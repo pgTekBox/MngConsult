@@ -1,0 +1,112 @@
+is_global = true
+build_property.EnableAotAnalyzer = 
+build_property.EnableSingleFileAnalyzer = true
+build_property.EnableTrimAnalyzer = false
+build_property.IncludeAllContentForSelfExtract = 
+build_property.MvvmToolkitEnableINotifyPropertyChangingSupport = true
+build_property.TargetFramework = net9.0-android
+build_property.TargetFrameworkIdentifier = .NETCoreApp
+build_property.TargetFrameworkVersion = v9.0
+build_property.TargetPlatformMinVersion = 
+build_property.UsingMicrosoftNETSdkWeb = 
+build_property.ProjectTypeGuids = 
+build_property.InvariantGlobalization = false
+build_property.PlatformNeutralAssembly = 
+build_property.EnforceExtendedAnalyzerRules = 
+build_property._SupportedPlatformList = Linux,macOS,Windows
+build_property.RootNamespace = prjPhoto
+build_property.ProjectDir = C:\MesSources\MngConsul\MAUI\prjPhoto\
+build_property.EnableComHosting = 
+build_property.EnableGeneratedComInterfaceComImportInterop = 
+build_property.EffectiveAnalysisLevelStyle = 9.0
+build_property.EnableCodeStyleSeverity = 
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/App.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.App.xaml
+build_metadata.AdditionalFiles.TargetPath = App.xaml
+build_metadata.AdditionalFiles.RelativePath = App.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/AppShell.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.AppShell.xaml
+build_metadata.AdditionalFiles.TargetPath = AppShell.xaml
+build_metadata.AdditionalFiles.RelativePath = AppShell.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/Controls/AddButton.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.Controls.AddButton.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\Controls\AddButton.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\Controls\AddButton.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/Controls/CategoryChart.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.Controls.CategoryChart.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\Controls\CategoryChart.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\Controls\CategoryChart.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/Controls/ProjectCardView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.Controls.ProjectCardView.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\Controls\ProjectCardView.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\Controls\ProjectCardView.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/Controls/TagView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.Controls.TagView.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\Controls\TagView.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\Controls\TagView.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/Controls/TaskView.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.Controls.TaskView.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\Controls\TaskView.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\Controls\TaskView.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/MainPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.MainPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\MainPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\MainPage.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/ManageMetaPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.ManageMetaPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\ManageMetaPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\ManageMetaPage.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/ProjectDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.ProjectDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\ProjectDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\ProjectDetailPage.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/ProjectListPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.ProjectListPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\ProjectListPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\ProjectListPage.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Pages/TaskDetailPage.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Pages.TaskDetailPage.xaml
+build_metadata.AdditionalFiles.TargetPath = Pages\TaskDetailPage.xaml
+build_metadata.AdditionalFiles.RelativePath = Pages\TaskDetailPage.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Resources/Styles/AppStyles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Resources.Styles.AppStyles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\AppStyles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\AppStyles.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Resources/Styles/Colors.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Resources.Styles.Colors.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Colors.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Colors.xaml
+
+[C:/MesSources/MngConsul/MAUI/prjPhoto/Resources/Styles/Styles.xaml]
+build_metadata.AdditionalFiles.GenKind = Xaml
+build_metadata.AdditionalFiles.ManifestResourceName = prjPhoto.Resources.Styles.Styles.xaml
+build_metadata.AdditionalFiles.TargetPath = Resources\Styles\Styles.xaml
+build_metadata.AdditionalFiles.RelativePath = Resources\Styles\Styles.xaml

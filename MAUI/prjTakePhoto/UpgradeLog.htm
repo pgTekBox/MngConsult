@@ -1,0 +1,486 @@
+﻿<!DOCTYPE html>
+<!-- saved from url=(0014)about:internet -->
+ <html xmlns:msxsl="urn:schemas-microsoft-com:xslt"><head><meta content="en-us" http-equiv="Content-Language" /><meta content="text/html; charset=utf-16" http-equiv="Content-Type" /><title _locID="ConversionReport0">
+          Rapport de migration
+        </title><style> 
+                    /* Body style, for the entire document */
+                    body
+                    {
+                        background: #F3F3F4;
+                        color: #1E1E1F;
+                        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+                        padding: 0;
+                        margin: 0;
+                    }
+
+                    /* Header1 style, used for the main title */
+                    h1
+                    {
+                        padding: 10px 0px 10px 10px;
+                        font-size: 21pt;
+                        background-color: #E2E2E2;
+                        border-bottom: 1px #C1C1C2 solid; 
+                        color: #201F20;
+                        margin: 0;
+                        font-weight: normal;
+                    }
+
+                    /* Header2 style, used for "Overview" and other sections */
+                    h2
+                    {
+                        font-size: 18pt;
+                        font-weight: normal;
+                        padding: 15px 0 5px 0;
+                        margin: 0;
+                    }
+
+                    /* Header3 style, used for sub-sections, such as project name */
+                    h3
+                    {
+                        font-weight: normal;
+                        font-size: 15pt;
+                        margin: 0;
+                        padding: 15px 0 5px 0;
+                        background-color: transparent;
+                    }
+
+                    /* Color all hyperlinks one color */
+                    a
+                    {
+                        color: #1382CE;
+                    }
+
+                    /* Table styles */ 
+                    table
+                    {
+                        border-spacing: 0 0;
+                        border-collapse: collapse;
+                        font-size: 10pt;
+                    }
+
+                    table th
+                    {
+                        background: #E7E7E8;
+                        text-align: left;
+                        text-decoration: none;
+                        font-weight: normal;
+                        padding: 3px 6px 3px 6px;
+                    }
+
+                    table td
+                    {
+                        vertical-align: top;
+                        padding: 3px 6px 5px 5px;
+                        margin: 0px;
+                        border: 1px solid #E7E7E8;
+                        background: #F7F7F8;
+                    }
+
+                    /* Local link is a style for hyperlinks that link to file:/// content, there are lots so color them as 'normal' text until the user mouse overs */
+                    .localLink
+                    {
+                        color: #1E1E1F;
+                        background: #EEEEED;
+                        text-decoration: none;
+                    }
+
+                    .localLink:hover
+                    {
+                        color: #1382CE;
+                        background: #FFFF99;
+                        text-decoration: none;
+                    }
+
+                    /* Center text, used in the over views cells that contain message level counts */ 
+                    .textCentered
+                    {
+                        text-align: center;
+                    }
+
+                    /* The message cells in message tables should take up all avaliable space */
+                    .messageCell
+                    {
+                        width: 100%;
+                    }
+
+                    /* Padding around the content after the h1 */ 
+                    #content 
+                    {
+	                    padding: 0px 12px 12px 12px; 
+                    }
+
+                    /* The overview table expands to width, with a max width of 97% */ 
+                    #overview table
+                    {
+                        width: auto;
+                        max-width: 75%; 
+                    }
+
+                    /* The messages tables are always 97% width */
+                    #messages table
+                    {
+                        width: 97%;
+                    }
+
+                    /* All Icons */
+                    .IconSuccessEncoded, .IconInfoEncoded, .IconWarningEncoded, .IconErrorEncoded
+                    {
+                        min-width:18px;
+                        min-height:18px; 
+                        background-repeat:no-repeat;
+                        background-position:center;
+                    }
+
+                    /* Success icon encoded */
+                    .IconSuccessEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconSuccess#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAABcElEQVR4Xq2TsUsCURzHv15g8ZJcBWlyiYYgCIWcb9DFRRwMW5TA2c0/QEFwFkxxUQdxVlBwCYWOi6IhWgQhBLHJUCkhLr/BW8S7gvrAg+N+v8/v+x68Z8MGy+XSCyABQAXgBgHGALoASkIIDWSLeLBetdHryMjd5IxQPWT4rn1c/P7+xxp72Cs9m5SZ0Bq2vPnbPFafK2zDvmNHypdC0BPkLlQhxJsCAhQoZwdZU5mwxh720qGo8MzTxTTKZDPCx2HoVzp6lz0Q9tKhyx0kGs8Ny+TkWRKk8lCROwEduhyg9l/6lunOPSfmH3NUH6uQ0KHLAe7JYvJjevm+DAMGJHToKtigE+vwvIidxLamb8IBY9e+C5LiXREkfho3TSd06HJA13/oh6T51MTsfQbHrsMynQ5dDihFjiK8JJAU9AKIWTp76dCVN7HWHrajmUEGvyF9nkbAE6gLIS7kTUyuf2gscLoJrElZo/Mvj+nPz/kLTmfnEwP3tB0AAAAASUVORK5CYII=);
+                    }
+
+                    /* Information icon encoded */
+                    .IconInfoEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconInformation#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABHElEQVR4Xs2TsUoDQRRF7wwoziokjZUKadInhdhukR9YP8DMX1hYW+QvdsXa/QHBbcXC7W0CamWTQnclFutceIQJwwaWNLlwm5k5d94M76mmaeCrrmsLYOocY12FcxZFUeozCqKqqgYA8uevv1H6VuPxcwlfk5N92KHBxfFeCSAxxswlYAW/Xr989x/mv9gkhtyMDhcAxgzRsp7flj8B/HF1RsMXq+NZMkopaHe7lbKxQUEIGbKsYNoGn969060hZBkQex/W8oRQwsQaW2o3Ago2SVcJUzAgY3N0lTCZZm+zPS8HB51gMmS1DEYyOz9acKO1D8JWTlafKIMxdhvlfdyT94Vv5h7P8Ky7nQzACmhvKq3zk3PjW9asz9D/1oigecsioooAAAAASUVORK5CYII=);
+                    }
+
+                    /* Warning icon encoded */
+                    .IconWarningEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconWarning#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAACXBIWXMAAA7EAAAOxAGVKw4bAAAAx0lEQVR4XpWSMQ7CMAxFf4xAyBMLCxMrO8dhaBcuwdCJS3RJBw7SA/QGTCxdWJgiQYWKXJWKIXHIlyw5lqr34tQgEOdcBsCOx5yZK3hCCKdYXneQkh4pEfqzLfu+wVDSyyzFoJjfz9NB+pAF+eizx2Vruts0k15mPgvS6GYvpVtQhB61IB/dk6AF6fS4Ben0uIX5odtFe8Q/eW1KvFeH4e8khT6+gm5B+t3juyDt7n0jpe+CANTd+oTUjN/U3yVaABnSUjFz/gFq44JaVSCXeQAAAABJRU5ErkJggg==);
+                    }
+
+                    /* Error icon encoded */
+                    .IconErrorEncoded
+                    {
+                        /* Note: Do not delete the comment below. It is used to verify the correctness of the encoded image resource below before the product is released */
+                        /* [---XsltValidateInternal-Base64EncodedImage:IconError#Begin#background-image: url(data:image/png;base64,#Separator#);#End#] */
+                        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAABQElEQVR4XqWTvUoEQRCE6wYPZUA80AfwAQz23uCMjA7MDRQEIzPBVEyNTQUFIw00vcQTTMzuAh/AxEQQT8HF/3G/oGGnEUGuoNnd6qoZuqltyKEsyzVJq5I6rnUp6SjGeGhESikzzlc1eL7opfuVbrqbU1Zw9NCgtQMaZpY0eNnaaL2fHusvTK5vKu7sjSS1Y4y3QUA6K3e3Mau5UFDyMP7tYF9o8cAHZv68vipoIJg971PZIZ5HiwdvYGGvFVFHmGmZ2MxwmQYPXubPl9Up0tfoMQGetXd6mRbvhBw+boZ6WF7Mbv1+GsHRk0fQmPAH1GfmZirbCfDJ61tw3Px8/8pZsPAG4jlVhcPgZ7adwNWBB68lkRQWFiTgFlbnLY3DGGM7izIJIyT/jjIvEJw6fdJTc6krDzh6aMwMP9bvDH4ADSsa9uSWVJkAAAAASUVORK5CYII=);
+                    }
+                 </style><script type="text/javascript" language="javascript"> 
+          
+            // Startup 
+            // Hook up the the loaded event for the document/window, to linkify the document content
+            var startupFunction = function() { linkifyElement("messages"); };
+            
+            if(window.attachEvent)
+            {
+              window.attachEvent('onload', startupFunction);
+            }
+            else if (window.addEventListener) 
+            {
+              window.addEventListener('load', startupFunction, false);
+            }
+            else 
+            {
+              document.addEventListener('load', startupFunction, false);
+            } 
+            
+            // Toggles the visibility of table rows with the specified name 
+            function toggleTableRowsByName(name)
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  if(!!currentName && currentName.indexOf(name) == 0)
+                  {
+                      var isVisible = allRows[i].style.display == ''; 
+                      isVisible ? allRows[i].style.display = 'none' : allRows[i].style.display = '';
+                  }
+               }
+            }
+            
+            function scrollToFirstVisibleRow(name) 
+            {
+               var allRows = document.getElementsByTagName('tr');
+               for (i=0; i < allRows.length; i++)
+               {
+                  var currentName = allRows[i].getAttribute('name');
+                  var isVisible = allRows[i].style.display == ''; 
+                  if(!!currentName && currentName.indexOf(name) == 0 && isVisible)
+                  {
+                     allRows[i].scrollIntoView(true); 
+                     return true; 
+                  }
+               }
+               
+               return false;
+            }
+            
+            // Linkifies the specified text content, replaces candidate links with html links 
+            function linkify(text)
+            {
+                 if(!text || 0 === text.length)
+                 {
+                     return text; 
+                 }
+
+                 // Find http, https and ftp links and replace them with hyper links 
+                 var urlLink = /(http|https|ftp)\:\/\/[a-zA-Z0-9\-\.]+(:[a-zA-Z0-9]*)?\/?([a-zA-Z0-9\-\._\?\,\/\\\+&%\$#\=~;\{\}])*/gi;
+                 
+                 return text.replace(urlLink, '<a href="$&">$&</a>') ;
+            }
+            
+            // Linkifies the specified element by ID
+            function linkifyElement(id)
+            {
+                var element = document.getElementById(id);
+                if(!!element)
+                {
+                  element.innerHTML = linkify(element.innerHTML); 
+                }
+            }
+            
+            function ToggleMessageVisibility(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              toggleTableRowsByName("MessageRowClass" + projectName);
+              toggleTableRowsByName('MessageRowHeaderShow' + projectName);
+              toggleTableRowsByName('MessageRowHeaderHide' + projectName); 
+            }
+            
+            function ScrollToFirstVisibleMessage(projectName)
+            {
+              if(!projectName || 0 === projectName.length)
+              {
+                return; 
+              }
+              
+              // First try the 'Show messages' row
+              if(!scrollToFirstVisibleRow('MessageRowHeaderShow' + projectName))
+              {
+                // Failed to find a visible row for 'Show messages', try an actual message row 
+                scrollToFirstVisibleRow('MessageRowClass' + projectName); 
+              }
+            }
+           </script></head><body><h1 _locID="ConversionReport">
+          Rapport de migration - prjTakePhoto</h1><div id="content"><h2 _locID="OverviewTitle">Vue d'ensemble</h2><div id="overview"><table><tr><th></th><th _locID="ProjectTableHeader">Projet</th><th _locID="PathTableHeader">Chemin d'accès</th><th _locID="ErrorsTableHeader">Erreurs</th><th _locID="WarningsTableHeader">Avertissements</th><th _locID="MessagesTableHeader">Messages</th></tr><tr><td class="IconErrorEncoded" /><td><strong><a href="#prjTakePhoto">prjTakePhoto</a></strong></td><td>prjTakePhoto.csproj</td><td class="textCentered"><a href="#prjTakePhotoError">12</a></td><td class="textCentered"><a>0</a></td><td class="textCentered"><a href="#" onclick="ScrollToFirstVisibleMessage('prjTakePhoto'); return false;">203</a></td></tr></table></div><h2 _locID="SolutionAndProjectsTitle">Solution et projets</h2><div id="messages"><a name="prjTakePhoto" /><h3>prjTakePhoto</h3><table><tr id="prjTakePhotoHeaderRow"><th></th><th class="messageCell" _locID="MessageTableHeader">Message</th></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\3045d4be-d03d-423e-b205-b18554223ac1.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\3045d4be-d03d-423e-b205-b18554223ac1.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\4fda25ac-e70a-482c-a0f4-b05958e484b0.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\4fda25ac-e70a-482c-a0f4-b05958e484b0.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\5b1d4fa3-4520-4405-ab71-c044defd4b91.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\5b1d4fa3-4520-4405-ab71-c044defd4b91.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\8030afb4-55fd-4faf-af1d-1bbe78e35859.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\8030afb4-55fd-4faf-af1d-1bbe78e35859.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\9e60f1af-b72c-4129-89c3-f61568de6ada.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\9e60f1af-b72c-4129-89c3-f61568de6ada.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\3045d4be-d03d-423e-b205-b18554223ac1.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\3045d4be-d03d-423e-b205-b18554223ac1.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\4fda25ac-e70a-482c-a0f4-b05958e484b0.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\4fda25ac-e70a-482c-a0f4-b05958e484b0.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\5b1d4fa3-4520-4405-ab71-c044defd4b91.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\5b1d4fa3-4520-4405-ab71-c044defd4b91.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\8030afb4-55fd-4faf-af1d-1bbe78e35859.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\8030afb4-55fd-4faf-af1d-1bbe78e35859.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\FileContentIndex\9e60f1af-b72c-4129-89c3-f61568de6ada.vsidx:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\FileContentIndex\9e60f1af-b72c-4129-89c3-f61568de6ada.vsidx</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>Application.xaml:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Application.xaml</span></td></tr><tr name="ErrorRowClassprjTakePhoto"><td class="IconErrorEncoded"><a name="prjTakePhotoError" /></td><td class="messageCell"><strong>UnitTestApp.xaml:
+        </strong><span>Échec de la sauvegarde du fichier avec le nom C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\UnitTestApp.xaml</span></td></tr><tr name="MessageRowHeaderShowprjTakePhoto"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="ShowAdditionalMessages" href="#" name="prjTakePhotoMessage" onclick="ToggleMessageVisibility('prjTakePhoto'); return false;">
+          Afficher 203 messages supplémentaires
+        </a></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj:
+        </strong><span>Fichier projet correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj.user:
+        </strong><span>Fichier utilisateur de projet correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj.user</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache.v2:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache.v2</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\.suo:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\.suo</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup.json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout.json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App.xaml.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell.xaml.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>DocumentScanResult.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\DocumentScanResult.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>IDocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\IDocumentScannerService.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>ImageCompress.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\ImageCompress.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage.xaml.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MauiProgram.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MauiProgram.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\.cache\com.companyname.prjtakephoto.flag:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\.cache\com.companyname.prjtakephoto.flag</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.dgspec.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.dgspec.json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.props:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g.props</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.targets:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g.targets</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.assets.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.assets.json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.nuget.cache:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.nuget.cache</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage.xaml.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\AndroidManifest.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\AndroidManifest.xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\DocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\DocumentScannerService.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainActivity.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainActivity.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainApplication.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainApplication.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\Resources\values\colors.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\Resources\values\colors.xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\AppDelegate.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\AppDelegate.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\DocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\DocumentScannerService.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Info.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Info.plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Program.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Program.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Resources\PrivacyInfo.xcprivacy:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Resources\PrivacyInfo.xcprivacy</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\AppDelegate.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\AppDelegate.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Entitlements.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Entitlements.plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Info.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Info.plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Program.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Program.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\Main.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\Main.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\tizen-manifest.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\tizen-manifest.xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\app.manifest:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\app.manifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App.xaml.cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\Package.appxmanifest:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\Package.appxmanifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(2).csproj</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(2).csproj</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj.user:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj(2).user</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj.user:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj(2).user</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.slnx:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.slnx</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Properties\launchSettings.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Properties\launchSettings.json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appicon.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appicon.svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appiconfg.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appiconfg.svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Regular.ttf:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Regular.ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Semibold.ttf:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Semibold.ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Images\dotnet_bot.png:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Images\dotnet_bot.png</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Raw\AboutAssets.txt:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Raw\AboutAssets.txt</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Splash\splash.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Splash\splash.svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles.xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache.v2:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache(2).v2</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache.v2:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\DesignTimeBuild\.dtbcache(2).v2</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\.suo:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\(2).suo</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\.suo:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\(2).suo</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup.json:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout.backup(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.json:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>.vs\prjTakePhoto.slnx\v18\DocumentLayout.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\.vs\prjTakePhoto.slnx\v18\DocumentLayout(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>DocumentScanResult.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\DocumentScanResult(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>DocumentScanResult.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\DocumentScanResult(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>IDocumentScannerService.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\IDocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>IDocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\IDocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>ImageCompress.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\ImageCompress(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>ImageCompress.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\ImageCompress(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MauiProgram.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MauiProgram(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MauiProgram.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MauiProgram(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\.cache\com.companyname.prjtakephoto.flag:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\.cache\com.companyname.prjtakephoto(2).flag</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\.cache\com.companyname.prjtakephoto.flag:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\.cache\com.companyname.prjtakephoto(2).flag</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.dgspec.json:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.dgspec(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.dgspec.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.dgspec(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.props:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g(2).props</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.props:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g(2).props</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.targets:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g(2).targets</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\prjTakePhoto.csproj.nuget.g.targets:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\prjTakePhoto.csproj.nuget.g(2).targets</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.assets.json:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.assets(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.assets.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.assets(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.nuget.cache:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.nuget(2).cache</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>obj\project.nuget.cache:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\obj\project.nuget(2).cache</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\AndroidManifest.xml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\AndroidManifest(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\AndroidManifest.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\AndroidManifest(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\DocumentScannerService.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\DocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\DocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\DocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainActivity.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainActivity(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainActivity.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainActivity(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainApplication.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainApplication(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\MainApplication.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\MainApplication(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\Resources\values\colors.xml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\Resources\values\colors(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Android\Resources\values\colors.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Android\Resources\values\colors(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\AppDelegate.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\AppDelegate(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\AppDelegate.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\AppDelegate(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\DocumentScannerService.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\DocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\DocumentScannerService.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\DocumentScannerService(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Info.plist:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Info(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Info.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Info(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Program.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Program(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Program.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Program(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Resources\PrivacyInfo.xcprivacy:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Resources\PrivacyInfo(2).xcprivacy</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\iOS\Resources\PrivacyInfo.xcprivacy:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\iOS\Resources\PrivacyInfo(2).xcprivacy</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\AppDelegate.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\AppDelegate(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\AppDelegate.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\AppDelegate(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Entitlements.plist:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Entitlements(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Entitlements.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Entitlements(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Info.plist:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Info(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Info.plist:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Info(2).plist</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Program.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Program(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\MacCatalyst\Program.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\MacCatalyst\Program(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\Main.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\Main(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\Main.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\Main(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\tizen-manifest.xml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\tizen-manifest(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Tizen\tizen-manifest.xml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Tizen\tizen-manifest(2).xml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\app.manifest:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\app(2).manifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\app.manifest:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\app(2).manifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml.cs:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml.cs:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App.xaml(2).cs</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\Package.appxmanifest:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\Package(2).appxmanifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\Package.appxmanifest:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\Package(2).appxmanifest</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(3).csproj</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(3).csproj</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj.user:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj(3).user</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.csproj.user:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto.csproj(3).user</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.slnx:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(2).slnx</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>prjTakePhoto.slnx:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\prjTakePhoto(2).slnx</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Properties\launchSettings.json:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Properties\launchSettings(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Properties\launchSettings.json:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Properties\launchSettings(2).json</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appicon.svg:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appicon(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appicon.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appicon(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appiconfg.svg:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appiconfg(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\AppIcon\appiconfg.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\AppIcon\appiconfg(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Regular.ttf:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Regular(2).ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Regular.ttf:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Regular(2).ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Semibold.ttf:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Semibold(2).ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Fonts\OpenSans-Semibold.ttf:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Fonts\OpenSans-Semibold(2).ttf</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Images\dotnet_bot.png:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Images\dotnet_bot(2).png</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Images\dotnet_bot.png:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Images\dotnet_bot(2).png</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Raw\AboutAssets.txt:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Raw\AboutAssets(2).txt</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Raw\AboutAssets.txt:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Raw\AboutAssets(2).txt</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Splash\splash.svg:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Splash\splash(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Splash\splash.svg:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Splash\splash(2).svg</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(2).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Images\dotnet_bot.png:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Images\dotnet_bot(3).png</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Images\dotnet_bot.png:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Images\dotnet_bot(3).png</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(5).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(5).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(3).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(6).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\App(6).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>AppShell.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\AppShell(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>MainPage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\MainPage(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>PhotoCapturePage.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\PhotoCapturePage(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Platforms\Windows\App.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Platforms\Windows\App(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Colors.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Colors(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Conflit de nom du fichier de sauvegarde. Renommer le fichier en : C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(4).xaml</span></td></tr><tr name="MessageRowClassprjTakePhoto" style="display: none"><td class="IconInfoEncoded"><a name="prjTakePhotoMessage" /></td><td class="messageCell"><strong>Resources\Styles\Styles.xaml:
+        </strong><span>Fichier correctement sauvegardé en tant que C:\MesSources\MngConsul\MAUI\prjTakePhoto\Backup\Resources\Styles\Styles(4).xaml</span></td></tr><tr style="display: none" name="MessageRowHeaderHideprjTakePhoto"><td class="IconInfoEncoded" /><td class="messageCell"><a _locID="HideAdditionalMessages" href="#" name="prjTakePhotoMessage" onclick="ToggleMessageVisibility('prjTakePhoto'); return false;">
+          Masquer 203 messages supplémentaires
+        </a></td></tr></table></div></div></body></html>

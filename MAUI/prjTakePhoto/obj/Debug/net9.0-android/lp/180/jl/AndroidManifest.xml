@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    package="com.google.mlkit.vision.documentscanner" >
+
+    <uses-sdk android:minSdkVersion="23" />
+
+    <application>
+
+        <!--
+        This activity is an invisible delegate activity to start scanner activity
+        and receive result, so it's unnecessary to support screen orientation and
+        we can avoid any side effect from activity recreation in any case.
+        -->
+        <activity
+            android:name="com.google.mlkit.vision.documentscanner.internal.GmsDocumentScanningDelegateActivity"
+            android:exported="false"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Black.NoTitleBar.Fullscreen"
+            tools:ignore="Instantiatable" >
+        </activity>
+    </application>
+
+</manifest>
