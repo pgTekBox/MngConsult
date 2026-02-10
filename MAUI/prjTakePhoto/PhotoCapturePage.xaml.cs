@@ -5,7 +5,7 @@ namespace prjTakePhoto;
 public partial class PhotoCapturePage : ContentPage
 {
     private byte[]? _finalBytes;
-
+    private readonly ReceiptApiClient _api = new ReceiptApiClient(new HttpClient());
     public PhotoCapturePage()
     {
         InitializeComponent();
@@ -42,13 +42,43 @@ public partial class PhotoCapturePage : ContentPage
 
         var originalBytes = File.ReadAllBytes(path);
 
-        // ✅ Option: réduire taille avec SkiaSharp (recommandé)
-        // Si tu ne veux pas, commente les 2 lignes suivantes et utilise originalBytes.
-        _finalBytes = ImageCompress.ResizeAndCompressJpeg(originalBytes, maxWidth: 1200, quality: 80);
+      
 
-        imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(_finalBytes));
-        lblStatus.Text = "Scan OK (cadrage automatique).";
-        lblSize.Text = $"Taille finale: {FormatBytes(_finalBytes.Length)}";
+        imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(originalBytes));
+        
+
+        lblStatus.Text = "Scan OK v1 (cadrage automatique).";
+        lblSize.Text = $"Taille finale: {FormatBytes(originalBytes.Length)}";
+
+        try
+        {
+            lblStatus.Text = "Upload vers serveur...";
+
+            // ⚠️ Android Emulator: "localhost" = le téléphone lui-même.
+            // - Emulateur Android: utilise http://10.0.2.2:5000
+            // - Device USB: utilise l'IP de ton PC (ex: http://192.168.1.25:5000)
+            var url = "http://60sec.ai:9090/api/receipts/upload";
+
+            var json = await _api.UploadReceiptAsync(
+                url,
+                originalBytes,
+                fileName: Path.GetFileName(path),
+                contentType: "image/jpeg"
+            );
+
+            lblStatus.Text = "Upload OK";
+            lblSize.Text = json; // ou parse JSON
+        }
+        catch (Exception ex)
+        {
+            lblStatus.Text = "Erreur upload";
+            lblSize.Text = ex.Message;
+        }
+
+
+
+
+
     }
 
     private static string FormatBytes(int bytes)

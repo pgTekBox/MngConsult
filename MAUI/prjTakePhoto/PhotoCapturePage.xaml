@@ -5,7 +5,7 @@
              Title="Scan reçu (cadre auto)">
 
     <VerticalStackLayout Padding="16" Spacing="12">
-        <Button Text="📄 Scanner un reçu (cadre auto)"
+        <Button Text="📄 Scanner un reçu v1 (cadre auto)"
                 Clicked="OnScanClicked"/>
 
         <Label x:Name="lblStatus" />
