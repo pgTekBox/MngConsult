@@ -1,0 +1,6 @@
+@APIWebMngConsul_HostAddress = http://localhost:5177
+
+GET {{APIWebMngConsul_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

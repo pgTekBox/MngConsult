@@ -1,0 +1,9 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<!-- https://go.microsoft.com/fwlink/?LinkID=208121. -->
+<Project>
+  <PropertyGroup>
+    <_PublishTargetUrl>\\Alfred\MngConsulDeploy</_PublishTargetUrl>
+    <History>True|2026-02-10T13:59:20.9005612Z||;False|2026-02-10T08:56:49.4252679-05:00||;True|2026-02-10T08:56:22.7081670-05:00||;True|2026-02-10T08:56:00.3832484-05:00||;False|2026-02-10T08:54:58.4063482-05:00||;False|2026-02-10T08:54:14.5215094-05:00||;</History>
+    <LastFailureDetails />
+  </PropertyGroup>
+</Project>
