@@ -57,7 +57,7 @@ public partial class PhotoCapturePage : ContentPage
             // ⚠️ Android Emulator: "localhost" = le téléphone lui-même.
             // - Emulateur Android: utilise http://10.0.2.2:5000
             // - Device USB: utilise l'IP de ton PC (ex: http://192.168.1.25:5000)
-            var url = "http://60sec.ai:9090/api/receipts/upload";
+            var url = "http://60sec.ai:7090/api/receipts/upload";
 
             var json = await _api.UploadReceiptAsync(
                 url,
