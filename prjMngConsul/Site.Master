@@ -1,0 +1,224 @@
+﻿<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.master.vb" Inherits="MngConsul.SiteMaster" %>
+
+<%@ Register Src="~/Controls/Header.ascx" TagPrefix="uc" TagName="Header" %>
+<%@ Register Src="~/Controls/LeftMenu.ascx" TagPrefix="uc" TagName="LeftMenu" %>
+<%@ Register Src="~/Controls/Footer.ascx" TagPrefix="uc" TagName="Footer" %>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head runat="server">
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
+
+<style>
+/* =========================
+   THEME (LIGHT)
+========================= */
+:root{
+    --mc-bg:#f6f7fb;
+    --mc-card:#ffffff;
+    --mc-muted:#64748b;
+    --mc-text:#0f172a;
+    --mc-stroke: rgba(15,23,42,.12);
+    --mc-shadow: 0 14px 40px rgba(2,6,23,.10);
+    --mc-radius: 16px;
+    --mc-font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+
+    --mc-blue:#2563eb;
+    --mc-cyan:#06b6d4;
+}
+
+*{ box-sizing:border-box; }
+html, body, form{
+    height:100%;
+}
+body{
+    margin:0;
+    font-family:var(--mc-font);
+    background:
+        radial-gradient(900px 450px at 20% 0%, rgba(37,99,235,.14), transparent 60%),
+        radial-gradient(900px 450px at 80% 0%, rgba(6,182,212,.10), transparent 60%),
+        var(--mc-bg);
+    color:var(--mc-text);
+}
+
+a{ color:inherit; text-decoration:none; }
+
+/* =========================
+   APP LAYOUT
+========================= */
+.mc-app{
+    height:  calc(100vh - 60px);
+    display:grid;
+   /* background-color :red; */
+    grid-template-rows:auto 1fr auto;
+}
+
+/* ⭐ FIX CRITIQUE POUR RADGRID */
+.mc-shell{
+    display:grid;
+    grid-template-columns: 270px minmax(0,1fr);
+    gap:16px;
+    padding:16px;
+    width:100%;
+}
+
+/* Sidebar */
+.mc-sidebar{
+    position:sticky;
+    top:16px;
+    align-self:start;
+    z-index:1;
+    margin-right: 10px;
+}
+
+/* MAIN */
+.mc-maincol{
+    min-width:0;
+    position:relative;
+    z-index:5;
+
+  /*   display:flex;*/
+    flex-direction:column;
+}
+
+/* Cards */
+.mc-card{
+    background: rgba(255,255,255,.92);
+    border:1px solid var(--mc-stroke);
+    border-radius:var(--mc-radius);
+    box-shadow:var(--mc-shadow);
+     overflow: hidden;
+
+    display:flex;
+    flex-direction:column;
+}
+
+/* Wrapper content page */
+.mc-mainwrap{
+       flex:1;
+    display:flex;
+    flex-direction:column;
+}
+
+/* =========================
+   UI UTIL
+========================= */
+.pad{ padding:16px; }
+
+.toolbar{
+    display:flex;
+    gap:10px;
+    align-items:center;
+    justify-content:space-between;
+    padding:14px 16px;
+    border-bottom:1px solid var(--mc-stroke);
+    background: rgba(255,255,255,.75);
+}
+
+.toolbar .title{
+    font-size:16px;
+    font-weight:800;
+}
+
+.searchbox{
+    display:flex;
+    gap:8px;
+    align-items:center;
+}
+
+.input{
+    width:min(360px,55vw);
+    padding:10px 12px;
+    border-radius:12px;
+    border:1px solid var(--mc-stroke);
+    background: #ffffff;
+    color:var(--mc-text);
+    outline:none;
+}
+
+.input::placeholder{ color: rgba(15,23,42,.55); }
+
+.btn{
+    cursor:pointer;
+    border:1px solid var(--mc-stroke);
+    border-radius:12px;
+    padding:10px 12px;
+    background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
+    color:var(--mc-text);
+    font-weight:800;
+}
+
+.btn:hover{ filter: brightness(0.98); }
+.btn:active{ transform: translateY(1px); }
+
+.pill{
+    display:inline-block;
+    padding:5px 10px;
+    border-radius:999px;
+    font-size:12px;
+    border:1px solid var(--mc-stroke);
+    background: rgba(2,6,23,.03);
+    color: var(--mc-text);
+}
+
+/* =========================
+   TERTELIK SAFE
+========================= */
+.RadGrid{ background: transparent !important; }
+
+/* =========================
+   MOBILE
+========================= */
+@media (max-width: 980px){
+    .mc-shell{ grid-template-columns: 1fr; }
+    .mc-sidebar{ position:relative; top:auto; }
+}
+</style>
+
+<asp:ContentPlaceHolder ID="HeadContent" runat="server" />
+</head>
+
+<body>
+<form id="form1" runat="server">
+
+    <!-- ⭐ TERTELIK GLOBAL -->
+    <telerik:RadScriptManager
+        ID="RadScriptManager1"
+        runat="server"
+        EnablePartialRendering="true"
+        AsyncPostBackTimeout="300" />
+
+    <div class="mc-app">
+
+        <!-- HEADER -->
+        <uc:Header runat="server" ID="Header1" />
+
+        <div class="mc-shell">
+
+            <!-- SIDEBAR -->
+            <aside class="mc-sidebar">
+                <div class="mc-card">
+                    <uc:LeftMenu runat="server" ID="LeftMenu1" />
+                </div>
+            </aside>
+
+            <!-- MAIN CONTENT -->
+            <main class="mc-maincol">
+                <div class="mc-card mc-mainwrap">
+                    <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+                </div>
+            </main>
+
+        </div>
+
+        <!-- FOOTER -->
+        <uc:Footer runat="server" ID="Footer1" />
+
+    </div>
+
+</form>
+</body>
+</html>
