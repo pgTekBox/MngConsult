@@ -41,6 +41,21 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
+    <telerik:RadWindowManager ID="rwmSuppliers" runat="server" EnableShadow="true">
+</telerik:RadWindowManager>
+
+<telerik:RadWindow ID="rwSupplier" runat="server"
+    Modal="true"
+    VisibleOnPageLoad="false"
+    Behaviors="Close,Move,Resize"
+    DestroyOnClose="true"
+    Width="1100px"
+    Height="720px"
+    Title="Ajouter / Modifier un fournisseur"
+    OnClientClose="rwSupplier_OnClientClose">
+</telerik:RadWindow>
+
+
     <div class="page-head">
         <div>
             <div class="page-title">Fournisseurs</div>
@@ -48,6 +63,11 @@
         </div>
 
         <div class="actions">
+            <asp:Button ID="btnAddSupplier" runat="server"
+    CssClass="btn primary"
+    Text="Ajouter Supplier"
+    CausesValidation="false"
+    OnClientClick="openSupplierWindow(0); return false;" />
             <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (nom, email, téléphone…)" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
             <asp:Button ID="btnClear" runat="server" CssClass="btn" Text="Effacer" CausesValidation="false" />
@@ -88,7 +108,7 @@
                     <telerik:GridTemplateColumn HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
                         <ItemTemplate>
                             <asp:Button ID="btnEdit" runat="server" CssClass="btn" Text="Edit"
-                                CommandName="EditSupplier" CommandArgument='<%# Eval("Id") %>' />
+    OnClientClick='<%# "openSupplierWindow(" & Eval("Id") & "); return false;" %>' />
                             <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete"
                                 CommandName="DeleteSupplier" CommandArgument='<%# Eval("Id") %>' />
                         </ItemTemplate>
@@ -117,7 +137,31 @@
             <PagerStyle Mode="NextPrevAndNumeric" />
         </telerik:RadGrid>
     </div>
+    <script type="text/javascript">
+    function openSupplierWindow(id) {
+        var wnd = $find("<%= rwSupplier.ClientID %>");
+        var url = "wbfSupplierEdit.aspx";
 
+        if (id && id > 0) {
+            url += "?SupplierId=" + id;
+            wnd.set_title("Modifier un fournisseur");
+        } else {
+            url += "?SupplierId=0";
+            wnd.set_title("Ajouter un fournisseur");
+        }
+
+        wnd.setUrl(url);
+        wnd.show();
+    }
+
+    function rwSupplier_OnClientClose(sender, args) {
+        // Refresh la grid après fermeture
+        var grid = $find("<%= rgFournisseurs.ClientID %>");
+        if (grid) {
+            grid.get_masterTableView().rebind();
+        }
+    }
+</script>
 </asp:Content>
 
 

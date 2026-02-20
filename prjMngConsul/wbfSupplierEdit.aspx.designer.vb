@@ -23,6 +23,24 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
+    '''RadScriptManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadScriptManager1 As Global.Telerik.Web.UI.RadScriptManager
+
+    '''<summary>
+    '''ram1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ram1 As Global.Telerik.Web.UI.RadAjaxManager
+
+    '''<summary>
     '''lnkBack control.
     '''</summary>
     '''<remarks>
@@ -83,7 +101,7 @@ Partial Public Class wbfSupplierEdit
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtName As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtName As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''txtWebsite control.
@@ -92,7 +110,7 @@ Partial Public Class wbfSupplierEdit
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtWebsite As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtWebsite As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''txtNoTPS control.
@@ -101,7 +119,7 @@ Partial Public Class wbfSupplierEdit
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtNoTPS As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtNoTPS As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''txtNoTVQ control.
@@ -110,7 +128,7 @@ Partial Public Class wbfSupplierEdit
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtNoTVQ As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtNoTVQ As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''btnNewAddress control.
@@ -122,22 +140,112 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents btnNewAddress As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''gvAddr control.
+    '''rgAddr control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents gvAddr As Global.System.Web.UI.WebControls.GridView
+    Protected WithEvents rgAddr As Global.Telerik.Web.UI.RadGrid
 
     '''<summary>
-    '''pnlAddrEdit control.
+    '''rwm1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlAddrEdit As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents rwm1 As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
+    '''rwAddr control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwAddr As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''pnlAddrEditor control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlAddrEditor As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''hfAddrId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hfAddrId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''txtA1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtA1 As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''txtA2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtA2 As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''txtCity control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtCity As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''rddlProvince control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rddlProvince As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>
+    '''rddlPays control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rddlPays As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>
+    '''txtPostal control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtPostal As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''txtCountry control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtCountry As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''btnAddrSave control.
@@ -158,65 +266,11 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents btnAddrCancel As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''hfAddrId control.
+    '''btnAddrRefresh control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfAddrId As Global.System.Web.UI.WebControls.HiddenField
-
-    '''<summary>
-    '''txtA1 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtA1 As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtA2 control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtA2 As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtCity control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtCity As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtProv control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtProv As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtPostal control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtPostal As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''txtCountry control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents txtCountry As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnAddrRefresh As Global.System.Web.UI.WebControls.Button
 End Class

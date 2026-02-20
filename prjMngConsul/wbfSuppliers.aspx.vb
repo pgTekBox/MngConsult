@@ -33,7 +33,8 @@ Public Class wbfSuppliers
         Select Case e.CommandName
             Case "EditSupplier"
                 SupplierId = e.CommandArgument
-                Server.Transfer("wbfSupplierEdit.aspx")
+                Response.Redirect("wbfSupplierEdit.aspx?SupplierId=" & SupplierId.ToString)
+
         End Select
 
     End Sub
@@ -50,4 +51,10 @@ Public Class wbfSuppliers
         Return ds.Tables(0)
     End Function
 
+
+    Protected Sub btnAddSupplier_Click(sender As Object, e As EventArgs) Handles btnAddSupplier.Click
+        ' Mode "nouveau": pas de SupplierId (ou SupplierId=0 si ta page le gère)
+        Response.Redirect("wbfSupplierEdit.aspx")
+        ' ou: Response.Redirect("wbfSupplierEdit.aspx?SupplierId=0")
+    End Sub
 End Class

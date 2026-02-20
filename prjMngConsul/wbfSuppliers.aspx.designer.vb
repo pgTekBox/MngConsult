@@ -14,6 +14,33 @@ Option Explicit On
 Partial Public Class wbfSuppliers
 
     '''<summary>
+    '''rwmSuppliers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwmSuppliers As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
+    '''rwSupplier control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwSupplier As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''btnAddSupplier control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnAddSupplier As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''tbSearch control.
     '''</summary>
     '''<remarks>
