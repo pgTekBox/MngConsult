@@ -330,6 +330,7 @@
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSuppliers.aspx" />
+    <Content Include="wbfSuppliersInvoices.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -469,6 +470,13 @@
       <DependentUpon>wbfSuppliers.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfSuppliersInvoices.aspx.designer.vb">
+      <DependentUpon>wbfSuppliersInvoices.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSuppliersInvoices.aspx.vb">
+      <DependentUpon>wbfSuppliersInvoices.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="My Project\Resources.resx">
@@ -544,7 +552,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

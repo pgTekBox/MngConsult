@@ -91,6 +91,11 @@ Public Class wbfReceipt
                 ' optionnel:
                 RadReceipt.Rebind()
 
+
+
+
+
+
             Case "VoirJSON"
                 Dim p As New Collection
                 p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
@@ -113,7 +118,12 @@ Public Class wbfReceipt
                 If imageForAIObj Is Nothing OrElse IsDBNull(imageForAIObj) Then Exit Sub
 
                 Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
-                Dim apiKey = System.Configuration.ConfigurationManager.AppSettings("OPENAI_API_KEY")
+
+                Dim MyParam2 As New Collection
+                MyParam2.Add(New Data.SqlClient.SqlParameter("@Parameter", "CHATGPT"))
+                Dim msds2 As DataSet = ExecuteSQLds("s0000GetParameter", MyParam2)
+                Dim apiKey As String = msds2.Tables(0).Rows(0)("Value")
+
 
                 Dim reader As New OpenAiReceiptReader()
                 Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, imageForAIBytes, "image/jpeg")

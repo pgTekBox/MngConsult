@@ -10,5 +10,17 @@
             Exposes the Android Resource designer assembly into the project Namespace.
             </summary>
         </member>
+        <member name="M:ImageProcessing.ResizeAndCompressJpeg(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Resize (si > maxWidth) puis encode en JPEG avec quality.
+            </summary>
+        </member>
+        <member name="M:ImageProcessing.ToGrayscaleJpeg(System.Byte[],System.Int32,System.Int32)">
+            <summary>
+            Convertit en grayscale (R=G=B), puis encode en JPEG.
+            (Recommandé pour papier thermique si tu veux garder les nuances.)
+            </summary>
+        </member>
+        <!-- Badly formed XML comment ignored for member "M:ImageProcessing.ToBlackAndWhiteThermalSafe(System.Byte[],System.Int32,System.Int32,System.Double,System.Boolean,System.Int32)" -->
     </members>
 </doc>

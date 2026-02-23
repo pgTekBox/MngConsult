@@ -87,14 +87,11 @@
             <span class="dot" aria-hidden="true"></span>
             Fournisseurs
           </a>
-          <a class="nav-child" href="~/FacturesFournisseurs.aspx" runat="server" data-navlink>
+          <a class="nav-child" href="~/wbfSuppliersInvoices.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Factures fournisseurs
           </a>
-          <a class="nav-child" href="~/Depenses.aspx" runat="server" data-navlink>
-            <span class="dot" aria-hidden="true"></span>
-            Dépenses
-          </a>
+          
 <a class="nav-child" href="~/wbfReceipt.aspx" runat="server" data-navlink>
   <span class="dot" aria-hidden="true"></span>
   Recus

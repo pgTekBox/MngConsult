@@ -77,6 +77,15 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents pMsg As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     '''<summary>
+    '''tlblId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tlblId As Global.Telerik.Web.UI.RadLabel
+
+    '''<summary>
     '''litId control.
     '''</summary>
     '''<remarks>
@@ -86,13 +95,22 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents litId As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litGuid control.
+    '''tlblOrigine control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litGuid As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents tlblOrigine As Global.Telerik.Web.UI.RadLabel
+
+    '''<summary>
+    '''tlblCreated control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tlblCreated As Global.Telerik.Web.UI.RadLabel
 
     '''<summary>
     '''txtName control.
@@ -102,6 +120,24 @@ Partial Public Class wbfSupplierEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtName As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''txtDisplayName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtDisplayName As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''rddlPartyType control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rddlPartyType As Global.Telerik.Web.UI.RadDropDownList
 
     '''<summary>
     '''txtWebsite control.
@@ -129,6 +165,15 @@ Partial Public Class wbfSupplierEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtNoTVQ As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''txtNote control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtNote As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''btnNewAddress control.
@@ -185,6 +230,24 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents hfAddrId As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''rddlAddressType control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rddlAddressType As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>
+    '''txtAddressName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents txtAddressName As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
     '''txtA1 control.
     '''</summary>
     '''<remarks>
@@ -239,13 +302,13 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents txtPostal As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''txtCountry control.
+    '''txtAddressNote control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents txtCountry As Global.Telerik.Web.UI.RadTextBox
+    Protected WithEvents txtAddressNote As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
     '''btnAddrSave control.

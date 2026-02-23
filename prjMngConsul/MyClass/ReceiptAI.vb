@@ -12,7 +12,7 @@ Public Class ReceiptAI
     '    json = sJson
     'End Sub
     Dim imageGUID As Guid
-    Public Function Strore2BD()
+    Public Sub Strore2BD()
 
 
 
@@ -24,7 +24,7 @@ Public Class ReceiptAI
         MyParamDoc.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
         Dim MydsDoc As DataSet = ExecuteSQLds("s0009SaveDocument", MyParamDoc)
 
-    End Function
+    End Sub
 
 
     Public json As String
@@ -35,6 +35,10 @@ Public Class ReceiptAI
         ParseReceiptJson()
         Strore2BD()
     End Sub
+
+
+
+
 
     Public Function ParseReceiptJson() As ReceiptDto
 

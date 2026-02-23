@@ -136,7 +136,15 @@ Public Class Receipts
 
             If ImageForAIBytes Is Nothing Then Exit Sub
 
-            Dim apiKey = System.Configuration.ConfigurationManager.AppSettings("OPENAI_API_KEY")
+
+            Dim MyParam2 As New Collection
+            MyParam2.Add(New Data.SqlClient.SqlParameter("@Parameter", "CHATGPT"))
+            Dim msds2 As DataSet = ExecuteSQLds("s0000GetParameter", MyParam2)
+            Dim apiKey As String = msds2.Tables(0).Rows(0)("Value")
+
+
+
+
 
 
             ' 2️⃣ Appeler OpenAI
@@ -163,16 +171,7 @@ Public Class Receipts
 
 
     End Sub
-    'Dim originalBytes As Byte() = jpegBytesFromSql
 
-    'Dim optimizedBytes As Byte() =
-    '    ReceiptImageOptimizer.OptimizeReceiptForAI(
-    '        originalBytes,
-    '        maxWidth:=1024,
-    '        jpegQuality:=55,
-    '        autoContrast:=True,
-    '        toGrayscale:=True
-    '    )
 
 
 

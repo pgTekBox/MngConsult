@@ -170,7 +170,7 @@
                                     CommandArgument='<%# Eval("imageGUID") %>' />
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
-
+                         
                        
                         <telerik:GridTemplateColumn HeaderText="Optimize for AI" UniqueName="ProcessJSON">
                             <ItemTemplate>
@@ -182,6 +182,8 @@
                                     CommandArgument='<%# Eval("imageGUID") %>' />
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
+
+                          
 
                         
                         <telerik:GridBoundColumn DataField="ProcessingStatus" HeaderText="Statut" SortExpression="ProcessingStatus" UniqueName="ProcessingStatus" />

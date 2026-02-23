@@ -12,8 +12,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Party — Édition</title>
-
+    <title>Supplier — Edit</title>
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -21,7 +20,7 @@
             --card: #fff;
             --text: #0f172a;
             --muted: #64748b;
-            --line: #e2e8f0;
+            --line: #e2e8f0;  
             --primary: #2563eb;
             --danger: #dc2626;
             --ok: #16a34a;
@@ -106,13 +105,104 @@
             grid-template-columns: 1fr 1fr;
             gap: 12px;
         }
+          .grid1 {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 12px;
+  }
+
+       .grid3 {
+       display: grid;
+       grid-template-columns: 1fr 1fr 1fr;
+       gap: 12px;
+   }
+        .grid4 {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr;
+            gap: 12px;
+        }
 
         @media (max-width: 800px) {
-            .grid {
+        .grid {
                 grid-template-columns: 1fr;
             }
         }
+           
+        /* 1) Largeur */
+.field .RadDropDownList,
+.field .RadDropDownList_Metro {
+    width: 100%;
+    display: block;
+}
 
+/* 2) Champ visible */
+.field .RadDropDownList_Metro .rddlInner {
+    width: 100%;
+    /*min-height: 40px;*/
+    height: 33px;
+    padding: 10px 40px 10px 12px !important; /* place pour la flèche */
+  /*  border: 1px solid var(--line) ;*/
+    border-radius: 12px !important;
+    background: #fff !important;
+
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+
+    /* Metro met parfois des shadows / backgrounds */
+    box-shadow: none !important;
+}
+
+/* 3) Texte */
+.field .RadDropDownList_Metro .rddlFakeInput {
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color:var(--text);
+    /* pour éviter une hauteur étrange selon Metro */
+    line-height: 20px;
+}
+
+
+ /* Grossir la flèche du RadDropDownList Metro */
+.RadDropDownList_Metro .rddlSelect .p-icon::before {
+    font-size: 25px; /* ajuste: 16, 20, 24… */
+}
+
+
+/* 4) Zone flèche */
+.field .RadDropDownList_Metro .rddlSelect {
+    width: 36px;
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: transparent !important;
+    border: 0 !important;
+  
+}
+
+/* 5) Focus (quand tu cliques / tab) + quand c'est ouvert */
+.field .RadDropDownList_Metro .rddlInner.rddlFocused,
+.field .RadDropDownList_Metro .rddlInner.rddlExpanded {
+    border-color: #2563eb /*!important*/;
+    box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
+}
+
+/* 6) Disabled */
+.field .RadDropDownList_Metro.rddlDisabled .rddlInner,
+.field .RadDropDownList_Metro .rddlInner.rddlDisabled {
+    background: #f8fafc !important;
+    color: #94a3b8 !important;
+    cursor: not-allowed;
+}
+
+/* 7) Optionnel: hover léger */
+.field .RadDropDownList_Metro .rddlInner:hover {
+    border-color: #cbd5e1 !important;
+}
 
 
 
@@ -124,8 +214,15 @@
             font-weight: 700
         }
 
-
-
+          .field textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      outline: none;
+      background: #fff;
+  }
+           
         .field input {
             width: 100%;
             padding: 10px 12px;
@@ -135,18 +232,29 @@
             background: #fff;
         }
 
-            .field input:focus {
+           .field input:focus {
                 border-color: rgba(37,99,235,.5);
                 box-shadow: 0 0 0 4px rgba(37,99,235,.12);
             }
 
-        .btn {
+           .btn {
+    cursor: pointer;
+    border: 1px solid var(--mc-stroke);
+    border-radius: 12px !important;
+    padding: 10px 12px;
+    background: linear-gradient(135deg, rgba(37, 99, 235, .14), rgba(6, 182, 212, .10));
+    color: var(--mc-text);
+    font-weight: 800;
+}
+
+
+        .btn2 {
             appearance: none;
             border: 1px solid rgba(148,163,184,.7);
             background: #fff;
             color: #0f172a;
             padding: 9px 12px;
-            border-radius: 12px;
+            border-radius: 12px  !important;
             font-weight: 800;
             cursor: pointer;
         }
@@ -256,6 +364,20 @@
                     border-color: rgba(37,99,235,.5) !important;
                     box-shadow: 0 0 0 4px rgba(37,99,235,.12) !important;
                 }
+
+
+/* Empêche la sélection de texte dans la grille */
+.RadGrid_Metro,
+.RadGrid_Metro * {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+.RadGrid_Metro .rgSelectedRow {
+    background: inherit !important;
+}
+
     </style>
 </head>
 
@@ -268,41 +390,53 @@
             runat="server"
             EnablePartialRendering="true"
             AsyncPostBackTimeout="300" />
-          <telerik:RadAjaxManager ID="ram1" runat="server">
-      <AjaxSettings>
-          <telerik:AjaxSetting AjaxControlID="rgAddr">
-              <UpdatedControls>
-                  <telerik:AjaxUpdatedControl ControlID="rgAddr" />
-                  <telerik:AjaxUpdatedControl ControlID="pnlMsg" />
-
-                  <telerik:AjaxUpdatedControl ControlID="pnlAddrEditor" />
+        <telerik:RadAjaxManager ID="ram1" runat="server">
+            <AjaxSettings>
 
 
-              </UpdatedControls>
-          </telerik:AjaxSetting>
 
-          <telerik:AjaxSetting AjaxControlID="btnNewAddress">
-              <UpdatedControls>
-                  <telerik:AjaxUpdatedControl ControlID="rgAddr" />
-              </UpdatedControls>
-          </telerik:AjaxSetting>
+                <telerik:AjaxSetting AjaxControlID="btnNewAddress">
+                    <UpdatedControls>
 
-          <telerik:AjaxSetting AjaxControlID="btnAddrRefresh">
-              <UpdatedControls>
-                  <telerik:AjaxUpdatedControl ControlID="rgAddr" />
-              </UpdatedControls>
-          </telerik:AjaxSetting>
-      </AjaxSettings>
-  </telerik:RadAjaxManager>
+
+                        <telerik:AjaxUpdatedControl ControlID="pnlAddrEditor" />
+
+
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+                <telerik:AjaxSetting AjaxControlID="rgAddr">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rgAddr" />
+                        <telerik:AjaxUpdatedControl ControlID="pnlMsg" />
+
+                        <telerik:AjaxUpdatedControl ControlID="pnlAddrEditor" />
+
+
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+
+                <telerik:AjaxSetting AjaxControlID="btnNewAddress">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rgAddr" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+
+                <telerik:AjaxSetting AjaxControlID="btnAddrRefresh">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rgAddr" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+            </AjaxSettings>
+        </telerik:RadAjaxManager>
         <div class="wrap">
 
             <div class="top">
                 <div>
                     <div class="title">Édition — Party</div>
-                    <div class="sub">Modifier l’entité + gérer ses adresses</div>
+                     
                 </div>
                 <div class="bar">
-                    <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn" NavigateUrl="PartyList.aspx">← Retour à la liste</asp:HyperLink>
+                    <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn" onclick="closeWin();">← Retour à la liste</asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
                 </div>
             </div>
@@ -315,27 +449,51 @@
             <div class="card">
                 <div class="cardHead">
                     <div>
-                        <div class="h">Informations Party</div>
-                        <div class="small">
-                            Id:
-                            <asp:Literal ID="litId" runat="server" />
+                        <div class="h">Informations suppliers </div>
+
+                        <div class="grid4">
+                            <div class="small">
+                                Id:
+                            <telerik:RadLabel runat="server" ID="tlblId"></telerik:RadLabel>
+                                <asp:Literal ID="litId" runat="server" />
+                            </div>
+
+                            <div class="small">
+                                Origine:
+                                <telerik:RadLabel runat="server" ID="tlblOrigine"></telerik:RadLabel>
+                            </div>
+                            <div class="small">
+                                Created:
+                                    <telerik:RadLabel runat="server" ID="tlblCreated"></telerik:RadLabel>
+                            </div>
+
                         </div>
                     </div>
-                    <div class="right">
+                   <%-- <div class="right">
                         <span class="small mono">
-                            <asp:Literal ID="litGuid" runat="server" /></span>
-                    </div>
+                            <asp:Literal ID="litGuid" runat="server" />le lit</span>
+                    </div>--%>
                 </div>
                 <div class="cardBody">
-                    <div class="grid">
+                    <div class="grid3">
                         <div class="field">
                             <label>Nom</label>
-                            <telerik:RadTextBox ID="txtName" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <telerik:RadTextBox ID="txtName"  Width="300px" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                        </div>
+                        <div class="field">
+                            <label>Display Name</label>
+                            <telerik:RadTextBox ID="txtDisplayName"  Width="300px" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
 
                         <div class="field">
+                            <label>Type</label>
+                            <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlPartyType" runat="server" 
+                                DefaultMessage="Select.." DropDownHeight="110px" Skin="Metro">
+                            </telerik:RadDropDownList>
+                        </div>
+                        <div class="field">
                             <label>Website</label>
-                            <telerik:RadTextBox ID="txtWebsite" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                            <telerik:RadTextBox ID="txtWebsite"  Width="300px"  runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
 
                         <div class="field">
@@ -347,6 +505,14 @@
                             <label>No TVQ</label>
                             <telerik:RadTextBox ID="txtNoTVQ" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
+                          </div>
+                        <div class="grid1">
+                        <div class="field">
+                            <label>Note</label>
+                            <telerik:RadTextBox ID="txtNote"  Width="100%"  runat="server" RenderMode="Lightweight" CssClass="rtbLike" TextMode="MultiLine" />
+                        </div>
+
+
                     </div>
                 </div>
             </div>
@@ -356,7 +522,7 @@
                 <div class="cardHead">
                     <div>
                         <div class="h">Adresses</div>
-                        <div class="small">Une Party peut avoir plusieurs adresses</div>
+                       
                     </div>
                     <div class="right">
                         <asp:Button ID="btnNewAddress" runat="server" Text="Ajouter une adresse" CssClass="btn primary" />
@@ -368,10 +534,12 @@
                     Skin="Metro"
                     AutoGenerateColumns="False"
                     AllowPaging="True"
-                    PageSize="25"
+                    AllowMultiRowSelection ="false" 
+                                         PageSize="25"
                     AllowSorting="True"
-                    Height="200px">
+                    Height="200px" SelectedItemStyle-ForeColor="Black">
                     <ClientSettings>
+                          <Selecting AllowRowSelect="false" EnableDragToSelectRows="False" />
                         <Scrolling AllowScroll="true" UseStaticHeaders="true" />
                     </ClientSettings>
                     <MasterTableView DataKeyNames="Id" CommandItemDisplay="Top">
@@ -383,14 +551,17 @@
                             ShowExportToPdfButton="False" />
 
                         <Columns>
-                            <telerik:GridTemplateColumn HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
+                            <telerik:GridTemplateColumn  HeaderStyle-Width="160px" ItemStyle-Width="160px" HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
                                 <ItemTemplate>
                                     <asp:Button ID="btnEdit" runat="server" CssClass="btn" Text="Edit" CommandName="EditAddress" />
                                     <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete" CommandName="DeleteAddress" />
                                 </ItemTemplate>
                             </telerik:GridTemplateColumn>
-                            <telerik:GridBoundColumn DataField="Address1" HeaderText="Address1" UniqueName="Address1" />
-                            <telerik:GridBoundColumn DataField="Address2" HeaderText="Address2" UniqueName="Address2" />
+
+                            <telerik:GridBoundColumn  HeaderStyle-Width="140px" ItemStyle-Width="140px" DataField="Typename" HeaderText="Type" UniqueName="Typename" />
+                            
+                            <telerik:GridBoundColumn    DataField="Address" HeaderText="Address" UniqueName="Address" />
+                            
 
                         </Columns>
                     </MasterTableView>
@@ -406,7 +577,7 @@
                 <!-- Editor -->
                 <telerik:RadWindowManager ID="rwm1" runat="server" EnableShadow="true" />
 
-                <telerik:RadWindow ID="rwAddr"  runat="server"
+                <telerik:RadWindow ID="rwAddr" runat="server"
                     Modal="true"
                     VisibleOnPageLoad="false"
                     Behaviors="Close,Move"
@@ -424,6 +595,19 @@
 
                             <div style="padding: 14px;">
                                 <div class="grid">
+
+                                    <div class="field">
+                                        <label>Type</label>
+                                        <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlAddressType" runat="server"
+                                            DefaultMessage="Select.." DropDownHeight="110px">
+                                        </telerik:RadDropDownList>
+                                    </div>
+
+                                    <div class="field">
+                                        <label>Name</label>
+                                        <telerik:RadTextBox ID="txtAddressName" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                                    </div>
+
                                     <div class="field">
                                         <label>Adresse 1</label>
                                         <telerik:RadTextBox ID="txtA1" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
@@ -456,11 +640,17 @@
                                         <telerik:RadTextBox ID="txtPostal" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
-                                    <div class="field">
+                                  <%--  <div class="field">
                                         <label>Pays</label>
                                         <telerik:RadTextBox ID="txtCountry" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
-                                    </div>
+                                    </div>--%>
                                 </div>
+
+                                <div class="field">
+                                    <label>Note</label>
+                                    <telerik:RadTextBox ID="txtAddressNote" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                                </div>
+
 
                                 <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 14px; flex-wrap: wrap;">
                                     <asp:Button ID="btnAddrSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
@@ -487,7 +677,7 @@
         </div>
         <!-- bouton caché pour refresh après fermeture -->
         <asp:Button ID="btnAddrRefresh" ClientIDMode="Static" runat="server" Style="display: none" />
-      
+
 
 
         <script type="text/javascript">
@@ -498,6 +688,7 @@
             }
 
             function rwAddr_OnClientClose(sender, args) {
+
                 var a = args.get_argument();
                 if (a && a.saved) {
 
