@@ -327,8 +327,14 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="wbfCustomers.aspx" />
+    <Content Include="wbfCustomersInvoices.aspx" />
+    <Content Include="wbflogout.aspx" />
+    <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
+    <Content Include="wbfScannedPDF.aspx" />
+    <Content Include="wbfSetting.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
+    <Content Include="wbfSupplierInvoinceEdit.aspx" />
     <Content Include="wbfSuppliers.aspx" />
     <Content Include="wbfSuppliersInvoices.aspx" />
     <Content Include="Web.config" />
@@ -449,6 +455,27 @@
       <DependentUpon>wbfCustomers.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfCustomersInvoices.aspx.designer.vb">
+      <DependentUpon>wbfCustomersInvoices.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCustomersInvoices.aspx.vb">
+      <DependentUpon>wbfCustomersInvoices.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbflogout.aspx.designer.vb">
+      <DependentUpon>wbflogout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbflogout.aspx.vb">
+      <DependentUpon>wbflogout.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfRapportTaxes.aspx.designer.vb">
+      <DependentUpon>wbfRapportTaxes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfRapportTaxes.aspx.vb">
+      <DependentUpon>wbfRapportTaxes.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfReceipt.aspx.designer.vb">
       <DependentUpon>wbfReceipt.aspx</DependentUpon>
     </Compile>
@@ -456,11 +483,32 @@
       <DependentUpon>wbfReceipt.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfScannedPDF.aspx.designer.vb">
+      <DependentUpon>wbfScannedPDF.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfScannedPDF.aspx.vb">
+      <DependentUpon>wbfScannedPDF.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfSetting.aspx.designer.vb">
+      <DependentUpon>wbfSetting.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSetting.aspx.vb">
+      <DependentUpon>wbfSetting.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfSupplierEdit.aspx.designer.vb">
       <DependentUpon>wbfSupplierEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfSupplierEdit.aspx.vb">
       <DependentUpon>wbfSupplierEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierInvoinceEdit.aspx.designer.vb">
+      <DependentUpon>wbfSupplierInvoinceEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierInvoinceEdit.aspx.vb">
+      <DependentUpon>wbfSupplierInvoinceEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfSuppliers.aspx.designer.vb">
@@ -509,7 +557,9 @@
       <DependentUpon>Web.config</DependentUpon>
     </None>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="App_Data\TempUploads\" />
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

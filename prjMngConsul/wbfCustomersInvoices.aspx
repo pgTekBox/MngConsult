@@ -1,4 +1,5 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfSuppliersInvoices.aspx.vb" Inherits="MngConsul.wbfSuppliersInvoices" %>
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfCustomersInvoices.aspx.vb" Inherits="MngConsul.wbfCustomersInvoices" %>
+
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Invoices — MngConsul
@@ -56,35 +57,66 @@
    </style>
 </asp:Content>
 
+
+
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
-    <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true">
+
+    <telerik:RadAjaxManager ID="ram1" runat="server">
+    <AjaxSettings>
+        
+    </AjaxSettings>
+         
+    <PostBackControls>
+        
+    </PostBackControls>
+</telerik:RadAjaxManager>
+     
+
+    <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true">
     </telerik:RadWindowManager>
 
-    <telerik:RadWindow ID="rwSupplierInvoices" runat="server"
+    <telerik:RadWindow ID="rwCustomerInvoices" runat="server"
         Modal="true"
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
         Width="1100px"
         Height="720px"
-        Title="Ajouter / Modifier un facture fournisseur"
-        OnClientClose="rwSupplierInvoice_OnClientClose">
+        Title="Ajouter / Modifier un facture client"
+        OnClientClose="rwCustomerInvoice_OnClientClose">
     </telerik:RadWindow>
 
 
     <div class="page-head">
         <div>
-            <div class="page-title">Facture Fournisseurs</div>
-            <div class="page-sub">Liste des factures fournisseurs </div>
+            <div class="page-title">Facture Client</div>
+            <div class="page-sub">Liste des factures client </div>
         </div>
 
         <div class="actions">
-            <asp:Button ID="btnAddSupplier" runat="server"
+            
+              <telerik:RadAsyncUpload ID="rauInvoicePdf" runat="server"
+        AllowedFileExtensions=".pdf"
+        MaxFileInputsCount="1"
+        AutoPostBackOnUpload="true"
+        MultipleFileSelection="Disabled"
+         
+        TargetFolder="~/App_Data/TempUploads"
+        Skin="Metro" /> <telerik:RadButton ID="btnSavePdf" runat="server"
+    Text="Sauvegarder"
+    CssClass="btn primary"
+    AutoPostBack="true"
+     />
+        <span class="page-sub" style="margin:0;">Uploader PDF facture</span>
+
+
+
+            <asp:Button ID="btnAddCustomer" runat="server"
                 CssClass="btn primary"
-                Text="Ajouter Supplier"
+                Text="Ajouter Client"
                 CausesValidation="false"
-                OnClientClick="openSupplierInvoicesWindow(0); return false;" />
+                OnClientClick="openCustomerInvoicesWindow(0); return false;" />
             <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (nom, email, téléphone…)" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
             <asp:Button ID="btnClear" runat="server" CssClass="btn" Text="Effacer" CausesValidation="false" />
@@ -94,7 +126,7 @@
 
 
     <div class="full-grid">
-       <telerik:RadGrid ID="rgFournisseursFactures" runat="server"
+       <telerik:RadGrid ID="rgClientsFactures" runat="server"
     Skin="Metro"
     AutoGenerateColumns="False"
     AllowPaging="True"
@@ -123,7 +155,7 @@
                     <telerik:GridTemplateColumn HeaderStyle-Width="200px" HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
                         <ItemTemplate>
                             <asp:Button ID="btnEdit" runat="server" CssClass="btn" Text="Edit"
-                                OnClientClick='<%# "openSupplierInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
+                                OnClientClick='<%# "openCustomerInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
                             <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete"
                                 CommandName="DeleteInvoice" CommandArgument='<%# Eval("Id") %>' />
                         </ItemTemplate>
@@ -153,27 +185,27 @@
 
     <script type="text/javascript">
         function openSupplierInvoiceWindow(id) {
-            var wnd = $find("<%= rwSupplierInvoices.ClientID %>");
-            var url = "wbfSupplierInvoinceEdit.aspx";
+            var wnd = $find("<%= rwCustomerInvoices.ClientID %>");
+            var url = "wbfCustomerInvoinceEdit.aspx";
 
             if (id && id > 0) {
                 url += "?SupplierId=" + id;
-                wnd.set_title("Modifier un fournisseur");
+                wnd.set_title("Modifier un client");
             } else {
                 url += "?SupplierId=0";
-                wnd.set_title("Ajouter un fournisseur");
+                wnd.set_title("Ajouter un client");
             }
 
             wnd.setUrl(url);
             wnd.show();
         }
 
-        function rwSupplierInvoice_OnClientClose(sender, args) {
+        function rwCustomerInvoice_OnClientClose(sender, args) {
             // Refresh la grid après fermeture
-            var grid = $find("<%= rwSupplierInvoices.ClientID %>");
+            var grid = $find("<%= rwCustomerInvoices.ClientID %>");
             if (grid) {
                 grid.get_masterTableView().rebind();
             }
         }
-</script>
+    </script>
 </asp:Content>

@@ -145,11 +145,17 @@ Public Class Receipts
 
 
 
+            Dim prompt As String =
+            "Tu es un moteur OCR + extraction comptable. " &
+            "Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
+            "Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
+            "Schéma souhaité: " &
+            "{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
+            "Si une valeur est inconnue: null."
 
-
-            ' 2️⃣ Appeler OpenAI
             Dim reader As New OpenAiReceiptReader()
-            Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, ImageForAIBytes, "image/jpeg")
+            Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, ImageForAIBytes, "image/jpeg", prompt)
+
 
             Dim MyParam3 As New Collection
             MyParam3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))

@@ -32,7 +32,7 @@
     <div class="sidebar-inner">
 
       <!-- Item simple -->
-      <a class="nav-item" href="~/Accueil.aspx" runat="server" data-navlink>
+      <a class="nav-item" href="~/default.aspx" runat="server" data-navlink>
         <span class="nav-ico" aria-hidden="true">🏠</span>
         <span class="nav-txt">Tableau de bord</span>
       </a>
@@ -57,14 +57,14 @@
             <span class="dot" aria-hidden="true"></span>
             Clients
           </a>
-          <a class="nav-child" href="~/Factures.aspx" runat="server" data-navlink>
+          <a class="nav-child" href="~/wbfCustomersInvoices.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Factures clients
           </a>
-          <a class="nav-child" href="~/Paiements.aspx" runat="server" data-navlink>
+          <a class="nav-child" href="~/wbfScannedPDF.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
-            Paiements reçus
-          </a>
+            Documents scannés
+          </a> 
         </div>
       </div>
 
@@ -115,15 +115,15 @@
         </button>
 
         <div class="nav-children">
-          <a class="nav-child" href="~/PlanComptable.aspx" runat="server" data-navlink>
+        <%--  <a class="nav-child" href="~/PlanComptable.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Plan comptable
           </a>
           <a class="nav-child" href="~/Ecritures.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Écritures
-          </a>
-          <a class="nav-child" href="~/Rapports.aspx" runat="server" data-navlink>
+          </a>--%>
+          <a class="nav-child" href="~/wbfRapportTaxes.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Rapports
           </a>
@@ -132,11 +132,11 @@
 
       <!-- Footer -->
       <div class="sidebar-footer">
-        <a class="nav-item subtle" href="~/Settings.aspx" runat="server" data-navlink>
+        <a class="nav-item subtle" href="~/wbfsetting.aspx" runat="server" data-navlink>
           <span class="nav-ico" aria-hidden="true">⚙️</span>
           <span class="nav-txt">Paramètres</span>
         </a>
-        <a class="nav-item subtle" href="~/Logout.aspx" runat="server" data-navlink>
+        <a class="nav-item subtle" href="~/wbfLogout.aspx" runat="server" data-navlink>
           <span class="nav-ico" aria-hidden="true">🚪</span>
           <span class="nav-txt">Déconnexion</span>
         </a>

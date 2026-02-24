@@ -17,7 +17,7 @@ Public Class OpenAiReceiptReader
     Public Async Function ReadReceiptAsJsonAsync(
         apiKey As String,
         receiptBytes As Byte(),
-        mimeType As String,
+        mimeType As String, Prompt As String,
         Optional model As String = "gpt-4.1-mini",
         Optional imageDetail As String = "low"
     ) As Task(Of OpenAiUsageResult)
@@ -29,13 +29,7 @@ Public Class OpenAiReceiptReader
         Dim b64 As String = Convert.ToBase64String(receiptBytes)
         Dim dataUrl As String = $"data:{mimeType};base64,{b64}"
 
-        Dim prompt As String =
-            "Tu es un moteur OCR + extraction comptable. " &
-            "Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
-            "Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
-            "Schéma souhaité: " &
-            "{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
-            "Si une valeur est inconnue: null."
+
 
         ' Corps Responses API (texte + image)
         Dim body As New JObject(
@@ -46,7 +40,7 @@ Public Class OpenAiReceiptReader
                     New JProperty("content", New JArray(
                         New JObject(
                             New JProperty("type", "input_text"),
-                            New JProperty("text", prompt)
+                            New JProperty("text", Prompt)
                         ),
                         New JObject(
                             New JProperty("type", "input_image"),

@@ -1,21 +1,21 @@
 ﻿Imports Telerik.Web.UI
 
-Public Class wbfReceipt
+Public Class wbfScannedPDF
     Inherits clsData
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            RadReceipt.Rebind()
+            RadScannedPDF.Rebind()
         End If
     End Sub
 
     Protected Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
-        RadReceipt.CurrentPageIndex = 0
-        RadReceipt.Rebind()
+        RadScannedPDF.CurrentPageIndex = 0
+        RadScannedPDF.Rebind()
     End Sub
-    Protected Sub RadReceipt_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs)
+    Protected Sub RadScannedPDF_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs)
         Dim dt As DataTable = GetData()
-        RadReceipt.DataSource = dt
+        RadScannedPDF.DataSource = dt
 
         lblInfo.Visible = True
         lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
@@ -29,13 +29,13 @@ Public Class wbfReceipt
         'p.Add(New SqlClient.SqlParameter("@q", q))
         'Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts", p)
 
-        Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts")
+        Dim ds As DataSet = ExecuteSQLds("s0028GetDocScanned")
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
     End Function
 
 
-    Protected Async Sub RadReceipt_ItemCommand(sender As Object, e As GridCommandEventArgs)
+    Protected Async Sub RadScannedPDF_ItemCommand(sender As Object, e As GridCommandEventArgs)
         If e.CommandArgument Is Nothing Then Return
 
         Dim imageGUID As Guid
@@ -47,35 +47,9 @@ Public Class wbfReceipt
                 Dim p As New Collection
                 p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
                 ExecuteSQLds("s0006DeleteReceipt", p)
-                RadReceipt.Rebind()
+                RadScannedPDF.Rebind()
 
-            Case "Optimize"
-                Dim p As New Collection
-                p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                Dim msds As DataSet = ExecuteSQLds("s0003GetDoc", p)
 
-                If msds Is Nothing OrElse msds.Tables.Count = 0 OrElse msds.Tables(0).Rows.Count = 0 Then Exit Sub
-                Dim originalBytes = msds.Tables(0).Rows(0)("ImageSource")
-                If originalBytes Is Nothing OrElse IsDBNull(originalBytes) Then Exit Sub
-
-                Dim opt As New clsReceiptImageOptimizer()
-                Dim optimizedBytes = opt.OptimizeReceiptForAI(
-                    CType(originalBytes, Byte()),
-                    maxWidth:=1024,
-                    jpegQuality:=55,
-                    autoContrast:=True,
-                    toGrayscale:=True
-                )
-
-                Dim p2 As New Collection
-                p2.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                p2.Add(New Data.SqlClient.SqlParameter("@optimizedImage", optimizedBytes))
-                ExecuteSQLds("s0004SaveoptimizedImage", p2)
-
-                lblInfo.Text = "Receipt optimized ✔"
-                lblInfo.Visible = True
-
-                RadReceipt.Rebind()
 
             Case "ProcessJSON"
                 Dim p As New Collection
@@ -89,7 +63,7 @@ Public Class wbfReceipt
                 oReceiptAI.ProcesJSON()
 
                 ' optionnel:
-                RadReceipt.Rebind()
+                RadScannedPDF.Rebind()
 
 
 
@@ -124,17 +98,16 @@ Public Class wbfReceipt
                 Dim msds2 As DataSet = ExecuteSQLds("s0000GetParameter", MyParam2)
                 Dim apiKey As String = msds2.Tables(0).Rows(0)("Value")
 
-
                 Dim prompt As String =
             "Tu es un moteur OCR + extraction comptable. " &
-            "Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
-            "Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
+            "Lis le document pdf fourni et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
             "Schéma souhaité: " &
             "{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
             "Si une valeur est inconnue: null."
 
                 Dim reader As New OpenAiReceiptReader()
-                Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, imageForAIBytes, "image/jpeg", prompt)
+                Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, imageForAIBytes, "application/pdf", prompt)
+
 
                 Dim p3 As New Collection
                 p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
@@ -143,7 +116,7 @@ Public Class wbfReceipt
                 p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
                 ExecuteSQLds("s0006SaveAIReturn", p3)
 
-                RadReceipt.Rebind()
+                RadScannedPDF.Rebind()
 
         End Select
     End Sub

@@ -28,7 +28,7 @@ Public Class wbfSuppliersInvoices
         Select Case e.CommandName
             Case "EditSupplierInvoice"
                 SupplierInvoiceId = e.CommandArgument
-                Response.Redirect("wbfSupplierEdit.aspx?SupplierId=" & SupplierInvoiceId.ToString)
+                Response.Redirect("wbfSupplierInvoinceEdit.aspx?SupplierId=" & SupplierInvoiceId.ToString)
 
         End Select
     End Sub
