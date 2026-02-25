@@ -1,4 +1,6 @@
-﻿Imports System.Drawing
+﻿Imports System.Data
+Imports System.Data.SqlClient
+Imports System.Drawing
 Imports Microsoft.SqlServer.Server
 
 Public Class docHandler
@@ -21,25 +23,38 @@ Public Class docHandler
             sFileName = context.Request.Url.Segments(context.Request.Url.Segments.Length - 1)
             'ImageModel_213'_1_Z.jpg
 
-
             If sFileName.Length < 1 Then Return
 
             Dim arrFileName() As String = sFileName.Split("_")
             Dim MyGUID As String = arrFileName(1)
             Dim arrMyGUID() As String = MyGUID.Split(".")
             MyGUID = arrMyGUID(0)
+            Dim ext As String = arrMyGUID(1)
 
-            Dim oImg As New clsImage
+            If ext = "pdf" Then
 
-            If arrFileName(0) = "Optimized" Then
-                oImg.LoadOptimizedImage(context, sFileName, "", New Guid(MyGUID))
+                Dim oImg As New clsImage
+
+                oImg.LoadPDF(context, sFileName, New Guid(MyGUID))
+
+
+            Else
+
+
+
+
+                Dim oImg As New clsImage
+
+                If arrFileName(0) = "Optimized" Then
+                    oImg.LoadOptimizedImage(context, sFileName, "", New Guid(MyGUID))
+                End If
+
+
+                If arrFileName(0) = "Voirlerecu" Then
+                    oImg.LoadImage(context, sFileName, "", New Guid(MyGUID))
+                End If
+
             End If
-
-
-            If arrFileName(0) = "Voirlerecu" Then
-                oImg.LoadImage(context, sFileName, "", New Guid(MyGUID))
-            End If
-
 
 
 

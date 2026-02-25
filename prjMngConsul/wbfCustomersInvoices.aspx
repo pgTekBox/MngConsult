@@ -96,19 +96,8 @@
 
         <div class="actions">
             
-              <telerik:RadAsyncUpload ID="rauInvoicePdf" runat="server"
-        AllowedFileExtensions=".pdf"
-        MaxFileInputsCount="1"
-        AutoPostBackOnUpload="true"
-        MultipleFileSelection="Disabled"
-         
-        TargetFolder="~/App_Data/TempUploads"
-        Skin="Metro" /> <telerik:RadButton ID="btnSavePdf" runat="server"
-    Text="Sauvegarder"
-    CssClass="btn primary"
-    AutoPostBack="true"
-     />
-        <span class="page-sub" style="margin:0;">Uploader PDF facture</span>
+   
+       
 
 
 

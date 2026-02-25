@@ -299,6 +299,18 @@
     <Content Include="App_Data\RadSpell\de-DE.tdf" />
     <Content Include="App_Data\RadSpell\en-US.tdf" />
     <Content Include="App_Data\RadSpell\fr-FR.tdf" />
+    <Content Include="App_Data\RadUploadTemp\1771964943549Facture_59310.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965019941Facture_59309.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965226841Facture_59308.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965260247Facture_59307.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965428239Facture_59308.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965444563Facture_59314.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771965897802Facture_59313.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771966249995Facture_59309.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771966309131Facture_59311.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771966644296Facture_59311.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\1771966730796Facture_59311.pdf.tmp" />
+    <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -333,6 +345,7 @@
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfSetting.aspx" />
+    <Content Include="wbfSettingsOpenAiPrompts.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
     <Content Include="wbfSuppliers.aspx" />
@@ -497,6 +510,13 @@
       <DependentUpon>wbfSetting.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfSettingsOpenAiPrompts.aspx.designer.vb">
+      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSettingsOpenAiPrompts.aspx.vb">
+      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfSupplierEdit.aspx.designer.vb">
       <DependentUpon>wbfSupplierEdit.aspx</DependentUpon>
     </Compile>
@@ -602,7 +622,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

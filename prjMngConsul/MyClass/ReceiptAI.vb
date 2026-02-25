@@ -30,6 +30,25 @@ Public Class ReceiptAI
     Public json As String
     Public MyReceiptDto As ReceiptDto
 
+
+    Public Sub ProcesJSONForCustomerInvoice()
+        StoreCustomerInvoice2BD
+    End Sub
+    Public Sub StoreCustomerInvoice2BD()
+
+
+
+        Dim MyParamHeader As New Collection
+        MyParamHeader.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+        Dim Myds As DataSet = ExecuteSQLds("s0033SaveCustomer", MyParamHeader)
+
+        Dim MyParamDoc As New Collection
+        MyParamDoc.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+        Dim MydsDoc As DataSet = ExecuteSQLds("se0009SaveDocument", MyParamDoc)
+
+    End Sub
+
+
     Public Sub ProcesJSON()
 
         ParseReceiptJson()

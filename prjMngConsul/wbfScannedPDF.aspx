@@ -1,85 +1,104 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"  MaintainScrollPositionOnPostback="true"   CodeBehind="wbfScannedPDF.aspx.vb" Inherits="MngConsul.wbfScannedPDF" %>
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" Async="true" MaintainScrollPositionOnPostback="true" CodeBehind="wbfScannedPDF.aspx.vb" Inherits="MngConsul.wbfScannedPDF" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Pdf Factures clients — MngConsul
 </asp:Content>
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
-     
+
  
-     
     <style>
-/* Modal JSON - Theme clair */
-.json-modal-overlay{
-    position:fixed;
-    inset:0;
-    background:rgba(15, 23, 42, .45); /* overlay doux */
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    z-index:99999;
-}
+        /* Modal JSON - Theme clair */
+        .json-modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(15, 23, 42, .45); /* overlay doux */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 99999;
+        }
 
-.json-modal-box{
-    width: min(1000px, 92vw);
-    max-height: 85vh;
-    background: #ffffff;
-    border-radius: 16px;
-    overflow: hidden;
-    display:flex;
-    flex-direction:column;
-    box-shadow: 0 30px 80px rgba(0,0,0,.25);
-    border: 1px solid rgba(0,0,0,.10);
-}
+        .json-modal-box {
+            width: min(1000px, 92vw);
+            max-height: 85vh;
+            background: #ffffff;
+            border-radius: 16px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 30px 80px rgba(0,0,0,.25);
+            border: 1px solid rgba(0,0,0,.10);
+        }
 
-.json-modal-header{
-    padding: 14px 18px;
-    background: #f8fafc;
-    color: #0f172a;
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    font-weight: 800;
-    border-bottom: 1px solid rgba(0,0,0,.10);
-}
+        .json-modal-header {
+            padding: 14px 18px;
+            background: #f8fafc;
+            color: #0f172a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 800;
+            border-bottom: 1px solid rgba(0,0,0,.10);
+        }
 
-.json-modal-close{
-    border: 1px solid rgba(0,0,0,.14);
-    background: #ffffff;
-    color: #0f172a;
-    font-size: 14px;
-    cursor: pointer;
-    border-radius: 10px;
-    padding: 6px 10px;
-    font-weight: 800;
-}
+        .json-modal-close {
+            border: 1px solid rgba(0,0,0,.14);
+            background: #ffffff;
+            color: #0f172a;
+            font-size: 14px;
+            cursor: pointer;
+            border-radius: 10px;
+            padding: 6px 10px;
+            font-weight: 800;
+        }
 
-.json-modal-close:hover{
-    background:#f1f5f9;
-}
+            .json-modal-close:hover {
+                background: #f1f5f9;
+            }
 
-.json-modal-content{
-    flex:1;
-    overflow:auto;
-    padding: 18px;
-    font-family: Consolas, ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-    font-size: 13px;
-    color: #0f172a;
-    background: #ffffff;
-    white-space: pre-wrap;
-    word-break: break-word;
-}
+        .json-modal-content {
+            flex: 1;
+            overflow: auto;
+            padding: 18px;
+            font-family: Consolas, ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+            font-size: 13px;
+            color: #0f172a;
+            background: #ffffff;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
 
-/* JSON "code look" plus lisible */
-.json-modal-content{
-    border-top: 0;
-}
-</style>
+        /* JSON "code look" plus lisible */
+        .json-modal-content {
+            border-top: 0;
+        }
+    </style>
 
 
     <div class="toolbar">
         <div class="title">Scanned PDF </div>
+  
 
         <div class="searchbox">
+
+          <telerik:RadAsyncUpload ID="rauInvoicePdf" runat="server"
+                AllowedFileExtensions=".pdf"
+                MaxFileInputsCount="1"
+                AutoPostBackOnUpload="true"
+                MultipleFileSelection="Disabled"
+                TemporaryFolder="~/App_Data/RadUploadTemp"
+                TargetFolder="~/App_Data/TempUploads"
+                Skin="Metro" />
+
+           
+
+            <telerik:RadButton ID="btnSavePdf" runat="server"
+                Text="Sauvegarder"
+                CssClass="btn primary"
+                AutoPostBack="true" />
+
+
+
             <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (fournisseur, fichier, statut…)" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
         </div>
@@ -104,7 +123,7 @@
                 <MasterTableView DataKeyNames="imageGUID" CommandItemDisplay="None">
                     <Columns>
 
-                         
+
                         <telerik:GridTemplateColumn HeaderText="Action" UniqueName="Action">
                             <ItemTemplate>
                                 <asp:Button ID="btnDelete"
@@ -116,7 +135,7 @@
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
 
-                        
+
                         <telerik:GridTemplateColumn HeaderText="Fichier" UniqueName="Fichier">
                             <ItemTemplate>
                                 <asp:Literal ID="litHtml" runat="server" Mode="PassThrough"
@@ -124,9 +143,9 @@
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
 
-                       
-                         
-                        
+
+
+
                         <telerik:GridTemplateColumn HeaderText="Analyse AI" UniqueName="ProcessAI">
                             <ItemTemplate>
                                 <asp:Button ID="btnProcess"
@@ -138,7 +157,7 @@
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
 
-                       
+
                         <telerik:GridTemplateColumn HeaderText="Voir JSON" UniqueName="VoirJSON">
                             <ItemTemplate>
                                 <asp:Button ID="btnVoirJSON"
@@ -149,9 +168,9 @@
                                     CommandArgument='<%# Eval("imageGUID") %>' />
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
-                         
-                       
-                        <telerik:GridTemplateColumn HeaderText="Optimize for AI" UniqueName="ProcessJSON">
+
+
+                        <telerik:GridTemplateColumn HeaderText="Process to Database" UniqueName="ProcessJSON">
                             <ItemTemplate>
                                 <asp:Button ID="btnProcessJSON"
                                     runat="server"
@@ -162,9 +181,9 @@
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
 
-                          
 
-                        
+
+
                         <telerik:GridBoundColumn DataField="ProcessingStatus" HeaderText="Statut" SortExpression="ProcessingStatus" UniqueName="ProcessingStatus" />
 
                     </Columns>
@@ -180,7 +199,7 @@
     </div>
 
     <!-- Modal JSON -->
-    <div id="jsonModal" class="json-modal-overlay" style="display:none;">
+    <div id="jsonModal" class="json-modal-overlay" style="display: none;">
         <div class="json-modal-box">
             <div class="json-modal-header">
                 <div>🤖 Résultat Analyse AI (JSON)</div>
@@ -190,20 +209,28 @@
         </div>
     </div>
 
-<script>
-    function showJsonModal(jsonText) {
-        document.getElementById("jsonModalContent").textContent = jsonText;
-        document.getElementById("jsonModal").style.display = "flex";
-    }
-    function closeJsonModal() {
-        document.getElementById("jsonModal").style.display = "none";
-    }
+    <script>
+        function showJsonModal(jsonText) {
+            document.getElementById("jsonModalContent").textContent = jsonText;
+            document.getElementById("jsonModal").style.display = "flex";
+        }
+        function closeJsonModal() {
+            document.getElementById("jsonModal").style.display = "none";
+        }
 
-    function openImageViewer(src) {
-        const w = window.open("", "_blank", "width=1100,height=800,resizable=yes,scrollbars=no");
-        if (!w) return alert("Popup bloquée. Autorise les popups pour ce site.");
 
-        w.document.write(`<!doctype html>
+        function openPdfViewer(src)
+        {
+
+
+        }
+
+
+        function openImageViewer(src) {
+            const w = window.open("", "_blank", "width=1100,height=800,resizable=yes,scrollbars=no");
+            if (!w) return alert("Popup bloquée. Autorise les popups pour ce site.");
+
+            w.document.write(`<!doctype html>
 <html lang="fr">
 <head>
 <meta charset="utf-8" />
@@ -389,9 +416,9 @@
 </body>
 </html>`);
 
-        w.document.close();
-    }
-</script>
-     
+            w.document.close();
+        }
+    </script>
 
-    </asp:Content>
+
+</asp:Content>

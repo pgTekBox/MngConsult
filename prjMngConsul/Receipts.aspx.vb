@@ -153,8 +153,8 @@ Public Class Receipts
             "{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
             "Si une valeur est inconnue: null."
 
-            Dim reader As New OpenAiReceiptReader()
-            Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, ImageForAIBytes, "image/jpeg", prompt)
+            Dim reader As New OpenAiReceiptReader(apiKey)
+            Dim result = Await reader.ReadReceiptAsJsonAsync(ImageForAIBytes, "image/jpeg", prompt)
 
 
             Dim MyParam3 As New Collection
@@ -162,7 +162,7 @@ Public Class Receipts
             MyParam3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonResult))
             MyParam3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
             MyParam3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
-
+            MyParam3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", 0))
             Dim msds3 As DataSet = ExecuteSQLds("s0006SaveAIReturn", MyParam3)
 
 

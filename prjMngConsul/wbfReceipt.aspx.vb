@@ -115,6 +115,7 @@ Public Class wbfReceipt
 
                 If msds Is Nothing OrElse msds.Tables.Count = 0 OrElse msds.Tables(0).Rows.Count = 0 Then Exit Sub
                 Dim imageForAIObj = msds.Tables(0).Rows(0)("ImageForAI")
+                Dim ContentType As String = CStr(msds.Tables(0).Rows(0)("ContentType"))
                 If imageForAIObj Is Nothing OrElse IsDBNull(imageForAIObj) Then Exit Sub
 
                 Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
@@ -124,23 +125,31 @@ Public Class wbfReceipt
                 Dim msds2 As DataSet = ExecuteSQLds("s0000GetParameter", MyParam2)
                 Dim apiKey As String = msds2.Tables(0).Rows(0)("Value")
 
+                Dim MyParam3 As New Collection
+                MyParam3.Add(New Data.SqlClient.SqlParameter("@Parameter", "PROMPT_RECEIPT"))
+                Dim msds3 As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", MyParam3)
+                Dim prompt As String = msds3.Tables(0).Rows(0)("Prompt")
 
-                Dim prompt As String =
-            "Tu es un moteur OCR + extraction comptable. " &
-            "Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
-            "Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
-            "Schéma souhaité: " &
-            "{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
-            "Si une valeur est inconnue: null."
+                '    Dim prompt As String =
+                '"Tu es un moteur OCR + extraction comptable. " &
+                '"Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
+                '"Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
+                '"Schéma souhaité: " &
+                '"{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
+                '"Si une valeur est inconnue: null."
 
-                Dim reader As New OpenAiReceiptReader()
-                Dim result = Await reader.ReadReceiptAsJsonAsync(apiKey, imageForAIBytes, "image/jpeg", prompt)
+                Dim reader As New OpenAiReceiptReader(apiKey)
+                Dim result = Await reader.ReadReceiptAsJsonAsync(imageForAIBytes, ContentType, prompt)
 
                 Dim p3 As New Collection
                 p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
                 p3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonResult))
                 p3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
                 p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
+                p3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", 0))
+
+
+
                 ExecuteSQLds("s0006SaveAIReturn", p3)
 
                 RadReceipt.Rebind()

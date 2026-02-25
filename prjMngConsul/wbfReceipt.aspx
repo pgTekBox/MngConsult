@@ -172,7 +172,7 @@
                         </telerik:GridTemplateColumn>
                          
                        
-                        <telerik:GridTemplateColumn HeaderText="Optimize for AI" UniqueName="ProcessJSON">
+                        <telerik:GridTemplateColumn HeaderText="Process to Database" UniqueName="ProcessJSON">
                             <ItemTemplate>
                                 <asp:Button ID="btnProcessJSON"
                                     runat="server"

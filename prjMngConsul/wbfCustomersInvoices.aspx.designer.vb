@@ -41,24 +41,6 @@ Partial Public Class wbfCustomersInvoices
     Protected WithEvents rwCustomerInvoices As Global.Telerik.Web.UI.RadWindow
 
     '''<summary>
-    '''rauInvoicePdf control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rauInvoicePdf As Global.Telerik.Web.UI.RadAsyncUpload
-
-    '''<summary>
-    '''btnSavePdf control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnSavePdf As Global.Telerik.Web.UI.RadButton
-
-    '''<summary>
     '''btnAddCustomer control.
     '''</summary>
     '''<remarks>

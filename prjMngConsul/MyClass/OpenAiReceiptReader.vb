@@ -4,6 +4,14 @@ Imports System.Net.Http.Headers
 Imports System.Text
 Imports System.Threading.Tasks
 
+Public Class OpenAiParseResult
+    Public Property JsonText As String
+    Public Property InputTokens As Integer
+    Public Property OutputTokens As Integer
+    Public Property TotalTokens As Integer
+    Public Property EstimatedCostUsd As Decimal
+End Class
+
 Public Class OpenAiUsageResult
     Public Property JsonResult As String
     Public Property InputTokens As Integer
@@ -13,16 +21,141 @@ End Class
 
 Public Class OpenAiReceiptReader
 
+    Private ReadOnly _http As HttpClient
+    Private ReadOnly _apiKey As String
+
+    Public Sub New(apiKey As String)
+        _apiKey = apiKey
+        _http = New HttpClient()
+        _http.DefaultRequestHeaders.Authorization =
+            New AuthenticationHeaderValue("Bearer", _apiKey)
+    End Sub
+    ' =============================
+    ' MÉTHODE PRINCIPALE
+    ' =============================
+    Public Async Function ParseInvoicePdfAsync(
+    pdfBytes As Byte(),
+    promptText As String
+) As Task(Of OpenAiParseResult)
+
+        ' 1️⃣ upload
+        Dim fileId = Await UploadFileAsync(pdfBytes)
+
+        ' 2️⃣ call model
+        Return Await CallModelAsync(fileId, promptText)
+
+    End Function
+
+    ' =============================
+    ' UPLOAD DU PDF
+    ' =============================
+    Private Async Function UploadFileAsync(pdfBytes As Byte()) As Task(Of String)
+
+        Using form As New MultipartFormDataContent()
+
+            Dim fileContent = New ByteArrayContent(pdfBytes)
+            fileContent.Headers.ContentType =
+                New MediaTypeHeaderValue("application/pdf")
+
+            form.Add(fileContent, "file", "invoice.pdf")
+            form.Add(New StringContent("user_data"), "purpose")
+
+            Dim resp = Await _http.PostAsync(
+                "https://api.openai.com/v1/files",
+                form)
+
+            Dim txt = Await resp.Content.ReadAsStringAsync()
+
+            If Not resp.IsSuccessStatusCode Then
+                Throw New Exception("OpenAI upload error: " & txt)
+            End If
+
+            Dim jo = JObject.Parse(txt)
+            Return jo("id").ToString()
+        End Using
+    End Function
+
+    ' =============================
+    ' APPEL GPT-4.1-mini
+    ' =============================
+    Private Async Function CallModelAsync(
+    fileId As String,
+    promptText As String
+) As Task(Of OpenAiParseResult)
+
+        Dim payload =
+$"{{
+  ""model"": ""gpt-4.1-mini"",
+  ""input"": [
+    {{
+      ""role"": ""user"",
+      ""content"": [
+        {{
+          ""type"": ""input_text"",
+          ""text"": {Newtonsoft.Json.JsonConvert.ToString(promptText)}
+        }},
+        {{
+          ""type"": ""input_file"",
+          ""file_id"": ""{fileId}""
+        }}
+      ]
+    }}
+  ]
+}}"
+
+        Dim content = New StringContent(payload, Encoding.UTF8, "application/json")
+
+        Dim resp = Await _http.PostAsync(
+        "https://api.openai.com/v1/responses",
+        content)
+
+        Dim txt = Await resp.Content.ReadAsStringAsync()
+
+        If Not resp.IsSuccessStatusCode Then
+            Throw New Exception("OpenAI response error: " & txt)
+        End If
+
+        Dim jo = JObject.Parse(txt)
+
+        ' =========================
+        ' 🔥 TEXTE EXTRAIT
+        ' =========================
+        Dim outputText =
+        jo("output")(0)("content")(0)("text").ToString()
+
+        ' =========================
+        ' 🔥 TOKENS UTILISÉS
+        ' =========================
+        Dim inputTokens As Integer = jo("usage")("input_tokens")
+        Dim outputTokens As Integer = jo("usage")("output_tokens")
+        Dim totalTokens As Integer = jo("usage")("total_tokens")
+
+        ' =========================
+        ' 💰 ESTIMATION COÛT (approx)
+        ' gpt-4.1-mini (à ajuster si pricing change)
+        ' =========================
+        Dim costUsd As Decimal =
+        (inputTokens * 0.00000015D) +
+        (outputTokens * 0.0000006D)
+
+        Return New OpenAiParseResult With {
+        .JsonText = outputText,
+        .InputTokens = inputTokens,
+        .OutputTokens = outputTokens,
+        .TotalTokens = totalTokens,
+        .EstimatedCostUsd = costUsd
+    }
+
+    End Function
     ' ✅ Appelle OpenAI (vision) et retourne JSON + tokens
     Public Async Function ReadReceiptAsJsonAsync(
-        apiKey As String,
-        receiptBytes As Byte(),
+               receiptBytes As Byte(),
         mimeType As String, Prompt As String,
         Optional model As String = "gpt-4.1-mini",
         Optional imageDetail As String = "low"
     ) As Task(Of OpenAiUsageResult)
 
-        If String.IsNullOrWhiteSpace(apiKey) Then Throw New ArgumentException("apiKey manquant")
+        If String.IsNullOrWhiteSpace(_apiKey) Then Throw New ArgumentException("apiKey manquant")
         If receiptBytes Is Nothing OrElse receiptBytes.Length = 0 Then Throw New ArgumentException("receiptBytes vide")
         If String.IsNullOrWhiteSpace(mimeType) Then Throw New ArgumentException("mimeType manquant")
 
@@ -59,7 +192,7 @@ Public Class OpenAiReceiptReader
 
         Using http As New HttpClient()
             http.Timeout = TimeSpan.FromSeconds(60)
-            http.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", apiKey)
+            http.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", _apiKey)
 
             Dim payload As String = body.ToString(Newtonsoft.Json.Formatting.None)
 

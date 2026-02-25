@@ -141,6 +141,38 @@ Public Class clsImage
 
 
 
+    Public Sub LoadPDF(ByVal oContext As System.Web.HttpContext, ByVal ImageName As String, ByVal ImgGUID As Guid)
+        Dim MyCon As New SqlConnection(Me.ConnectionString)
+        Try
+
+
+
+            Dim MyParam As New Collection
+            MyParam.Add(New Data.SqlClient.SqlParameter("@imageGUID", ImgGUID))
+            Dim ds As DataSet = Me.ExecuteSQLds("s0002GetImage", MyParam)
+            oContext.Response.ContentType = ds.Tables(0)(0)("ContentType").ToString()
+
+
+            Dim arrimg() As Byte = CType(ds.Tables(0)(0)("ImageSource"), Byte())
+
+
+
+            oContext.Response.AppendHeader("content-disposition", "inline; filename=" & ds.Tables(0)(0)("FileName").ToString())
+            oContext.Response.BinaryWrite(arrimg)
+            oContext.Response.End()
+
+
+            Return
+        Catch ex As System.Threading.ThreadAbortException
+        Catch ex As Exception
+            If MyCon.State = ConnectionState.Open Then MyCon.Close()
+
+            Throw ex
+        End Try
+    End Sub
+
+
+
     Function FaitFormatTimbre(ByVal BigImagebyte As Byte(), ByVal MyFormatImage As String) As Byte()
         Dim lHauteur As Integer = 1024
         Dim lLargeur As Integer = 1024

@@ -73,44 +73,4 @@ Public Class wbfCustomersInvoices
         '        End Using
     End Sub
 
-    Private Sub rauInvoicePdf_FileUploaded(sender As Object, e As FileUploadedEventArgs) Handles rauInvoicePdf.FileUploaded
-        ' 1) InvoiceId sélectionné
-        'Dim invoiceId As Integer
-        'If Not Integer.TryParse(hfSelectedInvoiceId.Value, invoiceId) OrElse invoiceId <= 0 Then
-        '    Throw New ApplicationException("Veuillez sélectionner une facture dans la grille avant d'uploader le PDF.")
-        'End If
-
-        ' 2) Sécurité: s'assurer que c'est bien un PDF
-        Dim fileName As String = e.File.FileName
-        Dim contentType As String = If(String.IsNullOrWhiteSpace(e.File.ContentType), "application/pdf", e.File.ContentType)
-
-        If Not fileName.ToLower().EndsWith(".pdf") Then
-            Throw New ApplicationException("Seuls les fichiers PDF sont acceptés.")
-        End If
-
-        ' 3) Lire les bytes
-        Dim pdfBytes As Byte()
-        Using s = e.File.InputStream
-            Using ms As New IO.MemoryStream()
-                s.CopyTo(ms)
-                pdfBytes = ms.ToArray()
-            End Using
-        End Using
-
-        If pdfBytes Is Nothing OrElse pdfBytes.Length = 0 Then
-            Throw New ApplicationException("Fichier PDF vide ou invalide.")
-        End If
-
-
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@SourceFileName", fileName))
-        p.Add(New SqlClient.SqlParameter("@SourceContentType", contentType))
-        p.Add(New SqlClient.SqlParameter("@SourceSizeBytes", pdfBytes.Length))
-        p.Add(New SqlClient.SqlParameter("@SourceBlob", pdfBytes))
-
-        Dim ds As DataSet = ExecuteSQLds("s0027InsertDocumentClient", p)
-    End Sub
-
-
 End Class
