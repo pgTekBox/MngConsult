@@ -17,8 +17,7 @@ Public Class wbfScannedPDF
         Dim dt As DataTable = GetData()
         RadScannedPDF.DataSource = dt
 
-        lblInfo.Visible = True
-        lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
+
     End Sub
 
     Private Function GetData() As DataTable

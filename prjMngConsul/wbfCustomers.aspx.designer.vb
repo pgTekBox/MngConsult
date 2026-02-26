@@ -14,6 +14,33 @@ Option Explicit On
 Partial Public Class wbfCustomers
 
     '''<summary>
+    '''rwmCustomers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwmCustomers As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
+    '''rwCustomer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwCustomer As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''btnAddCustomer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnAddCustomer As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''tbSearch control.
     '''</summary>
     '''<remarks>

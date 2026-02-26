@@ -44,7 +44,7 @@ Public Class ReceiptAI
 
         Dim MyParamDoc As New Collection
         MyParamDoc.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-        Dim MydsDoc As DataSet = ExecuteSQLds("se0009SaveDocument", MyParamDoc)
+        Dim MydsDoc As DataSet = ExecuteSQLds("s0034SaveCustomerDocument", MyParamDoc)
 
     End Sub
 

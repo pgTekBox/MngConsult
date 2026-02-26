@@ -135,7 +135,7 @@
 
              
 
-            <PagerStyle Mode="NextPrevAndNumeric" />
+             
         </telerik:RadGrid>
     </div>
 

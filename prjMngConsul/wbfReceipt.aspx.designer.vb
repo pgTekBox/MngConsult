@@ -14,6 +14,24 @@ Option Explicit On
 Partial Public Class wbfReceipt
 
     '''<summary>
+    '''RadAjaxLoadingPanel1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+
+    '''<summary>
+    '''RadAjaxPanel1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
+
+    '''<summary>
     '''tbSearch control.
     '''</summary>
     '''<remarks>
@@ -32,15 +50,6 @@ Partial Public Class wbfReceipt
     Protected WithEvents btnSearch As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''lblInfo control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''RadReceipt control.
     '''</summary>
     '''<remarks>
@@ -48,4 +57,22 @@ Partial Public Class wbfReceipt
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadReceipt As Global.Telerik.Web.UI.RadGrid
+
+    '''<summary>
+    '''jsonModal control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents jsonModal As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>
+    '''jsonModalContent control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents jsonModalContent As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 End Class

@@ -3,80 +3,173 @@
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Pdf Factures clients — MngConsul
 </asp:Content>
+
+
+<asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
+
+      <style>
+      /* Modal JSON - Theme clair */
+      .json-modal-overlay {
+          position: fixed;
+          inset: 0;
+          background: rgba(15, 23, 42, .45); /* overlay doux */
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          z-index: 99999;
+      }
+
+      .json-modal-box {
+          width: min(1000px, 92vw);
+          max-height: 85vh;
+          background: #ffffff;
+          border-radius: 16px;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+          box-shadow: 0 30px 80px rgba(0,0,0,.25);
+          border: 1px solid rgba(0,0,0,.10);
+      }
+
+      .json-modal-header {
+          padding: 14px 18px;
+          background: #f8fafc;
+          color: #0f172a;
+          display: flex;
+          justify-content: space-between;
+          align-items: center;
+          font-weight: 800;
+          border-bottom: 1px solid rgba(0,0,0,.10);
+      }
+
+      .json-modal-close {
+          border: 1px solid rgba(0,0,0,.14);
+          background: #ffffff;
+          color: #0f172a;
+          font-size: 14px;
+          cursor: pointer;
+          border-radius: 10px;
+          padding: 6px 10px;
+          font-weight: 800;
+      }
+
+          .json-modal-close:hover {
+              background: #f1f5f9;
+          }
+
+      .json-modal-content {
+          flex: 1;
+          overflow: auto;
+          padding: 18px;
+          font-family: Consolas, ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
+          font-size: 13px;
+          color: #0f172a;
+          background: #ffffff;
+          white-space: pre-wrap;
+          word-break: break-word;
+      }
+
+      /* JSON "code look" plus lisible */
+      .json-modal-content {
+          border-top: 0;
+      }
+
+      /* Petites touches pour harmoniser avec le thème du Site.master */
+      .page-head {
+          display: flex;
+          align-items: flex-start;
+          justify-content: space-between;
+          gap: 12px;
+          flex-wrap: wrap;
+          padding: 14px 16px;
+          border-bottom: 1px solid var(--mc-stroke);
+          background: rgba(255,255,255,.75);
+      }
+
+      .page-title {
+          font-weight: 900;
+          font-size: 18px;
+          line-height: 1.2;
+      }
+
+      .page-sub {
+          color: var(--mc-muted);
+          font-size: 13px;
+          margin-top: 4px;
+      }
+
+      .actions {
+          display: flex;
+          gap: 8px;
+          flex-wrap: wrap;
+          align-items: center;
+      }
+
+      .muted-note {
+          color: var(--mc-muted);
+          font-size: 12px;
+          padding: 10px 16px 0 16px;
+      }
+
+      .grid-wrap {
+          padding: 16px;
+      }
+
+      .full-grid {
+          height: calc(100vh - 220px);
+      }
+
+      .grid .btn,
+      .RadGrid .btn,
+      .RadGrid input[type=submit],
+      .RadGrid input[type=button] {
+          border-radius: 10px !important;
+      }
+
+      /* ===== ÉTAT DISABLED PRO ===== */
+.btn:disabled,
+.btn[disabled],
+.RadGrid .btn:disabled,
+.RadGrid input[type=submit]:disabled,
+.RadGrid input[type=button]:disabled{
+
+    background:#e5e7eb !important;   /* gris doux */
+    color:#9ca3af !important;        /* texte gris */
+    border-color:#d1d5db !important;
+
+    cursor:not-allowed !important;
+    opacity:.75;
+    box-shadow:none !important;
+    transform:none !important;
+}
+
+/* empêche hover */
+.btn:disabled:hover{
+    background:#e5e7eb !important;
+}
+
+  </style>
+
+
+
+</asp:Content>
+
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
+
+      <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro">
+  </telerik:RadAjaxLoadingPanel>
+
  
-    <style>
-        /* Modal JSON - Theme clair */
-        .json-modal-overlay {
-            position: fixed;
-            inset: 0;
-            background: rgba(15, 23, 42, .45); /* overlay doux */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            z-index: 99999;
-        }
-
-        .json-modal-box {
-            width: min(1000px, 92vw);
-            max-height: 85vh;
-            background: #ffffff;
-            border-radius: 16px;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            box-shadow: 0 30px 80px rgba(0,0,0,.25);
-            border: 1px solid rgba(0,0,0,.10);
-        }
-
-        .json-modal-header {
-            padding: 14px 18px;
-            background: #f8fafc;
-            color: #0f172a;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 800;
-            border-bottom: 1px solid rgba(0,0,0,.10);
-        }
-
-        .json-modal-close {
-            border: 1px solid rgba(0,0,0,.14);
-            background: #ffffff;
-            color: #0f172a;
-            font-size: 14px;
-            cursor: pointer;
-            border-radius: 10px;
-            padding: 6px 10px;
-            font-weight: 800;
-        }
-
-            .json-modal-close:hover {
-                background: #f1f5f9;
-            }
-
-        .json-modal-content {
-            flex: 1;
-            overflow: auto;
-            padding: 18px;
-            font-family: Consolas, ui-monospace, SFMono-Regular, Menlo, Monaco, monospace;
-            font-size: 13px;
-            color: #0f172a;
-            background: #ffffff;
-            white-space: pre-wrap;
-            word-break: break-word;
-        }
-
-        /* JSON "code look" plus lisible */
-        .json-modal-content {
-            border-top: 0;
-        }
-    </style>
+    
+     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
+  
+         
+        
 
 
-    <div class="toolbar">
-        <div class="title">Scanned PDF </div>
+    <div class="page-head">
+        <div class="page-title">Scanned PDF </div>
   
 
         <div class="searchbox">
@@ -104,23 +197,34 @@
         </div>
     </div>
 
-    <div class="pad">
-        <asp:Label ID="lblInfo" runat="server" CssClass="pill" Visible="false" />
-
-        <div style="margin-top: 12px; overflow: auto;">
-
+     <div class="full-grid">
             <telerik:RadGrid ID="RadScannedPDF" runat="server"
                 CssClass="grid"
-                AutoGenerateColumns="False"
-                AllowPaging="True"
-                Skin="Bootstrap"
-                PageSize="20"
-                AllowSorting="True"
-                AllowFilteringByColumn="False"
+ AutoGenerateColumns="False"
+ AllowPaging="false"
+ PageSize="20"
+ AllowSorting="True"
+ AllowFilteringByColumn="False"
                 OnItemCommand="RadScannedPDF_ItemCommand"
-                OnNeedDataSource="RadScannedPDF_NeedDataSource">
+                OnNeedDataSource="RadScannedPDF_NeedDataSource"      Skin="Metro"
+    Height="100%">
+                
+                <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
+                    <Selecting AllowRowSelect="True" />
+                    <Scrolling AllowScroll="true" UseStaticHeaders="true" />
+                </ClientSettings>
 
                 <MasterTableView DataKeyNames="imageGUID" CommandItemDisplay="None">
+                       <CommandItemSettings
+       ShowAddNewRecordButton="False"
+       ShowRefreshButton="False"
+       ShowExportToCsvButton="False"
+       ShowExportToExcelButton="False"
+       ShowExportToPdfButton="False" />
+
+
+   
+
                     <Columns>
 
 
@@ -151,6 +255,7 @@
                                 <asp:Button ID="btnProcess"
                                     runat="server"
                                     Text="Process AI"
+                                    Enabled='<%#  Eval("CanProcessAI")   %>'
                                     CssClass="btn"
                                     CommandName="Process"
                                     CommandArgument='<%# Eval("imageGUID") %>' />
@@ -163,6 +268,7 @@
                                 <asp:Button ID="btnVoirJSON"
                                     runat="server"
                                     Text="Voir JSON"
+                                    Visible='<%#  Eval("CanViewJSON")   %>'
                                     CssClass="btn"
                                     CommandName="VoirJSON"
                                     CommandArgument='<%# Eval("imageGUID") %>' />
@@ -176,6 +282,7 @@
                                     runat="server"
                                     Text="Process JSON"
                                     CssClass="btn"
+                                     Visible='<%#  Eval("CanViewJSON")   %>'
                                     CommandName="ProcessJSON"
                                     CommandArgument='<%# Eval("imageGUID") %>' />
                             </ItemTemplate>
@@ -195,17 +302,18 @@
 
             </telerik:RadGrid>
 
-        </div>
+     
     </div>
-
+         
+   </telerik:RadAjaxPanel> 
     <!-- Modal JSON -->
-    <div id="jsonModal" class="json-modal-overlay" style="display: none;">
+    <div id="jsonModal" class="json-modal-overlay"  ClientIDMode="Static"  style="display: none;">
         <div class="json-modal-box">
             <div class="json-modal-header">
                 <div>🤖 Résultat Analyse AI (JSON)</div>
                 <button type="button" class="json-modal-close" onclick="closeJsonModal()">✖</button>
             </div>
-            <pre id="jsonModalContent" class="json-modal-content"></pre>
+            <pre id="jsonModalContent"  ClientIDMode="Static"  class="json-modal-content"></pre>
         </div>
     </div>
 

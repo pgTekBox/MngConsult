@@ -47,12 +47,10 @@
            padding: 16px;
        }
 
-       .full-grid{
-  height: calc(100vh - 220px);
-  padding: 16px;
-  box-sizing: border-box;
-  overflow: hidden; /* IMPORTANT pour que Telerik calcule le scroll */
-}
+        .full-grid {
+     height: calc(100vh - 220px);
+ }
+ 
    </style>
 </asp:Content>
 
@@ -95,28 +93,27 @@
 
     <div class="full-grid">
        <telerik:RadGrid ID="rgFournisseursFactures" runat="server"
-    Skin="Metro"
+       Skin="Metro"
     AutoGenerateColumns="False"
     AllowPaging="True"
     PageSize="25"
     AllowSorting="True"
-    Height="100%"
-            Width="100%" 
-            >
+    Height="100%">
 
-    <ClientSettings  AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-        <Selecting AllowRowSelect="True" />
-        <Scrolling AllowScroll="true"  UseStaticHeaders="true" ScrollHeight="100%"/>
-    </ClientSettings>
+       <ClientSettings  AllowColumnsReorder="True" ReorderColumnsOnClient="True">
+       <Selecting AllowRowSelect="True" />
+       <Scrolling AllowScroll="true"  UseStaticHeaders="true" />
+   </ClientSettings>
+
  
 
     <MasterTableView DataKeyNames="Id" CommandItemDisplay="Top" EditMode="InPlace">
         <CommandItemSettings
-            ShowAddNewRecordButton="False"
-            ShowRefreshButton="False"
-            ShowExportToCsvButton="False"
-            ShowExportToExcelButton="False"
-            ShowExportToPdfButton="False" />
+     ShowAddNewRecordButton="False"
+     ShowRefreshButton="False"
+     ShowExportToCsvButton="False"
+     ShowExportToExcelButton="False"
+     ShowExportToPdfButton="False" />
 
         <Columns>
 

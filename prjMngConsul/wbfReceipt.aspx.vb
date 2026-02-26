@@ -17,8 +17,8 @@ Public Class wbfReceipt
         Dim dt As DataTable = GetData()
         RadReceipt.DataSource = dt
 
-        lblInfo.Visible = True
-        lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
+        'lblInfo.Visible = True
+        'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
     End Sub
 
     Private Function GetData() As DataTable
@@ -50,34 +50,15 @@ Public Class wbfReceipt
                 RadReceipt.Rebind()
 
             Case "Optimize"
-                Dim p As New Collection
-                p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                Dim msds As DataSet = ExecuteSQLds("s0003GetDoc", p)
 
-                If msds Is Nothing OrElse msds.Tables.Count = 0 OrElse msds.Tables(0).Rows.Count = 0 Then Exit Sub
-                Dim originalBytes = msds.Tables(0).Rows(0)("ImageSource")
-                If originalBytes Is Nothing OrElse IsDBNull(originalBytes) Then Exit Sub
-
-                Dim opt As New clsReceiptImageOptimizer()
-                Dim optimizedBytes = opt.OptimizeReceiptForAI(
-                    CType(originalBytes, Byte()),
-                    maxWidth:=1024,
-                    jpegQuality:=55,
-                    autoContrast:=True,
-                    toGrayscale:=True
-                )
-
-                Dim p2 As New Collection
-                p2.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                p2.Add(New Data.SqlClient.SqlParameter("@optimizedImage", optimizedBytes))
-                ExecuteSQLds("s0004SaveoptimizedImage", p2)
-
-                lblInfo.Text = "Receipt optimized ✔"
-                lblInfo.Visible = True
-
-                RadReceipt.Rebind()
 
             Case "ProcessJSON"
+
+
+
+
+
+
                 Dim p As New Collection
                 p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
                 Dim msds As DataSet = ExecuteSQLds("s0007GetJSON", p)
@@ -109,6 +90,32 @@ Public Class wbfReceipt
                 ScriptManager.RegisterStartupScript(Me, Me.GetType(), "jsonpopup", script, True)
 
             Case "Process"
+
+                Dim pPro As New Collection
+                pPro.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                Dim msdsPro As DataSet = ExecuteSQLds("s0003GetDoc", pPro)
+
+                If msdsPro Is Nothing OrElse msdsPro.Tables.Count = 0 OrElse msdsPro.Tables(0).Rows.Count = 0 Then Exit Sub
+                Dim originalBytes = msdsPro.Tables(0).Rows(0)("ImageSource")
+                If originalBytes Is Nothing OrElse IsDBNull(originalBytes) Then Exit Sub
+
+                Dim opt As New clsReceiptImageOptimizer()
+                Dim optimizedBytes = opt.OptimizeReceiptForAI(
+                    CType(originalBytes, Byte()),
+                    maxWidth:=1024,
+                    jpegQuality:=55,
+                    autoContrast:=True,
+                    toGrayscale:=True
+                )
+
+                Dim p2 As New Collection
+                p2.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                p2.Add(New Data.SqlClient.SqlParameter("@optimizedImage", optimizedBytes))
+                ExecuteSQLds("s0004SaveoptimizedImage", p2)
+
+
+
+
                 Dim p As New Collection
                 p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
                 Dim msds As DataSet = ExecuteSQLds("s0003GetDoc", p)

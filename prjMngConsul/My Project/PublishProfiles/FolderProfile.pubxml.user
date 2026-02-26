@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>\\Alfred\MngConsulWEB</_PublishTargetUrl>
-    <History>True|2026-02-25T13:46:38.8326521Z||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
+    <History>True|2026-02-26T19:36:47.0915510Z||;True|2026-02-25T08:46:38.8326521-05:00||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -200,10 +200,10 @@
       <publishTime>03/08/2023 07:09:56</publishTime>
     </File>
     <File Include="bin/prjMngConsul.dll">
-      <publishTime>02/25/2026 08:46:36</publishTime>
+      <publishTime>02/26/2026 14:36:40</publishTime>
     </File>
     <File Include="bin/prjMngConsul.pdb">
-      <publishTime>02/25/2026 08:46:36</publishTime>
+      <publishTime>02/26/2026 14:36:40</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>08/08/2018 06:38:48</publishTime>
@@ -395,7 +395,7 @@
       <publishTime>02/18/2025 09:27:58</publishTime>
     </File>
     <File Include="bin/WebForms_Basic.xml">
-      <publishTime>02/25/2026 08:46:36</publishTime>
+      <publishTime>02/26/2026 14:36:40</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -656,10 +656,10 @@
       <publishTime>02/11/2026 06:16:01</publishTime>
     </File>
     <File Include="wbfCustomers.aspx">
-      <publishTime>02/17/2026 08:37:45</publishTime>
+      <publishTime>02/26/2026 13:18:13</publishTime>
     </File>
     <File Include="wbfCustomersInvoices.aspx">
-      <publishTime>02/25/2026 08:39:08</publishTime>
+      <publishTime>02/26/2026 13:39:48</publishTime>
     </File>
     <File Include="wbflogout.aspx">
       <publishTime>02/24/2026 14:15:18</publishTime>
@@ -668,10 +668,10 @@
       <publishTime>02/25/2026 05:41:19</publishTime>
     </File>
     <File Include="wbfReceipt.aspx">
-      <publishTime>02/23/2026 14:50:23</publishTime>
+      <publishTime>02/26/2026 11:53:58</publishTime>
     </File>
     <File Include="wbfScannedPDF.aspx">
-      <publishTime>02/25/2026 08:43:24</publishTime>
+      <publishTime>02/26/2026 11:51:34</publishTime>
     </File>
     <File Include="wbfSetting.aspx">
       <publishTime>02/25/2026 06:12:50</publishTime>
@@ -680,19 +680,19 @@
       <publishTime>02/25/2026 07:04:07</publishTime>
     </File>
     <File Include="wbfSupplierEdit.aspx">
-      <publishTime>02/23/2026 09:06:39</publishTime>
+      <publishTime>02/25/2026 13:42:28</publishTime>
     </File>
     <File Include="wbfSupplierInvoinceEdit.aspx">
       <publishTime>02/24/2026 14:23:58</publishTime>
     </File>
     <File Include="wbfSuppliers.aspx">
-      <publishTime>02/24/2026 08:11:33</publishTime>
+      <publishTime>02/26/2026 13:18:13</publishTime>
     </File>
     <File Include="wbfSuppliersInvoices.aspx">
-      <publishTime>02/24/2026 14:44:50</publishTime>
+      <publishTime>02/26/2026 13:39:48</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>02/25/2026 08:20:29</publishTime>
+      <publishTime>02/26/2026 14:36:45</publishTime>
     </File>
   </ItemGroup>
 </Project>
