@@ -1,19 +1,21 @@
-﻿Imports System.Diagnostics.Eventing
+﻿
+Imports System.Diagnostics.Eventing
 Imports System.Runtime.InteropServices
 Imports Telerik.Web.UI
 Imports Telerik.Web.UI.OrgChartStyles
 Imports Telerik.Web.UI.Skins
 
-Public Class wbfSupplierEdit
+
+Public Class wbfCustomerEdit
     Inherits clsData
 
 
 
-    Property SupplierId() As Integer
+    Property CustomerId() As Integer
         Get
             Try
-                If ViewState("SupplierId") Is Nothing Then ViewState("SupplierId") = 0
-                Dim MyRetVal As Integer = ViewState("SupplierId")
+                If ViewState("CustomerId") Is Nothing Then ViewState("CustomerId") = 0
+                Dim MyRetVal As Integer = ViewState("CustomerId")
                 Return MyRetVal
 
             Catch ex As Exception
@@ -22,7 +24,7 @@ Public Class wbfSupplierEdit
 
         End Get
         Set(ByVal Value As Integer)
-            ViewState("SupplierId") = Value
+            ViewState("CustomerId") = Value
         End Set
     End Property
 
@@ -53,7 +55,7 @@ Public Class wbfSupplierEdit
         If Not IsPostBack Then
             BinDDL()
             CreatePartyAddressTable()
-            SupplierId = CInt(Request.QueryString("SupplierId"))
+            CustomerId = CInt(Request.QueryString("CustomerId"))
             BindData()
         End If
 
@@ -70,7 +72,7 @@ Public Class wbfSupplierEdit
 
 
     Sub BindData()
-        If SupplierId = 0 Then
+        If CustomerId = 0 Then
             'New Supplier
 
             txtName.Text = ""
@@ -85,7 +87,7 @@ Public Class wbfSupplierEdit
             'Existing Supplier
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlClient.SqlParameter("@PartyId", SupplierId))
+            p.Add(New SqlClient.SqlParameter("@PartyId", CustomerId))
             Dim ds As DataSet = ExecuteSQLds("s0012GetOneSuppliersCustomer", p)
 
             txtName.Text = ds.Tables(0).Rows(0)("Name").ToString()
@@ -113,7 +115,7 @@ Public Class wbfSupplierEdit
     ' Charge les adresses depuis la BD et les met dans la DataTable en ViewState
     Public Sub LoadAddressTableFromBD()
         Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@PartyId", SupplierId))
+        p.Add(New SqlClient.SqlParameter("@PartyId", CustomerId))
 
         Dim ds As DataSet = ExecuteSQLds("s0013GetPastyAddress", p)
 
@@ -141,15 +143,15 @@ Public Class wbfSupplierEdit
     End Sub
 
 
-    'Sauvegarde les infos du fournisseur (hors adresses) dans la BD
-    Sub SaveSupplier(SupplierId As Integer)
-        If SupplierId = 0 Then
+    'Sauvegarde les infos du Customer (hors adresses) dans la BD
+    Sub SaveCustomer(CustomerId As Integer)
+        If CustomerId = 0 Then
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
             p.Add(New SqlClient.SqlParameter("@Name", txtName.Text.Trim()))
             'p.Add(New SqlClient.SqlParameter("@Note", txtAddressNote.Text.Trim()))
-            p.Add(New SqlClient.SqlParameter("@PartyCodeiD", 2))
+            p.Add(New SqlClient.SqlParameter("@PartyCodeiD", 1))
             p.Add(New SqlClient.SqlParameter("@Website", txtWebsite.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@TPS", txtNoTPS.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@TVQ", txtNoTVQ.Text.Trim()))
@@ -162,7 +164,7 @@ Public Class wbfSupplierEdit
 
             Dim ds As DataSet = ExecuteSQLds("s0021InsertParty", p)
 
-            SupplierId = ds.Tables(0).Rows(0)(0)
+            CustomerId = ds.Tables(0).Rows(0)(0)
             UpadateAllAddress()
 
 
@@ -171,7 +173,7 @@ Public Class wbfSupplierEdit
 
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlClient.SqlParameter("@Id", SupplierId))
+            p.Add(New SqlClient.SqlParameter("@Id", CustomerId))
             p.Add(New SqlClient.SqlParameter("@Name", txtName.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@DisplayName", txtDisplayName.Text.Trim()))
             'p.Add(New SqlClient.SqlParameter("@Note", txtAddressNote.Text.Trim()))
@@ -371,7 +373,7 @@ Public Class wbfSupplierEdit
             If orow("Deleted") = 1 Then
                 Dim p As New Collection
                 p.Add(New SqlClient.SqlParameter("@Id", orow("Id")))
-                p.Add(New SqlClient.SqlParameter("@PartyId", SupplierId))
+                p.Add(New SqlClient.SqlParameter("@PartyId", CustomerId))
                 ExecuteSQL("s0018DeleteAddress", p)
 
 
@@ -393,7 +395,7 @@ Public Class wbfSupplierEdit
             ElseIf orow("Dirty") = 1 AndAlso CInt(orow("Id")) <= 0 Then
 
                 Dim p As New Collection
-                p.Add(New SqlClient.SqlParameter("@PartyId", SupplierId))
+                p.Add(New SqlClient.SqlParameter("@PartyId", CustomerId))
                 p.Add(New SqlClient.SqlParameter("@AddressTypeId", orow("AddressTypeId")))
                 p.Add(New SqlClient.SqlParameter("@Name", orow("Name")))
                 p.Add(New SqlClient.SqlParameter("@Note", orow("Note")))
@@ -451,11 +453,11 @@ Public Class wbfSupplierEdit
     ' Sauvegarde les infos du fournisseur et les adresse et ferme la fenêtre d'édition
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
 
-        If SupplierId = 0 Then
-            SaveSupplier(0)
+        If CustomerId = 0 Then
+            SaveCustomer(0)
         Else
 
-            SaveSupplier(SupplierId)
+            SaveCustomer(CustomerId)
         End If
 
 

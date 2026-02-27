@@ -114,41 +114,20 @@
                  
                 <Columns>
 
-                    <telerik:GridTemplateColumn HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
+                    <telerik:GridTemplateColumn HeaderText="Actions" HeaderStyle-Width="200px"  UniqueName="Actions" AllowFiltering="False">
                         <ItemTemplate>
                             <asp:Button ID="btnEdit" runat="server" CssClass="btn" Text="Edit"
-                                CommandName="EditClient" CommandArgument='<%# Eval("Id") %>' />
+     OnClientClick='<%# "openCustomerWindow(" & Eval("Id") & "); return false;" %>' />
                             <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete"
                                 CommandName="DeleteClient" CommandArgument='<%# Eval("Id") %>' />
                         </ItemTemplate>
                     </telerik:GridTemplateColumn>
 
 
-                    <telerik:GridBoundColumn DataField="Id" HeaderText="ID" UniqueName="CustomerId"
-                        ReadOnly="True" FilterControlAltText="Filtrer ID" />
-
-                    <telerik:GridBoundColumn DataField="Name" HeaderText="Nom" UniqueName="Name"
-                        FilterControlAltText="Filtrer Nom" />
-
-                    <telerik:GridBoundColumn DataField="Email" HeaderText="Email" UniqueName="Email"
-                        FilterControlAltText="Filtrer Email" />
-
-                    <telerik:GridBoundColumn DataField="Phone" HeaderText="Téléphone" UniqueName="Phone"
-                        FilterControlAltText="Filtrer Téléphone" />
-
-                    <telerik:GridBoundColumn DataField="City" HeaderText="Ville" UniqueName="City"
-                        FilterControlAltText="Filtrer Ville" />
-
-                    <telerik:GridBoundColumn DataField="StateId" HeaderText="Province" UniqueName="Province"
-                        FilterControlAltText="Filtrer Province" />
-
-                    <telerik:GridBoundColumn DataField="CountryId" HeaderText="Pays" UniqueName="Country"
-                        FilterControlAltText="Filtrer Pays" />
-
-
-
-                    <telerik:GridDateTimeColumn DataField="Created" HeaderText="Créé le" UniqueName="Created"
-                        PickerType="DatePicker" DataFormatString="{0:yyyy-MM-dd}" />
+                    <telerik:GridBoundColumn DataField="NameAllAdddress" HeaderText="Nom" UniqueName="NameAllAdddress" />
+ 
+ <telerik:GridDateTimeColumn DataField="Created" HeaderText="Créé le" UniqueName="Created"
+     PickerType="DatePicker" DataFormatString="{0:yyyy-MM-dd}" />
 
                 </Columns>
             </MasterTableView>
@@ -159,7 +138,7 @@
     </div>
 
     <script type="text/javascript">
-        function openSupplierWindow(id) {
+        function openCustomerWindow(id) {
             var wnd = $find("<%= rwCustomer.ClientID %>");
             var url = "wbfCustomerEdit.aspx";
 

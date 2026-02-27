@@ -115,7 +115,7 @@
        <telerik:RadGrid ID="rgClientsFactures" runat="server"
        Skin="Metro"
     AutoGenerateColumns="False"
-    AllowPaging="True"
+    AllowPaging="false"
     PageSize="25"
     AllowSorting="True"
     Height="100%">
@@ -169,9 +169,9 @@
 
 
     <script type="text/javascript">
-        function openSupplierInvoiceWindow(id) {
+        function openCustomerInvoiceWindow(id) {
             var wnd = $find("<%= rwCustomerInvoices.ClientID %>");
-            var url = "wbfCustomerInvoinceEdit.aspx";
+            var url = "wbfInvoiceEdit.aspx";
 
             if (id && id > 0) {
                 url += "?SupplierId=" + id;

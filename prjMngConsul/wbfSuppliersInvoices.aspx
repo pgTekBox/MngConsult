@@ -95,7 +95,7 @@
        <telerik:RadGrid ID="rgFournisseursFactures" runat="server"
        Skin="Metro"
     AutoGenerateColumns="False"
-    AllowPaging="True"
+    AllowPaging="false"
     PageSize="25"
     AllowSorting="True"
     Height="100%">

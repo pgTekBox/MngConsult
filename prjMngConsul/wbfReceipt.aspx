@@ -127,29 +127,26 @@
             border-radius: 10px !important;
         }
 
-        
-      /* ===== ÉTAT DISABLED PRO ===== */
-.btn:disabled,
-.btn[disabled],
-.RadGrid .btn:disabled,
-.RadGrid input[type=submit]:disabled,
-.RadGrid input[type=button]:disabled{
 
-    background:#e5e7eb !important;   /* gris doux */
-    color:#9ca3af !important;        /* texte gris */
-    border-color:#d1d5db !important;
+            /* ===== ÉTAT DISABLED PRO ===== */
+            .btn:disabled,
+            .btn[disabled],
+            .RadGrid .btn:disabled,
+            .RadGrid input[type=submit]:disabled,
+            .RadGrid input[type=button]:disabled {
+                background: #e5e7eb !important; /* gris doux */
+                color: #9ca3af !important; /* texte gris */
+                border-color: #d1d5db !important;
+                cursor: not-allowed !important;
+                opacity: .75;
+                box-shadow: none !important;
+                transform: none !important;
+            }
 
-    cursor:not-allowed !important;
-    opacity:.75;
-    box-shadow:none !important;
-    transform:none !important;
-}
-
-/* empêche hover */
-.btn:disabled:hover{
-    background:#e5e7eb !important;
-}
-
+                /* empêche hover */
+                .btn:disabled:hover {
+                    background: #e5e7eb !important;
+                }
     </style>
 
 
@@ -167,10 +164,11 @@
     <telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1">
 
         <div class="page-head">
-          <div> <div class="page-title">Reçus</div>
-            
+            <div>
+                <div class="page-title">Reçus</div>
+
                 <%--<asp:Label ID="lblInfo" runat="server" CssClass="pill" Visible="false" />--%>
-            </div> 
+            </div>
             <div class="searchbox">
                 <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (fournisseur, fichier, statut…)" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
@@ -234,7 +232,12 @@
                             </ItemTemplate>
                         </telerik:GridTemplateColumn>
 
+                        <telerik:GridTemplateColumn HeaderText="Fournisseur" UniqueName="Fournisseur">
+                            <ItemTemplate>
+                                <asp:Literal ID="litinfo" runat="server" Mode="PassThrough" Text='<%# Server.HtmlDecode(CStr(Eval("SupplierInfo"))) %>' />
 
+                            </ItemTemplate>
+                        </telerik:GridTemplateColumn>
 
 
 
@@ -247,7 +250,7 @@
                                     runat="server"
                                     Text="Process AI"
                                     CssClass="btn"
-                                     Enabled='<%#  Eval("CanProcessAI")   %>'
+                                    Enabled='<%#  Eval("CanProcessAI")   %>'
                                     CommandName="Process"
                                     CommandArgument='<%# Eval("imageGUID") %>' />
                             </ItemTemplate>
@@ -295,17 +298,17 @@
 
 
 
-   </telerik:RadAjaxPanel> 
+    </telerik:RadAjaxPanel>
 
 
     <!-- Modal JSON -->
-    <div id="jsonModal" runat="server" class="json-modal-overlay" ClientIDMode="Static" style="display: none;">
+    <div id="jsonModal" runat="server" class="json-modal-overlay" clientidmode="Static" style="display: none;">
         <div class="json-modal-box">
             <div class="json-modal-header">
                 <div>🤖 Résultat Analyse AI (JSON)</div>
                 <button type="button" class="json-modal-close" onclick="closeJsonModal()">✖</button>
             </div>
-            <pre id="jsonModalContent" runat="server" ClientIDMode="Static" class="json-modal-content"></pre>
+            <pre id="jsonModalContent" runat="server" clientidmode="Static" class="json-modal-content"></pre>
         </div>
     </div>
 

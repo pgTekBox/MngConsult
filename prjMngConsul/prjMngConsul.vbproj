@@ -338,8 +338,10 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
+    <Content Include="wbfInvoiceEdit.aspx" />
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
@@ -461,6 +463,13 @@
     <Compile Include="Site.Mobile.Master.designer.vb">
       <DependentUpon>Site.Mobile.Master</DependentUpon>
     </Compile>
+    <Compile Include="wbfCustomerEdit.aspx.designer.vb">
+      <DependentUpon>wbfCustomerEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCustomerEdit.aspx.vb">
+      <DependentUpon>wbfCustomerEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfCustomers.aspx.designer.vb">
       <DependentUpon>wbfCustomers.aspx</DependentUpon>
     </Compile>
@@ -473,6 +482,13 @@
     </Compile>
     <Compile Include="wbfCustomersInvoices.aspx.vb">
       <DependentUpon>wbfCustomersInvoices.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfInvoiceEdit.aspx.designer.vb">
+      <DependentUpon>wbfInvoiceEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfInvoiceEdit.aspx.vb">
+      <DependentUpon>wbfInvoiceEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbflogout.aspx.designer.vb">
@@ -622,7 +638,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
