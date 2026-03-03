@@ -98,11 +98,11 @@
 
 
 
-            <asp:Button ID="btnAddCustomer" runat="server"
+            <asp:Button ID="btnAddCustomerInvoice" runat="server"
                 CssClass="btn primary"
-                Text="Ajouter Client"
+                Text="Ajouter Facture"
                 CausesValidation="false"
-                OnClientClick="openCustomerInvoicesWindow(0); return false;" />
+                OnClientClick="openCustomerInvoiceWindow(0); return false;" />
             <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (nom, email, téléphone…)" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
             <asp:Button ID="btnClear" runat="server" CssClass="btn" Text="Effacer" CausesValidation="false" />
@@ -169,16 +169,17 @@
 
 
     <script type="text/javascript">
+                 
         function openCustomerInvoiceWindow(id) {
             var wnd = $find("<%= rwCustomerInvoices.ClientID %>");
             var url = "wbfInvoiceEdit.aspx";
 
             if (id && id > 0) {
-                url += "?SupplierId=" + id;
-                wnd.set_title("Modifier un client");
+                url += "?InvoiceId=" + id;
+                wnd.set_title("Modifier une facture client");
             } else {
-                url += "?SupplierId=0";
-                wnd.set_title("Ajouter un client");
+                url += "?InvoiceId=0";
+                wnd.set_title("Ajouter une facture client");
             }
 
             wnd.setUrl(url);

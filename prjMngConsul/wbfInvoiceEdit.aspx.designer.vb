@@ -50,51 +50,6 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents pnlMain As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''lblInvoiceNo control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblInvoiceNo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''lblInvoiceId control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblInvoiceId As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''lblStatusChip control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblStatusChip As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
-    '''btnSave control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnSave As Global.Telerik.Web.UI.RadButton
-
-    '''<summary>
-    '''btnSaveSend control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnSaveSend As Global.Telerik.Web.UI.RadButton
-
-    '''<summary>
     '''ddlCustomer control.
     '''</summary>
     '''<remarks>
@@ -131,13 +86,22 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents dpDueDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''rgItems control.
+    '''btnAddLine control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgItems As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents btnAddLine As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''rpItems control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rpItems As Global.System.Web.UI.WebControls.Repeater
 
     '''<summary>
     '''lblSubTotal control.
@@ -174,4 +138,13 @@ Partial Public Class wbfInvoiceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblTotal As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''btnSave control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
 End Class
