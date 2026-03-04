@@ -231,12 +231,12 @@
         <telerik:RadAjaxManager ID="Ram1" runat="server">
             <AjaxSettings>
 
-                  <telerik:AjaxSetting AjaxControlID="ddlCustomer">
-      <UpdatedControls>
-        
-          <telerik:AjaxUpdatedControl ControlID="rdLabel" />
-      </UpdatedControls>
-  </telerik:AjaxSetting>
+                <telerik:AjaxSetting AjaxControlID="ddlCustomer">
+                    <UpdatedControls>
+
+                        <telerik:AjaxUpdatedControl ControlID="rdLabel" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
 
 
                 <telerik:AjaxSetting AjaxControlID="btnAddLine">
@@ -288,13 +288,13 @@
                                         EnableLoadOnDemand="true" />
                                 </div>
 
-                              
-                                    <div class="field">
-                                        <div style="height: 100%; display: flex; align-items: flex-end;">
-                                            <telerik:RadLabel ID="rdLabel" runat="server"></telerik:RadLabel>
-                                        </div>
+
+                                <div class="field">
+                                    <div style="height: 100%; display: flex; align-items: flex-end;">
+                                        <telerik:RadLabel ID="rdLabel" runat="server"></telerik:RadLabel>
                                     </div>
-                                
+                                </div>
+
 
                             </div>
 
@@ -326,7 +326,8 @@
 
                             <!-- header desktop -->
                             <div class="items-header">
-                                <div>Code</div>
+                               
+                                 <div>Product</div>
                                 <div>Description</div>
                                 <div style="text-align: right">Qty</div>
                                 <div style="text-align: right">Prix unité</div>
@@ -341,14 +342,20 @@
 
                                         <div class="item-row">
                                             <div class="item-grid">
-
+                                                  <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
+                                                 
                                                 <div class="cell">
-                                                    <div class="m-label">Code</div>
-                                                    <telerik:RadTextBox ID="txtItemCode" runat="server"
-                                                        Text='<%# Eval("ProductId") %>' />
-                                                    <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
-                                                </div>
+                                                    <div class="m-label">Produit</div>
+                                                    <telerik:RadComboBox ID="rcProducts" runat="server" AutoPostBack="true"
+                                                        EmptyMessage="Sélectionner un produit..."
+                                                        Filter="Contains"
+                                                        MarkFirstMatch="true"
+                                                        EnableLoadOnDemand="true"
+                                                        DataTextField="Name" DataValueField="Id"
+                                                        OnSelectedIndexChanged="rcProducts_SelectedIndexChanged"  />
+                                                     <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
 
+                                                </div>
                                                 <div class="cell">
                                                     <div class="m-label">Description</div>
                                                     <telerik:RadTextBox ID="txtDesc" runat="server"
@@ -357,36 +364,42 @@
                                                 </div>
 
                                                 <div class="cell" style="text-align: right">
-                                                    <div class="m-label">Qty</div>
-                                                    <telerik:RadNumericTextBox ID="numQty" runat="server"
+                                                    <span class="m-label">Qty</span>
+                                                    <telerik:RadNumericTextBox ID="numQty"   runat="server"
                                                         Text='<%# IIf(Eval("Qty") Is DBNull.Value, Nothing, Eval("Qty")) %>'
-                                                        MinValue="0">
+                                                        MinValue="0" >
                                                         <NumberFormat DecimalDigits="4" />
+
+
                                                     </telerik:RadNumericTextBox>
                                                 </div>
 
                                                 <div class="cell" style="text-align: right">
-                                                    <div class="m-label">Prix unité</div>
-                                                    <telerik:RadNumericTextBox ID="numUnitPrice" runat="server"
+                                                    <span class="m-label">Prix unité</span>
+                                                    <telerik:RadNumericTextBox ID="numUnitPrice" runat="server"  Width="200px"
                                                         Text='<%# IIf(Eval("UnitPrice") Is DBNull.Value, Nothing, Eval("UnitPrice")) %>'
                                                         MinValue="0">
                                                         <NumberFormat DecimalDigits="2" />
+
+
                                                     </telerik:RadNumericTextBox>
                                                 </div>
 
                                                 <div class="cell" style="text-align: right">
                                                     <div class="m-label">Total</div>
-                                                    <asp:Label ID="lblAmount" runat="server"
+                                                    <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
                                                         Text='<%# Eval("Amount","{0:N2}") %>' />
                                                 </div>
 
                                                 <div class="cell actions" style="text-align: center">
                                                     <div class="m-label">Action</div>
-                                                    <asp:Button ID="btnDelete" runat="server"
+                                                    <telerik:RadButton ID="RadButton1" runat="server"
                                                         Text="Supprimer"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClick="return confirm('Supprimer cette ligne ?');" />
+                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }" />
+
+
                                                 </div>
 
                                             </div>
@@ -434,6 +447,237 @@
             </div>
             <asp:Button ID="btnSave" runat="server" Text="Enregistrer" />
         </asp:Panel>
+
+        <script type="text/javascript">
+            // helper: number parsing (manage comma or point)
+            function toNumber(v) {
+                if (v === null || v === undefined || v === '') return 0;
+                if (typeof v === 'number') return v;
+                v = String(v).replace(/\s/g, '').replace(',', '.');
+                var n = parseFloat(v);
+                return isNaN(n) ? 0 : n;
+            }
+
+            // Called by RadNumericTextBox client event
+            function onItemValueChanged(sender, eventArgs) {
+                try {
+
+
+
+
+                    // sender is the RadNumericTextBox client object
+                    var inputEl = sender.get_element(); // the actual input DOM element
+                    // find the repeater item container (.item-row)
+                    var itemRow = inputEl.closest('.item-row');
+                    if (!itemRow) return;
+
+                    // find qty and unit price inputs inside this row
+                    // they might be RadNumericTextBox inputs; select by id fragment or by name/class
+                    var qtyInput = itemRow.querySelector('input[id*="numQty"]');
+                    var priceInput = itemRow.querySelector('input[id*="numUnitPrice"]');
+
+                    var qty = toNumber(qtyInput ? qtyInput.value : sender.get_value());
+                    var unitPrice = toNumber(priceInput ? priceInput.value : 0);
+
+                    var amount = Math.round((qty * unitPrice) * 100) / 100; // 2 decimals
+
+                    // update label
+                    var lbl = itemRow.querySelector('.lbl-amount');
+                    if (lbl) {
+                        lbl.innerText = amount.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                    }
+
+                    // update a hidden field in the row so server can pick up values on postback (recommended)
+                    var hidQty = itemRow.querySelector('input[type="hidden"][id*="hidQty"]');
+                    if (!hidQty) {
+                        // create for later postback if not exists
+                        hidQty = document.createElement('input');
+                        hidQty.type = 'hidden';
+                        hidQty.id = itemRow.querySelector('input[id*="hidId"]').id + '_qty';
+                        hidQty.name = hidQty.id;
+                        itemRow.appendChild(hidQty);
+                    }
+                    hidQty.value = qty;
+
+                    var hidPrice = itemRow.querySelector('input[type="hidden"][id*="hidUnitPrice"]');
+                    if (!hidPrice) {
+                        hidPrice = document.createElement('input');
+                        hidPrice.type = 'hidden';
+                        hidPrice.id = itemRow.querySelector('input[id*="hidId"]').id + '_price';
+                        hidPrice.name = hidPrice.id;
+                        itemRow.appendChild(hidPrice);
+                    }
+                    hidPrice.value = unitPrice;
+
+                    // recalc totals visible
+                    recalcTotalsClient();
+
+                    // optional: mark row as dirty via hidden field
+                    var hidDirty = itemRow.querySelector('input[type="hidden"][id*="hidDirty"]');
+                    if (!hidDirty) {
+                        hidDirty = document.createElement('input');
+                        hidDirty.type = 'hidden';
+                        hidDirty.id = itemRow.querySelector('input[id*="hidId"]').id + '_dirty';
+                        hidDirty.name = hidDirty.id;
+                        itemRow.appendChild(hidDirty);
+                    }
+                    hidDirty.value = '1';
+
+                } catch (ex) {
+                    console.log('onItemValueChanged error', ex);
+                }
+            }
+
+            function recalcTotalsClient() {
+                var subtotal = 0;
+                document.querySelectorAll('.item-row').forEach(function (row) {
+                    // skip deleted rows (you may add a data-deleted attr)
+                    var deletedFlag = row.getAttribute('data-deleted');
+                    if (deletedFlag === '1') return;
+
+                    var lbl = row.querySelector('.lbl-amount');
+                    if (!lbl) return;
+                    var text = lbl.innerText || lbl.textContent;
+                    // remove thousands and convert
+                    var v = String(text).replace(/\s/g, '').replace(',', '.');
+                    var n = parseFloat(v);
+                    if (!isNaN(n)) subtotal += n;
+                });
+
+                // taxes (example 5% + 9.975%)
+                var tps = Math.round(subtotal * 0.05 * 100) / 100;
+                var tvq = Math.round(subtotal * 0.09975 * 100) / 100;
+                var total = Math.round((subtotal + tps + tvq) * 100) / 100;
+
+                var elSub = document.querySelector('#<%= lblSubTotal.ClientID %>');
+      var elTax1 = document.querySelector('#<%= lblTax1.ClientID %>');
+      var elTax2 = document.querySelector('#<%= lblTax2.ClientID %>');
+      var elTotal = document.querySelector('#<%= lblTotal.ClientID %>');
+
+                if (elSub) elSub.innerText = subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                if (elTax1) elTax1.innerText = tps.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                if (elTax2) elTax2.innerText = tvq.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+                if (elTotal) elTotal.innerText = total.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            // optional: run once on page load to normalize UI
+            document.addEventListener('DOMContentLoaded', function () {
+                recalcTotalsClient();
+            });
+        </script>
+
+        <script type="text/javascript">
+            // ===== CONFIG TAXES =====
+            var TAX_TPS = 0.05;
+            var TAX_TVQ = 0.09975;
+
+            function toNum(v) {
+                if (v == null) return 0;
+                v = ("" + v).replace(/\s/g, "").replace(",", ".");
+                var n = parseFloat(v);
+                return isNaN(n) ? 0 : n;
+            }
+
+            function fmt2(n) {
+                n = (isNaN(n) || n == null) ? 0 : n;
+                return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
+
+            function recalcRow(row) {
+                var qtyEl = row.querySelector("input[id*='numQty']");
+                var prEl = row.querySelector("input[id*='numUnitPrice']");
+                if (!qtyEl || !prEl) return 0;
+
+                var qty = toNum(qtyEl.value);
+                var pr = toNum(prEl.value);
+
+                var amt = Math.round(qty * pr * 100) / 100;
+
+                var lbl = row.querySelector(".lbl-amount");
+                if (lbl) lbl.innerText = fmt2(amt);
+
+                return amt;
+            }
+
+            function recalcTotals() {
+                var subtotal = 0;
+
+                document.querySelectorAll(".item-row").forEach(function (row) {
+                    if (row.getAttribute("data-deleted") === "1") return;
+                    subtotal += recalcRow(row);
+                });
+
+                subtotal = Math.round(subtotal * 100) / 100;
+
+                var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
+                var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
+                var total = Math.round((subtotal + tps + tvq) * 100) / 100;
+
+                // Labels server-side (ClientID)
+                var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
+                var elTps = document.getElementById("<%= lblTax1.ClientID %>");
+                var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
+                var elTot = document.getElementById("<%= lblTotal.ClientID %>");
+
+                if (elSub) elSub.innerText = fmt2(subtotal);
+                if (elTps) elTps.innerText = fmt2(tps);
+                if (elTvq) elTvq.innerText = fmt2(tvq);
+                if (elTot) elTot.innerText = fmt2(total);
+            }
+
+            function wireInvoiceInputs() {
+                // Attache events à chaque input (1 seule fois)
+                document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
+                    .forEach(function (inp) {
+                        if (inp.dataset.wired === "1") return;
+                        inp.dataset.wired = "1";
+
+                        // input = à chaque modification (touche, collage, wheel, etc.)
+                        inp.addEventListener("input", function () {
+                            var row = inp.closest(".item-row");
+                            if (row) {
+                                recalcRow(row);
+                                recalcTotals();
+                            }
+                        });
+
+                        // fallback
+                        inp.addEventListener("keyup", function () {
+                            var row = inp.closest(".item-row");
+                            if (row) {
+                                recalcRow(row);
+                                recalcTotals();
+                            }
+                        });
+                    });
+
+                // Calcul initial
+                recalcTotals();
+            }
+
+            // 1) Load initial
+            document.addEventListener("DOMContentLoaded", function () {
+                wireInvoiceInputs();
+            });
+
+            // 2) Après RadAjax (UpdatePanel/Telerik)
+            if (window.Sys && Sys.Application) {
+                Sys.Application.add_load(function () {
+                    wireInvoiceInputs();
+                });
+            }
+
+            // Optionnel: helper si tu veux marquer une ligne supprimée sans rebind
+            function markRowDeleted(buttonEl) {
+                var row = buttonEl.closest(".item-row");
+                if (row) {
+                    row.setAttribute("data-deleted", "1");
+                    row.style.display = "none";
+                    recalcTotals();
+                }
+            }
+        </script>
+
     </form>
 </body>
 </html>

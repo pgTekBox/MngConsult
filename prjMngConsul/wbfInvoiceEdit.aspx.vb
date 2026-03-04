@@ -81,17 +81,6 @@ Public Class wbfInvoiceEdit
         Next
     End Sub
     Sub UpdateAllItemInViewstate()
-        'For Each item As RepeaterItem In rpItems.Items
-        '    Dim id As Integer = Integer.Parse(CType(item.FindControl("hidId"), HiddenField).Value)
-        '    Dim ProductId As Integer = CType(item.FindControl("txtItemCodeMobile"), Telerik.Web.UI.RadTextBox).Text
-        '    Dim Description = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox).Text
-        '    Dim qty = CType(item.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox).Value
-        '    Dim unitPrice = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox).Value
-
-        '    'Update the datatable in viewstate
-
-        'Next
-
 
         Dim dt As DataTable = TryCast(ViewState("ItemsTable"), DataTable)
         If dt Is Nothing Then Exit Sub
@@ -113,8 +102,12 @@ Public Class wbfInvoiceEdit
             Dim txtDesc As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
             Dim numQty As Telerik.Web.UI.RadNumericTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox)
             Dim numUnitPrice As Telerik.Web.UI.RadNumericTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox)
+            Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
+
+
 
             Dim itemCode As String = If(txtItemCode Is Nothing, "", txtItemCode.Text.Trim())
+            Dim productId As Integer = If(rcProducts Is Nothing, 0, If(rcProducts.SelectedValue = "", 0, CInt(rcProducts.SelectedValue)))
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
 
             Dim qty As Double = 0
@@ -149,6 +142,17 @@ Public Class wbfInvoiceEdit
                     changed = True
                 End If
             End If
+
+            ' ProductId
+            If dt.Columns.Contains("ProductId") Then
+                Dim oldDesc As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
+                If oldDesc <> productId Then
+                    dr("ProductId") = productId
+                    changed = True
+                End If
+            End If
+
+
 
             '' Name (si tu t'en sers)
             'If dt.Columns.Contains("Name") Then
@@ -187,16 +191,16 @@ Public Class wbfInvoiceEdit
             End If
 
             ' ProductId (si tu veux le dériver du "code" -> ici j'essaie de parser un int)
-            If dt.Columns.Contains("ProductId") Then
-                Dim parsedPid As Integer
-                If Integer.TryParse(itemCode, parsedPid) Then
-                    Dim oldPid As Integer = If(IsDBNull(dr("ProductId")), 0, Convert.ToInt32(dr("ProductId")))
-                    If oldPid <> parsedPid Then
-                        dr("ProductId") = parsedPid
-                        changed = True
-                    End If
-                End If
-            End If
+            'If dt.Columns.Contains("ProductId") Then
+            '    Dim parsedPid As Integer
+            '    If Integer.TryParse(itemCode, parsedPid) Then
+            '        Dim oldPid As Integer = If(IsDBNull(dr("ProductId")), 0, Convert.ToInt32(dr("ProductId")))
+            '        If oldPid <> parsedPid Then
+            '            dr("ProductId") = parsedPid
+            '            changed = True
+            '        End If
+            '    End If
+            'End If
 
             ' Dirty
             If changed AndAlso dt.Columns.Contains("Dirty") Then
@@ -210,8 +214,18 @@ Public Class wbfInvoiceEdit
 
     End Sub
     Public Sub BindItemGrid()
-        rpItems.DataSource = CType(ViewState("ItemsTable"), DataTable)
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+
+        Dim dv As New DataView(dt)
+        dv.RowFilter = "Deleted = 0"
+
+        rpItems.DataSource = dv
         rpItems.DataBind()
+
+
+
+
     End Sub
 
     Sub BindData()
@@ -368,4 +382,101 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+
+    Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand
+        If e.CommandName = "DeleteLine" Then
+
+            UpdateAllItemInViewstate()
+
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+
+            For Each dr As DataRow In dt.Rows
+                If Convert.ToInt32(dr("Id")) = id Then
+                    dr("Deleted") = 1
+                    dr("Dirty") = 1
+                    Exit For
+                End If
+            Next
+
+            BindItemGrid()
+
+        End If
+    End Sub
+    Private Function GetProductsTable() As DataTable
+
+        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
+        Return ds.Tables(0)
+    End Function
+    Private Sub rpItems_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rpItems.ItemDataBound
+        If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then
+            Exit Sub
+        End If
+
+        Dim rc As Telerik.Web.UI.RadComboBox = TryCast(e.Item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
+        Dim hidProduct As HiddenField = TryCast(e.Item.FindControl("hidProductId"), HiddenField)
+        If rc Is Nothing Then Exit Sub
+
+        ' 1) Charger la source UNE fois
+        Dim products As DataTable = TryCast(ViewState("ProductsTable"), DataTable)
+        If products Is Nothing Then
+            products = GetProductsTable()
+            ViewState("ProductsTable") = products
+        End If
+
+        ' 2) Binder
+        rc.DataSource = products
+        rc.DataBind()
+
+        ' 3) Appliquer SelectedValue après bind
+        If hidProduct IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(hidProduct.Value) Then
+            rc.SelectedValue = hidProduct.Value
+        End If
+    End Sub
+    Protected Sub rcProducts_SelectedIndexChanged(sender As Object, e As Telerik.Web.UI.RadComboBoxSelectedIndexChangedEventArgs)
+
+        Dim rc As Telerik.Web.UI.RadComboBox = CType(sender, Telerik.Web.UI.RadComboBox)
+        Dim item As RepeaterItem = CType(rc.NamingContainer, RepeaterItem)
+
+        Dim hidId As HiddenField = CType(item.FindControl("hidId"), HiddenField)
+        Dim txtDesc As Telerik.Web.UI.RadTextBox = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
+        Dim numUnitPrice As Telerik.Web.UI.RadNumericTextBox = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox)
+
+        Dim lineId As Integer = Convert.ToInt32(hidId.Value)
+        Dim productId As Integer = 0
+        Integer.TryParse(rc.SelectedValue, productId)
+
+        ' 1) Mettre à jour ViewState (ProductId/Dirty etc.)
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        Dim rows() As DataRow = dt.Select("Id=" & lineId.ToString())
+        If rows.Length > 0 Then
+            rows(0)("ProductId") = productId
+            rows(0)("Dirty") = 1
+        End If
+
+        ' 2) Optionnel: charger desc/prix depuis BD quand produit choisi
+        ' (exemple)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@ProductId", productId))
+        Dim ds As DataSet = ExecuteSQLds("s0042GetProductById", p)
+
+        If ds.Tables(0).Rows.Count > 0 Then
+            Dim r = ds.Tables(0).Rows(0)
+            txtDesc.Text = Convert.ToString(r("Description"))
+            numUnitPrice.Value = Convert.ToDecimal(r("Prix"))
+        End If
+
+        ' 3) Recalc amount/totals (si tu as tes subs)
+        UpdateAllItemInViewstate()
+        RecalcTotalsFromViewState()
+        BindItemGrid()
+
+    End Sub
+
+    Sub RecalcTotalsFromViewState()
+
+    End Sub
+
+
 End Class
