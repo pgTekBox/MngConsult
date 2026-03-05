@@ -93,7 +93,22 @@
             gap: 12px
         }
 
+        .qty-right input {
+            text-align: right !important;
+        }
+                .tot {
+min-width: 150px;
+ padding: 10px; 
+border: 1px solid var(--line);
+border-radius: var(--r-lg);
+text-align: right;}
+
         @media(min-width:840px) {
+
+            .qty-right input {
+                text-align: right !important;
+            }
+
             .row2 {
                 grid-template-columns: 1fr 1fr
             }
@@ -104,6 +119,12 @@
         }
 
         /* ========= ITEMS RESPONSIVE ========= */
+
+
+        .RadNumericTextBox .riTextBox {
+            text-align: right;
+        }
+
 
         .items-header {
             display: none
@@ -122,6 +143,9 @@
         }
 
         @media(min-width:840px) {
+            .qty-right input {
+                text-align: right !important;
+            }
 
             .items-header {
                 display: grid;
@@ -152,14 +176,33 @@
                 border-right: 1px solid var(--line);
             }
 
+            .cellflex {
+                padding: 10px;
+                border-bottom: 1px solid var(--line);
+                border-right: 1px solid var(--line);
+            }
+
             .m-label {
                 display: none
             }
+
+             .tot {
+     min-width: 150px;
+      padding: 10px; 
+     border: 1px solid var(--line);
+     border-radius: var(--r-lg);
+     text-align: right;
+ }
+
+
         }
 
         /* mobile */
 
         @media(max-width:839px) {
+            .qty-right input {
+                text-align: right !important;
+            }
 
             .item-grid {
                 display: flex;
@@ -168,9 +211,20 @@
                 padding: 12px;
             }
 
+            .cellGrid3 {
+                border: none;
+                padding: 0;
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .telNTB {
+                width: 80px;
+            }
+
             .cell {
                 border: none;
-                padding: 0
+                padding: 0;
             }
 
             .m-label {
@@ -178,6 +232,7 @@
                 font-size: 11px;
                 color: var(--muted);
                 margin-bottom: 4px;
+                text-align: left
             }
 
             .cell.actions {
@@ -190,6 +245,16 @@
                     flex: 1;
                     min-width: 140px;
                 }
+
+                 .tot {
+     min-width: 150px;
+   /*  padding: 10px;*/
+    /* border: 1px solid var(--line);*/
+    /* border-radius: var(--r-lg);*/
+     text-align: right;
+ }
+
+
         }
 
         /* footer totals */
@@ -209,14 +274,10 @@
             justify-content: flex-end;
         }
 
-        .tot {
-            min-width: 150px;
-            padding: 10px;
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            text-align: right;
-        }
-
+       
+        .grid4 {
+          grid-template-columns: 1fr 1fr 1fr 1fr
+           }
         .RadInput, .RadPicker, .RadComboBox, .RadNumericTextBox {
             width: 100% !important
         }
@@ -326,8 +387,8 @@
 
                             <!-- header desktop -->
                             <div class="items-header">
-                               
-                                 <div>Product</div>
+
+                                <div>Product</div>
                                 <div>Description</div>
                                 <div style="text-align: right">Qty</div>
                                 <div style="text-align: right">Prix unité</div>
@@ -342,8 +403,8 @@
 
                                         <div class="item-row">
                                             <div class="item-grid">
-                                                  <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
-                                                 
+                                                <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
+
                                                 <div class="cell">
                                                     <div class="m-label">Produit</div>
                                                     <telerik:RadComboBox ID="rcProducts" runat="server" AutoPostBack="true"
@@ -352,8 +413,8 @@
                                                         MarkFirstMatch="true"
                                                         EnableLoadOnDemand="true"
                                                         DataTextField="Name" DataValueField="Id"
-                                                        OnSelectedIndexChanged="rcProducts_SelectedIndexChanged"  />
-                                                     <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
+                                                        OnSelectedIndexChanged="rcProducts_SelectedIndexChanged" />
+                                                    <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
 
                                                 </div>
                                                 <div class="cell">
@@ -363,36 +424,42 @@
                                                         Text='<%# Eval("Description") %>' />
                                                 </div>
 
-                                                <div class="cell" style="text-align: right">
+                                                <div class="cellGrid3" style="text-align: right">
                                                     <span class="m-label">Qty</span>
-                                                    <telerik:RadNumericTextBox ID="numQty"   runat="server"
-                                                        Text='<%# IIf(Eval("Qty") Is DBNull.Value, Nothing, Eval("Qty")) %>'
-                                                        MinValue="0" >
-                                                        <NumberFormat DecimalDigits="4" />
+                                                    <span></span>
+                                                    <span class="qty-right">
+                                                        <telerik:RadTextBox ID="numQty" runat="server"
+                                                            Text='<%# FormatQty(Eval("Qty")) %>'
+                                                            CssClass="num-right"
+                                                            oninput="fixNumber(this)" onblur="formatQtyOnBlur(this)" onfocus="this.select()">
+                                                        </telerik:RadTextBox>
 
 
-                                                    </telerik:RadNumericTextBox>
+
+                                                    </span>
                                                 </div>
 
-                                                <div class="cell" style="text-align: right">
+                                                <div class="cellGrid3" style="text-align: right">
                                                     <span class="m-label">Prix unité</span>
-                                                    <telerik:RadNumericTextBox ID="numUnitPrice" runat="server"  Width="200px"
-                                                        Text='<%# IIf(Eval("UnitPrice") Is DBNull.Value, Nothing, Eval("UnitPrice")) %>'
-                                                        MinValue="0">
-                                                        <NumberFormat DecimalDigits="2" />
-
-
-                                                    </telerik:RadNumericTextBox>
+                                                    <span></span>
+                                                    <span class="qty-right">
+                                                        <telerik:RadTextBox ID="numUnitPrice" runat="server"
+                                                            Text='<%# FormatUnitPrice(Eval("UnitPrice")) %>'
+                                                            CssClass="num-right"
+                                                            oninput="fixNumber(this)" onblur="formatPrice(this)" onfocus="this.select()">
+                                                        </telerik:RadTextBox>
+                                                    </span>
                                                 </div>
 
-                                                <div class="cell" style="text-align: right">
+                                                <div class="cellGrid3" style="text-align: right">
                                                     <div class="m-label">Total</div>
+                                                    <span></span>
                                                     <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
                                                         Text='<%# Eval("Amount","{0:N2}") %>' />
                                                 </div>
 
                                                 <div class="cell actions" style="text-align: center">
-                                                    <div class="m-label">Action</div>
+                                                    <%--<div class="m-label">Action</div>--%>
                                                     <telerik:RadButton ID="RadButton1" runat="server"
                                                         Text="Supprimer"
                                                         CommandName="DeleteLine"
@@ -449,6 +516,103 @@
         </asp:Panel>
 
         <script type="text/javascript">
+
+            function trimZeros(s) {
+                // suppose déjà . comme séparateur
+                s = (s || "").toString().trim();
+                if (s === "") return "";
+
+                // si finit par ".", on l'enlève
+                if (s.endsWith(".")) s = s.slice(0, -1);
+
+                // enlever zéros à droite: 2.50 -> 2.5, 2.00 -> 2
+                if (s.indexOf(".") >= 0) {
+                    s = s.replace(/0+$/, "");   // enlève zéros finaux
+                    s = s.replace(/\.$/, "");   // enlève le point s'il reste à la fin
+                }
+                return s;
+            }
+
+            function formatQtyOnBlur(el) {
+                // 1) normalise comme ton fixNumber (accepte , et .)
+                fixNumber(el);
+
+                // 2) format: 2.0 -> 2
+                el.value = trimZeros(el.value);
+
+                // 3) (optionnel) si vide => 0
+                // if(el.value === "") el.value = "0";
+            }
+
+            function formatPrice(el) {
+
+                fixNumber(el);
+
+                let v = el.value;
+
+                if (v === "") return;
+
+                let n = parseFloat(v);
+
+                if (isNaN(n)) {
+                    el.value = "";
+                    return;
+                }
+
+                let dec = n.toFixed(2);
+
+                // si .00 enlever
+                if (dec.endsWith(".00")) {
+                    el.value = parseInt(n);
+                    return;
+                }
+
+                // si .x ajouter 0
+                if (dec.match(/\.\d$/)) {
+                    el.value = dec + "0";
+                    return;
+                }
+
+                el.value = dec;
+            }
+
+
+            function fixNumber(el) {
+                // 1) Normaliser virgule -> point
+                let v = (el.value || "").replace(/,/g, ".");
+
+                // 2) Garder seulement chiffres et points
+                v = v.replace(/[^0-9.]/g, "");
+
+                // 3) Garder un seul point
+                const firstDot = v.indexOf(".");
+                if (firstDot !== -1) {
+                    let left = v.substring(0, firstDot);
+                    let right = v.substring(firstDot + 1).replace(/\./g, "");
+
+                    // max 2 décimales
+                    right = right.substring(0, 2);
+
+                    v = left + "." + right;
+                }
+
+
+                el.value = v;
+            }
+
+
+            function parseNumber(v) {
+
+                v = v.replace(",", ".");
+                var n = parseFloat(v);
+
+                if (isNaN(n))
+                    return 0;
+
+                return n;
+
+            }
+
             // helper: number parsing (manage comma or point)
             function toNumber(v) {
                 if (v === null || v === undefined || v === '') return 0;
@@ -550,9 +714,9 @@
                 var total = Math.round((subtotal + tps + tvq) * 100) / 100;
 
                 var elSub = document.querySelector('#<%= lblSubTotal.ClientID %>');
-      var elTax1 = document.querySelector('#<%= lblTax1.ClientID %>');
-      var elTax2 = document.querySelector('#<%= lblTax2.ClientID %>');
-      var elTotal = document.querySelector('#<%= lblTotal.ClientID %>');
+                var elTax1 = document.querySelector('#<%= lblTax1.ClientID %>');
+                var elTax2 = document.querySelector('#<%= lblTax2.ClientID %>');
+                var elTotal = document.querySelector('#<%= lblTotal.ClientID %>');
 
                 if (elSub) elSub.innerText = subtotal.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                 if (elTax1) elTax1.innerText = tps.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });

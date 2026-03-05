@@ -100,8 +100,8 @@ Public Class wbfInvoiceEdit
             ' Contrôles (version 1 seule UI)
             Dim txtItemCode As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox)
             Dim txtDesc As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
-            Dim numQty As Telerik.Web.UI.RadNumericTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox)
-            Dim numUnitPrice As Telerik.Web.UI.RadNumericTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox)
+            Dim numQty As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
+            Dim numUnitPrice As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
             Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
 
 
@@ -111,11 +111,11 @@ Public Class wbfInvoiceEdit
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
 
             Dim qty As Double = 0
-            If numQty IsNot Nothing AndAlso numQty.Value.HasValue Then qty = CDbl(numQty.Value.Value)
-
+            'If numQty IsNot Nothing AndAlso numQty.Text.HasValue Then
+            qty = ToDoubleAnyCulture(numQty.Text)
             Dim unitPrice As Double = 0
-            If numUnitPrice IsNot Nothing AndAlso numUnitPrice.Value.HasValue Then unitPrice = CDbl(numUnitPrice.Value.Value)
-
+            'If numUnitPrice IsNot Nothing AndAlso numUnitPrice.Value.HasValue Then unitPrice = CDbl(numUnitPrice.Value.Value)
+            unitPrice = ToDoubleAnyCulture(numUnitPrice.Text)
             Dim amount As Double = Math.Round(qty * unitPrice, 2)
 
             ' Trouver la ligne dans le DataTable
@@ -441,7 +441,7 @@ Public Class wbfInvoiceEdit
 
         Dim hidId As HiddenField = CType(item.FindControl("hidId"), HiddenField)
         Dim txtDesc As Telerik.Web.UI.RadTextBox = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
-        Dim numUnitPrice As Telerik.Web.UI.RadNumericTextBox = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox)
+        Dim numUnitPrice As Telerik.Web.UI.RadTextBox = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
 
         Dim lineId As Integer = Convert.ToInt32(hidId.Value)
         Dim productId As Integer = 0
@@ -464,7 +464,7 @@ Public Class wbfInvoiceEdit
         If ds.Tables(0).Rows.Count > 0 Then
             Dim r = ds.Tables(0).Rows(0)
             txtDesc.Text = Convert.ToString(r("Description"))
-            numUnitPrice.Value = Convert.ToDecimal(r("Prix"))
+            numUnitPrice.Text = FormatUnitPrice(r("Prix"))
         End If
 
         ' 3) Recalc amount/totals (si tu as tes subs)

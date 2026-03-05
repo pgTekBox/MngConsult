@@ -219,8 +219,128 @@ Public Class clsData
             Return oObj
         End If
     End Function
+    Public Function ToDoubleAnyCulture(value As String) As Double
+
+        If String.IsNullOrWhiteSpace(value) Then
+            Return 0
+        End If
+
+        value = value.Trim()
+
+        ' enlever espaces
+        value = value.Replace(" ", "")
+
+        ' trouver le dernier séparateur
+        Dim lastDot = value.LastIndexOf("."c)
+        Dim lastComma = value.LastIndexOf(","c)
+
+        Dim decimalPos = Math.Max(lastDot, lastComma)
+
+        If decimalPos >= 0 Then
+            Dim intPart = value.Substring(0, decimalPos)
+            Dim decPart = value.Substring(decimalPos + 1)
+
+            ' enlever autres séparateurs
+            intPart = intPart.Replace(".", "").Replace(",", "")
+
+            value = intPart & "." & decPart
+        End If
+
+        Dim result As Double
+
+        If Double.TryParse(value,
+        Globalization.NumberStyles.Float,
+        Globalization.CultureInfo.InvariantCulture,
+        result) Then
+
+            Return result
+        End If
+
+        Return 0
+
+    End Function
+
+    Public Function FormatQty(value As Object) As String
+
+        If value Is Nothing OrElse IsDBNull(value) Then
+            Return ""
+        End If
+
+        Dim s As String = value.ToString().Trim()
+
+        ' normaliser
+        s = s.Replace(",", ".")
+
+        Dim n As Double
+
+        If Not Double.TryParse(s,
+        Globalization.NumberStyles.Any,
+        Globalization.CultureInfo.InvariantCulture,
+        n) Then
+
+            Return ""
+        End If
+
+        ' max 2 décimales
+        n = Math.Floor(n * 100) / 100
+
+        Dim result As String = n.ToString("0.##", Globalization.CultureInfo.InvariantCulture)
+
+        Return result
+
+    End Function
 
 
+    Public Function FormatUnitPrice(value As String) As String
+
+        If String.IsNullOrWhiteSpace(value) Then
+            Return ""
+        End If
+
+        ' normaliser
+        value = value.Trim()
+        value = value.Replace(",", ".")
+
+        ' garder seulement chiffres et .
+        Dim clean As String = ""
+        For Each c As Char In value
+            If Char.IsDigit(c) Or c = "."c Then
+                clean &= c
+            End If
+        Next
+
+        ' un seul point
+        Dim firstDot = clean.IndexOf("."c)
+        If firstDot >= 0 Then
+
+            Dim left = clean.Substring(0, firstDot)
+            Dim right = clean.Substring(firstDot + 1).Replace(".", "")
+
+            ' max 2 décimales
+            If right.Length > 2 Then
+                right = right.Substring(0, 2)
+            End If
+
+            clean = left & "." & right
+
+        End If
+
+        Dim n As Double
+
+        If Not Double.TryParse(clean, Globalization.NumberStyles.Any,
+                           Globalization.CultureInfo.InvariantCulture, n) Then
+            Return ""
+        End If
+
+        Dim dec = n.ToString("0.00", Globalization.CultureInfo.InvariantCulture)
+
+        If dec.EndsWith(".00") Then
+            Return CInt(n).ToString()
+        End If
+
+        Return dec
+
+    End Function
     'Sub SetDDL(ByVal oDDL As System.Web.UI.WebControls.DropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String, DefaultValue As Integer)
 
 
