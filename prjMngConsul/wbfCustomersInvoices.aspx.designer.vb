@@ -32,15 +32,6 @@ Partial Public Class wbfCustomersInvoices
     Protected WithEvents rwmCustomersInvoices As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
-    '''rwCustomerInvoices control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rwCustomerInvoices As Global.Telerik.Web.UI.RadWindow
-
-    '''<summary>
     '''btnAddCustomerInvoice control.
     '''</summary>
     '''<remarks>

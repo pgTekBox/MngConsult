@@ -36,13 +36,23 @@ Public Class wbfInvoiceEdit
             InvoiceId = CInt(Request.QueryString("InvoiceId"))
             CreateItemsTable()
             LoadItemTableFromBD()
+
+            ProductsTable = GetProductsTable()
+
             BindData()
 
 
             BinDDL()
 
         End If
+        'Dim eventTarget As String = Request("__EVENTTARGET")
 
+        'If eventTarget = "ProductSelected" Then
+
+        '    Dim productId As Integer = Convert.ToInt32(hidSelectedProductId.Value)
+
+
+        'End If
 
 
     End Sub
@@ -51,6 +61,7 @@ Public Class wbfInvoiceEdit
         Dim dt As New DataTable
         dt.Columns.Add("Id", GetType(Integer))
         dt.Columns.Add("ProductId", GetType(Integer))
+        dt.Columns.Add("ProductName", GetType(String))
         dt.Columns.Add("Description", GetType(String))
         dt.Columns.Add("Qty", GetType(Double))
         dt.Columns.Add("UnitPrice", GetType(Double))
@@ -74,6 +85,7 @@ Public Class wbfInvoiceEdit
             dr("UnitPrice") = orow("UnitPrice")
             dr("Amount") = orow("Amount")
             dr("ProductId") = orow("ProductId")
+            dr("ProductName") = orow("ProductName")
             dr("Dirty") = 0
             dr("Deleted") = 0
             CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
@@ -102,12 +114,12 @@ Public Class wbfInvoiceEdit
             Dim txtDesc As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
             Dim numQty As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
             Dim numUnitPrice As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
-            Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
-
+            'Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
+            Dim hidProduct As HiddenField = TryCast(item.FindControl("hidProductId"), HiddenField)
 
 
             Dim itemCode As String = If(txtItemCode Is Nothing, "", txtItemCode.Text.Trim())
-            Dim productId As Integer = If(rcProducts Is Nothing, 0, If(rcProducts.SelectedValue = "", 0, CInt(rcProducts.SelectedValue)))
+            Dim productId As Integer = If(hidProduct Is Nothing, 0, hidProduct.Value)
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
 
             Dim qty As Double = 0
@@ -341,6 +353,7 @@ Public Class wbfInvoiceEdit
         dr("UnitPrice") = 0
         dr("Amount") = 0
         dr("ProductId") = 0
+        dr("ProductName") = ""
         dr("Dirty") = 1
         dr("Deleted") = 0
         CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
@@ -350,7 +363,7 @@ Public Class wbfInvoiceEdit
 
     End Sub
 
-    Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
+    Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
 
         UpdateAllItemInViewstate()
 
@@ -404,6 +417,8 @@ Public Class wbfInvoiceEdit
 
         End If
     End Sub
+
+
     Private Function GetProductsTable() As DataTable
 
         Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
@@ -414,9 +429,16 @@ Public Class wbfInvoiceEdit
             Exit Sub
         End If
 
-        Dim rc As Telerik.Web.UI.RadComboBox = TryCast(e.Item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
+        'Dim rc As Telerik.Web.UI.RadComboBox = TryCast(e.Item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
+
+        Dim lblProduct As Label = TryCast(e.Item.FindControl("lblProduct"), Label)
+        Dim id As Integer = DataBinder.Eval(e.Item.DataItem, "Id")
+        lblProduct.Attributes.Add("onclick", "openProductPicker(this," & id & ")")
+
+
+
         Dim hidProduct As HiddenField = TryCast(e.Item.FindControl("hidProductId"), HiddenField)
-        If rc Is Nothing Then Exit Sub
+        'If rc Is Nothing Then Exit Sub
 
         ' 1) Charger la source UNE fois
         Dim products As DataTable = TryCast(ViewState("ProductsTable"), DataTable)
@@ -425,58 +447,203 @@ Public Class wbfInvoiceEdit
             ViewState("ProductsTable") = products
         End If
 
+        lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
+
+
+
+
+
+
         ' 2) Binder
-        rc.DataSource = products
-        rc.DataBind()
+        'rc.DataSource = products
+        'rc.DataBind()
 
         ' 3) Appliquer SelectedValue après bind
-        If hidProduct IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(hidProduct.Value) Then
-            rc.SelectedValue = hidProduct.Value
-        End If
-    End Sub
-    Protected Sub rcProducts_SelectedIndexChanged(sender As Object, e As Telerik.Web.UI.RadComboBoxSelectedIndexChangedEventArgs)
-
-        Dim rc As Telerik.Web.UI.RadComboBox = CType(sender, Telerik.Web.UI.RadComboBox)
-        Dim item As RepeaterItem = CType(rc.NamingContainer, RepeaterItem)
-
-        Dim hidId As HiddenField = CType(item.FindControl("hidId"), HiddenField)
-        Dim txtDesc As Telerik.Web.UI.RadTextBox = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
-        Dim numUnitPrice As Telerik.Web.UI.RadTextBox = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
-
-        Dim lineId As Integer = Convert.ToInt32(hidId.Value)
-        Dim productId As Integer = 0
-        Integer.TryParse(rc.SelectedValue, productId)
-
-        ' 1) Mettre à jour ViewState (ProductId/Dirty etc.)
-        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-        Dim rows() As DataRow = dt.Select("Id=" & lineId.ToString())
-        If rows.Length > 0 Then
-            rows(0)("ProductId") = productId
-            rows(0)("Dirty") = 1
-        End If
-
-        ' 2) Optionnel: charger desc/prix depuis BD quand produit choisi
-        ' (exemple)
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@ProductId", productId))
-        Dim ds As DataSet = ExecuteSQLds("s0042GetProductById", p)
-
-        If ds.Tables(0).Rows.Count > 0 Then
-            Dim r = ds.Tables(0).Rows(0)
-            txtDesc.Text = Convert.ToString(r("Description"))
-            numUnitPrice.Text = FormatUnitPrice(r("Prix"))
-        End If
-
-        ' 3) Recalc amount/totals (si tu as tes subs)
-        UpdateAllItemInViewstate()
-        RecalcTotalsFromViewState()
-        BindItemGrid()
-
+        'If hidProduct IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(hidProduct.Value) Then
+        '    rc.SelectedValue = hidProduct.Value
+        'End If
     End Sub
 
     Sub RecalcTotalsFromViewState()
 
     End Sub
 
+    '=======================================================listview
+
+
+
+
+    Private Property ProductsTable As DataTable
+            Get
+                Return CType(ViewState("ProductsTable"), DataTable)
+            End Get
+            Set(value As DataTable)
+                ViewState("ProductsTable") = value
+            End Set
+        End Property
+
+
+
+    Protected Sub rlvProducts_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.RadListViewNeedDataSourceEventArgs)
+            Dim dt As DataTable = ProductsTable
+
+        If dt Is Nothing Then
+            dt = GetProductsTable()
+            ProductsTable = dt
+        End If
+
+        Dim searchText As String = GetSearchText()
+
+            If Not String.IsNullOrWhiteSpace(searchText) Then
+                Dim dv As New DataView(dt)
+                Dim safeText As String = searchText.Replace("'", "''")
+                dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
+                rlvProducts.DataSource = dv
+            Else
+                rlvProducts.DataSource = dt
+            End If
+        End Sub
+
+        Protected Sub btnSearch_Click(ByVal sender As Object, ByVal e As EventArgs)
+            rlvProducts.Rebind()
+        End Sub
+
+        Protected Sub btnClear_Click(ByVal sender As Object, ByVal e As EventArgs)
+            Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
+            If tbSearch IsNot Nothing Then
+                tbSearch.Text = ""
+            End If
+
+            rlvProducts.Rebind()
+        End Sub
+
+        Protected Sub btnAddProducts_Click(ByVal sender As Object, ByVal e As EventArgs)
+        ' Exemple simple
+        Return
+        Dim dt As DataTable = ProductsTable
+        'If dt Is Nothing Then
+        '    dt = BuildProductsTable()
+        'End If
+
+        Dim rnd As New Random()
+
+            Dim row As DataRow = dt.NewRow()
+            row("Id") = dt.Rows.Count + 1
+            row("Code") = "NEW-" & (dt.Rows.Count + 1).ToString("000")
+            row("Name") = "Nouveau produit " & (dt.Rows.Count + 1).ToString()
+            row("Category") = "Ajouté"
+            row("Qty") = rnd.Next(1, 50)
+            row("Price") = Math.Round(CDec(rnd.NextDouble() * 400 + 10), 2)
+
+            dt.Rows.Add(row)
+            ProductsTable = dt
+
+            rlvProducts.Rebind()
+        End Sub
+
+        Private Function GetSearchText() As String
+            Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
+            If tbSearch Is Nothing Then Return ""
+            Return tbSearch.Text.Trim()
+        End Function
+
+    Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
+
+        Dim AllParam As String() = e.Argument.Split("|"c)
+
+
+        Dim ItemLineId As Integer
+        Dim productId As Integer
+
+        If Integer.TryParse(AllParam(1), productId) Then
+            If Integer.TryParse(AllParam(0), ItemLineId) Then
+
+                UpdateItem(ItemLineId, productId)
+
+
+
+
+                BindItemGrid()
+            End If
+        End If
+
+    End Sub
+
+    Sub UpdateItem(ItemLineId As Integer, productId As Integer)
+
+        Dim p2 As New Collection
+        p2.Add(New SqlClient.SqlParameter("@ProductId", productId))
+        Dim AlldsProducts As DataSet = ExecuteSQLds("s0042GetProductById", p2)
+
+
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        If dt Is Nothing Then Exit Sub
+
+        Dim dr As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+
+        If dr Is Nothing Then Exit Sub
+
+        dr("ProductId") = productId
+        dr("Dirty") = 1
+
+        ' Exemple: si tu veux aussi vider ou reset certains champs
+        dr("Description") = AlldsProducts.Tables(0).Rows(0)("Description").ToString() ' ou "" si tu préfères
+        dr("ProductName") = AlldsProducts.Tables(0).Rows(0)("Name").ToString()
+        dr("Qty") = 1
+        dr("UnitPrice") = AlldsProducts.Tables(0).Rows(0)("Prix").ToString()
+        dr("Amount") = 0D
+        dr("Deleted") = 0
+
+        ViewState("ItemsTable") = dt
+
+
+
+
+    End Sub
+
+
+
+
+    'Private Function BuildProductsTable() As DataTable
+    '    Dim dt As New DataTable()
+
+    '    dt.Columns.Add("Id", GetType(Integer))
+    '    dt.Columns.Add("Code", GetType(String))
+    '    dt.Columns.Add("Name", GetType(String))
+    '    dt.Columns.Add("Category", GetType(String))
+    '    dt.Columns.Add("Qty", GetType(Integer))
+    '    dt.Columns.Add("Price", GetType(Decimal))
+
+    '    Dim productNames As String() = {
+    '        "Baignoire classique", "Baignoire antique", "Lavabo blanc", "Robinet chrome", "Douche murale",
+    '        "Panneau de verre", "Vanité moderne", "Miroir LED", "Toilette compacte", "Évier inox",
+    '        "Colonne de douche", "Mitigeur noir", "Bonde universelle", "Base de douche", "Cabine vitrée",
+    '        "Armoire salle de bain", "Tiroir vanity", "Céramique murale", "Plancher vinyle", "Pommeau pluie",
+    '        "Ensemble bain-douche", "Porte-serviette", "Distributeur savon", "Lumière vanity", "Extracteur d'air",
+    '        "Silicone blanc", "Joint étanche", "Accessoire inox", "Banc de douche", "Poignée de sécurité"
+    '    }
+
+    '    Dim categories As String() = {
+    '        "Bain", "Douche", "Lavabo", "Robinetterie", "Accessoires"
+    '    }
+
+    '    Dim rnd As New Random()
+
+    '    For i As Integer = 1 To 30
+    '        Dim row As DataRow = dt.NewRow()
+    '        row("Id") = i
+    '        row("Code") = "PRD-" & i.ToString("000")
+    '        row("Name") = productNames(i - 1)
+    '        row("Category") = categories(rnd.Next(0, categories.Length))
+    '        row("Qty") = rnd.Next(1, 101)
+    '        row("Price") = Math.Round(CDec(rnd.NextDouble() * 450 + 25), 2)
+    '        dt.Rows.Add(row)
+    '    Next
+
+    '    Return dt
+    'End Function
 
 End Class
+
