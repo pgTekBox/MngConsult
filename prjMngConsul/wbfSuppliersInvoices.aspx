@@ -5,53 +5,189 @@
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
-      <style>
-       /* Petites touches pour harmoniser avec le thème du Site.master */
-       .page-head {
-           display: flex;
-           align-items: flex-start;
-           justify-content: space-between;
-           gap: 12px;
-           flex-wrap: wrap;
-           padding: 14px 16px;
-           border-bottom: 1px solid var(--mc-stroke);
-           background: rgba(255,255,255,.75);
-       }
+    <style>
+        .page-head {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            padding: 14px 16px;
+            border-bottom: 1px solid var(--mc-stroke);
+            background: rgba(255,255,255,.75);
+        }
 
-       .page-title {
-           font-weight: 900;
-           font-size: 18px;
-           line-height: 1.2;
-       }
+        .page-title {
+            font-weight: 900;
+            font-size: 18px;
+            line-height: 1.2;
+        }
 
-       .page-sub {
-           color: var(--mc-muted);
-           font-size: 13px;
-           margin-top: 4px;
-       }
+        .page-sub {
+            color: var(--mc-muted);
+            font-size: 13px;
+            margin-top: 4px;
+        }
 
-       .actions {
-           display: flex;
-           gap: 8px;
-           flex-wrap: wrap;
-           align-items: center;
-       }
-
-       .muted-note {
-           color: var(--mc-muted);
-           font-size: 12px;
-           padding: 10px 16px 0 16px;
-       }
-
-       .grid-wrap {
-           padding: 16px;
-       }
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
 
         .full-grid {
-     height: calc(100vh - 220px);
- }
- 
-   </style>
+            height: calc(100vh - 220px);
+            padding: 16px;
+            box-sizing: border-box;
+        }
+
+        .invoice-shell {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            background: #fff;
+            border: 1px solid var(--mc-stroke);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(15,23,42,.06);
+            min-height: 0;
+        }
+
+        .invoice-scroll {
+            flex: 1 1 auto;
+            overflow: auto;
+            min-height: 0;
+        }
+
+        .invoice-list {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .invoice-head {
+            display: grid;
+            grid-template-columns: 210px 140px minmax(220px, 1fr) 140px 110px 130px;
+            gap: 12px;
+            padding: 14px 16px;
+            font-weight: 800;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--mc-stroke);
+            position: sticky;
+            top: 0;
+            z-index: 5;
+        }
+
+        .invoice-row {
+            display: grid;
+            grid-template-columns: 210px 140px minmax(220px, 1fr) 140px 110px 130px;
+            gap: 12px;
+            align-items: center;
+            padding: 14px 16px;
+            border-bottom: 1px solid #eef2f7;
+            background: #fff;
+        }
+
+        .invoice-row:hover {
+            background: #fafcff;
+        }
+
+        .invoice-actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+
+        .invoice-number,
+        .invoice-supplier,
+        .invoice-status,
+        .invoice-date {
+            color: #0f172a;
+            font-weight: 600;
+            min-width: 0;
+            word-break: break-word;
+        }
+
+        .invoice-total {
+            color: #0f172a;
+            font-weight: 800;
+            text-align: right;
+            white-space: nowrap;
+        }
+
+        .invoice-empty {
+            padding: 40px 20px;
+            text-align: center;
+            color: var(--mc-muted);
+        }
+
+        .invoice-pager {
+            flex: 0 0 auto;
+            padding: 12px 16px 16px 16px;
+            border-top: 1px solid var(--mc-stroke);
+            background: #fff;
+        }
+
+        .btn.danger {
+            border-color: #fecaca !important;
+            background: #fff5f5 !important;
+            color: #b91c1c !important;
+        }
+
+        .btn.danger:hover {
+            background: #fee2e2 !important;
+        }
+
+        @media (max-width: 920px) {
+            .invoice-head {
+                display: none;
+            }
+
+            .invoice-row {
+                grid-template-columns: 1fr;
+                gap: 8px;
+                align-items: start;
+            }
+
+            .invoice-number::before {
+                content: "Number: ";
+                font-weight: 800;
+                color: #64748b;
+            }
+
+            .invoice-supplier::before {
+                content: "Supplier: ";
+                font-weight: 800;
+                color: #64748b;
+            }
+
+            .invoice-total::before {
+                content: "Total: ";
+                font-weight: 800;
+                color: #64748b;
+                float: left;
+            }
+
+            .invoice-status::before {
+                content: "Status: ";
+                font-weight: 800;
+                color: #64748b;
+            }
+
+            .invoice-date::before {
+                content: "Date: ";
+                font-weight: 800;
+                color: #64748b;
+            }
+
+            .invoice-total {
+                text-align: left;
+            }
+        }
+    </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -70,11 +206,10 @@
         OnClientClose="rwSupplierInvoice_OnClientClose">
     </telerik:RadWindow>
 
-
     <div class="page-head">
         <div>
             <div class="page-title">Facture Fournisseurs</div>
-            <div class="page-sub">Liste des factures fournisseurs </div>
+            <div class="page-sub">Liste des factures fournisseurs</div>
         </div>
 
         <div class="actions">
@@ -82,71 +217,87 @@
                 CssClass="btn primary"
                 Text="Ajouter Supplier"
                 CausesValidation="false"
-                OnClientClick="openSupplierInvoicesWindow(0); return false;" />
+                OnClientClick="openSupplierInvoiceWindow(0); return false;" />
+
             <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (nom, email, téléphone…)" />
             <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
             <asp:Button ID="btnClear" runat="server" CssClass="btn" Text="Effacer" CausesValidation="false" />
         </div>
     </div>
 
-
-
     <div class="full-grid">
-       <telerik:RadGrid ID="rgFournisseursFactures" runat="server"
-       Skin="Metro"
-    AutoGenerateColumns="False"
-    AllowPaging="false"
-    PageSize="25"
-    AllowSorting="True"
-    Height="100%">
+        <div class="invoice-shell">
+            <div class="invoice-scroll">
+                <telerik:RadListView ID="rgFournisseursFactures" runat="server"
+                    DataKeyNames="Id"
+                    AllowPaging="True"
+                    ItemPlaceholderID="itemPlaceholder"
+                    RenderItemWrapper="false"
+                   >
 
-       <ClientSettings  AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-       <Selecting AllowRowSelect="True" />
-       <Scrolling AllowScroll="true"  UseStaticHeaders="true" />
-   </ClientSettings>
+                    <LayoutTemplate>
+                        <div class="invoice-list">
+                            <div class="invoice-head">
+                                <div>Actions</div>
+                                <div>Number</div>
+                                <div>Supplier</div>
+                                <div style="text-align:right;">Total</div>
+                                <div>Status</div>
+                                <div>Date</div>
+                            </div>
 
- 
+                            <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                        </div>
+                    </LayoutTemplate>
 
-    <MasterTableView DataKeyNames="Id" CommandItemDisplay="Top" EditMode="InPlace">
-        <CommandItemSettings
-     ShowAddNewRecordButton="False"
-     ShowRefreshButton="False"
-     ShowExportToCsvButton="False"
-     ShowExportToExcelButton="False"
-     ShowExportToPdfButton="False" />
+                    <ItemTemplate>
+                        <div class="invoice-row">
+                            <div class="invoice-actions">
+                                <asp:Button ID="btnEdit" runat="server"
+                                    CssClass="btn"
+                                    Text="Edit"
+                                    OnClientClick='<%# "openSupplierInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
 
-        <Columns>
+                                <asp:Button ID="btnDelete" runat="server"
+                                    CssClass="btn danger"
+                                    Text="Delete"
+                                    CommandName="DeleteInvoice"
+                                    CommandArgument='<%# Eval("Id") %>' />
+                            </div>
 
-                    <telerik:GridTemplateColumn HeaderStyle-Width="200px" HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
-                        <ItemTemplate>
-                            <asp:Button ID="btnEdit" runat="server" CssClass="btn" Text="Edit"
-                                OnClientClick='<%# "openSupplierInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
-                            <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete"
-                                CommandName="DeleteInvoice" CommandArgument='<%# Eval("Id") %>' />
-                        </ItemTemplate>
-                    </telerik:GridTemplateColumn>
+                            <div class="invoice-number">
+                                <%# Eval("DocumentNumber") %>
+                            </div>
 
+                            <div class="invoice-supplier">
+                                <%# Eval("Name") %>
+                            </div>
 
-                    <telerik:GridBoundColumn DataField="DocumentNumber" HeaderStyle-Width="200px" HeaderText="Number" UniqueName="DocumentNumber" />
-                    <telerik:GridBoundColumn DataField="Name" HeaderText="Supplier" UniqueName="Name" />
-                    <telerik:GridBoundColumn DataField="Total" HeaderStyle-Width="140px" DataFormatString="{0:C2}" HeaderText="Total" UniqueName="Total" HeaderStyle-HorizontalAlign="Right" ItemStyle-HorizontalAlign="Right" />
+                            <div class="invoice-total">
+                                <%# Eval("Total", "{0:C2}") %>
+                            </div>
 
-                    <telerik:GridBoundColumn DataField="Status" HeaderStyle-Width="70px" HeaderText="Status" UniqueName="Status" />
+                            <div class="invoice-status">
+                                <%# Eval("Status") %>
+                            </div>
 
+                            <div class="invoice-date">
+                                <%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %>
+                            </div>
+                        </div>
+                    </ItemTemplate>
 
-                    <telerik:GridDateTimeColumn DataField="DocumentDate" HeaderStyle-Width="130px" HeaderText="Date" UniqueName="DocumentDate"
-                        DataFormatString="{0:yyyy-MM-dd}" />
+                    <EmptyDataTemplate>
+                        <div class="invoice-empty">
+                            Aucune facture trouvée.
+                        </div>
+                    </EmptyDataTemplate>
+                </telerik:RadListView>
+            </div>
 
-                </Columns>
-            </MasterTableView>
-
-
-        </telerik:RadGrid>
-         
-
-
+            
+        </div>
     </div>
-
 
     <script type="text/javascript">
         function openSupplierInvoiceWindow(id) {
@@ -166,11 +317,7 @@
         }
 
         function rwSupplierInvoice_OnClientClose(sender, args) {
-            // Refresh la grid après fermeture
-            var grid = $find("<%= rwSupplierInvoices.ClientID %>");
-            if (grid) {
-                grid.get_masterTableView().rebind();
-            }
+            __doPostBack("<%= rgFournisseursFactures.UniqueID %>", "Rebind");
         }
-</script>
+    </script>
 </asp:Content>

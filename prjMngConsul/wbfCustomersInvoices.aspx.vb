@@ -10,28 +10,28 @@ Public Class wbfCustomersInvoices
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
-            rgClientsFactures.Rebind()
+            rlvClientsFactures.Rebind()
         End If
     End Sub
-
-    Private Sub rgCustomersFactures_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles rgClientsFactures.NeedDataSource
+    Private Sub rlvClientsFactures_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClientsFactures.NeedDataSource
         Dim dt As DataTable = GetData()
-        rgClientsFactures.DataSource = dt
+        rlvClientsFactures.DataSource = dt
     End Sub
 
-    Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rgClientsFactures.InsertCommand
-        If e.CommandArgument Is Nothing Then Return
+
+    'Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rlvClientsFactures.InsertCommand
+    '    If e.CommandArgument Is Nothing Then Return
 
 
 
 
-        Select Case e.CommandName
-            Case "EditSupplierInvoice"
-                CustomerInvoiceId = e.CommandArgument
-                Response.Redirect("wbfCustomerInvoinceEdit.aspx?SupplierId=" & CustomerInvoiceId.ToString)
+    '    Select Case e.CommandName
+    '        Case "EditSupplierInvoice"
+    '            CustomerInvoiceId = e.CommandArgument
+    '            Response.Redirect("wbfCustomerInvoinceEdit.aspx?SupplierId=" & CustomerInvoiceId.ToString)
 
-        End Select
-    End Sub
+    '    End Select
+    'End Sub
 
 
     Private Function GetData() As DataTable
@@ -72,5 +72,6 @@ Public Class wbfCustomersInvoices
         '            End Using
         '        End Using
     End Sub
+
 
 End Class

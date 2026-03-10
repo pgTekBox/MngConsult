@@ -58,19 +58,13 @@
             white-space: nowrap;
         }
 
-        .muted-note {
-            color: var(--mc-muted);
-            font-size: 12px;
-            padding: 10px 16px 0 16px;
-        }
-
-        .grid-host {
+        .list-host {
             flex: 1 1 auto;
             min-height: 0;
             padding: 16px;
         }
 
-        .grid-card {
+        .list-card {
             height: 100%;
             min-height: 420px;
             background: #fff;
@@ -78,29 +72,113 @@
             border-radius: 14px;
             overflow: hidden;
             box-shadow: 0 10px 28px rgba(15, 23, 42, .06);
+            display: flex;
+            flex-direction: column;
         }
 
-        .grid-scroll {
-            height: 100%;
-            overflow-x: auto;
-            overflow-y: hidden;
-            -webkit-overflow-scrolling: touch;
+        .invoice-list-wrap {
+            flex: 1 1 auto;
+            min-height: 0;
+            overflow: auto;
+            padding: 16px;
         }
 
-        .full-grid {
-            min-width: 980px;
-            height: 100%;
+        .invoice-list {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
         }
 
-        .action-cell {
+        .invoice-item {
+            border: 1px solid var(--mc-stroke);
+            border-radius: 14px;
+            background: #fff;
+            padding: 14px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .invoice-top {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .invoice-main {
+            min-width: 220px;
+            flex: 1 1 320px;
+        }
+
+        .invoice-number {
+            font-size: 16px;
+            font-weight: 900;
+            color: var(--mc-text, #0f172a);
+            line-height: 1.2;
+        }
+
+        .invoice-name {
+            margin-top: 4px;
+            color: var(--mc-muted);
+            font-size: 14px;
+        }
+
+        .invoice-status {
+            display: inline-flex;
+            align-items: center;
+            padding: 6px 10px;
+            border-radius: 999px;
+            background: #f8fafc;
+            border: 1px solid var(--mc-stroke);
+            font-size: 12px;
+            font-weight: 700;
+            white-space: nowrap;
+        }
+
+        .invoice-meta {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(140px, 1fr));
+            gap: 12px;
+        }
+
+        .meta-box {
+            border: 1px solid var(--mc-stroke);
+            border-radius: 12px;
+            padding: 10px 12px;
+            background: #f8fafc;
+        }
+
+        .meta-label {
+            font-size: 11px;
+            font-weight: 800;
+            color: var(--mc-muted);
+            text-transform: uppercase;
+            letter-spacing: .04em;
+            margin-bottom: 4px;
+        }
+
+        .meta-value {
+            font-size: 14px;
+            font-weight: 700;
+            color: var(--mc-text, #0f172a);
+        }
+
+        .invoice-actions {
             display: flex;
             gap: 8px;
             flex-wrap: wrap;
-            align-items: center;
         }
 
-        .action-cell .btn {
-            min-width: 90px;
+        .invoice-actions .btn {
+            min-width: 110px;
+        }
+
+        .empty-state {
+            padding: 28px;
+            text-align: center;
+            color: var(--mc-muted);
         }
 
         @media (max-width: 1024px) {
@@ -108,12 +186,12 @@
                 min-height: auto;
             }
 
-            .grid-host {
+            .list-host {
                 padding: 12px;
             }
 
-            .full-grid {
-                min-width: 900px;
+            .invoice-meta {
+                grid-template-columns: repeat(2, minmax(140px, 1fr));
             }
         }
 
@@ -145,17 +223,21 @@
                 min-width: 140px;
             }
 
-            .grid-host {
+            .list-host {
                 padding: 12px;
             }
 
-            .grid-card {
+            .list-card {
                 min-height: 360px;
                 border-radius: 12px;
             }
 
-            .full-grid {
-                min-width: 820px;
+            .invoice-list-wrap {
+                padding: 12px;
+            }
+
+            .invoice-meta {
+                grid-template-columns: 1fr;
             }
         }
 
@@ -173,16 +255,11 @@
                 min-width: 100%;
             }
 
-            .full-grid {
-                min-width: 760px;
-            }
-
-            .action-cell {
+            .invoice-actions {
                 flex-direction: column;
-                align-items: stretch;
             }
 
-            .action-cell .btn {
+            .invoice-actions .btn {
                 width: 100%;
                 min-width: 100%;
             }
@@ -196,42 +273,27 @@
         <AjaxSettings>
             <telerik:AjaxSetting AjaxControlID="btnSearch">
                 <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rgClientsFactures" />
+                    <telerik:AjaxUpdatedControl ControlID="rlvClientsFactures" />
                 </UpdatedControls>
             </telerik:AjaxSetting>
+
             <telerik:AjaxSetting AjaxControlID="btnClear">
                 <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rgClientsFactures" />
+                    <telerik:AjaxUpdatedControl ControlID="rlvClientsFactures" />
                     <telerik:AjaxUpdatedControl ControlID="tbSearch" />
                 </UpdatedControls>
             </telerik:AjaxSetting>
-            <telerik:AjaxSetting AjaxControlID="rgClientsFactures">
+
+            <telerik:AjaxSetting AjaxControlID="rlvClientsFactures">
                 <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rgClientsFactures" />
+                    <telerik:AjaxUpdatedControl ControlID="rlvClientsFactures" />
                 </UpdatedControls>
             </telerik:AjaxSetting>
         </AjaxSettings>
-
-        <PostBackControls>
-        </PostBackControls>
     </telerik:RadAjaxManager>
 
     <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true">
     </telerik:RadWindowManager>
-
-  <%--  <telerik:RadWindow ID="rwCustomerInvoices" runat="server"
-        Modal="true"
-        VisibleOnPageLoad="false"
-        Behaviors="Close,Move,Resize"
-        ClientIDMode="Static"
-        DestroyOnClose="true"
-       Width="90%"
-    Height="90%"
-    MinWidth="320px"
-    MinHeight="420px"
-        Title="Ajouter / Modifier un facture client"
-        OnClientClose="rwCustomerInvoice_OnClientClose">
-    </telerik:RadWindow>--%>
 
     <div class="page-shell">
 
@@ -263,117 +325,90 @@
             </div>
         </div>
 
-        <div class="grid-host">
-            <div class="grid-card">
-                <div class="grid-scroll">
+        <div class="list-host">
+            <div class="list-card">
 
-                    <telerik:RadGrid ID="rgClientsFactures" runat="server"
-                        Skin="Metro"
-                        CssClass="full-grid"
-                        AutoGenerateColumns="False"
-                        ClientIDMode="Static"
-                        AllowPaging="false"
-                        PageSize="25"
-                        AllowSorting="True"
-                        Height="100%">
+                <telerik:RadListView ID="rlvClientsFactures" runat="server"
+                    AllowPaging="False"
+                    DataKeyNames="Id"
+                    ItemPlaceholderID="itemPlaceholder">
 
-                        <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-                            <Selecting AllowRowSelect="True" />
-                            <Scrolling AllowScroll="true" UseStaticHeaders="true" />
-                        </ClientSettings>
+                    <LayoutTemplate>
+                        <div class="invoice-list-wrap">
+                            <div class="invoice-list">
+                                <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                            </div>
+                        </div>
+                    </LayoutTemplate>
 
-                        <MasterTableView DataKeyNames="Id" CommandItemDisplay="Top" EditMode="InPlace">
-                            <CommandItemSettings
-                                ShowAddNewRecordButton="False"
-                                ShowRefreshButton="False"
-                                ShowExportToCsvButton="False"
-                                ShowExportToExcelButton="False"
-                                ShowExportToPdfButton="False" />
+                    <ItemTemplate>
+                        <div class="invoice-item">
 
-                            <Columns>
+                            <div class="invoice-top">
+                                <div class="invoice-main">
+                                    <div class="invoice-number">
+                                        <%# Eval("DocumentNumber") %>
+                                    </div>
+                                    <div class="invoice-name">
+                                        <%# Eval("Name") %>
+                                    </div>
+                                </div>
 
-                                <telerik:GridTemplateColumn HeaderStyle-Width="220px" HeaderText="Actions" UniqueName="Actions" AllowFiltering="False">
-                                    <ItemTemplate>
-                                        <div class="action-cell">
-                                           
-                                            <telerik:RadLinkButton ID="RadLinkButton1"
-                                                runat="server" Text="RadLinkButton" 
-                                                NavigateUrl='<%# Eval("Id", "~/wbfInvoiceEdit.aspx?InvoiceId={0}") %>'>
-                                                 
+                                <div class="invoice-status">
+                                    <%# Eval("Status") %>
+                                </div>
+                            </div>
 
-                                            </telerik:RadLinkButton>
-                                            <asp:Button ID="btnDelete" runat="server" CssClass="btn" Text="Delete"
-                                                CommandName="DeleteInvoice" CommandArgument='<%# Eval("Id") %>' />
-                                        </div>
-                                    </ItemTemplate>
-                                </telerik:GridTemplateColumn>
+                            <div class="invoice-meta">
+                                <div class="meta-box">
+                                    <div class="meta-label">Numéro</div>
+                                    <div class="meta-value"><%# Eval("DocumentNumber") %></div>
+                                </div>
 
-                                <telerik:GridBoundColumn DataField="DocumentNumber" HeaderStyle-Width="180px" HeaderText="Number" UniqueName="DocumentNumber" />
-                                <telerik:GridBoundColumn DataField="Name" HeaderText="Supplier" UniqueName="Name" />
-                                <telerik:GridBoundColumn DataField="Total" HeaderStyle-Width="140px" DataFormatString="{0:C2}" HeaderText="Total" UniqueName="Total" HeaderStyle-HorizontalAlign="Right" ItemStyle-HorizontalAlign="Right" />
-                                <telerik:GridBoundColumn DataField="Status" HeaderStyle-Width="100px" HeaderText="Status" UniqueName="Status" />
-                                <telerik:GridDateTimeColumn DataField="DocumentDate" HeaderStyle-Width="130px" HeaderText="Date" UniqueName="DocumentDate"
-                                    DataFormatString="{0:yyyy-MM-dd}" />
+                                <div class="meta-box">
+                                    <div class="meta-label">Date</div>
+                                    <div class="meta-value"><%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %></div>
+                                </div>
 
-                            </Columns>
-                        </MasterTableView>
+                                <div class="meta-box">
+                                    <div class="meta-label">Total</div>
+                                    <div class="meta-value"><%# Eval("Total", "{0:C2}") %></div>
+                                </div>
+                            </div>
 
-                    </telerik:RadGrid>
+                            <div class="invoice-actions">
+                                <telerik:RadLinkButton ID="lnkEdit"
+                                    runat="server"
+                                    CssClass="btn"
+                                    Text="Ouvrir"
+                                    NavigateUrl='<%# Eval("Id", "~/wbfInvoiceEdit.aspx?InvoiceId={0}") %>'>
+                                </telerik:RadLinkButton>
 
-                </div>
+                                <asp:Button ID="btnDelete"
+                                    runat="server"
+                                    CssClass="btn"
+                                    Text="Delete"
+                                    CommandName="DeleteInvoice"
+                                    CommandArgument='<%# Eval("Id") %>' />
+                            </div>
+
+                        </div>
+                    </ItemTemplate>
+
+                    <EmptyDataTemplate>
+                        <div class="empty-state">
+                            Aucune facture trouvée.
+                        </div>
+                    </EmptyDataTemplate>
+
+                </telerik:RadListView>
+
             </div>
         </div>
 
     </div>
+
     <script type="text/javascript">
-        //function sizeCustomerInvoiceWindow(wnd) {
-        //    var vw = Math.max(document.documentElement.clientWidth || 0, window.innerWidth || 0);
-        //    var vh = Math.max(document.documentElement.clientHeight || 0, window.innerHeight || 0);
-
-        //    if (vw <= 768) {
-        //        wnd.set_width(Math.floor(vw * 0.96));
-        //        wnd.set_height(Math.floor(vh * 0.92));
-        //    } else if (vw <= 1200) {
-        //        wnd.set_width(Math.floor(vw * 0.92));
-        //        wnd.set_height(Math.floor(vh * 0.90));
-        //    } else {
-        //        wnd.set_width(1100);
-        //        wnd.set_height(Math.floor(vh * 0.90));
-        //    }
-
-        //    wnd.center();
-        //}
-
-        //function openCustomerInvoiceWindow(id) {
-        //    var wnd = $find("rwCustomerInvoices");
-        //    var url = "wbfInvoiceEdit.aspx";
-
-        //    if (id && id > 0) {
-        //        url += "?InvoiceId=" + id;
-        //        wnd.set_title("Modifier une facture client");
-        //    } else {
-        //        url += "?InvoiceId=0";
-        //        wnd.set_title("Ajouter une facture client");
-        //    }
-
-        //    wnd.setUrl(url);
-        //    sizeCustomerInvoiceWindow(wnd);
-        //    wnd.show();
-        //}
-
-        //function rwCustomerInvoice_OnClientClose(sender, args) {
-        //    var grid = $find("rgClientsFactures");
-        //    if (grid) {
-        //        grid.get_masterTableView().rebind();
-        //    }
-        //}
-
-        //window.addEventListener("resize", function () {
-        //    var wnd = $find("rwCustomerInvoices");
-        //    if (wnd && wnd.isVisible()) {
-        //        sizeCustomerInvoiceWindow(wnd);
-        //    }
-        //});
-    </script>
+</script>
 
 </asp:Content>

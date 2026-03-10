@@ -19,6 +19,11 @@
           z-index: 99999;
       }
 
+
+
+
+
+
       .json-modal-box {
           width: min(1000px, 92vw);
           max-height: 85vh;
@@ -147,7 +152,110 @@
 .btn:disabled:hover{
     background:#e5e7eb !important;
 }
+.list-shell {
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+}
 
+.pdf-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--mc-stroke);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+}
+
+.pdf-list-head {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.7fr) 180px minmax(320px, 1fr);
+    gap: 16px;
+    padding: 14px 16px;
+    font-weight: 800;
+    font-size: 13px;
+    color: #0f172a;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--mc-stroke);
+    position: sticky;
+    top: 0;
+    z-index: 2;
+}
+
+.pdf-list-body {
+    flex: 1;
+    overflow: auto;
+}
+
+.pdf-row {
+    display: grid;
+    grid-template-columns: minmax(280px, 1.7fr) 180px minmax(320px, 1fr);
+    gap: 16px;
+    align-items: center;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eef2f7;
+    background: #fff;
+}
+
+.pdf-row:hover {
+    background: #fafcff;
+}
+
+.pdf-file {
+    min-width: 0;
+    word-break: break-word;
+    color: #0f172a;
+    font-weight: 600;
+}
+
+.pdf-status {
+    color: #475569;
+    font-weight: 700;
+}
+
+.pdf-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.pdf-empty {
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+}
+
+.pdf-actions .btn,
+.pdf-actions input[type=submit],
+.pdf-actions input[type=button] {
+    border-radius: 10px !important;
+}
+
+@media (max-width: 900px) {
+    .pdf-list-head {
+        display: none;
+    }
+
+    .pdf-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .pdf-status::before {
+        content: "Statut : ";
+        font-weight: 800;
+        color: #0f172a;
+    }
+
+    .pdf-actions {
+        margin-top: 4px;
+    }
+}
   </style>
 
 
@@ -197,113 +305,86 @@
         </div>
     </div>
 
-     <div class="full-grid">
-            <telerik:RadGrid ID="RadScannedPDF" runat="server"
-                CssClass="grid"
- AutoGenerateColumns="False"
- AllowPaging="false"
- PageSize="20"
- AllowSorting="True"
- AllowFilteringByColumn="False"
-                OnItemCommand="RadScannedPDF_ItemCommand"
-                OnNeedDataSource="RadScannedPDF_NeedDataSource"      Skin="Metro"
-    Height="100%">
-                
-                <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-                    <Selecting AllowRowSelect="True" />
-                    <Scrolling AllowScroll="true" UseStaticHeaders="true" />
-                </ClientSettings>
+   <div class="full-grid">
+    <div class="list-shell">
+        <telerik:RadListView ID="RadScannedPDF" runat="server"
+            Skin="Metro"
+            DataKeyNames="imageGUID"
+            AllowPaging="false"
+            ItemPlaceholderID="itemPlaceholder"
+          >
 
-                <MasterTableView DataKeyNames="imageGUID" CommandItemDisplay="None">
-                       <CommandItemSettings
-       ShowAddNewRecordButton="False"
-       ShowRefreshButton="False"
-       ShowExportToCsvButton="False"
-       ShowExportToExcelButton="False"
-       ShowExportToPdfButton="False" />
+            <LayoutTemplate>
+                <div class="pdf-list">
+                    <div class="pdf-list-head">
+                        <div class="col-file">Fichier</div>
+                        <div class="col-status">Statut</div>
+                        <div class="col-actions">Actions</div>
+                    </div>
 
+                    <div class="pdf-list-body">
+                        <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
+                    </div>
+                </div>
+            </LayoutTemplate>
 
-   
+            <ItemTemplate>
+                <div class="pdf-row">
+                    <div class="pdf-file">
+                        <asp:Literal ID="litHtml"
+                            runat="server"
+                            Mode="PassThrough"
+                            Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
+                    </div>
 
-                    <Columns>
+                    <div class="pdf-status">
+                        <%# Eval("ProcessingStatus") %>
+                    </div>
 
+                    <div class="pdf-actions">
+                        <asp:Button ID="btnDelete"
+                            runat="server"
+                            Text="Delete"
+                            CssClass="btn"
+                            CommandName="DeleteR"
+                            CommandArgument='<%# Eval("imageGUID") %>' />
 
-                        <telerik:GridTemplateColumn HeaderText="Action" UniqueName="Action">
-                            <ItemTemplate>
-                                <asp:Button ID="btnDelete"
-                                    runat="server"
-                                    Text="Delete"
-                                    CssClass="btn"
-                                    CommandName="DeleteR"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
+                        <asp:Button ID="btnProcess"
+                            runat="server"
+                            Text="Process AI"
+                            CssClass="btn"
+                            Enabled='<%# Eval("CanProcessAI") %>'
+                            CommandName="Process"
+                            CommandArgument='<%# Eval("imageGUID") %>' />
 
+                        <asp:Button ID="btnVoirJSON"
+                            runat="server"
+                            Text="Voir JSON"
+                            CssClass="btn"
+                            Visible='<%# Eval("CanViewJSON") %>'
+                            CommandName="VoirJSON"
+                            CommandArgument='<%# Eval("imageGUID") %>' />
 
-                        <telerik:GridTemplateColumn HeaderText="Fichier" UniqueName="Fichier">
-                            <ItemTemplate>
-                                <asp:Literal ID="litHtml" runat="server" Mode="PassThrough"
-                                    Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
+                        <asp:Button ID="btnProcessJSON"
+                            runat="server"
+                            Text="Process JSON"
+                            CssClass="btn"
+                            Visible='<%# Eval("CanViewJSON") %>'
+                            CommandName="ProcessJSON"
+                            CommandArgument='<%# Eval("imageGUID") %>' />
+                    </div>
+                </div>
+            </ItemTemplate>
 
+            <EmptyDataTemplate>
+                <div class="pdf-empty">
+                    Aucun PDF trouvé.
+                </div>
+            </EmptyDataTemplate>
 
-
-
-                        <telerik:GridTemplateColumn HeaderText="Analyse AI" UniqueName="ProcessAI">
-                            <ItemTemplate>
-                                <asp:Button ID="btnProcess"
-                                    runat="server"
-                                    Text="Process AI"
-                                    Enabled='<%#  Eval("CanProcessAI")   %>'
-                                    CssClass="btn"
-                                    CommandName="Process"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Voir JSON" UniqueName="VoirJSON">
-                            <ItemTemplate>
-                                <asp:Button ID="btnVoirJSON"
-                                    runat="server"
-                                    Text="Voir JSON"
-                                    Visible='<%#  Eval("CanViewJSON")   %>'
-                                    CssClass="btn"
-                                    CommandName="VoirJSON"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Process to Database" UniqueName="ProcessJSON">
-                            <ItemTemplate>
-                                <asp:Button ID="btnProcessJSON"
-                                    runat="server"
-                                    Text="Process JSON"
-                                    CssClass="btn"
-                                     Visible='<%#  Eval("CanViewJSON")   %>'
-                                    CommandName="ProcessJSON"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-
-
-                        <telerik:GridBoundColumn DataField="ProcessingStatus" HeaderText="Statut" SortExpression="ProcessingStatus" UniqueName="ProcessingStatus" />
-
-                    </Columns>
-                </MasterTableView>
-
-                <ClientSettings>
-                    <Selecting AllowRowSelect="True" />
-                </ClientSettings>
-
-            </telerik:RadGrid>
-
-     
+        </telerik:RadListView>
     </div>
+</div>
          
    </telerik:RadAjaxPanel> 
     <!-- Modal JSON -->

@@ -32,13 +32,13 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents pnlMain As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''ddlCustomer control.
+    '''lblCustomer control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddlCustomer As Global.Telerik.Web.UI.RadComboBox
+    Protected WithEvents lblCustomer As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''rdLabel control.
@@ -75,15 +75,6 @@ Partial Public Class wbfInvoiceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rpItems As Global.System.Web.UI.WebControls.Repeater
-
-    '''<summary>
-    '''btnAddLine control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnAddLine As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''lblCapSubTotal control.
@@ -131,6 +122,15 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents lblTotal As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''btnAddLine control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnAddLine As Global.Telerik.Web.UI.RadImageButton
+
+    '''<summary>
     '''radSave control.
     '''</summary>
     '''<remarks>
@@ -156,4 +156,22 @@ Partial Public Class wbfInvoiceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rlvProducts As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>
+    '''hidSelectedCustomerId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hidSelectedCustomerId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''rlvCustomers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rlvCustomers As Global.Telerik.Web.UI.RadListView
 End Class

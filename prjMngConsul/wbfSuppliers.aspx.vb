@@ -13,7 +13,7 @@ Public Class wbfSuppliers
         End If
     End Sub
 
-    Private Sub rgFournisseurs_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles rgFournisseurs.NeedDataSource
+    Private Sub rgFournisseurs_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rgFournisseurs.NeedDataSource
         Dim dt As DataTable = GetData()
         rgFournisseurs.DataSource = dt
 
@@ -21,9 +21,7 @@ Public Class wbfSuppliers
         'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
     End Sub
 
-    Private Sub rgFournisseurs_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles rgFournisseurs.ItemCommand
-
-
+    Private Sub rgFournisseurs_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rgFournisseurs.ItemCommand
 
         If e.CommandArgument Is Nothing Then Return
 
@@ -36,8 +34,8 @@ Public Class wbfSuppliers
                 Response.Redirect("wbfSupplierEdit.aspx?SupplierId=" & SupplierId.ToString)
 
         End Select
-
     End Sub
+
 
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()
@@ -57,4 +55,5 @@ Public Class wbfSuppliers
         Response.Redirect("wbfSupplierEdit.aspx")
         ' ou: Response.Redirect("wbfSupplierEdit.aspx?SupplierId=0")
     End Sub
+
 End Class

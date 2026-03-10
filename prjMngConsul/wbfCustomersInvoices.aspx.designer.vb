@@ -68,11 +68,11 @@ Partial Public Class wbfCustomersInvoices
     Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''rgClientsFactures control.
+    '''rlvClientsFactures control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgClientsFactures As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents rlvClientsFactures As Global.Telerik.Web.UI.RadListView
 End Class

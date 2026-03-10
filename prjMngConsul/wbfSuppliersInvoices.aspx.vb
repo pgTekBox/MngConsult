@@ -14,12 +14,14 @@ Public Class wbfSuppliersInvoices
         End If
     End Sub
 
-    Private Sub rgFournisseursFactures_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles rgFournisseursFactures.NeedDataSource
+
+
+    Private Sub rgFournisseursFactures_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rgFournisseursFactures.NeedDataSource
         Dim dt As DataTable = GetData()
         rgFournisseursFactures.DataSource = dt
     End Sub
 
-    Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rgFournisseursFactures.InsertCommand
+    Private Sub rgFournisseursFactures_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rgFournisseursFactures.ItemCommand
         If e.CommandArgument Is Nothing Then Return
 
 
@@ -32,6 +34,10 @@ Public Class wbfSuppliersInvoices
 
         End Select
     End Sub
+    'Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rgFournisseursFactures.InsertCommand
+
+    'End Sub
+
 
 
     Private Function GetData() As DataTable

@@ -147,6 +147,190 @@
                 .btn:disabled:hover {
                     background: #e5e7eb !important;
                 }
+
+                .receipt-shell {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--mc-stroke);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15,23,42,.06);
+    min-height: 0;
+}
+
+.receipt-scroll {
+    flex: 1 1 auto;
+    overflow: auto;
+    min-height: 0;
+}
+
+.receipt-list {
+    display: flex;
+    flex-direction: column;
+    min-width: 1200px;
+}
+
+.receipt-head {
+    display: grid;
+    grid-template-columns: 120px minmax(230px, 1.5fr) minmax(220px, 1.2fr) 130px 120px 150px 140px;
+    gap: 12px;
+    padding: 14px 16px;
+    font-weight: 800;
+    font-size: 13px;
+    color: #0f172a;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--mc-stroke);
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+.receipt-row {
+    display: grid;
+    grid-template-columns: 120px minmax(230px, 1.5fr) minmax(220px, 1.2fr) 130px 120px 150px 140px;
+    gap: 12px;
+    align-items: start;
+    padding: 14px 16px;
+    border-bottom: 1px solid #eef2f7;
+    background: #fff;
+}
+
+.receipt-row:hover {
+    background: #fafcff;
+}
+
+.receipt-actions,
+.receipt-process,
+.receipt-json,
+.receipt-process-json {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.receipt-file,
+.receipt-supplier,
+.receipt-status {
+    color: #0f172a;
+    min-width: 0;
+    word-break: break-word;
+}
+
+.receipt-status {
+    font-weight: 700;
+    color: #475569;
+}
+
+.receipt-empty {
+    padding: 40px 20px;
+    text-align: center;
+    color: var(--mc-muted);
+}
+
+.receipt-pager {
+    flex: 0 0 auto;
+    padding: 12px 16px 16px 16px;
+    border-top: 1px solid var(--mc-stroke);
+    background: #fff;
+}
+
+/* boutons dans listview */
+.receipt-row .btn,
+.receipt-row input[type=submit],
+.receipt-row input[type=button] {
+    border-radius: 10px !important;
+}
+
+/* disabled */
+.receipt-row .btn:disabled,
+.receipt-row .btn[disabled],
+.receipt-row input[type=submit]:disabled,
+.receipt-row input[type=button]:disabled {
+    background: #e5e7eb !important;
+    color: #9ca3af !important;
+    border-color: #d1d5db !important;
+    cursor: not-allowed !important;
+    opacity: .75;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+.receipt-row .btn:disabled:hover {
+    background: #e5e7eb !important;
+}
+
+@media (max-width: 900px) {
+    .receipt-list {
+        min-width: 100%;
+    }
+
+    .receipt-head {
+        display: none;
+    }
+
+    .receipt-row {
+        grid-template-columns: 1fr;
+        gap: 10px;
+    }
+
+    .receipt-actions::before {
+        content: "Action";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-file::before {
+        content: "Fichier";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-supplier::before {
+        content: "Fournisseur";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-process::before {
+        content: "Optimize and AI";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-json::before {
+        content: "Voir JSON";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-process-json::before {
+        content: "Process to Database";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+
+    .receipt-status::before {
+        content: "Statut";
+        display: block;
+        font-weight: 800;
+        color: #64748b;
+        margin-bottom: 4px;
+    }
+}
     </style>
 
 
@@ -176,125 +360,105 @@
         </div>
 
 
-
         <div class="full-grid">
+    <div class="receipt-shell">
+        <div class="receipt-scroll">
+            <telerik:RadListView ID="RadReceipt" runat="server"
+                DataKeyNames="imageGUID"
+                AllowPaging="True"
+                ItemPlaceholderID="itemPlaceholder"
+                RenderItemWrapper="false"
+               >
 
-            <telerik:RadGrid ID="RadReceipt" runat="server"
-                CssClass="grid"
-                AutoGenerateColumns="False"
-                AllowPaging="false"
-                PageSize="20"
-                AllowSorting="True"
-                AllowFilteringByColumn="False"
-                OnItemCommand="RadReceipt_ItemCommand"
-                OnNeedDataSource="RadReceipt_NeedDataSource"
-                Skin="Metro"
-                Height="100%">
+                <LayoutTemplate>
+                    <div class="receipt-list">
+                        <div class="receipt-head">
+                            <div>Action</div>
+                            <div>Fichier</div>
+                            <div>Fournisseur</div>
+                            <div>Optimize and AI</div>
+                            <div>Voir JSON</div>
+                            <div>Process to Database</div>
+                            <div>Statut</div>
+                        </div>
 
-                <ClientSettings AllowColumnsReorder="True" ReorderColumnsOnClient="True">
-                    <Selecting AllowRowSelect="True" />
-                    <Scrolling AllowScroll="true" UseStaticHeaders="true" />
-                </ClientSettings>
+                        <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                    </div>
+                </LayoutTemplate>
 
+                <ItemTemplate>
+                    <div class="receipt-row">
+                        <div class="receipt-actions">
+                            <asp:Button ID="btnDelete"
+                                runat="server"
+                                Text="Delete"
+                                CssClass="btn"
+                                CommandName="DeleteR"
+                                CommandArgument='<%# Eval("imageGUID") %>' />
+                        </div>
 
+                        <div class="receipt-file">
+                            <asp:Literal ID="litHtml" runat="server"
+                                Mode="PassThrough"
+                                Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
+                            <asp:Literal ID="litHtmlOp" runat="server"
+                                Mode="PassThrough"
+                                Text='<%# Server.HtmlDecode(CStr(Eval("Optimized"))) %>' />
+                        </div>
 
+                        <div class="receipt-supplier">
+                            <asp:Literal ID="litinfo" runat="server"
+                                Mode="PassThrough"
+                                Text='<%# Server.HtmlDecode(CStr(Eval("SupplierInfo"))) %>' />
+                        </div>
 
+                        <div class="receipt-process">
+                            <asp:Button ID="btnProcess"
+                                runat="server"
+                                Text="Process AI"
+                                CssClass="btn"
+                                Enabled='<%# Eval("CanProcessAI") %>'
+                                CommandName="Process"
+                                CommandArgument='<%# Eval("imageGUID") %>' />
+                        </div>
 
-                <MasterTableView DataKeyNames="imageGUID" CommandItemDisplay="None">
+                        <div class="receipt-json">
+                            <asp:Button ID="btnVoirJSON"
+                                runat="server"
+                                Text="Voir JSON"
+                                Visible='<%# Eval("CanViewJSON") %>'
+                                CssClass="btn"
+                                CommandName="VoirJSON"
+                                CommandArgument='<%# Eval("imageGUID") %>' />
+                        </div>
 
-                    <CommandItemSettings
-                        ShowAddNewRecordButton="False"
-                        ShowRefreshButton="False"
-                        ShowExportToCsvButton="False"
-                        ShowExportToExcelButton="False"
-                        ShowExportToPdfButton="False" />
+                        <div class="receipt-process-json">
+                            <asp:Button ID="btnProcessJSON"
+                                runat="server"
+                                Text="Process JSON"
+                                CssClass="btn"
+                                Visible='<%# Eval("CanViewJSON") %>'
+                                CommandName="ProcessJSON"
+                                CommandArgument='<%# Eval("imageGUID") %>' />
+                        </div>
 
+                        <div class="receipt-status">
+                            <%# Eval("ProcessingStatus") %>
+                        </div>
+                    </div>
+                </ItemTemplate>
 
-                    <Columns>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Action" UniqueName="Action">
-                            <ItemTemplate>
-                                <asp:Button ID="btnDelete"
-                                    runat="server"
-                                    Text="Delete"
-                                    CssClass="btn"
-                                    CommandName="DeleteR"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Fichier" UniqueName="Fichier">
-                            <ItemTemplate>
-                                <asp:Literal ID="litHtml" runat="server" Mode="PassThrough" Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
-                                <asp:Literal ID="litHtmlOp" runat="server" Mode="PassThrough" Text='<%# Server.HtmlDecode(CStr(Eval("Optimized"))) %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-                        <telerik:GridTemplateColumn HeaderText="Fournisseur" UniqueName="Fournisseur">
-                            <ItemTemplate>
-                                <asp:Literal ID="litinfo" runat="server" Mode="PassThrough" Text='<%# Server.HtmlDecode(CStr(Eval("SupplierInfo"))) %>' />
-
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-
-
-
-
-                        <telerik:GridTemplateColumn HeaderText="Optimize and AI" UniqueName="ProcessAI">
-                            <ItemTemplate>
-                                <asp:Button ID="btnProcess"
-                                    runat="server"
-                                    Text="Process AI"
-                                    CssClass="btn"
-                                    Enabled='<%#  Eval("CanProcessAI")   %>'
-                                    CommandName="Process"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Voir JSON" UniqueName="VoirJSON">
-                            <ItemTemplate>
-                                <asp:Button ID="btnVoirJSON"
-                                    runat="server"
-                                    Text="Voir JSON"
-                                    Visible='<%#  Eval("CanViewJSON")   %>'
-                                    CssClass="btn"
-                                    CommandName="VoirJSON"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-                        <telerik:GridTemplateColumn HeaderText="Process to Database" UniqueName="ProcessJSON">
-                            <ItemTemplate>
-                                <asp:Button ID="btnProcessJSON"
-                                    runat="server"
-                                    Text="Process JSON"
-                                    CssClass="btn"
-                                    Visible='<%#  Eval("CanViewJSON")   %>'
-                                    CommandName="ProcessJSON"
-                                    CommandArgument='<%# Eval("imageGUID") %>' />
-                            </ItemTemplate>
-                        </telerik:GridTemplateColumn>
-
-
-
-
-                        <telerik:GridBoundColumn DataField="ProcessingStatus" HeaderText="Statut" SortExpression="ProcessingStatus" UniqueName="ProcessingStatus" />
-
-                    </Columns>
-                </MasterTableView>
-
-
-
-            </telerik:RadGrid>
+                <EmptyDataTemplate>
+                    <div class="receipt-empty">
+                        Aucun reçu trouvé.
+                    </div>
+                </EmptyDataTemplate>
+            </telerik:RadListView>
         </div>
 
+        
+    </div>
+</div>
 
 
 

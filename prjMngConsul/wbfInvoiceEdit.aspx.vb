@@ -29,6 +29,8 @@ Public Class wbfInvoiceEdit
             ViewState("InvoiceId") = Value
         End Set
     End Property
+
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
@@ -36,27 +38,14 @@ Public Class wbfInvoiceEdit
             InvoiceId = CInt(Request.QueryString("InvoiceId"))
             CreateItemsTable()
             LoadItemTableFromBD()
-
             ProductsTable = GetProductsTable()
-
             BindData()
-
-
-            BinDDL()
-
+            'BinDDL()
         End If
-        'Dim eventTarget As String = Request("__EVENTTARGET")
-
-        'If eventTarget = "ProductSelected" Then
-
-        '    Dim productId As Integer = Convert.ToInt32(hidSelectedProductId.Value)
-
-
-        'End If
 
 
     End Sub
-
+    'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
         dt.Columns.Add("Id", GetType(Integer))
@@ -70,6 +59,8 @@ Public Class wbfInvoiceEdit
         dt.Columns.Add("Deleted", GetType(Integer))
         ViewState("ItemsTable") = dt
     End Sub
+
+    'Charger les lignes de la facture depuis la BD et les stocker dans le ViewState("ItemsTable")
     Public Sub LoadItemTableFromBD()
 
         Dim p2 As New Collection
@@ -92,6 +83,8 @@ Public Class wbfInvoiceEdit
 
         Next
     End Sub
+
+    ' Met à jour le ViewState("ItemsTable") avec les valeurs actuelles des contrôles de chaque ligne (à appeler avant tout bind ou action qui nécessite les données à jour)
     Sub UpdateAllItemInViewstate()
 
         Dim dt As DataTable = TryCast(ViewState("ItemsTable"), DataTable)
@@ -166,15 +159,6 @@ Public Class wbfInvoiceEdit
 
 
 
-            '' Name (si tu t'en sers)
-            'If dt.Columns.Contains("Name") Then
-            '    Dim oldName As String = If(IsDBNull(dr("Name")), "", CStr(dr("Name")))
-            '    If oldName <> itemCode Then
-            '        dr("Name") = itemCode
-            '        changed = True
-            '    End If
-            'End If
-
             ' Qty
             If dt.Columns.Contains("Qty") Then
                 Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
@@ -202,17 +186,7 @@ Public Class wbfInvoiceEdit
                 End If
             End If
 
-            ' ProductId (si tu veux le dériver du "code" -> ici j'essaie de parser un int)
-            'If dt.Columns.Contains("ProductId") Then
-            '    Dim parsedPid As Integer
-            '    If Integer.TryParse(itemCode, parsedPid) Then
-            '        Dim oldPid As Integer = If(IsDBNull(dr("ProductId")), 0, Convert.ToInt32(dr("ProductId")))
-            '        If oldPid <> parsedPid Then
-            '            dr("ProductId") = parsedPid
-            '            changed = True
-            '        End If
-            '    End If
-            'End If
+
 
             ' Dirty
             If changed AndAlso dt.Columns.Contains("Dirty") Then
@@ -225,21 +199,21 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+
+    'Binding du Repeater avec les données du ViewState("ItemsTable") en filtrant les lignes marquées comme Deleted=1
     Public Sub BindItemGrid()
 
         Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-
         Dim dv As New DataView(dt)
         dv.RowFilter = "Deleted = 0"
 
         rpItems.DataSource = dv
         rpItems.DataBind()
 
-
-
-
     End Sub
 
+
+    'Binding des autres champs de la facture (client, dates, etc) et appel du BindItemGrid() pour les lignes
     Sub BindData()
         If InvoiceId > 0 Then
             Dim p As New Collection
@@ -248,19 +222,21 @@ Public Class wbfInvoiceEdit
             If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
             Dim orow As DataRow = ds.Tables(0).Rows(0)
 
-            ddlCustomer.Items.Clear()
+            'ddlCustomer.Items.Clear()
             Dim p2 As New Collection
             p2.Add(New SqlClient.SqlParameter("@Search", ""))
 
             Dim ds2 As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p2)
 
-            For Each orow2 As DataRow In ds2.Tables(0).Rows
-                Dim item As New RadComboBoxItem(orow2("Name").ToString(), orow2("Value").ToString())
-                ddlCustomer.Items.Add(item)
-            Next
+            'For Each orow2 As DataRow In ds2.Tables(0).Rows
+            '    Dim item As New RadComboBoxItem(orow2("ContactName").ToString(), orow2("Value").ToString())
+            '    ddlCustomer.Items.Add(item)
+            'Next
 
-            ddlCustomer.Text = orow("Name").ToString()
+            'ddlCustomer.Text = orow("Name").ToString()
 
+            lblCustomer.Text = orow("Name").ToString()
+            lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this," & InvoiceId.ToString & ")")
             rdLabel.Text = orow("FullName").ToString()
             dpIssueDate.SelectedDate = orow("IssueDate")
             dpDueDate.SelectedDate = orow("DueDate")
@@ -271,78 +247,76 @@ Public Class wbfInvoiceEdit
     End Sub
 
 
-    Sub BinDDL()
-        ddlCustomer.EmptyMessage = "Rechercher un client..."
-        ddlCustomer.Filter = RadComboBoxFilter.Contains
-        ddlCustomer.MarkFirstMatch = True
-        ddlCustomer.EnableLoadOnDemand = True
-        ddlCustomer.ShowMoreResultsBox = False
-        ddlCustomer.ItemsPerRequest = "50"
-        ddlCustomer.DataValueField = "Id"
-        ddlCustomer.DataTextField = "Value"
+    'Sub BinDDL()
+    '    ddlCustomer.EmptyMessage = "Rechercher un client..."
+    '    ddlCustomer.Filter = RadComboBoxFilter.Contains
+    '    ddlCustomer.MarkFirstMatch = True
+    '    ddlCustomer.EnableLoadOnDemand = True
+    '    ddlCustomer.ShowMoreResultsBox = False
+    '    ddlCustomer.ItemsPerRequest = "50"
+    '    ddlCustomer.DataValueField = "Id"
+    '    ddlCustomer.DataTextField = "Value"
 
 
-    End Sub
+    'End Sub
 
-    Private Sub ddlCustomer_ItemsRequested(sender As Object, e As RadComboBoxItemsRequestedEventArgs) Handles ddlCustomer.ItemsRequested
-        Dim combo = CType(sender, RadComboBox)
-        combo.Items.Clear()
+    'Private Sub ddlCustomer_ItemsRequested(sender As Object, e As RadComboBoxItemsRequestedEventArgs) Handles ddlCustomer.ItemsRequested
+    '    Dim combo = CType(sender, RadComboBox)
+    '    combo.Items.Clear()
 
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@Search", e.Text.Trim))
+    '    Dim p As New Collection
+    '    p.Add(New SqlClient.SqlParameter("@Search", e.Text.Trim))
 
-        Dim ds As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p)
+    '    Dim ds As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p)
 
-        For Each orow As DataRow In ds.Tables(0).Rows
-            Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
-            combo.Items.Add(item)
-        Next
-    End Sub
+    '    For Each orow As DataRow In ds.Tables(0).Rows
+    '        Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
+    '        combo.Items.Add(item)
+    '    Next
+    'End Sub
 
-    Private Sub ddlCustomer_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles ddlCustomer.SelectedIndexChanged
-        If e.Value <> "" Then
-
-
-            Dim p As New Collection
-            p.Add(New SqlClient.SqlParameter("@PartyId", e.Value))
-
-            Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
-
-            Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
-            rdLabel.Text = Fullanme
-        Else
-            rdLabel.Text = ""
-        End If
-        ddlCustomer.Items.Clear()
-        Dim p2 As New Collection
-        p2.Add(New SqlClient.SqlParameter("@Search", ""))
-
-        Dim ds2 As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p2)
-
-        For Each orow As DataRow In ds2.Tables(0).Rows
-            Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
-            ddlCustomer.Items.Add(item)
-        Next
-
-        'For Each it As Telerik.Web.UI.GridDataItem In rgItems.MasterTableView.Items
-        '    Dim id As Integer = CInt(it.GetDataKeyValue("Id"))
-        '    Dim code = CType(it.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox).Text
-        '    Dim desc = CType(it.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox).Text
-        '    Dim qty = CType(it.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox).Value
-        '    Dim unitPrice = CType(it.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox).Value
-
-        '    ' UPDATE SQL...
-        'Next
+    'Private Sub ddlCustomer_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles ddlCustomer.SelectedIndexChanged
+    '    If e.Value <> "" Then
 
 
-        '    ' UPDATE SQL...
-        'Next
-    End Sub
+    '        Dim p As New Collection
+    '        p.Add(New SqlClient.SqlParameter("@PartyId", e.Value))
 
+    '        Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
+
+    '        Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
+    '        rdLabel.Text = Fullanme
+    '    Else
+    '        rdLabel.Text = ""
+    '    End If
+    '    ddlCustomer.Items.Clear()
+    '    Dim p2 As New Collection
+    '    p2.Add(New SqlClient.SqlParameter("@Search", ""))
+
+    '    Dim ds2 As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p2)
+
+    '    For Each orow As DataRow In ds2.Tables(0).Rows
+    '        Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
+    '        ddlCustomer.Items.Add(item)
+    '    Next
+
+    '    'For Each it As Telerik.Web.UI.GridDataItem In rgItems.MasterTableView.Items
+    '    '    Dim id As Integer = CInt(it.GetDataKeyValue("Id"))
+    '    '    Dim code = CType(it.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox).Text
+    '    '    Dim desc = CType(it.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox).Text
+    '    '    Dim qty = CType(it.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox).Value
+    '    '    Dim unitPrice = CType(it.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox).Value
+
+    '    '    ' UPDATE SQL...
+    '    'Next
+
+
+    '    '    ' UPDATE SQL...
+    '    'Next
+    'End Sub
+
+    'Ajout d'une ligne vide dans le ViewState("ItemsTable") et rebind du Repeater pour afficher la nouvelle ligne
     Private Sub btnAddLine_Click(sender As Object, e As EventArgs) Handles btnAddLine.Click
-
-
-
 
         UpdateAllItemInViewstate()
 
@@ -363,6 +337,7 @@ Public Class wbfInvoiceEdit
 
     End Sub
 
+    'Sauvegarde de la facture: mise à jour du ViewState("ItemsTable") avec les valeurs actuelles, puis envoi de toutes les lignes (y compris les marquées comme Deleted=1) à une procédure stockée qui se chargera de faire les insert/update/delete nécessaires en fonction des flags Dirty et Deleted
     Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
 
         UpdateAllItemInViewstate()
@@ -383,7 +358,7 @@ Public Class wbfInvoiceEdit
 
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
         ParamItems.Value = tvp
-        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v2"
+        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v3"
 
         oCom.Parameters.Add(ParamInvoiceId)
         oCom.Parameters.Add(ParamItems)
@@ -392,10 +367,11 @@ Public Class wbfInvoiceEdit
         oCom.ExecuteNonQuery()
         oCom.Connection.Close()
 
-
+        Response.Redirect("wbfCustomersInvoices.aspx")
 
     End Sub
 
+    'ItemCommand du Repeater pour gérer la suppression d'une ligne: on marque la ligne comme Deleted=1 dans le ViewState("ItemsTable") et on rebind le Repeater pour que la ligne disparaisse de l'affichage (le vrai delete en BD sera géré par la procédure stockée lors de la sauvegarde en fonction du flag Deleted)
     Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand
         If e.CommandName = "DeleteLine" Then
 
@@ -418,12 +394,21 @@ Public Class wbfInvoiceEdit
         End If
     End Sub
 
-
+    'Creation d'une table en mémoire pour stocker la liste des produits (équivalent d'un DataTable dans une session classique) et méthode pour la charger depuis la BD (proc s0041GetProducts qui retourne Id, Name, Description, Price)
     Private Function GetProductsTable() As DataTable
 
         Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
         Return ds.Tables(0)
     End Function
+
+    Private Function GetCustomersTable() As DataTable
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Customer") ' <-- ta proc
+        Return ds.Tables(0)
+    End Function
+
+
+    'ItemDataBound du Repeater pour chaque ligne: on charge la liste des produits depuis le ViewState("ProductsTable") et on bind un RadComboBox (ou un autre contrôle de ton choix) pour permettre de sélectionner un produit. On peut aussi afficher le nom du produit dans un Label et ouvrir un product picker au clic (exemple avec un Label et une fonction JavaScript fictive openProductPicker)
+    'Charge la liste des produits dans le ViewState("ProductsTable") si ce n'est pas déjà fait, puis pour chaque ligne du Repeater, on trouve le Label lblProduct et le HiddenField hidProductId, on bind le Label avec le nom du produit correspondant au ProductId de la ligne, et on ajoute un onclick pour ouvrir un product picker (fonction JavaScript à implémenter) qui permettra de sélectionner un produit et de mettre à jour le HiddenField hidProductId avec l'Id du produit sélectionné. Le bind du RadComboBox est commenté mais tu peux l'utiliser à la place du Label si tu préfères.
     Private Sub rpItems_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rpItems.ItemDataBound
         If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then
             Exit Sub
@@ -447,9 +432,9 @@ Public Class wbfInvoiceEdit
             ViewState("ProductsTable") = products
         End If
 
-        lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
+        'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
 
-
+        lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
 
 
 
@@ -464,60 +449,70 @@ Public Class wbfInvoiceEdit
         'End If
     End Sub
 
-    Sub RecalcTotalsFromViewState()
-
-    End Sub
-
-    '=======================================================listview
-
-
-
-
+    'Propriete retourne le Viewstate des Produits
     Private Property ProductsTable As DataTable
-            Get
-                Return CType(ViewState("ProductsTable"), DataTable)
-            End Get
-            Set(value As DataTable)
-                ViewState("ProductsTable") = value
-            End Set
-        End Property
+        Get
+            Return CType(ViewState("ProductsTable"), DataTable)
+        End Get
+        Set(value As DataTable)
+            ViewState("ProductsTable") = value
+        End Set
+    End Property
 
 
-
+    'Binding de la liste de produits lors de la selection
     Protected Sub rlvProducts_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.RadListViewNeedDataSourceEventArgs)
-            Dim dt As DataTable = ProductsTable
+        Dim dt As DataTable = ProductsTable
 
         If dt Is Nothing Then
             dt = GetProductsTable()
             ProductsTable = dt
         End If
 
-        Dim searchText As String = GetSearchText()
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
 
-            If Not String.IsNullOrWhiteSpace(searchText) Then
-                Dim dv As New DataView(dt)
-                Dim safeText As String = searchText.Replace("'", "''")
-                dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
-                rlvProducts.DataSource = dv
-            Else
-                rlvProducts.DataSource = dt
-            End If
-        End Sub
 
-        Protected Sub btnSearch_Click(ByVal sender As Object, ByVal e As EventArgs)
-            rlvProducts.Rebind()
-        End Sub
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
+            rlvProducts.DataSource = dv
+        Else
+            rlvProducts.DataSource = dt
+        End If
+    End Sub
 
-        Protected Sub btnClear_Click(ByVal sender As Object, ByVal e As EventArgs)
-            Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
-            If tbSearch IsNot Nothing Then
-                tbSearch.Text = ""
-            End If
+    Private Sub rlvCustomers_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvCustomers.NeedDataSource
+        Dim dt As DataTable = GetCustomersTable()
 
-            rlvProducts.Rebind()
-        End Sub
 
-        Protected Sub btnAddProducts_Click(ByVal sender As Object, ByVal e As EventArgs)
+
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvCustomers.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
+
+
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
+            rlvCustomers.DataSource = dv
+        Else
+            rlvCustomers.DataSource = dt
+        End If
+    End Sub
+    'Ajout d'un produit: on ajoute une ligne dans le DataTable du ViewState("ProductsTable") et on rebind le RadListView pour afficher le nouveau produit (exemple simple sans formulaire de saisie, juste pour montrer le principe)
+    Protected Sub btnAddProducts_Click(ByVal sender As Object, ByVal e As EventArgs)
         ' Exemple simple
         Return
         Dim dt As DataTable = ProductsTable
@@ -527,48 +522,68 @@ Public Class wbfInvoiceEdit
 
         Dim rnd As New Random()
 
-            Dim row As DataRow = dt.NewRow()
-            row("Id") = dt.Rows.Count + 1
-            row("Code") = "NEW-" & (dt.Rows.Count + 1).ToString("000")
-            row("Name") = "Nouveau produit " & (dt.Rows.Count + 1).ToString()
-            row("Category") = "Ajouté"
-            row("Qty") = rnd.Next(1, 50)
-            row("Price") = Math.Round(CDec(rnd.NextDouble() * 400 + 10), 2)
+        Dim row As DataRow = dt.NewRow()
+        row("Id") = dt.Rows.Count + 1
+        row("Code") = "NEW-" & (dt.Rows.Count + 1).ToString("000")
+        row("Name") = "Nouveau produit " & (dt.Rows.Count + 1).ToString()
+        row("Category") = "Ajouté"
+        row("Qty") = rnd.Next(1, 50)
+        row("Price") = Math.Round(CDec(rnd.NextDouble() * 400 + 10), 2)
 
-            dt.Rows.Add(row)
-            ProductsTable = dt
+        dt.Rows.Add(row)
+        ProductsTable = dt
 
-            rlvProducts.Rebind()
-        End Sub
+        rlvProducts.Rebind()
+    End Sub
 
-        Private Function GetSearchText() As String
-            Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
-            If tbSearch Is Nothing Then Return ""
-            Return tbSearch.Text.Trim()
-        End Function
-
+    'Mise à jour d'un produit: on trouve la ligne correspondante dans le DataTable du ViewState("ProductsTable")
+    'en fonction de l'Id, on met à jour les champs avec les nouvelles valeurs,
+    'puis on rebind le RadListView pour afficher les changements (exemple simple sans formulaire de saisie, juste pour montrer le principe)
+    'Est appeler lors d une selection d un produit
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
 
         Dim AllParam As String() = e.Argument.Split("|"c)
-
-
+        Dim CommandName As String
         Dim ItemLineId As Integer
+        Dim CustomerId As Integer
         Dim productId As Integer
+        CommandName = AllParam(0)
 
-        If Integer.TryParse(AllParam(1), productId) Then
-            If Integer.TryParse(AllParam(0), ItemLineId) Then
+        Select Case CommandName
+            Case "PRODUCT"
 
-                UpdateItem(ItemLineId, productId)
+                If Integer.TryParse(AllParam(2), productId) Then
+                    If Integer.TryParse(AllParam(1), ItemLineId) Then
+                        UpdateItem(ItemLineId, productId)
+                        BindItemGrid()
+                    End If
+                End If
+            Case "CUSTOMER"
+                If Integer.TryParse(AllParam(1), CustomerId) Then
+                    UpdateCustomer(CustomerId)
+                End If
+        End Select
 
-
-
-
-                BindItemGrid()
-            End If
-        End If
 
     End Sub
 
+    Sub UpdateCustomer(Customerid As Integer)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@PartyId", Customerid))
+
+        Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
+
+        Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
+        rdLabel.Text = Fullanme
+        lblCustomer.Text = ds.Tables(0).Rows(0)("Name").ToString()
+
+    End Sub
+
+
+
+
+
+    'Mise a jour de la ligne du Viewstate a l aide du productId
     Sub UpdateItem(ItemLineId As Integer, productId As Integer)
 
         Dim p2 As New Collection
@@ -603,47 +618,6 @@ Public Class wbfInvoiceEdit
 
     End Sub
 
-
-
-
-    'Private Function BuildProductsTable() As DataTable
-    '    Dim dt As New DataTable()
-
-    '    dt.Columns.Add("Id", GetType(Integer))
-    '    dt.Columns.Add("Code", GetType(String))
-    '    dt.Columns.Add("Name", GetType(String))
-    '    dt.Columns.Add("Category", GetType(String))
-    '    dt.Columns.Add("Qty", GetType(Integer))
-    '    dt.Columns.Add("Price", GetType(Decimal))
-
-    '    Dim productNames As String() = {
-    '        "Baignoire classique", "Baignoire antique", "Lavabo blanc", "Robinet chrome", "Douche murale",
-    '        "Panneau de verre", "Vanité moderne", "Miroir LED", "Toilette compacte", "Évier inox",
-    '        "Colonne de douche", "Mitigeur noir", "Bonde universelle", "Base de douche", "Cabine vitrée",
-    '        "Armoire salle de bain", "Tiroir vanity", "Céramique murale", "Plancher vinyle", "Pommeau pluie",
-    '        "Ensemble bain-douche", "Porte-serviette", "Distributeur savon", "Lumière vanity", "Extracteur d'air",
-    '        "Silicone blanc", "Joint étanche", "Accessoire inox", "Banc de douche", "Poignée de sécurité"
-    '    }
-
-    '    Dim categories As String() = {
-    '        "Bain", "Douche", "Lavabo", "Robinetterie", "Accessoires"
-    '    }
-
-    '    Dim rnd As New Random()
-
-    '    For i As Integer = 1 To 30
-    '        Dim row As DataRow = dt.NewRow()
-    '        row("Id") = i
-    '        row("Code") = "PRD-" & i.ToString("000")
-    '        row("Name") = productNames(i - 1)
-    '        row("Category") = categories(rnd.Next(0, categories.Length))
-    '        row("Qty") = rnd.Next(1, 101)
-    '        row("Price") = Math.Round(CDec(rnd.NextDouble() * 450 + 25), 2)
-    '        dt.Rows.Add(row)
-    '    Next
-
-    '    Return dt
-    'End Function
 
 End Class
 

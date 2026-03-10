@@ -8,13 +8,15 @@ Public Class wbfCustomers
 
 
         If Not IsPostBack Then
-            rgClients.Rebind()
+            rlvClients.Rebind()
         End If
     End Sub
 
-    Private Sub rgClients_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles rgClients.NeedDataSource
+
+
+    Private Sub rlvClients_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClients.NeedDataSource
         Dim dt As DataTable = GetData()
-        rgClients.DataSource = dt
+        rlvClients.DataSource = dt
 
         'lblInfo.Visible = True
         'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"

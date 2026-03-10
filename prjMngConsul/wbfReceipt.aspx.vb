@@ -13,14 +13,14 @@ Public Class wbfReceipt
         RadReceipt.CurrentPageIndex = 0
         RadReceipt.Rebind()
     End Sub
-    Protected Sub RadReceipt_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs)
+
+    Private Sub RadReceipt_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles RadReceipt.NeedDataSource
         Dim dt As DataTable = GetData()
         RadReceipt.DataSource = dt
 
         'lblInfo.Visible = True
         'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
     End Sub
-
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()
 
@@ -35,7 +35,7 @@ Public Class wbfReceipt
     End Function
 
 
-    Protected Async Sub RadReceipt_ItemCommand(sender As Object, e As GridCommandEventArgs)
+    Protected Async Sub RadReceipt_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles RadReceipt.ItemCommand
         If e.CommandArgument Is Nothing Then Return
 
         Dim imageGUID As Guid

@@ -74,5 +74,5 @@ Partial Public Class wbfScannedPDF
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadScannedPDF As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents RadScannedPDF As Global.Telerik.Web.UI.RadListView
 End Class

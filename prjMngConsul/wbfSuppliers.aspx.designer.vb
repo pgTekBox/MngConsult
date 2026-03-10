@@ -74,5 +74,5 @@ Partial Public Class wbfSuppliers
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgFournisseurs As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents rgFournisseurs As Global.Telerik.Web.UI.RadListView
 End Class

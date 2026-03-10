@@ -56,7 +56,7 @@ Partial Public Class wbfReceipt
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadReceipt As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents RadReceipt As Global.Telerik.Web.UI.RadListView
 
     '''<summary>
     '''jsonModal control.

@@ -13,13 +13,11 @@ Public Class wbfScannedPDF
         RadScannedPDF.CurrentPageIndex = 0
         RadScannedPDF.Rebind()
     End Sub
-    Protected Sub RadScannedPDF_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs)
+
+    Private Sub RadScannedPDF_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles RadScannedPDF.NeedDataSource
         Dim dt As DataTable = GetData()
         RadScannedPDF.DataSource = dt
-
-
     End Sub
-
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()
 
@@ -34,7 +32,7 @@ Public Class wbfScannedPDF
     End Function
 
 
-    Protected Async Sub RadScannedPDF_ItemCommand(sender As Object, e As GridCommandEventArgs)
+    Protected Async Sub RadScannedPDF_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles RadScannedPDF.ItemCommand
         If e.CommandArgument Is Nothing Then Return
 
         Dim imageGUID As Guid
