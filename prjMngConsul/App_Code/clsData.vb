@@ -12,7 +12,9 @@ Public Class clsData
     Public Property Company() As Guid
         Get
             Try
-
+                If Session("Company") Is Nothing Then
+                    Session("Company") = Guid.Parse("87893D29-6D64-40C8-8E45-A3492B4FBB91")
+                End If
 
                 Return Session("Company")
             Catch ex As Exception

@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class wbfCustomers
 
     '''<summary>
+    '''RadAjaxLoadingPanel1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+
+    '''<summary>
     '''rwmCustomers control.
     '''</summary>
     '''<remarks>
@@ -23,13 +32,13 @@ Partial Public Class wbfCustomers
     Protected WithEvents rwmCustomers As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
-    '''rwCustomer control.
+    '''RadAjaxPanel1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwCustomer As Global.Telerik.Web.UI.RadWindow
+    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
     '''btnAddCustomer control.
@@ -75,4 +84,13 @@ Partial Public Class wbfCustomers
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rlvClients As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>
+    '''rwCustomer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwCustomer As Global.Telerik.Web.UI.RadWindow
 End Class

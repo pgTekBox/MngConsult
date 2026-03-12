@@ -183,7 +183,9 @@
     top: 0;
     z-index: 2;
 }
-
+.col-actions {
+    text-align: right;
+}
 .pdf-list-body {
     flex: 1;
     overflow: auto;
@@ -265,8 +267,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
 
-      <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro">
-  </telerik:RadAjaxLoadingPanel>
+      <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"> </telerik:RadAjaxLoadingPanel>
 
  
     
@@ -307,6 +308,8 @@
 
    <div class="full-grid">
     <div class="list-shell">
+
+
         <telerik:RadListView ID="RadScannedPDF" runat="server"
             Skin="Metro"
             DataKeyNames="imageGUID"

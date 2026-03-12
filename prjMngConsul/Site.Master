@@ -8,7 +8,7 @@
 <html lang="fr">
 <head runat="server">
 <meta charset="utf-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
+ 
 
 <title><asp:ContentPlaceHolder ID="TitleContent" runat="server" /></title>
 
@@ -25,15 +25,17 @@
     --mc-shadow: 0 14px 40px rgba(2,6,23,.10);
     --mc-radius: 16px;
     --mc-font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
-
     --mc-blue:#2563eb;
     --mc-cyan:#06b6d4;
 }
 
 *{ box-sizing:border-box; }
+
 html, body, form{
-    height:100%;
+    min-height:100%;
+    height:auto;
 }
+
 body{
     margin:0;
     font-family:var(--mc-font);
@@ -42,70 +44,64 @@ body{
         radial-gradient(900px 450px at 80% 0%, rgba(6,182,212,.10), transparent 60%),
         var(--mc-bg);
     color:var(--mc-text);
+    overflow-y: scroll; /* garde toujours la scrollbar */
 }
 
-a{ color:inherit; text-decoration:none; }
+a{
+    color:inherit;
+    text-decoration:none;
+}
 
-/* =========================
-   APP LAYOUT
-========================= */
+/* APP */
 .mc-app{
-    height:  calc(100vh - 60px);
+    min-height: calc(100vh - 60px);
     display:grid;
-   /* background-color :red; */
     grid-template-rows:auto 1fr auto;
 }
 
-/* ⭐ FIX CRITIQUE POUR RADGRID */
 .mc-shell{
     display:grid;
-    grid-template-columns: 270px minmax(0,1fr);
+    grid-template-columns:270px minmax(0,1fr);
     gap:16px;
     padding:16px;
     width:100%;
+    min-width:0;
 }
 
-/* Sidebar */
 .mc-sidebar{
     position:sticky;
     top:16px;
     align-self:start;
     z-index:1;
-    margin-right: 10px;
+    margin-right:10px;
 }
 
-/* MAIN */
 .mc-maincol{
     min-width:0;
     position:relative;
-/*    z-index:5;
-*/
-  /*   display:flex;*/
+    display:flex;
     flex-direction:column;
 }
 
-/* Cards */
 .mc-card{
-    background: rgba(255,255,255,.92);
+    background:rgba(255,255,255,.92);
     border:1px solid var(--mc-stroke);
     border-radius:var(--mc-radius);
     box-shadow:var(--mc-shadow);
-     overflow: hidden;
-
+    overflow:hidden;
     display:flex;
     flex-direction:column;
+    min-width:0;
 }
 
-/* Wrapper content page */
 .mc-mainwrap{
-       flex:1;
+    flex:1 1 auto;
     display:flex;
     flex-direction:column;
+    min-height:0;
+    min-width:0;
 }
 
-/* =========================
-   UI UTIL
-========================= */
 .pad{ padding:16px; }
 
 .toolbar{
@@ -115,7 +111,7 @@ a{ color:inherit; text-decoration:none; }
     justify-content:space-between;
     padding:14px 16px;
     border-bottom:1px solid var(--mc-stroke);
-    background: rgba(255,255,255,.75);
+    background:rgba(255,255,255,.75);
 }
 
 .toolbar .title{
@@ -134,25 +130,27 @@ a{ color:inherit; text-decoration:none; }
     padding:10px 12px;
     border-radius:12px;
     border:1px solid var(--mc-stroke);
-    background: #ffffff;
+    background:#ffffff;
     color:var(--mc-text);
     outline:none;
 }
 
-.input::placeholder{ color: rgba(15,23,42,.55); }
+.input::placeholder{
+    color:rgba(15,23,42,.55);
+}
 
 .btn{
     cursor:pointer;
     border:1px solid var(--mc-stroke);
     border-radius:12px;
     padding:10px 12px;
-    background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
+    background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
     color:var(--mc-text);
     font-weight:800;
 }
 
-.btn:hover{ filter: brightness(0.98); }
-.btn:active{ transform: translateY(1px); }
+.btn:hover{ filter:brightness(0.98); }
+.btn:active{ transform:translateY(1px); }
 
 .pill{
     display:inline-block;
@@ -160,24 +158,29 @@ a{ color:inherit; text-decoration:none; }
     border-radius:999px;
     font-size:12px;
     border:1px solid var(--mc-stroke);
-    background: rgba(2,6,23,.03);
-    color: var(--mc-text);
+    background:rgba(2,6,23,.03);
+    color:var(--mc-text);
 }
 
-/* =========================
-   TERTELIK SAFE
-========================= */
-.RadGrid{ background: transparent !important; }
+.RadGrid{
+    background:transparent !important;
+}
 
-/* =========================
-   MOBILE
-========================= */
 @media (max-width: 980px){
-    .mc-shell{ grid-template-columns: 1fr; }
-    .mc-sidebar{ position:relative; top:auto; }
+    .mc-shell{
+        grid-template-columns:1fr;
+    }
+
+    .mc-sidebar{
+        position:relative;
+        top:auto;
+        margin-right:0;
+    }
 }
 </style>
 
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 
