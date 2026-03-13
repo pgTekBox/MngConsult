@@ -200,10 +200,10 @@
       <publishTime>03/08/2023 07:09:56</publishTime>
     </File>
     <File Include="bin/prjMngConsul.dll">
-      <publishTime>03/11/2026 14:50:40</publishTime>
+      <publishTime>03/13/2026 14:14:07</publishTime>
     </File>
     <File Include="bin/prjMngConsul.pdb">
-      <publishTime>03/11/2026 14:50:40</publishTime>
+      <publishTime>03/13/2026 14:14:07</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>08/08/2018 06:38:48</publishTime>
@@ -395,7 +395,7 @@
       <publishTime>02/18/2025 09:27:58</publishTime>
     </File>
     <File Include="bin/WebForms_Basic.xml">
-      <publishTime>03/11/2026 14:50:40</publishTime>
+      <publishTime>03/13/2026 14:14:07</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -509,13 +509,19 @@
       <publishTime>02/18/2026 09:51:30</publishTime>
     </File>
     <File Include="Controls/Header.ascx">
-      <publishTime>02/18/2026 08:47:57</publishTime>
+      <publishTime>03/13/2026 11:15:26</publishTime>
+    </File>
+    <File Include="Controls/HeaderUser.ascx">
+      <publishTime>03/13/2026 13:22:33</publishTime>
     </File>
     <File Include="Controls/LeftMenu.ascx">
-      <publishTime>02/25/2026 06:03:41</publishTime>
+      <publishTime>03/13/2026 13:47:43</publishTime>
+    </File>
+    <File Include="css/listvew.css">
+      <publishTime>03/13/2026 15:19:35</publishTime>
     </File>
     <File Include="Default.aspx">
-      <publishTime>03/11/2026 09:30:24</publishTime>
+      <publishTime>03/13/2026 14:19:32</publishTime>
     </File>
     <File Include="favicon.ico">
       <publishTime>02/11/2026 06:04:35</publishTime>
@@ -532,8 +538,17 @@
     <File Include="Images/flechehaut.png">
       <publishTime>03/06/2026 06:45:20</publishTime>
     </File>
+    <File Include="Images/pencil.png">
+      <publishTime>03/12/2026 14:42:58</publishTime>
+    </File>
+    <File Include="Images/plus.png">
+      <publishTime>03/12/2026 14:44:23</publishTime>
+    </File>
     <File Include="Images/rondplus45.png">
       <publishTime>03/10/2026 09:24:13</publishTime>
+    </File>
+    <File Include="Images/trash.png">
+      <publishTime>03/12/2026 14:44:12</publishTime>
     </File>
     <File Include="Receipts.aspx">
       <publishTime>02/16/2026 07:29:16</publishTime>
@@ -659,7 +674,7 @@
       <publishTime>02/11/2026 06:05:01</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>03/06/2026 10:01:17</publishTime>
+      <publishTime>03/13/2026 11:05:04</publishTime>
     </File>
     <File Include="Site.Mobile.Master">
       <publishTime>02/11/2026 06:16:01</publishTime>
@@ -667,11 +682,14 @@
     <File Include="ViewSwitcher.ascx">
       <publishTime>02/11/2026 06:16:01</publishTime>
     </File>
+    <File Include="wbfCompanyInfo.aspx">
+      <publishTime>03/13/2026 11:44:56</publishTime>
+    </File>
     <File Include="wbfCustomerEdit.aspx">
-      <publishTime>02/27/2026 05:53:05</publishTime>
+      <publishTime>03/13/2026 11:43:08</publishTime>
     </File>
     <File Include="wbfCustomers.aspx">
-      <publishTime>03/11/2026 14:48:55</publishTime>
+      <publishTime>03/13/2026 15:29:42</publishTime>
     </File>
     <File Include="wbfCustomersInvoices.aspx">
       <publishTime>03/10/2026 14:40:17</publishTime>
@@ -689,7 +707,7 @@
       <publishTime>03/10/2026 16:34:04</publishTime>
     </File>
     <File Include="wbfScannedPDF.aspx">
-      <publishTime>03/11/2026 14:05:10</publishTime>
+      <publishTime>03/12/2026 15:02:31</publishTime>
     </File>
     <File Include="wbfSetting.aspx">
       <publishTime>02/25/2026 06:12:50</publishTime>

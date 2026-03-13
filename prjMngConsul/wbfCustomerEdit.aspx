@@ -1,4 +1,5 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false"  EnableViewState="true" CodeBehind="wbfCustomerEdit.aspx.vb" Inherits="MngConsul.wbfCustomerEdit" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false"  EnableViewState="true"
+    CodeBehind="wbfCustomerEdit.aspx.vb" Inherits="MngConsul.wbfCustomerEdit" %>
 
 
 <%@ Import Namespace="System" %>
@@ -403,14 +404,12 @@
 
                     </UpdatedControls>
                 </telerik:AjaxSetting>
-                <telerik:AjaxSetting AjaxControlID="rgAddr">
+               
+               <telerik:AjaxSetting AjaxControlID="rgAddr">
                     <UpdatedControls>
                         <telerik:AjaxUpdatedControl ControlID="rgAddr" />
                         <telerik:AjaxUpdatedControl ControlID="pnlMsg" />
-
                         <telerik:AjaxUpdatedControl ControlID="pnlAddrEditor" />
-
-
                     </UpdatedControls>
                 </telerik:AjaxSetting>
 

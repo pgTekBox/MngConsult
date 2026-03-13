@@ -32,13 +32,13 @@ Partial Public Class wbfCustomers
     Protected WithEvents rwmCustomers As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
-    '''RadAjaxPanel1 control.
+    '''RAP1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
+    Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
     '''btnAddCustomer control.

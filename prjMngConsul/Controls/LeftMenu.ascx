@@ -1,4 +1,6 @@
 ﻿<%@ Control Language="VB" AutoEventWireup="false" CodeBehind="LeftMenu.ascx.vb" Inherits="MngConsul.Controls.LeftMenu" %>
+<%@ Register Src="~/Controls/HeaderUser.ascx" TagPrefix="uc1" TagName="HeaderUser" %>
+
 
 <div class="app-shell" id="appShell" runat="server">
 
@@ -12,9 +14,13 @@
 
     <div class="brand">
       <span class="brand-dot" aria-hidden="true"></span>
-      <span class="brand-title"><asp:Literal runat="server" ID="litAppName" Text="MngConsul"></asp:Literal></span>
+      <span class="brand-title"><asp:Literal runat="server" ID="litAppName" Text="MngConsulx"></asp:Literal></span>
       <span class="brand-sub">ERP</span>
     </div>
+     
+    <uc1:HeaderUser runat="server" ID="HeaderUser" />
+
+
 
    <%-- <div class="topbar-right">
       <div class="user-pill">
@@ -180,7 +186,10 @@
   /* Topbar */
   .topbar{
     position: sticky; top:0; z-index:30;
-    display:flex; align-items:center; justify-content:space-between; gap:14px;
+    display:flex; align-items:center; 
+     justify-content:space-between;  
+    
+    gap:14px;
     padding:12px 16px;
     border-bottom:1px solid var(--border);
     background: rgba(255,255,255,.85);
@@ -322,7 +331,7 @@
   }
 
   /* Responsive */
-  @media (max-width: 820px){
+  @media (max-width: 980px){
     .hamburger{ display:flex; }
     .sidebar{
       transform: translateX(-110%);
@@ -331,6 +340,25 @@
     .content{ margin-left: 0; padding: 14px; }
     .app-shell.menu-open .sidebar{ transform: translateX(0); }
     .app-shell.menu-open .backdrop{ display:block; }
+
+     .topbar {
+        position: fixed;   /* ← au lieu de sticky */
+        top: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        height: 64px;
+    }
+
+    /* Compense la hauteur du topbar fixe */
+    .mc-shell {
+        padding-top: 64px;
+    }
+
+
+
+
+
   }
 
   @media (prefers-reduced-motion: reduce){
