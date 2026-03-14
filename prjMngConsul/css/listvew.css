@@ -448,11 +448,7 @@
         align-items: stretch;
     }
 
-        .listview-actions .btn,
-        .listview-actions input[type="submit"],
-        .listview-actions input[type="button"] {
-            width: 100%;
-        }
+      
 
     .btnAddRow {
         display: none;

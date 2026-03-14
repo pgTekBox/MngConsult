@@ -6,16 +6,26 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 
-    <link href="css/listvew.css" rel="stylesheet" />
+    <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
     <script src="js/viewport.js"></script>
 
     <style>
-        .listview-list-head {
+        .listview-actions {
+            flex-wrap: nowrap;
+        }
+
+        .listview-list-head,
+        .listview-row {
             display: grid;
-            grid-template-columns: 70px 100px 1fr 90px minmax(40px, 40px) 40px ;
             gap: 16px;
+            align-items: center;
             padding: 14px 16px;
+            box-sizing: border-box;
+        }
+
+        .listview-list-head {
+            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
             font-weight: 800;
             font-size: 13px;
             color: #0f172a;
@@ -23,85 +33,241 @@
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
             top: 0;
-            z-index: 0;
-            box-sizing: border-box;
+            z-index: 2;
         }
 
-
-
         .listview-row {
-            display: grid;
-            grid-template-columns: 70px 100px 1fr 90px minmax(40px, 40px) 40px ;
-            gap: 16px;
-            align-items: center;
-            padding: 14px 16px;
+            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
             border-bottom: 1px solid #eef2f7;
             background: #fff;
-            box-sizing: border-box;
         }
 
             .listview-row:hover {
                 background: #fafcff;
             }
 
+        /* Desktop — les wrappers mobiles sont invisibles */
+        .field-row1,
+        .field-row2 {
+            display: contents; /* ← les enfants participent directement à la grille */
+        }
+
+        .field-number {
+            grid-column: 1;
+            grid-row: 1;
+        }
+
+        .field-date {
+            grid-column: 2;
+            grid-row: 1;
+        }
+
+        .field-customer {
+            grid-column: 3;
+            grid-row: 1;
+        }
+
+        .field-etat {
+            grid-column: 4;
+            grid-row: 1;
+        }
+
+        .field-total {
+            grid-column: 5;
+            grid-row: 1;
+        }
+
+        .listview-actions {
+            grid-column: 6;
+            grid-row: 1;
+        }
+
+
         /* =========================
          TABLETTE — 769px à 1024px
       ========================= */
         @media (min-width: 769px) and (max-width: 1024px) {
+
+            .listview-list-head,
             .listview-row {
-                grid-template-columns: minmax(180px, 1.4fr) 30px;
+                grid-template-columns: 60px 100px 1fr 80px 90px 70px;
                 gap: 12px;
                 padding: 12px 14px;
             }
-
-
-            .listview-list-head {
-                display: grid;
-                grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
-                gap: 16px;
-                padding: 14px 16px;
-                font-weight: 800;
-                font-size: 13px;
-                color: #0f172a;
-                background: #f8fafc;
-                border-bottom: 1px solid var(--mc-stroke);
-                position: sticky;
-                top: 0;
-                z-index: 0;
-                box-sizing: border-box;
-            }
         }
 
         /* =========================
-          MOBILE LARGE  grands smartphones en portrait
+          MOBILE LARGE — 481px à 768px  grands smartphones en portrait
       ========================= */
         @media (min-width: 481px) and (max-width: 768px) {
 
-            .field-AllAddress {
-                order: 1;
-            }
 
             .listview-list-head {
                 display: none;
             }
-        }
-
-        /* =========================
-      PETIT MOBILE — max 480px
-        ========================= */
-        @media (max-width: 480px) {
-
 
             .listview-row {
-                grid-template-columns: auto 30px;
-                gap: 10px;
-                padding: 14px;
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: 2px 2px;
+                padding: 2px;
             }
 
-            .listview-list-head {
-                display: none;
+            /* Wrappers redeviennent flex */
+            .field-row1 {
+                grid-column: 1;
+                grid-row: 1;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                flex-wrap: nowrap;
+            }
+
+            .field-row2 {
+                grid-column: 1;
+                grid-row: 2;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+            }
+
+            /* Ligne 1 */
+            .field-number {
+                font-size: 13px;
+                font-weight: 700;
+                color: #64748b;
+                white-space: nowrap;
+            }
+
+            .field-date {
+                font-size: 13px;
+                color: #64748b;
+                white-space: nowrap;
+               margin-left: auto;
+        margin-right: auto;
+            }
+
+            .field-total {
+                font-weight: 800;
+                font-size: 14px;
+                color: #0f172a;
+                margin-left: auto; /* ← pousse le total à droite */
+                white-space: nowrap;
+            }
+
+
+
+            /* Ligne 2 */
+            .field-customer {
+                font-weight: 700;
+                font-size: 15px;
+                color: #0f172a;
+            }
+
+            .field-etat {
+                font-size: 12px;
+                color: #64748b;
+                margin-left: auto;
+            }
+
+
+            /* Actions — colonne droite sur 2 lignes */
+            .listview-actions {
+                grid-column: 2;
+                grid-row: 1 / -1;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
             }
         }
+
+            /* =========================
+             PETIT MOBILE — max 480px
+             ========================= */
+            @media (max-width: 480px) {
+
+
+                .listview-list-head {
+                    display: none;
+                }
+
+              
+            .listview-row {
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: 2px 2px;
+                padding: 2px;
+            }
+
+            /* Wrappers redeviennent flex */
+            .field-row1 {
+                grid-column: 1;
+                grid-row: 1;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                flex-wrap: nowrap;
+            }
+
+            .field-row2 {
+                grid-column: 1;
+                grid-row: 2;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+            }
+
+
+                .field-number {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #64748b;
+                    white-space: nowrap;
+                }
+
+                .field-date {
+                    font-size: 12px;
+                    color: #64748b;
+                    white-space: nowrap;
+                    margin-left: auto;
+        margin-right: auto;
+                }
+
+                .field-total {
+                    font-weight: 800;
+                    font-size: 13px;
+                    margin-left: auto;
+                    white-space: nowrap;
+                }
+
+               
+
+                .field-customer {
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+
+                .field-etat {
+                    font-size: 12px;
+                    color: #64748b;
+                    margin-left: auto;
+                }
+
+              
+
+                .listview-actions {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+  }
+                      
+
+            }
+       
     </style>
 
 </asp:Content>
@@ -164,8 +330,9 @@
                                 <div class="colh-numero">#</div>
                                 <div class="colh-date">Date</div>
                                 <div class="colh-customer">Client</div>
-                                <div class="colh-total">Total</div>
+
                                 <div class="colh-etat">État</div>
+                                <div class="colh-total">Total</div>
                                 <div class="colh-action">Action</div>
                             </div>
 
@@ -178,22 +345,18 @@
                     <ItemTemplate>
                         <div class="listview-row">
 
-                            <div class="field-number">
-                                <%# Eval("DocumentNumber") %>
-                            </div>
-                            <div class="field-date">
-                                <%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %>
-                            </div>
-                            <div class="field-customer">
-                                <%# Eval("Name") %>
-                            </div>
-                            <div class="field-total">
-                                <%# Eval("Total", "{0:C2}") %>
-                            </div>
-                            <div class="field-etat">
-                                <%# Eval("Status") %>
+                            <%-- Ligne 1 mobile : Numéro + Date + Total --%>
+                            <div class="field-row1">
+                                <span class="field-number"><%# Eval("DocumentNumber") %></span>
+                                <span class="field-date"><%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %></span>
+                                <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
                             </div>
 
+                            <%-- Ligne 2 mobile : Nom + État --%>
+                            <div class="field-row2">
+                                <span class="field-customer"><%# Eval("Name") %></span>
+                                <span class="field-etat"><%# Eval("Status") %></span>
+                            </div>
 
                             <div class="listview-actions">
 

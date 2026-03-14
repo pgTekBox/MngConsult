@@ -8,7 +8,7 @@
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
-    <link href="css/listvew.css" rel="stylesheet" />
+   <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
     <script src="js/viewport.js"></script>
 
