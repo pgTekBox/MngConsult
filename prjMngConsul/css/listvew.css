@@ -35,7 +35,9 @@
     padding: 16px;
     box-sizing: border-box;
 }
-
+.listview-row:hover {
+    background: #fafcff;
+}
 /* =========================
    SEARCHBOX
 ========================= */
@@ -59,15 +61,20 @@
     .searchbox input[type="button"] {
         white-space: nowrap;
     }
+.txttbsearch {
+    max-width: 350px;
+}  
+
 /* =========================
    SEARCH GROUP — toujours sur une ligne
 ========================= */
 .search-group {
     display: flex;
-    flex: 1 1 320px;
+    flex: 0 1 320px;
     gap: 8px;
     align-items: center;
     min-width: 0;
+    justify-content: flex-end;
 }
 
     .search-group .input,

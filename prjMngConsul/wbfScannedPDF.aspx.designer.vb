@@ -84,4 +84,13 @@ Partial Public Class wbfScannedPDF
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RadScannedPDF As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>
+    '''jsonViewer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents jsonViewer As Global.MngConsul.jsonViewer
 End Class

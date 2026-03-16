@@ -11,29 +11,7 @@
     <script src="js/viewport.js"></script>
 
     <style>
-
-                .txttbsearch{
-    max-width:350px;
-}  
-.search-group{
-      justify-content: flex-end;
-      flex-grow:0;
-  }
-
-        .listview-actions {
-            flex-wrap: nowrap;
-        }
-
-        .listview-list-head,
-        .listview-row {
-            display: grid;
-            gap: 16px;
-            align-items: center;
-            padding: 14px 16px;
-            box-sizing: border-box;
-        }
-
-        .listview-list-head {
+  .listview-list-head {
             grid-template-columns: 70px 110px 1fr 90px 100px 80px;
             font-weight: 800;
             font-size: 13px;
@@ -50,10 +28,22 @@
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
+        
 
-            .listview-row:hover {
-                background: #fafcff;
-            }
+        .listview-actions {
+            flex-wrap: nowrap;
+        }
+
+        .listview-list-head,
+        .listview-row {
+            display: grid;
+            gap: 16px;
+            align-items: center;
+            padding: 14px 16px;
+            box-sizing: border-box;
+        }
+
+       
 
         /* Desktop — les wrappers mobiles sont invisibles */
         .field-row1,

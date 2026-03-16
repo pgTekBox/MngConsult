@@ -14,14 +14,7 @@
 
     <style>
 
-         .txttbsearch{
-     max-width:350px;
- }  
- .search-group{
-       justify-content: flex-end;
-       flex-grow:0;
-   }
-
+  
 
         .listview-list-head {
             display: grid;
@@ -43,7 +36,7 @@
 
         .listview-row {
             display: grid;
-            grid-template-columns: minmax(280px, 1.7fr) 30px;
+            grid-template-columns: minmax(280px, 1.7fr) 100px;
             gap: 16px;
             align-items: center;
             padding: 14px 16px;
@@ -52,9 +45,7 @@
             box-sizing: border-box;
         }
 
-            .listview-row:hover {
-                background: #fafcff;
-            }
+          
 
         /* =========================
             TABLETTE — 769px à 1024px
@@ -125,8 +116,7 @@
 
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
 
-    <telerik:RadWindowManager ID="rwmCustomers" runat="server" EnableShadow="true">
-    </telerik:RadWindowManager>
+    <telerik:RadWindowManager ID="rwmCustomers" runat="server" EnableShadow="true"></telerik:RadWindowManager>
 
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
 

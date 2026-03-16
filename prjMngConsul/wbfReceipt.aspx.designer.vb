@@ -23,6 +23,15 @@ Partial Public Class wbfReceipt
     Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
 
     '''<summary>
+    '''rwmCustomers control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwmCustomers As Global.Telerik.Web.UI.RadWindowManager
+
+    '''<summary>
     '''RadAjaxPanel1 control.
     '''</summary>
     '''<remarks>
@@ -50,6 +59,15 @@ Partial Public Class wbfReceipt
     Protected WithEvents btnSearch As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''btnClear control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''RadReceipt control.
     '''</summary>
     '''<remarks>
@@ -59,20 +77,11 @@ Partial Public Class wbfReceipt
     Protected WithEvents RadReceipt As Global.Telerik.Web.UI.RadListView
 
     '''<summary>
-    '''jsonModal control.
+    '''jsonViewer control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents jsonModal As Global.System.Web.UI.HtmlControls.HtmlGenericControl
-
-    '''<summary>
-    '''jsonModalContent control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents jsonModalContent As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+    Protected WithEvents jsonViewer As Global.MngConsul.jsonViewer
 End Class
