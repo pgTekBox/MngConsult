@@ -1,4 +1,6 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" Async="true" MaintainScrollPositionOnPostback="true" CodeBehind="wbfScannedPDF.aspx.vb" Inherits="MngConsul.wbfScannedPDF" %>
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" 
+    Async="true" MaintainScrollPositionOnPostback="true" CodeBehind="wbfScannedPDF.aspx.vb" 
+    Inherits="MngConsul.wbfScannedPDF" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Pdf Factures clients — MngConsul
@@ -6,6 +8,8 @@
 
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
+
+      <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
       <style>
       /* Modal JSON - Theme clair */
@@ -80,7 +84,7 @@
       }
 
       /* Petites touches pour harmoniser avec le thème du Site.master */
-      .page-head {
+    /*  .page-head {
           display: flex;
           align-items: flex-start;
           justify-content: space-between;
@@ -89,6 +93,49 @@
           padding: 14px 16px;
           border-bottom: 1px solid var(--mc-stroke);
           background: rgba(255,255,255,.75);
+      }*/
+
+
+        .listview-list-head {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) 29px 1fr;
+        gap: 16px;
+        padding: 14px 16px;
+        font-weight: 800;
+        font-size: 13px;
+        color: #0f172a;
+        background: #f8fafc;
+        border-bottom: 1px solid var(--mc-stroke);
+        position: sticky;
+        top: 0;
+        z-index: 0;
+        box-sizing: border-box;
+    }
+
+
+
+    .listview-row {
+        display: grid;
+        grid-template-columns: minmax(180px, 1fr) 29px 1fr;
+        gap: 16px;
+        align-items: center;
+        padding: 14px 16px;
+        border-bottom: 1px solid #eef2f7;
+        background: #fff;
+        box-sizing: border-box;
+    }
+
+        .listview-row:hover {
+            background: #fafcff;
+        }
+
+
+    .txttbsearch{
+        max-width:350px;
+    }  
+    .search-group{
+          justify-content: flex-end;
+          flex-grow:0;
       }
 
       .page-title {
@@ -96,7 +143,10 @@
           font-size: 18px;
           line-height: 1.2;
       }
-
+      .colh-actions{
+          text-align:center;
+      }
+     
       .page-sub {
           color: var(--mc-muted);
           font-size: 13px;
@@ -237,6 +287,65 @@
     border-radius: 10px !important;
 }
 
+
+        /* =========================
+            TABLETTE — 769px à 1024px
+         ========================= */
+          @media (min-width: 769px) and (max-width: 1024px) {
+
+          }
+           /* =========================
+      MOBILE LARGE  grands smartphones en portrait
+  ========================= */
+          @media (min-width: 481px) and (max-width: 768px) {
+          }
+           /* =========================
+  PETIT MOBILE — max 480px
+    ========================= */
+          @media (max-width: 480px) {
+
+              .btn{
+                      padding: 5px 2px;
+                      font-size: 12px;
+              }
+
+                  .listview-list-head {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr)  1fr;
+    gap: 0px;
+    padding: 0px 0px;
+    font-weight: 800;
+    font-size: 13px;
+    color: #0f172a;
+    background: #f8fafc;
+    border-bottom: 1px solid var(--mc-stroke);
+    position: sticky;
+    top: 0;
+    z-index: 0;
+    box-sizing: border-box;
+}
+              .listview-row {
+    display: grid;
+    grid-template-columns: minmax(180px, 1fr) 1fr;
+    gap: 0px;
+    align-items: center;
+    padding: 0px 0px;
+    border-bottom: 1px solid #eef2f7;
+    background: #fff;
+    box-sizing: border-box;
+}
+
+
+
+        .field-status{
+    display:none
+} 
+                .colh-status{
+    display:none
+} 
+          }
+
+/*
 @media (max-width: 900px) {
     .pdf-list-head {
         display: none;
@@ -257,10 +366,10 @@
     .pdf-actions {
         margin-top: 4px;
     }
-}
+}*/
   </style>
 
-
+    
 
 </asp:Content>
 
@@ -278,8 +387,9 @@
 
 
     <div class="page-head">
-        <div class="page-title">Scanned PDF </div>
-  
+        <div class="page-head-left">
+             <div class="page-title">Scanned PDF </div>
+       </div>
 
         <div class="searchbox">
 
@@ -295,14 +405,25 @@
            
 
             <telerik:RadButton ID="btnSavePdf" runat="server"
-                Text="Sauvegarder"
-                CssClass="btn primary"
+                Text=""
+                CssClass="btn btn-icon btn-icon-save"
                 AutoPostBack="true" />
 
+              <div class="search-group">
+
+            <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (fournisseur, fichier, statut…)" />
+            <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
+                   <asp:Button ID="btnClear" runat="server"
+                    CssClass="btn btn-icon btn-icon-clear"
+                       Text=""
+                           ToolTip="Effacer"
+                           CausesValidation="false" />
 
 
-            <asp:TextBox ID="tbSearch" runat="server" CssClass="input" placeholder="Rechercher (fournisseur, fichier, statut…)" />
-            <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Rechercher" />
+
+                  </div>
+
+
         </div>
     </div>
 
@@ -318,21 +439,21 @@
           >
 
             <LayoutTemplate>
-                <div class="pdf-list">
-                    <div class="pdf-list-head">
-                        <div class="col-file">Fichier</div>
-                        <div class="col-status">Statut</div>
-                        <div class="col-actions">Actions</div>
+                <div class="listview-list">
+                    <div class="listview-list-head">
+                        <div class="colh-file">Fichier</div>
+                        <div class="colh-status">Statut</div>
+                        <div class="colh-actions">Actions</div>
                     </div>
 
-                    <div class="pdf-list-body">
+                    <div class="listview-list-body">
                         <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
                     </div>
                 </div>
             </LayoutTemplate>
 
             <ItemTemplate>
-                <div class="pdf-row">
+                <div class="listview-row">
                     <div class="pdf-file">
                         <asp:Literal ID="litHtml"
                             runat="server"
@@ -340,11 +461,11 @@
                             Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
                     </div>
 
-                    <div class="pdf-status">
+                    <div class="field-status">
                         <%# Eval("ProcessingStatus") %>
                     </div>
 
-                    <div class="pdf-actions">
+                    <div class="listview-actions">
                         <asp:Button ID="btnDelete"
                             runat="server"
                             Text="Delete"
@@ -380,7 +501,7 @@
             </ItemTemplate>
 
             <EmptyDataTemplate>
-                <div class="pdf-empty">
+                <div class="listview-empty">
                     Aucun PDF trouvé.
                 </div>
             </EmptyDataTemplate>

@@ -13,6 +13,16 @@
     <script src="js/viewport.js"></script>
 
     <style>
+
+         .txttbsearch{
+     max-width:350px;
+ }  
+ .search-group{
+       justify-content: flex-end;
+       flex-grow:0;
+   }
+
+
         .listview-list-head {
             display: grid;
             grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
@@ -134,7 +144,7 @@
                     OnClientClick="openCustomerWindow(0); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
-                        CssClass="input"
+                        CssClass="input  txttbsearch"
                         placeholder="Rechercher (nom, email, téléphone…)" />
 
                     <asp:Button ID="btnSearch" runat="server"
@@ -176,11 +186,12 @@
 
                     <ItemTemplate>
                         <div class="listview-row">
-                            <div class="field-AllAddress">
+                           
+                            
+                             <div class="field-AllAddress">
                                 <%# Eval("NameAllAdddress") %>
                             </div>
-
-
+                             
 
                             <div class="listview-actions">
 

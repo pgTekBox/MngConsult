@@ -118,12 +118,12 @@ a{
     font-size:16px;
     font-weight:800;
 }
-
+/*
 .searchbox{
     display:flex;
     gap:8px;
     align-items:center;
-}
+}*/
 
 .input{
     width:min(360px,55vw);

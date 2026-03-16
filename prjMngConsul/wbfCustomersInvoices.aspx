@@ -11,6 +11,15 @@
     <script src="js/viewport.js"></script>
 
     <style>
+
+                .txttbsearch{
+    max-width:350px;
+}  
+.search-group{
+      justify-content: flex-end;
+      flex-grow:0;
+  }
+
         .listview-actions {
             flex-wrap: nowrap;
         }
@@ -299,7 +308,7 @@
                     OnClientClick="openCustomerInvoiceWindow(0); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
-                        CssClass="input"
+                        CssClass="input txttbsearch"
                         placeholder="Rechercher (nom, email, téléphone…)" />
 
                     <asp:Button ID="btnSearch" runat="server"
