@@ -69,7 +69,7 @@
           </a>
           <a class="nav-child" href="~/wbfScannedPDF.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
-            Documents scannés
+            A enlever-> Documents scannés
           </a> 
         </div>
       </div>
@@ -100,7 +100,7 @@
           
 <a class="nav-child" href="~/wbfReceipt.aspx" runat="server" data-navlink>
   <span class="dot" aria-hidden="true"></span>
-  Recus
+  A enlever-> Recus
 </a>
 
         </div>

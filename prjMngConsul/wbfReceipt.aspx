@@ -10,7 +10,6 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
-    
     <script src="js/viewport.js"></script>
 
     <style>

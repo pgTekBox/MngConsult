@@ -1,5 +1,7 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfSuppliersInvoices.aspx.vb" Inherits="MngConsul.wbfSuppliersInvoices" %>
 
+<%@ Register Src="~/Controls/jsonViewer.ascx" TagPrefix="uc1" TagName="jsonViewer" %>
+
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Invoices — MngConsul
 </asp:Content>
@@ -13,30 +15,23 @@
 
 
     <style>
-              .listview-list-head {
-    display: grid;
-    grid-template-columns: 210px 140px minmax(220px, 1fr) 140px 110px 130px;
-    gap: 12px;
-    padding: 14px 16px;
-    font-weight: 800;
-    font-size: 13px;
-    color: #0f172a;
-    background: #f8fafc;
-    border-bottom: 1px solid var(--mc-stroke);
-    position: sticky;
-    top: 0;
-    z-index: 5;
-}
+             .listview-list-head {
+           grid-template-columns: 70px 110px 1fr 90px 100px 80px;
+           font-weight: 800;
+           font-size: 13px;
+           color: #0f172a;
+           background: #f8fafc;
+           border-bottom: 1px solid var(--mc-stroke);
+           position: sticky;
+           top: 0;
+           z-index: 2;
+       }
 
-.listview-row {
-    display: grid;
-    grid-template-columns: 210px 140px minmax(220px, 1fr) 140px 110px 130px;
-    gap: 12px;
-    align-items: center;
-    padding: 14px 16px;
-    border-bottom: 1px solid #eef2f7;
-    background: #fff;
-}
+        .listview-row {
+            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
+            border-bottom: 1px solid #eef2f7;
+            background: #fff;
+        }
 
         .page-head {
             display: flex;
@@ -144,53 +139,252 @@
             .btn.danger:hover {
                 background: #fee2e2 !important;
             }
+ .listview-list-head,
+ .listview-row {
+     display: grid;
+     gap: 16px;
+     align-items: center;
+     padding: 14px 16px;
+     box-sizing: border-box;
+ }
 
-        @media (max-width: 920px) {
-            .invoice-head {
+
+
+
+
+      .field-row1,
+     .field-row2 {
+         display: contents; /* ← les enfants participent directement à la grille */
+     }
+
+     .field-number {
+         grid-column: 1;
+         grid-row: 1;
+     }
+
+     .field-date {
+         grid-column: 2;
+         grid-row: 1;
+     }
+
+     .field-customer {
+         grid-column: 3;
+         grid-row: 1;
+     }
+
+     .field-etat {
+         grid-column: 4;
+         grid-row: 1;
+     }
+
+     .field-total {
+         grid-column: 5;
+         grid-row: 1;
+     }
+
+     .listview-actions {
+         grid-column: 6;
+         grid-row: 1;
+     }
+
+
+
+
+
+
+
+
+
+
+
+
+        /* =========================
+         TABLETTE — 769px à 1024px
+      ========================= */
+        @media (min-width: 769px) and (max-width: 1024px) {
+
+            .listview-list-head,
+            .listview-row {
+                grid-template-columns: 60px 100px 1fr 80px 90px 70px;
+                gap: 12px;
+                padding: 12px 14px;
+            }
+        }
+
+        /* =========================
+          MOBILE LARGE — 481px à 768px  grands smartphones en portrait
+      ========================= */
+        @media (min-width: 481px) and (max-width: 768px) {
+
+
+            .listview-list-head {
                 display: none;
             }
 
-            .invoice-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                align-items: start;
+            .listview-row {
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: 2px 2px;
+                padding: 2px;
             }
 
-            .invoice-number::before {
-                content: "Number: ";
-                font-weight: 800;
+            /* Wrappers redeviennent flex */
+            .field-row1 {
+                grid-column: 1;
+                grid-row: 1;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                flex-wrap: nowrap;
+            }
+
+            .field-row2 {
+                grid-column: 1;
+                grid-row: 2;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+            }
+
+            /* Ligne 1 */
+            .field-number {
+                font-size: 13px;
+                font-weight: 700;
                 color: #64748b;
+                white-space: nowrap;
             }
 
-            .invoice-supplier::before {
-                content: "Supplier: ";
-                font-weight: 800;
+            .field-date {
+                font-size: 13px;
                 color: #64748b;
+                white-space: nowrap;
+               margin-left: auto;
+        margin-right: auto;
             }
 
-            .invoice-total::before {
-                content: "Total: ";
+            .field-total {
                 font-weight: 800;
-                color: #64748b;
-                float: left;
+                font-size: 14px;
+                color: #0f172a;
+                margin-left: auto; /* ← pousse le total à droite */
+                white-space: nowrap;
             }
 
-            .invoice-status::before {
-                content: "Status: ";
-                font-weight: 800;
-                color: #64748b;
+
+
+            /* Ligne 2 */
+            .field-supplier {
+                font-weight: 700;
+                font-size: 15px;
+                color: #0f172a;
             }
 
-            .invoice-date::before {
-                content: "Date: ";
-                font-weight: 800;
+            .field-etat {
+                font-size: 12px;
                 color: #64748b;
+                margin-left: auto;
             }
 
-            .invoice-total {
-                text-align: left;
+
+            /* Actions — colonne droite sur 2 lignes */
+            .listview-actions {
+                grid-column: 2;
+                grid-row: 1 / -1;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                gap: 6px;
             }
         }
+
+            /* =========================
+             PETIT MOBILE — max 480px
+             ========================= */
+            @media (max-width: 480px) {
+
+
+                .listview-list-head {
+                    display: none;
+                }
+
+              
+            .listview-row {
+                grid-template-columns: 1fr auto;
+                grid-template-rows: auto auto;
+                gap: 2px 2px;
+                padding: 2px;
+            }
+
+            /* Wrappers redeviennent flex */
+            .field-row1 {
+                grid-column: 1;
+                grid-row: 1;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+                flex-wrap: nowrap;
+            }
+
+            .field-row2 {
+                grid-column: 1;
+                grid-row: 2;
+                display: flex;
+                align-items: center;
+                gap: 2px;
+            }
+                /* Ligne 1 */
+    .field-number {
+        font-size: 13px;
+        font-weight: 700;
+        color: #64748b;
+        white-space: nowrap;
+    }
+
+    .field-date {
+        font-size: 13px;
+        color: #64748b;
+        white-space: nowrap;
+       margin-left: auto;
+margin-right: auto;
+    }
+
+    .field-total {
+        font-weight: 800;
+        font-size: 14px;
+        color: #0f172a;
+        margin-left: auto; /* ← pousse le total à droite */
+        white-space: nowrap;
+    }
+
+      
+    
+            /* Ligne 2 */
+            .field-supplier {
+               font-weight: 700;
+               font-size: 14px;
+            }
+
+            .field-etat {
+                font-size: 12px;
+                color: #64748b;
+                margin-left: auto;
+            }
+              
+
+                .listview-actions {
+      grid-column: 2;
+      grid-row: 1 / -1;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+  }
+                      
+
+            }
+   
+
+
     </style>
 
 </asp:Content>
@@ -251,26 +445,17 @@
                     <ItemTemplate>
                         <div class="listview-row">
                             
-
-                            <div class="invoice-number">
-                                <%# Eval("DocumentNumber") %>
-                            </div>
-
-                            <div class="invoice-supplier">
-                                <%# Eval("Name") %>
-                            </div>
-
-                            <div class="invoice-total">
-                                <%# Eval("Total", "{0:C2}") %>
-                            </div>
-
-                            <div class="invoice-status">
-                                <%# Eval("Status") %>
-                            </div>
-
-                            <div class="invoice-date">
-                                <%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %>
-                            </div>
+                          <%-- Ligne 1 mobile : Numéro + Date + Total --%>
+                         <div class="field-row1">
+                            <div class="field-number"><%# Eval("DocumentNumber") %></div>
+                            <div class="field-date"><%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %></div>
+                            <div class="field-total"><%# Eval("Total", "{0:C2}") %></div>
+                        </div>
+                         <%-- Ligne 2 mobile : Nom + État --%>
+                         <div class="field-row2">
+                            <div class="field-supplier"><%# Eval("Name") %></div>
+                            <div class="field-etat"><%# Eval("Status") %></div>
+                          </div>
 
                             <div class="listview-actions">
                                 <asp:Button ID="btnEdit" runat="server"
@@ -334,4 +519,9 @@
             __doPostBack("rgFournisseursFactures", "Rebind");
         }
     </script>
+
+
+     <uc1:jsonViewer runat="server" id="jsonViewer" />
+
+
 </asp:Content>

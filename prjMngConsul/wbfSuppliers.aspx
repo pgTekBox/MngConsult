@@ -209,193 +209,65 @@
             .btn.danger:hover {
                 background: #fee2e2 !important;
             }
-               
-        @media (max-width: 700px) {
-            .supplier-cards-list {
-                grid-template-columns: 1fr;
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .supplier-card {
-                padding: 14px;
-            }
-
-            .supplier-card-top {
-                flex-direction: column;
-            }
-
-            .supplier-card-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-        }
+          
+              /* =========================
+      TABLETTE — 769px à 1024px
+   ========================= */
+  @media (min-width: 769px) and (max-width: 1024px) {
+      .listview-row {
+          grid-template-columns: minmax(180px, 1.4fr) 30px;
+          gap: 12px;
+          padding: 12px 14px;
+      }
 
 
+      .listview-list-head {
+          display: grid;
+          grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
+          gap: 16px;
+          padding: 14px 16px;
+          font-weight: 800;
+          font-size: 13px;
+          color: #0f172a;
+          background: #f8fafc;
+          border-bottom: 1px solid var(--mc-stroke);
+          position: sticky;
+          top: 0;
+          z-index: 0;
+          box-sizing: border-box;
+      }
+  }
 
-        .supplier-row:hover {
-            background: #fafcff;
-        }
+   /* =========================
+      MOBILE LARGE  grands smartphones en portrait
+  ========================= */
+ @media (min-width: 481px) and (max-width: 768px) {
+
+     .field-AllAddress {
+         order: 1;
+     }
+
+     .listview-list-head {
+         display: none;
+     }
+ }
+
+       /* =========================
+ PETIT MOBILE — max 480px
+   ========================= */
+@media (max-width: 480px) {
 
 
+    .listview-row {
+        grid-template-columns: auto 30px;
+        gap: 10px;
+        padding: 14px;
+    }
 
-        .supplier-empty {
-            padding: 28px;
-            text-align: center;
-            color: var(--mc-muted);
-        }
-
-        .full-grid {
-            min-height: calc(100vh - 220px);
-            padding: 16px;
-            box-sizing: border-box;
-        }
-
-        .supplier-cards-shell {
-            min-height: 100%;
-            background: #fff;
-            border: 1px solid var(--mc-stroke);
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15,23,42,.06);
-            display: flex;
-            flex-direction: column;
-        }
-
-
-        .supplier-card {
-            background: linear-gradient(180deg, #ffffff 0%, #fbfdff 100%);
-            border: 1px solid #e8edf5;
-            border-radius: 18px;
-            padding: 16px;
-            box-shadow: 0 8px 24px rgba(15,23,42,.05);
-            transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-        }
-
-            .supplier-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 16px 34px rgba(15,23,42,.10);
-                border-color: #d7e3f4;
-            }
-
-        .supplier-card-top {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-        }
-
-        .supplier-card-title-wrap {
-            min-width: 0;
-            flex: 1;
-        }
-
-        .supplier-card-title {
-            font-size: 17px;
-            font-weight: 900;
-            color: #0f172a;
-            line-height: 1.3;
-            word-break: break-word;
-        }
-
-        .supplier-card-sub {
-            margin-top: 4px;
-            font-size: 12px;
-            color: #64748b;
-        }
-
-        .supplier-card-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            justify-content: flex-end;
-        }
-
-        .supplier-card-body {
-            margin-top: 14px;
-            padding-top: 14px;
-            border-top: 1px solid #eef2f7;
-        }
-
-        .supplier-meta {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-
-        .supplier-meta-label {
-            font-size: 12px;
-            font-weight: 800;
-            color: #64748b;
-            text-transform: uppercase;
-            letter-spacing: .04em;
-        }
-
-        .supplier-meta-value {
-            font-size: 14px;
-            font-weight: 700;
-            color: #0f172a;
-        }
-
-        .supplier-empty {
-            padding: 40px 20px;
-            text-align: center;
-            color: var(--mc-muted);
-        }
-
-        .supplier-pager {
-            padding: 12px 16px 16px 16px;
-            border-top: 1px solid var(--mc-stroke);
-            background: #fff;
-        }
-
-        .btn.danger {
-            border-color: #fecaca !important;
-            background: #fff5f5 !important;
-            color: #b91c1c !important;
-        }
-
-            .btn.danger:hover {
-                background: #fee2e2 !important;
-            }
-
-        @media (max-width: 700px) {
-            .supplier-cards-list {
-                grid-template-columns: 1fr;
-                padding: 12px;
-                gap: 12px;
-            }
-
-            .supplier-card {
-                padding: 14px;
-            }
-
-            .supplier-card-top {
-                flex-direction: column;
-            }
-
-            .supplier-card-actions {
-                width: 100%;
-                justify-content: flex-start;
-            }
-        }
-
-        @media (max-width: 900px) {
-            .supplier-list-head {
-                display: none;
-            }
-
-            .supplier-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-            }
-
-            .supplier-created::before {
-                content: "Créé le : ";
-                font-weight: 800;
-                color: #0f172a;
-            }
-        }
+    .listview-list-head {
+        display: none;
+    }
+}
     </style>
 </asp:Content>
 
