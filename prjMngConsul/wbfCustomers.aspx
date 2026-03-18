@@ -50,7 +50,7 @@
         /* =========================
             TABLETTE — 769px à 1024px
          ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media  (max-width: 1024px) {
             .listview-row {
                 grid-template-columns: minmax(180px, 1.4fr) 30px;
                 gap: 12px;
@@ -78,7 +78,7 @@
         /* =========================
              MOBILE LARGE  grands smartphones en portrait
          ========================= */
-        @media (min-width: 481px) and (max-width: 768px) {
+        @media  (max-width: 768px) {
 
             .field-AllAddress {
                 order: 1;
@@ -190,8 +190,8 @@
                                     Text=""
                                     ToolTip="Modifier"
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openCustomerWindow(" & Eval("Id") & "); return false;" %>' />
-
+                                    
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", ""Modifier un client"", ""Ajouter un client""); return false;" %>' /> 
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -215,8 +215,8 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openCustomerWindow(0); return false;" title="Ajouter un client">+</button>
-
+        <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un client">+</button>
+        <%--openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", ""Modifier un client"", ""Ajouter un client""); return false;" %>' />--%> 
 
     </telerik:RadAjaxPanel>
 
@@ -225,29 +225,14 @@
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        Width="1100px"
-        Height="720px"
+        
         Title="Ajouter / Modifier un Client"
         OnClientClose="rwCustomer_OnClientClose"
         ClientIDMode="Static">
     </telerik:RadWindow>
-
+    <script src="js/RadWindows.js"></script>
     <script type="text/javascript">
-        function openCustomerWindow(id) {
-            var wnd = $find("rwCustomer");
-            var url = "wbfCustomerEdit.aspx";
-
-            if (id && id > 0) {
-                url += "?CustomerId=" + id;
-                wnd.set_title("Modifier un client");
-            } else {
-                url += "?CustomerId=0";
-                wnd.set_title("Ajouter un client");
-            }
-
-            wnd.setUrl(url);
-            wnd.show();
-        }
+         
 
         function rwCustomer_OnClientClose(sender, args) {
 

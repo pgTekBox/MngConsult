@@ -88,6 +88,33 @@
             border:1px solid rgba(220,38,38,.20);
             font-size:12px;
         }
+
+           /* =========================
+            TABLETTE — 769px à 1024px
+         ========================= */
+        @media (min-width: 769px) and (max-width: 1024px) {
+             
+        }
+
+        /* =========================
+             MOBILE LARGE  grands smartphones en portrait
+         ========================= */
+        @media (min-width: 481px) and (max-width: 768px) {
+
+            
+        }
+
+        /* =========================
+         PETIT MOBILE — max 480px
+           ========================= */
+        @media (max-width: 480px) {
+
+
+          
+        }
+
+
+
     </style>
 </asp:Content>
 

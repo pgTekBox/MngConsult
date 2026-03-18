@@ -1,5 +1,8 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfCustomersInvoices.aspx.vb" Inherits="MngConsul.wbfCustomersInvoices" %>
 
+<%@ Register Src="~/Controls/PdfViewer.ascx" TagPrefix="uc1" TagName="PdfViewer" %>
+
+
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Invoices — MngConsul
 </asp:Content>
@@ -85,7 +88,7 @@
         /* =========================
          TABLETTE — 769px à 1024px
       ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media  (max-width: 1024px) {
 
             .listview-list-head,
             .listview-row {
@@ -98,7 +101,7 @@
         /* =========================
           MOBILE LARGE — 481px à 768px  grands smartphones en portrait
       ========================= */
-        @media (min-width: 481px) and (max-width: 768px) {
+        @media  (max-width: 768px) {
 
 
             .listview-list-head {
@@ -347,7 +350,7 @@
                             <%-- Ligne 1 mobile : Numéro + Date + Total --%>
                             <div class="field-row1">
                                 <span class="field-number"><%# Eval("DocumentNumber") %></span>
-                                <span class="field-date"><%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %></span>
+                                <span class="field-date"><%# FormatDateFr(Eval("DocumentDate")) %></span>
                                 <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
                             </div>
 
@@ -364,8 +367,8 @@
                                     Text=""
                                     ToolTip="Modifier"
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
-
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture""); return false;" %>' />
+                                   
                                 <asp:Button ID="Button1" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -391,6 +394,9 @@
 
             </div>
         </div>
+                <%-- FAB mobile --%>
+        <button class="fab-add" onclick="openCustomerWindow(0); return false;" title="Ajouter un client">+</button>
+
 
 
 
@@ -400,28 +406,16 @@
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        Width="1100px"
-        Height="720px"
         Title="Ajouter / Modifier une Facture"
         OnClientClose="rwCustomer_OnInvoiceClose"
-        ClientIDMode="Static">
+        ClientIDMode="Static" >
     </telerik:RadWindow>
+
+
+    <script src="js/RadWindows.js"></script>
+
     <script type="text/javascript">
-        function openInvoiceWindow(id) {
-            var wnd = $find("rwInvoice");
-            var url = "wbfInvoiceEdit.aspx";
-
-            if (id && id > 0) {
-                url += "?InvoiceId=" + id;
-                wnd.set_title("Modifier une facture");
-            } else {
-                url += "?InvoiceId=0";
-                wnd.set_title("Ajouter un client");
-            }
-
-            wnd.setUrl(url);
-            wnd.show();
-        }
+       
 
         function rwCustomer_OnInvoiceClose(sender, args) {
 
@@ -434,6 +428,6 @@
         }
 
     </script>
-
+    <uc1:PdfViewer runat="server" id="PdfViewer" />
 
 </asp:Content>

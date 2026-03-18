@@ -2,6 +2,28 @@
 /* =========================
    PAGE — Desktop (base, tous écrans)
 ========================= */
+
+.lien {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: rgba(37,99,235,.35);
+    text-underline-offset: 3px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: color .15s, text-decoration-color .15s;
+}
+
+    .lien:hover {
+        color: #1d4ed8;
+        text-decoration-color: rgba(37,99,235,.8);
+    }
+
+    .lien:active {
+        color: #1e40af;
+    }
+
+
+
 .page-head {
     display: flex;
     align-items: flex-start;
@@ -213,34 +235,12 @@
     display: none;
 }
 
-/* =========================
-   PETIT DESKTOP — max 1280px
-========================= */
-/*@media (max-width: 1280px) {
-    .full-grid {
-        height: calc(100vh - 210px);
-    }
 
-    .search-group {
-        width: 100%;
-        flex: 1 1 100%;
-    }
-
-    .list-shell {
-        padding: 14px;
-    }
-
-    .listview-list-head,
-    .listview-row {
-        grid-template-columns: minmax(220px, 1.5fr) 150px minmax(240px, 1fr);
-        gap: 12px;
-    }
-}*/
 
 /* =========================
-   TABLETTE — 769px à 1024px
+   TABLETTE —   ET en dessous
 ========================= */
-@media (min-width: 769px) and (max-width: 1024px) {
+@media   (max-width: 1024px) {
     .page-head {
         padding: 12px 14px;
     }
@@ -274,9 +274,9 @@
 }
 
 /* =========================
-   MOBILE LARGE — 481px à 768px
+   MOBILE LARGE — ET en dessous
 ========================= */
-@media (min-width: 481px) and (max-width: 768px) {
+@media   (max-width: 768px) {
 
 
     .page-head {
@@ -397,7 +397,7 @@
 }
 
 /* =========================
-   PETIT MOBILE — max 480px
+   PETIT MOBILE —   seulement
 ========================= */
 @media (max-width: 480px) {
     .page-title {

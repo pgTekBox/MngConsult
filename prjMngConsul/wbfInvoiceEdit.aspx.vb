@@ -35,7 +35,7 @@ Public Class wbfInvoiceEdit
 
         If Not IsPostBack Then
 
-            InvoiceId = CInt(Request.QueryString("InvoiceId"))
+            InvoiceId = CInt(Request.QueryString("Id"))
             CreateItemsTable()
             LoadItemTableFromBD()
             ProductsTable = GetProductsTable()
@@ -402,7 +402,7 @@ Public Class wbfInvoiceEdit
     End Function
 
     Private Function GetCustomersTable() As DataTable
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Customer") ' <-- ta proc
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party") ' <-- ta proc
         Return ds.Tables(0)
     End Function
 

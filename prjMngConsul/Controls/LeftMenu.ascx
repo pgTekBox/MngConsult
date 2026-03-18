@@ -204,7 +204,16 @@
   }
   .hamburger:focus{ outline:none; box-shadow:var(--ring); }
 
-  .brand{ display:flex; align-items:baseline; gap:10px; min-width:180px; }
+  .brand{ 
+      display:flex; 
+      align-items:baseline; 
+      gap:10px; 
+      min-width:180px; 
+      margin-right: auto;
+ 
+  }
+
+
   .brand-dot{
     width:10px; height:10px; border-radius:999px; background:var(--primary);
     box-shadow:0 0 0 6px rgba(37,99,235,.12);
@@ -330,13 +339,25 @@
     z-index:35; border:none;
   }
 
-  /* Responsive */
-  @media (max-width: 980px){
+   /* =========================
+            TABLETTE — 769px à 1024px
+         ========================= */
+        @media   (max-width: 1024px) {
+             
+        }
+
+   /* =========================
+             MOBILE LARGE  grands smartphones en portrait
+         ========================= */
+        @media   (max-width: 768px) {
+
     .hamburger{ display:flex; }
+
     .sidebar{
       transform: translateX(-110%);
       transition: transform .22s ease;
     }
+
     .content{ margin-left: 0; padding: 14px; }
     .app-shell.menu-open .sidebar{ transform: translateX(0); }
     .app-shell.menu-open .backdrop{ display:block; }
@@ -355,15 +376,20 @@
         padding-top: 64px;
     }
 
+ }
+ /* =========================
+         PETIT MOBILE — max 480px
+           ========================= */
+        @media (max-width: 480px) {
 
 
-
-
-  }
+          
+        }
 
   @media (prefers-reduced-motion: reduce){
-    .sidebar, .nav-parent .chev svg{ transition:none; }
-  }
+    .sidebar, .nav-parent .chev svg{ transition:none;     }
+   }
+
 </style>
 
 <script>

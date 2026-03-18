@@ -93,4 +93,13 @@ Partial Public Class wbfCustomersInvoices
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rwInvoice As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''PdfViewer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents PdfViewer As Global.MngConsul.PdfViewer
 End Class

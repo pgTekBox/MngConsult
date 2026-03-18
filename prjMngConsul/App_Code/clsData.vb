@@ -1,7 +1,8 @@
-﻿Imports System.Data
+﻿Imports System
+Imports System.Data
 Imports System.Data.SqlClient
-Imports Telerik.Web.UI.Editor.DialogControls
 Imports Telerik.Web.UI
+Imports Telerik.Web.UI.Editor.DialogControls
 
 
 
@@ -490,7 +491,11 @@ Public Class clsData
         Next
     End Sub
 
-
+    Public Function FormatDateFr(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return ""
+        Dim d As DateTime = CDate(value)
+        Return d.ToString("dd MMM yyyy", New System.Globalization.CultureInfo("fr-FR"))
+    End Function
 
 
 

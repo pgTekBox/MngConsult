@@ -165,8 +165,19 @@ a{
 .RadGrid{
     background:transparent !important;
 }
+/* =========================
+            TABLETTE — 769px à 1024px
+         ========================= */
+        @media   (max-width: 1024px) {
+             
+        }
 
-@media (max-width: 980px){
+/* =========================
+             MOBILE LARGE  grands smartphones en portrait
+         ========================= */
+        @media  (max-width: 768px) {
+
+
 
     .app-header {
         display: none;
@@ -182,6 +193,17 @@ a{
         top:auto;
         margin-right:0;
     }
+
+    /* =========================
+         PETIT MOBILE — max 480px
+           ========================= */
+        @media (max-width: 480px) {
+
+
+          
+        }
+
+
 }
 </style>
 

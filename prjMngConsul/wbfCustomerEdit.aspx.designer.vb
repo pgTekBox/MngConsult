@@ -185,13 +185,13 @@ Partial Public Class wbfCustomerEdit
     Protected WithEvents btnNewAddress As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''rgAddr control.
+    '''rlvAddr control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgAddr As Global.Telerik.Web.UI.RadGrid
+    Protected WithEvents rlvAddr As Global.Telerik.Web.UI.RadListView
 
     '''<summary>
     '''rwm1 control.

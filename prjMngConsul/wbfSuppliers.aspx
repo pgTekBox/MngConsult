@@ -337,8 +337,8 @@
                             <asp:Button ID="btnEdit" runat="server"
                                 CssClass="btn btn-icon btn-icon-edit"
                                 Text=""
-                                OnClientClick='<%# "openSupplierWindow(" & Eval("Id") & "); return false;" %>' />
-
+                               
+                                OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />
                             <asp:Button ID="btnDelete" runat="server"
                                 CssClass="btn btn-icon btn-icon-delete"
                                 Text=""
@@ -367,34 +367,26 @@
 
             </div>
         </div>
+               <%-- FAB mobile --%>
+       <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un client">+</button>
+
+
     </telerik:RadAjaxPanel>
     <telerik:RadWindow ID="rwSupplier" runat="server"
         Modal="true"
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        Width="1100px"
-        Height="720px"
+     
         ClientIDMode="Static"
         Title="Ajouter / Modifier un fournisseur"
         OnClientClose="rwSupplier_OnClientClose">
     </telerik:RadWindow>
+    
+    <script src="js/RadWindows.js"></script>
+    
     <script type="text/javascript">
-        function openSupplierWindow(id) {
-            var wnd = $find("rwSupplier");
-            var url = "wbfSupplierEdit.aspx";
-
-            if (id && id > 0) {
-                url += "?SupplierId=" + id;
-                wnd.set_title("Modifier un fournisseur");
-            } else {
-                url += "?SupplierId=0";
-                wnd.set_title("Ajouter un fournisseur");
-            }
-
-            wnd.setUrl(url);
-            wnd.show();
-        }
+        
 
         function rwSupplier_OnClientClose(sender, args) {
             __doPostBack("rgFournisseurs", "Rebind");

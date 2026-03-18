@@ -266,6 +266,7 @@
     <Content Include="Controls\HeaderUser.ascx" />
     <Content Include="Controls\jsonViewer.ascx" />
     <Content Include="Controls\LeftMenu.ascx" />
+    <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\listvew.css" />
     <Content Include="Default.aspx" />
@@ -279,6 +280,7 @@
     <Content Include="Images\rondplus45.png" />
     <Content Include="Images\trash.png" />
     <Content Include="js\JsonView.js" />
+    <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
     <Content Include="Receipts.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
@@ -390,6 +392,13 @@
     </Compile>
     <Compile Include="Controls\jsonViewer.ascx.vb">
       <DependentUpon>jsonViewer.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\PdfViewer.ascx.designer.vb">
+      <DependentUpon>PdfViewer.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\PdfViewer.ascx.vb">
+      <DependentUpon>PdfViewer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />

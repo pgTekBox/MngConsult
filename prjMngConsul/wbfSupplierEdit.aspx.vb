@@ -53,7 +53,7 @@ Public Class wbfSupplierEdit
         If Not IsPostBack Then
             BinDDL()
             CreatePartyAddressTable()
-            SupplierId = CInt(Request.QueryString("SupplierId"))
+            SupplierId = CInt(Request.QueryString("Id"))
             BindData()
         End If
 
@@ -106,8 +106,8 @@ Public Class wbfSupplierEdit
 
     ' Bind la DataTable en ViewState au grid
     Public Sub BindAddressGrid()
-        rgAddr.DataSource = CType(ViewState("PartyAddressTable"), DataTable)
-        rgAddr.DataBind()
+        rlvAddr.DataSource = CType(ViewState("PartyAddressTable"), DataTable)
+        rlvAddr.DataBind()
     End Sub
 
     ' Charge les adresses depuis la BD et les met dans la DataTable en ViewState
@@ -189,24 +189,28 @@ Public Class wbfSupplierEdit
 
     End Sub
 
-    ' Gère les commandes du grid des adresse (Edit, Delete)
-    Private Sub rgAddr_ItemCommand(sender As Object, e As GridCommandEventArgs) Handles rgAddr.ItemCommand
-        'If e.CommandArgument Is Nothing Then Return
-        If TypeOf e.Item IsNot GridDataItem Then Return
-        Dim item = CType(e.Item, GridDataItem)
+    ''' <summary>
+    ''' Gère les commandes du RadListView des adresses (EditAddress, DeleteAddress).
+    ''' </summary>
+    Private Sub rlvAddr_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvAddr.ItemCommand
 
-        Dim addrId As Integer = CInt(item.GetDataKeyValue("Id"))
+        ' Ignorer les commandes système (Rebind, etc.)
+        If TypeOf e.ListViewItem IsNot RadListViewItem Then Return
+
+        ' Lire l'Id depuis CommandArgument (remplace item.GetDataKeyValue qui est propre à RadGrid)
+        Dim addrId As Integer = 0
+        If Not Integer.TryParse(e.CommandArgument?.ToString(), addrId) Then Return
 
         Select Case e.CommandName
             Case "EditAddress"
                 OpenAddrWindow(addrId)
-
             Case "DeleteAddress"
                 DeleteAddress(addrId)
-                'ReloadAddresses()
-                rgAddr.Rebind()
+                rlvAddr.Rebind()
         End Select
+
     End Sub
+
     Sub DeleteAddress(addrId As Integer)
         ' Marque l'adresse comme "Deleted" dans la DataTable en ViewState (pas besoin de requete SQL supplémentaire, on fera un batch à la fin pour tout supprimer en une fois)
         Dim dt = TryCast(ViewState("PartyAddressTable"), DataTable)
@@ -253,25 +257,18 @@ Public Class wbfSupplierEdit
 
     End Sub
     ' Bind la DataTable en ViewState au grid à chaque besoin de données
-    Private Sub rgAddr_NeedDataSource(sender As Object, e As GridNeedDataSourceEventArgs) Handles rgAddr.NeedDataSource
-
-        'rgAddr.DataSource = CType(ViewState("PartyAddressTable"), DataTable)
-
+    Private Sub rlvAddr_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAddr.NeedDataSource
         Dim dt As DataTable = CType(ViewState("PartyAddressTable"), DataTable)
-
         If dt IsNot Nothing Then
             Dim dv As New DataView(dt)
-            dv.RowFilter = "Deleted = 0"   ' 🔥 ton filtre
-
-            rgAddr.DataSource = dv
+            dv.RowFilter = "Deleted = 0"
+            rlvAddr.DataSource = dv
         End If
-
-
     End Sub
 
     ' Rafraîchit le grid (rebind) après chaque opération sur les adresses    
     Private Sub btnAddrRefresh_Click(sender As Object, e As EventArgs) Handles btnAddrRefresh.Click
-        rgAddr.Rebind()
+        rlvAddr.Rebind()
     End Sub
 
 
@@ -292,7 +289,7 @@ Public Class wbfSupplierEdit
             InsertAdresseIdViewState()
             hfAddrId.Value = 0
 
-            rgAddr.Rebind()
+            rlvAddr.Rebind()
 
             'ferme la fenêtre RadWindow (fonction JS closeAddrWindow(true))
             ScriptManager.RegisterStartupScript(Me, Me.GetType(), "closeRw", "closeAddrWindow(true);", True)
@@ -359,7 +356,7 @@ Public Class wbfSupplierEdit
 
         CType(ViewState("PartyAddressTable"), DataTable).Rows.Add(dr)
 
-        rgAddr.Rebind()
+        rlvAddr.Rebind()
     End Sub
 
     '

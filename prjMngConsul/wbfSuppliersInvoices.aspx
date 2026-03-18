@@ -461,8 +461,7 @@ margin-right: auto;
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    OnClientClick='<%# "openSupplierInvoiceWindow(" & Eval("Id") & "); return false;" %>' />
-
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' /> 
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -483,7 +482,9 @@ margin-right: auto;
 
 
         </div>
-        
+               <%-- FAB mobile --%>
+       <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un client">+</button>
+
 
     </telerik:RadAjaxPanel>
     <telerik:RadWindow ID="rwSupplierInvoices" runat="server"
@@ -491,29 +492,15 @@ margin-right: auto;
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        Width="1100px"
+        
         ClientIDMode="Static"
-        Height="720px"
+         
         Title="Ajouter / Modifier un facture fournisseur"
         OnClientClose="rwSupplierInvoice_OnClientClose">
     </telerik:RadWindow>
-
+    <script src="js/RadWindows.js"></script>
     <script type="text/javascript">
-        function openSupplierInvoiceWindow(id) {
-            var wnd = $find("rwSupplierInvoices");
-            var url = "wbfSupplierInvoinceEdit.aspx";
-
-            if (id && id > 0) {
-                url += "?SupplierId=" + id;
-                wnd.set_title("Modifier un fournisseur");
-            } else {
-                url += "?SupplierId=0";
-                wnd.set_title("Ajouter un fournisseur");
-            }
-
-            wnd.setUrl(url);
-            wnd.show();
-        }
+        
 
         function rwSupplierInvoice_OnClientClose(sender, args) {
             __doPostBack("rgFournisseursFactures", "Rebind");

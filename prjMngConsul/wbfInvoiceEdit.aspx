@@ -1,14 +1,12 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" MaintainScrollPositionOnPostback="true" CodeBehind="wbfInvoiceEdit.aspx.vb" Inherits="MngConsul.wbfInvoiceEdit" %>
+﻿<%@ Page Language="vb" AutoEventWireup="false"   MaintainScrollPositionOnPostback="true" CodeBehind="wbfInvoiceEdit.aspx.vb" Inherits="MngConsul.wbfInvoiceEdit" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+ <!DOCTYPE html>
 
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head runat="server">
+    <title></title>
 
-<asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Invoices — MngConsul
-</asp:Content>
-
-
-<asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 
     <style>
         :root {
@@ -472,8 +470,11 @@
 
 
 
-        /* Desktop tout les ecran plus grand  que 840 */
-        @media(min-width:840px) {
+        /* =========================
+            TABLETTE — 769px à 1024px
+         ========================= */
+        @media (min-width: 769px) and (max-width: 1024px) {
+
 
             .imgaction {
                 margin-left: 4px;
@@ -553,8 +554,22 @@
             }
         }
 
-        /* mobile tout les ecran plus petit que 839*/
-        @media(max-width:839px) {
+        /* =========================
+             MOBILE LARGE  grands smartphones en portrait
+         ========================= */
+        @media (min-width: 481px) and (max-width: 768px) {
+
+            
+        }
+
+
+
+
+        /* =========================
+         PETIT MOBILE — max 480px
+           ========================= */
+        @media (max-width: 480px) {
+
 
             .fab-addline {
                 right: 14px;
@@ -679,10 +694,17 @@
             }
         }
     </style>
-</asp:Content>
-<asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
+ 
 
-
+</head>
+<body>
+    <form id="form1" runat="server">
+         <telerik:RadScriptManager
+     ID="RadScriptManager1"
+     runat="server"
+     EnablePartialRendering="true"
+     AsyncPostBackTimeout="300" />
+          <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
 
 
     <telerik:RadAjaxManager ID="Ram1" runat="server">
@@ -1638,4 +1660,8 @@
         }
 
     </script>
-</asp:Content>
+        </form>
+    </body>
+    </html>
+
+
