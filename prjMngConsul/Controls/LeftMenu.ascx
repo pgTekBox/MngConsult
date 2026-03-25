@@ -129,6 +129,11 @@
             <span class="dot" aria-hidden="true"></span>
             Écritures
           </a>--%>
+
+             <a class="nav-child" href="~/wbfReleve.aspx" runat="server" data-navlink>
+   <span class="dot" aria-hidden="true"></span>
+   Relevé bancaire
+ </a>
           <a class="nav-child" href="~/wbfRapportTaxes.aspx" runat="server" data-navlink>
             <span class="dot" aria-hidden="true"></span>
             Rapports

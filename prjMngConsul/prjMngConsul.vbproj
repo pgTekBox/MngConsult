@@ -270,6 +270,7 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\listvew.css" />
     <Content Include="Default.aspx" />
+    <Content Include="ExchangeToken.aspx" />
     <Content Include="favicon.ico" />
     <Content Include="Global.asax" />
     <Content Include="Images\del200.png" />
@@ -282,6 +283,7 @@
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
+    <Content Include="PlaidCreateLinkToken.aspx" />
     <Content Include="Receipts.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -353,6 +355,7 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="testplaid.html" />
     <Content Include="wbfCompanyInfo.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
@@ -361,6 +364,7 @@
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
+    <Content Include="wbfReleve.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfSetting.aspx" />
     <Content Include="wbfSettingsOpenAiPrompts.aspx" />
@@ -400,6 +404,13 @@
     <Compile Include="Controls\PdfViewer.ascx.vb">
       <DependentUpon>PdfViewer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ExchangeToken.aspx.designer.vb">
+      <DependentUpon>ExchangeToken.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ExchangeToken.aspx.vb">
+      <DependentUpon>ExchangeToken.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
@@ -469,8 +480,16 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="MyClass\Plaid.vb" />
     <Compile Include="MyClass\ReceiptAI.vb">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PlaidCreateLinkToken.aspx.designer.vb">
+      <DependentUpon>PlaidCreateLinkToken.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PlaidCreateLinkToken.aspx.vb">
+      <DependentUpon>PlaidCreateLinkToken.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Receipts.aspx.designer.vb">
       <DependentUpon>Receipts.aspx</DependentUpon>
@@ -537,6 +556,13 @@
     </Compile>
     <Compile Include="wbfReceipt.aspx.vb">
       <DependentUpon>wbfReceipt.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfReleve.aspx.designer.vb">
+      <DependentUpon>wbfReleve.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfReleve.aspx.vb">
+      <DependentUpon>wbfReleve.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfScannedPDF.aspx.designer.vb">
