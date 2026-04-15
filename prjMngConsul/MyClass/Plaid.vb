@@ -8,7 +8,7 @@ Public Class Plaid
     Private ReadOnly _secret As String = "fe6a83feeae60c5e7512af8f0691fa"
     Private ReadOnly _baseUrl As String = "https://sandbox.plaid.com"
 
-    Public Async Function CreateLinkTokenAsync(clientUserId As String) As Task(Of String)
+    Public Async Function CreateLinkTokenAsync(clientUserId As Guid) As Task(Of String)
 
         Dim url As String = "https://sandbox.plaid.com/link/token/create"
 
@@ -22,9 +22,10 @@ Public Class Plaid
   ""language"": ""fr"",
   ""country_codes"": [""CA""],
   ""user"": {
-    ""client_user_id"": """ & JsonSafe(clientUserId) & """
+    ""client_user_id"": """ & JsonSafe(clientUserId.ToString) & """
   },
-  ""products"": [""transactions""]
+  ""products"": [""transactions""],
+  ""optional_products"": [""auth""]
 }"
 
         Using client As New HttpClient()
@@ -40,6 +41,7 @@ Public Class Plaid
             Return j("link_token").ToString()
         End Using
     End Function
+
     Public Async Function ExchangePublicTokenAsync(publicToken As String) As Task(Of JObject)
         Dim url As String = _baseUrl & "/item/public_token/exchange"
 
@@ -167,6 +169,78 @@ Public Class Plaid
             Return result
         End Using
     End Function
+    Public Async Function GetAccountsAsync(accessToken As String) As Task(Of JArray)
+        Dim url As String = _baseUrl & "/accounts/get"
+        Dim payload As String =
+"{
+  ""client_id"": """ & JsonSafe(_clientId) & """,
+  ""secret"": """ & JsonSafe(_secret) & """,
+  ""access_token"": """ & JsonSafe(accessToken) & """
+}"
+
+        Using client As New HttpClient()
+            Dim content As New StringContent(payload, Encoding.UTF8, "application/json")
+            Dim response = Await client.PostAsync(url, content)
+            Dim body = Await response.Content.ReadAsStringAsync()
+
+            If Not response.IsSuccessStatusCode Then
+                Throw New Exception("Erreur Plaid accounts/get : " & body)
+            End If
+
+            Dim j As JObject = JObject.Parse(body)
+            Return CType(j("accounts"), JArray)
+        End Using
+    End Function
+
+
+
+    Public Async Function GetBalancesAsync(accessToken As String) As Task(Of JArray)
+        Dim url As String = _baseUrl & "/accounts/balance/get"
+        Dim payload As String =
+"{
+  ""client_id"": """ & JsonSafe(_clientId) & """,
+  ""secret"": """ & JsonSafe(_secret) & """,
+  ""access_token"": """ & JsonSafe(accessToken) & """
+}"
+
+        Using client As New HttpClient()
+            Dim content As New StringContent(payload, Encoding.UTF8, "application/json")
+            Dim response = Await client.PostAsync(url, content)
+            Dim body = Await response.Content.ReadAsStringAsync()
+
+            If Not response.IsSuccessStatusCode Then
+                Throw New Exception("Erreur Plaid accounts/balance/get : " & body)
+            End If
+
+            Dim j As JObject = JObject.Parse(body)
+            Return CType(j("accounts"), JArray)
+        End Using
+    End Function
+
+    Public Async Function GetAuthAsync(accessToken As String) As Task(Of JObject)
+        Dim url As String = _baseUrl & "/auth/get"
+        Dim payload As String =
+"{
+  ""client_id"": """ & JsonSafe(_clientId) & """,
+  ""secret"": """ & JsonSafe(_secret) & """,
+  ""access_token"": """ & JsonSafe(accessToken) & """
+}"
+
+        Using client As New HttpClient()
+            Dim content As New StringContent(payload, Encoding.UTF8, "application/json")
+            Dim response = Await client.PostAsync(url, content)
+            Dim body = Await response.Content.ReadAsStringAsync()
+
+            If Not response.IsSuccessStatusCode Then
+                Throw New Exception("Erreur Plaid auth/get : " & body)
+            End If
+
+            Return JObject.Parse(body)
+        End Using
+    End Function
+
+
+
 
     Private Function JsonSafe(value As String) As String
         If value Is Nothing Then Return ""

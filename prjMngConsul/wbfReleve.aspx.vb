@@ -29,40 +29,45 @@ Public Class wbfReleve
         Dim dt As New DataTable()
         Dim q As String = tbSearch.Text.Trim()
 
-        Using cn As New SqlConnection(GetConnectionString())
-            Using cmd As New SqlCommand("
-                SELECT
-                    Id,
-                    ReleveBancaireGUID,
-                    CompanyGUID,
-                    DateMouvement,
-                    Description,
-                    Reference,
-                    Montant,
-                    CompteBanque,
-                    Statut,
-                    ReglementId,
-                    Created,
-                    CreatedBy
-                FROM dbo.T142ReleveBancaire
-                WHERE CompanyGUID = @CompanyGUID
-                  AND (
-                        @Search = ''
-                        OR Description LIKE '%' + @Search + '%'
-                        OR Reference LIKE '%' + @Search + '%'
-                        OR CompteBanque LIKE '%' + @Search + '%'
-                        OR Statut LIKE '%' + @Search + '%'
-                      )
-                ORDER BY DateMouvement DESC, Id DESC", cn)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Search", q))
+        dt = ExecuteSQLds("s0047GetReleveBancaire", p).Tables(0)
 
-                cmd.Parameters.AddWithValue("@CompanyGUID", Company)
-                cmd.Parameters.AddWithValue("@Search", q)
+        'Using cn As New SqlConnection(GetConnectionString())
+        '    Using cmd As New SqlCommand("
+        '        SELECT
+        '            Id,
+        '            ReleveBancaireGUID,
+        '            CompanyGUID,
+        '            DateMouvement,
+        '            Description,
+        '            Reference,
+        '            Montant,
+        '            CompteBanque,
+        '            Statut,
+        '            ReglementId,
+        '            Created,
+        '            CreatedBy
+        '        FROM dbo.T142ReleveBancaire
+        '        WHERE CompanyGUID = @CompanyGUID
+        '          AND (
+        '                @Search = ''
+        '                OR Description LIKE '%' + @Search + '%'
+        '                OR Reference LIKE '%' + @Search + '%'
+        '                OR CompteBanque LIKE '%' + @Search + '%'
+        '                OR Statut LIKE '%' + @Search + '%'
+        '              )
+        '        ORDER BY DateMouvement DESC, Id DESC", cn)
 
-                Using da As New SqlDataAdapter(cmd)
-                    da.Fill(dt)
-                End Using
-            End Using
-        End Using
+        '        cmd.Parameters.AddWithValue("@CompanyGUID", Company)
+        '        cmd.Parameters.AddWithValue("@Search", q)
+
+        '        Using da As New SqlDataAdapter(cmd)
+        '            da.Fill(dt)
+        '        End Using
+        '    End Using
+        'End Using
 
         Return dt
     End Function

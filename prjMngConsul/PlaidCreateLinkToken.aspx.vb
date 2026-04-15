@@ -2,7 +2,7 @@
 Imports System.IO
 
 Public Class PlaidCreateLinkToken
-    Inherits System.Web.UI.Page
+    Inherits clsData
 
     Protected Async Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Response.ContentType = "application/json"
@@ -17,7 +17,7 @@ Public Class PlaidCreateLinkToken
             Dim svc As New Plaid()
 
             ' Remplace ceci par ton vrai identifiant stable
-            Dim clientUserId As String = GetClientUserId()
+            Dim clientUserId As Guid = GetClientUserId()
 
             Dim linkToken As String = Await svc.CreateLinkTokenAsync(clientUserId)
 
@@ -28,16 +28,16 @@ Public Class PlaidCreateLinkToken
 
         Response.End()
     End Sub
-    Private Function GetClientUserId() As String
+    Private Function GetClientUserId() As Guid
         ' Exemple:
         ' Return Session("CompanyGUID").ToString()
         ' ou Return Company.ToString() si tu as cette propriété dans ton projet
 
-        If Session("CompanyGUID") IsNot Nothing Then
-            Return Session("CompanyGUID").ToString()
-        End If
+        'If Company IsNot Nothing Then
+        '    Return Session("CompanyGUID").ToString()
+        'End If
 
-        Return "demo-user-1"
+        Return Company
     End Function
 
     Private Function EscapeJson(value As String) As String

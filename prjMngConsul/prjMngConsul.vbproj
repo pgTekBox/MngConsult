@@ -280,10 +280,18 @@
     <Content Include="Images\plus.png" />
     <Content Include="Images\rondplus45.png" />
     <Content Include="Images\trash.png" />
+    <Content Include="ImportSageBalanceVerification.aspx" />
+    <Content Include="ImportSageComptes.aspx" />
+    <Content Include="ImportSageFactureLines.aspx" />
+    <Content Include="ImportSageFactures.aspx" />
+    <Content Include="ImportSageParties.aspx" />
+    <Content Include="ImportSageProduits.aspx" />
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
+    <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />
+    <Content Include="PlaidDailySync.aspx" />
     <Content Include="Receipts.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -355,13 +363,18 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
-    <Content Include="testplaid.html" />
     <Content Include="wbfCompanyInfo.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
     <Content Include="wbfInvoiceEdit.aspx" />
     <Content Include="wbflogout.aspx" />
+    <Content Include="wbfPlanComptable.aspx" />
+    <Content Include="wbfPlanComptableEdit.aspx" />
+    <Content Include="wbfProductCategory.aspx" />
+    <Content Include="wbfProductCategoryEdit.aspx" />
+    <Content Include="wbfProductEdit.aspx" />
+    <Content Include="wbfProducts.aspx" />
     <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfReleve.aspx" />
@@ -405,11 +418,56 @@
       <DependentUpon>PdfViewer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="ImportSageBalanceVerification.aspx.designer.vb">
+      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageBalanceVerification.aspx.vb">
+      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageBase.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="ExchangeToken.aspx.designer.vb">
       <DependentUpon>ExchangeToken.aspx</DependentUpon>
     </Compile>
     <Compile Include="ExchangeToken.aspx.vb">
       <DependentUpon>ExchangeToken.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageComptes.aspx.designer.vb">
+      <DependentUpon>ImportSageComptes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageComptes.aspx.vb">
+      <DependentUpon>ImportSageComptes.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageFactureLines.aspx.designer.vb">
+      <DependentUpon>ImportSageFactureLines.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageFactureLines.aspx.vb">
+      <DependentUpon>ImportSageFactureLines.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageFactures.aspx.designer.vb">
+      <DependentUpon>ImportSageFactures.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageFactures.aspx.vb">
+      <DependentUpon>ImportSageFactures.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageParties.aspx.designer.vb">
+      <DependentUpon>ImportSageParties.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageParties.aspx.vb">
+      <DependentUpon>ImportSageParties.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ImportSageProduits.aspx.designer.vb">
+      <DependentUpon>ImportSageProduits.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportSageProduits.aspx.vb">
+      <DependentUpon>ImportSageProduits.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
@@ -484,11 +542,25 @@
     <Compile Include="MyClass\ReceiptAI.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="PlaidAccounts.aspx.designer.vb">
+      <DependentUpon>PlaidAccounts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PlaidAccounts.aspx.vb">
+      <DependentUpon>PlaidAccounts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="PlaidCreateLinkToken.aspx.designer.vb">
       <DependentUpon>PlaidCreateLinkToken.aspx</DependentUpon>
     </Compile>
     <Compile Include="PlaidCreateLinkToken.aspx.vb">
       <DependentUpon>PlaidCreateLinkToken.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PlaidDailySync.aspx.designer.vb">
+      <DependentUpon>PlaidDailySync.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PlaidDailySync.aspx.vb">
+      <DependentUpon>PlaidDailySync.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Receipts.aspx.designer.vb">
@@ -542,6 +614,48 @@
     </Compile>
     <Compile Include="wbflogout.aspx.vb">
       <DependentUpon>wbflogout.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlanComptable.aspx.designer.vb">
+      <DependentUpon>wbfPlanComptable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlanComptable.aspx.vb">
+      <DependentUpon>wbfPlanComptable.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlanComptableEdit.aspx.designer.vb">
+      <DependentUpon>wbfPlanComptableEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlanComptableEdit.aspx.vb">
+      <DependentUpon>wbfPlanComptableEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfProductCategory.aspx.designer.vb">
+      <DependentUpon>wbfProductCategory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfProductCategory.aspx.vb">
+      <DependentUpon>wbfProductCategory.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfProductCategoryEdit.aspx.designer.vb">
+      <DependentUpon>wbfProductCategoryEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfProductCategoryEdit.aspx.vb">
+      <DependentUpon>wbfProductCategoryEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfProductEdit.aspx.designer.vb">
+      <DependentUpon>wbfProductEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfProductEdit.aspx.vb">
+      <DependentUpon>wbfProductEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfProducts.aspx.designer.vb">
+      <DependentUpon>wbfProducts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfProducts.aspx.vb">
+      <DependentUpon>wbfProducts.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfRapportTaxes.aspx.designer.vb">
@@ -646,6 +760,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\TempUploads\" />
+    <Folder Include="Documents\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -689,7 +804,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

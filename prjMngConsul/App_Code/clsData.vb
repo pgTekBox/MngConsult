@@ -126,10 +126,48 @@ Public Class clsData
 
     End Sub
 
+    Sub SetDDL(ByVal oDDL As RadDropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String, AllParameters As Collection)
+
+
+
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+
+        For Each oParam As Data.SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New DropDownListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+        For Each oItem As DropDownListItem In oDDL.Items
+            oItem.Selected = False
+        Next
+
+    End Sub
+
+
+
     Sub SetDDL(ByVal oDDL As RadDropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String)
 
         Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
         oCon.Open()
+
+
+
+
+
         Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
         oCom.CommandType = CommandType.StoredProcedure
         Dim oDr As SqlClient.SqlDataReader

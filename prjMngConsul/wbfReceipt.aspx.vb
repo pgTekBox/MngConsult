@@ -97,35 +97,9 @@ Public Class wbfReceipt
 
                 If msdsPro Is Nothing OrElse msdsPro.Tables.Count = 0 OrElse msdsPro.Tables(0).Rows.Count = 0 Then Exit Sub
                 Dim originalBytes = msdsPro.Tables(0).Rows(0)("ImageSource")
+                Dim ContentType As String = msdsPro.Tables(0).Rows(0)("ContentType")
                 If originalBytes Is Nothing OrElse IsDBNull(originalBytes) Then Exit Sub
 
-                Dim opt As New clsReceiptImageOptimizer()
-                Dim optimizedBytes = opt.OptimizeReceiptForAI(
-                    CType(originalBytes, Byte()),
-                    maxWidth:=1024,
-                    jpegQuality:=55,
-                    autoContrast:=True,
-                    toGrayscale:=True
-                )
-
-                Dim p2 As New Collection
-                p2.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                p2.Add(New Data.SqlClient.SqlParameter("@optimizedImage", optimizedBytes))
-                ExecuteSQLds("s0004SaveoptimizedImage", p2)
-
-
-
-
-                Dim p As New Collection
-                p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                Dim msds As DataSet = ExecuteSQLds("s0003GetDoc", p)
-
-                If msds Is Nothing OrElse msds.Tables.Count = 0 OrElse msds.Tables(0).Rows.Count = 0 Then Exit Sub
-                Dim imageForAIObj = msds.Tables(0).Rows(0)("ImageForAI")
-                Dim ContentType As String = CStr(msds.Tables(0).Rows(0)("ContentType"))
-                If imageForAIObj Is Nothing OrElse IsDBNull(imageForAIObj) Then Exit Sub
-
-                Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
 
                 Dim MyParam2 As New Collection
                 MyParam2.Add(New Data.SqlClient.SqlParameter("@Parameter", "CHATGPT"))
@@ -137,31 +111,123 @@ Public Class wbfReceipt
                 Dim msds3 As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", MyParam3)
                 Dim prompt As String = msds3.Tables(0).Rows(0)("Prompt")
 
-                '    Dim prompt As String =
-                '"Tu es un moteur OCR + extraction comptable. " &
-                '"Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
-                '"Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
-                '"Schéma souhaité: " &
-                '"{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
-                '"Si une valeur est inconnue: null."
+                If ContentType = "text/plain" Then
 
-                Dim reader As New OpenAiReceiptReader(apiKey)
-                Dim result = Await reader.ReadReceiptAsJsonAsync(imageForAIBytes, ContentType, prompt)
 
-                Dim p3 As New Collection
-                p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
-                p3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonResult))
-                p3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
-                p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
-                p3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", 0))
+                    Dim imageForAIText = msdsPro.Tables(0).Rows(0)("ImageSourceText")
+
+
+                    If imageForAIText Is Nothing OrElse IsDBNull(imageForAIText) Then Exit Sub
 
 
 
-                ExecuteSQLds("s0006SaveAIReturn", p3)
 
+
+                    Dim reader As New OpenAiReceiptReader(apiKey)
+                    Dim result = Await reader.ParseInvoiceEmailAsync(imageForAIText, prompt)
+
+                    'Dim imageForAIObj = msdsPro.Tables(0).Rows(0)("ImageSource")
+                    'Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
+                    'Dim result = Await reader.ParseInvoicePdfAsync(imageForAIBytes, prompt)
+
+
+
+
+
+
+
+
+                    Dim p3 As New Collection
+                    p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                    p3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonText))
+                    p3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", result.EstimatedCostUsd))
+                    ExecuteSQLds("s0006SaveAIReturn", p3)
+                End If
+
+                If ContentType = "application/pdf" Then
+
+
+                    Dim imageForAIObj = msdsPro.Tables(0).Rows(0)("ImageSource")
+
+
+                    If imageForAIObj Is Nothing OrElse IsDBNull(imageForAIObj) Then Exit Sub
+
+                    Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
+
+
+
+                    Dim reader As New OpenAiReceiptReader(apiKey)
+                    Dim result = Await reader.ParseInvoicePdfAsync(imageForAIBytes, prompt)
+
+
+                    Dim p3 As New Collection
+                    p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                    p3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonText))
+                    p3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", result.EstimatedCostUsd))
+                    ExecuteSQLds("s0006SaveAIReturn", p3)
+                End If
+
+                If ContentType = "image/jpeg" Then
+
+
+                    Dim opt As New clsReceiptImageOptimizer()
+                    Dim optimizedBytes = opt.OptimizeReceiptForAI(
+                        CType(originalBytes, Byte()),
+                        maxWidth:=1024,
+                        jpegQuality:=55,
+                        autoContrast:=True,
+                        toGrayscale:=True
+                    )
+
+                    Dim p2 As New Collection
+                    p2.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                    p2.Add(New Data.SqlClient.SqlParameter("@optimizedImage", optimizedBytes))
+                    ExecuteSQLds("s0004SaveoptimizedImage", p2)
+
+
+
+
+                    Dim p As New Collection
+                    p.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                    Dim msds As DataSet = ExecuteSQLds("s0003GetDoc", p)
+
+                    If msds Is Nothing OrElse msds.Tables.Count = 0 OrElse msds.Tables(0).Rows.Count = 0 Then Exit Sub
+                    Dim imageForAIObj = msds.Tables(0).Rows(0)("ImageForAI")
+                    ContentType = CStr(msds.Tables(0).Rows(0)("ContentType"))
+                    If imageForAIObj Is Nothing OrElse IsDBNull(imageForAIObj) Then Exit Sub
+
+                    Dim imageForAIBytes As Byte() = CType(imageForAIObj, Byte())
+
+
+                    '    Dim prompt As String =
+                    '"Tu es un moteur OCR + extraction comptable. " &
+                    '"Lis le reçu fourni (image) et retourne UNIQUEMENT un JSON valide (pas de texte autour). " &
+                    '"Retourne aussi le type de recu dans receipt_type, exemples :Restaurant, essence ou autre" &
+                    '"Schéma souhaité: " &
+                    '"{ receipt_type,receipt_number, merchant_name,merchant_email,number_tps,number_tvq,merchant_website,  merchant_street, merchant_address, merchant_city,merchant_country,merchant_state,merchand_postalcode,merchant_phonenumber, receipt_date, currency, subtotal, taxes:[{name,amount}], total, tip, payment_method, last4, items:[{desc, qty, unit_price, amount}], confidence_notes }." &
+                    '"Si une valeur est inconnue: null."
+
+                    Dim reader As New OpenAiReceiptReader(apiKey)
+                    Dim result = Await reader.ReadReceiptAsJsonAsync(imageForAIBytes, ContentType, prompt)
+
+                    Dim p3 As New Collection
+                    p3.Add(New Data.SqlClient.SqlParameter("@imageGUID", imageGUID))
+                    p3.Add(New Data.SqlClient.SqlParameter("@JSON", result.JsonResult))
+                    p3.Add(New Data.SqlClient.SqlParameter("@InputToken", result.InputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@OutputToken", result.OutputTokens))
+                    p3.Add(New Data.SqlClient.SqlParameter("@EstimatedCostUsd", 0))
+
+
+
+                    ExecuteSQLds("s0006SaveAIReturn", p3)
+                End If
                 RadReceipt.Rebind()
 
-        End Select
+                End Select
     End Sub
 
 End Class

@@ -246,5 +246,75 @@ $"{{
         End Using
 
     End Function
+    ' =============================
+    ' MÉTHODE POUR EMAIL / HTML
+    ' =============================
+    Public Async Function ParseInvoiceEmailAsync(
+        emailContent As String,
+        promptText As String
+    ) As Task(Of OpenAiParseResult)
+        ' Pas besoin d'upload : on envoie le contenu directement dans le prompt
+        Return Await CallModelWithTextAsync(emailContent, promptText)
+    End Function
 
+    ' =============================
+    ' APPEL GPT-4.1-mini AVEC TEXTE
+    ' =============================
+    Private Async Function CallModelWithTextAsync(
+        emailContent As String,
+        promptText As String
+    ) As Task(Of OpenAiParseResult)
+
+        ' On combine le prompt + le contenu du mail dans un seul message
+        Dim fullPrompt = promptText & vbCrLf & vbCrLf &
+                         "--- DÉBUT DU COURRIEL ---" & vbCrLf &
+                         emailContent & vbCrLf &
+                         "--- FIN DU COURRIEL ---"
+
+        Dim payload =
+    $"{{
+  ""model"": ""gpt-4.1-mini"",
+  ""input"": [
+    {{
+      ""role"": ""user"",
+      ""content"": [
+        {{
+          ""type"": ""input_text"",
+          ""text"": {Newtonsoft.Json.JsonConvert.ToString(fullPrompt)}
+        }}
+      ]
+    }}
+  ]
+}}"
+
+        Dim content = New StringContent(payload, Encoding.UTF8, "application/json")
+        Dim resp = Await _http.PostAsync(
+            "https://api.openai.com/v1/responses",
+            content)
+
+        Dim txt = Await resp.Content.ReadAsStringAsync()
+        If Not resp.IsSuccessStatusCode Then
+            Throw New Exception("OpenAI response error: " & txt)
+        End If
+
+        Dim jo = JObject.Parse(txt)
+
+        Dim outputText = jo("output")(0)("content")(0)("text").ToString()
+
+        Dim inputTokens As Integer = jo("usage")("input_tokens")
+        Dim outputTokens As Integer = jo("usage")("output_tokens")
+        Dim totalTokens As Integer = jo("usage")("total_tokens")
+
+        Dim costUsd As Decimal =
+            (inputTokens * 0.00000015D) +
+            (outputTokens * 0.0000006D)
+
+        Return New OpenAiParseResult With {
+            .JsonText = outputText,
+            .InputTokens = inputTokens,
+            .OutputTokens = outputTokens,
+            .TotalTokens = totalTokens,
+            .EstimatedCostUsd = costUsd
+        }
+    End Function
 End Class

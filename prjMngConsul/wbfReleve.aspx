@@ -13,7 +13,7 @@
     <style>
         .listview-list-head {
             display: grid;
-            grid-template-columns: 110px minmax(220px, 1.8fr) 130px 140px 110px 90px;
+            grid-template-columns: 110px minmax(220px, 1fr) 400px  70px 100px;
             gap: 14px;
             padding: 14px 16px;
             font-weight: 800;
@@ -29,7 +29,7 @@
 
         .listview-row {
             display: grid;
-            grid-template-columns: 110px minmax(220px, 1.8fr) 130px 140px 110px 90px;
+            grid-template-columns: 110px minmax(220px, 1fr) 400px  70px 100px;
             gap: 14px;
             align-items: center;
             padding: 14px 16px;
@@ -239,7 +239,7 @@
                                 <div>Date</div>
                                 <div>Description</div>
                                 <div>Référence</div>
-                                <div>Compte</div>
+                               
                                 <div>Statut</div>
                                 <div style="text-align: right;">Montant</div>
                             </div>
@@ -261,13 +261,11 @@
                             </div>
 
                             <div class="field-reference">
-                                <%# If(Eval("Reference") Is DBNull.Value OrElse Eval("Reference") Is Nothing, "-", Eval("Reference").ToString()) %>
+                                <%# Eval("FullName") %>
+                               
                             </div>
 
-                            <div class="field-compte">
-                                <%# Eval("CompteBanque") %>
-                            </div>
-
+                             
                             <div class="field-statut">
                                 <span class='<%# GetStatutCss(Eval("Statut")) %>'>
                                     <%# Eval("Statut") %>
