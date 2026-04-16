@@ -51,6 +51,8 @@ Public Class wbfInvoiceEdit
         dt.Columns.Add("Id", GetType(Integer))
         dt.Columns.Add("ProductId", GetType(Integer))
         dt.Columns.Add("ProductName", GetType(String))
+        dt.Columns.Add("AccountId", GetType(Integer))
+        dt.Columns.Add("AccountName", GetType(String))
         dt.Columns.Add("Description", GetType(String))
         dt.Columns.Add("Qty", GetType(Double))
         dt.Columns.Add("UnitPrice", GetType(Double))
@@ -59,6 +61,7 @@ Public Class wbfInvoiceEdit
         dt.Columns.Add("Deleted", GetType(Integer))
         ViewState("ItemsTable") = dt
     End Sub
+
 
     'Charger les lignes de la facture depuis la BD et les stocker dans le ViewState("ItemsTable")
     Public Sub LoadItemTableFromBD()
@@ -77,12 +80,15 @@ Public Class wbfInvoiceEdit
             dr("Amount") = orow("Amount")
             dr("ProductId") = orow("ProductId")
             dr("ProductName") = orow("ProductName")
+            dr("AccountId") = If(IsDBNull(orow("AccountId")), 0, Convert.ToInt32(orow("AccountId")))
+            dr("AccountName") = If(IsDBNull(orow("AccountName")), "", orow("AccountName").ToString())
             dr("Dirty") = 0
             dr("Deleted") = 0
             CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
 
         Next
     End Sub
+
 
     ' Met à jour le ViewState("ItemsTable") avec les valeurs actuelles des contrôles de chaque ligne (à appeler avant tout bind ou action qui nécessite les données à jour)
     Sub UpdateAllItemInViewstate()
@@ -109,10 +115,12 @@ Public Class wbfInvoiceEdit
             Dim numUnitPrice As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
             'Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
             Dim hidProduct As HiddenField = TryCast(item.FindControl("hidProductId"), HiddenField)
+            Dim hidAccount As HiddenField = TryCast(item.FindControl("hidAccountId"), HiddenField)
 
 
             Dim itemCode As String = If(txtItemCode Is Nothing, "", txtItemCode.Text.Trim())
-            Dim productId As Integer = If(hidProduct Is Nothing, 0, hidProduct.Value)
+            Dim productId As Integer = If(hidProduct Is Nothing OrElse String.IsNullOrWhiteSpace(hidProduct.Value), 0, Convert.ToInt32(hidProduct.Value))
+            Dim accountId As Integer = If(hidAccount Is Nothing OrElse String.IsNullOrWhiteSpace(hidAccount.Value), 0, Convert.ToInt32(hidAccount.Value))
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
 
             Dim qty As Double = 0
@@ -159,6 +167,15 @@ Public Class wbfInvoiceEdit
 
 
 
+            ' AccountId
+            If dt.Columns.Contains("AccountId") Then
+                Dim oldAccountId As Integer = If(IsDBNull(dr("AccountId")), 0, CInt(dr("AccountId")))
+                If oldAccountId <> accountId Then
+                    dr("AccountId") = accountId
+                    changed = True
+                End If
+            End If
+
             ' Qty
             If dt.Columns.Contains("Qty") Then
                 Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
@@ -199,6 +216,7 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+
 
     'Binding du Repeater avec les données du ViewState("ItemsTable") en filtrant les lignes marquées comme Deleted=1
     Public Sub BindItemGrid()
@@ -247,74 +265,6 @@ Public Class wbfInvoiceEdit
     End Sub
 
 
-    'Sub BinDDL()
-    '    ddlCustomer.EmptyMessage = "Rechercher un client..."
-    '    ddlCustomer.Filter = RadComboBoxFilter.Contains
-    '    ddlCustomer.MarkFirstMatch = True
-    '    ddlCustomer.EnableLoadOnDemand = True
-    '    ddlCustomer.ShowMoreResultsBox = False
-    '    ddlCustomer.ItemsPerRequest = "50"
-    '    ddlCustomer.DataValueField = "Id"
-    '    ddlCustomer.DataTextField = "Value"
-
-
-    'End Sub
-
-    'Private Sub ddlCustomer_ItemsRequested(sender As Object, e As RadComboBoxItemsRequestedEventArgs) Handles ddlCustomer.ItemsRequested
-    '    Dim combo = CType(sender, RadComboBox)
-    '    combo.Items.Clear()
-
-    '    Dim p As New Collection
-    '    p.Add(New SqlClient.SqlParameter("@Search", e.Text.Trim))
-
-    '    Dim ds As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p)
-
-    '    For Each orow As DataRow In ds.Tables(0).Rows
-    '        Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
-    '        combo.Items.Add(item)
-    '    Next
-    'End Sub
-
-    'Private Sub ddlCustomer_SelectedIndexChanged(sender As Object, e As RadComboBoxSelectedIndexChangedEventArgs) Handles ddlCustomer.SelectedIndexChanged
-    '    If e.Value <> "" Then
-
-
-    '        Dim p As New Collection
-    '        p.Add(New SqlClient.SqlParameter("@PartyId", e.Value))
-
-    '        Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
-
-    '        Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
-    '        rdLabel.Text = Fullanme
-    '    Else
-    '        rdLabel.Text = ""
-    '    End If
-    '    ddlCustomer.Items.Clear()
-    '    Dim p2 As New Collection
-    '    p2.Add(New SqlClient.SqlParameter("@Search", ""))
-
-    '    Dim ds2 As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p2)
-
-    '    For Each orow As DataRow In ds2.Tables(0).Rows
-    '        Dim item As New RadComboBoxItem(orow("Name").ToString(), orow("Value").ToString())
-    '        ddlCustomer.Items.Add(item)
-    '    Next
-
-    '    'For Each it As Telerik.Web.UI.GridDataItem In rgItems.MasterTableView.Items
-    '    '    Dim id As Integer = CInt(it.GetDataKeyValue("Id"))
-    '    '    Dim code = CType(it.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox).Text
-    '    '    Dim desc = CType(it.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox).Text
-    '    '    Dim qty = CType(it.FindControl("numQty"), Telerik.Web.UI.RadNumericTextBox).Value
-    '    '    Dim unitPrice = CType(it.FindControl("numUnitPrice"), Telerik.Web.UI.RadNumericTextBox).Value
-
-    '    '    ' UPDATE SQL...
-    '    'Next
-
-
-    '    '    ' UPDATE SQL...
-    '    'Next
-    'End Sub
-
     'Ajout d'une ligne vide dans le ViewState("ItemsTable") et rebind du Repeater pour afficher la nouvelle ligne
     Private Sub btnAddLine_Click(sender As Object, e As EventArgs) Handles btnAddLine.Click
 
@@ -328,6 +278,8 @@ Public Class wbfInvoiceEdit
         dr("Amount") = 0
         dr("ProductId") = 0
         dr("ProductName") = ""
+        dr("AccountId") = 0
+        dr("AccountName") = ""
         dr("Dirty") = 1
         dr("Deleted") = 0
         CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
@@ -336,6 +288,8 @@ Public Class wbfInvoiceEdit
         BindItemGrid()
 
     End Sub
+
+
 
     'Sauvegarde de la facture: mise à jour du ViewState("ItemsTable") avec les valeurs actuelles, puis envoi de toutes les lignes (y compris les marquées comme Deleted=1) à une procédure stockée qui se chargera de faire les insert/update/delete nécessaires en fonction des flags Dirty et Deleted
     Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
@@ -358,7 +312,7 @@ Public Class wbfInvoiceEdit
 
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
         ParamItems.Value = tvp
-        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v3"
+        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v4"
 
         oCom.Parameters.Add(ParamInvoiceId)
         oCom.Parameters.Add(ParamItems)
@@ -406,6 +360,13 @@ Public Class wbfInvoiceEdit
         Return ds.Tables(0)
     End Function
 
+    Private Function GetAccountsTable() As DataTable
+        ' TODO: adapter le nom de la procédure stockée si nécessaire
+        Dim ds As DataSet = ExecuteSQLds("s0082Get_GLAccounts_REVENU")
+        Return ds.Tables(0)
+    End Function
+
+
 
     'ItemDataBound du Repeater pour chaque ligne: on charge la liste des produits depuis le ViewState("ProductsTable") et on bind un RadComboBox (ou un autre contrôle de ton choix) pour permettre de sélectionner un produit. On peut aussi afficher le nom du produit dans un Label et ouvrir un product picker au clic (exemple avec un Label et une fonction JavaScript fictive openProductPicker)
     'Charge la liste des produits dans le ViewState("ProductsTable") si ce n'est pas déjà fait, puis pour chaque ligne du Repeater, on trouve le Label lblProduct et le HiddenField hidProductId, on bind le Label avec le nom du produit correspondant au ProductId de la ligne, et on ajoute un onclick pour ouvrir un product picker (fonction JavaScript à implémenter) qui permettra de sélectionner un produit et de mettre à jour le HiddenField hidProductId avec l'Id du produit sélectionné. Le bind du RadComboBox est commenté mais tu peux l'utiliser à la place du Label si tu préfères.
@@ -417,10 +378,12 @@ Public Class wbfInvoiceEdit
         'Dim rc As Telerik.Web.UI.RadComboBox = TryCast(e.Item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
 
         Dim lblProduct As Label = TryCast(e.Item.FindControl("lblProduct"), Label)
+        Dim lblAccount As Label = TryCast(e.Item.FindControl("lblAccount"), Label)
         Dim id As Integer = DataBinder.Eval(e.Item.DataItem, "Id")
         lblProduct.Attributes.Add("onclick", "openProductPicker(this," & id & ")")
-
-
+        If lblAccount IsNot Nothing Then
+            lblAccount.Attributes.Add("onclick", "openAccountPicker(this," & id & ")")
+        End If
 
         Dim hidProduct As HiddenField = TryCast(e.Item.FindControl("hidProductId"), HiddenField)
         'If rc Is Nothing Then Exit Sub
@@ -435,6 +398,10 @@ Public Class wbfInvoiceEdit
         'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
 
         lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
+
+        If lblAccount IsNot Nothing Then
+            lblAccount.Text = Convert.ToString(DataBinder.Eval(e.Item.DataItem, "AccountName"))
+        End If
 
 
 
@@ -461,7 +428,7 @@ Public Class wbfInvoiceEdit
 
 
     'Binding de la liste de produits lors de la selection
-    Protected Sub rlvProducts_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.RadListViewNeedDataSourceEventArgs)
+    Protected Sub rlvProducts_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.RadListViewNeedDataSourceEventArgs) Handles rlvProducts.NeedDataSource
         Dim dt As DataTable = ProductsTable
 
         If dt Is Nothing Then
@@ -485,6 +452,26 @@ Public Class wbfInvoiceEdit
             rlvProducts.DataSource = dv
         Else
             rlvProducts.DataSource = dt
+        End If
+    End Sub
+    Private Sub rlvAccounts_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAccounts.NeedDataSource
+        Dim dt As DataTable = GetAccountsTable()
+
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvAccounts.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
+
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR NoCompte LIKE '%" & safeText & "%' OR search LIKE '%" & safeText & "%'"
+            rlvAccounts.DataSource = dv
+        Else
+            rlvAccounts.DataSource = dt
         End If
     End Sub
 
@@ -547,6 +534,7 @@ Public Class wbfInvoiceEdit
         Dim ItemLineId As Integer
         Dim CustomerId As Integer
         Dim productId As Integer
+        Dim accountId As Integer
         CommandName = AllParam(0)
 
         Select Case CommandName
@@ -562,10 +550,19 @@ Public Class wbfInvoiceEdit
                 If Integer.TryParse(AllParam(1), CustomerId) Then
                     UpdateCustomer(CustomerId)
                 End If
+
+            Case "ACCOUNT"
+                If Integer.TryParse(AllParam(2), accountId) Then
+                    If Integer.TryParse(AllParam(1), ItemLineId) Then
+                        UpdateItemAccount(ItemLineId, accountId)
+                        BindItemGrid()
+                    End If
+                End If
         End Select
 
 
     End Sub
+
 
     Sub UpdateCustomer(Customerid As Integer)
         Dim p As New Collection
@@ -616,6 +613,32 @@ Public Class wbfInvoiceEdit
 
 
 
+    End Sub
+
+    Sub UpdateItemAccount(ItemLineId As Integer, accountId As Integer)
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@AccountId", accountId))
+        ' TODO: adapter le nom de la procédure stockée si nécessaire
+        Dim ds As DataSet = ExecuteSQLds("s0083Get_GLAccountById", p)
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        If dt Is Nothing Then Exit Sub
+
+        Dim dr As DataRow = dt.AsEnumerable().
+            FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+
+        If dr Is Nothing Then Exit Sub
+
+        dr("AccountId") = accountId
+        dr("Dirty") = 1
+        dr("Deleted") = 0
+
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+            dr("AccountName") = ds.Tables(0).Rows(0)("Name").ToString()
+        End If
+
+        ViewState("ItemsTable") = dt
     End Sub
 
 

@@ -201,4 +201,22 @@ Partial Public Class wbfInvoiceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rlvCustomers As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>
+    '''hidSelectedAccountId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hidSelectedAccountId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''rlvAccounts control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rlvAccounts As Global.Telerik.Web.UI.RadListView
 End Class

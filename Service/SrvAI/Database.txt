@@ -1,0 +1,515 @@
+﻿CREATE TABLE [dbo].[T400Mails](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[Mail] [varchar](max) NULL,
+	[RCPT] [varchar](1000) NULL,
+	[Received] [datetime] NULL,
+	[Sended] [datetime] NULL,
+	[FolderId] [int] NULL,
+	[From] [varchar](300) NULL,
+	[BCC] [varchar](300) NULL,
+	[CC] [varchar](300) NULL,
+	[ReplyTo] [varchar](300) NULL,
+	[ResentBCC] [varchar](300) NULL,
+	[ResentCC] [varchar](300) NULL,
+	[ResentFrom] [varchar](300) NULL,
+	[ResentReplyTo] [varchar](300) NULL,
+	[ResentSender] [varchar](300) NULL,
+	[ResentTo] [varchar](300) NULL,
+	[Sender] [varchar](300) NULL,
+	[To] [varchar](300) NULL,
+	[InReplyTo] [varchar](300) NULL,
+	[Importance] [varchar](20) NULL,
+	[xPriority] [varchar](20) NULL,
+	[MessageId] [varchar](300) NULL,
+	[ResentMessageId] [varchar](300) NULL,
+	[Subject] [varchar](2000) NULL,
+	[TextBody] [varchar](max) NULL,
+	[HTMLBody] [varchar](max) NULL,
+	[ClientIP] [varchar](20) NULL,
+	[HasBeenRead] [int] NULL,
+	[RCPT_ORG] [varchar](1000) NULL,
+	[HasBeenNotifie] [int] NULL,
+	[ToSend] [int] NULL,
+	[SendWithSuccess] [int] NULL,
+	[HaveAttachment] [varchar](150) NULL,
+	[UId] [bigint] NULL,
+	[SecuredEmail] [int] NULL,
+	[ConseillerId] [xml] NULL,
+	[ResponsablesId] [xml] NULL,
+	[UserId] [xml] NULL,
+	[MailGUID] [uniqueidentifier] NULL,
+	[CommandId] [xml] NULL,
+	[ClientId] [xml] NULL,
+	[ContratId] [xml] NULL,
+	[DATAgi] [xml] NULL,
+	[pi_Conseiller] [int] NULL,
+	[pi_CommandeId] [int] NULL,
+	[pi_Status] [int] NULL,
+	[pi_Ligne] [varchar](max) NULL,
+	[pi_sUser] [varchar](200) NULL,
+	[pi_DateMessage] [datetime] NULL,
+	[pi_Commentaire] [varchar](max) NULL,
+	[pi_CommandeConseiller] [int] NULL,
+	[pi_ResultatId] [int] NULL,
+	[pi_ResultatValue] [int] NULL,
+	[recipientIDList] [varchar](2000) NULL,
+	[contratlist] [varchar](1000) NULL,
+	[pi_entrevupasse] [int] NULL,
+	[pi_HaveDateEntrevue] [int] NULL,
+	[pi_ClientIdList] [varchar](200) NULL,
+	[pi_ResponsableIdList] [varchar](200) NULL,
+	[T405EventId] [int] NULL,
+	[SMTPMail] [int] NULL,
+	[pi_DateMarketing] [datetime] NULL,
+	[pi_DateEnCours] [datetime] NULL,
+	[pi_DateEnControl] [datetime] NULL,
+	[pi_DateFermeGagne] [datetime] NULL,
+	[pi_DateFermePerdu] [datetime] NULL,
+	[pi_DateFermeAnnule] [datetime] NULL,
+	[pi_DateNouveau] [datetime] NULL,
+	[pi_CommandesResultatID] [int] NULL,
+	[pi_ClientId] [int] NULL,
+	[pi_ResponsableId] [int] NULL,
+	[pi_ContratId] [int] NULL,
+	[pi_RecruteurId] [int] NULL,
+	[pi_RecruteurResId] [int] NULL,
+	[pi_VendeurId] [int] NULL,
+	[DATAgi_BK] [xml] NULL,
+	[Created] [datetime] NULL,
+	[NotePriority] [int] NULL,
+	[pi_SouleverPar] [int] NULL,
+	[xmlClientId] [int] NULL,
+	[xmlConseillerId] [int] NULL,
+	[xmlmessagetypeid] [int] NULL,
+	[xmlMessageType] [varchar](100) NULL,
+	[xmlMessageTypeValue] [int] NULL,
+	[xmlConseillerIdSTR] [varchar](50) NULL,
+	[xmlCommandId] [int] NULL,
+	[SecureMessage] [int] NULL,
+	[SecureMessageFacturation] [int] NULL,
+	[NotShowTextInHisto] [int] NULL,
+	[SendAt] [datetime] NULL,
+	[CountResend] [int] NULL,
+ CONSTRAINT [PK_T400Mails] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[T400Mails] ADD  CONSTRAINT [DF_T400Mails_MailGUID]  DEFAULT (newid()) FOR [MailGUID]
+GO
+
+ALTER TABLE [dbo].[T400Mails] ADD  CONSTRAINT [DF_T400Mails_pi_DateMessage]  DEFAULT (getdate()) FOR [pi_DateMessage]
+GO
+
+ALTER TABLE [dbo].[T400Mails] ADD  CONSTRAINT [DF_T400Mails_Created]  DEFAULT (getdate()) FOR [Created]
+GO
+********************************************************************************************************************************
+
+CREATE TABLE [dbo].[T403SendErrorMessage](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[MailId] [int] NULL,
+	[To] [varchar](4000) NULL,
+	[ErrorMessage] [varchar](2000) NULL,
+	[Created] [datetime] NULL,
+ CONSTRAINT [PK_T403SendErrorMessage] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY]
+GO
+
+ALTER TABLE [dbo].[T403SendErrorMessage] ADD  CONSTRAINT [DF_T403SendErrorMessage_Created]  DEFAULT (getdate()) FOR [Created]
+GO
+
+****************************************************************************************************************************
+  
+
+CREATE TABLE [dbo].[T402Attachments](
+	[Id] [int] IDENTITY(1,1) NOT NULL,
+	[MailId] [int] NULL,
+	[Content] [varbinary](max) NULL,
+	[ContentType] [varchar](200) NULL,
+	[FileName] [varchar](1000) NULL,
+	[ContentId] [varchar](400) NULL,
+	[ContentDisposition] [varchar](200) NULL,
+ CONSTRAINT [PK_T402ttachments] PRIMARY KEY CLUSTERED 
+(
+	[Id] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+) ON [PRIMARY] TEXTIMAGE_ON [PRIMARY]
+GO
+
+
+
+
+**************************************************************************************************************************
+s1549InsertMail_A      ->  modifier multiBD
+s1570GetOneMail
+s1575ErrorSendEmail
+s1579InsertAttachemnt_B
+s1570GetOneMail
+s1574SaveMimeMessage
+**************************************************************************************************************************
+
+
+
+ALTER procedure [dbo].[s1574SaveMimeMessage] @MailId int,@Message varchar(max) as
+
+
+
+update [dbo].[T400Mails] set [Mail]=@Message where Id = @MailId
+****************************************************************************************************************************
+
+ALTER procedure [dbo].[s1570GetOneMail] as
+
+
+declare @MailId int 
+
+--    select  * from T400Mails where coalesce(sender,'') =''  and coalesce(ToSend,0) = 1 and coalesce(SendWithSuccess,0) = 0
+begin tran
+
+update T400Mails set  sendAt =  dateadd(n,-1,GETDATE()) where SendAt is null and coalesce(ToSend,0) = 1 
+update T400Mails set  sendAt = null where  coalesce(ToSend,0) =0 and  sendAt is not null
+
+
+update T400Mails set  CountResend =  0 where CountResend is null and coalesce(ToSend,0) = 1 
+update T400Mails set  CountResend =  null where coalesce(ToSend,0) =0 and CountResend is not null
+
+update T400Mails set  Sender = 'giv4@sourcevolution.com' where coalesce(sender,'') =''  and coalesce(ToSend,0) = 1 and coalesce(SendWithSuccess,0) = 0
+
+
+--    exec s1570GetOneMail_totest
+
+select TOP (1)  @MailId = [Id]  from T400Mails 
+                where coalesce(ToSend,0) = 1  and coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and 
+				      coalesce(CountResend,0) < 10 and  
+					  Sended is not null and 
+					  SendWithSuccess is null 
+--  select *  from T400Mails where coalesce(ToSend,0) = 1  and coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and coalesce(CountResend,0) < 5 and  Sended is not null and SendWithSuccess is null 
+
+-- select * from T400Mails where id=303569
+
+
+--    select * from T400Mails where Sended is not null and SendWithSuccess is null order by id desc
+-- augmente le compteur si CountResend < 5 et A deja ete envoyer et envoyer avec echec et que la date de reenvoie est atteinte
+update T400Mails set CountResend = CountResend + 1 , sendAt =  dateadd(n,1,GETDATE()) 
+            where coalesce(ToSend,0) = 1  and SendAt < GETDATE() and CountResend < 5 and  Sended is not null and SendWithSuccess is null 
+
+--select @MailId
+--return
+
+ --
+-- select * from t400mails  where coalesce(ToSend,0) = 1  and  coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and coalesce(CountResend,0) < 5 
+                 --            and  Sended is not null and SendWithSuccess is null
+
+if (@MailId is null)
+begin				 
+   SELECT TOP (1) @MailId = [Id] FROM  [T400Mails]  where coalesce(ToSend,0) = 1 and Sended is null order by id   
+end
+
+
+update   [T400Mails] set [recipientIDList] = coalesce( [recipientIDList] , '00000000-0000-0000-0000-000000000000')        where Id = @MailId
+update   [T400Mails] set [To] = replace(coalesce( [To],'') , '; ;',';')        where Id = @MailId
+
+declare @MyTo varchar(600)
+select @MyTo = rtrim(lTRIM([To])) from [T400Mails]    where Id = @MailId
+ 
+if (right( @MyTo,1 )   = ';')
+  begin
+   select @MyTo = left( @MyTo,len(@MyTo) -1)  
+   update   [T400Mails] set [To] = @MyTo       where Id = @MailId
+end
+
+
+SELECT
+       Id
+      ,[Mail]
+      ,[RCPT]
+      ,[Received]
+      ,[Sended]
+      ,[FolderId]
+      ,[From]
+      ,coalesce([BCC],'') BCC
+      ,coalesce([CC],'') CC
+      ,[ReplyTo]
+      ,[ResentBCC]
+      ,[ResentCC]
+      ,[ResentFrom]
+      ,[ResentReplyTo]
+      ,[ResentSender]
+      ,[ResentTo]
+      ,coalesce([Sender],'') Sender
+      ,coalesce ([To],'') [To]
+      ,[InReplyTo]
+      ,[Importance]
+      ,[xPriority]
+      ,[MessageId]
+      ,[ResentMessageId]
+      ,coalesce([Subject],'') [Subject]
+      ,coalesce([TextBody],'') TextBody
+      ,coalesce([HTMLBody],'') HTMLBody
+      ,[ClientIP]
+      ,[HasBeenRead]
+      ,[RCPT_ORG]
+      ,[HasBeenNotifie]
+      ,[ToSend]
+	  ,CountResend
+  FROM  [T400Mails]  where Id = @MailId
+
+ 
+update [T400Mails] set Sended = getdate() , SendWithSuccess = null   where Id = @MailId
+
+
+update [T400Mails] set   SendWithSuccess = 0   where Id = @MailId and CountResend >= 5
+
+
+commit tran
+**************************************************************************************************************************
+
+ALTER procedure [dbo].[s1549InsertMail_A] @Message varchar(max),@RCPT varchar(1000),@From varchar(300),@BCC varchar(300) ,
+	@CC varchar(300) ,	@ReplyTo varchar(300) ,	@ResentBCC varchar(300) ,	@ResentCC varchar(300) ,	@ResentFrom varchar(300) ,
+	@ResentReplyTo varchar(300) ,	@ResentSender varchar(300) ,	@ResentTo varchar(300) ,	@Sender varchar(300) ,	@To varchar(300) ,
+	@InReplyTo varchar(300) ,	@Importance varchar(20) ,	@xPriority varchar(20) ,	@MessageId varchar(300) ,	@ResentMessageId varchar(300) ,
+	@Subject varchar(2000) ,	@TextBody varchar(max) ,	@HTMLBody varchar(max),@ClientIP varchar(50)  as
+
+
+declare @ToSplited varchar(200)
+DECLARE @EmailAdress varchar(300)
+declare @FolderId int
+declare @UserIdentification as uniqueidentifier  
+ declare @NewMailId int
+ 
+
+DECLARE @TBLMailId TABLE
+(
+  MailID int
+)
+-- -----------------------------------------------------------------------------------------------
+
+
+--declare @RCPT varchar(3000)
+--set @RCPT = ',<recrutement@sourcevolution.ca>,yperron@sourcevolution.ca,<tpilote@sourcevolution.ca>,<tpilote@sourcevolution.ca>,ventes@sourcevolution.ca'
+
+declare @TBLMailAdresseRCPT TABLE
+(
+	EMail varchar(300)
+)
+
+
+DECLARE adresse_cursor CURSOR FOR   
+     SELECT item  from dbo.fnSplit2(@RCPT,',')   
+OPEN adresse_cursor  
+FETCH NEXT FROM adresse_cursor   
+                   INTO @EmailAdress 
+WHILE @@FETCH_STATUS = 0  
+BEGIN  
+    set   @EmailAdress =  replace(@EmailAdress,'>','')
+    set   @EmailAdress =  replace(@EmailAdress,'<','')
+
+
+    if ((select count(*) from @TBLMailAdresseRCPT where EMail = @EmailAdress) = 0 )
+	  begin
+	    if (( select count(*) from [MTL-GI-05].[GestionInterne].[dbo].[T022Groups] where coalesce(Grouptype,0) = 1  and Email =   @EmailAdress   )  = 1 ) 
+		      begin
+			  --ici c est une groupe de mail
+			    
+			    insert into @TBLMailAdresseRCPT (Email)  (select Email from dbo.GetuserMailByGroupId(@EmailAdress) where email not in ( select Email from @TBLMailAdresseRCPT))
+
+			  end
+			  else
+			  begin 
+			      -- ici c est un user
+				  insert into @TBLMailAdresseRCPT (Email)  (select @EmailAdress where @EmailAdress not in ( select Email from @TBLMailAdresseRCPT))
+   			  end
+      end
+
+
+
+    FETCH NEXT FROM adresse_cursor   
+    INTO @EmailAdress
+END   
+CLOSE adresse_cursor;  
+DEALLOCATE adresse_cursor; 
+
+
+-------------------------------------------------------------
+
+
+
+  
+
+DECLARE mail_cursor CURSOR FOR   
+     SELECT '<' + EMail + '>' from @TBLMailAdresseRCPT  
+
+OPEN mail_cursor  
+
+FETCH NEXT FROM mail_cursor   
+                   INTO @EmailAdress 
+
+WHILE @@FETCH_STATUS = 0  
+BEGIN  
+      
+      if (( select count(*) from [MTL-GI-05].[GestionInterne].[dbo].[T021Users] where '<' + [MailBox] + '>' =   @EmailAdress   )  = 1 ) 
+	  begin 
+	       select @UserIdentification  = [UserIdentification] from [MTL-GI-05].[GestionInterne].[dbo].[T021Users] where  '<' + [MailBox] + '>' =     @EmailAdress  
+	       select @FolderId = Id from [dbo].[T401MailFolders] where  [UserId] = @UserIdentification and [FolderType] = 1 and ParentId is null
+	  end 
+	  else
+	       set  @FolderId  = -1
+
+
+      insert into [dbo].[T400Mails] ([Mail],[RCPT],RCPT_ORG,[Received],[From]  ,BCC  ,	CC ,	ReplyTo   ,	ResentBCC   ,	ResentCC   ,	ResentFrom   ,
+	                            ResentReplyTo   ,	ResentSender  ,	ResentTo   ,	Sender  ,	[To]   ,	InReplyTo ,	Importance   ,
+	                            xPriority   ,	MessageId   ,	ResentMessageId   ,	Subject  ,	TextBody ,	HTMLBody    ,ClientIP,FolderId,HasBeenNotifie,SMTPMail
+                ) values (@Message, @EmailAdress,@RCPT, getdate(), @From  ,@BCC  ,	@CC ,	@ReplyTo   ,	@ResentBCC   ,	@ResentCC   ,	@ResentFrom   ,
+	                            @ResentReplyTo   ,	@ResentSender  ,	@ResentTo   ,	@Sender  ,	@To   ,	@InReplyTo ,	@Importance   ,
+	                            @xPriority   ,	@MessageId   ,	@ResentMessageId   ,	@Subject  ,	@TextBody ,	@HTMLBody,@ClientIP,@FolderId,0,1 )
+    
+	   set @NewMailId = @@IDENTITY 
+	   insert into @TBLMailId (MailId) values(@NewMailId)
+	   
+
+        -- Get the next vendor.  
+    FETCH NEXT FROM mail_cursor   
+    INTO @EmailAdress
+END   
+CLOSE mail_cursor;  
+DEALLOCATE mail_cursor;  
+
+select MailId from @TBLMailId
+
+***********************************************************************************************************
+
+
+
+ALTER procedure [dbo].[s1570GetOneMail] as
+
+
+declare @MailId int 
+
+--    select  * from T400Mails where coalesce(sender,'') =''  and coalesce(ToSend,0) = 1 and coalesce(SendWithSuccess,0) = 0
+begin tran
+
+update T400Mails set  sendAt =  dateadd(n,-1,GETDATE()) where SendAt is null and coalesce(ToSend,0) = 1 
+update T400Mails set  sendAt = null where  coalesce(ToSend,0) =0 and  sendAt is not null
+
+
+update T400Mails set  CountResend =  0 where CountResend is null and coalesce(ToSend,0) = 1 
+update T400Mails set  CountResend =  null where coalesce(ToSend,0) =0 and CountResend is not null
+
+update T400Mails set  Sender = 'giv4@sourcevolution.com' where coalesce(sender,'') =''  and coalesce(ToSend,0) = 1 and coalesce(SendWithSuccess,0) = 0
+
+
+--    exec s1570GetOneMail_totest
+
+select TOP (1)  @MailId = [Id]  from T400Mails 
+                where coalesce(ToSend,0) = 1  and coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and 
+				      coalesce(CountResend,0) < 10 and  
+					  Sended is not null and 
+					  SendWithSuccess is null 
+--  select *  from T400Mails where coalesce(ToSend,0) = 1  and coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and coalesce(CountResend,0) < 5 and  Sended is not null and SendWithSuccess is null 
+
+-- select * from T400Mails where id=303569
+
+
+--    select * from T400Mails where Sended is not null and SendWithSuccess is null order by id desc
+-- augmente le compteur si CountResend < 5 et A deja ete envoyer et envoyer avec echec et que la date de reenvoie est atteinte
+update T400Mails set CountResend = CountResend + 1 , sendAt =  dateadd(n,1,GETDATE()) 
+            where coalesce(ToSend,0) = 1  and SendAt < GETDATE() and CountResend < 5 and  Sended is not null and SendWithSuccess is null 
+
+--select @MailId
+--return
+
+ --
+-- select * from t400mails  where coalesce(ToSend,0) = 1  and  coalesce(SendAt,dateadd(n,-1,GETDATE())) < GETDATE() and coalesce(CountResend,0) < 5 
+                 --            and  Sended is not null and SendWithSuccess is null
+
+if (@MailId is null)
+begin				 
+   SELECT TOP (1) @MailId = [Id] FROM  [T400Mails]  where coalesce(ToSend,0) = 1 and Sended is null order by id   
+end
+
+
+update   [T400Mails] set [recipientIDList] = coalesce( [recipientIDList] , '00000000-0000-0000-0000-000000000000')        where Id = @MailId
+update   [T400Mails] set [To] = replace(coalesce( [To],'') , '; ;',';')        where Id = @MailId
+
+declare @MyTo varchar(600)
+select @MyTo = rtrim(lTRIM([To])) from [T400Mails]    where Id = @MailId
+ 
+if (right( @MyTo,1 )   = ';')
+  begin
+   select @MyTo = left( @MyTo,len(@MyTo) -1)  
+   update   [T400Mails] set [To] = @MyTo       where Id = @MailId
+end
+
+
+SELECT
+       Id
+      ,[Mail]
+      ,[RCPT]
+      ,[Received]
+      ,[Sended]
+      ,[FolderId]
+      ,[From]
+      ,coalesce([BCC],'') BCC
+      ,coalesce([CC],'') CC
+      ,[ReplyTo]
+      ,[ResentBCC]
+      ,[ResentCC]
+      ,[ResentFrom]
+      ,[ResentReplyTo]
+      ,[ResentSender]
+      ,[ResentTo]
+      ,coalesce([Sender],'') Sender
+      ,coalesce ([To],'') [To]
+      ,[InReplyTo]
+      ,[Importance]
+      ,[xPriority]
+      ,[MessageId]
+      ,[ResentMessageId]
+      ,coalesce([Subject],'') [Subject]
+      ,coalesce([TextBody],'') TextBody
+      ,coalesce([HTMLBody],'') HTMLBody
+      ,[ClientIP]
+      ,[HasBeenRead]
+      ,[RCPT_ORG]
+      ,[HasBeenNotifie]
+      ,[ToSend]
+	  ,CountResend
+  FROM  [T400Mails]  where Id = @MailId
+
+ 
+update [T400Mails] set Sended = getdate() , SendWithSuccess = null   where Id = @MailId
+
+
+update [T400Mails] set   SendWithSuccess = 0   where Id = @MailId and CountResend >= 5
+
+
+commit tran
+
+****************************************************************************************************************
+
+
+ALTER procedure [dbo].[s1575ErrorSendEmail] @MailId int,@To varchar(2000),@ErrorMessage varchar(max) as
+
+
+insert into [dbo].[T403SendErrorMessage] ( [MailId],[To],[ErrorMessage]) values (@MailId,@To,@ErrorMessage) 
+
+update [dbo].[T400Mails] set [SendWithSuccess]=0 where Id =@MailId
+
+*****************************************************************************************************************
+
+
+
+ALTER procedure [dbo].[s1579InsertAttachemnt_B] @FileName varchar(200), @content varbinary(max), @MailId int,@ContentType varchar(200),@ContentDisposition varchar(200)='',@ContentId varchar(300)=''  as
+
+
+
+insert into [dbo].[T402Attachments]   ([MailId],[Content],[FileName],[ContentType],ContentId,ContentDisposition ) values(@MailId,@content,@FileName,@ContentType,@ContentId,@ContentDisposition )
+
+if (@ContentDisposition <> 'inline')
+     update T400Mails set  HaveAttachment = '<img src="images\att30.png"  />' where id = @MailId
+*********************************************************************************************************************
+

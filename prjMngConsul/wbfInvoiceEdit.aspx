@@ -1,12 +1,10 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false"   MaintainScrollPositionOnPostback="true" CodeBehind="wbfInvoiceEdit.aspx.vb" Inherits="MngConsul.wbfInvoiceEdit" %>
-
+﻿<%@ Page Language="vb" AutoEventWireup="false" MaintainScrollPositionOnPostback="true" CodeBehind="wbfInvoiceEdit.aspx.vb" Inherits="MngConsul.wbfInvoiceEdit" %>
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
- <!DOCTYPE html>
+<!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title></title>
-
 
     <style>
         :root {
@@ -25,7 +23,7 @@
         }
 
         html, body, form {
-            height: 100%
+            height: 100%;
         }
 
         body {
@@ -35,14 +33,9 @@
             color: var(--text);
         }
 
-
-        .product-selector::after {
-            content: "▾";
-            float: right;
-            color: #64748b;
-        }
-
-        .product-selector {
+        .product-selector,
+        .customer-selector,
+        .account-selector {
             display: block;
             width: 100%;
             min-height: 38px;
@@ -51,59 +44,35 @@
             border-radius: 10px;
             background: #fff;
             cursor: pointer;
+            box-sizing: border-box;
         }
 
-            .product-selector:active {
-                background: #f1f5f9;
-            }
-
-        .customer-selector::after {
+        .product-selector::after,
+        .customer-selector::after,
+        .account-selector::after {
             content: "▾";
             float: right;
             color: #64748b;
         }
 
-        .customer-selector {
-            display: block;
-            width: 100%;
-            min-height: 38px;
-            padding: 8px 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            background: #fff;
-            cursor: pointer;
+        .product-selector:active,
+        .customer-selector:active,
+        .account-selector:active {
+            background: #f1f5f9;
         }
 
-            .customer-selector:active {
-                background: #f1f5f9;
-            }
-
-
-        .product-picker-overlay {
+        .product-picker-overlay,
+        .customer-picker-overlay,
+        .account-picker-overlay {
             position: fixed;
             inset: 0;
             z-index: 99999;
             background: rgba(15, 23, 42, .35);
         }
 
-        .customer-picker-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: rgba(15, 23, 42, .35);
-        }
-
-        .product-picker-shell {
-            position: absolute;
-            inset: 0;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
-
-        .customer-picker-shell {
+        .product-picker-shell,
+        .customer-picker-shell,
+        .account-picker-shell {
             position: absolute;
             inset: 0;
             background: #fff;
@@ -119,27 +88,16 @@
         }
 
         .product-picker-search,
-.customer-picker-searchbar {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-
-
-
-
-
-        .product-picker-searchbar {
+        .product-picker-searchbar,
+        .customer-picker-searchbar,
+        .account-picker-searchbar {
             display: flex;
             align-items: center;
             gap: 10px;
+            padding: 14px;
+            border-bottom: 1px solid var(--line);
+            background: #fff;
         }
-       
-
-
-      
-       
 
         .product-picker-close {
             border: 0;
@@ -148,57 +106,47 @@
             cursor: pointer;
         }
 
-        
-
-       .product-picker-close-inline,
-.customer-picker-close-inline {
-    margin-left: auto;
-    width: 44px;
-    height: 44px;
-    flex: 0 0 44px;
-    border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    background: #fff;
-    font-size: 20px;
-    line-height: 1;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-}
-
-            .product-picker-close-inline:active {
-                background: #f8fafc;
-            }
-            .customer-picker-close-inline:active {
-                background: #f8fafc;
-            }
-
-
-
-
-.product-picker-input,
-.customer-picker-input {
-    width: 100%;
-    max-width: 200px;
-    min-width: 0;
-    height: 44px;
-    padding: 0 12px;
-    border: 1px solid #cbd5e1;
-    border-radius: 12px;
-    box-sizing: border-box;
-    font-size: 16px;
-}
-
-        .product-picker-list {
-            flex: 1 1 auto;
-            min-height: 0;
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
+        .product-picker-close-inline,
+        .customer-picker-close-inline,
+        .account-picker-close-inline {
+            margin-left: auto;
+            width: 44px;
+            height: 44px;
+            flex: 0 0 44px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            font-size: 20px;
+            line-height: 1;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
         }
 
-        .customer-picker-list {
+        .product-picker-close-inline:active,
+        .customer-picker-close-inline:active,
+        .account-picker-close-inline:active {
+            background: #f8fafc;
+        }
+
+        .product-picker-input,
+        .customer-picker-input,
+        .account-picker-input {
+            width: 100%;
+            max-width: 260px;
+            min-width: 0;
+            height: 44px;
+            padding: 0 12px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        .product-picker-list,
+        .customer-picker-list,
+        .account-picker-list {
             flex: 1 1 auto;
             min-height: 0;
             overflow: hidden;
@@ -212,19 +160,14 @@
             cursor: pointer;
         }
 
-            .product-picker-item:active {
-                background: #f8fafc;
-            }
+        .product-picker-item:active {
+            background: #f8fafc;
+        }
 
-
-
-
-
-        /* layout */
         .rw-page {
             height: 100%;
             display: flex;
-            flex-direction: column
+            flex-direction: column;
         }
 
         .topbar {
@@ -239,15 +182,16 @@
         .content {
             flex: 1;
             overflow: auto;
-            padding: 14px
+            padding: 14px;
+            padding-bottom: 90px;
         }
 
         .container {
-            max-width: 1100px;
+            max-width: 1200px;
             margin: 0 auto;
             display: flex;
             flex-direction: column;
-            gap: 12px
+            gap: 12px;
         }
 
         .card {
@@ -266,42 +210,29 @@
         }
 
         .card-body {
-            padding: 14px
+            padding: 14px;
         }
 
-        .row2 {
-            display: grid;
-            gap: 12px
-        }
-
+        .row2,
         .row4 {
             display: grid;
-            gap: 12px
+            gap: 12px;
         }
 
         .qty-right input {
             text-align: right !important;
         }
 
-
-
-
-
-        /* ========= ITEMS RESPONSIVE ========= */
-
-
-
         .items-header {
-            display: none
+            display: none;
         }
-
 
         .item-row {
             border: 1px solid var(--line);
             border-radius: var(--r-lg);
             background: #fff;
         }
-        /* footer totals */
+
         .footerbar {
             position: sticky;
             bottom: 0;
@@ -319,13 +250,9 @@
             touch-action: pan-y !important;
         }
 
-
-
-
         .RadInput, .RadPicker, .RadComboBox, .RadNumericTextBox {
-            width: 100% !important
+            width: 100% !important;
         }
-
 
         .list-shell {
             flex: 1 1 auto;
@@ -380,7 +307,6 @@
             gap: 14px;
         }
 
-
         .product-card {
             display: grid;
             grid-template-columns: 1fr auto;
@@ -393,7 +319,8 @@
             cursor: pointer;
         }
 
-        .customer-card {
+        .customer-card,
+        .account-card {
             align-items: center;
             gap: 10px;
             border: 1px solid var(--line);
@@ -402,7 +329,6 @@
             background: #fff;
             cursor: pointer;
         }
-
 
         .product-name {
             font-size: 15px;
@@ -415,7 +341,8 @@
             color: var(--accent);
         }
 
-        .product-meta {
+        .product-meta,
+        .account-code {
             color: var(--muted);
             font-size: 13px;
             margin-bottom: 6px;
@@ -428,7 +355,8 @@
             text-align: right;
         }
 
-        .BillingTo {
+        .BillingTo,
+        .account-name {
             font-size: 15px;
             font-weight: 600;
         }
@@ -450,39 +378,27 @@
             z-index: 2000;
         }
 
-            .fab-addline,
-            .fab-addline span,
-            .fab-addline img {
-                display: block;
-            }
-
-                .fab-addline img {
-                    width: 56px;
-                    height: 56px;
-                }
-
-        .content {
-            flex: 1;
-            overflow: auto;
-            padding: 14px;
-            padding-bottom: 90px;
+        .fab-addline,
+        .fab-addline span,
+        .fab-addline img {
+            display: block;
         }
 
+        .fab-addline img {
+            width: 56px;
+            height: 56px;
+        }
 
+        @media (min-width: 769px) {
+            .row2 {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
 
-        /* =========================
-            TABLETTE — 769px à 1024px
-         ========================= */
         @media (min-width: 769px) and (max-width: 1024px) {
-
-
             .imgaction {
                 margin-left: 4px;
             }
-
-
-
-
 
             .totals {
                 display: flex;
@@ -491,58 +407,43 @@
                 justify-content: flex-end;
             }
 
-
-            .row2 {
-                grid-template-columns: 1fr 1fr
-            }
-
             .row4 {
-                grid-template-columns: 1fr 1fr 1fr 1fr
-            }
-
-
-
-            .qty-right input {
-                text-align: right !important;
+                grid-template-columns: 1fr 1fr 1fr 1fr;
             }
 
             .items-header {
                 display: grid;
-                grid-template-columns: 140px 1fr 90px 90px 100px 120px;
+                grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
                 border: 1px solid var(--line);
                 border-radius: var(--r-lg);
                 overflow: hidden;
                 margin-bottom: 8px;
             }
 
-                .items-header div {
-                    padding: 10px;
-                    font-size: 12px;
-                    font-weight: 900;
-                    color: var(--muted);
-                    background: #f8fafc;
-                    border-right: 1px solid var(--line);
-                }
+            .items-header div {
+                padding: 10px;
+                font-size: 12px;
+                font-weight: 900;
+                color: var(--muted);
+                background: #f8fafc;
+                border-right: 1px solid var(--line);
+            }
 
             .item-grid {
                 display: grid;
-                grid-template-columns: 140px 1fr 90px 90px 100px 120px;
+                grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
             }
 
-            .cell {
+            .cell,
+            .cellGrid3 {
                 padding: 10px;
                 border-bottom: 1px solid var(--line);
                 border-right: 1px solid var(--line);
             }
 
-
-
-            .m-label {
-                display: none
-            }
-
+            .m-label,
             .m-labelmoney {
-                display: none
+                display: none;
             }
 
             .tot {
@@ -554,46 +455,7 @@
             }
         }
 
-        /* =========================
-             MOBILE LARGE  grands smartphones en portrait
-         ========================= */
-        @media (min-width: 481px) and (max-width: 768px) {
-
-            
-        }
-
-
-
-
-        /* =========================
-         PETIT MOBILE — max 480px
-           ========================= */
-        @media (max-width: 480px) {
-
-
-            .fab-addline {
-                right: 14px;
-                bottom: 14px;
-            }
-
-                .fab-addline img {
-                    width: 52px;
-                    height: 52px;
-                }
-
-            .content {
-                padding-bottom: 84px;
-            }
-
-
-
-            .RadComboBoxDropDown,
-            .rcbSlide {
-                max-width: calc(100vw - 24px) !important;
-                box-sizing: border-box !important;
-            }
-
-
+        @media (max-width: 768px) {
             .item-grid {
                 display: flex;
                 flex-direction: column;
@@ -608,35 +470,6 @@
                 min-width: 0;
             }
 
-
-
-            .RadComboBoxDropDown,
-            .rcbSlide {
-                max-width: calc(100vw - 24px) !important;
-                box-sizing: border-box !important;
-            }
-
-
-
-            .imgaction {
-                margin-left: 14px;
-            }
-
-
-
-
-
-            .qty-right input {
-                text-align: right !important;
-            }
-
-            .item-grid {
-                display: flex;
-                flex-direction: column;
-                gap: 10px;
-                padding: 12px;
-            }
-
             .cellGrid3 {
                 border: none;
                 padding: 0;
@@ -644,18 +477,12 @@
                 grid-template-columns: 1fr 1fr 1fr;
             }
 
-
-            .cell {
-                border: none;
-                padding: 0;
-            }
-
             .m-label {
                 display: block;
                 font-size: 11px;
                 color: var(--muted);
                 margin-bottom: 4px;
-                text-align: left
+                text-align: left;
             }
 
             .m-labelmoney {
@@ -663,23 +490,7 @@
                 font-size: 14px;
                 color: var(--text);
                 margin-bottom: 4px;
-                text-align: left
-            }
-
-            .cell.actions {
-                /*  display: flex;
-                gap: 8px;
-                flex-wrap: wrap;*/
-            }
-
-                .cell.actions > * {
-                    flex: 1;
-                    min-width: 140px;
-                }
-
-            .totals {
-                display: grid;
-                grid-template-columns: 1fr 85px 85px;
+                text-align: left;
             }
 
             .tot {
@@ -692,976 +503,767 @@
                 justify-content: left;
                 grid-row: span 4;
             }
+
+            .RadComboBoxDropDown,
+            .rcbSlide {
+                max-width: calc(100vw - 24px) !important;
+                box-sizing: border-box !important;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .fab-addline {
+                right: 14px;
+                bottom: 14px;
+            }
+
+            .fab-addline img {
+                width: 52px;
+                height: 52px;
+            }
+
+            .content {
+                padding-bottom: 84px;
+            }
+
+            .imgaction {
+                margin-left: 14px;
+            }
+
+            .totals {
+                display: grid;
+                grid-template-columns: 1fr 85px 85px;
+            }
         }
     </style>
- 
-
 </head>
 <body>
     <form id="form1" runat="server">
-         <telerik:RadScriptManager
-     ID="RadScriptManager1"
-     runat="server"
-     EnablePartialRendering="true"
-     AsyncPostBackTimeout="300" />
-          <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
+        <telerik:RadScriptManager
+            ID="RadScriptManager1"
+            runat="server"
+            EnablePartialRendering="true"
+            AsyncPostBackTimeout="300" />
 
+        <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
 
-    <telerik:RadAjaxManager ID="Ram1" runat="server">
-        <AjaxSettings>
+        <telerik:RadAjaxManager ID="Ram1" runat="server">
+            <AjaxSettings>
+                <telerik:AjaxSetting AjaxControlID="Ram1">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rpItems" />
+                        <telerik:AjaxUpdatedControl ControlID="lblCustomer" />
+                        <telerik:AjaxUpdatedControl ControlID="rdLabel" />
+                        <telerik:AjaxUpdatedControl ControlID="lblSubTotal" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax1" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax2" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTotal" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
 
-            <telerik:AjaxSetting AjaxControlID="Ram1">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rpItems" />
-                    <telerik:AjaxUpdatedControl ControlID="lblCustomer" />
-                    <telerik:AjaxUpdatedControl ControlID="rdLabel" />
-                </UpdatedControls>
-            </telerik:AjaxSetting>
+                <telerik:AjaxSetting AjaxControlID="btnAddLine">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rpItems" />
+                        <telerik:AjaxUpdatedControl ControlID="lblSubTotal" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax1" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax2" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTotal" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
 
+                <telerik:AjaxSetting AjaxControlID="rpItems">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rpItems" />
+                        <telerik:AjaxUpdatedControl ControlID="lblSubTotal" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax1" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTax2" />
+                        <telerik:AjaxUpdatedControl ControlID="lblTotal" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+            </AjaxSettings>
+        </telerik:RadAjaxManager>
 
+        <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
 
+            <div class="topbar">
+                <strong>Édition de facture</strong>
+            </div>
 
+            <div class="content">
+                <div class="container">
 
+                    <div class="card">
+                        <div class="card-body">
+                            <div class="row2">
+                                <div>
+                                    <label>Client</label>
+                                    <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Select client"></asp:Label>
+                                </div>
 
-            <telerik:AjaxSetting AjaxControlID="btnAddLine">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rpItems" />
-                    <telerik:AjaxUpdatedControl ControlID="lblSubTotal" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTax1" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTax2" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTotal" />
-                </UpdatedControls>
-            </telerik:AjaxSetting>
-
-            <telerik:AjaxSetting AjaxControlID="rpItems">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="rpItems" />
-                    <telerik:AjaxUpdatedControl ControlID="lblSubTotal" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTax1" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTax2" />
-                    <telerik:AjaxUpdatedControl ControlID="lblTotal" />
-                </UpdatedControls>
-            </telerik:AjaxSetting>
-
-
-        </AjaxSettings>
-    </telerik:RadAjaxManager>
-
-    <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
-
-        <!-- TOP -->
-        <div class="topbar">
-            <strong>Édition de facture</strong>
-        </div>
-
-        <!-- CONTENT -->
-        <div class="content">
-            <div class="container">
-
-                <!-- HEADER -->
-                <div class="card">
-                    <div class="card-body">
-
-                        <div class="row2">
-
-                            <div>
-                                <label>Client</label>
-
-                                <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Select client"> </asp:Label>
-
-                            </div>
-
-
-                            <div class="field">
-                                <div style="height: 100%; display: flex; align-items: flex-end;">
-                                    <telerik:RadLabel ID="rdLabel" runat="server"></telerik:RadLabel>
+                                <div class="field">
+                                    <div style="height: 100%; display: flex; align-items: flex-end;">
+                                        <telerik:RadLabel ID="rdLabel" runat="server"></telerik:RadLabel>
+                                    </div>
                                 </div>
                             </div>
 
+                            <div style="height: 12px"></div>
 
-                        </div>
+                            <div class="row2">
+                                <div>
+                                    <label>Date facture</label>
+                                    <telerik:RadDatePicker ID="dpIssueDate" runat="server" />
+                                </div>
 
-                        <div style="height: 12px"></div>
-
-                        <div class="row4">
-                            <div>
-                                <label>Date facture</label>
-                                <telerik:RadDatePicker ID="dpIssueDate" runat="server" />
-                            </div>
-
-                            <div>
-                                <label>Date d’échéance</label>
-                                <telerik:RadDatePicker ID="dpDueDate" runat="server" />
+                                <div>
+                                    <label>Date d’échéance</label>
+                                    <telerik:RadDatePicker ID="dpDueDate" runat="server" />
+                                </div>
                             </div>
                         </div>
-
-                    </div>
-                </div>
-
-                <!-- ITEMS -->
-                <div class="card">
-                    <div class="card-header">
-                        <strong>Lignes</strong>
-
                     </div>
 
-                    <div class="card-body">
-
-                        <!-- header desktop -->
-                        <div class="items-header">
-
-                            <div>Product</div>
-                            <div>Description</div>
-                            <div style="text-align: right">Qty</div>
-                            <div style="text-align: right">Prix unité</div>
-                            <div style="text-align: right">Total</div>
-                            <div style="text-align: center">Action</div>
+                    <div class="card">
+                        <div class="card-header">
+                            <strong>Lignes</strong>
                         </div>
 
-                        <div class="items-wrap">
+                        <div class="card-body">
+                            <div class="items-header">
+                                <div>Produit</div>
+                                <div>Description</div>
+                                <div>Compte</div>
+                                <div style="text-align: right">Qty</div>
+                                <div style="text-align: right">Prix unité</div>
+                                <div style="text-align: right">Total</div>
+                                <div style="text-align: center">Action</div>
+                                <div style="text-align: center">Ordre</div>
+                            </div>
 
-                            <asp:Repeater ID="rpItems" runat="server">
-                                <ItemTemplate>
+                            <div class="items-wrap" style="display:block; padding:0;">
+                                <asp:Repeater ID="rpItems" runat="server">
+                                    <ItemTemplate>
+                                        <div class="item-row">
+                                            <div class="item-grid">
+                                                <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
 
-                                    <div class="item-row">
-                                        <div class="item-grid">
-                                            <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
+                                                <div class="cell">
+                                                    <div class="m-label">Produit</div>
+                                                    <asp:Label ID="lblProduct" runat="server"
+                                                        CssClass="product-selector"
+                                                        Text='<%# Eval("ProductName") %>'
+                                                        OnClientClick='<%# "openProductPicker(this," & Eval("Id") & "); return false;" %>'>
+                                                    </asp:Label>
+                                                    <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
+                                                </div>
 
-                                            <div class="cell">
-                                                <div class="m-label">Produit</div>
+                                                <div class="cell">
+                                                    <div class="m-label">Description</div>
+                                                    <telerik:RadTextBox ID="txtDesc" runat="server"
+                                                        TextMode="MultiLine" Rows="2"
+                                                        Text='<%# Eval("Description") %>' />
+                                                </div>
 
-                                                <asp:Label ID="lblProduct" runat="server" CssClass="product-selector" Text='<%# Eval("ProductName") %>'> </asp:Label>
+                                                <div class="cell">
+                                                    <div class="m-label">Compte</div>
+                                                    <asp:Label ID="lblAccount" runat="server"
+                                                        CssClass="account-selector js-account-selector"
+                                                        Text='<%# Eval("AccountName") %>'>
+                                                    </asp:Label>
+                                                    <asp:HiddenField ID="hidAccountId" runat="server" Value='<%# Eval("AccountId") %>' />
+                                                </div>
 
-                                                <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
+                                                <div class="cellGrid3" style="text-align: right">
+                                                    <span class="m-labelmoney">Qty</span>
+                                                    <span></span>
+                                                    <span class="qty-right">
+                                                        <telerik:RadTextBox ID="numQty" runat="server"
+                                                            Text='<%# FormatQty(Eval("Qty")) %>'
+                                                            CssClass="num-right"
+                                                            oninput="fixNumber(this)" onblur="formatQtyOnBlur(this)" onfocus="this.select()">
+                                                        </telerik:RadTextBox>
+                                                    </span>
+                                                </div>
 
-                                            </div>
-                                            <div class="cell">
-                                                <div class="m-label">Description</div>
-                                                <telerik:RadTextBox ID="txtDesc" runat="server"
-                                                    TextMode="MultiLine" Rows="2"
-                                                    Text='<%# Eval("Description") %>' />
-                                            </div>
+                                                <div class="cellGrid3" style="text-align: right">
+                                                    <span class="m-labelmoney">Prix unité</span>
+                                                    <span></span>
+                                                    <span class="qty-right">
+                                                        <telerik:RadTextBox ID="numUnitPrice" runat="server"
+                                                            Text='<%# FormatUnitPrice(Eval("UnitPrice")) %>'
+                                                            CssClass="num-right"
+                                                            oninput="fixNumber(this)" onblur="formatPrice(this)" onfocus="this.select()">
+                                                        </telerik:RadTextBox>
+                                                    </span>
+                                                </div>
 
-                                            <div class="cellGrid3" style="text-align: right">
-                                                <span class="m-labelmoney">Qty</span>
-                                                <span></span>
-                                                <span class="qty-right">
-                                                    <telerik:RadTextBox ID="numQty" runat="server"
-                                                        Text='<%# FormatQty(Eval("Qty")) %>'
-                                                        CssClass="num-right"
-                                                        oninput="fixNumber(this)" onblur="formatQtyOnBlur(this)" onfocus="this.select()">
-                                                    </telerik:RadTextBox>
+                                                <div class="cellGrid3" style="text-align: right">
+                                                    <div class="m-labelmoney">Total</div>
+                                                    <span></span>
+                                                    <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
+                                                        Text='<%# Eval("Amount","{0:N2}") %>' />
+                                                </div>
 
-
-
-                                                </span>
-                                            </div>
-
-                                            <div class="cellGrid3" style="text-align: right">
-                                                <span class="m-labelmoney">Prix unité</span>
-                                                <span></span>
-                                                <span class="qty-right">
-                                                    <telerik:RadTextBox ID="numUnitPrice" runat="server"
-                                                        Text='<%# FormatUnitPrice(Eval("UnitPrice")) %>'
-                                                        CssClass="num-right"
-                                                        oninput="fixNumber(this)" onblur="formatPrice(this)" onfocus="this.select()">
-                                                    </telerik:RadTextBox>
-                                                </span>
-                                            </div>
-
-                                            <div class="cellGrid3" style="text-align: right">
-                                                <div class="m-labelmoney">Total</div>
-                                                <span></span>
-                                                <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
-                                                    Text='<%# Eval("Amount","{0:N2}") %>' />
-                                            </div>
-
-                                            <div class="cell actions" style="text-align: center">
-                                                <%--<div class="m-label">Action</div>--%>
-                                                <telerik:RadImageButton ID="RadImageButton1"
-                                                    runat="server"
-                                                    Text=""
-                                                    CssClass="imgaction"
-                                                    Width="25px"
-                                                    Height="35px"
-                                                    Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
-                                                    CommandName="DeleteLine"
-                                                    CommandArgument='<%# Eval("Id") %>'
-                                                    OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
-                                                </telerik:RadImageButton>
-
-                                                <telerik:RadImageButton ID="RadImageButton2"
-                                                    runat="server"
-                                                    CssClass="imgaction"
-                                                    Text=""
-                                                    Width="25px"
-                                                    Height="35px"
-                                                    Image-Url="~/Images/flechehaut.png" Image-Sizing="Stretch"
-                                                    CommandName="Up"
-                                                    CommandArgument='<%# Eval("Id") %>'>
-                                                </telerik:RadImageButton>
-                                                <telerik:RadImageButton ID="RadImageButton3"
-                                                    runat="server"
-                                                    Text=""
-                                                    CssClass="imgaction"
-                                                    Width="25px"
-                                                    Height="35px"
-                                                    Image-Url="~/Images/flechebas.png" Image-Sizing="Stretch"
-                                                    CommandName="Up"
-                                                    CommandArgument='<%# Eval("Id") %>'>
-                                                </telerik:RadImageButton>
-
-
-                                                <%-- <telerik:RadButton ID="RadButton1" runat="server"
+                                                <div class="cell actions" style="text-align: center">
+                                                    <telerik:RadImageButton ID="RadImageButton1"
+                                                        runat="server"
                                                         Text=""
-                                                         Image-ImageUrl="~/Images/del200.png"
+                                                        CssClass="imgaction"
+                                                        Width="25px"
+                                                        Height="35px"
+                                                        Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }" />--%>
+                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
+                                                    </telerik:RadImageButton>
+                                                </div>
+
+                                                <div class="cell actions" style="text-align: center">
+                                                    <telerik:RadImageButton ID="RadImageButton2"
+                                                        runat="server"
+                                                        CssClass="imgaction"
+                                                        Text=""
+                                                        Width="25px"
+                                                        Height="35px"
+                                                        Image-Url="~/Images/flechehaut.png" Image-Sizing="Stretch"
+                                                        CommandName="Up"
+                                                        CommandArgument='<%# Eval("Id") %>'>
+                                                    </telerik:RadImageButton>
+
+                                                    <telerik:RadImageButton ID="RadImageButton3"
+                                                        runat="server"
+                                                        Text=""
+                                                        CssClass="imgaction"
+                                                        Width="25px"
+                                                        Height="35px"
+                                                        Image-Url="~/Images/flechebas.png" Image-Sizing="Stretch"
+                                                        CommandName="Down"
+                                                        CommandArgument='<%# Eval("Id") %>'>
+                                                    </telerik:RadImageButton>
+                                                </div>
                                             </div>
-
                                         </div>
-                                    </div>
-
-                                </ItemTemplate>
-                            </asp:Repeater>
-
+                                    </ItemTemplate>
+                                </asp:Repeater>
+                            </div>
                         </div>
                     </div>
                 </div>
-
-            </div>
-        </div>
-
-        <!-- FOOTER -->
-        <div class="footerbar">
-            <div class="totals">
-
-
-
-                <div class="tot">
-
-                    <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" />
-                </div>
-                <div class="tot">
-                    <strong>
-                        <asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong>
-                </div>
-
-                <div class="tot">
-                    TPS
-
-                </div>
-
-                <div class="tot">
-                    <strong>
-                        <asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong>
-                </div>
-
-                <div class="tot">
-                    TVQ
-
-                </div>
-                <div class="tot">
-                    <strong>
-                        <asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
-                </div>
-
-                <div class="tot">
-                    Total
-
-                </div>
-                <div class="tot">
-                    <strong>
-                        <asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
-                </div>
-
             </div>
 
-        </div>
-
-        <div class="fab-addline">
-            <telerik:RadImageButton ID="btnAddLine"
-                runat="server"
-                Image-Url="~/Images/rondplus45.png"
-                Width="56px"
-                Height="56px"
-                ToolTip="Ajouter une ligne">
-            </telerik:RadImageButton>
-        </div>
-
-
-        <telerik:RadButton ID="radSave" runat="server" BackColor="lightgrey" Text="Enrgistrer" />
-
-
-        <%--Section overlay des Produits--%>
-
-        <asp:HiddenField ID="hidSelectedProductId" runat="server" />
-        <div id="productPickerOverlay" class="product-picker-overlay" style="display: none;">
-            <div class="product-picker-shell">
-
-
-                <div class="product-picker-search">
-                    <input type="text" id="productPickerSearch" oninput="filterProductsClient()" class="product-picker-input" placeholder="Rechercher un produit..." />
-                    <button type="button" class="product-picker-close-inline" onclick="closeProductPicker()" aria-label="Fermer">✕</button>
-                </div>
-
-                <div id="productPickerList" class="product-picker-list">
-                    <div class="list-shell">
-                        <telerik:RadListView ID="rlvProducts" runat="server"
-                            AllowPaging="false"
-                            ItemPlaceholderID="itemPlaceholder"
-                            OnNeedDataSource="rlvProducts_NeedDataSource">
-
-                            <LayoutTemplate>
-
-
-                                <div class="items-wrap">
-                                    <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
-                                </div>
-
-                                <div class="lv-footer">
-                                    <telerik:RadButton ID="btnAddProducts" runat="server" Text="Ajouter des produits"
-                                        CssClass="btn-add" OnClick="btnAddProducts_Click" />
-                                </div>
-                            </LayoutTemplate>
-
-                            <ItemTemplate>
-                                <div class="product-card" data-search='<%# Eval("Name").ToString().ToLower() %>' onclick="selectProduct( '<%# Eval("Code") %>' )">
-                                    <div class="product-name"><%# Eval("Name") %></div>
-                                    <div class="product-price"><%# Eval("Prix", "{0:C2}") %></div>
-                                </div>
-                            </ItemTemplate>
-
-                            <EmptyDataTemplate>
-                                <div class="empty">Aucun produit trouvé.</div>
-                            </EmptyDataTemplate>
-
-
-                        </telerik:RadListView>
+            <div class="footerbar">
+                <div class="totals">
+                    <div class="tot">
+                        <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" />
+                    </div>
+                    <div class="tot">
+                        <strong><asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong>
                     </div>
 
-                </div>
-            </div>
-        </div>
-
-
-
-        <%--Section overlay des Customer--%>
-        <asp:HiddenField ID="hidSelectedCustomerId" runat="server" />
-        <div id="customerPickerOverlay" class="customer-picker-overlay" style="display: none;">
-            <div class="customer-picker-shell">
-
-
-                <div class="customer-picker-searchbar">
-                    <input type="text" id="customerPickerSearch" oninput="filterCustomersClient()" class="customer-picker-input" placeholder="Rechercher d'un client..." />
-                     
-                    <button type="button" class="customer-picker-close-inline" onclick="closeCustomerPicker()" aria-label="Fermer">✕</button>
-                </div>
-
-                <div id="customerPickerList" class="customer-picker-list">
-                    <div class="list-shell">
-                        <telerik:RadListView ID="rlvCustomers" runat="server"
-                            AllowPaging="false"
-                            ItemPlaceholderID="itemcustomerPlaceholder">
-
-                            <LayoutTemplate>
-
-
-                                <div class="items-wrap">
-                                    <asp:PlaceHolder ID="itemcustomerPlaceholder" runat="server"></asp:PlaceHolder>
-                                </div>
-
-                                <div class="lv-footer">
-                                    <telerik:RadButton ID="btnAddcustomers" runat="server" Text="Ajouter des clients" CssClass="btn-add" />
-                                </div>
-                            </LayoutTemplate>
-
-                            <ItemTemplate>
-                                <div class="customer-card" data-search='<%# Eval("search").ToString().ToLower() %>' onclick="selectCustomer( '<%# Eval("Id") %>' )">
-                                    <div class="Contact-name"><%# Eval("ContactName") %></div>
-                                    <div class="BillingTo"><%# Eval("BillingTo") %></div>
-                                </div>
-                            </ItemTemplate>
-
-                            <EmptyDataTemplate>
-                                <div class="empty">Aucun client trouvé.</div>
-                            </EmptyDataTemplate>
-
-
-                        </telerik:RadListView>
+                    <div class="tot">TPS</div>
+                    <div class="tot">
+                        <strong><asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong>
                     </div>
 
+                    <div class="tot">TVQ</div>
+                    <div class="tot">
+                        <strong><asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
+                    </div>
+
+                    <div class="tot">Total</div>
+                    <div class="tot">
+                        <strong><asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
+                    </div>
                 </div>
             </div>
-        </div>
 
-    </asp:Panel>
+            <div class="fab-addline">
+                <telerik:RadImageButton ID="btnAddLine"
+                    runat="server"
+                    Image-Url="~/Images/rondplus45.png"
+                    Width="56px"
+                    Height="56px"
+                    ToolTip="Ajouter une ligne">
+                </telerik:RadImageButton>
+            </div>
 
-    <script type="text/javascript">
+            <telerik:RadButton ID="radSave" runat="server" BackColor="lightgrey" Text="Enrgistrer" />
 
+            <%-- Section overlay des Produits --%>
+            <asp:HiddenField ID="hidSelectedProductId" runat="server" />
+            <div id="productPickerOverlay" class="product-picker-overlay" style="display: none;">
+                <div class="product-picker-shell">
+                    <div class="product-picker-search">
+                        <input type="text" id="productPickerSearch" oninput="filterProductsClient()" class="product-picker-input" placeholder="Rechercher un produit..." />
+                        <button type="button" class="product-picker-close-inline" onclick="closeProductPicker()" aria-label="Fermer">✕</button>
+                    </div>
 
-        function trimZeros(s) {
-            // suppose déjà . comme séparateur
-            s = (s || "").toString().trim();
-            if (s === "") return "";
+                    <div id="productPickerList" class="product-picker-list">
+                        <div class="list-shell">
+                            <telerik:RadListView ID="rlvProducts" runat="server"
+                                AllowPaging="false"
+                                ItemPlaceholderID="itemPlaceholder"
+                                 >
 
-            // si finit par ".", on l'enlève
-            if (s.endsWith(".")) s = s.slice(0, -1);
+                                <LayoutTemplate>
+                                    <div class="items-wrap">
+                                        <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                                    </div>
 
-            // enlever zéros à droite: 2.50 -> 2.5, 2.00 -> 2
-            if (s.indexOf(".") >= 0) {
-                s = s.replace(/0+$/, "");   // enlève zéros finaux
-                s = s.replace(/\.$/, "");   // enlève le point s'il reste à la fin
+                                    <div class="lv-footer">
+                                        <telerik:RadButton ID="btnAddProducts" runat="server" Text="Ajouter des produits"
+                                            CssClass="btn-add" OnClick="btnAddProducts_Click" />
+                                    </div>
+                                </LayoutTemplate>
+
+                                <ItemTemplate>
+                                    <div class="product-card" data-search='<%# Eval("Name").ToString().ToLower() %>' onclick="selectProduct('<%# Eval("Code") %>')">
+                                        <div class="product-name"><%# Eval("Name") %></div>
+                                        <div class="product-price"><%# Eval("Prix", "{0:C2}") %></div>
+                                    </div>
+                                </ItemTemplate>
+
+                                <EmptyDataTemplate>
+                                    <div class="empty">Aucun produit trouvé.</div>
+                                </EmptyDataTemplate>
+                            </telerik:RadListView>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%-- Section overlay des Customer --%>
+            <asp:HiddenField ID="hidSelectedCustomerId" runat="server" />
+            <div id="customerPickerOverlay" class="customer-picker-overlay" style="display: none;">
+                <div class="customer-picker-shell">
+                    <div class="customer-picker-searchbar">
+                        <input type="text" id="customerPickerSearch" oninput="filterCustomersClient()" class="customer-picker-input" placeholder="Rechercher d'un client..." />
+                        <button type="button" class="customer-picker-close-inline" onclick="closeCustomerPicker()" aria-label="Fermer">✕</button>
+                    </div>
+
+                    <div id="customerPickerList" class="customer-picker-list">
+                        <div class="list-shell">
+                            <telerik:RadListView ID="rlvCustomers" runat="server"
+                                AllowPaging="false"
+                                ItemPlaceholderID="itemcustomerPlaceholder">
+
+                                <LayoutTemplate>
+                                    <div class="items-wrap">
+                                        <asp:PlaceHolder ID="itemcustomerPlaceholder" runat="server"></asp:PlaceHolder>
+                                    </div>
+
+                                    <div class="lv-footer">
+                                        <telerik:RadButton ID="btnAddcustomers" runat="server" Text="Ajouter des clients" CssClass="btn-add" />
+                                    </div>
+                                </LayoutTemplate>
+
+                                <ItemTemplate>
+                                    <div class="customer-card" data-search='<%# Eval("search").ToString().ToLower() %>' onclick="selectCustomer('<%# Eval("Id") %>')">
+                                        <div class="Contact-name"><%# Eval("ContactName") %></div>
+                                        <div class="BillingTo"><%# Eval("BillingTo") %></div>
+                                    </div>
+                                </ItemTemplate>
+
+                                <EmptyDataTemplate>
+                                    <div class="empty">Aucun client trouvé.</div>
+                                </EmptyDataTemplate>
+                            </telerik:RadListView>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <%-- Section overlay des Comptes --%>
+            <asp:HiddenField ID="hidSelectedAccountId" runat="server" />
+            <div id="accountPickerOverlay" class="account-picker-overlay" style="display: none;">
+                <div class="account-picker-shell">
+                    <div class="account-picker-searchbar">
+                        <input type="text" id="accountPickerSearch" oninput="filterAccountsClient()" class="account-picker-input" placeholder="Rechercher un compte..." />
+                        <button type="button" class="account-picker-close-inline" onclick="closeAccountPicker()" aria-label="Fermer">✕</button>
+                    </div>
+
+                    <div id="accountPickerList" class="account-picker-list">
+                        <div class="list-shell">
+                            <telerik:RadListView ID="rlvAccounts" runat="server"
+                                AllowPaging="false"
+                                ItemPlaceholderID="itemaccountPlaceholder"
+                                >
+
+                                <LayoutTemplate>
+                                    <div class="items-wrap">
+                                        <asp:PlaceHolder ID="itemaccountPlaceholder" runat="server"></asp:PlaceHolder>
+                                    </div>
+
+                                    <div class="lv-footer">
+                                        <telerik:RadButton ID="btnAddAccounts" runat="server" Text="Ajouter des comptes" CssClass="btn-add" />
+                                    </div>
+                                </LayoutTemplate>
+
+                                <ItemTemplate>
+                                    <div class="account-card" data-search='<%# Eval("search").ToString().ToLower() %>' onclick="selectAccount('<%# Eval("Id") %>')">
+                                        <div class="account-code"><%# Eval("NoCompte") %></div>
+                                        <div class="account-name"><%# Eval("Name") %></div>
+                                    </div>
+                                </ItemTemplate>
+
+                                <EmptyDataTemplate>
+                                    <div class="empty">Aucun compte trouvé.</div>
+                                </EmptyDataTemplate>
+                            </telerik:RadListView>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </asp:Panel>
+
+        <script type="text/javascript">
+            function trimZeros(s) {
+                s = (s || "").toString().trim();
+                if (s === "") return "";
+                if (s.endsWith(".")) s = s.slice(0, -1);
+                if (s.indexOf(".") >= 0) {
+                    s = s.replace(/0+$/, "");
+                    s = s.replace(/\.$/, "");
+                }
+                return s;
             }
-            return s;
-        }
 
-        function formatQtyOnBlur(el) {
-            // 1) normalise comme ton fixNumber (accepte , et .)
-            fixNumber(el);
-
-            // 2) format: 2.0 -> 2
-            el.value = trimZeros(el.value);
-
-            // 3) (optionnel) si vide => 0
-            // if(el.value === "") el.value = "0";
-        }
-
-        function formatPrice(el) {
-
-            fixNumber(el);
-
-            let v = el.value;
-
-            if (v === "") return;
-
-            let n = parseFloat(v);
-
-            if (isNaN(n)) {
-                el.value = "";
-                return;
+            function formatQtyOnBlur(el) {
+                fixNumber(el);
+                el.value = trimZeros(el.value);
             }
 
-            let dec = n.toFixed(2);
-
-            // si .00 enlever
-            if (dec.endsWith(".00")) {
-                el.value = parseInt(n);
-                return;
+            function formatPrice(el) {
+                fixNumber(el);
+                let v = el.value;
+                if (v === "") return;
+                let n = parseFloat(v);
+                if (isNaN(n)) {
+                    el.value = "";
+                    return;
+                }
+                let dec = n.toFixed(2);
+                if (dec.endsWith(".00")) {
+                    el.value = parseInt(n);
+                    return;
+                }
+                el.value = dec;
             }
 
-            // si .x ajouter 0
-            if (dec.match(/\.\d$/)) {
-                el.value = dec + "0";
-                return;
+            function fixNumber(el) {
+                let v = (el.value || "").replace(/,/g, ".");
+                v = v.replace(/[^0-9.]/g, "");
+                const firstDot = v.indexOf(".");
+                if (firstDot !== -1) {
+                    let left = v.substring(0, firstDot);
+                    let right = v.substring(firstDot + 1).replace(/\./g, "");
+                    right = right.substring(0, 2);
+                    v = left + "." + right;
+                }
+                el.value = v;
             }
 
-            el.value = dec;
-        }
+            var TAX_TPS = 0.05;
+            var TAX_TVQ = 0.09975;
 
-
-        function fixNumber(el) {
-            // 1) Normaliser virgule -> point
-            let v = (el.value || "").replace(/,/g, ".");
-
-            // 2) Garder seulement chiffres et points
-            v = v.replace(/[^0-9.]/g, "");
-
-            // 3) Garder un seul point
-            const firstDot = v.indexOf(".");
-            if (firstDot !== -1) {
-                let left = v.substring(0, firstDot);
-                let right = v.substring(firstDot + 1).replace(/\./g, "");
-
-                // max 2 décimales
-                right = right.substring(0, 2);
-
-                v = left + "." + right;
+            function toNum(v) {
+                if (v == null) return 0;
+                v = ("" + v).replace(/\s/g, "").replace(",", ".");
+                var n = parseFloat(v);
+                return isNaN(n) ? 0 : n;
             }
 
+            function fmt2(n) {
+                n = (isNaN(n) || n == null) ? 0 : n;
+                return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+            }
 
-            el.value = v;
-        }
+            function recalcRow(row) {
+                var qtyEl = row.querySelector("input[id*='numQty']");
+                var prEl = row.querySelector("input[id*='numUnitPrice']");
+                if (!qtyEl || !prEl) return 0;
 
+                var qty = toNum(qtyEl.value);
+                var pr = toNum(prEl.value);
 
+                var amt = Math.round(qty * pr * 100) / 100;
 
-        // ===== CONFIG TAXES =====
-        var TAX_TPS = 0.05;
-        var TAX_TVQ = 0.09975;
+                var lbl = row.querySelector(".lbl-amount");
+                if (lbl) lbl.innerText = fmt2(amt);
 
-        function toNum(v) {
-            if (v == null) return 0;
-            v = ("" + v).replace(/\s/g, "").replace(",", ".");
-            var n = parseFloat(v);
-            return isNaN(n) ? 0 : n;
-        }
+                return amt;
+            }
 
-        function fmt2(n) {
-            n = (isNaN(n) || n == null) ? 0 : n;
-            return n.toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-        }
+            function recalcTotals() {
+                var subtotal = 0;
 
-        function recalcRow(row) {
-            var qtyEl = row.querySelector("input[id*='numQty']");
-            var prEl = row.querySelector("input[id*='numUnitPrice']");
-            if (!qtyEl || !prEl) return 0;
-
-            var qty = toNum(qtyEl.value);
-            var pr = toNum(prEl.value);
-
-            var amt = Math.round(qty * pr * 100) / 100;
-
-            var lbl = row.querySelector(".lbl-amount");
-            if (lbl) lbl.innerText = fmt2(amt);
-
-            return amt;
-        }
-
-        function recalcTotals() {
-            var subtotal = 0;
-
-            document.querySelectorAll(".item-row").forEach(function (row) {
-                if (row.getAttribute("data-deleted") === "1") return;
-                subtotal += recalcRow(row);
-            });
-
-            subtotal = Math.round(subtotal * 100) / 100;
-
-            var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
-            var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
-            var total = Math.round((subtotal + tps + tvq) * 100) / 100;
-
-            // Labels server-side (ClientID)
-            var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
-            var elTps = document.getElementById("<%= lblTax1.ClientID %>");
-            var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
-            var elTot = document.getElementById("<%= lblTotal.ClientID %>");
-
-            if (elSub) elSub.innerText = fmt2(subtotal);
-            if (elTps) elTps.innerText = fmt2(tps);
-            if (elTvq) elTvq.innerText = fmt2(tvq);
-            if (elTot) elTot.innerText = fmt2(total);
-        }
-
-        function wireInvoiceInputs() {
-            // Attache events à chaque input (1 seule fois)
-            document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
-                .forEach(function (inp) {
-                    if (inp.dataset.wired === "1") return;
-                    inp.dataset.wired = "1";
-
-                    // input = à chaque modification (touche, collage, wheel, etc.)
-                    inp.addEventListener("input", function () {
-                        var row = inp.closest(".item-row");
-                        if (row) {
-                            recalcRow(row);
-                            recalcTotals();
-                        }
-                    });
-
-                    // fallback
-                    inp.addEventListener("keyup", function () {
-                        var row = inp.closest(".item-row");
-                        if (row) {
-                            recalcRow(row);
-                            recalcTotals();
-                        }
-                    });
+                document.querySelectorAll(".item-row").forEach(function (row) {
+                    if (row.getAttribute("data-deleted") === "1") return;
+                    subtotal += recalcRow(row);
                 });
 
-            // Calcul initial
-            recalcTotals();
-        }
+                subtotal = Math.round(subtotal * 100) / 100;
 
-        // 1) Load initial
-        document.addEventListener("DOMContentLoaded", function () {
-            wireInvoiceInputs();
-        });
+                var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
+                var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
+                var total = Math.round((subtotal + tps + tvq) * 100) / 100;
 
-        // 2) Après RadAjax (UpdatePanel/Telerik)
-        if (window.Sys && Sys.Application) {
-            Sys.Application.add_load(function () {
-                wireInvoiceInputs();
-            });
-        }
+                var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
+                var elTps = document.getElementById("<%= lblTax1.ClientID %>");
+                var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
+                var elTot = document.getElementById("<%= lblTotal.ClientID %>");
 
-        // Optionnel: helper si tu veux marquer une ligne supprimée sans rebind
-        function markRowDeleted(buttonEl) {
-            var row = buttonEl.closest(".item-row");
-            if (row) {
-                row.setAttribute("data-deleted", "1");
-                row.style.display = "none";
+                if (elSub) elSub.innerText = fmt2(subtotal);
+                if (elTps) elTps.innerText = fmt2(tps);
+                if (elTvq) elTvq.innerText = fmt2(tvq);
+                if (elTot) elTot.innerText = fmt2(total);
+            }
+
+            function wireInvoiceInputs() {
+                document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
+                    .forEach(function (inp) {
+                        if (inp.dataset.wired === "1") return;
+                        inp.dataset.wired = "1";
+
+                        inp.addEventListener("input", function () {
+                            var row = inp.closest(".item-row");
+                            if (row) {
+                                recalcRow(row);
+                                recalcTotals();
+                            }
+                        });
+
+                        inp.addEventListener("keyup", function () {
+                            var row = inp.closest(".item-row");
+                            if (row) {
+                                recalcRow(row);
+                                recalcTotals();
+                            }
+                        });
+                    });
+
                 recalcTotals();
             }
-        }
 
+            function wireAccountSelectors() {
+                document.querySelectorAll(".js-account-selector").forEach(function (el) {
+                    if (el.dataset.wired === "1") return;
+                    el.dataset.wired = "1";
 
-        //====================================================
-        var currentProductCombo = null;
-        var productPickerItems = [];
-
-        function closeProductPicker() {
-            var overlay = document.getElementById("productPickerOverlay");
-            if (overlay) {
-                overlay.style.display = "none";
+                    el.addEventListener("click", function () {
+                        var row = el.closest(".item-row");
+                        if (!row) return;
+                        var hidId = row.querySelector("input[id*='hidId']");
+                        var itemId = hidId ? hidId.value : "0";
+                         
+                        openAccountPicker(el, itemId);
+                    });
+                });
             }
 
-            document.documentElement.classList.remove("no-page-scroll");
-            document.body.classList.remove("no-page-scroll");
+            document.addEventListener("DOMContentLoaded", function () {
+                wireInvoiceInputs();
+                wireAccountSelectors();
+            });
 
-            currentProductCombo = null;
-        }
-
-        function resizeProductPickerToViewport() {
-            var shell = document.querySelector(".product-picker-shell");
-            if (!shell) return;
-
-            if (window.visualViewport) {
-                shell.style.height = window.visualViewport.height + "px";
-            } else {
-                shell.style.height = window.innerHeight + "px";
+            if (window.Sys && Sys.Application) {
+                Sys.Application.add_load(function () {
+                    wireInvoiceInputs();
+                    wireAccountSelectors();
+                });
             }
-        }
 
+            function normalizeText(str) {
+                return (str || "")
+                    .toLowerCase()
+                    .normalize("NFD")
+                    .replace(/[\u0300-\u036f]/g, "");
+            }
 
-        function renderProductPickerItems(items) {
-            var list = document.getElementById("productPickerList");
-            if (!list) return;
+            var currentProductLabel = null;
+            var currentItemId = null;
 
-            list.innerHTML = "";
+            function closeProductPicker() {
+                var overlay = document.getElementById("productPickerOverlay");
+                if (overlay) overlay.style.display = "none";
+                document.documentElement.classList.remove("no-page-scroll");
+                document.body.classList.remove("no-page-scroll");
+            }
 
-            items.forEach(function (item) {
-                var div = document.createElement("div");
-                div.className = "product-picker-item";
-                div.textContent = item.text;
-                div.dataset.value = item.value;
+            function openProductPicker(label, itemId) {
+                currentItemId = itemId;
+                currentProductLabel = label;
+                var overlay = document.getElementById("productPickerOverlay");
+                if (overlay) overlay.style.display = "block";
+            }
 
-                div.addEventListener("click", function () {
-                    selectProductFromPicker(item.value, item.text);
+            function selectProduct(productId) {
+                document.getElementById("<%= hidSelectedProductId.ClientID %>").value = productId;
+                if (!currentProductLabel) return;
+                closeProductPicker();
+                var ajaxManager = $find("<%= Ram1.ClientID %>");
+                ajaxManager.ajaxRequest('PRODUCT|' + currentItemId.toString() + '|' + productId.toString());
+            }
+
+            function filterProductsClient() {
+                var tb = document.getElementById("productPickerSearch");
+                var q = (tb ? tb.value : "").toLowerCase().trim();
+
+                var cards = document.querySelectorAll("#productPickerList .product-card");
+                var visibleCount = 0;
+
+                cards.forEach(function (card) {
+                    var text = normalizeText(card.getAttribute("data-search"));
+                    var show = q === "" || text.indexOf(q) !== -1;
+                    card.style.display = show ? "" : "none";
+                    if (show) visibleCount++;
                 });
 
-                list.appendChild(div);
-            });
-        }
-
-        function filterProductPicker() {
-            var q = document.getElementById("productPickerSearch").value.toLowerCase();
-
-            var filtered = productPickerItems.filter(function (x) {
-                return x.text.toLowerCase().indexOf(q) >= 0;
-            });
-
-            renderProductPickerItems(filtered);
-        }
-
-        function selectProductFromPicker(value, text) {
-            if (!currentProductCombo) return;
-
-            var combo = currentProductCombo;
-
-            combo.clearSelection();
-            var item = combo.findItemByValue(value);
-
-            if (item) {
-                item.select();
-                combo.set_text(text);
-            } else {
-                combo.set_text(text);
+                toggleEmptyProductsMessage(visibleCount === 0);
             }
 
-            closeProductPicker();
+            function toggleEmptyProductsMessage(show) {
+                var list = document.getElementById("productPickerList");
+                if (!list) return;
 
-            __doPostBack(combo.get_uniqueID(), "");
-        }
-
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener("resize", function () {
-                resizeProductPickerToViewport();
-            });
-        } else {
-            window.addEventListener("resize", function () {
-                resizeProductPickerToViewport();
-            });
-        }
-
-
-        var currentProductLabel = null;
-        var currentItemId = null;
-        function openProductPicker(label, itemId) {
-            currentItemId = itemId;
-            currentProductLabel = label;
-
-            var overlay = document.getElementById("productPickerOverlay");
-
-            if (overlay) {
-                overlay.style.display = "block";
-            }
-
-        }
-        function selectProduct(productId) {
-
-            // met l'id dans le hiddenfield
-            document.getElementById("<%= hidSelectedProductId.ClientID %>").value = productId;
-
-            if (!currentProductLabel) return;
-
-
-            // ferme la popup
-            closeProductPicker();
-
-
-            var ajaxManager = $find("<%= Ram1.ClientID %>");
-            ajaxManager.ajaxRequest('PRODUCT|' + currentItemId.toString() + '|' + productId.toString());
-
-
-
-        }
-
-        function selectProductold(productId, productName) {
-
-
-
-            currentProductLabel.innerText = productName;
-
-            var row = currentProductLabel.closest(".item-row");
-
-            if (row) {
-                var hidden = row.querySelector("input[id*='hidProductId']");
-                if (hidden) {
-                    hidden.value = productId;
+                var empty = document.getElementById("productPickerEmptyJs");
+                if (!empty) {
+                    empty = document.createElement("div");
+                    empty.id = "productPickerEmptyJs";
+                    empty.className = "empty";
+                    empty.innerText = "Aucun produit trouvé.";
+                    empty.style.display = "none";
+                    list.appendChild(empty);
                 }
+
+                empty.style.display = show ? "block" : "none";
             }
 
-            closeProductPicker();
-        }
+            var currentCustomerLabel = null;
 
-        function normalizeText(str) {
-            return (str || "")
-                .toLowerCase()
-                .normalize("NFD")
-                .replace(/[\u0300-\u036f]/g, "");
-        }
-
-        function filterProductsClient() {
-            var tb = document.getElementById("productPickerSearch");
-            var q = (tb ? tb.value : "").toLowerCase().trim();
-
-            var cards = document.querySelectorAll("#productPickerList .product-card");
-            var visibleCount = 0;
-
-            cards.forEach(function (card) {
-                var text = normalizeText(card.getAttribute("data-search"));
-                var show = q === "" || text.indexOf(q) !== -1;
-
-                card.style.display = show ? "" : "none";
-
-                if (show) visibleCount++;
-            });
-
-            toggleEmptyProductsMessage(visibleCount === 0);
-        }
-
-        function toggleEmptyProductsMessage(show) {
-            var list = document.getElementById("productPickerList");
-            if (!list) return;
-
-            var empty = document.getElementById("productPickerEmptyJs");
-
-            if (!empty) {
-                empty = document.createElement("div");
-                empty.id = "productPickerEmptyJs";
-                empty.className = "empty";
-                empty.innerText = "Aucun produit trouvé.";
-                empty.style.display = "none";
-                list.appendChild(empty);
+            function closeCustomerPicker() {
+                var overlay = document.getElementById("customerPickerOverlay");
+                if (overlay) overlay.style.display = "none";
+                document.documentElement.classList.remove("no-page-scroll");
+                document.body.classList.remove("no-page-scroll");
             }
 
-            empty.style.display = show ? "block" : "none";
-        }
-        //==========SECTION OVERLAY CUSTOMER=========================================
-
-        var currentCustomerCombo = null;
-        var CustomerPickerItems = [];
-
-        function closeCustomerPicker() {
-            var overlay = document.getElementById("customerPickerOverlay");
-            if (overlay) {
-                overlay.style.display = "none";
+            function openCustomerPicker(label) {
+                currentCustomerLabel = label;
+                var overlay = document.getElementById("customerPickerOverlay");
+                if (overlay) overlay.style.display = "block";
             }
 
-            document.documentElement.classList.remove("no-page-scroll");
-            document.body.classList.remove("no-page-scroll");
-
-            currentCustomerCombo = null;
-        }
-
-        function resizeCustomerPickerToViewport() {
-            var shell = document.querySelector(".customer-picker-shell");
-            if (!shell) return;
-
-            if (window.visualViewport) {
-                shell.style.height = window.visualViewport.height + "px";
-            } else {
-                shell.style.height = window.innerHeight + "px";
+            function selectCustomer(customerId) {
+                document.getElementById("<%= hidSelectedCustomerId.ClientID %>").value = customerId;
+                closeCustomerPicker();
+                var ajaxManager = $find("<%= Ram1.ClientID %>");
+                ajaxManager.ajaxRequest('CUSTOMER|' + customerId.toString());
             }
-        }
 
+            function filterCustomersClient() {
+                var tb = document.getElementById("customerPickerSearch");
+                var q = (tb ? tb.value : "").toLowerCase().trim();
 
+                var cards = document.querySelectorAll("#customerPickerList .customer-card");
+                var visibleCount = 0;
 
-        function renderCustomerPickerItems(items) {
-            var list = document.getElementById("customerPickerList");
-            if (!list) return;
-
-            list.innerHTML = "";
-
-            items.forEach(function (item) {
-                var div = document.createElement("div");
-                div.className = "customer-picker-item";
-                div.textContent = item.text;
-                div.dataset.value = item.value;
-
-                div.addEventListener("click", function () {
-                    selectCustomerFromPicker(item.value, item.text);
+                cards.forEach(function (card) {
+                    var text = normalizeText(card.getAttribute("data-search"));
+                    var show = q === "" || text.indexOf(q) !== -1;
+                    card.style.display = show ? "" : "none";
+                    if (show) visibleCount++;
                 });
 
-                list.appendChild(div);
-            });
-        }
-
-        function filterCustomerPicker() {
-            var q = document.getElementById("customerPickerSearch").value.toLowerCase();
-
-            var filtered = customerPickerItems.filter(function (x) {
-                return x.text.toLowerCase().indexOf(q) >= 0;
-            });
-
-            renderCustomerPickerItems(filtered);
-        }
-
-        function selectCustomerFromPicker(value, text) {
-            if (!currentCustomerCombo) return;
-
-            var combo = currentCustomerCombo;
-
-            combo.clearSelection();
-            var item = combo.findItemByValue(value);
-
-            if (item) {
-                item.select();
-                combo.set_text(text);
-            } else {
-                combo.set_text(text);
+                toggleEmptyCustomersMessage(visibleCount === 0);
             }
 
-            closeCustomerPicker();
+            function toggleEmptyCustomersMessage(show) {
+                var list = document.getElementById("customerPickerList");
+                if (!list) return;
 
-            __doPostBack(combo.get_uniqueID(), "");
-        }
-
-        if (window.visualViewport) {
-            window.visualViewport.addEventListener("resize", function () {
-                resizeCustomerPickerToViewport();
-            });
-        } else {
-            window.addEventListener("resize", function () {
-                resizeCustomerPickerToViewport();
-            });
-        }
-
-
-        var currentCustomerLabel = null;
-        var currentCustomerId = null;
-        function openCustomerPicker(label, itemId) {
-            currentCustomerId = itemId;
-            currentCustomerLabel = label;
-
-            var overlay = document.getElementById("customerPickerOverlay");
-
-            if (overlay) {
-                overlay.style.display = "block";
-            }
-
-        }
-        function selectCustomer(customerId) {
-
-            // met l'id dans le hiddenfield
-            document.getElementById("<%= hidSelectedCustomerId.ClientID %>").value = customerId;
-
-            if (!currentCustomerLabel) return;
-
-
-            // ferme la popup
-            closeCustomerPicker();
-
-
-            var ajaxManager = $find("<%= Ram1.ClientID %>");
-            ajaxManager.ajaxRequest('CUSTOMER|' + customerId.toString());
-
-
-
-        }
-
-        function selectCustomerold(productId, productName) {
-
-
-
-            currentProductLabel.innerText = productName;
-
-            var row = currentProductLabel.closest(".item-row");
-
-            if (row) {
-                var hidden = row.querySelector("input[id*='hidProductId']");
-                if (hidden) {
-                    hidden.value = productId;
+                var empty = document.getElementById("customerPickerEmptyJs");
+                if (!empty) {
+                    empty = document.createElement("div");
+                    empty.id = "customerPickerEmptyJs";
+                    empty.className = "empty";
+                    empty.innerText = "Aucun client trouvé.";
+                    empty.style.display = "none";
+                    list.appendChild(empty);
                 }
+
+                empty.style.display = show ? "block" : "none";
             }
 
-            closeProductPicker();
-        }
+            var currentAccountLabel = null;
+            var currentAccountItemId = null;
 
-
-
-        function filterCustomersClient() {
-            var tb = document.getElementById("customerPickerSearch");
-            var q = (tb ? tb.value : "").toLowerCase().trim();
-
-            var cards = document.querySelectorAll("#customerPickerList .customer-card");
-            var visibleCount = 0;
-
-            cards.forEach(function (card) {
-                var text = normalizeText(card.getAttribute("data-search"));
-                var show = q === "" || text.indexOf(q) !== -1;
-
-                card.style.display = show ? "" : "none";
-
-                if (show) visibleCount++;
-            });
-
-            toggleEmptyCustomersMessage(visibleCount === 0);
-        }
-
-        function toggleEmptyCustomersMessage(show) {
-            var list = document.getElementById("customerPickerList");
-            if (!list) return;
-
-            var empty = document.getElementById("customerPickerEmptyJs");
-
-            if (!empty) {
-                empty = document.createElement("div");
-                empty.id = "customerPickerEmptyJs";
-                empty.className = "empty";
-                empty.innerText = "Aucun client trouvé.";
-                empty.style.display = "none";
-                list.appendChild(empty);
+            function closeAccountPicker() {
+                var overlay = document.getElementById("accountPickerOverlay");
+                if (overlay) overlay.style.display = "none";
+                document.documentElement.classList.remove("no-page-scroll");
+                document.body.classList.remove("no-page-scroll");
+                console.log("Closed account picker");
+                //currentAccountLabel = null;
+                //currentAccountItemId = null;
             }
 
-            empty.style.display = show ? "block" : "none";
-        }
+            function openAccountPicker(label, itemId) {
+                currentAccountLabel = label;
+                currentAccountItemId = itemId;
+                console.log("Opening account picker 2 for item ID: " + itemId);
+                var overlay = document.getElementById("accountPickerOverlay");
+                if (overlay) overlay.style.display = "block";
+            }
 
-    </script>
-        </form>
-    </body>
-    </html>
+            function selectAccount(accountId) {
+                console.log("Selected account ID: " + accountId);
+                document.getElementById("<%= hidSelectedAccountId.ClientID %>").value = accountId;
+               
+                if (!currentAccountLabel) return;
+                closeAccountPicker();
+                var ajaxManager = $find("<%= Ram1.ClientID %>");
+                var itemId = currentAccountItemId || 0;
 
+                console.log("Sending AJAX request for item ID: " + itemId + " and account ID: " + accountId);
+                ajaxManager.ajaxRequest('ACCOUNT|' + itemId.toString() + '|' + accountId.toString());
+            }
 
+            function filterAccountsClient() {
+                var tb = document.getElementById("accountPickerSearch");
+                var q = (tb ? tb.value : "").toLowerCase().trim();
+
+                var cards = document.querySelectorAll("#accountPickerList .account-card");
+                var visibleCount = 0;
+
+                cards.forEach(function (card) {
+                    var text = normalizeText(card.getAttribute("data-search"));
+                    var show = q === "" || text.indexOf(q) !== -1;
+                    card.style.display = show ? "" : "none";
+                    if (show) visibleCount++;
+                });
+
+                toggleEmptyAccountsMessage(visibleCount === 0);
+            }
+
+            function toggleEmptyAccountsMessage(show) {
+                var list = document.getElementById("accountPickerList");
+                if (!list) return;
+
+                var empty = document.getElementById("accountPickerEmptyJs");
+                if (!empty) {
+                    empty = document.createElement("div");
+                    empty.id = "accountPickerEmptyJs";
+                    empty.className = "empty";
+                    empty.innerText = "Aucun compte trouvé.";
+                    empty.style.display = "none";
+                    list.appendChild(empty);
+                }
+
+                empty.style.display = show ? "block" : "none";
+            }
+        </script>
+    </form>
+</body>
+</html>
