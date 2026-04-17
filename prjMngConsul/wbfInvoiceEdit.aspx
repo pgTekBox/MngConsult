@@ -334,7 +334,13 @@
             font-size: 15px;
             font-weight: 600;
         }
-
+        .product-account {
+           font-size: 11px;
+           font-weight: 600;
+           text-align: right;
+           color: grey;
+         }
+        
         .Contact-name {
             font-size: 16px;
             font-weight: 800;
@@ -820,6 +826,8 @@
                                     <div class="product-card" data-search='<%# Eval("Name").ToString().ToLower() %>' onclick="selectProduct('<%# Eval("Code") %>')">
                                         <div class="product-name"><%# Eval("Name") %></div>
                                         <div class="product-price"><%# Eval("Prix", "{0:C2}") %></div>
+                                        <div> </div>
+                                        <div class="product-account"><%# Eval("account") %></div>
                                     </div>
                                 </ItemTemplate>
 

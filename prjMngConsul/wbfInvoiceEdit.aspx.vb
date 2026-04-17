@@ -148,67 +148,67 @@ Public Class wbfInvoiceEdit
             Dim changed As Boolean = False
 
             ' Description
-            If dt.Columns.Contains("Description") Then
-                Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
-                If oldDesc <> description Then
-                    dr("Description") = description
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("Description") Then
+            '    Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
+            '    If oldDesc <> description Then
+            dr("Description") = description
+            '        changed = True
+            '    End If
+            'End If
 
             ' ProductId
-            If dt.Columns.Contains("ProductId") Then
-                Dim oldDesc As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
-                If oldDesc <> productId Then
-                    dr("ProductId") = productId
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("ProductId") Then
+            '    Dim oldDesc As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
+            '    If oldDesc <> productId Then
+            dr("ProductId") = productId
+            '        changed = True
+            '    End If
+            'End If
 
 
 
             ' AccountId
-            If dt.Columns.Contains("AccountId") Then
-                Dim oldAccountId As Integer = If(IsDBNull(dr("AccountId")), 0, CInt(dr("AccountId")))
-                If oldAccountId <> accountId Then
-                    dr("AccountId") = accountId
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("AccountId") Then
+            '    Dim oldAccountId As Integer = If(IsDBNull(dr("AccountId")), 0, CInt(dr("AccountId")))
+            '    If oldAccountId <> accountId Then
+            dr("AccountId") = accountId
+            '        changed = True
+            '    End If
+            'End If
 
             ' Qty
-            If dt.Columns.Contains("Qty") Then
-                Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
-                If Math.Abs(oldQty - qty) > 0.0000001 Then
-                    dr("Qty") = qty
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("Qty") Then
+            '    Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
+            '    If Math.Abs(oldQty - qty) > 0.0000001 Then
+            dr("Qty") = qty
+            '        changed = True
+            '    End If
+            'End If
 
             ' UnitPrice
-            If dt.Columns.Contains("UnitPrice") Then
-                Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, Convert.ToDouble(dr("UnitPrice")))
-                If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
-                    dr("UnitPrice") = unitPrice
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("UnitPrice") Then
+            '    Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, Convert.ToDouble(dr("UnitPrice")))
+            '    If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
+            dr("UnitPrice") = unitPrice
+            '        changed = True
+            '    End If
+            'End If
 
             ' Amount (recalcul)
-            If dt.Columns.Contains("Amount") Then
-                Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, Convert.ToDouble(dr("Amount")))
-                If Math.Abs(oldAmt - amount) > 0.0000001 Then
-                    dr("Amount") = amount
-                    changed = True
-                End If
-            End If
+            'If dt.Columns.Contains("Amount") Then
+            '    Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, Convert.ToDouble(dr("Amount")))
+            '    If Math.Abs(oldAmt - amount) > 0.0000001 Then
+            dr("Amount") = amount
+            '        changed = True
+            '    End If
+            'End If
 
 
 
             ' Dirty
-            If changed AndAlso dt.Columns.Contains("Dirty") Then
-                dr("Dirty") = 1
-            End If
+            'If changed AndAlso dt.Columns.Contains("Dirty") Then
+            dr("Dirty") = 1
+            'End If
 
         Next
 
@@ -318,7 +318,8 @@ Public Class wbfInvoiceEdit
         oCom.Parameters.Add(ParamItems)
 
         oCom.Connection.Open()
-        oCom.ExecuteNonQuery()
+        'oCom.ExecuteNonQuery()
+        Dim retval = oCom.ExecuteScalar()
         oCom.Connection.Close()
 
         Response.Redirect("wbfCustomersInvoices.aspx")
@@ -554,7 +555,14 @@ Public Class wbfInvoiceEdit
             Case "ACCOUNT"
                 If Integer.TryParse(AllParam(2), accountId) Then
                     If Integer.TryParse(AllParam(1), ItemLineId) Then
+
+
+
+
                         UpdateItemAccount(ItemLineId, accountId)
+
+                        SetDirtyItem(ItemLineId)
+
                         BindItemGrid()
                     End If
                 End If
@@ -562,6 +570,16 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+    Sub SetDirtyItem(ItemLineId As Integer)
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        Dim dr As DataRow = dt.AsEnumerable().FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+        If dr Is Nothing Then Exit Sub
+        dr("Dirty") = 1
+        ViewState("ItemsTable") = dt
+    End Sub
+
+
+
 
 
     Sub UpdateCustomer(Customerid As Integer)
@@ -630,13 +648,12 @@ Public Class wbfInvoiceEdit
 
         If dr Is Nothing Then Exit Sub
 
-        dr("AccountId") = accountId
+        'dr("AccountId") = ds.Tables(0).Rows(0)("Name")
         dr("Dirty") = 1
         dr("Deleted") = 0
+        dr("AccountId") = ds.Tables(0).Rows(0)("Nocompte").ToString()
+        dr("AccountName") = ds.Tables(0).Rows(0)("Name").ToString()
 
-        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
-            dr("AccountName") = ds.Tables(0).Rows(0)("Name").ToString()
-        End If
 
         ViewState("ItemsTable") = dt
     End Sub
