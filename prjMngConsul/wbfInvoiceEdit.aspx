@@ -4,34 +4,11 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title></title>
-
+    <title>Facture client — Édition</title>
+    <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
     <style>
-        :root {
-            --bg: #f6f8fc;
-            --card: #fff;
-            --text: #0f172a;
-            --radius: var(--r-lg);
-            --muted: #64748b;
-            --line: #e2e8f0;
-            --accent: #2563eb;
-            --accent2: #06b6d4;
-            --r-md: 14px;
-            --r-lg: 18px;
-            --r-xl: 22px;
-            --shadow: 0 18px 50px rgba(2,6,23,.10);
-        }
 
-        html, body, form {
-            height: 100%;
-        }
-
-        body {
-            margin: 0;
-            background: var(--bg);
-            font-family: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
-            color: var(--text);
-        }
+     
 
         .product-selector,
         .customer-selector,

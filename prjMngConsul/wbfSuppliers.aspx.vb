@@ -44,6 +44,7 @@ Public Class wbfSuppliers
 
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Search", q))
         Dim ds As DataSet = ExecuteSQLds("s0011GetSuppliers", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)

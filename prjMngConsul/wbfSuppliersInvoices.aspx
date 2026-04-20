@@ -382,27 +382,20 @@ margin-right: auto;
                       
 
             }
-   
-
-
-    </style>
+     </style>
 
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
-    <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true">
-    </telerik:RadWindowManager>
-
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
+    <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true">    </telerik:RadWindowManager>
+   
 
         <div class="page-head">
             <div class="page-head-left">
                 <div class="page-title">Facture Fournisseurs</div>
-
             </div>
-
-
             <div class="searchbox">
                 <asp:Button ID="btnAddSupplier" runat="server"
                     CssClass="btn btnAddRow"
@@ -492,9 +485,7 @@ margin-right: auto;
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        
         ClientIDMode="Static"
-         
         Title="Ajouter / Modifier un facture fournisseur"
         OnClientClose="rwSupplierInvoice_OnClientClose">
     </telerik:RadWindow>
@@ -503,7 +494,10 @@ margin-right: auto;
         
 
         function rwSupplierInvoice_OnClientClose(sender, args) {
-            __doPostBack("rgFournisseursFactures", "Rebind");
+            var ajaxManager = $find("RAP1");
+            if (ajaxManager) {
+                ajaxManager.ajaxRequest("refreshgrid");
+            }
         }
     </script>
 

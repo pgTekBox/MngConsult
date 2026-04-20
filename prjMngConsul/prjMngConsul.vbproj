@@ -363,10 +363,15 @@
     <Content Include="Scripts\WebForms\WebForms.js" />
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
+    <Content Include="wbfBalanceVerification.aspx" />
+    <Content Include="wbfBeneficesNonRepartis.aspx" />
+    <Content Include="wbfBilan.aspx" />
     <Content Include="wbfCompanyInfo.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
+    <Content Include="wbfEtatResultats.aspx" />
+    <Content Include="wbfFluxTresorerie.aspx" />
     <Content Include="wbfInvoiceEdit.aspx" />
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfPlanComptable.aspx" />
@@ -375,6 +380,7 @@
     <Content Include="wbfProductCategoryEdit.aspx" />
     <Content Include="wbfProductEdit.aspx" />
     <Content Include="wbfProducts.aspx" />
+    <Content Include="wbfRapportPlanComptable.aspx" />
     <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfReleve.aspx" />
@@ -577,6 +583,27 @@
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="wbfBalanceVerification.aspx.designer.vb">
+      <DependentUpon>wbfBalanceVerification.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfBalanceVerification.aspx.vb">
+      <DependentUpon>wbfBalanceVerification.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfBeneficesNonRepartis.aspx.designer.vb">
+      <DependentUpon>wbfBeneficesNonRepartis.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfBeneficesNonRepartis.aspx.vb">
+      <DependentUpon>wbfBeneficesNonRepartis.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfBilan.aspx.designer.vb">
+      <DependentUpon>wbfBilan.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfBilan.aspx.vb">
+      <DependentUpon>wbfBilan.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfCompanyInfo.aspx.vb">
       <DependentUpon>wbfCompanyInfo.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -600,6 +627,20 @@
     </Compile>
     <Compile Include="wbfCustomersInvoices.aspx.vb">
       <DependentUpon>wbfCustomersInvoices.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfEtatResultats.aspx.designer.vb">
+      <DependentUpon>wbfEtatResultats.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfEtatResultats.aspx.vb">
+      <DependentUpon>wbfEtatResultats.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfFluxTresorerie.aspx.designer.vb">
+      <DependentUpon>wbfFluxTresorerie.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfFluxTresorerie.aspx.vb">
+      <DependentUpon>wbfFluxTresorerie.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfInvoiceEdit.aspx.designer.vb">
@@ -656,6 +697,13 @@
     </Compile>
     <Compile Include="wbfProducts.aspx.vb">
       <DependentUpon>wbfProducts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfRapportPlanComptable.aspx.designer.vb">
+      <DependentUpon>wbfRapportPlanComptable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfRapportPlanComptable.aspx.vb">
+      <DependentUpon>wbfRapportPlanComptable.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfRapportTaxes.aspx.designer.vb">

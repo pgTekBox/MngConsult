@@ -44,7 +44,7 @@
                 <span class="nav-txt">Tableau de bord</span>
             </a>
 
-            <!-- Sous-menu (accordion) -->
+            <!-- Sous-menu Ventes (accordion) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="false">
                     <span class="nav-ico" aria-hidden="true">🧾</span>
@@ -75,7 +75,7 @@
                 </div>
             </div>
 
-            <!-- Sous-menu (accordion) -->
+            <!-- Sous-menu Achats (accordion) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="false">
                     <span class="nav-ico" aria-hidden="true">📦</span>
@@ -107,7 +107,7 @@
                 </div>
             </div>
 
-            <!-- Sous-menu (accordion) -->
+            <!-- Sous-menu Comptabilité< (accordion) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="false">
                     <span class="nav-ico" aria-hidden="true">📒</span>
@@ -150,6 +150,53 @@
 
                 </div>
             </div>
+
+                        <!-- Sous-menu (accordion) -->
+            <div class="nav-group" data-accordion>
+                <button type="button" class="nav-parent" aria-expanded="false">
+                    <span class="nav-ico" aria-hidden="true">📒</span>
+                    <span class="nav-txt">Rapports</span>
+                    <span class="nav-meta">
+                        <span class="chev" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="nav-children">
+                    
+                    <a class="nav-child" href="~/wbfRapportPlanComptable.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Plan Comptable
+                    </a>
+                    <a class="nav-child" href="~/wbfEtatResultats.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        États des resultats
+                    </a>
+                    <a class="nav-child" href="~/wbfBilan.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Bilan
+                    </a>
+                      <a class="nav-child" href="~/wbfFluxTresorerie.aspx" runat="server" data-navlink>
+                            <span class="dot" aria-hidden="true"></span>
+                         État des flux de trésorerie
+                     </a>
+                          <a class="nav-child" href="~/wbfBeneficesNonRepartis.aspx" runat="server" data-navlink>
+            <span class="dot" aria-hidden="true"></span>
+         État des bénéfices non répartis
+     </a>
+                                          <a class="nav-child" href="~/wbfBalanceVerification.aspx" runat="server" data-navlink>
+       <span class="dot" aria-hidden="true"></span>
+    Balance de vérification
+</a>
+
+                </div>
+            </div>
+
+
+
 
   <!-- Sous-menu (accordion) -->
   <div class="nav-group" data-accordion>

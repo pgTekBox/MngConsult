@@ -1,7 +1,6 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfCustomersInvoices.aspx.vb" Inherits="MngConsul.wbfCustomersInvoices" %>
+﻿<%@ Page  Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfCustomersInvoices.aspx.vb" Inherits="MngConsul.wbfCustomersInvoices" %>
 
 <%@ Register Src="~/Controls/PdfViewer.ascx" TagPrefix="uc1" TagName="PdfViewer" %>
-
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Invoices — MngConsul
@@ -14,6 +13,7 @@
     <script src="js/viewport.js"></script>
 
     <style>
+
   .listview-list-head {
             grid-template-columns: 70px 110px 1fr 90px 100px 80px;
             font-weight: 800;
@@ -275,24 +275,16 @@
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
-
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
-
-
-
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
-
-        <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true">
-        </telerik:RadWindowManager>
+    <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true"></telerik:RadWindowManager>
 
 
 
         <div class="page-head">
             <div class="page-head-left">
                 <div class="page-title">Facture Client</div>
-
             </div>
-
             <div class="searchbox">
                 <asp:Button ID="btnAddCustomerInvoice" runat="server"
                     CssClass="btn btnAddRow"
@@ -300,20 +292,10 @@
                     CausesValidation="false"
                     OnClientClick="openCustomerInvoiceWindow(0); return false;" />
                 <div class="search-group">
-                    <asp:TextBox ID="tbSearch" runat="server"
-                        CssClass="input txttbsearch"
-                        placeholder="Rechercher (nom, email, téléphone…)" />
-
-                    <asp:Button ID="btnSearch" runat="server"
-                        CssClass="btn btn-icon btn-icon-search"
-                        Text="" />
-
-                    <asp:Button ID="btnClear" runat="server"
-                        CssClass="btn btn-icon btn-icon-clear"
-                        Text=""
-                        CausesValidation="false" />
+                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
+                    <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
+                    <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text=""CausesValidation="false" />
                 </div>
-
             </div>
         </div>
 

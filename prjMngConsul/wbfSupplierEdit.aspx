@@ -13,33 +13,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Supplier — Edit</title>
    <style>
-     /* =============================================
-        VARIABLES & BASE
-     ============================================= */
-     :root {
-         --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-         --bg: #f6f7fb;
-         --card: #fff;
-         --text: #0f172a;
-         --muted: #64748b;
-         --line: #e2e8f0;
-         --primary: #2563eb;
-         --primary-weak: #eff6ff;
-         --danger: #dc2626;
-         --ok: #16a34a;
-         --shadow: 0 12px 28px rgba(15,23,42,.08);
-         --radius: 16px;
-     }
+    
 
-     html, body { height: 100%; margin: 0; }
-
-     body {
-         font-family: var(--font);
-         color: var(--text);
-         background: radial-gradient(1200px 600px at 20% 0%, #eef2ff 0%, transparent 45%),
-                     radial-gradient(1200px 600px at 80% 0%, #ecfeff 0%, transparent 45%),
-                     var(--bg);
-     }
+  
 
      /* =============================================
         LAYOUT WRAP

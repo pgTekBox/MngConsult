@@ -32,13 +32,13 @@ Partial Public Class wbfSuppliers
     Protected WithEvents rwmSuppliers As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
-    '''RAP1 control.
+    '''Ram1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
+    Protected WithEvents Ram1 As Global.Telerik.Web.UI.RadAjaxManager
 
     '''<summary>
     '''btnAddSupplier control.

@@ -7,8 +7,11 @@
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
     <script src="js/viewport.js"></script>
+  
+    
     <style>
-                .listview-list-head {
+
+    .listview-list-head {
     display: grid;
     grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
     gap: 16px;
@@ -276,7 +279,34 @@
     <telerik:RadWindowManager ID="rwmSuppliers" runat="server" EnableShadow="true">
     </telerik:RadWindowManager>
 
-    <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
+
+    <telerik:RadAjaxManager ID="Ram1" runat="server">
+    <AjaxSettings>
+
+        <%-- Refresh du label fournisseur + label adresse + lignes --%>
+        <telerik:AjaxSetting AjaxControlID="btnClear">
+            <UpdatedControls>
+                <telerik:AjaxUpdatedControl ControlID="rgFournisseurs" />
+              
+            </UpdatedControls>
+        </telerik:AjaxSetting>
+          <telerik:AjaxSetting AjaxControlID="btnSearch">
+    <UpdatedControls>
+        <telerik:AjaxUpdatedControl ControlID="rgFournisseurs" />
+       
+    </UpdatedControls>
+</telerik:AjaxSetting>
+        
+         
+
+    </AjaxSettings>
+</telerik:RadAjaxManager>
+
+
+
+
+
+     
 
         <div class="page-head">
             <div class="page-head-left">
@@ -286,6 +316,7 @@
             </div>
 
             <div class="searchbox">
+
                 <asp:Button ID="btnAddSupplier" runat="server"
                     CssClass="btn btnAddRow"
                     Text="Ajouter Supplier"

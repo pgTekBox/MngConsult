@@ -11,86 +11,77 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfCustomersInvoices
+Partial Public Class wbfEtatResultats
 
     '''<summary>
-    '''RadAjaxLoadingPanel1 control.
+    '''lblInfo control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
+    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''RAP1 control.
+    '''dpDateDebut control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
+    Protected WithEvents dpDateDebut As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''rwmCustomersInvoices control.
+    '''dpDateFin control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwmCustomersInvoices As Global.Telerik.Web.UI.RadWindowManager
+    Protected WithEvents dpDateFin As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''btnAddCustomerInvoice control.
+    '''btnGenerate control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnAddCustomerInvoice As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnGenerate As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''tbSearch control.
+    '''lblCompanyName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbSearch As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents lblCompanyName As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''btnSearch control.
+    '''lblPeriodeDebut control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnSearch As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents lblPeriodeDebut As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''rlvClientsFactures control.
+    '''lblPeriodeFin control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rlvClientsFactures As Global.Telerik.Web.UI.RadListView
+    Protected WithEvents lblPeriodeFin As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
-    '''rwInvoice control.
+    '''litReport control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwInvoice As Global.Telerik.Web.UI.RadWindow
-
-    '''<summary>
-    '''PdfViewer control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents PdfViewer As Global.MngConsul.PdfViewer
+    Protected WithEvents litReport As Global.System.Web.UI.WebControls.Literal
 End Class

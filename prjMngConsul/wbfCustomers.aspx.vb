@@ -18,18 +18,8 @@ Public Class wbfCustomers
         Dim dt As DataTable = GetData()
         rlvClients.DataSource = dt
 
-        'lblInfo.Visible = True
-        'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
     End Sub
 
-    Private Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
-        ' e.Argument contient "refreshgrid"
-        If e.Argument = "refreshgrid" Then
-            rlvClients.Rebind() ' ← recharge la liste après fermeture de la fenêtre
-        End If
-
-
-    End Sub
 
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         rlvClients.Rebind()
@@ -38,6 +28,13 @@ Public Class wbfCustomers
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         tbSearch.Text = ""
         rlvClients.Rebind()
+    End Sub
+
+    Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
+        ' e.Argument contient "refreshgrid"
+        If e.Argument = "refreshgrid" Then
+            rlvClients.Rebind() ' ← recharge la liste après fermeture de la fenêtre
+        End If
     End Sub
 
     Private Function GetData() As DataTable

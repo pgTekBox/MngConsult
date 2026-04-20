@@ -118,7 +118,30 @@
 
     <telerik:RadWindowManager ID="rwmCustomers" runat="server" EnableShadow="true"></telerik:RadWindowManager>
 
-    <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
+
+  <telerik:RadAjaxManager ID="Ram1" runat="server">
+      <AjaxSettings>
+
+          <%-- Refresh du label fournisseur + label adresse + lignes --%>
+          <telerik:AjaxSetting AjaxControlID="btnClear">
+              <UpdatedControls>
+                  <telerik:AjaxUpdatedControl ControlID="rlvClients" />
+                
+              </UpdatedControls>
+          </telerik:AjaxSetting>
+            <telerik:AjaxSetting AjaxControlID="btnSearch">
+      <UpdatedControls>
+          <telerik:AjaxUpdatedControl ControlID="rlvClients" />
+         
+      </UpdatedControls>
+  </telerik:AjaxSetting>
+          
+           
+
+      </AjaxSettings>
+  </telerik:RadAjaxManager>
+
+     
 
         <div class="page-head">
             <div class="page-head-left">
@@ -218,7 +241,7 @@
         <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un client">+</button>
         <%--openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", ""Modifier un client"", ""Ajouter un client""); return false;" %>' />--%> 
 
-    </telerik:RadAjaxPanel>
+  
 
     <telerik:RadWindow ID="rwCustomer" runat="server"
         Modal="true"

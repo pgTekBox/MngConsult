@@ -23,15 +23,6 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
 
     '''<summary>
-    '''rwmSuppliersInvoices control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents rwmSuppliersInvoices As Global.Telerik.Web.UI.RadWindowManager
-
-    '''<summary>
     '''RAP1 control.
     '''</summary>
     '''<remarks>
@@ -39,6 +30,15 @@ Partial Public Class wbfSuppliersInvoices
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
+
+    '''<summary>
+    '''rwmSuppliersInvoices control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwmSuppliersInvoices As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
     '''btnAddSupplier control.
