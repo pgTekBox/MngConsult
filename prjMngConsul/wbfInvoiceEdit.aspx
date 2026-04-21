@@ -603,6 +603,16 @@
                                     <telerik:RadDatePicker ID="dpDueDate" runat="server" />
                                 </div>
                             </div>
+                             <div class="row2">
+     <div>
+         <label>Post</label><asp:CheckBox ID="chkPost" runat="server" />
+          
+     </div>
+
+     <div>
+          
+     </div>
+ </div>
                         </div>
                     </div>
 

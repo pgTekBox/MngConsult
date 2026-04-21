@@ -310,10 +310,23 @@ Public Class wbfInvoiceEdit
         Dim ParamInvoiceId As New SqlClient.SqlParameter("@InvoiceId", SqlDbType.Int)
         ParamInvoiceId.Value = InvoiceId
 
+        Dim ParamPost As New SqlClient.SqlParameter("@toPost", SqlDbType.Int)
+        If chkPost.Checked Then
+            ParamPost.Value = 1
+        Else
+            ParamPost.Value = 0
+        End If
+
+
+
+
+
+
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
         ParamItems.Value = tvp
         ParamItems.TypeName = "dbo.TVP_InvoiceItem_v4"
 
+        oCom.Parameters.Add(ParamPost)
         oCom.Parameters.Add(ParamInvoiceId)
         oCom.Parameters.Add(ParamItems)
 

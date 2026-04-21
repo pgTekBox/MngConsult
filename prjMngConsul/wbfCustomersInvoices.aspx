@@ -294,7 +294,7 @@
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
-                    <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text=""CausesValidation="false" />
+                    <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
                 </div>
             </div>
         </div>
@@ -315,6 +315,7 @@
                                 <div class="colh-date">Date</div>
                                 <div class="colh-customer">Client</div>
 
+                                <div class="colh-etat">État1</div>
                                 <div class="colh-etat">État</div>
                                 <div class="colh-total">Total</div>
                                 <div class="colh-action">Action</div>

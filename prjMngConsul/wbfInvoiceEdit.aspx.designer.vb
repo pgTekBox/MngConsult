@@ -95,6 +95,15 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents dpDueDate As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
+    '''chkPost control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkPost As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
     '''rpItems control.
     '''</summary>
     '''<remarks>
