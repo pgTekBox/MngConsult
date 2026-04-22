@@ -1,15 +1,14 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" MaintainScrollPositionOnPostback="true" CodeBehind="wbfInvoiceEdit.aspx.vb" Inherits="MngConsul.wbfInvoiceEdit" %>
+
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <!DOCTYPE html>
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
     <title>Facture client — Édition</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
     <style>
-
-     
-
         .product-selector,
         .customer-selector,
         .account-selector {
@@ -23,20 +22,26 @@
             cursor: pointer;
             box-sizing: border-box;
         }
+        .clamp-2 {
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* nombre de lignes */
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+            .product-selectore::after,
+            .customer-selector::after,
+            .account-selector::after {
+                content: "▾";
+                float: right;
+                color: #64748b;
+            }
 
-        .product-selector::after,
-        .customer-selector::after,
-        .account-selector::after {
-            content: "▾";
-            float: right;
-            color: #64748b;
-        }
-
-        .product-selector:active,
-        .customer-selector:active,
-        .account-selector:active {
-            background: #f1f5f9;
-        }
+            .product-selector:active,
+            .customer-selector:active,
+            .account-selector:active {
+                background: #f1f5f9;
+            }
 
         .product-picker-overlay,
         .customer-picker-overlay,
@@ -101,11 +106,11 @@
             justify-content: center;
         }
 
-        .product-picker-close-inline:active,
-        .customer-picker-close-inline:active,
-        .account-picker-close-inline:active {
-            background: #f8fafc;
-        }
+            .product-picker-close-inline:active,
+            .customer-picker-close-inline:active,
+            .account-picker-close-inline:active {
+                background: #f8fafc;
+            }
 
         .product-picker-input,
         .customer-picker-input,
@@ -137,9 +142,9 @@
             cursor: pointer;
         }
 
-        .product-picker-item:active {
-            background: #f8fafc;
-        }
+            .product-picker-item:active {
+                background: #f8fafc;
+            }
 
         .rw-page {
             height: 100%;
@@ -191,6 +196,7 @@
         }
 
         .row2,
+        .row3,
         .row4 {
             display: grid;
             gap: 12px;
@@ -200,23 +206,7 @@
             text-align: right !important;
         }
 
-        .items-header {
-            display: none;
-        }
 
-        .item-row {
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            background: #fff;
-        }
-
-        .footerbar {
-            position: sticky;
-            bottom: 0;
-            background: #fff;
-            border-top: 1px solid var(--line);
-            padding: 8px 14px;
-        }
 
         .RadComboBoxDropDown,
         .rcbSlide {
@@ -311,13 +301,14 @@
             font-size: 15px;
             font-weight: 600;
         }
+
         .product-account {
-           font-size: 11px;
-           font-weight: 600;
-           text-align: right;
-           color: grey;
-         }
-        
+            font-size: 11px;
+            font-weight: 600;
+            text-align: right;
+            color: grey;
+        }
+
         .Contact-name {
             font-size: 16px;
             font-weight: 800;
@@ -361,21 +352,62 @@
             z-index: 2000;
         }
 
-        .fab-addline,
-        .fab-addline span,
-        .fab-addline img {
-            display: block;
+            .fab-addline,
+            .fab-addline span,
+            .fab-addline img {
+                display: block;
+            }
+
+                .fab-addline img {
+                    width: 56px;
+                    height: 56px;
+                }
+
+        /*  <div>Produit</div>
+ <div>Description</div>
+ <div>Compte</div>
+ <div style="text-align: right">Qty</div>
+ <div style="text-align: right">Prix unité</div>
+ <div style="text-align: right">Total</div>
+ <div style="text-align: center">Action</div>
+ <div style="text-align: center">Ordre</div>*/
+
+        .items-headerRD {
+            display: grid;
+  grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  overflow: hidden;
+  margin-bottom: 8px;
+   padding: 10px;
+      font-size: 12px;
+      font-weight: 900;
+      color: var(--muted);
+      background: #f8fafc;
+      border-right: 1px solid var(--line);
         }
 
-        .fab-addline img {
-            width: 56px;
-            height: 56px;
+        .item-gridcutinv {
+            display: grid;
+            grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
+        }
+
+        .row2 {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .row3 {
+            grid-template-columns: auto auto 1fr;
         }
 
         @media (min-width: 769px) {
-            .row2 {
-                grid-template-columns: 1fr 1fr;
+            .row3 {
+                grid-template-columns: auto auto 1fr;
             }
+        }
+
+        .row2 {
+            grid-template-columns: 1fr 1fr;
         }
 
         @media (min-width: 769px) and (max-width: 1024px) {
@@ -394,25 +426,24 @@
                 grid-template-columns: 1fr 1fr 1fr 1fr;
             }
 
-            .items-header {
+            .items-headerRDd {
                 display: grid;
                 grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
                 border: 1px solid var(--line);
                 border-radius: var(--r-lg);
                 overflow: hidden;
                 margin-bottom: 8px;
+                 padding: 10px;
+                    font-size: 12px;
+                    font-weight: 900;
+                    color: var(--muted);
+                    background: #f8fafc;
+                    border-right: 1px solid var(--line);
             }
 
-            .items-header div {
-                padding: 10px;
-                font-size: 12px;
-                font-weight: 900;
-                color: var(--muted);
-                background: #f8fafc;
-                border-right: 1px solid var(--line);
-            }
+                
 
-            .item-grid {
+            .item-gridcutinv {
                 display: grid;
                 grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
             }
@@ -439,7 +470,7 @@
         }
 
         @media (max-width: 768px) {
-            .item-grid {
+            .item-gridcutinv {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
@@ -500,10 +531,10 @@
                 bottom: 14px;
             }
 
-            .fab-addline img {
-                width: 52px;
-                height: 52px;
-            }
+                .fab-addline img {
+                    width: 52px;
+                    height: 52px;
+                }
 
             .content {
                 padding-bottom: 84px;
@@ -568,9 +599,7 @@
 
         <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
 
-            <div class="topbar">
-                <strong>Édition de facture</strong>
-            </div>
+           
 
             <div class="content">
                 <div class="container">
@@ -592,27 +621,26 @@
 
                             <div style="height: 12px"></div>
 
-                            <div class="row2">
-                                <div>
+                            <div class="row3">
+                                <div  style="width:160px">
                                     <label>Date facture</label>
-                                    <telerik:RadDatePicker ID="dpIssueDate" runat="server" />
+                                    <telerik:RadDatePicker  Width="160px"  ID="dpIssueDate" runat="server" />
                                 </div>
 
-                                <div>
+                                <div  style="width:160px">
                                     <label>Date d’échéance</label>
-                                    <telerik:RadDatePicker ID="dpDueDate" runat="server" />
+                                    <telerik:RadDatePicker   ID="dpDueDate" runat="server" />
                                 </div>
-                            </div>
-                             <div class="row2">
-     <div>
-         <label>Post</label><asp:CheckBox ID="chkPost" runat="server" />
-          
-     </div>
+                                <div >
+                                    <br />
+                                    <label>Comptabilisé</label><asp:CheckBox ID="chkPost" runat="server" />
 
-     <div>
-          
-     </div>
- </div>
+                                </div>
+
+
+
+                            </div>
+
                         </div>
                     </div>
 
@@ -622,7 +650,7 @@
                         </div>
 
                         <div class="card-body">
-                            <div class="items-header">
+                            <div class="items-headerRD">
                                 <div>Produit</div>
                                 <div>Description</div>
                                 <div>Compte</div>
@@ -633,29 +661,29 @@
                                 <div style="text-align: center">Ordre</div>
                             </div>
 
-                            <div class="items-wrap" style="display:block; padding:0;">
+                            <div class="items-wrap" style="display: block; padding: 0;">
                                 <asp:Repeater ID="rpItems" runat="server">
                                     <ItemTemplate>
                                         <div class="item-row">
-                                            <div class="item-grid">
+                                            <div class="item-gridcutinv ">
                                                 <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
-
+                                                 <div class="cell">
+                                                    
+                                                    <telerik:RadTextBox ID="txtDesc" runat="server"  CssClass="clamp-2" 
+                                                        TextMode="MultiLine" Rows="2"
+                                                        Text='<%# Eval("Description") %>' />
+                                                </div>
                                                 <div class="cell">
-                                                    <div class="m-label">Produit</div>
+                                                     
                                                     <asp:Label ID="lblProduct" runat="server"
-                                                        CssClass="product-selector"
-                                                        Text='<%# Eval("ProductName") %>'
+                                                        CssClass="clamp-2 product-selector"
+                                                        Text="&nbsp;▾"
                                                         OnClientClick='<%# "openProductPicker(this," & Eval("Id") & "); return false;" %>'>
                                                     </asp:Label>
                                                     <asp:HiddenField ID="hidProductId" runat="server" Value='<%# Eval("ProductId") %>' />
                                                 </div>
 
-                                                <div class="cell">
-                                                    <div class="m-label">Description</div>
-                                                    <telerik:RadTextBox ID="txtDesc" runat="server"
-                                                        TextMode="MultiLine" Rows="2"
-                                                        Text='<%# Eval("Description") %>' />
-                                                </div>
+                                             
 
                                                 <div class="cell">
                                                     <div class="m-label">Compte</div>
@@ -750,22 +778,26 @@
                         <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" />
                     </div>
                     <div class="tot">
-                        <strong><asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong>
+                        <strong>
+                            <asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong>
                     </div>
 
                     <div class="tot">TPS</div>
                     <div class="tot">
-                        <strong><asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong>
+                        <strong>
+                            <asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong>
                     </div>
 
                     <div class="tot">TVQ</div>
                     <div class="tot">
-                        <strong><asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
+                        <strong>
+                            <asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
                     </div>
 
                     <div class="tot">Total</div>
                     <div class="tot">
-                        <strong><asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
+                        <strong>
+                            <asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
                     </div>
                 </div>
             </div>
@@ -795,8 +827,7 @@
                         <div class="list-shell">
                             <telerik:RadListView ID="rlvProducts" runat="server"
                                 AllowPaging="false"
-                                ItemPlaceholderID="itemPlaceholder"
-                                 >
+                                ItemPlaceholderID="itemPlaceholder">
 
                                 <LayoutTemplate>
                                     <div class="items-wrap">
@@ -813,7 +844,7 @@
                                     <div class="product-card" data-search='<%# Eval("Name").ToString().ToLower() %>' onclick="selectProduct('<%# Eval("Code") %>')">
                                         <div class="product-name"><%# Eval("Name") %></div>
                                         <div class="product-price"><%# Eval("Prix", "{0:C2}") %></div>
-                                        <div> </div>
+                                        <div></div>
                                         <div class="product-account"><%# Eval("account") %></div>
                                     </div>
                                 </ItemTemplate>
@@ -881,8 +912,7 @@
                         <div class="list-shell">
                             <telerik:RadListView ID="rlvAccounts" runat="server"
                                 AllowPaging="false"
-                                ItemPlaceholderID="itemaccountPlaceholder"
-                                >
+                                ItemPlaceholderID="itemaccountPlaceholder">
 
                                 <LayoutTemplate>
                                     <div class="items-wrap">
@@ -1051,7 +1081,7 @@
                         if (!row) return;
                         var hidId = row.querySelector("input[id*='hidId']");
                         var itemId = hidId ? hidId.value : "0";
-                         
+
                         openAccountPicker(el, itemId);
                     });
                 });
@@ -1215,7 +1245,7 @@
             function selectAccount(accountId) {
                 console.log("Selected account ID: " + accountId);
                 document.getElementById("<%= hidSelectedAccountId.ClientID %>").value = accountId;
-               
+
                 if (!currentAccountLabel) return;
                 closeAccountPicker();
                 var ajaxManager = $find("<%= Ram1.ClientID %>");

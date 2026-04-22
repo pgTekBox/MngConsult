@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" MaintainScrollPositionOnPostback="true" CodeBehind="wbfSupplierInvoinceEdit.aspx.vb" Inherits="MngConsul.wbfSupplierInvoinceEdit" %>
+
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <!DOCTYPE html>
 
@@ -7,7 +8,6 @@
     <title>Facture fournisseur — Édition</title>
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
     <style>
-        
         /* =============================================
            LAYOUT
         ============================================= */
@@ -82,18 +82,30 @@
             border-bottom: 1px solid var(--line);
         }
 
-        .card-body { padding: 14px; }
+        .card-body {
+            padding: 14px;
+        }
 
         /* =============================================
            GRILLES FORMULAIRE
         ============================================= */
-        .row2 { display: grid; gap: 12px; }
-        .row4 { display: grid; gap: 12px; }
+        .row2 {
+            display: grid;
+            gap: 12px;
+        }
+
+        .row4 {
+            display: grid;
+            gap: 12px;
+        }
 
         /* =============================================
            SÉLECTEURS (fournisseur / produit)
         ============================================= */
-        .supplier-selector {
+        
+        .product-selector,
+        .supplier-selector,
+         .account-selector {
             display: block;
             width: 100%;
             min-height: 38px;
@@ -105,43 +117,135 @@
             font-weight: 700;
             color: var(--supplier);
         }
-        .supplier-selector::after { content: "▾"; float: right; color: var(--supplier); }
-        .supplier-selector:active  { background: #ede9fe; }
 
-        .product-selector {
-            display: block;
-            width: 100%;
-            min-height: 38px;
-            padding: 8px 10px;
-            border: 1px solid #e2e8f0;
-            border-radius: 10px;
-            background: #fff;
-            cursor: pointer;
-        }
-        .product-selector::after { content: "▾"; float: right; color: #64748b; }
-        .product-selector:active  { background: #f1f5f9; }
+
+        .product-selector::after,
+.supplier-selector::after,
+.account-selector::after {
+    content: "▾";
+    float: right;
+    color: #64748b;
+}
+
+           .product-picker-overlay,
+   .supplier-picker-overlay,
+   .account-picker-overlay {
+       position: fixed;
+       inset: 0;
+       z-index: 99999;
+       background: rgba(15, 23, 42, .35);
+   }
+
+   .product-picker-shell,
+   .supplier-picker-shell,
+   .account-picker-shell {
+       position: absolute;
+       inset: 0;
+       background: #fff;
+       display: flex;
+       flex-direction: column;
+       height: 100%;
+       min-height: 0;
+   }
+         .product-picker-title {
+      font-size: 18px;
+      font-weight: 800;
+  }
+
+  .product-picker-search,
+  .product-picker-searchbar,
+  .supplier-picker-searchbar,
+  .account-picker-searchbar {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 14px;
+      border-bottom: 1px solid var(--line);
+      background: #fff;
+  }
+
+  .product-picker-close {
+      border: 0;
+      background: transparent;
+      font-size: 24px;
+      cursor: pointer;
+  }
+
+  .product-picker-close-inline,
+  .supplier-picker-close-inline,
+  .account-picker-close-inline {
+      margin-left: auto;
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      background: #fff;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+  }
+
+  .product-picker-close-inline:active,
+  .supplier-picker-close-inline:active,
+  .account-picker-close-inline:active {
+      background: #f8fafc;
+  }
+
+  .product-picker-input,
+  .supplier-picker-input,
+  .account-picker-input {
+      width: 100%;
+      max-width: 260px;
+      min-width: 0;
+      height: 44px;
+      padding: 0 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      box-sizing: border-box;
+      font-size: 16px;
+  }
+
+  .product-picker-list,
+  .supplier-picker-list,
+  .account-picker-list {
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+  }
+
+  .product-picker-item {
+      padding: 14px 16px;
+      border-bottom: 1px solid #f1f5f9;
+      cursor: pointer;
+  }
+
+  .product-picker-item:active {
+      background: #f8fafc;
+  }  
+   
+
+
+
+            .supplier-selector:active {
+                background: #ede9fe;
+            }
+
+      
+
+            .product-selector:active {
+                background: #f1f5f9;
+            }
 
         /* =============================================
            OVERLAYS (picker)
         ============================================= */
-        .supplier-picker-overlay,
-        .product-picker-overlay {
-            position: fixed;
-            inset: 0;
-            z-index: 99999;
-            background: rgba(15,23,42,.35);
-        }
-
-        .supplier-picker-shell,
-        .product-picker-shell {
-            position: absolute;
-            inset: 0;
-            background: #fff;
-            display: flex;
-            flex-direction: column;
-            height: 100%;
-            min-height: 0;
-        }
+      
 
         .picker-searchbar {
             display: flex;
@@ -176,7 +280,10 @@
             align-items: center;
             justify-content: center;
         }
-        .picker-close-btn:active { background: #f8fafc; }
+
+            .picker-close-btn:active {
+                background: #f8fafc;
+            }
 
         .picker-list {
             flex: 1 1 auto;
@@ -229,8 +336,18 @@
             background: #fff;
             cursor: pointer;
         }
-        .product-name  { font-size: 15px; font-weight: 600; }
-        .product-price { font-size: 16px; font-weight: 800; color: var(--accent); text-align: right; }
+
+        .product-name {
+            font-size: 15px;
+            font-weight: 600;
+        }
+
+        .product-price {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--accent);
+            text-align: right;
+        }
 
         /* Carte fournisseur dans le picker */
         .supplier-card {
@@ -240,24 +357,25 @@
             background: #fff;
             cursor: pointer;
         }
-        .supplier-name    { font-size: 16px; font-weight: 800; color: var(--supplier); }
-        .supplier-billing { font-size: 15px; font-weight: 600; }
 
-        .empty { padding: 24px; color: var(--muted); text-align: center; }
-
-        /* =============================================
-           ITEMS (lignes de facture)
-        ============================================= */
-        .items-header { display: none; }
-
-        .item-row {
-            border: 1px solid var(--line);
-            border-radius: var(--r-lg);
-            background: #fff;
+        .supplier-name {
+            font-size: 16px;
+            font-weight: 800;
+            color: var(--supplier);
         }
 
-        .qty-right input { text-align: right !important; }
+        .supplier-billing {
+            font-size: 15px;
+            font-weight: 600;
+        }
 
+        .empty {
+            padding: 24px;
+            color: var(--muted);
+            text-align: center;
+        }
+
+      
         /* =============================================
            FOOTER TOTAUX
         ============================================= */
@@ -288,8 +406,15 @@
             bottom: 22px;
             z-index: 2000;
         }
-        .fab-addline, .fab-addline span, .fab-addline img { display: block; }
-        .fab-addline img { width: 56px; height: 56px; }
+
+            .fab-addline, .fab-addline span, .fab-addline img {
+                display: block;
+            }
+
+                .fab-addline img {
+                    width: 56px;
+                    height: 56px;
+                }
 
         /* Champ No référence fournisseur */
         .field-refno label {
@@ -300,12 +425,51 @@
             font-weight: 700;
         }
 
+       /*  <div>Produit / Service</div>
+ <div>Description</div>
+   <div>Compte</div>
+ <div style="text-align: right;">Qté</div>
+ <div style="text-align: right;">Prix unit.</div>
+ <div style="text-align: right;">Total</div>
+ <div style="text-align: center;">Action</div>*/
+
+
+           .items-header {
+       display: grid;
+       grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
+       border: 1px solid var(--line);
+       border-radius: var(--r-lg);
+       overflow: hidden;
+       margin-bottom: 8px;
+   }
+
+       .items-header div {
+           padding: 10px;
+           font-size: 12px;
+           font-weight: 900;
+           color: var(--muted);
+           background: #f8fafc;
+           border-right: 1px solid var(--line);
+       }
+
+   .item-gridsupinv {
+       display: grid;
+       grid-template-columns: 140px 1fr 160px 90px 90px 100px 120px 120px;
+   }
+
+
+
         /* =============================================
            RESPONSIVE — TABLETTE 769–1024px
         ============================================= */
         @media (min-width: 769px) and (max-width: 1024px) {
-            .row2 { grid-template-columns: 1fr 1fr; }
-            .row4 { grid-template-columns: 1fr 1fr 1fr 1fr; }
+            .row2 {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .row4 {
+                grid-template-columns: 1fr 1fr 1fr 1fr;
+            }
 
             .items-header {
                 display: grid;
@@ -315,18 +479,19 @@
                 overflow: hidden;
                 margin-bottom: 8px;
             }
-            .items-header div {
-                padding: 10px;
-                font-size: 12px;
-                font-weight: 900;
-                color: var(--muted);
-                background: #f8fafc;
-                border-right: 1px solid var(--line);
-            }
 
-            .item-grid {
+                .items-header div {
+                    padding: 10px;
+                    font-size: 12px;
+                    font-weight: 900;
+                    color: var(--muted);
+                    background: #f8fafc;
+                    border-right: 1px solid var(--line);
+                }
+
+            .item-gridsupinv {
                 display: grid;
-                grid-template-columns: 140px 1fr 90px 90px 100px 120px;
+                grid-template-columns: 140px 1fr 90px 90px 90px 100px 120px;
             }
 
             .cell {
@@ -335,8 +500,13 @@
                 border-right: 1px solid var(--line);
             }
 
-            .m-label     { display: none; }
-            .m-labelmoney { display: none; }
+            .m-label {
+                display: none;
+            }
+
+            .m-labelmoney {
+                display: none;
+            }
 
             .totals {
                 display: flex;
@@ -358,23 +528,38 @@
            RESPONSIVE — MOBILE ≤480px
         ============================================= */
         @media (max-width: 480px) {
-            .fab-addline { right: 14px; bottom: 14px; }
-            .fab-addline img { width: 52px; height: 52px; }
-            .content { padding-bottom: 84px; }
+            .fab-addline {
+                right: 14px;
+                bottom: 14px;
+            }
+
+                .fab-addline img {
+                    width: 52px;
+                    height: 52px;
+                }
+
+            .content {
+                padding-bottom: 84px;
+            }
 
             .RadComboBoxDropDown, .rcbSlide {
                 max-width: calc(100vw - 24px) !important;
                 box-sizing: border-box !important;
             }
 
-            .item-grid {
+            .item-gridsupinv {
                 display: flex;
                 flex-direction: column;
                 gap: 10px;
                 padding: 12px;
             }
 
-            .cell { border: none; padding: 0; width: 100%; min-width: 0; }
+            .cell {
+                border: none;
+                padding: 0;
+                width: 100%;
+                min-width: 0;
+            }
 
             .m-label {
                 display: block;
@@ -383,6 +568,7 @@
                 margin-bottom: 4px;
                 text-align: left;
             }
+
             .m-labelmoney {
                 display: block;
                 font-size: 14px;
@@ -403,12 +589,15 @@
                 grid-template-columns: 1fr 85px 85px;
             }
 
-            .tot { text-align: right; }
+            .tot {
+                text-align: right;
+            }
 
-            .imgaction { margin-left: 14px; }
+            .imgaction {
+                margin-left: 14px;
+            }
         }
- 
-      </style>
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">
@@ -498,13 +687,13 @@
 
                                 <%-- Adresse de facturation fournisseur --%>
                                 <div>
-                                    <div style="height:100%;display:flex;align-items:flex-end;">
+                                    <div style="height: 100%; display: flex; align-items: flex-end;">
                                         <telerik:RadLabel ID="rdLabel" runat="server" />
                                     </div>
                                 </div>
                             </div>
 
-                            <div style="height:12px;"></div>
+                            <div style="height: 12px;"></div>
 
                             <%-- Dates + No PO --%>
                             <div class="row4">
@@ -527,6 +716,13 @@
                                         EmptyMessage="PO-…" />
                                 </div>
                             </div>
+                            <div class="row2">
+                                <div>
+                                    <label>Post</label><asp:CheckBox ID="chkPost" runat="server" />
+
+                                </div>
+
+                            </div>
 
                         </div>
                     </div>
@@ -543,10 +739,11 @@
                             <div class="items-header">
                                 <div>Produit / Service</div>
                                 <div>Description</div>
-                                <div style="text-align:right;">Qté</div>
-                                <div style="text-align:right;">Prix unit.</div>
-                                <div style="text-align:right;">Total</div>
-                                <div style="text-align:center;">Action</div>
+                                  <div>Compte</div>
+                                <div style="text-align: right;">Qté</div>
+                                <div style="text-align: right;">Prix unit.</div>
+                                <div style="text-align: right;">Total</div>
+                                <div style="text-align: center;">Action</div>
                             </div>
 
                             <div class="items-wrap">
@@ -555,7 +752,7 @@
                                     <ItemTemplate>
 
                                         <div class="item-row">
-                                            <div class="item-grid">
+                                            <div class="item-gridsupinv">
                                                 <asp:HiddenField ID="hidId" runat="server"
                                                     Value='<%# Eval("Id") %>' />
 
@@ -576,9 +773,16 @@
                                                         TextMode="MultiLine" Rows="2"
                                                         Text='<%# Eval("Description") %>' />
                                                 </div>
-
+                                                <div class="cell">
+                                                    <div class="m-label">Compte</div>
+                                                    <asp:Label ID="lblAccount" runat="server"
+                                                        CssClass="account-selector js-account-selector"
+                                                        Text='<%# Eval("AccountName") %>'>
+                                                    </asp:Label>
+                                                    <asp:HiddenField ID="hidAccountId" runat="server" Value='<%# Eval("AccountId") %>' />
+                                                </div>
                                                 <%-- Quantité --%>
-                                                <div class="cellGrid3" style="text-align:right;">
+                                                <div class="cellGrid3" style="text-align: right;">
                                                     <span class="m-labelmoney">Qté</span>
                                                     <span></span>
                                                     <span class="qty-right">
@@ -593,7 +797,7 @@
                                                 </div>
 
                                                 <%-- Prix unitaire --%>
-                                                <div class="cellGrid3" style="text-align:right;">
+                                                <div class="cellGrid3" style="text-align: right;">
                                                     <span class="m-labelmoney">Prix unit.</span>
                                                     <span></span>
                                                     <span class="qty-right">
@@ -608,7 +812,7 @@
                                                 </div>
 
                                                 <%-- Montant ligne --%>
-                                                <div class="cellGrid3" style="text-align:right;">
+                                                <div class="cellGrid3" style="text-align: right;">
                                                     <div class="m-labelmoney">Total</div>
                                                     <span></span>
                                                     <asp:Label ID="lblAmount" runat="server"
@@ -617,7 +821,7 @@
                                                 </div>
 
                                                 <%-- Actions --%>
-                                                <div class="cell actions" style="text-align:center;">
+                                                <div class="cell actions" style="text-align: center;">
                                                     <telerik:RadImageButton ID="btnDeleteLine"
                                                         runat="server"
                                                         CssClass="imgaction"
@@ -669,14 +873,19 @@
             <%-- ===== FOOTER TOTAUX ===== --%>
             <div class="footerbar">
                 <div class="totals">
-                    <div class="tot"><asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" /></div>
-                    <div class="tot"><strong><asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong></div>
+                    <div class="tot">
+                        <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" /></div>
+                    <div class="tot"><strong>
+                        <asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong></div>
                     <div class="tot">TPS</div>
-                    <div class="tot"><strong><asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong></div>
+                    <div class="tot"><strong>
+                        <asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong></div>
                     <div class="tot">TVQ</div>
-                    <div class="tot"><strong><asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong></div>
+                    <div class="tot"><strong>
+                        <asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong></div>
                     <div class="tot">Total</div>
-                    <div class="tot"><strong><asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong></div>
+                    <div class="tot"><strong>
+                        <asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong></div>
                 </div>
             </div>
 
@@ -695,7 +904,7 @@
             <asp:HiddenField ID="hidSelectedSupplierId" runat="server" />
 
             <%-- ===== OVERLAY PRODUITS ===== --%>
-            <div id="productPickerOverlay" class="product-picker-overlay" style="display:none;">
+            <div id="productPickerOverlay" class="product-picker-overlay" style="display: none;">
                 <div class="product-picker-shell">
 
                     <div class="picker-searchbar">
@@ -704,7 +913,8 @@
                             oninput="filterProductsClient()"
                             placeholder="Rechercher un produit…" />
                         <button type="button" class="picker-close-btn"
-                            onclick="closeProductPicker()" aria-label="Fermer">✕</button>
+                            onclick="closeProductPicker()" aria-label="Fermer">
+                            ✕</button>
                     </div>
 
                     <div id="productPickerList" class="picker-list">
@@ -746,7 +956,7 @@
             </div>
 
             <%-- ===== OVERLAY FOURNISSEURS ===== --%>
-            <div id="supplierPickerOverlay" class="supplier-picker-overlay" style="display:none;">
+            <div id="supplierPickerOverlay" class="supplier-picker-overlay" style="display: none;">
                 <div class="supplier-picker-shell">
 
                     <div class="picker-searchbar">
@@ -755,7 +965,8 @@
                             oninput="filterSuppliersClient()"
                             placeholder="Rechercher un fournisseur…" />
                         <button type="button" class="picker-close-btn"
-                            onclick="closeSupplierPicker()" aria-label="Fermer">✕</button>
+                            onclick="closeSupplierPicker()" aria-label="Fermer">
+                            ✕</button>
                     </div>
 
                     <div id="supplierPickerList" class="picker-list">
@@ -789,7 +1000,46 @@
 
                 </div>
             </div>
+            <%-- Section overlay des Comptes --%>
+            <asp:HiddenField ID="hidSelectedAccountId" runat="server" />
+            <div id="accountPickerOverlay" class="account-picker-overlay" style="display: none;">
+                <div class="account-picker-shell">
+                    <div class="account-picker-searchbar">
+                        <input type="text" id="accountPickerSearch" oninput="filterAccountsClient()" class="account-picker-input" placeholder="Rechercher un compte..." />
+                        <button type="button" class="account-picker-close-inline" onclick="closeAccountPicker()" aria-label="Fermer">✕</button>
+                    </div>
 
+                    <div id="accountPickerList" class="account-picker-list">
+                        <div class="list-shell">
+                            <telerik:RadListView ID="rlvAccounts" runat="server"
+                                AllowPaging="false"
+                                ItemPlaceholderID="itemaccountPlaceholder">
+
+                                <LayoutTemplate>
+                                    <div class="items-wrap">
+                                        <asp:PlaceHolder ID="itemaccountPlaceholder" runat="server"></asp:PlaceHolder>
+                                    </div>
+
+                                    <div class="lv-footer">
+                                        <telerik:RadButton ID="btnAddAccounts" runat="server" Text="Ajouter des comptes" CssClass="btn-add" />
+                                    </div>
+                                </LayoutTemplate>
+
+                                <ItemTemplate>
+                                    <div class="account-card" data-search='<%# Eval("search").ToString().ToLower() %>' onclick="selectAccount('<%# Eval("Id") %>')">
+                                        <div class="account-code"><%# Eval("NoCompte") %></div>
+                                        <div class="account-name"><%# Eval("Name") %></div>
+                                    </div>
+                                </ItemTemplate>
+
+                                <EmptyDataTemplate>
+                                    <div class="empty">Aucun compte trouvé.</div>
+                                </EmptyDataTemplate>
+                            </telerik:RadListView>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </asp:Panel>
 
         <%-- =====================================================
@@ -858,7 +1108,7 @@
 
             function recalcRow(row) {
                 var qtyEl = row.querySelector("input[id*='numQty']");
-                var prEl  = row.querySelector("input[id*='numUnitPrice']");
+                var prEl = row.querySelector("input[id*='numUnitPrice']");
                 if (!qtyEl || !prEl) return 0;
                 var amt = Math.round(toNum(qtyEl.value) * toNum(prEl.value) * 100) / 100;
                 var lbl = row.querySelector(".lbl-amount");
@@ -873,8 +1123,8 @@
                     subtotal += recalcRow(row);
                 });
                 subtotal = Math.round(subtotal * 100) / 100;
-                var tps   = Math.round(subtotal * TAX_TPS * 100) / 100;
-                var tvq   = Math.round(subtotal * TAX_TVQ * 100) / 100;
+                var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
+                var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
                 var total = Math.round((subtotal + tps + tvq) * 100) / 100;
 
                 var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
@@ -905,9 +1155,37 @@
                 recalcTotals();
             }
 
-            document.addEventListener("DOMContentLoaded", function () { wireInvoiceInputs(); });
+
+            function wireAccountSelectors() {
+                document.querySelectorAll(".js-account-selector").forEach(function (el) {
+                    if (el.dataset.wired === "1") return;
+                    el.dataset.wired = "1";
+
+                    el.addEventListener("click", function () {
+                        var row = el.closest(".item-row");
+                        if (!row) return;
+                        var hidId = row.querySelector("input[id*='hidId']");
+                        var itemId = hidId ? hidId.value : "0";
+
+                        openAccountPicker(el, itemId);
+                    });
+                });
+            }
+
+
+
+
+
+            document.addEventListener("DOMContentLoaded", function () {
+                wireInvoiceInputs();
+                wireAccountSelectors();
+            });
+
             if (window.Sys && Sys.Application) {
-                Sys.Application.add_load(function () { wireInvoiceInputs(); });
+                Sys.Application.add_load(function () {
+                    wireInvoiceInputs();
+                    wireAccountSelectors();
+                });
             }
 
             // ===== PICKER PRODUITS =====
@@ -993,6 +1271,73 @@
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
+                empty.style.display = show ? "block" : "none";
+            }
+
+
+
+            function closeAccountPicker() {
+                var overlay = document.getElementById("accountPickerOverlay");
+                if (overlay) overlay.style.display = "none";
+                document.documentElement.classList.remove("no-page-scroll");
+                document.body.classList.remove("no-page-scroll");
+                console.log("Closed account picker");
+                //currentAccountLabel = null;
+                //currentAccountItemId = null;
+            }
+
+            function openAccountPicker(label, itemId) {
+                currentAccountLabel = label;
+                currentAccountItemId = itemId;
+                console.log("Opening account picker 2 for item ID: " + itemId);
+                var overlay = document.getElementById("accountPickerOverlay");
+                if (overlay) overlay.style.display = "block";
+            }
+
+            function selectAccount(accountId) {
+                console.log("Selected account ID: " + accountId);
+                document.getElementById("<%= hidSelectedAccountId.ClientID %>").value = accountId;
+
+                if (!currentAccountLabel) return;
+                closeAccountPicker();
+                var ajaxManager = $find("<%= Ram1.ClientID %>");
+                var itemId = currentAccountItemId || 0;
+
+                console.log("Sending AJAX request for item ID: " + itemId + " and account ID: " + accountId);
+                ajaxManager.ajaxRequest('ACCOUNT|' + itemId.toString() + '|' + accountId.toString());
+            }
+
+            function filterAccountsClient() {
+                var tb = document.getElementById("accountPickerSearch");
+                var q = (tb ? tb.value : "").toLowerCase().trim();
+
+                var cards = document.querySelectorAll("#accountPickerList .account-card");
+                var visibleCount = 0;
+
+                cards.forEach(function (card) {
+                    var text = normalizeText(card.getAttribute("data-search"));
+                    var show = q === "" || text.indexOf(q) !== -1;
+                    card.style.display = show ? "" : "none";
+                    if (show) visibleCount++;
+                });
+
+                toggleEmptyAccountsMessage(visibleCount === 0);
+            }
+
+            function toggleEmptyAccountsMessage(show) {
+                var list = document.getElementById("accountPickerList");
+                if (!list) return;
+
+                var empty = document.getElementById("accountPickerEmptyJs");
+                if (!empty) {
+                    empty = document.createElement("div");
+                    empty.id = "accountPickerEmptyJs";
+                    empty.className = "empty";
+                    empty.innerText = "Aucun compte trouvé.";
+                    empty.style.display = "none";
+                    list.appendChild(empty);
+                }
+
                 empty.style.display = show ? "block" : "none";
             }
 

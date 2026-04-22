@@ -19,7 +19,9 @@ Public Class wbfBilan
         Dim dateBilan As DateTime = If(dpDateBilan.SelectedDate.HasValue, dpDateBilan.SelectedDate.Value, DateTime.Now)
         lblDateBilan.Text = dateBilan.ToString("yyyy-MM-dd")
 
-        ' Récupérer les soldes
+        ' La proc retourne 2 resultsets :
+        '   Table 0 = comptes du bilan
+        '   Table 1 = bénéfice net de l'exercice (1 ligne, 1 colonne)
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@DateBilan", dateBilan))
@@ -32,6 +34,14 @@ Public Class wbfBilan
 
         Dim dt As DataTable = ds.Tables(0)
 
+        ' Récupérer le bénéfice net (resultset 2)
+        Dim beneficeNet As Decimal = 0
+        If ds.Tables.Count > 1 AndAlso ds.Tables(1).Rows.Count > 0 Then
+            If Not IsDBNull(ds.Tables(1).Rows(0)("BeneficeNet")) Then
+                beneficeNet = CDec(ds.Tables(1).Rows(0)("BeneficeNet"))
+            End If
+        End If
+
         Dim sb As New StringBuilder()
         sb.AppendLine("<table class=""bi-table"">")
 
@@ -40,21 +50,17 @@ Public Class wbfBilan
         ' ══════════════════════════════════════════
         RenderSectionHeader(sb, "ACTIF")
 
-        ' Actif à court terme (ClasseParentId = 1)
         Dim totalActifCT As Decimal = RenderClasse(sb, dt, 1, "Actif à court terme", "1000 – 1499")
         RenderTotalRow(sb, "Total de l'actif à court terme", totalActifCT)
         RenderSpacer(sb)
 
-        ' Actif à long terme (ClasseParentId = 2)
         Dim totalActifLT As Decimal = RenderClasse(sb, dt, 2, "Actif à long terme", "1500 – 1999")
         RenderTotalRow(sb, "Total de l'actif à long terme", totalActifLT)
         RenderSpacer(sb)
 
-        ' TOTAL ACTIF
         Dim totalActif As Decimal = totalActifCT + totalActifLT
         RenderGrandTotal(sb, "TOTAL DE L'ACTIF", totalActif)
 
-        ' ── Séparateur ──
         sb.AppendLine("<tr class=""bi-divider""><td colspan=""3""><hr/></td></tr>")
 
         ' ══════════════════════════════════════════
@@ -62,17 +68,14 @@ Public Class wbfBilan
         ' ══════════════════════════════════════════
         RenderSectionHeader(sb, "PASSIF")
 
-        ' Passif à court terme (ClasseParentId = 3)
         Dim totalPassifCT As Decimal = RenderClasse(sb, dt, 3, "Passif à court terme", "2000 – 2499")
         RenderTotalRow(sb, "Total du passif à court terme", totalPassifCT)
         RenderSpacer(sb)
 
-        ' Passif à long terme (ClasseParentId = 4)
         Dim totalPassifLT As Decimal = RenderClasse(sb, dt, 4, "Passif à long terme", "2500 – 2999")
         RenderTotalRow(sb, "Total du passif à long terme", totalPassifLT)
         RenderSpacer(sb)
 
-        ' TOTAL PASSIF
         Dim totalPassif As Decimal = totalPassifCT + totalPassifLT
         RenderGrandTotal(sb, "TOTAL DU PASSIF", totalPassif)
         RenderSpacer(sb)
@@ -82,27 +85,58 @@ Public Class wbfBilan
         ' ══════════════════════════════════════════
         RenderSectionHeader(sb, "CAPITAUX PROPRES")
 
+        ' Comptes de capitaux propres du bilan (3000-3999)
         Dim totalCP As Decimal = RenderClasse(sb, dt, 5, "Capitaux propres", "3000 – 3999")
+
+        ' ── Bénéfice net de l'exercice courant ──
+        ' Calculé à partir des comptes de résultats (revenus − charges)
+        ' Intégré ici pour équilibrer le bilan
+        If beneficeNet <> 0 Then
+            sb.AppendLine("<tr class=""bi-sub-header"">")
+            sb.AppendLine("  <td colspan=""2"">Résultat de l'exercice courant</td>")
+            sb.AppendLine("  <td></td>")
+            sb.AppendLine("</tr>")
+
+            Dim labelBN As String = If(beneficeNet >= 0,
+                "Bénéfice net de l'exercice",
+                "Perte nette de l'exercice")
+
+            sb.AppendLine("<tr class=""bi-line"">")
+            sb.AppendLine("  <td class=""account-num"" style=""color:#2563eb; font-style:italic;"">—</td>")
+            sb.AppendFormat("  <td class=""account-name"" style=""color:#2563eb; font-style:italic;"">{0}</td>", labelBN).AppendLine()
+            sb.AppendFormat("  <td class=""bi-amount {0}"" style=""font-style:italic;"">{1}</td>",
+                GetAmountClass(beneficeNet), FormatMontant(beneficeNet)).AppendLine()
+            sb.AppendLine("</tr>")
+
+            sb.AppendLine("<tr class=""bi-sub-total"">")
+            sb.AppendLine("  <td></td>")
+            sb.AppendLine("  <td>Total — Résultat de l'exercice</td>")
+            sb.AppendFormat("  <td class=""bi-amount {0}"">{1}</td>",
+                GetAmountClass(beneficeNet), FormatMontant(beneficeNet)).AppendLine()
+            sb.AppendLine("</tr>")
+        End If
+
         RenderSpacer(sb)
 
-        ' TOTAL CAPITAUX PROPRES
-        RenderGrandTotal(sb, "TOTAL DES CAPITAUX PROPRES", totalCP)
+        ' Total CP incluant le bénéfice net
+        Dim totalCPAvecBN As Decimal = totalCP + beneficeNet
+        RenderGrandTotal(sb, "TOTAL DES CAPITAUX PROPRES", totalCPAvecBN)
         RenderSpacer(sb)
 
         ' ══════════════════════════════════════════
         ' TOTAL PASSIF + CAPITAUX PROPRES
         ' ══════════════════════════════════════════
-        Dim totalPassifCP As Decimal = totalPassif + totalCP
+        Dim totalPassifCP As Decimal = totalPassif + totalCPAvecBN
         RenderGrandTotal(sb, "TOTAL DU PASSIF ET DES CAPITAUX PROPRES", totalPassifCP)
 
         ' ══════════════════════════════════════════
-        ' VÉRIFICATION D'ÉQUILIBRE
+        ' VÉRIFICATION
         ' ══════════════════════════════════════════
         Dim ecart As Decimal = totalActif - totalPassifCP
-        Dim checkClass As String = If(ecart = 0, "bi-check-ok", "bi-check-err")
+        Dim checkClass As String = If(Math.Abs(ecart) < 0.01D, "bi-check-ok", "bi-check-err")
         Dim checkMsg As String
 
-        If ecart = 0 Then
+        If Math.Abs(ecart) < 0.01D Then
             checkMsg = "✓ Le bilan est en équilibre"
         Else
             checkMsg = String.Format("✗ Écart de {0} — Le bilan n'est pas en équilibre", FormatMontant(ecart))
@@ -110,6 +144,11 @@ Public Class wbfBilan
 
         sb.AppendLine("<tr class=""bi-spacer""><td colspan=""3""></td></tr>")
         sb.AppendFormat("<tr class=""bi-check {0}""><td colspan=""3"">{1}</td></tr>", checkClass, checkMsg).AppendLine()
+
+        If beneficeNet <> 0 Then
+            sb.AppendLine("<tr class=""bi-spacer""><td colspan=""3""></td></tr>")
+            sb.AppendFormat("<tr><td colspan=""3"" style=""font-size:12px; color:#64748b; padding:8px 14px; font-style:italic;"">Note : Le bénéfice net de l'exercice ({0}) est calculé automatiquement à partir des comptes de résultats et intégré aux capitaux propres.</td></tr>", FormatMontant(beneficeNet)).AppendLine()
+        End If
 
         sb.AppendLine("</table>")
 
@@ -121,7 +160,6 @@ Public Class wbfBilan
 
     Private Function RenderClasse(sb As StringBuilder, dt As DataTable, classeParentId As Integer, titre As String, plage As String) As Decimal
 
-        ' En-tête de classe
         sb.AppendLine("<tr class=""bi-classe"">")
         sb.AppendFormat("  <td colspan=""2"">{0} <span class=""plage"">({1})</span></td>", titre, plage).AppendLine()
         sb.AppendLine("  <td></td>")
@@ -129,7 +167,6 @@ Public Class wbfBilan
 
         Dim totalClasse As Decimal = 0
 
-        ' Grouper par sous-classe
         Dim sousClasses = (From r In dt.AsEnumerable()
                            Where CInt(r("ClasseParentId")) = classeParentId
                            Group r By scId = CInt(r("ClasseId")),
@@ -139,8 +176,6 @@ Public Class wbfBilan
                            Select New With {.Id = scId, .Nom = scNom, .Comptes = grp}).ToList()
 
         For Each sc In sousClasses
-
-            ' En-tête sous-classe
             sb.AppendLine("<tr class=""bi-sub-header"">")
             sb.AppendFormat("  <td colspan=""2"">{0}</td>", sc.Nom).AppendLine()
             sb.AppendLine("  <td></td>")
@@ -152,7 +187,6 @@ Public Class wbfBilan
                 Dim numero As String = row("Numero").ToString()
                 Dim nom As String = row("Nom").ToString()
                 Dim solde As Decimal = If(IsDBNull(row("Solde")), 0D, CDec(row("Solde")))
-
                 subTotal += solde
 
                 sb.AppendLine("<tr class=""bi-line"">")
@@ -162,7 +196,6 @@ Public Class wbfBilan
                 sb.AppendLine("</tr>")
             Next
 
-            ' Sous-total
             sb.AppendLine("<tr class=""bi-sub-total"">")
             sb.AppendLine("  <td></td>")
             sb.AppendFormat("  <td>Total — {0}</td>", sc.Nom).AppendLine()
@@ -174,8 +207,6 @@ Public Class wbfBilan
 
         Return totalClasse
     End Function
-
-    ' ── Lignes spéciales ──
 
     Private Sub RenderSectionHeader(sb As StringBuilder, titre As String)
         sb.AppendLine("<tr class=""bi-section"">")
@@ -203,13 +234,9 @@ Public Class wbfBilan
         sb.AppendLine("<tr class=""bi-spacer""><td colspan=""3""></td></tr>")
     End Sub
 
-    ' ── Formatage ──
-
     Private Function FormatMontant(montant As Decimal) As String
         If montant = 0 Then Return "—"
-        If montant < 0 Then
-            Return "(" & Math.Abs(montant).ToString("N2") & " $)"
-        End If
+        If montant < 0 Then Return "(" & Math.Abs(montant).ToString("N2") & " $)"
         Return montant.ToString("N2") & " $"
     End Function
 

@@ -131,6 +131,15 @@ Partial Public Class wbfSupplierInvoinceEdit
     Protected WithEvents txtPoNumber As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
+    '''chkPost control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents chkPost As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
     '''rpItems control.
     '''</summary>
     '''<remarks>
@@ -228,4 +237,22 @@ Partial Public Class wbfSupplierInvoinceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rlvSuppliers As Global.Telerik.Web.UI.RadListView
+
+    '''<summary>
+    '''hidSelectedAccountId control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hidSelectedAccountId As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''rlvAccounts control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rlvAccounts As Global.Telerik.Web.UI.RadListView
 End Class

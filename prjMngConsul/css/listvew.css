@@ -38,8 +38,28 @@ body {
     font-family: var(--font);
     color: var(--text);
 }
- 
- 
+
+
+
+
+
+/* =============================================
+           ITEMS (lignes de facture)
+============================================= */
+
+
+.item-row {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: #fff;
+}
+
+.qty-right input {
+    text-align: right !important;
+}
+/* ============================================= */
+
+
 
 .lien {
     color: var(--primary);

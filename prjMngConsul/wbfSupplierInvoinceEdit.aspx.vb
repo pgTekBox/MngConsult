@@ -71,6 +71,8 @@ Public Class wbfSupplierInvoinceEdit
         dt.Columns.Add("Id", GetType(Integer))
         dt.Columns.Add("ProductId", GetType(Integer))
         dt.Columns.Add("ProductName", GetType(String))
+        dt.Columns.Add("AccountId", GetType(Integer))
+        dt.Columns.Add("AccountName", GetType(String))
         dt.Columns.Add("Description", GetType(String))
         dt.Columns.Add("Qty", GetType(Double))
         dt.Columns.Add("UnitPrice", GetType(Double))
@@ -103,6 +105,8 @@ Public Class wbfSupplierInvoinceEdit
             dr("Qty") = orow("Qty")
             dr("UnitPrice") = orow("UnitPrice")
             dr("Amount") = orow("Amount")
+            dr("AccountId") = If(IsDBNull(orow("AccountId")), 0, Convert.ToInt32(orow("AccountId")))
+            dr("AccountName") = If(IsDBNull(orow("AccountName")), "", orow("AccountName").ToString())
             dr("Dirty") = 0
             dr("Deleted") = 0
             dt.Rows.Add(dr)
@@ -187,9 +191,11 @@ Public Class wbfSupplierInvoinceEdit
             Dim numQty As RadTextBox = TryCast(item.FindControl("numQty"), RadTextBox)
             Dim numUnitPrice As RadTextBox = TryCast(item.FindControl("numUnitPrice"), RadTextBox)
             Dim hidProduct As HiddenField = TryCast(item.FindControl("hidProductId"), HiddenField)
+            Dim hidAccount As HiddenField = TryCast(item.FindControl("hidAccountId"), HiddenField)
 
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
             Dim productId As Integer = If(hidProduct Is Nothing, 0, CInt(If(hidProduct.Value = "", "0", hidProduct.Value)))
+            Dim accountId As Integer = If(hidAccount Is Nothing OrElse String.IsNullOrWhiteSpace(hidAccount.Value), 0, Convert.ToInt32(hidAccount.Value))
             Dim qty As Double = ToDoubleAnyCulture(If(numQty Is Nothing, "0", numQty.Text))
             Dim unitPrice As Double = ToDoubleAnyCulture(If(numUnitPrice Is Nothing, "0", numUnitPrice.Text))
             Dim amount As Double = Math.Round(qty * unitPrice, 2)
@@ -208,34 +214,42 @@ Public Class wbfSupplierInvoinceEdit
             Dim changed As Boolean = False
 
             ' --- Description ---
-            Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
-            If oldDesc <> description Then
-                dr("Description") = description : changed = True
-            End If
+            'Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
+            'If oldDesc <> description Then
+            dr("Description") = description
+            'changed = True
+            'End If
 
             ' --- ProductId ---
-            Dim oldProductId As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
-            If oldProductId <> productId Then
-                dr("ProductId") = productId : changed = True
-            End If
+            'Dim oldProductId As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
+            'If oldProductId <> productId Then
+            dr("ProductId") = productId
+            'changed = True
+            'End If
 
             ' --- Qty ---
-            Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, CDbl(dr("Qty")))
-            If Math.Abs(oldQty - qty) > 0.0000001 Then
-                dr("Qty") = qty : changed = True
-            End If
+            'Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, CDbl(dr("Qty")))
+            'If Math.Abs(oldQty - qty) > 0.0000001 Then
+            dr("Qty") = qty
+            'changed = True
+            'End If
 
             ' --- UnitPrice ---
-            Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, CDbl(dr("UnitPrice")))
-            If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
-                dr("UnitPrice") = unitPrice : changed = True
-            End If
+            'Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, CDbl(dr("UnitPrice")))
+            'If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
+            dr("UnitPrice") = unitPrice
+            'changed = True
+            'End If
+
+            dr("AccountId") = accountId
+
 
             ' --- Amount (recalcul) ---
-            Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, CDbl(dr("Amount")))
-            If Math.Abs(oldAmt - amount) > 0.0000001 Then
-                dr("Amount") = amount : changed = True
-            End If
+            'Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, CDbl(dr("Amount")))
+            'If Math.Abs(oldAmt - amount) > 0.0000001 Then
+            dr("Amount") = amount
+            'changed = True
+            'End If
 
             If changed Then dr("Dirty") = 1
         Next
@@ -258,6 +272,8 @@ Public Class wbfSupplierInvoinceEdit
         dr("Description") = ""
         dr("Qty") = 1
         dr("UnitPrice") = 0
+        dr("AccountId") = 0
+        dr("AccountName") = ""
         dr("Amount") = 0
         dr("Dirty") = 1
         dr("Deleted") = 0
@@ -281,16 +297,19 @@ Public Class wbfSupplierInvoinceEdit
         UpdateAllItemInViewstate()
 
 
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@SupplierId", 1))
-        p.Add(New SqlClient.SqlParameter("@IssueDate", dpIssueDate.SelectedDate))
-        p.Add(New SqlClient.SqlParameter("@DueDate", dpDueDate.SelectedDate))
-        p.Add(New SqlClient.SqlParameter("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value)))
-        p.Add(New SqlClient.SqlParameter("@PoNumber", txtPoNumber.Text.Trim()))
-        p.Add(New SqlClient.SqlParameter("@RefNo", txtRefNo.Text.Trim()))
-        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        'Dim p As New Collection
+        'p.Add(New SqlClient.SqlParameter("@SupplierId", 1))
+        'p.Add(New SqlClient.SqlParameter("@IssueDate", dpIssueDate.SelectedDate))
+        'p.Add(New SqlClient.SqlParameter("@DueDate", dpDueDate.SelectedDate))
+        'p.Add(New SqlClient.SqlParameter("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value)))
+        'p.Add(New SqlClient.SqlParameter("@PoNumber", txtPoNumber.Text.Trim()))
+        'p.Add(New SqlClient.SqlParameter("@RefNo", txtRefNo.Text.Trim()))
+        'p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
-        Dim ds As DataSet = ExecuteSQLds(" ", p)
+
+
+
+        'Dim ds As DataSet = ExecuteSQLds(" ", p)
 
 
 
@@ -298,43 +317,56 @@ Public Class wbfSupplierInvoinceEdit
             conn.Open()
 
             ' --- 1. Sauvegarder l'en-tête ---
-            Using cmdHeader As New SqlCommand("s0044SaveSupplierInvoiceHeader", conn)
-                cmdHeader.CommandType = CommandType.StoredProcedure
+            'Using cmdHeader As New SqlCommand("s0044SaveSupplierInvoiceHeader", conn)
+            '    cmdHeader.CommandType = CommandType.StoredProcedure
 
-                ' InvoiceId en entrée/sortie (0 = INSERT, >0 = UPDATE)
-                Dim pId As New SqlParameter("@InvoiceId", SqlDbType.Int)
-                pId.Direction = ParameterDirection.InputOutput
-                pId.Value = InvoiceId
-                cmdHeader.Parameters.Add(pId)
+            '    ' InvoiceId en entrée/sortie (0 = INSERT, >0 = UPDATE)
+            '    Dim pId As New SqlParameter("@InvoiceId", SqlDbType.Int)
+            '    pId.Direction = ParameterDirection.InputOutput
+            '    pId.Value = InvoiceId
+            '    cmdHeader.Parameters.Add(pId)
 
-                ' Récupérer le SupplierId depuis le HiddenField (rempli par le picker JS)
-                Dim supplierId As Integer = 0
-                Integer.TryParse(hidSelectedSupplierId.Value, supplierId)
-                cmdHeader.Parameters.AddWithValue("@SupplierId", supplierId)
-                cmdHeader.Parameters.AddWithValue("@IssueDate", dpIssueDate.SelectedDate)
-                cmdHeader.Parameters.AddWithValue("@DueDate", dpDueDate.SelectedDate)
-                cmdHeader.Parameters.AddWithValue("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value))
-                cmdHeader.Parameters.AddWithValue("@PoNumber", txtPoNumber.Text.Trim())
-                cmdHeader.Parameters.AddWithValue("@RefNo", txtRefNo.Text.Trim())
-                cmdHeader.Parameters.AddWithValue("@CompanyGUID", Company)
+            '    ' Récupérer le SupplierId depuis le HiddenField (rempli par le picker JS)
+            '    Dim supplierId As Integer = 0
+            '    Integer.TryParse(hidSelectedSupplierId.Value, supplierId)
+            '    cmdHeader.Parameters.AddWithValue("@SupplierId", supplierId)
+            '    cmdHeader.Parameters.AddWithValue("@IssueDate", dpIssueDate.SelectedDate)
+            '    cmdHeader.Parameters.AddWithValue("@DueDate", dpDueDate.SelectedDate)
+            '    cmdHeader.Parameters.AddWithValue("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value))
+            '    cmdHeader.Parameters.AddWithValue("@PoNumber", txtPoNumber.Text.Trim())
+            '    cmdHeader.Parameters.AddWithValue("@RefNo", txtRefNo.Text.Trim())
+            '    cmdHeader.Parameters.AddWithValue("@CompanyGUID", Company)
 
-                cmdHeader.ExecuteNonQuery()
 
-                ' Récupérer l'Id de la nouvelle facture si INSERT
-                InvoiceId = CInt(pId.Value)
-            End Using
+
+
+
+            '    cmdHeader.ExecuteNonQuery()
+
+            '    ' Récupérer l'Id de la nouvelle facture si INSERT
+            '    InvoiceId = CInt(pId.Value)
+            'End Using
 
             ' --- 2. Sauvegarder les lignes via TVP ---
-            Using cmdItems As New SqlCommand("s0040SaveSupplierInvoiceItems", conn)
+            Using cmdItems As New SqlCommand("s0040SaveInvoiceItems", conn)
                 cmdItems.CommandType = CommandType.StoredProcedure
 
                 Dim pInvId As New SqlParameter("@InvoiceId", SqlDbType.Int)
                 pInvId.Value = InvoiceId
                 cmdItems.Parameters.Add(pInvId)
 
+                If chkPost.Checked Then
+                    cmdItems.Parameters.AddWithValue("@toPost", 1)
+                Else
+                    cmdItems.Parameters.AddWithValue("@toPost", 0)
+                End If
+
+
+
+
                 Dim pItems As New SqlParameter("@Items", SqlDbType.Structured)
                 pItems.Value = CType(ViewState("ItemsTable"), DataTable)
-                pItems.TypeName = "dbo.TVP_InvoiceItem_v3"
+                pItems.TypeName = "dbo.TVP_InvoiceItem_v4"
                 cmdItems.Parameters.Add(pItems)
 
                 cmdItems.ExecuteNonQuery()
@@ -427,10 +459,67 @@ Public Class wbfSupplierInvoinceEdit
         Dim lblProduct As Label = TryCast(e.Item.FindControl("lblProduct"), Label)
         If lblProduct Is Nothing Then Return
 
+        Dim lblAccount As Label = TryCast(e.Item.FindControl("lblAccount"), Label)
+
+
+
         Dim id As Integer = DataBinder.Eval(e.Item.DataItem, "Id")
         lblProduct.Attributes.Add("onclick", "openProductPicker(this," & id & ")")
         lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName").ToString()
+
+        If lblAccount IsNot Nothing Then
+            lblAccount.Attributes.Add("onclick", "openAccountPicker(this," & id & ")")
+        End If
+
+        Dim hidProduct As HiddenField = TryCast(e.Item.FindControl("hidProductId"), HiddenField)
+
+        ' 1) Charger la source UNE fois
+        Dim products As DataTable = TryCast(ViewState("ProductsTable"), DataTable)
+        If products Is Nothing Then
+            products = GetProductsTable()
+            ViewState("ProductsTable") = products
+        End If
+
+        'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
+
+        lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
+
+        If lblAccount IsNot Nothing Then
+            lblAccount.Text = Convert.ToString(DataBinder.Eval(e.Item.DataItem, "AccountName"))
+        End If
+
+
+
+
     End Sub
+    Private Function GetAccountsTable() As DataTable
+        ' TODO: adapter le nom de la procédure stockée si nécessaire
+        Dim ds As DataSet = ExecuteSQLds("s0090Get_GLAccounts_ACHAT")
+        Return ds.Tables(0)
+    End Function
+
+    Private Sub rlvAccounts_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAccounts.NeedDataSource
+        Dim dt As DataTable = GetAccountsTable()
+
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvAccounts.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
+
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR NoCompte LIKE '%" & safeText & "%' OR search LIKE '%" & safeText & "%'"
+            rlvAccounts.DataSource = dv
+        Else
+            rlvAccounts.DataSource = dt
+        End If
+    End Sub
+
+
 
     ' =========================================================
     '  BINDING DES LISTES (NeedDataSource)
@@ -461,34 +550,91 @@ Public Class wbfSupplierInvoinceEdit
     '''             "SUPPLIER|{supplierId}"
     ''' </summary>
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
-        Dim parts() As String = e.Argument.Split("|"c)
-        If parts.Length = 0 Then Return
+        Dim AllParam As String() = e.Argument.Split("|"c)
+        Dim CommandName As String
+        Dim ItemLineId As Integer
+        Dim CustomerId As Integer
+        Dim productId As Integer
+        Dim accountId As Integer
+        CommandName = AllParam(0)
 
-        Select Case parts(0)
+        Select Case CommandName
 
             Case "PRODUCT"
-                ' Mettre à jour une ligne avec le produit sélectionné
-                Dim itemLineId As Integer = 0
-                Dim productCode As String = ""
-                If parts.Length >= 3 Then
-                    Integer.TryParse(parts(1), itemLineId)
-                    productCode = parts(2)
+
+                If Integer.TryParse(AllParam(2), productId) Then
+                    If Integer.TryParse(AllParam(1), ItemLineId) Then
+                        UpdateItem(ItemLineId, productId)
+                        BindItemGrid()
+                    End If
                 End If
-                If productCode <> "" Then
-                    UpdateItemByProductCode(itemLineId, productCode)
-                    BindItemGrid()
-                End If
+
+
 
             Case "SUPPLIER"
                 ' Mettre à jour l'affichage du fournisseur sélectionné
                 Dim supplierId As Integer = 0
-                If parts.Length >= 2 AndAlso Integer.TryParse(parts(1), supplierId) Then
+                If AllParam.Length >= 2 AndAlso Integer.TryParse(AllParam(1), supplierId) Then
                     UpdateSupplierDisplay(supplierId)
                 End If
 
+            Case "ACCOUNT"
+                If Integer.TryParse(AllParam(2), accountId) Then
+                    If Integer.TryParse(AllParam(1), ItemLineId) Then
+
+
+
+
+                        UpdateItemAccount(ItemLineId, accountId)
+
+                        SetDirtyItem(ItemLineId)
+
+                        BindItemGrid()
+                    End If
+                End If
         End Select
     End Sub
 
+    Sub SetDirtyItem(ItemLineId As Integer)
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        Dim dr As DataRow = dt.AsEnumerable().FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+        If dr Is Nothing Then Exit Sub
+        dr("Dirty") = 1
+        ViewState("ItemsTable") = dt
+    End Sub
+    Sub UpdateItem(ItemLineId As Integer, productId As Integer)
+
+        Dim p2 As New Collection
+        p2.Add(New SqlClient.SqlParameter("@ProductId", productId))
+        Dim AlldsProducts As DataSet = ExecuteSQLds("s0042GetProductById", p2)
+
+
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        If dt Is Nothing Then Exit Sub
+
+        Dim dr As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+
+        If dr Is Nothing Then Exit Sub
+
+        dr("ProductId") = productId
+        dr("Dirty") = 1
+
+        ' Exemple: si tu veux aussi vider ou reset certains champs
+        dr("Description") = AlldsProducts.Tables(0).Rows(0)("Description").ToString() ' ou "" si tu préfères
+        dr("ProductName") = AlldsProducts.Tables(0).Rows(0)("Name").ToString()
+        dr("Qty") = 1
+        dr("UnitPrice") = AlldsProducts.Tables(0).Rows(0)("Prix").ToString()
+        dr("Amount") = 0D
+        dr("Deleted") = 0
+
+        ViewState("ItemsTable") = dt
+
+
+
+
+    End Sub
     ''' <summary>
     ''' Met à jour l'affichage du fournisseur (label + adresse).
     ''' Procédure SQL : s0037GetSupplierFullById (@PartyId)
@@ -570,5 +716,28 @@ Public Class wbfSupplierInvoinceEdit
     Protected Sub btnAddProducts_Click(sender As Object, e As EventArgs)
         Return
     End Sub
+    Sub UpdateItemAccount(ItemLineId As Integer, accountId As Integer)
 
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@AccountId", accountId))
+        ' TODO: adapter le nom de la procédure stockée si nécessaire
+        Dim ds As DataSet = ExecuteSQLds("s0083Get_GLAccountById", p)
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        If dt Is Nothing Then Exit Sub
+
+        Dim dr As DataRow = dt.AsEnumerable().
+            FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
+
+        If dr Is Nothing Then Exit Sub
+
+        'dr("AccountId") = ds.Tables(0).Rows(0)("Name")
+        dr("Dirty") = 1
+        dr("Deleted") = 0
+        dr("AccountId") = ds.Tables(0).Rows(0)("Nocompte").ToString()
+        dr("AccountName") = ds.Tables(0).Rows(0)("Name").ToString()
+
+
+        ViewState("ItemsTable") = dt
+    End Sub
 End Class
