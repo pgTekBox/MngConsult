@@ -41,6 +41,15 @@ Partial Public Class wbfCustomersInvoices
     Protected WithEvents rwmCustomersInvoices As Global.Telerik.Web.UI.RadWindowManager
 
     '''<summary>
+    '''hfInvoiceDirty control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hfInvoiceDirty As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''btnAddCustomerInvoice control.
     '''</summary>
     '''<remarks>

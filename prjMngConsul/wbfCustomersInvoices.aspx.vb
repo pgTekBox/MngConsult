@@ -1,5 +1,7 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Drawing
 Imports Telerik.Web.UI
+Imports Telerik.Web.UI.OrgChartStyles
 Imports Telerik.Web.UI.PageLayout
 
 Public Class wbfCustomersInvoices
@@ -73,5 +75,34 @@ Public Class wbfCustomersInvoices
         '        End Using
     End Sub
 
+    Private Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
+        If e.Argument = "refreshgrid" Then
+            rlvClientsFactures.Rebind()
+        End If
+    End Sub
 
+
+
+    Private Sub rlvClientsFactures_ItemDataBound(sender As Object, e As RadListViewItemEventArgs) Handles rlvClientsFactures.ItemDataBound
+        If TypeOf e.Item Is Telerik.Web.UI.RadListViewDataItem Then
+
+
+            Dim item As Telerik.Web.UI.RadListViewDataItem = CType(e.Item, Telerik.Web.UI.RadListViewDataItem)
+            Dim data As DataRowView = CType(item.DataItem, DataRowView)
+
+
+
+            If data("ComptabilisationStatus") = "COMPTABILISE" Then
+                Dim btnDelete As Button = CType(item.FindControl("btnDelete"), Button)
+                btnDelete.CssClass &= " btn-icon-lock-red readonly-click-block"
+
+                btnDelete.CommandName = ""
+
+
+            End If
+
+
+        End If
+
+    End Sub
 End Class

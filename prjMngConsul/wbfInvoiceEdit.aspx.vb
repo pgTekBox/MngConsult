@@ -29,8 +29,38 @@ Public Class wbfInvoiceEdit
             ViewState("InvoiceId") = Value
         End Set
     End Property
+    Property CustomerGUID() As Guid
+        Get
+            Try
+                If ViewState("CustomerGUID") Is Nothing Then ViewState("CustomerGUID") = New Guid("00000000-0000-0000-0000-000000000000")
+                Dim MyRetVal As Guid = ViewState("CustomerGUID")
+                Return MyRetVal
 
+            Catch ex As Exception
+                Return New Guid("00000000-0000-0000-0000-000000000000")
+            End Try
 
+        End Get
+        Set(ByVal Value As Guid)
+            ViewState("CustomerGUID") = Value
+        End Set
+    End Property
+    Property Comptabilise() As Boolean
+        Get
+            Try
+                If ViewState("Comptabilise") Is Nothing Then ViewState("Comptabilise") = False
+                Dim MyRetVal As Boolean = ViewState("Comptabilise")
+                Return MyRetVal
+
+            Catch ex As Exception
+                Return False
+            End Try
+
+        End Get
+        Set(ByVal Value As Boolean)
+            ViewState("Comptabilise") = Value
+        End Set
+    End Property
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
@@ -42,6 +72,7 @@ Public Class wbfInvoiceEdit
             BindData()
             'BinDDL()
         End If
+        ApplyReadOnlyMode()
 
 
     End Sub
@@ -59,6 +90,7 @@ Public Class wbfInvoiceEdit
         dt.Columns.Add("Amount", GetType(Double))
         dt.Columns.Add("Dirty", GetType(Integer))
         dt.Columns.Add("Deleted", GetType(Integer))
+        dt.Columns.Add("Ordre", GetType(Integer))
         ViewState("ItemsTable") = dt
     End Sub
 
@@ -84,6 +116,7 @@ Public Class wbfInvoiceEdit
             dr("AccountName") = If(IsDBNull(orow("AccountName")), "", orow("AccountName").ToString())
             dr("Dirty") = 0
             dr("Deleted") = 0
+            dr("Ordre") = 0
             CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
 
         Next
@@ -95,9 +128,9 @@ Public Class wbfInvoiceEdit
 
         Dim dt As DataTable = TryCast(ViewState("ItemsTable"), DataTable)
         If dt Is Nothing Then Exit Sub
-
+        Dim MyOrdre As Integer = 0
         For Each item As RepeaterItem In rpItems.Items
-
+            MyOrdre = MyOrdre + 1
             If item.ItemType <> ListItemType.Item AndAlso item.ItemType <> ListItemType.AlternatingItem Then
                 Continue For
             End If
@@ -204,7 +237,7 @@ Public Class wbfInvoiceEdit
             'End If
 
 
-
+            dr("Ordre") = MyOrdre
             ' Dirty
             'If changed AndAlso dt.Columns.Contains("Dirty") Then
             dr("Dirty") = 1
@@ -223,6 +256,7 @@ Public Class wbfInvoiceEdit
 
         Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
         Dim dv As New DataView(dt)
+        dv.Sort = "Ordre"
         dv.RowFilter = "Deleted = 0"
 
         rpItems.DataSource = dv
@@ -252,22 +286,94 @@ Public Class wbfInvoiceEdit
             'Next
 
             'ddlCustomer.Text = orow("Name").ToString()
-
+            CustomerGUID = orow("PartyGUID")
             lblCustomer.Text = orow("Name").ToString()
             lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this," & InvoiceId.ToString & ")")
             rdLabel.Text = orow("FullName").ToString()
             dpIssueDate.SelectedDate = orow("IssueDate")
             dpDueDate.SelectedDate = orow("DueDate")
+            Comptabilise = orow("Comptabilise")
+            If Comptabilise Then
+                chkPost.Checked = True
+            Else
+                chkPost.Checked = False
+            End If
             BindItemGrid()
+
+
+
+
+
+
         Else
 
         End If
     End Sub
 
 
+    Private Sub ApplyReadOnlyMode()
+        If Comptabilise Then
+
+
+            lblPostedBadge.Visible = True
+
+
+            chkPost.Enabled = False
+
+
+
+
+            ' Bloquer visuellement
+            pnlMain.CssClass &= " readonly"
+            lblCustomer.CssClass &= " readonly-click-block"
+            ' Désactiver champs principaux
+            dpIssueDate.Enabled = False
+            dpDueDate.Enabled = False
+
+            ' Bloquer bouton ajouter
+            btnAddLine.Visible = False
+
+            ' Bloquer save
+            radSave.Enabled = False
+
+            ' Bloquer repeater (inputs)
+            For Each item As RepeaterItem In rpItems.Items
+
+                Dim txtDesc = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
+                Dim numQty = CType(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
+                Dim numUnitPrice = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
+
+                If txtDesc IsNot Nothing Then txtDesc.Enabled = False
+                If numQty IsNot Nothing Then numQty.Enabled = False
+                If numUnitPrice IsNot Nothing Then numUnitPrice.Enabled = False
+
+                ' cacher boutons actions
+                Dim btnDel = CType(item.FindControl("RadImageButton1"), Telerik.Web.UI.RadImageButton)
+                Dim btnUp = CType(item.FindControl("RadImageButton2"), Telerik.Web.UI.RadImageButton)
+                Dim btnDown = CType(item.FindControl("RadImageButton3"), Telerik.Web.UI.RadImageButton)
+
+                If btnDel IsNot Nothing Then btnDel.Visible = False
+                If btnUp IsNot Nothing Then btnUp.Visible = False
+                If btnDown IsNot Nothing Then btnDown.Visible = False
+
+                Dim lblProduct = TryCast(item.FindControl("lblProduct"), Label)
+                Dim lblAccount = TryCast(item.FindControl("lblAccount"), Label)
+
+                If lblProduct IsNot Nothing Then lblProduct.CssClass &= " readonly-click-block"
+                If lblAccount IsNot Nothing Then lblAccount.CssClass &= " readonly-click-block"
+
+
+
+            Next
+        Else
+            lblPostedBadge.Visible = False
+        End If
+    End Sub
+
+
     'Ajout d'une ligne vide dans le ViewState("ItemsTable") et rebind du Repeater pour afficher la nouvelle ligne
     Private Sub btnAddLine_Click(sender As Object, e As EventArgs) Handles btnAddLine.Click
-
+        If Comptabilise Then Return
         UpdateAllItemInViewstate()
 
         Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
@@ -282,6 +388,8 @@ Public Class wbfInvoiceEdit
         dr("AccountName") = ""
         dr("Dirty") = 1
         dr("Deleted") = 0
+        dr("Ordre") = CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1
+
         CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
 
 
@@ -293,7 +401,7 @@ Public Class wbfInvoiceEdit
 
     'Sauvegarde de la facture: mise à jour du ViewState("ItemsTable") avec les valeurs actuelles, puis envoi de toutes les lignes (y compris les marquées comme Deleted=1) à une procédure stockée qui se chargera de faire les insert/update/delete nécessaires en fonction des flags Dirty et Deleted
     Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
-
+        If Comptabilise Then Return
         UpdateAllItemInViewstate()
 
 
@@ -317,15 +425,24 @@ Public Class wbfInvoiceEdit
             ParamPost.Value = 0
         End If
 
+        Dim ParamPartyGUID As New SqlClient.SqlParameter("@PartyGUID", SqlDbType.UniqueIdentifier)
+        ParamPartyGUID.Value = CustomerGUID
 
+        Dim ParamIssueDate As New SqlClient.SqlParameter("@IssueDate", SqlDbType.DateTime)
+        ParamIssueDate.Value = dpIssueDate.SelectedDate
 
-
+        Dim ParamDueDate As New SqlClient.SqlParameter("@DueDate", SqlDbType.DateTime)
+        ParamDueDate.Value = dpDueDate.SelectedDate
 
 
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
         ParamItems.Value = tvp
-        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v4"
+        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v5"
 
+
+        oCom.Parameters.Add(ParamDueDate)
+        oCom.Parameters.Add(ParamIssueDate)
+        oCom.Parameters.Add(ParamPartyGUID)
         oCom.Parameters.Add(ParamPost)
         oCom.Parameters.Add(ParamInvoiceId)
         oCom.Parameters.Add(ParamItems)
@@ -334,21 +451,18 @@ Public Class wbfInvoiceEdit
         'oCom.ExecuteNonQuery()
         Dim retval = oCom.ExecuteScalar()
         oCom.Connection.Close()
+        Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
+        ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
 
-        Response.Redirect("wbfCustomersInvoices.aspx")
 
     End Sub
 
     'ItemCommand du Repeater pour gérer la suppression d'une ligne: on marque la ligne comme Deleted=1 dans le ViewState("ItemsTable") et on rebind le Repeater pour que la ligne disparaisse de l'affichage (le vrai delete en BD sera géré par la procédure stockée lors de la sauvegarde en fonction du flag Deleted)
     Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand
         If e.CommandName = "DeleteLine" Then
-
             UpdateAllItemInViewstate()
-
             Dim id As Integer = Convert.ToInt32(e.CommandArgument)
-
             Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-
             For Each dr As DataRow In dt.Rows
                 If Convert.ToInt32(dr("Id")) = id Then
                     dr("Deleted") = 1
@@ -360,7 +474,109 @@ Public Class wbfInvoiceEdit
             BindItemGrid()
 
         End If
+
+        If e.CommandName = "OrdreHaut" Then
+            UpdateAllItemInViewstate()
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            DecrementerOrdre(dt, id)
+            BindItemGrid()
+        End If
+
+
+        If e.CommandName = "OrdreBas" Then
+            UpdateAllItemInViewstate()
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            IncrementerOrdre(dt, id)
+            BindItemGrid()
+
+        End If
+
+
+
     End Sub
+    Public Sub IncrementerOrdre(dt As DataTable, targetId As Integer)
+
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then Exit Sub
+
+        ' 🔹 1. Trouver la ligne cible
+        Dim targetRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = targetId)
+
+        If targetRow Is Nothing Then Exit Sub
+
+        Dim ordreActuel As Integer = Convert.ToInt32(targetRow("Ordre"))
+
+        ' 🔹 2. Trouver le max (pour ne pas dépasser)
+        Dim maxOrdre As Integer = dt.AsEnumerable().
+        Max(Function(r) Convert.ToInt32(r("Ordre")))
+
+        If ordreActuel >= maxOrdre Then Exit Sub
+
+        ' 🔹 3. Trouver la ligne suivante
+        Dim nextRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Ordre")) = ordreActuel + 1)
+
+        ' 🔹 4. Swap
+        If nextRow IsNot Nothing Then
+            nextRow("Ordre") = ordreActuel
+            targetRow("Ordre") = ordreActuel + 1
+        End If
+
+        ' 🔹 5. Re-numérotation (sécurité)
+        Dim orderedRows = dt.AsEnumerable().
+        OrderBy(Function(r) Convert.ToInt32(r("Ordre"))).
+        ThenBy(Function(r) Convert.ToInt32(r("Id"))).
+        ToList()
+
+        Dim i As Integer = 1
+        For Each r In orderedRows
+            r("Ordre") = i
+            i += 1
+        Next
+
+    End Sub
+    Public Sub DecrementerOrdre(dt As DataTable, targetId As Integer)
+
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then Exit Sub
+
+        ' 🔹 1. Trouver la ligne cible
+        Dim targetRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = targetId)
+
+        If targetRow Is Nothing Then Exit Sub
+
+        Dim ordreActuel As Integer = Convert.ToInt32(targetRow("Ordre"))
+
+        ' 🔹 2. Si déjà à 1 → rien à faire
+        If ordreActuel <= 1 Then Exit Sub
+
+        ' 🔹 3. Trouver la ligne juste avant
+        Dim previousRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Ordre")) = ordreActuel - 1)
+
+        ' 🔹 4. Swap des ordres
+        If previousRow IsNot Nothing Then
+            previousRow("Ordre") = ordreActuel
+            targetRow("Ordre") = ordreActuel - 1
+        End If
+
+        ' 🔹 5. Re-numérotation propre (sécurise les trous/doublons)
+        Dim orderedRows = dt.AsEnumerable().
+        OrderBy(Function(r) Convert.ToInt32(r("Ordre"))).
+        ThenBy(Function(r) Convert.ToInt32(r("Id"))).
+        ToList()
+
+        Dim i As Integer = 1
+        For Each r In orderedRows
+            r("Ordre") = i
+            i += 1
+        Next
+
+    End Sub
+
+
 
     'Creation d'une table en mémoire pour stocker la liste des produits (équivalent d'un DataTable dans une session classique) et méthode pour la charger depuis la BD (proc s0041GetProducts qui retourne Id, Name, Description, Price)
     Private Function GetProductsTable() As DataTable
@@ -411,7 +627,7 @@ Public Class wbfInvoiceEdit
 
         'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
 
-        lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
+        'lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
 
         If lblAccount IsNot Nothing Then
             lblAccount.Text = Convert.ToString(DataBinder.Eval(e.Item.DataItem, "AccountName"))
@@ -542,7 +758,7 @@ Public Class wbfInvoiceEdit
     'puis on rebind le RadListView pour afficher les changements (exemple simple sans formulaire de saisie, juste pour montrer le principe)
     'Est appeler lors d une selection d un produit
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
-
+        If Comptabilise Then Return
         Dim AllParam As String() = e.Argument.Split("|"c)
         Dim CommandName As String
         Dim ItemLineId As Integer
@@ -604,7 +820,7 @@ Public Class wbfInvoiceEdit
         Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
         rdLabel.Text = Fullanme
         lblCustomer.Text = ds.Tables(0).Rows(0)("Name").ToString()
-
+        CustomerGUID = ds.Tables(0).Rows(0)("PartyGUID")
     End Sub
 
 
@@ -638,6 +854,13 @@ Public Class wbfInvoiceEdit
         dr("UnitPrice") = AlldsProducts.Tables(0).Rows(0)("Prix").ToString()
         dr("Amount") = 0D
         dr("Deleted") = 0
+        dr("AccountId") = AlldsProducts.Tables(0).Rows(0)("Compte")
+        dr("AccountName") = AlldsProducts.Tables(0).Rows(0)("AccountName").ToString()
+
+
+
+
+
 
         ViewState("ItemsTable") = dt
 

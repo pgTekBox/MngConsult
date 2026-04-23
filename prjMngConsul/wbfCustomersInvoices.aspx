@@ -279,7 +279,7 @@
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
     <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true"></telerik:RadWindowManager>
 
-
+        <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
 
         <div class="page-head">
             <div class="page-head-left">
@@ -350,9 +350,9 @@
                                     Text=""
                                     ToolTip="Modifier"
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture""); return false;" %>' />
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture"");    return false;" %>' />
                                    
-                                <asp:Button ID="Button1" runat="server"
+                                <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
                                     ToolTip="Supprimer"
@@ -390,6 +390,8 @@
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
         Title="Ajouter / Modifier une Facture"
+        OnClientPageLoad="rwInvoice_PageLoad"
+        OnClientBeforeClose="rwInvoice_BeforeClose"
         OnClientClose="rwCustomer_OnInvoiceClose"
         ClientIDMode="Static" >
     </telerik:RadWindow>
@@ -398,17 +400,119 @@
     <script src="js/RadWindows.js"></script>
 
     <script type="text/javascript">
-       
+        function setInvoiceDirty() {
+             
+            document.getElementById("hfInvoiceDirty").value = "1";
+        }
+
+        function setInvoiceClean() {
+            document.getElementById("hfInvoiceDirty").value = "0";
+        }
+
+        function isInvoiceDirty() {
+            return document.getElementById("hfInvoiceDirty").value === "1";
+        }
+        //function wireDirtyTracking() {
+        //    setTimeout(function () {
+        //        wireDirtyTrackingde();
+        //    }, 800);
+        //}
+
+        function rwInvoice_PageLoad(sender, args) {
+            wireDirtyTracking(); // iframe prête ✔
+        }
+        function wireDirtyTracking() {
+            var oWnd = $find("rwInvoice");
+            console.log(oWnd);
+            if (!oWnd) return;
+
+            var iframe = oWnd.get_contentFrame();
+            console.log(iframe);
+            if (!iframe || !iframe.contentWindow || !iframe.contentWindow.document) return;
+
+            var doc = iframe.contentWindow.document;
+
+            var inputs = doc.querySelectorAll("input, textarea, select");
+
+            inputs.forEach(function (el) {
+                if (el.type === "hidden") return;
+
+                el.addEventListener("change", setInvoiceDirty);
+                el.addEventListener("input", setInvoiceDirty);
+            });
+        }
+
+
+        function rwInvoice_BeforeClose(sender, args) {
+
+            if (!isInvoiceDirty()) return;
+
+            // 🔴 On bloque la fermeture tout de suite
+            args.set_cancel(true);
+
+            // Telerik confirm (asynchrone)
+            radconfirm(
+                "⚠️ Vous avez des modifications non sauvegardées.<br/>Voulez-vous vraiment fermer ?",
+                function (arg) {
+
+                    if (arg) {
+                        // utilisateur confirme → on ferme manuellement
+                        setInvoiceClean(); // optionnel
+                        sender.close();
+                    }
+
+                    // sinon → on ne fait rien (reste ouvert)
+                },
+                350, // largeur
+                180, // hauteur
+                null,
+                "Confirmation"
+            );
+        }
+
 
         function rwCustomer_OnInvoiceClose(sender, args) {
-
+            setInvoiceClean();
             var ajaxManager = $find("RAP1");
             if (ajaxManager) {
+                 
                 ajaxManager.ajaxRequest("refreshgrid");
             }
 
 
         }
+
+        function wireDirtyTracking2() {
+
+            var oWnd = $find("rwInvoice");
+            var iframe = oWnd.get_contentFrame();
+
+            if (!iframe) return;
+
+            var doc = iframe.contentWindow.document;
+
+            var inputs = doc.querySelectorAll("input, textarea, select");
+            console.log(inputs);
+            inputs.forEach(function (el) {
+                el.addEventListener("change", setInvoiceDirty);
+                el.addEventListener("input", setInvoiceDirty);
+            });
+        }
+
+
+        function wireDirtyTracking3() {
+
+            var inputs = document.querySelectorAll("#rwInvoice input, #rwInvoice textarea, #rwInvoice select");
+
+            inputs.forEach(function (el) {
+                el.addEventListener("change", setInvoiceDirty);
+                el.addEventListener("input", setInvoiceDirty);
+            });
+        }
+
+
+
+
 
     </script>
     <uc1:PdfViewer runat="server" id="PdfViewer" />
