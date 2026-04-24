@@ -21,19 +21,6 @@ Public Class wbfCustomersInvoices
     End Sub
 
 
-    'Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rlvClientsFactures.InsertCommand
-    '    If e.CommandArgument Is Nothing Then Return
-
-
-
-
-    '    Select Case e.CommandName
-    '        Case "EditSupplierInvoice"
-    '            CustomerInvoiceId = e.CommandArgument
-    '            Response.Redirect("wbfCustomerInvoinceEdit.aspx?SupplierId=" & CustomerInvoiceId.ToString)
-
-    '    End Select
-    'End Sub
 
 
     Private Function GetData() As DataTable

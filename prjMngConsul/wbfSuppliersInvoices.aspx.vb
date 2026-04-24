@@ -34,12 +34,13 @@ Public Class wbfSuppliersInvoices
 
         End Select
     End Sub
-    'Private Sub rgFournisseursFactures_InsertCommand(sender As Object, e As GridCommandEventArgs) Handles rgFournisseursFactures.InsertCommand
-
-    'End Sub
 
 
-
+    Private Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
+        If e.Argument = "refreshgrid" Then
+            rgFournisseursFactures.Rebind()
+        End If
+    End Sub
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()
 

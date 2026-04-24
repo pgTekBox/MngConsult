@@ -1,71 +1,81 @@
 ﻿Imports System.Data.SqlClient
+Imports System.Diagnostics.Eventing
+Imports System.Runtime.InteropServices
 Imports Telerik.Web.UI
+Imports Telerik.Web.UI.Editor.DialogControls
+Imports Telerik.Web.UI.OrgChartStyles
+
+
+
 
 Public Class wbfSupplierInvoinceEdit
     Inherits clsData
 
-    ' =========================================================
-    '  PROPRIÉTÉS EN VIEWSTATE
-    ' =========================================================
 
-    ''' <summary>Id de la facture fournisseur (0 = nouvelle facture)</summary>
     Property InvoiceId() As Integer
         Get
             Try
                 If ViewState("InvoiceId") Is Nothing Then ViewState("InvoiceId") = 0
-                Return CInt(ViewState("InvoiceId"))
-            Catch
+                Dim MyRetVal As Integer = ViewState("InvoiceId")
+                Return MyRetVal
+
+            Catch ex As Exception
                 Return 0
             End Try
+
         End Get
-        Set(value As Integer)
-            ViewState("InvoiceId") = value
+        Set(ByVal Value As Integer)
+            ViewState("InvoiceId") = Value
         End Set
     End Property
-
-    ''' <summary>Cache local de la table produits</summary>
-    Private Property ProductsTable As DataTable
+    Property SupplierGUID() As Guid
         Get
-            Return CType(ViewState("ProductsTable"), DataTable)
+            Try
+                If ViewState("SupplierGUID") Is Nothing Then ViewState("SupplierGUID") = New Guid("00000000-0000-0000-0000-000000000000")
+                Dim MyRetVal As Guid = ViewState("SupplierGUID")
+                Return MyRetVal
+
+            Catch ex As Exception
+                Return New Guid("00000000-0000-0000-0000-000000000000")
+            End Try
+
         End Get
-        Set(value As DataTable)
-            ViewState("ProductsTable") = value
+        Set(ByVal Value As Guid)
+            ViewState("SupplierGUID") = Value
         End Set
     End Property
+    Property Comptabilise() As Boolean
+        Get
+            Try
+                If ViewState("Comptabilise") Is Nothing Then ViewState("Comptabilise") = False
+                Dim MyRetVal As Boolean = ViewState("Comptabilise")
+                Return MyRetVal
 
-    ' =========================================================
-    '  PAGE LOAD
-    ' =========================================================
+            Catch ex As Exception
+                Return False
+            End Try
 
-    Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        End Get
+        Set(ByVal Value As Boolean)
+            ViewState("Comptabilise") = Value
+        End Set
+    End Property
+    Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+
         If Not IsPostBack Then
-            ' Récupérer l'Id depuis la QueryString (?Id=xx ou ?InvoiceId=xx)
-            Dim qsId As String = If(Request.QueryString("Id"), Request.QueryString("InvoiceId"))
-            Dim parsedId As Integer = 0
-            Integer.TryParse(qsId, parsedId)
-            InvoiceId = parsedId
 
-            ' Initialiser la table en mémoire et charger depuis la BD si modification
+            InvoiceId = CInt(Request.QueryString("Id"))
             CreateItemsTable()
-            If InvoiceId > 0 Then
-                LoadItemTableFromBD()
-            End If
-
-            ' Pré-charger les produits
+            LoadItemTableFromBD()
             ProductsTable = GetProductsTable()
-
-            ' Binder les champs de l'en-tête + les lignes
             BindData()
+            'BinDDL()
         End If
+        ApplyReadOnlyMode()
+
+
     End Sub
-
-    ' =========================================================
-    '  CRÉATION / CHARGEMENT DE LA TABLE EN MÉMOIRE
-    ' =========================================================
-
-    ''' <summary>
-    ''' Crée une DataTable vide pour stocker les lignes de facture en ViewState.
-    ''' </summary>
+    'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
         dt.Columns.Add("Id", GetType(Integer))
@@ -79,106 +89,50 @@ Public Class wbfSupplierInvoinceEdit
         dt.Columns.Add("Amount", GetType(Double))
         dt.Columns.Add("Dirty", GetType(Integer))
         dt.Columns.Add("Deleted", GetType(Integer))
+        dt.Columns.Add("Ordre", GetType(Integer))
         ViewState("ItemsTable") = dt
     End Sub
 
-    ''' <summary>
-    ''' Charge les lignes existantes depuis la BD pour la facture fournisseur.
-    ''' Procédure SQL à créer : s0039GetSupplierInvoiceItems (@InvoiceId)
-    ''' Retourne : Id, ProductId, ProductName, Description, Qty, UnitPrice, Amount
-    ''' </summary>
+
+    'Charger les lignes de la facture depuis la BD et les stocker dans le ViewState("ItemsTable")
     Public Sub LoadItemTableFromBD()
-        Dim p As New Collection
-        p.Add(New SqlParameter("@InvoiceId", InvoiceId))
 
-        ' ⚠️ Remplacer par votre procédure stockée fournisseur
-        Dim ds As DataSet = ExecuteSQLds("s0039GetInvoiceItems", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
+        Dim p2 As New Collection
+        p2.Add(New SqlClient.SqlParameter("@InvoiceId", InvoiceId))
+        Dim ds2 As DataSet = ExecuteSQLds("s0039GetInvoiceItems", p2)
 
-        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-        For Each orow As DataRow In ds.Tables(0).Rows
-            Dim dr As DataRow = dt.NewRow()
+
+        For Each orow As DataRow In ds2.Tables(0).Rows
+            Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
             dr("Id") = orow("Id")
-            dr("ProductId") = orow("ProductId")
-            dr("ProductName") = orow("ProductName")
             dr("Description") = orow("Description")
             dr("Qty") = orow("Qty")
             dr("UnitPrice") = orow("UnitPrice")
             dr("Amount") = orow("Amount")
+            dr("ProductId") = orow("ProductId")
+            dr("ProductName") = orow("ProductName")
             dr("AccountId") = If(IsDBNull(orow("AccountId")), 0, Convert.ToInt32(orow("AccountId")))
             dr("AccountName") = If(IsDBNull(orow("AccountName")), "", orow("AccountName").ToString())
             dr("Dirty") = 0
             dr("Deleted") = 0
-            dt.Rows.Add(dr)
+            dr("Ordre") = 0
+            CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
+
         Next
     End Sub
 
-    ' =========================================================
-    '  BINDING
-    ' =========================================================
 
-    ''' <summary>
-    ''' Charge et affiche les données de l'en-tête de la facture fournisseur.
-    ''' Procédure SQL : s0038GetSupplierInvoiceById (@InvoiceId)
-    ''' Retourne : SupplierId, Name, FullName, IssueDate, DueDate, ReceivedDate, PoNumber, RefNo
-    ''' </summary>
-    Sub BindData()
-        If InvoiceId > 0 Then
-            Dim p As New Collection
-            p.Add(New SqlParameter("@InvoiceId", InvoiceId))
-
-            ' ⚠️ Remplacer par votre procédure stockée fournisseur
-            Dim ds As DataSet = ExecuteSQLds("s0038GetInvoiceById", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
-
-            Dim orow As DataRow = ds.Tables(0).Rows(0)
-
-            ' En-tête facture
-            lblSupplier.Text = orow("Name").ToString()
-            lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this)")
-            rdLabel.Text = orow("FullName").ToString()
-
-            dpIssueDate.SelectedDate = orow("IssueDate")
-            dpDueDate.SelectedDate = orow("DueDate")
-            dpReceivedDate.SelectedDate = If(IsDBNull(orow("ReceivedDate")), Nothing, orow("ReceivedDate"))
-            txtPoNumber.Text = If(IsDBNull(orow("PoNumber")), "", orow("PoNumber").ToString())
-            txtRefNo.Text = If(IsDBNull(orow("RefNo")), "", orow("RefNo").ToString())
-        Else
-            ' Nouvelle facture : onclick sur le label pour ouvrir le picker
-            lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this)")
-        End If
-
-        BindItemGrid()
-    End Sub
-
-    ''' <summary>
-    ''' Lie le Repeater avec les lignes du ViewState en excluant les lignes Deleted=1.
-    ''' </summary>
-    Public Sub BindItemGrid()
-        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-        If dt Is Nothing Then Return
-
-        Dim dv As New DataView(dt)
-        dv.RowFilter = "Deleted = 0"
-        rpItems.DataSource = dv
-        rpItems.DataBind()
-    End Sub
-
-    ' =========================================================
-    '  MISE À JOUR DU VIEWSTATE DEPUIS LES CONTRÔLES
-    ' =========================================================
-
-    ''' <summary>
-    ''' Parcourt toutes les lignes du Repeater et met à jour le ViewState("ItemsTable")
-    ''' avec les valeurs saisies. À appeler avant toute action (Ajouter, Sauvegarder, Supprimer).
-    ''' </summary>
+    ' Met à jour le ViewState("ItemsTable") avec les valeurs actuelles des contrôles de chaque ligne (à appeler avant tout bind ou action qui nécessite les données à jour)
     Sub UpdateAllItemInViewstate()
-        Dim dt As DataTable = TryCast(ViewState("ItemsTable"), DataTable)
-        If dt Is Nothing Then Return
 
+        Dim dt As DataTable = TryCast(ViewState("ItemsTable"), DataTable)
+        If dt Is Nothing Then Exit Sub
+        Dim MyOrdre As Integer = 0
         For Each item As RepeaterItem In rpItems.Items
-            If item.ItemType <> ListItemType.Item AndAlso
-               item.ItemType <> ListItemType.AlternatingItem Then Continue For
+            MyOrdre = MyOrdre + 1
+            If item.ItemType <> ListItemType.Item AndAlso item.ItemType <> ListItemType.AlternatingItem Then
+                Continue For
+            End If
 
             Dim hid As HiddenField = TryCast(item.FindControl("hidId"), HiddenField)
             If hid Is Nothing OrElse String.IsNullOrWhiteSpace(hid.Value) Then Continue For
@@ -186,18 +140,27 @@ Public Class wbfSupplierInvoinceEdit
             Dim id As Integer
             If Not Integer.TryParse(hid.Value, id) Then Continue For
 
-            ' Contrôles de la ligne
-            Dim txtDesc As RadTextBox = TryCast(item.FindControl("txtDesc"), RadTextBox)
-            Dim numQty As RadTextBox = TryCast(item.FindControl("numQty"), RadTextBox)
-            Dim numUnitPrice As RadTextBox = TryCast(item.FindControl("numUnitPrice"), RadTextBox)
+            ' Contrôles (version 1 seule UI)
+            Dim txtItemCode As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox)
+            Dim txtDesc As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
+            Dim numQty As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
+            Dim numUnitPrice As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
+            'Dim rcProducts As Telerik.Web.UI.RadComboBox = TryCast(item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
             Dim hidProduct As HiddenField = TryCast(item.FindControl("hidProductId"), HiddenField)
             Dim hidAccount As HiddenField = TryCast(item.FindControl("hidAccountId"), HiddenField)
 
-            Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
-            Dim productId As Integer = If(hidProduct Is Nothing, 0, CInt(If(hidProduct.Value = "", "0", hidProduct.Value)))
+
+            Dim itemCode As String = If(txtItemCode Is Nothing, "", txtItemCode.Text.Trim())
+            Dim productId As Integer = If(hidProduct Is Nothing OrElse String.IsNullOrWhiteSpace(hidProduct.Value), 0, Convert.ToInt32(hidProduct.Value))
             Dim accountId As Integer = If(hidAccount Is Nothing OrElse String.IsNullOrWhiteSpace(hidAccount.Value), 0, Convert.ToInt32(hidAccount.Value))
-            Dim qty As Double = ToDoubleAnyCulture(If(numQty Is Nothing, "0", numQty.Text))
-            Dim unitPrice As Double = ToDoubleAnyCulture(If(numUnitPrice Is Nothing, "0", numUnitPrice.Text))
+            Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
+
+            Dim qty As Double = 0
+            'If numQty IsNot Nothing AndAlso numQty.Text.HasValue Then
+            qty = ToDoubleAnyCulture(numQty.Text)
+            Dim unitPrice As Double = 0
+            'If numUnitPrice IsNot Nothing AndAlso numUnitPrice.Value.HasValue Then unitPrice = CDbl(numUnitPrice.Value.Value)
+            unitPrice = ToDoubleAnyCulture(numUnitPrice.Text)
             Dim amount As Double = Math.Round(qty * unitPrice, 2)
 
             ' Trouver la ligne dans le DataTable
@@ -206,272 +169,457 @@ Public Class wbfSupplierInvoinceEdit
 
             Dim dr As DataRow = rows(0)
 
-            ' Ignorer les lignes déjà supprimées
+            ' Si la ligne est déjà supprimée, on ne touche plus (optionnel)
             If dt.Columns.Contains("Deleted") Then
-                If Not IsDBNull(dr("Deleted")) AndAlso CInt(dr("Deleted")) = 1 Then Continue For
+                Dim deleted As Integer = 0
+                If Not IsDBNull(dr("Deleted")) Then deleted = Convert.ToInt32(dr("Deleted"))
+                If deleted = 1 Then Continue For
             End If
 
+            ' Détecter changement
             Dim changed As Boolean = False
 
-            ' --- Description ---
-            'Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
-            'If oldDesc <> description Then
+            ' Description
+            'If dt.Columns.Contains("Description") Then
+            '    Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
+            '    If oldDesc <> description Then
             dr("Description") = description
-            'changed = True
+            '        changed = True
+            '    End If
             'End If
 
-            ' --- ProductId ---
-            'Dim oldProductId As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
-            'If oldProductId <> productId Then
+            ' ProductId
+            'If dt.Columns.Contains("ProductId") Then
+            '    Dim oldDesc As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
+            '    If oldDesc <> productId Then
             dr("ProductId") = productId
-            'changed = True
+            '        changed = True
+            '    End If
             'End If
 
-            ' --- Qty ---
-            'Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, CDbl(dr("Qty")))
-            'If Math.Abs(oldQty - qty) > 0.0000001 Then
-            dr("Qty") = qty
-            'changed = True
-            'End If
 
-            ' --- UnitPrice ---
-            'Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, CDbl(dr("UnitPrice")))
-            'If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
-            dr("UnitPrice") = unitPrice
-            'changed = True
-            'End If
 
+            ' AccountId
+            'If dt.Columns.Contains("AccountId") Then
+            '    Dim oldAccountId As Integer = If(IsDBNull(dr("AccountId")), 0, CInt(dr("AccountId")))
+            '    If oldAccountId <> accountId Then
             dr("AccountId") = accountId
-
-
-            ' --- Amount (recalcul) ---
-            'Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, CDbl(dr("Amount")))
-            'If Math.Abs(oldAmt - amount) > 0.0000001 Then
-            dr("Amount") = amount
-            'changed = True
+            '        changed = True
+            '    End If
             'End If
 
-            If changed Then dr("Dirty") = 1
+            ' Qty
+            'If dt.Columns.Contains("Qty") Then
+            '    Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
+            '    If Math.Abs(oldQty - qty) > 0.0000001 Then
+            dr("Qty") = qty
+            '        changed = True
+            '    End If
+            'End If
+
+            ' UnitPrice
+            'If dt.Columns.Contains("UnitPrice") Then
+            '    Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, Convert.ToDouble(dr("UnitPrice")))
+            '    If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
+            dr("UnitPrice") = unitPrice
+            '        changed = True
+            '    End If
+            'End If
+
+            ' Amount (recalcul)
+            'If dt.Columns.Contains("Amount") Then
+            '    Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, Convert.ToDouble(dr("Amount")))
+            '    If Math.Abs(oldAmt - amount) > 0.0000001 Then
+            dr("Amount") = amount
+            '        changed = True
+            '    End If
+            'End If
+
+
+            dr("Ordre") = MyOrdre
+            ' Dirty
+            'If changed AndAlso dt.Columns.Contains("Dirty") Then
+            dr("Dirty") = 1
+            'End If
+
         Next
 
         ViewState("ItemsTable") = dt
+
+
     End Sub
 
-    ' =========================================================
-    '  AJOUTER UNE LIGNE
-    ' =========================================================
 
-    ''' <summary>Ajoute une ligne vide dans le ViewState et rebinde.</summary>
+    'Binding du Repeater avec les données du ViewState("ItemsTable") en filtrant les lignes marquées comme Deleted=1
+    Public Sub BindItemGrid()
+
+        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+        Dim dv As New DataView(dt)
+        dv.Sort = "Ordre"
+        dv.RowFilter = "Deleted = 0"
+
+        rpItems.DataSource = dv
+        rpItems.DataBind()
+
+    End Sub
+
+
+    'Binding des autres champs de la facture (fournisseur, dates, etc) et appel du BindItemGrid() pour les lignes
+    Sub BindData()
+        If InvoiceId > 0 Then
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@InvoiceId", InvoiceId))
+            Dim ds As DataSet = ExecuteSQLds("s0038GetInvoiceById", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
+            Dim orow As DataRow = ds.Tables(0).Rows(0)
+
+            Dim p2 As New Collection
+            p2.Add(New SqlClient.SqlParameter("@Search", ""))
+
+            Dim ds2 As DataSet = ExecuteSQLds("s0035Get_Customer_List4DDL", p2)
+
+            SupplierGUID = orow("PartyGUID")
+            lblSupplier.Text = orow("Name").ToString()
+            lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this," & InvoiceId.ToString & ")")
+            rdLabel.Text = orow("FullName").ToString()
+            dpIssueDate.SelectedDate = orow("IssueDate")
+            dpDueDate.SelectedDate = orow("DueDate")
+
+            ' Champs spécifiques au fournisseur
+            If ds.Tables(0).Columns.Contains("ReceivedDate") AndAlso Not IsDBNull(orow("ReceivedDate")) Then
+                dpReceivedDate.SelectedDate = orow("ReceivedDate")
+            End If
+            If ds.Tables(0).Columns.Contains("PoNumber") AndAlso Not IsDBNull(orow("PoNumber")) Then
+                txtPoNumber.Text = orow("PoNumber").ToString()
+            End If
+            If ds.Tables(0).Columns.Contains("RefNo") AndAlso Not IsDBNull(orow("RefNo")) Then
+                txtRefNo.Text = orow("RefNo").ToString()
+            End If
+
+            Comptabilise = orow("Comptabilise")
+            If Comptabilise Then
+                chkPost.Checked = True
+            Else
+                chkPost.Checked = False
+            End If
+            BindItemGrid()
+
+
+        Else
+            lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this,0)")
+        End If
+    End Sub
+
+
+    Private Sub ApplyReadOnlyMode()
+        If Comptabilise Then
+
+
+            lblPostedBadge.Visible = True
+
+
+            chkPost.Enabled = False
+
+
+
+
+            ' Bloquer visuellement
+            pnlMain.CssClass &= " readonly"
+            lblSupplier.CssClass &= " readonly-click-block"
+            ' Désactiver champs principaux
+            dpIssueDate.Enabled = False
+            dpDueDate.Enabled = False
+            dpReceivedDate.Enabled = False
+            txtPoNumber.Enabled = False
+            txtRefNo.Enabled = False
+
+            ' Bloquer bouton ajouter
+            btnAddLine.Visible = False
+
+            ' Bloquer save
+            radSave.Enabled = False
+
+            ' Bloquer repeater (inputs)
+            For Each item As RepeaterItem In rpItems.Items
+
+                Dim txtDesc = CType(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
+                Dim numQty = CType(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
+                Dim numUnitPrice = CType(item.FindControl("numUnitPrice"), Telerik.Web.UI.RadTextBox)
+
+                If txtDesc IsNot Nothing Then txtDesc.Enabled = False
+                If numQty IsNot Nothing Then numQty.Enabled = False
+                If numUnitPrice IsNot Nothing Then numUnitPrice.Enabled = False
+
+                ' cacher boutons actions
+                Dim btnDel = CType(item.FindControl("RadImageButton1"), Telerik.Web.UI.RadImageButton)
+                Dim btnUp = CType(item.FindControl("RadImageButton2"), Telerik.Web.UI.RadImageButton)
+                Dim btnDown = CType(item.FindControl("RadImageButton3"), Telerik.Web.UI.RadImageButton)
+
+                If btnDel IsNot Nothing Then btnDel.Visible = False
+                If btnUp IsNot Nothing Then btnUp.Visible = False
+                If btnDown IsNot Nothing Then btnDown.Visible = False
+
+                Dim lblProduct = TryCast(item.FindControl("lblProduct"), Label)
+                Dim lblAccount = TryCast(item.FindControl("lblAccount"), Label)
+
+                If lblProduct IsNot Nothing Then lblProduct.CssClass &= " readonly-click-block"
+                If lblAccount IsNot Nothing Then lblAccount.CssClass &= " readonly-click-block"
+
+
+
+            Next
+        Else
+            lblPostedBadge.Visible = False
+        End If
+    End Sub
+
+
+    'Ajout d'une ligne vide dans le ViewState("ItemsTable") et rebind du Repeater pour afficher la nouvelle ligne
     Private Sub btnAddLine_Click(sender As Object, e As EventArgs) Handles btnAddLine.Click
+        If Comptabilise Then Return
         UpdateAllItemInViewstate()
 
         Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
         dr("Id") = 0
-        dr("ProductId") = 0
-        dr("ProductName") = ""
         dr("Description") = ""
         dr("Qty") = 1
         dr("UnitPrice") = 0
+        dr("Amount") = 0
+        dr("ProductId") = 0
+        dr("ProductName") = ""
         dr("AccountId") = 0
         dr("AccountName") = ""
-        dr("Amount") = 0
         dr("Dirty") = 1
         dr("Deleted") = 0
+        dr("Ordre") = CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1
+
         CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
 
+
         BindItemGrid()
+
     End Sub
 
-    ' =========================================================
-    '  SAUVEGARDE
-    ' =========================================================
 
-    ''' <summary>
-    ''' Enregistre l'en-tête et les lignes de la facture fournisseur.
-    ''' Procédures SQL à créer :
-    '''   s0044SaveSupplierInvoiceHeader (@InvoiceId OUT, @SupplierId, @IssueDate, @DueDate,
-    '''                                   @ReceivedDate, @PoNumber, @RefNo, @CompanyGUID)
-    '''   s0040SaveSupplierInvoiceItems  (@InvoiceId, @Items TVP_InvoiceItem_v3)
-    ''' </summary>
+
+    'Sauvegarde de la facture: mise à jour du ViewState("ItemsTable") avec les valeurs actuelles, puis envoi de toutes les lignes (y compris les marquées comme Deleted=1) à une procédure stockée qui se chargera de faire les insert/update/delete nécessaires en fonction des flags Dirty et Deleted
     Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
+        If Comptabilise Then Return
         UpdateAllItemInViewstate()
 
 
-        'Dim p As New Collection
-        'p.Add(New SqlClient.SqlParameter("@SupplierId", 1))
-        'p.Add(New SqlClient.SqlParameter("@IssueDate", dpIssueDate.SelectedDate))
-        'p.Add(New SqlClient.SqlParameter("@DueDate", dpDueDate.SelectedDate))
-        'p.Add(New SqlClient.SqlParameter("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value)))
-        'p.Add(New SqlClient.SqlParameter("@PoNumber", txtPoNumber.Text.Trim()))
-        'p.Add(New SqlClient.SqlParameter("@RefNo", txtRefNo.Text.Trim()))
-        'p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim DRconn As SqlClient.SqlConnection
+        DRconn = New SqlClient.SqlConnection(ConnectionString)
+
+        Dim tvp As DataTable = CType(ViewState("ItemsTable"), DataTable)
+
+        Dim oCom As New SqlClient.SqlCommand
+        oCom.CommandText = "s0040SaveInvoiceItems"
+        oCom.Connection = DRconn
+        oCom.CommandType = CommandType.StoredProcedure
+
+        Dim ParamInvoiceId As New SqlClient.SqlParameter("@InvoiceId", SqlDbType.Int)
+        ParamInvoiceId.Value = InvoiceId
+
+        Dim ParamPost As New SqlClient.SqlParameter("@toPost", SqlDbType.Int)
+        If chkPost.Checked Then
+            ParamPost.Value = 1
+        Else
+            ParamPost.Value = 0
+        End If
+
+        Dim ParamPartyGUID As New SqlClient.SqlParameter("@PartyGUID", SqlDbType.UniqueIdentifier)
+        ParamPartyGUID.Value = SupplierGUID
+
+        Dim ParamIssueDate As New SqlClient.SqlParameter("@IssueDate", SqlDbType.DateTime)
+        ParamIssueDate.Value = dpIssueDate.SelectedDate
+
+        Dim ParamDueDate As New SqlClient.SqlParameter("@DueDate", SqlDbType.DateTime)
+        ParamDueDate.Value = dpDueDate.SelectedDate
 
 
+        Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
+        ParamItems.Value = tvp
+        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v5"
 
 
-        'Dim ds As DataSet = ExecuteSQLds(" ", p)
+        oCom.Parameters.Add(ParamDueDate)
+        oCom.Parameters.Add(ParamIssueDate)
+        oCom.Parameters.Add(ParamPartyGUID)
+        oCom.Parameters.Add(ParamPost)
+        oCom.Parameters.Add(ParamInvoiceId)
+        oCom.Parameters.Add(ParamItems)
+
+        oCom.Connection.Open()
+        'oCom.ExecuteNonQuery()
+        Dim retval = oCom.ExecuteScalar()
+        oCom.Connection.Close()
+        Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
+        ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
 
 
-
-        Using conn As New SqlConnection(ConnectionString)
-            conn.Open()
-
-            ' --- 1. Sauvegarder l'en-tête ---
-            'Using cmdHeader As New SqlCommand("s0044SaveSupplierInvoiceHeader", conn)
-            '    cmdHeader.CommandType = CommandType.StoredProcedure
-
-            '    ' InvoiceId en entrée/sortie (0 = INSERT, >0 = UPDATE)
-            '    Dim pId As New SqlParameter("@InvoiceId", SqlDbType.Int)
-            '    pId.Direction = ParameterDirection.InputOutput
-            '    pId.Value = InvoiceId
-            '    cmdHeader.Parameters.Add(pId)
-
-            '    ' Récupérer le SupplierId depuis le HiddenField (rempli par le picker JS)
-            '    Dim supplierId As Integer = 0
-            '    Integer.TryParse(hidSelectedSupplierId.Value, supplierId)
-            '    cmdHeader.Parameters.AddWithValue("@SupplierId", supplierId)
-            '    cmdHeader.Parameters.AddWithValue("@IssueDate", dpIssueDate.SelectedDate)
-            '    cmdHeader.Parameters.AddWithValue("@DueDate", dpDueDate.SelectedDate)
-            '    cmdHeader.Parameters.AddWithValue("@ReceivedDate", If(dpReceivedDate.SelectedDate, DBNull.Value))
-            '    cmdHeader.Parameters.AddWithValue("@PoNumber", txtPoNumber.Text.Trim())
-            '    cmdHeader.Parameters.AddWithValue("@RefNo", txtRefNo.Text.Trim())
-            '    cmdHeader.Parameters.AddWithValue("@CompanyGUID", Company)
-
-
-
-
-
-            '    cmdHeader.ExecuteNonQuery()
-
-            '    ' Récupérer l'Id de la nouvelle facture si INSERT
-            '    InvoiceId = CInt(pId.Value)
-            'End Using
-
-            ' --- 2. Sauvegarder les lignes via TVP ---
-            Using cmdItems As New SqlCommand("s0040SaveInvoiceItems", conn)
-                cmdItems.CommandType = CommandType.StoredProcedure
-
-                Dim pInvId As New SqlParameter("@InvoiceId", SqlDbType.Int)
-                pInvId.Value = InvoiceId
-                cmdItems.Parameters.Add(pInvId)
-
-                If chkPost.Checked Then
-                    cmdItems.Parameters.AddWithValue("@toPost", 1)
-                Else
-                    cmdItems.Parameters.AddWithValue("@toPost", 0)
-                End If
-
-
-
-
-                Dim pItems As New SqlParameter("@Items", SqlDbType.Structured)
-                pItems.Value = CType(ViewState("ItemsTable"), DataTable)
-                pItems.TypeName = "dbo.TVP_InvoiceItem_v4"
-                cmdItems.Parameters.Add(pItems)
-
-                cmdItems.ExecuteNonQuery()
-            End Using
-        End Using
-
-        ' Retour à la liste des factures fournisseurs
-        Response.Redirect("wbfSuppliersInvoices.aspx")
     End Sub
 
-    ' =========================================================
-    '  COMMANDES DU REPEATER (Supprimer / Réordonner)
-    ' =========================================================
-
-    ''' <summary>
-    ''' Gère les commandes sur les lignes : DeleteLine, Up, Down.
-    ''' </summary>
+    'ItemCommand du Repeater pour gérer la suppression d'une ligne: on marque la ligne comme Deleted=1 dans le ViewState("ItemsTable") et on rebind le Repeater pour que la ligne disparaisse de l'affichage (le vrai delete en BD sera géré par la procédure stockée lors de la sauvegarde en fonction du flag Deleted)
     Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand
+        If e.CommandName = "DeleteLine" Then
+            UpdateAllItemInViewstate()
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            For Each dr As DataRow In dt.Rows
+                If Convert.ToInt32(dr("Id")) = id Then
+                    dr("Deleted") = 1
+                    dr("Dirty") = 1
+                    Exit For
+                End If
+            Next
 
-        Select Case e.CommandName
+            BindItemGrid()
 
-            Case "DeleteLine"
-                UpdateAllItemInViewstate()
+        End If
 
-                Dim id As Integer = CInt(e.CommandArgument)
-                Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-                For Each dr As DataRow In dt.Rows
-                    If CInt(dr("Id")) = id Then
-                        dr("Deleted") = 1
-                        dr("Dirty") = 1
-                        Exit For
-                    End If
-                Next
-                BindItemGrid()
+        If e.CommandName = "OrdreHaut" Then
+            UpdateAllItemInViewstate()
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            DecrementerOrdre(dt, id)
+            BindItemGrid()
+        End If
 
-            Case "Up"
-                UpdateAllItemInViewstate()
-                MoveRow(CInt(e.CommandArgument), -1)
-                BindItemGrid()
 
-            Case "Down"
-                UpdateAllItemInViewstate()
-                MoveRow(CInt(e.CommandArgument), 1)
-                BindItemGrid()
+        If e.CommandName = "OrdreBas" Then
+            UpdateAllItemInViewstate()
+            Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            IncrementerOrdre(dt, id)
+            BindItemGrid()
 
-        End Select
+        End If
+
+
+
     End Sub
+    Public Sub IncrementerOrdre(dt As DataTable, targetId As Integer)
 
-    ''' <summary>
-    ''' Déplace une ligne d'une position vers le haut (direction=-1) ou le bas (direction=1)
-    ''' dans la DataView filtrée (Deleted=0).
-    ''' </summary>
-    Private Sub MoveRow(id As Integer, direction As Integer)
-        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-        If dt Is Nothing Then Return
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then Exit Sub
 
-        ' Construire la liste ordonnée des lignes visibles
-        Dim visible As List(Of DataRow) = dt.AsEnumerable().
-            Where(Function(r) CInt(r("Deleted")) = 0).ToList()
+        ' 🔹 1. Trouver la ligne cible
+        Dim targetRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = targetId)
 
-        Dim idx As Integer = visible.FindIndex(Function(r) CInt(r("Id")) = id)
-        If idx < 0 Then Return
+        If targetRow Is Nothing Then Exit Sub
 
-        Dim newIdx As Integer = idx + direction
-        If newIdx < 0 OrElse newIdx >= visible.Count Then Return
+        Dim ordreActuel As Integer = Convert.ToInt32(targetRow("Ordre"))
 
-        ' Permuter les lignes dans le DataTable réel
-        Dim rowA As DataRow = visible(idx)
-        Dim rowB As DataRow = visible(newIdx)
+        ' 🔹 2. Trouver le max (pour ne pas dépasser)
+        Dim maxOrdre As Integer = dt.AsEnumerable().
+        Max(Function(r) Convert.ToInt32(r("Ordre")))
 
-        ' Permuter par échange de toutes les colonnes de données
-        For Each col As DataColumn In dt.Columns
-            Dim tmp As Object = rowA(col)
-            rowA(col) = rowB(col)
-            rowB(col) = tmp
+        If ordreActuel >= maxOrdre Then Exit Sub
+
+        ' 🔹 3. Trouver la ligne suivante
+        Dim nextRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Ordre")) = ordreActuel + 1)
+
+        ' 🔹 4. Swap
+        If nextRow IsNot Nothing Then
+            nextRow("Ordre") = ordreActuel
+            targetRow("Ordre") = ordreActuel + 1
+        End If
+
+        ' 🔹 5. Re-numérotation (sécurité)
+        Dim orderedRows = dt.AsEnumerable().
+        OrderBy(Function(r) Convert.ToInt32(r("Ordre"))).
+        ThenBy(Function(r) Convert.ToInt32(r("Id"))).
+        ToList()
+
+        Dim i As Integer = 1
+        For Each r In orderedRows
+            r("Ordre") = i
+            i += 1
         Next
+
+    End Sub
+    Public Sub DecrementerOrdre(dt As DataTable, targetId As Integer)
+
+        If dt Is Nothing OrElse dt.Rows.Count = 0 Then Exit Sub
+
+        ' 🔹 1. Trouver la ligne cible
+        Dim targetRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = targetId)
+
+        If targetRow Is Nothing Then Exit Sub
+
+        Dim ordreActuel As Integer = Convert.ToInt32(targetRow("Ordre"))
+
+        ' 🔹 2. Si déjà à 1 → rien à faire
+        If ordreActuel <= 1 Then Exit Sub
+
+        ' 🔹 3. Trouver la ligne juste avant
+        Dim previousRow As DataRow = dt.AsEnumerable().
+        FirstOrDefault(Function(r) Convert.ToInt32(r("Ordre")) = ordreActuel - 1)
+
+        ' 🔹 4. Swap des ordres
+        If previousRow IsNot Nothing Then
+            previousRow("Ordre") = ordreActuel
+            targetRow("Ordre") = ordreActuel - 1
+        End If
+
+        ' 🔹 5. Re-numérotation propre (sécurise les trous/doublons)
+        Dim orderedRows = dt.AsEnumerable().
+        OrderBy(Function(r) Convert.ToInt32(r("Ordre"))).
+        ThenBy(Function(r) Convert.ToInt32(r("Id"))).
+        ToList()
+
+        Dim i As Integer = 1
+        For Each r In orderedRows
+            r("Ordre") = i
+            i += 1
+        Next
+
     End Sub
 
-    ' =========================================================
-    '  DATABOUND DU REPEATER
-    ' =========================================================
 
-    ''' <summary>
-    ''' Pour chaque ligne du Repeater : configure le onclick du sélecteur produit.
-    ''' </summary>
+
+    'Creation d'une table en mémoire pour stocker la liste des produits (équivalent d'un DataTable dans une session classique) et méthode pour la charger depuis la BD (proc s0041GetProducts qui retourne Id, Name, Description, Price)
+    Private Function GetProductsTable() As DataTable
+
+        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
+        Return ds.Tables(0)
+    End Function
+
+    Private Function GetSuppliersTable() As DataTable
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party 'Fournisseur'") ' <-- ta proc
+        Return ds.Tables(0)
+    End Function
+
+    Private Function GetAccountsTable() As DataTable
+        ' Comptes de dépenses / achats pour les factures fournisseurs
+        Dim ds As DataSet = ExecuteSQLds("s0090Get_GLAccounts_ACHAT")
+        Return ds.Tables(0)
+    End Function
+
+
+
+    'ItemDataBound du Repeater pour chaque ligne: on charge la liste des produits depuis le ViewState("ProductsTable") et on bind un RadComboBox (ou un autre contrôle de ton choix) pour permettre de sélectionner un produit. On peut aussi afficher le nom du produit dans un Label et ouvrir un product picker au clic (exemple avec un Label et une fonction JavaScript fictive openProductPicker)
+    'Charge la liste des produits dans le ViewState("ProductsTable") si ce n'est pas déjà fait, puis pour chaque ligne du Repeater, on trouve le Label lblProduct et le HiddenField hidProductId, on bind le Label avec le nom du produit correspondant au ProductId de la ligne, et on ajoute un onclick pour ouvrir un product picker (fonction JavaScript à implémenter) qui permettra de sélectionner un produit et de mettre à jour le HiddenField hidProductId avec l'Id du produit sélectionné. Le bind du RadComboBox est commenté mais tu peux l'utiliser à la place du Label si tu préfères.
     Private Sub rpItems_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rpItems.ItemDataBound
-        If e.Item.ItemType <> ListItemType.Item AndAlso
-           e.Item.ItemType <> ListItemType.AlternatingItem Then Return
+        If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then
+            Exit Sub
+        End If
+
+        'Dim rc As Telerik.Web.UI.RadComboBox = TryCast(e.Item.FindControl("rcProducts"), Telerik.Web.UI.RadComboBox)
 
         Dim lblProduct As Label = TryCast(e.Item.FindControl("lblProduct"), Label)
-        If lblProduct Is Nothing Then Return
-
         Dim lblAccount As Label = TryCast(e.Item.FindControl("lblAccount"), Label)
-
-
-
         Dim id As Integer = DataBinder.Eval(e.Item.DataItem, "Id")
         lblProduct.Attributes.Add("onclick", "openProductPicker(this," & id & ")")
-        lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName").ToString()
-
         If lblAccount IsNot Nothing Then
             lblAccount.Attributes.Add("onclick", "openAccountPicker(this," & id & ")")
         End If
 
         Dim hidProduct As HiddenField = TryCast(e.Item.FindControl("hidProductId"), HiddenField)
+        'If rc Is Nothing Then Exit Sub
 
         ' 1) Charger la source UNE fois
         Dim products As DataTable = TryCast(ViewState("ProductsTable"), DataTable)
@@ -482,7 +630,7 @@ Public Class wbfSupplierInvoinceEdit
 
         'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
 
-        lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
+        'lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
 
         If lblAccount IsNot Nothing Then
             lblAccount.Text = Convert.ToString(DataBinder.Eval(e.Item.DataItem, "AccountName"))
@@ -491,13 +639,54 @@ Public Class wbfSupplierInvoinceEdit
 
 
 
-    End Sub
-    Private Function GetAccountsTable() As DataTable
-        ' TODO: adapter le nom de la procédure stockée si nécessaire
-        Dim ds As DataSet = ExecuteSQLds("s0090Get_GLAccounts_ACHAT")
-        Return ds.Tables(0)
-    End Function
+        ' 2) Binder
+        'rc.DataSource = products
+        'rc.DataBind()
 
+        ' 3) Appliquer SelectedValue après bind
+        'If hidProduct IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(hidProduct.Value) Then
+        '    rc.SelectedValue = hidProduct.Value
+        'End If
+    End Sub
+
+    'Propriete retourne le Viewstate des Produits
+    Private Property ProductsTable As DataTable
+        Get
+            Return CType(ViewState("ProductsTable"), DataTable)
+        End Get
+        Set(value As DataTable)
+            ViewState("ProductsTable") = value
+        End Set
+    End Property
+
+
+    'Binding de la liste de produits lors de la selection
+    Protected Sub rlvProducts_NeedDataSource(ByVal sender As Object, ByVal e As Telerik.Web.UI.RadListViewNeedDataSourceEventArgs) Handles rlvProducts.NeedDataSource
+        Dim dt As DataTable = ProductsTable
+
+        If dt Is Nothing Then
+            dt = GetProductsTable()
+            ProductsTable = dt
+        End If
+
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvProducts.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
+
+
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
+            rlvProducts.DataSource = dv
+        Else
+            rlvProducts.DataSource = dt
+        End If
+    End Sub
     Private Sub rlvAccounts_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAccounts.NeedDataSource
         Dim dt As DataTable = GetAccountsTable()
 
@@ -519,47 +708,69 @@ Public Class wbfSupplierInvoinceEdit
         End If
     End Sub
 
-
-
-    ' =========================================================
-    '  BINDING DES LISTES (NeedDataSource)
-    ' =========================================================
-
-    ''' <summary>Fournit les données au RadListView des produits.</summary>
-    Protected Sub rlvProducts_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs)
-        Dim dt As DataTable = ProductsTable
-        If dt Is Nothing Then
-            dt = GetProductsTable()
-            ProductsTable = dt
-        End If
-        rlvProducts.DataSource = dt
-    End Sub
-
-    ''' <summary>Fournit les données au RadListView des fournisseurs.</summary>
     Private Sub rlvSuppliers_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvSuppliers.NeedDataSource
-        rlvSuppliers.DataSource = GetSuppliersTable()
+        Dim dt As DataTable = GetSuppliersTable()
+
+
+
+        Dim searchText As String = ""
+        Dim tbSearch As TextBox = CType(rlvSuppliers.FindControl("tbSearch"), TextBox)
+        If tbSearch Is Nothing Then
+            searchText = ""
+        Else
+            searchText = tbSearch.Text.Trim()
+        End If
+
+
+        If Not String.IsNullOrWhiteSpace(searchText) Then
+            Dim dv As New DataView(dt)
+            Dim safeText As String = searchText.Replace("'", "''")
+            dv.RowFilter = "Name LIKE '%" & safeText & "%' OR Code LIKE '%" & safeText & "%' OR Category LIKE '%" & safeText & "%'"
+            rlvSuppliers.DataSource = dv
+        Else
+            rlvSuppliers.DataSource = dt
+        End If
+    End Sub
+    'Ajout d'un produit: on ajoute une ligne dans le DataTable du ViewState("ProductsTable") et on rebind le RadListView pour afficher le nouveau produit (exemple simple sans formulaire de saisie, juste pour montrer le principe)
+    Protected Sub btnAddProducts_Click(ByVal sender As Object, ByVal e As EventArgs)
+        ' Exemple simple
+        Return
+        Dim dt As DataTable = ProductsTable
+        'If dt Is Nothing Then
+        '    dt = BuildProductsTable()
+        'End If
+
+        Dim rnd As New Random()
+
+        Dim row As DataRow = dt.NewRow()
+        row("Id") = dt.Rows.Count + 1
+        row("Code") = "NEW-" & (dt.Rows.Count + 1).ToString("000")
+        row("Name") = "Nouveau produit " & (dt.Rows.Count + 1).ToString()
+        row("Category") = "Ajouté"
+        row("Qty") = rnd.Next(1, 50)
+        row("Price") = Math.Round(CDec(rnd.NextDouble() * 400 + 10), 2)
+
+        dt.Rows.Add(row)
+        ProductsTable = dt
+
+        rlvProducts.Rebind()
     End Sub
 
-    ' =========================================================
-    '  REQUÊTES AJAX (PRODUCT / SUPPLIER)
-    ' =========================================================
-
-    ''' <summary>
-    ''' Traite les requêtes AJAX émises par les pickers JS.
-    ''' Protocole : "PRODUCT|{itemLineId}|{productCode}"
-    '''             "SUPPLIER|{supplierId}"
-    ''' </summary>
+    'Mise à jour d'un produit: on trouve la ligne correspondante dans le DataTable du ViewState("ProductsTable")
+    'en fonction de l'Id, on met à jour les champs avec les nouvelles valeurs,
+    'puis on rebind le RadListView pour afficher les changements (exemple simple sans formulaire de saisie, juste pour montrer le principe)
+    'Est appeler lors d une selection d un produit
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
+        If Comptabilise Then Return
         Dim AllParam As String() = e.Argument.Split("|"c)
         Dim CommandName As String
         Dim ItemLineId As Integer
-        Dim CustomerId As Integer
+        Dim SupplierId As Integer
         Dim productId As Integer
         Dim accountId As Integer
         CommandName = AllParam(0)
 
         Select Case CommandName
-
             Case "PRODUCT"
 
                 If Integer.TryParse(AllParam(2), productId) Then
@@ -568,21 +779,16 @@ Public Class wbfSupplierInvoinceEdit
                         BindItemGrid()
                     End If
                 End If
-
-
-
             Case "SUPPLIER"
-                ' Mettre à jour l'affichage du fournisseur sélectionné
-                Dim supplierId As Integer = 0
-                If AllParam.Length >= 2 AndAlso Integer.TryParse(AllParam(1), supplierId) Then
-                    UpdateSupplierDisplay(supplierId)
+                If Integer.TryParse(AllParam(1), SupplierId) Then
+                    UpdateSupplier(SupplierId)
                 End If
 
             Case "ACCOUNT"
                 If Integer.TryParse(AllParam(2), accountId) Then
                     If Integer.TryParse(AllParam(1), ItemLineId) Then
 
-
+                        UpdateAllItemInViewstate()
 
 
                         UpdateItemAccount(ItemLineId, accountId)
@@ -593,8 +799,9 @@ Public Class wbfSupplierInvoinceEdit
                     End If
                 End If
         End Select
-    End Sub
 
+
+    End Sub
     Sub SetDirtyItem(ItemLineId As Integer)
         Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
         Dim dr As DataRow = dt.AsEnumerable().FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
@@ -602,6 +809,28 @@ Public Class wbfSupplierInvoinceEdit
         dr("Dirty") = 1
         ViewState("ItemsTable") = dt
     End Sub
+
+
+
+
+
+    Sub UpdateSupplier(Supplierid As Integer)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@PartyId", Supplierid))
+
+        Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
+
+        Dim Fullanme As String = ds.Tables(0).Rows(0)("FullName").ToString()
+        rdLabel.Text = Fullanme
+        lblSupplier.Text = ds.Tables(0).Rows(0)("Name").ToString()
+        SupplierGUID = ds.Tables(0).Rows(0)("PartyGUID")
+    End Sub
+
+
+
+
+
+    'Mise a jour de la ligne du Viewstate a l aide du productId
     Sub UpdateItem(ItemLineId As Integer, productId As Integer)
 
         Dim p2 As New Collection
@@ -628,6 +857,13 @@ Public Class wbfSupplierInvoinceEdit
         dr("UnitPrice") = AlldsProducts.Tables(0).Rows(0)("Prix").ToString()
         dr("Amount") = 0D
         dr("Deleted") = 0
+        dr("AccountId") = AlldsProducts.Tables(0).Rows(0)("Compte")
+        dr("AccountName") = AlldsProducts.Tables(0).Rows(0)("AccountName").ToString()
+
+
+
+
+
 
         ViewState("ItemsTable") = dt
 
@@ -635,87 +871,7 @@ Public Class wbfSupplierInvoinceEdit
 
 
     End Sub
-    ''' <summary>
-    ''' Met à jour l'affichage du fournisseur (label + adresse).
-    ''' Procédure SQL : s0037GetSupplierFullById (@PartyId)
-    ''' Retourne : Name, FullName
-    ''' </summary>
-    Sub UpdateSupplierDisplay(supplierId As Integer)
-        Dim p As New Collection
-        p.Add(New SqlParameter("@PartyId", supplierId))
 
-        ' ⚠️ Remplacer par votre procédure stockée fournisseur
-        Dim ds As DataSet = ExecuteSQLds("s0037GetSupplierFullById", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
-
-        Dim orow As DataRow = ds.Tables(0).Rows(0)
-        lblSupplier.Text = orow("Name").ToString()
-        rdLabel.Text = orow("FullName").ToString()
-    End Sub
-
-    ''' <summary>
-    ''' Met à jour la ligne du ViewState avec les infos du produit sélectionné (par Code).
-    ''' Procédure SQL : s0042GetProductByCode (@ProductCode)
-    ''' Retourne : Id, Name, Description, Prix
-    ''' </summary>
-    Sub UpdateItemByProductCode(itemLineId As Integer, productCode As String)
-        Dim p As New Collection
-        p.Add(New SqlParameter("@ProductCode", productCode))
-
-        Dim ds As DataSet = ExecuteSQLds("s0042GetProductByCode", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
-
-        Dim prodRow As DataRow = ds.Tables(0).Rows(0)
-
-        Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-        If dt Is Nothing Then Return
-
-        Dim dr As DataRow = dt.AsEnumerable().
-            FirstOrDefault(Function(r) CInt(r("Id")) = itemLineId)
-        If dr Is Nothing Then Return
-
-        dr("ProductId") = CInt(prodRow("Id"))
-        dr("ProductName") = prodRow("Name").ToString()
-        dr("Description") = prodRow("Description").ToString()
-        dr("UnitPrice") = CDbl(prodRow("Prix"))
-        dr("Qty") = 1
-        dr("Amount") = 0D
-        dr("Deleted") = 0
-        dr("Dirty") = 1
-
-        ViewState("ItemsTable") = dt
-    End Sub
-
-    ' =========================================================
-    '  DONNÉES DEPUIS LA BD
-    ' =========================================================
-
-    ''' <summary>Retourne la liste des produits pour le picker.</summary>
-    Private Function GetProductsTable() As DataTable
-        ' ⚠️ Même procédure que les factures clients
-        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts")
-        Return If(ds IsNot Nothing AndAlso ds.Tables.Count > 0, ds.Tables(0), New DataTable())
-    End Function
-
-    ''' <summary>
-    ''' Retourne la liste des fournisseurs pour le picker.
-    ''' Procédure SQL : s0043Get_Supplier
-    ''' Retourne : Id, ContactName, BillingTo, search
-    ''' </summary>
-    Private Function GetSuppliersTable() As DataTable
-        ' ⚠️ Remplacer par votre procédure stockée fournisseurs
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party")
-        Return If(ds IsNot Nothing AndAlso ds.Tables.Count > 0, ds.Tables(0), New DataTable())
-    End Function
-
-    ' =========================================================
-    '  BOUTON AJOUT PRODUIT (placeholder)
-    ' =========================================================
-
-    ''' <summary>Placeholder — à implémenter si nécessaire.</summary>
-    Protected Sub btnAddProducts_Click(sender As Object, e As EventArgs)
-        Return
-    End Sub
     Sub UpdateItemAccount(ItemLineId As Integer, accountId As Integer)
 
         Dim p As New Collection
@@ -740,4 +896,7 @@ Public Class wbfSupplierInvoinceEdit
 
         ViewState("ItemsTable") = dt
     End Sub
+
+
 End Class
+

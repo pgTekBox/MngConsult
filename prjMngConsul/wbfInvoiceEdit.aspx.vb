@@ -1,6 +1,7 @@
 ﻿Imports System.Data.SqlClient
 Imports System.Diagnostics.Eventing
 Imports System.Runtime.InteropServices
+Imports System.Security.Cryptography.X509Certificates
 Imports Telerik.Web.UI
 Imports Telerik.Web.UI.Editor.DialogControls
 Imports Telerik.Web.UI.OrgChartStyles
@@ -91,6 +92,7 @@ Public Class wbfInvoiceEdit
         dt.Columns.Add("Dirty", GetType(Integer))
         dt.Columns.Add("Deleted", GetType(Integer))
         dt.Columns.Add("Ordre", GetType(Integer))
+        dt.Columns.Add("TaxeStatus", GetType(Integer))
         ViewState("ItemsTable") = dt
     End Sub
 
@@ -117,6 +119,7 @@ Public Class wbfInvoiceEdit
             dr("Dirty") = 0
             dr("Deleted") = 0
             dr("Ordre") = 0
+            dr("TaxeStatus") = orow("TaxeStatus")
             CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
 
         Next
@@ -142,6 +145,8 @@ Public Class wbfInvoiceEdit
             If Not Integer.TryParse(hid.Value, id) Then Continue For
 
             ' Contrôles (version 1 seule UI)
+            Dim ddlTaxeStatus As Telerik.Web.UI.RadDropDownList = TryCast(item.FindControl("rdTaxeStatus"), Telerik.Web.UI.RadDropDownList)
+
             Dim txtItemCode As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtItemCode"), Telerik.Web.UI.RadTextBox)
             Dim txtDesc As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("txtDesc"), Telerik.Web.UI.RadTextBox)
             Dim numQty As Telerik.Web.UI.RadTextBox = TryCast(item.FindControl("numQty"), Telerik.Web.UI.RadTextBox)
@@ -155,7 +160,7 @@ Public Class wbfInvoiceEdit
             Dim productId As Integer = If(hidProduct Is Nothing OrElse String.IsNullOrWhiteSpace(hidProduct.Value), 0, Convert.ToInt32(hidProduct.Value))
             Dim accountId As Integer = If(hidAccount Is Nothing OrElse String.IsNullOrWhiteSpace(hidAccount.Value), 0, Convert.ToInt32(hidAccount.Value))
             Dim description As String = If(txtDesc Is Nothing, "", txtDesc.Text.Trim())
-
+            Dim taxestatus As Integer = ddlTaxeStatus.SelectedValue
             Dim qty As Double = 0
             'If numQty IsNot Nothing AndAlso numQty.Text.HasValue Then
             qty = ToDoubleAnyCulture(numQty.Text)
@@ -179,70 +184,15 @@ Public Class wbfInvoiceEdit
 
             ' Détecter changement
             Dim changed As Boolean = False
-
-            ' Description
-            'If dt.Columns.Contains("Description") Then
-            '    Dim oldDesc As String = If(IsDBNull(dr("Description")), "", CStr(dr("Description")))
-            '    If oldDesc <> description Then
             dr("Description") = description
-            '        changed = True
-            '    End If
-            'End If
-
-            ' ProductId
-            'If dt.Columns.Contains("ProductId") Then
-            '    Dim oldDesc As Integer = If(IsDBNull(dr("ProductId")), 0, CInt(dr("ProductId")))
-            '    If oldDesc <> productId Then
             dr("ProductId") = productId
-            '        changed = True
-            '    End If
-            'End If
-
-
-
-            ' AccountId
-            'If dt.Columns.Contains("AccountId") Then
-            '    Dim oldAccountId As Integer = If(IsDBNull(dr("AccountId")), 0, CInt(dr("AccountId")))
-            '    If oldAccountId <> accountId Then
             dr("AccountId") = accountId
-            '        changed = True
-            '    End If
-            'End If
-
-            ' Qty
-            'If dt.Columns.Contains("Qty") Then
-            '    Dim oldQty As Double = If(IsDBNull(dr("Qty")), 0, Convert.ToDouble(dr("Qty")))
-            '    If Math.Abs(oldQty - qty) > 0.0000001 Then
             dr("Qty") = qty
-            '        changed = True
-            '    End If
-            'End If
-
-            ' UnitPrice
-            'If dt.Columns.Contains("UnitPrice") Then
-            '    Dim oldUP As Double = If(IsDBNull(dr("UnitPrice")), 0, Convert.ToDouble(dr("UnitPrice")))
-            '    If Math.Abs(oldUP - unitPrice) > 0.0000001 Then
             dr("UnitPrice") = unitPrice
-            '        changed = True
-            '    End If
-            'End If
-
-            ' Amount (recalcul)
-            'If dt.Columns.Contains("Amount") Then
-            '    Dim oldAmt As Double = If(IsDBNull(dr("Amount")), 0, Convert.ToDouble(dr("Amount")))
-            '    If Math.Abs(oldAmt - amount) > 0.0000001 Then
             dr("Amount") = amount
-            '        changed = True
-            '    End If
-            'End If
-
-
             dr("Ordre") = MyOrdre
-            ' Dirty
-            'If changed AndAlso dt.Columns.Contains("Dirty") Then
             dr("Dirty") = 1
-            'End If
-
+            dr("TaxeStatus") = taxestatus
         Next
 
         ViewState("ItemsTable") = dt
@@ -388,6 +338,7 @@ Public Class wbfInvoiceEdit
         dr("AccountName") = ""
         dr("Dirty") = 1
         dr("Deleted") = 0
+        dr("TaxeStatus") = 0
         dr("Ordre") = CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1
 
         CType(ViewState("ItemsTable"), DataTable).Rows.Add(dr)
@@ -437,7 +388,7 @@ Public Class wbfInvoiceEdit
 
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)
         ParamItems.Value = tvp
-        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v5"
+        ParamItems.TypeName = "dbo.TVP_InvoiceItem_v6"
 
 
         oCom.Parameters.Add(ParamDueDate)
@@ -586,7 +537,7 @@ Public Class wbfInvoiceEdit
     End Function
 
     Private Function GetCustomersTable() As DataTable
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party") ' <-- ta proc
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party 'Client'") ' <-- ta proc
         Return ds.Tables(0)
     End Function
 
@@ -625,9 +576,15 @@ Public Class wbfInvoiceEdit
             ViewState("ProductsTable") = products
         End If
 
-        'lblProduct.Text = "ProductId: " & Convert.ToString(DataBinder.Eval(e.Item.DataItem, "ProductId")) ' juste pour debug
 
-        'lblProduct.Text = DataBinder.Eval(e.Item.DataItem, "ProductName")
+        Dim rdTaxeStatus As RadDropDownList = TryCast(e.Item.FindControl("rdTaxeStatus"), Telerik.Web.UI.RadDropDownList)
+        If rdTaxeStatus IsNot Nothing Then
+            SetDDL(rdTaxeStatus, "ShortName", "Id", "s0092GetTaxeSatus")
+            rdTaxeStatus.SelectedValue = DataBinder.Eval(e.Item.DataItem, "TaxeStatus")
+
+        End If
+
+
 
         If lblAccount IsNot Nothing Then
             lblAccount.Text = Convert.ToString(DataBinder.Eval(e.Item.DataItem, "AccountName"))
@@ -635,16 +592,8 @@ Public Class wbfInvoiceEdit
 
 
 
-
-        ' 2) Binder
-        'rc.DataSource = products
-        'rc.DataBind()
-
-        ' 3) Appliquer SelectedValue après bind
-        'If hidProduct IsNot Nothing AndAlso Not String.IsNullOrWhiteSpace(hidProduct.Value) Then
-        '    rc.SelectedValue = hidProduct.Value
-        'End If
     End Sub
+
 
     'Propriete retourne le Viewstate des Produits
     Private Property ProductsTable As DataTable
@@ -784,12 +733,8 @@ Public Class wbfInvoiceEdit
             Case "ACCOUNT"
                 If Integer.TryParse(AllParam(2), accountId) Then
                     If Integer.TryParse(AllParam(1), ItemLineId) Then
-
-
-
-
+                        UpdateAllItemInViewstate()
                         UpdateItemAccount(ItemLineId, accountId)
-
                         SetDirtyItem(ItemLineId)
 
                         BindItemGrid()
@@ -799,6 +744,9 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+
+
+
     Sub SetDirtyItem(ItemLineId As Integer)
         Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
         Dim dr As DataRow = dt.AsEnumerable().FirstOrDefault(Function(r) Convert.ToInt32(r("Id")) = ItemLineId)
@@ -856,7 +804,7 @@ Public Class wbfInvoiceEdit
         dr("Deleted") = 0
         dr("AccountId") = AlldsProducts.Tables(0).Rows(0)("Compte")
         dr("AccountName") = AlldsProducts.Tables(0).Rows(0)("AccountName").ToString()
-
+        dr("TaxeStatus") = AlldsProducts.Tables(0).Rows(0)("TaxeStatus")
 
 
 

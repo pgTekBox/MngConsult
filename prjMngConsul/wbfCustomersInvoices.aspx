@@ -392,7 +392,7 @@
         Title="Ajouter / Modifier une Facture"
         OnClientPageLoad="rwInvoice_PageLoad"
         OnClientBeforeClose="rwInvoice_BeforeClose"
-        OnClientClose="rwCustomer_OnInvoiceClose"
+        OnClientClose="rwInvoice_OnInvoiceClose"
         ClientIDMode="Static" >
     </telerik:RadWindow>
 
@@ -412,11 +412,7 @@
         function isInvoiceDirty() {
             return document.getElementById("hfInvoiceDirty").value === "1";
         }
-        //function wireDirtyTracking() {
-        //    setTimeout(function () {
-        //        wireDirtyTrackingde();
-        //    }, 800);
-        //}
+        
 
         function rwInvoice_PageLoad(sender, args) {
             wireDirtyTracking(); // iframe prête ✔
@@ -471,7 +467,7 @@
         }
 
 
-        function rwCustomer_OnInvoiceClose(sender, args) {
+        function rwInvoice_OnInvoiceClose(sender, args) {
             setInvoiceClean();
             var ajaxManager = $find("RAP1");
             if (ajaxManager) {
@@ -482,33 +478,7 @@
 
         }
 
-        function wireDirtyTracking2() {
-
-            var oWnd = $find("rwInvoice");
-            var iframe = oWnd.get_contentFrame();
-
-            if (!iframe) return;
-
-            var doc = iframe.contentWindow.document;
-
-            var inputs = doc.querySelectorAll("input, textarea, select");
-            console.log(inputs);
-            inputs.forEach(function (el) {
-                el.addEventListener("change", setInvoiceDirty);
-                el.addEventListener("input", setInvoiceDirty);
-            });
-        }
-
-
-        function wireDirtyTracking3() {
-
-            var inputs = document.querySelectorAll("#rwInvoice input, #rwInvoice textarea, #rwInvoice select");
-
-            inputs.forEach(function (el) {
-                el.addEventListener("change", setInvoiceDirty);
-                el.addEventListener("input", setInvoiceDirty);
-            });
-        }
+      
 
 
 

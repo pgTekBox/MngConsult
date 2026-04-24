@@ -8,6 +8,7 @@
     <title>Facture client — Édition</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
+
     <style>
         .badge-posted {
     display: inline-flex;
@@ -34,9 +35,28 @@
     background-color: #f1f5f9 !important;
 }
 
+.no-arrow {
+    text-align: center;
+    font-weight: 700;
+}
+
+ 
 
 
-
+ 
+.no-arrow .rddlFakeInput   
+   {
+      padding-right: 30px;
+     text-align: center;
+     font-weight: 700;
+     padding-right: 30px;
+}
+.no-arrow .rddlSelect {
+     
+     text-align: center;
+     font-weight: 700;
+    display: none !important;
+}
 /* =============================================
     FOOTER TOTAUX
  ============================================= */
@@ -412,7 +432,7 @@
 
         .items-headerRD {
             display: grid;
-  grid-template-columns: 1fr 30px  190px 50px 80px 80px 45px 90px;
+  grid-template-columns: 1fr 30px  190px 50px 80px 80px 45px 45px 90px;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   overflow: hidden;
@@ -427,7 +447,7 @@
 
         .item-gridcutinv {
             display: grid;
-            grid-template-columns: 1fr 30px 190px 50px 80px 80px 45px 90px;
+            grid-template-columns: 1fr 30px 190px 50px 80px 80px 45px 45px 90px;
         }
 
         .row2 {
@@ -543,6 +563,7 @@
 
             <div class="content">
                 <div class="container">
+
                     <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé 🔒"></asp:Label>
                     <div class="card">
                         <div class="card-body">
@@ -599,7 +620,8 @@
                                 <div style="text-align: center">Qty</div>
                                 <div style="text-align: center">Prix unitaire</div>
                                 <div style="text-align: right">Total</div>
-                                <div style="text-align: center"></div>
+                                <div style="text-align: center">Tx</div>
+                                 <div style="text-align: center"></div>
                                 <div style="text-align: center">Ordre</div>
                             </div>
 
@@ -661,11 +683,11 @@
                                                 </div>
 
                                                 <div class="cell" style="text-align: right">
-                                                     
-                                                    <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
-                                                        Text='<%# Eval("Amount","{0:N2}") %>' />
+                                                    <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount" Text='<%# Eval("Amount","{0:N2}") %>' />
                                                 </div>
-
+                                                <div class="cell" style="text-align: right">
+                                                     <telerik:RadDropDownList ID="rdTaxeStatus"  CssClass="no-arrow"    runat="server"  RenderMode="Auto" DropDownAutoWidth="Enabled" DropDownWidth="50px" Width="40px"></telerik:RadDropDownList>
+                                                 </div>
                                                 <div class="cell actions" style="text-align: center">
                                                     <telerik:RadImageButton ID="RadImageButton1"
                                                         runat="server"
@@ -998,33 +1020,86 @@
 
                 return amt;
             }
+            //Uncaught TypeError: ddl.get_value is not a function
+              function getTaxStatus(row) {
+                var ddlEl = row.querySelector("[id*='rdTaxeStatus']");
+                if (!ddlEl) return 1;
+
+                var ddl = $find(ddlEl.id);
+                if (!ddl) return 1;
+
+                  var item = ddl.get_selectedItem();
+                  if (!item) return 1;
+
+                  var taxStatus = parseInt(item.get_value(), 10);
+
+                return isNaN(taxStatus) ? 1 : taxStatus;
+            }
 
             function recalcTotals() {
+
                 var subtotal = 0;
+                var taxableSubtotal = 0;
 
                 document.querySelectorAll(".item-row").forEach(function (row) {
+
                     if (row.getAttribute("data-deleted") === "1") return;
-                    subtotal += recalcRow(row);
+
+                    var amount = recalcRow(row);
+                    subtotal += amount;
+
+
+                    var taxStatus = getTaxStatus(row);
+
+                    console.log("taxStatus", taxStatus);
+
+                    
+
+                    // 🔥 seulement TAXABLE (1)
+                    if (taxStatus === 1) {
+                        taxableSubtotal += amount;
+                    }
+
                 });
 
                 subtotal = Math.round(subtotal * 100) / 100;
+                taxableSubtotal = Math.round(taxableSubtotal * 100) / 100;
 
-                var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
-                var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
+                var tps = Math.round(taxableSubtotal * TAX_TPS * 100) / 100;
+                var tvq = Math.round(taxableSubtotal * TAX_TVQ * 100) / 100;
+
                 var total = Math.round((subtotal + tps + tvq) * 100) / 100;
 
                 var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
-                var elTps = document.getElementById("<%= lblTax1.ClientID %>");
-                var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
-                var elTot = document.getElementById("<%= lblTotal.ClientID %>");
+             var elTps = document.getElementById("<%= lblTax1.ClientID %>");
+             var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
+             var elTot = document.getElementById("<%= lblTotal.ClientID %>");
 
-                if (elSub) elSub.innerText = fmt2(subtotal);
-                if (elTps) elTps.innerText = fmt2(tps);
-                if (elTvq) elTvq.innerText = fmt2(tvq);
-                if (elTot) elTot.innerText = fmt2(total);
+             if (elSub) elSub.innerText = fmt2(subtotal);
+             if (elTps) elTps.innerText = fmt2(tps);
+             if (elTvq) elTvq.innerText = fmt2(tvq);
+             if (elTot) elTot.innerText = fmt2(total);
             }
 
+          
             function wireInvoiceInputs() {
+
+                document.querySelectorAll("[id*='rdTaxeStatus']").forEach(function (ddl) {
+
+                    var combo = $find(ddl.id);
+                    if (!combo || ddl.dataset.wired === "1") return;
+
+                    ddl.dataset.wired = "1";
+
+                    combo.add_selectedIndexChanged(function () {
+                        recalcTotals();
+                    });
+
+                });
+
+
+
+
                 document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
                     .forEach(function (inp) {
                         if (inp.dataset.wired === "1") return;

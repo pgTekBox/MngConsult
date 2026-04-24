@@ -390,7 +390,7 @@ margin-right: auto;
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
     <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true">    </telerik:RadWindowManager>
-   
+      <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
 
         <div class="page-head">
             <div class="page-head-left">
@@ -487,11 +487,87 @@ margin-right: auto;
         DestroyOnClose="true"
         ClientIDMode="Static"
         Title="Ajouter / Modifier un facture fournisseur"
-        OnClientClose="rwSupplierInvoice_OnClientClose">
+        OnClientClose="rwSupplierInvoice_OnClientClose"
+        OnClientPageLoad="rwSupplierInvoice_PageLoad"
+        OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
+ >
+
+
+
+
     </telerik:RadWindow>
     <script src="js/RadWindows.js"></script>
     <script type="text/javascript">
-        
+
+
+        function setInvoiceDirty() {
+
+            document.getElementById("hfInvoiceDirty").value = "1";
+        }
+
+        function setInvoiceClean() {
+            document.getElementById("hfInvoiceDirty").value = "0";
+        }
+
+        function isInvoiceDirty() {
+            return document.getElementById("hfInvoiceDirty").value === "1";
+        }
+
+
+        function rwSupplierInvoice_PageLoad(sender, args) {
+            wireDirtyTracking(); // iframe prête ✔
+        }
+
+        function wireDirtyTracking() {
+            var oWnd = $find("rwSupplierInvoices");
+            console.log(oWnd);
+            if (!oWnd) return;
+
+            var iframe = oWnd.get_contentFrame();
+            console.log(iframe);
+            if (!iframe || !iframe.contentWindow || !iframe.contentWindow.document) return;
+
+            var doc = iframe.contentWindow.document;
+
+            var inputs = doc.querySelectorAll("input, textarea, select");
+
+            inputs.forEach(function (el) {
+                if (el.type === "hidden") return;
+
+                el.addEventListener("change", setInvoiceDirty);
+                el.addEventListener("input", setInvoiceDirty);
+            });
+        }
+
+
+
+
+        function rwSupplierInvoice_BeforeClose(sender, args) {
+
+            if (!isInvoiceDirty()) return;
+
+            // 🔴 On bloque la fermeture tout de suite
+            args.set_cancel(true);
+
+            // Telerik confirm (asynchrone)
+            radconfirm(
+                "⚠️ Vous avez des modifications non sauvegardées.<br/>Voulez-vous vraiment fermer ?",
+                function (arg) {
+
+                    if (arg) {
+                        // utilisateur confirme → on ferme manuellement
+                        setInvoiceClean(); // optionnel
+                        sender.close();
+                    }
+
+                    // sinon → on ne fait rien (reste ouvert)
+                },
+                350, // largeur
+                180, // hauteur
+                null,
+                "Confirmation"
+            );
+        }
 
         function rwSupplierInvoice_OnClientClose(sender, args) {
             var ajaxManager = $find("RAP1");

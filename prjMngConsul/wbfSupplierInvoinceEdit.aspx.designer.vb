@@ -59,13 +59,13 @@ Partial Public Class wbfSupplierInvoinceEdit
     Protected WithEvents pnlMain As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''radSave control.
+    '''lblPostedBadge control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents radSave As Global.Telerik.Web.UI.RadButton
+    Protected WithEvents lblPostedBadge As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''txtRefNo control.
@@ -201,6 +201,15 @@ Partial Public Class wbfSupplierInvoinceEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnAddLine As Global.Telerik.Web.UI.RadImageButton
+
+    '''<summary>
+    '''radSave control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents radSave As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
     '''hidSelectedProductId control.
