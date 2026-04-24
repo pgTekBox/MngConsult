@@ -36,6 +36,20 @@
 }
 
 
+ 
+.no-arrow .rddlFakeInput   
+   {
+      padding-right: 30px;
+     text-align: center;
+     font-weight: 700;
+     padding-right: 30px;
+}
+.no-arrow .rddlSelect {
+     
+     text-align: center;
+     font-weight: 700;
+    display: none !important;
+}
 
 
 /* =============================================
@@ -413,7 +427,7 @@
 
         .items-headerRD {
             display: grid;
-  grid-template-columns: 1fr 30px  190px 50px 80px 80px 45px 90px;
+  grid-template-columns: 1fr 30px  190px 50px 80px 80px 45px 45px 90px;
   border: 1px solid var(--line);
   border-radius: var(--r-lg);
   overflow: hidden;
@@ -428,7 +442,7 @@
 
         .item-gridcutinv {
             display: grid;
-            grid-template-columns: 1fr 30px 190px 50px 80px 80px 45px 90px;
+            grid-template-columns: 1fr 30px  190px 50px 80px 80px 45px 45px 90px;
         }
 
         .row2 {
@@ -622,6 +636,7 @@
                                 <div style="text-align: center">Qty</div>
                                 <div style="text-align: center">Prix unitaire</div>
                                 <div style="text-align: right">Total</div>
+                                <div style="text-align: center">Tx</div>
                                 <div style="text-align: center"></div>
                                 <div style="text-align: center">Ordre</div>
                             </div>
@@ -688,7 +703,9 @@
                                                     <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount"
                                                         Text='<%# Eval("Amount","{0:N2}") %>' />
                                                 </div>
-
+                                                  <div class="cell" style="text-align: right">
+       <telerik:RadDropDownList ID="rdTaxeStatus" OnClientItemSelected="onButtonClicked"  CssClass="no-arrow"    runat="server"  RenderMode="Auto" DropDownAutoWidth="Enabled" DropDownWidth="50px" Width="40px"></telerik:RadDropDownList>
+   </div>
                                                 <div class="cell actions" style="text-align: center">
                                                     <telerik:RadImageButton ID="RadImageButton1"
                                                         runat="server"
@@ -921,6 +938,7 @@
 
                 // ⚠️ ne pas annuler → laisse le postback / save serveur se faire
             }
+
             function onButtonClicked(sender, args) {
                  
                
@@ -1021,73 +1039,135 @@
 
                 return amt;
             }
+            //Uncaught TypeError: ddl.get_value is not a function
+            function getTaxStatus(row) {
+                var ddlEl = row.querySelector("[id*='rdTaxeStatus']");
+                if (!ddlEl) return 1;
 
-            function recalcTotals() {
-                var subtotal = 0;
+                var ddl = $find(ddlEl.id);
+                if (!ddl) return 1;
 
-                document.querySelectorAll(".item-row").forEach(function (row) {
-                    if (row.getAttribute("data-deleted") === "1") return;
-                    subtotal += recalcRow(row);
-                });
+                var item = ddl.get_selectedItem();
+                if (!item) return 1;
 
-                subtotal = Math.round(subtotal * 100) / 100;
+                var taxStatus = parseInt(item.get_value(), 10);
 
-                var tps = Math.round(subtotal * TAX_TPS * 100) / 100;
-                var tvq = Math.round(subtotal * TAX_TVQ * 100) / 100;
-                var total = Math.round((subtotal + tps + tvq) * 100) / 100;
-
-                var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
-                var elTps = document.getElementById("<%= lblTax1.ClientID %>");
-                var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
-                var elTot = document.getElementById("<%= lblTotal.ClientID %>");
-
-                if (elSub) elSub.innerText = fmt2(subtotal);
-                if (elTps) elTps.innerText = fmt2(tps);
-                if (elTvq) elTvq.innerText = fmt2(tvq);
-                if (elTot) elTot.innerText = fmt2(total);
+                return isNaN(taxStatus) ? 1 : taxStatus;
             }
 
-            function wireInvoiceInputs() {
-                document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
-                    .forEach(function (inp) {
-                        if (inp.dataset.wired === "1") return;
-                        inp.dataset.wired = "1";
+            
 
-                        inp.addEventListener("input", function () {
-                            var row = inp.closest(".item-row");
-                            if (row) {
-                                recalcRow(row);
-                                recalcTotals();
-                            }
-                        });
 
-                        inp.addEventListener("keyup", function () {
-                            var row = inp.closest(".item-row");
-                            if (row) {
-                                recalcRow(row);
-                                recalcTotals();
-                            }
-                        });
+                function recalcTotals() {
+
+                    var subtotal = 0;
+                    var taxableSubtotal = 0;
+
+                    document.querySelectorAll(".item-row").forEach(function (row) {
+
+                        if (row.getAttribute("data-deleted") === "1") return;
+
+                        var amount = recalcRow(row);
+                        subtotal += amount;
+
+
+                        var taxStatus = getTaxStatus(row);
+
+                        console.log("taxStatus", taxStatus);
+
+
+
+                        // 🔥 seulement TAXABLE (1)
+                        if (taxStatus === 1) {
+                            taxableSubtotal += amount;
+                        }
+
                     });
 
-                recalcTotals();
-            }
+                    subtotal = Math.round(subtotal * 100) / 100;
+                    taxableSubtotal = Math.round(taxableSubtotal * 100) / 100;
 
-            function wireAccountSelectors() {
-                document.querySelectorAll(".js-account-selector").forEach(function (el) {
-                    if (el.dataset.wired === "1") return;
-                    el.dataset.wired = "1";
+                    var tps = Math.round(taxableSubtotal * TAX_TPS * 100) / 100;
+                    var tvq = Math.round(taxableSubtotal * TAX_TVQ * 100) / 100;
 
-                    el.addEventListener("click", function () {
-                        var row = el.closest(".item-row");
-                        if (!row) return;
-                        var hidId = row.querySelector("input[id*='hidId']");
-                        var itemId = hidId ? hidId.value : "0";
+                    var total = Math.round((subtotal + tps + tvq) * 100) / 100;
 
-                        openAccountPicker(el, itemId);
+                    var elSub = document.getElementById("<%= lblSubTotal.ClientID %>");
+                    var elTps = document.getElementById("<%= lblTax1.ClientID %>");
+                    var elTvq = document.getElementById("<%= lblTax2.ClientID %>");
+                    var elTot = document.getElementById("<%= lblTotal.ClientID %>");
+
+                    if (elSub) elSub.innerText = fmt2(subtotal);
+                    if (elTps) elTps.innerText = fmt2(tps);
+                    if (elTvq) elTvq.innerText = fmt2(tvq);
+                    if (elTot) elTot.innerText = fmt2(total);
+                }
+
+
+                function wireInvoiceInputs() {
+
+                    document.querySelectorAll("[id*='rdTaxeStatus']").forEach(function (ddl) {
+
+                        var combo = $find(ddl.id);
+                        if (!combo || ddl.dataset.wired === "1") return;
+
+                        ddl.dataset.wired = "1";
+
+                        combo.add_selectedIndexChanged(function () {
+                            recalcTotals();
+                        });
+
                     });
-                });
-            }
+
+
+
+
+                    document.querySelectorAll(".item-row input[id*='numQty'], .item-row input[id*='numUnitPrice']")
+                        .forEach(function (inp) {
+                            if (inp.dataset.wired === "1") return;
+                            inp.dataset.wired = "1";
+
+                            inp.addEventListener("input", function () {
+                                var row = inp.closest(".item-row");
+                                if (row) {
+                                    recalcRow(row);
+                                    recalcTotals();
+                                }
+                            });
+
+                            inp.addEventListener("keyup", function () {
+                                var row = inp.closest(".item-row");
+                                if (row) {
+                                    recalcRow(row);
+                                    recalcTotals();
+                                }
+                            });
+                        });
+
+                    recalcTotals();
+                }
+
+
+
+
+                function wireAccountSelectors() {
+                    document.querySelectorAll(".js-account-selector").forEach(function (el) {
+                        if (el.dataset.wired === "1") return;
+                        el.dataset.wired = "1";
+
+                        el.addEventListener("click", function () {
+                            var row = el.closest(".item-row");
+                            if (!row) return;
+                            var hidId = row.querySelector("input[id*='hidId']");
+                            var itemId = hidId ? hidId.value : "0";
+
+                            openAccountPicker(el, itemId);
+                        });
+                    });
+                }
+
+
+
 
             document.addEventListener("DOMContentLoaded", function () {
                 wireInvoiceInputs();

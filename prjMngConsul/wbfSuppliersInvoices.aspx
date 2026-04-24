@@ -490,6 +490,12 @@ margin-right: auto;
         OnClientClose="rwSupplierInvoice_OnClientClose"
         OnClientPageLoad="rwSupplierInvoice_PageLoad"
         OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
+
+           
+
+
+
+
  >
 
 
@@ -570,6 +576,7 @@ margin-right: auto;
         }
 
         function rwSupplierInvoice_OnClientClose(sender, args) {
+            setInvoiceClean();
             var ajaxManager = $find("RAP1");
             if (ajaxManager) {
                 ajaxManager.ajaxRequest("refreshgrid");

@@ -72,6 +72,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         A enlever-> Documents scannés
                     </a>
+                     <a class="nav-child" href="~/wbfReceiptEdit.aspx" runat="server" data-navlink>
+     <span class="dot" aria-hidden="true"></span>
+     Encaissements
+ </a>
                 </div>
             </div>
 

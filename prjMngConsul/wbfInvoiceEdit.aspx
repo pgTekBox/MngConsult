@@ -10,7 +10,7 @@
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
     <style>
-        .badge-posted {
+ .badge-posted {
     display: inline-flex;
     align-items: center;
     gap: 6px;
@@ -686,7 +686,7 @@
                                                     <asp:Label ID="lblAmount" runat="server" CssClass="lbl-amount" Text='<%# Eval("Amount","{0:N2}") %>' />
                                                 </div>
                                                 <div class="cell" style="text-align: right">
-                                                     <telerik:RadDropDownList ID="rdTaxeStatus"  CssClass="no-arrow"    runat="server"  RenderMode="Auto" DropDownAutoWidth="Enabled" DropDownWidth="50px" Width="40px"></telerik:RadDropDownList>
+                                                     <telerik:RadDropDownList ID="rdTaxeStatus"  OnClientItemSelected="onButtonClicked"  CssClass="no-arrow"    runat="server"  RenderMode="Auto" DropDownAutoWidth="Enabled" DropDownWidth="50px" Width="40px"></telerik:RadDropDownList>
                                                  </div>
                                                 <div class="cell actions" style="text-align: center">
                                                     <telerik:RadImageButton ID="RadImageButton1"

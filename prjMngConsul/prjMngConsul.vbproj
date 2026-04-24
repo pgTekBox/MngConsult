@@ -383,6 +383,7 @@
     <Content Include="wbfRapportPlanComptable.aspx" />
     <Content Include="wbfRapportTaxes.aspx" />
     <Content Include="wbfReceipt.aspx" />
+    <Content Include="wbfReceiptEdit.aspx" />
     <Content Include="wbfReleve.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfSetting.aspx" />
@@ -720,6 +721,13 @@
       <DependentUpon>wbfReceipt.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfReceiptEdit.aspx.designer.vb">
+      <DependentUpon>wbfReceiptEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfReceiptEdit.aspx.vb">
+      <DependentUpon>wbfReceiptEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfReleve.aspx.designer.vb">
       <DependentUpon>wbfReleve.aspx</DependentUpon>
     </Compile>
@@ -852,7 +860,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
