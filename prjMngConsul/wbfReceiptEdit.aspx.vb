@@ -63,7 +63,7 @@ Public Class wbfReceiptEdit
 
             ' PartyId optionnel en QueryString pour pré-sélectionner un client
             Dim qsParty As Integer = 0
-            Integer.TryParse(Request.QueryString("PartyId"), qsParty)
+            Integer.TryParse(Request.QueryString("Id"), qsParty)
             PartyId = qsParty
 
             CreateInvoicesTable()

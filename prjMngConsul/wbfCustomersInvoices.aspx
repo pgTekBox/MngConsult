@@ -10,12 +10,12 @@
 
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
-    <script src="js/viewport.js"></script>
+    <script src="js/viewport.js?v=<%=DateTime.Now.Ticks %>"></script>
 
     <style>
 
   .listview-list-head {
-            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px 100px 80px;
             font-weight: 800;
             font-size: 13px;
             color: #0f172a;
@@ -27,7 +27,7 @@
         }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px 90px 100px 80px;
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
@@ -70,17 +70,17 @@
         }
 
         .field-etat {
-            grid-column: 4;
+            grid-column: x;
             grid-row: 1;
         }
 
         .field-total {
-            grid-column: 5;
+            grid-column: x;
             grid-row: 1;
         }
 
         .listview-actions {
-            grid-column: 6;
+            grid-column: x;
             grid-row: 1;
         }
 
@@ -92,7 +92,7 @@
 
             .listview-list-head,
             .listview-row {
-                grid-template-columns: 60px 100px 1fr 80px 90px 70px;
+                grid-template-columns: 60px 100px 1fr 80px  80px  90px 70px;
                 gap: 12px;
                 padding: 12px 14px;
             }
@@ -314,9 +314,15 @@
                                 <div class="colh-numero">#</div>
                                 <div class="colh-date">Date</div>
                                 <div class="colh-customer">Client</div>
+                                <div class="colh-statutpaiement">Statut Paiement</div>
+                                 <div class="colh-resteapayer">Reste A Payer</div>
+                                 <div class="colh-dejarecu">Deja Recu</div>
+                                   
 
-                                <div class="colh-etat">État1</div>
-                                <div class="colh-etat">État</div>
+
+                                <div class="colh-ecaissement">Ecaissement</div>
+                                <div class="colh-etat">Etat</div>
+                                 
                                 <div class="colh-total">Total</div>
                                 <div class="colh-action">Action</div>
                             </div>
@@ -339,11 +345,23 @@
 
                             <%-- Ligne 2 mobile : Nom + État --%>
                             <div class="field-row2">
-                                <span class="field-customer"><%# Eval("Name") %></span>
+                                <span class="field-name"><%# Eval("Name") %></span>
+                                <span class="field-statutpaiement"><%# Eval("StatutPaiement") %></span>
+                                <span class="field-resteapayer"><%# Eval("ResteAPayer") %></span>
+                                <span class="field-dejarecu"><%# Eval("DejaRecu") %></span>
                                 <span class="field-etat"><%# Eval("Status") %></span>
                             </div>
 
                             <div class="listview-actions">
+
+                                <asp:Button ID="Button1" runat="server" 
+                                    CssClass="btn btn-icon btn-icon-receipt" 
+                                    Text=""
+                                    ToolTip="Encaissement"
+                                    CausesValidation="false"
+                                    OnClientClick ='<%# "openRadWindow(" & Eval("PartyId") & ", ""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
+                                />
+
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -395,6 +413,21 @@
         OnClientClose="rwInvoice_OnInvoiceClose"
         ClientIDMode="Static" >
     </telerik:RadWindow>
+
+
+     <telerik:RadWindow ID="rwEncaissement" runat="server"
+     Modal="true"
+     VisibleOnPageLoad="false"
+     Behaviors="Close,Move,Resize"
+     DestroyOnClose="true"
+     Title="Ajouter / Modifier unencaissement"
+      OnClientPageLoad="rwInvoice_PageLoad"
+  OnClientBeforeClose="rwInvoice_BeforeClose"
+  OnClientClose="rwInvoice_OnInvoiceClose"
+     ClientIDMode="Static" >
+ </telerik:RadWindow>
+
+
 
 
     <script src="js/RadWindows.js"></script>
