@@ -126,7 +126,10 @@
                 </button>
 
                 <div class="nav-children">
-                    
+                          <a class="nav-child" href="~/wbfJournal.aspx" runat="server" data-navlink>
+          <span class="dot" aria-hidden="true"></span>
+          Journaux
+      </a>
                     <a class="nav-child" href="~/PlaidAccounts.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Comptes bancaires
