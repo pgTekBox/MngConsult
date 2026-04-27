@@ -5,7 +5,7 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-    <title>Encaissement client — Édition</title>
+    <title><asp:Literal ID="litTitle" runat="server" Text="Encaissement client — Édition" /></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
@@ -398,7 +398,7 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>Client</label>
+                                    <asp:Label ID="lblTiersLabel" runat="server" Text="Client" />
                                     <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Sélectionner un client"></asp:Label>
                                 </div>
 
@@ -451,7 +451,7 @@
                                 </div>
 
                                 <div>
-                                    <label>Montant reçu total</label>
+                                    <asp:Label ID="lblMontantLabel" runat="server" Text="Montant reçu total" />
                                     <telerik:RadTextBox ID="txtMontantRecu" runat="server"
                                         CssClass="num-right"
                                         oninput="fixNumber(this)" onblur="formatPrice(this); recalcDiff();" onfocus="this.select()"
@@ -465,7 +465,7 @@
                     <%-- LIGNES : FACTURES OUVERTES DU CLIENT --%>
                     <div class="card">
                         <div class="card-header">
-                            <strong>Factures ouvertes à encaisser</strong>
+                            <strong><asp:Literal ID="litLignesTitle" runat="server" Text="Factures ouvertes à encaisser" /></strong>
                             <telerik:RadButton ID="btnAutoImpute" runat="server" Text="Imputer automatiquement"
                                 OnClientClicked="onAutoImputeClicked" AutoPostBack="false" />
                         </div>
@@ -555,7 +555,7 @@
                             <asp:Label ID="lblTotalImpute" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">Différence (reçu − imputé)</div>
+                    <div class="tot"><asp:Literal ID="litLabelDiff" runat="server" Text="Différence (reçu − imputé)" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblDiff" runat="server" Text="0.00" CssClass="diff-ok" /></strong>

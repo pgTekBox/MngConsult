@@ -14,6 +14,15 @@ Option Explicit On
 Partial Public Class wbfReceiptEdit
 
     '''<summary>
+    '''litTitle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTitle As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''form1 control.
     '''</summary>
     '''<remarks>
@@ -66,6 +75,15 @@ Partial Public Class wbfReceiptEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblPostedBadge As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblTiersLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblTiersLabel As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
     '''lblCustomer control.
@@ -140,6 +158,15 @@ Partial Public Class wbfReceiptEdit
     Protected WithEvents hidBankCompte As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''lblMontantLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblMontantLabel As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''txtMontantRecu control.
     '''</summary>
     '''<remarks>
@@ -147,6 +174,15 @@ Partial Public Class wbfReceiptEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents txtMontantRecu As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
+    '''litLignesTitle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litLignesTitle As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''btnAutoImpute control.
@@ -183,6 +219,15 @@ Partial Public Class wbfReceiptEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents lblTotalImpute As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''litLabelDiff control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litLabelDiff As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''lblDiff control.

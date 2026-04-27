@@ -62,7 +62,7 @@ Public Class wbfTemplateEdit
 
     Sub LoadJournauxCombo()
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0114Get_Journaux", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
         cbJournal.DataSource = ds.Tables(0)
@@ -70,16 +70,18 @@ Public Class wbfTemplateEdit
     End Sub
 
     ' =========================================================
-    '  TABLE EN MÉMOIRE DES LIGNES (T139TemplateLignes)
+    '  TABLE EN MÉMOIRE DES LIGNES — VERSION UI (11 colonnes)
+    '  Contient en plus 3 colonnes d'affichage (AccountNumero,
+    '  AccountName, AccountDisplay) qui ne sont PAS dans le TVP.
     ' =========================================================
 
     Public Sub CreateLinesTable()
         Dim dt As New DataTable
         dt.Columns.Add("Id", GetType(Integer))
         dt.Columns.Add("PlanComptableId", GetType(Integer))
-        dt.Columns.Add("AccountNumero", GetType(String))
-        dt.Columns.Add("AccountName", GetType(String))
-        dt.Columns.Add("AccountDisplay", GetType(String))
+        dt.Columns.Add("AccountNumero", GetType(String))     ' UI seulement
+        dt.Columns.Add("AccountName", GetType(String))        ' UI seulement
+        dt.Columns.Add("AccountDisplay", GetType(String))     ' UI seulement
         dt.Columns.Add("Libelle", GetType(String))
         dt.Columns.Add("Sens", GetType(String))
         dt.Columns.Add("Montant", GetType(Double))
@@ -108,9 +110,42 @@ Public Class wbfTemplateEdit
     End Sub
 
     ''' <summary>
+    ''' Projette le DataTable UI (11 colonnes) vers une structure compatible
+    ''' avec le TVP dbo.TVP_TemplateLigne (8 colonnes).
+    '''
+    ''' L'ORDRE DES COLONNES EST CRITIQUE : SQL Server mappe les TVP par
+    ''' position, pas par nom. L'ordre doit correspondre exactement à :
+    '''   Id, PlanComptableId, Libelle, Sens, Montant, Ordre, Dirty, Deleted
+    ''' </summary>
+    Private Function ProjectLinesForTVP(source As DataTable) As DataTable
+        Dim tvp As New DataTable()
+        tvp.Columns.Add("Id", GetType(Integer))
+        tvp.Columns.Add("PlanComptableId", GetType(Integer))
+        tvp.Columns.Add("Libelle", GetType(String))
+        tvp.Columns.Add("Sens", GetType(String))
+        tvp.Columns.Add("Montant", GetType(Decimal))
+        tvp.Columns.Add("Ordre", GetType(Integer))
+        tvp.Columns.Add("Dirty", GetType(Integer))
+        tvp.Columns.Add("Deleted", GetType(Integer))
+
+        For Each row As DataRow In source.Rows
+            Dim newRow As DataRow = tvp.NewRow()
+            newRow("Id") = row("Id")
+            newRow("PlanComptableId") = row("PlanComptableId")
+            newRow("Libelle") = If(IsDBNull(row("Libelle")), "", row("Libelle"))
+            newRow("Sens") = If(IsDBNull(row("Sens")), "DEBIT", row("Sens"))
+            newRow("Montant") = Convert.ToDecimal(row("Montant"))
+            newRow("Ordre") = row("Ordre")
+            newRow("Dirty") = row("Dirty")
+            newRow("Deleted") = row("Deleted")
+            tvp.Rows.Add(newRow)
+        Next
+
+        Return tvp
+    End Function
+
+    ''' <summary>
     ''' Charge l'en-tête du template.
-    ''' Procédure : s0121GetTemplateById
-    ''' Retourne : Id, Code, Libelle, Description, JournauxId, MontantsPreRemplis, Actif
     ''' </summary>
     Sub LoadTemplateFromBD()
         Dim p As New Collection
@@ -130,8 +165,6 @@ Public Class wbfTemplateEdit
 
     ''' <summary>
     ''' Charge les lignes du template.
-    ''' Procédure : s0122GetTemplateLignes
-    ''' Retourne : Id, PlanComptableId, AccountNumero, AccountName, Libelle, Sens, Montant, Ordre
     ''' </summary>
     Sub LoadLinesFromBD()
         Dim p As New Collection
@@ -329,7 +362,7 @@ Public Class wbfTemplateEdit
         oCom.CommandType = CommandType.StoredProcedure
 
         oCom.Parameters.Add(New SqlParameter("@TemplateId", SqlDbType.Int) With {.Value = TemplateId})
-        oCom.Parameters.Add(New SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier) With {.Value = GetCompanyGUID()})
+        oCom.Parameters.Add(New SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier) With {.Value = Company})
         oCom.Parameters.Add(New SqlParameter("@Code", SqlDbType.VarChar, 50) With {.Value = txtCode.Text.Trim()})
         oCom.Parameters.Add(New SqlParameter("@Libelle", SqlDbType.VarChar, 250) With {.Value = txtLibelle.Text.Trim()})
         oCom.Parameters.Add(New SqlParameter("@Description", SqlDbType.VarChar, 500) With {.Value = txtDescription.Text.Trim()})
@@ -338,8 +371,11 @@ Public Class wbfTemplateEdit
         oCom.Parameters.Add(New SqlParameter("@Actif", SqlDbType.Bit) With {.Value = If(chkActif.Checked, 1, 0)})
         oCom.Parameters.Add(New SqlParameter("@UserId", SqlDbType.Int) With {.Value = GetCurrentUserId()})
 
+        ' >>> CORRECTION : projeter le DataTable UI (11 col) vers le TVP (8 col) <<<
+        Dim tvpLignes As DataTable = ProjectLinesForTVP(dt)
+
         Dim ParamLignes As New SqlParameter("@Lignes", SqlDbType.Structured)
-        ParamLignes.Value = dt
+        ParamLignes.Value = tvpLignes
         ParamLignes.TypeName = "dbo.TVP_TemplateLigne"
         oCom.Parameters.Add(ParamLignes)
 
@@ -370,7 +406,7 @@ Public Class wbfTemplateEdit
 
     Private Function GetAccountsTable() As DataTable
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0093Get_PlanComptable_All", p)
         Return ds.Tables(0)
     End Function
@@ -425,11 +461,6 @@ Public Class wbfTemplateEdit
     Private Function GetCurrentUserId() As Integer
         ' TODO : adapter
         Return 1
-    End Function
-
-    Private Function GetCompanyGUID() As Guid
-        ' TODO : Return CType(Session("CompanyGUID"), Guid)
-        Return Guid.Empty
     End Function
 
 End Class

@@ -364,6 +364,8 @@
     <Content Include="Scripts\WebForms\WebParts.js" />
     <Content Include="Scripts\WebForms\WebUIValidation.js" />
     <Content Include="todel.aspx" />
+    <Content Include="ucJournalList.ascx" />
+    <Content Include="usJournalTemplateList.ascx" />
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
@@ -396,6 +398,7 @@
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
     <Content Include="wbfSuppliers.aspx" />
     <Content Include="wbfSuppliersInvoices.aspx" />
+    <Content Include="wbfTemplate.aspx" />
     <Content Include="wbfTemplateEdit.aspx" />
     <Content Include="wbfTemplateList.aspx" />
     <Content Include="Web.config" />
@@ -403,6 +406,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Code\clsDataUC.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Code\clsReceiptImageOptimizer.vb" />
@@ -596,6 +602,20 @@
     <Compile Include="todel.aspx.vb">
       <DependentUpon>todel.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="ucJournalList.ascx.designer.vb">
+      <DependentUpon>ucJournalList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="ucJournalList.ascx.vb">
+      <DependentUpon>ucJournalList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="usJournalTemplateList.ascx.designer.vb">
+      <DependentUpon>usJournalTemplateList.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="usJournalTemplateList.ascx.vb">
+      <DependentUpon>usJournalTemplateList.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfBalanceVerification.aspx.designer.vb">
       <DependentUpon>wbfBalanceVerification.aspx</DependentUpon>
@@ -816,6 +836,13 @@
     </Compile>
     <Compile Include="wbfSuppliersInvoices.aspx.vb">
       <DependentUpon>wbfSuppliersInvoices.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfTemplate.aspx.designer.vb">
+      <DependentUpon>wbfTemplate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfTemplate.aspx.vb">
+      <DependentUpon>wbfTemplate.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfTemplateEdit.aspx.designer.vb">

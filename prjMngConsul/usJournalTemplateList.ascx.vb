@@ -1,8 +1,11 @@
-﻿Imports System.Data.SqlClient
+﻿
+
+
+Imports System.Data.SqlClient
 Imports Telerik.Web.UI
 
-Public Class wbfTemplateList
-    Inherits clsData
+Public Class usJournalTemplateList
+    Inherits clsDataUC
 
     ' =========================================================
     '  PAGE LOAD

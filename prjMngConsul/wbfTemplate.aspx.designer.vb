@@ -11,14 +11,14 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfJournal
+Partial Public Class wbfTemplate
 
     '''<summary>
-    '''ucJournalList control.
+    '''usJournalTemplateList control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ucJournalList As Global.MngConsul.ucJournalList
+    Protected WithEvents usJournalTemplateList As Global.MngConsul.usJournalTemplateList
 End Class

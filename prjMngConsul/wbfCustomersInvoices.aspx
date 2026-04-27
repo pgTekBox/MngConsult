@@ -69,13 +69,27 @@
             grid-row: 1;
         }
 
+      .field-dejarecu{
+            grid-column: 6;
+            grid-row: 1;
+        }
+      .field-encaissement{
+            grid-column: 8;
+            grid-row: 1;
+        }
         .field-etat {
-            grid-column: x;
+            grid-column: 8;
+            grid-row: 1;
+        }
+          
+        .field-resteapayer{
+            grid-column: 5;
             grid-row: 1;
         }
 
+
         .field-total {
-            grid-column: x;
+            grid-column: 7;
             grid-row: 1;
         }
 
@@ -345,7 +359,7 @@
 
                             <%-- Ligne 2 mobile : Nom + État --%>
                             <div class="field-row2">
-                                <span class="field-name"><%# Eval("Name") %></span>
+                                <span class="field-customer"><%# Eval("Name") %></span>
                                 <span class="field-statutpaiement"><%# Eval("StatutPaiement") %></span>
                                 <span class="field-resteapayer"><%# Eval("ResteAPayer") %></span>
                                 <span class="field-dejarecu"><%# Eval("DejaRecu") %></span>
@@ -355,11 +369,11 @@
                             <div class="listview-actions">
 
                                 <asp:Button ID="Button1" runat="server" 
-                                    CssClass="btn btn-icon btn-icon-receipt" 
+                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt" 
                                     Text=""
                                     ToolTip="Encaissement"
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindow(" & Eval("PartyId") & ", ""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
                                 />
 
 
@@ -512,7 +526,7 @@
         }
 
       
-
+      
 
 
 

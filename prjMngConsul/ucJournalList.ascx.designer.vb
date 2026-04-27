@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfSuppliersInvoices
+Partial Public Class ucJournalList
 
     '''<summary>
     '''RadAjaxLoadingPanel1 control.
@@ -23,101 +23,128 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents RadAjaxLoadingPanel1 As Global.Telerik.Web.UI.RadAjaxLoadingPanel
 
     '''<summary>
-    '''RAP1 control.
+    '''Ram1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
+    Protected WithEvents Ram1 As Global.Telerik.Web.UI.RadAjaxManager
 
     '''<summary>
-    '''rwmSuppliersInvoices control.
+    '''pnlMain control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwmSuppliersInvoices As Global.Telerik.Web.UI.RadWindowManager
+    Protected WithEvents pnlMain As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''hfInvoiceDirty control.
+    '''dpDateFrom control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfInvoiceDirty As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents dpDateFrom As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''btnAddSupplier control.
+    '''dpDateTo control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnAddSupplier As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents dpDateTo As Global.Telerik.Web.UI.RadDatePicker
 
     '''<summary>
-    '''tbSearch control.
+    '''cbJournalFilter control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbSearch As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents cbJournalFilter As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''btnSearch control.
+    '''cbStatusFilter control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnSearch As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents cbStatusFilter As Global.Telerik.Web.UI.RadComboBox
 
     '''<summary>
-    '''btnClear control.
+    '''txtSearch control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents txtSearch As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
-    '''rgFournisseursFactures control.
+    '''btnFilter control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgFournisseursFactures As Global.Telerik.Web.UI.RadListView
+    Protected WithEvents btnFilter As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
-    '''rwSupplierInvoices control.
+    '''rpEcritures control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwSupplierInvoices As Global.Telerik.Web.UI.RadWindow
+    Protected WithEvents rpEcritures As Global.System.Web.UI.WebControls.Repeater
 
     '''<summary>
-    '''rwEncaissement control.
+    '''pnlEmpty control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rwEncaissement As Global.Telerik.Web.UI.RadWindow
+    Protected WithEvents pnlEmpty As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''jsonViewer control.
+    '''lblCount control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents jsonViewer As Global.MngConsul.jsonViewer
+    Protected WithEvents lblCount As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblTotalDebit control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblTotalDebit As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''lblTotalCredit control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lblTotalCredit As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
+    '''RadWindowManager1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadWindowManager1 As Global.Telerik.Web.UI.RadWindowManager
 End Class

@@ -203,21 +203,7 @@
 
         .fab-addline img { width: 56px; height: 56px; display: block; }
 
-        @media (max-width: 480px) {
-            .fab-addline { right: 14px; bottom: 14px; }
-            .fab-addline img { width: 52px; height: 52px; }
-            .content { padding-bottom: 84px; }
-
-            .lines-header,
-            .line-gridrow {
-                grid-template-columns: 1fr 80px 110px 40px;
-            }
-
-            .lines-header > div:nth-child(2),
-            .line-gridrow > div:nth-child(2) { display: none; }
-
-            .row4 { grid-template-columns: 1fr 1fr; }
-        }
+        
     </style>
 </head>
 <body>

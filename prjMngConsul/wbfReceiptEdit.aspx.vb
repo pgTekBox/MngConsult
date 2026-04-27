@@ -1,15 +1,38 @@
 ﻿Imports System.Data.SqlClient
 Imports Telerik.Web.UI
 
-
-
-
 Public Class wbfReceiptEdit
     Inherits clsData
 
     ' =========================================================
     '  PROPRIÉTÉS EN VIEWSTATE
     ' =========================================================
+
+    ''' <summary>
+    ''' Sens du règlement : "ENCAISSEMENT" (client) ou "DECAISSEMENT" (fournisseur).
+    ''' Récupéré depuis la querystring ?Sens=... au premier load.
+    ''' </summary>
+    Property Sens() As String
+        Get
+            Try
+                If ViewState("Sens") Is Nothing Then ViewState("Sens") = "ENCAISSEMENT"
+                Return ViewState("Sens").ToString()
+            Catch
+                Return "ENCAISSEMENT"
+            End Try
+        End Get
+        Set(value As String)
+            ViewState("Sens") = value
+        End Set
+    End Property
+
+    Public Function IsEncaissement() As Boolean
+        Return Sens = "ENCAISSEMENT"
+    End Function
+
+    Public Function IsDecaissement() As Boolean
+        Return Sens = "DECAISSEMENT"
+    End Function
 
     Property PartyId() As Integer
         Get
@@ -25,17 +48,20 @@ Public Class wbfReceiptEdit
         End Set
     End Property
 
-    Property CustomerGUID() As Guid
+    ''' <summary>
+    ''' GUID du tiers (client ou fournisseur selon le sens).
+    ''' </summary>
+    Property TiersGUID() As Guid
         Get
             Try
-                If ViewState("CustomerGUID") Is Nothing Then ViewState("CustomerGUID") = New Guid("00000000-0000-0000-0000-000000000000")
-                Return CType(ViewState("CustomerGUID"), Guid)
+                If ViewState("TiersGUID") Is Nothing Then ViewState("TiersGUID") = New Guid("00000000-0000-0000-0000-000000000000")
+                Return CType(ViewState("TiersGUID"), Guid)
             Catch
                 Return New Guid("00000000-0000-0000-0000-000000000000")
             End Try
         End Get
         Set(value As Guid)
-            ViewState("CustomerGUID") = value
+            ViewState("TiersGUID") = value
         End Set
     End Property
 
@@ -61,26 +87,36 @@ Public Class wbfReceiptEdit
 
         If Not IsPostBack Then
 
-            ' PartyId optionnel en QueryString pour pré-sélectionner un client
+            ' Récupérer le sens depuis la querystring (ENCAISSEMENT par défaut)
+            Dim qsSens As String = Request.QueryString("Sens")
+            If String.IsNullOrEmpty(qsSens) Then qsSens = "ENCAISSEMENT"
+            qsSens = qsSens.ToUpper()
+            If qsSens <> "ENCAISSEMENT" AndAlso qsSens <> "DECAISSEMENT" Then qsSens = "ENCAISSEMENT"
+            Sens = qsSens
+
+            ' PartyId optionnel en QueryString pour pré-sélectionner un tiers
             Dim qsParty As Integer = 0
-            Integer.TryParse(Request.QueryString("Id"), qsParty)
+            Integer.TryParse(Request.QueryString("PartyId"), qsParty)
             PartyId = qsParty
+
+            ' Adapter les libellés selon le sens AVANT de charger les données
+            ApplyLabelsForSens()
 
             CreateInvoicesTable()
 
             If PartyId > 0 Then
-                LoadCustomerHeader(PartyId)
+                LoadTiersHeader(PartyId)
                 LoadOpenInvoicesFromBD(PartyId)
             End If
 
-            ' Date encaissement par défaut = aujourd'hui
+            ' Date par défaut = aujourd'hui
             dpDateEncaissement.SelectedDate = Date.Today
 
             ' Type règlement par défaut
             cbTypeReglement.SelectedValue = "CHEQUE"
 
             BindInvoiceGrid()
-            SetCustomerClickHandler()
+            SetTiersClickHandler()
             SetBankClickHandler()
         End If
 
@@ -89,13 +125,39 @@ Public Class wbfReceiptEdit
     End Sub
 
     ' =========================================================
-    '  TABLE EN MÉMOIRE DES FACTURES OUVERTES
+    '  ADAPTATION DES LIBELLÉS SELON LE SENS
     ' =========================================================
 
     ''' <summary>
-    ''' Crée la DataTable vide qui va stocker les factures ouvertes du client
-    ''' et le montant à imputer sur chacune.
+    ''' Adapte tous les libellés visibles selon que l'on soit en mode
+    ''' ENCAISSEMENT (client) ou DECAISSEMENT (fournisseur).
     ''' </summary>
+    Private Sub ApplyLabelsForSens()
+        If IsEncaissement() Then
+            litTitle.Text = "Encaissement client — Édition"
+            Page.Title = "Encaissement client — Édition"
+            lblTiersLabel.Text = "Client"
+            lblCustomer.Text = "Sélectionner un client"
+            litLignesTitle.Text = "Factures ouvertes à encaisser"
+            lblMontantLabel.Text = "Montant reçu total"
+            litLabelDiff.Text = "Différence (reçu − imputé)"
+            radSave.Text = "Enregistrer l'encaissement"
+        Else
+            litTitle.Text = "Paiement fournisseur — Édition"
+            Page.Title = "Paiement fournisseur — Édition"
+            lblTiersLabel.Text = "Fournisseur"
+            lblCustomer.Text = "Sélectionner un fournisseur"
+            litLignesTitle.Text = "Factures ouvertes à payer"
+            lblMontantLabel.Text = "Montant payé total"
+            litLabelDiff.Text = "Différence (payé − imputé)"
+            radSave.Text = "Enregistrer le paiement"
+        End If
+    End Sub
+
+    ' =========================================================
+    '  TABLE EN MÉMOIRE DES FACTURES OUVERTES
+    ' =========================================================
+
     Public Sub CreateInvoicesTable()
         Dim dt As New DataTable
         dt.Columns.Add("DocumentId", GetType(Integer))
@@ -109,15 +171,23 @@ Public Class wbfReceiptEdit
     End Sub
 
     ''' <summary>
-    ''' Charge les factures ouvertes (non totalement payées) d'un client depuis la BD.
-    ''' Procédure attendue : s0100GetOpenInvoicesByParty (@PartyId)
-    ''' Retourne : DocumentId, DocumentNumber, IssueDate, Total, DejaRecu, Reste
+    ''' Charge les factures ouvertes selon le sens :
+    '''   - ENCAISSEMENT : factures CLIENTS non totalement encaissées
+    '''   - DECAISSEMENT : factures FOURNISSEURS non totalement payées
     ''' </summary>
     Public Sub LoadOpenInvoicesFromBD(pPartyId As Integer)
         Dim p As New Collection
         p.Add(New SqlParameter("@PartyId", pPartyId))
 
-        Dim ds As DataSet = ExecuteSQLds("s0100GetOpenInvoicesByParty", p)
+        ' Choix de la procédure selon le sens
+        Dim procName As String
+        If IsEncaissement() Then
+            procName = "s0100GetOpenInvoicesByParty"          ' Factures clients
+        Else
+            procName = "s0102GetOpenSupplierInvoicesByParty"  ' Factures fournisseurs
+        End If
+
+        Dim ds As DataSet = ExecuteSQLds(procName, p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
 
         Dim dt As DataTable = CType(ViewState("InvoicesTable"), DataTable)
@@ -138,9 +208,6 @@ Public Class wbfReceiptEdit
         ViewState("InvoicesTable") = dt
     End Sub
 
-    ''' <summary>
-    ''' Binding du Repeater avec les factures ouvertes.
-    ''' </summary>
     Public Sub BindInvoiceGrid()
         Dim dt As DataTable = CType(ViewState("InvoicesTable"), DataTable)
         If dt Is Nothing Then Return
@@ -152,10 +219,6 @@ Public Class wbfReceiptEdit
         rpInvoices.DataBind()
     End Sub
 
-    ''' <summary>
-    ''' Met à jour le ViewState("InvoicesTable") avec les montants saisis par l'utilisateur
-    ''' dans chaque ligne du Repeater. À appeler avant toute action serveur.
-    ''' </summary>
     Sub UpdateAllInvoicesInViewstate()
         Dim dt As DataTable = TryCast(ViewState("InvoicesTable"), DataTable)
         If dt Is Nothing Then Exit Sub
@@ -186,13 +249,15 @@ Public Class wbfReceiptEdit
     End Sub
 
     ' =========================================================
-    '  BINDING EN-TÊTE CLIENT
+    '  BINDING EN-TÊTE TIERS (client OU fournisseur)
     ' =========================================================
 
     ''' <summary>
-    ''' Charge les infos du client sélectionné.
+    ''' Charge les infos du tiers sélectionné (client ou fournisseur).
+    ''' s0037GetCustomerFullById retourne les infos d'un Party par son Id,
+    ''' la même proc fonctionne pour les deux types.
     ''' </summary>
-    Sub LoadCustomerHeader(pPartyId As Integer)
+    Sub LoadTiersHeader(pPartyId As Integer)
         Dim p As New Collection
         p.Add(New SqlParameter("@PartyId", pPartyId))
 
@@ -202,10 +267,10 @@ Public Class wbfReceiptEdit
         Dim orow As DataRow = ds.Tables(0).Rows(0)
         lblCustomer.Text = orow("Name").ToString()
         rdLabel.Text = orow("FullName").ToString()
-        CustomerGUID = CType(orow("PartyGUID"), Guid)
+        TiersGUID = CType(orow("PartyGUID"), Guid)
     End Sub
 
-    Sub SetCustomerClickHandler()
+    Sub SetTiersClickHandler()
         lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this)")
     End Sub
 
@@ -243,7 +308,9 @@ Public Class wbfReceiptEdit
     End Sub
 
     ' =========================================================
-    '  SAUVEGARDE — APPEL DE sp_EncaisserFactureClient PAR LIGNE
+    '  SAUVEGARDE
+    '   - ENCAISSEMENT : appel de sp_EncaisserFactureClient par ligne
+    '   - DECAISSEMENT : appel de sp_PayerFactureFournisseur par ligne
     ' =========================================================
 
     Private Sub radSave_Click(sender As Object, e As EventArgs) Handles radSave.Click
@@ -252,7 +319,8 @@ Public Class wbfReceiptEdit
 
         ' Validation minimale
         If PartyId <= 0 Then
-            RegisterAlert("Veuillez sélectionner un client.")
+            Dim labelTiers As String = If(IsEncaissement(), "client", "fournisseur")
+            RegisterAlert("Veuillez sélectionner un " & labelTiers & ".")
             Return
         End If
 
@@ -262,7 +330,7 @@ Public Class wbfReceiptEdit
             Return
         End If
 
-        Dim dateEnc As Date = If(dpDateEncaissement.SelectedDate.HasValue, dpDateEncaissement.SelectedDate.Value, Date.Today)
+        Dim dateOp As Date = If(dpDateEncaissement.SelectedDate.HasValue, dpDateEncaissement.SelectedDate.Value, Date.Today)
         Dim typeRegl As String = If(cbTypeReglement.SelectedValue, "CHEQUE")
         Dim reference As String = txtReference.Text.Trim()
 
@@ -280,24 +348,37 @@ Public Class wbfReceiptEdit
 
         ' Vérifier que Sum(AImputer) <= MontantReçu (tolérance 1 cent)
         Dim sumImpute As Double = linesToPost.Sum(Function(r) Convert.ToDouble(r("AImputer")))
-        Dim montantRecu As Double = ToDoubleAnyCulture(txtMontantRecu.Text)
-        If montantRecu > 0 AndAlso Math.Abs(sumImpute - montantRecu) > 0.01 Then
-            ' Message informatif mais non bloquant (le user peut vouloir un encaissement partiel)
-            ' Si vous voulez rendre bloquant, remplacer par Return après l'alerte
-        End If
+        Dim montantTotal As Double = ToDoubleAnyCulture(txtMontantRecu.Text)
+        ' Note : laissé non bloquant (paiement partiel possible)
 
         ' Vérifier que chaque AImputer <= Reste
+        Dim labelOperation As String = If(IsEncaissement(), "encaisser", "payer")
         For Each row As DataRow In linesToPost
             Dim aImputer As Double = Convert.ToDouble(row("AImputer"))
             Dim reste As Double = Convert.ToDouble(row("Reste"))
             If aImputer - reste > 0.005 Then
                 RegisterAlert("Le montant à imputer sur la facture " & row("DocumentNumber").ToString() &
-                              " dépasse le reste à recevoir.")
+                              " dépasse le reste à " & labelOperation & ".")
                 Return
             End If
         Next
 
-        ' Boucler sur chaque facture : 1 appel à sp_EncaisserFactureClient par ligne
+        ' Choix de la procédure et des noms de paramètres selon le sens
+        Dim procName As String
+        Dim paramMontantName As String
+        Dim paramDateName As String
+
+        If IsEncaissement() Then
+            procName = "sp_EncaisserFactureClient"
+            paramMontantName = "@MontantEncaisse"
+            paramDateName = "@DateEncaissement"
+        Else
+            procName = "sp_PayerFactureFournisseur"
+            paramMontantName = "@MontantPaye"
+            paramDateName = "@DatePaiement"
+        End If
+
+        ' Boucler sur chaque facture : 1 appel par ligne, le tout dans une transaction
         Using conn As New SqlConnection(ConnectionString)
             conn.Open()
             Using tx As SqlTransaction = conn.BeginTransaction()
@@ -306,11 +387,11 @@ Public Class wbfReceiptEdit
                         Dim docId As Integer = Convert.ToInt32(row("DocumentId"))
                         Dim aImputer As Double = Convert.ToDouble(row("AImputer"))
 
-                        Using cmd As New SqlCommand("sp_EncaisserFactureClient", conn, tx)
+                        Using cmd As New SqlCommand(procName, conn, tx)
                             cmd.CommandType = CommandType.StoredProcedure
                             cmd.Parameters.AddWithValue("@DocumentId", docId)
-                            cmd.Parameters.AddWithValue("@MontantEncaisse", aImputer)
-                            cmd.Parameters.AddWithValue("@DateEncaissement", dateEnc)
+                            cmd.Parameters.AddWithValue(paramMontantName, aImputer)
+                            cmd.Parameters.AddWithValue(paramDateName, dateOp)
                             cmd.Parameters.AddWithValue("@CompteBanque", noCompteBanque)
                             cmd.Parameters.AddWithValue("@TypeReglement", typeRegl)
 
@@ -358,20 +439,30 @@ Public Class wbfReceiptEdit
     '  DATA SOURCES POUR LES PICKERS
     ' =========================================================
 
-    Private Function GetCustomersTable() As DataTable
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party 'Client'")
+    ''' <summary>
+    ''' Liste des tiers selon le sens (clients ou fournisseurs).
+    ''' Réutilise la même proc s0043Get_Party avec un paramètre différent.
+    ''' </summary>
+    Private Function GetTiersTable() As DataTable
+        Dim sql As String
+        If IsEncaissement() Then
+            sql = "s0043Get_Party 'Client'"
+        Else
+            sql = "s0043Get_Party 'Fournisseur'"
+        End If
+
+        Dim ds As DataSet = ExecuteSQLds(sql)
         Return ds.Tables(0)
     End Function
 
     Private Function GetBanksTable() As DataTable
-        ' Retourne les comptes de type Banque du plan comptable.
-        ' TODO : adapter selon votre procédure (filtrer par ClasseId = 'BANQUE' ou équivalent)
+        ' Même compte banque pour encaissement et décaissement
         Dim ds As DataSet = ExecuteSQLds("s0091Get_GLAccounts_BANQUE")
         Return ds.Tables(0)
     End Function
 
     Private Sub rlvCustomers_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvCustomers.NeedDataSource
-        Dim dt As DataTable = GetCustomersTable()
+        Dim dt As DataTable = GetTiersTable()
         rlvCustomers.DataSource = dt
     End Sub
 
@@ -395,12 +486,15 @@ Public Class wbfReceiptEdit
         Select Case CommandName
 
             Case "CUSTOMER"
-                Dim customerId As Integer = 0
-                If Integer.TryParse(AllParam(1), customerId) Then
+                ' Le picker JS envoie toujours "CUSTOMER" (même nom de commande
+                ' pour les deux modes pour ne pas modifier le JS de l'aspx).
+                ' L'interprétation côté VB dépend du Sens.
+                Dim tiersId As Integer = 0
+                If Integer.TryParse(AllParam(1), tiersId) Then
                     UpdateAllInvoicesInViewstate()
-                    PartyId = customerId
-                    LoadCustomerHeader(customerId)
-                    LoadOpenInvoicesFromBD(customerId)
+                    PartyId = tiersId
+                    LoadTiersHeader(tiersId)
+                    LoadOpenInvoicesFromBD(tiersId)
                     BindInvoiceGrid()
                 End If
 
@@ -418,8 +512,6 @@ Public Class wbfReceiptEdit
         Dim p As New Collection
         p.Add(New SqlParameter("@NoCompte", noCompte))
 
-        ' Récupère le nom du compte à partir de son numéro.
-        ' TODO : adapter au nom de votre procédure.
         Dim ds As DataSet = ExecuteSQLds("s0092Get_GLAccountByNoCompte", p)
 
         If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then

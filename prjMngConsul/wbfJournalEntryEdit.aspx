@@ -320,26 +320,7 @@
             gap: 8px;
         }
 
-        @media (max-width: 480px) {
-            .fab-addline { right: 14px; bottom: 14px; }
-            .fab-addline img { width: 52px; height: 52px; }
-            .content { padding-bottom: 84px; }
-
-            .totals {
-                display: grid;
-                grid-template-columns: 1fr 85px 85px;
-            }
-
-            .lines-header,
-            .line-gridrow {
-                grid-template-columns: 1fr 90px 90px 60px;
-            }
-
-            .lines-header > div:nth-child(2),
-            .line-gridrow > div:nth-child(2) { display: none; }
-
-            .row4 { grid-template-columns: 1fr 1fr; }
-        }
+      
     </style>
 </head>
 <body>

@@ -28,7 +28,7 @@
        }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr 90px 100px 80px;
+            grid-template-columns: 70px 110px 1fr 90px 100px  100px   100px  100px  80px;
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
@@ -166,24 +166,48 @@
          grid-column: 2;
          grid-row: 1;
      }
+ .field-total {
+         grid-column: 3;
+         grid-row: 1;
+     }
+
 
      .field-customer {
          grid-column: 3;
          grid-row: 1;
      }
 
-     .field-etat {
+     .field-supplier {
          grid-column: 4;
          grid-row: 1;
      }
 
-     .field-total {
-         grid-column: 5;
-         grid-row: 1;
-     }
+    
+       .field-etat {
+      grid-column: 5;
+      grid-row: 1;
+  }    
+       .field-DejaPaye {
+    grid-column: 6;
+    grid-row: 1;
+}
+
+               .field-ResteAPayer {
+    grid-column: 7;
+    grid-row: 1;
+}
+    .field-StatutPaiement {
+    grid-column: 8;
+    grid-row: 1;
+}
+     
+
+
+
+
 
      .listview-actions {
-         grid-column: 6;
+         grid-column: 9;
          grid-row: 1;
      }
 
@@ -448,9 +472,25 @@ margin-right: auto;
                          <div class="field-row2">
                             <div class="field-supplier"><%# Eval("Name") %></div>
                             <div class="field-etat"><%# Eval("Status") %></div>
+
+                             <div class="field-DejaPaye"><%# Eval("DejaPaye") %></div>
+                                <div class="field-ResteAPayer"><%# Eval("ResteAPayer") %></div>
+                                <div class="field-StatutPaiement"><%# Eval("StatutPaiement") %></div>
                           </div>
 
                             <div class="listview-actions">
+
+                                
+                                <asp:Button ID="Button1" runat="server" 
+                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt" 
+                                    Text=""
+                                    ToolTip="Encaissement"
+                                    CausesValidation="false"
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
+                                />
+
+
+
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
@@ -490,18 +530,24 @@ margin-right: auto;
         OnClientClose="rwSupplierInvoice_OnClientClose"
         OnClientPageLoad="rwSupplierInvoice_PageLoad"
         OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
-
-           
-
-
-
-
+         
  >
-
-
-
-
+ 
     </telerik:RadWindow>
+
+        <telerik:RadWindow ID="rwEncaissement" runat="server"
+    Modal="true"
+    VisibleOnPageLoad="false"
+    Behaviors="Close,Move,Resize"
+    DestroyOnClose="true"
+    Title="Ajouter / Modifier unencaissement"
+     OnClientClose="rwSupplierInvoice_OnClientClose"
+ OnClientPageLoad="rwSupplierInvoice_PageLoad"
+ OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
+    ClientIDMode="Static" >
+</telerik:RadWindow>
+
+
     <script src="js/RadWindows.js"></script>
     <script type="text/javascript">
 

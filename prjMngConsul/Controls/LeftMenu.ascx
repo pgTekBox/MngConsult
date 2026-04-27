@@ -130,6 +130,13 @@
           <span class="dot" aria-hidden="true"></span>
           Journaux
       </a>
+                     
+                    <a class="nav-child" href="~/wbfTemplate.aspx" runat="server" data-navlink>
+    <span class="dot" aria-hidden="true"></span>
+    Template Journaux
+</a>
+
+
                     <a class="nav-child" href="~/PlaidAccounts.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Comptes bancaires

@@ -81,7 +81,7 @@ Public Class wbfJournalEntryEdit
 
     Sub LoadJournauxCombo()
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0114Get_Journaux", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
         cbJournal.DataSource = ds.Tables(0)
@@ -90,7 +90,7 @@ Public Class wbfJournalEntryEdit
 
     Sub LoadPeriodesCombo()
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0115Get_PeriodesOuvertes", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
         cbPeriode.DataSource = ds.Tables(0)
@@ -98,16 +98,18 @@ Public Class wbfJournalEntryEdit
     End Sub
 
     ' =========================================================
-    '  TABLE EN MÉMOIRE DES LIGNES (T136LignesEcriture)
+    '  TABLE EN MÉMOIRE DES LIGNES — VERSION UI (12 colonnes)
+    '  Contient en plus les 3 colonnes d'affichage (AccountNumero,
+    '  AccountName, AccountDisplay) qui ne sont PAS dans le TVP.
     ' =========================================================
 
     Public Sub CreateLinesTable()
         Dim dt As New DataTable
         dt.Columns.Add("Id", GetType(Integer))
         dt.Columns.Add("PlanComptableId", GetType(Integer))
-        dt.Columns.Add("AccountNumero", GetType(String))
-        dt.Columns.Add("AccountName", GetType(String))
-        dt.Columns.Add("AccountDisplay", GetType(String))
+        dt.Columns.Add("AccountNumero", GetType(String))      ' UI seulement
+        dt.Columns.Add("AccountName", GetType(String))         ' UI seulement
+        dt.Columns.Add("AccountDisplay", GetType(String))      ' UI seulement
         dt.Columns.Add("PartyId", GetType(Integer))
         dt.Columns.Add("Libelle", GetType(String))
         dt.Columns.Add("MontantDebit", GetType(Double))
@@ -138,10 +140,52 @@ Public Class wbfJournalEntryEdit
     End Sub
 
     ''' <summary>
+    ''' Projette le DataTable UI (12 colonnes) vers une structure compatible
+    ''' avec le TVP dbo.TVP_LigneEcriture (9 colonnes).
+    '''
+    ''' L'ORDRE DES COLONNES EST CRITIQUE : SQL Server mappe les TVP par
+    ''' position et non par nom. L'ordre doit correspondre exactement à :
+    '''   Id, PlanComptableId, PartyId, Libelle, MontantDebit, MontantCredit,
+    '''   Ordre, Dirty, Deleted
+    ''' </summary>
+    Private Function ProjectLinesForTVP(source As DataTable) As DataTable
+        Dim tvp As New DataTable()
+        tvp.Columns.Add("Id", GetType(Integer))
+        tvp.Columns.Add("PlanComptableId", GetType(Integer))
+        tvp.Columns.Add("PartyId", GetType(Integer))
+        tvp.Columns.Add("Libelle", GetType(String))
+        tvp.Columns.Add("MontantDebit", GetType(Decimal))
+        tvp.Columns.Add("MontantCredit", GetType(Decimal))
+        tvp.Columns.Add("Ordre", GetType(Integer))
+        tvp.Columns.Add("Dirty", GetType(Integer))
+        tvp.Columns.Add("Deleted", GetType(Integer))
+
+        For Each row As DataRow In source.Rows
+            Dim newRow As DataRow = tvp.NewRow()
+            newRow("Id") = row("Id")
+            newRow("PlanComptableId") = row("PlanComptableId")
+
+            ' PartyId : NULL si 0 ou DBNull
+            If IsDBNull(row("PartyId")) OrElse Convert.ToInt32(row("PartyId")) = 0 Then
+                newRow("PartyId") = DBNull.Value
+            Else
+                newRow("PartyId") = row("PartyId")
+            End If
+
+            newRow("Libelle") = If(IsDBNull(row("Libelle")), "", row("Libelle"))
+            newRow("MontantDebit") = Convert.ToDecimal(row("MontantDebit"))
+            newRow("MontantCredit") = Convert.ToDecimal(row("MontantCredit"))
+            newRow("Ordre") = row("Ordre")
+            newRow("Dirty") = row("Dirty")
+            newRow("Deleted") = row("Deleted")
+            tvp.Rows.Add(newRow)
+        Next
+
+        Return tvp
+    End Function
+
+    ''' <summary>
     ''' Charge l'en-tête de l'écriture depuis la BD.
-    ''' Procédure : s0110GetEcritureById
-    ''' Retourne : Id, JournauxId, PeriodeId, PartyId, DateEcriture,
-    '''            NumeroPiece, Libelle, Statut, SourceType, ...
     ''' </summary>
     Sub LoadEcritureFromBD()
         Dim p As New Collection
@@ -164,9 +208,6 @@ Public Class wbfJournalEntryEdit
 
     ''' <summary>
     ''' Charge les lignes de l'écriture (T136LignesEcriture).
-    ''' Procédure : s0111GetEcritureLignes
-    ''' Retourne : Id, PlanComptableId, AccountNumero, AccountName, PartyId,
-    '''            Libelle, MontantDebit, MontantCredit, Ordre
     ''' </summary>
     Sub LoadLinesFromBD()
         Dim p As New Collection
@@ -209,7 +250,6 @@ Public Class wbfJournalEntryEdit
 
     ''' <summary>
     ''' Met à jour la table en mémoire avec les valeurs saisies.
-    ''' À appeler avant toute action serveur.
     ''' </summary>
     Sub UpdateAllLinesInViewstate()
         Dim dt As DataTable = TryCast(ViewState("LinesTable"), DataTable)
@@ -256,11 +296,10 @@ Public Class wbfJournalEntryEdit
     End Sub
 
     ' =========================================================
-    '  READ-ONLY MODE (écritures VALIDEE ou EXTOURNEE)
+    '  READ-ONLY MODE
     ' =========================================================
 
     Private Sub ApplyReadOnlyMode()
-        ' Badges de statut
         lblValideeBadge.Visible = (Statut = "VALIDEE")
         lblExtourneeBadge.Visible = (Statut = "EXTOURNEE")
 
@@ -326,9 +365,6 @@ Public Class wbfJournalEntryEdit
 
         Dim lblAccount As Label = TryCast(e.Item.FindControl("lblAccount"), Label)
         If lblAccount IsNot Nothing Then
-            ' L'attribut onclick est ajouté côté JS via wireAccountSelectors
-            ' (mais on peut aussi l'attacher ici si on veut un clic direct sans JS)
-
             Dim planComptableId As Object = DataBinder.Eval(e.Item.DataItem, "PlanComptableId")
             If planComptableId IsNot Nothing AndAlso CInt(planComptableId) > 0 Then
                 lblAccount.Text = DataBinder.Eval(e.Item.DataItem, "AccountDisplay").ToString()
@@ -380,7 +416,6 @@ Public Class wbfJournalEntryEdit
             End If
             Dim d As Double = Convert.ToDouble(row("MontantDebit"))
             Dim c As Double = Convert.ToDouble(row("MontantCredit"))
-            ' La contrainte chk_T136_UnSeulCote exige Débit XOR Crédit
             If d <= 0 AndAlso c <= 0 Then
                 RegisterAlert("Toutes les lignes doivent avoir un montant Débit ou Crédit.")
                 Return
@@ -391,7 +426,6 @@ Public Class wbfJournalEntryEdit
             End If
         Next
 
-        ' Doit balancer
         Dim totDebit As Double = activeLines.Sum(Function(r) Convert.ToDouble(r("MontantDebit")))
         Dim totCredit As Double = activeLines.Sum(Function(r) Convert.ToDouble(r("MontantCredit")))
         If Math.Abs(totDebit - totCredit) > 0.005 Then
@@ -410,7 +444,7 @@ Public Class wbfJournalEntryEdit
         oCom.CommandType = CommandType.StoredProcedure
 
         oCom.Parameters.Add(New SqlParameter("@EcritureId", SqlDbType.Int) With {.Value = EcritureId})
-        oCom.Parameters.Add(New SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier) With {.Value = GetCompanyGUID()})
+        oCom.Parameters.Add(New SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier) With {.Value = Company})
         oCom.Parameters.Add(New SqlParameter("@JournauxId", SqlDbType.Int) With {.Value = CInt(cbJournal.SelectedValue)})
         oCom.Parameters.Add(New SqlParameter("@PeriodeId", SqlDbType.Int) With {.Value = CInt(cbPeriode.SelectedValue)})
         oCom.Parameters.Add(New SqlParameter("@PartyId", SqlDbType.Int) With {.Value = DBNull.Value})
@@ -420,8 +454,11 @@ Public Class wbfJournalEntryEdit
         oCom.Parameters.Add(New SqlParameter("@ToValider", SqlDbType.Bit) With {.Value = If(chkValider.Checked, 1, 0)})
         oCom.Parameters.Add(New SqlParameter("@UserId", SqlDbType.Int) With {.Value = GetCurrentUserId()})
 
+        ' >>> CORRECTION : projeter le DataTable UI vers la structure du TVP <<<
+        Dim tvpLignes As DataTable = ProjectLinesForTVP(dt)
+
         Dim ParamLignes As New SqlParameter("@Lignes", SqlDbType.Structured)
-        ParamLignes.Value = dt
+        ParamLignes.Value = tvpLignes
         ParamLignes.TypeName = "dbo.TVP_LigneEcriture"
         oCom.Parameters.Add(ParamLignes)
 
@@ -435,7 +472,6 @@ Public Class wbfJournalEntryEdit
             If oCom.Connection.State = ConnectionState.Open Then oCom.Connection.Close()
         End Try
 
-        ' Fermeture de la fenêtre
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
     End Sub
@@ -453,7 +489,7 @@ Public Class wbfJournalEntryEdit
 
     Private Function GetAccountsTable() As DataTable
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0093Get_PlanComptable_All", p)
         Return ds.Tables(0)
     End Function
@@ -468,7 +504,7 @@ Public Class wbfJournalEntryEdit
 
     Private Function GetTemplatesTable() As DataTable
         Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", GetCompanyGUID()))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Search", DBNull.Value))
         p.Add(New SqlParameter("@OnlyActive", 1))
         p.Add(New SqlParameter("@JournauxId", DBNull.Value))
@@ -539,10 +575,6 @@ Public Class wbfJournalEntryEdit
 
     ''' <summary>
     ''' Charge un template et remplace les lignes courantes.
-    ''' s0123ApplyTemplateToEcriture retourne 2 result sets :
-    '''   1) En-tête : JournauxId, LibelleDefaut, MontantsPreRemplis
-    '''   2) Lignes : PlanComptableId, AccountNumero, AccountName, Libelle,
-    '''               MontantDebit, MontantCredit, Ordre
     ''' </summary>
     Sub ApplyTemplate(templateId As Integer)
         Dim p As New Collection
@@ -573,7 +605,7 @@ Public Class wbfJournalEntryEdit
         For Each tplRow As DataRow In ds.Tables(1).Rows
             ordre += 1
             Dim dr As DataRow = dt.NewRow()
-            dr("Id") = -ordre  ' Id négatif → considéré comme nouveau à la sauvegarde
+            dr("Id") = -ordre
             dr("PlanComptableId") = If(IsDBNull(tplRow("PlanComptableId")), 0, CInt(tplRow("PlanComptableId")))
             dr("AccountNumero") = If(IsDBNull(tplRow("AccountNumero")), "", tplRow("AccountNumero").ToString())
             dr("AccountName") = If(IsDBNull(tplRow("AccountName")), "", tplRow("AccountName").ToString())
@@ -598,11 +630,6 @@ Public Class wbfJournalEntryEdit
     Private Function GetCurrentUserId() As Integer
         ' TODO : adapter selon votre mécanisme d'authentification
         Return 1
-    End Function
-
-    Private Function GetCompanyGUID() As Guid
-        ' TODO : adapter — Return CType(Session("CompanyGUID"), Guid)
-        Return Guid.Empty
     End Function
 
 End Class
