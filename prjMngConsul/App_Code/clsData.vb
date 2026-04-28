@@ -28,7 +28,23 @@ Public Class clsData
         End Set
     End Property
 
+    Public Property UserId() As Integer
+        Get
+            Try
+                If Session("UserId") Is Nothing Then
+                    Session("UserId") = 1
+                End If
 
+                Return Session("UserId")
+            Catch ex As Exception
+                Return 0
+            End Try
+
+        End Get
+        Set(ByVal Value As Integer)
+            Session("UserId") = Value
+        End Set
+    End Property
 
     Private m_ConnectionString As String = ""
     Public Property ConnectionString() As String

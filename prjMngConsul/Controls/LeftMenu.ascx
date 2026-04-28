@@ -72,10 +72,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         A enlever-> Documents scannés
                     </a>
-                     <a class="nav-child" href="~/wbfReceiptEdit.aspx" runat="server" data-navlink>
-     <span class="dot" aria-hidden="true"></span>
-     Encaissements
- </a>
+                    <a class="nav-child" href="~/wbfReceiptEdit.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Encaissements
+                    </a>
                 </div>
             </div>
 
@@ -126,15 +126,15 @@
                 </button>
 
                 <div class="nav-children">
-                          <a class="nav-child" href="~/wbfJournal.aspx" runat="server" data-navlink>
-          <span class="dot" aria-hidden="true"></span>
-          Journaux
-      </a>
-                     
+                    <a class="nav-child" href="~/wbfJournal.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Journaux
+                    </a>
+
                     <a class="nav-child" href="~/wbfTemplate.aspx" runat="server" data-navlink>
-    <span class="dot" aria-hidden="true"></span>
-    Template Journaux
-</a>
+                        <span class="dot" aria-hidden="true"></span>
+                        Template Journaux
+                    </a>
 
 
                     <a class="nav-child" href="~/PlaidAccounts.aspx" runat="server" data-navlink>
@@ -145,27 +145,76 @@
                         <span class="dot" aria-hidden="true"></span>
                         Relevé bancaire
                     </a>
-                    <a class="nav-child" href="~/wbfRapportTaxes.aspx" runat="server" data-navlink>
+                    <a class="nav-child" href="~/wbfRapportTaxe.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
-                        Rapports
+                        Rapport de taxes
                     </a>
-                      <a class="nav-child" href="~/wbfPlanComptable.aspx" runat="server" data-navlink>
-      <span class="dot" aria-hidden="true"></span>
-      Plan Comptable
-  </a>
-                                        <a class="nav-child" href="~/wbfProductCategory.aspx" runat="server" data-navlink>
-    <span class="dot" aria-hidden="true"></span>
-    Catégorie de produit
-</a>
-                                                            <a class="nav-child" href="~/wbfProducts.aspx" runat="server" data-navlink>
-    <span class="dot" aria-hidden="true"></span>
-   Produits
-</a>
+                    <a class="nav-child" href="~/wbfFermetureAnnee.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Fermeture d'année fiscale
+                    </a>
+
+
+
+                    <a class="nav-child" href="~/wbfPlanComptable.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Plan Comptable
+                    </a>
+                    <a class="nav-child" href="~/wbfProductCategory.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Catégorie de produit
+                    </a>
+                    <a class="nav-child" href="~/wbfProducts.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Produits
+                    </a>
+
+                </div>
+            </div>
+             <div class="nav-group" data-accordion>
+     <button type="button" class="nav-parent" aria-expanded="false">
+         <span class="nav-ico" aria-hidden="true">📒</span>
+         <span class="nav-txt">Jobs</span>
+         <span class="nav-meta">
+             <span class="chev" aria-hidden="true">
+                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                     <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                 </svg>
+             </span>
+         </span>
+     </button>
+
+     <div class="nav-children">
+                             <a class="nav-child" href="~/wbfJobs.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Jobs
+                    </a>
+
+                    <a class="nav-child" href="~/wbfJobSchedule.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Job Schedule
+                    </a>
+
+                    <a class="nav-child" href="~/wbfJobMonitoring.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Job Monitoring  </a>
+
+                     <a class="nav-child" href="~/wbfJobExecution.aspx" runat="server" data-navlink>
+     <span class="dot" aria-hidden="true"></span>
+     Job Execution  </a>
+                                    <a class="nav-child" href="~/wbfJobDashboard.aspx" runat="server" data-navlink>
+<span class="dot" aria-hidden="true"></span>
+Job Dashboard  </a>
+
+                  
+
+
+
 
                 </div>
             </div>
 
-                        <!-- Sous-menu (accordion) -->
+            <!-- Sous-menu (accordion) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="false">
                     <span class="nav-ico" aria-hidden="true">📒</span>
@@ -180,7 +229,7 @@
                 </button>
 
                 <div class="nav-children">
-                    
+
                     <a class="nav-child" href="~/wbfRapportPlanComptable.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Plan Comptable
@@ -193,18 +242,24 @@
                         <span class="dot" aria-hidden="true"></span>
                         Bilan
                     </a>
-                      <a class="nav-child" href="~/wbfFluxTresorerie.aspx" runat="server" data-navlink>
-                            <span class="dot" aria-hidden="true"></span>
-                         État des flux de trésorerie
-                     </a>
-                          <a class="nav-child" href="~/wbfBeneficesNonRepartis.aspx" runat="server" data-navlink>
-            <span class="dot" aria-hidden="true"></span>
-         État des bénéfices non répartis
-     </a>
-                                          <a class="nav-child" href="~/wbfBalanceVerification.aspx" runat="server" data-navlink>
-       <span class="dot" aria-hidden="true"></span>
-    Balance de vérification
-</a>
+                    <a class="nav-child" href="~/wbfFluxTresorerie.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        État des flux de trésorerie
+                    </a>
+                    <a class="nav-child" href="~/wbfBeneficesNonRepartis.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        État des bénéfices non répartis
+                    </a>
+                    <a class="nav-child" href="~/wbfBalanceVerification.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Balance de vérification
+                    </a>
+                   
+
+                  
+
+
+
 
                 </div>
             </div>
@@ -212,49 +267,49 @@
 
 
 
-  <!-- Sous-menu (accordion) -->
-  <div class="nav-group" data-accordion>
-      <button type="button" class="nav-parent" aria-expanded="false">
-          <span class="nav-ico" aria-hidden="true">📒</span>
-          <span class="nav-txt">Importation</span>
-          <span class="nav-meta">
-              <span class="chev" aria-hidden="true">
-                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                      <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-              </span>
-          </span>
-      </button>
+            <!-- Sous-menu (accordion) -->
+            <div class="nav-group" data-accordion>
+                <button type="button" class="nav-parent" aria-expanded="false">
+                    <span class="nav-ico" aria-hidden="true">📒</span>
+                    <span class="nav-txt">Importation</span>
+                    <span class="nav-meta">
+                        <span class="chev" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
 
-      <div class="nav-children">
-          
-          <a class="nav-child" href="~/ImportSageComptes.aspx" runat="server" data-navlink>
-              <span class="dot" aria-hidden="true"></span>
-              Importation comptes Sage
-          </a>
-          <a class="nav-child" href="~/ImportSageProduits.aspx" runat="server" data-navlink>
-              <span class="dot" aria-hidden="true"></span>
-              Produits
-          </a>
-          <a class="nav-child" href="~/ImportSageParties.aspx" runat="server" data-navlink>
-              <span class="dot" aria-hidden="true"></span>
-              Parties
-          </a>
-           <a class="nav-child" href="~/ImportSageFactures.aspx" runat="server" data-navlink>
-     <span class="dot" aria-hidden="true"></span>
-     Factures
-    </a>
-          <a class="nav-child" href="~/ImportSageFactureLines.aspx" runat="server" data-navlink>
-              <span class="dot" aria-hidden="true"></span>
-              Lignes de factures
-          </a>
-          <a class="nav-child" href="~/ImportSageBalanceVerification.aspx" runat="server" data-navlink>
-              <span class="dot" aria-hidden="true"></span>
-              Balance de verification
-          </a>
+                <div class="nav-children">
 
-      </div>
-  </div>
+                    <a class="nav-child" href="~/ImportSageComptes.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Importation comptes Sage
+                    </a>
+                    <a class="nav-child" href="~/ImportSageProduits.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Produits
+                    </a>
+                    <a class="nav-child" href="~/ImportSageParties.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Parties
+                    </a>
+                    <a class="nav-child" href="~/ImportSageFactures.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Factures
+                    </a>
+                    <a class="nav-child" href="~/ImportSageFactureLines.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Lignes de factures
+                    </a>
+                    <a class="nav-child" href="~/ImportSageBalanceVerification.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Balance de verification
+                    </a>
+
+                </div>
+            </div>
 
 
 

@@ -374,8 +374,15 @@
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
     <Content Include="wbfEtatResultats.aspx" />
+    <Content Include="wbfFermetureAnnee.aspx" />
     <Content Include="wbfFluxTresorerie.aspx" />
     <Content Include="wbfInvoiceEdit.aspx" />
+    <Content Include="wbfJobDashboard.aspx" />
+    <Content Include="wbfJobEdit.aspx" />
+    <Content Include="wbfJobExecution.aspx" />
+    <Content Include="wbfJobMonitoring.aspx" />
+    <Content Include="wbfJobs.aspx" />
+    <Content Include="wbfJobSchedule.aspx" />
     <Content Include="wbfJournal.aspx" />
     <Content Include="wbfJournalEntryEdit.aspx" />
     <Content Include="wbfJournalList.aspx" />
@@ -387,7 +394,7 @@
     <Content Include="wbfProductEdit.aspx" />
     <Content Include="wbfProducts.aspx" />
     <Content Include="wbfRapportPlanComptable.aspx" />
-    <Content Include="wbfRapportTaxes.aspx" />
+    <Content Include="wbfRapportTaxe.aspx" />
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfReceiptEdit.aspx" />
     <Content Include="wbfReleve.aspx" />
@@ -670,6 +677,13 @@
       <DependentUpon>wbfEtatResultats.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfFermetureAnnee.aspx.designer.vb">
+      <DependentUpon>wbfFermetureAnnee.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfFermetureAnnee.aspx.vb">
+      <DependentUpon>wbfFermetureAnnee.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfFluxTresorerie.aspx.designer.vb">
       <DependentUpon>wbfFluxTresorerie.aspx</DependentUpon>
     </Compile>
@@ -682,6 +696,48 @@
     </Compile>
     <Compile Include="wbfInvoiceEdit.aspx.vb">
       <DependentUpon>wbfInvoiceEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobDashboard.aspx.designer.vb">
+      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobDashboard.aspx.vb">
+      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobEdit.aspx.designer.vb">
+      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobEdit.aspx.vb">
+      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobExecution.aspx.designer.vb">
+      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobExecution.aspx.vb">
+      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobMonitoring.aspx.designer.vb">
+      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobMonitoring.aspx.vb">
+      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobs.aspx.designer.vb">
+      <DependentUpon>wbfJobs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobs.aspx.vb">
+      <DependentUpon>wbfJobs.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobSchedule.aspx.designer.vb">
+      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobSchedule.aspx.vb">
+      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfJournal.aspx.designer.vb">
@@ -761,11 +817,11 @@
       <DependentUpon>wbfRapportPlanComptable.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="wbfRapportTaxes.aspx.designer.vb">
-      <DependentUpon>wbfRapportTaxes.aspx</DependentUpon>
+    <Compile Include="wbfRapportTaxe.aspx.designer.vb">
+      <DependentUpon>wbfRapportTaxe.aspx</DependentUpon>
     </Compile>
-    <Compile Include="wbfRapportTaxes.aspx.vb">
-      <DependentUpon>wbfRapportTaxes.aspx</DependentUpon>
+    <Compile Include="wbfRapportTaxe.aspx.vb">
+      <DependentUpon>wbfRapportTaxe.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfReceipt.aspx.designer.vb">
