@@ -96,6 +96,10 @@ Partial Public Class wbfJobs
 
         Try
             Select Case e.CommandName
+                Case "Editer"
+                    Response.Redirect("wbfJobEdit.aspx?Id=" & jobId)
+                    Return
+
                 Case "RunNow"
                     Dim execId = LancerJobMaintenant(jobId)
                     ShowStatus("success",

@@ -71,6 +71,8 @@
         .jobs-table .col-num { text-align: right; font-variant-numeric: tabular-nums; }
 
         .job-name { font-weight: 600; color: #0f172a; }
+        .job-name a { color: inherit; text-decoration: none; }
+        .job-name a:hover { color: #0ea5e9; text-decoration: underline; }
         .job-code { font-family: 'Consolas', 'Monaco', monospace; font-size: 11px;
                     color: #64748b; background: #f1f5f9;
                     padding: 1px 6px; border-radius: 4px; }
@@ -280,7 +282,12 @@
                                     <tr>
                                         <td>
                                             <div class="job-name">
-                                                <%# Eval("Nom") %>
+                                                <asp:LinkButton ID="lnkEditerJob" runat="server"
+                                                    CommandName="Editer"
+                                                    CommandArgument='<%# Eval("JobDefinitionId") %>'
+                                                    Style="color: inherit; text-decoration: none;">
+                                                    <%# Eval("Nom") %>
+                                                </asp:LinkButton>
                                                 <%# IIf(Convert.ToBoolean(Eval("Systeme")), "<span class='badge-systeme'>SYSTÈME</span>", "") %>
                                             </div>
                                             <div class="meta-line">
@@ -303,6 +310,12 @@
                                             <asp:Literal ID="litDerniereExec" runat="server" />
                                         </td>
                                         <td class="col-actions">
+                                            <asp:LinkButton ID="btnEditer" runat="server"
+                                                CssClass="action-btn"
+                                                CommandName="Editer"
+                                                CommandArgument='<%# Eval("JobDefinitionId") %>'
+                                                Text="Éditer" />
+
                                             <asp:LinkButton ID="btnRunNow" runat="server"
                                                 CssClass="action-btn primary"
                                                 CommandName="RunNow"

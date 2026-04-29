@@ -254,7 +254,10 @@ Job Dashboard  </a>
                         <span class="dot" aria-hidden="true"></span>
                         Balance de vérification
                     </a>
-                   
+                      <a class="nav-child" href="~/wbfAIPaiement.aspx" runat="server" data-navlink>
+       <span class="dot" aria-hidden="true"></span>
+        AI Payement
+   </a>
 
                   
 

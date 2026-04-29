@@ -245,6 +245,13 @@ Partial Public Class wbfJobSchedule
                 If Not Convert.IsDBNull(r("JourMois")) Then
                     ddlJourMois.SelectedValue = r("JourMois").ToString()
                 End If
+                ' Lire IntervalleMois (défaut = 1 si NULL ou colonne absente)
+                Dim intervMois = 1
+                If r.Table.Columns.Contains("IntervalleMois") AndAlso Not Convert.IsDBNull(r("IntervalleMois")) Then
+                    intervMois = Convert.ToInt32(r("IntervalleMois"))
+                End If
+                Dim itIntervMois = ddlIntervalleMois.FindItemByValue(intervMois.ToString())
+                If itIntervMois IsNot Nothing Then itIntervMois.Selected = True
             Case "CRON"
                 If Not Convert.IsDBNull(r("CronExpression")) Then
                     txtCronExpression.Text = r("CronExpression").ToString()
@@ -295,6 +302,7 @@ Partial Public Class wbfJobSchedule
         Dim heureExec As Object = DBNull.Value
         Dim joursSem As Object = DBNull.Value
         Dim jourMois As Object = DBNull.Value
+        Dim intervalleMois As Integer = 1                      ' ← NOUVEAU
         Dim dateOnce As Object = DBNull.Value
         Dim dateDebut As Object = DBNull.Value
         Dim dateFin As Object = DBNull.Value
@@ -320,6 +328,10 @@ Partial Public Class wbfJobSchedule
                 If Not String.IsNullOrEmpty(ddlJourMois.SelectedValue) Then
                     jourMois = Convert.ToInt32(ddlJourMois.SelectedValue)
                 End If
+                ' ← NOUVEAU : récupérer la périodicité
+                If Not String.IsNullOrEmpty(ddlIntervalleMois.SelectedValue) Then
+                    intervalleMois = Convert.ToInt32(ddlIntervalleMois.SelectedValue)
+                End If
             Case "ONCE"
                 If dpDateOnce.SelectedDate.HasValue Then dateOnce = dpDateOnce.SelectedDate.Value
         End Select
@@ -338,6 +350,7 @@ Partial Public Class wbfJobSchedule
                     cmd.Parameters.AddWithValue("@HeureExecution", heureExec)
                     cmd.Parameters.AddWithValue("@JoursSemaine", joursSem)
                     cmd.Parameters.AddWithValue("@JourMois", jourMois)
+                    cmd.Parameters.AddWithValue("@IntervalleMois", intervalleMois)
                     cmd.Parameters.AddWithValue("@DateOnce", dateOnce)
                     cmd.Parameters.AddWithValue("@DateDebut", dateDebut)
                     cmd.Parameters.AddWithValue("@DateFin", dateFin)
@@ -394,6 +407,7 @@ Partial Public Class wbfJobSchedule
         Dim heureExec As Object = DBNull.Value
         Dim joursSem As Object = DBNull.Value
         Dim jourMois As Object = DBNull.Value
+        Dim intervalleMois As Integer = 1                      ' ← NOUVEAU
         Dim cronExpr As Object = DBNull.Value
         Dim dateOnce As Object = DBNull.Value
 
@@ -422,6 +436,10 @@ Partial Public Class wbfJobSchedule
                     Throw New ApplicationException("Choisis un jour du mois.")
                 End If
                 jourMois = Convert.ToInt32(ddlJourMois.SelectedValue)
+                ' ← NOUVEAU : récupérer la périodicité
+                If Not String.IsNullOrEmpty(ddlIntervalleMois.SelectedValue) Then
+                    intervalleMois = Convert.ToInt32(ddlIntervalleMois.SelectedValue)
+                End If
             Case "CRON"
                 If String.IsNullOrWhiteSpace(txtCronExpression.Text) Then
                     Throw New ApplicationException("L'expression CRON est obligatoire.")
@@ -454,6 +472,7 @@ Partial Public Class wbfJobSchedule
                 cmd.Parameters.AddWithValue("@HeureExecution", heureExec)
                 cmd.Parameters.AddWithValue("@JoursSemaine", joursSem)
                 cmd.Parameters.AddWithValue("@JourMois", jourMois)
+                cmd.Parameters.AddWithValue("@IntervalleMois", intervalleMois)
                 cmd.Parameters.AddWithValue("@CronExpression", cronExpr)
                 cmd.Parameters.AddWithValue("@DateOnce", dateOnce)
                 cmd.Parameters.AddWithValue("@DateDebut", dateDebut)

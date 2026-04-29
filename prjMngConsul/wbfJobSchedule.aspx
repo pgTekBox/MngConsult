@@ -188,7 +188,7 @@
                             <telerik:RadComboBoxItem Text="Toutes les N minutes (INTERVAL)" Value="INTERVAL" />
                             <telerik:RadComboBoxItem Text="Quotidien (DAILY)" Value="DAILY" Selected="true" />
                             <telerik:RadComboBoxItem Text="Hebdomadaire (WEEKLY)" Value="WEEKLY" />
-                            <telerik:RadComboBoxItem Text="Mensuel (MONTHLY)" Value="MONTHLY" />
+                            <telerik:RadComboBoxItem Text="Mensuel / Trimestriel / Semestriel / Annuel (MONTHLY)" Value="MONTHLY" />
                             <telerik:RadComboBoxItem Text="Expression CRON (avancé)" Value="CRON" />
                             <telerik:RadComboBoxItem Text="Une seule fois (ONCE)" Value="ONCE" />
                         </Items>
@@ -258,6 +258,23 @@
 
                 <!-- MONTHLY -->
                 <asp:Panel ID="pnlMonthly" runat="server" Visible="false">
+                    <div class="form-row">
+                        <label class="required">Périodicité</label>
+                        <div>
+                            <telerik:RadComboBox ID="ddlIntervalleMois" runat="server" Skin="Bootstrap"
+                                Width="220px">
+                                <Items>
+                                    <telerik:RadComboBoxItem Text="Tous les mois" Value="1" Selected="true" />
+                                    <telerik:RadComboBoxItem Text="Tous les 3 mois (trimestriel)" Value="3" />
+                                    <telerik:RadComboBoxItem Text="Tous les 6 mois (semestriel)" Value="6" />
+                                    <telerik:RadComboBoxItem Text="Tous les 12 mois (annuel)" Value="12" />
+                                </Items>
+                            </telerik:RadComboBox>
+                            <div class="hint">
+                                Ex : trimestriel = remise des taxes ; annuel = T4 ou rapport fin d'exercice.
+                            </div>
+                        </div>
+                    </div>
                     <div class="form-row">
                         <label class="required">Heure d'exécution</label>
                         <div>

@@ -366,6 +366,7 @@
     <Content Include="todel.aspx" />
     <Content Include="ucJournalList.ascx" />
     <Content Include="usJournalTemplateList.ascx" />
+    <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
@@ -623,6 +624,13 @@
     <Compile Include="usJournalTemplateList.ascx.vb">
       <DependentUpon>usJournalTemplateList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfAIPaiement.aspx.designer.vb">
+      <DependentUpon>wbfAIPaiement.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAIPaiement.aspx.vb">
+      <DependentUpon>wbfAIPaiement.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfBalanceVerification.aspx.designer.vb">
       <DependentUpon>wbfBalanceVerification.aspx</DependentUpon>

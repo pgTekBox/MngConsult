@@ -266,6 +266,15 @@ Partial Public Class wbfJobSchedule
     Protected WithEvents pnlMonthly As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''ddlIntervalleMois control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlIntervalleMois As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
     '''dpHeureMonthly control.
     '''</summary>
     '''<remarks>
