@@ -43,6 +43,7 @@ Partial Public Class wbfSetting
         BindCategory("EMAIL", rpEmail, pnlEmptyEmail)
         BindCategory("PDF", rpPdf, pnlEmptyPdf)
         BindCategory("COMPTABILITE", rpComptabilite, pnlEmptyComptabilite)
+        BindCategory("BANCAIRE", rpBancaire, pnlEmptyBancaire)
         phStatus.Visible = False
     End Sub
 
@@ -118,6 +119,11 @@ Partial Public Class wbfSetting
                 Return
             Case "TAX_MODE"
                 phControl.Controls.Add(BuildTaxModeCombo(sVal))
+                Return
+            Case "COMPTE_BANQUE"
+                ' Combo dynamique alimenté depuis T143PlaidAccount
+                ' La valeur sélectionnée est l'Id du compte (stocké dans iVal)
+                phControl.Controls.Add(BuildCompteBanqueCombo(iVal))
                 Return
         End Select
 
@@ -248,6 +254,61 @@ Partial Public Class wbfSetting
         Return cb
     End Function
 
+    ''' <summary>
+    ''' Construit un combo alimenté dynamiquement depuis T143PlaidAccount
+    ''' filtré par CompanyGUID. Affiche AccountName, stocke l'Id du compte
+    ''' (qui ira dans iVal au moment de la sauvegarde puisque le ParamType
+    ''' est INT pour ce paramètre COMPTE_BANQUE).
+    ''' </summary>
+    Private Function BuildCompteBanqueCombo(selectedId As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        cb.EmptyMessage = "-- Sélectionnez un compte --"
+
+        ' Item vide pour permettre la désélection
+        cb.Items.Add(New RadComboBoxItem("(Aucun compte)", ""))
+
+        Dim sql As String =
+            "SELECT [Id], [AccountName], [BankName], [Mask] " &
+            "FROM [dbo].[T143PlaidAccount] " &
+            "WHERE [CompanyGUID] = @CompanyGUID AND [Active] = 1 " &
+            "ORDER BY [BankName], [AccountName]"
+
+        Using conn As New SqlConnection(ConnectionString)
+            conn.Open()
+            Using cmd As New SqlCommand(sql, conn)
+                cmd.Parameters.Add(New SqlParameter("@CompanyGUID", Company))
+                Using rd = cmd.ExecuteReader()
+                    While rd.Read()
+                        Dim id As String = rd("Id").ToString()
+                        Dim accName As String = If(IsDBNull(rd("AccountName")), "", rd("AccountName").ToString())
+                        Dim bankName As String = If(IsDBNull(rd("BankName")), "", rd("BankName").ToString())
+                        Dim mask As String = If(IsDBNull(rd("Mask")), "", rd("Mask").ToString())
+
+                        ' Texte affiché : "AccountName — BankName ••1234"
+                        Dim displayText As String = If(String.IsNullOrEmpty(accName), "(sans nom)", accName)
+                        If Not String.IsNullOrEmpty(bankName) Then
+                            displayText &= " — " & bankName
+                        End If
+                        If Not String.IsNullOrEmpty(mask) Then
+                            displayText &= " ••" & mask
+                        End If
+
+                        cb.Items.Add(New RadComboBoxItem(displayText, id))
+                    End While
+                End Using
+            End Using
+        End Using
+
+        ' Sélection courante (l'Id stocké dans iVal)
+        If Not String.IsNullOrEmpty(selectedId) AndAlso selectedId <> "0" Then
+            cb.SelectedValue = selectedId
+        End If
+
+        Return cb
+    End Function
+
     ' =========================================================
     '  SAUVEGARDE
     ' =========================================================
@@ -259,6 +320,7 @@ Partial Public Class wbfSetting
             SaveRepeater(rpEmail)
             SaveRepeater(rpPdf)
             SaveRepeater(rpComptabilite)
+            SaveRepeater(rpBancaire)
         Catch ex As Exception
             ShowErr("Erreur lors de la sauvegarde : " & ex.Message)
             Return
@@ -323,6 +385,12 @@ Partial Public Class wbfSetting
                         Dim ival2 As Integer = 0
                         Integer.TryParse(selected, ival2)
                         iVal = ival2
+                    ElseIf paramType = "INT" OrElse paramType = "INTEGER" Then
+                        ' Combo avec valeur entière (ex: COMPTE_BANQUE → Id du compte)
+                        Dim ival2 As Integer = 0
+                        If Not String.IsNullOrEmpty(selected) AndAlso Integer.TryParse(selected, ival2) Then
+                            iVal = ival2
+                        End If
                     Else
                         sVal = If(String.IsNullOrEmpty(selected), CType(DBNull.Value, Object), selected)
                     End If

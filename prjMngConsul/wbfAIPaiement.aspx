@@ -274,11 +274,6 @@
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
         <AjaxSettings>
-            <telerik:AjaxSetting AjaxControlID="rblPeriode">
-                <UpdatedControls>
-                    <telerik:AjaxUpdatedControl ControlID="phContenu" LoadingPanelID="ralp" />
-                </UpdatedControls>
-            </telerik:AjaxSetting>
             <telerik:AjaxSetting AjaxControlID="btnDispatchAction">
                 <UpdatedControls>
                     <telerik:AjaxUpdatedControl ControlID="phContenu" LoadingPanelID="ralp" />
@@ -297,20 +292,11 @@
     <asp:HiddenField ID="hfActionArg" runat="server" Value="" ClientIDMode="Static" />
 
     <!-- LinkButton invisible (mais présent dans le DOM) qui déclenche les actions de paiement -->
+    <!-- LinkButton invisible (mais présent dans le DOM) qui déclenche les actions -->
     <asp:LinkButton ID="btnDispatchAction" runat="server" Text="."
         Style="position:absolute; left:-9999px; width:1px; height:1px; overflow:hidden;"
         CausesValidation="false"
         OnClick="btnDispatchAction_Click" />
-
-    <!-- RadioButtonList caché pour les changements de période (déclenché par JS) -->
-    <asp:RadioButtonList ID="rblPeriode" runat="server"
-        AutoPostBack="true" OnSelectedIndexChanged="rblPeriode_Changed"
-        Style="display:none;" ClientIDMode="Static">
-        <asp:ListItem Value="TODAY"   Text="Today" />
-        <asp:ListItem Value="WEEK"    Text="Week" />
-        <asp:ListItem Value="MONTH"   Text="Month" />
-        <asp:ListItem Value="3MONTHS" Text="3 Months" Selected="True" />
-    </asp:RadioButtonList>
 
     <div class="ai-page">
 
@@ -335,10 +321,7 @@
             </div>
         </div>
 
-        <div class="ai-page-title">
-            <h2>AI Payment</h2>
-            <p>Gestion intelligente des paiements par catégorie</p>
-        </div>
+      
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
             <div id="divStatus" runat="server" class="status-msg">
@@ -573,19 +556,12 @@
     </div>
 
     <script type="text/javascript">
-        // ─── Sélection d'une période → trigger le RadioButtonList caché (postback) ───
+        // ─── Sélection d'une période → utilise le dispatcher central ───
         function selectPeriode(periode) {
-            var hf = document.getElementById('hfPeriodeSel');
-            hf.value = periode;
-
-            var radios = document.querySelectorAll('#rblPeriode input[type=radio]');
-            for (var i = 0; i < radios.length; i++) {
-                if (radios[i].value === periode) {
-                    radios[i].checked = true;
-                    radios[i].dispatchEvent(new Event('change', { bubbles: true }));
-                    return;
-                }
-            }
+            document.getElementById('hfPeriodeSel').value = periode;
+            document.getElementById('hfActionName').value = 'ChangePeriode';
+            document.getElementById('hfActionArg').value = periode;
+            __doPostBack(__dispatchTarget, '');
         }
 
         // ─── Toggle UI pur — pas de postback ───

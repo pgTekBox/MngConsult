@@ -42,12 +42,6 @@ Partial Public Class wbfAIPaiement
     '  ÉVÉNEMENTS
     ' =========================================================
 
-    Protected Sub rblPeriode_Changed(sender As Object, e As EventArgs)
-        PeriodeSel = rblPeriode.SelectedValue
-        ChargerKpis()
-        ChargerCategories()
-    End Sub
-
     Protected Sub btnDispatchAction_Click(sender As Object, e As EventArgs)
         Dim actionName = hfActionName.Value
         Dim actionArg = hfActionArg.Value
@@ -58,6 +52,11 @@ Partial Public Class wbfAIPaiement
 
         Try
             Select Case actionName
+                Case "ChangePeriode"
+                    PeriodeSel = actionArg
+                    ChargerKpis()
+                    ChargerCategories()
+
                 Case "PayerTout"
                     ShowStatus("success",
                         "Paiement groupé déclenché pour la catégorie " & actionArg &

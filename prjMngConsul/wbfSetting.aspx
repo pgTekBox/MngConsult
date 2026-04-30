@@ -119,6 +119,7 @@
                         <telerik:RadTab Text="Email" />
                         <telerik:RadTab Text="PDF" />
                         <telerik:RadTab Text="Comptabilité" />
+                        <telerik:RadTab Text="Bancaire" />
                     </Tabs>
                 </telerik:RadTabStrip>
 
@@ -239,6 +240,33 @@
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyComptabilite" runat="server" Visible="false" CssClass="empty-state">
                             Aucun paramètre comptable défini.
+                        </asp:Panel>
+                    </telerik:RadPageView>
+
+                    <!-- BANCAIRE -->
+                    <telerik:RadPageView ID="pvBancaire" runat="server">
+                        <div style="margin-bottom:12px; color:var(--mc-muted); font-size:13px;">
+                            Comptes bancaires connectés via Plaid. Sélectionnez le compte par défaut
+                            utilisé pour les encaissements et décaissements.
+                        </div>
+                        <asp:Repeater ID="rpBancaire" runat="server" OnItemDataBound="rp_ItemDataBound">
+                            <HeaderTemplate><div class="form-grid"></HeaderTemplate>
+                            <ItemTemplate>
+                                <div class='<%# GetFieldCssClass(Container.DataItem) %>'>
+                                    <asp:HiddenField ID="hidParamId" runat="server" Value='<%# Eval("ParamId") %>' />
+                                    <asp:HiddenField ID="hidParamType" runat="server" Value='<%# Eval("ParamType") %>' />
+                                    <asp:HiddenField ID="hidShortName" runat="server" Value='<%# Eval("ShortName") %>' />
+                                    <label>
+                                        <%# Eval("Name") %>
+                                        <span class="field-shortname"><%# Eval("ShortName") %></span>
+                                    </label>
+                                    <asp:PlaceHolder ID="phControl" runat="server" />
+                                </div>
+                            </ItemTemplate>
+                            <FooterTemplate></div></FooterTemplate>
+                        </asp:Repeater>
+                        <asp:Panel ID="pnlEmptyBancaire" runat="server" Visible="false" CssClass="empty-state">
+                            Aucun paramètre bancaire configuré pour cet onglet.
                         </asp:Panel>
                     </telerik:RadPageView>
 

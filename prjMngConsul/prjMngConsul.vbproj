@@ -367,6 +367,7 @@
     <Content Include="ucJournalList.ascx" />
     <Content Include="usJournalTemplateList.ascx" />
     <Content Include="wbfAIPaiement.aspx" />
+    <Content Include="wbfAISale.aspx" />
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
@@ -630,6 +631,13 @@
     </Compile>
     <Compile Include="wbfAIPaiement.aspx.vb">
       <DependentUpon>wbfAIPaiement.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAISale.aspx.designer.vb">
+      <DependentUpon>wbfAISale.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAISale.aspx.vb">
+      <DependentUpon>wbfAISale.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfBalanceVerification.aspx.designer.vb">
@@ -999,7 +1007,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

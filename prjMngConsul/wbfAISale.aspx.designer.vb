@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfAIPaiement
+Partial Public Class wbfAISale
 
     '''<summary>
     '''RadAjaxManager1 control.
@@ -41,13 +41,13 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents hfPeriodeSel As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''hfCategorieOpen control.
+    '''hfTabSel control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfCategorieOpen As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents hfTabSel As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
     '''hfActionName control.
@@ -75,6 +75,15 @@ Partial Public Class wbfAIPaiement
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnDispatchAction As Global.System.Web.UI.WebControls.LinkButton
+
+    '''<summary>
+    '''litSoldeBancaire control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litSoldeBancaire As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''phStatus control.
@@ -113,24 +122,6 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents phContenu As Global.System.Web.UI.WebControls.PlaceHolder
 
     '''<summary>
-    '''litTotalTrans control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litTotalTrans As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
-    '''litTotalMontant control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litTotalMontant As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
     '''btnPeriodToday control.
     '''</summary>
     '''<remarks>
@@ -140,31 +131,40 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents btnPeriodToday As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
     '''<summary>
-    '''litTodayGov control.
+    '''litTodayCount control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litTodayGov As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litTodayCount As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litTodayFrn control.
+    '''litTodayCollecte control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litTodayFrn As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litTodayCollecte As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litTodayEmp control.
+    '''litTodayRecevoir control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litTodayEmp As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litTodayRecevoir As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTodayRetard control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTodayRetard As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''btnPeriodWeek control.
@@ -176,31 +176,40 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents btnPeriodWeek As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
     '''<summary>
-    '''litWeekGov control.
+    '''litWeekCount control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litWeekGov As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litWeekCount As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litWeekFrn control.
+    '''litWeekCollecte control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litWeekFrn As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litWeekCollecte As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litWeekEmp control.
+    '''litWeekRecevoir control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litWeekEmp As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litWeekRecevoir As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litWeekRetard control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litWeekRetard As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''btnPeriodMonth control.
@@ -212,31 +221,40 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents btnPeriodMonth As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
     '''<summary>
-    '''litMonthGov control.
+    '''litMonthCount control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litMonthGov As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litMonthCount As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litMonthFrn control.
+    '''litMonthCollecte control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litMonthFrn As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litMonthCollecte As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litMonthEmp control.
+    '''litMonthRecevoir control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litMonthEmp As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litMonthRecevoir As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litMonthRetard control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litMonthRetard As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''btnPeriod3M control.
@@ -248,38 +266,119 @@ Partial Public Class wbfAIPaiement
     Protected WithEvents btnPeriod3M As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
     '''<summary>
-    '''lit3MGov control.
+    '''lit3MCount control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lit3MGov As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lit3MCount As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''lit3MFrn control.
+    '''lit3MCollecte control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lit3MFrn As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lit3MCollecte As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''lit3MEmp control.
+    '''lit3MRecevoir control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents lit3MEmp As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lit3MRecevoir As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''rpCategories control.
+    '''lit3MRetard control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rpCategories As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents lit3MRetard As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litPeriodeLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litPeriodeLabel As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''tabCollecte control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tabCollecte As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+    '''<summary>
+    '''litTabCollecteCount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTabCollecteCount As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''tabRecevoir control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tabRecevoir As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+    '''<summary>
+    '''litTabRecevoirCount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTabRecevoirCount As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''tabRetard control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents tabRetard As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+    '''<summary>
+    '''litTabRetardCount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTabRetardCount As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''rpItems control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rpItems As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''phEmpty control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents phEmpty As Global.System.Web.UI.WebControls.PlaceHolder
 End Class

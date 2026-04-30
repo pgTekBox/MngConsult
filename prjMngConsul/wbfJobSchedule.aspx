@@ -71,9 +71,17 @@
             font-size: 11px; color: #475569; margin-top: 4px;
         }
 
-        /* Cases à cocher des jours de la semaine */
+        /* Cases à cocher des jours de la semaine — CSS pur */
         .jours-semaine {
             display: flex; gap: 8px; flex-wrap: wrap;
+        }
+        /* Cacher les checkboxes natives hors écran */
+        .jour-cb {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            opacity: 0;
         }
         .jour-pill {
             display: inline-block; padding: 6px 14px;
@@ -83,11 +91,16 @@
             color: #475569; background: #fff;
             user-select: none;
             transition: all 0.15s;
+            margin: 0;
         }
         .jour-pill:hover { border-color: #94a3b8; }
-        .jour-pill input { display: none; }
-        .jour-pill.selected {
+        /* État sélectionné via CSS pur grâce au sélecteur :checked + label */
+        .jour-cb:checked + .jour-pill {
             background: #0ea5e9; border-color: #0ea5e9; color: #fff;
+        }
+        /* Focus visible pour l'accessibilité (Tab + Espace) */
+        .jour-cb:focus + .jour-pill {
+            box-shadow: 0 0 0 3px rgba(14,165,233,0.25);
         }
 
         /* Aide CRON */
@@ -241,13 +254,26 @@
                         <label class="required">Jours de la semaine</label>
                         <div>
                             <div class="jours-semaine" id="joursSemaineGroup">
-                                <label class="jour-pill"><input type="checkbox" id="cbLun" runat="server" value="1" />Lun</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbMar" runat="server" value="2" />Mar</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbMer" runat="server" value="3" />Mer</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbJeu" runat="server" value="4" />Jeu</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbVen" runat="server" value="5" />Ven</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbSam" runat="server" value="6" />Sam</label>
-                                <label class="jour-pill"><input type="checkbox" id="cbDim" runat="server" value="7" />Dim</label>
+                                <input type="checkbox" ClientIDMode="Static"  id="cbLun" runat="server" value="1" class="jour-cb" />
+                                <label class="jour-pill" for="cbLun">Lun</label>
+
+                                <input type="checkbox" ClientIDMode="Static"  id="cbMar" runat="server" value="2" class="jour-cb" />
+                                <label class="jour-pill" for="cbMar">Mar</label>
+
+                                <input type="checkbox" ClientIDMode="Static" id="cbMer" runat="server" value="3" class="jour-cb" />
+                                <label class="jour-pill" for="cbMer">Mer</label>
+
+                                <input type="checkbox" ClientIDMode="Static" id="cbJeu" runat="server" value="4" class="jour-cb" />
+                                <label class="jour-pill" for="cbJeu">Jeu</label>
+
+                                <input type="checkbox" ClientIDMode="Static" id="cbVen" runat="server" value="5" class="jour-cb" />
+                                <label class="jour-pill" for="cbVen">Ven</label>
+
+                                <input type="checkbox" ClientIDMode="Static" id="cbSam" runat="server" value="6" class="jour-cb" />
+                                <label class="jour-pill" for="cbSam">Sam</label>
+
+                                <input type="checkbox" ClientIDMode="Static" id="cbDim" runat="server" value="7" class="jour-cb" />
+                                <label class="jour-pill" for="cbDim">Dim</label>
                             </div>
                             <div class="hint" style="margin-top: 8px;">
                                 Cliquez sur les pilules pour sélectionner les jours actifs.
@@ -441,28 +467,8 @@
             args.set_cancel(!confirm("Supprimer définitivement ce schedule ?"));
         }
 
-        // Toggle visuel des pilules de jours de la semaine
-        document.addEventListener("click", function (e) {
-            var pill = e.target.closest(".jour-pill");
-            if (!pill) return;
-            var input = pill.querySelector("input[type='checkbox']");
-            if (input && input !== e.target) {
-                input.checked = !input.checked;
-            }
-            pill.classList.toggle("selected", input.checked);
-        });
-
-        // Au chargement : appliquer la classe "selected" aux pills cochées
-        Sys.WebForms.PageRequestManager.getInstance().add_endRequest(function () {
-            document.querySelectorAll(".jour-pill input[type='checkbox']").forEach(function (cb) {
-                cb.closest(".jour-pill").classList.toggle("selected", cb.checked);
-            });
-        });
-        document.addEventListener("DOMContentLoaded", function () {
-            document.querySelectorAll(".jour-pill input[type='checkbox']").forEach(function (cb) {
-                cb.closest(".jour-pill").classList.toggle("selected", cb.checked);
-            });
-        });
+        // Note : les pilules de jours de semaine sont gérées en CSS pur
+        // via le sélecteur .jour-cb:checked + .jour-pill — aucun JS nécessaire.
     </script>
 
 </asp:Content>

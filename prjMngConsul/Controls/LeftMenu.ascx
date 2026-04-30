@@ -258,7 +258,10 @@ Job Dashboard  </a>
        <span class="dot" aria-hidden="true"></span>
         AI Payement
    </a>
-
+                                       <a class="nav-child" href="~/wbfAISale.aspx" runat="server" data-navlink>
+    <span class="dot" aria-hidden="true"></span>
+     AI Sales
+</a>
                   
 
 
