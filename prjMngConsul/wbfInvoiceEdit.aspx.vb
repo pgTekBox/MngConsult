@@ -72,11 +72,93 @@ Public Class wbfInvoiceEdit
             ProductsTable = GetProductsTable()
             BindData()
             'BinDDL()
+
+            ' Si on arrive depuis un rendez-vous (nouvelle facture seulement), pré-remplir
+            If InvoiceId = 0 Then
+                Dim apptId As Integer = 0
+                Integer.TryParse(Request.QueryString("AppointmentId"), apptId)
+                If apptId > 0 Then
+                    PrefillFromAppointment(apptId)
+                End If
+            End If
         End If
         ApplyReadOnlyMode()
 
 
     End Sub
+
+    ''' <summary>
+    ''' Pré-remplit la facture à partir d'un rendez-vous :
+    ''' - Client (PartyGUID + nom affiché)
+    ''' - Date d'émission = aujourd'hui (par défaut)
+    ''' - Une ligne avec le produit lié au type du RDV
+    ''' </summary>
+    Private Sub PrefillFromAppointment(appointmentId As Integer)
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@AppointmentId", appointmentId))
+        Dim ds As DataSet = ExecuteSQLds("s0114GetAppointmentForInvoice", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return
+        End If
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+
+        ' === 1. Client ===
+        If Not (r("CustomerGUID") Is DBNull.Value) Then
+            CustomerGUID = CType(r("CustomerGUID"), Guid)
+            lblCustomer.Text = If(r("CustomerName") Is DBNull.Value, "", r("CustomerName").ToString())
+            lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this," & InvoiceId.ToString & ")")
+
+            If Not (r("CustomerFullName") Is DBNull.Value) Then
+                rdLabel.Text = r("CustomerFullName").ToString()
+            End If
+        End If
+
+        ' === 2. Dates par défaut ===
+        If Not dpIssueDate.SelectedDate.HasValue Then
+            dpIssueDate.SelectedDate = Date.Now.Date
+        End If
+        If Not dpDueDate.SelectedDate.HasValue Then
+            dpDueDate.SelectedDate = Date.Now.Date.AddDays(30)
+        End If
+
+        ' === 3. Ligne de facture (produit lié au type de RDV) ===
+        If Not (r("ProductId") Is DBNull.Value) AndAlso CInt(r("ProductId")) > 0 Then
+
+            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
+            Dim dr As DataRow = dt.NewRow()
+
+            dr("Id") = 0
+            dr("ProductId") = CInt(r("ProductId"))
+            dr("ProductName") = If(r("ProductName") Is DBNull.Value, "", r("ProductName").ToString())
+            dr("Description") = If(r("ProductDescription") Is DBNull.Value, "", r("ProductDescription").ToString())
+            dr("Qty") = If(r("ProductQty") Is DBNull.Value, 1.0, CDbl(r("ProductQty")))
+            dr("UnitPrice") = If(r("ProductPrice") Is DBNull.Value, 0.0, CDbl(r("ProductPrice")))
+            dr("Amount") = CDbl(dr("Qty")) * CDbl(dr("UnitPrice"))
+
+            ' Compte de revenus (CompteVente du produit)
+            Dim accId As Integer = 0
+            If Not (r("ProductAccountId") Is DBNull.Value) Then
+                Integer.TryParse(r("ProductAccountId").ToString(), accId)
+            End If
+            dr("AccountId") = accId
+            dr("AccountName") = ""
+
+            dr("TaxeStatus") = If(r("ProductTaxeStatus") Is DBNull.Value, 0, CInt(r("ProductTaxeStatus")))
+            dr("Dirty") = 1
+            dr("Deleted") = 0
+            dr("Ordre") = 1
+
+            dt.Rows.Add(dr)
+            ViewState("ItemsTable") = dt
+
+            BindItemGrid()
+        End If
+
+    End Sub
+
     'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
@@ -390,18 +472,32 @@ Public Class wbfInvoiceEdit
         ParamItems.Value = tvp
         ParamItems.TypeName = "dbo.TVP_InvoiceItem_v6"
 
+        ' Pour le cas où la facture est créée (Id=0) - on passe le CompanyGUID
+        Dim ParamCompanyGUID As New SqlClient.SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier)
+        ParamCompanyGUID.Value = Company
 
         oCom.Parameters.Add(ParamDueDate)
         oCom.Parameters.Add(ParamIssueDate)
         oCom.Parameters.Add(ParamPartyGUID)
         oCom.Parameters.Add(ParamPost)
         oCom.Parameters.Add(ParamInvoiceId)
+        oCom.Parameters.Add(ParamCompanyGUID)
         oCom.Parameters.Add(ParamItems)
 
         oCom.Connection.Open()
         'oCom.ExecuteNonQuery()
         Dim retval = oCom.ExecuteScalar()
         oCom.Connection.Close()
+
+        ' Si on vient de créer la facture, mettre à jour InvoiceId
+        ' avec la valeur retournée par la procédure
+        If retval IsNot Nothing AndAlso Not IsDBNull(retval) Then
+            Dim newId As Integer = 0
+            If Integer.TryParse(retval.ToString(), newId) AndAlso newId > 0 Then
+                InvoiceId = newId
+            End If
+        End If
+
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
 

@@ -43,6 +43,11 @@
                 <span class="nav-ico" aria-hidden="true">🏠</span>
                 <span class="nav-txt">Tableau de bord</span>
             </a>
+            <!-- Item simple : Agenda -->
+<a class="nav-item" href="~/wbfAgenda.aspx" runat="server" data-navlink>
+    <span class="nav-ico" aria-hidden="true">📅</span>
+    <span class="nav-txt">Agenda</span>
+</a>
 
             <!-- Sous-menu Ventes (accordion) -->
             <div class="nav-group" data-accordion>

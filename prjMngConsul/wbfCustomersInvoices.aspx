@@ -15,7 +15,7 @@
     <style>
 
   .listview-list-head {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px 100px 80px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px 100px 120px;
             font-weight: 800;
             font-size: 13px;
             color: #0f172a;
@@ -27,7 +27,7 @@
         }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px 90px 100px 80px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px 90px 100px 120px;
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
@@ -35,6 +35,14 @@
 
         .listview-actions {
             flex-wrap: nowrap;
+        }
+
+        /* Icône PDF (cohérent avec les autres btn-icon-*) */
+        .btn-icon-pdf {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='9' y1='13' x2='15' y2='13'/%3E%3Cline x1='9' y1='17' x2='15' y2='17'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 16px 16px !important;
         }
 
         .listview-list-head,
@@ -376,6 +384,13 @@
                                     OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
                                 />
 
+                                <asp:Button ID="btnPdf" runat="server"
+                                    CssClass="btn btn-icon btn-icon-pdf"
+                                    Text=""
+                                    ToolTip="Télécharger PDF"
+                                    CommandName="DownloadPdf"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    CausesValidation="false" />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -448,7 +463,7 @@
 
     <script type="text/javascript">
         function setInvoiceDirty() {
-             
+
             document.getElementById("hfInvoiceDirty").value = "1";
         }
 
@@ -459,7 +474,7 @@
         function isInvoiceDirty() {
             return document.getElementById("hfInvoiceDirty").value === "1";
         }
-        
+
 
         function rwInvoice_PageLoad(sender, args) {
             wireDirtyTracking(); // iframe prête ✔
@@ -518,15 +533,15 @@
             setInvoiceClean();
             var ajaxManager = $find("RAP1");
             if (ajaxManager) {
-                 
+
                 ajaxManager.ajaxRequest("refreshgrid");
             }
 
 
         }
 
-      
-      
+
+
 
 
 

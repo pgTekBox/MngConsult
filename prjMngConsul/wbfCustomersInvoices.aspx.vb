@@ -92,4 +92,123 @@ Public Class wbfCustomersInvoices
         End If
 
     End Sub
+
+    ''' <summary>
+    ''' Gère les boutons CommandName de la grille (DownloadPdf, DeleteInvoice, etc.)
+    ''' </summary>
+    Private Sub rlvClientsFactures_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClientsFactures.ItemCommand
+        Select Case e.CommandName
+            Case "DownloadPdf"
+                Dim invoiceId As Integer = 0
+                Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
+                If invoiceId > 0 Then
+                    GenerateAndDownloadPdf(invoiceId)
+                End If
+
+            Case "DeleteInvoice"
+                ' (à ajouter si vous avez une procédure de suppression)
+        End Select
+    End Sub
+
+    ''' <summary>
+    ''' Génère le PDF de la facture, le stocke dans T060Document.PdfData,
+    ''' puis l'envoie au navigateur en téléchargement.
+    ''' </summary>
+    Private Sub GenerateAndDownloadPdf(invoiceId As Integer)
+
+        ' 1. Charger les données de la facture
+        Dim inv As InvoiceData = LoadInvoiceForPdf(invoiceId)
+        If inv Is Nothing Then Exit Sub
+
+        ' 2. Générer le PDF en mémoire
+        Dim pdfBytes As Byte() = InvoicePdfBuilder.Build(inv)
+
+        ' 3. Stocker dans T060Document
+        Dim fileName As String = "Facture_" & inv.InvoiceNumber & ".pdf"
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        p.Add(New SqlClient.SqlParameter("@PdfData", pdfBytes))
+        p.Add(New SqlClient.SqlParameter("@FileName", fileName))
+        ExecuteSQL("s0116SaveInvoicePdf", p)
+
+        ' 4. Envoyer au navigateur
+        Response.Clear()
+        Response.ContentType = "application/pdf"
+        Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
+        Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
+        Response.BinaryWrite(pdfBytes)
+        Response.Flush()
+        Response.SuppressContent = True
+        Context.ApplicationInstance.CompleteRequest()
+    End Sub
+
+    ''' <summary>
+    ''' Charge l'objet InvoiceData (entête + lignes) depuis la BD via s0115.
+    ''' </summary>
+    Private Function LoadInvoiceForPdf(invoiceId As Integer) As InvoiceData
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        Dim ds As DataSet = ExecuteSQLds("s0115GetInvoiceForPdf", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return Nothing
+        End If
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim inv As New InvoiceData()
+
+        ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
+        inv.CompanyName = "MngConsul Inc."
+        inv.CompanyTagline = "Cabinet de massothérapie"
+        inv.CompanyAddressLine1 = "123 rue Principale"
+        inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
+        inv.CompanyPhone = "(514) 555-1234"
+        inv.CompanyEmail = "info@mngconsul.com"
+        inv.CompanyTpsNumber = "123456789 RT0001"
+        inv.CompanyTvqNumber = "1234567890 TQ0001"
+
+        ' === Facture ===
+        inv.InvoiceNumber = If(r("DocumentNumber") Is DBNull.Value, invoiceId.ToString(), r("DocumentNumber").ToString())
+        inv.IssueDate = If(r("DocumentDate") Is DBNull.Value, Date.Now.Date, CDate(r("DocumentDate")))
+        inv.DueDate = If(r("DueDate") Is DBNull.Value, inv.IssueDate.AddDays(30), CDate(r("DueDate")))
+
+        ' === Client (depuis les colonnes copiées dans T060Document) ===
+        inv.CustomerName = If(r("Name") Is DBNull.Value, "", r("Name").ToString())
+        inv.CustomerAddressLine1 = If(r("Address1") Is DBNull.Value, "", r("Address1").ToString())
+
+        Dim line2 As New System.Text.StringBuilder()
+        If Not (r("City") Is DBNull.Value) Then line2.Append(r("City").ToString())
+        If Not (r("State") Is DBNull.Value) Then line2.Append(", ").Append(r("State").ToString())
+        If Not (r("PostalCode") Is DBNull.Value) Then line2.Append(" ").Append(r("PostalCode").ToString())
+        inv.CustomerAddressLine2 = line2.ToString()
+
+        inv.CustomerPhone = If(r("Phone") Is DBNull.Value, "", r("Phone").ToString())
+        inv.CustomerEmail = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
+
+        ' === Totaux ===
+        inv.SubTotal = If(r("SubTotal") Is DBNull.Value, 0D, CDec(r("SubTotal")))
+        inv.Tps = If(r("TPS") Is DBNull.Value, 0D, CDec(r("TPS")))
+        inv.Tvq = If(r("TVQ") Is DBNull.Value, 0D, CDec(r("TVQ")))
+        inv.Total = If(r("Total") Is DBNull.Value, 0D, CDec(r("Total")))
+
+        ' === Lignes (table 2 du DataSet) ===
+        If ds.Tables.Count >= 2 Then
+            For Each rl As DataRow In ds.Tables(1).Rows
+                inv.Items.Add(New InvoiceLine With {
+                    .Description = If(rl("ProductName") Is DBNull.Value OrElse rl("ProductName").ToString() = "",
+                                       If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
+                                       rl("ProductName").ToString()),
+                    .SubDescription = If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
+                    .Qty = If(rl("Qty") Is DBNull.Value, 1D, CDec(rl("Qty"))),
+                    .UnitPrice = If(rl("UnitPrice") Is DBNull.Value, 0D, CDec(rl("UnitPrice"))),
+                    .Amount = If(rl("Amount") Is DBNull.Value, 0D, CDec(rl("Amount")))
+                })
+            Next
+        End If
+
+        Return inv
+    End Function
+
 End Class

@@ -49,6 +49,9 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="QuestPDF, Version=2026.2.4.0, Culture=neutral, PublicKeyToken=0f3c2b2315ff52c8, processorArchitecture=MSIL">
+      <HintPath>packages\QuestPDF.2026.2.4\lib\netstandard2.0\QuestPDF.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
@@ -366,8 +369,10 @@
     <Content Include="todel.aspx" />
     <Content Include="ucJournalList.ascx" />
     <Content Include="usJournalTemplateList.ascx" />
+    <Content Include="wbfAgenda.aspx" />
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
+    <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
@@ -498,6 +503,7 @@
       <DependentUpon>ImportSageProduits.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="InvoicePdfBuilder.vb" />
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
@@ -626,6 +632,13 @@
       <DependentUpon>usJournalTemplateList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="wbfAgenda.aspx.designer.vb">
+      <DependentUpon>wbfAgenda.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAgenda.aspx.vb">
+      <DependentUpon>wbfAgenda.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfAIPaiement.aspx.designer.vb">
       <DependentUpon>wbfAIPaiement.aspx</DependentUpon>
     </Compile>
@@ -638,6 +651,13 @@
     </Compile>
     <Compile Include="wbfAISale.aspx.vb">
       <DependentUpon>wbfAISale.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAppointmentEdit.aspx.designer.vb">
+      <DependentUpon>wbfAppointmentEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAppointmentEdit.aspx.vb">
+      <DependentUpon>wbfAppointmentEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfBalanceVerification.aspx.designer.vb">
@@ -1016,6 +1036,8 @@
     </PropertyGroup>
     <Error Condition="!Exists('packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', 'packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.2.0.1\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
     <Error Condition="!Exists('packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets'))" />
+    <Error Condition="!Exists('packages\QuestPDF.2026.2.4\build\net4\QuestPDF.targets')" Text="$([System.String]::Format('$(ErrorText)', 'packages\QuestPDF.2026.2.4\build\net4\QuestPDF.targets'))" />
   </Target>
   <Import Project="packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets" Condition="Exists('packages\System.ValueTuple.4.6.1\build\net471\System.ValueTuple.targets')" />
+  <Import Project="packages\QuestPDF.2026.2.4\build\net4\QuestPDF.targets" Condition="Exists('packages\QuestPDF.2026.2.4\build\net4\QuestPDF.targets')" />
 </Project>
