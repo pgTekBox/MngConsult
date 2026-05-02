@@ -26,16 +26,26 @@ Public Class docHandler
             If sFileName.Length < 1 Then Return
 
             Dim arrFileName() As String = sFileName.Split("_")
+            Dim TypeFile As String = arrFileName(0)
             Dim MyGUID As String = arrFileName(1)
             Dim arrMyGUID() As String = MyGUID.Split(".")
             MyGUID = arrMyGUID(0)
+
+
             Dim ext As String = arrMyGUID(1)
 
+
+
             If ext = "pdf" Then
-
                 Dim oImg As New clsImage
+                If TypeFile.ToUpper = "FACTURE" Then
+                    oImg.LoadPDFFacture(context, sFileName, New Guid(MyGUID))
+                End If
+                If TypeFile.ToUpper = "INVOICE" Then
+                    oImg.LoadPDFInvoice(context, sFileName, New Guid(MyGUID))
+                End If
 
-                oImg.LoadPDF(context, sFileName, New Guid(MyGUID))
+
 
 
             Else

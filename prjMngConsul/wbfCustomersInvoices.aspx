@@ -387,8 +387,8 @@
                                 <asp:Button ID="btnPdf" runat="server"
                                     CssClass="btn btn-icon btn-icon-pdf"
                                     Text=""
-                                    ToolTip="Télécharger PDF"
-                                    CommandName="DownloadPdf"
+                                    ToolTip="Creation PDF"
+                                    CommandName="CreatePdf"
                                     CommandArgument='<%# Eval("Id") %>'
                                     CausesValidation="false" />
 

@@ -98,11 +98,12 @@ Public Class wbfCustomersInvoices
     ''' </summary>
     Private Sub rlvClientsFactures_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClientsFactures.ItemCommand
         Select Case e.CommandName
-            Case "DownloadPdf"
+            Case "CreatePdf"
                 Dim invoiceId As Integer = 0
                 Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
                 If invoiceId > 0 Then
                     GenerateAndDownloadPdf(invoiceId)
+                    rlvClientsFactures.Rebind()
                 End If
 
             Case "DeleteInvoice"
@@ -124,7 +125,7 @@ Public Class wbfCustomersInvoices
         Dim pdfBytes As Byte() = InvoicePdfBuilder.Build(inv)
 
         ' 3. Stocker dans T060Document
-        Dim fileName As String = "Facture_" & inv.InvoiceNumber & ".pdf"
+        Dim fileName As String = "Invoice_" & inv.InvoiceNumber & ".pdf"
 
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
@@ -133,14 +134,14 @@ Public Class wbfCustomersInvoices
         ExecuteSQL("s0116SaveInvoicePdf", p)
 
         ' 4. Envoyer au navigateur
-        Response.Clear()
-        Response.ContentType = "application/pdf"
-        Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
-        Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
-        Response.BinaryWrite(pdfBytes)
-        Response.Flush()
-        Response.SuppressContent = True
-        Context.ApplicationInstance.CompleteRequest()
+        'Response.Clear()
+        'Response.ContentType = "application/pdf"
+        'Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
+        'Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
+        'Response.BinaryWrite(pdfBytes)
+        'Response.Flush()
+        'Response.SuppressContent = True
+        'Context.ApplicationInstance.CompleteRequest()
     End Sub
 
     ''' <summary>

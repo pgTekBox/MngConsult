@@ -409,7 +409,7 @@ Public Class wbfInvoiceEdit
         UpdateAllItemInViewstate()
 
         Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
-        dr("Id") = 0
+        dr("Id") = (CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (qui n'ont pas encore d'Id en BD) des lignes existantes
         dr("Description") = ""
         dr("Qty") = 1
         dr("UnitPrice") = 0

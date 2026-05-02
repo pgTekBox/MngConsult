@@ -141,7 +141,7 @@ Public Class clsImage
 
 
 
-    Public Sub LoadPDF(ByVal oContext As System.Web.HttpContext, ByVal ImageName As String, ByVal ImgGUID As Guid)
+    Public Sub LoadPDFFacture(ByVal oContext As System.Web.HttpContext, ByVal ImageName As String, ByVal ImgGUID As Guid)
         Dim MyCon As New SqlConnection(Me.ConnectionString)
         Try
 
@@ -158,6 +158,45 @@ Public Class clsImage
 
 
             oContext.Response.AppendHeader("content-disposition", "inline; filename=" & ds.Tables(0)(0)("FileName").ToString())
+            oContext.Response.BinaryWrite(arrimg)
+            oContext.Response.End()
+
+
+            Return
+        Catch ex As System.Threading.ThreadAbortException
+        Catch ex As Exception
+            If MyCon.State = ConnectionState.Open Then MyCon.Close()
+
+            Throw ex
+        End Try
+    End Sub
+
+
+    Public Sub LoadPDFInvoice(ByVal oContext As System.Web.HttpContext, ByVal ImageName As String, ByVal ImgGUID As Guid)
+        Dim MyCon As New SqlConnection(Me.ConnectionString)
+        Try
+
+
+            '          create procedure [dbo].[s0255GetInvoice] @imageGUID uniqueidentifier as
+
+
+            'Select Case [ID]
+            '    ,[Created]
+            '    ,[PdfData]
+            '    ,[PdfFileName]
+
+
+            Dim MyParam As New Collection
+            MyParam.Add(New Data.SqlClient.SqlParameter("@imageGUID", ImgGUID))
+            Dim ds As DataSet = Me.ExecuteSQLds("s0255GetInvoice", MyParam)
+            oContext.Response.ContentType = ds.Tables(0)(0)("PDFContentType").ToString()
+
+
+            Dim arrimg() As Byte = CType(ds.Tables(0)(0)("PdfData"), Byte())
+
+
+
+            oContext.Response.AppendHeader("content-disposition", "inline; filename=" & ds.Tables(0)(0)("PDFFileName").ToString())
             oContext.Response.BinaryWrite(arrimg)
             oContext.Response.End()
 
