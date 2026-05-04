@@ -46,6 +46,11 @@ Partial Public Class wbfJobSchedule
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
+
             ' Lire les paramètres de QueryString
             Dim id As Integer = 0, jobId As Integer = 0
             Integer.TryParse(Request.QueryString("Id"), id)

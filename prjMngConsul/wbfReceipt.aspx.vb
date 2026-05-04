@@ -5,6 +5,10 @@ Public Class wbfReceipt
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             RadReceipt.Rebind()
         End If
     End Sub

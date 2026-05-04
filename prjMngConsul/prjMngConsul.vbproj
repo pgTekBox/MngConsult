@@ -46,6 +46,9 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next, Version=4.1.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <HintPath>packages\BCrypt.Net-Next.4.1.0\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
@@ -383,6 +386,7 @@
     <Content Include="wbfEtatResultats.aspx" />
     <Content Include="wbfFermetureAnnee.aspx" />
     <Content Include="wbfFluxTresorerie.aspx" />
+    <Content Include="wbfGenerateHash.aspx" />
     <Content Include="wbfInvoiceEdit.aspx" />
     <Content Include="wbfJobDashboard.aspx" />
     <Content Include="wbfJobEdit.aspx" />
@@ -393,6 +397,7 @@
     <Content Include="wbfJournal.aspx" />
     <Content Include="wbfJournalEntryEdit.aspx" />
     <Content Include="wbfJournalList.aspx" />
+    <Content Include="wbfLogin.aspx" />
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfPlanComptable.aspx" />
     <Content Include="wbfPlanComptableEdit.aspx" />
@@ -415,6 +420,8 @@
     <Content Include="wbfTemplate.aspx" />
     <Content Include="wbfTemplateEdit.aspx" />
     <Content Include="wbfTemplateList.aspx" />
+    <Content Include="wbfUserEdit.aspx" />
+    <Content Include="wbfUsers.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -727,6 +734,13 @@
       <DependentUpon>wbfFluxTresorerie.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfGenerateHash.aspx.designer.vb">
+      <DependentUpon>wbfGenerateHash.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfGenerateHash.aspx.vb">
+      <DependentUpon>wbfGenerateHash.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfInvoiceEdit.aspx.designer.vb">
       <DependentUpon>wbfInvoiceEdit.aspx</DependentUpon>
     </Compile>
@@ -795,6 +809,13 @@
     </Compile>
     <Compile Include="wbfJournalList.aspx.vb">
       <DependentUpon>wbfJournalList.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfLogin.aspx.designer.vb">
+      <DependentUpon>wbfLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfLogin.aspx.vb">
+      <DependentUpon>wbfLogin.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbflogout.aspx.designer.vb">
@@ -949,6 +970,20 @@
     </Compile>
     <Compile Include="wbfTemplateList.aspx.vb">
       <DependentUpon>wbfTemplateList.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfUserEdit.aspx.designer.vb">
+      <DependentUpon>wbfUserEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfUserEdit.aspx.vb">
+      <DependentUpon>wbfUserEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfUsers.aspx.designer.vb">
+      <DependentUpon>wbfUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfUsers.aspx.vb">
+      <DependentUpon>wbfUsers.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
   </ItemGroup>

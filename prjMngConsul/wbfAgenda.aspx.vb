@@ -9,6 +9,11 @@ Public Class wbfAgenda
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
+
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             ' Date courante par défaut
             hfCurrentDate.Value = Date.Now.ToString("yyyy-MM-dd HH:mm:ss")
             hfViewMode.Value = "month"

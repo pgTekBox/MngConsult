@@ -30,6 +30,10 @@ Partial Public Class wbfSetting
     End Sub
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
         ' Rien à faire ici — tout est fait dans OnInit
     End Sub
 

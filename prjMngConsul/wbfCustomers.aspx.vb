@@ -8,6 +8,10 @@ Public Class wbfCustomers
 
 
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             rlvClients.Rebind()
         End If
     End Sub

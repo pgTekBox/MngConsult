@@ -10,6 +10,56 @@ Public Class clsData
     Inherits System.Web.UI.Page
 
 
+    Private Function GetUserByEmail(email As String) As DataRow
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Email", email))
+            Dim ds As DataSet = ExecuteSQLds("s0200GetUserByEmail", p)
+            If ds.Tables(0).Rows.Count > 0 Then Return ds.Tables(0).Rows(0)
+        Catch ex As Exception
+            ' Ne pas révéler les détails au user
+            System.Diagnostics.Debug.WriteLine("Login error: " & ex.Message)
+        End Try
+        Return Nothing
+    End Function
+
+
+
+    Public Property isAdmin() As Boolean
+        Get
+            Try
+                If Session("isAdmin") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("isAdmin") = CType(userRow("isAdmin"), Boolean)
+                End If
+                Return Session("isAdmin")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+            Session("isAdmin") = Value
+        End Set
+    End Property
+
+    Public Property isAuthenticated() As Boolean
+        Get
+            Try
+                If UserId = "" Then
+                    Return False
+                End If
+                Return True
+
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+
+        End Set
+    End Property
+
+
     Public Property Company() As Guid
         Get
             Try
@@ -28,23 +78,25 @@ Public Class clsData
         End Set
     End Property
 
-    Public Property UserId() As Integer
+    Public Property UserId() As String
         Get
             Try
                 If Session("UserId") Is Nothing Then
-                    Session("UserId") = 1
+                    Session("UserId") = ""
                 End If
 
                 Return Session("UserId")
             Catch ex As Exception
-                Return 0
+                Return ""
             End Try
 
         End Get
-        Set(ByVal Value As Integer)
-            Session("UserId") = Value
+        Set(ByVal Value As String)
+            Session("UserId") = Value.Trim
         End Set
     End Property
+
+
 
     Private m_ConnectionString As String = ""
     Public Property ConnectionString() As String

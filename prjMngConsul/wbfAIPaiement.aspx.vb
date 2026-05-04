@@ -31,6 +31,10 @@ Partial Public Class wbfAIPaiement
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "DispatchTarget", js, True)
 
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             PeriodeSel = "3MONTHS"
             ' La catégorie ouverte par défaut (Fournisseur) est gérée côté client via hfCategorieOpen
             ChargerKpis()

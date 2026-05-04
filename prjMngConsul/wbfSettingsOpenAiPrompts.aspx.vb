@@ -13,7 +13,10 @@ Partial Public Class wbfSettingsOpenAiPrompts
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             SetDDL(ddPromptKey, "ParamName", "Id", "s0031GetOpenAPISetting")
             LoadFirstPrompt()
         End If

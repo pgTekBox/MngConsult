@@ -51,6 +51,10 @@ Public Class wbfSupplierEdit
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             BinDDL()
             CreatePartyAddressTable()
             SupplierId = CInt(Request.QueryString("Id"))

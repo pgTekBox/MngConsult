@@ -326,6 +326,12 @@ Job Dashboard  </a>
 
             <!-- Footer -->
             <div class="sidebar-footer">
+                <a class="nav-item subtle" href="~/wbfUsers.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">⚙️</span>
+                    <span class="nav-txt">Utilisateur</span>
+                </a>
+
+
                 <a class="nav-item subtle" href="~/wbfsetting.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">⚙️</span>
                     <span class="nav-txt">Paramètres</span>

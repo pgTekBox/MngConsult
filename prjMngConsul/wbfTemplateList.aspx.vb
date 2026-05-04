@@ -10,6 +10,10 @@ Public Class wbfTemplateList
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             LoadJournauxFilter()
             BindList()
         End If

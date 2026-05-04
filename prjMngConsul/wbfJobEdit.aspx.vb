@@ -36,6 +36,11 @@ Partial Public Class wbfJobEdit
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
+
             ' Lire l'Id depuis QueryString
             Dim idStr = Request.QueryString("Id")
             Dim id As Integer = 0

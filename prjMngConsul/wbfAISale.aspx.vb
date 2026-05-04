@@ -34,6 +34,12 @@ Partial Public Class wbfAISale
     ' =========================================================
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+
         Dim js As String = "var __dispatchTarget = '" & btnDispatchAction.UniqueID & "';"
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "DispatchTarget", js, True)
 

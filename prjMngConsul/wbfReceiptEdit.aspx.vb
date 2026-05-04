@@ -86,7 +86,10 @@ Public Class wbfReceiptEdit
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
-
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             ' Récupérer le sens depuis la querystring (ENCAISSEMENT par défaut)
             Dim qsSens As String = Request.QueryString("Sens")
             If String.IsNullOrEmpty(qsSens) Then qsSens = "ENCAISSEMENT"

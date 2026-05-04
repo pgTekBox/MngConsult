@@ -3,14 +3,14 @@ Imports System.Data.SqlClient
 
 
 Public Class wbfCompanyInfo
-        Inherits System.Web.UI.Page
+    Inherits clsData
 
 #Region "Propriétés"
 
-        ''' <summary>
-        ''' Chaîne de connexion — à adapter selon ton web.config
-        ''' </summary>
-        Private ReadOnly Property ConnStr As String
+    ''' <summary>
+    ''' Chaîne de connexion — à adapter selon ton web.config
+    ''' </summary>
+    Private ReadOnly Property ConnStr As String
             Get
                 Return ConfigurationManager.ConnectionStrings("MngConsulDB").ConnectionString
             End Get
@@ -21,10 +21,14 @@ Public Class wbfCompanyInfo
 #Region "Événements de page"
 
         Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-            If Not IsPostBack Then
-                'LoadCompanyInfo()
-            End If
-        End Sub
+        If Not IsPostBack Then
+
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If 'LoadCompanyInfo()
+        End If
+    End Sub
 
 #End Region
 

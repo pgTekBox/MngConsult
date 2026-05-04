@@ -54,6 +54,10 @@ Partial Public Class wbfJobExecution
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             Dim id As Integer = 0
             Integer.TryParse(Request.QueryString("Id"), id)
 

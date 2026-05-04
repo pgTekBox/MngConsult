@@ -49,6 +49,10 @@ Partial Public Class wbfRapportTaxe
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             DateReference = Date.Today
             dpDatePaiement.SelectedDate = Date.Today
             LoadFrequence()

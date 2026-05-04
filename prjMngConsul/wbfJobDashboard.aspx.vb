@@ -12,6 +12,11 @@ Partial Public Class wbfJobDashboard
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' On peut rafraîchir aussi sur le premier load
         If Not IsPostBack Then
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
+
             ChargerTout()
         End If
     End Sub

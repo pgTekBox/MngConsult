@@ -10,6 +10,12 @@ Public Class wbfJournalList
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not IsPostBack Then
+
+
+            If Not isAuthenticated Then
+                Response.Redirect("~/wbfLogin.aspx")
+                Return
+            End If
             ' Période par défaut : mois en cours
             dpDateFrom.SelectedDate = New Date(Date.Today.Year, Date.Today.Month, 1)
             dpDateTo.SelectedDate = Date.Today
