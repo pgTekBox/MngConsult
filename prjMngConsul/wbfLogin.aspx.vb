@@ -47,7 +47,6 @@ Public Class wbfLogin
 
         If Not isValid Then
             ShowError("Courriel ou mot de passe incorrect.")
-
             Return
         End If
 

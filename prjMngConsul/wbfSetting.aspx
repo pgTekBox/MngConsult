@@ -120,6 +120,7 @@
                         <telerik:RadTab Text="PDF" />
                         <telerik:RadTab Text="Comptabilité" />
                         <telerik:RadTab Text="Bancaire" />
+                        <telerik:RadTab Text="Comptable" />
                     </Tabs>
                 </telerik:RadTabStrip>
 
@@ -267,6 +268,31 @@
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyBancaire" runat="server" Visible="false" CssClass="empty-state">
                             Aucun paramètre bancaire configuré pour cet onglet.
+                        </asp:Panel>
+                    </telerik:RadPageView>
+                    <!-- BANCAIRE -->
+                    <telerik:RadPageView ID="pvComptable" runat="server">
+                        <div style="margin-bottom:12px; color:var(--mc-muted); font-size:13px;">
+                            Clé pour votre comptable afin qu'il puisse accéder à vos données comptables sans être utilisateur de votre compte MngConsul.
+                        </div>
+                        <asp:Repeater ID="rpComptable" runat="server" OnItemDataBound="rp_ItemDataBound">
+                            <HeaderTemplate><div class="form-grid"></HeaderTemplate>
+                            <ItemTemplate>
+                                <div class='<%# GetFieldCssClass(Container.DataItem) %>'>
+                                    <asp:HiddenField ID="hidParamId" runat="server" Value='<%# Eval("ParamId") %>' />
+                                    <asp:HiddenField ID="hidParamType" runat="server" Value='<%# Eval("ParamType") %>' />
+                                    <asp:HiddenField ID="hidShortName" runat="server" Value='<%# Eval("ShortName") %>' />
+                                    <label>
+                                        <%# Eval("Name") %>
+                                        <span class="field-shortname"><%# Eval("ShortName") %></span>
+                                    </label>
+                                    <asp:PlaceHolder ID="phControl" runat="server" />
+                                </div>
+                            </ItemTemplate>
+                            <FooterTemplate></div></FooterTemplate>
+                        </asp:Repeater>
+                        <asp:Panel ID="pnlEmptyComptable" runat="server" Visible="false" CssClass="empty-state">
+                            Aucun paramètre comptable configuré pour cet onglet.
                         </asp:Panel>
                     </telerik:RadPageView>
 

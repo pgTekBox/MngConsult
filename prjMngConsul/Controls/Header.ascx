@@ -9,7 +9,7 @@
         <div class="header-left">
             <span class="logo-dot"></span>
             <span class="logo-text">
-                <asp:Literal runat="server" ID="litAppName" Text="MngConsul" />
+                <asp:Literal runat="server" ID="litAppName" Text="60sec" />
             </span>
             <span class="logo-tag">ERP</span>
         </div>

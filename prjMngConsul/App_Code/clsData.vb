@@ -24,6 +24,23 @@ Public Class clsData
     End Function
 
 
+    Public Property IsAccountant() As Boolean
+        Get
+            Try
+                If Session("IsAccountant") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("IsAccountant") = CType(userRow("IsAccountant"), Boolean)
+                End If
+                Return Session("IsAccountant")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+            Session("IsAccountant") = Value
+        End Set
+    End Property
+
 
     Public Property isAdmin() As Boolean
         Get
@@ -96,6 +113,57 @@ Public Class clsData
         End Set
     End Property
 
+
+
+    Public Property UserFirstName() As String
+        Get
+            Try
+                If Session("UserFirstName") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserFirstName") = CType(userRow("FirstName"), String)
+                End If
+                Return Session("UserFirstName")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserFirstName") = Value
+        End Set
+    End Property
+
+    Public Property UserLastName() As String
+        Get
+            Try
+                If Session("UserLastName") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserLastName") = CType(userRow("LastName"), String)
+                End If
+                Return Session("UserLastName")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserLastName") = Value
+        End Set
+    End Property
+    Public Property UserEmail() As String
+        Get
+            Try
+                If Session("UserEmail") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserEmail") = CType(userRow("Email"), String)
+                End If
+                Return Session("UserEmail")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserEmail") = Value
+        End Set
+    End Property
 
 
     Private m_ConnectionString As String = ""

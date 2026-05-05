@@ -14,6 +14,60 @@ Option Explicit On
 Partial Public Class HeaderUser
 
     '''<summary>
+    '''RadAjaxPanel1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents RadAjaxPanel1 As Global.Telerik.Web.UI.RadAjaxPanel
+
+    '''<summary>
+    '''pnlCompanyPicker control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlCompanyPicker As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''ddlCompany control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents ddlCompany As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''pnlCompanyLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlCompanyLabel As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litCompanyName control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litCompanyName As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litInitials control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litInitials As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''litUserName control.
     '''</summary>
     '''<remarks>
@@ -21,4 +75,13 @@ Partial Public Class HeaderUser
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents litUserName As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litUserRole control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litUserRole As Global.System.Web.UI.WebControls.Literal
 End Class

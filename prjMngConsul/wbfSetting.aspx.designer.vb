@@ -228,4 +228,31 @@ Partial Public Class wbfSetting
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents pnlEmptyBancaire As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pvComptable control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pvComptable As Global.Telerik.Web.UI.RadPageView
+
+    '''<summary>
+    '''rpComptable control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rpComptable As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''pnlEmptyComptable control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlEmptyComptable As Global.System.Web.UI.WebControls.Panel
 End Class

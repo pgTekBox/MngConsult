@@ -9,6 +9,73 @@ Public Class clsDataUC
     Inherits System.Web.UI.UserControl
 
 
+    Private Function GetUserByEmail(email As String) As DataRow
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Email", email))
+            Dim ds As DataSet = ExecuteSQLds("s0200GetUserByEmail", p)
+            If ds.Tables(0).Rows.Count > 0 Then Return ds.Tables(0).Rows(0)
+        Catch ex As Exception
+            ' Ne pas révéler les détails au user
+            System.Diagnostics.Debug.WriteLine("Login error: " & ex.Message)
+        End Try
+        Return Nothing
+    End Function
+
+
+    Public Property IsAccountant() As Boolean
+        Get
+            Try
+                If Session("IsAccountant") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("IsAccountant") = CType(userRow("IsAccountant"), Boolean)
+                End If
+                Return Session("IsAccountant")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+            Session("IsAccountant") = Value
+        End Set
+    End Property
+
+
+    Public Property isAdmin() As Boolean
+        Get
+            Try
+                If Session("isAdmin") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("isAdmin") = CType(userRow("isAdmin"), Boolean)
+                End If
+                Return Session("isAdmin")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+            Session("isAdmin") = Value
+        End Set
+    End Property
+
+    Public Property isAuthenticated() As Boolean
+        Get
+            Try
+                If UserId = "" Then
+                    Return False
+                End If
+                Return True
+
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As Boolean)
+
+        End Set
+    End Property
+
+
     Public Property Company() As Guid
         Get
             Try
@@ -26,6 +93,81 @@ Public Class clsDataUC
             Session("Company") = Value
         End Set
     End Property
+
+    Public Property UserId() As String
+        Get
+            Try
+                If Session("UserId") Is Nothing Then
+                    Session("UserId") = ""
+                End If
+
+                Return Session("UserId")
+            Catch ex As Exception
+                Return ""
+            End Try
+
+        End Get
+        Set(ByVal Value As String)
+            Session("UserId") = Value.Trim
+        End Set
+    End Property
+
+
+
+    Public Property UserFirstName() As String
+        Get
+            Try
+                If Session("UserFirstName") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserFirstName") = CType(userRow("FirstName"), String)
+                End If
+                Return Session("UserFirstName")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserFirstName") = Value
+        End Set
+    End Property
+
+    Public Property UserLastName() As String
+        Get
+            Try
+                If Session("UserLastName") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserLastName") = CType(userRow("LastName"), String)
+                End If
+                Return Session("UserLastName")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserLastName") = Value
+        End Set
+    End Property
+    Public Property UserEmail() As String
+        Get
+            Try
+                If Session("UserEmail") Is Nothing Then
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("UserEmail") = CType(userRow("Email"), String)
+                End If
+                Return Session("UserEmail")
+            Catch ex As Exception
+                Return False
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("UserEmail") = Value
+        End Set
+    End Property
+
+
+
+
+
 
 
 
