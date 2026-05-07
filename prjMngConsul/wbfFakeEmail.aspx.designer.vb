@@ -11,68 +11,77 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class HeaderUser
+Partial Public Class wbfFakeEmail
 
     '''<summary>
-    '''pnlCompanyPicker control.
+    '''form1 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlCompanyPicker As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
-    '''ddlCompany control.
+    '''pnlMail control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents ddlCompany As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents pnlMail As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
-    '''pnlCompanyLabel control.
+    '''litFrom control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlCompanyLabel As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litFrom As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litCompanyName control.
+    '''litTo control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litCompanyName As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litTo As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litInitials control.
+    '''litSubject control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litInitials As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litSubject As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litUserName control.
+    '''lnkOpenLink control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litUserName As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lnkOpenLink As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''litUserRole control.
+    '''pnlEmpty control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litUserRole As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents pnlEmpty As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''hfBody control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hfBody As Global.System.Web.UI.WebControls.HiddenField
 End Class

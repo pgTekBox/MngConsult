@@ -372,6 +372,7 @@
     <Content Include="todel.aspx" />
     <Content Include="ucJournalList.ascx" />
     <Content Include="usJournalTemplateList.ascx" />
+    <Content Include="wbfActivate.aspx" />
     <Content Include="wbfAgenda.aspx" />
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
@@ -384,6 +385,7 @@
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
     <Content Include="wbfEtatResultats.aspx" />
+    <Content Include="wbfFakeEmail.aspx" />
     <Content Include="wbfFermetureAnnee.aspx" />
     <Content Include="wbfFluxTresorerie.aspx" />
     <Content Include="wbfGenerateHash.aspx" />
@@ -399,6 +401,7 @@
     <Content Include="wbfJournalList.aspx" />
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbflogout.aspx" />
+    <Content Include="wbfNewUser.aspx" />
     <Content Include="wbfPlanComptable.aspx" />
     <Content Include="wbfPlanComptableEdit.aspx" />
     <Content Include="wbfProductCategory.aspx" />
@@ -409,6 +412,7 @@
     <Content Include="wbfRapportTaxe.aspx" />
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfReceiptEdit.aspx" />
+    <Content Include="wbfRegister.aspx" />
     <Content Include="wbfReleve.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfSetting.aspx" />
@@ -437,6 +441,7 @@
     <Compile Include="App_Code\clsImage.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="App_Code\EmailHelper.vb" />
     <Compile Include="Controls\HeaderUser.ascx.designer.vb">
       <DependentUpon>HeaderUser.ascx</DependentUpon>
     </Compile>
@@ -639,6 +644,13 @@
       <DependentUpon>usJournalTemplateList.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="wbfActivate.aspx.designer.vb">
+      <DependentUpon>wbfActivate.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfActivate.aspx.vb">
+      <DependentUpon>wbfActivate.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfAgenda.aspx.designer.vb">
       <DependentUpon>wbfAgenda.aspx</DependentUpon>
     </Compile>
@@ -718,6 +730,13 @@
     </Compile>
     <Compile Include="wbfEtatResultats.aspx.vb">
       <DependentUpon>wbfEtatResultats.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfFakeEmail.aspx.designer.vb">
+      <DependentUpon>wbfFakeEmail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfFakeEmail.aspx.vb">
+      <DependentUpon>wbfFakeEmail.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfFermetureAnnee.aspx.designer.vb">
@@ -825,6 +844,13 @@
       <DependentUpon>wbflogout.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfNewUser.aspx.designer.vb">
+      <DependentUpon>wbfNewUser.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfNewUser.aspx.vb">
+      <DependentUpon>wbfNewUser.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfPlanComptable.aspx.designer.vb">
       <DependentUpon>wbfPlanComptable.aspx</DependentUpon>
     </Compile>
@@ -893,6 +919,13 @@
     </Compile>
     <Compile Include="wbfReceiptEdit.aspx.vb">
       <DependentUpon>wbfReceiptEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfRegister.aspx.designer.vb">
+      <DependentUpon>wbfRegister.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfRegister.aspx.vb">
+      <DependentUpon>wbfRegister.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfReleve.aspx.designer.vb">

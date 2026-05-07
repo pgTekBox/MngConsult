@@ -1,15 +1,15 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="HeaderUser.ascx.vb" Inherits="MngConsul.HeaderUser" %>
 
 <div class="header-right">
-<telerik:RadAjaxPanel ID="RadAjaxPanel1" runat="server"  >
+ 
     <%-- Sélecteur de compagnie (visible uniquement si comptable avec >1 compagnie) --%>
     <asp:Panel ID="pnlCompanyPicker" runat="server" CssClass="company-picker" Visible="false">
         <span class="company-icon" aria-hidden="true">🏢</span>
         <asp:DropDownList ID="ddlCompany" runat="server"
             CssClass="company-select" 
-            AutoPostBack="false" />
+            AutoPostBack="true" />
     </asp:Panel>
-    </telerik:RadAjaxPanel>
+ 
     <%-- Affichage simple si une seule compagnie --%>
     <asp:Panel ID="pnlCompanyLabel" runat="server" CssClass="company-label" Visible="false">
         <span class="company-icon" aria-hidden="true">🏢</span>

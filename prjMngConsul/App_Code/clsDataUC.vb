@@ -80,7 +80,7 @@ Public Class clsDataUC
         Get
             Try
                 If Session("Company") Is Nothing Then
-                    Session("Company") = Guid.Parse("87893D29-6D64-40C8-8E45-A3492B4FBB91")
+                    Session("Company") = Guid.Parse("00000000-0000-0000-0000-000000000000")
                 End If
 
                 Return Session("Company")

@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
+Imports Telerik.Web.UI
 
 Public Class HeaderUser
     Inherits clsDataUC    ' ou System.Web.UI.UserControl si vous préférez
@@ -35,9 +36,9 @@ Public Class HeaderUser
         ' Rôle
 
 
-        If isAccountant AndAlso isAdmin Then
+        If IsAccountant AndAlso isAdmin Then
             litUserRole.Text = "Comptable · Admin"
-        ElseIf isAccountant Then
+        ElseIf IsAccountant Then
             litUserRole.Text = "Comptable"
         ElseIf isAdmin Then
             litUserRole.Text = "Administrateur"
@@ -68,7 +69,7 @@ Public Class HeaderUser
 
 
         Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", userId))
+        p.Add(New SqlParameter("@UserId", UserId))
         Dim ds As DataSet = ExecuteSQLds("s0210GetUserCompanies", p)
 
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
@@ -105,20 +106,29 @@ Public Class HeaderUser
 
             ' Plusieurs compagnies : dropdown
             ddlCompany.Items.Clear()
-                For Each r As DataRow In dt.Rows
-                    Dim sguid As String = r("CompanyGUID").ToString().ToUpper()
-                    Dim name As String = r("Name").ToString()
-                    Dim item As New ListItem(name, sguid)
-                    If sguid = Company.ToString Then item.Selected = True
-                    ddlCompany.Items.Add(item)
-                Next
+            For Each r As DataRow In dt.Rows
+                Dim sguid As String = r("CompanyGUID").ToString().ToUpper()
+                Dim name As String = r("Name").ToString()
+                Dim item As New ListItem(name, sguid)
+                If sguid = Company.ToString.ToUpper Then item.Selected = True
+                ddlCompany.Items.Add(item)
+            Next
 
-                ' Si la compagnie en session n'est pas dans la liste, sélectionner la 1ère
-                If ddlCompany.SelectedIndex < 0 AndAlso ddlCompany.Items.Count > 0 Then
+            ' Si la compagnie en session n'est pas dans la liste, sélectionner la 1ère
+            If ddlCompany.SelectedIndex < 0 AndAlso ddlCompany.Items.Count > 0 Then
                 ddlCompany.SelectedIndex = 0
                 Company = New Guid(ddlCompany.Items(0).Value)
 
             End If
+
+            If Company.ToString = "00000000-0000-0000-0000-000000000000" Then
+                ddlCompany.SelectedIndex = 0
+                Company = New Guid(ddlCompany.Items(0).Value)
+            End If
+
+
+
+
             'ddlCompany.AutoPostBack = previousAutoPostBack
             pnlCompanyPicker.Visible = True
             pnlCompanyLabel.Visible = False
@@ -145,7 +155,7 @@ Public Class HeaderUser
 
         ' Vérifier l'accès côté serveur
         Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", userId))
+        p.Add(New SqlParameter("@UserId", UserId))
         p.Add(New SqlParameter("@CompanyGUID", newGuid))
 
         Dim outAccess As New SqlParameter("@HasAccess", SqlDbType.Bit)
@@ -172,5 +182,6 @@ Public Class HeaderUser
         ' Redirection vers le tableau de bord
         Response.Redirect("~/Default.aspx")
     End Sub
+
 
 End Class

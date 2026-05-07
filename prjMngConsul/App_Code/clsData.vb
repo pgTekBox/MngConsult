@@ -109,7 +109,13 @@ Public Class clsData
 
         End Get
         Set(ByVal Value As String)
-            Session("UserId") = Value.Trim
+            If Value Is Nothing Then
+                Session("UserId") = Nothing
+            Else
+                Session("UserId") = Value.Trim
+            End If
+
+
         End Set
     End Property
 
