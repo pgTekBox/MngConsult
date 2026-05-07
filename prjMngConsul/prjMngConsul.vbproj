@@ -274,6 +274,7 @@
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
+    <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
     <Content Include="Default.aspx" />
     <Content Include="ExchangeToken.aspx" />
@@ -295,6 +296,7 @@
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
+    <Content Include="LandingPage.aspx" />
     <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />
     <Content Include="PlaidDailySync.aspx" />
@@ -516,6 +518,13 @@
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="InvoicePdfBuilder.vb" />
+    <Compile Include="LandingPage.aspx.designer.vb">
+      <DependentUpon>LandingPage.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="LandingPage.aspx.vb">
+      <DependentUpon>LandingPage.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
