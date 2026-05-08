@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfRegister
+Partial Public Class wbfPayment
 
     '''<summary>
     '''form1 control.
@@ -23,13 +23,76 @@ Partial Public Class wbfRegister
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
-    '''pnlForm control.
+    '''litPlanName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlForm As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litPlanName As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litPlanTagline control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litPlanTagline As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litPlanLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litPlanLabel As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litPlanAmount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litPlanAmount As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTps control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTps As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTvq control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTvq As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTotal control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTotal As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litFeatures control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litFeatures As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''pnlError control.
@@ -50,110 +113,47 @@ Partial Public Class wbfRegister
     Protected WithEvents litError As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''tbFirstName control.
+    '''tbCardHolder control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbFirstName As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbCardHolder As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''tbLastName control.
+    '''tbCardNumber control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbLastName As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbCardNumber As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''tbEmail control.
+    '''tbExpiry control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbEmail As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbExpiry As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''tbPassword control.
+    '''tbCvv control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbPassword As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbCvv As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
-    '''tbPasswordConfirm control.
+    '''btnPay control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents tbPasswordConfirm As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''cbTerms control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents cbTerms As Global.System.Web.UI.WebControls.CheckBox
-
-    '''<summary>
-    '''btnRegister control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnRegister As Global.System.Web.UI.WebControls.Button
-
-    '''<summary>
-    '''lnkLogin control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lnkLogin As Global.System.Web.UI.WebControls.HyperLink
-
-    '''<summary>
-    '''pnlSuccess control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents pnlSuccess As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>
-    '''litSuccessEmail control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litSuccessEmail As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
-    '''lnkResend control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lnkResend As Global.System.Web.UI.WebControls.LinkButton
-
-    '''<summary>
-    '''btnFerme control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents btnFerme As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnPay As Global.System.Web.UI.WebControls.Button
 End Class

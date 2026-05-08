@@ -176,7 +176,7 @@
                 <iframe id="mailFrame" srcdoc=""></iframe>
             </div>
 
-            <div class="actions">
+        <%--    <div class="actions">
                 <a href="javascript:void(0)" onclick="window.close();" class="btn btn-secondary">
                     Fermer cette fenêtre
                 </a>
@@ -184,7 +184,7 @@
                     Target="_blank" CssClass="btn btn-primary">
                     🔗 Ouvrir le lien d'activation
                 </asp:HyperLink>
-            </div>
+            </div>--%>
 
         </asp:Panel>
 

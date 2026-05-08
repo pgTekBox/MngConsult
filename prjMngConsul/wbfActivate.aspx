@@ -121,8 +121,8 @@
                     </strong> !
                 </p>
                 <div class="actions">
-                    <asp:HyperLink ID="lnkContinue" runat="server"
-                        NavigateUrl="~/wbfNewUser.aspx" CssClass="btn">
+                    <asp:HyperLink ID="lnkContinue" runat="server"  
+                        NavigateUrl="~/wbfPayment.aspx" CssClass="btn">
                         Continuer →
                     </asp:HyperLink>
                 </div>

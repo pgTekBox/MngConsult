@@ -443,7 +443,7 @@
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Assistant IA en français</span></li>
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Point de vente (POS)</span></li>
                     </ul>
-                    <a href="#cta" class="plan-button">Commencer gratuitement</a>
+                    <a href="wbfRegister.aspx?ab=solo" class="plan-button">Commencer gratuitement</a>
                 </div>
 
                 <!-- Plan 2 : Compagnie Solo (featured) -->
@@ -465,7 +465,7 @@
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Connexion compte bancaire</span></li>
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Conciliation financière automatisée</span></li>
                     </ul>
-                    <a href="#cta" class="plan-button">Commencer gratuitement</a>
+                    <a href="wbfRegister.aspx?ab=comsolo" class="plan-button">Commencer gratuitement</a>
                 </div>
 
                 <!-- Plan 3 : Compagnie 1-19 -->
@@ -486,7 +486,7 @@
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Contrats &amp; T4A</span></li>
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Alertes de conformité RH</span></li>
                     </ul>
-                    <a href="#cta" class="plan-button">Commencer gratuitement</a>
+                    <a href="wbfRegister.aspx?ab=scom119" class="plan-button">Commencer gratuitement</a>
                 </div>
             </div>
 

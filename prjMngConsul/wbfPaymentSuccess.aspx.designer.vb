@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class wbfFakeEmail
+Partial Public Class wbfPaymentSuccess
 
     '''<summary>
     '''form1 control.
@@ -23,56 +23,74 @@ Partial Public Class wbfFakeEmail
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
-    '''pnlMail control.
+    '''litPlanName control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlMail As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litPlanName As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litFrom control.
+    '''litTransactionId control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litFrom As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litTransactionId As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litTo control.
+    '''litDate control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litTo As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litDate As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''litSubject control.
+    '''litCard control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents litSubject As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litCard As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''pnlEmpty control.
+    '''litPlanName2 control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents pnlEmpty As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litPlanName2 As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''hfBody control.
+    '''litNextBilling control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents hfBody As Global.System.Web.UI.WebControls.HiddenField
+    Protected WithEvents litNextBilling As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litAmount control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litAmount As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''lnkDashboard control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkDashboard As Global.System.Web.UI.WebControls.HyperLink
 End Class

@@ -404,6 +404,8 @@
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfNewUser.aspx" />
+    <Content Include="wbfPayment.aspx" />
+    <Content Include="wbfPaymentSuccess.aspx" />
     <Content Include="wbfPlanComptable.aspx" />
     <Content Include="wbfPlanComptableEdit.aspx" />
     <Content Include="wbfProductCategory.aspx" />
@@ -858,6 +860,20 @@
     </Compile>
     <Compile Include="wbfNewUser.aspx.vb">
       <DependentUpon>wbfNewUser.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPayment.aspx.designer.vb">
+      <DependentUpon>wbfPayment.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPayment.aspx.vb">
+      <DependentUpon>wbfPayment.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPaymentSuccess.aspx.designer.vb">
+      <DependentUpon>wbfPaymentSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPaymentSuccess.aspx.vb">
+      <DependentUpon>wbfPaymentSuccess.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfPlanComptable.aspx.designer.vb">

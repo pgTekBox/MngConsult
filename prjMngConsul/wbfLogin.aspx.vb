@@ -32,7 +32,10 @@ Public Class wbfLogin
 
         ' Vérifier qu'il est actif
         If Not CBool(userRow("IsActive")) Then
-            ShowError("Ce compte est désactivé. Contactez votre administrateur.")
+
+            Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString())
+
+            'ShowError("Ce compte est désactivé. Contactez votre administrateur.")
             Return
         End If
 
@@ -54,6 +57,10 @@ Public Class wbfLogin
 
         Company = CType(userRow("CompanyGUID"), Guid)
         UserId = userRow("Email").ToString()
+        'Dim Activted As Boolean = CBool(userRow("IsActive"))
+        'If Not Activted Then
+        '    Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString())
+        'End If
 
 
         ' Mettre à jour la dernière connexion

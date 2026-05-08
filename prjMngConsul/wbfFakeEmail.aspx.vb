@@ -18,12 +18,12 @@
         litSubject.Text = mail.Subject
         hfBody.Value = mail.HtmlBody
 
-        If Not String.IsNullOrEmpty(mail.ActionLink) Then
-            lnkOpenLink.NavigateUrl = mail.ActionLink
-            lnkOpenLink.Visible = True
-        Else
-            lnkOpenLink.Visible = False
-        End If
+        'If Not String.IsNullOrEmpty(mail.ActionLink) Then
+        '    lnkOpenLink.NavigateUrl = mail.ActionLink
+        '    lnkOpenLink.Visible = True
+        'Else
+        '    lnkOpenLink.Visible = False
+        'End If
     End Sub
 
 End Class

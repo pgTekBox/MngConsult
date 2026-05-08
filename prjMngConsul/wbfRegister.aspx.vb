@@ -8,7 +8,55 @@ Public Class wbfRegister
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' Si déjà connecté, rediriger vers le dashboard
-        UserId = Nothing
+
+        'wbfRegister.aspx?ab= solo
+        'wbfRegister.aspx?ab= comsolo
+        'wbfRegister.aspx?ab= scom119
+        'Session.Clear()
+        'Session.Abandon()
+
+        Abonnement = Request.QueryString("ab")
+        Dim ActiveToken As String = Request.QueryString("ac")
+
+
+
+        If Not IsPostBack Then
+
+
+
+            If Not ActiveToken Is Nothing AndAlso Guid.TryParse(ActiveToken, Nothing) Then
+                ' Redirection depuis le lien d'activation
+                ' Afficher la vue de succès
+                pnlForm.Visible = False
+                pnlSuccess.Visible = True
+                Dim MyToken As Guid
+                Guid.TryParse(ActiveToken, MyToken)
+
+                Dim p As New Collection
+                p.Add(New SqlClient.SqlParameter("@ActivationToken", MyToken))
+                Dim ds As DataSet = ExecuteSQLds("s0256GetUserByActivationToken", p)
+
+
+
+                ' Stocker l'email pour le bouton "Renvoyer"
+                ViewState("RegisteredEmail") = ds.Tables(0).Rows(0)("Email").ToString()
+
+
+
+
+
+
+                'litSuccessEmail.Text = email
+
+                ' Stocker l'email pour le bouton "Renvoyer"
+                'ViewState("RegisteredEmail") = email
+                'Response.Redirect("~/wbfActivate.aspx?token=" & ActiveToken)
+                Return
+            End If
+
+        End If
+        btnRegister.Text = If(Abonnement = "solo", "Créer mon compte Solo", If(Abonnement = "comsolo", "Créer mon compte ComSolo", If(Abonnement = "scom119", "Créer mon compte SCOM119", "Créer mon compte")))
+
         If Not IsPostBack AndAlso UserId IsNot "" Then
             Response.Redirect("~/Default.aspx")
         End If
@@ -58,6 +106,7 @@ Public Class wbfRegister
             p.Add(New SqlClient.SqlParameter("@FirstName", If(String.IsNullOrEmpty(firstName), CObj(DBNull.Value), firstName)))
             p.Add(New SqlClient.SqlParameter("@LastName", If(String.IsNullOrEmpty(lastName), CObj(DBNull.Value), lastName)))
             p.Add(New SqlClient.SqlParameter("@CompanyName", DBNull.Value))
+            p.Add(New SqlClient.SqlParameter("@Abonnement", Abonnement))
             Dim ds As DataSet = ExecuteSQLds("s0220RegisterUser", p)
 
 
@@ -192,7 +241,7 @@ Public Class wbfRegister
         sb.AppendLine("<p style=""font-size:16px;"">" & greeting & "</p>")
         sb.AppendLine("<p>Merci de vous être inscrit. Pour finaliser la création de votre compte, cliquez sur le bouton ci-dessous :</p>")
         sb.AppendLine("<div style=""text-align:center; margin:28px 0;"">")
-        sb.AppendLine("<a href=""" & activationLink & """ style=""display:inline-block; background: linear-gradient(135deg,#2563eb,#06b6d4); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">Activer mon compte</a>")
+        sb.AppendLine("<a href=""" & activationLink & """  target=""_blank""   style=""display:inline-block; background: linear-gradient(135deg,#2563eb,#06b6d4); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">Activer mon compte</a>")
         sb.AppendLine("</div>")
         sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">Le lien est valide pendant <strong>24 heures</strong>.</p>")
         sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br/>")
@@ -211,4 +260,10 @@ Public Class wbfRegister
         litError.Text = msg
     End Sub
 
+    Private Sub btnFerme_Click(sender As Object, e As EventArgs) Handles btnFerme.Click
+        Session.Clear()
+        Session.Abandon()
+
+        Response.Redirect("~/LandingPage.aspx")
+    End Sub
 End Class
