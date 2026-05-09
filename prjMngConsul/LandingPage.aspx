@@ -486,7 +486,7 @@
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Contrats &amp; T4A</span></li>
                         <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Alertes de conformité RH</span></li>
                     </ul>
-                    <a href="wbfRegister.aspx?ab=scom119" class="plan-button">Commencer gratuitement</a>
+                    <a href="wbfRegister.aspx?ab=com119" class="plan-button">Commencer gratuitement</a>
                 </div>
             </div>
 

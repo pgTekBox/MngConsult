@@ -513,6 +513,14 @@
 <body>
     <form id="form1" runat="server">
 
+        <asp:HiddenField ID="hfPlan" runat="server" />
+
+        <asp:Panel ID="pnlMessage" runat="server" Visible="false"
+            Style="max-width: 920px; margin: 0 auto 12px auto; padding: 12px 16px;
+                   border-radius: 12px; font-size: 13px; font-weight: 600;">
+            <asp:Literal ID="litMessage" runat="server" />
+        </asp:Panel>
+
         <!-- ============================================================
              HEADER
              ============================================================ -->
@@ -809,7 +817,7 @@
                                     </svg>
                                 </button>
                             </label>
-                            <asp:TextBox ID="txtEmail" runat="server" TextMode="Email" placeholder="jean.tremblay@courriel.com" />
+                            <asp:TextBox ID="txtEmail" runat="server" ReadOnly="true" TextMode="Email" placeholder="jean.tremblay@courriel.com" />
                         </div>
 
                         <div class="field full toggle-row">

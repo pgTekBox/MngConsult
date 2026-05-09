@@ -11,7 +11,7 @@ Public Class wbfRegister
 
         'wbfRegister.aspx?ab= solo
         'wbfRegister.aspx?ab= comsolo
-        'wbfRegister.aspx?ab= scom119
+        'wbfRegister.aspx?ab= com119
         'Session.Clear()
         'Session.Abandon()
 
@@ -55,7 +55,7 @@ Public Class wbfRegister
             End If
 
         End If
-        btnRegister.Text = If(Abonnement = "solo", "Créer mon compte Solo", If(Abonnement = "comsolo", "Créer mon compte ComSolo", If(Abonnement = "scom119", "Créer mon compte SCOM119", "Créer mon compte")))
+        btnRegister.Text = If(Abonnement = "solo", "Créer mon compte Solo", If(Abonnement = "comsolo", "Créer mon compte ComSolo", If(Abonnement = "com119", "Créer mon compte COM119", "Créer mon compte")))
 
         If Not IsPostBack AndAlso UserId IsNot "" Then
             Response.Redirect("~/Default.aspx")

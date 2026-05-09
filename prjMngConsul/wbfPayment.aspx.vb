@@ -19,13 +19,34 @@ Public Class wbfPayment
             LoadPlanDetails()
         End If
     End Sub
+    Private Function GetUserAndCompanyInfo(userId As Integer) As DataRow
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@UserId", userId))
+
+        Dim ds As DataSet = ExecuteSQLds("s0230GetUserAndCompanyInfo", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return Nothing
+        End If
+
+        Return ds.Tables(0).Rows(0)
+    End Function
+
+
 
     ''' <summary>
     ''' Charge les détails du forfait depuis le QueryString (?plan=xxx)
     ''' </summary>
     Private Sub LoadPlanDetails()
 
-        Dim planCode As String = If(Request.QueryString("plan"), "pro").ToLower()
+
+        Dim dr As DataRow = GetUserAndCompanyInfo(UserId)
+
+
+
+
+        Dim planCode As String = dr("Abonnement")
 
         Dim planName As String
         Dim tagline As String
@@ -33,18 +54,25 @@ Public Class wbfPayment
         Dim features As String()
 
         Select Case planCode
-            Case "starter"
-                planName = "Starter"
+            Case "solo"
+                planName = "Solo"
                 tagline = "Pour démarrer en toute simplicité"
                 amount = 19D
                 features = {"1 utilisateur", "Facturation illimitée", "Support par courriel", "Stockage 5 Go"}
 
-            Case "business"
-                planName = "Business"
+            Case "comsolo"
+                planName = "ComSolo"
                 tagline = "Pour les équipes en croissance"
                 amount = 99D
                 features = {"Utilisateurs illimités", "Multi-compagnie", "Support prioritaire 24/7",
                             "Stockage 100 Go", "API et intégrations", "Tableau de bord avancé"}
+
+            Case "com119"
+                planName = "COM119"
+                tagline = "Pour les grandes entreprises"
+                amount = 199D
+                features = {"Utilisateurs illimités", "Multi-compagnie", "Support prioritaire 24/7",
+                            "Stockage 500 Go", "API et intégrations avancées", "Tableau de bord complet"}
 
             Case Else
                 ' Pro par défaut
@@ -137,8 +165,8 @@ Public Class wbfPayment
 
         ' === Création de l'abonnement ===
         Try
-            Dim planCode As String = If(ViewState("PlanCode"), "pro").ToString()
-            Dim planName As String = If(ViewState("PlanName"), "Pro").ToString()
+            Dim planCode As String = If(ViewState("PlanCode"), "solo").ToString()
+            Dim planName As String = If(ViewState("PlanName"), "Solo").ToString()
             Dim amount As Decimal = CDec(ViewState("PlanAmount"))
 
             Dim cardLast4 As String = cardNumber.Substring(cardNumber.Length - 4)

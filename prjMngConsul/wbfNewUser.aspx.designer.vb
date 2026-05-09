@@ -23,6 +23,33 @@ Partial Public Class wbfNewUser
     Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
 
     '''<summary>
+    '''hfPlan control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents hfPlan As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''pnlMessage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlMessage As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litMessage control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litMessage As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''txtFirstName control.
     '''</summary>
     '''<remarks>

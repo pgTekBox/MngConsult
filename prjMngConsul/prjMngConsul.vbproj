@@ -430,6 +430,7 @@
     <Content Include="wbfTemplateList.aspx" />
     <Content Include="wbfUserEdit.aspx" />
     <Content Include="wbfUsers.aspx" />
+    <Content Include="wbfWelcome.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -1042,6 +1043,13 @@
     </Compile>
     <Compile Include="wbfUsers.aspx.vb">
       <DependentUpon>wbfUsers.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfWelcome.aspx.designer.vb">
+      <DependentUpon>wbfWelcome.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfWelcome.aspx.vb">
+      <DependentUpon>wbfWelcome.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
   </ItemGroup>

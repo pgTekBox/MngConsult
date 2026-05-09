@@ -237,7 +237,7 @@
             <div class="actions">
                 <asp:HyperLink ID="lnkDashboard" runat="server"
                     NavigateUrl="~/wbfNewUser.aspx" CssClass="btn btn-primary">
-                    Accéder au tableau de bord →
+                    Remplisser votre profile →
                 </asp:HyperLink>
             </div>
 
