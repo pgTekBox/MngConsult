@@ -9,7 +9,7 @@ Public Class wbfNewUser
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté
-        If Session("UserId") Is Nothing Then
+        If UserId = 0 Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
@@ -30,12 +30,14 @@ Public Class wbfNewUser
     ''' Pré-remplit les champs Prénom / Nom à partir de la session
     ''' </summary>
     Private Sub PrefillUserInfo()
-        If Session("UserFirstName") IsNot Nothing Then
-            txtFirstName.Text = Session("UserFirstName").ToString()
-        End If
-        If Session("UserLastName") IsNot Nothing Then
-            txtLastName.Text = Session("UserLastName").ToString()
-        End If
+
+
+
+        txtFirstName.Text = UserFirstName
+
+
+        txtLastName.Text = UserLastName
+
 
 
         txtEmail.Text = UserEmail
@@ -63,18 +65,18 @@ Public Class wbfNewUser
         End If
 
         Try
-            Dim userId As Integer = CInt(Session("UserId"))
-            Dim modifiedBy As String = If(Session("UserEmail"), "").ToString()
+
+            Dim modifiedBy As String = UserEmail
 
             ' === 1) Sauvegarder le profil utilisateur (T015User) ===
-            SaveUserProfile(userId, modifiedBy)
+            SaveUserProfile(UserId, modifiedBy)
 
             ' === 2) Sauvegarder les infos entreprise (T010Company) — partie Générale ===
             SaveCompanyGeneral(modifiedBy)
 
             ' === 3) Mettre à jour la session avec les nouveaux noms ===
-            Session("UserFirstName") = txtFirstName.Text.Trim()
-            Session("UserLastName") = txtLastName.Text.Trim()
+            UserFirstName = txtFirstName.Text.Trim()
+            UserLastName = txtLastName.Text.Trim()
 
             ' === 4) Démarrer l'essai gratuit ===
             Dim subscriptionId As Integer = StartFreeTrial(userId, modifiedBy)
@@ -94,7 +96,7 @@ Public Class wbfNewUser
     Protected Sub btnSaveGov_Click(sender As Object, e As EventArgs) Handles btnSaveGov.Click
 
         Try
-            Dim modifiedBy As String = If(Session("UserEmail"), "").ToString()
+            Dim modifiedBy As String = UserEmail
             SaveCompanyFull(modifiedBy)
             ShowMessage("Informations gouvernementales enregistrées.", isError:=False)
         Catch ex As Exception

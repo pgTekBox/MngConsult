@@ -8,7 +8,7 @@ Public Class wbfUsers
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté ET admin
-        If Session("UserId") = "" Then
+        If UserId = "" Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If

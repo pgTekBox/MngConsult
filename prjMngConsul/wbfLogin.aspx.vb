@@ -7,7 +7,7 @@ Public Class wbfLogin
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ' Si déjà connecté, rediriger vers la page d'accueil
-        If Not IsPostBack AndAlso Not String.IsNullOrEmpty(UserId) Then
+        If Not IsPostBack AndAlso Not UserId = 0 Then
             Response.Redirect("~/Default.aspx")
         End If
     End Sub
@@ -30,14 +30,7 @@ Public Class wbfLogin
             Return
         End If
 
-        ' Vérifier qu'il est actif
-        If Not CBool(userRow("IsActive")) Then
 
-            Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString())
-
-            'ShowError("Ce compte est désactivé. Contactez votre administrateur.")
-            Return
-        End If
 
         ' Vérifier le mot de passe avec bcrypt
         Dim hash As String = userRow("PasswordHash").ToString()
@@ -55,12 +48,27 @@ Public Class wbfLogin
 
         ' === Login OK ===
 
+        ' Vérifier qu'il est actif
+        If Not CBool(userRow("IsActive")) Then
+            Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString())
+            Return
+        End If
+
+        UserId = userRow("Id")
+        'Verifier s'il a un abonnement actif (pour le rediriger vers la page de paiement s'il n'en a pas)
+        Dim pa As New Collection
+        pa.Add(New SqlParameter("@CompanyGUID", CType(userRow("CompanyGUID"), Guid)))
+        Dim dsa As DataSet = ExecuteSQLds("s0313GetSubscriptionForPaiement", pa)
+        If dsa.Tables(0).Rows.Count = 1 Then
+            Response.Redirect("~/wbfPayment.aspx")
+            Return
+        End If
+
+
+
+
         Company = CType(userRow("CompanyGUID"), Guid)
-        UserId = userRow("Email").ToString()
-        'Dim Activted As Boolean = CBool(userRow("IsActive"))
-        'If Not Activted Then
-        '    Response.Redirect("~/wbfRegister.aspx?ac=" & userRow("ActivationToken").ToString())
-        'End If
+        'email = userRow("Email").ToString()
 
 
         ' Mettre à jour la dernière connexion
@@ -94,7 +102,7 @@ Public Class wbfLogin
         Return Nothing
     End Function
 
-    Private Sub UpdateLastLogin(userId As String)
+    Private Sub UpdateLastLogin(userId As Integer)
         Try
 
             Dim p As New Collection

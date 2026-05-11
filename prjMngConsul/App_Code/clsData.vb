@@ -62,7 +62,7 @@ Public Class clsData
     Public Property isAuthenticated() As Boolean
         Get
             Try
-                If UserId = "" Then
+                If UserId = 0 Then
                     Return False
                 End If
                 Return True
@@ -78,7 +78,7 @@ Public Class clsData
     Public Property Abonnement() As String
         Get
             Try
-                If Session("Abonnement") Is Nothing Then
+                If String.IsNullOrEmpty(Session("Abonnement")) Then
                     Session("Abonnement") = ""
                 End If
 
@@ -112,11 +112,11 @@ Public Class clsData
         End Set
     End Property
 
-    Public Property UserId() As String
+    Public Property UserId() As Integer
         Get
             Try
                 If Session("UserId") Is Nothing Then
-                    Session("UserId") = ""
+                    Session("UserId") = 0
                 End If
 
                 Return Session("UserId")
@@ -125,29 +125,44 @@ Public Class clsData
             End Try
 
         End Get
-        Set(ByVal Value As String)
-            If Value Is Nothing Then
-                Session("UserId") = Nothing
-            Else
-                Session("UserId") = Value.Trim
-            End If
+        Set(ByVal Value As Integer)
+
+            Session("UserId") = Value
+
 
 
         End Set
     End Property
 
+    Public Property CompanyName() As String
+        Get
+            Try
+                If String.IsNullOrEmpty(Session("CompanyName")) Then
 
+                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Session("CompanyName") = CType(userRow("CompanyName"), String)
+                End If
+                Return Session("CompanyName")
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("CompanyName") = Value
+        End Set
+    End Property
 
     Public Property UserFirstName() As String
         Get
             Try
-                If Session("UserFirstName") Is Nothing Then
+                If String.IsNullOrEmpty(Session("UserFirstName")) Then
+
                     Dim userRow As DataRow = GetUserByEmail(UserId)
                     Session("UserFirstName") = CType(userRow("FirstName"), String)
                 End If
                 Return Session("UserFirstName")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)
@@ -158,13 +173,14 @@ Public Class clsData
     Public Property UserLastName() As String
         Get
             Try
-                If Session("UserLastName") Is Nothing Then
+                If String.IsNullOrEmpty(Session("UserLastName")) Then
+
                     Dim userRow As DataRow = GetUserByEmail(UserId)
                     Session("UserLastName") = CType(userRow("LastName"), String)
                 End If
                 Return Session("UserLastName")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)
@@ -174,13 +190,14 @@ Public Class clsData
     Public Property UserEmail() As String
         Get
             Try
-                If Session("UserEmail") Is Nothing Then
+                If String.IsNullOrEmpty(Session("UserEmail")) Then
+
                     Dim userRow As DataRow = GetUserByEmail(UserId)
                     Session("UserEmail") = CType(userRow("Email"), String)
                 End If
                 Return Session("UserEmail")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)

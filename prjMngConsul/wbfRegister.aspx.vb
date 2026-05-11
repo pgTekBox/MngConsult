@@ -36,28 +36,16 @@ Public Class wbfRegister
                 p.Add(New SqlClient.SqlParameter("@ActivationToken", MyToken))
                 Dim ds As DataSet = ExecuteSQLds("s0256GetUserByActivationToken", p)
 
-
-
                 ' Stocker l'email pour le bouton "Renvoyer"
                 ViewState("RegisteredEmail") = ds.Tables(0).Rows(0)("Email").ToString()
 
 
-
-
-
-
-                'litSuccessEmail.Text = email
-
-                ' Stocker l'email pour le bouton "Renvoyer"
-                'ViewState("RegisteredEmail") = email
-                'Response.Redirect("~/wbfActivate.aspx?token=" & ActiveToken)
-                Return
             End If
 
         End If
         btnRegister.Text = If(Abonnement = "solo", "Créer mon compte Solo", If(Abonnement = "comsolo", "Créer mon compte ComSolo", If(Abonnement = "com119", "Créer mon compte COM119", "Créer mon compte")))
 
-        If Not IsPostBack AndAlso UserId IsNot "" Then
+        If Not IsPostBack AndAlso UserId <> 0 Then
             Response.Redirect("~/Default.aspx")
         End If
     End Sub

@@ -10,7 +10,7 @@ Public Class wbfPayment
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté
-        If Session("UserId") Is Nothing Then
+        If UserId = "" Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
@@ -43,7 +43,7 @@ Public Class wbfPayment
 
         Dim dr As DataRow = GetUserAndCompanyInfo(UserId)
 
-
+        Company = dr("CompanyGUID")
 
 
         Dim planCode As String = dr("Abonnement")

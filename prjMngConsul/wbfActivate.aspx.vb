@@ -38,12 +38,13 @@ Public Class wbfActivate
             Select Case result
 
                 Case 1   ' Activation OK
-                    Dim userId As Integer = CInt(r("UserId"))
-                    Dim email As String = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
+                    UserId = CInt(r("UserId"))
+                    UserEmail = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
+                    Company = CType(r("CompanyGUID"), Guid)
 
-                    LoadUserSession(userId)
+                    LoadUserSession(UserId)
 
-                    litEmail.Text = email
+                    litEmail.Text = UserEmail
                     ShowSuccess()
 
                 Case -1
@@ -77,14 +78,13 @@ Public Class wbfActivate
 
             Dim r As DataRow = ds.Tables(0).Rows(0)
 
-            Session("UserId") = CInt(r("Id"))
-            Session("UserEmail") = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
-            Session("UserFirstName") = If(r("FirstName") Is DBNull.Value, "", r("FirstName").ToString())
-            Session("UserLastName") = If(r("LastName") Is DBNull.Value, "", r("LastName").ToString())
-            Session("IsAdmin") = (Not r("IsAdmin") Is DBNull.Value) AndAlso CBool(r("IsAdmin"))
-            Session("IsAccountant") = (Not r("IsAccountant") Is DBNull.Value) AndAlso CBool(r("IsAccountant"))
-            Session("CompanyGUID") = CType(r("CompanyGUID"), Guid)
-            Session("CompanyName") = If(r("CompanyName") Is DBNull.Value, "", r("CompanyName").ToString())
+
+            UserFirstName = If(r("FirstName") Is DBNull.Value, "", r("FirstName").ToString())
+            UserLastName = If(r("LastName") Is DBNull.Value, "", r("LastName").ToString())
+            isAdmin  = (Not r("IsAdmin") Is DBNull.Value) AndAlso CBool(r("IsAdmin"))
+            IsAccountant = (Not r("IsAccountant") Is DBNull.Value) AndAlso CBool(r("IsAccountant"))
+            Company = CType(r("CompanyGUID"), Guid)
+            CompanyName = If(r("CompanyName") Is DBNull.Value, "", r("CompanyName").ToString())
 
         Catch
             ' Si le chargement échoue, l'utilisateur devra se connecter manuellement
