@@ -339,9 +339,10 @@ Public Class wbfSupplierInvoinceEdit
     Private Sub btnAddLine_Click(sender As Object, e As EventArgs) Handles btnAddLine.Click
         If Comptabilise Then Return
         UpdateAllItemInViewstate()
+        Dim Newid As Integer = (CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (les lignes existantes ont des Id positifs issus de la BD, les nouvelles lignes auront des Id négatifs générés à la volée)    
 
         Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
-        dr("Id") = 0
+        dr("Id") = Newid
         dr("Description") = ""
         dr("Qty") = 1
         dr("UnitPrice") = 0

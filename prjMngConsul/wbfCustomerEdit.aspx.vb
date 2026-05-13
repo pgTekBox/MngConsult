@@ -71,7 +71,10 @@ Public Class wbfCustomerEdit
         SetDDL(rddlProvince, "Name", "Value", "s0014GetProvince")
         SetDDL(rddlPays, "Name", "Value", "s0015GetCountry")
         SetDDL(rddlAddressType, "Name", "Value", "s0020AddressType")
-        SetDDL(rddlPartyType, "Name", "Value", "s0022GetPartyType")
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@Type", 1))
+        SetDDL(rddlPartyType, "Name", "Value", "s0022GetPartyType", p)
     End Sub
 
 
@@ -148,8 +151,8 @@ Public Class wbfCustomerEdit
 
 
     'Sauvegarde les infos du Customer (hors adresses) dans la BD
-    Sub SaveCustomer(CustomerId As Integer)
-        If CustomerId = 0 Then
+    Sub SaveCustomer(MyCustomerId As Integer)
+        If MyCustomerId = 0 Then
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
@@ -350,8 +353,12 @@ Public Class wbfCustomerEdit
 
     ' Insère une nouvelle adresse dans la DataTable en ViewState (sans toucher à la BD) pour l'afficher immédiatement dans le grid
     Private Sub InsertAdresseIdViewState()
+
+        Dim Newid As Integer = (CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (les lignes existantes ont des Id positifs issus de la BD, les nouvelles lignes auront des Id négatifs générés à la volée)    
+
+
         Dim dr As DataRow = CType(ViewState("PartyAddressTable"), DataTable).NewRow()
-        dr("Id") = 0 'Nouvelle adresse
+        dr("Id") = Newid 'Nouvelle adresse
         dr("Dirty") = 1
         dr("Deleted") = 0
         dr("AddressTypeId") = DbNullIfEmpty(rddlAddressType.SelectedValue)

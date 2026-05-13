@@ -65,103 +65,18 @@ Public Class wbfInvoiceEdit
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
+
             InvoiceId = CInt(Request.QueryString("Id"))
             CreateItemsTable()
             LoadItemTableFromBD()
             ProductsTable = GetProductsTable()
             BindData()
             'BinDDL()
-
-            ' Si on arrive depuis un rendez-vous (nouvelle facture seulement), pré-remplir
-            If InvoiceId = 0 Then
-                Dim apptId As Integer = 0
-                Integer.TryParse(Request.QueryString("AppointmentId"), apptId)
-                If apptId > 0 Then
-                    PrefillFromAppointment(apptId)
-                End If
-            End If
         End If
         ApplyReadOnlyMode()
 
 
     End Sub
-
-    ''' <summary>
-    ''' Pré-remplit la facture à partir d'un rendez-vous :
-    ''' - Client (PartyGUID + nom affiché)
-    ''' - Date d'émission = aujourd'hui (par défaut)
-    ''' - Une ligne avec le produit lié au type du RDV
-    ''' </summary>
-    Private Sub PrefillFromAppointment(appointmentId As Integer)
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@AppointmentId", appointmentId))
-        Dim ds As DataSet = ExecuteSQLds("s0114GetAppointmentForInvoice", p)
-
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            Return
-        End If
-
-        Dim r As DataRow = ds.Tables(0).Rows(0)
-
-        ' === 1. Client ===
-        If Not (r("CustomerGUID") Is DBNull.Value) Then
-            CustomerGUID = CType(r("CustomerGUID"), Guid)
-            lblCustomer.Text = If(r("CustomerName") Is DBNull.Value, "", r("CustomerName").ToString())
-            lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this," & InvoiceId.ToString & ")")
-
-            If Not (r("CustomerFullName") Is DBNull.Value) Then
-                rdLabel.Text = r("CustomerFullName").ToString()
-            End If
-        End If
-
-        ' === 2. Dates par défaut ===
-        If Not dpIssueDate.SelectedDate.HasValue Then
-            dpIssueDate.SelectedDate = Date.Now.Date
-        End If
-        If Not dpDueDate.SelectedDate.HasValue Then
-            dpDueDate.SelectedDate = Date.Now.Date.AddDays(30)
-        End If
-
-        ' === 3. Ligne de facture (produit lié au type de RDV) ===
-        If Not (r("ProductId") Is DBNull.Value) AndAlso CInt(r("ProductId")) > 0 Then
-
-            Dim dt As DataTable = CType(ViewState("ItemsTable"), DataTable)
-            Dim dr As DataRow = dt.NewRow()
-
-            dr("Id") = 0
-            dr("ProductId") = CInt(r("ProductId"))
-            dr("ProductName") = If(r("ProductName") Is DBNull.Value, "", r("ProductName").ToString())
-            dr("Description") = If(r("ProductDescription") Is DBNull.Value, "", r("ProductDescription").ToString())
-            dr("Qty") = If(r("ProductQty") Is DBNull.Value, 1.0, CDbl(r("ProductQty")))
-            dr("UnitPrice") = If(r("ProductPrice") Is DBNull.Value, 0.0, CDbl(r("ProductPrice")))
-            dr("Amount") = CDbl(dr("Qty")) * CDbl(dr("UnitPrice"))
-
-            ' Compte de revenus (CompteVente du produit)
-            Dim accId As Integer = 0
-            If Not (r("ProductAccountId") Is DBNull.Value) Then
-                Integer.TryParse(r("ProductAccountId").ToString(), accId)
-            End If
-            dr("AccountId") = accId
-            dr("AccountName") = ""
-
-            dr("TaxeStatus") = If(r("ProductTaxeStatus") Is DBNull.Value, 0, CInt(r("ProductTaxeStatus")))
-            dr("Dirty") = 1
-            dr("Deleted") = 0
-            dr("Ordre") = 1
-
-            dt.Rows.Add(dr)
-            ViewState("ItemsTable") = dt
-
-            BindItemGrid()
-        End If
-
-    End Sub
-
     'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
@@ -323,7 +238,6 @@ Public Class wbfInvoiceEdit
             'ddlCustomer.Text = orow("Name").ToString()
             CustomerGUID = orow("PartyGUID")
             lblCustomer.Text = orow("Name").ToString()
-            lblCustomer.Attributes.Add("onclick", "openCustomerPicker(this," & InvoiceId.ToString & ")")
             rdLabel.Text = orow("FullName").ToString()
             dpIssueDate.SelectedDate = orow("IssueDate")
             dpDueDate.SelectedDate = orow("DueDate")
@@ -411,8 +325,12 @@ Public Class wbfInvoiceEdit
         If Comptabilise Then Return
         UpdateAllItemInViewstate()
 
+        Dim Newid As Integer = (CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (les lignes existantes ont des Id positifs issus de la BD, les nouvelles lignes auront des Id négatifs générés à la volée)    
+
+
+
         Dim dr As DataRow = CType(ViewState("ItemsTable"), DataTable).NewRow()
-        dr("Id") = (CType(ViewState("ItemsTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (qui n'ont pas encore d'Id en BD) des lignes existantes
+        dr("Id") = Newid
         dr("Description") = ""
         dr("Qty") = 1
         dr("UnitPrice") = 0
@@ -464,6 +382,9 @@ Public Class wbfInvoiceEdit
         Dim ParamPartyGUID As New SqlClient.SqlParameter("@PartyGUID", SqlDbType.UniqueIdentifier)
         ParamPartyGUID.Value = CustomerGUID
 
+        Dim ParamCompanyGUID As New SqlClient.SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier)
+        ParamCompanyGUID.Value = Company
+
         Dim ParamIssueDate As New SqlClient.SqlParameter("@IssueDate", SqlDbType.DateTime)
         ParamIssueDate.Value = dpIssueDate.SelectedDate
 
@@ -475,37 +396,133 @@ Public Class wbfInvoiceEdit
         ParamItems.Value = tvp
         ParamItems.TypeName = "dbo.TVP_InvoiceItem_v6"
 
-        ' Pour le cas où la facture est créée (Id=0) - on passe le CompanyGUID
-        Dim ParamCompanyGUID As New SqlClient.SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier)
-        ParamCompanyGUID.Value = Company
 
         oCom.Parameters.Add(ParamDueDate)
         oCom.Parameters.Add(ParamIssueDate)
         oCom.Parameters.Add(ParamPartyGUID)
         oCom.Parameters.Add(ParamPost)
         oCom.Parameters.Add(ParamInvoiceId)
-        oCom.Parameters.Add(ParamCompanyGUID)
         oCom.Parameters.Add(ParamItems)
+        oCom.Parameters.Add(ParamCompanyGUID)
+
+
+
 
         oCom.Connection.Open()
         'oCom.ExecuteNonQuery()
-        Dim retval = oCom.ExecuteScalar()
+        Dim MyInvoiceId As Integer = CInt(oCom.ExecuteScalar())
         oCom.Connection.Close()
 
-        ' Si on vient de créer la facture, mettre à jour InvoiceId
-        ' avec la valeur retournée par la procédure
-        If retval IsNot Nothing AndAlso Not IsDBNull(retval) Then
-            Dim newId As Integer = 0
-            If Integer.TryParse(retval.ToString(), newId) AndAlso newId > 0 Then
-                InvoiceId = newId
-            End If
-        End If
+
+
+        GenerateAndDownloadPdf(MyInvoiceId)
+
 
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
 
 
     End Sub
+    ''' <summary>
+    ''' Génère le PDF de la facture, le stocke dans T060Document.PdfData,
+    ''' puis l'envoie au navigateur en téléchargement.
+    ''' </summary>
+    Private Sub GenerateAndDownloadPdf(invoiceId As Integer)
+
+        ' 1. Charger les données de la facture
+        Dim inv As InvoiceData = LoadInvoiceForPdf(invoiceId)
+        If inv Is Nothing Then Exit Sub
+
+        ' 2. Générer le PDF en mémoire
+        Dim pdfBytes As Byte() = InvoicePdfBuilder.Build(inv)
+
+        ' 3. Stocker dans T060Document
+        Dim fileName As String = "Invoice_" & inv.InvoiceNumber & ".pdf"
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        p.Add(New SqlClient.SqlParameter("@PdfData", pdfBytes))
+        p.Add(New SqlClient.SqlParameter("@FileName", fileName))
+        ExecuteSQL("s0116SaveInvoicePdf", p)
+
+        ' 4. Envoyer au navigateur
+        'Response.Clear()
+        'Response.ContentType = "application/pdf"
+        'Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
+        'Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
+        'Response.BinaryWrite(pdfBytes)
+        'Response.Flush()
+        'Response.SuppressContent = True
+        'Context.ApplicationInstance.CompleteRequest()
+    End Sub
+
+
+    Private Function LoadInvoiceForPdf(invoiceId As Integer) As InvoiceData
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        Dim ds As DataSet = ExecuteSQLds("s0115GetInvoiceForPdf", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return Nothing
+        End If
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim inv As New InvoiceData()
+
+        ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
+        inv.CompanyName = "MngConsul Inc."
+        inv.CompanyTagline = "Cabinet de massothérapie"
+        inv.CompanyAddressLine1 = "123 rue Principale"
+        inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
+        inv.CompanyPhone = "(514) 555-1234"
+        inv.CompanyEmail = "info@mngconsul.com"
+        inv.CompanyTpsNumber = "123456789 RT0001"
+        inv.CompanyTvqNumber = "1234567890 TQ0001"
+
+        ' === Facture ===
+        inv.InvoiceNumber = If(r("DocumentNumber") Is DBNull.Value, invoiceId.ToString(), r("DocumentNumber").ToString())
+        inv.IssueDate = If(r("DocumentDate") Is DBNull.Value, Date.Now.Date, CDate(r("DocumentDate")))
+        inv.DueDate = If(r("DueDate") Is DBNull.Value, inv.IssueDate.AddDays(30), CDate(r("DueDate")))
+
+        ' === Client (depuis les colonnes copiées dans T060Document) ===
+        inv.CustomerName = If(r("Name") Is DBNull.Value, "", r("Name").ToString())
+        inv.CustomerAddressLine1 = If(r("Address1") Is DBNull.Value, "", r("Address1").ToString())
+
+        Dim line2 As New System.Text.StringBuilder()
+        If Not (r("City") Is DBNull.Value) Then line2.Append(r("City").ToString())
+        If Not (r("State") Is DBNull.Value) Then line2.Append(", ").Append(r("State").ToString())
+        If Not (r("PostalCode") Is DBNull.Value) Then line2.Append(" ").Append(r("PostalCode").ToString())
+        inv.CustomerAddressLine2 = line2.ToString()
+
+        inv.CustomerPhone = If(r("Phone") Is DBNull.Value, "", r("Phone").ToString())
+        inv.CustomerEmail = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
+
+        ' === Totaux ===
+        inv.SubTotal = If(r("SubTotal") Is DBNull.Value, 0D, CDec(r("SubTotal")))
+        inv.Tps = If(r("TPS") Is DBNull.Value, 0D, CDec(r("TPS")))
+        inv.Tvq = If(r("TVQ") Is DBNull.Value, 0D, CDec(r("TVQ")))
+        inv.Total = If(r("Total") Is DBNull.Value, 0D, CDec(r("Total")))
+
+        ' === Lignes (table 2 du DataSet) ===
+        If ds.Tables.Count >= 2 Then
+            For Each rl As DataRow In ds.Tables(1).Rows
+                inv.Items.Add(New InvoiceLine With {
+                    .Description = If(rl("ProductName") Is DBNull.Value OrElse rl("ProductName").ToString() = "",
+                                       If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
+                                       rl("ProductName").ToString()),
+                    .SubDescription = If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
+                    .Qty = If(rl("Qty") Is DBNull.Value, 1D, CDec(rl("Qty"))),
+                    .UnitPrice = If(rl("UnitPrice") Is DBNull.Value, 0D, CDec(rl("UnitPrice"))),
+                    .Amount = If(rl("Amount") Is DBNull.Value, 0D, CDec(rl("Amount")))
+                })
+            Next
+        End If
+
+        Return inv
+    End Function
+
+
 
     'ItemCommand du Repeater pour gérer la suppression d'une ligne: on marque la ligne comme Deleted=1 dans le ViewState("ItemsTable") et on rebind le Repeater pour que la ligne disparaisse de l'affichage (le vrai delete en BD sera géré par la procédure stockée lors de la sauvegarde en fonction du flag Deleted)
     Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand
@@ -636,7 +653,12 @@ Public Class wbfInvoiceEdit
     End Function
 
     Private Function GetCustomersTable() As DataTable
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party 'Client'") ' <-- ta proc
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@Type", "Client"))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+
+
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party", p) '  
         Return ds.Tables(0)
     End Function
 

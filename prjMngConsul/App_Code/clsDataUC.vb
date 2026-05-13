@@ -8,7 +8,6 @@ Imports Telerik.Web.UI.Editor.DialogControls
 Public Class clsDataUC
     Inherits System.Web.UI.UserControl
 
-
     Private Function GetUserByEmail(email As String) As DataRow
         Try
             Dim p As New Collection
@@ -21,13 +20,27 @@ Public Class clsDataUC
         End Try
         Return Nothing
     End Function
+    Private Function GetUserById(UserId As Integer) As DataRow
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Id", UserId))
+            Dim ds As DataSet = ExecuteSQLds("s0314GetUserByUserId", p)
+            If ds.Tables(0).Rows.Count > 0 Then Return ds.Tables(0).Rows(0)
+        Catch ex As Exception
+            ' Ne pas révéler les détails au user
+            System.Diagnostics.Debug.WriteLine("Login error: " & ex.Message)
+        End Try
+        Return Nothing
+    End Function
+
+
 
 
     Public Property IsAccountant() As Boolean
         Get
             Try
                 If Session("IsAccountant") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("IsAccountant") = CType(userRow("IsAccountant"), Boolean)
                 End If
                 Return Session("IsAccountant")
@@ -94,11 +107,12 @@ Public Class clsDataUC
         End Set
     End Property
 
-    Public Property UserId() As String
+
+    Public Property UserId() As Integer
         Get
             Try
                 If Session("UserId") Is Nothing Then
-                    Session("UserId") = ""
+                    Session("UserId") = 0
                 End If
 
                 Return Session("UserId")
@@ -107,8 +121,12 @@ Public Class clsDataUC
             End Try
 
         End Get
-        Set(ByVal Value As String)
-            Session("UserId") = Value.Trim
+        Set(ByVal Value As Integer)
+
+            Session("UserId") = Value
+
+
+
         End Set
     End Property
 
@@ -118,7 +136,7 @@ Public Class clsDataUC
         Get
             Try
                 If Session("UserFirstName") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserFirstName") = CType(userRow("FirstName"), String)
                 End If
                 Return Session("UserFirstName")
@@ -135,7 +153,7 @@ Public Class clsDataUC
         Get
             Try
                 If Session("UserLastName") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserLastName") = CType(userRow("LastName"), String)
                 End If
                 Return Session("UserLastName")
@@ -151,7 +169,7 @@ Public Class clsDataUC
         Get
             Try
                 If Session("UserEmail") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserEmail") = CType(userRow("Email"), String)
                 End If
                 Return Session("UserEmail")

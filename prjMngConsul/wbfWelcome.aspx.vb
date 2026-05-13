@@ -7,7 +7,7 @@ Public Class wbfWelcome
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté
-        If Session("UserId") Is Nothing Then
+        If UserId = 0 Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
@@ -21,7 +21,7 @@ Public Class wbfWelcome
     Private Sub LoadWelcomeInfo()
 
         ' === Prénom de l'utilisateur ===
-        Dim firstName As String = If(Session("UserFirstName"), "").ToString()
+        Dim firstName As String = UserFirstName
         If String.IsNullOrEmpty(firstName) Then firstName = "à bord"
         litFirstName.Text = firstName
 

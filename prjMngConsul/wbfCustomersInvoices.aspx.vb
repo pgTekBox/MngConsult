@@ -101,7 +101,10 @@ Public Class wbfCustomersInvoices
     ''' Gère les boutons CommandName de la grille (DownloadPdf, DeleteInvoice, etc.)
     ''' </summary>
     Private Sub rlvClientsFactures_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClientsFactures.ItemCommand
+
+
         Select Case e.CommandName
+
             Case "CreatePdf"
                 Dim invoiceId As Integer = 0
                 Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
@@ -111,9 +114,26 @@ Public Class wbfCustomersInvoices
                 End If
 
             Case "DeleteInvoice"
-                ' (à ajouter si vous avez une procédure de suppression)
+                Dim invoiceId As Integer = 0
+                Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
+                DeleteDocument(invoiceId)
+                rlvClientsFactures.Rebind()
         End Select
     End Sub
+
+    Sub DeleteDocument(invoiceId As Integer)
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s317DeleteDocument ", p)
+        If ds.Tables(0).Rows(0)("RetCode") = 2 Then
+
+
+        End If
+    End Sub
+
+
 
     ''' <summary>
     ''' Génère le PDF de la facture, le stocke dans T060Document.PdfData,

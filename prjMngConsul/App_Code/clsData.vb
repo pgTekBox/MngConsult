@@ -22,13 +22,25 @@ Public Class clsData
         End Try
         Return Nothing
     End Function
+    Private Function GetUserById(UserId As Integer) As DataRow
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Id", UserId))
+            Dim ds As DataSet = ExecuteSQLds("s0314GetUserByUserId", p)
+            If ds.Tables(0).Rows.Count > 0 Then Return ds.Tables(0).Rows(0)
+        Catch ex As Exception
+            ' Ne pas révéler les détails au user
+            System.Diagnostics.Debug.WriteLine("Login error: " & ex.Message)
+        End Try
+        Return Nothing
+    End Function
 
 
     Public Property IsAccountant() As Boolean
         Get
             Try
                 If Session("IsAccountant") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("IsAccountant") = CType(userRow("IsAccountant"), Boolean)
                 End If
                 Return Session("IsAccountant")
@@ -46,7 +58,7 @@ Public Class clsData
         Get
             Try
                 If Session("isAdmin") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("isAdmin") = CType(userRow("isAdmin"), Boolean)
                 End If
                 Return Session("isAdmin")
@@ -139,7 +151,7 @@ Public Class clsData
             Try
                 If String.IsNullOrEmpty(Session("CompanyName")) Then
 
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("CompanyName") = CType(userRow("CompanyName"), String)
                 End If
                 Return Session("CompanyName")
@@ -157,7 +169,7 @@ Public Class clsData
             Try
                 If String.IsNullOrEmpty(Session("UserFirstName")) Then
 
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserFirstName") = CType(userRow("FirstName"), String)
                 End If
                 Return Session("UserFirstName")
@@ -175,7 +187,7 @@ Public Class clsData
             Try
                 If String.IsNullOrEmpty(Session("UserLastName")) Then
 
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserLastName") = CType(userRow("LastName"), String)
                 End If
                 Return Session("UserLastName")
@@ -192,7 +204,7 @@ Public Class clsData
             Try
                 If String.IsNullOrEmpty(Session("UserEmail")) Then
 
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("UserEmail") = CType(userRow("Email"), String)
                 End If
                 Return Session("UserEmail")

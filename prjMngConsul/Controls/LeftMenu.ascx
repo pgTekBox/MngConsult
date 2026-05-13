@@ -38,6 +38,14 @@
     <aside class="sidebar" id="appSidebar" aria-label="Navigation principale">
         <div class="sidebar-inner">
 
+         <a class="nav-item" href="~/wbfWelcome.aspx" runat="server" data-navlink>
+                <span class="nav-ico" aria-hidden="true">🏠</span>
+                <span class="nav-txt">Bienvenu</span>
+            </a>
+
+
+
+
             <!-- Item simple -->
             <a class="nav-item" href="~/default.aspx" runat="server" data-navlink>
                 <span class="nav-ico" aria-hidden="true">🏠</span>

@@ -312,7 +312,8 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter Facture"
                     CausesValidation="false"
-                    OnClientClick="openCustomerInvoiceWindow(0); return false;" />
+                    OnClientClick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" 
+                />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -425,7 +426,7 @@
             </div>
         </div>
                 <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openCustomerWindow(0); return false;" title="Ajouter un client">+</button>
+        <button class="fab-add" onclick="openRadWindow(0, ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture""); return false;" title="Ajouter un client">+</button>
 
 
 

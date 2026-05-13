@@ -47,33 +47,7 @@
 
           
 
-        /* =========================
-            TABLETTE — 769px à 1024px
-         ========================= */
-        @media  (max-width: 1024px) {
-            .listview-row {
-                grid-template-columns: minmax(180px, 1.4fr) 30px;
-                gap: 12px;
-                padding: 12px 14px;
-            }
-
-
-            .listview-list-head {
-                display: grid;
-                grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
-                gap: 16px;
-                padding: 14px 16px;
-                font-weight: 800;
-                font-size: 13px;
-                color: #0f172a;
-                background: #f8fafc;
-                border-bottom: 1px solid var(--mc-stroke);
-                position: sticky;
-                top: 0;
-                z-index: 0;
-                box-sizing: border-box;
-            }
-        }
+      
 
         /* =========================
              MOBILE LARGE  grands smartphones en portrait
@@ -119,7 +93,7 @@
     <telerik:RadWindowManager ID="rwmCustomers" runat="server" EnableShadow="true"></telerik:RadWindowManager>
 
 
-  <telerik:RadAjaxManager ID="Ram1" runat="server">
+  <telerik:RadAjaxManager ID="Ram1" runat="server"  ClientIDMode="Static">
       <AjaxSettings>
 
           <%-- Refresh du label fournisseur + label adresse + lignes --%>
@@ -130,13 +104,18 @@
               </UpdatedControls>
           </telerik:AjaxSetting>
             <telerik:AjaxSetting AjaxControlID="btnSearch">
-      <UpdatedControls>
-          <telerik:AjaxUpdatedControl ControlID="rlvClients" />
+              <UpdatedControls>
+                <telerik:AjaxUpdatedControl ControlID="rlvClients" />
          
-      </UpdatedControls>
-  </telerik:AjaxSetting>
+              </UpdatedControls>
+            </telerik:AjaxSetting>
           
-           
+             <telerik:AjaxSetting AjaxControlID="btnClear">
+    <UpdatedControls>
+      <telerik:AjaxUpdatedControl ControlID="rlvClients" />
+         
+    </UpdatedControls>
+  </telerik:AjaxSetting>
 
       </AjaxSettings>
   </telerik:RadAjaxManager>
@@ -154,7 +133,7 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter Client"
                     CausesValidation="false"
-                    OnClientClick="openCustomerWindow(0); return false;" />
+                    OnClientClick="openNewCustomerWindow(0); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
                         CssClass="input  txttbsearch"
@@ -254,12 +233,21 @@
         ClientIDMode="Static">
     </telerik:RadWindow>
     <script src="js/RadWindows.js"></script>
+
+
+
     <script type="text/javascript">
-         
+
+
+
+        function openNewCustomerWindow() {
+            openRadWindow(0, "rwCustomer", "wbfCustomerEdit.aspx", "Ajouter un client", "Ajouter un client");
+        }   
+
 
         function rwCustomer_OnClientClose(sender, args) {
 
-            var ajaxManager = $find("RAP1");
+            var ajaxManager = $find("Ram1");
             if (ajaxManager) {
                 ajaxManager.ajaxRequest("refreshgrid");
             }

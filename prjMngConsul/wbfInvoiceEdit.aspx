@@ -571,7 +571,7 @@
                             <div class="row2">
                                 <div>
                                     <label>Client</label>
-                                    <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Select client"></asp:Label>
+                                    <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Select client" onclick="openCustomerPicker(this); return false;"></asp:Label>
                                 </div>
 
                                 <div class="field">

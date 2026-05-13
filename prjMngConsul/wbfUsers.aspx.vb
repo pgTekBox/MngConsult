@@ -38,7 +38,7 @@ Public Class wbfUsers
                 Integer.TryParse(e.CommandArgument.ToString(), id)
                 If id > 0 Then
                     ' Empêcher de se supprimer soi-même
-                    If UserId IsNot Nothing AndAlso UserId = id Then
+                    If UserId <> id Then
                         ' On pourrait afficher un message
                     Else
                         DeleteUser(id)

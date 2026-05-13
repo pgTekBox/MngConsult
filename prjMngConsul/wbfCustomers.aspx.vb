@@ -15,9 +15,23 @@ Public Class wbfCustomers
             rlvClients.Rebind()
         End If
     End Sub
+    Private Sub rlvClients_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClients.ItemCommand
+        If e.CommandArgument Is Nothing Then Return
 
+        Select Case e.CommandName
+            Case "DeleteClient"
+                Dim clientId As Integer = CInt(e.CommandArgument)
+                DeleteClient(clientId)
+                rlvClients.Rebind()
+        End Select
+    End Sub
 
-
+    Sub DeleteClient(clientId As Integer)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@PartyId", clientId))
+        ExecuteSQL("s0316DeleteParty", p)
+    End Sub
     Private Sub rlvClients_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClients.NeedDataSource
         Dim dt As DataTable = GetData()
         rlvClients.DataSource = dt

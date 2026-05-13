@@ -10,7 +10,7 @@ Public Class wbfPayment
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté
-        If UserId = "" Then
+        If UserId = 0 Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If

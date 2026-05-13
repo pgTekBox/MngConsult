@@ -77,13 +77,13 @@ Partial Public Class wbfSuppliers
     Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
-    '''rgFournisseurs control.
+    '''rlvSuppliers control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents rgFournisseurs As Global.Telerik.Web.UI.RadListView
+    Protected WithEvents rlvSuppliers As Global.Telerik.Web.UI.RadListView
 
     '''<summary>
     '''rwSupplier control.

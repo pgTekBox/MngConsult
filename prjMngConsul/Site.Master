@@ -169,7 +169,7 @@ a{
 
 /* =========================
              MOBILE LARGE  grands smartphones en portrait
-         ========================= */
+========================= */
         @media  (max-width: 768px) {
 
 
@@ -179,16 +179,16 @@ a{
     }
 
 
-    .mc-shell{
+   /* .mc-shell{
         grid-template-columns:1fr;
-    }
+    }*/
 
     .mc-sidebar{
         position:relative;
         top:auto;
         margin-right:0;
     }
-
+        }
     /* =========================
          PETIT MOBILE — max 480px
            ========================= */
@@ -199,7 +199,7 @@ a{
         }
 
 
-}
+ 
 </style>
 
 

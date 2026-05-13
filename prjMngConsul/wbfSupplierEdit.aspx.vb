@@ -1,8 +1,10 @@
-﻿Imports System.Diagnostics.Eventing
+﻿
+Imports System.Diagnostics.Eventing
 Imports System.Runtime.InteropServices
 Imports Telerik.Web.UI
 Imports Telerik.Web.UI.OrgChartStyles
 Imports Telerik.Web.UI.Skins
+
 
 Public Class wbfSupplierEdit
     Inherits clsData
@@ -69,7 +71,9 @@ Public Class wbfSupplierEdit
         SetDDL(rddlProvince, "Name", "Value", "s0014GetProvince")
         SetDDL(rddlPays, "Name", "Value", "s0015GetCountry")
         SetDDL(rddlAddressType, "Name", "Value", "s0020AddressType")
-        SetDDL(rddlPartyType, "Name", "Value", "s0022GetPartyType")
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@Type", 2))
+        SetDDL(rddlPartyType, "Name", "Value", "s0022GetPartyType", p)
     End Sub
 
 
@@ -90,7 +94,7 @@ Public Class wbfSupplierEdit
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
             p.Add(New SqlClient.SqlParameter("@PartyId", SupplierId))
-            Dim ds As DataSet = ExecuteSQLds("s0012GetOneSuppliersCustomer", p)
+            Dim ds As DataSet = ExecuteSQLds("s0012GetOneSuppliersSupplier", p)
 
             txtName.Text = ds.Tables(0).Rows(0)("Name").ToString()
             txtWebsite.Text = ds.Tables(0).Rows(0)("Website").ToString()
@@ -145,9 +149,9 @@ Public Class wbfSupplierEdit
     End Sub
 
 
-    'Sauvegarde les infos du fournisseur (hors adresses) dans la BD
-    Sub SaveSupplier(SupplierId As Integer)
-        If SupplierId = 0 Then
+    'Sauvegarde les infos du Supplier (hors adresses) dans la BD
+    Sub SaveSupplier(MySupplierId As Integer)
+        If MySupplierId = 0 Then
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
@@ -195,19 +199,21 @@ Public Class wbfSupplierEdit
 
     ''' <summary>
     ''' Gère les commandes du RadListView des adresses (EditAddress, DeleteAddress).
+    ''' Le CommandArgument contient l'Id de l'adresse, passé via Eval("Id") dans l'ItemTemplate.
     ''' </summary>
     Private Sub rlvAddr_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvAddr.ItemCommand
 
-        ' Ignorer les commandes système (Rebind, etc.)
+        ' Ignorer les commandes système (ex: Rebind)
         If TypeOf e.ListViewItem IsNot RadListViewItem Then Return
 
-        ' Lire l'Id depuis CommandArgument (remplace item.GetDataKeyValue qui est propre à RadGrid)
+        ' Lire l'Id depuis CommandArgument (défini dans le bouton ASPX)
         Dim addrId As Integer = 0
         If Not Integer.TryParse(e.CommandArgument?.ToString(), addrId) Then Return
 
         Select Case e.CommandName
             Case "EditAddress"
                 OpenAddrWindow(addrId)
+
             Case "DeleteAddress"
                 DeleteAddress(addrId)
                 rlvAddr.Rebind()
@@ -256,11 +262,14 @@ Public Class wbfSupplierEdit
         pnlMsg.Visible = True
         pMsg.InnerText = "OpenAddrWindow appelé - id=" & addrId & " A1=" & txtA1.Text
         ' Ouvre la fenêtre
-        ' ✅ Ouvre côté client (marche même en AJAX)
+        ' ✅ Ouvre côté fournisseur (marche même en AJAX)
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "openRw", "$find('" & rwAddr.ClientID & "').show();", True)
 
     End Sub
-    ' Bind la DataTable en ViewState au grid à chaque besoin de données
+    ''' <summary>
+    ''' Bind la DataTable en ViewState au RadListView des adresses à chaque besoin de données.
+    ''' Filtre les lignes supprimées (Deleted = 0).
+    ''' </summary>
     Private Sub rlvAddr_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAddr.NeedDataSource
         Dim dt As DataTable = CType(ViewState("PartyAddressTable"), DataTable)
         If dt IsNot Nothing Then
@@ -269,6 +278,7 @@ Public Class wbfSupplierEdit
             rlvAddr.DataSource = dv
         End If
     End Sub
+
 
     ' Rafraîchit le grid (rebind) après chaque opération sur les adresses    
     Private Sub btnAddrRefresh_Click(sender As Object, e As EventArgs) Handles btnAddrRefresh.Click
@@ -342,8 +352,12 @@ Public Class wbfSupplierEdit
 
     ' Insère une nouvelle adresse dans la DataTable en ViewState (sans toucher à la BD) pour l'afficher immédiatement dans le grid
     Private Sub InsertAdresseIdViewState()
+
+        Dim Newid As Integer = (CType(ViewState("PartyAddressTable"), DataTable).Rows.Count + 1) * -1 ' Id négatif temporaire pour différencier les nouvelles lignes (les lignes existantes ont des Id positifs issus de la BD, les nouvelles lignes auront des Id négatifs générés à la volée)    
+
         Dim dr As DataRow = CType(ViewState("PartyAddressTable"), DataTable).NewRow()
-        dr("Id") = 0 'Nouvelle adresse
+
+        dr("Id") = Newid
         dr("Dirty") = 1
         dr("Deleted") = 0
         dr("AddressTypeId") = DbNullIfEmpty(rddlAddressType.SelectedValue)
@@ -475,5 +489,6 @@ Public Class wbfSupplierEdit
         If String.IsNullOrWhiteSpace(s) Then Return DBNull.Value
         Return s.Trim()
     End Function
+
 
 End Class

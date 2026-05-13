@@ -64,6 +64,17 @@ Public Class wbfLogin
             Return
         End If
 
+        Dim pac As New Collection
+        pac.Add(New SqlParameter("@UserId", CType(userRow("Id"), Integer)))
+        Dim dsac As DataSet = ExecuteSQLds("s0315GetProfileCompleted", pac)
+        If dsac.Tables(0).Rows(0)("ProfileCompleted") < 100 Then
+            Response.Redirect("~/wbfNewUser.aspx")
+            Return
+        End If
+
+
+
+
 
 
 
