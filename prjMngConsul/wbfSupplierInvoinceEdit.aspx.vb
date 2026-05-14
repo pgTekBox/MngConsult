@@ -785,6 +785,7 @@ Public Class wbfSupplierInvoinceEdit
     Sub UpdateSupplier(Supplierid As Integer)
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@PartyId", Supplierid))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
         Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
 

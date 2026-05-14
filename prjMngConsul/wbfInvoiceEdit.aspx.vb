@@ -883,6 +883,7 @@ Public Class wbfInvoiceEdit
     Sub UpdateCustomer(Customerid As Integer)
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@PartyId", Customerid))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
         Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
 

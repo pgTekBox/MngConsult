@@ -29,11 +29,12 @@ Public Class wbfCustomersInvoices
 
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()
-
+        Dim sSearch As String = tbSearch.Text
 
 
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@Search", sSearch))
         Dim ds As DataSet = ExecuteSQLds("s0026GetCustomersInvoices", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
@@ -236,4 +237,12 @@ Public Class wbfCustomersInvoices
         Return inv
     End Function
 
+    Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
+        rlvClientsFactures.Rebind()
+    End Sub
+
+    Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        tbSearch.Text = ""
+        rlvClientsFactures.Rebind()
+    End Sub
 End Class

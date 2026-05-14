@@ -15,7 +15,8 @@
     <style>
 
   .listview-list-head {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px 100px 120px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px   190px;
+                               
             font-weight: 800;
             font-size: 13px;
             color: #0f172a;
@@ -27,7 +28,8 @@
         }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px 90px 100px 120px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px  190px;
+                                 
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
@@ -77,32 +79,38 @@
             grid-row: 1;
         }
 
-      .field-dejarecu{
-            grid-column: 6;
-            grid-row: 1;
-        }
-      .field-encaissement{
-            grid-column: 8;
-            grid-row: 1;
-        }
         .field-etat {
-            grid-column: 8;
+            grid-column: 4;
             grid-row: 1;
         }
-          
-        .field-resteapayer{
+       .field-resteapayer{
             grid-column: 5;
             grid-row: 1;
         }
 
 
-        .field-total {
+      .field-dejarecu{
+            grid-column: 6;
+            grid-row: 1;
+        }
+  .field-total {
             grid-column: 7;
             grid-row: 1;
         }
 
+      .field-encaissement{
+            grid-column: 8;
+            grid-row: 1;
+        }
+      
+          
+      
+
+
+      
+
         .listview-actions {
-            grid-column: x;
+            grid-column: 9;
             grid-row: 1;
         }
 
@@ -343,10 +351,10 @@
                                    
 
 
-                                <div class="colh-ecaissement">Ecaissement</div>
+                                <div class="colh-total">Total</div>
                                 <div class="colh-etat">Etat</div>
                                  
-                                <div class="colh-total">Total</div>
+                                
                                 <div class="colh-action">Action</div>
                             </div>
 
@@ -385,13 +393,7 @@
                                     OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
                                 />
 
-                                <asp:Button ID="btnPdf" runat="server"
-                                    CssClass="btn btn-icon btn-icon-pdf"
-                                    Text=""
-                                    ToolTip="Creation PDF"
-                                    CommandName="CreatePdf"
-                                    CommandArgument='<%# Eval("Id") %>'
-                                    CausesValidation="false" />
+                               
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"

@@ -190,6 +190,7 @@ Public Class wbfReceiptEdit
             procName = "s0102GetOpenSupplierInvoicesByParty"  ' Factures fournisseurs
         End If
 
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds(procName, p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
 
@@ -263,6 +264,7 @@ Public Class wbfReceiptEdit
     Sub LoadTiersHeader(pPartyId As Integer)
         Dim p As New Collection
         p.Add(New SqlParameter("@PartyId", pPartyId))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
 
         Dim ds As DataSet = ExecuteSQLds("s0037GetCustomerFullById", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
@@ -397,6 +399,7 @@ Public Class wbfReceiptEdit
                             cmd.Parameters.AddWithValue(paramDateName, dateOp)
                             cmd.Parameters.AddWithValue("@CompteBanque", noCompteBanque)
                             cmd.Parameters.AddWithValue("@TypeReglement", typeRegl)
+                            cmd.Parameters.AddWithValue("@CompanyGUID", Company)
 
                             If Not String.IsNullOrWhiteSpace(reference) Then
                                 cmd.Parameters.AddWithValue("@Reference", reference)
@@ -447,20 +450,29 @@ Public Class wbfReceiptEdit
     ''' Réutilise la même proc s0043Get_Party avec un paramètre différent.
     ''' </summary>
     Private Function GetTiersTable() As DataTable
-        Dim sql As String
+
+        Dim ds As DataSet
         If IsEncaissement() Then
-            sql = "s0043Get_Party 'Client'"
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Type", "Client"))
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            ds = ExecuteSQLds("s0043Get_Party", p)
         Else
-            sql = "s0043Get_Party 'Fournisseur'"
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Type", "Fournisseur"))
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            ds = ExecuteSQLds("s0043Get_Party", p)
         End If
 
-        Dim ds As DataSet = ExecuteSQLds(sql)
+
         Return ds.Tables(0)
     End Function
 
     Private Function GetBanksTable() As DataTable
         ' Même compte banque pour encaissement et décaissement
-        Dim ds As DataSet = ExecuteSQLds("s0091Get_GLAccounts_BANQUE")
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0091Get_GLAccounts_BANQUE", p)
         Return ds.Tables(0)
     End Function
 
@@ -514,7 +526,7 @@ Public Class wbfReceiptEdit
     Sub UpdateBankDisplay(noCompte As String)
         Dim p As New Collection
         p.Add(New SqlParameter("@NoCompte", noCompte))
-
+        p.Add(New SqlParameter("@CompanyGUID", Company))
         Dim ds As DataSet = ExecuteSQLds("s0092Get_GLAccountByNoCompte", p)
 
         If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then

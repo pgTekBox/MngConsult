@@ -145,6 +145,8 @@ Partial Public Class wbfSetting
                 phControl.Controls.Add(BuildNumericTextbox(sVal, isInt:=False))
             Case "BOOL", "BOOLEAN"
                 phControl.Controls.Add(BuildBoolCombo(sVal, iVal))
+            Case "DATE"
+                phControl.Controls.Add(BuildDatePicker(sVal))
             Case Else
                 ' STRING par défaut
                 phControl.Controls.Add(BuildSimpleTextbox(sVal))
@@ -198,6 +200,32 @@ Partial Public Class wbfSetting
             ntb.Value = CDbl(parsed)
         End If
         Return ntb
+    End Function
+
+    ''' <summary>
+    ''' Construit un RadDatePicker. La valeur est stockée en sVal au format
+    ''' ISO 'yyyy-MM-dd' pour éviter les problèmes de culture.
+    ''' </summary>
+    Private Function BuildDatePicker(value As String) As RadDatePicker
+        Dim dp As New RadDatePicker()
+        dp.ID = "txtValue"
+        dp.Width = Unit.Percentage(100)
+        dp.DateInput.DateFormat = "yyyy-MM-dd"
+        dp.DateInput.DisplayDateFormat = "yyyy-MM-dd"
+
+        If Not String.IsNullOrEmpty(value) Then
+            Dim parsedDate As Date
+            ' On tente d'abord le format ISO, puis le format de la culture courante
+            If Date.TryParseExact(value, "yyyy-MM-dd",
+                                  Globalization.CultureInfo.InvariantCulture,
+                                  Globalization.DateTimeStyles.None, parsedDate) Then
+                dp.SelectedDate = parsedDate
+            ElseIf Date.TryParse(value, parsedDate) Then
+                dp.SelectedDate = parsedDate
+            End If
+        End If
+
+        Return dp
     End Function
 
     Private Function BuildBoolCombo(sVal As String, iVal As String) As RadComboBox
@@ -326,6 +354,12 @@ Partial Public Class wbfSetting
             SaveRepeater(rpPdf)
             SaveRepeater(rpComptabilite)
             SaveRepeater(rpBancaire)
+
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0500InitializeCompanyData", p)
+
+
         Catch ex As Exception
             ShowErr("Erreur lors de la sauvegarde : " & ex.Message)
             Return
@@ -383,6 +417,12 @@ Partial Public Class wbfSetting
                                 sVal = ntb.Value.Value.ToString(Globalization.CultureInfo.InvariantCulture)
                         End Select
                     End If
+                ElseIf TypeOf ctrl Is RadDatePicker Then
+                    ' DATE : on stocke en sVal au format ISO 'yyyy-MM-dd'
+                    Dim dp As RadDatePicker = CType(ctrl, RadDatePicker)
+                    If dp.SelectedDate.HasValue Then
+                        sVal = dp.SelectedDate.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+                    End If
                 ElseIf TypeOf ctrl Is RadComboBox Then
                     Dim cb As RadComboBox = CType(ctrl, RadComboBox)
                     Dim selected As String = If(cb.SelectedValue, "")
@@ -436,4 +476,7 @@ Partial Public Class wbfSetting
         litStatus.Text = "<span class=""status-err"">✖ " & Server.HtmlEncode(msg) & "</span>"
     End Sub
 
+    Private Sub btnSave_PreRender(sender As Object, e As EventArgs) Handles btnSave.PreRender
+
+    End Sub
 End Class

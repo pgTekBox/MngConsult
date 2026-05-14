@@ -3,7 +3,7 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>\\Alfred\MngConsulWEB</_PublishTargetUrl>
-    <History>True|2026-04-24T18:48:42.6980957Z||;True|2026-04-09T11:35:51.6804049-04:00||;True|2026-04-07T15:58:44.3934636-04:00||;True|2026-03-16T15:55:10.6693064-04:00||;True|2026-03-16T11:26:30.1650075-04:00||;True|2026-02-26T14:36:47.0915510-05:00||;True|2026-02-25T08:46:38.8326521-05:00||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
+    <History>True|2026-04-29T18:46:04.8693341Z||;True|2026-04-24T14:48:42.6980957-04:00||;True|2026-04-09T11:35:51.6804049-04:00||;True|2026-04-07T15:58:44.3934636-04:00||;True|2026-03-16T15:55:10.6693064-04:00||;True|2026-03-16T11:26:30.1650075-04:00||;True|2026-02-26T14:36:47.0915510-05:00||;True|2026-02-25T08:46:38.8326521-05:00||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
@@ -169,6 +169,9 @@
     <File Include="bin/Antlr3.Runtime.pdb">
       <publishTime>09/10/2013 17:29:20</publishTime>
     </File>
+    <File Include="bin/BCrypt.Net-Next.dll">
+      <publishTime>02/16/2026 06:44:28</publishTime>
+    </File>
     <File Include="bin/fr/Microsoft.AspNet.FriendlyUrls.resources.dll">
       <publishTime>07/30/2013 13:01:48</publishTime>
     </File>
@@ -200,10 +203,13 @@
       <publishTime>03/08/2023 07:09:56</publishTime>
     </File>
     <File Include="bin/prjMngConsul.dll">
-      <publishTime>04/28/2026 09:26:55</publishTime>
+      <publishTime>05/14/2026 10:20:24</publishTime>
     </File>
     <File Include="bin/prjMngConsul.pdb">
-      <publishTime>04/28/2026 09:26:55</publishTime>
+      <publishTime>05/14/2026 10:20:24</publishTime>
+    </File>
+    <File Include="bin/QuestPDF.dll">
+      <publishTime>03/20/2026 09:48:00</publishTime>
     </File>
     <File Include="bin/roslyn/csc.exe">
       <publishTime>08/08/2018 06:38:48</publishTime>
@@ -352,6 +358,72 @@
     <File Include="bin/roslyn/VBCSCompiler.exe.config">
       <publishTime>08/08/2018 13:18:16</publishTime>
     </File>
+    <File Include="bin/runtimes/linux-arm64/native/libqpdf.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/linux-arm64/native/libQuestPdfSkia.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/linux-musl-x64/native/libqpdf.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/linux-musl-x64/native/libQuestPdfSkia.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/linux-x64/native/libqpdf.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/linux-x64/native/libQuestPdfSkia.so">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/osx-arm64/native/libqpdf.dylib">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/osx-arm64/native/libQuestPdfSkia.dylib">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/osx-x64/native/libqpdf.dylib">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/osx-x64/native/libQuestPdfSkia.dylib">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/libgcc_s_seh-1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/libstdc++-6.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/libwinpthread-1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/qpdf.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/QuestPdfSkia.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x64/native/zlib1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/libgcc_s_dw2-1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/libstdc++-6.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/libwinpthread-1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/qpdf.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/QuestPdfSkia.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
+    <File Include="bin/runtimes/win-x86/native/zlib1.dll">
+      <publishTime>03/20/2026 09:44:14</publishTime>
+    </File>
     <File Include="bin/System.Buffers.dll">
       <publishTime>03/19/2025 16:55:38</publishTime>
     </File>
@@ -395,7 +467,7 @@
       <publishTime>02/18/2025 09:27:58</publishTime>
     </File>
     <File Include="bin/WebForms_Basic.xml">
-      <publishTime>04/28/2026 09:26:55</publishTime>
+      <publishTime>05/14/2026 10:20:24</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -509,16 +581,16 @@
       <publishTime>02/18/2026 09:51:30</publishTime>
     </File>
     <File Include="Controls/Header.ascx">
-      <publishTime>03/13/2026 11:15:26</publishTime>
+      <publishTime>05/05/2026 07:32:36</publishTime>
     </File>
     <File Include="Controls/HeaderUser.ascx">
-      <publishTime>03/13/2026 13:22:33</publishTime>
+      <publishTime>05/06/2026 09:48:07</publishTime>
     </File>
     <File Include="Controls/jsonViewer.ascx">
       <publishTime>03/16/2026 15:44:21</publishTime>
     </File>
     <File Include="Controls/LeftMenu.ascx">
-      <publishTime>04/28/2026 09:08:39</publishTime>
+      <publishTime>05/12/2026 09:39:43</publishTime>
     </File>
     <File Include="Controls/PdfViewer.ascx">
       <publishTime>03/18/2026 16:35:46</publishTime>
@@ -526,8 +598,11 @@
     <File Include="css/JsonViewer.css">
       <publishTime>03/16/2026 15:44:21</publishTime>
     </File>
+    <File Include="css/landingpage.css">
+      <publishTime>05/07/2026 15:48:05</publishTime>
+    </File>
     <File Include="css/listvew.css">
-      <publishTime>04/26/2026 06:37:42</publishTime>
+      <publishTime>05/14/2026 11:07:16</publishTime>
     </File>
     <File Include="Default.aspx">
       <publishTime>03/13/2026 14:19:32</publishTime>
@@ -588,6 +663,9 @@
     </File>
     <File Include="js/viewport.js">
       <publishTime>03/13/2026 15:45:04</publishTime>
+    </File>
+    <File Include="LandingPage.aspx">
+      <publishTime>05/09/2026 06:43:21</publishTime>
     </File>
     <File Include="PlaidAccounts.aspx">
       <publishTime>03/26/2026 11:07:38</publishTime>
@@ -722,7 +800,7 @@
       <publishTime>02/11/2026 06:05:01</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>03/18/2026 09:27:20</publishTime>
+      <publishTime>05/14/2026 11:10:34</publishTime>
     </File>
     <File Include="Site.Mobile.Master">
       <publishTime>02/11/2026 06:16:01</publishTime>
@@ -738,6 +816,21 @@
     </File>
     <File Include="ViewSwitcher.ascx">
       <publishTime>02/11/2026 06:16:01</publishTime>
+    </File>
+    <File Include="wbfActivate.aspx">
+      <publishTime>05/08/2026 13:38:13</publishTime>
+    </File>
+    <File Include="wbfAgenda.aspx">
+      <publishTime>05/01/2026 10:51:49</publishTime>
+    </File>
+    <File Include="wbfAIPaiement.aspx">
+      <publishTime>04/29/2026 14:44:44</publishTime>
+    </File>
+    <File Include="wbfAISale.aspx">
+      <publishTime>04/30/2026 14:25:47</publishTime>
+    </File>
+    <File Include="wbfAppointmentEdit.aspx">
+      <publishTime>05/01/2026 13:28:17</publishTime>
     </File>
     <File Include="wbfBalanceVerification.aspx">
       <publishTime>04/20/2026 09:48:49</publishTime>
@@ -755,13 +848,16 @@
       <publishTime>03/18/2026 14:00:45</publishTime>
     </File>
     <File Include="wbfCustomers.aspx">
-      <publishTime>04/18/2026 06:54:12</publishTime>
+      <publishTime>05/12/2026 11:01:04</publishTime>
     </File>
     <File Include="wbfCustomersInvoices.aspx">
-      <publishTime>04/27/2026 14:53:29</publishTime>
+      <publishTime>05/14/2026 11:02:50</publishTime>
     </File>
     <File Include="wbfEtatResultats.aspx">
       <publishTime>04/20/2026 09:19:31</publishTime>
+    </File>
+    <File Include="wbfFakeEmail.aspx">
+      <publishTime>05/08/2026 11:39:52</publishTime>
     </File>
     <File Include="wbfFermetureAnnee.aspx">
       <publishTime>04/28/2026 08:24:51</publishTime>
@@ -769,8 +865,29 @@
     <File Include="wbfFluxTresorerie.aspx">
       <publishTime>04/20/2026 09:35:23</publishTime>
     </File>
+    <File Include="wbfGenerateHash.aspx">
+      <publishTime>05/04/2026 13:53:40</publishTime>
+    </File>
     <File Include="wbfInvoiceEdit.aspx">
-      <publishTime>04/24/2026 14:29:21</publishTime>
+      <publishTime>05/13/2026 10:28:22</publishTime>
+    </File>
+    <File Include="wbfJobDashboard.aspx">
+      <publishTime>04/28/2026 14:14:13</publishTime>
+    </File>
+    <File Include="wbfJobEdit.aspx">
+      <publishTime>04/28/2026 13:35:00</publishTime>
+    </File>
+    <File Include="wbfJobExecution.aspx">
+      <publishTime>04/28/2026 14:06:57</publishTime>
+    </File>
+    <File Include="wbfJobMonitoring.aspx">
+      <publishTime>04/28/2026 13:46:21</publishTime>
+    </File>
+    <File Include="wbfJobs.aspx">
+      <publishTime>04/29/2026 08:00:37</publishTime>
+    </File>
+    <File Include="wbfJobSchedule.aspx">
+      <publishTime>04/29/2026 14:26:14</publishTime>
     </File>
     <File Include="wbfJournal.aspx">
       <publishTime>04/27/2026 07:02:06</publishTime>
@@ -781,8 +898,20 @@
     <File Include="wbfJournalList.aspx">
       <publishTime>04/26/2026 06:37:42</publishTime>
     </File>
+    <File Include="wbfLogin.aspx">
+      <publishTime>05/04/2026 13:45:46</publishTime>
+    </File>
     <File Include="wbflogout.aspx">
       <publishTime>02/24/2026 14:15:18</publishTime>
+    </File>
+    <File Include="wbfNewUser.aspx">
+      <publishTime>05/09/2026 06:08:11</publishTime>
+    </File>
+    <File Include="wbfPayment.aspx">
+      <publishTime>05/08/2026 13:30:25</publishTime>
+    </File>
+    <File Include="wbfPaymentSuccess.aspx">
+      <publishTime>05/09/2026 07:49:07</publishTime>
     </File>
     <File Include="wbfPlanComptable.aspx">
       <publishTime>04/15/2026 14:01:51</publishTime>
@@ -817,6 +946,9 @@
     <File Include="wbfReceiptEdit.aspx">
       <publishTime>04/27/2026 13:54:49</publishTime>
     </File>
+    <File Include="wbfRegister.aspx">
+      <publishTime>05/08/2026 15:14:05</publishTime>
+    </File>
     <File Include="wbfReleve.aspx">
       <publishTime>03/26/2026 13:07:33</publishTime>
     </File>
@@ -824,19 +956,19 @@
       <publishTime>03/16/2026 15:53:11</publishTime>
     </File>
     <File Include="wbfSetting.aspx">
-      <publishTime>04/28/2026 06:53:08</publishTime>
+      <publishTime>05/04/2026 15:50:37</publishTime>
     </File>
     <File Include="wbfSettingsOpenAiPrompts.aspx">
       <publishTime>02/25/2026 07:04:07</publishTime>
     </File>
     <File Include="wbfSupplierEdit.aspx">
-      <publishTime>04/18/2026 06:36:16</publishTime>
+      <publishTime>05/13/2026 08:14:36</publishTime>
     </File>
     <File Include="wbfSupplierInvoinceEdit.aspx">
       <publishTime>04/24/2026 14:27:34</publishTime>
     </File>
     <File Include="wbfSuppliers.aspx">
-      <publishTime>04/18/2026 08:27:43</publishTime>
+      <publishTime>05/13/2026 08:12:14</publishTime>
     </File>
     <File Include="wbfSuppliersInvoices.aspx">
       <publishTime>04/27/2026 15:30:10</publishTime>
@@ -850,8 +982,17 @@
     <File Include="wbfTemplateList.aspx">
       <publishTime>04/26/2026 07:32:36</publishTime>
     </File>
+    <File Include="wbfUserEdit.aspx">
+      <publishTime>05/04/2026 15:05:48</publishTime>
+    </File>
+    <File Include="wbfUsers.aspx">
+      <publishTime>05/04/2026 14:59:47</publishTime>
+    </File>
+    <File Include="wbfWelcome.aspx">
+      <publishTime>05/09/2026 06:30:26</publishTime>
+    </File>
     <File Include="Web.config">
-      <publishTime>03/16/2026 11:26:11</publishTime>
+      <publishTime>05/07/2026 15:13:15</publishTime>
     </File>
   </ItemGroup>
 </Project>

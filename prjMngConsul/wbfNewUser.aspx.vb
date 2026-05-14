@@ -74,6 +74,15 @@ Public Class wbfNewUser
             ' === 2) Sauvegarder les infos entreprise (T010Company) — partie Générale ===
             SaveCompanyGeneral(modifiedBy)
 
+
+
+            'Dim p As New Collection
+            'p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            'Dim ds As DataSet = ExecuteSQLds("s0500InitializeCompanyData", p)
+
+
+
+
             ' === 3) Mettre à jour la session avec les nouveaux noms ===
             UserFirstName = txtFirstName.Text.Trim()
             UserLastName = txtLastName.Text.Trim()
