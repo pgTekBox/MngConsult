@@ -50,13 +50,13 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents hfInvoiceDirty As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
-    '''btnAddSupplier control.
+    '''btnAddSupplierInvoice control.
     '''</summary>
     '''<remarks>
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    Protected WithEvents btnAddSupplier As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnAddSupplierInvoice As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''tbSearch control.
@@ -111,6 +111,15 @@ Partial Public Class wbfSuppliersInvoices
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rwEncaissement As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''PdfViewer control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents PdfViewer As Global.MngConsul.PdfViewer
 
     '''<summary>
     '''jsonViewer control.

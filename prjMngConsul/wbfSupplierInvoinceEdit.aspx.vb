@@ -397,6 +397,9 @@ Public Class wbfSupplierInvoinceEdit
         Dim ParamIssueDate As New SqlClient.SqlParameter("@IssueDate", SqlDbType.DateTime)
         ParamIssueDate.Value = dpIssueDate.SelectedDate
 
+        Dim ParamDocumentType As New SqlClient.SqlParameter("@DocumentType", SqlDbType.VarChar)
+        ParamDocumentType.Value = "FOURNISSEUR "
+
         Dim ParamDueDate As New SqlClient.SqlParameter("@DueDate", SqlDbType.DateTime)
         ParamDueDate.Value = dpDueDate.SelectedDate
 
@@ -405,7 +408,7 @@ Public Class wbfSupplierInvoinceEdit
         ParamItems.Value = tvp
         ParamItems.TypeName = "dbo.TVP_InvoiceItem_v6"
 
-
+        oCom.Parameters.Add(ParamDocumentType)
         oCom.Parameters.Add(ParamDueDate)
         oCom.Parameters.Add(ParamIssueDate)
         oCom.Parameters.Add(ParamPartyGUID)
@@ -546,19 +549,29 @@ Public Class wbfSupplierInvoinceEdit
 
     'Creation d'une table en mémoire pour stocker la liste des produits (équivalent d'un DataTable dans une session classique) et méthode pour la charger depuis la BD (proc s0041GetProducts qui retourne Id, Name, Description, Price)
     Private Function GetProductsTable() As DataTable
+        Dim p As New Collection
 
-        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts", p) ' <-- ta proc
         Return ds.Tables(0)
     End Function
 
     Private Function GetSuppliersTable() As DataTable
-        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party 'Fournisseur'") ' <-- ta proc
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@Type", "Fournisseur"))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+
+        Dim ds As DataSet = ExecuteSQLds("s0043Get_Party", p) ' <-- ta proc
         Return ds.Tables(0)
     End Function
 
     Private Function GetAccountsTable() As DataTable
         ' Comptes de dépenses / achats pour les factures fournisseurs
-        Dim ds As DataSet = ExecuteSQLds("s0090Get_GLAccounts_ACHAT")
+        Dim p As New Collection
+
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0090Get_GLAccounts_ACHAT", p)
         Return ds.Tables(0)
     End Function
 

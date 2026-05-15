@@ -19,6 +19,7 @@ Public Class InvoicePdfBuilder
     Private Const CLR_NOTE_TEXT As String = "#0e7490"
     Private Const CLR_LINE_DARK As String = "#cbd5e1"
     Private Const CLR_WHITE As String = "#ffffff"
+    Private Const CLR_STAMP As String = "#dc2626"   ' Rouge tampon « PAYÉ »
 
     ' ============================================================
     ' Point d'entrée
@@ -40,26 +41,61 @@ Public Class InvoicePdfBuilder
             End Sub).GeneratePdf()
     End Function
 
-    ' ============================================================
-    ' Corps
-    ' ============================================================
+    '' ============================================================
+    '' Corps — avec couche tampon en superposition si payée
+    '' ============================================================
+    'Private Shared Sub ComposeBody(container As IContainer, inv As InvoiceData)
+    '    container.Layers(
+    '        Sub(layers)
+    '            ' Couche principale : le contenu normal de la facture
+    '            layers.PrimaryLayer().Column(
+    '                Sub(col)
+    '                    col.Spacing(20)
+
+    '                    ComposeHeader(col, inv)
+    '                    ComposeMetaCards(col, inv)
+    '                    ComposeClientCards(col, inv)
+    '                    ComposeItemsTable(col, inv)
+    '                    ComposeTotals(col, inv)
+
+    '                    If Not String.IsNullOrEmpty(inv.PaymentTerms) Then
+    '                        ComposeNotes(col, inv.PaymentTerms)
+    '                    End If
+    '                End Sub)
+
+    '            ' Couche du tampon : seulement sur la 1ère page, seulement si payée
+    '            If inv.IsPaid Then
+    '                layers.Layer().ShowOnce().AlignCenter().AlignMiddle().
+    '                    Element(Sub(c) ComposePaidStamp(c))
+    '            End If
+    '        End Sub)
+    'End Sub
     Private Shared Sub ComposeBody(container As IContainer, inv As InvoiceData)
         container.Column(
-            Sub(col)
-                col.Spacing(20)
+        Sub(col)
+            col.Spacing(20)
 
-                ComposeHeader(col, inv)
-                ComposeMetaCards(col, inv)
-                ComposeClientCards(col, inv)
-                ComposeItemsTable(col, inv)
-                ComposeTotals(col, inv)
+            ' Si payée, on injecte un élément zéro-hauteur qui dessine le tampon
+            ' à la position absolue centre-haut de la page.
+            If inv.IsPaid Then
+                col.Item().Height(0).Element(
+                    Sub(stampSlot)
+                        stampSlot.TranslateX(120).TranslateY(280).
+                            Element(Sub(c) ComposePaidStamp(c))
+                    End Sub)
+            End If
 
-                If Not String.IsNullOrEmpty(inv.PaymentTerms) Then
-                    ComposeNotes(col, inv.PaymentTerms)
-                End If
-            End Sub)
+            ComposeHeader(col, inv)
+            ComposeMetaCards(col, inv)
+            ComposeClientCards(col, inv)
+            ComposeItemsTable(col, inv)
+            ComposeTotals(col, inv)
+
+            If Not String.IsNullOrEmpty(inv.PaymentTerms) Then
+                ComposeNotes(col, inv.PaymentTerms)
+            End If
+        End Sub)
     End Sub
-
     ' ============================================================
     ' En-tête
     ' ============================================================
@@ -281,6 +317,20 @@ Public Class InvoicePdfBuilder
     End Sub
 
     ' ============================================================
+    ' Tampon « PAYÉ »
+    '   Rouge, bold 90pt, encadré, incliné -22°.
+    '   Centré sur la page (via AlignCenter/AlignMiddle de la couche appelante).
+    ' ============================================================
+    Private Shared Sub ComposePaidStamp(container As IContainer)
+        container.Rotate(-22).Width(280).Height(120).
+            Border(4).BorderColor(CLR_STAMP).
+            Padding(10).
+            AlignCenter().AlignMiddle().
+            Text("PAYÉ").
+                FontSize(90).Bold().FontColor(CLR_STAMP).LetterSpacing(0.05F)
+    End Sub
+
+    ' ============================================================
     ' Pied de page
     ' ============================================================
     Private Shared Sub ComposeFooter(container As IContainer, inv As InvoiceData)
@@ -347,6 +397,12 @@ Public Class InvoiceData
     Public Property Total As Decimal
 
     Public Property PaymentTerms As String = "Net 30 jours. Paiement par virement Interac. Merci de votre confiance!"
+
+    ''' <summary>
+    ''' Si True, un tampon « PAYÉ » est apposé sur la 1ère page du PDF.
+    ''' Mis à True par LoadInvoiceForPdf quand ResteAPayer = 0 (ou IsPaid = 1).
+    ''' </summary>
+    Public Property IsPaid As Boolean = False
 
 End Class
 

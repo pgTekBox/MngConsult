@@ -413,6 +413,18 @@ Public Class wbfReceiptEdit
                     Next
 
                     tx.Commit()
+
+                    Dim Mypdf As New clsGenerateInvoicePDF
+                    For Each myrow As DataRow In linesToPost
+                        Dim docId As Integer = Convert.ToInt32(myrow("DocumentId"))
+                        Mypdf.GenerateAndDownloadPdf(docId)
+                    Next
+
+
+
+
+
+
                 Catch ex As Exception
                     tx.Rollback()
                     RegisterAlert("Erreur lors de l'enregistrement : " & ex.Message)
@@ -425,6 +437,8 @@ Public Class wbfReceiptEdit
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
     End Sub
+
+
 
     ''' <summary>
     ''' Retourne l'Id de l'utilisateur courant.

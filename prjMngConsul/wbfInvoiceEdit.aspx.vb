@@ -378,6 +378,8 @@ Public Class wbfInvoiceEdit
         Else
             ParamPost.Value = 0
         End If
+        Dim ParamDocumentType As New SqlClient.SqlParameter("@DocumentType", SqlDbType.VarChar)
+        ParamDocumentType.Value = "CLIENT "
 
         Dim ParamPartyGUID As New SqlClient.SqlParameter("@PartyGUID", SqlDbType.UniqueIdentifier)
         ParamPartyGUID.Value = CustomerGUID
@@ -396,7 +398,7 @@ Public Class wbfInvoiceEdit
         ParamItems.Value = tvp
         ParamItems.TypeName = "dbo.TVP_InvoiceItem_v6"
 
-
+        oCom.Parameters.Add(ParamDocumentType)
         oCom.Parameters.Add(ParamDueDate)
         oCom.Parameters.Add(ParamIssueDate)
         oCom.Parameters.Add(ParamPartyGUID)
@@ -647,8 +649,10 @@ Public Class wbfInvoiceEdit
 
     'Creation d'une table en mémoire pour stocker la liste des produits (équivalent d'un DataTable dans une session classique) et méthode pour la charger depuis la BD (proc s0041GetProducts qui retourne Id, Name, Description, Price)
     Private Function GetProductsTable() As DataTable
+        Dim p As New Collection
 
-        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts") ' <-- ta proc
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0041GetProducts", p) ' <-- ta proc
         Return ds.Tables(0)
     End Function
 
@@ -664,7 +668,10 @@ Public Class wbfInvoiceEdit
 
     Private Function GetAccountsTable() As DataTable
         ' TODO: adapter le nom de la procédure stockée si nécessaire
-        Dim ds As DataSet = ExecuteSQLds("s0082Get_GLAccounts_REVENU")
+        Dim p As New Collection
+
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0082Get_GLAccounts_REVENU", p)
         Return ds.Tables(0)
     End Function
 

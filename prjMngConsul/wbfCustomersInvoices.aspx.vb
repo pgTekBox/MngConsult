@@ -219,6 +219,17 @@ Public Class wbfCustomersInvoices
         inv.Tvq = If(r("TVQ") Is DBNull.Value, 0D, CDec(r("TVQ")))
         inv.Total = If(r("Total") Is DBNull.Value, 0D, CDec(r("Total")))
 
+        ' === État de paiement ===
+        '   Apposera le tampon « PAYÉ » sur le PDF si la facture est totalement réglée.
+        '   Rétrocompatible : si la proc s0115 ne retourne ni ResteAPayer ni IsPaid,
+        '   IsPaid reste False et aucun tampon n'est dessiné.
+        If ds.Tables(0).Columns.Contains("ResteAPayer") Then
+            Dim reste As Decimal = If(r("ResteAPayer") Is DBNull.Value, inv.Total, CDec(r("ResteAPayer")))
+            inv.IsPaid = (reste <= 0D AndAlso inv.Total > 0D)
+        ElseIf ds.Tables(0).Columns.Contains("IsPaid") Then
+            inv.IsPaid = If(r("IsPaid") Is DBNull.Value, False, CBool(r("IsPaid")))
+        End If
+
         ' === Lignes (table 2 du DataSet) ===
         If ds.Tables.Count >= 2 Then
             For Each rl As DataRow In ds.Tables(1).Rows

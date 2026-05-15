@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfSuppliersInvoices.aspx.vb" Inherits="MngConsul.wbfSuppliersInvoices" %>
 
-<%@ Register Src="~/Controls/jsonViewer.ascx" TagPrefix="uc1" TagName="jsonViewer" %>
+<%@ Register Src="~/Controls/PdfViewer.ascx" TagPrefix="uc1" TagName="PdfViewer" %>
+<%@ Register Src="~/Controls/jsonViewer.ascx" TagPrefix="uc2" TagName="jsonViewer" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Invoices — MngConsul
@@ -10,226 +11,119 @@
 
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
-    <script src="js/viewport.js"></script>
-
-
+    <script src="js/viewport.js?v=<%=DateTime.Now.Ticks %>"></script>
 
     <style>
-             .listview-list-head {
-           grid-template-columns: 70px 110px 1fr 90px 100px 80px;
-           font-weight: 800;
-           font-size: 13px;
-           color: #0f172a;
-           background: #f8fafc;
-           border-bottom: 1px solid var(--mc-stroke);
-           position: sticky;
-           top: 0;
-           z-index: 2;
-       }
+
+  .listview-list-head {
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px   190px;
+                               
+            font-weight: 800;
+            font-size: 13px;
+            color: #0f172a;
+            background: #f8fafc;
+            border-bottom: 1px solid var(--mc-stroke);
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr 90px 100px  100px   100px  100px  80px;
+            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px  190px;
+                                 
             border-bottom: 1px solid #eef2f7;
             background: #fff;
         }
+        
 
-        .page-head {
-            display: flex;
-            align-items: flex-start;
-            justify-content: space-between;
-            gap: 12px;
-            flex-wrap: wrap;
-            padding: 14px 16px;
-            border-bottom: 1px solid var(--mc-stroke);
-            background: rgba(255,255,255,.75);
+        .listview-actions {
+            flex-wrap: nowrap;
         }
 
-        .page-title {
-            font-weight: 900;
-            font-size: 18px;
-            line-height: 1.2;
+        /* Icône PDF (cohérent avec les autres btn-icon-*) */
+        .btn-icon-pdf {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z'/%3E%3Cpolyline points='14 2 14 8 20 8'/%3E%3Cline x1='9' y1='13' x2='15' y2='13'/%3E%3Cline x1='9' y1='17' x2='15' y2='17'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 16px 16px !important;
         }
 
-        .page-sub {
-            color: var(--mc-muted);
-            font-size: 13px;
-            margin-top: 4px;
-        }
-
-        .actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
+        .listview-list-head,
+        .listview-row {
+            display: grid;
+            gap: 16px;
             align-items: center;
-        }
-
-        .full-grid {
-            height: calc(100vh - 220px);
-            padding: 16px;
+            padding: 14px 16px;
             box-sizing: border-box;
         }
 
-        .invoice-shell {
-            height: 100%;
-            display: flex;
-            flex-direction: column;
-            background: #fff;
-            border: 1px solid var(--mc-stroke);
-            border-radius: 18px;
-            overflow: hidden;
-            box-shadow: 0 10px 30px rgba(15,23,42,.06);
-            min-height: 0;
+       
+
+        /* Desktop — les wrappers mobiles sont invisibles */
+        .field-row1,
+        .field-row2 {
+            display: contents; /* ← les enfants participent directement à la grille */
         }
 
-        .invoice-scroll {
-            flex: 1 1 auto;
-            overflow: auto;
-            min-height: 0;
+        .field-number {
+            grid-column: 1;
+            grid-row: 1;
         }
 
-        .invoice-list {
-            display: flex;
-            flex-direction: column;
+        .field-date {
+            grid-column: 2;
+            grid-row: 1;
         }
 
-     
-        .invoice-actions {
-            display: flex;
-            gap: 8px;
-            flex-wrap: wrap;
-            align-items: center;
+        .field-supplier {
+            grid-column: 3;
+            grid-row: 1;
         }
 
-        .invoice-number,
-        .invoice-supplier,
-        .invoice-status,
-        .invoice-date {
-            color: #0f172a;
-            font-weight: 600;
-            min-width: 0;
-            word-break: break-word;
+        .field-etat {
+            grid-column: 4;
+            grid-row: 1;
+        }
+       .field-resteapayer{
+            grid-column: 5;
+            grid-row: 1;
         }
 
-        .invoice-total {
-            color: #0f172a;
-            font-weight: 800;
-            text-align: right;
-            white-space: nowrap;
+
+      .field-dejapaye{
+            grid-column: 6;
+            grid-row: 1;
+        }
+  .field-total {
+            grid-column: 7;
+            grid-row: 1;
         }
 
-        .invoice-empty {
-            padding: 40px 20px;
-            text-align: center;
-            color: var(--mc-muted);
+      .field-encaissement{
+            grid-column: 8;
+            grid-row: 1;
         }
+      
+          
+      
 
-        .invoice-pager {
-            flex: 0 0 auto;
-            padding: 12px 16px 16px 16px;
-            border-top: 1px solid var(--mc-stroke);
-            background: #fff;
+
+      
+
+        .listview-actions {
+            grid-column: 9;
+            grid-row: 1;
         }
-
-        .btn.danger {
-            border-color: #fecaca !important;
-            background: #fff5f5 !important;
-            color: #b91c1c !important;
-        }
-
-            .btn.danger:hover {
-                background: #fee2e2 !important;
-            }
- .listview-list-head,
- .listview-row {
-     display: grid;
-     gap: 16px;
-     align-items: center;
-     padding: 14px 16px;
-     box-sizing: border-box;
- }
-
-
-
-
-
-      .field-row1,
-     .field-row2 {
-         display: contents; /* ← les enfants participent directement à la grille */
-     }
-
-     .field-number {
-         grid-column: 1;
-         grid-row: 1;
-     }
-
-     .field-date {
-         grid-column: 2;
-         grid-row: 1;
-     }
- .field-total {
-         grid-column: 3;
-         grid-row: 1;
-     }
-
-
-     .field-customer {
-         grid-column: 3;
-         grid-row: 1;
-     }
-
-     .field-supplier {
-         grid-column: 4;
-         grid-row: 1;
-     }
-
-    
-       .field-etat {
-      grid-column: 5;
-      grid-row: 1;
-  }    
-       .field-DejaPaye {
-    grid-column: 6;
-    grid-row: 1;
-}
-
-               .field-ResteAPayer {
-    grid-column: 7;
-    grid-row: 1;
-}
-    .field-StatutPaiement {
-    grid-column: 8;
-    grid-row: 1;
-}
-     
-
-
-
-
-
-     .listview-actions {
-         grid-column: 9;
-         grid-row: 1;
-     }
-
-
-
-
-
-
-
-
-
-
 
 
         /* =========================
          TABLETTE — 769px à 1024px
       ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
+        @media  (max-width: 1024px) {
 
             .listview-list-head,
             .listview-row {
-                grid-template-columns: 60px 100px 1fr 80px 90px 70px;
+                grid-template-columns: 60px 100px 1fr 80px  80px  90px 70px;
                 gap: 12px;
                 padding: 12px 14px;
             }
@@ -238,7 +132,7 @@
         /* =========================
           MOBILE LARGE — 481px à 768px  grands smartphones en portrait
       ========================= */
-        @media (min-width: 481px) and (max-width: 768px) {
+        @media  (max-width: 768px) {
 
 
             .listview-list-head {
@@ -356,43 +250,43 @@
                 align-items: center;
                 gap: 2px;
             }
-                /* Ligne 1 */
-    .field-number {
-        font-size: 13px;
-        font-weight: 700;
-        color: #64748b;
-        white-space: nowrap;
-    }
 
-    .field-date {
-        font-size: 13px;
-        color: #64748b;
-        white-space: nowrap;
-       margin-left: auto;
-margin-right: auto;
-    }
 
-    .field-total {
-        font-weight: 800;
-        font-size: 14px;
-        color: #0f172a;
-        margin-left: auto; /* ← pousse le total à droite */
-        white-space: nowrap;
-    }
+                .field-number {
+                    font-size: 12px;
+                    font-weight: 700;
+                    color: #64748b;
+                    white-space: nowrap;
+                }
 
-      
-    
-            /* Ligne 2 */
-            .field-supplier {
-               font-weight: 700;
-               font-size: 14px;
-            }
+                .field-date {
+                    font-size: 12px;
+                    color: #64748b;
+                    white-space: nowrap;
+                    margin-left: auto;
+        margin-right: auto;
+                }
 
-            .field-etat {
-                font-size: 12px;
-                color: #64748b;
-                margin-left: auto;
-            }
+                .field-total {
+                    font-weight: 800;
+                    font-size: 13px;
+                    margin-left: auto;
+                    white-space: nowrap;
+                }
+
+               
+
+                .field-supplier {
+                    font-weight: 700;
+                    font-size: 14px;
+                }
+
+                .field-etat {
+                    font-size: 12px;
+                    color: #64748b;
+                    margin-left: auto;
+                }
+
               
 
                 .listview-actions {
@@ -406,28 +300,31 @@ margin-right: auto;
                       
 
             }
-     </style>
+       
+    </style>
 
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
-    <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true">    </telerik:RadWindowManager>
-      <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
+    <telerik:RadWindowManager ID="rwmSuppliersInvoices" runat="server" EnableShadow="true"></telerik:RadWindowManager>
+
+        <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Facture Fournisseurs</div>
+                <div class="page-title">Facture Fournisseur</div>
             </div>
             <div class="searchbox">
-                <asp:Button ID="btnAddSupplier" runat="server"
+                <asp:Button ID="btnAddSupplierInvoice" runat="server"
                     CssClass="btn btnAddRow"
-                    Text="Ajouter Supplier"
+                    Text="Ajouter Facture"
                     CausesValidation="false"
-                    OnClientClick="openSupplierInvoiceWindow(0); return false;" />
+                    OnClientClick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" 
+                />
                 <div class="search-group">
-                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input  txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
+                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
                     <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
                 </div>
@@ -436,23 +333,32 @@ margin-right: auto;
 
         <div class="full-grid">
             <div class="list-shell">
+
                 <telerik:RadListView ID="rgFournisseursFactures" runat="server"
+                    Skin="Metro"
+                    AllowPaging="False"
                     DataKeyNames="Id"
-                    ClientIDMode="Static"
-                    ItemPlaceholderID="itemPlaceholder"
-                    RenderItemWrapper="false">
+                    ItemPlaceholderID="itemPlaceholder" ClientIDMode="Static">
 
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
+                                <div class="colh-numero">#</div>
+                                <div class="colh-date">Date</div>
+                                <div class="colh-supplier">Fournisseur</div>
+                                <div class="colh-statutpaiement">Statut Paiement</div>
+                                 <div class="colh-resteapayer">Reste A Payer</div>
+                                 <div class="colh-dejapaye">Deja Payé</div>
+                                   
 
-                                <div>Number</div>
-                                <div>Supplier</div>
-                                <div style="text-align: right;">Total</div>
-                                <div>Status</div>
-                                <div>Date</div>
-                                <div>Actions</div>
+
+                                <div class="colh-total">Total</div>
+                                <div class="colh-etat">Etat</div>
+                                 
+                                
+                                <div class="colh-action">Action</div>
                             </div>
+
                             <div class="listview-list-body">
                                 <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
                             </div>
@@ -461,62 +367,71 @@ margin-right: auto;
 
                     <ItemTemplate>
                         <div class="listview-row">
-                            
-                          <%-- Ligne 1 mobile : Numéro + Date + Total --%>
-                         <div class="field-row1">
-                            <div class="field-number"><%# Eval("DocumentNumber") %></div>
-                            <div class="field-date"><%# Eval("DocumentDate", "{0:yyyy-MM-dd}") %></div>
-                            <div class="field-total"><%# Eval("Total", "{0:C2}") %></div>
-                        </div>
-                         <%-- Ligne 2 mobile : Nom + État --%>
-                         <div class="field-row2">
-                            <div class="field-supplier"><%# Eval("Name") %></div>
-                            <div class="field-etat"><%# Eval("Status") %></div>
 
-                             <div class="field-DejaPaye"><%# Eval("DejaPaye") %></div>
-                                <div class="field-ResteAPayer"><%# Eval("ResteAPayer") %></div>
-                                <div class="field-StatutPaiement"><%# Eval("StatutPaiement") %></div>
-                          </div>
+                            <%-- Ligne 1 mobile : Numéro + Date + Total --%>
+                            <div class="field-row1">
+                                <span class="field-number"><%# Eval("DocumentNumber") %></span>
+                                <span class="field-date"><%# FormatDateFr(Eval("DocumentDate")) %></span>
+                                <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
+                            </div>
+
+                            <%-- Ligne 2 mobile : Nom + État --%>
+                            <div class="field-row2">
+                                <span class="field-supplier"><%# Eval("Name") %></span>
+                                <span class="field-statutpaiement"><%# Eval("StatutPaiement") %></span>
+                                <span class="field-resteapayer"><%# Eval("ResteAPayer") %></span>
+                                <span class="field-dejapaye"><%# Eval("DejaPaye") %></span>
+                                <span class="field-etat"><%# Eval("Status") %></span>
+                            </div>
 
                             <div class="listview-actions">
 
-                                
                                 <asp:Button ID="Button1" runat="server" 
                                     CssClass="field-encaissement btn btn-icon btn-icon-receipt" 
                                     Text=""
-                                    ToolTip="Encaissement"
+                                    ToolTip="Décaissement"
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier un décaissement"", ""Ajouter un décaissement"");    return false;" %>' 
                                 />
 
-
+                               
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' /> 
+                                    ToolTip="Modifier"
+                                    CausesValidation="false"
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture"");    return false;" %>' />
+                                   
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
+                                    ToolTip="Supprimer"
                                     CommandName="DeleteInvoice"
-                                    CommandArgument='<%# Eval("Id") %>' />
-
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    CausesValidation="false" />
                             </div>
+
+
+
+
                         </div>
                     </ItemTemplate>
 
                     <EmptyDataTemplate>
-                        <div class="listview-empty">
+                        <div class="empty-state">
                             Aucune facture trouvée.
                         </div>
                     </EmptyDataTemplate>
+
                 </telerik:RadListView>
+
             </div>
-
-
         </div>
-               <%-- FAB mobile --%>
-       <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un client">+</button>
+                <%-- FAB mobile --%>
+        <button class="fab-add" onclick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" title="Ajouter une facture">+</button>
+
+
 
 
     </telerik:RadAjaxPanel>
@@ -525,33 +440,32 @@ margin-right: auto;
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
-        ClientIDMode="Static"
-        Title="Ajouter / Modifier un facture fournisseur"
-        OnClientClose="rwSupplierInvoice_OnClientClose"
-        OnClientPageLoad="rwSupplierInvoice_PageLoad"
-        OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
-         
- >
- 
+        Title="Ajouter / Modifier une Facture Fournisseur"
+        OnClientPageLoad="rwInvoice_PageLoad"
+        OnClientBeforeClose="rwInvoice_BeforeClose"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
     </telerik:RadWindow>
 
-        <telerik:RadWindow ID="rwEncaissement" runat="server"
-    Modal="true"
-    VisibleOnPageLoad="false"
-    Behaviors="Close,Move,Resize"
-    DestroyOnClose="true"
-    Title="Ajouter / Modifier unencaissement"
-     OnClientClose="rwSupplierInvoice_OnClientClose"
- OnClientPageLoad="rwSupplierInvoice_PageLoad"
- OnClientBeforeClose  ="rwSupplierInvoice_BeforeClose"
-    ClientIDMode="Static" >
-</telerik:RadWindow>
+
+     <telerik:RadWindow ID="rwEncaissement" runat="server"
+     Modal="true"
+     VisibleOnPageLoad="false"
+     Behaviors="Close,Move,Resize"
+     DestroyOnClose="true"
+     Title="Ajouter / Modifier un décaissement"
+      OnClientPageLoad="rwInvoice_PageLoad"
+  OnClientBeforeClose="rwInvoice_BeforeClose"
+  OnClientClose="rwInvoice_OnInvoiceClose"
+     ClientIDMode="Static" >
+ </telerik:RadWindow>
+
+
 
 
     <script src="js/RadWindows.js"></script>
+
     <script type="text/javascript">
-
-
         function setInvoiceDirty() {
 
             document.getElementById("hfInvoiceDirty").value = "1";
@@ -566,10 +480,9 @@ margin-right: auto;
         }
 
 
-        function rwSupplierInvoice_PageLoad(sender, args) {
+        function rwInvoice_PageLoad(sender, args) {
             wireDirtyTracking(); // iframe prête ✔
         }
-
         function wireDirtyTracking() {
             var oWnd = $find("rwSupplierInvoices");
             console.log(oWnd);
@@ -592,9 +505,7 @@ margin-right: auto;
         }
 
 
-
-
-        function rwSupplierInvoice_BeforeClose(sender, args) {
+        function rwInvoice_BeforeClose(sender, args) {
 
             if (!isInvoiceDirty()) return;
 
@@ -621,17 +532,25 @@ margin-right: auto;
             );
         }
 
-        function rwSupplierInvoice_OnClientClose(sender, args) {
+
+        function rwInvoice_OnInvoiceClose(sender, args) {
             setInvoiceClean();
             var ajaxManager = $find("RAP1");
             if (ajaxManager) {
+
                 ajaxManager.ajaxRequest("refreshgrid");
             }
+
+
         }
+
+
+
+
+
+
     </script>
-
-
-     <uc1:jsonViewer runat="server" id="jsonViewer" />
-
+    <uc1:PdfViewer runat="server" id="PdfViewer" />
+    <uc2:jsonViewer runat="server" id="jsonViewer" />
 
 </asp:Content>
