@@ -27,6 +27,7 @@ Public Class OpenAiReceiptReader
     Public Sub New(apiKey As String)
         _apiKey = apiKey
         _http = New HttpClient()
+        _http.Timeout = TimeSpan.FromMinutes(5)
         _http.DefaultRequestHeaders.Authorization =
             New AuthenticationHeaderValue("Bearer", _apiKey)
     End Sub
@@ -267,9 +268,9 @@ $"{{
 
         ' On combine le prompt + le contenu du mail dans un seul message
         Dim fullPrompt = promptText & vbCrLf & vbCrLf &
-                         "--- DÉBUT DU COURRIEL ---" & vbCrLf &
+                         "--- DÉBUT DU FICHIER ---" & vbCrLf &
                          emailContent & vbCrLf &
-                         "--- FIN DU COURRIEL ---"
+                         "--- FIN DU FICHIER ---"
 
         Dim payload =
     $"{{

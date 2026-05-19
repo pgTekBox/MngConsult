@@ -1,0 +1,56 @@
+Name;Type;Contact Name;Address 1;Address 2;City;Province;Postal Code;Phone;Email;GST/TPS Number;QST/TVQ Number;Balance;Auxiliary Account
+Boutique Lumière inc.;Client;Sophie Tremblay;1245 rue Sainte-Catherine Ouest;Suite 410;Montréal;QC;H3G 1P1;514-555-0101;sophie.tremblay@boutiquelumiere.ca;812345670RT0001;1212345671TQ0001;1250.75;C001
+Construction Bélanger Ltée;Client;Marc Bélanger;789 boul. Industriel;;Laval;QC;H7L 4S3;450-555-0102;m.belanger@constructionbelanger.ca;812345671RT0001;1212345672TQ0001;8540.00;C002
+Café du Vieux-Port;Client;Émilie Gagnon;45 rue de la Commune Est;;Montréal;QC;H2Y 1H8;514-555-0103;emilie@cafevieuxport.ca;812345672RT0001;1212345673TQ0001;325.50;C003
+Garage Mécano Pro;Client;Jean-François Lavoie;3210 chemin de Chambly;;Longueuil;QC;J4L 1N4;450-555-0104;jf.lavoie@mecanopro.ca;812345673RT0001;1212345674TQ0001;1850.20;C004
+Studio Photo Lumina;Client;Anaïs Beaulieu;512 avenue du Mont-Royal Est;;Montréal;QC;H2J 1W7;514-555-0105;anais@studiolumina.ca;812345674RT0001;1212345675TQ0001;0.00;C005
+Fleuriste Pétales;Client;Mireille Dubois;128 rue Principale;;Saint-Jérôme;QC;J7Z 3A4;450-555-0106;mireille@petales.ca;812345675RT0001;1212345676TQ0001;420.85;C006
+Librairie Le Signet;Client;Pierre Côté;67 rue Saint-Jean;;Québec;QC;G1R 1N4;418-555-0107;p.cote@librairielesignet.ca;812345676RT0001;1212345677TQ0001;612.40;C007
+Salon Coiffure Élégance;Client;Caroline Roy;234 boul. Saint-Joseph;;Gatineau;QC;J8Y 3X7;819-555-0108;caroline@salonelegance.ca;812345677RT0001;1212345678TQ0001;180.00;C008
+Pâtisserie Croissant d'Or;Client;Olivier Lemieux;890 rue Bernard Ouest;;Montréal;QC;H2V 1Z3;514-555-0109;olivier@croissantdor.ca;812345678RT0001;1212345679TQ0001;975.30;C009
+Imprimerie Rapide;Client;Sylvie Pelletier;55 rue de l'Industrie;;Sherbrooke;QC;J1H 5N3;819-555-0110;s.pelletier@imprimerierapide.ca;812345679RT0001;1212345680TQ0001;2340.60;C010
+Clinique Dentaire Sourire;Client;Dr. Antoine Fortin;1500 boul. Henri-Bourassa;Bureau 200;Québec;QC;G1G 3T2;418-555-0111;reception@cliniquesourire.ca;812345680RT0001;1212345681TQ0001;540.00;C011
+Restaurant La Belle Époque;Client;Geneviève Morin;78 rue Saint-Paul Est;;Montréal;QC;H2Y 1G2;514-555-0112;genevieve@bellebreuque.ca;812345681RT0001;1212345682TQ0001;1820.45;C012
+Boulangerie Artisanale du Coin;Client;Sébastien Cloutier;145 rue Wellington;;Sherbrooke;QC;J1H 5C7;819-555-0113;sebastien@boulangerieducoin.ca;812345682RT0001;1212345683TQ0001;485.90;C013
+Quincaillerie Rive-Sud;Client;Daniel Bouchard;2890 boul. Taschereau;;Brossard;QC;J4W 1L8;450-555-0114;d.bouchard@quincailleriers.ca;812345683RT0001;1212345684TQ0001;3120.75;C014
+Bijouterie Diamant Pur;Client;Vanessa Lévesque;320 rue Sherbrooke Ouest;;Montréal;QC;H3A 1B9;514-555-0115;vanessa@diamantpur.ca;812345684RT0001;1212345685TQ0001;0.00;C015
+Atelier de Couture Marie-Claire;Client;Marie-Claire Houde;512 rue Cartier;;Trois-Rivières;QC;G8Y 2R9;819-555-0116;marieclaire@ateliercouture.ca;812345685RT0001;1212345686TQ0001;245.00;C016
+Centre Sportif Action;Client;Maxime Therrien;678 rue Laurier;;Drummondville;QC;J2B 6V6;819-555-0117;maxime@centreaction.ca;812345686RT0001;1212345687TQ0001;1100.00;C017
+Galerie d'Art Horizon;Client;Élise Champagne;1234 rue Notre-Dame Ouest;;Montréal;QC;H3C 1K5;514-555-0118;elise@galeriehorizon.ca;812345687RT0001;1212345688TQ0001;820.50;C018
+Pharmacie Santé Plus;Client;Robert Drouin;456 boul. Curé-Labelle;;Laval;QC;H7P 5B9;450-555-0119;r.drouin@pharmaciesanteplus.ca;812345688RT0001;1212345689TQ0001;0.00;C019
+École de Musique Crescendo;Client;Patricia Lambert;89 rue Bélanger;;Montréal;QC;H2S 1L3;514-555-0120;patricia@ecolecrescendo.ca;812345689RT0001;1212345690TQ0001;680.00;C020
+Animalerie Aux 4 Pattes;Client;Stéphane Ouellet;1567 boul. Pie-IX;;Montréal;QC;H1V 2C9;514-555-0121;stephane@aux4pattes.ca;812345690RT0001;1212345691TQ0001;325.85;C021
+Plomberie Express;Client;Mathieu Desjardins;234 rue Saint-Maurice;;Trois-Rivières;QC;G9A 2X7;819-555-0122;m.desjardins@plomberieexpress.ca;812345691RT0001;1212345692TQ0001;1450.30;C022
+Cabinet Comptable Vigilance;Client;Hélène Martel;789 rue de la Couronne;Suite 500;Québec;QC;G1K 7R5;418-555-0123;h.martel@cabinetvigilance.ca;812345692RT0001;1212345693TQ0001;2200.00;C023
+Boutique Mode Avenue;Client;Nathalie Simard;456 rue Saint-Denis;;Montréal;QC;H2X 3K9;514-555-0124;nathalie@modeavenue.ca;812345693RT0001;1212345694TQ0001;560.40;C024
+Garderie Petits Pas;Client;Karine Brunet;123 rue des Érables;;Saint-Hyacinthe;QC;J2S 5K3;450-555-0125;karine@garderiepetitspas.ca;812345694RT0001;1212345695TQ0001;0.00;C025
+Auto Lavage Brillant;Client;Carlos Mendoza;890 rue Jean-Talon Est;;Montréal;QC;H2R 1V7;514-555-0126;carlos@autolavagebrillant.ca;812345695RT0001;1212345696TQ0001;215.00;C026
+Toiture Saint-Laurent;Client;Pascal Vézina;567 rue de l'Église;;Saint-Eustache;QC;J7R 4K3;450-555-0127;p.vezina@toituresl.ca;812345696RT0001;1212345697TQ0001;4500.00;C027
+Café Internet Connexion;Client;Julie Bergeron;234 rue Saint-Joseph Est;;Québec;QC;G1K 3B1;418-555-0128;julie@cafeconnexion.ca;812345697RT0001;1212345698TQ0001;78.50;C028
+Magasin Général du Village;Client;Roger Audet;15 chemin du Village;;Bromont;QC;J2L 1R6;450-555-0129;r.audet@magasingeneral.ca;812345698RT0001;1212345699TQ0001;920.15;C029
+Service de Nettoyage Éclat;Client;Lucie Forand;678 rue Charest Est;;Québec;QC;G1K 3J4;418-555-0130;lucie@nettoyageeclat.ca;812345699RT0001;1212345700TQ0001;385.00;C030
+Studio de Yoga Harmonie;Client;Sandra Bélisle;890 rue Mont-Royal Ouest;;Montréal;QC;H2T 2S6;514-555-0131;sandra@studioharmonie.ca;812345700RT0001;1212345701TQ0001;240.00;C031
+Boucherie du Quartier;Client;Yves Rivard;456 boul. Saint-Laurent;;Montréal;QC;H2W 1Z6;514-555-0132;yves@boucherieduquartier.ca;812345701RT0001;1212345702TQ0001;1280.75;C032
+Garage Pneus Excellence;Client;Frédéric Plourde;3456 boul. Métropolitain Est;;Anjou;QC;H1S 1P6;514-555-0133;f.plourde@pneusexcellence.ca;812345702RT0001;1212345703TQ0001;2100.40;C033
+École de Danse Étoile;Client;Audrey Charbonneau;123 rue King Ouest;;Sherbrooke;QC;J1H 1N9;819-555-0134;audrey@ecoleetoile.ca;812345703RT0001;1212345704TQ0001;480.00;C034
+Boutique Bio Nature;Client;Mélanie Sauvé;567 avenue du Parc;;Montréal;QC;H2V 4G7;514-555-0135;melanie@boutiquebionature.ca;812345704RT0001;1212345705TQ0001;195.30;C035
+Atelier Réparation Vélos;Client;Benoît Lessard;789 rue Rachel Est;;Montréal;QC;H2J 2H1;514-555-0136;benoit@atelierreparvelos.ca;812345705RT0001;1212345706TQ0001;165.50;C036
+Hôtel des Voyageurs;Client;Bernard Côté;234 rue Dalhousie;;Québec;QC;G1K 4C1;418-555-0137;b.cote@hoteldesvoyageurs.ca;812345706RT0001;1212345707TQ0001;6700.00;C037
+Garage Auto-Pro;Client;Martin Provost;1234 rue Industrielle;;Granby;QC;J2J 1A3;450-555-0138;m.provost@autopro.ca;812345707RT0001;1212345708TQ0001;3450.85;C038
+Pâtissier Le Délice;Client;Isabelle Roy;567 rue Bélanger;;Montréal;QC;H2G 1B9;514-555-0139;isabelle@ledelice.ca;812345708RT0001;1212345709TQ0001;780.20;C039
+Construction Patrimoine;Client;Christian Lambert;890 boul. Lebourgneuf;Suite 320;Québec;QC;G2J 1A6;418-555-0140;c.lambert@constructionpatrimoine.ca;812345709RT0001;1212345710TQ0001;12500.00;C040
+Garage Vroom-Vroom;Client;Alexandre Dion;456 rue Saint-Hubert;;Saint-Hubert;QC;J3Y 4T1;450-555-0141;a.dion@vroomvroom.ca;812345710RT0001;1212345711TQ0001;920.40;C041
+Boutique Cadeaux Originaux;Client;Manon Bouchard;789 rue Sainte-Catherine Est;;Montréal;QC;H2L 2C4;514-555-0142;manon@cadeauxoriginaux.ca;812345711RT0001;1212345712TQ0001;345.60;C042
+Centre Optique Vision;Client;Dr. Suzanne Tardif;234 boul. de la Capitale;;Québec;QC;G1H 6T4;418-555-0143;s.tardif@centrevision.ca;812345712RT0001;1212345713TQ0001;1480.00;C043
+Restaurant Le Bistrot;Client;François Lapointe;567 rue Cartier;;Trois-Rivières;QC;G8Y 2T5;819-555-0144;francois@lebistrot.ca;812345713RT0001;1212345714TQ0001;920.85;C044
+Salon Esthétique Pure;Client;Stéphanie Ménard;890 rue Wellington;;Sherbrooke;QC;J1H 5E1;819-555-0145;stephanie@estetiquepure.ca;812345714RT0001;1212345715TQ0001;320.00;C045
+Boutique Sportive Action;Client;Éric Pelletier;345 boul. Lebourgneuf;;Québec;QC;G2K 0A4;418-555-0146;eric@sportiveaction.ca;812345715RT0001;1212345716TQ0001;890.20;C046
+Garage Express Lavage;Client;Nicolas Pouliot;234 boul. Industriel;;Drummondville;QC;J2C 4N5;819-555-0147;n.pouliot@expresslavage.ca;812345716RT0001;1212345717TQ0001;145.00;C047
+Imprimerie Couleur;Client;Diane Charpentier;789 rue Notre-Dame Est;;Montréal;QC;H2Y 1S5;514-555-0148;diane@imprimeriecouleur.ca;812345717RT0001;1212345718TQ0001;1640.30;C048
+École Privée Saint-Augustin;Client;Marie-Josée Talbot;456 chemin des Quatre-Bourgeois;;Québec;QC;G1V 1Z5;418-555-0149;mj.talbot@stesaugustin.ca;812345718RT0001;1212345719TQ0001;8500.00;C049
+Garage Saint-Bruno Auto;Client;Christian Lapierre;1234 boul. des Promenades;;Saint-Bruno-de-Montarville;QC;J3V 5J5;450-555-0150;c.lapierre@stbrunoauto.ca;812345719RT0001;1212345720TQ0001;2230.75;C050
+Studio Tatouage Encre Noire;Client;Renaud Bouvier;678 rue Saint-Denis;;Montréal;QC;H2X 3K9;514-555-0151;renaud@encrenoire.ca;812345720RT0001;1212345721TQ0001;420.00;C051
+Boutique Antiquités Tradition;Client;Claude Bertrand;234 rue Saint-Paul;;Québec;QC;G1K 3W2;418-555-0152;claude@antiquitestradition.ca;812345721RT0001;1212345722TQ0001;1880.50;C052
+Centre Médical Bien-Être;Client;Dr. Caroline Dubé;567 boul. Brunswick;;Pointe-Claire;QC;H9R 1A6;514-555-0153;c.dube@medicalbienetre.ca;812345722RT0001;1212345723TQ0001;3200.00;C053
+Café-Terrasse du Soleil;Client;Étienne Lacroix;890 rue Mont-Royal Est;;Montréal;QC;H2J 1Y2;514-555-0154;etienne@cafedusoleil.ca;812345723RT0001;1212345724TQ0001;560.40;C054
+Boutique Chic & Choc;Client;Brigitte Renaud;234 boul. Saint-Joseph;;Hull;QC;J8Y 3X3;819-555-0155;brigitte@chicetchoc.ca;812345724RT0001;1212345725TQ0001;785.30;C055

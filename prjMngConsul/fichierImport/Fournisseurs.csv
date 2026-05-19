@@ -1,0 +1,56 @@
+Name;Type;Contact Name;Address 1;Address 2;City;Province;Postal Code;Phone;Email;GST/TPS Number;QST/TVQ Number;Balance;Auxiliary Account
+Bell Canada;Fournisseur;Service Clientèle;1 Carrefour Alexander-Graham-Bell;;Verdun;QC;H3E 3B3;800-555-2001;facturation@bell.ca;100068079RT0001;1000479143TQ0001;420.50;F001
+Hydro-Québec;Fournisseur;Service Affaires;75 boul. René-Lévesque Ouest;;Montréal;QC;H2Z 1A4;800-555-2002;affaires@hydroquebec.com;120000128RT0001;1006001374TQ0001;1820.30;F002
+Vidéotron;Fournisseur;Service PME;612 rue Saint-Jacques;;Montréal;QC;H3C 4M8;800-555-2003;pme@videotron.ca;102389476RT0001;1023894765TQ0001;185.40;F003
+Costco Wholesale Canada;Fournisseur;Compte Affaires;300 boul. Brunswick;;Pointe-Claire;QC;H9R 1A6;514-555-2004;affaires@costco.ca;101896034RT0001;1018960345TQ0001;3450.85;F004
+Bureau en Gros;Fournisseur;Solutions PME;1255 boul. Robert-Bourassa;;Montréal;QC;H3B 3W9;800-555-2005;solutions@bureauengros.com;102345678RT0001;1023456789TQ0001;780.20;F005
+RONA inc.;Fournisseur;Service Pro;220 chemin du Tremblay;;Boucherville;QC;J4B 8H7;800-555-2006;pro@rona.ca;100568234RT0001;1005682341TQ0001;1240.50;F006
+Imprimerie Solisco;Fournisseur;Jacques Lemieux;120 13e Rue;;Scott;QC;G0S 3G0;418-555-2007;jacques@solisco.com;102678901RT0001;1026789012TQ0001;2850.00;F007
+Métro Richelieu;Fournisseur;Compte Commercial;11011 boul. Maurice-Duplessis;;Montréal;QC;H1C 1V6;514-555-2008;commercial@metro.ca;100789012RT0001;1007890123TQ0001;560.30;F008
+Sysco Québec;Fournisseur;Yannick Pelletier;9275 boul. Henri-Bourassa Est;;Montréal;QC;H1E 7C7;514-555-2009;y.pelletier@sysco.ca;102890123RT0001;1028901234TQ0001;5420.85;F009
+Postes Canada;Fournisseur;Service Affaires;2701 rue Riverside;;Ottawa;ON;K1A 0B1;866-555-2010;affaires@postescanada.ca;121491807RT0001;0000000000TQ0000;125.40;F010
+Microsoft Canada;Fournisseur;Compte Entreprise;1950 Meadowvale Blvd;;Mississauga;ON;L5N 8L9;877-555-2011;entreprise@microsoft.ca;107654321RT0001;0000000000TQ0000;1200.00;F011
+Dell Canada;Fournisseur;Compte Affaires;155 Gordon Baker Road;;Toronto;ON;M2H 3N5;800-555-2012;affaires@dell.ca;108765432RT0001;0000000000TQ0000;2850.50;F012
+Apple Canada;Fournisseur;Compte Affaires;120 Bremner Blvd;;Toronto;ON;M5J 0A8;800-555-2013;affaires@apple.ca;109876543RT0001;0000000000TQ0000;3450.00;F013
+Adobe Systems Canada;Fournisseur;Service Entreprise;343 Preston Street;;Ottawa;ON;K1S 1N4;800-555-2014;entreprise@adobe.ca;110987654RT0001;0000000000TQ0000;650.00;F014
+Staples Canada;Fournisseur;Solutions Affaires;6 Staples Avenue;;Richmond Hill;ON;L4B 4W3;877-555-2015;solutions@staples.ca;112098765RT0001;0000000000TQ0000;420.80;F015
+UPS Canada;Fournisseur;Compte Commercial;1930 16th Avenue;;Richmond Hill;ON;L4C 0L8;800-555-2016;commercial@ups.ca;113109876RT0001;0000000000TQ0000;380.50;F016
+FedEx Express Canada;Fournisseur;Service Affaires;5985 Explorer Drive;;Mississauga;ON;L4W 5K6;800-555-2017;affaires@fedex.ca;114210987RT0001;0000000000TQ0000;245.30;F017
+Imprimerie Quad Graphics;Fournisseur;Sylvie Dansereau;5945 rue Hochelaga;;Montréal;QC;H1N 1Y3;514-555-2018;s.dansereau@quadgraphics.ca;115321098RT0001;1153210987TQ0001;1820.00;F018
+Distribution Aliments Couche-Tard;Fournisseur;Compte Affaires;4204 boul. Industriel;;Laval;QC;H7L 6H8;450-555-2019;affaires@couchetard.ca;116432109RT0001;1164321098TQ0001;325.45;F019
+Énergir;Fournisseur;Service Clientèle;1717 rue du Havre;;Montréal;QC;H2K 2X3;800-555-2020;clientele@energir.com;100089234RT0001;1000892341TQ0001;620.30;F020
+Lassonde Industries;Fournisseur;Geneviève Lacombe;755 rue Principale;;Rougemont;QC;J0L 1M0;450-555-2021;g.lacombe@lassonde.com;117543210RT0001;1175432109TQ0001;1450.75;F021
+Cascades Inc.;Fournisseur;Robert Demers;404 boul. Marie-Victorin;;Kingsey Falls;QC;J0A 1B0;819-555-2022;r.demers@cascades.com;118654321RT0001;1186543210TQ0001;2230.00;F022
+Saputo Inc.;Fournisseur;Catherine Boivin;6869 boul. Métropolitain Est;;Saint-Léonard;QC;H1P 1X8;514-555-2023;c.boivin@saputo.com;119765432RT0001;1197654321TQ0001;3120.50;F023
+Olymel S.E.C.;Fournisseur;Pierre Dion;2200 boul. Léon-Pratte;;Saint-Hyacinthe;QC;J2S 4Y4;450-555-2024;p.dion@olymel.com;120876543RT0001;1208765432TQ0001;2840.85;F024
+Bombardier Récréatif;Fournisseur;Compte Commercial;726 rue Saint-Joseph;;Valcourt;QC;J0E 2L0;450-555-2025;commercial@brp.com;121987654RT0001;1219876543TQ0001;5430.00;F025
+Couche-Tard Imperial Tobacco;Fournisseur;Distribution;4204 boul. Industriel;;Laval;QC;H7L 6H8;450-555-2026;distribution@couchetard.ca;122098765RT0001;1220987654TQ0001;780.30;F026
+TVA Publications;Fournisseur;Service Comptes;1600 boul. de Maisonneuve Est;;Montréal;QC;H2L 4P2;514-555-2027;comptes@tvapublications.ca;123109876RT0001;1231098765TQ0001;345.00;F027
+Transcontinental Inc.;Fournisseur;Hélène Bourgeois;1 Place Ville-Marie;;Montréal;QC;H3B 0G1;514-555-2028;h.bourgeois@tc.tc;124210987RT0001;1242109876TQ0001;1980.75;F028
+Couvre-Planchers Tendance;Fournisseur;Marc-André Côté;567 boul. Industriel;;Saint-Jérôme;QC;J7Z 7A4;450-555-2029;ma.cote@couvrePlanchers.ca;125321098RT0001;1253210987TQ0001;4200.00;F029
+Quincaillerie Plus;Fournisseur;Service Pro;789 rue Industrielle;;Granby;QC;J2J 1A3;450-555-2030;pro@quincailleriepl.ca;126432109RT0001;1264321098TQ0001;1340.20;F030
+Hewlett-Packard Canada;Fournisseur;Compte Entreprise;5150 Spectrum Way;;Mississauga;ON;L4W 5G1;800-555-2031;entreprise@hp.ca;127543210RT0001;0000000000TQ0000;1820.00;F031
+Lenovo Canada;Fournisseur;Compte Affaires;3500 Steeles Avenue East;;Markham;ON;L3R 2Z1;800-555-2032;affaires@lenovo.ca;128654321RT0001;0000000000TQ0000;1240.50;F032
+Cogeco Communications;Fournisseur;Service PME;5 Place Ville-Marie;;Montréal;QC;H3B 4Y9;800-555-2033;pme@cogeco.com;129765432RT0001;1297654321TQ0001;185.30;F033
+Ricoh Canada;Fournisseur;Service Location;5520 Explorer Drive;;Mississauga;ON;L4W 5L1;800-555-2034;location@ricoh.ca;130876543RT0001;0000000000TQ0000;520.40;F034
+Xerox Canada;Fournisseur;Service Solutions;33 Bloor Street East;;Toronto;ON;M4W 3H1;800-555-2035;solutions@xerox.ca;131987654RT0001;0000000000TQ0000;680.20;F035
+Iron Mountain Canada;Fournisseur;Stockage;3120 rue Hochelaga;;Montréal;QC;H1N 1Y4;514-555-2036;stockage@ironmountain.ca;132098765RT0001;1320987654TQ0001;420.00;F036
+ADP Canada;Fournisseur;Service Paie;1450 boul. Robert-Bourassa;;Montréal;QC;H3A 2J7;514-555-2037;paie@adp.ca;133109876RT0001;1331098765TQ0001;780.50;F037
+Desjardins Assurances;Fournisseur;Service Affaires;200 rue des Commandeurs;;Lévis;QC;G6V 6R2;418-555-2038;affaires@desjardins.com;134210987RT0001;1342109876TQ0001;1230.00;F038
+SSQ Assurance;Fournisseur;Compte Entreprise;2515 boul. Laurier;;Québec;QC;G1V 2S8;418-555-2039;entreprise@ssq.ca;135321098RT0001;1353210987TQ0001;980.30;F039
+Banque Nationale du Canada;Fournisseur;Service PME;600 rue de La Gauchetière Ouest;;Montréal;QC;H3B 4L2;514-555-2040;pme@bnc.ca;136432109RT0001;1364321098TQ0001;245.00;F040
+Banque Royale du Canada;Fournisseur;Service Affaires;1 Place Ville-Marie;;Montréal;QC;H3C 3A9;514-555-2041;affaires@rbc.ca;137543210RT0001;1375432109TQ0001;185.50;F041
+Loto-Québec;Fournisseur;Compte Détaillant;500 rue Sherbrooke Ouest;;Montréal;QC;H3A 3G6;514-555-2042;detaillant@loto-quebec.com;138654321RT0001;1386543210TQ0001;125.00;F042
+SAQ Société des alcools du Québec;Fournisseur;Compte Restaurateur;7500 rue Tellier;;Montréal;QC;H1N 3W5;514-555-2043;restaurateur@saq.com;138765432RT0001;1387654321TQ0001;3450.85;F043
+Pétroles Sonic;Fournisseur;Service Commercial;485 rue Sigouin;;Trois-Rivières;QC;G8T 7T1;819-555-2044;commercial@petrolessonic.ca;139876543RT0001;1398765432TQ0001;1820.40;F044
+Équipement Lourd Tremblay;Fournisseur;Jacques Tremblay;234 chemin des Industries;;Saguenay;QC;G7H 5B7;418-555-2045;jacques@equipementtremblay.ca;140987654RT0001;1409876543TQ0001;6500.00;F045
+Outillage Pro Construction;Fournisseur;Service Pro;567 boul. Industriel;;Longueuil;QC;J4G 1A1;450-555-2046;pro@outillagepc.ca;141098765RT0001;1410987654TQ0001;2340.50;F046
+Plomberie Centrale Distribution;Fournisseur;Compte Entrepreneur;789 rue de l'Industrie;;Boucherville;QC;J4B 1V1;450-555-2047;entrepreneur@plomberiecd.ca;142109876RT0001;1421098765TQ0001;1840.00;F047
+Électricité Pro Distribution;Fournisseur;Service Commercial;456 boul. Industriel;;Laval;QC;H7L 4S3;450-555-2048;commercial@elecpro.ca;143210987RT0001;1432109876TQ0001;2120.30;F048
+Couture Industrielle Québec;Fournisseur;Lyne Beaulieu;789 rue Beaubien Est;;Montréal;QC;H2G 1L9;514-555-2049;l.beaulieu@couturequebec.ca;144321098RT0001;1443210987TQ0001;980.50;F049
+Aliments Premium Distribution;Fournisseur;Service Commercial;1234 boul. Industriel;;Saint-Bruno-de-Montarville;QC;J3V 5J5;450-555-2050;commercial@alimentspremium.ca;145432109RT0001;1454321098TQ0001;4250.85;F050
+Téléphonie d'Affaires Plus;Fournisseur;Service Clientèle;567 rue Sainte-Catherine;;Montréal;QC;H3B 1B2;514-555-2051;clientele@telephonieaplus.ca;146543210RT0001;1465432109TQ0001;385.20;F051
+Sécurité Vigilante;Fournisseur;Compte Affaires;234 rue de la Cathédrale;;Québec;QC;G1R 5G4;418-555-2052;affaires@securitevigilante.ca;147654321RT0001;1476543210TQ0001;680.00;F052
+Aliments Bio Québec;Fournisseur;Diane Cardinal;456 chemin du Roy;;Repentigny;QC;J6A 1B9;450-555-2053;d.cardinal@alimentsbio.ca;148765432RT0001;1487654321TQ0001;1280.50;F053
+Mobilier de Bureau Excellence;Fournisseur;Compte Commercial;789 boul. Lebourgneuf;;Québec;QC;G2K 0A4;418-555-2054;commercial@mobilierexcellence.ca;149876543RT0001;1498765432TQ0001;3450.00;F054
+Logiciels Comptables Avant-Garde;Fournisseur;Support Technique;345 rue Saint-Paul;;Montréal;QC;H2Y 2A7;514-555-2055;support@logicielsavantgarde.ca;150987654RT0001;1509876543TQ0001;1620.30;F055

@@ -429,6 +429,19 @@
     <Content Include="wbfTemplateEdit.aspx" />
     <Content Include="wbfTemplateList.aspx" />
     <Content Include="wbfUserEdit.aspx" />
+    <Content Include="Database\staging.ImportFiles.sql" />
+    <Content Include="Database\alter_staging_ImportFiles_AddAIColumns.sql" />
+    <Content Include="Database\s0600InsertImportFile.sql" />
+    <Content Include="Database\s0601GetRecentImportFiles.sql" />
+    <Content Include="Database\s0602UpdateImportFileResult.sql" />
+    <Content Include="Database\s0603GetImportFile.sql" />
+    <Content Include="Database\s0604ProcessImportJson.sql" />
+    <Content Include="Database\s0605GetPartyImports.sql" />
+    <Content Include="Database\s0606GetProductImports.sql" />
+    <Content Include="Database\staging.PartyImport.sql" />
+    <Content Include="Database\staging.ProductImport.sql" />
+    <Content Include="wbfImport.aspx" />
+    <Content Include="wbfImportView.aspx" />
     <Content Include="wbfUsers.aspx" />
     <Content Include="wbfWelcome.aspx" />
     <Content Include="Web.config" />
@@ -1039,6 +1052,20 @@
       <DependentUpon>wbfUserEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfImport.aspx.designer.vb">
+      <DependentUpon>wbfImport.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfImport.aspx.vb">
+      <DependentUpon>wbfImport.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfImportView.aspx.designer.vb">
+      <DependentUpon>wbfImportView.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfImportView.aspx.vb">
+      <DependentUpon>wbfImportView.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfUsers.aspx.designer.vb">
       <DependentUpon>wbfUsers.aspx</DependentUpon>
     </Compile>
@@ -1085,6 +1112,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\TempUploads\" />
+    <Folder Include="Database\" />
     <Folder Include="Documents\" />
   </ItemGroup>
   <PropertyGroup>
@@ -1129,7 +1157,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">

@@ -1,0 +1,58 @@
+Item Name;Description;Price;Revenue Account;Expense Account;Taxable
+Consultation comptable - heure;Heure de consultation en tenue de livres et fiscalité;125.00;4100;5100;Oui
+Préparation déclaration T1;Préparation de déclaration de revenus personnelle simple;185.00;4100;5100;Oui
+Préparation déclaration T2;Préparation de déclaration de revenus de société;850.00;4100;5100;Oui
+Vérification annuelle;Mission de vérification d'états financiers annuels;3500.00;4110;5110;Oui
+Mission d'examen;Mission d'examen d'états financiers;1850.00;4110;5110;Oui
+Avis aux lecteurs;Compilation d'états financiers avec avis aux lecteurs;650.00;4110;5110;Oui
+Tenue de livres mensuelle;Forfait mensuel pour entreprise jusqu'à 50 transactions;285.00;4120;5120;Oui
+Tenue de livres mensuelle plus;Forfait mensuel pour entreprise 51 à 150 transactions;485.00;4120;5120;Oui
+Tenue de livres mensuelle élite;Forfait mensuel pour entreprise 151+ transactions;785.00;4120;5120;Oui
+Production paie hebdomadaire;Service de production de paie par employé par semaine;12.50;4130;5130;Oui
+Production paie aux deux semaines;Service de paie par employé aux deux semaines;15.00;4130;5130;Oui
+Production paie mensuelle;Service de production de paie par employé par mois;25.00;4130;5130;Oui
+Déclaration TPS-TVQ mensuelle;Préparation et soumission déclaration TPS-TVQ mensuelle;125.00;4140;5140;Oui
+Déclaration TPS-TVQ trimestrielle;Préparation et soumission déclaration TPS-TVQ trimestrielle;185.00;4140;5140;Oui
+Déclaration TPS-TVQ annuelle;Préparation et soumission déclaration TPS-TVQ annuelle;325.00;4140;5140;Oui
+Préparation T4 et Relevé 1;Préparation des feuillets fiscaux de fin d'année par employé;15.00;4150;5150;Oui
+Conciliation bancaire;Conciliation bancaire mensuelle par compte;75.00;4120;5120;Oui
+Formation logiciel comptable;Formation personnalisée sur logiciel comptable par heure;145.00;4200;5200;Oui
+Formation TPS-TVQ;Formation de groupe sur les taxes à la consommation;385.00;4200;5200;Oui
+Formation paie;Formation de groupe sur la gestion de la paie;425.00;4200;5200;Oui
+Implantation Sage 50;Implantation complète du logiciel Sage 50 Comptabilité;1850.00;4210;5210;Oui
+Implantation QuickBooks;Implantation complète du logiciel QuickBooks Desktop;1650.00;4210;5210;Oui
+Implantation QuickBooks Online;Implantation complète de QuickBooks en ligne;1450.00;4210;5210;Oui
+Migration logiciel comptable;Migration de données entre logiciels comptables;2400.00;4210;5210;Oui
+Licence Sage 50 Premium;Licence annuelle Sage 50 Premium par utilisateur;680.00;4220;5220;Oui
+Licence QuickBooks Pro;Licence annuelle QuickBooks Pro par utilisateur;399.00;4220;5220;Oui
+Licence Microsoft 365 Business;Licence annuelle Microsoft 365 Business Standard par utilisateur;192.00;4220;5220;Oui
+Conseil fiscal stratégique;Heure de conseil fiscal et planification successorale;225.00;4300;5300;Oui
+Planification fiscale entreprise;Mandat de planification fiscale pour société;1850.00;4300;5300;Oui
+Réorganisation corporative;Mandat de réorganisation d'entreprise (gel successoral, etc.);4500.00;4300;5300;Oui
+Représentation Revenu Québec;Heure de représentation auprès de Revenu Québec;195.00;4310;5310;Oui
+Représentation ARC;Heure de représentation auprès de l'Agence du revenu du Canada;195.00;4310;5310;Oui
+Préparation budget annuel;Préparation d'un budget annuel détaillé par département;850.00;4320;5320;Oui
+Projection financière 3 ans;Préparation de projections financières sur 3 ans;1850.00;4320;5320;Oui
+Plan d'affaires complet;Préparation d'un plan d'affaires complet pour financement;3500.00;4320;5320;Oui
+Évaluation d'entreprise;Évaluation de la valeur marchande d'une entreprise;4500.00;4330;5330;Oui
+Audit interne contrôles;Mission d'audit des contrôles internes;3200.00;4330;5330;Oui
+Constitution société Québec;Constitution d'une société par actions au Québec;850.00;4400;5400;Oui
+Constitution société fédérale;Constitution d'une société par actions fédérale;1200.00;4400;5400;Oui
+Maintien annuel société;Préparation des résolutions annuelles et rapport annuel;385.00;4400;5400;Oui
+Convention entre actionnaires;Rédaction d'une convention entre actionnaires;1850.00;4410;5410;Oui
+Acquisition d'entreprise;Mandat d'accompagnement pour acquisition d'entreprise;6500.00;4420;5420;Oui
+Vente d'entreprise;Mandat d'accompagnement pour vente d'entreprise;6500.00;4420;5420;Oui
+Restructuration financière;Mandat de restructuration financière d'entreprise en difficulté;4800.00;4430;5430;Oui
+Dossier financement bancaire;Préparation d'un dossier complet de financement bancaire;1850.00;4440;5440;Oui
+Référencement subvention PME;Recherche et demande de subventions pour PME;1450.00;4440;5440;Oui
+Crédit impôt RS-DE;Préparation demande de crédit d'impôt à la R&D;2400.00;4450;5450;Oui
+Forfait démarrage entreprise;Forfait complet de démarrage d'entreprise (constitution + comptabilité);1850.00;4500;5500;Oui
+Frais administratifs;Frais administratifs - photocopies, envois, etc.;25.00;4900;5900;Non
+Frais de déplacement;Frais de déplacement par kilomètre;0.68;4910;5910;Non
+Frais d'hébergement;Frais d'hébergement professionnel par nuit;185.00;4910;5910;Non
+Frais de repas - réunion;Frais de repas d'affaires;75.00;4910;5910;Oui
+Heure supplémentaire urgente;Tarif horaire majoré pour travail urgent (hors heures);185.00;4100;5100;Oui
+Réunion virtuelle - heure;Heure de réunion par visioconférence;95.00;4100;5100;Oui
+Suivi mensuel tableau de bord;Préparation d'un tableau de bord financier mensuel;385.00;4120;5120;Oui
+Service de classement documents;Classement et numérisation de documents par boîte;125.00;4920;5920;Oui
+Archivage sécurisé annuel;Archivage sécurisé de documents - par boîte par année;45.00;4920;5920;Oui

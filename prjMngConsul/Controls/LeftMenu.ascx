@@ -302,6 +302,10 @@ Job Dashboard  </a>
 
                 <div class="nav-children">
 
+                    <a class="nav-child" href="~/wbfImport.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Import (clients / fournisseurs / produits)
+                    </a>
                     <a class="nav-child" href="~/ImportSageComptes.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Importation comptes Sage
