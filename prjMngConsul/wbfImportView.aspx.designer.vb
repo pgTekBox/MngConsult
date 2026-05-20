@@ -40,4 +40,8 @@ Partial Public Class wbfImportView
     Protected WithEvents pnlProduct As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents gvProduct As Global.System.Web.UI.WebControls.GridView
 
+    Protected WithEvents pnlMigrateResult As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litMigrateResult As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents btnMigrate As Global.System.Web.UI.WebControls.Button
+
 End Class

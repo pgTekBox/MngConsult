@@ -198,7 +198,7 @@
                                             CausesValidation="false" />
                                 <asp:LinkButton runat="server" Text="👁 Voir"
                                                 CssClass="up-btn up-btn-secondary"
-                                                OnClientClick='<%# String.Format("window.open(""wbfImportView.aspx?Id={0}"", ""ImportView{0}"", ""width=1280,height=820,scrollbars=yes,resizable=yes""); return false;", Eval("Id")) %>'
+                                                OnClientClick='<%# String.Format("openRadWindow({0}, ""rwImportView"", ""wbfImportView.aspx"", ""Détails import #{0}"", ""Détails import""); return false;", Eval("Id")) %>'
                                                 Visible='<%# Not (Eval("InputTokens") Is DBNull.Value) %>'
                                                 CausesValidation="false" />
                             </ItemTemplate>
@@ -208,6 +208,18 @@
             </div>
         </div>
     </asp:Panel>
+
+    <telerik:RadWindowManager ID="rwmImport" runat="server" EnableShadow="true"></telerik:RadWindowManager>
+
+    <telerik:RadWindow ID="rwImportView" runat="server"
+                       Modal="true"
+                       VisibleOnPageLoad="false"
+                       Behaviors="Close,Move,Resize,Maximize"
+                       Title="Visualisation staging"
+                       ClientIDMode="Static">
+    </telerik:RadWindow>
+
+    <script src="js/RadWindows.js"></script>
 
     <script>
         (function () {

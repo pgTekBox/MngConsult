@@ -438,6 +438,8 @@
     <Content Include="Database\s0604ProcessImportJson.sql" />
     <Content Include="Database\s0605GetPartyImports.sql" />
     <Content Include="Database\s0606GetProductImports.sql" />
+    <Content Include="Database\s0607MigratePartyImportToProd.sql" />
+    <Content Include="Database\s0608MigrateProductImportToProd.sql" />
     <Content Include="Database\staging.PartyImport.sql" />
     <Content Include="Database\staging.ProductImport.sql" />
     <Content Include="wbfImport.aspx" />

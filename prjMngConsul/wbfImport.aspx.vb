@@ -265,63 +265,33 @@ Public Class wbfImport
         End Try
     End Sub
 
-    Private Shared Function BuildPromptForType(typeImport As String, originalName As String) As String
-        Dim header As String =
-            "Tu es un extracteur de données comptables. Tu reçois ci-dessous le contenu brut d'un fichier " &
-            " " & originalName & " qui contient une liste de " & typeImport & "s. " &
-            "Retourne UNIQUEMENT un JSON valide, sans aucun texte autour, sans markdown, sans ```." &
-            vbCrLf & vbCrLf
+    Private Function BuildPromptForType(typeImport As String, originalName As String) As String
+
 
         Select Case typeImport
-            Case "Client", "Fournisseur"
-                Return header &
-                    "Schéma exigé :" & vbCrLf &
-                    "{" & vbCrLf &
-                    "  ""type"": """ & typeImport.ToLower() & """," & vbCrLf &
-                    "  ""row_count"": <nombre de lignes de données extraites>," & vbCrLf &
-                    "  ""rows"": [" & vbCrLf &
-                    "    {" & vbCrLf &
-                    "      ""name"": ""<nom du tiers>""," & vbCrLf &
-                    "      ""contact_name"": ""<contact ou null>""," & vbCrLf &
-                    "      ""address1"": ""<adresse ligne 1>""," & vbCrLf &
-                    "      ""address2"": ""<ligne 2 ou null>""," & vbCrLf &
-                    "      ""city"": ""<ville>""," & vbCrLf &
-                    "      ""province"": ""<province>""," & vbCrLf &
-                    "      ""postal_code"": ""<code postal>""," & vbCrLf &
-                    "      ""phone"": ""<téléphone>""," & vbCrLf &
-                    "      ""email"": ""<courriel>""," & vbCrLf &
-                    "      ""tps"": ""<no TPS ou null>""," & vbCrLf &
-                    "      ""tvq"": ""<no TVQ ou null>""," & vbCrLf &
-                    "      ""balance"": <nombre ou null>," & vbCrLf &
-                    "      ""auxiliary_account"": ""<compte aux. ou null>""" & vbCrLf &
-                    "    }" & vbCrLf &
-                    "  ]," & vbCrLf &
-                    "  ""errors"": [ { ""line"": <int>, ""message"": ""<raison>"" } ]" & vbCrLf &
-                    "}" & vbCrLf &
-                    "Règles : si une valeur est inconnue → null. Identifie automatiquement le séparateur (; , ou tab) et l'en-tête. Inclus dans errors toute ligne non parsable."
+            Case "Fournisseur"
+                Dim MyParam3 As New Collection
+                MyParam3.Add(New Data.SqlClient.SqlParameter("@Parameter", "PROMPT_FILE_SUPPLIER"))
+                Dim msds3 As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", MyParam3)
+                Dim prompt As String = msds3.Tables(0).Rows(0)("Prompt")
+
+            Case "Client"
+                Dim MyParam3 As New Collection
+                MyParam3.Add(New Data.SqlClient.SqlParameter("@Parameter", "PROMPT_FILE_CUSTOMER"))
+                Dim msds3 As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", MyParam3)
+                Dim prompt As String = msds3.Tables(0).Rows(0)("Prompt")
+                Return prompt
+
 
             Case "Produit"
-                Return header &
-                    "Schéma exigé :" & vbCrLf &
-                    "{" & vbCrLf &
-                    "  ""type"": ""produit""," & vbCrLf &
-                    "  ""row_count"": <nombre de lignes de données extraites>," & vbCrLf &
-                    "  ""rows"": [" & vbCrLf &
-                    "    {" & vbCrLf &
-                    "      ""name"": ""<nom du produit/service>""," & vbCrLf &
-                    "      ""description"": ""<description ou null>""," & vbCrLf &
-                    "      ""price"": <nombre ou null>," & vbCrLf &
-                    "      ""revenue_account"": ""<compte de vente ou null>""," & vbCrLf &
-                    "      ""expense_account"": ""<compte d'achat ou null>""," & vbCrLf &
-                    "      ""taxable"": <true|false|null>" & vbCrLf &
-                    "    }" & vbCrLf &
-                    "  ]," & vbCrLf &
-                    "  ""errors"": [ { ""line"": <int>, ""message"": ""<raison>"" } ]" & vbCrLf &
-                    "}" & vbCrLf &
-                    "Règles : si une valeur est inconnue → null. ""taxable"" = true pour ""Oui""/""Yes""/""Y""/""1"", false pour ""Non""/""No""/""N""/""0"", sinon null."
+                Dim MyParam3 As New Collection
+                MyParam3.Add(New Data.SqlClient.SqlParameter("@Parameter", "PROMPT_FILE_PRODUCT_SERVICE"))
+                Dim msds3 As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", MyParam3)
+                Dim prompt As String = msds3.Tables(0).Rows(0)("Prompt")
+                Return prompt
 
             Case Else
-                Return header & "Retourne un JSON avec un tableau ""rows"" représentant chaque ligne du fichier sous forme d'objet clé/valeur."
+                Return "Retourne un JSON avec un tableau ""rows"" représentant chaque ligne du fichier sous forme d'objet clé/valeur."
         End Select
     End Function
 

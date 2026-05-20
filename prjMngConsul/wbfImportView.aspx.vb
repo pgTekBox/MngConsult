@@ -5,13 +5,65 @@ Public Class wbfImportView
     Inherits clsData
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             LoadView()
         End If
+    End Sub
+
+    Protected Sub btnMigrate_Click(sender As Object, e As EventArgs) Handles btnMigrate.Click
+        Dim id As Integer
+        If Not Integer.TryParse(Request.QueryString("Id"), id) OrElse id <= 0 Then
+            ShowError("Identifiant manquant.")
+            Return
+        End If
+
+        ' Récupérer le TypeImport pour aiguiller vers la bonne proc
+        Dim pType As New Collection
+        pType.Add(New SqlParameter("@Id", id))
+        Dim dsType As DataSet = ExecuteSQLds("s0603GetImportFile", pType)
+        If dsType.Tables(0).Rows.Count = 0 Then
+            ShowError("Fichier introuvable.")
+            Return
+        End If
+        Dim typeImport As String = Convert.ToString(dsType.Tables(0).Rows(0)("TypeImport"))
+
+        Dim procName As String
+        Select Case typeImport
+            Case "Client", "Fournisseur" : procName = "s0607MigratePartyImportToProd"
+            Case "Produit"               : procName = "s0608MigrateProductImportToProd"
+            Case Else
+                ShowError($"TypeImport inconnu : {Server.HtmlEncode(typeImport)}")
+                Return
+        End Select
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@ImportFileId", id))
+            Dim ds As DataSet = ExecuteSQLds(procName, p)
+
+            Dim totalPending As Integer = 0, migrated As Integer = 0, skipped As Integer = 0, errors As Integer = 0
+            If ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                totalPending = If(r("TotalPending") Is DBNull.Value, 0, Convert.ToInt32(r("TotalPending")))
+                migrated     = If(r("Migrated")     Is DBNull.Value, 0, Convert.ToInt32(r("Migrated")))
+                skipped      = If(r("Skipped")      Is DBNull.Value, 0, Convert.ToInt32(r("Skipped")))
+                errors       = If(r("Errors")       Is DBNull.Value, 0, Convert.ToInt32(r("Errors")))
+            End If
+
+            Dim icon As String = If(errors > 0, "⚠", "✅")
+            Dim destination As String = If(typeImport = "Produit", "produits", "T050Party + T054PartyAddress")
+            litMigrateResult.Text = $"{icon} Migration vers {destination} terminée : <strong>{migrated}</strong> migré(s), <strong>{skipped}</strong> ignoré(s), <strong>{errors}</strong> erreur(s) sur {totalPending} ligne(s) en attente."
+            pnlMigrateResult.Visible = True
+        Catch ex As Exception
+            ShowError($"Erreur lors de la migration : {Server.HtmlEncode(ex.Message)}")
+        End Try
+
+        ' Rafraîchir l'affichage pour montrer les nouveaux statuts
+        LoadView()
     End Sub
 
     Private Sub LoadView()

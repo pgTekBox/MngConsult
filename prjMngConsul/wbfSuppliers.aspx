@@ -94,6 +94,7 @@
 
 
   <telerik:RadAjaxManager ID="Ram1" runat="server"  ClientIDMode="Static">
+      <ClientEvents OnRequestStart="captureListScroll" OnResponseEnd="restoreListScroll" />
       <AjaxSettings>
 
           <%-- Refresh du label fournisseur + label adresse + lignes --%>
@@ -133,7 +134,7 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter Fournisseur"
                     CausesValidation="false"
-                    OnClientClick="openNewSupplierWindow(0); return false;" />
+                    OnClientClick="saveListScrollNow(); openNewSupplierWindow(0); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
                         CssClass="input  txttbsearch"
@@ -193,13 +194,14 @@
                                     ToolTip="Modifier"
                                     CausesValidation="false"
                                     
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' /> 
+                                    OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
                                     ToolTip="Supprimer"
                                     CommandName="DeleteSupplier"
                                     CommandArgument='<%# Eval("Id") %>'
+                                    OnClientClick="saveListScrollNow();"
                                     CausesValidation="false" />
                             </div>
                         </div>
@@ -217,7 +219,7 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0); return false;" title="Ajouter un fournisseur">+</button>
+        <button class="fab-add" onclick="saveListScrollNow(); openNewSupplierWindow(0); return false;" title="Ajouter un fournisseur">+</button>
         <%--openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />--%> 
 
   
@@ -238,6 +240,70 @@
 
     <script type="text/javascript">
 
+        // ── Conservation du scroll ───────────────────────────────────────
+        // Stratégie en deux temps :
+        //   (a) sessionStorage : survit aux rechargements complets de page
+        //       → utilisé via saveListScrollNow() avant ouverture du modal
+        //   (b) ClientEvents Telerik : couvre les refresh AJAX in-place
+        //       → captureListScroll / restoreListScroll
+        var SCROLL_KEY = 'wbfSuppliers_listScroll';
+
+        function saveListScrollNow() {
+            var body = document.querySelector('.listview-list-body');
+            var v = body ? body.scrollTop : 0;
+            try { sessionStorage.setItem(SCROLL_KEY, v); } catch (e) { }
+        }
+
+        function restoreListScrollFromStorage() {
+            var raw = null;
+            try { raw = sessionStorage.getItem(SCROLL_KEY); } catch (e) { }
+            if (raw === null) return;
+            var n = parseInt(raw, 10) || 0;
+            try { sessionStorage.removeItem(SCROLL_KEY); } catch (e) { }
+            if (n <= 0) return;
+
+            var apply = function () {
+                var body = document.querySelector('.listview-list-body');
+                if (body) body.scrollTop = n;
+            };
+            apply();
+            if (window.requestAnimationFrame) requestAnimationFrame(apply);
+            setTimeout(apply, 50);
+            setTimeout(apply, 200);
+            setTimeout(apply, 500);
+        }
+
+        if (document.readyState !== 'loading') {
+            restoreListScrollFromStorage();
+        } else {
+            document.addEventListener('DOMContentLoaded', restoreListScrollFromStorage);
+        }
+        window.addEventListener('load', restoreListScrollFromStorage);
+
+        // Hooks Telerik AJAX (cas refresh in-place sans reload)
+        var __listScrollSaved = { winY: 0, bodyY: 0, has: false };
+
+        function captureListScroll(sender, args) {
+            __listScrollSaved.winY = window.scrollY || window.pageYOffset || 0;
+            var body = document.querySelector('.listview-list-body');
+            __listScrollSaved.bodyY = body ? body.scrollTop : 0;
+            __listScrollSaved.has = true;
+        }
+
+        function restoreListScroll(sender, args) {
+            if (!__listScrollSaved.has) return;
+            var winY = __listScrollSaved.winY, bodyY = __listScrollSaved.bodyY;
+
+            var apply = function () {
+                if (winY > 0) window.scrollTo(0, winY);
+                var body = document.querySelector('.listview-list-body');
+                if (body && bodyY > 0) body.scrollTop = bodyY;
+            };
+            apply();
+            if (window.requestAnimationFrame) requestAnimationFrame(apply);
+            setTimeout(apply, 50);
+            setTimeout(apply, 200);
+        }
 
 
         function openNewSupplierWindow() {

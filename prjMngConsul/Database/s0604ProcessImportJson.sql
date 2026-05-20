@@ -4,6 +4,15 @@
 -- OPENJSON, et insère les lignes dans staging.PartyImport (Client/Fournisseur)
 -- ou staging.ProductImport (Produit) selon TypeImport.
 --
+-- Les COMPTES (CompteAuxClient, CompteAuxFournisseur, RevenueAccount,
+-- ExpenseAccount) ne viennent PAS du JSON — ils sont lus depuis
+-- T100ParamComptable/T101ParamValues (Categorie='COMPTABILITE') pour la
+-- compagnie du fichier :
+--   - 'AR' → CompteAuxClient (clients)
+--   - 'CF' → CompteAuxFournisseur (fournisseurs)
+--   - 'VP' → RevenueAccount (produits)
+--   - 'AP' → ExpenseAccount (produits)
+--
 -- Idempotent : supprime d'abord les lignes staging existantes pour ce
 -- ImportFileId, donc peut être ré-exécutée sans dupliquer.
 --
@@ -20,15 +29,17 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
-    DECLARE @TypeImport   VARCHAR(20),
-            @JsonResult   NVARCHAR(MAX),
-            @Status       VARCHAR(20),
+    DECLARE @TypeImport    VARCHAR(20),
+            @JsonResult    NVARCHAR(MAX),
+            @Status        VARCHAR(20),
+            @CompanyGUID   UNIQUEIDENTIFIER,
             @InsertedCount INT = 0;
 
     -- ── 1. Récupérer le fichier et son JSON ─────────────────────────────────
-    SELECT @TypeImport = TypeImport,
-           @JsonResult = JsonResult,
-           @Status     = Status
+    SELECT @TypeImport  = TypeImport,
+           @JsonResult  = JsonResult,
+           @Status      = Status,
+           @CompanyGUID = CompanyGUID
     FROM staging.ImportFiles
     WHERE Id = @ImportFileId;
 
@@ -50,11 +61,32 @@ BEGIN
         RETURN;
     END
 
-    -- ── 2. Nettoyer les lignes staging existantes pour ce fichier ──────────
+    -- ── 2. Lookup des comptes par défaut de la compagnie (T100/T101) ───────
+    DECLARE @AR NVARCHAR(20),    -- CompteAuxClient
+            @CF NVARCHAR(20),    -- CompteAuxFournisseur
+            @VP NVARCHAR(20),    -- Compte vente (revenue)
+            @AP NVARCHAR(20);    -- Compte achat (expense)
+
+    IF @CompanyGUID IS NOT NULL
+    BEGIN
+        SELECT @AR = MAX(CASE WHEN pc.ShortName = 'AR' THEN pv.sVal END),
+               @CF = MAX(CASE WHEN pc.ShortName = 'CF' THEN pv.sVal END),
+               @VP = MAX(CASE WHEN pc.ShortName = 'VP' THEN pv.sVal END),
+               @AP = MAX(CASE WHEN pc.ShortName = 'AP' THEN pv.sVal END)
+        FROM dbo.T100ParamComptable pc
+        INNER JOIN dbo.T101ParamValues pv
+                ON pv.T100Id = pc.Id
+               AND pv.CompanyGUID = pc.CompanyGUID
+        WHERE pc.CompanyGUID = @CompanyGUID
+          AND pc.Categorie   = 'COMPTABILITE'
+          AND pc.ShortName IN ('AR', 'CF', 'VP', 'AP');
+    END
+
+    -- ── 3. Nettoyer les lignes staging existantes pour ce fichier ──────────
     DELETE FROM staging.PartyImport   WHERE ImportFileId = @ImportFileId;
     DELETE FROM staging.ProductImport WHERE ImportFileId = @ImportFileId;
 
-    -- ── 3. Aiguillage selon TypeImport ─────────────────────────────────────
+    -- ── 4. Aiguillage selon TypeImport ─────────────────────────────────────
     IF @TypeImport IN ('Client', 'Fournisseur')
     BEGIN
         ;WITH parsed AS (
@@ -71,8 +103,7 @@ BEGIN
                 j.email,
                 j.tps,
                 j.tvq,
-                j.balance_text,
-                j.auxiliary_account
+                j.balance_text
             FROM OPENJSON(@JsonResult, '$.rows')
             WITH (
                 [name]            NVARCHAR(500)  '$.name',
@@ -86,8 +117,7 @@ BEGIN
                 email             NVARCHAR(200)  '$.email',
                 tps               NVARCHAR(20)   '$.tps',
                 tvq               NVARCHAR(20)   '$.tvq',
-                balance_text      NVARCHAR(50)   '$.balance',
-                auxiliary_account NVARCHAR(20)   '$.auxiliary_account'
+                balance_text      NVARCHAR(50)   '$.balance'
             ) AS j
         )
         INSERT INTO staging.PartyImport (
@@ -112,8 +142,8 @@ BEGIN
             tps,
             tvq,
             TRY_CAST(REPLACE(REPLACE(balance_text, ',', '.'), ' ', '') AS DECIMAL(15,2)),
-            CASE WHEN @TypeImport = 'Client'      THEN auxiliary_account END,
-            CASE WHEN @TypeImport = 'Fournisseur' THEN auxiliary_account END
+            CASE WHEN @TypeImport = 'Client'      THEN @AR END,    -- depuis T101 'AR'
+            CASE WHEN @TypeImport = 'Fournisseur' THEN @CF END     -- depuis T101 'CF'
         FROM parsed;
 
         SET @InsertedCount = @@ROWCOUNT;
@@ -126,16 +156,12 @@ BEGIN
                 j.[name],
                 j.[description],
                 j.price_text,
-                j.revenue_account,
-                j.expense_account,
                 j.taxable_text
             FROM OPENJSON(@JsonResult, '$.rows')
             WITH (
                 [name]          NVARCHAR(500)  '$.name',
                 [description]   NVARCHAR(2000) '$.description',
                 price_text      NVARCHAR(50)   '$.price',
-                revenue_account NVARCHAR(20)   '$.revenue_account',
-                expense_account NVARCHAR(20)   '$.expense_account',
                 taxable_text    NVARCHAR(10)   '$.taxable'
             ) AS j
         )
@@ -149,8 +175,8 @@ BEGIN
             [name],
             [description],
             TRY_CAST(REPLACE(REPLACE(price_text, ',', '.'), ' ', '') AS DECIMAL(15,2)),
-            revenue_account,
-            expense_account,
+            @VP,    -- depuis T101 'VP'
+            @AP,    -- depuis T101 'AP'
             CASE
                 WHEN taxable_text IS NULL THEN NULL
                 WHEN LOWER(taxable_text) IN ('true', 'oui', 'yes', 'y', '1') THEN CAST(1 AS BIT)
@@ -167,12 +193,12 @@ BEGIN
         RETURN;
     END
 
-    -- ── 4. Mettre à jour le compteur dans staging.ImportFiles ──────────────
+    -- ── 5. Mettre à jour le compteur dans staging.ImportFiles ──────────────
     UPDATE staging.ImportFiles
     SET ProcessedRows = @InsertedCount
     WHERE Id = @ImportFileId;
 
-    -- ── 5. Résumé ───────────────────────────────────────────────────────────
+    -- ── 6. Résumé ───────────────────────────────────────────────────────────
     SELECT @ImportFileId  AS ImportFileId,
            @TypeImport    AS TypeImport,
            @InsertedCount AS InsertedCount;

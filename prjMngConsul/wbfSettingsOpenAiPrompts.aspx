@@ -1,4 +1,5 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+    ValidateRequest="false"
     CodeBehind="wbfSettingsOpenAiPrompts.aspx.vb" Inherits="MngConsul.wbfSettingsOpenAiPrompts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
