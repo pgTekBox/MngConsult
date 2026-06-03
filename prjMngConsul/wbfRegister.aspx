@@ -336,6 +336,7 @@
                         renvoyer le lien
                     </asp:LinkButton>.
                 </p>
+                <asp:Literal ID="litResendStatus" runat="server" />
                   <p style="margin-top: 18px;">
                   <asp:Button ID="btnFerme" runat="server"  
       Text="Vous pouvez fermer cette page." CssClass="btn-submit" CausesValidation="false" />

@@ -88,6 +88,8 @@ Public Class wbfSupplierEdit
 
             txtNote.Text = ""
 
+            ' Bouton Stripe : non visible pour un nouveau fournisseur (besoin d'un PartyId)
+            lnkStripeOnboarding.Visible = False
 
         Else
             'Existing Supplier
@@ -108,6 +110,11 @@ Public Class wbfSupplierEdit
             tlblCreated.Text = CDate(ds.Tables(0).Rows(0)("Created")).ToString("yyyy-MM-dd HH:mm")
             LoadAddressTableFromBD()
             BindAddressGrid()
+
+            ' Activer le bouton Stripe Connect (ouvre dans nouvelle fenêtre)
+            lnkStripeOnboarding.Visible = True
+            lnkStripeOnboarding.NavigateUrl = "wbfSupplierStripeOnboarding.aspx?PartyId=" & SupplierId.ToString()
+            lnkStripeOnboarding.Target = "_blank"
 
         End If
     End Sub

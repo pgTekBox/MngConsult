@@ -374,6 +374,50 @@
             color: var(--slate-500);
             margin-top: 14px;
         }
+
+        /* === Bloc Stripe info === */
+        .stripe-info {
+            background: linear-gradient(135deg, rgba(99,91,255,.04), rgba(99,91,255,.08));
+            border: 1px solid rgba(99,91,255,.15);
+            border-radius: 14px;
+            padding: 18px 20px;
+            margin-bottom: 20px;
+        }
+
+        .stripe-logo-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 14px;
+            padding-bottom: 14px;
+            border-bottom: 1px solid rgba(99,91,255,.15);
+        }
+
+        .stripe-tagline {
+            font-size: 13px;
+            font-weight: 700;
+            color: #635BFF;
+        }
+
+        .stripe-features-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .stripe-features-list li {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--slate-700);
+            padding: 5px 0;
+        }
+
+        .stripe-features-list svg {
+            color: var(--green-500);
+            flex-shrink: 0;
+        }
     </style>
 </head>
 
@@ -385,11 +429,6 @@
             <div class="brand">
                 <div class="logo">M</div>
                 <h1>MngConsul</h1>
-            </div>
-
-            <div class="dev-banner">
-                <strong>🧪 Mode simulation</strong> — Pour tester un paiement réussi, utilisez la carte
-                <strong>4242 4242 4242 4242</strong> avec n'importe quelle date d'expiration future et CVV.
             </div>
 
             <!-- =====================================================
@@ -443,74 +482,47 @@
 
 
             <!-- =====================================================
-                 DROITE : Formulaire carte de crédit
+                 DROITE : Bloc paiement Stripe Checkout
                  ===================================================== -->
             <div class="form-card">
 
-                <h2>Informations de paiement</h2>
-                <p class="form-sub">Entrez les détails de votre carte de crédit</p>
+                <h2>Paiement sécurisé</h2>
+                <p class="form-sub">Vous serez redirigé vers Stripe pour finaliser votre paiement.</p>
 
-                <!-- Carte visuelle qui se met à jour avec les saisies -->
-                <div class="card-visual">
-                    <div class="card-brand-logo" id="cardBrandLogo">VISA</div>
-                    <div class="card-chip"></div>
-                    <div class="card-number" id="cardNumberDisplay">•••• •••• •••• ••••</div>
-                    <div class="card-bottom">
-                        <div>
-                            <div class="lbl">Titulaire</div>
-                            <div class="val" id="cardHolderDisplay">VOTRE NOM</div>
-                        </div>
-                        <div style="text-align: right;">
-                            <div class="lbl">Expire</div>
-                            <div class="val" id="cardExpiryDisplay">MM/AA</div>
-                        </div>
+                <!-- Bloc d'information Stripe -->
+                <div class="stripe-info">
+                    <div class="stripe-logo-row">
+                        <svg width="42" height="20" viewBox="0 0 60 25" fill="#635BFF" aria-label="Stripe">
+                            <path d="M59.5,14.1c0-4.2-2-7.5-5.9-7.5s-6.3,3.3-6.3,7.4c0,4.9,2.8,7.4,6.8,7.4c2,0,3.5-0.4,4.6-1.1v-3.3c-1.1,0.6-2.4,0.9-4.1,0.9c-1.6,0-3-0.6-3.2-2.5h8.1C59.5,15.3,59.5,14.5,59.5,14.1z M51.3,12.6c0-1.8,1.1-2.6,2.1-2.6c1,0,2,0.8,2,2.6H51.3z M40.8,6.6c-1.6,0-2.7,0.8-3.2,1.3l-0.2-1H33.7v18.9l4.2-0.9l0-4.6c0.6,0.5,1.6,1.1,3.1,1.1c3.1,0,5.9-2.5,5.9-7.5C46.9,9.3,44,6.6,40.8,6.6z M39.8,17.6c-1,0-1.7-0.4-2-0.8l0-6.4c0.4-0.5,1-0.8,2-0.8c1.6,0,2.7,1.8,2.7,4C42.6,15.9,41.5,17.6,39.8,17.6z M32.1,5.6L27.9,6.5v3.4l4.2-0.9V5.6z M27.9,6.9h4.2v14.3h-4.2V6.9z M23.4,8l-0.3-1.2h-3.6v14.4h4.1v-9.7c1-1.3,2.6-1,3.1-0.9V6.8C26.3,6.6,24.4,6.2,23.4,8z M14.9,3.2l-4.1,0.9V18c0,2.5,1.9,4.3,4.3,4.3c1.3,0,2.3-0.2,2.9-0.5v-3.3c-0.5,0.2-3.1,1-3.1-1.5v-5.7h3.1V7.4h-3.1V3.2z M4.2,11c0-0.6,0.5-0.9,1.4-0.9c1.2,0,2.8,0.4,4.1,1.1V7.3c-1.4-0.6-2.7-0.8-4.1-0.8c-3.3,0-5.6,1.8-5.6,4.7c0,4.6,6.3,3.9,6.3,5.9c0,0.8-0.7,1-1.5,1c-1.3,0-3-0.5-4.4-1.2v4c1.5,0.6,3,0.9,4.4,0.9c3.4,0,5.8-1.7,5.8-4.7C10.6,12.2,4.2,13,4.2,11z"/>
+                        </svg>
+                        <span class="stripe-tagline">Paiement traité par Stripe</span>
                     </div>
+                    <ul class="stripe-features-list">
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Chiffrement SSL 256 bits
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Conforme PCI-DSS
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Apple Pay, Google Pay, Link supportés
+                        </li>
+                        <li>
+                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
+                            Aucune carte stockée chez MngConsul
+                        </li>
+                    </ul>
                 </div>
 
                 <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="alert error">
                     <asp:Literal ID="litError" runat="server" />
                 </asp:Panel>
 
-                <div class="field">
-                    <label>Nom du titulaire</label>
-                    <asp:TextBox ID="tbCardHolder" runat="server"
-                        placeholder="JEAN TREMBLAY"
-                        ClientIDMode="Static" autocomplete="cc-name" />
-                </div>
-
-                <div class="field">
-                    <label>Numéro de carte</label>
-                    <asp:TextBox ID="tbCardNumber" runat="server"
-                        placeholder="4242 4242 4242 4242"
-                        ClientIDMode="Static"
-                        autocomplete="cc-number"
-                        MaxLength="23" />
-                    <div class="test-card-hint">
-                        💡 Carte de test : <code>4242 4242 4242 4242</code> · Toute autre carte sera refusée
-                    </div>
-                </div>
-
-                <div class="field-row">
-                    <div class="field">
-                        <label>Date d'expiration</label>
-                        <asp:TextBox ID="tbExpiry" runat="server"
-                            placeholder="MM/AA"
-                            ClientIDMode="Static"
-                            autocomplete="cc-exp"
-                            MaxLength="5" />
-                    </div>
-                    <div class="field">
-                        <label>CVV</label>
-                        <asp:TextBox ID="tbCvv" runat="server"
-                            placeholder="123"
-                            ClientIDMode="Static"
-                            autocomplete="cc-csc"
-                            MaxLength="4" />
-                    </div>
-                </div>
-
                 <asp:Button ID="btnPay" runat="server" CssClass="btn-pay"
-                    Text="🔒 Payer maintenant" />
+                    Text="Payer avec Stripe →" />
 
                 <div class="secure-info">
                     <svg width="14" height="14" viewBox="0 0 24 24" fill="none"
@@ -518,80 +530,12 @@
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
-                    Paiement sécurisé · Vos informations sont chiffrées
+                    Vous serez redirigé vers checkout.stripe.com
                 </div>
 
             </div>
 
         </div>
-
-        <script type="text/javascript">
-
-            // ===== Formatage du numéro de carte =====
-            (function () {
-                var input = document.getElementById('tbCardNumber');
-                var display = document.getElementById('cardNumberDisplay');
-                var brandLogo = document.getElementById('cardBrandLogo');
-                if (!input) return;
-
-                input.addEventListener('input', function () {
-                    var val = input.value.replace(/\D/g, '').substring(0, 19);
-                    var formatted = val.match(/.{1,4}/g);
-                    input.value = formatted ? formatted.join(' ') : '';
-
-                    // Affichage sur la carte visuelle
-                    var visual = (input.value + '•'.repeat(19)).substring(0, 19);
-                    if (visual.length === 0) visual = '•••• •••• •••• ••••';
-                    display.textContent = visual;
-
-                    // Détection du type de carte
-                    var firstDigit = val.charAt(0);
-                    var firstTwo = val.substring(0, 2);
-                    if (val.length === 0)              brandLogo.textContent = 'VISA';
-                    else if (firstDigit === '4')       brandLogo.textContent = 'VISA';
-                    else if (firstTwo >= '51' && firstTwo <= '55') brandLogo.textContent = 'MC';
-                    else if (firstTwo === '34' || firstTwo === '37') brandLogo.textContent = 'AMEX';
-                    else                               brandLogo.textContent = 'CARD';
-                });
-            })();
-
-            // ===== Formatage de l'expiration MM/AA =====
-            (function () {
-                var input = document.getElementById('tbExpiry');
-                var display = document.getElementById('cardExpiryDisplay');
-                if (!input) return;
-
-                input.addEventListener('input', function () {
-                    var val = input.value.replace(/\D/g, '').substring(0, 4);
-                    if (val.length >= 3) {
-                        input.value = val.substring(0, 2) + '/' + val.substring(2);
-                    } else {
-                        input.value = val;
-                    }
-                    display.textContent = input.value || 'MM/AA';
-                });
-            })();
-
-            // ===== CVV : chiffres uniquement =====
-            (function () {
-                var input = document.getElementById('tbCvv');
-                if (!input) return;
-                input.addEventListener('input', function () {
-                    input.value = input.value.replace(/\D/g, '').substring(0, 4);
-                });
-            })();
-
-            // ===== Nom du titulaire en majuscules sur la carte =====
-            (function () {
-                var input = document.getElementById('tbCardHolder');
-                var display = document.getElementById('cardHolderDisplay');
-                if (!input) return;
-                input.addEventListener('input', function () {
-                    display.textContent = input.value.toUpperCase() || 'VOTRE NOM';
-                });
-            })();
-
-        </script>
 
     </form>
 </body>

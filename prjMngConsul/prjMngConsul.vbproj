@@ -52,8 +52,12 @@
     <Reference Include="Microsoft.Bcl.AsyncInterfaces, Version=10.0.0.3, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
+    <Reference Include="Microsoft.CSharp" />
     <Reference Include="QuestPDF, Version=2026.2.4.0, Culture=neutral, PublicKeyToken=0f3c2b2315ff52c8, processorArchitecture=MSIL">
       <HintPath>packages\QuestPDF.2026.2.4\lib\netstandard2.0\QuestPDF.dll</HintPath>
+    </Reference>
+    <Reference Include="Stripe.net, Version=51.2.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>packages\Stripe.net.51.2.0\lib\net462\Stripe.net.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
@@ -92,6 +96,11 @@
     </Reference>
     <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.InteropServices.RuntimeInformation, Version=4.0.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Runtime.InteropServices.RuntimeInformation.4.3.0\lib\net45\System.Runtime.InteropServices.RuntimeInformation.dll</HintPath>
+      <Private>True</Private>
+      <Private>True</Private>
     </Reference>
     <Reference Include="System.Security.Cryptography.Algorithms, Version=4.2.1.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>packages\System.Security.Cryptography.Algorithms.4.3.0\lib\net463\System.Security.Cryptography.Algorithms.dll</HintPath>
@@ -276,6 +285,33 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="Database\check_existing_outbound_mail_proc.sql" />
+    <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
+    <Content Include="Database\s0070UpdatePartyLastPaymentMethod.sql" />
+    <Content Include="Database\s0071GetPartyForPayment.sql" />
+    <Content Include="Database\s0072UpdatePartyStripeAccountId.sql" />
+    <Content Include="Database\s0073GetPartyForOnboarding.sql" />
+    <Content Include="Database\s0080CreateDecaissementFromStripe.sql" />
+    <Content Include="Database\s0082CheckReglementExists.sql" />
+    <Content Include="Database\s0083GetStripeEvents.sql" />
+    <Content Include="Database\s0084GetStripeEventStats.sql" />
+    <Content Include="Database\s0222ResendActivation.sql" />
+    <Content Include="Database\s0610InsertOutboundMail.sql" />
+    <Content Include="Database\s0630GetPlansForLanding.sql" />
+    <Content Include="Database\s0631GetPlanByCode.sql" />
+    <Content Include="Database\s0640StripeEventInsertIfNew.sql" />
+    <Content Include="Database\s0641StripeEventMarkProcessed.sql" />
+    <Content Include="Database\s0642StripeEventMarkFailed.sql" />
+    <Content Include="Database\s0643StripeSubscriptionUpsert.sql" />
+    <Content Include="Database\s0644StripeCustomerLink.sql" />
+    <Content Include="Database\s0645GetUserByStripeCustomerId.sql" />
+    <Content Include="Database\setup_MailService_user.sql" />
+    <Content Include="Database\T015User_AddStripeCustomerId.sql" />
+    <Content Include="Database\T021Plan.sql" />
+    <Content Include="Database\T021Plan_AddLandingPageColumns.sql" />
+    <Content Include="Database\T021Plan_FixAccents.sql" />
+    <Content Include="Database\T050Party_AddStripeColumns.sql" />
+    <Content Include="Database\tStripeEvenement.sql" />
     <Content Include="Default.aspx" />
     <Content Include="ExchangeToken.aspx" />
     <Content Include="favicon.ico" />
@@ -421,10 +457,15 @@
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfSetting.aspx" />
     <Content Include="wbfSettingsOpenAiPrompts.aspx" />
+    <Content Include="wbfStripeWebhookDiagnostic.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
+    <Content Include="wbfSupplierPaymentChoice.aspx" />
+    <Content Include="wbfSupplierPaymentSuccess.aspx" />
+    <Content Include="wbfSupplierPaymentSync.aspx" />
     <Content Include="wbfSuppliers.aspx" />
     <Content Include="wbfSuppliersInvoices.aspx" />
+    <Content Include="wbfSupplierStripeOnboarding.aspx" />
     <Content Include="wbfTemplate.aspx" />
     <Content Include="wbfTemplateEdit.aspx" />
     <Content Include="wbfTemplateList.aspx" />
@@ -440,6 +481,7 @@
     <Content Include="Database\s0606GetProductImports.sql" />
     <Content Include="Database\s0607MigratePartyImportToProd.sql" />
     <Content Include="Database\s0608MigrateProductImportToProd.sql" />
+    <Content Include="Database\s0609DeleteImportFile.sql" />
     <Content Include="Database\staging.PartyImport.sql" />
     <Content Include="Database\staging.ProductImport.sql" />
     <Content Include="wbfImport.aspx" />
@@ -457,6 +499,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Code\clsReceiptImageOptimizer.vb" />
+    <Compile Include="App_Code\clsStripe.vb" />
     <Compile Include="App_Code\docHandler.vb" />
     <Compile Include="App_Code\clsImage.vb">
       <SubType>ASPXCodeBehind</SubType>
@@ -650,6 +693,9 @@
     <Compile Include="Site.Master.vb">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="StripeWebhook.ashx.vb">
+      <DependentUpon>StripeWebhook.ashx</DependentUpon>
     </Compile>
     <Compile Include="todel.aspx.designer.vb">
       <DependentUpon>todel.aspx</DependentUpon>
@@ -998,6 +1044,13 @@
       <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfStripeWebhookDiagnostic.aspx.designer.vb">
+      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfStripeWebhookDiagnostic.aspx.vb">
+      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="wbfSupplierEdit.aspx.designer.vb">
       <DependentUpon>wbfSupplierEdit.aspx</DependentUpon>
     </Compile>
@@ -1012,6 +1065,27 @@
       <DependentUpon>wbfSupplierInvoinceEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfSupplierPaymentChoice.aspx.designer.vb">
+      <DependentUpon>wbfSupplierPaymentChoice.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentChoice.aspx.vb">
+      <DependentUpon>wbfSupplierPaymentChoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentSuccess.aspx.designer.vb">
+      <DependentUpon>wbfSupplierPaymentSuccess.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentSuccess.aspx.vb">
+      <DependentUpon>wbfSupplierPaymentSuccess.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentSync.aspx.designer.vb">
+      <DependentUpon>wbfSupplierPaymentSync.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentSync.aspx.vb">
+      <DependentUpon>wbfSupplierPaymentSync.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="wbfSuppliers.aspx.designer.vb">
       <DependentUpon>wbfSuppliers.aspx</DependentUpon>
     </Compile>
@@ -1025,6 +1099,13 @@
     <Compile Include="wbfSuppliersInvoices.aspx.vb">
       <DependentUpon>wbfSuppliersInvoices.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierStripeOnboarding.aspx.designer.vb">
+      <DependentUpon>wbfSupplierStripeOnboarding.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierStripeOnboarding.aspx.vb">
+      <DependentUpon>wbfSupplierStripeOnboarding.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfTemplate.aspx.designer.vb">
       <DependentUpon>wbfTemplate.aspx</DependentUpon>
@@ -1105,6 +1186,7 @@
     <None Include="packages.config" />
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
+    <Content Include="StripeWebhook.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1114,7 +1196,6 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\TempUploads\" />
-    <Folder Include="Database\" />
     <Folder Include="Documents\" />
   </ItemGroup>
   <PropertyGroup>

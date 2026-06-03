@@ -112,4 +112,34 @@ Public Class wbfSuppliersInvoices
         rgFournisseursFactures.Rebind()
     End Sub
 
+    ''' <summary>
+    ''' Détermine si le bouton "Payer" doit être visible sur une ligne.
+    ''' Visible UNIQUEMENT si :
+    '''   - StatutPaiement <> 'PAYEE' (il reste à payer)
+    '''   - ComptabilisationStatus = 'COMPTABILISE' (facture finalisée, pas en brouillon)
+    ''' </summary>
+    Public Function CanPay(statutPaiement As Object, comptabilisationStatus As Object) As Boolean
+        If statutPaiement Is Nothing OrElse IsDBNull(statutPaiement) Then Return False
+        If comptabilisationStatus Is Nothing OrElse IsDBNull(comptabilisationStatus) Then Return False
+
+        Dim statut As String = statutPaiement.ToString().Trim().ToUpper()
+        Dim compta As String = comptabilisationStatus.ToString().Trim().ToUpper()
+
+        Return statut <> "PAYEE" AndAlso compta = "COMPTABILISE"
+    End Function
+
+    ''' <summary>
+    ''' Formate un montant decimal pour usage dans une URL (point comme separateur).
+    ''' Evite que la virgule FR soit interpretee comme separateur de milliers cote
+    ''' destination, transformant 493,24 en 49324.
+    ''' </summary>
+    Public Function FormatAmountForUrl(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return "0"
+        Try
+            Return Convert.ToDecimal(value).ToString("F2", System.Globalization.CultureInfo.InvariantCulture)
+        Catch
+            Return "0"
+        End Try
+    End Function
+
 End Class

@@ -143,12 +143,20 @@ Public Class wbfImport
     ' ─────────────────────────────────────────────────────────────────────────
 
     Protected Async Sub gvRecent_RowCommand(sender As Object, e As System.Web.UI.WebControls.GridViewCommandEventArgs) Handles gvRecent.RowCommand
-        If Not String.Equals(e.CommandName, "ProcessAI", StringComparison.OrdinalIgnoreCase) Then Return
+        Dim cmd As String = e.CommandName
+        If Not (String.Equals(cmd, "ProcessAI",    StringComparison.OrdinalIgnoreCase) OrElse
+                String.Equals(cmd, "DeleteImport", StringComparison.OrdinalIgnoreCase)) Then Return
 
         HideMessages()
         Dim id As Integer
         If Not Integer.TryParse(Convert.ToString(e.CommandArgument), id) Then
             ShowError("Identifiant invalide.")
+            Return
+        End If
+
+        If String.Equals(cmd, "DeleteImport", StringComparison.OrdinalIgnoreCase) Then
+            DeleteImportFile(id)
+            BindRecent()
             Return
         End If
 
@@ -160,6 +168,30 @@ Public Class wbfImport
         End Try
 
         BindRecent()
+    End Sub
+
+    Private Sub DeleteImportFile(id As Integer)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Id", id))
+            Dim ds As DataSet = ExecuteSQLds("s0609DeleteImportFile", p)
+
+            Dim fileDel As Integer = 0, partyDel As Integer = 0, prodDel As Integer = 0
+            If ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                fileDel  = If(r("FileDeleted")          Is DBNull.Value, 0, Convert.ToInt32(r("FileDeleted")))
+                partyDel = If(r("PartyImportDeleted")   Is DBNull.Value, 0, Convert.ToInt32(r("PartyImportDeleted")))
+                prodDel  = If(r("ProductImportDeleted") Is DBNull.Value, 0, Convert.ToInt32(r("ProductImportDeleted")))
+            End If
+
+            If fileDel = 0 Then
+                ShowError($"Aucun fichier #{id} trouvé (déjà supprimé ?).")
+            Else
+                ShowSuccess($"Fichier #{id} supprimé (avec {partyDel} ligne(s) staging.PartyImport et {prodDel} ligne(s) staging.ProductImport).")
+            End If
+        Catch ex As Exception
+            ShowError($"Erreur lors de la suppression : {Server.HtmlEncode(ex.Message)}")
+        End Try
     End Sub
 
     Private Async Function ProcessFileWithAI(id As Integer) As Task

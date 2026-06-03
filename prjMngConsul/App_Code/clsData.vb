@@ -238,6 +238,74 @@ Public Class clsData
         End Set
     End Property
 
+    ' -------------------------------------------------------------------------
+    ' Connection vers la BD MailService (insertion dans T400Mails pour envoi).
+    ' Utilisée par les méthodes ExecuteSQLMail / ExecuteSQLdsMail.
+    ' -------------------------------------------------------------------------
+    Private m_ConnectionStringMail As String = ""
+    Public Property ConnectionStringMail() As String
+        Get
+            Try
+                If m_ConnectionStringMail.Length = 0 Then
+                    Dim sConnect As String = System.Configuration.ConfigurationManager.AppSettings("ConnectionStringMail")
+                    m_ConnectionStringMail = sConnect
+                End If
+                Return m_ConnectionStringMail
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            m_ConnectionStringMail = Value
+        End Set
+    End Property
+
+    ' -------------------------------------------------------------------------
+    ' Exécute une stored procedure dans la BD MailService.
+    ' Équivalent de ExecuteSQL mais sur la 2e connection string.
+    ' -------------------------------------------------------------------------
+    Public Sub ExecuteSQLMail(ByVal SQLStatement As String, AllParameters As Collection)
+        Dim DRconn As SqlClient.SqlConnection
+        DRconn = New SqlClient.SqlConnection(ConnectionStringMail)
+
+        Dim oCom As New SqlClient.SqlCommand
+        oCom.CommandText = SQLStatement
+        oCom.Connection = DRconn
+        oCom.CommandType = CommandType.StoredProcedure
+
+        For Each oParam As Data.SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+
+        oCom.Connection.Open()
+        oCom.ExecuteNonQuery()
+        oCom.Connection.Close()
+    End Sub
+
+    ' -------------------------------------------------------------------------
+    ' Exécute une stored procedure dans MailService et retourne un DataSet.
+    ' Utile quand la proc retourne l'Id du mail inséré (OUTPUT INSERTED.Id).
+    ' -------------------------------------------------------------------------
+    Public Function ExecuteSQLdsMail(ByVal SQLStatement As String, AllParameters As Collection) As DataSet
+        Dim DRconn As SqlClient.SqlConnection
+        DRconn = New SqlClient.SqlConnection(ConnectionStringMail)
+        Dim MyDA As New SqlClient.SqlDataAdapter
+
+        Dim oCom As New SqlClient.SqlCommand
+        oCom.CommandText = SQLStatement
+        oCom.Connection = DRconn
+        oCom.CommandType = CommandType.StoredProcedure
+        MyDA.SelectCommand = oCom
+
+        For Each oParam As Data.SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+
+        Dim oDs As New DataSet
+        MyDA.Fill(oDs)
+        Return oDs
+    End Function
+
     Public Sub ExecuteSQL(ByVal SQLStatement As String)
         Dim oCom As New SqlClient.SqlCommand
         oCom.CommandText = SQLStatement

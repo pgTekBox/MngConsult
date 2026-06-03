@@ -423,71 +423,25 @@
               <div  id="plangrid" style="height:74px;">
               </div>
             <div class="plans-grid">
-                <!-- Plan 1 : Travailleur autonome -->
-                <div class="plan-card">
-                    <div class="plan-icon-circle plan-icon-slate">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-                    </div>
-                    <h3>Travailleur Autonome</h3>
-                    <p class="plan-tagline">Sans incorporation</p>
-                    <span class="plan-pill">0 employé</span>
-                    <p class="plan-desc">Idéal pour le Travailleur Autonome non incorporé qui veut gérer ses finances simplement.</p>
-                    <div class="plan-price"><span class="amount">69,99 $</span><span class="period">/ mois</span></div>
-                    <ul class="plan-features">
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Gestion des clients avec calendrier</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Facturation client</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Gestion des fournisseurs</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Plan comptable complet</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>États financiers en temps réel</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Remises gouvernementales</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Assistant IA en français</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Point de vente (POS)</span></li>
-                    </ul>
-                    <a href="wbfRegister.aspx?ab=solo" class="plan-button">Commencer gratuitement</a>
-                </div>
-
-                <!-- Plan 2 : Compagnie Solo (featured) -->
-                <div class="plan-card featured">
-                    <div class="plan-badge-popular">Le plus populaire</div>
-                    <div class="plan-icon-circle plan-icon-sky">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><polyline points="16 11 18 13 22 9"></polyline></svg>
-                    </div>
-                    <h3>Compagnie Solo</h3>
-                    <p class="plan-tagline">Avec incorporation</p>
-                    <span class="plan-pill">0 employé</span>
-                    <p class="plan-desc">Pour l'entrepreneur incorporé qui décide de ne pas se verser de salaire.</p>
-                    <div class="plan-price"><span class="amount">99,99 $</span><span class="period">/ mois</span></div>
-                    <ul class="plan-features">
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Tout du plan Travailleur Autonome</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Comptabilité d'entreprise incorporée</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Dividendes &amp; rémunération mixte</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Fermeture &amp; ouverture d'année</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Connexion compte bancaire</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Conciliation financière automatisée</span></li>
-                    </ul>
-                    <a href="wbfRegister.aspx?ab=comsolo" class="plan-button">Commencer gratuitement</a>
-                </div>
-
-                <!-- Plan 3 : Compagnie 1-19 -->
-                <div class="plan-card emerald-bordered">
-                    <div class="plan-icon-circle plan-icon-emerald">
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path></svg>
-                    </div>
-                    <h3>Compagnie 1–19</h3>
-                    <p class="plan-tagline">1 à 9 employés</p>
-                    <span class="plan-pill">1–19 employés</span>
-                    <p class="plan-desc">Conçu pour les PME en croissance avec une équipe d'employés à temps plein.</p>
-                    <div class="plan-price"><span class="amount">149,99 $</span><span class="period">/ mois</span></div>
-                    <ul class="plan-features">
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Tout du plan Compagnie Solo</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Paie jusqu'à 19 employés</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Portail employé &amp; talons de paie</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Gestion des congés &amp; maladies</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Contrats &amp; T4A</span></li>
-                        <li class="plan-feature"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"></path></svg><span>Alertes de conformité RH</span></li>
-                    </ul>
-                    <a href="wbfRegister.aspx?ab=com119" class="plan-button">Commencer gratuitement</a>
-                </div>
+                <asp:Repeater ID="rptPlans" runat="server">
+                    <ItemTemplate>
+                        <div class='<%# "plan-card " & Eval("PlanCardCssClass").ToString().Trim() %>'>
+                            <%# RenderBadge(Eval("BadgeText")) %>
+                            <div class='<%# "plan-icon-circle " & Eval("PlanIconCssClass").ToString().Trim() %>'>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%# Eval("IconSvg") %></svg>
+                            </div>
+                            <h3><%# Eval("Name") %></h3>
+                            <p class="plan-tagline"><%# Eval("Tagline") %></p>
+                            <span class="plan-pill"><%# Eval("EmployeeRange") %></span>
+                            <p class="plan-desc"><%# Eval("Description") %></p>
+                            <div class="plan-price"><span class="amount"><%# FormatPrice(Eval("Amount")) %></span><span class="period">/ mois</span></div>
+                            <ul class="plan-features">
+                                <%# RenderFeatures(Eval("Features")) %>
+                            </ul>
+                            <a href='<%# "wbfRegister.aspx?ab=" & Eval("Code") %>' class="plan-button">Commencer gratuitement</a>
+                        </div>
+                    </ItemTemplate>
+                </asp:Repeater>
             </div>
 
             <p class="plans-note">Tous les plans incluent un essai gratuit. Aucune carte de crédit requise. Annulation à tout moment.</p>

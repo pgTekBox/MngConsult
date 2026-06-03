@@ -22,13 +22,7 @@
         <uc1:HeaderUser runat="server" ID="HeaderUser" />
 
 
-
-        <%-- <div class="topbar-right">
-      <div class="user-pill">
-        <span class="user-avatar" aria-hidden="true">PG</span>
-        <span class="user-name"><asp:Literal runat="server" ID="litUserName" Text="Pierre"></asp:Literal></span>
-      </div>
-    </div>--%>
+ 
     </header>
 
     <!-- Backdrop mobile -->
@@ -306,19 +300,10 @@ Job Dashboard  </a>
                         <span class="dot" aria-hidden="true"></span>
                         Import (clients / fournisseurs / produits)
                     </a>
-                    <a class="nav-child" href="~/ImportSageComptes.aspx" runat="server" data-navlink>
-                        <span class="dot" aria-hidden="true"></span>
-                        Importation comptes Sage
-                    </a>
-                    <a class="nav-child" href="~/ImportSageProduits.aspx" runat="server" data-navlink>
-                        <span class="dot" aria-hidden="true"></span>
-                        Produits
-                    </a>
-                    <a class="nav-child" href="~/ImportSageParties.aspx" runat="server" data-navlink>
-                        <span class="dot" aria-hidden="true"></span>
-                        Parties
-                    </a>
-                    <a class="nav-child" href="~/ImportSageFactures.aspx" runat="server" data-navlink>
+                    
+                   
+                    
+                  <%--  <a class="nav-child" href="~/ImportSageFactures.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Factures
                     </a>
@@ -329,7 +314,7 @@ Job Dashboard  </a>
                     <a class="nav-child" href="~/ImportSageBalanceVerification.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Balance de verification
-                    </a>
+                    </a>--%>
 
                 </div>
             </div>
@@ -351,6 +336,10 @@ Job Dashboard  </a>
                 <a class="nav-item subtle" href="~/wbfSettingsOpenAiPrompts.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">⚙️</span>
                     <span class="nav-txt">Paramètres OpenAI</span>
+                </a>
+                <a class="nav-item subtle" href="~/wbfStripeWebhookDiagnostic.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">💳</span>
+                    <span class="nav-txt">Diagnostic Stripe</span>
                 </a>
                 <a class="nav-item subtle" href="~/wbfLogout.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">🚪</span>

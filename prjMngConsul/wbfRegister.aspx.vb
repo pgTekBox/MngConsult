@@ -36,9 +36,16 @@ Public Class wbfRegister
                 p.Add(New SqlClient.SqlParameter("@ActivationToken", MyToken))
                 Dim ds As DataSet = ExecuteSQLds("s0256GetUserByActivationToken", p)
 
-                ' Stocker l'email pour le bouton "Renvoyer"
-                ViewState("RegisteredEmail") = ds.Tables(0).Rows(0)("Email").ToString()
+                ' Vérification défensive : si la SP retourne 0 row, ne pas crasher
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                    Dim userEmail As String = ds.Tables(0).Rows(0)("Email").ToString()
 
+                    ' Stocker l'email pour le bouton "Renvoyer"
+                    ViewState("RegisteredEmail") = userEmail
+
+                    ' Afficher l'email dans le panneau de succès (FIX bug : était vide)
+                    litSuccessEmail.Text = userEmail
+                End If
 
             End If
 
@@ -130,8 +137,9 @@ Public Class wbfRegister
             pnlSuccess.Visible = True
             litSuccessEmail.Text = email
 
-            ' Stocker l'email pour le bouton "Renvoyer"
+            ' Stocker l'email + prénom pour le bouton "Renvoyer"
             ViewState("RegisteredEmail") = email
+            ViewState("RegisteredFirstName") = firstName
 
 
         Catch ex As Exception
@@ -142,36 +150,57 @@ Public Class wbfRegister
     Protected Sub lnkResend_Click(sender As Object, e As EventArgs) Handles lnkResend.Click
 
         Dim email As String = If(ViewState("RegisteredEmail"), "").ToString()
+        Dim firstName As String = If(ViewState("RegisteredFirstName"), "").ToString()
         If String.IsNullOrEmpty(email) Then Return
 
-
-        Dim p As New Collection
-
-
-        p.Add(New SqlClient.SqlParameter("@Email", email))
-
-
-        Dim ds As DataSet = ExecuteSQLds("s0222ResendActivation", p)
-
-
-
-
-
         Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@Email", email))
 
+            Dim ds As DataSet = ExecuteSQLds("s0222ResendActivation", p)
 
-            If ds.Tables(0).Rows(0)("NewToken") IsNot Nothing AndAlso Not IsDBNull(ds.Tables(0).Rows(0)("NewToken")) Then
-                Dim newToken As Guid = ds.Tables(0).Rows(0)("NewToken")
-                SendActivationEmail(email, "", newToken)
+            ' Protection contre les retours vides ou inattendus de la SP
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                System.Diagnostics.Debug.WriteLine("Resend: s0222ResendActivation n'a retourné aucune ligne pour " & email)
+                ShowResendStatus(False, "Trop de tentatives. Réessayez dans 1 minute.")
+                Return
             End If
 
-        Catch
-            ' silencieux
+            Dim newTokenObj As Object = ds.Tables(0).Rows(0)("NewToken")
+            If newTokenObj Is Nothing OrElse IsDBNull(newTokenObj) Then
+                ' Rate limited ou compte déjà activé
+                ShowResendStatus(False, "Trop de tentatives. Réessayez dans 1 minute.")
+                Return
+            End If
+
+            Dim newToken As Guid = CType(newTokenObj, Guid)
+            Dim ok As Boolean = SendActivationEmail(email, firstName, newToken)
+            If ok Then
+                ShowResendStatus(True, "Courriel renvoyé à " & email)
+            Else
+                ShowResendStatus(False, "Échec d'envoi. Réessayez dans quelques instants.")
+                System.Diagnostics.Debug.WriteLine("Resend: SendActivationEmail a échoué pour " & email)
+            End If
+
+        Catch ex As Exception
+            ShowResendStatus(False, "Une erreur est survenue. Réessayez dans quelques instants.")
+            System.Diagnostics.Debug.WriteLine("Resend error pour " & email & " : " & ex.Message)
         End Try
     End Sub
 
     ''' <summary>
-    ''' Envoie le courriel d'activation. Retourne True si réussi.
+    ''' Affiche un message de statut (succès vert / échec rouge) sous le lien Renvoyer.
+    ''' </summary>
+    Private Sub ShowResendStatus(success As Boolean, message As String)
+        Dim color As String = If(success, "#10b981", "#ef4444")
+        Dim icon As String = If(success, "&#10003;", "&#10007;")
+        litResendStatus.Text = "<p style=""color:" & color & "; font-weight:700; margin-top:12px; font-size:13px;"">" & icon & " " & Server.HtmlEncode(message) & "</p>"
+    End Sub
+
+    ''' <summary>
+    ''' Envoie le courriel d'activation en insérant dans T400Mails (BD MailService).
+    ''' Le service Windows SrvAI poll cette table et envoie via SMTP.
+    ''' Retourne True si l'insertion a réussi.
     ''' </summary>
     Private Function SendActivationEmail(email As String, firstName As String, token As Guid) As Boolean
 
@@ -185,29 +214,17 @@ Public Class wbfRegister
         Dim body As String = BuildEmailBody(greeting, activationLink)
 
         Try
-            ' === MODE SIMULATION ===
-            ' Au lieu d'envoyer un vrai courriel via SMTP, on stocke le contenu
-            ' dans la session et on ouvre une fenêtre navigateur de simulation.
-            ' L'envoi SMTP réel sera branché plus tard via EmailHelper.Send().
+            ' === INSERT DANS T400Mails (BD MailService via 2e connection string) ===
+            ' Le service Windows SrvAI poll T400Mails et envoie via SMTP les rows
+            ' avec ToSend = 1 et SendWithSuccess IS NULL.
 
-            'EmailHelper.Send(email, subject, body)
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@To", email))
+            p.Add(New SqlClient.SqlParameter("@Subject", subject))
+            p.Add(New SqlClient.SqlParameter("@HTMLBody", body))
+            p.Add(New SqlClient.SqlParameter("@TextBody", DBNull.Value))
 
-            Session("FakeEmail") = New FakeEmailMessage With {
-                .ToEmail = email,
-                .Subject = subject,
-                .HtmlBody = body,
-                .ActionLink = activationLink
-            }
-
-            ' Ouvre une nouvelle fenêtre navigateur (popup) avec wbfFakeEmail.aspx
-            Dim fakeUrl As String = ResolveUrl("~/wbfFakeEmail.aspx")
-            Dim script As String =
-                "window.open('" & fakeUrl & "?_t=' + new Date().getTime(), " &
-                "'fakeEmail', " &
-                "'width=860,height=780,resizable=yes,scrollbars=yes,toolbar=no,menubar=no,location=no,status=no');"
-
-            Page.ClientScript.RegisterStartupScript(Me.GetType(), "openFakeEmail",
-                script, addScriptTags:=True)
+            ExecuteSQLMail("s0610InsertOutboundMail", p)
 
             Return True
         Catch ex As Exception

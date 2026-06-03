@@ -113,42 +113,6 @@ Partial Public Class wbfPayment
     Protected WithEvents litError As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
-    '''tbCardHolder control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tbCardHolder As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''tbCardNumber control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tbCardNumber As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''tbExpiry control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tbExpiry As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
-    '''tbCvv control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tbCvv As Global.System.Web.UI.WebControls.TextBox
-
-    '''<summary>
     '''btnPay control.
     '''</summary>
     '''<remarks>

@@ -48,6 +48,22 @@
             background-size: 16px 16px !important;
         }
 
+        /* Icône Payer (carte de crédit verte) */
+        .btn-icon-pay {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M2 10h20'/%3E%3Cpath d='M7 15h4'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
+        /* Icône Sync Stripe (rotation orange) */
+        .btn-icon-sync {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23f59e0b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='23 4 23 10 17 10'/%3E%3Cpolyline points='1 20 1 14 7 14'/%3E%3Cpath d='M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
         .listview-list-head,
         .listview-row {
             display: grid;
@@ -386,15 +402,32 @@
 
                             <div class="listview-actions">
 
-                                <asp:Button ID="Button1" runat="server" 
-                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt" 
+                                <asp:Button ID="Button1" runat="server"
+                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt"
                                     Text=""
                                     ToolTip="Décaissement"
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier un décaissement"", ""Ajouter un décaissement"");    return false;" %>' 
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier un décaissement"", ""Ajouter un décaissement"");    return false;" %>'
                                 />
 
-                               
+                                <%-- Bouton "Payer avec Stripe" : visible seulement si facture non payée et comptabilisée
+                                     IMPORTANT : Amount doit etre formate en InvariantCulture (point decimal)
+                                     pour eviter que la virgule FR soit interpretee comme separateur milliers --%>
+                                <asp:Button ID="btnPay" runat="server"
+                                    CssClass="btn btn-icon btn-icon-pay"
+                                    Text=""
+                                    ToolTip="Payer avec Stripe (Interac / ACSS / Carte)"
+                                    CausesValidation="false"
+                                    Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSupplierPayment"", ""wbfSupplierPaymentChoice.aspx"", ""Payer le fournisseur"", ""Payer"");    return false;" %>' />
+
+                                <%-- Bouton "Synchroniser paiements Stripe" : ouvre la page sync dans nouvelle fenêtre --%>
+                                <asp:Button ID="btnSync" runat="server"
+                                    CssClass="btn btn-icon btn-icon-sync"
+                                    Text=""
+                                    ToolTip="Synchroniser les paiements Stripe (si webhook a échoué)"
+                                    CausesValidation="false"
+                                    OnClientClick='<%# "window.open(""wbfSupplierPaymentSync.aspx?DocumentId="" + " & Eval("Id") & ", ""_blank"", ""width=800,height=900,scrollbars=yes""); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -402,7 +435,7 @@
                                     ToolTip="Modifier"
                                     CausesValidation="false"
                                     OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture"");    return false;" %>' />
-                                   
+
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -459,6 +492,19 @@
   OnClientClose="rwInvoice_OnInvoiceClose"
      ClientIDMode="Static" >
  </telerik:RadWindow>
+
+    <%-- Modal de choix de méthode de paiement (Interac / ACSS / Carte) --%>
+    <telerik:RadWindow ID="rwSupplierPayment" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="true"
+        Width="720"
+        Height="780"
+        Title="Payer le fournisseur"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
+    </telerik:RadWindow>
 
 
 

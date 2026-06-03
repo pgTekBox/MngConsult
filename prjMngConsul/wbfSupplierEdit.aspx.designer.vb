@@ -50,6 +50,15 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents lnkBack As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
+    '''lnkStripeOnboarding control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents lnkStripeOnboarding As Global.System.Web.UI.WebControls.HyperLink
+
+    '''<summary>
     '''btnSave control.
     '''</summary>
     '''<remarks>

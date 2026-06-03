@@ -453,6 +453,12 @@
                 <div class="bar">
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
                         onclick="closeWin();">← Retour à la liste</asp:HyperLink>
+                    <%-- Bouton Stripe Connect : visible seulement en mode édition (SupplierId > 0) --%>
+                    <asp:HyperLink ID="lnkStripeOnboarding" runat="server" CssClass="btn"
+                        Visible="false"
+                        Style="background: linear-gradient(135deg, #635BFF, #4F46E5); color: white; border: none;">
+                        💳 Configurer Stripe
+                    </asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
                 </div>
             </div>

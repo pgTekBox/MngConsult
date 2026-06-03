@@ -14,7 +14,13 @@
 
     <style>
 
-  
+        /* Icône Stripe Connect (violet Stripe) */
+        .btn-icon-stripe {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23635BFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M2 10h20'/%3E%3Cpath d='M7 15h2'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
 
         .listview-list-head {
             display: grid;
@@ -188,12 +194,19 @@
 
                             <div class="listview-actions">
 
+                                <%-- Bouton Stripe Connect : ouvre l'onboarding du fournisseur dans une nouvelle fenêtre --%>
+                                <asp:Button ID="btnStripe" runat="server"
+                                    CssClass="btn btn-icon btn-icon-stripe"
+                                    Text=""
+                                    ToolTip="Configurer paiements Stripe Connect"
+                                    CausesValidation="false"
+                                    OnClientClick='<%# "window.open(""wbfSupplierStripeOnboarding.aspx?PartyId="" + " & Eval("Id") & ", ""_blank""); return false;" %>' />
+
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
                                     ToolTip="Modifier"
                                     CausesValidation="false"
-                                    
                                     OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"

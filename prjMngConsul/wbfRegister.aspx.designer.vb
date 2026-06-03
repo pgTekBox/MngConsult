@@ -149,6 +149,15 @@ Partial Public Class wbfRegister
     Protected WithEvents lnkResend As Global.System.Web.UI.WebControls.LinkButton
 
     '''<summary>
+    '''litResendStatus control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litResendStatus As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''btnFerme control.
     '''</summary>
     '''<remarks>

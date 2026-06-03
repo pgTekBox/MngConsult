@@ -39,4 +39,13 @@ Partial Public Class LandingPage
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnDemarrer As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''rptPlans control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rptPlans As Global.System.Web.UI.WebControls.Repeater
 End Class

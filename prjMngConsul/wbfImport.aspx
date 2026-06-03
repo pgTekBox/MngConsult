@@ -67,6 +67,8 @@
     .up-btn-primary:hover { filter:brightness(.92); }
     .up-btn-secondary { background:#fff; color:var(--mc-text); border:1px solid var(--mc-stroke); }
     .up-btn-secondary:hover { background:var(--mc-bg); }
+    .up-btn-danger { background:#fff; color:#b91c1c; border:1px solid #fecaca; }
+    .up-btn-danger:hover { background:#fef2f2; border-color:#fca5a5; }
 
     .up-alert {
         padding:12px 16px; border-radius:12px; font-size:13px; margin:16px 20px 0;
@@ -201,6 +203,12 @@
                                                 OnClientClick='<%# String.Format("openRadWindow({0}, ""rwImportView"", ""wbfImportView.aspx"", ""Détails import #{0}"", ""Détails import""); return false;", Eval("Id")) %>'
                                                 Visible='<%# Not (Eval("InputTokens") Is DBNull.Value) %>'
                                                 CausesValidation="false" />
+                                <asp:Button runat="server" Text="🗑 Supprimer"
+                                            CssClass="up-btn up-btn-danger"
+                                            CommandName="DeleteImport"
+                                            CommandArgument='<%# Eval("Id") %>'
+                                            OnClientClick='<%# String.Format("return confirm(""Supprimer définitivement le fichier #{0} ({1}) et toutes les lignes staging associées ?"");", Eval("Id"), System.Web.HttpUtility.JavaScriptStringEncode(Convert.ToString(Eval("OriginalName")))) %>'
+                                            CausesValidation="false" />
                             </ItemTemplate>
                         </asp:TemplateField>
                     </Columns>
