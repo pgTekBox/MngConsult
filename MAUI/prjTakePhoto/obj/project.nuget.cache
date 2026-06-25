@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "AE0JTJs6bjw=",
+  "dgSpecHash": "brZLbAz56FQ=",
   "success": true,
   "projectFilePath": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\prjTakePhoto.csproj",
   "expectedPackageFiles": [
@@ -143,11 +143,14 @@
     "C:\\Users\\Pierre\\.nuget\\packages\\xamarin.kotlinx.serialization.core.jvm\\1.9.0.1\\xamarin.kotlinx.serialization.core.jvm.1.9.0.1.nupkg.sha512",
     "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.android.runtime.35.android-arm64\\35.0.105\\microsoft.android.runtime.35.android-arm64.35.0.105.nupkg.sha512",
     "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.android.runtime.35.android-x64\\35.0.105\\microsoft.android.runtime.35.android-x64.35.0.105.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.13\\microsoft.netcore.app.ref.9.0.13.nupkg.sha512",
     "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.android.ref.35\\35.0.105\\microsoft.android.ref.35.35.0.105.nupkg.sha512",
-    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.0\\26.0.9783\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.0.26.0.9783.nupkg.sha512",
-    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.maccatalyst.ref.net9.0_26.0\\26.0.9783\\microsoft.maccatalyst.ref.net9.0_26.0.26.0.9783.nupkg.sha512",
-    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.ios.runtime.iossimulator-x64.net9.0_26.0\\26.0.9783\\microsoft.ios.runtime.iossimulator-x64.net9.0_26.0.26.0.9783.nupkg.sha512",
-    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.ios.ref.net9.0_26.0\\26.0.9783\\microsoft.ios.ref.net9.0_26.0.26.0.9783.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.0\\26.0.9785\\microsoft.maccatalyst.runtime.maccatalyst-x64.net9.0_26.0.26.0.9785.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.13\\microsoft.netcore.app.ref.9.0.13.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.maccatalyst.ref.net9.0_26.0\\26.0.9785\\microsoft.maccatalyst.ref.net9.0_26.0.26.0.9785.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.ios.runtime.iossimulator-x64.net9.0_26.0\\26.0.9785\\microsoft.ios.runtime.iossimulator-x64.net9.0_26.0.26.0.9785.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.netcore.app.ref\\9.0.13\\microsoft.netcore.app.ref.9.0.13.nupkg.sha512",
+    "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.ios.ref.net9.0_26.0\\26.0.9785\\microsoft.ios.ref.net9.0_26.0.26.0.9785.nupkg.sha512",
     "C:\\Users\\Pierre\\.nuget\\packages\\microsoft.windows.sdk.net.ref\\10.0.19041.57\\microsoft.windows.sdk.net.ref.10.0.19041.57.nupkg.sha512"
   ],
   "logs": [

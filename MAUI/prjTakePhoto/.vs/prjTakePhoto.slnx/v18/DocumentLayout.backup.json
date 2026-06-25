@@ -7,12 +7,12 @@
       "RelativeMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|solutionrelative:platforms\\android\\androidmanifest.xml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|c:\\messources\\mngconsul\\maui\\prjtakephoto\\platforms\\android\\resources\\xml\\network_security_config.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}",
-      "RelativeMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|solutionrelative:platforms\\android\\resources\\xml\\network_security_config.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|c:\\messources\\mngconsul\\maui\\prjtakephoto\\photocapturepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|solutionrelative:photocapturepage.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|c:\\messources\\mngconsul\\maui\\prjtakephoto\\platforms\\android\\resources\\xml\\network_security_config.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}",
+      "RelativeMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|solutionrelative:platforms\\android\\resources\\xml\\network_security_config.xml||{6B79B2C4-8503-4A04-8248-ADCEF2B49CB1}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{455D1E3E-2C30-7E60-2340-8C75AAAA6296}|prjTakePhoto.csproj|c:\\messources\\mngconsul\\maui\\prjtakephoto\\prjtakephoto.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
@@ -61,25 +61,24 @@
               "Title": "AndroidManifest.xml",
               "DocumentMoniker": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\Platforms\\Android\\AndroidManifest.xml",
               "RelativeDocumentMoniker": "Platforms\\Android\\AndroidManifest.xml",
-              "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\Platforms\\Android\\AndroidManifest.xml*",
-              "RelativeToolTip": "Platforms\\Android\\AndroidManifest.xml*",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAgAAAAAAAAAA==",
+              "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\Platforms\\Android\\AndroidManifest.xml",
+              "RelativeToolTip": "Platforms\\Android\\AndroidManifest.xml",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvw4AAAALAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
-              "WhenOpened": "2026-02-11T10:44:09.538Z",
+              "WhenOpened": "2026-02-11T10:55:03.149Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 1,
               "Title": "PhotoCapturePage.xaml.cs",
               "DocumentMoniker": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\PhotoCapturePage.xaml.cs",
               "RelativeDocumentMoniker": "PhotoCapturePage.xaml.cs",
               "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\PhotoCapturePage.xaml.cs",
               "RelativeToolTip": "PhotoCapturePage.xaml.cs",
-              "ViewState": "AgIAAD0AAAAAAAAAAAAAAEQAAAApAAAAAAAAAA==",
+              "ViewState": "AgIAAD0AAAAAAAAAAAAAAEkAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T13:24:38.658Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T13:24:38.658Z"
             },
             {
               "$type": "Document",
@@ -91,13 +90,12 @@
               "RelativeToolTip": "ReceiptApiClient.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAA2wAkAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T13:53:55.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T13:53:55.172Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "prjTakePhoto",
+              "Title": "prjTakePhoto.csproj",
               "DocumentMoniker": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\prjTakePhoto.csproj",
               "RelativeDocumentMoniker": "prjTakePhoto.csproj",
               "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\prjTakePhoto.csproj",
@@ -109,7 +107,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "network_security_config.xml",
               "DocumentMoniker": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\Platforms\\Android\\Resources\\xml\\network_security_config.xml",
               "RelativeDocumentMoniker": "Platforms\\Android\\Resources\\xml\\network_security_config.xml",
@@ -117,8 +115,7 @@
               "RelativeToolTip": "Platforms\\Android\\Resources\\xml\\network_security_config.xml",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwYAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
-              "WhenOpened": "2026-02-11T10:30:40.734Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:30:40.734Z"
             },
             {
               "$type": "Document",
@@ -130,8 +127,7 @@
               "RelativeToolTip": "MauiProgram.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAA3wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T10:18:10.268Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:18:10.268Z"
             },
             {
               "$type": "Document",
@@ -143,8 +139,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\Users\\Pierre\\AppData\\Local\\SourceServer\\5ffcf3986a6f62000e0fa275a08494b53cffac8513719618ac6a75e0486cbf62\\src\\Mono.Android\\Android.Runtime\\JNINativeWrapper.g.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAowBMAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T10:29:08.75Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:29:08.75Z"
             },
             {
               "$type": "Document",
@@ -156,8 +151,7 @@
               "RelativeToolTip": "ImageProcessing.cs",
               "ViewState": "AgIAADsAAAAAJsgIqHQwwCAAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T12:16:53.612Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T12:16:53.612Z"
             },
             {
               "$type": "Document",
@@ -169,8 +163,7 @@
               "RelativeToolTip": "Platforms\\Android\\MainActivity.cs",
               "ViewState": "AgIAACsAAAAAAAAAAABCwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T15:59:02.45Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:59:02.45Z"
             },
             {
               "$type": "Document",
@@ -194,8 +187,7 @@
               "RelativeToolTip": "PhotoCapturePage.xaml",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-08T15:57:24.86Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:57:24.86Z"
             }
           ]
         }

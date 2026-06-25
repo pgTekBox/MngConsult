@@ -60,7 +60,7 @@
                 "    (CompanyGUID, Email, PasswordHash, FirstName, LastName, IsAdmin, IsActive)" & vbCrLf &
                 "VALUES" & vbCrLf &
                 "    ('87893D29-6D64-40C8-8E45-A3492B4FBB91'," & vbCrLf &
-                "     'admin@mngconsul.com'," & vbCrLf &
+                "     'admin@60sec.ca'," & vbCrLf &
                 "     '" & hash & "'," & vbCrLf &
                 "     'Admin', 'Principal', 1, 1);"
 

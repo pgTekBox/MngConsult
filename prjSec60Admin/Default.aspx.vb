@@ -1,5 +1,5 @@
 ﻿Public Class _Default
-    Inherits Page
+    Inherits clsData
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
 

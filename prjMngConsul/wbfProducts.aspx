@@ -1,4 +1,5 @@
-﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfProducts.aspx.vb" Inherits="MngConsul.wbfProducts" %>
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" 
+    MasterPageFile="~/Site.Master" CodeBehind="wbfProducts.aspx.vb" Inherits="MngConsul.wbfProducts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Produits — MngConsul
@@ -167,6 +168,16 @@
             </div>
 
             <div class="searchbox">
+                <asp:Button ID="btnConnectSquare" runat="server"
+                    CssClass="btn"
+                    Text="Connecter Square"
+                    CausesValidation="false"
+                    OnClientClick="window.location.href='SquareOAuth.aspx'; return false;" />
+                <asp:Button ID="btnExportSquare" runat="server"
+                    CssClass="btn"
+                    Text="Exporter vers Square"
+                    CausesValidation="false"/>
+                    <%--OnClientClick="return confirm('Exporter les produits/services actifs vers Square ?');" />--%>
                 <asp:Button ID="btnAdd" runat="server"
                     CssClass="btn btnAddRow"
                     Text="Ajouter un produit"

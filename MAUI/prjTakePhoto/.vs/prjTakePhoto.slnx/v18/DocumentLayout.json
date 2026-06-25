@@ -63,7 +63,7 @@
               "RelativeDocumentMoniker": "Platforms\\Android\\AndroidManifest.xml",
               "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\Platforms\\Android\\AndroidManifest.xml",
               "RelativeToolTip": "Platforms\\Android\\AndroidManifest.xml",
-              "ViewState": "AgIAAAAAAAAAAAAAAADwvwcAAABIAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAADwvwYAAAAuAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
               "WhenOpened": "2026-02-11T10:55:03.149Z",
               "EditorCaption": ""
@@ -78,8 +78,7 @@
               "RelativeToolTip": "PhotoCapturePage.xaml.cs",
               "ViewState": "AgIAAD0AAAAAAAAAAAAAAEkAAAAjAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T13:24:38.658Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T13:24:38.658Z"
             },
             {
               "$type": "Document",
@@ -91,13 +90,12 @@
               "RelativeToolTip": "ReceiptApiClient.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAA2wAkAAAAxAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T13:53:55.172Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T13:53:55.172Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "prjTakePhoto",
+              "Title": "prjTakePhoto.csproj",
               "DocumentMoniker": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\prjTakePhoto.csproj",
               "RelativeDocumentMoniker": "prjTakePhoto.csproj",
               "ToolTip": "C:\\MesSources\\MngConsul\\MAUI\\prjTakePhoto\\prjTakePhoto.csproj",
@@ -117,8 +115,7 @@
               "RelativeToolTip": "Platforms\\Android\\Resources\\xml\\network_security_config.xml",
               "ViewState": "AgIAAAAAAAAAAAAAAADwvwYAAAA5AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003576|",
-              "WhenOpened": "2026-02-11T10:30:40.734Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:30:40.734Z"
             },
             {
               "$type": "Document",
@@ -130,8 +127,7 @@
               "RelativeToolTip": "MauiProgram.cs",
               "ViewState": "AgIAAAcAAAAAAAAAAAA3wAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T10:18:10.268Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:18:10.268Z"
             },
             {
               "$type": "Document",
@@ -143,8 +139,7 @@
               "RelativeToolTip": "..\\..\\..\\..\\Users\\Pierre\\AppData\\Local\\SourceServer\\5ffcf3986a6f62000e0fa275a08494b53cffac8513719618ac6a75e0486cbf62\\src\\Mono.Android\\Android.Runtime\\JNINativeWrapper.g.cs",
               "ViewState": "AgIAAAUAAAAAAAAAAAAowBMAAAA1AAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-11T10:29:08.75Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-11T10:29:08.75Z"
             },
             {
               "$type": "Document",
@@ -156,8 +151,7 @@
               "RelativeToolTip": "ImageProcessing.cs",
               "ViewState": "AgIAADsAAAAAJsgIqHQwwCAAAAAzAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-09T12:16:53.612Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-09T12:16:53.612Z"
             },
             {
               "$type": "Document",
@@ -169,8 +163,7 @@
               "RelativeToolTip": "Platforms\\Android\\MainActivity.cs",
               "ViewState": "AgIAACsAAAAAAAAAAABCwAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-02-08T15:59:02.45Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:59:02.45Z"
             },
             {
               "$type": "Document",
@@ -194,8 +187,7 @@
               "RelativeToolTip": "PhotoCapturePage.xaml",
               "ViewState": "AgIAAAMAAAAAAAAAAAAAAAoAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-02-08T15:57:24.86Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-02-08T15:57:24.86Z"
             }
           ]
         }

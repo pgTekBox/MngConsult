@@ -93,6 +93,46 @@
     <Reference Include="Microsoft.AspNet.FriendlyUrls">
       <HintPath>packages\Microsoft.AspNet.FriendlyUrls.Core.1.0.2\lib\net45\Microsoft.AspNet.FriendlyUrls.dll</HintPath>
     </Reference>
+    <Reference Include="BCrypt.Net-Next, Version=4.1.0.0, Culture=neutral, PublicKeyToken=1e11be04b6288443, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\BCrypt.Net-Next.4.1.0\lib\net472\BCrypt.Net-Next.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\System.Buffers.4.6.1\lib\net462\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors, Version=4.1.6.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\System.Numerics.Vectors.4.6.1\lib\net462\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe, Version=6.0.3.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\System.Runtime.CompilerServices.Unsafe.6.1.2\lib\net462\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions, Version=4.2.4.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\packages\System.Threading.Tasks.Extensions.4.6.3\lib\net462\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Licensing.Runtime, Version=1.4.6.0, Culture=neutral, PublicKeyToken=98bb5b04e55c09ef, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\lib\RCAJAX\2025.1.218.462\Telerik.Licensing.Runtime.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.Design">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\lib\RCAJAX\2025.1.218.462\Telerik.Web.Design.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI, Version=2025.1.218.462, Culture=neutral, PublicKeyToken=121fae78165ba3d4, processorArchitecture=MSIL">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\lib\RCAJAX\2025.1.218.462\Telerik.Web.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="Telerik.Web.UI.Skins">
+      <Private>True</Private>
+      <HintPath>..\prjMngConsul\lib\RCAJAX\2025.1.218.462\Telerik.Web.UI.Skins.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform">
@@ -305,6 +345,110 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="css\listvew.css" />
+    <Content Include="Controls\LeftMenu.ascx" />
+    <Content Include="wbfUsers.aspx" />
+    <Content Include="wbfUserEdit.aspx" />
+    <Content Include="wbfPlans.aspx" />
+    <Content Include="wbfPlanEdit.aspx" />
+    <Content Include="wbfLogin.aspx" />
+    <Content Include="wbfLogout.aspx" />
+    <Content Include="wbfAdmins.aspx" />
+    <Content Include="wbfAdminEdit.aspx" />
+    <Content Include="wbfResetPassword.aspx" />
+    <Content Include="wbfCompanies.aspx" />
+    <Content Include="wbfCompanyEdit.aspx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App_Code\clsData.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\LeftMenu.ascx.vb">
+      <DependentUpon>LeftMenu.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\LeftMenu.ascx.designer.vb">
+      <DependentUpon>LeftMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfUsers.aspx.vb">
+      <DependentUpon>wbfUsers.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfUsers.aspx.designer.vb">
+      <DependentUpon>wbfUsers.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfUserEdit.aspx.vb">
+      <DependentUpon>wbfUserEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfUserEdit.aspx.designer.vb">
+      <DependentUpon>wbfUserEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlans.aspx.vb">
+      <DependentUpon>wbfPlans.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlans.aspx.designer.vb">
+      <DependentUpon>wbfPlans.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlanEdit.aspx.vb">
+      <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlanEdit.aspx.designer.vb">
+      <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfLogin.aspx.vb">
+      <DependentUpon>wbfLogin.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfLogin.aspx.designer.vb">
+      <DependentUpon>wbfLogin.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfLogout.aspx.vb">
+      <DependentUpon>wbfLogout.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfLogout.aspx.designer.vb">
+      <DependentUpon>wbfLogout.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAdmins.aspx.vb">
+      <DependentUpon>wbfAdmins.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAdmins.aspx.designer.vb">
+      <DependentUpon>wbfAdmins.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAdminEdit.aspx.vb">
+      <DependentUpon>wbfAdminEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAdminEdit.aspx.designer.vb">
+      <DependentUpon>wbfAdminEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfResetPassword.aspx.vb">
+      <DependentUpon>wbfResetPassword.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfResetPassword.aspx.designer.vb">
+      <DependentUpon>wbfResetPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCompanies.aspx.vb">
+      <DependentUpon>wbfCompanies.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfCompanies.aspx.designer.vb">
+      <DependentUpon>wbfCompanies.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCompanyEdit.aspx.vb">
+      <DependentUpon>wbfCompanyEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfCompanyEdit.aspx.designer.vb">
+      <DependentUpon>wbfCompanyEdit.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>

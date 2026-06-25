@@ -36,7 +36,7 @@ GO
 
 DECLARE @PowerShellPath VARCHAR(255) = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
 DECLARE @ScriptPath     VARCHAR(500) = 'C:\MesSources\MngConsul\prjMngConsul\Scripts\RunAutoPayProcessor.ps1';
-DECLARE @BaseUrl        VARCHAR(255) = 'http://localhost';  -- adapter selon deploiement (https://mngconsul.com en prod)
+DECLARE @BaseUrl        VARCHAR(255) = 'https://60sec.ca';  -- prod : https://60sec.ca / dev local : http://localhost
 DECLARE @NotifyOperator VARCHAR(100) = NULL; -- nom de l'operateur pour notifications email (NULL = pas de notif)
 
 -- =============================================================================
@@ -106,7 +106,7 @@ GO
 
 DECLARE @PowerShellPath VARCHAR(255) = 'C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe';
 DECLARE @ScriptPath     VARCHAR(500) = 'C:\MesSources\MngConsul\prjMngConsul\Scripts\RunAutoPayProcessor.ps1';
-DECLARE @BaseUrl        VARCHAR(255) = 'http://localhost';
+DECLARE @BaseUrl        VARCHAR(255) = 'https://60sec.ca';  -- prod : https://60sec.ca / dev local : http://localhost
 
 IF EXISTS (SELECT 1 FROM msdb.dbo.sysjobs WHERE name = N'MngConsul_AutoPay_Process_Every15min')
 BEGIN

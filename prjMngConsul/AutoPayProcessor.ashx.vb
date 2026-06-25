@@ -7,7 +7,7 @@ Imports System.Web
 ''' Handler HTTP appele par SQL Server Agent (via PowerShell) pour declencher
 ''' les operations d'auto-paiement.
 '''
-''' URL endpoint : https://mngconsul.com/AutoPayProcessor.ashx
+''' URL endpoint : https://60sec.ca/AutoPayProcessor.ashx
 '''
 ''' Modes (parametre "mode" GET ou POST) :
 '''   - process       : execute les debits dus (toutes les 15 min)

@@ -1,4 +1,5 @@
-﻿Imports Telerik.Web.UI
+﻿Imports System.Collections.Generic
+Imports Telerik.Web.UI
 
 Public Class wbfProducts
     Inherits clsData
@@ -11,7 +12,21 @@ Public Class wbfProducts
             End If
             BindFilterDDL()
             rlvProducts.Rebind()
+            HandleSquareReturn()
+            If IsSquareConnected() Then btnConnectSquare.Text = "Reconnecter Square"
         End If
+    End Sub
+
+    ''' <summary>Affiche un message selon le retour OAuth Square (?square=...).</summary>
+    Private Sub HandleSquareReturn()
+        Dim s As String = Request.QueryString("square")
+        If String.IsNullOrEmpty(s) Then Return
+        Select Case s
+            Case "connected" : ShowSquareMessage("Compte Square connecté avec succès.")
+            Case "denied" : ShowSquareMessage("Connexion Square refusée par l'utilisateur.")
+            Case "badstate" : ShowSquareMessage("Échec de sécurité OAuth (state invalide). Réessaie la connexion.")
+            Case "error" : ShowSquareMessage("Erreur lors de la connexion à Square.")
+        End Select
     End Sub
 
     Private Sub BindFilterDDL()
@@ -80,6 +95,70 @@ Public Class wbfProducts
         tbSearch.Text = ""
         rddlFilterCat.ClearSelection()
         rlvProducts.Rebind()
+    End Sub
+
+    ' ── Export vers Square ──
+
+    Protected Sub btnExportSquare_Click(sender As Object, e As EventArgs) Handles btnExportSquare.Click
+        Try
+            ' 1. Lire les produits/services actifs a exporter (+ mapping existant)
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0660GetProductsForSquareSync", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                ShowSquareMessage("Aucun produit actif a exporter.")
+                Return
+            End If
+
+            ' 2. Construire la liste pour Square
+            Dim items As New List(Of clsSquare.SquareProductInput)
+            For Each row As DataRow In ds.Tables(0).Rows
+                Dim inp As New clsSquare.SquareProductInput
+                inp.ProductId = CInt(row("Id"))
+                inp.Name = If(IsDBNull(row("Name")), "", CStr(row("Name")))
+                inp.Description = If(IsDBNull(row("Description")), "", CStr(row("Description")))
+                Dim prix As Decimal = If(IsDBNull(row("Prix")), 0D, CDec(row("Prix")))
+                inp.PriceCents = CLng(Math.Round(prix * 100D))
+                If Not IsDBNull(row("SquareItemId")) Then inp.ExistingItemId = CStr(row("SquareItemId"))
+                If Not IsDBNull(row("SquareVariationId")) Then inp.ExistingVariationId = CStr(row("SquareVariationId"))
+                If Not IsDBNull(row("SquareItemVersion")) Then inp.ExistingItemVersion = CLng(row("SquareItemVersion"))
+                If Not IsDBNull(row("SquareVariationVersion")) Then inp.ExistingVariationVersion = CLng(row("SquareVariationVersion"))
+                items.Add(inp)
+            Next
+
+            ' 3. Pousser vers Square (BatchUpsertCatalogObjects)
+            '    Jeton de l'abonne (OAuth) avec refresh auto ; fallback Web.config.
+            Dim token As String = GetValidSquareAccessToken()
+            Dim results As List(Of clsSquare.SquareSyncResult) = clsSquare.BatchUpsertCatalog(token, items)
+
+            ' 4. Sauvegarder les identifiants Square sur le produit (T075Products)
+            Dim okCount As Integer = 0
+            For Each r As clsSquare.SquareSyncResult In results
+                If Not String.IsNullOrEmpty(r.ItemId) Then
+                    Dim pm As New Collection
+                    pm.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                    pm.Add(New SqlClient.SqlParameter("@ProductId", r.ProductId))
+                    pm.Add(New SqlClient.SqlParameter("@SquareItemId", r.ItemId))
+                    pm.Add(New SqlClient.SqlParameter("@SquareVariationId", If(String.IsNullOrEmpty(r.VariationId), CObj(DBNull.Value), r.VariationId)))
+                    pm.Add(New SqlClient.SqlParameter("@SquareItemVersion", r.ItemVersion))
+                    pm.Add(New SqlClient.SqlParameter("@SquareVariationVersion", r.VariationVersion))
+                    pm.Add(New SqlClient.SqlParameter("@Status", "OK"))
+                    ExecuteSQL("s0661UpdateProductSquareIds", pm)
+                    okCount += 1
+                End If
+            Next
+
+            ShowSquareMessage(okCount & " produit(s) exporte(s) vers Square sur " & items.Count & ".")
+        Catch ex As Exception
+            ShowSquareMessage("Erreur lors de l'export Square : " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub ShowSquareMessage(msg As String)
+        Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
+        Dim script As String = "radalert('" & safe & "', 400, 200, 'Export Square');"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "squareMsg", script, True)
     End Sub
 
     ' ── Helpers ──

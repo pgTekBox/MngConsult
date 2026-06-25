@@ -297,6 +297,102 @@
             transform: none;
             box-shadow: none;
         }
+
+        /* === Section autorisation auto-paiement === */
+        .autopay-section {
+            background: linear-gradient(135deg, rgba(168,85,247,.04), rgba(59,130,246,.04));
+            border: 1px solid var(--slate-200);
+            border-radius: 14px;
+            padding: 14px 16px;
+            margin: 18px 0;
+        }
+        .autopay-toggle {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            cursor: pointer;
+            user-select: none;
+        }
+        .autopay-toggle input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+            margin-top: 2px;
+            accent-color: var(--purple-500);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .autopay-toggle-label {
+            flex: 1;
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--slate-800);
+        }
+        .autopay-toggle-label .icon { margin-right: 6px; }
+        .autopay-sublabel {
+            display: block;
+            font-size: 11px;
+            color: var(--slate-500);
+            font-weight: 500;
+            margin-top: 2px;
+        }
+        .autopay-details {
+            margin-top: 12px;
+            padding-top: 12px;
+            border-top: 1px dashed var(--slate-300);
+            display: none;
+        }
+        .autopay-details.visible { display: block; }
+
+        .autopay-cap-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .autopay-cap-row label {
+            flex: 1;
+            font-size: 12px;
+            color: var(--slate-700);
+            font-weight: 600;
+        }
+        .autopay-cap-row input {
+            width: 110px;
+            padding: 6px 10px;
+            border: 1.5px solid var(--slate-200);
+            border-radius: 8px;
+            font-size: 13px;
+            font-weight: 700;
+            text-align: right;
+            font-family: var(--font);
+        }
+        .autopay-cap-row .unit {
+            font-weight: 700;
+            color: var(--slate-600);
+            font-size: 13px;
+        }
+
+        .autopay-legal {
+            background: var(--slate-50);
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-size: 11px;
+            line-height: 1.5;
+            color: var(--slate-600);
+            margin-top: 10px;
+        }
+        .autopay-legal strong { color: var(--slate-800); }
+        .autopay-legal ul {
+            margin: 6px 0 2px 0;
+            padding-left: 18px;
+        }
+        .autopay-legal li { margin: 2px 0; }
+
+        .autopay-revoke-note {
+            font-size: 11px;
+            color: var(--slate-500);
+            margin-top: 8px;
+            font-style: italic;
+        }
     </style>
 </head>
 <body>
@@ -439,9 +535,84 @@
                 </div>
             </div>
 
+            <!-- === Section autorisation paiement automatique === -->
+            <%-- Masquee si une autorisation active existe deja pour ce fournisseur (pnlAutoPayExisting) --%>
+            <asp:Panel ID="pnlAutoPaySection" runat="server" CssClass="autopay-section">
+
+                <!-- Cas 1 : Pas d'autorisation existante -> proposer activation -->
+                <asp:Panel ID="pnlAutoPayPropose" runat="server">
+                    <label class="autopay-toggle" for="chkAuthorizeAutoPay">
+                        <asp:CheckBox ID="chkAuthorizeAutoPay" runat="server" ClientIDMode="Static" />
+                        <span class="autopay-toggle-label">
+                            <span class="icon">🤖</span>Autoriser le paiement automatique pour
+                            <asp:Literal ID="litAutoPaySupplierName" runat="server" />
+                            <span class="autopay-sublabel">
+                                Les prochaines factures seront prélevées automatiquement à leur date d'échéance.
+                            </span>
+                        </span>
+                    </label>
+
+                    <div id="autopayDetails" class="autopay-details">
+
+                        <div class="autopay-cap-row">
+                            <label for="txtMaxPerMonth">Plafond mensuel maximum (sécurité)</label>
+                            <input type="number" id="txtMaxPerMonth" min="0" step="100"
+                                   value="5000" placeholder="5000" />
+                            <span class="unit">$ / mois</span>
+                        </div>
+
+                        <div class="autopay-legal" id="autopayLegalCard">
+                            <strong>📋 Conditions — Carte de crédit/débit (MIT)</strong>
+                            <ul>
+                                <li>Le moyen de paiement choisi sera sauvegardé de manière sécurisée par Stripe.</li>
+                                <li>Vous recevrez un <strong>email de préavis 24 h avant chaque débit</strong>.</li>
+                                <li>Le débit n'aura lieu que pour les factures que vous aurez approuvées (saisies + comptabilisées).</li>
+                                <li>Vous pouvez <strong>révoquer cette autorisation</strong> à tout moment depuis la page "Paiements automatiques".</li>
+                                <li>Plafond mensuel défini ci-dessus respecté — toute facture dépassant le plafond restera en attente manuelle.</li>
+                            </ul>
+                        </div>
+
+                        <div class="autopay-legal" id="autopayLegalAcss" style="display:none;">
+                            <strong>📋 Convention PAD (Préautorisation de débit) — Règle H1 Paiements Canada</strong>
+                            <ul>
+                                <li>J'autorise les <strong>prélèvements de type Affaires</strong> à montants variables.</li>
+                                <li>J'accepte un <strong>préavis raccourci de 3 jours</strong> avant chaque débit (conforme à la Règle H1).</li>
+                                <li>Numéro de mandat Stripe : généré automatiquement après confirmation.</li>
+                                <li>Droit de contestation : 10 jours, droit au remboursement : 90 jours.</li>
+                                <li>Cette autorisation est révocable à tout moment.</li>
+                            </ul>
+                        </div>
+
+                        <div class="autopay-revoke-note">
+                            ℹ️ Vous gardez le contrôle total. Aucun débit sans préavis et sans facture comptabilisée.
+                        </div>
+                    </div>
+                </asp:Panel>
+
+                <!-- Cas 2 : Autorisation deja active -> indiquer + ne pas redemander -->
+                <asp:Panel ID="pnlAutoPayExisting" runat="server" Visible="false">
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <span style="font-size: 20px;">✅</span>
+                        <div>
+                            <div style="font-weight: 800; font-size: 13px; color: var(--green-600);">
+                                Paiement automatique déjà activé pour ce fournisseur
+                            </div>
+                            <div style="font-size: 11px; color: var(--slate-500); margin-top: 2px;">
+                                Méthode active :
+                                <asp:Literal ID="litExistingMethod" runat="server" />
+                                — révocable depuis la page "Paiements automatiques".
+                            </div>
+                        </div>
+                    </div>
+                </asp:Panel>
+
+            </asp:Panel>
+
             <!-- Hidden fields pour méthode + montant choisis -->
             <asp:HiddenField ID="hfSelectedMethod" runat="server" ClientIDMode="Static" />
             <asp:HiddenField ID="hfAmountToPay" runat="server" ClientIDMode="Static" />
+            <asp:HiddenField ID="hfAuthorizeAutoPay" runat="server" ClientIDMode="Static" />
+            <asp:HiddenField ID="hfMaxAmountPerMonth" runat="server" ClientIDMode="Static" />
 
             <!-- Bouton de paiement -->
             <asp:Button ID="btnPay" runat="server"
@@ -542,6 +713,45 @@
                 var calc = calculateFees(method, window.currentAmount);
                 document.getElementById('feeDisplay').textContent = '+ ' + formatMoney(calc.fee);
                 document.getElementById('totalDisplay').textContent = formatMoney(calc.total);
+
+                // Mettre a jour le texte legal de l'autorisation selon la methode
+                updateAutoPayLegal(method);
+            }
+
+            // === AutoPay : afficher / masquer detail selon case a cocher ===
+            function onAutoPayToggle() {
+                var chk = document.getElementById('chkAuthorizeAutoPay');
+                if (!chk) return;
+                var details = document.getElementById('autopayDetails');
+                var hf = document.getElementById('hfAuthorizeAutoPay');
+                if (chk.checked) {
+                    details.classList.add('visible');
+                    if (hf) hf.value = 'true';
+                } else {
+                    details.classList.remove('visible');
+                    if (hf) hf.value = 'false';
+                }
+            }
+
+            // Affiche le bon texte legal (carte vs acss)
+            function updateAutoPayLegal(method) {
+                var legalCard = document.getElementById('autopayLegalCard');
+                var legalAcss = document.getElementById('autopayLegalAcss');
+                if (!legalCard || !legalAcss) return;
+                if (method === 'acss_debit') {
+                    legalCard.style.display = 'none';
+                    legalAcss.style.display = 'block';
+                } else {
+                    legalCard.style.display = 'block';
+                    legalAcss.style.display = 'none';
+                }
+            }
+
+            // Maj du hidden field plafond mensuel quand l'input change
+            function onMaxMonthChange() {
+                var input = document.getElementById('txtMaxPerMonth');
+                var hf = document.getElementById('hfMaxAmountPerMonth');
+                if (input && hf) hf.value = input.value || '';
             }
 
             function validateBeforeSubmit() {
@@ -578,6 +788,22 @@
                     initial = 'card';
                 }
                 selectMethod(initial);
+
+                // AutoPay : brancher la case a cocher
+                var chk = document.getElementById('chkAuthorizeAutoPay');
+                if (chk) {
+                    chk.addEventListener('change', onAutoPayToggle);
+                    // Init hidden field
+                    var hf = document.getElementById('hfAuthorizeAutoPay');
+                    if (hf) hf.value = chk.checked ? 'true' : 'false';
+                }
+
+                // AutoPay : brancher l'input plafond
+                var maxInput = document.getElementById('txtMaxPerMonth');
+                if (maxInput) {
+                    maxInput.addEventListener('input', onMaxMonthChange);
+                    onMaxMonthChange();
+                }
             })();
 
         </script>

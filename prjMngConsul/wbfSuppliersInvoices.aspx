@@ -64,6 +64,21 @@
             background-size: 18px 18px !important;
         }
 
+        /* Icône Programmer auto-paiement (robot/calendrier violet) */
+        .btn-icon-autopay {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237c3aed' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cline x1='16' y1='2' x2='16' y2='6'/%3E%3Cline x1='8' y1='2' x2='8' y2='6'/%3E%3Cline x1='3' y1='10' x2='21' y2='10'/%3E%3Cpath d='M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01M16 18h.01'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+        /* Icône AutoPay programmé (vert plein) */
+        .btn-icon-autopay-active {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2310b981' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='4' width='18' height='18' rx='2'/%3E%3Cpolyline points='9 14 11 16 15 12'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
         .listview-list-head,
         .listview-row {
             display: grid;
@@ -429,6 +444,16 @@
                                     CausesValidation="false"
                                     OnClientClick='<%# "window.open(""wbfSupplierPaymentSync.aspx?DocumentId="" + " & Eval("Id") & ", ""_blank"", ""width=800,height=900,scrollbars=yes""); return false;" %>' />
 
+                                <%-- Bouton "Programmer auto-paiement" : visible si facture eligible + autorisation T144 active
+                                     existe pour le fournisseur (sera affiche selon AutoPayCanSchedule retourne par s0023) --%>
+                                <asp:Button ID="btnAutoPay" runat="server"
+                                    CssClass='<%# IIf(IsAutoPayActive(Eval("AutoPay"), Eval("AutoPayStatus")), "btn btn-icon btn-icon-autopay-active", "btn btn-icon btn-icon-autopay") %>'
+                                    Text=""
+                                    ToolTip='<%# IIf(IsAutoPayActive(Eval("AutoPay"), Eval("AutoPayStatus")), "Auto-paiement programmé - cliquer pour gérer", "Programmer un paiement automatique") %>'
+                                    CausesValidation="false"
+                                    Visible='<%# CanShowAutoPayButton(Eval("StatutPaiement"), Eval("ComptabilisationStatus"), Eval("HasActiveAuthorization")) %>'
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Total=" & FormatAmountForUrl(Eval("ResteAPayer")) & """, ""rwScheduleAutoPay"", ""wbfScheduleAutoPay.aspx"", ""Programmer auto-paiement"", ""Programmer"");    return false;" %>' />
+
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
@@ -502,6 +527,19 @@
         Width="720"
         Height="780"
         Title="Payer le fournisseur"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
+    </telerik:RadWindow>
+
+    <%-- Modal "Programmer auto-paiement" --%>
+    <telerik:RadWindow ID="rwScheduleAutoPay" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="true"
+        Width="640"
+        Height="580"
+        Title="Programmer paiement automatique"
         OnClientClose="rwInvoice_OnInvoiceClose"
         ClientIDMode="Static" >
     </telerik:RadWindow>

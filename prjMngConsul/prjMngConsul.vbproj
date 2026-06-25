@@ -305,6 +305,12 @@
     <Content Include="Database\s0643StripeSubscriptionUpsert.sql" />
     <Content Include="Database\s0644StripeCustomerLink.sql" />
     <Content Include="Database\s0645GetUserByStripeCustomerId.sql" />
+    <Content Include="Database\T075Products_AddSquareColumns.sql" />
+    <Content Include="Database\s0660GetProductsForSquareSync.sql" />
+    <Content Include="Database\s0661UpdateProductSquareIds.sql" />
+    <Content Include="Database\T010Company_AddSquareColumns.sql" />
+    <Content Include="Database\s0662SaveCompanySquareTokens.sql" />
+    <Content Include="Database\s0663GetCompanySquareAuth.sql" />
     <Content Include="Database\setup_MailService_user.sql" />
     <Content Include="Database\T015User_AddStripeCustomerId.sql" />
     <Content Include="Database\T021Plan.sql" />
@@ -448,6 +454,7 @@
     <Content Include="wbfProductCategoryEdit.aspx" />
     <Content Include="wbfProductEdit.aspx" />
     <Content Include="wbfProducts.aspx" />
+    <Content Include="SquareOAuth.aspx" />
     <Content Include="wbfRapportPlanComptable.aspx" />
     <Content Include="wbfRapportTaxe.aspx" />
     <Content Include="wbfReceipt.aspx" />
@@ -492,6 +499,7 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\clsAutoPayEngine.vb" />
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -587,6 +595,8 @@
       <DependentUpon>LandingPage.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="App_Code\clsSquare.vb" />
+    <Compile Include="App_Code\clsCrypto.vb" />
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />
@@ -979,6 +989,13 @@
     </Compile>
     <Compile Include="wbfProducts.aspx.vb">
       <DependentUpon>wbfProducts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="SquareOAuth.aspx.designer.vb">
+      <DependentUpon>SquareOAuth.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="SquareOAuth.aspx.vb">
+      <DependentUpon>SquareOAuth.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfRapportPlanComptable.aspx.designer.vb">

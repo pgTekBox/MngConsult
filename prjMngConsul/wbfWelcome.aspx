@@ -510,8 +510,8 @@
                     </svg>
                     <span><strong>Vous n'êtes pas seul·e.</strong>
                           Notre équipe de support est disponible par courriel à
-                          <a href="mailto:support@mngconsul.com" style="color:#92400e; font-weight:800;">
-                              support@mngconsul.com</a>.</span>
+                          <a href="mailto:support@60sec.ca" style="color:#92400e; font-weight:800;">
+                              support@60sec.ca</a>.</span>
                 </li>
             </ul>
         </div>
@@ -540,7 +540,7 @@
                 Tutoriels vidéo
             </a>
 
-            <a href="mailto:support@mngconsul.com" class="resource-link">
+            <a href="mailto:support@60sec.ca" class="resource-link">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none"
                      stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path>

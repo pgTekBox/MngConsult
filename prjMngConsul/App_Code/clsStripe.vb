@@ -157,6 +157,13 @@ Public Class clsStripe
     ''' <param name="successUrl">URL retour si succes</param>
     ''' <param name="cancelUrl">URL retour si annulation</param>
     ''' <param name="metadata">Metadonnees (DocumentId, PartyId, UserId, etc.)</param>
+    ''' <param name="authorizeAutoPay">
+    ''' Si True, demande a Stripe de sauvegarder la PaymentMethod (setup_future_usage
+    ''' = off_session) et de creer un Customer sur le compte connecte. Necessaire pour
+    ''' permettre les debits automatiques futurs (MIT - Merchant-Initiated Transactions).
+    ''' La metadata doit aussi contenir MngConsul_AuthorizeAutoPay='true' pour que
+    ''' le webhook cree l'autorisation T144 apres reussite.
+    ''' </param>
     ''' <returns>URL Stripe Checkout</returns>
     Public Shared Function CreateSupplierPaymentSession(
         stripeAccountId As String,
@@ -166,7 +173,8 @@ Public Class clsStripe
         description As String,
         successUrl As String,
         cancelUrl As String,
-        Optional metadata As Dictionary(Of String, String) = Nothing
+        Optional metadata As Dictionary(Of String, String) = Nothing,
+        Optional authorizeAutoPay As Boolean = False
     ) As String
 
         EnsureInitialized()
@@ -234,18 +242,141 @@ Public Class clsStripe
             }
         End If
 
-        ' Metadata (visibles dans Stripe Dashboard et webhooks)
-        If metadata IsNot Nothing AndAlso metadata.Count > 0 Then
-            options.Metadata = metadata
-            options.PaymentIntentData = New SessionPaymentIntentDataOptions With {
-                .Metadata = metadata
-            }
+        ' Initialisation PaymentIntentData (metadata + setup_future_usage)
+        ' Doit etre initialise meme si pas de metadata, si on veut activer authorizeAutoPay
+        Dim hasMetadata As Boolean = (metadata IsNot Nothing AndAlso metadata.Count > 0)
+        If hasMetadata Or authorizeAutoPay Then
+            options.PaymentIntentData = New SessionPaymentIntentDataOptions()
+
+            If hasMetadata Then
+                options.Metadata = metadata
+                options.PaymentIntentData.Metadata = metadata
+            End If
+
+            ' === MIT (Merchant-Initiated Transactions) ===
+            ' Demander a Stripe de sauvegarder la PaymentMethod pour usage futur
+            ' off-session (debits automatiques). Necessite un Customer.
+            If authorizeAutoPay Then
+                options.PaymentIntentData.SetupFutureUsage = "off_session"
+
+                ' En mode payment, Stripe Checkout ne cree PAS de Customer par defaut.
+                ' CustomerCreation = "always" force la creation d'un Customer sur le
+                ' compte connecte pour stocker la PaymentMethod.
+                options.CustomerCreation = "always"
+
+                ' Pour les cartes : enregistrer automatiquement le mode "off_session"
+                ' permet aussi l'authentification 3DS au moment de l'autorisation
+                ' (le client doit confirmer 3DS pour autoriser les debits futurs).
+            End If
         End If
 
         Dim service As New SessionService()
         Dim session As Session = service.Create(options, requestOptions)
         Return session.Url
     End Function
+
+    ''' <summary>
+    ''' Recupere une PaymentMethod sur un compte connecte (Direct Charge).
+    ''' Utilise par le webhook apres checkout.session.completed pour lire
+    ''' les details (card.brand, card.last4, etc.) et creer la T144Authorization.
+    ''' </summary>
+    Public Shared Function GetPaymentMethodFromConnectedAccount(paymentMethodId As String, stripeAccountId As String) As PaymentMethod
+        EnsureInitialized()
+        If String.IsNullOrEmpty(paymentMethodId) Then Return Nothing
+        Try
+            Dim requestOptions As New RequestOptions With {.StripeAccount = stripeAccountId}
+            Dim service As New PaymentMethodService()
+            Return service.Get(paymentMethodId, Nothing, requestOptions)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("GetPaymentMethodFromConnectedAccount failed : " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Recupere un PaymentIntent sur un compte connecte. Sert a obtenir
+    ''' le PaymentMethodId attache apres confirmation d'une checkout.session.
+    ''' </summary>
+    Public Shared Function GetPaymentIntentFromConnectedAccount(paymentIntentId As String, stripeAccountId As String) As PaymentIntent
+        EnsureInitialized()
+        If String.IsNullOrEmpty(paymentIntentId) Then Return Nothing
+        Try
+            Dim requestOptions As New RequestOptions With {.StripeAccount = stripeAccountId}
+            Dim service As New PaymentIntentService()
+            Return service.Get(paymentIntentId, Nothing, requestOptions)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("GetPaymentIntentFromConnectedAccount failed : " & ex.Message)
+            Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Cree un PaymentIntent off-session pour debiter un Customer avec une
+    ''' PaymentMethod deja sauvegardee. Mode MIT (Merchant-Initiated Transaction).
+    '''
+    ''' Utilise par AutoPayProcessor.ashx pour les debits automatiques.
+    '''
+    ''' Comportement :
+    '''   - confirm = true : execute le paiement immediatement
+    '''   - off_session = true : indique a Stripe qu'aucun client n'est present
+    '''   - Si carte demande 3DS : retourne PI avec status 'requires_action'
+    '''   - Si succes : retourne PI avec status 'succeeded'
+    ''' </summary>
+    ''' <param name="stripeAccountId">acct_xxx du fournisseur</param>
+    ''' <param name="customerId">cus_xxx Customer sur compte connecte</param>
+    ''' <param name="paymentMethodId">pm_xxx PaymentMethod sauvegardee</param>
+    ''' <param name="amountInCents">Montant brut (avec gross-up)</param>
+    ''' <param name="currency">cad</param>
+    ''' <param name="description">Description visible dans Stripe (n° facture)</param>
+    ''' <param name="metadata">Metadata MngConsul (DocumentId, etc.)</param>
+    Public Shared Function CreateOffSessionPaymentIntent(
+        stripeAccountId As String,
+        customerId As String,
+        paymentMethodId As String,
+        amountInCents As Long,
+        currency As String,
+        description As String,
+        Optional metadata As Dictionary(Of String, String) = Nothing
+    ) As PaymentIntent
+
+        EnsureInitialized()
+
+        Dim requestOptions As New RequestOptions With {.StripeAccount = stripeAccountId}
+
+        Dim options As New PaymentIntentCreateOptions With {
+            .Amount = amountInCents,
+            .Currency = currency,
+            .Customer = customerId,
+            .PaymentMethod = paymentMethodId,
+            .Confirm = True,
+            .OffSession = True,
+            .Description = description
+        }
+
+        If metadata IsNot Nothing AndAlso metadata.Count > 0 Then
+            options.Metadata = metadata
+        End If
+
+        Dim service As New PaymentIntentService()
+        Return service.Create(options, requestOptions)
+    End Function
+
+    ''' <summary>
+    ''' Detache une PaymentMethod d'un Customer sur compte connecte.
+    ''' Appelee lors de la revocation d'une autorisation (s0090) pour que
+    ''' la PM ne soit plus utilisable.
+    ''' </summary>
+    Public Shared Sub DetachPaymentMethodFromConnectedAccount(paymentMethodId As String, stripeAccountId As String)
+        EnsureInitialized()
+        If String.IsNullOrEmpty(paymentMethodId) Then Return
+        Try
+            Dim requestOptions As New RequestOptions With {.StripeAccount = stripeAccountId}
+            Dim service As New PaymentMethodService()
+            service.Detach(paymentMethodId, Nothing, requestOptions)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("DetachPaymentMethod failed : " & ex.Message)
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Recupere une session Checkout avec expansion : subscription complete,

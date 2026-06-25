@@ -191,7 +191,7 @@ Public Class wbfCustomersInvoices
         inv.CompanyAddressLine1 = "123 rue Principale"
         inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
         inv.CompanyPhone = "(514) 555-1234"
-        inv.CompanyEmail = "info@mngconsul.com"
+        inv.CompanyEmail = "info@60sec.ca"
         inv.CompanyTpsNumber = "123456789 RT0001"
         inv.CompanyTvqNumber = "1234567890 TQ0001"
 

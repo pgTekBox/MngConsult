@@ -791,6 +791,92 @@ Public Class clsData
         Return d.ToString("dd MMM yyyy", New System.Globalization.CultureInfo("fr-FR"))
     End Function
 
+    ' =========================================================================
+    ' Square - jeton d'acces de la compagnie (OAuth par abonne)
+    ' =========================================================================
 
+    ''' <summary>
+    ''' Retourne un access token Square valide pour la compagnie courante.
+    ''' Rafraichit automatiquement si l'expiration approche. A defaut de
+    ''' connexion OAuth, retombe sur le jeton unique de Web.config (sandbox).
+    ''' </summary>
+    Public Function GetValidSquareAccessToken() As String
+        Try
+            Dim col As New Collection
+            col.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0663GetCompanySquareAuth", col)
+
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim row As DataRow = ds.Tables(0).Rows(0)
+                Dim accEnc As String = If(IsDBNull(row("SquareAccessTokenEnc")), "", row("SquareAccessTokenEnc").ToString())
+
+                If Not String.IsNullOrEmpty(accEnc) Then
+                    Dim access As String = clsCrypto.Decrypt(accEnc)
+                    Dim expires As DateTime = If(IsDBNull(row("SquareTokenExpiresAt")), DateTime.MinValue, CDate(row("SquareTokenExpiresAt")))
+
+                    ' Rafraichir si le jeton expire dans moins de 7 jours
+                    If expires <> DateTime.MinValue AndAlso expires <= DateTime.Now.AddDays(7) Then
+                        Dim refEnc As String = If(IsDBNull(row("SquareRefreshTokenEnc")), "", row("SquareRefreshTokenEnc").ToString())
+                        If Not String.IsNullOrEmpty(refEnc) Then
+                            Try
+                                Dim info As clsSquare.SquareTokenInfo = clsSquare.RefreshAccessToken(clsCrypto.Decrypt(refEnc))
+                                SaveCompanySquareTokens(info, Nothing, Nothing)
+                                access = info.AccessToken
+                            Catch
+                                ' Garder l'ancien jeton si le refresh echoue
+                            End Try
+                        End If
+                    End If
+                    Return access
+                End If
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("GetValidSquareAccessToken: " & ex.Message)
+        End Try
+
+        ' Fallback : jeton unique de Web.config (utile en sandbox avant OAuth)
+        Return System.Configuration.ConfigurationManager.AppSettings("Square.AccessToken")
+    End Function
+
+    ''' <summary>Location Square principale de la compagnie (pour le terminal).</summary>
+    Public Function GetCompanySquareLocationId() As String
+        Try
+            Dim col As New Collection
+            col.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0663GetCompanySquareAuth", col)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim row As DataRow = ds.Tables(0).Rows(0)
+                If Not IsDBNull(row("SquareLocationId")) Then Return row("SquareLocationId").ToString()
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
+
+    ''' <summary>Indique si la compagnie a connecte un compte Square (OAuth).</summary>
+    Public Function IsSquareConnected() As Boolean
+        Try
+            Dim col As New Collection
+            col.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0663GetCompanySquareAuth", col)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Return Not IsDBNull(ds.Tables(0).Rows(0)("SquareAccessTokenEnc"))
+            End If
+        Catch
+        End Try
+        Return False
+    End Function
+
+    ''' <summary>Enregistre (chiffres) les jetons Square de la compagnie courante.</summary>
+    Public Sub SaveCompanySquareTokens(info As clsSquare.SquareTokenInfo, merchantId As String, locationId As String)
+        Dim col As New Collection
+        col.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        col.Add(New SqlClient.SqlParameter("@MerchantId", If(String.IsNullOrEmpty(merchantId), CObj(DBNull.Value), merchantId)))
+        col.Add(New SqlClient.SqlParameter("@AccessTokenEnc", If(info Is Nothing OrElse String.IsNullOrEmpty(info.AccessToken), CObj(DBNull.Value), clsCrypto.Encrypt(info.AccessToken))))
+        col.Add(New SqlClient.SqlParameter("@RefreshTokenEnc", If(info Is Nothing OrElse String.IsNullOrEmpty(info.RefreshToken), CObj(DBNull.Value), clsCrypto.Encrypt(info.RefreshToken))))
+        col.Add(New SqlClient.SqlParameter("@ExpiresAt", If(info Is Nothing OrElse info.ExpiresAt = DateTime.MinValue, CObj(DBNull.Value), CObj(info.ExpiresAt))))
+        col.Add(New SqlClient.SqlParameter("@LocationId", If(String.IsNullOrEmpty(locationId), CObj(DBNull.Value), locationId)))
+        ExecuteSQL("s0662SaveCompanySquareTokens", col)
+    End Sub
 
 End Class

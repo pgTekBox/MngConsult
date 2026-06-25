@@ -27,8 +27,8 @@ CREATE PROCEDURE dbo.s0610InsertOutboundMail
     @Subject        NVARCHAR(500),
     @HTMLBody       NVARCHAR(MAX),
     @TextBody       NVARCHAR(MAX)   = NULL,
-    @Sender         NVARCHAR(200)   = 'noreply@mngconsul.com',  -- Adresse d'envoi
-    @From           NVARCHAR(200)   = 'noreply@mngconsul.com',
+    @Sender         NVARCHAR(200)   = 'noreply@60sec.ca',  -- Adresse d'envoi
+    @From           NVARCHAR(200)   = 'noreply@60sec.ca',
     @ReplyTo        NVARCHAR(200)   = NULL,
     @CC             NVARCHAR(500)   = NULL,
     @BCC            NVARCHAR(500)   = NULL,

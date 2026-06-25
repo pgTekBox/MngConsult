@@ -1,69 +1,100 @@
 ﻿<%@ Master Language="VB" AutoEventWireup="true" CodeBehind="Site.master.vb" Inherits="prjSec60Admin.SiteMaster" %>
 
-<!DOCTYPE html>
+<%@ Register Src="~/Controls/LeftMenu.ascx" TagPrefix="uc" TagName="LeftMenu" %>
 
-<html lang="en">
+<!DOCTYPE html>
+<html lang="fr">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title><%: Page.Title %> - My ASP.NET Application</title>
+    <title><asp:ContentPlaceHolder ID="TitleContent" runat="server">Sec60Admin</asp:ContentPlaceHolder></title>
 
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/bundles/modernizr") %>
-    </asp:PlaceHolder>
+    <style>
+        :root {
+            --mc-bg: #f6f7fb;
+            --mc-card: #ffffff;
+            --mc-muted: #64748b;
+            --mc-text: #0f172a;
+            --mc-stroke: rgba(15,23,42,.12);
+            --mc-shadow: 0 14px 40px rgba(2,6,23,.10);
+            --mc-radius: 16px;
+            --mc-font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
+            --mc-blue: #2563eb;
+            --mc-cyan: #06b6d4;
+            --sidebarW: 280px;
+        }
 
-    <webopt:bundlereference runat="server" path="~/Content/css" />
-    <link href="~/favicon.ico" rel="shortcut icon" type="image/x-icon" />
+        * { box-sizing: border-box; }
 
+        html, body, form {
+            min-height: 100%;
+            height: auto;
+        }
+
+        body {
+            margin: 0;
+            font-family: var(--mc-font);
+            background: radial-gradient(900px 450px at 20% 0%, rgba(37,99,235,.14), transparent 60%), radial-gradient(900px 450px at 80% 0%, rgba(6,182,212,.10), transparent 60%), var(--mc-bg);
+            color: var(--mc-text);
+            overflow-y: scroll;
+        }
+
+        a {
+            color: inherit;
+            text-decoration: none;
+        }
+
+        /* APP — la sidebar est fixe (280px), le contenu est décalé à droite */
+        .mc-main {
+            margin-left: var(--sidebarW);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            padding: 16px;
+            min-width: 0;
+        }
+
+        .mc-card {
+            background: rgba(255,255,255,.92);
+            border: 1px solid var(--mc-stroke);
+            border-radius: var(--mc-radius);
+            box-shadow: var(--mc-shadow);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .RadGrid { background: transparent !important; }
+
+        @media (max-width: 768px) {
+            .mc-main {
+                margin-left: 0;
+                padding-top: 80px;
+            }
+        }
+    </style>
+
+    <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 <body>
-    <form runat="server">
-        <asp:ScriptManager runat="server">
-            <Scripts>
-                <%--To learn more about bundling scripts in ScriptManager see https://go.microsoft.com/fwlink/?LinkID=301884 --%>
-                <%--Framework Scripts--%>
-                <asp:ScriptReference Name="MsAjaxBundle" />
-                <asp:ScriptReference Name="jquery" />
-                <asp:ScriptReference Name="WebForms.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebForms.js" />
-                <asp:ScriptReference Name="WebUIValidation.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebUIValidation.js" />
-                <asp:ScriptReference Name="MenuStandards.js" Assembly="System.Web" Path="~/Scripts/WebForms/MenuStandards.js" />
-                <asp:ScriptReference Name="GridView.js" Assembly="System.Web" Path="~/Scripts/WebForms/GridView.js" />
-                <asp:ScriptReference Name="DetailsView.js" Assembly="System.Web" Path="~/Scripts/WebForms/DetailsView.js" />
-                <asp:ScriptReference Name="TreeView.js" Assembly="System.Web" Path="~/Scripts/WebForms/TreeView.js" />
-                <asp:ScriptReference Name="WebParts.js" Assembly="System.Web" Path="~/Scripts/WebForms/WebParts.js" />
-                <asp:ScriptReference Name="Focus.js" Assembly="System.Web" Path="~/Scripts/WebForms/Focus.js" />
-                <asp:ScriptReference Name="WebFormsBundle" />
-                <%--Site Scripts--%>
-            </Scripts>
-        </asp:ScriptManager>
+    <form id="form1" runat="server">
 
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-dark bg-dark">
-            <div class="container">
-                <a class="navbar-brand" runat="server" href="~/">Application name</a>
-                <button type="button" class="navbar-toggler" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" title="Toggle navigation" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
-                <div class="collapse navbar-collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/">Home</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/About">About</a></li>
-                        <li class="nav-item"><a class="nav-link" runat="server" href="~/Contact">Contact</a></li>
-                    </ul>
-                </div>
+        <telerik:RadScriptManager ID="RadScriptManager1" runat="server"
+            EnablePartialRendering="true" AsyncPostBackTimeout="300" />
+
+        <!-- MENU DE GAUCHE -->
+        <uc:LeftMenu runat="server" ID="LeftMenu1" />
+
+        <!-- CONTENU PRINCIPAL -->
+        <main class="mc-main">
+            <div class="mc-card">
+                <asp:ContentPlaceHolder ID="MainContent" runat="server">
+                </asp:ContentPlaceHolder>
             </div>
-        </nav>
-        <div class="container body-content">
-            <asp:ContentPlaceHolder ID="MainContent" runat="server">
-            </asp:ContentPlaceHolder>
-            <hr />
-            <footer>
-                <p>&copy; <%: DateTime.Now.Year %> - My ASP.NET Application</p>
-            </footer>
-        </div>
+        </main>
+
     </form>
-    <asp:PlaceHolder runat="server">
-        <%: Scripts.Render("~/Scripts/bootstrap.js") %>
-    </asp:PlaceHolder>
 </body>
 </html>

@@ -341,6 +341,10 @@ Job Dashboard  </a>
                     <span class="nav-ico" aria-hidden="true">💳</span>
                     <span class="nav-txt">Diagnostic Stripe</span>
                 </a>
+                <a class="nav-item subtle" href="~/wbfAutoPayAuthorizations.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">🤖</span>
+                    <span class="nav-txt">Paiements automatiques</span>
+                </a>
                 <a class="nav-item subtle" href="~/wbfLogout.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">🚪</span>
                     <span class="nav-txt">Déconnexion</span>

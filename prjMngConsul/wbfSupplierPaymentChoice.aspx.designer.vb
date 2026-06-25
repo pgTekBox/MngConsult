@@ -95,6 +95,46 @@ Partial Public Class wbfSupplierPaymentChoice
     Protected WithEvents hfAmountToPay As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''pnlAutoPaySection control.
+    '''</summary>
+    Protected WithEvents pnlAutoPaySection As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''pnlAutoPayPropose control.
+    '''</summary>
+    Protected WithEvents pnlAutoPayPropose As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''chkAuthorizeAutoPay control.
+    '''</summary>
+    Protected WithEvents chkAuthorizeAutoPay As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
+    '''litAutoPaySupplierName control.
+    '''</summary>
+    Protected WithEvents litAutoPaySupplierName As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''pnlAutoPayExisting control.
+    '''</summary>
+    Protected WithEvents pnlAutoPayExisting As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litExistingMethod control.
+    '''</summary>
+    Protected WithEvents litExistingMethod As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''hfAuthorizeAutoPay control.
+    '''</summary>
+    Protected WithEvents hfAuthorizeAutoPay As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''hfMaxAmountPerMonth control.
+    '''</summary>
+    Protected WithEvents hfMaxAmountPerMonth As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
     '''btnPay control.
     '''</summary>
     Protected WithEvents btnPay As Global.System.Web.UI.WebControls.Button

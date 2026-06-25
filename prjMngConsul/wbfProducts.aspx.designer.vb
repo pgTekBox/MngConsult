@@ -50,6 +50,24 @@ Partial Public Class wbfProducts
     Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''btnConnectSquare control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnConnectSquare As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnExportSquare control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnExportSquare As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''btnAdd control.
     '''</summary>
     '''<remarks>

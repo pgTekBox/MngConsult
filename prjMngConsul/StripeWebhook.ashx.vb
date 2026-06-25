@@ -11,7 +11,7 @@ Imports Stripe
 ''' <summary>
 ''' Handler webhook Stripe pour MngConsul.
 '''
-''' URL endpoint : https://mngconsul.com/StripeWebhook.ashx
+''' URL endpoint : https://60sec.ca/StripeWebhook.ashx
 ''' Configurer dans Dashboard Stripe : Developers > Webhooks > Add endpoint
 '''
 ''' Events ecoutes (a configurer cote Stripe Dashboard) :
@@ -274,11 +274,236 @@ Public Class StripeWebhook
                 {"@PaymentMethod", paymentMethod},
                 {"@CreatedByUserId", If(userId > 0, CType(userId, Object), DBNull.Value)}
             })
+
+            ' === Si autorisation auto-paiement demandee : creer T144Authorization ===
+            ' L'utilisateur a coche la case "Autoriser auto-paiement" dans le modal,
+            ' et Stripe a sauvegarde la PaymentMethod (setup_future_usage=off_session).
+            ' On recupere les details de la PM et on cree l'autorisation en BD.
+            Dim authorizeAutoPay As String = GetMetadataValue(session.Metadata, "MngConsul_AuthorizeAutoPay", "false")
+            If String.Compare(authorizeAutoPay, "true", True) = 0 Then
+                Try
+                    CreateAutoPayAuthorizationFromSession(session, companyGuid, partyId, paymentMethod)
+                Catch ex As Exception
+                    ' Non-bloquant : le paiement (T140Reglement) est deja cree.
+                    ' On loggue mais on ne fait pas echouer le webhook complet.
+                    System.Diagnostics.Debug.WriteLine("CreateAutoPayAuthorizationFromSession FAILED (non-blocking): " & ex.Message)
+                End Try
+            End If
+
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("HandleSupplierPaymentCompleted error: " & ex.Message)
             Throw  ' Faire echouer le webhook pour que Stripe retente
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Apres un paiement reussi avec setup_future_usage=off_session, recupere les
+    ''' details de la PaymentMethod sauvegardee et cree une T144AuthorizationAutoPay.
+    ''' </summary>
+    Private Sub CreateAutoPayAuthorizationFromSession(session As Checkout.Session,
+                                                       companyGuid As Guid,
+                                                       partyId As Integer,
+                                                       paymentMethodType As String)
+        ' 1. Recuperer stripeAccountId du fournisseur (necessaire pour appels Connect)
+        Dim stripeAccountId As String = GetStripeAccountIdForParty(companyGuid, partyId)
+        If String.IsNullOrEmpty(stripeAccountId) Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : StripeAccountId introuvable pour PartyId=" & partyId)
+            Return
+        End If
+
+        ' 2. Recuperer le PartyGUID (necessaire pour T144.PartyGUID)
+        Dim partyGuid As Guid = GetPartyGuidFromId(companyGuid, partyId)
+        If partyGuid = Guid.Empty Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : PartyGUID introuvable pour PartyId=" & partyId)
+            Return
+        End If
+
+        ' 3. Recuperer le PaymentIntent (sur compte connecte) pour obtenir le PaymentMethodId
+        Dim paymentIntentId As String = session.PaymentIntentId
+        If String.IsNullOrEmpty(paymentIntentId) Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : session.PaymentIntentId vide")
+            Return
+        End If
+
+        Dim pi As PaymentIntent = clsStripe.GetPaymentIntentFromConnectedAccount(paymentIntentId, stripeAccountId)
+        If pi Is Nothing OrElse String.IsNullOrEmpty(pi.PaymentMethodId) Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : PaymentMethod introuvable sur PI " & paymentIntentId)
+            Return
+        End If
+
+        Dim paymentMethodId As String = pi.PaymentMethodId
+        Dim customerId As String = pi.CustomerId
+        If String.IsNullOrEmpty(customerId) Then
+            ' Fallback : prendre depuis session.CustomerId
+            customerId = session.CustomerId
+        End If
+
+        If String.IsNullOrEmpty(customerId) Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : CustomerId introuvable - setup_future_usage a echoue ?")
+            Return
+        End If
+
+        ' 4. Recuperer les details de la PaymentMethod
+        Dim pm As PaymentMethod = clsStripe.GetPaymentMethodFromConnectedAccount(paymentMethodId, stripeAccountId)
+        If pm Is Nothing Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : PaymentMethod inaccessible (pm=" & paymentMethodId & ")")
+            Return
+        End If
+
+        ' Confirmer le type
+        Dim effectiveMethodType As String = If(String.IsNullOrEmpty(pm.Type), paymentMethodType, pm.Type)
+        ' Stripe peut classer Interac comme 'card' - on garde 'card' pour T144
+        If effectiveMethodType <> "card" AndAlso effectiveMethodType <> "acss_debit" Then
+            effectiveMethodType = "card"
+        End If
+
+        ' 5. Lire UserGUID + metadata audit
+        Dim userGuidStr As String = GetMetadataValue(session.Metadata, "MngConsul_UserGUID", "")
+        Dim userGuid As Guid = Guid.Empty
+        Guid.TryParse(userGuidStr, userGuid)
+        If userGuid = Guid.Empty Then
+            System.Diagnostics.Debug.WriteLine("AutoPay setup : UserGUID manquant dans metadata")
+            Return
+        End If
+
+        Dim authorizedIp As String = GetMetadataValue(session.Metadata, "MngConsul_AuthorizedIp", "")
+        Dim authorizedUserAgent As String = GetMetadataValue(session.Metadata, "MngConsul_AuthorizedUserAgent", "")
+        Dim authorizationTextRef As String = GetMetadataValue(session.Metadata, "MngConsul_AuthorizationTextRef", "V1")
+        Dim language As String = GetMetadataValue(session.Metadata, "MngConsul_AuthorizedLanguage", "fr-CA")
+
+        ' Plafond mensuel (optionnel)
+        Dim maxMonthlyStr As String = GetMetadataValue(session.Metadata, "MngConsul_MaxAmountPerMonth", "")
+        Dim maxMonthly As Decimal = 0D
+        If Not String.IsNullOrEmpty(maxMonthlyStr) Then
+            Decimal.TryParse(maxMonthlyStr, System.Globalization.NumberStyles.Any,
+                             System.Globalization.CultureInfo.InvariantCulture, maxMonthly)
+        End If
+
+        ' 6. Construire le texte legal complet (pour preuve de consentement)
+        Dim authorizationText As String = BuildAuthorizationText(effectiveMethodType, maxMonthly, authorizationTextRef)
+
+        ' 7. Extraire les details specifiques au type de PM
+        Dim cardBrand As Object = DBNull.Value
+        Dim cardLast4 As Object = DBNull.Value
+        Dim cardExpMonth As Object = DBNull.Value
+        Dim cardExpYear As Object = DBNull.Value
+        Dim bankInstitution As Object = DBNull.Value
+        Dim bankTransit As Object = DBNull.Value
+        Dim bankLast4 As Object = DBNull.Value
+        Dim mandateId As Object = DBNull.Value
+
+        Try
+            If pm.Card IsNot Nothing Then
+                cardBrand = If(String.IsNullOrEmpty(pm.Card.Brand), CType(DBNull.Value, Object), pm.Card.Brand)
+                cardLast4 = If(String.IsNullOrEmpty(pm.Card.Last4), CType(DBNull.Value, Object), pm.Card.Last4)
+                cardExpMonth = pm.Card.ExpMonth
+                cardExpYear = pm.Card.ExpYear
+            End If
+        Catch
+        End Try
+
+        Try
+            If pm.AcssDebit IsNot Nothing Then
+                bankInstitution = If(String.IsNullOrEmpty(pm.AcssDebit.InstitutionNumber), CType(DBNull.Value, Object), pm.AcssDebit.InstitutionNumber)
+                bankTransit = If(String.IsNullOrEmpty(pm.AcssDebit.TransitNumber), CType(DBNull.Value, Object), pm.AcssDebit.TransitNumber)
+                bankLast4 = If(String.IsNullOrEmpty(pm.AcssDebit.Last4), CType(DBNull.Value, Object), pm.AcssDebit.Last4)
+            End If
+        Catch
+        End Try
+
+        ' MandateId : seulement disponible si Stripe a cree un mandat ACSS
+        Try
+            ' Le mandate id peut etre sur pi.Mandate ou pi.LatestCharge.PaymentMethodDetails.AcssDebit.MandateId
+            ' Pour ACSS, on prend depuis pm si dispo
+        Catch
+        End Try
+
+        ' 8. Appeler s0085CreateAuthorizationAutoPay
+        ExecProc("s0085CreateAuthorizationAutoPay", New Dictionary(Of String, Object) From {
+            {"@CompanyGUID", companyGuid},
+            {"@PartyId", partyId},
+            {"@PartyGUID", partyGuid},
+            {"@StripeAccountId", stripeAccountId},
+            {"@StripeCustomerId", customerId},
+            {"@StripePaymentMethodId", paymentMethodId},
+            {"@PaymentMethodType", effectiveMethodType},
+            {"@CardBrand", cardBrand},
+            {"@CardLast4", cardLast4},
+            {"@CardExpMonth", cardExpMonth},
+            {"@CardExpYear", cardExpYear},
+            {"@BankInstitutionNumber", bankInstitution},
+            {"@BankTransitNumber", bankTransit},
+            {"@BankAccountLast4", bankLast4},
+            {"@StripeMandateId", mandateId},
+            {"@PadAgreementUrl", DBNull.Value},
+            {"@MaxAmountPerCharge", DBNull.Value},
+            {"@MaxAmountPerMonth", If(maxMonthly > 0D, CType(maxMonthly, Object), DBNull.Value)},
+            {"@AuthorizedByUserGUID", userGuid},
+            {"@AuthorizedIpAddress", If(String.IsNullOrEmpty(authorizedIp), CType(DBNull.Value, Object), authorizedIp)},
+            {"@AuthorizedUserAgent", If(String.IsNullOrEmpty(authorizedUserAgent), CType(DBNull.Value, Object), authorizedUserAgent)},
+            {"@AuthorizationText", authorizationText},
+            {"@AuthorizationLanguage", language}
+        })
+
+        System.Diagnostics.Debug.WriteLine("AutoPay setup : autorisation T144 creee pour PartyId=" & partyId & " UserGUID=" & userGuid.ToString())
+    End Sub
+
+    ''' <summary>
+    ''' Recupere le StripeAccountId d'un fournisseur (T050Party.StripeAccountId).
+    ''' </summary>
+    Private Function GetStripeAccountIdForParty(companyGuid As Guid, partyId As Integer) As String
+        Dim row As DataRow = ExecSimpleSelect(
+            "SELECT StripeAccountId FROM dbo.T050Party WHERE Id = @PartyId AND CompanyGUID = @CompanyGUID",
+            New Dictionary(Of String, Object) From {
+                {"@PartyId", partyId},
+                {"@CompanyGUID", companyGuid}
+            })
+        If row Is Nothing Then Return ""
+        If row("StripeAccountId") Is DBNull.Value Then Return ""
+        Return row("StripeAccountId").ToString()
+    End Function
+
+    ''' <summary>
+    ''' Recupere le PartyGUID a partir de l'Id (T050Party.PartyGUID).
+    ''' </summary>
+    Private Function GetPartyGuidFromId(companyGuid As Guid, partyId As Integer) As Guid
+        Dim row As DataRow = ExecSimpleSelect(
+            "SELECT PartyGUID FROM dbo.T050Party WHERE Id = @PartyId AND CompanyGUID = @CompanyGUID",
+            New Dictionary(Of String, Object) From {
+                {"@PartyId", partyId},
+                {"@CompanyGUID", companyGuid}
+            })
+        If row Is Nothing OrElse row("PartyGUID") Is DBNull.Value Then Return Guid.Empty
+        Return CType(row("PartyGUID"), Guid)
+    End Function
+
+    ''' <summary>
+    ''' Construit le texte legal qui sera stocke dans T144.AuthorizationText
+    ''' (preuve de consentement en cas de litige).
+    ''' </summary>
+    Private Function BuildAuthorizationText(methodType As String, maxMonthly As Decimal, textRef As String) As String
+        Dim sb As New StringBuilder()
+        sb.AppendLine("=== Autorisation de paiement automatique fournisseur (MngConsul) ===")
+        sb.AppendLine("Reference texte : " & textRef)
+        sb.AppendLine("Date : " & DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") & " UTC")
+        sb.AppendLine("")
+        If methodType = "card" Then
+            sb.AppendLine("Type : Carte de credit/debit (MIT - Merchant-Initiated Transaction)")
+            sb.AppendLine("J'autorise MngConsul a debiter automatiquement cette carte pour les factures fournisseur que j'aurai approuvees (saisies + comptabilisees), a leur date d'echeance.")
+            sb.AppendLine("Je recevrai un email de preavis 24 heures avant chaque debit.")
+        ElseIf methodType = "acss_debit" Then
+            sb.AppendLine("Type : ACSS Debit / PAD (Pre-Authorized Debit - Regle H1 Paiements Canada)")
+            sb.AppendLine("J'autorise les prelevements de type Affaires a montants variables sur le compte bancaire identifie.")
+            sb.AppendLine("J'accepte un preavis raccourci de 3 jours avant chaque debit (conformement a la Regle H1).")
+            sb.AppendLine("Droit de contestation : 10 jours. Droit au remboursement : 90 jours.")
+        End If
+        If maxMonthly > 0D Then
+            sb.AppendLine("Plafond mensuel maximum : " & maxMonthly.ToString("F2") & " $ CAD")
+        End If
+        sb.AppendLine("")
+        sb.AppendLine("Revocation : je peux annuler cette autorisation a tout moment depuis l'interface MngConsul (page Paiements automatiques).")
+        Return sb.ToString()
+    End Function
 
     ''' <summary>
     ''' customer.subscription.created OR customer.subscription.updated :

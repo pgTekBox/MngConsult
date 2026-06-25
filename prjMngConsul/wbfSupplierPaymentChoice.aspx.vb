@@ -9,9 +9,12 @@ Imports System.Globalization
 ''' Recoit en QueryString : DocumentId, PartyId, Amount
 '''
 ''' Flow :
-'''   1. Affiche les 3 methodes (Interac, ACSS, Carte) avec frais calcules
+'''   1. Affiche les 2 methodes (Carte, ACSS) avec frais calcules
 '''   2. Pre-selectionne la derniere methode utilisee (T050Party.LastPaymentMethod)
-'''   3. Au clic "Payer" : sauve la methode + redirige vers Stripe Checkout (Connect)
+'''   3. Detecte si une autorisation auto-pay existe deja (T144) -> affiche badge
+'''   4. Sinon, propose case a cocher "Autoriser auto-paiement futur" + plafond
+'''   5. Au clic "Payer" : sauve la methode + redirige vers Stripe Checkout (Connect)
+'''      Si auto-pay coche, passe metadata.MngConsul_AuthorizeAutoPay et setupFutureUsage
 ''' </summary>
 Public Class wbfSupplierPaymentChoice
     Inherits clsData
@@ -153,10 +156,101 @@ Public Class wbfSupplierPaymentChoice
                 lnkConfigure.Target = "_blank"
             End If
 
+            ' Section autorisation auto-paiement
+            litAutoPaySupplierName.Text = Server.HtmlEncode(supplierName)
+            LoadAutoPayState(supplierName)
+
         Catch ex As Exception
             ShowError("Erreur : " & ex.Message)
         End Try
     End Sub
+
+    ''' <summary>
+    ''' Detecte si une autorisation T144 active existe pour ce couple
+    ''' (Company, Party, User). Si oui, affiche un badge "deja configure"
+    ''' et masque la proposition d'activation.
+    ''' </summary>
+    Private Sub LoadAutoPayState(supplierName As String)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@PartyId", PartyId))
+            p.Add(New SqlParameter("@UserGUID", UserGUID))
+            p.Add(New SqlParameter("@PaymentMethodType", DBNull.Value))
+
+            Dim ds As DataSet = ExecuteSQLds("s0086GetActiveAuthorization", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                ' Pas d'autorisation -> propose activation (par defaut)
+                Return
+            End If
+
+            ' Au moins une autorisation active : affiche badge "deja configure"
+            Dim row As DataRow = ds.Tables(0).Rows(0)
+            Dim methodType As String = row("PaymentMethodType").ToString()
+            Dim methodDesc As String = ""
+
+            If methodType = "card" Then
+                Dim brand As String = If(row("CardBrand") Is DBNull.Value, "Carte", row("CardBrand").ToString())
+                Dim last4 As String = If(row("CardLast4") Is DBNull.Value, "????", row("CardLast4").ToString())
+                methodDesc = brand & " se terminant par " & last4
+            ElseIf methodType = "acss_debit" Then
+                Dim last4 As String = If(row("BankAccountLast4") Is DBNull.Value, "????", row("BankAccountLast4").ToString())
+                methodDesc = "ACSS Debit, compte se terminant par " & last4
+            Else
+                methodDesc = methodType
+            End If
+
+            litExistingMethod.Text = Server.HtmlEncode(methodDesc)
+            pnlAutoPayPropose.Visible = False
+            pnlAutoPayExisting.Visible = True
+
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("LoadAutoPayState error: " & ex.Message)
+            ' Non-bloquant : la section autorisation reste visible mais l'erreur est loggee
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Recupere l'UserGUID de l'utilisateur courant depuis Session ou BD.
+    ''' Si non disponible en Session, fait un lookup T015User par UserId.
+    ''' </summary>
+    Private ReadOnly Property UserGUID As Guid
+        Get
+            ' Premier essai : ViewState (cache durant la vie de la page)
+            If ViewState("UserGUID") IsNot Nothing Then
+                Return CType(ViewState("UserGUID"), Guid)
+            End If
+            ' Deuxieme essai : Session (selon comment clsData expose)
+            Try
+                If Session("UserGUID") IsNot Nothing Then
+                    Dim g As Guid = CType(Session("UserGUID"), Guid)
+                    ViewState("UserGUID") = g
+                    Return g
+                End If
+            Catch
+            End Try
+            ' Fallback : lookup T015User par UserId
+            Try
+                Dim cmd As New SqlCommand("SELECT UserGUID FROM T015User WHERE Id = @Id")
+                cmd.Parameters.AddWithValue("@Id", UserId)
+                Dim cs As String = ConfigurationManager.AppSettings("ConnectionString")
+                Using conn As New SqlConnection(cs)
+                    conn.Open()
+                    cmd.Connection = conn
+                    Dim res As Object = cmd.ExecuteScalar()
+                    If res IsNot Nothing AndAlso Not IsDBNull(res) Then
+                        Dim g As Guid = CType(res, Guid)
+                        ViewState("UserGUID") = g
+                        Return g
+                    End If
+                End Using
+            Catch ex As Exception
+                System.Diagnostics.Debug.WriteLine("UserGUID lookup error: " & ex.Message)
+            End Try
+            Return Guid.Empty
+        End Get
+    End Property
 
     ''' <summary>
     ''' Affiche les frais estimes pour chaque methode (gross-up).
@@ -246,6 +340,37 @@ Public Class wbfSupplierPaymentChoice
                 {"MngConsul_InvoiceTotal", Amount.ToString("F2", CultureInfo.InvariantCulture)}
             }
 
+            ' === Autorisation auto-paiement (MIT) ===
+            ' Si l'utilisateur a coche la case, on demande a Stripe de sauvegarder la
+            ' PaymentMethod (setup_future_usage = off_session) et on passe les infos
+            ' necessaires en metadata pour que le webhook cree T144Authorization.
+            Dim authorizeAutoPay As Boolean = (String.Compare(If(hfAuthorizeAutoPay.Value, ""), "true", True) = 0)
+
+            If authorizeAutoPay AndAlso Not pnlAutoPayExisting.Visible Then
+                metadata.Add("MngConsul_AuthorizeAutoPay", "true")
+                metadata.Add("MngConsul_UserGUID", UserGUID.ToString())
+                metadata.Add("MngConsul_AuthorizedLanguage", "fr-CA")
+
+                ' Plafond mensuel (optionnel)
+                Dim maxMonthly As Decimal = 0D
+                Dim maxMonthlyStr As String = If(hfMaxAmountPerMonth.Value, "").Trim()
+                If Not String.IsNullOrEmpty(maxMonthlyStr) Then
+                    Decimal.TryParse(maxMonthlyStr.Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, maxMonthly)
+                    If maxMonthly > 0D Then
+                        metadata.Add("MngConsul_MaxAmountPerMonth", maxMonthly.ToString("F2", CultureInfo.InvariantCulture))
+                    End If
+                End If
+
+                ' Audit trail : IP + User-Agent pour T144 (preuve de consentement)
+                metadata.Add("MngConsul_AuthorizedIp", GetClientIpAddress())
+                metadata.Add("MngConsul_AuthorizedUserAgent", TruncateUserAgent(Request.UserAgent, 400))
+
+                ' Texte legal expose au consentement (pour audit + litige)
+                metadata.Add("MngConsul_AuthorizationTextRef", "V1_" & selectedMethod & "_2026")
+            Else
+                authorizeAutoPay = False
+            End If
+
             Dim checkoutUrl As String = clsStripe.CreateSupplierPaymentSession(
                 stripeAccountId:=StripeAccountId,
                 amountInCents:=CLng(Math.Round(grossAmount * 100)),
@@ -254,7 +379,8 @@ Public Class wbfSupplierPaymentChoice
                 description:="Facture #" & DocumentId.ToString(),
                 successUrl:=successUrl,
                 cancelUrl:=cancelUrl,
-                metadata:=metadata
+                metadata:=metadata,
+                authorizeAutoPay:=authorizeAutoPay
             )
 
             ' 4. Rediriger vers Stripe Checkout
@@ -316,5 +442,39 @@ Public Class wbfSupplierPaymentChoice
         pnlError.Visible = True
         litError.Text = msg
     End Sub
+
+    ''' <summary>
+    ''' Recupere l'adresse IP du client en gerant les proxys/reverse-proxy
+    ''' (X-Forwarded-For). Retourne max 45 caracteres pour la colonne VARCHAR(45).
+    ''' </summary>
+    Private Function GetClientIpAddress() As String
+        Try
+            Dim ip As String = ""
+            ' Premier essai : header X-Forwarded-For (si derriere reverse-proxy)
+            Dim xff As String = Request.Headers("X-Forwarded-For")
+            If Not String.IsNullOrEmpty(xff) Then
+                ' Format : "client, proxy1, proxy2..." -> garder le premier
+                ip = xff.Split(","c)(0).Trim()
+            End If
+            ' Fallback : Request.UserHostAddress
+            If String.IsNullOrEmpty(ip) Then
+                ip = Request.UserHostAddress
+            End If
+            If String.IsNullOrEmpty(ip) Then Return ""
+            If ip.Length > 45 Then ip = ip.Substring(0, 45)
+            Return ip
+        Catch
+            Return ""
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Tronque le User-Agent a une longueur max (colonne VARCHAR(500)).
+    ''' </summary>
+    Private Function TruncateUserAgent(ua As String, maxLen As Integer) As String
+        If String.IsNullOrEmpty(ua) Then Return ""
+        If ua.Length > maxLen Then Return ua.Substring(0, maxLen)
+        Return ua
+    End Function
 
 End Class

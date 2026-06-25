@@ -142,4 +142,47 @@ Public Class wbfSuppliersInvoices
         End Try
     End Function
 
+    ''' <summary>
+    ''' Determine si le bouton "Programmer auto-paiement" doit etre affiche.
+    ''' Affiche si :
+    '''   - Facture non payee (StatutPaiement <> 'PAYEE')
+    '''   - Facture comptabilisee
+    '''   - Une autorisation T144 active existe pour ce fournisseur
+    ''' </summary>
+    Public Function CanShowAutoPayButton(statutPaiement As Object, comptabilisation As Object, hasAuth As Object) As Boolean
+        If statutPaiement Is Nothing OrElse IsDBNull(statutPaiement) Then Return False
+        If comptabilisation Is Nothing OrElse IsDBNull(comptabilisation) Then Return False
+
+        Dim statut As String = statutPaiement.ToString().Trim().ToUpper()
+        Dim compta As String = comptabilisation.ToString().Trim().ToUpper()
+
+        If statut = "PAYEE" Then Return False
+        If compta <> "COMPTABILISE" Then Return False
+
+        ' Necessite une autorisation T144 active
+        If hasAuth Is Nothing OrElse IsDBNull(hasAuth) Then Return False
+        Try
+            Return CBool(hasAuth)
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Determine si la facture est deja programmee pour auto-paiement
+    ''' (affiche l'icone verte avec checkmark au lieu de l'icone neutre violette).
+    ''' </summary>
+    Public Function IsAutoPayActive(autoPay As Object, autoPayStatus As Object) As Boolean
+        If autoPay Is Nothing OrElse IsDBNull(autoPay) Then Return False
+        Try
+            If Not CBool(autoPay) Then Return False
+        Catch
+            Return False
+        End Try
+
+        If autoPayStatus Is Nothing OrElse IsDBNull(autoPayStatus) Then Return True
+        Dim s As String = autoPayStatus.ToString().Trim().ToUpper()
+        Return s = "PLANIFIE" OrElse s = "EN_COURS" OrElse s = "REQUIRES_3DS"
+    End Function
+
 End Class

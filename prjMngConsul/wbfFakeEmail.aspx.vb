@@ -34,7 +34,7 @@ End Class
 ''' </summary>
 <Serializable()>
 Public Class FakeEmailMessage
-    Public Property FromDisplay As String = "MngConsul <noreply@mngconsul.com>"
+    Public Property FromDisplay As String = "60sec <noreply@60sec.ca>"
     Public Property ToEmail As String
     Public Property Subject As String
     Public Property HtmlBody As String

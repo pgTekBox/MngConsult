@@ -30208,7 +30208,7 @@
         "auditLevel": "low",
         "auditMode": "direct"
       },
-      "SdkAnalysisLevel": "10.0.100"
+      "SdkAnalysisLevel": "10.0.200"
     },
     "frameworks": {
       "net9.0-android35.0": {
@@ -30308,6 +30308,10 @@
           {
             "name": "Microsoft.Android.Runtime.35.android-x64",
             "version": "[35.0.105, 35.0.105]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.13, 9.0.13]"
           }
         ],
         "frameworkReferences": {
@@ -30318,7 +30322,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-ios26.0": {
         "targetAlias": "net9.0-ios",
@@ -30356,11 +30360,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.iOS.Ref.net9.0_26.0",
-            "version": "[26.0.9783, 26.0.9783]"
+            "version": "[26.0.9785, 26.0.9785]"
           },
           {
             "name": "Microsoft.iOS.Runtime.iossimulator-x64.net9.0_26.0",
-            "version": "[26.0.9783, 26.0.9783]"
+            "version": "[26.0.9785, 26.0.9785]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.13, 9.0.13]"
           }
         ],
         "frameworkReferences": {
@@ -30371,7 +30379,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-maccatalyst26.0": {
         "targetAlias": "net9.0-maccatalyst",
@@ -30410,11 +30418,15 @@
         "downloadDependencies": [
           {
             "name": "Microsoft.MacCatalyst.Ref.net9.0_26.0",
-            "version": "[26.0.9783, 26.0.9783]"
+            "version": "[26.0.9785, 26.0.9785]"
           },
           {
             "name": "Microsoft.MacCatalyst.Runtime.maccatalyst-x64.net9.0_26.0",
-            "version": "[26.0.9783, 26.0.9783]"
+            "version": "[26.0.9785, 26.0.9785]"
+          },
+          {
+            "name": "Microsoft.NETCore.App.Ref",
+            "version": "[9.0.13, 9.0.13]"
           }
         ],
         "frameworkReferences": {
@@ -30425,7 +30437,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102/PortableRuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119/PortableRuntimeIdentifierGraph.json"
       },
       "net9.0-windows10.0.19041": {
         "targetAlias": "net9.0-windows10.0.19041.0",
@@ -30468,7 +30480,7 @@
             "privateAssets": "all"
           }
         },
-        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.102\\RuntimeIdentifierGraph.json"
+        "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\10.0.200-preview.0.26103.119\\RuntimeIdentifierGraph.json"
       }
     },
     "runtimes": {
