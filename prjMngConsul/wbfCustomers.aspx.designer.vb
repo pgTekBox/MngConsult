@@ -50,6 +50,24 @@ Partial Public Class wbfCustomers
     Protected WithEvents btnAddCustomer As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''btnExportSquare control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnExportSquare As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''btnImportSquare control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnImportSquare As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''tbSearch control.
     '''</summary>
     '''<remarks>

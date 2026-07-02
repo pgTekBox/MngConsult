@@ -320,8 +320,13 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter Facture"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" 
+                    OnClientClick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;"
                 />
+                <asp:Button ID="btnImportSquare" runat="server"
+                    CssClass="btn btnAddRow"
+                    Text="Importer depuis Square"
+                    CausesValidation="false"
+                    ToolTip="Rapatrier les factures et paiements Square comme Factures Clients" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />

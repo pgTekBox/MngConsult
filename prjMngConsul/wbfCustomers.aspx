@@ -135,6 +135,14 @@
                     Text="Ajouter Client"
                     CausesValidation="false"
                     OnClientClick="saveListScrollNow(); openNewCustomerWindow(0); return false;" />
+                <asp:Button ID="btnExportSquare" runat="server"
+                    CssClass="btn"
+                    Text="Exporter vers Square"
+                    CausesValidation="false" />
+                <asp:Button ID="btnImportSquare" runat="server"
+                    CssClass="btn"
+                    Text="Importer depuis Square"
+                    CausesValidation="false" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
                         CssClass="input  txttbsearch"

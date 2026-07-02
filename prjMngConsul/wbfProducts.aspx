@@ -178,6 +178,10 @@
                     Text="Exporter vers Square"
                     CausesValidation="false"/>
                     <%--OnClientClick="return confirm('Exporter les produits/services actifs vers Square ?');" />--%>
+                <asp:Button ID="btnImportSquare" runat="server"
+                    CssClass="btn"
+                    Text="Importer depuis Square"
+                    CausesValidation="false"/>
                 <asp:Button ID="btnAdd" runat="server"
                     CssClass="btn btnAddRow"
                     Text="Ajouter un produit"

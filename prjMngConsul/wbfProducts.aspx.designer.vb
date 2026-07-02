@@ -68,6 +68,15 @@ Partial Public Class wbfProducts
     Protected WithEvents btnExportSquare As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''btnImportSquare control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnImportSquare As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
     '''btnAdd control.
     '''</summary>
     '''<remarks>

@@ -426,18 +426,8 @@
                 <asp:Repeater ID="rptPlans" runat="server">
                     <ItemTemplate>
                         <div class='<%# "plan-card " & Eval("PlanCardCssClass").ToString().Trim() %>'>
-                            <%# RenderBadge(Eval("BadgeText")) %>
-                            <div class='<%# "plan-icon-circle " & Eval("PlanIconCssClass").ToString().Trim() %>'>
-                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><%# Eval("IconSvg") %></svg>
-                            </div>
-                            <h3><%# Eval("Name") %></h3>
-                            <p class="plan-tagline"><%# Eval("Tagline") %></p>
-                            <span class="plan-pill"><%# Eval("EmployeeRange") %></span>
-                            <p class="plan-desc"><%# Eval("Description") %></p>
-                            <div class="plan-price"><span class="amount"><%# FormatPrice(Eval("Amount")) %></span><span class="period">/ mois</span></div>
-                            <ul class="plan-features">
-                                <%# RenderFeatures(Eval("Features")) %>
-                            </ul>
+                            <%-- Tout le contenu de la cartouche provient de l'editeur (colonne DescriptionLong) --%>
+                            <div class="plan-content"><%# Eval("DescriptionLong") %></div>
                             <a href='<%# "wbfRegister.aspx?ab=" & Eval("Code") %>' class="plan-button">Commencer gratuitement</a>
                         </div>
                     </ItemTemplate>

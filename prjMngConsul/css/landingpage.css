@@ -1242,6 +1242,28 @@ button {
     color: #cbd5e1;
 }
 
+/* Contenu COMPLET de la cartouche, edite via RadEditor (colonne DescriptionLong). */
+.plan-content {
+    flex: 1;                 /* pousse le bouton en bas de la carte */
+    color: #475569;
+    font-size: 14px;
+    line-height: 1.55;
+    margin-bottom: 24px;
+}
+.plan-content > *:first-child { margin-top: 0; }
+.plan-content h1, .plan-content h2, .plan-content h3, .plan-content h4 { color: #0f172a; margin: 0 0 8px; }
+.plan-content p { margin: 0 0 10px; }
+.plan-content ul, .plan-content ol { text-align: left; margin: 0 0 12px; padding-left: 18px; }
+.plan-content li { margin-bottom: 6px; }
+.plan-content a { color: #2563eb; text-decoration: underline; }
+.plan-content img { max-width: 100%; height: auto; }
+/* Carte "featured" (fond fonce) : texte clair */
+.plan-card.featured .plan-content { color: #cbd5e1; }
+.plan-card.featured .plan-content h1,
+.plan-card.featured .plan-content h2,
+.plan-card.featured .plan-content h3,
+.plan-card.featured .plan-content h4 { color: #fff; }
+
 .plan-button {
     width: 100%;
     text-align: center;

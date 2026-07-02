@@ -1,0 +1,91 @@
+
+
+<!DOCTYPE html>
+<html lang="fr">
+<head><meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" /><title>
+	Connexion — Sec60Admin
+</title>
+    <style>
+        :root {
+            --font: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+            --bg: #f6f7fb; --card: #fff; --text: #0f172a; --muted: #64748b;
+            --line: #e2e8f0; --primary: #2563eb; --danger: #dc2626; --ok: #16a34a;
+            --shadow: 0 18px 50px rgba(2,6,23,.12);
+        }
+        * { box-sizing: border-box; }
+        html, body { height: 100%; margin: 0; }
+        body {
+            font-family: var(--font); color: var(--text);
+            background: radial-gradient(900px 450px at 20% 0%, rgba(37,99,235,.16), transparent 60%),
+                        radial-gradient(900px 450px at 80% 0%, rgba(6,182,212,.12), transparent 60%), var(--bg);
+            display: flex; align-items: center; justify-content: center; min-height: 100vh; padding: 20px;
+        }
+        .login-card { width: 100%; max-width: 400px; background: var(--card); border: 1px solid var(--line); border-radius: 18px; box-shadow: var(--shadow); padding: 28px; }
+        .brand { display: flex; align-items: center; gap: 10px; margin-bottom: 6px; }
+        .brand-dot { width: 12px; height: 12px; border-radius: 999px; background: var(--primary); box-shadow: 0 0 0 6px rgba(37,99,235,.14); }
+        .brand-title { font-weight: 900; font-size: 18px; }
+        .brand-sub { font-size: 12px; color: var(--muted); font-weight: 700; }
+        h1 { font-size: 20px; margin: 14px 0 4px; }
+        .lead { font-size: 13px; color: var(--muted); margin: 0 0 20px; }
+        .field { margin-bottom: 14px; }
+        .field label { display: block; font-size: 12px; color: #334155; margin-bottom: 6px; font-weight: 700; }
+        .inp { width: 100%; padding: 11px 12px; border: 1px solid var(--line); border-radius: 12px; outline: none; background: #fff; color: var(--text); font-family: var(--font); font-size: 14px; }
+        .inp:focus { border-color: rgba(37,99,235,.5); box-shadow: 0 0 0 4px rgba(37,99,235,.12); }
+        .btn { width: 100%; cursor: pointer; border: 1px solid rgba(37,99,235,.4); border-radius: 12px; padding: 12px; background: var(--primary); color: #fff; font-weight: 800; font-size: 14px; font-family: var(--font); margin-top: 6px; }
+        .btn:hover { filter: brightness(1.05); }
+        .msg { margin: 0 0 16px; padding: 10px 12px; border-radius: 12px; font-weight: 700; font-size: 13px; border: 1px solid rgba(220,38,38,.35); background: rgba(220,38,38,.08); color: var(--danger); }
+        .msg.ok { border-color: rgba(22,163,74,.35); background: rgba(22,163,74,.08); color: var(--ok); }
+        .linkrow { margin-top: 14px; text-align: center; }
+        .linkrow a { color: var(--primary); font-size: 13px; font-weight: 700; text-decoration: none; cursor: pointer; }
+        .linkrow a:hover { text-decoration: underline; }
+        .foot { margin-top: 18px; font-size: 11px; color: var(--muted); text-align: center; }
+    </style>
+</head>
+<body>
+    <form method="post" action="./wbfLogin?ReturnUrl=%2f" id="form1">
+<input type="hidden" name="__VIEWSTATE" id="__VIEWSTATE" value="9hN359gCwSNeODwDh+S9Y6Nsy+Q6k1bSU2/yZ7Sakg0QwEDLaCeRFUswOPyFZvTAMP3J2LFptJF3CU9ZQmV2pr7qbL6HeSGQFdGI6oSk6Aw=" />
+
+<input type="hidden" name="__VIEWSTATEGENERATOR" id="__VIEWSTATEGENERATOR" value="EC77FC87" />
+<input type="hidden" name="__EVENTVALIDATION" id="__EVENTVALIDATION" value="8oKhEw7y/kzqN9YrVa2tmTf9nVYI/4bj5z9InxMNmfCmOoeqBHymkFKsmMYOQv2GjyIcYj+jgMDgFRHRglZKTHmlyfinCzc1EKtdQONc7nEn/zWf/+meEL5msNWtZQr5uU6zYVVt+Y2Xz/6Zkn1/3C2AGQGShpo4QS+s5o/YkapLQi6yTRIs427dDwflA8fg" />
+        <div class="login-card">
+
+            <div class="brand">
+                <span class="brand-dot"></span>
+                <span class="brand-title">Sec60Admin</span>
+                <span class="brand-sub">Console</span>
+            </div>
+
+            
+
+            
+            <div id="pnlLogin">
+	
+                <h1>Connexion</h1>
+                <p class="lead">Accès réservé aux administrateurs de la console.</p>
+
+                <div class="field">
+                    <label>Courriel</label>
+                    <input name="txtEmail" type="email" id="txtEmail" class="inp" placeholder="vous@exemple.com" />
+                </div>
+                <div class="field">
+                    <label>Mot de passe</label>
+                    <input name="txtPassword" type="password" id="txtPassword" class="inp" placeholder="••••••••" />
+                </div>
+
+                <input type="submit" name="btnLogin" value="Se connecter" id="btnLogin" class="btn" />
+
+                <div class="linkrow">
+                    <a id="lnkForgot" href="javascript:__doPostBack(&#39;lnkForgot&#39;,&#39;&#39;)">Mot de passe oublié ?</a>
+                </div>
+            
+</div>
+
+            
+            
+
+            <div class="foot">© 2026 Sec60Admin</div>
+
+        </div>
+    </form>
+</body>
+</html>

@@ -1,0 +1,604 @@
+﻿
+/* =========================
+   PAGE — Desktop (base, tous écrans)
+========================= */
+/* =============================================
+        VARIABLES & BASE
+============================================= */
+:root {
+    --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+    --bg: #f6f8fc;
+    --card: #fff;
+    --text: #0f172a;
+    --radius: var(--r-lg);
+    --muted: #64748b;
+    --line: #e2e8f0;
+    --primary: #2563eb;
+    --primary-weak: #eff6ff;
+    --danger: #dc2626;
+    --ok: #16a34a;
+    --accent: #2563eb;
+    --accent2: #06b6d4;
+    --supplier: #7c3aed; /* violet — couleur distincte fournisseur */
+    --supplier-weak: #f5f3ff;
+    --r-md: 14px;
+    --r-lg: 18px;
+    --r-xl: 22px;
+    --shadow: 0 18px 50px rgba(2,6,23,.10);
+}
+
+html, body, form {
+    height: 100%;
+    margin: 0;
+}
+
+body {
+    margin: 0;
+    background: radial-gradient(1200px 600px at 20% 0%, #eef2ff 0%, transparent 45%), radial-gradient(1200px 600px at 80% 0%, #ecfeff 0%, transparent 45%), var(--bg);
+    font-family: var(--font);
+    color: var(--text);
+}
+
+.readonly-click-block {
+    pointer-events: none;
+    opacity: 0.75;
+}
+
+
+
+/* =============================================
+           ITEMS (lignes de facture)
+============================================= */
+
+
+.item-row {
+    border: 1px solid var(--line);
+    border-radius: var(--r-lg);
+    background: #fff;
+}
+
+.qty-right input {
+    text-align: right !important;
+}
+/* ============================================= */
+
+
+
+.lien {
+    color: var(--primary);
+    text-decoration: underline;
+    text-decoration-color: rgba(37,99,235,.35);
+    text-underline-offset: 3px;
+    cursor: pointer;
+    font-weight: 700;
+    transition: color .15s, text-decoration-color .15s;
+}
+
+    .lien:hover {
+        color: #1d4ed8;
+        text-decoration-color: rgba(37,99,235,.8);
+    }
+
+    .lien:active {
+        color: #1e40af;
+    }
+
+
+
+.page-head {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 14px 16px;
+    border-bottom: 1px solid var(--mc-stroke);
+    background: rgba(255,255,255,.75);
+}
+
+.page-head-left {
+    min-width: 220px;
+    flex: 0 1 auto;
+}
+
+.page-title {
+    font-weight: 900;
+    font-size: 18px;
+    line-height: 1.2;
+}
+ 
+
+.full-grid {
+    height: calc(100vh - 220px);
+    min-height: 420px;
+}
+
+.list-shell {
+    height: 100%;
+    padding: 16px;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    min-height: 0;
+}
+
+/* Telerik insère son propre <div class="RadListView…"> entre .list-shell
+   et .listview-list ; on lui force la hauteur + flex pour que la chaîne
+   de propagation soit complète jusqu'à .listview-list-body (qui a overflow:auto). */
+.list-shell > * {
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+}
+.listview-row:hover {
+    background: #fafcff;
+}
+
+/* =========================
+   SEARCHBOX
+========================= */
+
+.searchbox {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: flex-end;
+    flex: 1 1 620px;
+}
+
+    .searchbox .input,
+    .searchbox input[type="text"] {
+        min-width: 280px;
+        flex: 1 1 320px;
+    }
+
+    .searchbox .btn,
+    .searchbox input[type="submit"],
+    .searchbox input[type="button"] {
+        white-space: nowrap;
+    }
+
+.txttbsearch {
+    max-width: 350px;
+}  
+
+/* =========================
+   SEARCH GROUP — toujours sur une ligne
+========================= */
+.search-group {
+    display: flex;
+    flex: 0 1 320px;
+    gap: 8px;
+    align-items: center;
+    min-width: 0;
+    justify-content: flex-end;
+}
+
+    .search-group .input,
+    .search-group input[type="text"] {
+        flex: 1 1 auto;
+        min-width: 0;
+    }
+/* =========================
+   BOUTONS ICÔNES
+========================= */
+.btn-icon {
+    width: 42px;
+    height: 42px;
+    min-width: 0;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    border-radius: 10px !important;
+    border: none !important;
+    background-color: transparent !important;
+    box-shadow: none !important;
+}
+
+    .btn-icon:hover {
+        background-color: #f1f5f9 !important;
+    }
+
+/* =========================
+   BOUTONS ICÔNES LISTVIEW
+========================= */
+.btn-icon-receipt {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='12' cy='12' r='10'/%3E%3Cpath d='M12 6v12'/%3E%3Cpath d='M15 9.5a2.5 2.5 0 0 0-2.5-2.5h-1a2.5 2.5 0 0 0 0 5h1a2.5 2.5 0 0 1 0 5h-1A2.5 2.5 0 0 1 9 14.5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 17px 17px;
+}
+.btn-icon-receipt-bill {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='6' width='20' height='12' rx='2'/%3E%3Ccircle cx='12' cy='12' r='2'/%3E%3Cpath d='M6 12h.01'/%3E%3Cpath d='M18 12h.01'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 17px 17px;
+}
+
+
+.btn-icon-edit {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232563eb' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7'/%3E%3Cpath d='M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 17px 17px;
+}
+
+.btn-icon-delete {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ef4444' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 6 5 6 21 6'/%3E%3Cpath d='M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6'/%3E%3Cpath d='M10 11v6'/%3E%3Cpath d='M14 11v6'/%3E%3Cpath d='M9 6V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 17px 17px;
+}
+
+.btn-icon-plaid1 {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='6' height='6' rx='2'/%3E%3Crect x='15' y='3' width='6' height='6' rx='2'/%3E%3Crect x='3' y='15' width='6' height='6' rx='2'/%3E%3Crect x='15' y='15' width='6' height='6' rx='2'/%3E%3Cpath d='M9 6h6M6 9v6M18 9v6M9 18h6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+.btn-icon-plaid {
+    background-color: #ecfdf5;
+    border: 1px solid #a7f3d0;
+    border-radius: 12px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23059669' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='3' y='3' width='6' height='6' rx='2'/%3E%3Crect x='15' y='3' width='6' height='6' rx='2'/%3E%3Crect x='3' y='15' width='6' height='6' rx='2'/%3E%3Crect x='15' y='15' width='6' height='6' rx='2'/%3E%3Cpath d='M9 6h6M6 9v6M18 9v6M9 18h6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+    transition: all .15s ease;
+}
+    .btn-icon-plaid:hover {
+        background-color: #d1fae5;
+        border-color: #6ee7b7;
+        transform: translateY(-1px);
+    }
+
+.btn-icon-search {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Ccircle cx='11' cy='11' r='8'/%3E%3Cline x1='21' y1='21' x2='16.65' y2='16.65'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+
+.btn-icon-clear {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='18' y1='6' x2='6' y2='18'/%3E%3Cline x1='6' y1='6' x2='18' y2='18'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+
+.btn-icon-save {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23000000' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z'/%3E%3Cpolyline points='17 21 17 13 7 13 7 21'/%3E%3Cpolyline points='7 3 7 8 15 8'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+.btn-icon-lock-red {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23dc2626' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='5' y='11' width='14' height='10' rx='2' ry='2'/%3E%3Cpath d='M8 11V8a4 4 0 0 1 8 0v3'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: 18px 18px;
+}
+
+/* =========================
+   BOUTONS GÉNÉRAUX
+========================= */
+.listview-actions .btn,
+.listview-actions input[type=submit],
+.listview-actions input[type=button] {
+    border-radius: 10px !important;
+}
+
+.btn:disabled,
+.btn[disabled] {
+    background: #e5e7eb !important;
+    color: #9ca3af !important;
+    border-color: #d1d5db !important;
+    cursor: not-allowed !important;
+    opacity: .75;
+    box-shadow: none !important;
+    transform: none !important;
+}
+
+    .btn:disabled:hover {
+        background: #e5e7eb !important;
+    }
+
+/* =========================
+   LISTVIEW
+========================= */
+.listview-list {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    background: #fff;
+    border: 1px solid var(--mc-stroke);
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 10px 30px rgba(15, 23, 42, .06);
+}
+
+
+
+.listview-list-body {
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: auto;
+}
+
+
+.listview-actions {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+    align-items: center;
+    flex-direction: row;
+}
+
+.listview-empty {
+    padding: 24px;
+    text-align: center;
+    color: #64748b;
+}
+ 
+
+
+/* =========================
+   TABLETTE —   ET en dessous
+========================= */
+@media   (max-width: 1024px) {
+    .page-head {
+        padding: 12px 14px;
+    }
+
+    .searchbox {
+        width: 100%;
+        justify-content: flex-start;
+    }
+
+        .searchbox .input,
+        .searchbox input[type="text"] {
+            min-width: 220px;
+            flex: 1 1 260px;
+        }
+
+    .full-grid {
+        height: calc(100vh - 205px);
+        min-height: 360px;
+    }
+
+    .list-shell {
+        padding: 12px;
+    }
+
+    .listview-list {
+        border-radius: 14px;
+    }
+
+     
+ 
+}
+
+/* =========================
+   MOBILE LARGE — ET en dessous
+========================= */
+@media   (max-width: 768px) {
+
+
+    .page-head {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 12px;
+    }
+
+    .page-head-left {
+        width: 100%;
+    }
+
+    .search-group {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .searchbox {
+        width: 100%;
+        flex: none;
+        justify-content: stretch;
+    }
+
+        .searchbox .input,
+        .searchbox input[type="text"] {
+          /*  min-width: 100%;*/
+            width: 100%;
+            flex: 1 1 100%;
+        }
+
+        .searchbox .btn:not(.btn-icon),
+        .searchbox input[type="submit"]:not(.btn-icon),
+        .searchbox input[type="button"]:not(.btn-icon) {
+            flex: 1 1 calc(50% - 4px);
+            min-width: 140px;
+        }
+
+        .searchbox .btn-icon {
+            flex: 0 0 42px;
+            width: 42px;
+        }
+    
+
+    .full-grid {
+        height: calc(100vh - 205px); /* ← hauteur fixe comme desktop */
+        min-height: 0;
+    }
+
+    .list-shell {
+        height: 100%; /* ← prend toute la hauteur */
+        padding: 12px;
+        box-sizing: border-box;
+    }
+
+    .listview-list {
+        height: 100%; /* ← prend toute la hauteur */
+        min-height: 0;
+        border-radius: 12px;
+    }
+
+   
+
+    .listview-list-body {
+        overflow: auto; /* ← remet le scroll sur la grille */
+    }
+
+ 
+    .field-status {
+        order: 2;
+        font-size: 13px;
+    }
+
+        .field-status::before {
+            content: "Créé : ";
+            font-weight: 800;
+            color: #0f172a;
+        }
+
+    .listview-actions {
+        order: 3;
+        margin-top: 4px;
+    }
+
+    .btnAddRow {
+        display: none;
+    }
+
+    .fab-add {
+        display: flex;
+        position: fixed;
+        bottom: 24px;
+        right: 20px;
+        z-index: 9999;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--mc-primary, #2563eb);
+        color: #fff;
+        font-size: 28px;
+        font-weight: 300;
+        border: none;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, .45);
+        line-height: 1;
+    }
+
+        .fab-add:hover,
+        .fab-add:active {
+            background: #1d4ed8;
+            transform: scale(1.08);
+        }
+}
+
+/* =========================
+   PETIT MOBILE —   seulement
+========================= */
+@media (max-width: 480px) {
+    .page-title {
+        font-size: 17px;
+    }
+
+ /*   .page-sub {
+        font-size: 12px;
+    }*/
+
+    .search-group {
+        width: 100%;
+        flex: 1 1 100%;
+    }
+
+    .searchbox .btn-icon {
+        flex: 0 0 42px;
+        width: 42px;
+    }
+
+    .searchbox .btn:not(.btn-icon),
+    .searchbox input[type="submit"]:not(.btn-icon),
+    .searchbox input[type="button"]:not(.btn-icon) {
+        flex: 1 1 100%;
+        min-width: 100%;
+    }
+   
+
+
+    .full-grid {
+        height: calc(100vh - 195px); /* ← un peu moins car header plus petit */
+        min-height: 0;
+    }
+
+    .list-shell {
+        height: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+    }
+
+    .listview-list {
+        height: 100%;
+        min-height: 0;
+    }
+
+    .listview-list-body {
+        overflow: auto;
+    }
+
+
+
+
+
+    .listview-row {
+      
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 14px;
+    }
+
+    .listview-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+      
+
+    .btnAddRow {
+        display: none;
+    }
+
+    .fab-add {
+        display: flex;
+        position: fixed;
+        bottom: 24px;
+        right: 20px;
+        z-index: 9999;
+        width: 56px;
+        height: 56px;
+        border-radius: 50%;
+        background: var(--mc-primary, #2563eb);
+        color: #fff;
+        font-size: 28px;
+        font-weight: 300;
+        border: none;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 4px 20px rgba(37, 99, 235, .45);
+        line-height: 1;
+    }
+
+        .fab-add:hover,
+        .fab-add:active {
+            background: #1d4ed8;
+            transform: scale(1.08);
+        }
+}

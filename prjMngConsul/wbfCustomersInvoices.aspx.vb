@@ -256,4 +256,198 @@ Public Class wbfCustomersInvoices
         tbSearch.Text = ""
         rlvClientsFactures.Rebind()
     End Sub
+
+    ' ── Import des factures + paiements Square (sens entrant, a la demande) ──
+
+    Protected Sub btnImportSquare_Click(sender As Object, e As EventArgs) Handles btnImportSquare.Click
+        Try
+            Dim token As String = GetValidSquareAccessToken()
+            Dim locationId As String = GetCompanySquareLocationId()
+
+            Dim invCount As Integer = 0, payCount As Integer = 0
+
+            ' 1. Factures Square -> Factures Clients (entete + lignes via l'Order)
+            Dim invoices As List(Of clsSquare.SquareInvoiceRemote) = clsSquare.ListInvoices(token, locationId)
+            If invoices IsNot Nothing Then
+                For Each inv As clsSquare.SquareInvoiceRemote In invoices
+                    If String.IsNullOrEmpty(inv.InvoiceId) Then Continue For
+                    EnsureClient(inv)
+                    Dim order As clsSquare.SquareOrderRemote = Nothing
+                    If Not String.IsNullOrEmpty(inv.OrderId) Then order = clsSquare.RetrieveOrder(token, inv.OrderId)
+                    UpsertSquareInvoice(inv, order, Nothing, Nothing)
+                    invCount += 1
+                Next
+            End If
+
+            ' 2. Paiements Square -> rapprochement (Paye) ou creation facture payee (vente TPV)
+            Dim payments As List(Of clsSquare.SquarePaymentRemote) = clsSquare.ListPayments(token, locationId)
+            If payments IsNot Nothing Then
+                For Each pay As clsSquare.SquarePaymentRemote In payments
+                    If String.IsNullOrEmpty(pay.PaymentId) Then Continue For
+                    Dim needsInvoice As Boolean = ApplyPayment(pay)
+                    If needsInvoice Then
+                        Dim order As clsSquare.SquareOrderRemote = Nothing
+                        If Not String.IsNullOrEmpty(pay.OrderId) Then order = clsSquare.RetrieveOrder(token, pay.OrderId)
+                        If order Is Nothing Then order = SyntheticOrder(pay)
+                        Dim inv As New clsSquare.SquareInvoiceRemote()
+                        inv.OrderId = pay.OrderId
+                        inv.CustomerId = pay.CustomerId
+                        inv.Status = pay.Status
+                        UpsertSquareInvoice(inv, order, pay.PaymentId, pay.Status)
+                    End If
+                    payCount += 1
+                Next
+            End If
+
+            ShowSquareMessage(invCount & " facture(s) et " & payCount & " paiement(s) traites depuis Square.")
+            rlvClientsFactures.Rebind()
+        Catch ex As Exception
+            ShowSquareMessage("Erreur lors de l'import Square : " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Garantit le client local (SquareCustomerId -> T050Party) via le snapshot destinataire.</summary>
+    Private Sub EnsureClient(inv As clsSquare.SquareInvoiceRemote)
+        If inv Is Nothing OrElse String.IsNullOrEmpty(inv.CustomerId) Then Return
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@SquareCustomerId", inv.CustomerId))
+        p.Add(New SqlClient.SqlParameter("@SquareCustomerVersion", DBNull.Value))
+        p.Add(New SqlClient.SqlParameter("@ReferenceId", DBNull.Value))
+        p.Add(New SqlClient.SqlParameter("@Name", NzP(inv.RecipientName)))
+        p.Add(New SqlClient.SqlParameter("@Email", NzP(inv.RecipientEmail)))
+        p.Add(New SqlClient.SqlParameter("@Phone", NzP(inv.RecipientPhone)))
+        p.Add(New SqlClient.SqlParameter("@Address1", NzP(inv.RecipientAddress1)))
+        p.Add(New SqlClient.SqlParameter("@Address2", NzP(inv.RecipientAddress2)))
+        p.Add(New SqlClient.SqlParameter("@City", NzP(inv.RecipientCity)))
+        p.Add(New SqlClient.SqlParameter("@PostalCode", NzP(inv.RecipientPostalCode)))
+        ExecuteSQLds("s0666UpsertClientFromSquare", p)
+    End Sub
+
+    ''' <summary>Rapproche un paiement (s0672) ; retourne True si aucune facture ne correspond.</summary>
+    Private Function ApplyPayment(pay As clsSquare.SquarePaymentRemote) As Boolean
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@SquareOrderId", NzP(pay.OrderId)))
+        p.Add(New SqlClient.SqlParameter("@SquarePaymentId", pay.PaymentId))
+        p.Add(New SqlClient.SqlParameter("@SquareStatus", NzP(pay.Status)))
+        p.Add(New SqlClient.SqlParameter("@AmountCents", If(pay.AmountCents <> 0, CObj(pay.AmountCents), DBNull.Value)))
+        Dim ds As DataSet = ExecuteSQLds("s0672ApplySquarePayment", p)
+        If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 _
+           AndAlso ds.Tables(0).Columns.Contains("NeedsInvoice") Then
+            Return CBool(ds.Tables(0).Rows(0)("NeedsInvoice"))
+        End If
+        Return False
+    End Function
+
+    ''' <summary>Appelle s0671UpsertInvoiceFromSquare (entete + lignes TVP).</summary>
+    Private Sub UpsertSquareInvoice(inv As clsSquare.SquareInvoiceRemote,
+                                    order As clsSquare.SquareOrderRemote,
+                                    paymentId As String,
+                                    paymentStatus As String)
+
+        Dim status As String = If(Not String.IsNullOrEmpty(paymentStatus), paymentStatus,
+                                  If(inv IsNot Nothing, inv.Status, Nothing))
+        Dim orderId As String = If(order IsNot Nothing, order.OrderId,
+                                   If(inv IsNot Nothing, inv.OrderId, Nothing))
+        Dim customerId As String = If(inv IsNot Nothing AndAlso Not String.IsNullOrEmpty(inv.CustomerId),
+                                      inv.CustomerId, If(order IsNot Nothing, order.CustomerId, Nothing))
+
+        Using conn As New SqlClient.SqlConnection(ConnectionString)
+            Using cmd As New SqlClient.SqlCommand("s0671UpsertInvoiceFromSquare", conn)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.Parameters.AddWithValue("@CompanyGUID", Company)
+                cmd.Parameters.AddWithValue("@SquareInvoiceId", NzP(If(inv IsNot Nothing, inv.InvoiceId, Nothing)))
+                cmd.Parameters.AddWithValue("@SquareInvoiceVersion", If(inv IsNot Nothing AndAlso inv.Version > 0, CObj(inv.Version), DBNull.Value))
+                cmd.Parameters.AddWithValue("@SquareOrderId", NzP(orderId))
+                cmd.Parameters.AddWithValue("@SquarePaymentId", NzP(paymentId))
+                cmd.Parameters.AddWithValue("@SquareCustomerId", NzP(customerId))
+                cmd.Parameters.AddWithValue("@InvoiceNumber", NzP(If(inv IsNot Nothing, inv.InvoiceNumber, Nothing)))
+                cmd.Parameters.AddWithValue("@SquareStatus", NzP(status))
+                cmd.Parameters.AddWithValue("@IssueDate", DateP(If(inv IsNot Nothing, inv.IssueDate, Nothing)))
+                cmd.Parameters.AddWithValue("@DueDate", DateP(If(inv IsNot Nothing, inv.DueDate, Nothing)))
+                cmd.Parameters.AddWithValue("@SubTotalCents", If(order IsNot Nothing, CObj(order.SubTotalCents), DBNull.Value))
+                cmd.Parameters.AddWithValue("@TpsCents", If(order IsNot Nothing, CObj(order.TpsCents), DBNull.Value))
+                cmd.Parameters.AddWithValue("@TvqCents", If(order IsNot Nothing, CObj(order.TvqCents), DBNull.Value))
+                cmd.Parameters.AddWithValue("@TotalCents", If(order IsNot Nothing, CObj(order.TotalCents), DBNull.Value))
+                cmd.Parameters.AddWithValue("@RecipientName", NzP(If(inv IsNot Nothing, inv.RecipientName, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientEmail", NzP(If(inv IsNot Nothing, inv.RecipientEmail, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientPhone", NzP(If(inv IsNot Nothing, inv.RecipientPhone, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientAddress1", NzP(If(inv IsNot Nothing, inv.RecipientAddress1, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientAddress2", NzP(If(inv IsNot Nothing, inv.RecipientAddress2, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientCity", NzP(If(inv IsNot Nothing, inv.RecipientCity, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientState", NzP(If(inv IsNot Nothing, inv.RecipientState, Nothing)))
+                cmd.Parameters.AddWithValue("@RecipientPostalCode", NzP(If(inv IsNot Nothing, inv.RecipientPostalCode, Nothing)))
+
+                Dim pLines As New SqlClient.SqlParameter("@Lines", SqlDbType.Structured)
+                pLines.TypeName = "dbo.TVP_SquareInvoiceLine"
+                pLines.Value = BuildLinesTable(order)
+                cmd.Parameters.Add(pLines)
+
+                conn.Open()
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    ''' <summary>Order synthetique (1 ligne = montant total) pour une vente sans Order Square.</summary>
+    Private Shared Function SyntheticOrder(pay As clsSquare.SquarePaymentRemote) As clsSquare.SquareOrderRemote
+        Dim o As New clsSquare.SquareOrderRemote()
+        o.OrderId = pay.OrderId
+        o.CustomerId = pay.CustomerId
+        o.TotalCents = pay.AmountCents
+        o.SubTotalCents = pay.AmountCents
+        o.TpsCents = 0
+        o.TvqCents = 0
+        Dim ln As New clsSquare.SquareOrderLine()
+        ln.Name = "Vente au terminal (Square)"
+        ln.Qty = 1D
+        ln.UnitPriceCents = pay.AmountCents
+        ln.AmountCents = pay.AmountCents
+        ln.HasTax = False
+        o.Lines.Add(ln)
+        Return o
+    End Function
+
+    ''' <summary>Construit le TVP_SquareInvoiceLine a partir des lignes de l'Order.</summary>
+    Private Shared Function BuildLinesTable(order As clsSquare.SquareOrderRemote) As DataTable
+        Dim dt As New DataTable()
+        dt.Columns.Add("Ordre", GetType(Integer))
+        dt.Columns.Add("SquareItemId", GetType(String))
+        dt.Columns.Add("Description", GetType(String))
+        dt.Columns.Add("Qty", GetType(Decimal))
+        dt.Columns.Add("UnitPrice", GetType(Decimal))
+        dt.Columns.Add("Amount", GetType(Decimal))
+        dt.Columns.Add("HasTax", GetType(Boolean))
+        If order IsNot Nothing AndAlso order.Lines IsNot Nothing Then
+            Dim i As Integer = 0
+            For Each l As clsSquare.SquareOrderLine In order.Lines
+                i += 1
+                dt.Rows.Add(i,
+                            If(String.IsNullOrEmpty(l.CatalogObjectId), CType(DBNull.Value, Object), l.CatalogObjectId),
+                            If(l.Name, CType(DBNull.Value, Object)),
+                            l.Qty,
+                            l.UnitPriceCents / 100D,
+                            l.AmountCents / 100D,
+                            l.HasTax)
+            Next
+        End If
+        Return dt
+    End Function
+
+    Private Shared Function NzP(s As String) As Object
+        If String.IsNullOrEmpty(s) Then Return DBNull.Value
+        Return s
+    End Function
+
+    Private Shared Function DateP(d As DateTime?) As Object
+        If d.HasValue Then Return d.Value
+        Return DBNull.Value
+    End Function
+
+    Private Sub ShowSquareMessage(msg As String)
+        Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
+        Dim script As String = "radalert('" & safe & "', 400, 200, 'Import Square');"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "squareMsg", script, True)
+    End Sub
 End Class

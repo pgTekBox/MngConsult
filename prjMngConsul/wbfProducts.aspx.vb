@@ -155,6 +155,54 @@ Public Class wbfProducts
         End Try
     End Sub
 
+    ' ── Import des produits depuis Square (sens entrant, a la demande) ──
+
+    Protected Sub btnImportSquare_Click(sender As Object, e As EventArgs) Handles btnImportSquare.Click
+        Try
+            Dim token As String = GetValidSquareAccessToken()
+            Dim remotes As List(Of clsSquare.SquareProductRemote) = clsSquare.ListCatalogItems(token)
+
+            If remotes Is Nothing OrElse remotes.Count = 0 Then
+                ShowSquareMessage("Aucun produit a importer depuis Square.")
+                rlvProducts.Rebind()
+                Return
+            End If
+
+            Dim created As Integer = 0, updated As Integer = 0
+            For Each p As clsSquare.SquareProductRemote In remotes
+                If String.IsNullOrEmpty(p.ItemId) Then Continue For
+
+                Dim pr As New Collection
+                pr.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                pr.Add(New SqlClient.SqlParameter("@SquareItemId", p.ItemId))
+                pr.Add(New SqlClient.SqlParameter("@SquareVariationId", NzProd(p.VariationId)))
+                pr.Add(New SqlClient.SqlParameter("@SquareItemVersion", If(p.ItemVersion > 0, CObj(p.ItemVersion), DBNull.Value)))
+                pr.Add(New SqlClient.SqlParameter("@SquareVariationVersion", If(p.VariationVersion > 0, CObj(p.VariationVersion), DBNull.Value)))
+                pr.Add(New SqlClient.SqlParameter("@Name", NzProd(p.Name)))
+                pr.Add(New SqlClient.SqlParameter("@Description", NzProd(p.Description)))
+                pr.Add(New SqlClient.SqlParameter("@PriceCents", If(p.PriceCents > 0, CObj(p.PriceCents), DBNull.Value)))
+                Dim ds As DataSet = ExecuteSQLds("s0670UpsertProductFromSquare", pr)
+
+                Dim action As String = ""
+                If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 _
+                   AndAlso Not IsDBNull(ds.Tables(0).Rows(0)("Action")) Then
+                    action = CStr(ds.Tables(0).Rows(0)("Action"))
+                End If
+                If action = "created" Then created += 1 Else updated += 1
+            Next
+
+            ShowSquareMessage(created & " produit(s) cree(s) et " & updated & " mis a jour depuis Square (" & remotes.Count & " trouve(s)).")
+            rlvProducts.Rebind()
+        Catch ex As Exception
+            ShowSquareMessage("Erreur lors de l'import Square : " & ex.Message)
+        End Try
+    End Sub
+
+    Private Shared Function NzProd(s As String) As Object
+        If String.IsNullOrEmpty(s) Then Return DBNull.Value
+        Return s
+    End Function
+
     Private Sub ShowSquareMessage(msg As String)
         Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
         Dim script As String = "radalert('" & safe & "', 400, 200, 'Export Square');"

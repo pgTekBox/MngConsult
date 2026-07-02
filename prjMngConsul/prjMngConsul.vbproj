@@ -386,6 +386,7 @@
     <Content Include="App_Data\RadUploadTemp\1771966644296Facture_59311.pdf.tmp" />
     <Content Include="App_Data\RadUploadTemp\1771966730796Facture_59311.pdf.tmp" />
     <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
+    <Content Include="AutoPayProcessor.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -421,6 +422,9 @@
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
     <Content Include="wbfAppointmentEdit.aspx" />
+    <Content Include="wbfAutoPayAuthorizations.aspx" />
+    <Content Include="wbfAutoPayHistory.aspx" />
+    <Content Include="wbfAutoPaySchedule.aspx" />
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
@@ -462,6 +466,7 @@
     <Content Include="wbfRegister.aspx" />
     <Content Include="wbfReleve.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
+    <Content Include="wbfScheduleAutoPay.aspx" />
     <Content Include="wbfSetting.aspx" />
     <Content Include="wbfSettingsOpenAiPrompts.aspx" />
     <Content Include="wbfStripeWebhookDiagnostic.aspx" />
@@ -513,6 +518,9 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="App_Code\EmailHelper.vb" />
+    <Compile Include="AutoPayProcessor.ashx.vb">
+      <DependentUpon>AutoPayProcessor.ashx</DependentUpon>
+    </Compile>
     <Compile Include="clsGenerateInvoicePDF.vb" />
     <Compile Include="Controls\HeaderUser.ascx.designer.vb">
       <DependentUpon>HeaderUser.ascx</DependentUpon>
@@ -707,6 +715,9 @@
     <Compile Include="StripeWebhook.ashx.vb">
       <DependentUpon>StripeWebhook.ashx</DependentUpon>
     </Compile>
+    <Compile Include="SquareWebhook.ashx.vb">
+      <DependentUpon>SquareWebhook.ashx</DependentUpon>
+    </Compile>
     <Compile Include="todel.aspx.designer.vb">
       <DependentUpon>todel.aspx</DependentUpon>
     </Compile>
@@ -762,6 +773,27 @@
     <Compile Include="wbfAppointmentEdit.aspx.vb">
       <DependentUpon>wbfAppointmentEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAutoPayAuthorizations.aspx.designer.vb">
+      <DependentUpon>wbfAutoPayAuthorizations.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAutoPayAuthorizations.aspx.vb">
+      <DependentUpon>wbfAutoPayAuthorizations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfAutoPayHistory.aspx.designer.vb">
+      <DependentUpon>wbfAutoPayHistory.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAutoPayHistory.aspx.vb">
+      <DependentUpon>wbfAutoPayHistory.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfAutoPaySchedule.aspx.designer.vb">
+      <DependentUpon>wbfAutoPaySchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfAutoPaySchedule.aspx.vb">
+      <DependentUpon>wbfAutoPaySchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfBalanceVerification.aspx.designer.vb">
       <DependentUpon>wbfBalanceVerification.aspx</DependentUpon>
@@ -1047,6 +1079,13 @@
       <DependentUpon>wbfScannedPDF.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfScheduleAutoPay.aspx.designer.vb">
+      <DependentUpon>wbfScheduleAutoPay.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfScheduleAutoPay.aspx.vb">
+      <DependentUpon>wbfScheduleAutoPay.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="wbfSetting.aspx.designer.vb">
       <DependentUpon>wbfSetting.aspx</DependentUpon>
     </Compile>
@@ -1204,6 +1243,7 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
     <Content Include="StripeWebhook.ashx" />
+    <Content Include="SquareWebhook.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
@@ -1257,7 +1297,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
