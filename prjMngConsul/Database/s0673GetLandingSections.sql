@@ -1,8 +1,9 @@
 -- =============================================================================
--- s0673GetLandingSections  @PageCode, @Lang
--- Retourne les sections actives d'une page, dans l'ordre d'affichage, avec le
--- HTML de la langue demandée. Si la langue demandée n'a pas de contenu pour la
--- section, on retombe sur le français ('fr').
+-- s0673GetLandingSections  @PageCode = NULL, @Lang = 'fr'
+-- Retourne les sections actives, dans l'ordre (page puis section), avec le HTML
+-- de la langue demandée (repli sur 'fr' si absent).
+--   @PageCode NULL  -> toutes les pages (rendu de tout le site vitrine)
+--   @PageCode fourni -> une seule page
 -- =============================================================================
 
 USE [MngConsul];
@@ -13,13 +14,16 @@ SET QUOTED_IDENTIFIER ON;
 GO
 
 CREATE OR ALTER PROCEDURE dbo.s0673GetLandingSections
-    @PageCode NVARCHAR(50),
-    @Lang     NVARCHAR(5) = N'fr'
+    @PageCode NVARCHAR(50) = NULL,
+    @Lang     NVARCHAR(5)  = N'fr'
 AS
 BEGIN
     SET NOCOUNT ON;
 
     SELECT
+        p.Code         AS PageCode,
+        p.IsDefault,
+        p.DisplayOrder AS PageOrder,
         s.Id,
         s.Code,
         s.Name,
@@ -29,9 +33,9 @@ BEGIN
     FROM dbo.T023LandingSection AS s
         INNER JOIN dbo.T022LandingPage AS p
             ON p.Id = s.PageId
-           AND p.Code = @PageCode
            AND p.IsActive = 1
            AND p.IsDeleted = 0
+           AND (@PageCode IS NULL OR p.Code = @PageCode)
         LEFT JOIN dbo.T024LandingSectionContent AS c
             ON c.SectionId = s.Id
            AND c.Lang = @Lang
@@ -40,6 +44,6 @@ BEGIN
            AND cfr.Lang = N'fr'
     WHERE s.IsActive = 1
       AND s.IsDeleted = 0
-    ORDER BY s.DisplayOrder, s.Id;
+    ORDER BY p.DisplayOrder, p.Id, s.DisplayOrder, s.Id;
 END
 GO

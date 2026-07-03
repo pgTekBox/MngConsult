@@ -7,9 +7,6 @@ Imports System.Web.UI
 Partial Public Class LandingPage
     Inherits clsData
 
-    ' Code de la page rendue par cette .aspx.
-    Private Const PAGE_CODE As String = "accueil"
-
     ' Jeton remplacé, dans la section des forfaits, par les cartes générées
     ' dynamiquement depuis T021Plan.
     Private Const PLANS_TOKEN As String = "{{PLANS}}"
@@ -32,35 +29,49 @@ Partial Public Class LandingPage
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            BindSections()
+            RenderPages()
         End If
     End Sub
 
     ''' <summary>
-    ''' Charge les sections actives de la LandingPage depuis T022LandingSection.
+    ''' Construit tout le contenu du &lt;main&gt; depuis la BD : toutes les pages
+    ''' actives (T022LandingPage) et leurs sections (T023/T024) dans la langue
+    ''' courante. Chaque page est enveloppée dans son &lt;div data-page&gt; ;
+    ''' la page par défaut est visible, les autres masquées (routage JS).
     ''' </summary>
-    Private Sub BindSections()
+    Private Sub RenderPages()
         Try
             Dim p As New Collection
-            p.Add(New SqlParameter("@PageCode", PAGE_CODE))
+            p.Add(New SqlParameter("@PageCode", DBNull.Value))   ' NULL = toutes les pages
             p.Add(New SqlParameter("@Lang", CurrentLang))
             Dim ds As DataSet = ExecuteSQLds("s0673GetLandingSections", p)
-            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-                rptSections.DataSource = ds.Tables(0)
-                rptSections.DataBind()
-            End If
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
+
+            Dim sb As New StringBuilder()
+            Dim currentPage As String = Nothing
+            For Each row As DataRowView In ds.Tables(0).DefaultView
+                Dim pageCode As String = GetStr(row, "PageCode")
+                If Not String.Equals(pageCode, currentPage, StringComparison.Ordinal) Then
+                    If currentPage IsNot Nothing Then sb.Append("</div>")
+                    currentPage = pageCode
+                    Dim cssClass As String = If(GetBool(row, "IsDefault"), "page", "page hidden")
+                    sb.Append("<div class=""" & cssClass & """ data-page=""" & pageCode & """>")
+                End If
+                sb.Append(RenderSectionHtml(row))
+            Next
+            If currentPage IsNot Nothing Then sb.Append("</div>")
+
+            litPages.Text = sb.ToString()
         Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("LandingPage BindSections error: " & ex.Message)
+            System.Diagnostics.Debug.WriteLine("LandingPage RenderPages error: " & ex.Message)
         End Try
     End Sub
 
     ''' <summary>
-    ''' Rend une section : le HTML vient de la colonne HtmlContent. Si la section
-    ''' contient le jeton {{PLANS}}, il est remplacé par les cartes de forfaits.
+    ''' Rend le HTML d'une section : vient de HtmlContent ; si la section contient
+    ''' le jeton {{PLANS}}, il est remplacé par les cartes de forfaits.
     ''' </summary>
-    Public Function RenderSection(item As Object) As String
-        Dim row As DataRowView = TryCast(item, DataRowView)
-        If row Is Nothing Then Return ""
+    Private Function RenderSectionHtml(row As DataRowView) As String
         Dim html As String = GetStr(row, "HtmlContent")
         If html.Length = 0 Then Return ""
         If html.IndexOf(PLANS_TOKEN, StringComparison.Ordinal) >= 0 Then
