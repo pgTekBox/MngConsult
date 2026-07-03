@@ -315,6 +315,11 @@
     <Content Include="Database\s0610InsertOutboundMail.sql" />
     <Content Include="Database\s0630GetPlansForLanding.sql" />
     <Content Include="Database\s0631GetPlanByCode.sql" />
+    <Content Include="Database\s0673GetLandingSections.sql" />
+    <Content Include="Database\s0674UpsertLandingSection.sql" />
+    <Content Include="Database\T022LandingPage.sql" />
+    <Content Include="Database\T023LandingSection.sql" />
+    <Content Include="Database\T024LandingSectionContent.sql" />
     <Content Include="Database\s0640StripeEventInsertIfNew.sql" />
     <Content Include="Database\s0641StripeEventMarkProcessed.sql" />
     <Content Include="Database\s0642StripeEventMarkFailed.sql" />

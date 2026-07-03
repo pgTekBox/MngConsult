@@ -1,37 +1,96 @@
 ﻿Imports System
 Imports System.Data
+Imports System.Data.SqlClient
 Imports System.Text
 Imports System.Web.UI
 
 Partial Public Class LandingPage
     Inherits clsData
 
+    ' Code de la page rendue par cette .aspx.
+    Private Const PAGE_CODE As String = "accueil"
+
+    ' Jeton remplacé, dans la section des forfaits, par les cartes générées
+    ' dynamiquement depuis T021Plan.
+    Private Const PLANS_TOKEN As String = "{{PLANS}}"
+
+    ''' <summary>
+    ''' Langue courante : ?lang=fr|en|es (défaut fr). Le contenu retombe sur fr
+    ''' côté procédure si la langue demandée n'existe pas.
+    ''' </summary>
+    Private ReadOnly Property CurrentLang As String
+        Get
+            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            Select Case l
+                Case "en", "es", "fr"
+                    Return l
+                Case Else
+                    Return "fr"
+            End Select
+        End Get
+    End Property
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
-            BindPlans()
+            BindSections()
         End If
     End Sub
 
     ''' <summary>
-    ''' Charge les forfaits actifs depuis T021Plan et les bind au Repeater.
+    ''' Charge les sections actives de la LandingPage depuis T022LandingSection.
     ''' </summary>
-    Private Sub BindPlans()
+    Private Sub BindSections()
         Try
-            Dim ds As DataSet = ExecuteSQLds("s0630GetPlansForLanding")
+            Dim p As New Collection
+            p.Add(New SqlParameter("@PageCode", PAGE_CODE))
+            p.Add(New SqlParameter("@Lang", CurrentLang))
+            Dim ds As DataSet = ExecuteSQLds("s0673GetLandingSections", p)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
-                rptPlans.DataSource = ds.Tables(0)
-                rptPlans.DataBind()
+                rptSections.DataSource = ds.Tables(0)
+                rptSections.DataBind()
             End If
         Catch ex As Exception
-            System.Diagnostics.Debug.WriteLine("LandingPage BindPlans error: " & ex.Message)
+            System.Diagnostics.Debug.WriteLine("LandingPage BindSections error: " & ex.Message)
         End Try
     End Sub
 
     ''' <summary>
-    ''' Rend la cartouche complète d'un forfait dans le style de la nouvelle
-    ''' LandingPage (Tailwind). Le thème (slate / sky recommandé / emerald) est
-    ''' déterminé à partir des colonnes IsRecommended et PlanIconCssClass.
-    ''' Le bouton pointe vers l'inscription : wbfRegister.aspx?ab=&lt;Code&gt;.
+    ''' Rend une section : le HTML vient de la colonne HtmlContent. Si la section
+    ''' contient le jeton {{PLANS}}, il est remplacé par les cartes de forfaits.
+    ''' </summary>
+    Public Function RenderSection(item As Object) As String
+        Dim row As DataRowView = TryCast(item, DataRowView)
+        If row Is Nothing Then Return ""
+        Dim html As String = GetStr(row, "HtmlContent")
+        If html.Length = 0 Then Return ""
+        If html.IndexOf(PLANS_TOKEN, StringComparison.Ordinal) >= 0 Then
+            html = html.Replace(PLANS_TOKEN, BuildPlansHtml())
+        End If
+        Return html
+    End Function
+
+    ''' <summary>
+    ''' Construit le HTML des cartes de forfaits actifs (T021Plan via s0630).
+    ''' </summary>
+    Private Function BuildPlansHtml() As String
+        Dim sb As New StringBuilder()
+        Try
+            Dim ds As DataSet = ExecuteSQLds("s0630GetPlansForLanding")
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each row As DataRowView In ds.Tables(0).DefaultView
+                    sb.Append(RenderPlanCard(row))
+                Next
+            End If
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("LandingPage BuildPlansHtml error: " & ex.Message)
+        End Try
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Rend la cartouche complète d'un forfait (Tailwind). Le thème (slate / sky
+    ''' recommandé / emerald) est déterminé à partir de IsRecommended et
+    ''' PlanIconCssClass. Le bouton pointe vers wbfRegister.aspx?ab=&lt;Code&gt;.
     ''' </summary>
     Public Function RenderPlanCard(item As Object) As String
         Dim row As DataRowView = TryCast(item, DataRowView)
