@@ -323,6 +323,7 @@
     <Content Include="Database\s0678UpsertLandingSectionContent.sql" />
     <Content Include="Database\seed_LandingSections_accueil.sql" />
     <Content Include="Database\seed_LandingSections_subpages.sql" />
+    <Content Include="Database\seed_LandingContent_accueil_en_es.sql" />
     <Content Include="Database\T022LandingPage.sql" />
     <Content Include="Database\T023LandingSection.sql" />
     <Content Include="Database\T024LandingSectionContent.sql" />
