@@ -44,7 +44,7 @@
                         </button>
                     </div>
                     <a href="wbfLogin.aspx" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
-                    <a href="wbfRegister.aspx" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
+                    <a data-nav="accueil" href="#plans" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
                 </div>
                 <button class="md:hidden text-slate-700 p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
