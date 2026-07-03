@@ -29,8 +29,28 @@ Partial Public Class LandingPage
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            BuildLangSwitcher()
             RenderPages()
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Sélecteur de langue de la nav (FR/EN/ES). Chaque lien recharge la page
+    ''' en ?lang=xx ; la langue courante est surlignée.
+    ''' </summary>
+    Private Sub BuildLangSwitcher()
+        Dim cur As String = CurrentLang
+        Dim codes() As String = {"fr", "en", "es"}
+        Dim labels() As String = {"FR", "EN", "ES"}
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""flex items-center gap-1 text-sm font-medium"">")
+        sb.Append("<i data-lucide=""globe"" class=""w-4 h-4 text-slate-500 mr-1""></i>")
+        For i As Integer = 0 To codes.Length - 1
+            Dim cls As String = If(codes(i) = cur, "text-blue-700 font-bold", "text-slate-600 hover:text-slate-900")
+            sb.Append("<a href=""?lang=" & codes(i) & """ class=""px-1.5 py-1 rounded transition-colors " & cls & """>" & labels(i) & "</a>")
+        Next
+        sb.Append("</div>")
+        litLang.Text = sb.ToString()
     End Sub
 
     ''' <summary>

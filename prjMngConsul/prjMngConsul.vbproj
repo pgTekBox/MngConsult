@@ -317,6 +317,10 @@
     <Content Include="Database\s0631GetPlanByCode.sql" />
     <Content Include="Database\s0673GetLandingSections.sql" />
     <Content Include="Database\s0674UpsertLandingSection.sql" />
+    <Content Include="Database\s0675GetLandingPages.sql" />
+    <Content Include="Database\s0676GetLandingSectionsForPage.sql" />
+    <Content Include="Database\s0677GetLandingSectionContent.sql" />
+    <Content Include="Database\s0678UpsertLandingSectionContent.sql" />
     <Content Include="Database\seed_LandingSections_accueil.sql" />
     <Content Include="Database\seed_LandingSections_subpages.sql" />
     <Content Include="Database\T022LandingPage.sql" />

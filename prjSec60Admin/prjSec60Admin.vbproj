@@ -348,11 +348,13 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="css\listvew.css" />
+    <Content Include="css\planeditor.css" />
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="wbfUsers.aspx" />
     <Content Include="wbfUserEdit.aspx" />
     <Content Include="wbfPlans.aspx" />
     <Content Include="wbfPlanEdit.aspx" />
+    <Content Include="wbfLanding.aspx" />
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbfLogout.aspx" />
     <Content Include="wbfAdmins.aspx" />
@@ -399,6 +401,13 @@
     </Compile>
     <Compile Include="wbfPlanEdit.aspx.designer.vb">
       <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfLanding.aspx.vb">
+      <DependentUpon>wbfLanding.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfLanding.aspx.designer.vb">
+      <DependentUpon>wbfLanding.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfLogin.aspx.vb">
       <DependentUpon>wbfLogin.aspx</DependentUpon>

@@ -38,11 +38,7 @@
                     <a data-nav="accueil" href="#mission" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Mission</a>
                 </div>
                 <div class="hidden md:flex items-center gap-4">
-                    <div class="relative">
-                        <button class="flex items-center gap-1.5 text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors px-2 py-1 rounded-lg hover:bg-slate-100">
-                            <i data-lucide="globe" class="w-4 h-4"></i>FR
-                        </button>
-                    </div>
+                    <asp:Literal ID="litLang" runat="server"></asp:Literal>
                     <a href="wbfLogin.aspx" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
                     <a data-nav="accueil" href="#plans" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
                 </div>

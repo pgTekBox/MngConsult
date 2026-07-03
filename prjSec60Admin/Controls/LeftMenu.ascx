@@ -75,6 +75,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Forfaits
                     </a>
+                    <a class="nav-child" href="~/wbfLanding.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        LandingPage
+                    </a>
                     <a class="nav-child" href="~/wbfCompanies.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Compagnies
