@@ -283,6 +283,7 @@
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
+    <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
     <Content Include="Database\check_existing_outbound_mail_proc.sql" />
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
