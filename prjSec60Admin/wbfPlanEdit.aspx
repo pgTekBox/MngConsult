@@ -190,9 +190,10 @@
                             <label>Contenu mis en forme (affiché sur la page d'accueil)</label>
                             <telerik:RadEditor ID="reDescriptionLong" runat="server"
                                 RenderMode="Lightweight" Skin="Bootstrap"
-                                Width="100%" Height="320px"
+                                Width="100%" Height="360px"
                                 EditModes="Design,Html,Preview"
-                                ContentAreaMode="Div"
+                                ContentAreaMode="Iframe"
+                                ContentAreaCssFile="~/css/planeditor.css"
                                 ToolbarMode="ShowOnFocus">
                                 <Content></Content>
                             </telerik:RadEditor>
