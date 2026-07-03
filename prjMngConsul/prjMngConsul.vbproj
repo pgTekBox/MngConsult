@@ -367,6 +367,7 @@
     <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
+    <Content Include="LandingPagesNEW.html" />
     <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />
     <Content Include="PlaidDailySync.aspx" />
@@ -1325,7 +1326,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
+      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
