@@ -35,7 +35,7 @@
         }
 
         .login-card {
-            width: 100%;
+            width: 430px;
             max-width: 520px;
             background: #fff;
             border-radius: 20px;
@@ -116,8 +116,9 @@
 
         .check-row {
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 10px;
             margin: 8px 0 18px 0;
             font-size: 13px;
         }
