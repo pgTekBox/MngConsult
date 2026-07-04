@@ -1,12 +1,12 @@
 ﻿<%@ Page Language="vb" AutoEventWireup="false"
-    CodeBehind="wbfLogin.aspx.vb" Inherits="MngConsul.wbfLogin" %>
+    CodeBehind="wbfResetPassword.aspx.vb" Inherits="MngConsul.wbfResetPassword" %>
 
 <!DOCTYPE html>
 <html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Connexion — 60Sec-AI</title>
+    <title>Réinitialiser le mot de passe — 60Sec-AI</title>
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
@@ -114,29 +114,6 @@
             box-shadow: 0 0 0 4px rgba(37,99,235,.12);
         }
 
-        .check-row {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 8px 0 18px 0;
-            font-size: 13px;
-        }
-
-        .check-row label {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            cursor: pointer;
-            color: var(--muted);
-        }
-
-        .check-row a {
-            color: var(--primary);
-            font-weight: 600;
-            text-decoration: none;
-        }
-        .check-row a:hover { text-decoration: underline; }
-
         .btn-login {
             width: 100%;
             padding: 13px;
@@ -167,6 +144,35 @@
             margin-bottom: 14px;
         }
 
+        .login-note {
+            padding: 14px 16px;
+            background: rgba(16,185,129,.08);
+            border: 1px solid rgba(16,185,129,.25);
+            color: #047857;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 1.5;
+        }
+
+        .login-note.warn {
+            background: rgba(220,38,38,.08);
+            border-color: rgba(220,38,38,.25);
+            color: var(--danger);
+        }
+
+        .login-links {
+            margin-top: 18px;
+            text-align: center;
+            font-size: 13px;
+        }
+        .login-links a {
+            color: var(--primary);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .login-links a:hover { text-decoration: underline; }
+
         .login-footer {
             padding: 16px;
             text-align: center;
@@ -186,7 +192,7 @@
                     <img src="Images/logo.svg" alt="60Sec-AI" />
                     <span class="brand-name">60Sec-AI</span>
                 </div>
-                <h1 class="login-title"><%= L("welcome") %></h1>
+                <h1 class="login-title"><%= L("heading") %></h1>
                 <p class="login-sub"><%= L("subtitle") %></p>
             </div>
 
@@ -196,27 +202,35 @@
                     <asp:Literal ID="litError" runat="server" />
                 </asp:Panel>
 
-                <div class="field">
-                    <label for="<%= tbEmail.ClientID %>"><%= L("email") %></label>
-                    <asp:TextBox ID="tbEmail" runat="server" TextMode="Email"
-                        autofocus="autofocus" />
-                </div>
+                <asp:Panel ID="pnlForm" runat="server">
+                    <div class="field">
+                        <label for="<%= tbPassword.ClientID %>"><%= L("newPassword") %></label>
+                        <asp:TextBox ID="tbPassword" runat="server" TextMode="Password" />
+                    </div>
 
-                <div class="field">
-                    <label for="<%= tbPassword.ClientID %>"><%= L("password") %></label>
-                    <asp:TextBox ID="tbPassword" runat="server" TextMode="Password" />
-                </div>
+                    <div class="field">
+                        <label for="<%= tbPasswordConfirm.ClientID %>"><%= L("confirmPassword") %></label>
+                        <asp:TextBox ID="tbPasswordConfirm" runat="server" TextMode="Password" />
+                    </div>
 
-                <div class="check-row">
-                    <label>
-                        <asp:CheckBox ID="cbRemember" runat="server" />
-                        <span><%= L("remember") %></span>
-                    </label>
-                    <a href="wbfForgotPassword.aspx?lang=<%= CurrentLang %>"><%= L("forgot") %></a>
-                </div>
+                    <asp:Button ID="btnReset" runat="server"
+                        Text="Réinitialiser" CssClass="btn-login" />
+                </asp:Panel>
 
-                <asp:Button ID="btnLogin" runat="server"
-                    Text="Se connecter" CssClass="btn-login" />
+                <asp:Panel ID="pnlSuccess" runat="server" Visible="false">
+                    <div class="login-note"><%= L("success") %></div>
+                    <div class="login-links">
+                        <a href="wbfLogin.aspx?lang=<%= CurrentLang %>"><%= L("goToLogin") %></a>
+                    </div>
+                </asp:Panel>
+
+                <asp:Panel ID="pnlInvalid" runat="server" Visible="false">
+                    <div class="login-note warn"><%= L("invalid") %></div>
+                    <div class="login-links">
+                        <a href="wbfForgotPassword.aspx?lang=<%= CurrentLang %>"><%= L("requestNew") %></a>
+                    </div>
+                </asp:Panel>
+
             </div>
 
             <div class="login-footer">

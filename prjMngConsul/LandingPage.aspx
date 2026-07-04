@@ -26,9 +26,7 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8">
             <div class="flex items-center justify-between h-16 lg:h-20">
                 <a data-nav="accueil" href="#" class="flex items-center gap-2 group">
-                    <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center group-hover:bg-blue-500 transition-colors">
-                        <i data-lucide="zap" class="w-5 h-5 text-white fill-white"></i>
-                    </div>
+                    <img src="Images/logo.svg" alt="60sec-AI" class="w-9 h-9 transition-transform duration-200 group-hover:scale-110" />
                     <span class="text-slate-900 font-bold text-2xl tracking-tight">60sec-AI</span>
                 </a>
                 <div class="hidden md:flex items-center gap-8">
@@ -39,7 +37,7 @@
                 </div>
                 <div class="hidden md:flex items-center gap-4">
                     <asp:Literal ID="litLang" runat="server"></asp:Literal>
-                    <a href="wbfLogin.aspx" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
+                    <a href="wbfLogin.aspx?lang=<%= CurrentLang %>" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
                     <a data-nav="accueil" href="#plans" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
                 </div>
                 <button class="md:hidden text-slate-700 p-2">
@@ -56,10 +54,8 @@
         <div class="max-w-7xl mx-auto px-6 lg:px-8 py-16 lg:py-20">
             <div class="grid grid-cols-1 lg:grid-cols-5 gap-12 mb-16">
                 <div class="lg:col-span-1">
-                    <a data-nav="accueil" href="#" class="flex items-center gap-2 mb-5">
-                        <div class="w-9 h-9 bg-blue-600 rounded-lg flex items-center justify-center">
-                            <i data-lucide="zap" class="w-5 h-5 text-white fill-white"></i>
-                        </div>
+                    <a data-nav="accueil" href="#" class="flex items-center gap-2 mb-5 group">
+                        <img src="Images/logo.svg" alt="60sec-AI" class="w-9 h-9 transition-transform duration-200 group-hover:scale-110" />
                         <span class="text-slate-900 font-bold text-2xl tracking-tight">60sec-AI</span>
                     </a>
                     <p class="text-slate-500 text-sm leading-relaxed mb-6">L'administration financière automatisée pour les PME &amp; les Travailleurs Autonomes du Québec et du Canada.</p>

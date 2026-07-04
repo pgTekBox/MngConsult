@@ -1,0 +1,93 @@
+/* =============================================================================
+   planeditor.css
+   Feuille de CONTENU du RadEditor (wbfPlanEdit), chargee via ContentAreaCssFile.
+   Le contenu edite EST desormais la cartouche complete (<div class="plan-card ...">
+   ... <a class="plan-button">). Cette feuille reproduit fidelement le rendu de la
+   LandingPage (contour, couleurs, variante "featured" foncee, bouton) et contraint
+   les images/SVG. Garder coherent avec prjMngConsul/css/landingpage.css.
+   ============================================================================= */
+
+/* Scene derriere la carte (comme la section tarifs) */
+html { background: #eef2ff; }
+body {
+    font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    color: #0f172a;
+    padding: 28px 16px;
+    margin: 0;
+}
+
+/* Contrainte des medias : empeche tout debordement / surdimensionnement */
+img { max-width: 100%; height: auto; }
+svg { max-width: 100%; }
+
+/* --- Carte (contour + couleurs) --- */
+.plan-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    max-width: 340px;
+    margin: 14px auto;              /* espace pour le badge en surplomb */
+    background: #f8fafc;
+    border: 2px solid #e2e8f0;
+    border-radius: 16px;
+    padding: 28px;
+    box-sizing: border-box;
+}
+.plan-card.featured { background: #020617; border-color: rgba(14,165,233,0.4); color: #fff; }
+.plan-card.emerald-bordered { border-color: #a7f3d0; }
+
+/* --- Badge "Le plus populaire" en surplomb --- */
+.plan-badge-popular {
+    position: absolute; top: -14px; left: 50%; transform: translateX(-50%);
+    background: #0ea5e9; color: #fff; font-size: 12px; font-weight: 700;
+    padding: 6px 16px; border-radius: 9999px;
+    box-shadow: 0 10px 15px -3px rgba(14,165,233,0.3); white-space: nowrap;
+}
+
+/* --- Icone --- */
+.plan-icon-circle {
+    width: 48px; height: 48px; border-radius: 12px;
+    display: flex; align-items: center; justify-content: center; margin-bottom: 20px;
+}
+.plan-icon-slate   { background: #e2e8f0; color: #334155; }
+.plan-icon-sky     { background: rgba(14,165,233,0.2); color: #7dd3fc; }
+.plan-icon-emerald { background: #d1fae5; color: #047857; }
+.plan-icon-circle svg { width: 24px; height: 24px; }
+
+/* --- Textes --- */
+.plan-card h3 { font-size: 20px; font-weight: 700; margin: 0 0 4px; }
+.plan-tagline { font-size: 14px; font-weight: 600; margin-bottom: 4px; color: #64748b; }
+.plan-card.featured .plan-tagline { color: #7dd3fc; }
+.plan-pill {
+    display: inline-block; align-self: flex-start; background: #f1f5f9; color: #475569;
+    font-size: 12px; font-weight: 500; padding: 4px 10px; border-radius: 9999px; margin-bottom: 16px;
+}
+.plan-card.featured .plan-pill { background: rgba(14,165,233,0.2); color: #7dd3fc; }
+.plan-desc { font-size: 14px; line-height: 1.6; color: #64748b; margin-bottom: 24px; }
+.plan-card.featured .plan-desc { color: #cbd5e1; }
+
+/* --- Prix --- */
+.plan-price { display: flex; align-items: baseline; gap: 4px; margin-bottom: 24px; }
+.plan-price .amount { font-size: 30px; font-weight: 700; }
+.plan-price .period { font-size: 14px; font-weight: 500; color: #64748b; }
+.plan-card.featured .plan-price .period { color: #94a3b8; }
+
+/* --- Features --- */
+.plan-features {
+    display: flex; flex-direction: column; gap: 12px; flex: 1;
+    margin-bottom: 32px; list-style: none; padding: 0;
+}
+.plan-feature { display: flex; align-items: flex-start; gap: 12px; font-size: 14px; }
+.plan-feature svg { width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: #475569; }
+.plan-card.featured .plan-feature svg { color: #38bdf8; }
+.plan-card.emerald-bordered .plan-feature svg { color: #059669; }
+.plan-feature span { color: #475569; }
+.plan-card.featured .plan-feature span { color: #cbd5e1; }
+
+/* --- Bouton --- */
+.plan-button {
+    display: block; width: 100%; text-align: center; font-weight: 600;
+    padding: 12px 20px; border-radius: 12px; font-size: 14px;
+    background: #020617; color: #fff; text-decoration: none; box-sizing: border-box;
+}
+.plan-card.featured .plan-button { background: #0ea5e9; }

@@ -15,7 +15,7 @@ Partial Public Class LandingPage
     ''' Langue courante : ?lang=fr|en|es (défaut fr). Le contenu retombe sur fr
     ''' côté procédure si la langue demandée n'existe pas.
     ''' </summary>
-    Private ReadOnly Property CurrentLang As String
+    Protected ReadOnly Property CurrentLang As String
         Get
             Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
             Select Case l

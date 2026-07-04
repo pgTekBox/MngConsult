@@ -285,6 +285,7 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="Images\logo.svg" />
     <Content Include="js\lucide.min.js" />
     <Content Include="img\landingpage-1.jpg" />
     <Content Include="img\landingpage-2.jpg" />
@@ -476,6 +477,8 @@
     <Content Include="wbfJournal.aspx" />
     <Content Include="wbfJournalEntryEdit.aspx" />
     <Content Include="wbfJournalList.aspx" />
+    <Content Include="wbfForgotPassword.aspx" />
+    <Content Include="wbfResetPassword.aspx" />
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbflogout.aspx" />
     <Content Include="wbfNewUser.aspx" />
@@ -975,6 +978,20 @@
       <DependentUpon>wbfJournalList.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfForgotPassword.aspx.designer.vb">
+      <DependentUpon>wbfForgotPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfForgotPassword.aspx.vb">
+      <DependentUpon>wbfForgotPassword.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfResetPassword.aspx.designer.vb">
+      <DependentUpon>wbfResetPassword.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfResetPassword.aspx.vb">
+      <DependentUpon>wbfResetPassword.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="wbfLogin.aspx.designer.vb">
       <DependentUpon>wbfLogin.aspx</DependentUpon>
     </Compile>
@@ -1326,7 +1343,7 @@
           <SaveServerSettingsInUserFile>False</SaveServerSettingsInUserFile>
         </WebProjectProperties>
       </FlavorProperties>
-      <UserProperties UseJQuerySupport="True" UseAjaxifiedTemplates="True" />
+      <UserProperties UseAjaxifiedTemplates="True" UseJQuerySupport="True" />
     </VisualStudio>
   </ProjectExtensions>
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
