@@ -3,7 +3,7 @@
     CodeBehind="wbfSettingsOpenAiPrompts.aspx.vb" Inherits="MngConsul.wbfSettingsOpenAiPrompts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Prompts OpenAI — MngConsul
+    Prompts OpenAI — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

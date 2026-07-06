@@ -2,11 +2,11 @@
     CodeBehind="wbfActivate.aspx.vb" Inherits="MngConsul.wbfActivate" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Activation — MngConsul</title>
+    <title>Activation — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }
@@ -113,18 +113,13 @@
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
-                <h1>Compte activé !</h1>
+                <h1><%= L("successTitle") %></h1>
                 <p>
-                    Votre compte est maintenant actif.
-                    Bienvenue chez MngConsul, <strong>
-                        <asp:Literal ID="litEmail" runat="server" />
-                    </strong> !
+                    <%= L("successBefore") %><strong><asp:Literal ID="litEmail" runat="server" /></strong><%= L("successAfter") %>
                 </p>
                 <div class="actions">
-                    <asp:HyperLink ID="lnkContinue" runat="server"  
-                        NavigateUrl="~/wbfPayment.aspx" CssClass="btn">
-                        Continuer →
-                    </asp:HyperLink>
+                    <asp:HyperLink ID="lnkContinue" runat="server"
+                        NavigateUrl="~/wbfPayment.aspx" CssClass="btn" />
                 </div>
             </asp:Panel>
 
@@ -137,16 +132,13 @@
                         <polyline points="12 6 12 12 16 14"></polyline>
                     </svg>
                 </div>
-                <h1>Lien expiré</h1>
+                <h1><%= L("expiredTitle") %></h1>
                 <p>
-                    Ce lien d'activation a expiré (durée maximale : 24 heures).
-                    Demandez un nouveau lien pour activer votre compte.
+                    <%= L("expiredMsg") %>
                 </p>
                 <div class="actions">
                     <asp:HyperLink ID="lnkResend" runat="server"
-                        NavigateUrl="~/wbfRegister.aspx" CssClass="btn">
-                        Recommencer l'inscription
-                    </asp:HyperLink>
+                        NavigateUrl="~/wbfRegister.aspx" CssClass="btn" />
                 </div>
             </asp:Panel>
 
@@ -160,20 +152,15 @@
                         <line x1="9" y1="9" x2="15" y2="15"></line>
                     </svg>
                 </div>
-                <h1>Lien invalide</h1>
+                <h1><%= L("invalidTitle") %></h1>
                 <p>
-                    Ce lien n'est pas valide ou a déjà été utilisé.
-                    Si vous avez déjà activé votre compte, vous pouvez vous connecter directement.
+                    <%= L("invalidMsg") %>
                 </p>
                 <div class="actions">
                     <asp:HyperLink ID="lnkLoginInvalid" runat="server"
-                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn">
-                        Se connecter
-                    </asp:HyperLink>
+                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn" />
                     <asp:HyperLink ID="lnkRegInvalid" runat="server"
-                        NavigateUrl="~/wbfRegister.aspx" CssClass="btn btn-secondary">
-                        S'inscrire
-                    </asp:HyperLink>
+                        NavigateUrl="~/wbfRegister.aspx" CssClass="btn btn-secondary" />
                 </div>
             </asp:Panel>
 
@@ -185,15 +172,13 @@
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
-                <h1>Compte déjà activé</h1>
+                <h1><%= L("alreadyTitle") %></h1>
                 <p>
-                    Votre compte est déjà actif. Vous pouvez vous connecter dès maintenant.
+                    <%= L("alreadyMsg") %>
                 </p>
                 <div class="actions">
                     <asp:HyperLink ID="lnkLoginAlready" runat="server"
-                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn">
-                        Se connecter
-                    </asp:HyperLink>
+                        NavigateUrl="~/wbfLogin.aspx" CssClass="btn" />
                 </div>
             </asp:Panel>
 

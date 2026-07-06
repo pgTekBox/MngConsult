@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Entrepreneur Information — MngConsul</title>
+    <title>Entrepreneur Information — 60Sec-AI</title>
 
     <style>
         /* =====================================================================

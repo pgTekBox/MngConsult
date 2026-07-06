@@ -176,7 +176,7 @@ Public Class wbfSupplierPaymentSync
                 If isPaid AndAlso Not alreadyInBD Then
                     sb.Append("<div class=""action-row"">")
                     sb.Append("<button type=""submit"" name=""import"" value=""" & Server.HtmlEncode(s.Id) & """ class=""btn-import"" formnovalidate>")
-                    sb.Append("Importer dans MngConsul →")
+                    sb.Append("Importer dans 60Sec-AI →")
                     sb.Append("</button>")
                     sb.Append("</div>")
                 End If

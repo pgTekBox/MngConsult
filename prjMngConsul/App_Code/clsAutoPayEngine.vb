@@ -708,7 +708,7 @@ Public Class clsAutoPayEngine
             "<tr><td style='padding:8px; border:1px solid #e2e8f0;'><strong>Date du debit</strong></td>" &
             "<td style='padding:8px; border:1px solid #e2e8f0;'>" & autopayDate.ToString("yyyy-MM-dd") & "</td></tr>" &
             "</table>" &
-            "<p>Si vous souhaitez annuler ce prelevement, connectez-vous a MngConsul et utilisez la page " &
+            "<p>Si vous souhaitez annuler ce prelevement, connectez-vous a 60Sec-AI et utilisez la page " &
             "<strong>Paiements automatiques</strong>.</p>" &
             "<p style='color:#64748b; font-size:12px;'>Cet email est envoye automatiquement.</p>"
         )
@@ -749,7 +749,7 @@ Public Class clsAutoPayEngine
             "<ul>" &
             "<li>Droit de contestation : 10 jours apres le debit</li>" &
             "<li>Droit au remboursement : 90 jours en cas de non-conformite</li>" &
-            "<li>Vous pouvez annuler ce debit en vous connectant a MngConsul (page Paiements automatiques)</li>" &
+            "<li>Vous pouvez annuler ce debit en vous connectant a 60Sec-AI (page Paiements automatiques)</li>" &
             "</ul>"
         )
     End Function
@@ -795,9 +795,9 @@ Public Class clsAutoPayEngine
             "<ul>" &
             "<li>Si le moyen de paiement est expire/refuse : reactiver une nouvelle autorisation</li>" &
             "<li>Si plafond depasse : ajuster le plafond ou payer manuellement</li>" &
-            "<li>Sinon : MngConsul reessayera automatiquement dans 24h (max 3 tentatives)</li>" &
+            "<li>Sinon : 60Sec-AI reessayera automatiquement dans 24h (max 3 tentatives)</li>" &
             "</ul>" &
-            "<p>Connectez-vous a MngConsul pour gerer cette facture.</p>"
+            "<p>Connectez-vous a 60Sec-AI pour gerer cette facture.</p>"
         )
     End Function
 
@@ -830,7 +830,7 @@ Public Class clsAutoPayEngine
         sb.Append("<h2 style='margin:0 0 16px 0; color:#2563eb;'>" & HtmlEnc(title) & "</h2>")
         sb.Append(content)
         sb.Append("<hr style='border:none; border-top:1px solid #e2e8f0; margin:24px 0 16px 0;'>")
-        sb.Append("<p style='font-size:11px; color:#94a3b8; margin:0;'>MngConsul - Gestion des paiements automatiques fournisseurs</p>")
+        sb.Append("<p style='font-size:11px; color:#94a3b8; margin:0;'>60Sec-AI - Gestion des paiements automatiques fournisseurs</p>")
         sb.Append("</div></body></html>")
         Return sb.ToString()
     End Function

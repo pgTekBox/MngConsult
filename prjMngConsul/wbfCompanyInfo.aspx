@@ -2,7 +2,7 @@
     MaintainScrollPositionOnPostback="true" CodeBehind="wbfCompanyInfo.aspx.vb" Inherits="MngConsul.wbfCompanyInfo" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Compagnie — MngConsul
+    Compagnie — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

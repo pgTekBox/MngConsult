@@ -1,4 +1,4 @@
-﻿<%@ Page Title="Bienvenue chez MngConsul" Language="vb"
+﻿<%@ Page Title="Bienvenue chez 60Sec-AI" Language="vb"
     MasterPageFile="~/Site.Master"
     AutoEventWireup="false"
     CodeBehind="wbfWelcome.aspx.vb" Inherits="MngConsul.wbfWelcome" %>
@@ -501,7 +501,7 @@
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                     <span><strong>Conformité fiscale Québec.</strong>
-                          MngConsul calcule automatiquement la TPS (5 %) et la TVQ (9,975 %)
+                          60Sec-AI calcule automatiquement la TPS (5 %) et la TVQ (9,975 %)
                           sur vos factures.</span>
                 </li>
                 <li>

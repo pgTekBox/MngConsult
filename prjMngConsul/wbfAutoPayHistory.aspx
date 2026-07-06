@@ -2,7 +2,7 @@
     CodeBehind="wbfAutoPayHistory.aspx.vb" Inherits="MngConsul.wbfAutoPayHistory" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Historique auto-paiement — MngConsul
+    Historique auto-paiement — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

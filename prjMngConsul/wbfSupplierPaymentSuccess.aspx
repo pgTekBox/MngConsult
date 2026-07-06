@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paiement fournisseur réussi — MngConsul</title>
+    <title>Paiement fournisseur réussi — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }

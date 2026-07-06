@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>📧 Simulation d'envoi — MngConsul</title>
+    <title>📧 Simulation d'envoi — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }

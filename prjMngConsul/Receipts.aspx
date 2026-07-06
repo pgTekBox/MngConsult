@@ -2,7 +2,7 @@
     CodeBehind="Receipts.aspx.vb" Async="true" MaintainScrollPositionOnPostback="true" Inherits="MngConsul.Receipts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Reçus — MngConsul
+    Reçus — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">

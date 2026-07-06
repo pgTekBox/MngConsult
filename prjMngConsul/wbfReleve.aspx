@@ -3,7 +3,7 @@
     Inherits="MngConsul.wbfReleve"  Async="true"  %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Relevé bancaire — MngConsul
+    Relevé bancaire — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

@@ -17,7 +17,7 @@ Public Class EmailHelper
         Dim user As String = GetSetting("SmtpUser", "")
         Dim pwd As String = GetSetting("SmtpPassword", "")
         Dim fromEmail As String = GetSetting("SmtpFrom", user)
-        Dim fromName As String = GetSetting("SmtpFromName", "MngConsul")
+        Dim fromName As String = GetSetting("SmtpFromName", "60Sec-AI")
         Dim ssl As Boolean = Boolean.Parse(GetSetting("SmtpEnableSSL", "True"))
 
         If String.IsNullOrEmpty(host) Then

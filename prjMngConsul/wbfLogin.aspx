@@ -53,7 +53,10 @@
             align-items: center;
             gap: 12px;
             margin-bottom: 18px;
+            text-decoration: none;
+            cursor: pointer;
         }
+        .login-brand:hover { opacity: .85; }
 
         .login-brand img {
             width: 48px; height: 48px;
@@ -183,10 +186,10 @@
         <div class="login-card">
 
             <div class="login-header">
-                <div class="login-brand">
+                <a class="login-brand" href="LandingPage.aspx?lang=<%= CurrentLang %>">
                     <img src="Images/logo.svg" alt="60Sec-AI" />
                     <span class="brand-name">60Sec-AI</span>
-                </div>
+                </a>
                 <h1 class="login-title"><%= L("welcome") %></h1>
                 <p class="login-sub"><%= L("subtitle") %></p>
             </div>

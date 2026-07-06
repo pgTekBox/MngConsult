@@ -3,7 +3,7 @@
     Inherits="MngConsul.wbfSuppliers" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Fournisseurs — MngConsul
+    Fournisseurs — 60Sec-AI
  
 </asp:Content>
 

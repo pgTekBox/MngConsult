@@ -15,7 +15,7 @@
         <div class="brand">
             <span class="brand-dot" aria-hidden="true"></span>
             <span class="brand-title">
-                <asp:Literal runat="server" ID="litAppName" Text="MngConsulx"></asp:Literal></span>
+                <asp:Literal runat="server" ID="litAppName" Text="60Sec-AI"></asp:Literal></span>
             <span class="brand-sub">ERP</span>
         </div>
 

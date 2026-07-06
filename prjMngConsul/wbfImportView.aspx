@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Visualisation staging — MngConsul</title>
+    <title>Visualisation staging — 60Sec-AI</title>
     <style>
         :root {
             --mc-bg: #f6f7fb;

@@ -540,7 +540,7 @@
                 <div class="hero-badge">✨ Tableau de bord principal</div>
 
                 <h1 class="hero-title">
-                    Bienvenue dans MngConsul
+                    Bienvenue dans 60Sec-AI
                 </h1>
 
                 <p class="hero-sub">

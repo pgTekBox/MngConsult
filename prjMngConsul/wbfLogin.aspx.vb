@@ -129,12 +129,18 @@ Public Class wbfLogin
         End If
 
         UserId = userRow("Id")
+
+        ' « Se souvenir de moi » : cookie de connexion persistant (7 jours).
+        If cbRemember.Checked Then
+            clsRememberMe.Issue(Context, CInt(userRow("Id")))
+        End If
+
         'Verifier s'il a un abonnement actif (pour le rediriger vers la page de paiement s'il n'en a pas)
         Dim pa As New Collection
         pa.Add(New SqlParameter("@CompanyGUID", CType(userRow("CompanyGUID"), Guid)))
         Dim dsa As DataSet = ExecuteSQLds("s0313GetSubscriptionForPaiement", pa)
         If dsa.Tables(0).Rows.Count = 1 Then
-            Response.Redirect("~/wbfPayment.aspx")
+            Response.Redirect("~/wbfPayment.aspx?lang=" & CurrentLang)
             Return
         End If
 

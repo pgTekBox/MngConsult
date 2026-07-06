@@ -106,7 +106,9 @@ Partial Public Class LandingPage
     Private Function BuildPlansHtml() As String
         Dim sb As New StringBuilder()
         Try
-            Dim ds As DataSet = ExecuteSQLds("s0630GetPlansForLanding")
+            Dim pp As New Collection
+            pp.Add(New SqlParameter("@Lang", CurrentLang))
+            Dim ds As DataSet = ExecuteSQLds("s0630GetPlansForLanding", pp)
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
                 For Each row As DataRowView In ds.Tables(0).DefaultView
                     sb.Append(RenderPlanCard(row))
@@ -136,6 +138,10 @@ Partial Public Class LandingPage
         Dim iconClass As String = GetStr(row, "PlanIconCssClass")
         Dim recommended As Boolean = GetBool(row, "IsRecommended")
         Dim price As String = FormatPrice(row("Amount"))
+
+        ' Libellés fixes des cartes traduits selon la langue courante.
+        Dim perMonth As String = Choose3(CurrentLang, "/ mois", "/ month", "/ mes")
+        Dim ctaText As String = Choose3(CurrentLang, "Commencer gratuitement", "Start for free", "Comenzar gratis")
 
         Dim cardCls, iconWrap, iconName, nameCls, tagCls, pillCls As String
         Dim descCls, priceCls, permoCls, featCheck, featText, btnCls As String
@@ -204,14 +210,14 @@ Partial Public Class LandingPage
         End If
         sb.Append("</div>")
 
-        sb.Append("<div class=""mb-6""><div class=""flex items-baseline gap-1""><span class=""text-3xl font-bold " & priceCls & """>" & Server.HtmlEncode(price) & "</span><span class=""text-sm font-medium " & permoCls & """>/ mois</span></div></div>")
+        sb.Append("<div class=""mb-6""><div class=""flex items-baseline gap-1""><span class=""text-3xl font-bold " & priceCls & """>" & Server.HtmlEncode(price) & "</span><span class=""text-sm font-medium " & permoCls & """>" & perMonth & "</span></div></div>")
 
         sb.Append("<ul class=""space-y-3 mb-8 flex-1"">")
         sb.Append(BuildFeatures(row("Features"), featCheck, featText))
         sb.Append("</ul>")
 
-        Dim url As String = "wbfRegister.aspx?ab=" & Server.UrlEncode(code)
-        sb.Append("<a href=""" & url & """ class=""" & btnCls & """>Commencer gratuitement</a>")
+        Dim url As String = "wbfRegister.aspx?ab=" & Server.UrlEncode(code) & "&lang=" & CurrentLang
+        sb.Append("<a href=""" & url & """ class=""" & btnCls & """>" & ctaText & "</a>")
 
         sb.Append("</div>")
         Return sb.ToString()
@@ -244,7 +250,20 @@ Partial Public Class LandingPage
     Public Function FormatPrice(amount As Object) As String
         If amount Is Nothing OrElse IsDBNull(amount) Then Return ""
         Dim val As Decimal = CDec(amount)
+        ' Anglais : symbole devant (« $69.99 ») ; français/espagnol : après (« 69,99 $ »).
+        If CurrentLang = "en" Then
+            Return "$" & val.ToString("N2", New Globalization.CultureInfo("en-CA"))
+        End If
         Return val.ToString("N2", New Globalization.CultureInfo("fr-CA")) & " $"
+    End Function
+
+    ''' <summary>Retourne fr/en/es selon la langue passée.</summary>
+    Private Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
     End Function
 
     Private Shared Function GetStr(row As DataRowView, col As String) As String

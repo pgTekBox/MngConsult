@@ -2,7 +2,7 @@
     CodeBehind="wbfAutoPaySchedule.aspx.vb" Inherits="MngConsul.wbfAutoPaySchedule" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Calendrier auto-paiement — MngConsul
+    Calendrier auto-paiement — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

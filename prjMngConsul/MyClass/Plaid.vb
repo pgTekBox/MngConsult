@@ -18,7 +18,7 @@ Public Class Plaid
 "{
   ""client_id"": """ & JsonSafe(_clientId) & """,
   ""secret"": """ & JsonSafe(_secret) & """,
-  ""client_name"": ""MngConsul"",
+  ""client_name"": ""60Sec-AI"",
   ""language"": ""fr"",
   ""country_codes"": [""CA""],
   ""user"": {

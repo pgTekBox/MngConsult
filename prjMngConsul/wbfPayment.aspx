@@ -2,11 +2,11 @@
     CodeBehind="wbfPayment.aspx.vb" Inherits="MngConsul.wbfPayment" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Paiement — MngConsul</title>
+    <title>Paiement — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }
@@ -427,8 +427,8 @@
         <div class="layout">
 
             <div class="brand">
-                <div class="logo">M</div>
-                <h1>MngConsul</h1>
+                <img src="Images/logo.svg" alt="60Sec-AI" style="width:40px; height:40px;" />
+                <h1>60Sec-AI</h1>
             </div>
 
             <!-- =====================================================
@@ -436,7 +436,7 @@
                  ===================================================== -->
             <div class="summary">
                 <div class="summary-content">
-                    <h2>Votre forfait</h2>
+                    <h2><%= L("yourPlan") %></h2>
                     <div class="plan-name">
                         <asp:Literal ID="litPlanName" runat="server" Text="Pro" />
                     </div>
@@ -454,20 +454,20 @@
                             </span>
                         </div>
                         <div class="price-row">
-                            <span class="lbl">TPS (5 %)</span>
+                            <span class="lbl"><%= L("gst") %></span>
                             <span class="val">
                                 <asp:Literal ID="litTps" runat="server" Text="2,45 $" />
                             </span>
                         </div>
                         <div class="price-row">
-                            <span class="lbl">TVQ (9,975 %)</span>
+                            <span class="lbl"><%= L("qst") %></span>
                             <span class="val">
                                 <asp:Literal ID="litTvq" runat="server" Text="4,89 $" />
                             </span>
                         </div>
                         <div class="price-divider"></div>
                         <div class="price-row total">
-                            <span class="lbl">Total mensuel</span>
+                            <span class="lbl"><%= L("monthlyTotal") %></span>
                             <span class="val">
                                 <asp:Literal ID="litTotal" runat="server" Text="56,34 $" />
                             </span>
@@ -486,8 +486,8 @@
                  ===================================================== -->
             <div class="form-card">
 
-                <h2>Paiement sécurisé</h2>
-                <p class="form-sub">Vous serez redirigé vers Stripe pour finaliser votre paiement.</p>
+                <h2><%= L("securePayment") %></h2>
+                <p class="form-sub"><%= L("redirectStripe") %></p>
 
                 <!-- Bloc d'information Stripe -->
                 <div class="stripe-info">
@@ -495,24 +495,24 @@
                         <svg width="42" height="20" viewBox="0 0 60 25" fill="#635BFF" aria-label="Stripe">
                             <path d="M59.5,14.1c0-4.2-2-7.5-5.9-7.5s-6.3,3.3-6.3,7.4c0,4.9,2.8,7.4,6.8,7.4c2,0,3.5-0.4,4.6-1.1v-3.3c-1.1,0.6-2.4,0.9-4.1,0.9c-1.6,0-3-0.6-3.2-2.5h8.1C59.5,15.3,59.5,14.5,59.5,14.1z M51.3,12.6c0-1.8,1.1-2.6,2.1-2.6c1,0,2,0.8,2,2.6H51.3z M40.8,6.6c-1.6,0-2.7,0.8-3.2,1.3l-0.2-1H33.7v18.9l4.2-0.9l0-4.6c0.6,0.5,1.6,1.1,3.1,1.1c3.1,0,5.9-2.5,5.9-7.5C46.9,9.3,44,6.6,40.8,6.6z M39.8,17.6c-1,0-1.7-0.4-2-0.8l0-6.4c0.4-0.5,1-0.8,2-0.8c1.6,0,2.7,1.8,2.7,4C42.6,15.9,41.5,17.6,39.8,17.6z M32.1,5.6L27.9,6.5v3.4l4.2-0.9V5.6z M27.9,6.9h4.2v14.3h-4.2V6.9z M23.4,8l-0.3-1.2h-3.6v14.4h4.1v-9.7c1-1.3,2.6-1,3.1-0.9V6.8C26.3,6.6,24.4,6.2,23.4,8z M14.9,3.2l-4.1,0.9V18c0,2.5,1.9,4.3,4.3,4.3c1.3,0,2.3-0.2,2.9-0.5v-3.3c-0.5,0.2-3.1,1-3.1-1.5v-5.7h3.1V7.4h-3.1V3.2z M4.2,11c0-0.6,0.5-0.9,1.4-0.9c1.2,0,2.8,0.4,4.1,1.1V7.3c-1.4-0.6-2.7-0.8-4.1-0.8c-3.3,0-5.6,1.8-5.6,4.7c0,4.6,6.3,3.9,6.3,5.9c0,0.8-0.7,1-1.5,1c-1.3,0-3-0.5-4.4-1.2v4c1.5,0.6,3,0.9,4.4,0.9c3.4,0,5.8-1.7,5.8-4.7C10.6,12.2,4.2,13,4.2,11z"/>
                         </svg>
-                        <span class="stripe-tagline">Paiement traité par Stripe</span>
+                        <span class="stripe-tagline"><%= L("processedByStripe") %></span>
                     </div>
                     <ul class="stripe-features-list">
                         <li>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Chiffrement SSL 256 bits
+                            <%= L("feat256") %>
                         </li>
                         <li>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Conforme PCI-DSS
+                            <%= L("featPci") %>
                         </li>
                         <li>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Apple Pay, Google Pay, Link supportés
+                            <%= L("featWallets") %>
                         </li>
                         <li>
                             <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"></polyline></svg>
-                            Aucune carte stockée chez MngConsul
+                            <%= L("featNoCard") %>
                         </li>
                     </ul>
                 </div>
@@ -530,7 +530,7 @@
                         <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
                         <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
                     </svg>
-                    Vous serez redirigé vers checkout.stripe.com
+                    <%= L("redirectInfo") %>
                 </div>
 
             </div>

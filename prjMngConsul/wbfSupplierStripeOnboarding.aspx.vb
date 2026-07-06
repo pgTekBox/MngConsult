@@ -282,7 +282,7 @@ Public Class wbfSupplierStripeOnboarding
 
         Dim acct As Account = clsStripe.CreateConnectExpressAccount(
             email:=emailForStripe,
-            businessName:=If(String.IsNullOrEmpty(SupplierName), "Fournisseur MngConsul", SupplierName),
+            businessName:=If(String.IsNullOrEmpty(SupplierName), "Fournisseur 60Sec-AI", SupplierName),
             country:="CA",
             metadata:=metadata
         )
@@ -344,7 +344,7 @@ Public Class wbfSupplierStripeOnboarding
     ''' Envoie l'invitation Stripe Connect par courriel via T400Mails (s0610).
     ''' </summary>
     Private Sub SendInvitationEmail(toEmail As String, onboardingUrl As String)
-        Dim subject As String = "Invitation à configurer vos paiements - MngConsul"
+        Dim subject As String = "Invitation à configurer vos paiements - 60Sec-AI"
         Dim htmlBody As String = BuildInvitationEmailBody(onboardingUrl)
 
         Try
@@ -367,11 +367,11 @@ Public Class wbfSupplierStripeOnboarding
         sb.AppendLine("<html><body style=""font-family: Arial, sans-serif; background:#f6f7fb; margin:0; padding:20px;"">")
         sb.AppendLine("<div style=""max-width:560px; margin:0 auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.06);"">")
         sb.AppendLine("<div style=""background: linear-gradient(135deg,#635BFF,#4F46E5); padding:32px; text-align:center;"">")
-        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:22px;"">Invitation MngConsul</h1>")
+        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:22px;"">Invitation 60Sec-AI</h1>")
         sb.AppendLine("</div>")
         sb.AppendLine("<div style=""padding:32px; color:#0f172a;"">")
         sb.AppendLine("<p style=""font-size:16px;"">Bonjour,</p>")
-        sb.AppendLine("<p>Vous avez été ajouté comme fournisseur sur la plateforme <strong>MngConsul</strong> ")
+        sb.AppendLine("<p>Vous avez été ajouté comme fournisseur sur la plateforme <strong>60Sec-AI</strong> ")
         sb.AppendLine("par un de vos clients qui souhaite vous payer électroniquement.</p>")
         sb.AppendLine("<p>Pour activer la réception de paiements (carte de crédit, Interac, ACSS), ")
         sb.AppendLine("complétez votre inscription Stripe en cliquant sur le bouton ci-dessous :</p>")

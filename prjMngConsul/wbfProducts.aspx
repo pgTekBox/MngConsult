@@ -2,7 +2,7 @@
     MasterPageFile="~/Site.Master" CodeBehind="wbfProducts.aspx.vb" Inherits="MngConsul.wbfProducts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Produits — MngConsul
+    Produits — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

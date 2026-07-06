@@ -3,7 +3,7 @@
     Inherits="MngConsul.wbfUsers" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Utilisateurs — MngConsul
+    Utilisateurs — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

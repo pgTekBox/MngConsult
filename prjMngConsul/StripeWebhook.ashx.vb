@@ -483,13 +483,13 @@ Public Class StripeWebhook
     ''' </summary>
     Private Function BuildAuthorizationText(methodType As String, maxMonthly As Decimal, textRef As String) As String
         Dim sb As New StringBuilder()
-        sb.AppendLine("=== Autorisation de paiement automatique fournisseur (MngConsul) ===")
+        sb.AppendLine("=== Autorisation de paiement automatique fournisseur (60Sec-AI) ===")
         sb.AppendLine("Reference texte : " & textRef)
         sb.AppendLine("Date : " & DateTime.UtcNow.ToString("yyyy-MM-dd HH:mm:ss") & " UTC")
         sb.AppendLine("")
         If methodType = "card" Then
             sb.AppendLine("Type : Carte de credit/debit (MIT - Merchant-Initiated Transaction)")
-            sb.AppendLine("J'autorise MngConsul a debiter automatiquement cette carte pour les factures fournisseur que j'aurai approuvees (saisies + comptabilisees), a leur date d'echeance.")
+            sb.AppendLine("J'autorise 60Sec-AI a debiter automatiquement cette carte pour les factures fournisseur que j'aurai approuvees (saisies + comptabilisees), a leur date d'echeance.")
             sb.AppendLine("Je recevrai un email de preavis 24 heures avant chaque debit.")
         ElseIf methodType = "acss_debit" Then
             sb.AppendLine("Type : ACSS Debit / PAD (Pre-Authorized Debit - Regle H1 Paiements Canada)")
@@ -501,7 +501,7 @@ Public Class StripeWebhook
             sb.AppendLine("Plafond mensuel maximum : " & maxMonthly.ToString("F2") & " $ CAD")
         End If
         sb.AppendLine("")
-        sb.AppendLine("Revocation : je peux annuler cette autorisation a tout moment depuis l'interface MngConsul (page Paiements automatiques).")
+        sb.AppendLine("Revocation : je peux annuler cette autorisation a tout moment depuis l'interface 60Sec-AI (page Paiements automatiques).")
         Return sb.ToString()
     End Function
 

@@ -2,7 +2,7 @@
     CodeBehind="wbfAutoPayAuthorizations.aspx.vb" Inherits="MngConsul.wbfAutoPayAuthorizations" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Autorisations auto-paiement — MngConsul
+    Autorisations auto-paiement — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">

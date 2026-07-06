@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Configuration Stripe Connect — MngConsul</title>
+    <title>Configuration Stripe Connect — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; padding: 0; }
@@ -199,7 +199,7 @@
                         </svg>
                     </div>
                     <h1>Configuration des paiements</h1>
-                    <p class="subtitle">Permettre à ce fournisseur de recevoir des paiements via MngConsul</p>
+                    <p class="subtitle">Permettre à ce fournisseur de recevoir des paiements via 60Sec-AI</p>
                 </div>
 
                 <div class="supplier-info">

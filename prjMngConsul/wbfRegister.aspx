@@ -2,11 +2,11 @@
     CodeBehind="wbfRegister.aspx.vb" Inherits="MngConsul.wbfRegister" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Inscription — MngConsul</title>
+    <title>Inscription — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }
@@ -63,6 +63,23 @@
             margin-bottom: 18px;
             box-shadow: 0 10px 24px rgba(37,99,235,.3);
         }
+
+        .brand {
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 18px;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        .brand img { width: 48px; height: 48px; display: block; }
+        .brand .brand-name {
+            font-size: 28px;
+            font-weight: 800;
+            letter-spacing: -0.02em;
+            color: var(--slate-800);
+        }
+        .brand:hover { opacity: .85; }
 
         .card-header h1 {
             font-size: 24px;
@@ -243,9 +260,12 @@
         <asp:Panel ID="pnlForm" runat="server" CssClass="card">
 
             <div class="card-header">
-                <div class="logo">M</div>
-                <h1>Créer votre compte</h1>
-                <p>Commencez en quelques secondes — gratuit, aucune carte requise</p>
+                <a class="brand" href="LandingPage.aspx?lang=<%= CurrentLang %>">
+                    <img src="Images/logo.svg" alt="60Sec-AI" />
+                    <span class="brand-name">60Sec-AI</span>
+                </a>
+                <h1><%= L("heading") %></h1>
+                <p><%= L("subtitle") %></p>
             </div>
 
             <div class="card-body">
@@ -256,42 +276,40 @@
 
                 <div class="field-row">
                     <div class="field">
-                        <label for="<%= tbFirstName.ClientID %>">Prénom</label>
-                        <asp:TextBox ID="tbFirstName" runat="server" placeholder="Jean" />
+                        <label for="<%= tbFirstName.ClientID %>"><%= L("firstName") %></label>
+                        <asp:TextBox ID="tbFirstName" runat="server" />
                     </div>
                     <div class="field">
-                        <label for="<%= tbLastName.ClientID %>">Nom</label>
-                        <asp:TextBox ID="tbLastName" runat="server" placeholder="Tremblay" />
+                        <label for="<%= tbLastName.ClientID %>"><%= L("lastName") %></label>
+                        <asp:TextBox ID="tbLastName" runat="server" />
                     </div>
                 </div>
 
                 <div class="field">
-                    <label for="<%= tbEmail.ClientID %>">Adresse courriel *</label>
+                    <label for="<%= tbEmail.ClientID %>"><%= L("email") %></label>
                     <asp:TextBox ID="tbEmail" runat="server" TextMode="Email"
-                        placeholder="vous@exemple.com" autofocus="autofocus" />
+                        autofocus="autofocus" />
                 </div>
 
                 <div class="field">
-                    <label for="<%= tbPassword.ClientID %>">Mot de passe *</label>
+                    <label for="<%= tbPassword.ClientID %>"><%= L("password") %></label>
                     <asp:TextBox ID="tbPassword" runat="server" TextMode="Password"
-                        placeholder="••••••••" ClientIDMode="Static" />
+                        ClientIDMode="Static" />
                     <div class="strength-bar"><div id="strength-fill"></div></div>
                     <div class="strength-text" id="strength-text" style="color: var(--slate-500);">
-                        Minimum 8 caractères
+                        <%= L("pwHint") %>
                     </div>
                 </div>
 
                 <div class="field">
-                    <label for="<%= tbPasswordConfirm.ClientID %>">Confirmer le mot de passe *</label>
-                    <asp:TextBox ID="tbPasswordConfirm" runat="server" TextMode="Password"
-                        placeholder="••••••••" />
+                    <label for="<%= tbPasswordConfirm.ClientID %>"><%= L("passwordConfirm") %></label>
+                    <asp:TextBox ID="tbPasswordConfirm" runat="server" TextMode="Password" />
                 </div>
 
                 <label class="terms">
                     <asp:CheckBox ID="cbTerms" runat="server" />
                     <span>
-                        J'accepte les <a href="#">Conditions d'utilisation</a>
-                        et la <a href="#">Politique de confidentialité</a> de MngConsul.
+                        <%= L("termsBefore") %><a href="#"><%= L("termsCgu") %></a><%= L("termsMid") %><a href="#"><%= L("termsPrivacy") %></a><%= L("termsAfter") %>
                     </span>
                 </label>
 
@@ -301,10 +319,8 @@
             </div>
 
             <div class="card-footer">
-                Déjà un compte ?
-                <asp:HyperLink ID="lnkLogin" runat="server" NavigateUrl="~/wbfLogin.aspx">
-                    Se connecter
-                </asp:HyperLink>
+                <%= L("already") %>
+                <asp:HyperLink ID="lnkLogin" runat="server" NavigateUrl="~/wbfLogin.aspx" />
             </div>
 
         </asp:Panel>
@@ -319,22 +335,19 @@
                         <polyline points="20 6 9 17 4 12"></polyline>
                     </svg>
                 </div>
-                <h1>Vérifiez votre courriel</h1>
+                <h1><%= L("successTitle") %></h1>
                 <p>
-                    Nous venons d'envoyer un lien d'activation à
+                    <%= L("successIntro") %>
                 </p>
                 <span class="email-shown">
                     <asp:Literal ID="litSuccessEmail" runat="server" />
                 </span>
                 <p style="margin-top: 18px;">
-                    Cliquez sur le lien dans le courriel pour activer votre compte.
-                    Le lien est valide pendant 24 heures.
+                    <%= L("successBody") %>
                 </p>
                 <p style="font-size: 12px; color: var(--slate-500);">
-                    Vous n'avez rien reçu ? Vérifiez vos courriels indésirables ou
-                    <asp:LinkButton ID="lnkResend" runat="server" Style="color: var(--blue-600); font-weight: 700;">
-                        renvoyer le lien
-                    </asp:LinkButton>.
+                    <%= L("resendPrompt") %>
+                    <asp:LinkButton ID="lnkResend" runat="server" Style="color: var(--blue-600); font-weight: 700;" />.
                 </p>
                 <asp:Literal ID="litResendStatus" runat="server" />
                   <p style="margin-top: 18px;">
@@ -366,12 +379,12 @@
 
                     var widths = ['0%', '25%', '50%', '75%', '100%'];
                     var colors = ['#e2e8f0', '#ef4444', '#f59e0b', '#3b82f6', '#10b981'];
-                    var labels = ['', 'Très faible', 'Faible', 'Bon', 'Excellent'];
+                    var labels = ['', '<%= L("strWeak") %>', '<%= L("strLow") %>', '<%= L("strGood") %>', '<%= L("strExcellent") %>'];
 
                     fill.style.width = widths[score];
                     fill.style.background = colors[score];
                     text.textContent = v.length === 0
-                        ? 'Minimum 8 caractères'
+                        ? '<%= L("pwHint") %>'
                         : labels[score];
                     text.style.color = score >= 3 ? '#10b981'
                         : score >= 2 ? '#f59e0b'

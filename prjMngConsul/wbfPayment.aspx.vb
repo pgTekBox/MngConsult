@@ -17,18 +17,82 @@ Imports System.Web
 Public Class wbfPayment
     Inherits clsData
 
+    ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr), transmise depuis l'onboarding.</summary>
+    Protected ReadOnly Property CurrentLang As String
+        Get
+            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            Select Case l
+                Case "en", "es", "fr"
+                    Return l
+                Case Else
+                    Return "fr"
+            End Select
+        End Get
+    End Property
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/wbfLogin.aspx?lang=" & CurrentLang)
             Return
         End If
+
+        ApplyLocalization()
 
         If Not IsPostBack Then
             LoadPlanDetails()
         End If
     End Sub
+
+    ''' <summary>Applique la langue aux contrôles serveur (titre, bouton).</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        btnPay.Text = L("payBtn")
+    End Sub
+
+    ''' <summary>Formate un montant selon la langue (en : « $69.99 » ; fr/es : « 69,99 $ »).</summary>
+    Private Function FormatMoney(amount As Decimal) As String
+        If CurrentLang = "en" Then
+            Return "$" & amount.ToString("N2", New CultureInfo("en-CA"))
+        End If
+        Return amount.ToString("N2", New CultureInfo("fr-CA")) & " $"
+    End Function
+
+    ''' <summary>Traductions de la page de paiement (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Paiement — 60Sec-AI", "Payment — 60Sec-AI", "Pago — 60Sec-AI")
+            Case "yourPlan" : Return Choose3(lang, "Votre forfait", "Your plan", "Su plan")
+            Case "planPrefix" : Return Choose3(lang, "Forfait", "Plan", "Plan")
+            Case "gst" : Return Choose3(lang, "TPS (5 %)", "GST (5%)", "GST (5%)")
+            Case "qst" : Return Choose3(lang, "TVQ (9,975 %)", "QST (9.975%)", "QST (9.975%)")
+            Case "monthlyTotal" : Return Choose3(lang, "Total mensuel", "Monthly total", "Total mensual")
+            Case "securePayment" : Return Choose3(lang, "Paiement sécurisé", "Secure payment", "Pago seguro")
+            Case "redirectStripe" : Return Choose3(lang, "Vous serez redirigé vers Stripe pour finaliser votre paiement.", "You'll be redirected to Stripe to complete your payment.", "Será redirigido a Stripe para completar su pago.")
+            Case "processedByStripe" : Return Choose3(lang, "Paiement traité par Stripe", "Payment processed by Stripe", "Pago procesado por Stripe")
+            Case "feat256" : Return Choose3(lang, "Chiffrement SSL 256 bits", "256-bit SSL encryption", "Cifrado SSL de 256 bits")
+            Case "featPci" : Return Choose3(lang, "Conforme PCI-DSS", "PCI-DSS compliant", "Conforme con PCI-DSS")
+            Case "featWallets" : Return Choose3(lang, "Apple Pay, Google Pay, Link supportés", "Apple Pay, Google Pay, Link supported", "Apple Pay, Google Pay, Link compatibles")
+            Case "featNoCard" : Return Choose3(lang, "Aucune carte stockée chez 60Sec-AI", "No card stored by 60Sec-AI", "Ninguna tarjeta almacenada por 60Sec-AI")
+            Case "payBtn" : Return Choose3(lang, "Payer avec Stripe →", "Pay with Stripe →", "Pagar con Stripe →")
+            Case "redirectInfo" : Return Choose3(lang, "Vous serez redirigé vers checkout.stripe.com", "You'll be redirected to checkout.stripe.com", "Será redirigido a checkout.stripe.com")
+            Case "errAccount" : Return Choose3(lang, "Impossible de récupérer vos informations de compte.", "Unable to retrieve your account information.", "No se pudo recuperar la información de su cuenta.")
+            Case "errPlanUnavailable" : Return Choose3(lang, "Ce forfait n'est pas disponible. Veuillez contacter le support.", "This plan is not available. Please contact support.", "Este plan no está disponible. Contacte con soporte.")
+            Case "errStripeConfig" : Return Choose3(lang, "La configuration de paiement pour ce forfait est incomplète. Veuillez contacter le support.", "The payment configuration for this plan is incomplete. Please contact support.", "La configuración de pago para este plan está incompleta. Contacte con soporte.")
+            Case "errCheckout" : Return Choose3(lang, "Une erreur est survenue lors de la création de la session de paiement : ", "An error occurred while creating the payment session: ", "Se produjo un error al crear la sesión de pago: ")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     ''' <summary>
     ''' Récupère le code abonnement + GUID compagnie + email du user connecté.
@@ -52,6 +116,7 @@ Public Class wbfPayment
         Dim p As New Collection
         p.Add(New SqlParameter("@Code", planCode))
         p.Add(New SqlParameter("@BillingCycle", billingCycle))
+        p.Add(New SqlParameter("@Lang", CurrentLang))
 
         Dim ds As DataSet = ExecuteSQLds("s0631GetPlanByCode", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
@@ -67,7 +132,7 @@ Public Class wbfPayment
 
         Dim userRow As DataRow = GetUserAndCompanyInfo(UserId)
         If userRow Is Nothing Then
-            ShowError("Impossible de récupérer vos informations de compte.")
+            ShowError(L("errAccount"))
             Return
         End If
 
@@ -77,7 +142,7 @@ Public Class wbfPayment
         ' Lookup dans T021Plan (BD = source de vérité, plus de hardcode)
         Dim planRow As DataRow = GetPlan(planCode, "monthly")
         If planRow Is Nothing Then
-            ShowError("Le forfait '" & planCode & "' n'est pas disponible. Contactez le support.")
+            ShowError(L("errPlanUnavailable"))
             Return
         End If
 
@@ -100,14 +165,13 @@ Public Class wbfPayment
         Dim total As Decimal = amount + tps + tvq
 
         ' === Affichage des Literals ===
-        Dim culture As New CultureInfo("fr-CA")
         litPlanName.Text = planName
         litPlanTagline.Text = tagline
-        litPlanLabel.Text = "Forfait " & planName
-        litPlanAmount.Text = amount.ToString("N2", culture) & " $"
-        litTps.Text = tps.ToString("N2", culture) & " $"
-        litTvq.Text = tvq.ToString("N2", culture) & " $"
-        litTotal.Text = total.ToString("N2", culture) & " $"
+        litPlanLabel.Text = L("planPrefix") & " " & planName
+        litPlanAmount.Text = FormatMoney(amount)
+        litTps.Text = FormatMoney(tps)
+        litTvq.Text = FormatMoney(tvq)
+        litTotal.Text = FormatMoney(total)
 
         ' === Liste des features (depuis T021Plan.Features, une ligne = une feature) ===
         litFeatures.Text = RenderFeaturesHtml(features)
@@ -144,10 +208,9 @@ Public Class wbfPayment
             Dim priceId As String = If(ViewState("StripePriceId"), "").ToString()
 
             If String.IsNullOrEmpty(priceId) Then
-                ShowError("La configuration Stripe pour ce forfait est incomplète. " &
-                          "Le StripePriceId n'est pas défini dans T021Plan. " &
-                          "Allez dans le dashboard Stripe, créez le Product+Price, puis : " &
-                          "UPDATE T021Plan SET StripePriceId='price_xxx' WHERE Code='" & planCode & "' AND BillingCycle='" & billingCycle & "';")
+                ' Détail technique en log seulement ; message générique localisé pour l'utilisateur.
+                System.Diagnostics.Debug.WriteLine("StripePriceId manquant dans T021Plan pour Code='" & planCode & "' BillingCycle='" & billingCycle & "'.")
+                ShowError(L("errStripeConfig"))
                 Return
             End If
 
@@ -189,7 +252,7 @@ Public Class wbfPayment
             ' Normal lors d'un Response.Redirect, ignorer
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("Stripe Checkout error: " & ex.Message)
-            ShowError("Une erreur est survenue lors de la création de la session de paiement : " & ex.Message)
+            ShowError(L("errCheckout") & ex.Message)
         End Try
     End Sub
 
