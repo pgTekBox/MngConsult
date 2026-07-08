@@ -18,18 +18,82 @@ Imports Stripe.Checkout
 Public Class wbfPaymentSuccess
     Inherits clsData
 
+    ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr), transmise par l'URL de retour Stripe.</summary>
+    Protected ReadOnly Property CurrentLang As String
+        Get
+            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            Select Case l
+                Case "en", "es", "fr"
+                    Return l
+                Case Else
+                    Return "fr"
+            End Select
+        End Get
+    End Property
+
+    ''' <summary>Culture pour le format des dates et montants selon la langue.</summary>
+    Private Function Cult() As CultureInfo
+        Select Case CurrentLang
+            Case "en" : Return New CultureInfo("en-CA")
+            Case "es" : Return New CultureInfo("es-ES")
+            Case Else : Return New CultureInfo("fr-CA")
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        lnkDashboard.Text = L("fillProfile")
+        lnkDashboard.NavigateUrl = "~/wbfNewUser.aspx?lang=" & CurrentLang
+    End Sub
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         ' Verifier que l'utilisateur est toujours connecte
         If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx")
+            Response.Redirect("~/wbfLogin.aspx?lang=" & CurrentLang)
             Return
         End If
+
+        ApplyLocalization()
 
         If Not IsPostBack Then
             DisplayConfirmation()
         End If
     End Sub
+
+    ''' <summary>Traductions de la page de confirmation de paiement (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Paiement réussi — 60Sec-AI", "Payment successful — 60Sec-AI", "Pago exitoso — 60Sec-AI")
+            Case "title" : Return Choose3(lang, "Paiement réussi !", "Payment successful!", "¡Pago exitoso!")
+            Case "thanksLine" : Return Choose3(lang, "Merci pour votre confiance.", "Thank you for your trust.", "Gracias por su confianza.")
+            Case "subBefore" : Return Choose3(lang, "Votre abonnement ", "Your ", "Su suscripción ")
+            Case "subAfter" : Return Choose3(lang, " est maintenant actif.", " subscription is now active.", " ya está activa.")
+            Case "receiptTitle" : Return Choose3(lang, "Reçu de paiement", "Payment receipt", "Recibo de pago")
+            Case "txnLabel" : Return Choose3(lang, "N° de transaction", "Transaction no.", "N.º de transacción")
+            Case "dateLabel" : Return Choose3(lang, "Date", "Date", "Fecha")
+            Case "cardLabel" : Return Choose3(lang, "Carte", "Card", "Tarjeta")
+            Case "planLabel" : Return Choose3(lang, "Forfait", "Plan", "Plan")
+            Case "nextBillingLabel" : Return Choose3(lang, "Prochaine facturation", "Next billing", "Próxima facturación")
+            Case "amountLabel" : Return Choose3(lang, "Montant payé", "Amount paid", "Importe pagado")
+            Case "fillProfile" : Return Choose3(lang, "Remplissez votre profil →", "Complete your profile →", "Complete su perfil →")
+            Case "footer" : Return Choose3(lang, "Un courriel de confirmation a été envoyé à votre adresse.", "A confirmation email has been sent to your address.", "Se ha enviado un correo de confirmación a su dirección.")
+            Case "cardValue" : Return Choose3(lang, "Carte de crédit · via Stripe", "Credit card · via Stripe", "Tarjeta de crédito · vía Stripe")
+            Case "trialEndSuffix" : Return Choose3(lang, " (fin de l'essai gratuit)", " (end of free trial)", " (fin del período de prueba)")
+            Case "freeTrial" : Return Choose3(lang, "Gratuit (essai)", "Free (trial)", "Gratis (prueba)")
+            Case "yourPlan" : Return Choose3(lang, "Votre forfait", "Your plan", "Su plan")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     Private Sub DisplayConfirmation()
 
@@ -90,7 +154,7 @@ Public Class wbfPaymentSuccess
         End If
 
         ' === Affichage ===
-        Dim culture As New CultureInfo("fr-CA")
+        Dim culture As CultureInfo = Cult()
 
         litPlanName.Text = planName
         litPlanName2.Text = planName
@@ -104,12 +168,12 @@ Public Class wbfPaymentSuccess
 
         ' Carte : on n'a pas le brand/last4 sans appel supplementaire, on affiche generique
         ' (sera enrichi plus tard si besoin via session.PaymentIntent ou Customer.default_payment_method)
-        litCard.Text = "Carte de crédit · via Stripe"
+        litCard.Text = L("cardValue")
 
         ' Prochaine facturation
         If nextBilling <> Date.MinValue Then
             If isTrial AndAlso trialEnd <> Date.MinValue Then
-                litNextBilling.Text = trialEnd.ToString("dd MMMM yyyy", culture) & " (fin de l'essai gratuit)"
+                litNextBilling.Text = trialEnd.ToString("dd MMMM yyyy", culture) & L("trialEndSuffix")
             Else
                 litNextBilling.Text = nextBilling.ToString("dd MMMM yyyy", culture)
             End If
@@ -120,7 +184,7 @@ Public Class wbfPaymentSuccess
         ' Montant : si essai gratuit on affiche 0.00, sinon le montant total
         Dim displayAmount As Decimal = amountTotal
         If isTrial AndAlso displayAmount = 0D Then
-            litAmount.Text = "Gratuit (essai)"
+            litAmount.Text = L("freeTrial")
         Else
             litAmount.Text = displayAmount.ToString("N2", culture) & " " & currency
         End If
@@ -162,7 +226,7 @@ Public Class wbfPaymentSuccess
             End If
         End If
 
-        Return "Votre forfait"
+        Return L("yourPlan")
     End Function
 
     Private Function CapitalizeFirst(s As String) As String
@@ -175,12 +239,12 @@ Public Class wbfPaymentSuccess
     ''' Le webhook fera son travail en arriere-plan de toute facon.
     ''' </summary>
     Private Sub ShowGenericSuccess()
-        Dim culture As New CultureInfo("fr-CA")
-        litPlanName.Text = "Votre forfait"
-        litPlanName2.Text = "Votre forfait"
+        Dim culture As CultureInfo = Cult()
+        litPlanName.Text = L("yourPlan")
+        litPlanName2.Text = L("yourPlan")
         litTransactionId.Text = "—"
         litDate.Text = Date.Now.ToString("dd MMMM yyyy", culture)
-        litCard.Text = "Carte de crédit · via Stripe"
+        litCard.Text = L("cardValue")
         litNextBilling.Text = "—"
         litAmount.Text = "—"
     End Sub

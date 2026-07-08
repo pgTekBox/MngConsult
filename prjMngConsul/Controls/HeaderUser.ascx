@@ -1,7 +1,12 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="HeaderUser.ascx.vb" Inherits="MngConsul.HeaderUser" %>
 
 <div class="header-right">
- 
+
+    <%-- Sélecteur de langue (FR / EN / ES) --%>
+    <div class="lang-switch">
+        <asp:Literal ID="litLang" runat="server" />
+    </div>
+
     <%-- Sélecteur de compagnie (visible uniquement si comptable avec >1 compagnie) --%>
     <asp:Panel ID="pnlCompanyPicker" runat="server" CssClass="company-picker" Visible="false">
         <span class="company-icon" aria-hidden="true">🏢</span>
@@ -47,6 +52,33 @@
     display:flex;
     align-items:center;
     gap:12px;
+}
+
+/* === Sélecteur de langue === */
+.lang-switch{
+    display:flex;
+    gap:2px;
+    align-items:center;
+    background:white;
+    border:1px solid var(--border);
+    border-radius:12px;
+    padding:4px;
+    height:42px;
+    box-sizing:border-box;
+}
+.lang-switch a{
+    padding:5px 9px;
+    border-radius:8px;
+    font-size:12px;
+    font-weight:800;
+    color:var(--muted);
+    text-decoration:none;
+    line-height:1;
+}
+.lang-switch a:hover{ background:#f1f5f9; }
+.lang-switch a.active{
+    background:var(--primary-weak,#eff6ff);
+    color:var(--primary,#2563eb);
 }
 
 /* === Sélecteur de compagnie (DropDown) === */

@@ -95,6 +95,24 @@ Partial Public Class wbfPayment
     Protected WithEvents litFeatures As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
+    '''pnlTrial control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlTrial As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litTrialBanner control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTrialBanner As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''pnlError control.
     '''</summary>
     '''<remarks>

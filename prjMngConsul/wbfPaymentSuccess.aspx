@@ -2,7 +2,7 @@
     CodeBehind="wbfPaymentSuccess.aspx.vb" Inherits="MngConsul.wbfPaymentSuccess" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -179,53 +179,52 @@
                     </svg>
                 </div>
 
-                <h1>Paiement réussi !</h1>
+                <h1><%= L("title") %></h1>
                 <p class="subtitle">
-                    Merci pour votre confiance.<br/>
-                    Votre abonnement <strong><asp:Literal ID="litPlanName" runat="server" /></strong>
-                    est maintenant actif.
+                    <%= L("thanksLine") %><br/>
+                    <%= L("subBefore") %><strong><asp:Literal ID="litPlanName" runat="server" /></strong><%= L("subAfter") %>
                 </p>
 
                 <div class="receipt">
-                    <h3>Reçu de paiement</h3>
+                    <h3><%= L("receiptTitle") %></h3>
 
                     <div class="receipt-row">
-                        <span class="lbl">N° de transaction</span>
+                        <span class="lbl"><%= L("txnLabel") %></span>
                         <span class="val" style="font-family: monospace; font-size: 12px;">
                             <asp:Literal ID="litTransactionId" runat="server" />
                         </span>
                     </div>
 
                     <div class="receipt-row">
-                        <span class="lbl">Date</span>
+                        <span class="lbl"><%= L("dateLabel") %></span>
                         <span class="val">
                             <asp:Literal ID="litDate" runat="server" />
                         </span>
                     </div>
 
                     <div class="receipt-row">
-                        <span class="lbl">Carte</span>
+                        <span class="lbl"><%= L("cardLabel") %></span>
                         <span class="val">
                             <asp:Literal ID="litCard" runat="server" />
                         </span>
                     </div>
 
                     <div class="receipt-row">
-                        <span class="lbl">Forfait</span>
+                        <span class="lbl"><%= L("planLabel") %></span>
                         <span class="val">
                             <asp:Literal ID="litPlanName2" runat="server" />
                         </span>
                     </div>
 
                     <div class="receipt-row">
-                        <span class="lbl">Prochaine facturation</span>
+                        <span class="lbl"><%= L("nextBillingLabel") %></span>
                         <span class="val">
                             <asp:Literal ID="litNextBilling" runat="server" />
                         </span>
                     </div>
 
                     <div class="receipt-row total">
-                        <span class="lbl" style="font-weight: 800; color: var(--slate-800);">Montant payé</span>
+                        <span class="lbl" style="font-weight: 800; color: var(--slate-800);"><%= L("amountLabel") %></span>
                         <span class="val">
                             <asp:Literal ID="litAmount" runat="server" />
                         </span>
@@ -236,13 +235,11 @@
 
             <div class="actions">
                 <asp:HyperLink ID="lnkDashboard" runat="server"
-                    NavigateUrl="~/wbfNewUser.aspx" CssClass="btn btn-primary">
-                    Remplisser votre profile →
-                </asp:HyperLink>
+                    NavigateUrl="~/wbfNewUser.aspx" CssClass="btn btn-primary" />
             </div>
 
             <div class="footer-info">
-                Un courriel de confirmation a été envoyé à votre adresse.
+                <%= L("footer") %>
             </div>
 
         </div>

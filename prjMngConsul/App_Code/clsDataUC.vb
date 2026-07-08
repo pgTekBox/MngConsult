@@ -74,7 +74,7 @@ Public Class clsDataUC
     Public Property isAuthenticated() As Boolean
         Get
             Try
-                If UserId = "" Then
+                If UserId = 0 Then
                     Return False
                 End If
                 Return True

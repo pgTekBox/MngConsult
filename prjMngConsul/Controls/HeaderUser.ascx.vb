@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Text
 Imports Telerik.Web.UI
 
 Public Class HeaderUser
@@ -12,11 +13,49 @@ Public Class HeaderUser
             Me.Visible = False
             Return
         End If
+
+        ' Le sélecteur de langue doit être rendu à chaque chargement (aussi au postback).
+        BuildLangSwitcher()
+
         If IsPostBack Then Return
 
         BindUserInfo()
         BindCompanies()
 
+    End Sub
+
+    ''' <summary>
+    ''' Construit le sélecteur FR / EN / ES. Chaque lien recharge la page courante
+    ''' avec ?lang=xx (en conservant les autres paramètres). La langue courante est
+    ''' surlignée. Les pages localisées (login, inscription, activation, paiement,
+    ''' profil…) lisent ce paramètre ?lang.
+    ''' </summary>
+    Private Sub BuildLangSwitcher()
+        Dim cur As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+        If cur <> "en" AndAlso cur <> "es" Then cur = "fr"
+
+        ' Paramètres existants (sauf lang), à préserver dans le lien.
+        Dim extra As New StringBuilder()
+        For Each k As String In Request.QueryString.AllKeys
+            If k Is Nothing Then Continue For
+            If String.Equals(k, "lang", StringComparison.OrdinalIgnoreCase) Then Continue For
+            extra.Append("&"c)
+            extra.Append(System.Web.HttpUtility.UrlEncode(k))
+            extra.Append("="c)
+            extra.Append(System.Web.HttpUtility.UrlEncode(Request.QueryString(k)))
+        Next
+
+        Dim basePath As String = Request.Url.AbsolutePath
+        Dim codes() As String = {"fr", "en", "es"}
+        Dim labels() As String = {"FR", "EN", "ES"}
+
+        Dim sb As New StringBuilder()
+        For i As Integer = 0 To codes.Length - 1
+            Dim href As String = basePath & "?lang=" & codes(i) & extra.ToString()
+            Dim cls As String = If(codes(i) = cur, "active", "")
+            sb.Append("<a class=""" & cls & """ href=""" & href & """>" & labels(i) & "</a>")
+        Next
+        litLang.Text = sb.ToString()
     End Sub
 
     ''' <summary>
@@ -68,8 +107,9 @@ Public Class HeaderUser
     Private Sub BindCompanies()
 
 
+        ' s0210GetUserCompanies attend l'EMAIL (WHERE email = @UserId), pas l'Id entier.
         Dim p As New Collection
-        p.Add(New SqlParameter("@UserId", UserId))
+        p.Add(New SqlParameter("@UserId", UserEmail))
         Dim ds As DataSet = ExecuteSQLds("s0210GetUserCompanies", p)
 
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then

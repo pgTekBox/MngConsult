@@ -19,10 +19,6 @@
             <span class="brand-sub">ERP</span>
         </div>
 
-        <uc1:HeaderUser runat="server" ID="HeaderUser" />
-
-
- 
     </header>
 
     <!-- Backdrop mobile -->
@@ -323,6 +319,11 @@ Job Dashboard  </a>
 
             <!-- Footer -->
             <div class="sidebar-footer">
+                <a class="nav-item subtle" href="~/wbfNewUser.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">🏢</span>
+                    <span class="nav-txt">Profil de l'entreprise</span>
+                </a>
+
                 <a class="nav-item subtle" href="~/wbfUsers.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">⚙️</span>
                     <span class="nav-txt">Utilisateur</span>

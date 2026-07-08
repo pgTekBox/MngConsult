@@ -144,16 +144,9 @@ Public Class wbfLogin
             Return
         End If
 
-        Dim pac As New Collection
-        pac.Add(New SqlParameter("@UserId", CType(userRow("Id"), Integer)))
-        Dim dsac As DataSet = ExecuteSQLds("s0315GetProfileCompleted", pac)
-        If dsac.Tables(0).Rows(0)("ProfileCompleted") < 100 Then
-            Response.Redirect("~/wbfNewUser.aspx")
-            Return
-        End If
-
-
-
+        ' Note : l'onboarding (wbfNewUser) fait partie du parcours d'inscription
+        ' (wbfPaymentSuccess → « Remplir mon profil »), pas de la connexion.
+        ' À la connexion, l'utilisateur va directement à wbfWelcome.
 
 
 
@@ -170,7 +163,7 @@ Public Class wbfLogin
         If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") Then
             Response.Redirect(returnUrl)
         Else
-            Response.Redirect("~/Default.aspx")
+            Response.Redirect("~/wbfWelcome.aspx")
         End If
     End Sub
 

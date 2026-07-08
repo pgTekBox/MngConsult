@@ -51,6 +51,15 @@ Public Class wbfPayment
         btnPay.Text = L("payBtn")
     End Sub
 
+    ''' <summary>Locale de la page Stripe Checkout selon la langue courante.</summary>
+    Private Function StripeLocale() As String
+        Select Case CurrentLang
+            Case "en" : Return "en"
+            Case "es" : Return "es"
+            Case Else : Return "fr-CA"
+        End Select
+    End Function
+
     ''' <summary>Formate un montant selon la langue (en : « $69.99 » ; fr/es : « 69,99 $ »).</summary>
     Private Function FormatMoney(amount As Decimal) As String
         If CurrentLang = "en" Then
@@ -69,6 +78,8 @@ Public Class wbfPayment
             Case "gst" : Return Choose3(lang, "TPS (5 %)", "GST (5%)", "GST (5%)")
             Case "qst" : Return Choose3(lang, "TVQ (9,975 %)", "QST (9.975%)", "QST (9.975%)")
             Case "monthlyTotal" : Return Choose3(lang, "Total mensuel", "Monthly total", "Total mensual")
+            Case "taxNote" : Return Choose3(lang, "Taxes estimées (Québec). Le montant exact est calculé selon votre adresse de facturation au moment du paiement.", "Estimated taxes (Quebec). The exact amount is calculated from your billing address at checkout.", "Impuestos estimados (Quebec). El importe exacto se calcula según su dirección de facturación en el pago.")
+            Case "trialBanner" : Return Choose3(lang, "{0} jours gratuits — aucun prélèvement aujourd'hui, annulable à tout moment.", "{0} days free — no charge today, cancel anytime.", "{0} días gratis — sin cargo hoy, cancele cuando quiera.")
             Case "securePayment" : Return Choose3(lang, "Paiement sécurisé", "Secure payment", "Pago seguro")
             Case "redirectStripe" : Return Choose3(lang, "Vous serez redirigé vers Stripe pour finaliser votre paiement.", "You'll be redirected to Stripe to complete your payment.", "Será redirigido a Stripe para completar su pago.")
             Case "processedByStripe" : Return Choose3(lang, "Paiement traité par Stripe", "Payment processed by Stripe", "Pago procesado por Stripe")
@@ -173,6 +184,13 @@ Public Class wbfPayment
         litTvq.Text = FormatMoney(tvq)
         litTotal.Text = FormatMoney(total)
 
+        ' === Bandeau essai gratuit (si le forfait a des jours d'essai) ===
+        Dim trialDays As Integer = If(planRow("TrialDays") Is DBNull.Value, 0, CInt(planRow("TrialDays")))
+        If trialDays > 0 Then
+            pnlTrial.Visible = True
+            litTrialBanner.Text = String.Format(L("trialBanner"), trialDays)
+        End If
+
         ' === Liste des features (depuis T021Plan.Features, une ligne = une feature) ===
         litFeatures.Text = RenderFeaturesHtml(features)
     End Sub
@@ -223,8 +241,9 @@ Public Class wbfPayment
 
             ' URLs de retour (absolues, requis par Stripe)
             Dim baseUrl As String = Request.Url.GetLeftPart(UriPartial.Authority)
-            Dim successUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.SuccessUrlPath"))
-            Dim cancelUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.CancelUrlPath"))
+            Dim langQs As String = "?lang=" & CurrentLang
+            Dim successUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.SuccessUrlPath")) & langQs
+            Dim cancelUrl As String = baseUrl & ResolveUrl(ConfigurationManager.AppSettings("Stripe.CancelUrlPath")) & langQs
 
             ' Metadata pour traçabilité dans webhook Stripe
             Dim meta As New Dictionary(Of String, String) From {
@@ -242,7 +261,8 @@ Public Class wbfPayment
                 successUrl:=successUrl,
                 cancelUrl:=cancelUrl,
                 trialDays:=trialDays,
-                metadata:=meta
+                metadata:=meta,
+                locale:=StripeLocale()
             )
 
             ' Redirection vers Stripe (URL de type https://checkout.stripe.com/c/pay/cs_xxx)

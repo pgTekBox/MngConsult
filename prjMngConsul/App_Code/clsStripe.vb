@@ -60,7 +60,8 @@ Public Class clsStripe
         successUrl As String,
         cancelUrl As String,
         Optional trialDays As Integer = 0,
-        Optional metadata As Dictionary(Of String, String) = Nothing
+        Optional metadata As Dictionary(Of String, String) = Nothing,
+        Optional locale As String = "fr-CA"
     ) As String
 
         EnsureInitialized()
@@ -103,6 +104,13 @@ Public Class clsStripe
             options.CustomerEmail = customerEmail
         End If
 
+        ' Stripe Tax : avec un Customer existant, Checkout doit pouvoir collecter /
+        ' mettre à jour son adresse (obligatoire quand automatic_tax est activé),
+        ' sinon Stripe renvoie l'erreur "customer_update parameter is required".
+        If enableAutoTax AndAlso Not String.IsNullOrEmpty(options.Customer) Then
+            options.CustomerUpdate = New SessionCustomerUpdateOptions With {.Address = "auto"}
+        End If
+
         ' Essai gratuit si specifie
         If trialDays > 0 Then
             options.SubscriptionData = New SessionSubscriptionDataOptions With {
@@ -123,8 +131,8 @@ Public Class clsStripe
             End If
         End If
 
-        ' Locale francaise pour clients quebecois
-        options.Locale = "fr-CA"
+        ' Locale de la page Stripe Checkout (fr-CA par defaut, sinon selon la langue choisie)
+        options.Locale = If(String.IsNullOrEmpty(locale), "fr-CA", locale)
 
         Dim service As New SessionService()
         Dim session As Session = service.Create(options)

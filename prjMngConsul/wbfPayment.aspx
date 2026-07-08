@@ -274,6 +274,21 @@
             margin: 0 0 22px 0;
         }
 
+        .trial-banner {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(16,185,129,.10);
+            border: 1px solid rgba(16,185,129,.30);
+            color: var(--green-600);
+            border-radius: 12px;
+            padding: 12px 14px;
+            font-size: 13px;
+            font-weight: 700;
+            line-height: 1.4;
+            margin-bottom: 18px;
+        }
+
         .field { margin-bottom: 14px; }
 
         .field label {
@@ -474,6 +489,8 @@
                         </div>
                     </div>
 
+                    <p style="font-size:11px; color:var(--slate-500); margin:0 0 20px 0;"><%= L("taxNote") %></p>
+
                     <ul class="features">
                         <asp:Literal ID="litFeatures" runat="server" />
                     </ul>
@@ -485,6 +502,13 @@
                  DROITE : Bloc paiement Stripe Checkout
                  ===================================================== -->
             <div class="form-card">
+
+                <asp:Panel ID="pnlTrial" runat="server" Visible="false" CssClass="trial-banner">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="flex-shrink:0;">
+                        <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <asp:Literal ID="litTrialBanner" runat="server" />
+                </asp:Panel>
 
                 <h2><%= L("securePayment") %></h2>
                 <p class="form-sub"><%= L("redirectStripe") %></p>
