@@ -8,18 +8,29 @@ Imports Telerik.Web.UI.Editor.DialogControls
 Public Class clsDataUC
     Inherits System.Web.UI.UserControl
 
-    Private Function GetUserByEmail(email As String) As DataRow
-        Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@Email", email))
-            Dim ds As DataSet = ExecuteSQLds("s0200GetUserByEmail", p)
-            If ds.Tables(0).Rows.Count > 0 Then Return ds.Tables(0).Rows(0)
-        Catch ex As Exception
-            ' Ne pas révéler les détails au user
-            System.Diagnostics.Debug.WriteLine("Login error: " & ex.Message)
-        End Try
-        Return Nothing
-    End Function
+    ''' <summary>
+    ''' Langue courante de l'interface (fr/en/es), conservée en Session.
+    ''' Un paramètre ?lang=xx dans l'URL (sélecteur de langue du header) est
+    ''' prioritaire et met à jour la Session ; sinon on relit la valeur mémorisée,
+    ''' défaut « fr ». Partagée avec les pages via la même clé Session("Lang").
+    ''' </summary>
+    Public Property CurrentLang() As String
+        Get
+            Dim q As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            If q = "fr" OrElse q = "en" OrElse q = "es" Then
+                Session("Lang") = q
+                Return q
+            End If
+            Dim s As String = TryCast(Session("Lang"), String)
+            If s = "fr" OrElse s = "en" OrElse s = "es" Then Return s
+            Return "fr"
+        End Get
+        Set(value As String)
+            Dim v As String = If(value, "").Trim().ToLowerInvariant()
+            If v = "fr" OrElse v = "en" OrElse v = "es" Then Session("Lang") = v
+        End Set
+    End Property
+
     Private Function GetUserById(UserId As Integer) As DataRow
         Try
             Dim p As New Collection
@@ -58,7 +69,7 @@ Public Class clsDataUC
         Get
             Try
                 If Session("isAdmin") Is Nothing Then
-                    Dim userRow As DataRow = GetUserByEmail(UserId)
+                    Dim userRow As DataRow = GetUserById(UserId)
                     Session("isAdmin") = CType(userRow("isAdmin"), Boolean)
                 End If
                 Return Session("isAdmin")
@@ -117,7 +128,7 @@ Public Class clsDataUC
 
                 Return Session("UserId")
             Catch ex As Exception
-                Return ""
+                Return 0
             End Try
 
         End Get
@@ -141,7 +152,7 @@ Public Class clsDataUC
                 End If
                 Return Session("UserFirstName")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)
@@ -158,7 +169,7 @@ Public Class clsDataUC
                 End If
                 Return Session("UserLastName")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)
@@ -174,11 +185,44 @@ Public Class clsDataUC
                 End If
                 Return Session("UserEmail")
             Catch ex As Exception
-                Return False
+                Return ""
             End Try
         End Get
         Set(ByVal Value As String)
             Session("UserEmail") = Value
+        End Set
+    End Property
+
+    Public Property CompanyName() As String
+        Get
+            Try
+                If String.IsNullOrEmpty(Session("CompanyName")) Then
+                    Dim userRow As DataRow = GetUserById(UserId)
+                    Session("CompanyName") = CType(userRow("CompanyName"), String)
+                End If
+                Return Session("CompanyName")
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("CompanyName") = Value
+        End Set
+    End Property
+
+    Public Property Abonnement() As String
+        Get
+            Try
+                If String.IsNullOrEmpty(Session("Abonnement")) Then
+                    Session("Abonnement") = ""
+                End If
+                Return Session("Abonnement")
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            Session("Abonnement") = Value
         End Set
     End Property
 
@@ -208,6 +252,66 @@ Public Class clsDataUC
             m_ConnectionString = Value
         End Set
     End Property
+
+    ' -------------------------------------------------------------------------
+    ' Connexion vers la BD MailService (insertion dans T400Mails pour envoi).
+    ' Aligné sur clsData.
+    ' -------------------------------------------------------------------------
+    Private m_ConnectionStringMail As String = ""
+    Public Property ConnectionStringMail() As String
+        Get
+            Try
+                If m_ConnectionStringMail.Length = 0 Then
+                    Dim sConnect As String = System.Configuration.ConfigurationManager.AppSettings("ConnectionStringMail")
+                    m_ConnectionStringMail = sConnect
+                End If
+                Return m_ConnectionStringMail
+            Catch ex As Exception
+                Return ""
+            End Try
+        End Get
+        Set(ByVal Value As String)
+            m_ConnectionStringMail = Value
+        End Set
+    End Property
+
+    Public Sub ExecuteSQLMail(ByVal SQLStatement As String, AllParameters As Collection)
+        Dim DRconn As SqlClient.SqlConnection
+        DRconn = New SqlClient.SqlConnection(ConnectionStringMail)
+
+        Dim oCom As New SqlClient.SqlCommand
+        oCom.CommandText = SQLStatement
+        oCom.Connection = DRconn
+        oCom.CommandType = CommandType.StoredProcedure
+
+        For Each oParam As Data.SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+
+        oCom.Connection.Open()
+        oCom.ExecuteNonQuery()
+        oCom.Connection.Close()
+    End Sub
+
+    Public Function ExecuteSQLdsMail(ByVal SQLStatement As String, AllParameters As Collection) As DataSet
+        Dim DRconn As SqlClient.SqlConnection
+        DRconn = New SqlClient.SqlConnection(ConnectionStringMail)
+        Dim MyDA As New SqlClient.SqlDataAdapter
+
+        Dim oCom As New SqlClient.SqlCommand
+        oCom.CommandText = SQLStatement
+        oCom.Connection = DRconn
+        oCom.CommandType = CommandType.StoredProcedure
+        MyDA.SelectCommand = oCom
+
+        For Each oParam As Data.SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+
+        Dim oDs As New DataSet
+        MyDA.Fill(oDs)
+        Return oDs
+    End Function
 
     Public Sub ExecuteSQL(ByVal SQLStatement As String)
         Dim oCom As New SqlClient.SqlCommand

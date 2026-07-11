@@ -6,22 +6,6 @@ Public Class wbfResetPassword
     Inherits clsData
 
     ''' <summary>
-    ''' Langue courante : ?lang=fr|en|es (défaut fr). Transmise par le lien du
-    ''' courriel de réinitialisation et conservée au postback.
-    ''' </summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
-
-    ''' <summary>
     ''' Jeton passé dans le query string (?token=). Guid.Empty si absent/invalide.
     ''' Le query string est conservé au postback (form action inchangée).
     ''' </summary>

@@ -529,56 +529,281 @@
             padding-right:14px;
         }
     }
+
+    /* ===== Boîte de bienvenue dépliable ===== */
+    .welcome-box{
+        background:linear-gradient(135deg,#2563eb 0%,#06b6d4 100%);
+        border-radius:20px;
+        box-shadow:var(--mc-shadow);
+        overflow:hidden;
+        color:#fff;
+    }
+
+    .welcome-summary{
+        display:flex;
+        align-items:center;
+        gap:16px;
+        padding:18px 22px;
+        cursor:pointer;
+        list-style:none;
+        user-select:none;
+    }
+    .welcome-summary::-webkit-details-marker{ display:none; }
+
+    .wb-emoji{
+        font-size:26px;
+        width:48px;
+        height:48px;
+        flex:0 0 48px;
+        border-radius:14px;
+        background:rgba(255,255,255,.18);
+        display:flex;
+        align-items:center;
+        justify-content:center;
+    }
+
+    .wb-main{ flex:1; min-width:0; line-height:1.3; }
+    .wb-title{ font-size:18px; font-weight:900; display:block; }
+    .wb-sub{
+        font-size:13px;
+        color:rgba(255,255,255,.9);
+        display:block;
+        margin-top:2px;
+        white-space:nowrap;
+        overflow:hidden;
+        text-overflow:ellipsis;
+    }
+
+    .wb-chevron{
+        flex:0 0 auto;
+        font-size:22px;
+        transition:transform .22s ease;
+        opacity:.9;
+    }
+    .welcome-box[open] .wb-chevron{ transform:rotate(180deg); }
+
+    .wb-content{
+        background:#fff;
+        color:var(--mc-text);
+        padding:8px 22px 24px 22px;
+    }
+
+    .wb-section-title{
+        font-size:12px;
+        font-weight:800;
+        color:var(--mc-muted);
+        text-transform:uppercase;
+        letter-spacing:.1em;
+        margin:20px 0 12px 0;
+    }
+
+    .wb-steps{
+        display:grid;
+        grid-template-columns:repeat(2,1fr);
+        gap:14px;
+    }
+
+    .wb-step{
+        display:flex;
+        gap:14px;
+        padding:16px;
+        border:1px solid var(--mc-line);
+        border-radius:14px;
+        text-decoration:none;
+        color:inherit;
+        background:#fff;
+        transition:.15s ease;
+    }
+    .wb-step:hover{
+        transform:translateY(-2px);
+        border-color:#bfdbfe;
+        box-shadow:0 12px 22px rgba(37,99,235,.10);
+    }
+
+    .wb-step-ico{
+        width:44px; height:44px;
+        flex:0 0 44px;
+        border-radius:12px;
+        display:flex; align-items:center; justify-content:center;
+        font-size:22px;
+        color:#fff;
+    }
+    .wb-ico-blue{ background:linear-gradient(135deg,#3b82f6,#2563eb); }
+    .wb-ico-cyan{ background:linear-gradient(135deg,#06b6d4,#0891b2); }
+    .wb-ico-green{ background:linear-gradient(135deg,#10b981,#059669); }
+    .wb-ico-orange{ background:linear-gradient(135deg,#f59e0b,#d97706); }
+
+    .wb-step-num{
+        font-size:11px; font-weight:800;
+        color:var(--mc-muted);
+        text-transform:uppercase; letter-spacing:.06em;
+        margin-bottom:3px;
+    }
+    .wb-step-title{ font-size:15px; font-weight:800; margin-bottom:3px; }
+    .wb-step-desc{ font-size:13px; color:var(--mc-muted); line-height:1.5; }
+
+    .wb-tips{
+        background:linear-gradient(135deg,#fffbeb,#fef3c7);
+        border:1px solid var(--mc-warning);
+        border-radius:14px;
+        padding:18px 20px;
+    }
+    .wb-tips h4{
+        font-size:14px; font-weight:800; color:#78350f;
+        margin:0 0 10px 0;
+    }
+    .wb-tips ul{ list-style:none; padding:0; margin:0; }
+    .wb-tips li{
+        display:flex; align-items:flex-start; gap:8px;
+        padding:5px 0; font-size:13px; color:#92400e; line-height:1.5;
+    }
+    .wb-tips li .ck{ color:var(--mc-warning); font-weight:900; margin-top:1px; }
+
+    .wb-resources{
+        display:grid;
+        grid-template-columns:repeat(3,1fr);
+        gap:12px;
+    }
+    .wb-res{
+        display:flex; align-items:center; gap:10px;
+        padding:12px 14px;
+        background:#fff;
+        border:1px solid var(--mc-line);
+        border-radius:10px;
+        text-decoration:none;
+        color:var(--mc-text);
+        font-size:13px; font-weight:700;
+        transition:.15s ease;
+    }
+    .wb-res:hover{ border-color:#bfdbfe; color:var(--mc-primary); background:#f8fafc; }
+
+    @media (max-width:760px){
+        .wb-steps{ grid-template-columns:1fr; }
+        .wb-resources{ grid-template-columns:1fr; }
+        .wb-sub{ white-space:normal; }
+    }
 </style>
 
 <main class="home-page">
     <div class="home-wrap">
 
+        <!-- BOÎTE DE BIENVENUE (onboarding dépliable) -->
+        <details class="welcome-box">
+            <summary class="welcome-summary">
+                <span class="wb-emoji" aria-hidden="true">👋</span>
+                <span class="wb-main">
+                    <span class="wb-title"><%= L("wbGreetBefore") %><asp:Literal ID="litFirstName" runat="server" /><%= L("wbGreetAfter") %></span>
+                    <span class="wb-sub"><%= L("wbTrialBefore") %><asp:Literal ID="litPlanName" runat="server" Text="Solo" /><%= L("wbTrialMiddle") %><asp:Literal ID="litTrialEnd" runat="server" /> — <%= L("wbToggle") %></span>
+                </span>
+                <span class="wb-chevron" aria-hidden="true">⌄</span>
+            </summary>
+
+            <div class="wb-content">
+
+                <!-- Prochaines étapes -->
+                <div class="wb-section-title"><%= L("nextSteps") %></div>
+                <div class="wb-steps">
+                    <a class="wb-step" href="<%= ResolveUrl("~/wbfNewUser.aspx") %>">
+                        <span class="wb-step-ico wb-ico-blue">👤</span>
+                        <span>
+                            <span class="wb-step-num"><%= L("step") %> 1</span>
+                            <div class="wb-step-title"><%= L("step1Title") %></div>
+                            <div class="wb-step-desc"><%= L("step1Desc") %></div>
+                        </span>
+                    </a>
+                    <a class="wb-step" href="<%= ResolveUrl("~/wbfCustomers.aspx") %>">
+                        <span class="wb-step-ico wb-ico-cyan">👥</span>
+                        <span>
+                            <span class="wb-step-num"><%= L("step") %> 2</span>
+                            <div class="wb-step-title"><%= L("step2Title") %></div>
+                            <div class="wb-step-desc"><%= L("step2Desc") %></div>
+                        </span>
+                    </a>
+                    <a class="wb-step" href="<%= ResolveUrl("~/wbfProducts.aspx") %>">
+                        <span class="wb-step-ico wb-ico-green">💲</span>
+                        <span>
+                            <span class="wb-step-num"><%= L("step") %> 3</span>
+                            <div class="wb-step-title"><%= L("step3Title") %></div>
+                            <div class="wb-step-desc"><%= L("step3Desc") %></div>
+                        </span>
+                    </a>
+                    <a class="wb-step" href="<%= ResolveUrl("~/wbfAgenda.aspx") %>">
+                        <span class="wb-step-ico wb-ico-orange">📅</span>
+                        <span>
+                            <span class="wb-step-num"><%= L("step") %> 4</span>
+                            <div class="wb-step-title"><%= L("step4Title") %></div>
+                            <div class="wb-step-desc"><%= L("step4Desc") %></div>
+                        </span>
+                    </a>
+                </div>
+
+                <!-- Conseils -->
+                <div class="wb-section-title"><%= L("tipsTitle") %></div>
+                <div class="wb-tips">
+                    <h4><%= L("tipsHead") %></h4>
+                    <ul>
+                        <li><span class="ck" aria-hidden="true">✓</span><span><%= L("tip1") %></span></li>
+                        <li><span class="ck" aria-hidden="true">✓</span><span><%= L("tip2") %></span></li>
+                        <li><span class="ck" aria-hidden="true">✓</span><span><%= L("tip3") %></span></li>
+                        <li><span class="ck" aria-hidden="true">✓</span><span><%= L("tip4") %></span></li>
+                    </ul>
+                </div>
+
+                <!-- Ressources -->
+                <div class="wb-section-title"><%= L("resourcesTitle") %></div>
+                <div class="wb-resources">
+                    <a class="wb-res" href="<%= ResolveUrl("~/wbfHelp.aspx") %>">❓ <%= L("helpCenter") %></a>
+                    <a class="wb-res" href="<%= ResolveUrl("~/wbfTutorials.aspx") %>">🎬 <%= L("videoTutorials") %></a>
+                    <a class="wb-res" href="mailto:support@60sec.ca">✉️ <%= L("contactSupport") %></a>
+                </div>
+
+            </div>
+        </details>
+
         <!-- HERO -->
         <section class="hero">
             <div class="hero-left">
-                <div class="hero-badge">✨ Tableau de bord principal</div>
+                <div class="hero-badge"><%= L("heroBadge") %></div>
 
                 <h1 class="hero-title">
-                    Bienvenue dans 60Sec-AI
+                    <%= L("heroTitle") %>
                 </h1>
 
                 <p class="hero-sub">
-                    Gérez vos clients, vos factures, vos produits et vos opérations quotidiennes
-                    depuis une seule interface claire, rapide et adaptée au mobile.
+                    <%= L("heroSub") %>
                 </p>
 
                 <div class="hero-actions">
-                    <a class="btn-hero" href="wbfInvoiceEdit.aspx">Nouvelle facture</a>
-                    <a class="btn-soft" href="wbfCustomers.aspx">Voir les clients</a>
-                    <a class="btn-soft" href="Settings.aspx">Paramètres</a>
+                    <a class="btn-hero" href="wbfInvoiceEdit.aspx"><%= L("btnNewInvoice") %></a>
+                    <a class="btn-soft" href="wbfCustomers.aspx"><%= L("btnViewCustomers") %></a>
+                    <a class="btn-soft" href="Settings.aspx"><%= L("btnSettings") %></a>
                 </div>
             </div>
 
             <div class="hero-right">
                 <div class="hero-mini-stats">
                     <div class="mini-stat">
-                        <div class="mini-stat-label">Ventes du mois</div>
+                        <div class="mini-stat-label"><%= L("msSalesLabel") %></div>
                         <div class="mini-stat-value">24 580 $</div>
-                        <div class="mini-stat-note">+12.4% vs mois dernier</div>
+                        <div class="mini-stat-note"><%= L("msSalesNote") %></div>
                     </div>
 
                     <div class="mini-stat">
-                        <div class="mini-stat-label">Factures ouvertes</div>
+                        <div class="mini-stat-label"><%= L("msOpenInvLabel") %></div>
                         <div class="mini-stat-value">18</div>
-                        <div class="mini-stat-note">5 à relancer cette semaine</div>
+                        <div class="mini-stat-note"><%= L("msOpenInvNote") %></div>
                     </div>
 
                     <div class="mini-stat">
-                        <div class="mini-stat-label">Clients actifs</div>
+                        <div class="mini-stat-label"><%= L("msActiveCustLabel") %></div>
                         <div class="mini-stat-value">326</div>
-                        <div class="mini-stat-note">Nouveaux ce mois-ci : 14</div>
+                        <div class="mini-stat-note"><%= L("msActiveCustNote") %></div>
                     </div>
 
                     <div class="mini-stat">
-                        <div class="mini-stat-label">Produits</div>
+                        <div class="mini-stat-label"><%= L("msProductsLabel") %></div>
                         <div class="mini-stat-value">1 248</div>
-                        <div class="mini-stat-note">Catalogue synchronisé</div>
+                        <div class="mini-stat-note"><%= L("msProductsNote") %></div>
                     </div>
                 </div>
             </div>
@@ -588,38 +813,38 @@
         <section class="kpi-grid">
             <div class="kpi-card">
                 <div class="kpi-head">
-                    <div class="kpi-label">Clients</div>
+                    <div class="kpi-label"><%= L("kpiCustomers") %></div>
                     <div class="kpi-icon">👥</div>
                 </div>
                 <div class="kpi-value">326</div>
-                <div class="kpi-foot">14 nouveaux clients ce mois-ci</div>
+                <div class="kpi-foot"><%= L("kpiCustomersFoot") %></div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-head">
-                    <div class="kpi-label">Factures</div>
+                    <div class="kpi-label"><%= L("kpiInvoices") %></div>
                     <div class="kpi-icon">🧾</div>
                 </div>
                 <div class="kpi-value">87</div>
-                <div class="kpi-foot">18 ouvertes, 69 payées</div>
+                <div class="kpi-foot"><%= L("kpiInvoicesFoot") %></div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-head">
-                    <div class="kpi-label">Produits</div>
+                    <div class="kpi-label"><%= L("kpiProducts") %></div>
                     <div class="kpi-icon">📦</div>
                 </div>
                 <div class="kpi-value">1 248</div>
-                <div class="kpi-foot">Catalogue prêt pour la vente</div>
+                <div class="kpi-foot"><%= L("kpiProductsFoot") %></div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-head">
-                    <div class="kpi-label">Revenus</div>
+                    <div class="kpi-label"><%= L("kpiRevenue") %></div>
                     <div class="kpi-icon">💰</div>
                 </div>
                 <div class="kpi-value">24 580 $</div>
-                <div class="kpi-foot">Performance du mois courant</div>
+                <div class="kpi-foot"><%= L("kpiRevenueFoot") %></div>
             </div>
         </section>
 
@@ -632,8 +857,8 @@
                 <div class="panel">
                     <div class="panel-head">
                         <div>
-                            <div class="panel-title">Modules</div>
-                            <div class="panel-sub">Accès rapide aux sections principales</div>
+                            <div class="panel-title"><%= L("modulesTitle") %></div>
+                            <div class="panel-sub"><%= L("modulesSub") %></div>
                         </div>
                     </div>
 
@@ -641,49 +866,49 @@
                         <div class="module-grid">
                             <a class="module-card" href="wbfCustomers.aspx">
                                 <div class="module-icon">👥</div>
-                                <div class="module-title">Clients</div>
+                                <div class="module-title"><%= L("modClients") %></div>
                                 <div class="module-desc">
-                                    Consultez, ajoutez et modifiez vos clients.
+                                    <%= L("modClientsDesc") %>
                                 </div>
                             </a>
 
                             <a class="module-card" href="wbfInvoice.aspx">
                                 <div class="module-icon">🧾</div>
-                                <div class="module-title">Factures</div>
+                                <div class="module-title"><%= L("modInvoices") %></div>
                                 <div class="module-desc">
-                                    Gérez vos factures, paiements et suivis.
+                                    <%= L("modInvoicesDesc") %>
                                 </div>
                             </a>
 
                             <a class="module-card" href="wbfProducts.aspx">
                                 <div class="module-icon">📦</div>
-                                <div class="module-title">Produits</div>
+                                <div class="module-title"><%= L("modProducts") %></div>
                                 <div class="module-desc">
-                                    Maintenez votre catalogue et vos prix.
+                                    <%= L("modProductsDesc") %>
                                 </div>
                             </a>
 
                             <a class="module-card" href="wbfSuppliers.aspx">
                                 <div class="module-icon">🏭</div>
-                                <div class="module-title">Fournisseurs</div>
+                                <div class="module-title"><%= L("modSuppliers") %></div>
                                 <div class="module-desc">
-                                    Suivi des partenaires et des approvisionnements.
+                                    <%= L("modSuppliersDesc") %>
                                 </div>
                             </a>
 
                             <a class="module-card" href="wbfReceipt.aspx">
                                 <div class="module-icon">🧾</div>
-                                <div class="module-title">Reçus</div>
+                                <div class="module-title"><%= L("modReceipts") %></div>
                                 <div class="module-desc">
-                                    Consultez les reçus et les encaissements.
+                                    <%= L("modReceiptsDesc") %>
                                 </div>
                             </a>
 
                             <a class="module-card" href="Settings.aspx">
                                 <div class="module-icon">⚙️</div>
-                                <div class="module-title">Paramètres</div>
+                                <div class="module-title"><%= L("modSettings") %></div>
                                 <div class="module-desc">
-                                    Configurez l’entreprise, les taxes et l’email.
+                                    <%= L("modSettingsDesc") %>
                                 </div>
                             </a>
                         </div>
@@ -694,10 +919,10 @@
                 <div class="panel">
                     <div class="panel-head">
                         <div>
-                            <div class="panel-title">Factures récentes</div>
-                            <div class="panel-sub">Aperçu rapide des dernières opérations</div>
+                            <div class="panel-title"><%= L("recentInvTitle") %></div>
+                            <div class="panel-sub"><%= L("recentInvSub") %></div>
                         </div>
-                        <a class="link-muted" href="wbfInvoice.aspx">Voir tout</a>
+                        <a class="link-muted" href="wbfInvoice.aspx"><%= L("viewAll") %></a>
                     </div>
 
                     <div class="panel-body" style="padding-top:0;">
@@ -705,48 +930,48 @@
                             <table class="data-table">
                                 <thead>
                                     <tr>
-                                        <th>No</th>
-                                        <th>Client</th>
-                                        <th>Date</th>
-                                        <th>Montant</th>
-                                        <th>Statut</th>
+                                        <th><%= L("thNo") %></th>
+                                        <th><%= L("thClient") %></th>
+                                        <th><%= L("thDate") %></th>
+                                        <th><%= L("thAmount") %></th>
+                                        <th><%= L("thStatus") %></th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <tr>
                                         <td>#1048</td>
                                         <td>Baignoire Expert</td>
-                                        <td>11 mars 2026</td>
+                                        <td><%= L("d1") %></td>
                                         <td>1 245,00 $</td>
-                                        <td><span class="badge badge-warning">Ouverte</span></td>
+                                        <td><span class="badge badge-warning"><%= L("stOpen") %></span></td>
                                     </tr>
                                     <tr>
                                         <td>#1047</td>
                                         <td>Construction Nova</td>
-                                        <td>10 mars 2026</td>
+                                        <td><%= L("d2") %></td>
                                         <td>2 890,00 $</td>
-                                        <td><span class="badge badge-success">Payée</span></td>
+                                        <td><span class="badge badge-success"><%= L("stPaid") %></span></td>
                                     </tr>
                                     <tr>
                                         <td>#1046</td>
                                         <td>Immeubles Rive-Nord</td>
-                                        <td>10 mars 2026</td>
+                                        <td><%= L("d2") %></td>
                                         <td>780,00 $</td>
-                                        <td><span class="badge badge-warning">Ouverte</span></td>
+                                        <td><span class="badge badge-warning"><%= L("stOpen") %></span></td>
                                     </tr>
                                     <tr>
                                         <td>#1045</td>
                                         <td>Atelier du Bain</td>
-                                        <td>9 mars 2026</td>
+                                        <td><%= L("d3") %></td>
                                         <td>560,00 $</td>
-                                        <td><span class="badge badge-danger">En retard</span></td>
+                                        <td><span class="badge badge-danger"><%= L("stOverdue") %></span></td>
                                     </tr>
                                     <tr>
                                         <td>#1044</td>
                                         <td>Gestion MTL</td>
-                                        <td>8 mars 2026</td>
+                                        <td><%= L("d4") %></td>
                                         <td>4 120,00 $</td>
-                                        <td><span class="badge badge-success">Payée</span></td>
+                                        <td><span class="badge badge-success"><%= L("stPaid") %></span></td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -763,8 +988,8 @@
                 <div class="panel">
                     <div class="panel-head">
                         <div>
-                            <div class="panel-title">Actions rapides</div>
-                            <div class="panel-sub">Les opérations les plus utilisées</div>
+                            <div class="panel-title"><%= L("quickTitle") %></div>
+                            <div class="panel-sub"><%= L("quickSub") %></div>
                         </div>
                     </div>
 
@@ -772,22 +997,22 @@
                         <div class="quick-actions">
                             <a class="quick-btn" href="wbfInvoiceEdit.aspx">
                                 <span class="quick-ico">➕</span>
-                                <span>Créer une facture</span>
+                                <span><%= L("qaCreateInvoice") %></span>
                             </a>
 
                             <a class="quick-btn" href="wbfCustomers.aspx">
                                 <span class="quick-ico">👤</span>
-                                <span>Ajouter un client</span>
+                                <span><%= L("qaAddCustomer") %></span>
                             </a>
 
                             <a class="quick-btn" href="wbfProducts.aspx">
                                 <span class="quick-ico">📦</span>
-                                <span>Ajouter un produit</span>
+                                <span><%= L("qaAddProduct") %></span>
                             </a>
 
                             <a class="quick-btn" href="wbfReceipt.aspx">
                                 <span class="quick-ico">💵</span>
-                                <span>Voir les reçus</span>
+                                <span><%= L("qaViewReceipts") %></span>
                             </a>
                         </div>
                     </div>
@@ -797,8 +1022,8 @@
                 <div class="panel">
                     <div class="panel-head">
                         <div>
-                            <div class="panel-title">Activité récente</div>
-                            <div class="panel-sub">Derniers événements du système</div>
+                            <div class="panel-title"><%= L("activityTitle") %></div>
+                            <div class="panel-sub"><%= L("activitySub") %></div>
                         </div>
                     </div>
 
@@ -807,32 +1032,32 @@
                             <div class="activity-item">
                                 <span class="activity-dot dot-blue"></span>
                                 <div class="activity-main">
-                                    <div class="activity-text">La facture #1048 a été créée.</div>
-                                    <div class="activity-time">Aujourd’hui à 08:42</div>
+                                    <div class="activity-text"><%= L("act1") %></div>
+                                    <div class="activity-time"><%= L("act1Time") %></div>
                                 </div>
                             </div>
 
                             <div class="activity-item">
                                 <span class="activity-dot dot-green"></span>
                                 <div class="activity-main">
-                                    <div class="activity-text">Paiement reçu pour la facture #1047.</div>
-                                    <div class="activity-time">Aujourd’hui à 07:58</div>
+                                    <div class="activity-text"><%= L("act2") %></div>
+                                    <div class="activity-time"><%= L("act2Time") %></div>
                                 </div>
                             </div>
 
                             <div class="activity-item">
                                 <span class="activity-dot dot-orange"></span>
                                 <div class="activity-main">
-                                    <div class="activity-text">Un nouveau client a été ajouté au système.</div>
-                                    <div class="activity-time">Hier à 16:21</div>
+                                    <div class="activity-text"><%= L("act3") %></div>
+                                    <div class="activity-time"><%= L("act3Time") %></div>
                                 </div>
                             </div>
 
                             <div class="activity-item">
                                 <span class="activity-dot dot-red"></span>
                                 <div class="activity-main">
-                                    <div class="activity-text">La facture #1045 est maintenant en retard.</div>
-                                    <div class="activity-time">Hier à 09:14</div>
+                                    <div class="activity-text"><%= L("act4") %></div>
+                                    <div class="activity-time"><%= L("act4Time") %></div>
                                 </div>
                             </div>
                         </div>
@@ -843,31 +1068,31 @@
                 <div class="panel">
                     <div class="panel-head">
                         <div>
-                            <div class="panel-title">Résumé</div>
-                            <div class="panel-sub">État général de votre environnement</div>
+                            <div class="panel-title"><%= L("summaryTitle") %></div>
+                            <div class="panel-sub"><%= L("summarySub") %></div>
                         </div>
                     </div>
 
                     <div class="panel-body">
                         <div style="display:flex; flex-direction:column; gap:12px;">
                             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;">Base clients</span>
-                                <strong>À jour</strong>
+                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumCustomers") %></span>
+                                <strong><%= L("sumCustomersVal") %></strong>
                             </div>
 
                             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;">Taxes</span>
-                                <strong>Configurées</strong>
+                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumTaxes") %></span>
+                                <strong><%= L("sumTaxesVal") %></strong>
                             </div>
 
                             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;">Emails</span>
-                                <strong>Actifs</strong>
+                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumEmails") %></span>
+                                <strong><%= L("sumEmailsVal") %></strong>
                             </div>
 
                             <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;">PDF / Modèles</span>
-                                <strong>Disponibles</strong>
+                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumPdf") %></span>
+                                <strong><%= L("sumPdfVal") %></strong>
                             </div>
                         </div>
                     </div>

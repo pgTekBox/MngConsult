@@ -2,6 +2,12 @@
 
 <div class="header-right">
 
+    <%-- Pastille « fin de l'essai gratuit » (visible seulement pendant l'essai) --%>
+    <asp:Panel ID="pnlTrial" runat="server" CssClass="trial-pill" Visible="false">
+        <span class="trial-ico" aria-hidden="true">⏳</span>
+        <asp:Literal ID="litTrial" runat="server" />
+    </asp:Panel>
+
     <%-- Sélecteur de langue (FR / EN / ES) --%>
     <div class="lang-switch">
         <asp:Literal ID="litLang" runat="server" />
@@ -52,6 +58,42 @@
     display:flex;
     align-items:center;
     gap:12px;
+}
+
+/* === Pastille essai gratuit === */
+.trial-pill{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    height:42px;
+    box-sizing:border-box;
+    padding:0 14px;
+    border-radius:12px;
+    background:#eff6ff;
+    border:1px solid #bfdbfe;
+    color:#1d4ed8;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
+    cursor:default;
+}
+.trial-pill .trial-ico{ font-size:14px; line-height:1; }
+/* Alerte quand il reste peu de jours */
+.trial-pill.trial-pill--warn{
+    background:#fff7ed;
+    border-color:#fed7aa;
+    color:#c2410c;
+}
+.trial-pill.trial-pill--danger{
+    background:#fef2f2;
+    border-color:#fecaca;
+    color:#b91c1c;
+}
+@media(max-width:768px){
+    .trial-pill .trial-lbl-long{ display:none; }
+}
+@media(max-width:560px){
+    .trial-pill{ display:none; }
 }
 
 /* === Sélecteur de langue === */

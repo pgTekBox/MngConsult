@@ -21,17 +21,6 @@ Public Class wbfNewUser
         "Ne retourne que le JSON, sans texte ni balises de code autour."
 
     ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr).</summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If UserId = 0 Then
@@ -287,8 +276,8 @@ Public Class wbfNewUser
             UserFirstName = txtFirstName.Text.Trim()
             UserLastName = txtLastName.Text.Trim()
 
-            Dim subscriptionId As Integer = StartFreeTrial(UserId, modifiedBy)
-            Response.Redirect("~/wbfWelcome.aspx?id=" & subscriptionId.ToString())
+            StartFreeTrial(UserId, modifiedBy)
+            Response.Redirect("~/Default.aspx")
 
         Catch ex As Threading.ThreadAbortException
             ' Response.Redirect normal

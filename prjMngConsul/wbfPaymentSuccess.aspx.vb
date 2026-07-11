@@ -18,19 +18,6 @@ Imports Stripe.Checkout
 Public Class wbfPaymentSuccess
     Inherits clsData
 
-    ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr), transmise par l'URL de retour Stripe.</summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
-
     ''' <summary>Culture pour le format des dates et montants selon la langue.</summary>
     Private Function Cult() As CultureInfo
         Select Case CurrentLang

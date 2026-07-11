@@ -4,19 +4,6 @@ Imports System.Data.SqlClient
 Public Class wbfActivate
     Inherits clsData
 
-    ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr). Transmise par le lien du courriel d'activation.</summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
-
     ''' <summary>Applique la langue aux textes des liens (contrôles serveur) et au titre.</summary>
     Private Sub ApplyLocalization()
         Page.Title = L("pageTitle")

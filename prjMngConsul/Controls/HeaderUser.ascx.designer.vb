@@ -14,6 +14,16 @@ Option Explicit On
 Partial Public Class HeaderUser
 
     '''<summary>
+    '''pnlTrial control.
+    '''</summary>
+    Protected WithEvents pnlTrial As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litTrial control.
+    '''</summary>
+    Protected WithEvents litTrial As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''litLang control.
     '''</summary>
     '''<remarks>

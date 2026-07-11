@@ -48,7 +48,7 @@ Partial Public Class wbfSetting
         BindCategory("PDF", rpPdf, pnlEmptyPdf)
         BindCategory("COMPTABILITE", rpComptabilite, pnlEmptyComptabilite)
         BindCategory("BANCAIRE", rpBancaire, pnlEmptyBancaire)
-        BindCategory("BANCAIRE", rpComptable, pnlEmptyComptable)
+        BindCategory("COMPTABLE", rpComptable, pnlEmptyComptable)
         phStatus.Visible = False
     End Sub
 

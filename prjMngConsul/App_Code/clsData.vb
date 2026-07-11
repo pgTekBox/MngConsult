@@ -9,6 +9,29 @@ Imports Telerik.Web.UI.Editor.DialogControls
 Public Class clsData
     Inherits System.Web.UI.Page
 
+    ''' <summary>
+    ''' Langue courante de l'interface (fr/en/es), conservée en Session.
+    ''' Un paramètre ?lang=xx dans l'URL (sélecteur de langue du header) est
+    ''' prioritaire et met à jour la Session ; sinon on relit la valeur mémorisée,
+    ''' défaut « fr ». Ainsi la langue persiste d'une page à l'autre (menu de
+    ''' gauche, etc.) sans devoir propager ?lang= sur chaque lien.
+    ''' </summary>
+    Public Property CurrentLang() As String
+        Get
+            Dim q As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            If q = "fr" OrElse q = "en" OrElse q = "es" Then
+                Session("Lang") = q
+                Return q
+            End If
+            Dim s As String = TryCast(Session("Lang"), String)
+            If s = "fr" OrElse s = "en" OrElse s = "es" Then Return s
+            Return "fr"
+        End Get
+        Set(value As String)
+            Dim v As String = If(value, "").Trim().ToLowerInvariant()
+            If v = "fr" OrElse v = "en" OrElse v = "es" Then Session("Lang") = v
+        End Set
+    End Property
 
     Private Function GetUserByEmail(email As String) As DataRow
         Try
@@ -133,7 +156,7 @@ Public Class clsData
 
                 Return Session("UserId")
             Catch ex As Exception
-                Return ""
+                Return 0
             End Try
 
         End Get

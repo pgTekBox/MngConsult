@@ -3,24 +3,11 @@
 Namespace Controls
 
     Public Class LeftMenu
-        Inherits System.Web.UI.UserControl
+        Inherits clsDataUC
 
         Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
             litMenu.Text = BuildMenu()
         End Sub
-
-        ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr).</summary>
-        Private ReadOnly Property CurrentLang As String
-            Get
-                Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-                Select Case l
-                    Case "en", "es", "fr"
-                        Return l
-                    Case Else
-                        Return "fr"
-                End Select
-            End Get
-        End Property
 
         Private ReadOnly CHEV As String =
             "<span class=""nav-meta""><span class=""chev"" aria-hidden=""true"">" &
@@ -52,9 +39,7 @@ Namespace Controls
         Private Function BuildMenu() As String
             Dim sb As New StringBuilder()
 
-            sb.Append(Item("~/wbfWelcome.aspx", "🏠", "welcome"))
             sb.Append(Item("~/default.aspx", "🏠", "dashboard"))
-            sb.Append(Item("~/wbfAgenda.aspx", "📅", "agenda"))
 
             ' Ventes
             sb.Append(GroupStart("🧾", "sales"))
@@ -71,6 +56,12 @@ Namespace Controls
             sb.Append(Child("~/wbfReceipt.aspx", "receipts"))
             sb.Append(GroupEnd)
 
+            ' Produits et services
+            sb.Append(GroupStart("🏷️", "productsServices"))
+            sb.Append(Child("~/wbfProducts.aspx", "products"))
+            sb.Append(Child("~/wbfProductCategory.aspx", "productCategory"))
+            sb.Append(GroupEnd)
+
             ' Comptabilité
             sb.Append(GroupStart("📒", "accounting"))
             sb.Append(Child("~/wbfJournal.aspx", "journals"))
@@ -80,9 +71,10 @@ Namespace Controls
             sb.Append(Child("~/wbfRapportTaxe.aspx", "taxReport"))
             sb.Append(Child("~/wbfFermetureAnnee.aspx", "yearEnd"))
             sb.Append(Child("~/wbfPlanComptable.aspx", "chartOfAccounts"))
-            sb.Append(Child("~/wbfProductCategory.aspx", "productCategory"))
-            sb.Append(Child("~/wbfProducts.aspx", "products"))
             sb.Append(GroupEnd)
+
+            ' Agenda
+            sb.Append(Item("~/wbfAgenda.aspx", "📅", "agenda"))
 
             ' Jobs
             sb.Append(GroupStart("📒", "jobs"))
@@ -140,6 +132,7 @@ Namespace Controls
                 Case "suppliers" : Return Choose3(lang, "Fournisseurs", "Suppliers", "Proveedores")
                 Case "supplierInvoices" : Return Choose3(lang, "Factures fournisseurs", "Supplier invoices", "Facturas de proveedores")
                 Case "receipts" : Return Choose3(lang, "Reçus", "Receipts", "Recibos")
+                Case "productsServices" : Return Choose3(lang, "Produits et services", "Products and services", "Productos y servicios")
                 Case "accounting" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
                 Case "journals" : Return Choose3(lang, "Journaux", "Journals", "Diarios")
                 Case "journalTemplates" : Return Choose3(lang, "Modèles de journaux", "Journal templates", "Plantillas de diarios")

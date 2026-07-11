@@ -5,23 +5,6 @@ Imports BCrypt.Net
 Public Class wbfLogin
     Inherits clsData
 
-    ''' <summary>
-    ''' Langue courante : ?lang=fr|en|es (défaut fr). Conserve la langue choisie
-    ''' sur la landing page à travers l'écran de connexion (transmise via le lien
-    ''' « Connexion » et préservée dans le query string au postback).
-    ''' </summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
-
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ApplyLocalization()
 
@@ -146,7 +129,8 @@ Public Class wbfLogin
 
         ' Note : l'onboarding (wbfNewUser) fait partie du parcours d'inscription
         ' (wbfPaymentSuccess → « Remplir mon profil »), pas de la connexion.
-        ' À la connexion, l'utilisateur va directement à wbfWelcome.
+        ' À la connexion, l'utilisateur va directement au tableau de bord (Default),
+        ' qui intègre désormais la boîte de bienvenue/onboarding.
 
 
 
@@ -163,7 +147,7 @@ Public Class wbfLogin
         If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") Then
             Response.Redirect(returnUrl)
         Else
-            Response.Redirect("~/wbfWelcome.aspx")
+            Response.Redirect("~/Default.aspx")
         End If
     End Sub
 

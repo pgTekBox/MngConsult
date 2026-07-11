@@ -1,5 +1,6 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Globalization
 Imports System.Text
 Imports Telerik.Web.UI
 
@@ -21,8 +22,96 @@ Public Class HeaderUser
 
         BindUserInfo()
         BindCompanies()
+        LoadTrialBadge()
 
     End Sub
+
+    ''' <summary>
+    ''' Affiche la pastille « fin de l'essai gratuit » dans le header quand la
+    ''' compagnie est en période d'essai. Masquée sinon. Alimentée par
+    ''' s0687GetCompanyTrialStatus (IsTrial / TrialEndOn / DaysRemaining).
+    ''' </summary>
+    Private Sub LoadTrialBadge()
+        Try
+            If Company = Guid.Empty Then
+                pnlTrial.Visible = False
+                Return
+            End If
+
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0687GetCompanyTrialStatus", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                pnlTrial.Visible = False
+                Return
+            End If
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim isTrial As Boolean = Not IsDBNull(r("IsTrial")) AndAlso CBool(r("IsTrial"))
+            If Not isTrial OrElse IsDBNull(r("TrialEndOn")) Then
+                pnlTrial.Visible = False
+                Return
+            End If
+
+            Dim endOn As Date = CDate(r("TrialEndOn"))
+            Dim days As Integer = 0
+            If Not IsDBNull(r("DaysRemaining")) Then days = CInt(r("DaysRemaining"))
+
+            pnlTrial.Visible = True
+            litTrial.Text = TrialLabel(days)
+
+            ' Info-bulle avec la date de fin exacte, localisée
+            Dim lang As String = CurrentLang
+            Dim dateStr As String = endOn.ToString("d MMMM yyyy", Cult())
+            pnlTrial.ToolTip = Choose3(lang,
+                "Votre essai gratuit se termine le " & dateStr,
+                "Your free trial ends on " & dateStr,
+                "Su prueba gratuita finaliza el " & dateStr)
+
+            ' Couleur selon l'urgence
+            Dim css As String = "trial-pill"
+            If days < 0 Then
+                css &= " trial-pill--danger"
+            ElseIf days <= 3 Then
+                css &= " trial-pill--warn"
+            End If
+            pnlTrial.CssClass = css
+
+        Catch
+            pnlTrial.Visible = False
+        End Try
+    End Sub
+
+    ''' <summary>Libellé compact de la pastille d'essai selon les jours restants.</summary>
+    Private Function TrialLabel(days As Integer) As String
+        Dim lang As String = CurrentLang
+        If days < 0 Then
+            Return Choose3(lang, "Essai expiré", "Trial expired", "Prueba vencida")
+        ElseIf days = 0 Then
+            Return Choose3(lang, "Essai · dernier jour", "Trial · last day", "Prueba · último día")
+        ElseIf days = 1 Then
+            Return Choose3(lang, "Essai · 1 jour", "Trial · 1 day", "Prueba · 1 día")
+        Else
+            Return Choose3(lang, "Essai · " & days & " jours", "Trial · " & days & " days", "Prueba · " & days & " días")
+        End If
+    End Function
+
+    Private Function Cult() As CultureInfo
+        Select Case CurrentLang
+            Case "en" : Return New CultureInfo("en-CA")
+            Case "es" : Return New CultureInfo("es-ES")
+            Case Else : Return New CultureInfo("fr-CA")
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     ''' <summary>
     ''' Construit le sélecteur FR / EN / ES. Chaque lien recharge la page courante
@@ -31,8 +120,10 @@ Public Class HeaderUser
     ''' profil…) lisent ce paramètre ?lang.
     ''' </summary>
     Private Sub BuildLangSwitcher()
-        Dim cur As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-        If cur <> "en" AndAlso cur <> "es" Then cur = "fr"
+        ' Langue courante = valeur persistée en Session (clsDataUC.CurrentLang),
+        ' pour surligner la bonne langue même sur une page atteinte via le menu
+        ' de gauche (sans ?lang dans l'URL).
+        Dim cur As String = CurrentLang
 
         ' Paramètres existants (sauf lang), à préserver dans le lien.
         Dim extra As New StringBuilder()

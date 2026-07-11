@@ -7,22 +7,6 @@ Public Class wbfRegister
     Inherits clsData
 
     ''' <summary>
-    ''' Langue courante : ?lang=fr|en|es (défaut fr). Utilisée pour transmettre
-    ''' la langue au lien de la marque vers la landing page.
-    ''' </summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
-
-    ''' <summary>
     ''' Applique la langue courante aux contrôles serveur (titre, placeholders,
     ''' boutons, lien de connexion). Les textes statiques sont localisés dans le
     ''' markup via &lt;%= L("clé") %&gt;.

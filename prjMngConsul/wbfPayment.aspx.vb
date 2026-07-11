@@ -18,17 +18,6 @@ Public Class wbfPayment
     Inherits clsData
 
     ''' <summary>Langue courante : ?lang=fr|en|es (défaut fr), transmise depuis l'onboarding.</summary>
-    Protected ReadOnly Property CurrentLang As String
-        Get
-            Dim l As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
-            Select Case l
-                Case "en", "es", "fr"
-                    Return l
-                Case Else
-                    Return "fr"
-            End Select
-        End Get
-    End Property
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 

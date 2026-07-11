@@ -8,7 +8,8 @@ Public Class wbfUsers
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         ' Vérifier que l'utilisateur est connecté ET admin
-        If UserId = "" Then
+        ' (UserId est un entier : 0 = non authentifié)
+        If UserId = 0 Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
@@ -39,10 +40,10 @@ Public Class wbfUsers
                 If id > 0 Then
                     ' Empêcher de se supprimer soi-même
                     If UserId <> id Then
-                        ' On pourrait afficher un message
-                    Else
                         DeleteUser(id)
                         rlvUsers.Rebind()
+                    Else
+                        ' Suppression de son propre compte interdite : ne rien faire
                     End If
                 End If
         End Select
