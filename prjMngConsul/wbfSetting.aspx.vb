@@ -84,6 +84,9 @@ Partial Public Class wbfSetting
             Case "roundTrunc" : Return Choose3(lang, "Tronquer (2 décimales)", "Truncate (2 decimals)", "Truncar (2 decimales)")
             Case "taxExclusive" : Return Choose3(lang, "Taxes en sus", "Taxes added", "Impuestos aparte")
             Case "taxInclusive" : Return Choose3(lang, "Taxes incluses", "Taxes included", "Impuestos incluidos")
+            Case "freqMonthly" : Return Choose3(lang, "Mensuelle", "Monthly", "Mensual")
+            Case "freqQuarterly" : Return Choose3(lang, "Trimestrielle", "Quarterly", "Trimestral")
+            Case "freqAnnual" : Return Choose3(lang, "Annuelle", "Annual", "Anual")
             Case "bankNone" : Return Choose3(lang, "(Aucun compte)", "(No account)", "(Sin cuenta)")
             Case "bankPick" : Return Choose3(lang, "-- Sélectionnez un compte --", "-- Select an account --", "-- Seleccione una cuenta --")
             Case Else : Return ""
@@ -190,6 +193,9 @@ Partial Public Class wbfSetting
                 Return
             Case "TAX_MODE"
                 phControl.Controls.Add(BuildTaxModeCombo(sVal))
+                Return
+            Case "TAX_FREQ"
+                phControl.Controls.Add(BuildTaxFreqCombo(sVal))
                 Return
             Case "COMPTE_BANQUE"
                 ' Combo dynamique alimenté depuis T143PlaidAccount
@@ -351,6 +357,19 @@ Partial Public Class wbfSetting
         cb.Items.Add(New RadComboBoxItem(L("taxExclusive"), "EXCLUSIVE"))
         cb.Items.Add(New RadComboBoxItem(L("taxInclusive"), "INCLUSIVE"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "EXCLUSIVE"
+        Return cb
+    End Function
+
+    ''' <summary>Fréquence de remise des taxes (TPS/TVQ) : valeurs MENSUELLE / TRIMESTRIELLE / ANNUELLE
+    ''' (lues par wbfRapportTaxe). Défaut : TRIMESTRIELLE.</summary>
+    Private Function BuildTaxFreqCombo(value As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        cb.Items.Add(New RadComboBoxItem(L("freqMonthly"), "MENSUELLE"))
+        cb.Items.Add(New RadComboBoxItem(L("freqQuarterly"), "TRIMESTRIELLE"))
+        cb.Items.Add(New RadComboBoxItem(L("freqAnnual"), "ANNUELLE"))
+        If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "TRIMESTRIELLE"
         Return cb
     End Function
 

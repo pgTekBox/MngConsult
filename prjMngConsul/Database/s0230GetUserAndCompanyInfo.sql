@@ -7,7 +7,7 @@ GO
 -- paramètre LEGAL_NAME (T101) via dbo.fCompanyName (repli T010Company.Name).
 -- Champs fiscaux sourcés depuis T101 (source unique) : BusinessNumber(FED_BN),
 -- SIN, TpsNumber(GST_NO), TpsRegDate(TPS_REG_DATE), NEQ, TvqNumber(QST_NO),
--- TvqRegDate(TVQ_REG_DATE), CAE, FiscalYearEnd(FISCAL_YEAR_END), PaymentRegime.
+-- TvqRegDate(TVQ_REG_DATE), CAE, FiscalYearEnd(FISCAL_YEAR_END).
 -- TpsFrequency et TvqFrequency proviennent du paramètre unique TAX_FREQ.
 -- Tous les champs entreprise viennent désormais de T101 ; T010Company ne sert
 -- plus que pour Id/CompanyCode (identité de l'enregistrement).
@@ -64,7 +64,6 @@ BEGIN
         dbo.fParamS(u.CompanyGUID, 'TAX_FREQ') AS TpsFrequency,
         dbo.fParamS(u.CompanyGUID, 'TAX_FREQ') AS TvqFrequency,
         dbo.fParamD(u.CompanyGUID, 'FISCAL_YEAR_END') AS FiscalYearEnd,
-        dbo.fParamS(u.CompanyGUID, 'PAYMENT_REGIME') AS PaymentRegime,
 
         c.ModifiedOn          AS CompanyModifiedOn
 

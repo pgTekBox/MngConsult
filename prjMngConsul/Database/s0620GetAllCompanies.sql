@@ -1,12 +1,10 @@
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
--- =============================================================
--- s0620GetAllCompanies
--- Retourne toutes les compagnies (GUID + nom) pour le sélecteur
--- de compagnie de la console d'administration (prjSec60Admin).
--- Utilisé par wbfUsers.aspx pour choisir le contexte de compagnie.
--- =============================================================
+-- =============================================================================
+-- s0620GetAllCompanies (console admin — sélecteur de compagnie)
+-- Name = paramètre TRADE_NAME (T101), repli LEGAL_NAME/T010Company.Name via fCompanyName.
+-- =============================================================================
 CREATE OR ALTER PROCEDURE dbo.s0620GetAllCompanies
 AS
 BEGIN
@@ -14,7 +12,8 @@ BEGIN
 
     SELECT
         CompanyGUID,
-        Name
+        COALESCE(dbo.fParamS(CompanyGUID, 'TRADE_NAME'), dbo.fCompanyName(CompanyGUID)) AS Name
     FROM dbo.T010Company
     ORDER BY Name;
 END
+GO

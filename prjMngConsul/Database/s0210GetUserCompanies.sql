@@ -29,13 +29,8 @@ BEGIN
         -- Comptable : toutes ses compagnies
         SELECT
             c.CompanyGUID,
-            COALESCE(
-                (SELECT v.sVal FROM dbo.T101ParamValues v
-                    INNER JOIN dbo.T100ParamComptable p ON p.Id = v.T100Id
-                    WHERE p.CompanyGUID = c.CompanyGUID AND p.ShortName = 'LEGAL_NAME'),
-                c.Name
-            ) AS Name,
-            c.LegalName,
+            dbo.fCompanyName(c.CompanyGUID) AS Name,
+            dbo.fParamS(c.CompanyGUID, 'LEGAL_NAME') AS LegalName,
             c.CompanyCode
         FROM dbo.T010Company c
         WHERE c.[ComptableGUID] = @UserGUID
@@ -46,13 +41,8 @@ BEGIN
         -- Utilisateur normal : uniquement sa compagnie
         SELECT
             c.CompanyGUID,
-            COALESCE(
-                (SELECT v.sVal FROM dbo.T101ParamValues v
-                    INNER JOIN dbo.T100ParamComptable p ON p.Id = v.T100Id
-                    WHERE p.CompanyGUID = c.CompanyGUID AND p.ShortName = 'LEGAL_NAME'),
-                c.Name
-            ) AS Name,
-            c.LegalName,
+            dbo.fCompanyName(c.CompanyGUID) AS Name,
+            dbo.fParamS(c.CompanyGUID, 'LEGAL_NAME') AS LegalName,
             c.CompanyCode
         FROM dbo.T010Company c
         WHERE c.CompanyGUID = @UserCompanyGUID;

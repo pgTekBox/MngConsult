@@ -21,8 +21,7 @@ FROM (VALUES
     ('SIN',            N'NAS (Numéro d''assurance sociale)', 'STRING', 'ENTREPRISE', 113),
     ('CAE',            N'Code d''activité économique (CAE)',  'STRING', 'ENTREPRISE', 114),
     ('TPS_REG_DATE',   N'Date d''inscription TPS',            'DATE',   'TAXES',      261),
-    ('TVQ_REG_DATE',   N'Date d''inscription TVQ',            'DATE',   'TAXES',      262),
-    ('PAYMENT_REGIME', N'Régime de versement des taxes',      'STRING', 'TAXES',      263)
+    ('TVQ_REG_DATE',   N'Date d''inscription TVQ',            'DATE',   'TAXES',      262)
 ) v(ShortName, Name, ParamType, Categorie, Ordre)
 WHERE NOT EXISTS (
     SELECT 1 FROM dbo.T100ParamComptable p
@@ -34,8 +33,7 @@ GO
         ('SIN',          N'NAS (Numéro d''assurance sociale)', N'SIN (Social Insurance Number)', N'NSS (Número de Seguro Social)'),
         ('CAE',          N'Code d''activité économique (CAE)',  N'Economic activity code (CAE)',   N'Código de actividad económica (CAE)'),
         ('TPS_REG_DATE',   N'Date d''inscription TPS',       N'GST registration date',    N'Fecha de registro GST'),
-        ('TVQ_REG_DATE',   N'Date d''inscription TVQ',       N'QST registration date',    N'Fecha de registro QST'),
-        ('PAYMENT_REGIME', N'Régime de versement des taxes', N'Tax remittance regime',    N'Régimen de remesa de impuestos')
+        ('TVQ_REG_DATE',   N'Date d''inscription TVQ',       N'QST registration date',    N'Fecha de registro QST')
     ) v(ShortName, NameFr, NameEn, NameEs)
 )
 MERGE dbo.T102ParamI18n AS t

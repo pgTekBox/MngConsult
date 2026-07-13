@@ -57,6 +57,7 @@ Public Class wbfNewUser
             Case "uploadTitle" : Return Choose3(lang, "Importer un document", "Import a document", "Importar un documento")
             Case "uploadSub" : Return Choose3(lang, "Téléversez un document officiel (immatriculation au REQ, lettre de l'ARC ou de Revenu Québec, certificat de constitution — PDF ou image) et l'IA remplira automatiquement les champs. Vous pourrez tout vérifier avant d'enregistrer.", "Upload an official document (Quebec enterprise registration, CRA or Revenu Québec letter, certificate of incorporation — PDF or image) and the AI will fill the fields automatically. You can review everything before saving.", "Suba un documento oficial (registro de empresa de Quebec, carta de la CRA o Revenu Québec, certificado de constitución — PDF o imagen) y la IA rellenará los campos automáticamente. Podrá revisarlo todo antes de guardar.")
             Case "extractBtn" : Return Choose3(lang, "Analyser le document", "Analyze the document", "Analizar el documento")
+            Case "dropZone" : Return Choose3(lang, "Glissez un document ici, ou cliquez pour parcourir", "Drag a document here, or click to browse", "Arrastre un documento aquí, o haga clic para explorar")
             Case "identity" : Return Choose3(lang, "Identité de l'administrateur", "Administrator identity", "Identidad del administrador")
             Case "firstName" : Return Choose3(lang, "Prénom", "First name", "Nombre")
             Case "lastName" : Return Choose3(lang, "Nom de famille", "Last name", "Apellido")

@@ -1,12 +1,12 @@
 SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
--- =============================================================
--- s0653GetCompaniesList
--- Liste des compagnies (T010Company) avec un résumé de leur
--- abonnement courant (le plus récent actif, sinon le plus récent).
--- @Search : filtre optionnel (nom, code, raison sociale).
--- =============================================================
+-- =============================================================================
+-- s0653GetCompaniesList (console admin — liste des compagnies)
+-- Name/LegalName/Structure proviennent de T101 (Name←TRADE_NAME, repli
+-- LEGAL_NAME/T010Company.Name ; LegalName←LEGAL_NAME ; Structure←STRUCTURE).
+-- Le filtre @Search cherche dans TRADE_NAME, CompanyCode et LEGAL_NAME.
+-- =============================================================================
 CREATE OR ALTER PROCEDURE dbo.s0653GetCompaniesList
     @Search NVARCHAR(200) = NULL
 AS
@@ -16,9 +16,9 @@ BEGIN
     SELECT
         c.CompanyGUID,
         c.CompanyCode,
-        c.Name,
-        c.LegalName,
-        c.Structure,
+        COALESCE(dbo.fParamS(c.CompanyGUID, 'TRADE_NAME'), dbo.fCompanyName(c.CompanyGUID)) AS Name,
+        dbo.fParamS(c.CompanyGUID, 'LEGAL_NAME') AS LegalName,
+        dbo.fParamS(c.CompanyGUID, 'STRUCTURE')  AS Structure,
         s.PlanCode,
         s.PlanName,
         s.Status        AS SubStatus,
@@ -37,8 +37,9 @@ BEGIN
         ORDER BY CASE WHEN s2.Status = 'active' THEN 0 ELSE 1 END, s2.CreatedOn DESC
     ) s
     WHERE (@Search IS NULL OR @Search = ''
-           OR c.Name LIKE '%' + @Search + '%'
+           OR dbo.fParamS(c.CompanyGUID, 'TRADE_NAME') LIKE '%' + @Search + '%'
            OR c.CompanyCode LIKE '%' + @Search + '%'
-           OR c.LegalName LIKE '%' + @Search + '%')
-    ORDER BY c.Name;
+           OR dbo.fParamS(c.CompanyGUID, 'LEGAL_NAME') LIKE '%' + @Search + '%')
+    ORDER BY Name;
 END
+GO

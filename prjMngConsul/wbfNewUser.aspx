@@ -45,8 +45,17 @@
         .nu .field input[readonly] { background:var(--slate-50); color:var(--slate-500); cursor:not-allowed; }
 
         .nu .upload-card { border:2px dashed var(--blue-200); background:var(--blue-50); }
-        .nu .upload-row { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:6px; }
+        .nu .upload-row { display:flex; flex-wrap:wrap; align-items:center; gap:12px; margin-top:12px; }
         .nu .upload-row input[type="file"] { font-size:13px; color:var(--slate-600); }
+
+        .nu .dropzone { position:relative; margin-top:10px; border:2px dashed var(--blue-200); border-radius:12px;
+            background:#fff; padding:22px 18px; text-align:center; cursor:pointer; transition:border-color .15s, background .15s; }
+        .nu .dropzone:hover { border-color:var(--blue-500); background:var(--blue-50); }
+        .nu .dropzone.drag { border-color:var(--blue-600); background:rgba(59,130,246,.10); }
+        .nu .dropzone .dz-ico { font-size:26px; line-height:1; }
+        .nu .dropzone .dz-text { font-size:13px; color:var(--slate-600); font-weight:600; margin-top:6px; }
+        .nu .dropzone .dz-file { font-size:13px; color:var(--blue-600); font-weight:700; margin-top:6px; min-height:16px; word-break:break-all; }
+        .nu .dropzone .dz-input { position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
         .nu .upload-msg { margin-top:14px; padding:11px 14px; border-radius:10px; font-size:13px; font-weight:600; }
         .nu .upload-msg.ok { background:rgba(16,185,129,.08); border:1px solid rgba(16,185,129,.25); color:var(--green-600); }
         .nu .upload-msg.err { background:rgba(239,68,68,.08); border:1px solid rgba(239,68,68,.25); color:var(--red-600); }
@@ -92,8 +101,14 @@
                 <p class="section-label"><%= L("autoFill") %></p>
                 <h3 class="card-title"><%= L("uploadTitle") %></h3>
                 <p class="card-sub"><%= L("uploadSub") %></p>
+                <div id="dropZone" class="dropzone">
+                    <div class="dz-ico" aria-hidden="true">⬆️</div>
+                    <div class="dz-text"><%= L("dropZone") %></div>
+                    <div class="dz-file" id="dzFile"></div>
+                    <asp:FileUpload ID="fileDoc" runat="server" ClientIDMode="Static"
+                        accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" CssClass="dz-input" />
+                </div>
                 <div class="upload-row">
-                    <asp:FileUpload ID="fileDoc" runat="server" accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" />
                     <asp:Button ID="btnExtract" runat="server" Text="Analyser le document"
                         CssClass="btn btn-primary" CausesValidation="false" />
                 </div>
@@ -194,6 +209,35 @@
                 });
                 document.addEventListener('DOMContentLoaded', updateProgress);
                 window.addEventListener('load', updateProgress);
+            })();
+
+            // Glisser-déposer d'un document dans la zone de remplissage automatique.
+            // Le fichier déposé est injecté dans le <input type=file> (via DataTransfer),
+            // le postback « Analyser » fonctionne alors comme avec une sélection classique.
+            (function () {
+                function initDrop() {
+                    var dz = document.getElementById('dropZone'),
+                        inp = document.getElementById('fileDoc'),
+                        lbl = document.getElementById('dzFile');
+                    if (!dz || !inp) return;
+                    function showName() { lbl.textContent = (inp.files && inp.files.length) ? inp.files[0].name : ''; }
+                    dz.addEventListener('click', function () { inp.click(); });
+                    inp.addEventListener('change', showName);
+                    ['dragenter', 'dragover'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('drag'); });
+                    });
+                    ['dragleave', 'dragend', 'drop'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag'); });
+                    });
+                    dz.addEventListener('drop', function (e) {
+                        var files = e.dataTransfer && e.dataTransfer.files;
+                        if (!files || !files.length) return;
+                        try { var dt = new DataTransfer(); dt.items.add(files[0]); inp.files = dt.files; } catch (ex) { }
+                        showName();
+                    });
+                }
+                if (document.readyState !== 'loading') initDrop();
+                else document.addEventListener('DOMContentLoaded', initDrop);
             })();
         </script>
 
