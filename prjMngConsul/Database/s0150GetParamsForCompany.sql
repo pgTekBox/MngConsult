@@ -21,7 +21,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 CREATE OR ALTER PROCEDURE [dbo].[s0150GetParamsForCompany]
     @CompanyGUID UNIQUEIDENTIFIER,
-    @Categorie   VARCHAR(20) = NULL
+    @Categorie   VARCHAR(20) = NULL,
+    @Lang        VARCHAR(2)  = 'fr'   -- fr | en | es (libellé retourné dans Name)
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -48,8 +49,8 @@ BEGIN
 
         -- 2. Créer les VALEURS (T101) manquantes pour les définitions de la
         --    compagnie, en reprenant la valeur par défaut du modèle (même ShortName).
-        INSERT INTO dbo.T101ParamValues (T100Id, CompanyGUID, iVal, sVal)
-        SELECT c.Id, @CompanyGUID, vm.iVal, vm.sVal
+        INSERT INTO dbo.T101ParamValues (T100Id, CompanyGUID, iVal, sVal, dVal, fVal)
+        SELECT c.Id, @CompanyGUID, vm.iVal, vm.sVal, vm.dVal, vm.fVal
         FROM dbo.T100ParamComptable c
         LEFT JOIN dbo.T100ParamComptable m
                ON m.CompanyGUID = @ModelGUID AND m.ShortName = c.ShortName
@@ -67,16 +68,27 @@ BEGIN
         t101.[Id]          AS ParamId,
         t100.[Id]          AS T100Id,
         t100.[ShortName],
-        t100.[Name],
+        -- Libellé localisé (T102ParamI18n), repli : @Lang → FR → libellé propre à la compagnie
+        COALESCE(
+            CASE @Lang WHEN 'en' THEN i.[NameEn]
+                       WHEN 'es' THEN i.[NameEs]
+                       ELSE i.[NameFr] END,
+            i.[NameFr],
+            t100.[Name]
+        ) AS [Name],
         t100.[ParamType],
         t100.[Categorie],
         ISNULL(t100.[Ordre], t100.[Id]) AS Ordre,
         t101.[sVal],
-        t101.[iVal]
+        t101.[iVal],
+        t101.[dVal],
+        t101.[fVal]
     FROM dbo.T100ParamComptable t100
     INNER JOIN dbo.T101ParamValues t101
         ON t101.[T100Id]      = t100.[Id]
        AND t101.[CompanyGUID] = @CompanyGUID
+    LEFT JOIN dbo.T102ParamI18n i
+        ON i.[ShortName] = t100.[ShortName]
     WHERE (@Categorie IS NULL OR t100.[Categorie] = @Categorie)
       AND t100.[CompanyGUID] = @CompanyGUID
     ORDER BY ISNULL(t100.[Ordre], t100.[Id]);

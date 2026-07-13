@@ -34,8 +34,69 @@ Partial Public Class wbfSetting
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
-        ' Rien à faire ici — tout est fait dans OnInit
+        ApplyLocalization()
     End Sub
+
+    ''' <summary>Applique la langue courante aux contrôles serveur (titre, boutons, onglets).</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        btnSave.Text = L("save")
+        btnReload.Text = L("reload")
+        If tsSettings.Tabs.Count >= 7 Then
+            tsSettings.Tabs(0).Text = L("tabCompany")
+            tsSettings.Tabs(1).Text = L("tabTaxes")
+            tsSettings.Tabs(2).Text = L("tabEmail")
+            tsSettings.Tabs(3).Text = L("tabPdf")
+            tsSettings.Tabs(4).Text = L("tabAccounting")
+            tsSettings.Tabs(5).Text = L("tabBank")
+            tsSettings.Tabs(6).Text = L("tabAccountant")
+        End If
+    End Sub
+
+    ''' <summary>Traductions de l'interface des paramètres (fr/en/es). Les LIBELLÉS des
+    ''' paramètres viennent de la BD (T102ParamI18n via s0150) ; ici : chrome + combos.</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Paramètres — 60Sec-AI", "Settings — 60Sec-AI", "Ajustes — 60Sec-AI")
+            Case "pageTitleShort" : Return Choose3(lang, "Paramètres", "Settings", "Ajustes")
+            Case "pageSub" : Return Choose3(lang, "Entreprise, taxes, courriels, PDF et comptabilité.", "Company, taxes, emails, PDF and accounting.", "Empresa, impuestos, correos, PDF y contabilidad.")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "reload" : Return Choose3(lang, "Recharger", "Reload", "Recargar")
+            Case "tabCompany" : Return Choose3(lang, "Entreprise", "Company", "Empresa")
+            Case "tabTaxes" : Return Choose3(lang, "Taxes", "Taxes", "Impuestos")
+            Case "tabEmail" : Return Choose3(lang, "Email", "Email", "Correo")
+            Case "tabPdf" : Return Choose3(lang, "PDF", "PDF", "PDF")
+            Case "tabAccounting" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
+            Case "tabBank" : Return Choose3(lang, "Bancaire", "Banking", "Bancario")
+            Case "tabAccountant" : Return Choose3(lang, "Comptable", "Accountant", "Contador")
+            Case "introAccounting" : Return Choose3(lang, "Comptes par défaut utilisés par les modules de comptabilisation automatique.", "Default accounts used by the automatic bookkeeping modules.", "Cuentas predeterminadas usadas por los módulos de contabilización automática.")
+            Case "introBank" : Return Choose3(lang, "Comptes bancaires connectés via Plaid. Sélectionnez le compte par défaut utilisé pour les encaissements et décaissements.", "Bank accounts connected via Plaid. Select the default account used for cash-ins and cash-outs.", "Cuentas bancarias conectadas mediante Plaid. Seleccione la cuenta predeterminada para cobros y pagos.")
+            Case "introAccountant" : Return Choose3(lang, "Clé pour votre comptable afin qu'il puisse accéder à vos données comptables sans être utilisateur de votre compte 60Sec-AI.", "Key for your accountant so they can access your accounting data without being a user of your 60Sec-AI account.", "Clave para su contador para que pueda acceder a sus datos contables sin ser usuario de su cuenta 60Sec-AI.")
+            Case "emptyTab" : Return Choose3(lang, "Aucun paramètre configuré pour cet onglet.", "No parameter configured for this tab.", "Ningún parámetro configurado para esta pestaña.")
+            Case "savedOk" : Return Choose3(lang, "Paramètres enregistrés.", "Settings saved.", "Ajustes guardados.")
+            Case "reloadedOk" : Return Choose3(lang, "Paramètres rechargés.", "Settings reloaded.", "Ajustes recargados.")
+            Case "saveErr" : Return Choose3(lang, "Erreur lors de la sauvegarde : ", "Error while saving: ", "Error al guardar: ")
+            Case "boolYes" : Return Choose3(lang, "Oui", "Yes", "Sí")
+            Case "boolNo" : Return Choose3(lang, "Non", "No", "No")
+            Case "roundCent" : Return Choose3(lang, "2 décimales (cent)", "2 decimals (cent)", "2 decimales (centavo)")
+            Case "roundInternal" : Return Choose3(lang, "4 décimales (interne)", "4 decimals (internal)", "4 decimales (interno)")
+            Case "roundTrunc" : Return Choose3(lang, "Tronquer (2 décimales)", "Truncate (2 decimals)", "Truncar (2 decimales)")
+            Case "taxExclusive" : Return Choose3(lang, "Taxes en sus", "Taxes added", "Impuestos aparte")
+            Case "taxInclusive" : Return Choose3(lang, "Taxes incluses", "Taxes included", "Impuestos incluidos")
+            Case "bankNone" : Return Choose3(lang, "(Aucun compte)", "(No account)", "(Sin cuenta)")
+            Case "bankPick" : Return Choose3(lang, "-- Sélectionnez un compte --", "-- Select an account --", "-- Seleccione una cuenta --")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     ' =========================================================
     '  CHARGEMENT DE TOUS LES ONGLETS
@@ -60,6 +121,7 @@ Partial Public Class wbfSetting
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Categorie", categorie))
+        p.Add(New SqlParameter("@Lang", CurrentLang))
 
         Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
 
@@ -113,6 +175,10 @@ Partial Public Class wbfSetting
         Dim paramType As String = If(IsDBNull(row("ParamType")), "STRING", row("ParamType").ToString().ToUpper())
         Dim sVal As String = If(IsDBNull(row("sVal")), "", row("sVal").ToString())
         Dim iVal As String = If(IsDBNull(row("iVal")), "", row("iVal").ToString())
+        ' DATE lue depuis la colonne typée dVal (format ISO pour le RadDatePicker)
+        Dim dVal As String = If(IsDBNull(row("dVal")), "", CDate(row("dVal")).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture))
+        ' DECIMAL lu depuis la colonne typée fVal (chaîne invariante)
+        Dim fVal As String = If(IsDBNull(row("fVal")), "", CDec(row("fVal")).ToString(Globalization.CultureInfo.InvariantCulture))
 
         ' Cas spéciaux : combos avec valeurs fixes (par ShortName)
         Select Case shortName
@@ -142,11 +208,11 @@ Partial Public Class wbfSetting
             Case "INT", "INTEGER"
                 phControl.Controls.Add(BuildNumericTextbox(iVal, isInt:=True))
             Case "DECIMAL"
-                phControl.Controls.Add(BuildNumericTextbox(sVal, isInt:=False))
+                phControl.Controls.Add(BuildNumericTextbox(fVal, isInt:=False))
             Case "BOOL", "BOOLEAN"
                 phControl.Controls.Add(BuildBoolCombo(sVal, iVal))
             Case "DATE"
-                phControl.Controls.Add(BuildDatePicker(sVal))
+                phControl.Controls.Add(BuildDatePicker(dVal))
             Case Else
                 ' STRING par défaut
                 phControl.Controls.Add(BuildSimpleTextbox(sVal))
@@ -232,8 +298,8 @@ Partial Public Class wbfSetting
         Dim cb As New RadComboBox()
         cb.ID = "txtValue"
         cb.Width = Unit.Percentage(100)
-        cb.Items.Add(New RadComboBoxItem("Oui", "1"))
-        cb.Items.Add(New RadComboBoxItem("Non", "0"))
+        cb.Items.Add(New RadComboBoxItem(L("boolYes"), "1"))
+        cb.Items.Add(New RadComboBoxItem(L("boolNo"), "0"))
 
         ' La valeur peut être dans iVal (préféré) ou sVal
         Dim selected As String = "0"
@@ -249,17 +315,18 @@ Partial Public Class wbfSetting
         Dim cb As New RadComboBox()
         cb.ID = "txtValue"
         cb.Width = Unit.Percentage(100)
+        Dim lang As String = CurrentLang
         cb.Items.Add(New RadComboBoxItem("Québec", "QC"))
         cb.Items.Add(New RadComboBoxItem("Ontario", "ON"))
-        cb.Items.Add(New RadComboBoxItem("Nouveau-Brunswick", "NB"))
-        cb.Items.Add(New RadComboBoxItem("Nouvelle-Écosse", "NS"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Nouveau-Brunswick", "New Brunswick", "Nuevo Brunswick"), "NB"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Nouvelle-Écosse", "Nova Scotia", "Nueva Escocia"), "NS"))
         cb.Items.Add(New RadComboBoxItem("Manitoba", "MB"))
         cb.Items.Add(New RadComboBoxItem("Saskatchewan", "SK"))
         cb.Items.Add(New RadComboBoxItem("Alberta", "AB"))
-        cb.Items.Add(New RadComboBoxItem("Colombie-Britannique", "BC"))
-        cb.Items.Add(New RadComboBoxItem("Terre-Neuve-et-Labrador", "NL"))
-        cb.Items.Add(New RadComboBoxItem("Île-du-Prince-Édouard", "PE"))
-        cb.Items.Add(New RadComboBoxItem("Territoires du Nord-Ouest", "NT"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Colombie-Britannique", "British Columbia", "Columbia Británica"), "BC"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Terre-Neuve-et-Labrador", "Newfoundland and Labrador", "Terranova y Labrador"), "NL"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Île-du-Prince-Édouard", "Prince Edward Island", "Isla del Príncipe Eduardo"), "PE"))
+        cb.Items.Add(New RadComboBoxItem(Choose3(lang, "Territoires du Nord-Ouest", "Northwest Territories", "Territorios del Noroeste"), "NT"))
         cb.Items.Add(New RadComboBoxItem("Nunavut", "NU"))
         cb.Items.Add(New RadComboBoxItem("Yukon", "YT"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value
@@ -270,9 +337,9 @@ Partial Public Class wbfSetting
         Dim cb As New RadComboBox()
         cb.ID = "txtValue"
         cb.Width = Unit.Percentage(100)
-        cb.Items.Add(New RadComboBoxItem("2 décimales (cent)", "2"))
-        cb.Items.Add(New RadComboBoxItem("4 décimales (interne)", "4"))
-        cb.Items.Add(New RadComboBoxItem("Tronquer (2 décimales)", "TRUNC2"))
+        cb.Items.Add(New RadComboBoxItem(L("roundCent"), "2"))
+        cb.Items.Add(New RadComboBoxItem(L("roundInternal"), "4"))
+        cb.Items.Add(New RadComboBoxItem(L("roundTrunc"), "TRUNC2"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "2"
         Return cb
     End Function
@@ -281,8 +348,8 @@ Partial Public Class wbfSetting
         Dim cb As New RadComboBox()
         cb.ID = "txtValue"
         cb.Width = Unit.Percentage(100)
-        cb.Items.Add(New RadComboBoxItem("Taxes en sus", "EXCLUSIVE"))
-        cb.Items.Add(New RadComboBoxItem("Taxes incluses", "INCLUSIVE"))
+        cb.Items.Add(New RadComboBoxItem(L("taxExclusive"), "EXCLUSIVE"))
+        cb.Items.Add(New RadComboBoxItem(L("taxInclusive"), "INCLUSIVE"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "EXCLUSIVE"
         Return cb
     End Function
@@ -297,10 +364,10 @@ Partial Public Class wbfSetting
         Dim cb As New RadComboBox()
         cb.ID = "txtValue"
         cb.Width = Unit.Percentage(100)
-        cb.EmptyMessage = "-- Sélectionnez un compte --"
+        cb.EmptyMessage = L("bankPick")
 
         ' Item vide pour permettre la désélection
-        cb.Items.Add(New RadComboBoxItem("(Aucun compte)", ""))
+        cb.Items.Add(New RadComboBoxItem(L("bankNone"), ""))
 
         Dim sql As String =
             "SELECT [Id], [AccountName], [BankName], [Mask] " &
@@ -361,18 +428,18 @@ Partial Public Class wbfSetting
 
 
         Catch ex As Exception
-            ShowErr("Erreur lors de la sauvegarde : " & ex.Message)
+            ShowErr(L("saveErr") & ex.Message)
             Return
         End Try
 
         ' Rafraîchir l'affichage avec les valeurs effectivement en BD
         LoadAllSettings()
-        ShowOk("Paramètres enregistrés.")
+        ShowOk(L("savedOk"))
     End Sub
 
     Protected Sub btnReload_Click(sender As Object, e As EventArgs)
         LoadAllSettings()
-        ShowOk("Paramètres rechargés.")
+        ShowOk(L("reloadedOk"))
     End Sub
 
     ''' <summary>
@@ -404,6 +471,8 @@ Partial Public Class wbfSetting
 
                 Dim sVal As Object = DBNull.Value
                 Dim iVal As Object = DBNull.Value
+                Dim dVal As Object = DBNull.Value   ' miroir typé (DATE)
+                Dim fVal As Object = DBNull.Value   ' miroir typé (DECIMAL/float)
 
                 ' Extraction de la valeur selon le type de contrôle
                 If TypeOf ctrl Is RadNumericTextBox Then
@@ -413,15 +482,15 @@ Partial Public Class wbfSetting
                             Case "INT", "INTEGER"
                                 iVal = CInt(ntb.Value.Value)
                             Case Else
-                                ' DECIMAL ou autre numérique : on stocke en sVal pour préserver les décimales
-                                sVal = ntb.Value.Value.ToString(Globalization.CultureInfo.InvariantCulture)
+                                ' DECIMAL : stockée UNIQUEMENT dans la colonne typée fVal (sVal reste NULL)
+                                fVal = CDec(ntb.Value.Value)
                         End Select
                     End If
                 ElseIf TypeOf ctrl Is RadDatePicker Then
-                    ' DATE : on stocke en sVal au format ISO 'yyyy-MM-dd'
+                    ' DATE : stockée UNIQUEMENT dans la colonne typée dVal (sVal reste NULL)
                     Dim dp As RadDatePicker = CType(ctrl, RadDatePicker)
                     If dp.SelectedDate.HasValue Then
-                        sVal = dp.SelectedDate.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+                        dVal = dp.SelectedDate.Value
                     End If
                 ElseIf TypeOf ctrl Is RadComboBox Then
                     Dim cb As RadComboBox = CType(ctrl, RadComboBox)
@@ -456,6 +525,8 @@ Partial Public Class wbfSetting
                     cmd.Parameters.Add(New SqlParameter("@ParamId", SqlDbType.Int) With {.Value = paramId})
                     cmd.Parameters.Add(New SqlParameter("@sVal", SqlDbType.VarChar, 300) With {.Value = sVal})
                     cmd.Parameters.Add(New SqlParameter("@iVal", SqlDbType.Int) With {.Value = iVal})
+                    cmd.Parameters.Add(New SqlParameter("@dVal", SqlDbType.DateTime) With {.Value = dVal})
+                    cmd.Parameters.Add(New SqlParameter("@fVal", SqlDbType.Decimal) With {.Precision = 18, .Scale = 6, .Value = fVal})
                     cmd.ExecuteNonQuery()
                 End Using
             Next

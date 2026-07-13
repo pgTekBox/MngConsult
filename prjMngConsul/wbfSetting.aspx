@@ -2,7 +2,7 @@
 
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Paramètres — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -87,8 +87,8 @@
 
     <div class="page-head">
         <div>
-            <div class="page-title">Paramètres</div>
-            <div class="page-sub">Entreprise, taxes, courriels, PDF et comptabilité.</div>
+            <div class="page-title"><%= L("pageTitleShort") %></div>
+            <div class="page-sub"><%= L("pageSub") %></div>
         </div>
 
         <div class="actions">
@@ -145,7 +145,7 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyEntreprise" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre configuré pour cet onglet.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 
@@ -168,7 +168,7 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyTaxes" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre configuré pour cet onglet.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 
@@ -191,7 +191,7 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyEmail" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre configuré pour cet onglet.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 
@@ -214,14 +214,14 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyPdf" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre configuré pour cet onglet.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 
                     <!-- COMPTABILITÉ -->
                     <telerik:RadPageView ID="pvAccounting" runat="server">
                         <div style="margin-bottom:12px; color:var(--mc-muted); font-size:13px;">
-                            Comptes par défaut utilisés par les modules de comptabilisation automatique.
+                            <%= L("introAccounting") %>
                         </div>
                         <asp:Repeater ID="rpComptabilite" runat="server" OnItemDataBound="rp_ItemDataBound">
                             <HeaderTemplate><div class="form-grid"></HeaderTemplate>
@@ -240,15 +240,14 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyComptabilite" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre comptable défini.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 
                     <!-- BANCAIRE -->
                     <telerik:RadPageView ID="pvBancaire" runat="server">
                         <div style="margin-bottom:12px; color:var(--mc-muted); font-size:13px;">
-                            Comptes bancaires connectés via Plaid. Sélectionnez le compte par défaut
-                            utilisé pour les encaissements et décaissements.
+                            <%= L("introBank") %>
                         </div>
                         <asp:Repeater ID="rpBancaire" runat="server" OnItemDataBound="rp_ItemDataBound">
                             <HeaderTemplate><div class="form-grid"></HeaderTemplate>
@@ -273,7 +272,7 @@
                     <!-- BANCAIRE -->
                     <telerik:RadPageView ID="pvComptable" runat="server">
                         <div style="margin-bottom:12px; color:var(--mc-muted); font-size:13px;">
-                            Clé pour votre comptable afin qu'il puisse accéder à vos données comptables sans être utilisateur de votre compte MngConsul.
+                            <%= L("introAccountant") %>
                         </div>
                         <asp:Repeater ID="rpComptable" runat="server" OnItemDataBound="rp_ItemDataBound">
                             <HeaderTemplate><div class="form-grid"></HeaderTemplate>
@@ -292,7 +291,7 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyComptable" runat="server" Visible="false" CssClass="empty-state">
-                            Aucun paramètre comptable configuré pour cet onglet.
+                            <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
 

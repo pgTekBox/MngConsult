@@ -304,7 +304,25 @@
     <Content Include="img\landingpage-15.jpg" />
     <Content Include="Database\check_existing_outbound_mail_proc.sql" />
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
+    <Content Include="Database\s0150GetParamsForCompany.sql" />
+    <Content Include="Database\s0151UpdateParamValue.sql" />
+    <Content Include="Database\fCompanyName.sql" />
+    <Content Include="Database\fParam.sql" />
+    <Content Include="Database\s0160GetParamValue.sql" />
+    <Content Include="Database\s0200GetUserByEmail.sql" />
+    <Content Include="Database\s0210GetUserCompanies.sql" />
+    <Content Include="Database\s0223GetUserSessionInfo.sql" />
+    <Content Include="Database\s0230GetUserAndCompanyInfo.sql" />
+    <Content Include="Database\s0314GetUserByUserId.sql" />
+    <Content Include="Database\s0685GetOnboardingProfile.sql" />
+    <Content Include="Database\s0686SaveOnboardingProfile.sql" />
+    <Content Include="Database\T100_add_fiscal_params.sql" />
+    <Content Include="Database\T100_add_onboarding_params.sql" />
+    <Content Include="Database\s0500InitializeCompanyData.sql" />
+    <Content Include="Database\T101ParamValues_add_dVal_fVal.sql" />
+    <Content Include="Database\T102ParamI18n.sql" />
     <Content Include="Database\s0687GetCompanyTrialStatus.sql" />
+    <Content Include="Database\v_Parameters.sql" />
     <Content Include="Database\s0070UpdatePartyLastPaymentMethod.sql" />
     <Content Include="Database\s0071GetPartyForPayment.sql" />
     <Content Include="Database\s0072UpdatePartyStripeAccountId.sql" />
@@ -459,7 +477,6 @@
     <Content Include="wbfBalanceVerification.aspx" />
     <Content Include="wbfBeneficesNonRepartis.aspx" />
     <Content Include="wbfBilan.aspx" />
-    <Content Include="wbfCompanyInfo.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
@@ -848,10 +865,6 @@
     <Compile Include="wbfBilan.aspx.vb">
       <DependentUpon>wbfBilan.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfCompanyInfo.aspx.vb">
-      <DependentUpon>wbfCompanyInfo.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfCustomerEdit.aspx.designer.vb">
       <DependentUpon>wbfCustomerEdit.aspx</DependentUpon>
