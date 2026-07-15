@@ -302,6 +302,14 @@ Partial Public Class wbfCustomerEdit
     Protected WithEvents txtPostal As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
+    '''txtAddrEmail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents txtAddrEmail As Global.Telerik.Web.UI.RadTextBox
+
+    '''<summary>
     '''txtAddressNote control.
     '''</summary>
     '''<remarks>

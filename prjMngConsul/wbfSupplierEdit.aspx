@@ -7,7 +7,7 @@
 <%@ Import Namespace="System.Configuration" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -448,17 +448,15 @@
             <%-- ===== ENTÊTE PAGE ===== --%>
             <div class="top">
                 <div>
-                    <div class="title">Édition — Fournisseur</div>
+                    <div class="title"><asp:Literal ID="litTitle" runat="server" /></div>
                 </div>
                 <div class="bar">
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
-                        onclick="closeWin();">← Retour à la liste</asp:HyperLink>
+                        onclick="closeWin();"></asp:HyperLink>
                     <%-- Bouton Stripe Connect : visible seulement en mode édition (SupplierId > 0) --%>
                     <asp:HyperLink ID="lnkStripeOnboarding" runat="server" CssClass="btn"
                         Visible="false"
-                        Style="background: linear-gradient(135deg, #635BFF, #4F46E5); color: white; border: none;">
-                        💳 Configurer Stripe
-                    </asp:HyperLink>
+                        Style="background: linear-gradient(135deg, #635BFF, #4F46E5); color: white; border: none;"></asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
                 </div>
             </div>
@@ -472,16 +470,16 @@
             <div class="card">
                 <div class="cardHead">
                     <div>
-                        <div class="h">Informations Fournisseur</div>
+                        <div class="h"><asp:Literal ID="litSupplierInfo" runat="server" /></div>
                         <div class="grid4" style="margin-top:6px;">
-                            <div class="small">Id :
+                            <div class="small"><asp:Literal ID="litLblId" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblId"></telerik:RadLabel>
                                 <asp:Literal ID="litId" runat="server" />
                             </div>
-                            <div class="small">Origine :
+                            <div class="small"><asp:Literal ID="litLblOrigin" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblOrigine"></telerik:RadLabel>
                             </div>
-                            <div class="small">Créé :
+                            <div class="small"><asp:Literal ID="litLblCreated" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblCreated"></telerik:RadLabel>
                             </div>
                         </div>
@@ -491,33 +489,33 @@
                 <div class="cardBody">
                     <div class="grid3">
                         <div class="field">
-                            <label>Nom</label>
+                            <label><asp:Literal ID="litLblName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtName" Width="300px" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
                         <div class="field">
-                            <label>Display Name</label>
+                            <label><asp:Literal ID="litLblDisplayName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtDisplayName" Width="300px" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
                         <div class="field">
-                            <label>Type</label>
+                            <label><asp:Literal ID="litLblPartyType" runat="server" /></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlPartyType"
                                 runat="server" DefaultMessage="Sélectionner…"
                                 DropDownHeight="110px" Skin="Metro" />
                         </div>
                         <div class="field">
-                            <label>Site web</label>
+                            <label><asp:Literal ID="litLblWebsite" runat="server" /></label>
                             <telerik:RadTextBox ID="txtWebsite" Width="300px" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
                         <div class="field">
-                            <label>No TPS</label>
+                            <label><asp:Literal ID="litLblNoTps" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTPS" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
                         <div class="field">
-                            <label>No TVQ</label>
+                            <label><asp:Literal ID="litLblNoTvq" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTVQ" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
@@ -525,7 +523,7 @@
 
                     <div class="grid1" style="margin-top:12px;">
                         <div class="field">
-                            <label>Note</label>
+                            <label><asp:Literal ID="litLblNote" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNote" Width="100%" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" TextMode="MultiLine" />
                         </div>
@@ -536,7 +534,7 @@
             <%-- ===== CARD : ADRESSES (RadListView remplace RadGrid) ===== --%>
             <div class="card">
                 <div class="cardHead">
-                    <div class="h">Adresses</div>
+                    <div class="h"><asp:Literal ID="litAddresses" runat="server" /></div>
                     <div class="right">
                         <asp:Button ID="btnNewAddress" runat="server"
                             Text="+ Ajouter une adresse"
@@ -563,9 +561,9 @@
 
                             <%-- Entête colonnes (masqué sur mobile via CSS) --%>
                             <div class="addr-list-head">
-                                <div>Type</div>
-                                <div>Adresse</div>
-                                <div style="text-align:right;">Actions</div>
+                                <div><asp:Literal ID="litAddrColType" runat="server" /></div>
+                                <div><asp:Literal ID="litAddrColAddress" runat="server" /></div>
+                                <div style="text-align:right;"><asp:Literal ID="litAddrColActions" runat="server" /></div>
                             </div>
 
                             <%-- Corps : les items seront injectés ici --%>
@@ -597,7 +595,7 @@
                                 <asp:Button ID="btnAddrEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    ToolTip="Modifier"
+                                    ToolTip='<%# L("edit") %>'
                                     CausesValidation="false"
                                     CommandName="EditAddress"
                                     CommandArgument='<%# Eval("Id") %>' />
@@ -605,7 +603,7 @@
                                 <asp:Button ID="btnAddrDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Supprimer"
+                                    ToolTip='<%# L("delete") %>'
                                     CausesValidation="false"
                                     CommandName="DeleteAddress"
                                     CommandArgument='<%# Eval("Id") %>' />
@@ -617,7 +615,7 @@
                     <%-- EMPTY TEMPLATE : affiché quand aucune adresse --%>
                     <EmptyDataTemplate>
                         <div class="addr-empty">
-                            Aucune adresse enregistrée pour ce fournisseur.
+                            <asp:Literal ID="litAddrEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -644,60 +642,66 @@
                                 <div class="grid">
 
                                     <div class="field">
-                                        <label>Type</label>
+                                        <label><asp:Literal ID="litLblAddrType" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlAddressType" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Nom</label>
+                                        <label><asp:Literal ID="litLblAddrName" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtAddressName" runat="server"
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Adresse 1</label>
+                                        <label><asp:Literal ID="litLblAddr1" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA1" runat="server"
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Adresse 2</label>
+                                        <label><asp:Literal ID="litLblAddr2" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA2" runat="server"
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Ville</label>
+                                        <label><asp:Literal ID="litLblCity" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtCity" runat="server"
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Province</label>
+                                        <label><asp:Literal ID="litLblProvince" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlProvince" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Pays</label>
+                                        <label><asp:Literal ID="litLblCountry" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlPays" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Code postal</label>
+                                        <label><asp:Literal ID="litLblPostal" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtPostal" runat="server"
+                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                    </div>
+
+                                    <div class="field">
+                                        <label><asp:Literal ID="litLblAddrEmail" runat="server" /></label>
+                                        <telerik:RadTextBox ID="txtAddrEmail" runat="server"
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
                                 </div>
 
                                 <div class="field" style="margin-top:12px;">
-                                    <label>Note</label>
+                                    <label><asp:Literal ID="litLblAddrNote" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtAddressNote" runat="server"
                                         RenderMode="Lightweight" CssClass="rtbLike" />
                                 </div>

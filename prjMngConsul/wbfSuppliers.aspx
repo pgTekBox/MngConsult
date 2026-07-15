@@ -3,8 +3,7 @@
     Inherits="MngConsul.wbfSuppliers" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Fournisseurs — 60Sec-AI
- 
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -94,9 +93,9 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 
-    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
+    <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1"  runat="server" Skin="Metro" ClientIDMode="Static"></telerik:RadAjaxLoadingPanel>
 
-    <telerik:RadWindowManager ID="rwmSuppliers" runat="server" EnableShadow="true"></telerik:RadWindowManager>
+    <telerik:RadWindowManager  ID="rwmSuppliers" runat="server" EnableShadow="true" ClientIDMode="Static"></telerik:RadWindowManager>
 
 
   <telerik:RadAjaxManager ID="Ram1" runat="server"  ClientIDMode="Static">
@@ -131,27 +130,27 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Fournisseurs</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
 
             </div>
 
             <div class="searchbox">
                 <asp:Button ID="btnAddSupplier" runat="server"
-                    CssClass="btn btnAddRow"
+                    CssClass="btn btnAddRow"  ClientIDMode="Static"
                     Text="Ajouter Fournisseur"
                     CausesValidation="false"
                     OnClientClick="saveListScrollNow(); openNewSupplierWindow(0); return false;" />
                 <div class="search-group">
-                    <asp:TextBox ID="tbSearch" runat="server"
+                    <asp:TextBox ID="tbSearch" runat="server"  ClientIDMode="Static"
                         CssClass="input  txttbsearch"
                         placeholder="Rechercher (nom, email, téléphone…)" />
 
                     <asp:Button ID="btnSearch" runat="server"
-                        CssClass="btn btn-icon btn-icon-search"
+                        CssClass="btn btn-icon btn-icon-search"  ClientIDMode="Static"
                         Text="" />
 
                     <asp:Button ID="btnClear" runat="server"
-                        CssClass="btn btn-icon btn-icon-clear"
+                        CssClass="btn btn-icon btn-icon-clear"  ClientIDMode="Static"
                         Text=""
                         ToolTip="Effacer"
                         CausesValidation="false" />
@@ -172,13 +171,13 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div class="colh-file">Nom</div>
+                                <div class="colh-file"><asp:Literal ID="litColName" runat="server" /></div>
 
-                                <div class="colh-actions">Action</div>
+                                <div class="colh-actions"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
-                                <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                                <asp:PlaceHolder  ClientIDMode="Static" ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
                             </div>
                         </div>
                     </LayoutTemplate>
@@ -187,7 +186,7 @@
                         <div class="listview-row">
                            
                             
-                             <div class="field-AllAddress">
+                             <div   class="field-AllAddress">
                                 <%# Eval("NameAllAdddress") %>
                             </div>
                              
@@ -198,20 +197,23 @@
                                 <asp:Button ID="btnStripe" runat="server"
                                     CssClass="btn btn-icon btn-icon-stripe"
                                     Text=""
-                                    ToolTip="Configurer paiements Stripe Connect"
+                                    ClientIDMode="Static"
+                                    ToolTip='<%# L("stripeTip") %>'
                                     CausesValidation="false"
                                     OnClientClick='<%# "window.open(""wbfSupplierStripeOnboarding.aspx?PartyId="" + " & Eval("Id") & ", ""_blank""); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    ToolTip="Modifier"
+                                    ClientIDMode="Static"
+                                    ToolTip='<%# L("edit") %>'
                                     CausesValidation="false"
-                                    OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />
+                                    OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", L_EDIT_SUPPLIER, L_ADD_SUPPLIER); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Supprimer"
+                                    ClientIDMode="Static"
+                                    ToolTip='<%# L("delete") %>'
                                     CommandName="DeleteSupplier"
                                     CommandArgument='<%# Eval("Id") %>'
                                     OnClientClick="saveListScrollNow();"
@@ -222,7 +224,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun fournisseur trouvé.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -232,13 +234,13 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="saveListScrollNow(); openNewSupplierWindow(0); return false;" title="Ajouter un fournisseur">+</button>
+        <button class="fab-add" ClientIDMode="Static" onclick="saveListScrollNow(); openNewSupplierWindow(0); return false;" title="">+</button>
         <%--openRadWindow(" & Eval("Id") & ", ""rwSupplier"", ""wbfSupplierEdit.aspx"", ""Modifier un fournisseur"", ""Ajouter un fournisseur""); return false;" %>' />--%> 
 
   
 
     <telerik:RadWindow ID="rwSupplier" runat="server"
-        Modal="true"
+        Modal="true" 
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
         DestroyOnClose="true"
@@ -319,8 +321,12 @@
         }
 
 
+        // L_ADD_SUPPLIER / L_EDIT_SUPPLIER sont injectes par le code-behind
+        // (ScriptManager.RegisterStartupScript). Aucun bloc de rendu serveur ne doit
+        // rester dans MainContent, sinon RadAjax ne peut pas deplacer le RadUpdatePanel.
+
         function openNewSupplierWindow() {
-            openRadWindow(0, "rwSupplier", "wbfSupplierEdit.aspx", "Ajouter un fournisseur", "Ajouter un fournisseur");
+            openRadWindow(0, "rwSupplier", "wbfSupplierEdit.aspx", L_ADD_SUPPLIER, L_ADD_SUPPLIER);
         }
 
 

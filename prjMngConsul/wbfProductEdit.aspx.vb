@@ -27,7 +27,104 @@ Public Class wbfProductEdit
             ProductId = CInt(Request.QueryString("Id"))
             BindData()
         End If
+        ApplyLocalization()
     End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux libellés statiques (Literal) et contrôles serveur.
+    ''' lblTitle/lblSub sont gérés dans BindData (dépendent du mode new/edit).</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        btnSave.Text = L("save")
+        btnCancel.Text = L("close")
+        rddlCategory.DefaultMessage = L("noCategory")
+        rddlTaxeStatus.DefaultMessage = L("select")
+        rddlCompteVente.DefaultMessage = L("useCategoryAccount")
+        rddlCompteAchat.DefaultMessage = L("useCategoryAccount")
+
+        If rddlTaxeStatus.Items.Count >= 3 Then
+            rddlTaxeStatus.Items(0).Text = L("taxTaxable")
+            rddlTaxeStatus.Items(1).Text = L("taxExempt")
+            rddlTaxeStatus.Items(2).Text = L("taxZeroRated")
+        End If
+
+        SetLiteral(Me, "litInfoGeneral", L("infoGeneral"))
+        SetLiteral(Me, "litNameLabel", L("nameLabel"))
+        SetLiteral(Me, "litCategory", L("category"))
+        SetLiteral(Me, "litDescription", L("description"))
+        SetLiteral(Me, "litPriceQty", L("priceQty"))
+        SetLiteral(Me, "litUnitPrice", L("unitPrice"))
+        SetLiteral(Me, "litDefaultQty", L("defaultQty"))
+        SetLiteral(Me, "litTaxStatus", L("taxStatus"))
+        SetLiteral(Me, "litAddToInvoice", L("addToInvoice"))
+        SetLiteral(Me, "litGlAccounts", L("glAccounts"))
+        SetLiteral(Me, "litGlHint", L("glHint"))
+        SetLiteral(Me, "litSaleAccount", L("saleAccount"))
+        SetLiteral(Me, "litPurchaseAccount", L("purchaseAccount"))
+        SetLiteral(Me, "litActiveProduct", L("activeProduct"))
+        SetLiteral(Me, "litIdLabel", L("idLabel"))
+        SetLiteral(Me, "litCreatedLabel", L("createdLabel"))
+    End Sub
+
+    ''' <summary>Traductions de l'interface Édition produit (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Produit — Édition", "Product — Edit", "Producto — Edición")
+            Case "titleNew" : Return Choose3(lang, "Nouveau produit", "New product", "Nuevo producto")
+            Case "titleEdit" : Return Choose3(lang, "Modifier le produit", "Edit product", "Editar producto")
+            Case "subNew" : Return Choose3(lang, "Remplissez les informations du produit ou service", "Fill in the product or service information", "Complete la información del producto o servicio")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "close" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "infoGeneral" : Return Choose3(lang, "Informations générales", "General information", "Información general")
+            Case "nameLabel" : Return Choose3(lang, "Nom du produit / service *", "Product / service name *", "Nombre del producto / servicio *")
+            Case "category" : Return Choose3(lang, "Catégorie", "Category", "Categoría")
+            Case "noCategory" : Return Choose3(lang, "Aucune catégorie", "No category", "Sin categoría")
+            Case "description" : Return Choose3(lang, "Description", "Description", "Descripción")
+            Case "priceQty" : Return Choose3(lang, "Prix et quantités", "Price and quantities", "Precio y cantidades")
+            Case "unitPrice" : Return Choose3(lang, "Prix unitaire ($)", "Unit price ($)", "Precio unitario ($)")
+            Case "defaultQty" : Return Choose3(lang, "Quantité par défaut", "Default quantity", "Cantidad predeterminada")
+            Case "taxStatus" : Return Choose3(lang, "Statut de taxe", "Tax status", "Estado de impuesto")
+            Case "select" : Return Choose3(lang, "Sélectionner…", "Select…", "Seleccionar…")
+            Case "taxTaxable" : Return Choose3(lang, "Taxable", "Taxable", "Gravable")
+            Case "taxExempt" : Return Choose3(lang, "Exempt", "Exempt", "Exento")
+            Case "taxZeroRated" : Return Choose3(lang, "Détaxé", "Zero-rated", "Tasa cero")
+            Case "addToInvoice" : Return Choose3(lang, "Ajouter auto aux factures", "Auto-add to invoices", "Agregar automáticamente a facturas")
+            Case "glAccounts" : Return Choose3(lang, "Comptes du plan comptable", "Chart of accounts", "Cuentas del plan contable")
+            Case "glHint" : Return Choose3(lang, "Ces comptes remplacent ceux de la catégorie pour ce produit spécifique. Laissez vide pour utiliser les comptes de la catégorie.", "These accounts override the category's for this specific product. Leave empty to use the category accounts.", "Estas cuentas reemplazan las de la categoría para este producto específico. Deje vacío para usar las cuentas de la categoría.")
+            Case "saleAccount" : Return Choose3(lang, "Compte de vente (Revenus)", "Sales account (Revenue)", "Cuenta de venta (Ingresos)")
+            Case "purchaseAccount" : Return Choose3(lang, "Compte d'achat (Coût / Charges)", "Purchase account (Cost / Expenses)", "Cuenta de compra (Costo / Gastos)")
+            Case "useCategoryAccount" : Return Choose3(lang, "Utiliser le compte de la catégorie", "Use the category account", "Usar la cuenta de la categoría")
+            Case "activeProduct" : Return Choose3(lang, "Produit actif", "Active product", "Producto activo")
+            Case "idLabel" : Return Choose3(lang, "ID :", "ID:", "ID:")
+            Case "createdLabel" : Return Choose3(lang, "Créé le :", "Created on:", "Creado el:")
+            Case "nameRequired" : Return Choose3(lang, "Le nom du produit est obligatoire.", "The product name is required.", "El nombre del producto es obligatorio.")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
 
     ' ── Chargement des listes déroulantes ──
 
@@ -55,8 +152,8 @@ Public Class wbfProductEdit
     Sub BindData()
         If ProductId = 0 Then
             ' Nouveau produit
-            lblTitle.Text = "Nouveau produit"
-            lblSub.Text = "Remplissez les informations du produit ou service"
+            lblTitle.Text = L("titleNew")
+            lblSub.Text = L("subNew")
             txtName.Text = ""
             txtDescription.Text = ""
             txtPrix.Value = Nothing
@@ -66,7 +163,7 @@ Public Class wbfProductEdit
             pnlInfo.Visible = False
         Else
             ' Produit existant
-            lblTitle.Text = "Modifier le produit"
+            lblTitle.Text = L("titleEdit")
 
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
@@ -121,7 +218,7 @@ Public Class wbfProductEdit
     Private Sub btnSave_Click(sender As Object, e As EventArgs) Handles btnSave.Click
 
         If String.IsNullOrWhiteSpace(txtName.Text) Then
-            ShowMsg("Le nom du produit est obligatoire.", False)
+            ShowMsg(L("nameRequired"), False)
             Return
         End If
 

@@ -47,6 +47,14 @@
             background-size: 16px 16px !important;
         }
 
+        /* Icône Encaisser / lien de paiement Square (bleu Square) */
+        .btn-icon-collect {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23006aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
         .listview-list-head,
         .listview-row {
             display: grid;
@@ -395,10 +403,17 @@
                                     Text=""
                                     ToolTip="Encaissement"
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>' 
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>'
                                 />
 
-                               
+                                <%-- Bouton "Encaisser" : genere un lien de paiement Square (page hebergee) --%>
+                                <asp:Button ID="btnSquarePay" runat="server"
+                                    CssClass="btn btn-icon btn-icon-collect"
+                                    Text=""
+                                    ToolTip="Encaisser (lien de paiement Square)"
+                                    CausesValidation="false"
+                                    Visible='<%# CanCollect(Eval("StatutPaiement")) %>'
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSquarePay"", ""wbfCustomerPaymentLink.aspx"", ""Encaisser (Square)"", ""Encaisser (Square)"");    return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -463,6 +478,19 @@
   OnClientClose="rwInvoice_OnInvoiceClose"
      ClientIDMode="Static" >
  </telerik:RadWindow>
+
+    <%-- Modal : lien de paiement Square (encaissement facture client) --%>
+    <telerik:RadWindow ID="rwSquarePay" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="true"
+        Width="620"
+        Height="560"
+        Title="Encaisser (Square)"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
+    </telerik:RadWindow>
 
 
 

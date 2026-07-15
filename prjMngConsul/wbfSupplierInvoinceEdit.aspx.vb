@@ -75,9 +75,129 @@ Public Class wbfSupplierInvoinceEdit
             'BinDDL()
         End If
         ApplyReadOnlyMode()
-
+        ApplyLocalization()
 
     End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur et Literal DANS pnlMain.
+    ''' Aucun bloc &lt;%= %&gt; n'est utilisé dans pnlMain (RadAjaxManager déplace les
+    ''' RadUpdatePanel des contrôles rafraîchis, ce qui verrouille le conteneur s'il contient
+    ''' des blocs de code). Les libellés JS sont dans le &lt;script&gt; du bas, HORS de pnlMain.</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+
+        SetLiteral(Me, "litLblSupplier", L("supplier"))
+        SetLiteral(Me, "litLblInvoiceDate", L("invoiceDate"))
+        SetLiteral(Me, "litLblDueDate", L("dueDate"))
+        SetLiteral(Me, "litLblReceivedDate", L("receivedDate"))
+        SetLiteral(Me, "litLblPosted", L("posted"))
+        SetLiteral(Me, "litLblRefNo", L("refNo"))
+        SetLiteral(Me, "litLblPoNumber", L("poNumber"))
+        SetLiteral(Me, "litLblLines", L("lines"))
+        SetLiteral(Me, "litColProduct", L("colProduct"))
+        SetLiteral(Me, "litColAccount", L("colAccount"))
+        SetLiteral(Me, "litColQty", L("colQty"))
+        SetLiteral(Me, "litColUnitPrice", L("colUnitPrice"))
+        SetLiteral(Me, "litColLineTotal", L("colTotal"))
+        SetLiteral(Me, "litColTx", L("colTx"))
+        SetLiteral(Me, "litColOrder", L("colOrder"))
+        SetLiteral(Me, "litCapSubTotal", L("subTotal"))
+        SetLiteral(Me, "litCapTps", L("tps"))
+        SetLiteral(Me, "litCapTvq", L("tvq"))
+        SetLiteral(Me, "litCapTotal", L("total"))
+
+        lblPostedBadge.Text = L("postedBadge")
+        radSave.Text = L("save")
+        btnAddLine.ToolTip = L("addLine")
+        txtRefNo.EmptyMessage = L("refNoHint")
+    End Sub
+
+    ''' <summary>Boutons + messages vides des RadListView des sélecteurs (Layout/Empty templates).</summary>
+    Private Sub rlvProducts_PreRender(sender As Object, e As EventArgs) Handles rlvProducts.PreRender
+        Dim b = TryCast(FindDeep(rlvProducts, "btnAddProducts"), RadButton)
+        If b IsNot Nothing Then b.Text = L("addProducts")
+        SetLiteral(rlvProducts, "litEmptyProducts", L("emptyProducts"))
+    End Sub
+
+    Private Sub rlvSuppliers_PreRender(sender As Object, e As EventArgs) Handles rlvSuppliers.PreRender
+        Dim b = TryCast(FindDeep(rlvSuppliers, "btnAddSuppliers"), RadButton)
+        If b IsNot Nothing Then b.Text = L("addSuppliers")
+        SetLiteral(rlvSuppliers, "litEmptySuppliers", L("emptySuppliers"))
+    End Sub
+
+    Private Sub rlvAccounts_PreRender(sender As Object, e As EventArgs) Handles rlvAccounts.PreRender
+        Dim b = TryCast(FindDeep(rlvAccounts, "btnAddAccounts"), RadButton)
+        If b IsNot Nothing Then b.Text = L("addAccounts")
+        SetLiteral(rlvAccounts, "litEmptyAccounts", L("emptyAccounts"))
+    End Sub
+
+    ''' <summary>Traductions de l'interface Édition facture fournisseur (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Facture fournisseur — Édition", "Supplier invoice — Edit", "Factura de proveedor — Edición")
+            Case "supplier" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
+            Case "selectSupplier" : Return Choose3(lang, "Sélectionner un fournisseur", "Select a supplier", "Seleccionar un proveedor")
+            Case "invoiceDate" : Return Choose3(lang, "Date facture", "Invoice date", "Fecha de factura")
+            Case "dueDate" : Return Choose3(lang, "Date d'échéance", "Due date", "Fecha de vencimiento")
+            Case "receivedDate" : Return Choose3(lang, "Date de réception", "Received date", "Fecha de recepción")
+            Case "posted" : Return Choose3(lang, "Comptabilisé", "Posted", "Contabilizado")
+            Case "postedBadge" : Return Choose3(lang, "Comptabilisé 🔒", "Posted 🔒", "Contabilizado 🔒")
+            Case "refNo" : Return Choose3(lang, "No facture fournisseur", "Supplier invoice no.", "No. factura proveedor")
+            Case "poNumber" : Return Choose3(lang, "No bon de commande", "Purchase order no.", "No. orden de compra")
+            Case "refNoHint" : Return Choose3(lang, "Référence fournisseur…", "Supplier reference…", "Referencia del proveedor…")
+            Case "lines" : Return Choose3(lang, "Lignes", "Lines", "Líneas")
+            Case "colProduct" : Return Choose3(lang, "Produit", "Product", "Producto")
+            Case "colAccount" : Return Choose3(lang, "Compte", "Account", "Cuenta")
+            Case "colQty" : Return Choose3(lang, "Qté", "Qty", "Cant.")
+            Case "colUnitPrice" : Return Choose3(lang, "Prix unitaire", "Unit price", "Precio unitario")
+            Case "colTotal" : Return Choose3(lang, "Total", "Total", "Total")
+            Case "colTx" : Return Choose3(lang, "Tx", "Tax", "Imp.")
+            Case "colOrder" : Return Choose3(lang, "Ordre", "Order", "Orden")
+            Case "subTotal" : Return Choose3(lang, "Sous-total", "Subtotal", "Subtotal")
+            Case "tps" : Return Choose3(lang, "TPS", "GST", "TPS")
+            Case "tvq" : Return Choose3(lang, "TVQ", "QST", "TVQ")
+            Case "total" : Return Choose3(lang, "Total", "Total", "Total")
+            Case "addLine" : Return Choose3(lang, "Ajouter une ligne", "Add a line", "Agregar una línea")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "searchProduct" : Return Choose3(lang, "Rechercher un produit...", "Search a product...", "Buscar un producto...")
+            Case "searchSupplier" : Return Choose3(lang, "Rechercher un fournisseur...", "Search a supplier...", "Buscar un proveedor...")
+            Case "searchAccount" : Return Choose3(lang, "Rechercher un compte...", "Search an account...", "Buscar una cuenta...")
+            Case "close" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "addProducts" : Return Choose3(lang, "Ajouter des produits", "Add products", "Agregar productos")
+            Case "addSuppliers" : Return Choose3(lang, "Ajouter des fournisseurs", "Add suppliers", "Agregar proveedores")
+            Case "addAccounts" : Return Choose3(lang, "Ajouter des comptes", "Add accounts", "Agregar cuentas")
+            Case "emptyProducts" : Return Choose3(lang, "Aucun produit trouvé.", "No product found.", "Ningún producto encontrado.")
+            Case "emptySuppliers" : Return Choose3(lang, "Aucun fournisseur trouvé.", "No supplier found.", "Ningún proveedor encontrado.")
+            Case "emptyAccounts" : Return Choose3(lang, "Aucun compte trouvé.", "No account found.", "Ninguna cuenta encontrada.")
+            Case "confirmDelLine" : Return Choose3(lang, "Supprimer cette ligne ?", "Delete this line?", "¿Eliminar esta línea?")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
     'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
@@ -267,6 +387,7 @@ Public Class wbfSupplierInvoinceEdit
 
 
         Else
+            lblSupplier.Text = L("selectSupplier")
             lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this,0)")
         End If
     End Sub

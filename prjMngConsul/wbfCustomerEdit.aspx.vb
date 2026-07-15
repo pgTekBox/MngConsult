@@ -43,6 +43,7 @@ Public Class wbfCustomerEdit
         dt.Columns.Add("StateId", GetType(Integer))
         dt.Columns.Add("PostalCode", GetType(String))
         dt.Columns.Add("CountryId", GetType(Integer))
+        dt.Columns.Add("Email", GetType(String))
         dt.Columns.Add("Dirty", GetType(Integer))
         dt.Columns.Add("Deleted", GetType(Integer))
         ViewState("PartyAddressTable") = dt
@@ -141,6 +142,7 @@ Public Class wbfCustomerEdit
             dr("StateId") = orow("StateId")
             dr("CountryId") = orow("CountryId")
             dr("PostalCode") = orow("PostalCode")
+            dr("Email") = orow("Email")
             dr("Dirty") = 0
             dr("Deleted") = 0
             CType(ViewState("PartyAddressTable"), DataTable).Rows.Add(dr)
@@ -250,6 +252,7 @@ Public Class wbfCustomerEdit
             txtCity.Text = r("City").ToString()
 
             txtPostal.Text = r("PostalCode").ToString()
+            txtAddrEmail.Text = r("Email").ToString()
             rddlProvince.SelectedValue = r("StateId")
             rddlPays.SelectedValue = r("CountryId")
             rddlAddressType.SelectedValue = r("AddressTypeId")
@@ -258,7 +261,7 @@ Public Class wbfCustomerEdit
 
         Else
             ' Nouveau / introuvable
-            txtA1.Text = "" : txtA2.Text = "" : txtCity.Text = "" : txtPostal.Text = ""
+            txtA1.Text = "" : txtA2.Text = "" : txtCity.Text = "" : txtPostal.Text = "" : txtAddrEmail.Text = ""
         End If
         pnlMsg.Visible = True
         pMsg.InnerText = "OpenAddrWindow appelé - id=" & addrId & " A1=" & txtA1.Text
@@ -340,6 +343,7 @@ Public Class wbfCustomerEdit
             r("Note") = DbNullIfEmpty(txtAddressNote.Text)
             r("City") = DbNullIfEmpty(txtCity.Text)
             r("PostalCode") = DbNullIfEmpty(txtPostal.Text)
+            r("Email") = DbNullIfEmpty(txtAddrEmail.Text)
             r("StateId") = DbNullIfEmpty(rddlProvince.SelectedValue)
             r("CountryId") = DbNullIfEmpty(rddlPays.SelectedValue)
             r("AddressTypeId") = DbNullIfEmpty(rddlAddressType.SelectedValue)
@@ -372,6 +376,7 @@ Public Class wbfCustomerEdit
         dr("CountryId") = DbNullIfEmpty(rddlPays.SelectedValue)
         dr("Typename") = DbNullIfEmpty(rddlAddressType.SelectedText)
         dr("PostalCode") = DbNullIfEmpty(txtPostal.Text)
+        dr("Email") = DbNullIfEmpty(txtAddrEmail.Text)
 
         CType(ViewState("PartyAddressTable"), DataTable).Rows.Add(dr)
 
@@ -404,6 +409,7 @@ Public Class wbfCustomerEdit
                 p.Add(New SqlClient.SqlParameter("@PostalCode", orow("PostalCode")))
                 p.Add(New SqlClient.SqlParameter("@CountryId", orow("CountryId")))
                 p.Add(New SqlClient.SqlParameter("@StateId", orow("StateId")))
+                p.Add(New SqlClient.SqlParameter("@Email", orow("Email")))
                 ExecuteSQL("s0016UpdatePartyAddress", p)
 
             ElseIf orow("Dirty") = 1 AndAlso CInt(orow("Id")) <= 0 Then
@@ -419,6 +425,7 @@ Public Class wbfCustomerEdit
                 p.Add(New SqlClient.SqlParameter("@PostalCode", orow("PostalCode")))
                 p.Add(New SqlClient.SqlParameter("@CountryId", orow("CountryId")))
                 p.Add(New SqlClient.SqlParameter("@StateId", orow("StateId")))
+                p.Add(New SqlClient.SqlParameter("@Email", orow("Email")))
                 ExecuteSQL("s0015InsertPartyAddress", p)
 
             End If
@@ -442,6 +449,7 @@ Public Class wbfCustomerEdit
         txtA2.Text = ""
         txtCity.Text = ""
         txtPostal.Text = ""
+        txtAddrEmail.Text = ""
 
         txtAddressNote.Text = ""
         txtAddressName.Text = ""

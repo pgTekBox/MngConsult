@@ -2,7 +2,7 @@
     CodeBehind="wbfProductCategoryEdit.aspx.vb" Inherits="MngConsul.wbfProductCategoryEdit" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -265,19 +265,19 @@
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
                     <div class="cardHead">
-                        <div class="h">Informations générales</div>
+                        <div class="h"><asp:Literal ID="litInfoGeneral" runat="server" /></div>
                     </div>
                     <div class="cardBody">
                         <div class="grid">
 
                             <div class="field">
-                                <label>Code *</label>
+                                <label><asp:Literal ID="litCodeLabel" runat="server" /></label>
                                 <telerik:RadTextBox ID="txtCode" runat="server" RenderMode="Lightweight" CssClass="rtbLike"
                                     MaxLength="10" />
                             </div>
 
                             <div class="field">
-                                <label>Nom *</label>
+                                <label><asp:Literal ID="litNameLabel" runat="server" /></label>
                                 <telerik:RadTextBox ID="txtName" runat="server" RenderMode="Lightweight" CssClass="rtbLike"
                                     MaxLength="150" />
                             </div>
@@ -287,14 +287,14 @@
                         <div style="margin-top:12px;">
                             <div class="grid">
                                 <div class="field">
-                                    <label>Description</label>
+                                    <label><asp:Literal ID="litDescription" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtDescription" runat="server" RenderMode="Lightweight"
                                         CssClass="rtbLike" TextMode="MultiLine" Rows="3" />
                                 </div>
 
                                 <div>
                                     <div class="field">
-                                        <label>Statut de taxe par défaut</label>
+                                        <label><asp:Literal ID="litTaxStatusDefault" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlTaxeStatus" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px">
                                             <Items>
@@ -307,7 +307,7 @@
 
                                     <div class="chk-wrap">
                                         <asp:CheckBox  ID="chkActif" runat="server" Checked="true" ClientIDMode="Static" />
-                                        <label for="chkActif">Catégorie active</label>
+                                        <label for="chkActif"><asp:Literal ID="litActiveCategory" runat="server" /></label>
                                     </div>
                                 </div>
                             </div>
@@ -320,25 +320,24 @@
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
                     <div class="cardHead">
-                        <div class="h">Comptes du plan comptable</div>
+                        <div class="h"><asp:Literal ID="litGlAccounts" runat="server" /></div>
                     </div>
                     <div class="cardBody">
                         <div class="section-hint">
-                            Associez un compte de revenus et un compte d'achats/coût des ventes à cette catégorie.
-                            Ces comptes seront utilisés automatiquement lors de la facturation.
+                            <asp:Literal ID="litGlHint" runat="server" />
                         </div>
 
                         <div class="grid">
 
                             <div class="field">
-                                <label>Compte de vente (Revenus)</label>
+                                <label><asp:Literal ID="litSaleAccount" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCompteVente" runat="server"
                                     DefaultMessage="Aucun compte sélectionné" DropDownHeight="250px">
                                 </telerik:RadDropDownList>
                             </div>
 
                             <div class="field">
-                                <label>Compte d'achat (Coût des ventes / Charges)</label>
+                                <label><asp:Literal ID="litPurchaseAccount" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCompteAchat" runat="server"
                                     DefaultMessage="Aucun compte sélectionné" DropDownHeight="250px">
                                 </telerik:RadDropDownList>
@@ -353,10 +352,10 @@
                     <div class="card">
                         <div class="cardBody">
                             <div class="info-row">
-                                <div>ID : <span><asp:Label ID="tlblId" runat="server" /></span></div>
-                                <div>GUID : <span><asp:Label ID="tlblGuid" runat="server" /></span></div>
-                                <div>Créé le : <span><asp:Label ID="tlblCreated" runat="server" /></span></div>
-                                <div>Ordre : <span><asp:Label ID="tlblOrdre" runat="server" /></span></div>
+                                <div><asp:Literal ID="litIdLabel" runat="server" /> <span><asp:Label ID="tlblId" runat="server" /></span></div>
+                                <div><asp:Literal ID="litGuidLabel" runat="server" /> <span><asp:Label ID="tlblGuid" runat="server" /></span></div>
+                                <div><asp:Literal ID="litCreatedLabel" runat="server" /> <span><asp:Label ID="tlblCreated" runat="server" /></span></div>
+                                <div><asp:Literal ID="litOrdreLabel" runat="server" /> <span><asp:Label ID="tlblOrdre" runat="server" /></span></div>
                             </div>
                         </div>
                     </div>

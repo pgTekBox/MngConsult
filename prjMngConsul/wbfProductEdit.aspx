@@ -2,7 +2,7 @@
     CodeBehind="wbfProductEdit.aspx.vb" Inherits="MngConsul.wbfProductEdit" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -195,16 +195,16 @@
                      CARTE 1 : Informations générales
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
-                    <div class="cardHead"><div class="h">Informations générales</div></div>
+                    <div class="cardHead"><div class="h"><asp:Literal ID="litInfoGeneral" runat="server" /></div></div>
                     <div class="cardBody">
 
                         <div class="grid">
                             <div class="field">
-                                <label>Nom du produit / service *</label>
+                                <label><asp:Literal ID="litNameLabel" runat="server" /></label>
                                 <telerik:RadTextBox ID="txtName" runat="server" RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                             </div>
                             <div class="field">
-                                <label>Catégorie</label>
+                                <label><asp:Literal ID="litCategory" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCategory" runat="server"
                                     DefaultMessage="Aucune catégorie" DropDownHeight="200px" />
                             </div>
@@ -212,7 +212,7 @@
 
                         <div style="margin-top:12px;">
                             <div class="field">
-                                <label>Description</label>
+                                <label><asp:Literal ID="litDescription" runat="server" /></label>
                                 <telerik:RadTextBox ID="txtDescription" runat="server" RenderMode="Lightweight"
                                     CssClass="rtbLike" TextMode="MultiLine" Rows="3" />
                             </div>
@@ -225,23 +225,23 @@
                      CARTE 2 : Prix et quantités
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
-                    <div class="cardHead"><div class="h">Prix et quantités</div></div>
+                    <div class="cardHead"><div class="h"><asp:Literal ID="litPriceQty" runat="server" /></div></div>
                     <div class="cardBody">
                         <div class="grid4">
                             <div class="field">
-                                <label>Prix unitaire ($)</label>
+                                <label><asp:Literal ID="litUnitPrice" runat="server" /></label>
                                 <telerik:RadNumericTextBox ID="txtPrix" runat="server" RenderMode="Lightweight"
                                     Type="Currency" NumberFormat-DecimalDigits="2" MinValue="0"
                                     Width="100%" />
                             </div>
                             <div class="field">
-                                <label>Quantité par défaut</label>
+                                <label><asp:Literal ID="litDefaultQty" runat="server" /></label>
                                 <telerik:RadNumericTextBox ID="txtDefaultQty" runat="server" RenderMode="Lightweight"
                                     Type="Number" NumberFormat-DecimalDigits="2" MinValue="0" Value="1"
                                     Width="100%" />
                             </div>
                             <div class="field">
-                                <label>Statut de taxe</label>
+                                <label><asp:Literal ID="litTaxStatus" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlTaxeStatus" runat="server"
                                     DefaultMessage="Sélectionner…" DropDownHeight="110px">
                                     <Items>
@@ -254,7 +254,7 @@
                             <div>
                                 <div class="chk-wrap">
                                     <asp:CheckBox  ID="chkAddToNewInvoice" runat="server" ClientIDMode="Static" />
-                                    <label for="chkAddToNewInvoice">Ajouter auto aux factures</label>
+                                    <label for="chkAddToNewInvoice"><asp:Literal ID="litAddToInvoice" runat="server" /></label>
                                 </div>
                             </div>
                         </div>
@@ -265,20 +265,19 @@
                      CARTE 3 : Comptes du plan comptable
                 ═══════════════════════════════════════════ --%>
                 <div class="card">
-                    <div class="cardHead"><div class="h">Comptes du plan comptable</div></div>
+                    <div class="cardHead"><div class="h"><asp:Literal ID="litGlAccounts" runat="server" /></div></div>
                     <div class="cardBody">
                         <div class="section-hint">
-                            Ces comptes remplacent ceux de la catégorie pour ce produit spécifique.
-                            Laissez vide pour utiliser les comptes de la catégorie.
+                            <asp:Literal ID="litGlHint" runat="server" />
                         </div>
                         <div class="grid">
                             <div class="field">
-                                <label>Compte de vente (Revenus)</label>
+                                <label><asp:Literal ID="litSaleAccount" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCompteVente" runat="server"
                                     DefaultMessage="Utiliser le compte de la catégorie" DropDownHeight="250px" />
                             </div>
                             <div class="field">
-                                <label>Compte d'achat (Coût / Charges)</label>
+                                <label><asp:Literal ID="litPurchaseAccount" runat="server" /></label>
                                 <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCompteAchat" runat="server"
                                     DefaultMessage="Utiliser le compte de la catégorie" DropDownHeight="250px" />
                             </div>
@@ -292,12 +291,12 @@
                         <div class="grid">
                             <div class="chk-wrap" style="padding-top:0;">
                                 <asp:CheckBox  ID="chkActif" runat="server" Checked="true" ClientIDMode="Static" />
-                                <label for="chkActif">Produit actif</label>
+                                <label for="chkActif"><asp:Literal ID="litActiveProduct" runat="server" /></label>
                             </div>
                             <asp:Panel ID="pnlInfo" runat="server" Visible="false">
                                 <div class="info-row">
-                                    <div>ID : <span><asp:Label ID="tlblId" runat="server" /></span></div>
-                                    <div>Créé le : <span><asp:Label ID="tlblCreated" runat="server" /></span></div>
+                                    <div><asp:Literal ID="litIdLabel" runat="server" /> <span><asp:Label ID="tlblId" runat="server" /></span></div>
+                                    <div><asp:Literal ID="litCreatedLabel" runat="server" /> <span><asp:Label ID="tlblCreated" runat="server" /></span></div>
                                 </div>
                             </asp:Panel>
                         </div>

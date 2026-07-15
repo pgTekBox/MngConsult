@@ -787,6 +787,50 @@ Public Class clsSquare
     ' ce qui permet a clsSquare de vivre dans App_Code).
     ' accessToken Nothing/"" => pas d'en-tete Authorization (ex. /oauth2/token).
     ' -------------------------------------------------------------------------
+    ' -------------------------------------------------------------------------
+    ' PAYMENT LINK (Square Online Checkout) -- encaissement facture client
+    ' -------------------------------------------------------------------------
+    Public Class SquarePaymentLinkResult
+        Public Property Id As String
+        Public Property Url As String          ' page de paiement hebergee (https://square.link/...)
+        Public Property LongUrl As String
+        Public Property OrderId As String
+    End Class
+
+    ''' <summary>
+    ''' Cree un lien de paiement Square (POST /v2/online-checkout/payment-links) pour un
+    ''' montant donne. Square heberge la page de paiement (carte + Interac debit). Le client
+    ''' paie via l'URL retournee ; le paiement revient par webhook (reconciliation existante).
+    ''' amountCents en cents CAD. note/reference : y mettre notre no de facture.
+    ''' </summary>
+    Public Shared Function CreatePaymentLink(accessToken As String, locationId As String,
+                                             amountCents As Long, name As String, note As String) As SquarePaymentLinkResult
+        Dim price As New JObject()
+        price("amount") = amountCents
+        price("currency") = "CAD"
+
+        Dim quick As New JObject()
+        quick("name") = name
+        quick("price_money") = price
+        If Not String.IsNullOrEmpty(locationId) Then quick("location_id") = locationId
+
+        Dim body As New JObject()
+        body("idempotency_key") = Guid.NewGuid().ToString()
+        body("quick_pay") = quick
+        If Not String.IsNullOrEmpty(note) Then body("description") = note
+
+        Dim resp As String = PostJson("/v2/online-checkout/payment-links", body.ToString(), accessToken)
+        Dim pl As JToken = JObject.Parse(resp)("payment_link")
+        Dim r As New SquarePaymentLinkResult()
+        If pl IsNot Nothing Then
+            r.Id = JStr(pl("id"))
+            r.Url = JStr(pl("url"))
+            r.LongUrl = JStr(pl("long_url"))
+            r.OrderId = JStr(pl("order_id"))
+        End If
+        Return r
+    End Function
+
     Private Shared Function PostJson(path As String, jsonBody As String, accessToken As String) As String
         Return SendRequest(path, "POST", jsonBody, accessToken)
     End Function

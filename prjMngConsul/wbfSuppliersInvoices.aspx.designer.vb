@@ -50,6 +50,15 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents hfInvoiceDirty As Global.System.Web.UI.WebControls.HiddenField
 
     '''<summary>
+    '''litPageTitle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litPageTitle As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''btnAddSupplierInvoice control.
     '''</summary>
     '''<remarks>
@@ -95,6 +104,15 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents rgFournisseursFactures As Global.Telerik.Web.UI.RadListView
 
     '''<summary>
+    '''fabAdd control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents fabAdd As Global.System.Web.UI.HtmlControls.HtmlButton
+
+    '''<summary>
     '''rwSupplierInvoices control.
     '''</summary>
     '''<remarks>
@@ -111,6 +129,24 @@ Partial Public Class wbfSuppliersInvoices
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rwEncaissement As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''rwSupplierPayment control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwSupplierPayment As Global.Telerik.Web.UI.RadWindow
+
+    '''<summary>
+    '''rwScheduleAutoPay control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rwScheduleAutoPay As Global.Telerik.Web.UI.RadWindow
 
     '''<summary>
     '''PdfViewer control.

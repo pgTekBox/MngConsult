@@ -6,15 +6,99 @@ Public Class wbfSuppliers
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+        ApplyLocalization()
 
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             rlvSuppliers.Rebind()
         End If
     End Sub
+
+    ''' <summary>Applique la langue courante (fr/en/es) aux contrôles serveur hors templates.
+    ''' Les libellés JS et le titre du FAB sont injectés via un script de démarrage : on évite
+    ''' ainsi tout bloc &lt;%= %&gt; dans MainContent, qui empêcherait RadAjax de déplacer le
+    ''' RadUpdatePanel de la liste (erreur « La collection Controls ne peut pas être modifiée »).</summary>
+    Private Sub ApplyLocalization()
+        SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        btnAddSupplier.Text = L("addSupplier")
+        btnClear.ToolTip = L("clear")
+        tbSearch.Attributes("placeholder") = L("searchPh")
+        rwSupplier.Title = L("winTitle")
+
+        Dim js As String =
+            "var L_ADD_SUPPLIER=" & JsStr(L("addSupplierWin")) & ";" &
+            "var L_EDIT_SUPPLIER=" & JsStr(L("editSupplierWin")) & ";" &
+            "(function(){var f=document.querySelector('.fab-add');if(f)f.title=" & JsStr(L("addSupplier")) & ";})();"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "supLang", js, True)
+    End Sub
+
+    ''' <summary>Encode une chaîne en littéral JS (guillemets inclus, accents et quotes échappés).</summary>
+    Private Shared Function JsStr(s As String) As String
+        Return System.Web.HttpUtility.JavaScriptStringEncode(If(s, ""), True)
+    End Function
+
+    ''' <summary>Localise les libellés du LayoutTemplate / EmptyDataTemplate du RadListView.
+    ''' On ne peut PAS y mettre de blocs &lt;%# %&gt; : le RadListView doit modifier la
+    ''' collection Controls du LayoutTemplate (injection des lignes dans itemPlaceholder),
+    ''' ce qui est interdit si le conteneur contient des blocs de code. On passe donc par
+    ''' des Literal renseignés ici, une fois le gabarit instancié.</summary>
+    Private Sub rlvSuppliers_PreRender(sender As Object, e As EventArgs) Handles rlvSuppliers.PreRender
+        SetLiteral(rlvSuppliers, "litColName", L("colName"))
+        SetLiteral(rlvSuppliers, "litColAction", L("colAction"))
+        SetLiteral(rlvSuppliers, "litEmpty", L("empty"))
+    End Sub
+
+    ''' <summary>Recherche récursive d'un Literal par Id (les contrôles de gabarit du
+    ''' RadListView sont dans des conteneurs de nommage imbriqués) et lui assigne un texte.</summary>
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    ''' <summary>Traductions de l'interface Fournisseurs (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Fournisseurs — 60Sec-AI", "Suppliers — 60Sec-AI", "Proveedores — 60Sec-AI")
+            Case "pageTitleShort" : Return Choose3(lang, "Fournisseurs", "Suppliers", "Proveedores")
+            Case "addSupplier" : Return Choose3(lang, "Ajouter Fournisseur", "Add supplier", "Agregar proveedor")
+            Case "searchPh" : Return Choose3(lang, "Rechercher (nom, email, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
+            Case "clear" : Return Choose3(lang, "Effacer", "Clear", "Borrar")
+            Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
+            Case "stripeTip" : Return Choose3(lang, "Configurer paiements Stripe Connect", "Configure Stripe Connect payments", "Configurar pagos Stripe Connect")
+            Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
+            Case "delete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
+            Case "empty" : Return Choose3(lang, "Aucun fournisseur trouvé.", "No supplier found.", "Ningún proveedor encontrado.")
+            Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier un Fournisseur", "Add / Edit a supplier", "Agregar / Editar un proveedor")
+            Case "addSupplierWin" : Return Choose3(lang, "Ajouter un fournisseur", "Add a supplier", "Agregar un proveedor")
+            Case "editSupplierWin" : Return Choose3(lang, "Modifier un fournisseur", "Edit a supplier", "Editar un proveedor")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
     Private Sub rlvSuppliers_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvSuppliers.ItemCommand
         If e.CommandArgument Is Nothing Then Return
 

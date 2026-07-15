@@ -2,7 +2,7 @@
     MasterPageFile="~/Site.Master" CodeBehind="wbfProducts.aspx.vb" Inherits="MngConsul.wbfProducts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Produits — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -161,7 +161,7 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Produits et services</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
                 <div class="page-sub">
                     <asp:Label ID="lblInfo" runat="server" />
                 </div>
@@ -186,7 +186,7 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter un produit"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwProduct', 'wbfProductEdit.aspx', 'Modifier un produit', 'Ajouter un produit'); return false;" />
+                    OnClientClick="openRadWindow(0, 'rwProduct', 'wbfProductEdit.aspx', L_EDIT_PRODUCT, L_ADD_PRODUCT); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, description…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -197,7 +197,7 @@
 
         <%-- Filtre par catégorie --%>
         <div class="filter-bar">
-            <label>Catégorie :</label>
+            <label><asp:Literal ID="litFilterCat" runat="server" /></label>
             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlFilterCat" runat="server"
                 DefaultMessage="Toutes" DropDownHeight="200px" AutoPostBack="true"
                 OnSelectedIndexChanged="rddlFilterCat_SelectedIndexChanged"
@@ -217,13 +217,13 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div>Produit</div>
-                                <div class="col-cat">Catégorie</div>
-                                <div>Prix</div>
-                                <div class="col-qty">Qté déf.</div>
-                                <div class="col-taxe">Taxe</div>
-                                <div class="col-actif">Actif</div>
-                                <div>Action</div>
+                                <div><asp:Literal ID="litColProduct" runat="server" /></div>
+                                <div class="col-cat"><asp:Literal ID="litColCategory" runat="server" /></div>
+                                <div><asp:Literal ID="litColPrice" runat="server" /></div>
+                                <div class="col-qty"><asp:Literal ID="litColQty" runat="server" /></div>
+                                <div class="col-taxe"><asp:Literal ID="litColTaxe" runat="server" /></div>
+                                <div class="col-actif"><asp:Literal ID="litColActive" runat="server" /></div>
+                                <div><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
                             <div class="listview-list-body">
                                 <asp:PlaceHolder ID="itemPlaceholder" runat="server" />
@@ -265,7 +265,7 @@
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwProduct"", ""wbfProductEdit.aspx"", ""Modifier un produit"", ""Ajouter un produit""); return false;" %>' />
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwProduct"", ""wbfProductEdit.aspx"", L_EDIT_PRODUCT, L_ADD_PRODUCT); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -277,7 +277,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun produit trouvé.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
                 </telerik:RadListView>
@@ -286,7 +286,7 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0, 'rwProduct', 'wbfProductEdit.aspx', 'Modifier un produit', 'Ajouter un produit'); return false;" title="Ajouter un produit">+</button>
+        <button id="fabAdd" runat="server" type="button" class="fab-add" onclick="openRadWindow(0, 'rwProduct', 'wbfProductEdit.aspx', L_EDIT_PRODUCT, L_ADD_PRODUCT); return false;" title="">+</button>
 
     </telerik:RadAjaxPanel>
 
@@ -302,9 +302,16 @@
 
     <script src="js/RadWindows.js"></script>
 
+    <%-- RadCodeBlock obligatoire : les blocs de rendu serveur ci-dessous sont enfants
+         directs de MainContent, et le RadAjaxPanel (RadAjaxControl) modifie
+         MainContent.Controls au rendu. Sans RadCodeBlock : erreur Controls collection. --%>
+    <telerik:RadCodeBlock ID="rcbProductsJs" runat="server">
     <script type="text/javascript">
+        var L_ADD_PRODUCT = "<%= L("addProductWin") %>";
+        var L_EDIT_PRODUCT = "<%= L("editProductWin") %>";
         function rwProduct_OnClientClose(sender, args) {
             __doPostBack("rlvProducts", "Rebind");
         }
     </script>
+    </telerik:RadCodeBlock>
 </asp:Content>

@@ -40,6 +40,22 @@ Public Class wbfCustomersInvoices
         Return ds.Tables(0)
     End Function
 
+    ''' <summary>Le bouton "Encaisser" est visible tant que la facture n'est pas entièrement payée.</summary>
+    Public Function CanCollect(statutPaiement As Object) As Boolean
+        If statutPaiement Is Nothing OrElse IsDBNull(statutPaiement) Then Return True
+        Return statutPaiement.ToString().Trim().ToUpperInvariant() <> "PAYEE"
+    End Function
+
+    ''' <summary>Formate un montant pour l'URL (point décimal, InvariantCulture).</summary>
+    Public Function FormatAmountForUrl(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return "0"
+        Try
+            Return Convert.ToDecimal(value).ToString("F2", System.Globalization.CultureInfo.InvariantCulture)
+        Catch
+            Return "0"
+        End Try
+    End Function
+
 
     Private Sub SaveInvoicePdfToDb(fileName As String, contentType As String, pdfBytes As Byte())
         'Dim cs As String = ConfigurationManager.ConnectionStrings("YourConnectionStringName").ConnectionString

@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfProductCategory.aspx.vb" Inherits="MngConsul.wbfProductCategory" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Catégories de produits — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -168,7 +168,7 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Catégories de produits</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
                 <div class="page-sub">
                     <asp:Label ID="lblInfo" runat="server" />
                 </div>
@@ -179,7 +179,7 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter une catégorie"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwCategory', 'wbfProductCategoryEdit.aspx', 'Modifier une catégorie', 'Ajouter une catégorie'); return false;" />
+                    OnClientClick="openRadWindow(0, 'rwCategory', 'wbfProductCategoryEdit.aspx', L_EDIT_CATEGORY, L_ADD_CATEGORY); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (code, nom…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -200,13 +200,13 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div>Code</div>
-                                <div>Nom</div>
-                                <div class="col-vente">Compte vente</div>
-                                <div class="col-achat">Compte achat</div>
-                                <div class="col-taxe">Taxe</div>
-                                <div class="col-actif">Actif</div>
-                                <div>Action</div>
+                                <div><asp:Literal ID="litColCode" runat="server" /></div>
+                                <div><asp:Literal ID="litColName" runat="server" /></div>
+                                <div class="col-vente"><asp:Literal ID="litColSaleAccount" runat="server" /></div>
+                                <div class="col-achat"><asp:Literal ID="litColPurchaseAccount" runat="server" /></div>
+                                <div class="col-taxe"><asp:Literal ID="litColTaxe" runat="server" /></div>
+                                <div class="col-actif"><asp:Literal ID="litColActive" runat="server" /></div>
+                                <div><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -255,7 +255,7 @@
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwCategory"", ""wbfProductCategoryEdit.aspx"", ""Modifier une catégorie"", ""Ajouter une catégorie""); return false;" %>' />
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwCategory"", ""wbfProductCategoryEdit.aspx"", L_EDIT_CATEGORY, L_ADD_CATEGORY); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -267,7 +267,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucune catégorie trouvée.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
                 </telerik:RadListView>
@@ -276,7 +276,7 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0, 'rwCategory', 'wbfProductCategoryEdit.aspx', 'Modifier une catégorie', 'Ajouter une catégorie'); return false;" title="Ajouter une catégorie">+</button>
+        <button id="fabAdd" runat="server" type="button" class="fab-add" onclick="openRadWindow(0, 'rwCategory', 'wbfProductCategoryEdit.aspx', L_EDIT_CATEGORY, L_ADD_CATEGORY); return false;" title="">+</button>
 
     </telerik:RadAjaxPanel>
 
@@ -292,9 +292,16 @@
 
     <script src="js/RadWindows.js"></script>
 
+    <%-- RadCodeBlock obligatoire : les blocs de rendu serveur ci-dessous sont enfants
+         directs de MainContent, et le RadAjaxPanel (RadAjaxControl) modifie
+         MainContent.Controls au rendu. Sans RadCodeBlock : erreur Controls collection. --%>
+    <telerik:RadCodeBlock ID="rcbCategoryJs" runat="server">
     <script type="text/javascript">
+        var L_ADD_CATEGORY = "<%= L("addCategoryWin") %>";
+        var L_EDIT_CATEGORY = "<%= L("editCategoryWin") %>";
         function rwCategory_OnClientClose(sender, args) {
             __doPostBack("rlvCategories", "Rebind");
         }
     </script>
+    </telerik:RadCodeBlock>
 </asp:Content>

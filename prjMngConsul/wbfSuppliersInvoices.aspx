@@ -4,7 +4,7 @@
 <%@ Register Src="~/Controls/jsonViewer.ascx" TagPrefix="uc2" TagName="jsonViewer" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Invoices — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -51,6 +51,22 @@
         /* Icône Payer (carte de crédit verte) */
         .btn-icon-pay {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%2310b981' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M2 10h20'/%3E%3Cpath d='M7 15h4'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
+        /* Icône DreamPaiement EFT (virement bancaire, sarcelle) */
+        .btn-icon-dream {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230d9488' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cline x1='3' y1='21' x2='21' y2='21'/%3E%3Cline x1='5' y1='21' x2='5' y2='10'/%3E%3Cline x1='19' y1='21' x2='19' y2='10'/%3E%3Cline x1='9' y1='21' x2='9' y2='10'/%3E%3Cline x1='15' y1='21' x2='15' y2='10'/%3E%3Cpolygon points='12 2 21 8 3 8'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
+        }
+
+        /* Icône Interac e-Transfer (enveloppe/envoi, rouge Interac) */
+        .btn-icon-interac {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e4002b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='M22 6l-10 7L2 6'/%3E%3C/svg%3E") !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
             background-size: 18px 18px !important;
@@ -345,19 +361,19 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Facture Fournisseur</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
             </div>
             <div class="searchbox">
                 <asp:Button ID="btnAddSupplierInvoice" runat="server"
-                    CssClass="btn btnAddRow"
+                    CssClass="btn btnAddRow"  ClientIDMode="Static"
                     Text="Ajouter Facture"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" 
+                    OnClientClick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"
                 />
                 <div class="search-group">
-                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
-                    <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
-                    <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
+                    <asp:TextBox ID="tbSearch"  ClientIDMode="Static" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
+                    <asp:Button ID="btnSearch"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
+                    <asp:Button ID="btnClear"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
                 </div>
             </div>
         </div>
@@ -374,24 +390,24 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div class="colh-numero">#</div>
-                                <div class="colh-date">Date</div>
-                                <div class="colh-supplier">Fournisseur</div>
-                                <div class="colh-statutpaiement">Statut Paiement</div>
-                                 <div class="colh-resteapayer">Reste A Payer</div>
-                                 <div class="colh-dejapaye">Deja Payé</div>
-                                   
+                                <div class="colh-numero"><asp:Literal ID="litColNum" runat="server" /></div>
+                                <div class="colh-date"><asp:Literal ID="litColDate" runat="server" /></div>
+                                <div class="colh-supplier"><asp:Literal ID="litColSupplier" runat="server" /></div>
+                                <div class="colh-statutpaiement"><asp:Literal ID="litColStatutPaiement" runat="server" /></div>
+                                 <div class="colh-resteapayer"><asp:Literal ID="litColResteAPayer" runat="server" /></div>
+                                 <div class="colh-dejapaye"><asp:Literal ID="litColDejaPaye" runat="server" /></div>
 
 
-                                <div class="colh-total">Total</div>
-                                <div class="colh-etat">Etat</div>
-                                 
-                                
-                                <div class="colh-action">Action</div>
+
+                                <div class="colh-total"><asp:Literal ID="litColTotal" runat="server" /></div>
+                                <div class="colh-etat"><asp:Literal ID="litColEtat" runat="server" /></div>
+
+
+                                <div class="colh-action"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
-                                <asp:PlaceHolder ID="itemPlaceholder" runat="server"></asp:PlaceHolder>
+                                <asp:PlaceHolder ID="itemPlaceholder"  ClientIDMode="Static" runat="server"></asp:PlaceHolder>
                             </div>
                         </div>
                     </LayoutTemplate>
@@ -419,10 +435,10 @@
 
                                 <asp:Button ID="Button1" runat="server"
                                     CssClass="field-encaissement btn btn-icon btn-icon-receipt"
-                                    Text=""
-                                    ToolTip="Décaissement"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("tipDecaiss") %>'
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier un décaissement"", ""Ajouter un décaissement"");    return false;" %>'
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", L_EDIT_DECAISS, L_ADD_DECAISS);    return false;" %>'
                                 />
 
                                 <%-- Bouton "Payer avec Stripe" : visible seulement si facture non payée et comptabilisée
@@ -430,17 +446,36 @@
                                      pour eviter que la virgule FR soit interpretee comme separateur milliers --%>
                                 <asp:Button ID="btnPay" runat="server"
                                     CssClass="btn btn-icon btn-icon-pay"
-                                    Text=""
-                                    ToolTip="Payer avec Stripe (Interac / ACSS / Carte)"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("tipPay") %>'
                                     CausesValidation="false"
                                     Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSupplierPayment"", ""wbfSupplierPaymentChoice.aspx"", ""Payer le fournisseur"", ""Payer"");    return false;" %>' />
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSupplierPayment"", ""wbfSupplierPaymentChoice.aspx"", L_PAY_SUPPLIER, L_PAY);    return false;" %>' />
+
+                                <%-- Bouton "Payer via DreamPaiement EFT" : mêmes conditions que Stripe (non payée + comptabilisée) ;
+                                     ouvre la page DreamPaiement dans un RadWindow (DocumentId / PartyId / Amount) --%>
+                                <asp:Button ID="btnDreamPay" runat="server"
+                                    CssClass="btn btn-icon btn-icon-dream"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("tipDreamPay") %>'
+                                    CausesValidation="false"
+                                    Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwDreamPayment"", ""wbfSupplierPaymentDream.aspx"", L_DREAM_TITLE, L_DREAM_TITLE);    return false;" %>' />
+
+                                <%-- Bouton "Payer via Interac e-Transfer" (rail Interac, basé courriel) --%>
+                                <asp:Button ID="btnInteracPay" runat="server"
+                                    CssClass="btn btn-icon btn-icon-interac"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("tipInteracPay") %>'
+                                    CausesValidation="false"
+                                    Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwInteracPayment"", ""wbfSupplierPaymentInterac.aspx"", L_INTERAC_TITLE, L_INTERAC_TITLE);    return false;" %>' />
 
                                 <%-- Bouton "Synchroniser paiements Stripe" : ouvre la page sync dans nouvelle fenêtre --%>
                                 <asp:Button ID="btnSync" runat="server"
                                     CssClass="btn btn-icon btn-icon-sync"
-                                    Text=""
-                                    ToolTip="Synchroniser les paiements Stripe (si webhook a échoué)"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("tipSync") %>'
                                     CausesValidation="false"
                                     OnClientClick='<%# "window.open(""wbfSupplierPaymentSync.aspx?DocumentId="" + " & Eval("Id") & ", ""_blank"", ""width=800,height=900,scrollbars=yes""); return false;" %>' />
 
@@ -448,23 +483,23 @@
                                      existe pour le fournisseur (sera affiche selon AutoPayCanSchedule retourne par s0023) --%>
                                 <asp:Button ID="btnAutoPay" runat="server"
                                     CssClass='<%# IIf(IsAutoPayActive(Eval("AutoPay"), Eval("AutoPayStatus")), "btn btn-icon btn-icon-autopay-active", "btn btn-icon btn-icon-autopay") %>'
-                                    Text=""
-                                    ToolTip='<%# IIf(IsAutoPayActive(Eval("AutoPay"), Eval("AutoPayStatus")), "Auto-paiement programmé - cliquer pour gérer", "Programmer un paiement automatique") %>'
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# IIf(IsAutoPayActive(Eval("AutoPay"), Eval("AutoPayStatus")), L("tipAutoPayActive"), L("tipAutoPaySched")) %>'
                                     CausesValidation="false"
                                     Visible='<%# CanShowAutoPayButton(Eval("StatutPaiement"), Eval("ComptabilisationStatus"), Eval("HasActiveAuthorization")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Total=" & FormatAmountForUrl(Eval("ResteAPayer")) & """, ""rwScheduleAutoPay"", ""wbfScheduleAutoPay.aspx"", ""Programmer auto-paiement"", ""Programmer"");    return false;" %>' />
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Total=" & FormatAmountForUrl(Eval("ResteAPayer")) & """, ""rwScheduleAutoPay"", ""wbfScheduleAutoPay.aspx"", L_SCHED_AUTOPAY, L_SCHEDULE);    return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
-                                    Text=""
-                                    ToolTip="Modifier"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("edit") %>'
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture"");    return false;" %>' />
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwSupplierInvoices"", ""wbfSupplierInvoinceEdit.aspx"", L_EDIT_INVOICE, L_ADD_INVOICE);    return false;" %>' />
 
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
-                                    Text=""
-                                    ToolTip="Supprimer"
+                                    Text=""  ClientIDMode="Static"
+                                    ToolTip='<%# L("delete") %>'
                                     CommandName="DeleteInvoice"
                                     CommandArgument='<%# Eval("Id") %>'
                                     CausesValidation="false" />
@@ -478,7 +513,7 @@
 
                     <EmptyDataTemplate>
                         <div class="empty-state">
-                            Aucune facture trouvée.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -487,7 +522,7 @@
             </div>
         </div>
                 <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;" title="Ajouter une facture">+</button>
+        <button id="fabAdd" runat="server" type="button"  ClientIDMode="Static" class="fab-add" onclick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;" title="">+</button>
 
 
 
@@ -531,6 +566,32 @@
         ClientIDMode="Static" >
     </telerik:RadWindow>
 
+    <%-- Modal de paiement DreamPaiement EFT --%>
+    <telerik:RadWindow ID="rwDreamPayment" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="true"
+        Width="720"
+        Height="780"
+        Title="Payer via DreamPaiement (EFT)"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
+    </telerik:RadWindow>
+
+    <%-- Modal de paiement Interac e-Transfer --%>
+    <telerik:RadWindow ID="rwInteracPayment" runat="server"
+        Modal="true"
+        VisibleOnPageLoad="false"
+        Behaviors="Close,Move"
+        DestroyOnClose="true"
+        Width="720"
+        Height="720"
+        Title="Payer via Interac e-Transfer"
+        OnClientClose="rwInvoice_OnInvoiceClose"
+        ClientIDMode="Static" >
+    </telerik:RadWindow>
+
     <%-- Modal "Programmer auto-paiement" --%>
     <telerik:RadWindow ID="rwScheduleAutoPay" runat="server"
         Modal="true"
@@ -549,7 +610,26 @@
 
     <script src="js/RadWindows.js"></script>
 
+    <telerik:RadCodeBlock ID="rcbInvoicesJs" runat="server">
     <script type="text/javascript">
+
+        // Libelles localises (fr/en/es). Les blocs de rendu serveur ci-dessous DOIVENT
+        // rester dans le RadCodeBlock englobant : sinon ils verrouillent le conteneur
+        // MainContent, et le RadAjaxPanel (RadAjaxControl) echoue a s'envelopper
+        // (MoveUpdatePanel -> AddAt). Variables referencees par les OnClientClick de la grille.
+        var L_ADD_INVOICE = "<%= L("addInvoiceWin") %>";
+        var L_EDIT_INVOICE = "<%= L("editInvoiceWin") %>";
+        var L_ADD_DECAISS = "<%= L("addDecaissWin") %>";
+        var L_EDIT_DECAISS = "<%= L("editDecaissWin") %>";
+        var L_PAY_SUPPLIER = "<%= L("payWin") %>";
+        var L_PAY = "<%= L("pay") %>";
+        var L_SCHED_AUTOPAY = "<%= L("schedAutoPayWin") %>";
+        var L_SCHEDULE = "<%= L("schedule") %>";
+        var L_DREAM_TITLE = "<%= L("winDreamTitle") %>";
+        var L_INTERAC_TITLE = "<%= L("winInteracTitle") %>";
+        var L_CONFIRM_UNSAVED = "<%= L("confirmUnsaved") %>";
+        var L_CONFIRM_TITLE = "<%= L("confirmTitle") %>";
+
         function setInvoiceDirty() {
 
             document.getElementById("hfInvoiceDirty").value = "1";
@@ -598,7 +678,7 @@
 
             // Telerik confirm (asynchrone)
             radconfirm(
-                "⚠️ Vous avez des modifications non sauvegardées.<br/>Voulez-vous vraiment fermer ?",
+                L_CONFIRM_UNSAVED,
                 function (arg) {
 
                     if (arg) {
@@ -612,7 +692,7 @@
                 350, // largeur
                 180, // hauteur
                 null,
-                "Confirmation"
+                L_CONFIRM_TITLE
             );
         }
 
@@ -634,6 +714,7 @@
 
 
     </script>
+    </telerik:RadCodeBlock>
     <uc1:PdfViewer runat="server" id="PdfViewer" />
     <uc2:jsonViewer runat="server" id="jsonViewer" />
 

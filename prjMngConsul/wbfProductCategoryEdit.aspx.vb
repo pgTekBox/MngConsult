@@ -27,7 +27,99 @@ Public Class wbfProductCategoryEdit
             CategoryId = CInt(Request.QueryString("Id"))
             BindData()
         End If
+        ApplyLocalization()
     End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux libellés statiques (Literal) et contrôles serveur.
+    ''' lblTitle/lblSub sont gérés dans BindData (dépendent du mode new/edit).</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        btnSave.Text = L("save")
+        btnCancel.Text = L("close")
+        rddlTaxeStatus.DefaultMessage = L("select")
+        rddlCompteVente.DefaultMessage = L("noAccount")
+        rddlCompteAchat.DefaultMessage = L("noAccount")
+
+        If rddlTaxeStatus.Items.Count >= 3 Then
+            rddlTaxeStatus.Items(0).Text = L("taxTaxable")
+            rddlTaxeStatus.Items(1).Text = L("taxExempt")
+            rddlTaxeStatus.Items(2).Text = L("taxZeroRated")
+        End If
+
+        SetLiteral(Me, "litInfoGeneral", L("infoGeneral"))
+        SetLiteral(Me, "litCodeLabel", L("codeLabel"))
+        SetLiteral(Me, "litNameLabel", L("nameLabel"))
+        SetLiteral(Me, "litDescription", L("description"))
+        SetLiteral(Me, "litTaxStatusDefault", L("taxStatusDefault"))
+        SetLiteral(Me, "litActiveCategory", L("activeCategory"))
+        SetLiteral(Me, "litGlAccounts", L("glAccounts"))
+        SetLiteral(Me, "litGlHint", L("glHint"))
+        SetLiteral(Me, "litSaleAccount", L("saleAccount"))
+        SetLiteral(Me, "litPurchaseAccount", L("purchaseAccount"))
+        SetLiteral(Me, "litIdLabel", L("idLabel"))
+        SetLiteral(Me, "litGuidLabel", L("guidLabel"))
+        SetLiteral(Me, "litCreatedLabel", L("createdLabel"))
+        SetLiteral(Me, "litOrdreLabel", L("ordreLabel"))
+    End Sub
+
+    ''' <summary>Traductions de l'interface Édition catégorie (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Catégorie de produit — Édition", "Product category — Edit", "Categoría de producto — Edición")
+            Case "titleNew" : Return Choose3(lang, "Nouvelle catégorie", "New category", "Nueva categoría")
+            Case "titleEdit" : Return Choose3(lang, "Modifier la catégorie", "Edit category", "Editar categoría")
+            Case "subNew" : Return Choose3(lang, "Remplissez les informations de la catégorie de produit", "Fill in the product category information", "Complete la información de la categoría de producto")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "close" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "infoGeneral" : Return Choose3(lang, "Informations générales", "General information", "Información general")
+            Case "codeLabel" : Return Choose3(lang, "Code *", "Code *", "Código *")
+            Case "nameLabel" : Return Choose3(lang, "Nom *", "Name *", "Nombre *")
+            Case "description" : Return Choose3(lang, "Description", "Description", "Descripción")
+            Case "taxStatusDefault" : Return Choose3(lang, "Statut de taxe par défaut", "Default tax status", "Estado de impuesto predeterminado")
+            Case "select" : Return Choose3(lang, "Sélectionner…", "Select…", "Seleccionar…")
+            Case "taxTaxable" : Return Choose3(lang, "Taxable", "Taxable", "Gravable")
+            Case "taxExempt" : Return Choose3(lang, "Exempt", "Exempt", "Exento")
+            Case "taxZeroRated" : Return Choose3(lang, "Détaxé", "Zero-rated", "Tasa cero")
+            Case "activeCategory" : Return Choose3(lang, "Catégorie active", "Active category", "Categoría activa")
+            Case "glAccounts" : Return Choose3(lang, "Comptes du plan comptable", "Chart of accounts", "Cuentas del plan contable")
+            Case "glHint" : Return Choose3(lang, "Associez un compte de revenus et un compte d'achats/coût des ventes à cette catégorie. Ces comptes seront utilisés automatiquement lors de la facturation.", "Link a revenue account and a purchases/cost-of-sales account to this category. These accounts are used automatically during invoicing.", "Asocie una cuenta de ingresos y una cuenta de compras/costo de ventas a esta categoría. Estas cuentas se usan automáticamente durante la facturación.")
+            Case "saleAccount" : Return Choose3(lang, "Compte de vente (Revenus)", "Sales account (Revenue)", "Cuenta de venta (Ingresos)")
+            Case "purchaseAccount" : Return Choose3(lang, "Compte d'achat (Coût des ventes / Charges)", "Purchase account (Cost of sales / Expenses)", "Cuenta de compra (Costo de ventas / Gastos)")
+            Case "noAccount" : Return Choose3(lang, "Aucun compte sélectionné", "No account selected", "Ninguna cuenta seleccionada")
+            Case "idLabel" : Return Choose3(lang, "ID :", "ID:", "ID:")
+            Case "guidLabel" : Return Choose3(lang, "GUID :", "GUID:", "GUID:")
+            Case "createdLabel" : Return Choose3(lang, "Créé le :", "Created on:", "Creado el:")
+            Case "ordreLabel" : Return Choose3(lang, "Ordre :", "Order:", "Orden:")
+            Case "codeRequired" : Return Choose3(lang, "Le code est obligatoire.", "The code is required.", "El código es obligatorio.")
+            Case "nameRequired" : Return Choose3(lang, "Le nom est obligatoire.", "The name is required.", "El nombre es obligatorio.")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
 
     ' ── Chargement des listes déroulantes ──
 
@@ -50,8 +142,8 @@ Public Class wbfProductCategoryEdit
     Sub BindData()
         If CategoryId = 0 Then
             ' Nouvelle catégorie
-            lblTitle.Text = "Nouvelle catégorie"
-            lblSub.Text = "Remplissez les informations de la catégorie de produit"
+            lblTitle.Text = L("titleNew")
+            lblSub.Text = L("subNew")
             txtCode.Text = ""
             txtName.Text = ""
             txtDescription.Text = ""
@@ -59,7 +151,7 @@ Public Class wbfProductCategoryEdit
             pnlInfo.Visible = False
         Else
             ' Catégorie existante
-            lblTitle.Text = "Modifier la catégorie"
+            lblTitle.Text = L("titleEdit")
 
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
@@ -118,11 +210,11 @@ Public Class wbfProductCategoryEdit
 
         ' Validation
         If String.IsNullOrWhiteSpace(txtCode.Text) Then
-            ShowMsg("Le code est obligatoire.", False)
+            ShowMsg(L("codeRequired"), False)
             Return
         End If
         If String.IsNullOrWhiteSpace(txtName.Text) Then
-            ShowMsg("Le nom est obligatoire.", False)
+            ShowMsg(L("nameRequired"), False)
             Return
         End If
 

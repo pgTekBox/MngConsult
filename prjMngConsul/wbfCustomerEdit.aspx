@@ -688,6 +688,12 @@
                                             RenderMode="Lightweight" CssClass="rtbLike" />
                                     </div>
 
+                                    <div class="field">
+                                        <label>Courriel</label>
+                                        <telerik:RadTextBox ID="txtAddrEmail" runat="server"
+                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                    </div>
+
                                 </div>
 
                                 <div class="field" style="margin-top:12px;">

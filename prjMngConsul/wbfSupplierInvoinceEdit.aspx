@@ -569,7 +569,7 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>Fournisseur</label>
+                                    <label><asp:Literal ID="litLblSupplier" runat="server" /></label>
                                     <asp:Label ID="lblSupplier" runat="server" CssClass="supplier-selector" Text="Sélectionner un fournisseur"></asp:Label>
                                 </div>
 
@@ -584,23 +584,23 @@
 
                             <div class="row4">
                                 <div  style="width:160px">
-                                    <label>Date facture</label>
+                                    <label><asp:Literal ID="litLblInvoiceDate" runat="server" /></label>
                                     <telerik:RadDatePicker  Width="160px"  ID="dpIssueDate" runat="server" />
                                 </div>
 
                                 <div  style="width:160px">
-                                    <label>Date d’échéance</label>
+                                    <label><asp:Literal ID="litLblDueDate" runat="server" /></label>
                                     <telerik:RadDatePicker   ID="dpDueDate" runat="server" />
                                 </div>
 
                                 <div  style="width:160px">
-                                    <label>Date de réception</label>
+                                    <label><asp:Literal ID="litLblReceivedDate" runat="server" /></label>
                                     <telerik:RadDatePicker   ID="dpReceivedDate" runat="server" />
                                 </div>
 
                                 <div >
                                     <br />
-                                    <label>Comptabilisé</label><asp:CheckBox ID="chkPost" runat="server" />
+                                    <label><asp:Literal ID="litLblPosted" runat="server" /></label><asp:CheckBox ID="chkPost" runat="server" />
 
                                 </div>
 
@@ -610,11 +610,11 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>No facture fournisseur</label>
+                                    <label><asp:Literal ID="litLblRefNo" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtRefNo" runat="server" EmptyMessage="Référence fournisseur…" />
                                 </div>
                                 <div>
-                                    <label>No bon de commande</label>
+                                    <label><asp:Literal ID="litLblPoNumber" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtPoNumber" runat="server" EmptyMessage="PO-…" />
                                 </div>
                             </div>
@@ -624,21 +624,21 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <strong>Lignes</strong>
+                            <strong><asp:Literal ID="litLblLines" runat="server" /></strong>
                         </div>
 
                         <div class="card-body">
                             <div class="items-headerRD">
-                                <div>Produit</div>
+                                <div><asp:Literal ID="litColProduct" runat="server" /></div>
                              <div></div>
-                                <div style="text-align: center">Compte</div>
-                                
-                                <div style="text-align: center">Qty</div>
-                                <div style="text-align: center">Prix unitaire</div>
-                                <div style="text-align: right">Total</div>
-                                <div style="text-align: center">Tx</div>
+                                <div style="text-align: center"><asp:Literal ID="litColAccount" runat="server" /></div>
+
+                                <div style="text-align: center"><asp:Literal ID="litColQty" runat="server" /></div>
+                                <div style="text-align: center"><asp:Literal ID="litColUnitPrice" runat="server" /></div>
+                                <div style="text-align: right"><asp:Literal ID="litColLineTotal" runat="server" /></div>
+                                <div style="text-align: center"><asp:Literal ID="litColTx" runat="server" /></div>
                                 <div style="text-align: center"></div>
-                                <div style="text-align: center">Ordre</div>
+                                <div style="text-align: center"><asp:Literal ID="litColOrder" runat="server" /></div>
                             </div>
 
                             <div class="items-wrap" style="display: block; padding: 0;">
@@ -716,7 +716,7 @@
                                                         Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
+                                                        OnClientClicking="function(s,e){ if(!confirm(L_CONFIRM_DELLINE)) e.set_cancel(true); }">
                                                     </telerik:RadImageButton>
                                                 </div>
 
@@ -758,26 +758,26 @@
             <div class="footerbar">
                 <div class="totals">
                     <div class="tot">
-                        <asp:Label ID="lblCapSubTotal" runat="server" Text="Sous-total" />
+                        <asp:Literal ID="litCapSubTotal" runat="server" />
                     </div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblSubTotal" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">TPS</div>
+                    <div class="tot"><asp:Literal ID="litCapTps" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblTax1" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">TVQ</div>
+                    <div class="tot"><asp:Literal ID="litCapTvq" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">Total</div>
+                    <div class="tot"><asp:Literal ID="litCapTotal" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
@@ -833,7 +833,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun produit trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptyProducts" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -874,7 +874,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun fournisseur trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptySuppliers" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -915,7 +915,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun compte trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptyAccounts" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -925,10 +925,32 @@
 
         </asp:Panel>
 
+        <telerik:RadCodeBlock ID="rcbInvoiceJs" runat="server">
         <script type="text/javascript">
 
 
             var IS_READONLY = <%= chkPost.Checked.ToString().ToLower() %>;
+
+            // Libelles localises (fr/en/es). Ce bloc est HORS de pnlMain, les blocs de rendu
+            // serveur y sont donc autorises. Les inputs HTML des selecteurs recoivent leur
+            // placeholder/aria-label ici car on ne peut pas les traduire dans pnlMain.
+            var L_CONFIRM_DELLINE = "<%= L("confirmDelLine") %>";
+            var L_EMPTY_PRODUCTS = "<%= L("emptyProducts") %>";
+            var L_EMPTY_SUPPLIERS = "<%= L("emptySuppliers") %>";
+            var L_EMPTY_ACCOUNTS = "<%= L("emptyAccounts") %>";
+            (function () {
+                function setPh(id, v) { var el = document.getElementById(id); if (el) el.placeholder = v; }
+                function setClose(sel, v) { document.querySelectorAll(sel).forEach(function (b) { b.setAttribute("aria-label", v); }); }
+                function apply() {
+                    setPh("productPickerSearch", "<%= L("searchProduct") %>");
+                    setPh("supplierPickerSearch", "<%= L("searchSupplier") %>");
+                    setPh("accountPickerSearch", "<%= L("searchAccount") %>");
+                    setClose(".product-picker-close-inline,.supplier-picker-close-inline,.account-picker-close-inline", "<%= L("close") %>");
+                }
+                if (document.readyState !== "loading") apply();
+                else document.addEventListener("DOMContentLoaded", apply);
+            })();
+
             function onSaveClicked(sender, args) {
 
                 // 👉 remet le flag à propre
@@ -1243,7 +1265,7 @@
                     empty = document.createElement("div");
                     empty.id = "productPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun produit trouvé.";
+                    empty.innerText = L_EMPTY_PRODUCTS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
@@ -1311,7 +1333,7 @@
                     empty = document.createElement("div");
                     empty.id = "supplierPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun fournisseur trouvé.";
+                    empty.innerText = L_EMPTY_SUPPLIERS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
@@ -1382,7 +1404,7 @@
                     empty = document.createElement("div");
                     empty.id = "accountPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun compte trouvé.";
+                    empty.innerText = L_EMPTY_ACCOUNTS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
@@ -1396,6 +1418,7 @@
 
 
         </script>
+        </telerik:RadCodeBlock>
     </form>
 </body>
 </html>

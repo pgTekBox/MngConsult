@@ -43,6 +43,7 @@ Public Class wbfSupplierEdit
         dt.Columns.Add("StateId", GetType(Integer))
         dt.Columns.Add("PostalCode", GetType(String))
         dt.Columns.Add("CountryId", GetType(Integer))
+        dt.Columns.Add("Email", GetType(String))
         dt.Columns.Add("Dirty", GetType(Integer))
         dt.Columns.Add("Deleted", GetType(Integer))
         ViewState("PartyAddressTable") = dt
@@ -63,9 +64,129 @@ Public Class wbfSupplierEdit
             BindData()
         End If
 
-
+        ApplyLocalization()
 
     End Sub
+
+    ''' <summary>Applique la langue courante (fr/en/es) aux contrôles serveur (titre, boutons, combos).</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        lnkBack.Text = "← " & L("back")
+        lnkStripeOnboarding.Text = "💳 " & L("configStripe")
+        btnSave.Text = L("save")
+        rddlPartyType.DefaultMessage = L("select")
+        btnNewAddress.Text = "+ " & L("addAddress")
+        rwAddr.Title = L("addrWinTitle")
+        rddlAddressType.DefaultMessage = L("select")
+        rddlProvince.DefaultMessage = L("select")
+        rddlPays.DefaultMessage = L("select")
+        btnAddrSave.Text = L("save")
+        btnAddrCancel.Text = L("cancel")
+
+        ' Libellés HTML : passés par des Literal (et non des blocs <%= %>) car le
+        ' RadAjaxManager déplace le RadUpdatePanel de rlvAddr/pnlAddrEditor en modifiant
+        ' la collection Controls de form1 — impossible si form1 contient des blocs de code.
+        SetLiteral(Me, "litTitle", L("pageTitleShort"))
+        SetLiteral(Me, "litSupplierInfo", L("supplierInfo"))
+        SetLiteral(Me, "litLblId", L("id"))
+        SetLiteral(Me, "litLblOrigin", L("origin"))
+        SetLiteral(Me, "litLblCreated", L("created"))
+        SetLiteral(Me, "litLblName", L("name"))
+        SetLiteral(Me, "litLblDisplayName", L("displayName"))
+        SetLiteral(Me, "litLblPartyType", L("type"))
+        SetLiteral(Me, "litLblWebsite", L("website"))
+        SetLiteral(Me, "litLblNoTps", L("noTps"))
+        SetLiteral(Me, "litLblNoTvq", L("noTvq"))
+        SetLiteral(Me, "litLblNote", L("note"))
+        SetLiteral(Me, "litAddresses", L("addresses"))
+        SetLiteral(Me, "litLblAddrType", L("type"))
+        SetLiteral(Me, "litLblAddrName", L("name"))
+        SetLiteral(Me, "litLblAddr1", L("address1"))
+        SetLiteral(Me, "litLblAddr2", L("address2"))
+        SetLiteral(Me, "litLblCity", L("city"))
+        SetLiteral(Me, "litLblProvince", L("province"))
+        SetLiteral(Me, "litLblCountry", L("country"))
+        SetLiteral(Me, "litLblPostal", L("postalCode"))
+        SetLiteral(Me, "litLblAddrEmail", L("addrEmail"))
+        SetLiteral(Me, "litLblAddrNote", L("note"))
+    End Sub
+
+    ''' <summary>Localise les libellés du LayoutTemplate / EmptyDataTemplate du RadListView
+    ''' des adresses. Interdiction d'y mettre des blocs &lt;%# %&gt; : le RadListView doit
+    ''' modifier la collection Controls du LayoutTemplate (injection dans addrPlaceholder).
+    ''' On passe donc par des Literal renseignés ici.</summary>
+    Private Sub rlvAddr_PreRender(sender As Object, e As EventArgs) Handles rlvAddr.PreRender
+        SetLiteral(rlvAddr, "litAddrColType", L("colType"))
+        SetLiteral(rlvAddr, "litAddrColAddress", L("colAddress"))
+        SetLiteral(rlvAddr, "litAddrColActions", L("colActions"))
+        SetLiteral(rlvAddr, "litAddrEmpty", L("noAddress"))
+    End Sub
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    ''' <summary>Traductions de l'interface Édition Fournisseur (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Fournisseur — Édition", "Supplier — Edit", "Proveedor — Edición")
+            Case "pageTitleShort" : Return Choose3(lang, "Édition — Fournisseur", "Edit — Supplier", "Edición — Proveedor")
+            Case "back" : Return Choose3(lang, "Retour à la liste", "Back to list", "Volver a la lista")
+            Case "configStripe" : Return Choose3(lang, "Configurer Stripe", "Configure Stripe", "Configurar Stripe")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "cancel" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
+            Case "select" : Return Choose3(lang, "Sélectionner…", "Select…", "Seleccionar…")
+            Case "supplierInfo" : Return Choose3(lang, "Informations Fournisseur", "Supplier information", "Información del proveedor")
+            Case "id" : Return Choose3(lang, "Id", "Id", "Id")
+            Case "origin" : Return Choose3(lang, "Origine", "Origin", "Origen")
+            Case "created" : Return Choose3(lang, "Créé", "Created", "Creado")
+            Case "name" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "displayName" : Return Choose3(lang, "Nom d'affichage", "Display name", "Nombre para mostrar")
+            Case "type" : Return Choose3(lang, "Type", "Type", "Tipo")
+            Case "website" : Return Choose3(lang, "Site web", "Website", "Sitio web")
+            Case "noTps" : Return Choose3(lang, "No TPS", "GST No.", "No. TPS")
+            Case "noTvq" : Return Choose3(lang, "No TVQ", "QST No.", "No. TVQ")
+            Case "note" : Return Choose3(lang, "Note", "Note", "Nota")
+            Case "addresses" : Return Choose3(lang, "Adresses", "Addresses", "Direcciones")
+            Case "addAddress" : Return Choose3(lang, "Ajouter une adresse", "Add an address", "Agregar una dirección")
+            Case "colType" : Return Choose3(lang, "Type", "Type", "Tipo")
+            Case "colAddress" : Return Choose3(lang, "Adresse", "Address", "Dirección")
+            Case "colActions" : Return Choose3(lang, "Actions", "Actions", "Acciones")
+            Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
+            Case "delete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
+            Case "noAddress" : Return Choose3(lang, "Aucune adresse enregistrée pour ce fournisseur.", "No address saved for this supplier.", "Ninguna dirección registrada para este proveedor.")
+            Case "addrWinTitle" : Return Choose3(lang, "Édition adresse", "Edit address", "Edición de dirección")
+            Case "address1" : Return Choose3(lang, "Adresse 1", "Address 1", "Dirección 1")
+            Case "address2" : Return Choose3(lang, "Adresse 2", "Address 2", "Dirección 2")
+            Case "city" : Return Choose3(lang, "Ville", "City", "Ciudad")
+            Case "province" : Return Choose3(lang, "Province", "Province", "Provincia")
+            Case "country" : Return Choose3(lang, "Pays", "Country", "País")
+            Case "postalCode" : Return Choose3(lang, "Code postal", "Postal code", "Código postal")
+            Case "addrEmail" : Return Choose3(lang, "Courriel", "Email", "Correo")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     Sub BinDDL()
         SetDDL(rddlProvince, "Name", "Value", "s0014GetProvince")
@@ -147,6 +268,7 @@ Public Class wbfSupplierEdit
             dr("StateId") = orow("StateId")
             dr("CountryId") = orow("CountryId")
             dr("PostalCode") = orow("PostalCode")
+            dr("Email") = orow("Email")
             dr("Dirty") = 0
             dr("Deleted") = 0
             CType(ViewState("PartyAddressTable"), DataTable).Rows.Add(dr)
@@ -256,6 +378,7 @@ Public Class wbfSupplierEdit
             txtCity.Text = r("City").ToString()
 
             txtPostal.Text = r("PostalCode").ToString()
+            txtAddrEmail.Text = r("Email").ToString()
             rddlProvince.SelectedValue = r("StateId")
             rddlPays.SelectedValue = r("CountryId")
             rddlAddressType.SelectedValue = r("AddressTypeId")
@@ -264,7 +387,7 @@ Public Class wbfSupplierEdit
 
         Else
             ' Nouveau / introuvable
-            txtA1.Text = "" : txtA2.Text = "" : txtCity.Text = "" : txtPostal.Text = ""
+            txtA1.Text = "" : txtA2.Text = "" : txtCity.Text = "" : txtPostal.Text = "" : txtAddrEmail.Text = ""
         End If
         pnlMsg.Visible = True
         pMsg.InnerText = "OpenAddrWindow appelé - id=" & addrId & " A1=" & txtA1.Text
@@ -346,6 +469,7 @@ Public Class wbfSupplierEdit
             r("Note") = DbNullIfEmpty(txtAddressNote.Text)
             r("City") = DbNullIfEmpty(txtCity.Text)
             r("PostalCode") = DbNullIfEmpty(txtPostal.Text)
+            r("Email") = DbNullIfEmpty(txtAddrEmail.Text)
             r("StateId") = DbNullIfEmpty(rddlProvince.SelectedValue)
             r("CountryId") = DbNullIfEmpty(rddlPays.SelectedValue)
             r("AddressTypeId") = DbNullIfEmpty(rddlAddressType.SelectedValue)
@@ -378,6 +502,7 @@ Public Class wbfSupplierEdit
         dr("CountryId") = DbNullIfEmpty(rddlPays.SelectedValue)
         dr("Typename") = DbNullIfEmpty(rddlAddressType.SelectedText)
         dr("PostalCode") = DbNullIfEmpty(txtPostal.Text)
+        dr("Email") = DbNullIfEmpty(txtAddrEmail.Text)
 
         CType(ViewState("PartyAddressTable"), DataTable).Rows.Add(dr)
 
@@ -410,6 +535,7 @@ Public Class wbfSupplierEdit
                 p.Add(New SqlClient.SqlParameter("@PostalCode", orow("PostalCode")))
                 p.Add(New SqlClient.SqlParameter("@CountryId", orow("CountryId")))
                 p.Add(New SqlClient.SqlParameter("@StateId", orow("StateId")))
+                p.Add(New SqlClient.SqlParameter("@Email", orow("Email")))
                 ExecuteSQL("s0016UpdatePartyAddress", p)
 
             ElseIf orow("Dirty") = 1 AndAlso CInt(orow("Id")) <= 0 Then
@@ -425,6 +551,7 @@ Public Class wbfSupplierEdit
                 p.Add(New SqlClient.SqlParameter("@PostalCode", orow("PostalCode")))
                 p.Add(New SqlClient.SqlParameter("@CountryId", orow("CountryId")))
                 p.Add(New SqlClient.SqlParameter("@StateId", orow("StateId")))
+                p.Add(New SqlClient.SqlParameter("@Email", orow("Email")))
                 ExecuteSQL("s0015InsertPartyAddress", p)
 
             End If
@@ -448,6 +575,7 @@ Public Class wbfSupplierEdit
         txtA2.Text = ""
         txtCity.Text = ""
         txtPostal.Text = ""
+        txtAddrEmail.Text = ""
 
         txtAddressNote.Text = ""
         txtAddressName.Text = ""

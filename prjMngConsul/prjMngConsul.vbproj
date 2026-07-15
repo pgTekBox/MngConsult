@@ -306,6 +306,7 @@
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
     <Content Include="Database\s0150GetParamsForCompany.sql" />
     <Content Include="Database\s0151UpdateParamValue.sql" />
+    <Content Include="Database\s0688LinkDocumentToSquareOrder.sql" />
     <Content Include="Database\fCompanyName.sql" />
     <Content Include="Database\fParam.sql" />
     <Content Include="Database\s0160GetParamValue.sql" />
@@ -532,6 +533,9 @@
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
     <Content Include="wbfSupplierPaymentChoice.aspx" />
+    <Content Include="wbfSupplierPaymentDream.aspx" />
+    <Content Include="wbfSupplierPaymentInterac.aspx" />
+    <Content Include="wbfCustomerPaymentLink.aspx" />
     <Content Include="wbfSupplierPaymentSuccess.aspx" />
     <Content Include="wbfSupplierPaymentSync.aspx" />
     <Content Include="wbfSuppliers.aspx" />
@@ -662,6 +666,7 @@
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="App_Code\clsSquare.vb" />
+    <Compile Include="App_Code\clsDreamPayments.vb" />
     <Compile Include="App_Code\clsCrypto.vb" />
     <Compile Include="App_Code\clsRememberMe.vb" />
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
@@ -1195,6 +1200,27 @@
     </Compile>
     <Compile Include="wbfSupplierPaymentChoice.aspx.vb">
       <DependentUpon>wbfSupplierPaymentChoice.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentDream.aspx.designer.vb">
+      <DependentUpon>wbfSupplierPaymentDream.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentDream.aspx.vb">
+      <DependentUpon>wbfSupplierPaymentDream.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentInterac.aspx.designer.vb">
+      <DependentUpon>wbfSupplierPaymentInterac.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSupplierPaymentInterac.aspx.vb">
+      <DependentUpon>wbfSupplierPaymentInterac.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfCustomerPaymentLink.aspx.designer.vb">
+      <DependentUpon>wbfCustomerPaymentLink.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCustomerPaymentLink.aspx.vb">
+      <DependentUpon>wbfCustomerPaymentLink.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfSupplierPaymentSuccess.aspx.designer.vb">
