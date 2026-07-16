@@ -107,10 +107,16 @@ Public Class InvoicePdfBuilder
                 ' Côté gauche : logo + nom entreprise
                 row.RelativeItem().Row(
                     Sub(brandRow)
-                        ' Carré logo avec initiale
-                        brandRow.AutoItem().Width(50).Height(50).Background(CLR_PRIMARY).AlignCenter().AlignMiddle().
-                            Text(GetInitial(inv.CompanyName)).
-                                FontSize(24).FontColor(CLR_WHITE).Bold()
+                        If inv.LogoBytes IsNot Nothing AndAlso inv.LogoBytes.Length > 0 Then
+                            ' Vrai logo de l'entreprise
+                            brandRow.AutoItem().Width(50).Height(50).AlignCenter().AlignMiddle().
+                                Image(inv.LogoBytes).FitArea()
+                        Else
+                            ' Repli : carré avec l'initiale
+                            brandRow.AutoItem().Width(50).Height(50).Background(CLR_PRIMARY).AlignCenter().AlignMiddle().
+                                Text(GetInitial(inv.CompanyName)).
+                                    FontSize(24).FontColor(CLR_WHITE).Bold()
+                        End If
 
                         brandRow.ConstantItem(12)
 
@@ -370,6 +376,8 @@ Public Class InvoiceData
 
     Public Property CompanyName As String
     Public Property CompanyTagline As String = "Cabinet de massothérapie"
+    ''' <summary>Octets du logo de l'entreprise (T010Company.Logo). Si présent, remplace le monogramme.</summary>
+    Public Property LogoBytes As Byte()
     Public Property CompanyAddressLine1 As String
     Public Property CompanyAddressLine2 As String
     Public Property CompanyPhone As String

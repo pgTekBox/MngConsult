@@ -15,14 +15,16 @@
 
     <%-- Sélecteur de compagnie (visible uniquement si comptable avec >1 compagnie) --%>
     <asp:Panel ID="pnlCompanyPicker" runat="server" CssClass="company-picker" Visible="false">
+        <asp:Literal ID="litCompanyLogoPicker" runat="server" />
         <span class="company-icon" aria-hidden="true">🏢</span>
         <asp:DropDownList ID="ddlCompany" runat="server"
-            CssClass="company-select" 
+            CssClass="company-select"
             AutoPostBack="true" />
     </asp:Panel>
- 
+
     <%-- Affichage simple si une seule compagnie --%>
     <asp:Panel ID="pnlCompanyLabel" runat="server" CssClass="company-label" Visible="false">
+        <asp:Literal ID="litCompanyLogoLabel" runat="server" />
         <span class="company-icon" aria-hidden="true">🏢</span>
         <asp:Literal ID="litCompanyName" runat="server" />
     </asp:Panel>
@@ -140,6 +142,16 @@
 .company-icon{
     font-size:16px;
     flex-shrink:0;
+}
+
+.company-logo{
+    width:24px;
+    height:24px;
+    object-fit:contain;
+    border-radius:6px;
+    flex-shrink:0;
+    display:inline-block;
+    vertical-align:middle;
 }
 
 .company-select{

@@ -22,8 +22,21 @@ Public Class HeaderUser
 
         BindUserInfo()
         BindCompanies()
+        RenderCompanyLogo()
         LoadTrialBadge()
 
+    End Sub
+
+    ''' <summary>Logo de la compagnie DEVANT le nom (via CompanyLogo.ashx). Si aucun logo,
+    ''' l'image échoue (404), onerror la retire → l'icône 🏢 reste visible.</summary>
+    Private Sub RenderCompanyLogo()
+        If Company = Guid.Empty Then Return
+        Dim img As String =
+            "<img class=""company-logo"" src=""" & ResolveUrl("~/CompanyLogo.ashx") & "?c=" & Company.ToString() & """ " &
+            "alt="""" onerror=""this.remove()"" " &
+            "onload=""if(this.nextElementSibling){this.nextElementSibling.style.display='none';}"" />"
+        litCompanyLogoLabel.Text = img
+        litCompanyLogoPicker.Text = img
     End Sub
 
     ''' <summary>

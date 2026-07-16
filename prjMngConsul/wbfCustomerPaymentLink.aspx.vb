@@ -31,6 +31,15 @@ Public Class wbfCustomerPaymentLink
         End Set
     End Property
 
+    Private Property PartyId As String
+        Get
+            Return CStr(If(ViewState("PartyId"), ""))
+        End Get
+        Set(value As String)
+            ViewState("PartyId") = value
+        End Set
+    End Property
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         If Not isAuthenticated Then
             Response.Redirect("~/wbfLogin.aspx")
@@ -42,6 +51,7 @@ Public Class wbfCustomerPaymentLink
         If Not IsPostBack Then
             DocId = Server.HtmlEncode(If(Request.QueryString("DocumentId"), ""))
             Dim pid As String = Server.HtmlEncode(If(Request.QueryString("PartyId"), ""))
+            PartyId = pid
 
             Dim d As Decimal
             If Decimal.TryParse(If(Request.QueryString("Amount"), ""), NumberStyles.Any, CultureInfo.InvariantCulture, d) Then
@@ -76,6 +86,49 @@ Public Class wbfCustomerPaymentLink
         Return ""
     End Function
 
+    ''' <summary>Courriel du client pour pré-remplir la page Square : priorité à l'adresse de
+    ''' facturation (AddressTypeId=1), sinon la première adresse ayant un courriel.</summary>
+    Private Function LoadBillingEmail(pid As String) As String
+        Try
+            Dim n As Integer
+            If Not Integer.TryParse(pid, n) OrElse n <= 0 Then Return ""
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@PartyId", n))
+            Dim ds As DataSet = ExecuteSQLds("s0013GetPastyAddress", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return ""
+
+            Dim fallback As String = ""
+            For Each r As DataRow In ds.Tables(0).Rows
+                If IsDBNull(r("Email")) Then Continue For
+                Dim em As String = r("Email").ToString().Trim()
+                If em = "" Then Continue For
+                Dim atype As Integer = If(IsDBNull(r("AddressTypeId")), 0, CInt(r("AddressTypeId")))
+                If atype = 1 Then Return em          ' Facturation -> priorité
+                If fallback = "" Then fallback = em
+            Next
+            Return fallback
+        Catch
+        End Try
+        Return ""
+    End Function
+
+    ''' <summary>Ajoute nos paramètres (langue, montant, nom compagnie) à la page de remerciement.
+    ''' Square conserve cette query string et y ajoute ses propres identifiants (orderId, etc.).</summary>
+    Private Function BuildRedirectUrl(baseUrl As String, company As String, amount As Decimal) As String
+        If String.IsNullOrEmpty(baseUrl) Then Return ""
+        Dim sep As String = If(baseUrl.Contains("?"), "&", "?")
+        Dim sb As New Text.StringBuilder()
+        sb.Append(baseUrl).Append(sep)
+        sb.Append("lang=").Append(HttpUtility.UrlEncode(CurrentLang))
+        sb.Append("&amt=").Append(HttpUtility.UrlEncode(amount.ToString("0.00", CultureInfo.InvariantCulture)))
+        If Not String.IsNullOrEmpty(company) Then
+            sb.Append("&co=").Append(HttpUtility.UrlEncode(company))
+        End If
+        ' CompanyGUID pour que merci.aspx récupère le vrai logo via CompanyLogo.ashx.
+        sb.Append("&c=").Append(HttpUtility.UrlEncode(Company.ToString()))
+        Return sb.ToString()
+    End Function
+
     Private Function SafeSquareToken() As String
         Try
             Return GetValidSquareAccessToken()
@@ -104,8 +157,13 @@ Public Class wbfCustomerPaymentLink
             Dim cents As Long = CLng(Math.Round(AmountValue * 100D))
             Dim name As String = L("invoice") & " #" & DocId
             Dim note As String = "Facture client #" & DocId
+            Dim buyerEmail As String = LoadBillingEmail(PartyId)
+            Dim supportEmail As String = UserEmail
+            Dim baseRedirect As String = If(System.Configuration.ConfigurationManager.AppSettings("Square.PaymentRedirectUrl"), "")
+            Dim redirectUrl As String = BuildRedirectUrl(baseRedirect, CompanyName, AmountValue)
 
-            Dim link As clsSquare.SquarePaymentLinkResult = clsSquare.CreatePaymentLink(token, locationId, cents, name, note)
+            Dim link As clsSquare.SquarePaymentLinkResult = clsSquare.CreatePaymentLink(
+                token, locationId, cents, name, note, CompanyName, buyerEmail, supportEmail, redirectUrl)
 
             If link Is Nothing OrElse String.IsNullOrEmpty(link.Url) Then
                 ShowMsg(L("errApi") & " (URL vide)", False)

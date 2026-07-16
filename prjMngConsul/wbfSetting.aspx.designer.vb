@@ -95,6 +95,38 @@ Partial Public Class wbfSetting
     Protected WithEvents pnlEmptyEntreprise As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''imgLogo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents imgLogo As Global.System.Web.UI.WebControls.Image
+
+    '''<summary>
+    '''pnlNoLogo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents pnlNoLogo As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''fuLogo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents fuLogo As Global.System.Web.UI.WebControls.FileUpload
+
+    '''<summary>
+    '''chkRemoveLogo control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents chkRemoveLogo As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>
     '''pvTaxes control.
     '''</summary>
     '''<remarks>

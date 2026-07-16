@@ -518,6 +518,7 @@
     <Content Include="wbfProductCategoryEdit.aspx" />
     <Content Include="wbfProductEdit.aspx" />
     <Content Include="wbfProducts.aspx" />
+    <Content Include="merci.aspx" />
     <Content Include="SquareOAuth.aspx" />
     <Content Include="wbfRapportPlanComptable.aspx" />
     <Content Include="wbfRapportTaxe.aspx" />
@@ -778,6 +779,9 @@
     </Compile>
     <Compile Include="StripeWebhook.ashx.vb">
       <DependentUpon>StripeWebhook.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="CompanyLogo.ashx.vb">
+      <DependentUpon>CompanyLogo.ashx</DependentUpon>
     </Compile>
     <Compile Include="SquareWebhook.ashx.vb">
       <DependentUpon>SquareWebhook.ashx</DependentUpon>
@@ -1097,6 +1101,13 @@
       <DependentUpon>wbfProducts.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="merci.aspx.designer.vb">
+      <DependentUpon>merci.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="merci.aspx.vb">
+      <DependentUpon>merci.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
     <Compile Include="SquareOAuth.aspx.designer.vb">
       <DependentUpon>SquareOAuth.aspx</DependentUpon>
     </Compile>
@@ -1331,6 +1342,7 @@
     <Content Include="Scripts\jquery-3.7.0.slim.min.map" />
     <Content Include="Scripts\jquery-3.7.0.min.map" />
     <Content Include="StripeWebhook.ashx" />
+    <Content Include="CompanyLogo.ashx" />
     <Content Include="SquareWebhook.ashx" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

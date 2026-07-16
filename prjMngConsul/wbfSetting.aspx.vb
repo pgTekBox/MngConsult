@@ -35,6 +35,7 @@ Partial Public Class wbfSetting
             Return
         End If
         ApplyLocalization()
+        If Not IsPostBack Then LoadCompanyLogo()
     End Sub
 
     ''' <summary>Applique la langue courante aux contrôles serveur (titre, boutons, onglets).</summary>
@@ -89,6 +90,12 @@ Partial Public Class wbfSetting
             Case "freqAnnual" : Return Choose3(lang, "Annuelle", "Annual", "Anual")
             Case "bankNone" : Return Choose3(lang, "(Aucun compte)", "(No account)", "(Sin cuenta)")
             Case "bankPick" : Return Choose3(lang, "-- Sélectionnez un compte --", "-- Select an account --", "-- Seleccione una cuenta --")
+            Case "logoLabel" : Return Choose3(lang, "Logo de l'entreprise", "Company logo", "Logotipo de la empresa")
+            Case "logoHint" : Return Choose3(lang, "PNG, JPG ou SVG — 1 Mo max. Enregistrez pour appliquer.", "PNG, JPG or SVG — 1 MB max. Save to apply.", "PNG, JPG o SVG — 1 MB máx. Guarde para aplicar.")
+            Case "logoNone" : Return Choose3(lang, "Aucun logo", "No logo", "Sin logotipo")
+            Case "logoRemove" : Return Choose3(lang, "Retirer le logo", "Remove logo", "Quitar el logotipo")
+            Case "logoTooBig" : Return Choose3(lang, "Le logo dépasse 1 Mo.", "The logo exceeds 1 MB.", "El logotipo supera 1 MB.")
+            Case "logoBadType" : Return Choose3(lang, "Format non supporté (PNG, JPG ou SVG).", "Unsupported format (PNG, JPG or SVG).", "Formato no soportado (PNG, JPG o SVG).")
             Case Else : Return ""
         End Select
     End Function
@@ -434,6 +441,9 @@ Partial Public Class wbfSetting
 
     Protected Sub btnSave_Click(sender As Object, e As EventArgs)
         Try
+            ' Logo d'abord : si validation échoue, on n'enregistre rien et on informe.
+            If Not SaveCompanyLogoFromUpload() Then Return
+
             SaveRepeater(rpEntreprise)
             SaveRepeater(rpTaxes)
             SaveRepeater(rpEmail)
@@ -453,8 +463,85 @@ Partial Public Class wbfSetting
 
         ' Rafraîchir l'affichage avec les valeurs effectivement en BD
         LoadAllSettings()
+        chkRemoveLogo.Checked = False
+        LoadCompanyLogo()
         ShowOk(L("savedOk"))
     End Sub
+
+    ' =========================================================
+    '  LOGO D'ENTREPRISE (T010Company.Logo)
+    ' =========================================================
+
+    ''' <summary>Charge le logo courant (data URI) dans l'aperçu, ou affiche « Aucun logo ».</summary>
+    Private Sub LoadCompanyLogo()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0690GetCompanyLogo", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                If Not IsDBNull(r("Logo")) Then
+                    Dim bytes As Byte() = CType(r("Logo"), Byte())
+                    If bytes IsNot Nothing AndAlso bytes.Length > 0 Then
+                        Dim ct As String = If(IsDBNull(r("LogoContentType")), "image/png", r("LogoContentType").ToString())
+                        imgLogo.ImageUrl = "data:" & ct & ";base64," & Convert.ToBase64String(bytes)
+                        imgLogo.Visible = True
+                        pnlNoLogo.Visible = False
+                        Return
+                    End If
+                End If
+            End If
+        Catch
+        End Try
+        imgLogo.Visible = False
+        pnlNoLogo.Visible = True
+    End Sub
+
+    ''' <summary>Enregistre ou retire le logo. Retourne False si validation échoue (message affiché).</summary>
+    Private Function SaveCompanyLogoFromUpload() As Boolean
+        ' Retrait explicite
+        If chkRemoveLogo.Checked Then
+            Dim pr As New Collection
+            pr.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            pr.Add(New SqlClient.SqlParameter("@Logo", DBNull.Value))
+            pr.Add(New SqlClient.SqlParameter("@ContentType", DBNull.Value))
+            ExecuteSQL("s0689SaveCompanyLogo", pr)
+            Return True
+        End If
+
+        If Not fuLogo.HasFile Then Return True
+
+        Dim bytes As Byte() = fuLogo.FileBytes
+        If bytes Is Nothing OrElse bytes.Length = 0 Then Return True
+        If bytes.Length > 1048576 Then
+            ShowErr(L("logoTooBig"))
+            Return False
+        End If
+
+        Dim ct As String = DetectImageContentType()
+        If String.IsNullOrEmpty(ct) Then
+            ShowErr(L("logoBadType"))
+            Return False
+        End If
+
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim pLogo As New SqlClient.SqlParameter("@Logo", SqlDbType.VarBinary, -1) With {.Value = bytes}
+        p.Add(pLogo)
+        p.Add(New SqlClient.SqlParameter("@ContentType", ct))
+        ExecuteSQL("s0689SaveCompanyLogo", p)
+        Return True
+    End Function
+
+    ''' <summary>Type MIME normalisé du fichier téléversé (PNG/JPEG/SVG), ou "" si non supporté.</summary>
+    Private Function DetectImageContentType() As String
+        Dim ct As String = If(fuLogo.PostedFile IsNot Nothing, fuLogo.PostedFile.ContentType, "").ToLower()
+        Dim ext As String = System.IO.Path.GetExtension(fuLogo.FileName).ToLower()
+        If ct = "image/png" OrElse ext = ".png" Then Return "image/png"
+        If ct = "image/jpeg" OrElse ct = "image/jpg" OrElse ext = ".jpg" OrElse ext = ".jpeg" Then Return "image/jpeg"
+        If ct = "image/svg+xml" OrElse ext = ".svg" Then Return "image/svg+xml"
+        Return ""
+    End Function
 
     Protected Sub btnReload_Click(sender As Object, e As EventArgs)
         LoadAllSettings()

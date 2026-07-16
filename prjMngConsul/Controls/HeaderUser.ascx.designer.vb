@@ -42,6 +42,14 @@ Partial Public Class HeaderUser
     Protected WithEvents pnlCompanyPicker As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''litCompanyLogoPicker control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents litCompanyLogoPicker As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''ddlCompany control.
     '''</summary>
     '''<remarks>
@@ -58,6 +66,14 @@ Partial Public Class HeaderUser
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents pnlCompanyLabel As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litCompanyLogoLabel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''</remarks>
+    Protected WithEvents litCompanyLogoLabel As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''litCompanyName control.

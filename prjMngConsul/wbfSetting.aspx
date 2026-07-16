@@ -80,6 +80,22 @@
             color:var(--mc-muted);
             font-size:13px;
         }
+
+        .logo-box{
+            display:flex; align-items:center; gap:18px;
+            padding:14px; margin-bottom:16px;
+            border:1px solid var(--mc-stroke); border-radius:12px;
+            background:rgba(2,6,23,.02);
+        }
+        .logo-preview{
+            width:84px; height:84px; flex:0 0 84px;
+            border:1px solid var(--mc-stroke); border-radius:12px;
+            background:#fff; display:flex; align-items:center; justify-content:center; overflow:hidden;
+        }
+        .logo-preview img{ max-width:100%; max-height:100%; object-fit:contain; }
+        .logo-preview .ph{ color:var(--mc-muted); font-size:11px; text-align:center; padding:4px; }
+        .logo-info{ flex:1 1 auto; min-width:0; }
+        .logo-info label{ display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
     </style>
 </asp:Content>
 
@@ -128,6 +144,21 @@
 
                     <!-- ENTREPRISE -->
                     <telerik:RadPageView ID="pvCompany" runat="server">
+
+                        <div class="logo-box">
+                            <div class="logo-preview">
+                                <asp:Image ID="imgLogo" runat="server" Visible="false" />
+                                <asp:Panel ID="pnlNoLogo" runat="server" CssClass="ph"><%= L("logoNone") %></asp:Panel>
+                            </div>
+                            <div class="logo-info">
+                                <label><%= L("logoLabel") %></label>
+                                <asp:FileUpload ID="fuLogo" runat="server" accept="image/png,image/jpeg,image/svg+xml" />
+                                <div class="hint"><%= L("logoHint") %></div>
+                                <asp:CheckBox ID="chkRemoveLogo" runat="server" Text="" />
+                                <span style="font-size:12px;color:var(--mc-muted);"><%= L("logoRemove") %></span>
+                            </div>
+                        </div>
+
                         <asp:Repeater ID="rpEntreprise" runat="server" OnItemDataBound="rp_ItemDataBound">
                             <HeaderTemplate><div class="form-grid"></HeaderTemplate>
                             <ItemTemplate>

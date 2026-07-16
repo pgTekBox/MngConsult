@@ -200,6 +200,7 @@ Public Class wbfCustomersInvoices
 
         Dim r As DataRow = ds.Tables(0).Rows(0)
         Dim inv As New InvoiceData()
+        inv.LogoBytes = GetCompanyLogoBytes()   ' logo de l'entreprise (remplace le monogramme si présent)
 
         ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
         inv.CompanyName = "MngConsul Inc."

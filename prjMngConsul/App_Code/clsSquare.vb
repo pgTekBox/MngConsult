@@ -804,20 +804,48 @@ Public Class clsSquare
     ''' amountCents en cents CAD. note/reference : y mettre notre no de facture.
     ''' </summary>
     Public Shared Function CreatePaymentLink(accessToken As String, locationId As String,
-                                             amountCents As Long, name As String, note As String) As SquarePaymentLinkResult
+                                             amountCents As Long, name As String, note As String,
+                                             Optional businessName As String = Nothing,
+                                             Optional buyerEmail As String = Nothing,
+                                             Optional supportEmail As String = Nothing,
+                                             Optional redirectUrl As String = Nothing) As SquarePaymentLinkResult
         Dim price As New JObject()
         price("amount") = amountCents
         price("currency") = "CAD"
 
+        ' Rendre la page hébergée explicite : préfixer le libellé de l'article avec le nom
+        ' de la compagnie (l'en-tête marchand vient du compte Square, pas de l'API).
+        Dim displayName As String = name
+        If Not String.IsNullOrEmpty(businessName) Then displayName = businessName & " — " & name
+
         Dim quick As New JObject()
-        quick("name") = name
+        quick("name") = displayName
         quick("price_money") = price
         If Not String.IsNullOrEmpty(locationId) Then quick("location_id") = locationId
 
         Dim body As New JObject()
         body("idempotency_key") = Guid.NewGuid().ToString()
         body("quick_pay") = quick
-        If Not String.IsNullOrEmpty(note) Then body("description") = note
+
+        ' Description affichée à la caisse : nom de compagnie + note métier.
+        Dim fullDesc As String = note
+        If Not String.IsNullOrEmpty(businessName) Then
+            fullDesc = If(String.IsNullOrEmpty(note), businessName, businessName & " · " & note)
+        End If
+        If Not String.IsNullOrEmpty(fullDesc) Then body("description") = fullDesc
+
+        ' Pré-remplir le courriel du client (ex. adresse de facturation) sur la page Square.
+        If Not String.IsNullOrEmpty(buyerEmail) Then
+            Dim pre As New JObject()
+            pre("buyer_email") = buyerEmail
+            body("pre_populated_data") = pre
+        End If
+
+        ' Options de caisse : courriel de support marchand + redirection après paiement.
+        Dim opts As New JObject()
+        If Not String.IsNullOrEmpty(supportEmail) Then opts("merchant_support_email") = supportEmail
+        If Not String.IsNullOrEmpty(redirectUrl) Then opts("redirect_url") = redirectUrl
+        If opts.HasValues Then body("checkout_options") = opts
 
         Dim resp As String = PostJson("/v2/online-checkout/payment-links", body.ToString(), accessToken)
         Dim pl As JToken = JObject.Parse(resp)("payment_link")

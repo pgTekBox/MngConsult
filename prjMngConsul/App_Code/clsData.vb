@@ -876,6 +876,25 @@ Public Class clsData
         Return ""
     End Function
 
+    ''' <summary>Octets du logo de la compagnie courante (T010Company.Logo) via s0690GetCompanyLogo,
+    ''' ou Nothing si aucun logo. Utilisé pour le PDF de facture et l'en-tête de l'app.</summary>
+    Public Function GetCompanyLogoBytes() As Byte()
+        Try
+            Dim col As New Collection
+            col.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0690GetCompanyLogo", col)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                If Not IsDBNull(r("Logo")) Then
+                    Dim bytes As Byte() = CType(r("Logo"), Byte())
+                    If bytes IsNot Nothing AndAlso bytes.Length > 0 Then Return bytes
+                End If
+            End If
+        Catch
+        End Try
+        Return Nothing
+    End Function
+
     ''' <summary>Indique si la compagnie a connecte un compte Square (OAuth).</summary>
     Public Function IsSquareConnected() As Boolean
         Try
