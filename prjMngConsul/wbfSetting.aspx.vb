@@ -96,6 +96,22 @@ Partial Public Class wbfSetting
             Case "logoRemove" : Return Choose3(lang, "Retirer le logo", "Remove logo", "Quitar el logotipo")
             Case "logoTooBig" : Return Choose3(lang, "Le logo dépasse 1 Mo.", "The logo exceeds 1 MB.", "El logotipo supera 1 MB.")
             Case "logoBadType" : Return Choose3(lang, "Format non supporté (PNG, JPG ou SVG).", "Unsupported format (PNG, JPG or SVG).", "Formato no soportado (PNG, JPG o SVG).")
+            Case "mailVerifyBtn" : Return Choose3(lang, "Vérifier cette adresse", "Verify this address", "Verificar esta dirección")
+            Case "mailVerifyAgainBtn" : Return Choose3(lang, "Renvoyer le lien", "Resend the link", "Reenviar el enlace")
+            Case "mailVerified" : Return Choose3(lang, "Adresse vérifiée le", "Address verified on", "Dirección verificada el")
+            Case "mailPending" : Return Choose3(lang, "Lien envoyé — en attente de confirmation", "Link sent — awaiting confirmation", "Enlace enviado — esperando confirmación")
+            Case "mailNotVerified" : Return Choose3(lang, "Adresse non vérifiée", "Address not verified", "Dirección no verificada")
+            Case "mailEmpty" : Return Choose3(lang, "Saisissez d'abord une adresse courriel.", "Enter an email address first.", "Introduzca primero una dirección de correo.")
+            Case "mailInvalid" : Return Choose3(lang, "Adresse courriel invalide.", "Invalid email address.", "Dirección de correo no válida.")
+            Case "mailSent" : Return Choose3(lang, "Courriel de vérification envoyé à ", "Verification email sent to ", "Correo de verificación enviado a ")
+            Case "mailSendErr" : Return Choose3(lang, "Impossible d'envoyer le courriel de vérification : ", "Unable to send the verification email: ", "No se pudo enviar el correo de verificación: ")
+            Case "mailSubject" : Return Choose3(lang, "Vérifiez l'adresse courriel de votre entreprise", "Verify your company email address", "Verifique la dirección de correo de su empresa")
+            Case "mailHeader" : Return Choose3(lang, "Vérification de votre adresse courriel", "Email address verification", "Verificación de su dirección de correo")
+            Case "mailGreeting" : Return Choose3(lang, "Bonjour !", "Hello!", "¡Hola!")
+            Case "mailIntro" : Return Choose3(lang, "Cette adresse a été inscrite comme adresse d'expédition des courriels de votre entreprise. Cliquez sur le bouton ci-dessous pour confirmer que vous y avez bien accès.", "This address was set as your company's sending email address. Click the button below to confirm you have access to it.", "Esta dirección se registró como dirección de envío de correos de su empresa. Haga clic en el botón siguiente para confirmar que tiene acceso a ella.")
+            Case "mailCta" : Return Choose3(lang, "Confirmer mon adresse", "Confirm my address", "Confirmar mi dirección")
+            Case "mailExpiry" : Return Choose3(lang, "Ce lien est valide 24 heures.", "This link is valid for 24 hours.", "Este enlace es válido durante 24 horas.")
+            Case "mailIgnore" : Return Choose3(lang, "Si vous n'êtes pas à l'origine de cette demande, ignorez simplement ce message.", "If you did not request this, simply ignore this message.", "Si no ha solicitado esto, simplemente ignore este mensaje.")
             Case Else : Return ""
         End Select
     End Function
@@ -113,6 +129,9 @@ Partial Public Class wbfSetting
     ' =========================================================
 
     Private Sub LoadAllSettings()
+        ' L'état de vérification du courriel est relu à chaque (re)chargement :
+        ' le badge doit refléter la BD, pas le cycle précédent.
+        m_MailStatus = Nothing
         BindCategory("ENTREPRISE", rpEntreprise, pnlEmptyEntreprise)
         BindCategory("TAXES", rpTaxes, pnlEmptyTaxes)
         BindCategory("EMAIL", rpEmail, pnlEmptyEmail)
@@ -208,6 +227,10 @@ Partial Public Class wbfSetting
                 ' Combo dynamique alimenté depuis T143PlaidAccount
                 ' La valeur sélectionnée est l'Id du compte (stocké dans iVal)
                 phControl.Controls.Add(BuildCompteBanqueCombo(iVal))
+                Return
+            Case "MAIL_FROM_EMAIL"
+                ' Textbox + bouton de vérification par courriel + badge d'état
+                phControl.Controls.Add(BuildMailFromEmailField(sVal))
                 Return
         End Select
 
@@ -434,6 +457,219 @@ Partial Public Class wbfSetting
 
         Return cb
     End Function
+
+    ' =========================================================
+    '  VÉRIFICATION DU COURRIEL D'ENTREPRISE (MAIL_FROM_EMAIL)
+    '
+    '  La VALEUR du courriel reste un paramètre normal (T101, sauvegardé
+    '  comme les autres par SaveRepeater). Seul le SUIVI de la vérification
+    '  vit dans T010Company (MailVerified*/MailVerify*).
+    '
+    '  L'état est dérivé par s0693 : l'adresse confirmée doit toujours
+    '  correspondre à MAIL_FROM_EMAIL, donc changer le courriel invalide
+    '  la vérification d'office.
+    ' =========================================================
+
+    ''' <summary>État de vérification (s0693), lu une seule fois par chargement.</summary>
+    Private m_MailStatus As DataRow
+
+    Private Function GetMailStatus() As DataRow
+        If m_MailStatus IsNot Nothing Then Return m_MailStatus
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0693GetCompanyMailStatus", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                m_MailStatus = ds.Tables(0).Rows(0)
+            End If
+        Catch
+        End Try
+        Return m_MailStatus
+    End Function
+
+    ''' <summary>
+    ''' Champ du paramètre MAIL_FROM_EMAIL : la textbox habituelle (ID "txtValue",
+    ''' donc sauvegardée par SaveRepeater comme n'importe quel STRING) plus un
+    ''' bouton de vérification et le badge d'état.
+    ''' </summary>
+    Private Function BuildMailFromEmailField(value As String) As Panel
+        Dim pnl As New Panel()
+
+        Dim tb As New RadTextBox()
+        tb.ID = "txtValue"
+        tb.Width = Unit.Percentage(100)
+        tb.Text = value
+        pnl.Controls.Add(tb)
+
+        Dim row As New Panel()
+        row.CssClass = "mail-verify-row"
+
+        Dim st As DataRow = GetMailStatus()
+        Dim isVerified As Boolean = st IsNot Nothing AndAlso Not IsDBNull(st("IsVerified")) AndAlso CBool(st("IsVerified"))
+
+        Dim btn As New RadButton()
+        btn.ID = "btnVerifyMail"
+        btn.Text = If(isVerified, L("mailVerifyAgainBtn"), L("mailVerifyBtn"))
+        btn.CssClass = "btn"
+        btn.AutoPostBack = True
+        btn.CausesValidation = False
+        AddHandler btn.Click, AddressOf btnVerifyMail_Click
+        row.Controls.Add(btn)
+
+        Dim lit As New Literal()
+        lit.Text = BuildMailStatusBadge()
+        row.Controls.Add(lit)
+
+        pnl.Controls.Add(row)
+        Return pnl
+    End Function
+
+    ''' <summary>Badge « vérifiée / en attente / non vérifiée » du courriel d'entreprise.</summary>
+    Private Function BuildMailStatusBadge() As String
+        Dim st As DataRow = GetMailStatus()
+        If st Is Nothing Then Return ""
+
+        Dim isVerified As Boolean = Not IsDBNull(st("IsVerified")) AndAlso CBool(st("IsVerified"))
+        Dim isPending As Boolean = Not IsDBNull(st("IsPending")) AndAlso CBool(st("IsPending"))
+
+        If isVerified Then
+            Dim onDate As String = ""
+            If Not IsDBNull(st("VerifiedOn")) Then onDate = " " & CDate(st("VerifiedOn")).ToString("yyyy-MM-dd")
+            Return "<span class=""mail-badge ok"">✔ " & Server.HtmlEncode(L("mailVerified") & onDate) & "</span>"
+        ElseIf isPending Then
+            Return "<span class=""mail-badge pending"">⏳ " & Server.HtmlEncode(L("mailPending")) & "</span>"
+        Else
+            Return "<span class=""mail-badge no"">✖ " & Server.HtmlEncode(L("mailNotVerified")) & "</span>"
+        End If
+    End Function
+
+    ''' <summary>
+    ''' Bouton « Vérifier » : enregistre l'adresse saisie (on ne vérifie que ce qui
+    ''' est réellement en BD), génère un token 24 h via s0691 et dépose le courriel
+    ''' dans T400Mails.
+    ''' </summary>
+    Protected Sub btnVerifyMail_Click(sender As Object, e As EventArgs)
+        Dim btn As Control = TryCast(sender, Control)
+        If btn Is Nothing Then Return
+
+        Dim item As RepeaterItem = TryCast(btn.NamingContainer, RepeaterItem)
+        If item Is Nothing Then Return
+
+        Dim hidParamId As HiddenField = TryCast(item.FindControl("hidParamId"), HiddenField)
+        Dim tb As RadTextBox = TryCast(item.FindControl("txtValue"), RadTextBox)
+        If hidParamId Is Nothing OrElse tb Is Nothing Then Return
+
+        Dim paramId As Integer = 0
+        If Not Integer.TryParse(hidParamId.Value, paramId) OrElse paramId <= 0 Then Return
+
+        Dim email As String = tb.Text.Trim()
+        If String.IsNullOrEmpty(email) Then
+            ShowErr(L("mailEmpty"))
+            Return
+        End If
+        If Not IsValidEmail(email) Then
+            ShowErr(L("mailInvalid"))
+            Return
+        End If
+
+        Try
+            ' 1) Persister l'adresse : le lien doit confirmer la valeur en BD,
+            '    pas une saisie non enregistrée.
+            SaveParamString(paramId, email)
+
+            ' 2) Token de vérification (24 h)
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Email", email))
+            Dim ds As DataSet = ExecuteSQLds("s0691StartCompanyMailVerification", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                ShowErr(L("mailSendErr") & "s0691")
+                Return
+            End If
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            If IsDBNull(r("Result")) OrElse CInt(r("Result")) <> 1 OrElse IsDBNull(r("Token")) Then
+                ShowErr(L("mailSendErr") & "s0691")
+                Return
+            End If
+
+            Dim token As Guid = CType(r("Token"), Guid)
+
+            ' 3) Dépôt dans T400Mails (le service SrvAI l'envoie par SMTP)
+            SendMailVerification(email, token)
+
+        Catch ex As Exception
+            ShowErr(L("mailSendErr") & ex.Message)
+            Return
+        End Try
+
+        LoadAllSettings()
+        LoadCompanyLogo()
+        ShowOk(L("mailSent") & email)
+    End Sub
+
+    ''' <summary>Insère le courriel de vérification dans T400Mails (BD MailService).</summary>
+    Private Sub SendMailVerification(email As String, token As Guid)
+        Dim link As String = Request.Url.GetLeftPart(UriPartial.Authority) &
+                             ResolveUrl("~/wbfVerifyCompanyMail.aspx") &
+                             "?token=" & token.ToString("D") & "&lang=" & CurrentLang
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@To", email))
+        p.Add(New SqlParameter("@Subject", L("mailSubject")))
+        p.Add(New SqlParameter("@HTMLBody", BuildMailVerificationBody(email, link)))
+        p.Add(New SqlParameter("@TextBody", DBNull.Value))
+
+        ExecuteSQLMail("s0610InsertOutboundMail", p)
+    End Sub
+
+    Private Function BuildMailVerificationBody(email As String, link As String) As String
+        Dim sb As New System.Text.StringBuilder()
+        sb.AppendLine("<!DOCTYPE html>")
+        sb.AppendLine("<html><body style=""font-family: Arial, sans-serif; background:#f6f7fb; margin:0; padding:20px;"">")
+        sb.AppendLine("<div style=""max-width:560px; margin:0 auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.06);"">")
+        sb.AppendLine("<div style=""background: linear-gradient(135deg,#2563eb,#06b6d4); padding:32px; text-align:center;"">")
+        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:24px; font-weight:800;"">60Sec-AI</h1>")
+        sb.AppendLine("<p style=""color:#e0f2fe; margin:6px 0 0 0; font-size:15px;"">" & L("mailHeader") & "</p>")
+        sb.AppendLine("</div>")
+        sb.AppendLine("<div style=""padding:32px;"">")
+        sb.AppendLine("<p style=""margin:0 0 12px 0; font-size:16px; font-weight:700;"">" & L("mailGreeting") & "</p>")
+        sb.AppendLine("<p style=""color:#475569; line-height:1.6; margin:0 0 8px 0;"">" & L("mailIntro") & "</p>")
+        sb.AppendLine("<p style=""margin:0 0 24px 0; font-weight:700;"">" & Server.HtmlEncode(email) & "</p>")
+        sb.AppendLine("<div style=""text-align:center; margin:0 0 24px 0;"">")
+        sb.AppendLine("<a href=""" & link & """ style=""display:inline-block; padding:13px 28px; background:#2563eb; color:#fff; border-radius:12px; font-weight:800; text-decoration:none;"">" & L("mailCta") & "</a>")
+        sb.AppendLine("</div>")
+        sb.AppendLine("<p style=""color:#64748b; font-size:13px; margin:0 0 6px 0;"">" & L("mailExpiry") & "</p>")
+        sb.AppendLine("<p style=""color:#64748b; font-size:13px; margin:0;"">" & L("mailIgnore") & "</p>")
+        sb.AppendLine("</div></div></body></html>")
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function IsValidEmail(email As String) As Boolean
+        Try
+            Dim addr As New System.Net.Mail.MailAddress(email)
+            Return addr.Address.Equals(email, StringComparison.OrdinalIgnoreCase) AndAlso email.Contains(".")
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>Écrit un paramètre STRING (sVal) via s0151UpdateParamValue.</summary>
+    Private Sub SaveParamString(paramId As Integer, value As String)
+        Using conn As New SqlConnection(ConnectionString)
+            conn.Open()
+            Using cmd As New SqlCommand("s0151UpdateParamValue", conn)
+                cmd.CommandType = CommandType.StoredProcedure
+                cmd.Parameters.Add(New SqlParameter("@ParamId", SqlDbType.Int) With {.Value = paramId})
+                cmd.Parameters.Add(New SqlParameter("@sVal", SqlDbType.VarChar, 300) With {.Value = value})
+                cmd.Parameters.Add(New SqlParameter("@iVal", SqlDbType.Int) With {.Value = DBNull.Value})
+                cmd.Parameters.Add(New SqlParameter("@dVal", SqlDbType.DateTime) With {.Value = DBNull.Value})
+                cmd.Parameters.Add(New SqlParameter("@fVal", SqlDbType.Decimal) With {.Precision = 18, .Scale = 6, .Value = DBNull.Value})
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
 
     ' =========================================================
     '  SAUVEGARDE

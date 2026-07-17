@@ -163,6 +163,9 @@
     <File Include="App_Data/RadUploadTemp/RadUploadTestFile">
       <publishTime>02/24/2026 14:59:54</publishTime>
     </File>
+    <File Include="AutoPayProcessor.ashx">
+      <publishTime>06/03/2026 08:16:14</publishTime>
+    </File>
     <File Include="bin/Antlr3.Runtime.dll">
       <publishTime>09/10/2013 17:29:20</publishTime>
     </File>
@@ -203,10 +206,10 @@
       <publishTime>03/08/2023 07:09:56</publishTime>
     </File>
     <File Include="bin/prjMngConsul.dll">
-      <publishTime>06/25/2026 15:19:36</publishTime>
+      <publishTime>07/17/2026 06:41:05</publishTime>
     </File>
     <File Include="bin/prjMngConsul.pdb">
-      <publishTime>06/25/2026 15:19:36</publishTime>
+      <publishTime>07/17/2026 06:41:05</publishTime>
     </File>
     <File Include="bin/QuestPDF.dll">
       <publishTime>03/20/2026 09:48:00</publishTime>
@@ -470,13 +473,16 @@
       <publishTime>02/18/2025 09:27:58</publishTime>
     </File>
     <File Include="bin/WebForms_Basic.xml">
-      <publishTime>06/25/2026 15:19:36</publishTime>
+      <publishTime>07/17/2026 06:41:04</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
     </File>
     <File Include="Bundle.config">
       <publishTime>02/11/2026 06:04:35</publishTime>
+    </File>
+    <File Include="CompanyLogo.ashx">
+      <publishTime>07/16/2026 14:07:34</publishTime>
     </File>
     <File Include="Contact.aspx">
       <publishTime>02/16/2026 06:44:49</publishTime>
@@ -587,13 +593,13 @@
       <publishTime>05/05/2026 07:32:36</publishTime>
     </File>
     <File Include="Controls/HeaderUser.ascx">
-      <publishTime>05/06/2026 09:48:07</publishTime>
+      <publishTime>07/16/2026 14:58:40</publishTime>
     </File>
     <File Include="Controls/jsonViewer.ascx">
       <publishTime>03/16/2026 15:44:21</publishTime>
     </File>
     <File Include="Controls/LeftMenu.ascx">
-      <publishTime>06/03/2026 09:50:57</publishTime>
+      <publishTime>07/16/2026 14:58:40</publishTime>
     </File>
     <File Include="Controls/PdfViewer.ascx">
       <publishTime>03/18/2026 16:35:46</publishTime>
@@ -602,7 +608,10 @@
       <publishTime>03/16/2026 15:44:21</publishTime>
     </File>
     <File Include="css/landingpage.css">
-      <publishTime>05/07/2026 15:48:05</publishTime>
+      <publishTime>07/03/2026 15:59:13</publishTime>
+    </File>
+    <File Include="css/landingpage.src.css">
+      <publishTime>07/03/2026 10:11:55</publishTime>
     </File>
     <File Include="css/listvew.css">
       <publishTime>05/20/2026 14:52:39</publishTime>
@@ -612,6 +621,18 @@
     </File>
     <File Include="Database/check_existing_outbound_mail_proc.sql">
       <publishTime>05/29/2026 10:13:52</publishTime>
+    </File>
+    <File Include="Database/fCompanyName.sql">
+      <publishTime>07/13/2026 14:26:50</publishTime>
+    </File>
+    <File Include="Database/fParam.sql">
+      <publishTime>07/13/2026 06:57:26</publishTime>
+    </File>
+    <File Include="Database/remove_PAYMENT_REGIME_param.sql">
+      <publishTime>07/13/2026 15:21:11</publishTime>
+    </File>
+    <File Include="Database/remove_SMTP_params.sql">
+      <publishTime>07/17/2026 06:17:10</publishTime>
     </File>
     <File Include="Database/s0023GetSuppliersInvoices_v2.sql">
       <publishTime>06/02/2026 08:25:38</publishTime>
@@ -640,8 +661,38 @@
     <File Include="Database/s0084GetStripeEventStats.sql">
       <publishTime>06/02/2026 11:47:00</publishTime>
     </File>
+    <File Include="Database/s0150GetParamsForCompany.sql">
+      <publishTime>07/12/2026 07:09:00</publishTime>
+    </File>
+    <File Include="Database/s0151UpdateParamValue.sql">
+      <publishTime>07/12/2026 06:38:34</publishTime>
+    </File>
+    <File Include="Database/s0160GetParamValue.sql">
+      <publishTime>07/12/2026 06:55:55</publishTime>
+    </File>
+    <File Include="Database/s0200GetUserByEmail.sql">
+      <publishTime>07/13/2026 06:30:38</publishTime>
+    </File>
+    <File Include="Database/s0210GetUserCompanies.sql">
+      <publishTime>07/13/2026 14:27:01</publishTime>
+    </File>
+    <File Include="Database/s0220RegisterUser.sql">
+      <publishTime>07/13/2026 14:27:38</publishTime>
+    </File>
     <File Include="Database/s0222ResendActivation.sql">
       <publishTime>05/29/2026 10:03:52</publishTime>
+    </File>
+    <File Include="Database/s0223GetUserSessionInfo.sql">
+      <publishTime>07/13/2026 06:30:59</publishTime>
+    </File>
+    <File Include="Database/s0230GetUserAndCompanyInfo.sql">
+      <publishTime>07/13/2026 15:20:16</publishTime>
+    </File>
+    <File Include="Database/s0314GetUserByUserId.sql">
+      <publishTime>07/13/2026 06:30:48</publishTime>
+    </File>
+    <File Include="Database/s0500InitializeCompanyData.sql">
+      <publishTime>07/12/2026 06:48:16</publishTime>
     </File>
     <File Include="Database/s0600InsertImportFile.sql">
       <publishTime>05/19/2026 11:01:36</publishTime>
@@ -676,11 +727,14 @@
     <File Include="Database/s0610InsertOutboundMail.sql">
       <publishTime>06/15/2026 08:18:52</publishTime>
     </File>
+    <File Include="Database/s0620GetAllCompanies.sql">
+      <publishTime>07/13/2026 13:40:21</publishTime>
+    </File>
     <File Include="Database/s0630GetPlansForLanding.sql">
-      <publishTime>06/01/2026 09:24:22</publishTime>
+      <publishTime>07/06/2026 13:10:49</publishTime>
     </File>
     <File Include="Database/s0631GetPlanByCode.sql">
-      <publishTime>06/01/2026 09:53:15</publishTime>
+      <publishTime>07/06/2026 14:38:26</publishTime>
     </File>
     <File Include="Database/s0640StripeEventInsertIfNew.sql">
       <publishTime>06/01/2026 10:42:50</publishTime>
@@ -700,6 +754,15 @@
     <File Include="Database/s0645GetUserByStripeCustomerId.sql">
       <publishTime>06/01/2026 10:43:22</publishTime>
     </File>
+    <File Include="Database/s0653GetCompaniesList.sql">
+      <publishTime>07/13/2026 13:41:01</publishTime>
+    </File>
+    <File Include="Database/s0654GetCompanyById.sql">
+      <publishTime>07/13/2026 13:40:40</publishTime>
+    </File>
+    <File Include="Database/s0655SaveCompany.sql">
+      <publishTime>07/13/2026 13:41:34</publishTime>
+    </File>
     <File Include="Database/s0660GetProductsForSquareSync.sql">
       <publishTime>06/25/2026 12:25:22</publishTime>
     </File>
@@ -711,6 +774,57 @@
     </File>
     <File Include="Database/s0663GetCompanySquareAuth.sql">
       <publishTime>06/25/2026 13:23:19</publishTime>
+    </File>
+    <File Include="Database/s0673GetLandingSections.sql">
+      <publishTime>07/03/2026 14:56:56</publishTime>
+    </File>
+    <File Include="Database/s0674UpsertLandingSection.sql">
+      <publishTime>07/03/2026 14:43:41</publishTime>
+    </File>
+    <File Include="Database/s0675GetLandingPages.sql">
+      <publishTime>07/03/2026 15:12:59</publishTime>
+    </File>
+    <File Include="Database/s0676GetLandingSectionsForPage.sql">
+      <publishTime>07/03/2026 15:13:10</publishTime>
+    </File>
+    <File Include="Database/s0677GetLandingSectionContent.sql">
+      <publishTime>07/03/2026 15:13:17</publishTime>
+    </File>
+    <File Include="Database/s0678UpsertLandingSectionContent.sql">
+      <publishTime>07/03/2026 15:13:29</publishTime>
+    </File>
+    <File Include="Database/s0685GetOnboardingProfile.sql">
+      <publishTime>07/12/2026 07:37:29</publishTime>
+    </File>
+    <File Include="Database/s0686SaveOnboardingProfile.sql">
+      <publishTime>07/12/2026 07:38:33</publishTime>
+    </File>
+    <File Include="Database/s0687GetCompanyTrialStatus.sql">
+      <publishTime>07/09/2026 11:33:15</publishTime>
+    </File>
+    <File Include="Database/s0688LinkDocumentToSquareOrder.sql">
+      <publishTime>07/15/2026 15:13:07</publishTime>
+    </File>
+    <File Include="Database/s0691StartCompanyMailVerification.sql">
+      <publishTime>07/17/2026 05:42:28</publishTime>
+    </File>
+    <File Include="Database/s0692VerifyCompanyMail.sql">
+      <publishTime>07/17/2026 05:42:40</publishTime>
+    </File>
+    <File Include="Database/s0693GetCompanyMailStatus.sql">
+      <publishTime>07/17/2026 05:42:47</publishTime>
+    </File>
+    <File Include="Database/s0694GetCompanyReplyTo.sql">
+      <publishTime>07/17/2026 06:30:07</publishTime>
+    </File>
+    <File Include="Database/seed_LandingContent_accueil_en_es.sql">
+      <publishTime>07/03/2026 15:37:40</publishTime>
+    </File>
+    <File Include="Database/seed_LandingSections_accueil.sql">
+      <publishTime>07/03/2026 14:48:32</publishTime>
+    </File>
+    <File Include="Database/seed_LandingSections_subpages.sql">
+      <publishTime>07/03/2026 14:58:14</publishTime>
     </File>
     <File Include="Database/setup_MailService_user.sql">
       <publishTime>05/29/2026 10:13:52</publishTime>
@@ -724,8 +838,17 @@
     <File Include="Database/staging.ProductImport.sql">
       <publishTime>05/19/2026 15:20:43</publishTime>
     </File>
+    <File Include="Database/T010Company_AddMailVerification.sql">
+      <publishTime>07/17/2026 05:48:47</publishTime>
+    </File>
     <File Include="Database/T010Company_AddSquareColumns.sql">
       <publishTime>06/25/2026 13:22:57</publishTime>
+    </File>
+    <File Include="Database/T010Company_cleanup_migrated_columns.sql">
+      <publishTime>07/13/2026 14:11:01</publishTime>
+    </File>
+    <File Include="Database/T010Company_drop_Name.sql">
+      <publishTime>07/13/2026 14:28:40</publishTime>
     </File>
     <File Include="Database/T015User_AddStripeCustomerId.sql">
       <publishTime>06/01/2026 09:53:21</publishTime>
@@ -739,17 +862,44 @@
     <File Include="Database/T021Plan_FixAccents.sql">
       <publishTime>06/01/2026 09:35:22</publishTime>
     </File>
+    <File Include="Database/T022LandingPage.sql">
+      <publishTime>07/03/2026 14:56:39</publishTime>
+    </File>
+    <File Include="Database/T023LandingSection.sql">
+      <publishTime>07/03/2026 14:43:10</publishTime>
+    </File>
+    <File Include="Database/T024LandingSectionContent.sql">
+      <publishTime>07/03/2026 14:43:18</publishTime>
+    </File>
     <File Include="Database/T050Party_AddStripeColumns.sql">
       <publishTime>06/02/2026 08:25:07</publishTime>
     </File>
     <File Include="Database/T075Products_AddSquareColumns.sql">
       <publishTime>06/25/2026 12:25:10</publishTime>
     </File>
+    <File Include="Database/T100_add_fiscal_params.sql">
+      <publishTime>07/13/2026 15:20:53</publishTime>
+    </File>
+    <File Include="Database/T100_add_onboarding_params.sql">
+      <publishTime>07/12/2026 07:36:35</publishTime>
+    </File>
+    <File Include="Database/T100_add_structure_param.sql">
+      <publishTime>07/13/2026 13:39:25</publishTime>
+    </File>
+    <File Include="Database/T101ParamValues_add_dVal_fVal.sql">
+      <publishTime>07/12/2026 06:54:48</publishTime>
+    </File>
+    <File Include="Database/T102ParamI18n.sql">
+      <publishTime>07/17/2026 06:17:22</publishTime>
+    </File>
     <File Include="Database/tStripeEvenement.sql">
       <publishTime>06/01/2026 10:42:35</publishTime>
     </File>
+    <File Include="Database/v_Parameters.sql">
+      <publishTime>07/12/2026 06:56:02</publishTime>
+    </File>
     <File Include="Default.aspx">
-      <publishTime>03/13/2026 14:19:32</publishTime>
+      <publishTime>07/09/2026 11:36:16</publishTime>
     </File>
     <File Include="ExchangeToken.aspx">
       <publishTime>03/25/2026 16:34:45</publishTime>
@@ -769,6 +919,9 @@
     <File Include="Images/flechehaut.png">
       <publishTime>03/06/2026 06:45:20</publishTime>
     </File>
+    <File Include="Images/logo.svg">
+      <publishTime>07/04/2026 06:47:14</publishTime>
+    </File>
     <File Include="Images/pencil.png">
       <publishTime>03/12/2026 14:42:58</publishTime>
     </File>
@@ -780,6 +933,51 @@
     </File>
     <File Include="Images/trash.png">
       <publishTime>03/12/2026 14:44:12</publishTime>
+    </File>
+    <File Include="img/landingpage-1.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-10.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-11.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-12.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-13.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-14.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-15.jpg">
+      <publishTime>07/03/2026 13:21:51</publishTime>
+    </File>
+    <File Include="img/landingpage-2.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-3.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-4.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-5.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-6.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-7.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-8.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
+    </File>
+    <File Include="img/landingpage-9.jpg">
+      <publishTime>07/03/2026 13:21:50</publishTime>
     </File>
     <File Include="ImportSageBalanceVerification.aspx">
       <publishTime>04/09/2026 11:33:21</publishTime>
@@ -802,6 +1000,9 @@
     <File Include="js/JsonView.js">
       <publishTime>03/16/2026 15:37:04</publishTime>
     </File>
+    <File Include="js/lucide.min.js">
+      <publishTime>07/03/2026 12:56:22</publishTime>
+    </File>
     <File Include="js/RadWindows.js">
       <publishTime>04/27/2026 14:08:30</publishTime>
     </File>
@@ -809,10 +1010,16 @@
       <publishTime>03/13/2026 15:45:04</publishTime>
     </File>
     <File Include="LandingPage.aspx">
-      <publishTime>06/01/2026 09:25:23</publishTime>
+      <publishTime>07/04/2026 06:55:55</publishTime>
+    </File>
+    <File Include="LandingPagesNEW.html">
+      <publishTime>07/03/2026 15:54:11</publishTime>
+    </File>
+    <File Include="merci.aspx">
+      <publishTime>07/16/2026 14:07:34</publishTime>
     </File>
     <File Include="PlaidAccounts.aspx">
-      <publishTime>03/26/2026 11:07:38</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="PlaidCreateLinkToken.aspx">
       <publishTime>03/25/2026 14:42:44</publishTime>
@@ -821,7 +1028,7 @@
       <publishTime>03/26/2026 06:15:40</publishTime>
     </File>
     <File Include="Receipts.aspx">
-      <publishTime>02/16/2026 07:29:16</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="Scripts/bootstrap.bundle.js">
       <publishTime>02/11/2026 06:04:56</publishTime>
@@ -952,8 +1159,14 @@
     <File Include="SquareOAuth.aspx">
       <publishTime>06/25/2026 13:29:44</publishTime>
     </File>
+    <File Include="SquareWebhook.ashx">
+      <publishTime>06/30/2026 11:02:42</publishTime>
+    </File>
     <File Include="StripeWebhook.ashx">
       <publishTime>06/01/2026 10:46:46</publishTime>
+    </File>
+    <File Include="tailwind.config.js">
+      <publishTime>07/03/2026 15:58:58</publishTime>
     </File>
     <File Include="todel.aspx">
       <publishTime>04/26/2026 06:13:45</publishTime>
@@ -968,10 +1181,10 @@
       <publishTime>02/11/2026 06:16:01</publishTime>
     </File>
     <File Include="wbfActivate.aspx">
-      <publishTime>05/08/2026 13:38:13</publishTime>
+      <publishTime>07/06/2026 14:20:26</publishTime>
     </File>
     <File Include="wbfAgenda.aspx">
-      <publishTime>05/01/2026 10:51:49</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfAIPaiement.aspx">
       <publishTime>04/29/2026 14:44:44</publishTime>
@@ -982,38 +1195,53 @@
     <File Include="wbfAppointmentEdit.aspx">
       <publishTime>05/01/2026 13:28:17</publishTime>
     </File>
+    <File Include="wbfAutoPayAuthorizations.aspx">
+      <publishTime>07/06/2026 11:46:12</publishTime>
+    </File>
+    <File Include="wbfAutoPayHistory.aspx">
+      <publishTime>07/06/2026 11:46:12</publishTime>
+    </File>
+    <File Include="wbfAutoPaySchedule.aspx">
+      <publishTime>07/06/2026 11:46:12</publishTime>
+    </File>
     <File Include="wbfBalanceVerification.aspx">
-      <publishTime>04/20/2026 09:48:49</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfBeneficesNonRepartis.aspx">
-      <publishTime>04/20/2026 09:41:59</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfBilan.aspx">
-      <publishTime>04/20/2026 09:26:00</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfCompanyInfo.aspx">
-      <publishTime>03/13/2026 11:44:56</publishTime>
+      <publishTime>07/06/2026 11:43:02</publishTime>
     </File>
     <File Include="wbfCustomerEdit.aspx">
-      <publishTime>03/18/2026 14:00:45</publishTime>
+      <publishTime>07/15/2026 16:15:02</publishTime>
+    </File>
+    <File Include="wbfCustomerPaymentLink.aspx">
+      <publishTime>07/15/2026 15:02:27</publishTime>
     </File>
     <File Include="wbfCustomers.aspx">
-      <publishTime>05/20/2026 15:14:16</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfCustomersInvoices.aspx">
-      <publishTime>05/14/2026 11:02:50</publishTime>
+      <publishTime>07/15/2026 14:58:14</publishTime>
     </File>
     <File Include="wbfEtatResultats.aspx">
-      <publishTime>04/20/2026 09:19:31</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfFakeEmail.aspx">
-      <publishTime>05/08/2026 11:39:52</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfFermetureAnnee.aspx">
       <publishTime>04/28/2026 08:24:51</publishTime>
     </File>
     <File Include="wbfFluxTresorerie.aspx">
-      <publishTime>04/20/2026 09:35:23</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
+    </File>
+    <File Include="wbfForgotPassword.aspx">
+      <publishTime>07/04/2026 07:29:00</publishTime>
     </File>
     <File Include="wbfGenerateHash.aspx">
       <publishTime>06/15/2026 08:18:24</publishTime>
@@ -1022,7 +1250,7 @@
       <publishTime>05/21/2026 10:00:35</publishTime>
     </File>
     <File Include="wbfImportView.aspx">
-      <publishTime>05/20/2026 11:38:52</publishTime>
+      <publishTime>07/06/2026 11:46:12</publishTime>
     </File>
     <File Include="wbfInvoiceEdit.aspx">
       <publishTime>05/13/2026 10:28:22</publishTime>
@@ -1055,37 +1283,37 @@
       <publishTime>04/26/2026 06:37:42</publishTime>
     </File>
     <File Include="wbfLogin.aspx">
-      <publishTime>05/04/2026 13:45:46</publishTime>
+      <publishTime>07/06/2026 10:49:38</publishTime>
     </File>
     <File Include="wbflogout.aspx">
       <publishTime>02/24/2026 14:15:18</publishTime>
     </File>
     <File Include="wbfNewUser.aspx">
-      <publishTime>05/09/2026 06:08:11</publishTime>
+      <publishTime>07/13/2026 14:49:17</publishTime>
     </File>
     <File Include="wbfPayment.aspx">
-      <publishTime>06/01/2026 09:55:51</publishTime>
+      <publishTime>07/07/2026 14:07:05</publishTime>
     </File>
     <File Include="wbfPaymentSuccess.aspx">
-      <publishTime>05/09/2026 07:49:07</publishTime>
+      <publishTime>07/07/2026 14:45:52</publishTime>
     </File>
     <File Include="wbfPlanComptable.aspx">
-      <publishTime>04/15/2026 14:01:51</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfPlanComptableEdit.aspx">
       <publishTime>04/15/2026 14:47:18</publishTime>
     </File>
     <File Include="wbfProductCategory.aspx">
-      <publishTime>04/15/2026 15:34:38</publishTime>
+      <publishTime>07/14/2026 11:53:45</publishTime>
     </File>
     <File Include="wbfProductCategoryEdit.aspx">
-      <publishTime>04/15/2026 15:42:19</publishTime>
+      <publishTime>07/14/2026 13:18:57</publishTime>
     </File>
     <File Include="wbfProductEdit.aspx">
-      <publishTime>04/15/2026 15:59:42</publishTime>
+      <publishTime>07/14/2026 13:16:46</publishTime>
     </File>
     <File Include="wbfProducts.aspx">
-      <publishTime>06/25/2026 13:31:07</publishTime>
+      <publishTime>07/14/2026 11:50:17</publishTime>
     </File>
     <File Include="wbfRapportPlanComptable.aspx">
       <publishTime>04/20/2026 08:54:12</publishTime>
@@ -1097,52 +1325,64 @@
       <publishTime>03/18/2026 08:35:35</publishTime>
     </File>
     <File Include="wbfReceipt.aspx">
-      <publishTime>03/17/2026 15:03:28</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfReceiptEdit.aspx">
       <publishTime>04/27/2026 13:54:49</publishTime>
     </File>
     <File Include="wbfRegister.aspx">
-      <publishTime>05/29/2026 10:03:09</publishTime>
+      <publishTime>07/06/2026 12:56:01</publishTime>
     </File>
     <File Include="wbfReleve.aspx">
-      <publishTime>03/26/2026 13:07:33</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
+    </File>
+    <File Include="wbfResetPassword.aspx">
+      <publishTime>07/04/2026 07:29:03</publishTime>
     </File>
     <File Include="wbfScannedPDF.aspx">
-      <publishTime>03/16/2026 15:53:11</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
+    </File>
+    <File Include="wbfScheduleAutoPay.aspx">
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfSetting.aspx">
-      <publishTime>05/04/2026 15:50:37</publishTime>
+      <publishTime>07/17/2026 05:45:23</publishTime>
     </File>
     <File Include="wbfSettingsOpenAiPrompts.aspx">
-      <publishTime>05/20/2026 15:28:53</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfStripeWebhookDiagnostic.aspx">
-      <publishTime>06/02/2026 11:49:14</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfSupplierEdit.aspx">
-      <publishTime>06/02/2026 10:18:22</publishTime>
+      <publishTime>07/15/2026 16:11:52</publishTime>
     </File>
     <File Include="wbfSupplierInvoinceEdit.aspx">
-      <publishTime>04/24/2026 14:27:34</publishTime>
+      <publishTime>07/14/2026 11:12:04</publishTime>
     </File>
     <File Include="wbfSupplierPaymentChoice.aspx">
-      <publishTime>06/03/2026 07:48:20</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
+    </File>
+    <File Include="wbfSupplierPaymentDream.aspx">
+      <publishTime>07/14/2026 16:37:41</publishTime>
+    </File>
+    <File Include="wbfSupplierPaymentInterac.aspx">
+      <publishTime>07/15/2026 11:48:06</publishTime>
     </File>
     <File Include="wbfSupplierPaymentSuccess.aspx">
-      <publishTime>06/02/2026 08:51:45</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfSupplierPaymentSync.aspx">
-      <publishTime>06/02/2026 11:37:30</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfSuppliers.aspx">
-      <publishTime>06/02/2026 10:17:58</publishTime>
+      <publishTime>07/14/2026 10:22:43</publishTime>
     </File>
     <File Include="wbfSuppliersInvoices.aspx">
-      <publishTime>06/03/2026 09:51:55</publishTime>
+      <publishTime>07/15/2026 11:04:04</publishTime>
     </File>
     <File Include="wbfSupplierStripeOnboarding.aspx">
-      <publishTime>06/02/2026 10:15:54</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="wbfTemplate.aspx">
       <publishTime>04/27/2026 10:36:25</publishTime>
@@ -1157,13 +1397,16 @@
       <publishTime>05/04/2026 15:05:48</publishTime>
     </File>
     <File Include="wbfUsers.aspx">
-      <publishTime>05/04/2026 14:59:47</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
+    </File>
+    <File Include="wbfVerifyCompanyMail.aspx">
+      <publishTime>07/17/2026 05:47:15</publishTime>
     </File>
     <File Include="wbfWelcome.aspx">
-      <publishTime>06/15/2026 08:18:04</publishTime>
+      <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>06/25/2026 15:19:37</publishTime>
+      <publishTime>07/17/2026 05:57:05</publishTime>
     </File>
   </ItemGroup>
 </Project>

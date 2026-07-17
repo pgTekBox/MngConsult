@@ -331,6 +331,12 @@
     <Content Include="Database\T010Company_drop_Name.sql" />
     <Content Include="Database\T101ParamValues_add_dVal_fVal.sql" />
     <Content Include="Database\T102ParamI18n.sql" />
+    <Content Include="Database\T010Company_AddMailVerification.sql" />
+    <Content Include="Database\remove_SMTP_params.sql" />
+    <Content Include="Database\s0694GetCompanyReplyTo.sql" />
+    <Content Include="Database\s0691StartCompanyMailVerification.sql" />
+    <Content Include="Database\s0692VerifyCompanyMail.sql" />
+    <Content Include="Database\s0693GetCompanyMailStatus.sql" />
     <Content Include="Database\s0687GetCompanyTrialStatus.sql" />
     <Content Include="Database\v_Parameters.sql" />
     <Content Include="Database\s0070UpdatePartyLastPaymentMethod.sql" />
@@ -563,6 +569,7 @@
     <Content Include="wbfImport.aspx" />
     <Content Include="wbfImportView.aspx" />
     <Content Include="wbfUsers.aspx" />
+    <Content Include="wbfVerifyCompanyMail.aspx" />
     <Content Include="Web.config" />
     <Content Include="Bundle.config" />
   </ItemGroup>
@@ -580,6 +587,7 @@
     <Compile Include="App_Code\clsImage.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="App_Code\CompanyMail.vb" />
     <Compile Include="App_Code\EmailHelper.vb" />
     <Compile Include="AutoPayProcessor.ashx.vb">
       <DependentUpon>AutoPayProcessor.ashx</DependentUpon>
@@ -1316,6 +1324,13 @@
     </Compile>
     <Compile Include="wbfUsers.aspx.vb">
       <DependentUpon>wbfUsers.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfVerifyCompanyMail.aspx.designer.vb">
+      <DependentUpon>wbfVerifyCompanyMail.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfVerifyCompanyMail.aspx.vb">
+      <DependentUpon>wbfVerifyCompanyMail.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
   </ItemGroup>

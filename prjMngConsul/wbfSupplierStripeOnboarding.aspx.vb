@@ -342,6 +342,9 @@ Public Class wbfSupplierStripeOnboarding
 
     ''' <summary>
     ''' Envoie l'invitation Stripe Connect par courriel via T400Mails (s0610).
+    ''' Courriel envoyé au nom de la compagnie : le From reste noreply@60sec.ca
+    ''' (aligné SPF) et son adresse vérifiée sert de Reply-To, pour que le
+    ''' fournisseur réponde à la compagnie et non à la plateforme.
     ''' </summary>
     Private Sub SendInvitationEmail(toEmail As String, onboardingUrl As String)
         Dim subject As String = "Invitation à configurer vos paiements - 60Sec-AI"
@@ -353,6 +356,7 @@ Public Class wbfSupplierStripeOnboarding
             p.Add(New SqlParameter("@Subject", subject))
             p.Add(New SqlParameter("@HTMLBody", htmlBody))
             p.Add(New SqlParameter("@TextBody", DBNull.Value))
+            CompanyMail.AddReplyToParam(p, ConnectionString, Company)
 
             ExecuteSQLMail("s0610InsertOutboundMail", p)
         Catch ex As Exception

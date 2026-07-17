@@ -96,6 +96,20 @@
         .logo-preview .ph{ color:var(--mc-muted); font-size:11px; text-align:center; padding:4px; }
         .logo-info{ flex:1 1 auto; min-width:0; }
         .logo-info label{ display:block; font-size:13px; font-weight:700; margin-bottom:6px; }
+
+        /* Vérification du courriel d'entreprise (MAIL_FROM_EMAIL) */
+        .mail-verify-row{
+            display:flex; align-items:center; gap:10px;
+            flex-wrap:wrap; margin-top:8px;
+        }
+        .mail-badge{
+            display:inline-flex; align-items:center; gap:6px;
+            padding:5px 10px; border-radius:999px;
+            font-size:12px; font-weight:700;
+        }
+        .mail-badge.ok{ background:rgba(22,163,74,.10); color:#166534; border:1px solid rgba(22,163,74,.20); }
+        .mail-badge.pending{ background:rgba(245,158,11,.12); color:#92400e; border:1px solid rgba(245,158,11,.25); }
+        .mail-badge.no{ background:rgba(220,38,38,.10); color:#991b1b; border:1px solid rgba(220,38,38,.20); }
     </style>
 </asp:Content>
 

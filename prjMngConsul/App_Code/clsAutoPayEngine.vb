@@ -406,7 +406,7 @@ Public Class clsAutoPayEngine
                                      If(row("DocumentNumber"), documentId.ToString()).ToString()
                 Dim body As String = BuildPreavis24hEmail(row)
 
-                InsertOutboundMail(toEmail, subj, body)
+                InsertOutboundMail(toEmail, subj, body, companyGuid)
                 result.EmailsSent += 1
 
                 ' Marquer comme envoye
@@ -456,7 +456,7 @@ Public Class clsAutoPayEngine
                                      If(row("DocumentNumber"), documentId.ToString()).ToString()
                 Dim body As String = BuildPreavisPadEmail(row)
 
-                InsertOutboundMail(toEmail, subj, body)
+                InsertOutboundMail(toEmail, subj, body, companyGuid)
                 result.EmailsSent += 1
 
                 ExecProc("s0092bMarkPadPreavisSent", New Dictionary(Of String, Object) From {
@@ -590,14 +590,23 @@ Public Class clsAutoPayEngine
     ' EMAILS - Insertion dans T400Mails (BD MailService)
     ' =========================================================================
 
-    Private Shared Sub InsertOutboundMail(toEmail As String, subject As String, htmlBody As String)
+    ''' <summary>
+    ''' Depose un courriel sortant. Ces avis partent AU NOM de la compagnie :
+    ''' le From reste noreply@60sec.ca (aligne SPF) et l'adresse verifiee de la
+    ''' compagnie est mise en Reply-To, pour que le payeur reponde a celle-ci.
+    ''' </summary>
+    Private Shared Sub InsertOutboundMail(toEmail As String, subject As String, htmlBody As String, companyGuid As Guid)
         If String.IsNullOrEmpty(toEmail) Then Return
+
+        Dim replyTo As String = CompanyMail.GetVerifiedReplyTo(ConnString, companyGuid)
+
         Using conn As New SqlConnection(ConnStringMail)
             Using cmd As New SqlCommand("s0610InsertOutboundMail", conn)
                 cmd.CommandType = CommandType.StoredProcedure
                 cmd.Parameters.AddWithValue("@To", toEmail)
                 cmd.Parameters.AddWithValue("@Subject", subject)
                 cmd.Parameters.AddWithValue("@HTMLBody", htmlBody)
+                cmd.Parameters.AddWithValue("@ReplyTo", If(String.IsNullOrEmpty(replyTo), CType(DBNull.Value, Object), replyTo))
                 conn.Open()
                 cmd.ExecuteNonQuery()
             End Using
@@ -615,7 +624,7 @@ Public Class clsAutoPayEngine
             Dim subj As String = "Paiement automatique reussi - " & partyName & " - " & amount.ToString("F2") & " $"
 
             Dim body As String = BuildSuccessHtml(partyName, documentNumber, amount, gross, fee, pi.Id)
-            InsertOutboundMail(toEmail, subj, body)
+            InsertOutboundMail(toEmail, subj, body, CType(row("CompanyGUID"), Guid))
             result.EmailsSent += 1
         Catch ex As Exception
             result.Errors.Add("SendSuccessEmail : " & ex.Message)
@@ -632,7 +641,7 @@ Public Class clsAutoPayEngine
             Dim subj As String = "[Echec] Paiement automatique - " & partyName & " - " & documentNumber
 
             Dim body As String = BuildFailureHtml(partyName, documentNumber, reason, statusCode)
-            InsertOutboundMail(toEmail, subj, body)
+            InsertOutboundMail(toEmail, subj, body, CType(row("CompanyGUID"), Guid))
             result.EmailsSent += 1
         Catch ex As Exception
             result.Errors.Add("SendFailureEmail : " & ex.Message)
@@ -649,7 +658,7 @@ Public Class clsAutoPayEngine
             Dim subj As String = "[Action requise] Authentification 3D Secure - " & partyName
 
             Dim body As String = Build3DSHtml(partyName, documentNumber, actionUrl)
-            InsertOutboundMail(toEmail, subj, body)
+            InsertOutboundMail(toEmail, subj, body, CType(row("CompanyGUID"), Guid))
             result.EmailsSent += 1
         Catch ex As Exception
             result.Errors.Add("Send3DSEmail : " & ex.Message)

@@ -30,12 +30,9 @@ GO
         -- COMPTABLE
         ('COMPTABLE',           N'Clé comptable',                           N'Accountant key',                    N'Clave del contador'),
         -- EMAIL
-        ('MAIL_FROM_NAME',      N'Nom d''expéditeur',                       N'From name',                         N'Nombre del remitente'),
+        -- SMTP par compagnie retire (MAIL_FROM_NAME/SMTP_HOST/SMTP_PORT/SMTP_USER/SMTP_PASS) :
+        -- envoi centralise via T400Mails + SrvAI. Cf. Database/remove_SMTP_params.sql.
         ('MAIL_FROM_EMAIL',     N'Courriel d''expéditeur',                  N'From email',                        N'Correo del remitente'),
-        ('SMTP_HOST',           N'Hôte SMTP',                               N'SMTP host',                         N'Servidor SMTP'),
-        ('SMTP_PORT',           N'Port SMTP',                               N'SMTP port',                         N'Puerto SMTP'),
-        ('SMTP_USER',           N'Utilisateur SMTP',                        N'SMTP user',                         N'Usuario SMTP'),
-        ('SMTP_PASS',           N'Mot de passe SMTP',                       N'SMTP password',                     N'Contraseña SMTP'),
         ('MAIL_SIGNATURE',      N'Signature courriel',                      N'Email signature',                   N'Firma de correo'),
         -- ENTREPRISE
         ('LEGAL_NAME',          N'Nom légal',                               N'Legal name',                        N'Razón social'),
