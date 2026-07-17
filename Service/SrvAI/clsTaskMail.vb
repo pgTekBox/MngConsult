@@ -443,6 +443,7 @@ Public Class clsTaskMail
         Dim MessageHTML As String = ""
         Dim MessageSubject As String = ""
         Dim FromAddress As String = ""
+        Dim ReplyToAddress As String = ""
         Dim MailId As Integer = 0
         Dim sStep As String = ""
 
@@ -472,6 +473,9 @@ Public Class clsTaskMail
                         MailId = rd("Id")
                         AllAdressTo = rd("To")
                         FromAddress = rd("Sender")
+                        ' Reply-To : porte l'adresse verifiee de la compagnie pour les
+                        ' courriels envoyes en son nom. Le From reste le notre (SPF).
+                        If Not IsDBNull(rd("ReplyTo")) Then ReplyToAddress = CStr(rd("ReplyTo"))
                         MessageSubject = rd("Subject")
                         MessageText = rd("TextBody")
                         MessageHTML = rd("HTMLBody")
@@ -525,6 +529,7 @@ Public Class clsTaskMail
                 GetMailBoxList(AllAdressTo, mimeMessage.[To])
                 GetMailBoxList(AllAdressCC, mimeMessage.Cc)
                 GetMailBoxList(AllAdressBCC, mimeMessage.Bcc)
+                GetMailBoxList(ReplyToAddress, mimeMessage.ReplyTo)
                 sStep = "2.5 Toutes les adresse sont initialise"
                 clsTaskMail.EventWritelog("Étape SendOneMail: Step:" & sStep & ". MailId: " & MailId.ToString)
                 mimeMessage.Subject = MessageSubject
