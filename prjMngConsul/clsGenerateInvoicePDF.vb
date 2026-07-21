@@ -77,6 +77,12 @@
 
     End Function
 
+    ''' <summary>Lit une colonne texte de façon sûre (colonne absente ou NULL → "").</summary>
+    Private Shared Function ColStr(r As DataRow, col As String) As String
+        If r Is Nothing OrElse Not r.Table.Columns.Contains(col) OrElse r.IsNull(col) Then Return ""
+        Return r(col).ToString().Trim()
+    End Function
+
     Public Sub GenerateAndDownloadPdf(invoiceId As Integer)
 
         ' 1. Charger les données de la facture
@@ -113,15 +119,45 @@
         Dim r As DataRow = ds.Tables(0).Rows(0)
         Dim inv As New InvoiceData()
 
-        ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
-        inv.CompanyName = "MngConsul Inc."
-        inv.CompanyTagline = "Cabinet de massothérapie"
-        inv.CompanyAddressLine1 = "123 rue Principale"
-        inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
-        inv.CompanyPhone = "(514) 555-1234"
-        inv.CompanyEmail = "info@60sec.ca"
-        inv.CompanyTpsNumber = "123456789 RT0001"
-        inv.CompanyTvqNumber = "1234567890 TQ0001"
+        ' === Émetteur : infos réelles de la compagnie (paramètres T101 + logo) ===
+        '   Fournies par s0115GetInvoiceForPdf (colonnes Co*). Plus rien codé en dur.
+        inv.CompanyName = ColStr(r, "CoName")
+
+        ' Nom commercial en sous-titre s'il diffère du nom légal.
+        Dim coTrade As String = ColStr(r, "CoTradeName")
+        inv.CompanyTagline = If(coTrade <> "" AndAlso Not coTrade.Equals(inv.CompanyName, StringComparison.OrdinalIgnoreCase), coTrade, "")
+
+        ' Adresse : ligne 1 = rue (+ complément), ligne 2 = ville, province, code postal.
+        Dim coAddr1 As String = ColStr(r, "CoAddr1")
+        Dim coAddr2 As String = ColStr(r, "CoAddr2")
+        inv.CompanyAddressLine1 = If(coAddr2 <> "", (coAddr1 & If(coAddr1 <> "", ", ", "") & coAddr2), coAddr1)
+
+        Dim coL2 As New System.Text.StringBuilder()
+        Dim coCity As String = ColStr(r, "CoCity")
+        Dim coProv As String = ColStr(r, "CoProvince")
+        Dim coPostal As String = ColStr(r, "CoPostal")
+        If coCity <> "" Then coL2.Append(coCity)
+        If coProv <> "" Then coL2.Append(If(coL2.Length > 0, ", ", "")).Append(coProv)
+        If coPostal <> "" Then coL2.Append(If(coL2.Length > 0, " ", "")).Append(coPostal)
+        inv.CompanyAddressLine2 = coL2.ToString()
+
+        inv.CompanyPhone = ColStr(r, "CoPhone")
+        inv.CompanyEmail = ColStr(r, "CoEmail")
+
+        ' Numéros de taxe : TPS (ou TVH si pas de TPS) et TVQ.
+        Dim coGst As String = ColStr(r, "CoGstNo")
+        Dim coHst As String = ColStr(r, "CoHstNo")
+        inv.CompanyTpsNumber = If(coGst <> "", coGst, coHst)
+        inv.CompanyTvqNumber = ColStr(r, "CoQstNo")
+
+        ' Bas de facture : conditions de paiement + notes (paramètres PDF).
+        inv.PaymentTerms = ColStr(r, "CoPaymentTerms")
+        inv.Notes = ColStr(r, "CoNotes")
+
+        ' Logo de la compagnie (T010Company.Logo).
+        If r.Table.Columns.Contains("CoLogo") AndAlso Not r.IsNull("CoLogo") Then
+            inv.LogoBytes = CType(r("CoLogo"), Byte())
+        End If
 
         ' === Facture ===
         inv.InvoiceNumber = If(r("DocumentNumber") Is DBNull.Value, invoiceId.ToString(), r("DocumentNumber").ToString())

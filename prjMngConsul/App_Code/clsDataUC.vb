@@ -798,6 +798,20 @@ Public Class clsDataUC
         Return d.ToString("dd MMM yyyy", New System.Globalization.CultureInfo("fr-FR"))
     End Function
 
+    ''' <summary>Indique si la compagnie courante a connecté un compte Square (OAuth).</summary>
+    Public Function IsSquareConnected() As Boolean
+        Try
+            Dim col As New Collection
+            col.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0663GetCompanySquareAuth", col)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Return Not IsDBNull(ds.Tables(0).Rows(0)("SquareAccessTokenEnc"))
+            End If
+        Catch
+        End Try
+        Return False
+    End Function
+
 
 
 
