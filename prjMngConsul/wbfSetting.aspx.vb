@@ -223,6 +223,9 @@ Partial Public Class wbfSetting
             Case "TAX_FREQ"
                 phControl.Controls.Add(BuildTaxFreqCombo(sVal))
                 Return
+            Case "INV_NUM_FORMAT"
+                phControl.Controls.Add(BuildInvNumFormatCombo(sVal))
+                Return
             Case "COMPTE_BANQUE"
                 ' Combo dynamique alimenté depuis T143PlaidAccount
                 ' La valeur sélectionnée est l'Id du compte (stocké dans iVal)
@@ -387,6 +390,23 @@ Partial Public Class wbfSetting
         cb.Items.Add(New RadComboBoxItem(L("taxExclusive"), "EXCLUSIVE"))
         cb.Items.Add(New RadComboBoxItem(L("taxInclusive"), "INCLUSIVE"))
         If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "EXCLUSIVE"
+        Return cb
+    End Function
+
+    ''' <summary>Format du numéro de facture : menu déroulant de gabarits à jetons
+    ''' ({PREFIXE} {AAAA} {MM} {NUMERO}). La valeur stockée est le gabarit lui-même.
+    ''' Défaut : {PREFIXE}-{AAAA}-{NUMERO}.</summary>
+    Private Function BuildInvNumFormatCombo(value As String) As RadComboBox
+        Dim cb As New RadComboBox()
+        cb.ID = "txtValue"
+        cb.Width = Unit.Percentage(100)
+        ' Libellé = exemple lisible ; Valeur = gabarit à jetons
+        cb.Items.Add(New RadComboBoxItem("PREFIXE-2026-0001", "{PREFIXE}-{AAAA}-{NUMERO}"))
+        cb.Items.Add(New RadComboBoxItem("PREFIXE202612-0001", "{PREFIXE}{AAAA}{MM}-{NUMERO}"))
+        cb.Items.Add(New RadComboBoxItem("PREFIXE-0001", "{PREFIXE}-{NUMERO}"))
+        cb.Items.Add(New RadComboBoxItem("2026-0001", "{AAAA}-{NUMERO}"))
+        cb.Items.Add(New RadComboBoxItem("0001", "{NUMERO}"))
+        If Not String.IsNullOrEmpty(value) Then cb.SelectedValue = value Else cb.SelectedValue = "{PREFIXE}-{AAAA}-{NUMERO}"
         Return cb
     End Function
 

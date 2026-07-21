@@ -73,7 +73,7 @@ Public Class InvoicePdfBuilder
     Private Shared Sub ComposeBody(container As IContainer, inv As InvoiceData)
         container.Column(
         Sub(col)
-            col.Spacing(20)
+            col.Spacing(14)
 
             ' Si payée, on injecte un élément zéro-hauteur qui dessine le tampon
             ' à la position absolue centre-haut de la page.
@@ -91,8 +91,12 @@ Public Class InvoicePdfBuilder
             ComposeItemsTable(col, inv)
             ComposeTotals(col, inv)
 
+            ' Bas de facture : conditions de paiement, puis notes en dessous.
             If Not String.IsNullOrEmpty(inv.PaymentTerms) Then
-                ComposeNotes(col, inv.PaymentTerms)
+                ComposeNote(col, "CONDITIONS DE PAIEMENT", inv.PaymentTerms)
+            End If
+            If Not String.IsNullOrEmpty(inv.Notes) Then
+                ComposeNote(col, "NOTES", inv.Notes)
             End If
         End Sub)
     End Sub
@@ -194,6 +198,9 @@ Public Class InvoicePdfBuilder
                         End If
                         If Not String.IsNullOrEmpty(inv.CompanyPhone) Then
                             c.Item().Text(inv.CompanyPhone).FontSize(10).FontColor(CLR_TEXT_LIGHT)
+                        End If
+                        If Not String.IsNullOrEmpty(inv.CompanyEmail) Then
+                            c.Item().Text(inv.CompanyEmail).FontSize(10).FontColor(CLR_TEXT_LIGHT)
                         End If
 
                         If Not String.IsNullOrEmpty(inv.CompanyTpsNumber) Then
@@ -322,6 +329,19 @@ Public Class InvoicePdfBuilder
             Text(notes).FontSize(10).FontColor(CLR_NOTE_TEXT)
     End Sub
 
+    ''' <summary>Encadré de bas de facture avec un petit titre (conditions de paiement, notes…).</summary>
+    Private Shared Sub ComposeNote(col As ColumnDescriptor, title As String, body As String)
+        col.Item().BorderLeft(3).BorderColor(CLR_SECONDARY).
+            Background(CLR_NOTE_BG).Padding(10).Column(
+            Sub(c)
+                If Not String.IsNullOrEmpty(title) Then
+                    c.Item().Text(title).FontSize(9).Bold().FontColor(CLR_NOTE_TEXT)
+                    c.Item().PaddingTop(3)
+                End If
+                c.Item().Text(body).FontSize(10).FontColor(CLR_NOTE_TEXT)
+            End Sub)
+    End Sub
+
     ' ============================================================
     ' Tampon « PAYÉ »
     '   Rouge, bold 90pt, encadré, incliné -22°.
@@ -375,7 +395,7 @@ End Class
 Public Class InvoiceData
 
     Public Property CompanyName As String
-    Public Property CompanyTagline As String = "Cabinet de massothérapie"
+    Public Property CompanyTagline As String = ""
     ''' <summary>Octets du logo de l'entreprise (T010Company.Logo). Si présent, remplace le monogramme.</summary>
     Public Property LogoBytes As Byte()
     Public Property CompanyAddressLine1 As String
@@ -404,7 +424,11 @@ Public Class InvoiceData
     Public Property Tvq As Decimal
     Public Property Total As Decimal
 
-    Public Property PaymentTerms As String = "Net 30 jours. Paiement par virement Interac. Merci de votre confiance!"
+    ''' <summary>Conditions de paiement (paramètre PDF_PAYMENT_TERMS) — affichées en bas de la facture.</summary>
+    Public Property PaymentTerms As String = ""
+
+    ''' <summary>Mentions / notes (paramètre PDF_NOTES) — affichées tout en bas, sous les conditions.</summary>
+    Public Property Notes As String = ""
 
     ''' <summary>
     ''' Si True, un tampon « PAYÉ » est apposé sur la 1ère page du PDF.

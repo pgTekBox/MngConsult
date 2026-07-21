@@ -121,6 +121,9 @@ Partial Public Class wbfCustomersInvoices
     '''</remarks>
     Protected WithEvents rwEncaissement As Global.Telerik.Web.UI.RadWindow
 
+    '''<summary>rwSquarePay control.</summary>
+    Protected WithEvents rwSquarePay As Global.Telerik.Web.UI.RadWindow
+
     '''<summary>
     '''PdfViewer control.
     '''</summary>

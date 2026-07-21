@@ -24,7 +24,22 @@ Public Class HeaderUser
         BindCompanies()
         RenderCompanyLogo()
         LoadTrialBadge()
+        LoadSquareBadge()
 
+    End Sub
+
+    ''' <summary>Affiche « Square connecté » dans le header si la compagnie a connecté Square.</summary>
+    Private Sub LoadSquareBadge()
+        Try
+            If Company <> Guid.Empty AndAlso IsSquareConnected() Then
+                pnlSquare.Visible = True
+                litSquare.Text = Choose3(CurrentLang, "Square connecté", "Square connected", "Square conectado")
+            Else
+                pnlSquare.Visible = False
+            End If
+        Catch
+            pnlSquare.Visible = False
+        End Try
     End Sub
 
     ''' <summary>Logo de la compagnie DEVANT le nom (via CompanyLogo.ashx). Si aucun logo,

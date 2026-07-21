@@ -64,12 +64,15 @@ Public Class wbfInvoiceEdit
     End Property
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        ApplyLocalization()
+
         If Not IsPostBack Then
 
             InvoiceId = CInt(Request.QueryString("Id"))
             CreateItemsTable()
             LoadItemTableFromBD()
             ProductsTable = GetProductsTable()
+            If InvoiceId = 0 Then lblCustomer.Text = L("selectClient")
             BindData()
             'BinDDL()
         End If
@@ -77,6 +80,110 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
+
+    ''' <summary>Applique les libellés localisés (fr/en/es) aux contrôles serveur.</summary>
+    Private Sub ApplyLocalization()
+        Page.Title = L("pageTitle")
+        lblPostedBadge.Text = L("postedBadge")
+        radSave.Text = L("save")
+        btnAddLine.ToolTip = L("addLine")
+        lblCapSubTotal.Text = L("subtotal")
+        SetLiteral(Me, "litLblClient", L("client"))
+        SetLiteral(Me, "litLblInvoiceDate", L("invoiceDate"))
+        SetLiteral(Me, "litLblDueDate", L("dueDate"))
+        SetLiteral(Me, "litLblPosted", L("posted"))
+        SetLiteral(Me, "litLines", L("lines"))
+        SetLiteral(Me, "litColProduct", L("colProduct"))
+        SetLiteral(Me, "litColAccount", L("colAccount"))
+        SetLiteral(Me, "litColQty", L("colQty"))
+        SetLiteral(Me, "litColUnitPrice", L("colUnitPrice"))
+        SetLiteral(Me, "litColTotal", L("colTotal"))
+        SetLiteral(Me, "litColTax", L("colTax"))
+        SetLiteral(Me, "litColOrder", L("colOrder"))
+        SetLiteral(Me, "litCapTotal", L("total"))
+    End Sub
+
+    Private Sub rlvProducts_PreRender(sender As Object, e As EventArgs) Handles rlvProducts.PreRender
+        SetLiteral(rlvProducts, "litEmptyProducts", L("emptyProducts"))
+        SetRadButtonText(rlvProducts, "btnAddProducts", L("addProducts"))
+    End Sub
+
+    Private Sub rlvCustomers_PreRender(sender As Object, e As EventArgs) Handles rlvCustomers.PreRender
+        SetLiteral(rlvCustomers, "litEmptyCustomers", L("emptyCustomers"))
+        SetRadButtonText(rlvCustomers, "btnAddcustomers", L("addCustomers"))
+    End Sub
+
+    Private Sub rlvAccounts_PreRender(sender As Object, e As EventArgs) Handles rlvAccounts.PreRender
+        SetLiteral(rlvAccounts, "litEmptyAccounts", L("emptyAccounts"))
+        SetRadButtonText(rlvAccounts, "btnAddAccounts", L("addAccounts"))
+    End Sub
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Sub SetRadButtonText(root As Control, id As String, text As String)
+        Dim b = TryCast(FindDeep(root, id), Telerik.Web.UI.RadButton)
+        If b IsNot Nothing Then b.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    ''' <summary>Traductions (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Facture client — Édition", "Customer invoice — Edit", "Factura de cliente — Edición")
+            Case "client" : Return Choose3(lang, "Client", "Customer", "Cliente")
+            Case "selectClient" : Return Choose3(lang, "Sélectionner un client", "Select a customer", "Seleccionar un cliente")
+            Case "invoiceDate" : Return Choose3(lang, "Date de facture", "Invoice date", "Fecha de factura")
+            Case "dueDate" : Return Choose3(lang, "Date d'échéance", "Due date", "Fecha de vencimiento")
+            Case "posted" : Return Choose3(lang, "Comptabilisé", "Posted", "Contabilizado")
+            Case "postedBadge" : Return Choose3(lang, "Comptabilisé 🔒", "Posted 🔒", "Contabilizado 🔒")
+            Case "lines" : Return Choose3(lang, "Lignes", "Lines", "Líneas")
+            Case "colProduct" : Return Choose3(lang, "Produit", "Product", "Producto")
+            Case "colAccount" : Return Choose3(lang, "Compte", "Account", "Cuenta")
+            Case "colQty" : Return Choose3(lang, "Qté", "Qty", "Cant.")
+            Case "colUnitPrice" : Return Choose3(lang, "Prix unitaire", "Unit price", "Precio unitario")
+            Case "colTotal" : Return Choose3(lang, "Total", "Total", "Total")
+            Case "colTax" : Return Choose3(lang, "Tx", "Tax", "Imp.")
+            Case "colOrder" : Return Choose3(lang, "Ordre", "Order", "Orden")
+            Case "total" : Return Choose3(lang, "Total", "Total", "Total")
+            Case "subtotal" : Return Choose3(lang, "Sous-total", "Subtotal", "Subtotal")
+            Case "save" : Return Choose3(lang, "Enregistrer", "Save", "Guardar")
+            Case "addLine" : Return Choose3(lang, "Ajouter une ligne", "Add a line", "Agregar una línea")
+            Case "searchProduct" : Return Choose3(lang, "Rechercher un produit…", "Search a product…", "Buscar un producto…")
+            Case "searchCustomer" : Return Choose3(lang, "Rechercher un client…", "Search a customer…", "Buscar un cliente…")
+            Case "searchAccount" : Return Choose3(lang, "Rechercher un compte…", "Search an account…", "Buscar una cuenta…")
+            Case "close" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "addProducts" : Return Choose3(lang, "Ajouter des produits", "Add products", "Agregar productos")
+            Case "addCustomers" : Return Choose3(lang, "Ajouter des clients", "Add customers", "Agregar clientes")
+            Case "addAccounts" : Return Choose3(lang, "Ajouter des comptes", "Add accounts", "Agregar cuentas")
+            Case "emptyProducts" : Return Choose3(lang, "Aucun produit trouvé.", "No product found.", "No se encontró ningún producto.")
+            Case "emptyCustomers" : Return Choose3(lang, "Aucun client trouvé.", "No customer found.", "No se encontró ningún cliente.")
+            Case "emptyAccounts" : Return Choose3(lang, "Aucun compte trouvé.", "No account found.", "No se encontró ninguna cuenta.")
+            Case "confirmDelLine" : Return Choose3(lang, "Supprimer cette ligne ?", "Delete this line?", "¿Eliminar esta línea?")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
     'Creation d 'une table en mémoire pour stocker les lignes de facture (équivalent d'un DataTable dans une session classique)
     Public Sub CreateItemsTable()
         Dim dt As New DataTable
@@ -417,7 +524,9 @@ Public Class wbfInvoiceEdit
 
 
 
-        GenerateAndDownloadPdf(MyInvoiceId)
+        ' Génération du PDF (infos compagnie réelles + logo) via la classe centralisée.
+        Dim oPdf As New clsGenerateInvoicePDF()
+        oPdf.GenerateAndDownloadPdf(MyInvoiceId)
 
 
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
@@ -425,107 +534,6 @@ Public Class wbfInvoiceEdit
 
 
     End Sub
-    ''' <summary>
-    ''' Génère le PDF de la facture, le stocke dans T060Document.PdfData,
-    ''' puis l'envoie au navigateur en téléchargement.
-    ''' </summary>
-    Private Sub GenerateAndDownloadPdf(invoiceId As Integer)
-
-        ' 1. Charger les données de la facture
-        Dim inv As InvoiceData = LoadInvoiceForPdf(invoiceId)
-        If inv Is Nothing Then Exit Sub
-
-        ' 2. Générer le PDF en mémoire
-        Dim pdfBytes As Byte() = InvoicePdfBuilder.Build(inv)
-
-        ' 3. Stocker dans T060Document
-        Dim fileName As String = "Invoice_" & inv.InvoiceNumber & ".pdf"
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
-        p.Add(New SqlClient.SqlParameter("@PdfData", pdfBytes))
-        p.Add(New SqlClient.SqlParameter("@FileName", fileName))
-        ExecuteSQL("s0116SaveInvoicePdf", p)
-
-        ' 4. Envoyer au navigateur
-        'Response.Clear()
-        'Response.ContentType = "application/pdf"
-        'Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
-        'Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
-        'Response.BinaryWrite(pdfBytes)
-        'Response.Flush()
-        'Response.SuppressContent = True
-        'Context.ApplicationInstance.CompleteRequest()
-    End Sub
-
-
-    Private Function LoadInvoiceForPdf(invoiceId As Integer) As InvoiceData
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
-        Dim ds As DataSet = ExecuteSQLds("s0115GetInvoiceForPdf", p)
-
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            Return Nothing
-        End If
-
-        Dim r As DataRow = ds.Tables(0).Rows(0)
-        Dim inv As New InvoiceData()
-        inv.LogoBytes = GetCompanyLogoBytes()   ' logo de l'entreprise (remplace le monogramme si présent)
-
-        ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
-        inv.CompanyName = "MngConsul Inc."
-        inv.CompanyTagline = "Cabinet de massothérapie"
-        inv.CompanyAddressLine1 = "123 rue Principale"
-        inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
-        inv.CompanyPhone = "(514) 555-1234"
-        inv.CompanyEmail = "info@60sec.ca"
-        inv.CompanyTpsNumber = "123456789 RT0001"
-        inv.CompanyTvqNumber = "1234567890 TQ0001"
-
-        ' === Facture ===
-        inv.InvoiceNumber = If(r("DocumentNumber") Is DBNull.Value, invoiceId.ToString(), r("DocumentNumber").ToString())
-        inv.IssueDate = If(r("DocumentDate") Is DBNull.Value, Date.Now.Date, CDate(r("DocumentDate")))
-        inv.DueDate = If(r("DueDate") Is DBNull.Value, inv.IssueDate.AddDays(30), CDate(r("DueDate")))
-
-        ' === Client (depuis les colonnes copiées dans T060Document) ===
-        inv.CustomerName = If(r("Name") Is DBNull.Value, "", r("Name").ToString())
-        inv.CustomerAddressLine1 = If(r("Address1") Is DBNull.Value, "", r("Address1").ToString())
-
-        Dim line2 As New System.Text.StringBuilder()
-        If Not (r("City") Is DBNull.Value) Then line2.Append(r("City").ToString())
-        If Not (r("State") Is DBNull.Value) Then line2.Append(", ").Append(r("State").ToString())
-        If Not (r("PostalCode") Is DBNull.Value) Then line2.Append(" ").Append(r("PostalCode").ToString())
-        inv.CustomerAddressLine2 = line2.ToString()
-
-        inv.CustomerPhone = If(r("Phone") Is DBNull.Value, "", r("Phone").ToString())
-        inv.CustomerEmail = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
-
-        ' === Totaux ===
-        inv.SubTotal = If(r("SubTotal") Is DBNull.Value, 0D, CDec(r("SubTotal")))
-        inv.Tps = If(r("TPS") Is DBNull.Value, 0D, CDec(r("TPS")))
-        inv.Tvq = If(r("TVQ") Is DBNull.Value, 0D, CDec(r("TVQ")))
-        inv.Total = If(r("Total") Is DBNull.Value, 0D, CDec(r("Total")))
-
-        ' === Lignes (table 2 du DataSet) ===
-        If ds.Tables.Count >= 2 Then
-            For Each rl As DataRow In ds.Tables(1).Rows
-                inv.Items.Add(New InvoiceLine With {
-                    .Description = If(rl("ProductName") Is DBNull.Value OrElse rl("ProductName").ToString() = "",
-                                       If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
-                                       rl("ProductName").ToString()),
-                    .SubDescription = If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
-                    .Qty = If(rl("Qty") Is DBNull.Value, 1D, CDec(rl("Qty"))),
-                    .UnitPrice = If(rl("UnitPrice") Is DBNull.Value, 0D, CDec(rl("UnitPrice"))),
-                    .Amount = If(rl("Amount") Is DBNull.Value, 0D, CDec(rl("Amount")))
-                })
-            Next
-        End If
-
-        Return inv
-    End Function
-
-
 
     'ItemCommand du Repeater pour gérer la suppression d'une ligne: on marque la ligne comme Deleted=1 dans le ViewState("ItemsTable") et on rebind le Repeater pour que la ligne disparaisse de l'affichage (le vrai delete en BD sera géré par la procédure stockée lors de la sauvegarde en fonction du flag Deleted)
     Private Sub rpItems_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpItems.ItemCommand

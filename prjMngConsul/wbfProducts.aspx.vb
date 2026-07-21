@@ -23,11 +23,7 @@ Public Class wbfProducts
     Private Sub ApplyLocalization()
         SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
         SetLiteral(Me, "litFilterCat", L("filterCat"))
-        If IsSquareConnected() Then
-            btnConnectSquare.Text = L("reconnectSquare")
-        Else
-            btnConnectSquare.Text = L("connectSquare")
-        End If
+        ' Bouton « Connecter Square » déplacé vers wbfPaymentProcessors.aspx.
         btnExportSquare.Text = L("exportSquare")
         btnImportSquare.Text = L("importSquare")
         btnAdd.Text = L("addProduct")

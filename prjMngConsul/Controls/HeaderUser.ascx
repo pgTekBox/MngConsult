@@ -8,6 +8,13 @@
         <asp:Literal ID="litTrial" runat="server" />
     </asp:Panel>
 
+    <%-- Statut Square (visible seulement si un compte Square est connecté) --%>
+    <asp:Panel ID="pnlSquare" runat="server" CssClass="square-pill" Visible="false"
+        ToolTip="Compte Square connecté">
+        <span class="square-dot" aria-hidden="true"></span>
+        <asp:Literal ID="litSquare" runat="server" />
+    </asp:Panel>
+
     <%-- Sélecteur de langue (FR / EN / ES) --%>
     <div class="lang-switch">
         <asp:Literal ID="litLang" runat="server" />
@@ -96,6 +103,38 @@
 }
 @media(max-width:560px){
     .trial-pill{ display:none; }
+}
+
+/* === Pastille statut Square === */
+.square-pill{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    height:42px;
+    box-sizing:border-box;
+    padding:0 14px;
+    border-radius:12px;
+    background:#ecfdf5;
+    border:1px solid #a7f3d0;
+    color:#047857;
+    font-size:12px;
+    font-weight:800;
+    white-space:nowrap;
+    cursor:default;
+}
+.square-pill .square-dot{
+    width:9px;
+    height:9px;
+    border-radius:50%;
+    background:#10b981;
+    box-shadow:0 0 0 3px rgba(16,185,129,.2);
+    flex-shrink:0;
+}
+@media(max-width:768px){
+    .square-pill .square-lbl-long{ display:none; }
+}
+@media(max-width:560px){
+    .square-pill{ display:none; }
 }
 
 /* === Sélecteur de langue === */

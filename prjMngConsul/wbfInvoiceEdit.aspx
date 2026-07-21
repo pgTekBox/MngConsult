@@ -570,8 +570,8 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>Client</label>
-                                    <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" Text="Select client" onclick="openCustomerPicker(this); return false;"></asp:Label>
+                                    <label><asp:Literal ID="litLblClient" runat="server" /></label>
+                                    <asp:Label ID="lblCustomer" runat="server" CssClass="customer-selector" onclick="openCustomerPicker(this); return false;"></asp:Label>
                                 </div>
 
                                 <div class="field">
@@ -585,17 +585,17 @@
 
                             <div class="row3">
                                 <div  style="width:160px">
-                                    <label>Date facture</label>
+                                    <label><asp:Literal ID="litLblInvoiceDate" runat="server" /></label>
                                     <telerik:RadDatePicker  Width="160px"  ID="dpIssueDate" runat="server" />
                                 </div>
 
                                 <div  style="width:160px">
-                                    <label>Date d’échéance</label>
+                                    <label><asp:Literal ID="litLblDueDate" runat="server" /></label>
                                     <telerik:RadDatePicker   ID="dpDueDate" runat="server" />
                                 </div>
                                 <div >
                                     <br />
-                                    <label>Comptabilisé</label><asp:CheckBox ID="chkPost" runat="server" />
+                                    <label><asp:Literal ID="litLblPosted" runat="server" /></label><asp:CheckBox ID="chkPost" runat="server" />
 
                                 </div>
 
@@ -608,21 +608,21 @@
 
                     <div class="card">
                         <div class="card-header">
-                            <strong>Lignes</strong>
+                            <strong><asp:Literal ID="litLines" runat="server" /></strong>
                         </div>
 
                         <div class="card-body">
                             <div class="items-headerRD">
-                                <div>Produit</div>
+                                <div><asp:Literal ID="litColProduct" runat="server" /></div>
                              <div></div>
-                                <div style="text-align: center">Compte</div>
-                                
-                                <div style="text-align: center">Qty</div>
-                                <div style="text-align: center">Prix unitaire</div>
-                                <div style="text-align: right">Total</div>
-                                <div style="text-align: center">Tx</div>
+                                <div style="text-align: center"><asp:Literal ID="litColAccount" runat="server" /></div>
+
+                                <div style="text-align: center"><asp:Literal ID="litColQty" runat="server" /></div>
+                                <div style="text-align: center"><asp:Literal ID="litColUnitPrice" runat="server" /></div>
+                                <div style="text-align: right"><asp:Literal ID="litColTotal" runat="server" /></div>
+                                <div style="text-align: center"><asp:Literal ID="litColTax" runat="server" /></div>
                                  <div style="text-align: center"></div>
-                                <div style="text-align: center">Ordre</div>
+                                <div style="text-align: center"><asp:Literal ID="litColOrder" runat="server" /></div>
                             </div>
 
                             <div class="items-wrap" style="display: block; padding: 0;">
@@ -698,7 +698,7 @@
                                                         Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
+                                                        OnClientClicking="function(s,e){ if(!confirm(L_CONFIRM_DELLINE)) e.set_cancel(true); }">
                                                     </telerik:RadImageButton>
                                                 </div>
 
@@ -759,7 +759,7 @@
                             <asp:Label ID="lblTax2" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">Total</div>
+                    <div class="tot"><asp:Literal ID="litCapTotal" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong>
                             <asp:Label ID="lblTotal" runat="server" Text="0.00" /></strong>
@@ -784,8 +784,8 @@
             <div id="productPickerOverlay" class="product-picker-overlay" style="display: none;">
                 <div class="product-picker-shell">
                     <div class="product-picker-search">
-                        <input type="text" id="productPickerSearch" oninput="filterProductsClient()" class="product-picker-input" placeholder="Rechercher un produit..." />
-                        <button type="button" class="product-picker-close-inline" onclick="closeProductPicker()" aria-label="Fermer">✕</button>
+                        <input type="text" id="productPickerSearch" oninput="filterProductsClient()" class="product-picker-input" />
+                        <button type="button" class="product-picker-close-inline" onclick="closeProductPicker()">✕</button>
                     </div>
 
                     <div id="productPickerList" class="product-picker-list">
@@ -800,7 +800,7 @@
                                     </div>
 
                                     <div class="lv-footer">
-                                        <telerik:RadButton ID="btnAddProducts" runat="server" Text="Ajouter des produits"
+                                        <telerik:RadButton ID="btnAddProducts" runat="server"
                                             CssClass="btn-add" OnClick="btnAddProducts_Click" />
                                     </div>
                                 </LayoutTemplate>
@@ -815,7 +815,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun produit trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptyProducts" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -828,8 +828,8 @@
             <div id="customerPickerOverlay" class="customer-picker-overlay" style="display: none;">
                 <div class="customer-picker-shell">
                     <div class="customer-picker-searchbar">
-                        <input type="text" id="customerPickerSearch" oninput="filterCustomersClient()" class="customer-picker-input" placeholder="Rechercher d'un client..." />
-                        <button type="button" class="customer-picker-close-inline" onclick="closeCustomerPicker()" aria-label="Fermer">✕</button>
+                        <input type="text" id="customerPickerSearch" oninput="filterCustomersClient()" class="customer-picker-input" />
+                        <button type="button" class="customer-picker-close-inline" onclick="closeCustomerPicker()">✕</button>
                     </div>
 
                     <div id="customerPickerList" class="customer-picker-list">
@@ -844,7 +844,7 @@
                                     </div>
 
                                     <div class="lv-footer">
-                                        <telerik:RadButton ID="btnAddcustomers" runat="server" Text="Ajouter des clients" CssClass="btn-add" />
+                                        <telerik:RadButton ID="btnAddcustomers" runat="server" CssClass="btn-add" />
                                     </div>
                                 </LayoutTemplate>
 
@@ -856,7 +856,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun client trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptyCustomers" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -869,8 +869,8 @@
             <div id="accountPickerOverlay" class="account-picker-overlay" style="display: none;">
                 <div class="account-picker-shell">
                     <div class="account-picker-searchbar">
-                        <input type="text" id="accountPickerSearch" oninput="filterAccountsClient()" class="account-picker-input" placeholder="Rechercher un compte..." />
-                        <button type="button" class="account-picker-close-inline" onclick="closeAccountPicker()" aria-label="Fermer">✕</button>
+                        <input type="text" id="accountPickerSearch" oninput="filterAccountsClient()" class="account-picker-input" />
+                        <button type="button" class="account-picker-close-inline" onclick="closeAccountPicker()">✕</button>
                     </div>
 
                     <div id="accountPickerList" class="account-picker-list">
@@ -885,7 +885,7 @@
                                     </div>
 
                                     <div class="lv-footer">
-                                        <telerik:RadButton ID="btnAddAccounts" runat="server" Text="Ajouter des comptes" CssClass="btn-add" />
+                                        <telerik:RadButton ID="btnAddAccounts" runat="server" CssClass="btn-add" />
                                     </div>
                                 </LayoutTemplate>
 
@@ -897,7 +897,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun compte trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litEmptyAccounts" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -909,6 +909,24 @@
 
         <script type="text/javascript">
 
+            // Chaînes localisées (fr/en/es)
+            var L_CONFIRM_DELLINE = "<%= L("confirmDelLine") %>";
+            var L_EMPTY_PRODUCTS = "<%= L("emptyProducts") %>";
+            var L_EMPTY_CUSTOMERS = "<%= L("emptyCustomers") %>";
+            var L_EMPTY_ACCOUNTS = "<%= L("emptyAccounts") %>";
+            var L_SEARCH_PRODUCT = "<%= L("searchProduct") %>";
+            var L_SEARCH_CUSTOMER = "<%= L("searchCustomer") %>";
+            var L_SEARCH_ACCOUNT = "<%= L("searchAccount") %>";
+            var L_CLOSE = "<%= L("close") %>";
+
+            function localizePickers() {
+                var ph = [["productPickerSearch", L_SEARCH_PRODUCT], ["customerPickerSearch", L_SEARCH_CUSTOMER], ["accountPickerSearch", L_SEARCH_ACCOUNT]];
+                ph.forEach(function (x) { var el = document.getElementById(x[0]); if (el) el.placeholder = x[1]; });
+                document.querySelectorAll(".product-picker-close-inline,.customer-picker-close-inline,.account-picker-close-inline")
+                    .forEach(function (b) { b.setAttribute("aria-label", L_CLOSE); });
+            }
+            document.addEventListener("DOMContentLoaded", localizePickers);
+            if (window.Sys && Sys.Application) { Sys.Application.add_load(localizePickers); }
 
             var IS_READONLY = <%= chkPost.Checked.ToString().ToLower() %>;
             function onSaveClicked(sender, args) {
@@ -1215,7 +1233,7 @@
                     empty = document.createElement("div");
                     empty.id = "productPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun produit trouvé.";
+                    empty.innerText = L_EMPTY_PRODUCTS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
@@ -1283,7 +1301,7 @@
                     empty = document.createElement("div");
                     empty.id = "customerPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun client trouvé.";
+                    empty.innerText = L_EMPTY_CUSTOMERS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }
@@ -1354,7 +1372,7 @@
                     empty = document.createElement("div");
                     empty.id = "accountPickerEmptyJs";
                     empty.className = "empty";
-                    empty.innerText = "Aucun compte trouvé.";
+                    empty.innerText = L_EMPTY_ACCOUNTS;
                     empty.style.display = "none";
                     list.appendChild(empty);
                 }

@@ -25,7 +25,7 @@ Public Class SquareOAuth
 
         ' ── Retour Square : refus / erreur ──────────────────────────────────
         If Not String.IsNullOrEmpty(oauthError) Then
-            Response.Redirect("~/wbfProducts.aspx?square=denied", True)
+            Response.Redirect("~/wbfPaymentProcessors.aspx?square=denied", True)
             Return
         End If
 
@@ -33,7 +33,7 @@ Public Class SquareOAuth
         If Not String.IsNullOrEmpty(code) Then
             Dim expected As String = TryCast(Session("SquareOAuthState"), String)
             If String.IsNullOrEmpty(state) OrElse expected Is Nothing OrElse state <> expected Then
-                Response.Redirect("~/wbfProducts.aspx?square=badstate", True)
+                Response.Redirect("~/wbfPaymentProcessors.aspx?square=badstate", True)
                 Return
             End If
             Session.Remove("SquareOAuthState")
@@ -49,13 +49,13 @@ Public Class SquareOAuth
                 End Try
 
                 SaveCompanySquareTokens(info, info.MerchantId, locationId)
-                Response.Redirect("~/wbfProducts.aspx?square=connected", True)
+                Response.Redirect("~/wbfPaymentProcessors.aspx?square=connected", True)
 
             Catch ex As Threading.ThreadAbortException
                 ' redirection normale
             Catch ex As Exception
                 System.Diagnostics.Debug.WriteLine("SquareOAuth exchange error: " & ex.Message)
-                Response.Redirect("~/wbfProducts.aspx?square=error", True)
+                Response.Redirect("~/wbfPaymentProcessors.aspx?square=error", True)
             End Try
             Return
         End If
@@ -69,7 +69,7 @@ Public Class SquareOAuth
             ' redirection normale
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SquareOAuth start error: " & ex.Message)
-            Response.Redirect("~/wbfProducts.aspx?square=error", True)
+            Response.Redirect("~/wbfPaymentProcessors.aspx?square=error", True)
         End Try
     End Sub
 

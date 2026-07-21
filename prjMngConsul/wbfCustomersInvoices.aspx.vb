@@ -11,14 +11,123 @@ Public Class wbfCustomersInvoices
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+        ApplyLocalization()
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             rlvClientsFactures.Rebind()
         End If
     End Sub
+
+    ''' <summary>Applique les libellés localisés (fr/en/es) aux contrôles serveur de la page.</summary>
+    Private Sub ApplyLocalization()
+        SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        btnAddCustomerInvoice.Text = L("addInvoice")
+        btnImportSquare.Text = L("importSquare")
+        btnImportSquare.ToolTip = L("importSquareTip")
+        tbSearch.Attributes("placeholder") = L("searchPh")
+        rwInvoice.Title = L("winInvoiceTitle")
+        rwEncaissement.Title = L("winCashInTitle")
+        rwSquarePay.Title = L("winSquare")
+        SetLiteral(Me, "litDlgTitle", L("dlgEmailTitle"))
+        SetLiteral(Me, "litDlgQuestion", L("dlgEmailQuestion"))
+        SetLiteral(Me, "litDlgCancel", L("dlgCancel"))
+        SetLiteral(Me, "litDlgWithout", L("dlgWithout"))
+        SetLiteral(Me, "litDlgWith", L("dlgWith"))
+    End Sub
+
+    ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
+    Private Sub rlvClientsFactures_PreRender(sender As Object, e As EventArgs) Handles rlvClientsFactures.PreRender
+        SetLiteral(rlvClientsFactures, "litColNum", L("colNum"))
+        SetLiteral(rlvClientsFactures, "litColDate", L("colDate"))
+        SetLiteral(rlvClientsFactures, "litColCustomer", L("colCustomer"))
+        SetLiteral(rlvClientsFactures, "litColStatutPaiement", L("colStatutPaiement"))
+        SetLiteral(rlvClientsFactures, "litColResteAPayer", L("colResteAPayer"))
+        SetLiteral(rlvClientsFactures, "litColDejaRecu", L("colDejaRecu"))
+        SetLiteral(rlvClientsFactures, "litColTotal", L("colTotal"))
+        SetLiteral(rlvClientsFactures, "litColEtat", L("colEtat"))
+        SetLiteral(rlvClientsFactures, "litColAction", L("colAction"))
+        SetLiteral(rlvClientsFactures, "litEmpty", L("empty"))
+    End Sub
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    ''' <summary>Traductions (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Factures clients — 60Sec-AI", "Customer invoices — 60Sec-AI", "Facturas de clientes — 60Sec-AI")
+            Case "pageTitleShort" : Return Choose3(lang, "Factures clients", "Customer invoices", "Facturas de clientes")
+            Case "addInvoice" : Return Choose3(lang, "Ajouter une facture", "Add invoice", "Agregar factura")
+            Case "importSquare" : Return Choose3(lang, "Importer depuis Square", "Import from Square", "Importar desde Square")
+            Case "importSquareTip" : Return Choose3(lang, "Rapatrier les factures et paiements Square comme factures clients", "Bring back Square invoices and payments as customer invoices", "Traer facturas y pagos de Square como facturas de clientes")
+            Case "searchPh" : Return Choose3(lang, "Rechercher (nom, courriel, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
+            Case "colNum" : Return Choose3(lang, "#", "#", "#")
+            Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
+            Case "colCustomer" : Return Choose3(lang, "Client", "Customer", "Cliente")
+            Case "colStatutPaiement" : Return Choose3(lang, "Statut paiement", "Payment status", "Estado de pago")
+            Case "colResteAPayer" : Return Choose3(lang, "Reste à payer", "Balance due", "Saldo pendiente")
+            Case "colDejaRecu" : Return Choose3(lang, "Déjà reçu", "Received", "Recibido")
+            Case "colTotal" : Return Choose3(lang, "Total", "Total", "Total")
+            Case "colEtat" : Return Choose3(lang, "État", "Status", "Estado")
+            Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
+            Case "tipCashIn" : Return Choose3(lang, "Encaissement", "Cash receipt", "Cobro")
+            Case "tipSquarePay" : Return Choose3(lang, "Encaisser (lien de paiement Square)", "Collect (Square payment link)", "Cobrar (enlace de pago Square)")
+            Case "tipSendEmail" : Return Choose3(lang, "Envoyer la facture par courriel", "Send invoice by email", "Enviar factura por correo")
+            Case "tipEdit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
+            Case "tipDelete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
+            Case "empty" : Return Choose3(lang, "Aucune facture trouvée.", "No invoice found.", "No se encontró ninguna factura.")
+            Case "winInvoiceTitle" : Return Choose3(lang, "Ajouter / Modifier une facture", "Add / Edit invoice", "Agregar / Editar factura")
+            Case "winCashInTitle" : Return Choose3(lang, "Ajouter / Modifier un encaissement", "Add / Edit cash receipt", "Agregar / Editar cobro")
+            Case "winEditInvoice" : Return Choose3(lang, "Modifier une facture", "Edit invoice", "Editar factura")
+            Case "winAddInvoice" : Return Choose3(lang, "Ajouter une facture", "Add invoice", "Agregar factura")
+            Case "winEditCashIn" : Return Choose3(lang, "Modifier un encaissement", "Edit cash receipt", "Editar cobro")
+            Case "winAddCashIn" : Return Choose3(lang, "Ajouter un encaissement", "Add cash receipt", "Agregar cobro")
+            Case "winSquare" : Return Choose3(lang, "Encaisser (Square)", "Collect (Square)", "Cobrar (Square)")
+            Case "dlgEmailTitle" : Return Choose3(lang, "Envoyer la facture par courriel", "Send invoice by email", "Enviar factura por correo")
+            Case "dlgEmailQuestion" : Return Choose3(lang, "Voulez-vous inclure un <strong>lien de paiement Square</strong> dans le courriel&nbsp;?", "Do you want to include a <strong>Square payment link</strong> in the email?", "¿Desea incluir un <strong>enlace de pago Square</strong> en el correo?")
+            Case "dlgCancel" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
+            Case "dlgWithout" : Return Choose3(lang, "Envoyer sans lien", "Send without link", "Enviar sin enlace")
+            Case "dlgWith" : Return Choose3(lang, "Avec lien Square", "With Square link", "Con enlace Square")
+            Case "msgNotFound" : Return Choose3(lang, "Facture introuvable.", "Invoice not found.", "Factura no encontrada.")
+            Case "msgNoEmail" : Return Choose3(lang, "Aucun courriel de facturation pour ce client.", "No billing email for this customer.", "No hay correo de facturación para este cliente.")
+            Case "msgPdfFail" : Return Choose3(lang, "Impossible de générer le PDF de la facture.", "Unable to generate the invoice PDF.", "No se pudo generar el PDF de la factura.")
+            Case "msgSent" : Return Choose3(lang, "Facture {0} envoyée à {1}.", "Invoice {0} sent to {1}.", "Factura {0} enviada a {1}.")
+            Case "noteAlreadyPaid" : Return Choose3(lang, " (lien Square non ajouté : facture déjà payée)", " (Square link not added: invoice already paid)", " (enlace Square no agregado: factura ya pagada)")
+            Case "noteNotConnected" : Return Choose3(lang, " (lien Square non ajouté : compte Square non connecté)", " (Square link not added: Square account not connected)", " (enlace Square no agregado: cuenta Square no conectada)")
+            Case "noteNotGenerated" : Return Choose3(lang, " (lien Square non généré)", " (Square link not generated)", " (enlace Square no generado)")
+            Case "noteError" : Return Choose3(lang, " (lien Square non ajouté : ", " (Square link not added: ", " (enlace Square no agregado: ")
+            Case "msgImportDone" : Return Choose3(lang, "{0} facture(s) et {1} paiement(s) traités depuis Square.", "{0} invoice(s) and {1} payment(s) processed from Square.", "{0} factura(s) y {1} pago(s) procesados desde Square.")
+            Case "msgImportError" : Return Choose3(lang, "Erreur lors de l'import Square : ", "Error during Square import: ", "Error durante la importación de Square: ")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
     Private Sub rlvClientsFactures_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClientsFactures.NeedDataSource
         Dim dt As DataTable = GetData()
         rlvClientsFactures.DataSource = dt
@@ -84,7 +193,19 @@ Public Class wbfCustomersInvoices
     End Sub
 
     Private Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
-        If e.Argument = "refreshgrid" Then
+        Dim arg As String = If(e.Argument, "")
+        If arg = "refreshgrid" Then
+            rlvClientsFactures.Rebind()
+        ElseIf arg.StartsWith("sendmail|") Then
+            ' Format : sendmail|<invoiceId>|<includeSquare 0/1>
+            Dim parts As String() = arg.Split("|"c)
+            Dim invoiceId As Integer = 0
+            Dim includeSquare As Boolean = False
+            If parts.Length >= 3 Then
+                Integer.TryParse(parts(1), invoiceId)
+                includeSquare = (parts(2) = "1")
+            End If
+            If invoiceId > 0 Then SendInvoiceByEmail(invoiceId, includeSquare)
             rlvClientsFactures.Rebind()
         End If
     End Sub
@@ -126,7 +247,8 @@ Public Class wbfCustomersInvoices
                 Dim invoiceId As Integer = 0
                 Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
                 If invoiceId > 0 Then
-                    GenerateAndDownloadPdf(invoiceId)
+                    Dim oPdf As New clsGenerateInvoicePDF()
+                    oPdf.GenerateAndDownloadPdf(invoiceId)
                     rlvClientsFactures.Rebind()
                 End If
 
@@ -137,6 +259,150 @@ Public Class wbfCustomersInvoices
                 rlvClientsFactures.Rebind()
         End Select
     End Sub
+
+    ''' <summary>
+    ''' Envoie la facture (PDF en pièce jointe) au courriel de facturation du
+    ''' client via le service de courriels (T400Mails + T402Attachments).
+    ''' Reply-To = courriel vérifié de la compagnie. Le PDF est généré au besoin.
+    ''' </summary>
+    Private Sub SendInvoiceByEmail(invoiceId As Integer, includeSquare As Boolean)
+
+        ' 1. Charger les données de la facture
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        Dim ds As DataSet = ExecuteSQLds("s0696GetInvoiceForEmail", p)
+        If ds Is Nothing OrElse ds.Tables(0).Rows.Count = 0 Then
+            ShowSquareMessage(L("msgNotFound"))
+            Return
+        End If
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+
+        Dim toEmail As String = If(IsDBNull(r("Email")), "", r("Email").ToString().Trim())
+        If toEmail = "" Then
+            ShowSquareMessage(L("msgNoEmail"))
+            Return
+        End If
+
+        ' 2. S'assurer que le PDF existe (sinon le générer)
+        If IsDBNull(r("PdfData")) Then
+            Dim oGen As New clsGenerateInvoicePDF()
+            oGen.GenerateAndDownloadPdf(invoiceId)
+            ds = ExecuteSQLds("s0696GetInvoiceForEmail", p)
+            r = ds.Tables(0).Rows(0)
+        End If
+        If IsDBNull(r("PdfData")) Then
+            ShowSquareMessage(L("msgPdfFail"))
+            Return
+        End If
+
+        Dim pdfBytes As Byte() = CType(r("PdfData"), Byte())
+        Dim docNumber As String = If(IsDBNull(r("DocumentNumber")), invoiceId.ToString(), r("DocumentNumber").ToString())
+        Dim companyName As String = If(IsDBNull(r("CompanyName")), "", r("CompanyName").ToString())
+        Dim docGuid As String = If(IsDBNull(r("DocumentGUID")), "", r("DocumentGUID").ToString())
+        Dim fileName As String = If(IsDBNull(r("PdfFileName")) OrElse r("PdfFileName").ToString() = "",
+                                    "Facture_" & docNumber & ".pdf", r("PdfFileName").ToString())
+        Dim companyGuid As Guid = CType(r("CompanyGUID"), Guid)
+        Dim reste As Decimal = If(IsDBNull(r("ResteAPayer")), 0D, CDec(r("ResteAPayer")))
+
+        ' 3b. Lien de paiement Square (optionnel, sur le solde restant)
+        Dim squareLinkHtml As String = ""
+        Dim squareNote As String = ""
+        If includeSquare Then
+            squareLinkHtml = BuildSquarePaymentLink(invoiceId, docNumber, companyName, toEmail, reste, squareNote)
+        End If
+
+        ' 4. Corps HTML (+ lien de visualisation en secours)
+        Dim viewUrl As String = "https://60sec.ca/InvoicePdf.ashx?g=" & docGuid
+        Dim subject As String = "Facture " & docNumber & If(companyName <> "", " — " & companyName, "")
+        Dim body As New System.Text.StringBuilder()
+        body.Append("<div style=""font-family:Arial,sans-serif;font-size:14px;color:#0f172a"">")
+        body.Append("<p>Bonjour,</p>")
+        body.Append("<p>Veuillez trouver ci-jointe la facture <strong>").Append(Server.HtmlEncode(docNumber)).Append("</strong>")
+        If companyName <> "" Then body.Append(" de ").Append(Server.HtmlEncode(companyName))
+        body.Append(".</p>")
+        body.Append("<p><a href=""").Append(viewUrl).Append(""" style=""display:inline-block;padding:10px 18px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700"">Voir la facture (PDF)</a></p>")
+        If squareLinkHtml <> "" Then body.Append(squareLinkHtml)
+        body.Append("<p>Merci de votre confiance.</p>")
+        If companyName <> "" Then body.Append("<p>").Append(Server.HtmlEncode(companyName)).Append("</p>")
+        body.Append("</div>")
+
+        ' 5. Insérer le courriel sortant (BD MailService) -> MailId
+        Dim pm As New Collection
+        pm.Add(New SqlClient.SqlParameter("@To", toEmail))
+        pm.Add(New SqlClient.SqlParameter("@Subject", subject))
+        pm.Add(New SqlClient.SqlParameter("@HTMLBody", body.ToString()))
+        ' Reply-To = courriel vérifié de la compagnie (règle centralisée, sinon NULL)
+        CompanyMail.AddReplyToParam(pm, ConnectionString, companyGuid)
+        Dim dsm As DataSet = ExecuteSQLdsMail("s0610InsertOutboundMail", pm)
+        Dim mailId As Integer = Convert.ToInt32(dsm.Tables(0).Rows(0)(0))
+
+        ' 6. Joindre le PDF (T402Attachments + drapeau HaveAttachment)
+        Dim pa As New Collection
+        pa.Add(New SqlClient.SqlParameter("@FileName", fileName))
+        pa.Add(New SqlClient.SqlParameter("@content", pdfBytes))
+        pa.Add(New SqlClient.SqlParameter("@MailId", mailId))
+        pa.Add(New SqlClient.SqlParameter("@ContentType", "application/pdf"))
+        pa.Add(New SqlClient.SqlParameter("@ContentId", ""))
+        ExecuteSQLMail("s1579InsertAttachemnt_A", pa)
+
+        ShowSquareMessage(String.Format(L("msgSent"), docNumber, toEmail) & squareNote)
+    End Sub
+
+    ''' <summary>
+    ''' Génère un lien de paiement Square (page hébergée) sur le solde restant de la
+    ''' facture et retourne le bloc HTML (bouton « Payer ») à insérer dans le courriel.
+    ''' Estampille la facture avec le SquareOrderId (réconciliation webhook, s0688).
+    ''' Retourne "" si impossible (Square non connecté, solde nul, erreur) et remplit
+    ''' <paramref name="note"/> avec la raison (affichée dans la confirmation).
+    ''' </summary>
+    Private Function BuildSquarePaymentLink(invoiceId As Integer, docNumber As String,
+                                            companyName As String, buyerEmail As String,
+                                            reste As Decimal, ByRef note As String) As String
+        Try
+            If reste <= 0D Then
+                note = L("noteAlreadyPaid")
+                Return ""
+            End If
+
+            Dim token As String = ""
+            Try
+                token = GetValidSquareAccessToken()
+            Catch
+            End Try
+            If String.IsNullOrEmpty(token) Then
+                note = L("noteNotConnected")
+                Return ""
+            End If
+
+            Dim locationId As String = clsSquare.GetMainLocationId(token)
+            Dim cents As Long = CLng(Math.Round(reste * 100D))
+            Dim name As String = "Facture #" & docNumber
+            Dim linkRes As clsSquare.SquarePaymentLinkResult =
+                clsSquare.CreatePaymentLink(token, locationId, cents, name, "Facture client #" & docNumber,
+                                            companyName, buyerEmail, UserEmail, Nothing)
+
+            If linkRes Is Nothing OrElse String.IsNullOrEmpty(linkRes.Url) Then
+                note = L("noteNotGenerated")
+                Return ""
+            End If
+
+            ' Réconciliation : estampiller la facture avec le SquareOrderId.
+            If Not String.IsNullOrEmpty(linkRes.OrderId) Then
+                Dim ps As New Collection
+                ps.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                ps.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+                ps.Add(New SqlClient.SqlParameter("@SquareOrderId", linkRes.OrderId))
+                ExecuteSQL("s0688LinkDocumentToSquareOrder", ps)
+            End If
+
+            Return "<p><a href=""" & linkRes.Url & """ style=""display:inline-block;padding:10px 18px;" &
+                   "background:#16a34a;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700"">" &
+                   "Payer maintenant (" & reste.ToString("N2") & " $)</a></p>"
+        Catch ex As Exception
+            note = L("noteError") & ex.Message & ")"
+            Return ""
+        End Try
+    End Function
 
     Sub DeleteDocument(invoiceId As Integer)
 
@@ -151,119 +417,6 @@ Public Class wbfCustomersInvoices
     End Sub
 
 
-
-    ''' <summary>
-    ''' Génère le PDF de la facture, le stocke dans T060Document.PdfData,
-    ''' puis l'envoie au navigateur en téléchargement.
-    ''' </summary>
-    Private Sub GenerateAndDownloadPdf(invoiceId As Integer)
-
-        ' 1. Charger les données de la facture
-        Dim inv As InvoiceData = LoadInvoiceForPdf(invoiceId)
-        If inv Is Nothing Then Exit Sub
-
-        ' 2. Générer le PDF en mémoire
-        Dim pdfBytes As Byte() = InvoicePdfBuilder.Build(inv)
-
-        ' 3. Stocker dans T060Document
-        Dim fileName As String = "Invoice_" & inv.InvoiceNumber & ".pdf"
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
-        p.Add(New SqlClient.SqlParameter("@PdfData", pdfBytes))
-        p.Add(New SqlClient.SqlParameter("@FileName", fileName))
-        ExecuteSQL("s0116SaveInvoicePdf", p)
-
-        ' 4. Envoyer au navigateur
-        'Response.Clear()
-        'Response.ContentType = "application/pdf"
-        'Response.AddHeader("Content-Disposition", "attachment; filename=""" & fileName & """")
-        'Response.AddHeader("Content-Length", pdfBytes.Length.ToString())
-        'Response.BinaryWrite(pdfBytes)
-        'Response.Flush()
-        'Response.SuppressContent = True
-        'Context.ApplicationInstance.CompleteRequest()
-    End Sub
-
-    ''' <summary>
-    ''' Charge l'objet InvoiceData (entête + lignes) depuis la BD via s0115.
-    ''' </summary>
-    Private Function LoadInvoiceForPdf(invoiceId As Integer) As InvoiceData
-
-        Dim p As New Collection
-        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
-        Dim ds As DataSet = ExecuteSQLds("s0115GetInvoiceForPdf", p)
-
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            Return Nothing
-        End If
-
-        Dim r As DataRow = ds.Tables(0).Rows(0)
-        Dim inv As New InvoiceData()
-        inv.LogoBytes = GetCompanyLogoBytes()   ' logo de l'entreprise (remplace le monogramme si présent)
-
-        ' === Émetteur (votre entreprise) — à externaliser dans une config plus tard ===
-        inv.CompanyName = "MngConsul Inc."
-        inv.CompanyTagline = "Cabinet de massothérapie"
-        inv.CompanyAddressLine1 = "123 rue Principale"
-        inv.CompanyAddressLine2 = "Montréal, QC H2X 1A1"
-        inv.CompanyPhone = "(514) 555-1234"
-        inv.CompanyEmail = "info@60sec.ca"
-        inv.CompanyTpsNumber = "123456789 RT0001"
-        inv.CompanyTvqNumber = "1234567890 TQ0001"
-
-        ' === Facture ===
-        inv.InvoiceNumber = If(r("DocumentNumber") Is DBNull.Value, invoiceId.ToString(), r("DocumentNumber").ToString())
-        inv.IssueDate = If(r("DocumentDate") Is DBNull.Value, Date.Now.Date, CDate(r("DocumentDate")))
-        inv.DueDate = If(r("DueDate") Is DBNull.Value, inv.IssueDate.AddDays(30), CDate(r("DueDate")))
-
-        ' === Client (depuis les colonnes copiées dans T060Document) ===
-        inv.CustomerName = If(r("Name") Is DBNull.Value, "", r("Name").ToString())
-        inv.CustomerAddressLine1 = If(r("Address1") Is DBNull.Value, "", r("Address1").ToString())
-
-        Dim line2 As New System.Text.StringBuilder()
-        If Not (r("City") Is DBNull.Value) Then line2.Append(r("City").ToString())
-        If Not (r("State") Is DBNull.Value) Then line2.Append(", ").Append(r("State").ToString())
-        If Not (r("PostalCode") Is DBNull.Value) Then line2.Append(" ").Append(r("PostalCode").ToString())
-        inv.CustomerAddressLine2 = line2.ToString()
-
-        inv.CustomerPhone = If(r("Phone") Is DBNull.Value, "", r("Phone").ToString())
-        inv.CustomerEmail = If(r("Email") Is DBNull.Value, "", r("Email").ToString())
-
-        ' === Totaux ===
-        inv.SubTotal = If(r("SubTotal") Is DBNull.Value, 0D, CDec(r("SubTotal")))
-        inv.Tps = If(r("TPS") Is DBNull.Value, 0D, CDec(r("TPS")))
-        inv.Tvq = If(r("TVQ") Is DBNull.Value, 0D, CDec(r("TVQ")))
-        inv.Total = If(r("Total") Is DBNull.Value, 0D, CDec(r("Total")))
-
-        ' === État de paiement ===
-        '   Apposera le tampon « PAYÉ » sur le PDF si la facture est totalement réglée.
-        '   Rétrocompatible : si la proc s0115 ne retourne ni ResteAPayer ni IsPaid,
-        '   IsPaid reste False et aucun tampon n'est dessiné.
-        If ds.Tables(0).Columns.Contains("ResteAPayer") Then
-            Dim reste As Decimal = If(r("ResteAPayer") Is DBNull.Value, inv.Total, CDec(r("ResteAPayer")))
-            inv.IsPaid = (reste <= 0D AndAlso inv.Total > 0D)
-        ElseIf ds.Tables(0).Columns.Contains("IsPaid") Then
-            inv.IsPaid = If(r("IsPaid") Is DBNull.Value, False, CBool(r("IsPaid")))
-        End If
-
-        ' === Lignes (table 2 du DataSet) ===
-        If ds.Tables.Count >= 2 Then
-            For Each rl As DataRow In ds.Tables(1).Rows
-                inv.Items.Add(New InvoiceLine With {
-                    .Description = If(rl("ProductName") Is DBNull.Value OrElse rl("ProductName").ToString() = "",
-                                       If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
-                                       rl("ProductName").ToString()),
-                    .SubDescription = If(rl("Description") Is DBNull.Value, "", rl("Description").ToString()),
-                    .Qty = If(rl("Qty") Is DBNull.Value, 1D, CDec(rl("Qty"))),
-                    .UnitPrice = If(rl("UnitPrice") Is DBNull.Value, 0D, CDec(rl("UnitPrice"))),
-                    .Amount = If(rl("Amount") Is DBNull.Value, 0D, CDec(rl("Amount")))
-                })
-            Next
-        End If
-
-        Return inv
-    End Function
 
     Private Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         rlvClientsFactures.Rebind()
@@ -316,10 +469,10 @@ Public Class wbfCustomersInvoices
                 Next
             End If
 
-            ShowSquareMessage(invCount & " facture(s) et " & payCount & " paiement(s) traites depuis Square.")
+            ShowSquareMessage(String.Format(L("msgImportDone"), invCount, payCount))
             rlvClientsFactures.Rebind()
         Catch ex As Exception
-            ShowSquareMessage("Erreur lors de l'import Square : " & ex.Message)
+            ShowSquareMessage(L("msgImportError") & ex.Message)
         End Try
     End Sub
 

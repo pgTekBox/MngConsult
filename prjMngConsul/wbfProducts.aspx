@@ -168,11 +168,7 @@
             </div>
 
             <div class="searchbox">
-                <asp:Button ID="btnConnectSquare" runat="server"
-                    CssClass="btn"
-                    Text="Connecter Square"
-                    CausesValidation="false"
-                    OnClientClick="window.location.href='SquareOAuth.aspx'; return false;" />
+                <%-- Connexion Square déplacée vers wbfPaymentProcessors.aspx (menu « Processeur de paiement »). --%>
                 <asp:Button ID="btnExportSquare" runat="server"
                     CssClass="btn"
                     Text="Exporter vers Square"

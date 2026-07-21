@@ -279,6 +279,7 @@
     <Content Include="Controls\Footer.ascx" />
     <Content Include="Controls\Header.ascx" />
     <Content Include="Controls\HeaderUser.ascx" />
+    <Content Include="Controls\ucReceiptEdit.ascx" />
     <Content Include="Controls\jsonViewer.ascx" />
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
@@ -305,6 +306,15 @@
     <Content Include="Database\check_existing_outbound_mail_proc.sql" />
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
     <Content Include="Database\s0150GetParamsForCompany.sql" />
+    <Content Include="Database\T100_add_invoice_numbering_params.sql" />
+    <Content Include="Database\T062DocumentNumberCounter.sql" />
+    <Content Include="Database\s0695GenerateInvoiceNumber.sql" />
+    <Content Include="Database\sp_ComptabiliserDocument.sql" />
+    <Content Include="Database\s0040SaveInvoiceItems.sql" />
+    <Content Include="Database\s0026GetCustomersInvoices.sql" />
+    <Content Include="Database\s0115GetInvoiceForPdf.sql" />
+    <Content Include="Database\s0696GetInvoiceForEmail.sql" />
+    <Content Include="Database\remove_PDF_LOGO_PATH_param.sql" />
     <Content Include="Database\s0151UpdateParamValue.sql" />
     <Content Include="Database\s0688LinkDocumentToSquareOrder.sql" />
     <Content Include="Database\fCompanyName.sql" />
@@ -452,6 +462,7 @@
     <Content Include="App_Data\RadUploadTemp\1771966730796Facture_59311.pdf.tmp" />
     <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
     <Content Include="AutoPayProcessor.ashx" />
+    <Content Include="InvoicePdf.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -530,6 +541,7 @@
     <Content Include="wbfRapportTaxe.aspx" />
     <Content Include="wbfReceipt.aspx" />
     <Content Include="wbfReceiptEdit.aspx" />
+    <Content Include="wbfReceiptEditPopup.aspx" />
     <Content Include="wbfRegister.aspx" />
     <Content Include="wbfReleve.aspx" />
     <Content Include="wbfScannedPDF.aspx" />
@@ -537,6 +549,7 @@
     <Content Include="wbfSetting.aspx" />
     <Content Include="wbfSettingsOpenAiPrompts.aspx" />
     <Content Include="wbfStripeWebhookDiagnostic.aspx" />
+    <Content Include="wbfPaymentProcessors.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
     <Content Include="wbfSupplierPaymentChoice.aspx" />
@@ -598,6 +611,13 @@
     </Compile>
     <Compile Include="Controls\HeaderUser.ascx.vb">
       <DependentUpon>HeaderUser.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ucReceiptEdit.ascx.designer.vb">
+      <DependentUpon>ucReceiptEdit.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ucReceiptEdit.ascx.vb">
+      <DependentUpon>ucReceiptEdit.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Controls\jsonViewer.ascx.designer.vb">
@@ -1144,6 +1164,13 @@
       <DependentUpon>wbfReceipt.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
+    <Compile Include="wbfReceiptEditPopup.aspx.designer.vb">
+      <DependentUpon>wbfReceiptEditPopup.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfReceiptEditPopup.aspx.vb">
+      <DependentUpon>wbfReceiptEditPopup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="wbfReceiptEdit.aspx.designer.vb">
       <DependentUpon>wbfReceiptEdit.aspx</DependentUpon>
     </Compile>
@@ -1192,6 +1219,13 @@
     <Compile Include="wbfSettingsOpenAiPrompts.aspx.vb">
       <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPaymentProcessors.aspx.designer.vb">
+      <DependentUpon>wbfPaymentProcessors.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPaymentProcessors.aspx.vb">
+      <DependentUpon>wbfPaymentProcessors.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfStripeWebhookDiagnostic.aspx.designer.vb">
       <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>

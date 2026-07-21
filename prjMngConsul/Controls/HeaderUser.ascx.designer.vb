@@ -24,6 +24,16 @@ Partial Public Class HeaderUser
     Protected WithEvents litTrial As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
+    '''pnlSquare control.
+    '''</summary>
+    Protected WithEvents pnlSquare As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litSquare control.
+    '''</summary>
+    Protected WithEvents litSquare As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''litLang control.
     '''</summary>
     '''<remarks>

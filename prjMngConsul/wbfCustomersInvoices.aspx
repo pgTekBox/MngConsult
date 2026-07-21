@@ -3,7 +3,7 @@
 <%@ Register Src="~/Controls/PdfViewer.ascx" TagPrefix="uc1" TagName="PdfViewer" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Invoices — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -45,6 +45,22 @@
             background-repeat: no-repeat !important;
             background-position: center !important;
             background-size: 16px 16px !important;
+        }
+
+        /* Courriel (billing) affiché sous l'adresse dans la colonne Client */
+        .cust-email {
+            font-size: 12px;
+            color: #64748b;
+            margin-top: 2px;
+            word-break: break-all;
+        }
+
+        /* Icône Envoyer par courriel (enveloppe) */
+        .btn-icon-email {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230891b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 7-10 6L2 7'/%3E%3C/svg%3E") !important;
+            background-repeat: no-repeat !important;
+            background-position: center !important;
+            background-size: 18px 18px !important;
         }
 
         /* Icône Encaisser / lien de paiement Square (bleu Square) */
@@ -314,29 +330,29 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>
-    <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
+    <%-- Le RadWindowManager (radalert/radconfirm) DOIT rester HORS du RadAjaxPanel :
+         sinon chaque rebind AJAX le re-rend et laisse un fond modal orphelin qui
+         bloque les clics (l'envoi « fonctionne une fois puis plus »). --%>
     <telerik:RadWindowManager ID="rwmCustomersInvoices" runat="server" EnableShadow="true"></telerik:RadWindowManager>
+    <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
 
         <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Facture Client</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
             </div>
             <div class="searchbox">
                 <asp:Button ID="btnAddCustomerInvoice" runat="server"
                     CssClass="btn btnAddRow"
-                    Text="Ajouter Facture"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', 'Modifier une facture', 'Ajouter une facture'); return false;"
+                    OnClientClick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"
                 />
                 <asp:Button ID="btnImportSquare" runat="server"
                     CssClass="btn btnAddRow"
-                    Text="Importer depuis Square"
-                    CausesValidation="false"
-                    ToolTip="Rapatrier les factures et paiements Square comme Factures Clients" />
+                    CausesValidation="false" />
                 <div class="search-group">
-                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
+                    <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
                     <asp:Button ID="btnClear" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
                 </div>
@@ -355,20 +371,21 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div class="colh-numero">#</div>
-                                <div class="colh-date">Date</div>
-                                <div class="colh-customer">Client</div>
-                                <div class="colh-statutpaiement">Statut Paiement</div>
-                                 <div class="colh-resteapayer">Reste A Payer</div>
-                                 <div class="colh-dejarecu">Deja Recu</div>
-                                   
+                                <div class="colh-numero"><asp:Literal ID="litColNum" runat="server" /></div>
+                                <div class="colh-date"><asp:Literal ID="litColDate" runat="server" /></div>
+                                <div class="colh-customer"><asp:Literal ID="litColCustomer" runat="server" /></div>
+                                <div class="colh-statutpaiement"><asp:Literal ID="litColStatutPaiement" runat="server" /></div>
+                                 <div class="colh-resteapayer"><asp:Literal ID="litColResteAPayer" runat="server" /></div>
+                                 <div class="colh-dejarecu"><asp:Literal ID="litColDejaRecu" runat="server" /></div>
 
 
-                                <div class="colh-total">Total</div>
-                                <div class="colh-etat">Etat</div>
-                                 
-                                
-                                <div class="colh-action">Action</div>
+
+                                <div class="colh-total"><asp:Literal ID="litColTotal" runat="server" /></div>
+                                <div class="colh-etat"><asp:Literal ID="litColEtat" runat="server" /></div>
+
+
+
+                                <div class="colh-action"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -398,34 +415,41 @@
 
                             <div class="listview-actions">
 
-                                <asp:Button ID="Button1" runat="server" 
-                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt" 
+                                <asp:Button ID="Button1" runat="server"
+                                    CssClass="field-encaissement btn btn-icon btn-icon-receipt"
                                     Text=""
-                                    ToolTip="Encaissement"
+                                    ToolTip='<%# L("tipCashIn") %>'
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", ""Modifier unencaissement"", ""Ajouter un encaissement"");    return false;" %>'
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEditPopup.aspx"", L_EDIT_CASHIN, L_ADD_CASHIN);    return false;" %>'
                                 />
 
                                 <%-- Bouton "Encaisser" : genere un lien de paiement Square (page hebergee) --%>
                                 <asp:Button ID="btnSquarePay" runat="server"
                                     CssClass="btn btn-icon btn-icon-collect"
                                     Text=""
-                                    ToolTip="Encaisser (lien de paiement Square)"
+                                    ToolTip='<%# L("tipSquarePay") %>'
                                     CausesValidation="false"
                                     Visible='<%# CanCollect(Eval("StatutPaiement")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSquarePay"", ""wbfCustomerPaymentLink.aspx"", ""Encaisser (Square)"", ""Encaisser (Square)"");    return false;" %>' />
+                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSquarePay"", ""wbfCustomerPaymentLink.aspx"", L_SQUARE, L_SQUARE);    return false;" %>' />
+
+                                <asp:Button ID="btnSendEmail" runat="server"
+                                    CssClass="btn btn-icon btn-icon-email"
+                                    Text=""
+                                    ToolTip='<%# L("tipSendEmail") %>'
+                                    CausesValidation="false"
+                                    OnClientClick='<%# "openSendEmailDialog(" & Eval("Id") & "); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    ToolTip="Modifier"
+                                    ToolTip='<%# L("tipEdit") %>'
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture"");    return false;" %>' />
-                                   
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwInvoice"", ""wbfInvoiceEdit.aspx"", L_EDIT_INVOICE, L_ADD_INVOICE);    return false;" %>' />
+
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Supprimer"
+                                    ToolTip='<%# L("tipDelete") %>'
                                     CommandName="DeleteInvoice"
                                     CommandArgument='<%# Eval("Id") %>'
                                     CausesValidation="false" />
@@ -439,7 +463,7 @@
 
                     <EmptyDataTemplate>
                         <div class="empty-state">
-                            Aucune facture trouvée.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -447,13 +471,15 @@
 
             </div>
         </div>
-                <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0, ""rwInvoice"", ""wbfInvoiceEdit.aspx"", ""Modifier une facture"", ""Ajouter une facture""); return false;" title="Ajouter un client">+</button>
 
 
 
 
     </telerik:RadAjaxPanel>
+
+    <%-- FAB mobile — titre posé par JS (pas de bloc de code inline : cMain est verrouillé par RadAjaxPanel) --%>
+    <button class="fab-add" onclick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;">+</button>
+
     <telerik:RadWindow ID="rwInvoice" runat="server"
         Modal="true"
         VisibleOnPageLoad="false"
@@ -496,6 +522,26 @@
 
 
     <script src="js/RadWindows.js"></script>
+
+    <%-- RadCodeBlock OBLIGATOIRE : RadAjaxPanel verrouille le Content parent (cMain),
+         donc aucun bloc de code inline ne doit être enfant direct de cMain (cf. mémoire i18n). --%>
+    <telerik:RadCodeBlock ID="rcbLang" runat="server">
+        <script type="text/javascript">
+            // Titres localisés des fenêtres modales (RadWindow)
+            var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
+            var L_ADD_INVOICE = "<%= L("winAddInvoice") %>";
+            var L_EDIT_CASHIN = "<%= L("winEditCashIn") %>";
+            var L_ADD_CASHIN = "<%= L("winAddCashIn") %>";
+            var L_SQUARE = "<%= L("winSquare") %>";
+            var L_ADD_INVOICE_TIP = "<%= L("addInvoice") %>";
+            // Titre du FAB défini ici (pas de bloc de code inline dans le bouton)
+            (function () {
+                function setFab() { var f = document.querySelector(".fab-add"); if (f) f.title = L_ADD_INVOICE_TIP; }
+                document.addEventListener("DOMContentLoaded", setFab);
+                if (window.Sys && Sys.Application) { Sys.Application.add_load(setFab); }
+            })();
+        </script>
+    </telerik:RadCodeBlock>
 
     <script type="text/javascript">
         function setInvoiceDirty() {
@@ -583,6 +629,51 @@
 
 
     </script>
+    <%-- Dialogue : envoyer la facture par courriel (avec ou sans lien de paiement Square) --%>
+    <div id="sendEmailOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
+         background:rgba(15,23,42,.55); align-items:center; justify-content:center;">
+        <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+             width:92vw; max-width:460px; padding:24px; box-sizing:border-box;">
+            <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:8px;">
+                <asp:Literal ID="litDlgTitle" runat="server" />
+            </div>
+            <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:22px;">
+                <asp:Literal ID="litDlgQuestion" runat="server" />
+            </div>
+            <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                <button type="button" onclick="closeSendEmailDialog()"
+                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                           border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgCancel" runat="server" /></button>
+                <button type="button" onclick="doSendEmail(0)"
+                    style="padding:10px 16px; border:1px solid #2563eb; background:#fff; color:#2563eb;
+                           border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWithout" runat="server" /></button>
+                <button type="button" onclick="doSendEmail(1)"
+                    style="padding:10px 16px; border:1px solid #16a34a; background:#16a34a; color:#fff;
+                           border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWith" runat="server" /></button>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        var _sendEmailInvoiceId = 0;
+        function openSendEmailDialog(id) {
+            _sendEmailInvoiceId = id;
+            document.getElementById("sendEmailOverlay").style.display = "flex";
+        }
+        function closeSendEmailDialog() {
+            document.getElementById("sendEmailOverlay").style.display = "none";
+        }
+        function doSendEmail(includeSquare) {
+            closeSendEmailDialog();
+            var mgr = $find("RAP1");
+            if (mgr) { mgr.ajaxRequest("sendmail|" + _sendEmailInvoiceId + "|" + includeSquare); }
+        }
+        // Fermer en cliquant le fond sombre
+        document.getElementById("sendEmailOverlay").addEventListener("click", function (e) {
+            if (e.target === this) closeSendEmailDialog();
+        });
+    </script>
+
     <uc1:PdfViewer runat="server" id="PdfViewer" />
 
 </asp:Content>

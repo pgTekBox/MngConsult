@@ -48,7 +48,6 @@ GO
         ('FISCAL_YEAR_END',     N'Date de fin d''année fiscale',            N'Fiscal year-end date',              N'Fecha de cierre del ejercicio fiscal'),
         -- PDF
         ('PDF_TEMPLATE',        N'Nom du modèle PDF',                       N'PDF template name',                 N'Nombre de la plantilla PDF'),
-        ('PDF_LOGO_PATH',       N'Logo (URL/chemin)',                       N'Logo (URL/path)',                   N'Logo (URL/ruta)'),
         ('PDF_PAYMENT_TERMS',   N'Conditions de paiement',                  N'Payment terms',                     N'Condiciones de pago'),
         ('PDF_NOTES',           N'Mentions / Notes',                        N'Disclaimers / Notes',               N'Menciones / Notas'),
         ('PDF_PAID_STAMP',      N'Afficher tampon « PAYÉ »',                N'Show "PAID" stamp',                 N'Mostrar sello «PAGADO»'),

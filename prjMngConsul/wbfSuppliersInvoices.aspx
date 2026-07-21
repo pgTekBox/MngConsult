@@ -438,7 +438,7 @@
                                     Text=""  ClientIDMode="Static"
                                     ToolTip='<%# L("tipDecaiss") %>'
                                     CausesValidation="false"
-                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEdit.aspx"", L_EDIT_DECAISS, L_ADD_DECAISS);    return false;" %>'
+                                    OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=DECAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEditPopup.aspx"", L_EDIT_DECAISS, L_ADD_DECAISS);    return false;" %>'
                                 />
 
                                 <%-- Bouton "Payer avec Stripe" : visible seulement si facture non payée et comptabilisée
