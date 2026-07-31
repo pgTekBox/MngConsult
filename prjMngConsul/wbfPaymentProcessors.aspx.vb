@@ -20,7 +20,85 @@ Public Class wbfPaymentProcessors
         If Not IsPostBack Then
             ShowReturnMessage()
             LoadStatus()
+            LoadPlaidStatus()
         End If
+    End Sub
+
+    ''' <summary>Charge l'état de connexion Plaid (banques connectées) et alimente la carte.</summary>
+    Private Sub LoadPlaidStatus()
+        Dim bankCount As Integer = 0, accountCount As Integer = 0
+        Dim banks As String = ""
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0698GetCompanyPlaidStatus", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                bankCount = If(IsDBNull(r("BankCount")), 0, CInt(r("BankCount")))
+                accountCount = If(IsDBNull(r("AccountCount")), 0, CInt(r("AccountCount")))
+                banks = If(IsDBNull(r("Banks")), "", r("Banks").ToString())
+            End If
+        Catch
+        End Try
+
+        Dim connected As Boolean = bankCount > 0
+        pnlPlaidConnected.Visible = connected
+        pnlPlaidDisconnected.Visible = Not connected
+
+        If connected Then
+            litPlaidBadge.Text = "<span class=""pp-badge on""><span class=""dot""></span>" & L("connected") & "</span>"
+            litPlaidBanks.Text = If(banks = "", "—", Server.HtmlEncode(banks))
+            litPlaidAccounts.Text = accountCount.ToString()
+            chkAutoImport.Checked = GetAutoImport()
+        Else
+            litPlaidBadge.Text = "<span class=""pp-badge off""><span class=""dot""></span>" & L("notConnected") & "</span>"
+        End If
+    End Sub
+
+    ''' <summary>Lit l'état de l'import automatique Plaid de la compagnie (défaut activé).</summary>
+    Private Function GetAutoImport() As Boolean
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0705GetPlaidAutoImport", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim v As Object = ds.Tables(0).Rows(0)("PlaidAutoImport")
+                Return IsDBNull(v) OrElse CBool(v)
+            End If
+        Catch
+        End Try
+        Return True
+    End Function
+
+    ''' <summary>Active / désactive l'import automatique Plaid pour la compagnie.</summary>
+    Private Sub chkAutoImport_CheckedChanged(sender As Object, e As EventArgs) Handles chkAutoImport.CheckedChanged
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Enabled", chkAutoImport.Checked))
+            ExecuteSQL("s0706SetPlaidAutoImport", p)
+
+            pnlMsg.Visible = True
+            pnlMsg.CssClass = "pp-msg ok"
+            litMsg.Text = If(chkAutoImport.Checked, L("autoImportOn"), L("autoImportOff"))
+        Catch
+            pnlMsg.Visible = True
+            pnlMsg.CssClass = "pp-msg err"
+            litMsg.Text = L("autoImportErr")
+        End Try
+    End Sub
+
+    ' Connexion / ajout d'une banque : vers la page du relevé bancaire, où le flux
+    ' Plaid Link (avec reprise OAuth) est en place.
+    Private Sub btnPlaidConnect_Click(sender As Object, e As EventArgs) _
+        Handles btnPlaidConnect.Click, btnPlaidAdd.Click
+        Response.Redirect("~/wbfReleve.aspx")
+    End Sub
+
+    ' Gestion des comptes déjà connectés.
+    Private Sub btnPlaidManage_Click(sender As Object, e As EventArgs) Handles btnPlaidManage.Click
+        Response.Redirect("~/PlaidAccounts.aspx")
     End Sub
 
     ''' <summary>Charge l'état de connexion Square et alimente la carte.</summary>
@@ -108,6 +186,16 @@ Public Class wbfPaymentProcessors
         btnDisconnect.Text = L("disconnect")
         litSoon.Text = L("soon")
         litStripeNote.Text = L("stripeNote")
+
+        ' Plaid
+        litLblPlaidBanks.Text = L("lblPlaidBanks")
+        litLblPlaidAccounts.Text = L("lblPlaidAccounts")
+        litPlaidIntro.Text = L("plaidIntro")
+        btnPlaidConnect.Text = L("plaidConnect")
+        btnPlaidAdd.Text = L("plaidAdd")
+        btnPlaidManage.Text = L("plaidManage")
+        chkAutoImport.Text = L("autoImport")
+        litAutoImportHint.Text = L("autoImportHint")
     End Sub
 
     ''' <summary>Traductions (fr/en/es).</summary>
@@ -132,6 +220,20 @@ Public Class wbfPaymentProcessors
             Case "msgDisconnected" : Return Choose3(lang, "✔ Compte Square déconnecté.", "✔ Square account disconnected.", "✔ Cuenta Square desconectada.")
             Case "msgDenied" : Return Choose3(lang, "✖ Connexion Square annulée.", "✖ Square connection cancelled.", "✖ Conexión Square cancelada.")
             Case "msgError" : Return Choose3(lang, "✖ Erreur lors de la connexion Square.", "✖ Error during Square connection.", "✖ Error durante la conexión Square.")
+
+            ' === Plaid ===
+            Case "lblPlaidBanks" : Return Choose3(lang, "Banques", "Banks", "Bancos")
+            Case "lblPlaidAccounts" : Return Choose3(lang, "Comptes reliés", "Linked accounts", "Cuentas vinculadas")
+            Case "plaidIntro" : Return Choose3(lang, "Connectez votre compte bancaire via Plaid pour importer automatiquement vos transactions et faire le rapprochement bancaire.", "Connect your bank account through Plaid to automatically import your transactions and reconcile your statements.", "Conecte su cuenta bancaria mediante Plaid para importar automáticamente sus transacciones y conciliar sus extractos.")
+            Case "plaidConnect" : Return Choose3(lang, "Connecter une banque", "Connect a bank", "Conectar un banco")
+            Case "plaidAdd" : Return Choose3(lang, "Connecter une autre banque", "Connect another bank", "Conectar otro banco")
+            Case "plaidManage" : Return Choose3(lang, "Gérer les comptes", "Manage accounts", "Gestionar cuentas")
+            Case "autoImport" : Return Choose3(lang, "Import automatique des transactions", "Automatic transaction import", "Importación automática de transacciones")
+            Case "autoImportHint" : Return Choose3(lang, "Lorsque activé, les nouvelles transactions signalées par votre banque sont importées automatiquement (webhook Plaid), sans cliquer « Importer ».", "When enabled, new transactions reported by your bank are imported automatically (Plaid webhook), without clicking « Import ».", "Cuando está activado, las nuevas transacciones informadas por su banco se importan automáticamente (webhook de Plaid), sin hacer clic en « Importar ».")
+            Case "autoImportOn" : Return Choose3(lang, "✔ Import automatique activé.", "✔ Automatic import enabled.", "✔ Importación automática activada.")
+            Case "autoImportOff" : Return Choose3(lang, "✔ Import automatique désactivé.", "✔ Automatic import disabled.", "✔ Importación automática desactivada.")
+            Case "autoImportErr" : Return Choose3(lang, "✖ Erreur lors de l'enregistrement du réglage.", "✖ Error saving the setting.", "✖ Error al guardar la configuración.")
+
             Case Else : Return ""
         End Select
     End Function

@@ -4,6 +4,7 @@
 <%@ Register Src="~/ucJournalList.ascx" TagPrefix="uc1" TagName="ucJournalList" %>
 
 <asp:Content ID="Content1" ContentPlaceHolderID="TitleContent" runat="server">
+    <%= L("pageTitle") %>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="HeadContent" runat="server">
 </asp:Content>

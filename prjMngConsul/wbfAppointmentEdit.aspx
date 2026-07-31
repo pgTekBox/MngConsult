@@ -95,10 +95,6 @@
         .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 12px; }
         .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 
-        @media (max-width: 800px) {
-            .grid, .grid3, .grid4 { grid-template-columns: 1fr; }
-        }
-
         /* =============================================
            CHAMPS
         ============================================= */
@@ -248,13 +244,6 @@
         .right { display: flex; gap: 8px; align-items: center; flex-wrap: wrap; }
         .small { font-size: 12px; color: var(--muted); }
         .hint  { font-size: 11px; color: var(--muted); margin-top: 4px; }
-
-        /* =============================================
-           RESPONSIVE
-        ============================================= */
-        @media (max-width: 768px) {
-            .wrap { margin: 10px auto; padding: 0 10px 16px; }
-        }
     </style>
 </head>
 

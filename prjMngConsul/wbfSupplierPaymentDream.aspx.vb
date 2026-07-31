@@ -65,6 +65,9 @@ Public Class wbfSupplierPaymentDream
             litSupplier.Text = LoadSupplierName(PartyId)
             txtAccountName.Text = litSupplier.Text
 
+            ' Pré-remplissage : personne-contact + adresse depuis la fiche fournisseur.
+            PrefillFromSupplier(PartyId)
+
             ' Garde-fou : credentials non configurés -> on désactive le paiement.
             If Not clsDreamPayments.IsConfigured() Then
                 btnPay.Enabled = False
@@ -89,6 +92,62 @@ Public Class wbfSupplierPaymentDream
         End Try
         Return ""
     End Function
+
+    ''' <summary>
+    ''' Pré-remplit la personne-contact (prénom/nom/courriel) et l'adresse de
+    ''' l'entreprise depuis l'adresse de facturation du fournisseur (s0013).
+    ''' L'utilisateur peut tout corriger avant de payer.
+    ''' </summary>
+    Private Sub PrefillFromSupplier(pid As String)
+        Try
+            Dim n As Integer
+            If Not Integer.TryParse(pid, n) OrElse n <= 0 Then Return
+
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@PartyId", n))
+            Dim ds As DataSet = ExecuteSQLds("s0013GetPastyAddress", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
+
+            ' Adresse de facturation (AddressTypeId = 1) si présente, sinon la première.
+            Dim dt As DataTable = ds.Tables(0)
+            Dim row As DataRow = Nothing
+            For Each r As DataRow In dt.Rows
+                If dt.Columns.Contains("AddressTypeId") AndAlso Not IsDBNull(r("AddressTypeId")) AndAlso CInt(r("AddressTypeId")) = 1 Then
+                    row = r : Exit For
+                End If
+            Next
+            If row Is Nothing Then row = dt.Rows(0)
+
+            ' Personne-contact : « Attention » découpé en prénom / nom (heuristique).
+            Dim contact As String = SafeStr(row, "Attention")
+            If contact <> "" Then
+                Dim sp As Integer = contact.IndexOf(" "c)
+                If sp > 0 Then
+                    txtFirstName.Text = contact.Substring(0, sp).Trim()
+                    txtLastName.Text = contact.Substring(sp + 1).Trim()
+                Else
+                    txtFirstName.Text = contact
+                End If
+            End If
+
+            SetIfEmpty(txtEmail, SafeStr(row, "Email"))
+
+            ' Adresse de l'entreprise (province laissée vide : pas de code 2 lettres en BD).
+            SetIfEmpty(txtAddress, SafeStr(row, "Address1"))
+            SetIfEmpty(txtCity, SafeStr(row, "City"))
+            SetIfEmpty(txtPostal, SafeStr(row, "PostalCode"))
+        Catch
+        End Try
+    End Sub
+
+    Private Shared Function SafeStr(r As DataRow, col As String) As String
+        If r.Table.Columns.Contains(col) AndAlso Not IsDBNull(r(col)) Then Return r(col).ToString().Trim()
+        Return ""
+    End Function
+
+    Private Shared Sub SetIfEmpty(tb As TextBox, val As String)
+        If Not String.IsNullOrWhiteSpace(val) AndAlso String.IsNullOrWhiteSpace(tb.Text) Then tb.Text = val
+    End Sub
 
     ' =====================================================================
     ' ORCHESTRATION EFT
@@ -184,6 +243,11 @@ Public Class wbfSupplierPaymentDream
             Case "supplier" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
             Case "invoice" : Return Choose3(lang, "Facture", "Invoice", "Factura")
             Case "amount" : Return Choose3(lang, "Montant à payer", "Amount to pay", "Monto a pagar")
+            Case "companySection" : Return Choose3(lang, "Entreprise (bénéficiaire)", "Company (beneficiary)", "Empresa (beneficiario)")
+            Case "companyHint" : Return Choose3(lang, "Le fournisseur qui reçoit le paiement : raison sociale et adresse.", "The supplier receiving the payment: legal name and address.", "El proveedor que recibe el pago: razón social y dirección.")
+            Case "companyName" : Return Choose3(lang, "Nom de l'entreprise (raison sociale)", "Company name (legal name)", "Nombre de la empresa (razón social)")
+            Case "contactSection" : Return Choose3(lang, "Personne-contact", "Contact person", "Persona de contacto")
+            Case "contactHint" : Return Choose3(lang, "La personne de ce fournisseur qui gère le compte (vérification du compte bancaire, notifications).", "The person at this supplier who manages the account (bank account verification, notifications).", "La persona de este proveedor que gestiona la cuenta (verificación de la cuenta bancaria, notificaciones).")
             Case "payeeSection" : Return Choose3(lang, "Bénéficiaire", "Payee", "Beneficiario")
             Case "firstName" : Return Choose3(lang, "Prénom", "First name", "Nombre")
             Case "lastName" : Return Choose3(lang, "Nom", "Last name", "Apellido")

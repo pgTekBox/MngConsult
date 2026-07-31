@@ -98,62 +98,6 @@
    
 
 
-        /* =========================
-            TABLETTE — 769px à 1024px
-         ========================= */
-          @media (min-width: 769px) and (max-width: 1024px) {
-
-          }
-           /* =========================
-      MOBILE LARGE  grands smartphones en portrait
-  ========================= */
-          @media (min-width: 481px) and (max-width: 768px) {
-          }
-           /* =========================
-  PETIT MOBILE — max 480px
-    ========================= */
-          @media (max-width: 480px) {
-
-              .btn{
-                      padding: 5px 2px;
-                      font-size: 12px;
-              }
-
-                  .listview-list-head {
-    display: grid;
-    grid-template-columns: minmax(180px, 1fr)  1fr;
-    gap: 0px;
-    padding: 0px 0px;
-    font-weight: 800;
-    font-size: 13px;
-    color: #0f172a;
-    background: #f8fafc;
-    border-bottom: 1px solid var(--mc-stroke);
-    position: sticky;
-    top: 0;
-    z-index: 0;
-    box-sizing: border-box;
-}
-              .listview-row {
-    display: grid;
-    grid-template-columns: minmax(180px, 1fr) 1fr;
-    gap: 0px;
-    align-items: center;
-    padding: 0px 0px;
-    border-bottom: 1px solid #eef2f7;
-    background: #fff;
-    box-sizing: border-box;
-}
-
-
-
-        .field-status{
-    display:none
-} 
-                .colh-status{
-    display:none
-} 
-          }
 
 /*
 @media (max-width: 900px) {

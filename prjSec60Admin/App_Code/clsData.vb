@@ -1,12 +1,15 @@
 ﻿Imports System
 Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Web.UI.WebControls
+Imports Telerik.Web.UI
 
 ''' <summary>
 ''' Classe de base pour l'accès aux données de la console d'administration.
 ''' Toutes les pages qui appellent des procédures stockées héritent de clsData.
-''' Reprend le pattern de prjMngConsul (ExecuteSQL / ExecuteSQLds) mais allégé :
-''' pas de dépendance Telerik, pas d'authentification (la console n'a pas de login).
+''' Reprend le pattern de prjMngConsul (ExecuteSQL / ExecuteSQLds / SetDDL).
+''' Inclut les surcharges SetDDL (DropDownList ASP.NET + RadDropDownList Telerik)
+''' pour que les pages migrées depuis l'app principale fonctionnent sans modification.
 ''' </summary>
 Public Class clsData
     Inherits System.Web.UI.Page
@@ -214,6 +217,148 @@ Public Class clsData
             MyDA.Fill(oDs)
             Return oDs
         End Using
+    End Function
+
+    ' -------------------------------------------------------------------------
+    ' Remplissage de listes déroulantes à partir d'une procédure stockée.
+    ' Repris de prjMngConsul.clsData pour que les pages migrées depuis l'app
+    ' principale (ex. wbfSettingsOpenAiPrompts) fonctionnent sans modification.
+    ' Overloads : DropDownList (ASP.NET) et RadDropDownList (Telerik).
+    ' -------------------------------------------------------------------------
+
+    Sub SetDDL(ByVal oDDL As DropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String)
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New ListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+    End Sub
+
+    Sub SetDDL(ByVal oDDL As DropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String, ByVal SetSelectedValue As Integer)
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New ListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+        For Each oItem As ListItem In oDDL.Items
+            oItem.Selected = False
+        Next
+        For Each oItem As ListItem In oDDL.Items
+            If SetSelectedValue = oItem.Value Then
+                oItem.Selected = True
+                Exit For
+            End If
+        Next
+
+    End Sub
+
+    Sub SetDDL(ByVal oDDL As RadDropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String)
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New DropDownListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+        For Each oItem As DropDownListItem In oDDL.Items
+            oItem.Selected = False
+        Next
+
+    End Sub
+
+    Sub SetDDL(ByVal oDDL As RadDropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String, AllParameters As Collection)
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+        For Each oParam As SqlClient.SqlParameter In AllParameters
+            oCom.Parameters.Add(oParam)
+        Next
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New DropDownListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+        For Each oItem As DropDownListItem In oDDL.Items
+            oItem.Selected = False
+        Next
+
+    End Sub
+
+    Sub SetDDL(ByVal oDDL As RadDropDownList, ByVal DisplayName As String, ByVal KeyField As String, ByVal SQLStatement As String, ByVal SetSelectedValue As Integer)
+
+        Dim oCon As New SqlClient.SqlConnection(Me.ConnectionString)
+        oCon.Open()
+        Dim oCom As New SqlClient.SqlCommand(SQLStatement, oCon)
+        oCom.CommandType = CommandType.StoredProcedure
+        Dim oDr As SqlClient.SqlDataReader
+        oDr = oCom.ExecuteReader
+        oDDL.Items.Clear()
+        Do While oDr.Read()
+            Dim MyItem As New DropDownListItem(CheckStringNull(oDr(DisplayName)), CheckStringNull(oDr(KeyField).ToString))
+            oDDL.Items.Add(MyItem)
+        Loop
+        oDr.Close()
+        oCom.Connection.Close()
+        oCon.Close()
+
+        For Each oItem As DropDownListItem In oDDL.Items
+            oItem.Selected = False
+        Next
+        For Each oItem As DropDownListItem In oDDL.Items
+            If SetSelectedValue = oItem.Value Then
+                oItem.Selected = True
+                Exit For
+            End If
+        Next
+
+    End Sub
+
+    ''' <summary>Convertit DBNull en chaîne vide (utilisé par SetDDL).</summary>
+    Private Function CheckStringNull(ByVal oObj As Object) As Object
+        If IsDBNull(oObj) Then
+            Return ""
+        Else
+            Return oObj
+        End If
     End Function
 
 End Class

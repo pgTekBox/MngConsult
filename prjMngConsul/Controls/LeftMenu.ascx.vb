@@ -45,8 +45,6 @@ Namespace Controls
             sb.Append(GroupStart("🧾", "sales"))
             sb.Append(Child("~/wbfCustomers.aspx", "customers"))
             sb.Append(Child("~/wbfCustomersInvoices.aspx", "customerInvoices"))
-            sb.Append(Child("~/wbfScannedPDF.aspx", "scannedDocs"))
-            sb.Append(Child("~/wbfReceiptEdit.aspx", "cashIns"))
             sb.Append(GroupEnd)
 
             ' Achats
@@ -107,9 +105,7 @@ Namespace Controls
             sb.Append(Item("~/wbfNewUser.aspx", "🏢", "companyProfile", "nav-item subtle"))
             sb.Append(Item("~/wbfUsers.aspx", "⚙️", "users", "nav-item subtle"))
             sb.Append(Item("~/wbfsetting.aspx", "⚙️", "settings", "nav-item subtle"))
-            sb.Append(Item("~/wbfSettingsOpenAiPrompts.aspx", "⚙️", "settingsOpenAI", "nav-item subtle"))
             sb.Append(Item("~/wbfPaymentProcessors.aspx", "💳", "paymentProcessors", "nav-item subtle"))
-            sb.Append(Item("~/wbfStripeWebhookDiagnostic.aspx", "💳", "stripeDiag", "nav-item subtle"))
             sb.Append(Item("~/wbfAutoPayAuthorizations.aspx", "🤖", "autoPay", "nav-item subtle"))
             sb.Append(Item("~/wbfLogout.aspx", "🚪", "logout", "nav-item subtle"))
             sb.Append("</div>")

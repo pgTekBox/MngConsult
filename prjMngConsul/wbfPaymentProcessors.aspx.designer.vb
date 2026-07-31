@@ -72,4 +72,43 @@ Partial Public Class wbfPaymentProcessors
     '''<summary>litStripeNote control.</summary>
     Protected WithEvents litStripeNote As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litPlaidBadge control.</summary>
+    Protected WithEvents litPlaidBadge As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>pnlPlaidConnected control.</summary>
+    Protected WithEvents pnlPlaidConnected As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litLblPlaidBanks control.</summary>
+    Protected WithEvents litLblPlaidBanks As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPlaidBanks control.</summary>
+    Protected WithEvents litPlaidBanks As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litLblPlaidAccounts control.</summary>
+    Protected WithEvents litLblPlaidAccounts As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPlaidAccounts control.</summary>
+    Protected WithEvents litPlaidAccounts As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>chkAutoImport control.</summary>
+    Protected WithEvents chkAutoImport As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>litAutoImportHint control.</summary>
+    Protected WithEvents litAutoImportHint As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>btnPlaidManage control.</summary>
+    Protected WithEvents btnPlaidManage As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>btnPlaidAdd control.</summary>
+    Protected WithEvents btnPlaidAdd As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlPlaidDisconnected control.</summary>
+    Protected WithEvents pnlPlaidDisconnected As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litPlaidIntro control.</summary>
+    Protected WithEvents litPlaidIntro As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>btnPlaidConnect control.</summary>
+    Protected WithEvents btnPlaidConnect As Global.System.Web.UI.WebControls.Button
+
 End Class

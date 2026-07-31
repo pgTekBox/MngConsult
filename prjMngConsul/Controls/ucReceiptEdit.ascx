@@ -330,16 +330,6 @@
             font-weight: 900;
         }
 
-        @media (max-width: 480px) {
-            .content {
-                padding-bottom: 84px;
-            }
-
-            .totals {
-                display: grid;
-                grid-template-columns: 1fr 85px 85px;
-            }
-        }
     </style>
 
     <telerik:RadAjaxLoadingPanel ID="RadAjaxLoadingPanel1" runat="server" Skin="Metro"></telerik:RadAjaxLoadingPanel>

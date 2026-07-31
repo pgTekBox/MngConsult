@@ -164,15 +164,6 @@
 
             .fab-add img { width: 56px; height: 56px; display: block; }
 
-        @media (max-width: 768px) {
-            .grid-header { display: none; }
-
-            .grid-row {
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-                padding: 14px;
-            }
-        }
     </style>
 </head>
 <body>

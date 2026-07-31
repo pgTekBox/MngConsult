@@ -1,8 +1,35 @@
 ﻿Imports System.Data.SqlClient
+Imports Newtonsoft.Json.Linq
 Imports Telerik.Web.UI
 
 Partial Public Class wbfSetting
     Inherits clsData
+
+    ''' <summary>
+    ''' Prompt d'extraction des informations d'entreprise à partir d'un document
+    ''' (immatriculation REQ, lettre ARC/Revenu Québec, en-tête de lettre, facture…).
+    ''' </summary>
+    Private Const EXTRACT_PROMPT_COMPANY As String =
+        "Tu es un extracteur d'informations d'entreprise québécoise et canadienne. " &
+        "À partir du document fourni (immatriculation au Registraire des entreprises du Québec, " &
+        "lettre de l'ARC ou de Revenu Québec, en-tête de lettre, facture, etc.), " &
+        "retourne UNIQUEMENT un objet JSON valide avec exactement ces clés (mets null si absent) : " &
+        "{""legal_name"": string, ""trade_name"": string, ""neq"": string, ""phone"": string, " &
+        """address1"": string, ""address2"": string, ""city"": string, ""province"": string, " &
+        """postal_code"": string, ""country"": string, ""gst_number"": string, ""qst_number"": string}. " &
+        "legal_name = dénomination / nom légal. trade_name = nom commercial usuel. " &
+        "neq = Numéro d'entreprise du Québec (10 chiffres). phone = téléphone. " &
+        "address1 = adresse civique (numéro et rue). address2 = complément (bureau, suite). " &
+        "city = ville. province = province ou état. postal_code = code postal. country = pays. " &
+        "gst_number = numéro de TPS. qst_number = numéro de TVQ. " &
+        "Ne retourne que le JSON, sans texte ni balises de code autour."
+
+    ' --- Valeurs exposées au markup (haut de page : progression + identité admin) ---
+    Protected ProfilePct As Integer = 0
+    Protected AdminName As String = ""
+    Protected AdminMeta As String = ""
+    Protected AdminRole As String = ""
+    Protected AdminInitials As String = ""
 
     ' =========================================================
     '  PAGE LIFECYCLE
@@ -43,6 +70,7 @@ Partial Public Class wbfSetting
         Page.Title = L("pageTitle")
         btnSave.Text = L("save")
         btnReload.Text = L("reload")
+        btnScanExtract.Text = L("scanBtn")
         If tsSettings.Tabs.Count >= 7 Then
             tsSettings.Tabs(0).Text = L("tabCompany")
             tsSettings.Tabs(1).Text = L("tabTaxes")
@@ -77,6 +105,24 @@ Partial Public Class wbfSetting
             Case "emptyTab" : Return Choose3(lang, "Aucun paramètre configuré pour cet onglet.", "No parameter configured for this tab.", "Ningún parámetro configurado para esta pestaña.")
             Case "savedOk" : Return Choose3(lang, "Paramètres enregistrés.", "Settings saved.", "Ajustes guardados.")
             Case "reloadedOk" : Return Choose3(lang, "Paramètres rechargés.", "Settings reloaded.", "Ajustes recargados.")
+
+            ' === Haut de page : progression + identité admin ===
+            Case "profileLabel" : Return Choose3(lang, "Progression du profil", "Profile completion", "Progreso del perfil")
+            Case "roleAdmin" : Return Choose3(lang, "Administrateur", "Administrator", "Administrador")
+            Case "roleAccountant" : Return Choose3(lang, "Comptable", "Accountant", "Contador")
+
+            ' === Scan de document / remplissage automatique ===
+            Case "scanTitle" : Return Choose3(lang, "Remplissage automatique par document", "Auto-fill from a document", "Autocompletar desde un documento")
+            Case "scanHint" : Return Choose3(lang, "Déposez une immatriculation, une lettre de l'ARC/Revenu Québec ou un en-tête : l'IA remplit les champs vides (Entreprise, Taxes).", "Drop a registration, a CRA/Revenu Québec letter or a letterhead: AI fills the empty fields (Company, Taxes).", "Suelte un registro, una carta de la CRA/Revenu Québec o un membrete: la IA rellena los campos vacíos (Empresa, Impuestos).")
+            Case "scanDrop" : Return Choose3(lang, "Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG)", "Drag a file here or click to choose (PDF, JPG, PNG)", "Arrastre un archivo aquí o haga clic para elegir (PDF, JPG, PNG)")
+            Case "scanBtn" : Return Choose3(lang, "Analyser le document", "Analyze document", "Analizar documento")
+            Case "upChoose" : Return Choose3(lang, "Veuillez d'abord choisir un fichier.", "Please choose a file first.", "Elija un archivo primero.")
+            Case "upEmpty" : Return Choose3(lang, "Le fichier est vide.", "The file is empty.", "El archivo está vacío.")
+            Case "upNoKey" : Return Choose3(lang, "Clé OpenAI absente. Contactez l'administrateur.", "OpenAI key missing. Contact the administrator.", "Falta la clave de OpenAI. Contacte al administrador.")
+            Case "upFormat" : Return Choose3(lang, "Format non pris en charge (PDF, JPG ou PNG uniquement).", "Unsupported format (PDF, JPG or PNG only).", "Formato no admitido (solo PDF, JPG o PNG).")
+            Case "upFilled" : Return Choose3(lang, "{0} champ(s) rempli(s) automatiquement. Vérifiez, puis cliquez Enregistrer.", "{0} field(s) filled automatically. Review, then click Save.", "{0} campo(s) rellenado(s) automáticamente. Revise y haga clic en Guardar.")
+            Case "upNone" : Return Choose3(lang, "Aucune information exploitable trouvée (ou champs déjà remplis).", "No usable information found (or fields already filled).", "No se encontró información utilizable (o los campos ya están llenos).")
+            Case "upError" : Return Choose3(lang, "Erreur lors de l'analyse du document.", "Error while analyzing the document.", "Error al analizar el documento.")
             Case "saveErr" : Return Choose3(lang, "Erreur lors de la sauvegarde : ", "Error while saving: ", "Error al guardar: ")
             Case "boolYes" : Return Choose3(lang, "Oui", "Yes", "Sí")
             Case "boolNo" : Return Choose3(lang, "Non", "No", "No")
@@ -267,6 +313,7 @@ Partial Public Class wbfSetting
         Dim tb As New RadTextBox()
         tb.ID = "txtValue"
         tb.Width = Unit.Percentage(100)
+        tb.MaxLength = 300   ' = plafond de SaveParamString (sVal varchar(8000), tronqué à 300 côté code)
         tb.Text = value
         Return tb
     End Function
@@ -277,6 +324,7 @@ Partial Public Class wbfSetting
         tb.Width = Unit.Percentage(100)
         tb.TextMode = InputMode.MultiLine
         tb.Rows = 4
+        tb.MaxLength = 300   ' plafond SaveParamString
         tb.Text = value
         Return tb
     End Function
@@ -286,6 +334,7 @@ Partial Public Class wbfSetting
         tb.ID = "txtValue"
         tb.Width = Unit.Percentage(100)
         tb.TextMode = InputMode.Password
+        tb.MaxLength = 300   ' plafond SaveParamString
         tb.Text = value
         Return tb
     End Function
@@ -518,6 +567,7 @@ Partial Public Class wbfSetting
         Dim tb As New RadTextBox()
         tb.ID = "txtValue"
         tb.Width = Unit.Percentage(100)
+        tb.MaxLength = 300   ' plafond SaveParamString
         tb.Text = value
         pnl.Controls.Add(tb)
 
@@ -803,6 +853,238 @@ Partial Public Class wbfSetting
         LoadAllSettings()
         ShowOk(L("reloadedOk"))
     End Sub
+
+    ' =========================================================
+    '  HAUT DE PAGE : progression du profil + identité admin
+    '  Calculé en OnPreRender (après les événements) pour refléter
+    '  l'état sauvegardé le plus récent.
+    ' =========================================================
+    Protected Overrides Sub OnPreRender(e As EventArgs)
+        MyBase.OnPreRender(e)
+        LoadProfileHeader()
+    End Sub
+
+    Private Sub LoadProfileHeader()
+        ' --- Identité de l'administrateur (affichage seulement) ---
+        Dim fn As String = If(UserFirstName, "").Trim()
+        Dim ln As String = If(UserLastName, "").Trim()
+        Dim full As String = (fn & " " & ln).Trim()
+        If String.IsNullOrEmpty(full) Then full = If(UserEmail, "").Trim()
+        AdminName = Server.HtmlEncode(full)
+
+        Dim company As String = If(CompanyName, "").Trim()
+        Dim email As String = If(UserEmail, "").Trim()
+        If Not String.IsNullOrEmpty(company) AndAlso Not String.IsNullOrEmpty(email) Then
+            AdminMeta = Server.HtmlEncode(company & " · " & email)
+        ElseIf Not String.IsNullOrEmpty(email) Then
+            AdminMeta = Server.HtmlEncode(email)
+        Else
+            AdminMeta = Server.HtmlEncode(company)
+        End If
+
+        AdminRole = If(IsAccountant, L("roleAccountant"), L("roleAdmin"))
+
+        Dim ini As String = ""
+        If fn.Length > 0 Then ini &= fn.Substring(0, 1)
+        If ln.Length > 0 Then ini &= ln.Substring(0, 1)
+        If ini = "" AndAlso email.Length > 0 Then ini = email.Substring(0, 1)
+        AdminInitials = Server.HtmlEncode(ini.ToUpper())
+
+        ' --- Progression du profil ---
+        ProfilePct = ComputeProfileProgress()
+    End Sub
+
+    ''' <summary>% de complétion du profil = champs remplis / total sur les onglets
+    ''' Entreprise et Taxes (valeurs de la compagnie).</summary>
+    Private Function ComputeProfileProgress() As Integer
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0150GetParamsForCompany", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return 0
+
+            Dim total As Integer = 0, filled As Integer = 0
+            For Each r As DataRow In ds.Tables(0).Rows
+                Dim cat As String = If(IsDBNull(r("Categorie")), "", r("Categorie").ToString()).ToUpper()
+                If cat <> "ENTREPRISE" AndAlso cat <> "TAXES" Then Continue For
+                total += 1
+                If IsParamFilled(r) Then filled += 1
+            Next
+
+            If total = 0 Then Return 0
+            Return CInt(Math.Round(filled / total * 100.0))
+        Catch
+            Return 0
+        End Try
+    End Function
+
+    Private Shared Function IsParamFilled(r As DataRow) As Boolean
+        If r.Table.Columns.Contains("sVal") AndAlso Not IsDBNull(r("sVal")) AndAlso Not String.IsNullOrWhiteSpace(r("sVal").ToString()) Then Return True
+        If r.Table.Columns.Contains("iVal") AndAlso Not IsDBNull(r("iVal")) Then Return True
+        If r.Table.Columns.Contains("dVal") AndAlso Not IsDBNull(r("dVal")) Then Return True
+        If r.Table.Columns.Contains("fVal") AndAlso Not IsDBNull(r("fVal")) Then Return True
+        Return False
+    End Function
+
+    ' =====================================================================
+    ' SCAN DE DOCUMENT : extraction IA (OpenAI) → remplit les champs VIDES
+    ' des onglets Entreprise / Taxes. L'utilisateur révise puis clique Enregistrer.
+    ' =====================================================================
+    Protected Async Sub btnScanExtract_Click(sender As Object, e As EventArgs) Handles btnScanExtract.Click
+
+        If Not fileDocScan.HasFile Then
+            ShowScanMsg(L("upChoose"))
+            Return
+        End If
+
+        Try
+            Dim bytes As Byte() = fileDocScan.FileBytes
+            If bytes Is Nothing OrElse bytes.Length = 0 Then
+                ShowScanMsg(L("upEmpty"))
+                Return
+            End If
+
+            Dim fileName As String = If(fileDocScan.FileName, "").ToLowerInvariant()
+            Dim ct As String = If(fileDocScan.PostedFile IsNot Nothing, If(fileDocScan.PostedFile.ContentType, ""), "").ToLowerInvariant()
+
+            Dim apiKey As String = GetChatGptKey()
+            If String.IsNullOrEmpty(apiKey) Then
+                ShowScanMsg(L("upNoKey"))
+                Return
+            End If
+
+            Dim reader As New OpenAiReceiptReader(apiKey)
+            Dim json As String
+
+            If ct.Contains("pdf") OrElse fileName.EndsWith(".pdf") Then
+                Dim res = Await reader.ParseInvoicePdfAsync(bytes, EXTRACT_PROMPT_COMPANY)
+                json = res.JsonText
+            ElseIf ct.StartsWith("image") OrElse fileName.EndsWith(".jpg") OrElse fileName.EndsWith(".jpeg") OrElse fileName.EndsWith(".png") Then
+                Dim mime As String = If(ct.StartsWith("image"), ct, If(fileName.EndsWith(".png"), "image/png", "image/jpeg"))
+                Dim res = Await reader.ReadReceiptAsJsonAsync(bytes, mime, EXTRACT_PROMPT_COMPANY)
+                json = res.JsonResult
+            Else
+                ShowScanMsg(L("upFormat"))
+                Return
+            End If
+
+            Dim n As Integer = FillSettingsFromJson(json)
+            If n > 0 Then
+                ShowScanMsg(String.Format(L("upFilled"), n))
+            Else
+                ShowScanMsg(L("upNone"))
+            End If
+
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("wbfSetting scan error: " & ex.Message)
+            ShowScanMsg(L("upError"))
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Remplit les champs (contrôles txtValue) des onglets Entreprise et Taxes
+    ''' à partir du JSON, UNIQUEMENT quand le champ est vide. Mapping par ShortName.
+    ''' Retourne le nombre de champs remplis.
+    ''' </summary>
+    Private Function FillSettingsFromJson(json As String) As Integer
+        If String.IsNullOrWhiteSpace(json) Then Return 0
+
+        Dim iStart As Integer = json.IndexOf("{"c)
+        Dim iEnd As Integer = json.LastIndexOf("}"c)
+        If iStart < 0 OrElse iEnd <= iStart Then Return 0
+
+        Dim jo As JObject
+        Try
+            jo = JObject.Parse(json.Substring(iStart, iEnd - iStart + 1))
+        Catch
+            Return 0
+        End Try
+
+        ' Mapping ShortName -> clé JSON
+        Dim map As New Dictionary(Of String, String) From {
+            {"LEGAL_NAME", "legal_name"},
+            {"TRADE_NAME", "trade_name"},
+            {"NEQ", "neq"},
+            {"PHONE", "phone"},
+            {"ADDR1", "address1"},
+            {"ADDR2", "address2"},
+            {"CITY", "city"},
+            {"PROVINCE", "province"},
+            {"POSTAL", "postal_code"},
+            {"COUNTRY", "country"},
+            {"GST_NO", "gst_number"},
+            {"QST_NO", "qst_number"}
+        }
+
+        Dim n As Integer = 0
+        n += FillRepeater(rpEntreprise, jo, map)
+        n += FillRepeater(rpTaxes, jo, map)
+        Return n
+    End Function
+
+    Private Function FillRepeater(rp As Repeater, jo As JObject, map As Dictionary(Of String, String)) As Integer
+        Dim n As Integer = 0
+        For Each item As RepeaterItem In rp.Items
+            If item.ItemType <> ListItemType.Item AndAlso item.ItemType <> ListItemType.AlternatingItem Then Continue For
+
+            Dim hidShort As HiddenField = TryCast(item.FindControl("hidShortName"), HiddenField)
+            Dim ph As PlaceHolder = TryCast(item.FindControl("phControl"), PlaceHolder)
+            If hidShort Is Nothing OrElse ph Is Nothing Then Continue For
+
+            Dim sn As String = If(hidShort.Value, "").Trim().ToUpper()
+            Dim jsonKey As String = Nothing
+            If Not map.TryGetValue(sn, jsonKey) Then Continue For
+
+            Dim val As String = J(jo, jsonKey)
+            If String.IsNullOrWhiteSpace(val) Then Continue For
+
+            Dim ctrl As Control = ph.FindControl("txtValue")
+            If ctrl Is Nothing Then Continue For
+
+            If TypeOf ctrl Is RadTextBox Then
+                Dim tb As RadTextBox = CType(ctrl, RadTextBox)
+                If String.IsNullOrWhiteSpace(tb.Text) Then
+                    tb.Text = val.Trim()
+                    n += 1
+                End If
+            ElseIf TypeOf ctrl Is RadComboBox Then
+                ' Ex. PROVINCE : sélection au mieux par texte (si vide et correspondance trouvée)
+                Dim cb As RadComboBox = CType(ctrl, RadComboBox)
+                If String.IsNullOrEmpty(cb.SelectedValue) Then
+                    Dim match As RadComboBoxItem = cb.FindItemByText(val.Trim())
+                    If match IsNot Nothing Then
+                        match.Selected = True
+                        n += 1
+                    End If
+                End If
+            End If
+        Next
+        Return n
+    End Function
+
+    Private Shared Function J(jo As JObject, key As String) As String
+        Dim t As JToken = jo(key)
+        If t Is Nothing OrElse t.Type = JTokenType.Null Then Return ""
+        Return t.ToString().Trim()
+    End Function
+
+    Private Sub ShowScanMsg(msg As String)
+        pnlScanMsg.Visible = True
+        litScanMsg.Text = Server.HtmlEncode(msg)
+    End Sub
+
+    Private Function GetChatGptKey() As String
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Parameter", "CHATGPT"))
+            Dim ds As DataSet = ExecuteSQLds("s0000GetParameter", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Return ds.Tables(0).Rows(0)("Value").ToString()
+            End If
+        Catch
+        End Try
+        Return ""
+    End Function
 
     ''' <summary>
     ''' Boucle sur les items d'un Repeater et appelle s0151UpdateParamValue

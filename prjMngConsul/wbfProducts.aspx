@@ -122,34 +122,6 @@
             font-size: 12px;
         }
 
-        /* ========================= TABLETTE ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .listview-list-head,
-            .listview-row {
-                grid-template-columns: minmax(160px, 1.5fr) minmax(80px, 1fr) 80px 70px 60px 50px 60px;
-                gap: 8px;
-                padding: 10px 12px;
-            }
-        }
-
-        /* ========================= MOBILE ========================= */
-        @media (max-width: 768px) {
-            .listview-list-head { display: none; }
-            .listview-row {
-                grid-template-columns: 1fr 80px 60px;
-                gap: 8px;
-                padding: 12px 14px;
-            }
-            .col-cat, .col-taxe, .col-actif, .col-qty { display: none; }
-        }
-
-        @media (max-width: 480px) {
-            .listview-row {
-                grid-template-columns: 1fr 70px 40px;
-                gap: 6px;
-                padding: 10px;
-            }
-        }
     </style>
 </asp:Content>
 

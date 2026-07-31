@@ -27,11 +27,14 @@ Public Class wbfTemplateEdit
     ' =========================================================
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+        ApplyLocalization()
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             TemplateId = CInt(Val(Request.QueryString("Id")))
             CreateLinesTable()
 
@@ -52,11 +55,47 @@ Public Class wbfTemplateEdit
         UpdateModeInfo()
     End Sub
 
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
+    Private Sub ApplyLocalization()
+        ' En-tête du template
+        txtCode.EmptyMessage = L("phCode")
+        cbJournal.EmptyMessage = L("selectPh")
+        txtLibelle.EmptyMessage = L("phLibelle")
+        txtDescription.EmptyMessage = L("phDescription")
+
+        SetLiteral(Me, "litLblCode", L("lblCode"))
+        SetLiteral(Me, "litLblJournal", L("lblJournal"))
+        SetLiteral(Me, "litPreRempli", L("chkPreRempli"))
+        SetLiteral(Me, "litActif", L("chkActif"))
+        SetLiteral(Me, "litLblLibelle", L("lblLibelle"))
+        SetLiteral(Me, "litLblDescription", L("lblDescription"))
+
+        ' Lignes du template
+        SetLiteral(Me, "litStructTitle", L("structTitle"))
+        SetLiteral(Me, "litColCompte", L("colCompte"))
+        SetLiteral(Me, "litColLibelle", L("colLibelle"))
+        SetLiteral(Me, "litColSens", L("colSens"))
+        SetLiteral(Me, "litColMontant", L("colMontant"))
+
+        ' Boutons
+        btnAddLine.ToolTip = L("tipAddLine")
+        radSave.Text = L("saveTemplate")
+
+        ' Sélecteur de comptes (input HTML runat=server)
+        Dim srch = TryCast(FindDeep(Me, "accountPickerSearch"), System.Web.UI.HtmlControls.HtmlInputControl)
+        If srch IsNot Nothing Then srch.Attributes("placeholder") = L("searchAccount")
+    End Sub
+
+    ''' <summary>Libellé du EmptyDataTemplate du RadListView des comptes.</summary>
+    Private Sub rlvAccounts_PreRender(sender As Object, e As EventArgs) Handles rlvAccounts.PreRender
+        SetLiteral(rlvAccounts, "litAccEmpty", L("accEmpty"))
+    End Sub
+
     Sub UpdateModeInfo()
         If chkPreRempli.Checked Then
-            lblModeInfo.Text = "Mode <strong>pré-rempli</strong> : les montants enregistrés ici seront automatiquement utilisés à chaque application du template."
+            lblModeInfo.Text = L("modePreRempli")
         Else
-            lblModeInfo.Text = "Mode <strong>structure</strong> : seuls les comptes et leur sens (Débit/Crédit) sont mémorisés. Les montants seront à saisir à chaque utilisation."
+            lblModeInfo.Text = L("modeStructure")
         End If
     End Sub
 
@@ -102,7 +141,7 @@ Public Class wbfTemplateEdit
         dr("PlanComptableId") = 0
         dr("AccountNumero") = ""
         dr("AccountName") = ""
-        dr("AccountDisplay") = "Sélectionner un compte ▾"
+        dr("AccountDisplay") = L("selectAccount")
         dr("Libelle") = ""
         dr("Sens") = "DEBIT"
         dr("Montant") = 0
@@ -284,18 +323,27 @@ Public Class wbfTemplateEdit
 
         Dim lblAccount As Label = TryCast(e.Item.FindControl("lblAccount"), Label)
         Dim cbSens As RadComboBox = TryCast(e.Item.FindControl("cbSens"), RadComboBox)
+        Dim txtLineLib As RadTextBox = TryCast(e.Item.FindControl("txtLineLibelle"), RadTextBox)
 
         If lblAccount IsNot Nothing Then
             Dim planComptableId As Object = DataBinder.Eval(e.Item.DataItem, "PlanComptableId")
             If planComptableId IsNot Nothing AndAlso CInt(planComptableId) > 0 Then
                 lblAccount.Text = DataBinder.Eval(e.Item.DataItem, "AccountDisplay").ToString()
             Else
-                lblAccount.Text = "Sélectionner un compte ▾"
+                lblAccount.Text = L("selectAccount")
             End If
         End If
 
-        ' Pré-sélectionner le sens
+        ' Localiser le placeholder de la ligne
+        If txtLineLib IsNot Nothing Then txtLineLib.EmptyMessage = L("phLineLibelle")
+
+        ' Pré-sélectionner le sens + localiser Débit / Crédit
         If cbSens IsNot Nothing Then
+            Dim itDebit = cbSens.FindItemByValue("DEBIT")
+            If itDebit IsNot Nothing Then itDebit.Text = L("debit")
+            Dim itCredit = cbSens.FindItemByValue("CREDIT")
+            If itCredit IsNot Nothing Then itCredit.Text = L("credit")
+
             Dim sens As String = If(IsDBNull(DataBinder.Eval(e.Item.DataItem, "Sens")), "DEBIT",
                                     DataBinder.Eval(e.Item.DataItem, "Sens").ToString())
             cbSens.SelectedValue = sens
@@ -316,15 +364,15 @@ Public Class wbfTemplateEdit
 
         ' --- Validations ---
         If String.IsNullOrWhiteSpace(txtCode.Text) Then
-            RegisterAlert("Le code du template est obligatoire.")
+            RegisterAlert(L("alertCode"))
             Return
         End If
         If String.IsNullOrWhiteSpace(txtLibelle.Text) Then
-            RegisterAlert("Le libellé du template est obligatoire.")
+            RegisterAlert(L("alertLibelle"))
             Return
         End If
         If String.IsNullOrEmpty(cbJournal.SelectedValue) Then
-            RegisterAlert("Veuillez sélectionner un journal.")
+            RegisterAlert(L("alertJournal"))
             Return
         End If
 
@@ -332,13 +380,13 @@ Public Class wbfTemplateEdit
         Dim activeLines = dt.AsEnumerable().Where(Function(r) Convert.ToInt32(r("Deleted")) = 0).ToList()
 
         If activeLines.Count < 2 Then
-            RegisterAlert("Un template doit comporter au moins 2 lignes.")
+            RegisterAlert(L("alertMinLines"))
             Return
         End If
 
         For Each row In activeLines
             If Convert.ToInt32(row("PlanComptableId")) <= 0 Then
-                RegisterAlert("Toutes les lignes doivent avoir un compte sélectionné.")
+                RegisterAlert(L("alertAccountReq"))
                 Return
             End If
         Next
@@ -350,12 +398,11 @@ Public Class wbfTemplateEdit
             Dim totCredit As Double = activeLines.Where(Function(r) r("Sens").ToString() = "CREDIT").
                                                   Sum(Function(r) Convert.ToDouble(r("Montant")))
             If Math.Abs(totDebit - totCredit) > 0.005 Then
-                RegisterAlert("Le template pré-rempli n'est pas équilibré. Débit = " &
-                              totDebit.ToString("N2") & " / Crédit = " & totCredit.ToString("N2"))
+                RegisterAlert(String.Format(L("alertUnbalanced"), totDebit.ToString("N2"), totCredit.ToString("N2")))
                 Return
             End If
             If totDebit <= 0 Then
-                RegisterAlert("Les montants pré-remplis doivent être > 0.")
+                RegisterAlert(L("alertAmountPos"))
                 Return
             End If
         End If
@@ -387,7 +434,7 @@ Public Class wbfTemplateEdit
             oCom.Connection.Open()
             oCom.ExecuteNonQuery()
         Catch ex As Exception
-            RegisterAlert("Erreur lors de l'enregistrement : " & ex.Message)
+            RegisterAlert(String.Format(L("alertSaveError"), ex.Message))
             Return
         Finally
             If oCom.Connection.State = ConnectionState.Open Then oCom.Connection.Close()
@@ -465,6 +512,97 @@ Public Class wbfTemplateEdit
     Private Function GetCurrentUserId() As Integer
         ' TODO : adapter
         Return 1
+    End Function
+
+    ' =========================================================
+    '  LOCALISATION (fr / en / es)
+    ' =========================================================
+
+    ''' <summary>Traductions de l'écran d'édition d'un modèle de journal (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Modèle d'écriture — Édition", "Journal template — Edit", "Plantilla de diario — Edición")
+
+            ' En-tête
+            Case "lblCode" : Return Choose3(lang, "Code", "Code", "Código")
+            Case "phCode" : Return Choose3(lang, "ex: AMORT-MENS", "e.g. DEPR-MTHLY", "ej.: AMORT-MENS")
+            Case "lblJournal" : Return Choose3(lang, "Journal", "Journal", "Diario")
+            Case "selectPh" : Return Choose3(lang, "Sélectionner...", "Select...", "Seleccionar...")
+            Case "chkPreRempli" : Return Choose3(lang, "Pré-remplir les montants", "Pre-fill amounts", "Pre-rellenar los importes")
+            Case "chkActif" : Return Choose3(lang, "Actif", "Active", "Activo")
+            Case "lblLibelle" : Return Choose3(lang, "Libellé du modèle", "Template label", "Etiqueta de la plantilla")
+            Case "phLibelle" : Return Choose3(lang, "ex: Amortissement mensuel équipement", "e.g. Monthly equipment depreciation", "ej.: Amortización mensual de equipos")
+            Case "lblDescription" : Return Choose3(lang, "Description / Mémo par défaut", "Default description / memo", "Descripción / memo predeterminado")
+            Case "phDescription" : Return Choose3(lang, "Description appliquée à l'écriture...", "Description applied to the entry...", "Descripción aplicada al asiento...")
+
+            ' Lignes
+            Case "structTitle" : Return Choose3(lang, "Structure du modèle", "Template structure", "Estructura de la plantilla")
+            Case "colCompte" : Return Choose3(lang, "Compte", "Account", "Cuenta")
+            Case "colLibelle" : Return Choose3(lang, "Libellé ligne", "Line description", "Descripción de la línea")
+            Case "colSens" : Return Choose3(lang, "Sens", "Side", "Sentido")
+            Case "colMontant" : Return Choose3(lang, "Montant", "Amount", "Importe")
+            Case "phLineLibelle" : Return Choose3(lang, "Description ligne...", "Line description...", "Descripción de la línea...")
+            Case "debit" : Return Choose3(lang, "Débit", "Debit", "Débito")
+            Case "credit" : Return Choose3(lang, "Crédit", "Credit", "Crédito")
+            Case "selectAccount" : Return Choose3(lang, "Sélectionner un compte ▾", "Select an account ▾", "Seleccionar una cuenta ▾")
+            Case "confirmDelLine" : Return Choose3(lang, "Supprimer cette ligne ?", "Delete this line?", "¿Eliminar esta línea?")
+
+            ' Boutons / picker
+            Case "tipAddLine" : Return Choose3(lang, "Ajouter une ligne", "Add a line", "Agregar una línea")
+            Case "saveTemplate" : Return Choose3(lang, "Enregistrer le modèle", "Save template", "Guardar plantilla")
+            Case "searchAccount" : Return Choose3(lang, "Rechercher un compte...", "Search for an account...", "Buscar una cuenta...")
+            Case "accEmpty" : Return Choose3(lang, "Aucun compte trouvé.", "No account found.", "No se encontró ninguna cuenta.")
+
+            ' Bannière de mode
+            Case "modePreRempli" : Return Choose3(lang,
+                "Mode <strong>pré-rempli</strong> : les montants enregistrés ici seront automatiquement utilisés à chaque application du modèle.",
+                "<strong>Pre-filled</strong> mode: the amounts saved here are automatically used each time the template is applied.",
+                "Modo <strong>pre-rellenado</strong>: los importes guardados aquí se utilizan automáticamente cada vez que se aplica la plantilla.")
+            Case "modeStructure" : Return Choose3(lang,
+                "Mode <strong>structure</strong> : seuls les comptes et leur sens (Débit/Crédit) sont mémorisés. Les montants seront à saisir à chaque utilisation.",
+                "<strong>Structure</strong> mode: only the accounts and their side (Debit/Credit) are stored. Amounts must be entered on each use.",
+                "Modo <strong>estructura</strong>: solo se guardan las cuentas y su sentido (Débito/Crédito). Los importes deberán ingresarse en cada uso.")
+
+            ' Alertes de validation / sauvegarde
+            Case "alertCode" : Return Choose3(lang, "Le code du modèle est obligatoire.", "The template code is required.", "El código de la plantilla es obligatorio.")
+            Case "alertLibelle" : Return Choose3(lang, "Le libellé du modèle est obligatoire.", "The template label is required.", "La etiqueta de la plantilla es obligatoria.")
+            Case "alertJournal" : Return Choose3(lang, "Veuillez sélectionner un journal.", "Please select a journal.", "Seleccione un diario.")
+            Case "alertMinLines" : Return Choose3(lang, "Un modèle doit comporter au moins 2 lignes.", "A template must have at least 2 lines.", "Una plantilla debe tener al menos 2 líneas.")
+            Case "alertAccountReq" : Return Choose3(lang, "Toutes les lignes doivent avoir un compte sélectionné.", "All lines must have a selected account.", "Todas las líneas deben tener una cuenta seleccionada.")
+            Case "alertUnbalanced" : Return Choose3(lang,
+                "Le modèle pré-rempli n'est pas équilibré. Débit = {0} / Crédit = {1}",
+                "The pre-filled template is not balanced. Debit = {0} / Credit = {1}",
+                "La plantilla pre-rellenada no está equilibrada. Débito = {0} / Crédito = {1}")
+            Case "alertAmountPos" : Return Choose3(lang, "Les montants pré-remplis doivent être > 0.", "Pre-filled amounts must be > 0.", "Los importes pre-rellenados deben ser > 0.")
+            Case "alertSaveError" : Return Choose3(lang, "Erreur lors de l'enregistrement : {0}", "Error while saving: {0}", "Error al guardar: {0}")
+
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
     End Function
 
 End Class

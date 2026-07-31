@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" EnableViewState="true"
+﻿<%@ Page Language="vb" AutoEventWireup="false" EnableViewState="true" Async="true"
     CodeBehind="wbfSupplierEdit.aspx.vb" Inherits="MngConsul.wbfSupplierEdit" %>
 
 <%@ Import Namespace="System" %>
@@ -94,10 +94,6 @@
         .grid1 { display: grid; grid-template-columns: 1fr;             gap: 12px; }
         .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 12px; }
         .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
-
-        @media (max-width: 800px) {
-            .grid, .grid3, .grid4 { grid-template-columns: 1fr; }
-        }
 
         /* =============================================
            CHAMPS
@@ -333,74 +329,45 @@
         }
 
         /* =============================================
-           RESPONSIVE — TABLETTE (max 1024px)
+           SCAN / REMPLISSAGE AUTOMATIQUE
         ============================================= */
-        @media (max-width: 1024px) {
-            .addr-list { margin: 0 12px 12px; }
-            .addr-list-head {
-                grid-template-columns: 100px 1fr 72px;
-                gap: 10px;
-                padding: 10px 12px;
-            }
-            .addr-row {
-                grid-template-columns: 100px 1fr 72px;
-                gap: 10px;
-                padding: 11px 12px;
-            }
+        .scan-box {
+            border: 1px solid var(--line);
+            border-radius: 14px;
+            background: #f8fafc;
+            padding: 14px 16px;
+            margin-bottom: 16px;
         }
+        .scan-box .scan-title { font-weight: 800; font-size: 14px; margin-bottom: 2px; }
+        .scan-box .scan-hint  { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
 
-        /* =============================================
-           RESPONSIVE — MOBILE (max 768px)
-           Passage en carte verticale
-        ============================================= */
-        @media (max-width: 768px) {
-            .wrap { margin: 10px auto; padding: 0 10px 20px; }
-
-            /* Masquer l'entête de colonnes sur mobile */
-            .addr-list-head { display: none; }
-
-            .addr-list {
-                margin: 0 12px 12px;
-                border-radius: 12px;
-            }
-
-            /* Carte verticale : type / adresse / actions empilés */
-            .addr-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 14px 14px;
-            }
-
-            .addr-actions {
-                justify-content: flex-start;
-                padding-top: 4px;
-                border-top: 1px dashed #f1f5f9;
-            }
-
-            /* Le badge type s'affiche en tête de carte */
-            .addr-type-badge { font-size: 11px; }
+        .dropzone {
+            position: relative;
+            border: 2px dashed #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            padding: 18px;
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s, background .15s;
         }
+        .dropzone:hover { border-color: var(--primary); background: #eff6ff; }
+        .dropzone.drag  { border-color: #1d4ed8; background: rgba(59,130,246,.10); }
+        .dropzone .dz-ico  { font-size: 24px; line-height: 1; }
+        .dropzone .dz-text { font-size: 13px; color: #475569; font-weight: 600; margin-top: 6px; }
+        .dropzone .dz-file { font-size: 13px; color: var(--primary); font-weight: 700; margin-top: 6px; min-height: 16px; word-break: break-all; }
+        .dropzone .dz-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 
-        /* =============================================
-           RESPONSIVE — PETIT MOBILE (max 480px)
-        ============================================= */
-        @media (max-width: 480px) {
-            .addr-list { margin: 0 8px 12px; }
+        .scan-row { display: flex; gap: 10px; align-items: center; margin-top: 10px; flex-wrap: wrap; }
 
-            .addr-row { padding: 12px; gap: 6px; }
-
-            .addr-text { font-size: 13px; }
-
-            /* Boutons pleine largeur sur très petits écrans */
-            .addr-actions {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .addr-actions .btn-icon {
-                width: 100%;
-                height: 36px;
-            }
+        .scan-msg {
+            margin-top: 10px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid var(--line);
+            background: #fff;
         }
     </style>
 </head>
@@ -440,6 +407,13 @@
                     </UpdatedControls>
                 </telerik:AjaxSetting>
 
+                <%-- Cascade Pays → Province : recharge la liste des provinces/états du pays choisi --%>
+                <telerik:AjaxSetting AjaxControlID="rddlPays">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rddlProvince" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+
             </AjaxSettings>
         </telerik:RadAjaxManager>
 
@@ -453,10 +427,6 @@
                 <div class="bar">
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
                         onclick="closeWin();"></asp:HyperLink>
-                    <%-- Bouton Stripe Connect : visible seulement en mode édition (SupplierId > 0) --%>
-                    <asp:HyperLink ID="lnkStripeOnboarding" runat="server" CssClass="btn"
-                        Visible="false"
-                        Style="background: linear-gradient(135deg, #635BFF, #4F46E5); color: white; border: none;"></asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
                 </div>
             </div>
@@ -487,16 +457,40 @@
                 </div>
 
                 <div class="cardBody">
+
+                    <%-- Scan de document : remplissage automatique (IA) des champs vides --%>
+                    <div class="scan-box">
+                        <div class="scan-title"><asp:Literal ID="litScanTitle" runat="server" /></div>
+                        <div class="scan-hint"><asp:Literal ID="litScanHint" runat="server" /></div>
+
+                        <div id="dropZone" class="dropzone">
+                            <div class="dz-ico" aria-hidden="true">⬆️</div>
+                            <div class="dz-text"><asp:Literal ID="litDropZone" runat="server" /></div>
+                            <div class="dz-file" id="dzFile"></div>
+                            <asp:FileUpload ID="fileDoc" runat="server" ClientIDMode="Static"
+                                accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" CssClass="dz-input" />
+                        </div>
+
+                        <div class="scan-row">
+                            <asp:Button ID="btnExtract" runat="server" CssClass="btn primary"
+                                CausesValidation="false" Text="Analyser le document" />
+                        </div>
+
+                        <asp:Panel ID="pnlUpload" runat="server" Visible="false" CssClass="scan-msg">
+                            <asp:Literal ID="litUpload" runat="server" />
+                        </asp:Panel>
+                    </div>
+
                     <div class="grid3">
                         <div class="field">
                             <label><asp:Literal ID="litLblName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtName" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                         </div>
                         <div class="field">
                             <label><asp:Literal ID="litLblDisplayName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtDisplayName" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                         </div>
                         <div class="field">
                             <label><asp:Literal ID="litLblPartyType" runat="server" /></label>
@@ -507,17 +501,17 @@
                         <div class="field">
                             <label><asp:Literal ID="litLblWebsite" runat="server" /></label>
                             <telerik:RadTextBox ID="txtWebsite" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                         </div>
                         <div class="field">
                             <label><asp:Literal ID="litLblNoTps" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTPS" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                         </div>
                         <div class="field">
                             <label><asp:Literal ID="litLblNoTvq" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTVQ" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                         </div>
                     </div>
 
@@ -651,25 +645,25 @@
                                     <div class="field">
                                         <label><asp:Literal ID="litLblAddrName" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtAddressName" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                                     </div>
 
                                     <div class="field">
                                         <label><asp:Literal ID="litLblAddr1" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA1" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                                     </div>
 
                                     <div class="field">
                                         <label><asp:Literal ID="litLblAddr2" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA2" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                                     </div>
 
                                     <div class="field">
                                         <label><asp:Literal ID="litLblCity" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtCity" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="50" />
                                     </div>
 
                                     <div class="field">
@@ -683,19 +677,20 @@
                                         <label><asp:Literal ID="litLblCountry" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlPays" runat="server"
+                                            AutoPostBack="true" OnSelectedIndexChanged="rddlPays_SelectedIndexChanged"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
                                         <label><asp:Literal ID="litLblPostal" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtPostal" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                                     </div>
 
                                     <div class="field">
                                         <label><asp:Literal ID="litLblAddrEmail" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtAddrEmail" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                                     </div>
 
                                 </div>
@@ -763,6 +758,42 @@
                 if (oWnd) oWnd.close();
             }
 
+        </script>
+
+        <%-- Glisser-déposer d'un document dans la zone de scan.
+             Le fichier déposé est injecté dans le <input type=file> (DataTransfer),
+             puis le postback « Analyser » le traite comme une sélection classique. --%>
+        <script type="text/javascript">
+            (function () {
+                function initDrop() {
+                    var dz = document.getElementById('dropZone'),
+                        inp = document.getElementById('fileDoc'),
+                        lbl = document.getElementById('dzFile');
+                    if (!dz || !inp) return;
+                    if (dz.dataset.wired === '1') return;
+                    dz.dataset.wired = '1';
+
+                    function showName() { if (lbl) lbl.textContent = (inp.files && inp.files.length) ? inp.files[0].name : ''; }
+                    dz.addEventListener('click', function () { inp.click(); });
+                    inp.addEventListener('change', showName);
+
+                    ['dragenter', 'dragover'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('drag'); });
+                    });
+                    ['dragleave', 'dragend', 'drop'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag'); });
+                    });
+                    dz.addEventListener('drop', function (e) {
+                        var files = e.dataTransfer && e.dataTransfer.files;
+                        if (!files || !files.length) return;
+                        try { var dt = new DataTransfer(); dt.items.add(files[0]); inp.files = dt.files; } catch (ex) { }
+                        showName();
+                    });
+                }
+                if (document.readyState !== 'loading') initDrop();
+                else document.addEventListener('DOMContentLoaded', initDrop);
+                if (window.Sys && Sys.Application) { Sys.Application.add_load(initDrop); }
+            })();
         </script>
 
     </form>

@@ -51,8 +51,6 @@
         .grid  { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
         .grid1 { display: grid; grid-template-columns: 1fr;     gap: 12px; }
 
-        @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
-
         .field label {
             display: block; font-size: 12px; color: #334155;
             margin-bottom: 6px; font-weight: 700;
@@ -148,7 +146,7 @@
                         <div class="field">
                             <label>Courriel *</label>
                             <telerik:RadTextBox ID="txtEmail" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                         </div>
                     </div>
 
@@ -156,12 +154,12 @@
                         <div class="field">
                             <label>Prénom</label>
                             <telerik:RadTextBox ID="txtFirstName" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="100" />
                         </div>
                         <div class="field">
                             <label>Nom</label>
                             <telerik:RadTextBox ID="txtLastName" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="100" />
                         </div>
                     </div>
 

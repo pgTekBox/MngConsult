@@ -362,6 +362,10 @@
     <Content Include="wbfResetPassword.aspx" />
     <Content Include="wbfCompanies.aspx" />
     <Content Include="wbfCompanyEdit.aspx" />
+    <Content Include="wbfStripeWebhookDiagnostic.aspx" />
+    <Content Include="wbfSettingsOpenAiPrompts.aspx" />
+    <Content Include="wbfSquareWebhookDiagnostic.aspx" />
+    <Content Include="wbfPlaidDiagnostic.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb">
@@ -450,6 +454,34 @@
     </Compile>
     <Compile Include="wbfCompanies.aspx.designer.vb">
       <DependentUpon>wbfCompanies.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfStripeWebhookDiagnostic.aspx.vb">
+      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfStripeWebhookDiagnostic.aspx.designer.vb">
+      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSettingsOpenAiPrompts.aspx.vb">
+      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfSettingsOpenAiPrompts.aspx.designer.vb">
+      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfSquareWebhookDiagnostic.aspx.vb">
+      <DependentUpon>wbfSquareWebhookDiagnostic.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfSquareWebhookDiagnostic.aspx.designer.vb">
+      <DependentUpon>wbfSquareWebhookDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlaidDiagnostic.aspx.vb">
+      <DependentUpon>wbfPlaidDiagnostic.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlaidDiagnostic.aspx.designer.vb">
+      <DependentUpon>wbfPlaidDiagnostic.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfCompanyEdit.aspx.vb">
       <DependentUpon>wbfCompanyEdit.aspx</DependentUpon>

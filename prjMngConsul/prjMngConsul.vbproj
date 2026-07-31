@@ -304,6 +304,11 @@
     <Content Include="img\landingpage-14.jpg" />
     <Content Include="img\landingpage-15.jpg" />
     <Content Include="Database\check_existing_outbound_mail_proc.sql" />
+    <Content Include="Database\s0017UpdateParty.sql" />
+    <Content Include="Database\s0021InsertParty.sql" />
+    <Content Include="Database\T060Document_AddPoNumber.sql" />
+    <Content Include="Database\s0038GetInvoiceById.sql" />
+    <Content Include="Database\s0707UpdateSupplierInvoiceRefs.sql" />
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
     <Content Include="Database\s0150GetParamsForCompany.sql" />
     <Content Include="Database\T100_add_invoice_numbering_params.sql" />
@@ -417,6 +422,7 @@
     <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />
     <Content Include="PlaidDailySync.aspx" />
+    <Content Include="PlaidWebhook.aspx" />
     <Content Include="Receipts.aspx" />
     <Content Include="Scripts\bootstrap.bundle.js" />
     <Content Include="Scripts\bootstrap.bundle.min.js" />
@@ -547,8 +553,6 @@
     <Content Include="wbfScannedPDF.aspx" />
     <Content Include="wbfScheduleAutoPay.aspx" />
     <Content Include="wbfSetting.aspx" />
-    <Content Include="wbfSettingsOpenAiPrompts.aspx" />
-    <Content Include="wbfStripeWebhookDiagnostic.aspx" />
     <Content Include="wbfPaymentProcessors.aspx" />
     <Content Include="wbfSupplierEdit.aspx" />
     <Content Include="wbfSupplierInvoinceEdit.aspx" />
@@ -789,6 +793,13 @@
     </Compile>
     <Compile Include="PlaidDailySync.aspx.vb">
       <DependentUpon>PlaidDailySync.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="PlaidWebhook.aspx.designer.vb">
+      <DependentUpon>PlaidWebhook.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="PlaidWebhook.aspx.vb">
+      <DependentUpon>PlaidWebhook.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="Receipts.aspx.designer.vb">
@@ -1213,25 +1224,11 @@
       <DependentUpon>wbfSetting.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="wbfSettingsOpenAiPrompts.aspx.designer.vb">
-      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfSettingsOpenAiPrompts.aspx.vb">
-      <DependentUpon>wbfSettingsOpenAiPrompts.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
     <Compile Include="wbfPaymentProcessors.aspx.designer.vb">
       <DependentUpon>wbfPaymentProcessors.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfPaymentProcessors.aspx.vb">
       <DependentUpon>wbfPaymentProcessors.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="wbfStripeWebhookDiagnostic.aspx.designer.vb">
-      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfStripeWebhookDiagnostic.aspx.vb">
-      <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfSupplierEdit.aspx.designer.vb">

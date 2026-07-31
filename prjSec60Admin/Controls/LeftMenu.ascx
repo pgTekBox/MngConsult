@@ -83,11 +83,27 @@
                         <span class="dot" aria-hidden="true"></span>
                         Compagnies
                     </a>
+                    <a class="nav-child" href="~/wbfStripeWebhookDiagnostic.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Webhooks Stripe
+                    </a>
+                    <a class="nav-child" href="~/wbfSquareWebhookDiagnostic.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Webhooks Square
+                    </a>
+                    <a class="nav-child" href="~/wbfPlaidDiagnostic.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Connexions Plaid
+                    </a>
                 </div>
             </div>
 
             <!-- Footer -->
             <div class="sidebar-footer">
+                <a class="nav-item subtle" href="~/wbfSettingsOpenAiPrompts.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">🤖</span>
+                    <span class="nav-txt">Prompts OpenAI</span>
+                </a>
                 <a class="nav-item subtle" href="~/About.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">ℹ️</span>
                     <span class="nav-txt">À propos</span>

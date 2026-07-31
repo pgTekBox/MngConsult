@@ -31,5 +31,11 @@ Namespace Controls
         '''To modify move field declaration from designer file to code-behind file.
         '''</remarks>
         Protected WithEvents HeaderUser As Global.MngConsul.HeaderUser
+
+        '''<summary>litPlaidStatus control.</summary>
+        Protected WithEvents litPlaidStatus As Global.System.Web.UI.WebControls.Literal
+
+        '''<summary>litStripeStatus control.</summary>
+        Protected WithEvents litStripeStatus As Global.System.Web.UI.WebControls.Literal
     End Class
 End Namespace

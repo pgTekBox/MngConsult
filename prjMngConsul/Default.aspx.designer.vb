@@ -21,4 +21,16 @@ Partial Public Class _Default
 
     '''<summary>litTrialEnd control.</summary>
     Protected WithEvents litTrialEnd As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpiCustomers control.</summary>
+    Protected WithEvents litKpiCustomers As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpiSupplierInvoices control.</summary>
+    Protected WithEvents litKpiSupplierInvoices As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpiProducts control.</summary>
+    Protected WithEvents litKpiProducts As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpiRevenue control.</summary>
+    Protected WithEvents litKpiRevenue As Global.System.Web.UI.WebControls.Literal
 End Class

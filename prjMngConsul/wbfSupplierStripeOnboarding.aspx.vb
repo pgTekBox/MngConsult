@@ -46,6 +46,8 @@ Public Class wbfSupplierStripeOnboarding
             Return
         End If
 
+        ApplyLocalization()
+
         If Not IsPostBack Then
             Dim partyIdStr As String = Request.QueryString("PartyId")
             Dim pid As Integer = 0
@@ -59,6 +61,15 @@ Public Class wbfSupplierStripeOnboarding
 
             LoadSupplierAndStatus()
         End If
+    End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur.</summary>
+    Private Sub ApplyLocalization()
+        btnStartOnboarding.Text = L("btnConfigNow")
+        btnSendInvitation.Text = L("btnSendInv")
+        btnResumeOnboarding.Text = L("btnResume")
+        btnResendInvitation.Text = L("btnResend")
+        lnkBack.Text = L("btnBack")
     End Sub
 
     Private Sub LoadSupplierAndStatus()
@@ -84,8 +95,8 @@ Public Class wbfSupplierStripeOnboarding
 
         SupplierName = supplierName
 
-        litSupplierName.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(supplierName), "Fournisseur inconnu", supplierName))
-        litSupplierEmail.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(supplierEmail), "Courriel non renseigné dans la fiche", supplierEmail))
+        litSupplierName.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(supplierName), L("supplierUnknown"), supplierName))
+        litSupplierEmail.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(supplierEmail), L("emailMissing"), supplierEmail))
         tbInvitationEmail.Text = supplierEmail  ' pre-remplir si dispo
 
         ' Statut selon le StripeAccountId
@@ -117,7 +128,7 @@ Public Class wbfSupplierStripeOnboarding
                acct.Requirements.CurrentlyDue.Count > 0 Then
 
                 pnlStatusRestricted.Visible = True
-                litRestrictedMessage.Text = "Documents requis : " & String.Join(", ", acct.Requirements.CurrentlyDue)
+                litRestrictedMessage.Text = L("msgDocsRequired") & String.Join(", ", acct.Requirements.CurrentlyDue)
                 btnResumeOnboarding.Visible = True
                 btnResendInvitation.Visible = True
                 Return
@@ -166,7 +177,7 @@ Public Class wbfSupplierStripeOnboarding
 
             If String.IsNullOrEmpty(email) OrElse Not email.Contains("@") OrElse Not email.Contains(".") Then
                 pnlStatusRestricted.Visible = True
-                litRestrictedMessage.Text = "Veuillez saisir un courriel valide pour le fournisseur."
+                litRestrictedMessage.Text = L("msgInvalidEmail")
                 Return
             End If
 
@@ -187,7 +198,7 @@ Public Class wbfSupplierStripeOnboarding
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("SendInvitation error: " & ex.Message)
             pnlStatusRestricted.Visible = True
-            litRestrictedMessage.Text = "Erreur lors de l'envoi de l'invitation : " & ex.Message
+            litRestrictedMessage.Text = L("msgSendError") & ex.Message
         End Try
     End Sub
 
@@ -205,7 +216,7 @@ Public Class wbfSupplierStripeOnboarding
 
             If String.IsNullOrEmpty(email) Then
                 pnlStatusRestricted.Visible = True
-                litRestrictedMessage.Text = "Aucun courriel disponible pour ce fournisseur."
+                litRestrictedMessage.Text = L("msgNoEmail")
                 Return
             End If
 
@@ -347,7 +358,7 @@ Public Class wbfSupplierStripeOnboarding
     ''' fournisseur réponde à la compagnie et non à la plateforme.
     ''' </summary>
     Private Sub SendInvitationEmail(toEmail As String, onboardingUrl As String)
-        Dim subject As String = "Invitation à configurer vos paiements - 60Sec-AI"
+        Dim subject As String = L("emailSubject")
         Dim htmlBody As String = BuildInvitationEmailBody(onboardingUrl)
 
         Try
@@ -371,28 +382,86 @@ Public Class wbfSupplierStripeOnboarding
         sb.AppendLine("<html><body style=""font-family: Arial, sans-serif; background:#f6f7fb; margin:0; padding:20px;"">")
         sb.AppendLine("<div style=""max-width:560px; margin:0 auto; background:#fff; border-radius:16px; overflow:hidden; box-shadow:0 8px 24px rgba(0,0,0,.06);"">")
         sb.AppendLine("<div style=""background: linear-gradient(135deg,#635BFF,#4F46E5); padding:32px; text-align:center;"">")
-        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:22px;"">Invitation 60Sec-AI</h1>")
+        sb.AppendLine("<h1 style=""color:#fff; margin:0; font-size:22px;"">" & L("emailH1") & "</h1>")
         sb.AppendLine("</div>")
         sb.AppendLine("<div style=""padding:32px; color:#0f172a;"">")
-        sb.AppendLine("<p style=""font-size:16px;"">Bonjour,</p>")
-        sb.AppendLine("<p>Vous avez été ajouté comme fournisseur sur la plateforme <strong>60Sec-AI</strong> ")
-        sb.AppendLine("par un de vos clients qui souhaite vous payer électroniquement.</p>")
-        sb.AppendLine("<p>Pour activer la réception de paiements (carte de crédit, Interac, ACSS), ")
-        sb.AppendLine("complétez votre inscription Stripe en cliquant sur le bouton ci-dessous :</p>")
+        sb.AppendLine("<p style=""font-size:16px;"">" & L("emailHello") & "</p>")
+        sb.AppendLine("<p>" & L("emailP1") & "</p>")
+        sb.AppendLine("<p>" & L("emailP2") & "</p>")
         sb.AppendLine("<div style=""text-align:center; margin:28px 0;"">")
-        sb.AppendLine("<a href=""" & activationLink & """ target=""_blank"" style=""display:inline-block; background:linear-gradient(135deg,#635BFF,#4F46E5); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">Configurer mes paiements →</a>")
+        sb.AppendLine("<a href=""" & activationLink & """ target=""_blank"" style=""display:inline-block; background:linear-gradient(135deg,#635BFF,#4F46E5); color:#fff; padding:14px 32px; border-radius:12px; text-decoration:none; font-weight:800; font-size:15px;"">" & L("emailBtn") & "</a>")
         sb.AppendLine("</div>")
-        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">L'inscription prend environ 5 minutes et est gratuite.</p>")
-        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">Vous aurez besoin de : nom légal de l'entreprise, NEQ, adresse, ")
-        sb.AppendLine("représentant + pièce d'identité, compte bancaire pour recevoir les versements.</p>")
+        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">" & L("emailNote1") & "</p>")
+        sb.AppendLine("<p style=""font-size:13px; color:#64748b;"">" & L("emailNote2") & "</p>")
         sb.AppendLine("<hr style=""border:none; border-top:1px solid #e2e8f0; margin:24px 0;"" />")
-        sb.AppendLine("<p style=""font-size:12px; color:#94a3b8;"">Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :<br/>")
+        sb.AppendLine("<p style=""font-size:12px; color:#94a3b8;"">" & L("emailFallbackLink") & "<br/>")
         sb.AppendLine("<span style=""word-break:break-all; color:#635BFF;"">" & activationLink & "</span></p>")
-        sb.AppendLine("<p style=""font-size:12px; color:#94a3b8;"">Ce lien expire dans quelques minutes pour des raisons de sécurité. ")
-        sb.AppendLine("Si vous ne pouvez pas l'utiliser tout de suite, demandez un nouveau lien à votre client.</p>")
+        sb.AppendLine("<p style=""font-size:12px; color:#94a3b8;"">" & L("emailExpire") & "</p>")
         sb.AppendLine("</div>")
         sb.AppendLine("</div></body></html>")
         Return sb.ToString()
+    End Function
+
+    ''' <summary>Traductions de l'onboarding Stripe fournisseur (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Configuration Stripe Connect — 60Sec-AI", "Stripe Connect setup — 60Sec-AI", "Configuración de Stripe Connect — 60Sec-AI")
+            Case "hTitle" : Return Choose3(lang, "Configuration des paiements", "Payment setup", "Configuración de pagos")
+            Case "subtitle" : Return Choose3(lang, "Permettre à ce fournisseur de recevoir des paiements via 60Sec-AI", "Allow this supplier to receive payments through 60Sec-AI", "Permitir que este proveedor reciba pagos a través de 60Sec-AI")
+            Case "supplierLabel" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
+            Case "supplierUnknown" : Return Choose3(lang, "Fournisseur inconnu", "Unknown supplier", "Proveedor desconocido")
+            Case "emailMissing" : Return Choose3(lang, "Courriel non renseigné dans la fiche", "No email in the record", "Correo no indicado en la ficha")
+            Case "stNewTitle" : Return Choose3(lang, "⚠ Paiements non configurés", "⚠ Payments not configured", "⚠ Pagos no configurados")
+            Case "stNewBody" : Return Choose3(lang, "Ce fournisseur n'a pas encore de compte Stripe Connect. Cliquez sur le bouton ci-dessous pour démarrer l'inscription.", "This supplier does not have a Stripe Connect account yet. Click the button below to start onboarding.", "Este proveedor aún no tiene una cuenta de Stripe Connect. Haga clic en el botón de abajo para iniciar el registro.")
+            Case "stPendTitle" : Return Choose3(lang, "⏳ Inscription en cours", "⏳ Onboarding in progress", "⏳ Registro en curso")
+            Case "stPendBody" : Return Choose3(lang, "Le fournisseur a démarré son inscription Stripe mais ne l'a pas complétée.", "The supplier started their Stripe onboarding but did not complete it.", "El proveedor inició su registro en Stripe pero no lo completó.")
+            Case "stActiveTitle" : Return Choose3(lang, "✓ Compte actif", "✓ Account active", "✓ Cuenta activa")
+            Case "stActiveBody" : Return Choose3(lang, "Ce fournisseur peut recevoir des paiements via MngConsul.", "This supplier can receive payments through MngConsul.", "Este proveedor puede recibir pagos a través de MngConsul.")
+            Case "stRestrTitle" : Return Choose3(lang, "⚠ Action requise", "⚠ Action required", "⚠ Acción requerida")
+            Case "feat1" : Return Choose3(lang, "Recevoir des paiements par carte de crédit, Interac et ACSS Debit", "Receive payments by credit card, Interac and ACSS Debit", "Recibir pagos con tarjeta de crédito, Interac y ACSS Debit")
+            Case "feat2" : Return Choose3(lang, "Versement automatique dans votre compte bancaire (1-2 jours)", "Automatic payout to your bank account (1-2 days)", "Depósito automático en su cuenta bancaria (1-2 días)")
+            Case "feat3" : Return Choose3(lang, "Sécurité maximale (PCI-DSS, conforme Paiements Canada)", "Maximum security (PCI-DSS, Payments Canada compliant)", "Máxima seguridad (PCI-DSS, conforme a Payments Canada)")
+            Case "feat4" : Return Choose3(lang, "Inscription gratuite, ~5 minutes", "Free registration, ~5 minutes", "Registro gratuito, ~5 minutos")
+            Case "modeChoiceTitle" : Return Choose3(lang, "Choisir comment inscrire ce fournisseur", "Choose how to onboard this supplier", "Elija cómo registrar a este proveedor")
+            Case "modeATitle" : Return Choose3(lang, "🖥️ Configurer maintenant", "🖥️ Configure now", "🖥️ Configurar ahora")
+            Case "modeADesc" : Return Choose3(lang, "Vous serez redirigé vers Stripe pour remplir les informations du fournisseur. Utile si vous avez toutes ses infos (NEQ, banque, etc.) ou s'il est avec vous.", "You will be redirected to Stripe to fill in the supplier's information. Useful if you have all their details (business number, bank, etc.) or if they are with you.", "Será redirigido a Stripe para completar la información del proveedor. Útil si tiene todos sus datos (número de empresa, banco, etc.) o si está con usted.")
+            Case "btnConfigNow" : Return Choose3(lang, "Configurer maintenant →", "Configure now →", "Configurar ahora →")
+            Case "modeBTitle" : Return Choose3(lang, "✉️ Envoyer une invitation par courriel", "✉️ Send an email invitation", "✉️ Enviar una invitación por correo")
+            Case "modeBDesc" : Return Choose3(lang, "Le fournisseur reçoit un courriel avec un lien sécurisé. Il remplit lui-même ses informations sur Stripe. ", "The supplier receives an email with a secure link. They fill in their own information on Stripe. ", "El proveedor recibe un correo con un enlace seguro. Completa su propia información en Stripe. ")
+            Case "modeBRecommended" : Return Choose3(lang, "Recommandé en B2B", "Recommended for B2B", "Recomendado en B2B")
+            Case "lblSupplierEmail" : Return Choose3(lang, "Courriel du fournisseur", "Supplier email", "Correo del proveedor")
+            Case "btnSendInv" : Return Choose3(lang, "Envoyer l'invitation par courriel ✉️", "Send email invitation ✉️", "Enviar invitación por correo ✉️")
+            Case "invSentTitle" : Return Choose3(lang, "✓ Invitation envoyée", "✓ Invitation sent", "✓ Invitación enviada")
+            Case "invSentPre" : Return Choose3(lang, "Un courriel a été envoyé à", "An email was sent to", "Se envió un correo a")
+            Case "invSentPost" : Return Choose3(lang, "avec le lien d'inscription Stripe Connect. Vous serez notifié quand le fournisseur aura complété son inscription.", "with the Stripe Connect onboarding link. You will be notified once the supplier completes their registration.", "con el enlace de registro de Stripe Connect. Se le notificará cuando el proveedor complete su registro.")
+            Case "btnResume" : Return Choose3(lang, "Reprendre l'inscription →", "Resume onboarding →", "Reanudar el registro →")
+            Case "btnResend" : Return Choose3(lang, "Renvoyer l'invitation ✉️", "Resend invitation ✉️", "Reenviar invitación ✉️")
+            Case "btnBack" : Return Choose3(lang, "Retour", "Back", "Volver")
+            Case "msgDocsRequired" : Return Choose3(lang, "Documents requis : ", "Required documents: ", "Documentos requeridos: ")
+            Case "msgInvalidEmail" : Return Choose3(lang, "Veuillez saisir un courriel valide pour le fournisseur.", "Please enter a valid email for the supplier.", "Ingrese un correo válido para el proveedor.")
+            Case "msgSendError" : Return Choose3(lang, "Erreur lors de l'envoi de l'invitation : ", "Error while sending the invitation: ", "Error al enviar la invitación: ")
+            Case "msgNoEmail" : Return Choose3(lang, "Aucun courriel disponible pour ce fournisseur.", "No email available for this supplier.", "No hay correo disponible para este proveedor.")
+            Case "emailSubject" : Return Choose3(lang, "Invitation à configurer vos paiements - 60Sec-AI", "Invitation to set up your payments - 60Sec-AI", "Invitación para configurar sus pagos - 60Sec-AI")
+            Case "emailH1" : Return Choose3(lang, "Invitation 60Sec-AI", "60Sec-AI invitation", "Invitación 60Sec-AI")
+            Case "emailHello" : Return Choose3(lang, "Bonjour,", "Hello,", "Hola,")
+            Case "emailP1" : Return Choose3(lang, "Vous avez été ajouté comme fournisseur sur la plateforme <strong>60Sec-AI</strong> par un de vos clients qui souhaite vous payer électroniquement.", "You have been added as a supplier on the <strong>60Sec-AI</strong> platform by one of your customers who wishes to pay you electronically.", "Uno de sus clientes lo agregó como proveedor en la plataforma <strong>60Sec-AI</strong> porque desea pagarle electrónicamente.")
+            Case "emailP2" : Return Choose3(lang, "Pour activer la réception de paiements (carte de crédit, Interac, ACSS), complétez votre inscription Stripe en cliquant sur le bouton ci-dessous :", "To enable receiving payments (credit card, Interac, ACSS), complete your Stripe registration by clicking the button below:", "Para habilitar la recepción de pagos (tarjeta de crédito, Interac, ACSS), complete su registro en Stripe haciendo clic en el botón de abajo:")
+            Case "emailBtn" : Return Choose3(lang, "Configurer mes paiements →", "Set up my payments →", "Configurar mis pagos →")
+            Case "emailNote1" : Return Choose3(lang, "L'inscription prend environ 5 minutes et est gratuite.", "Registration takes about 5 minutes and is free.", "El registro toma unos 5 minutos y es gratuito.")
+            Case "emailNote2" : Return Choose3(lang, "Vous aurez besoin de : nom légal de l'entreprise, NEQ, adresse, représentant + pièce d'identité, compte bancaire pour recevoir les versements.", "You will need: the company's legal name, business number, address, a representative + ID, and a bank account to receive payouts.", "Necesitará: el nombre legal de la empresa, número de empresa, dirección, un representante + identificación, y una cuenta bancaria para recibir los depósitos.")
+            Case "emailFallbackLink" : Return Choose3(lang, "Si le bouton ne fonctionne pas, copiez ce lien dans votre navigateur :", "If the button does not work, copy this link into your browser:", "Si el botón no funciona, copie este enlace en su navegador:")
+            Case "emailExpire" : Return Choose3(lang, "Ce lien expire dans quelques minutes pour des raisons de sécurité. Si vous ne pouvez pas l'utiliser tout de suite, demandez un nouveau lien à votre client.", "This link expires in a few minutes for security reasons. If you cannot use it right away, ask your customer for a new link.", "Este enlace caduca en unos minutos por razones de seguridad. Si no puede usarlo de inmediato, solicite un nuevo enlace a su cliente.")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
     End Function
 
 End Class

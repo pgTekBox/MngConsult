@@ -3,9 +3,9 @@
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<%= CurrentLang %>">
 <head runat="server">
-    <title>Écriture comptable — Édition</title>
+    <title><%= L("pageTitle") %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
@@ -389,28 +389,28 @@
 
                             <div class="row4">
                                 <div>
-                                    <label>Journal</label>
+                                    <label><asp:Literal ID="litLblJournal" runat="server" /></label>
                                     <telerik:RadComboBox ID="cbJournal" runat="server"
                                         DataTextField="DisplayName" DataValueField="Id"
                                         EmptyMessage="Sélectionner..." />
                                 </div>
 
                                 <div>
-                                    <label>Période</label>
+                                    <label><asp:Literal ID="litLblPeriode" runat="server" /></label>
                                     <telerik:RadComboBox ID="cbPeriode" runat="server"
                                         DataTextField="Libelle" DataValueField="Id"
                                         EmptyMessage="Sélectionner..." />
                                 </div>
 
                                 <div>
-                                    <label>Date écriture</label>
+                                    <label><asp:Literal ID="litLblDate" runat="server" /></label>
                                     <telerik:RadDatePicker ID="dpDateEcriture" runat="server" />
                                 </div>
 
                                 <div style="display: flex; align-items: end; padding-bottom: 8px;">
                                     <label style="margin: 0;">
                                         <asp:CheckBox ID="chkValider" runat="server" />
-                                        Valider l'écriture
+                                        <asp:Literal ID="litLblValider" runat="server" />
                                     </label>
                                 </div>
                             </div>
@@ -419,14 +419,14 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>No pièce</label>
+                                    <label><asp:Literal ID="litLblNoPiece" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtNumeroPiece" runat="server"
-                                        EmptyMessage="(auto si laissé vide)" />
+                                        EmptyMessage="(auto si laissé vide)" MaxLength="50" />
                                 </div>
                                 <div>
-                                    <label>Libellé de l'écriture</label>
+                                    <label><asp:Literal ID="litLblLibelle" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtLibelle" runat="server"
-                                        EmptyMessage="Description / mémo..." Width="100%" />
+                                        EmptyMessage="Description / mémo..." Width="100%" MaxLength="250" />
                                 </div>
                             </div>
 
@@ -436,16 +436,16 @@
                     <%-- LIGNES D'ÉCRITURE --%>
                     <div class="card">
                         <div class="card-header">
-                            <strong>Lignes d'écriture</strong>
+                            <strong><asp:Literal ID="litLignesEcriture" runat="server" /></strong>
                             <asp:Label ID="lblBalanceBadge" runat="server" CssClass="badge-balanced" Text="Équilibré ✓" />
                         </div>
 
                         <div class="card-body">
                             <div class="lines-header">
-                                <div>Compte</div>
-                                <div>Libellé ligne</div>
-                                <div style="text-align: right">Débit</div>
-                                <div style="text-align: right">Crédit</div>
+                                <div><asp:Literal ID="litColCompte" runat="server" /></div>
+                                <div><asp:Literal ID="litColLibelle" runat="server" /></div>
+                                <div style="text-align: right"><asp:Literal ID="litColDebit" runat="server" /></div>
+                                <div style="text-align: right"><asp:Literal ID="litColCredit" runat="server" /></div>
                                 <div style="text-align: center"></div>
                             </div>
 
@@ -467,7 +467,7 @@
                                                 <div class="cell">
                                                     <telerik:RadTextBox ID="txtLineLibelle" runat="server"
                                                         Text='<%# Eval("Libelle") %>'
-                                                        EmptyMessage="Description ligne..." />
+                                                        EmptyMessage="Description ligne..." MaxLength="250" />
                                                 </div>
 
                                                 <div class="cell" style="text-align: right">
@@ -504,7 +504,7 @@
                                                         Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
+                                                        OnClientClicking="confirmDeleteLine">
                                                     </telerik:RadImageButton>
                                                 </div>
                                             </div>
@@ -521,17 +521,17 @@
             <%-- FOOTER TOTAUX D/C/ÉCART --%>
             <div class="footerbar">
                 <div class="totals">
-                    <div class="tot">Total Débit</div>
+                    <div class="tot"><asp:Literal ID="litTotalDebit" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong><asp:Label ID="lblTotalDebit" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">Total Crédit</div>
+                    <div class="tot"><asp:Literal ID="litTotalCredit" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong><asp:Label ID="lblTotalCredit" runat="server" Text="0.00" /></strong>
                     </div>
 
-                    <div class="tot">Écart (D − C)</div>
+                    <div class="tot"><asp:Literal ID="litEcart" runat="server" /></div>
                     <div class="tot" style="justify-self: end;">
                         <strong><asp:Label ID="lblBalance" runat="server" Text="0.00" CssClass="diff-ok" /></strong>
                     </div>
@@ -582,7 +582,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun compte trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litNoAccount" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
@@ -619,7 +619,7 @@
                                         onclick="selectTemplate('<%# Eval("Id") %>')">
                                         <div class="template-code">
                                             <%# Eval("Code") %> · <%# Eval("JournalCode") %>
-                                            <%# IIf(CBool(Eval("MontantsPreRemplis")), " · 💰 pré-rempli", "") %>
+                                            <%# IIf(CBool(Eval("MontantsPreRemplis")), " · " & L("prefilled"), "") %>
                                         </div>
                                         <div class="template-name"><%# Eval("Libelle") %></div>
                                     </div>
@@ -627,7 +627,7 @@
 
                                 <EmptyDataTemplate>
                                     <div class="empty">
-                                        Aucun template défini.
+                                        <asp:Literal ID="litNoTemplate" runat="server" />
                                     </div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
@@ -638,9 +638,40 @@
 
         </asp:Panel>
 
+        <telerik:RadCodeBlock ID="rcbScript" runat="server">
         <script type="text/javascript">
 
             var IS_READONLY = <%= IsReadOnly().ToString().ToLower() %>;
+
+            /* Chaînes localisées (fr/en/es) injectées côté serveur */
+            var LNG = {
+                balanced: '<%= L("badgeBalanced") %>',
+                unbalanced: '<%= L("badgeUnbalanced") %>',
+                empty: '<%= L("badgeEmpty") %>',
+                searchAccount: '<%= L("searchAccount") %>',
+                searchTemplate: '<%= L("searchTemplate") %>',
+                close: '<%= L("close") %>',
+                confirmTemplate: '<%= L("jsConfirmTemplate") %>',
+                confirmDelete: '<%= L("jsConfirmDelete") %>'
+            };
+
+            /* Confirmation de suppression de ligne (RadImageButton OnClientClicking) */
+            function confirmDeleteLine(s, e) {
+                if (!confirm(LNG.confirmDelete)) e.set_cancel(true);
+            }
+
+            /* Applique les libellés localisés aux éléments HTML non-serveur */
+            function localizePickers() {
+                var accSearch = document.getElementById("accountPickerSearch");
+                if (accSearch) accSearch.placeholder = LNG.searchAccount;
+                var tplSearch = document.getElementById("templatePickerSearch");
+                if (tplSearch) tplSearch.placeholder = LNG.searchTemplate;
+                document.querySelectorAll(".account-picker-close-inline, .template-picker-close-inline")
+                    .forEach(function (b) { b.setAttribute("aria-label", LNG.close); });
+            }
+
+            document.addEventListener("DOMContentLoaded", localizePickers);
+            if (window.Sys && Sys.Application) { Sys.Application.add_load(localizePickers); }
 
             function GetRadWindow() {
                 var oWindow = null;
@@ -731,13 +762,13 @@
                 }
                 if (elBadge) {
                     if (Math.abs(ecart) < 0.005 && totDebit > 0) {
-                        elBadge.innerText = "Équilibré ✓";
+                        elBadge.innerText = LNG.balanced;
                         elBadge.className = "badge-balanced";
                     } else if (totDebit === 0 && totCredit === 0) {
-                        elBadge.innerText = "Vide";
+                        elBadge.innerText = LNG.empty;
                         elBadge.className = "badge-balanced";
                     } else {
-                        elBadge.innerText = "Déséquilibré ✗";
+                        elBadge.innerText = LNG.unbalanced;
                         elBadge.className = "badge-unbalanced";
                     }
                 }
@@ -851,7 +882,7 @@
                     });
 
                 if (hasContent) {
-                    if (!confirm("Charger ce template écrasera les lignes actuelles. Continuer ?")) return;
+                    if (!confirm(LNG.confirmTemplate)) return;
                 }
 
                 closeTemplatePicker();
@@ -871,6 +902,7 @@
             }
 
         </script>
+        </telerik:RadCodeBlock>
     </form>
 </body>
 </html>

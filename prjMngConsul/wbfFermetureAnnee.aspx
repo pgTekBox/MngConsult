@@ -1,8 +1,10 @@
-﻿<%@ Page Title="Fermeture d'année fiscale" Language="vb" AutoEventWireup="false"
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfFermetureAnnee.aspx.vb"
     Inherits="MngConsul.wbfFermetureAnnee" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<asp:Content ID="ContentTitle" ContentPlaceHolderID="TitleContent" runat="server"><%= L("pageTitle") %></asp:Content>
 
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -110,10 +112,9 @@
 
     <div class="closure-page">
 
-        <h2>Fermeture d'année fiscale</h2>
+        <h2><asp:Literal ID="litH2Title" runat="server" /></h2>
         <div class="subtitle">
-            Clôture des comptes de résultat, affectation du bénéfice net aux Bénéfices non répartis,
-            verrouillage de l'exercice et création automatique de l'exercice suivant.
+            <asp:Literal ID="litSubtitle" runat="server" />
         </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
@@ -124,9 +125,9 @@
 
         <!-- Étape 1 : sélection de l'exercice -->
         <div class="closure-card">
-            <h3>1. Sélection de l'exercice</h3>
+            <h3><asp:Literal ID="litH3Step1" runat="server" /></h3>
             <div class="closure-toolbar">
-                <asp:Label runat="server" Text="Exercice à fermer :" />
+                <asp:Literal ID="litLblExercice" runat="server" />
                 <telerik:RadComboBox ID="ddlExercice" runat="server" Width="180px"
                     AutoPostBack="true" Skin="Bootstrap"
                     OnSelectedIndexChanged="ddlExercice_SelectedIndexChanged" />
@@ -142,29 +143,29 @@
             <!-- Aperçu financier -->
             <div class="closure-card">
                 <h3>
-                    2. Aperçu financier de l'exercice
+                    <asp:Literal ID="litH3Apercu" runat="server" />
                     <asp:Literal ID="litStatutPill" runat="server" />
                 </h3>
                 <div class="preview-grid">
-                    <div class="lbl">Total des revenus :</div>
+                    <div class="lbl"><asp:Literal ID="litLblRevenus" runat="server" /></div>
                     <div class="val positive"><asp:Literal ID="litRevenus" runat="server" /></div>
 
-                    <div class="lbl">Total des dépenses :</div>
+                    <div class="lbl"><asp:Literal ID="litLblDepenses" runat="server" /></div>
                     <div class="val negative"><asp:Literal ID="litDepenses" runat="server" /></div>
 
-                    <div class="lbl"><strong>Bénéfice net :</strong></div>
+                    <div class="lbl"><strong><asp:Literal ID="litLblBeneficeNet" runat="server" /></strong></div>
                     <div class="val"><asp:Literal ID="litBeneficeNet" runat="server" /></div>
 
-                    <div class="lbl">Compte BNR :</div>
+                    <div class="lbl"><asp:Literal ID="litLblCompteBNR" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litCompteBNR" runat="server" /></div>
 
-                    <div class="lbl">Solde BNR avant clôture :</div>
+                    <div class="lbl"><asp:Literal ID="litLblBNRAvant" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litBNRAvant" runat="server" /></div>
 
-                    <div class="lbl"><strong>Solde BNR après clôture :</strong></div>
+                    <div class="lbl"><strong><asp:Literal ID="litLblBNRApres" runat="server" /></strong></div>
                     <div class="val"><asp:Literal ID="litBNRApres" runat="server" /></div>
 
-                    <div class="lbl">Compte BNE / Journal :</div>
+                    <div class="lbl"><asp:Literal ID="litLblCompteBNE" runat="server" /></div>
                     <div class="val">
                         <asp:Literal ID="litCompteBNE" runat="server" /> /
                         <asp:Literal ID="litJournal" runat="server" />
@@ -175,7 +176,7 @@
             <!-- Problèmes détectés -->
             <asp:PlaceHolder ID="phProblemes" runat="server" Visible="false">
                 <div class="closure-card">
-                    <h3>3. Problèmes détectés</h3>
+                    <h3><asp:Literal ID="litH3Problemes" runat="server" /></h3>
                     <asp:Repeater ID="rpProblemes" runat="server">
                         <ItemTemplate>
                             <div class='problem-row <%# Eval("Severite").ToString().ToLower() %>'>
@@ -198,17 +199,17 @@
             <!-- Détail des écritures qui seront créées -->
             <asp:PlaceHolder ID="phEcritures" runat="server" Visible="false">
                 <div class="closure-card">
-                    <h3>4. Écritures de clôture qui seront générées</h3>
+                    <h3><asp:Literal ID="litH3Ecritures" runat="server" /></h3>
                     <table class="preview-table">
                         <thead>
                             <tr>
-                                <th>Compte</th>
-                                <th>Nom</th>
-                                <th>Type</th>
-                                <th class="num">Total D</th>
-                                <th class="num">Total C</th>
-                                <th class="num">Débit clôture</th>
-                                <th class="num">Crédit clôture</th>
+                                <th><asp:Literal ID="litThCompte" runat="server" /></th>
+                                <th><asp:Literal ID="litThNom" runat="server" /></th>
+                                <th><asp:Literal ID="litThType" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litThTotD" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litThTotC" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litThDebitClot" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litThCreditClot" runat="server" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -245,13 +246,15 @@
 
     </div>
 
+    <telerik:RadCodeBlock ID="rcbFermetureJs" runat="server">
     <script type="text/javascript">
         function confirmCloture(sender, args) {
-            var msg = "Cette opération est définitive et créera des écritures comptables.\n\n"
-                + "L'exercice sélectionné sera FERMÉ et un nouvel exercice OUVERT sera créé automatiquement.\n\n"
-                + "Voulez-vous continuer ?";
+            var msg = "<%= L("jsConfirm1") %>\n\n"
+                + "<%= L("jsConfirm2") %>\n\n"
+                + "<%= L("jsConfirm3") %>";
             args.set_cancel(!confirm(msg));
         }
     </script>
+    </telerik:RadCodeBlock>
 
 </asp:Content>

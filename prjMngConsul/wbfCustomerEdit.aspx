@@ -1,4 +1,4 @@
-﻿<%@ Page Language="vb" AutoEventWireup="false" EnableViewState="true"
+﻿<%@ Page Language="vb" AutoEventWireup="false" EnableViewState="true" Async="true"
     CodeBehind="wbfCustomerEdit.aspx.vb" Inherits="MngConsul.wbfCustomerEdit" %>
 
 <%@ Import Namespace="System" %>
@@ -7,11 +7,11 @@
 <%@ Import Namespace="System.Configuration" %>
 
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= CurrentLang %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Customer — Edit</title>
+    <title><%= L("pageTitle") %></title>
     <style>
         /* =============================================
            VARIABLES & BASE
@@ -32,6 +32,10 @@
         }
 
         html, body { height: 100%; margin: 0; }
+        /* Réserve la place de la barre de défilement en permanence : quand la
+           fenêtre modale « Édition adresse » s'ouvre, la barre de la page ne
+           disparaît plus, donc la grille (et ses boutons) ne se décale plus. */
+        html { scrollbar-gutter: stable; }
 
         body {
             font-family: var(--font);
@@ -94,10 +98,6 @@
         .grid1 { display: grid; grid-template-columns: 1fr;             gap: 12px; }
         .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 12px; }
         .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
-
-        @media (max-width: 800px) {
-            .grid, .grid3, .grid4 { grid-template-columns: 1fr; }
-        }
 
         /* =============================================
            CHAMPS
@@ -229,11 +229,16 @@
         .addr-list {
             border: 1px solid var(--line);
             border-radius: 14px;
-            overflow: hidden;
+            overflow-y: auto;              /* la liste ENTIÈRE défile (entête + lignes)  */
+            overflow-x: hidden;
+            scrollbar-gutter: stable;      /* réserve la barre : pas de décalage des colonnes */
+            max-height: 340px;
             margin: 0 16px 16px;
         }
 
-        /* Entête colonnes — desktop */
+        /* Entête colonnes — desktop. Sticky DANS le conteneur scrollable : ainsi la
+           barre de défilement rétrécit entête ET lignes de la même façon, et la
+           colonne Actions reste alignée avec les boutons (fix : décalage après rebind). */
         .addr-list-head {
             display: grid;
             grid-template-columns: 120px 1fr 80px;
@@ -245,12 +250,14 @@
             background: #f8fafc;
             border-bottom: 1px solid var(--line);
             box-sizing: border-box;
+            position: sticky;
+            top: 0;
+            z-index: 1;
         }
 
-        /* Corps scrollable si beaucoup d'adresses */
+        /* Le défilement est délégué à .addr-list (entête sticky). */
         .addr-list-body {
-            max-height: 280px;
-            overflow-y: auto;
+            min-height: 0;
         }
 
         /* Ligne adresse */
@@ -332,75 +339,84 @@
             background-size: 16px 16px !important;
         }
 
+        /* Interface DESKTOP uniquement (pas de version mobile/tablette) :
+           layout fixe en 3 colonnes, aucune media query responsive. */
+
         /* =============================================
-           RESPONSIVE — TABLETTE (max 1024px)
+           SCAN / REMPLISSAGE AUTOMATIQUE
         ============================================= */
-        @media (max-width: 1024px) {
-            .addr-list { margin: 0 12px 12px; }
-            .addr-list-head {
-                grid-template-columns: 100px 1fr 72px;
-                gap: 10px;
-                padding: 10px 12px;
-            }
-            .addr-row {
-                grid-template-columns: 100px 1fr 72px;
-                gap: 10px;
-                padding: 11px 12px;
-            }
+        /* Carte client : laisse le panneau scan déborder (overlay) et prime
+           sur les cartes suivantes (z-index) — sinon .card { overflow:hidden } le rognerait. */
+        .card-client { overflow: visible; position: relative; z-index: 5; }
+
+        /* Boîte scan : pastille compacte dans l'entête ; panneau flottant à l'ouverture */
+        .scan-box {
+            position: relative;
+            flex: 0 0 auto;
+            width: 300px; max-width: 100%;
+            border: 1px solid var(--line);
+            border-radius: 10px;
+            background: #f8fafc;
+            padding: 6px 10px;
         }
+        .scan-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; }
+        .scan-box .scan-title { font-weight: 800; font-size: 13px; }
+        .scan-box .scan-hint  { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
 
-        /* =============================================
-           RESPONSIVE — MOBILE (max 768px)
-           Passage en carte verticale
-        ============================================= */
-        @media (max-width: 768px) {
-            .wrap { margin: 10px auto; padding: 0 10px 20px; }
-
-            /* Masquer l'entête de colonnes sur mobile */
-            .addr-list-head { display: none; }
-
-            .addr-list {
-                margin: 0 12px 12px;
-                border-radius: 12px;
-            }
-
-            /* Carte verticale : type / adresse / actions empilés */
-            .addr-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 14px 14px;
-            }
-
-            .addr-actions {
-                justify-content: flex-start;
-                padding-top: 4px;
-                border-top: 1px dashed #f1f5f9;
-            }
-
-            /* Le badge type s'affiche en tête de carte */
-            .addr-type-badge { font-size: 11px; }
+        /* Chevron expand / collapse */
+        .scan-toggle {
+            flex: 0 0 auto;
+            width: 24px; height: 24px; padding: 0;
+            border: none; background: transparent;
+            color: #64748b; cursor: pointer; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
         }
+        .scan-toggle:hover { background: #e2e8f0; color: #334155; }
+        .scan-toggle .chev { font-size: 13px; line-height: 1; transition: transform .18s ease; }
+        .scan-box.collapsed .scan-toggle .chev { transform: rotate(-90deg); }
 
-        /* =============================================
-           RESPONSIVE — PETIT MOBILE (max 480px)
-        ============================================= */
-        @media (max-width: 480px) {
-            .addr-list { margin: 0 8px 12px; }
+        /* Panneau flottant : s'ouvre PAR-DESSUS tous les autres éléments */
+        .scan-body {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            width: 360px; max-width: 86vw;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 18px 44px rgba(2,6,23,.20);
+            padding: 12px;
+            z-index: 100;
+        }
+        .scan-box.collapsed .scan-body { display: none; }
 
-            .addr-row { padding: 12px; gap: 6px; }
+        .dropzone {
+            position: relative;
+            border: 2px dashed #cbd5e1;
+            border-radius: 10px;
+            background: #fff;
+            padding: 10px;              /* était 18px */
+            text-align: center;
+            cursor: pointer;
+            transition: border-color .15s, background .15s;
+        }
+        .dropzone:hover { border-color: var(--primary); background: #eff6ff; }
+        .dropzone.drag  { border-color: #1d4ed8; background: rgba(59,130,246,.10); }
+        .dropzone .dz-ico  { font-size: 18px; line-height: 1; }
+        .dropzone .dz-text { font-size: 12px; color: #475569; font-weight: 600; margin-top: 4px; }
+        .dropzone .dz-file { font-size: 12px; color: var(--primary); font-weight: 700; margin-top: 4px; min-height: 14px; word-break: break-all; }
+        .dropzone .dz-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 
-            .addr-text { font-size: 13px; }
+        .scan-row { display: flex; gap: 10px; align-items: center; margin-top: 8px; flex-wrap: wrap; }
 
-            /* Boutons pleine largeur sur très petits écrans */
-            .addr-actions {
-                display: grid;
-                grid-template-columns: 1fr 1fr;
-                gap: 8px;
-            }
-            .addr-actions .btn-icon {
-                width: 100%;
-                height: 36px;
-            }
+        .scan-msg {
+            margin-top: 8px;
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 13px;
+            font-weight: 700;
+            border: 1px solid var(--line);
+            background: #fff;
         }
     </style>
 </head>
@@ -440,6 +456,13 @@
                     </UpdatedControls>
                 </telerik:AjaxSetting>
 
+                <%-- Cascade Pays → Province : recharge la liste des provinces/états du pays choisi --%>
+                <telerik:AjaxSetting AjaxControlID="rddlPays">
+                    <UpdatedControls>
+                        <telerik:AjaxUpdatedControl ControlID="rddlProvince" />
+                    </UpdatedControls>
+                </telerik:AjaxSetting>
+
             </AjaxSettings>
         </telerik:RadAjaxManager>
 
@@ -448,11 +471,11 @@
             <%-- ===== ENTÊTE PAGE ===== --%>
             <div class="top">
                 <div>
-                    <div class="title">Édition — Client</div>
+                    <div class="title"><asp:Literal ID="litEditTitle" runat="server" /></div>
                 </div>
                 <div class="bar">
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
-                        onclick="closeWin();">← Retour à la liste</asp:HyperLink>
+                        onclick="closeWin();"></asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
                 </div>
             </div>
@@ -463,21 +486,48 @@
             </asp:Panel>
 
             <%-- ===== CARD : INFORMATIONS CLIENT ===== --%>
-            <div class="card">
+            <div class="card card-client">
                 <div class="cardHead">
                     <div>
-                        <div class="h">Informations Client</div>
+                        <div class="h"><asp:Literal ID="litCustomerInfo" runat="server" /></div>
                         <div class="grid4" style="margin-top:6px;">
-                            <div class="small">Id :
-                                <telerik:RadLabel runat="server" ID="tlblId"></telerik:RadLabel>
-                                <asp:Literal ID="litId" runat="server" />
-                            </div>
-                            <div class="small">Origine :
+                            <div class="small"><asp:Literal ID="litOriginLbl" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblOrigine"></telerik:RadLabel>
                             </div>
-                            <div class="small">Créé :
+                            <div class="small"><asp:Literal ID="litCreatedLbl" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblCreated"></telerik:RadLabel>
                             </div>
+                        </div>
+                    </div>
+
+                    <%-- Scan de document : compact dans l'entête ; le panneau s'ouvre en overlay --%>
+                    <div id="scanBox" class="scan-box collapsed">
+                        <div class="scan-head" onclick="toggleScanBox(); return false;">
+                            <div class="scan-title"><asp:Literal ID="litScanTitle" runat="server" /></div>
+                            <button type="button" id="btnScanToggle" runat="server" class="scan-toggle"
+                                title="" aria-label="">
+                                <span class="chev" aria-hidden="true">&#9662;</span>
+                            </button>
+                        </div>
+                        <div class="scan-body">
+                            <div class="scan-hint"><asp:Literal ID="litScanHint" runat="server" /></div>
+
+                            <div id="dropZone" class="dropzone">
+                                <div class="dz-ico" aria-hidden="true">⬆️</div>
+                                <div class="dz-text"><asp:Literal ID="litDropZone" runat="server" /></div>
+                                <div class="dz-file" id="dzFile"></div>
+                                <asp:FileUpload ID="fileDoc" runat="server" ClientIDMode="Static"
+                                    accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" CssClass="dz-input" />
+                            </div>
+
+                            <div class="scan-row">
+                                <asp:Button ID="btnExtract" runat="server" CssClass="btn primary"
+                                    CausesValidation="false" Text="Analyser le document" />
+                            </div>
+
+                            <asp:Panel ID="pnlUpload" runat="server" Visible="false" CssClass="scan-msg">
+                                <asp:Literal ID="litUpload" runat="server" />
+                            </asp:Panel>
                         </div>
                     </div>
                 </div>
@@ -485,41 +535,41 @@
                 <div class="cardBody">
                     <div class="grid3">
                         <div class="field">
-                            <label>Nom</label>
+                            <label><asp:Literal ID="litLblName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtName" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                         </div>
                         <div class="field">
-                            <label>Display Name</label>
+                            <label><asp:Literal ID="litLblDisplayName" runat="server" /></label>
                             <telerik:RadTextBox ID="txtDisplayName" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                         </div>
                         <div class="field">
-                            <label>Type</label>
+                            <label><asp:Literal ID="litLblType" runat="server" /></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlPartyType"
                                 runat="server" DefaultMessage="Sélectionner…"
                                 DropDownHeight="110px" Skin="Metro" />
                         </div>
                         <div class="field">
-                            <label>Site web</label>
+                            <label><asp:Literal ID="litLblWebsite" runat="server" /></label>
                             <telerik:RadTextBox ID="txtWebsite" Width="300px" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                         </div>
                         <div class="field">
-                            <label>No TPS</label>
+                            <label><asp:Literal ID="litLblTPS" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTPS" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                         </div>
                         <div class="field">
-                            <label>No TVQ</label>
+                            <label><asp:Literal ID="litLblTVQ" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNoTVQ" runat="server"
-                                RenderMode="Lightweight" CssClass="rtbLike" />
+                                RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                         </div>
                     </div>
 
                     <div class="grid1" style="margin-top:12px;">
                         <div class="field">
-                            <label>Note</label>
+                            <label><asp:Literal ID="litLblNote" runat="server" /></label>
                             <telerik:RadTextBox ID="txtNote" Width="100%" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" TextMode="MultiLine" />
                         </div>
@@ -530,7 +580,7 @@
             <%-- ===== CARD : ADRESSES (RadListView remplace RadGrid) ===== --%>
             <div class="card">
                 <div class="cardHead">
-                    <div class="h">Adresses</div>
+                    <div class="h"><asp:Literal ID="litAddresses" runat="server" /></div>
                     <div class="right">
                         <asp:Button ID="btnNewAddress" runat="server"
                             Text="+ Ajouter une adresse"
@@ -557,9 +607,9 @@
 
                             <%-- Entête colonnes (masqué sur mobile via CSS) --%>
                             <div class="addr-list-head">
-                                <div>Type</div>
-                                <div>Adresse</div>
-                                <div style="text-align:right;">Actions</div>
+                                <div><asp:Literal ID="litAddrColType" runat="server" /></div>
+                                <div><asp:Literal ID="litAddrColAddress" runat="server" /></div>
+                                <div style="text-align:right;"><asp:Literal ID="litAddrColActions" runat="server" /></div>
                             </div>
 
                             <%-- Corps : les items seront injectés ici --%>
@@ -591,7 +641,7 @@
                                 <asp:Button ID="btnAddrEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    ToolTip="Modifier"
+                                    ToolTip='<%# L("edit") %>'
                                     CausesValidation="false"
                                     CommandName="EditAddress"
                                     CommandArgument='<%# Eval("Id") %>' />
@@ -599,7 +649,7 @@
                                 <asp:Button ID="btnAddrDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Supprimer"
+                                    ToolTip='<%# L("delete") %>'
                                     CausesValidation="false"
                                     CommandName="DeleteAddress"
                                     CommandArgument='<%# Eval("Id") %>' />
@@ -611,7 +661,7 @@
                     <%-- EMPTY TEMPLATE : affiché quand aucune adresse --%>
                     <EmptyDataTemplate>
                         <div class="addr-empty">
-                            Aucune adresse enregistrée pour ce client.
+                            <asp:Literal ID="litAddrEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -638,66 +688,67 @@
                                 <div class="grid">
 
                                     <div class="field">
-                                        <label>Type</label>
+                                        <label><asp:Literal ID="litAddrType" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlAddressType" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Nom</label>
+                                        <label><asp:Literal ID="litAddrName" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtAddressName" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Adresse 1</label>
+                                        <label><asp:Literal ID="litAddr1" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA1" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Adresse 2</label>
+                                        <label><asp:Literal ID="litAddr2" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtA2" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="500" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Ville</label>
+                                        <label><asp:Literal ID="litCity" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtCity" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="50" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Province</label>
+                                        <label><asp:Literal ID="litProvince" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlProvince" runat="server"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Pays</label>
+                                        <label><asp:Literal ID="litCountry" runat="server" /></label>
                                         <telerik:RadDropDownList RenderMode="Lightweight"
                                             ID="rddlPays" runat="server"
+                                            AutoPostBack="true" OnSelectedIndexChanged="rddlPays_SelectedIndexChanged"
                                             DefaultMessage="Sélectionner…" DropDownHeight="110px" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Code postal</label>
+                                        <label><asp:Literal ID="litPostal" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtPostal" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                                     </div>
 
                                     <div class="field">
-                                        <label>Courriel</label>
+                                        <label><asp:Literal ID="litAddrEmail" runat="server" /></label>
                                         <telerik:RadTextBox ID="txtAddrEmail" runat="server"
-                                            RenderMode="Lightweight" CssClass="rtbLike" />
+                                            RenderMode="Lightweight" CssClass="rtbLike" MaxLength="200" />
                                     </div>
 
                                 </div>
 
                                 <div class="field" style="margin-top:12px;">
-                                    <label>Note</label>
+                                    <label><asp:Literal ID="litAddrNote" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtAddressNote" runat="server"
                                         RenderMode="Lightweight" CssClass="rtbLike" />
                                 </div>
@@ -730,6 +781,13 @@
         ===================================================== --%>
         <script type="text/javascript">
 
+            /* Replie / déplie la boîte « Remplissage automatique par document »
+               (l'entête reste visible, le chevron pivote). */
+            function toggleScanBox() {
+                var box = document.getElementById('scanBox');
+                if (box) box.classList.toggle('collapsed');
+            }
+
             /* Ferme la fenêtre adresse et signale si on a sauvegardé */
             function closeAddrWindow(saved) {
                 var wnd = $find("rwAddr");
@@ -759,6 +817,42 @@
                 if (oWnd) oWnd.close();
             }
 
+        </script>
+
+        <%-- Glisser-déposer d'un document dans la zone de scan.
+             Le fichier déposé est injecté dans le <input type=file> (DataTransfer),
+             puis le postback « Analyser » le traite comme une sélection classique. --%>
+        <script type="text/javascript">
+            (function () {
+                function initDrop() {
+                    var dz = document.getElementById('dropZone'),
+                        inp = document.getElementById('fileDoc'),
+                        lbl = document.getElementById('dzFile');
+                    if (!dz || !inp) return;
+                    if (dz.dataset.wired === '1') return;
+                    dz.dataset.wired = '1';
+
+                    function showName() { if (lbl) lbl.textContent = (inp.files && inp.files.length) ? inp.files[0].name : ''; }
+                    dz.addEventListener('click', function () { inp.click(); });
+                    inp.addEventListener('change', showName);
+
+                    ['dragenter', 'dragover'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.add('drag'); });
+                    });
+                    ['dragleave', 'dragend', 'drop'].forEach(function (t) {
+                        dz.addEventListener(t, function (e) { e.preventDefault(); e.stopPropagation(); dz.classList.remove('drag'); });
+                    });
+                    dz.addEventListener('drop', function (e) {
+                        var files = e.dataTransfer && e.dataTransfer.files;
+                        if (!files || !files.length) return;
+                        try { var dt = new DataTransfer(); dt.items.add(files[0]); inp.files = dt.files; } catch (ex) { }
+                        showName();
+                    });
+                }
+                if (document.readyState !== 'loading') initDrop();
+                else document.addEventListener('DOMContentLoaded', initDrop);
+                if (window.Sys && Sys.Application) { Sys.Application.add_load(initDrop); }
+            })();
         </script>
 
     </form>

@@ -79,11 +79,6 @@
             grid-template-columns: repeat(4, 1fr);
             gap: 12px;
         }
-        @media (max-width: 768px) {
-            .periods-grid {
-                grid-template-columns: repeat(2, 1fr);
-            }
-        }
         .period-btn {
             background: #fff; border: 2px solid #e2e8f0;
             border-radius: 12px; padding: 16px; text-align: left;
@@ -244,10 +239,6 @@
         .item-amount.collecte { color: #047857; }
         .item-amount.recevoir { color: #b45309; }
         .item-amount.retard { color: #b91c1c; }
-
-        @media (max-width: 640px) {
-            .item-date, .item-id { display: none; }
-        }
 
         .empty-state {
             text-align: center; padding: 48px 24px;

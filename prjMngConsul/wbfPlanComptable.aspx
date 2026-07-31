@@ -1,7 +1,7 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master" CodeBehind="wbfPlanComptable.aspx.vb" Inherits="MngConsul.wbfPlanComptable" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Plan comptable — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -175,36 +175,6 @@
         }
 
 
-        /* ========================= TABLETTE ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .listview-list-head,
-            .listview-row {
-                grid-template-columns: 70px minmax(160px, 1.5fr) minmax(80px, 1fr) 70px 60px 60px;
-                gap: 8px;
-                padding: 10px 12px;
-            }
-            .col-plage { display: none; }
-        }
-
-        /* ========================= MOBILE ========================= */
-        @media (max-width: 768px) {
-            .listview-list-head { display: none; }
-            .listview-row {
-                grid-template-columns: 70px 1fr 60px;
-                gap: 8px;
-                padding: 12px 14px;
-            }
-            .col-classe, .col-type, .col-sens, .col-plage { display: none; }
-            .row-sous-classe { padding-left: 16px; }
-        }
-
-        @media (max-width: 480px) {
-            .listview-row {
-                grid-template-columns: 60px 1fr 40px;
-                gap: 6px;
-                padding: 10px;
-            }
-        }
     </style>
 </asp:Content>
 
@@ -217,7 +187,7 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Plan comptable</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
                 <div class="page-sub">
                     <asp:Label ID="lblInfo" runat="server" />
                 </div>
@@ -228,7 +198,7 @@
                     CssClass="btn btnAddRow"
                     Text="Ajouter un compte"
                     CausesValidation="false"
-                    OnClientClick="openRadWindow(0, 'rwCompte', 'wbfPlanComptableEdit.aspx', 'Modifier un compte', 'Ajouter un compte'); return false;" />
+                    OnClientClick="openRadWindow(0, 'rwCompte', 'wbfPlanComptableEdit.aspx', L_EDIT_COMPTE, L_ADD_COMPTE); return false;" />
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (numéro, nom…)" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -256,13 +226,13 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div>Numéro</div>
-                                <div>Nom du compte</div>
-                                <div class="col-classe">Classe</div>
-                                <div class="col-type">Type</div>
-                                <div class="col-sens">Sens</div>
-                                <div class="col-plage">Actif</div>
-                                <div>Action</div>
+                                <div><asp:Literal ID="litColNumero" runat="server" /></div>
+                                <div><asp:Literal ID="litColNom" runat="server" /></div>
+                                <div class="col-classe"><asp:Literal ID="litColClasse" runat="server" /></div>
+                                <div class="col-type"><asp:Literal ID="litColType" runat="server" /></div>
+                                <div class="col-sens"><asp:Literal ID="litColSens" runat="server" /></div>
+                                <div class="col-plage"><asp:Literal ID="litColActif" runat="server" /></div>
+                                <div><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -295,7 +265,7 @@
 
                             <div class="col-sens">
                                 <span class='badge-sens <%# If(Eval("Sens").ToString() = "D", "badge-debit", "badge-credit") %>'>
-                                    <%# If(Eval("Sens").ToString() = "D", "Débit", "Crédit") %>
+                                    <%# SensLabel(Eval("Sens")) %>
                                 </span>
                             </div>
 
@@ -307,7 +277,7 @@
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwCompte"", ""wbfPlanComptableEdit.aspx"", ""Modifier un compte"", ""Ajouter un compte""); return false;" %>' />
+                                    OnClientClick='<%# "openRadWindow(" & Eval("Id") & ", ""rwCompte"", ""wbfPlanComptableEdit.aspx"", L_EDIT_COMPTE, L_ADD_COMPTE); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
@@ -319,7 +289,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun compte trouvé.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
                 </telerik:RadListView>
@@ -328,7 +298,7 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openRadWindow(0, 'rwCompte', 'wbfPlanComptableEdit.aspx', 'Modifier un compte', 'Ajouter un compte'); return false;" title="Ajouter un compte">+</button>
+        <button id="fabAdd" runat="server" type="button" class="fab-add" onclick="openRadWindow(0, 'rwCompte', 'wbfPlanComptableEdit.aspx', L_EDIT_COMPTE, L_ADD_COMPTE); return false;" title="">+</button>
 
     </telerik:RadAjaxPanel>
 
@@ -344,9 +314,15 @@
 
     <script src="js/RadWindows.js"></script>
 
+    <%-- RadCodeBlock obligatoire : blocs de rendu serveur enfants directs de
+         MainContent, que le RadAjaxPanel modifie au rendu. --%>
+    <telerik:RadCodeBlock ID="rcbPlanJs" runat="server">
     <script type="text/javascript">
+        var L_ADD_COMPTE = "<%= L("addCompteWin") %>";
+        var L_EDIT_COMPTE = "<%= L("editCompteWin") %>";
         function rwCompte_OnClientClose(sender, args) {
             __doPostBack("rlvComptes", "Rebind");
         }
     </script>
+    </telerik:RadCodeBlock>
 </asp:Content>

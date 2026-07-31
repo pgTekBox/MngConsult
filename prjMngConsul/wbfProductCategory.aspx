@@ -128,34 +128,6 @@
             background: #fee2e2 !important;
         }
 
-        /* ========================= TABLETTE ========================= */
-        @media (min-width: 769px) and (max-width: 1024px) {
-            .listview-list-head,
-            .listview-row {
-                grid-template-columns: 60px minmax(140px, 1.5fr) minmax(100px, 1fr) minmax(100px, 1fr) 70px 50px 60px;
-                gap: 8px;
-                padding: 10px 12px;
-            }
-        }
-
-        /* ========================= MOBILE ========================= */
-        @media (max-width: 768px) {
-            .listview-list-head { display: none; }
-            .listview-row {
-                grid-template-columns: 60px 1fr 60px;
-                gap: 8px;
-                padding: 12px 14px;
-            }
-            .col-vente, .col-achat, .col-taxe, .col-actif { display: none; }
-        }
-
-        @media (max-width: 480px) {
-            .listview-row {
-                grid-template-columns: 50px 1fr 40px;
-                gap: 6px;
-                padding: 10px;
-            }
-        }
     </style>
 </asp:Content>
 

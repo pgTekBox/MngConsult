@@ -53,13 +53,6 @@
         .badge.active  { background: rgba(22,163,74,.10);  color: #16a34a; border: 1px solid rgba(22,163,74,.25); }
         .badge.inactive { background: rgba(220,38,38,.10); color: #dc2626; border: 1px solid rgba(220,38,38,.25); }
 
-        @media (max-width: 1024px) {
-            .listview-list-head, .listview-row {
-                grid-template-columns: 40px 1fr 90px 80px 90px;
-                gap: 10px; padding: 12px 14px;
-            }
-            .col-email, .col-lastlogin { display: none; }
-        }
     </style>
 </asp:Content>
 

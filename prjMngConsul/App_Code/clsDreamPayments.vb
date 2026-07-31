@@ -63,6 +63,17 @@ Public Class clsDreamPayments
         Return Not String.IsNullOrEmpty(ClientId()) AndAlso Not String.IsNullOrEmpty(ClientSecret())
     End Function
 
+    ''' <summary>
+    ''' Type de bénéficiaire envoyé à Dream (payeeType). Configurable via
+    ''' Web.config (DreamPayments.PayeeType). Confirmé par la doc Dream : « INSURED »
+    ''' est la valeur pour TOUS les bénéficiaires de l'API InsureTech (fournisseurs
+    ''' inclus) ; c'est le repli si la clé est absente.
+    ''' </summary>
+    Public Shared Function DefaultPayeeType() As String
+        Dim v As String = If(ConfigurationManager.AppSettings("DreamPayments.PayeeType"), "").Trim()
+        Return If(String.IsNullOrEmpty(v), "INSURED", v)
+    End Function
+
     ''' <summary>Endpoint OAuth /token. Sandbox par défaut ; en production il DOIT être configuré.</summary>
     Private Shared Function TokenUrl() As String
         Dim u As String = ConfigurationManager.AppSettings("DreamPayments.TokenUrl")
@@ -220,7 +231,7 @@ Public Class clsDreamPayments
         ' payeeAccountInfo
         Public Property AccountName As String                 ' requis (nom du bénéficiaire)
         Public Property CustomerNumber As String
-        Public Property PayeeType As String = "INSURED"       ' TODO : valeur adéquate pour un fournisseur ?
+        Public Property PayeeType As String = clsDreamPayments.DefaultPayeeType()   ' "INSURED" (confirmé doc), config DreamPayments.PayeeType
         ' Adresse (type BILLING)
         Public Property Address1 As String
         Public Property Address2 As String
@@ -479,9 +490,11 @@ Public Class clsDreamPayments
 
     ''' <summary>Préfixe le chemin par le base path de l'InsureTech (defaut "/platform", override Web.config).</summary>
     Private Shared Function PlatformPath(rel As String) As String
-        Dim bp As String = ConfigurationManager.AppSettings("DreamPayments.BasePath")
-        If String.IsNullOrEmpty(bp) Then bp = "/platform"
-        Return bp.Trim().TrimEnd("/"c) & rel
+        ' Préfixe optionnel avant le chemin relatif. Sur l'env insuretechv2 (ApiBase .../v1),
+        ' AUCUN préfixe : l'endpoint est /v1/payees/add (le "/platform" donnait un 404).
+        ' Configurable via DreamPayments.BasePath (vide = pas de préfixe).
+        Dim bp As String = If(ConfigurationManager.AppSettings("DreamPayments.BasePath"), "").Trim()
+        Return bp.TrimEnd("/"c) & rel
     End Function
 
     ''' <summary>Ajoute une propriété string seulement si non vide.</summary>

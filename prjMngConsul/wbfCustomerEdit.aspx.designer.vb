@@ -76,23 +76,6 @@ Partial Public Class wbfCustomerEdit
     '''</remarks>
     Protected WithEvents pMsg As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
-    '''<summary>
-    '''tlblId control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tlblId As Global.Telerik.Web.UI.RadLabel
-
-    '''<summary>
-    '''litId control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litId As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''tlblOrigine control.
@@ -344,4 +327,16 @@ Partial Public Class wbfCustomerEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnAddrRefresh As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>fileDoc control.</summary>
+    Protected WithEvents fileDoc As Global.System.Web.UI.WebControls.FileUpload
+
+    '''<summary>btnExtract control.</summary>
+    Protected WithEvents btnExtract As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlUpload control.</summary>
+    Protected WithEvents pnlUpload As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litUpload control.</summary>
+    Protected WithEvents litUpload As Global.System.Web.UI.WebControls.Literal
 End Class

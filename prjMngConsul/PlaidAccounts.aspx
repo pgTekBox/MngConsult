@@ -3,7 +3,7 @@
     Inherits="MngConsul.PlaidAccounts" Async="true" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Comptes bancaires — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -112,68 +112,6 @@
             color: #dc2626;
         }
 
-        /* TABLETTE */
-        @media (max-width: 1024px) {
-            .listview-list-head {
-                grid-template-columns: minmax(180px, 1.4fr) 120px 90px 70px;
-                gap: 12px;
-                padding: 12px 14px;
-            }
-
-            .listview-row {
-                grid-template-columns: minmax(180px, 1.4fr) 120px 90px 70px;
-                gap: 12px;
-                padding: 12px 14px;
-            }
-        }
-
-        /* MOBILE LARGE */
-        @media (max-width: 768px) {
-            .listview-list-head {
-                display: none;
-            }
-
-            .listview-row {
-                grid-template-columns: 1fr;
-                gap: 6px;
-            }
-
-            .field-bank::before {
-                content: "Banque : ";
-                font-weight: 800;
-                color: #0f172a;
-            }
-
-            .field-date::before {
-                content: "Connecté le : ";
-                font-weight: 800;
-                color: #0f172a;
-            }
-
-            .import-panel {
-                flex-direction: column;
-                align-items: stretch;
-            }
-
-                .import-panel .input,
-                .import-panel select,
-                .import-panel input[type="date"] {
-                    width: 100%;
-                }
-        }
-
-        /* PETIT MOBILE */
-        @media (max-width: 480px) {
-            .listview-row {
-                grid-template-columns: 1fr;
-                gap: 10px;
-                padding: 14px;
-            }
-
-            .listview-list-head {
-                display: none;
-            }
-        }
     </style>
 </asp:Content>
 
@@ -185,13 +123,13 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Comptes bancaires</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
             </div>
 
             <div class="searchbox">
                 <asp:Button ID="btnConnect" runat="server"
                     CssClass="btn btnAddRow"
-                    Text="Connecter une banque"
+                    Text=""
                     CausesValidation="false"
                     OnClientClick="openPlaidFromPage(); return false;" />
             </div>
@@ -210,13 +148,11 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div>Banque</div>
-  <div>Balance current</div>
-                                <div>Date de connexion</div>
-                                 <div>Statut</div>
-                              
-                               
-                                <div>Action</div>
+                                <div><asp:Literal ID="litColBank" runat="server" /></div>
+                                <div><asp:Literal ID="litColBalance" runat="server" /></div>
+                                <div><asp:Literal ID="litColDate" runat="server" /></div>
+                                <div><asp:Literal ID="litColStatus" runat="server" /></div>
+                                <div><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -225,18 +161,18 @@
 
                             <%-- Panel d'import en bas de la liste --%>
                             <div class="import-panel">
-                                <label>Compte :</label>
+                                <label><asp:Literal ID="litLblAccount" runat="server" /></label>
                                 <asp:DropDownList ID="ddlAccount" runat="server" CssClass="input"></asp:DropDownList>
 
-                                <label>Du :</label>
+                                <label><asp:Literal ID="litLblFrom" runat="server" /></label>
                                 <asp:TextBox ID="txtStartDate" runat="server" CssClass="input" TextMode="Date"></asp:TextBox>
 
-                                <label>Au :</label>
+                                <label><asp:Literal ID="litLblTo" runat="server" /></label>
                                 <asp:TextBox ID="txtEndDate" runat="server" CssClass="input" TextMode="Date"></asp:TextBox>
 
                                 <asp:Button ID="btnImport" runat="server"
                                     CssClass="btn"
-                                    Text="Importer"
+                                    Text=""
                                     CausesValidation="false" />
                             </div>
 
@@ -265,7 +201,7 @@
 
                             <div>
                                 <span class='<%# If(CBool(Eval("Active")), "field-status-badge badge-active", "field-status-badge badge-inactive") %>'>
-                                    <%# If(CBool(Eval("Active")), "Actif", "Déconnecté") %>
+                                    <%# If(CBool(Eval("Active")), L("active"), L("inactive")) %>
                                 </span>
                             </div>
 
@@ -273,11 +209,11 @@
                                 <asp:Button ID="btnDisconnect" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Déconnecter"
+                                    ToolTip='<%# L("disconnect") %>'
                                     CommandName="Disconnect"
                                     CommandArgument='<%# Eval("ItemId") %>'
                                     Visible='<%# CBool(Eval("Active")) %>'
-                                    OnClientClick="return confirm('Voulez-vous vraiment déconnecter ce compte?');"
+                                    OnClientClick="return confirm(L_CONFIRM_DISCONNECT);"
                                     CausesValidation="false" />
                             </div>
                         </div>
@@ -285,8 +221,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun compte bancaire connecté.
-                       
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -296,8 +231,14 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="openPlaidFromPage(); return false;" title="Connecter une banque">+</button>
+        <button id="fabAdd" runat="server" class="fab-add" onclick="openPlaidFromPage(); return false;" title="">+</button>
 
     </telerik:RadAjaxPanel>
+
+    <telerik:RadCodeBlock ID="rcbPlaidJs" runat="server">
+        <script type="text/javascript">
+            var L_CONFIRM_DISCONNECT = "<%= L("confirmDisconnect") %>";
+        </script>
+    </telerik:RadCodeBlock>
 
 </asp:Content>

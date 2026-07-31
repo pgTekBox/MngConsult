@@ -50,15 +50,6 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents lnkBack As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>
-    '''lnkStripeOnboarding control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lnkStripeOnboarding As Global.System.Web.UI.WebControls.HyperLink
-
-    '''<summary>
     '''btnSave control.
     '''</summary>
     '''<remarks>
@@ -353,4 +344,16 @@ Partial Public Class wbfSupplierEdit
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnAddrRefresh As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>fileDoc control.</summary>
+    Protected WithEvents fileDoc As Global.System.Web.UI.WebControls.FileUpload
+
+    '''<summary>btnExtract control.</summary>
+    Protected WithEvents btnExtract As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlUpload control.</summary>
+    Protected WithEvents pnlUpload As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litUpload control.</summary>
+    Protected WithEvents litUpload As Global.System.Web.UI.WebControls.Literal
 End Class

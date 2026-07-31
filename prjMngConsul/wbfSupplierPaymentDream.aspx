@@ -27,9 +27,9 @@
         .rowline .k { color: var(--muted); font-size: 13px; }
         .rowline .v { font-weight: 800; }
         .amount { font-size: 24px; font-weight: 900; color: var(--teal); }
-        .sec-title { font-weight: 900; font-size: 14px; margin: 0 0 12px; }
+        .sec-title { font-weight: 900; font-size: 14px; margin: 0 0 4px; }
+        .sec-hint { font-size: 12px; color: var(--muted); margin: 0 0 12px; }
         .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field label { font-size: 12px; font-weight: 700; color: #334155; }
         .field input, .field select { padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px;
@@ -74,13 +74,12 @@
                 <div class="rowline"><span class="k"><%= L("amount") %></span><span class="v amount"><asp:Literal ID="litAmount" runat="server" /></span></div>
             </div>
 
-            <%-- Bénéficiaire (payee user) --%>
+            <%-- Entreprise (bénéficiaire) : accountName + adresse = payeeAccountInfo côté Dream --%>
             <div class="card">
-                <div class="sec-title"><%= L("payeeSection") %></div>
+                <div class="sec-title"><%= L("companySection") %></div>
+                <div class="sec-hint"><%= L("companyHint") %></div>
                 <div class="grid2">
-                    <div class="field"><label><%= L("firstName") %></label><asp:TextBox ID="txtFirstName" runat="server" /></div>
-                    <div class="field"><label><%= L("lastName") %></label><asp:TextBox ID="txtLastName" runat="server" /></div>
-                    <div class="field"><label><%= L("email") %></label><asp:TextBox ID="txtEmail" runat="server" TextMode="Email" /></div>
+                    <div class="field"><label><%= L("companyName") %></label><asp:TextBox ID="txtAccountName" runat="server" /></div>
                     <div class="field"><label><%= L("address") %></label><asp:TextBox ID="txtAddress" runat="server" /></div>
                     <div class="field"><label><%= L("city") %></label><asp:TextBox ID="txtCity" runat="server" /></div>
                     <div class="field"><label><%= L("province") %></label><asp:TextBox ID="txtProvince" runat="server" MaxLength="2" /></div>
@@ -88,11 +87,21 @@
                 </div>
             </div>
 
+            <%-- Personne-contact : contactName + contactInfo = payeeUser côté Dream --%>
+            <div class="card">
+                <div class="sec-title"><%= L("contactSection") %></div>
+                <div class="sec-hint"><%= L("contactHint") %></div>
+                <div class="grid2">
+                    <div class="field"><label><%= L("firstName") %></label><asp:TextBox ID="txtFirstName" runat="server" /></div>
+                    <div class="field"><label><%= L("lastName") %></label><asp:TextBox ID="txtLastName" runat="server" /></div>
+                    <div class="field"><label><%= L("email") %></label><asp:TextBox ID="txtEmail" runat="server" TextMode="Email" /></div>
+                </div>
+            </div>
+
             <%-- Compte bancaire EFT --%>
             <div class="card">
                 <div class="sec-title"><%= L("bankSection") %></div>
                 <div class="grid2">
-                    <div class="field"><label><%= L("accountName") %></label><asp:TextBox ID="txtAccountName" runat="server" /></div>
                     <div class="field"><label><%= L("accountType") %></label>
                         <asp:DropDownList ID="ddlAccountType" runat="server">
                             <asp:ListItem Value="CHEQUING" Text="Chèque / Chequing" />

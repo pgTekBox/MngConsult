@@ -63,10 +63,6 @@
         .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 12px; }
         .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 
-        @media (max-width: 800px) {
-            .grid, .grid3, .grid4 { grid-template-columns: 1fr; }
-        }
-
         .field label {
             display: block; font-size: 12px; color: #334155;
             margin-bottom: 6px; font-weight: 700;
@@ -214,7 +210,7 @@
                             <div class="field">
                                 <label><asp:Literal ID="litDescription" runat="server" /></label>
                                 <telerik:RadTextBox ID="txtDescription" runat="server" RenderMode="Lightweight"
-                                    CssClass="rtbLike" TextMode="MultiLine" Rows="3" />
+                                    CssClass="rtbLike" TextMode="MultiLine" Rows="3" MaxLength="2000" />
                             </div>
                         </div>
 

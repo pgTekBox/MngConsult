@@ -287,4 +287,16 @@ Partial Public Class wbfSetting
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents pnlEmptyComptable As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>fileDocScan control.</summary>
+    Protected WithEvents fileDocScan As Global.System.Web.UI.WebControls.FileUpload
+
+    '''<summary>btnScanExtract control.</summary>
+    Protected WithEvents btnScanExtract As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlScanMsg control.</summary>
+    Protected WithEvents pnlScanMsg As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litScanMsg control.</summary>
+    Protected WithEvents litScanMsg As Global.System.Web.UI.WebControls.Literal
 End Class

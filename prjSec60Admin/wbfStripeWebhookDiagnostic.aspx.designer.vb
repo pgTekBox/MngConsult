@@ -10,7 +10,6 @@ Option Explicit On
 
 Partial Public Class wbfStripeWebhookDiagnostic
 
-    Protected WithEvents form1 As Global.System.Web.UI.HtmlControls.HtmlForm
     Protected WithEvents lnkStripeDashboard As Global.System.Web.UI.WebControls.HyperLink
     Protected WithEvents btnRefresh As Global.System.Web.UI.WebControls.Button
     Protected WithEvents litTotalEvents As Global.System.Web.UI.WebControls.Literal

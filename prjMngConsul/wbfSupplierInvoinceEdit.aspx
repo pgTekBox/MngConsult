@@ -457,11 +457,9 @@
             grid-template-columns: auto auto auto 1fr;
         }
 
-        @media (min-width: 769px) {
             .row3 {
                 grid-template-columns: auto auto 1fr;
             }
-        }
 
         .row2 {
             grid-template-columns: 1fr 1fr;
@@ -484,30 +482,6 @@
   }
          
      
-        @media (max-width: 480px) {
-            .fab-addline {
-                right: 14px;
-                bottom: 14px;
-            }
-
-                .fab-addline img {
-                    width: 52px;
-                    height: 52px;
-                }
-
-            .content {
-                padding-bottom: 84px;
-            }
-
-            .imgaction {
-                margin-left: 14px;
-            }
-
-            .totals {
-                display: grid;
-                grid-template-columns: 1fr 85px 85px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -611,11 +585,11 @@
                             <div class="row2">
                                 <div>
                                     <label><asp:Literal ID="litLblRefNo" runat="server" /></label>
-                                    <telerik:RadTextBox ID="txtRefNo" runat="server" EmptyMessage="Référence fournisseur…" />
+                                    <telerik:RadTextBox ID="txtRefNo" runat="server" EmptyMessage="Référence fournisseur…" MaxLength="200" />
                                 </div>
                                 <div>
                                     <label><asp:Literal ID="litLblPoNumber" runat="server" /></label>
-                                    <telerik:RadTextBox ID="txtPoNumber" runat="server" EmptyMessage="PO-…" />
+                                    <telerik:RadTextBox ID="txtPoNumber" runat="server" EmptyMessage="PO-…" MaxLength="50" />
                                 </div>
                             </div>
 
@@ -649,8 +623,8 @@
                                                 <asp:HiddenField ID="hidId" runat="server" Value='<%# Eval("Id") %>' />
                                                  <div class="cell no-right-border">
                                                     
-                                                    <telerik:RadTextBox ID="txtDesc" runat="server"  CssClass="no-right-border clamp-2" 
-                                                        TextMode="MultiLine" Rows="2"
+                                                    <telerik:RadTextBox ID="txtDesc" runat="server"  CssClass="no-right-border clamp-2"
+                                                        TextMode="MultiLine" Rows="2" MaxLength="1000"
                                                         Text='<%# Eval("Description") %>' />
                                                 </div>
                                                 <div class="cell no-left-border">

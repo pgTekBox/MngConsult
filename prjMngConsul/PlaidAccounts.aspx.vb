@@ -6,11 +6,14 @@ Public Class PlaidAccounts
     Inherits clsData
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+        ApplyLocalization()
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             rlvAccounts.Rebind()
             BindAccountDropdown()
 
@@ -19,6 +22,33 @@ Public Class PlaidAccounts
             If txtStart IsNot Nothing Then txtStart.Text = Date.Today.AddMonths(-1).ToString("yyyy-MM-dd")
             If txtEnd IsNot Nothing Then txtEnd.Text = Date.Today.ToString("yyyy-MM-dd")
         End If
+    End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
+    Private Sub ApplyLocalization()
+        SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        btnConnect.Text = L("connectBank")
+
+        Dim fab As Control = FindDeep(Me, "fabAdd")
+        If TypeOf fab Is System.Web.UI.HtmlControls.HtmlControl Then
+            CType(fab, System.Web.UI.HtmlControls.HtmlControl).Attributes("title") = L("connectBank")
+        End If
+    End Sub
+
+    ''' <summary>Libellés du LayoutTemplate / EmptyDataTemplate du RadListView (via Literal).</summary>
+    Private Sub rlvAccounts_PreRender(sender As Object, e As EventArgs) Handles rlvAccounts.PreRender
+        SetLiteral(rlvAccounts, "litColBank", L("colBank"))
+        SetLiteral(rlvAccounts, "litColBalance", L("colBalance"))
+        SetLiteral(rlvAccounts, "litColDate", L("colDate"))
+        SetLiteral(rlvAccounts, "litColStatus", L("colStatus"))
+        SetLiteral(rlvAccounts, "litColAction", L("colAction"))
+        SetLiteral(rlvAccounts, "litLblAccount", L("lblAccount"))
+        SetLiteral(rlvAccounts, "litLblFrom", L("lblFrom"))
+        SetLiteral(rlvAccounts, "litLblTo", L("lblTo"))
+        SetLiteral(rlvAccounts, "litEmpty", L("empty"))
+
+        Dim bi As Button = TryCast(FindDeep(rlvAccounts, "btnImport"), Button)
+        If bi IsNot Nothing Then bi.Text = L("import")
     End Sub
 
     ' ==========================================
@@ -115,7 +145,7 @@ Public Class PlaidAccounts
             Dim accessToken As String = GetAccessToken(itemId)
 
             If String.IsNullOrEmpty(accessToken) Then
-                lbl.Text = "Compte introuvable."
+                lbl.Text = L("accountNotFound")
                 lbl.CssClass = "import-result text-danger"
                 lbl.Visible = True
                 Return
@@ -132,12 +162,12 @@ Public Class PlaidAccounts
                 Next
             End If
 
-            lbl.Text = count & " transaction(s) importée(s)."
+            lbl.Text = String.Format(L("txImported"), count)
             lbl.CssClass = "import-result text-success"
             lbl.Visible = True
 
         Catch ex As Exception
-            lbl.Text = "Erreur : " & ex.Message
+            lbl.Text = L("errorPrefix") & ex.Message
             lbl.CssClass = "import-result text-danger"
             lbl.Visible = True
         End Try
@@ -229,5 +259,59 @@ END"
             BindAccountDropdown()
         End If
     End Sub
+
+    ''' <summary>Traductions de l'interface Comptes bancaires (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Comptes bancaires — 60Sec-AI", "Bank accounts — 60Sec-AI", "Cuentas bancarias — 60Sec-AI")
+            Case "pageTitleShort" : Return Choose3(lang, "Comptes bancaires", "Bank accounts", "Cuentas bancarias")
+            Case "connectBank" : Return Choose3(lang, "Connecter une banque", "Connect a bank", "Conectar un banco")
+            Case "colBank" : Return Choose3(lang, "Banque", "Bank", "Banco")
+            Case "colBalance" : Return Choose3(lang, "Solde actuel", "Current balance", "Saldo actual")
+            Case "colDate" : Return Choose3(lang, "Date de connexion", "Connection date", "Fecha de conexión")
+            Case "colStatus" : Return Choose3(lang, "Statut", "Status", "Estado")
+            Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
+            Case "lblAccount" : Return Choose3(lang, "Compte :", "Account:", "Cuenta:")
+            Case "lblFrom" : Return Choose3(lang, "Du :", "From:", "Desde:")
+            Case "lblTo" : Return Choose3(lang, "Au :", "To:", "Hasta:")
+            Case "import" : Return Choose3(lang, "Importer", "Import", "Importar")
+            Case "active" : Return Choose3(lang, "Actif", "Active", "Activo")
+            Case "inactive" : Return Choose3(lang, "Déconnecté", "Disconnected", "Desconectado")
+            Case "disconnect" : Return Choose3(lang, "Déconnecter", "Disconnect", "Desconectar")
+            Case "confirmDisconnect" : Return Choose3(lang, "Voulez-vous vraiment déconnecter ce compte?", "Do you really want to disconnect this account?", "¿Realmente desea desconectar esta cuenta?")
+            Case "empty" : Return Choose3(lang, "Aucun compte bancaire connecté.", "No bank account connected.", "Ninguna cuenta bancaria conectada.")
+            Case "accountNotFound" : Return Choose3(lang, "Compte introuvable.", "Account not found.", "Cuenta no encontrada.")
+            Case "txImported" : Return Choose3(lang, "{0} transaction(s) importée(s).", "{0} transaction(s) imported.", "{0} transacción(es) importada(s).")
+            Case "errorPrefix" : Return Choose3(lang, "Erreur : ", "Error: ", "Error: ")
+            Case "mBank" : Return Choose3(lang, "Banque : ", "Bank: ", "Banco: ")
+            Case "mConnected" : Return Choose3(lang, "Connecté le : ", "Connected on: ", "Conectado el: ")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
 
 End Class

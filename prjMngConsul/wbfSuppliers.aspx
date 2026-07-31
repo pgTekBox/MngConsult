@@ -13,6 +13,35 @@
 
     <style>
 
+        /* Badge d'inscription Stripe (cliquable → page de statut) */
+        .stripe-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 4px 10px;
+            border-radius: 999px;
+            font-size: 11px;
+            font-weight: 800;
+            text-decoration: none;
+            white-space: nowrap;
+            flex: 0 0 auto;
+        }
+
+        /* Cellule d'actions : badge + boutons alignés à droite, sur une ligne */
+        .listview-actions {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        .stripe-badge .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 7px; }
+        .stripe-badge.on  { background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; }
+        .stripe-badge.on .dot  { background: #10b981; }
+        .stripe-badge.off { background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; }
+        .stripe-badge.off .dot { background: #94a3b8; }
+        .stripe-badge:hover { filter: brightness(0.97); }
+
         /* Icône Stripe Connect (violet Stripe) */
         .btn-icon-stripe {
             background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23635BFF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='5' width='20' height='14' rx='2'/%3E%3Cpath d='M2 10h20'/%3E%3Cpath d='M7 15h2'/%3E%3C/svg%3E") !important;
@@ -23,7 +52,7 @@
 
         .listview-list-head {
             display: grid;
-            grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
+            grid-template-columns: minmax(220px, 1fr) auto;
             gap: 16px;
             padding: 14px 16px;
             font-weight: 800;
@@ -41,7 +70,7 @@
 
         .listview-row {
             display: grid;
-            grid-template-columns: minmax(280px, 1.7fr) 100px;
+            grid-template-columns: minmax(220px, 1fr) auto;
             gap: 16px;
             align-items: center;
             padding: 14px 16px;
@@ -54,36 +83,6 @@
 
       
 
-        /* =========================
-             MOBILE LARGE  grands smartphones en portrait
-         ========================= */
-        @media  (max-width: 768px) {
-
-            .field-AllAddress {
-                order: 1;
-            }
-
-            .listview-list-head {
-                display: none;
-            }
-        }
-
-        /* =========================
-         PETIT MOBILE — max 480px
-           ========================= */
-        @media (max-width: 480px) {
-
-
-            .listview-row {
-                grid-template-columns: auto 30px;
-                gap: 10px;
-                padding: 14px;
-            }
-
-            .listview-list-head {
-                display: none;
-            }
-        }
     </style>
 
 
@@ -192,6 +191,9 @@
                              
 
                             <div class="listview-actions">
+
+                                <%-- Badge d'inscription Stripe, en ligne avec les boutons --%>
+                                <%# StripeBadge(Eval("StripeAccountId"), Eval("Id")) %>
 
                                 <%-- Bouton Stripe Connect : ouvre l'onboarding du fournisseur dans une nouvelle fenêtre --%>
                                 <asp:Button ID="btnStripe" runat="server"

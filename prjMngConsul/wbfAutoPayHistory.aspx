@@ -68,11 +68,6 @@
             padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 14px;
         }
         .alert.error { background: rgba(239,68,68,.08); border: 1px solid rgba(239,68,68,.3); color: #b91c1c; }
-
-        @media (max-width: 768px) {
-            .history-table { overflow-x: auto; }
-            .history-table table { min-width: 700px; }
-        }
     </style>
 </asp:Content>
 

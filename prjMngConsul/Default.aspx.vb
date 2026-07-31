@@ -13,7 +13,41 @@ Public Class _Default
 
         If Not IsPostBack Then
             LoadWelcomeInfo()
+            LoadKPIs()
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Alimente les 4 cartes KPI (Clients, Factures fournisseur, Produits, Revenu du mois)
+    ''' avec les vraies valeurs de la compagnie via s0697GetDashboardKPIs.
+    ''' </summary>
+    Private Sub LoadKPIs()
+        Dim custCount As Long = 0
+        Dim supInvCount As Long = 0
+        Dim prodCount As Long = 0
+        Dim revenue As Decimal = 0D
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0697GetDashboardKPIs", p)
+
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                custCount = If(IsDBNull(r("CustomerCount")), 0L, Convert.ToInt64(r("CustomerCount")))
+                supInvCount = If(IsDBNull(r("SupplierInvoiceCount")), 0L, Convert.ToInt64(r("SupplierInvoiceCount")))
+                prodCount = If(IsDBNull(r("ProductCount")), 0L, Convert.ToInt64(r("ProductCount")))
+                revenue = If(IsDBNull(r("RevenueMonth")), 0D, Convert.ToDecimal(r("RevenueMonth")))
+            End If
+        Catch
+            ' En cas d'erreur, on laisse les valeurs à 0.
+        End Try
+
+        Dim c As CultureInfo = Cult()
+        litKpiCustomers.Text = custCount.ToString("N0", c)
+        litKpiSupplierInvoices.Text = supInvCount.ToString("N0", c)
+        litKpiProducts.Text = prodCount.ToString("N0", c)
+        litKpiRevenue.Text = revenue.ToString("N0", c) & " $"
     End Sub
 
     ''' <summary>Culture pour le format des dates selon la langue courante.</summary>
@@ -67,6 +101,8 @@ Public Class _Default
             Case "heroTitle" : Return Choose3(lang, "Bienvenue dans 60Sec-AI", "Welcome to 60Sec-AI", "Bienvenido a 60Sec-AI")
             Case "heroSub" : Return Choose3(lang, "Gérez vos clients, vos factures, vos produits et vos opérations quotidiennes depuis une seule interface claire, rapide et adaptée au mobile.", "Manage your customers, invoices, products and daily operations from a single interface that's clear, fast and mobile-ready.", "Gestione sus clientes, facturas, productos y operaciones diarias desde una sola interfaz clara, rápida y adaptada al móvil.")
             Case "btnNewInvoice" : Return Choose3(lang, "Nouvelle facture", "New invoice", "Nueva factura")
+            Case "winAddInvoice" : Return Choose3(lang, "Nouvelle facture", "New invoice", "Nueva factura")
+            Case "winEditInvoice" : Return Choose3(lang, "Modifier la facture", "Edit invoice", "Editar factura")
             Case "btnViewCustomers" : Return Choose3(lang, "Voir les clients", "View customers", "Ver clientes")
             Case "btnSettings" : Return Choose3(lang, "Paramètres", "Settings", "Ajustes")
             Case "msSalesLabel" : Return Choose3(lang, "Ventes du mois", "Monthly sales", "Ventas del mes")
@@ -78,9 +114,9 @@ Public Class _Default
             Case "msProductsLabel" : Return Choose3(lang, "Produits", "Products", "Productos")
             Case "msProductsNote" : Return Choose3(lang, "Catalogue synchronisé", "Catalog synced", "Catálogo sincronizado")
             Case "kpiCustomers" : Return Choose3(lang, "Clients", "Customers", "Clientes")
-            Case "kpiCustomersFoot" : Return Choose3(lang, "14 nouveaux clients ce mois-ci", "14 new customers this month", "14 nuevos clientes este mes")
-            Case "kpiInvoices" : Return Choose3(lang, "Factures", "Invoices", "Facturas")
-            Case "kpiInvoicesFoot" : Return Choose3(lang, "18 ouvertes, 69 payées", "18 open, 69 paid", "18 abiertas, 69 pagadas")
+            Case "kpiCustomersFoot" : Return Choose3(lang, "Total des clients enregistrés", "Total registered customers", "Total de clientes registrados")
+            Case "kpiSupplierInvoices" : Return Choose3(lang, "Factures fournisseur", "Supplier invoices", "Facturas de proveedor")
+            Case "kpiSupplierInvoicesFoot" : Return Choose3(lang, "Total des factures fournisseurs", "Total supplier invoices", "Total de facturas de proveedores")
             Case "kpiProducts" : Return Choose3(lang, "Produits", "Products", "Productos")
             Case "kpiProductsFoot" : Return Choose3(lang, "Catalogue prêt pour la vente", "Catalog ready to sell", "Catálogo listo para vender")
             Case "kpiRevenue" : Return Choose3(lang, "Revenus", "Revenue", "Ingresos")

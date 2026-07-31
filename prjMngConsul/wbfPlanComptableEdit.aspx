@@ -79,10 +79,6 @@
         .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr;     gap: 12px; }
         .grid4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 12px; }
 
-        @media (max-width: 800px) {
-            .grid, .grid3, .grid4 { grid-template-columns: 1fr; }
-        }
-
         /* Champs */
         .field label {
             display: block;
@@ -262,12 +258,12 @@
 
                             <div class="field">
                                 <label>Numéro de compte *</label>
-                                <telerik:RadTextBox ID="txtNumero" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                                <telerik:RadTextBox ID="txtNumero" runat="server" RenderMode="Lightweight" CssClass="rtbLike" MaxLength="10" />
                             </div>
 
                             <div class="field">
                                 <label>Nom du compte *</label>
-                                <telerik:RadTextBox ID="txtNom" runat="server" RenderMode="Lightweight" CssClass="rtbLike" />
+                                <telerik:RadTextBox ID="txtNom" runat="server" RenderMode="Lightweight" CssClass="rtbLike" MaxLength="150" />
                             </div>
 
                             <div class="field">
@@ -317,7 +313,7 @@
                                 <div class="field">
                                     <label>Description</label>
                                     <telerik:RadTextBox ID="txtDescription" runat="server" RenderMode="Lightweight"
-                                        CssClass="rtbLike" TextMode="MultiLine" Rows="3" />
+                                        CssClass="rtbLike" TextMode="MultiLine" Rows="3" MaxLength="250" />
                                 </div>
 
                                 <div>

@@ -478,58 +478,6 @@
         text-decoration:underline;
     }
 
-    @media (max-width: 1180px){
-        .kpi-grid{
-            grid-template-columns:repeat(2, minmax(0,1fr));
-        }
-
-        .layout-grid{
-            grid-template-columns:1fr;
-        }
-
-        .module-grid{
-            grid-template-columns:repeat(2, minmax(0,1fr));
-        }
-
-        .hero{
-            grid-template-columns:1fr;
-        }
-    }
-
-    @media (max-width: 760px){
-        .home-page{
-            padding:14px;
-        }
-
-        .hero{
-            padding:20px;
-            border-radius:20px;
-        }
-
-        .hero-title{
-            font-size:24px;
-        }
-
-        .hero-mini-stats{
-            grid-template-columns:1fr;
-        }
-
-        .kpi-grid{
-            grid-template-columns:1fr;
-        }
-
-        .module-grid,
-        .quick-actions{
-            grid-template-columns:1fr;
-        }
-
-        .panel-head,
-        .panel-body{
-            padding-left:14px;
-            padding-right:14px;
-        }
-    }
-
     /* ===== Boîte de bienvenue dépliable ===== */
     .welcome-box{
         background:linear-gradient(135deg,#2563eb 0%,#06b6d4 100%);
@@ -676,12 +624,6 @@
         transition:.15s ease;
     }
     .wb-res:hover{ border-color:#bfdbfe; color:var(--mc-primary); background:#f8fafc; }
-
-    @media (max-width:760px){
-        .wb-steps{ grid-template-columns:1fr; }
-        .wb-resources{ grid-template-columns:1fr; }
-        .wb-sub{ white-space:normal; }
-    }
 </style>
 
 <main class="home-page">
@@ -774,9 +716,10 @@
                 </p>
 
                 <div class="hero-actions">
-                    <a class="btn-hero" href="wbfInvoiceEdit.aspx"><%= L("btnNewInvoice") %></a>
+                    <a class="btn-hero" href="javascript:void(0)"
+                       onclick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"><%= L("btnNewInvoice") %></a>
                     <a class="btn-soft" href="wbfCustomers.aspx"><%= L("btnViewCustomers") %></a>
-                    <a class="btn-soft" href="Settings.aspx"><%= L("btnSettings") %></a>
+                    <a class="btn-soft" href="wbfSetting.aspx"><%= L("btnSettings") %></a>
                 </div>
             </div>
 
@@ -816,17 +759,17 @@
                     <div class="kpi-label"><%= L("kpiCustomers") %></div>
                     <div class="kpi-icon">👥</div>
                 </div>
-                <div class="kpi-value">326</div>
+                <div class="kpi-value"><asp:Literal ID="litKpiCustomers" runat="server" Text="0" /></div>
                 <div class="kpi-foot"><%= L("kpiCustomersFoot") %></div>
             </div>
 
             <div class="kpi-card">
                 <div class="kpi-head">
-                    <div class="kpi-label"><%= L("kpiInvoices") %></div>
-                    <div class="kpi-icon">🧾</div>
+                    <div class="kpi-label"><%= L("kpiSupplierInvoices") %></div>
+                    <div class="kpi-icon">🏭</div>
                 </div>
-                <div class="kpi-value">87</div>
-                <div class="kpi-foot"><%= L("kpiInvoicesFoot") %></div>
+                <div class="kpi-value"><asp:Literal ID="litKpiSupplierInvoices" runat="server" Text="0" /></div>
+                <div class="kpi-foot"><%= L("kpiSupplierInvoicesFoot") %></div>
             </div>
 
             <div class="kpi-card">
@@ -834,7 +777,7 @@
                     <div class="kpi-label"><%= L("kpiProducts") %></div>
                     <div class="kpi-icon">📦</div>
                 </div>
-                <div class="kpi-value">1 248</div>
+                <div class="kpi-value"><asp:Literal ID="litKpiProducts" runat="server" Text="0" /></div>
                 <div class="kpi-foot"><%= L("kpiProductsFoot") %></div>
             </div>
 
@@ -843,7 +786,7 @@
                     <div class="kpi-label"><%= L("kpiRevenue") %></div>
                     <div class="kpi-icon">💰</div>
                 </div>
-                <div class="kpi-value">24 580 $</div>
+                <div class="kpi-value"><asp:Literal ID="litKpiRevenue" runat="server" Text="0 $" /></div>
                 <div class="kpi-foot"><%= L("kpiRevenueFoot") %></div>
             </div>
         </section>
@@ -872,7 +815,7 @@
                                 </div>
                             </a>
 
-                            <a class="module-card" href="wbfInvoice.aspx">
+                            <a class="module-card" href="wbfSuppliersInvoices.aspx">
                                 <div class="module-icon">🧾</div>
                                 <div class="module-title"><%= L("modInvoices") %></div>
                                 <div class="module-desc">
@@ -904,7 +847,7 @@
                                 </div>
                             </a>
 
-                            <a class="module-card" href="Settings.aspx">
+                            <a class="module-card" href="wbfSetting.aspx">
                                 <div class="module-icon">⚙️</div>
                                 <div class="module-title"><%= L("modSettings") %></div>
                                 <div class="module-desc">
@@ -1103,5 +1046,27 @@
         </section>
     </div>
 </main>
+
+<%-- Popup « Nouvelle facture » (même RadWindow que la liste des factures clients) --%>
+<telerik:RadWindow ID="rwInvoice" runat="server"
+    Modal="true"
+    VisibleOnPageLoad="false"
+    Behaviors="Close,Move,Resize"
+    DestroyOnClose="true"
+    Title="Facture"
+    OnClientClose="rwInvoice_OnClose"
+    ClientIDMode="Static">
+</telerik:RadWindow>
+
+<script src="js/RadWindows.js"></script>
+<script type="text/javascript">
+    var L_ADD_INVOICE = "<%= L("winAddInvoice") %>";
+    var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
+
+    // Après fermeture du popup, recharger le tableau de bord pour rafraîchir les KPI.
+    function rwInvoice_OnClose(sender, args) {
+        window.location.reload();
+    }
+</script>
 
 </asp:Content>

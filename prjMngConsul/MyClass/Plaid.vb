@@ -1,32 +1,50 @@
-﻿Imports System.Net.Http
+﻿Imports System.Configuration
+Imports System.Net.Http
 Imports System.Threading.Tasks
 Imports Newtonsoft.Json.Linq
 
 Public Class Plaid
 
-    Private ReadOnly _clientId As String = "69c41b51df332d000d1bec94"
-    Private ReadOnly _secret As String = "fe6a83feeae60c5e7512af8f0691fa"
-    Private ReadOnly _baseUrl As String = "https://sandbox.plaid.com"
+    ' Identifiants et environnement lus depuis Web.config (appSettings).
+    ' Plaid.Environment = "sandbox" | "development" | "production" ; l'URL de base en decoule.
+    Private ReadOnly _clientId As String = If(ConfigurationManager.AppSettings("Plaid.ClientId"), "")
+    Private ReadOnly _secret As String = If(ConfigurationManager.AppSettings("Plaid.Secret"), "")
+    Private ReadOnly _baseUrl As String = ResolvePlaidBaseUrl()
+    Private ReadOnly _redirectUri As String = If(ConfigurationManager.AppSettings("Plaid.RedirectUri"), "").Trim()
+    Private ReadOnly _webhookUrl As String = If(ConfigurationManager.AppSettings("Plaid.WebhookUrl"), "").Trim()
+
+    ''' <summary>Derive l'URL de base Plaid depuis Plaid.Environment (defaut : sandbox).</summary>
+    Private Shared Function ResolvePlaidBaseUrl() As String
+        Dim env As String = If(ConfigurationManager.AppSettings("Plaid.Environment"), "sandbox").Trim().ToLowerInvariant()
+        Select Case env
+            Case "production", "prod" : Return "https://production.plaid.com"
+            Case "development", "dev" : Return "https://development.plaid.com"
+            Case Else : Return "https://sandbox.plaid.com"
+        End Select
+    End Function
 
     Public Async Function CreateLinkTokenAsync(clientUserId As Guid) As Task(Of String)
 
-        Dim url As String = "https://sandbox.plaid.com/link/token/create"
+        Dim url As String = _baseUrl & "/link/token/create"
 
+        ' Construction via JObject pour ajouter proprement les champs optionnels
+        ' (redirect_uri pour les banques OAuth, webhook pour les notifications de transactions).
+        Dim jo As New JObject()
+        jo("client_id") = _clientId
+        jo("secret") = _secret
+        jo("client_name") = "60Sec-AI"
+        jo("language") = "fr"
+        jo("country_codes") = New JArray("CA")
+        jo("user") = New JObject(New JProperty("client_user_id", clientUserId.ToString()))
+        jo("products") = New JArray("transactions")
+        jo("optional_products") = New JArray("auth")
 
+        ' redirect_uri : requis pour les institutions OAuth ; DOIT etre enregistre dans le Dashboard Plaid.
+        If Not String.IsNullOrEmpty(_redirectUri) Then jo("redirect_uri") = _redirectUri
+        ' webhook : Plaid POST les evenements (nouvelles transactions, erreurs d'item) a cette URL.
+        If Not String.IsNullOrEmpty(_webhookUrl) Then jo("webhook") = _webhookUrl
 
-        Dim payload As String =
-"{
-  ""client_id"": """ & JsonSafe(_clientId) & """,
-  ""secret"": """ & JsonSafe(_secret) & """,
-  ""client_name"": ""60Sec-AI"",
-  ""language"": ""fr"",
-  ""country_codes"": [""CA""],
-  ""user"": {
-    ""client_user_id"": """ & JsonSafe(clientUserId.ToString) & """
-  },
-  ""products"": [""transactions""],
-  ""optional_products"": [""auth""]
-}"
+        Dim payload As String = jo.ToString()
 
         Using client As New HttpClient()
             Dim content As New StringContent(payload, Encoding.UTF8, "application/json")

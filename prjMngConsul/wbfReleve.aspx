@@ -3,7 +3,7 @@
     Inherits="MngConsul.wbfReleve"  Async="true"  %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Relevé bancaire — 60Sec-AI
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -102,84 +102,11 @@
             margin-top: 4px;
         }
 
-        @media (max-width: 1024px) {
-            .listview-list-head,
-            .listview-row {
-                grid-template-columns: 100px minmax(180px, 1.6fr) 110px 120px 95px 90px;
-                gap: 10px;
-                padding: 12px 14px;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .listview-list-head {
-                display: none;
-            }
-
-            .listview-row {
-                grid-template-columns: 1fr;
-                gap: 8px;
-                padding: 14px;
-            }
-
-            .field-date {
-                order: 1;
-                font-weight: 800;
-            }
-
-            .field-description {
-                order: 2;
-            }
-
-            .field-reference {
-                order: 3;
-                color: var(--mc-muted);
-                font-size: 13px;
-            }
-
-                .field-reference::before {
-                    content: "Référence : ";
-                    font-weight: 800;
-                    color: #0f172a;
-                }
-
-            .field-compte {
-                order: 4;
-                color: var(--mc-muted);
-                font-size: 13px;
-            }
-
-                .field-compte::before {
-                    content: "Compte : ";
-                    font-weight: 800;
-                    color: #0f172a;
-                }
-
-            .field-statut {
-                order: 5;
-            }
-
-            .field-montant {
-                order: 6;
-                text-align: left;
-                font-size: 16px;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .listview-row {
-                padding: 12px;
-            }
-
-            .page-title {
-                font-size: 17px;
-            }
-        }
     </style>
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
-                   <button type="button" onclick="openPlaidFromPage()">Test Plaid</button>
+                   <button type="button" class="btn btnAddRow" onclick="openPlaidFromPage(); return false;"><asp:Literal ID="litConnectBtn" runat="server" /></button>
     
     <%--<button type="button"
       class ="btn btn-icon btn-icon-plaid" 
@@ -194,15 +121,15 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Relevé bancaire</div>
-                <div class="page-sub">Consultation des mouvements bancaires</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
+                <div class="page-sub"><asp:Literal ID="litPageSub" runat="server" /></div>
             </div>
 
             <div class="searchbox">
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server"
                         CssClass="input txttbsearch"
-                        placeholder="Rechercher (description, référence, compte, statut…)" />
+                        placeholder="" />
 
                     <asp:Button ID="btnSearch" runat="server"
                         CssClass="btn btn-icon btn-icon-search"
@@ -211,7 +138,7 @@
                     <asp:Button ID="btnClear"  runat="server"
                         CssClass="btn btn-icon btn-icon-clear"
                         Text=""
-                        ToolTip="Effacer"
+                        ToolTip=""
                         CausesValidation="false" />
 
                 <%-- <button type="button"
@@ -236,12 +163,11 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div>Date</div>
-                                <div>Description</div>
-                                <div>Référence</div>
-                               
-                                <div>Statut</div>
-                                <div style="text-align: right;">Montant</div>
+                                <div><asp:Literal ID="litColDate" runat="server" /></div>
+                                <div><asp:Literal ID="litColDesc" runat="server" /></div>
+                                <div><asp:Literal ID="litColRef" runat="server" /></div>
+                                <div><asp:Literal ID="litColStatus" runat="server" /></div>
+                                <div style="text-align: right;"><asp:Literal ID="litColAmount" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -268,7 +194,7 @@
                              
                             <div class="field-statut">
                                 <span class='<%# GetStatutCss(Eval("Statut")) %>'>
-                                    <%# Eval("Statut") %>
+                                    <%# LocalizeStatut(Eval("Statut")) %>
                                 </span>
                             </div>
 
@@ -280,7 +206,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun mouvement bancaire trouvé.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -293,68 +219,104 @@
       <%-- =====================================================
        JAVASCRIPT
   ===================================================== --%>
+  <telerik:RadCodeBlock ID="rcbReleveJs" runat="server">
   <script type="text/javascript">
+
+      var L_EXCHANGE_ERROR  = "<%= L("jsExchangeError") %>";
+      var L_CONNECTED       = "<%= L("jsConnected") %>";
+      var L_LINKTOKEN_ERROR = "<%= L("jsLinkTokenError") %>";
+      var L_PLAID_ERROR     = "<%= L("jsPlaidError") %>";
+
+      // Construit le handler Plaid Link. receivedRedirectUri n'est fourni que lors
+      // de la REPRISE après un retour OAuth (banques OAuth : RBC, TD, etc.).
+      function createPlaidHandler(linkToken, receivedRedirectUri) {
+          var config = {
+              token: linkToken,
+
+              onSuccess: async function (public_token, metadata) {
+                  const ex = await fetch('ExchangeToken', {
+                      method: 'POST',
+                      headers: { 'Content-Type': 'application/json' },
+                      body: JSON.stringify({
+                          public_token: public_token,
+                          institution_name: metadata.institution ? metadata.institution.name : '',
+                          accounts: metadata.accounts || []
+                      })
+                  });
+
+                  const exData = await ex.json();
+                  try { localStorage.removeItem('plaid_link_token'); } catch (e) { }
+
+                  if (!exData.success) {
+                      alert(exData.message || L_EXCHANGE_ERROR);
+                      return;
+                  }
+
+                  alert(L_CONNECTED);
+                  window.location.reload();
+              },
+
+              onExit: function (err, metadata) {
+                  try { localStorage.removeItem('plaid_link_token'); } catch (e) { }
+                  if (err) { console.log('Plaid Exit Error:', err); }
+              }
+          };
+
+          // Reprise OAuth : indique à Plaid l'URL de retour complète.
+          if (receivedRedirectUri) { config.receivedRedirectUri = receivedRedirectUri; }
+
+          return Plaid.create(config);
+      }
+
       async function openPlaidFromPage() {
           try {
-              
               const res = await fetch('/PlaidCreateLinkToken', {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json' },
                   body: '{}'
               });
 
-               
               const data = await res.json();
-              console.log(res);
               if (!data.success) {
-                  alert(data.message || 'Erreur lors de la création du link token.');
+                  alert(data.message || L_LINKTOKEN_ERROR);
                   return;
               }
-               
-              const handler = Plaid.create({
-                  token: data.link_token,
 
-                  onSuccess: async function (public_token, metadata) {
-                      const ex = await fetch('ExchangeToken', {
-                          method: 'POST',
-                          headers: { 'Content-Type': 'application/json' },
-                          body: JSON.stringify({
-                              public_token: public_token,
-                              institution_name: metadata.institution ? metadata.institution.name : '',
-                              accounts: metadata.accounts || []
-                          })
-                      });
+              // Le link_token doit survivre à la redirection OAuth (depart vers la
+              // banque, puis retour sur cette page) : on le garde en localStorage.
+              try { localStorage.setItem('plaid_link_token', data.link_token); } catch (e) { }
 
-                      const exData = await ex.json();
-
-                      if (!exData.success) {
-                          alert(exData.message || 'Erreur lors de l’échange du token.');
-                          return;
-                      }
-
-                      alert('Compte bancaire connecté avec succès.');
-
-                      // recharge la page pour revoir les lignes importées
-                      window.location.reload();
-                  },
-
-                  onExit: function (err, metadata) {
-                      if (err) {
-                          console.log('Plaid Exit Error:', err);
-                      }
-                  }
-              });
-
+              const handler = createPlaidHandler(data.link_token, null);
               handler.open();
 
           } catch (e) {
               console.error(e);
-              alert('Erreur Plaid.');
+              alert(L_PLAID_ERROR);
           }
       }
 
-       
+      // Reprise automatique après retour OAuth : Plaid redirige vers le redirect_uri
+      // en ajoutant ?oauth_state_id=... On rouvre alors Plaid Link avec le meme
+      // link_token (localStorage) et l'URL de retour complete.
+      (function resumePlaidOAuth() {
+          try {
+              if (window.location.search.indexOf('oauth_state_id=') === -1) return;
+
+              var linkToken = null;
+              try { linkToken = localStorage.getItem('plaid_link_token'); } catch (e) { }
+              if (!linkToken) return;
+
+              function go() {
+                  if (typeof Plaid === 'undefined') { setTimeout(go, 100); return; }
+                  var handler = createPlaidHandler(linkToken, window.location.href);
+                  handler.open();
+              }
+              if (document.readyState === 'complete') { go(); }
+              else { window.addEventListener('load', go); }
+          } catch (e) { console.error(e); }
+      })();
 
       </script>
+  </telerik:RadCodeBlock>
 
 </asp:Content>

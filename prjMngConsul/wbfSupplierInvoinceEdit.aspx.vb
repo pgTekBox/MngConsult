@@ -541,6 +541,20 @@ Public Class wbfSupplierInvoinceEdit
         'oCom.ExecuteNonQuery()
         Dim retval = oCom.ExecuteScalar()
         oCom.Connection.Close()
+
+        ' Persiste les references fournisseur (RefNo -> DocumentNumber, PoNumber) via une
+        ' proc dediee, sans toucher a s0040 (partagee client/fournisseur). L'InvoiceId vient
+        ' de la page, ou de la valeur retournee par s0040 lors d'une creation.
+        Dim invId As Integer = InvoiceId
+        If invId <= 0 AndAlso retval IsNot Nothing AndAlso IsNumeric(retval) Then invId = CInt(retval)
+        If invId > 0 Then
+            Dim pRefs As New Collection
+            pRefs.Add(New SqlClient.SqlParameter("@InvoiceId", invId))
+            pRefs.Add(New SqlClient.SqlParameter("@RefNo", If(String.IsNullOrWhiteSpace(txtRefNo.Text), CType(DBNull.Value, Object), txtRefNo.Text.Trim())))
+            pRefs.Add(New SqlClient.SqlParameter("@PoNumber", If(String.IsNullOrWhiteSpace(txtPoNumber.Text), CType(DBNull.Value, Object), txtPoNumber.Text.Trim())))
+            ExecuteSQL("s0707UpdateSupplierInvoiceRefs", pRefs)
+        End If
+
         Dim script As String = "function fw(){closeWin(); Sys.Application.remove_load(fw);}Sys.Application.add_load(fw);"
         ScriptManager.RegisterStartupScript(Page, Page.GetType(), "close", script, True)
 

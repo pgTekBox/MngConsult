@@ -43,7 +43,13 @@ Public Class PlaidDailySync
 
         Using cn As New SqlConnection(cs)
             cn.Open()
-            Dim sql As String = "SELECT CompanyGUID, AccessToken, ItemId, BankName FROM dbo.T143PlaidAccount WHERE Active = 1"
+            ' Seules les compagnies dont l'import automatique est activé (T010Company.PlaidAutoImport)
+            ' sont synchronisées.
+            Dim sql As String =
+                "SELECT a.CompanyGUID, a.AccessToken, a.ItemId, a.BankName " &
+                "FROM dbo.T143PlaidAccount a " &
+                "INNER JOIN dbo.T010Company c ON c.CompanyGUID = a.CompanyGUID " &
+                "WHERE a.Active = 1 AND ISNULL(c.PlaidAutoImport, 1) = 1"
             Using cmd As New SqlCommand(sql, cn)
                 Using dr = cmd.ExecuteReader()
                     While dr.Read()

@@ -78,7 +78,48 @@ Public Class wbfJournalEntryEdit
             BindLineGrid()
         End If
 
+        ApplyLocalization()
         ApplyReadOnlyMode()
+    End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
+    ''' <remarks>Appelée à chaque chargement (y compris AJAX) pour re-localiser les panneaux mis à jour.</remarks>
+    Private Sub ApplyLocalization()
+        ' Badges de statut
+        lblValideeBadge.Text = L("badgeValidee")
+        lblExtourneeBadge.Text = L("badgeExtournee")
+        lblBalanceBadge.Text = L("badgeBalanced")
+
+        ' Boutons / actions
+        btnLoadTemplate.Text = L("loadTemplate")
+        btnAddLine.ToolTip = L("addLineTooltip")
+        radSave.Text = L("save")
+
+        ' Combos / placeholders en-tête
+        cbJournal.EmptyMessage = L("phSelect")
+        cbPeriode.EmptyMessage = L("phSelect")
+        txtNumeroPiece.EmptyMessage = L("phNumeroPiece")
+        txtLibelle.EmptyMessage = L("phLibelle")
+
+        ' Libellés statiques (Literal — pas de <%= %> à cause du RadAjaxManager)
+        SetLiteral(Me, "litLblJournal", L("journal"))
+        SetLiteral(Me, "litLblPeriode", L("periode"))
+        SetLiteral(Me, "litLblDate", L("dateEcriture"))
+        SetLiteral(Me, "litLblValider", L("validerEcriture"))
+        SetLiteral(Me, "litLblNoPiece", L("noPiece"))
+        SetLiteral(Me, "litLblLibelle", L("libelleEcriture"))
+        SetLiteral(Me, "litLignesEcriture", L("lignesEcriture"))
+
+        ' En-têtes de colonnes des lignes
+        SetLiteral(Me, "litColCompte", L("colCompte"))
+        SetLiteral(Me, "litColLibelle", L("colLibelleLigne"))
+        SetLiteral(Me, "litColDebit", L("colDebit"))
+        SetLiteral(Me, "litColCredit", L("colCredit"))
+
+        ' Totaux (footer)
+        SetLiteral(Me, "litTotalDebit", L("totalDebit"))
+        SetLiteral(Me, "litTotalCredit", L("totalCredit"))
+        SetLiteral(Me, "litEcart", L("ecart"))
     End Sub
 
     ' =========================================================
@@ -133,7 +174,7 @@ Public Class wbfJournalEntryEdit
         dr("PlanComptableId") = 0
         dr("AccountNumero") = ""
         dr("AccountName") = ""
-        dr("AccountDisplay") = "Sélectionner un compte ▾"
+        dr("AccountDisplay") = L("accountSelectorDefault")
         dr("PartyId") = 0
         dr("Libelle") = ""
         dr("MontantDebit") = 0
@@ -375,9 +416,13 @@ Public Class wbfJournalEntryEdit
             If planComptableId IsNot Nothing AndAlso CInt(planComptableId) > 0 Then
                 lblAccount.Text = DataBinder.Eval(e.Item.DataItem, "AccountDisplay").ToString()
             Else
-                lblAccount.Text = "Sélectionner un compte ▾"
+                lblAccount.Text = L("accountSelectorDefault")
             End If
         End If
+
+        ' Placeholder localisé du libellé de ligne
+        Dim txtLine As RadTextBox = TryCast(e.Item.FindControl("txtLineLibelle"), RadTextBox)
+        If txtLine IsNot Nothing Then txtLine.EmptyMessage = L("phLineLibelle")
     End Sub
 
     ' =========================================================
@@ -390,19 +435,19 @@ Public Class wbfJournalEntryEdit
 
         ' --- Validations en-tête ---
         If String.IsNullOrEmpty(cbJournal.SelectedValue) Then
-            RegisterAlert("Veuillez sélectionner un journal.")
+            RegisterAlert(L("alertJournal"))
             Return
         End If
         If String.IsNullOrEmpty(cbPeriode.SelectedValue) Then
-            RegisterAlert("Veuillez sélectionner une période.")
+            RegisterAlert(L("alertPeriode"))
             Return
         End If
         If Not dpDateEcriture.SelectedDate.HasValue Then
-            RegisterAlert("Veuillez saisir une date.")
+            RegisterAlert(L("alertDate"))
             Return
         End If
         If String.IsNullOrWhiteSpace(txtLibelle.Text) Then
-            RegisterAlert("Le libellé de l'écriture est obligatoire.")
+            RegisterAlert(L("alertLibelle"))
             Return
         End If
 
@@ -411,23 +456,23 @@ Public Class wbfJournalEntryEdit
         Dim activeLines = dt.AsEnumerable().Where(Function(r) Convert.ToInt32(r("Deleted")) = 0).ToList()
 
         If activeLines.Count < 2 Then
-            RegisterAlert("Une écriture doit comporter au moins 2 lignes.")
+            RegisterAlert(L("alertMin2Lines"))
             Return
         End If
 
         For Each row In activeLines
             If Convert.ToInt32(row("PlanComptableId")) <= 0 Then
-                RegisterAlert("Toutes les lignes doivent avoir un compte sélectionné.")
+                RegisterAlert(L("alertAccountRequired"))
                 Return
             End If
             Dim d As Double = Convert.ToDouble(row("MontantDebit"))
             Dim c As Double = Convert.ToDouble(row("MontantCredit"))
             If d <= 0 AndAlso c <= 0 Then
-                RegisterAlert("Toutes les lignes doivent avoir un montant Débit ou Crédit.")
+                RegisterAlert(L("alertAmountRequired"))
                 Return
             End If
             If d > 0 AndAlso c > 0 Then
-                RegisterAlert("Une ligne ne peut avoir un montant à la fois en Débit et en Crédit.")
+                RegisterAlert(L("alertBothSides"))
                 Return
             End If
         Next
@@ -435,12 +480,11 @@ Public Class wbfJournalEntryEdit
         Dim totDebit As Double = activeLines.Sum(Function(r) Convert.ToDouble(r("MontantDebit")))
         Dim totCredit As Double = activeLines.Sum(Function(r) Convert.ToDouble(r("MontantCredit")))
         If Math.Abs(totDebit - totCredit) > 0.005 Then
-            RegisterAlert("L'écriture n'est pas équilibrée. Débit = " & totDebit.ToString("N2") &
-                          " / Crédit = " & totCredit.ToString("N2"))
+            RegisterAlert(String.Format(L("alertUnbalanced"), totDebit.ToString("N2"), totCredit.ToString("N2")))
             Return
         End If
         If totDebit <= 0 Then
-            RegisterAlert("Le total de l'écriture doit être supérieur à 0.")
+            RegisterAlert(L("alertTotalPositive"))
             Return
         End If
 
@@ -472,7 +516,7 @@ Public Class wbfJournalEntryEdit
             oCom.Connection.Open()
             oCom.ExecuteNonQuery()
         Catch ex As Exception
-            RegisterAlert("Erreur lors de l'enregistrement : " & ex.Message)
+            RegisterAlert(String.Format(L("alertSaveError"), ex.Message))
             Return
         Finally
             If oCom.Connection.State = ConnectionState.Open Then oCom.Connection.Close()
@@ -504,6 +548,11 @@ Public Class wbfJournalEntryEdit
         rlvAccounts.DataSource = GetAccountsTable()
     End Sub
 
+    ''' <summary>Libellé de l'EmptyDataTemplate du picker de comptes (langue courante).</summary>
+    Private Sub rlvAccounts_PreRender(sender As Object, e As EventArgs) Handles rlvAccounts.PreRender
+        SetLiteral(rlvAccounts, "litNoAccount", L("noAccount"))
+    End Sub
+
     ' =========================================================
     '  PICKER TEMPLATES
     ' =========================================================
@@ -520,6 +569,11 @@ Public Class wbfJournalEntryEdit
 
     Private Sub rlvTemplates_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvTemplates.NeedDataSource
         rlvTemplates.DataSource = GetTemplatesTable()
+    End Sub
+
+    ''' <summary>Libellé de l'EmptyDataTemplate du picker de templates (langue courante).</summary>
+    Private Sub rlvTemplates_PreRender(sender As Object, e As EventArgs) Handles rlvTemplates.PreRender
+        SetLiteral(rlvTemplates, "litNoTemplate", L("noTemplate"))
     End Sub
 
     ' =========================================================
@@ -636,6 +690,108 @@ Public Class wbfJournalEntryEdit
     Private Function GetCurrentUserId() As Integer
         ' TODO : adapter selon votre mécanisme d'authentification
         Return 1
+    End Function
+
+    ' =========================================================
+    '  LOCALISATION (fr / en / es)
+    ' =========================================================
+
+    ''' <summary>Traductions de l'écran d'édition d'une écriture de journal (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Écriture comptable — Édition", "Journal entry — Edit", "Asiento contable — Edición")
+
+            ' Badges de statut
+            Case "badgeValidee" : Return Choose3(lang, "Validée 🔒", "Validated 🔒", "Validado 🔒")
+            Case "badgeExtournee" : Return Choose3(lang, "Extournée", "Reversed", "Reversado")
+            Case "badgeBalanced" : Return Choose3(lang, "Équilibré ✓", "Balanced ✓", "Cuadrado ✓")
+            Case "badgeUnbalanced" : Return Choose3(lang, "Déséquilibré ✗", "Unbalanced ✗", "Descuadrado ✗")
+            Case "badgeEmpty" : Return Choose3(lang, "Vide", "Empty", "Vacío")
+
+            ' Boutons / actions
+            Case "loadTemplate" : Return Choose3(lang, "📋 Charger un template", "📋 Load a template", "📋 Cargar una plantilla")
+            Case "addLineTooltip" : Return Choose3(lang, "Ajouter une ligne", "Add a line", "Agregar una línea")
+            Case "save" : Return Choose3(lang, "Enregistrer l'écriture", "Save entry", "Guardar asiento")
+
+            ' Libellés en-tête
+            Case "journal" : Return Choose3(lang, "Journal", "Journal", "Diario")
+            Case "periode" : Return Choose3(lang, "Période", "Period", "Período")
+            Case "dateEcriture" : Return Choose3(lang, "Date écriture", "Entry date", "Fecha de asiento")
+            Case "validerEcriture" : Return Choose3(lang, "Valider l'écriture", "Validate the entry", "Validar el asiento")
+            Case "noPiece" : Return Choose3(lang, "No pièce", "Voucher no.", "N.º de comprobante")
+            Case "libelleEcriture" : Return Choose3(lang, "Libellé de l'écriture", "Entry description", "Descripción del asiento")
+            Case "lignesEcriture" : Return Choose3(lang, "Lignes d'écriture", "Entry lines", "Líneas del asiento")
+
+            ' En-têtes de colonnes des lignes
+            Case "colCompte" : Return Choose3(lang, "Compte", "Account", "Cuenta")
+            Case "colLibelleLigne" : Return Choose3(lang, "Libellé ligne", "Line description", "Descripción de línea")
+            Case "colDebit" : Return Choose3(lang, "Débit", "Debit", "Débito")
+            Case "colCredit" : Return Choose3(lang, "Crédit", "Credit", "Crédito")
+
+            ' Totaux (footer)
+            Case "totalDebit" : Return Choose3(lang, "Total Débit", "Total Debit", "Total Débito")
+            Case "totalCredit" : Return Choose3(lang, "Total Crédit", "Total Credit", "Total Crédito")
+            Case "ecart" : Return Choose3(lang, "Écart (D − C)", "Difference (D − C)", "Diferencia (D − C)")
+
+            ' Placeholders / valeurs par défaut
+            Case "phSelect" : Return Choose3(lang, "Sélectionner...", "Select...", "Seleccionar...")
+            Case "phNumeroPiece" : Return Choose3(lang, "(auto si laissé vide)", "(auto if left blank)", "(automático si se deja vacío)")
+            Case "phLibelle" : Return Choose3(lang, "Description / mémo...", "Description / memo...", "Descripción / nota...")
+            Case "phLineLibelle" : Return Choose3(lang, "Description ligne...", "Line description...", "Descripción de línea...")
+            Case "accountSelectorDefault" : Return Choose3(lang, "Sélectionner un compte ▾", "Select an account ▾", "Seleccionar una cuenta ▾")
+
+            ' Pickers comptes / templates
+            Case "searchAccount" : Return Choose3(lang, "Rechercher un compte...", "Search for an account...", "Buscar una cuenta...")
+            Case "searchTemplate" : Return Choose3(lang, "Rechercher un template...", "Search for a template...", "Buscar una plantilla...")
+            Case "close" : Return Choose3(lang, "Fermer", "Close", "Cerrar")
+            Case "noAccount" : Return Choose3(lang, "Aucun compte trouvé.", "No account found.", "No se encontró ninguna cuenta.")
+            Case "noTemplate" : Return Choose3(lang, "Aucun template défini.", "No template defined.", "Ninguna plantilla definida.")
+            Case "prefilled" : Return Choose3(lang, "💰 pré-rempli", "💰 pre-filled", "💰 pre-rellenado")
+
+            ' Confirmations JS
+            Case "jsConfirmTemplate" : Return Choose3(lang, "Charger ce template écrasera les lignes actuelles. Continuer ?", "Loading this template will overwrite the current lines. Continue?", "Cargar esta plantilla sobrescribirá las líneas actuales. ¿Continuar?")
+            Case "jsConfirmDelete" : Return Choose3(lang, "Supprimer cette ligne ?", "Delete this line?", "¿Eliminar esta línea?")
+
+            ' Alertes de validation / erreur
+            Case "alertJournal" : Return Choose3(lang, "Veuillez sélectionner un journal.", "Please select a journal.", "Seleccione un diario.")
+            Case "alertPeriode" : Return Choose3(lang, "Veuillez sélectionner une période.", "Please select a period.", "Seleccione un período.")
+            Case "alertDate" : Return Choose3(lang, "Veuillez saisir une date.", "Please enter a date.", "Ingrese una fecha.")
+            Case "alertLibelle" : Return Choose3(lang, "Le libellé de l'écriture est obligatoire.", "The entry description is required.", "La descripción del asiento es obligatoria.")
+            Case "alertMin2Lines" : Return Choose3(lang, "Une écriture doit comporter au moins 2 lignes.", "An entry must have at least 2 lines.", "Un asiento debe tener al menos 2 líneas.")
+            Case "alertAccountRequired" : Return Choose3(lang, "Toutes les lignes doivent avoir un compte sélectionné.", "All lines must have an account selected.", "Todas las líneas deben tener una cuenta seleccionada.")
+            Case "alertAmountRequired" : Return Choose3(lang, "Toutes les lignes doivent avoir un montant Débit ou Crédit.", "All lines must have a Debit or Credit amount.", "Todas las líneas deben tener un importe en Débito o Crédito.")
+            Case "alertBothSides" : Return Choose3(lang, "Une ligne ne peut avoir un montant à la fois en Débit et en Crédit.", "A line cannot have an amount in both Debit and Credit.", "Una línea no puede tener un importe en Débito y Crédito a la vez.")
+            Case "alertUnbalanced" : Return Choose3(lang, "L'écriture n'est pas équilibrée. Débit = {0} / Crédit = {1}", "The entry is not balanced. Debit = {0} / Credit = {1}", "El asiento no está cuadrado. Débito = {0} / Crédito = {1}")
+            Case "alertTotalPositive" : Return Choose3(lang, "Le total de l'écriture doit être supérieur à 0.", "The entry total must be greater than 0.", "El total del asiento debe ser mayor que 0.")
+            Case "alertSaveError" : Return Choose3(lang, "Erreur lors de l'enregistrement : {0}", "Error while saving: {0}", "Error al guardar: {0}")
+
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
     End Function
 
 End Class

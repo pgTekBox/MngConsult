@@ -405,16 +405,6 @@
             to   { transform: translateX(0); opacity: 1; }
         }
 
-        /* =========================================================
-           Mobile
-           ========================================================= */
-        @media (max-width: 768px) {
-            .ag-toolbar { gap: 6px; }
-            .ag-toolbar .ag-title { font-size: 14px; min-width: auto; }
-            .ag-views button { padding: 6px 10px; font-size: 12px; }
-            .ag-day { min-height: 70px; }
-            .ag-event { font-size: 10px; padding: 2px 4px; }
-        }
     </style>
 </asp:Content>
 

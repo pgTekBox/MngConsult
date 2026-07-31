@@ -6,14 +6,39 @@ Public Class wbfCustomers
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
+        ApplyLocalization()
 
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             rlvClients.Rebind()
         End If
+    End Sub
+
+    ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
+    Private Sub ApplyLocalization()
+        SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        btnAddCustomer.Text = L("addCustomer")
+        btnExportSquare.Text = L("exportSquare")
+        btnImportSquare.Text = L("importSquare")
+        tbSearch.Attributes("placeholder") = L("searchPh")
+        btnClear.ToolTip = L("clear")
+        rwCustomer.Title = L("winTitle")
+
+        Dim fab As Control = FindDeep(Me, "fabAdd")
+        If TypeOf fab Is System.Web.UI.HtmlControls.HtmlControl Then
+            CType(fab, System.Web.UI.HtmlControls.HtmlControl).Attributes("title") = L("addCustomerWin")
+        End If
+    End Sub
+
+    ''' <summary>Libellés du LayoutTemplate / EmptyDataTemplate du RadListView (via Literal).</summary>
+    Private Sub rlvClients_PreRender(sender As Object, e As EventArgs) Handles rlvClients.PreRender
+        SetLiteral(rlvClients, "litColName", L("colName"))
+        SetLiteral(rlvClients, "litColAction", L("colAction"))
+        SetLiteral(rlvClients, "litEmpty", L("empty"))
     End Sub
     Private Sub rlvClients_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClients.ItemCommand
         If e.CommandArgument Is Nothing Then Return
@@ -65,7 +90,7 @@ Public Class wbfCustomers
             Dim ds As DataSet = ExecuteSQLds("s0664GetClientsForSquareSync", p)
 
             If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-                ShowSquareMessage("Aucun client a exporter.")
+                ShowSquareMessage(L("sqNoExport"))
                 Return
             End If
 
@@ -106,9 +131,9 @@ Public Class wbfCustomers
                 End If
             Next
 
-            ShowSquareMessage(okCount & " client(s) exporte(s) vers Square sur " & items.Count & ".")
+            ShowSquareMessage(String.Format(L("sqExported"), okCount, items.Count))
         Catch ex As Exception
-            ShowSquareMessage("Erreur lors de l'export Square : " & ex.Message)
+            ShowSquareMessage(L("sqExportError") & ex.Message)
         End Try
     End Sub
 
@@ -120,7 +145,7 @@ Public Class wbfCustomers
             Dim remotes As List(Of clsSquare.SquareCustomerRemote) = clsSquare.ListCustomers(token)
 
             If remotes Is Nothing OrElse remotes.Count = 0 Then
-                ShowSquareMessage("Aucun client a importer depuis Square.")
+                ShowSquareMessage(L("sqNoImport"))
                 rlvClients.Rebind()
                 Return
             End If
@@ -151,10 +176,10 @@ Public Class wbfCustomers
                 If action = "created" Then created += 1 Else updated += 1
             Next
 
-            ShowSquareMessage(created & " client(s) cree(s) et " & updated & " mis a jour depuis Square (" & remotes.Count & " trouve(s)).")
+            ShowSquareMessage(String.Format(L("sqImported"), created, updated, remotes.Count))
             rlvClients.Rebind()
         Catch ex As Exception
-            ShowSquareMessage("Erreur lors de l'import Square : " & ex.Message)
+            ShowSquareMessage(L("sqImportError") & ex.Message)
         End Try
     End Sub
 
@@ -165,9 +190,64 @@ Public Class wbfCustomers
 
     Private Sub ShowSquareMessage(msg As String)
         Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
-        Dim script As String = "radalert('" & safe & "', 400, 200, 'Export Square');"
+        Dim titleSafe As String = L("sqTitle").Replace("'", "\'")
+        Dim script As String = "radalert('" & safe & "', 400, 200, '" & titleSafe & "');"
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "squareMsg", script, True)
     End Sub
+
+    ''' <summary>Traductions de l'interface Clients (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "pageTitle" : Return Choose3(lang, "Clients — 60Sec-AI", "Customers — 60Sec-AI", "Clientes — 60Sec-AI")
+            Case "pageTitleShort" : Return Choose3(lang, "Clients", "Customers", "Clientes")
+            Case "addCustomer" : Return Choose3(lang, "Ajouter Client", "Add customer", "Agregar cliente")
+            Case "exportSquare" : Return Choose3(lang, "Exporter vers Square", "Export to Square", "Exportar a Square")
+            Case "importSquare" : Return Choose3(lang, "Importer depuis Square", "Import from Square", "Importar desde Square")
+            Case "searchPh" : Return Choose3(lang, "Rechercher (nom, email, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
+            Case "clear" : Return Choose3(lang, "Effacer", "Clear", "Borrar")
+            Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
+            Case "delete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
+            Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
+            Case "empty" : Return Choose3(lang, "Aucun client trouvé.", "No customer found.", "Ningún cliente encontrado.")
+            Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier un Client", "Add / Edit a customer", "Agregar / Editar un cliente")
+            Case "addCustomerWin" : Return Choose3(lang, "Ajouter un client", "Add a customer", "Agregar un cliente")
+            Case "editCustomerWin" : Return Choose3(lang, "Modifier un client", "Edit a customer", "Editar un cliente")
+            Case "sqTitle" : Return Choose3(lang, "Square", "Square", "Square")
+            Case "sqNoExport" : Return Choose3(lang, "Aucun client à exporter.", "No customer to export.", "Ningún cliente para exportar.")
+            Case "sqExported" : Return Choose3(lang, "{0} client(s) exporté(s) vers Square sur {1}.", "{0} customer(s) exported to Square out of {1}.", "{0} cliente(s) exportado(s) a Square de {1}.")
+            Case "sqExportError" : Return Choose3(lang, "Erreur lors de l'export Square : ", "Error during Square export: ", "Error durante la exportación Square: ")
+            Case "sqNoImport" : Return Choose3(lang, "Aucun client à importer depuis Square.", "No customer to import from Square.", "Ningún cliente para importar desde Square.")
+            Case "sqImported" : Return Choose3(lang, "{0} client(s) créé(s) et {1} mis à jour depuis Square ({2} trouvé(s)).", "{0} customer(s) created and {1} updated from Square ({2} found).", "{0} cliente(s) creado(s) y {1} actualizado(s) desde Square ({2} encontrado(s)).")
+            Case "sqImportError" : Return Choose3(lang, "Erreur lors de l'import Square : ", "Error during Square import: ", "Error durante la importación Square: ")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
 
     Private Function GetData() As DataTable
         Dim q As String = tbSearch.Text.Trim()

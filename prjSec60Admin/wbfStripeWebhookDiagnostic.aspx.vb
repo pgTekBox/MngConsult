@@ -5,7 +5,7 @@ Imports System.Globalization
 Imports System.Text
 
 ''' <summary>
-''' Page de diagnostic des webhooks Stripe.
+''' Page de diagnostic des webhooks Stripe (console d'administration).
 '''
 ''' URL : wbfStripeWebhookDiagnostic.aspx
 '''
@@ -14,23 +14,16 @@ Imports System.Text
 '''   - Liste des events recents avec filtres (status, type, periode)
 '''   - Details deroulants par event (payload JSON, ErrorMessage)
 '''
-''' Acces : utilisateurs admin uniquement (a securiser selon ton modele).
+''' Acces : reserve aux administrateurs de la console (garde globale dans clsData).
+''' Les stats/events sont globaux (procedures s0083 / s0084), non filtres par compagnie.
 ''' </summary>
 Public Class wbfStripeWebhookDiagnostic
     Inherits clsData
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
-        If UserId = 0 Then
-            Response.Redirect("~/wbfLogin.aspx")
-            Return
-        End If
-
-        ' Restriction admin (decommenter si necessaire) :
-        ' If Not isAdmin Then
-        '     Response.Redirect("~/Default.aspx")
-        '     Return
-        ' End If
+        ' L'authentification est assuree par la garde globale de clsData (OnLoad) :
+        ' toute page non anonyme redirige vers wbfLogin.aspx si l'admin n'est pas connecte.
 
         If Not IsPostBack Then
             LoadStatsAndEvents()

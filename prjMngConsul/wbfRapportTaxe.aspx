@@ -1,8 +1,10 @@
-﻿<%@ Page Title="Rapport de remise de taxes" Language="vb" AutoEventWireup="false"
+﻿<%@ Page Title="" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfRapportTaxe.aspx.vb"
     Inherits="MngConsul.wbfRapportTaxe" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
+
+<asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server"><%= L("pageTitle") %></asp:Content>
 
 <asp:Content ID="ContentMain" ContentPlaceHolderID="MainContent" runat="server">
 
@@ -139,10 +141,9 @@
 
     <div class="tax-page">
 
-        <h2>Rapport de remise de taxes (TPS / TVQ)</h2>
+        <h2><asp:Literal ID="litH2Title" runat="server" /></h2>
         <div class="subtitle">
-            Calcul automatique des taxes perçues et payées sur la période, selon la fréquence
-            de remise configurée. <asp:Literal ID="litFreqInfo" runat="server" />
+            <asp:Literal ID="litSubtitle" runat="server" /> <asp:Literal ID="litFreqInfo" runat="server" />
         </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
@@ -173,41 +174,41 @@
             <!-- Bloc TPS / TVQ -->
             <div class="tax-card">
                 <h3>
-                    Détail du rapport
+                    <asp:Literal ID="litDetailTitre" runat="server" />
                     <asp:Literal ID="litStatutPill" runat="server" />
                 </h3>
 
                 <div class="tax-grid">
                     <!-- TPS -->
                     <div class="tax-block">
-                        <h4>TPS — 5 %</h4>
+                        <h4><asp:Literal ID="litTPSTitre" runat="server" /></h4>
                         <div class="tax-line">
-                            <span class="lbl">Perçue sur ventes</span>
+                            <span class="lbl"><asp:Literal ID="litTPSPercueLbl" runat="server" /></span>
                             <span class="val"><asp:Literal ID="litTPSPercue" runat="server" /></span>
                         </div>
                         <div class="tax-line minus">
-                            <span class="lbl">CTI sur achats</span>
+                            <span class="lbl"><asp:Literal ID="litTPSPayeeLbl" runat="server" /></span>
                             <span class="val">(<asp:Literal ID="litTPSPayee" runat="server" />)</span>
                         </div>
                         <div class="tax-line total">
-                            <span>TPS nette à remettre</span>
+                            <span><asp:Literal ID="litTPSNetteLbl" runat="server" /></span>
                             <span class="val"><asp:Literal ID="litTPSNette" runat="server" /></span>
                         </div>
                     </div>
 
                     <!-- TVQ -->
                     <div class="tax-block">
-                        <h4>TVQ — 9,975 %</h4>
+                        <h4><asp:Literal ID="litTVQTitre" runat="server" /></h4>
                         <div class="tax-line">
-                            <span class="lbl">Perçue sur ventes</span>
+                            <span class="lbl"><asp:Literal ID="litTVQPercueLbl" runat="server" /></span>
                             <span class="val"><asp:Literal ID="litTVQPercue" runat="server" /></span>
                         </div>
                         <div class="tax-line minus">
-                            <span class="lbl">RTI sur achats</span>
+                            <span class="lbl"><asp:Literal ID="litTVQPayeeLbl" runat="server" /></span>
                             <span class="val">(<asp:Literal ID="litTVQPayee" runat="server" />)</span>
                         </div>
                         <div class="tax-line total">
-                            <span>TVQ nette à remettre</span>
+                            <span><asp:Literal ID="litTVQNetteLbl" runat="server" /></span>
                             <span class="val"><asp:Literal ID="litTVQNette" runat="server" /></span>
                         </div>
                     </div>
@@ -215,32 +216,32 @@
 
                 <!-- Total à remettre -->
                 <div class="total-remise">
-                    <span class="lbl">TOTAL À REMETTRE À REVENU QUÉBEC</span>
+                    <span class="lbl"><asp:Literal ID="litTotalLbl" runat="server" /></span>
                     <span class="val"><asp:Literal ID="litTotal" runat="server" /></span>
                 </div>
 
                 <!-- Date de paiement (si payé) -->
                 <asp:Panel ID="pnlPaye" runat="server" Visible="false"
                     style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:12px 16px;">
-                    <strong>Remise effectuée le <asp:Literal ID="litDatePaiement" runat="server" /></strong>
-                    — Référence : <asp:Literal ID="litReference" runat="server" />
+                    <strong><asp:Literal ID="litRemiseFaiteLbl" runat="server" /> <asp:Literal ID="litDatePaiement" runat="server" /></strong>
+                    <asp:Literal ID="litRefSepLbl" runat="server" /> <asp:Literal ID="litReference" runat="server" />
                 </asp:Panel>
             </div>
 
             <!-- Détail des écritures -->
             <asp:PlaceHolder ID="phDetail" runat="server" Visible="false">
                 <div class="tax-card">
-                    <h3>Détail des écritures incluses dans le calcul</h3>
+                    <h3><asp:Literal ID="litDetailEcrituresTitre" runat="server" /></h3>
                     <table class="detail-table">
                         <thead>
                             <tr>
-                                <th>Date</th>
-                                <th>Pièce</th>
-                                <th>Libellé</th>
-                                <th>Compte</th>
-                                <th>Catégorie</th>
-                                <th class="num">Débit</th>
-                                <th class="num">Crédit</th>
+                                <th><asp:Literal ID="litColDate" runat="server" /></th>
+                                <th><asp:Literal ID="litColPiece" runat="server" /></th>
+                                <th><asp:Literal ID="litColLibelle" runat="server" /></th>
+                                <th><asp:Literal ID="litColCompte" runat="server" /></th>
+                                <th><asp:Literal ID="litColCategorie" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litColDebit" runat="server" /></th>
+                                <th class="num"><asp:Literal ID="litColCredit" runat="server" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -283,18 +284,18 @@
         Skin="Bootstrap" AutoSizeBehaviors="Default" ClientIDMode="Static">
         <ContentTemplate>
             <div style="padding:16px;">
-                <p>Vous allez marquer cette déclaration comme remise. Cette action :</p>
+                <p><asp:Literal ID="litWinIntro" runat="server" /></p>
                 <ul style="font-size:13px;color:#475569;">
-                    <li>créera l'écriture comptable de remise</li>
-                    <li>verrouillera la déclaration (statut PAYE)</li>
+                    <li><asp:Literal ID="litWinLi1" runat="server" /></li>
+                    <li><asp:Literal ID="litWinLi2" runat="server" /></li>
                 </ul>
                 <table style="width:100%;margin-top:12px;">
                     <tr>
-                        <td style="width:130px;padding:6px 0;">Date du paiement :</td>
+                        <td style="width:130px;padding:6px 0;"><asp:Literal ID="litWinDateLbl" runat="server" /></td>
                         <td><telerik:RadDatePicker ID="dpDatePaiement" runat="server" Skin="Bootstrap" Width="150px" /></td>
                     </tr>
                     <tr>
-                        <td style="padding:6px 0;">Référence :</td>
+                        <td style="padding:6px 0;"><asp:Literal ID="litWinRefLbl" runat="server" /></td>
                         <td><telerik:RadTextBox ID="txtReference" runat="server" Skin="Bootstrap" Width="250px"
                                 EmptyMessage="Numéro de chèque, confirmation, ..." /></td>
                     </tr>

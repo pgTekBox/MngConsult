@@ -88,6 +88,9 @@ Public Class wbfSuppliers
             Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier un Fournisseur", "Add / Edit a supplier", "Agregar / Editar un proveedor")
             Case "addSupplierWin" : Return Choose3(lang, "Ajouter un fournisseur", "Add a supplier", "Agregar un proveedor")
             Case "editSupplierWin" : Return Choose3(lang, "Modifier un fournisseur", "Edit a supplier", "Editar un proveedor")
+            Case "stripeYes" : Return Choose3(lang, "Compte Stripe", "Stripe account", "Cuenta Stripe")
+            Case "stripeNo" : Return Choose3(lang, "Aucun compte Stripe", "No Stripe account", "Sin cuenta Stripe")
+            Case "stripeViewStatus" : Return Choose3(lang, "Voir le statut Stripe", "View Stripe status", "Ver estado de Stripe")
             Case Else : Return ""
         End Select
     End Function
@@ -98,6 +101,24 @@ Public Class wbfSuppliers
             Case "es" : Return es
             Case Else : Return fr
         End Select
+    End Function
+
+    ''' <summary>
+    ''' Badge « inscription Stripe » pour la liste : vert « Compte Stripe » si le
+    ''' fournisseur a un acct_xxx, gris « Aucun compte Stripe » sinon. Cliquable :
+    ''' ouvre la page de statut/onboarding (détail live) dans un nouvel onglet.
+    ''' </summary>
+    Public Function StripeBadge(acct As Object, partyId As Object) As String
+        Dim pid As String = If(partyId Is Nothing OrElse IsDBNull(partyId), "0", partyId.ToString())
+        Dim url As String = "wbfSupplierStripeOnboarding.aspx?PartyId=" & pid
+        Dim tip As String = L("stripeViewStatus")
+        Dim hasAcct As Boolean = (acct IsNot Nothing AndAlso Not IsDBNull(acct) AndAlso Not String.IsNullOrWhiteSpace(acct.ToString()))
+
+        Dim cls As String = If(hasAcct, "on", "off")
+        Dim label As String = If(hasAcct, L("stripeYes"), L("stripeNo"))
+
+        Return "<a class=""stripe-badge " & cls & """ href=""" & url & """ target=""_blank"" title=""" & tip &
+               """ onclick=""event.stopPropagation();""><span class=""dot""></span>" & label & "</a>"
     End Function
     Private Sub rlvSuppliers_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvSuppliers.ItemCommand
         If e.CommandArgument Is Nothing Then Return

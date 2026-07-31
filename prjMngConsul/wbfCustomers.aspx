@@ -3,8 +3,7 @@
     Inherits="MngConsul.wbfCustomers" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Clients — 60Sec-AI
- 
+    <%= L("pageTitle") %>
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -18,7 +17,7 @@
 
         .listview-list-head {
             display: grid;
-            grid-template-columns: minmax(280px, auto) minmax(40px, 1fr);
+            grid-template-columns: minmax(280px, 1.7fr) 100px;
             gap: 16px;
             padding: 14px 16px;
             font-weight: 800;
@@ -30,6 +29,11 @@
             top: 0;
             z-index: 0;
             box-sizing: border-box;
+        }
+
+        /* L'entête « Action » s'aligne à droite, au-dessus des boutons (flex-end). */
+        .colh-actions {
+            text-align: right;
         }
 
 
@@ -49,36 +53,6 @@
 
       
 
-        /* =========================
-             MOBILE LARGE  grands smartphones en portrait
-         ========================= */
-        @media  (max-width: 768px) {
-
-            .field-AllAddress {
-                order: 1;
-            }
-
-            .listview-list-head {
-                display: none;
-            }
-        }
-
-        /* =========================
-         PETIT MOBILE — max 480px
-           ========================= */
-        @media (max-width: 480px) {
-
-
-            .listview-row {
-                grid-template-columns: auto 30px;
-                gap: 10px;
-                padding: 14px;
-            }
-
-            .listview-list-head {
-                display: none;
-            }
-        }
     </style>
 
 
@@ -125,7 +99,7 @@
 
         <div class="page-head">
             <div class="page-head-left">
-                <div class="page-title">Clients</div>
+                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
 
             </div>
 
@@ -174,9 +148,9 @@
                     <LayoutTemplate>
                         <div class="listview-list">
                             <div class="listview-list-head">
-                                <div class="colh-file">Nom</div>
+                                <div class="colh-file"><asp:Literal ID="litColName" runat="server" /></div>
 
-                                <div class="colh-actions">Action</div>
+                                <div class="colh-actions"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -199,14 +173,14 @@
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
                                     Text=""
-                                    ToolTip="Modifier"
+                                    ToolTip='<%# L("edit") %>'
                                     CausesValidation="false"
-                                    
-                                    OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", ""Modifier un client"", ""Ajouter un client""); return false;" %>' />
+
+                                    OnClientClick='<%# "saveListScrollNow(); openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", L_EDIT_CUSTOMER, L_ADD_CUSTOMER); return false;" %>' />
                                 <asp:Button ID="btnDelete" runat="server"
                                     CssClass="btn btn-icon btn-icon-delete"
                                     Text=""
-                                    ToolTip="Supprimer"
+                                    ToolTip='<%# L("delete") %>'
                                     CommandName="DeleteClient"
                                     CommandArgument='<%# Eval("Id") %>'
                                     OnClientClick="saveListScrollNow();"
@@ -217,7 +191,7 @@
 
                     <EmptyDataTemplate>
                         <div class="listview-empty">
-                            Aucun client trouvé.
+                            <asp:Literal ID="litEmpty" runat="server" />
                         </div>
                     </EmptyDataTemplate>
 
@@ -227,7 +201,7 @@
         </div>
 
         <%-- FAB mobile --%>
-        <button class="fab-add" onclick="saveListScrollNow(); openNewCustomerWindow(0); return false;" title="Ajouter un client">+</button>
+        <button id="fabAdd" runat="server" type="button" class="fab-add" onclick="saveListScrollNow(); openNewCustomerWindow(0); return false;" title="">+</button>
         <%--openRadWindow(" & Eval("Id") & ", ""rwCustomer"", ""wbfCustomerEdit.aspx"", ""Modifier un client"", ""Ajouter un client""); return false;" %>' />--%> 
 
   
@@ -245,6 +219,13 @@
     <script src="js/RadWindows.js"></script>
 
 
+
+    <telerik:RadCodeBlock ID="rcbCustomersJs" runat="server">
+    <script type="text/javascript">
+        var L_ADD_CUSTOMER = "<%= L("addCustomerWin") %>";
+        var L_EDIT_CUSTOMER = "<%= L("editCustomerWin") %>";
+    </script>
+    </telerik:RadCodeBlock>
 
     <script type="text/javascript">
 
@@ -316,7 +297,7 @@
 
 
         function openNewCustomerWindow() {
-            openRadWindow(0, "rwCustomer", "wbfCustomerEdit.aspx", "Ajouter un client", "Ajouter un client");
+            openRadWindow(0, "rwCustomer", "wbfCustomerEdit.aspx", L_ADD_CUSTOMER, L_ADD_CUSTOMER);
         }
 
 

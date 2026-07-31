@@ -54,7 +54,6 @@
 
     /* ───── Options ───── */
     .opts { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
-    @media (max-width:640px) { .opts { grid-template-columns:1fr; } }
     .opt label { display:block; font-size:13px; font-weight:700; margin-bottom:4px; }
     .opt select {
         width:100%; padding:9px 12px; border:1px solid var(--mc-stroke);

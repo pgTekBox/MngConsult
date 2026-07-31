@@ -96,6 +96,43 @@
             </asp:Panel>
         </div>
 
+        <%-- Carte Plaid --%>
+        <div class="pp-card">
+            <div class="pp-card-head">
+                <div class="pp-logo"><span class="pp-mark" style="background:#111827;">P</span> Plaid</div>
+                <asp:Literal ID="litPlaidBadge" runat="server" />
+            </div>
+
+            <asp:Panel ID="pnlPlaidConnected" runat="server" Visible="false">
+                <div class="pp-detail">
+                    <div class="k"><asp:Literal ID="litLblPlaidBanks" runat="server" /></div>
+                    <div class="v"><asp:Literal ID="litPlaidBanks" runat="server" /></div>
+                    <div class="k"><asp:Literal ID="litLblPlaidAccounts" runat="server" /></div>
+                    <div class="v"><asp:Literal ID="litPlaidAccounts" runat="server" /></div>
+                </div>
+
+                <div class="pp-toggle" style="display:flex; align-items:center; gap:10px; margin:14px 0 4px;">
+                    <asp:CheckBox ID="chkAutoImport" runat="server" AutoPostBack="true" />
+                </div>
+                <p class="pp-note"><asp:Literal ID="litAutoImportHint" runat="server" /></p>
+
+                <div class="pp-actions">
+                    <asp:Button ID="btnPlaidManage" runat="server" CssClass="pp-btn pp-btn-ghost"
+                        CausesValidation="false" />
+                    <asp:Button ID="btnPlaidAdd" runat="server" CssClass="pp-btn pp-btn-primary"
+                        CausesValidation="false" />
+                </div>
+            </asp:Panel>
+
+            <asp:Panel ID="pnlPlaidDisconnected" runat="server" Visible="false">
+                <p class="pp-note"><asp:Literal ID="litPlaidIntro" runat="server" /></p>
+                <div class="pp-actions">
+                    <asp:Button ID="btnPlaidConnect" runat="server" CssClass="pp-btn pp-btn-primary"
+                        CausesValidation="false" />
+                </div>
+            </asp:Panel>
+        </div>
+
         <%-- Autres processeurs (à venir) --%>
         <div class="pp-card pp-soon">
             <div class="pp-card-head">

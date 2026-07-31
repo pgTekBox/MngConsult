@@ -29,7 +29,6 @@
         .amount { font-size: 24px; font-weight: 900; color: var(--brand); }
         .sec-title { font-weight: 900; font-size: 14px; margin: 0 0 12px; }
         .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-        @media (max-width: 560px) { .grid2 { grid-template-columns: 1fr; } }
         .field { display: flex; flex-direction: column; gap: 5px; }
         .field.full { grid-column: 1 / -1; }
         .field label { font-size: 12px; font-weight: 700; color: #334155; }

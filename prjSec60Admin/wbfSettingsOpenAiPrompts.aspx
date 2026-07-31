@@ -1,9 +1,9 @@
 ﻿<%@ Page Title="" Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     ValidateRequest="false"
-    CodeBehind="wbfSettingsOpenAiPrompts.aspx.vb" Inherits="MngConsul.wbfSettingsOpenAiPrompts" %>
+    CodeBehind="wbfSettingsOpenAiPrompts.aspx.vb" Inherits="prjSec60Admin.wbfSettingsOpenAiPrompts" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Prompts OpenAI — 60Sec-AI
+    Prompts OpenAI — Sec60Admin
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -86,9 +86,9 @@
                 <telerik:RadDropDownList ID="ddPromptKey" runat="server" Width="100%"
                     AutoPostBack="true"  />
 
-               
 
-                
+
+
             </div>
         </div>
 
@@ -107,7 +107,7 @@
                         <label class="page-sub" style="margin:0;">Clé (unique)</label><br />
                         <telerik:RadTextBox ReadOnly="true"  ID="tbKey" runat="server" Width="100%" />
                     </div>
-                     
+
                 </div>
 
                 <div style="margin-top:12px;">
@@ -125,13 +125,8 @@
                         <label class="page-sub" style="margin:0;">Modèle </label><br />
                         <telerik:RadTextBox ID="tbModel" runat="server" Width="100%" Text="gpt-4.1-mini" />
                     </div>
-                    
-                </div>
 
-               <%-- <div class="k-row" style="margin-top:12px;">
-                    <telerik:RadButton ID="btnLoadDefault" runat="server" Text="Charger défaut (STRICT_JSON)"
-                        CssClass="btn" AutoPostBack="true" OnClick="btnLoadDefault_Click" />
-                </div>--%>
+                </div>
 
             </div>
         </div>

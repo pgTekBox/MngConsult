@@ -173,17 +173,6 @@
 
     
 
-     @media (max-width: 768px) {
-         .grid-header {
-             display: none;
-         }
-
-         .grid-row {
-             grid-template-columns: 1fr 1fr;
-             gap: 8px;
-             padding: 14px;
-         }
-     }
  </style>
 
   
@@ -218,15 +207,15 @@
      <div class="topbar">
          <div class="filterbar">
              <div class="filter-field" style="width: 140px">
-                 <label>Date de</label>
+                 <label><asp:Literal ID="litLblDateFrom" runat="server" /></label>
                  <telerik:RadDatePicker ID="dpDateFrom" runat="server" />
              </div>
              <div class="filter-field" style="width: 140px">
-                 <label>Date à</label>
+                 <label><asp:Literal ID="litLblDateTo" runat="server" /></label>
                  <telerik:RadDatePicker ID="dpDateTo" runat="server" />
              </div>
              <div class="filter-field" style="width: 200px">
-                 <label>Journal</label>
+                 <label><asp:Literal ID="litLblJournal" runat="server" /></label>
                  <telerik:RadComboBox ID="cbJournalFilter" runat="server" Width="200px"
                      DataTextField="DisplayName" DataValueField="Id">
                      <Items>
@@ -235,7 +224,7 @@
                  </telerik:RadComboBox>
              </div>
              <div class="filter-field" style="width: 160px">
-                 <label>Statut</label>
+                 <label><asp:Literal ID="litLblStatus" runat="server" /></label>
                  <telerik:RadComboBox ID="cbStatusFilter" runat="server" Width="160px">
                      <Items>
                          <telerik:RadComboBoxItem Text="(Tous)" Value="" Selected="true" />
@@ -246,7 +235,7 @@
                  </telerik:RadComboBox>
              </div>
              <div class="filter-field" style="flex: 1; min-width: 200px">
-                 <label>Recherche (no pièce, libellé)</label>
+                 <label><asp:Literal ID="litLblSearch" runat="server" /></label>
                  <telerik:RadTextBox ID="txtSearch" runat="server" EmptyMessage="Rechercher..." Width="100%" />
              </div>
              <div class="filter-field">
@@ -261,14 +250,14 @@
          <div class="container">
              <div class="grid-wrap">
                  <div class="grid-header">
-                     <div>No pièce</div>
-                     <div>Date</div>
-                     <div>Journal</div>
-                     <div>Libellé</div>
-                     <div style="text-align: right">Débit</div>
-                     <div style="text-align: right">Crédit</div>
-                     <div style="text-align: center">Statut</div>
-                     <div style="text-align: center">Actions</div>
+                     <div><asp:Literal ID="litColNoPiece" runat="server" /></div>
+                     <div><asp:Literal ID="litColDate" runat="server" /></div>
+                     <div><asp:Literal ID="litColJournal" runat="server" /></div>
+                     <div><asp:Literal ID="litColLibelle" runat="server" /></div>
+                     <div style="text-align: right"><asp:Literal ID="litColDebit" runat="server" /></div>
+                     <div style="text-align: right"><asp:Literal ID="litColCredit" runat="server" /></div>
+                     <div style="text-align: center"><asp:Literal ID="litColStatut" runat="server" /></div>
+                     <div style="text-align: center"><asp:Literal ID="litColActions" runat="server" /></div>
                  </div>
 
                  <asp:Repeater ID="rpEcritures" runat="server">
@@ -294,22 +283,22 @@
                                  </span>
                              </div>
                              <div class="actions-cell">
-                                 <button type="button" class="btn-icon-edit" title="Modifier"
+                                 <button type="button" class="btn-icon-edit" title='<%# L("edit") %>'
                                      onclick='<%# "openEcriture(" & Eval("Id") & "); return false;" %>'></button>
                                  <asp:LinkButton ID="btnDelete" runat="server"
                                      CssClass="btn-icon-delete"
                                      CommandName="DeleteEcriture"
                                      CommandArgument='<%# Eval("Id") %>'
-                                     OnClientClick="return confirm('Supprimer cette écriture ?');"
+                                     OnClientClick='<%# "return confirm(" & Chr(39) & L("confirmDelete") & Chr(39) & ");" %>'
                                      Visible='<%# CanDelete(Eval("Statut")) %>'
-                                     ToolTip="Supprimer">&nbsp;</asp:LinkButton>
+                                     ToolTip='<%# L("delete") %>'>&nbsp;</asp:LinkButton>
                              </div>
                          </div>
                      </ItemTemplate>
                  </asp:Repeater>
 
                  <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="empty">
-                     Aucune écriture trouvée pour ces critères.
+                     <asp:Literal ID="litEmpty" runat="server" />
                  </asp:Panel>
              </div>
 
@@ -318,11 +307,11 @@
                  <div style="display: grid; grid-template-columns: 1fr auto auto; gap: 30px; align-items: center;">
                      <div>
                          <strong>
-                             <asp:Label ID="lblCount" runat="server" Text="0" /></strong> écriture(s)
+                             <asp:Label ID="lblCount" runat="server" Text="0" /></strong> <asp:Literal ID="litFtEntries" runat="server" />
                      </div>
-                     <div>Total Débit : <strong>
+                     <div><asp:Literal ID="litFtTotalDebit" runat="server" /> <strong>
                          <asp:Label ID="lblTotalDebit" runat="server" Text="0.00" /></strong></div>
-                     <div>Total Crédit : <strong>
+                     <div><asp:Literal ID="litFtTotalCredit" runat="server" /> <strong>
                          <asp:Label ID="lblTotalCredit" runat="server" Text="0.00" /></strong></div>
                  </div>
              </div>
@@ -331,8 +320,8 @@
 
      <%-- FAB NOUVELLE ÉCRITURE --%>
      <div class="fab-add">
-         <a href="javascript:openEcriture(0)" title="Nouvelle écriture">
-             <img src="Images/rondplus45.png" alt="Nouvelle écriture" />
+         <a id="fabNew" runat="server" href="javascript:openEcriture(0)" title="">
+             <img id="imgFabNew" runat="server" src="Images/rondplus45.png" alt="" />
          </a>
      </div>
 
@@ -349,7 +338,7 @@
          var oWnd = oManager.open("wbfJournalEntryEdit.aspx?Id=" + id, "wndEcriture");
          oWnd.setSize(1100, 750);
          oWnd.set_modal(true);
-         oWnd.set_title(id > 0 ? "Modifier l'écriture" : "Nouvelle écriture");
+         oWnd.set_title(id > 0 ? "<%= L("editEntry") %>" : "<%= L("newEntry") %>");
          oWnd.center();
          oWnd.add_close(function () {
              /* Recharger la liste à la fermeture */

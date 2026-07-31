@@ -3,9 +3,9 @@
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="<%= CurrentLang %>">
 <head runat="server">
-    <title>Template d'écriture — Édition</title>
+    <title><%= L("pageTitle") %></title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
@@ -248,12 +248,12 @@
 
                             <div class="row4">
                                 <div>
-                                    <label>Code</label>
-                                    <telerik:RadTextBox ID="txtCode" runat="server" EmptyMessage="ex: AMORT-MENS" />
+                                    <label><asp:Literal ID="litLblCode" runat="server" /></label>
+                                    <telerik:RadTextBox ID="txtCode" runat="server" EmptyMessage="ex: AMORT-MENS" MaxLength="50" />
                                 </div>
 
                                 <div>
-                                    <label>Journal</label>
+                                    <label><asp:Literal ID="litLblJournal" runat="server" /></label>
                                     <telerik:RadComboBox ID="cbJournal" runat="server"
                                         DataTextField="DisplayName" DataValueField="Id"
                                         EmptyMessage="Sélectionner..." />
@@ -262,14 +262,14 @@
                                 <div style="display: flex; align-items: end; padding-bottom: 8px;">
                                     <label style="margin: 0;">
                                         <asp:CheckBox ID="chkPreRempli" runat="server" AutoPostBack="true" />
-                                        Pré-remplir les montants
+                                        <asp:Literal ID="litPreRempli" runat="server" />
                                     </label>
                                 </div>
 
                                 <div style="display: flex; align-items: end; padding-bottom: 8px;">
                                     <label style="margin: 0;">
                                         <asp:CheckBox ID="chkActif" runat="server" Checked="true" />
-                                        Actif
+                                        <asp:Literal ID="litActif" runat="server" />
                                     </label>
                                 </div>
                             </div>
@@ -278,14 +278,14 @@
 
                             <div class="row2">
                                 <div>
-                                    <label>Libellé du template</label>
+                                    <label><asp:Literal ID="litLblLibelle" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtLibelle" runat="server"
-                                        EmptyMessage="ex: Amortissement mensuel équipement" Width="100%" />
+                                        EmptyMessage="ex: Amortissement mensuel équipement" Width="100%" MaxLength="250" />
                                 </div>
                                 <div>
-                                    <label>Description / Mémo par défaut</label>
+                                    <label><asp:Literal ID="litLblDescription" runat="server" /></label>
                                     <telerik:RadTextBox ID="txtDescription" runat="server"
-                                        EmptyMessage="Description appliquée à l'écriture..." Width="100%" />
+                                        EmptyMessage="Description appliquée à l'écriture..." Width="100%" MaxLength="500" />
                                 </div>
                             </div>
 
@@ -300,15 +300,15 @@
                     <%-- LIGNES TEMPLATE --%>
                     <div class="card">
                         <div class="card-header">
-                            <strong>Structure du template</strong>
+                            <strong><asp:Literal ID="litStructTitle" runat="server" /></strong>
                         </div>
 
                         <div class="card-body">
                             <div class="lines-header">
-                                <div>Compte</div>
-                                <div>Libellé ligne</div>
-                                <div style="text-align: center">Sens</div>
-                                <div style="text-align: right">Montant</div>
+                                <div><asp:Literal ID="litColCompte" runat="server" /></div>
+                                <div><asp:Literal ID="litColLibelle" runat="server" /></div>
+                                <div style="text-align: center"><asp:Literal ID="litColSens" runat="server" /></div>
+                                <div style="text-align: right"><asp:Literal ID="litColMontant" runat="server" /></div>
                                 <div></div>
                             </div>
 
@@ -330,7 +330,7 @@
                                                 <div class="cell">
                                                     <telerik:RadTextBox ID="txtLineLibelle" runat="server"
                                                         Text='<%# Eval("Libelle") %>'
-                                                        EmptyMessage="Description ligne..." />
+                                                        EmptyMessage="Description ligne..." MaxLength="250" />
                                                 </div>
 
                                                 <div class="cell">
@@ -341,6 +341,7 @@
                                                         </Items>
                                                     </telerik:RadComboBox>
                                                 </div>
+
 
                                                 <div class="cell" style="text-align: right">
                                                     <span class="qty-right">
@@ -363,7 +364,7 @@
                                                         Image-Url="~/Images/del200.png" Image-Sizing="Stretch"
                                                         CommandName="DeleteLine"
                                                         CommandArgument='<%# Eval("Id") %>'
-                                                        OnClientClicking="function(s,e){ if(!confirm('Supprimer cette ligne ?')) e.set_cancel(true); }">
+                                                        OnClientClicking="function(s,e){ if(!confirm(LOC.delLine)) e.set_cancel(true); }">
                                                     </telerik:RadImageButton>
                                                 </div>
                                             </div>
@@ -387,12 +388,19 @@
             <telerik:RadButton ID="radSave" runat="server"
                 BackColor="lightgrey" Text="Enregistrer le template" />
 
+            <telerik:RadCodeBlock ID="rcbLoc" runat="server">
+                <script type="text/javascript">
+                    var LOC = { delLine: "<%= L("confirmDelLine") %>" };
+                </script>
+            </telerik:RadCodeBlock>
+
             <%-- OVERLAY PICKER COMPTES --%>
             <asp:HiddenField ID="hidSelectedAccountId" runat="server" />
             <div id="accountPickerOverlay" class="account-picker-overlay" style="display: none;">
                 <div class="account-picker-shell">
                     <div class="account-picker-searchbar">
-                        <input type="text" id="accountPickerSearch" oninput="filterAccountsClient()"
+                        <input type="text" id="accountPickerSearch" runat="server" ClientIDMode="Static"
+                            oninput="filterAccountsClient()"
                             class="account-picker-input" placeholder="Rechercher un compte..." />
                         <button type="button" class="account-picker-close-inline" onclick="closeAccountPicker()">✕</button>
                     </div>
@@ -418,7 +426,7 @@
                                 </ItemTemplate>
 
                                 <EmptyDataTemplate>
-                                    <div class="empty">Aucun compte trouvé.</div>
+                                    <div class="empty"><asp:Literal ID="litAccEmpty" runat="server" /></div>
                                 </EmptyDataTemplate>
                             </telerik:RadListView>
                         </div>
