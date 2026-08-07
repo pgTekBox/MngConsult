@@ -74,6 +74,12 @@ Namespace Controls
             ' Agenda
             sb.Append(Item("~/wbfAgenda.aspx", "📅", "agenda"))
 
+            ' Employés (ressources de l'agenda)
+            sb.Append(Item("~/wbfEmployees.aspx", "👥", "employees"))
+
+            ' Courriel
+            sb.Append(Item("~/wbfMailbox.aspx", "✉️", "mailbox"))
+
             ' Jobs
             sb.Append(GroupStart("📒", "jobs"))
             sb.Append(Child("~/wbfJobs.aspx", "jobs"))
@@ -120,6 +126,8 @@ Namespace Controls
                 Case "welcome" : Return Choose3(lang, "Bienvenue", "Welcome", "Bienvenida")
                 Case "dashboard" : Return Choose3(lang, "Tableau de bord", "Dashboard", "Panel de control")
                 Case "agenda" : Return Choose3(lang, "Agenda", "Agenda", "Agenda")
+                Case "employees" : Return Choose3(lang, "Employés", "Employees", "Empleados")
+                Case "mailbox" : Return Choose3(lang, "Courriel", "Mail", "Correo")
                 Case "sales" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
                 Case "customers" : Return Choose3(lang, "Clients", "Customers", "Clientes")
                 Case "customerInvoices" : Return Choose3(lang, "Factures clients", "Customer invoices", "Facturas de clientes")

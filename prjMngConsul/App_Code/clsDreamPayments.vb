@@ -74,6 +74,22 @@ Public Class clsDreamPayments
         Return If(String.IsNullOrEmpty(v), "INSURED", v)
     End Function
 
+    ''' <summary>
+    ''' Libellé de l'entité légale / PAYEUR (legalEntityLabel) envoyé avec le paiement.
+    ''' OBLIGATOIRE quand le compte Dream comporte PLUSIEURS payeurs (sinon erreur
+    ''' G00021 « Multiple payers exist »). Valeur à obtenir de Dream (une par payeur).
+    ''' Configurable via Web.config DreamPayments.LegalEntityLabel. Vide = non envoyé.
+    ''' </summary>
+    Public Shared Function DefaultLegalEntityLabel() As String
+        Return If(ConfigurationManager.AppSettings("DreamPayments.LegalEntityLabel"), "").Trim()
+    End Function
+
+    ''' <summary>Code d'entité légale (legalEntity, ex. « INST CAD »), optionnel/conditionnel
+    ''' avec legalEntityLabel. Configurable via Web.config DreamPayments.LegalEntity.</summary>
+    Public Shared Function DefaultLegalEntity() As String
+        Return If(ConfigurationManager.AppSettings("DreamPayments.LegalEntity"), "").Trim()
+    End Function
+
     ''' <summary>Endpoint OAuth /token. Sandbox par défaut ; en production il DOIT être configuré.</summary>
     Private Shared Function TokenUrl() As String
         Dim u As String = ConfigurationManager.AppSettings("DreamPayments.TokenUrl")
@@ -189,6 +205,17 @@ Public Class clsDreamPayments
         req.Method = method
         req.Accept = "application/json"
         req.Headers.Add("Authorization", "Bearer " & token)
+
+        ' Sélecteur de PAYEUR (compte Dream à plusieurs payeurs → G00021).
+        ' En-tête configurable appliqué à TOUS les appels (dont /payees/add), à
+        ' renseigner selon ce que Dream indique. Ex. Web.config :
+        '   DreamPayments.PayerHeaderName = "X-Payer-Id"
+        '   DreamPayments.PayerHeaderValue = "<id du payeur>"
+        Dim payerHdr As String = If(ConfigurationManager.AppSettings("DreamPayments.PayerHeaderName"), "").Trim()
+        Dim payerVal As String = If(ConfigurationManager.AppSettings("DreamPayments.PayerHeaderValue"), "").Trim()
+        If payerHdr <> "" AndAlso payerVal <> "" Then
+            req.Headers.Add(payerHdr, payerVal)
+        End If
 
         If jsonBody IsNot Nothing Then
             req.ContentType = "application/json"

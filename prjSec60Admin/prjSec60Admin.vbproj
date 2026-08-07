@@ -361,15 +361,31 @@
     <Content Include="wbfAdminEdit.aspx" />
     <Content Include="wbfResetPassword.aspx" />
     <Content Include="wbfCompanies.aspx" />
+    <Content Include="wbfMailAccounts.aspx" />
     <Content Include="wbfCompanyEdit.aspx" />
     <Content Include="wbfStripeWebhookDiagnostic.aspx" />
     <Content Include="wbfSettingsOpenAiPrompts.aspx" />
     <Content Include="wbfSquareWebhookDiagnostic.aspx" />
     <Content Include="wbfPlaidDiagnostic.aspx" />
+    <Content Include="wbfDemoReset.aspx" />
+    <Content Include="wbfMail.aspx" />
+    <Content Include="MailAttachment.ashx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="App_Code\clsMime.vb" />
+    <Compile Include="MailAttachment.ashx.vb">
+      <DependentUpon>MailAttachment.ashx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="wbfMail.aspx.vb">
+      <DependentUpon>wbfMail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfMail.aspx.designer.vb">
+      <DependentUpon>wbfMail.aspx</DependentUpon>
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>
@@ -455,6 +471,13 @@
     <Compile Include="wbfCompanies.aspx.designer.vb">
       <DependentUpon>wbfCompanies.aspx</DependentUpon>
     </Compile>
+    <Compile Include="wbfMailAccounts.aspx.vb">
+      <DependentUpon>wbfMailAccounts.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfMailAccounts.aspx.designer.vb">
+      <DependentUpon>wbfMailAccounts.aspx</DependentUpon>
+    </Compile>
     <Compile Include="wbfStripeWebhookDiagnostic.aspx.vb">
       <DependentUpon>wbfStripeWebhookDiagnostic.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
@@ -482,6 +505,13 @@
     </Compile>
     <Compile Include="wbfPlaidDiagnostic.aspx.designer.vb">
       <DependentUpon>wbfPlaidDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfDemoReset.aspx.vb">
+      <DependentUpon>wbfDemoReset.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfDemoReset.aspx.designer.vb">
+      <DependentUpon>wbfDemoReset.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfCompanyEdit.aspx.vb">
       <DependentUpon>wbfCompanyEdit.aspx</DependentUpon>

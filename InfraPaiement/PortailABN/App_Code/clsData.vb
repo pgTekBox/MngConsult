@@ -157,4 +157,33 @@ Public Class clsData
         End Using
     End Function
 
+    ' =====================================================================
+    ' Helpers de formatage partages (accessibles depuis les .aspx via <%# %>)
+    ' =====================================================================
+
+    Private Shared ReadOnly CultCA As Globalization.CultureInfo = New Globalization.CultureInfo("fr-CA")
+
+    ''' <summary>Formate un montant en cents entiers vers « 1 234,56 $ ».</summary>
+    Protected Function Money(cents As Object) As String
+        Dim c As Long = If(cents Is Nothing OrElse IsDBNull(cents), 0L, Convert.ToInt64(cents))
+        Return (c / 100D).ToString("N2", CultCA) & " $"
+    End Function
+
+    ''' <summary>Date + heure « yyyy-MM-dd HH:mm » (— si nul).</summary>
+    Protected Function FormatDt(d As Object) As String
+        If d Is Nothing OrElse IsDBNull(d) Then Return "—"
+        Return CDate(d).ToString("yyyy-MM-dd HH:mm")
+    End Function
+
+    ''' <summary>Date seule « yyyy-MM-dd » (— si nul).</summary>
+    Protected Function FormatDate(d As Object) As String
+        If d Is Nothing OrElse IsDBNull(d) Then Return "—"
+        Return CDate(d).ToString("yyyy-MM-dd")
+    End Function
+
+    ''' <summary>Encodage HTML sur (comme Server.HtmlEncode mais tolerant au nul).</summary>
+    Protected Function Enc(o As Object) As String
+        Return Server.HtmlEncode(If(o, "").ToString())
+    End Function
+
 End Class

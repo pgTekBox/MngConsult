@@ -167,6 +167,32 @@ Public Class clsData
         End Using
     End Sub
 
+    ''' <summary>Exécute une procédure stockée sur la BD MailService et retourne un DataSet (lecture courriels).</summary>
+    Public Function ExecuteSQLdsMail(ByVal SQLStatement As String) As DataSet
+        Using DRconn As New SqlClient.SqlConnection(ConnectionStringMail)
+            Dim oCom As New SqlClient.SqlCommand(SQLStatement, DRconn)
+            oCom.CommandType = CommandType.StoredProcedure
+            Dim MyDA As New SqlClient.SqlDataAdapter(oCom)
+            Dim oDs As New DataSet
+            MyDA.Fill(oDs)
+            Return oDs
+        End Using
+    End Function
+
+    Public Function ExecuteSQLdsMail(ByVal SQLStatement As String, AllParameters As Collection) As DataSet
+        Using DRconn As New SqlClient.SqlConnection(ConnectionStringMail)
+            Dim oCom As New SqlClient.SqlCommand(SQLStatement, DRconn)
+            oCom.CommandType = CommandType.StoredProcedure
+            For Each oParam As SqlClient.SqlParameter In AllParameters
+                oCom.Parameters.Add(oParam)
+            Next
+            Dim MyDA As New SqlClient.SqlDataAdapter(oCom)
+            Dim oDs As New DataSet
+            MyDA.Fill(oDs)
+            Return oDs
+        End Using
+    End Function
+
     ' -------------------------------------------------------------------------
     ' Exécute une procédure stockée (sans retour).
     ' -------------------------------------------------------------------------

@@ -30,6 +30,32 @@
                 <span class="nav-txt">Tableau de bord</span>
             </a>
 
+            <!-- Sous-menu Courriel (accordion, ouvert par défaut) -->
+            <div class="nav-group" data-accordion>
+                <button type="button" class="nav-parent" aria-expanded="true">
+                    <span class="nav-ico" aria-hidden="true">✉️</span>
+                    <span class="nav-txt">Courriel</span>
+                    <span class="nav-meta">
+                        <span class="chev" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="nav-children">
+                    <a class="nav-child" href="~/wbfMail.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Courriel
+                    </a>
+                    <a class="nav-child" href="~/wbfMailAccounts.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Comptes de courriel
+                    </a>
+                </div>
+            </div>
+
             <!-- Sous-menu Sécurité (accordion, ouvert par défaut) -->
             <div class="nav-group" data-accordion>
                 <button type="button" class="nav-parent" aria-expanded="true">
@@ -103,6 +129,10 @@
                 <a class="nav-item subtle" href="~/wbfSettingsOpenAiPrompts.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">🤖</span>
                     <span class="nav-txt">Prompts OpenAI</span>
+                </a>
+                <a class="nav-item subtle" href="~/wbfDemoReset.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">🔄</span>
+                    <span class="nav-txt">Réinitialiser la démo</span>
                 </a>
                 <a class="nav-item subtle" href="~/About.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">ℹ️</span>
