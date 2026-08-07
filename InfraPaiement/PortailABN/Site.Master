@@ -1,0 +1,165 @@
+<%@ Master Language="vb" AutoEventWireup="false"
+    CodeBehind="Site.Master.vb" Inherits="PortailABN.SiteMaster" %>
+
+<!DOCTYPE html>
+<html lang="fr">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Espace abonné — 60secPaiement</title>
+    <link rel="icon" href="Images/logo.svg" type="image/svg+xml" />
+    <style>
+        :root {
+            --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+            --primary: #0ea5a4;
+            --secondary: #4f46e5;
+            --text: #0f172a;
+            --muted: #64748b;
+            --line: #e2e8f0;
+            --bg: #f6f7fb;
+            --danger: #dc2626;
+            --ok: #059669;
+        }
+        * { box-sizing: border-box; }
+        html, body { margin: 0; }
+        body { font-family: var(--font); color: var(--text); background: var(--bg); }
+        a { color: var(--secondary); }
+
+        /* ---- Topbar ---- */
+        .topbar {
+            display: flex; align-items: center; gap: 22px;
+            padding: 12px 28px; background: #fff;
+            border-bottom: 1px solid var(--line);
+            position: sticky; top: 0; z-index: 10;
+        }
+        .brand { display: inline-flex; align-items: center; gap: 10px; text-decoration: none; }
+        .brand img { width: 32px; height: 32px; }
+        .brand .name { font-size: 18px; font-weight: 800; letter-spacing: -.02em; color: var(--text); }
+        .brand .name b { color: var(--primary); }
+        .brand .tag { font-size: 11px; font-weight: 800; color: var(--secondary);
+                      background: rgba(79,70,229,.10); padding: 2px 8px; border-radius: 999px; margin-left: 4px; }
+
+        .nav { display: inline-flex; gap: 4px; flex-wrap: wrap; }
+        .nav a {
+            padding: 8px 12px; border-radius: 10px; text-decoration: none;
+            color: var(--muted); font-weight: 700; font-size: 14px;
+        }
+        .nav a:hover { background: #f1f5f9; color: var(--text); }
+        .nav a.active { background: rgba(14,165,164,.12); color: var(--primary); }
+
+        .spacer { flex: 1; }
+        .userbox { display: inline-flex; align-items: center; gap: 14px; font-size: 14px; color: var(--muted); }
+        .userbox .abn { font-weight: 800; color: var(--text); }
+        .userbox .who { font-size: 12px; }
+        .btn-logout {
+            padding: 8px 14px; border: 1px solid var(--line); border-radius: 10px;
+            background: #fff; color: var(--text); font-weight: 700; font-size: 13px;
+            cursor: pointer; font-family: var(--font); text-decoration: none;
+        }
+        .btn-logout:hover { border-color: var(--primary); color: var(--primary); }
+
+        /* ---- Layout ---- */
+        .wrap { max-width: 1120px; margin: 30px auto; padding: 0 28px; }
+        .page-head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 22px; gap: 16px; }
+        h1 { font-size: 25px; margin: 0 0 4px 0; }
+        .sub { color: var(--muted); margin: 0; }
+
+        /* ---- Boutons ---- */
+        .btn {
+            display: inline-flex; align-items: center; gap: 8px;
+            padding: 10px 16px; border-radius: 11px; border: 1px solid var(--line);
+            background: #fff; color: var(--text); font-weight: 700; font-size: 14px;
+            cursor: pointer; font-family: var(--font); text-decoration: none;
+        }
+        .btn:hover { border-color: var(--primary); color: var(--primary); }
+        .btn-primary { border: none; color: #fff; background: linear-gradient(135deg, var(--primary), var(--secondary)); }
+        .btn-primary:hover { color: #fff; transform: translateY(-1px); box-shadow: 0 8px 20px rgba(79,70,229,.25); }
+        .btn-ghost { background: transparent; }
+
+        /* ---- Cartes ---- */
+        .card { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 22px; box-shadow: 0 1px 2px rgba(15,23,42,.04); }
+        .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+
+        /* ---- Cartes KPI ---- */
+        .kpi { background: #fff; border: 1px solid var(--line); border-radius: 16px; padding: 20px 22px; }
+        .kpi .lbl { font-size: 12px; font-weight: 800; text-transform: uppercase; letter-spacing: .04em; color: var(--muted); }
+        .kpi .val { font-size: 27px; font-weight: 800; margin-top: 8px; font-variant-numeric: tabular-nums; }
+        .kpi .hint { font-size: 12px; color: var(--muted); margin-top: 4px; }
+
+        /* ---- Tableau ---- */
+        .table-wrap { background: #fff; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; }
+        table.grid { width: 100%; border-collapse: collapse; font-size: 14px; }
+        table.grid th, table.grid td { text-align: left; padding: 12px 16px; border-bottom: 1px solid var(--line); }
+        table.grid th { background: #fafbfc; color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .03em; }
+        table.grid tr:last-child td { border-bottom: none; }
+        table.grid tbody tr:hover { background: #f8fafc; }
+        .num { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
+        .mono { font-family: Consolas, monospace; }
+        .empty { padding: 40px; text-align: center; color: var(--muted); }
+
+        /* ---- Badges de statut ---- */
+        .badge { display: inline-block; font-size: 11px; font-weight: 800; border-radius: 999px; padding: 3px 10px; }
+        .badge-actif     { background: rgba(5,150,105,.12);  color: var(--ok); }
+        .badge-encours   { background: rgba(2,132,199,.12);  color: #0284c7; }
+        .badge-attente   { background: rgba(217,119,6,.14);  color: #b45309; }
+        .badge-rejete    { background: rgba(220,38,38,.10);  color: var(--danger); }
+        .badge-neutre    { background: rgba(100,116,139,.16); color: #475569; }
+
+        /* ---- Formulaire ---- */
+        .form-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; }
+        .form-grid .full { grid-column: 1 / -1; }
+        .field label { display: block; font-size: 12px; font-weight: 700; color: #334155; margin-bottom: 6px; }
+        .field input[type="text"], .field input[type="email"], .field select, .field textarea {
+            width: 100%; padding: 11px 13px; border: 1px solid var(--line); border-radius: 11px;
+            font-size: 14px; font-family: var(--font); outline: none; background: #fff;
+            transition: border-color .15s, box-shadow .15s;
+        }
+        .field textarea { resize: vertical; min-height: 84px; }
+        .field input:focus, .field select:focus, .field textarea:focus {
+            border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14,165,164,.13);
+        }
+        .form-actions { display: flex; gap: 12px; margin-top: 22px; }
+
+        .msg-ok { padding: 11px 15px; background: rgba(5,150,105,.10); border: 1px solid rgba(5,150,105,.30);
+                  color: var(--ok); border-radius: 11px; font-weight: 600; font-size: 14px; margin-bottom: 18px; }
+        .msg-err { padding: 11px 15px; background: rgba(220,38,38,.08); border: 1px solid rgba(220,38,38,.25);
+                   color: var(--danger); border-radius: 11px; font-weight: 600; font-size: 14px; margin-bottom: 18px; }
+
+        @media (max-width: 720px) { .form-grid { grid-template-columns: 1fr; } }
+    </style>
+    <asp:ContentPlaceHolder ID="head" runat="server" />
+</head>
+<body>
+    <form id="form1" runat="server">
+        <div class="topbar">
+            <a class="brand" href="Default.aspx">
+                <img src="Images/logo.svg" alt="60secPaiement" />
+                <span class="name">60sec<b>Paiement</b><span class="tag">Abonné</span></span>
+            </a>
+            <nav class="nav">
+                <a href="Default.aspx" id="navDash" runat="server">Tableau de bord</a>
+                <a href="wbfClients.aspx" id="navClients" runat="server">Clients</a>
+                <a href="wbfFournisseurs.aspx" id="navFourn" runat="server">Fournisseurs</a>
+                <a href="wbfEncaissements.aspx" id="navEnc" runat="server">Encaissements</a>
+                <a href="wbfDecaissements.aspx" id="navDec" runat="server">Décaissements</a>
+                <a href="wbfReleve.aspx" id="navReleve" runat="server">Relevé</a>
+                <a href="wbfApiKeys.aspx" id="navApi" runat="server">API</a>
+                <a href="wbfWebhooks.aspx" id="navHooks" runat="server">Webhooks</a>
+            </nav>
+            <span class="spacer"></span>
+            <span class="userbox">
+                <span>
+                    <span class="abn"><asp:Literal ID="litAbonne" runat="server" /></span><br />
+                    <span class="who"><asp:Literal ID="litUser" runat="server" /></span>
+                </span>
+                <asp:LinkButton ID="btnLogout" runat="server" CssClass="btn-logout"
+                    Text="Déconnexion" OnClick="btnLogout_Click" CausesValidation="false" />
+            </span>
+        </div>
+
+        <div class="wrap">
+            <asp:ContentPlaceHolder ID="MainContent" runat="server" />
+        </div>
+    </form>
+</body>
+</html>
