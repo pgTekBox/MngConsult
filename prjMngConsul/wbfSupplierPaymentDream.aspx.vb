@@ -213,7 +213,9 @@ Public Class wbfSupplierPaymentDream
                     .PaymentType = "EXPENSE",
                     .Memo = "Facture fournisseur #" & DocId,
                     .ExternalReferenceData = DocId,
-                    .AllowablePaymentMethods = New String() {"EFT"}
+                    .AllowablePaymentMethods = New String() {"EFT"},
+                    .LegalEntityLabel = clsDreamPayments.DefaultLegalEntityLabel(),
+                    .LegalEntity = clsDreamPayments.DefaultLegalEntity()
                 })
 
             ' 4) Accepter -> déclenche le virement EFT
@@ -225,7 +227,12 @@ Public Class wbfSupplierPaymentDream
             ShowMsg(String.Format(L("okPaid"), paymentId), True)
 
         Catch ex As Exception
-            ShowMsg(L("errApi") & " " & ex.Message, False)
+            Dim msg As String = L("errApi") & " " & ex.Message
+            If ex.Message.IndexOf("G00021", StringComparison.OrdinalIgnoreCase) >= 0 _
+               OrElse ex.Message.IndexOf("Multiple payers", StringComparison.OrdinalIgnoreCase) >= 0 Then
+                msg &= " — " & L("hintMultiPayers")
+            End If
+            ShowMsg(msg, False)
         End Try
     End Sub
 
@@ -271,6 +278,7 @@ Public Class wbfSupplierPaymentDream
             Case "errBank" : Return Choose3(lang, "Institution, transit et numéro de compte sont requis.", "Institution, transit and account number are required.", "Institución, tránsito y número de cuenta son obligatorios.")
             Case "errAmount" : Return Choose3(lang, "Montant invalide.", "Invalid amount.", "Monto inválido.")
             Case "errApi" : Return Choose3(lang, "Erreur DreamPaiement :", "DreamPayments error:", "Error DreamPayments:")
+            Case "hintMultiPayers" : Return Choose3(lang, "Le compte Dream comporte plusieurs payeurs. Renseignez « DreamPayments.LegalEntityLabel » dans Web.config avec le libellé du payeur fourni par Dream (ou demandez à Dream de n'associer qu'un seul payeur).", "The Dream account has multiple payers. Set ""DreamPayments.LegalEntityLabel"" in Web.config to the payer label provided by Dream (or ask Dream to associate a single payer).", "La cuenta Dream tiene varios pagadores. Configure ""DreamPayments.LegalEntityLabel"" en Web.config con la etiqueta del pagador proporcionada por Dream (o pida a Dream asociar un solo pagador).")
             Case "okPaid" : Return Choose3(lang, "Virement EFT initié avec succès. Paiement : {0}", "EFT transfer initiated successfully. Payment: {0}", "Transferencia EFT iniciada con éxito. Pago: {0}")
             Case Else : Return ""
         End Select

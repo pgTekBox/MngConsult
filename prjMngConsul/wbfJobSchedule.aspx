@@ -168,7 +168,7 @@
         <!-- Aperçu de la prochaine exécution -->
         <asp:PlaceHolder ID="phPreview" runat="server">
             <div id="divPreview" runat="server" class="preview-box">
-                <div class="lbl">Prochaine exécution prévue</div>
+                <div class="lbl"><asp:Literal ID="litLoc01" runat="server" /></div>
                 <div class="val">
                     <asp:Literal ID="litProchaineExec" runat="server" Text="—" />
                 </div>
@@ -180,10 +180,10 @@
 
         <!-- Section 1 : Informations de base -->
         <div class="sched-card">
-            <h3>Informations de base</h3>
+            <h3><asp:Literal ID="litLoc02" runat="server" /></h3>
 
             <div class="form-row">
-                <label class="required">Nom du schedule</label>
+                <label class="required"><asp:Literal ID="litLoc03" runat="server" /></label>
                 <div>
                     <telerik:RadTextBox ID="txtNom" runat="server" Skin="Bootstrap"
                         Width="100%" MaxLength="200"
@@ -192,7 +192,7 @@
             </div>
 
             <div class="form-row">
-                <label class="required">Type de planification</label>
+                <label class="required"><asp:Literal ID="litLoc04" runat="server" /></label>
                 <div>
                     <telerik:RadComboBox ID="ddlScheduleType" runat="server" Skin="Bootstrap"
                         Width="280px" AutoPostBack="true"
@@ -215,12 +215,12 @@
                 <!-- INTERVAL -->
                 <asp:Panel ID="pnlInterval" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Toutes les ... minutes</label>
+                        <label class="required"><asp:Literal ID="litLoc05" runat="server" /></label>
                         <div>
                             <telerik:RadNumericTextBox ID="txtIntervalMinutes" runat="server" Skin="Bootstrap"
                                 Width="120px" MinValue="1" MaxValue="10080" Value="60"
                                 NumberFormat-DecimalDigits="0" />
-                            <div class="hint">Ex: 30 = toutes les 30 min, 1440 = 1 fois par jour.</div>
+                            <div class="hint"><asp:Literal ID="litLoc06" runat="server" /></div>
                         </div>
                     </div>
                 </asp:Panel>
@@ -228,7 +228,7 @@
                 <!-- DAILY -->
                 <asp:Panel ID="pnlDaily" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Heure d'exécution</label>
+                        <label class="required"><asp:Literal ID="litLoc07" runat="server" /></label>
                         <div>
                             <telerik:RadTimePicker ID="dpHeureDaily" runat="server" Skin="Bootstrap"
                                 Width="120px">
@@ -242,7 +242,7 @@
                 <!-- WEEKLY -->
                 <asp:Panel ID="pnlWeekly" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Heure d'exécution</label>
+                        <label class="required"><asp:Literal ID="litLoc08" runat="server" /></label>
                         <div>
                             <telerik:RadTimePicker ID="dpHeureWeekly" runat="server" Skin="Bootstrap"
                                 Width="120px">
@@ -251,32 +251,32 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="required">Jours de la semaine</label>
+                        <label class="required"><asp:Literal ID="litLoc09" runat="server" /></label>
                         <div>
                             <div class="jours-semaine" id="joursSemaineGroup">
                                 <input type="checkbox" ClientIDMode="Static"  id="cbLun" runat="server" value="1" class="jour-cb" />
-                                <label class="jour-pill" for="cbLun">Lun</label>
+                                <label class="jour-pill" for="cbLun"><asp:Literal ID="litLoc10" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static"  id="cbMar" runat="server" value="2" class="jour-cb" />
-                                <label class="jour-pill" for="cbMar">Mar</label>
+                                <label class="jour-pill" for="cbMar"><asp:Literal ID="litLoc11" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static" id="cbMer" runat="server" value="3" class="jour-cb" />
-                                <label class="jour-pill" for="cbMer">Mer</label>
+                                <label class="jour-pill" for="cbMer"><asp:Literal ID="litLoc12" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static" id="cbJeu" runat="server" value="4" class="jour-cb" />
-                                <label class="jour-pill" for="cbJeu">Jeu</label>
+                                <label class="jour-pill" for="cbJeu"><asp:Literal ID="litLoc13" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static" id="cbVen" runat="server" value="5" class="jour-cb" />
-                                <label class="jour-pill" for="cbVen">Ven</label>
+                                <label class="jour-pill" for="cbVen"><asp:Literal ID="litLoc14" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static" id="cbSam" runat="server" value="6" class="jour-cb" />
-                                <label class="jour-pill" for="cbSam">Sam</label>
+                                <label class="jour-pill" for="cbSam"><asp:Literal ID="litLoc15" runat="server" /></label>
 
                                 <input type="checkbox" ClientIDMode="Static" id="cbDim" runat="server" value="7" class="jour-cb" />
-                                <label class="jour-pill" for="cbDim">Dim</label>
+                                <label class="jour-pill" for="cbDim"><asp:Literal ID="litLoc16" runat="server" /></label>
                             </div>
                             <div class="hint" style="margin-top: 8px;">
-                                Cliquez sur les pilules pour sélectionner les jours actifs.
+                                <asp:Literal ID="litLoc17" runat="server" />
                             </div>
                         </div>
                     </div>
@@ -285,7 +285,7 @@
                 <!-- MONTHLY -->
                 <asp:Panel ID="pnlMonthly" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Périodicité</label>
+                        <label class="required"><asp:Literal ID="litLoc18" runat="server" /></label>
                         <div>
                             <telerik:RadComboBox ID="ddlIntervalleMois" runat="server" Skin="Bootstrap"
                                 Width="220px">
@@ -297,12 +297,12 @@
                                 </Items>
                             </telerik:RadComboBox>
                             <div class="hint">
-                                Ex : trimestriel = remise des taxes ; annuel = T4 ou rapport fin d'exercice.
+                                <asp:Literal ID="litLoc19" runat="server" />
                             </div>
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="required">Heure d'exécution</label>
+                        <label class="required"><asp:Literal ID="litLoc20" runat="server" /></label>
                         <div>
                             <telerik:RadTimePicker ID="dpHeureMonthly" runat="server" Skin="Bootstrap"
                                 Width="120px">
@@ -311,7 +311,7 @@
                         </div>
                     </div>
                     <div class="form-row">
-                        <label class="required">Jour du mois</label>
+                        <label class="required"><asp:Literal ID="litLoc21" runat="server" /></label>
                         <div>
                             <telerik:RadComboBox ID="ddlJourMois" runat="server" Skin="Bootstrap"
                                 Width="200px">
@@ -320,7 +320,7 @@
                                 </Items>
                             </telerik:RadComboBox>
                             <div class="hint">
-                                Ex: 15 = le 15 de chaque mois, -1 = dernier jour (28/30/31 selon le mois).
+                                <asp:Literal ID="litLoc22" runat="server" />
                             </div>
                         </div>
                     </div>
@@ -329,22 +329,22 @@
                 <!-- CRON -->
                 <asp:Panel ID="pnlCron" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Expression CRON</label>
+                        <label class="required"><asp:Literal ID="litLoc23" runat="server" /></label>
                         <div>
                             <telerik:RadTextBox ID="txtCronExpression" runat="server" Skin="Bootstrap"
                                 Width="300px" MaxLength="100"
                                 EmptyMessage="0 8 * * 1-5" />
                             <div class="cron-help">
-                                <div><strong>Format :</strong> <code>min hour day-of-month month day-of-week</code></div>
+                                <div><strong><asp:Literal ID="litLoc24" runat="server" /></strong> <code>min hour day-of-month month day-of-week</code></div>
                                 <table>
-                                    <tr><td><code>0 8 * * *</code></td><td>Tous les jours à 8h00</td></tr>
-                                    <tr><td><code>*/30 8-18 * * 1-5</code></td><td>Toutes les 30 min, 8h-18h, Lun-Ven</td></tr>
-                                    <tr><td><code>0 0 1 * *</code></td><td>Le 1er du mois à minuit</td></tr>
-                                    <tr><td><code>0 12 * * 0</code></td><td>Tous les dimanches midi</td></tr>
-                                    <tr><td><code>0 22 * * 1-5</code></td><td>Lun-Ven 22h00</td></tr>
+                                    <tr><td><code>0 8 * * *</code></td><td><asp:Literal ID="litLoc25" runat="server" /></td></tr>
+                                    <tr><td><code>*/30 8-18 * * 1-5</code></td><td><asp:Literal ID="litLoc26" runat="server" /></td></tr>
+                                    <tr><td><code>0 0 1 * *</code></td><td><asp:Literal ID="litLoc27" runat="server" /></td></tr>
+                                    <tr><td><code>0 12 * * 0</code></td><td><asp:Literal ID="litLoc28" runat="server" /></td></tr>
+                                    <tr><td><code>0 22 * * 1-5</code></td><td><asp:Literal ID="litLoc29" runat="server" /></td></tr>
                                 </table>
                                 <div style="margin-top: 6px; color: #92400e;">
-                                    ⚠ La prochaine exécution sera calculée par le service .NET au prochain cycle.
+                                    ⚠ <asp:Literal ID="litLoc30" runat="server" />
                                 </div>
                             </div>
                         </div>
@@ -354,12 +354,12 @@
                 <!-- ONCE -->
                 <asp:Panel ID="pnlOnce" runat="server" Visible="false">
                     <div class="form-row">
-                        <label class="required">Date et heure d'exécution</label>
+                        <label class="required"><asp:Literal ID="litLoc31" runat="server" /></label>
                         <div>
                             <telerik:RadDateTimePicker ID="dpDateOnce" runat="server" Skin="Bootstrap"
                                 Width="240px">
                             </telerik:RadDateTimePicker>
-                            <div class="hint">Le schedule sera désactivé après cette unique exécution.</div>
+                            <div class="hint"><asp:Literal ID="litLoc32" runat="server" /></div>
                         </div>
                     </div>
                 </asp:Panel>
@@ -369,28 +369,28 @@
 
         <!-- Section 2 : Période de validité + état -->
         <div class="sched-card">
-            <h3>Période de validité et état</h3>
+            <h3><asp:Literal ID="litLoc33" runat="server" /></h3>
 
             <div class="form-row">
-                <label>Date de début</label>
+                <label><asp:Literal ID="litLoc34" runat="server" /></label>
                 <div>
                     <telerik:RadDatePicker ID="dpDateDebut" runat="server" Skin="Bootstrap"
                         Width="160px" />
-                    <div class="hint">Avant cette date, le schedule ne s'exécute pas. (Défaut : aujourd'hui)</div>
+                    <div class="hint"><asp:Literal ID="litLoc35" runat="server" /></div>
                 </div>
             </div>
 
             <div class="form-row">
-                <label>Date de fin</label>
+                <label><asp:Literal ID="litLoc36" runat="server" /></label>
                 <div>
                     <telerik:RadDatePicker ID="dpDateFin" runat="server" Skin="Bootstrap"
                         Width="160px" />
-                    <div class="hint">Optionnel. Vide = pas de fin.</div>
+                    <div class="hint"><asp:Literal ID="litLoc37" runat="server" /></div>
                 </div>
             </div>
 
             <div class="form-row">
-                <label>État</label>
+                <label><asp:Literal ID="litLoc38" runat="server" /></label>
                 <div>
                     <telerik:RadComboBox ID="ddlEtat" runat="server" Skin="Bootstrap" Width="220px">
                         <Items>
@@ -400,7 +400,7 @@
                         </Items>
                     </telerik:RadComboBox>
                     <div class="hint">
-                        Pause = arrêt temporaire (réactivable rapidement). Inactif = désactivation longue durée.
+                        <asp:Literal ID="litLoc39" runat="server" />
                     </div>
                 </div>
             </div>
@@ -408,7 +408,7 @@
 
         <!-- Section 3 : Paramètres override (optionnel) -->
         <div class="sched-card">
-            <h3>Paramètres spécifiques (override)</h3>
+            <h3><asp:Literal ID="litLoc40" runat="server" /></h3>
             <div class="form-row">
                 <label>HandlerParams (JSON)</label>
                 <div>
@@ -416,7 +416,7 @@
                         Width="100%" TextMode="MultiLine" Rows="3"
                         EmptyMessage='{"@DateReference": "@END_OF_MONTH"}' />
                     <div class="hint">
-                        Optionnel. Si renseigné, ces paramètres remplacent ceux par défaut du job pour ce schedule.
+                        <asp:Literal ID="litLoc41" runat="server" />
                     </div>
                 </div>
             </div>
@@ -451,7 +451,11 @@
 
     </div>
 
+    <telerik:RadCodeBlock runat="server">
     <script type="text/javascript">
+        var SCH_I18N = {
+            confirmSuppression: '<%= T("Supprimer définitivement ce schedule ?", "Permanently delete this schedule?", "¿Eliminar definitivamente esta programación?") %>'
+        };
         function annuler(sender, args) {
             // Lecture du JobId depuis le HiddenField rendu par ASP.NET
             var hfJobId = document.getElementById('hfJobId');
@@ -464,11 +468,12 @@
             }
         }
         function confirmerSuppression(sender, args) {
-            args.set_cancel(!confirm("Supprimer définitivement ce schedule ?"));
+            args.set_cancel(!confirm(SCH_I18N.confirmSuppression));
         }
 
         // Note : les pilules de jours de semaine sont gérées en CSS pur
         // via le sélecteur .jour-cb:checked + .jour-pill — aucun JS nécessaire.
     </script>
+    </telerik:RadCodeBlock>
 
 </asp:Content>

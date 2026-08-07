@@ -10,6 +10,8 @@ Partial Public Class wbfJobs
     ' =========================================================
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ApplyLocalization()
+
         If Not IsPostBack Then
             If Not isAuthenticated Then
                 Response.Redirect("~/wbfLogin.aspx")
@@ -18,6 +20,56 @@ Partial Public Class wbfJobs
             ChargerKpis()
             ChargerJobs()
         End If
+    End Sub
+
+    ' =========================================================
+    '  LOCALISATION (FR / EN / ES)
+    ' =========================================================
+
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        Page.Title = T("Tâches planifiées", "Scheduled jobs", "Tareas programadas")
+
+        ' Filtre : état actif
+        ddlFiltreActif.Items(0).Text = T("Tous les jobs", "All jobs", "Todas las tareas")
+        ddlFiltreActif.Items(1).Text = T("Actifs", "Active", "Activos")
+        ddlFiltreActif.Items(2).Text = T("Inactifs", "Inactive", "Inactivos")
+
+        ' Filtre : type
+        ddlFiltreType.Items(0).Text = T("Tous les types", "All types", "Todos los tipos")
+        ddlFiltreType.Items(1).Text = T("Procédure stockée", "Stored procedure", "Procedimiento almacenado")
+        ddlFiltreType.Items(2).Text = T("Connecteur", "Connector", "Conector")
+        ddlFiltreType.Items(3).Text = T("Courriel", "Email", "Correo")
+        ddlFiltreType.Items(4).Text = T("Custom", "Custom", "Personalizado")
+
+        txtRecherche.EmptyMessage = T("Rechercher...", "Search...", "Buscar...")
+        btnRefresh.Text = T("Rafraîchir", "Refresh", "Actualizar")
+        btnNouveau.Text = T("Nouveau job", "New job", "Nueva tarea")
+
+        ' Libellés statiques (Literals au lieu de blocs <%= %> pour compatibilité RadAjax)
+        litTitre.Text = T("Tâches planifiées", "Scheduled jobs", "Tareas programadas")
+        litSousTitre.Text = T("Gestion des jobs automatiques exécutés par l'orchestrateur (rapports, imports, courriels, maintenance).",
+                              "Management of automatic jobs run by the orchestrator (reports, imports, emails, maintenance).",
+                              "Gestión de las tareas automáticas ejecutadas por el orquestador (informes, importaciones, correos, mantenimiento).")
+        litLblActifs.Text = T("Jobs actifs", "Active jobs", "Tareas activas")
+        litLblSucces.Text = T("Succès dernières 24 h", "Success last 24 h", "Éxitos últimas 24 h")
+        litLblEchecs.Text = T("Échecs dernières 24 h", "Failures last 24 h", "Fallos últimas 24 h")
+        litLblEnCours.Text = T("Exécutions en cours", "Running executions", "Ejecuciones en curso")
+        litListeTitre.Text = T("Liste des jobs", "Job list", "Lista de tareas")
+        litEmptyText.Text = T("Aucun job trouvé avec ces filtres.", "No job found with these filters.", "No se encontró ninguna tarea con estos filtros.")
+        litThJob.Text = T("Job", "Job", "Tarea")
+        litThType.Text = T("Type", "Type", "Tipo")
+        litThSchedules.Text = T("Schedules", "Schedules", "Programaciones")
+        litThProchaine.Text = T("Prochaine exéc.", "Next run", "Próxima ejec.")
+        litThDerniere.Text = T("Dernière exéc.", "Last run", "Última ejec.")
+        litThActions.Text = T("Actions", "Actions", "Acciones")
     End Sub
 
     ' =========================================================
@@ -48,14 +100,16 @@ Partial Public Class wbfJobs
         Dim nbTotal = If(Convert.IsDBNull(row("NbSchedules")), 0, Convert.ToInt32(row("NbSchedules")))
 
         If nbTotal = 0 Then
-            litSchedules.Text = "<span class='pill pill-neutral'>Aucun</span>"
+            litSchedules.Text = "<span class='pill pill-neutral'>" & T("Aucun", "None", "Ninguno") & "</span>"
         ElseIf nbPause > 0 Then
             litSchedules.Text = String.Format(
-                "<span class='pill pill-warning'>{0} actifs / {1} en pause</span>", nbActifs, nbPause)
+                "<span class='pill pill-warning'>{0} {1} / {2} {3}</span>",
+                nbActifs, T("actifs", "active", "activos"),
+                nbPause, T("en pause", "paused", "en pausa"))
         Else
             litSchedules.Text = String.Format(
-                "<span class='pill pill-info'>{0} actif{1}</span>",
-                nbActifs, If(nbActifs > 1, "s", ""))
+                "<span class='pill pill-info'>{0} {1}</span>",
+                nbActifs, T("actif", "active", "activo") & If(nbActifs > 1, T("s", "", "s"), ""))
         End If
 
         ' ─── Prochaine exécution ───
@@ -71,20 +125,42 @@ Partial Public Class wbfJobs
         ' ─── Dernière exécution ───
         Dim litDerniere = TryCast(e.Item.FindControl("litDerniereExec"), Literal)
         If Convert.IsDBNull(row("DerniereExecDemarre")) Then
-            litDerniere.Text = "<span style='color:#94a3b8;'>Jamais</span>"
+            litDerniere.Text = "<span style='color:#94a3b8;'>" & T("Jamais", "Never", "Nunca") & "</span>"
         Else
             Dim statut = row("DerniereExecStatut").ToString()
             Dim dt = Convert.ToDateTime(row("DerniereExecDemarre"))
             Dim pillClass = StatutToPillClass(statut)
             litDerniere.Text = String.Format(
                 "<span class='pill {0}'>{1}</span><div class='meta-line'>{2}</div>",
-                pillClass, statut, dt.ToString("yyyy-MM-dd HH:mm"))
+                pillClass, StatutToLabel(statut), dt.ToString("yyyy-MM-dd HH:mm"))
         End If
 
         ' ─── Volet déplié : schedules détaillés ───
         Dim phSchedules = TryCast(e.Item.FindControl("phSchedules"), PlaceHolder)
         If nbTotal > 0 Then
             ChargerSchedules(jobId, phSchedules)
+        End If
+
+        ' ─── Boutons d'action (texte + confirmations localisés) ───
+        Dim btnEditer = TryCast(e.Item.FindControl("btnEditer"), LinkButton)
+        If btnEditer IsNot Nothing Then btnEditer.Text = T("Éditer", "Edit", "Editar")
+
+        Dim btnRunNow = TryCast(e.Item.FindControl("btnRunNow"), LinkButton)
+        If btnRunNow IsNot Nothing Then
+            btnRunNow.Text = T("Lancer", "Run now", "Ejecutar ahora")
+            btnRunNow.OnClientClick = "return confirm('" &
+                T("Lancer ce job maintenant ?", "Run this job now?", "¿Ejecutar esta tarea ahora?") & "');"
+        End If
+
+        Dim btnHistorique = TryCast(e.Item.FindControl("btnHistorique"), LinkButton)
+        If btnHistorique IsNot Nothing Then btnHistorique.Text = T("Historique", "History", "Historial")
+
+        Dim btnSupprimer = TryCast(e.Item.FindControl("btnSupprimer"), LinkButton)
+        If btnSupprimer IsNot Nothing Then
+            btnSupprimer.OnClientClick = "return confirm('" &
+                T("Supprimer définitivement ce job et tout son historique ?",
+                  "Permanently delete this job and all its history?",
+                  "¿Eliminar definitivamente esta tarea y todo su historial?") & "');"
         End If
 
         ' Job inactif : griser la ligne
@@ -107,16 +183,20 @@ Partial Public Class wbfJobs
                 Case "RunNow"
                     Dim execId = LancerJobMaintenant(jobId)
                     ShowStatus("success",
-                        "Job lancé manuellement. ExecutionId=" & execId &
-                        ". Le worker prendra le relais à son prochain cycle.")
+                        T("Job lancé manuellement. ExecutionId=",
+                          "Job started manually. ExecutionId=",
+                          "Tarea iniciada manualmente. ExecutionId=") & execId &
+                        T(". Le worker prendra le relais à son prochain cycle.",
+                          ". The worker will take over on its next cycle.",
+                          ". El worker continuará en su próximo ciclo."))
 
                 Case "ToggleActif"
                     BasculerActifJob(jobId)
-                    ShowStatus("info", "Statut du job mis à jour.")
+                    ShowStatus("info", T("Statut du job mis à jour.", "Job status updated.", "Estado de la tarea actualizado."))
 
                 Case "Supprimer"
                     SupprimerJob(jobId)
-                    ShowStatus("success", "Job supprimé avec succès.")
+                    ShowStatus("success", T("Job supprimé avec succès.", "Job deleted successfully.", "Tarea eliminada con éxito."))
 
                 Case "Historique"
                     Response.Redirect("wbfJobMonitoring.aspx?JobId=" & jobId)
@@ -127,9 +207,9 @@ Partial Public Class wbfJobs
             ChargerJobs()
 
         Catch sqlex As SqlException
-            ShowStatus("danger", "Erreur SQL : " & sqlex.Message)
+            ShowStatus("danger", T("Erreur SQL : ", "SQL error: ", "Error SQL: ") & sqlex.Message)
         Catch ex As Exception
-            ShowStatus("danger", "Erreur : " & ex.Message)
+            ShowStatus("danger", T("Erreur : ", "Error: ", "Error: ") & ex.Message)
         End Try
     End Sub
 
@@ -209,11 +289,11 @@ Partial Public Class wbfJobs
 
             Dim badgeEtat = ""
             If Convert.ToBoolean(r("Pause")) Then
-                badgeEtat = "<span class='pill pill-warning'>EN PAUSE</span>"
+                badgeEtat = "<span class='pill pill-warning'>" & T("EN PAUSE", "PAUSED", "EN PAUSA") & "</span>"
             ElseIf Not Convert.ToBoolean(r("Actif")) Then
-                badgeEtat = "<span class='pill pill-neutral'>INACTIF</span>"
+                badgeEtat = "<span class='pill pill-neutral'>" & T("INACTIF", "INACTIVE", "INACTIVO") & "</span>"
             Else
-                badgeEtat = "<span class='pill pill-success'>ACTIF</span>"
+                badgeEtat = "<span class='pill pill-success'>" & T("ACTIF", "ACTIVE", "ACTIVO") & "</span>"
             End If
 
             Dim prochaine As String
@@ -228,7 +308,7 @@ Partial Public Class wbfJobs
                 "<div class='schedule-item'>" &
                 "<span class='sched-name'>{0}</span>" &
                 "<span class='sched-desc'>{1}</span>" &
-                "<span class='sched-next'>Prochaine : {2}</span>" &
+                "<span class='sched-next'>" & T("Prochaine : ", "Next: ", "Próxima: ") & "{2}</span>" &
                 "<span>{3}</span>" &
                 "</div>",
                 nom, desc, prochaine, badgeEtat)
@@ -333,17 +413,28 @@ Partial Public Class wbfJobs
 
         If diff.TotalSeconds < 0 Then
             ' Date passée
-            If minutes < 1 Then Return "À l'instant"
-            If minutes < 60 Then Return "Il y a " & Math.Round(minutes) & " min"
-            If diff.TotalHours > -24 Then Return "Il y a " & Math.Round(Math.Abs(diff.TotalHours)) & " h"
-            Return "Il y a " & Math.Round(Math.Abs(diff.TotalDays)) & " j"
+            If minutes < 1 Then Return T("À l'instant", "Just now", "Ahora mismo")
+            If minutes < 60 Then Return T("Il y a ", "", "Hace ") & Math.Round(minutes) & T(" min", " min ago", " min")
+            If diff.TotalHours > -24 Then Return T("Il y a ", "", "Hace ") & Math.Round(Math.Abs(diff.TotalHours)) & T(" h", " h ago", " h")
+            Return T("Il y a ", "", "Hace ") & Math.Round(Math.Abs(diff.TotalDays)) & T(" j", " d ago", " d")
         Else
             ' Date future
-            If minutes < 1 Then Return "Dans moins d'1 min"
-            If minutes < 60 Then Return "Dans " & Math.Round(minutes) & " min"
-            If diff.TotalHours < 24 Then Return "Dans " & Math.Round(diff.TotalHours) & " h"
-            Return "Dans " & Math.Round(diff.TotalDays) & " j"
+            If minutes < 1 Then Return T("Dans moins d'1 min", "In less than 1 min", "En menos de 1 min")
+            If minutes < 60 Then Return T("Dans ", "In ", "En ") & Math.Round(minutes) & T(" min", " min", " min")
+            If diff.TotalHours < 24 Then Return T("Dans ", "In ", "En ") & Math.Round(diff.TotalHours) & T(" h", " h", " h")
+            Return T("Dans ", "In ", "En ") & Math.Round(diff.TotalDays) & T(" j", " d", " d")
         End If
+    End Function
+
+    Private Function StatutToLabel(statut As String) As String
+        Select Case statut
+            Case "SUCCES" : Return T("Succès", "Success", "Éxito")
+            Case "ECHEC" : Return T("Échec", "Failure", "Fallo")
+            Case "TIMEOUT" : Return T("Délai dépassé", "Timeout", "Tiempo agotado")
+            Case "EN_COURS" : Return T("En cours", "Running", "En curso")
+            Case "ANNULE" : Return T("Annulé", "Cancelled", "Cancelado")
+            Case Else : Return statut
+        End Select
     End Function
 
     Private Sub ShowStatus(level As String, message As String)

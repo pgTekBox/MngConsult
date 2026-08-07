@@ -446,9 +446,9 @@
         <!-- TOOLBAR -->
         <div class="ag-toolbar">
             <div class="ag-nav">
-                <button type="button" class="ag-iconbtn" onclick="agNav(-1); return false;" title="Précédent">‹</button>
-                <button type="button" class="ag-iconbtn" onclick="agNav(1); return false;"  title="Suivant">›</button>
-                <button type="button" class="ag-iconbtn" onclick="agNavToday(); return false;" title="Aujourd'hui">●</button>
+                <button type="button" class="ag-iconbtn" onclick="agNav(-1); return false;" title="<%= T("Précédent","Previous","Anterior") %>">‹</button>
+                <button type="button" class="ag-iconbtn" onclick="agNav(1); return false;"  title="<%= T("Suivant","Next","Siguiente") %>">›</button>
+                <button type="button" class="ag-iconbtn" onclick="agNavToday(); return false;" title="<%= T("Aujourd'hui","Today","Hoy") %>">●</button>
             </div>
 
             <div class="ag-title" id="agTitle">—</div>
@@ -456,24 +456,24 @@
             <div class="ag-spacer"></div>
 
             <div class="ag-views" role="tablist">
-                <button type="button" id="vMonth" class="active" onclick="agSetView('month'); return false;">Mois</button>
-                <button type="button" id="vWeek"  onclick="agSetView('week');  return false;">Semaine</button>
-                <button type="button" id="vDay"   onclick="agSetView('day');   return false;">Jour</button>
+                <button type="button" id="vMonth" class="active" onclick="agSetView('month'); return false;"><%= T("Mois","Month","Mes") %></button>
+                <button type="button" id="vWeek"  onclick="agSetView('week');  return false;"><%= T("Semaine","Week","Semana") %></button>
+                <button type="button" id="vDay"   onclick="agSetView('day');   return false;"><%= T("Jour","Day","Día") %></button>
             </div>
 
-            <button type="button" class="ag-btn-add" onclick="agNewAppointment(); return false;">+ Rendez-vous</button>
+            <button type="button" class="ag-btn-add" onclick="agNewAppointment(); return false;">+ <%= T("Rendez-vous","Appointment","Cita") %></button>
         </div>
 
         <!-- FILTRES RESSOURCES -->
         <div class="ag-resources" id="agResources">
-            <span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;">Ressources :</span>
+            <span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;"><%= T("Employés","Employees","Empleados") %> :</span>
             <%-- généré par JS --%>
         </div>
 
         <!-- VUE MOIS -->
         <div class="ag-month" id="agMonthView">
             <div class="ag-month-head">
-                <div>Lun</div><div>Mar</div><div>Mer</div><div>Jeu</div><div>Ven</div><div>Sam</div><div>Dim</div>
+                <div><%= T("Lun","Mon","Lun") %></div><div><%= T("Mar","Tue","Mar") %></div><div><%= T("Mer","Wed","Mié") %></div><div><%= T("Jeu","Thu","Jue") %></div><div><%= T("Ven","Fri","Vie") %></div><div><%= T("Sam","Sat","Sáb") %></div><div><%= T("Dim","Sun","Dom") %></div>
             </div>
             <div class="ag-month-grid" id="agMonthGrid"></div>
         </div>
@@ -491,6 +491,16 @@
     <div class="ag-toast-host" id="agToastHost"></div>
 
     <script>
+        // ============================================================
+        // I18N (fr/en/es) — injecté côté serveur selon la langue
+        // ============================================================
+        var AG_LANG = '<%= AgLocale() %>';
+        var AG_I18N = {
+            employees: '<%= T("Employés","Employees","Empleados") %>',
+            allDay: '<%= T("Toute la journée","All day","Todo el día") %>',
+            at: '<%= T("À","At","A las") %>'
+        };
+
         // ============================================================
         // ÉTAT GLOBAL (côté client)
         // ============================================================
@@ -546,11 +556,11 @@
         }
 
         function monthLabel(d) {
-            return d.toLocaleDateString('fr-CA', { year: 'numeric', month: 'long' });
+            return d.toLocaleDateString(AG_LANG, { year: 'numeric', month: 'long' });
         }
 
         function dayLabel(d) {
-            return d.toLocaleDateString('fr-CA', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+            return d.toLocaleDateString(AG_LANG, { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
         }
 
         // ============================================================
@@ -563,8 +573,8 @@
             } else if (AG.view === 'week') {
                 var s = startOfWeek(AG.currentDate);
                 var e = addDays(s, 6);
-                el.textContent = s.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short' }) + ' – ' +
-                    e.toLocaleDateString('fr-CA', { day: 'numeric', month: 'short', year: 'numeric' });
+                el.textContent = s.toLocaleDateString(AG_LANG, { day: 'numeric', month: 'short' }) + ' – ' +
+                    e.toLocaleDateString(AG_LANG, { day: 'numeric', month: 'short', year: 'numeric' });
             } else {
                 el.textContent = dayLabel(AG.currentDate);
             }
@@ -573,7 +583,7 @@
         function agRenderResources() {
             var host = document.getElementById('agResources');
             // garde le label
-            host.innerHTML = '<span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;">Ressources :</span>';
+            host.innerHTML = '<span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;">' + AG_I18N.employees + ' :</span>';
             AG.employees.forEach(function (emp) {
                 var on = AG.empFilter.length === 0 || AG.empFilter.indexOf(emp.Id) !== -1;
                 var pill = document.createElement('span');
@@ -729,13 +739,13 @@
             // Header
             var today = new Date(); today.setHours(0, 0, 0, 0);
             head.innerHTML = '<div class="col" style="background:#fafbfc;"></div>';
-            allday.innerHTML = '<div class="lbl">Toute la journée</div>';
+            allday.innerHTML = '<div class="lbl">' + AG_I18N.allDay + '</div>';
 
             for (var i = 0; i < dayCount; i++) {
                 var d = addDays(start, i);
                 var col = document.createElement('div');
                 col.className = 'col' + (sameDay(d, today) ? ' today' : '');
-                col.innerHTML = '<span>' + d.toLocaleDateString('fr-CA', { weekday: 'short' }) + '</span><span class="num">' + d.getDate() + '</span>';
+                col.innerHTML = '<span>' + d.toLocaleDateString(AG_LANG, { weekday: 'short' }) + '</span><span class="num">' + d.getDate() + '</span>';
                 head.appendChild(col);
 
                 var ad = document.createElement('div');
@@ -1031,7 +1041,7 @@
                 var s = new Date(ev.Start);
                 var triggerAt = new Date(s.getTime() - ev.ReminderMinutes * 60000);
                 if (now >= triggerAt && now < s) {
-                    agShowToast(ev.Title, 'À ' + fmtTime(s) + (ev.CustomerName ? ' — ' + ev.CustomerName : ''));
+                    agShowToast(ev.Title, AG_I18N.at + ' ' + fmtTime(s) + (ev.CustomerName ? ' — ' + ev.CustomerName : ''));
                     ev._reminded = true;
                 }
             });

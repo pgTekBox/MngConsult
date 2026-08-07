@@ -8,6 +8,8 @@ Public Class wbfAppointmentEdit
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        ApplyLocalization()
+
         If Not IsPostBack Then
             If Not isAuthenticated Then
                 Response.Redirect("~/wbfLogin.aspx")
@@ -23,7 +25,7 @@ Public Class wbfAppointmentEdit
 
             If id > 0 Then
                 LoadAppointment(id)
-                litTitle.Text = "Modifier le rendez-vous"
+                litTitle.Text = T("Modifier le rendez-vous", "Edit appointment", "Editar la cita")
                 btnDelete.Visible = True
             Else
                 ' Date suggérée venue de l'agenda
@@ -39,10 +41,62 @@ Public Class wbfAppointmentEdit
                 rdpEnd.SelectedDate = endDt
                 rtpEnd.SelectedDate = New Date(1980, 1, 1, endDt.Hour, endDt.Minute, 0)
 
-                litTitle.Text = "Nouveau rendez-vous"
+                litTitle.Text = T("Nouveau rendez-vous", "New appointment", "Nueva cita")
             End If
         End If
     End Sub
+
+    ''' <summary>Localisation fr/en/es des contrôles serveur (Telerik + boutons).</summary>
+    Private Sub ApplyLocalization()
+        btnDelete.Text = T("Supprimer", "Delete", "Eliminar")
+        btnDelete.OnClientClick = "return confirm('" &
+            T("Supprimer ce rendez-vous ?", "Delete this appointment?", "¿Eliminar esta cita?").Replace("'", "\'") & "');"
+        lnkBack.Text = "← " & T("Annuler", "Cancel", "Cancelar")
+        btnInvoice.Text = T("Facturer", "Invoice", "Facturar")
+        btnInvoice.ToolTip = T("Sauvegarder le rendez-vous et créer une facture",
+                               "Save the appointment and create an invoice",
+                               "Guardar la cita y crear una factura")
+        btnSave.Text = T("Enregistrer", "Save", "Guardar")
+
+        Dim sel As String = T("Sélectionner…", "Select…", "Seleccionar…")
+        rddlCustomer.DefaultMessage = sel
+        rddlEmployee.DefaultMessage = sel
+        rddlType.DefaultMessage = sel
+
+        SetItem(rddlStatus, "Planifié", T("Planifié", "Planned", "Planificado"))
+        SetItem(rddlStatus, "Confirmé", T("Confirmé", "Confirmed", "Confirmado"))
+        SetItem(rddlStatus, "Terminé", T("Terminé", "Completed", "Terminado"))
+        SetItem(rddlStatus, "Annulé", T("Annulé", "Cancelled", "Cancelado"))
+        SetItem(rddlStatus, "NoShow", T("No-show", "No-show", "No se presentó"))
+
+        SetItem(rddlRecurrence, "", T("Aucune", "None", "Ninguna"))
+        SetItem(rddlRecurrence, "FREQ=DAILY;INTERVAL=1", T("Tous les jours", "Every day", "Todos los días"))
+        SetItem(rddlRecurrence, "FREQ=WEEKLY;INTERVAL=1", T("Toutes les semaines", "Every week", "Cada semana"))
+        SetItem(rddlRecurrence, "FREQ=WEEKLY;INTERVAL=2", T("Toutes les 2 semaines", "Every 2 weeks", "Cada 2 semanas"))
+        SetItem(rddlRecurrence, "FREQ=MONTHLY;INTERVAL=1", T("Tous les mois", "Every month", "Cada mes"))
+        SetItem(rddlRecurrence, "FREQ=YEARLY;INTERVAL=1", T("Tous les ans", "Every year", "Cada año"))
+
+        SetItem(rddlReminder, "", T("Aucun", "None", "Ninguno"))
+        SetItem(rddlReminder, "5", T("5 minutes avant", "5 minutes before", "5 minutos antes"))
+        SetItem(rddlReminder, "15", T("15 minutes avant", "15 minutes before", "15 minutos antes"))
+        SetItem(rddlReminder, "30", T("30 minutes avant", "30 minutes before", "30 minutos antes"))
+        SetItem(rddlReminder, "60", T("1 heure avant", "1 hour before", "1 hora antes"))
+        SetItem(rddlReminder, "1440", T("1 jour avant", "1 day before", "1 día antes"))
+    End Sub
+
+    Private Shared Sub SetItem(ddl As RadDropDownList, value As String, text As String)
+        Dim it = ddl.FindItemByValue(value)
+        If it IsNot Nothing Then it.Text = text
+    End Sub
+
+    ''' <summary>Sélecteur de langue simple (fr/en/es).</summary>
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     ''' <summary>
     ''' AutoPostBack du dropdown Type → recalcule la date/heure de fin selon DurationMinutes
@@ -234,7 +288,7 @@ Public Class wbfAppointmentEdit
         If Not SaveAppointment(newId) Then Return
 
         If newId <= 0 Then
-            ShowMsg("Impossible de récupérer l'identifiant du rendez-vous sauvegardé.", isError:=True)
+            ShowMsg(T("Impossible de récupérer l'identifiant du rendez-vous sauvegardé.", "Unable to retrieve the saved appointment identifier.", "No se pudo recuperar el identificador de la cita guardada."), isError:=True)
             Return
         End If
 
@@ -254,15 +308,15 @@ Public Class wbfAppointmentEdit
 
         ' Validations
         If String.IsNullOrWhiteSpace(txtTitle.Text) Then
-            ShowMsg("Le titre est obligatoire.", isError:=True)
+            ShowMsg(T("Le titre est obligatoire.", "The title is required.", "El título es obligatorio."), isError:=True)
             Return False
         End If
         If Not rdpStart.SelectedDate.HasValue OrElse Not rdpEnd.SelectedDate.HasValue Then
-            ShowMsg("Les dates de début et de fin sont obligatoires.", isError:=True)
+            ShowMsg(T("Les dates de début et de fin sont obligatoires.", "Start and end dates are required.", "Las fechas de inicio y fin son obligatorias."), isError:=True)
             Return False
         End If
         If Not rtpStart.SelectedDate.HasValue OrElse Not rtpEnd.SelectedDate.HasValue Then
-            ShowMsg("Les heures de début et de fin sont obligatoires.", isError:=True)
+            ShowMsg(T("Les heures de début et de fin sont obligatoires.", "Start and end times are required.", "Las horas de inicio y fin son obligatorias."), isError:=True)
             Return False
         End If
 
@@ -276,7 +330,7 @@ Public Class wbfAppointmentEdit
         Dim endDt As New Date(eDate.Year, eDate.Month, eDate.Day, eTime.Hour, eTime.Minute, 0)
 
         If endDt <= startDt Then
-            ShowMsg("La date/heure de fin doit être après la date/heure de début.", isError:=True)
+            ShowMsg(T("La date/heure de fin doit être après la date/heure de début.", "The end date/time must be after the start date/time.", "La fecha/hora de fin debe ser posterior a la de inicio."), isError:=True)
             Return False
         End If
 

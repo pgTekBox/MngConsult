@@ -33,7 +33,76 @@ Partial Public Class wbfJobMonitoring
     '  PAGE LIFECYCLE
     ' =========================================================
 
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        Me.Title = T("Historique des exécutions", "Execution history", "Historial de ejecuciones")
+
+        ' ─── Libellés HTML (Literals, évite les blocs <%= %> qui verrouillent la collection de contrôles sous RadAjax) ───
+        litLoc01.Text = T("Historique des exécutions", "Execution history", "Historial de ejecuciones")
+        litLoc02.Text = T("Exploration de l'historique des jobs exécutés par l'orchestrateur. Cliquez sur une ligne pour voir les détails et les logs.",
+                          "Explore the history of jobs run by the orchestrator. Click a row to view details and logs.",
+                          "Explore el historial de tareas ejecutadas por el orquestador. Haga clic en una fila para ver los detalles y los registros.")
+        litLoc03.Text = T("Total", "Total", "Total")
+        litLoc04.Text = T("exécutions", "executions", "ejecuciones")
+        litLoc05.Text = T("Succès", "Success", "Éxito")
+        litLoc06.Text = T("Échecs / Timeouts", "Failures / Timeouts", "Fallos / Timeouts")
+        litLoc07.Text = T("En cours", "Running", "En curso")
+        litLoc08.Text = T("actuellement", "currently", "actualmente")
+        litLoc09.Text = T("Durée moyenne", "Average duration", "Duración media")
+        litLoc10.Text = T("par exécution", "per execution", "por ejecución")
+        litLoc11.Text = T("Job", "Job", "Tarea")
+        litLoc12.Text = T("Statut", "Status", "Estado")
+        litLoc13.Text = T("Trigger", "Trigger", "Disparador")
+        litLoc14.Text = T("Période", "Period", "Período")
+        litLoc15.Text = T("Aucune exécution ne correspond à ces filtres.",
+                          "No execution matches these filters.",
+                          "Ninguna ejecución coincide con estos filtros.")
+        litLoc16.Text = T("Démarré", "Started", "Iniciado")
+        litLoc17.Text = T("Job", "Job", "Tarea")
+        litLoc18.Text = T("Statut", "Status", "Estado")
+        litLoc19.Text = T("Trigger", "Trigger", "Disparador")
+        litLoc20.Text = T("Durée", "Duration", "Duración")
+        litLoc21.Text = T("Lignes", "Rows", "Filas")
+        litLoc22.Text = T("Message", "Message", "Mensaje")
+        litLoc23.Text = T("Actions", "Actions", "Acciones")
+
+        ddlJob.EmptyMessage = T("Tous les jobs", "All jobs", "Todas las tareas")
+
+        LocaliserItem(ddlStatut, "", T("Tous", "All", "Todos"))
+        LocaliserItem(ddlStatut, "SUCCES", T("Succès", "Success", "Éxito"))
+        LocaliserItem(ddlStatut, "ECHEC", T("Échec", "Failure", "Fallo"))
+        LocaliserItem(ddlStatut, "TIMEOUT", T("Timeout", "Timeout", "Timeout"))
+        LocaliserItem(ddlStatut, "EN_COURS", T("En cours", "Running", "En curso"))
+        LocaliserItem(ddlStatut, "ANNULE", T("Annulé", "Cancelled", "Cancelado"))
+
+        LocaliserItem(ddlTrigger, "", T("Tous", "All", "Todos"))
+        LocaliserItem(ddlTrigger, "SCHEDULE", T("Schedule", "Schedule", "Programado"))
+        LocaliserItem(ddlTrigger, "MANUAL", T("Manuel", "Manual", "Manual"))
+        LocaliserItem(ddlTrigger, "RETRY", T("Retry", "Retry", "Reintento"))
+        LocaliserItem(ddlTrigger, "DEPENDENCY", T("Dépendance", "Dependency", "Dependencia"))
+
+        btnReset.Text = T("Réinitialiser", "Reset", "Restablecer")
+        btnFiltrer.Text = T("Appliquer", "Apply", "Aplicar")
+
+        btnPagPrev.Text = T("‹ Précédent", "‹ Previous", "‹ Anterior")
+        btnPagNext.Text = T("Suivant ›", "Next ›", "Siguiente ›")
+    End Sub
+
+    Private Sub LocaliserItem(combo As RadComboBox, value As String, texte As String)
+        Dim it = combo.FindItemByValue(value)
+        If it IsNot Nothing Then it.Text = texte
+    End Sub
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ApplyLocalization()
+
         If Not IsPostBack Then
 
             If Not isAuthenticated Then
@@ -150,7 +219,7 @@ Partial Public Class wbfJobMonitoring
 
     Private Sub ChargerJobsCombo()
         ddlJob.Items.Clear()
-        ddlJob.Items.Add(New RadComboBoxItem("Tous les jobs", ""))
+        ddlJob.Items.Add(New RadComboBoxItem(T("Tous les jobs", "All jobs", "Todas las tareas"), ""))
 
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
@@ -263,7 +332,9 @@ Partial Public Class wbfJobMonitoring
         Dim pageEnd = Math.Min(PageNumber * PAGE_SIZE, TotalLignes)
 
         litPagInfo.Text = String.Format(
-            "Affichage {0:N0} – {1:N0} sur {2:N0} exécutions",
+            T("Affichage {0:N0} – {1:N0} sur {2:N0} exécutions",
+              "Showing {0:N0} – {1:N0} of {2:N0} executions",
+              "Mostrando {0:N0} – {1:N0} de {2:N0} ejecuciones"),
             pageStart, pageEnd, TotalLignes)
 
         ' Boutons Prev/Next
@@ -277,7 +348,7 @@ Partial Public Class wbfJobMonitoring
 
         ' Indicateur de page courante (entre les boutons Prev/Next)
         litPagPages.Text = String.Format(
-            "<span class='page-btn active'>Page {0} / {1}</span>",
+            "<span class='page-btn active'>" & T("Page {0} / {1}", "Page {0} / {1}", "Página {0} / {1}") & "</span>",
             PageNumber, totalPages)
     End Sub
 
@@ -345,10 +416,10 @@ Partial Public Class wbfJobMonitoring
 
     Private Function FormatDateRelative(dt As DateTime) As String
         Dim diff = DateTime.Now - dt
-        If diff.TotalSeconds < 60 Then Return "À l'instant"
-        If diff.TotalMinutes < 60 Then Return String.Format("Il y a {0} min", Math.Round(diff.TotalMinutes))
-        If diff.TotalHours < 24 Then Return String.Format("Il y a {0} h", Math.Round(diff.TotalHours))
-        If diff.TotalDays < 7 Then Return String.Format("Il y a {0} j", Math.Round(diff.TotalDays))
+        If diff.TotalSeconds < 60 Then Return T("À l'instant", "Just now", "Ahora mismo")
+        If diff.TotalMinutes < 60 Then Return String.Format(T("Il y a {0} min", "{0} min ago", "Hace {0} min"), Math.Round(diff.TotalMinutes))
+        If diff.TotalHours < 24 Then Return String.Format(T("Il y a {0} h", "{0} h ago", "Hace {0} h"), Math.Round(diff.TotalHours))
+        If diff.TotalDays < 7 Then Return String.Format(T("Il y a {0} j", "{0} d ago", "Hace {0} d"), Math.Round(diff.TotalDays))
         Return dt.ToString("yyyy-MM-dd")
     End Function
 

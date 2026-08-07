@@ -94,6 +94,22 @@ Partial Public Class wbfJobs
     '''</remarks>
     Protected WithEvents litKpiEnCours As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>Libellés localisés (convertis de blocs &lt;%= %&gt; pour compatibilité RadAjax).</summary>
+    Protected WithEvents litTitre As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLblActifs As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLblSucces As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLblEchecs As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLblEnCours As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litListeTitre As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litEmptyText As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThJob As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThType As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThSchedules As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThProchaine As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThDerniere As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litThActions As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''ddlFiltreActif control.
     '''</summary>

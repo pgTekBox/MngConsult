@@ -144,7 +144,9 @@ Public Class wbfSupplierPaymentInterac
                     .Memo = "Facture fournisseur #" & DocId,
                     .ExternalReferenceData = DocId,
                     .NotifyEmail = txtEmail.Text.Trim(),
-                    .AllowablePaymentMethods = New String() {interac}
+                    .AllowablePaymentMethods = New String() {interac},
+                    .LegalEntityLabel = clsDreamPayments.DefaultLegalEntityLabel(),
+                    .LegalEntity = clsDreamPayments.DefaultLegalEntity()
                 })
 
             ' 3) Accepter -> déclenche l'e-Transfer (méthode courriel, PAS de bankAccountId)

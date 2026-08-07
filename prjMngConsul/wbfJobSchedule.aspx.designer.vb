@@ -408,4 +408,49 @@ Partial Public Class wbfJobSchedule
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnEnregistrer As Global.Telerik.Web.UI.RadButton
+
+    '''<summary>
+    '''Literals de localisation (libellés HTML convertis).
+    '''</summary>
+    Protected WithEvents litLoc01 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc02 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc03 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc04 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc05 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc06 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc07 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc08 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc09 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc10 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc11 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc12 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc13 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc14 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc15 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc16 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc17 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc18 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc19 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc20 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc21 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc22 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc23 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc24 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc25 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc26 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc27 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc28 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc29 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc30 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc31 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc32 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc33 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc34 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc35 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc36 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc37 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc38 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc39 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc40 As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litLoc41 As Global.System.Web.UI.WebControls.Literal
 End Class

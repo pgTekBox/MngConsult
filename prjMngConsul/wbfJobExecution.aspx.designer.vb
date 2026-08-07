@@ -381,4 +381,94 @@ Partial Public Class wbfJobExecution
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hfJobIdCtx As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>
+    '''litLoc01 control.
+    '''</summary>
+    Protected WithEvents litLoc01 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc02 control.
+    '''</summary>
+    Protected WithEvents litLoc02 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc03 control.
+    '''</summary>
+    Protected WithEvents litLoc03 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc04 control.
+    '''</summary>
+    Protected WithEvents litLoc04 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc05 control.
+    '''</summary>
+    Protected WithEvents litLoc05 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc06 control.
+    '''</summary>
+    Protected WithEvents litLoc06 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc07 control.
+    '''</summary>
+    Protected WithEvents litLoc07 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc08 control.
+    '''</summary>
+    Protected WithEvents litLoc08 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc09 control.
+    '''</summary>
+    Protected WithEvents litLoc09 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc10 control.
+    '''</summary>
+    Protected WithEvents litLoc10 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc11 control.
+    '''</summary>
+    Protected WithEvents litLoc11 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc12 control.
+    '''</summary>
+    Protected WithEvents litLoc12 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc13 control.
+    '''</summary>
+    Protected WithEvents litLoc13 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc14 control.
+    '''</summary>
+    Protected WithEvents litLoc14 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc15 control.
+    '''</summary>
+    Protected WithEvents litLoc15 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc16 control.
+    '''</summary>
+    Protected WithEvents litLoc16 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc17 control.
+    '''</summary>
+    Protected WithEvents litLoc17 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLoc18 control.
+    '''</summary>
+    Protected WithEvents litLoc18 As Global.System.Web.UI.WebControls.Literal
 End Class

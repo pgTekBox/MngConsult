@@ -761,6 +761,14 @@ Partial Public Class wbfSetting
             p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
             Dim ds As DataSet = ExecuteSQLds("s0500InitializeCompanyData", p)
 
+            ' Attribue la boîte @60sec.ca maintenant que le nom commercial est connu
+            ' (best-effort, non bloquant ; no-op si le nom est encore vide).
+            Try
+                Dim pm As New Collection
+                pm.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                ExecuteSQLds("s0712AssignMailbox", pm)
+            Catch
+            End Try
 
         Catch ex As Exception
             ShowErr(L("saveErr") & ex.Message)

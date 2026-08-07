@@ -6,10 +6,51 @@ Partial Public Class wbfJobDashboard
     Inherits clsData
 
     ' =========================================================
+    '  LOCALISATION
+    ' =========================================================
+
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        Page.Title = T("Tableau de bord — Orchestrateur", "Dashboard — Orchestrator", "Panel de control — Orquestador")
+        btnRefresh.Text = T("Rafraîchir", "Refresh", "Actualizar")
+
+        litLoc01.Text = T("Tableau de bord — Orchestrateur", "Dashboard — Orchestrator", "Panel de control — Orquestador")
+        litLoc02.Text = T("Vue d'ensemble en temps réel des jobs planifiés.", "Real-time overview of scheduled jobs.", "Vista general en tiempo real de las tareas programadas.")
+        litLoc03.Text = T("Dernière actualisation :", "Last refresh:", "Última actualización:")
+        litLoc04.Text = T("Auto-refresh 30s", "Auto-refresh 30s", "Auto-actualización 30s")
+        litLoc05.Text = T("Jobs actifs", "Active jobs", "Tareas activas")
+        litLoc06.Text = T("inactifs", "inactive", "inactivas")
+        litLoc07.Text = T("Succès 24 h", "Success 24 h", "Éxitos 24 h")
+        litLoc08.Text = T("Taux 7j :", "7-day rate:", "Tasa 7 días:")
+        litLoc09.Text = T("Échecs 24 h", "Failures 24 h", "Fallos 24 h")
+        litLoc10.Text = T("Sur 7 jours :", "Over 7 days:", "En 7 días:")
+        litLoc11.Text = T("exéc.", "runs", "ejec.")
+        litLoc12.Text = T("En cours actuellement", "Currently running", "En curso actualmente")
+        litLoc13.Text = T("Durée moyenne :", "Average duration:", "Duración media:")
+        litLoc14.Text = T("Tendance des 7 derniers jours", "Trend over the last 7 days", "Tendencia de los últimos 7 días")
+        litLoc15.Text = T("Jobs en alerte", "Jobs in alert", "Tareas en alerta")
+        litLoc16.Text = T("Aucun job en alerte. Tout roule.", "No jobs in alert. All running smoothly.", "Ninguna tarea en alerta. Todo funciona.")
+        litLoc17.Text = T("Prochaines exécutions (24 h)", "Upcoming runs (24 h)", "Próximas ejecuciones (24 h)")
+        litLoc18.Text = T("Aucune exécution prévue dans les 24 prochaines heures.", "No runs scheduled in the next 24 hours.", "Ninguna ejecución prevista en las próximas 24 horas.")
+        litLoc19.Text = T("Activité récente", "Recent activity", "Actividad reciente")
+        litLoc20.Text = T("10 dernières", "Last 10", "Últimas 10")
+        litLoc21.Text = T("Aucune exécution récente.", "No recent runs.", "Ninguna ejecución reciente.")
+    End Sub
+
+    ' =========================================================
     '  PAGE LIFECYCLE
     ' =========================================================
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ApplyLocalization()
+
         ' On peut rafraîchir aussi sur le premier load
         If Not IsPostBack Then
             If Not isAuthenticated Then
@@ -71,8 +112,12 @@ Partial Public Class wbfJobDashboard
         sb.AppendFormat("<div class='ico'>{0}</div>", ico)
         sb.Append("<div class='body'>")
         sb.AppendFormat("<div class='title'>{0}</div>", jobNom)
-        sb.AppendFormat("<div class='meta'><code>{0}</code> • {1} échec{2} récent{2} • {3}</div>",
-                        jobCode, nbEchecs, If(nbEchecs > 1, "s", ""), msg)
+        Dim plur = If(nbEchecs > 1, "s", "")
+        Dim echecTxt = T(nbEchecs & " échec" & plur & " récent" & plur,
+                         nbEchecs & " recent failure" & plur,
+                         nbEchecs & " fallo" & plur & " reciente" & plur)
+        sb.AppendFormat("<div class='meta'><code>{0}</code> • {1} • {2}</div>",
+                        jobCode, echecTxt, msg)
         sb.Append("</div>")
         sb.AppendFormat("<div class='when'>{0}</div>", quand)
         sb.Append("</div>")
@@ -216,7 +261,8 @@ Partial Public Class wbfJobDashboard
         Next
 
         Dim sb As New System.Text.StringBuilder()
-        Dim ci = System.Globalization.CultureInfo.GetCultureInfo("fr-CA")
+        Dim ci = System.Globalization.CultureInfo.GetCultureInfo(
+            If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))
 
         For Each row As DataRow In dt.Rows
             Dim jour = Convert.ToDateTime(row("Jour"))
@@ -341,19 +387,19 @@ Partial Public Class wbfJobDashboard
 
     Private Function FormatDateRelative(dt As DateTime) As String
         Dim diff = DateTime.Now - dt
-        If diff.TotalSeconds < 60 Then Return "À l'instant"
-        If diff.TotalMinutes < 60 Then Return String.Format("Il y a {0} min", Math.Round(diff.TotalMinutes))
-        If diff.TotalHours < 24 Then Return String.Format("Il y a {0} h", Math.Round(diff.TotalHours))
-        If diff.TotalDays < 7 Then Return String.Format("Il y a {0} j", Math.Round(diff.TotalDays))
+        If diff.TotalSeconds < 60 Then Return T("À l'instant", "Just now", "Ahora mismo")
+        If diff.TotalMinutes < 60 Then Return String.Format(T("Il y a {0} min", "{0} min ago", "hace {0} min"), Math.Round(diff.TotalMinutes))
+        If diff.TotalHours < 24 Then Return String.Format(T("Il y a {0} h", "{0} h ago", "hace {0} h"), Math.Round(diff.TotalHours))
+        If diff.TotalDays < 7 Then Return String.Format(T("Il y a {0} j", "{0} d ago", "hace {0} d"), Math.Round(diff.TotalDays))
         Return dt.ToString("yyyy-MM-dd")
     End Function
 
     Private Function FormatDateRelativeFutur(dt As DateTime) As String
         Dim diff = dt - DateTime.Now
-        If diff.TotalMinutes < 1 Then Return "Imminent"
-        If diff.TotalMinutes < 60 Then Return String.Format("Dans {0} min", Math.Round(diff.TotalMinutes))
-        If diff.TotalHours < 24 Then Return String.Format("Dans {0} h", Math.Round(diff.TotalHours, 1))
-        Return String.Format("Dans {0} j", Math.Round(diff.TotalDays))
+        If diff.TotalMinutes < 1 Then Return T("Imminent", "Imminent", "Inminente")
+        If diff.TotalMinutes < 60 Then Return String.Format(T("Dans {0} min", "In {0} min", "En {0} min"), Math.Round(diff.TotalMinutes))
+        If diff.TotalHours < 24 Then Return String.Format(T("Dans {0} h", "In {0} h", "En {0} h"), Math.Round(diff.TotalHours, 1))
+        Return String.Format(T("Dans {0} j", "In {0} d", "En {0} d"), Math.Round(diff.TotalDays))
     End Function
 
     Private Function FormatDureeMs(ms As Long) As String

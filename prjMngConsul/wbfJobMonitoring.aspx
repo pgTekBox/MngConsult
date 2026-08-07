@@ -215,38 +215,37 @@
 
     <div class="mon-page">
 
-        <h2>Historique des exécutions</h2>
+        <h2><asp:Literal ID="litLoc01" runat="server" /></h2>
         <div class="subtitle">
-            Exploration de l'historique des jobs exécutés par l'orchestrateur.
-            Cliquez sur une ligne pour voir les détails et les logs.
+            <asp:Literal ID="litLoc02" runat="server" />
         </div>
 
         <!-- KPI Row -->
         <div class="kpi-row">
             <div class="kpi-card kpi-info">
-                <div class="lbl">Total</div>
+                <div class="lbl"><asp:Literal ID="litLoc03" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiTotal" runat="server" Text="0" /></div>
-                <div class="meta">exécutions</div>
+                <div class="meta"><asp:Literal ID="litLoc04" runat="server" /></div>
             </div>
             <div class="kpi-card kpi-success">
-                <div class="lbl">Succès</div>
+                <div class="lbl"><asp:Literal ID="litLoc05" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiSucces" runat="server" Text="0" /></div>
                 <div class="meta"><asp:Literal ID="litKpiSuccesPct" runat="server" /></div>
             </div>
             <div class="kpi-card kpi-danger">
-                <div class="lbl">Échecs / Timeouts</div>
+                <div class="lbl"><asp:Literal ID="litLoc06" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiEchecs" runat="server" Text="0" /></div>
                 <div class="meta"><asp:Literal ID="litKpiEchecsPct" runat="server" /></div>
             </div>
             <div class="kpi-card kpi-warning">
-                <div class="lbl">En cours</div>
+                <div class="lbl"><asp:Literal ID="litLoc07" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiEnCours" runat="server" Text="0" /></div>
-                <div class="meta">actuellement</div>
+                <div class="meta"><asp:Literal ID="litLoc08" runat="server" /></div>
             </div>
             <div class="kpi-card">
-                <div class="lbl">Durée moyenne</div>
+                <div class="lbl"><asp:Literal ID="litLoc09" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiDureeMoy" runat="server" Text="—" /></div>
-                <div class="meta">par exécution</div>
+                <div class="meta"><asp:Literal ID="litLoc10" runat="server" /></div>
             </div>
         </div>
 
@@ -254,7 +253,7 @@
         <div class="mon-card">
             <div class="filters">
                 <div class="filter-group">
-                    <label>Job</label>
+                    <label><asp:Literal ID="litLoc11" runat="server" /></label>
                     <telerik:RadComboBox ID="ddlJob" runat="server" Skin="Bootstrap"
                         Width="100%" AutoPostBack="true" Filter="Contains"
                         EmptyMessage="Tous les jobs"
@@ -262,7 +261,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>Statut</label>
+                    <label><asp:Literal ID="litLoc12" runat="server" /></label>
                     <telerik:RadComboBox ID="ddlStatut" runat="server" Skin="Bootstrap"
                         Width="100%" AutoPostBack="true"
                         OnSelectedIndexChanged="Filtre_Changed">
@@ -278,7 +277,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>Trigger</label>
+                    <label><asp:Literal ID="litLoc13" runat="server" /></label>
                     <telerik:RadComboBox ID="ddlTrigger" runat="server" Skin="Bootstrap"
                         Width="100%" AutoPostBack="true"
                         OnSelectedIndexChanged="Filtre_Changed">
@@ -293,7 +292,7 @@
                 </div>
 
                 <div class="filter-group">
-                    <label>Période</label>
+                    <label><asp:Literal ID="litLoc14" runat="server" /></label>
                     <div style="display: flex; gap: 4px;">
                         <telerik:RadDatePicker ID="dpDateDebut" runat="server" Skin="Bootstrap"
                             Width="49%" AutoPostBack="true"
@@ -320,7 +319,7 @@
 
                 <asp:PlaceHolder ID="phEmpty" runat="server" Visible="false">
                     <div class="empty-state">
-                        Aucune exécution ne correspond à ces filtres.
+                        <asp:Literal ID="litLoc15" runat="server" />
                     </div>
                 </asp:PlaceHolder>
 
@@ -328,14 +327,14 @@
                     <table class="exec-table">
                         <thead>
                             <tr>
-                                <th style="width:18%;">Démarré</th>
-                                <th style="width:25%;">Job</th>
-                                <th style="width:9%;">Statut</th>
-                                <th style="width:9%;">Trigger</th>
-                                <th class="col-num" style="width:8%;">Durée</th>
-                                <th class="col-num" style="width:7%;">Lignes</th>
-                                <th style="width:14%;">Message</th>
-                                <th class="col-actions" style="width:10%;">Actions</th>
+                                <th style="width:18%;"><asp:Literal ID="litLoc16" runat="server" /></th>
+                                <th style="width:25%;"><asp:Literal ID="litLoc17" runat="server" /></th>
+                                <th style="width:9%;"><asp:Literal ID="litLoc18" runat="server" /></th>
+                                <th style="width:9%;"><asp:Literal ID="litLoc19" runat="server" /></th>
+                                <th class="col-num" style="width:8%;"><asp:Literal ID="litLoc20" runat="server" /></th>
+                                <th class="col-num" style="width:7%;"><asp:Literal ID="litLoc21" runat="server" /></th>
+                                <th style="width:14%;"><asp:Literal ID="litLoc22" runat="server" /></th>
+                                <th class="col-actions" style="width:10%;"><asp:Literal ID="litLoc23" runat="server" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -362,7 +361,7 @@
                                         <td>
                                             <asp:Literal ID="litTriggerBadge" runat="server" />
                                             <%# IIf(Convert.ToInt32(Eval("TentativeNumero")) > 1,
-                                                   String.Format("<div class='meta-line'>Tentative #{0}</div>", Eval("TentativeNumero")),
+                                                   String.Format("<div class='meta-line'>{0} #{1}</div>", T("Tentative", "Attempt", "Intento"), Eval("TentativeNumero")),
                                                    "") %>
                                         </td>
                                         <td class="col-num">
@@ -379,7 +378,7 @@
                                                 CssClass="action-btn"
                                                 CommandName="Detail"
                                                 CommandArgument='<%# Eval("Id") %>'
-                                                Text="Détails →" />
+                                                Text='<%# T("Détails →", "Details →", "Detalles →") %>' />
                                         </td>
                                     </tr>
                                 </ItemTemplate>

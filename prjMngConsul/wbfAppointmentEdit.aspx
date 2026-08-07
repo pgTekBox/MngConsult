@@ -11,7 +11,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>Rendez-vous — Edit</title>
+    <title><%= T("Rendez-vous","Appointment","Cita") %></title>
     <style>
         /* =============================================
            VARIABLES & BASE
@@ -273,7 +273,7 @@
                     <div class="title">
                         <asp:Literal ID="litTitle" runat="server" Text="Nouveau rendez-vous" />
                     </div>
-                    <div class="sub">Remplissez les informations du rendez-vous.</div>
+                    <div class="sub"><%= T("Remplissez les informations du rendez-vous.","Fill in the appointment details.","Complete la información de la cita.") %></div>
                 </div>
                 <div class="bar">
                     <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
@@ -298,7 +298,7 @@
             <%-- ===== CARD : INFORMATIONS GÉNÉRALES ===== --%>
             <div class="card">
                 <div class="cardHead">
-                    <div class="h">Informations</div>
+                    <div class="h"><%= T("Informations","Information","Información") %></div>
                 </div>
 
                 <div class="cardBody">
@@ -306,7 +306,7 @@
                     <%-- Ligne 1 : Titre seul --%>
                     <div class="grid1">
                         <div class="field">
-                            <label>Titre *</label>
+                            <label><%= T("Titre","Title","Título") %> *</label>
                             <telerik:RadTextBox ID="txtTitle" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
@@ -315,19 +315,19 @@
                     <%-- Ligne 2 : Client / Employé / Statut --%>
                     <div class="grid3" style="margin-top:12px;">
                         <div class="field">
-                            <label>Client</label>
+                            <label><%= T("Client","Customer","Cliente") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlCustomer"
                                 runat="server" DefaultMessage="Sélectionner…"
                                 DropDownHeight="200px" Skin="Metro" />
                         </div>
                         <div class="field">
-                            <label>Employé / Ressource</label>
+                            <label><%= T("Employé","Employee","Empleado") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlEmployee"
                                 runat="server" DefaultMessage="Sélectionner…"
                                 DropDownHeight="200px" Skin="Metro" />
                         </div>
                         <div class="field">
-                            <label>Statut</label>
+                            <label><%= T("Statut","Status","Estado") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlStatus"
                                 runat="server" DropDownHeight="200px" Skin="Metro">
                                 <Items>
@@ -347,7 +347,7 @@
             <%-- ===== CARD : DATES ET TYPE ===== --%>
             <div class="card">
                 <div class="cardHead">
-                    <div class="h">Date et durée</div>
+                    <div class="h"><%= T("Date et durée","Date and duration","Fecha y duración") %></div>
                 </div>
 
                 <div class="cardBody">
@@ -355,16 +355,16 @@
                     <%-- Ligne 1 : Type / Date début / Heure début --%>
                     <div class="grid3">
                         <div class="field">
-                            <label>Type</label>
+                            <label><%= T("Type","Type","Tipo") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlType"
                                 runat="server" DefaultMessage="Sélectionner…"
                                 DropDownHeight="200px" Skin="Metro" OnClientSelectedIndexChanged="aeOnTypeChanged">
                             
                             </telerik:RadDropDownList>
-                            <div class="hint">La durée du type ajustera automatiquement la date de fin.</div>
+                            <div class="hint"><%= T("La durée du type ajustera automatiquement la date de fin.","The type duration will automatically adjust the end date.","La duración del tipo ajustará automáticamente la fecha de fin.") %></div>
                         </div>
                         <div class="field">
-                            <label>Date de début *</label>
+                            <label><%= T("Date de début","Start date","Fecha de inicio") %> *</label>
                             <telerik:RadDatePicker ID="rdpStart" runat="server"
                                 RenderMode="Lightweight" Skin="Metro" Width="100%">
                                 <DateInput DateFormat="yyyy-MM-dd" DisplayDateFormat="yyyy-MM-dd" />
@@ -372,7 +372,7 @@
                             </telerik:RadDatePicker>
                         </div>
                         <div class="field">
-                            <label>Heure de début *</label>
+                            <label><%= T("Heure de début","Start time","Hora de inicio") %> *</label>
                             <telerik:RadTimePicker ID="rtpStart" runat="server"
                                 RenderMode="Lightweight" Skin="Metro" Width="100%">
                                 <DateInput DateFormat="HH:mm" DisplayDateFormat="HH:mm" />
@@ -388,18 +388,18 @@
                             <label>&nbsp;</label>
                             <label class="check">
                                 <asp:CheckBox ID="cbAllDay" runat="server" />
-                                <span>Toute la journée</span>
+                                <span><%= T("Toute la journée","All day","Todo el día") %></span>
                             </label>
                         </div>
                         <div class="field">
-                            <label>Date de fin *</label>
+                            <label><%= T("Date de fin","End date","Fecha de fin") %> *</label>
                             <telerik:RadDatePicker ID="rdpEnd" runat="server"
                                 RenderMode="Lightweight" Skin="Metro" Width="100%">
                                 <DateInput DateFormat="yyyy-MM-dd" DisplayDateFormat="yyyy-MM-dd" />
                             </telerik:RadDatePicker>
                         </div>
                         <div class="field">
-                            <label>Heure de fin *</label>
+                            <label><%= T("Heure de fin","End time","Hora de fin") %> *</label>
                             <telerik:RadTimePicker ID="rtpEnd" runat="server"
                                 RenderMode="Lightweight" Skin="Metro" Width="100%">
                                 <DateInput DateFormat="HH:mm" DisplayDateFormat="HH:mm" />
@@ -414,19 +414,19 @@
             <%-- ===== CARD : OPTIONS ===== --%>
             <div class="card">
                 <div class="cardHead">
-                    <div class="h">Options</div>
+                    <div class="h"><%= T("Options","Options","Opciones") %></div>
                 </div>
 
                 <div class="cardBody">
 
                     <div class="grid3">
                         <div class="field">
-                            <label>Lieu</label>
+                            <label><%= T("Lieu","Location","Lugar") %></label>
                             <telerik:RadTextBox ID="txtLocation" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" />
                         </div>
                         <div class="field">
-                            <label>Récurrence</label>
+                            <label><%= T("Récurrence","Recurrence","Recurrencia") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlRecurrence"
                                 runat="server" DropDownHeight="200px" Skin="Metro">
                                 <Items>
@@ -440,7 +440,7 @@
                             </telerik:RadDropDownList>
                         </div>
                         <div class="field">
-                            <label>Rappel</label>
+                            <label><%= T("Rappel","Reminder","Recordatorio") %></label>
                             <telerik:RadDropDownList RenderMode="Lightweight" ID="rddlReminder"
                                 runat="server" DropDownHeight="200px" Skin="Metro">
                                 <Items>
@@ -457,7 +457,7 @@
 
                     <div class="grid1" style="margin-top:12px;">
                         <div class="field">
-                            <label>Description</label>
+                            <label><%= T("Description","Description","Descripción") %></label>
                             <telerik:RadTextBox ID="txtDescription" Width="100%" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike"
                                 TextMode="MultiLine" Rows="4" />

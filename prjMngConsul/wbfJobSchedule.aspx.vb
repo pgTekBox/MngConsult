@@ -44,7 +44,111 @@ Partial Public Class wbfJobSchedule
     '  PAGE LIFECYCLE
     ' =========================================================
 
+    ' =========================================================
+    '  LOCALISATION
+    ' =========================================================
+
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        Page.Title = T("Édition d'un schedule", "Edit schedule", "Editar programación")
+
+        ' Libellés HTML (anciens blocs <%= T(...) %> convertis en Literals)
+        litLoc01.Text = T("Prochaine exécution prévue", "Next scheduled run", "Próxima ejecución prevista")
+        litLoc02.Text = T("Informations de base", "Basic information", "Información básica")
+        litLoc03.Text = T("Nom du schedule", "Schedule name", "Nombre de la programación")
+        litLoc04.Text = T("Type de planification", "Schedule type", "Tipo de programación")
+        litLoc05.Text = T("Toutes les ... minutes", "Every ... minutes", "Cada ... minutos")
+        litLoc06.Text = T("Ex: 30 = toutes les 30 min, 1440 = 1 fois par jour.", "Ex: 30 = every 30 min, 1440 = once a day.", "Ej: 30 = cada 30 min, 1440 = una vez al día.")
+        litLoc07.Text = T("Heure d'exécution", "Run time", "Hora de ejecución")
+        litLoc08.Text = T("Heure d'exécution", "Run time", "Hora de ejecución")
+        litLoc09.Text = T("Jours de la semaine", "Days of the week", "Días de la semana")
+        litLoc10.Text = T("Lun", "Mon", "Lun")
+        litLoc11.Text = T("Mar", "Tue", "Mar")
+        litLoc12.Text = T("Mer", "Wed", "Mié")
+        litLoc13.Text = T("Jeu", "Thu", "Jue")
+        litLoc14.Text = T("Ven", "Fri", "Vie")
+        litLoc15.Text = T("Sam", "Sat", "Sáb")
+        litLoc16.Text = T("Dim", "Sun", "Dom")
+        litLoc17.Text = T("Cliquez sur les pilules pour sélectionner les jours actifs.", "Click the pills to select the active days.", "Haga clic en las píldoras para seleccionar los días activos.")
+        litLoc18.Text = T("Périodicité", "Periodicity", "Periodicidad")
+        litLoc19.Text = T("Ex : trimestriel = remise des taxes ; annuel = T4 ou rapport fin d'exercice.", "Ex: quarterly = tax remittance; yearly = T4 or year-end report.", "Ej: trimestral = remesa de impuestos; anual = T4 o informe de fin de ejercicio.")
+        litLoc20.Text = T("Heure d'exécution", "Run time", "Hora de ejecución")
+        litLoc21.Text = T("Jour du mois", "Day of the month", "Día del mes")
+        litLoc22.Text = T("Ex: 15 = le 15 de chaque mois, -1 = dernier jour (28/30/31 selon le mois).", "Ex: 15 = the 15th of each month, -1 = last day (28/30/31 depending on the month).", "Ej: 15 = el 15 de cada mes, -1 = último día (28/30/31 según el mes).")
+        litLoc23.Text = T("Expression CRON", "CRON expression", "Expresión CRON")
+        litLoc24.Text = T("Format :", "Format:", "Formato:")
+        litLoc25.Text = T("Tous les jours à 8h00", "Every day at 8:00", "Todos los días a las 8:00")
+        litLoc26.Text = T("Toutes les 30 min, 8h-18h, Lun-Ven", "Every 30 min, 8am-6pm, Mon-Fri", "Cada 30 min, 8h-18h, Lun-Vie")
+        litLoc27.Text = T("Le 1er du mois à minuit", "The 1st of the month at midnight", "El 1.º del mes a medianoche")
+        litLoc28.Text = T("Tous les dimanches midi", "Every Sunday at noon", "Todos los domingos al mediodía")
+        litLoc29.Text = T("Lun-Ven 22h00", "Mon-Fri 10pm", "Lun-Vie 22:00")
+        litLoc30.Text = T("La prochaine exécution sera calculée par le service .NET au prochain cycle.", "The next run will be calculated by the .NET service on the next cycle.", "La próxima ejecución será calculada por el servicio .NET en el próximo ciclo.")
+        litLoc31.Text = T("Date et heure d'exécution", "Run date and time", "Fecha y hora de ejecución")
+        litLoc32.Text = T("Le schedule sera désactivé après cette unique exécution.", "The schedule will be disabled after this single run.", "La programación se desactivará después de esta única ejecución.")
+        litLoc33.Text = T("Période de validité et état", "Validity period and status", "Período de validez y estado")
+        litLoc34.Text = T("Date de début", "Start date", "Fecha de inicio")
+        litLoc35.Text = T("Avant cette date, le schedule ne s'exécute pas. (Défaut : aujourd'hui)", "Before this date, the schedule does not run. (Default: today)", "Antes de esta fecha, la programación no se ejecuta. (Predeterminado: hoy)")
+        litLoc36.Text = T("Date de fin", "End date", "Fecha de fin")
+        litLoc37.Text = T("Optionnel. Vide = pas de fin.", "Optional. Empty = no end.", "Opcional. Vacío = sin fin.")
+        litLoc38.Text = T("État", "Status", "Estado")
+        litLoc39.Text = T("Pause = arrêt temporaire (réactivable rapidement). Inactif = désactivation longue durée.", "Pause = temporary stop (quickly re-enabled). Inactive = long-term deactivation.", "Pausa = detención temporal (reactivable rápidamente). Inactivo = desactivación de larga duración.")
+        litLoc40.Text = T("Paramètres spécifiques (override)", "Specific parameters (override)", "Parámetros específicos (override)")
+        litLoc41.Text = T("Optionnel. Si renseigné, ces paramètres remplacent ceux par défaut du job pour ce schedule.", "Optional. If provided, these parameters override the job's defaults for this schedule.", "Opcional. Si se completa, estos parámetros reemplazan los predeterminados del job para esta programación.")
+
+        txtNom.EmptyMessage = T("Ex: Quotidien 7h, Fin de mois, ...", "Ex: Daily 7am, End of month, ...", "Ej: Diario 7h, Fin de mes, ...")
+
+        ' Type de planification
+        SetComboItemText(ddlScheduleType, "INTERVAL", T("Toutes les N minutes (INTERVAL)", "Every N minutes (INTERVAL)", "Cada N minutos (INTERVAL)"))
+        SetComboItemText(ddlScheduleType, "DAILY", T("Quotidien (DAILY)", "Daily (DAILY)", "Diario (DAILY)"))
+        SetComboItemText(ddlScheduleType, "WEEKLY", T("Hebdomadaire (WEEKLY)", "Weekly (WEEKLY)", "Semanal (WEEKLY)"))
+        SetComboItemText(ddlScheduleType, "MONTHLY", T("Mensuel / Trimestriel / Semestriel / Annuel (MONTHLY)", "Monthly / Quarterly / Half-yearly / Yearly (MONTHLY)", "Mensual / Trimestral / Semestral / Anual (MONTHLY)"))
+        SetComboItemText(ddlScheduleType, "CRON", T("Expression CRON (avancé)", "CRON expression (advanced)", "Expresión CRON (avanzado)"))
+        SetComboItemText(ddlScheduleType, "ONCE", T("Une seule fois (ONCE)", "Once (ONCE)", "Una sola vez (ONCE)"))
+
+        ' Périodicité (mensuel)
+        SetComboItemText(ddlIntervalleMois, "1", T("Tous les mois", "Every month", "Todos los meses"))
+        SetComboItemText(ddlIntervalleMois, "3", T("Tous les 3 mois (trimestriel)", "Every 3 months (quarterly)", "Cada 3 meses (trimestral)"))
+        SetComboItemText(ddlIntervalleMois, "6", T("Tous les 6 mois (semestriel)", "Every 6 months (half-yearly)", "Cada 6 meses (semestral)"))
+        SetComboItemText(ddlIntervalleMois, "12", T("Tous les 12 mois (annuel)", "Every 12 months (yearly)", "Cada 12 meses (anual)"))
+
+        ' Jour du mois : premier item (dernier jour)
+        SetComboItemText(ddlJourMois, "-1", T("-1 — Dernier jour du mois", "-1 — Last day of the month", "-1 — Último día del mes"))
+
+        ' État
+        SetComboItemText(ddlEtat, "ACTIF", T("Actif", "Active", "Activo"))
+        SetComboItemText(ddlEtat, "PAUSE", T("En pause (temporaire)", "Paused (temporary)", "En pausa (temporal)"))
+        SetComboItemText(ddlEtat, "INACTIF", T("Inactif", "Inactive", "Inactivo"))
+
+        ' Boutons
+        btnApercu.Text = T("Calculer aperçu", "Calculate preview", "Calcular vista previa")
+        btnSupprimer.Text = T("Supprimer ce schedule", "Delete this schedule", "Eliminar esta programación")
+        btnAnnuler.Text = T("Annuler", "Cancel", "Cancelar")
+        btnEnregistrer.Text = T("Enregistrer", "Save", "Guardar")
+    End Sub
+
+    Private Sub SetComboItemText(combo As RadComboBox, value As String, text As String)
+        Dim it = combo.FindItemByValue(value)
+        If it IsNot Nothing Then it.Text = text
+    End Sub
+
+    Private Function CultureLang() As System.Globalization.CultureInfo
+        Select Case CurrentLang
+            Case "en" : Return System.Globalization.CultureInfo.GetCultureInfo("en-CA")
+            Case "es" : Return System.Globalization.CultureInfo.GetCultureInfo("es-ES")
+            Case Else : Return System.Globalization.CultureInfo.GetCultureInfo("fr-CA")
+        End Select
+    End Function
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ApplyLocalization()
+
         If Not IsPostBack Then
             If Not isAuthenticated Then
                 Response.Redirect("~/wbfLogin.aspx")
@@ -70,7 +174,7 @@ Partial Public Class wbfJobSchedule
                 AfficherChampsSelonType("DAILY")
                 CalculerEtAfficherApercu()
             Else
-                ShowStatus("danger", "Paramètre JobId manquant en URL.")
+                ShowStatus("danger", T("Paramètre JobId manquant en URL.", "Missing JobId parameter in URL.", "Falta el parámetro JobId en la URL."))
                 btnEnregistrer.Enabled = False
                 Return
             End If
@@ -106,16 +210,16 @@ Partial Public Class wbfJobSchedule
             Dim newId = SauvegarderSchedule()
 
             If newId > 0 Then
-                ShowStatus("success", "Schedule enregistré.")
+                ShowStatus("success", T("Schedule enregistré.", "Schedule saved.", "Programación guardada."))
                 ScheduleId = newId
                 ' Recharger pour afficher la ProchaineExec recalculée
                 ChargerSchedule(newId)
             End If
 
         Catch sqlex As SqlException
-            ShowStatus("danger", "Erreur SQL : " & sqlex.Message)
+            ShowStatus("danger", T("Erreur SQL : ", "SQL error: ", "Error SQL: ") & sqlex.Message)
         Catch ex As Exception
-            ShowStatus("danger", "Erreur : " & ex.Message)
+            ShowStatus("danger", T("Erreur : ", "Error: ", "Error: ") & ex.Message)
         End Try
     End Sub
 
@@ -137,9 +241,9 @@ Partial Public Class wbfJobSchedule
             Response.Redirect("wbfJobEdit.aspx?Id=" & JobDefinitionId & "&schedDeleted=1")
 
         Catch sqlex As SqlException
-            ShowStatus("danger", "Erreur SQL : " & sqlex.Message)
+            ShowStatus("danger", T("Erreur SQL : ", "SQL error: ", "Error SQL: ") & sqlex.Message)
         Catch ex As Exception
-            ShowStatus("danger", "Erreur : " & ex.Message)
+            ShowStatus("danger", T("Erreur : ", "Error: ", "Error: ") & ex.Message)
         End Try
     End Sub
 
@@ -157,8 +261,8 @@ Partial Public Class wbfJobSchedule
                 Using rdr = cmd.ExecuteReader()
                     If rdr.Read() Then
                         JobNom = rdr("Nom").ToString()
-                        litTitre.Text = "Nouveau schedule"
-                        litBadgeJob.Text = "<span class='badge-job'>Pour le job : " & Server.HtmlEncode(JobNom) & "</span>"
+                        litTitre.Text = T("Nouveau schedule", "New schedule", "Nueva programación")
+                        litBadgeJob.Text = "<span class='badge-job'>" & T("Pour le job : ", "For job: ", "Para el job: ") & Server.HtmlEncode(JobNom) & "</span>"
                     End If
                 End Using
             End Using
@@ -181,7 +285,7 @@ Partial Public Class wbfJobSchedule
         End Using
 
         If dt.Rows.Count = 0 Then
-            ShowStatus("danger", "Schedule introuvable (Id=" & id & ").")
+            ShowStatus("danger", T("Schedule introuvable (Id=", "Schedule not found (Id=", "Programación no encontrada (Id=") & id & ").")
             btnEnregistrer.Enabled = False
             Return
         End If
@@ -191,8 +295,8 @@ Partial Public Class wbfJobSchedule
         JobDefinitionId = Convert.ToInt32(r("JobDefinitionId"))
         JobNom = r("JobNom").ToString()
 
-        litTitre.Text = "Édition : " & Server.HtmlEncode(r("Nom").ToString())
-        litBadgeJob.Text = "<span class='badge-job'>Pour le job : " & Server.HtmlEncode(JobNom) & "</span>"
+        litTitre.Text = T("Édition : ", "Edit: ", "Edición: ") & Server.HtmlEncode(r("Nom").ToString())
+        litBadgeJob.Text = "<span class='badge-job'>" & T("Pour le job : ", "For job: ", "Para el job: ") & Server.HtmlEncode(JobNom) & "</span>"
 
         btnSupprimer.Visible = True
 
@@ -277,7 +381,7 @@ Partial Public Class wbfJobSchedule
         If Not Convert.IsDBNull(r("ProchaineExec")) Then
             AfficherApercu(Convert.ToDateTime(r("ProchaineExec")), Nothing)
         Else
-            AfficherApercu(Nothing, "Pas encore calculée — sera mise à jour au prochain démarrage du worker.")
+            AfficherApercu(Nothing, T("Pas encore calculée — sera mise à jour au prochain démarrage du worker.", "Not yet calculated — will be updated at the next worker startup.", "Aún no calculada — se actualizará en el próximo inicio del worker."))
         End If
     End Sub
 
@@ -298,7 +402,7 @@ Partial Public Class wbfJobSchedule
         Dim scheduleType = ddlScheduleType.SelectedValue
 
         If scheduleType = "CRON" Then
-            AfficherApercu(Nothing, "Le calcul d'une expression CRON est effectué par le service .NET (NCrontab/Cronos).")
+            AfficherApercu(Nothing, T("Le calcul d'une expression CRON est effectué par le service .NET (NCrontab/Cronos).", "CRON expression calculation is performed by the .NET service (NCrontab/Cronos).", "El cálculo de una expresión CRON lo realiza el servicio .NET (NCrontab/Cronos)."))
             Return
         End If
 
@@ -377,7 +481,7 @@ Partial Public Class wbfJobSchedule
                 End Using
             End Using
         Catch ex As Exception
-            AfficherApercu(Nothing, "Erreur de calcul : " & ex.Message)
+            AfficherApercu(Nothing, T("Erreur de calcul : ", "Calculation error: ", "Error de cálculo: ") & ex.Message)
         End Try
     End Sub
 
@@ -388,7 +492,7 @@ Partial Public Class wbfJobSchedule
             divPreview.Attributes("class") = "preview-box"
         Else
             litProchaineExec.Text = "—"
-            litProchaineExecMeta.Text = If(String.IsNullOrEmpty(messageErreur), "Saisis les paramètres pour voir l'aperçu.", messageErreur)
+            litProchaineExecMeta.Text = If(String.IsNullOrEmpty(messageErreur), T("Saisis les paramètres pour voir l'aperçu.", "Enter the parameters to see the preview.", "Ingrese los parámetros para ver la vista previa."), messageErreur)
             divPreview.Attributes("class") = If(String.IsNullOrEmpty(messageErreur), "preview-box", "preview-box error")
         End If
     End Sub
@@ -400,10 +504,10 @@ Partial Public Class wbfJobSchedule
     Private Function SauvegarderSchedule() As Integer
         ' Validations
         If String.IsNullOrWhiteSpace(txtNom.Text) Then
-            Throw New ApplicationException("Le nom du schedule est obligatoire.")
+            Throw New ApplicationException(T("Le nom du schedule est obligatoire.", "The schedule name is required.", "El nombre de la programación es obligatorio."))
         End If
         If String.IsNullOrEmpty(ddlScheduleType.SelectedValue) Then
-            Throw New ApplicationException("Le type de planification est obligatoire.")
+            Throw New ApplicationException(T("Le type de planification est obligatoire.", "The schedule type is required.", "El tipo de programación es obligatorio."))
         End If
 
         Dim scheduleType = ddlScheduleType.SelectedValue
@@ -432,13 +536,13 @@ Partial Public Class wbfJobSchedule
                 If cbSam.Checked Then jours.Add("6")
                 If cbDim.Checked Then jours.Add("7")
                 If jours.Count = 0 Then
-                    Throw New ApplicationException("Sélectionne au moins un jour de la semaine.")
+                    Throw New ApplicationException(T("Sélectionne au moins un jour de la semaine.", "Select at least one day of the week.", "Seleccione al menos un día de la semana."))
                 End If
                 joursSem = String.Join(",", jours)
             Case "MONTHLY"
                 If dpHeureMonthly.SelectedTime.HasValue Then heureExec = dpHeureMonthly.SelectedTime.Value
                 If String.IsNullOrEmpty(ddlJourMois.SelectedValue) Then
-                    Throw New ApplicationException("Choisis un jour du mois.")
+                    Throw New ApplicationException(T("Choisis un jour du mois.", "Choose a day of the month.", "Elija un día del mes."))
                 End If
                 jourMois = Convert.ToInt32(ddlJourMois.SelectedValue)
                 ' ← NOUVEAU : récupérer la périodicité
@@ -447,12 +551,12 @@ Partial Public Class wbfJobSchedule
                 End If
             Case "CRON"
                 If String.IsNullOrWhiteSpace(txtCronExpression.Text) Then
-                    Throw New ApplicationException("L'expression CRON est obligatoire.")
+                    Throw New ApplicationException(T("L'expression CRON est obligatoire.", "The CRON expression is required.", "La expresión CRON es obligatoria."))
                 End If
                 cronExpr = txtCronExpression.Text.Trim()
             Case "ONCE"
                 If Not dpDateOnce.SelectedDate.HasValue Then
-                    Throw New ApplicationException("Choisis une date d'exécution.")
+                    Throw New ApplicationException(T("Choisis une date d'exécution.", "Choose a run date.", "Elija una fecha de ejecución."))
                 End If
                 dateOnce = dpDateOnce.SelectedDate.Value
         End Select
@@ -506,25 +610,28 @@ Partial Public Class wbfJobSchedule
 
     Private Function FormatDateRelative(dt As DateTime) As String
         Dim diff = dt - DateTime.Now
+        Dim cult = CultureLang()
 
         If diff.TotalSeconds < 0 Then
             Dim minutes = Math.Abs(diff.TotalMinutes)
-            If minutes < 60 Then Return "Il y a " & Math.Round(minutes) & " min"
-            If diff.TotalHours > -24 Then Return "Il y a " & Math.Round(Math.Abs(diff.TotalHours)) & " h"
-            Return "Il y a " & Math.Round(Math.Abs(diff.TotalDays)) & " jours"
+            If minutes < 60 Then Return T("Il y a " & Math.Round(minutes) & " min", Math.Round(minutes) & " min ago", "hace " & Math.Round(minutes) & " min")
+            If diff.TotalHours > -24 Then Return T("Il y a " & Math.Round(Math.Abs(diff.TotalHours)) & " h", Math.Round(Math.Abs(diff.TotalHours)) & " h ago", "hace " & Math.Round(Math.Abs(diff.TotalHours)) & " h")
+            Return T("Il y a " & Math.Round(Math.Abs(diff.TotalDays)) & " jours", Math.Round(Math.Abs(diff.TotalDays)) & " days ago", "hace " & Math.Round(Math.Abs(diff.TotalDays)) & " días")
         Else
             Dim minutes = diff.TotalMinutes
-            If minutes < 1 Then Return "Dans moins d'1 min"
-            If minutes < 60 Then Return "Dans " & Math.Round(minutes) & " min"
+            If minutes < 1 Then Return T("Dans moins d'1 min", "In less than 1 min", "En menos de 1 min")
+            If minutes < 60 Then Return T("Dans " & Math.Round(minutes) & " min", "In " & Math.Round(minutes) & " min", "En " & Math.Round(minutes) & " min")
             If diff.TotalHours < 24 Then
-                Return "Dans " & Math.Round(diff.TotalHours, 1) & " h (" &
-                    dt.ToString("dddd HH:mm", System.Globalization.CultureInfo.GetCultureInfo("fr-CA")) & ")"
+                Dim h = Math.Round(diff.TotalHours, 1)
+                Dim d = dt.ToString("dddd HH:mm", cult)
+                Return T("Dans " & h & " h (" & d & ")", "In " & h & " h (" & d & ")", "En " & h & " h (" & d & ")")
             End If
             If diff.TotalDays < 7 Then
-                Return "Dans " & Math.Round(diff.TotalDays) & " j (" &
-                    dt.ToString("dddd dd MMM", System.Globalization.CultureInfo.GetCultureInfo("fr-CA")) & ")"
+                Dim j = Math.Round(diff.TotalDays)
+                Dim d = dt.ToString("dddd dd MMM", cult)
+                Return T("Dans " & j & " j (" & d & ")", "In " & j & " d (" & d & ")", "En " & j & " d (" & d & ")")
             End If
-            Return "Dans " & Math.Round(diff.TotalDays) & " jours"
+            Return T("Dans " & Math.Round(diff.TotalDays) & " jours", "In " & Math.Round(diff.TotalDays) & " days", "En " & Math.Round(diff.TotalDays) & " días")
         End If
     End Function
 

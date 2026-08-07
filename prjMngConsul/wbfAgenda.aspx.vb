@@ -8,6 +8,8 @@ Public Class wbfAgenda
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        rwAppointment.Title = T("Rendez-vous", "Appointment", "Cita")
+
         If Not IsPostBack Then
 
             If Not isAuthenticated Then
@@ -20,6 +22,24 @@ Public Class wbfAgenda
             LoadAll()
         End If
     End Sub
+
+    ''' <summary>Sélecteur de langue simple (fr/en/es) pour les libellés de la page.</summary>
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    ''' <summary>Locale BCP-47 pour toLocaleDateString côté JS.</summary>
+    Protected Function AgLocale() As String
+        Select Case CurrentLang
+            Case "en" : Return "en-CA"
+            Case "es" : Return "es-ES"
+            Case Else : Return "fr-CA"
+        End Select
+    End Function
 
     ''' <summary>
     ''' Handler unique pour les requêtes Ajax du RadAjaxManager.

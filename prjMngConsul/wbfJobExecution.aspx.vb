@@ -52,7 +52,45 @@ Partial Public Class wbfJobExecution
     '  PAGE LIFECYCLE
     ' =========================================================
 
+    Protected Function T(fr As String, en As String, es As String) As String
+        Select Case CurrentLang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub ApplyLocalization()
+        btnRetour.Text = "← " & T("Retour à l'historique", "Back to history", "Volver al historial")
+        btnAnnuler.Text = T("Annuler l'exécution", "Cancel execution", "Cancelar ejecución")
+        btnRelancer.Text = T("Réessayer", "Retry", "Reintentar")
+        If rblNiveau.Items.Count > 0 Then
+            rblNiveau.Items(0).Text = T("Tous", "All", "Todos")
+        End If
+
+        ' Libellés HTML statiques (ex-blocs <%= T(...) %>)
+        litLoc01.Text = T("Détails de l'exécution", "Execution details", "Detalles de la ejecución")
+        litLoc02.Text = T("Job", "Job", "Tarea")
+        litLoc03.Text = T("Code", "Code", "Código")
+        litLoc04.Text = T("Schedule", "Schedule", "Programación")
+        litLoc05.Text = T("Trigger", "Trigger", "Disparador")
+        litLoc06.Text = T("Démarré", "Started", "Iniciado")
+        litLoc07.Text = T("Terminé", "Completed", "Completado")
+        litLoc08.Text = T("Durée", "Duration", "Duración")
+        litLoc09.Text = T("Tentative", "Attempt", "Intento")
+        litLoc10.Text = T("Worker", "Worker", "Worker")
+        litLoc11.Text = T("Lignes traitées", "Rows processed", "Filas procesadas")
+        litLoc12.Text = T("Handler", "Handler", "Handler")
+        litLoc13.Text = T("Lancée par", "Started by", "Iniciada por")
+        litLoc14.Text = T("Message de résultat", "Result message", "Mensaje de resultado")
+        litLoc15.Text = T("Détail technique", "Technical detail", "Detalle técnico")
+        litLoc16.Text = T("Paramètres utilisés", "Parameters used", "Parámetros utilizados")
+        litLoc17.Text = T("Logs détaillés", "Detailed logs", "Registros detallados")
+        litLoc18.Text = T("Aucun log à afficher pour ce filtre.", "No logs to display for this filter.", "No hay registros para mostrar con este filtro.")
+    End Sub
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ApplyLocalization()
         If Not IsPostBack Then
             If Not isAuthenticated Then
                 Response.Redirect("~/wbfLogin.aspx")
@@ -62,7 +100,7 @@ Partial Public Class wbfJobExecution
             Integer.TryParse(Request.QueryString("Id"), id)
 
             If id <= 0 Then
-                ShowStatus("danger", "Paramètre Id manquant en URL.")
+                ShowStatus("danger", T("Paramètre Id manquant en URL.", "Missing Id parameter in URL.", "Falta el parámetro Id en la URL."))
                 phHeader.Visible = False
                 Return
             End If
@@ -101,14 +139,14 @@ Partial Public Class wbfJobExecution
                 End Using
             End Using
 
-            ShowStatus("success", "Exécution marquée comme ANNULÉE.")
+            ShowStatus("success", T("Exécution marquée comme ANNULÉE.", "Execution marked as CANCELLED.", "Ejecución marcada como CANCELADA."))
             ChargerDetail(ExecutionId)
             ChargerLogs(ExecutionId, Nothing)
 
         Catch sqlex As SqlException
-            ShowStatus("danger", "Erreur SQL : " & sqlex.Message)
+            ShowStatus("danger", T("Erreur SQL : ", "SQL error: ", "Error SQL: ") & sqlex.Message)
         Catch ex As Exception
-            ShowStatus("danger", "Erreur : " & ex.Message)
+            ShowStatus("danger", T("Erreur : ", "Error: ", "Error: ") & ex.Message)
         End Try
     End Sub
 
@@ -141,9 +179,9 @@ Partial Public Class wbfJobExecution
             End If
 
         Catch sqlex As SqlException
-            ShowStatus("danger", "Erreur SQL : " & sqlex.Message)
+            ShowStatus("danger", T("Erreur SQL : ", "SQL error: ", "Error SQL: ") & sqlex.Message)
         Catch ex As Exception
-            ShowStatus("danger", "Erreur : " & ex.Message)
+            ShowStatus("danger", T("Erreur : ", "Error: ", "Error: ") & ex.Message)
         End Try
     End Sub
 
@@ -164,8 +202,8 @@ Partial Public Class wbfJobExecution
 
                 If litToggle IsNot Nothing Then
                     litToggle.Text = String.Format(
-                        " <span class='detail-toggle' onclick=""toggleLogDetail({0})"">[détail]</span>",
-                        logId)
+                        " <span class='detail-toggle' onclick=""toggleLogDetail({0})"">[{1}]</span>",
+                        logId, T("détail", "detail", "detalle"))
                 End If
                 If litDetail IsNot Nothing Then
                     litDetail.Text = String.Format(
@@ -201,7 +239,7 @@ Partial Public Class wbfJobExecution
         End Using
 
         If dt.Rows.Count = 0 Then
-            ShowStatus("danger", "Exécution introuvable (Id=" & id & ").")
+            ShowStatus("danger", T("Exécution introuvable (Id=", "Execution not found (Id=", "Ejecución no encontrada (Id=") & id & ").")
             phHeader.Visible = False
             Return
         End If
@@ -213,7 +251,7 @@ Partial Public Class wbfJobExecution
         StatutCourant = r("Statut").ToString()
 
         ' ─── Bandeau d'en-tête ───
-        Page.Title = "Exécution #" & id & " — " & r("JobNom").ToString()
+        Page.Title = T("Exécution #", "Execution #", "Ejecución #") & id & " — " & r("JobNom").ToString()
 
         Dim icon As String, statutClass As String
         Select Case StatutCourant
@@ -234,12 +272,12 @@ Partial Public Class wbfJobExecution
             StatutCourant)
 
         Dim metaParts As New List(Of String)()
-        metaParts.Add("Exécution #" & id)
+        metaParts.Add(T("Exécution #", "Execution #", "Ejecución #") & id)
         If Not Convert.IsDBNull(r("Demarre")) Then
-            metaParts.Add("Démarrée " & Convert.ToDateTime(r("Demarre")).ToString("yyyy-MM-dd HH:mm:ss"))
+            metaParts.Add(T("Démarrée ", "Started ", "Iniciada ") & Convert.ToDateTime(r("Demarre")).ToString("yyyy-MM-dd HH:mm:ss"))
         End If
         If Not Convert.IsDBNull(r("DureeMs")) Then
-            metaParts.Add("Durée " & FormatDureeMs(Convert.ToInt64(r("DureeMs"))))
+            metaParts.Add(T("Durée ", "Duration ", "Duración ") & FormatDureeMs(Convert.ToInt64(r("DureeMs"))))
         End If
         litHeaderMeta.Text = String.Join(" • ", metaParts)
 
@@ -250,19 +288,19 @@ Partial Public Class wbfJobExecution
         ' ─── Métadonnées ───
         Dim sysBadge = ""
         If Not Convert.IsDBNull(r("JobSysteme")) AndAlso Convert.ToBoolean(r("JobSysteme")) Then
-            sysBadge = " <span class='badge-systeme'>SYSTÈME</span>"
+            sysBadge = " <span class='badge-systeme'>" & T("SYSTÈME", "SYSTEM", "SISTEMA") & "</span>"
         End If
         litJobNom.Text = Server.HtmlEncode(r("JobNom").ToString()) & sysBadge
         litJobCode.Text = Server.HtmlEncode(r("JobCode").ToString())
 
-        litScheduleNom.Text = If(Convert.IsDBNull(r("ScheduleNom")), "<em style='color:#94a3b8;'>Aucun (lancement manuel)</em>",
+        litScheduleNom.Text = If(Convert.IsDBNull(r("ScheduleNom")), "<em style='color:#94a3b8;'>" & T("Aucun (lancement manuel)", "None (manual start)", "Ninguno (inicio manual)") & "</em>",
                                  Server.HtmlEncode(r("ScheduleNom").ToString()))
         litTrigger.Text = String.Format("<span class='pill pill-neutral'>{0}</span>", r("TriggerType"))
 
         litDemarre.Text = If(Convert.IsDBNull(r("Demarre")), "—",
                              Convert.ToDateTime(r("Demarre")).ToString("yyyy-MM-dd HH:mm:ss"))
         litTermine.Text = If(Convert.IsDBNull(r("Termine")),
-                             "<em style='color:#94a3b8;'>En cours...</em>",
+                             "<em style='color:#94a3b8;'>" & T("En cours...", "Running...", "En curso...") & "</em>",
                              Convert.ToDateTime(r("Termine")).ToString("yyyy-MM-dd HH:mm:ss"))
 
         litDuree.Text = If(Convert.IsDBNull(r("DureeMs")), "—", FormatDureeMs(Convert.ToInt64(r("DureeMs"))))
@@ -338,7 +376,7 @@ Partial Public Class wbfJobExecution
         End If
 
         Dim sb As New System.Text.StringBuilder()
-        sb.Append(GenererTab("", "Tous", nbTotal))
+        sb.Append(GenererTab("", T("Tous", "All", "Todos"), nbTotal))
         If nbDebug > 0 Then sb.Append(GenererTab("DEBUG", "DEBUG", nbDebug))
         sb.Append(GenererTab("INFO", "INFO", nbInfo))
         If nbWarn > 0 Then sb.Append(GenererTab("WARN", "WARN", nbWarn))

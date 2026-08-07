@@ -178,9 +178,9 @@
 
     <div class="jobs-page">
 
-        <h2>Tâches planifiées</h2>
+        <h2><asp:Literal ID="litTitre" runat="server" /></h2>
         <div class="subtitle">
-            Gestion des jobs automatiques exécutés par l'orchestrateur (rapports, imports, courriels, maintenance).
+            <asp:Literal ID="litSousTitre" runat="server" />
         </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">
@@ -192,19 +192,19 @@
         <!-- KPI Row -->
         <div class="kpi-row">
             <div class="kpi-card">
-                <div class="lbl">Jobs actifs</div>
+                <div class="lbl"><asp:Literal ID="litLblActifs" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiActifs" runat="server" Text="0" /></div>
             </div>
             <div class="kpi-card kpi-success">
-                <div class="lbl">Succès dernières 24 h</div>
+                <div class="lbl"><asp:Literal ID="litLblSucces" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiSucces" runat="server" Text="0" /></div>
             </div>
             <div class="kpi-card kpi-danger">
-                <div class="lbl">Échecs dernières 24 h</div>
+                <div class="lbl"><asp:Literal ID="litLblEchecs" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiEchecs" runat="server" Text="0" /></div>
             </div>
             <div class="kpi-card kpi-warning">
-                <div class="lbl">Exécutions en cours</div>
+                <div class="lbl"><asp:Literal ID="litLblEnCours" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litKpiEnCours" runat="server" Text="0" /></div>
             </div>
         </div>
@@ -254,11 +254,11 @@
         <!-- Liste des jobs -->
         <asp:PlaceHolder ID="phContenu" runat="server">
             <div class="jobs-card">
-                <h3>Liste des jobs</h3>
+                <h3><asp:Literal ID="litListeTitre" runat="server" /></h3>
 
                 <asp:PlaceHolder ID="phEmpty" runat="server" Visible="false">
                     <div class="empty-state">
-                        Aucun job trouvé avec ces filtres.
+                        <asp:Literal ID="litEmptyText" runat="server" />
                     </div>
                 </asp:PlaceHolder>
 
@@ -266,12 +266,12 @@
                     <table class="jobs-table">
                         <thead>
                             <tr>
-                                <th style="width:30%;">Job</th>
-                                <th style="width:12%;">Type</th>
-                                <th style="width:12%;">Schedules</th>
-                                <th style="width:18%;">Prochaine exéc.</th>
-                                <th style="width:13%;">Dernière exéc.</th>
-                                <th class="col-actions" style="width:15%;">Actions</th>
+                                <th style="width:30%;"><asp:Literal ID="litThJob" runat="server" /></th>
+                                <th style="width:12%;"><asp:Literal ID="litThType" runat="server" /></th>
+                                <th style="width:12%;"><asp:Literal ID="litThSchedules" runat="server" /></th>
+                                <th style="width:18%;"><asp:Literal ID="litThProchaine" runat="server" /></th>
+                                <th style="width:13%;"><asp:Literal ID="litThDerniere" runat="server" /></th>
+                                <th class="col-actions" style="width:15%;"><asp:Literal ID="litThActions" runat="server" /></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -288,7 +288,7 @@
                                                     Style="color: inherit; text-decoration: none;">
                                                     <%# Eval("Nom") %>
                                                 </asp:LinkButton>
-                                                <%# IIf(Convert.ToBoolean(Eval("Systeme")), "<span class='badge-systeme'>SYSTÈME</span>", "") %>
+                                                <%# IIf(Convert.ToBoolean(Eval("Systeme")), "<span class='badge-systeme'>" & T("SYSTÈME", "SYSTEM", "SISTEMA") & "</span>", "") %>
                                             </div>
                                             <div class="meta-line">
                                                 <span class="job-code"><%# Eval("JobCode") %></span>
@@ -327,7 +327,7 @@
                                                 CssClass="action-btn"
                                                 CommandName="ToggleActif"
                                                 CommandArgument='<%# Eval("JobDefinitionId") %>'>
-                                                <%# IIf(Convert.ToBoolean(Eval("Actif")), "Désactiver", "Activer") %>
+                                                <%# IIf(Convert.ToBoolean(Eval("Actif")), T("Désactiver", "Disable", "Desactivar"), T("Activer", "Enable", "Activar")) %>
                                             </asp:LinkButton>
 
                                             <asp:LinkButton ID="btnHistorique" runat="server"

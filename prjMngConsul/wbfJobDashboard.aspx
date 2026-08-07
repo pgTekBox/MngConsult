@@ -210,15 +210,15 @@
 
     <div class="dash-page">
 
-        <h2>Tableau de bord — Orchestrateur</h2>
+        <h2><asp:Literal ID="litLoc01" runat="server" /></h2>
         <div class="subtitle">
             <div>
-                Vue d'ensemble en temps réel des jobs planifiés.
-                Dernière actualisation : <asp:Literal ID="litLastRefresh" runat="server" />
+                <asp:Literal ID="litLoc02" runat="server" />
+                <asp:Literal ID="litLoc03" runat="server" /> <asp:Literal ID="litLastRefresh" runat="server" />
             </div>
             <div class="toolbar">
                 <span class="live-indicator">
-                    <span class="live-dot"></span> Auto-refresh 30s
+                    <span class="live-dot"></span> <asp:Literal ID="litLoc04" runat="server" />
                 </span>
                 <telerik:RadButton ID="btnRefresh" runat="server" Skin="Bootstrap"
                     Text="Rafraîchir" Icon-PrimaryIconCssClass="rbRefresh"
@@ -231,38 +231,38 @@
             <!-- KPIs -->
             <div class="kpi-grid">
                 <div class="kpi-card kpi-info">
-                    <div class="lbl">Jobs actifs</div>
+                    <div class="lbl"><asp:Literal ID="litLoc05" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litKpiJobsActifs" runat="server" Text="0" /></div>
                     <div class="trend">
-                        <asp:Literal ID="litKpiJobsInactifs" runat="server" /> inactifs
+                        <asp:Literal ID="litKpiJobsInactifs" runat="server" /> <asp:Literal ID="litLoc06" runat="server" />
                     </div>
                 </div>
                 <div class="kpi-card kpi-success">
-                    <div class="lbl">Succès 24 h</div>
+                    <div class="lbl"><asp:Literal ID="litLoc07" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litKpiSucces24h" runat="server" Text="0" /></div>
                     <div class="trend">
-                        Taux 7j : <strong><asp:Literal ID="litKpiTaux7j" runat="server" /></strong>
+                        <asp:Literal ID="litLoc08" runat="server" /> <strong><asp:Literal ID="litKpiTaux7j" runat="server" /></strong>
                     </div>
                 </div>
                 <div class="kpi-card kpi-danger">
-                    <div class="lbl">Échecs 24 h</div>
+                    <div class="lbl"><asp:Literal ID="litLoc09" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litKpiEchecs24h" runat="server" Text="0" /></div>
                     <div class="trend">
-                        Sur 7 jours : <strong><asp:Literal ID="litKpiTotal7j" runat="server" /></strong> exéc.
+                        <asp:Literal ID="litLoc10" runat="server" /> <strong><asp:Literal ID="litKpiTotal7j" runat="server" /></strong> <asp:Literal ID="litLoc11" runat="server" />
                     </div>
                 </div>
                 <div class="kpi-card kpi-warning">
-                    <div class="lbl">En cours actuellement</div>
+                    <div class="lbl"><asp:Literal ID="litLoc12" runat="server" /></div>
                     <div class="val"><asp:Literal ID="litKpiEnCours" runat="server" Text="0" /></div>
                     <div class="trend">
-                        Durée moyenne : <strong><asp:Literal ID="litKpiDureeMoy" runat="server" /></strong>
+                        <asp:Literal ID="litLoc13" runat="server" /> <strong><asp:Literal ID="litKpiDureeMoy" runat="server" /></strong>
                     </div>
                 </div>
             </div>
 
             <!-- Tendance 7 jours -->
             <div class="dash-card" style="margin-bottom: 16px;">
-                <h3>Tendance des 7 derniers jours</h3>
+                <h3><asp:Literal ID="litLoc14" runat="server" /></h3>
                 <div class="tendance">
                     <asp:Literal ID="litTendance" runat="server" />
                 </div>
@@ -274,13 +274,13 @@
                 <!-- Jobs en alerte -->
                 <div class="dash-card">
                     <h3>
-                        Jobs en alerte
+                        <asp:Literal ID="litLoc15" runat="server" />
                         <span id="badgeAlertes" runat="server" class="badge-count">0</span>
                     </h3>
                     <asp:PlaceHolder ID="phAlertesEmpty" runat="server" Visible="false">
                         <div class="empty-state">
                             <div class="ico">✓</div>
-                            Aucun job en alerte. Tout roule.
+                            <asp:Literal ID="litLoc16" runat="server" />
                         </div>
                     </asp:PlaceHolder>
                     <div class="item-list">
@@ -302,7 +302,7 @@
                 <!-- Prochaines exécutions -->
                 <div class="dash-card">
                     <h3>
-                        Prochaines exécutions (24 h)
+                        <asp:Literal ID="litLoc17" runat="server" />
                         <span class="badge-count">
                             <asp:Literal ID="litNbProchaines" runat="server" Text="0" />
                         </span>
@@ -310,7 +310,7 @@
                     <asp:PlaceHolder ID="phProchainesEmpty" runat="server" Visible="false">
                         <div class="empty-state">
                             <div class="ico">📅</div>
-                            Aucune exécution prévue dans les 24 prochaines heures.
+                            <asp:Literal ID="litLoc18" runat="server" />
                         </div>
                     </asp:PlaceHolder>
                     <div class="item-list">
@@ -341,13 +341,13 @@
             <!-- Activité récente -->
             <div class="dash-card">
                 <h3>
-                    Activité récente
-                    <span class="badge-count">10 dernières</span>
+                    <asp:Literal ID="litLoc19" runat="server" />
+                    <span class="badge-count"><asp:Literal ID="litLoc20" runat="server" /></span>
                 </h3>
                 <asp:PlaceHolder ID="phActiviteEmpty" runat="server" Visible="false">
                     <div class="empty-state">
                         <div class="ico">○</div>
-                        Aucune exécution récente.
+                        <asp:Literal ID="litLoc21" runat="server" />
                     </div>
                 </asp:PlaceHolder>
                 <div class="item-list">

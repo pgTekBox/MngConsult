@@ -204,6 +204,20 @@ Public Class wbfRegister
             Dim userId As Integer = ds.Tables(0).Rows(0)("NewUserId")
             Dim activationToken As Guid = ds.Tables(0).Rows(0)("activationToken")
 
+            ' === Attribution de l'adresse courriel @60sec.ca de la compagnie (best-effort) ===
+            ' Génère un slug du nom commercial, écrit T010Company.Sec60Email et enregistre
+            ' l'adresse locale (SmtpLocalRecipient). Non bloquant : une erreur ici ne doit
+            ' jamais faire échouer une inscription déjà réussie.
+            Try
+                If ds.Tables(0).Columns.Contains("NewCompanyGUID") _
+                   AndAlso Not IsDBNull(ds.Tables(0).Rows(0)("NewCompanyGUID")) Then
+                    Dim pm As New Collection
+                    pm.Add(New SqlClient.SqlParameter("@CompanyGUID", CType(ds.Tables(0).Rows(0)("NewCompanyGUID"), Guid)))
+                    ExecuteSQLds("s0712AssignMailbox", pm)
+                End If
+            Catch
+            End Try
+
             ' === Envoi du courriel d'activation ===
             Dim emailSent = SendActivationEmail(email, firstName, activationToken)
 

@@ -246,43 +246,43 @@
 
         <!-- Section : Métadonnées de l'exécution -->
         <div class="exec-card">
-            <h3>Détails de l'exécution</h3>
+            <h3><asp:Literal ID="litLoc01" runat="server" /></h3>
             <div class="meta-grid">
-                <div class="lbl">Job</div>
+                <div class="lbl"><asp:Literal ID="litLoc02" runat="server" /></div>
                 <div class="val">
                     <asp:Literal ID="litJobNom" runat="server" />
                 </div>
-                <div class="lbl">Code</div>
+                <div class="lbl"><asp:Literal ID="litLoc03" runat="server" /></div>
                 <div class="val">
                     <code><asp:Literal ID="litJobCode" runat="server" /></code>
                 </div>
 
-                <div class="lbl">Schedule</div>
+                <div class="lbl"><asp:Literal ID="litLoc04" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litScheduleNom" runat="server" /></div>
-                <div class="lbl">Trigger</div>
+                <div class="lbl"><asp:Literal ID="litLoc05" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litTrigger" runat="server" /></div>
 
-                <div class="lbl">Démarré</div>
+                <div class="lbl"><asp:Literal ID="litLoc06" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litDemarre" runat="server" /></div>
-                <div class="lbl">Terminé</div>
+                <div class="lbl"><asp:Literal ID="litLoc07" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litTermine" runat="server" /></div>
 
-                <div class="lbl">Durée</div>
+                <div class="lbl"><asp:Literal ID="litLoc08" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litDuree" runat="server" /></div>
-                <div class="lbl">Tentative</div>
+                <div class="lbl"><asp:Literal ID="litLoc09" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litTentative" runat="server" /></div>
 
-                <div class="lbl">Worker</div>
+                <div class="lbl"><asp:Literal ID="litLoc10" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litWorker" runat="server" /></div>
-                <div class="lbl">Lignes traitées</div>
+                <div class="lbl"><asp:Literal ID="litLoc11" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litLignesTraitees" runat="server" /></div>
 
-                <div class="lbl">Handler</div>
+                <div class="lbl"><asp:Literal ID="litLoc12" runat="server" /></div>
                 <div class="val">
                     <asp:Literal ID="litHandlerType" runat="server" /> :
                     <code><asp:Literal ID="litHandlerName" runat="server" /></code>
                 </div>
-                <div class="lbl">Lancée par</div>
+                <div class="lbl"><asp:Literal ID="litLoc13" runat="server" /></div>
                 <div class="val"><asp:Literal ID="litLanceePar" runat="server" /></div>
             </div>
         </div>
@@ -290,7 +290,7 @@
         <!-- Section : Message de résultat -->
         <asp:PlaceHolder ID="phMessage" runat="server" Visible="false">
             <div class="exec-card">
-                <h3>Message de résultat</h3>
+                <h3><asp:Literal ID="litLoc14" runat="server" /></h3>
                 <div style="font-size: 14px; color: #0f172a; padding: 8px 0;">
                     <asp:Literal ID="litResultatMessage" runat="server" />
                 </div>
@@ -300,7 +300,7 @@
         <!-- Section : Stack trace / détail erreur -->
         <asp:PlaceHolder ID="phDetail" runat="server" Visible="false">
             <div class="exec-card">
-                <h3>Détail technique</h3>
+                <h3><asp:Literal ID="litLoc15" runat="server" /></h3>
                 <div id="divDetailBlock" runat="server" class="code-block">
                     <asp:Literal ID="litResultatDetail" runat="server" />
                 </div>
@@ -310,14 +310,14 @@
         <!-- Section : Paramètres utilisés -->
         <asp:PlaceHolder ID="phParams" runat="server" Visible="false">
             <div class="exec-card">
-                <h3>Paramètres utilisés</h3>
+                <h3><asp:Literal ID="litLoc16" runat="server" /></h3>
                 <div class="code-block"><asp:Literal ID="litParamsUtilises" runat="server" /></div>
             </div>
         </asp:PlaceHolder>
 
         <!-- Section : Logs -->
         <div class="exec-card">
-            <h3>Logs détaillés</h3>
+            <h3><asp:Literal ID="litLoc17" runat="server" /></h3>
 
             <div class="logs-filter">
                 <asp:Literal ID="litFilterTabs" runat="server" />
@@ -339,7 +339,7 @@
             <asp:PlaceHolder ID="phLogs" runat="server">
                 <asp:PlaceHolder ID="phLogsEmpty" runat="server" Visible="false">
                     <div class="empty-state">
-                        Aucun log à afficher pour ce filtre.
+                        <asp:Literal ID="litLoc18" runat="server" />
                     </div>
                 </asp:PlaceHolder>
 
@@ -377,7 +377,13 @@
     <!-- Champ caché pour exposer JobIdContexte au JavaScript -->
     <asp:HiddenField ID="hfJobIdCtx"  runat="server" Value="0" ClientIDMode="Static" />
 
+    <telerik:RadCodeBlock runat="server">
     <script type="text/javascript">
+        var EXE_I18N = {
+            confirmAnnul: "<%= T("Marquer cette exécution comme ANNULÉE ?\n\nNote : ce marqueur n'arrête pas physiquement le worker — c'est juste un statut.", "Mark this execution as CANCELLED?\n\nNote: this marker does not physically stop the worker — it is only a status.", "¿Marcar esta ejecución como CANCELADA?\n\nNota: este marcador no detiene físicamente el worker, es solo un estado.") %>",
+            confirmRelance: "<%= T("Relancer cette exécution avec les mêmes paramètres ?\n\nUne nouvelle exécution sera créée en EN_COURS et le worker la prendra en charge.", "Retry this execution with the same parameters?\n\nA new execution will be created as RUNNING and the worker will pick it up.", "¿Reintentar esta ejecución con los mismos parámetros?\n\nSe creará una nueva ejecución como EN CURSO y el worker se encargará de ella.") %>"
+        };
+
         function retour(sender, args) {
             // Si on est arrivé via QueryString JobId, retour vers monitoring filtré
             // Sinon retour vers monitoring général
@@ -390,12 +396,10 @@
             }
         }
         function confirmerAnnulation(sender, args) {
-            args.set_cancel(!confirm("Marquer cette exécution comme ANNULÉE ?\n\n" +
-                "Note : ce marqueur n'arrête pas physiquement le worker — c'est juste un statut."));
+            args.set_cancel(!confirm(EXE_I18N.confirmAnnul));
         }
         function confirmerRelance(sender, args) {
-            args.set_cancel(!confirm("Relancer cette exécution avec les mêmes paramètres ?\n\n" +
-                "Une nouvelle exécution sera créée en EN_COURS et le worker la prendra en charge."));
+            args.set_cancel(!confirm(EXE_I18N.confirmRelance));
         }
 
         // Toggle des détails de log
@@ -419,5 +423,6 @@
             }
         }
     </script>
+    </telerik:RadCodeBlock>
 
 </asp:Content>

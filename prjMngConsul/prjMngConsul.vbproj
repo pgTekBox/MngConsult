@@ -309,6 +309,38 @@
     <Content Include="Database\T060Document_AddPoNumber.sql" />
     <Content Include="Database\s0038GetInvoiceById.sql" />
     <Content Include="Database\s0707UpdateSupplierInvoiceRefs.sql" />
+    <Content Include="Database\DEMO_CreateAndSnapshot.sql" />
+    <Content Include="Database\s0708ResetDemoCompany.sql" />
+    <Content Include="Database\fnDemoCompanies.sql" />
+    <Content Include="Database\s0710CloneCompany.sql" />
+    <Content Include="Database\s0611ListInboundMail.sql" />
+    <Content Include="Database\s0612GetInboundMail.sql" />
+    <Content Include="Database\s0613ListSentMail.sql" />
+    <Content Include="Database\s0614GetSentMail.sql" />
+    <Content Include="Database\s0615ListLocalRecipients.sql" />
+    <Content Include="Database\s0616ListInboxForAddress.sql" />
+    <Content Include="Database\s0617GetInboxForAddress.sql" />
+    <Content Include="Database\s0618ListSentForAddress.sql" />
+    <Content Include="Database\s0619GetSentForAddress.sql" />
+    <Content Include="Database\s0620ImapLocalRecipientExists.sql" />
+    <Content Include="Database\s0621ImapDeleteInbox.sql" />
+    <Content Include="Database\s0622ImapDeleteSent.sql" />
+    <Content Include="Database\s0623ImapInsertAttachment.sql" />
+    <Content Include="Database\s1578GetAttachment_addChain.sql" />
+    <Content Include="Database\s0624ListInboundAttachments.sql" />
+    <Content Include="Database\s0625GetInboundAttachment.sql" />
+    <Content Include="Database\s0626ListSentAttachments.sql" />
+    <Content Include="Database\s0627GetSentAttachment.sql" />
+    <Content Include="Database\s0714ImapGetCredential.sql" />
+    <Content Include="Database\T010Company_AddSec60Email.sql" />
+    <Content Include="Database\fnSlugify.sql" />
+    <Content Include="Database\s0713GetCompanyMailbox.sql" />
+    <Content Include="Database\T010Company_Sec60Email_Unique.sql" />
+    <Content Include="Database\SmtpLocalRecipient_Email_Unique.sql" />
+    <Content Include="Database\fix_QI_Square_procs.sql" />
+    <Content Include="Database\s0712AssignMailbox.sql" />
+    <Content Include="Database\s0711GetDemoCompanies.sql" />
+    <Content Include="Database\DEMO_SeedAgendaEmployees.sql" />
     <Content Include="Database\s0023GetSuppliersInvoices_v2.sql" />
     <Content Include="Database\s0150GetParamsForCompany.sql" />
     <Content Include="Database\T100_add_invoice_numbering_params.sql" />
@@ -469,6 +501,7 @@
     <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
     <Content Include="AutoPayProcessor.ashx" />
     <Content Include="InvoicePdf.ashx" />
+    <Content Include="MailAttachment.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />
     <Content Include="Scripts\jquery-3.7.0.min.js" />
@@ -501,6 +534,7 @@
     <Content Include="usJournalTemplateList.ascx" />
     <Content Include="wbfActivate.aspx" />
     <Content Include="wbfAgenda.aspx" />
+    <Content Include="wbfMailbox.aspx" />
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
     <Content Include="wbfAppointmentEdit.aspx" />
@@ -512,6 +546,9 @@
     <Content Include="wbfBilan.aspx" />
     <Content Include="wbfCustomerEdit.aspx" />
     <Content Include="wbfCustomers.aspx" />
+    <Content Include="wbfEmployees.aspx" />
+    <Content Include="wbfEmployeeEdit.aspx" />
+    <Content Include="wbfMailboxReset.aspx" />
     <Content Include="wbfCustomersInvoices.aspx" />
     <Content Include="wbfEtatResultats.aspx" />
     <Content Include="wbfFakeEmail.aspx" />
@@ -592,6 +629,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsAutoPayEngine.vb" />
+    <Compile Include="App_Code\clsMime.vb" />
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -822,6 +860,9 @@
     <Compile Include="CompanyLogo.ashx.vb">
       <DependentUpon>CompanyLogo.ashx</DependentUpon>
     </Compile>
+    <Compile Include="MailAttachment.ashx.vb">
+      <DependentUpon>MailAttachment.ashx</DependentUpon>
+    </Compile>
     <Compile Include="SquareWebhook.ashx.vb">
       <DependentUpon>SquareWebhook.ashx</DependentUpon>
     </Compile>
@@ -858,6 +899,13 @@
     </Compile>
     <Compile Include="wbfAgenda.aspx.vb">
       <DependentUpon>wbfAgenda.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfMailbox.aspx.designer.vb">
+      <DependentUpon>wbfMailbox.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfMailbox.aspx.vb">
+      <DependentUpon>wbfMailbox.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfAIPaiement.aspx.designer.vb">
@@ -928,6 +976,27 @@
     </Compile>
     <Compile Include="wbfCustomerEdit.aspx.vb">
       <DependentUpon>wbfCustomerEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfEmployees.aspx.designer.vb">
+      <DependentUpon>wbfEmployees.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfEmployees.aspx.vb">
+      <DependentUpon>wbfEmployees.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfEmployeeEdit.aspx.designer.vb">
+      <DependentUpon>wbfEmployeeEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfEmployeeEdit.aspx.vb">
+      <DependentUpon>wbfEmployeeEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfMailboxReset.aspx.designer.vb">
+      <DependentUpon>wbfMailboxReset.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfMailboxReset.aspx.vb">
+      <DependentUpon>wbfMailboxReset.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="wbfCustomers.aspx.designer.vb">
