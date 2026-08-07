@@ -1,0 +1,213 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "60secPaiement API",
+    "version": "1.0.0",
+    "description": "API de paiement (EFT) pour les applications SaaS des abonnés 60secPaiement.\n\n- Authentification par clé d'API (en-tête `X-Api-Key`).\n- Toutes les ressources sont isolées par abonné (multi-locataire).\n- Montants en **cents entiers** (BIGINT), devise CAD.\n- Idempotence des créations via l'en-tête `Idempotency-Key`.\n- Pagination `limit`/`offset` sur les listes.\n- Limite de débit par clé (en-têtes `X-RateLimit-*`, statut 429).\n- Webhooks signés (HMAC-SHA256) pour les statuts de paiement/décaissement."
+  },
+  "servers": [
+    { "url": "/api/v1", "description": "Version 1 (canonique)" }
+  ],
+  "security": [ { "ApiKeyAuth": [] } ],
+  "tags": [
+    { "name": "Général" },
+    { "name": "Clients" },
+    { "name": "Fournisseurs" },
+    { "name": "Encaissements" },
+    { "name": "Décaissements" },
+    { "name": "Webhooks" }
+  ],
+  "paths": {
+    "/ping": {
+      "get": {
+        "tags": ["Général"], "summary": "Santé du service", "security": [],
+        "responses": { "200": { "description": "OK", "content": { "application/json": { "example": { "ok": true, "service": "60secPaiement API", "version": "v1" } } } } }
+      }
+    },
+    "/balance": {
+      "get": {
+        "tags": ["Général"], "summary": "Solde de l'abonné",
+        "responses": {
+          "200": { "description": "Soldes en cents", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Balance" } } } },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "429": { "$ref": "#/components/responses/RateLimited" }
+        }
+      }
+    },
+    "/clients": {
+      "get": {
+        "tags": ["Clients"], "summary": "Lister les clients (payeurs)",
+        "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/ClientList" } } } }, "401": { "$ref": "#/components/responses/Unauthorized" }, "429": { "$ref": "#/components/responses/RateLimited" } }
+      },
+      "post": {
+        "tags": ["Clients"], "summary": "Créer un client",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartyInput" } } } },
+        "responses": { "201": { "description": "Client créé", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Client" } } } }, "400": { "$ref": "#/components/responses/BadRequest" }, "401": { "$ref": "#/components/responses/Unauthorized" } }
+      }
+    },
+    "/clients/{id}": {
+      "get": {
+        "tags": ["Clients"], "summary": "Obtenir un client",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Client", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Client" } } } }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/fournisseurs": {
+      "get": {
+        "tags": ["Fournisseurs"], "summary": "Lister les fournisseurs (bénéficiaires)",
+        "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/FournisseurList" } } } }, "401": { "$ref": "#/components/responses/Unauthorized" } }
+      },
+      "post": {
+        "tags": ["Fournisseurs"], "summary": "Créer un fournisseur",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PartyInput" } } } },
+        "responses": { "201": { "description": "Fournisseur créé", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Fournisseur" } } } }, "400": { "$ref": "#/components/responses/BadRequest" } }
+      }
+    },
+    "/fournisseurs/{id}": {
+      "get": {
+        "tags": ["Fournisseurs"], "summary": "Obtenir un fournisseur",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Fournisseur", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Fournisseur" } } } }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/payments": {
+      "get": {
+        "tags": ["Encaissements"], "summary": "Lister les encaissements (entrants)",
+        "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PaymentList" } } } } }
+      },
+      "post": {
+        "tags": ["Encaissements"], "summary": "Initier un encaissement (débit EFT du client)",
+        "parameters": [ { "name": "Idempotency-Key", "in": "header", "required": false, "schema": { "type": "string" } } ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PaymentInput" } } } },
+        "responses": { "201": { "description": "Paiement initié", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Payment" } } } }, "400": { "$ref": "#/components/responses/BadRequest" } }
+      }
+    },
+    "/payments/{id}": {
+      "get": {
+        "tags": ["Encaissements"], "summary": "Obtenir un encaissement",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Paiement", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Payment" } } } }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/payouts": {
+      "get": {
+        "tags": ["Décaissements"], "summary": "Lister les décaissements (sortants)",
+        "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PaymentList" } } } } }
+      },
+      "post": {
+        "tags": ["Décaissements"], "summary": "Initier un décaissement (crédit EFT vers un fournisseur)",
+        "parameters": [ { "name": "Idempotency-Key", "in": "header", "required": false, "schema": { "type": "string" } } ],
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/PayoutInput" } } } },
+        "responses": { "201": { "description": "Décaissement initié", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Payment" } } } }, "400": { "$ref": "#/components/responses/BadRequest" } }
+      }
+    },
+    "/payouts/{id}": {
+      "get": {
+        "tags": ["Décaissements"], "summary": "Obtenir un décaissement",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Décaissement", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Payment" } } } }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/webhook": {
+      "get": {
+        "tags": ["Webhooks"], "summary": "Obtenir la configuration du webhook",
+        "responses": { "200": { "description": "Configuration (le secret n'est jamais renvoyé)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WebhookConfig" } } } }, "404": { "description": "Aucun webhook configuré", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } } }
+      },
+      "put": {
+        "tags": ["Webhooks"], "summary": "Définir / mettre à jour le webhook",
+        "description": "Upsert de l'endpoint. Si `secret` est fourni, il est utilisé et renvoyé une fois. Si absent et qu'aucun webhook n'existe, un secret est généré et renvoyé une fois. Sinon le secret existant est conservé (non renvoyé).",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WebhookConfigInput" } } } },
+        "responses": { "200": { "description": "Configuration (avec `secret` si créé/pivoté)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WebhookConfig" } } } }, "400": { "$ref": "#/components/responses/BadRequest" } }
+      },
+      "delete": {
+        "tags": ["Webhooks"], "summary": "Désactiver le webhook",
+        "responses": { "200": { "description": "Désactivé", "content": { "application/json": { "example": { "url": "https://…", "active": false } } } }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/webhook/deliveries": {
+      "get": {
+        "tags": ["Webhooks"], "summary": "Historique des livraisons",
+        "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WebhookDeliveryList" } } } } }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyAuth": { "type": "apiKey", "in": "header", "name": "X-Api-Key" }
+    },
+    "parameters": {
+      "Limit": { "name": "limit", "in": "query", "required": false, "description": "Nombre d'éléments (défaut 25, max 100).", "schema": { "type": "integer", "default": 25, "maximum": 100, "minimum": 1 } },
+      "Offset": { "name": "offset", "in": "query", "required": false, "description": "Décalage (défaut 0).", "schema": { "type": "integer", "default": 0, "minimum": 0 } }
+    },
+    "responses": {
+      "Unauthorized": { "description": "Clé d'API absente ou invalide", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "unauthorized", "message": "Clé d'API absente ou invalide." } } } } },
+      "NotFound": { "description": "Ressource introuvable", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
+      "BadRequest": { "description": "Requête invalide (validation ou règle métier)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "validation", "message": "Le champ 'name' est requis." } } } } },
+      "RateLimited": { "description": "Trop de requêtes", "headers": { "Retry-After": { "schema": { "type": "integer" }, "description": "Secondes avant réessai." } }, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "rate_limited", "message": "Trop de requêtes. Réessayez plus tard." } } } } }
+    },
+    "schemas": {
+      "Error": { "type": "object", "properties": { "error": { "type": "object", "properties": { "code": { "type": "string" }, "message": { "type": "string" } } } } },
+      "Pagination": { "type": "object", "properties": { "limit": { "type": "integer" }, "offset": { "type": "integer" }, "count": { "type": "integer" }, "has_more": { "type": "boolean" }, "next_offset": { "type": "integer", "nullable": true } } },
+      "Balance": { "type": "object", "properties": { "available_cents": { "type": "integer" }, "reserve_cents": { "type": "integer" }, "eft_incoming_cents": { "type": "integer" }, "eft_outgoing_cents": { "type": "integer" }, "currency": { "type": "string", "example": "CAD" } } },
+      "PartyInput": {
+        "type": "object", "required": ["name"],
+        "properties": { "name": { "type": "string" }, "type": { "type": "string", "enum": ["Entreprise", "Particulier"], "default": "Entreprise" }, "reference": { "type": "string", "description": "Votre identifiant (unique par abonné)." }, "email": { "type": "string" }, "phone": { "type": "string" }, "address1": { "type": "string" }, "address2": { "type": "string" }, "city": { "type": "string" }, "province": { "type": "string" }, "postal_code": { "type": "string" }, "country": { "type": "string", "default": "Canada" }, "status": { "type": "string", "enum": ["Actif", "Inactif", "Bloque"], "default": "Actif" } }
+      },
+      "Client": { "type": "object", "properties": { "id": { "type": "integer" }, "name": { "type": "string" }, "type": { "type": "string" }, "reference": { "type": "string", "nullable": true }, "email": { "type": "string", "nullable": true }, "phone": { "type": "string", "nullable": true }, "city": { "type": "string", "nullable": true }, "province": { "type": "string", "nullable": true }, "status": { "type": "string" } } },
+      "Fournisseur": { "allOf": [ { "$ref": "#/components/schemas/Client" } ] },
+      "ClientList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Client" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } },
+      "FournisseurList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Fournisseur" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } },
+      "PaymentInput": {
+        "type": "object", "required": ["client_id", "amount_cents"],
+        "properties": { "client_id": { "type": "integer" }, "amount_cents": { "type": "integer", "description": "Montant brut en cents." }, "fee_cents": { "type": "integer", "default": 0, "description": "Frais retenus par la plateforme." }, "description": { "type": "string" }, "reference": { "type": "string" }, "idempotency_key": { "type": "string" } }
+      },
+      "PayoutInput": {
+        "type": "object", "required": ["fournisseur_id", "amount_cents"],
+        "properties": { "fournisseur_id": { "type": "integer" }, "amount_cents": { "type": "integer" }, "fee_cents": { "type": "integer", "default": 0 }, "description": { "type": "string" }, "reference": { "type": "string" }, "idempotency_key": { "type": "string" } }
+      },
+      "Payment": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "client_id": { "type": "integer", "nullable": true },
+          "client_name": { "type": "string", "nullable": true },
+          "fournisseur_id": { "type": "integer", "nullable": true },
+          "fournisseur_name": { "type": "string", "nullable": true },
+          "direction": { "type": "string", "enum": ["Entrant", "Sortant"] },
+          "method": { "type": "string", "example": "EFT" },
+          "amount_cents": { "type": "integer" },
+          "fee_cents": { "type": "integer" },
+          "net_cents": { "type": "integer" },
+          "currency": { "type": "string", "nullable": true },
+          "status": { "type": "string", "enum": ["initiated", "settled", "returned"] },
+          "reference": { "type": "string", "nullable": true },
+          "description": { "type": "string", "nullable": true },
+          "expected_settlement_date": { "type": "string", "format": "date", "nullable": true },
+          "created_utc": { "type": "string", "format": "date-time", "nullable": true }
+        }
+      },
+      "PaymentList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Payment" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } },
+      "WebhookConfigInput": {
+        "type": "object", "required": ["url"],
+        "properties": { "url": { "type": "string", "description": "URL HTTPS de réception." }, "active": { "type": "boolean", "default": true }, "secret": { "type": "string", "description": "Secret de signature (≥ 8 car.). Optionnel : généré si absent lors de la 1re configuration." } }
+      },
+      "WebhookConfig": {
+        "type": "object",
+        "properties": { "url": { "type": "string" }, "active": { "type": "boolean" }, "has_secret": { "type": "boolean" }, "secret": { "type": "string", "description": "Renvoyé UNIQUEMENT lors de la création ou d'une rotation." }, "created_utc": { "type": "string", "format": "date-time", "nullable": true }, "updated_utc": { "type": "string", "format": "date-time", "nullable": true } }
+      },
+      "WebhookDelivery": {
+        "type": "object",
+        "properties": { "id": { "type": "integer" }, "event": { "type": "string" }, "payment_id": { "type": "integer", "nullable": true }, "status": { "type": "string", "enum": ["Pending", "Delivered", "Abandoned"] }, "attempts": { "type": "integer" }, "max_attempts": { "type": "integer" }, "response_status": { "type": "integer", "nullable": true }, "last_error": { "type": "string", "nullable": true }, "next_attempt_utc": { "type": "string", "format": "date-time", "nullable": true }, "created_utc": { "type": "string", "format": "date-time", "nullable": true }, "delivered_utc": { "type": "string", "format": "date-time", "nullable": true } }
+      },
+      "WebhookDeliveryList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/WebhookDelivery" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } }
+    }
+  },
+  "x-webhooks": {
+    "note": "La plateforme envoie un POST HTTP signé à l'URL configurée par l'abonné lors des transitions de paiement. En-têtes : X-Webhook-Event, X-Webhook-Signature (sha256=HMAC-SHA256(secret, corps)), X-Webhook-Delivery-Id. Événements : payment.initiated, payment.settled, payment.returned, payout.initiated, payout.settled, payout.returned. Corps : { event, delivery_id, data: { ...paiement... } }."
+  }
+}
