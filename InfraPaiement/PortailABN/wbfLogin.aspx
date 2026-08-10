@@ -1,4 +1,4 @@
-<%@ Page Language="vb" AutoEventWireup="false"
+﻿<%@ Page Language="vb" AutoEventWireup="false"
     CodeBehind="wbfLogin.aspx.vb" Inherits="PortailABN.wbfLogin" %>
 
 <!DOCTYPE html>
@@ -46,6 +46,8 @@
             transition: border-color .15s, box-shadow .15s;
         }
         .field input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(14,165,164,.14); }
+        .remember { display: flex; align-items: center; gap: 8px; margin: 4px 0 16px; font-size: 13px; color: var(--muted); }
+        .remember label { cursor: pointer; }
         .btn-login {
             width: 100%; padding: 13px; background: linear-gradient(135deg, var(--primary), var(--secondary));
             color: white; border: none; border-radius: 12px; font-size: 15px; font-weight: 800;
@@ -85,6 +87,11 @@
                 <div class="field">
                     <label for="<%= tbPassword.ClientID %>">Mot de passe</label>
                     <asp:TextBox ID="tbPassword" runat="server" TextMode="Password" placeholder="••••••••" />
+                </div>
+
+                <div class="remember">
+                    <asp:CheckBox ID="cbRemember" runat="server" />
+                    <label for="<%= cbRemember.ClientID %>">Se souvenir de moi sur cet appareil</label>
                 </div>
 
                 <asp:Button ID="btnLogin" runat="server" Text="Se connecter" CssClass="btn-login" OnClick="btnLogin_Click" />

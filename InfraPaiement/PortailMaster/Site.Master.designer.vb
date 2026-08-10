@@ -27,8 +27,14 @@ Partial Public Class SiteMaster
     '''<summary>Contrôle navRec.</summary>
     Protected WithEvents navRec As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
+    '''<summary>Contrôle navPartenaires.</summary>
+    Protected WithEvents navPartenaires As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
     '''<summary>Contrôle navUsers.</summary>
     Protected WithEvents navUsers As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+    '''<summary>Contrôle navAudit.</summary>
+    Protected WithEvents navAudit As Global.System.Web.UI.HtmlControls.HtmlAnchor
 
     '''<summary>Contrôle litUser.</summary>
     Protected WithEvents litUser As Global.System.Web.UI.WebControls.Literal

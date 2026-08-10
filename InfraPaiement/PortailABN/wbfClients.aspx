@@ -1,12 +1,14 @@
-<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="wbfClients.aspx.vb" Inherits="PortailABN.wbfClients" %>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="head" runat="server">
     <style>
-        details.add { margin-bottom: 22px; }
-        details.add summary { cursor: pointer; font-weight: 800; font-size: 15px; padding: 4px 0; color: var(--secondary); }
         .toolbar { display:flex; gap:10px; align-items:center; margin-bottom:16px; flex-wrap:wrap; }
         .toolbar input[type=text] { padding:10px 13px; border:1px solid var(--line); border-radius:11px; font-size:14px; font-family:var(--font); min-width:260px; }
+        table.grid a.rowlink { font-weight:700; text-decoration:none; color:var(--text); }
+        table.grid a.rowlink:hover { color:var(--primary); }
+        .eft-yes { color:var(--ok); font-weight:800; }
+        .eft-no { color:var(--muted); }
     </style>
 </asp:Content>
 
@@ -16,33 +18,11 @@
             <h1>Clients</h1>
             <p class="sub">Les payeurs de votre organisation (contreparties d'encaissement EFT).</p>
         </div>
+        <div><a href="wbfClient.aspx" class="btn btn-primary">+ Ajouter un client</a></div>
     </div>
 
     <asp:Panel ID="pnlOk" runat="server" Visible="false" CssClass="msg-ok"><asp:Literal ID="litOk" runat="server" /></asp:Panel>
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="msg-err"><asp:Literal ID="litError" runat="server" /></asp:Panel>
-
-    <details class="add" runat="server" id="detAdd">
-        <summary>+ Ajouter un client</summary>
-        <div class="card" style="margin-top:12px">
-            <div class="form-grid">
-                <div class="field"><label>Type</label>
-                    <asp:DropDownList ID="ddlType" runat="server" CssClass="mono">
-                        <asp:ListItem Value="Entreprise">Entreprise</asp:ListItem>
-                        <asp:ListItem Value="Particulier">Particulier</asp:ListItem>
-                    </asp:DropDownList>
-                </div>
-                <div class="field"><label>Référence externe (votre ID)</label><asp:TextBox ID="tbRef" runat="server" /></div>
-                <div class="field full"><label>Nom / raison sociale *</label><asp:TextBox ID="tbNom" runat="server" /></div>
-                <div class="field"><label>Courriel</label><asp:TextBox ID="tbEmail" runat="server" TextMode="Email" /></div>
-                <div class="field"><label>Téléphone</label><asp:TextBox ID="tbTel" runat="server" /></div>
-                <div class="field"><label>Ville</label><asp:TextBox ID="tbVille" runat="server" /></div>
-                <div class="field"><label>Province</label><asp:TextBox ID="tbProv" runat="server" /></div>
-            </div>
-            <div class="form-actions">
-                <asp:Button ID="btnAdd" runat="server" CssClass="btn btn-primary" Text="Créer le client" OnClick="btnAdd_Click" />
-            </div>
-        </div>
-    </details>
 
     <div class="toolbar">
         <asp:TextBox ID="tbSearch" runat="server" placeholder="Rechercher (nom, courriel, référence)…" />
@@ -53,22 +33,22 @@
         <asp:Repeater ID="rpt" runat="server">
             <HeaderTemplate>
                 <table class="grid"><thead><tr>
-                    <th>Nom</th><th>Type</th><th>Référence</th><th>Courriel</th><th>Ville</th><th>Statut</th><th>Créé</th>
+                    <th>Nom</th><th>Type</th><th>Référence</th><th>Ville</th><th>Prêt EFT</th><th>Statut</th><th></th>
                 </tr></thead><tbody>
             </HeaderTemplate>
             <ItemTemplate>
                 <tr>
-                    <td style="font-weight:700"><%# Enc(Eval("Nom")) %></td>
+                    <td><a class="rowlink" href='wbfClient.aspx?id=<%# Eval("Id") %>'><%# Enc(Eval("Nom")) %></a></td>
                     <td class="muted"><%# Enc(Eval("TypeClient")) %></td>
                     <td class="mono muted"><%# Enc(Eval("ReferenceExterne")) %></td>
-                    <td class="muted"><%# Enc(Eval("CourrielContact")) %></td>
                     <td class="muted"><%# Enc(Eval("Ville")) %></td>
+                    <td><%# EftReady(Eval("HasBankCoords")) %></td>
                     <td><span class='badge <%# BadgeStatut(Eval("Statut")) %>'><%# Enc(Eval("Statut")) %></span></td>
-                    <td class="muted"><%# FormatDate(Eval("CreatedUtc")) %></td>
+                    <td><a href='wbfClient.aspx?id=<%# Eval("Id") %>'>Modifier</a></td>
                 </tr>
             </ItemTemplate>
             <FooterTemplate></tbody></table></FooterTemplate>
         </asp:Repeater>
-        <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="empty">Aucun client. Ajoutez-en un ci-dessus.</asp:Panel>
+        <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="empty">Aucun client. Cliquez « + Ajouter un client ».</asp:Panel>
     </div>
 </asp:Content>

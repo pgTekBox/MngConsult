@@ -20,6 +20,7 @@ Public Class wbfEftBatches
             BindBatches()
             BindReturns()
             BindExchange()
+            BindAck()
             ShowMsgFromQuery()
         End If
     End Sub
@@ -89,6 +90,8 @@ Public Class wbfEftBatches
                 pnlOk.Visible = True : litOk.Text = "Configuration émetteur enregistrée."
             Case "ret"
                 pnlOk.Visible = True : litOk.Text = CInt(Val(Request.QueryString("n"))) & " retour(s) contre-passé(s) au grand livre."
+            Case "ack"
+                pnlOk.Visible = True : litOk.Text = "Accusé bancaire traité : " & CInt(Val(Request.QueryString("n"))) & " item(s) rejeté(s) contre-passé(s) ; lot marqué « Accusé reçu »."
         End Select
     End Sub
 
@@ -192,12 +195,45 @@ Public Class wbfEftBatches
                 Dim text As String = clsEft005Returns.SimulateReturnFile(id, "901")
                 Dim sum As clsEft005Returns.ImportSummary = clsEft005Returns.ImportReturnFile(text, "SIMULATION_RETOUR.005")
                 Response.Redirect("wbfEftBatches.aspx?msg=ret&n=" & sum.Processed)
+            ElseIf e.CommandName = "simack" Then
+                ' Simule un accusé bancaire ACCEPTÉ rejetant le 1er item à l'intake, puis le traite.
+                Dim text As String = clsEft005Ack.SimulateAckFile(id, True, 1)
+                Dim sum As clsEft005Ack.AckSummary = clsEft005Ack.ProcessAckFile(text, "SIMULATION_ACCUSE.txt")
+                Response.Redirect("wbfEftBatches.aspx?msg=ack&n=" & sum.Reversed)
             End If
         Catch sqlEx As SqlException
             ShowError(sqlEx.Message) : BindBatches() : BindReturns()
         Catch ex As Exception
             ShowError("Action impossible : " & ex.Message)
             System.Diagnostics.Debug.WriteLine("Eft ItemCommand: " & ex.Message) : BindBatches() : BindReturns()
+        End Try
+    End Sub
+
+    Protected Sub btnImportAck_Click(sender As Object, e As EventArgs)
+        If Not fuAck.HasFile Then
+            ShowError("Sélectionnez un fichier d'accusé de réception.") : Return
+        End If
+        Try
+            Dim text As String = Encoding.UTF8.GetString(fuAck.FileBytes)
+            Dim sum As clsEft005Ack.AckSummary = clsEft005Ack.ProcessAckFile(text, fuAck.FileName)
+            pnlOk.Visible = True
+            litOk.Text = "Accusé traité (lot " & sum.FileCreationNumber & ", " & sum.FileStatus & ") : " &
+                         sum.Reversed & " item(s) contre-passé(s), " & sum.Errors & " erreur(s)."
+            BindBatches() : BindReturns() : BindAck()
+        Catch ex As Exception
+            ShowError("Import d'accusé impossible : " & ex.Message)
+            System.Diagnostics.Debug.WriteLine("Eft ImportAck: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub BindAck()
+        Try
+            Dim p As New Collection : p.Add(New SqlParameter("@Top", 50))
+            Dim tbl As DataTable = ExecuteSQLds("s0096ListEftAck", p).Tables(0)
+            rptAck.DataSource = tbl : rptAck.DataBind()
+            rptAck.Visible = (tbl.Rows.Count > 0) : pnlNoAck.Visible = (tbl.Rows.Count = 0)
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("Eft BindAck: " & ex.Message)
         End Try
     End Sub
 
@@ -213,8 +249,10 @@ Public Class wbfEftBatches
     Protected Function BadgeStatut(s As Object) As String
         Select Case If(s, "").ToString()
             Case "Settled" : Return "badge-actif"
+            Case "Acknowledged" : Return "badge-verifie"
             Case "Generated" : Return "badge-gen"
             Case "Submitted" : Return "badge-sub"
+            Case "Rejected" : Return "badge-rejete"
             Case Else : Return "badge-open"
         End Select
     End Function
@@ -223,8 +261,17 @@ Public Class wbfEftBatches
             Case "Open" : Return "Ouvert"
             Case "Generated" : Return "Généré"
             Case "Submitted" : Return "Soumis"
+            Case "Acknowledged" : Return "Accusé reçu"
+            Case "Rejected" : Return "Refusé"
             Case "Settled" : Return "Réglé"
             Case Else : Return If(s, "").ToString()
+        End Select
+    End Function
+    Protected Function BadgeAck(s As Object) As String
+        Select Case If(s, "").ToString()
+            Case "Accepted" : Return "badge-actif"
+            Case "Rejected" : Return "badge-rejete"
+            Case Else : Return "badge-open"
         End Select
     End Function
 

@@ -81,4 +81,40 @@ Public Class ApiData
         Return CInt(dt.Rows(0)("AbonneId"))
     End Function
 
+    ''' <summary>
+    ''' Résout une clé d'API en clair vers son porteur : soit un abonné
+    ''' (clé "sk_…"), soit un partenaire (clé "pk_…", Modèle B). Retourne
+    ''' Nothing si la clé est absente/invalide/révoquée.
+    ''' </summary>
+    Public Shared Function ResolvePrincipal(rawKey As String) As ApiPrincipal
+        If String.IsNullOrEmpty(rawKey) Then Return Nothing
+        Dim p As New Collection
+        p.Add(New SqlParameter("@KeyHash", Sha256Hex(rawKey.Trim())))
+        Dim dt As DataTable = ExecuteSQLdt("s0027ResolveApiKey", p)
+        If dt.Rows.Count = 0 Then Return Nothing
+        Dim r As DataRow = dt.Rows(0)
+        Dim pr As New ApiPrincipal()
+        pr.ApiKeyId = CInt(r("ApiKeyId"))
+        pr.AbonneId = If(IsDBNull(r("AbonneId")), 0, CInt(r("AbonneId")))
+        pr.PartenaireId = If(r.Table.Columns.Contains("PartenaireId") AndAlso Not IsDBNull(r("PartenaireId")), CInt(r("PartenaireId")), 0)
+        pr.Environment = r("Environment").ToString()
+        Return pr
+    End Function
+
+End Class
+
+''' <summary>
+''' Porteur d'une clé d'API : un abonné (AbonneId) OU un partenaire
+''' (PartenaireId). IsPartner distingue les deux.
+''' </summary>
+Public Class ApiPrincipal
+    Public AbonneId As Integer
+    Public PartenaireId As Integer
+    Public Environment As String = ""
+    Public ApiKeyId As Integer
+    Public ReadOnly Property IsPartner As Boolean
+        Get
+            Return PartenaireId > 0
+        End Get
+    End Property
 End Class

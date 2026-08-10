@@ -1,4 +1,4 @@
-Imports System
+﻿Imports System
 Imports System.Data
 Imports System.Data.SqlClient
 
@@ -100,7 +100,8 @@ Public Class clsData
         End Get
     End Property
 
-    ''' <summary>Termine la session de l'utilisateur.</summary>
+    ''' <summary>Termine la session de l'utilisateur et revoque le jeton
+    ''' « Se souvenir de moi » (cookie + base) le cas echeant.</summary>
     Public Sub SignOut()
         Session.Remove("AbnUserId")
         Session.Remove("AbnId")
@@ -108,6 +109,7 @@ Public Class clsData
         Session.Remove("AbnUserEmail")
         Session.Remove("AbnName")
         Session.Remove("AbnIsAdmin")
+        clsRememberMe.Clear(Context)
     End Sub
 
     ' =====================================================================

@@ -53,16 +53,14 @@ Public Class ApiHandler
                 Return
             End If
 
-            ' --- Authentification par clé d'API ---
-            Dim env As String = ""
-            Dim apiKeyId As Integer = 0
-            Dim abonneId As Integer = ApiData.ResolveApiKey(ExtractApiKey(ctx), env, apiKeyId)
-            If abonneId = 0 Then
+            ' --- Authentification par clé d'API (abonné "sk_…" ou partenaire "pk_…") ---
+            Dim principal As ApiPrincipal = ApiData.ResolvePrincipal(ExtractApiKey(ctx))
+            If principal Is Nothing Then
                 Throw New ApiException(401, "unauthorized", "Clé d'API absente ou invalide.")
             End If
 
             ' --- Rate limiting (par clé d'API) ---
-            Dim rl As RateLimiter.RateResult = RateLimiter.Check(apiKeyId)
+            Dim rl As RateLimiter.RateResult = RateLimiter.Check(principal.ApiKeyId)
             ctx.Response.Headers("X-RateLimit-Limit") = rl.Limit.ToString()
             ctx.Response.Headers("X-RateLimit-Remaining") = rl.Remaining.ToString()
             ctx.Response.Headers("X-RateLimit-Reset") = rl.ResetEpoch.ToString()
@@ -71,7 +69,39 @@ Public Class ApiHandler
                 Throw New ApiException(429, "rate_limited", "Trop de requêtes. Réessayez plus tard.")
             End If
 
+            ' --- Résolution du locataire effectif (isolation multi-locataire) ---
+            ' Clé abonné : agit pour son propre abonné.
+            ' Clé partenaire (Modèle B) : la ressource "abonnes" = provisioning
+            '   (scope partenaire) ; les autres ressources exigent l'en-tête
+            '   X-Abonne-Id désignant un tenant appartenant au partenaire.
+            Dim abonneId As Integer = 0
+            If principal.IsPartner Then
+                If resource <> "abonnes" Then
+                    abonneId = ResolveDelegatedTenant(ctx, principal)
+                End If
+            Else
+                abonneId = principal.AbonneId
+            End If
+
             Select Case resource
+                Case "abonnes"
+                    ' Provisioning de locataires — réservé aux clés partenaire.
+                    If Not principal.IsPartner Then Throw New ApiException(403, "forbidden", "Réservé aux clés partenaire.")
+                    Dim sub2 As String = If(segs.Length > 2, segs(2).ToLowerInvariant(), "")
+                    If method = "GET" AndAlso idPart = "" Then
+                        ListAbonnes(ctx, principal)
+                    ElseIf method = "POST" AndAlso idPart = "" Then
+                        CreateAbonne(ctx, principal)
+                    ElseIf method = "GET" AndAlso idPart <> "" AndAlso sub2 = "" Then
+                        GetAbonne(ctx, principal, ParseId(idPart))
+                    ElseIf idPart <> "" AndAlso sub2 = "kyb" AndAlso method = "POST" Then
+                        RunKyb(ctx, principal, ParseId(idPart))
+                    ElseIf idPart <> "" AndAlso sub2 = "kyb" AndAlso method = "GET" Then
+                        ListKyb(ctx, principal, ParseId(idPart))
+                    Else
+                        Throw New ApiException(405, "method_not_allowed", "Méthode non permise.")
+                    End If
+
                 Case "balance"
                     RequireMethod(method, "GET")
                     GetBalance(ctx, abonneId)
@@ -393,6 +423,153 @@ Public Class ApiHandler
         Dim dt As DataTable = ApiData.ExecuteSQLdt("s0025GetPayment", p)
         If dt.Rows.Count = 0 Then Return Nothing
         Return dt.Rows(0)
+    End Function
+
+    ' =====================================================================
+    ' Abonnés — provisioning par un partenaire (Modèle B)
+    ' =====================================================================
+
+    Private Sub ListAbonnes(ctx As HttpContext, principal As ApiPrincipal)
+        Dim limit As Integer = GetLimit(ctx), offset As Integer = GetOffset(ctx)
+        Dim search As String = ctx.Request.QueryString("search")
+        Dim p As New Collection
+        p.Add(New SqlParameter("@PartenaireId", principal.PartenaireId))
+        p.Add(New SqlParameter("@Search", If(String.IsNullOrEmpty(search), CObj(DBNull.Value), search)))
+        p.Add(New SqlParameter("@Limit", limit + 1))
+        p.Add(New SqlParameter("@Offset", offset))
+        Dim dt As DataTable = ApiData.ExecuteSQLdt("s0116ListAbonnesForPartner", p)
+        WritePaged(ctx, dt, limit, offset, AddressOf AbonneJson)
+    End Sub
+
+    Private Function LoadPartnerTenant(partenaireId As Integer, id As Integer) As DataRow
+        Dim p As New Collection
+        p.Add(New SqlParameter("@Id", id))
+        p.Add(New SqlParameter("@PartenaireId", partenaireId))
+        Dim dt As DataTable = ApiData.ExecuteSQLdt("s0117GetAbonneForPartner", p)
+        If dt.Rows.Count = 0 Then Return Nothing
+        Return dt.Rows(0)
+    End Function
+
+    Private Sub GetAbonne(ctx As HttpContext, principal As ApiPrincipal, id As Integer)
+        Dim r As DataRow = LoadPartnerTenant(principal.PartenaireId, id)
+        If r Is Nothing Then Throw New ApiException(404, "not_found", "Abonné introuvable.")
+        WriteJson(ctx, 200, AbonneJson(r))
+    End Sub
+
+    Private Sub CreateAbonne(ctx As HttpContext, principal As ApiPrincipal)
+        Dim body As JObject = ReadBody(ctx)
+        Dim nom As String = JStr(body, "legal_name")
+        If String.IsNullOrEmpty(nom) Then nom = JStr(body, "name")
+        If String.IsNullOrEmpty(nom) Then Throw New ApiException(400, "validation", "Le champ 'legal_name' est requis.")
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@PartenaireId", principal.PartenaireId))
+        p.Add(New SqlParameter("@RaisonSociale", nom))
+        p.Add(New SqlParameter("@NomAffichage", NullStr(body, "display_name")))
+        p.Add(New SqlParameter("@NumeroEntreprise", NullStr(body, "business_number")))
+        p.Add(New SqlParameter("@CourrielContact", NullStr(body, "email")))
+        p.Add(New SqlParameter("@Telephone", NullStr(body, "phone")))
+        p.Add(New SqlParameter("@Adresse1", NullStr(body, "address1")))
+        p.Add(New SqlParameter("@Adresse2", NullStr(body, "address2")))
+        p.Add(New SqlParameter("@Ville", NullStr(body, "city")))
+        p.Add(New SqlParameter("@Province", NullStr(body, "province")))
+        p.Add(New SqlParameter("@CodePostal", NullStr(body, "postal_code")))
+        p.Add(New SqlParameter("@Pays", DefStr(body, "country", "Canada")))
+        p.Add(New SqlParameter("@Statut", DefStr(body, "status", "Prospect")))
+        Dim outId As New SqlParameter("@Id", SqlDbType.Int) With {.Direction = ParameterDirection.InputOutput, .Value = 0}
+        p.Add(outId)
+
+        Dim dt As DataTable = ApiData.ExecuteSQLdt("s0115CreateAbonneForPartner", p)
+        If dt.Rows.Count = 0 Then Throw New ApiException(500, "server_error", "Création échouée.")
+        Dim r As DataRow = dt.Rows(0)
+
+        Try
+            clsAudit.Write(0, "partner:" & principal.PartenaireId, "AbonneProvision", "Abonne",
+                           CInt(r("Id")), r("RaisonSociale").ToString(), "via API partenaire", ctx.Request.UserHostAddress)
+        Catch
+        End Try
+
+        WriteJson(ctx, 201, AbonneJson(r))
+    End Sub
+
+    Private Sub RunKyb(ctx As HttpContext, principal As ApiPrincipal, id As Integer)
+        If LoadPartnerTenant(principal.PartenaireId, id) Is Nothing Then
+            Throw New ApiException(404, "not_found", "Abonné introuvable.")
+        End If
+        Dim res As KybResult = clsKyb.RunCheck(id, 0, "partner:" & principal.PartenaireId, ctx.Request.UserHostAddress)
+        Dim reloaded As DataRow = LoadPartnerTenant(principal.PartenaireId, id)
+        Dim o As New JObject()
+        o("abonne_id") = id
+        o("kyb_status") = If(reloaded IsNot Nothing, SVal(reloaded, "StatutKYB"), JValue.CreateNull())
+        o("result") = KybResultJson(res)
+        WriteJson(ctx, 200, o)
+    End Sub
+
+    Private Sub ListKyb(ctx As HttpContext, principal As ApiPrincipal, id As Integer)
+        If LoadPartnerTenant(principal.PartenaireId, id) Is Nothing Then
+            Throw New ApiException(404, "not_found", "Abonné introuvable.")
+        End If
+        Dim p As New Collection
+        p.Add(New SqlParameter("@AbonneId", id))
+        p.Add(New SqlParameter("@Top", 20))
+        Dim dt As DataTable = ApiData.ExecuteSQLdt("s0102ListKybChecks", p)
+        Dim arr As New JArray()
+        For Each r As DataRow In dt.Rows
+            Dim o As New JObject()
+            o("id") = CInt(r("Id"))
+            o("provider") = SVal(r, "Provider")
+            o("status") = SVal(r, "Status")
+            o("score") = If(IsDBNull(r("Score")), CType(Nothing, JToken), New JValue(CInt(r("Score"))))
+            o("message") = SVal(r, "Message")
+            o("utc") = DateTimeVal(r, "Utc")
+            arr.Add(o)
+        Next
+        Dim wrap As New JObject()
+        wrap("data") = arr
+        WriteJson(ctx, 200, wrap)
+    End Sub
+
+    Private Function AbonneJson(r As DataRow) As JObject
+        Dim o As New JObject()
+        o("id") = CInt(r("Id"))
+        o("tenant_guid") = SVal(r, "TenantGUID")
+        o("legal_name") = SVal(r, "RaisonSociale")
+        o("display_name") = SVal(r, "NomAffichage")
+        o("business_number") = SVal(r, "NumeroEntreprise")
+        o("email") = SVal(r, "CourrielContact")
+        o("phone") = SVal(r, "Telephone")
+        o("city") = SVal(r, "Ville")
+        o("province") = SVal(r, "Province")
+        o("status") = SVal(r, "Statut")
+        o("kyb_status") = SVal(r, "StatutKYB")
+        o("created_utc") = DateTimeVal(r, "CreatedUtc")
+        Return o
+    End Function
+
+    Private Function KybResultJson(res As KybResult) As JObject
+        Dim o As New JObject()
+        o("status") = res.Status
+        o("score") = res.Score
+        o("registry_match") = res.RegistryMatch
+        o("watchlist_clear") = res.WatchlistClear
+        o("address_valid") = res.AddressValid
+        o("provider_ref") = res.ProviderRef
+        o("message") = res.Message
+        Return o
+    End Function
+
+    ''' <summary>Auth déléguée : pour une clé partenaire, valide l'en-tête
+    ''' X-Abonne-Id et vérifie que le tenant appartient bien au partenaire.</summary>
+    Private Function ResolveDelegatedTenant(ctx As HttpContext, principal As ApiPrincipal) As Integer
+        Dim h As String = ctx.Request.Headers("X-Abonne-Id")
+        Dim aid As Integer
+        If String.IsNullOrEmpty(h) OrElse Not Integer.TryParse(h, aid) OrElse aid <= 0 Then
+            Throw New ApiException(400, "validation", "En-tête X-Abonne-Id requis pour une clé partenaire.")
+        End If
+        If LoadPartnerTenant(principal.PartenaireId, aid) Is Nothing Then
+            Throw New ApiException(403, "forbidden", "Cet abonné n'appartient pas au partenaire.")
+        End If
+        Return aid
     End Function
 
     ' ---- Webhook (configuration) ----

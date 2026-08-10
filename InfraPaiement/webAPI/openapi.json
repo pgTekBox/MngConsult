@@ -3,7 +3,7 @@
   "info": {
     "title": "60secPaiement API",
     "version": "1.0.0",
-    "description": "API de paiement (EFT) pour les applications SaaS des abonnés 60secPaiement.\n\n- Authentification par clé d'API (en-tête `X-Api-Key`).\n- Toutes les ressources sont isolées par abonné (multi-locataire).\n- Montants en **cents entiers** (BIGINT), devise CAD.\n- Idempotence des créations via l'en-tête `Idempotency-Key`.\n- Pagination `limit`/`offset` sur les listes.\n- Limite de débit par clé (en-têtes `X-RateLimit-*`, statut 429).\n- Webhooks signés (HMAC-SHA256) pour les statuts de paiement/décaissement."
+    "description": "API de paiement (EFT) pour les applications SaaS des abonnés 60secPaiement.\n\n- Authentification par clé d'API (en-tête `X-Api-Key`).\n- Toutes les ressources sont isolées par abonné (multi-locataire).\n- Montants en **cents entiers** (BIGINT), devise CAD.\n- Idempotence des créations via l'en-tête `Idempotency-Key`.\n- Pagination `limit`/`offset` sur les listes.\n- Limite de débit par clé (en-têtes `X-RateLimit-*`, statut 429).\n- Webhooks signés (HMAC-SHA256) pour les statuts de paiement/décaissement.\n\n**Partenaires (Modèle B)** — une clé partenaire (`pk_…`) permet de provisionner des abonnés (locataires) via `/abonnes` et d'agir au nom de l'un d'eux en ajoutant l'en-tête `X-Abonne-Id` sur les ressources scopées (balance, clients, fournisseurs, encaissements, décaissements, webhook). Une clé abonné (`sk_…`) n'a pas accès à `/abonnes` et n'utilise pas `X-Abonne-Id`."
   },
   "servers": [
     { "url": "/api/v1", "description": "Version 1 (canonique)" }
@@ -15,7 +15,8 @@
     { "name": "Fournisseurs" },
     { "name": "Encaissements" },
     { "name": "Décaissements" },
-    { "name": "Webhooks" }
+    { "name": "Webhooks" },
+    { "name": "Partenaires (Modèle B)", "description": "Provisioning et gestion d'abonnés par un partenaire (canal de revente). Requiert une clé partenaire pk_…." }
   ],
   "paths": {
     "/ping": {
@@ -134,6 +135,40 @@
         "parameters": [ { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
         "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/WebhookDeliveryList" } } } } }
       }
+    },
+    "/abonnes": {
+      "get": {
+        "tags": ["Partenaires (Modèle B)"], "summary": "Lister les abonnés provisionnés",
+        "description": "Réservé aux clés partenaire (`pk_…`). Liste les abonnés (locataires) rattachés au partenaire.",
+        "parameters": [ { "name": "search", "in": "query", "required": false, "schema": { "type": "string" } }, { "$ref": "#/components/parameters/Limit" }, { "$ref": "#/components/parameters/Offset" } ],
+        "responses": { "200": { "description": "Liste paginée", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AbonneList" } } } }, "401": { "$ref": "#/components/responses/Unauthorized" }, "403": { "$ref": "#/components/responses/Forbidden" } }
+      },
+      "post": {
+        "tags": ["Partenaires (Modèle B)"], "summary": "Provisionner un abonné",
+        "description": "Réservé aux clés partenaire. Crée un nouvel abonné (locataire) rattaché au partenaire, avec un statut KYB initial `NonDebute`.",
+        "requestBody": { "required": true, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/AbonneInput" } } } },
+        "responses": { "201": { "description": "Abonné créé", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Abonne" } } } }, "400": { "$ref": "#/components/responses/BadRequest" }, "401": { "$ref": "#/components/responses/Unauthorized" }, "403": { "$ref": "#/components/responses/Forbidden" } }
+      }
+    },
+    "/abonnes/{id}": {
+      "get": {
+        "tags": ["Partenaires (Modèle B)"], "summary": "Obtenir un abonné provisionné",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Abonné", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Abonne" } } } }, "403": { "$ref": "#/components/responses/Forbidden" }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
+    },
+    "/abonnes/{id}/kyb": {
+      "post": {
+        "tags": ["Partenaires (Modèle B)"], "summary": "Lancer une vérification KYB",
+        "description": "Exécute une vérification KYB (Know Your Business) sur l'abonné via le fournisseur configuré (sandbox par défaut) et met à jour son `kyb_status`.",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Résultat de la vérification", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/KybRunResult" } } } }, "403": { "$ref": "#/components/responses/Forbidden" }, "404": { "$ref": "#/components/responses/NotFound" } }
+      },
+      "get": {
+        "tags": ["Partenaires (Modèle B)"], "summary": "Historique des vérifications KYB",
+        "parameters": [ { "name": "id", "in": "path", "required": true, "schema": { "type": "integer" } } ],
+        "responses": { "200": { "description": "Vérifications récentes (20 plus récentes)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/KybCheckList" } } } }, "403": { "$ref": "#/components/responses/Forbidden" }, "404": { "$ref": "#/components/responses/NotFound" } }
+      }
     }
   },
   "components": {
@@ -142,13 +177,15 @@
     },
     "parameters": {
       "Limit": { "name": "limit", "in": "query", "required": false, "description": "Nombre d'éléments (défaut 25, max 100).", "schema": { "type": "integer", "default": 25, "maximum": 100, "minimum": 1 } },
-      "Offset": { "name": "offset", "in": "query", "required": false, "description": "Décalage (défaut 0).", "schema": { "type": "integer", "default": 0, "minimum": 0 } }
+      "Offset": { "name": "offset", "in": "query", "required": false, "description": "Décalage (défaut 0).", "schema": { "type": "integer", "default": 0, "minimum": 0 } },
+      "AbonneIdHeader": { "name": "X-Abonne-Id", "in": "header", "required": false, "description": "Avec une clé partenaire (`pk_…`), désigne l'abonné (locataire) au nom duquel agir sur les ressources scopées (balance, clients, fournisseurs, encaissements, décaissements, webhook). Inutile — et ignoré — avec une clé abonné (`sk_…`).", "schema": { "type": "integer" } }
     },
     "responses": {
       "Unauthorized": { "description": "Clé d'API absente ou invalide", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "unauthorized", "message": "Clé d'API absente ou invalide." } } } } },
       "NotFound": { "description": "Ressource introuvable", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" } } } },
       "BadRequest": { "description": "Requête invalide (validation ou règle métier)", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "validation", "message": "Le champ 'name' est requis." } } } } },
-      "RateLimited": { "description": "Trop de requêtes", "headers": { "Retry-After": { "schema": { "type": "integer" }, "description": "Secondes avant réessai." } }, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "rate_limited", "message": "Trop de requêtes. Réessayez plus tard." } } } } }
+      "RateLimited": { "description": "Trop de requêtes", "headers": { "Retry-After": { "schema": { "type": "integer" }, "description": "Secondes avant réessai." } }, "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "rate_limited", "message": "Trop de requêtes. Réessayez plus tard." } } } } },
+      "Forbidden": { "description": "Accès refusé : clé non autorisée pour cette ressource (ex. clé abonné sur `/abonnes`), en-tête `X-Abonne-Id` manquant, ou abonné n'appartenant pas au partenaire.", "content": { "application/json": { "schema": { "$ref": "#/components/schemas/Error" }, "example": { "error": { "code": "forbidden", "message": "Cet abonné n'appartient pas au partenaire." } } } } }
     },
     "schemas": {
       "Error": { "type": "object", "properties": { "error": { "type": "object", "properties": { "code": { "type": "string" }, "message": { "type": "string" } } } } },
@@ -204,7 +241,29 @@
         "type": "object",
         "properties": { "id": { "type": "integer" }, "event": { "type": "string" }, "payment_id": { "type": "integer", "nullable": true }, "status": { "type": "string", "enum": ["Pending", "Delivered", "Abandoned"] }, "attempts": { "type": "integer" }, "max_attempts": { "type": "integer" }, "response_status": { "type": "integer", "nullable": true }, "last_error": { "type": "string", "nullable": true }, "next_attempt_utc": { "type": "string", "format": "date-time", "nullable": true }, "created_utc": { "type": "string", "format": "date-time", "nullable": true }, "delivered_utc": { "type": "string", "format": "date-time", "nullable": true } }
       },
-      "WebhookDeliveryList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/WebhookDelivery" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } }
+      "WebhookDeliveryList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/WebhookDelivery" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } },
+      "AbonneInput": {
+        "type": "object", "required": ["legal_name"],
+        "properties": { "legal_name": { "type": "string", "description": "Raison sociale de l'abonné." }, "display_name": { "type": "string" }, "business_number": { "type": "string", "description": "NEQ / numéro d'entreprise (BN)." }, "email": { "type": "string" }, "phone": { "type": "string" }, "address1": { "type": "string" }, "address2": { "type": "string" }, "city": { "type": "string" }, "province": { "type": "string" }, "postal_code": { "type": "string" }, "country": { "type": "string", "default": "Canada" }, "status": { "type": "string", "enum": ["Prospect", "Actif"], "default": "Prospect" } }
+      },
+      "Abonne": {
+        "type": "object",
+        "properties": { "id": { "type": "integer" }, "tenant_guid": { "type": "string" }, "legal_name": { "type": "string" }, "display_name": { "type": "string", "nullable": true }, "business_number": { "type": "string", "nullable": true }, "email": { "type": "string", "nullable": true }, "phone": { "type": "string", "nullable": true }, "city": { "type": "string", "nullable": true }, "province": { "type": "string", "nullable": true }, "status": { "type": "string" }, "kyb_status": { "type": "string", "enum": ["NonDebute", "EnCours", "Verifie", "Rejete"] }, "created_utc": { "type": "string", "format": "date-time", "nullable": true } }
+      },
+      "AbonneList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/Abonne" } }, "pagination": { "$ref": "#/components/schemas/Pagination" } } },
+      "KybResult": {
+        "type": "object",
+        "properties": { "status": { "type": "string", "enum": ["Verified", "Rejected", "Review", "Error"] }, "score": { "type": "integer", "description": "0 à 100." }, "registry_match": { "type": "boolean" }, "watchlist_clear": { "type": "boolean" }, "address_valid": { "type": "boolean" }, "provider_ref": { "type": "string", "nullable": true }, "message": { "type": "string", "nullable": true } }
+      },
+      "KybRunResult": {
+        "type": "object",
+        "properties": { "abonne_id": { "type": "integer" }, "kyb_status": { "type": "string", "enum": ["NonDebute", "EnCours", "Verifie", "Rejete"] }, "result": { "$ref": "#/components/schemas/KybResult" } }
+      },
+      "KybCheck": {
+        "type": "object",
+        "properties": { "id": { "type": "integer" }, "provider": { "type": "string" }, "status": { "type": "string" }, "score": { "type": "integer", "nullable": true }, "message": { "type": "string", "nullable": true }, "utc": { "type": "string", "format": "date-time", "nullable": true } }
+      },
+      "KybCheckList": { "type": "object", "properties": { "data": { "type": "array", "items": { "$ref": "#/components/schemas/KybCheck" } } } }
     }
   },
   "x-webhooks": {

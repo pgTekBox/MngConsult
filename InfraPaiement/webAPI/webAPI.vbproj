@@ -70,6 +70,8 @@
     <Compile Include="App_Code\ApiHandler.vb" />
     <Compile Include="App_Code\ApiRouteHandler.vb" />
     <Compile Include="App_Code\RateLimiter.vb" />
+    <Compile Include="App_Code\clsAudit.vb" />
+    <Compile Include="App_Code\clsKyb.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>

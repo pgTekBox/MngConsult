@@ -30,11 +30,17 @@ Partial Public Class wbfAbonne
     '''<summary>Contrôle lnkDecaissements.</summary>
     Protected WithEvents lnkDecaissements As Global.System.Web.UI.WebControls.HyperLink
 
+    '''<summary>Contrôle lnkInterac.</summary>
+    Protected WithEvents lnkInterac As Global.System.Web.UI.WebControls.HyperLink
+
     '''<summary>Contrôle lnkApiKeys.</summary>
     Protected WithEvents lnkApiKeys As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>Contrôle lnkWebhooks.</summary>
     Protected WithEvents lnkWebhooks As Global.System.Web.UI.WebControls.HyperLink
+
+    '''<summary>Contrôle lnkExport.</summary>
+    Protected WithEvents lnkExport As Global.System.Web.UI.WebControls.HyperLink
 
     '''<summary>Contrôle pnlOk.</summary>
     Protected WithEvents pnlOk As Global.System.Web.UI.WebControls.Panel
@@ -95,4 +101,31 @@ Partial Public Class wbfAbonne
 
     '''<summary>Contrôle btnSave.</summary>
     Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>Contrôle pnlOffboard.</summary>
+    Protected WithEvents pnlOffboard As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>Contrôle litPreflight.</summary>
+    Protected WithEvents litPreflight As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>Contrôle btnClose.</summary>
+    Protected WithEvents btnClose As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>Contrôle btnReactivate.</summary>
+    Protected WithEvents btnReactivate As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>Contrôle btnAnonymize.</summary>
+    Protected WithEvents btnAnonymize As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>Contrôle litAudit.</summary>
+    Protected WithEvents litAudit As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>Contrôle pnlKyb.</summary>
+    Protected WithEvents pnlKyb As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>Contrôle litKyb.</summary>
+    Protected WithEvents litKyb As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>Contrôle btnRunKyb.</summary>
+    Protected WithEvents btnRunKyb As Global.System.Web.UI.WebControls.Button
 End Class

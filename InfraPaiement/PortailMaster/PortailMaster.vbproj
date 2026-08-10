@@ -90,9 +90,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb" />
+    <Compile Include="App_Code\clsAudit.vb" />
     <Compile Include="App_Code\clsWebhookDispatcher.vb" />
     <Compile Include="App_Code\clsCpa005Builder.vb" />
     <Compile Include="App_Code\clsEft005Returns.vb" />
+    <Compile Include="App_Code\clsEft005Ack.vb" />
+    <Compile Include="App_Code\clsInterac.vb" />
+    <Compile Include="App_Code\clsKyb.vb" />
     <Compile Include="App_Code\clsBankRecon.vb" />
     <Compile Include="App_Code\clsBankExchange.vb" />
     <Compile Include="BankExchange.ashx.vb">
@@ -103,6 +107,12 @@
     </Compile>
     <Compile Include="EftFile.ashx.vb">
       <DependentUpon>EftFile.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AbonneExport.ashx.vb">
+      <DependentUpon>AbonneExport.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AuditExport.ashx.vb">
+      <DependentUpon>AuditExport.ashx</DependentUpon>
     </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
@@ -192,6 +202,10 @@
     <Compile Include="wbfApiKeys.aspx.designer.vb">
       <DependentUpon>wbfApiKeys.aspx</DependentUpon>
     </Compile>
+    <Compile Include="wbfPartenaires.aspx.vb">
+      <DependentUpon>wbfPartenaires.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="wbfWebhooks.aspx.vb">
       <DependentUpon>wbfWebhooks.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -241,6 +255,20 @@
     <Compile Include="wbfRapprochement.aspx.designer.vb">
       <DependentUpon>wbfRapprochement.aspx</DependentUpon>
     </Compile>
+    <Compile Include="wbfAudit.aspx.vb">
+      <DependentUpon>wbfAudit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfAudit.aspx.designer.vb">
+      <DependentUpon>wbfAudit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfInterac.aspx.vb">
+      <DependentUpon>wbfInterac.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfInterac.aspx.designer.vb">
+      <DependentUpon>wbfInterac.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -256,6 +284,7 @@
     <Content Include="wbfGrandLivre.aspx" />
     <Content Include="wbfPaiements.aspx" />
     <Content Include="wbfApiKeys.aspx" />
+    <Content Include="wbfPartenaires.aspx" />
     <Content Include="wbfWebhooks.aspx" />
     <Content Include="WebhookDispatcher.ashx" />
     <Content Include="wbfFournisseurs.aspx" />
@@ -263,8 +292,12 @@
     <Content Include="wbfDecaissements.aspx" />
     <Content Include="wbfEftBatches.aspx" />
     <Content Include="EftFile.ashx" />
+    <Content Include="AbonneExport.ashx" />
+    <Content Include="AuditExport.ashx" />
     <Content Include="wbfSupervision.aspx" />
     <Content Include="wbfRapprochement.aspx" />
+    <Content Include="wbfAudit.aspx" />
+    <Content Include="wbfInterac.aspx" />
     <Content Include="BankExchange.ashx" />
     <Content Include="Error.aspx" />
     <Content Include="Images\logo.svg" />
@@ -297,6 +330,26 @@
     <None Include="Database\sqlagent_jobs.sql" />
     <None Include="Database\20_rapprochement.sql" />
     <None Include="Database\21_bank_exchange.sql" />
+    <None Include="Database\22_abonne_users.sql" />
+    <None Include="Database\23_abonne_users_admin.sql" />
+    <None Include="Database\24_bank_coords_list.sql" />
+    <None Include="Database\25_onboarding.sql" />
+    <None Include="Database\26_remember_me.sql" />
+    <None Include="Database\27_webhook_purge.sql" />
+    <None Include="Database\28_bank_line_purge.sql" />
+    <None Include="Database\29_eft_batch_purge.sql" />
+    <None Include="Database\30_exchange_log_purge.sql" />
+    <None Include="Database\31_eft_return_purge.sql" />
+    <None Include="Database\32_webhook_abandoned_purge.sql" />
+    <None Include="Database\33_returned_payment_purge.sql" />
+    <None Include="Database\34_deactivated_user_purge.sql" />
+    <None Include="Database\35_tenant_offboarding.sql" />
+    <None Include="Database\36_tenant_reactivation.sql" />
+    <None Include="Database\37_abonne_export.sql" />
+    <None Include="Database\38_audit_log.sql" />
+    <None Include="Database\39_eft_ack.sql" />
+    <None Include="Database\40_interac.sql" />
+    <None Include="Database\41_kyb.sql" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />

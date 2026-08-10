@@ -35,14 +35,18 @@ Public Class wbfLogin
         Dim genericErr As String = "Courriel ou mot de passe incorrect."
 
         If admin Is Nothing Then
+            AuditLogin("LoginFailed", 0, email, "compte introuvable")
             ShowError(genericErr)
             Return
         End If
+
+        Dim aId As Integer = CInt(admin("Id"))
 
         ' Compte verrouille ?
         If Not IsDBNull(admin("LockoutUntilUtc")) Then
             Dim until As DateTime = CDate(admin("LockoutUntilUtc"))
             If until > DateTime.UtcNow Then
+                AuditLogin("LoginFailed", aId, email, "compte verrouillé")
                 ShowError("Compte temporairement verrouillé après plusieurs tentatives. Réessayez dans quelques minutes.")
                 Return
             End If
@@ -57,13 +61,15 @@ Public Class wbfLogin
         End Try
 
         If Not isValid Then
-            RegisterFailedLogin(CInt(admin("Id")))
+            RegisterFailedLogin(aId)
+            AuditLogin("LoginFailed", aId, email, "mot de passe invalide")
             ShowError(genericErr)
             Return
         End If
 
         ' Compte actif ?
         If Not CBool(admin("IsActive")) Then
+            AuditLogin("LoginFailed", aId, email, "compte désactivé")
             ShowError("Ce compte est désactivé. Contactez un administrateur.")
             Return
         End If
@@ -76,6 +82,7 @@ Public Class wbfLogin
         AdminIsSuperAdmin = Not IsDBNull(admin("IsSuperAdmin")) AndAlso CBool(admin("IsSuperAdmin"))
 
         UpdateLastLogin(AdminId)
+        AuditLogin("Login", AdminId, AdminEmail, Nothing)
 
         Dim returnUrl As String = Request.QueryString("ReturnUrl")
         If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") Then
@@ -119,6 +126,12 @@ Public Class wbfLogin
         Catch
             ' Non-bloquant.
         End Try
+    End Sub
+
+    ''' <summary>Journalise un évènement de connexion (succès ou échec) au
+    ''' journal d'audit. actorAdminId=0 si le compte est inconnu.</summary>
+    Private Sub AuditLogin(action As String, adminId As Integer, email As String, details As String)
+        clsAudit.Write(adminId, email, action, "PortalAdmin", adminId, email, details, Request.UserHostAddress)
     End Sub
 
     Private Sub ShowError(msg As String)

@@ -1,4 +1,4 @@
-<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="vb" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="Default.aspx.vb" Inherits="PortailABN.Default_aspx" %>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="head" runat="server">
@@ -8,6 +8,14 @@
         .kpi.eft .val { color: #0284c7; }
         .delta-pos { color: var(--ok); font-weight: 700; }
         .delta-neg { color: var(--danger); font-weight: 700; }
+        .onboard { display:flex; align-items:center; gap:18px; background:linear-gradient(135deg, rgba(14,165,164,.08), rgba(79,70,229,.08));
+                   border:1px solid rgba(79,70,229,.20); border-radius:16px; padding:18px 22px; margin-bottom:24px; }
+        .onboard .ic { font-size:26px; }
+        .onboard .txt { flex:1; }
+        .onboard .txt strong { font-size:15px; }
+        .onboard .txt p { margin:2px 0 0; color:var(--muted); font-size:13px; }
+        .onboard .bar { height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; margin-top:8px; max-width:320px; }
+        .onboard .bar > span { display:block; height:100%; background:linear-gradient(135deg, var(--primary), var(--secondary)); }
     </style>
 </asp:Content>
 
@@ -24,6 +32,16 @@
     </div>
 
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="msg-err"><asp:Literal ID="litError" runat="server" /></asp:Panel>
+
+    <asp:Panel ID="pnlOnboard" runat="server" Visible="false" CssClass="onboard">
+        <span class="ic">🚀</span>
+        <div class="txt">
+            <strong>Terminez la configuration de votre espace</strong>
+            <p><asp:Literal ID="litOnboard" runat="server" /></p>
+            <div class="bar"><span id="obBar" runat="server"></span></div>
+        </div>
+        <a href="wbfBienvenue.aspx" class="btn btn-primary">Continuer</a>
+    </asp:Panel>
 
     <div class="cards" style="margin-bottom:26px">
         <div class="kpi solde">

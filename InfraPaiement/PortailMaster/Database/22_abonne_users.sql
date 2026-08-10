@@ -1,4 +1,4 @@
-/* =====================================================================
+﻿/* =====================================================================
    PortailABN - Script 22 : Utilisateurs du portail des abonnes
    ---------------------------------------------------------------------
    Le portail des abonnes (PortailABN) est l'interface libre-service que

@@ -24,7 +24,9 @@ Public Class SiteMaster
 
         If Not IsPostBack Then
             litUser.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(Data.AdminName), Data.AdminEmail, Data.AdminName))
+            navPartenaires.Visible = Data.AdminIsSuperAdmin
             navUsers.Visible = Data.AdminIsSuperAdmin
+            navAudit.Visible = Data.AdminIsSuperAdmin
             HighlightNav()
         End If
     End Sub
@@ -43,13 +45,22 @@ Public Class SiteMaster
                 navEft.Attributes("class") = "active"
             Case "wbfrapprochement.aspx"
                 navRec.Attributes("class") = "active"
+            Case "wbfpartenaires.aspx"
+                navPartenaires.Attributes("class") = "active"
             Case "wbfutilisateurs.aspx", "wbfutilisateur.aspx"
                 navUsers.Attributes("class") = "active"
+            Case "wbfaudit.aspx"
+                navAudit.Attributes("class") = "active"
         End Select
     End Sub
 
     Protected Sub btnLogout_Click(sender As Object, e As EventArgs)
-        If Data IsNot Nothing Then Data.SignOut()
+        If Data IsNot Nothing Then
+            If Data.AdminId > 0 Then
+                clsAudit.Write(Data.AdminId, Data.AdminEmail, "Logout", "PortalAdmin", Data.AdminId, Data.AdminEmail, Nothing, Request.UserHostAddress)
+            End If
+            Data.SignOut()
+        End If
         Response.Redirect("~/wbfLogin.aspx")
     End Sub
 

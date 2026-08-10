@@ -29,4 +29,8 @@ Partial Public Class wbfEftBatches
     Protected WithEvents btnImport As Global.System.Web.UI.WebControls.Button
     Protected WithEvents rptReturns As Global.System.Web.UI.WebControls.Repeater
     Protected WithEvents pnlNoReturns As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents fuAck As Global.System.Web.UI.WebControls.FileUpload
+    Protected WithEvents btnImportAck As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents rptAck As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents pnlNoAck As Global.System.Web.UI.WebControls.Panel
 End Class

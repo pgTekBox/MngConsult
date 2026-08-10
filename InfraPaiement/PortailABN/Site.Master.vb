@@ -1,4 +1,4 @@
-''' <summary>
+﻿''' <summary>
 ''' Page maître de la zone authentifiée du portail des abonnes.
 ''' Centralise l'entête (marque, navigation, abonne/utilisateur, deconnexion)
 ''' et la garde d'authentification : toute page de contenu qui utilise ce
@@ -15,6 +15,7 @@ Public Class SiteMaster
     Protected WithEvents navReleve As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents navApi As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents navHooks As Global.System.Web.UI.HtmlControls.HtmlAnchor
+    Protected WithEvents navUsers As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents litAbonne As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litUser As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents btnLogout As Global.System.Web.UI.WebControls.LinkButton
@@ -37,9 +38,10 @@ Public Class SiteMaster
         If Not IsPostBack Then
             litAbonne.Text = Server.HtmlEncode(Data.AbonneName)
             litUser.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(Data.UserName), Data.UserEmail, Data.UserName))
-            ' Gestion API/Webhooks reservee aux administrateurs de l'abonne.
+            ' Gestion API/Webhooks/Utilisateurs reservee aux administrateurs de l'abonne.
             navApi.Visible = Data.IsAbonneAdmin
             navHooks.Visible = Data.IsAbonneAdmin
+            navUsers.Visible = Data.IsAbonneAdmin
             HighlightNav()
         End If
     End Sub
@@ -56,6 +58,7 @@ Public Class SiteMaster
             Case "wbfreleve.aspx" : navReleve.Attributes("class") = "active"
             Case "wbfapikeys.aspx" : navApi.Attributes("class") = "active"
             Case "wbfwebhooks.aspx" : navHooks.Attributes("class") = "active"
+            Case "wbfutilisateurs.aspx", "wbfutilisateur.aspx" : navUsers.Attributes("class") = "active"
         End Select
     End Sub
 

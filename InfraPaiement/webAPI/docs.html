@@ -75,6 +75,7 @@
       <a href="#ref-fournisseurs">Fournisseurs</a>
       <a href="#ref-payments">Encaissements</a>
       <a href="#ref-payouts">Décaissements</a>
+      <a href="#ref-partenaires">Partenaires (Modèle B)</a>
       <div class="grp">Outil</div>
       <a href="#console">Console</a>
     </nav>
@@ -94,6 +95,15 @@ https://&lt;votre-hôte&gt;/api/v1</pre>
       <p>Chaque requête doit inclure votre clé d'API dans l'en-tête <code>X-Api-Key</code> (ou <code>Authorization: Bearer &lt;clé&gt;</code>). Les clés sont générées par la plateforme et isolent automatiquement vos données.</p>
       <pre><span class="k">curl</span> https://votre-hôte/api/v1/balance \
   -H <span class="s">"X-Api-Key: sk_live_..."</span></pre>
+      <div class="card">
+        <h3>Deux types de clés</h3>
+        <p><b>Clé abonné</b> (<code>sk_…</code>) — accède aux ressources de votre propre compte.</p>
+        <p><b>Clé partenaire</b> (<code>pk_…</code>, Modèle B) — provisionne des abonnés via <code>/abonnes</code> et agit au nom de l'un d'eux en ajoutant l'en-tête <code>X-Abonne-Id: &lt;id&gt;</code> sur les ressources scopées.</p>
+        <pre><span class="c"># Agir au nom d'un abonné avec une clé partenaire</span>
+<span class="k">curl</span> https://votre-hôte/api/v1/balance \
+  -H <span class="s">"X-Api-Key: pk_live_..."</span> \
+  -H <span class="s">"X-Abonne-Id: 42"</span></pre>
+      </div>
 
       <h2 id="concepts">Conventions</h2>
       <div class="card">
@@ -166,13 +176,42 @@ https://&lt;votre-hôte&gt;/api/v1</pre>
         <tr><td><span class="m get">GET</span></td><td class="mono">/payouts/{id}</td><td>Obtenir</td></tr>
       </table>
 
+      <h2 id="ref-partenaires">Partenaires (Modèle B)</h2>
+      <p>Réservé aux <b>clés partenaire</b> (<code>pk_…</code>). Un partenaire (canal de revente) provisionne et gère ses propres abonnés (locataires), puis agit en leur nom via l'en-tête <code>X-Abonne-Id</code>.</p>
+      <table>
+        <tr><th>Méthode</th><th>Chemin</th><th>Description</th></tr>
+        <tr><td><span class="m get">GET</span></td><td class="mono">/abonnes</td><td>Lister les abonnés provisionnés (paginé, <code>?search=</code>)</td></tr>
+        <tr><td><span class="m post">POST</span></td><td class="mono">/abonnes</td><td>Provisionner — corps <code>{ legal_name*, display_name, business_number, email, city, province, postal_code }</code></td></tr>
+        <tr><td><span class="m get">GET</span></td><td class="mono">/abonnes/{id}</td><td>Obtenir un abonné</td></tr>
+        <tr><td><span class="m post">POST</span></td><td class="mono">/abonnes/{id}/kyb</td><td>Lancer une vérification KYB (met à jour <code>kyb_status</code>)</td></tr>
+        <tr><td><span class="m get">GET</span></td><td class="mono">/abonnes/{id}/kyb</td><td>Historique des vérifications KYB</td></tr>
+      </table>
+      <h3>Agir au nom d'un abonné</h3>
+      <p>Pour les ressources scopées (<code>/balance</code>, <code>/clients</code>, <code>/fournisseurs</code>, <code>/payments</code>, <code>/payouts</code>, <code>/webhook</code>), ajoutez l'en-tête <code>X-Abonne-Id</code> avec l'identifiant d'un abonné vous appartenant :</p>
+      <pre><span class="c"># 1) Provisionner un abonné</span>
+<span class="k">curl</span> -X POST https://votre-hôte/api/v1/abonnes \
+  -H <span class="s">"X-Api-Key: pk_live_..."</span> -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{ "legal_name": "Boulangerie Tremblay inc.", "business_number": "1234567890" }'</span>
+<span class="c"># => { "id": 42, "kyb_status": "NonDebute", ... }</span>
+
+<span class="c"># 2) Créer un client POUR cet abonné (auth déléguée)</span>
+<span class="k">curl</span> -X POST https://votre-hôte/api/v1/clients \
+  -H <span class="s">"X-Api-Key: pk_live_..."</span> -H <span class="s">"X-Abonne-Id: 42"</span> \
+  -H <span class="s">"Content-Type: application/json"</span> \
+  -d <span class="s">'{ "name": "Client du boulanger" }'</span></pre>
+      <p class="note">Sans <code>X-Abonne-Id</code>, une clé partenaire reçoit <code>400</code> sur les ressources scopées. Un <code>X-Abonne-Id</code> pointant un abonné non rattaché au partenaire renvoie <code>403</code>.</p>
+
       <h2 id="console">Console</h2>
       <div class="console">
         <div class="row">
           <label>Base</label>
           <input type="text" id="base" class="grow" />
           <label>Clé API</label>
-          <input type="password" id="key" class="grow" placeholder="sk_test_..." />
+          <input type="password" id="key" class="grow" placeholder="sk_test_… ou pk_test_…" />
+        </div>
+        <div class="row">
+          <label>X-Abonne-Id</label>
+          <input type="text" id="abonneId" class="grow" placeholder="Clé partenaire (pk_…) uniquement — id de l'abonné cible" />
         </div>
         <div class="chips" id="chips"></div>
         <div class="row">
@@ -216,6 +255,10 @@ https://&lt;votre-hôte&gt;/api/v1</pre>
     ['POST /payments','POST','/payments','{\n  "client_id": 1,\n  "amount_cents": 10000,\n  "fee_cents": 250,\n  "reference": "INV-1"\n}'],
     ['GET /payouts','GET','/payouts?limit=25',''],
     ['POST /payouts','POST','/payouts','{\n  "fournisseur_id": 1,\n  "amount_cents": 5000,\n  "reference": "BILL-1"\n}'],
+    ['GET /abonnes','GET','/abonnes?limit=25',''],
+    ['POST /abonnes','POST','/abonnes','{\n  "legal_name": "Abonné Démo inc.",\n  "business_number": "1234567890",\n  "city": "Montréal",\n  "province": "QC",\n  "postal_code": "H2X 1Y4"\n}'],
+    ['POST /abonnes/1/kyb','POST','/abonnes/1/kyb',''],
+    ['GET /abonnes/1/kyb','GET','/abonnes/1/kyb',''],
     ['GET /webhook','GET','/webhook',''],
     ['PUT /webhook','PUT','/webhook','{\n  "url": "https://app.exemple.ca/hooks/60sec",\n  "active": true\n}'],
     ['GET deliveries','GET','/webhook/deliveries?limit=25',''],
@@ -235,6 +278,8 @@ https://&lt;votre-hôte&gt;/api/v1</pre>
   document.getElementById('send').onclick = function(){
     var url = base.value.replace(/\/+$/,'') + (path.value.charAt(0)==='/'?'':'/') + path.value;
     var opts = { method: method.value, headers: { 'X-Api-Key': document.getElementById('key').value } };
+    var aid = document.getElementById('abonneId').value.trim();
+    if(aid) opts.headers['X-Abonne-Id'] = aid;
     if(method.value==='POST'||method.value==='PUT'){ opts.headers['Content-Type']='application/json'; opts.body = body.value; }
     var t0 = Date.now();
     fetch(url, opts).then(function(r){

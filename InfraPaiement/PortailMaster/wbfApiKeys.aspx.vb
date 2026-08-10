@@ -85,6 +85,7 @@ Public Class wbfApiKeys
             p.Add(New SqlParameter("@Environment", env))
             p.Add(New SqlParameter("@AdminId", If(AdminId = 0, CObj(DBNull.Value), AdminId)))
             ExecuteSQLds("s0026CreateApiKey", p)
+            AuditKey("ApiKeyCreate", "prefix=" & prefix & " env=" & env)
 
             pnlNewKey.Visible = True
             litNewKey.Text = Server.HtmlEncode(rawKey)   ' affichée une seule fois
@@ -105,11 +106,19 @@ Public Class wbfApiKeys
             p.Add(New SqlParameter("@Id", id))
             p.Add(New SqlParameter("@AbonneId", AbonneId))
             ExecuteSQL("s0029RevokeApiKey", p)
+            AuditKey("ApiKeyRevoke", "keyId=" & id)
             BindList()
         Catch ex As Exception
             ShowError("Révocation impossible.")
             System.Diagnostics.Debug.WriteLine("Keys Revoke: " & ex.Message)
         End Try
+    End Sub
+
+    ''' <summary>Journalise une action sur une clé d'API (ciblée sur l'abonné,
+    ''' pour apparaître aussi dans l'historique d'audit par-abonné).</summary>
+    Private Sub AuditKey(action As String, details As String)
+        Dim nom As String = Server.HtmlDecode(If(litAbonne.Text, ""))
+        clsAudit.Write(AdminId, AdminEmail, action, "Abonne", AbonneId, nom, details, Request.UserHostAddress)
     End Sub
 
     ' --- Helpers crypto ---

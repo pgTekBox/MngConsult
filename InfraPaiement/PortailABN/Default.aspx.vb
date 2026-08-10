@@ -1,4 +1,4 @@
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 
 ''' <summary>
@@ -17,14 +17,47 @@ Public Class Default_aspx
     Protected WithEvents litEftOut As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents rptJournal As Global.System.Web.UI.WebControls.Repeater
     Protected WithEvents pnlNoJournal As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents pnlOnboard As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litOnboard As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents obBar As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsAuthenticated Then Return
         If Not IsPostBack Then
             litHello.Text = Server.HtmlEncode(If(String.IsNullOrEmpty(UserName), UserEmail, UserName))
+            CheckOnboarding()
             LoadBalances()
             BindJournal()
         End If
+    End Sub
+
+    ''' <summary>Affiche la banniere d'onboarding tant que les etapes requises
+    ''' (client, fournisseur, coordonnees bancaires, 1re transaction) ne sont
+    ''' pas toutes completees.</summary>
+    Private Sub CheckOnboarding()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AbonneId", AbonneId))
+            Dim t As DataTable = ExecuteSQLds("s0073GetOnboardingStatus", p).Tables(0)
+            If t.Rows.Count = 0 Then Return
+            Dim r As DataRow = t.Rows(0)
+            Dim steps(3) As Boolean
+            steps(0) = Convert.ToInt32(r("ClientsCount")) > 0
+            steps(1) = Convert.ToInt32(r("FournisseursCount")) > 0
+            steps(2) = Convert.ToInt32(r("EftReadyCount")) > 0
+            steps(3) = Convert.ToInt32(r("TxnCount")) > 0
+            Dim done As Integer = 0
+            For Each b As Boolean In steps
+                If b Then done += 1
+            Next
+            If done >= steps.Length Then Return  ' tout est fait : pas de banniere
+            Dim pct As Integer = CInt(Math.Floor(done * 100.0 / steps.Length))
+            litOnboard.Text = done & " étape(s) sur " & steps.Length & " terminée(s) — " & pct & " %."
+            obBar.Style("width") = pct & "%"
+            pnlOnboard.Visible = True
+        Catch ex As Exception
+            System.Diagnostics.Debug.WriteLine("ABN Dash onboarding: " & ex.Message)
+        End Try
     End Sub
 
     Private Sub LoadBalances()

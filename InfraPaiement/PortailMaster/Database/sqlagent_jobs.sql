@@ -1,13 +1,15 @@
 /* =====================================================================
    60secPaiement - Jobs SQL Server Agent (a executer par un ADMIN sysadmin)
    ---------------------------------------------------------------------
-   Cree 3 taches planifiees :
+   Cree 4 taches planifiees :
      1. 60secPaiement_ReglementQuotidien  (T-SQL, quotidien 22:00)
         -> EXEC dbo.s0056RunDailySettlement  [reglement SIMULE des echeances]
      2. 60secPaiement_GenerationLotEFT     (T-SQL, quotidien 06:00)
         -> EXEC dbo.s0057AutoGenerateBatch  [genere le lot du jour]
      3. 60secPaiement_Webhooks             (PowerShell, toutes les 2 min)
         -> POST WebhookDispatcher.ashx      [vide la file de webhooks]
+     4. 60secPaiement_MaintenanceQuotidienne (T-SQL, quotidien 03:00)
+        -> EXEC dbo.s0079RunDailyMaintenance [purge jetons remember-me + webhooks livres]
 
    AVANT D'EXECUTER : remplacer <HOST_PORTAIL> et <DISPATCH_SECRET> ci-dessous.
    Prerequis : SQL Server Agent demarre ; sous-systeme PowerShell disponible.
@@ -58,6 +60,20 @@ BEGIN
         @freq_subday_type = 4, @freq_subday_interval = 2;   -- toutes les 2 minutes
     EXEC msdb.dbo.sp_attach_schedule @job_name = N'60secPaiement_Webhooks', @schedule_name = N'60sec_2min';
     EXEC msdb.dbo.sp_add_jobserver @job_name = N'60secPaiement_Webhooks';
+END
+
+/* --------- 4) Maintenance quotidienne (purge des jetons remember-me) --------- */
+IF NOT EXISTS (SELECT 1 FROM msdb.dbo.sysjobs WHERE name = N'60secPaiement_MaintenanceQuotidienne')
+BEGIN
+    EXEC msdb.dbo.sp_add_job @job_name = N'60secPaiement_MaintenanceQuotidienne', @enabled = 1,
+        @description = N'Hygiene quotidienne : purge des jetons « Se souvenir de moi » expires + webhooks livres.';
+    EXEC msdb.dbo.sp_add_jobstep @job_name = N'60secPaiement_MaintenanceQuotidienne',
+        @step_name = N'Maintenance', @subsystem = N'TSQL', @database_name = @DbName,
+        @command = N'EXEC dbo.s0079RunDailyMaintenance;';
+    EXEC msdb.dbo.sp_add_schedule @schedule_name = N'60sec_Quotidien_03h',
+        @freq_type = 4, @freq_interval = 1, @active_start_time = 030000;   -- tous les jours 03:00
+    EXEC msdb.dbo.sp_attach_schedule @job_name = N'60secPaiement_MaintenanceQuotidienne', @schedule_name = N'60sec_Quotidien_03h';
+    EXEC msdb.dbo.sp_add_jobserver @job_name = N'60secPaiement_MaintenanceQuotidienne';
 END
 GO
 

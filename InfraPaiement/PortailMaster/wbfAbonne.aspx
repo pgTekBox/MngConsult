@@ -23,9 +23,11 @@
             <asp:HyperLink ID="lnkPaiements" runat="server" CssClass="btn" Visible="false" />
             <asp:HyperLink ID="lnkFournisseurs" runat="server" CssClass="btn" Visible="false" />
             <asp:HyperLink ID="lnkDecaissements" runat="server" CssClass="btn" Visible="false" />
+            <asp:HyperLink ID="lnkInterac" runat="server" CssClass="btn" Visible="false" />
             <asp:HyperLink ID="lnkApiKeys" runat="server" CssClass="btn" Visible="false" />
             <asp:HyperLink ID="lnkWebhooks" runat="server" CssClass="btn" Visible="false" />
             <asp:HyperLink ID="lnkClients" runat="server" CssClass="btn" Visible="false" />
+            <asp:HyperLink ID="lnkExport" runat="server" CssClass="btn" Visible="false" />
             <a class="btn btn-ghost" href="wbfAbonnes.aspx">← Retour à la liste</a>
         </div>
     </div>
@@ -130,5 +132,34 @@
         </div>
 
     </div>
+
+    <asp:Panel ID="pnlKyb" runat="server" Visible="false" CssClass="card" style="margin-top:24px">
+        <div class="section-title" style="margin-top:0">Vérification KYB (Know Your Business)</div>
+        <asp:Literal ID="litKyb" runat="server" />
+        <div class="form-actions">
+            <asp:Button ID="btnRunKyb" runat="server" CssClass="btn btn-primary" Text="Lancer une vérification KYB (sandbox)" OnClick="btnRunKyb_Click"
+                OnClientClick="return confirm('Lancer une vérification KYB via le fournisseur configuré (sandbox) ? Le statut KYB sera mis à jour selon le résultat.');" />
+        </div>
+        <div class="meta" style="margin-top:8px">Connecteur abstrait + fournisseur sandbox simulé (le vrai — Trulioo/Onfido — est gaté par le contrat). Déclencheurs de test : raison sociale contenant « REJECT » ou n° d'entreprise finissant par 0000 → Rejeté ; informations incomplètes → Revue.</div>
+    </asp:Panel>
+
+    <asp:Panel ID="pnlOffboard" runat="server" Visible="false" CssClass="card" style="margin-top:24px; border-color: rgba(220,38,38,.28)">
+        <div class="section-title" style="margin-top:0; color:var(--danger)">Offboarding — clôture du compte</div>
+        <asp:Literal ID="litPreflight" runat="server" />
+        <div class="form-actions">
+            <asp:Button ID="btnClose" runat="server" CssClass="btn" Text="Clôturer le compte" OnClick="btnClose_Click"
+                OnClientClick="return confirm('Clôturer ce compte abonné ? Les accès (utilisateurs, clés API, webhook) seront désactivés et les contreparties gelées.');" />
+            <asp:Button ID="btnReactivate" runat="server" CssClass="btn" Visible="false" Text="Réactiver le compte" OnClick="btnReactivate_Click"
+                OnClientClick="return confirm('Réactiver ce compte clôturé ? Le statut repasse à Actif et les utilisateurs retrouvent l''accès. Les clés d''API restent révoquées, le webhook et les contreparties restent à ré-habiliter.');" />
+            <asp:Button ID="btnAnonymize" runat="server" CssClass="btn" Text="Anonymiser les données" OnClick="btnAnonymize_Click"
+                style="color:var(--danger)"
+                OnClientClick="return confirm('ANONYMISER définitivement les données personnelles de cet abonné ? Action IRRÉVERSIBLE. Le grand livre et les paiements sont conservés.');" />
+        </div>
+        <div class="meta" style="margin-top:8px">
+            La clôture est refusée tant que l'abonné détient des fonds ou a des paiements en cours. L'anonymisation
+            (RGPD) n'est possible qu'après clôture et ne touche jamais le grand livre ni les paiements.
+        </div>
+        <asp:Literal ID="litAudit" runat="server" />
+    </asp:Panel>
 
 </asp:Content>

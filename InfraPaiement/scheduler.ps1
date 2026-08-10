@@ -5,7 +5,11 @@
   Modes :
     -Mode Webhooks : vide la file de webhooks (POST signe vers WebhookDispatcher.ashx).
                      A planifier toutes les 1-5 minutes.
-    -Mode Daily    : reglement des echeances (s0056) + generation du lot EFT (s0057).
+    -Mode Daily    : reglement des echeances (s0056) + generation du lot EFT (s0057)
+                     + maintenance/hygiene (s0079 : purge jetons remember-me + webhooks livres/abandonnes
+                       + lignes de releve rapprochees + lots EFT regles + journaux d'echange
+                       + retours EFT traites + paiements retournes [retention 7 ans par defaut]
+                       + utilisateurs abonnes desactives [RGPD, retention 365 j]).
                      A planifier une fois par jour.
 
   Exemples d'enregistrement (a lancer en admin, adapter chemins/heures) :
@@ -66,6 +70,12 @@ try {
         $created = $b.Rows[0].Created
         $batchId = if ($b.Rows[0].BatchId -is [DBNull]) { "-" } else { $b.Rows[0].BatchId }
         Write-Output ("[$(Get-Date -Format s)] Lot EFT: created=$created batchId=$batchId")
+      }
+      # Hygiene : jetons + webhooks livres/abandonnes + releve + lots EFT + journaux d'echange + retours traites.
+      $m = Invoke-Proc "s0079RunDailyMaintenance"
+      if ($m.Rows.Count -gt 0) {
+        $r = $m.Rows[0]
+        Write-Output ("[$(Get-Date -Format s)] Maintenance: jetons=$($r.PurgedTokens) webhooks=$($r.PurgedWebhooks) webhooksAband=$($r.PurgedAbandonedWebhooks) releve=$($r.PurgedBankLines) lotsEFT=$($r.PurgedEftBatches) journaux=$($r.PurgedExchangeLogs) retours=$($r.PurgedEftReturns) paiementsRet=$($r.PurgedReturnedPayments) usagersDesact=$($r.PurgedDeactivatedUsers)")
       }
     }
   }

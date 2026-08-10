@@ -1,4 +1,4 @@
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports BCrypt.Net
 
@@ -16,6 +16,7 @@ Public Class wbfLogin
     Protected WithEvents litError As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents tbEmail As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents tbPassword As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents cbRemember As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents btnLogin As Global.System.Web.UI.WebControls.Button
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -89,13 +90,39 @@ Public Class wbfLogin
 
         UpdateLastLogin(UserId)
 
+        ' « Se souvenir de moi » : emet un jeton persistant (cookie split-token).
+        If cbRemember.Checked Then
+            clsRememberMe.Issue(Context, UserId)
+        End If
+
         Dim returnUrl As String = Request.QueryString("ReturnUrl")
         If Not String.IsNullOrEmpty(returnUrl) AndAlso returnUrl.StartsWith("/") Then
             Response.Redirect(returnUrl)
+        ElseIf IsBrandNew() Then
+            ' Abonne encore vierge : diriger vers l'ecran de prise en main.
+            Response.Redirect("~/wbfBienvenue.aspx")
         Else
             Response.Redirect("~/Default.aspx")
         End If
     End Sub
+
+    ''' <summary>True si l'abonne n'a encore aucun client, fournisseur ni
+    ''' transaction (compte tout juste cree) — pour l'aiguiller vers
+    ''' l'ecran de demarrage a la premiere connexion.</summary>
+    Private Function IsBrandNew() As Boolean
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AbonneId", AbonneId))
+            Dim t As DataSet = ExecuteSQLds("s0073GetOnboardingStatus", p)
+            If t.Tables(0).Rows.Count = 0 Then Return False
+            Dim r As DataRow = t.Tables(0).Rows(0)
+            Return Convert.ToInt32(r("ClientsCount")) = 0 _
+               AndAlso Convert.ToInt32(r("FournisseursCount")) = 0 _
+               AndAlso Convert.ToInt32(r("TxnCount")) = 0
+        Catch
+            Return False
+        End Try
+    End Function
 
     ' -----------------------------------------------------------------
     ' Acces BD

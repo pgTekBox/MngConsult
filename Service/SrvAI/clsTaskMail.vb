@@ -541,8 +541,28 @@ Public Class clsTaskMail
 
                 Dim dsAtt As DataSet = ExecuteSQLds("exec s1578GetAttachment @MailId=" & MailId.ToString)
 
+                Dim attCols = dsAtt.Tables(0).Columns
                 For Each orow In dsAtt.Tables(0).Rows
-                    MyBody.Attachments.Add(orow("FileName"), orow("content"))
+                    Dim attFileName As String = orow("FileName").ToString()
+                    Dim attContent As Byte() = CType(orow("content"), Byte())
+                    Dim attCt As String = If(attCols.Contains("ContentType") AndAlso Not IsDBNull(orow("ContentType")), orow("ContentType").ToString(), "")
+                    Dim attCid As String = ""
+                    Dim attDisp As String = ""
+                    If attCols.Contains("ContentId") AndAlso Not IsDBNull(orow("ContentId")) Then attCid = orow("ContentId").ToString().Trim(New Char() {"<"c, ">"c, " "c})
+                    If attCols.Contains("ContentDisposition") AndAlso Not IsDBNull(orow("ContentDisposition")) Then attDisp = orow("ContentDisposition").ToString()
+                    Dim attIsInline As Boolean = (attCid <> "" AndAlso (attDisp = "" OrElse String.Equals(attDisp, "inline", StringComparison.OrdinalIgnoreCase)))
+                    If attIsInline Then
+                        ' Image inline (cid:) -> ressource liee -> rendu inline dans le corps HTML
+                        Dim res As MimeKit.MimeEntity
+                        If attCt <> "" Then
+                            res = MyBody.LinkedResources.Add(attFileName, attContent, MimeKit.ContentType.Parse(attCt))
+                        Else
+                            res = MyBody.LinkedResources.Add(attFileName, attContent)
+                        End If
+                        res.ContentId = attCid
+                    Else
+                        MyBody.Attachments.Add(attFileName, attContent)
+                    End If
                 Next
 
                 mimeMessage.Body = MyBody.ToMessageBody

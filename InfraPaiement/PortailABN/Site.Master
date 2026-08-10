@@ -1,4 +1,4 @@
-<%@ Master Language="vb" AutoEventWireup="false"
+﻿<%@ Master Language="vb" AutoEventWireup="false"
     CodeBehind="Site.Master.vb" Inherits="PortailABN.SiteMaster" %>
 
 <!DOCTYPE html>
@@ -145,6 +145,7 @@
                 <a href="wbfReleve.aspx" id="navReleve" runat="server">Relevé</a>
                 <a href="wbfApiKeys.aspx" id="navApi" runat="server">API</a>
                 <a href="wbfWebhooks.aspx" id="navHooks" runat="server">Webhooks</a>
+                <a href="wbfUtilisateurs.aspx" id="navUsers" runat="server">Utilisateurs</a>
             </nav>
             <span class="spacer"></span>
             <span class="userbox">

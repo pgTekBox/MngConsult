@@ -157,7 +157,9 @@
                 <a href="wbfAbonnes.aspx" id="navAbonnes" runat="server">Abonnés</a>
                 <a href="wbfEftBatches.aspx" id="navEft" runat="server">EFT</a>
                 <a href="wbfRapprochement.aspx" id="navRec" runat="server">Rapprochement</a>
+                <a href="wbfPartenaires.aspx" id="navPartenaires" runat="server" visible="false">Partenaires</a>
                 <a href="wbfUtilisateurs.aspx" id="navUsers" runat="server" visible="false">Utilisateurs</a>
+                <a href="wbfAudit.aspx" id="navAudit" runat="server" visible="false">Audit</a>
             </nav>
             <span class="spacer"></span>
             <span class="userbox">

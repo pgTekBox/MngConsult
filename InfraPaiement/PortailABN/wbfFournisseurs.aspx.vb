@@ -1,26 +1,18 @@
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 
 ''' <summary>
-''' Gestion des fournisseurs (beneficiaires) de l'abonne connecte. Liste
-''' filtrable + creation, scopees a l'AbonneId de la session.
+''' Liste des fournisseurs (beneficiaires) de l'abonne connecte, avec
+''' indicateur « prêt EFT ». Creation/edition via wbfFournisseur.aspx.
+''' Scopee a l'AbonneId de la session.
 ''' </summary>
 Public Class wbfFournisseurs
     Inherits clsData
 
-    Protected WithEvents detAdd As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     Protected WithEvents pnlOk As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litOk As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents pnlError As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litError As Global.System.Web.UI.WebControls.Literal
-    Protected WithEvents ddlType As Global.System.Web.UI.WebControls.DropDownList
-    Protected WithEvents tbRef As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents tbNom As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents tbEmail As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents tbTel As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents tbVille As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents tbProv As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents btnAdd As Global.System.Web.UI.WebControls.Button
     Protected WithEvents tbSearch As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents btnSearch As Global.System.Web.UI.WebControls.Button
     Protected WithEvents rpt As Global.System.Web.UI.WebControls.Repeater
@@ -28,7 +20,13 @@ Public Class wbfFournisseurs
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsAuthenticated Then Return
-        If Not IsPostBack Then Bind()
+        If Not IsPostBack Then
+            If Request.QueryString("saved") = "1" Then
+                pnlOk.Visible = True
+                litOk.Text = "Fournisseur enregistré."
+            End If
+            Bind()
+        End If
     End Sub
 
     Private Sub Bind()
@@ -52,50 +50,11 @@ Public Class wbfFournisseurs
         Bind()
     End Sub
 
-    Protected Sub btnAdd_Click(sender As Object, e As EventArgs)
-        Dim nom As String = If(tbNom.Text, "").Trim()
-        If nom.Length = 0 Then
-            detAdd.Attributes("open") = "open"
-            ShowError("Le nom du fournisseur est obligatoire.")
-            Return
-        End If
-        Try
-            Dim p As New Collection
-            Dim outId As New SqlParameter("@Id", SqlDbType.Int) With {.Direction = ParameterDirection.InputOutput, .Value = 0}
-            p.Add(outId)
-            p.Add(New SqlParameter("@AbonneId", AbonneId))
-            p.Add(New SqlParameter("@TypeFournisseur", ddlType.SelectedValue))
-            p.Add(New SqlParameter("@Nom", nom))
-            p.Add(New SqlParameter("@ReferenceExterne", NzOrNull(tbRef.Text)))
-            p.Add(New SqlParameter("@CourrielContact", NzOrNull(tbEmail.Text)))
-            p.Add(New SqlParameter("@Telephone", NzOrNull(tbTel.Text)))
-            p.Add(New SqlParameter("@Ville", NzOrNull(tbVille.Text)))
-            p.Add(New SqlParameter("@Province", NzOrNull(tbProv.Text)))
-            ExecuteSQLds("s0037SaveFournisseur", p)
-
-            pnlOk.Visible = True
-            litOk.Text = "Fournisseur « " & Server.HtmlEncode(nom) & " » créé."
-            ClearForm()
-            Bind()
-        Catch sqlEx As SqlException
-            detAdd.Attributes("open") = "open"
-            If sqlEx.Number = 2601 OrElse sqlEx.Number = 2627 Then
-                ShowError("Cette référence externe est déjà utilisée pour un autre fournisseur.")
-            Else
-                ShowError("Création impossible : " & sqlEx.Message)
-            End If
-        Catch ex As Exception
-            detAdd.Attributes("open") = "open"
-            ShowError("Création impossible.")
-            System.Diagnostics.Debug.WriteLine("ABN Fourn add: " & ex.Message)
-        End Try
-    End Sub
-
-    Private Sub ClearForm()
-        tbRef.Text = "" : tbNom.Text = "" : tbEmail.Text = ""
-        tbTel.Text = "" : tbVille.Text = "" : tbProv.Text = ""
-        ddlType.SelectedIndex = 0
-    End Sub
+    Protected Function EftReady(v As Object) As String
+        Dim ready As Boolean = Not (v Is Nothing OrElse IsDBNull(v)) AndAlso CBool(v)
+        If ready Then Return "<span class=""eft-yes"">✔ Oui</span>"
+        Return "<span class=""eft-no"">— Non</span>"
+    End Function
 
     Protected Function BadgeStatut(s As Object) As String
         Select Case If(s, "").ToString()
