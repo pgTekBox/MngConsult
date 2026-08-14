@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.NewAppointmentPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- En-tête simple avec retour -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="10"
+              Padding="16,14">
+            <Label Grid.Column="0"
+                   Text="&#8249;"
+                   FontSize="26"
+                   TextColor="{StaticResource Primary}"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1"
+                   Text="Nouveau rendez-vous"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16"
+                                 Spacing="16">
+
+                <!-- ===== Carte : détails ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <Label Text="Client" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="12,0">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                            <Entry x:Name="ClientEntry" BackgroundColor="Transparent"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HeightRequest="44" />
+                        </Border>
+
+                        <Label Text="Service" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                            <Picker x:Name="ServicePicker" Title="Choisir un service"
+                                    BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}">
+                                <Picker.ItemsSource>
+                                    <x:Array Type="{x:Type x:String}">
+                                        <x:String>Massothérapie</x:String>
+                                        <x:String>Plomberie</x:String>
+                                        <x:String>Électricité</x:String>
+                                        <x:String>Peinture</x:String>
+                                        <x:String>Construction</x:String>
+                                        <x:String>Mécanique</x:String>
+                                        <x:String>Consultation</x:String>
+                                        <x:String>Livraison</x:String>
+                                    </x:Array>
+                                </Picker.ItemsSource>
+                            </Picker>
+                        </Border>
+
+                        <Label Text="Date" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                            <DatePicker x:Name="DatePickerCtrl" Format="dddd d MMMM yyyy"
+                                        BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </Border>
+
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
+                            <VerticalStackLayout Grid.Column="0" Spacing="4">
+                                <Label Text="Heure début" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                                <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                                    <TimePicker x:Name="StartTimePicker" Format="HH:mm"
+                                                BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                </Border>
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="4">
+                                <Label Text="Heure fin" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                                <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
+                                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                                    <TimePicker x:Name="EndTimePicker" Format="HH:mm"
+                                                BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                </Border>
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label Text="Note" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,4">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                            <Editor x:Name="NoteEditor" BackgroundColor="Transparent"
+                                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                    HeightRequest="64" AutoSize="TextChanges" />
+                        </Border>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- Enregistrer -->
+                <Button Text="Ajouter le rendez-vous"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White"
+                        FontAttributes="Bold" FontSize="16"
+                        HeightRequest="52" CornerRadius="26"
+                        Clicked="OnSaveClicked" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

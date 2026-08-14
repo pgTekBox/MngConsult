@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="60SecAI.csproj">
+    <Deploy Solution="Debug|*" />
+  </Project>
+</Solution>

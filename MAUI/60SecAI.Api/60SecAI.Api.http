@@ -1,0 +1,45 @@
+@host = http://localhost:5048
+
+### 1. Connexion (récupère le token JWT) — utiliser un vrai courriel T015User
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "prenom.nom@exemple.com",
+  "password": "MotDePasseReel"
+}
+
+### Récupère le token de la réponse précédente
+@token = {{login.response.body.token}}
+
+### 2. Utilisateur connecté
+GET {{host}}/api/auth/me
+Authorization: Bearer {{token}}
+
+### 3. Résumé AI Sales (En retard / Collecté / À recevoir)
+GET {{host}}/api/sales/summary
+Authorization: Bearer {{token}}
+
+### 4. Liste des factures
+GET {{host}}/api/sales/invoices
+Authorization: Bearer {{token}}
+
+### 5. Factures filtrées par status (Collected / Overdue / Receivable)
+GET {{host}}/api/sales/invoices?status=Overdue
+Authorization: Bearer {{token}}
+
+### 6. Créer une facture
+POST {{host}}/api/sales/invoices
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+  "id": 0,
+  "clientName": "Nouveau Client",
+  "description": "Prestation",
+  "amount": 1250.00,
+  "status": "Receivable",
+  "issuedOn": "2026-06-01",
+  "dueOn": "2026-06-30"
+}

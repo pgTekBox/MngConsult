@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.ServiceChip"
+             x:Name="Root">
+
+    <Border BackgroundColor="{AppThemeBinding Light=#FAFAFC, Dark=#262138}"
+            Stroke="{AppThemeBinding Light=#ECECF2, Dark=#332E47}"
+            StrokeThickness="1"
+            Padding="10,9">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="12" />
+        </Border.StrokeShape>
+        <Border.GestureRecognizers>
+            <TapGestureRecognizer Tapped="OnTapped" />
+        </Border.GestureRecognizers>
+
+        <HorizontalStackLayout Spacing="8"
+                               VerticalOptions="Center">
+            <Label Text="{Binding Source={x:Reference Root}, Path=Icon}"
+                   FontSize="15"
+                   TextColor="{Binding Source={x:Reference Root}, Path=Accent}"
+                   VerticalTextAlignment="Center" />
+            <Label FontSize="12"
+                   VerticalTextAlignment="Center">
+                <Label.FormattedText>
+                    <FormattedString>
+                        <Span Text="{Binding Source={x:Reference Root}, Path=ServiceName}"
+                              FontAttributes="Bold"
+                              TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        <Span Text=" · " TextColor="{StaticResource Gray400}" />
+                        <Span Text="{Binding Source={x:Reference Root}, Path=Duration}"
+                              TextColor="{StaticResource Gray400}" />
+                    </FormattedString>
+                </Label.FormattedText>
+            </Label>
+        </HorizontalStackLayout>
+    </Border>
+
+</ContentView>

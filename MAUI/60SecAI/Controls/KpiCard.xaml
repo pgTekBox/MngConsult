@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.KpiCard"
+             x:Name="Root">
+
+    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+            StrokeThickness="0"
+            Padding="14">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="16" />
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="8">
+
+            <!-- Titre + icône -->
+            <Grid ColumnDefinitions="*,Auto"
+                  VerticalOptions="Start">
+                <Label Grid.Column="0"
+                       Text="{Binding Source={x:Reference Root}, Path=Title}"
+                       FontSize="11"
+                       FontAttributes="Bold"
+                       TextColor="{StaticResource Gray400}"
+                       VerticalOptions="Center" />
+                <Border x:Name="IconBadge"
+                        Grid.Column="1"
+                        WidthRequest="30"
+                        HeightRequest="30"
+                        BackgroundColor="{Binding Source={x:Reference Root}, Path=IconBg}"
+                        StrokeThickness="0">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="9" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Source={x:Reference Root}, Path=Icon}"
+                           FontSize="14"
+                           TextColor="White"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+            </Grid>
+
+            <!-- Valeur -->
+            <Label Text="{Binding Source={x:Reference Root}, Path=Value}"
+                   FontSize="22"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+
+            <!-- Delta / sous-titre + santé -->
+            <Grid ColumnDefinitions="*,Auto"
+                  VerticalOptions="Center">
+                <VerticalStackLayout Grid.Column="0"
+                                     Spacing="1"
+                                     VerticalOptions="Center">
+                    <Label x:Name="DeltaLabel"
+                           Text="{Binding Source={x:Reference Root}, Path=Delta}"
+                           FontSize="10"
+                           TextColor="#1E8449" />
+                    <Label x:Name="SubtitleLabel"
+                           Text="{Binding Source={x:Reference Root}, Path=Subtitle}"
+                           FontSize="10"
+                           TextColor="{StaticResource Gray400}" />
+                </VerticalStackLayout>
+
+                <Border x:Name="HealthBadge"
+                        Grid.Column="1"
+                        BackgroundColor="#E7F7EF"
+                        StrokeThickness="0"
+                        Padding="8,3"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="9" />
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="3">
+                        <Label x:Name="HealthIcon"
+                               Text="&#10003;"
+                               FontSize="10"
+                               TextColor="#1E8449"
+                               VerticalTextAlignment="Center" />
+                        <Label x:Name="HealthLabel"
+                               Text="{Binding Source={x:Reference Root}, Path=Health}"
+                               FontSize="10"
+                               FontAttributes="Bold"
+                               TextColor="#1E8449"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+
+</ContentView>

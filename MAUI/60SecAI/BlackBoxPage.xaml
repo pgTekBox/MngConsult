@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:_60SecAI.Controls"
+             x:Class="_60SecAI.BlackBoxPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Menu commun (haut) -->
+        <controls:TopMenuView Grid.Row="0"
+                              PageTitle="Black Box AI"
+                              Subtitle="Transactions financières en erreur à corriger"
+                              Balance="48320.55" />
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- ===== Stats ===== -->
+                <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto" ColumnSpacing="12" RowSpacing="12">
+
+                    <Border Grid.Row="0" Grid.Column="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" Stroke="#E23B3B" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="ERREURS CRITIQUES" FontSize="10" FontAttributes="Bold" TextColor="#C0392B" />
+                            <Label Text="6" FontSize="26" FontAttributes="Bold" TextColor="#C0392B" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="0" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" Stroke="#F2C94C" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="AVERTISSEMENTS" FontSize="10" FontAttributes="Bold" TextColor="#B9770E" />
+                            <Label Text="6" FontSize="26" FontAttributes="Bold" TextColor="#B9770E" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" Stroke="#17A672" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="CORRIGÉES" FontSize="10" FontAttributes="Bold" TextColor="#1E8449" />
+                            <Label Text="0" FontSize="26" FontAttributes="Bold" TextColor="#1E8449" />
+                        </VerticalStackLayout>
+                    </Border>
+
+                    <Border Grid.Row="1" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                        <VerticalStackLayout Spacing="4">
+                            <Label Text="TOTAL" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                            <Label Text="12" FontSize="26" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </VerticalStackLayout>
+                    </Border>
+                </Grid>
+
+                <!-- ===== Filtre ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="14">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="10">
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <HorizontalStackLayout Spacing="6">
+                                <Label Text="&#9660; Filtrer :" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                <Border BackgroundColor="#1F2430" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Tous" FontSize="12" FontAttributes="Bold" TextColor="White" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Critique" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Avertissement" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                            <HorizontalStackLayout Spacing="6">
+                                <Border BackgroundColor="#1F2430" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Tous types" FontSize="12" FontAttributes="Bold" TextColor="White" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Doublon" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Montant" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Compte" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Référence" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="Date" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                                <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}" StrokeThickness="0" Padding="12,6"><Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape><Label Text="TPS/TVQ" FontSize="12" TextColor="{StaticResource Gray600}" /></Border>
+                            </HorizontalStackLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== En erreur ===== -->
+                <HorizontalStackLayout Spacing="8">
+                    <Label Text="&#10006;" FontSize="16" TextColor="#C0392B" VerticalTextAlignment="Center" />
+                    <Label Text="En erreur (12)" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalTextAlignment="Center" />
+                </HorizontalStackLayout>
+
+                <controls:ErrorCard Accent="#E23B3B" IconBg="#FCEBD6" Icon="&#8635;"
+                                    Code="ERR-2026-001" TypeText="Montant" TypeBg="#FCEBD6" TypeFg="#C87A1E" Critical="True"
+                                    Title="Remise TPS/TVQ Avril" Source="Revenu Québec — 2026-04-25"
+                                    Amount="4 280 $" Account="2310-TVQ" />
+
+                <controls:ErrorCard Accent="#E23B3B" IconBg="#FDE0E4" Icon="#"
+                                    Code="ERR-2026-002" TypeText="Doublon" TypeBg="#FDE0E4" TypeFg="#C0392B" Critical="True"
+                                    Title="Salaire Jean Tremblay" Source="Jean Tremblay — 2026-04-24"
+                                    Amount="3 500 $" Account="5100-SALAIRES" />
+
+                <controls:ErrorCard Accent="#F2C94C" IconBg="#E1ECFB" Icon="&#127970;"
+                                    Code="ERR-2026-003" TypeText="Compte" TypeBg="#E1ECFB" TypeFg="#2D6CDF" Critical="False"
+                                    Title="Facture fournisseur ABC" Source="Fournisseur ABC — 2026-04-23"
+                                    Amount="12 450 $" Account="6100-ACHATS" />
+
+                <controls:ErrorCard Accent="#F2C94C" IconBg="#E4E7EF" Icon="&#128196;"
+                                    Code="ERR-2026-004" TypeText="Référence" TypeBg="#EDE3FB" TypeFg="#7C4DD6" Critical="True"
+                                    Title="Acompte provisionnel Q2" Source="ARC — 2026-04-22"
+                                    Amount="8 000 $" Account="2500-IMPOT" />
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

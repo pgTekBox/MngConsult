@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.ErrorCard"
+             x:Name="Root">
+
+    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+            StrokeThickness="0"
+            Padding="0">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="16" />
+        </Border.StrokeShape>
+
+        <Grid ColumnDefinitions="5,*">
+
+            <BoxView Grid.Column="0"
+                     Color="{Binding Source={x:Reference Root}, Path=Accent}"
+                     VerticalOptions="Fill" />
+
+            <VerticalStackLayout Grid.Column="1" Padding="12" Spacing="8">
+
+                <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10">
+
+                    <!-- Icône -->
+                    <Border Grid.Column="0"
+                            WidthRequest="40" HeightRequest="40"
+                            BackgroundColor="{Binding Source={x:Reference Root}, Path=IconBg}"
+                            StrokeThickness="0" VerticalOptions="Start">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Icon}"
+                               FontSize="18" HorizontalTextAlignment="Center" VerticalTextAlignment="Center" />
+                    </Border>
+
+                    <!-- Détails -->
+                    <VerticalStackLayout Grid.Column="1" Spacing="3" VerticalOptions="Center">
+                        <HorizontalStackLayout Spacing="6">
+                            <Label Text="{Binding Source={x:Reference Root}, Path=Code}"
+                                   FontSize="10" TextColor="{StaticResource Gray400}" VerticalTextAlignment="Center" />
+                            <Border BackgroundColor="{Binding Source={x:Reference Root}, Path=TypeBg}"
+                                    StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="7" /></Border.StrokeShape>
+                                <Label Text="{Binding Source={x:Reference Root}, Path=TypeText}"
+                                       FontSize="9" FontAttributes="Bold"
+                                       TextColor="{Binding Source={x:Reference Root}, Path=TypeFg}" />
+                            </Border>
+                        </HorizontalStackLayout>
+
+                        <Border x:Name="CritiqueBadge"
+                                BackgroundColor="#FDECEC" StrokeThickness="0" Padding="6,2" HorizontalOptions="Start">
+                            <Border.StrokeShape><RoundRectangle CornerRadius="7" /></Border.StrokeShape>
+                            <Label Text="Critique" FontSize="9" FontAttributes="Bold" TextColor="#C0392B" />
+                        </Border>
+
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Title}"
+                               FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Source}"
+                               FontSize="11" TextColor="{StaticResource Gray400}" />
+                    </VerticalStackLayout>
+
+                    <Label Grid.Column="2" Text="&#9662;" FontSize="14" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                </Grid>
+
+                <Grid ColumnDefinitions="*,*" ColumnSpacing="10" Padding="50,0,0,0">
+                    <VerticalStackLayout Grid.Column="0" Spacing="1">
+                        <Label Text="Montant" FontSize="10" TextColor="{StaticResource Gray400}" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Amount}"
+                               FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                    </VerticalStackLayout>
+                    <VerticalStackLayout Grid.Column="1" Spacing="1">
+                        <Label Text="Compte" FontSize="10" TextColor="{StaticResource Gray400}" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Account}"
+                               FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </VerticalStackLayout>
+        </Grid>
+    </Border>
+
+</ContentView>

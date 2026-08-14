@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.AppointmentCard"
+             x:Name="Root">
+
+    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+            StrokeThickness="0"
+            Padding="0">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="16" />
+        </Border.StrokeShape>
+
+        <Grid ColumnDefinitions="5,*">
+
+            <!-- Barre d'accent -->
+            <BoxView Grid.Column="0"
+                     Color="{Binding Source={x:Reference Root}, Path=Accent}"
+                     VerticalOptions="Fill" />
+
+            <Grid Grid.Column="1"
+                  ColumnDefinitions="Auto,*,Auto"
+                  ColumnSpacing="10"
+                  Padding="12">
+
+                <!-- Avatar -->
+                <Border Grid.Column="0"
+                        WidthRequest="40"
+                        HeightRequest="40"
+                        BackgroundColor="{Binding Source={x:Reference Root}, Path=AvatarBg}"
+                        StrokeThickness="0"
+                        VerticalOptions="Start">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="12" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Source={x:Reference Root}, Path=Avatar}"
+                           FontSize="18"
+                           HorizontalTextAlignment="Center"
+                           VerticalTextAlignment="Center" />
+                </Border>
+
+                <!-- Contenu -->
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="4"
+                                     VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="6">
+                        <Ellipse Fill="{Binding Source={x:Reference Root}, Path=Accent}"
+                                 WidthRequest="7"
+                                 HeightRequest="7"
+                                 VerticalOptions="Center" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=PersonName}"
+                               FontSize="15"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                    <Label Text="{Binding Source={x:Reference Root}, Path=Trade}"
+                           FontSize="12"
+                           TextColor="{StaticResource Gray400}" />
+
+                    <HorizontalStackLayout Spacing="6">
+                        <Label Text="&#128340;" FontSize="10" VerticalTextAlignment="Center" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=TimeRange}"
+                               FontSize="10"
+                               TextColor="{StaticResource Gray500}"
+                               VerticalTextAlignment="Center" />
+                        <Border BackgroundColor="{AppThemeBinding Light=#EDE3FB, Dark=#332A47}"
+                                StrokeThickness="0"
+                                Padding="6,1"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="7" />
+                            </Border.StrokeShape>
+                            <Label Text="{Binding Source={x:Reference Root}, Path=Duration}"
+                                   FontSize="9"
+                                   FontAttributes="Bold"
+                                   TextColor="#7C4DD6" />
+                        </Border>
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Extra}"
+                               FontSize="10"
+                               TextColor="{StaticResource Gray400}"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+
+                    <!-- Actions -->
+                    <HorizontalStackLayout Spacing="8"
+                                           IsVisible="{Binding Source={x:Reference Root}, Path=ShowActions}"
+                                           Margin="0,4,0,0">
+                        <Border BackgroundColor="{AppThemeBinding Light=#EAF6F2, Dark=#1B2A26}"
+                                StrokeThickness="0"
+                                Padding="10,6">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFactureTapped" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#128179;" FontSize="10" VerticalTextAlignment="Center" />
+                                <Label Text="Facture" FontSize="11" TextColor="#16A085" VerticalTextAlignment="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                        <Border BackgroundColor="{AppThemeBinding Light=#EAF6F2, Dark=#1B2A26}"
+                                StrokeThickness="0"
+                                Padding="10,6">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPayerTapped" />
+                            </Border.GestureRecognizers>
+                            <HorizontalStackLayout Spacing="4">
+                                <Label Text="&#128179;" FontSize="10" VerticalTextAlignment="Center" />
+                                <Label Text="Payer" FontSize="11" TextColor="#16A085" VerticalTextAlignment="Center" />
+                            </HorizontalStackLayout>
+                        </Border>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+
+                <!-- Statut + heure -->
+                <VerticalStackLayout Grid.Column="2"
+                                     Spacing="6"
+                                     HorizontalOptions="End"
+                                     VerticalOptions="Start">
+                    <Border BackgroundColor="{AppThemeBinding Light=#E7F7EF, Dark=#16281F}"
+                            StrokeThickness="0"
+                            Padding="8,3"
+                            HorizontalOptions="End">
+                        <Border.StrokeShape>
+                            <RoundRectangle CornerRadius="9" />
+                        </Border.StrokeShape>
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Status}"
+                               FontSize="10"
+                               FontAttributes="Bold"
+                               TextColor="#1E8449" />
+                    </Border>
+                    <Label Text="{Binding Source={x:Reference Root}, Path=Time}"
+                           FontSize="15"
+                           FontAttributes="Bold"
+                           TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                           HorizontalTextAlignment="End" />
+                </VerticalStackLayout>
+            </Grid>
+        </Grid>
+    </Border>
+
+</ContentView>

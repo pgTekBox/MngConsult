@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.TopMenuView">
+
+    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}"
+            StrokeThickness="0"
+            Padding="16,12">
+        <Border.StrokeShape>
+            <RoundRectangle CornerRadius="0" />
+        </Border.StrokeShape>
+
+        <VerticalStackLayout Spacing="12">
+
+            <!-- ===== Titre centré en haut ===== -->
+            <VerticalStackLayout Spacing="0"
+                                 HorizontalOptions="Center">
+                <Label x:Name="TitleLabel"
+                       Text="Dashboard 60SecAi"
+                       FontSize="20"
+                       FontAttributes="Bold"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                <Label x:Name="DateLabel"
+                       FontSize="12"
+                       HorizontalTextAlignment="Center"
+                       TextColor="{StaticResource Gray400}" />
+            </VerticalStackLayout>
+
+            <!-- ===== Boutons (gauche) + solde bancaire (droite) ===== -->
+            <Grid ColumnDefinitions="*,Auto"
+                  ColumnSpacing="12"
+                  VerticalOptions="Center">
+
+                <!-- 2 boutons -->
+                <ScrollView Grid.Column="0"
+                            Orientation="Horizontal"
+                            HorizontalScrollBarVisibility="Never"
+                            VerticalOptions="Center">
+                    <HorizontalStackLayout Spacing="10">
+
+                        <!-- Bouton Financial Report -->
+                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                StrokeThickness="0"
+                                Padding="12,10"
+                                WidthRequest="88"
+                                HeightRequest="72">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnFinancialReportTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid>
+                                <VerticalStackLayout Spacing="6"
+                                                     HorizontalOptions="Center"
+                                                     VerticalOptions="Center">
+                                    <Border WidthRequest="30"
+                                            HeightRequest="30"
+                                            BackgroundColor="#E7F7EF"
+                                            StrokeThickness="0"
+                                            HorizontalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="9" />
+                                        </Border.StrokeShape>
+                                        <Label Text="&#128202;"
+                                               FontSize="16"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+                                    <Label Text="Financial&#10;Report"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           LineHeight="1.1"
+                                           TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                                <Ellipse Fill="#E53935"
+                                         WidthRequest="8"
+                                         HeightRequest="8"
+                                         HorizontalOptions="End"
+                                         VerticalOptions="Start" />
+                            </Grid>
+                        </Border>
+
+                        <!-- Bouton Black Box AI -->
+                        <Border BackgroundColor="{AppThemeBinding Light=#1F2430, Dark=#0E0B18}"
+                                StrokeThickness="0"
+                                Padding="12,10"
+                                WidthRequest="88"
+                                HeightRequest="72">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="16" />
+                            </Border.StrokeShape>
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnBlackBoxTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid>
+                                <VerticalStackLayout Spacing="6"
+                                                     HorizontalOptions="Center"
+                                                     VerticalOptions="Center">
+                                    <Label Text="&#129513;"
+                                           FontSize="20"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="Black&#10;Box AI"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           LineHeight="1.1"
+                                           TextColor="White"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                                <Ellipse Fill="#E53935"
+                                         WidthRequest="8"
+                                         HeightRequest="8"
+                                         HorizontalOptions="End"
+                                         VerticalOptions="Start" />
+                            </Grid>
+                        </Border>
+                    </HorizontalStackLayout>
+                </ScrollView>
+
+                <!-- Solde bancaire -->
+                <Border Grid.Column="1"
+                        BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                        StrokeThickness="0"
+                        Padding="12,10"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="16" />
+                    </Border.StrokeShape>
+                    <Grid ColumnDefinitions="Auto,Auto"
+                          ColumnSpacing="8"
+                          VerticalOptions="Center">
+
+                        <Border Grid.Column="0"
+                                WidthRequest="34"
+                                HeightRequest="34"
+                                BackgroundColor="#E8ECFB"
+                                StrokeThickness="0"
+                                VerticalOptions="Center">
+                            <Border.StrokeShape>
+                                <RoundRectangle CornerRadius="10" />
+                            </Border.StrokeShape>
+                            <Label Text="&#127974;"
+                                   FontSize="16"
+                                   HorizontalTextAlignment="Center"
+                                   VerticalTextAlignment="Center" />
+                        </Border>
+
+                        <VerticalStackLayout Grid.Column="1"
+                                             Spacing="0"
+                                             VerticalOptions="Center">
+                            <Label Text="Solde bancaire"
+                                   FontSize="11"
+                                   TextColor="{StaticResource Gray400}" />
+                            <Label x:Name="BalanceLabel"
+                                   Text="0,00 $"
+                                   FontSize="16"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </VerticalStackLayout>
+                    </Grid>
+                </Border>
+            </Grid>
+        </VerticalStackLayout>
+    </Border>
+
+</ContentView>

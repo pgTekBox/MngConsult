@@ -1,0 +1,854 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:controls="clr-namespace:_60SecAI.Controls"
+             x:Class="_60SecAI.DashboardPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- Menu commun (haut) -->
+        <controls:TopMenuView Grid.Row="0"
+                              PageTitle="Dashboard 60SecAi"
+                              Balance="48320.55" />
+
+        <!-- Contenu du dashboard -->
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16"
+                                 Spacing="16">
+
+                <!-- ============================================================ -->
+                <!-- ===== 1. AI Sales ===== -->
+                <!-- ============================================================ -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <!-- En-tête -->
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="8"
+                              VerticalOptions="Center">
+                            <Label Grid.Column="0"
+                                   Text="AI Sales"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                   VerticalOptions="Center" />
+
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#17A2C4"
+                                    StrokeThickness="0"
+                                    Padding="14,9">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnNewInvoiceTapped" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="&#128179;"
+                                           FontSize="14"
+                                           VerticalTextAlignment="Center" />
+                                    <Label Text="Nouvelle facture"
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           VerticalTextAlignment="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Label Grid.Column="2"
+                                   Text="&#8250;"
+                                   FontSize="22"
+                                   TextColor="{StaticResource Gray300}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Trois status -->
+                        <Grid ColumnDefinitions="*,*,*"
+                              ColumnSpacing="10">
+
+                            <!-- En retard -->
+                            <Border Grid.Column="0"
+                                    BackgroundColor="#FDECEC"
+                                    StrokeThickness="0"
+                                    Padding="10,12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSalesStatusTapped"
+                                                          CommandParameter="overdue" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="6">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#9888;"
+                                               FontSize="11"
+                                               TextColor="#C0392B" />
+                                        <Label Text="Retard"
+                                               FontSize="11"
+                                               TextColor="#C0392B" />
+                                    </HorizontalStackLayout>
+                                    <Label x:Name="OverdueLabel"
+                                           Text="{Binding OverdueText}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#C0392B" />
+                                    <Border BackgroundColor="#E23B3B"
+                                            StrokeThickness="0"
+                                            Padding="8,5"
+                                            HorizontalOptions="Start">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnCollectTapped" />
+                                        </Border.GestureRecognizers>
+                                        <HorizontalStackLayout Spacing="4">
+                                            <Label Text="&#128176;"
+                                                   FontSize="10"
+                                                   VerticalTextAlignment="Center" />
+                                            <Label Text="Collecter"
+                                                   TextColor="White"
+                                                   FontSize="11"
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                    </Border>
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Collecté -->
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="10,12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSalesStatusTapped"
+                                                          CommandParameter="collected" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="6">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#128200;"
+                                               FontSize="11"
+                                               TextColor="#1E8449" />
+                                        <Label Text="Collecté (3)"
+                                               FontSize="11"
+                                               TextColor="#1E8449" />
+                                    </HorizontalStackLayout>
+                                    <Label x:Name="CollectedLabel"
+                                           Text="{Binding CollectedText}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#1E8449" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- À recevoir -->
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="10,12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSalesStatusTapped"
+                                                          CommandParameter="receivable" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="6">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#8599;"
+                                               FontSize="11"
+                                               TextColor="#B9770E" />
+                                        <Label Text="À recevoir (3)"
+                                               FontSize="11"
+                                               TextColor="#B9770E" />
+                                    </HorizontalStackLayout>
+                                    <Label x:Name="ReceivableLabel"
+                                           Text="{Binding ReceivableText}"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#B9770E" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ============================================================ -->
+                <!-- ===== 2. AI Payment ===== -->
+                <!-- ============================================================ -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="14">
+
+                        <!-- En-tête -->
+                        <Grid ColumnDefinitions="*,Auto,Auto"
+                              ColumnSpacing="8"
+                              VerticalOptions="Center">
+                            <Label Grid.Column="0"
+                                   Text="AI Payment"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                   VerticalOptions="Center" />
+
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#17A672"
+                                    StrokeThickness="0"
+                                    Padding="14,9">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="20" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnReceiptTapped" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="6">
+                                    <Label Text="&#128247;"
+                                           FontSize="14"
+                                           VerticalTextAlignment="Center" />
+                                    <Label Text="Reçu"
+                                           TextColor="White"
+                                           FontAttributes="Bold"
+                                           FontSize="14"
+                                           VerticalTextAlignment="Center" />
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Label Grid.Column="2"
+                                   Text="&#8250;"
+                                   FontSize="22"
+                                   TextColor="{StaticResource Gray300}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Trois résumés -->
+                        <Grid ColumnDefinitions="*,*,*"
+                              ColumnSpacing="10">
+
+                            <!-- Aujourd'hui -->
+                            <Border Grid.Column="0"
+                                    BackgroundColor="#17A672"
+                                    StrokeThickness="0"
+                                    Padding="12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="AUJ."
+                                           FontSize="10"
+                                           TextColor="#D8F5E8" />
+                                    <Label Text="6 206,61 $"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="White" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- En retard -->
+                            <Border Grid.Column="1"
+                                    BackgroundColor="#FDECEC"
+                                    StrokeThickness="0"
+                                    Padding="12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="4">
+                                    <HorizontalStackLayout Spacing="4">
+                                        <Label Text="&#9888;"
+                                               FontSize="10"
+                                               TextColor="#C0392B" />
+                                        <Label Text="EN RETARD (3)"
+                                               FontSize="10"
+                                               TextColor="#C0392B" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="16 369,05 $"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="#C0392B" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Total -->
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="12">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="14" />
+                                </Border.StrokeShape>
+                                <VerticalStackLayout Spacing="4">
+                                    <Label Text="TOTAL"
+                                           FontSize="10"
+                                           TextColor="{StaticResource Gray500}" />
+                                    <Label Text="22 575,66 $"
+                                           FontSize="15"
+                                           FontAttributes="Bold"
+                                           TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+
+                        <!-- Quatre catégories -->
+                        <Grid ColumnDefinitions="*,*,*,*"
+                              ColumnSpacing="8">
+
+                            <!-- Général -->
+                            <Border Grid.Column="0"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="8,10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPaymentCategoryTapped"
+                                                          CommandParameter="Général" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3"
+                                                     HorizontalOptions="Center">
+                                    <HorizontalStackLayout Spacing="4"
+                                                           HorizontalOptions="Center">
+                                        <Ellipse Fill="#2D9CDB"
+                                                 WidthRequest="7"
+                                                 HeightRequest="7"
+                                                 VerticalOptions="Center" />
+                                        <Label Text="&#127974;"
+                                               FontSize="12" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Général"
+                                           FontSize="10"
+                                           TextColor="{StaticResource Gray500}"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="6 206,61 $"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="#2B3A67"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Institution -->
+                            <Border Grid.Column="1"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="8,10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPaymentCategoryTapped"
+                                                          CommandParameter="Institution" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3"
+                                                     HorizontalOptions="Center">
+                                    <HorizontalStackLayout Spacing="4"
+                                                           HorizontalOptions="Center">
+                                        <Ellipse Fill="#F2C94C"
+                                                 WidthRequest="7"
+                                                 HeightRequest="7"
+                                                 VerticalOptions="Center" />
+                                        <Label Text="&#127963;"
+                                               FontSize="12" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Institution"
+                                           FontSize="10"
+                                           TextColor="{StaticResource Gray500}"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="0,00 $"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="#2B3A67"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Gouvernement -->
+                            <Border Grid.Column="2"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="8,10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPaymentCategoryTapped"
+                                                          CommandParameter="Gouvernement" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3"
+                                                     HorizontalOptions="Center">
+                                    <HorizontalStackLayout Spacing="4"
+                                                           HorizontalOptions="Center">
+                                        <Ellipse Fill="#27AE60"
+                                                 WidthRequest="7"
+                                                 HeightRequest="7"
+                                                 VerticalOptions="Center" />
+                                        <Label Text="&#127970;"
+                                               FontSize="12" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Gouvernement"
+                                           FontSize="10"
+                                           TextColor="{StaticResource Gray500}"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="0,00 $"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="#2B3A67"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+
+                            <!-- Paie -->
+                            <Border Grid.Column="3"
+                                    BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
+                                    StrokeThickness="0"
+                                    Padding="8,10">
+                                <Border.StrokeShape>
+                                    <RoundRectangle CornerRadius="12" />
+                                </Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnPaymentCategoryTapped"
+                                                          CommandParameter="Paie" />
+                                </Border.GestureRecognizers>
+                                <VerticalStackLayout Spacing="3"
+                                                     HorizontalOptions="Center">
+                                    <HorizontalStackLayout Spacing="4"
+                                                           HorizontalOptions="Center">
+                                        <Ellipse Fill="#EB5286"
+                                                 WidthRequest="7"
+                                                 HeightRequest="7"
+                                                 VerticalOptions="Center" />
+                                        <Label Text="&#128101;"
+                                               FontSize="12" />
+                                    </HorizontalStackLayout>
+                                    <Label Text="Paie"
+                                           FontSize="10"
+                                           TextColor="{StaticResource Gray500}"
+                                           HorizontalTextAlignment="Center" />
+                                    <Label Text="0,00 $"
+                                           FontSize="11"
+                                           FontAttributes="Bold"
+                                           TextColor="#2B3A67"
+                                           HorizontalTextAlignment="Center" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ============================================================ -->
+                <!-- ===== 3. Agenda ===== -->
+                <!-- ============================================================ -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="12">
+
+                        <!-- En-tête : titre + filtres -->
+                        <Grid ColumnDefinitions="Auto,*,Auto"
+                              ColumnSpacing="8"
+                              VerticalOptions="Center">
+
+                            <Label Grid.Column="0"
+                                   Text="Agenda"
+                                   FontSize="20"
+                                   FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                   VerticalOptions="Center" />
+
+                            <ScrollView Grid.Column="1"
+                                        Orientation="Horizontal"
+                                        HorizontalScrollBarVisibility="Never"
+                                        VerticalOptions="Center">
+                                <HorizontalStackLayout Spacing="6">
+
+                                    <!-- Auj. (sélectionné) -->
+                                    <Border BackgroundColor="#4361EE"
+                                            StrokeThickness="0"
+                                            Padding="12,8"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Label Text="Auj."
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               FontSize="12"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Résumé RDV -->
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                            StrokeThickness="0"
+                                            Padding="10,6"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Label Text="RDV: 3 - 3.5h"
+                                               TextColor="{StaticResource Gray600}"
+                                               FontSize="11"
+                                               FontAttributes="Bold"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Dem. -->
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                            StrokeThickness="0"
+                                            Padding="12,8"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Label Text="Dem."
+                                               TextColor="{StaticResource Gray600}"
+                                               FontSize="12"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!-- Sem. -->
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                            StrokeThickness="0"
+                                            Padding="12,8"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Label Text="Sem."
+                                               TextColor="{StaticResource Gray600}"
+                                               FontSize="12"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <!-- + -->
+                                    <Border BackgroundColor="#4361EE"
+                                            StrokeThickness="0"
+                                            WidthRequest="34"
+                                            HeightRequest="34"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="12" />
+                                        </Border.StrokeShape>
+                                        <Border.GestureRecognizers>
+                                            <TapGestureRecognizer Tapped="OnAddAppointmentTapped" />
+                                        </Border.GestureRecognizers>
+                                        <Label Text="+"
+                                               TextColor="White"
+                                               FontAttributes="Bold"
+                                               FontSize="18"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </ScrollView>
+
+                            <Label Grid.Column="2"
+                                   Text="&#8250;"
+                                   FontSize="22"
+                                   TextColor="{StaticResource Gray300}"
+                                   VerticalOptions="Center" />
+                        </Grid>
+
+                        <!-- Liste des rendez-vous -->
+                        <ScrollView HeightRequest="190"
+                                    VerticalScrollBarVisibility="Always">
+                            <VerticalStackLayout Spacing="8">
+                                <VerticalStackLayout.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAgendaTapped" />
+                                </VerticalStackLayout.GestureRecognizers>
+
+                                <!-- RDV 1 -->
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="10"
+                                      VerticalOptions="Center">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="38"
+                                            HeightRequest="38"
+                                            BackgroundColor="#EDE3FB"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="19" />
+                                        </Border.StrokeShape>
+                                        <Label Text="&#128100;"
+                                               FontSize="16"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="1"
+                                                         VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="M. Ouellet"
+                                                   FontAttributes="Bold"
+                                                   FontSize="13"
+                                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                                   VerticalTextAlignment="Center" />
+                                            <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                                    StrokeThickness="0"
+                                                    Padding="6,2"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Label Text="1h"
+                                                       FontSize="9"
+                                                       TextColor="{StaticResource Gray500}" />
+                                            </Border>
+                                            <Label Text="09:00"
+                                                   FontSize="10"
+                                                   TextColor="{StaticResource Gray400}"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="Massothérapie"
+                                               FontSize="10"
+                                               TextColor="{StaticResource Gray400}" />
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="2"
+                                                           Spacing="6"
+                                                           VerticalOptions="Center">
+                                        <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#262138}"
+                                                Stroke="{StaticResource Gray200}"
+                                                StrokeThickness="1"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#128179;"
+                                                       FontSize="10"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Facture"
+                                                       FontSize="10"
+                                                       TextColor="{StaticResource Gray600}"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border BackgroundColor="#EAF9F1"
+                                                StrokeThickness="0"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#10003;"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Payer"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <!-- RDV 2 -->
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="10"
+                                      VerticalOptions="Center">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="38"
+                                            HeightRequest="38"
+                                            BackgroundColor="#E1ECFB"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="19" />
+                                        </Border.StrokeShape>
+                                        <Label Text="&#128167;"
+                                               FontSize="16"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="1"
+                                                         VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="Mme Pelletier"
+                                                   FontAttributes="Bold"
+                                                   FontSize="13"
+                                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                                   VerticalTextAlignment="Center" />
+                                            <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                                    StrokeThickness="0"
+                                                    Padding="6,2"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Label Text="2h10"
+                                                       FontSize="9"
+                                                       TextColor="{StaticResource Gray500}" />
+                                            </Border>
+                                            <Label Text="11:00"
+                                                   FontSize="10"
+                                                   TextColor="{StaticResource Gray400}"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="Plomberie"
+                                               FontSize="10"
+                                               TextColor="{StaticResource Gray400}" />
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="2"
+                                                           Spacing="6"
+                                                           VerticalOptions="Center">
+                                        <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#262138}"
+                                                Stroke="{StaticResource Gray200}"
+                                                StrokeThickness="1"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#128179;"
+                                                       FontSize="10"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Facture"
+                                                       FontSize="10"
+                                                       TextColor="{StaticResource Gray600}"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border BackgroundColor="#EAF9F1"
+                                                StrokeThickness="0"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#10003;"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Payer"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </Grid>
+
+                                <!-- RDV 3 -->
+                                <Grid ColumnDefinitions="Auto,*,Auto"
+                                      ColumnSpacing="10"
+                                      VerticalOptions="Center">
+                                    <Border Grid.Column="0"
+                                            WidthRequest="38"
+                                            HeightRequest="38"
+                                            BackgroundColor="#E2F6EC"
+                                            StrokeThickness="0"
+                                            VerticalOptions="Center">
+                                        <Border.StrokeShape>
+                                            <RoundRectangle CornerRadius="19" />
+                                        </Border.StrokeShape>
+                                        <Label Text="&#128100;"
+                                               FontSize="16"
+                                               HorizontalTextAlignment="Center"
+                                               VerticalTextAlignment="Center" />
+                                    </Border>
+
+                                    <VerticalStackLayout Grid.Column="1"
+                                                         Spacing="1"
+                                                         VerticalOptions="Center">
+                                        <HorizontalStackLayout Spacing="6">
+                                            <Label Text="M. Tremblay"
+                                                   FontAttributes="Bold"
+                                                   FontSize="13"
+                                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                                   VerticalTextAlignment="Center" />
+                                            <Border BackgroundColor="{AppThemeBinding Light=#F0F1F5, Dark=#262138}"
+                                                    StrokeThickness="0"
+                                                    Padding="6,2"
+                                                    VerticalOptions="Center">
+                                                <Border.StrokeShape>
+                                                    <RoundRectangle CornerRadius="8" />
+                                                </Border.StrokeShape>
+                                                <Label Text="30m"
+                                                       FontSize="9"
+                                                       TextColor="{StaticResource Gray500}" />
+                                            </Border>
+                                            <Label Text="14:00"
+                                                   FontSize="10"
+                                                   TextColor="{StaticResource Gray400}"
+                                                   VerticalTextAlignment="Center" />
+                                        </HorizontalStackLayout>
+                                        <Label Text="Consultation"
+                                               FontSize="10"
+                                               TextColor="{StaticResource Gray400}" />
+                                    </VerticalStackLayout>
+
+                                    <HorizontalStackLayout Grid.Column="2"
+                                                           Spacing="6"
+                                                           VerticalOptions="Center">
+                                        <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#262138}"
+                                                Stroke="{StaticResource Gray200}"
+                                                StrokeThickness="1"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#128179;"
+                                                       FontSize="10"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Facture"
+                                                       FontSize="10"
+                                                       TextColor="{StaticResource Gray600}"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                        <Border BackgroundColor="#EAF9F1"
+                                                StrokeThickness="0"
+                                                Padding="8,6">
+                                            <Border.StrokeShape>
+                                                <RoundRectangle CornerRadius="10" />
+                                            </Border.StrokeShape>
+                                            <HorizontalStackLayout Spacing="3">
+                                                <Label Text="&#10003;"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                                <Label Text="Payer"
+                                                       FontSize="10"
+                                                       TextColor="#17A672"
+                                                       VerticalTextAlignment="Center" />
+                                            </HorizontalStackLayout>
+                                        </Border>
+                                    </HorizontalStackLayout>
+                                </Grid>
+                            </VerticalStackLayout>
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

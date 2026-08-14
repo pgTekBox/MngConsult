@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="_60SecAI.Controls.PaymentRow"
+             x:Name="Root">
+
+    <Grid ColumnDefinitions="Auto,Auto,*,Auto"
+          ColumnSpacing="10"
+          Padding="0,12">
+
+        <!-- Date -->
+        <VerticalStackLayout Grid.Column="0"
+                             Spacing="0"
+                             WidthRequest="34"
+                             VerticalOptions="Center">
+            <Label Text="{Binding Source={x:Reference Root}, Path=Day}"
+                   FontSize="18"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                   HorizontalTextAlignment="Center" />
+            <Label Text="{Binding Source={x:Reference Root}, Path=Month}"
+                   FontSize="9"
+                   TextColor="{StaticResource Gray400}"
+                   HorizontalTextAlignment="Center" />
+        </VerticalStackLayout>
+
+        <!-- Barre verte -->
+        <BoxView Grid.Column="1"
+                 WidthRequest="3"
+                 Color="#17A672"
+                 VerticalOptions="Fill" />
+
+        <!-- Contenu -->
+        <VerticalStackLayout Grid.Column="2"
+                             Spacing="3"
+                             VerticalOptions="Center">
+            <Label Text="{Binding Source={x:Reference Root}, Path=Payer}"
+                   FontSize="14"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+            <Label Text="{Binding Source={x:Reference Root}, Path=Amount}"
+                   FontSize="15"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+            <HorizontalStackLayout Spacing="6">
+                <Label Text="{Binding Source={x:Reference Root}, Path=Detail}"
+                       FontSize="10"
+                       TextColor="{StaticResource Gray400}"
+                       VerticalTextAlignment="Center" />
+                <Border BackgroundColor="{AppThemeBinding Light=#F5E1DA, Dark=#5A2A22}"
+                        StrokeThickness="0"
+                        Padding="6,2"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="7" />
+                    </Border.StrokeShape>
+                    <Label Text="{Binding Source={x:Reference Root}, Path=DelayText}"
+                           FontSize="9"
+                           FontAttributes="Bold"
+                           TextColor="#D98C6A" />
+                </Border>
+                <Border BackgroundColor="Transparent"
+                        Stroke="#17A2C4"
+                        StrokeThickness="1"
+                        Padding="6,2"
+                        VerticalOptions="Center">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="7" />
+                    </Border.StrokeShape>
+                    <HorizontalStackLayout Spacing="3">
+                        <Label Text="&#127963;" FontSize="9" VerticalTextAlignment="Center" />
+                        <Label Text="{Binding Source={x:Reference Root}, Path=Category}"
+                               FontSize="9"
+                               FontAttributes="Bold"
+                               TextColor="#17A2C4"
+                               VerticalTextAlignment="Center" />
+                    </HorizontalStackLayout>
+                </Border>
+            </HorizontalStackLayout>
+        </VerticalStackLayout>
+
+        <!-- Bouton Payer -->
+        <Border Grid.Column="3"
+                BackgroundColor="#17A672"
+                StrokeThickness="0"
+                Padding="16,9"
+                VerticalOptions="Center">
+            <Border.StrokeShape>
+                <RoundRectangle CornerRadius="12" />
+            </Border.StrokeShape>
+            <Border.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnPayTapped" />
+            </Border.GestureRecognizers>
+            <Label Text="Payer"
+                   TextColor="White"
+                   FontAttributes="Bold"
+                   FontSize="13"
+                   HorizontalTextAlignment="Center"
+                   VerticalTextAlignment="Center" />
+        </Border>
+    </Grid>
+
+</ContentView>
