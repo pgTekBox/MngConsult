@@ -1,11 +1,24 @@
+using _60SecAI.Services;
+using _60SecAI.ViewModels;
+
 namespace _60SecAI;
 
 public partial class FinancialReportPage : ContentPage
 {
+	private readonly FinancialReportViewModel _vm;
+
 	public FinancialReportPage()
 	{
 		InitializeComponent();
+		_vm = ServiceHelper.GetService<FinancialReportViewModel>();
+		BindingContext = _vm;
 		SelectTab("Aperçu");
+	}
+
+	protected override async void OnAppearing()
+	{
+		base.OnAppearing();
+		await _vm.LoadCommand.ExecuteAsync(null);
 	}
 
 	private void OnTabTapped(object? sender, TappedEventArgs e)

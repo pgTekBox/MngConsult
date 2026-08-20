@@ -33,4 +33,7 @@ public partial class AiSalesDetailPage : ContentPage
 		base.OnAppearing();
 		await _vm.LoadCommand.ExecuteAsync(null);
 	}
+
+	private async void OnNewInvoiceClicked(object? sender, EventArgs e)
+		=> await Shell.Current.GoToAsync(nameof(NewInvoicePage));
 }

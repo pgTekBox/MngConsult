@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:_60SecAI.Controls"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.FinancialReportPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
@@ -10,8 +11,8 @@
 
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
-                              PageTitle="Rapports financiers"
-                              Subtitle="Gestion en temps réel avec AI"
+                              PageTitle="{loc:Translate ReportTitle}"
+                              Subtitle="{loc:Translate RealtimeSubtitle}"
                               Balance="48320.55" />
 
         <ScrollView Grid.Row="1">
@@ -47,12 +48,12 @@
                             <VerticalStackLayout Grid.Column="1"
                                                  Spacing="1"
                                                  VerticalOptions="Center">
-                                <Label Text="Rapports financiers"
+                                <Label Text="{loc:Translate ReportTitle}"
                                        FontSize="17"
                                        FontAttributes="Bold"
                                        TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                                 <HorizontalStackLayout Spacing="6">
-                                    <Label Text="Travailleur autonome"
+                                    <Label Text="{loc:Translate WorkerType}"
                                            FontSize="11"
                                            TextColor="{StaticResource Gray400}"
                                            VerticalTextAlignment="Center" />
@@ -63,7 +64,7 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="7" />
                                         </Border.StrokeShape>
-                                        <Label Text="Mis à jour en temps réel"
+                                        <Label Text="{loc:Translate UpdatedRealtime}"
                                                FontSize="9"
                                                FontAttributes="Bold"
                                                TextColor="#1E8449" />
@@ -79,28 +80,28 @@
                                 <Border x:Name="PeriodMois" BackgroundColor="{AppThemeBinding Light=#EEF0F4, Dark=#262138}" StrokeThickness="0" Padding="14,8">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnPeriodTapped" CommandParameter="Ce mois" /></Border.GestureRecognizers>
-                                    <Label x:Name="PeriodMoisLabel" Text="Ce mois" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                    <Label x:Name="PeriodMoisLabel" Text="{loc:Translate PeriodMonth}" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                                 </Border>
                                 <Border x:Name="PeriodTrim" BackgroundColor="Transparent" StrokeThickness="0" Padding="14,8">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnPeriodTapped" CommandParameter="Trimestre" /></Border.GestureRecognizers>
-                                    <Label x:Name="PeriodTrimLabel" Text="Trimestre" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="PeriodTrimLabel" Text="{loc:Translate PeriodQuarter}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border x:Name="PeriodAnnee" BackgroundColor="Transparent" StrokeThickness="0" Padding="14,8">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnPeriodTapped" CommandParameter="Année" /></Border.GestureRecognizers>
-                                    <Label x:Name="PeriodAnneeLabel" Text="Année" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="PeriodAnneeLabel" Text="{loc:Translate PeriodYear}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#262138}" Stroke="{StaticResource Gray200}" StrokeThickness="1" Padding="14,8">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                                    <Label Text="Vue détaillée" FontSize="12" TextColor="{StaticResource Gray600}" />
+                                    <Label Text="{loc:Translate DetailedView}" FontSize="12" TextColor="{StaticResource Gray600}" />
                                 </Border>
                                 <Border BackgroundColor="#1F2430" StrokeThickness="0" Padding="14,8">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnExportTapped" /></Border.GestureRecognizers>
                                     <HorizontalStackLayout Spacing="5">
                                         <Label Text="&#11015;" FontSize="11" TextColor="White" VerticalTextAlignment="Center" />
-                                        <Label Text="Exporter" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalTextAlignment="Center" />
+                                        <Label Text="{loc:Translate Export}" FontSize="12" FontAttributes="Bold" TextColor="White" VerticalTextAlignment="Center" />
                                     </HorizontalStackLayout>
                                 </Border>
                             </HorizontalStackLayout>
@@ -113,32 +114,32 @@
                                 <Border x:Name="TabApercu" BackgroundColor="#3B5BDB" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Aperçu" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabApercuLabel" Text="Aperçu" FontSize="12" FontAttributes="Bold" TextColor="White" />
+                                    <Label x:Name="TabApercuLabel" Text="{loc:Translate TabApercu}" FontSize="12" FontAttributes="Bold" TextColor="White" />
                                 </Border>
                                 <Border x:Name="TabResultats" BackgroundColor="Transparent" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Résultats" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabResultatsLabel" Text="Résultats" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="TabResultatsLabel" Text="{loc:Translate TabResultats}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border x:Name="TabBilan" BackgroundColor="Transparent" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Bilan" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabBilanLabel" Text="Bilan" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="TabBilanLabel" Text="{loc:Translate TabBilan}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border x:Name="TabTresorerie" BackgroundColor="Transparent" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Trésorerie" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabTresorerieLabel" Text="Trésorerie" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="TabTresorerieLabel" Text="{loc:Translate TabTresorerie}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border x:Name="TabTaxes" BackgroundColor="Transparent" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Taxes" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabTaxesLabel" Text="Taxes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="TabTaxesLabel" Text="{loc:Translate TabTaxes}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                                 <Border x:Name="TabComptes" BackgroundColor="Transparent" StrokeThickness="0" Padding="12,7">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="11" /></Border.StrokeShape>
                                     <Border.GestureRecognizers><TapGestureRecognizer Tapped="OnTabTapped" CommandParameter="Comptes" /></Border.GestureRecognizers>
-                                    <Label x:Name="TabComptesLabel" Text="Comptes" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                    <Label x:Name="TabComptesLabel" Text="{loc:Translate TabComptes}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                 </Border>
                             </HorizontalStackLayout>
                         </ScrollView>
@@ -163,8 +164,11 @@
                                TextColor="{AppThemeBinding Light=#2C3E60, Dark=#C9D4FA}">
                             <Label.FormattedText>
                                 <FormattedString>
-                                    <Span Text="Période : Juin 2026. " FontAttributes="Bold" />
-                                    <Span Text="Votre entreprise est rentable : vous avez gagné 11 960,00 $ de plus que vos dépenses. C'est une bonne nouvelle !" />
+                                    <Span Text="{loc:Translate BannerPeriodPrefix}" FontAttributes="Bold" />
+                                    <Span Text="Juin 2026. " FontAttributes="Bold" />
+                                    <Span Text="{loc:Translate ApercuBannerText1}" />
+                                    <Span Text="11 960,00 $" />
+                                    <Span Text="{loc:Translate ApercuBannerText2}" />
                                 </FormattedString>
                             </Label.FormattedText>
                         </Label>
@@ -177,35 +181,35 @@
                       ColumnSpacing="12"
                       RowSpacing="12">
                     <controls:KpiCard Grid.Row="0" Grid.Column="0"
-                                      Title="REVENUS" Value="13 300,00 $"
+                                      Title="{loc:Translate KpiRevenue}" Value="{Binding RevenusText}"
                                       Icon="&#128200;" IconBg="#17A672"
-                                      Delta="↗ +13.6 % vs période préc." Health="Sain" HealthKind="good" />
+                                      Delta="{loc:Translate DeltaRevenue}" Health="{loc:Translate HealthGood}" HealthKind="good" />
                     <controls:KpiCard Grid.Row="0" Grid.Column="1"
-                                      Title="DÉPENSES" Value="1 340,00 $"
+                                      Title="{loc:Translate KpiExpenses}" Value="{Binding DepensesText}"
                                       Icon="&#128201;" IconBg="#E23B3B"
-                                      Health="Sain" HealthKind="good" />
+                                      Health="{loc:Translate HealthGood}" HealthKind="good" />
                     <controls:KpiCard Grid.Row="1" Grid.Column="0"
-                                      Title="BÉNÉFICE NET" Value="11 960,00 $"
+                                      Title="{loc:Translate KpiNetProfit}" Value="{Binding BeneficeNetText}"
                                       Icon="&#128176;" IconBg="#3B5BDB"
-                                      Delta="↗ +16.3 % vs période préc." Health="Sain" HealthKind="good" />
+                                      Delta="{loc:Translate DeltaProfit}" Health="{loc:Translate HealthGood}" HealthKind="good" />
                     <controls:KpiCard Grid.Row="1" Grid.Column="1"
-                                      Title="MARGE BRUTE" Value="89.9 %"
+                                      Title="{loc:Translate KpiGrossMargin}" Value="{Binding MargeBrutePctText}"
                                       Icon="&#128196;" IconBg="#7C4DD6"
-                                      Subtitle="Revenus − dépenses directes" Health="Sain" HealthKind="good" />
+                                      Subtitle="{loc:Translate KpiGrossMarginSub}" Health="{loc:Translate HealthGood}" HealthKind="good" />
                 </Grid>
 
                 <!-- ===== KPIs secondaires ===== -->
                 <Grid ColumnDefinitions="*,*,*"
                       ColumnSpacing="10">
                     <controls:KpiCard Grid.Column="0"
-                                      Title="TRÉSORERIE" Value="28 450,00 $"
-                                      Subtitle="Solde bancaire professionnel" Health="Sain" HealthKind="good" />
+                                      Title="{loc:Translate KpiCash}" Value="{Binding TresorerieText}"
+                                      Subtitle="{loc:Translate KpiCashSub}" Health="{loc:Translate HealthGood}" HealthKind="good" />
                     <controls:KpiCard Grid.Column="1"
-                                      Title="À RECEVOIR DES CLIENTS" Value="18 700,00 $"
-                                      Subtitle="Dont 3 800 $ en retard (+90 j)" Health="À surveiller" HealthKind="watch" />
+                                      Title="{loc:Translate KpiReceivable}" Value="{Binding ARecevoirText}"
+                                      Subtitle="{loc:Translate KpiReceivableSub}" Health="{loc:Translate HealthWatch}" HealthKind="watch" />
                     <controls:KpiCard Grid.Column="2"
-                                      Title="TAXES À REMETTRE" Value="2 096,00 $"
-                                      Subtitle="Prochaine échéance : 31 juil. 2026" Health="Attention" HealthKind="alert" />
+                                      Title="{loc:Translate KpiTaxesDue}" Value="2 096,00 $"
+                                      Subtitle="{loc:Translate KpiTaxesDueSub}" Health="{loc:Translate HealthAlert}" HealthKind="alert" />
                 </Grid>
 
                 <!-- ===== Graphique ===== -->
@@ -216,7 +220,7 @@
                         <RoundRectangle CornerRadius="20" />
                     </Border.StrokeShape>
                     <VerticalStackLayout Spacing="14">
-                        <Label Text="Revenus vs Dépenses — Juin 2026"
+                        <Label Text="{loc:Translate ChartTitle}"
                                FontSize="14"
                                FontAttributes="Bold"
                                TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
@@ -242,15 +246,15 @@
                               ColumnSpacing="24"
                               Padding="10,0">
                             <VerticalStackLayout Grid.Column="0" Spacing="1" HorizontalOptions="Center">
-                                <Label Text="Revenus" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate ChartRevenue}" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
                                 <Label Text="13 300 $" FontSize="11" FontAttributes="Bold" TextColor="#17A672" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="1" Spacing="1" HorizontalOptions="Center">
-                                <Label Text="Dépenses" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate ChartExpenses}" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
                                 <Label Text="1 340 $" FontSize="11" FontAttributes="Bold" TextColor="#E23B3B" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                             <VerticalStackLayout Grid.Column="2" Spacing="1" HorizontalOptions="Center">
-                                <Label Text="Bénéfice" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate ChartProfit}" FontSize="10" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
                                 <Label Text="11 960 $" FontSize="11" FontAttributes="Bold" TextColor="#3B5BDB" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                         </Grid>
@@ -278,14 +282,15 @@
                                    TextColor="{AppThemeBinding Light=#2C3E60, Dark=#C9D4FA}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Revenus et dépenses — Juin 2026. " FontAttributes="Bold" />
-                                        <Span Text="Vos revenus s'élèvent à " />
+                                        <Span Text="{loc:Translate ResBannerPrefix}" FontAttributes="Bold" />
+                                        <Span Text="Juin 2026. " FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate ResBannerText1}" />
                                         <Span Text="13 300,00 $" FontAttributes="Bold" />
-                                        <Span Text=" et vos dépenses déductibles à " />
+                                        <Span Text="{loc:Translate ResBannerText2}" />
                                         <Span Text="1 340,00 $" FontAttributes="Bold" />
-                                        <Span Text=", pour un bénéfice net de " />
+                                        <Span Text="{loc:Translate ResBannerText3}" />
                                         <Span Text="11 960,00 $" FontAttributes="Bold" />
-                                        <Span Text=". C'est +16.3 % de plus que la période précédente." />
+                                        <Span Text="{loc:Translate ResBannerText4}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -299,27 +304,27 @@
                         <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#E7F7EF, Dark=#16281F}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="REVENUS" FontSize="10" FontAttributes="Bold" TextColor="#1E8449" />
-                                <Label Text="13 300,00 $" FontSize="17" FontAttributes="Bold" TextColor="#1E8449" />
-                                <Label Text="↗ 13.6 % vs période préc." FontSize="9" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate KpiRevenue}" FontSize="10" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Text="{Binding RevenusText}" FontSize="17" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate ResRevenueDelta}" FontSize="9" TextColor="#1E8449" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#FDECEC, Dark=#2C1E1E}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="DÉPENSES" FontSize="10" FontAttributes="Bold" TextColor="#C0392B" />
-                                <Label Text="1 340,00 $" FontSize="17" FontAttributes="Bold" TextColor="#C0392B" />
-                                <Label Text="↗ 7.5 % vs période préc." FontSize="9" TextColor="#C0392B" />
+                                <Label Text="{loc:Translate KpiExpenses}" FontSize="10" FontAttributes="Bold" TextColor="#C0392B" />
+                                <Label Text="{Binding DepensesText}" FontSize="17" FontAttributes="Bold" TextColor="#C0392B" />
+                                <Label Text="{loc:Translate ResExpenseDelta}" FontSize="9" TextColor="#C0392B" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#EAF1FB, Dark=#1B2740}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="BÉNÉFICE NET" FontSize="10" FontAttributes="Bold" TextColor="#2D6CDF" />
-                                <Label Text="11 960,00 $" FontSize="17" FontAttributes="Bold" TextColor="#2D6CDF" />
-                                <Label Text="↗ 16.3 % vs période préc." FontSize="9" TextColor="#2D6CDF" />
+                                <Label Text="{loc:Translate KpiNetProfit}" FontSize="10" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{Binding BeneficeNetText}" FontSize="17" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{loc:Translate ResProfitDelta}" FontSize="9" TextColor="#2D6CDF" />
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
@@ -329,8 +334,8 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="10">
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Marge brute" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="11 960,00 $" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate GrossMargin}" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{Binding BeneficeBrutText}" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" VerticalOptions="Center" />
                             </Grid>
                             <Grid HeightRequest="10">
                                 <Border BackgroundColor="{AppThemeBinding Light=#E4E7EF, Dark=#2B3346}" StrokeThickness="0">
@@ -342,7 +347,7 @@
                                     </Border>
                                 </Grid>
                             </Grid>
-                            <Label Text="89.9 % de vos revenus" FontSize="11" TextColor="{StaticResource Gray500}" />
+                            <Label Text="{loc:Translate GrossMarginOfRevenue}" FontSize="11" TextColor="{StaticResource Gray500}" />
                         </VerticalStackLayout>
                     </Border>
 
@@ -350,14 +355,14 @@
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Ce que ça veut dire pour vous" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate WhatItMeans}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Vos dépenses représentent 10.1 % de vos revenus — c'est excellent." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate ResMeaning1}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Le rapport peut être partagé avec votre comptable pour votre déclaration annuelle." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate ResMeaning2}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -376,13 +381,14 @@
                             <Label FontSize="12" TextColor="{AppThemeBinding Light=#2C3E60, Dark=#C9D4FA}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Bilan au 17 juin 2026. " FontAttributes="Bold" />
-                                        <Span Text="Votre entreprise possède " />
-                                        <Span Text="55 950,00 $" FontAttributes="Bold" />
-                                        <Span Text=" en actifs, doit " />
-                                        <Span Text="10 646,00 $" FontAttributes="Bold" />
-                                        <Span Text=" en passifs et votre valeur nette est de " />
-                                        <Span Text="45 304,00 $" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate BilanBannerPrefix}" FontAttributes="Bold" />
+                                        <Span Text="17 juin 2026. " FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate BilanBannerText1}" />
+                                        <Span Text="{Binding TotalActifsText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate BilanBannerText2}" />
+                                        <Span Text="{Binding TotalPassifsText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate BilanBannerText3}" />
+                                        <Span Text="{Binding ValeurNetteText}" FontAttributes="Bold" />
                                         <Span Text="." />
                                     </FormattedString>
                                 </Label.FormattedText>
@@ -394,25 +400,25 @@
                     <Border BackgroundColor="{AppThemeBinding Light=#F4F5F8, Dark=#1B2233}" StrokeThickness="0" Padding="14">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="12">
-                            <Label Text="L'ÉQUATION COMPTABLE FONDAMENTALE" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource Gray400}" />
+                            <Label Text="{loc:Translate AccountingEquation}" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource Gray400}" />
 
                             <Grid ColumnDefinitions="*,Auto,*,Auto,*" ColumnSpacing="4">
                                 <VerticalStackLayout Grid.Column="0" Spacing="1" HorizontalOptions="Center">
-                                    <Label Text="55 950,00 $" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
-                                    <Label Text="ACTIFS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="Ce que vous possédez" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{Binding TotalActifsText}" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate Assets}" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate WhatYouOwn}" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                                 <Label Grid.Column="1" Text="=" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalOptions="Start" Margin="0,2,0,0" />
                                 <VerticalStackLayout Grid.Column="2" Spacing="1" HorizontalOptions="Center">
-                                    <Label Text="10 646,00 $" FontSize="14" FontAttributes="Bold" TextColor="#E23B3B" HorizontalTextAlignment="Center" />
-                                    <Label Text="PASSIFS" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="Ce que vous devez" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{Binding TotalPassifsText}" FontSize="14" FontAttributes="Bold" TextColor="#E23B3B" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate Liabilities}" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate WhatYouOwe}" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                                 <Label Grid.Column="3" Text="+" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalOptions="Start" Margin="0,2,0,0" />
                                 <VerticalStackLayout Grid.Column="4" Spacing="1" HorizontalOptions="Center">
-                                    <Label Text="45 304,00 $" FontSize="14" FontAttributes="Bold" TextColor="#1E8449" HorizontalTextAlignment="Center" />
-                                    <Label Text="VALEUR NETTE" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="Ce qui vous revient" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{Binding ValeurNetteText}" FontSize="14" FontAttributes="Bold" TextColor="#1E8449" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate NetWorth}" FontSize="9" FontAttributes="Bold" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate WhatIsYours}" FontSize="8" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Grid>
 
@@ -426,8 +432,8 @@
                                 </Border>
                             </Grid>
                             <Grid ColumnDefinitions="*,*">
-                                <Label Grid.Column="0" Text="Passifs 19 %" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalOptions="Start" />
-                                <Label Grid.Column="1" Text="Valeur nette 81 %" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalOptions="End" />
+                                <Label Grid.Column="0" Text="{Binding PassifsPctText}" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalOptions="Start" />
+                                <Label Grid.Column="1" Text="{Binding ValeurNettePctText}" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalOptions="End" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -437,51 +443,47 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
 
-                            <Label Text="Actifs" FontSize="15" FontAttributes="Bold" TextColor="#2D6CDF" />
+                            <Label Text="{loc:Translate AssetsTitle}" FontSize="15" FontAttributes="Bold" TextColor="#2D6CDF" />
 
                             <!-- Actifs courants -->
-                            <Label Text="Actifs courants" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,4,0,0" />
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Compte bancaire" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="28 450,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Comptes clients" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="18 700,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Frais payés d'avance" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="1 200,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
+                            <Label Text="{loc:Translate CurrentAssets}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,4,0,0" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding ActifsCourantsLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Sous-total courants" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="48 350,00 $" FontSize="13" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Grid.Column="0" Text="{loc:Translate SubtotalCurrent}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding SousTotalActifsCourantsText}" FontSize="13" FontAttributes="Bold" TextColor="#2D6CDF" />
                             </Grid>
 
                             <!-- Actifs à long terme -->
-                            <Label Text="Actifs à long terme" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,6,0,0" />
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Équipement informatique" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="8 500,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Mobilier de bureau" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="3 200,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Amortissement cumulé" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="−4 100,00 $" FontSize="12" TextColor="#C0392B" />
-                            </Grid>
+                            <Label Text="{loc:Translate LongTermAssets}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,6,0,0" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding ActifsLongTermeLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Sous-total long terme" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="7 600,00 $" FontSize="13" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Grid.Column="0" Text="{loc:Translate SubtotalLongTerm}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding SousTotalActifsLongTermeText}" FontSize="13" FontAttributes="Bold" TextColor="#2D6CDF" />
                             </Grid>
 
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="TOTAL ACTIFS" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="55 950,00 $" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Grid.Column="0" Text="{loc:Translate TotalAssets}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TotalActifsText}" FontSize="14" FontAttributes="Bold" TextColor="#2D6CDF" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -491,54 +493,58 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
 
-                            <Label Text="Passifs &amp; Valeur nette" FontSize="15" FontAttributes="Bold" TextColor="#D6336C" />
+                            <Label Text="{loc:Translate LiabilitiesAndNetWorth}" FontSize="15" FontAttributes="Bold" TextColor="#D6336C" />
 
                             <!-- Passifs courants -->
-                            <Label Text="Passifs courants" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,4,0,0" />
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="TPS/TVQ à remettre" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="2 096,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Acomptes à payer" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="4 500,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Charges à payer" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="850,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
+                            <Label Text="{loc:Translate CurrentLiabilities}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,4,0,0" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding PassifsCourantsLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Sous-total courants" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="7 446,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" />
+                                <Label Grid.Column="0" Text="{loc:Translate SubtotalCurrent}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding SousTotalPassifsCourantsText}" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" />
                             </Grid>
 
                             <!-- Passifs à long terme -->
-                            <Label Text="Passifs à long terme" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,6,0,0" />
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Emprunt équipement" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="3 200,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
+                            <Label Text="{loc:Translate LongTermLiabilities}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" Margin="0,6,0,0" />
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding PassifsLongTermeLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Sous-total long terme" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="3 200,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" />
-                            </Grid>
-
-                            <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
-
-                            <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Total passifs" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="10 646,00 $" FontSize="14" FontAttributes="Bold" TextColor="#C0392B" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="VALEUR NETTE" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="45 304,00 $" FontSize="14" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Grid.Column="0" Text="{loc:Translate SubtotalLongTerm}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding SousTotalPassifsLongTermeText}" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" />
                             </Grid>
 
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="TOTAL PASSIFS + VALEUR NETTE" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                                <Label Grid.Column="1" Text="55 950,00 $" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                                <Label Grid.Column="0" Text="{loc:Translate TotalLiabilities}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TotalPassifsText}" FontSize="14" FontAttributes="Bold" TextColor="#C0392B" />
+                            </Grid>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{loc:Translate NetWorth}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding ValeurNetteText}" FontSize="14" FontAttributes="Bold" TextColor="#1E8449" />
+                            </Grid>
+
+                            <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
+
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label Grid.Column="0" Text="{loc:Translate TotalLiabilitiesPlusNetWorth}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                                <Label Grid.Column="1" Text="{Binding TotalPassifsPlusValeurNetteText}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -547,14 +553,14 @@
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Ce que ça veut dire pour vous" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate WhatItMeans}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Votre valeur nette de 45 304,00 $ représente 81 % de vos actifs — c'est solide." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate BilanMeaning1}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Vos dettes représentent 19 % de vos actifs — votre niveau d'endettement est faible." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate BilanMeaning2}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -573,9 +579,10 @@
                             <Label FontSize="12" TextColor="{AppThemeBinding Light=#2C3E60, Dark=#C9D4FA}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Flux de trésorerie — Juin 2026. " FontAttributes="Bold" />
-                                        <Span Text="Différence cruciale : bénéfice ≠ argent en banque. Votre flux net pour la période est de " />
-                                        <Span Text="9 031,00 $" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TresorerieBannerPrefix}" FontAttributes="Bold" />
+                                        <Span Text="Juin 2026. " FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TresorerieBannerText1}" />
+                                        <Span Text="{Binding FluxNetText}" FontAttributes="Bold" />
                                         <Span Text="." />
                                     </FormattedString>
                                 </Label.FormattedText>
@@ -589,31 +596,31 @@
                         <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#E7F7EF, Dark=#16281F}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="ENTRÉES (EXPLOITATION)" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate CashInflows}" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
                                 <Label Text="12 236,00 $" FontSize="16" FontAttributes="Bold" TextColor="#1E8449" />
-                                <Label Text="Honoraires encaissés" FontSize="9" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate FeesCollected}" FontSize="9" TextColor="#1E8449" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#FDECEC, Dark=#2C1E1E}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="SORTIES (EXPLOITATION)" FontSize="9" FontAttributes="Bold" TextColor="#C0392B" />
+                                <Label Text="{loc:Translate CashOutflows}" FontSize="9" FontAttributes="Bold" TextColor="#C0392B" />
                                 <Label Text="2 005,00 $" FontSize="16" FontAttributes="Bold" TextColor="#C0392B" />
-                                <Label Text="Dépenses payées" FontSize="9" TextColor="#C0392B" />
+                                <Label Text="{loc:Translate ExpensesPaid}" FontSize="9" TextColor="#C0392B" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#EAF1FB, Dark=#1B2740}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="FLUX NET" FontSize="9" FontAttributes="Bold" TextColor="#2D6CDF" />
-                                <Label Text="9 031,00 $" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{loc:Translate NetFlow}" FontSize="9" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{Binding FluxNetText}" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" />
                                 <Border BackgroundColor="#E7F7EF" StrokeThickness="0" Padding="6,2" HorizontalOptions="Start">
                                     <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
                                     <HorizontalStackLayout Spacing="3">
                                         <Label Text="&#10003;" FontSize="9" TextColor="#1E8449" />
-                                        <Label Text="Positif" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
+                                        <Label Text="{loc:Translate Positive}" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
                                     </HorizontalStackLayout>
                                 </Border>
                             </VerticalStackLayout>
@@ -625,40 +632,61 @@
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
 
-                            <Label Text="Détail par catégorie" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate DetailByCategory}" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
 
+                            <!-- Exploitation -->
                             <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
-                                <Label Grid.Column="0" Text="Exploitation" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="10 231,00 $" FontSize="13" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Grid.Column="0" Text="{loc:Translate Operating}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TotalExploitationText}" FontSize="13" FontAttributes="Bold" TextColor="#1E8449" />
                             </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Encaissements clients" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="12 236,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Paiements fournisseurs" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="− 2 005,00 $" FontSize="12" TextColor="#C0392B" />
-                            </Grid>
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding ExploitationLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
+                            <!-- Investissement -->
                             <Grid ColumnDefinitions="*,Auto" Margin="0,6,0,0">
-                                <Label Grid.Column="0" Text="Investissement" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="−1 200,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" />
+                                <Label Grid.Column="0" Text="{loc:Translate Investment}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TotalInvestissementText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             </Grid>
-                            <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="Achat équipement" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="− 1 200,00 $" FontSize="12" TextColor="#C0392B" />
-                            </Grid>
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding InvestissementLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
+                            <!-- Financement -->
                             <Grid ColumnDefinitions="*,Auto" Margin="0,6,0,0">
-                                <Label Grid.Column="0" Text="Financement" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="0,00 $" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="0" Text="{loc:Translate Financing}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TotalFinancementText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             </Grid>
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding FinancementLines}" Spacing="4">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
+                                            <Label Grid.Column="0" Text="{Binding Description}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Flux net total" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
-                                <Label Grid.Column="1" Text="9 031,00 $" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                                <Label Grid.Column="0" Text="{loc:Translate TotalNetFlow}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                                <Label Grid.Column="1" Text="{Binding FluxNetText}" FontSize="14" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -667,14 +695,14 @@
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Ce que ça veut dire pour vous" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate WhatItMeans}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Votre flux d'exploitation est positif — votre activité génère de l'argent réel." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate TresorerieMeaning1}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Vous avez 18 700 $ de factures non encore encaissées — relancer ces clients améliorerait votre trésorerie." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate TresorerieMeaning2}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -694,13 +722,13 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <Span Text="TPS/TVQ — Juin 2026. " FontAttributes="Bold" />
-                                        <Span Text="Vous avez collecté " />
-                                        <Span Text="1 991,68 $" FontAttributes="Bold" />
-                                        <Span Text=" en taxes auprès de vos clients. Vous avez payé " />
-                                        <Span Text="200,67 $" FontAttributes="Bold" />
-                                        <Span Text=" en taxes sur vos achats. Il vous reste à remettre " />
-                                        <Span Text="1 791,01 $" FontAttributes="Bold" />
-                                        <Span Text=" au gouvernement." />
+                                        <Span Text="{loc:Translate TaxesBannerText1}" />
+                                        <Span Text="{Binding TaxesCollecteText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TaxesBannerText2}" />
+                                        <Span Text="{Binding TaxesPayeText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TaxesBannerText3}" />
+                                        <Span Text="{Binding TaxesARemettreText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TaxesBannerText4}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -713,27 +741,27 @@
                         <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#E7F7EF, Dark=#16281F}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="TAXES COLLECTÉES" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
-                                <Label Text="1 991,68 $" FontSize="16" FontAttributes="Bold" TextColor="#1E8449" />
-                                <Label Text="De vos clients" FontSize="9" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate TaxesCollected}" FontSize="9" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Text="{Binding TaxesCollecteText}" FontSize="16" FontAttributes="Bold" TextColor="#1E8449" />
+                                <Label Text="{loc:Translate FromYourClients}" FontSize="9" TextColor="#1E8449" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#EAF1FB, Dark=#1B2740}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="TAXES PAYÉES" FontSize="9" FontAttributes="Bold" TextColor="#2D6CDF" />
-                                <Label Text="200,67 $" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" />
-                                <Label Text="Sur vos achats" FontSize="9" TextColor="#2D6CDF" />
+                                <Label Text="{loc:Translate TaxesPaid}" FontSize="9" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{Binding TaxesPayeText}" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" />
+                                <Label Text="{loc:Translate OnYourPurchases}" FontSize="9" TextColor="#2D6CDF" />
                             </VerticalStackLayout>
                         </Border>
 
                         <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#FEF9E7, Dark=#2A2616}" StrokeThickness="0" Padding="12">
                             <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                             <VerticalStackLayout Spacing="4">
-                                <Label Text="À REMETTRE" FontSize="9" FontAttributes="Bold" TextColor="#B9770E" />
-                                <Label Text="1 791,01 $" FontSize="16" FontAttributes="Bold" TextColor="#B9770E" />
-                                <Label Text="Échéance : 31 juil. 2026" FontSize="9" TextColor="#B9770E" />
+                                <Label Text="{loc:Translate ToRemit}" FontSize="9" FontAttributes="Bold" TextColor="#B9770E" />
+                                <Label Text="{Binding TaxesARemettreText}" FontSize="16" FontAttributes="Bold" TextColor="#B9770E" />
+                                <Label Text="{loc:Translate TaxesDueDate}" FontSize="9" TextColor="#B9770E" />
                             </VerticalStackLayout>
                         </Border>
                     </Grid>
@@ -744,17 +772,17 @@
                         <VerticalStackLayout Spacing="8">
                             <Label Text="TPS (5 %)" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="TPS perçue (clients)" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="665,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="0" Text="{loc:Translate GstCollectedClients}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Grid.Column="1" Text="{Binding TpsPercueText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="TPS payée (achats)" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="− 67,00 $" FontSize="12" TextColor="#C0392B" />
+                                <Label Grid.Column="0" Text="{loc:Translate GstPaidPurchases}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Grid.Column="1" Text="{Binding TpsPayeeText}" FontSize="12" TextColor="#C0392B" />
                             </Grid>
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="TPS nette à remettre" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="598,00 $" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
+                                <Label Grid.Column="0" Text="{loc:Translate GstNetToRemit}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TpsNetteText}" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -765,17 +793,17 @@
                         <VerticalStackLayout Spacing="8">
                             <Label Text="TVQ (9,975 %)" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="TVQ perçue (clients)" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="1 326,68 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="0" Text="{loc:Translate QstCollectedClients}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Grid.Column="1" Text="{Binding TvqPercueText}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             </Grid>
                             <Grid ColumnDefinitions="*,Auto" Padding="12,0,0,0">
-                                <Label Grid.Column="0" Text="TVQ payée (achats)" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Grid.Column="1" Text="− 133,67 $" FontSize="12" TextColor="#C0392B" />
+                                <Label Grid.Column="0" Text="{loc:Translate QstPaidPurchases}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Grid.Column="1" Text="{Binding TvqPayeeText}" FontSize="12" TextColor="#C0392B" />
                             </Grid>
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,4" />
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="TVQ nette à remettre" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Grid.Column="1" Text="1 193,01 $" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
+                                <Label Grid.Column="0" Text="{loc:Translate QstNetToRemit}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Grid.Column="1" Text="{Binding TvqNetteText}" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
                             </Grid>
                         </VerticalStackLayout>
                     </Border>
@@ -786,14 +814,14 @@
                         <VerticalStackLayout Spacing="4">
                             <HorizontalStackLayout Spacing="6">
                                 <Label Text="&#9888;" FontSize="13" TextColor="#B9770E" />
-                                <Label Text="Prochaine remise : 31 juillet 2026" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
+                                <Label Text="{loc:Translate NextRemittance}" FontSize="13" FontAttributes="Bold" TextColor="#B9770E" />
                             </HorizontalStackLayout>
                             <Label FontSize="11" TextColor="{AppThemeBinding Light=#8A6D1E, Dark=#D8C58A}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Montant estimé : " />
-                                        <Span Text="1 791,01 $" FontAttributes="Bold" />
-                                        <Span Text=". À remettre à Revenu Québec (TVQ) et à l'ARC (TPS). Ces rapports sont indicatifs — votre comptable doit valider avant la remise officielle." />
+                                        <Span Text="{loc:Translate TaxWarnText1}" />
+                                        <Span Text="{Binding TaxesARemettreText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate TaxWarnText2}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -804,14 +832,14 @@
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Ce que ça veut dire pour vous" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate WhatItMeans}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Vous agissez comme percepteur de taxes pour le gouvernement." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate TaxesMeaning1}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Mettez de côté 1 791,01 $ dès maintenant pour votre prochaine remise." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate TaxesMeaning2}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -830,14 +858,14 @@
                             <Label FontSize="12" TextColor="{AppThemeBinding Light=#2C3E60, Dark=#C9D4FA}">
                                 <Label.FormattedText>
                                     <FormattedString>
-                                        <Span Text="Comptes clients et fournisseurs. " FontAttributes="Bold" />
-                                        <Span Text="Vos clients vous doivent " />
-                                        <Span Text="18 700,00 $" FontAttributes="Bold" />
-                                        <Span Text=". Vous devez " />
-                                        <Span Text="532,00 $" FontAttributes="Bold" />
-                                        <Span Text=" à vos fournisseurs. Votre position nette est de " />
-                                        <Span Text="18 168,00 $" FontAttributes="Bold" />
-                                        <Span Text=" en votre faveur." />
+                                        <Span Text="{loc:Translate ComptesBannerPrefix}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate ComptesBannerText1}" />
+                                        <Span Text="{Binding TotalClientsText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate ComptesBannerText2}" />
+                                        <Span Text="{Binding TotalFournisseursText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate ComptesBannerText3}" />
+                                        <Span Text="{Binding PositionNetteText}" FontAttributes="Bold" />
+                                        <Span Text="{loc:Translate ComptesBannerText4}" />
                                     </FormattedString>
                                 </Label.FormattedText>
                             </Label>
@@ -850,66 +878,60 @@
                         <VerticalStackLayout Spacing="10">
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Comptes clients (à recevoir)" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="18 700,00 $" FontSize="15" FontAttributes="Bold" TextColor="#1E8449" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate AccountsReceivableTitle}" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{Binding TotalClientsText}" FontSize="15" FontAttributes="Bold" TextColor="#1E8449" VerticalOptions="Center" />
                             </Grid>
 
                             <!-- Aging -->
                             <Grid ColumnDefinitions="44,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="0-30 j." FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate Aging0_30}" FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
                                 <Grid Grid.Column="1" HeightRequest="8" VerticalOptions="Center">
                                     <Border BackgroundColor="{AppThemeBinding Light=#EEF0F4, Dark=#2B3346}" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border>
                                     <Grid ColumnDefinitions="39*,61*"><Border Grid.Column="0" BackgroundColor="#2FBF8F" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border></Grid>
                                 </Grid>
-                                <Label Grid.Column="2" Text="4 200,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding Aging0Text}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
                             </Grid>
                             <Grid ColumnDefinitions="44,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="31-60 j." FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate Aging31_60}" FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
                                 <Grid Grid.Column="1" HeightRequest="8" VerticalOptions="Center">
                                     <Border BackgroundColor="{AppThemeBinding Light=#EEF0F4, Dark=#2B3346}" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border>
                                     <Grid ColumnDefinitions="99*,1*"><Border Grid.Column="0" BackgroundColor="#F2C94C" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border></Grid>
                                 </Grid>
-                                <Label Grid.Column="2" Text="10 700,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding Aging1Text}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
                             </Grid>
                             <Grid ColumnDefinitions="44,*,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="+90 j." FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate Aging90Plus}" FontSize="10" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
                                 <Grid Grid.Column="1" HeightRequest="8" VerticalOptions="Center">
                                     <Border BackgroundColor="{AppThemeBinding Light=#EEF0F4, Dark=#2B3346}" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border>
                                     <Grid ColumnDefinitions="36*,64*"><Border Grid.Column="0" BackgroundColor="#E76A78" StrokeThickness="0"><Border.StrokeShape><RoundRectangle CornerRadius="4" /></Border.StrokeShape></Border></Grid>
                                 </Grid>
-                                <Label Grid.Column="2" Text="3 800,00 $" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding Aging2Text}" FontSize="12" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
                             </Grid>
 
                             <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" Margin="0,2" />
 
-                            <!-- Clients -->
-                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="Agence Creativa" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Border Grid.Column="1" BackgroundColor="#E7F7EF" StrokeThickness="0" Padding="6,2" VerticalOptions="Center"><Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape><Label Text="0-30 j." FontSize="9" FontAttributes="Bold" TextColor="#1E8449" /></Border>
-                                <Label Grid.Column="2" Text="4 200,00 $" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" WidthRequest="90" HorizontalTextAlignment="End" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="TechNord Inc." FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Border Grid.Column="1" BackgroundColor="#FEF6E7" StrokeThickness="0" Padding="6,2" VerticalOptions="Center"><Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape><Label Text="31-60 j." FontSize="9" FontAttributes="Bold" TextColor="#B9770E" /></Border>
-                                <Label Grid.Column="2" Text="6 800,00 $" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" WidthRequest="90" HorizontalTextAlignment="End" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="Constructions LP" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Border Grid.Column="1" BackgroundColor="#FEF6E7" StrokeThickness="0" Padding="6,2" VerticalOptions="Center"><Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape><Label Text="31-60 j." FontSize="9" FontAttributes="Bold" TextColor="#B9770E" /></Border>
-                                <Label Grid.Column="2" Text="3 900,00 $" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" WidthRequest="90" HorizontalTextAlignment="End" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                                <Label Grid.Column="0" Text="Boutique Bonsaï" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Border Grid.Column="1" BackgroundColor="#FDECEC" StrokeThickness="0" Padding="6,2" VerticalOptions="Center"><Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape><Label Text="+90 j." FontSize="9" FontAttributes="Bold" TextColor="#C0392B" /></Border>
-                                <Label Grid.Column="2" Text="3 800,00 $" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" WidthRequest="90" HorizontalTextAlignment="End" />
-                            </Grid>
+                            <!-- Clients (dynamique) -->
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding ClientsLines}" Spacing="8">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                                            <Label Grid.Column="0" Text="{Binding Name}" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                            <Border Grid.Column="1" BackgroundColor="{Binding BadgeBg}" StrokeThickness="0" Padding="6,2" VerticalOptions="Center">
+                                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                                <Label Text="{Binding BadgeText}" FontSize="9" FontAttributes="Bold" TextColor="{Binding BadgeFg}" />
+                                            </Border>
+                                            <Label Grid.Column="2" Text="{Binding AmountText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" WidthRequest="90" HorizontalTextAlignment="End" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
                             <!-- Alerte retard -->
                             <Border BackgroundColor="{AppThemeBinding Light=#FDECEC, Dark=#2C1E1E}" StrokeThickness="0" Padding="10">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="&#9888;" FontSize="11" TextColor="#C0392B" VerticalOptions="Center" />
-                                    <Label Text="3 800,00 $ en retard de plus de 90 jours — envisagez de relancer ces clients." FontSize="11" TextColor="#C0392B" VerticalOptions="Center" />
+                                    <Label Text="{loc:Translate ComptesOverdueAlert}" FontSize="11" TextColor="#C0392B" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
                         </VerticalStackLayout>
@@ -921,37 +943,29 @@
                         <VerticalStackLayout Spacing="10">
 
                             <Grid ColumnDefinitions="*,Auto">
-                                <Label Grid.Column="0" Text="Comptes fournisseurs (à payer)" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="532,00 $" FontSize="15" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
+                                <Label Grid.Column="0" Text="{loc:Translate AccountsPayableTitle}" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{Binding TotalFournisseursText}" FontSize="15" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
                             </Grid>
 
-                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                                <VerticalStackLayout Grid.Column="0" Spacing="1">
-                                    <Label Text="Adobe Systems" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                    <Label Text="Éch. 30 juin 2026" FontSize="10" TextColor="{StaticResource Gray400}" />
-                                </VerticalStackLayout>
-                                <Label Grid.Column="1" Text="312,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                                <VerticalStackLayout Grid.Column="0" Spacing="1">
-                                    <Label Text="Bell Canada" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                    <Label Text="Éch. 5 juil. 2026" FontSize="10" TextColor="{StaticResource Gray400}" />
-                                </VerticalStackLayout>
-                                <Label Grid.Column="1" Text="95,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
-                            </Grid>
-                            <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                                <VerticalStackLayout Grid.Column="0" Spacing="1">
-                                    <Label Text="Assur-Pro Qc" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                    <Label Text="Éch. 15 juil. 2026" FontSize="10" TextColor="{StaticResource Gray400}" />
-                                </VerticalStackLayout>
-                                <Label Grid.Column="1" Text="125,00 $" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
-                            </Grid>
+                            <VerticalStackLayout BindableLayout.ItemsSource="{Binding FournisseursLines}" Spacing="10">
+                                <BindableLayout.ItemTemplate>
+                                    <DataTemplate>
+                                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                                            <VerticalStackLayout Grid.Column="0" Spacing="1">
+                                                <Label Text="{Binding Name}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                                <Label Text="{Binding DueText}" FontSize="10" TextColor="{StaticResource Gray400}" />
+                                            </VerticalStackLayout>
+                                            <Label Grid.Column="1" Text="{Binding AmountText}" FontSize="13" FontAttributes="Bold" TextColor="#C0392B" VerticalOptions="Center" />
+                                        </Grid>
+                                    </DataTemplate>
+                                </BindableLayout.ItemTemplate>
+                            </VerticalStackLayout>
 
                             <Border BackgroundColor="{AppThemeBinding Light=#E7F7EF, Dark=#16281F}" StrokeThickness="0" Padding="10">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
                                 <HorizontalStackLayout Spacing="6">
                                     <Label Text="&#10003;" FontSize="11" TextColor="#1E8449" VerticalOptions="Center" />
-                                    <Label Text="Toutes vos factures fournisseurs sont à jour." FontSize="11" TextColor="#1E8449" VerticalOptions="Center" />
+                                    <Label Text="{loc:Translate VendorsUpToDate}" FontSize="11" TextColor="#1E8449" VerticalOptions="Center" />
                                 </HorizontalStackLayout>
                             </Border>
                         </VerticalStackLayout>
@@ -961,14 +975,14 @@
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
                         <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
                         <VerticalStackLayout Spacing="8">
-                            <Label Text="Ce que ça veut dire pour vous" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{loc:Translate WhatItMeans}" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="On vous doit 18 700,00 $ — relancer vos clients améliorerait votre trésorerie." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate ComptesMeaning1}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                             <HorizontalStackLayout Spacing="8">
                                 <Label Text="•" FontSize="12" TextColor="{StaticResource Gray500}" />
-                                <Label Text="Vous êtes à jour avec vos fournisseurs — bonne gestion des paiements." FontSize="12" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{loc:Translate ComptesMeaning2}" FontSize="12" TextColor="{StaticResource Gray500}" />
                             </HorizontalStackLayout>
                         </VerticalStackLayout>
                     </Border>
@@ -983,7 +997,7 @@
                         <RoundRectangle CornerRadius="16" />
                     </Border.StrokeShape>
                     <Label x:Name="OtherSectionLabel"
-                           Text="Section en construction."
+                           Text="{loc:Translate SectionUnderConstruction}"
                            FontSize="13"
                            TextColor="{StaticResource Gray400}"
                            HorizontalTextAlignment="Center"

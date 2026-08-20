@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
+             x:Class="_60SecAI.SettingsPage"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- En-tête simple avec retour -->
+        <Grid Grid.Row="0"
+              ColumnDefinitions="Auto,*"
+              ColumnSpacing="10"
+              Padding="16,14">
+            <Label Grid.Column="0"
+                   Text="&#8249;"
+                   FontSize="26"
+                   TextColor="{StaticResource Primary}"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1"
+                   Text="{loc:Translate SettingsTitle}"
+                   FontSize="20"
+                   FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                   VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- ===== Langue ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                        StrokeThickness="0"
+                        Padding="16">
+                    <Border.StrokeShape>
+                        <RoundRectangle CornerRadius="20" />
+                    </Border.StrokeShape>
+
+                    <VerticalStackLayout Spacing="12">
+                        <Label Text="{loc:Translate LanguageLabel}"
+                               FontSize="14"
+                               FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+
+                        <HorizontalStackLayout Spacing="8">
+                            <Border BackgroundColor="{Binding FrBg}" StrokeThickness="0" Padding="14,9">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SetLanguageCommand}" CommandParameter="fr" />
+                                </Border.GestureRecognizers>
+                                <Label Text="Français" FontSize="13" FontAttributes="Bold" TextColor="#8E2DE2" />
+                            </Border>
+                            <Border BackgroundColor="{Binding EnBg}" StrokeThickness="0" Padding="14,9">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SetLanguageCommand}" CommandParameter="en" />
+                                </Border.GestureRecognizers>
+                                <Label Text="English" FontSize="13" FontAttributes="Bold" TextColor="#8E2DE2" />
+                            </Border>
+                            <Border BackgroundColor="{Binding EsBg}" StrokeThickness="0" Padding="14,9">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SetLanguageCommand}" CommandParameter="es" />
+                                </Border.GestureRecognizers>
+                                <Label Text="Español" FontSize="13" FontAttributes="Bold" TextColor="#8E2DE2" />
+                            </Border>
+                        </HorizontalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Déconnexion ===== -->
+                <Button Text="{loc:Translate Logout}"
+                        BackgroundColor="#E23B3B" TextColor="White"
+                        FontAttributes="Bold" FontSize="15"
+                        HeightRequest="50" CornerRadius="25"
+                        Command="{Binding LogoutCommand}" />
+
+                <Label Text="Version 1.0"
+                       FontSize="12"
+                       TextColor="{StaticResource Gray400}"
+                       HorizontalTextAlignment="Center" />
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

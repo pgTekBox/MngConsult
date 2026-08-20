@@ -35,13 +35,10 @@ public partial class DashboardPage : ContentPage
 
 	// ===== AI Payment =====
 	private async void OnReceiptTapped(object? sender, TappedEventArgs e)
-		=> await DisplayAlertAsync("AI Payment", "Ajouter un reçu.", "OK");
+		=> await Shell.Current.GoToAsync(nameof(ReceiptScanPage));
 
 	private async void OnPaymentCategoryTapped(object? sender, TappedEventArgs e)
-	{
-		var filter = e.Parameter as string ?? "Gouvernement";
-		await Shell.Current.GoToAsync($"{nameof(AiPaymentDetailPage)}?filter={Uri.EscapeDataString(filter)}");
-	}
+		=> await Shell.Current.GoToAsync(nameof(AiPaymentDetailPage));
 
 	// ===== Agenda =====
 	private async void OnAddAppointmentTapped(object? sender, TappedEventArgs e)

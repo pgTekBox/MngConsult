@@ -3,7 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:_60SecAI.Controls"
              xmlns:vm="clr-namespace:_60SecAI.ViewModels"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.AiSalesDetailPage"
+             x:Name="Page"
              x:DataType="vm:AiSalesDetailViewModel"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
@@ -13,8 +15,9 @@
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
                               PageTitle="AI Sales"
-                              Subtitle="Gestion en temps réel avec AI"
-                              Balance="48320.55" />
+                              Subtitle="{loc:Translate RealtimeSubtitle}"
+                              Balance="48320.55"
+                              ShowHome="True" />
 
         <CollectionView Grid.Row="1"
                         ItemsSource="{Binding Invoices}">
@@ -23,17 +26,41 @@
             <CollectionView.Header>
                 <VerticalStackLayout>
 
-                    <HorizontalStackLayout Spacing="6" Padding="16,16,16,8">
-                        <Label Text="Détail —" FontSize="20" FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                        <Label Text="{Binding PeriodText}" FontSize="20" FontAttributes="Bold"
-                               TextColor="{StaticResource Gray400}" />
-                    </HorizontalStackLayout>
+                    <Grid ColumnDefinitions="*,Auto" Padding="16,16,16,8" ColumnSpacing="8" VerticalOptions="Center">
+                        <HorizontalStackLayout Grid.Column="0" Spacing="6" VerticalOptions="Center">
+                            <Label Text="{loc:Translate DetailPrefix}" FontSize="20" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Label Text="{Binding PeriodText}" FontSize="20" FontAttributes="Bold"
+                                   TextColor="{StaticResource Gray400}" />
+                        </HorizontalStackLayout>
+                        <Button Grid.Column="1" Text="{loc:Translate NewInvoice}"
+                                BackgroundColor="{StaticResource Primary}" TextColor="White"
+                                FontSize="13" FontAttributes="Bold" HeightRequest="40"
+                                CornerRadius="14" Padding="14,0" VerticalOptions="Center"
+                                Clicked="OnNewInvoiceClicked" />
+                    </Grid>
 
                     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
                             StrokeThickness="0" Padding="16" Margin="16,0,16,8">
                         <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
-                        <Grid ColumnDefinitions="Auto,Auto,Auto" ColumnSpacing="6">
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                          <HorizontalStackLayout Spacing="6">
+
+                            <Border BackgroundColor="{Binding AllTabBg}"
+                                    StrokeThickness="0" Padding="12,8">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="all" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#128203;" FontSize="12" TextColor="#2D6CDF" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabAll}" FontSize="12" FontAttributes="Bold" TextColor="#2D6CDF" VerticalTextAlignment="Center" />
+                                    <Border BackgroundColor="#2D6CDF" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
+                                        <Label Text="{Binding AllCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
 
                             <Border Grid.Column="0" BackgroundColor="{Binding CollectedTabBg}"
                                     StrokeThickness="0" Padding="12,8">
@@ -43,7 +70,7 @@
                                 </Border.GestureRecognizers>
                                 <HorizontalStackLayout Spacing="5">
                                     <Label Text="&#128200;" FontSize="12" TextColor="#1E8449" VerticalTextAlignment="Center" />
-                                    <Label Text="Collecté" FontSize="12" FontAttributes="Bold" TextColor="#1E8449" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabCollected}" FontSize="12" FontAttributes="Bold" TextColor="#1E8449" VerticalTextAlignment="Center" />
                                     <Border BackgroundColor="#1E8449" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
                                         <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
                                         <Label Text="{Binding CollectedCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
@@ -59,7 +86,7 @@
                                 </Border.GestureRecognizers>
                                 <HorizontalStackLayout Spacing="5">
                                     <Label Text="&#8599;" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
-                                    <Label Text="Recev." FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabReceivable}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
                                     <Border BackgroundColor="#E9A100" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
                                         <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
                                         <Label Text="{Binding ReceivableCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
@@ -75,14 +102,15 @@
                                 </Border.GestureRecognizers>
                                 <HorizontalStackLayout Spacing="5">
                                     <Label Text="&#9888;" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
-                                    <Label Text="Retard" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabOverdue}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
                                     <Border BackgroundColor="#E23B3B" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
                                         <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
                                         <Label Text="{Binding OverdueCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
                                     </Border>
                                 </HorizontalStackLayout>
                             </Border>
-                        </Grid>
+                          </HorizontalStackLayout>
+                        </ScrollView>
                     </Border>
                 </VerticalStackLayout>
             </CollectionView.Header>
@@ -93,19 +121,24 @@
                     <Border BackgroundColor="{Binding RowBackground}" StrokeThickness="0"
                             Padding="12" Margin="16,0,16,8">
                         <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
-                        <Grid ColumnDefinitions="Auto,*,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.OpenInvoiceCommand, Source={x:Reference Page}}"
+                                                  CommandParameter="{Binding Id}" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
                             <Label Grid.Column="0" Text="{Binding Icon}" FontSize="16"
                                    TextColor="{Binding AmountColor}" VerticalOptions="Center" />
                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
-                                <Label Text="{Binding ClientName}" FontSize="14" FontAttributes="Bold"
+                                <Label Text="{Binding Number}" FontSize="14" FontAttributes="Bold"
                                        TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Text="{Binding Description}" FontSize="11" TextColor="{StaticResource Gray400}" />
+                                <Label Text="{Binding ClientName}" FontSize="11" TextColor="{StaticResource Gray400}" />
                             </VerticalStackLayout>
                             <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
                                 <Label Text="{Binding DateText}" FontSize="11" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
                                 <Label Text="{Binding AmountText}" FontSize="14" FontAttributes="Bold"
                                        TextColor="{Binding AmountColor}" VerticalOptions="Center" />
                             </HorizontalStackLayout>
+                            <Label Grid.Column="3" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>
@@ -126,9 +159,9 @@
                     <VerticalStackLayout Spacing="12">
 
                         <VerticalStackLayout Spacing="0">
-                            <Label Text="Période de vente" FontSize="18" FontAttributes="Bold"
+                            <Label Text="{loc:Translate SalesPeriodTitle}" FontSize="18" FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            <Label Text="Sélectionnez une période" FontSize="12" TextColor="{StaticResource Gray400}" />
+                            <Label Text="{loc:Translate SalesPeriodSubtitle}" FontSize="12" TextColor="{StaticResource Gray400}" />
                         </VerticalStackLayout>
 
                         <Border BackgroundColor="{AppThemeBinding Light=#FEF9E7, Dark=#2A2616}" Stroke="#F2A900" StrokeThickness="1.5" Padding="12">
@@ -138,7 +171,7 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Today" FontSize="15" FontAttributes="Bold" TextColor="#B9770E" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="6 ventes · 5 240,00 $" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{loc:Translate PeriodTodaySales}" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
                             </Grid>
                         </Border>
 
@@ -149,7 +182,7 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Week" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="14 ventes · 28 750,00 $" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{loc:Translate PeriodWeekSales}" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
                             </Grid>
                         </Border>
 
@@ -160,7 +193,7 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="Month" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="28 ventes · 141 380,00 $" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{loc:Translate PeriodMonthSales}" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
                             </Grid>
                         </Border>
 
@@ -171,7 +204,7 @@
                             </Border.GestureRecognizers>
                             <Grid ColumnDefinitions="Auto,*">
                                 <Label Grid.Column="0" Text="3 Months" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
-                                <Label Grid.Column="1" Text="25 ventes · 458 820,00 $" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{loc:Translate Period3MonthsSales}" FontSize="12" TextColor="{StaticResource Gray500}" HorizontalOptions="End" VerticalOptions="Center" />
                             </Grid>
                         </Border>
                     </VerticalStackLayout>

@@ -3,133 +3,149 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:_60SecAI.Controls"
              xmlns:vm="clr-namespace:_60SecAI.ViewModels"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.AiPaymentDetailPage"
+             x:Name="Page"
              x:DataType="vm:AiPaymentDetailViewModel"
              Shell.NavBarIsVisible="False"
-             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#0E1220}">
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
 
     <Grid RowDefinitions="Auto,*">
 
+        <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
                               PageTitle="AI Payment"
-                              Subtitle="Gestion en temps réel avec AI"
-                              Balance="48320.55" />
+                              Subtitle="{loc:Translate RealtimeSubtitle}"
+                              Balance="48320.55"
+                              ShowHome="True" />
 
-        <CollectionView Grid.Row="1" ItemsSource="{Binding Payments}">
+        <CollectionView Grid.Row="1"
+                        ItemsSource="{Binding Invoices}">
 
+            <!-- ===== En-tête : titre + onglets ===== -->
             <CollectionView.Header>
-                <VerticalStackLayout Padding="16" Spacing="16">
+                <VerticalStackLayout>
 
-                    <!-- Résumé -->
-                    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#141A2A}" StrokeThickness="0" Padding="14">
+                    <Grid ColumnDefinitions="*,Auto" Padding="16,16,16,8" ColumnSpacing="8" VerticalOptions="Center">
+                        <Label Grid.Column="0" Text="{loc:Translate SupplierInvoicesTitle}" FontSize="20" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                        <Button Grid.Column="1" Text="{loc:Translate NewInvoice}"
+                                BackgroundColor="{StaticResource Primary}" TextColor="White"
+                                FontSize="13" FontAttributes="Bold" HeightRequest="40"
+                                CornerRadius="14" Padding="14,0" VerticalOptions="Center"
+                                Clicked="OnNewInvoiceClicked" />
+                    </Grid>
+
+                    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                            StrokeThickness="0" Padding="16" Margin="16,0,16,8">
                         <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
-                        <VerticalStackLayout Spacing="12">
+                        <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                          <HorizontalStackLayout Spacing="6">
 
-                            <Grid ColumnDefinitions="*,*" ColumnSpacing="10">
-                                <Border Grid.Column="0" BackgroundColor="#17A672" StrokeThickness="0" Padding="14,12">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
-                                    <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
-                                        <VerticalStackLayout Grid.Column="0" Spacing="1">
-                                            <Label Text="AUJOURD'HUI" FontSize="10" FontAttributes="Bold" TextColor="#D8F5E8" />
-                                            <Label Text="mar. 2 juin" FontSize="10" TextColor="#BEEAD5" />
-                                        </VerticalStackLayout>
-                                        <Label Grid.Column="1" Text="6 206,61 $" FontSize="17" FontAttributes="Bold" TextColor="White" VerticalOptions="Center" />
-                                    </Grid>
-                                </Border>
-                                <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#FDECEC, Dark=#2A1720}" StrokeThickness="0" Padding="14,12">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="16" /></Border.StrokeShape>
-                                    <Grid ColumnDefinitions="Auto,*" ColumnSpacing="8" VerticalOptions="Center">
-                                        <VerticalStackLayout Grid.Column="0" Spacing="1">
-                                            <HorizontalStackLayout Spacing="3">
-                                                <Label Text="&#9888;" FontSize="10" TextColor="#E74C3C" />
-                                                <Label Text="EN RETARD" FontSize="10" FontAttributes="Bold" TextColor="#E74C3C" />
-                                            </HorizontalStackLayout>
-                                            <Label Text="3 tx" FontSize="10" TextColor="#E88" />
-                                        </VerticalStackLayout>
-                                        <Label Grid.Column="1" Text="16 369,05 $" FontSize="16" FontAttributes="Bold" TextColor="#E74C3C" HorizontalOptions="End" VerticalOptions="Center" />
-                                    </Grid>
-                                </Border>
-                            </Grid>
+                            <Border BackgroundColor="{Binding AllTabBg}"
+                                    StrokeThickness="0" Padding="12,8">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="all" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#128203;" FontSize="12" TextColor="#2D6CDF" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabAll}" FontSize="12" FontAttributes="Bold" TextColor="#2D6CDF" VerticalTextAlignment="Center" />
+                                    <Border BackgroundColor="#2D6CDF" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
+                                        <Label Text="{Binding AllCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
 
-                            <!-- 4 catégories -->
-                            <Grid ColumnDefinitions="*,*,*,*" ColumnSpacing="8">
-                                <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#1B2233}" Stroke="{Binding GeneralStroke}" StrokeThickness="1.5" Padding="8,10">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
-                                    <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="General" /></Border.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                        <Label Text="&#128188;" FontSize="16" TextColor="#2D9CDB" HorizontalOptions="Center" />
-                                        <Label Text="{Binding GeneralCount}" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
-                                        <Label Text="Général" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#1B2233}" Stroke="{Binding InstitutionStroke}" StrokeThickness="1.5" Padding="8,10">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
-                                    <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="Institution" /></Border.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                        <Label Text="&#127963;" FontSize="16" TextColor="#F2C94C" HorizontalOptions="Center" />
-                                        <Label Text="{Binding InstitutionCount}" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
-                                        <Label Text="Institution" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="2" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#13251F}" Stroke="{Binding GouvernementStroke}" StrokeThickness="1.5" Padding="8,10">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
-                                    <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="Gouvernement" /></Border.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                        <Label Text="&#127970;" FontSize="16" TextColor="#17A672" HorizontalOptions="Center" />
-                                        <Label Text="{Binding GouvernementCount}" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
-                                        <Label Text="Gouvernement" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
-                                    </VerticalStackLayout>
-                                </Border>
-                                <Border Grid.Column="3" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#1B2233}" Stroke="{Binding PaieStroke}" StrokeThickness="1.5" Padding="8,10">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
-                                    <Border.GestureRecognizers><TapGestureRecognizer Command="{Binding SelectCategoryCommand}" CommandParameter="Paie" /></Border.GestureRecognizers>
-                                    <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                        <Label Text="&#128101;" FontSize="16" TextColor="#EB5286" HorizontalOptions="Center" />
-                                        <Label Text="{Binding PaieCount}" FontSize="16" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
-                                        <Label Text="Paie" FontSize="10" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
-                                    </VerticalStackLayout>
-                                </Border>
-                            </Grid>
-                        </VerticalStackLayout>
+                            <Border BackgroundColor="{Binding PaidTabBg}"
+                                    StrokeThickness="0" Padding="12,8">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="paid" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#128200;" FontSize="12" TextColor="#1E8449" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabPaid}" FontSize="12" FontAttributes="Bold" TextColor="#1E8449" VerticalTextAlignment="Center" />
+                                    <Border BackgroundColor="#1E8449" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
+                                        <Label Text="{Binding PaidCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="{Binding ToPayTabBg}"
+                                    StrokeThickness="0" Padding="12,8">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="topay" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#8599;" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabToPay}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Border BackgroundColor="#E9A100" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
+                                        <Label Text="{Binding ToPayCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
+
+                            <Border BackgroundColor="{Binding OverdueTabBg}"
+                                    StrokeThickness="0" Padding="12,8">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                <Border.GestureRecognizers>
+                                    <TapGestureRecognizer Command="{Binding SelectTabCommand}" CommandParameter="overdue" />
+                                </Border.GestureRecognizers>
+                                <HorizontalStackLayout Spacing="5">
+                                    <Label Text="&#9888;" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate TabOverdue}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
+                                    <Border BackgroundColor="#E23B3B" StrokeThickness="0" Padding="6,1" VerticalOptions="Center">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="9" /></Border.StrokeShape>
+                                        <Label Text="{Binding OverdueCount}" FontSize="10" FontAttributes="Bold" TextColor="White" />
+                                    </Border>
+                                </HorizontalStackLayout>
+                            </Border>
+                          </HorizontalStackLayout>
+                        </ScrollView>
                     </Border>
-
-                    <!-- Filtre -->
-                    <HorizontalStackLayout Spacing="8" VerticalOptions="Center" IsVisible="{Binding FilterVisible}">
-                        <Label Text="Filtre :" FontSize="12" TextColor="{StaticResource Gray400}" VerticalTextAlignment="Center" />
-                        <Border BackgroundColor="{AppThemeBinding Light=#E1E4EC, Dark=#2B3346}" StrokeThickness="0" Padding="10,5">
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                            <HorizontalStackLayout Spacing="6">
-                                <Label Text="{Binding FilterChipText}" FontSize="12" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalTextAlignment="Center" />
-                                <Label Text="&#10005;" FontSize="11" TextColor="{StaticResource Gray400}" VerticalTextAlignment="Center">
-                                    <Label.GestureRecognizers>
-                                        <TapGestureRecognizer Command="{Binding ClearFilterCommand}" />
-                                    </Label.GestureRecognizers>
-                                </Label>
-                            </HorizontalStackLayout>
-                        </Border>
-                    </HorizontalStackLayout>
                 </VerticalStackLayout>
             </CollectionView.Header>
 
-            <!-- Paiement (item) -->
+            <!-- ===== Facture fournisseur (item) ===== -->
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="vm:PaymentListItem">
-                    <controls:PaymentRow Day="{Binding Day}" Month="{Binding Month}"
-                                         Payer="{Binding Payer}" Amount="{Binding Amount}"
-                                         Detail="{Binding Detail}" Category="{Binding CategoryLabel}"
-                                         DelayText="{Binding DelayText}" Margin="16,0" />
+                <DataTemplate x:DataType="vm:InvoiceListItem">
+                    <Border BackgroundColor="{Binding RowBackground}" StrokeThickness="0"
+                            Padding="12" Margin="16,0,16,8">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding BindingContext.OpenInvoiceCommand, Source={x:Reference Page}}"
+                                                  CommandParameter="{Binding Id}" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                            <Label Grid.Column="0" Text="{Binding Icon}" FontSize="16"
+                                   TextColor="{Binding AmountColor}" VerticalOptions="Center" />
+                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
+                                <Label Text="{Binding Number}" FontSize="14" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Text="{Binding ClientName}" FontSize="11" TextColor="{StaticResource Gray400}" />
+                            </VerticalStackLayout>
+                            <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
+                                <Label Text="{Binding DateText}" FontSize="11" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                <Label Text="{Binding AmountText}" FontSize="14" FontAttributes="Bold"
+                                       TextColor="{Binding AmountColor}" VerticalOptions="Center" />
+                            </HorizontalStackLayout>
+                            <Label Grid.Column="3" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
 
+            <!-- ===== Liste vide ===== -->
             <CollectionView.EmptyView>
                 <Label Text="{Binding EmptyText}" FontSize="13"
                        TextColor="{StaticResource Gray400}"
                        HorizontalTextAlignment="Center" Margin="0,24" />
             </CollectionView.EmptyView>
-
-            <CollectionView.Footer>
-                <BoxView HeightRequest="16" Color="Transparent" />
-            </CollectionView.Footer>
         </CollectionView>
     </Grid>
 

@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:_60SecAI.Controls"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.DashboardPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
@@ -10,7 +11,7 @@
 
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
-                              PageTitle="Dashboard 60SecAi"
+                              PageTitle="{loc:Translate DashboardTitle}"
                               Balance="48320.55" />
 
         <!-- Contenu du dashboard -->
@@ -55,7 +56,7 @@
                                     <Label Text="&#128179;"
                                            FontSize="14"
                                            VerticalTextAlignment="Center" />
-                                    <Label Text="Nouvelle facture"
+                                    <Label Text="{loc:Translate NewInvoice}"
                                            TextColor="White"
                                            FontAttributes="Bold"
                                            FontSize="14"
@@ -91,7 +92,7 @@
                                         <Label Text="&#9888;"
                                                FontSize="11"
                                                TextColor="#C0392B" />
-                                        <Label Text="Retard"
+                                        <Label Text="{loc:Translate SalesOverdue}"
                                                FontSize="11"
                                                TextColor="#C0392B" />
                                     </HorizontalStackLayout>
@@ -114,7 +115,7 @@
                                             <Label Text="&#128176;"
                                                    FontSize="10"
                                                    VerticalTextAlignment="Center" />
-                                            <Label Text="Collecter"
+                                            <Label Text="{loc:Translate Collect}"
                                                    TextColor="White"
                                                    FontSize="11"
                                                    FontAttributes="Bold"
@@ -141,7 +142,7 @@
                                         <Label Text="&#128200;"
                                                FontSize="11"
                                                TextColor="#1E8449" />
-                                        <Label Text="Collecté (3)"
+                                        <Label Text="{loc:Translate SalesCollected}"
                                                FontSize="11"
                                                TextColor="#1E8449" />
                                     </HorizontalStackLayout>
@@ -170,7 +171,7 @@
                                         <Label Text="&#8599;"
                                                FontSize="11"
                                                TextColor="#B9770E" />
-                                        <Label Text="À recevoir (3)"
+                                        <Label Text="{loc:Translate SalesReceivable}"
                                                FontSize="11"
                                                TextColor="#B9770E" />
                                     </HorizontalStackLayout>
@@ -222,7 +223,7 @@
                                     <Label Text="&#128247;"
                                            FontSize="14"
                                            VerticalTextAlignment="Center" />
-                                    <Label Text="Reçu"
+                                    <Label Text="{loc:Translate Receipt}"
                                            TextColor="White"
                                            FontAttributes="Bold"
                                            FontSize="14"
@@ -250,7 +251,7 @@
                                     <RoundRectangle CornerRadius="14" />
                                 </Border.StrokeShape>
                                 <VerticalStackLayout Spacing="4">
-                                    <Label Text="AUJ."
+                                    <Label Text="{loc:Translate PayToday}"
                                            FontSize="10"
                                            TextColor="#D8F5E8" />
                                     <Label Text="6 206,61 $"
@@ -273,7 +274,7 @@
                                         <Label Text="&#9888;"
                                                FontSize="10"
                                                TextColor="#C0392B" />
-                                        <Label Text="EN RETARD (3)"
+                                        <Label Text="{loc:Translate PayOverdue}"
                                                FontSize="10"
                                                TextColor="#C0392B" />
                                     </HorizontalStackLayout>
@@ -293,7 +294,7 @@
                                     <RoundRectangle CornerRadius="14" />
                                 </Border.StrokeShape>
                                 <VerticalStackLayout Spacing="4">
-                                    <Label Text="TOTAL"
+                                    <Label Text="{loc:Translate Total}"
                                            FontSize="10"
                                            TextColor="{StaticResource Gray500}" />
                                     <Label Text="22 575,66 $"
@@ -331,7 +332,7 @@
                                         <Label Text="&#127974;"
                                                FontSize="12" />
                                     </HorizontalStackLayout>
-                                    <Label Text="Général"
+                                    <Label Text="{loc:Translate CatGeneral}"
                                            FontSize="10"
                                            TextColor="{StaticResource Gray500}"
                                            HorizontalTextAlignment="Center" />
@@ -366,7 +367,7 @@
                                         <Label Text="&#127963;"
                                                FontSize="12" />
                                     </HorizontalStackLayout>
-                                    <Label Text="Institution"
+                                    <Label Text="{loc:Translate CatInstitution}"
                                            FontSize="10"
                                            TextColor="{StaticResource Gray500}"
                                            HorizontalTextAlignment="Center" />
@@ -401,7 +402,7 @@
                                         <Label Text="&#127970;"
                                                FontSize="12" />
                                     </HorizontalStackLayout>
-                                    <Label Text="Gouvernement"
+                                    <Label Text="{loc:Translate CatGovernment}"
                                            FontSize="10"
                                            TextColor="{StaticResource Gray500}"
                                            HorizontalTextAlignment="Center" />
@@ -436,7 +437,7 @@
                                         <Label Text="&#128101;"
                                                FontSize="12" />
                                     </HorizontalStackLayout>
-                                    <Label Text="Paie"
+                                    <Label Text="{loc:Translate CatPayroll}"
                                            FontSize="10"
                                            TextColor="{StaticResource Gray500}"
                                            HorizontalTextAlignment="Center" />
@@ -469,7 +470,7 @@
                               VerticalOptions="Center">
 
                             <Label Grid.Column="0"
-                                   Text="Agenda"
+                                   Text="{loc:Translate AgendaTitle}"
                                    FontSize="20"
                                    FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
@@ -489,7 +490,7 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12" />
                                         </Border.StrokeShape>
-                                        <Label Text="Auj."
+                                        <Label Text="{loc:Translate FilterToday}"
                                                TextColor="White"
                                                FontAttributes="Bold"
                                                FontSize="12"
@@ -504,7 +505,7 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12" />
                                         </Border.StrokeShape>
-                                        <Label Text="RDV: 3 - 3.5h"
+                                        <Label Text="{loc:Translate AgendaSummary}"
                                                TextColor="{StaticResource Gray600}"
                                                FontSize="11"
                                                FontAttributes="Bold"
@@ -519,7 +520,7 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12" />
                                         </Border.StrokeShape>
-                                        <Label Text="Dem."
+                                        <Label Text="{loc:Translate FilterTomorrow}"
                                                TextColor="{StaticResource Gray600}"
                                                FontSize="12"
                                                VerticalTextAlignment="Center" />
@@ -533,7 +534,7 @@
                                         <Border.StrokeShape>
                                             <RoundRectangle CornerRadius="12" />
                                         </Border.StrokeShape>
-                                        <Label Text="Sem."
+                                        <Label Text="{loc:Translate FilterWeek}"
                                                TextColor="{StaticResource Gray600}"
                                                FontSize="12"
                                                VerticalTextAlignment="Center" />
@@ -620,7 +621,7 @@
                                                    TextColor="{StaticResource Gray400}"
                                                    VerticalTextAlignment="Center" />
                                         </HorizontalStackLayout>
-                                        <Label Text="Massothérapie"
+                                        <Label Text="{loc:Translate TradeMassage}"
                                                FontSize="10"
                                                TextColor="{StaticResource Gray400}" />
                                     </VerticalStackLayout>
@@ -639,7 +640,7 @@
                                                 <Label Text="&#128179;"
                                                        FontSize="10"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Facture"
+                                                <Label Text="{loc:Translate Invoice}"
                                                        FontSize="10"
                                                        TextColor="{StaticResource Gray600}"
                                                        VerticalTextAlignment="Center" />
@@ -656,7 +657,7 @@
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Payer"
+                                                <Label Text="{loc:Translate Pay}"
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />
@@ -709,7 +710,7 @@
                                                    TextColor="{StaticResource Gray400}"
                                                    VerticalTextAlignment="Center" />
                                         </HorizontalStackLayout>
-                                        <Label Text="Plomberie"
+                                        <Label Text="{loc:Translate TradePlumbing}"
                                                FontSize="10"
                                                TextColor="{StaticResource Gray400}" />
                                     </VerticalStackLayout>
@@ -728,7 +729,7 @@
                                                 <Label Text="&#128179;"
                                                        FontSize="10"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Facture"
+                                                <Label Text="{loc:Translate Invoice}"
                                                        FontSize="10"
                                                        TextColor="{StaticResource Gray600}"
                                                        VerticalTextAlignment="Center" />
@@ -745,7 +746,7 @@
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Payer"
+                                                <Label Text="{loc:Translate Pay}"
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />
@@ -798,7 +799,7 @@
                                                    TextColor="{StaticResource Gray400}"
                                                    VerticalTextAlignment="Center" />
                                         </HorizontalStackLayout>
-                                        <Label Text="Consultation"
+                                        <Label Text="{loc:Translate TradeConsultation}"
                                                FontSize="10"
                                                TextColor="{StaticResource Gray400}" />
                                     </VerticalStackLayout>
@@ -817,7 +818,7 @@
                                                 <Label Text="&#128179;"
                                                        FontSize="10"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Facture"
+                                                <Label Text="{loc:Translate Invoice}"
                                                        FontSize="10"
                                                        TextColor="{StaticResource Gray600}"
                                                        VerticalTextAlignment="Center" />
@@ -834,7 +835,7 @@
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />
-                                                <Label Text="Payer"
+                                                <Label Text="{loc:Translate Pay}"
                                                        FontSize="10"
                                                        TextColor="#17A672"
                                                        VerticalTextAlignment="Center" />

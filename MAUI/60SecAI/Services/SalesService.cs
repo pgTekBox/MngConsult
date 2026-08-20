@@ -25,4 +25,21 @@ public class SalesService
 		var invoices = await _http.GetFromJsonAsync<List<InvoiceDto>>(url, JsonOptions, ct);
 		return invoices ?? [];
 	}
+
+	/// <summary>Détail d'une facture (en-tête + lignes).</summary>
+	public async Task<InvoiceDetailDto?> GetInvoiceAsync(int id, CancellationToken ct = default)
+		=> await _http.GetFromJsonAsync<InvoiceDetailDto>($"api/sales/invoices/{id}", JsonOptions, ct);
+
+	/// <summary>Liste des clients (pour le sélecteur de facture).</summary>
+	public async Task<IReadOnlyList<ClientLookupDto>> GetClientsAsync(CancellationToken ct = default)
+		=> await _http.GetFromJsonAsync<List<ClientLookupDto>>("api/sales/customers", JsonOptions, ct) ?? [];
+
+	/// <summary>Crée une facture brouillon. Renvoie l'Id créé (0 si échec).</summary>
+	public async Task<int> CreateInvoiceAsync(CreateInvoiceRequest request, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsJsonAsync("api/sales/invoices", request, JsonOptions, ct);
+		response.EnsureSuccessStatusCode();
+		var result = await response.Content.ReadFromJsonAsync<CreateInvoiceResult>(JsonOptions, ct);
+		return result?.Id ?? 0;
+	}
 }

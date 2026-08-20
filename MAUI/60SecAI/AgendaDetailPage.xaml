@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:controls="clr-namespace:_60SecAI.Controls"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.AgendaDetailPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
@@ -10,9 +11,10 @@
 
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
-                              PageTitle="Agenda"
-                              Subtitle="Gestion en temps réel avec AI"
-                              Balance="48320.55" />
+                              PageTitle="{loc:Translate AgendaTitle}"
+                              Subtitle="{loc:Translate RealtimeSubtitle}"
+                              Balance="48320.55"
+                              ShowHome="True" />
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="16"
@@ -28,7 +30,7 @@
 
                     <VerticalStackLayout Spacing="14">
 
-                        <Label Text="Agenda personnel · Travailleur autonome"
+                        <Label Text="{loc:Translate AgendaPersonalHeader}"
                                FontSize="13"
                                TextColor="{StaticResource Gray400}" />
 
@@ -47,7 +49,7 @@
                                     </Border.StrokeShape>
                                     <HorizontalStackLayout Spacing="6">
                                         <Label Text="&#128100;" FontSize="13" TextColor="#1E8449" VerticalTextAlignment="Center" />
-                                        <Label Text="Travailleur autonome" FontSize="13" FontAttributes="Bold" TextColor="#1E8449" VerticalTextAlignment="Center" />
+                                        <Label Text="{loc:Translate WorkerType}" FontSize="13" FontAttributes="Bold" TextColor="#1E8449" VerticalTextAlignment="Center" />
                                     </HorizontalStackLayout>
                                 </Border>
 
@@ -83,7 +85,7 @@
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="OnViewToggle" CommandParameter="Journée" />
                                             </Border.GestureRecognizers>
-                                            <Label x:Name="ViewJourneeLabel" Text="Journée" FontSize="12" FontAttributes="Bold" TextColor="#3B5BDB" />
+                                            <Label x:Name="ViewJourneeLabel" Text="{loc:Translate ViewDay}" FontSize="12" FontAttributes="Bold" TextColor="#3B5BDB" />
                                         </Border>
                                         <Border x:Name="ViewSemaine"
                                                 BackgroundColor="Transparent"
@@ -95,7 +97,7 @@
                                             <Border.GestureRecognizers>
                                                 <TapGestureRecognizer Tapped="OnViewToggle" CommandParameter="Semaine" />
                                             </Border.GestureRecognizers>
-                                            <Label x:Name="ViewSemaineLabel" Text="Semaine" FontSize="12" TextColor="{StaticResource Gray500}" />
+                                            <Label x:Name="ViewSemaineLabel" Text="{loc:Translate ViewWeek}" FontSize="12" TextColor="{StaticResource Gray500}" />
                                         </Border>
                                     </HorizontalStackLayout>
                                 </Border>
@@ -112,8 +114,8 @@
                                 <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label Text="2" FontSize="22" FontAttributes="Bold" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
-                                    <Label Text="Confirmés" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="semaine" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate StatConfirmed}" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate LabelWeek}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Border>
 
@@ -121,8 +123,8 @@
                                 <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label Text="3" FontSize="22" FontAttributes="Bold" TextColor="#1E8449" HorizontalTextAlignment="Center" />
-                                    <Label Text="Terminés" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="semaine" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate StatCompleted}" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate LabelWeek}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Border>
 
@@ -130,8 +132,8 @@
                                 <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
                                     <Label Text="0h" FontSize="22" FontAttributes="Bold" TextColor="#16A085" HorizontalTextAlignment="Center" />
-                                    <Label Text="À venir" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
-                                    <Label Text="journée" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate StatUpcoming}" FontSize="11" TextColor="{StaticResource Gray500}" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate LabelDay}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Border>
                         </Grid>
@@ -157,7 +159,7 @@
                             </Label>
                             <VerticalStackLayout Grid.Column="1" Spacing="0" HorizontalOptions="Center">
                                 <Label Text="Mar 16 Juin 2026" FontSize="16" FontAttributes="Bold" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
-                                <Label Text="Aujourd'hui" FontSize="12" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate TodayFull}" FontSize="12" TextColor="#2D6CDF" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                             <Label Grid.Column="2" Text="&#8250;" FontSize="24" TextColor="{StaticResource Gray400}" VerticalOptions="Center">
                                 <Label.GestureRecognizers>
@@ -171,7 +173,7 @@
                               ColumnSpacing="4">
 
                             <VerticalStackLayout Grid.Column="0" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="LUN" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowMon}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="15" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text=" " FontSize="9" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
@@ -179,38 +181,38 @@
                             <Border Grid.Column="1" BackgroundColor="#3B5BDB" StrokeThickness="0" Padding="0,8">
                                 <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
                                 <VerticalStackLayout Spacing="2" HorizontalOptions="Center">
-                                    <Label Text="MAR" FontSize="9" TextColor="#C9D4FA" HorizontalTextAlignment="Center" />
+                                    <Label Text="{loc:Translate DowTue}" FontSize="9" TextColor="#C9D4FA" HorizontalTextAlignment="Center" />
                                     <Label Text="16" FontSize="14" FontAttributes="Bold" TextColor="White" HorizontalTextAlignment="Center" />
                                     <Label Text="3" FontSize="9" TextColor="#C9D4FA" HorizontalTextAlignment="Center" />
                                 </VerticalStackLayout>
                             </Border>
 
                             <VerticalStackLayout Grid.Column="2" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="MER" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowWed}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="17" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text="4" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="3" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="JEU" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowThu}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="18" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text="3" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="4" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="VEN" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowFri}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="19" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text="3" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="5" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="SAM" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowSat}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="20" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text="2" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
 
                             <VerticalStackLayout Grid.Column="6" Spacing="2" HorizontalOptions="Center">
-                                <Label Text="DIM" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
+                                <Label Text="{loc:Translate DowSun}" FontSize="9" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="Center" />
                                 <Label Text="21" FontSize="14" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" HorizontalTextAlignment="Center" />
                                 <Label Text=" " FontSize="9" HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
@@ -219,7 +221,7 @@
                 </Border>
 
                 <!-- Bouton ajouter un rendez-vous -->
-                <Button Text="+ Ajouter un rendez-vous"
+                <Button Text="{loc:Translate AddAppointment}"
                         BackgroundColor="{StaticResource Primary}" TextColor="White"
                         FontAttributes="Bold" FontSize="15"
                         HeightRequest="48" CornerRadius="24"
@@ -227,17 +229,17 @@
 
                 <!-- ===== Rendez-vous ===== -->
                 <controls:AppointmentCard Accent="#8B5CF6" AvatarBg="#EDE3FB" Avatar="&#128100;"
-                                          PersonName="M. Ouellet" Trade="Massothérapie" Status="Terminé"
+                                          PersonName="M. Ouellet" Trade="{loc:Translate TradeMassage}" Status="{loc:Translate StatusDone}"
                                           Time="09:00" TimeRange="09:00 – 10:00" Duration="1h"
                                           Extra="Marie" ShowActions="True" />
 
                 <controls:AppointmentCard Accent="#4C9AE6" AvatarBg="#E1ECFB" Avatar="&#128167;"
-                                          PersonName="Mme Pelletier" Trade="Plomberie" Status="Facturé"
+                                          PersonName="Mme Pelletier" Trade="{loc:Translate TradePlumbing}" Status="{loc:Translate StatusInvoiced}"
                                           Time="11:00" TimeRange="11:20 – 12:50" Duration="1h30"
                                           Extra="+20min · Jean" ShowActions="False" />
 
                 <controls:AppointmentCard Accent="#16B39A" AvatarBg="#DFF5EF" Avatar="&#127873;"
-                                          PersonName="Transport Nadeau" Trade="Consultation" Status="Terminé"
+                                          PersonName="Transport Nadeau" Trade="{loc:Translate TradeConsultation}" Status="{loc:Translate StatusDone}"
                                           Time="14:00" TimeRange="14:00 – 15:00" Duration="1h"
                                           Extra="Pierre" ShowActions="True" />
 
@@ -250,7 +252,7 @@
                     </Border.StrokeShape>
 
                     <VerticalStackLayout Spacing="10">
-                        <Label Text="SERVICES"
+                        <Label Text="{loc:Translate ServicesTitle}"
                                FontSize="12"
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray500}" />
@@ -260,14 +262,14 @@
                               ColumnSpacing="10"
                               RowSpacing="10">
 
-                            <controls:ServiceChip Grid.Row="0" Grid.Column="0" Icon="&#128100;" Accent="#8B5CF6" ServiceName="Massothérapie" Duration="60min" />
-                            <controls:ServiceChip Grid.Row="0" Grid.Column="1" Icon="&#128167;" Accent="#4C9AE6" ServiceName="Plomberie" Duration="90min" />
-                            <controls:ServiceChip Grid.Row="1" Grid.Column="0" Icon="&#9889;" Accent="#E9A100" ServiceName="Électricité" Duration="120min" />
-                            <controls:ServiceChip Grid.Row="1" Grid.Column="1" Icon="&#127912;" Accent="#EB5286" ServiceName="Peinture" Duration="180min" />
-                            <controls:ServiceChip Grid.Row="2" Grid.Column="0" Icon="&#127959;" Accent="#E2703A" ServiceName="Construction" Duration="480min" />
-                            <controls:ServiceChip Grid.Row="2" Grid.Column="1" Icon="&#128295;" Accent="#7F8C8D" ServiceName="Mécanique" Duration="90min" />
-                            <controls:ServiceChip Grid.Row="3" Grid.Column="0" Icon="&#127970;" Accent="#16B39A" ServiceName="Consultation" Duration="60min" />
-                            <controls:ServiceChip Grid.Row="3" Grid.Column="1" Icon="&#128666;" Accent="#27AE60" ServiceName="Livraison" Duration="45min" />
+                            <controls:ServiceChip Grid.Row="0" Grid.Column="0" Icon="&#128100;" Accent="#8B5CF6" ServiceName="{loc:Translate TradeMassage}" Duration="60min" />
+                            <controls:ServiceChip Grid.Row="0" Grid.Column="1" Icon="&#128167;" Accent="#4C9AE6" ServiceName="{loc:Translate TradePlumbing}" Duration="90min" />
+                            <controls:ServiceChip Grid.Row="1" Grid.Column="0" Icon="&#9889;" Accent="#E9A100" ServiceName="{loc:Translate TradeElectricity}" Duration="120min" />
+                            <controls:ServiceChip Grid.Row="1" Grid.Column="1" Icon="&#127912;" Accent="#EB5286" ServiceName="{loc:Translate TradePainting}" Duration="180min" />
+                            <controls:ServiceChip Grid.Row="2" Grid.Column="0" Icon="&#127959;" Accent="#E2703A" ServiceName="{loc:Translate TradeConstruction}" Duration="480min" />
+                            <controls:ServiceChip Grid.Row="2" Grid.Column="1" Icon="&#128295;" Accent="#7F8C8D" ServiceName="{loc:Translate TradeMechanics}" Duration="90min" />
+                            <controls:ServiceChip Grid.Row="3" Grid.Column="0" Icon="&#127970;" Accent="#16B39A" ServiceName="{loc:Translate TradeConsultation}" Duration="60min" />
+                            <controls:ServiceChip Grid.Row="3" Grid.Column="1" Icon="&#128666;" Accent="#27AE60" ServiceName="{loc:Translate TradeDelivery}" Duration="45min" />
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
