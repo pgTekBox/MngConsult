@@ -1,4 +1,6 @@
+using System.ComponentModel;
 using System.Globalization;
+using _60SecAI.Localization;
 
 namespace _60SecAI.Controls;
 
@@ -30,6 +32,14 @@ public partial class TopMenuView : ContentView
 			0m,
 			propertyChanged: OnBalanceChanged);
 
+	public static readonly BindableProperty ShowHomeProperty =
+		BindableProperty.Create(
+			nameof(ShowHome),
+			typeof(bool),
+			typeof(TopMenuView),
+			false,
+			propertyChanged: OnShowHomeChanged);
+
 	public string PageTitle
 	{
 		get => (string)GetValue(PageTitleProperty);
@@ -49,6 +59,13 @@ public partial class TopMenuView : ContentView
 		set => SetValue(BalanceProperty, value);
 	}
 
+	/// <summary>Affiche le bouton accueil (retour au dashboard). Faux par défaut.</summary>
+	public bool ShowHome
+	{
+		get => (bool)GetValue(ShowHomeProperty);
+		set => SetValue(ShowHomeProperty, value);
+	}
+
 	public event EventHandler? FinancialReportClicked;
 	public event EventHandler? BlackBoxClicked;
 
@@ -56,10 +73,27 @@ public partial class TopMenuView : ContentView
 	{
 		InitializeComponent();
 
+		Loaded += OnLoaded;
+		Unloaded += OnUnloaded;
+
 		UpdateTitleLabel();
 		UpdateSubtitleLabel();
 		UpdateBalanceLabel();
 	}
+
+	private void OnLoaded(object? sender, EventArgs e)
+	{
+		LocalizationResourceManager.Instance.PropertyChanged += OnLanguageChanged;
+		UpdateSubtitleLabel();
+	}
+
+	private void OnUnloaded(object? sender, EventArgs e)
+	{
+		LocalizationResourceManager.Instance.PropertyChanged -= OnLanguageChanged;
+	}
+
+	private void OnLanguageChanged(object? sender, PropertyChangedEventArgs e)
+		=> UpdateSubtitleLabel();
 
 	private static void OnPageTitleChanged(BindableObject bindable, object oldValue, object newValue)
 	{
@@ -85,8 +119,21 @@ public partial class TopMenuView : ContentView
 	private void UpdateSubtitleLabel()
 	{
 		DateLabel.Text = string.IsNullOrWhiteSpace(Subtitle)
-			? DateTime.Now.ToString("dddd d MMMM yyyy", FrCulture)
+			? FormatToday()
 			: Subtitle;
+	}
+
+	/// <summary>Date du jour formatée selon la langue courante.</summary>
+	private static string FormatToday()
+	{
+		var (culture, pattern) = LocalizationResourceManager.Instance.CurrentLanguage switch
+		{
+			"en" => (CultureInfo.GetCultureInfo("en-CA"), "dddd, MMMM d, yyyy"),
+			"es" => (CultureInfo.GetCultureInfo("es-ES"), "dddd d 'de' MMMM 'de' yyyy"),
+			_ => (FrCulture, "dddd d MMMM yyyy"),
+		};
+
+		return DateTime.Now.ToString(pattern, culture);
 	}
 
 	private static void OnBalanceChanged(BindableObject bindable, object oldValue, object newValue)
@@ -119,6 +166,30 @@ public partial class TopMenuView : ContentView
 		if (Shell.Current is not null)
 		{
 			await Shell.Current.GoToAsync("BlackBoxPage");
+		}
+	}
+
+	private async void OnSettingsTapped(object? sender, TappedEventArgs e)
+	{
+		if (Shell.Current is not null)
+		{
+			await Shell.Current.GoToAsync("SettingsPage");
+		}
+	}
+
+	private static void OnShowHomeChanged(BindableObject bindable, object oldValue, object newValue)
+	{
+		if (bindable is TopMenuView view)
+		{
+			view.HomeButton.IsVisible = view.ShowHome;
+		}
+	}
+
+	private async void OnHomeTapped(object? sender, TappedEventArgs e)
+	{
+		if (Shell.Current is not null)
+		{
+			await Shell.Current.GoToAsync("..");
 		}
 	}
 }

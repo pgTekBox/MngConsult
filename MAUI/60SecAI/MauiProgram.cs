@@ -36,11 +36,29 @@ public static class MauiProgram
 			client.BaseAddress = new Uri(api.BaseUrl))
 			.AddHttpMessageHandler<AuthHeaderHandler>();
 
+		builder.Services.AddHttpClient<SupplierService>(client =>
+			client.BaseAddress = new Uri(api.BaseUrl))
+			.AddHttpMessageHandler<AuthHeaderHandler>();
+
+		builder.Services.AddHttpClient<ReportService>(client =>
+			client.BaseAddress = new Uri(api.BaseUrl))
+			.AddHttpMessageHandler<AuthHeaderHandler>();
+
 		// ----- ViewModels (MVVM) -----
 		builder.Services.AddTransient<LoginViewModel>();
 		builder.Services.AddTransient<DashboardViewModel>();
 		builder.Services.AddTransient<AiSalesDetailViewModel>();
+		builder.Services.AddTransient<InvoiceDetailViewModel>();
 		builder.Services.AddTransient<AiPaymentDetailViewModel>();
+		builder.Services.AddTransient<SettingsViewModel>();
+		builder.Services.AddTransient<FinancialReportViewModel>();
+
+		// ----- Scanner de documents natif (reçus) -----
+#if ANDROID
+		builder.Services.AddSingleton<IDocumentScannerService, _60SecAI.Platforms.Android.DocumentScannerService>();
+#elif IOS
+		builder.Services.AddSingleton<IDocumentScannerService, _60SecAI.Platforms.iOS.DocumentScannerService>();
+#endif
 
 #if DEBUG
 		builder.Logging.AddDebug();

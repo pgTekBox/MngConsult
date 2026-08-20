@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:_60SecAI.ViewModels"
+             x:Class="_60SecAI.InvoiceDetailPage"
+             x:DataType="vm:InvoiceDetailViewModel"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,*">
+
+        <!-- En-tête simple avec retour -->
+        <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="16,14">
+            <Label Grid.Column="0" Text="&#8249;" FontSize="26" TextColor="{StaticResource Primary}" VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnBackTapped" />
+                </Label.GestureRecognizers>
+            </Label>
+            <Label Grid.Column="1" Text="{Binding Number}" FontSize="20" FontAttributes="Bold"
+                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+        </Grid>
+
+        <ScrollView Grid.Row="1">
+            <VerticalStackLayout Padding="16" Spacing="16">
+
+                <!-- ===== Carte client / dates ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="6">
+                        <Label Text="{Binding ClientName}" FontSize="16" FontAttributes="Bold"
+                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        <Label Text="{Binding ClientAddress}" FontSize="12" TextColor="{StaticResource Gray400}" />
+                        <Grid ColumnDefinitions="*,*" Margin="0,6,0,0">
+                            <VerticalStackLayout Grid.Column="0" Spacing="1">
+                                <Label Text="Date de facturation" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding IssuedText}" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            </VerticalStackLayout>
+                            <VerticalStackLayout Grid.Column="1" Spacing="1">
+                                <Label Text="Échéance" FontSize="10" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
+                                <Label Text="{Binding DueText}" FontSize="13" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            </VerticalStackLayout>
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Lignes ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Label Text="Lignes" FontSize="15" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+
+                        <VerticalStackLayout BindableLayout.ItemsSource="{Binding Lines}" Spacing="10">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:InvoiceLineRow">
+                                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto">
+                                        <Label Grid.Row="0" Grid.Column="0" Text="{Binding Description}" FontSize="13"
+                                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding Amount}" FontSize="13" FontAttributes="Bold"
+                                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                        <Label Grid.Row="1" Grid.Column="0" Text="{Binding Qty}" FontSize="11" TextColor="{StaticResource Gray400}" />
+                                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding UnitPrice}" FontSize="11" TextColor="{StaticResource Gray400}" HorizontalTextAlignment="End" />
+                                    </Grid>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Sommaire ===== -->
+                <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="8">
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="Sous-total" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="1" Text="{Binding SubTotalText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="TPS" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="1" Text="{Binding TpsText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="TVQ" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="1" Text="{Binding TvqText}" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        </Grid>
+                        <BoxView HeightRequest="1" Color="{AppThemeBinding Light=#EEE, Dark=#2E2942}" />
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="TOTAL" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                            <Label Grid.Column="1" Text="{Binding TotalText}" FontSize="15" FontAttributes="Bold" TextColor="{StaticResource Primary}" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto" Margin="0,4,0,0">
+                            <Label Grid.Column="0" Text="Payé" FontSize="13" TextColor="{StaticResource Gray500}" />
+                            <Label Grid.Column="1" Text="{Binding PaidText}" FontSize="13" FontAttributes="Bold" TextColor="#1E8449" />
+                        </Grid>
+                        <Grid ColumnDefinitions="*,Auto">
+                            <Label Grid.Column="0" Text="Reste à payer" FontSize="15" FontAttributes="Bold" TextColor="#C0392B" />
+                            <Label Grid.Column="1" Text="{Binding BalanceText}" FontSize="15" FontAttributes="Bold" TextColor="#C0392B" />
+                        </Grid>
+                    </VerticalStackLayout>
+                </Border>
+
+                <!-- ===== Note ===== -->
+                <Border IsVisible="{Binding HasNote}" BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}" StrokeThickness="0" Padding="16">
+                    <Border.StrokeShape><RoundRectangle CornerRadius="20" /></Border.StrokeShape>
+                    <VerticalStackLayout Spacing="4">
+                        <Label Text="Note" FontSize="13" FontAttributes="Bold" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                        <Label Text="{Binding Note}" FontSize="12" TextColor="{StaticResource Gray500}" />
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </Grid>
+
+</ContentPage>

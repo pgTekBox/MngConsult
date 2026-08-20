@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.Controls.TopMenuView">
 
     <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}"
@@ -12,20 +13,49 @@
 
         <VerticalStackLayout Spacing="12">
 
-            <!-- ===== Titre centré en haut ===== -->
-            <VerticalStackLayout Spacing="0"
-                                 HorizontalOptions="Center">
-                <Label x:Name="TitleLabel"
-                       Text="Dashboard 60SecAi"
+            <!-- ===== Bouton paramètres (gauche) + titre centré ===== -->
+            <Grid ColumnDefinitions="32,*,32"
+                  VerticalOptions="Center">
+
+                <Label Grid.Column="0"
+                       Text="&#9881;"
+                       FontSize="22"
+                       TextColor="{StaticResource Gray500}"
+                       VerticalOptions="Start"
+                       HorizontalOptions="Start">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnSettingsTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+
+                <VerticalStackLayout Grid.Column="1"
+                                     Spacing="0"
+                                     HorizontalOptions="Center">
+                    <Label x:Name="TitleLabel"
+                           Text="Dashboard 60SecAi"
+                           FontSize="20"
+                           FontAttributes="Bold"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                    <Label x:Name="DateLabel"
+                           FontSize="12"
+                           HorizontalTextAlignment="Center"
+                           TextColor="{StaticResource Gray400}" />
+                </VerticalStackLayout>
+
+                <!-- Bouton accueil (droite) : revient au dashboard -->
+                <Label Grid.Column="2"
+                       x:Name="HomeButton"
+                       Text="&#127968;"
                        FontSize="20"
-                       FontAttributes="Bold"
-                       HorizontalTextAlignment="Center"
-                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                <Label x:Name="DateLabel"
-                       FontSize="12"
-                       HorizontalTextAlignment="Center"
-                       TextColor="{StaticResource Gray400}" />
-            </VerticalStackLayout>
+                       IsVisible="False"
+                       VerticalOptions="Start"
+                       HorizontalOptions="End">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="OnHomeTapped" />
+                    </Label.GestureRecognizers>
+                </Label>
+            </Grid>
 
             <!-- ===== Boutons (gauche) + solde bancaire (droite) ===== -->
             <Grid ColumnDefinitions="*,Auto"
@@ -68,7 +98,7 @@
                                                HorizontalTextAlignment="Center"
                                                VerticalTextAlignment="Center" />
                                     </Border>
-                                    <Label Text="Financial&#10;Report"
+                                    <Label Text="{loc:Translate FinancialReport}"
                                            FontSize="11"
                                            FontAttributes="Bold"
                                            LineHeight="1.1"
@@ -150,7 +180,7 @@
                         <VerticalStackLayout Grid.Column="1"
                                              Spacing="0"
                                              VerticalOptions="Center">
-                            <Label Text="Solde bancaire"
+                            <Label Text="{loc:Translate BankBalance}"
                                    FontSize="11"
                                    TextColor="{StaticResource Gray400}" />
                             <Label x:Name="BalanceLabel"
