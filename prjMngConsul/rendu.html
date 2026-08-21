@@ -616,7 +616,8 @@
         <a href="#ia">5 &nbsp;Intelligence artificielle</a>
         <a href="#infra">6 &nbsp;60secPaiement</a>
         <a href="#mobile">7 &nbsp;Application mobile</a>
-        <a href="#socle">8 &nbsp;Socle technique</a>
+        <a href="#admin">8 &nbsp;Console d'administration</a>
+        <a href="#socle">9 &nbsp;Socle technique</a>
     </nav>
 
     <main>
@@ -749,6 +750,71 @@
                     </div>
                 </div>
 
+            </div>
+
+            <h4 style="margin-top:34px">Où trouver chaque application</h4>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Application</th>
+                            <th>Adresse</th>
+                            <th>Pour qui</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>60sec-AI — ERP web</b></td>
+                            <td><code>https://60sec.ca</code></td>
+                            <td>Abonnés</td>
+                        </tr>
+                        <tr>
+                            <td><b>Application mobile — APK Android</b></td>
+                            <td><code>https://60sec.ca/AppAndroid.ashx</code></td>
+                            <td>Public</td>
+                        </tr>
+                        <tr>
+                            <td><b>Cette page de présentation</b></td>
+                            <td><code>https://60sec.ca/rendu.html</code></td>
+                            <td>Public</td>
+                        </tr>
+                        <tr>
+                            <td><b>Console d'administration</b></td>
+                            <td><code>http://localhost:51872</code></td>
+                            <td>Équipe 60sec</td>
+                        </tr>
+                        <tr>
+                            <td><b>60secPaiement — Portail maître</b></td>
+                            <td><code>http://localhost:56520</code></td>
+                            <td>Personnel de la plateforme</td>
+                        </tr>
+                        <tr>
+                            <td><b>60secPaiement — Portail abonné</b></td>
+                            <td><code>http://localhost:56540</code></td>
+                            <td>Abonnés de 60secPaiement</td>
+                        </tr>
+                        <tr>
+                            <td><b>60secPaiement — Portail partenaire</b></td>
+                            <td><code>http://localhost:56550</code></td>
+                            <td>Partenaires revendeurs</td>
+                        </tr>
+                        <tr>
+                            <td><b>60secPaiement — API REST</b></td>
+                            <td><code>/api/v1</code> — console d'essai <code>docs.html</code></td>
+                            <td>Intégrateurs</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="note info" style="margin-top:16px">
+                <span class="n-ico">ℹ️</span>
+                <p>
+                    Seul l'ERP est déployé sur un domaine public. La console d'administration et
+                    les trois portails de 60secPaiement tournent pour l'instant en environnement
+                    de développement : les adresses <code>localhost</code> ci-dessus sont celles
+                    de leur configuration de projet, et seront remplacées par des adresses
+                    publiques à la mise en service.
+                </p>
             </div>
         </section>
 
@@ -1408,9 +1474,107 @@
             </div>
         </section>
 
-        <!-- ================================================= 8. SOCLE -->
+        <!-- ================================================= 8. ADMIN -->
+        <section id="admin">
+            <h2><span class="num">08</span>La console d'administration</h2>
+            <p class="sub">
+                Application distincte de l'ERP, réservée à l'équipe 60sec, mais branchée sur la
+                même base de données. C'est le poste de pilotage : elle sert à administrer les
+                abonnés, à alimenter le site vitrine et à diagnostiquer les intégrations sans
+                jamais toucher au code.
+            </p>
+
+            <div class="note info" style="margin-bottom:22px">
+                <span class="n-ico">🔒</span>
+                <p>
+                    L'accès est protégé par un compte administrateur dédié : mot de passe haché
+                    avec BCrypt, réinitialisation par jeton envoyé par courriel, et suivi de la
+                    dernière connexion. Les comptes de l'ERP n'y donnent pas accès.
+                </p>
+            </div>
+
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>🏢 Compagnies abonnées</h3>
+                    <ul>
+                        <li>Liste et fiche détaillée de chaque compagnie</li>
+                        <li>Création et modification hors parcours d'inscription</li>
+                        <li>Gestion des utilisateurs rattachés</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>💼 Forfaits</h3>
+                    <ul>
+                        <li>Nom, prix, description et fonctionnalités de chaque forfait</li>
+                        <li>Traductions française, anglaise et espagnole</li>
+                        <li>Ce sont ces fiches qui alimentent directement les cartes de prix
+                            du site vitrine</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📝 Contenu du site vitrine</h3>
+                    <ul>
+                        <li>Éditeur page / section / langue</li>
+                        <li>L'intégralité du site public est stockée en base, pas dans le code</li>
+                        <li>Modifier un texte ne demande aucun redéploiement</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🧠 Instructions d'IA</h3>
+                    <ul>
+                        <li>Les consignes envoyées au modèle pour lire les reçus et les
+                            documents sont éditables ici</li>
+                        <li>Ajustement du comportement de l'extraction sans livraison de code</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>✉️ Courriel</h3>
+                    <ul>
+                        <li>Comptes courriel de la plateforme</li>
+                        <li>Consultation des messages et de leur état d'envoi</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🩺 Diagnostics d'intégration</h3>
+                    <ul>
+                        <li>Webhooks Square : réception et validation de signature</li>
+                        <li>Webhooks Stripe : mêmes contrôles</li>
+                        <li>Connexion bancaire Plaid : état et jetons</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🧪 Comptes de démonstration</h3>
+                    <ul>
+                        <li>Remise à zéro d'une compagnie de démonstration à partir d'un
+                            instantané enregistré</li>
+                        <li>Prise d'un nouvel instantané qui devient l'état de référence</li>
+                        <li>Les procédures refusent de s'exécuter sur une compagnie qui n'est
+                            pas déclarée comme démo — aucune donnée réelle ne peut être effacée
+                            par erreur</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>👤 Administrateurs</h3>
+                    <ul>
+                        <li>Comptes d'accès à la console elle-même</li>
+                        <li>Création, modification, réinitialisation de mot de passe</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================================= 9. SOCLE -->
         <section id="socle">
-            <h2><span class="num">08</span>Socle technique</h2>
+            <h2><span class="num">09</span>Socle technique</h2>
             <p class="sub">
                 Les choix structurants, communs à toutes les applications de la plateforme.
             </p>
