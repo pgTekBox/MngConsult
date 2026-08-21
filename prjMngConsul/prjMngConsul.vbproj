@@ -53,6 +53,9 @@
       <HintPath>packages\Microsoft.Bcl.AsyncInterfaces.10.0.3\lib\net462\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
+    <Reference Include="QRCoder, Version=1.6.0.0, Culture=neutral, PublicKeyToken=c4ed5b9ae8358a28, processorArchitecture=MSIL">
+      <HintPath>packages\QRCoder.1.6.0\lib\net40\QRCoder.dll</HintPath>
+    </Reference>
     <Reference Include="QuestPDF, Version=2026.2.4.0, Culture=neutral, PublicKeyToken=0f3c2b2315ff52c8, processorArchitecture=MSIL">
       <HintPath>packages\QuestPDF.2026.2.4\lib\netstandard2.0\QuestPDF.dll</HintPath>
     </Reference>
@@ -500,6 +503,8 @@
     <Content Include="App_Data\RadUploadTemp\1771966730796Facture_59311.pdf.tmp" />
     <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
     <Content Include="AutoPayProcessor.ashx" />
+    <Content Include="AppAndroid.ashx" />
+    <Content Include="android\LISEZMOI.md" />
     <Content Include="InvoicePdf.ashx" />
     <Content Include="MailAttachment.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
@@ -628,6 +633,8 @@
     <Content Include="Bundle.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="App_Code\clsAndroidApp.vb" />
+    <Compile Include="App_Code\clsQrCode.vb" />
     <Compile Include="App_Code\clsAutoPayEngine.vb" />
     <Compile Include="App_Code\clsMime.vb" />
     <Compile Include="App_Code\clsData.vb">
@@ -865,6 +872,9 @@
     </Compile>
     <Compile Include="SquareWebhook.ashx.vb">
       <DependentUpon>SquareWebhook.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AppAndroid.ashx.vb">
+      <DependentUpon>AppAndroid.ashx</DependentUpon>
     </Compile>
     <Compile Include="todel.aspx.designer.vb">
       <DependentUpon>todel.aspx</DependentUpon>

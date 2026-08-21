@@ -19,6 +19,255 @@
         body {
             margin: 0
         }
+
+        /* ---------------------------------------------------------------
+           Page « Application mobile » : maquette de téléphone en CSS pur
+           (aucune image). Le reste de la page utilise les classes du CSS
+           compilé (css/landingpage.css), qui est figé — d'où ces quelques
+           règles dédiées ici plutôt que de nouvelles classes utilitaires.
+           --------------------------------------------------------------- */
+        .apk-stage {
+            position: relative;
+            display: flex;
+            justify-content: center
+        }
+
+            .apk-stage::before {
+                content: "";
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                width: 360px;
+                height: 360px;
+                transform: translate(-50%,-50%);
+                border-radius: 9999px;
+                background: rgba(14,165,233,.20);
+                filter: blur(70px)
+            }
+
+        .apk-phone {
+            position: relative;
+            width: 288px;
+            height: 586px;
+            padding: 11px;
+            border-radius: 46px;
+            background: #0b1220;
+            box-shadow: 0 45px 90px -30px rgba(2,6,23,.55), 0 0 0 1px rgba(2,6,23,.08)
+        }
+
+            .apk-phone::before {
+                content: "";
+                position: absolute;
+                top: 20px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 104px;
+                height: 24px;
+                border-radius: 14px;
+                background: #0b1220;
+                z-index: 3
+            }
+
+        .apk-screen {
+            position: relative;
+            height: 100%;
+            border-radius: 36px;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            background: #f8fafc
+        }
+
+        .apk-top {
+            padding: 52px 20px 22px;
+            color: #fff;
+            background: linear-gradient(135deg,#1d4ed8 0%,#2563eb 45%,#0ea5e9 100%)
+        }
+
+        .apk-brand {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 13px;
+            font-weight: 600
+        }
+
+        .apk-avatar {
+            width: 26px;
+            height: 26px;
+            border-radius: 9999px;
+            background: rgba(255,255,255,.22);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 11px;
+            font-weight: 700
+        }
+
+        .apk-label {
+            margin-top: 18px;
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: .09em;
+            color: rgba(224,242,254,.85)
+        }
+
+        .apk-amount {
+            margin-top: 3px;
+            font-size: 30px;
+            font-weight: 700;
+            letter-spacing: -.02em;
+            line-height: 1.1
+        }
+
+        .apk-delta {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin-top: 12px;
+            padding: 3px 10px;
+            font-size: 11px;
+            font-weight: 600;
+            border-radius: 9999px;
+            background: rgba(255,255,255,.16);
+            border: 1px solid rgba(255,255,255,.24)
+        }
+
+            .apk-delta svg {
+                width: 12px;
+                height: 12px
+            }
+
+        .apk-body {
+            flex: 1;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            background: linear-gradient(180deg,#f8fafc 0%,#eff6ff 100%)
+        }
+
+        .apk-card {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            border-radius: 16px;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            box-shadow: 0 6px 16px -10px rgba(15,23,42,.35)
+        }
+
+        .apk-ico {
+            width: 34px;
+            height: 34px;
+            border-radius: 11px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0
+        }
+
+            .apk-ico svg {
+                width: 16px;
+                height: 16px
+            }
+
+        .apk-ico-blue {
+            background: #eff6ff;
+            color: #1d4ed8
+        }
+
+        .apk-ico-emerald {
+            background: #ecfdf5;
+            color: #047857
+        }
+
+        .apk-card-txt {
+            min-width: 0;
+            display: block
+        }
+
+        .apk-card-t {
+            display: block;
+            font-size: 12px;
+            font-weight: 600;
+            color: #020617;
+            line-height: 1.3
+        }
+
+        .apk-card-s {
+            display: block;
+            margin-top: 1px;
+            font-size: 11px;
+            color: #64748b
+        }
+
+        .apk-card-v {
+            margin-left: auto;
+            text-align: right;
+            flex-shrink: 0
+        }
+
+        .apk-card-a {
+            display: block;
+            font-size: 12px;
+            font-weight: 700;
+            color: #020617
+        }
+
+        .apk-pill {
+            display: inline-block;
+            margin-top: 3px;
+            padding: 2px 7px;
+            font-size: 9px;
+            font-weight: 600;
+            border-radius: 9999px;
+            background: #ecfdf5;
+            color: #047857
+        }
+
+        .apk-tabs {
+            display: flex;
+            align-items: center;
+            justify-content: space-around;
+            padding: 12px 8px 18px;
+            background: #fff;
+            border-top: 1px solid #e2e8f0
+        }
+
+        .apk-tab {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #94a3b8
+        }
+
+            .apk-tab svg {
+                width: 18px;
+                height: 18px
+            }
+
+            .apk-tab.is-on {
+                color: #1d4ed8
+            }
+
+        .apk-qr svg {
+            display: block;
+            border-radius: 8px
+        }
+
+        /* Le code QR ne sert qu'aux visiteurs sur ordinateur : sur téléphone
+           on masque la carte, le bouton de téléchargement suffit. */
+        .apk-qr-card {
+            display: none
+        }
+
+        @media (min-width:640px) {
+            .apk-qr-card {
+                display: flex
+            }
+        }
     </style>
 </head>
 <body class="font-sans antialiased bg-white text-slate-900">
@@ -34,6 +283,7 @@
                     <a data-nav="accueil" href="#solution" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Solution</a>
                     <a data-nav="accueil" href="#features" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Fonctionnalités</a>
                     <a data-nav="accueil" href="#mission" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Mission</a>
+                    <a data-nav="mobile" href="#" class="inline-flex items-center gap-1.5 text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors"><i data-lucide="smartphone" class="w-4 h-4"></i>Application mobile</a>
                 </div>
                 <div class="hidden md:flex items-center gap-4">
                     <asp:Literal ID="litLang" runat="server"></asp:Literal>
@@ -75,6 +325,7 @@
                     <div>
                         <h4 class="text-slate-900 font-semibold text-sm mb-4">Ressources</h4>
                         <ul class="space-y-3">
+                            <li><a data-nav="mobile" href="#" class="inline-flex items-center gap-1.5 text-slate-500 hover:text-slate-900 text-sm transition-colors"><i data-lucide="smartphone" class="w-3.5 h-3.5"></i>Application Android</a></li>
                             <li><a data-nav="documentation" href="#" class="text-slate-500 hover:text-slate-900 text-sm transition-colors">Documentation</a></li>
                             <li><a data-nav="guides" href="#" class="text-slate-500 hover:text-slate-900 text-sm transition-colors">Guides</a></li>
                             <li><a data-nav="blog" href="#" class="text-slate-500 hover:text-slate-900 text-sm transition-colors">Blog</a></li>
@@ -144,8 +395,17 @@
   // Neutralise la soumission des formulaires (reconstruction statique hors-ligne)
   document.addEventListener('submit', function (e) { e.preventDefault(); });
 
+  // Page affichée au chargement : « accueil » par défaut, ou celle demandée
+  // par ?page=<code> (lien profond partageable, ex. ?page=mobile).
+  function startSlug() {
+    var m = /[?&]page=([A-Za-z0-9-]+)/.exec(window.location.search);
+    if (!m) return 'accueil';
+    var slug = m[1].toLowerCase();
+    return document.querySelector('[data-page="' + slug + '"]') ? slug : 'accueil';
+  }
+
   function init() {
-    showPage('accueil');
+    showPage(startSlug());
     if (window.lucide && typeof window.lucide.createIcons === 'function') window.lucide.createIcons();
   }
   if (document.readyState !== 'loading') init();
