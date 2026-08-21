@@ -252,6 +252,11 @@
 
     .card > p:last-child { margin-bottom: 0 }
 
+    .card h3 .st {
+        margin-left: 8px;
+        vertical-align: 2px;
+    }
+
     .card .role {
         font-size: 12px;
         font-weight: 700;
@@ -595,7 +600,7 @@
             moyens de paiement intégrés.
         </p>
         <div class="stats">
-            <div class="stat"><b>6</b><span>applications</span></div>
+            <div class="stat"><b>9</b><span>applications et services</span></div>
             <div class="stat"><b>11</b><span>domaines fonctionnels</span></div>
             <div class="stat"><b>7</b><span>rails de paiement</span></div>
             <div class="stat"><b>3</b><span>langues (FR/EN/ES)</span></div>
@@ -655,7 +660,7 @@
         <section id="ecosysteme">
             <h2><span class="num">01</span>L'écosystème</h2>
             <p class="sub">
-                La plateforme n'est pas une application unique mais un ensemble de six programmes
+                La plateforme n'est pas une application unique mais un ensemble de neuf programmes
                 qui partagent la même base de données et les mêmes comptes utilisateurs.
             </p>
 
@@ -737,16 +742,63 @@
                 </div>
 
                 <div class="card">
-                    <div class="ico">⚙️</div>
+                    <div class="ico">✉️</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>SrvAI — service Windows</h3>
+                    <h3>SrvAI — service de courriel</h3>
                     <p>
-                        Envoie les courriels sortants en remise directe vers les serveurs de
-                        destination et exécute les traitements planifiés hors interface.
+                        Traite le courriel <b>entrant et sortant</b> de la plateforme. Les messages
+                        sortants sont remis directement aux serveurs de destination ; les messages
+                        entrants alimentent la boîte de réception intégrée à l'ERP.
                     </p>
                     <div class="tags">
                         <span class="tag">Service Windows</span>
-                        <span class="tag">Direct-to-MX</span>
+                        <span class="tag">Entrant et sortant</span>
+                        <span class="tag">Remise directe</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">📬</div>
+                    <p class="role">Arrière-plan</p>
+                    <h3>Service IMAP <span class="st st-wip">En développement</span></h3>
+                    <p>
+                        Exposera les courriels de la plateforme par le protocole IMAP, pour que
+                        l'abonné puisse consulter sa boîte depuis n'importe quel client de
+                        messagerie plutôt que depuis l'ERP seulement.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">IMAP</span>
+                        <span class="tag">Clients tiers</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🧠</div>
+                    <p class="role">Arrière-plan</p>
+                    <h3>Service de traitements IA <span class="st st-wip">En développement</span></h3>
+                    <p>
+                        Déportera les traitements d'intelligence artificielle hors de l'application
+                        web : lecture des reçus et des documents exécutée en arrière-plan, sans
+                        faire attendre l'utilisateur devant son écran.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Traitement asynchrone</span>
+                        <span class="tag">File d'attente</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">⏱️</div>
+                    <p class="role">Arrière-plan</p>
+                    <h3>Service de tâches planifiées <span class="st st-wip">En développement</span></h3>
+                    <p>
+                        Exécutera les traitements récurrents à heure fixe : prélèvements
+                        automatiques, synchronisations bancaires et travaux d'entretien, sans
+                        dépendre d'une session ouverte dans le navigateur.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Ordonnanceur</span>
+                        <span class="tag">Traitements récurrents</span>
                     </div>
                 </div>
 
@@ -780,7 +832,7 @@
                         </tr>
                         <tr>
                             <td><b>Console d'administration</b></td>
-                            <td><code>http://localhost:51872</code></td>
+                            <td><code>https://60sec.ca:3635</code></td>
                             <td>Équipe 60sec</td>
                         </tr>
                         <tr>
@@ -809,11 +861,11 @@
             <div class="note info" style="margin-top:16px">
                 <span class="n-ico">ℹ️</span>
                 <p>
-                    Seul l'ERP est déployé sur un domaine public. La console d'administration et
-                    les trois portails de 60secPaiement tournent pour l'instant en environnement
-                    de développement : les adresses <code>localhost</code> ci-dessus sont celles
-                    de leur configuration de projet, et seront remplacées par des adresses
-                    publiques à la mise en service.
+                    L'ERP et la console d'administration sont déployés sur le domaine public.
+                    Les trois portails de 60secPaiement et leur API tournent pour l'instant en
+                    environnement de développement : les adresses <code>localhost</code>
+                    ci-dessus sont celles de leur configuration de projet, et seront remplacées
+                    par des adresses publiques à la mise en service.
                 </p>
             </div>
         </section>
@@ -1483,6 +1535,15 @@
                 abonnés, à alimenter le site vitrine et à diagnostiquer les intégrations sans
                 jamais toucher au code.
             </p>
+
+            <div class="panel panel-demo" style="margin-bottom:22px">
+                <h3>🔑 Accès</h3>
+                <ul class="accounts">
+                    <li>https://60sec.ca:3635</li>
+                    <li>claude@le102.ca</li>
+                </ul>
+                <p class="fine">Le mot de passe est fourni sur demande.</p>
+            </div>
 
             <div class="note info" style="margin-bottom:22px">
                 <span class="n-ico">🔒</span>
