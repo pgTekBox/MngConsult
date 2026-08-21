@@ -4,14 +4,19 @@ Déposez ici le paquet Android de l'application mobile **60sec-AI**.
 
 ## Fichier attendu
 
+N'importe quel fichier `*.apk` déposé dans ce répertoire, par exemple :
+
 ```
-android/60secai.apk
+android/ca.sixtysec.app.apk
 ```
 
-Si aucun fichier `60secai.apk` n'est présent, le site sert automatiquement
-le fichier `*.apk` le plus récent de ce répertoire. Si le répertoire est vide,
-la page « Application mobile » du site affiche l'état « bientôt disponible »
-au lieu du bouton de téléchargement (aucune erreur, aucun lien mort).
+Le nom n'a pas d'importance : le site sert le `*.apk` du répertoire, et le
+plus récent s'il y en a plusieurs. Le visiteur télécharge le fichier **sous
+son nom réel**, et c'est ce même nom qu'affiche le guide d'installation de la
+page « Application mobile ».
+
+Si le répertoire est vide, cette page affiche l'état « bientôt disponible » au
+lieu du bouton de téléchargement (aucune erreur, aucun lien mort).
 
 ## Fichier de version (optionnel)
 
@@ -35,7 +40,7 @@ statique) :
 
 - URL publique : `/AppAndroid.ashx`
 - Content-Type : `application/vnd.android.package-archive`
-- Le nom de fichier proposé au navigateur est toujours `60secai.apk`
+- Le nom de fichier proposé au navigateur est celui du fichier déposé
 
 Avantage : aucun type MIME `.apk` à configurer dans IIS, et le répertoire
 peut rester en dehors du dépôt Git.
@@ -49,9 +54,8 @@ dotnet publish -f net10.0-android -c Release
 ```
 
 L'APK signé se trouve ensuite sous
-`bin/Release/net10.0-android/publish/`. Copiez-le ici sous le nom
-`60secai.apk`.
-
+`bin/Release/net10.0-android/publish/`. Copiez-le ici tel quel, sans le
+renommer.
 
 ## Code QR
 
