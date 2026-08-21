@@ -454,6 +454,7 @@
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPagesNEW.html" />
+    <Content Include="rendu.html" />
     <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />
     <Content Include="PlaidDailySync.aspx" />
