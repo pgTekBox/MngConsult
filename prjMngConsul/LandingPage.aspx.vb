@@ -49,31 +49,37 @@ Partial Public Class LandingPage
     ''' la page par défaut est visible, les autres masquées (routage JS).
     ''' </summary>
     Private Sub RenderPages()
+        Dim sb As New StringBuilder()
+
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@PageCode", DBNull.Value))   ' NULL = toutes les pages
             p.Add(New SqlParameter("@Lang", CurrentLang))
             Dim ds As DataSet = ExecuteSQLds("s0673GetLandingSections", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
-
-            Dim sb As New StringBuilder()
-            Dim currentPage As String = Nothing
-            For Each row As DataRowView In ds.Tables(0).DefaultView
-                Dim pageCode As String = GetStr(row, "PageCode")
-                If Not String.Equals(pageCode, currentPage, StringComparison.Ordinal) Then
-                    If currentPage IsNot Nothing Then sb.Append("</div>")
-                    currentPage = pageCode
-                    Dim cssClass As String = If(GetBool(row, "IsDefault"), "page", "page hidden")
-                    sb.Append("<div class=""" & cssClass & """ data-page=""" & pageCode & """>")
-                End If
-                sb.Append(RenderSectionHtml(row))
-            Next
-            If currentPage IsNot Nothing Then sb.Append("</div>")
-
-            litPages.Text = sb.ToString()
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                Dim currentPage As String = Nothing
+                For Each row As DataRowView In ds.Tables(0).DefaultView
+                    Dim pageCode As String = GetStr(row, "PageCode")
+                    If Not String.Equals(pageCode, currentPage, StringComparison.Ordinal) Then
+                        If currentPage IsNot Nothing Then sb.Append("</div>")
+                        currentPage = pageCode
+                        Dim cssClass As String = If(GetBool(row, "IsDefault"), "page", "page hidden")
+                        sb.Append("<div class=""" & cssClass & """ data-page=""" & pageCode & """>")
+                    End If
+                    sb.Append(RenderSectionHtml(row))
+                Next
+                If currentPage IsNot Nothing Then sb.Append("</div>")
+            End If
         Catch ex As Exception
             System.Diagnostics.Debug.WriteLine("LandingPage RenderPages error: " & ex.Message)
         End Try
+
+        ' La page « Application mobile » n'est pas en BD : son contenu dépend de
+        ' l'APK présent sur disque. Elle est donc toujours ajoutée ici, même si
+        ' la lecture des sections a échoué.
+        sb.Append(BuildMobilePageHtml())
+
+        litPages.Text = sb.ToString()
     End Sub
 
     ''' <summary>
@@ -253,6 +259,458 @@ Partial Public Class LandingPage
             Case "es" : Return es
             Case Else : Return fr
         End Select
+    End Function
+
+
+    ' ------------------------------------------------------------------
+    ' Page « Application mobile » (data-page="mobile")
+    '
+    ' Contrairement aux autres pages du site vitrine, celle-ci n'est PAS
+    ' stockée en BD (T022/T023/T024) : son contenu dépend de la présence
+    ' réelle de l'APK sur le disque (version, taille, date, bouton actif ou
+    ' état « bientôt disponible »). Elle est donc rendue par le code, puis
+    ' ajoutée aux pages venant de la BD. Le routage JS (data-nav) et le
+    ' lien profond ?page=mobile fonctionnent de la même façon.
+    ' ------------------------------------------------------------------
+
+    ''' <summary>Code de la page mobile, utilisé par data-page / data-nav / ?page=.</summary>
+    Private Const MOBILE_PAGE_CODE As String = "mobile"
+
+    ''' <summary>
+    ''' Construit la page complète de téléchargement de l'application Android.
+    ''' </summary>
+    Private Function BuildMobilePageHtml() As String
+        Dim lang As String = CurrentLang
+        Dim available As Boolean = clsAndroidApp.IsAvailable()
+
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""page hidden"" data-page=""" & MOBILE_PAGE_CODE & """>")
+        sb.Append(BuildMobileHeroHtml(lang, available))
+        sb.Append(BuildMobileStepsHtml(lang))
+        sb.Append(BuildMobileFeaturesHtml(lang))
+        sb.Append(BuildMobileCtaHtml(lang, available))
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Section héro : accroche, bouton de téléchargement, maquette du téléphone.</summary>
+    Private Function BuildMobileHeroHtml(lang As String, available As Boolean) As String
+        Dim sb As New StringBuilder()
+
+        sb.Append("<section class=""relative overflow-hidden bg-gradient-to-br from-slate-50 via-sky-50/60 to-white"">")
+        sb.Append("<div class=""absolute inset-0"">")
+        sb.Append("<div class=""absolute top-0 left-1/4 w-96 h-96 bg-sky-400/15 rounded-full blur-3xl""></div>")
+        sb.Append("<div class=""absolute bottom-0 right-1/4 w-96 h-96 bg-blue-400/10 rounded-full blur-3xl""></div>")
+        sb.Append("</div>")
+        sb.Append("<div class=""relative max-w-7xl mx-auto px-6 lg:px-8 pt-32 pb-20 lg:pb-24"">")
+        sb.Append("<div class=""grid grid-cols-1 lg:grid-cols-2 gap-16 items-center"">")
+
+        ' --- Colonne texte ---
+        sb.Append("<div>")
+        sb.Append("<div class=""inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium px-4 py-2 rounded-full mb-8"">")
+        sb.Append("<i data-lucide=""smartphone"" class=""w-4 h-4""></i>")
+        sb.Append(Choose3(lang, "Application Android", "Android app", "Aplicación Android"))
+        sb.Append("</div>")
+
+        sb.Append("<h1 class=""text-4xl md:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-tight mb-6"">")
+        sb.Append(Choose3(lang, "Toute votre gestion ", "Your whole business ", "Toda su gestión "))
+        sb.Append("<span class=""text-blue-600"">")
+        sb.Append(Choose3(lang, "dans votre poche", "in your pocket", "en su bolsillo"))
+        sb.Append("</span></h1>")
+
+        sb.Append("<p class=""text-lg text-slate-600 leading-relaxed mb-10 max-w-xl"">")
+        sb.Append(Choose3(lang,
+                          "Numérisez vos reçus, créez vos factures et suivez vos finances où que vous soyez. L'application Android 60sec-AI utilise le même compte que le site web : tout est synchronisé en temps réel.",
+                          "Scan your receipts, create invoices and follow your finances anywhere. The 60sec-AI Android app uses the same account as the website: everything stays in sync, in real time.",
+                          "Digitalice sus recibos, cree sus facturas y siga sus finanzas desde donde esté. La aplicación Android de 60sec-AI usa la misma cuenta que el sitio web: todo se sincroniza en tiempo real."))
+        sb.Append("</p>")
+
+        sb.Append(BuildMobileDownloadBlockHtml(lang, available))
+        sb.Append("</div>")
+
+        ' --- Colonne maquette ---
+        sb.Append("<div class=""apk-stage"">")
+        sb.Append(BuildPhoneMockupHtml(lang))
+        sb.Append("</div>")
+
+        sb.Append("</div></div></section>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Bloc d'appel à l'action du héro : soit les boutons de téléchargement et
+    ''' les métadonnées du fichier, soit l'état « bientôt disponible » quand
+    ''' aucun APK n'a encore été déposé dans ~/android.
+    ''' </summary>
+    Private Function BuildMobileDownloadBlockHtml(lang As String, available As Boolean) As String
+        Dim sb As New StringBuilder()
+
+        If Not available Then
+            sb.Append("<div class=""flex items-start gap-4 bg-amber-50 border border-amber-200 rounded-2xl p-6 max-w-xl"">")
+            sb.Append("<i data-lucide=""clock"" class=""w-6 h-6 text-amber-600 flex-shrink-0 mt-0.5""></i>")
+            sb.Append("<div>")
+            sb.Append("<p class=""font-semibold text-amber-800 mb-1"">")
+            sb.Append(Choose3(lang, "Bientôt disponible", "Coming soon", "Próximamente"))
+            sb.Append("</p>")
+            sb.Append("<p class=""text-sm text-amber-700 leading-relaxed"">")
+            sb.Append(Choose3(lang,
+                              "La version Android est en cours de préparation. Écrivez-nous et nous vous préviendrons dès qu'elle sera publiée.",
+                              "The Android build is being prepared. Write to us and we will let you know as soon as it is published.",
+                              "La versión Android está en preparación. Escríbanos y le avisaremos en cuanto se publique."))
+            sb.Append("</p></div></div>")
+            Return sb.ToString()
+        End If
+
+        Dim version As String = clsAndroidApp.GetVersion()
+        Dim sizeTxt As String = clsAndroidApp.FormatSize(clsAndroidApp.GetSizeBytes(), lang)
+        Dim dateTxt As String = clsAndroidApp.FormatDate(clsAndroidApp.GetPublishedOn(), lang)
+
+        sb.Append("<div class=""flex flex-col sm:flex-row items-center gap-4 mb-8"">")
+        sb.Append("<a href=""" & clsAndroidApp.DownloadUrl & """ class=""w-full sm:w-auto inline-flex items-center justify-center gap-3 bg-blue-700 hover:bg-blue-600 text-white font-semibold px-8 py-4 rounded-xl text-base transition-all duration-200 hover:shadow-2xl hover:shadow-blue-700/30 hover:-translate-y-0.5"">")
+        sb.Append("<i data-lucide=""download"" class=""w-5 h-5""></i>")
+        sb.Append(Choose3(lang, "Télécharger l'APK", "Download the APK", "Descargar el APK"))
+        sb.Append("</a>")
+        sb.Append("<a data-nav=""" & MOBILE_PAGE_CODE & """ href=""#installation"" class=""w-full sm:w-auto inline-flex items-center justify-center gap-2 bg-white hover:bg-slate-50 text-slate-800 font-semibold px-8 py-4 rounded-xl text-base border border-slate-200 transition-all duration-200 hover:shadow-lg"">")
+        sb.Append("<i data-lucide=""list-checks"" class=""w-5 h-5""></i>")
+        sb.Append(Choose3(lang, "Guide d'installation", "Installation guide", "Guía de instalación"))
+        sb.Append("</a>")
+        sb.Append("</div>")
+
+        sb.Append("<div class=""flex flex-wrap items-center gap-5 text-sm text-slate-500"">")
+        If version.Length > 0 Then
+            sb.Append(MetaChip("package", "text-slate-400", Choose3(lang, "Version ", "Version ", "Versión ") & Server.HtmlEncode(version)))
+        End If
+        If sizeTxt.Length > 0 Then
+            sb.Append(MetaChip("hard-drive", "text-slate-400", sizeTxt))
+        End If
+        If dateTxt.Length > 0 Then
+            sb.Append(MetaChip("calendar", "text-slate-400", dateTxt))
+        End If
+        sb.Append(MetaChip("shield-check", "text-emerald-500",
+                           Choose3(lang, "Android 6.0 ou plus récent", "Android 6.0 or later", "Android 6.0 o posterior")))
+        sb.Append("</div>")
+
+        sb.Append(BuildQrCardHtml(lang))
+
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Carte « Scannez pour installer » : code QR généré côté serveur (SVG
+    ''' inline, aucun appel réseau ni service externe) pointant sur l'URL
+    ''' absolue de téléchargement. Retourne "" si l'encodage échoue, auquel
+    ''' cas la page se contente des boutons.
+    ''' </summary>
+    Private Function BuildQrCardHtml(lang As String) As String
+        Dim alt As String = Choose3(lang,
+                                    "Code QR vers le téléchargement de l'application Android",
+                                    "QR code linking to the Android app download",
+                                    "Código QR que enlaza con la descarga de la aplicación Android")
+        Dim svg As String = clsQrCode.BuildSvg(BuildAbsoluteDownloadUrl(), 132, "#020617", alt)
+        If svg.Length = 0 Then Return ""
+
+        Dim sb As New StringBuilder()
+        ' Masquée sous 640 px : sur un téléphone le visiteur touche simplement
+        ' le bouton, et la carte y serait à l'étroit (voir .apk-qr-card).
+        sb.Append("<div class=""apk-qr-card mt-8 items-center gap-5 bg-white border border-slate-200 rounded-2xl p-5 shadow-sm max-w-xl"">")
+        sb.Append("<div class=""apk-qr flex-shrink-0"">").Append(svg).Append("</div>")
+        sb.Append("<div class=""min-w-0"">")
+        sb.Append("<p class=""font-semibold text-slate-900 mb-1"">")
+        sb.Append(Choose3(lang, "Scannez pour installer", "Scan to install", "Escanee para instalar"))
+        sb.Append("</p>")
+        sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-2"">")
+        sb.Append(Choose3(lang,
+                          "Pointez l'appareil photo de votre téléphone vers ce code : le téléchargement démarre directement sur l'appareil.",
+                          "Point your phone camera at this code: the download starts straight on the device.",
+                          "Apunte la cámara de su teléfono a este código: la descarga empieza directamente en el dispositivo."))
+        sb.Append("</p>")
+        sb.Append("<span class=""font-mono text-xs text-slate-500"">")
+        sb.Append(Server.HtmlEncode(BuildDisplayDownloadUrl()))
+        sb.Append("</span>")
+        sb.Append("</div></div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' URL absolue, schéma compris, encodée dans le code QR — un appareil
+    ''' photo de téléphone n'ouvre pas une adresse sans schéma.
+    ''' </summary>
+    Private Function BuildAbsoluteDownloadUrl() As String
+        Try
+            Return New Uri(Request.Url, ResolveUrl("~/" & clsAndroidApp.DownloadUrl)).AbsoluteUri
+        Catch ex As Exception
+            Return clsAndroidApp.DownloadUrl
+        End Try
+    End Function
+
+    ''' <summary>Petite pastille « icône + texte » de la ligne de métadonnées.</summary>
+    Private Function MetaChip(icon As String, iconCls As String, text As String) As String
+        Return "<span class=""inline-flex items-center gap-2""><i data-lucide=""" & icon &
+               """ class=""w-4 h-4 " & iconCls & """></i>" & text & "</span>"
+    End Function
+
+    ''' <summary>
+    ''' Maquette CSS du téléphone (aucune image) : entête dégradé, solde, trois
+    ''' lignes d'activité et barre d'onglets. Purement décoratif.
+    ''' </summary>
+    Private Function BuildPhoneMockupHtml(lang As String) As String
+        Dim balance As String = Choose3(lang, "12 480,55 $", "$12,480.55", "12 480,55 $")
+        Dim delta As String = Choose3(lang, "+8,2 % ce mois", "+8.2% this month", "+8,2 % este mes")
+
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""apk-phone"" aria-hidden=""true""><div class=""apk-screen"">")
+
+        sb.Append("<div class=""apk-top"">")
+        sb.Append("<div class=""apk-brand""><span>60sec-AI</span><span class=""apk-avatar"">PG</span></div>")
+        sb.Append("<div class=""apk-label"">" & Choose3(lang, "Solde net", "Net balance", "Saldo neto") & "</div>")
+        sb.Append("<div class=""apk-amount"">" & balance & "</div>")
+        sb.Append("<div class=""apk-delta""><i data-lucide=""trending-up""></i>" & delta & "</div>")
+        sb.Append("</div>")
+
+        sb.Append("<div class=""apk-body"">")
+        sb.Append(PhoneCard("scan-line", "apk-ico-blue",
+                            Choose3(lang, "Reçu numérisé", "Receipt scanned", "Recibo escaneado"),
+                            "Métro — " & Choose3(lang, "aujourd'hui", "today", "hoy"),
+                            Choose3(lang, "84,37 $", "$84.37", "84,37 $"),
+                            Choose3(lang, "Comptabilisé", "Booked", "Contabilizado")))
+        sb.Append(PhoneCard("file-text", "apk-ico-emerald",
+                            Choose3(lang, "Facture #1042", "Invoice #1042", "Factura n° 1042"),
+                            "Clinique Belvédère",
+                            Choose3(lang, "1 250,00 $", "$1,250.00", "1 250,00 $"),
+                            Choose3(lang, "Payée", "Paid", "Pagada")))
+        sb.Append(PhoneCard("banknote", "apk-ico-blue",
+                            Choose3(lang, "Virement fournisseur", "Supplier payout", "Pago a proveedor"),
+                            Choose3(lang, "Programmé demain", "Scheduled tomorrow", "Programado mañana"),
+                            Choose3(lang, "612,90 $", "$612.90", "612,90 $"),
+                            Choose3(lang, "En attente", "Pending", "Pendiente")))
+        sb.Append("</div>")
+
+        sb.Append("<div class=""apk-tabs"">")
+        sb.Append("<span class=""apk-tab is-on""><i data-lucide=""layout-dashboard""></i></span>")
+        sb.Append("<span class=""apk-tab""><i data-lucide=""scan-line""></i></span>")
+        sb.Append("<span class=""apk-tab""><i data-lucide=""file-text""></i></span>")
+        sb.Append("<span class=""apk-tab""><i data-lucide=""settings""></i></span>")
+        sb.Append("</div>")
+
+        sb.Append("</div></div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Une ligne d'activité de la maquette du téléphone.</summary>
+    Private Function PhoneCard(icon As String, iconCls As String, title As String,
+                               subtitle As String, amount As String, pill As String) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""apk-card"">")
+        sb.Append("<span class=""apk-ico " & iconCls & """><i data-lucide=""" & icon & """></i></span>")
+        sb.Append("<span class=""apk-card-txt""><span class=""apk-card-t"">" & Server.HtmlEncode(title) & "</span>")
+        sb.Append("<span class=""apk-card-s"">" & Server.HtmlEncode(subtitle) & "</span></span>")
+        sb.Append("<span class=""apk-card-v""><span class=""apk-card-a"">" & Server.HtmlEncode(amount) & "</span>")
+        sb.Append("<span class=""apk-pill"">" & Server.HtmlEncode(pill) & "</span></span>")
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Section « installation en trois étapes » + note sur l'avertissement Android.</summary>
+    Private Function BuildMobileStepsHtml(lang As String) As String
+        Dim sb As New StringBuilder()
+
+        sb.Append("<section id=""installation"" class=""py-20 lg:py-24 bg-white"">")
+        sb.Append("<div class=""max-w-7xl mx-auto px-6 lg:px-8"">")
+
+        sb.Append("<div class=""max-w-3xl mb-16"">")
+        sb.Append("<h2 class=""text-3xl lg:text-5xl font-bold text-slate-950 tracking-tight mb-4"">")
+        sb.Append(Choose3(lang, "Installation en trois étapes", "Install in three steps", "Instalación en tres pasos"))
+        sb.Append("</h2>")
+        sb.Append("<p class=""text-lg text-slate-600 leading-relaxed"">")
+        sb.Append(Choose3(lang,
+                          "Android demande une confirmation avant d'installer une application qui ne provient pas du Play Store. C'est normal, et cela prend moins d'une minute.",
+                          "Android asks for a confirmation before installing an app that does not come from the Play Store. That is expected, and it takes less than a minute.",
+                          "Android pide una confirmación antes de instalar una aplicación que no procede de Play Store. Es normal y toma menos de un minuto."))
+        sb.Append("</p></div>")
+
+        sb.Append("<div class=""grid grid-cols-1 md:grid-cols-3 gap-8"">")
+        sb.Append(StepCard("1",
+                           Choose3(lang, "Télécharger le fichier", "Download the file", "Descargar el archivo"),
+                           Choose3(lang,
+                                   "Depuis votre téléphone Android, touchez le bouton de téléchargement. Le fichier 60secai.apk se dépose dans vos téléchargements.",
+                                   "From your Android phone, tap the download button. The 60secai.apk file lands in your Downloads folder.",
+                                   "Desde su teléfono Android, toque el botón de descarga. El archivo 60secai.apk se guarda en Descargas.")))
+        sb.Append(StepCard("2",
+                           Choose3(lang, "Autoriser l'installation", "Allow the installation", "Permitir la instalación"),
+                           Choose3(lang,
+                                   "Ouvrez le fichier téléchargé. Android affiche « Installer des applications inconnues » : accordez l'autorisation à votre navigateur, puis revenez en arrière.",
+                                   "Open the downloaded file. Android shows « Install unknown apps »: grant the permission to your browser, then go back.",
+                                   "Abra el archivo descargado. Android mostrará « Instalar aplicaciones desconocidas »: conceda el permiso a su navegador y vuelva atrás.")))
+        sb.Append(StepCard("3",
+                           Choose3(lang, "Installer et se connecter", "Install and sign in", "Instalar e iniciar sesión"),
+                           Choose3(lang,
+                                   "Touchez « Installer », ouvrez l'application et connectez-vous avec les mêmes identifiants que sur le site web.",
+                                   "Tap « Install », open the app and sign in with the same credentials you use on the website.",
+                                   "Toque « Instalar », abra la aplicación e inicie sesión con las mismas credenciales del sitio web.")))
+        sb.Append("</div>")
+
+        sb.Append("<div class=""mt-12 flex items-start gap-4 bg-sky-50 border border-sky-100 rounded-2xl p-6"">")
+        sb.Append("<i data-lucide=""shield-check"" class=""w-6 h-6 text-sky-600 flex-shrink-0 mt-0.5""></i>")
+        sb.Append("<div>")
+        sb.Append("<p class=""font-semibold text-slate-900 mb-1"">")
+        sb.Append(Choose3(lang, "Pourquoi Android demande-t-il une autorisation ?",
+                                "Why does Android ask for a permission?",
+                                "¿Por qué Android pide un permiso?"))
+        sb.Append("</p>")
+        sb.Append("<p class=""text-sm text-slate-600 leading-relaxed"">")
+        sb.Append(Choose3(lang,
+                          "L'application est distribuée directement par 60s Technologies plutôt que par le Play Store. Le paquet est signé par nos soins et servi en HTTPS depuis nos serveurs : l'avertissement d'Android porte sur la provenance du fichier, pas sur sa sécurité.",
+                          "The app is distributed directly by 60s Technologies rather than through the Play Store. The package is signed by us and served over HTTPS from our own servers: Android's warning is about where the file comes from, not about its safety.",
+                          "La aplicación se distribuye directamente por 60s Technologies y no a través de Play Store. El paquete está firmado por nosotros y se sirve por HTTPS desde nuestros servidores: el aviso de Android se refiere al origen del archivo, no a su seguridad."))
+        sb.Append("</p></div></div>")
+
+        sb.Append("</div></section>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Une carte numérotée du guide d'installation.</summary>
+    Private Function StepCard(number As String, title As String, text As String) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""bg-slate-50 border border-slate-200 rounded-2xl p-8 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/80"">")
+        sb.Append("<div class=""w-12 h-12 rounded-xl bg-blue-700 text-white flex items-center justify-center font-bold text-lg mb-5"">" & number & "</div>")
+        sb.Append("<h3 class=""text-xl font-bold text-slate-950 mb-2"">" & Server.HtmlEncode(title) & "</h3>")
+        sb.Append("<p class=""text-sm text-slate-600 leading-relaxed"">" & Server.HtmlEncode(text) & "</p>")
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Section « ce que l'application permet de faire ».</summary>
+    Private Function BuildMobileFeaturesHtml(lang As String) As String
+        Dim sb As New StringBuilder()
+
+        sb.Append("<section class=""py-20 lg:py-24 bg-slate-50 border-t border-slate-200"">")
+        sb.Append("<div class=""max-w-7xl mx-auto px-6 lg:px-8"">")
+
+        sb.Append("<div class=""max-w-3xl mb-16"">")
+        sb.Append("<h2 class=""text-3xl lg:text-5xl font-bold text-slate-950 tracking-tight mb-4"">")
+        sb.Append(Choose3(lang, "Tout 60sec-AI, pensé pour le mobile",
+                                "The whole of 60sec-AI, built for mobile",
+                                "Todo 60sec-AI, pensado para el móvil"))
+        sb.Append("</h2>")
+        sb.Append("<p class=""text-lg text-slate-600 leading-relaxed"">")
+        sb.Append(Choose3(lang,
+                          "Les fonctions que vous utilisez le plus souvent, adaptées à l'écran d'un téléphone.",
+                          "The features you use most often, adapted to a phone screen.",
+                          "Las funciones que más utiliza, adaptadas a la pantalla de un teléfono."))
+        sb.Append("</p></div>")
+
+        sb.Append("<div class=""grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"">")
+        sb.Append(FeatureCard("scan-line",
+                              Choose3(lang, "Scan de reçus", "Receipt scanning", "Escaneo de recibos"),
+                              Choose3(lang,
+                                      "Photographiez un reçu : l'IA lit le marchand, le montant et les taxes, puis prépare l'écriture.",
+                                      "Snap a receipt: the AI reads the merchant, the amount and the taxes, then prepares the entry.",
+                                      "Fotografíe un recibo: la IA lee el comercio, el importe y los impuestos y prepara el asiento.")))
+        sb.Append(FeatureCard("file-text",
+                              Choose3(lang, "Factures clients", "Customer invoices", "Facturas de clientes"),
+                              Choose3(lang,
+                                      "Créez et envoyez une facture en quelques touches, avec le PDF généré automatiquement.",
+                                      "Create and send an invoice in a few taps, with the PDF generated for you.",
+                                      "Cree y envíe una factura en pocos toques, con el PDF generado automáticamente.")))
+        sb.Append(FeatureCard("wallet",
+                              Choose3(lang, "Encaissements et paiements", "Payments in and out", "Cobros y pagos"),
+                              Choose3(lang,
+                                      "Suivez les encaissements et réglez vos fournisseurs par virement ou par Interac.",
+                                      "Follow incoming payments and pay your suppliers by transfer or Interac.",
+                                      "Siga los cobros y pague a sus proveedores por transferencia o Interac.")))
+        sb.Append(FeatureCard("bar-chart-3",
+                              Choose3(lang, "États financiers", "Financial statements", "Estados financieros"),
+                              Choose3(lang,
+                                      "Bilan, état des résultats et flux de trésorerie à jour, consultables en tout temps.",
+                                      "Balance sheet, income statement and cash flow, up to date and available at any time.",
+                                      "Balance, estado de resultados y flujo de caja al día, disponibles en todo momento.")))
+        sb.Append(FeatureCard("calendar-days",
+                              Choose3(lang, "Agenda", "Schedule", "Agenda"),
+                              Choose3(lang,
+                                      "Vos rendez-vous et vos tâches, synchronisés avec votre poste de travail.",
+                                      "Your appointments and tasks, synced with your workstation.",
+                                      "Sus citas y tareas, sincronizadas con su puesto de trabajo.")))
+        sb.Append(FeatureCard("refresh-cw",
+                              Choose3(lang, "Synchronisation en temps réel", "Real-time sync", "Sincronización en tiempo real"),
+                              Choose3(lang,
+                                      "Un seul compte, une seule base de données : ce qui est saisi au téléphone apparaît aussitôt sur le web.",
+                                      "One account, one database: whatever you enter on the phone shows up on the web right away.",
+                                      "Una sola cuenta y una sola base de datos: lo que registra en el móvil aparece al instante en la web.")))
+        sb.Append("</div>")
+
+        sb.Append("</div></section>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Une carte de la grille des fonctionnalités mobiles.</summary>
+    Private Function FeatureCard(icon As String, title As String, text As String) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""bg-white border border-slate-200 rounded-2xl p-7 transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-slate-200/80"">")
+        sb.Append("<div class=""w-11 h-11 rounded-xl bg-blue-50 text-blue-700 flex items-center justify-center mb-5""><i data-lucide=""" & icon & """ class=""w-5 h-5""></i></div>")
+        sb.Append("<h3 class=""text-base font-semibold text-slate-950 mb-2"">" & Server.HtmlEncode(title) & "</h3>")
+        sb.Append("<p class=""text-sm text-slate-600 leading-relaxed"">" & Server.HtmlEncode(text) & "</p>")
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Bandeau final : rappel du bouton et lien à ouvrir depuis le téléphone.</summary>
+    Private Function BuildMobileCtaHtml(lang As String, available As Boolean) As String
+        Dim sb As New StringBuilder()
+
+        sb.Append("<section class=""py-20 lg:py-24 bg-gradient-to-br from-blue-700 via-blue-600 to-sky-500"">")
+        sb.Append("<div class=""max-w-3xl mx-auto px-6 text-center"">")
+        sb.Append("<div class=""w-14 h-14 rounded-2xl bg-white/15 border border-white/25 flex items-center justify-center mx-auto mb-6""><i data-lucide=""smartphone"" class=""w-7 h-7 text-white""></i></div>")
+        sb.Append("<h2 class=""text-3xl lg:text-5xl font-bold text-white tracking-tight mb-4"">")
+        sb.Append(Choose3(lang, "Prêt à gérer votre entreprise depuis votre téléphone ?",
+                                "Ready to run your business from your phone?",
+                                "¿Listo para gestionar su empresa desde el teléfono?"))
+        sb.Append("</h2>")
+        sb.Append("<p class=""text-lg text-sky-100 leading-relaxed mb-10"">")
+        sb.Append(Choose3(lang,
+                          "Téléchargez l'application, connectez-vous : vos données sont déjà là.",
+                          "Download the app and sign in: your data is already there.",
+                          "Descargue la aplicación e inicie sesión: sus datos ya están ahí."))
+        sb.Append("</p>")
+
+        If available Then
+            sb.Append("<a href=""" & clsAndroidApp.DownloadUrl & """ class=""inline-flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-blue-700 font-semibold px-8 py-4 rounded-xl text-base transition-all duration-200 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-0.5"">")
+            sb.Append("<i data-lucide=""download"" class=""w-5 h-5""></i>")
+            sb.Append(Choose3(lang, "Télécharger l'APK", "Download the APK", "Descargar el APK"))
+            sb.Append("</a>")
+
+            sb.Append("<p class=""text-sm text-sky-100/80 mt-10 mb-3"">")
+            sb.Append(Choose3(lang, "Ou ouvrez ce lien directement depuis votre téléphone",
+                                    "Or open this link straight from your phone",
+                                    "O abra este enlace directamente desde su teléfono"))
+            sb.Append("</p>")
+            sb.Append("<div class=""inline-flex items-center gap-3 bg-white/15 border border-white/25 rounded-xl px-5 py-3"">")
+            sb.Append("<i data-lucide=""link"" class=""w-4 h-4 text-sky-100""></i>")
+            sb.Append("<span class=""font-mono text-sm text-white"">" & Server.HtmlEncode(BuildDisplayDownloadUrl()) & "</span>")
+            sb.Append("</div>")
+        Else
+            sb.Append("<a data-nav=""contact"" href=""#"" class=""inline-flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-blue-700 font-semibold px-8 py-4 rounded-xl text-base transition-all duration-200 hover:shadow-2xl hover:shadow-blue-900/20 hover:-translate-y-0.5"">")
+            sb.Append("<i data-lucide=""mail"" class=""w-5 h-5""></i>")
+            sb.Append(Choose3(lang, "Me prévenir de la sortie", "Notify me when it ships", "Avisarme cuando salga"))
+            sb.Append("</a>")
+        End If
+
+        sb.Append("</div></section>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' URL de téléchargement telle qu'on l'affiche pour être retapée sur un
+    ''' téléphone (hôte + chemin, sans le schéma). Ex. « 60sec.ca/AppAndroid.ashx ».
+    ''' </summary>
+    Private Function BuildDisplayDownloadUrl() As String
+        Try
+            Dim u As New Uri(Request.Url, ResolveUrl("~/" & clsAndroidApp.DownloadUrl))
+            Dim host As String = u.Host
+            If Not u.IsDefaultPort Then host &= ":" & u.Port.ToString()
+            Return host & u.AbsolutePath
+        Catch ex As Exception
+            Return clsAndroidApp.DownloadUrl
+        End Try
     End Function
 
     Private Shared Function GetStr(row As DataRowView, col As String) As String

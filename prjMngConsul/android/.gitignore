@@ -1,0 +1,4 @@
+# Les APK sont des binaires de build : jamais versionnés.
+*.apk
+*.aab
+version.txt
