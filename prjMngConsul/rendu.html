@@ -489,6 +489,77 @@
         justify-content: space-between;
     }
 
+    /* -------------------------------------------------------- Préambule */
+    .preface {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        padding-top: 56px;
+    }
+
+    .panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        break-inside: avoid;
+    }
+
+    .panel h3 {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    .panel p {
+        font-size: 14.5px;
+    }
+
+    .panel p:last-child { margin-bottom: 0 }
+
+    .panel-state {
+        background: var(--amber-bg);
+        border-color: #fde68a;
+    }
+
+    .panel-state h3 { color: #78350f }
+
+    .panel-state p { color: #854d0e }
+
+    .panel-demo {
+        background: var(--blue-bg);
+        border-color: #bfdbfe;
+    }
+
+    .panel-demo h3 { color: #1e3a8a }
+
+    .panel-demo p { color: #1e40af }
+
+    .accounts {
+        list-style: none;
+        margin: 14px 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .accounts li {
+        font-family: var(--mono);
+        font-size: 13.5px;
+        color: var(--ink-2);
+        background: #fff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    .fine {
+        font-size: 13px !important;
+        opacity: .85;
+    }
+
     @media (max-width: 1023px) {
         .shell {
             grid-template-columns: minmax(0, 1fr);
@@ -528,6 +599,7 @@
             <div class="stat"><b>11</b><span>domaines fonctionnels</span></div>
             <div class="stat"><b>7</b><span>rails de paiement</span></div>
             <div class="stat"><b>3</b><span>langues (FR/EN/ES)</span></div>
+            <div class="stat"><b>3</b><span>comptes de démo</span></div>
         </div>
     </div>
 </header>
@@ -536,6 +608,7 @@
 
     <nav class="toc">
         <p>Sommaire</p>
+        <a href="#preface">État et accès</a>
         <a href="#ecosysteme">1 &nbsp;L'écosystème</a>
         <a href="#erp">2 &nbsp;L'ERP en détail</a>
         <a href="#paiements">3 &nbsp;Les moyens de paiement</a>
@@ -547,6 +620,35 @@
     </nav>
 
     <main>
+
+        <!-- ============================================== PRÉAMBULE -->
+        <div class="preface" id="preface">
+
+            <div class="panel panel-state">
+                <h3>⚠️ État du projet</h3>
+                <p>
+                    Toutes les fonctionnalités décrites dans ce document sont réalisées.
+                    Elles restent cependant susceptibles d'être revues et modifiées.
+                </p>
+                <p>
+                    L'ensemble des applications a fait l'objet de <b>tests partiels et non
+                    exhaustifs</b>. Des modifications sont encore à prévoir, et l'esthétique
+                    de l'ensemble pourrait elle aussi être retravaillée.
+                </p>
+            </div>
+
+            <div class="panel panel-demo">
+                <h3>🔑 Comptes de démonstration</h3>
+                <p>Trois comptes permettent d'explorer la plateforme :</p>
+                <ul class="accounts">
+                    <li>demo1@60sec.ca</li>
+                    <li>demo2@60sec.ca</li>
+                    <li>demo3@60sec.ca</li>
+                </ul>
+                <p class="fine">Le mot de passe est fourni sur demande.</p>
+            </div>
+
+        </div>
 
         <!-- ============================================ 1. ÉCOSYSTÈME -->
         <section id="ecosysteme">
@@ -1368,6 +1470,8 @@
         <div>
             <b>60sec-AI — Cartographie fonctionnelle.</b>
             Document établi à partir du code source de la plateforme.
+            Fonctionnalités réalisées, tests partiels et non exhaustifs :
+            le contenu comme l'interface restent susceptibles d'évoluer.
         </div>
         <div>Page autonome : aucune dépendance externe, aucun appel réseau.</div>
     </div>
