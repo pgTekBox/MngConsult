@@ -10,6 +10,14 @@
 *.sln.docstates
 *.DotSettings.user
 
+# Scripts de déploiement contenant des identifiants (ne pas committer)
+60SecAI.Api/Deploy/
+
+# Clés de signature Android (ne JAMAIS committer)
+signing/
+*.keystore
+*.jks
+
 # .NET
 project.assets.json
 *.nuget.g.props

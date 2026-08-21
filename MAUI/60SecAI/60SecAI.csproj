@@ -31,7 +31,7 @@
 		<ApplicationTitle>60SecAI</ApplicationTitle>
 
 		<!-- App Identifier -->
-		<ApplicationId>com.companyname.60secai</ApplicationId>
+		<ApplicationId>ca.sixtysec.app</ApplicationId>
 
 		<!-- Versions -->
 		<ApplicationDisplayVersion>1.0</ApplicationDisplayVersion>
@@ -45,6 +45,14 @@
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">23.0</SupportedOSPlatformVersion>
 		<SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</SupportedOSPlatformVersion>
 		<TargetPlatformMinVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'windows'">10.0.17763.0</TargetPlatformMinVersion>
+	</PropertyGroup>
+
+	<!-- Permet le débogage (F5) en configuration Release : symboles inclus.
+	     (La config Release vise l'API de production via ApiSettings.) -->
+	<PropertyGroup Condition="'$(Configuration)' == 'Release'">
+		<DebugSymbols>true</DebugSymbols>
+		<DebugType>portable</DebugType>
+		<AndroidIncludeDebugSymbols>true</AndroidIncludeDebugSymbols>
 	</PropertyGroup>
 
 	<ItemGroup>

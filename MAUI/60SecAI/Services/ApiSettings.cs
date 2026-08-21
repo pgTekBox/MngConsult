@@ -5,12 +5,15 @@ public class ApiSettings
 {
 	/// <summary>
 	/// URL de base de l'API.
-	/// - Émulateur Android : 10.0.2.2 pointe vers le localhost de la machine hôte.
-	/// - Windows / iOS simulateur : localhost.
-	/// À remplacer par l'URL du serveur en production.
+	/// - Release : serveur de production (api.60sec.ca:6090).
+	/// - Debug   : API locale sur le port 5048 (émulateur Android = 10.0.2.2, sinon localhost).
 	/// </summary>
 	public string BaseUrl { get; init; } =
+#if DEBUG
 		DeviceInfo.Platform == DevicePlatform.Android
 			? "http://10.0.2.2:5048/"
 			: "http://localhost:5048/";
+#else
+		"http://api.60sec.ca:6090/";
+#endif
 }
