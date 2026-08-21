@@ -528,13 +528,18 @@ Partial Public Class LandingPage
                           "Android pide una confirmación antes de instalar una aplicación que no procede de Play Store. Es normal y toma menos de un minuto."))
         sb.Append("</p></div>")
 
+        ' Le nom annoncé est celui du fichier réellement déposé dans ~/android,
+        ' pour que le visiteur retrouve exactement ce nom dans ses téléchargements.
+        Dim apkName As String = clsAndroidApp.GetFileName()
+        If apkName.Length = 0 Then apkName = "*.apk"
+
         sb.Append("<div class=""grid grid-cols-1 md:grid-cols-3 gap-8"">")
         sb.Append(StepCard("1",
                            Choose3(lang, "Télécharger le fichier", "Download the file", "Descargar el archivo"),
                            Choose3(lang,
-                                   "Depuis votre téléphone Android, touchez le bouton de téléchargement. Le fichier 60secai.apk se dépose dans vos téléchargements.",
-                                   "From your Android phone, tap the download button. The 60secai.apk file lands in your Downloads folder.",
-                                   "Desde su teléfono Android, toque el botón de descarga. El archivo 60secai.apk se guarda en Descargas.")))
+                                   "Depuis votre téléphone Android, touchez le bouton de téléchargement. Le fichier " & apkName & " se dépose dans vos téléchargements.",
+                                   "From your Android phone, tap the download button. The " & apkName & " file lands in your Downloads folder.",
+                                   "Desde su teléfono Android, toque el botón de descarga. El archivo " & apkName & " se guarda en Descargas.")))
         sb.Append(StepCard("2",
                            Choose3(lang, "Autoriser l'installation", "Allow the installation", "Permitir la instalación"),
                            Choose3(lang,

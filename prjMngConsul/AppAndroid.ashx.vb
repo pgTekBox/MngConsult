@@ -7,9 +7,9 @@ Imports System.Web
 ''' URL : /AppAndroid.ashx
 '''
 ''' Passer par un handler plutôt que par le fichier statique évite d'avoir à
-''' déclarer le type MIME .apk dans IIS (sans quoi IIS répond 404) et garantit
-''' un nom de fichier propre côté téléphone, quel que soit le nom du build
-''' déposé dans ~/android.
+''' déclarer le type MIME .apk dans IIS (sans quoi IIS répond 404). Le fichier
+''' est servi sous son propre nom, quel qu'il soit : c'est celui que le
+''' visiteur retrouve dans ses téléchargements.
 '''
 ''' Aucune authentification : c'est un téléchargement public, appelé depuis la
 ''' page « Application mobile » du site vitrine.
@@ -47,7 +47,7 @@ Public Class AppAndroid
         context.Response.Buffer = False
         context.Response.ContentType = clsAndroidApp.ContentType
         context.Response.AddHeader("Content-Disposition",
-                                   "attachment; filename=""" & clsAndroidApp.PreferredFileName & """")
+                                   "attachment; filename=""" & clsAndroidApp.GetFileName() & """")
         context.Response.AddHeader("Content-Length", length.ToString())
         ' L'APK est remplacé à chaque nouvelle version : pas de cache navigateur.
         context.Response.Cache.SetCacheability(HttpCacheability.NoCache)

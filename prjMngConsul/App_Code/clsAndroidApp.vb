@@ -17,9 +17,6 @@ Public NotInheritable Class clsAndroidApp
     ''' <summary>Répertoire virtuel où l'APK est déposé.</summary>
     Public Const FolderVirtualPath As String = "~/android"
 
-    ''' <summary>Nom de fichier attendu ; sert aussi de nom proposé au navigateur.</summary>
-    Public Const PreferredFileName As String = "60secai.apk"
-
     ''' <summary>URL publique de téléchargement (handler, pas de fichier statique).</summary>
     Public Const DownloadUrl As String = "AppAndroid.ashx"
 
@@ -31,16 +28,14 @@ Public NotInheritable Class clsAndroidApp
 
     ''' <summary>
     ''' Chemin physique de l'APK à servir, ou "" si aucun n'est disponible.
-    ''' On privilégie 60secai.apk ; à défaut on prend le *.apk le plus récent
-    ''' du répertoire (pratique quand on y dépose un build daté).
+    ''' Le nom du fichier n'a pas d'importance : on prend le *.apk du
+    ''' répertoire, et le plus récent s'il y en a plusieurs (pratique quand on
+    ''' y dépose successivement des builds datés).
     ''' </summary>
     Public Shared Function ResolveApkPath() As String
         Try
             Dim folder As String = HttpContext.Current.Server.MapPath(FolderVirtualPath)
             If Not Directory.Exists(folder) Then Return ""
-
-            Dim preferred As String = Path.Combine(folder, PreferredFileName)
-            If File.Exists(preferred) Then Return preferred
 
             Dim newest As String = ""
             Dim newestUtc As DateTime = DateTime.MinValue
@@ -56,6 +51,20 @@ Public NotInheritable Class clsAndroidApp
             System.Diagnostics.Debug.WriteLine("clsAndroidApp.ResolveApkPath: " & ex.Message)
             Return ""
         End Try
+    End Function
+
+    ''' <summary>
+    ''' Nom du fichier réellement servi (ex. « ca.sixtysec.app.apk »), ou "" si
+    ''' aucun APK n'est présent. C'est ce nom que reçoit le téléphone et celui
+    ''' qu'affiche le guide d'installation : le visiteur retrouve donc dans ses
+    ''' téléchargements exactement le nom annoncé.
+    ''' Les caractères qui casseraient l'en-tête HTTP sont retirés par sécurité.
+    ''' </summary>
+    Public Shared Function GetFileName() As String
+        Dim p As String = ResolveApkPath()
+        If p.Length = 0 Then Return ""
+        Dim name As String = Path.GetFileName(p)
+        Return name.Replace("""", "").Replace(vbCr, "").Replace(vbLf, "")
     End Function
 
     ''' <summary>Vrai si un APK est disponible au téléchargement.</summary>
