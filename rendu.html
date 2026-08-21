@@ -1,0 +1,1377 @@
+﻿<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>60sec-AI — Cartographie fonctionnelle</title>
+<style>
+    :root {
+        --ink: #020617;
+        --ink-2: #0f172a;
+        --body: #475569;
+        --muted: #64748b;
+        --faint: #94a3b8;
+        --line: #e2e8f0;
+        --line-2: #f1f5f9;
+        --bg: #ffffff;
+        --bg-2: #f8fafc;
+        --blue: #1d4ed8;
+        --blue-2: #2563eb;
+        --sky: #0ea5e9;
+        --blue-bg: #eff6ff;
+        --emerald: #047857;
+        --emerald-bg: #ecfdf5;
+        --amber: #b45309;
+        --amber-bg: #fffbeb;
+        --rose: #be123c;
+        --rose-bg: #fff1f2;
+        --violet: #6d28d9;
+        --violet-bg: #f5f3ff;
+        --radius: 16px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box }
+
+    html { scroll-behavior: smooth }
+
+    body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--body);
+        background: var(--bg);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------------------------------------------------------- Bandeau */
+    .hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #020617 0%, #0f2c6b 55%, #0369a1 100%);
+        color: #fff;
+        padding: 72px 32px 64px;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+        background-size: 56px 56px;
+        pointer-events: none;
+    }
+
+    .hero-in {
+        position: relative;
+        z-index: 1;
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+        margin: 0 0 18px;
+    }
+
+    .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: #7dd3fc;
+        display: block;
+    }
+
+    h1 {
+        margin: 0 0 18px;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1.08;
+        letter-spacing: -.025em;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .lede {
+        margin: 0 0 36px;
+        max-width: 66ch;
+        font-size: clamp(16px, 1.5vw, 19px);
+        color: #cbd5e1;
+    }
+
+    .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .stat {
+        border: 1px solid rgba(255,255,255,.22);
+        background: rgba(255,255,255,.09);
+        border-radius: 12px;
+        padding: 12px 18px;
+        min-width: 132px;
+    }
+
+    .stat b {
+        display: block;
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.2;
+    }
+
+    .stat span {
+        font-size: 12.5px;
+        color: #bae6fd;
+    }
+
+    /* ------------------------------------------------------- Structure */
+    .shell {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0 32px 96px;
+        display: grid;
+        grid-template-columns: 232px minmax(0, 1fr);
+        gap: 56px;
+    }
+
+    .toc {
+        position: sticky;
+        top: 28px;
+        align-self: start;
+        padding-top: 56px;
+        font-size: 13.5px;
+    }
+
+    .toc p {
+        margin: 0 0 12px;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--faint);
+    }
+
+    .toc a {
+        display: block;
+        padding: 7px 12px;
+        color: var(--muted);
+        text-decoration: none;
+        border-left: 2px solid var(--line);
+        transition: color .15s, border-color .15s, background .15s;
+    }
+
+    .toc a:hover {
+        color: var(--blue);
+        border-left-color: var(--blue);
+        background: var(--blue-bg);
+    }
+
+    main { min-width: 0 }
+
+    section { padding-top: 56px }
+
+    h2 {
+        margin: 0 0 8px;
+        font-size: clamp(24px, 2.6vw, 32px);
+        line-height: 1.2;
+        letter-spacing: -.02em;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+    h2 .num {
+        display: inline-block;
+        min-width: 34px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sky);
+        vertical-align: 3px;
+    }
+
+    .sub {
+        margin: 0 0 28px 34px;
+        max-width: 72ch;
+        color: var(--muted);
+        font-size: 15.5px;
+    }
+
+    h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -.01em;
+    }
+
+    h4 {
+        margin: 26px 0 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--faint);
+    }
+
+    p { margin: 0 0 12px }
+
+    a { color: var(--blue) }
+
+    code {
+        font-family: var(--mono);
+        font-size: .88em;
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        color: var(--ink-2);
+    }
+
+    /* ----------------------------------------------------------- Cartes */
+    .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px;
+        background: var(--bg);
+        break-inside: avoid;
+    }
+
+    .card > p:last-child { margin-bottom: 0 }
+
+    .card .role {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--sky);
+        margin: 0 0 6px;
+    }
+
+    .card p {
+        font-size: 14.5px;
+        color: var(--body);
+    }
+
+    .ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        margin-bottom: 14px;
+        background: var(--blue-bg);
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+    }
+
+    .tag {
+        font-size: 12px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    /* ---------------------------------------------------------- Statuts */
+    .st {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .st-ok { background: var(--emerald-bg); color: var(--emerald) }
+    .st-test { background: var(--blue-bg); color: var(--blue) }
+    .st-wip { background: var(--amber-bg); color: var(--amber) }
+    .st-blocked { background: var(--rose-bg); color: var(--rose) }
+
+    /* --------------------------------------------- Fiches de paiement */
+    .rail {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 18px;
+        break-inside: avoid;
+    }
+
+    .rail-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 22px;
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
+        flex-wrap: wrap;
+    }
+
+    .rail-head .ico {
+        margin: 0;
+        background: #fff;
+        border: 1px solid var(--line);
+    }
+
+    .rail-head h3 { margin: 0 }
+
+    .rail-head .dir {
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .rail-head .st { margin-left: auto }
+
+    .rail-body { padding: 22px }
+
+    .rail-body > p:first-child { margin-top: 0 }
+
+    ul.checks {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul.checks li {
+        position: relative;
+        padding: 0 0 0 26px;
+        margin-bottom: 9px;
+        font-size: 14.5px;
+    }
+
+    ul.checks li::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 9px;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--sky);
+    }
+
+    ul.checks li:last-child { margin-bottom: 0 }
+
+    ul.checks li b { color: var(--ink-2) }
+
+    .note {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        background: var(--amber-bg);
+        border: 1px solid #fde68a;
+        color: #78350f;
+    }
+
+    .note.info {
+        background: var(--blue-bg);
+        border-color: #bfdbfe;
+        color: #1e3a8a;
+    }
+
+    .note .n-ico { flex: 0 0 auto; font-size: 16px; line-height: 1.4 }
+
+    .note p { margin: 0; font-size: 14px }
+
+    /* --------------------------------------------------------- Tableau */
+    .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+        min-width: 720px;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line-2);
+        vertical-align: top;
+    }
+
+    th {
+        font-size: 11.5px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--faint);
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+    }
+
+    td b { color: var(--ink-2) }
+
+    tr:last-child td { border-bottom: 0 }
+
+    /* ------------------------------------------------------- Domaines */
+    .mods {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    .mod {
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--blue);
+        border-radius: 12px;
+        padding: 18px 20px;
+        break-inside: avoid;
+    }
+
+    .mod h3 {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 10px;
+        font-size: 15.5px;
+    }
+
+    .mod ul {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 14px;
+        color: var(--body);
+    }
+
+    .mod li { margin-bottom: 4px }
+
+    /* --------------------------------------------------------- Divers */
+    .split {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    footer {
+        border-top: 1px solid var(--line);
+        background: var(--bg-2);
+        padding: 36px 32px;
+        font-size: 13.5px;
+        color: var(--muted);
+    }
+
+    .foot-in {
+        max-width: 1240px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: space-between;
+    }
+
+    @media (max-width: 1023px) {
+        .shell {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+            padding: 0 24px 64px;
+        }
+
+        .toc { display: none }
+
+        .hero { padding: 56px 24px 48px }
+    }
+
+    @media print {
+        .toc, .hero::after { display: none }
+        .hero { background: #020617; padding: 32px }
+        .shell { display: block; padding: 0 24px }
+        section { padding-top: 32px }
+        .card, .rail, .mod { break-inside: avoid }
+        a { color: inherit; text-decoration: none }
+    }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="hero-in">
+        <p class="eyebrow">Cartographie fonctionnelle</p>
+        <h1>60sec-AI</h1>
+        <p class="lede">
+            Plateforme d'administration financière automatisée pour les PME et les travailleurs
+            autonomes du Québec et du Canada. Ce document décrit les applications qui composent
+            la plateforme, leurs grandes fonctionnalités, et en particulier les différents
+            moyens de paiement intégrés.
+        </p>
+        <div class="stats">
+            <div class="stat"><b>6</b><span>applications</span></div>
+            <div class="stat"><b>11</b><span>domaines fonctionnels</span></div>
+            <div class="stat"><b>7</b><span>rails de paiement</span></div>
+            <div class="stat"><b>3</b><span>langues (FR/EN/ES)</span></div>
+        </div>
+    </div>
+</header>
+
+<div class="shell">
+
+    <nav class="toc">
+        <p>Sommaire</p>
+        <a href="#ecosysteme">1 &nbsp;L'écosystème</a>
+        <a href="#erp">2 &nbsp;L'ERP en détail</a>
+        <a href="#paiements">3 &nbsp;Les moyens de paiement</a>
+        <a href="#comparatif">4 &nbsp;Comparatif des rails</a>
+        <a href="#ia">5 &nbsp;Intelligence artificielle</a>
+        <a href="#infra">6 &nbsp;60secPaiement</a>
+        <a href="#mobile">7 &nbsp;Application mobile</a>
+        <a href="#socle">8 &nbsp;Socle technique</a>
+    </nav>
+
+    <main>
+
+        <!-- ============================================ 1. ÉCOSYSTÈME -->
+        <section id="ecosysteme">
+            <h2><span class="num">01</span>L'écosystème</h2>
+            <p class="sub">
+                La plateforme n'est pas une application unique mais un ensemble de six programmes
+                qui partagent la même base de données et les mêmes comptes utilisateurs.
+            </p>
+
+            <div class="grid">
+
+                <div class="card">
+                    <div class="ico">🧮</div>
+                    <p class="role">Produit principal</p>
+                    <h3>60sec-AI — l'ERP web</h3>
+                    <p>
+                        Le cœur de la plateforme : comptabilité, facturation, achats, agenda,
+                        courriel et états financiers. C'est l'application qu'utilise l'abonné
+                        au quotidien.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">VB.NET WebForms</span>
+                        <span class="tag">.NET 4.7.2</span>
+                        <span class="tag">SQL Server</span>
+                        <span class="tag">Telerik UI</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">📱</div>
+                    <p class="role">Mobilité</p>
+                    <h3>Application mobile 60SecAI</h3>
+                    <p>
+                        Le même compte et la même base de données, dans la poche. Conçue avant
+                        tout pour photographier des reçus et consulter les chiffres en déplacement.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">.NET MAUI</span>
+                        <span class="tag">Android 6.0+</span>
+                        <span class="tag">iOS 15+</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🛡️</div>
+                    <p class="role">Interne</p>
+                    <h3>Console d'administration</h3>
+                    <p>
+                        Back-office réservé à l'équipe : compagnies abonnées, forfaits, contenu du
+                        site vitrine, prompts d'IA, diagnostics des webhooks Square, Stripe et Plaid.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">prjSec60Admin</span>
+                        <span class="tag">Telerik</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🏦</div>
+                    <p class="role">Infrastructure</p>
+                    <h3>60secPaiement</h3>
+                    <p>
+                        Infrastructure de paiement EFT multi-locataire, indépendante de l'ERP :
+                        trois portails (maître, abonné, partenaire) et une API REST publique.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">3 portails</span>
+                        <span class="tag">API REST v1</span>
+                        <span class="tag">Grand livre</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🔌</div>
+                    <p class="role">Intégration</p>
+                    <h3>API REST de l'ERP</h3>
+                    <p>
+                        Service ASP.NET Core exposant profil, inscription, contrats, pointage
+                        et téléversement de documents aux applications tierces.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">ASP.NET Core</span>
+                        <span class="tag">Contrôleurs REST</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">⚙️</div>
+                    <p class="role">Arrière-plan</p>
+                    <h3>SrvAI — service Windows</h3>
+                    <p>
+                        Envoie les courriels sortants en remise directe vers les serveurs de
+                        destination et exécute les traitements planifiés hors interface.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Service Windows</span>
+                        <span class="tag">Direct-to-MX</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================================== 2. L'ERP -->
+        <section id="erp">
+            <h2><span class="num">02</span>L'ERP en détail</h2>
+            <p class="sub">
+                Onze domaines fonctionnels, accessibles depuis le menu latéral. Chaque domaine
+                correspond à des écrans réels de l'application.
+            </p>
+
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>🏠 Tableau de bord</h3>
+                    <ul>
+                        <li>Vue d'entrée : indicateurs de l'entreprise et accès rapides</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🧾 Ventes</h3>
+                    <ul>
+                        <li>Fiches clients et coordonnées</li>
+                        <li>Factures clients avec PDF généré à la demande</li>
+                        <li>Numérotation de factures configurable par compagnie</li>
+                        <li>Lien de paiement envoyé au client</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📦 Achats</h3>
+                    <ul>
+                        <li>Fiches fournisseurs et coordonnées bancaires</li>
+                        <li>Factures fournisseurs et suivi des règlements</li>
+                        <li>Reçus : numérisation et lecture automatique</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🏷️ Produits et services</h3>
+                    <ul>
+                        <li>Catalogue de produits et de services</li>
+                        <li>Catégories de produits</li>
+                        <li>Synchronisation avec le catalogue Square</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📒 Comptabilité</h3>
+                    <ul>
+                        <li>Journaux et écritures</li>
+                        <li>Modèles d'écritures récurrentes</li>
+                        <li>Comptes bancaires connectés (Plaid)</li>
+                        <li>Relevé bancaire et rapprochement</li>
+                        <li>Rapport de taxes (TPS/TVQ)</li>
+                        <li>Fermeture d'année</li>
+                        <li>Plan comptable</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📊 Rapports</h3>
+                    <ul>
+                        <li>État des résultats</li>
+                        <li>Bilan</li>
+                        <li>Flux de trésorerie</li>
+                        <li>Bénéfices non répartis</li>
+                        <li>Balance de vérification</li>
+                        <li>Rapport du plan comptable</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📅 Agenda et employés</h3>
+                    <ul>
+                        <li>Rendez-vous et plages horaires</li>
+                        <li>Employés comme ressources de l'agenda</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>✉️ Courriel</h3>
+                    <ul>
+                        <li>Boîte de réception intégrée à l'application</li>
+                        <li>Pièces jointes rattachées aux documents</li>
+                        <li>Envoi par le service SrvAI</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🤖 Traitements planifiés</h3>
+                    <ul>
+                        <li>Définition des traitements</li>
+                        <li>Planification et calendrier</li>
+                        <li>Surveillance et journal d'exécution</li>
+                        <li>Tableau de bord des traitements</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>📥 Importation</h3>
+                    <ul>
+                        <li>Reprise depuis Sage : comptes, tiers, produits</li>
+                        <li>Factures et lignes de factures</li>
+                        <li>Vérification de la balance après import</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>⚙️ Administration</h3>
+                    <ul>
+                        <li>Profil de la compagnie</li>
+                        <li>Utilisateurs et droits</li>
+                        <li>Paramètres propres à chaque compagnie</li>
+                        <li>Processeurs de paiement</li>
+                        <li>Autorisations de paiement automatique</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ============================================= 3. PAIEMENTS -->
+        <section id="paiements">
+            <h2><span class="num">03</span>Les moyens de paiement</h2>
+            <p class="sub">
+                C'est le domaine le plus riche de la plateforme. Sept rails cohabitent, chacun
+                avec un rôle précis : encaisser l'argent des clients, verser l'argent aux
+                fournisseurs, ou simplement lire ce qui se passe au compte bancaire.
+            </p>
+
+            <!-- SQUARE -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#fff">⬛</div>
+                    <div>
+                        <h3>Square</h3>
+                        <div class="dir">Encaissement — commerce et vente en ligne</div>
+                    </div>
+                    <span class="st st-ok">Opérationnel</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Square sert à encaisser les clients. Chaque compagnie abonnée connecte
+                        <b>son propre compte Square</b> : la plateforme ne mutualise rien, les
+                        jetons sont stockés chiffrés et rafraîchis automatiquement.
+                    </p>
+                    <h4>Ce qui est en place</h4>
+                    <ul class="checks">
+                        <li><b>Connexion OAuth par abonné</b> — l'abonné autorise l'accès depuis
+                            l'écran « Processeurs de paiement » ; il peut se déconnecter à tout
+                            moment, ce qui efface les jetons.</li>
+                        <li><b>Synchronisation du catalogue</b> — les produits et services de
+                            l'ERP sont poussés vers Square, et les articles créés dans Square
+                            peuvent être récupérés.</li>
+                        <li><b>Synchronisation des clients</b> — export et import de la fiche
+                            client dans les deux sens, avec suivi des versions pour éviter
+                            d'écraser une modification faite chez Square.</li>
+                        <li><b>Import des ventes</b> — factures et paiements Square sont repris
+                            dans l'ERP comme factures clients, avec l'identifiant de commande
+                            Square comme clé, donc sans doublon possible.</li>
+                        <li><b>Liens de paiement</b> — génération d'un lien de règlement à
+                            envoyer au client.</li>
+                        <li><b>Webhook signé</b> — Square notifie la plateforme en temps réel ;
+                            la signature est vérifiée avant tout traitement. Un écran de
+                            diagnostic est disponible dans la console d'administration.</li>
+                    </ul>
+                    <div class="note">
+                        <span class="n-ico">⏳</span>
+                        <p><b>À venir :</b> la prise en charge du terminal de paiement Square
+                            (TPV en boutique) reste à faire.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- STRIPE -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#f5f3ff">💳</div>
+                    <div>
+                        <h3>Stripe</h3>
+                        <div class="dir">Encaissement et versement — abonnements, factures, fournisseurs</div>
+                    </div>
+                    <span class="st st-test">Configuré en test</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Stripe joue trois rôles distincts dans la plateforme, ce qui en fait
+                        l'intégration la plus transversale.
+                    </p>
+                    <h4>1. L'abonnement à la plateforme</h4>
+                    <ul class="checks">
+                        <li>Paiement de l'abonnement en mode <b>souscription récurrente</b>, avec
+                            période d'essai gratuite.</li>
+                        <li>Calcul automatique des taxes canadiennes et québécoises via Stripe Tax
+                            (prix récurrents, siège social et immatriculations fiscales configurés).</li>
+                        <li>Portail client Stripe pour que l'abonné gère lui-même sa carte et ses
+                            factures d'abonnement.</li>
+                    </ul>
+                    <h4>2. L'encaissement des factures clients</h4>
+                    <ul class="checks">
+                        <li>Génération d'un lien de paiement rattaché à une facture, encaissé sur
+                            le <b>compte connecté de l'abonné</b> et non sur celui de la plateforme.</li>
+                        <li>Relecture des sessions de paiement pour rapprocher un règlement de son
+                            document.</li>
+                    </ul>
+                    <h4>3. Le versement aux fournisseurs</h4>
+                    <ul class="checks">
+                        <li><b>Stripe Connect Express</b> : création du compte du fournisseur et
+                            lien d'embarquement pour qu'il fournisse lui-même ses informations.</li>
+                        <li><b>Paiements hors session</b> : une fois le moyen de paiement autorisé,
+                            la plateforme peut débiter sans que personne soit devant l'écran —
+                            c'est ce qui alimente les paiements automatiques.</li>
+                    </ul>
+                    <h4>Sécurité</h4>
+                    <ul class="checks">
+                        <li>Toutes les notifications Stripe sont validées par signature avant
+                            traitement, avec écran de diagnostic dédié côté administration.</li>
+                    </ul>
+                    <div class="note">
+                        <span class="n-ico">⚠️</span>
+                        <p><b>À finaliser :</b> l'environnement de test est complet et fonctionnel.
+                            La chaîne de prérequis Stripe Tax doit être refaite dans
+                            l'environnement de production avant la mise en service réelle.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- PLAID -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#ecfdf5">🏛️</div>
+                    <div>
+                        <h3>Plaid</h3>
+                        <div class="dir">Lecture bancaire — aucun mouvement d'argent</div>
+                    </div>
+                    <span class="st st-test">Environnement bac à sable</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Plaid ne déplace pas d'argent : il donne à la plateforme une vue en lecture
+                        seule sur les comptes bancaires de l'entreprise. C'est ce qui permet de
+                        rapprocher la comptabilité de la réalité du compte.
+                    </p>
+                    <h4>Ce qui est en place</h4>
+                    <ul class="checks">
+                        <li><b>Connexion bancaire multi-locataire</b> — chaque compagnie relie ses
+                            propres comptes ; les accès sont cloisonnés par compagnie.</li>
+                        <li><b>Parcours de liaison Plaid Link</b> — jeton de liaison généré à la
+                            demande, puis échangé contre un accès durable.</li>
+                        <li><b>Comptes et soldes</b> — récupération de la liste des comptes et des
+                            soldes courants.</li>
+                        <li><b>Transactions</b> — synchronisation incrémentale des opérations
+                            bancaires, qui alimente le relevé et le rapprochement.</li>
+                        <li><b>Coordonnées bancaires</b> — récupération des numéros d'institution,
+                            de transit et de compte, réutilisables pour les virements.</li>
+                        <li><b>Webhook et reprise du parcours OAuth bancaire</b> pour les
+                            institutions qui l'exigent.</li>
+                    </ul>
+                    <div class="note info">
+                        <span class="n-ico">ℹ️</span>
+                        <p>La configuration est externalisée : le passage du bac à sable à la
+                            production se fait sans toucher au code.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- DREAM -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#fff1f2">💸</div>
+                    <div>
+                        <h3>DreamPayments</h3>
+                        <div class="dir">Versement fournisseurs — EFT et Interac e-Transfer</div>
+                    </div>
+                    <span class="st st-blocked">Bloqué côté fournisseur</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        DreamPayments sert à <b>payer les fournisseurs</b>, directement depuis la
+                        grille des factures fournisseurs : deux boutons, deux rails.
+                    </p>
+                    <h4>Ce qui est développé</h4>
+                    <ul class="checks">
+                        <li><b>Authentification</b> par identifiants d'application, avec jeton mis
+                            en cache et renouvelé automatiquement.</li>
+                        <li><b>Création du bénéficiaire</b> — nom, adresse, courriel, téléphone,
+                            langue préférée.</li>
+                        <li><b>Virement EFT</b> — association des coordonnées bancaires canadiennes
+                            (institution, transit, compte) au bénéficiaire, puis déclenchement du
+                            virement.</li>
+                        <li><b>Interac e-Transfer</b> — envoi par adresse courriel, sans avoir
+                            besoin des coordonnées bancaires du bénéficiaire.</li>
+                        <li><b>Suivi</b> — relecture de l'état d'un paiement et test de connexion.</li>
+                    </ul>
+                    <div class="note">
+                        <span class="n-ico">🚧</span>
+                        <p><b>Blocage en cours :</b> l'API répond « Multiple payers exist » — les
+                            identifiants fournis sont rattachés à plusieurs payeurs chez Dream.
+                            Le code est prêt ; la résolution dépend d'un ajustement à faire avec
+                            DreamPayments.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- AUTOPAY -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#eff6ff">🔁</div>
+                    <div>
+                        <h3>Paiements automatiques</h3>
+                        <div class="dir">Versement récurrent — moteur interne</div>
+                    </div>
+                    <span class="st st-ok">Opérationnel</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Ce moteur n'est pas un fournisseur externe mais une brique propre à la
+                        plateforme, qui s'appuie sur les paiements hors session de Stripe pour
+                        régler les fournisseurs sans intervention humaine.
+                    </p>
+                    <h4>Ce qui est en place</h4>
+                    <ul class="checks">
+                        <li><b>Autorisations</b> — chaque fournisseur doit être explicitement
+                            autorisé avant tout prélèvement.</li>
+                        <li><b>Calendrier</b> — planification des échéances à venir.</li>
+                        <li><b>Exécution idempotente</b> — les débits dus sont exécutés sans
+                            risque de double paiement en cas de relance du traitement.</li>
+                        <li><b>Préavis réglementaires</b> — avis 24 h pour les cartes et préavis
+                            légal de 3 jours pour les débits préautorisés, envoyés par courriel.</li>
+                        <li><b>Historique complet</b> des prélèvements effectués.</li>
+                    </ul>
+                </div>
+            </article>
+
+            <!-- EFT CPA-005 -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#f8fafc">🏦</div>
+                    <div>
+                        <h3>EFT CPA-005</h3>
+                        <div class="dir">Encaissement et versement — rail bancaire propriétaire (60secPaiement)</div>
+                    </div>
+                    <span class="st st-wip">Testé, en attente de la banque</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Dans l'infrastructure 60secPaiement, les virements ne passent par aucun
+                        intermédiaire : la plateforme produit elle-même les fichiers bancaires au
+                        format normalisé canadien.
+                    </p>
+                    <h4>Ce qui est en place</h4>
+                    <ul class="checks">
+                        <li><b>Génération des lots</b> au format CPA-005 (enregistrements
+                            d'en-tête, de débit, de crédit et de clôture, en lignes de longueur fixe).</li>
+                        <li><b>Accusé de réception bancaire</b> — les éléments rejetés dès l'entrée
+                            sont automatiquement contre-passés au grand livre.</li>
+                        <li><b>Import des retours</b> — provisions insuffisantes, comptes fermés :
+                            chaque retour génère sa contre-passation.</li>
+                        <li><b>Règlement différé</b> — les paiements acceptés sont réglés selon le
+                            délai de compensation, de façon automatisée.</li>
+                        <li><b>Échange avec la banque</b> par dépôt de fichiers sécurisé, avec
+                            journal des échanges.</li>
+                    </ul>
+                    <div class="note">
+                        <span class="n-ico">🏦</span>
+                        <p>La chaîne complète est testée de bout en bout avec une compensation
+                            simulée. Le raccordement au réseau de compensation réel dépend de
+                            l'accord bancaire.</p>
+                    </div>
+                </div>
+            </article>
+
+            <!-- INTERAC -->
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#fffbeb">✉️</div>
+                    <div>
+                        <h3>Interac e-Transfer</h3>
+                        <div class="dir">Encaissement et versement — rail parallèle (60secPaiement)</div>
+                    </div>
+                    <span class="st st-wip">Simulé</span>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        Rail parallèle à l'EFT, fondé sur l'adresse courriel plutôt que sur les
+                        coordonnées bancaires. Il réutilise exactement le même flux de paiement et
+                        le même grand livre que l'EFT, ce qui évite d'avoir deux comptabilités.
+                    </p>
+                    <h4>Ce qui est en place</h4>
+                    <ul class="checks">
+                        <li>Encaissements et décaissements par adresse courriel.</li>
+                        <li>Journal des évènements du virement (dépôt, refus).</li>
+                        <li>Console de simulation permettant de dérouler et de tester tout le
+                            cycle sans partenaire réel.</li>
+                    </ul>
+                    <div class="note">
+                        <span class="n-ico">🚧</span>
+                        <p>Le rail réel nécessite un accord avec un partenaire Interac. Le code
+                            est structuré pour que le branchement ne change que la couche
+                            d'envoi.</p>
+                    </div>
+                </div>
+            </article>
+
+        </section>
+
+        <!-- ============================================ 4. COMPARATIF -->
+        <section id="comparatif">
+            <h2><span class="num">04</span>Comparatif des rails</h2>
+            <p class="sub">
+                Une lecture rapide : qui fait quoi, dans quelle application, et où en est
+                chaque intégration.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Rail</th>
+                            <th>Sens</th>
+                            <th>Usage principal</th>
+                            <th>Application</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Square</b></td>
+                            <td>Entrant</td>
+                            <td>Ventes en boutique et en ligne, catalogue, clients</td>
+                            <td>ERP</td>
+                            <td><span class="st st-ok">Opérationnel</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Stripe</b></td>
+                            <td>Entrant et sortant</td>
+                            <td>Abonnement à la plateforme, factures clients, versements fournisseurs</td>
+                            <td>ERP</td>
+                            <td><span class="st st-test">Test</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Plaid</b></td>
+                            <td>Lecture seule</td>
+                            <td>Comptes, soldes, transactions, rapprochement</td>
+                            <td>ERP</td>
+                            <td><span class="st st-test">Bac à sable</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>DreamPayments</b></td>
+                            <td>Sortant</td>
+                            <td>EFT et Interac vers les fournisseurs</td>
+                            <td>ERP</td>
+                            <td><span class="st st-blocked">Bloqué</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Paiements automatiques</b></td>
+                            <td>Sortant</td>
+                            <td>Prélèvements récurrents avec préavis</td>
+                            <td>ERP</td>
+                            <td><span class="st st-ok">Opérationnel</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>EFT CPA-005</b></td>
+                            <td>Entrant et sortant</td>
+                            <td>Fichiers bancaires normalisés, retours, règlement</td>
+                            <td>60secPaiement</td>
+                            <td><span class="st st-wip">En attente banque</span></td>
+                        </tr>
+                        <tr>
+                            <td><b>Interac e-Transfer</b></td>
+                            <td>Entrant et sortant</td>
+                            <td>Virements par adresse courriel</td>
+                            <td>60secPaiement</td>
+                            <td><span class="st st-wip">Simulé</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- ==================================================== 5. IA -->
+        <section id="ia">
+            <h2><span class="num">05</span>Intelligence artificielle</h2>
+            <p class="sub">
+                L'IA n'est pas un gadget posé à côté : elle sert à supprimer de la saisie et à
+                lire des chiffres à la place de l'utilisateur.
+            </p>
+
+            <div class="split">
+
+                <div class="card">
+                    <div class="ico">📸</div>
+                    <h3>Lecture automatique des documents</h3>
+                    <p>
+                        Un reçu photographié, un PDF ou un simple texte sont transformés en données
+                        structurées : marchand, date, montant, taxes, mode de paiement. L'écriture
+                        comptable est ensuite préparée à partir de ce résultat.
+                    </p>
+                    <p>
+                        Les instructions données au modèle sont stockées en base et modifiables
+                        depuis la console d'administration, sans redéploiement.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Scan de reçus</span>
+                        <span class="tag">Inscription pré-remplie</span>
+                        <span class="tag">Prompts éditables</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">📈</div>
+                    <h3>Tableaux d'analyse IA</h3>
+                    <p>
+                        Deux écrans dédiés — <b>IA Paiement</b> et <b>IA Ventes</b> — présentent
+                        les indicateurs de l'entreprise sur une période choisie (trois mois par
+                        défaut), avec regroupement par catégorie et par tiers.
+                    </p>
+                    <p>
+                        Les mêmes analyses sont reprises dans l'application mobile.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Indicateurs</span>
+                        <span class="tag">Par période</span>
+                        <span class="tag">Web et mobile</span>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================================= 6. INFRA -->
+        <section id="infra">
+            <h2><span class="num">06</span>60secPaiement — l'infrastructure de paiement</h2>
+            <p class="sub">
+                Un projet distinct de l'ERP, conçu comme une infrastructure de paiement EFT
+                canadienne multi-locataire : un abonné y gère ses propres clients et fournisseurs.
+            </p>
+
+            <div class="grid">
+
+                <div class="card">
+                    <div class="ico">🎛️</div>
+                    <p class="role">Portail maître</p>
+                    <h3>Pour l'équipe plateforme</h3>
+                    <p>
+                        Gestion des abonnés et de leur vérification d'entreprise, clés d'API,
+                        webhooks, lots EFT, tableau de bord de supervision, rapprochement
+                        bancaire fiduciaire.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Vérification KYB</span>
+                        <span class="tag">Supervision</span>
+                        <span class="tag">Journal d'audit</span>
+                        <span class="tag">Clôture RGPD</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🏢</div>
+                    <p class="role">Portail abonné</p>
+                    <h3>Libre-service du client</h3>
+                    <p>
+                        L'abonné gère seul ses clients, ses fournisseurs, ses encaissements et
+                        décaissements, son relevé, ses clés d'API et ses webhooks — le tout
+                        strictement cloisonné à son organisation.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Multi-utilisateurs</span>
+                        <span class="tag">Parcours d'accueil</span>
+                        <span class="tag">Se souvenir de moi</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🤝</div>
+                    <p class="role">Portail partenaire</p>
+                    <h3>Modèle de revente</h3>
+                    <p>
+                        Un partenaire (éditeur de logiciel, réseau de cliniques…) provisionne et
+                        pilote ses propres abonnés, avec ses clés d'API dédiées et le lancement
+                        des vérifications d'entreprise.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Provisionnement</span>
+                        <span class="tag">Clés partenaire</span>
+                        <span class="tag">Accès délégué</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🔗</div>
+                    <p class="role">API REST</p>
+                    <h3>Intégration par les abonnés</h3>
+                    <p>
+                        API versionnée protégée par clé, avec limitation de débit, pagination,
+                        webhooks configurables, documentation OpenAPI et console d'essai
+                        autonome.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">/api/v1</span>
+                        <span class="tag">Clé d'API</span>
+                        <span class="tag">OpenAPI 3.0</span>
+                        <span class="tag">Webhooks signés</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <div class="note info" style="margin-top:22px">
+                <span class="n-ico">📚</span>
+                <p>
+                    Toute la mécanique financière repose sur un <b>grand livre en partie double
+                    immuable</b> : aucune écriture n'est modifiée ni supprimée, les corrections
+                    passent par contre-passation. Les opérations sensibles (export de données,
+                    clôture de compte, anonymisation, changement de statut) sont tracées dans un
+                    journal d'audit lui aussi inaltérable.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================================================ 7. MOBILE -->
+        <section id="mobile">
+            <h2><span class="num">07</span>Application mobile</h2>
+            <p class="sub">
+                Application native Android et iOS bâtie avec .NET MAUI, connectée au même compte
+                et à la même base de données que le site web.
+            </p>
+
+            <div class="mods">
+                <div class="mod">
+                    <h3>📸 Saisie sur le terrain</h3>
+                    <ul>
+                        <li>Scan de reçus avec lecture automatique</li>
+                        <li>Création de facture</li>
+                        <li>Prise de rendez-vous</li>
+                    </ul>
+                </div>
+                <div class="mod">
+                    <h3>📊 Consultation</h3>
+                    <ul>
+                        <li>Tableau de bord</li>
+                        <li>États financiers</li>
+                        <li>Analyses IA paiement et IA ventes</li>
+                        <li>Détail des factures et de l'agenda</li>
+                    </ul>
+                </div>
+                <div class="mod">
+                    <h3>📥 Distribution</h3>
+                    <ul>
+                        <li>Téléchargement direct de l'APK depuis le site</li>
+                        <li>Code QR à scanner depuis un poste de travail</li>
+                        <li>Guide d'installation en trois étapes</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================= 8. SOCLE -->
+        <section id="socle">
+            <h2><span class="num">08</span>Socle technique</h2>
+            <p class="sub">
+                Les choix structurants, communs à toutes les applications de la plateforme.
+            </p>
+
+            <div class="split">
+
+                <div class="card">
+                    <h3>Architecture des données</h3>
+                    <ul class="checks" style="margin-top:10px">
+                        <li><b>Tout passe par des procédures stockées</b> — aucune requête SQL
+                            écrite dans le code applicatif.</li>
+                        <li><b>Multi-locataire</b> — les données sont cloisonnées par compagnie,
+                            jusqu'aux paramètres qui sont clonés pour chaque nouvelle entreprise.</li>
+                        <li><b>Écritures immuables</b> côté infrastructure de paiement.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Sécurité</h3>
+                    <ul class="checks" style="margin-top:10px">
+                        <li>Mots de passe hachés avec BCrypt.</li>
+                        <li>« Se souvenir de moi » à jeton scindé, avec rotation à chaque usage.</li>
+                        <li>HTTPS forcé et HSTS, en-têtes de sécurité durcis.</li>
+                        <li>Signature vérifiée sur tous les webhooks entrants.</li>
+                        <li>Journal d'audit inaltérable des actions sensibles.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Expérience et contenu</h3>
+                    <ul class="checks" style="margin-top:10px">
+                        <li>Interface trilingue français, anglais, espagnol.</li>
+                        <li>Site vitrine entièrement piloté depuis la base, avec éditeur dédié.</li>
+                        <li>Écrans internes pensés pour le poste de travail ; site public et
+                            tunnel d'inscription adaptés au mobile.</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Documents et communication</h3>
+                    <ul class="checks" style="margin-top:10px">
+                        <li>PDF de facture généré à la demande, numérotation configurable.</li>
+                        <li>Courriels sortants mis en file puis remis directement aux serveurs
+                            de destination par le service SrvAI.</li>
+                        <li>Boîte de réception intégrée à l'ERP.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    <div class="foot-in">
+        <div>
+            <b>60sec-AI — Cartographie fonctionnelle.</b>
+            Document établi à partir du code source de la plateforme.
+        </div>
+        <div>Page autonome : aucune dépendance externe, aucun appel réseau.</div>
+    </div>
+</footer>
+
+</body>
+</html>
