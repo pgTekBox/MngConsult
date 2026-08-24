@@ -290,9 +290,26 @@
                     <a href="wbfLogin.aspx?lang=<%= CurrentLang %>" class="text-slate-600 hover:text-slate-900 text-sm font-medium transition-colors">Connexion</a>
                     <a data-nav="accueil" href="#plans" class="bg-blue-700 hover:bg-blue-600 text-white text-sm font-semibold px-5 py-2.5 rounded-lg transition-all duration-200 hover:shadow-lg hover:shadow-blue-700/25">Inscription</a>
                 </div>
-                <button class="md:hidden text-slate-700 p-2">
+                <button type="button" data-mobile-toggle aria-controls="mobile-menu" aria-expanded="false" aria-label="Ouvrir le menu" class="md:hidden text-slate-700 p-2">
                     <i data-lucide="menu" class="w-6 h-6"></i>
                 </button>
+            </div>
+        </div>
+
+        <!-- Menu mobile : déplié par le bouton ci-dessus (data-mobile-toggle),
+             replié dès qu'un lien est touché. Masqué au-delà de 768 px. -->
+        <div id="mobile-menu" class="hidden md:hidden border-t border-slate-100 bg-white">
+            <div class="max-w-7xl mx-auto px-6 py-4">
+                <a data-nav="accueil" href="#problem" class="block py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Problème</a>
+                <a data-nav="accueil" href="#solution" class="block py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Solution</a>
+                <a data-nav="accueil" href="#features" class="block py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Fonctionnalités</a>
+                <a data-nav="accueil" href="#mission" class="block py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Mission</a>
+                <a data-nav="mobile" href="#" class="flex items-center gap-2 py-3 text-slate-700 hover:text-slate-900 text-base font-medium transition-colors"><i data-lucide="smartphone" class="w-4 h-4"></i>Application mobile</a>
+                <div class="flex items-center justify-between pt-4 mt-2 border-t border-slate-100">
+                    <asp:Literal ID="litLangMobile" runat="server"></asp:Literal>
+                    <a href="wbfLogin.aspx?lang=<%= CurrentLang %>" class="text-slate-700 hover:text-slate-900 text-base font-medium transition-colors">Connexion</a>
+                </div>
+                <a data-nav="accueil" href="#plans" class="block text-center bg-blue-700 hover:bg-blue-600 text-white text-base font-semibold px-5 py-3 rounded-lg mt-6 transition-all duration-200">Inscription</a>
             </div>
         </div>
     </nav>
@@ -370,8 +387,17 @@
     });
     window.scrollTo({ top: 0, behavior: 'auto' });
   }
-  function closeMobile() { var mm = document.getElementById('mobile-menu'); if (mm) mm.classList.add('hidden'); }
-  function toggleMobile() { var mm = document.getElementById('mobile-menu'); if (mm) mm.classList.toggle('hidden'); }
+  function setMobile(open) {
+    var mm = document.getElementById('mobile-menu');
+    if (mm) mm.classList.toggle('hidden', !open);
+    var btn = document.querySelector('[data-mobile-toggle]');
+    if (btn) btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+  }
+  function closeMobile() { setMobile(false); }
+  function toggleMobile() {
+    var mm = document.getElementById('mobile-menu');
+    setMobile(mm ? mm.classList.contains('hidden') : false);
+  }
 
   document.addEventListener('click', function (e) {
     var nav = e.target.closest('[data-nav]');

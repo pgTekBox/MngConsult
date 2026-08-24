@@ -30,4 +30,13 @@ Partial Public Class LandingPage
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents litLang As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litLangMobile control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litLangMobile As Global.System.Web.UI.WebControls.Literal
 End Class
