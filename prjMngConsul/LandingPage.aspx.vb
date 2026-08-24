@@ -1,4 +1,5 @@
 ﻿Imports System
+Imports System.Configuration
 Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text
@@ -311,7 +312,7 @@ Partial Public Class LandingPage
         sb.Append("<div>")
         sb.Append("<div class=""inline-flex items-center gap-2 bg-blue-50 border border-blue-200 text-blue-700 text-sm font-medium px-4 py-2 rounded-full mb-8"">")
         sb.Append("<i data-lucide=""smartphone"" class=""w-4 h-4""></i>")
-        sb.Append(Choose3(lang, "Application Android", "Android app", "Aplicación Android"))
+        sb.Append(Choose3(lang, "Application mobile", "Mobile app", "Aplicación móvil"))
         sb.Append("</div>")
 
         sb.Append("<h1 class=""text-4xl md:text-5xl lg:text-6xl font-bold text-slate-950 tracking-tight leading-tight mb-6"">")
@@ -322,12 +323,13 @@ Partial Public Class LandingPage
 
         sb.Append("<p class=""text-lg text-slate-600 leading-relaxed mb-10 max-w-xl"">")
         sb.Append(Choose3(lang,
-                          "Numérisez vos reçus, créez vos factures et suivez vos finances où que vous soyez. L'application Android 60sec-AI utilise le même compte que le site web : tout est synchronisé en temps réel.",
-                          "Scan your receipts, create invoices and follow your finances anywhere. The 60sec-AI Android app uses the same account as the website: everything stays in sync, in real time.",
-                          "Digitalice sus recibos, cree sus facturas y siga sus finanzas desde donde esté. La aplicación Android de 60sec-AI usa la misma cuenta que el sitio web: todo se sincroniza en tiempo real."))
+                          "Numérisez vos reçus, créez vos factures et suivez vos finances où que vous soyez. Sur Android, iPhone et iPad, l'application 60sec-AI utilise le même compte que le site web : tout est synchronisé en temps réel.",
+                          "Scan your receipts, create invoices and follow your finances anywhere. On Android, iPhone and iPad, the 60sec-AI app uses the same account as the website: everything stays in sync, in real time.",
+                          "Digitalice sus recibos, cree sus facturas y siga sus finanzas desde donde esté. En Android, iPhone y iPad, la aplicación 60sec-AI usa la misma cuenta que el sitio web: todo se sincroniza en tiempo real."))
         sb.Append("</p>")
 
         sb.Append(BuildMobileDownloadBlockHtml(lang, available))
+        sb.Append(BuildIosCardHtml(lang))
         sb.Append("</div>")
 
         ' --- Colonne maquette ---
@@ -445,6 +447,72 @@ Partial Public Class LandingPage
         End Try
     End Function
 
+    ''' <summary>
+    ''' Carte « iPhone et iPad ».
+    '''
+    ''' Apple n'autorise pas l'équivalent du téléchargement direct d'un APK :
+    ''' une application n'atteint un appareil que par l'App Store ou TestFlight.
+    ''' La carte pointe donc vers l'URL configurée dans Web.config
+    ''' (appSetting « Apple.AppUrl », App Store ou lien public TestFlight).
+    ''' Tant que cette clé est vide, on annonce honnêtement que la version iOS
+    ''' arrive, sans bouton mort.
+    ''' </summary>
+    Private Function BuildIosCardHtml(lang As String) As String
+        Dim url As String = AppleAppUrl()
+
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""mt-6 flex items-start gap-4 bg-slate-50 border border-slate-200 rounded-2xl p-6 max-w-xl"">")
+        sb.Append("<div class=""w-11 h-11 rounded-xl bg-slate-200 text-slate-700 flex items-center justify-center flex-shrink-0""><i data-lucide=""tablet-smartphone"" class=""w-5 h-5""></i></div>")
+        sb.Append("<div class=""min-w-0"">")
+        sb.Append("<p class=""font-semibold text-slate-900 mb-1"">")
+        sb.Append(Choose3(lang, "iPhone et iPad", "iPhone and iPad", "iPhone y iPad"))
+        sb.Append("</p>")
+
+        If url.Length > 0 Then
+            sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-4"">")
+            sb.Append(Choose3(lang,
+                              "La même application, sur iPhone et sur iPad. L'installation passe par Apple : touchez le bouton pour l'obtenir.",
+                              "The same app, on iPhone and iPad. Installation goes through Apple: tap the button to get it.",
+                              "La misma aplicación, en iPhone y iPad. La instalación pasa por Apple: toque el botón para obtenerla."))
+            sb.Append("</p>")
+            sb.Append("<a href=""" & Server.HtmlEncode(url) & """ class=""inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all duration-200 hover:shadow-lg"">")
+            sb.Append("<i data-lucide=""download"" class=""w-4 h-4""></i>")
+            sb.Append(Choose3(lang, "Installer sur iPhone ou iPad", "Install on iPhone or iPad", "Instalar en iPhone o iPad"))
+            sb.Append("</a>")
+        Else
+            sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-2"">")
+            sb.Append(Choose3(lang,
+                              "L'application est déjà prévue pour iPhone et iPad (iOS 15 ou plus récent). Contrairement à Android, Apple n'autorise pas le téléchargement direct : la version iOS sera distribuée par l'App Store.",
+                              "The app is already built for iPhone and iPad (iOS 15 or later). Unlike Android, Apple does not allow a direct download: the iOS version will be distributed through the App Store.",
+                              "La aplicación ya está prevista para iPhone y iPad (iOS 15 o posterior). A diferencia de Android, Apple no permite la descarga directa: la versión iOS se distribuirá por la App Store."))
+            sb.Append("</p>")
+            sb.Append("<span class=""inline-flex items-center gap-2 bg-amber-50 border border-amber-200 text-amber-800 text-xs font-semibold px-3 py-1.5 rounded-full"">")
+            sb.Append("<i data-lucide=""clock"" class=""w-3.5 h-3.5 text-amber-600""></i>")
+            sb.Append(Choose3(lang, "Bientôt disponible", "Coming soon", "Próximamente"))
+            sb.Append("</span>")
+        End If
+
+        sb.Append("</div></div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Lien d'installation iOS (App Store ou TestFlight), configuré dans
+    ''' Web.config. Vide tant qu'aucune distribution Apple n'est en place.
+    ''' Seules les URL https sont retenues, pour ne pas produire un lien cassé.
+    ''' </summary>
+    Private Function AppleAppUrl() As String
+        Try
+            Dim v As String = ConfigurationManager.AppSettings("Apple.AppUrl")
+            If String.IsNullOrWhiteSpace(v) Then Return ""
+            v = v.Trim()
+            If Not v.StartsWith("https://", StringComparison.OrdinalIgnoreCase) Then Return ""
+            Return v
+        Catch ex As Exception
+            Return ""
+        End Try
+    End Function
+
     ''' <summary>Petite pastille « icône + texte » de la ligne de métadonnées.</summary>
     Private Function MetaChip(icon As String, iconCls As String, text As String) As String
         Return "<span class=""inline-flex items-center gap-2""><i data-lucide=""" & icon &
@@ -521,7 +589,7 @@ Partial Public Class LandingPage
 
         sb.Append("<div class=""max-w-3xl mb-16"">")
         sb.Append("<h2 class=""text-3xl lg:text-5xl font-bold text-slate-950 tracking-tight mb-4"">")
-        sb.Append(Choose3(lang, "Installation en trois étapes", "Install in three steps", "Instalación en tres pasos"))
+        sb.Append(Choose3(lang, "Installer sur Android en trois étapes", "Install on Android in three steps", "Instalar en Android en tres pasos"))
         sb.Append("</h2>")
         sb.Append("<p class=""text-lg text-slate-600 leading-relaxed"">")
         sb.Append(Choose3(lang,
