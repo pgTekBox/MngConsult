@@ -39,7 +39,9 @@ Partial Public Class LandingPage
             sb.Append("<a href=""?lang=" & codes(i) & """ class=""px-1.5 py-1 rounded transition-colors " & cls & """>" & labels(i) & "</a>")
         Next
         sb.Append("</div>")
+        ' Le même sélecteur alimente la barre de bureau et le panneau mobile.
         litLang.Text = sb.ToString()
+        litLangMobile.Text = sb.ToString()
     End Sub
 
     ''' <summary>
