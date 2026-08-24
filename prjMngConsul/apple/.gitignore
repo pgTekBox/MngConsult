@@ -1,0 +1,5 @@
+# Binaires de build et secrets de distribution : jamais versionnés.
+*.ipa
+*.plist
+*.mobileprovision
+version.txt

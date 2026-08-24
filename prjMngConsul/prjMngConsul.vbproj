@@ -505,6 +505,8 @@
     <Content Include="App_Data\RadUploadTemp\RadUploadTestFile" />
     <Content Include="AutoPayProcessor.ashx" />
     <Content Include="AppAndroid.ashx" />
+    <Content Include="AppApple.ashx" />
+    <Content Include="apple\LISEZMOI.md" />
     <Content Include="android\LISEZMOI.md" />
     <Content Include="InvoicePdf.ashx" />
     <Content Include="MailAttachment.ashx" />
@@ -635,6 +637,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsAndroidApp.vb" />
+    <Compile Include="App_Code\clsAppleApp.vb" />
     <Compile Include="App_Code\clsQrCode.vb" />
     <Compile Include="App_Code\clsAutoPayEngine.vb" />
     <Compile Include="App_Code\clsMime.vb" />
@@ -876,6 +879,9 @@
     </Compile>
     <Compile Include="AppAndroid.ashx.vb">
       <DependentUpon>AppAndroid.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AppApple.ashx.vb">
+      <DependentUpon>AppApple.ashx</DependentUpon>
     </Compile>
     <Compile Include="todel.aspx.designer.vb">
       <DependentUpon>todel.aspx</DependentUpon>

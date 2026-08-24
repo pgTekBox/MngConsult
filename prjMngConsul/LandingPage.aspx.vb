@@ -450,15 +450,17 @@ Partial Public Class LandingPage
     ''' <summary>
     ''' Carte « iPhone et iPad ».
     '''
-    ''' Apple n'autorise pas l'équivalent du téléchargement direct d'un APK :
-    ''' une application n'atteint un appareil que par l'App Store ou TestFlight.
-    ''' La carte pointe donc vers l'URL configurée dans Web.config
-    ''' (appSetting « Apple.AppUrl », App Store ou lien public TestFlight).
-    ''' Tant que cette clé est vide, on annonce honnêtement que la version iOS
-    ''' arrive, sans bouton mort.
+    ''' Trois états, dans cet ordre de priorité :
+    '''   1. App Store / TestFlight — appSetting « Apple.AppUrl » renseigné ;
+    '''      c'est la distribution ouverte, elle prime sur tout le reste.
+    '''   2. Ad Hoc — un .ipa et son manifest.plist déposés dans ~/apple ;
+    '''      installation par lien itms-services://, réservée aux appareils
+    '''      dont l'UDID est enregistré dans le profil.
+    '''   3. Rien de déposé — on annonce la version iOS comme à venir.
     ''' </summary>
     Private Function BuildIosCardHtml(lang As String) As String
-        Dim url As String = AppleAppUrl()
+        Dim storeUrl As String = AppleAppUrl()
+        Dim adHoc As Boolean = (storeUrl.Length = 0) AndAlso clsAppleApp.IsAvailable()
 
         Dim sb As New StringBuilder()
         sb.Append("<div class=""mt-6 flex items-start gap-4 bg-slate-50 border border-slate-200 rounded-2xl p-6 max-w-xl"">")
@@ -468,17 +470,53 @@ Partial Public Class LandingPage
         sb.Append(Choose3(lang, "iPhone et iPad", "iPhone and iPad", "iPhone y iPad"))
         sb.Append("</p>")
 
-        If url.Length > 0 Then
+        If storeUrl.Length > 0 Then
             sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-4"">")
             sb.Append(Choose3(lang,
                               "La même application, sur iPhone et sur iPad. L'installation passe par Apple : touchez le bouton pour l'obtenir.",
                               "The same app, on iPhone and iPad. Installation goes through Apple: tap the button to get it.",
                               "La misma aplicación, en iPhone y iPad. La instalación pasa por Apple: toque el botón para obtenerla."))
             sb.Append("</p>")
-            sb.Append("<a href=""" & Server.HtmlEncode(url) & """ class=""inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all duration-200 hover:shadow-lg"">")
-            sb.Append("<i data-lucide=""download"" class=""w-4 h-4""></i>")
-            sb.Append(Choose3(lang, "Installer sur iPhone ou iPad", "Install on iPhone or iPad", "Instalar en iPhone o iPad"))
-            sb.Append("</a>")
+            sb.Append(IosButton(Server.HtmlEncode(storeUrl),
+                                Choose3(lang, "Installer sur iPhone ou iPad", "Install on iPhone or iPad", "Instalar en iPhone o iPad")))
+
+        ElseIf adHoc Then
+            sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-4"">")
+            sb.Append(Choose3(lang,
+                              "Version de test pour iPhone et iPad (iOS 15 ou plus récent). Touchez le bouton depuis l'appareil : iOS installe l'application directement, sans passer par l'App Store.",
+                              "Test build for iPhone and iPad (iOS 15 or later). Tap the button from the device: iOS installs the app directly, without going through the App Store.",
+                              "Versión de prueba para iPhone y iPad (iOS 15 o posterior). Toque el botón desde el dispositivo: iOS instala la aplicación directamente, sin pasar por la App Store."))
+            sb.Append("</p>")
+
+            sb.Append(IosButton("itms-services://?action=download-manifest&amp;url=" &
+                                Server.UrlEncode(BuildAbsoluteUrl(clsAppleApp.DownloadUrl & "?manifest=1")),
+                                Choose3(lang, "Installer sur iPhone ou iPad", "Install on iPhone or iPad", "Instalar en iPhone o iPad")))
+
+            sb.Append("<div class=""flex flex-wrap items-center gap-5 text-sm text-slate-500 mt-6"">")
+            Dim version As String = clsAppleApp.GetVersion()
+            If version.Length > 0 Then
+                sb.Append(MetaChip("package", "text-slate-400",
+                                   Choose3(lang, "Version ", "Version ", "Versión ") & Server.HtmlEncode(version)))
+            End If
+            Dim sizeTxt As String = clsAppleApp.FormatSize(clsAppleApp.GetSizeBytes(), lang)
+            If sizeTxt.Length > 0 Then
+                sb.Append(MetaChip("hard-drive", "text-slate-400", sizeTxt))
+            End If
+            Dim dateTxt As String = clsAppleApp.FormatDate(clsAppleApp.GetPublishedOn(), lang)
+            If dateTxt.Length > 0 Then
+                sb.Append(MetaChip("calendar", "text-slate-400", dateTxt))
+            End If
+            sb.Append("</div>")
+
+            ' L'Ad Hoc n'installe que sur les appareils déclarés : le dire
+            ' évite un échec incompréhensible côté visiteur.
+            sb.Append("<p class=""text-xs text-slate-500 leading-relaxed mt-3"">")
+            sb.Append(Choose3(lang,
+                              "Version de test : l'installation n'aboutit que sur les appareils enregistrés auprès de nous. Écrivez-nous pour faire ajouter le vôtre.",
+                              "Test build: installation only succeeds on devices registered with us. Write to us to have yours added.",
+                              "Versión de prueba: la instalación solo funciona en dispositivos registrados con nosotros. Escríbanos para añadir el suyo."))
+            sb.Append("</p>")
+
         Else
             sb.Append("<p class=""text-sm text-slate-600 leading-relaxed mb-2"">")
             sb.Append(Choose3(lang,
@@ -496,9 +534,29 @@ Partial Public Class LandingPage
         Return sb.ToString()
     End Function
 
+    ''' <summary>Bouton sombre commun aux deux modes d'installation iOS.</summary>
+    Private Function IosButton(href As String, label As String) As String
+        Return "<a href=""" & href & """ class=""inline-flex items-center justify-center gap-2 bg-slate-950 hover:bg-slate-800 text-white font-semibold px-5 py-3 rounded-xl text-sm transition-all duration-200 hover:shadow-lg"">" &
+               "<i data-lucide=""download"" class=""w-4 h-4""></i>" & label & "</a>"
+    End Function
+
     ''' <summary>
-    ''' Lien d'installation iOS (App Store ou TestFlight), configuré dans
-    ''' Web.config. Vide tant qu'aucune distribution Apple n'est en place.
+    ''' URL absolue d'une ressource du site. iOS exige une URL complète et en
+    ''' HTTPS dans le lien itms-services ; en développement sur http, le lien
+    ''' se construit quand même mais l'appareil refusera l'installation.
+    ''' </summary>
+    Private Function BuildAbsoluteUrl(relative As String) As String
+        Try
+            Return New Uri(Request.Url, ResolveUrl("~/" & relative)).AbsoluteUri
+        Catch ex As Exception
+            Return relative
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Lien App Store ou TestFlight, configuré dans Web.config. Vide tant
+    ''' qu'aucune distribution ouverte n'est en place : on retombe alors sur
+    ''' l'Ad Hoc du répertoire ~/apple.
     ''' Seules les URL https sont retenues, pour ne pas produire un lien cassé.
     ''' </summary>
     Private Function AppleAppUrl() As String
