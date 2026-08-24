@@ -187,9 +187,42 @@ public partial class TopMenuView : ContentView
 
 	private async void OnHomeTapped(object? sender, TappedEventArgs e)
 	{
-		if (Shell.Current is not null)
+		var shell = Shell.Current;
+		if (shell is null)
 		{
-			await Shell.Current.GoToAsync("..");
+			return;
 		}
+
+		// Remonter jusqu'au Dashboard, quelle que soit la profondeur.
+		var stack = shell.Navigation.NavigationStack;
+		var dashIndex = -1;
+		for (var i = 0; i < stack.Count; i++)
+		{
+			if (stack[i] is _60SecAI.DashboardPage)
+			{
+				dashIndex = i;
+				break;
+			}
+		}
+
+		if (dashIndex < 0)
+		{
+			await shell.GoToAsync(nameof(_60SecAI.DashboardPage));
+			return;
+		}
+
+		var popCount = stack.Count - 1 - dashIndex;
+		if (popCount <= 0)
+		{
+			return; // déjà sur le Dashboard
+		}
+
+		var route = string.Empty;
+		for (var i = 0; i < popCount; i++)
+		{
+			route += "../";
+		}
+
+		await shell.GoToAsync(route);
 	}
 }

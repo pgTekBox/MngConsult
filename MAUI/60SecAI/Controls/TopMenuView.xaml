@@ -13,16 +13,16 @@
 
         <VerticalStackLayout Spacing="12">
 
-            <!-- ===== Bouton paramètres (gauche) + titre centré ===== -->
+            <!-- ===== Accueil (gauche) + titre centré + paramètres (droite) ===== -->
             <Grid ColumnDefinitions="32,*,32"
                   VerticalOptions="Center">
 
-                <Label Grid.Column="0"
+                <Label Grid.Column="2"
                        Text="&#9881;"
                        FontSize="22"
                        TextColor="{StaticResource Gray500}"
                        VerticalOptions="Start"
-                       HorizontalOptions="Start">
+                       HorizontalOptions="End">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnSettingsTapped" />
                     </Label.GestureRecognizers>
@@ -43,14 +43,14 @@
                            TextColor="{StaticResource Gray400}" />
                 </VerticalStackLayout>
 
-                <!-- Bouton accueil (droite) : revient au dashboard -->
-                <Label Grid.Column="2"
+                <!-- Bouton accueil (gauche) : revient au dashboard -->
+                <Label Grid.Column="0"
                        x:Name="HomeButton"
                        Text="&#127968;"
                        FontSize="20"
                        IsVisible="False"
                        VerticalOptions="Start"
-                       HorizontalOptions="End">
+                       HorizontalOptions="Start">
                     <Label.GestureRecognizers>
                         <TapGestureRecognizer Tapped="OnHomeTapped" />
                     </Label.GestureRecognizers>
