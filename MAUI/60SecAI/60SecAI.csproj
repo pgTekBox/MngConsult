@@ -53,6 +53,8 @@
 		<DebugSymbols>true</DebugSymbols>
 		<DebugType>portable</DebugType>
 		<AndroidIncludeDebugSymbols>true</AndroidIncludeDebugSymbols>
+		<!-- APK (téléchargement direct) plutôt que AAB (Play Store) -->
+		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
 
 	<ItemGroup>
@@ -86,5 +88,9 @@
 		<PackageReference Include="Xamarin.GooglePlayServices.Base" Version="118.7.2.1" />
 		<PackageReference Include="Xamarin.GooglePlayServices.Tasks" Version="118.3.2.1" />
 	</ItemGroup>
+
+	<!-- Signature Android (Release). Le fichier réel est dans signing/ (exclu de git) ;
+	     absent = build non signé, présent = APK signé automatiquement. -->
+	<Import Project="..\signing\signing.props" Condition="Exists('..\signing\signing.props')" />
 
 </Project>
