@@ -13,15 +13,14 @@
               ColumnDefinitions="Auto,*"
               ColumnSpacing="10"
               Padding="16,14">
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackTapped" />
+            </Grid.GestureRecognizers>
             <Label Grid.Column="0"
                    Text="&#8249;"
-                   FontSize="26"
+                   FontSize="30"
                    TextColor="{StaticResource Primary}"
-                   VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackTapped" />
-                </Label.GestureRecognizers>
-            </Label>
+                   VerticalOptions="Center" />
             <Label Grid.Column="1"
                    Text="{loc:Translate NewAppointment}"
                    FontSize="20"

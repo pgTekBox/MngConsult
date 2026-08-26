@@ -11,11 +11,10 @@
 
         <!-- En-tête simple avec retour -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="16,14">
-            <Label Grid.Column="0" Text="&#8249;" FontSize="26" TextColor="{StaticResource Primary}" VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackTapped" />
-                </Label.GestureRecognizers>
-            </Label>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackTapped" />
+            </Grid.GestureRecognizers>
+            <Label Grid.Column="0" Text="&#8249;" FontSize="30" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
             <Label Grid.Column="1" Text="{Binding Number}" FontSize="20" FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
         </Grid>
