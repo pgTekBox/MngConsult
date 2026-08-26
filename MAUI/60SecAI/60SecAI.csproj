@@ -56,13 +56,17 @@
 		<!-- APK (téléchargement direct) plutôt que AAB (Play Store) -->
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
+	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
+	  <ProvisioningType>manual</ProvisioningType>
+	  <CodesignProvision>60Sec</CodesignProvision>
+	  <CodesignKey>Apple Distribution: Logiciels Cronus ltee (YZ8JNE33R9)</CodesignKey>
+	</PropertyGroup>
 
 	<ItemGroup>
 		<!-- App Icon -->
-		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#512BD4" />
+		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#2D6CDF" />
 
-		<!-- Splash Screen -->
-		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#512BD4" BaseSize="128,128" />
+		<!-- Splash Screen retire (le systeme affiche l'icone de l'app au demarrage) -->
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
