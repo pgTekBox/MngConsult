@@ -52,14 +52,15 @@ public sealed class DocumentScannerService : NSObject, IDocumentScannerService, 
 		try
 		{
 			var res = new DocumentScanResult();
+			var dir = FileSystem.CacheDirectory;
 
-			// Un seul reçu à la fois : on ne garde que la 1re page scannée.
-			if (scan.PageCount > 0)
+			// On garde toutes les pages scannées (chacune = un reçu).
+			for (nuint i = 0; i < scan.PageCount; i++)
 			{
-				using var img = scan.GetImage(0);
+				using var img = scan.GetImage(i);
 				using var jpeg = img.AsJPEG(0.9f);
 
-				var path = Path.Combine(FileSystem.CacheDirectory, $"scan_{DateTime.UtcNow:yyyyMMdd_HHmmss}.jpg");
+				var path = Path.Combine(dir, $"scan_{DateTime.UtcNow:yyyyMMdd_HHmmss}_{i}.jpg");
 				File.WriteAllBytes(path, jpeg.ToArray());
 				res.Images.Add(new Uri(path));
 			}

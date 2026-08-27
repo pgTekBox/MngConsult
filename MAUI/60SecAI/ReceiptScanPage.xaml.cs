@@ -38,28 +38,39 @@ public partial class ReceiptScanPage : ContentPage
 			return;
 		}
 
-		var path = result.Images[0].LocalPath;
-		if (!File.Exists(path))
+		// Aperçu de la 1re page.
+		var firstPath = result.Images[0].LocalPath;
+		if (File.Exists(firstPath))
 		{
-			lblStatus.Text = L("ScanFileNotFound");
-			return;
+			var firstBytes = File.ReadAllBytes(firstPath);
+			imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(firstBytes));
 		}
-
-		var originalBytes = File.ReadAllBytes(path);
-		imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(originalBytes));
 
 		try
 		{
 			lblStatus.Text = L("ScanUploading");
 
-			await _api.UploadReceiptAsync(
-				UploadUrl,
-				originalBytes,
-				fileName: Path.GetFileName(path),
-				contentType: "image/jpeg");
+			// On envoie TOUS les reçus scannés (toutes les pages).
+			var count = 0;
+			foreach (var image in result.Images)
+			{
+				var p = image.LocalPath;
+				if (!File.Exists(p))
+				{
+					continue;
+				}
+
+				var bytes = File.ReadAllBytes(p);
+				await _api.UploadReceiptAsync(
+					UploadUrl,
+					bytes,
+					fileName: Path.GetFileName(p),
+					contentType: "image/jpeg");
+				count++;
+			}
 
 			// Succès : message clair (pas le JSON brut) + bouton pour recommencer.
-			lblStatus.Text = L("ReceiptSaved");
+			lblStatus.Text = count > 1 ? string.Format(L("ReceiptsSavedCount"), count) : L("ReceiptSaved");
 			lblStatus.TextColor = Color.FromArgb("#1E8449");
 			lblSize.Text = string.Empty;
 			ScanButton.Text = L("ScanAnotherReceipt");
