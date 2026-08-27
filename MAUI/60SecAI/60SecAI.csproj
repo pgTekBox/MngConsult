@@ -56,6 +56,12 @@
 		<!-- APK (téléchargement direct) plutôt que AAB (Play Store) -->
 		<AndroidPackageFormat>apk</AndroidPackageFormat>
 	</PropertyGroup>
+
+	<!-- Estampille la date/heure de build (Release) -> affichee sur l'ecran de login,
+	     pour verifier qu'on est bien sur la derniere version publiee. -->
+	<ItemGroup Condition="'$(Configuration)' == 'Release'">
+		<AssemblyMetadata Include="BuildDate" Value="$([System.DateTime]::Now.ToString('yyyy-MM-dd HH:mm'))" />
+	</ItemGroup>
 	<PropertyGroup Condition="'$(TargetFramework)'=='net10.0-ios'">
 	  <ProvisioningType>manual</ProvisioningType>
 	  <CodesignProvision>60Sec</CodesignProvision>

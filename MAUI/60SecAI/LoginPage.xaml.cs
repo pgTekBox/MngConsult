@@ -9,5 +9,6 @@ public partial class LoginPage : ContentPage
 	{
 		InitializeComponent();
 		BindingContext = ServiceHelper.GetService<LoginViewModel>();
+		VersionLabel.Text = AppBuildInfo.Display;
 	}
 }
