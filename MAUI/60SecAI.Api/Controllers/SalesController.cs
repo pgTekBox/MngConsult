@@ -2,6 +2,8 @@ using System.Data;
 using System.Security.Claims;
 using _60SecAI.Api.Dtos;
 using _60SecAI.Api.Security;
+using MetadataExtractor;
+using MetadataExtractor.Formats.Exif;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Data.SqlClient;
@@ -92,6 +94,224 @@ public class SalesController : ControllerBase
 		return Ok(list);
 	}
 
+	/// <summary>Crée un client (s0715InsertClient) et renvoie son Id/PartyGUID/DisplayName.</summary>
+	[HttpPost("customers")]
+	public async Task<ActionResult<ClientLookupDto>> CreateCustomer([FromBody] CreateClientRequest request)
+	{
+		if (string.IsNullOrWhiteSpace(request.Name))
+		{
+			return BadRequest(new { message = "Le nom du client est requis." });
+		}
+
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0715InsertClient", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+		cmd.Parameters.AddWithValue("@Name", request.Name.Trim());
+		cmd.Parameters.AddWithValue("@DisplayName", (object?)request.Name.Trim() ?? DBNull.Value);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		if (await reader.ReadAsync())
+		{
+			var cols = ColumnSet(reader);
+			var id = ReadInt(reader, Ordinal(reader, cols, "Id"));
+			var guidIdx = Ordinal(reader, cols, "PartyGUID");
+			var guid = guidIdx is int gi && !reader.IsDBNull(gi) ? reader.GetGuid(gi) : Guid.Empty;
+			var name = StripHtml(ReadString(reader, Ordinal(reader, cols, "DisplayName", "Name"), request.Name));
+			return Ok(new ClientLookupDto(id, guid, name));
+		}
+
+		return StatusCode(500, new { message = "Création du client échouée." });
+	}
+
+	private static int ReadInt(SqlDataReader reader, int? idx)
+		=> idx is int i && !reader.IsDBNull(i) ? Convert.ToInt32(reader.GetValue(i)) : 0;
+
+	/// <summary>
+	/// Extrait la vraie date de prise (EXIF) de l'image : DateTimeOriginal, sinon
+	/// DateTimeDigitized, sinon la date IFD0. Renvoie null si absente ou illisible.
+	/// </summary>
+	private static DateTime? ReadExifCaptureDate(byte[] bytes)
+	{
+		try
+		{
+			using var ms = new MemoryStream(bytes);
+			var directories = ImageMetadataReader.ReadMetadata(ms);
+
+			var subIfd = directories.OfType<ExifSubIfdDirectory>().FirstOrDefault();
+			if (subIfd is not null)
+			{
+				if (subIfd.TryGetDateTime(ExifDirectoryBase.TagDateTimeOriginal, out var original))
+				{
+					return original;
+				}
+
+				if (subIfd.TryGetDateTime(ExifDirectoryBase.TagDateTimeDigitized, out var digitized))
+				{
+					return digitized;
+				}
+			}
+
+			var ifd0 = directories.OfType<ExifIfd0Directory>().FirstOrDefault();
+			if (ifd0 is not null && ifd0.TryGetDateTime(ExifDirectoryBase.TagDateTime, out var dateTime))
+			{
+				return dateTime;
+			}
+		}
+		catch
+		{
+			// Image sans EXIF, format non supporté, ou métadonnées corrompues : on ignore.
+		}
+
+		return null;
+	}
+
+	/// <summary>Liste des produits/services (s0041GetProducts).</summary>
+	[HttpGet("products")]
+	public async Task<ActionResult<IEnumerable<ProductLookupDto>>> GetProducts()
+	{
+		var list = new List<ProductLookupDto>();
+
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0041GetProducts", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		var cols = ColumnSet(reader);
+		var idIdx = Ordinal(reader, cols, "Code", "Id");
+		var nameIdx = Ordinal(reader, cols, "Name", "Nom");
+		var priceIdx = Ordinal(reader, cols, "Prix", "Price", "UnitPrice");
+
+		while (await reader.ReadAsync())
+		{
+			var id = ReadInt(reader, idIdx);
+			var name = StripHtml(ReadString(reader, nameIdx, string.Empty));
+			var price = ReadDecimal(reader, priceIdx);
+			list.Add(new ProductLookupDto(id, name, price));
+		}
+
+		return Ok(list);
+	}
+
+	/// <summary>Crée un produit/service (s0079InsertProduct) et renvoie sa fiche.</summary>
+	[HttpPost("products")]
+	public async Task<ActionResult<ProductLookupDto>> CreateProduct([FromBody] CreateProductRequest request)
+	{
+		if (string.IsNullOrWhiteSpace(request.Name))
+		{
+			return BadRequest(new { message = "Le nom du produit est requis." });
+		}
+
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0079InsertProduct", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+		cmd.Parameters.AddWithValue("@Name", request.Name.Trim());
+		cmd.Parameters.AddWithValue("@Prix", request.Price);
+		cmd.Parameters.AddWithValue("@TaxeStatusId", 1);
+
+		var result = await cmd.ExecuteScalarAsync();
+		var newId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
+		return Ok(new ProductLookupDto(newId, request.Name.Trim(), request.Price));
+	}
+
+	/// <summary>Ajoute une photo à une facture (s0719SaveInvoicePhoto). Plusieurs photos possibles.</summary>
+	[HttpPost("invoices/{id:int}/photo")]
+	[Consumes("multipart/form-data")]
+	public async Task<ActionResult> AddInvoicePhoto(int id, IFormFile file)
+	{
+		if (file is null || file.Length == 0)
+		{
+			return BadRequest(new { message = "Fichier manquant." });
+		}
+
+		byte[] bytes;
+		await using (var ms = new MemoryStream())
+		{
+			await file.CopyToAsync(ms);
+			bytes = ms.ToArray();
+		}
+
+		var contentType = string.IsNullOrWhiteSpace(file.ContentType) ? "image/jpeg" : file.ContentType;
+		var capturedAt = ReadExifCaptureDate(bytes);
+
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0719SaveInvoicePhoto", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@DocumentId", id);
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+		cmd.Parameters.AddWithValue("@FileName", (object?)file.FileName ?? DBNull.Value);
+		cmd.Parameters.AddWithValue("@ContentType", contentType);
+		cmd.Parameters.AddWithValue("@SizeBytes", bytes.Length);
+		cmd.Parameters.Add(new SqlParameter("@ImageSource", SqlDbType.VarBinary, -1) { Value = bytes });
+		cmd.Parameters.AddWithValue("@CapturedAt", (object?)capturedAt ?? DBNull.Value);
+
+		var result = await cmd.ExecuteScalarAsync();
+		var newId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
+		return Ok(new { id = newId });
+	}
+
+	/// <summary>Liste des photos d'une facture (s0720GetInvoicePhotos) : métadonnées + date de prise.</summary>
+	[HttpGet("invoices/{id:int}/photos")]
+	public async Task<ActionResult<IEnumerable<InvoicePhotoDto>>> GetInvoicePhotos(int id)
+	{
+		var list = new List<InvoicePhotoDto>();
+
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0720GetInvoicePhotos", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@DocumentId", id);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		var cols = ColumnSet(reader);
+		var idIdx = Ordinal(reader, cols, "Id");
+		var nameIdx = Ordinal(reader, cols, "FileName");
+		var typeIdx = Ordinal(reader, cols, "ContentType");
+		var sizeIdx = Ordinal(reader, cols, "SizeBytes");
+		var createdIdx = Ordinal(reader, cols, "Created");
+
+		while (await reader.ReadAsync())
+		{
+			list.Add(new InvoicePhotoDto(
+				ReadInt(reader, idIdx),
+				ReadString(reader, nameIdx, string.Empty),
+				ReadString(reader, typeIdx, "image/jpeg"),
+				ReadInt(reader, sizeIdx),
+				ReadDate(reader, createdIdx)));
+		}
+
+		return Ok(list);
+	}
+
+	/// <summary>Contenu binaire d'une photo (s0721GetInvoicePhotoContent) — renvoyé comme image.</summary>
+	[HttpGet("invoices/{id:int}/photos/{photoId:int}")]
+	public async Task<ActionResult> GetInvoicePhotoContent(int id, int photoId)
+	{
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0721GetInvoicePhotoContent", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@DocumentId", id);
+		cmd.Parameters.AddWithValue("@PhotoId", photoId);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		if (!await reader.ReadAsync())
+		{
+			return NotFound();
+		}
+
+		var cols = ColumnSet(reader);
+		var contentType = ReadString(reader, Ordinal(reader, cols, "ContentType"), "image/jpeg");
+		var blobIdx = Ordinal(reader, cols, "ImageSource");
+		if (blobIdx is not int bi || reader.IsDBNull(bi))
+		{
+			return NotFound();
+		}
+
+		var bytes = (byte[])reader.GetValue(bi);
+		return File(bytes, string.IsNullOrWhiteSpace(contentType) ? "image/jpeg" : contentType);
+	}
+
 	/// <summary>
 	/// Crée une facture client (brouillon) via s0040SaveInvoiceItems (TVP dbo.TVP_InvoiceItem_v6).
 	/// L'en-tête, le numéro provisoire (BROUILLON-…) et les totaux/taxes sont calculés par la base.
@@ -124,7 +344,25 @@ public class SalesController : ControllerBase
 
 		var result = await cmd.ExecuteScalarAsync();
 		var newId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
+
+		await SaveGeolocationAsync(conn, newId, request.Latitude, request.Longitude);
+
 		return Ok(new CreateInvoiceResult(newId));
+	}
+
+	/// <summary>Enregistre la géolocalisation de la facture (s0717SetInvoiceGeolocation), si fournie.</summary>
+	private static async Task SaveGeolocationAsync(SqlConnection conn, int invoiceId, double? latitude, double? longitude)
+	{
+		if (invoiceId <= 0 || latitude is not double lat || longitude is not double lng)
+		{
+			return;
+		}
+
+		await using var cmd = new SqlCommand("s0717SetInvoiceGeolocation", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@InvoiceId", invoiceId);
+		cmd.Parameters.AddWithValue("@Latitude", lat);
+		cmd.Parameters.AddWithValue("@Longitude", lng);
+		await cmd.ExecuteNonQueryAsync();
 	}
 
 	/// <summary>Construit le TVP des lignes (mêmes colonnes/ordre que l'app web).</summary>
@@ -244,11 +482,24 @@ public class SalesController : ControllerBase
 			}
 		}
 
+		// ----- Géolocalisation -----
+		double? latitude = null, longitude = null;
+		await using (var geoCmd = new SqlCommand("s0718GetInvoiceGeolocation", conn) { CommandType = CommandType.StoredProcedure })
+		{
+			geoCmd.Parameters.AddWithValue("@InvoiceId", id);
+			await using var geoReader = await geoCmd.ExecuteReaderAsync();
+			if (await geoReader.ReadAsync())
+			{
+				if (!geoReader.IsDBNull(0)) latitude = Convert.ToDouble(geoReader.GetValue(0));
+				if (!geoReader.IsDBNull(1)) longitude = Convert.ToDouble(geoReader.GetValue(1));
+			}
+		}
+
 		return Ok(new InvoiceDetailDto(
 			id, number, clientName, address,
 			issued.HasValue ? DateOnly.FromDateTime(issued.Value) : DateOnly.FromDateTime(DateTime.Today),
 			due.HasValue ? DateOnly.FromDateTime(due.Value) : DateOnly.FromDateTime(DateTime.Today),
-			subTotal, tps, tvq, total, paid, balance, note, po, lines));
+			subTotal, tps, tvq, total, paid, balance, note, po, lines, latitude, longitude));
 	}
 
 	private async Task<List<InvoiceDto>> LoadInvoicesAsync()

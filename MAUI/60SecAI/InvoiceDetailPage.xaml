@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:_60SecAI.ViewModels"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.InvoiceDetailPage"
              x:DataType="vm:InvoiceDetailViewModel"
              Shell.NavBarIsVisible="False"
@@ -11,11 +12,10 @@
 
         <!-- En-tête simple avec retour -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="16,14">
-            <Label Grid.Column="0" Text="&#8249;" FontSize="26" TextColor="{StaticResource Primary}" VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackTapped" />
-                </Label.GestureRecognizers>
-            </Label>
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackTapped" />
+            </Grid.GestureRecognizers>
+            <Label Grid.Column="0" Text="&#8249;" FontSize="30" TextColor="{StaticResource Primary}" VerticalOptions="Center" />
             <Label Grid.Column="1" Text="{Binding Number}" FontSize="20" FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
         </Grid>
@@ -106,6 +106,13 @@
                         <Label Text="{Binding Note}" FontSize="12" TextColor="{StaticResource Gray500}" />
                     </VerticalStackLayout>
                 </Border>
+
+                <!-- ===== Lien carte ===== -->
+                <Button Text="{loc:Translate ViewOnMap}"
+                        Command="{Binding OpenMapCommand}"
+                        IsEnabled="{Binding HasLocation}"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White"
+                        FontAttributes="Bold" HeightRequest="48" CornerRadius="14" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

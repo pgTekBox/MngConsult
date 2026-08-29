@@ -1,6 +1,9 @@
+using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using _60SecAI.Localization;
 using _60SecAI.Services;
+using _60SecAI.ViewModels;
 
 namespace _60SecAI;
 
@@ -13,7 +16,10 @@ public partial class NewInvoicePage : ContentPage
 	private static readonly CultureInfo FrCulture = CultureInfo.GetCultureInfo("fr-CA");
 
 	private bool _saving;
-	private bool _partiesLoaded;
+	private ClientLookupDto? _selectedParty;
+
+	/// <summary>Lignes de la facture (produit + quantité + prix).</summary>
+	public ObservableCollection<InvoiceLineItem> Lines { get; } = [];
 
 	/// <summary>"supplier" = facture fournisseur, sinon facture client.</summary>
 	public string Kind { get; set; } = "client";
@@ -23,41 +29,172 @@ public partial class NewInvoicePage : ContentPage
 	public NewInvoicePage()
 	{
 		InitializeComponent();
+		AddLine();
 		Recalculate();
 	}
 
-	protected override async void OnAppearing()
+	protected override void OnAppearing()
 	{
 		base.OnAppearing();
-
 		ApplyKindLabels();
-
-		if (_partiesLoaded)
-		{
-			return;
-		}
-
-		try
-		{
-			var parties = IsSupplier
-				? await ServiceHelper.GetService<SupplierService>().GetSuppliersAsync()
-				: await ServiceHelper.GetService<SalesService>().GetClientsAsync();
-			ClientPicker.ItemsSource = parties.ToList();
-			_partiesLoaded = true;
-		}
-		catch (Exception)
-		{
-			// API injoignable : le sélecteur reste vide.
-		}
 	}
 
-	/// <summary>Ajuste le titre, le libellé et le sélecteur selon client / fournisseur.</summary>
+	/// <summary>Ajuste le titre et les libellés selon client / fournisseur.</summary>
 	private void ApplyKindLabels()
 	{
 		var loc = LocalizationResourceManager.Instance;
 		HeaderTitle.Text = IsSupplier ? loc["NewSupplierInvoice"] : loc["NewInvoice"];
 		PartyLabel.Text = IsSupplier ? loc["SupplierLabel"] : loc["ClientLabel"];
-		ClientPicker.Title = IsSupplier ? loc["ChooseSupplier"] : loc["ChooseClient"];
+		if (_selectedParty is null)
+		{
+			ClientValueLabel.Text = IsSupplier ? loc["ChooseSupplier"] : loc["ChooseClient"];
+		}
+	}
+
+	/// <summary>Ouvre le sélecteur de client/fournisseur (recherche + « Nouveau client »).</summary>
+	private async void OnPickPartyTapped(object? sender, TappedEventArgs e)
+	{
+		var loc = LocalizationResourceManager.Instance;
+		ClientLookupDto? picked;
+
+		if (IsSupplier)
+		{
+			var supplier = ServiceHelper.GetService<SupplierService>();
+			picked = await ClientPickerPage.PickAsync(
+				Navigation,
+				loc["ChooseSupplier"],
+				ct => supplier.GetSuppliersAsync(ct));
+		}
+		else
+		{
+			var sales = ServiceHelper.GetService<SalesService>();
+			picked = await ClientPickerPage.PickAsync(
+				Navigation,
+				loc["ChooseClient"],
+				ct => sales.GetClientsAsync(ct),
+				name => sales.CreateClientAsync(name));
+		}
+
+		if (picked is not null)
+		{
+			_selectedParty = picked;
+			ClientValueLabel.Text = picked.DisplayName;
+		}
+	}
+
+	// ---------- Lignes ----------
+
+	private async void OnAddLineClicked(object? sender, EventArgs e)
+	{
+		var item = AddLine();
+		await PickProductForLine(item);
+	}
+
+	private InvoiceLineItem AddLine()
+	{
+		var item = new InvoiceLineItem(LocalizationResourceManager.Instance["ChooseProduct"]);
+		item.PropertyChanged += OnLinePropertyChanged;
+		Lines.Add(item);
+		return item;
+	}
+
+	private void OnLineDeleteTapped(object? sender, TappedEventArgs e)
+	{
+		if (LineFrom(sender) is not { } item)
+		{
+			return;
+		}
+
+		item.PropertyChanged -= OnLinePropertyChanged;
+		Lines.Remove(item);
+
+		if (Lines.Count == 0)
+		{
+			AddLine();
+		}
+
+		Recalculate();
+	}
+
+	private async void OnLineProductTapped(object? sender, TappedEventArgs e)
+	{
+		if (LineFrom(sender) is { } item)
+		{
+			await PickProductForLine(item);
+		}
+	}
+
+	private async Task PickProductForLine(InvoiceLineItem item)
+	{
+		var sales = ServiceHelper.GetService<SalesService>();
+		var product = await ProductPickerPage.PickAsync(
+			Navigation,
+			ct => sales.GetProductsAsync(ct),
+			(name, price) => sales.CreateProductAsync(name, price));
+
+		if (product is null)
+		{
+			return;
+		}
+
+		item.Description = product.Name;
+		item.ProductLabel = product.Name;
+		item.PriceText = product.Price.ToString("0.##", CultureInfo.InvariantCulture);
+		if (ParseAmount(item.QtyText) <= 0m)
+		{
+			item.QtyText = "1";
+		}
+
+		UpdateLineAmount(item);
+		Recalculate();
+	}
+
+	private void OnLinePropertyChanged(object? sender, PropertyChangedEventArgs e)
+	{
+		if (sender is not InvoiceLineItem item)
+		{
+			return;
+		}
+
+		if (e.PropertyName is nameof(InvoiceLineItem.QtyText) or nameof(InvoiceLineItem.PriceText))
+		{
+			UpdateLineAmount(item);
+			Recalculate();
+		}
+	}
+
+	private static void UpdateLineAmount(InvoiceLineItem item)
+	{
+		var amount = ParseAmount(item.QtyText) * ParseAmount(item.PriceText);
+		item.AmountText = Money(amount);
+	}
+
+	private InvoiceLineItem? LineFrom(object? sender) => (sender as BindableObject)?.BindingContext as InvoiceLineItem;
+
+	// ---------- Totaux ----------
+
+	private void OnPaidChanged(object? sender, CheckedChangedEventArgs e) => Recalculate();
+
+	private void Recalculate()
+	{
+		var subTotal = 0m;
+		foreach (var item in Lines)
+		{
+			subTotal += ParseAmount(item.QtyText) * ParseAmount(item.PriceText);
+		}
+
+		var tps = subTotal * TpsRate;
+		var tvq = subTotal * TvqRate;
+		var total = subTotal + tps + tvq;
+		var paid = PaidCheck.IsChecked ? total : 0m;
+		var due = total - paid;
+
+		SubTotalLabel.Text = Money(subTotal);
+		TpsLabel.Text = Money(tps);
+		TvqLabel.Text = Money(tvq);
+		TotalLabel.Text = Money(total);
+		PaidLabel.Text = Money(paid);
+		TotalDueLabel.Text = Money(due);
 	}
 
 	private static decimal ParseAmount(string? text)
@@ -73,52 +210,40 @@ public partial class NewInvoicePage : ContentPage
 			: 0m;
 	}
 
-	private static string Money(decimal value)
-		=> value.ToString("N2", FrCulture) + " $";
+	private static string Money(decimal value) => value.ToString("N2", FrCulture) + " $";
 
-	private void OnAmountChanged(object? sender, TextChangedEventArgs e) => Recalculate();
-
-	private void OnPaidChanged(object? sender, CheckedChangedEventArgs e) => Recalculate();
-
-	private void Recalculate()
-	{
-		var qty = ParseAmount(QtyEntry.Text);
-		var price = ParseAmount(PriceEntry.Text);
-
-		var subTotal = qty * price;
-		var tps = subTotal * TpsRate;
-		var tvq = subTotal * TvqRate;
-		var total = subTotal + tps + tvq;
-		var paid = PaidCheck.IsChecked ? total : 0m;
-		var due = total - paid;
-
-		SubTotalLabel.Text = Money(subTotal);
-		TpsLabel.Text = Money(tps);
-		TvqLabel.Text = Money(tvq);
-		TotalLabel.Text = Money(total);
-		PaidLabel.Text = Money(paid);
-		TotalDueLabel.Text = Money(due);
-	}
+	// ---------- Navigation / actions ----------
 
 	private async void OnBackTapped(object? sender, TappedEventArgs e)
 		=> await Shell.Current.GoToAsync("..");
 
-	private async void OnLineActionTapped(object? sender, TappedEventArgs e)
-	{
-		var action = e.Parameter as string ?? "";
-		var message = action switch
-		{
-			"up" => "Monter la ligne.",
-			"down" => "Descendre la ligne.",
-			"discount" => "Ajouter un rabais.",
-			"delete" => "Supprimer la ligne.",
-			_ => "Action.",
-		};
-		await DisplayAlertAsync("Ligne", message, "OK");
-	}
-
 	private async void OnCreatePaymentTapped(object? sender, TappedEventArgs e)
 		=> await DisplayAlertAsync("Facture", "Créer un nouveau paiement.", "OK");
+
+	/// <summary>Récupère la position GPS (best-effort) pour l'enregistrer avec la facture.</summary>
+	private static async Task<(double? Latitude, double? Longitude)> TryGetLocationAsync()
+	{
+		try
+		{
+			var status = await Permissions.RequestAsync<Permissions.LocationWhenInUse>();
+			if (status != PermissionStatus.Granted)
+			{
+				return (null, null);
+			}
+
+			var location = await Geolocation.Default.GetLocationAsync(
+				new GeolocationRequest(GeolocationAccuracy.Medium, TimeSpan.FromSeconds(10)));
+
+			location ??= await Geolocation.Default.GetLastKnownLocationAsync();
+
+			return location is null ? (null, null) : (location.Latitude, location.Longitude);
+		}
+		catch (Exception)
+		{
+			// Permission refusée, GPS off, ou timeout : on enregistre sans position.
+			return (null, null);
+		}
+	}
 
 	private async void OnSaveInvoiceClicked(object? sender, EventArgs e)
 	{
@@ -127,32 +252,38 @@ public partial class NewInvoicePage : ContentPage
 			return;
 		}
 
-		if (ClientPicker.SelectedItem is not ClientLookupDto client)
+		if (_selectedParty is not { } client)
 		{
 			await DisplayAlertAsync("Facture", "Veuillez choisir un client.", "OK");
 			return;
 		}
 
-		var qty = ParseAmount(QtyEntry.Text);
-		var price = ParseAmount(PriceEntry.Text);
-		if (qty <= 0m || price <= 0m)
+		var lines = new List<CreateInvoiceLine>();
+		foreach (var item in Lines)
 		{
-			await DisplayAlertAsync("Facture", "Veuillez saisir une quantité et un prix.", "OK");
+			var qty = ParseAmount(item.QtyText);
+			var price = ParseAmount(item.PriceText);
+			if (qty > 0m && price > 0m && !string.IsNullOrWhiteSpace(item.Description))
+			{
+				lines.Add(new CreateInvoiceLine(item.Description.Trim(), qty, price));
+			}
+		}
+
+		if (lines.Count == 0)
+		{
+			await DisplayAlertAsync("Facture", "Ajoutez au moins une ligne (produit, quantité et prix).", "OK");
 			return;
 		}
 
-		var description = string.IsNullOrWhiteSpace(DescriptionEditor.Text)
-			? "Facture"
-			: DescriptionEditor.Text.Trim();
+		var (lat, lng) = await TryGetLocationAsync();
 
 		var request = new CreateInvoiceRequest(
 			client.PartyGUID,
 			DateOnly.FromDateTime(BillDatePicker.Date ?? DateTime.Today),
 			DateOnly.FromDateTime(DueDatePicker.Date ?? DateTime.Today),
-			new List<CreateInvoiceLine>
-			{
-				new(description, qty, price)
-			});
+			lines,
+			lat,
+			lng);
 
 		_saving = true;
 		try

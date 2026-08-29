@@ -33,6 +33,10 @@ public partial class InvoiceDetailViewModel : BaseViewModel
 	[ObservableProperty] private string _balanceText = "—";
 	[ObservableProperty] private string _note = string.Empty;
 	[ObservableProperty] private bool _hasNote;
+	[ObservableProperty] private bool _hasLocation;
+
+	private double _latitude;
+	private double _longitude;
 
 	public InvoiceDetailViewModel(SalesService sales, SupplierService suppliers)
 	{
@@ -70,6 +74,10 @@ public partial class InvoiceDetailViewModel : BaseViewModel
 				Note = inv.Note;
 				HasNote = !string.IsNullOrWhiteSpace(inv.Note);
 
+				HasLocation = inv.Latitude.HasValue && inv.Longitude.HasValue;
+				_latitude = inv.Latitude ?? 0;
+				_longitude = inv.Longitude ?? 0;
+
 				Lines.Clear();
 				foreach (var l in inv.Lines)
 				{
@@ -88,6 +96,26 @@ public partial class InvoiceDetailViewModel : BaseViewModel
 		finally
 		{
 			IsBusy = false;
+		}
+	}
+
+	[RelayCommand]
+	private async Task OpenMap()
+	{
+		if (!HasLocation)
+		{
+			return;
+		}
+
+		try
+		{
+			await Microsoft.Maui.ApplicationModel.Map.Default.OpenAsync(
+				_latitude, _longitude,
+				new Microsoft.Maui.ApplicationModel.MapLaunchOptions { Name = Number });
+		}
+		catch (Exception)
+		{
+			// Aucune app de carte disponible.
 		}
 	}
 

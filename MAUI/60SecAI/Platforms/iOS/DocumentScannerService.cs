@@ -54,6 +54,7 @@ public sealed class DocumentScannerService : NSObject, IDocumentScannerService, 
 			var res = new DocumentScanResult();
 			var dir = FileSystem.CacheDirectory;
 
+			// On garde toutes les pages scannées (chacune = un reçu).
 			for (nuint i = 0; i < scan.PageCount; i++)
 			{
 				using var img = scan.GetImage(i);

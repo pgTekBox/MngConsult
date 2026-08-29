@@ -1,3 +1,4 @@
+using _60SecAI.Localization;
 using _60SecAI.Services;
 
 namespace _60SecAI;
@@ -9,6 +10,8 @@ public partial class ReceiptScanPage : ContentPage
 
 	private readonly ReceiptApiClient _api = new(new HttpClient());
 
+	private static string L(string key) => LocalizationResourceManager.Instance[key];
+
 	public ReceiptScanPage()
 	{
 		InitializeComponent();
@@ -16,72 +19,70 @@ public partial class ReceiptScanPage : ContentPage
 
 	private async void OnScanClicked(object? sender, EventArgs e)
 	{
-		lblStatus.Text = "Ouverture du scanner…";
+		lblStatus.TextColor = Color.FromArgb("#6B7280");
+		lblStatus.Text = L("ScanOpening");
 		lblSize.Text = string.Empty;
 		imgPreview.Source = null;
 
 		var service = Handler?.MauiContext?.Services.GetService<IDocumentScannerService>();
 		if (service is null)
 		{
-			lblStatus.Text = "Scanner non disponible sur cet appareil.";
+			lblStatus.Text = L("ScanUnavailable");
 			return;
 		}
 
 		var result = await service.OpenDocumentScannerAsync();
 		if (result is null || result.Images.Count == 0)
 		{
-			lblStatus.Text = "Scan annulé ou aucun reçu détecté.";
+			lblStatus.Text = L("ScanCancelled");
 			return;
 		}
 
-		// On prend la 1ère page (le reçu).
-		var path = result.Images[0].LocalPath;
-		if (!File.Exists(path))
+		// Aperçu de la 1re page.
+		var firstPath = result.Images[0].LocalPath;
+		if (File.Exists(firstPath))
 		{
-			lblStatus.Text = "Fichier scanné introuvable.";
-			return;
+			var firstBytes = File.ReadAllBytes(firstPath);
+			imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(firstBytes));
 		}
-
-		var originalBytes = File.ReadAllBytes(path);
-		imgPreview.Source = ImageSource.FromStream(() => new MemoryStream(originalBytes));
-
-		lblStatus.Text = "Scan OK (cadrage automatique).";
-		lblSize.Text = $"Taille : {FormatBytes(originalBytes.Length)}";
 
 		try
 		{
-			lblStatus.Text = "Envoi au serveur…";
+			lblStatus.Text = L("ScanUploading");
 
-			var json = await _api.UploadReceiptAsync(
-				UploadUrl,
-				originalBytes,
-				fileName: Path.GetFileName(path),
-				contentType: "image/jpeg");
+			// On envoie TOUS les reçus scannés (toutes les pages).
+			var count = 0;
+			foreach (var image in result.Images)
+			{
+				var p = image.LocalPath;
+				if (!File.Exists(p))
+				{
+					continue;
+				}
 
-			lblStatus.Text = "Traitement terminé.";
-			lblSize.Text = json; // réponse brute du serveur (JSON)
+				var bytes = File.ReadAllBytes(p);
+				await _api.UploadReceiptAsync(
+					UploadUrl,
+					bytes,
+					fileName: Path.GetFileName(p),
+					contentType: "image/jpeg");
+				count++;
+			}
+
+			// Succès : message clair (pas le JSON brut) + bouton pour recommencer.
+			lblStatus.Text = count > 1 ? string.Format(L("ReceiptsSavedCount"), count) : L("ReceiptSaved");
+			lblStatus.TextColor = Color.FromArgb("#1E8449");
+			lblSize.Text = string.Empty;
+			ScanButton.Text = L("ScanAnotherReceipt");
 		}
 		catch (Exception ex)
 		{
-			lblStatus.Text = "Erreur d'envoi.";
+			lblStatus.Text = L("ScanUploadError");
+			lblStatus.TextColor = Color.FromArgb("#C0392B");
 			lblSize.Text = ex.Message;
 		}
 	}
 
 	private async void OnBackTapped(object? sender, TappedEventArgs e)
 		=> await Shell.Current.GoToAsync("..");
-
-	private static string FormatBytes(int bytes)
-	{
-		double b = bytes;
-		string[] u = { "B", "KB", "MB", "GB" };
-		int i = 0;
-		while (b >= 1024 && i < u.Length - 1)
-		{
-			b /= 1024;
-			i++;
-		}
-
-		return $"{b:0.##} {u[i]}";
-	}
 }

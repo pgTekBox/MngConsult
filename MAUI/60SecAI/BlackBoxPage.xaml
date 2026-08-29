@@ -13,7 +13,8 @@
         <controls:TopMenuView Grid.Row="0"
                               PageTitle="Black Box AI"
                               Subtitle="{loc:Translate BlackBoxSubtitle}"
-                              Balance="48320.55" />
+                              Balance="48320.55"
+                              ShowHome="True" />
 
         <ScrollView Grid.Row="1">
             <VerticalStackLayout Padding="16" Spacing="16">

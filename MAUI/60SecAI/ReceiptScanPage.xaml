@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.ReceiptScanPage"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
@@ -9,13 +10,12 @@
 
         <!-- En-tête simple avec retour -->
         <Grid Grid.Row="0" ColumnDefinitions="Auto,*" ColumnSpacing="10" Padding="16,14">
-            <Label Grid.Column="0" Text="&#8249;" FontSize="26"
-                   TextColor="{StaticResource Primary}" VerticalOptions="Center">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Tapped="OnBackTapped" />
-                </Label.GestureRecognizers>
-            </Label>
-            <Label Grid.Column="1" Text="Scanner un reçu" FontSize="20" FontAttributes="Bold"
+            <Grid.GestureRecognizers>
+                <TapGestureRecognizer Tapped="OnBackTapped" />
+            </Grid.GestureRecognizers>
+            <Label Grid.Column="0" Text="&#8249;" FontSize="30"
+                   TextColor="{StaticResource Primary}" VerticalOptions="Center" />
+            <Label Grid.Column="1" Text="{loc:Translate ScanReceiptTitle}" FontSize="20" FontAttributes="Bold"
                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
         </Grid>
 
@@ -23,7 +23,7 @@
             <VerticalStackLayout Padding="16" Spacing="16">
 
                 <Button x:Name="ScanButton"
-                        Text="📄 Scanner un reçu (cadrage auto)"
+                        Text="{loc:Translate ScanReceiptButton}"
                         BackgroundColor="{StaticResource Primary}" TextColor="White"
                         FontAttributes="Bold" HeightRequest="52" CornerRadius="14"
                         Clicked="OnScanClicked" />

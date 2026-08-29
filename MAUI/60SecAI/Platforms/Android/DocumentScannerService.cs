@@ -49,7 +49,7 @@ public sealed class DocumentScannerService : Java.Lang.Object, IDocumentScannerS
 			.SetScannerMode(GmsDocumentScannerOptions.ScannerModeBase)
 			.SetResultFormats(GmsDocumentScannerOptions.ResultFormatJpeg)
 			.SetGalleryImportAllowed(false)
-			.SetPageLimit(1)
+			.SetPageLimit(15)
 			.Build();
 
 		var scanner = GmsDocumentScanning.GetClient(options);
@@ -68,13 +68,19 @@ public sealed class DocumentScannerService : Java.Lang.Object, IDocumentScannerS
 						var pages = scanResult?.Pages;
 						if (pages is not null && pages.Count > 0)
 						{
-							AUri imgUri = pages[0].ImageUri;
-							var localPath = CopyUriToCache(activity, imgUri);
-
-							if (!string.IsNullOrWhiteSpace(localPath))
+							// On garde toutes les pages scannées (chacune = un reçu).
+							var res = new DocumentScanResult();
+							foreach (var page in pages)
 							{
-								var res = new DocumentScanResult();
-								res.Images.Add(new SUri(localPath));
+								var localPath = CopyUriToCache(activity, page.ImageUri);
+								if (!string.IsNullOrWhiteSpace(localPath))
+								{
+									res.Images.Add(new SUri(localPath));
+								}
+							}
+
+							if (res.Images.Count > 0)
+							{
 								_tcs?.TrySetResult(res);
 								return;
 							}
