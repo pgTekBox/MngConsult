@@ -125,7 +125,7 @@
                             <TapGestureRecognizer Command="{Binding BindingContext.OpenInvoiceCommand, Source={x:Reference Page}}"
                                                   CommandParameter="{Binding Id}" />
                         </Border.GestureRecognizers>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
                             <Label Grid.Column="0" Text="{Binding Icon}" FontSize="16"
                                    TextColor="{Binding AmountColor}" VerticalOptions="Center" />
                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
@@ -138,7 +138,17 @@
                                 <Label Text="{Binding AmountText}" FontSize="14" FontAttributes="Bold"
                                        TextColor="{Binding AmountColor}" VerticalOptions="Center" />
                             </HorizontalStackLayout>
-                            <Label Grid.Column="3" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
+                            <Label Grid.Column="3" Text="&#128247;" FontSize="18" VerticalOptions="Center" Padding="6,4">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnAddPhotoTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="4" Text="&#128444;&#65039;" FontSize="18" VerticalOptions="Center" Padding="6,4">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnViewPhotosTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="5" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>

@@ -16,15 +16,26 @@ public record SalesSummaryDto(decimal Overdue, decimal Collected, decimal Receiv
 // ----- Création d'une facture -----
 public record ClientLookupDto(int Id, Guid PartyGUID, string DisplayName);
 
+public record CreateClientRequest(string Name);
+
+public record ProductLookupDto(int Id, string Name, decimal Price);
+
+public record CreateProductRequest(string Name, decimal Price);
+
 public record CreateInvoiceLine(string Description, decimal Qty, decimal UnitPrice, int TaxeStatus = 1);
 
 public record CreateInvoiceRequest(
 	Guid PartyGUID,
 	DateOnly IssueDate,
 	DateOnly DueDate,
-	List<CreateInvoiceLine> Lines);
+	List<CreateInvoiceLine> Lines,
+	double? Latitude = null,
+	double? Longitude = null);
 
 public record CreateInvoiceResult(int Id);
+
+/// <summary>Métadonnées d'une photo de facture (sans le blob). Created = date/heure de prise.</summary>
+public record InvoicePhotoDto(int Id, string FileName, string ContentType, int SizeBytes, DateTime? Created);
 
 // ----- Détail d'une facture -----
 public record InvoiceLineDto(string Description, decimal Qty, decimal UnitPrice, decimal Amount);
@@ -44,4 +55,6 @@ public record InvoiceDetailDto(
 	decimal Balance,
 	string Note,
 	string PoNumber,
-	List<InvoiceLineDto> Lines);
+	List<InvoiceLineDto> Lines,
+	double? Latitude = null,
+	double? Longitude = null);

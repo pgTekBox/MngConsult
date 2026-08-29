@@ -2,6 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:_60SecAI.ViewModels"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
              x:Class="_60SecAI.InvoiceDetailPage"
              x:DataType="vm:InvoiceDetailViewModel"
              Shell.NavBarIsVisible="False"
@@ -105,6 +106,13 @@
                         <Label Text="{Binding Note}" FontSize="12" TextColor="{StaticResource Gray500}" />
                     </VerticalStackLayout>
                 </Border>
+
+                <!-- ===== Lien carte ===== -->
+                <Button Text="{loc:Translate ViewOnMap}"
+                        Command="{Binding OpenMapCommand}"
+                        IsEnabled="{Binding HasLocation}"
+                        BackgroundColor="{StaticResource Primary}" TextColor="White"
+                        FontAttributes="Bold" HeightRequest="48" CornerRadius="14" />
             </VerticalStackLayout>
         </ScrollView>
     </Grid>

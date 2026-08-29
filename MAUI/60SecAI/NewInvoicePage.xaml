@@ -2,7 +2,9 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:loc="clr-namespace:_60SecAI.Localization"
+             xmlns:vm="clr-namespace:_60SecAI.ViewModels"
              x:Class="_60SecAI.NewInvoicePage"
+             x:Name="Page"
              Shell.NavBarIsVisible="False"
              BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
 
@@ -50,14 +52,22 @@
                                FontAttributes="Bold"
                                TextColor="{StaticResource Gray500}" />
                         <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}"
-                                StrokeThickness="0" Padding="10,0">
+                                StrokeThickness="0" Padding="12,0" HeightRequest="44">
                             <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                            <Picker x:Name="ClientPicker" Title="Choisir un client"
-                                    ItemDisplayBinding="{Binding DisplayName}"
-                                    BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                            <Border.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnPickPartyTapped" />
+                            </Border.GestureRecognizers>
+                            <Grid ColumnDefinitions="*,Auto">
+                                <Label x:Name="ClientValueLabel" Grid.Column="0"
+                                       Text="{loc:Translate ChooseClient}"
+                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                       VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="1" Text="&#9662;" FontSize="14"
+                                       TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                            </Grid>
                         </Border>
 
-                        <Grid ColumnDefinitions="*,*,*" ColumnSpacing="8">
+                        <Grid ColumnDefinitions="*,*" ColumnSpacing="8">
                             <VerticalStackLayout Grid.Column="0" Spacing="4">
                                 <Label Text="{loc:Translate BillingDate}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
                                 <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="8,0">
@@ -74,15 +84,6 @@
                                                 BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                                 </Border>
                             </VerticalStackLayout>
-                            <VerticalStackLayout Grid.Column="2" Spacing="4">
-                                <Label Text="{loc:Translate WorkDoneOn}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
-                                <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="8,0">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                                    <Entry x:Name="WorkDoneEntry" Placeholder="{loc:Translate DatePlaceholder}"
-                                           BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
-                                           HeightRequest="44" />
-                                </Border>
-                            </VerticalStackLayout>
                         </Grid>
                     </VerticalStackLayout>
                 </Border>
@@ -97,75 +98,70 @@
 
                     <VerticalStackLayout Spacing="12">
 
-                        <Label Text="{loc:Translate Lines}"
-                               FontSize="18"
-                               FontAttributes="Bold"
-                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-
-                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                            <Picker x:Name="LineTypePicker"
-                                    BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}">
-                                <Picker.ItemsSource>
-                                    <x:Array Type="{x:Type x:String}">
-                                        <x:String>Montant fixe</x:String>
-                                        <x:String>Taux horaire</x:String>
-                                        <x:String>Produit</x:String>
-                                    </x:Array>
-                                </Picker.ItemsSource>
-                            </Picker>
-                        </Border>
-
-                        <Label Text="{loc:Translate Description}" FontSize="11" FontAttributes="Bold" TextColor="{StaticResource Gray500}" />
-                        <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,4">
-                            <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                            <Editor x:Name="DescriptionEditor"
-                                    BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
-                                    HeightRequest="64" AutoSize="TextChanges" />
-                        </Border>
-
-                        <Grid ColumnDefinitions="Auto,*" ColumnSpacing="10" RowDefinitions="Auto,Auto,Auto" RowSpacing="10">
-                            <Label Grid.Row="0" Grid.Column="0" Text="{loc:Translate DateUpper}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalOptions="Center" />
-                            <Border Grid.Row="0" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="8,0" HorizontalOptions="End" WidthRequest="160">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                                <DatePicker x:Name="LineDatePicker" Format="MM/dd/yyyy" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                            </Border>
-
-                            <Label Grid.Row="1" Grid.Column="0" Text="{loc:Translate Quantity}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalOptions="Center" />
-                            <Border Grid.Row="1" Grid.Column="1" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0" HorizontalOptions="End" WidthRequest="160">
-                                <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                                <Entry x:Name="QtyEntry" Text="0" Keyboard="Numeric"
-                                       BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
-                                       HorizontalTextAlignment="End" HeightRequest="44" TextChanged="OnAmountChanged" />
-                            </Border>
-
-                            <Label Grid.Row="2" Grid.Column="0" Text="{loc:Translate Price}" FontSize="12" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalOptions="Center" />
-                            <Grid Grid.Row="2" Grid.Column="1" ColumnDefinitions="160,Auto" ColumnSpacing="6" HorizontalOptions="End">
-                                <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="10,0">
-                                    <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
-                                    <Entry x:Name="PriceEntry" Text="0" Keyboard="Numeric"
-                                           BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
-                                           HorizontalTextAlignment="End" HeightRequest="44" TextChanged="OnAmountChanged" />
-                                </Border>
-                                <Label Grid.Column="1" Text="$" FontAttributes="Bold" TextColor="{StaticResource Gray500}" VerticalTextAlignment="Center" />
-                            </Grid>
+                        <!-- Titre + Ajouter une ligne -->
+                        <Grid ColumnDefinitions="*,Auto" VerticalOptions="Center">
+                            <Label Grid.Column="0" Text="{loc:Translate Lines}" FontSize="18" FontAttributes="Bold"
+                                   TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                            <Button Grid.Column="1" Text="{loc:Translate AddLine}" Clicked="OnAddLineClicked"
+                                    BackgroundColor="{StaticResource Primary}" TextColor="White"
+                                    FontSize="13" FontAttributes="Bold" HeightRequest="38" CornerRadius="12" Padding="12,0" />
                         </Grid>
 
-                        <!-- Actions ligne -->
-                        <HorizontalStackLayout Spacing="24" HorizontalOptions="Center" Margin="0,4">
-                            <Label Text="&#8593;" FontSize="20" TextColor="{StaticResource Gray500}">
-                                <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnLineActionTapped" CommandParameter="up" /></Label.GestureRecognizers>
-                            </Label>
-                            <Label Text="&#8595;" FontSize="20" TextColor="{StaticResource Gray500}">
-                                <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnLineActionTapped" CommandParameter="down" /></Label.GestureRecognizers>
-                            </Label>
-                            <Label Text="-$" FontSize="18" FontAttributes="Bold" TextColor="{StaticResource Gray500}">
-                                <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnLineActionTapped" CommandParameter="discount" /></Label.GestureRecognizers>
-                            </Label>
-                            <Label Text="&#128465;" FontSize="18" TextColor="#C0392B">
-                                <Label.GestureRecognizers><TapGestureRecognizer Tapped="OnLineActionTapped" CommandParameter="delete" /></Label.GestureRecognizers>
-                            </Label>
-                        </HorizontalStackLayout>
+                        <!-- Liste des lignes -->
+                        <VerticalStackLayout Spacing="10"
+                                             BindableLayout.ItemsSource="{Binding Lines, Source={x:Reference Page}}">
+                            <BindableLayout.ItemTemplate>
+                                <DataTemplate x:DataType="vm:InvoiceLineItem">
+                                    <Border BackgroundColor="{AppThemeBinding Light=#F6F7FB, Dark=#262138}" StrokeThickness="0" Padding="12">
+                                        <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
+                                        <VerticalStackLayout Spacing="8">
+
+                                            <!-- Produit + supprimer -->
+                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                                <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}"
+                                                        StrokeThickness="0" Padding="10,0" HeightRequest="42">
+                                                    <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                                                    <Border.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnLineProductTapped" />
+                                                    </Border.GestureRecognizers>
+                                                    <Grid ColumnDefinitions="*,Auto">
+                                                        <Label Grid.Column="0" Text="{Binding ProductLabel}"
+                                                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                                               VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                                                        <Label Grid.Column="1" Text="&#9662;" FontSize="14"
+                                                               TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                                    </Grid>
+                                                </Border>
+                                                <Label Grid.Column="1" Text="&#128465;" FontSize="18" TextColor="#C0392B" VerticalOptions="Center">
+                                                    <Label.GestureRecognizers>
+                                                        <TapGestureRecognizer Tapped="OnLineDeleteTapped" />
+                                                    </Label.GestureRecognizers>
+                                                </Label>
+                                            </Grid>
+
+                                            <!-- Qté / Prix / Montant -->
+                                            <Grid ColumnDefinitions="Auto,64,Auto,84,*" ColumnSpacing="6" VerticalOptions="Center">
+                                                <Label Grid.Column="0" Text="{loc:Translate Quantity}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalOptions="Center" />
+                                                <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}" StrokeThickness="0" Padding="8,0">
+                                                    <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                                                    <Entry Text="{Binding QtyText}" Keyboard="Numeric" HorizontalTextAlignment="End"
+                                                           HeightRequest="40" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                                </Border>
+                                                <Label Grid.Column="2" Text="{loc:Translate Price}" FontSize="12" TextColor="{StaticResource Gray500}" VerticalOptions="Center" />
+                                                <Border Grid.Column="3" BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}" StrokeThickness="0" Padding="8,0">
+                                                    <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                                                    <Entry Text="{Binding PriceText}" Keyboard="Numeric" HorizontalTextAlignment="End"
+                                                           HeightRequest="40" BackgroundColor="Transparent" TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                                </Border>
+                                                <Label Grid.Column="4" Text="{Binding AmountText}" FontAttributes="Bold"
+                                                       HorizontalTextAlignment="End" VerticalOptions="Center"
+                                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                            </Grid>
+                                        </VerticalStackLayout>
+                                    </Border>
+                                </DataTemplate>
+                            </BindableLayout.ItemTemplate>
+                        </VerticalStackLayout>
                     </VerticalStackLayout>
                 </Border>
 

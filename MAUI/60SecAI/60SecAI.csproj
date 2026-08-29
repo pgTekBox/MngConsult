@@ -72,7 +72,9 @@
 		<!-- App Icon -->
 		<MauiIcon Include="Resources\AppIcon\appicon.svg" ForegroundFile="Resources\AppIcon\appiconfg.svg" Color="#2D6CDF" />
 
-		<!-- Splash Screen retire (le systeme affiche l'icone de l'app au demarrage) -->
+		<!-- Splash Screen minimal (couleur seule, sans logo).
+		     Requis sur iOS : sans launch screen, l'app s'affiche en mode reduit (letterbox). -->
+		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#2D6CDF" BaseSize="128,128" />
 
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />

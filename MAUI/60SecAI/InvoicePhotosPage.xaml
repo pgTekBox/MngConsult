@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:local="clr-namespace:_60SecAI"
+             xmlns:loc="clr-namespace:_60SecAI.Localization"
+             x:Class="_60SecAI.InvoicePhotosPage"
+             x:Name="Page"
+             Shell.NavBarIsVisible="False"
+             BackgroundColor="{AppThemeBinding Light=#F2F0FB, Dark=#141221}">
+
+    <Grid RowDefinitions="Auto,Auto,*">
+
+        <!-- En-tête : titre + Fermer -->
+        <Grid Grid.Row="0" ColumnDefinitions="*,Auto" Padding="16,14">
+            <VerticalStackLayout Spacing="1" VerticalOptions="Center">
+                <Label Text="{loc:Translate PhotosTitle}" FontSize="20" FontAttributes="Bold"
+                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                <Label x:Name="SubtitleLabel" FontSize="12" TextColor="{StaticResource Gray400}" />
+            </VerticalStackLayout>
+            <Label Grid.Column="1" Text="{loc:Translate Cancel}"
+                   TextColor="{StaticResource Primary}" FontAttributes="Bold" FontSize="15"
+                   VerticalOptions="Center">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnCancel" />
+                </Label.GestureRecognizers>
+            </Label>
+        </Grid>
+
+        <!-- Indicateur de chargement -->
+        <ActivityIndicator Grid.Row="1" x:Name="Busy" IsRunning="False" IsVisible="False"
+                           Color="{StaticResource Primary}" Margin="0,8" />
+
+        <!-- Liste des photos -->
+        <CollectionView Grid.Row="2" x:Name="List"
+                        ItemsSource="{Binding Photos, Source={x:Reference Page}}"
+                        Margin="12,0,12,12">
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="local:PhotoItem">
+                    <Border BackgroundColor="{AppThemeBinding Light=White, Dark=#211C33}"
+                            StrokeThickness="0" Padding="10" Margin="0,0,0,8">
+                        <Border.StrokeShape><RoundRectangle CornerRadius="12" /></Border.StrokeShape>
+                        <Border.GestureRecognizers>
+                            <TapGestureRecognizer Tapped="OnPhotoTapped" />
+                        </Border.GestureRecognizers>
+                        <Grid ColumnDefinitions="64,*,Auto" ColumnSpacing="12" VerticalOptions="Center">
+                            <Border Grid.Column="0" WidthRequest="64" HeightRequest="64"
+                                    StrokeThickness="0" BackgroundColor="{AppThemeBinding Light=#EEEBF7, Dark=#2A2440}">
+                                <Border.StrokeShape><RoundRectangle CornerRadius="8" /></Border.StrokeShape>
+                                <Image Source="{Binding Thumb}" Aspect="AspectFill" />
+                            </Border>
+                            <VerticalStackLayout Grid.Column="1" Spacing="2" VerticalOptions="Center">
+                                <Label Text="{Binding DateText}" FontSize="14" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
+                                <Label Text="{Binding SizeText}" FontSize="11" TextColor="{StaticResource Gray400}" />
+                            </VerticalStackLayout>
+                            <Label Grid.Column="2" Text="&#8250;" FontSize="18"
+                                   TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            <CollectionView.EmptyView>
+                <Label x:Name="EmptyLabel" Text="{loc:Translate NoPhoto}" FontSize="13"
+                       TextColor="{StaticResource Gray400}"
+                       HorizontalTextAlignment="Center" Margin="0,24" />
+            </CollectionView.EmptyView>
+        </CollectionView>
+    </Grid>
+
+</ContentPage>
