@@ -130,6 +130,16 @@ public class SuppliersController : ControllerBase
 
 		var result = await cmd.ExecuteScalarAsync();
 		var newId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
+
+		if (newId > 0 && request.Latitude is double lat && request.Longitude is double lng)
+		{
+			await using var geo = new SqlCommand("s0717SetInvoiceGeolocation", conn) { CommandType = CommandType.StoredProcedure };
+			geo.Parameters.AddWithValue("@InvoiceId", newId);
+			geo.Parameters.AddWithValue("@Latitude", lat);
+			geo.Parameters.AddWithValue("@Longitude", lng);
+			await geo.ExecuteNonQueryAsync();
+		}
+
 		return Ok(new CreateInvoiceResult(newId));
 	}
 
@@ -250,11 +260,24 @@ public class SuppliersController : ControllerBase
 			}
 		}
 
+		// ----- Géolocalisation -----
+		double? latitude = null, longitude = null;
+		await using (var geoCmd = new SqlCommand("s0718GetInvoiceGeolocation", conn) { CommandType = CommandType.StoredProcedure })
+		{
+			geoCmd.Parameters.AddWithValue("@InvoiceId", id);
+			await using var geoReader = await geoCmd.ExecuteReaderAsync();
+			if (await geoReader.ReadAsync())
+			{
+				if (!geoReader.IsDBNull(0)) latitude = Convert.ToDouble(geoReader.GetValue(0));
+				if (!geoReader.IsDBNull(1)) longitude = Convert.ToDouble(geoReader.GetValue(1));
+			}
+		}
+
 		return Ok(new InvoiceDetailDto(
 			id, number, name, address,
 			issued.HasValue ? DateOnly.FromDateTime(issued.Value) : DateOnly.FromDateTime(DateTime.Today),
 			due.HasValue ? DateOnly.FromDateTime(due.Value) : DateOnly.FromDateTime(DateTime.Today),
-			subTotal, tps, tvq, total, paid, balance, note, po, lines));
+			subTotal, tps, tvq, total, paid, balance, note, po, lines, latitude, longitude));
 	}
 
 	private async Task<List<InvoiceDto>> LoadInvoicesAsync()

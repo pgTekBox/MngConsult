@@ -34,6 +34,55 @@ public class SalesService
 	public async Task<IReadOnlyList<ClientLookupDto>> GetClientsAsync(CancellationToken ct = default)
 		=> await _http.GetFromJsonAsync<List<ClientLookupDto>>("api/sales/customers", JsonOptions, ct) ?? [];
 
+	/// <summary>Crée un client et renvoie sa fiche (Id/PartyGUID/DisplayName).</summary>
+	public async Task<ClientLookupDto?> CreateClientAsync(string name, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsJsonAsync("api/sales/customers", new CreateClientRequest(name), JsonOptions, ct);
+		response.EnsureSuccessStatusCode();
+		return await response.Content.ReadFromJsonAsync<ClientLookupDto>(JsonOptions, ct);
+	}
+
+	/// <summary>Liste des produits/services.</summary>
+	public async Task<IReadOnlyList<ProductLookupDto>> GetProductsAsync(CancellationToken ct = default)
+		=> await _http.GetFromJsonAsync<List<ProductLookupDto>>("api/sales/products", JsonOptions, ct) ?? [];
+
+	/// <summary>Ajoute une photo à une facture (multipart). Renvoie true si OK.</summary>
+	public async Task<bool> UploadInvoicePhotoAsync(int invoiceId, byte[] imageBytes, string fileName, string contentType, CancellationToken ct = default)
+	{
+		using var form = new MultipartFormDataContent();
+		using var fileContent = new ByteArrayContent(imageBytes);
+		fileContent.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue(
+			string.IsNullOrWhiteSpace(contentType) ? "image/jpeg" : contentType);
+		form.Add(fileContent, "file", string.IsNullOrWhiteSpace(fileName) ? "photo.jpg" : fileName);
+
+		using var response = await _http.PostAsync($"api/sales/invoices/{invoiceId}/photo", form, ct);
+		return response.IsSuccessStatusCode;
+	}
+
+	/// <summary>Liste des photos d'une facture (métadonnées + date de prise).</summary>
+	public async Task<IReadOnlyList<InvoicePhotoDto>> GetInvoicePhotosAsync(int invoiceId, CancellationToken ct = default)
+		=> await _http.GetFromJsonAsync<List<InvoicePhotoDto>>($"api/sales/invoices/{invoiceId}/photos", JsonOptions, ct) ?? [];
+
+	/// <summary>Télécharge le contenu binaire d'une photo (null si absente).</summary>
+	public async Task<byte[]?> GetInvoicePhotoContentAsync(int invoiceId, int photoId, CancellationToken ct = default)
+	{
+		using var response = await _http.GetAsync($"api/sales/invoices/{invoiceId}/photos/{photoId}", ct);
+		if (!response.IsSuccessStatusCode)
+		{
+			return null;
+		}
+
+		return await response.Content.ReadAsByteArrayAsync(ct);
+	}
+
+	/// <summary>Crée un produit/service et renvoie sa fiche (Id/Name/Price).</summary>
+	public async Task<ProductLookupDto?> CreateProductAsync(string name, decimal price, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsJsonAsync("api/sales/products", new CreateProductRequest(name, price), JsonOptions, ct);
+		response.EnsureSuccessStatusCode();
+		return await response.Content.ReadFromJsonAsync<ProductLookupDto>(JsonOptions, ct);
+	}
+
 	/// <summary>Crée une facture brouillon. Renvoie l'Id créé (0 si échec).</summary>
 	public async Task<int> CreateInvoiceAsync(CreateInvoiceRequest request, CancellationToken ct = default)
 	{

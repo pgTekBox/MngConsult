@@ -30,6 +30,10 @@
 	<string>Assets.xcassets/appicon.appiconset</string>
 	<key>NSCameraUsageDescription</key>
 	<string>L'application utilise l'appareil photo pour scanner vos reçus.</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>L'application accède à vos photos pour joindre une image à une facture.</string>
+	<key>NSLocationWhenInUseUsageDescription</key>
+	<string>La position est enregistrée avec vos factures pour référence.</string>
 	<key>NSAppTransportSecurity</key>
 	<dict>
 		<key>NSExceptionDomains</key>
