@@ -55,21 +55,54 @@
             word-break: break-all;
         }
 
-        /* Icône Envoyer par courriel (enveloppe) */
-        .btn-icon-email {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230891b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='20' height='16' rx='2'/%3E%3Cpath d='m22 7-10 6L2 7'/%3E%3C/svg%3E") !important;
+        /* Icône unique « Envoyer / Encaisser » : enveloppe + pastille $ (lien de paiement) */
+        .btn-icon-invoice-send {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%230891b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Crect x='2' y='4' width='18' height='14' rx='2'/%3E%3Cpath d='m20 6.5-9 5.5-9-5.5'/%3E%3Ccircle cx='18' cy='17.5' r='5.2' fill='%23ffffff' stroke='%2316a34a' stroke-width='1.6'/%3E%3Cpath d='M18 14.6v5.8' stroke='%2316a34a' stroke-width='1.4'/%3E%3Cpath d='M19.5 15.6h-2.1a.95.95 0 0 0 0 1.9h1.2a.95.95 0 0 1 0 1.9h-2.1' stroke='%2316a34a' stroke-width='1.4'/%3E%3C/svg%3E") !important;
             background-repeat: no-repeat !important;
             background-position: center !important;
-            background-size: 18px 18px !important;
+            background-size: 20px 20px !important;
         }
 
-        /* Icône Encaisser / lien de paiement Square (bleu Square) */
-        .btn-icon-collect {
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23006aff' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71'/%3E%3Cpath d='M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71'/%3E%3C/svg%3E") !important;
-            background-repeat: no-repeat !important;
-            background-position: center !important;
-            background-size: 18px 18px !important;
+        /* Options du dialogue « Envoyer / Encaisser » */
+        .dlg-opt {
+            display: block;
+            width: 100%;
+            text-align: left;
+            padding: 12px 14px;
+            margin-bottom: 10px;
+            border: 1px solid #cbd5e1;
+            border-radius: 12px;
+            background: #fff;
+            cursor: pointer;
+            font: inherit;
         }
+
+            .dlg-opt:hover {
+                border-color: #2563eb;
+                background: #f8fafc;
+            }
+
+            .dlg-opt .dlg-opt-title {
+                display: block;
+                font-weight: 800;
+                font-size: 14px;
+                color: #0f172a;
+            }
+
+            .dlg-opt .dlg-opt-sub {
+                display: block;
+                font-size: 12px;
+                color: #64748b;
+                margin-top: 3px;
+            }
+
+            .dlg-opt.dlg-opt-pay {
+                border-color: #16a34a;
+            }
+
+                .dlg-opt.dlg-opt-pay .dlg-opt-title {
+                    color: #15803d;
+                }
 
         .listview-list-head,
         .listview-row {
@@ -238,21 +271,14 @@
                                     OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEditPopup.aspx"", L_EDIT_CASHIN, L_ADD_CASHIN);    return false;" %>'
                                 />
 
-                                <%-- Bouton "Encaisser" : genere un lien de paiement Square (page hebergee) --%>
-                                <asp:Button ID="btnSquarePay" runat="server"
-                                    CssClass="btn btn-icon btn-icon-collect"
+                                <%-- Bouton unique « Envoyer / Encaisser » : ouvre le dialogue d'actions
+                                     (courriel sans lien / courriel avec lien Square / lien à copier). --%>
+                                <asp:Button ID="btnInvoiceSend" runat="server"
+                                    CssClass="btn btn-icon btn-icon-invoice-send"
                                     Text=""
-                                    ToolTip='<%# L("tipSquarePay") %>'
+                                    ToolTip='<%# L("tipInvoiceSend") %>'
                                     CausesValidation="false"
-                                    Visible='<%# CanCollect(Eval("StatutPaiement")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSquarePay"", ""wbfCustomerPaymentLink.aspx"", L_SQUARE, L_SQUARE);    return false;" %>' />
-
-                                <asp:Button ID="btnSendEmail" runat="server"
-                                    CssClass="btn btn-icon btn-icon-email"
-                                    Text=""
-                                    ToolTip='<%# L("tipSendEmail") %>'
-                                    CausesValidation="false"
-                                    OnClientClick='<%# "openSendEmailDialog(" & Eval("Id") & "); return false;" %>' />
+                                    OnClientClick='<%# "openInvoiceActions(" & FormatIntForJs(Eval("Id")) & "," & FormatIntForJs(Eval("PartyId")) & ",""" & FormatAmountForUrl(Eval("ResteAPayer")) & """," & If(CanCollect(Eval("StatutPaiement")), "1", "0") & "); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -444,35 +470,60 @@
 
 
     </script>
-    <%-- Dialogue : envoyer la facture par courriel (avec ou sans lien de paiement Square) --%>
+    <%-- Dialogue unique « Envoyer / Encaisser » : courriel sans lien, courriel avec lien
+         de paiement Square, ou génération du lien seul (à copier / envoyer soi-même). --%>
     <div id="sendEmailOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
          background:rgba(15,23,42,.55); align-items:center; justify-content:center;">
         <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
-             width:92vw; max-width:460px; padding:24px; box-sizing:border-box;">
+             width:92vw; max-width:480px; padding:24px; box-sizing:border-box;">
             <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:8px;">
                 <asp:Literal ID="litDlgTitle" runat="server" />
             </div>
-            <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:22px;">
+            <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:18px;">
                 <asp:Literal ID="litDlgQuestion" runat="server" />
             </div>
-            <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+
+            <button type="button" class="dlg-opt" onclick="doSendEmail(0)">
+                <span class="dlg-opt-title"><asp:Literal ID="litDlgWithout" runat="server" /></span>
+                <span class="dlg-opt-sub"><asp:Literal ID="litDlgWithoutSub" runat="server" /></span>
+            </button>
+
+            <button type="button" id="optSendWithLink" class="dlg-opt dlg-opt-pay" onclick="doSendEmail(1)">
+                <span class="dlg-opt-title"><asp:Literal ID="litDlgWith" runat="server" /></span>
+                <span class="dlg-opt-sub"><asp:Literal ID="litDlgWithSub" runat="server" /></span>
+            </button>
+
+            <button type="button" id="optCopyLink" class="dlg-opt dlg-opt-pay" onclick="doPaymentLink()">
+                <span class="dlg-opt-title"><asp:Literal ID="litDlgLink" runat="server" /></span>
+                <span class="dlg-opt-sub"><asp:Literal ID="litDlgLinkSub" runat="server" /></span>
+            </button>
+
+            <div id="optPaidNote" style="display:none; color:#64748b; font-size:12px; margin:-2px 0 12px;">
+                <asp:Literal ID="litDlgPaidNote" runat="server" />
+            </div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:6px;">
                 <button type="button" onclick="closeSendEmailDialog()"
                     style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
                            border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgCancel" runat="server" /></button>
-                <button type="button" onclick="doSendEmail(0)"
-                    style="padding:10px 16px; border:1px solid #2563eb; background:#fff; color:#2563eb;
-                           border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWithout" runat="server" /></button>
-                <button type="button" onclick="doSendEmail(1)"
-                    style="padding:10px 16px; border:1px solid #16a34a; background:#16a34a; color:#fff;
-                           border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWith" runat="server" /></button>
             </div>
         </div>
     </div>
 
     <script type="text/javascript">
         var _sendEmailInvoiceId = 0;
-        function openSendEmailDialog(id) {
+        var _sendEmailPartyId = 0;
+        var _sendEmailAmount = "0";
+
+        // canCollect = 0 quand la facture est déjà payée -> on masque les options de paiement.
+        function openInvoiceActions(id, partyId, amount, canCollect) {
             _sendEmailInvoiceId = id;
+            _sendEmailPartyId = partyId;
+            _sendEmailAmount = amount;
+            var show = (canCollect === 1 || canCollect === "1") ? "" : "none";
+            document.getElementById("optSendWithLink").style.display = show;
+            document.getElementById("optCopyLink").style.display = show;
+            document.getElementById("optPaidNote").style.display = (show === "") ? "none" : "block";
             document.getElementById("sendEmailOverlay").style.display = "flex";
         }
         function closeSendEmailDialog() {
@@ -482,6 +533,13 @@
             closeSendEmailDialog();
             var mgr = $find("RAP1");
             if (mgr) { mgr.ajaxRequest("sendmail|" + _sendEmailInvoiceId + "|" + includeSquare); }
+        }
+        // Lien de paiement seul : ouvre la fenêtre Square (générer / copier / ouvrir).
+        function doPaymentLink() {
+            closeSendEmailDialog();
+            openRadWindowParam(_sendEmailInvoiceId,
+                "DocumentId=" + _sendEmailInvoiceId + "&PartyId=" + _sendEmailPartyId + "&Amount=" + _sendEmailAmount,
+                "rwSquarePay", "wbfCustomerPaymentLink.aspx", L_SQUARE, L_SQUARE);
         }
         // Fermer en cliquant le fond sombre
         document.getElementById("sendEmailOverlay").addEventListener("click", function (e) {
