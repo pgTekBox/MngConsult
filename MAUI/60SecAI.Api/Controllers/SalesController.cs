@@ -182,16 +182,61 @@ public class SalesController : ControllerBase
 		var idIdx = Ordinal(reader, cols, "Code", "Id");
 		var nameIdx = Ordinal(reader, cols, "Name", "Nom");
 		var priceIdx = Ordinal(reader, cols, "Prix", "Price", "UnitPrice");
+		var accountIdx = Ordinal(reader, cols, "Account", "Compte", "NoCompte");
 
 		while (await reader.ReadAsync())
 		{
 			var id = ReadInt(reader, idIdx);
 			var name = StripHtml(ReadString(reader, nameIdx, string.Empty));
 			var price = ReadDecimal(reader, priceIdx);
-			list.Add(new ProductLookupDto(id, name, price));
+			var account = ReadString(reader, accountIdx, string.Empty).Trim();
+			list.Add(new ProductLookupDto(id, name, price, account.Length == 0 ? null : account));
 		}
 
 		return Ok(list);
+	}
+
+	/// <summary>Compte comptable par defaut d'une ligne (s0723GetDefaultInvoiceAccount).</summary>
+	[HttpGet("accounts/default")]
+	public async Task<ActionResult<AccountInfoDto>> GetDefaultAccount()
+	{
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0723GetDefaultInvoiceAccount", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		var number = string.Empty;
+		var name = string.Empty;
+		if (await reader.ReadAsync())
+		{
+			var cols = ColumnSet(reader);
+			number = ReadString(reader, Ordinal(reader, cols, "NoCompte", "Number", "Account"), string.Empty).Trim();
+			name = StripHtml(ReadString(reader, Ordinal(reader, cols, "Name", "Nom"), string.Empty));
+		}
+
+		return Ok(new AccountInfoDto(number, name));
+	}
+
+	/// <summary>Nom du compte comptable a partir de son numero (s0092Get_GLAccountByNoCompte).</summary>
+	[HttpGet("accounts/{noCompte}")]
+	public async Task<ActionResult<AccountInfoDto>> GetAccountName(string noCompte)
+	{
+		await using var conn = new SqlConnection(_connectionString);
+		await conn.OpenAsync();
+		await using var cmd = new SqlCommand("s0092Get_GLAccountByNoCompte", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@NoCompte", noCompte);
+		cmd.Parameters.AddWithValue("@CompanyGUID", CompanyGuid);
+
+		await using var reader = await cmd.ExecuteReaderAsync();
+		var name = string.Empty;
+		if (await reader.ReadAsync())
+		{
+			var cols = ColumnSet(reader);
+			name = StripHtml(ReadString(reader, Ordinal(reader, cols, "Name", "Nom"), string.Empty));
+		}
+
+		return Ok(new AccountInfoDto(noCompte, name));
 	}
 
 	/// <summary>Crée un produit/service (s0079InsertProduct) et renvoie sa fiche.</summary>
@@ -387,11 +432,15 @@ public class SalesController : ControllerBase
 		{
 			var line = lines[i];
 			var amount = Math.Round(line.Qty * line.UnitPrice, 2);
+
+			// Le no de compte (ex. « 4000 ») est stocké dans CompteComptable via AccountId (int).
+			var accountId = int.TryParse((line.AccountNumber ?? string.Empty).Trim(), out var acc) ? acc : 0;
+
 			dt.Rows.Add(
 				-(i + 1),               // Id : négatif = nouvelle ligne
 				0,                      // ProductId
 				DBNull.Value,           // ProductName
-				0,                      // AccountId
+				accountId,              // AccountId → CompteComptable
 				DBNull.Value,           // AccountName
 				line.Description ?? string.Empty,
 				(double)line.Qty,

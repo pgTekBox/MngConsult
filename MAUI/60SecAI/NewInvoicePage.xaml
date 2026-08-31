@@ -116,28 +116,41 @@
                                         <Border.StrokeShape><RoundRectangle CornerRadius="14" /></Border.StrokeShape>
                                         <VerticalStackLayout Spacing="8">
 
-                                            <!-- Produit + supprimer -->
-                                            <Grid ColumnDefinitions="*,Auto" ColumnSpacing="10">
+                                            <!-- Description (editable) + catalogue + supprimer -->
+                                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8">
                                                 <Border Grid.Column="0" BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}"
                                                         StrokeThickness="0" Padding="10,0" HeightRequest="42">
+                                                    <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
+                                                    <Entry Text="{Binding Description}" Placeholder="{loc:Translate DescriptionPlaceholder}"
+                                                           HeightRequest="42" BackgroundColor="Transparent"
+                                                           TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                                           PlaceholderColor="{StaticResource Gray400}" />
+                                                </Border>
+                                                <Border Grid.Column="1" BackgroundColor="{AppThemeBinding Light=White, Dark=#1B1730}"
+                                                        StrokeThickness="0" WidthRequest="42" HeightRequest="42">
                                                     <Border.StrokeShape><RoundRectangle CornerRadius="10" /></Border.StrokeShape>
                                                     <Border.GestureRecognizers>
                                                         <TapGestureRecognizer Tapped="OnLineProductTapped" />
                                                     </Border.GestureRecognizers>
-                                                    <Grid ColumnDefinitions="*,Auto">
-                                                        <Label Grid.Column="0" Text="{Binding ProductLabel}"
-                                                               TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
-                                                               VerticalOptions="Center" LineBreakMode="TailTruncation" />
-                                                        <Label Grid.Column="1" Text="&#9662;" FontSize="14"
-                                                               TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
-                                                    </Grid>
+                                                    <Label Text="&#128203;" FontSize="18" HorizontalOptions="Center" VerticalOptions="Center" />
                                                 </Border>
-                                                <Label Grid.Column="1" Text="&#128465;" FontSize="18" TextColor="#C0392B" VerticalOptions="Center">
+                                                <Label Grid.Column="2" Text="&#128465;" FontSize="18" TextColor="#C0392B"
+                                                       VerticalOptions="Center" WidthRequest="28" HorizontalTextAlignment="Center">
                                                     <Label.GestureRecognizers>
                                                         <TapGestureRecognizer Tapped="OnLineDeleteTapped" />
                                                     </Label.GestureRecognizers>
                                                 </Label>
                                             </Grid>
+
+                                            <!-- Numero de compte + description (clic = nom du compte) -->
+                                            <Label Text="{Binding AccountLabel}" FontSize="10"
+                                                   TextColor="{StaticResource Gray400}" Margin="4,-2,0,0"
+                                                   LineBreakMode="TailTruncation"
+                                                   IsVisible="{Binding HasAccount}">
+                                                <Label.GestureRecognizers>
+                                                    <TapGestureRecognizer Tapped="OnLineAccountTapped" />
+                                                </Label.GestureRecognizers>
+                                            </Label>
 
                                             <!-- Qté / Prix / Montant -->
                                             <Grid ColumnDefinitions="Auto,64,Auto,84,*" ColumnSpacing="6" VerticalOptions="Center">

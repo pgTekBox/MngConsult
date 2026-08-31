@@ -11,6 +11,12 @@ namespace _60SecAI;
 /// </summary>
 public partial class ProductPickerPage : ContentPage
 {
+	/// <summary>Id sentinelle de l'item « Ligne libre » (saisie manuelle, hors catalogue).</summary>
+	private const int CustomLineId = -1;
+
+	/// <summary>Vrai si le produit renvoyé est l'item « Ligne libre ».</summary>
+	public static bool IsCustomLine(ProductLookupDto? product) => product is { Id: CustomLineId };
+
 	private readonly TaskCompletionSource<ProductLookupDto?> _tcs;
 	private readonly Func<CancellationToken, Task<IReadOnlyList<ProductLookupDto>>> _loader;
 	private readonly Func<string, decimal, Task<ProductLookupDto?>>? _creator;
@@ -76,6 +82,10 @@ public partial class ProductPickerPage : ContentPage
 		}
 
 		Items.Clear();
+
+		// « Ligne libre » toujours en tête : insère une ligne vide à remplir soi-même.
+		Items.Add(new ProductLookupDto(CustomLineId, LocalizationResourceManager.Instance["CustomLine"], 0m));
+
 		foreach (var p in source)
 		{
 			Items.Add(p);
