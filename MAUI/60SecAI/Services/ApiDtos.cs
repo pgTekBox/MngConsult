@@ -22,11 +22,13 @@ public record ClientLookupDto(int Id, Guid PartyGUID, string DisplayName);
 
 public record CreateClientRequest(string Name);
 
-public record ProductLookupDto(int Id, string Name, decimal Price);
+public record ProductLookupDto(int Id, string Name, decimal Price, string? AccountNumber = null);
+
+public record AccountInfoDto(string Number, string Name);
 
 public record CreateProductRequest(string Name, decimal Price);
 
-public record CreateInvoiceLine(string Description, decimal Qty, decimal UnitPrice, int TaxeStatus = 1);
+public record CreateInvoiceLine(string Description, decimal Qty, decimal UnitPrice, int TaxeStatus = 1, string? AccountNumber = null);
 
 public record CreateInvoiceRequest(
 	Guid PartyGUID,

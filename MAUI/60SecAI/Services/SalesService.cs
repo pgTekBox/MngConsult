@@ -59,6 +59,22 @@ public class SalesService
 		return response.IsSuccessStatusCode;
 	}
 
+	/// <summary>Compte comptable par défaut d'une ligne de facture (numéro + nom).</summary>
+	public async Task<AccountInfoDto?> GetDefaultAccountAsync(CancellationToken ct = default)
+		=> await _http.GetFromJsonAsync<AccountInfoDto>("api/sales/accounts/default", JsonOptions, ct);
+
+	/// <summary>Nom du compte comptable à partir de son numéro (vide si introuvable).</summary>
+	public async Task<string> GetAccountNameAsync(string noCompte, CancellationToken ct = default)
+	{
+		if (string.IsNullOrWhiteSpace(noCompte))
+		{
+			return string.Empty;
+		}
+
+		var info = await _http.GetFromJsonAsync<AccountInfoDto>($"api/sales/accounts/{Uri.EscapeDataString(noCompte)}", JsonOptions, ct);
+		return info?.Name ?? string.Empty;
+	}
+
 	/// <summary>Liste des photos d'une facture (métadonnées + date de prise).</summary>
 	public async Task<IReadOnlyList<InvoicePhotoDto>> GetInvoicePhotosAsync(int invoiceId, CancellationToken ct = default)
 		=> await _http.GetFromJsonAsync<List<InvoicePhotoDto>>($"api/sales/invoices/{invoiceId}/photos", JsonOptions, ct) ?? [];

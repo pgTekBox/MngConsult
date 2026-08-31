@@ -17,6 +17,7 @@ public partial class NewInvoicePage : ContentPage
 
 	private bool _saving;
 	private ClientLookupDto? _selectedParty;
+	private AccountInfoDto? _defaultAccount;
 
 	/// <summary>Lignes de la facture (produit + quantité + prix).</summary>
 	public ObservableCollection<InvoiceLineItem> Lines { get; } = [];
@@ -29,14 +30,51 @@ public partial class NewInvoicePage : ContentPage
 	public NewInvoicePage()
 	{
 		InitializeComponent();
+
+		// Dates vides au depart : l'utilisateur doit les choisir (obligatoires).
+		BillDatePicker.Date = null;
+		DueDatePicker.Date = null;
+
 		AddLine();
 		Recalculate();
 	}
 
-	protected override void OnAppearing()
+	protected override async void OnAppearing()
 	{
 		base.OnAppearing();
 		ApplyKindLabels();
+		await EnsureDefaultAccountAsync();
+	}
+
+	/// <summary>Charge le compte par défaut et l'associe aux lignes qui n'en ont pas encore.</summary>
+	private async Task EnsureDefaultAccountAsync()
+	{
+		// Le compte par défaut (« VP ») ne s'applique qu'aux factures client.
+		if (IsSupplier || _defaultAccount is not null)
+		{
+			return;
+		}
+
+		try
+		{
+			_defaultAccount = await ServiceHelper.GetService<SalesService>().GetDefaultAccountAsync();
+		}
+		catch (Exception)
+		{
+			_defaultAccount = null;
+		}
+
+		if (_defaultAccount is { } d && !string.IsNullOrWhiteSpace(d.Number))
+		{
+			foreach (var line in Lines)
+			{
+				if (!line.HasAccount)
+				{
+					line.AccountNumber = d.Number;
+					line.AccountName = d.Name;
+				}
+			}
+		}
 	}
 
 	/// <summary>Ajuste le titre et les libellés selon client / fournisseur.</summary>
@@ -84,6 +122,7 @@ public partial class NewInvoicePage : ContentPage
 
 	// ---------- Lignes ----------
 
+	/// <summary>Ajoute une ligne et ouvre le catalogue (dont l'item « Ligne libre »).</summary>
 	private async void OnAddLineClicked(object? sender, EventArgs e)
 	{
 		var item = AddLine();
@@ -93,6 +132,14 @@ public partial class NewInvoicePage : ContentPage
 	private InvoiceLineItem AddLine()
 	{
 		var item = new InvoiceLineItem(LocalizationResourceManager.Instance["ChooseProduct"]);
+
+		// Chaque ligne est associée à un compte : par défaut le compte de ventes.
+		if (_defaultAccount is { } d && !string.IsNullOrWhiteSpace(d.Number))
+		{
+			item.AccountNumber = d.Number;
+			item.AccountName = d.Name;
+		}
+
 		item.PropertyChanged += OnLinePropertyChanged;
 		Lines.Add(item);
 		return item;
@@ -124,6 +171,21 @@ public partial class NewInvoicePage : ContentPage
 		}
 	}
 
+	/// <summary>Affiche le nom du compte comptable de la ligne dans une petite fenêtre.</summary>
+	private async void OnLineAccountTapped(object? sender, TappedEventArgs e)
+	{
+		if (LineFrom(sender) is not { } item || string.IsNullOrWhiteSpace(item.AccountNumber))
+		{
+			return;
+		}
+
+		var loc = LocalizationResourceManager.Instance;
+		var name = string.IsNullOrWhiteSpace(item.AccountName)
+			? await ServiceHelper.GetService<SalesService>().GetAccountNameAsync(item.AccountNumber)
+			: item.AccountName;
+		await DisplayAlertAsync(item.AccountNumber, string.IsNullOrWhiteSpace(name) ? loc["AccountNameUnavailable"] : name, "OK");
+	}
+
 	private async Task PickProductForLine(InvoiceLineItem item)
 	{
 		var sales = ServiceHelper.GetService<SalesService>();
@@ -137,9 +199,24 @@ public partial class NewInvoicePage : ContentPage
 			return;
 		}
 
+		// « Ligne libre » : description à saisir, mais on associe le compte par défaut (facture client).
+		if (ProductPickerPage.IsCustomLine(product))
+		{
+			if (!IsSupplier)
+			{
+				await ApplyAccountAsync(item, _defaultAccount?.Number);
+			}
+
+			return;
+		}
+
 		item.Description = product.Name;
 		item.ProductLabel = product.Name;
 		item.PriceText = product.Price.ToString("0.##", CultureInfo.InvariantCulture);
+		if (!IsSupplier)
+		{
+			await ApplyAccountAsync(item, product.AccountNumber);
+		}
 		if (ParseAmount(item.QtyText) <= 0m)
 		{
 			item.QtyText = "1";
@@ -147,6 +224,30 @@ public partial class NewInvoicePage : ContentPage
 
 		UpdateLineAmount(item);
 		Recalculate();
+	}
+
+	/// <summary>Associe un compte à la ligne (celui fourni, sinon le compte par défaut) et résout son nom.</summary>
+	private async Task ApplyAccountAsync(InvoiceLineItem item, string? number)
+	{
+		var acct = string.IsNullOrWhiteSpace(number) ? _defaultAccount?.Number : number;
+		if (string.IsNullOrWhiteSpace(acct))
+		{
+			return; // aucun compte disponible
+		}
+
+		item.AccountNumber = acct;
+		item.AccountName = await ResolveAccountNameAsync(acct);
+	}
+
+	/// <summary>Nom du compte : depuis le cache du compte par défaut, sinon via l'API.</summary>
+	private async Task<string> ResolveAccountNameAsync(string number)
+	{
+		if (_defaultAccount is { } d && string.Equals(d.Number, number, StringComparison.OrdinalIgnoreCase))
+		{
+			return d.Name;
+		}
+
+		return await ServiceHelper.GetService<SalesService>().GetAccountNameAsync(number);
 	}
 
 	private void OnLinePropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -252,9 +353,23 @@ public partial class NewInvoicePage : ContentPage
 			return;
 		}
 
+		var loc = LocalizationResourceManager.Instance;
+
 		if (_selectedParty is not { } client)
 		{
-			await DisplayAlertAsync("Facture", "Veuillez choisir un client.", "OK");
+			await DisplayAlertAsync("Facture", loc[IsSupplier ? "SupplierRequiredMsg" : "ClientRequiredMsg"], "OK");
+			return;
+		}
+
+		if (BillDatePicker.Date is null)
+		{
+			await DisplayAlertAsync("Facture", loc["BillDateRequired"], "OK");
+			return;
+		}
+
+		if (DueDatePicker.Date is null)
+		{
+			await DisplayAlertAsync("Facture", loc["DueDateRequired"], "OK");
 			return;
 		}
 
@@ -265,7 +380,9 @@ public partial class NewInvoicePage : ContentPage
 			var price = ParseAmount(item.PriceText);
 			if (qty > 0m && price > 0m && !string.IsNullOrWhiteSpace(item.Description))
 			{
-				lines.Add(new CreateInvoiceLine(item.Description.Trim(), qty, price));
+				lines.Add(new CreateInvoiceLine(
+					item.Description.Trim(), qty, price,
+					AccountNumber: string.IsNullOrWhiteSpace(item.AccountNumber) ? null : item.AccountNumber.Trim()));
 			}
 		}
 
@@ -279,8 +396,8 @@ public partial class NewInvoicePage : ContentPage
 
 		var request = new CreateInvoiceRequest(
 			client.PartyGUID,
-			DateOnly.FromDateTime(BillDatePicker.Date ?? DateTime.Today),
-			DateOnly.FromDateTime(DueDatePicker.Date ?? DateTime.Today),
+			DateOnly.FromDateTime(BillDatePicker.Date.Value),
+			DateOnly.FromDateTime(DueDatePicker.Date.Value),
 			lines,
 			lat,
 			lng);
