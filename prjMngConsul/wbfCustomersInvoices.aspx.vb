@@ -37,7 +37,12 @@ Public Class wbfCustomersInvoices
         SetLiteral(Me, "litDlgQuestion", L("dlgEmailQuestion"))
         SetLiteral(Me, "litDlgCancel", L("dlgCancel"))
         SetLiteral(Me, "litDlgWithout", L("dlgWithout"))
+        SetLiteral(Me, "litDlgWithoutSub", L("dlgWithoutSub"))
         SetLiteral(Me, "litDlgWith", L("dlgWith"))
+        SetLiteral(Me, "litDlgWithSub", L("dlgWithSub"))
+        SetLiteral(Me, "litDlgLink", L("dlgLink"))
+        SetLiteral(Me, "litDlgLinkSub", L("dlgLinkSub"))
+        SetLiteral(Me, "litDlgPaidNote", L("dlgPaidNote"))
     End Sub
 
     ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
@@ -90,8 +95,7 @@ Public Class wbfCustomersInvoices
             Case "colEtat" : Return Choose3(lang, "État", "Status", "Estado")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "tipCashIn" : Return Choose3(lang, "Encaissement", "Cash receipt", "Cobro")
-            Case "tipSquarePay" : Return Choose3(lang, "Encaisser (lien de paiement Square)", "Collect (Square payment link)", "Cobrar (enlace de pago Square)")
-            Case "tipSendEmail" : Return Choose3(lang, "Envoyer la facture par courriel", "Send invoice by email", "Enviar factura por correo")
+            Case "tipInvoiceSend" : Return Choose3(lang, "Envoyer la facture / Encaisser", "Send invoice / Collect", "Enviar factura / Cobrar")
             Case "tipEdit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
             Case "tipDelete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
             Case "empty" : Return Choose3(lang, "Aucune facture trouvée.", "No invoice found.", "No se encontró ninguna factura.")
@@ -102,11 +106,16 @@ Public Class wbfCustomersInvoices
             Case "winEditCashIn" : Return Choose3(lang, "Modifier un encaissement", "Edit cash receipt", "Editar cobro")
             Case "winAddCashIn" : Return Choose3(lang, "Ajouter un encaissement", "Add cash receipt", "Agregar cobro")
             Case "winSquare" : Return Choose3(lang, "Encaisser (Square)", "Collect (Square)", "Cobrar (Square)")
-            Case "dlgEmailTitle" : Return Choose3(lang, "Envoyer la facture par courriel", "Send invoice by email", "Enviar factura por correo")
-            Case "dlgEmailQuestion" : Return Choose3(lang, "Voulez-vous inclure un <strong>lien de paiement Square</strong> dans le courriel&nbsp;?", "Do you want to include a <strong>Square payment link</strong> in the email?", "¿Desea incluir un <strong>enlace de pago Square</strong> en el correo?")
+            Case "dlgEmailTitle" : Return Choose3(lang, "Envoyer la facture / Encaisser", "Send invoice / Collect", "Enviar factura / Cobrar")
+            Case "dlgEmailQuestion" : Return Choose3(lang, "Que voulez-vous faire&nbsp;?", "What do you want to do?", "¿Qué desea hacer?")
             Case "dlgCancel" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
-            Case "dlgWithout" : Return Choose3(lang, "Envoyer sans lien", "Send without link", "Enviar sin enlace")
-            Case "dlgWith" : Return Choose3(lang, "Avec lien Square", "With Square link", "Con enlace Square")
+            Case "dlgWithout" : Return Choose3(lang, "Envoyer la facture par courriel", "Send the invoice by email", "Enviar la factura por correo")
+            Case "dlgWithoutSub" : Return Choose3(lang, "PDF en pièce jointe, sans lien de paiement.", "PDF attached, no payment link.", "PDF adjunto, sin enlace de pago.")
+            Case "dlgWith" : Return Choose3(lang, "Envoyer par courriel avec lien de paiement", "Send by email with payment link", "Enviar por correo con enlace de pago")
+            Case "dlgWithSub" : Return Choose3(lang, "PDF en pièce jointe + bouton « Payer maintenant » (Square).", "PDF attached + « Pay now » button (Square).", "PDF adjunto + botón « Pagar ahora » (Square).")
+            Case "dlgLink" : Return Choose3(lang, "Obtenir le lien de paiement seulement", "Get the payment link only", "Obtener solo el enlace de pago")
+            Case "dlgLinkSub" : Return Choose3(lang, "Génère le lien Square à copier (texto, téléphone, en personne). Aucun courriel envoyé.", "Generates the Square link to copy (text, phone, in person). No email sent.", "Genera el enlace Square para copiar (SMS, teléfono, en persona). No se envía correo.")
+            Case "dlgPaidNote" : Return Choose3(lang, "Facture déjà payée : les options de paiement ne sont pas offertes.", "Invoice already paid: payment options are not available.", "Factura ya pagada: las opciones de pago no están disponibles.")
             Case "msgNotFound" : Return Choose3(lang, "Facture introuvable.", "Invoice not found.", "Factura no encontrada.")
             Case "msgNoEmail" : Return Choose3(lang, "Aucun courriel de facturation pour ce client.", "No billing email for this customer.", "No hay correo de facturación para este cliente.")
             Case "msgPdfFail" : Return Choose3(lang, "Impossible de générer le PDF de la facture.", "Unable to generate the invoice PDF.", "No se pudo generar el PDF de la factura.")
@@ -153,6 +162,15 @@ Public Class wbfCustomersInvoices
     Public Function CanCollect(statutPaiement As Object) As Boolean
         If statutPaiement Is Nothing OrElse IsDBNull(statutPaiement) Then Return True
         Return statutPaiement.ToString().Trim().ToUpperInvariant() <> "PAYEE"
+    End Function
+
+    ''' <summary>Entier sûr pour un argument JavaScript (0 si NULL / non numérique) :
+    ''' évite un « openInvoiceActions(5,,... ) » qui casserait tout le dialogue.</summary>
+    Public Function FormatIntForJs(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return "0"
+        Dim n As Integer
+        If Integer.TryParse(value.ToString(), n) Then Return n.ToString(System.Globalization.CultureInfo.InvariantCulture)
+        Return "0"
     End Function
 
     ''' <summary>Formate un montant pour l'URL (point décimal, InvariantCulture).</summary>
@@ -308,7 +326,7 @@ Public Class wbfCustomersInvoices
         Dim squareLinkHtml As String = ""
         Dim squareNote As String = ""
         If includeSquare Then
-            squareLinkHtml = BuildSquarePaymentLink(invoiceId, docNumber, companyName, toEmail, reste, squareNote)
+            squareLinkHtml = BuildSquarePaymentLink(invoiceId, docNumber, companyName, toEmail, reste, companyGuid, squareNote)
         End If
 
         ' 4. Corps HTML (+ lien de visualisation en secours)
@@ -352,12 +370,15 @@ Public Class wbfCustomersInvoices
     ''' Génère un lien de paiement Square (page hébergée) sur le solde restant de la
     ''' facture et retourne le bloc HTML (bouton « Payer ») à insérer dans le courriel.
     ''' Estampille la facture avec le SquareOrderId (réconciliation webhook, s0688).
+    ''' Après paiement le client est renvoyé sur la page « merci » brandée, comme pour
+    ''' le lien généré depuis la fenêtre « Encaisser » (clsSquare.PaymentRedirectUrl).
     ''' Retourne "" si impossible (Square non connecté, solde nul, erreur) et remplit
     ''' <paramref name="note"/> avec la raison (affichée dans la confirmation).
     ''' </summary>
     Private Function BuildSquarePaymentLink(invoiceId As Integer, docNumber As String,
                                             companyName As String, buyerEmail As String,
-                                            reste As Decimal, ByRef note As String) As String
+                                            reste As Decimal, companyGuid As Guid,
+                                            ByRef note As String) As String
         Try
             If reste <= 0D Then
                 note = L("noteAlreadyPaid")
@@ -377,9 +398,10 @@ Public Class wbfCustomersInvoices
             Dim locationId As String = clsSquare.GetMainLocationId(token)
             Dim cents As Long = CLng(Math.Round(reste * 100D))
             Dim name As String = "Facture #" & docNumber
+            Dim redirectUrl As String = clsSquare.PaymentRedirectUrl(CurrentLang, reste, companyName, companyGuid)
             Dim linkRes As clsSquare.SquarePaymentLinkResult =
                 clsSquare.CreatePaymentLink(token, locationId, cents, name, "Facture client #" & docNumber,
-                                            companyName, buyerEmail, UserEmail, Nothing)
+                                            companyName, buyerEmail, UserEmail, redirectUrl)
 
             If linkRes Is Nothing OrElse String.IsNullOrEmpty(linkRes.Url) Then
                 note = L("noteNotGenerated")

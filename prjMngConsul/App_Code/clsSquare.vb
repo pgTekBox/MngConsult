@@ -669,6 +669,34 @@ Public Class clsSquare
         Return If(u, "")
     End Function
 
+    ''' <summary>
+    ''' URL de retour apres paiement (checkout_options.redirect_url) : la page « merci »
+    ''' brandee, avec nos parametres (langue, montant, nom et GUID de la compagnie pour
+    ''' le logo). Square conserve cette query string et y ajoute ses propres identifiants
+    ''' (orderId, transactionId...). Retourne "" si Square.PaymentRedirectUrl n'est pas
+    ''' configure (Square utilise alors sa page de confirmation par defaut).
+    ''' Partage par TOUS les liens de paiement (fenetre « Encaisser » et courriel) pour
+    ''' que le client vive la meme experience de retour.
+    ''' </summary>
+    Public Shared Function PaymentRedirectUrl(lang As String, amount As Decimal,
+                                              companyName As String, companyGuid As Guid) As String
+        Dim baseUrl As String = If(ConfigurationManager.AppSettings("Square.PaymentRedirectUrl"), "")
+        If String.IsNullOrEmpty(baseUrl) Then Return ""
+
+        Dim sb As New StringBuilder()
+        sb.Append(baseUrl).Append(If(baseUrl.Contains("?"), "&"c, "?"c))
+        sb.Append("lang=").Append(Uri.EscapeDataString(If(lang, "fr")))
+        sb.Append("&amt=").Append(Uri.EscapeDataString(amount.ToString("0.00", Globalization.CultureInfo.InvariantCulture)))
+        If Not String.IsNullOrEmpty(companyName) Then
+            sb.Append("&co=").Append(Uri.EscapeDataString(companyName))
+        End If
+        ' CompanyGUID pour que merci.aspx recupere le vrai logo via CompanyLogo.ashx.
+        If companyGuid <> Guid.Empty Then
+            sb.Append("&c=").Append(Uri.EscapeDataString(companyGuid.ToString()))
+        End If
+        Return sb.ToString()
+    End Function
+
     ''' <summary>Comparaison de chaines a temps constant (anti timing-attack).</summary>
     Private Shared Function FixedTimeEquals(a As String, b As String) As Boolean
         If a Is Nothing OrElse b Is Nothing OrElse a.Length <> b.Length Then Return False

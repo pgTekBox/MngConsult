@@ -112,23 +112,6 @@ Public Class wbfCustomerPaymentLink
         Return ""
     End Function
 
-    ''' <summary>Ajoute nos paramètres (langue, montant, nom compagnie) à la page de remerciement.
-    ''' Square conserve cette query string et y ajoute ses propres identifiants (orderId, etc.).</summary>
-    Private Function BuildRedirectUrl(baseUrl As String, company As String, amount As Decimal) As String
-        If String.IsNullOrEmpty(baseUrl) Then Return ""
-        Dim sep As String = If(baseUrl.Contains("?"), "&", "?")
-        Dim sb As New Text.StringBuilder()
-        sb.Append(baseUrl).Append(sep)
-        sb.Append("lang=").Append(HttpUtility.UrlEncode(CurrentLang))
-        sb.Append("&amt=").Append(HttpUtility.UrlEncode(amount.ToString("0.00", CultureInfo.InvariantCulture)))
-        If Not String.IsNullOrEmpty(company) Then
-            sb.Append("&co=").Append(HttpUtility.UrlEncode(company))
-        End If
-        ' CompanyGUID pour que merci.aspx récupère le vrai logo via CompanyLogo.ashx.
-        sb.Append("&c=").Append(HttpUtility.UrlEncode(Company.ToString()))
-        Return sb.ToString()
-    End Function
-
     Private Function SafeSquareToken() As String
         Try
             Return GetValidSquareAccessToken()
@@ -159,8 +142,8 @@ Public Class wbfCustomerPaymentLink
             Dim note As String = "Facture client #" & DocId
             Dim buyerEmail As String = LoadBillingEmail(PartyId)
             Dim supportEmail As String = UserEmail
-            Dim baseRedirect As String = If(System.Configuration.ConfigurationManager.AppSettings("Square.PaymentRedirectUrl"), "")
-            Dim redirectUrl As String = BuildRedirectUrl(baseRedirect, CompanyName, AmountValue)
+            ' Page « merci » brandée — helper partagé avec l'envoi par courriel.
+            Dim redirectUrl As String = clsSquare.PaymentRedirectUrl(CurrentLang, AmountValue, CompanyName, Company)
 
             Dim link As clsSquare.SquarePaymentLinkResult = clsSquare.CreatePaymentLink(
                 token, locationId, cents, name, note, CompanyName, buyerEmail, supportEmail, redirectUrl)
