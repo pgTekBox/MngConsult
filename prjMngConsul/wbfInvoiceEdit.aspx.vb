@@ -75,6 +75,9 @@ Public Class wbfInvoiceEdit
             If InvoiceId = 0 Then lblCustomer.Text = L("selectClient")
             BindData()
             'BinDDL()
+
+            ' Le bouton « Envoyer au client » n'a de sens que pour une facture déjà enregistrée.
+            btnSendEmail.Visible = (InvoiceId > 0)
         End If
         ApplyReadOnlyMode()
 
@@ -86,6 +89,12 @@ Public Class wbfInvoiceEdit
         Page.Title = L("pageTitle")
         lblPostedBadge.Text = L("postedBadge")
         radSave.Text = L("save")
+        btnSendEmail.Text = L("sendEmail")
+        SetLiteral(Me, "litDlgTitle", L("dlgEmailTitle"))
+        SetLiteral(Me, "litDlgQuestion", L("dlgEmailQuestion"))
+        SetLiteral(Me, "litDlgCancel", L("dlgCancel"))
+        SetLiteral(Me, "litDlgWithout", L("dlgWithout"))
+        SetLiteral(Me, "litDlgWith", L("dlgWith"))
         btnAddLine.ToolTip = L("addLine")
         lblCapSubTotal.Text = L("subtotal")
         SetLiteral(Me, "litLblClient", L("client"))
@@ -173,6 +182,21 @@ Public Class wbfInvoiceEdit
             Case "emptyCustomers" : Return Choose3(lang, "Aucun client trouvé.", "No customer found.", "No se encontró ningún cliente.")
             Case "emptyAccounts" : Return Choose3(lang, "Aucun compte trouvé.", "No account found.", "No se encontró ninguna cuenta.")
             Case "confirmDelLine" : Return Choose3(lang, "Supprimer cette ligne ?", "Delete this line?", "¿Eliminar esta línea?")
+            Case "sendEmail" : Return Choose3(lang, "Envoyer au client", "Send to customer", "Enviar al cliente")
+            Case "dlgEmailTitle" : Return Choose3(lang, "Envoyer la facture par courriel", "Send invoice by email", "Enviar factura por correo")
+            Case "dlgEmailQuestion" : Return Choose3(lang, "Voulez-vous inclure un <strong>lien de paiement Square</strong> dans le courriel&nbsp;?", "Do you want to include a <strong>Square payment link</strong> in the email?", "¿Desea incluir un <strong>enlace de pago Square</strong> en el correo?")
+            Case "dlgCancel" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
+            Case "dlgWithout" : Return Choose3(lang, "Envoyer sans lien", "Send without link", "Enviar sin enlace")
+            Case "dlgWith" : Return Choose3(lang, "Avec lien Square", "With Square link", "Con enlace Square")
+            Case "saveFirst" : Return Choose3(lang, "Veuillez d'abord enregistrer la facture.", "Please save the invoice first.", "Guarde primero la factura.")
+            Case "msgNotFound" : Return Choose3(lang, "Facture introuvable.", "Invoice not found.", "Factura no encontrada.")
+            Case "msgNoEmail" : Return Choose3(lang, "Aucun courriel de facturation pour ce client.", "No billing email for this customer.", "No hay correo de facturación para este cliente.")
+            Case "msgPdfFail" : Return Choose3(lang, "Impossible de générer le PDF de la facture.", "Unable to generate the invoice PDF.", "No se pudo generar el PDF de la factura.")
+            Case "msgSent" : Return Choose3(lang, "Facture {0} envoyée à {1}.", "Invoice {0} sent to {1}.", "Factura {0} enviada a {1}.")
+            Case "noteAlreadyPaid" : Return Choose3(lang, " (lien Square non ajouté : facture déjà payée)", " (Square link not added: invoice already paid)", " (enlace Square no agregado: factura ya pagada)")
+            Case "noteNotConnected" : Return Choose3(lang, " (lien Square non ajouté : compte Square non connecté)", " (Square link not added: Square account not connected)", " (enlace Square no agregado: cuenta Square no conectada)")
+            Case "noteNotGenerated" : Return Choose3(lang, " (lien Square non généré)", " (Square link not generated)", " (enlace Square no generado)")
+            Case "noteError" : Return Choose3(lang, " (lien Square non ajouté : ", " (Square link not added: ", " (enlace Square no agregado: ")
             Case Else : Return ""
         End Select
     End Function
@@ -844,14 +868,25 @@ Public Class wbfInvoiceEdit
     'puis on rebind le RadListView pour afficher les changements (exemple simple sans formulaire de saisie, juste pour montrer le principe)
     'Est appeler lors d une selection d un produit
     Private Sub Ram1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles Ram1.AjaxRequest
-        If Comptabilise Then Return
         Dim AllParam As String() = e.Argument.Split("|"c)
-        Dim CommandName As String
+        Dim CommandName As String = AllParam(0)
+
+        ' L'envoi par courriel est permis même sur une facture comptabilisée.
+        If CommandName = "SENDMAIL" Then
+            Dim includeSquare As Boolean = (AllParam.Length >= 2 AndAlso AllParam(1) = "1")
+            If InvoiceId > 0 Then
+                SendInvoiceByEmail(InvoiceId, includeSquare)
+            Else
+                ShowMsg(L("saveFirst"))
+            End If
+            Return
+        End If
+
+        If Comptabilise Then Return
         Dim ItemLineId As Integer
         Dim CustomerId As Integer
         Dim productId As Integer
         Dim accountId As Integer
-        CommandName = AllParam(0)
 
         Select Case CommandName
             Case "PRODUCT"
@@ -978,6 +1013,157 @@ Public Class wbfInvoiceEdit
 
 
         ViewState("ItemsTable") = dt
+    End Sub
+
+    ''' <summary>
+    ''' Envoie la facture (PDF en pièce jointe) au courriel de facturation du client
+    ''' via le service de courriels (T400Mails + T402Attachments). Le PDF est généré
+    ''' au besoin. Optionnellement, ajoute un lien de paiement Square dans le corps.
+    ''' Repris de wbfCustomersInvoices.SendInvoiceByEmail.
+    ''' </summary>
+    Private Sub SendInvoiceByEmail(invoiceId As Integer, includeSquare As Boolean)
+
+        ' 1. Charger les données de la facture
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
+        Dim ds As DataSet = ExecuteSQLds("s0696GetInvoiceForEmail", p)
+        If ds Is Nothing OrElse ds.Tables(0).Rows.Count = 0 Then
+            ShowMsg(L("msgNotFound"))
+            Return
+        End If
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+
+        Dim toEmail As String = If(IsDBNull(r("Email")), "", r("Email").ToString().Trim())
+        If toEmail = "" Then
+            ShowMsg(L("msgNoEmail"))
+            Return
+        End If
+
+        ' 2. S'assurer que le PDF existe (sinon le générer)
+        If IsDBNull(r("PdfData")) Then
+            Dim oGen As New clsGenerateInvoicePDF()
+            oGen.GenerateAndDownloadPdf(invoiceId)
+            ds = ExecuteSQLds("s0696GetInvoiceForEmail", p)
+            r = ds.Tables(0).Rows(0)
+        End If
+        If IsDBNull(r("PdfData")) Then
+            ShowMsg(L("msgPdfFail"))
+            Return
+        End If
+
+        Dim pdfBytes As Byte() = CType(r("PdfData"), Byte())
+        Dim docNumber As String = If(IsDBNull(r("DocumentNumber")), invoiceId.ToString(), r("DocumentNumber").ToString())
+        Dim companyName As String = If(IsDBNull(r("CompanyName")), "", r("CompanyName").ToString())
+        Dim docGuid As String = If(IsDBNull(r("DocumentGUID")), "", r("DocumentGUID").ToString())
+        Dim fileName As String = If(IsDBNull(r("PdfFileName")) OrElse r("PdfFileName").ToString() = "",
+                                    "Facture_" & docNumber & ".pdf", r("PdfFileName").ToString())
+        Dim companyGuid As Guid = CType(r("CompanyGUID"), Guid)
+        Dim reste As Decimal = If(IsDBNull(r("ResteAPayer")), 0D, CDec(r("ResteAPayer")))
+
+        ' 3. Lien de paiement Square (optionnel, sur le solde restant)
+        Dim squareLinkHtml As String = ""
+        Dim squareNote As String = ""
+        If includeSquare Then
+            squareLinkHtml = BuildSquarePaymentLink(invoiceId, docNumber, companyName, toEmail, reste, squareNote)
+        End If
+
+        ' 4. Corps HTML (+ lien de visualisation en secours)
+        Dim viewUrl As String = "https://60sec.ca/InvoicePdf.ashx?g=" & docGuid
+        Dim subject As String = "Facture " & docNumber & If(companyName <> "", " — " & companyName, "")
+        Dim body As New System.Text.StringBuilder()
+        body.Append("<div style=""font-family:Arial,sans-serif;font-size:14px;color:#0f172a"">")
+        body.Append("<p>Bonjour,</p>")
+        body.Append("<p>Veuillez trouver ci-jointe la facture <strong>").Append(Server.HtmlEncode(docNumber)).Append("</strong>")
+        If companyName <> "" Then body.Append(" de ").Append(Server.HtmlEncode(companyName))
+        body.Append(".</p>")
+        body.Append("<p><a href=""").Append(viewUrl).Append(""" style=""display:inline-block;padding:10px 18px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700"">Voir la facture (PDF)</a></p>")
+        If squareLinkHtml <> "" Then body.Append(squareLinkHtml)
+        body.Append("<p>Merci de votre confiance.</p>")
+        If companyName <> "" Then body.Append("<p>").Append(Server.HtmlEncode(companyName)).Append("</p>")
+        body.Append("</div>")
+
+        ' 5. Insérer le courriel sortant (BD MailService) -> MailId
+        Dim pm As New Collection
+        pm.Add(New SqlClient.SqlParameter("@To", toEmail))
+        pm.Add(New SqlClient.SqlParameter("@Subject", subject))
+        pm.Add(New SqlClient.SqlParameter("@HTMLBody", body.ToString()))
+        ' Reply-To = courriel vérifié de la compagnie (règle centralisée, sinon NULL)
+        CompanyMail.AddReplyToParam(pm, ConnectionString, companyGuid)
+        Dim dsm As DataSet = ExecuteSQLdsMail("s0610InsertOutboundMail", pm)
+        Dim mailId As Integer = Convert.ToInt32(dsm.Tables(0).Rows(0)(0))
+
+        ' 6. Joindre le PDF (T402Attachments + drapeau HaveAttachment)
+        Dim pa As New Collection
+        pa.Add(New SqlClient.SqlParameter("@FileName", fileName))
+        pa.Add(New SqlClient.SqlParameter("@content", pdfBytes))
+        pa.Add(New SqlClient.SqlParameter("@MailId", mailId))
+        pa.Add(New SqlClient.SqlParameter("@ContentType", "application/pdf"))
+        pa.Add(New SqlClient.SqlParameter("@ContentId", ""))
+        ExecuteSQLMail("s1579InsertAttachemnt_A", pa)
+
+        ShowMsg(String.Format(L("msgSent"), docNumber, toEmail) & squareNote)
+    End Sub
+
+    ''' <summary>
+    ''' Génère un lien de paiement Square (page hébergée) sur le solde restant de la
+    ''' facture et retourne le bloc HTML (bouton « Payer ») à insérer dans le courriel.
+    ''' Estampille la facture avec le SquareOrderId (réconciliation webhook, s0688).
+    ''' Retourne "" si impossible et remplit <paramref name="note"/> avec la raison.
+    ''' Repris de wbfCustomersInvoices.BuildSquarePaymentLink.
+    ''' </summary>
+    Private Function BuildSquarePaymentLink(invoiceId As Integer, docNumber As String,
+                                            companyName As String, buyerEmail As String,
+                                            reste As Decimal, ByRef note As String) As String
+        Try
+            If reste <= 0D Then
+                note = L("noteAlreadyPaid")
+                Return ""
+            End If
+
+            Dim token As String = ""
+            Try
+                token = GetValidSquareAccessToken()
+            Catch
+            End Try
+            If String.IsNullOrEmpty(token) Then
+                note = L("noteNotConnected")
+                Return ""
+            End If
+
+            Dim locationId As String = clsSquare.GetMainLocationId(token)
+            Dim cents As Long = CLng(Math.Round(reste * 100D))
+            Dim name As String = "Facture #" & docNumber
+            Dim linkRes As clsSquare.SquarePaymentLinkResult =
+                clsSquare.CreatePaymentLink(token, locationId, cents, name, "Facture client #" & docNumber,
+                                            companyName, buyerEmail, UserEmail, Nothing)
+
+            If linkRes Is Nothing OrElse String.IsNullOrEmpty(linkRes.Url) Then
+                note = L("noteNotGenerated")
+                Return ""
+            End If
+
+            ' Réconciliation : estampiller la facture avec le SquareOrderId.
+            If Not String.IsNullOrEmpty(linkRes.OrderId) Then
+                Dim ps As New Collection
+                ps.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                ps.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+                ps.Add(New SqlClient.SqlParameter("@SquareOrderId", linkRes.OrderId))
+                ExecuteSQL("s0688LinkDocumentToSquareOrder", ps)
+            End If
+
+            Return "<p><a href=""" & linkRes.Url & """ style=""display:inline-block;padding:10px 18px;" &
+                   "background:#16a34a;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700"">" &
+                   "Payer maintenant (" & reste.ToString("N2") & " $)</a></p>"
+        Catch ex As Exception
+            note = L("noteError") & ex.Message & ")"
+            Return ""
+        End Try
+    End Function
+
+    ''' <summary>Affiche un message simple à l'utilisateur (fenêtre du navigateur).</summary>
+    Private Sub ShowMsg(msg As String)
+        Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "invMsg", "alert('" & safe & "');", True)
     End Sub
 
 

@@ -185,6 +185,60 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents radSave As Global.Telerik.Web.UI.RadButton
 
     '''<summary>
+    '''btnSendEmail control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents btnSendEmail As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''litDlgTitle control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDlgTitle As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDlgQuestion control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDlgQuestion As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDlgCancel control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDlgCancel As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDlgWithout control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDlgWithout As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDlgWith control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDlgWith As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
     '''hidSelectedProductId control.
     '''</summary>
     '''<remarks>
