@@ -35,6 +35,18 @@
 -- avale ses exceptions), le courriel revient a l'expiration du bail et repart. La
 -- garantie est « au moins une fois », jamais « exactement une fois ».
 -- ============================================================================
+-- ⚠️ OBLIGATOIRE. Le reglage est capture a la CREATION de la procedure et fige
+-- pour toutes ses executions. sqlcmd a QUOTED_IDENTIFIER OFF par defaut (ADO.NET
+-- l'a ON), et une procedure creee en OFF echoue a l'INSERT sur une table portant
+-- un index filtre : « INSERT failed because the following SET options have
+-- incorrect settings: 'QUOTED_IDENTIFIER' ». C'est exactement ce qui est arrive
+-- lors du premier deploiement de ce script, la definition exportee depuis
+-- sys.sql_modules ne portant aucun SET. Les procs voisines (s0610, s1572, s1575)
+-- sont toutes en ON : verifier avec sys.sql_modules.uses_quoted_identifier.
+SET QUOTED_IDENTIFIER ON;
+SET ANSI_NULLS ON;
+GO
+
 CREATE OR ALTER PROCEDURE [dbo].[s1570GetOneMail_A]
 AS
 BEGIN
