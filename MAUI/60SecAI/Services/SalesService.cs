@@ -75,6 +75,31 @@ public class SalesService
 		return info?.Name ?? string.Empty;
 	}
 
+	/// <summary>Envoie la facture au client par courriel (PDF + lien Square optionnel).</summary>
+	public async Task<SendInvoiceResult?> SendInvoiceAsync(int invoiceId, bool includeSquare, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsJsonAsync(
+			$"api/sales/invoices/{invoiceId}/send", new SendInvoiceRequest(includeSquare), JsonOptions, ct);
+		if (!response.IsSuccessStatusCode)
+		{
+			return null;
+		}
+
+		return await response.Content.ReadFromJsonAsync<SendInvoiceResult>(JsonOptions, ct);
+	}
+
+	/// <summary>Génère (sans courriel) un lien de paiement Square pour la facture.</summary>
+	public async Task<PaymentLinkResult?> CreatePaymentLinkAsync(int invoiceId, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsync($"api/sales/invoices/{invoiceId}/paymentlink", null, ct);
+		if (!response.IsSuccessStatusCode)
+		{
+			return null;
+		}
+
+		return await response.Content.ReadFromJsonAsync<PaymentLinkResult>(JsonOptions, ct);
+	}
+
 	/// <summary>Liste des photos d'une facture (métadonnées + date de prise).</summary>
 	public async Task<IReadOnlyList<InvoicePhotoDto>> GetInvoicePhotosAsync(int invoiceId, CancellationToken ct = default)
 		=> await _http.GetFromJsonAsync<List<InvoicePhotoDto>>($"api/sales/invoices/{invoiceId}/photos", JsonOptions, ct) ?? [];

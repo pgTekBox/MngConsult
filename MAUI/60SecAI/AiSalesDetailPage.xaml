@@ -125,7 +125,7 @@
                             <TapGestureRecognizer Command="{Binding BindingContext.OpenInvoiceCommand, Source={x:Reference Page}}"
                                                   CommandParameter="{Binding Id}" />
                         </Border.GestureRecognizers>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto" ColumnSpacing="10" VerticalOptions="Center">
+                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
                             <Label Grid.Column="0" Text="{Binding Icon}" FontSize="16"
                                    TextColor="{Binding AmountColor}" VerticalOptions="Center" />
                             <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
@@ -148,7 +148,12 @@
                                     <TapGestureRecognizer Tapped="OnViewPhotosTapped" />
                                 </Label.GestureRecognizers>
                             </Label>
-                            <Label Grid.Column="5" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
+                            <Label Grid.Column="5" Text="&#128231;" FontSize="18" VerticalOptions="Center" Padding="6,4">
+                                <Label.GestureRecognizers>
+                                    <TapGestureRecognizer Tapped="OnSendInvoiceTapped" />
+                                </Label.GestureRecognizers>
+                            </Label>
+                            <Label Grid.Column="6" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>

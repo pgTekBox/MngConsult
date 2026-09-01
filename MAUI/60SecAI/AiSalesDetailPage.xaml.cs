@@ -38,6 +38,129 @@ public partial class AiSalesDetailPage : ContentPage
 	private async void OnNewInvoiceClicked(object? sender, EventArgs e)
 		=> await Shell.Current.GoToAsync(nameof(NewInvoicePage));
 
+	/// <summary>Envoie la facture au client par courriel (PDF + lien Square optionnel).</summary>
+	private async void OnSendInvoiceTapped(object? sender, TappedEventArgs e)
+	{
+		if ((sender as BindableObject)?.BindingContext is not InvoiceListItem invoice || invoice.Id <= 0)
+		{
+			return;
+		}
+
+		var loc = LocalizationResourceManager.Instance;
+		var choice = await DisplayActionSheetAsync(loc["SendTitle"], loc["Cancel"], null,
+			loc["SendWithout"], loc["SendWithSquare"], loc["GenLink"], loc["SendSms"]);
+
+		if (choice == loc["SendWithout"])
+		{
+			await SendInvoiceEmailAsync(invoice.Id, false, loc);
+		}
+		else if (choice == loc["SendWithSquare"])
+		{
+			await SendInvoiceEmailAsync(invoice.Id, true, loc);
+		}
+		else if (choice == loc["GenLink"])
+		{
+			await GeneratePaymentLinkAsync(invoice.Id, sendSms: false, loc);
+		}
+		else if (choice == loc["SendSms"])
+		{
+			await GeneratePaymentLinkAsync(invoice.Id, sendSms: true, loc);
+		}
+	}
+
+	/// <summary>Envoie la facture par courriel (avec ou sans lien Square).</summary>
+	private async Task SendInvoiceEmailAsync(int invoiceId, bool includeSquare, LocalizationResourceManager loc)
+	{
+		try
+		{
+			var result = await ServiceHelper.GetService<SalesService>().SendInvoiceAsync(invoiceId, includeSquare);
+			await DisplayAlertAsync(loc["SendTitle"], BuildSendMessage(result, loc), "OK");
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync(loc["SendTitle"], ex.Message, "OK");
+		}
+	}
+
+	/// <summary>Génère le lien de paiement Square, puis le copie (ou l'envoie par SMS).</summary>
+	private async Task GeneratePaymentLinkAsync(int invoiceId, bool sendSms, LocalizationResourceManager loc)
+	{
+		try
+		{
+			var result = await ServiceHelper.GetService<SalesService>().CreatePaymentLinkAsync(invoiceId);
+			if (result is null)
+			{
+				await DisplayAlertAsync(loc["SendTitle"], loc["SendFailed"], "OK");
+				return;
+			}
+
+			if (result.Status != "Created" || string.IsNullOrWhiteSpace(result.Url))
+			{
+				var reason = result.Status switch
+				{
+					"AlreadyPaid" => loc["LinkAlreadyPaid"],
+					"NotConnected" => loc["LinkNotConnected"],
+					"NotFound" => loc["SendNotFound"],
+					_ => loc["LinkFailed"],
+				};
+				await DisplayAlertAsync(loc["SendTitle"], reason, "OK");
+				return;
+			}
+
+			if (sendSms)
+			{
+				var body = string.Format(loc["SmsBody"], result.DocNumber, result.Url);
+				var message = string.IsNullOrWhiteSpace(result.Phone)
+					? new SmsMessage(body, Array.Empty<string>())
+					: new SmsMessage(body, new[] { result.Phone });
+				await Sms.Default.ComposeAsync(message);
+			}
+			else
+			{
+				await Clipboard.Default.SetTextAsync(result.Url);
+				await DisplayAlertAsync(loc["SendTitle"], string.Format(loc["LinkCopied"], result.Url), "OK");
+			}
+		}
+		catch (FeatureNotSupportedException)
+		{
+			await DisplayAlertAsync(loc["SendTitle"], loc["SmsNotSupported"], "OK");
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync(loc["SendTitle"], ex.Message, "OK");
+		}
+	}
+
+	/// <summary>Construit le message localisé à partir du statut d'envoi renvoyé par l'API.</summary>
+	private static string BuildSendMessage(SendInvoiceResult? result, LocalizationResourceManager loc)
+	{
+		if (result is null)
+		{
+			return loc["SendFailed"];
+		}
+
+		switch (result.Status)
+		{
+			case "Sent":
+				var msg = string.Format(loc["SendSent"], result.DocNumber, result.Email);
+				var note = result.SquareStatus switch
+				{
+					"AlreadyPaid" => loc["SqAlreadyPaid"],
+					"NotConnected" => loc["SqNotConnected"],
+					"NotGenerated" => loc["SqNotGenerated"],
+					"Error" => loc["SqError"],
+					_ => string.Empty,
+				};
+				return msg + note;
+			case "NoEmail":
+				return loc["SendNoEmail"];
+			case "PdfFail":
+				return loc["SendPdfFail"];
+			default:
+				return loc["SendNotFound"];
+		}
+	}
+
 	/// <summary>Ouvre la liste des photos de la facture.</summary>
 	private async void OnViewPhotosTapped(object? sender, TappedEventArgs e)
 	{
