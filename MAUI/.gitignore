@@ -15,6 +15,7 @@
 
 # Secrets d'environnement (jetons Square, etc.) — ne JAMAIS committer
 **/appsettings.Production.json
+**/appsettings.Development.json
 
 # Clés de signature Android (ne JAMAIS committer)
 signing/
