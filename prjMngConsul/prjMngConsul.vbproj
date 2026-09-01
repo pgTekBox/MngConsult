@@ -352,6 +352,7 @@
     <Content Include="Database\sp_ComptabiliserDocument.sql" />
     <Content Include="Database\s0040SaveInvoiceItems.sql" />
     <Content Include="Database\s0026GetCustomersInvoices.sql" />
+    <Content Include="Database\s0727GetInvoicePhotosWeb.sql" />
     <Content Include="Database\s0115GetInvoiceForPdf.sql" />
     <Content Include="Database\s0696GetInvoiceForEmail.sql" />
     <Content Include="Database\remove_PDF_LOGO_PATH_param.sql" />
@@ -509,6 +510,7 @@
     <Content Include="apple\LISEZMOI.md" />
     <Content Include="android\LISEZMOI.md" />
     <Content Include="InvoicePdf.ashx" />
+    <Content Include="InvoicePhoto.ashx" />
     <Content Include="MailAttachment.ashx" />
     <None Include="Scripts\jquery-3.7.0.intellisense.js" />
     <Content Include="Scripts\jquery-3.7.0.js" />

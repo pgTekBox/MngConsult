@@ -43,6 +43,9 @@ Public Class wbfCustomersInvoices
         SetLiteral(Me, "litDlgLink", L("dlgLink"))
         SetLiteral(Me, "litDlgLinkSub", L("dlgLinkSub"))
         SetLiteral(Me, "litDlgPaidNote", L("dlgPaidNote"))
+        ' Titre/sous-titre de la visionneuse : posés par LoadInvoicePhotos (qui
+        ' s'exécute après Page_Load), pas ici.
+        SetLiteral(Me, "litPhotoClose", L("dlgCancel"))
     End Sub
 
     ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
@@ -126,6 +129,14 @@ Public Class wbfCustomersInvoices
             Case "noteError" : Return Choose3(lang, " (lien Square non ajouté : ", " (Square link not added: ", " (enlace Square no agregado: ")
             Case "msgImportDone" : Return Choose3(lang, "{0} facture(s) et {1} paiement(s) traités depuis Square.", "{0} invoice(s) and {1} payment(s) processed from Square.", "{0} factura(s) y {1} pago(s) procesados desde Square.")
             Case "msgImportError" : Return Choose3(lang, "Erreur lors de l'import Square : ", "Error during Square import: ", "Error durante la importación de Square: ")
+            Case "tipPhotos" : Return Choose3(lang, "{0} photo(s) prise(s) sur place — cliquer pour voir", "{0} photo(s) taken on site — click to view", "{0} foto(s) tomadas en el lugar — clic para ver")
+            Case "tipGeo" : Return Choose3(lang, "Lieu d'intervention — ouvrir la carte", "Job location — open the map", "Lugar de intervención — abrir el mapa")
+            Case "photoTitle" : Return Choose3(lang, "Photos — facture {0}", "Photos — invoice {0}", "Fotos — factura {0}")
+            Case "photoSubtitle" : Return Choose3(lang, "{0} photo(s)", "{0} photo(s)", "{0} foto(s)")
+            Case "photoNone" : Return Choose3(lang, "Aucune photo pour cette facture.", "No photo for this invoice.", "Ninguna foto para esta factura.")
+            Case "photoGeoLabel" : Return Choose3(lang, "Lieu d'intervention", "Job location", "Lugar de intervención")
+            Case "photoGeoAt" : Return Choose3(lang, "capté le {0}", "captured on {0}", "capturado el {0}")
+            Case "photoGeoLink" : Return Choose3(lang, "Ouvrir dans Google Maps", "Open in Google Maps", "Abrir en Google Maps")
             Case Else : Return ""
         End Select
     End Function
@@ -184,6 +195,166 @@ Public Class wbfCustomersInvoices
     End Function
 
 
+    ' =====================================================================
+    ' MÉDIAS CAPTÉS PAR L'APP MOBILE (60SecAI) : photos de chantier + géoloc.
+    ' Les données sont écrites par 60SecAI.Api (T063DocumentPhoto et
+    ' T060Document.Latitude/Longitude) ; ici on ne fait que les consulter.
+    ' =====================================================================
+
+    ''' <summary>
+    ''' Badges « photos » et « lieu » affichés sous le nom du client. Retourne ""
+    ''' quand la facture n'a ni photo ni géolocalisation (cas le plus courant),
+    ''' pour ne pas alourdir la grille d'un conteneur vide.
+    ''' </summary>
+    Public Function RenderMediaBadges(idObj As Object, photoCountObj As Object,
+                                      latObj As Object, lngObj As Object) As String
+        Dim id As Integer = 0
+        If Not Integer.TryParse(FormatIntForJs(idObj), id) OrElse id <= 0 Then Return ""
+
+        Dim count As Integer = 0
+        If photoCountObj IsNot Nothing AndAlso Not IsDBNull(photoCountObj) Then
+            Integer.TryParse(photoCountObj.ToString(), count)
+        End If
+
+        ' Latitude/Longitude sont des FLOAT : on convertit depuis l'objet SQL plutôt
+        ' que depuis sa chaîne, qui serait formatée selon la culture courante
+        ' (« 45,52 » en fr-CA) et ne se reparserait pas en invariant.
+        Dim lat As Double = 0, lng As Double = 0
+        Dim hasGeo As Boolean = False
+        If latObj IsNot Nothing AndAlso Not IsDBNull(latObj) AndAlso
+           lngObj IsNot Nothing AndAlso Not IsDBNull(lngObj) Then
+            Try
+                lat = Convert.ToDouble(latObj)
+                lng = Convert.ToDouble(lngObj)
+                hasGeo = True
+            Catch
+            End Try
+        End If
+
+        If count <= 0 AndAlso Not hasGeo Then Return ""
+
+        Dim sb As New System.Text.StringBuilder()
+        sb.Append("<span class=""media-badges"">")
+
+        If count > 0 Then
+            sb.Append("<span class=""media-badge"" title=""")
+            sb.Append(Server.HtmlEncode(String.Format(L("tipPhotos"), count)))
+            sb.Append(""" onclick=""openPhotos(").Append(id).Append(");"">")
+            sb.Append(SvgCamera()).Append(count.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            sb.Append("</span>")
+        End If
+
+        If hasGeo Then
+            sb.Append("<span class=""media-badge"" title=""")
+            sb.Append(Server.HtmlEncode(L("tipGeo")))
+            sb.Append(""" onclick=""openMap(").Append(InvariantNum(lat)).Append(",").Append(InvariantNum(lng))
+            sb.Append(");"">").Append(SvgPin()).Append("</span>")
+        End If
+
+        sb.Append("</span>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Nombre en culture invariante (point décimal) pour un argument JS.</summary>
+    Private Shared Function InvariantNum(value As Double) As String
+        Return value.ToString("0.######", System.Globalization.CultureInfo.InvariantCulture)
+    End Function
+
+    Private Shared Function SvgCamera() As String
+        Return "<svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2"" " &
+               "stroke-linecap=""round"" stroke-linejoin=""round"">" &
+               "<path d=""M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3Z""/>" &
+               "<circle cx=""12"" cy=""13"" r=""3""/></svg>"
+    End Function
+
+    Private Shared Function SvgPin() As String
+        Return "<svg viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2"" " &
+               "stroke-linecap=""round"" stroke-linejoin=""round"">" &
+               "<path d=""M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z""/>" &
+               "<circle cx=""12"" cy=""10"" r=""3""/></svg>"
+    End Function
+
+    ''' <summary>
+    ''' Remplit la visionneuse avec les photos de la facture puis l'affiche.
+    ''' La lecture est scopée à la compagnie de la session (s0727) : la grille
+    ''' n'expose que le nombre de photos, jamais leurs identifiants.
+    ''' </summary>
+    Private Sub LoadInvoicePhotos(invoiceId As Integer)
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+        Dim ds As DataSet = ExecuteSQLds("s0727GetInvoicePhotos", p)
+
+        ' Jeu 0 = en-tête du document ; vide = facture inexistante ou d'une autre compagnie.
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            ShowSquareMessage(L("msgNotFound"))
+            Return
+        End If
+        Dim head As DataRow = ds.Tables(0).Rows(0)
+        Dim docNumber As String = If(IsDBNull(head("DocumentNumber")), invoiceId.ToString(),
+                                     head("DocumentNumber").ToString())
+
+        Dim photos As DataTable = If(ds.Tables.Count > 1, ds.Tables(1), Nothing)
+        Dim nb As Integer = If(photos Is Nothing, 0, photos.Rows.Count)
+
+        SetLiteral(Me, "litPhotoTitle", String.Format(L("photoTitle"), Server.HtmlEncode(docNumber)))
+        SetLiteral(Me, "litPhotoSubtitle", String.Format(L("photoSubtitle"), nb))
+
+        Dim sb As New System.Text.StringBuilder()
+
+        ' Bloc géolocalisation (si l'app mobile l'a captée).
+        If Not IsDBNull(head("Latitude")) AndAlso Not IsDBNull(head("Longitude")) Then
+            Dim lat As Double = Convert.ToDouble(head("Latitude"))
+            Dim lng As Double = Convert.ToDouble(head("Longitude"))
+            Dim coords As String = InvariantNum(lat) & ", " & InvariantNum(lng)
+            sb.Append("<div class=""photo-geo""><strong>").Append(Server.HtmlEncode(L("photoGeoLabel")))
+            sb.Append("</strong> : ").Append(Server.HtmlEncode(coords))
+            If Not IsDBNull(head("GeoCapturedAt")) Then
+                sb.Append(" (").Append(Server.HtmlEncode(String.Format(L("photoGeoAt"),
+                    CDate(head("GeoCapturedAt")).ToString("yyyy-MM-dd HH:mm")))).Append(")")
+            End If
+            sb.Append(" — <a href=""https://www.google.com/maps?q=").Append(InvariantNum(lat)).Append(",")
+            sb.Append(InvariantNum(lng)).Append(""" target=""_blank"" rel=""noopener"">")
+            sb.Append(Server.HtmlEncode(L("photoGeoLink"))).Append("</a></div>")
+        End If
+
+        If nb = 0 Then
+            sb.Append("<div style=""color:#64748b;font-size:13px"">").Append(Server.HtmlEncode(L("photoNone"))).Append("</div>")
+        Else
+            sb.Append("<div class=""photo-grid"">")
+            For Each r As DataRow In photos.Rows
+                ' Le blob n'est jamais dans le DataSet : chaque vignette est servie
+                ' par InvoicePhoto.ashx, lui aussi scopé à la compagnie de la session.
+                Dim url As String = "InvoicePhoto.ashx?d=" & invoiceId.ToString(System.Globalization.CultureInfo.InvariantCulture) &
+                                    "&p=" & Convert.ToInt32(r("Id")).ToString(System.Globalization.CultureInfo.InvariantCulture)
+                sb.Append("<a class=""photo-item"" href=""").Append(url).Append(""" target=""_blank"" rel=""noopener"">")
+                sb.Append("<img src=""").Append(url).Append(""" alt="""" loading=""lazy"" />")
+                sb.Append("<span class=""photo-cap"">").Append(Server.HtmlEncode(PhotoCaption(r))).Append("</span></a>")
+            Next
+            sb.Append("</div>")
+        End If
+
+        SetLiteral(Me, "litPhotoBody", sb.ToString())
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "showPhotos", "showPhotos();", True)
+    End Sub
+
+    ''' <summary>Légende d'une vignette : date de prise (EXIF si connue) et poids.</summary>
+    Private Shared Function PhotoCaption(r As DataRow) As String
+        Dim parts As New List(Of String)
+        If Not IsDBNull(r("Created")) Then
+            parts.Add(CDate(r("Created")).ToString("yyyy-MM-dd HH:mm"))
+        End If
+        If Not IsDBNull(r("SizeBytes")) Then
+            Dim ko As Double = Convert.ToDouble(r("SizeBytes")) / 1024.0
+            If ko >= 1024 Then
+                parts.Add((ko / 1024.0).ToString("N1") & " Mo")
+            Else
+                parts.Add(ko.ToString("N0") & " Ko")
+            End If
+        End If
+        Return String.Join(" · ", parts)
+    End Function
+
     Private Sub SaveInvoicePdfToDb(fileName As String, contentType As String, pdfBytes As Byte())
         'Dim cs As String = ConfigurationManager.ConnectionStrings("YourConnectionStringName").ConnectionString
 
@@ -213,6 +384,14 @@ Public Class wbfCustomersInvoices
     Private Sub RAP1_AjaxRequest(sender As Object, e As AjaxRequestEventArgs) Handles RAP1.AjaxRequest
         Dim arg As String = If(e.Argument, "")
         If arg = "refreshgrid" Then
+            rlvClientsFactures.Rebind()
+        ElseIf arg.StartsWith("photos|") Then
+            ' Format : photos|<invoiceId>
+            Dim photoId As Integer = 0
+            Integer.TryParse(arg.Split("|"c)(1), photoId)
+            If photoId > 0 Then LoadInvoicePhotos(photoId)
+            ' Le RadAjaxPanel re-rend tout son contenu : sans rebind, la grille
+            ' repartirait du ViewState. On la relit, comme le fait l'envoi courriel.
             rlvClientsFactures.Rebind()
         ElseIf arg.StartsWith("sendmail|") Then
             ' Format : sendmail|<invoiceId>|<includeSquare 0/1>

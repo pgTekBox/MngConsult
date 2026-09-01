@@ -60,7 +60,18 @@ BEGIN
         v.[StatusOld]                                      AS [Statusold],
         v.[ComptabilisationStatus],
         v.[StatusComptable]                                AS [Status],
-        v.[DocumentDate]
+        v.[DocumentDate],
+
+        -- Médias capturés par l'app mobile (60SecAI) : photos de chantier et
+        -- géolocalisation du lieu d'intervention. Servent à afficher les
+        -- indicateurs (badge photo / épingle) dans la grille des factures.
+        -- PhotoCount = 0 et Latitude/Longitude NULL quand rien n'a été capturé.
+        (SELECT COUNT(*)
+           FROM dbo.T063DocumentPhoto ph
+          WHERE ph.[DocumentId] = v.[Id])                  AS [PhotoCount],
+        d.[Latitude],
+        d.[Longitude],
+        d.[GeoCapturedAt]
     FROM [dbo].[vwCustomersInvoices] v
     LEFT JOIN dbo.T060Document d ON d.[Id] = v.[Id]
     WHERE v.[CompanyGUID] = @CompanyGUID and coalesce(nameRaw,'') like '%' + @Search +  '%';
