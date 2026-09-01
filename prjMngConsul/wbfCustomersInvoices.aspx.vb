@@ -43,6 +43,8 @@ Public Class wbfCustomersInvoices
         SetLiteral(Me, "litDlgLink", L("dlgLink"))
         SetLiteral(Me, "litDlgLinkSub", L("dlgLinkSub"))
         SetLiteral(Me, "litDlgPaidNote", L("dlgPaidNote"))
+        SetLiteral(Me, "litMediaOptTitle", L("mediaOptTitle"))
+        SetLiteral(Me, "litInclGeo", L("inclGeo"))
         ' Titre/sous-titre de la visionneuse : posés par LoadInvoicePhotos (qui
         ' s'exécute après Page_Load), pas ici.
         SetLiteral(Me, "litPhotoClose", L("dlgCancel"))
@@ -130,6 +132,11 @@ Public Class wbfCustomersInvoices
             Case "msgImportDone" : Return Choose3(lang, "{0} facture(s) et {1} paiement(s) traités depuis Square.", "{0} invoice(s) and {1} payment(s) processed from Square.", "{0} factura(s) y {1} pago(s) procesados desde Square.")
             Case "msgImportError" : Return Choose3(lang, "Erreur lors de l'import Square : ", "Error during Square import: ", "Error durante la importación de Square: ")
             Case "msgBoxTitle" : Return Choose3(lang, "Information", "Information", "Información")
+            Case "mediaOptTitle" : Return Choose3(lang, "À inclure dans le courriel", "Include in the email", "Incluir en el correo")
+            Case "inclPhotos" : Return Choose3(lang, "Joindre les {0} photo(s) prises sur place", "Attach the {0} photo(s) taken on site", "Adjuntar las {0} foto(s) tomadas en el lugar")
+            Case "inclGeo" : Return Choose3(lang, "Inclure le lien vers le lieu d'intervention", "Include the link to the job location", "Incluir el enlace al lugar de intervención")
+            Case "notePhotos" : Return Choose3(lang, " ({0} photo(s) jointe(s), {1})", " ({0} photo(s) attached, {1})", " ({0} foto(s) adjuntada(s), {1})")
+            Case "noteGeo" : Return Choose3(lang, " (lieu d'intervention inclus)", " (job location included)", " (lugar de intervención incluido)")
             Case "tipPhotos" : Return Choose3(lang, "{0} photo(s) prise(s) sur place — cliquer pour voir", "{0} photo(s) taken on site — click to view", "{0} foto(s) tomadas en el lugar — clic para ver")
             Case "tipGeo" : Return Choose3(lang, "Lieu d'intervention — ouvrir la carte", "Job location — open the map", "Lugar de intervención — abrir el mapa")
             Case "photoTitle" : Return Choose3(lang, "Photos — facture {0}", "Photos — invoice {0}", "Fotos — factura {0}")
@@ -217,20 +224,8 @@ Public Class wbfCustomersInvoices
             Integer.TryParse(photoCountObj.ToString(), count)
         End If
 
-        ' Latitude/Longitude sont des FLOAT : on convertit depuis l'objet SQL plutôt
-        ' que depuis sa chaîne, qui serait formatée selon la culture courante
-        ' (« 45,52 » en fr-CA) et ne se reparserait pas en invariant.
         Dim lat As Double = 0, lng As Double = 0
-        Dim hasGeo As Boolean = False
-        If latObj IsNot Nothing AndAlso Not IsDBNull(latObj) AndAlso
-           lngObj IsNot Nothing AndAlso Not IsDBNull(lngObj) Then
-            Try
-                lat = Convert.ToDouble(latObj)
-                lng = Convert.ToDouble(lngObj)
-                hasGeo = True
-            Catch
-            End Try
-        End If
+        Dim hasGeo As Boolean = TryGetGeo(latObj, lngObj, lat, lng)
 
         If count <= 0 AndAlso Not hasGeo Then Return ""
 
@@ -254,6 +249,32 @@ Public Class wbfCustomersInvoices
 
         sb.Append("</span>")
         Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' Extrait la géolocalisation d'une ligne. Latitude/Longitude sont des FLOAT :
+    ''' on convertit depuis l'objet SQL plutôt que depuis sa chaîne, qui serait
+    ''' formatée selon la culture courante (« 45,52 » en fr-CA) et ne se reparserait
+    ''' pas en invariant.
+    ''' </summary>
+    Private Shared Function TryGetGeo(latObj As Object, lngObj As Object,
+                                      ByRef lat As Double, ByRef lng As Double) As Boolean
+        lat = 0 : lng = 0
+        If latObj Is Nothing OrElse IsDBNull(latObj) OrElse
+           lngObj Is Nothing OrElse IsDBNull(lngObj) Then Return False
+        Try
+            lat = Convert.ToDouble(latObj)
+            lng = Convert.ToDouble(lngObj)
+            Return True
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>La facture porte-t-elle une géolocalisation ? (liaison de la grille)</summary>
+    Public Function HasGeo(latObj As Object, lngObj As Object) As Boolean
+        Dim lat As Double, lng As Double
+        Return TryGetGeo(latObj, lngObj, lat, lng)
     End Function
 
     ''' <summary>Nombre en culture invariante (point décimal) pour un argument JS.</summary>
@@ -395,15 +416,21 @@ Public Class wbfCustomersInvoices
             ' repartirait du ViewState. On la relit, comme le fait l'envoi courriel.
             rlvClientsFactures.Rebind()
         ElseIf arg.StartsWith("sendmail|") Then
-            ' Format : sendmail|<invoiceId>|<includeSquare 0/1>
+            ' Format : sendmail|<invoiceId>|<includeSquare>|<includePhotos>|<includeGeo> (0/1)
             Dim parts As String() = arg.Split("|"c)
             Dim invoiceId As Integer = 0
             Dim includeSquare As Boolean = False
+            Dim includePhotos As Boolean = False
+            Dim includeGeo As Boolean = False
             If parts.Length >= 3 Then
                 Integer.TryParse(parts(1), invoiceId)
                 includeSquare = (parts(2) = "1")
             End If
-            If invoiceId > 0 Then SendInvoiceByEmail(invoiceId, includeSquare)
+            If parts.Length >= 5 Then
+                includePhotos = (parts(3) = "1")
+                includeGeo = (parts(4) = "1")
+            End If
+            If invoiceId > 0 Then SendInvoiceByEmail(invoiceId, includeSquare, includePhotos, includeGeo)
             rlvClientsFactures.Rebind()
         End If
     End Sub
@@ -463,7 +490,8 @@ Public Class wbfCustomersInvoices
     ''' client via le service de courriels (T400Mails + T402Attachments).
     ''' Reply-To = courriel vérifié de la compagnie. Le PDF est généré au besoin.
     ''' </summary>
-    Private Sub SendInvoiceByEmail(invoiceId As Integer, includeSquare As Boolean)
+    Private Sub SendInvoiceByEmail(invoiceId As Integer, includeSquare As Boolean,
+                                   includePhotos As Boolean, includeGeo As Boolean)
 
         ' 1. Charger les données de la facture
         Dim p As New Collection
@@ -509,6 +537,36 @@ Public Class wbfCustomersInvoices
             squareLinkHtml = BuildSquarePaymentLink(invoiceId, docNumber, companyName, toEmail, reste, companyGuid, squareNote)
         End If
 
+        ' 3c. Médias captés par l'app mobile. Un seul appel sert les deux options :
+        ' s0727 renvoie l'en-tête (géoloc) puis la liste des photos, scopé compagnie.
+        Dim geoHtml As String = ""
+        Dim photoRows As New List(Of DataRow)
+        If includePhotos OrElse includeGeo Then
+            Dim pm2 As New Collection
+            pm2.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            pm2.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+            Dim dsm2 As DataSet = ExecuteSQLds("s0727GetInvoicePhotos", pm2)
+            If dsm2 IsNot Nothing AndAlso dsm2.Tables.Count > 0 AndAlso dsm2.Tables(0).Rows.Count > 0 Then
+                If includeGeo Then
+                    Dim h As DataRow = dsm2.Tables(0).Rows(0)
+                    Dim glat As Double, glng As Double
+                    If TryGetGeo(h("Latitude"), h("Longitude"), glat, glng) Then
+                        ' Lien Google Maps public : le destinataire n'a pas de session ici.
+                        Dim mapUrl As String = "https://www.google.com/maps?q=" &
+                                               InvariantNum(glat) & "," & InvariantNum(glng)
+                        geoHtml = "<p style=""margin-top:18px""><strong>Lieu d'intervention :</strong> " &
+                                  "<a href=""" & mapUrl & """>" & Server.HtmlEncode(
+                                      InvariantNum(glat) & ", " & InvariantNum(glng)) & "</a></p>"
+                    End If
+                End If
+                If includePhotos AndAlso dsm2.Tables.Count > 1 Then
+                    For Each pr As DataRow In dsm2.Tables(1).Rows
+                        photoRows.Add(pr)
+                    Next
+                End If
+            End If
+        End If
+
         ' 4. Corps HTML (+ lien de visualisation en secours)
         Dim viewUrl As String = "https://60sec.ca/InvoicePdf.ashx?g=" & docGuid
         Dim subject As String = "Facture " & docNumber & If(companyName <> "", " — " & companyName, "")
@@ -520,6 +578,13 @@ Public Class wbfCustomersInvoices
         body.Append(".</p>")
         body.Append("<p><a href=""").Append(viewUrl).Append(""" style=""display:inline-block;padding:10px 18px;background:#2563eb;color:#ffffff;text-decoration:none;border-radius:8px;font-weight:700"">Voir la facture (PDF)</a></p>")
         If squareLinkHtml <> "" Then body.Append(squareLinkHtml)
+        If photoRows.Count > 0 Then
+            body.Append("<p style=""margin-top:18px"">Vous trouverez également ")
+            body.Append(photoRows.Count.ToString(System.Globalization.CultureInfo.InvariantCulture))
+            body.Append(If(photoRows.Count = 1, " photo prise", " photos prises"))
+            body.Append(" sur place en pièce jointe.</p>")
+        End If
+        If geoHtml <> "" Then body.Append(geoHtml)
         body.Append("<p>Merci de votre confiance.</p>")
         If companyName <> "" Then body.Append("<p>").Append(Server.HtmlEncode(companyName)).Append("</p>")
         body.Append("</div>")
@@ -543,8 +608,59 @@ Public Class wbfCustomersInvoices
         pa.Add(New SqlClient.SqlParameter("@ContentId", ""))
         ExecuteSQLMail("s1579InsertAttachemnt_A", pa)
 
-        ShowSquareMessage(String.Format(L("msgSent"), docNumber, toEmail) & squareNote)
+        ' 7. Joindre les photos demandées. Le blob n'était pas dans la liste (s0727
+        ' ne renvoie que les métadonnées) : on le relit photo par photo via s0728,
+        ' lui aussi scopé compagnie. Ce sont des originaux d'appareil photo, donc
+        ' quelques Mo chacun — d'où le total rappelé dans la confirmation.
+        Dim photoNote As String = ""
+        If photoRows.Count > 0 Then
+            Dim attached As Integer = 0
+            Dim totalBytes As Long = 0
+            For Each pr As DataRow In photoRows
+                Dim pc As New Collection
+                pc.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+                pc.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+                pc.Add(New SqlClient.SqlParameter("@PhotoId", Convert.ToInt32(pr("Id"))))
+                Dim dsp As DataSet = ExecuteSQLds("s0728GetInvoicePhotoContent", pc)
+                If dsp Is Nothing OrElse dsp.Tables.Count = 0 OrElse dsp.Tables(0).Rows.Count = 0 Then Continue For
+                Dim prow As DataRow = dsp.Tables(0).Rows(0)
+                If IsDBNull(prow("ImageSource")) Then Continue For
+
+                Dim bytes As Byte() = CType(prow("ImageSource"), Byte())
+                Dim pName As String = If(IsDBNull(prow("FileName")) OrElse prow("FileName").ToString() = "",
+                                         "photo_" & Convert.ToInt32(pr("Id")).ToString() & ".jpg",
+                                         prow("FileName").ToString())
+                Dim pType As String = If(IsDBNull(prow("ContentType")) OrElse prow("ContentType").ToString() = "",
+                                         "image/jpeg", prow("ContentType").ToString())
+
+                Dim pp As New Collection
+                pp.Add(New SqlClient.SqlParameter("@FileName", pName))
+                pp.Add(New SqlClient.SqlParameter("@content", bytes))
+                pp.Add(New SqlClient.SqlParameter("@MailId", mailId))
+                pp.Add(New SqlClient.SqlParameter("@ContentType", pType))
+                pp.Add(New SqlClient.SqlParameter("@ContentId", ""))
+                ExecuteSQLMail("s1579InsertAttachemnt_A", pp)
+
+                attached += 1
+                totalBytes += bytes.LongLength
+            Next
+            If attached > 0 Then
+                photoNote = String.Format(L("notePhotos"), attached, FormatBytes(totalBytes))
+            End If
+        End If
+
+        Dim geoNote As String = If(geoHtml <> "", L("noteGeo"), "")
+
+        ShowSquareMessage(String.Format(L("msgSent"), docNumber, toEmail) &
+                          squareNote & photoNote & geoNote)
     End Sub
+
+    ''' <summary>Taille lisible (Ko / Mo) pour la confirmation d'envoi.</summary>
+    Private Shared Function FormatBytes(bytes As Long) As String
+        Dim ko As Double = bytes / 1024.0
+        If ko >= 1024 Then Return (ko / 1024.0).ToString("N1") & " Mo"
+        Return ko.ToString("N0") & " Ko"
+    End Function
 
     ''' <summary>
     ''' Génère un lien de paiement Square (page hébergée) sur le solde restant de la

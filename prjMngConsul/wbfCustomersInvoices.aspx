@@ -359,7 +359,7 @@
                                     Text=""
                                     ToolTip='<%# L("tipInvoiceSend") %>'
                                     CausesValidation="false"
-                                    OnClientClick='<%# "openInvoiceActions(" & FormatIntForJs(Eval("Id")) & "," & FormatIntForJs(Eval("PartyId")) & ",""" & FormatAmountForUrl(Eval("ResteAPayer")) & """," & If(CanCollect(Eval("StatutPaiement")), "1", "0") & "); return false;" %>' />
+                                    OnClientClick='<%# "openInvoiceActions(" & FormatIntForJs(Eval("Id")) & "," & FormatIntForJs(Eval("PartyId")) & ",""" & FormatAmountForUrl(Eval("ResteAPayer")) & """," & If(CanCollect(Eval("StatutPaiement")), "1", "0") & "," & FormatIntForJs(Eval("PhotoCount")) & "," & If(HasGeo(Eval("Latitude"), Eval("Longitude")), "1", "0") & "); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"
                                     CssClass="btn btn-icon btn-icon-edit"
@@ -465,6 +465,8 @@
             var L_EDIT_CASHIN = "<%= L("winEditCashIn") %>";
             var L_ADD_CASHIN = "<%= L("winAddCashIn") %>";
             var L_SQUARE = "<%= L("winSquare") %>";
+            // {0} = nombre de photos, substitué à l'ouverture du dialogue.
+            var L_INCL_PHOTOS = "<%= L("inclPhotos") %>";
             var L_ADD_INVOICE_TIP = "<%= L("addInvoice") %>";
             // Titre du FAB défini ici (pas de bloc de code inline dans le bouton)
             (function () {
@@ -574,6 +576,28 @@
                 <asp:Literal ID="litDlgQuestion" runat="server" />
             </div>
 
+            <%-- Médias à joindre. Le bloc entier reste caché quand la facture n'a ni
+                 photo ni géolocalisation, et chaque ligne n'apparaît que si la donnée
+                 existe (openInvoiceActions reçoit le nombre de photos et la présence
+                 de coordonnées depuis la grille). Ne concerne que les deux options
+                 d'envoi par courriel : le lien de paiement seul n'envoie rien. --%>
+            <div id="mediaOptions" style="display:none; margin-bottom:16px; padding:12px 14px;
+                 border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc;">
+                <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:8px;">
+                    <asp:Literal ID="litMediaOptTitle" runat="server" />
+                </div>
+                <label id="rowInclPhotos" style="display:none; gap:8px; align-items:center;
+                       font-size:13px; color:#0f172a; margin-bottom:6px; cursor:pointer;">
+                    <input type="checkbox" id="chkInclPhotos" />
+                    <span id="lblInclPhotos"></span>
+                </label>
+                <label id="rowInclGeo" style="display:none; gap:8px; align-items:center;
+                       font-size:13px; color:#0f172a; cursor:pointer;">
+                    <input type="checkbox" id="chkInclGeo" />
+                    <span><asp:Literal ID="litInclGeo" runat="server" /></span>
+                </label>
+            </div>
+
             <button type="button" class="dlg-opt" onclick="doSendEmail(0)">
                 <span class="dlg-opt-title"><asp:Literal ID="litDlgWithout" runat="server" /></span>
                 <span class="dlg-opt-sub"><asp:Literal ID="litDlgWithoutSub" runat="server" /></span>
@@ -635,7 +659,8 @@
         var _sendEmailAmount = "0";
 
         // canCollect = 0 quand la facture est déjà payée -> on masque les options de paiement.
-        function openInvoiceActions(id, partyId, amount, canCollect) {
+        // photoCount / hasGeo viennent de la grille : on n'offre de joindre que ce qui existe.
+        function openInvoiceActions(id, partyId, amount, canCollect, photoCount, hasGeo) {
             _sendEmailInvoiceId = id;
             _sendEmailPartyId = partyId;
             _sendEmailAmount = amount;
@@ -643,15 +668,42 @@
             document.getElementById("optSendWithLink").style.display = show;
             document.getElementById("optCopyLink").style.display = show;
             document.getElementById("optPaidNote").style.display = (show === "") ? "none" : "block";
+
+            // Cases décochées à chaque ouverture : joindre des photos au client est
+            // une décision explicite, jamais un reste de la facture précédente.
+            var nbPhotos = parseInt(photoCount, 10) || 0;
+            var geo = (hasGeo === 1 || hasGeo === "1");
+            var chkP = document.getElementById("chkInclPhotos");
+            var chkG = document.getElementById("chkInclGeo");
+            chkP.checked = false;
+            chkG.checked = false;
+            document.getElementById("lblInclPhotos").textContent =
+                L_INCL_PHOTOS.replace("{0}", nbPhotos);
+            document.getElementById("rowInclPhotos").style.display = nbPhotos > 0 ? "flex" : "none";
+            document.getElementById("rowInclGeo").style.display = geo ? "flex" : "none";
+            document.getElementById("mediaOptions").style.display =
+                (nbPhotos > 0 || geo) ? "block" : "none";
+
             document.getElementById("sendEmailOverlay").style.display = "flex";
         }
         function closeSendEmailDialog() {
             document.getElementById("sendEmailOverlay").style.display = "none";
         }
+        // Une case cochée mais sur une ligne masquée ne compte pas (la donnée n'existe pas).
         function doSendEmail(includeSquare) {
+            var p = mediaChecked("chkInclPhotos", "rowInclPhotos") ? 1 : 0;
+            var g = mediaChecked("chkInclGeo", "rowInclGeo") ? 1 : 0;
             closeSendEmailDialog();
             var mgr = $find("RAP1");
-            if (mgr) { mgr.ajaxRequest("sendmail|" + _sendEmailInvoiceId + "|" + includeSquare); }
+            if (mgr) {
+                mgr.ajaxRequest("sendmail|" + _sendEmailInvoiceId + "|" + includeSquare +
+                                "|" + p + "|" + g);
+            }
+        }
+        function mediaChecked(chkId, rowId) {
+            var c = document.getElementById(chkId);
+            var r = document.getElementById(rowId);
+            return !!(c && c.checked && r && r.style.display !== "none");
         }
         // Lien de paiement seul : ouvre la fenêtre Square (générer / copier / ouvrir).
         function doPaymentLink() {
