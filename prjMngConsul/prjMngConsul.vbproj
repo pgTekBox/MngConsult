@@ -353,6 +353,7 @@
     <Content Include="Database\s0040SaveInvoiceItems.sql" />
     <Content Include="Database\s0026GetCustomersInvoices.sql" />
     <Content Include="Database\s0727GetInvoicePhotosWeb.sql" />
+    <Content Include="Database\s1570GetOneMail_A.sql" />
     <Content Include="Database\s0115GetInvoiceForPdf.sql" />
     <Content Include="Database\s0696GetInvoiceForEmail.sql" />
     <Content Include="Database\remove_PDF_LOGO_PATH_param.sql" />
