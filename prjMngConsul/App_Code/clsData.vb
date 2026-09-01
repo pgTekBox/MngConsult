@@ -358,6 +358,23 @@ Public Class clsData
         oCom.Connection.Close()
 
     End Sub
+    ''' <summary>
+    ''' Affiche un message à l'utilisateur via la boîte définie dans Site.Master.
+    '''
+    ''' N'utilise PAS radalert : appelé depuis un script de démarrage, il s'exécute
+    ''' avant que Telerik ait créé son RadWindowManager côté client et lève
+    ''' « Cannot read properties of undefined (reading 'radalert') ». L'exception
+    ''' interrompt le traitement de la réponse AJAX, après quoi la page ne réagit
+    ''' plus aux clics suivants.
+    ''' </summary>
+    ''' <param name="msg">Texte affiché (inséré via textContent, jamais interprété).</param>
+    ''' <param name="title">Titre de la boîte ; « Information » si vide.</param>
+    Public Sub ShowMessageBox(msg As String, Optional title As String = "")
+        Dim script As String = "showAppMessage('" & HttpUtility.JavaScriptStringEncode(If(msg, "")) &
+                               "','" & HttpUtility.JavaScriptStringEncode(If(title, "")) & "');"
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "appMsg", script, True)
+    End Sub
+
     Public Function ExecuteSQLds(ByVal SQLStatement As String) As DataSet
         Dim oDa As New SqlClient.SqlDataAdapter(SQLStatement, ConnectionString)
         Dim oDs As New DataSet

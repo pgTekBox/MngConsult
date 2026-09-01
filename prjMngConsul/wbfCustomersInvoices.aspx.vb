@@ -46,8 +46,6 @@ Public Class wbfCustomersInvoices
         ' Titre/sous-titre de la visionneuse : posés par LoadInvoicePhotos (qui
         ' s'exécute après Page_Load), pas ici.
         SetLiteral(Me, "litPhotoClose", L("dlgCancel"))
-        SetLiteral(Me, "litMsgTitle", L("msgBoxTitle"))
-        SetLiteral(Me, "litMsgOk", L("msgBoxOk"))
     End Sub
 
     ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
@@ -132,7 +130,6 @@ Public Class wbfCustomersInvoices
             Case "msgImportDone" : Return Choose3(lang, "{0} facture(s) et {1} paiement(s) traités depuis Square.", "{0} invoice(s) and {1} payment(s) processed from Square.", "{0} factura(s) y {1} pago(s) procesados desde Square.")
             Case "msgImportError" : Return Choose3(lang, "Erreur lors de l'import Square : ", "Error during Square import: ", "Error durante la importación de Square: ")
             Case "msgBoxTitle" : Return Choose3(lang, "Information", "Information", "Información")
-            Case "msgBoxOk" : Return Choose3(lang, "OK", "OK", "OK")
             Case "tipPhotos" : Return Choose3(lang, "{0} photo(s) prise(s) sur place — cliquer pour voir", "{0} photo(s) taken on site — click to view", "{0} foto(s) tomadas en el lugar — clic para ver")
             Case "tipGeo" : Return Choose3(lang, "Lieu d'intervention — ouvrir la carte", "Job location — open the map", "Lugar de intervención — abrir el mapa")
             Case "photoTitle" : Return Choose3(lang, "Photos — facture {0}", "Photos — invoice {0}", "Fotos — factura {0}")
@@ -820,17 +817,10 @@ Public Class wbfCustomersInvoices
         Return DBNull.Value
     End Function
 
-    ''' <summary>
-    ''' Affiche un message à l'utilisateur via la surimpression #msgOverlay.
-    '''
-    ''' N'utilise PAS radalert : appelé depuis un script de démarrage, il s'exécute
-    ''' avant que Telerik ait créé son RadWindowManager côté client et lève
-    ''' « Cannot read properties of undefined (reading 'radalert') ». L'exception
-    ''' interrompait le traitement de la réponse AJAX, après quoi la page ne
-    ''' réagissait plus aux clics (la visionneuse de photos semblait cassée).
-    ''' </summary>
+    ' radalert levait « Cannot read properties of undefined (reading 'radalert') »
+    ' quand il partait d'un script de demarrage, ce qui cassait le traitement de la
+    ' reponse AJAX et rendait la page sourde aux clics : voir clsData.ShowMessageBox.
     Private Sub ShowSquareMessage(msg As String)
-        Dim script As String = "showAppMessage('" & HttpUtility.JavaScriptStringEncode(If(msg, "")) & "');"
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "appMsg", script, True)
+        ShowMessageBox(msg, L("msgBoxTitle"))
     End Sub
 End Class

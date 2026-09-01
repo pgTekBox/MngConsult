@@ -188,11 +188,10 @@ Public Class wbfCustomers
         Return s
     End Function
 
+    ' radalert leve « Cannot read properties of undefined (reading 'radalert') »
+    ' quand il part d'un script de demarrage : voir clsData.ShowMessageBox.
     Private Sub ShowSquareMessage(msg As String)
-        Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(ControlChars.Cr, " ").Replace(ControlChars.Lf, " ")
-        Dim titleSafe As String = L("sqTitle").Replace("'", "\'")
-        Dim script As String = "radalert('" & safe & "', 400, 200, '" & titleSafe & "');"
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "squareMsg", script, True)
+        ShowMessageBox(msg, L("sqTitle"))
     End Sub
 
     ''' <summary>Traductions de l'interface Clients (fr/en/es).</summary>
