@@ -2,6 +2,7 @@ using System.Data;
 using System.Security.Claims;
 using _60SecAI.Api.Dtos;
 using _60SecAI.Api.Security;
+using _60SecAI.Api.Services;
 using MetadataExtractor;
 using MetadataExtractor.Formats.Exif;
 using Microsoft.AspNetCore.Authorization;
@@ -295,6 +296,31 @@ public class SalesController : ControllerBase
 		var result = await cmd.ExecuteScalarAsync();
 		var newId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
 		return Ok(new { id = newId });
+	}
+
+	/// <summary>
+	/// Envoie la facture au client par courriel (PDF en pièce jointe + lien de paiement
+	/// Square optionnel). Génère le PDF au besoin. Renvoie un statut détaillé.
+	/// </summary>
+	[HttpPost("invoices/{id:int}/send")]
+	public async Task<ActionResult> SendInvoice(int id, [FromBody] SendInvoiceRequest? request,
+		[FromServices] InvoiceEmailService emailService)
+	{
+		var supportEmail = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue(ClaimTypes.Name);
+		var result = await emailService.SendAsync(CompanyGuid, id, request?.IncludeSquare ?? false, supportEmail);
+		return Ok(result);
+	}
+
+	/// <summary>
+	/// Génère (sans courriel) un lien de paiement Square pour la facture et le renvoie
+	/// (avec le téléphone du client pour un envoi SMS). Pour « Générer le lien » / « SMS ».
+	/// </summary>
+	[HttpPost("invoices/{id:int}/paymentlink")]
+	public async Task<ActionResult> CreatePaymentLink(int id, [FromServices] InvoiceEmailService emailService)
+	{
+		var supportEmail = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue(ClaimTypes.Name);
+		var result = await emailService.CreatePaymentLinkAsync(CompanyGuid, id, supportEmail);
+		return Ok(result);
 	}
 
 	/// <summary>Liste des photos d'une facture (s0720GetInvoicePhotos) : métadonnées + date de prise.</summary>
