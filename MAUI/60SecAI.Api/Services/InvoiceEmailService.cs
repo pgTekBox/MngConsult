@@ -123,8 +123,21 @@ public sealed class InvoiceEmailService
 				return (null, "AlreadyPaid", null);
 			}
 
-			string? token = null;
-			try { token = await _square.GetValidAccessTokenAsync(companyGuid); } catch { }
+			string? token;
+			try
+			{
+				token = await _square.GetValidAccessTokenAsync(companyGuid);
+			}
+			catch (SquareService.SquareConfigException ex)
+			{
+				// Compte connecté mais config API invalide (Square:TokenKey) : message dédié.
+				return (null, "Misconfigured", ex.Message);
+			}
+			catch
+			{
+				token = null;
+			}
+
 			if (string.IsNullOrEmpty(token))
 			{
 				return (null, "NotConnected", null);

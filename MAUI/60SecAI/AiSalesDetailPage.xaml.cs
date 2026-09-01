@@ -100,6 +100,7 @@ public partial class AiSalesDetailPage : ContentPage
 				{
 					"AlreadyPaid" => loc["LinkAlreadyPaid"],
 					"NotConnected" => loc["LinkNotConnected"],
+					"Misconfigured" => loc["LinkMisconfigured"],
 					"NotFound" => loc["SendNotFound"],
 					_ => loc["LinkFailed"],
 				};
@@ -147,6 +148,7 @@ public partial class AiSalesDetailPage : ContentPage
 				{
 					"AlreadyPaid" => loc["SqAlreadyPaid"],
 					"NotConnected" => loc["SqNotConnected"],
+					"Misconfigured" => loc["SqMisconfigured"],
 					"NotGenerated" => loc["SqNotGenerated"],
 					"Error" => loc["SqError"],
 					_ => string.Empty,

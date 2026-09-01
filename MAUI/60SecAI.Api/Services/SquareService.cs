@@ -31,6 +31,12 @@ public sealed class SquareService
 
 	public sealed record PaymentLinkResult(string? Id, string? Url, string? LongUrl, string? OrderId);
 
+	/// <summary>Compte Square connecté mais config API invalide (ex. Square:TokenKey manquant/incorrect).</summary>
+	public sealed class SquareConfigException : Exception
+	{
+		public SquareConfigException(string message, Exception? inner = null) : base(message, inner) { }
+	}
+
 	private sealed record TokenInfo(string? AccessToken, string? RefreshToken, string? MerchantId, DateTime ExpiresAt);
 
 	// ---------- Configuration ----------
@@ -104,57 +110,67 @@ public sealed class SquareService
 	// ---------- Jeton d'accès valide pour la compagnie (s0663 + refresh + s0662) ----------
 	public async Task<string?> GetValidAccessTokenAsync(Guid companyGuid)
 	{
+		DataRow? row = null;
 		try
 		{
-			DataRow? row = null;
-			await using (var conn = new SqlConnection(_connectionString))
+			await using var conn = new SqlConnection(_connectionString);
+			await using var cmd = new SqlCommand("s0663GetCompanySquareAuth", conn) { CommandType = CommandType.StoredProcedure };
+			cmd.Parameters.AddWithValue("@CompanyGUID", companyGuid);
+			var ds = new DataSet();
+			using var da = new SqlDataAdapter(cmd);
+			da.Fill(ds);
+			if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
 			{
-				await using var cmd = new SqlCommand("s0663GetCompanySquareAuth", conn) { CommandType = CommandType.StoredProcedure };
-				cmd.Parameters.AddWithValue("@CompanyGUID", companyGuid);
-				var ds = new DataSet();
-				using var da = new SqlDataAdapter(cmd);
-				da.Fill(ds);
-				if (ds.Tables.Count > 0 && ds.Tables[0].Rows.Count > 0)
-				{
-					row = ds.Tables[0].Rows[0];
-				}
-			}
-
-			if (row is not null)
-			{
-				var accEnc = row["SquareAccessTokenEnc"] is DBNull ? "" : row["SquareAccessTokenEnc"].ToString()!;
-				if (!string.IsNullOrEmpty(accEnc))
-				{
-					var access = Decrypt(accEnc);
-					var expires = row["SquareTokenExpiresAt"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(row["SquareTokenExpiresAt"]);
-
-					if (expires != DateTime.MinValue && expires <= DateTime.Now.AddDays(7))
-					{
-						var refEnc = row["SquareRefreshTokenEnc"] is DBNull ? "" : row["SquareRefreshTokenEnc"].ToString()!;
-						if (!string.IsNullOrEmpty(refEnc))
-						{
-							try
-							{
-								var info = await RefreshAccessTokenAsync(Decrypt(refEnc));
-								await SaveTokensAsync(companyGuid, info);
-								access = info.AccessToken ?? access;
-							}
-							catch
-							{
-								// on garde l'ancien jeton si le refresh échoue
-							}
-						}
-					}
-
-					return access;
-				}
+				row = ds.Tables[0].Rows[0];
 			}
 		}
 		catch
 		{
-			// on retombe sur le jeton de secours
+			row = null;
 		}
 
+		if (row is not null)
+		{
+			var accEnc = row["SquareAccessTokenEnc"] is DBNull ? "" : row["SquareAccessTokenEnc"].ToString()!;
+			if (!string.IsNullOrEmpty(accEnc))
+			{
+				// Un jeton EST stocké (compte connecté). S'il est illisible, c'est un
+				// problème de configuration (Square:TokenKey), pas un compte absent.
+				string access;
+				try
+				{
+					access = Decrypt(accEnc);
+				}
+				catch (Exception ex)
+				{
+					throw new SquareConfigException(
+						"Jeton Square illisible : « Square:TokenKey » est manquant ou différent de celui du site web.", ex);
+				}
+
+				var expires = row["SquareTokenExpiresAt"] is DBNull ? DateTime.MinValue : Convert.ToDateTime(row["SquareTokenExpiresAt"]);
+				if (expires != DateTime.MinValue && expires <= DateTime.Now.AddDays(7))
+				{
+					var refEnc = row["SquareRefreshTokenEnc"] is DBNull ? "" : row["SquareRefreshTokenEnc"].ToString()!;
+					if (!string.IsNullOrEmpty(refEnc))
+					{
+						try
+						{
+							var info = await RefreshAccessTokenAsync(Decrypt(refEnc));
+							await SaveTokensAsync(companyGuid, info);
+							access = info.AccessToken ?? access;
+						}
+						catch
+						{
+							// on garde l'ancien jeton si le refresh échoue
+						}
+					}
+				}
+
+				return access;
+			}
+		}
+
+		// Aucun jeton stocké : jeton de secours (sandbox), sinon null → « non connecté ».
 		return _config["Square:AccessToken"];
 	}
 
