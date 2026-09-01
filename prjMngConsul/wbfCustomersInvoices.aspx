@@ -394,31 +394,17 @@
             </div>
         </div>
 
-        <%-- Visionneuse de photos (app mobile). DOIT rester DANS le RadAjaxPanel :
-             son contenu est rempli par le serveur au retour de ajaxRequest("photos|<id>").
-             Le fond sombre utilise un onclick inline plutôt qu'un addEventListener :
-             le panneau re-rend ce bloc à chaque rebind, ce qui perdrait un écouteur. --%>
-        <div id="photoOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
-             background:rgba(15,23,42,.55); align-items:center; justify-content:center;"
-             onclick="if (event.target === this) closePhotos();">
-            <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
-                 width:92vw; max-width:900px; max-height:86vh; overflow:auto; padding:24px; box-sizing:border-box;">
-                <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
-                    <div style="font-weight:800; font-size:16px; color:#0f172a;">
-                        <asp:Literal ID="litPhotoTitle" runat="server" /></div>
-                    <div style="color:#64748b; font-size:13px;">
-                        <asp:Literal ID="litPhotoSubtitle" runat="server" /></div>
-                </div>
-
-                <asp:Literal ID="litPhotoBody" runat="server" />
-
-                <div style="display:flex; justify-content:flex-end; margin-top:18px;">
-                    <button type="button" onclick="closePhotos()"
-                        style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
-                               border-radius:10px; font-weight:700; cursor:pointer;">
-                        <asp:Literal ID="litPhotoClose" runat="server" /></button>
-                </div>
-            </div>
+        <%-- Porteur de données des photos. Seul ce bloc, invisible, vit DANS le
+             RadAjaxPanel : c'est le serveur qui le remplit au retour de
+             ajaxRequest("photos|<id>"). La surimpression visible, elle, est hors
+             du panneau (plus bas) — une surimpression re-rendue à chaque aller-retour
+             AJAX cesse de fonctionner dès qu'un autre échange a lieu (même piège que
+             le RadWindowManager, cf. commentaire en tête de page). showPhotos()
+             recopie ce contenu dans la surimpression avant de l'afficher. --%>
+        <div id="photoData" style="display:none;">
+            <span id="photoDataTitle"><asp:Literal ID="litPhotoTitle" runat="server" /></span>
+            <span id="photoDataSubtitle"><asp:Literal ID="litPhotoSubtitle" runat="server" /></span>
+            <div id="photoDataBody"><asp:Literal ID="litPhotoBody" runat="server" /></div>
         </div>
 
     </telerik:RadAjaxPanel>
@@ -615,6 +601,31 @@
         </div>
     </div>
 
+    <%-- Visionneuse de photos. HORS du RadAjaxPanel, comme le dialogue d'envoi :
+         ce noeud ne doit jamais être re-rendu par un aller-retour AJAX. Ses zones
+         sont vides au départ et remplies par showPhotos() depuis #photoData.
+         z-index au-dessus des fenêtres Telerik (radalert), qui montent très haut. --%>
+    <div id="photoOverlay" style="display:none; position:fixed; inset:0; z-index:999999;
+         background:rgba(15,23,42,.55); align-items:center; justify-content:center;"
+         onclick="if (event.target === this) closePhotos();">
+        <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+             width:92vw; max-width:900px; max-height:86vh; overflow:auto; padding:24px; box-sizing:border-box;">
+            <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
+                <div id="photoTitle" style="font-weight:800; font-size:16px; color:#0f172a;"></div>
+                <div id="photoSubtitle" style="color:#64748b; font-size:13px;"></div>
+            </div>
+
+            <div id="photoBody"></div>
+
+            <div style="display:flex; justify-content:flex-end; margin-top:18px;">
+                <button type="button" onclick="closePhotos()"
+                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                           border-radius:10px; font-weight:700; cursor:pointer;">
+                    <asp:Literal ID="litPhotoClose" runat="server" /></button>
+            </div>
+        </div>
+    </div>
+
     <script type="text/javascript">
         var _sendEmailInvoiceId = 0;
         var _sendEmailPartyId = 0;
@@ -658,9 +669,20 @@
             var mgr = $find("RAP1");
             if (mgr) { mgr.ajaxRequest("photos|" + id); }
         }
+        // Recopie le contenu produit par le serveur (#photoData, dans le panneau AJAX)
+        // vers la surimpression (hors panneau), puis l'affiche.
         function showPhotos() {
             var o = document.getElementById("photoOverlay");
-            if (o) { o.style.display = "flex"; }
+            if (!o) { return; }
+            var pairs = [["photoTitle", "photoDataTitle"],
+                         ["photoSubtitle", "photoDataSubtitle"],
+                         ["photoBody", "photoDataBody"]];
+            for (var i = 0; i < pairs.length; i++) {
+                var dst = document.getElementById(pairs[i][0]);
+                var src = document.getElementById(pairs[i][1]);
+                if (dst) { dst.innerHTML = src ? src.innerHTML : ""; }
+            }
+            o.style.display = "flex";
         }
         function closePhotos() {
             var o = document.getElementById("photoOverlay");
