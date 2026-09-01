@@ -63,6 +63,87 @@
             background-size: 20px 20px !important;
         }
 
+        /* Indicateurs médias (photos / géolocalisation captées par l'app mobile),
+           affichés sous le nom du client. Absents quand il n'y a rien à montrer. */
+        .media-badges {
+            display: flex;
+            gap: 6px;
+            margin-top: 4px;
+        }
+
+        .media-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 1px 8px 1px 6px;
+            border: 1px solid #cbd5e1;
+            border-radius: 999px;
+            background: #f8fafc;
+            font-size: 11px;
+            font-weight: 700;
+            color: #475569;
+            cursor: pointer;
+            line-height: 18px;
+        }
+
+            .media-badge:hover {
+                border-color: #2563eb;
+                color: #2563eb;
+                background: #eff6ff;
+            }
+
+            .media-badge svg {
+                width: 12px;
+                height: 12px;
+                flex: none;
+            }
+
+        /* Visionneuse de photos */
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+            gap: 12px;
+        }
+
+        .photo-item {
+            display: block;
+            border: 1px solid #e2e8f0;
+            border-radius: 10px;
+            overflow: hidden;
+            background: #f8fafc;
+            text-decoration: none;
+        }
+
+            .photo-item img {
+                display: block;
+                width: 100%;
+                height: 140px;
+                object-fit: cover;
+                background: #e2e8f0;
+            }
+
+        .photo-cap {
+            display: block;
+            padding: 6px 8px;
+            font-size: 11px;
+            color: #64748b;
+        }
+
+        .photo-geo {
+            margin-bottom: 14px;
+            padding: 10px 12px;
+            border: 1px solid #bbf7d0;
+            border-radius: 10px;
+            background: #f0fdf4;
+            font-size: 12px;
+            color: #166534;
+        }
+
+            .photo-geo a {
+                font-weight: 700;
+                color: #15803d;
+            }
+
         /* Options du dialogue « Envoyer / Encaisser » */
         .dlg-opt {
             display: block;
@@ -254,7 +335,7 @@
 
                             <%-- Ligne 2 mobile : Nom + État --%>
                             <div class="field-row2">
-                                <span class="field-customer"><%# Eval("Name") %></span>
+                                <span class="field-customer"><%# Eval("Name") %><%# RenderMediaBadges(Eval("Id"), Eval("PhotoCount"), Eval("Latitude"), Eval("Longitude")) %></span>
                                 <span class="field-statutpaiement"><%# Eval("StatutPaiement") %></span>
                                 <span class="field-resteapayer"><%# Eval("ResteAPayer") %></span>
                                 <span class="field-dejarecu"><%# Eval("DejaRecu") %></span>
@@ -313,8 +394,32 @@
             </div>
         </div>
 
+        <%-- Visionneuse de photos (app mobile). DOIT rester DANS le RadAjaxPanel :
+             son contenu est rempli par le serveur au retour de ajaxRequest("photos|<id>").
+             Le fond sombre utilise un onclick inline plutôt qu'un addEventListener :
+             le panneau re-rend ce bloc à chaque rebind, ce qui perdrait un écouteur. --%>
+        <div id="photoOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
+             background:rgba(15,23,42,.55); align-items:center; justify-content:center;"
+             onclick="if (event.target === this) closePhotos();">
+            <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+                 width:92vw; max-width:900px; max-height:86vh; overflow:auto; padding:24px; box-sizing:border-box;">
+                <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
+                    <div style="font-weight:800; font-size:16px; color:#0f172a;">
+                        <asp:Literal ID="litPhotoTitle" runat="server" /></div>
+                    <div style="color:#64748b; font-size:13px;">
+                        <asp:Literal ID="litPhotoSubtitle" runat="server" /></div>
+                </div>
 
+                <asp:Literal ID="litPhotoBody" runat="server" />
 
+                <div style="display:flex; justify-content:flex-end; margin-top:18px;">
+                    <button type="button" onclick="closePhotos()"
+                        style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                               border-radius:10px; font-weight:700; cursor:pointer;">
+                        <asp:Literal ID="litPhotoClose" runat="server" /></button>
+                </div>
+            </div>
+        </div>
 
     </telerik:RadAjaxPanel>
 
@@ -544,6 +649,30 @@
         // Fermer en cliquant le fond sombre
         document.getElementById("sendEmailOverlay").addEventListener("click", function (e) {
             if (e.target === this) closeSendEmailDialog();
+        });
+
+        // ---- Médias captés par l'app mobile ----
+        // Photos : aller-retour serveur (la grille ne connaît que le nombre, pas les
+        // identifiants). Le serveur remplit la visionneuse puis appelle showPhotos().
+        function openPhotos(id) {
+            var mgr = $find("RAP1");
+            if (mgr) { mgr.ajaxRequest("photos|" + id); }
+        }
+        function showPhotos() {
+            var o = document.getElementById("photoOverlay");
+            if (o) { o.style.display = "flex"; }
+        }
+        function closePhotos() {
+            var o = document.getElementById("photoOverlay");
+            if (o) { o.style.display = "none"; }
+        }
+        // Géolocalisation : purement client, aucun aller-retour.
+        function openMap(lat, lng) {
+            window.open("https://www.google.com/maps?q=" + lat + "," + lng, "_blank", "noopener");
+        }
+        // Échap ferme la visionneuse ouverte.
+        document.addEventListener("keydown", function (e) {
+            if (e.key === "Escape") { closePhotos(); closeSendEmailDialog(); }
         });
     </script>
 
