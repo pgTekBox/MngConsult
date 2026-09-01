@@ -162,9 +162,10 @@ Public Class wbfEmployees
 
     ' ---- Helpers ------------------------------------------------------------
 
+    ' radalert leve « Cannot read properties of undefined (reading 'radalert') »
+    ' quand il part d'un script de demarrage : voir clsData.ShowMessageBox.
     Private Sub Alert(msg As String)
-        Dim safe As String = msg.Replace("\", "\\").Replace("'", "\'").Replace(vbCr, " ").Replace(vbLf, " ")
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "empMsg", "radalert('" & safe & "', 420, 200, '" & L("winTitle").Replace("'", "\'") & "');", True)
+        ShowMessageBox(msg, L("winTitle"))
     End Sub
 
     Protected Function Val_(o As Object) As String

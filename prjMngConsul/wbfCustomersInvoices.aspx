@@ -626,29 +626,8 @@
         </div>
     </div>
 
-    <%-- Boîte de message. Remplace radalert() : appelé depuis un script de démarrage,
-         radalert s'exécute AVANT que Telerik ait créé son RadWindowManager côté client
-         et lève « Cannot read properties of undefined (reading 'radalert') ». Cette
-         exception interrompait le traitement de la réponse AJAX et laissait la page
-         sourde aux clics suivants. Une surimpression maison n'a aucune dépendance ni
-         contrainte d'ordre d'initialisation. --%>
-    <div id="msgOverlay" style="display:none; position:fixed; inset:0; z-index:999999;
-         background:rgba(15,23,42,.55); align-items:center; justify-content:center;"
-         onclick="if (event.target === this) closeAppMessage();">
-        <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
-             width:92vw; max-width:460px; padding:24px; box-sizing:border-box;">
-            <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:10px;">
-                <asp:Literal ID="litMsgTitle" runat="server" /></div>
-            <div id="msgText" style="color:#475569; font-size:14px; line-height:1.5;
-                 margin-bottom:22px; white-space:pre-wrap;"></div>
-            <div style="display:flex; justify-content:flex-end;">
-                <button type="button" onclick="closeAppMessage()"
-                    style="padding:10px 18px; border:1px solid #2563eb; background:#2563eb; color:#fff;
-                           border-radius:10px; font-weight:700; cursor:pointer;">
-                    <asp:Literal ID="litMsgOk" runat="server" /></button>
-            </div>
-        </div>
-    </div>
+    <%-- La boîte de message vit dans Site.Master (showAppMessage / closeAppMessage),
+         partagée par toutes les pages. Côté serveur : clsData.ShowMessageBox. --%>
 
     <script type="text/javascript">
         var _sendEmailInvoiceId = 0;
@@ -716,22 +695,9 @@
         function openMap(lat, lng) {
             window.open("https://www.google.com/maps?q=" + lat + "," + lng, "_blank", "noopener");
         }
-        // Boîte de message (voir le commentaire du bloc #msgOverlay).
-        // textContent et non innerHTML : le message peut contenir un nom de client.
-        function showAppMessage(text) {
-            var t = document.getElementById("msgText");
-            var o = document.getElementById("msgOverlay");
-            if (!t || !o) { return; }
-            t.textContent = text;
-            o.style.display = "flex";
-        }
-        function closeAppMessage() {
-            var o = document.getElementById("msgOverlay");
-            if (o) { o.style.display = "none"; }
-        }
-        // Échap ferme la surimpression ouverte.
+        // Échap ferme les surimpressions de cette page (celle du master gère la sienne).
         document.addEventListener("keydown", function (e) {
-            if (e.key === "Escape") { closePhotos(); closeSendEmailDialog(); closeAppMessage(); }
+            if (e.key === "Escape") { closePhotos(); closeSendEmailDialog(); }
         });
     </script>
 
