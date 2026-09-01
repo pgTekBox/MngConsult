@@ -70,7 +70,107 @@ Public Class clsReceiptImageOptimizer
         End Using
     End Function
 
+    ''' <summary>
+    ''' Réduit une photo destinée à un envoi par courriel : couleur conservée,
+    ''' contrainte sur le plus grand côté, ré-encodage JPEG. Contrairement à
+    ''' OptimizeReceiptForAI, qui vise l'OCR (niveaux de gris, contraste forcé),
+    ''' celle-ci vise un rendu fidèle chez le destinataire.
+    '''
+    ''' L'orientation EXIF est appliquée aux pixels avant le redimensionnement,
+    ''' puis abandonnée avec le reste des métadonnées : sans cela, une photo de
+    ''' téléphone prise en portrait arriverait couchée, l'étiquette qui la
+    ''' redressait ayant disparu au ré-encodage.
+    '''
+    ''' Ne renvoie jamais Nothing ni un résultat plus lourd que l'entrée : si
+    ''' l'image est illisible, d'un format non géré, ou déjà plus légère que ce
+    ''' qu'on produirait, les octets d'origine sont retournés tels quels.
+    ''' </summary>
+    ''' <param name="maxLongEdge">Plus grand côté en pixels ; 0 = pas de redimensionnement.</param>
+    ''' <param name="jpegQuality">Qualité JPEG 20-95 (bornée par SaveAsJpegBytes).</param>
+    Public Function OptimizeForEmail(inputBytes As Byte(),
+                                     Optional maxLongEdge As Integer = 1600,
+                                     Optional jpegQuality As Long = 80) As Byte()
+
+        If inputBytes Is Nothing OrElse inputBytes.Length = 0 Then Return inputBytes
+
+        Try
+            Using msIn As New MemoryStream(inputBytes)
+                Using srcImg As Image = Image.FromStream(msIn)
+
+                    ApplyExifOrientation(srcImg)
+
+                    ' On contraint le plus grand côté (et non la largeur seule) :
+                    ' une photo portrait resterait sinon très haute.
+                    Dim longEdge As Integer = Math.Max(srcImg.Width, srcImg.Height)
+                    Dim scale As Double = 1.0
+                    If maxLongEdge > 0 AndAlso longEdge > maxLongEdge Then
+                        scale = maxLongEdge / CDbl(longEdge)
+                    End If
+
+                    Dim newW As Integer = Math.Max(1, CInt(Math.Round(srcImg.Width * scale)))
+                    Dim newH As Integer = Math.Max(1, CInt(Math.Round(srcImg.Height * scale)))
+
+                    Using resized As New Bitmap(newW, newH, PixelFormat.Format24bppRgb)
+                        resized.SetResolution(96, 96)
+
+                        Using g As Graphics = Graphics.FromImage(resized)
+                            g.CompositingQuality = CompositingQuality.HighQuality
+                            g.SmoothingMode = SmoothingMode.HighQuality
+                            g.InterpolationMode = InterpolationMode.HighQualityBicubic
+                            g.PixelOffsetMode = PixelOffsetMode.HighQuality
+
+                            Using ia As New ImageAttributes()
+                                ia.SetWrapMode(WrapMode.TileFlipXY)  ' évite le liseré sur les bords
+                                g.DrawImage(srcImg,
+                                            New Rectangle(0, 0, newW, newH),
+                                            0, 0, srcImg.Width, srcImg.Height,
+                                            GraphicsUnit.Pixel, ia)
+                            End Using
+                        End Using
+
+                        Dim out As Byte() = SaveAsJpegBytes(resized, jpegQuality)
+                        If out Is Nothing OrElse out.Length = 0 OrElse out.Length >= inputBytes.Length Then
+                            Return inputBytes
+                        End If
+                        Return out
+                    End Using
+                End Using
+            End Using
+
+        Catch
+            ' Format non géré ou fichier corrompu : mieux vaut joindre l'original
+            ' que perdre la pièce jointe.
+            Return inputBytes
+        End Try
+    End Function
+
     ' --- Helpers ---
+
+    Private Const ExifOrientationId As Integer = &H112   ' 274
+
+    ''' <summary>Applique l'orientation EXIF aux pixels puis retire l'étiquette.</summary>
+    Private Sub ApplyExifOrientation(img As Image)
+        Try
+            If Not img.PropertyIdList.Contains(ExifOrientationId) Then Return
+
+            Dim prop As PropertyItem = img.GetPropertyItem(ExifOrientationId)
+            If prop Is Nothing OrElse prop.Value Is Nothing OrElse prop.Value.Length < 2 Then Return
+
+            Select Case CInt(BitConverter.ToUInt16(prop.Value, 0))
+                Case 2 : img.RotateFlip(RotateFlipType.RotateNoneFlipX)
+                Case 3 : img.RotateFlip(RotateFlipType.Rotate180FlipNone)
+                Case 4 : img.RotateFlip(RotateFlipType.Rotate180FlipX)
+                Case 5 : img.RotateFlip(RotateFlipType.Rotate90FlipX)
+                Case 6 : img.RotateFlip(RotateFlipType.Rotate90FlipNone)
+                Case 7 : img.RotateFlip(RotateFlipType.Rotate270FlipX)
+                Case 8 : img.RotateFlip(RotateFlipType.Rotate270FlipNone)
+            End Select
+
+            img.RemovePropertyItem(ExifOrientationId)
+        Catch
+            ' Pas d'EXIF exploitable : on garde l'image telle quelle.
+        End Try
+    End Sub
 
     Private Function SaveAsJpegBytes(bmp As Bitmap, quality As Long) As Byte()
         Dim q As Long = Math.Max(20, Math.Min(95, quality))

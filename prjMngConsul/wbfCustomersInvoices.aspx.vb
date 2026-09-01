@@ -616,6 +616,7 @@ Public Class wbfCustomersInvoices
         If photoRows.Count > 0 Then
             Dim attached As Integer = 0
             Dim totalBytes As Long = 0
+            Dim optimizer As New clsReceiptImageOptimizer()
             For Each pr As DataRow In photoRows
                 Dim pc As New Collection
                 pc.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
@@ -633,16 +634,28 @@ Public Class wbfCustomersInvoices
                 Dim pType As String = If(IsDBNull(prow("ContentType")) OrElse prow("ContentType").ToString() = "",
                                          "image/jpeg", prow("ContentType").ToString())
 
+                ' Redimensionnement pour le courriel : les originaux font 2-3 Mo pièce
+                ' et plusieurs photos dépasseraient vite les limites des serveurs de
+                ' courriel. L'original reste intact en base ; seule la copie jointe
+                ' est réduite. OptimizeForEmail retourne le tableau d'entrée lui-même
+                ' quand elle n'a rien pu (ou rien eu) à réduire : la comparaison de
+                ' référence dit s'il faut annoncer du JPEG.
+                Dim sendBytes As Byte() = optimizer.OptimizeForEmail(bytes)
+                If Not Object.ReferenceEquals(sendBytes, bytes) Then
+                    pType = "image/jpeg"
+                    pName = System.IO.Path.ChangeExtension(pName, ".jpg")
+                End If
+
                 Dim pp As New Collection
                 pp.Add(New SqlClient.SqlParameter("@FileName", pName))
-                pp.Add(New SqlClient.SqlParameter("@content", bytes))
+                pp.Add(New SqlClient.SqlParameter("@content", sendBytes))
                 pp.Add(New SqlClient.SqlParameter("@MailId", mailId))
                 pp.Add(New SqlClient.SqlParameter("@ContentType", pType))
                 pp.Add(New SqlClient.SqlParameter("@ContentId", ""))
                 ExecuteSQLMail("s1579InsertAttachemnt_A", pp)
 
                 attached += 1
-                totalBytes += bytes.LongLength
+                totalBytes += sendBytes.LongLength
             Next
             If attached > 0 Then
                 photoNote = String.Format(L("notePhotos"), attached, FormatBytes(totalBytes))
