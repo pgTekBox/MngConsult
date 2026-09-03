@@ -150,6 +150,16 @@ Partial Public Class wbfCustomerEdit
     Protected WithEvents txtNoTVQ As Global.Telerik.Web.UI.RadTextBox
 
     '''<summary>
+    '''litLblTermDays control.
+    '''</summary>
+    Protected WithEvents litLblTermDays As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''numTermDays control.
+    '''</summary>
+    Protected WithEvents numTermDays As Global.Telerik.Web.UI.RadNumericTextBox
+
+    '''<summary>
     '''txtNote control.
     '''</summary>
     '''<remarks>

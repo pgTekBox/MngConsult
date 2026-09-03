@@ -89,6 +89,19 @@ Public Class wbfCustomerEdit
 
     End Sub
 
+    ''' <summary>
+    ''' Délai de paiement saisi, en jours : 0 si le champ est vide, borné à [0, 365].
+    ''' C'est ce délai qui fixe l'échéance de la facture au moment de sa
+    ''' comptabilisation (DueDate = date de facture + délai).
+    ''' </summary>
+    Private Function TermDaysValue() As Integer
+        If Not numTermDays.Value.HasValue Then Return 0
+        Dim d As Integer = CInt(Math.Round(numTermDays.Value.Value))
+        If d < 0 Then Return 0
+        If d > 365 Then Return 365
+        Return d
+    End Function
+
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
     Private Sub ApplyLocalization()
         lnkBack.Text = "← " & L("backToList")
@@ -120,6 +133,7 @@ Public Class wbfCustomerEdit
         SetLiteral(Me, "litLblWebsite", L("lblWebsite"))
         SetLiteral(Me, "litLblTPS", L("lblTPS"))
         SetLiteral(Me, "litLblTVQ", L("lblTVQ"))
+        SetLiteral(Me, "litLblTermDays", L("lblTermDays"))
         SetLiteral(Me, "litLblNote", L("lblNote"))
         SetLiteral(Me, "litAddresses", L("addresses"))
 
@@ -204,6 +218,9 @@ Public Class wbfCustomerEdit
             txtNote.Text = ds.Tables(0).Rows(0)("Note").ToString()
             txtDisplayName.Text = ds.Tables(0).Rows(0)("DisplayName").ToString()
             tlblOrigine.Text = ds.Tables(0).Rows(0)("Origin").ToString()
+            ' Délai de paiement : sert à calculer l'échéance à la comptabilisation.
+            numTermDays.Value = If(IsDBNull(ds.Tables(0).Rows(0)("PaymentTermDays")), 0.0,
+                                   Convert.ToDouble(ds.Tables(0).Rows(0)("PaymentTermDays")))
             rddlPartyType.SelectedValue = ds.Tables(0).Rows(0)("Type")
             tlblCreated.Text = CDate(ds.Tables(0).Rows(0)("Created")).ToString("yyyy-MM-dd HH:mm")
             LoadAddressTableFromBD()
@@ -267,6 +284,7 @@ Public Class wbfCustomerEdit
             p.Add(New SqlClient.SqlParameter("@Note", txtNote.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@Type", rddlPartyType.SelectedValue))
             p.Add(New SqlClient.SqlParameter("@Origin", 1))
+            p.Add(New SqlClient.SqlParameter("@PaymentTermDays", TermDaysValue()))
 
 
             Dim ds As DataSet = ExecuteSQLds("s0021InsertParty", p)
@@ -289,7 +307,7 @@ Public Class wbfCustomerEdit
             p.Add(New SqlClient.SqlParameter("@TPS", txtNoTPS.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@TVQ", txtNoTVQ.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@Note", txtNote.Text.Trim()))
-            p.Add(New SqlClient.SqlParameter("@Type", rddlPartyType.SelectedValue))
+            p.Add(New SqlClient.SqlParameter("@PaymentTermDays", TermDaysValue()))
             ExecuteSQL("s0017UpdateParty", p)
 
             UpadateAllAddress()
@@ -815,6 +833,7 @@ Public Class wbfCustomerEdit
             Case "lblWebsite" : Return Choose3(lang, "Site web", "Website", "Sitio web")
             Case "lblTPS" : Return Choose3(lang, "No TPS", "GST no.", "N.º GST")
             Case "lblTVQ" : Return Choose3(lang, "No TVQ", "QST no.", "N.º QST")
+            Case "lblTermDays" : Return Choose3(lang, "Délai de paiement (jours)", "Payment terms (days)", "Plazo de pago (días)")
             Case "lblNote" : Return Choose3(lang, "Note", "Note", "Nota")
             Case "selectPh" : Return Choose3(lang, "Sélectionner…", "Select…", "Seleccionar…")
             Case "addresses" : Return Choose3(lang, "Adresses", "Addresses", "Direcciones")

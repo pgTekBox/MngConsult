@@ -363,8 +363,10 @@ Public Class wbfSupplierInvoinceEdit
             lblSupplier.Text = orow("Name").ToString()
             lblSupplier.Attributes.Add("onclick", "openSupplierPicker(this," & InvoiceId.ToString & ")")
             rdLabel.Text = orow("FullName").ToString()
-            dpIssueDate.SelectedDate = orow("IssueDate")
-            dpDueDate.SelectedDate = orow("DueDate")
+            ' s0038 renvoie les dates telles quelles : elles peuvent être nulles
+            ' (document jamais daté), auquel cas le sélecteur reste vide.
+            dpIssueDate.SelectedDate = If(IsDBNull(orow("IssueDate")), Nothing, CType(orow("IssueDate"), Date?))
+            dpDueDate.SelectedDate = If(IsDBNull(orow("DueDate")), Nothing, CType(orow("DueDate"), Date?))
 
             ' Champs spécifiques au fournisseur
             If ds.Tables(0).Columns.Contains("ReceivedDate") AndAlso Not IsDBNull(orow("ReceivedDate")) Then

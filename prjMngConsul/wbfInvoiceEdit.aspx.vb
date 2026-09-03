@@ -89,6 +89,7 @@ Public Class wbfInvoiceEdit
         btnAddLine.ToolTip = L("addLine")
         lblCapSubTotal.Text = L("subtotal")
         SetLiteral(Me, "litLblClient", L("client"))
+        SetLiteral(Me, "litLblDocNumber", L("docNumber"))
         SetLiteral(Me, "litLblInvoiceDate", L("invoiceDate"))
         SetLiteral(Me, "litLblDueDate", L("dueDate"))
         SetLiteral(Me, "litLblPosted", L("posted"))
@@ -146,6 +147,7 @@ Public Class wbfInvoiceEdit
             Case "pageTitle" : Return Choose3(lang, "Facture client — Édition", "Customer invoice — Edit", "Factura de cliente — Edición")
             Case "client" : Return Choose3(lang, "Client", "Customer", "Cliente")
             Case "selectClient" : Return Choose3(lang, "Sélectionner un client", "Select a customer", "Seleccionar un cliente")
+            Case "docNumber" : Return Choose3(lang, "Numéro", "Number", "Número")
             Case "invoiceDate" : Return Choose3(lang, "Date de facture", "Invoice date", "Fecha de factura")
             Case "dueDate" : Return Choose3(lang, "Date d'échéance", "Due date", "Fecha de vencimiento")
             Case "posted" : Return Choose3(lang, "Comptabilisé", "Posted", "Contabilizado")
@@ -346,8 +348,14 @@ Public Class wbfInvoiceEdit
             CustomerGUID = orow("PartyGUID")
             lblCustomer.Text = orow("Name").ToString()
             rdLabel.Text = orow("FullName").ToString()
-            dpIssueDate.SelectedDate = orow("IssueDate")
-            dpDueDate.SelectedDate = orow("DueDate")
+
+            ' Numéro affiché en tête : provisoire pour un brouillon (BRO-xxx),
+            ' officiel une fois la facture comptabilisée.
+            ShowDocNumber(orow("DocumentNumber"))
+
+            ' Dates laissées vides tant que la facture est un brouillon.
+            dpIssueDate.SelectedDate = If(IsDBNull(orow("IssueDate")), Nothing, CType(orow("IssueDate"), Date?))
+            dpDueDate.SelectedDate = If(IsDBNull(orow("DueDate")), Nothing, CType(orow("DueDate"), Date?))
             Comptabilise = orow("Comptabilise")
             If Comptabilise Then
                 chkPost.Checked = True
@@ -366,6 +374,18 @@ Public Class wbfInvoiceEdit
         End If
     End Sub
 
+
+    ''' <summary>
+    ''' Affiche le numéro du document en tête de page : provisoire tant que la
+    ''' facture est un brouillon (préfixe configuré dans Réglages › Facture),
+    ''' officiel dès la comptabilisation. Rien n'est affiché pour une facture
+    ''' qui n'a pas encore été enregistrée.
+    ''' </summary>
+    Private Sub ShowDocNumber(o As Object)
+        Dim n As String = If(o Is Nothing OrElse IsDBNull(o), "", o.ToString().Trim())
+        lblDocNumber.Text = Server.HtmlEncode(n)
+        pnlDocNumber.Visible = (n.Length > 0)
+    End Sub
 
     Private Sub ApplyReadOnlyMode()
         If Comptabilise Then
@@ -494,11 +514,14 @@ Public Class wbfInvoiceEdit
         Dim ParamCompanyGUID As New SqlClient.SqlParameter("@CompanyGUID", SqlDbType.UniqueIdentifier)
         ParamCompanyGUID.Value = Company
 
+        ' Un brouillon peut n'avoir aucune date : les champs vides partent en NULL,
+        ' et c'est la comptabilisation qui attribue la date de facture (aujourd'hui)
+        ' et l'échéance (date + délai du client).
         Dim ParamIssueDate As New SqlClient.SqlParameter("@IssueDate", SqlDbType.DateTime)
-        ParamIssueDate.Value = dpIssueDate.SelectedDate
+        ParamIssueDate.Value = If(dpIssueDate.SelectedDate.HasValue, CObj(dpIssueDate.SelectedDate.Value), DBNull.Value)
 
         Dim ParamDueDate As New SqlClient.SqlParameter("@DueDate", SqlDbType.DateTime)
-        ParamDueDate.Value = dpDueDate.SelectedDate
+        ParamDueDate.Value = If(dpDueDate.SelectedDate.HasValue, CObj(dpDueDate.SelectedDate.Value), DBNull.Value)
 
 
         Dim ParamItems As New SqlClient.SqlParameter("@Items", SqlDbType.Structured)

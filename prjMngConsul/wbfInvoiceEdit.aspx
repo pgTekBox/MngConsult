@@ -10,6 +10,20 @@
     <link href='css/listvew.css?v=<%=DateTime.Now.Ticks %>' rel="stylesheet" />
 
     <style>
+ .doc-number {
+    display: inline-flex;
+    align-items: baseline;
+    gap: 8px;
+    margin: 0 0 10px 0;
+    font-size: 13px;
+    color: #64748b;
+}
+ .doc-number-value {
+    font-family: Consolas, "Courier New", monospace;
+    font-size: 15px;
+    font-weight: 700;
+    color: #0f172a;
+}
  .badge-posted {
     display: inline-flex;
     align-items: center;
@@ -539,6 +553,11 @@
                 <div class="container">
 
                     <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé 🔒"></asp:Label>
+
+                    <asp:Panel ID="pnlDocNumber" runat="server" Visible="false" CssClass="doc-number">
+                        <asp:Literal ID="litLblDocNumber" runat="server" />
+                        <asp:Label ID="lblDocNumber" runat="server" CssClass="doc-number-value" />
+                    </asp:Panel>
                     <div class="card">
                         <div class="card-body">
 
