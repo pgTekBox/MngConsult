@@ -31,7 +31,11 @@ Thumbs.db
 desktop.ini
 
 # Fichiers deposes a l'execution (televersements temporaires de l'ERP)
-App_Data/TempUploads/
+**/App_Data/TempUploads/
+
+# Detritus divers (dossier temporaire de git, vidage memoire de bash)
+_program files_git_*/
+*.stackdump
 
 # Espace de travail Claude Code (sessions, worktrees)
 .claude/
