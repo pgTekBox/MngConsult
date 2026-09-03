@@ -129,6 +129,34 @@ BEGIN
             NULLIF(LTRIM(RTRIM(ISNULL(dbo.fParamS(@CompanyGUID, 'INV_DRAFT_PREFIX'), ''))), '');
         IF @DraftPrefix IS NULL SET @DraftPrefix = 'BRO';
 
+        -- ----------------------------------------------------
+        -- 1ter. Dates attribuees ICI, a la transformation en facture :
+        --       un brouillon n'a ni date de facture ni date d'echeance.
+        --         DocumentDate : aujourd'hui, si vide
+        --         DueDate      : DocumentDate + delai du tiers
+        --                        (T050Party.PaymentTermDays, 0 par defaut), si vide
+        --       Une date deja saisie n'est jamais ecrasee.
+        -- ----------------------------------------------------
+        IF @DocumentDate IS NULL
+        BEGIN
+            SET @DocumentDate = CAST(GETDATE() AS DATE);
+            UPDATE dbo.T060Document SET DocumentDate = @DocumentDate WHERE Id = @DocumentId;
+        END
+
+        IF EXISTS (SELECT 1 FROM dbo.T060Document WHERE Id = @DocumentId AND DueDate IS NULL)
+        BEGIN
+            DECLARE @TermDays INT = ISNULL((
+                SELECT TOP 1 p.PaymentTermDays
+                FROM dbo.T050Party p
+                JOIN dbo.T060Document d ON d.PartyGUID = p.PartyGUID
+                WHERE d.Id = @DocumentId), 0);
+            IF @TermDays < 0 SET @TermDays = 0;
+
+            UPDATE dbo.T060Document
+               SET DueDate = DATEADD(DAY, @TermDays, CAST(@DocumentDate AS DATE))
+             WHERE Id = @DocumentId;
+        END
+
         IF @DocumentTypeId = 1
            AND (@DocumentNumber IS NULL
                 OR @DocumentNumber LIKE 'BROUILLON-%'                                  -- ancien prefixe, documents deja en base

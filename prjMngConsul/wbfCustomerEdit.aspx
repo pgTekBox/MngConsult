@@ -565,6 +565,14 @@
                             <telerik:RadTextBox ID="txtNoTVQ" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" MaxLength="20" />
                         </div>
+                        <div class="field">
+                            <label><asp:Literal ID="litLblTermDays" runat="server" /></label>
+                            <telerik:RadNumericTextBox ID="numTermDays" runat="server"
+                                RenderMode="Lightweight" CssClass="rtbLike" Width="100px"
+                                MinValue="0" MaxValue="365" Value="0">
+                                <NumberFormat DecimalDigits="0" GroupSeparator="" />
+                            </telerik:RadNumericTextBox>
+                        </div>
                     </div>
 
                     <div class="grid1" style="margin-top:12px;">

@@ -68,6 +68,21 @@ Partial Public Class wbfInvoiceEdit
     Protected WithEvents lblPostedBadge As Global.System.Web.UI.WebControls.Label
 
     '''<summary>
+    '''pnlDocNumber control.
+    '''</summary>
+    Protected WithEvents pnlDocNumber As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litLblDocNumber control.
+    '''</summary>
+    Protected WithEvents litLblDocNumber As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''lblDocNumber control.
+    '''</summary>
+    Protected WithEvents lblDocNumber As Global.System.Web.UI.WebControls.Label
+
+    '''<summary>
     '''lblCustomer control.
     '''</summary>
     '''<remarks>

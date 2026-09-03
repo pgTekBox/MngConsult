@@ -17,8 +17,11 @@ SELECT [Id]
       ,coalesce([PartyGUID],CONVERT(UNIQUEIDENTIFIER, '00000000-0000-0000-0000-000000000000')) [PartyGUID]
       ,[DocumentTypeId]
       ,[StatusId]
-      ,coalesce([DocumentDate],getdate()) IssueDate
-	  ,coalesce(DueDate,getdate()) DueDate
+      -- Dates renvoyees TELLES QUELLES : un brouillon n'a ni date de facture ni
+      -- date d'echeance (les champs restent vides a l'ecran). Les deux sont
+      -- attribuees a la comptabilisation par sp_ComptabiliserDocument.
+      ,[DocumentDate] IssueDate
+	  ,DueDate
       ,[DocumentNumber]
       ,[SubTotal]
       ,[TPS]
