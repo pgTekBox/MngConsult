@@ -83,9 +83,17 @@ BEGIN
 
         SET @InvoiceId = SCOPE_IDENTITY();
 
-        -- Numéro de document = Id du document
+        -- Numéro provisoire. Pour une facture client non comptabilisée, il est
+        -- prefixé par le paramètre de compagnie INV_DRAFT_PREFIX (onglet
+        -- « Facture » des Réglages) ; 'BRO' si le paramètre n'est pas encore
+        -- provisionné chez la compagnie. Le numéro officiel est attribué plus
+        -- tard, à la comptabilisation (sp_ComptabiliserDocument).
+        DECLARE @DraftPrefix VARCHAR(20) =
+            NULLIF(LTRIM(RTRIM(ISNULL(dbo.fParamS(@CompanyGUID, 'INV_DRAFT_PREFIX'), ''))), '');
+        IF @DraftPrefix IS NULL SET @DraftPrefix = 'BRO';
+
         UPDATE dbo.T060Document
-        SET DocumentNumber = CASE WHEN @DocumentTypeId = 1 THEN 'BROUILLON-' + CAST(@InvoiceId AS VARCHAR(20)) ELSE CAST(@InvoiceId AS VARCHAR(20)) END
+        SET DocumentNumber = CASE WHEN @DocumentTypeId = 1 THEN @DraftPrefix + '-' + CAST(@InvoiceId AS VARCHAR(20)) ELSE CAST(@InvoiceId AS VARCHAR(20)) END
         WHERE Id = @InvoiceId;
     END
 
