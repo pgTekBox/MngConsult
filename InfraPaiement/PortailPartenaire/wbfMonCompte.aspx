@@ -42,10 +42,6 @@
 
         <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end">
             <div class="field" style="margin:0; flex:1; min-width:220px">
-                <label>Mot de passe actuel</label>
-                <asp:TextBox ID="tbCurrent" runat="server" TextMode="Password" autocomplete="current-password" />
-            </div>
-            <div class="field" style="margin:0; flex:1; min-width:220px">
                 <label>Nouveau mot de passe</label>
                 <asp:TextBox ID="tbNew" runat="server" TextMode="Password" autocomplete="new-password" />
             </div>

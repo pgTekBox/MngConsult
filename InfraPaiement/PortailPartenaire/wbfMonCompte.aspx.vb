@@ -4,10 +4,11 @@ Imports BCrypt.Net
 
 ''' <summary>
 ''' « Mon compte » : fiche de l'utilisateur partenaire connecté et changement
-''' de son mot de passe. L'utilisateur doit fournir son mot de passe actuel ;
-''' le nouveau est haché avec BCrypt côté application (la base ne voit jamais
-''' le mot de passe en clair) puis enregistré par s0123. Le changement est
-''' tracé au journal d'audit (PartnerPasswordChange).
+''' de son mot de passe. L'utilisateur saisit le nouveau mot de passe et sa
+''' confirmation (le mot de passe actuel n'est pas redemandé : la session
+''' authentifiée fait foi). Le nouveau est haché avec BCrypt côté application
+''' — la base ne voit jamais le mot de passe en clair — puis enregistré par
+''' s0123. Le changement est tracé au journal d'audit (PartnerPasswordChange).
 ''' </summary>
 Public Class wbfMonCompte
     Inherits clsData
@@ -22,7 +23,7 @@ Public Class wbfMonCompte
     Protected WithEvents litRole As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litLastLogin As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litCreated As Global.System.Web.UI.WebControls.Literal
-    Protected WithEvents tbCurrent As Global.System.Web.UI.WebControls.TextBox
+
     Protected WithEvents tbNew As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents tbConfirm As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents btnChange As Global.System.Web.UI.WebControls.Button
@@ -67,12 +68,11 @@ Public Class wbfMonCompte
         pnlOk.Visible = False
         pnlError.Visible = False
 
-        Dim current As String = If(tbCurrent.Text, "")
         Dim nouveau As String = If(tbNew.Text, "")
         Dim confirm As String = If(tbConfirm.Text, "")
 
-        If current.Length = 0 OrElse nouveau.Length = 0 OrElse confirm.Length = 0 Then
-            ShowError("Remplissez les trois champs.")
+        If nouveau.Length = 0 OrElse confirm.Length = 0 Then
+            ShowError("Remplissez les deux champs.")
             BindInfo() : Return
         End If
 
@@ -86,27 +86,23 @@ Public Class wbfMonCompte
             BindInfo() : Return
         End If
 
-        If nouveau = current Then
-            ShowError("Le nouveau mot de passe doit être différent de l'actuel.")
-            BindInfo() : Return
-        End If
-
         Dim r As DataRow = GetUser()
         If r Is Nothing Then
             ShowError("Impossible de vérifier votre compte. Réessayez.")
             Return
         End If
 
-        ' Vérification du mot de passe actuel (BCrypt).
-        Dim ok As Boolean = False
+        ' Refus d'un mot de passe identique à celui déjà en place (comparé au hash,
+        ' sans jamais demander le mot de passe actuel).
+        Dim dejaUtilise As Boolean = False
         Try
-            ok = BCrypt.Net.BCrypt.Verify(current, V(r, "PasswordHash"))
+            dejaUtilise = BCrypt.Net.BCrypt.Verify(nouveau, V(r, "PasswordHash"))
         Catch
-            ok = False
+            dejaUtilise = False
         End Try
 
-        If Not ok Then
-            ShowError("Le mot de passe actuel est incorrect.")
+        If dejaUtilise Then
+            ShowError("Ce mot de passe est déjà le vôtre. Choisissez-en un autre.")
             BindInfo() : Return
         End If
 
@@ -122,7 +118,7 @@ Public Class wbfMonCompte
                            UserEmail, "Changement de mot de passe par l'utilisateur lui-même.",
                            Request.UserHostAddress)
 
-            tbCurrent.Text = "" : tbNew.Text = "" : tbConfirm.Text = ""
+            tbNew.Text = "" : tbConfirm.Text = ""
             pnlOk.Visible = True
             litOk.Text = "Mot de passe changé. Utilisez le nouveau à votre prochaine connexion."
 
