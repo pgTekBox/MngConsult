@@ -344,11 +344,24 @@
 
                             <div class="listview-actions">
 
+                                <%-- Comptabiliser : uniquement sur un brouillon. C'est ce geste qui
+                                     attribue le numéro officiel, la date de facture et l'échéance. --%>
+                                <asp:Button ID="btnPost" runat="server"
+                                    CssClass="btn btn-icon btn-icon-post"
+                                    Text=""
+                                    ToolTip='<%# L("tipPost") %>'
+                                    Visible='<%# ShowPost(Container.DataItem) %>'
+                                    CommandName="PostInvoice"
+                                    CommandArgument='<%# Eval("Id") %>'
+                                    OnClientClick='<%# ConfirmPost() %>'
+                                    CausesValidation="false" />
+
                                 <asp:Button ID="Button1" runat="server"
                                     CssClass="field-encaissement btn btn-icon btn-icon-receipt"
                                     Text=""
                                     ToolTip='<%# L("tipCashIn") %>'
                                     CausesValidation="false"
+                                    Visible='<%# ShowCollect(Container.DataItem) %>'
                                     OnClientClick ='<%# "openRadWindowParam(" & Eval("PartyId") & ",""&PartyId=" & Eval("PartyId") & "&sens=ENCAISSEMENT "" ,""rwEncaissement"", ""wbfReceiptEditPopup.aspx"", L_EDIT_CASHIN, L_ADD_CASHIN);    return false;" %>'
                                 />
 
@@ -359,6 +372,7 @@
                                     Text=""
                                     ToolTip='<%# L("tipInvoiceSend") %>'
                                     CausesValidation="false"
+                                    Visible='<%# ShowSend(Container.DataItem) %>'
                                     OnClientClick='<%# "openInvoiceActions(" & FormatIntForJs(Eval("Id")) & "," & FormatIntForJs(Eval("PartyId")) & ",""" & FormatAmountForUrl(Eval("ResteAPayer")) & """," & If(CanCollect(Eval("StatutPaiement")), "1", "0") & "," & FormatIntForJs(Eval("PhotoCount")) & "," & If(HasGeo(Eval("Latitude"), Eval("Longitude")), "1", "0") & "); return false;" %>' />
 
                                 <asp:Button ID="btnEdit" runat="server"

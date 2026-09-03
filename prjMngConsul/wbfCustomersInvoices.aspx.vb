@@ -101,6 +101,13 @@ Public Class wbfCustomersInvoices
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "tipCashIn" : Return Choose3(lang, "Encaissement", "Cash receipt", "Cobro")
             Case "tipInvoiceSend" : Return Choose3(lang, "Envoyer la facture / Encaisser", "Send invoice / Collect", "Enviar factura / Cobrar")
+            Case "tipPost" : Return Choose3(lang, "Comptabiliser la facture", "Post the invoice", "Contabilizar la factura")
+            Case "confirmPost" : Return Choose3(lang,
+                "Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l'échéance seront attribués, et la facture ne pourra plus être modifiée.",
+                "Post this draft? The official number, invoice date and due date will be assigned, and the invoice can no longer be edited.",
+                "¿Contabilizar este borrador? Se asignarán el número oficial, la fecha de factura y el vencimiento, y la factura ya no podrá modificarse.")
+            Case "msgPosted" : Return Choose3(lang, "Facture comptabilisée.", "Invoice posted.", "Factura contabilizada.")
+            Case "msgPostFailed" : Return Choose3(lang, "Comptabilisation impossible.", "Posting failed.", "No se pudo contabilizar.")
             Case "tipEdit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
             Case "tipDelete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
             Case "empty" : Return Choose3(lang, "Aucune facture trouvée.", "No invoice found.", "No se encontró ninguna factura.")
@@ -181,6 +188,51 @@ Public Class wbfCustomersInvoices
     Public Function CanCollect(statutPaiement As Object) As Boolean
         If statutPaiement Is Nothing OrElse IsDBNull(statutPaiement) Then Return True
         Return statutPaiement.ToString().Trim().ToUpperInvariant() <> "PAYEE"
+    End Function
+
+    ' =====================================================================
+    ' Visibilité des actions de la grille
+    '   Brouillon         → seul « Comptabiliser » est offert.
+    '   Facture impayée   → encaissement et envoi.
+    '   Facture payée     → ni encaissement ni envoi (plus rien à réclamer).
+    ' =====================================================================
+
+    ''' <summary>
+    ''' Vrai pour un brouillon, c'est-à-dire un document explicitement marqué
+    ''' NON_COMPTABILISE (ce qu'écrit s0040SaveInvoiceItems à la création).
+    ''' Le statut vide ou NULL, lui, désigne des factures anciennes jamais
+    ''' estampillées (19 en base au 2026-09-03, avec de vrais numéros) : elles
+    ''' ne sont PAS des brouillons et gardent leurs boutons habituels.
+    ''' </summary>
+    Public Function IsDraft(item As Object) As Boolean
+        Dim v As Object = DataBinder.Eval(item, "ComptabilisationStatus")
+        If v Is Nothing OrElse IsDBNull(v) Then Return False
+        Return v.ToString().Trim().ToUpperInvariant() = "NON_COMPTABILISE"
+    End Function
+
+    ''' <summary>Vrai si la facture est entièrement payée.</summary>
+    Public Function IsPaid(item As Object) As Boolean
+        Return Not CanCollect(DataBinder.Eval(item, "StatutPaiement"))
+    End Function
+
+    ''' <summary>« Comptabiliser » : uniquement sur un brouillon.</summary>
+    Public Function ShowPost(item As Object) As Boolean
+        Return IsDraft(item)
+    End Function
+
+    ''' <summary>« Encaisser » : facture comptabilisée et pas encore soldée.</summary>
+    Public Function ShowCollect(item As Object) As Boolean
+        Return (Not IsDraft(item)) AndAlso (Not IsPaid(item))
+    End Function
+
+    ''' <summary>« Envoyer la facture » : même règle que l'encaissement.</summary>
+    Public Function ShowSend(item As Object) As Boolean
+        Return (Not IsDraft(item)) AndAlso (Not IsPaid(item))
+    End Function
+
+    ''' <summary>Confirmation avant comptabilisation (geste irréversible).</summary>
+    Public Function ConfirmPost() As String
+        Return "return confirm(""" & L("confirmPost") & """);"
     End Function
 
     ''' <summary>Entier sûr pour un argument JavaScript (0 si NULL / non numérique) :
@@ -482,6 +534,12 @@ Public Class wbfCustomersInvoices
                 Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
                 DeleteDocument(invoiceId)
                 rlvClientsFactures.Rebind()
+
+            Case "PostInvoice"
+                Dim invoiceId As Integer = 0
+                Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
+                If invoiceId > 0 Then PostDocument(invoiceId)
+                rlvClientsFactures.Rebind()
         End Select
     End Sub
 
@@ -734,6 +792,27 @@ Public Class wbfCustomersInvoices
             Return ""
         End Try
     End Function
+
+    ''' <summary>
+    ''' Comptabilise un brouillon depuis la grille : sp_ComptabiliserDocument
+    ''' attribue le numéro officiel, la date de facture (aujourd'hui) et
+    ''' l'échéance (date + délai du client), puis écrit au journal. Toute erreur
+    ''' remontée par la procédure est affichée telle quelle : elle explique ce
+    ''' qui manque (aucune ligne, total à zéro, période fermée…).
+    ''' </summary>
+    Sub PostDocument(invoiceId As Integer)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))
+            ExecuteSQL("sp_ComptabiliserDocument", p)
+            ShowSquareMessage(L("msgPosted"))
+        Catch ex As SqlClient.SqlException
+            ShowSquareMessage(ex.Message)
+        Catch ex As Exception
+            ShowSquareMessage(L("msgPostFailed"))
+            System.Diagnostics.Debug.WriteLine("PostDocument: " & ex.Message)
+        End Try
+    End Sub
 
     Sub DeleteDocument(invoiceId As Integer)
 
