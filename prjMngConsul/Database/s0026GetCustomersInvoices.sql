@@ -74,7 +74,11 @@ BEGIN
         d.[GeoCapturedAt]
     FROM [dbo].[vwCustomersInvoices] v
     LEFT JOIN dbo.T060Document d ON d.[Id] = v.[Id]
-    WHERE v.[CompanyGUID] = @CompanyGUID and coalesce(nameRaw,'') like '%' + @Search +  '%';
+    WHERE v.[CompanyGUID] = @CompanyGUID and coalesce(nameRaw,'') like '%' + @Search +  '%'
+    -- Ordre par defaut de la grille : de la plus recente a la plus vieille.
+    -- L'Id departage les factures de meme date (les plus recemment saisies
+    -- d'abord) et rend l'ordre deterministe.
+    ORDER BY v.[DocumentDate] DESC, v.[Id] DESC;
 
 END;
 GO
