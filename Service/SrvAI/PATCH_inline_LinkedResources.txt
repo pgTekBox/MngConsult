@@ -1,0 +1,69 @@
+================================================================================
+ PATCH SrvAI — Rendu des IMAGES INLINE (cid:) à l'envoi
+================================================================================
+But : les images inline envoyées par progIMAP (stockées dans T402Attachments avec
+ContentDisposition = 'inline' et un ContentId) doivent être reconstruites en
+"linked resources" MimeKit pour que le corps HTML (<img src="cid:...">) s'affiche
+inline chez le destinataire (Gmail inclus), au lieu d'être jointes comme fichiers.
+
+Deux changements :
+  1) BASE : s1578GetAttachment renvoie AUSSI ContentId + ContentDisposition
+     (déjà déployé ; fichier : prjMngConsul/Database/s1578GetAttachment_addChain.sql).
+     -> Rétro-compatible : SrvAI lit FileName/content par NOM, les colonnes en plus
+        sont simplement ignorées si on ne les utilise pas.
+
+  2) CODE : clsTaskMail.vb, dans SendOneMail (la boucle qui ajoute les pièces jointes,
+     ~ lignes 544-546, juste après :
+         Dim dsAtt As DataSet = ExecuteSQLds("exec s1578GetAttachment @MailId=" & MailId.ToString)
+     ).
+
+--------------------------------------------------------------------------------
+ REMPLACER CE BLOC :
+--------------------------------------------------------------------------------
+                For Each orow In dsAtt.Tables(0).Rows
+                    MyBody.Attachments.Add(orow("FileName"), orow("content"))
+                Next
+
+--------------------------------------------------------------------------------
+ PAR CELUI-CI :
+--------------------------------------------------------------------------------
+                Dim attCols = dsAtt.Tables(0).Columns
+                For Each orow In dsAtt.Tables(0).Rows
+                    Dim attFileName As String = orow("FileName").ToString()
+                    Dim attContent As Byte() = CType(orow("content"), Byte())
+                    Dim attCt As String = If(attCols.Contains("ContentType") AndAlso Not IsDBNull(orow("ContentType")), orow("ContentType").ToString(), "")
+                    Dim attCid As String = ""
+                    Dim attDisp As String = ""
+                    If attCols.Contains("ContentId") AndAlso Not IsDBNull(orow("ContentId")) Then attCid = orow("ContentId").ToString().Trim(New Char() {"<"c, ">"c, " "c})
+                    If attCols.Contains("ContentDisposition") AndAlso Not IsDBNull(orow("ContentDisposition")) Then attDisp = orow("ContentDisposition").ToString()
+                    Dim attIsInline As Boolean = (attCid <> "" AndAlso (attDisp = "" OrElse String.Equals(attDisp, "inline", StringComparison.OrdinalIgnoreCase)))
+                    If attIsInline Then
+                        ' Image inline (cid:) -> ressource liee -> rendu inline dans le corps HTML
+                        Dim res As MimeKit.MimeEntity
+                        If attCt <> "" Then
+                            res = MyBody.LinkedResources.Add(attFileName, attContent, MimeKit.ContentType.Parse(attCt))
+                        Else
+                            res = MyBody.LinkedResources.Add(attFileName, attContent)
+                        End If
+                        res.ContentId = attCid
+                    Else
+                        MyBody.Attachments.Add(attFileName, attContent)
+                    End If
+                Next
+
+--------------------------------------------------------------------------------
+ NOTES
+--------------------------------------------------------------------------------
+- `MyBody.LinkedResources` + `res.ContentId = attCid` produisent un multipart/related
+  où le HTML `cid:<attCid>` pointe sur la ressource -> image inline.
+- Sûr même AVANT la maj de s1578 : si les colonnes ContentId/ContentDisposition sont
+  absentes, `attCols.Contains(...)` est faux -> comportement identique à avant
+  (MyBody.Attachments.Add). Donc on peut déployer le code puis la proc, sans casse.
+- MimeKit 2.0 (celui référencé par SrvAI) expose bien BodyBuilder.LinkedResources,
+  AttachmentCollection.Add(fileName, data[, ContentType]) et MimeEntity.ContentId.
+- Après application : recompiler SrvAI (dossier "Assembly Mailkit" requis) et redéployer.
+
+Côté progIMAP (déjà fait) : les images inline sont insérées dans T402 via
+s0623ImapInsertAttachment avec @ContentDisposition='inline' + @ContentId, et le HTML
+conserve ses références cid:.
+================================================================================

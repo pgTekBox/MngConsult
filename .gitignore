@@ -29,3 +29,9 @@ PublishProfiles/*.pubxml.user
 *~
 Thumbs.db
 desktop.ini
+
+# Fichiers deposes a l'execution (televersements temporaires de l'ERP)
+App_Data/TempUploads/
+
+# Espace de travail Claude Code (sessions, worktrees)
+.claude/
