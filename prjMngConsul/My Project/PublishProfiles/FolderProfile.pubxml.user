@@ -3,12 +3,24 @@
 <Project>
   <PropertyGroup>
     <_PublishTargetUrl>\\Alfred\MngConsulWEB</_PublishTargetUrl>
-    <History>True|2026-07-30T14:14:30.7643640Z||;True|2026-07-30T08:19:25.5569294-04:00||;True|2026-07-23T14:58:37.3743697-04:00||;True|2026-07-23T11:18:29.9592275-04:00||;True|2026-07-22T13:56:10.3407729-04:00||;True|2026-07-21T08:55:00.8957875-04:00||;False|2026-06-25T15:19:42.3307462-04:00||;True|2026-06-15T08:22:54.9845562-04:00||;True|2026-06-01T12:59:02.9549196-04:00||;True|2026-05-28T05:16:51.3433546-04:00||;True|2026-04-29T14:46:04.8693341-04:00||;True|2026-04-24T14:48:42.6980957-04:00||;True|2026-04-09T11:35:51.6804049-04:00||;True|2026-04-07T15:58:44.3934636-04:00||;True|2026-03-16T15:55:10.6693064-04:00||;True|2026-03-16T11:26:30.1650075-04:00||;True|2026-02-26T14:36:47.0915510-05:00||;True|2026-02-25T08:46:38.8326521-05:00||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
+    <History>True|2026-09-03T17:59:35.3942819Z||;True|2026-09-02T04:03:41.2051464-04:00||;True|2026-08-25T15:05:05.5841340-04:00||;True|2026-07-30T10:14:30.7643640-04:00||;True|2026-07-30T08:19:25.5569294-04:00||;True|2026-07-23T14:58:37.3743697-04:00||;True|2026-07-23T11:18:29.9592275-04:00||;True|2026-07-22T13:56:10.3407729-04:00||;True|2026-07-21T08:55:00.8957875-04:00||;False|2026-06-25T15:19:42.3307462-04:00||;True|2026-06-15T08:22:54.9845562-04:00||;True|2026-06-01T12:59:02.9549196-04:00||;True|2026-05-28T05:16:51.3433546-04:00||;True|2026-04-29T14:46:04.8693341-04:00||;True|2026-04-24T14:48:42.6980957-04:00||;True|2026-04-09T11:35:51.6804049-04:00||;True|2026-04-07T15:58:44.3934636-04:00||;True|2026-03-16T15:55:10.6693064-04:00||;True|2026-03-16T11:26:30.1650075-04:00||;True|2026-02-26T14:36:47.0915510-05:00||;True|2026-02-25T08:46:38.8326521-05:00||;True|2026-02-25T08:20:31.4765729-05:00||;False|2026-02-24T13:49:59.2705893-05:00||;False|2026-02-24T13:48:50.8551702-05:00||;</History>
     <LastFailureDetails />
   </PropertyGroup>
   <ItemGroup>
     <File Include="About.aspx">
       <publishTime>02/11/2026 06:16:01</publishTime>
+    </File>
+    <File Include="android/LISEZMOI.md">
+      <publishTime>08/21/2026 15:43:42</publishTime>
+    </File>
+    <File Include="AppAndroid.ashx">
+      <publishTime>08/21/2026 09:27:38</publishTime>
+    </File>
+    <File Include="AppApple.ashx">
+      <publishTime>08/24/2026 15:10:25</publishTime>
+    </File>
+    <File Include="apple/LISEZMOI.md">
+      <publishTime>08/24/2026 15:10:25</publishTime>
     </File>
     <File Include="App_Data/RadCaptcha/0.wav">
       <publishTime>02/18/2025 09:10:10</publishTime>
@@ -206,10 +218,13 @@
       <publishTime>03/08/2023 07:09:56</publishTime>
     </File>
     <File Include="bin/prjMngConsul.dll">
-      <publishTime>08/06/2026 15:14:38</publishTime>
+      <publishTime>09/01/2026 13:00:37</publishTime>
     </File>
     <File Include="bin/prjMngConsul.pdb">
-      <publishTime>08/06/2026 15:14:38</publishTime>
+      <publishTime>09/01/2026 13:00:37</publishTime>
+    </File>
+    <File Include="bin/QRCoder.dll">
+      <publishTime>08/21/2026 09:12:30</publishTime>
     </File>
     <File Include="bin/QuestPDF.dll">
       <publishTime>03/20/2026 09:48:00</publishTime>
@@ -473,7 +488,7 @@
       <publishTime>02/18/2025 09:27:58</publishTime>
     </File>
     <File Include="bin/WebForms_Basic.xml">
-      <publishTime>08/06/2026 15:14:37</publishTime>
+      <publishTime>09/01/2026 13:00:35</publishTime>
     </File>
     <File Include="bin/WebGrease.dll">
       <publishTime>01/23/2014 13:57:34</publishTime>
@@ -665,7 +680,7 @@
       <publishTime>06/02/2026 08:25:38</publishTime>
     </File>
     <File Include="Database/s0026GetCustomersInvoices.sql">
-      <publishTime>07/20/2026 15:23:29</publishTime>
+      <publishTime>09/01/2026 09:07:06</publishTime>
     </File>
     <File Include="Database/s0038GetInvoiceById.sql">
       <publishTime>07/31/2026 09:54:40</publishTime>
@@ -934,6 +949,9 @@
     <File Include="Database/s0714ImapGetCredential.sql">
       <publishTime>08/04/2026 08:56:14</publishTime>
     </File>
+    <File Include="Database/s0727GetInvoicePhotosWeb.sql">
+      <publishTime>09/01/2026 09:07:06</publishTime>
+    </File>
     <File Include="Database/s1578GetAttachment_addChain.sql">
       <publishTime>08/04/2026 13:32:54</publishTime>
     </File>
@@ -1141,6 +1159,9 @@
     <File Include="InvoicePdf.ashx">
       <publishTime>07/20/2026 13:42:50</publishTime>
     </File>
+    <File Include="InvoicePhoto.ashx">
+      <publishTime>09/01/2026 09:07:06</publishTime>
+    </File>
     <File Include="js/JsonView.js">
       <publishTime>03/16/2026 15:37:04</publishTime>
     </File>
@@ -1154,7 +1175,7 @@
       <publishTime>03/13/2026 15:45:04</publishTime>
     </File>
     <File Include="LandingPage.aspx">
-      <publishTime>07/04/2026 06:55:55</publishTime>
+      <publishTime>08/24/2026 14:25:44</publishTime>
     </File>
     <File Include="LandingPagesNEW.html">
       <publishTime>07/03/2026 15:54:11</publishTime>
@@ -1179,6 +1200,9 @@
     </File>
     <File Include="Receipts.aspx">
       <publishTime>07/06/2026 11:46:12</publishTime>
+    </File>
+    <File Include="rendu.html">
+      <publishTime>09/03/2026 11:51:22</publishTime>
     </File>
     <File Include="Scripts/bootstrap.bundle.js">
       <publishTime>02/11/2026 06:04:56</publishTime>
@@ -1301,7 +1325,7 @@
       <publishTime>02/11/2026 06:05:01</publishTime>
     </File>
     <File Include="Site.Master">
-      <publishTime>05/14/2026 11:10:34</publishTime>
+      <publishTime>09/01/2026 10:38:02</publishTime>
     </File>
     <File Include="Site.Mobile.Master">
       <publishTime>02/11/2026 06:16:01</publishTime>
@@ -1376,7 +1400,7 @@
       <publishTime>07/30/2026 15:49:50</publishTime>
     </File>
     <File Include="wbfCustomersInvoices.aspx">
-      <publishTime>07/30/2026 15:50:30</publishTime>
+      <publishTime>09/01/2026 10:47:37</publishTime>
     </File>
     <File Include="wbfEmployeeEdit.aspx">
       <publishTime>08/05/2026 10:45:59</publishTime>
@@ -1574,7 +1598,7 @@
       <publishTime>07/06/2026 11:46:13</publishTime>
     </File>
     <File Include="Web.config">
-      <publishTime>07/30/2026 14:02:42</publishTime>
+      <publishTime>09/03/2026 13:59:02</publishTime>
     </File>
   </ItemGroup>
 </Project>

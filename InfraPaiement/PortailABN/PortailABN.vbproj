@@ -89,7 +89,9 @@
     <Import Include="System.Web.UI.WebControls" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\clsData.vb" />
+    <Compile Include="App_Code\clsData.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="App_Code\clsRememberMe.vb" />
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>

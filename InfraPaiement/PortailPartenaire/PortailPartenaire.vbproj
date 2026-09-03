@@ -89,7 +89,9 @@
     <Import Include="System.Web.UI.WebControls" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="App_Code\clsData.vb" />
+    <Compile Include="App_Code\clsData.vb">
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
     <Compile Include="App_Code\clsAudit.vb" />
     <Compile Include="App_Code\clsKyb.vb" />
     <Compile Include="Global.asax.vb">
@@ -122,7 +124,6 @@
     </Compile>
     <Compile Include="wbfMonCompte.aspx.vb">
       <DependentUpon>wbfMonCompte.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
   </ItemGroup>
   <ItemGroup>
@@ -133,14 +134,15 @@
     <Content Include="wbfAbonnes.aspx" />
     <Content Include="wbfAbonne.aspx" />
     <Content Include="wbfApiKeys.aspx" />
-    <Content Include="wbfMonCompte.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Images\logo.svg" />
+    <Content Include="wbfMonCompte.aspx" />
     <Content Include="Web.config" />
     <Content Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="bin\" />
+    <Folder Include="My Project\" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
