@@ -93,6 +93,17 @@
                 </asp:Repeater>
                 <asp:Panel ID="pnlNoUsers" runat="server" Visible="false"><p class="sub">Aucun utilisateur.</p></asp:Panel>
 
+                <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin:-4px 0 4px">
+                    <div class="field" style="margin:0; flex:1; min-width:200px">
+                        <label>Mot de passe pour « Réinitialiser »</label>
+                        <asp:TextBox ID="tbResetPwd" runat="server" TextMode="Password" placeholder="laisser vide = généré" />
+                    </div>
+                </div>
+                <p class="sub" style="margin:0 0 4px; font-size:12px">
+                    Laissez le champ vide et « Réinitialiser » tirera un mot de passe fort, affiché une seule fois.
+                    Sinon, saisissez celui de votre choix (8 caractères minimum) : il sera appliqué tel quel, sans être réaffiché.
+                </p>
+
                 <div style="border-top:1px solid var(--line); padding-top:14px; margin-top:4px">
                     <div class="form-grid">
                         <div class="field"><label>Courriel *</label><asp:TextBox ID="tbUserEmail" runat="server" TextMode="Email" /></div>

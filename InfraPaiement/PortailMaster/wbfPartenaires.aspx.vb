@@ -45,6 +45,7 @@ Public Class wbfPartenaires
     Protected WithEvents tbUserLast As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents cbUserAdmin As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents btnCreateUser As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents tbResetPwd As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents pnlNewPwd As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litNewPwd As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litNewPwdUser As Global.System.Web.UI.WebControls.Literal
@@ -283,7 +284,15 @@ Public Class wbfPartenaires
                 BindDetail() : ShowErr("Utilisateur introuvable pour ce partenaire.") : Return
             End If
 
-            Dim clair As String = GeneratePassword()
+            ' Champ vide = mot de passe genere ; sinon celui saisi par le staff.
+            Dim saisi As String = If(tbResetPwd.Text, "")
+            Dim genere As Boolean = (saisi.Length = 0)
+
+            If Not genere AndAlso saisi.Length < 8 Then
+                BindDetail() : ShowErr("Le mot de passe saisi doit contenir au moins 8 caractères (ou laissez le champ vide pour en générer un).") : Return
+            End If
+
+            Dim clair As String = If(genere, GeneratePassword(), saisi)
             Dim hash As String = BCrypt.Net.BCrypt.HashPassword(clair, 11)
 
             ExecuteSQL("s0123ChangePartnerUserPassword", Params(
@@ -291,14 +300,21 @@ Public Class wbfPartenaires
                 New SqlParameter("@PasswordHash", hash)))
 
             clsAudit.Write(AdminId, AdminEmail, "PartnerUserPasswordReset", "Partenaire", SelectedId,
-                           email, "Mot de passe réinitialisé par le staff (généré, affiché une fois).",
+                           email, If(genere, "Mot de passe réinitialisé par le staff (généré, affiché une fois).",
+                                             "Mot de passe réinitialisé par le staff (saisi manuellement)."),
                            Request.UserHostAddress)
 
+            tbResetPwd.Text = ""
             BindDetail()
-            pnlNewPwd.Visible = True
-            litNewPwd.Text = Server.HtmlEncode(clair)
-            litNewPwdUser.Text = Server.HtmlEncode(email)
-            ShowOk("Mot de passe réinitialisé. L'ancien ne fonctionne plus.")
+
+            If genere Then
+                pnlNewPwd.Visible = True
+                litNewPwd.Text = Server.HtmlEncode(clair)
+                litNewPwdUser.Text = Server.HtmlEncode(email)
+                ShowOk("Mot de passe réinitialisé. L'ancien ne fonctionne plus.")
+            Else
+                ShowOk("Mot de passe défini pour " & email & ". L'ancien ne fonctionne plus.")
+            End If
 
         Catch ex As SqlException
             BindDetail() : ShowErr("Réinitialisation impossible : " & ex.Message)
@@ -331,7 +347,7 @@ Public Class wbfPartenaires
     Protected Function ConfirmReset(o As Object) As String
         Dim email As String = If(o Is Nothing OrElse IsDBNull(o), "", o.ToString())
         email = email.Replace("\", "\\").Replace("""", "\""")
-        Return "return confirm(""Générer un nouveau mot de passe pour " & email &
+        Return "return confirm(""Réinitialiser le mot de passe de " & email &
                " ? Le mot de passe actuel cessera de fonctionner immédiatement."");"
     End Function
 
