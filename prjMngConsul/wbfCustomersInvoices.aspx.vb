@@ -230,9 +230,17 @@ Public Class wbfCustomersInvoices
         Return (Not IsDraft(item)) AndAlso (Not IsPaid(item))
     End Function
 
-    ''' <summary>Confirmation avant comptabilisation (geste irréversible).</summary>
+    ''' <summary>
+    ''' Confirmation avant comptabilisation (geste irréversible).
+    '''
+    ''' Surtout pas de « return confirm(...); » ici : ces boutons sont rendus en
+    ''' <c>type="button"</c>, donc ASP.NET colle son <c>__doPostBack</c> À LA SUITE
+    ''' du script d'OnClientClick. Un <c>return</c> sortirait du gestionnaire avant
+    ''' l'appel et le clic ne partirait jamais au serveur. On sort donc uniquement
+    ''' quand l'utilisateur annule.
+    ''' </summary>
     Public Function ConfirmPost() As String
-        Return "return confirm(""" & L("confirmPost") & """);"
+        Return "if (!confirm(""" & L("confirmPost") & """)) { return false; } "
     End Function
 
     ''' <summary>Entier sûr pour un argument JavaScript (0 si NULL / non numérique) :
