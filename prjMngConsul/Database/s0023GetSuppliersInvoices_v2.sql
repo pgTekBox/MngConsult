@@ -90,6 +90,10 @@ BEGIN
         ON pc.DocumentId = T060.[Id]
     WHERE T060.[CompanyGUID] = @CompanyGUID
       AND T060.[DocumentTypeId] IN (2, 5)
-      AND (T060.[Name] LIKE '%' + @Search + '%');
+      AND (T060.[Name] LIKE '%' + @Search + '%')
+    -- Ordre par defaut de la grille : de la plus recente a la plus vieille.
+    -- L'Id departage les factures de meme date (les plus recemment saisies
+    -- d'abord) et rend l'ordre deterministe.
+    ORDER BY T060.[DocumentDate] DESC, T060.[Id] DESC;
 END;
 GO
