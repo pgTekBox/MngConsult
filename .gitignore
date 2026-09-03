@@ -1,2 +1,31 @@
+# ---------------------------------------------------------------------
+# Fichiers à ne pas versionner (Visual Studio / .NET)
+# ---------------------------------------------------------------------
+
+# Configuration locale : contient les chaînes de connexion et les secrets.
 web.config
-web.config
+
+# Sorties de compilation
+[Bb]in/
+[Oo]bj/
+[Dd]ebug/
+[Rr]elease/
+
+# Dépendances NuGet restaurées (packages.config, lui, reste versionné)
+packages/
+
+# État local de Visual Studio (disposition des fenêtres, cache, options)
+.vs/
+*.suo
+*.user
+*.userprefs
+
+# Sorties de publication
+[Pp]ublish/
+PublishProfiles/*.pubxml.user
+
+# Fichiers temporaires
+*.tmp
+*~
+Thumbs.db
+desktop.ini
