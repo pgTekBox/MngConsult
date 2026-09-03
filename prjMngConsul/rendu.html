@@ -823,17 +823,17 @@
                         </tr>
                         <tr>
                             <td><b>60secPaiement — Portail maître</b></td>
-                            <td><code>http://localhost:56520</code></td>
+                            <td><code>https://60sec.ca:4141</code></td>
                             <td>Personnel de la plateforme</td>
                         </tr>
                         <tr>
                             <td><b>60secPaiement — Portail abonné</b></td>
-                            <td><code>http://localhost:56540</code></td>
+                            <td><code>https://60sec.ca:4371</code></td>
                             <td>Abonnés de 60secPaiement</td>
                         </tr>
                         <tr>
                             <td><b>60secPaiement — Portail partenaire</b></td>
-                            <td><code>http://localhost:56550</code></td>
+                            <td><code>https://60sec.ca:4859</code></td>
                             <td>Partenaires revendeurs</td>
                         </tr>
                         <tr>
@@ -847,11 +847,10 @@
             <div class="note info" style="margin-top:16px">
                 <span class="n-ico">ℹ️</span>
                 <p>
-                    L'ERP et la console d'administration sont déployés sur le domaine public.
-                    Les trois portails de 60secPaiement et leur API tournent pour l'instant en
-                    environnement de développement : les adresses <code>localhost</code>
-                    ci-dessus sont celles de leur configuration de projet, et seront remplacées
-                    par des adresses publiques à la mise en service.
+                    L'ERP, la console d'administration et les trois portails de 60secPaiement sont
+                    déployés sur le domaine public, chacun sur son propre port. L'API REST de
+                    60secPaiement s'atteint sous le chemin <code>/api/v1</code>, avec sa console
+                    d'essai <code>docs.html</code>.
                 </p>
             </div>
         </section>

@@ -143,6 +143,7 @@
                 <a href="Default.aspx" id="navDash" runat="server">Tableau de bord</a>
                 <a href="wbfAbonnes.aspx" id="navAbonnes" runat="server">Abonnés</a>
                 <a href="wbfApiKeys.aspx" id="navApi" runat="server">Clés API</a>
+                <a href="wbfMonCompte.aspx" id="navCompte" runat="server">Mon compte</a>
             </nav>
             <span class="spacer"></span>
             <span class="userbox">

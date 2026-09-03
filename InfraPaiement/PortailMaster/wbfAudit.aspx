@@ -35,6 +35,8 @@
             <asp:ListItem Value="ApiKeyCreate">Clé d'API — création</asp:ListItem>
             <asp:ListItem Value="ApiKeyRevoke">Clé d'API — révocation</asp:ListItem>
             <asp:ListItem Value="AuditExport">Export du journal</asp:ListItem>
+            <asp:ListItem Value="EftBatchApprove">Lot EFT — approbation</asp:ListItem>
+            <asp:ListItem Value="PartnerUserPasswordReset">Partenaire — mot de passe réinitialisé</asp:ListItem>
         </asp:DropDownList>
         <asp:TextBox ID="tbSearch" runat="server" placeholder="Rechercher (acteur, cible, détails)…" />
         <asp:Button ID="btnFilter" runat="server" CssClass="btn" Text="Filtrer" OnClick="btnFilter_Click" />

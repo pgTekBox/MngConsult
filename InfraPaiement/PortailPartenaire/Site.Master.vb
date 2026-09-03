@@ -11,6 +11,7 @@ Public Class SiteMaster
     Protected WithEvents navDash As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents navAbonnes As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents navApi As Global.System.Web.UI.HtmlControls.HtmlAnchor
+    Protected WithEvents navCompte As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents litPartenaire As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litUser As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents btnLogout As Global.System.Web.UI.WebControls.LinkButton
@@ -46,6 +47,7 @@ Public Class SiteMaster
             Case "default.aspx" : navDash.Attributes("class") = "active"
             Case "wbfabonnes.aspx", "wbfabonne.aspx" : navAbonnes.Attributes("class") = "active"
             Case "wbfapikeys.aspx" : navApi.Attributes("class") = "active"
+            Case "wbfmoncompte.aspx" : navCompte.Attributes("class") = "active"
         End Select
     End Sub
 

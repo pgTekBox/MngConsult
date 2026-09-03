@@ -22,6 +22,9 @@ Partial Public Class wbfEftBatches
     Protected WithEvents tbRetAccount As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents tbCpaDebit As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents tbCpaCredit As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbMaxItem As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbMaxFile As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbMaxDaily As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents btnSaveOrig As Global.System.Web.UI.WebControls.Button
     Protected WithEvents rptBatches As Global.System.Web.UI.WebControls.Repeater
     Protected WithEvents pnlEmpty As Global.System.Web.UI.WebControls.Panel

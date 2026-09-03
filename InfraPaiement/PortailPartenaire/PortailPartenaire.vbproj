@@ -120,6 +120,10 @@
       <DependentUpon>wbfApiKeys.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="wbfMonCompte.aspx.vb">
+      <DependentUpon>wbfMonCompte.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Global.asax" />
@@ -129,6 +133,7 @@
     <Content Include="wbfAbonnes.aspx" />
     <Content Include="wbfAbonne.aspx" />
     <Content Include="wbfApiKeys.aspx" />
+    <Content Include="wbfMonCompte.aspx" />
     <Content Include="Error.aspx" />
     <Content Include="Images\logo.svg" />
     <Content Include="Web.config" />

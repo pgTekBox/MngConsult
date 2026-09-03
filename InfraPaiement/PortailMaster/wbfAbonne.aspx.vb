@@ -103,6 +103,7 @@ Public Class wbfAbonne
             SelectValue(ddlStatut, Val(r, "Statut"))
             SelectValue(ddlKyb, Val(r, "StatutKYB"))
             tbNotes.Text = Val(r, "Notes")
+            tbMaxDailyEft.Text = CentsToBox(r, "MaxDailyEftCents")
 
             BindOffboard(id)
             BindKyb(id)
@@ -392,6 +393,9 @@ Public Class wbfAbonne
 
             Dim p As New Collection
             p.Add(New SqlParameter("@Id", newId))
+            ' Plafond EFT : validé AVANT toute écriture, pour ne rien enregistrer si la saisie est fautive.
+            Dim lim As Object = BoxToCents(tbMaxDailyEft.Text)
+
             p.Add(New SqlParameter("@RaisonSociale", raison))
             p.Add(New SqlParameter("@NomAffichage", ParamOrNull(tbNomAffichage.Text)))
             p.Add(New SqlParameter("@NumeroEntreprise", ParamOrNull(tbNumeroEntreprise.Text)))
@@ -414,6 +418,13 @@ Public Class wbfAbonne
                 newId = CInt(ds.Tables(0).Rows(0)("Id"))
             End If
 
+            ' Plafond EFT quotidien de l'abonné (proc dédiée : ne touche pas s0006).
+            Dim pl As New Collection
+            pl.Add(New SqlParameter("@AbonneId", newId))
+            pl.Add(New SqlParameter("@MaxDailyEftCents", lim))
+            pl.Add(New SqlParameter("@AdminId", If(AdminId = 0, CObj(DBNull.Value), AdminId)))
+            ExecuteSQL("s0121SetAbonneEftLimit", pl)
+
             ' Audit d'un changement de statut KYB (conformité).
             If isEdit AndAlso oldKyb.Length > 0 AndAlso oldKyb <> ddlKyb.SelectedValue Then
                 clsAudit.Write(AdminId, AdminEmail, "KybStatusChange", "Abonne", newId, raison,
@@ -422,6 +433,8 @@ Public Class wbfAbonne
 
             Response.Redirect("wbfAbonne.aspx?id=" & newId & "&saved=1")
 
+        Catch fx As FormatException
+            ShowError("Plafond EFT invalide : entrez un montant en dollars (ex. 25000,00) ou laissez le champ vide.")
         Catch ex As Exception
             ShowError("Enregistrement impossible. Vérifiez que les scripts de base de données ont été exécutés.")
             System.Diagnostics.Debug.WriteLine("SaveAbonne: " & ex.Message)
@@ -433,6 +446,26 @@ Public Class wbfAbonne
     Private Function Val(r As DataRow, col As String) As String
         If IsDBNull(r(col)) Then Return ""
         Return r(col).ToString()
+    End Function
+
+    ' --- Plafond EFT : saisie en dollars, stockage en cents ---
+
+    Private Function CentsToBox(r As DataRow, col As String) As String
+        If Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return ""
+        Return (Convert.ToInt64(r(col)) / 100D).ToString("N2", OffCult)
+    End Function
+
+    Private Function BoxToCents(s As String) As Object
+        Dim v2 As String = If(s, "").Trim().Replace(" ", "").Replace(ChrW(160), "").Replace(ChrW(8239), "").Replace("$", "")
+        If v2.Length = 0 Then Return DBNull.Value
+        Dim d As Decimal
+        If Not Decimal.TryParse(v2, Globalization.NumberStyles.Number, OffCult, d) Then
+            If Not Decimal.TryParse(v2, Globalization.NumberStyles.Number, Globalization.CultureInfo.InvariantCulture, d) Then
+                Throw New FormatException("Plafond invalide : " & s)
+            End If
+        End If
+        If d < 0D Then Throw New FormatException("Plafond négatif.")
+        Return CLng(Math.Round(d * 100D, 0))
     End Function
 
     Private Function ParamOrNull(s As String) As Object

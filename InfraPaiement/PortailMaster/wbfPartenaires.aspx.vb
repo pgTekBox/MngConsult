@@ -45,6 +45,9 @@ Public Class wbfPartenaires
     Protected WithEvents tbUserLast As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents cbUserAdmin As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents btnCreateUser As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents pnlNewPwd As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litNewPwd As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litNewPwdUser As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents pnlNewKey As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litNewKey As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents rptKeys As Global.System.Web.UI.WebControls.Repeater
@@ -256,7 +259,81 @@ Public Class wbfPartenaires
         BindDetail()
     End Sub
 
+    ''' <summary>
+    ''' Réinitialise le mot de passe d'un utilisateur du portail partenaire :
+    ''' un mot de passe fort est tiré au sort, haché (BCrypt) et enregistré par
+    ''' s0123 — qui remet aussi à zéro le compteur d'échecs et lève un éventuel
+    ''' verrouillage. Le mot de passe en clair n'est affiché qu'une seule fois,
+    ''' au staff qui vient de le générer, et n'est jamais stocké.
+    ''' </summary>
+    Protected Sub rptUsers_ItemCommand(source As Object, e As RepeaterCommandEventArgs)
+        If e.CommandName <> "resetpwd" Then Return
+
+        Dim userId As Integer
+        If Not Integer.TryParse(TryCast(e.CommandArgument, String), userId) OrElse userId <= 0 Then Return
+
+        Try
+            ' Le courriel sert au message et à l'audit ; il vient de la liste déjà affichée.
+            Dim email As String = ""
+            Dim t As DataTable = ExecuteSQLds("s0119ListPartnerUsers", Params(New SqlParameter("@PartenaireId", SelectedId))).Tables(0)
+            For Each r As DataRow In t.Rows
+                If CInt(r("Id")) = userId Then email = r("Email").ToString()
+            Next
+            If email.Length = 0 Then
+                BindDetail() : ShowErr("Utilisateur introuvable pour ce partenaire.") : Return
+            End If
+
+            Dim clair As String = GeneratePassword()
+            Dim hash As String = BCrypt.Net.BCrypt.HashPassword(clair, 11)
+
+            ExecuteSQL("s0123ChangePartnerUserPassword", Params(
+                New SqlParameter("@Id", userId),
+                New SqlParameter("@PasswordHash", hash)))
+
+            clsAudit.Write(AdminId, AdminEmail, "PartnerUserPasswordReset", "Partenaire", SelectedId,
+                           email, "Mot de passe réinitialisé par le staff (généré, affiché une fois).",
+                           Request.UserHostAddress)
+
+            BindDetail()
+            pnlNewPwd.Visible = True
+            litNewPwd.Text = Server.HtmlEncode(clair)
+            litNewPwdUser.Text = Server.HtmlEncode(email)
+            ShowOk("Mot de passe réinitialisé. L'ancien ne fonctionne plus.")
+
+        Catch ex As SqlException
+            BindDetail() : ShowErr("Réinitialisation impossible : " & ex.Message)
+        Catch ex As Exception
+            BindDetail() : ShowErr("Réinitialisation impossible.")
+            System.Diagnostics.Debug.WriteLine("Partner pwd reset: " & ex.Message)
+        End Try
+    End Sub
+
     ' ================= Helpers =================
+
+    ''' <summary>Mot de passe temporaire lisible : 4 blocs de 4 caractères
+    ''' sans caractères ambigus (0/O, 1/l/I), tirés au sort de façon sûre.</summary>
+    Private Function GeneratePassword() As String
+        Const alphabet As String = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"
+        Dim bytes(15) As Byte
+        Using rng As RandomNumberGenerator = RandomNumberGenerator.Create()
+            rng.GetBytes(bytes)
+        End Using
+        Dim sb As New StringBuilder(19)
+        For i As Integer = 0 To 15
+            If i > 0 AndAlso i Mod 4 = 0 Then sb.Append("-"c)
+            sb.Append(alphabet(bytes(i) Mod alphabet.Length))
+        Next
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Confirmation JavaScript de la réinitialisation (l'attribut est
+    ''' délimité par des apostrophes : la chaîne JS utilise donc des guillemets).</summary>
+    Protected Function ConfirmReset(o As Object) As String
+        Dim email As String = If(o Is Nothing OrElse IsDBNull(o), "", o.ToString())
+        email = email.Replace("\", "\\").Replace("""", "\""")
+        Return "return confirm(""Générer un nouveau mot de passe pour " & email &
+               " ? Le mot de passe actuel cessera de fonctionner immédiatement."");"
+    End Function
 
     Private Function Params(ParamArray ps As SqlParameter()) As Collection
         Dim c As New Collection
