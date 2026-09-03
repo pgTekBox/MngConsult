@@ -84,6 +84,10 @@ Public Class wbfEftBatches
             Case "gen"
                 pnlOk.Visible = True
                 litOk.Text = "Lot généré (fichier n° " & CInt(Val(Request.QueryString("fcn"))) & "). Téléchargez le fichier .005 puis soumettez-le à la banque."
+            Case "appr"
+                pnlOk.Visible = True
+                litOk.Text = "Lot n° " & CInt(Val(Request.QueryString("fcn"))).ToString("D4") &
+                             " approuvé : il peut maintenant être transmis à la banque."
             Case "settle"
                 pnlOk.Visible = True : litOk.Text = "Lot réglé : transactions comptabilisées."
             Case "orig"
@@ -117,6 +121,9 @@ Public Class wbfEftBatches
             tbRetAccount.Text = V(r, "ReturnAccount")
             tbCpaDebit.Text = V(r, "CpaCodeDebit")
             tbCpaCredit.Text = V(r, "CpaCodeCredit")
+            tbMaxItem.Text = CentsToBox(r, "MaxItemCents")
+            tbMaxFile.Text = CentsToBox(r, "MaxFileCents")
+            tbMaxDaily.Text = CentsToBox(r, "MaxDailyCents")
         Catch ex As Exception
             ShowError("Impossible de charger la configuration. Vérifiez que les scripts de base de données ont été exécutés.")
             System.Diagnostics.Debug.WriteLine("Eft LoadOrig: " & ex.Message)
@@ -150,8 +157,13 @@ Public Class wbfEftBatches
             p.Add(New SqlParameter("@ReturnAccount", NzOrNull(tbRetAccount.Text)))
             p.Add(New SqlParameter("@CpaCodeDebit", NzDef(tbCpaDebit.Text, "430")))
             p.Add(New SqlParameter("@CpaCodeCredit", NzDef(tbCpaCredit.Text, "230")))
+            p.Add(New SqlParameter("@MaxItemCents", BoxToCents(tbMaxItem.Text)))
+            p.Add(New SqlParameter("@MaxFileCents", BoxToCents(tbMaxFile.Text)))
+            p.Add(New SqlParameter("@MaxDailyCents", BoxToCents(tbMaxDaily.Text)))
             ExecuteSQL("s0043SaveOriginator", p)
             Response.Redirect("wbfEftBatches.aspx?msg=orig")
+        Catch fx As FormatException
+            ShowError("Plafond invalide : entrez un montant en dollars (ex. 25000,00) ou laissez vide.")
         Catch ex As Exception
             ShowError("Enregistrement impossible.")
             System.Diagnostics.Debug.WriteLine("Eft SaveOrig: " & ex.Message)
@@ -184,7 +196,19 @@ Public Class wbfEftBatches
         Dim id As Integer
         If Not Integer.TryParse(TryCast(e.CommandArgument, String), id) Then Return
         Try
-            If e.CommandName = "settle" Then
+            If e.CommandName = "approve" Then
+                ' Double contrôle : la proc refuse si l'approbateur est le créateur du lot.
+                Dim p As New Collection
+                p.Add(New SqlParameter("@BatchId", id))
+                p.Add(New SqlParameter("@AdminId", If(AdminId = 0, CObj(DBNull.Value), AdminId)))
+                Dim res As DataTable = ExecuteSQLds("s0120ApproveEftBatch", p).Tables(0)
+                Dim fcn As Integer = If(res.Rows.Count > 0 AndAlso Not IsDBNull(res.Rows(0)("FileCreationNumber")),
+                                        CInt(res.Rows(0)("FileCreationNumber")), 0)
+                clsAudit.Write(AdminId, AdminEmail, "EftBatchApprove", "EftBatch", id,
+                               "Lot " & fcn.ToString("D4"), "Approbation pour transmission (double contrôle)",
+                               Request.UserHostAddress)
+                Response.Redirect("wbfEftBatches.aspx?msg=appr&fcn=" & fcn)
+            ElseIf e.CommandName = "settle" Then
                 Dim p As New Collection
                 p.Add(New SqlParameter("@BatchId", id))
                 p.Add(New SqlParameter("@AdminId", If(AdminId = 0, CObj(DBNull.Value), AdminId)))
@@ -246,10 +270,77 @@ Public Class wbfEftBatches
         If d Is Nothing OrElse IsDBNull(d) Then Return ""
         Return CDate(d).ToString("yyyy-MM-dd HH:mm")
     End Function
+    ' --- Double contrôle ---
+
+    ''' <summary>Vrai si l'administrateur courant peut approuver ce lot
+    ''' (lot non transmis, créateur connu et différent de lui).</summary>
+    Protected Function CanApprove(item As Object) As Boolean
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return False
+        Dim st As String = If(r("Status"), "").ToString()
+        If st <> "Open" AndAlso st <> "Generated" Then Return False
+        If IsDBNull(r("CreatedByAdminId")) Then Return False
+        Return CInt(r("CreatedByAdminId")) <> AdminId AndAlso AdminId <> 0
+    End Function
+
+    ''' <summary>Qui a généré le lot (colonne « Créé »).</summary>
+    Protected Function CreatorText(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+        Dim who As String = If(IsDBNull(r("CreatedBy")), "", r("CreatedBy").ToString()).Trim()
+        If who.Length = 0 Then Return "par un compte inconnu"
+        If Not IsDBNull(r("CreatedByAdminId")) AndAlso CInt(r("CreatedByAdminId")) = AdminId Then
+            Return Server.HtmlEncode("par vous (" & who & ")")
+        End If
+        Return Server.HtmlEncode("par " & who)
+    End Function
+
+    ''' <summary>État du second contrôle pour la grille.</summary>
+    Protected Function ApprovalText(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+        Dim st As String = If(r("Status"), "").ToString()
+
+        If Not IsDBNull(r("ApprovedUtc")) Then
+            Dim who As String = If(IsDBNull(r("ApprovedBy")), "", r("ApprovedBy").ToString()).Trim()
+            Return Server.HtmlEncode("Approuvé par " & If(who.Length = 0, "?", who)) &
+                   "<br />" & Server.HtmlEncode(FormatDt(r("ApprovedUtc")))
+        End If
+
+        If st = "Open" OrElse st = "Generated" Then
+            If IsDBNull(r("CreatedByAdminId")) Then Return "Créateur inconnu — approbation impossible"
+            If CInt(r("CreatedByAdminId")) = AdminId Then Return "En attente d'un autre administrateur"
+            Return "En attente d'approbation"
+        End If
+
+        Return "—"
+    End Function
+
+    ' --- Plafonds : saisie en dollars, stockage en cents ---
+
+    Private Function CentsToBox(r As DataRow, col As String) As String
+        If Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return ""
+        Return (Convert.ToInt64(r(col)) / 100D).ToString("N2", Cult)
+    End Function
+
+    Private Function BoxToCents(s As String) As Object
+        Dim v2 As String = If(s, "").Trim().Replace(" ", "").Replace(ChrW(160), "").Replace(ChrW(8239), "").Replace("$", "")
+        If v2.Length = 0 Then Return DBNull.Value
+        Dim d As Decimal
+        If Not Decimal.TryParse(v2, Globalization.NumberStyles.Number, Cult, d) Then
+            If Not Decimal.TryParse(v2, Globalization.NumberStyles.Number, CultureInfo.InvariantCulture, d) Then
+                Throw New FormatException("Plafond invalide : " & s)
+            End If
+        End If
+        If d < 0D Then Throw New FormatException("Plafond négatif.")
+        Return CLng(Math.Round(d * 100D, 0))
+    End Function
+
     Protected Function BadgeStatut(s As Object) As String
         Select Case If(s, "").ToString()
             Case "Settled" : Return "badge-actif"
             Case "Acknowledged" : Return "badge-verifie"
+            Case "Approved" : Return "badge-appr"
             Case "Generated" : Return "badge-gen"
             Case "Submitted" : Return "badge-sub"
             Case "Rejected" : Return "badge-rejete"
@@ -260,6 +351,7 @@ Public Class wbfEftBatches
         Select Case If(s, "").ToString()
             Case "Open" : Return "Ouvert"
             Case "Generated" : Return "Généré"
+            Case "Approved" : Return "Approuvé"
             Case "Submitted" : Return "Soumis"
             Case "Acknowledged" : Return "Accusé reçu"
             Case "Rejected" : Return "Refusé"

@@ -96,6 +96,9 @@ Partial Public Class wbfAbonne
     '''<summary>Contrôle ddlKyb.</summary>
     Protected WithEvents ddlKyb As Global.System.Web.UI.WebControls.DropDownList
 
+    '''<summary>Contrôle tbMaxDailyEft.</summary>
+    Protected WithEvents tbMaxDailyEft As Global.System.Web.UI.WebControls.TextBox
+
     '''<summary>Contrôle tbNotes.</summary>
     Protected WithEvents tbNotes As Global.System.Web.UI.WebControls.TextBox
 

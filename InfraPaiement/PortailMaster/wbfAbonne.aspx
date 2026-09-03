@@ -120,6 +120,14 @@
                     <asp:ListItem Value="Rejete">Rejeté</asp:ListItem>
                 </asp:DropDownList>
             </div>
+            <div class="field">
+                <label>Plafond EFT quotidien ($)</label>
+                <asp:TextBox ID="tbMaxDailyEft" runat="server" placeholder="aucun" />
+                <div class="hint" style="font-size:12px;color:var(--muted);margin-top:6px">
+                    Total maximal que cet abonné peut mettre en lot dans une même journée (débits + crédits).
+                    Vide = aucun plafond propre ; les plafonds globaux s'appliquent quand même.
+                </div>
+            </div>
             <div class="field full">
                 <label>Notes internes</label>
                 <asp:TextBox ID="tbNotes" runat="server" TextMode="MultiLine" />

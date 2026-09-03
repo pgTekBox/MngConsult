@@ -70,13 +70,23 @@
             <%-- Utilisateurs --%>
             <div class="card">
                 <h3 style="margin:0 0 12px">Utilisateurs du portail</h3>
-                <asp:Repeater ID="rptUsers" runat="server">
-                    <HeaderTemplate><table class="grid" style="margin-bottom:14px"><thead><tr><th>Courriel</th><th>Rôle</th><th>Statut</th></tr></thead><tbody></HeaderTemplate>
+                <asp:Panel ID="pnlNewPwd" runat="server" Visible="false" CssClass="msg-ok" style="word-break:break-all; margin-bottom:12px">
+                    <b>Nouveau mot de passe (à transmettre maintenant, il ne sera plus affiché) :</b><br />
+                    <span class="mono" style="font-size:15px"><asp:Literal ID="litNewPwd" runat="server" /></span><br />
+                    <span class="sub">Pour <asp:Literal ID="litNewPwdUser" runat="server" />. Demandez-lui de le changer dans « Mon compte » dès sa connexion.</span>
+                </asp:Panel>
+                <asp:Repeater ID="rptUsers" runat="server" OnItemCommand="rptUsers_ItemCommand">
+                    <HeaderTemplate><table class="grid" style="margin-bottom:14px"><thead><tr><th>Courriel</th><th>Rôle</th><th>Statut</th><th>Mot de passe</th></tr></thead><tbody></HeaderTemplate>
                     <ItemTemplate>
                         <tr>
                             <td><%# Enc(Eval("Email")) %></td>
                             <td><%# IIf(CBool(Eval("IsAdmin")), "Admin", "Utilisateur") %></td>
                             <td><%# IIf(CBool(Eval("IsActive")), "<span class='badge badge-actif'>Actif</span>", "<span class='badge badge-ferme'>Inactif</span>") %></td>
+                            <td style="white-space:nowrap">
+                                <asp:LinkButton runat="server" Text="Réinitialiser" CommandName="resetpwd"
+                                    CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
+                                    OnClientClick='<%# ConfirmReset(Eval("Email")) %>' />
+                            </td>
                         </tr>
                     </ItemTemplate>
                     <FooterTemplate></tbody></table></FooterTemplate>

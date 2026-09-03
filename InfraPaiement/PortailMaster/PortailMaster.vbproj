@@ -99,6 +99,7 @@
     <Compile Include="App_Code\clsKyb.vb" />
     <Compile Include="App_Code\clsBankRecon.vb" />
     <Compile Include="App_Code\clsBankExchange.vb" />
+    <Compile Include="App_Code\clsBusinessCalendar.vb" />
     <Compile Include="BankExchange.ashx.vb">
       <DependentUpon>BankExchange.ashx</DependentUpon>
     </Compile>

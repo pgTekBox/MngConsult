@@ -49,6 +49,10 @@ Public Class clsCpa005Builder
         Dim retAccount As String = SV(orig, "ReturnAccount")
         Dim fcn As Long = LNG(batch, "FileCreationNumber")
 
+        ' Date de dépôt du fichier : jour ouvrable bancaire en heure de l'Est,
+        ' reportée au prochain jour ouvrable si l'heure de tombée est passée.
+        Dim fileDate As Date = clsBusinessCalendar.FileBusinessDate()
+
         Dim sb As New StringBuilder()
         Dim rc As Integer = 0
 
@@ -59,7 +63,7 @@ Public Class clsCpa005Builder
         a.Append(Num(rc.ToString(), 9))
         a.Append(Alpha(clientNo, 10))
         a.Append(Num(fcn.ToString(), 4))
-        a.Append(Julian(DateTime.UtcNow))
+        a.Append(Julian(fileDate))
         a.Append(Num(dataCentre, 5))
         sb.AppendLine(Pad(a.ToString()))
 
@@ -69,11 +73,11 @@ Public Class clsCpa005Builder
 
         For Each rec In Chunk(debits)
             rc += 1
-            sb.AppendLine(BuildDetail("D", rc, clientNo, fcn, rec, cpaDebit, shortName, longName, retBranch, retAccount))
+            sb.AppendLine(BuildDetail("D", rc, clientNo, fcn, rec, cpaDebit, shortName, longName, retBranch, retAccount, fileDate))
         Next
         For Each rec In Chunk(credits)
             rc += 1
-            sb.AppendLine(BuildDetail("C", rc, clientNo, fcn, rec, cpaCredit, shortName, longName, retBranch, retAccount))
+            sb.AppendLine(BuildDetail("C", rc, clientNo, fcn, rec, cpaCredit, shortName, longName, retBranch, retAccount, fileDate))
         Next
 
         ' --- Enregistrement Z (contrôle) ---
@@ -91,31 +95,33 @@ Public Class clsCpa005Builder
 
         Dim res As New Cpa005Result()
         res.RecordCount = rc
-        res.FileName = "AFT_" & Alpha(clientNo, 10).Trim() & "_" & fcn.ToString("D4") & "_" & DateTime.UtcNow.ToString("yyyyMMdd") & ".005"
+        res.FileName = "AFT_" & Alpha(clientNo, 10).Trim() & "_" & fcn.ToString("D4") & "_" & fileDate.ToString("yyyyMMdd") & ".005"
         res.Content = sb.ToString()
         Return res
     End Function
 
     Private Shared Function BuildDetail(recType As String, rc As Integer, clientNo As String, fcn As Long,
                                         segRows As List(Of DataRow), cpaCode As String, shortName As String,
-                                        longName As String, retBranch As String, retAccount As String) As String
+                                        longName As String, retBranch As String, retAccount As String,
+                                        fileDate As Date) As String
         Dim r As New StringBuilder()
         r.Append(recType)
         r.Append(Num(rc.ToString(), 9))
         r.Append(Alpha(clientNo, 10))
         r.Append(Num(fcn.ToString(), 4))
         For Each item In segRows
-            r.Append(BuildSegment(item, cpaCode, shortName, longName, clientNo, retBranch, retAccount))
+            r.Append(BuildSegment(item, cpaCode, shortName, longName, clientNo, retBranch, retAccount, fileDate))
         Next
         Return Pad(r.ToString())
     End Function
 
     Private Shared Function BuildSegment(item As DataRow, cpaCode As String, shortName As String, longName As String,
-                                         clientNo As String, retBranch As String, retAccount As String) As String
+                                         clientNo As String, retBranch As String, retAccount As String,
+                                         fileDate As Date) As String
         Dim s As New StringBuilder()
         s.Append(Num(cpaCode, 3))                                             ' code CPA
         s.Append(Num(LNG(item, "AmountCents").ToString(), 10))               ' montant (cents)
-        s.Append(Julian2(item, "DueDate"))                                    ' date d'echeance
+        s.Append(Julian(DueDate(item, fileDate)))                             ' date d'echeance (jour ouvrable)
         s.Append("0" & Num(SV(item, "BankInstitution"), 3) & Num(SV(item, "BankTransit"), 5)) ' succursale (9)
         s.Append(Alpha(SV(item, "BankAccount"), 12))                          ' n. de compte
         s.Append(Alpha(shortName, 15))                                        ' nom court emetteur
@@ -150,9 +156,13 @@ Public Class clsCpa005Builder
         Return "0" & (d.Year Mod 100).ToString("D2") & d.DayOfYear.ToString("D3")
     End Function
 
-    Private Shared Function Julian2(r As DataRow, col As String) As String
-        If Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return Julian(DateTime.UtcNow)
-        Return Julian(CDate(r(col)))
+    ''' <summary>
+    ''' Échéance d'un item, ramenée sur le calendrier bancaire : jamais avant
+    ''' la date de dépôt du fichier, jamais un samedi, dimanche ou jour férié.
+    ''' </summary>
+    Private Shared Function DueDate(r As DataRow, fileDate As Date) As Date
+        If Not r.Table.Columns.Contains("DueDate") OrElse IsDBNull(r("DueDate")) Then Return fileDate
+        Return clsBusinessCalendar.SettlementDate(CDate(r("DueDate")), fileDate)
     End Function
 
     Private Shared Function Pad(s As String) As String
