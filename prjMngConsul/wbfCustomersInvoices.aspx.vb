@@ -106,6 +106,7 @@ Public Class wbfCustomersInvoices
                 "Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l'échéance seront attribués, et la facture ne pourra plus être modifiée.",
                 "Post this draft? The official number, invoice date and due date will be assigned, and the invoice can no longer be edited.",
                 "¿Contabilizar este borrador? Se asignarán el número oficial, la fecha de factura y el vencimiento, y la factura ya no podrá modificarse.")
+            Case "confirmPostTitle" : Return Choose3(lang, "Comptabiliser la facture", "Post the invoice", "Contabilizar la factura")
             Case "msgPosted" : Return Choose3(lang, "Facture comptabilisée.", "Invoice posted.", "Factura contabilizada.")
             Case "msgPostFailed" : Return Choose3(lang, "Comptabilisation impossible.", "Posting failed.", "No se pudo contabilizar.")
             Case "tipEdit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
@@ -240,7 +241,9 @@ Public Class wbfCustomersInvoices
     ''' quand l'utilisateur annule.
     ''' </summary>
     Public Function ConfirmPost() As String
-        Return "if (!confirm(""" & L("confirmPost") & """)) { return false; } "
+        Dim msg As String = HttpUtility.JavaScriptStringEncode(L("confirmPost"), True)
+        Dim ttl As String = HttpUtility.JavaScriptStringEncode(L("confirmPostTitle"), True)
+        Return "return confirmPostInvoice(this, " & msg & ", " & ttl & ");"
     End Function
 
     ''' <summary>Entier sûr pour un argument JavaScript (0 si NULL / non numérique) :
