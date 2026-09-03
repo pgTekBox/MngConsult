@@ -37,6 +37,8 @@
             <asp:ListItem Value="AuditExport">Export du journal</asp:ListItem>
             <asp:ListItem Value="EftBatchApprove">Lot EFT — approbation</asp:ListItem>
             <asp:ListItem Value="PartnerUserPasswordReset">Partenaire — mot de passe réinitialisé</asp:ListItem>
+            <asp:ListItem Value="AbonneUserCreate">Abonné — accès créé</asp:ListItem>
+            <asp:ListItem Value="AbonneUserPasswordReset">Abonné — mot de passe réinitialisé</asp:ListItem>
         </asp:DropDownList>
         <asp:TextBox ID="tbSearch" runat="server" placeholder="Rechercher (acteur, cible, détails)…" />
         <asp:Button ID="btnFilter" runat="server" CssClass="btn" Text="Filtrer" OnClick="btnFilter_Click" />

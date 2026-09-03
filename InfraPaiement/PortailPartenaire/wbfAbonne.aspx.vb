@@ -43,6 +43,16 @@ Public Class wbfAbonne
     Protected WithEvents pnlKybResult As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litKybMsg As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents btnKyb As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents pnlNewPwd As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litNewPwd As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litNewPwdUser As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents rptUsers As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents pnlNoUsers As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents tbUserPwd As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbUserEmail As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbUserFirst As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents tbUserLast As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnCreateUser As Global.System.Web.UI.WebControls.Button
     Protected WithEvents litVId As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litVId2 As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents litVGuid As Global.System.Web.UI.WebControls.Literal
@@ -152,7 +162,174 @@ Public Class wbfAbonne
         litVGuid.Text = Enc(r("TenantGUID"))
 
         LoadLastKyb()
+        BindUsers()
     End Sub
+
+    ' ================= Acces au portail abonne =================
+
+    ''' <summary>Comptes du portail abonné, scopés au partenaire (garde s0126).</summary>
+    Private Sub BindUsers()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AbonneId", SelectedId))
+            p.Add(New SqlParameter("@PartenaireId", PartenaireId))
+            Dim t As DataTable = ExecuteSQLds("s0126ListAbonneUsersForPartner", p).Tables(0)
+            rptUsers.DataSource = t : rptUsers.DataBind()
+            rptUsers.Visible = (t.Rows.Count > 0)
+            pnlNoUsers.Visible = (t.Rows.Count = 0)
+        Catch ex As Exception
+            ShowErr("Impossible de charger les accès. Vérifiez que le script de base de données 47 a été exécuté.")
+            System.Diagnostics.Debug.WriteLine("PTN Abonne users: " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Donne un nouveau mot de passe à un compte de l'abonné. L'ancien n'est pas
+    ''' demandé : c'est le partenaire, responsable de son canal, qui agit. La
+    ''' procédure s0125 revérifie que le compte appartient bien à un abonné de ce
+    ''' partenaire avant d'écrire.
+    ''' </summary>
+    Protected Sub rptUsers_ItemCommand(source As Object, e As RepeaterCommandEventArgs)
+        If e.CommandName <> "resetpwd" Then Return
+
+        Dim userId As Integer
+        If Not Integer.TryParse(TryCast(e.CommandArgument, String), userId) OrElse userId <= 0 Then Return
+
+        Try
+            Dim email As String = EmailOf(userId)
+            If email.Length = 0 Then
+                LoadView() : ShowErr("Compte introuvable pour cet abonné.") : Return
+            End If
+
+            Dim saisi As String = If(tbUserPwd.Text, "")
+            Dim genere As Boolean = (saisi.Length = 0)
+            If Not genere AndAlso saisi.Length < 8 Then
+                LoadView() : ShowErr("Le mot de passe saisi doit contenir au moins 8 caractères (ou laissez le champ vide pour en générer un).") : Return
+            End If
+
+            Dim clair As String = If(genere, GeneratePassword(), saisi)
+            Dim p As New Collection
+            p.Add(New SqlParameter("@UserId", userId))
+            p.Add(New SqlParameter("@PartenaireId", PartenaireId))
+            p.Add(New SqlParameter("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(clair, 11)))
+            ExecuteSQL("s0125ResetAbonneUserPassword", p)
+
+            clsAudit.Write(0, UserEmail, "AbonneUserPasswordReset", "Abonne", SelectedId, email,
+                           If(genere, "Mot de passe redonné par le partenaire (généré).",
+                                      "Mot de passe redonné par le partenaire (saisi)."),
+                           Request.UserHostAddress)
+
+            tbUserPwd.Text = ""
+            LoadView()
+            If genere Then
+                ShowNewPassword(clair, email)
+                ShowOk("Mot de passe réinitialisé. L'ancien ne fonctionne plus.")
+            Else
+                ShowOk("Mot de passe défini pour " & email & ". L'ancien ne fonctionne plus.")
+            End If
+
+        Catch ex As SqlException
+            LoadView() : ShowErr(ex.Message)
+        Catch ex As Exception
+            LoadView() : ShowErr("Réinitialisation impossible.")
+            System.Diagnostics.Debug.WriteLine("PTN Abonne pwd reset: " & ex.Message)
+        End Try
+    End Sub
+
+    ''' <summary>Crée le premier (ou un nouvel) accès au portail abonné.</summary>
+    Protected Sub btnCreateUser_Click(sender As Object, e As EventArgs)
+        Dim email As String = If(tbUserEmail.Text, "").Trim().ToLowerInvariant()
+        If email.Length = 0 Then
+            LoadView() : ShowErr("Le courriel du nouvel accès est requis.") : Return
+        End If
+
+        Dim saisi As String = If(tbUserPwd.Text, "")
+        Dim genere As Boolean = (saisi.Length = 0)
+        If Not genere AndAlso saisi.Length < 8 Then
+            LoadView() : ShowErr("Le mot de passe saisi doit contenir au moins 8 caractères (ou laissez le champ vide pour en générer un).") : Return
+        End If
+
+        Try
+            Dim clair As String = If(genere, GeneratePassword(), saisi)
+            Dim outId As New SqlParameter("@Id", SqlDbType.Int) With {.Direction = ParameterDirection.InputOutput, .Value = 0}
+            Dim p As New Collection
+            p.Add(New SqlParameter("@AbonneId", SelectedId))
+            p.Add(New SqlParameter("@PartenaireId", PartenaireId))
+            p.Add(New SqlParameter("@Email", email))
+            p.Add(New SqlParameter("@PasswordHash", BCrypt.Net.BCrypt.HashPassword(clair, 11)))
+            p.Add(New SqlParameter("@FirstName", NzParam(tbUserFirst.Text)))
+            p.Add(New SqlParameter("@LastName", NzParam(tbUserLast.Text)))
+            p.Add(New SqlParameter("@IsAdmin", True))
+            p.Add(outId)
+            ExecuteSQLds("s0127CreateAbonneUserForPartner", p)
+
+            clsAudit.Write(0, UserEmail, "AbonneUserCreate", "Abonne", SelectedId, email,
+                           "Accès au portail abonné créé par le partenaire.", Request.UserHostAddress)
+
+            tbUserEmail.Text = "" : tbUserFirst.Text = "" : tbUserLast.Text = "" : tbUserPwd.Text = ""
+            LoadView()
+            If genere Then ShowNewPassword(clair, email)
+            ShowOk("Accès créé pour " & email & ".")
+
+        Catch ex As SqlException
+            LoadView()
+            If ex.Number = 2627 OrElse ex.Number = 2601 Then
+                ShowErr("Ce courriel est déjà utilisé par un autre accès.")
+            Else
+                ShowErr("Création impossible : " & ex.Message)
+            End If
+        Catch ex As Exception
+            LoadView() : ShowErr("Création impossible.")
+            System.Diagnostics.Debug.WriteLine("PTN Abonne user create: " & ex.Message)
+        End Try
+    End Sub
+
+    Private Sub ShowOk(msg As String)
+        pnlOk.Visible = True
+        litOk.Text = Server.HtmlEncode(msg)
+    End Sub
+
+    Private Sub ShowNewPassword(clair As String, email As String)
+        pnlNewPwd.Visible = True
+        litNewPwd.Text = Server.HtmlEncode(clair)
+        litNewPwdUser.Text = Server.HtmlEncode(email)
+    End Sub
+
+    ''' <summary>Courriel d'un compte, via la liste scopée au partenaire.</summary>
+    Private Function EmailOf(userId As Integer) As String
+        Dim p As New Collection
+        p.Add(New SqlParameter("@AbonneId", SelectedId))
+        p.Add(New SqlParameter("@PartenaireId", PartenaireId))
+        Dim t As DataTable = ExecuteSQLds("s0126ListAbonneUsersForPartner", p).Tables(0)
+        For Each r As DataRow In t.Rows
+            If CInt(r("Id")) = userId Then Return r("Email").ToString()
+        Next
+        Return ""
+    End Function
+
+    ''' <summary>Mot de passe temporaire lisible : 4 blocs de 4 caractères,
+    ''' sans caractères ambigus, tirés au sort de façon sûre.</summary>
+    Private Function GeneratePassword() As String
+        Const alphabet As String = "ABCDEFGHJKLMNPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz23456789"
+        Dim bytes(15) As Byte
+        Using rng As System.Security.Cryptography.RandomNumberGenerator = System.Security.Cryptography.RandomNumberGenerator.Create()
+            rng.GetBytes(bytes)
+        End Using
+        Dim sb As New System.Text.StringBuilder(19)
+        For i As Integer = 0 To 15
+            If i > 0 AndAlso i Mod 4 = 0 Then sb.Append("-"c)
+            sb.Append(alphabet(bytes(i) Mod alphabet.Length))
+        Next
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Confirmation JavaScript (attribut délimité par des apostrophes).</summary>
+    Protected Function ConfirmReset(o As Object) As String
+        Dim email As String = If(o Is Nothing OrElse IsDBNull(o), "", o.ToString())
+        email = email.Replace("\", "\\").Replace("""", "\""")
+        Return "return confirm(""Réinitialiser le mot de passe de " & email &
+               " ? Le mot de passe actuel cessera de fonctionner immédiatement."");"
+    End Function
 
     Private Sub LoadLastKyb()
         Try
