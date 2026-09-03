@@ -203,7 +203,7 @@
                         <telerik:RadTab Text="Entreprise" />
                         <telerik:RadTab Text="Taxes" />
                         <telerik:RadTab Text="Email" />
-                        <telerik:RadTab Text="PDF" />
+                        <telerik:RadTab Text="Facture" />
                         <telerik:RadTab Text="Comptabilité" />
                         <telerik:RadTab Text="Bancaire" />
                         <telerik:RadTab Text="Comptable" />

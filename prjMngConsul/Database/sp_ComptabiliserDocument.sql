@@ -125,9 +125,14 @@ BEGIN
         --       comptabilisation seulement. Remplace le numéro provisoire
         --       (BROUILLON-xxx ou Id) une seule fois, avant l'écriture au journal.
         -- ----------------------------------------------------
+        DECLARE @DraftPrefix VARCHAR(20) =
+            NULLIF(LTRIM(RTRIM(ISNULL(dbo.fParamS(@CompanyGUID, 'INV_DRAFT_PREFIX'), ''))), '');
+        IF @DraftPrefix IS NULL SET @DraftPrefix = 'BRO';
+
         IF @DocumentTypeId = 1
            AND (@DocumentNumber IS NULL
-                OR @DocumentNumber LIKE 'BROUILLON-%'
+                OR @DocumentNumber LIKE 'BROUILLON-%'                                  -- ancien prefixe, documents deja en base
+                OR LEFT(@DocumentNumber, LEN(@DraftPrefix) + 1) = @DraftPrefix + '-'   -- prefixe configure (LEFT : pas de joker LIKE)
                 OR @DocumentNumber = CAST(@DocumentId AS VARCHAR(20)))
         BEGIN
             EXEC dbo.s0695GenerateInvoiceNumber
