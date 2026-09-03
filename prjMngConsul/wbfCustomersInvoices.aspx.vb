@@ -535,11 +535,6 @@ Public Class wbfCustomersInvoices
                 DeleteDocument(invoiceId)
                 rlvClientsFactures.Rebind()
 
-            Case "PostInvoice"
-                Dim invoiceId As Integer = 0
-                Integer.TryParse(e.CommandArgument.ToString(), invoiceId)
-                If invoiceId > 0 Then PostDocument(invoiceId)
-                rlvClientsFactures.Rebind()
         End Select
     End Sub
 
@@ -792,6 +787,26 @@ Public Class wbfCustomersInvoices
             Return ""
         End Try
     End Function
+
+    ''' <summary>
+    ''' Clic sur « Comptabiliser » d'une ligne de la grille. Le bouton appelle
+    ''' directement ce gestionnaire (plutôt que de passer par ItemCommand du
+    ''' RadListView) : l'identifiant du document voyage dans CommandArgument.
+    ''' </summary>
+    Protected Sub btnPost_Click(sender As Object, e As EventArgs)
+        Dim b As Button = TryCast(sender, Button)
+        If b Is Nothing Then Return
+
+        Dim invoiceId As Integer = 0
+        Integer.TryParse(If(b.CommandArgument, "").Trim(), invoiceId)
+        If invoiceId <= 0 Then
+            ShowSquareMessage(L("msgPostFailed"))
+            Return
+        End If
+
+        PostDocument(invoiceId)
+        rlvClientsFactures.Rebind()
+    End Sub
 
     ''' <summary>
     ''' Comptabilise un brouillon depuis la grille : sp_ComptabiliserDocument

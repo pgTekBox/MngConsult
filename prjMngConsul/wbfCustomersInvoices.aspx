@@ -351,8 +351,8 @@
                                     Text=""
                                     ToolTip='<%# L("tipPost") %>'
                                     Visible='<%# ShowPost(Container.DataItem) %>'
-                                    CommandName="PostInvoice"
                                     CommandArgument='<%# Eval("Id") %>'
+                                    OnClick="btnPost_Click"
                                     OnClientClick='<%# ConfirmPost() %>'
                                     CausesValidation="false" />
 
