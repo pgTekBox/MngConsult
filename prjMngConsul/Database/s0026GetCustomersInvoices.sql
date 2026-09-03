@@ -78,7 +78,9 @@ BEGIN
     -- Ordre par defaut de la grille : de la plus recente a la plus vieille.
     -- L'Id departage les factures de meme date (les plus recemment saisies
     -- d'abord) et rend l'ordre deterministe.
-    ORDER BY v.[DocumentDate] DESC, v.[Id] DESC;
+    -- Un brouillon n'a pas encore de date de facture : on retombe sur sa date de
+    -- creation pour qu'il se classe quand meme au bon endroit (et non en fin de liste).
+    ORDER BY COALESCE(v.[DocumentDate], d.[Created]) DESC, v.[Id] DESC;
 
 END;
 GO
