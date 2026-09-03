@@ -307,6 +307,7 @@ Public Class wbfCustomerEdit
             p.Add(New SqlClient.SqlParameter("@TPS", txtNoTPS.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@TVQ", txtNoTVQ.Text.Trim()))
             p.Add(New SqlClient.SqlParameter("@Note", txtNote.Text.Trim()))
+            p.Add(New SqlClient.SqlParameter("@Type", rddlPartyType.SelectedValue))
             p.Add(New SqlClient.SqlParameter("@PaymentTermDays", TermDaysValue()))
             ExecuteSQL("s0017UpdateParty", p)
 
