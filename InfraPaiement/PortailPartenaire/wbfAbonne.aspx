@@ -96,6 +96,77 @@
         </div>
 
         <div class="card" style="margin-top:18px">
+            <h3 style="margin:0 0 6px">Accès au portail abonné</h3>
+            <p class="sub" style="margin:0 0 12px">
+                Comptes avec lesquels cet abonné se connecte à son portail. Vous pouvez leur redonner
+                un mot de passe sans connaître l'ancien.
+            </p>
+
+            <asp:Panel ID="pnlNewPwd" runat="server" Visible="false" CssClass="msg-ok" style="word-break:break-all; margin-bottom:12px">
+                <b>Mot de passe (à transmettre maintenant, il ne sera plus affiché) :</b><br />
+                <span class="mono" style="font-size:15px"><asp:Literal ID="litNewPwd" runat="server" /></span><br />
+                <span class="sub">Pour <asp:Literal ID="litNewPwdUser" runat="server" />. Il pourra le changer dans « Mon compte » du portail abonné.</span>
+            </asp:Panel>
+
+            <asp:Repeater ID="rptUsers" runat="server" OnItemCommand="rptUsers_ItemCommand">
+                <HeaderTemplate>
+                    <table class="grid" style="margin-bottom:14px"><thead><tr>
+                        <th>Courriel</th><th>Rôle</th><th>Statut</th><th>Dernière connexion</th><th>Mot de passe</th>
+                    </tr></thead><tbody>
+                </HeaderTemplate>
+                <ItemTemplate>
+                    <tr>
+                        <td><%# Enc(Eval("Email")) %></td>
+                        <td><%# IIf(CBool(Eval("IsAdmin")), "Admin", "Utilisateur") %></td>
+                        <td><%# IIf(CBool(Eval("IsActive")), "<span class='badge badge-actif'>Actif</span>", "<span class='badge badge-ferme'>Inactif</span>") %></td>
+                        <td><%# FormatDt(Eval("LastLoginUtc")) %></td>
+                        <td style="white-space:nowrap">
+                            <asp:LinkButton runat="server" Text="Réinitialiser" CommandName="resetpwd"
+                                CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
+                                OnClientClick='<%# ConfirmReset(Eval("Email")) %>' />
+                        </td>
+                    </tr>
+                </ItemTemplate>
+                <FooterTemplate></tbody></table></FooterTemplate>
+            </asp:Repeater>
+            <asp:Panel ID="pnlNoUsers" runat="server" Visible="false">
+                <p class="sub">Aucun accès pour l'instant : cet abonné ne peut pas encore se connecter à son portail. Créez-lui un compte ci-dessous.</p>
+            </asp:Panel>
+
+            <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap; margin-bottom:6px">
+                <div class="field" style="margin:0; flex:1; min-width:200px">
+                    <label>Mot de passe</label>
+                    <asp:TextBox ID="tbUserPwd" runat="server" TextMode="Password" placeholder="laisser vide = généré" />
+                </div>
+            </div>
+            <p class="sub" style="margin:0 0 14px; font-size:12px">
+                Sert aussi bien à « Réinitialiser » qu'à la création ci-dessous. Vide = mot de passe fort généré et
+                affiché une seule fois ; sinon 8 caractères minimum.
+            </p>
+
+            <div style="border-top:1px solid var(--line); padding-top:14px">
+                <div style="display:flex; gap:10px; align-items:flex-end; flex-wrap:wrap">
+                    <div class="field" style="margin:0; flex:2; min-width:220px">
+                        <label>Courriel du nouvel accès</label>
+                        <asp:TextBox ID="tbUserEmail" runat="server" TextMode="Email" placeholder="personne@entreprise.ca" />
+                    </div>
+                    <div class="field" style="margin:0; flex:1; min-width:140px">
+                        <label>Prénom</label>
+                        <asp:TextBox ID="tbUserFirst" runat="server" />
+                    </div>
+                    <div class="field" style="margin:0; flex:1; min-width:140px">
+                        <label>Nom</label>
+                        <asp:TextBox ID="tbUserLast" runat="server" />
+                    </div>
+                    <asp:Button ID="btnCreateUser" runat="server" Text="Créer l'accès" CssClass="btn btn-primary" OnClick="btnCreateUser_Click" />
+                </div>
+                <p class="sub" style="margin:10px 0 0; font-size:12px">
+                    Le compte créé est administrateur de l'abonné : il pourra ensuite ajouter ses propres collègues.
+                </p>
+            </div>
+        </div>
+
+        <div class="card" style="margin-top:18px">
             <h3 style="margin:0 0 6px">Intégration API</h3>
             <p class="sub" style="margin:0 0 12px">
                 Pour agir au nom de cet abonné via l'API, utilisez votre clé partenaire et ciblez ce locataire avec l'en-tête
