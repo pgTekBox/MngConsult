@@ -492,6 +492,22 @@
     </telerik:RadCodeBlock>
 
     <script type="text/javascript">
+
+        // Confirmation « Comptabiliser » : radconfirm est ASYNCHRONE, on annule donc
+        // le clic tout de suite (return false côté bouton) et c'est la callback qui
+        // déclenche le postback si l'utilisateur confirme. Le nom du bouton est
+        // capturé avant l'appel : après un rebind AJAX, l'élément peut avoir été
+        // remplacé, mais la chaîne, elle, reste valable.
+        function confirmPostInvoice(btn, msg, title) {
+            var target = btn.name;
+            radconfirm(msg,
+                function (ok) {
+                    if (ok) { __doPostBack(target, ''); }
+                },
+                420, 190, null, title);
+            return false;
+        }
+
         function setInvoiceDirty() {
 
             document.getElementById("hfInvoiceDirty").value = "1";
