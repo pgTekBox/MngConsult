@@ -121,7 +121,8 @@ INSERT INTO T061DocumentLine
     Amount,
 	UnitPrice,
 	Qty,
-	IncludeInRepport_TPS_TVQ
+	IncludeInRepport_TPS_TVQ,
+	TaxeStatus
 )
 SELECT
     @T060DocumentId,
@@ -129,6 +130,11 @@ SELECT
     amount,
 	unit_price,
 	qty,
+	1,
+	-- TaxeStatus n'etait pas renseigne : sp_RecalculerTotauxDocument, appelee
+	-- au bout de s0024NormaliseTaxe, remet TPS et TVQ a 0 pour toute ligne dont
+	-- TaxeStatus <> 1. Les documents issus de l'OCR sortaient donc toujours
+	-- sans taxes, et leur Total valait le sous-total.
 	1
 
 FROM OPENJSON(@json, '$.items')
@@ -175,6 +181,74 @@ end
 
 --  Normalise les ligne du document, calcule TPS et TVQ
 exec s0024NormaliseTaxe @T060DocumentId
+
+/*
+   Taxes reellement facturees.
+
+   s0024NormaliseTaxe recalcule les taxes a partir des taux (5 % / 9,975 %).
+   C'est le bon repli, mais ce n'est pas ce qu'on doit inscrire : pour un CTI /
+   RTI, c'est le montant imprime sur le recu qui fait foi, pas une reestimation.
+   Quand le JSON porte des montants de taxes, ils remplacent donc le calcul.
+
+   Repartition au prorata du montant de chaque ligne, l'ecart d'arrondi allant
+   sur la ligne la plus importante : la somme des lignes redonne exactement le
+   montant du recu.
+*/
+declare @TPS_Json numeric(18,2)
+declare @TVQ_Json numeric(18,2)
+
+select @TPS_Json = sum(case when upper(t.name) like 'TPS%' or upper(t.name) like 'GST%' then t.amount end),
+       @TVQ_Json = sum(case when upper(t.name) like 'TVQ%' or upper(t.name) like 'QST%' then t.amount end)
+  from openjson(@json, '$.taxes')
+  with ( name varchar(100), amount numeric(18,4) ) t
+
+if (@TPS_Json is not null or @TVQ_Json is not null)
+begin
+    declare @Base numeric(18,4)
+    select @Base = sum(coalesce([Amount], 0)) from [dbo].[T061DocumentLine] where [DocumentId] = @T060DocumentId
+
+    if coalesce(@Base, 0) > 0
+    begin
+        update [dbo].[T061DocumentLine]
+           set [TPS] = round(coalesce(@TPS_Json, 0) * coalesce([Amount], 0) / @Base, 2),
+               [TVQ] = round(coalesce(@TVQ_Json, 0) * coalesce([Amount], 0) / @Base, 2)
+         where [DocumentId] = @T060DocumentId
+
+        -- Ecart d'arrondi : on le pose sur la ligne la plus grosse.
+        declare @TPS_Reparti numeric(18,2)
+        declare @TVQ_Reparti numeric(18,2)
+        select @TPS_Reparti = sum(coalesce([TPS], 0)), @TVQ_Reparti = sum(coalesce([TVQ], 0))
+          from [dbo].[T061DocumentLine] where [DocumentId] = @T060DocumentId
+
+        declare @LigneMax int
+        select top 1 @LigneMax = [Id] from [dbo].[T061DocumentLine]
+         where [DocumentId] = @T060DocumentId order by coalesce([Amount], 0) desc, [Id]
+
+        if @LigneMax is not null
+            update [dbo].[T061DocumentLine]
+               set [TPS] = coalesce([TPS], 0) + (coalesce(@TPS_Json, 0) - @TPS_Reparti),
+                   [TVQ] = coalesce([TVQ], 0) + (coalesce(@TVQ_Json, 0) - @TVQ_Reparti)
+             where [Id] = @LigneMax
+
+        update [dbo].[T061DocumentLine]
+           set [Total] = coalesce([Amount], 0) + coalesce([TPS], 0) + coalesce([TVQ], 0)
+         where [DocumentId] = @T060DocumentId
+
+        -- Les totaux de l'entete suivent les lignes.
+        update d
+           set [SubTotal] = x.SousTotal,
+               [TPS]      = x.TPS,
+               [TVQ]      = x.TVQ,
+               [Total]    = x.SousTotal + x.TPS + x.TVQ
+          from [dbo].[T060Document] d
+         cross apply ( select sum(coalesce(l.[Amount], 0)) SousTotal,
+                              sum(coalesce(l.[TPS], 0))    TPS,
+                              sum(coalesce(l.[TVQ], 0))    TVQ
+                         from [dbo].[T061DocumentLine] l where l.[DocumentId] = d.[Id] ) x
+         where d.[Id] = @T060DocumentId
+    end
+end
+
 exec sp_ResoudreComptesDocument @T060DocumentId
 exec s0025BuildTaxeRepport
 GO
