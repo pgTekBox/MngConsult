@@ -15,7 +15,7 @@
     <style>
 
   .listview-list-head {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px   190px;
+            grid-template-columns: 70px 105px 105px 1fr 95px 90px 90px 95px 95px 190px;
                                
             font-weight: 800;
             font-size: 13px;
@@ -28,7 +28,7 @@
         }
 
         .listview-row {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px  190px;
+            grid-template-columns: 70px 105px 105px 1fr 95px 90px 90px 95px 95px 190px;
                                  
             border-bottom: 1px solid #eef2f7;
             background: #fff;
@@ -202,6 +202,10 @@
             display: contents; /* ← les enfants participent directement à la grille */
         }
 
+        /* Placement explicite : l'ordre du DOM (contraint par les wrappers
+           mobiles field-row1/2) ne suit pas celui des entêtes. Chaque cellule
+           est donc posée sur SA colonne — l'état et le statut de paiement
+           étaient d'ailleurs intervertis avant l'ajout de l'échéance. */
         .field-number {
             grid-column: 1;
             grid-row: 1;
@@ -212,34 +216,55 @@
             grid-row: 1;
         }
 
-        .field-customer {
+        .field-echeance {
             grid-column: 3;
             grid-row: 1;
         }
 
-        .field-etat {
+        .field-customer {
             grid-column: 4;
             grid-row: 1;
         }
-       .field-resteapayer{
+
+        .field-statutpaiement {
             grid-column: 5;
+            grid-row: 1;
+        }
+
+       .field-resteapayer{
+            grid-column: 6;
             grid-row: 1;
         }
 
 
       .field-dejarecu{
-            grid-column: 6;
-            grid-row: 1;
-        }
-  .field-total {
             grid-column: 7;
             grid-row: 1;
         }
 
-      .field-encaissement{
+  .field-total {
             grid-column: 8;
             grid-row: 1;
         }
+
+        .field-etat {
+            grid-column: 9;
+            grid-row: 1;
+        }
+
+        .listview-row > .listview-actions {
+            grid-column: 10;
+            grid-row: 1;
+        }
+
+        /* Entêtes cliquables (tri) */
+        .sort-link, .sort-link:hover, .sort-link:visited {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: inherit;
+        }
+        .sort-link:hover { text-decoration: underline; }
       
           
       
@@ -310,20 +335,35 @@
 
                     <LayoutTemplate>
                         <div class="listview-list">
+                            <%-- Toutes les colonnes sont triables, sauf « Action ». --%>
                             <div class="listview-list-head">
-                                <div class="colh-numero"><asp:Literal ID="litColNum" runat="server" /></div>
-                                <div class="colh-date"><asp:Literal ID="litColDate" runat="server" /></div>
-                                <div class="colh-customer"><asp:Literal ID="litColCustomer" runat="server" /></div>
-                                <div class="colh-statutpaiement"><asp:Literal ID="litColStatutPaiement" runat="server" /></div>
-                                 <div class="colh-resteapayer"><asp:Literal ID="litColResteAPayer" runat="server" /></div>
-                                 <div class="colh-dejarecu"><asp:Literal ID="litColDejaRecu" runat="server" /></div>
-
-
-
-                                <div class="colh-total"><asp:Literal ID="litColTotal" runat="server" /></div>
-                                <div class="colh-etat"><asp:Literal ID="litColEtat" runat="server" /></div>
-
-
+                                <div class="colh-numero">
+                                    <asp:LinkButton ID="lnkSortNum" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NumeroSort" CausesValidation="false" />
+                                </div>
+                                <div class="colh-date">
+                                    <asp:LinkButton ID="lnkSortDate" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DocumentDate" CausesValidation="false" />
+                                </div>
+                                <div class="colh-echeance">
+                                    <asp:LinkButton ID="lnkSortDue" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DueDate" CausesValidation="false" />
+                                </div>
+                                <div class="colh-customer">
+                                    <asp:LinkButton ID="lnkSortCustomer" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NameSort" CausesValidation="false" />
+                                </div>
+                                <div class="colh-statutpaiement">
+                                    <asp:LinkButton ID="lnkSortPay" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="StatutPaiement" CausesValidation="false" />
+                                </div>
+                                <div class="colh-resteapayer">
+                                    <asp:LinkButton ID="lnkSortReste" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="ResteAPayer" CausesValidation="false" />
+                                </div>
+                                <div class="colh-dejarecu">
+                                    <asp:LinkButton ID="lnkSortRecu" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DejaRecu" CausesValidation="false" />
+                                </div>
+                                <div class="colh-total">
+                                    <asp:LinkButton ID="lnkSortTotal" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Total" CausesValidation="false" />
+                                </div>
+                                <div class="colh-etat">
+                                    <asp:LinkButton ID="lnkSortEtat" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Status" CausesValidation="false" />
+                                </div>
 
                                 <div class="colh-action"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
@@ -341,6 +381,7 @@
                             <div class="field-row1">
                                 <span class="field-number"><%# Eval("DocumentNumber") %></span>
                                 <span class="field-date"><%# FormatDateFr(Eval("DocumentDate")) %></span>
+                                <span class="field-echeance"><%# FormatDateFr(Eval("DueDate")) %></span>
                                 <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
                             </div>
 

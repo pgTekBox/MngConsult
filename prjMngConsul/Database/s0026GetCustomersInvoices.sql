@@ -41,6 +41,11 @@ BEGIN
 
         d.[Email]                                          AS [Email],
 
+        -- Colonnes BRUTES pour le tri de la grille : les colonnes affichées
+        -- ci-dessus contiennent du HTML, on ne peut pas trier dessus.
+        v.[NameRaw]                                        AS [NameSort],
+        v.[DocumentNumber]                                 AS [NumeroSort],
+
         v.[Total],
 
         -- Indicateurs de paiement (déjà calculés dans la vue)
@@ -71,6 +76,7 @@ BEGIN
         v.[ComptabilisationStatus],
         v.[StatusComptable]                                AS [Status],
         v.[DocumentDate],
+        v.[DueDate],
 
         -- Médias capturés par l'app mobile (60SecAI) : photos de chantier et
         -- géolocalisation du lieu d'intervention. Servent à afficher les
