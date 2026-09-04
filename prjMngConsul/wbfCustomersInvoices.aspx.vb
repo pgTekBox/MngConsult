@@ -380,6 +380,17 @@ Public Class wbfCustomersInvoices
     ''' l'appel et le clic ne partirait jamais au serveur. On sort donc uniquement
     ''' quand l'utilisateur annule.
     ''' </summary>
+    Public Function FormatDate2Lines(value As Object) As String
+        ' Date sur deux lignes dans la grille : « 26 sept. » puis l'année en
+        ' dessous, en gris. La colonne reste étroite sans que la date soit
+        ' coupée à un endroit arbitraire.
+        If value Is Nothing OrElse IsDBNull(value) Then Return ""
+        Dim d As DateTime = CDate(value)
+        Dim fr As New Globalization.CultureInfo("fr-FR")
+        Return Server.HtmlEncode(d.ToString("dd MMM", fr)) &
+               "<span class=""year"">" & d.Year.ToString() & "</span>"
+    End Function
+
     Public Function ConfirmPost() As String
         Dim msg As String = HttpUtility.JavaScriptStringEncode(L("confirmPost"), True)
         Dim ttl As String = HttpUtility.JavaScriptStringEncode(L("confirmPostTitle"), True)

@@ -77,24 +77,6 @@ Partial Public Class wbfSupplierEdit
     Protected WithEvents pMsg As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
     '''<summary>
-    '''tlblId control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents tlblId As Global.Telerik.Web.UI.RadLabel
-
-    '''<summary>
-    '''litId control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents litId As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>
     '''tlblOrigine control.
     '''</summary>
     '''<remarks>

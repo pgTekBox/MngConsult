@@ -15,7 +15,7 @@
     <style>
 
   .listview-list-head {
-            grid-template-columns: 70px 105px 105px 1fr 95px 90px 90px 95px 95px 190px;
+            grid-template-columns: 92px 88px 88px 1fr 95px 90px 90px 95px 95px 190px;
                                
             font-weight: 800;
             font-size: 13px;
@@ -28,7 +28,7 @@
         }
 
         .listview-row {
-            grid-template-columns: 70px 105px 105px 1fr 95px 90px 90px 95px 95px 190px;
+            grid-template-columns: 92px 88px 88px 1fr 95px 90px 90px 95px 95px 190px;
                                  
             border-bottom: 1px solid #eef2f7;
             background: #fff;
@@ -206,10 +206,24 @@
            mobiles field-row1/2) ne suit pas celui des entêtes. Chaque cellule
            est donc posée sur SA colonne — l'état et le statut de paiement
            étaient d'ailleurs intervertis avant l'ajout de l'échéance. */
+        /* Le numéro reste sur une seule ligne (« FAC-0007 », jamais coupé). */
         .field-number {
             grid-column: 1;
             grid-row: 1;
+            white-space: nowrap;
         }
+
+        /* Les dates s'écrivent sur deux lignes : « 26 sept. » puis « 2026 ». */
+        .field-date,
+        .field-echeance {
+            line-height: 1.25;
+        }
+
+            .field-date .year,
+            .field-echeance .year {
+                display: block;
+                color: #64748b;
+            }
 
         .field-date {
             grid-column: 2;
@@ -380,8 +394,8 @@
                             <%-- Ligne 1 mobile : Numéro + Date + Total --%>
                             <div class="field-row1">
                                 <span class="field-number"><%# Eval("DocumentNumber") %></span>
-                                <span class="field-date"><%# FormatDateFr(Eval("DocumentDate")) %></span>
-                                <span class="field-echeance"><%# FormatDateFr(Eval("DueDate")) %></span>
+                                <span class="field-date"><%# FormatDate2Lines(Eval("DocumentDate")) %></span>
+                                <span class="field-echeance"><%# FormatDate2Lines(Eval("DueDate")) %></span>
                                 <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
                             </div>
 

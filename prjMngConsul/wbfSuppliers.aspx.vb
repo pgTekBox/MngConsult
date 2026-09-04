@@ -47,10 +47,68 @@ Public Class wbfSuppliers
     ''' ce qui est interdit si le conteneur contient des blocs de code. On passe donc par
     ''' des Literal renseignés ici, une fois le gabarit instancié.</summary>
     Private Sub rlvSuppliers_PreRender(sender As Object, e As EventArgs) Handles rlvSuppliers.PreRender
-        SetLiteral(rlvSuppliers, "litColName", L("colName"))
+        SetSortHeader(rlvSuppliers, "lnkSortName", L("colName"), "Name")
+        SetSortHeader(rlvSuppliers, "lnkSortAmount", L("colToPay"), "APayer")
         SetLiteral(rlvSuppliers, "litColAction", L("colAction"))
         SetLiteral(rlvSuppliers, "litEmpty", L("empty"))
     End Sub
+
+    ' =====================================================================
+    ' Tri de la grille (« Nom » et « À payer »)
+    ' ---------------------------------------------------------------------
+    ' Appliqué sur la DataTable renvoyée par s0011GetSuppliers, donc sur les
+    ' colonnes brutes Name et APayer — jamais sur le HTML affiché.
+    ' =====================================================================
+
+    Private Property SortCol() As String
+        Get
+            Return If(TryCast(ViewState("SortCol"), String), "Name")
+        End Get
+        Set(value As String)
+            ViewState("SortCol") = value
+        End Set
+    End Property
+
+    Private Property SortDesc() As Boolean
+        Get
+            Dim v As Object = ViewState("SortDesc")
+            Return v IsNot Nothing AndAlso CBool(v)
+        End Get
+        Set(value As Boolean)
+            ViewState("SortDesc") = value
+        End Set
+    End Property
+
+    ''' <summary>Libellé d'un entête cliquable, avec la flèche du tri courant.</summary>
+    Private Sub SetSortHeader(root As Control, id As String, text As String, col As String)
+        Dim lnk = TryCast(FindDeep(root, id), LinkButton)
+        If lnk Is Nothing Then Return
+        Dim fleche As String = ""
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            fleche = If(SortDesc, " ▼", " ▲")
+        End If
+        lnk.Text = Server.HtmlEncode(text) & fleche
+    End Sub
+
+    ''' <summary>Clic sur un entête : même colonne = sens inversé, sinon
+    ''' nouvelle colonne en ordre croissant.</summary>
+    Private Sub ApplySortCommand(col As String)
+        If String.IsNullOrEmpty(col) Then Return
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            SortDesc = Not SortDesc
+        Else
+            SortCol = col
+            SortDesc = False
+        End If
+    End Sub
+
+    ''' <summary>Montant dû : « — » discret quand il n'y a rien à payer.</summary>
+    Protected Function FormatAmount(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return "<span class=""field-amount zero"">—</span>"
+        Dim d As Decimal = Convert.ToDecimal(o)
+        If d = 0D Then Return "<span class=""field-amount zero"">—</span>"
+        Return Server.HtmlEncode(d.ToString("N2", Globalization.CultureInfo.GetCultureInfo("fr-CA")) & " $")
+    End Function
 
     ''' <summary>Recherche récursive d'un Literal par Id (les contrôles de gabarit du
     ''' RadListView sont dans des conteneurs de nommage imbriqués) et lui assigne un texte.</summary>
@@ -80,6 +138,7 @@ Public Class wbfSuppliers
             Case "searchPh" : Return Choose3(lang, "Rechercher (nom, email, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
             Case "clear" : Return Choose3(lang, "Effacer", "Clear", "Borrar")
             Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "colToPay" : Return Choose3(lang, "À payer", "Payable", "Por pagar")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "stripeTip" : Return Choose3(lang, "Configurer paiements Stripe Connect", "Configure Stripe Connect payments", "Configurar pagos Stripe Connect")
             Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
@@ -128,6 +187,10 @@ Public Class wbfSuppliers
                 Dim supplierId As Integer = CInt(e.CommandArgument)
                 DeleteSupplier(supplierId)
                 rlvSuppliers.Rebind()
+
+            Case "SortBy"
+                ApplySortCommand(e.CommandArgument.ToString())
+                rlvSuppliers.Rebind()
         End Select
     End Sub
 
@@ -167,6 +230,12 @@ Public Class wbfSuppliers
         p.Add(New SqlClient.SqlParameter("@Search", q))
         Dim ds As DataSet = ExecuteSQLds("s0011GetSuppliers", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
+
+        Dim dt As DataTable = ds.Tables(0)
+        If dt.Columns.Contains(SortCol) Then
+            dt.DefaultView.Sort = "[" & SortCol & "]" & If(SortDesc, " DESC", " ASC")
+            dt = dt.DefaultView.ToTable()
+        End If
+        Return dt
     End Function
 End Class
