@@ -204,6 +204,7 @@
                         <telerik:RadTab Text="Taxes" />
                         <telerik:RadTab Text="Email" />
                         <telerik:RadTab Text="Facture" />
+                        <telerik:RadTab Text="Traitement" />
                         <telerik:RadTab Text="Comptabilité" />
                         <telerik:RadTab Text="Bancaire" />
                         <telerik:RadTab Text="Comptable" />
@@ -337,6 +338,29 @@
                             <FooterTemplate></div></FooterTemplate>
                         </asp:Repeater>
                         <asp:Panel ID="pnlEmptyPdf" runat="server" Visible="false" CssClass="empty-state">
+                            <%= L("emptyTab") %>
+                        </asp:Panel>
+                    </telerik:RadPageView>
+
+                    <!-- TRAITEMENT -->
+                    <telerik:RadPageView ID="pvTraitement" runat="server">
+                        <asp:Repeater ID="rpTraitement" runat="server" OnItemDataBound="rp_ItemDataBound">
+                            <HeaderTemplate><div class="form-grid"></HeaderTemplate>
+                            <ItemTemplate>
+                                <div class='<%# GetFieldCssClass(Container.DataItem) %>'>
+                                    <asp:HiddenField ID="hidParamId" runat="server" Value='<%# Eval("ParamId") %>' />
+                                    <asp:HiddenField ID="hidParamType" runat="server" Value='<%# Eval("ParamType") %>' />
+                                    <asp:HiddenField ID="hidShortName" runat="server" Value='<%# Eval("ShortName") %>' />
+                                    <label>
+                                        <%# Eval("Name") %>
+                                        <span class="field-shortname"><%# Eval("ShortName") %></span>
+                                    </label>
+                                    <asp:PlaceHolder ID="phControl" runat="server" />
+                                </div>
+                            </ItemTemplate>
+                            <FooterTemplate></div></FooterTemplate>
+                        </asp:Repeater>
+                        <asp:Panel ID="pnlEmptyTraitement" runat="server" Visible="false" CssClass="empty-state">
                             <%= L("emptyTab") %>
                         </asp:Panel>
                     </telerik:RadPageView>
