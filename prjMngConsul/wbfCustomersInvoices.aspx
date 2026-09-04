@@ -280,6 +280,17 @@
                 <asp:Button ID="btnImportSquare" runat="server"
                     CssClass="btn btnAddRow"
                     CausesValidation="false" />
+                <%-- Filtres à sélection multiple : rien de coché = aucun filtre. --%>
+                <telerik:RadComboBox ID="rcbEtat" runat="server"
+                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
+                    Skin="Metro" RenderMode="Lightweight" Width="180px"
+                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
+
+                <telerik:RadComboBox ID="rcbStatutPaiement" runat="server"
+                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
+                    Skin="Metro" RenderMode="Lightweight" Width="220px"
+                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
+
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch" runat="server" CssClass="input txttbsearch" />
                     <asp:Button ID="btnSearch" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />

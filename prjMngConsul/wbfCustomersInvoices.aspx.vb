@@ -19,9 +19,52 @@ Public Class wbfCustomersInvoices
         ApplyLocalization()
 
         If Not IsPostBack Then
+            BindFilters()
             rlvClientsFactures.Rebind()
         End If
     End Sub
+
+    ' =====================================================================
+    ' Filtres à sélection multiple (état comptable / statut de paiement)
+    ' ---------------------------------------------------------------------
+    ' Les valeurs envoyées à s0026 sont celles de la vue vwCustomersInvoices,
+    ' jamais les libellés traduits. Rien de coché = aucun filtre.
+    ' =====================================================================
+
+    ''' <summary>Remplit les deux listes déroulantes à cases à cocher.</summary>
+    Private Sub BindFilters()
+        ' « Check All » de Telerik est en anglais par défaut.
+        rcbEtat.Localization.CheckAllString = L("checkAll")
+        rcbStatutPaiement.Localization.CheckAllString = L("checkAll")
+
+        rcbEtat.EmptyMessage = L("filterStateAll")
+        rcbEtat.Items.Clear()
+        rcbEtat.Items.Add(New RadComboBoxItem(L("stDraft"), "Brouillon"))
+        rcbEtat.Items.Add(New RadComboBoxItem(L("stPosted"), "Comptabilisé"))
+
+        rcbStatutPaiement.EmptyMessage = L("filterPayAll")
+        rcbStatutPaiement.Items.Clear()
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payOpen"), "OUVERTE"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPartial"), "PARTIELLE"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payLate"), "EN_RETARD"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPaid"), "PAYEE"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payInProgress"), "IN_PROGRESS"))
+    End Sub
+
+    ''' <summary>Une case cochée/décochée dans l'un des filtres : on recharge la grille.</summary>
+    Protected Sub rcbFiltre_ItemChecked(sender As Object, e As RadComboBoxItemEventArgs)
+        rlvClientsFactures.Rebind()
+    End Sub
+
+    ''' <summary>Valeurs cochées d'un filtre, en liste séparée par des virgules
+    ''' (chaîne vide si rien n'est coché = pas de filtre).</summary>
+    Private Function CheckedCsv(rcb As RadComboBox) As String
+        Dim vals As New List(Of String)
+        For Each it As RadComboBoxItem In rcb.CheckedItems
+            If Not String.IsNullOrEmpty(it.Value) Then vals.Add(it.Value)
+        Next
+        Return String.Join(",", vals)
+    End Function
 
     ''' <summary>Applique les libellés localisés (fr/en/es) aux contrôles serveur de la page.</summary>
     Private Sub ApplyLocalization()
@@ -101,6 +144,16 @@ Public Class wbfCustomersInvoices
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "tipCashIn" : Return Choose3(lang, "Encaissement", "Cash receipt", "Cobro")
             Case "tipInvoiceSend" : Return Choose3(lang, "Envoyer la facture / Encaisser", "Send invoice / Collect", "Enviar factura / Cobrar")
+            Case "checkAll" : Return Choose3(lang, "Tout cocher", "Check all", "Marcar todo")
+            Case "filterStateAll" : Return Choose3(lang, "État : tous", "State: all", "Estado: todos")
+            Case "filterPayAll" : Return Choose3(lang, "Paiement : tous", "Payment: all", "Pago: todos")
+            Case "stDraft" : Return Choose3(lang, "Brouillon", "Draft", "Borrador")
+            Case "stPosted" : Return Choose3(lang, "Comptabilisé", "Posted", "Contabilizado")
+            Case "payOpen" : Return Choose3(lang, "Ouverte", "Open", "Abierta")
+            Case "payPartial" : Return Choose3(lang, "Partielle", "Partial", "Parcial")
+            Case "payLate" : Return Choose3(lang, "En retard", "Overdue", "Vencida")
+            Case "payPaid" : Return Choose3(lang, "Payée", "Paid", "Pagada")
+            Case "payInProgress" : Return Choose3(lang, "En cours (brouillon)", "In progress (draft)", "En curso (borrador)")
             Case "tipPost" : Return Choose3(lang, "Comptabiliser la facture", "Post the invoice", "Contabilizar la factura")
             Case "confirmPost" : Return Choose3(lang,
                 "Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l'échéance seront attribués, et la facture ne pourra plus être modifiée.",
@@ -180,6 +233,8 @@ Public Class wbfCustomersInvoices
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@Search", sSearch))
+        p.Add(New SqlClient.SqlParameter("@Etats", CheckedCsv(rcbEtat)))
+        p.Add(New SqlClient.SqlParameter("@StatutsPaiement", CheckedCsv(rcbStatutPaiement)))
         Dim ds As DataSet = ExecuteSQLds("s0026GetCustomersInvoices", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
@@ -860,6 +915,11 @@ Public Class wbfCustomersInvoices
 
     Private Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         tbSearch.Text = ""
+        ' Le bouton « effacer » remet aussi les filtres à zéro : sinon la grille
+        ' reste filtrée alors que la recherche paraît vide.
+        For Each it As RadComboBoxItem In rcbEtat.Items : it.Checked = False : Next
+        For Each it As RadComboBoxItem In rcbStatutPaiement.Items : it.Checked = False : Next
+        rcbEtat.Text = "" : rcbStatutPaiement.Text = ""
         rlvClientsFactures.Rebind()
     End Sub
 

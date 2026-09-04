@@ -11,8 +11,18 @@
 -- ============================================================================
 SET QUOTED_IDENTIFIER ON;
 GO
+-- @Etats / @StatutsPaiement : listes separees par des virgules, pour les filtres
+--   a selection multiple de la grille. Vide ou NULL = aucun filtre (tout sort).
+--   Valeurs attendues :
+--     @Etats           'Brouillon', 'Comptabilise'  (accents ignores, cf. collation)
+--     @StatutsPaiement 'OUVERTE', 'PARTIELLE', 'EN_RETARD', 'PAYEE', 'IN_PROGRESS'
+--   Les deux parametres ont une valeur par defaut : les appelants existants
+--   (application mobile, rapports) ne changent pas.
 ALTER PROCEDURE [dbo].[s0026GetCustomersInvoices]
-    @CompanyGUID uniqueidentifier,@Search varchar(200)
+    @CompanyGUID uniqueidentifier,
+    @Search varchar(200),
+    @Etats varchar(200) = NULL,
+    @StatutsPaiement varchar(200) = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
@@ -75,6 +85,11 @@ BEGIN
     FROM [dbo].[vwCustomersInvoices] v
     LEFT JOIN dbo.T060Document d ON d.[Id] = v.[Id]
     WHERE v.[CompanyGUID] = @CompanyGUID and coalesce(nameRaw,'') like '%' + @Search +  '%'
+      -- Filtres a selection multiple de la grille (vide = pas de filtre)
+      AND (@Etats IS NULL OR LTRIM(RTRIM(@Etats)) = ''
+           OR v.[StatusComptable] IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@Etats, ',')))
+      AND (@StatutsPaiement IS NULL OR LTRIM(RTRIM(@StatutsPaiement)) = ''
+           OR v.[StatutPaiement] IN (SELECT LTRIM(RTRIM(value)) FROM STRING_SPLIT(@StatutsPaiement, ',')))
     -- Ordre par defaut de la grille : de la plus recente a la plus vieille.
     -- L'Id departage les factures de meme date (les plus recemment saisies
     -- d'abord) et rend l'ordre deterministe.
