@@ -121,12 +121,23 @@ Public Class clsTaskReceipt
         End If
 
         Dim opt As New clsReceiptImageOptimizer()
-        Dim optimized As Byte() = opt.OptimizeReceiptForAI(
-            item.ImageSource,
-            maxWidth:=clsXmlConfig.ToInt(_config.ImageMaxWidth, 1024),
-            jpegQuality:=clsXmlConfig.ToInt(_config.ImageJpegQuality, 55),
-            autoContrast:=True,
-            toGrayscale:=True)
+        Dim optimized As Byte()
+
+        Try
+            optimized = opt.OptimizeReceiptForAI(
+                item.ImageSource,
+                maxWidth:=clsXmlConfig.ToInt(_config.ImageMaxWidth, 1024),
+                jpegQuality:=clsXmlConfig.ToInt(_config.ImageJpegQuality, 55),
+                autoContrast:=True,
+                toGrayscale:=True)
+        Catch ex As Exception
+            ' GDI+ ne dit que « Le paramètre n'est pas valide. » quand il ne sait
+            ' pas décoder le fichier. Sans le nom et le format, impossible de
+            ' savoir lequel des reçus est en cause ni pourquoi.
+            Throw New Exception("Image illisible (" & If(item.FileName, "sans nom") &
+                                ", " & If(item.ContentType, "format inconnu") &
+                                ", " & item.ImageSource.Length.ToString("N0") & " octets) : " & ex.Message)
+        End Try
 
         If optimized Is Nothing OrElse optimized.Length = 0 Then
             Throw New Exception("L'optimisation de l'image n'a rien produit.")
@@ -210,7 +221,7 @@ Public Class clsTaskReceipt
         ' Validation avant d'ecrire : s0006SaveAIReturn refuse silencieusement
         ' un texte qui n'est pas du JSON (ISJSON = 0). Sans ce controle, le reçu
         ' resterait indefiniment au meme etat sans qu'on sache pourquoi.
-        Dim dto As ReceiptDto = ReceiptJsonValidator.Parse(json)
+        ReceiptJsonValidator.EnsureValidJson(json)
 
         _repo.SaveAiReturn(item.ImageGUID, json, inputTokens, outputTokens, costUsd)
         item.AiJson = json
@@ -218,7 +229,7 @@ Public Class clsTaskReceipt
 
         sw.Stop()
         SafeLog(item.ImageGUID, "IA", True,
-                ReceiptJsonValidator.Describe(dto),
+                ReceiptJsonValidator.Describe(json),
                 json:=json,
                 inputToken:=inputTokens,
                 outputToken:=outputTokens,
@@ -254,7 +265,7 @@ Public Class clsTaskReceipt
         Dim json As String = item.AiJson
         If String.IsNullOrWhiteSpace(json) Then json = _repo.GetJson(item.ImageGUID)
 
-        Dim dto As ReceiptDto = ReceiptJsonValidator.Parse(json)
+        ReceiptJsonValidator.EnsureValidJson(json)
 
         If item.ReceiptTypeId = 1 Then
             _repo.ProcessJsonCustomer(item.ImageGUID)   ' facture client
@@ -264,7 +275,7 @@ Public Class clsTaskReceipt
 
         sw.Stop()
         SafeLog(item.ImageGUID, "JSON", True,
-                ReceiptJsonValidator.Describe(dto),
+                ReceiptJsonValidator.Describe(json),
                 json:=json,
                 durationMs:=CInt(sw.ElapsedMilliseconds))
 
