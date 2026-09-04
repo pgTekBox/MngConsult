@@ -39,6 +39,10 @@ redemande pas le JSON à ChatGPT, il n'exécute que le « Process JSON ».
   silencieusement ce qui n'est pas du JSON (`ISJSON = 0`). Le service valide
   donc lui-même, et retire au passage l'emballage <code>```json</code> que le
   modèle ajoute parfois — sans quoi le reçu resterait bloqué sans explication.
+  La validation s'arrête à « est-ce un objet JSON », qui est exactement ce dont
+  SQL a besoin : lier le contrôle au DTO bloquait des reçus traitables dès que
+  le modèle écrivait `167.8L` dans un champ de montant, alors que `JSON_VALUE`
+  s'en accommode.
 
 ---
 
@@ -119,6 +123,17 @@ lit en base (`s0000GetParameter 'CHATGPT'` et `s0032GetPromptOpenAPI
 
 L'état `ProcessingStatus = 4` (« JSON traité ») est nouveau ; les états 0 à 3
 gardent leur signification d'origine, l'application web n'est pas affectée.
+
+### Dépendance : s0009SaveDocument
+
+Le « Process JSON » passe par `s0009SaveDocument`, qui liait chaque ligne de
+document à un rapport de taxe dont l'Id était écrit en dur (`= 1`). Ce rapport
+n'existe plus dans `T070RapportTaxe`, donc l'insertion violait la clé étrangère
+`FK_T071_T061DocumentLine_T070RapportTaxe_T070RapportTaxe` — pour le service
+comme pour `wbfReceipt.aspx`. Corrigé dans
+`prjMngConsul\Database\s0009SaveDocument.sql` : le rapport est résolu par
+compagnie et par période, et le lien est omis quand aucune période ne couvre la
+date du document.
 
 ---
 

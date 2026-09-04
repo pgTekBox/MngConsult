@@ -1,4 +1,5 @@
 ﻿Imports Newtonsoft.Json
+Imports Newtonsoft.Json.Linq
 
 ''' <summary>
 ''' Validation du JSON rendu par ChatGPT, avant de le confier aux procedures
@@ -12,40 +13,81 @@
 Public Class ReceiptJsonValidator
 
     ''' <summary>
-    ''' Verifie que le texte est un JSON de recu exploitable et le renvoie.
-    ''' Leve une exception explicite sinon : le service la journalise et
-    ''' marque le recu en erreur plutot que de creer un document bancal.
+    ''' Verifie que le texte est un objet JSON exploitable, et le renvoie tel
+    ''' quel. C'est exactement le contrat de SQL : s0006SaveAIReturn refuse ce
+    ''' qui n'est pas du JSON (ISJSON = 0), et s0008/s0009 relisent ensuite le
+    ''' texte avec JSON_VALUE.
+    '''
+    ''' On ne va pas plus loin volontairement. Lier la validation au DTO
+    ''' bloquait des recus parfaitement traitables : il suffisait que le modele
+    ''' ecrive « 167.8L » ou « 20.32 » dans un champ decimal pour que la
+    ''' deserialisation echoue, alors que JSON_VALUE s'en accommode.
     ''' </summary>
-    Public Shared Function Parse(json As String) As ReceiptDto
+    Public Shared Function EnsureValidJson(json As String) As String
         If String.IsNullOrWhiteSpace(json) Then
             Throw New Exception("JSON vide")
         End If
 
-        Dim obj As ReceiptDto
+        Dim token As JToken
         Try
-            obj = JsonConvert.DeserializeObject(Of ReceiptDto)(json)
+            token = JToken.Parse(json)
         Catch ex As Exception
-            Throw New Exception("Erreur parsing JSON reçu : " & ex.Message)
+            Throw New Exception("JSON invalide : " & ex.Message)
         End Try
 
-        If obj Is Nothing Then
-            Throw New Exception("JSON invalide")
+        If token.Type <> JTokenType.Object Then
+            Throw New Exception("JSON invalide : un objet était attendu, reçu " & token.Type.ToString() & ".")
         End If
 
-        If obj.items Is Nothing Then obj.items = New List(Of ReceiptItemDto)
-        If obj.taxes Is Nothing Then obj.taxes = New List(Of ReceiptTaxDto)
-
-        Return obj
+        Return json
     End Function
 
-    ''' <summary>Resume d'une ligne pour le journal : de quoi reconnaitre le recu.</summary>
-    Public Shared Function Describe(dto As ReceiptDto) As String
-        If dto Is Nothing Then Return ""
+    ''' <summary>
+    ''' Lecture au mieux du JSON pour le DTO. Renvoie Nothing si le document ne
+    ''' s'y plie pas : c'est sans consequence, le DTO ne sert qu'a fabriquer le
+    ''' libelle du journal.
+    ''' </summary>
+    Public Shared Function TryParse(json As String) As ReceiptDto
+        If String.IsNullOrWhiteSpace(json) Then Return Nothing
+
+        Try
+            Dim obj = JsonConvert.DeserializeObject(Of ReceiptDto)(json)
+            If obj Is Nothing Then Return Nothing
+            If obj.items Is Nothing Then obj.items = New List(Of ReceiptItemDto)
+            If obj.taxes Is Nothing Then obj.taxes = New List(Of ReceiptTaxDto)
+            Return obj
+        Catch
+            Return Nothing
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Resume d'une ligne pour le journal : de quoi reconnaitre le recu.
+    ''' Si le DTO n'a pas pu etre lu, on retombe sur les champs bruts du JSON,
+    ''' pour que la grille reste lisible meme quand le modele a mal ecrit un
+    ''' montant.
+    ''' </summary>
+    Public Shared Function Describe(json As String) As String
+        Dim dto As ReceiptDto = TryParse(json)
 
         Dim parts As New List(Of String)
-        If Not String.IsNullOrWhiteSpace(dto.merchant_name) Then parts.Add(dto.merchant_name)
-        If Not String.IsNullOrWhiteSpace(dto.receipt_number) Then parts.Add("#" & dto.receipt_number)
-        If dto.total.HasValue Then parts.Add(dto.total.Value.ToString("N2") & " " & If(dto.currency, ""))
+
+        If dto IsNot Nothing Then
+            If Not String.IsNullOrWhiteSpace(dto.merchant_name) Then parts.Add(dto.merchant_name)
+            If Not String.IsNullOrWhiteSpace(dto.receipt_number) Then parts.Add("#" & dto.receipt_number)
+            If dto.total.HasValue Then parts.Add(dto.total.Value.ToString("N2") & " " & If(dto.currency, ""))
+        Else
+            Try
+                Dim o As JObject = JObject.Parse(json)
+                Dim nom As String = o.Value(Of String)("merchant_name")
+                Dim num As String = o.Value(Of String)("receipt_number")
+                Dim tot As String = Convert.ToString(o("total"))
+                If Not String.IsNullOrWhiteSpace(nom) Then parts.Add(nom)
+                If Not String.IsNullOrWhiteSpace(num) Then parts.Add("#" & num)
+                If Not String.IsNullOrWhiteSpace(tot) Then parts.Add(tot & " " & Convert.ToString(o("currency")))
+            Catch
+            End Try
+        End If
 
         Return String.Join(" — ", parts)
     End Function
