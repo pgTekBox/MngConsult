@@ -331,15 +331,50 @@
         /* =============================================
            SCAN / REMPLISSAGE AUTOMATIQUE
         ============================================= */
+        /* Carte fournisseur : laisse le panneau scan déborder (overlay) et prime
+           sur les cartes suivantes — sinon .card { overflow:hidden } le rognerait. */
+        .card-supplier { overflow: visible; position: relative; z-index: 5; }
+
+        /* Boîte scan : pastille compacte dans l'entête ; panneau flottant à l'ouverture */
         .scan-box {
+            position: relative;
+            flex: 0 0 auto;
+            width: 300px; max-width: 100%;
             border: 1px solid var(--line);
-            border-radius: 14px;
+            border-radius: 10px;
             background: #f8fafc;
-            padding: 14px 16px;
-            margin-bottom: 16px;
+            padding: 6px 10px;
         }
-        .scan-box .scan-title { font-weight: 800; font-size: 14px; margin-bottom: 2px; }
-        .scan-box .scan-hint  { font-size: 12px; color: var(--muted); margin-bottom: 10px; }
+        .scan-head { display: flex; align-items: center; justify-content: space-between; gap: 8px; cursor: pointer; }
+        .scan-box .scan-title { font-weight: 800; font-size: 13px; }
+        .scan-box .scan-hint  { font-size: 11px; color: var(--muted); margin: 0 0 8px; }
+
+        /* Chevron expand / collapse */
+        .scan-toggle {
+            flex: 0 0 auto;
+            width: 24px; height: 24px; padding: 0;
+            border: none; background: transparent;
+            color: #64748b; cursor: pointer; border-radius: 6px;
+            display: flex; align-items: center; justify-content: center;
+        }
+        .scan-toggle:hover { background: #e2e8f0; color: #334155; }
+        .scan-toggle .chev { font-size: 13px; line-height: 1; transition: transform .18s ease; }
+        .scan-box.collapsed .scan-toggle .chev { transform: rotate(-90deg); }
+
+        /* Panneau flottant : s'ouvre PAR-DESSUS tous les autres éléments */
+        .scan-body {
+            position: absolute;
+            top: calc(100% + 6px);
+            right: 0;
+            width: 360px; max-width: 86vw;
+            background: #fff;
+            border: 1px solid var(--line);
+            border-radius: 12px;
+            box-shadow: 0 18px 44px rgba(2,6,23,.20);
+            padding: 12px;
+            z-index: 100;
+        }
+        .scan-box.collapsed .scan-body { display: none; }
 
         .dropzone {
             position: relative;
@@ -436,16 +471,12 @@
                 <p id="pMsg" runat="server" class="msg"></p>
             </asp:Panel>
 
-            <%-- ===== CARD : INFORMATIONS CLIENT ===== --%>
-            <div class="card">
+            <%-- ===== CARD : INFORMATIONS FOURNISSEUR ===== --%>
+            <div class="card card-supplier">
                 <div class="cardHead">
                     <div>
                         <div class="h"><asp:Literal ID="litSupplierInfo" runat="server" /></div>
                         <div class="grid4" style="margin-top:6px;">
-                            <div class="small"><asp:Literal ID="litLblId" runat="server" /> :
-                                <telerik:RadLabel runat="server" ID="tlblId"></telerik:RadLabel>
-                                <asp:Literal ID="litId" runat="server" />
-                            </div>
                             <div class="small"><asp:Literal ID="litLblOrigin" runat="server" /> :
                                 <telerik:RadLabel runat="server" ID="tlblOrigine"></telerik:RadLabel>
                             </div>
@@ -454,32 +485,41 @@
                             </div>
                         </div>
                     </div>
+
+                    <%-- Scan de document : compact dans l'entête ; le panneau s'ouvre en overlay
+                         (même présentation que la fiche client). --%>
+                    <div id="scanBox" class="scan-box collapsed">
+                        <div class="scan-head" onclick="toggleScanBox(); return false;">
+                            <div class="scan-title"><asp:Literal ID="litScanTitle" runat="server" /></div>
+                            <button type="button" id="btnScanToggle" runat="server" class="scan-toggle"
+                                title="" aria-label="">
+                                <span class="chev" aria-hidden="true">&#9662;</span>
+                            </button>
+                        </div>
+                        <div class="scan-body">
+                            <div class="scan-hint"><asp:Literal ID="litScanHint" runat="server" /></div>
+
+                            <div id="dropZone" class="dropzone">
+                                <div class="dz-ico" aria-hidden="true">⬆️</div>
+                                <div class="dz-text"><asp:Literal ID="litDropZone" runat="server" /></div>
+                                <div class="dz-file" id="dzFile"></div>
+                                <asp:FileUpload ID="fileDoc" runat="server" ClientIDMode="Static"
+                                    accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" CssClass="dz-input" />
+                            </div>
+
+                            <div class="scan-row">
+                                <asp:Button ID="btnExtract" runat="server" CssClass="btn primary"
+                                    CausesValidation="false" Text="Analyser le document" />
+                            </div>
+
+                            <asp:Panel ID="pnlUpload" runat="server" Visible="false" CssClass="scan-msg">
+                                <asp:Literal ID="litUpload" runat="server" />
+                            </asp:Panel>
+                        </div>
+                    </div>
                 </div>
 
                 <div class="cardBody">
-
-                    <%-- Scan de document : remplissage automatique (IA) des champs vides --%>
-                    <div class="scan-box">
-                        <div class="scan-title"><asp:Literal ID="litScanTitle" runat="server" /></div>
-                        <div class="scan-hint"><asp:Literal ID="litScanHint" runat="server" /></div>
-
-                        <div id="dropZone" class="dropzone">
-                            <div class="dz-ico" aria-hidden="true">⬆️</div>
-                            <div class="dz-text"><asp:Literal ID="litDropZone" runat="server" /></div>
-                            <div class="dz-file" id="dzFile"></div>
-                            <asp:FileUpload ID="fileDoc" runat="server" ClientIDMode="Static"
-                                accept=".pdf,.png,.jpg,.jpeg,image/*,application/pdf" CssClass="dz-input" />
-                        </div>
-
-                        <div class="scan-row">
-                            <asp:Button ID="btnExtract" runat="server" CssClass="btn primary"
-                                CausesValidation="false" Text="Analyser le document" />
-                        </div>
-
-                        <asp:Panel ID="pnlUpload" runat="server" Visible="false" CssClass="scan-msg">
-                            <asp:Literal ID="litUpload" runat="server" />
-                        </asp:Panel>
-                    </div>
 
                     <div class="grid3">
                         <div class="field">
@@ -756,6 +796,13 @@
             function closeWin() {
                 var oWnd = GetRadWindow();
                 if (oWnd) oWnd.close();
+            }
+
+            /* Replie / déplie la boîte « Remplissage automatique par document »
+               (l'entête reste visible, le chevron pivote). */
+            function toggleScanBox() {
+                var box = document.getElementById('scanBox');
+                if (box) box.classList.toggle('collapsed');
             }
 
         </script>

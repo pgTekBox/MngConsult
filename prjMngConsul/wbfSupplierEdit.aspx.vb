@@ -102,6 +102,12 @@ Public Class wbfSupplierEdit
 
         ' Zone de scan / remplissage automatique
         btnExtract.Text = L("scanBtn")
+        Dim scanToggle As Control = FindDeep(Me, "btnScanToggle")
+        If TypeOf scanToggle Is System.Web.UI.HtmlControls.HtmlControl Then
+            Dim hc = CType(scanToggle, System.Web.UI.HtmlControls.HtmlControl)
+            hc.Attributes("title") = L("scanToggle")
+            hc.Attributes("aria-label") = L("scanToggle")
+        End If
         SetLiteral(Me, "litScanTitle", L("scanTitle"))
         SetLiteral(Me, "litScanHint", L("scanHint"))
         SetLiteral(Me, "litDropZone", L("scanDrop"))
@@ -111,7 +117,6 @@ Public Class wbfSupplierEdit
         ' la collection Controls de form1 — impossible si form1 contient des blocs de code.
         SetLiteral(Me, "litTitle", L("pageTitleShort"))
         SetLiteral(Me, "litSupplierInfo", L("supplierInfo"))
-        SetLiteral(Me, "litLblId", L("id"))
         SetLiteral(Me, "litLblOrigin", L("origin"))
         SetLiteral(Me, "litLblCreated", L("created"))
         SetLiteral(Me, "litLblName", L("name"))
@@ -173,7 +178,6 @@ Public Class wbfSupplierEdit
             Case "cancel" : Return Choose3(lang, "Annuler", "Cancel", "Cancelar")
             Case "select" : Return Choose3(lang, "Sélectionner…", "Select…", "Seleccionar…")
             Case "supplierInfo" : Return Choose3(lang, "Informations Fournisseur", "Supplier information", "Información del proveedor")
-            Case "id" : Return Choose3(lang, "Id", "Id", "Id")
             Case "origin" : Return Choose3(lang, "Origine", "Origin", "Origen")
             Case "created" : Return Choose3(lang, "Créé", "Created", "Creado")
             Case "name" : Return Choose3(lang, "Nom", "Name", "Nombre")
@@ -202,6 +206,7 @@ Public Class wbfSupplierEdit
 
             ' === Scan de document / remplissage automatique ===
             Case "scanTitle" : Return Choose3(lang, "Remplissage automatique par document", "Auto-fill from a document", "Autocompletar desde un documento")
+            Case "scanToggle" : Return Choose3(lang, "Réduire / Agrandir", "Collapse / Expand", "Contraer / Expandir")
             Case "scanHint" : Return Choose3(lang, "Déposez une facture, une carte d'affaires ou un en-tête de lettre : l'IA remplit les champs vides.", "Drop an invoice, business card or letterhead: AI fills in the empty fields.", "Suelte una factura, tarjeta de presentación o membrete: la IA rellena los campos vacíos.")
             Case "scanDrop" : Return Choose3(lang, "Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG)", "Drag a file here or click to choose (PDF, JPG, PNG)", "Arrastre un archivo aquí o haga clic para elegir (PDF, JPG, PNG)")
             Case "scanBtn" : Return Choose3(lang, "Analyser le document", "Analyze document", "Analizar documento")
@@ -278,7 +283,6 @@ Public Class wbfSupplierEdit
             txtDisplayName.Text = ds.Tables(0).Rows(0)("DisplayName").ToString()
             tlblOrigine.Text = ds.Tables(0).Rows(0)("Origin").ToString()
             rddlPartyType.SelectedValue = ds.Tables(0).Rows(0)("Type")
-            tlblId.Text = ds.Tables(0).Rows(0)("Id").ToString()
             tlblCreated.Text = CDate(ds.Tables(0).Rows(0)("Created")).ToString("yyyy-MM-dd HH:mm")
             LoadAddressTableFromBD()
             BindAddressGrid()

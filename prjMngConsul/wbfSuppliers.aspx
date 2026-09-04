@@ -50,9 +50,30 @@
             background-size: 18px 18px !important;
         }
 
+        /* Montant dû : chiffres alignés à droite, colonne étroite. */
+        .colh-amount, .field-amount {
+            text-align: right;
+            font-variant-numeric: tabular-nums;
+            white-space: nowrap;
+        }
+        .field-amount { font-weight: 700; color: #0f172a; }
+        .field-amount.zero { font-weight: 400; color: #94a3b8; }
+
+        /* Entêtes cliquables (tri) */
+        .sort-link, .sort-link:hover, .sort-link:visited {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: inherit;
+        }
+        .sort-link:hover { text-decoration: underline; }
+
+        /* Courriel affiché sous l'adresse */
+        .cust-email { color: #64748b; font-size: 12px; }
+
         .listview-list-head {
             display: grid;
-            grid-template-columns: minmax(220px, 1fr) auto;
+            grid-template-columns: minmax(220px, 1fr) 130px auto;
             gap: 16px;
             padding: 14px 16px;
             font-weight: 800;
@@ -70,7 +91,7 @@
 
         .listview-row {
             display: grid;
-            grid-template-columns: minmax(220px, 1fr) auto;
+            grid-template-columns: minmax(220px, 1fr) 130px auto;
             gap: 16px;
             align-items: center;
             padding: 14px 16px;
@@ -169,9 +190,16 @@
 
                     <LayoutTemplate>
                         <div class="listview-list">
+                            <%-- Colonnes triables, sauf « Action ». --%>
                             <div class="listview-list-head">
-                                <div class="colh-file"><asp:Literal ID="litColName" runat="server" /></div>
-
+                                <div class="colh-file">
+                                    <asp:LinkButton ID="lnkSortName" runat="server" CssClass="sort-link"
+                                        CommandName="SortBy" CommandArgument="Name" CausesValidation="false" />
+                                </div>
+                                <div class="colh-amount">
+                                    <asp:LinkButton ID="lnkSortAmount" runat="server" CssClass="sort-link"
+                                        CommandName="SortBy" CommandArgument="APayer" CausesValidation="false" />
+                                </div>
                                 <div class="colh-actions"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
@@ -188,7 +216,9 @@
                              <div   class="field-AllAddress">
                                 <%# Eval("NameAllAdddress") %>
                             </div>
-                             
+
+                            <div class="field-amount"><%# FormatAmount(Eval("APayer")) %></div>
+
 
                             <div class="listview-actions">
 
