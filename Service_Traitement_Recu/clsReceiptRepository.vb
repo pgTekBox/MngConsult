@@ -19,6 +19,18 @@ Public Class ReceiptWorkItem
 End Class
 
 ''' <summary>
+''' Resultat de la comptabilisation automatique d'un reçu.
+''' </summary>
+Public Class AutoPostResult
+    ''' <summary>La compagnie demande-t-elle la comptabilisation automatique ?</summary>
+    Public Property AutoPost As Boolean
+    Public Property DocumentId As Integer
+    Public Property DocumentNumber As String
+    ''' <summary>Le document est-il comptabilise au sortir de la procedure ?</summary>
+    Public Property Comptabilise As Boolean
+End Class
+
+''' <summary>
 ''' Tout l'acces a la base MngConsul passe par ici, et uniquement par des
 ''' procedures stockees (meme regle que l'application web : aucun SQL en dur).
 ''' </summary>
@@ -255,6 +267,33 @@ Public Class clsReceiptRepository
         ExecNonQuery("s0033SaveCustomer", P("@imageGUID", imageGUID))
         ExecNonQuery("s0034SaveCustomerDocument", P("@imageGUID", imageGUID))
     End Sub
+
+    ''' <summary>
+    ''' Comptabilise le document du reçu si la compagnie a demande « Reçu
+    ''' comptabilise automatiquement » (parametre RECEIPT_AUTO_POST).
+    '''
+    ''' sp_ComptabiliserDocument, appelee a l'interieur, renvoie son propre jeu
+    ''' de resultats avant le notre : on retrouve le bon en cherchant la table
+    ''' qui porte la colonne AutoPost, plutot que de parier sur son rang.
+    ''' </summary>
+    Public Function PostDocumentIfAuto(imageGUID As Guid) As AutoPostResult
+        Dim ds As DataSet = Exec("s0737PostReceiptDocumentIfAuto", P("@imageGUID", imageGUID))
+        If ds Is Nothing Then Return Nothing
+
+        For Each t As DataTable In ds.Tables
+            If t.Columns.Contains("AutoPost") AndAlso t.Rows.Count > 0 Then
+                Dim r As DataRow = t.Rows(0)
+                Return New AutoPostResult With {
+                    .AutoPost = (Not IsDBNull(r("AutoPost"))) AndAlso Convert.ToBoolean(r("AutoPost")),
+                    .DocumentId = Num(r, "DocumentId"),
+                    .DocumentNumber = Str(r, "DocumentNumber"),
+                    .Comptabilise = (Not IsDBNull(r("Comptabilise"))) AndAlso Convert.ToBoolean(r("Comptabilise"))
+                }
+            End If
+        Next
+
+        Return Nothing
+    End Function
 
 #End Region
 
