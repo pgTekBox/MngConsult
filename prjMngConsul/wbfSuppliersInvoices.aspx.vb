@@ -16,7 +16,124 @@ Public Class wbfSuppliersInvoices
         ApplyLocalization()
 
         If Not IsPostBack Then
+            BindFilters()
             rgFournisseursFactures.Rebind()
+        End If
+    End Sub
+
+    ' =====================================================================
+    ' Filtres à sélection multiple (état comptable / statut de paiement)
+    ' ---------------------------------------------------------------------
+    ' Les valeurs envoyées à s0023 sont celles produites par la procédure,
+    ' jamais les libellés traduits. Rien de coché = aucun filtre.
+    ' =====================================================================
+
+    ''' <summary>Remplit les deux listes déroulantes à cases à cocher.</summary>
+    Private Sub BindFilters()
+        ' « Check All » de Telerik est en anglais par défaut.
+        rcbEtat.Localization.CheckAllString = L("checkAll")
+        rcbStatutPaiement.Localization.CheckAllString = L("checkAll")
+
+        rcbEtat.EmptyMessage = L("filterStateAll")
+        rcbEtat.Items.Clear()
+        rcbEtat.Items.Add(New RadComboBoxItem(L("stDraft"), "Brouillon"))
+        rcbEtat.Items.Add(New RadComboBoxItem(L("stPosted"), "Comptabilisé"))
+
+        rcbStatutPaiement.EmptyMessage = L("filterPayAll")
+        rcbStatutPaiement.Items.Clear()
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payOpen"), "OUVERTE"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPartial"), "PARTIELLE"))
+        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPaid"), "PAYEE"))
+
+        ' Persistance : on retrouve ses filtres en revenant sur la page.
+        RestoreChecked(rcbEtat, TryCast(Session("SuppInv.Etats"), String))
+        RestoreChecked(rcbStatutPaiement, TryCast(Session("SuppInv.Paiements"), String))
+    End Sub
+
+    ''' <summary>Recoche les valeurs mémorisées et remet le texte du champ.</summary>
+    Private Sub RestoreChecked(rcb As RadComboBox, csv As String)
+        If String.IsNullOrEmpty(csv) Then Return
+        Dim voulues As New List(Of String)(csv.Split(","c))
+        Dim libelles As New List(Of String)
+        For Each it As RadComboBoxItem In rcb.Items
+            If voulues.Contains(it.Value) Then
+                it.Checked = True
+                libelles.Add(it.Text)
+            End If
+        Next
+        If libelles.Count > 0 Then rcb.Text = String.Join(", ", libelles)
+    End Sub
+
+    ''' <summary>Mémorise l'état des deux filtres pour la prochaine visite.</summary>
+    Private Sub SaveFilterState()
+        Session("SuppInv.Etats") = CheckedCsv(rcbEtat)
+        Session("SuppInv.Paiements") = CheckedCsv(rcbStatutPaiement)
+    End Sub
+
+    ''' <summary>Une case cochée/décochée dans l'un des filtres : on recharge la grille.</summary>
+    Protected Sub rcbFiltre_ItemChecked(sender As Object, e As RadComboBoxItemEventArgs)
+        SaveFilterState()
+        rgFournisseursFactures.Rebind()
+    End Sub
+
+    ''' <summary>Valeurs cochées d'un filtre, en liste séparée par des virgules
+    ''' (chaîne vide si rien n'est coché = pas de filtre).</summary>
+    Private Function CheckedCsv(rcb As RadComboBox) As String
+        Dim vals As New List(Of String)
+        For Each it As RadComboBoxItem In rcb.CheckedItems
+            If Not String.IsNullOrEmpty(it.Value) Then vals.Add(it.Value)
+        Next
+        Return String.Join(",", vals)
+    End Function
+
+    ' =====================================================================
+    ' Tri de la grille — toutes les colonnes sauf « Action »
+    ' ---------------------------------------------------------------------
+    ' Le tri s'applique sur la DataTable, donc sur les colonnes BRUTES :
+    ' NumeroSort et NameSort (le numéro et le fournisseur affichés contiennent
+    ' du HTML), DueDate, StatutPaiement, ResteAPayer, DejaPaye, Total, Status.
+    ' Colonne et sens sont conservés en session, comme les filtres.
+    ' =====================================================================
+
+    Private Property SortCol() As String
+        Get
+            Return If(TryCast(Session("SuppInv.SortCol"), String), "DocumentDate")
+        End Get
+        Set(value As String)
+            Session("SuppInv.SortCol") = value
+        End Set
+    End Property
+
+    Private Property SortDesc() As Boolean
+        Get
+            Dim v As Object = Session("SuppInv.SortDesc")
+            Return v Is Nothing OrElse CBool(v)   ' défaut : plus récent en premier
+        End Get
+        Set(value As Boolean)
+            Session("SuppInv.SortDesc") = value
+        End Set
+    End Property
+
+    ''' <summary>Libellé d'un entête cliquable, avec la flèche du tri courant.</summary>
+    Private Sub SetSortHeader(root As Control, id As String, text As String, col As String)
+        Dim lnk = TryCast(FindDeep(root, id), LinkButton)
+        If lnk Is Nothing Then Return
+        Dim fleche As String = ""
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            fleche = If(SortDesc, " ▼", " ▲")
+        End If
+        lnk.Text = Server.HtmlEncode(text) & fleche
+    End Sub
+
+    ''' <summary>Clic sur un entête : même colonne = sens inversé, sinon
+    ''' nouvelle colonne en ordre croissant.</summary>
+    Private Sub ApplySortCommand(col As String)
+        If String.IsNullOrEmpty(col) Then Return
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            SortDesc = Not SortDesc
+        Else
+            SortCol = col
+            SortDesc = False
         End If
     End Sub
 
@@ -49,14 +166,14 @@ Public Class wbfSuppliersInvoices
     ''' <summary>Localise les libellés du LayoutTemplate / EmptyDataTemplate (via Literal :
     ''' interdit d'y mettre des blocs de code car le RadListView remplace itemPlaceholder).</summary>
     Private Sub rgFournisseursFactures_PreRender(sender As Object, e As EventArgs) Handles rgFournisseursFactures.PreRender
-        SetLiteral(rgFournisseursFactures, "litColNum", L("colNum"))
-        SetLiteral(rgFournisseursFactures, "litColDate", L("colDate"))
-        SetLiteral(rgFournisseursFactures, "litColSupplier", L("colSupplier"))
-        SetLiteral(rgFournisseursFactures, "litColStatutPaiement", L("colStatutPaiement"))
-        SetLiteral(rgFournisseursFactures, "litColResteAPayer", L("colResteAPayer"))
-        SetLiteral(rgFournisseursFactures, "litColDejaPaye", L("colDejaPaye"))
-        SetLiteral(rgFournisseursFactures, "litColTotal", L("colTotal"))
-        SetLiteral(rgFournisseursFactures, "litColEtat", L("colEtat"))
+        SetSortHeader(rgFournisseursFactures, "lnkSortNum", L("colNum"), "NumeroSort")
+        SetSortHeader(rgFournisseursFactures, "lnkSortDue", L("colDueDate"), "DueDate")
+        SetSortHeader(rgFournisseursFactures, "lnkSortSupplier", L("colSupplier"), "NameSort")
+        SetSortHeader(rgFournisseursFactures, "lnkSortPay", L("colStatutPaiement"), "StatutPaiement")
+        SetSortHeader(rgFournisseursFactures, "lnkSortReste", L("colResteAPayer"), "ResteAPayer")
+        SetSortHeader(rgFournisseursFactures, "lnkSortPaye", L("colDejaPaye"), "DejaPaye")
+        SetSortHeader(rgFournisseursFactures, "lnkSortTotal", L("colTotal"), "Total")
+        SetSortHeader(rgFournisseursFactures, "lnkSortEtat", L("colEtat"), "Status")
         SetLiteral(rgFournisseursFactures, "litColAction", L("colAction"))
         SetLiteral(rgFournisseursFactures, "litEmpty", L("empty"))
     End Sub
@@ -71,6 +188,15 @@ Public Class wbfSuppliersInvoices
             Case "searchPh" : Return Choose3(lang, "Rechercher (nom, email, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
             Case "colNum" : Return Choose3(lang, "#", "#", "#")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
+            Case "colDueDate" : Return Choose3(lang, "Date échéance", "Due date", "Vencimiento")
+            Case "checkAll" : Return Choose3(lang, "Tout cocher", "Check all", "Marcar todo")
+            Case "filterStateAll" : Return Choose3(lang, "État : tous", "Status: all", "Estado: todos")
+            Case "filterPayAll" : Return Choose3(lang, "Statut paiement : tous", "Payment status: all", "Estado de pago: todos")
+            Case "stDraft" : Return Choose3(lang, "Brouillon", "Draft", "Borrador")
+            Case "stPosted" : Return Choose3(lang, "Comptabilisé", "Posted", "Contabilizado")
+            Case "payOpen" : Return Choose3(lang, "Ouverte", "Open", "Abierta")
+            Case "payPartial" : Return Choose3(lang, "Partielle", "Partial", "Parcial")
+            Case "payPaid" : Return Choose3(lang, "Payée", "Paid", "Pagada")
             Case "colSupplier" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
             Case "colStatutPaiement" : Return Choose3(lang, "Statut paiement", "Payment status", "Estado de pago")
             Case "colResteAPayer" : Return Choose3(lang, "Reste à payer", "Balance due", "Saldo pendiente")
@@ -145,9 +271,17 @@ Public Class wbfSuppliersInvoices
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@Search", sSearch))
+        p.Add(New SqlClient.SqlParameter("@Etats", CheckedCsv(rcbEtat)))
+        p.Add(New SqlClient.SqlParameter("@StatutsPaiement", CheckedCsv(rcbStatutPaiement)))
         Dim ds As DataSet = ExecuteSQLds("s0023GetSuppliersInvoices", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
+
+        Dim dt As DataTable = ds.Tables(0)
+        If dt.Columns.Contains(SortCol) Then
+            dt.DefaultView.Sort = "[" & SortCol & "]" & If(SortDesc, " DESC", " ASC")
+            dt = dt.DefaultView.ToTable()
+        End If
+        Return dt
     End Function
 
 
@@ -200,6 +334,10 @@ Public Class wbfSuppliersInvoices
             Case "EditSupplierInvoice"
                 SupplierInvoiceId = e.CommandArgument
                 Response.Redirect("wbfSupplierInvoinceEdit.aspx?SupplierId=" & SupplierInvoiceId.ToString)
+
+            Case "SortBy"
+                ApplySortCommand(If(e.CommandArgument, "").ToString())
+                rgFournisseursFactures.Rebind()
 
         End Select
     End Sub

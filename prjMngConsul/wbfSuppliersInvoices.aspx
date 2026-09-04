@@ -127,10 +127,14 @@
             grid-row: 1;
         }
 
-        .field-etat {
+        /* Chaque cellule est posée sur SA colonne : l'ordre du DOM (contraint
+           par les wrappers mobiles) ne suit pas celui des entêtes. L'état et le
+           statut de paiement étaient intervertis. */
+        .field-statutpaiement {
             grid-column: 4;
             grid-row: 1;
         }
+
        .field-resteapayer{
             grid-column: 5;
             grid-row: 1;
@@ -146,10 +150,22 @@
             grid-row: 1;
         }
 
-      .field-encaissement{
+        .field-etat {
             grid-column: 8;
             grid-row: 1;
         }
+
+        /* Entêtes cliquables (tri) */
+        .sort-link, .sort-link:hover, .sort-link:visited {
+            color: inherit;
+            text-decoration: none;
+            cursor: pointer;
+            font-weight: inherit;
+        }
+        .sort-link:hover { text-decoration: underline; }
+
+      /* .field-encaissement est un bouton DANS la cellule d'actions : il n'est
+         pas un élément de la grille, sa position n'a donc plus d'effet ici. */
       
           
       
@@ -185,6 +201,17 @@
                     CausesValidation="false"
                     OnClientClick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"
                 />
+                <%-- Filtres à sélection multiple : rien de coché = aucun filtre. --%>
+                <telerik:RadComboBox ID="rcbEtat" runat="server"
+                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
+                    Skin="Metro" RenderMode="Lightweight" Width="180px"
+                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
+
+                <telerik:RadComboBox ID="rcbStatutPaiement" runat="server"
+                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
+                    Skin="Metro" RenderMode="Lightweight" Width="220px"
+                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
+
                 <div class="search-group">
                     <asp:TextBox ID="tbSearch"  ClientIDMode="Static" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
                     <asp:Button ID="btnSearch"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
@@ -204,19 +231,32 @@
 
                     <LayoutTemplate>
                         <div class="listview-list">
+                            <%-- Toutes les colonnes sont triables, sauf « Action ». --%>
                             <div class="listview-list-head">
-                                <div class="colh-numero"><asp:Literal ID="litColNum" runat="server" /></div>
-                                <div class="colh-date"><asp:Literal ID="litColDate" runat="server" /></div>
-                                <div class="colh-supplier"><asp:Literal ID="litColSupplier" runat="server" /></div>
-                                <div class="colh-statutpaiement"><asp:Literal ID="litColStatutPaiement" runat="server" /></div>
-                                 <div class="colh-resteapayer"><asp:Literal ID="litColResteAPayer" runat="server" /></div>
-                                 <div class="colh-dejapaye"><asp:Literal ID="litColDejaPaye" runat="server" /></div>
-
-
-
-                                <div class="colh-total"><asp:Literal ID="litColTotal" runat="server" /></div>
-                                <div class="colh-etat"><asp:Literal ID="litColEtat" runat="server" /></div>
-
+                                <div class="colh-numero">
+                                    <asp:LinkButton ID="lnkSortNum" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NumeroSort" CausesValidation="false" />
+                                </div>
+                                <div class="colh-date">
+                                    <asp:LinkButton ID="lnkSortDue" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DueDate" CausesValidation="false" />
+                                </div>
+                                <div class="colh-supplier">
+                                    <asp:LinkButton ID="lnkSortSupplier" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NameSort" CausesValidation="false" />
+                                </div>
+                                <div class="colh-statutpaiement">
+                                    <asp:LinkButton ID="lnkSortPay" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="StatutPaiement" CausesValidation="false" />
+                                </div>
+                                <div class="colh-resteapayer">
+                                    <asp:LinkButton ID="lnkSortReste" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="ResteAPayer" CausesValidation="false" />
+                                </div>
+                                <div class="colh-dejapaye">
+                                    <asp:LinkButton ID="lnkSortPaye" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DejaPaye" CausesValidation="false" />
+                                </div>
+                                <div class="colh-total">
+                                    <asp:LinkButton ID="lnkSortTotal" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Total" CausesValidation="false" />
+                                </div>
+                                <div class="colh-etat">
+                                    <asp:LinkButton ID="lnkSortEtat" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Status" CausesValidation="false" />
+                                </div>
 
                                 <div class="colh-action"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
@@ -233,7 +273,7 @@
                             <%-- Ligne 1 mobile : Numéro + Date + Total --%>
                             <div class="field-row1">
                                 <span class="field-number"><%# Eval("DocumentNumber") %></span>
-                                <span class="field-date"><%# FormatDateFr(Eval("DocumentDate")) %></span>
+                                <span class="field-date"><%# FormatDateFr(Eval("DueDate")) %></span>
                                 <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
                             </div>
 

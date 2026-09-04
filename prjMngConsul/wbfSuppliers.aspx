@@ -35,6 +35,8 @@
             gap: 8px;
             flex-wrap: wrap;
         }
+        /* Colonne Stripe : le badge occupe sa propre cellule */
+        .field-stripe { display: flex; align-items: center; }
         .stripe-badge .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 7px; }
         .stripe-badge.on  { background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; }
         .stripe-badge.on .dot  { background: #10b981; }
@@ -73,7 +75,11 @@
 
         .listview-list-head {
             display: grid;
-            grid-template-columns: minmax(220px, 1fr) 130px auto;
+            /* L'entête et les lignes sont deux grilles CSS distinctes : une
+               dernière colonne « auto » s'y calculait différemment (largeur du
+               mot « Action » d'un côté, largeur des boutons de l'autre), ce qui
+               décalait « À payer » de son montant. Largeurs fixes des deux côtés. */
+            grid-template-columns: minmax(220px, 1fr) 130px 160px 140px;
             gap: 16px;
             padding: 14px 16px;
             font-weight: 800;
@@ -91,7 +97,11 @@
 
         .listview-row {
             display: grid;
-            grid-template-columns: minmax(220px, 1fr) 130px auto;
+            /* L'entête et les lignes sont deux grilles CSS distinctes : une
+               dernière colonne « auto » s'y calculait différemment (largeur du
+               mot « Action » d'un côté, largeur des boutons de l'autre), ce qui
+               décalait « À payer » de son montant. Largeurs fixes des deux côtés. */
+            grid-template-columns: minmax(220px, 1fr) 130px 160px 140px;
             gap: 16px;
             align-items: center;
             padding: 14px 16px;
@@ -200,6 +210,10 @@
                                     <asp:LinkButton ID="lnkSortAmount" runat="server" CssClass="sort-link"
                                         CommandName="SortBy" CommandArgument="APayer" CausesValidation="false" />
                                 </div>
+                                <div class="colh-stripe">
+                                    <asp:LinkButton ID="lnkSortStripe" runat="server" CssClass="sort-link"
+                                        CommandName="SortBy" CommandArgument="StripeAccountId" CausesValidation="false" />
+                                </div>
                                 <div class="colh-actions"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
@@ -220,10 +234,10 @@
                             <div class="field-amount"><%# FormatAmount(Eval("APayer")) %></div>
 
 
-                            <div class="listview-actions">
+                            <%-- Badge d'inscription Stripe : colonne à part, sous son entête --%>
+                            <div class="field-stripe"><%# StripeBadge(Eval("StripeAccountId"), Eval("Id")) %></div>
 
-                                <%-- Badge d'inscription Stripe, en ligne avec les boutons --%>
-                                <%# StripeBadge(Eval("StripeAccountId"), Eval("Id")) %>
+                            <div class="listview-actions">
 
                                 <%-- Bouton Stripe Connect : ouvre l'onboarding du fournisseur dans une nouvelle fenêtre --%>
                                 <asp:Button ID="btnStripe" runat="server"
