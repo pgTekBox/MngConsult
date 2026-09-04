@@ -307,24 +307,10 @@
                                     Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
                                     OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwSupplierPayment"", ""wbfSupplierPaymentChoice.aspx"", L_PAY_SUPPLIER, L_PAY);    return false;" %>' />
 
-                                <%-- Bouton "Payer via DreamPaiement EFT" : mêmes conditions que Stripe (non payée + comptabilisée) ;
-                                     ouvre la page DreamPaiement dans un RadWindow (DocumentId / PartyId / Amount) --%>
-                                <asp:Button ID="btnDreamPay" runat="server"
-                                    CssClass="btn btn-icon btn-icon-dream"
-                                    Text=""  ClientIDMode="Static"
-                                    ToolTip='<%# L("tipDreamPay") %>'
-                                    CausesValidation="false"
-                                    Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwDreamPayment"", ""wbfSupplierPaymentDream.aspx"", L_DREAM_TITLE, L_DREAM_TITLE);    return false;" %>' />
-
-                                <%-- Bouton "Payer via Interac e-Transfer" (rail Interac, basé courriel) --%>
-                                <asp:Button ID="btnInteracPay" runat="server"
-                                    CssClass="btn btn-icon btn-icon-interac"
-                                    Text=""  ClientIDMode="Static"
-                                    ToolTip='<%# L("tipInteracPay") %>'
-                                    CausesValidation="false"
-                                    Visible='<%# CanPay(Eval("StatutPaiement"), Eval("ComptabilisationStatus")) %>'
-                                    OnClientClick='<%# "openRadWindowParam(" & Eval("Id") & ",""&DocumentId=" & Eval("Id") & "&PartyId=" & Eval("PartyId") & "&Amount=" & FormatAmountForUrl(Eval("ResteAPayer")) & """ ,""rwInteracPayment"", ""wbfSupplierPaymentInterac.aspx"", L_INTERAC_TITLE, L_INTERAC_TITLE);    return false;" %>' />
+                                <%-- Les boutons « Payer via DreamPaiement (EFT) » et « Payer via
+                                     Interac e-Transfer » ont ete retires de la grille sur demande.
+                                     Les pages wbfSupplierPaymentDream.aspx / wbfSupplierPaymentInterac.aspx
+                                     et leurs RadWindow restent en place. --%>
 
                                 <%-- Bouton "Synchroniser paiements Stripe" : ouvre la page sync dans nouvelle fenêtre --%>
                                 <asp:Button ID="btnSync" runat="server"

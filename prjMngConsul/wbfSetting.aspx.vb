@@ -71,14 +71,15 @@ Partial Public Class wbfSetting
         btnSave.Text = L("save")
         btnReload.Text = L("reload")
         btnScanExtract.Text = L("scanBtn")
-        If tsSettings.Tabs.Count >= 7 Then
+        If tsSettings.Tabs.Count >= 8 Then
             tsSettings.Tabs(0).Text = L("tabCompany")
             tsSettings.Tabs(1).Text = L("tabTaxes")
             tsSettings.Tabs(2).Text = L("tabEmail")
             tsSettings.Tabs(3).Text = L("tabInvoice")
-            tsSettings.Tabs(4).Text = L("tabAccounting")
-            tsSettings.Tabs(5).Text = L("tabBank")
-            tsSettings.Tabs(6).Text = L("tabAccountant")
+            tsSettings.Tabs(4).Text = L("tabProcessing")
+            tsSettings.Tabs(5).Text = L("tabAccounting")
+            tsSettings.Tabs(6).Text = L("tabBank")
+            tsSettings.Tabs(7).Text = L("tabAccountant")
         End If
     End Sub
 
@@ -96,6 +97,7 @@ Partial Public Class wbfSetting
             Case "tabTaxes" : Return Choose3(lang, "Taxes", "Taxes", "Impuestos")
             Case "tabEmail" : Return Choose3(lang, "Email", "Email", "Correo")
             Case "tabInvoice" : Return Choose3(lang, "Facture", "Invoice", "Factura")
+            Case "tabProcessing" : Return Choose3(lang, "Traitement", "Processing", "Procesamiento")
             Case "tabAccounting" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
             Case "tabBank" : Return Choose3(lang, "Bancaire", "Banking", "Bancario")
             Case "tabAccountant" : Return Choose3(lang, "Comptable", "Accountant", "Contador")
@@ -182,6 +184,7 @@ Partial Public Class wbfSetting
         BindCategory("TAXES", rpTaxes, pnlEmptyTaxes)
         BindCategory("EMAIL", rpEmail, pnlEmptyEmail)
         BindCategory("PDF", rpPdf, pnlEmptyPdf)
+        BindCategory("TRAITEMENT", rpTraitement, pnlEmptyTraitement)
         BindCategory("COMPTABILITE", rpComptabilite, pnlEmptyComptabilite)
         BindCategory("BANCAIRE", rpBancaire, pnlEmptyBancaire)
         BindCategory("COMPTABLE", rpComptable, pnlEmptyComptable)
@@ -754,6 +757,7 @@ Partial Public Class wbfSetting
             SaveRepeater(rpTaxes)
             SaveRepeater(rpEmail)
             SaveRepeater(rpPdf)
+            SaveRepeater(rpTraitement)
             SaveRepeater(rpComptabilite)
             SaveRepeater(rpBancaire)
 

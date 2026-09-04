@@ -208,6 +208,33 @@ Partial Public Class wbfSetting
     Protected WithEvents pnlEmptyPdf As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''pvTraitement control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pvTraitement As Global.Telerik.Web.UI.RadPageView
+
+    '''<summary>
+    '''rpTraitement control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rpTraitement As Global.System.Web.UI.WebControls.Repeater
+
+    '''<summary>
+    '''pnlEmptyTraitement control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents pnlEmptyTraitement As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
     '''pvAccounting control.
     '''</summary>
     '''<remarks>
