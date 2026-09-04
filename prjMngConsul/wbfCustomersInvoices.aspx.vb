@@ -49,10 +49,35 @@ Public Class wbfCustomersInvoices
         rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payLate"), "EN_RETARD"))
         rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPaid"), "PAYEE"))
         rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payInProgress"), "IN_PROGRESS"))
+
+        ' Persistance : on retrouve ses filtres en revenant sur la page.
+        RestoreChecked(rcbEtat, TryCast(Session("CustInv.Etats"), String))
+        RestoreChecked(rcbStatutPaiement, TryCast(Session("CustInv.Paiements"), String))
+    End Sub
+
+    ''' <summary>Recoche les valeurs mémorisées et remet le texte du champ.</summary>
+    Private Sub RestoreChecked(rcb As RadComboBox, csv As String)
+        If String.IsNullOrEmpty(csv) Then Return
+        Dim voulues As New List(Of String)(csv.Split(","c))
+        Dim libelles As New List(Of String)
+        For Each it As RadComboBoxItem In rcb.Items
+            If voulues.Contains(it.Value) Then
+                it.Checked = True
+                libelles.Add(it.Text)
+            End If
+        Next
+        If libelles.Count > 0 Then rcb.Text = String.Join(", ", libelles)
+    End Sub
+
+    ''' <summary>Mémorise l'état des deux filtres pour la prochaine visite.</summary>
+    Private Sub SaveFilterState()
+        Session("CustInv.Etats") = CheckedCsv(rcbEtat)
+        Session("CustInv.Paiements") = CheckedCsv(rcbStatutPaiement)
     End Sub
 
     ''' <summary>Une case cochée/décochée dans l'un des filtres : on recharge la grille.</summary>
     Protected Sub rcbFiltre_ItemChecked(sender As Object, e As RadComboBoxItemEventArgs)
+        SaveFilterState()
         rlvClientsFactures.Rebind()
     End Sub
 
@@ -95,16 +120,69 @@ Public Class wbfCustomersInvoices
 
     ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
     Private Sub rlvClientsFactures_PreRender(sender As Object, e As EventArgs) Handles rlvClientsFactures.PreRender
-        SetLiteral(rlvClientsFactures, "litColNum", L("colNum"))
-        SetLiteral(rlvClientsFactures, "litColDate", L("colDate"))
-        SetLiteral(rlvClientsFactures, "litColCustomer", L("colCustomer"))
-        SetLiteral(rlvClientsFactures, "litColStatutPaiement", L("colStatutPaiement"))
-        SetLiteral(rlvClientsFactures, "litColResteAPayer", L("colResteAPayer"))
-        SetLiteral(rlvClientsFactures, "litColDejaRecu", L("colDejaRecu"))
-        SetLiteral(rlvClientsFactures, "litColTotal", L("colTotal"))
-        SetLiteral(rlvClientsFactures, "litColEtat", L("colEtat"))
+        SetSortHeader(rlvClientsFactures, "lnkSortNum", L("colNum"), "NumeroSort")
+        SetSortHeader(rlvClientsFactures, "lnkSortDate", L("colDate"), "DocumentDate")
+        SetSortHeader(rlvClientsFactures, "lnkSortDue", L("colDueDate"), "DueDate")
+        SetSortHeader(rlvClientsFactures, "lnkSortCustomer", L("colCustomer"), "NameSort")
+        SetSortHeader(rlvClientsFactures, "lnkSortPay", L("colStatutPaiement"), "StatutPaiement")
+        SetSortHeader(rlvClientsFactures, "lnkSortReste", L("colResteAPayer"), "ResteAPayer")
+        SetSortHeader(rlvClientsFactures, "lnkSortRecu", L("colDejaRecu"), "DejaRecu")
+        SetSortHeader(rlvClientsFactures, "lnkSortTotal", L("colTotal"), "Total")
+        SetSortHeader(rlvClientsFactures, "lnkSortEtat", L("colEtat"), "Status")
         SetLiteral(rlvClientsFactures, "litColAction", L("colAction"))
         SetLiteral(rlvClientsFactures, "litEmpty", L("empty"))
+    End Sub
+
+    ' =====================================================================
+    ' Tri de la grille — toutes les colonnes sauf « Action »
+    ' ---------------------------------------------------------------------
+    ' Le tri s'applique sur la DataTable, donc sur les colonnes BRUTES :
+    ' NumeroSort et NameSort (le numéro et le client affichés contiennent du
+    ' HTML), DocumentDate, DueDate, StatutPaiement, ResteAPayer, DejaRecu,
+    ' Total, Status. Colonne et sens sont conservés en session, comme les
+    ' filtres : on retrouve son tri en revenant sur la page.
+    ' =====================================================================
+
+    Private Property SortCol() As String
+        Get
+            Return If(TryCast(Session("CustInv.SortCol"), String), "DocumentDate")
+        End Get
+        Set(value As String)
+            Session("CustInv.SortCol") = value
+        End Set
+    End Property
+
+    Private Property SortDesc() As Boolean
+        Get
+            Dim v As Object = Session("CustInv.SortDesc")
+            Return v Is Nothing OrElse CBool(v)   ' défaut : plus récent en premier
+        End Get
+        Set(value As Boolean)
+            Session("CustInv.SortDesc") = value
+        End Set
+    End Property
+
+    ''' <summary>Libellé d'un entête cliquable, avec la flèche du tri courant.</summary>
+    Private Sub SetSortHeader(root As Control, id As String, text As String, col As String)
+        Dim lnk = TryCast(FindDeep(root, id), LinkButton)
+        If lnk Is Nothing Then Return
+        Dim fleche As String = ""
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            fleche = If(SortDesc, " ▼", " ▲")
+        End If
+        lnk.Text = Server.HtmlEncode(text) & fleche
+    End Sub
+
+    ''' <summary>Clic sur un entête : même colonne = sens inversé, sinon
+    ''' nouvelle colonne en ordre croissant.</summary>
+    Private Sub ApplySortCommand(col As String)
+        If String.IsNullOrEmpty(col) Then Return
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            SortDesc = Not SortDesc
+        Else
+            SortCol = col
+            SortDesc = False
+        End If
     End Sub
 
     Private Shared Sub SetLiteral(root As Control, id As String, text As String)
@@ -135,6 +213,7 @@ Public Class wbfCustomersInvoices
             Case "searchPh" : Return Choose3(lang, "Rechercher (nom, courriel, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
             Case "colNum" : Return Choose3(lang, "#", "#", "#")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
+            Case "colDueDate" : Return Choose3(lang, "Échéance", "Due date", "Vencimiento")
             Case "colCustomer" : Return Choose3(lang, "Client", "Customer", "Cliente")
             Case "colStatutPaiement" : Return Choose3(lang, "Statut paiement", "Payment status", "Estado de pago")
             Case "colResteAPayer" : Return Choose3(lang, "Reste à payer", "Balance due", "Saldo pendiente")
@@ -237,7 +316,13 @@ Public Class wbfCustomersInvoices
         p.Add(New SqlClient.SqlParameter("@StatutsPaiement", CheckedCsv(rcbStatutPaiement)))
         Dim ds As DataSet = ExecuteSQLds("s0026GetCustomersInvoices", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
+
+        Dim dt As DataTable = ds.Tables(0)
+        If dt.Columns.Contains(SortCol) Then
+            dt.DefaultView.Sort = "[" & SortCol & "]" & If(SortDesc, " DESC", " ASC")
+            dt = dt.DefaultView.ToTable()
+        End If
+        Return dt
     End Function
 
     ''' <summary>Le bouton "Encaisser" est visible tant que la facture n'est pas entièrement payée.</summary>
@@ -601,6 +686,10 @@ Public Class wbfCustomersInvoices
                 DeleteDocument(invoiceId)
                 rlvClientsFactures.Rebind()
 
+            Case "SortBy"
+                ApplySortCommand(If(e.CommandArgument, "").ToString())
+                rlvClientsFactures.Rebind()
+
         End Select
     End Sub
 
@@ -920,6 +1009,7 @@ Public Class wbfCustomersInvoices
         For Each it As RadComboBoxItem In rcbEtat.Items : it.Checked = False : Next
         For Each it As RadComboBoxItem In rcbStatutPaiement.Items : it.Checked = False : Next
         rcbEtat.Text = "" : rcbStatutPaiement.Text = ""
+        SaveFilterState()
         rlvClientsFactures.Rebind()
     End Sub
 

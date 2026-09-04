@@ -36,9 +36,60 @@ Public Class wbfCustomers
 
     ''' <summary>Libellés du LayoutTemplate / EmptyDataTemplate du RadListView (via Literal).</summary>
     Private Sub rlvClients_PreRender(sender As Object, e As EventArgs) Handles rlvClients.PreRender
-        SetLiteral(rlvClients, "litColName", L("colName"))
+        SetSortHeader(rlvClients, "lnkSortName", L("colName"), "Name")
+        SetSortHeader(rlvClients, "lnkSortAmount", L("colToReceive"), "ARecevoir")
         SetLiteral(rlvClients, "litColAction", L("colAction"))
         SetLiteral(rlvClients, "litEmpty", L("empty"))
+    End Sub
+
+    ' =====================================================================
+    ' Tri de la grille (colonnes « Nom » et « À recevoir »)
+    ' ---------------------------------------------------------------------
+    ' Le tri est appliqué sur la DataTable renvoyée par s0010GetCustomers,
+    ' donc sur les colonnes brutes : Name et ARecevoir, jamais sur le HTML
+    ' affiché. La colonne et le sens sont conservés en ViewState.
+    ' =====================================================================
+
+    Private Property SortCol() As String
+        Get
+            Return If(TryCast(ViewState("SortCol"), String), "Name")
+        End Get
+        Set(value As String)
+            ViewState("SortCol") = value
+        End Set
+    End Property
+
+    Private Property SortDesc() As Boolean
+        Get
+            Dim v As Object = ViewState("SortDesc")
+            Return v IsNot Nothing AndAlso CBool(v)
+        End Get
+        Set(value As Boolean)
+            ViewState("SortDesc") = value
+        End Set
+    End Property
+
+    ''' <summary>Libellé d'un entête cliquable, avec la flèche du tri courant.</summary>
+    Private Sub SetSortHeader(root As Control, id As String, text As String, col As String)
+        Dim lnk = TryCast(FindDeep(root, id), LinkButton)
+        If lnk Is Nothing Then Return
+        Dim fleche As String = ""
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            fleche = If(SortDesc, " ▼", " ▲")
+        End If
+        lnk.Text = Server.HtmlEncode(text) & fleche
+    End Sub
+
+    ''' <summary>Clic sur un entête : même colonne = on inverse le sens, sinon
+    ''' nouvelle colonne en ordre croissant.</summary>
+    Private Sub ApplySortCommand(col As String)
+        If String.IsNullOrEmpty(col) Then Return
+        If String.Equals(SortCol, col, StringComparison.OrdinalIgnoreCase) Then
+            SortDesc = Not SortDesc
+        Else
+            SortCol = col
+            SortDesc = False
+        End If
     End Sub
     Private Sub rlvClients_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvClients.ItemCommand
         If e.CommandArgument Is Nothing Then Return
@@ -47,6 +98,10 @@ Public Class wbfCustomers
             Case "DeleteClient"
                 Dim clientId As Integer = CInt(e.CommandArgument)
                 DeleteClient(clientId)
+                rlvClients.Rebind()
+
+            Case "SortBy"
+                ApplySortCommand(e.CommandArgument.ToString())
                 rlvClients.Rebind()
         End Select
     End Sub
@@ -208,6 +263,7 @@ Public Class wbfCustomers
             Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
             Case "delete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
             Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
+            Case "colToReceive" : Return Choose3(lang, "À recevoir", "Receivable", "Por cobrar")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "empty" : Return Choose3(lang, "Aucun client trouvé.", "No customer found.", "Ningún cliente encontrado.")
             Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier un Client", "Add / Edit a customer", "Agregar / Editar un cliente")
@@ -255,6 +311,20 @@ Public Class wbfCustomers
         p.Add(New SqlClient.SqlParameter("@Search", q))
         Dim ds As DataSet = ExecuteSQLds("s0010GetCustomers", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
+
+        Dim dt As DataTable = ds.Tables(0)
+        If dt.Columns.Contains(SortCol) Then
+            dt.DefaultView.Sort = "[" & SortCol & "]" & If(SortDesc, " DESC", " ASC")
+            dt = dt.DefaultView.ToTable()
+        End If
+        Return dt
+    End Function
+
+    ''' <summary>Montant à recevoir : « — » discret quand il n'y a rien à réclamer.</summary>
+    Protected Function FormatAmount(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return "<span class=""field-amount zero"">—</span>"
+        Dim d As Decimal = Convert.ToDecimal(o)
+        If d = 0D Then Return "<span class=""field-amount zero"">—</span>"
+        Return Server.HtmlEncode(d.ToString("N2", Globalization.CultureInfo.GetCultureInfo("fr-CA")) & " $")
     End Function
 End Class
