@@ -68,6 +68,24 @@ Partial Public Class wbfSuppliersInvoices
     Protected WithEvents btnAddSupplierInvoice As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
+    '''rcbEtat control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rcbEtat As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''rcbStatutPaiement control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rcbStatutPaiement As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
     '''tbSearch control.
     '''</summary>
     '''<remarks>

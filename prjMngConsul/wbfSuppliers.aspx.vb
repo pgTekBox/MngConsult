@@ -49,6 +49,7 @@ Public Class wbfSuppliers
     Private Sub rlvSuppliers_PreRender(sender As Object, e As EventArgs) Handles rlvSuppliers.PreRender
         SetSortHeader(rlvSuppliers, "lnkSortName", L("colName"), "Name")
         SetSortHeader(rlvSuppliers, "lnkSortAmount", L("colToPay"), "APayer")
+        SetSortHeader(rlvSuppliers, "lnkSortStripe", L("colStripe"), "StripeAccountId")
         SetLiteral(rlvSuppliers, "litColAction", L("colAction"))
         SetLiteral(rlvSuppliers, "litEmpty", L("empty"))
     End Sub
@@ -139,6 +140,7 @@ Public Class wbfSuppliers
             Case "clear" : Return Choose3(lang, "Effacer", "Clear", "Borrar")
             Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
             Case "colToPay" : Return Choose3(lang, "À payer", "Payable", "Por pagar")
+            Case "colStripe" : Return Choose3(lang, "Stripe", "Stripe", "Stripe")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
             Case "stripeTip" : Return Choose3(lang, "Configurer paiements Stripe Connect", "Configure Stripe Connect payments", "Configurar pagos Stripe Connect")
             Case "edit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
