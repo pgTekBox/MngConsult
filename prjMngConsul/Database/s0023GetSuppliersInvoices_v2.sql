@@ -1,4 +1,15 @@
 -- =============================================================================
+-- ⚠️  OBSOLÈTE — NE PAS EXÉCUTER. La version en service est la **v3**
+--     (s0023GetSuppliersInvoices_v3.sql), qui ajoute les colonnes AutoPay,
+--     AutoPayStatus, AutoPayDate et HasActiveAuthorization.
+--
+--     Rejouer ce fichier casse la page « Factures fournisseurs » :
+--     wbfSuppliersInvoices lie Eval("AutoPay") et lève
+--     « DataBinding : DataRowView ne comporte pas de propriété AutoPay ».
+--     (Erreur commise le 2026-09-04, corrigée en réappliquant la v3.)
+--
+--     Conservé uniquement pour l'historique.
+-- =============================================================================
 -- s0023GetSuppliersInvoices (v2)
 -- Mise a jour : ajout de 2 colonnes pour le bouton "Payer" :
 --   LastPaymentMethod : derniere methode utilisee pour ce fournisseur
