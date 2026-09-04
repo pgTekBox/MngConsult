@@ -567,9 +567,11 @@
                         </div>
                         <div class="field">
                             <label><asp:Literal ID="litLblTermDays" runat="server" /></label>
+                            <%-- 30 jours : valeur de départ d'un NOUVEAU client (net 30).
+                                 Un client existant garde évidemment la sienne. --%>
                             <telerik:RadNumericTextBox ID="numTermDays" runat="server"
                                 RenderMode="Lightweight" CssClass="rtbLike" Width="100px"
-                                MinValue="0" MaxValue="365" Value="0">
+                                MinValue="0" MaxValue="365" Value="30">
                                 <NumberFormat DecimalDigits="0" GroupSeparator="" />
                             </telerik:RadNumericTextBox>
                         </div>
