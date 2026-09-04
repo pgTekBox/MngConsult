@@ -109,6 +109,11 @@ BEGIN
         ON ap.PartyId = T050.Id
     WHERE T060.[CompanyGUID] = @CompanyGUID
       AND T060.[DocumentTypeId] IN (2, 5)
-      AND (T060.[Name] LIKE '%' + @Search + '%');
+      AND (T060.[Name] LIKE '%' + @Search + '%')
+    -- Ordre par defaut de la grille : de la plus recente a la plus vieille.
+    -- Un brouillon n'a pas de date de document : on retombe sur sa date de
+    -- creation pour qu'il se classe quand meme au bon endroit. L'Id departage
+    -- les documents de meme date et rend l'ordre deterministe.
+    ORDER BY COALESCE(T060.[DocumentDate], T060.[Created]) DESC, T060.[Id] DESC;
 END;
 GO
