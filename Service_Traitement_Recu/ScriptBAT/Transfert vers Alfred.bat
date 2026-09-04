@@ -1,12 +1,17 @@
-rem Copie du service compile vers le partage de deploiement.
-rem /Y ecrase sans demander, /R remplace les fichiers en lecture seule, /C ignore les erreurs.
+ 
+@echo off
 
-xcopy /Y/R/C ..\bin\Debug\ServiceTraitementRecu.exe        \alfred\TraitementRecuDeploy
-xcopy /Y/R/C ..\bin\Debug\ServiceTraitementRecu.exe.config \alfred\TraitementRecuDeploy
-xcopy /Y/R/C ..\bin\Debug\Newtonsoft.Json.dll              \alfred\TraitementRecuDeploy
-xcopy /Y/R/C ServiceController.bat                         \alfred\TraitementRecuDeploy
-xcopy /Y/R/C ServiceInstaller.bat                          \alfred\TraitementRecuDeploy
-xcopy /Y/R/C ServiceUninstaller.bat                        \alfred\TraitementRecuDeploy
-xcopy /Y/R/C Interface.bat                                 \alfred\TraitementRecuDeploy
+rem Copie du service compile vers le partage de deploiement.
+rem /Y ecrase les fichiers existants sans demander.
+
+copy /Y "..\bin\Debug\ServiceTraitementRecu.exe" "\\alfred\ServiceTraitementRecuDeploy\ServiceTraitementRecu.exe"
+copy /Y "..\bin\Debug\ServiceTraitementRecu.exe.config" "\\alfred\ServiceTraitementRecuDeploy\ServiceTraitementRecu.exe.config"
+copy /Y "..\bin\Debug\Newtonsoft.Json.dll" "\\alfred\ServiceTraitementRecuDeploy\Newtonsoft.Json.dll"
+
+copy /Y "ServiceController.bat" "\\alfred\ServiceTraitementRecuDeploy\ServiceController.bat"
+copy /Y "ServiceInstaller.bat" "\\alfred\ServiceTraitementRecuDeploy\ServiceInstaller.bat"
+copy /Y "ServiceUninstaller.bat" "\\alfred\ServiceTraitementRecuDeploy\ServiceUninstaller.bat"
+copy /Y "Interface.bat" "\\alfred\ServiceTraitementRecuDeploy\Interface.bat"
 
 pause
+ 
