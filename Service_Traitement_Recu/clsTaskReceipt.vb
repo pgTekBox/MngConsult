@@ -279,7 +279,48 @@ Public Class clsTaskReceipt
                 json:=json,
                 durationMs:=CInt(sw.ElapsedMilliseconds))
 
+        PostIfAuto(item)
+
         SafeLog(item.ImageGUID, "COMPLET", True, "Traitement terminé")
+    End Sub
+
+    ''' <summary>
+    ''' Comptabilise le document si la compagnie a coché « Reçu comptabilisé
+    ''' automatiquement » dans l'onglet Traitement des paramètres.
+    '''
+    ''' Un refus de la comptabilisation (période fermée, compte manquant, total
+    ''' à zéro…) ne fait PAS échouer le reçu : le document est créé, il reste en
+    ''' brouillon et se comptabilise à la main. Le faire échouer remettrait le
+    ''' reçu en file alors que son document existe déjà — il ne se passerait
+    ''' plus rien d'utile, et l'erreur reviendrait à chaque tentative.
+    ''' </summary>
+    Private Sub PostIfAuto(item As ReceiptWorkItem)
+        Dim sw As Stopwatch = Stopwatch.StartNew()
+
+        Try
+            Dim res As AutoPostResult = _repo.PostDocumentIfAuto(item.ImageGUID)
+            sw.Stop()
+
+            ' Paramètre à « Non » : rien à faire et rien à journaliser.
+            If res Is Nothing OrElse Not res.AutoPost Then Return
+
+            If res.Comptabilise Then
+                SafeLog(item.ImageGUID, "COMPTABILISATION", True,
+                        "Document " & If(res.DocumentNumber, "") & " comptabilisé",
+                        durationMs:=CInt(sw.ElapsedMilliseconds))
+            Else
+                SafeLog(item.ImageGUID, "COMPTABILISATION", False,
+                        "Aucun document à comptabiliser pour ce reçu.",
+                        durationMs:=CInt(sw.ElapsedMilliseconds))
+            End If
+
+        Catch ex As Exception
+            sw.Stop()
+            SafeLog(item.ImageGUID, "COMPTABILISATION", False, ex.Message,
+                    durationMs:=CInt(sw.ElapsedMilliseconds))
+            clsLog.ErrorWritelog("Comptabilisation automatique du reçu " & item.ImageGUID.ToString() &
+                                 " : " & ex.Message, LogType.Erreur)
+        End Try
     End Sub
 
 #End Region

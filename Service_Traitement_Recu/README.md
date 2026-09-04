@@ -20,6 +20,7 @@ Pour chaque reçu, dans l'ordre d'arrivée (le plus ancien d'abord) :
 | 1 | Photo convertie en **noir et blanc** et allégée (`clsReceiptImageOptimizer`) | `s0004SaveoptimizedImage` | 2 |
 | 2 | Document **lu par ChatGPT** (`OpenAiReceiptReader`), JSON enregistré | `s0006SaveAIReturn` | 3 |
 | 3 | **Process JSON** : création du marchand et du document | `s0008`/`s0009` (fournisseur) ou `s0033`/`s0034` (client) | 4 |
+| 4 | **Comptabilisation**, si la compagnie l'a demandée | `s0737PostReceiptDocumentIfAuto` → `sp_ComptabiliserDocument` | 4 |
 
 L'étape 1 ne concerne que les `image/jpeg`. Les `application/pdf` et
 `text/plain` passent directement à l'étape 2, avec la méthode correspondante
@@ -123,6 +124,24 @@ lit en base (`s0000GetParameter 'CHATGPT'` et `s0032GetPromptOpenAPI
 
 L'état `ProcessingStatus = 4` (« JSON traité ») est nouveau ; les états 0 à 3
 gardent leur signification d'origine, l'application web n'est pas affectée.
+
+### Comptabilisation automatique
+
+Le paramètre **« Reçu comptabilisé automatiquement »** (`RECEIPT_AUTO_POST`,
+onglet Traitement des paramètres) est lu par `s0737PostReceiptDocumentIfAuto`
+juste après la création du document. À `Oui`, le document est comptabilisé
+immédiatement ; à `Non`, il reste en brouillon.
+
+Le paramètre est lu **pour la compagnie du reçu**, avec repli sur la compagnie
+modèle tant que la compagnie n'a pas sa propre copie (le catalogue n'est cloné
+qu'à l'ouverture de la page Paramètres). `fParamI` a été ajoutée pour ça :
+`fParamS` et `fParamD` ne lisaient que les chaînes et les dates.
+
+Un refus de la comptabilisation (période fermée, compte manquant, total à zéro)
+ne fait pas échouer le reçu : le document est déjà créé, il reste en brouillon,
+et la ligne `COMPTABILISATION` apparaît en erreur dans la grille « Résultat ».
+Faire échouer le reçu le remettrait en file alors que son document existe déjà —
+l'erreur reviendrait à chaque tentative sans que rien n'avance.
 
 ### Dépendance : s0009SaveDocument
 
