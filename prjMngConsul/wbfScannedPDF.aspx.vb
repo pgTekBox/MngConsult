@@ -159,6 +159,10 @@ Public Class wbfScannedPDF
         p.Add(New SqlClient.SqlParameter("@SourceContentType", contentType))
         p.Add(New SqlClient.SqlParameter("@SourceSizeBytes", pdfBytes.Length))
         p.Add(New SqlClient.SqlParameter("@SourceBlob", pdfBytes))
+        ' La compagnie du document est celle de la session : la procédure
+        ' écrivait auparavant une compagnie codée en dur, et le document
+        ' n'apparaissait pas chez celui qui venait de le déposer.
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
         Dim ds As DataSet = ExecuteSQLds("s0027InsertDocumentClient", p)
 
