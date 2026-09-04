@@ -74,6 +74,16 @@ Partial Public Class wbfCustomersInvoices
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
+    '''<summary>
+    '''rcbEtat control.
+    '''</summary>
+    Protected WithEvents rcbEtat As Global.Telerik.Web.UI.RadComboBox
+
+    '''<summary>
+    '''rcbStatutPaiement control.
+    '''</summary>
+    Protected WithEvents rcbStatutPaiement As Global.Telerik.Web.UI.RadComboBox
+
     Protected WithEvents tbSearch As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
