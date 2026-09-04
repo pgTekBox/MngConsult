@@ -24,13 +24,27 @@
 --   ce qui creerait des ecritures datees de 2024-2025 — a ne faire qu'en
 --   connaissance de cause, exercice par exercice.
 --
---   Les 19 documents fournisseurs (DocumentTypeId = 5) sont dans la meme
---   situation et n'ont PAS ete touches.
+-- VOLET FOURNISSEURS (ajoute le meme jour, a la demande)
+--   19 documents DocumentTypeId = 5 (ReceiptOCR : recus numerises — Costco,
+--   Esso, Rona, Postes Canada…, de 2014 a 2026) etaient dans le meme cas.
+--   Ils sont marques 'COMPTABILISE' eux aussi.
+--
+--   Deux consequences a connaitre :
+--     - la grille fournisseurs les affiche desormais « Comptabilise » ;
+--     - CanPay() de wbfSuppliersInvoices n'offre le paiement QUE sur un
+--       document comptabilise : ces 19 recus deviennent donc payables depuis
+--       la grille, ce qui n'etait pas le cas avant.
+--   Eux non plus n'ont aucune ecriture au journal.
 --
 -- RETOUR EN ARRIERE
+--   Factures clients :
 --   UPDATE dbo.T060Document SET ComptabilisationStatus = NULL
 --    WHERE Id IN (111,112,113,114,115,116,117,118,119,120,
 --                 121,122,123,124,125,126,127,128,129);
+--   Recus fournisseurs :
+--   UPDATE dbo.T060Document SET ComptabilisationStatus = NULL
+--    WHERE Id IN (96,97,98,99,100,101,102,103,104,105,106,
+--                 130,131,132,133,134,135,136,137);
 --
 -- Deja applique sur MngConsul le 2026-09-04. Rejouable sans effet.
 -- =============================================================================
@@ -38,12 +52,22 @@ SET QUOTED_IDENTIFIER ON;
 SET ANSI_NULLS ON;
 GO
 
+-- Factures clients
 UPDATE dbo.T060Document
    SET ComptabilisationStatus = 'COMPTABILISE'
  WHERE ISNULL(ComptabilisationStatus, '') = ''
    AND DocumentTypeId = 1
    AND Id IN (111,112,113,114,115,116,117,118,119,120,
               121,122,123,124,125,126,127,128,129);
+GO
+
+-- Recus fournisseurs numerises (ReceiptOCR)
+UPDATE dbo.T060Document
+   SET ComptabilisationStatus = 'COMPTABILISE'
+ WHERE ISNULL(ComptabilisationStatus, '') = ''
+   AND DocumentTypeId = 5
+   AND Id IN (96,97,98,99,100,101,102,103,104,105,106,
+              130,131,132,133,134,135,136,137);
 GO
 
 PRINT N'fix_legacy_invoices_comptabilisation_status.sql : termine.';
