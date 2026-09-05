@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Tableau de bord — Orchestrateur" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobDashboard.aspx.vb"
-    Inherits="MngConsul.wbfJobDashboard" %>
+    Inherits="prjSec60Admin.wbfJobDashboard" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

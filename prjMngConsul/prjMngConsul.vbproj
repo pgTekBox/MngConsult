@@ -566,12 +566,12 @@
     <Content Include="wbfFluxTresorerie.aspx" />
     <Content Include="wbfGenerateHash.aspx" />
     <Content Include="wbfInvoiceEdit.aspx" />
-    <Content Include="wbfJobDashboard.aspx" />
-    <Content Include="wbfJobEdit.aspx" />
-    <Content Include="wbfJobExecution.aspx" />
-    <Content Include="wbfJobMonitoring.aspx" />
-    <Content Include="wbfJobs.aspx" />
-    <Content Include="wbfJobSchedule.aspx" />
+    
+    
+    
+    
+    
+    
     <Content Include="wbfJournal.aspx" />
     <Content Include="wbfJournalEntryEdit.aspx" />
     <Content Include="wbfJournalList.aspx" />
@@ -1074,48 +1074,18 @@
       <DependentUpon>wbfInvoiceEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
-    <Compile Include="wbfJobDashboard.aspx.designer.vb">
-      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobDashboard.aspx.vb">
-      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfJobEdit.aspx.designer.vb">
-      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobEdit.aspx.vb">
-      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfJobExecution.aspx.designer.vb">
-      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobExecution.aspx.vb">
-      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfJobMonitoring.aspx.designer.vb">
-      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobMonitoring.aspx.vb">
-      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfJobs.aspx.designer.vb">
-      <DependentUpon>wbfJobs.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobs.aspx.vb">
-      <DependentUpon>wbfJobs.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="wbfJobSchedule.aspx.designer.vb">
-      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="wbfJobSchedule.aspx.vb">
-      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
+    
     <Compile Include="wbfJournal.aspx.designer.vb">
       <DependentUpon>wbfJournal.aspx</DependentUpon>
     </Compile>

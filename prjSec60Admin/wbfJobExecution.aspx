@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Détail d'une exécution" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobExecution.aspx.vb"
-    Inherits="MngConsul.wbfJobExecution" %>
+    Inherits="prjSec60Admin.wbfJobExecution" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

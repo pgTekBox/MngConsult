@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Historique des exécutions" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobMonitoring.aspx.vb"
-    Inherits="MngConsul.wbfJobMonitoring" %>
+    Inherits="prjSec60Admin.wbfJobMonitoring" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

@@ -80,14 +80,9 @@ Namespace Controls
             ' Courriel
             sb.Append(Item("~/wbfMailbox.aspx", "✉️", "mailbox"))
 
-            ' Jobs
-            sb.Append(GroupStart("📒", "jobs"))
-            sb.Append(Child("~/wbfJobs.aspx", "jobs"))
-            sb.Append(Child("~/wbfJobSchedule.aspx", "jobSchedule"))
-            sb.Append(Child("~/wbfJobMonitoring.aspx", "jobMonitoring"))
-            sb.Append(Child("~/wbfJobExecution.aspx", "jobExecution"))
-            sb.Append(Child("~/wbfJobDashboard.aspx", "jobDashboard"))
-            sb.Append(GroupEnd)
+            ' Les tâches planifiées ont été déplacées dans la console
+            ' d'administration (prjSec60Admin) : elles pilotent des traitements
+            ' de fond, pas le travail quotidien d'un utilisateur.
 
             ' Rapports
             sb.Append(GroupStart("📒", "reports"))
@@ -148,11 +143,6 @@ Namespace Controls
                 Case "chartOfAccounts" : Return Choose3(lang, "Plan comptable", "Chart of accounts", "Plan contable")
                 Case "productCategory" : Return Choose3(lang, "Catégorie de produit", "Product category", "Categoría de producto")
                 Case "products" : Return Choose3(lang, "Produits", "Products", "Productos")
-                Case "jobs" : Return Choose3(lang, "Tâches", "Jobs", "Tareas")
-                Case "jobSchedule" : Return Choose3(lang, "Calendrier des tâches", "Job schedule", "Programación de tareas")
-                Case "jobMonitoring" : Return Choose3(lang, "Suivi des tâches", "Job monitoring", "Monitoreo de tareas")
-                Case "jobExecution" : Return Choose3(lang, "Exécution des tâches", "Job execution", "Ejecución de tareas")
-                Case "jobDashboard" : Return Choose3(lang, "Tableau des tâches", "Job dashboard", "Panel de tareas")
                 Case "reports" : Return Choose3(lang, "Rapports", "Reports", "Informes")
                 Case "incomeStatement" : Return Choose3(lang, "État des résultats", "Income statement", "Estado de resultados")
                 Case "balanceSheet" : Return Choose3(lang, "Bilan", "Balance sheet", "Balance general")

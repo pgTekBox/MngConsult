@@ -124,6 +124,46 @@
                 </div>
             </div>
 
+            <!-- Sous-menu Tâches : venu de l'ERP, ces pages pilotent des
+                 traitements de fond et non le travail quotidien. Elles sont
+                 cadrées sur la compagnie courante de la console. -->
+            <div class="nav-group" data-accordion>
+                <button type="button" class="nav-parent" aria-expanded="false">
+                    <span class="nav-ico" aria-hidden="true">⏱️</span>
+                    <span class="nav-txt">Tâches</span>
+                    <span class="nav-meta">
+                        <span class="chev" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="nav-children">
+                    <a class="nav-child" href="~/wbfJobs.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Tâches
+                    </a>
+                    <a class="nav-child" href="~/wbfJobSchedule.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Calendrier des tâches
+                    </a>
+                    <a class="nav-child" href="~/wbfJobMonitoring.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Suivi des tâches
+                    </a>
+                    <a class="nav-child" href="~/wbfJobExecution.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Exécution des tâches
+                    </a>
+                    <a class="nav-child" href="~/wbfJobDashboard.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Tableau des tâches
+                    </a>
+                </div>
+            </div>
+
             <!-- Footer -->
             <div class="sidebar-footer">
                 <a class="nav-item subtle" href="~/wbfSettingsOpenAiPrompts.aspx" runat="server" data-navlink>

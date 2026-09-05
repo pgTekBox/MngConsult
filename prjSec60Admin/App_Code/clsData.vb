@@ -101,6 +101,47 @@ Public Class clsData
     End Property
 
     ' -------------------------------------------------------------------------
+    ' Deux membres attendus par les pages « Tâches », reprises de l'ERP.
+    ' -------------------------------------------------------------------------
+
+    ''' <summary>
+    ''' Identifiant transmis aux procédures des tâches (@UserId, @LanceePar).
+    '''
+    ''' Dans l'ERP c'était l'utilisateur connecté (T015User) ; ici c'est
+    ''' l'administrateur de la console (T900AdminUser). Ces colonnes ne portent
+    ''' aucune clé étrangère, elles servent à retenir QUI a lancé une tâche : la
+    ''' valeur reste donc exploitable, mais elle se lit dans T900AdminUser, pas
+    ''' dans T015User.
+    ''' </summary>
+    Public ReadOnly Property UserId() As Integer
+        Get
+            Return AdminId
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Langue de l'interface (fr/en/es), conservée en Session. Un ?lang=xx dans
+    ''' l'URL est prioritaire. La console est en français, mais les pages des
+    ''' tâches sont traduites : on garde le mécanisme plutôt que de figer « fr ».
+    ''' </summary>
+    Public Property CurrentLang() As String
+        Get
+            Dim q As String = If(Request.QueryString("lang"), "").Trim().ToLowerInvariant()
+            If q = "fr" OrElse q = "en" OrElse q = "es" Then
+                Session("Lang") = q
+                Return q
+            End If
+            Dim s As String = TryCast(Session("Lang"), String)
+            If s = "fr" OrElse s = "en" OrElse s = "es" Then Return s
+            Return "fr"
+        End Get
+        Set(value As String)
+            Dim v As String = If(value, "").Trim().ToLowerInvariant()
+            If v = "fr" OrElse v = "en" OrElse v = "es" Then Session("Lang") = v
+        End Set
+    End Property
+
+    ' -------------------------------------------------------------------------
     ' Courriel utilisé comme @ModifiedBy dans les procédures : celui de
     ' l'administrateur connecté, sinon "admin".
     ' -------------------------------------------------------------------------

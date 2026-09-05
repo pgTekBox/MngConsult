@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Édition d'un job" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobEdit.aspx.vb"
-    Inherits="MngConsul.wbfJobEdit" %>
+    Inherits="prjSec60Admin.wbfJobEdit" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

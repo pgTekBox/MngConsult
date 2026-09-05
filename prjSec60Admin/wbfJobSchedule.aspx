@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Édition d'un schedule" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobSchedule.aspx.vb"
-    Inherits="MngConsul.wbfJobSchedule" %>
+    Inherits="prjSec60Admin.wbfJobSchedule" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 

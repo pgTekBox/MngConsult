@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Tâches planifiées" Language="vb" AutoEventWireup="false"
     MasterPageFile="~/Site.Master" CodeBehind="wbfJobs.aspx.vb"
-    Inherits="MngConsul.wbfJobs" %>
+    Inherits="prjSec60Admin.wbfJobs" %>
 
 <%@ Register Assembly="Telerik.Web.UI" Namespace="Telerik.Web.UI" TagPrefix="telerik" %>
 
