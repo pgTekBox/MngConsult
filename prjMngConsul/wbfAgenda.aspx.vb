@@ -9,6 +9,7 @@ Public Class wbfAgenda
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
         rwAppointment.Title = T("Rendez-vous", "Appointment", "Cita")
+        ApplyLocalization()
 
         If Not IsPostBack Then
 
@@ -21,6 +22,37 @@ Public Class wbfAgenda
             hfViewMode.Value = "month"
             LoadAll()
         End If
+    End Sub
+
+    ''' <summary>
+    ''' Libellés de la barre d'outils et de l'entête du mois.
+    '''
+    ''' Ils passent par des Literal et non par des &lt;%= %&gt; : la page porte un
+    ''' RadAjaxPanel, et Telerik déplace l'UpdatePanel dans la collection de
+    ''' contrôles du conteneur. Un seul bloc de code dans ce conteneur fait
+    ''' échouer ce déplacement (« La collection Controls ne peut pas être
+    ''' modifiée »). Les seuls &lt;%= %&gt; restants sont dans le RadCodeBlock du
+    ''' bas de page, qui est justement là pour ça.
+    ''' </summary>
+    Private Sub ApplyLocalization()
+        litTipPrev.Text = T("Précédent", "Previous", "Anterior")
+        litTipNext.Text = T("Suivant", "Next", "Siguiente")
+        litTipToday.Text = T("Aujourd'hui", "Today", "Hoy")
+
+        litViewMonth.Text = T("Mois", "Month", "Mes")
+        litViewWeek.Text = T("Semaine", "Week", "Semana")
+        litViewDay.Text = T("Jour", "Day", "Día")
+
+        litAddAppt.Text = T("Rendez-vous", "Appointment", "Cita")
+        litEmployees.Text = T("Employés", "Employees", "Empleados")
+
+        litDow1.Text = T("Lun", "Mon", "Lun")
+        litDow2.Text = T("Mar", "Tue", "Mar")
+        litDow3.Text = T("Mer", "Wed", "Mié")
+        litDow4.Text = T("Jeu", "Thu", "Jue")
+        litDow5.Text = T("Ven", "Fri", "Vie")
+        litDow6.Text = T("Sam", "Sat", "Sáb")
+        litDow7.Text = T("Dim", "Sun", "Dom")
     End Sub
 
     ''' <summary>Sélecteur de langue simple (fr/en/es) pour les libellés de la page.</summary>

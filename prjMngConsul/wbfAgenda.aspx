@@ -443,12 +443,19 @@
       </telerik:RadAjaxPanel>
     <div class="ag-wrap">
 
+        <%-- Les libellés passent par des Literal et non par des <%= %> : cette
+             page porte un RadAjaxPanel, et Telerik déplace l'UpdatePanel dans
+             la collection de contrôles du parent. Un seul bloc de code ailleurs
+             dans ce même conteneur fait échouer ce déplacement (« La collection
+             Controls ne peut pas être modifiée »). Les Literal sont renseignés
+             dans ApplyLocalization. --%>
+
         <!-- TOOLBAR -->
         <div class="ag-toolbar">
             <div class="ag-nav">
-                <button type="button" class="ag-iconbtn" onclick="agNav(-1); return false;" title="<%= T("Précédent","Previous","Anterior") %>">‹</button>
-                <button type="button" class="ag-iconbtn" onclick="agNav(1); return false;"  title="<%= T("Suivant","Next","Siguiente") %>">›</button>
-                <button type="button" class="ag-iconbtn" onclick="agNavToday(); return false;" title="<%= T("Aujourd'hui","Today","Hoy") %>">●</button>
+                <button type="button" class="ag-iconbtn" onclick="agNav(-1); return false;" title='<asp:Literal ID="litTipPrev" runat="server" />'>‹</button>
+                <button type="button" class="ag-iconbtn" onclick="agNav(1); return false;"  title='<asp:Literal ID="litTipNext" runat="server" />'>›</button>
+                <button type="button" class="ag-iconbtn" onclick="agNavToday(); return false;" title='<asp:Literal ID="litTipToday" runat="server" />'>●</button>
             </div>
 
             <div class="ag-title" id="agTitle">—</div>
@@ -456,24 +463,24 @@
             <div class="ag-spacer"></div>
 
             <div class="ag-views" role="tablist">
-                <button type="button" id="vMonth" class="active" onclick="agSetView('month'); return false;"><%= T("Mois","Month","Mes") %></button>
-                <button type="button" id="vWeek"  onclick="agSetView('week');  return false;"><%= T("Semaine","Week","Semana") %></button>
-                <button type="button" id="vDay"   onclick="agSetView('day');   return false;"><%= T("Jour","Day","Día") %></button>
+                <button type="button" id="vMonth" class="active" onclick="agSetView('month'); return false;"><asp:Literal ID="litViewMonth" runat="server" /></button>
+                <button type="button" id="vWeek"  onclick="agSetView('week');  return false;"><asp:Literal ID="litViewWeek" runat="server" /></button>
+                <button type="button" id="vDay"   onclick="agSetView('day');   return false;"><asp:Literal ID="litViewDay" runat="server" /></button>
             </div>
 
-            <button type="button" class="ag-btn-add" onclick="agNewAppointment(); return false;">+ <%= T("Rendez-vous","Appointment","Cita") %></button>
+            <button type="button" class="ag-btn-add" onclick="agNewAppointment(); return false;">+ <asp:Literal ID="litAddAppt" runat="server" /></button>
         </div>
 
         <!-- FILTRES RESSOURCES -->
         <div class="ag-resources" id="agResources">
-            <span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;"><%= T("Employés","Employees","Empleados") %> :</span>
+            <span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;"><asp:Literal ID="litEmployees" runat="server" /> :</span>
             <%-- généré par JS --%>
         </div>
 
         <!-- VUE MOIS -->
         <div class="ag-month" id="agMonthView">
             <div class="ag-month-head">
-                <div><%= T("Lun","Mon","Lun") %></div><div><%= T("Mar","Tue","Mar") %></div><div><%= T("Mer","Wed","Mié") %></div><div><%= T("Jeu","Thu","Jue") %></div><div><%= T("Ven","Fri","Vie") %></div><div><%= T("Sam","Sat","Sáb") %></div><div><%= T("Dim","Sun","Dom") %></div>
+                <div><asp:Literal ID="litDow1" runat="server" /></div><div><asp:Literal ID="litDow2" runat="server" /></div><div><asp:Literal ID="litDow3" runat="server" /></div><div><asp:Literal ID="litDow4" runat="server" /></div><div><asp:Literal ID="litDow5" runat="server" /></div><div><asp:Literal ID="litDow6" runat="server" /></div><div><asp:Literal ID="litDow7" runat="server" /></div>
             </div>
             <div class="ag-month-grid" id="agMonthGrid"></div>
         </div>
@@ -490,17 +497,26 @@
     <!-- Hôte des toasts/rappels -->
     <div class="ag-toast-host" id="agToastHost"></div>
 
-    <script>
-        // ============================================================
-        // I18N (fr/en/es) — injecté côté serveur selon la langue
-        // ============================================================
-        var AG_LANG = '<%= AgLocale() %>';
-        var AG_I18N = {
-            employees: '<%= T("Employés","Employees","Empleados") %>',
-            allDay: '<%= T("Toute la journée","All day","Todo el día") %>',
-            at: '<%= T("À","At","A las") %>'
-        };
+    <%-- Les seuls blocs de code de la page sont ici, dans un RadCodeBlock :
+         c'est la façon prévue par Telerik de garder du <%= %> sur une page
+         gérée en AJAX. Sans cette enveloppe, RadAjaxPanel ne peut plus
+         déplacer son UpdatePanel et la page lève « La collection Controls ne
+         peut pas être modifiée ». --%>
+    <telerik:RadCodeBlock ID="rcbAgendaI18n" runat="server">
+        <script>
+            // ============================================================
+            // I18N (fr/en/es) — injecté côté serveur selon la langue
+            // ============================================================
+            var AG_LANG = '<%= AgLocale() %>';
+            var AG_I18N = {
+                employees: '<%= T("Employés","Employees","Empleados") %>',
+                allDay: '<%= T("Toute la journée","All day","Todo el día") %>',
+                at: '<%= T("À","At","A las") %>'
+            };
+        </script>
+    </telerik:RadCodeBlock>
 
+    <script>
         // ============================================================
         // ÉTAT GLOBAL (côté client)
         // ============================================================

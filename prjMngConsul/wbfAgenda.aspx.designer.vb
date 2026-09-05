@@ -111,4 +111,148 @@ Partial Public Class wbfAgenda
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents hfMoveData As Global.System.Web.UI.WebControls.HiddenField
+    '''<summary>
+    '''litTipPrev control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTipPrev As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTipNext control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTipNext As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litTipToday control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litTipToday As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litViewMonth control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litViewMonth As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litViewWeek control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litViewWeek As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litViewDay control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litViewDay As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litAddAppt control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litAddAppt As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litEmployees control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litEmployees As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow1 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow1 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow2 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow2 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow3 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow3 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow4 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow4 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow5 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow5 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow6 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow6 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''litDow7 control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents litDow7 As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>
+    '''rcbAgendaI18n control.
+    '''</summary>
+    '''<remarks>
+    '''Auto-generated field.
+    '''To modify move field declaration from designer file to code-behind file.
+    '''</remarks>
+    Protected WithEvents rcbAgendaI18n As Global.Telerik.Web.UI.RadCodeBlock
+
 End Class
