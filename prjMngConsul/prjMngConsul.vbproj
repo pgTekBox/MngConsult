@@ -548,6 +548,7 @@
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
     <Content Include="wbfAppointmentEdit.aspx" />
+    <Content Include="wbfApprobations.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
     <Content Include="wbfAutoPayHistory.aspx" />
     <Content Include="wbfAutoPaySchedule.aspx" />
@@ -947,6 +948,13 @@
     <Compile Include="wbfAppointmentEdit.aspx.vb">
       <DependentUpon>wbfAppointmentEdit.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfApprobations.aspx.designer.vb">
+      <DependentUpon>wbfApprobations.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfApprobations.aspx.vb">
+      <DependentUpon>wbfApprobations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="wbfAutoPayAuthorizations.aspx.designer.vb">
       <DependentUpon>wbfAutoPayAuthorizations.aspx</DependentUpon>

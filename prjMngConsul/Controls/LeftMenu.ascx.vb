@@ -1,4 +1,6 @@
-﻿Imports System.Text
+﻿Imports System.Data
+Imports System.Data.SqlClient
+Imports System.Text
 
 Namespace Controls
 
@@ -15,10 +17,42 @@ Namespace Controls
             "<path d=""M9 18l6-6-6-6"" stroke=""currentColor"" stroke-width=""2"" stroke-linecap=""round"" stroke-linejoin=""round"" />" &
             "</svg></span></span>"
 
-        Private Function Item(url As String, icon As String, labelKey As String, Optional cls As String = "nav-item") As String
+        Private Function Item(url As String, icon As String, labelKey As String,
+                              Optional cls As String = "nav-item",
+                              Optional badge As Integer = 0) As String
+
+            ' Une pastille à zéro ne se dessine pas : elle ferait du bruit sur
+            ' chaque ligne du menu sans rien signaler.
+            Dim meta As String = ""
+            If badge > 0 Then
+                meta = "<span class=""nav-meta""><span class=""nav-badge alert"">" &
+                       badge.ToString() & "</span></span>"
+            End If
+
             Return "<a class=""" & cls & """ href=""" & ResolveUrl(url) & """ data-navlink>" &
                    "<span class=""nav-ico"" aria-hidden=""true"">" & icon & "</span>" &
-                   "<span class=""nav-txt"">" & L(labelKey) & "</span></a>"
+                   "<span class=""nav-txt"">" & L(labelKey) & "</span>" & meta & "</a>"
+        End Function
+
+        ''' <summary>
+        ''' Nombre de tâches en attente de décision pour la compagnie courante.
+        ''' Le menu se dessine sur chaque page : une erreur ici ne doit jamais
+        ''' faire tomber la navigation, on rend simplement zéro.
+        ''' </summary>
+        Private Function CountApprobations() As Integer
+            Try
+                If Company = Guid.Empty Then Return 0
+
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", Company))
+
+                Dim ds As DataSet = ExecuteSQLds("s0745GetApprobationsCount", p)
+                If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
+
+                Return Convert.ToInt32(ds.Tables(0).Rows(0)("AApprouver"))
+            Catch
+                Return 0
+            End Try
         End Function
 
         Private Function Child(url As String, labelKey As String) As String
@@ -83,6 +117,11 @@ Namespace Controls
             ' Les tâches planifiées ont été déplacées dans la console
             ' d'administration (prjSec60Admin) : elles pilotent des traitements
             ' de fond, pas le travail quotidien d'un utilisateur.
+            '
+            ' Ce qui reste ici, c'est la boîte de messages : les tâches que
+            ' l'exécuteur ne lancera pas sans l'accord de l'utilisateur. La
+            ' pastille porte le nombre en attente.
+            sb.Append(Item("~/wbfApprobations.aspx", "📥", "approvals", "nav-item", CountApprobations()))
 
             ' Rapports
             sb.Append(GroupStart("📒", "reports"))
@@ -123,6 +162,7 @@ Namespace Controls
                 Case "agenda" : Return Choose3(lang, "Agenda", "Agenda", "Agenda")
                 Case "employees" : Return Choose3(lang, "Employés", "Employees", "Empleados")
                 Case "mailbox" : Return Choose3(lang, "Courriel", "Mail", "Correo")
+                Case "approvals" : Return Choose3(lang, "Tâches à approuver", "Tasks to approve", "Tareas por aprobar")
                 Case "sales" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
                 Case "customers" : Return Choose3(lang, "Clients", "Customers", "Clientes")
                 Case "customerInvoices" : Return Choose3(lang, "Factures clients", "Customer invoices", "Facturas de clientes")
