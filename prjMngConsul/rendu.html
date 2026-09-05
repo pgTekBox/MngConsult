@@ -623,6 +623,7 @@
         <a href="#mobile">7 &nbsp;Application mobile</a>
         <a href="#admin">8 &nbsp;Console d'administration</a>
         <a href="#socle">9 &nbsp;Socle technique</a>
+        <a href="#projets">10 &nbsp;Projets Visual Studio</a>
     </nav>
 
     <main>
@@ -1670,6 +1671,226 @@
                 </div>
 
             </div>
+        </section>
+
+        <!-- ============================================== PROJETS VS -->
+        <section id="projets">
+            <h2><span class="num">10</span>Projets Visual Studio</h2>
+            <p class="sub">
+                L'inventaire des solutions qui composent la plateforme, relevé dans le code
+                source. Deux dépôts : <b>MngConsul</b> pour l'ERP et l'infrastructure de
+                paiement, <b>MailServer</b> pour le courriel.
+            </p>
+
+            <h3 style="margin-top:26px">Dépôt MngConsul — applications web</h3>
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>🏢 prjMngConsul</h3>
+                    <ul>
+                        <li>L'ERP lui-même : ventes, achats, comptabilité, agenda, courriel.</li>
+                        <li>C'est l'application que voient les entreprises abonnées.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">VB.NET WebForms</span><span class="tag">.NET 4.7.2</span>
+                        <span class="tag">Telerik</span><span class="tag">base MngConsul</span>
+                    </div>
+                </div>
+
+                <div class="mod">
+                    <h3>🔐 prjSec60Admin</h3>
+                    <ul>
+                        <li>Console d'administration interne : compagnies, forfaits, page vitrine,
+                            prompts d'IA, diagnostics des webhooks.</li>
+                        <li>Accueille depuis peu les écrans de <b>tâches planifiées</b>, venus de l'ERP.</li>
+                        <li>Authentification distincte de celle de l'ERP.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">VB.NET WebForms</span><span class="tag">.NET 4.7.2</span>
+                        <span class="tag">Telerik</span><span class="tag">base MngConsul</span>
+                    </div>
+                </div>
+
+                <div class="mod">
+                    <h3>🔌 WebApi — APIWebMngConsul</h3>
+                    <ul>
+                        <li>API REST consommée par l'application mobile : connexion, profil,
+                            inscription, pointage, dépôt de reçus.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">C#</span><span class="tag">.NET 8</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <h3 style="margin-top:28px">Dépôt MngConsul — 60secPaiement</h3>
+            <p class="sub" style="margin-top:-6px">
+                L'infrastructure de paiement, indépendante de l'ERP : quatre applications
+                distinctes sur la base <span class="tag">60secPaiement</span>.
+            </p>
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>🏦 PortailMaster</h3>
+                    <ul>
+                        <li>Portail du personnel de la plateforme : abonnés, grand livre,
+                            lots EFT (CPA-005), rapprochement bancaire, supervision, audit.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET WebForms</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>👤 PortailABN</h3>
+                    <ul>
+                        <li>Libre-service de l'abonné : ses clients, ses fournisseurs,
+                            ses encaissements et décaissements, ses clés d'API.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET WebForms</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🤝 PortailPartenaire</h3>
+                    <ul>
+                        <li>Modèle de revente : un partenaire crée et gère ses propres abonnés.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET WebForms</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🔗 webAPI</h3>
+                    <ul>
+                        <li>API REST de 60secPaiement pour les logiciels des abonnés :
+                            soldes, contreparties, paiements, versements, webhooks.</li>
+                        <li>Authentification par clé d'API, documentation et console intégrées.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">clé d'API</span></div>
+                </div>
+
+            </div>
+
+            <h3 style="margin-top:28px">Services Windows</h3>
+            <p class="sub" style="margin-top:-6px">
+                Ce qui tourne en arrière-plan sur le serveur, sans interface ouverte.
+                Chacun a son contrôleur en zone de notification et sa fenêtre de surveillance.
+            </p>
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>✉️ ServiceWindowsSMTPMail <span class="st st-ok">en service</span></h3>
+                    <ul>
+                        <li>Le serveur de courriel : réception SMTP, remise directe aux serveurs
+                            de destination, signature DKIM, analyse MIME des messages reçus.</li>
+                        <li>Dépôt <b>MailServer</b> — c'est la version maintenue.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 4.7.2</span><span class="tag">MailKit</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>📥 ServiceIMAP <span class="st st-test">à déployer</span></h3>
+                    <ul>
+                        <li>Serveur IMAP4rev1 et SMTP de soumission : permet de relever et
+                            d'envoyer le courrier depuis un client classique.</li>
+                        <li>Reprend le code de <b>progIMAP</b>, qui tournait dans une fenêtre
+                            qu'il fallait laisser ouverte.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 8</span><span class="tag">MimeKit</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🧾 ServiceTraitementRecu <span class="st st-test">à déployer</span></h3>
+                    <ul>
+                        <li>Traite les reçus déposés dans l'ERP : passage en noir et blanc,
+                            lecture par l'IA, création du fournisseur et du document.</li>
+                        <li>Comptabilise dans la foulée si la compagnie l'a demandé.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 4.7.2</span><span class="tag">OpenAI</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>📤 Service/SrvAI <span class="st st-wip">copie ancienne</span></h3>
+                    <ul>
+                        <li>Copie du service de courriel conservée dans le dépôt MngConsul.</li>
+                        <li>Elle a divergé : il lui manque des évolutions présentes dans
+                            <b>ServiceWindowsSMTPMail</b>, et les deux s'installent sous le même
+                            nom de service Windows — un seul peut tourner à la fois.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 4.7.2</span></div>
+                </div>
+
+            </div>
+
+            <h3 style="margin-top:28px">Mobile et outils</h3>
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>📱 MAUI / 60SecAI</h3>
+                    <ul>
+                        <li>L'application mobile : scan de reçus, facturation, rendez-vous,
+                            consultation depuis le terrain.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">C# MAUI</span><span class="tag">.NET 10</span><span class="tag">Android · iOS</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🔌 MAUI / 60SecAI.Api</h3>
+                    <ul>
+                        <li>Service dédié à l'application mobile : authentification, ventes,
+                            fournisseurs, rapports.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">C#</span><span class="tag">.NET 10</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🧪 MAUI / prjTakePhoto · DemoMAUI</h3>
+                    <ul>
+                        <li>Deux prototypes de prise de photo, antérieurs à l'application
+                            actuelle. Conservés comme référence.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">C# MAUI</span><span class="tag">.NET 9</span><span class="tag">prototype</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>✅ Tests / MngConsul.E2E.Tests</h3>
+                    <ul>
+                        <li>Test de fumée : vérifie que chacun des écrans du menu de l'ERP
+                            se charge sans erreur. Un test par écran.</li>
+                        <li>Exige que le site tourne localement.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">C#</span><span class="tag">.NET 9</span></div>
+                </div>
+
+                <div class="mod">
+                    <h3>🗄️ MailServer / progIMAP <span class="st st-wip">remplacé</span></h3>
+                    <ul>
+                        <li>Le serveur IMAP sous forme d'application à fenêtre, d'où vient le
+                            code de <b>ServiceIMAP</b>.</li>
+                        <li>Conservé comme historique : plus rien ne l'utilise, et toute
+                            correction doit se faire du côté du service.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 8</span></div>
+                </div>
+
+            </div>
+
+            <div class="note" style="margin-top:24px">
+                <h3>⏱️ Tâches planifiées : les écrans existent, l'exécuteur reste à écrire</h3>
+                <p>
+                    Les cinq écrans de tâches — définition, calendrier, suivi, exécutions,
+                    tableau de bord — sont en place dans la console d'administration, et une
+                    tâche peut être lancée à la main. En revanche, <b>aucun projet Visual Studio
+                    n'implémente le déclenchement à l'heure dite</b>, et rien dans le code des
+                    applications ne s'en charge : c'est le seul des huit programmes annoncés au
+                    chapitre 1 qui reste à écrire.
+                </p>
+            </div>
+
+            <p class="fine" style="margin-top:22px">
+                Le dossier <span class="tag">MailServer / Old source and Doc</span> contient une
+                centaine de projets tiers (MailKit, MimeKit, hMailServer, Papercut…) rassemblés
+                comme documentation de référence. Ils ne font pas partie de la plateforme et ne
+                sont pas listés ici.
+            </p>
         </section>
 
     </main>
