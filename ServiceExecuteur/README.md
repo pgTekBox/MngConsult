@@ -166,6 +166,14 @@ En dessous de 40 px il ne reste pas assez de pixels pour les dents du rouage
 **et** le glyphe : à ces tailles seul le glyphe est dessiné, en grand. C'est lui
 qui porte l'information, la tuile colorée suffit à garder la famille.
 
+**L'icône de la fenêtre ne doit pas être posée dans le concepteur.** Il la
+recopie dans `Form1.resx` et elle se retrouve deux fois dans l'assembly — une
+fois en ressource Win32, une fois en ressource .NET : `Form1.resx` était passé à
+567 Ko pour ça. `Form1.AppliquerIcone()` la relit sur l'exécutable au démarrage
+(`Icon.ExtractAssociatedIcon`), ce qui ne coûte pas un octet. Si vous ouvrez
+`Form1` dans le concepteur, vérifiez qu'il n'a pas remis `Me.Icon` dans le
+designer et regonflé le `.resx`.
+
 `Resources\GenererIcones.ps1` régénère les quatre fichiers (toute la géométrie
 est dans le script, rien n'est dessiné à la main) :
 

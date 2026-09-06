@@ -18,7 +18,6 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
-        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.pnlTop = New System.Windows.Forms.Panel()
         Me.lblEtatTitre = New System.Windows.Forms.Label()
         Me.lblEtat = New System.Windows.Forms.Label()
@@ -361,7 +360,6 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(1084, 561)
         Me.Controls.Add(Me.tabMain)
         Me.Controls.Add(Me.pnlTop)
-        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(900, 480)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen

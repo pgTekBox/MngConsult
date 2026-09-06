@@ -29,6 +29,8 @@ Public Class Form1
 
     Private Sub Form1_Load(sender As Object, e As EventArgs) Handles MyBase.Load
 
+        AppliquerIcone()
+
         Dim config As New clsXmlConfig()
         ConnectionString = config.ConnectionString
 
@@ -49,6 +51,25 @@ Public Class Form1
         StartPipeThread()
 
         Timer1.Enabled = True
+    End Sub
+
+    ''' <summary>
+    ''' Icône de la fenêtre, prise sur l'exécutable lui-même.
+    '''
+    ''' Le concepteur, lui, la recopie dans Form1.resx : l'icône se retrouve
+    ''' alors deux fois dans l'assembly (une fois en ressource Win32, une fois
+    ''' en ressource .NET), soit un demi-mégaoctet pour rien. ServiceExecuteur.ico
+    ''' est déjà dans le fichier — on la relit de là.
+    '''
+    ''' Sans icône la fenêtre garde celle de Windows par défaut : ça n'a jamais
+    ''' à faire échouer l'ouverture de l'interface.
+    ''' </summary>
+    Private Sub AppliquerIcone()
+        Try
+            Me.Icon = Drawing.Icon.ExtractAssociatedIcon(Application.ExecutablePath)
+        Catch ex As Exception
+            clsLog.ErrorWritelog("Icône de la fenêtre : " & ex.Message, LogType.Erreur)
+        End Try
     End Sub
 
     Private Function Version() As String
