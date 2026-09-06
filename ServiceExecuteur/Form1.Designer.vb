@@ -18,6 +18,7 @@ Partial Class Form1
     <System.Diagnostics.DebuggerStepThrough()>
     Private Sub InitializeComponent()
         Me.components = New System.ComponentModel.Container()
+        Dim resources As System.ComponentModel.ComponentResourceManager = New System.ComponentModel.ComponentResourceManager(GetType(Form1))
         Me.pnlTop = New System.Windows.Forms.Panel()
         Me.lblEtatTitre = New System.Windows.Forms.Label()
         Me.lblEtat = New System.Windows.Forms.Label()
@@ -37,18 +38,6 @@ Partial Class Form1
         Me.tabMain = New System.Windows.Forms.TabControl()
         Me.tabExecutions = New System.Windows.Forms.TabPage()
         Me.dvExecutions = New System.Windows.Forms.DataGridView()
-        Me.colXId = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXJobCode = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXJobNom = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXType = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXStatut = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXDemarre = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXTermine = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXDuree = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXLignes = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXWorker = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXReservee = New System.Windows.Forms.DataGridViewTextBoxColumn()
-        Me.colXMessage = New System.Windows.Forms.DataGridViewTextBoxColumn()
         Me.pnlExecutionsBas = New System.Windows.Forms.Panel()
         Me.btnVoirDetail = New System.Windows.Forms.Button()
         Me.tabJournal = New System.Windows.Forms.TabPage()
@@ -107,7 +96,7 @@ Partial Class Form1
         Me.lblEtat.ForeColor = System.Drawing.Color.DimGray
         Me.lblEtat.Location = New System.Drawing.Point(110, 14)
         Me.lblEtat.Name = "lblEtat"
-        Me.lblEtat.Size = New System.Drawing.Size(80, 13)
+        Me.lblEtat.Size = New System.Drawing.Size(87, 13)
         Me.lblEtat.TabIndex = 1
         Me.lblEtat.Text = "Service arrêté"
         '
@@ -116,7 +105,7 @@ Partial Class Form1
         Me.lblDernierPassageTitre.AutoSize = True
         Me.lblDernierPassageTitre.Location = New System.Drawing.Point(12, 38)
         Me.lblDernierPassageTitre.Name = "lblDernierPassageTitre"
-        Me.lblDernierPassageTitre.Size = New System.Drawing.Size(92, 13)
+        Me.lblDernierPassageTitre.Size = New System.Drawing.Size(90, 13)
         Me.lblDernierPassageTitre.TabIndex = 2
         Me.lblDernierPassageTitre.Text = "Dernier passage :"
         '
@@ -125,7 +114,7 @@ Partial Class Form1
         Me.lblDernierPassage.AutoSize = True
         Me.lblDernierPassage.Location = New System.Drawing.Point(110, 38)
         Me.lblDernierPassage.Name = "lblDernierPassage"
-        Me.lblDernierPassage.Size = New System.Drawing.Size(40, 13)
+        Me.lblDernierPassage.Size = New System.Drawing.Size(39, 13)
         Me.lblDernierPassage.TabIndex = 3
         Me.lblDernierPassage.Text = "Jamais"
         '
@@ -134,7 +123,7 @@ Partial Class Form1
         Me.lblFileTitre.AutoSize = True
         Me.lblFileTitre.Location = New System.Drawing.Point(12, 62)
         Me.lblFileTitre.Name = "lblFileTitre"
-        Me.lblFileTitre.Size = New System.Drawing.Size(88, 13)
+        Me.lblFileTitre.Size = New System.Drawing.Size(81, 13)
         Me.lblFileTitre.TabIndex = 4
         Me.lblFileTitre.Text = "Tâches à faire :"
         '
@@ -144,7 +133,7 @@ Partial Class Form1
         Me.lblFile.Font = New System.Drawing.Font("Microsoft Sans Serif", 8.25!, System.Drawing.FontStyle.Bold)
         Me.lblFile.Location = New System.Drawing.Point(110, 62)
         Me.lblFile.Name = "lblFile"
-        Me.lblFile.Size = New System.Drawing.Size(13, 13)
+        Me.lblFile.Size = New System.Drawing.Size(14, 13)
         Me.lblFile.TabIndex = 5
         Me.lblFile.Text = "0"
         '
@@ -153,7 +142,7 @@ Partial Class Form1
         Me.lblAApprouverTitre.AutoSize = True
         Me.lblAApprouverTitre.Location = New System.Drawing.Point(260, 62)
         Me.lblAApprouverTitre.Name = "lblAApprouverTitre"
-        Me.lblAApprouverTitre.Size = New System.Drawing.Size(75, 13)
+        Me.lblAApprouverTitre.Size = New System.Drawing.Size(71, 13)
         Me.lblAApprouverTitre.TabIndex = 6
         Me.lblAApprouverTitre.Text = "À approuver :"
         '
@@ -164,7 +153,7 @@ Partial Class Form1
         Me.lblAApprouver.ForeColor = System.Drawing.Color.DarkOrange
         Me.lblAApprouver.Location = New System.Drawing.Point(345, 62)
         Me.lblAApprouver.Name = "lblAApprouver"
-        Me.lblAApprouver.Size = New System.Drawing.Size(13, 13)
+        Me.lblAApprouver.Size = New System.Drawing.Size(14, 13)
         Me.lblAApprouver.TabIndex = 7
         Me.lblAApprouver.Text = "0"
         '
@@ -173,7 +162,7 @@ Partial Class Form1
         Me.lblSuccesTitre.AutoSize = True
         Me.lblSuccesTitre.Location = New System.Drawing.Point(430, 62)
         Me.lblSuccesTitre.Name = "lblSuccesTitre"
-        Me.lblSuccesTitre.Size = New System.Drawing.Size(48, 13)
+        Me.lblSuccesTitre.Size = New System.Drawing.Size(49, 13)
         Me.lblSuccesTitre.TabIndex = 8
         Me.lblSuccesTitre.Text = "Succès :"
         '
@@ -184,7 +173,7 @@ Partial Class Form1
         Me.lblSucces.ForeColor = System.Drawing.Color.ForestGreen
         Me.lblSucces.Location = New System.Drawing.Point(490, 62)
         Me.lblSucces.Name = "lblSucces"
-        Me.lblSucces.Size = New System.Drawing.Size(13, 13)
+        Me.lblSucces.Size = New System.Drawing.Size(14, 13)
         Me.lblSucces.TabIndex = 9
         Me.lblSucces.Text = "0"
         '
@@ -193,7 +182,7 @@ Partial Class Form1
         Me.lblEchecsTitre.AutoSize = True
         Me.lblEchecsTitre.Location = New System.Drawing.Point(560, 62)
         Me.lblEchecsTitre.Name = "lblEchecsTitre"
-        Me.lblEchecsTitre.Size = New System.Drawing.Size(48, 13)
+        Me.lblEchecsTitre.Size = New System.Drawing.Size(49, 13)
         Me.lblEchecsTitre.TabIndex = 10
         Me.lblEchecsTitre.Text = "Échecs :"
         '
@@ -204,7 +193,7 @@ Partial Class Form1
         Me.lblEchecs.ForeColor = System.Drawing.Color.Firebrick
         Me.lblEchecs.Location = New System.Drawing.Point(620, 62)
         Me.lblEchecs.Name = "lblEchecs"
-        Me.lblEchecs.Size = New System.Drawing.Size(13, 13)
+        Me.lblEchecs.Size = New System.Drawing.Size(14, 13)
         Me.lblEchecs.TabIndex = 11
         Me.lblEchecs.Text = "0"
         '
@@ -265,9 +254,7 @@ Partial Class Form1
         '
         Me.dvExecutions.AllowUserToAddRows = False
         Me.dvExecutions.AllowUserToDeleteRows = False
-        Me.dvExecutions.AutoGenerateColumns = False
         Me.dvExecutions.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize
-        Me.dvExecutions.Columns.AddRange(New System.Windows.Forms.DataGridViewColumn() {Me.colXId, Me.colXJobCode, Me.colXJobNom, Me.colXType, Me.colXStatut, Me.colXDemarre, Me.colXTermine, Me.colXDuree, Me.colXLignes, Me.colXWorker, Me.colXReservee, Me.colXMessage})
         Me.dvExecutions.Dock = System.Windows.Forms.DockStyle.Fill
         Me.dvExecutions.Location = New System.Drawing.Point(3, 3)
         Me.dvExecutions.MultiSelect = False
@@ -277,102 +264,6 @@ Partial Class Form1
         Me.dvExecutions.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect
         Me.dvExecutions.Size = New System.Drawing.Size(1070, 397)
         Me.dvExecutions.TabIndex = 0
-        '
-        'colXId
-        '
-        Me.colXId.DataPropertyName = "ExecutionId"
-        Me.colXId.HeaderText = "#"
-        Me.colXId.Name = "colXId"
-        Me.colXId.ReadOnly = True
-        Me.colXId.Width = 55
-        '
-        'colXJobCode
-        '
-        Me.colXJobCode.DataPropertyName = "JobCode"
-        Me.colXJobCode.HeaderText = "Code"
-        Me.colXJobCode.Name = "colXJobCode"
-        Me.colXJobCode.ReadOnly = True
-        Me.colXJobCode.Width = 150
-        '
-        'colXJobNom
-        '
-        Me.colXJobNom.DataPropertyName = "JobNom"
-        Me.colXJobNom.HeaderText = "Tâche"
-        Me.colXJobNom.Name = "colXJobNom"
-        Me.colXJobNom.ReadOnly = True
-        Me.colXJobNom.Width = 180
-        '
-        'colXType
-        '
-        Me.colXType.DataPropertyName = "HandlerType"
-        Me.colXType.HeaderText = "Type"
-        Me.colXType.Name = "colXType"
-        Me.colXType.ReadOnly = True
-        Me.colXType.Width = 80
-        '
-        'colXStatut
-        '
-        Me.colXStatut.DataPropertyName = "Statut"
-        Me.colXStatut.HeaderText = "Statut"
-        Me.colXStatut.Name = "colXStatut"
-        Me.colXStatut.ReadOnly = True
-        Me.colXStatut.Width = 90
-        '
-        'colXDemarre
-        '
-        Me.colXDemarre.DataPropertyName = "Demarre"
-        Me.colXDemarre.HeaderText = "Démarrée"
-        Me.colXDemarre.Name = "colXDemarre"
-        Me.colXDemarre.ReadOnly = True
-        Me.colXDemarre.Width = 130
-        '
-        'colXTermine
-        '
-        Me.colXTermine.DataPropertyName = "Termine"
-        Me.colXTermine.HeaderText = "Terminée"
-        Me.colXTermine.Name = "colXTermine"
-        Me.colXTermine.ReadOnly = True
-        Me.colXTermine.Width = 130
-        '
-        'colXDuree
-        '
-        Me.colXDuree.DataPropertyName = "DureeMs"
-        Me.colXDuree.HeaderText = "ms"
-        Me.colXDuree.Name = "colXDuree"
-        Me.colXDuree.ReadOnly = True
-        Me.colXDuree.Width = 70
-        '
-        'colXLignes
-        '
-        Me.colXLignes.DataPropertyName = "LignesTraitees"
-        Me.colXLignes.HeaderText = "Lignes"
-        Me.colXLignes.Name = "colXLignes"
-        Me.colXLignes.ReadOnly = True
-        Me.colXLignes.Width = 60
-        '
-        'colXWorker
-        '
-        Me.colXWorker.DataPropertyName = "WorkerName"
-        Me.colXWorker.HeaderText = "Exécuteur"
-        Me.colXWorker.Name = "colXWorker"
-        Me.colXWorker.ReadOnly = True
-        Me.colXWorker.Width = 110
-        '
-        'colXReservee
-        '
-        Me.colXReservee.DataPropertyName = "Reservee"
-        Me.colXReservee.HeaderText = "Verrou"
-        Me.colXReservee.Name = "colXReservee"
-        Me.colXReservee.ReadOnly = True
-        Me.colXReservee.Width = 55
-        '
-        'colXMessage
-        '
-        Me.colXMessage.DataPropertyName = "ResultatMessage"
-        Me.colXMessage.HeaderText = "Résultat"
-        Me.colXMessage.Name = "colXMessage"
-        Me.colXMessage.ReadOnly = True
-        Me.colXMessage.Width = 320
         '
         'pnlExecutionsBas
         '
@@ -434,7 +325,7 @@ Partial Class Form1
         Me.rbEvent.Checked = True
         Me.rbEvent.Location = New System.Drawing.Point(6, 9)
         Me.rbEvent.Name = "rbEvent"
-        Me.rbEvent.Size = New System.Drawing.Size(80, 17)
+        Me.rbEvent.Size = New System.Drawing.Size(77, 17)
         Me.rbEvent.TabIndex = 0
         Me.rbEvent.TabStop = True
         Me.rbEvent.Text = "Exécutions"
@@ -445,7 +336,7 @@ Partial Class Form1
         Me.rbError.AutoSize = True
         Me.rbError.Location = New System.Drawing.Point(100, 9)
         Me.rbError.Name = "rbError"
-        Me.rbError.Size = New System.Drawing.Size(63, 17)
+        Me.rbError.Size = New System.Drawing.Size(58, 17)
         Me.rbError.TabIndex = 1
         Me.rbError.Text = "Erreurs"
         Me.rbError.UseVisualStyleBackColor = True
@@ -470,6 +361,7 @@ Partial Class Form1
         Me.ClientSize = New System.Drawing.Size(1084, 561)
         Me.Controls.Add(Me.tabMain)
         Me.Controls.Add(Me.pnlTop)
+        Me.Icon = CType(resources.GetObject("$this.Icon"), System.Drawing.Icon)
         Me.MinimumSize = New System.Drawing.Size(900, 480)
         Me.Name = "Form1"
         Me.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen
@@ -485,6 +377,7 @@ Partial Class Form1
         Me.pnlJournalBas.ResumeLayout(False)
         Me.pnlJournalBas.PerformLayout()
         Me.ResumeLayout(False)
+
     End Sub
 
     Friend WithEvents pnlTop As System.Windows.Forms.Panel
