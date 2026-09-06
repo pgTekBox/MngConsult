@@ -149,6 +149,30 @@ Les mêmes commandes sont dans `ScriptBAT\`.
 - En-tête : état du service (poussé par le pipe nommé), dernier passage, tâches à
   faire, tâches en attente d'approbation, succès et échecs depuis le démarrage.
 
+## Les icônes
+
+Un rouage traversé d'un glyphe : **lecture** pour l'application et pour le
+service démarré (vert), **pause** en pause (ambre), **carré** à l'arrêt (gris).
+Le glyphe seul distingue les trois états, la couleur ne fait que confirmer.
+
+| Fichier | Où on la voit |
+|---|---|
+| `ServiceExecuteur.ico` | Explorateur, barre des tâches, gestionnaire de services |
+| `Resources\Running.ico` | Zone de notification — service démarré |
+| `Resources\Paused.ico` | Zone de notification — service en pause |
+| `Resources\Stopped.ico` | Zone de notification — service arrêté |
+
+En dessous de 40 px il ne reste pas assez de pixels pour les dents du rouage
+**et** le glyphe : à ces tailles seul le glyphe est dessiné, en grand. C'est lui
+qui porte l'information, la tuile colorée suffit à garder la famille.
+
+`Resources\GenererIcones.ps1` régénère les quatre fichiers (toute la géométrie
+est dans le script, rien n'est dessiné à la main) :
+
+```powershell
+powershell -ExecutionPolicy Bypass -File Resources\GenererIcones.ps1
+```
+
 ## Ajouter un type de tâche
 
 1. Créer la définition dans `T200JobDefinition` (`JobCode`, `HandlerType`,

@@ -189,6 +189,7 @@
   <ItemGroup>
     <Content Include="Database\T206_Approbation_et_executeur.sql" />
     <Content Include="README.md" />
+    <Content Include="Resources\GenererIcones.ps1" />
     <Content Include="Resources\Paused.ico" />
     <Content Include="Resources\Running.ico" />
     <Content Include="Resources\Stopped.ico" />
