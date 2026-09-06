@@ -37,6 +37,15 @@ public record CreateInvoiceRequest(
 
 public record CreateInvoiceResult(int Id);
 
+// ----- Envoi de facture par courriel -----
+public record SendInvoiceRequest(bool IncludeSquare = false);
+
+/// <summary>Status : Sent | NotFound | NoEmail | PdfFail. SquareStatus : NotRequested | Included | AlreadyPaid | NotConnected | NotGenerated | Error.</summary>
+public record SendInvoiceResult(string Status, string? Email, string? DocNumber, string SquareStatus, string? SquareError);
+
+/// <summary>Status : Created | AlreadyPaid | NotConnected | NotGenerated | Error | NotFound.</summary>
+public record PaymentLinkResult(string Status, string? Url, string? DocNumber, string? Phone, decimal Amount, string? Error);
+
 /// <summary>Métadonnées d'une photo de facture (sans le blob). Created = date/heure de prise.</summary>
 public record InvoicePhotoDto(int Id, string FileName, string ContentType, int SizeBytes, DateTime? Created);
 

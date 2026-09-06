@@ -13,6 +13,10 @@
 # Scripts de déploiement contenant des identifiants (ne pas committer)
 60SecAI.Api/Deploy/
 
+# Secrets d'environnement (jetons Square, etc.) — ne JAMAIS committer
+**/appsettings.Production.json
+**/appsettings.Development.json
+
 # Clés de signature Android (ne JAMAIS committer)
 signing/
 *.keystore

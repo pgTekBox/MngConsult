@@ -82,6 +82,17 @@
      padding: 8px 14px;
  }
 
+ .btn-send-email {
+     margin-left: 8px;
+     padding: 8px 16px;
+     border: 1px solid #16a34a;
+     background: #16a34a;
+     color: #fff;
+     border-radius: 8px;
+     font-weight: 700;
+     cursor: pointer;
+ }
+
 
         .product-selector,
         .customer-selector,
@@ -772,6 +783,11 @@
 
             <telerik:RadButton ID="radSave" runat="server" OnClientClicked="onSaveClicked"  BackColor="lightgrey" Text="Enrgistrer" />
 
+            <%-- Envoyer la facture au client par courriel (PDF + lien Square optionnel) --%>
+            <asp:Button ID="btnSendEmail" runat="server" CssClass="btn-send-email"
+                CausesValidation="false" Text="Envoyer au client"
+                OnClientClick="openSendEmailDialog(); return false;" />
+
             <%-- Section overlay des Produits --%>
             <asp:HiddenField ID="hidSelectedProductId" runat="server" />
             <div id="productPickerOverlay" class="product-picker-overlay" style="display: none;">
@@ -1379,6 +1395,50 @@
 
 
 
+        </script>
+
+        <%-- Dialogue : envoyer la facture par courriel (avec ou sans lien de paiement Square) --%>
+        <div id="sendEmailOverlay" style="display:none; position:fixed; inset:0; z-index:10000;
+             background:rgba(15,23,42,.55); align-items:center; justify-content:center;">
+            <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+                 width:92vw; max-width:460px; padding:24px; box-sizing:border-box;">
+                <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:8px;">
+                    <asp:Literal ID="litDlgTitle" runat="server" />
+                </div>
+                <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:22px;">
+                    <asp:Literal ID="litDlgQuestion" runat="server" />
+                </div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
+                    <button type="button" onclick="closeSendEmailDialog()"
+                        style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                               border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgCancel" runat="server" /></button>
+                    <button type="button" onclick="doSendEmail(0)"
+                        style="padding:10px 16px; border:1px solid #2563eb; background:#fff; color:#2563eb;
+                               border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWithout" runat="server" /></button>
+                    <button type="button" onclick="doSendEmail(1)"
+                        style="padding:10px 16px; border:1px solid #16a34a; background:#16a34a; color:#fff;
+                               border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWith" runat="server" /></button>
+                </div>
+            </div>
+        </div>
+
+        <script type="text/javascript">
+            function openSendEmailDialog() {
+                document.getElementById("sendEmailOverlay").style.display = "flex";
+            }
+            function closeSendEmailDialog() {
+                document.getElementById("sendEmailOverlay").style.display = "none";
+            }
+            function doSendEmail(includeSquare) {
+                closeSendEmailDialog();
+                var mgr = $find("<%= Ram1.ClientID %>");
+                if (mgr) { mgr.ajaxRequest("SENDMAIL|" + includeSquare); }
+            }
+            // Fermer en cliquant le fond sombre
+            (function () {
+                var ov = document.getElementById("sendEmailOverlay");
+                if (ov) ov.addEventListener("click", function (e) { if (e.target === this) closeSendEmailDialog(); });
+            })();
         </script>
     </form>
 </body>

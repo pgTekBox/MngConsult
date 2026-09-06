@@ -1,15 +1,26 @@
 using System.Text;
 using _60SecAI.Api.Data;
 using _60SecAI.Api.Security;
+using _60SecAI.Api.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+
+// QuestPDF : licence communautaire (génération du PDF de facture).
+QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // ----- Base de données (SQL Server) -----
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));
+
+// ----- Envoi de facture par courriel (PDF + lien Square) -----
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<InvoicePdfService>();
+builder.Services.AddScoped<SquareService>();
+builder.Services.AddScoped<MailQueueService>();
+builder.Services.AddScoped<InvoiceEmailService>();
 
 // ----- Sécurité -----
 builder.Services.Configure<JwtOptions>(builder.Configuration.GetSection(JwtOptions.SectionName));
