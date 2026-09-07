@@ -31,20 +31,40 @@ fichier), et un pipe nommé pour pousser l'état vers l'interface.
 3. **`s0739ClaimNextExecution`** — l'exécution la plus ancienne est réservée avec
    un verrou (`SvcLockedUntilUtc`), ce qui permet de faire tourner plusieurs
    exécuteurs sans qu'ils se marchent dessus.
-4. **Dispatch** selon `HandlerType`, puis **`s0740SaveExecutionResult`** et
-   **`s0741LogExecution`**.
+4. **`JobRunner.ashx`** — l'exécution est confiée à la console
+   d'administration, qui fait le travail et rend un compte rendu.
+5. **`s0740SaveExecutionResult`** et **`s0741LogExecution`** enregistrent l'issue.
 
-## Les handlers
+## Le partage des rôles
 
-| `HandlerType` | État | Ce qui se passe |
-|---|---|---|
-| `SP` | implémenté | Lance la procédure nommée par `HandlerName`. Les paramètres sont découverts par `DeriveParameters` : ceux du JSON `HandlerParams` sont passés, les autres sont ignorés, et `@CompanyGUID` est comblé par la compagnie de l'exécution. Jetons `@TODAY` et `@NOW` reconnus dans les valeurs. |
-| `EMAIL` | implémenté | Deux modèles, reconnus par `Template`, `HandlerName` ou `JobCode` : `RAPPEL_FACTURE` (lit `s0746GetFacturesEnRetard`, un courriel par facture échue) et `TEST` (un courriel de vérification portant le nom de la compagnie, aux adresses de `Destinataires`). Le courriel est déposé dans `T400Mails` (base **MailService**) — c'est SrvAI qui l'envoie. |
-| `CONNECTOR` | **non implémenté** | Échec explicite. Un connecteur parle à un système tiers (flux bancaire, export comptable) : c'est un projet à part. |
-| `CUSTOM` | **non implémenté** | Échec explicite. `HandlerName` y désigne une classe .NET que ce service ne charge pas. |
+**Ce service ne sait rien d'aucune tâche.** Il ne connaît ni ce qu'une tâche
+fait, ni à qui elle écrit, ni quelles procédures elle appelle. Il repère ce qui
+est dû, le réserve, passe la main, et note le résultat.
 
-Un type non implémenté **échoue** au lieu de marquer un succès qui n'a rien fait :
-une tâche en erreur se voit, un faux succès non.
+**Tout ce qu'une tâche fait vraiment est écrit dans
+`prjSec60Admin/App_Code/clsJobRunner.vb`.** Modifier une tâche, ou en ajouter
+une, ne demande donc que de redéployer la console d'administration — ce service
+Windows sur le serveur ne rebouge pas. C'était la raison d'être de ce découpage :
+on déploie une application web tous les jours, pas un service Windows.
+
+```
+ServiceExecuteur                 60secadmin
+────────────────                 ──────────
+promotion, verrou   ── POST ──▶  JobRunner.ashx
+                                 clsJobRunner.Dispatch
+                                   ├─ TEST_COURRIEL
+                                   ├─ RAPPEL_FACTURES
+                                   └─ … (procédure stockée par défaut)
+statut, journal     ◀── JSON ──  { success, message, rows, detail }
+```
+
+Le service garde le cycle de vie — verrou, statut, journal, durée, reprises —
+parce qu'un seul endroit doit tenir l'état d'une exécution. La console ne fait
+que le travail.
+
+Une tâche pour laquelle la console n'a rien de défini **échoue** au lieu de
+marquer un succès qui n'a rien fait : une tâche en erreur se voit dans le suivi,
+un faux succès non.
 
 ## L'approbation — la boîte de messages
 
@@ -90,6 +110,10 @@ procédures `s0738` à `s0749`.
 | `s0747GetExecutionsEnCours` | Ce qu'affiche l'interface du service |
 | `s0748GetCompanyMailInfo` | Nom de compagnie + Reply-To vérifié |
 | `s0749GetApprobationsCountGlobal` | Compteur du service (toutes compagnies) |
+| `s0750GetJobExecutionContext` | Ce que la console relit pour exécuter (`T209`) |
+
+Les autres scripts du dossier `Database/` : `T207` crée la tâche de test, `T208`
+corrige `sp_SaveJobDefinition`, `T209` ajoute `s0750`.
 
 Application (le `.sql` doit être ré-encodé en UTF-16 LE, sinon les accents sont
 corrompus) :
@@ -106,20 +130,18 @@ sqlcmd -S 192.168.0.203 -U MngConsul -P '***' -d MngConsul -i $tmp -b
 ## Configuration
 
 `configExecuteur.xml`, à côté de l'exécutable, créé au premier démarrage avec des
-valeurs par défaut. Les deux chaînes de connexion y sont chiffrées (`clsEncDec`).
+valeurs par défaut. La chaîne de connexion et la clé partagée y sont chiffrées (`clsEncDec`).
 On l'édite par l'interface (**Paramètres...**), jamais à la main.
 
 | Clé | Défaut | Rôle |
 |---|---|---|
-| `ConnectionString` | *(vide)* | Base **MngConsul** — les tâches et les données métier |
-| `ConnectionStringMail` | *(vide)* | Base **MailService** — la file `T400Mails` |
+| `ConnectionString` | *(vide)* | Base **MngConsul** — la file des tâches |
+| `AdminBaseUrl` | *(vide)* | Adresse de la console, ex. `http://alfred/60secadmin` — c'est elle qui exécute |
+| `AdminApiKey` | *(vide)* | Clé partagée avec `JobRunner.ashx` (chiffrée dans le fichier) |
 | `IntervalSeconds` | 60 | Secondes entre deux passages |
 | `BatchSize` | 5 | Tâches exécutées au maximum par passage |
 | `LockSeconds` | 900 | Durée du verrou posé sur une exécution |
 | `Actif` | 1 | 0 = le service tourne mais n'exécute rien |
-| `MailSender` | noreply@60sec.ca | Expéditeur des courriels déposés |
-| `RelanceJoursAvant` | 0 | Rappel préventif : jours **avant** l'échéance |
-| `RelanceJoursApres` | 30 | Jusqu'à combien de jours **après** on relance |
 | `PlanningRefreshMinutes` | 15 | Minutes entre deux appels à `sp_GenererPlanningJobs` (0 = jamais) |
 
 Le regarnissage du planning n'est pas un luxe : `sp_GenererPlanningJobs` ne
@@ -129,9 +151,12 @@ elle-même. Il tourne après la promotion, jamais avant : la procédure passe en
 `EXPIRE` toute occurrence `PLANIFIE` dont l'heure est déjà passée, et l'inverse
 effacerait le travail du tour.
 
-Le `From` reste celui du service : SrvAI envoie en direct-to-MX depuis notre IP,
-un `From` au domaine du client échouerait son SPF. C'est le `Reply-To` qui porte
-l'adresse de la compagnie, et seulement si elle a été vérifiée.
+La clé doit être identique des deux côtés : `AdminApiKey` ici, `JobRunnerKey`
+dans le `Web.config` de 60secadmin. Ce `Web.config` n'est pas versionné, la clé
+ne part donc pas dans le dépôt.
+
+Côté console, deux réglages complètent le tableau : `JobRunnerKey` et
+`JobMailSender` (expéditeur des courriels déposés par les tâches).
 
 ---
 
@@ -211,12 +236,28 @@ corrige un défaut bloquant : `T200JobDefinition.Id` n'est pas une colonne
 `IDENTITY`, mais la procédure lisait `SCOPE_IDENTITY()` après son `INSERT` —
 aucune tâche n'était créable depuis la console.
 
-## Ajouter un type de tâche
+## Ajouter une tâche
 
-1. Créer la définition dans `T200JobDefinition` (`JobCode`, `HandlerType`,
-   `HandlerName`, `HandlerParams` en JSON) et son calendrier dans
-   `T201JobSchedule`.
+**Rien de tout cela ne touche à ce service.**
+
+1. Créer la tâche et son calendrier dans la console d'administration
+   (**Tâches planifiées**) : code, type, paramètres JSON, cadence.
 2. Pour une **procédure SQL**, il n'y a rien à coder : `HandlerType = 'SP'` et
-   `HandlerName` = le nom de la procédure suffisent.
-3. Pour un **nouveau modèle de courriel**, ajouter la branche dans
-   `clsTaskExecutor.HandlerEmail` et la procédure de lecture correspondante.
+   `HandlerName` = le nom de la procédure suffisent. `clsJobRunner` la lance,
+   en ne lui passant que les paramètres qu'elle accepte (`DeriveParameters`), et
+   comble `@CompanyGUID` avec la compagnie de la tâche. Jetons `@TODAY` et
+   `@NOW` reconnus dans les valeurs.
+3. Pour **tout le reste**, ajouter le cas dans
+   `prjSec60Admin/App_Code/clsJobRunner.vb` :
+
+```vb
+Select Case job.JobCode.Trim().ToUpperInvariant()
+    Case "MON_NOUVEAU_JOB"
+        Return MonNouveauJob(job)
+```
+
+   puis écrire la méthode. `JobContext` donne la compagnie, son nom, les
+   paramètres (`Param`, `ParamInt`, `Destinataires`) et le `Reply-To` vérifié ;
+   `clsJobData` donne l'accès aux deux bases. On rend un `JobResult.Ok` ou
+   `JobResult.Ko` — le service s'occupe du reste.
+4. Déployer la console. Le service, lui, ne bouge pas.

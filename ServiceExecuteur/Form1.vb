@@ -43,7 +43,7 @@ Public Class Form1
                             "Ouvrez « Paramètres... » pour la renseigner.",
                             "Configuration", MessageBoxButtons.OK, MessageBoxIcon.Information)
         Else
-            repo = New clsJobRepository(ConnectionString, config.ConnectionStringMail)
+            repo = New clsJobRepository(ConnectionString)
             RefreshAll()
         End If
 
@@ -326,7 +326,7 @@ Public Class Form1
         Dim config As New clsXmlConfig()
         ConnectionString = config.ConnectionString
         If Not String.IsNullOrWhiteSpace(ConnectionString) Then
-            repo = New clsJobRepository(ConnectionString, config.ConnectionStringMail)
+            repo = New clsJobRepository(ConnectionString)
             RefreshAll()
         End If
     End Sub

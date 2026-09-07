@@ -243,7 +243,7 @@ Public Class tkbService
                     CounterSucces += lot.Succes
                     CounterEchec += lot.Echecs
 
-                    Dim repo As New clsJobRepository(config.ConnectionString, config.ConnectionStringMail)
+                    Dim repo As New clsJobRepository(config.ConnectionString)
                     Dim reste As Integer = repo.CountAFaire()
                     Dim attente As Integer = repo.CountAApprouver()
 

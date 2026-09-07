@@ -22,27 +22,20 @@ Public Class JobWorkItem
     Public Property RetryDelayMin As Integer
 End Class
 
-''' <summary>Identite d'une compagnie pour la mise en forme d'un courriel.</summary>
-Public Class CompanyMailInfo
-    Public Property CompanyName As String
-    Public Property ReplyTo As String
-End Class
-
 ''' <summary>
-''' Tout l'acces aux bases passe par ici, et uniquement par des procedures
+''' Tout l'acces a la base passe par ici, et uniquement par des procedures
 ''' stockees (meme regle que l'application web : aucun SQL en dur).
 '''
-''' Deux connexions : MngConsul pour les taches et les donnees metier,
-''' MailService pour deposer les courriels dans T400Mails.
+''' Une seule connexion : MngConsul, pour la file des taches. Les donnees
+''' metier et l'envoi des courriels regardent la console d'administration, pas
+''' ce service.
 ''' </summary>
 Public Class clsJobRepository
 
     Private ReadOnly _connectionString As String
-    Private ReadOnly _connectionStringMail As String
 
-    Public Sub New(connectionString As String, Optional connectionStringMail As String = "")
+    Public Sub New(connectionString As String)
         _connectionString = connectionString
-        _connectionStringMail = connectionStringMail
     End Sub
 
 #Region "Helpers"
@@ -263,123 +256,6 @@ Public Class clsJobRepository
         Dim ds As DataSet = Exec("s0749GetApprobationsCountGlobal")
         If Not HasRow(ds) Then Return 0
         Return Num(ds.Tables(0).Rows(0), "AApprouver")
-    End Function
-
-#End Region
-
-#Region "Handlers"
-
-    ''' <summary>
-    ''' Lance une procedure stockee metier. Les parametres reconnus par la
-    ''' procedure sont decouverts par SqlCommandBuilder.DeriveParameters : on ne
-    ''' passe @CompanyGUID et @UserId que si elle les attend, ce qui permet a
-    ''' une definition de tache de pointer vers n'importe quelle procedure
-    ''' existante sans l'adapter.
-    ''' </summary>
-    Public Function ExecuteStoredProcedure(procName As String,
-                                           companyGuid As Guid,
-                                           timeoutSeconds As Integer,
-                                           parametres As Dictionary(Of String, Object)) As Integer
-
-        Using cnn As New SqlConnection(_connectionString)
-            Using cmd As New SqlCommand(procName, cnn)
-                cmd.CommandType = CommandType.StoredProcedure
-                cmd.CommandTimeout = If(timeoutSeconds > 0, timeoutSeconds, 300)
-
-                cnn.Open()
-                SqlCommandBuilder.DeriveParameters(cmd)
-
-                For Each p As SqlParameter In cmd.Parameters
-                    If p.Direction = ParameterDirection.ReturnValue Then Continue For
-
-                    Dim nom As String = p.ParameterName.TrimStart("@"c)
-                    Dim valeur As Object = Nothing
-
-                    If parametres IsNot Nothing Then
-                        For Each kv As KeyValuePair(Of String, Object) In parametres
-                            If String.Equals(kv.Key.TrimStart("@"c), nom, StringComparison.OrdinalIgnoreCase) Then
-                                valeur = kv.Value
-                                Exit For
-                            End If
-                        Next
-                    End If
-
-                    ' La compagnie de l'execution comble le parametre attendu
-                    ' quand les parametres JSON ne le fournissent pas.
-                    If valeur Is Nothing AndAlso
-                       String.Equals(nom, "CompanyGUID", StringComparison.OrdinalIgnoreCase) AndAlso
-                       companyGuid <> Guid.Empty Then
-                        valeur = companyGuid
-                    End If
-
-                    p.Value = If(valeur, DBNull.Value)
-                Next
-
-                Return cmd.ExecuteNonQuery()
-            End Using
-        End Using
-    End Function
-
-    ''' <summary>Factures clients impayees a relancer pour une compagnie.</summary>
-    Public Function GetFacturesEnRetard(companyGuid As Guid, joursAvant As Integer, joursApres As Integer) As DataTable
-        Dim ds As DataSet = Exec("s0746GetFacturesEnRetard",
-                                 P("@CompanyGUID", companyGuid),
-                                 P("@JoursAvant", joursAvant),
-                                 P("@JoursApres", joursApres))
-        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
-    End Function
-
-    ''' <summary>
-    ''' Nom de la compagnie et adresse de reponse verifiee. Le From reste
-    ''' celui du service : SrvAI envoie en direct-to-MX depuis notre IP, un From
-    ''' au domaine du client echouerait son SPF.
-    ''' </summary>
-    Public Function GetCompanyMailInfo(companyGuid As Guid) As CompanyMailInfo
-        Dim info As New CompanyMailInfo With {.CompanyName = "", .ReplyTo = ""}
-        If companyGuid = Guid.Empty Then Return info
-
-        Try
-            Dim ds As DataSet = Exec("s0748GetCompanyMailInfo", P("@CompanyGUID", companyGuid))
-            If HasRow(ds) Then
-                Dim r As DataRow = ds.Tables(0).Rows(0)
-                info.CompanyName = Str(r, "CompanyName")
-                info.ReplyTo = Str(r, "ReplyTo")
-            End If
-        Catch ex As Exception
-            ' Un courriel doit partir meme si l'entete Reply-To est indisponible.
-            clsLog.ErrorWritelog("GetCompanyMailInfo : " & ex.Message, clsLog.LogType.Erreur)
-        End Try
-
-        Return info
-    End Function
-
-    ''' <summary>
-    ''' Depose un courriel dans la file de MailService. SrvAI le prend au
-    ''' prochain cycle ; le service ne parle jamais SMTP lui-meme.
-    ''' </summary>
-    Public Function QueueMail(destinataire As String,
-                              sujet As String,
-                              htmlBody As String,
-                              sender As String,
-                              replyTo As String) As Integer
-
-        If String.IsNullOrWhiteSpace(_connectionStringMail) Then
-            Throw New InvalidOperationException("La connexion à la base MailService n'est pas configurée.")
-        End If
-
-        Dim parametres As SqlParameter() = {
-            P("@To", destinataire),
-            P("@Subject", sujet),
-            P("@HTMLBody", htmlBody),
-            P("@Sender", If(String.IsNullOrWhiteSpace(sender), "noreply@60sec.ca", sender)),
-            P("@From", If(String.IsNullOrWhiteSpace(sender), "noreply@60sec.ca", sender)),
-            P("@ReplyTo", If(String.IsNullOrWhiteSpace(replyTo), Nothing, replyTo))
-        }
-
-        Dim ds As DataSet = ExecOn(_connectionStringMail, "s0610InsertOutboundMail", 120, parametres)
-        If Not HasRow(ds) Then Return 0
-        Return Num(ds.Tables(0).Rows(0), "Id")
     End Function
 
 #End Region

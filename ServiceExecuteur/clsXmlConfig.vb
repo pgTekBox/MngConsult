@@ -4,12 +4,12 @@ Imports System.Xml
 ''' <summary>
 ''' Configuration du service, dans configExecuteur.xml a cote de l'executable.
 ''' Meme mecanique que les autres services 60Sec : le fichier est cree avec les
-''' valeurs par defaut au premier demarrage, et les valeurs sensibles (les deux
-''' chaines de connexion) sont chiffrees par clsEncDec.
+''' valeurs par defaut au premier demarrage, et les valeurs sensibles (chaine de
+''' connexion et cle partagee) sont chiffrees par clsEncDec.
 '''
-''' Deux bases, parce que l'executeur traverse la frontiere que l'application
-''' web traverse deja : MngConsul porte les taches et les donnees metier,
-''' MailService porte la file d'envoi (T400Mails) que SrvAI vide.
+''' Rien ici ne decrit ce que font les taches : le service ne le sait pas. Il
+''' lui faut seulement de quoi lire la file (MngConsul) et de quoi joindre la
+''' console d'administration, qui execute.
 ''' </summary>
 Public Class clsXmlConfig
 
@@ -20,8 +20,19 @@ Public Class clsXmlConfig
     ''' <summary>Connexion a la base MngConsul (chiffree dans le fichier).</summary>
     Public ConnectionString As String = ""
 
-    ''' <summary>Connexion a la base MailService, pour deposer les courriels (chiffree).</summary>
-    Public ConnectionStringMail As String = ""
+    ''' <summary>
+    ''' Adresse de la console d'administration, par exemple
+    ''' http://alfred/60secadmin. C'est elle qui execute les taches : le service
+    ''' ne fait que lui passer la main.
+    ''' </summary>
+    Public AdminBaseUrl As String = ""
+
+    ''' <summary>
+    ''' Cle partagee avec JobRunner.ashx (parametre JobRunnerKey de son
+    ''' Web.config). Le service n'a pas de session : c'est elle qui
+    ''' l'authentifie. Chiffree dans le fichier.
+    ''' </summary>
+    Public AdminApiKey As String = ""
 
     ''' <summary>Secondes entre deux passages de la boucle d'execution.</summary>
     Public IntervalSeconds As String = "60"
@@ -35,14 +46,10 @@ Public Class clsXmlConfig
     ''' <summary>"1" = le service execute ; "0" = il tourne mais ne fait rien (mode observation).</summary>
     Public Actif As String = "1"
 
-    ''' <summary>Adresse d'expedition des courriels deposes dans T400Mails.</summary>
-    Public MailSender As String = "noreply@60sec.ca"
-
-    ''' <summary>Rappel preventif : jours AVANT l'echeance ou l'on relance deja (0 = jamais).</summary>
-    Public RelanceJoursAvant As String = "0"
-
-    ''' <summary>Jusqu'a combien de jours APRES l'echeance on continue de relancer.</summary>
-    Public RelanceJoursApres As String = "30"
+    ' L'expediteur des courriels et la fenetre de relance ont demenage cote
+    ' console : ce sont des particularites de tache, elles se reglent dans les
+    ' parametres de la tache ou dans le Web.config de 60secadmin. Le service ne
+    ' connait plus rien du contenu de ce qu'il declenche.
 
     ''' <summary>
     ''' Minutes entre deux regarnissages du planning (sp_GenererPlanningJobs).
@@ -65,15 +72,13 @@ Public Class clsXmlConfig
         Dim node_appSettings As XmlNode = GetNode(doc, node_configuration, "appSettings")
 
         Me.ConnectionString = clsEncDec.Decrypt(GetNodeValueString(doc, node_appSettings, "ConnectionString", ""))
-        Me.ConnectionStringMail = clsEncDec.Decrypt(GetNodeValueString(doc, node_appSettings, "ConnectionStringMail", ""))
+        Me.AdminBaseUrl = GetNodeValueString(doc, node_appSettings, "AdminBaseUrl", "")
+        Me.AdminApiKey = clsEncDec.Decrypt(GetNodeValueString(doc, node_appSettings, "AdminApiKey", ""))
 
         Me.IntervalSeconds = GetNodeValueString(doc, node_appSettings, "IntervalSeconds", "60")
         Me.BatchSize = GetNodeValueString(doc, node_appSettings, "BatchSize", "5")
         Me.LockSeconds = GetNodeValueString(doc, node_appSettings, "LockSeconds", "900")
         Me.Actif = GetNodeValueString(doc, node_appSettings, "Actif", "1")
-        Me.MailSender = GetNodeValueString(doc, node_appSettings, "MailSender", "noreply@60sec.ca")
-        Me.RelanceJoursAvant = GetNodeValueString(doc, node_appSettings, "RelanceJoursAvant", "0")
-        Me.RelanceJoursApres = GetNodeValueString(doc, node_appSettings, "RelanceJoursApres", "30")
         Me.PlanningRefreshMinutes = GetNodeValueString(doc, node_appSettings, "PlanningRefreshMinutes", "15")
 
         ' Un fichier edite a la main peut contenir n'importe quoi : on retombe
@@ -81,10 +86,7 @@ Public Class clsXmlConfig
         If ToInt(Me.IntervalSeconds, 0) < 5 Then Me.IntervalSeconds = "60"
         If ToInt(Me.BatchSize, 0) < 1 Then Me.BatchSize = "5"
         If ToInt(Me.LockSeconds, 0) < 30 Then Me.LockSeconds = "900"
-        If ToInt(Me.RelanceJoursAvant, -1) < 0 Then Me.RelanceJoursAvant = "0"
-        If ToInt(Me.RelanceJoursApres, 0) < 1 Then Me.RelanceJoursApres = "30"
         If ToInt(Me.PlanningRefreshMinutes, -1) < 0 Then Me.PlanningRefreshMinutes = "15"
-        If String.IsNullOrWhiteSpace(Me.MailSender) Then Me.MailSender = "noreply@60sec.ca"
     End Sub
 
     Public Shared Function ToInt(value As String, fallback As Integer) As Integer
@@ -108,14 +110,12 @@ Public Class clsXmlConfig
         Dim node_appSettings As XmlNode = GetNode(doc, node_configuration, "appSettings")
 
         GetNode(doc, node_appSettings, "ConnectionString", clsEncDec.Encrypt(ConnectionString))
-        GetNode(doc, node_appSettings, "ConnectionStringMail", clsEncDec.Encrypt(ConnectionStringMail))
+        GetNode(doc, node_appSettings, "AdminBaseUrl", AdminBaseUrl)
+        GetNode(doc, node_appSettings, "AdminApiKey", clsEncDec.Encrypt(AdminApiKey))
         GetNode(doc, node_appSettings, "IntervalSeconds", IntervalSeconds)
         GetNode(doc, node_appSettings, "BatchSize", BatchSize)
         GetNode(doc, node_appSettings, "LockSeconds", LockSeconds)
         GetNode(doc, node_appSettings, "Actif", Actif)
-        GetNode(doc, node_appSettings, "MailSender", MailSender)
-        GetNode(doc, node_appSettings, "RelanceJoursAvant", RelanceJoursAvant)
-        GetNode(doc, node_appSettings, "RelanceJoursApres", RelanceJoursApres)
         GetNode(doc, node_appSettings, "PlanningRefreshMinutes", PlanningRefreshMinutes)
 
         doc.Save(fullpathToXMLFile)

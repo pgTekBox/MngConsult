@@ -19,20 +19,19 @@ Partial Class frmSetting
     Private Sub InitializeComponent()
         Me.lblConnectionString = New System.Windows.Forms.Label()
         Me.txtConnectionString = New System.Windows.Forms.TextBox()
-        Me.lblConnectionStringMail = New System.Windows.Forms.Label()
-        Me.txtConnectionStringMail = New System.Windows.Forms.TextBox()
+        Me.lblAdminUrl = New System.Windows.Forms.Label()
+        Me.txtAdminUrl = New System.Windows.Forms.TextBox()
         Me.lblInterval = New System.Windows.Forms.Label()
         Me.txtInterval = New System.Windows.Forms.TextBox()
         Me.lblBatch = New System.Windows.Forms.Label()
         Me.txtBatch = New System.Windows.Forms.TextBox()
         Me.lblLock = New System.Windows.Forms.Label()
         Me.txtLock = New System.Windows.Forms.TextBox()
-        Me.lblMailSender = New System.Windows.Forms.Label()
-        Me.txtMailSender = New System.Windows.Forms.TextBox()
-        Me.lblRelance = New System.Windows.Forms.Label()
-        Me.txtRelanceAvant = New System.Windows.Forms.TextBox()
-        Me.lblRelanceEntre = New System.Windows.Forms.Label()
-        Me.txtRelanceApres = New System.Windows.Forms.TextBox()
+        Me.lblAdminKey = New System.Windows.Forms.Label()
+        Me.txtAdminKey = New System.Windows.Forms.TextBox()
+        Me.lblPlanning = New System.Windows.Forms.Label()
+        Me.txtPlanning = New System.Windows.Forms.TextBox()
+        Me.lblPlanningUnite = New System.Windows.Forms.Label()
         Me.chkActif = New System.Windows.Forms.CheckBox()
         Me.btnTester = New System.Windows.Forms.Button()
         Me.btnOk = New System.Windows.Forms.Button()
@@ -55,21 +54,21 @@ Partial Class frmSetting
         Me.txtConnectionString.Size = New System.Drawing.Size(420, 20)
         Me.txtConnectionString.TabIndex = 1
         '
-        'lblConnectionStringMail
+        'lblAdminUrl
         '
-        Me.lblConnectionStringMail.AutoSize = True
-        Me.lblConnectionStringMail.Location = New System.Drawing.Point(14, 46)
-        Me.lblConnectionStringMail.Name = "lblConnectionStringMail"
-        Me.lblConnectionStringMail.Size = New System.Drawing.Size(122, 13)
-        Me.lblConnectionStringMail.TabIndex = 2
-        Me.lblConnectionStringMail.Text = "Connexion MailService :"
+        Me.lblAdminUrl.AutoSize = True
+        Me.lblAdminUrl.Location = New System.Drawing.Point(14, 46)
+        Me.lblAdminUrl.Name = "lblAdminUrl"
+        Me.lblAdminUrl.Size = New System.Drawing.Size(122, 13)
+        Me.lblAdminUrl.TabIndex = 2
+        Me.lblAdminUrl.Text = "Console 60secadmin :"
         '
-        'txtConnectionStringMail
+        'txtAdminUrl
         '
-        Me.txtConnectionStringMail.Location = New System.Drawing.Point(180, 43)
-        Me.txtConnectionStringMail.Name = "txtConnectionStringMail"
-        Me.txtConnectionStringMail.Size = New System.Drawing.Size(420, 20)
-        Me.txtConnectionStringMail.TabIndex = 3
+        Me.txtAdminUrl.Location = New System.Drawing.Point(180, 43)
+        Me.txtAdminUrl.Name = "txtAdminUrl"
+        Me.txtAdminUrl.Size = New System.Drawing.Size(420, 20)
+        Me.txtAdminUrl.TabIndex = 3
         '
         'lblInterval
         '
@@ -119,53 +118,48 @@ Partial Class frmSetting
         Me.txtLock.Size = New System.Drawing.Size(80, 20)
         Me.txtLock.TabIndex = 9
         '
-        'lblMailSender
+        'lblAdminKey
         '
-        Me.lblMailSender.AutoSize = True
-        Me.lblMailSender.Location = New System.Drawing.Point(14, 178)
-        Me.lblMailSender.Name = "lblMailSender"
-        Me.lblMailSender.Size = New System.Drawing.Size(140, 13)
-        Me.lblMailSender.TabIndex = 10
-        Me.lblMailSender.Text = "Expéditeur des courriels :"
+        Me.lblAdminKey.AutoSize = True
+        Me.lblAdminKey.Location = New System.Drawing.Point(14, 178)
+        Me.lblAdminKey.Name = "lblAdminKey"
+        Me.lblAdminKey.Size = New System.Drawing.Size(140, 13)
+        Me.lblAdminKey.TabIndex = 10
+        Me.lblAdminKey.Text = "Clé partagée :"
         '
-        'txtMailSender
+        'txtAdminKey
         '
-        Me.txtMailSender.Location = New System.Drawing.Point(180, 175)
-        Me.txtMailSender.Name = "txtMailSender"
-        Me.txtMailSender.Size = New System.Drawing.Size(240, 20)
-        Me.txtMailSender.TabIndex = 11
+        Me.txtAdminKey.Location = New System.Drawing.Point(180, 175)
+        Me.txtAdminKey.Name = "txtAdminKey"
+        Me.txtAdminKey.Size = New System.Drawing.Size(240, 20)
+        Me.txtAdminKey.TabIndex = 11
         '
-        'lblRelance
+        'lblPlanning
         '
-        Me.lblRelance.AutoSize = True
-        Me.lblRelance.Location = New System.Drawing.Point(14, 206)
-        Me.lblRelance.Name = "lblRelance"
-        Me.lblRelance.Size = New System.Drawing.Size(150, 13)
-        Me.lblRelance.TabIndex = 12
-        Me.lblRelance.Text = "Relance : jours avant / après :"
+        Me.lblPlanning.AutoSize = True
+        Me.lblPlanning.Location = New System.Drawing.Point(14, 206)
+        Me.lblPlanning.Name = "lblPlanning"
+        Me.lblPlanning.Size = New System.Drawing.Size(150, 13)
+        Me.lblPlanning.TabIndex = 12
+        Me.lblPlanning.Text = "Planning : rafraîchir (min) :"
         '
-        'txtRelanceAvant
+        'txtPlanning
         '
-        Me.txtRelanceAvant.Location = New System.Drawing.Point(180, 203)
-        Me.txtRelanceAvant.Name = "txtRelanceAvant"
-        Me.txtRelanceAvant.Size = New System.Drawing.Size(60, 20)
-        Me.txtRelanceAvant.TabIndex = 13
+        Me.txtPlanning.Location = New System.Drawing.Point(180, 203)
+        Me.txtPlanning.Name = "txtPlanning"
+        Me.txtPlanning.Size = New System.Drawing.Size(60, 20)
+        Me.txtPlanning.TabIndex = 13
         '
-        'lblRelanceEntre
+        'lblPlanningUnite
         '
-        Me.lblRelanceEntre.AutoSize = True
-        Me.lblRelanceEntre.Location = New System.Drawing.Point(248, 206)
-        Me.lblRelanceEntre.Name = "lblRelanceEntre"
-        Me.lblRelanceEntre.Size = New System.Drawing.Size(10, 13)
-        Me.lblRelanceEntre.TabIndex = 14
-        Me.lblRelanceEntre.Text = "/"
+        Me.lblPlanningUnite.AutoSize = True
+        Me.lblPlanningUnite.Location = New System.Drawing.Point(248, 206)
+        Me.lblPlanningUnite.Name = "lblPlanningUnite"
+        Me.lblPlanningUnite.Size = New System.Drawing.Size(80, 13)
+        Me.lblPlanningUnite.TabIndex = 14
+        Me.lblPlanningUnite.Text = "0 = jamais"
         '
-        'txtRelanceApres
         '
-        Me.txtRelanceApres.Location = New System.Drawing.Point(266, 203)
-        Me.txtRelanceApres.Name = "txtRelanceApres"
-        Me.txtRelanceApres.Size = New System.Drawing.Size(60, 20)
-        Me.txtRelanceApres.TabIndex = 15
         '
         'chkActif
         '
@@ -213,20 +207,19 @@ Partial Class frmSetting
         Me.ClientSize = New System.Drawing.Size(620, 328)
         Me.Controls.Add(Me.lblConnectionString)
         Me.Controls.Add(Me.txtConnectionString)
-        Me.Controls.Add(Me.lblConnectionStringMail)
-        Me.Controls.Add(Me.txtConnectionStringMail)
+        Me.Controls.Add(Me.lblAdminUrl)
+        Me.Controls.Add(Me.txtAdminUrl)
         Me.Controls.Add(Me.lblInterval)
         Me.Controls.Add(Me.txtInterval)
         Me.Controls.Add(Me.lblBatch)
         Me.Controls.Add(Me.txtBatch)
         Me.Controls.Add(Me.lblLock)
         Me.Controls.Add(Me.txtLock)
-        Me.Controls.Add(Me.lblMailSender)
-        Me.Controls.Add(Me.txtMailSender)
-        Me.Controls.Add(Me.lblRelance)
-        Me.Controls.Add(Me.txtRelanceAvant)
-        Me.Controls.Add(Me.lblRelanceEntre)
-        Me.Controls.Add(Me.txtRelanceApres)
+        Me.Controls.Add(Me.lblAdminKey)
+        Me.Controls.Add(Me.txtAdminKey)
+        Me.Controls.Add(Me.lblPlanning)
+        Me.Controls.Add(Me.txtPlanning)
+        Me.Controls.Add(Me.lblPlanningUnite)
         Me.Controls.Add(Me.chkActif)
         Me.Controls.Add(Me.btnTester)
         Me.Controls.Add(Me.btnOk)
@@ -243,20 +236,19 @@ Partial Class frmSetting
 
     Friend WithEvents lblConnectionString As System.Windows.Forms.Label
     Friend WithEvents txtConnectionString As System.Windows.Forms.TextBox
-    Friend WithEvents lblConnectionStringMail As System.Windows.Forms.Label
-    Friend WithEvents txtConnectionStringMail As System.Windows.Forms.TextBox
+    Friend WithEvents lblAdminUrl As System.Windows.Forms.Label
+    Friend WithEvents txtAdminUrl As System.Windows.Forms.TextBox
     Friend WithEvents lblInterval As System.Windows.Forms.Label
     Friend WithEvents txtInterval As System.Windows.Forms.TextBox
     Friend WithEvents lblBatch As System.Windows.Forms.Label
     Friend WithEvents txtBatch As System.Windows.Forms.TextBox
     Friend WithEvents lblLock As System.Windows.Forms.Label
     Friend WithEvents txtLock As System.Windows.Forms.TextBox
-    Friend WithEvents lblMailSender As System.Windows.Forms.Label
-    Friend WithEvents txtMailSender As System.Windows.Forms.TextBox
-    Friend WithEvents lblRelance As System.Windows.Forms.Label
-    Friend WithEvents txtRelanceAvant As System.Windows.Forms.TextBox
-    Friend WithEvents lblRelanceEntre As System.Windows.Forms.Label
-    Friend WithEvents txtRelanceApres As System.Windows.Forms.TextBox
+    Friend WithEvents lblAdminKey As System.Windows.Forms.Label
+    Friend WithEvents txtAdminKey As System.Windows.Forms.TextBox
+    Friend WithEvents lblPlanning As System.Windows.Forms.Label
+    Friend WithEvents txtPlanning As System.Windows.Forms.TextBox
+    Friend WithEvents lblPlanningUnite As System.Windows.Forms.Label
     Friend WithEvents chkActif As System.Windows.Forms.CheckBox
     Friend WithEvents btnTester As System.Windows.Forms.Button
     Friend WithEvents btnOk As System.Windows.Forms.Button

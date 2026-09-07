@@ -1,10 +1,15 @@
-﻿Imports System.Data.SqlClient
+Imports System.Data.SqlClient
 Imports System.Windows.Forms
 
 ''' <summary>
-''' Écriture de configExecuteur.xml. Les deux chaînes de connexion y sont
-''' chiffrées (clsEncDec), comme dans le service SMTP : le fichier reste posé à
-''' côté de l'exécutable sur le serveur.
+''' Écriture de configExecuteur.xml. La chaîne de connexion et la clé partagée
+''' y sont chiffrées (clsEncDec), comme dans le service SMTP : le fichier reste
+''' posé à côté de l'exécutable sur le serveur.
+'''
+''' On ne règle plus ici ce que font les tâches — expéditeur, fenêtre de
+''' relance, destinataires : tout cela vit dans la console d'administration.
+''' Ce service n'a besoin que de savoir où est la console et comment s'y
+''' authentifier.
 ''' </summary>
 Public Class frmSetting
 
@@ -12,13 +17,12 @@ Public Class frmSetting
         Dim config As New clsXmlConfig()
 
         txtConnectionString.Text = config.ConnectionString
-        txtConnectionStringMail.Text = config.ConnectionStringMail
+        txtAdminUrl.Text = config.AdminBaseUrl
+        txtAdminKey.Text = config.AdminApiKey
         txtInterval.Text = config.IntervalSeconds
         txtBatch.Text = config.BatchSize
         txtLock.Text = config.LockSeconds
-        txtMailSender.Text = config.MailSender
-        txtRelanceAvant.Text = config.RelanceJoursAvant
-        txtRelanceApres.Text = config.RelanceJoursApres
+        txtPlanning.Text = config.PlanningRefreshMinutes
         chkActif.Checked = (config.Actif = "1")
     End Sub
 
@@ -29,13 +33,12 @@ Public Class frmSetting
         Dim config As New clsXmlConfig()
 
         config.ConnectionString = txtConnectionString.Text.Trim()
-        config.ConnectionStringMail = txtConnectionStringMail.Text.Trim()
+        config.AdminBaseUrl = txtAdminUrl.Text.Trim()
+        config.AdminApiKey = txtAdminKey.Text.Trim()
         config.IntervalSeconds = txtInterval.Text.Trim()
         config.BatchSize = txtBatch.Text.Trim()
         config.LockSeconds = txtLock.Text.Trim()
-        config.MailSender = txtMailSender.Text.Trim()
-        config.RelanceJoursAvant = txtRelanceAvant.Text.Trim()
-        config.RelanceJoursApres = txtRelanceApres.Text.Trim()
+        config.PlanningRefreshMinutes = txtPlanning.Text.Trim()
         config.Actif = If(chkActif.Checked, "1", "0")
 
         Try
@@ -63,20 +66,17 @@ Public Class frmSetting
         If clsXmlConfig.ToInt(txtLock.Text.Trim(), 0) < 30 Then
             Return Refuse("Le verrou doit durer au moins 30 secondes.", txtLock)
         End If
-        If clsXmlConfig.ToInt(txtRelanceAvant.Text.Trim(), -1) < 0 Then
-            Return Refuse("Le nombre de jours avant échéance doit être positif ou nul.", txtRelanceAvant)
-        End If
-        If clsXmlConfig.ToInt(txtRelanceApres.Text.Trim(), 0) < 1 Then
-            Return Refuse("La fenêtre de relance doit couvrir au moins un jour.", txtRelanceApres)
+        If clsXmlConfig.ToInt(txtPlanning.Text.Trim(), -1) < 0 Then
+            Return Refuse("Le rafraîchissement du planning doit être positif ou nul.", txtPlanning)
         End If
 
-        ' Sans la base MailService, les tâches de type EMAIL échoueront : on le
-        ' dit maintenant plutôt que de le découvrir dans le journal.
-        If String.IsNullOrWhiteSpace(txtConnectionStringMail.Text) Then
-            If MessageBox.Show("La connexion à MailService est vide : les tâches d'envoi de courriel échoueront." & vbCrLf & vbCrLf &
+        ' Sans la console, aucune tâche ne peut s'exécuter : c'est elle qui les
+        ' fait. On le dit maintenant plutôt que de le découvrir dans le journal.
+        If String.IsNullOrWhiteSpace(txtAdminUrl.Text) OrElse String.IsNullOrWhiteSpace(txtAdminKey.Text) Then
+            If MessageBox.Show("L'adresse ou la clé de la console est vide : aucune tâche ne pourra s'exécuter." & vbCrLf & vbCrLf &
                                "Enregistrer quand même ?",
                                "Paramètres", MessageBoxButtons.YesNo, MessageBoxIcon.Warning) <> DialogResult.Yes Then
-                txtConnectionStringMail.Focus()
+                If String.IsNullOrWhiteSpace(txtAdminUrl.Text) Then txtAdminUrl.Focus() Else txtAdminKey.Focus()
                 Return False
             End If
         End If
@@ -91,8 +91,8 @@ Public Class frmSetting
     End Function
 
     ''' <summary>
-    ''' Vérifie les deux connexions : c'est le couple qui manque le plus souvent
-    ''' lors d'une première installation.
+    ''' Vérifie la base ET la console : ce sont les deux dépendances du service,
+    ''' et celles qui manquent le plus souvent lors d'une première installation.
     ''' </summary>
     Private Sub btnTester_Click(sender As Object, e As EventArgs) Handles btnTester.Click
         Dim cs As String = txtConnectionString.Text.Trim()
@@ -109,7 +109,7 @@ Public Class frmSetting
                 cnn.Open()
             End Using
 
-            Dim repo As New clsJobRepository(cs, txtConnectionStringMail.Text.Trim())
+            Dim repo As New clsJobRepository(cs)
             msg = "Connexion à MngConsul réussie."
             msg &= vbCrLf & vbCrLf & "Tâches à faire : " & repo.CountAFaire()
             msg &= vbCrLf & "En attente d'approbation : " & repo.CountAApprouver()
@@ -120,17 +120,24 @@ Public Class frmSetting
             Return
         End Try
 
-        Dim csMail As String = txtConnectionStringMail.Text.Trim()
-        If String.IsNullOrWhiteSpace(csMail) Then
-            msg &= vbCrLf & vbCrLf & "MailService non configurée : les tâches d'envoi de courriel échoueront."
+        ' On appelle la console avec un identifiant d'exécution qui n'existe
+        ' pas : rien ne s'exécute, mais la réponse prouve que l'adresse répond
+        ' et que la clé est acceptée.
+        Dim console As New clsAdminGateway(txtAdminUrl.Text.Trim(), txtAdminKey.Text.Trim())
+        If Not console.EstConfigure Then
+            msg &= vbCrLf & vbCrLf & "Console non configurée : aucune tâche ne pourra s'exécuter."
         Else
             Try
-                Using cnn As New SqlConnection(csMail)
-                    cnn.Open()
-                End Using
-                msg &= vbCrLf & vbCrLf & "Connexion à MailService réussie."
+                Dim essai As AdminJobResult = console.ExecuterTache(0, 20)
+                If essai.Message.IndexOf("clé", StringComparison.OrdinalIgnoreCase) >= 0 OrElse
+                   essai.Message.IndexOf("cle", StringComparison.OrdinalIgnoreCase) >= 0 Then
+                    msg &= vbCrLf & vbCrLf & "Console joignable, mais la clé est refusée : " & essai.Message
+                Else
+                    msg &= vbCrLf & vbCrLf & "Console joignable et clé acceptée." &
+                           vbCrLf & console.UrlRunner
+                End If
             Catch ex As Exception
-                msg &= vbCrLf & vbCrLf & "Échec de la connexion à MailService : " & ex.Message
+                msg &= vbCrLf & vbCrLf & "Console injoignable : " & ex.Message
             End Try
         End If
 

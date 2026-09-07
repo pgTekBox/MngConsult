@@ -103,6 +103,7 @@
     <Import Include="System.Threading.Tasks" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="clsAdminGateway.vb" />
     <Compile Include="clsEncDec.vb" />
     <Compile Include="clsExecutorStatus.vb" />
     <Compile Include="clsJobRepository.vb" />
@@ -190,6 +191,7 @@
     <Content Include="Database\T206_Approbation_et_executeur.sql" />
     <Content Include="Database\T207_Tache_courriel_test.sql" />
     <Content Include="Database\T208_sp_SaveJobDefinition_id.sql" />
+    <Content Include="Database\T209_JobRunner.sql" />
     <Content Include="README.md" />
     <Content Include="Resources\GenererIcones.ps1" />
     <Content Include="Resources\Paused.ico" />
