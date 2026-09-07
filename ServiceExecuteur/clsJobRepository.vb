@@ -147,6 +147,27 @@ Public Class clsJobRepository
     End Function
 
     ''' <summary>
+    ''' Regarnit le planning a partir des calendriers (sp_GenererPlanningJobs).
+    ''' Renvoie le nombre d'occurrences ajoutees.
+    '''
+    ''' A n'appeler qu'APRES la promotion : la procedure passe en EXPIRE toute
+    ''' occurrence PLANIFIE dont l'heure est deja passee. Ce qui vient d'etre
+    ''' promu n'est plus PLANIFIE et survit donc ; l'inverse effacerait le
+    ''' travail du tour.
+    ''' </summary>
+    Public Function GenererPlanning() As Integer
+        Dim ds As DataSet = ExecOn(_connectionString, "sp_GenererPlanningJobs", 300, Nothing)
+        If ds Is Nothing Then Return 0
+
+        For Each t As DataTable In ds.Tables
+            If t.Columns.Contains("Delta") AndAlso t.Rows.Count > 0 Then
+                Return Num(t.Rows(0), "Delta")
+            End If
+        Next
+        Return 0
+    End Function
+
+    ''' <summary>
     ''' Reserve la prochaine execution a faire et pose un verrou dessus.
     ''' Renvoie Nothing quand il n'y a plus rien a faire.
     ''' </summary>

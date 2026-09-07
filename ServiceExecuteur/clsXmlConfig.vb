@@ -44,6 +44,12 @@ Public Class clsXmlConfig
     ''' <summary>Jusqu'a combien de jours APRES l'echeance on continue de relancer.</summary>
     Public RelanceJoursApres As String = "30"
 
+    ''' <summary>
+    ''' Minutes entre deux regarnissages du planning (sp_GenererPlanningJobs).
+    ''' 0 = jamais : a mettre si le planning est genere ailleurs.
+    ''' </summary>
+    Public PlanningRefreshMinutes As String = "15"
+
     Sub New()
         pathofApp = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location)
         fullpathToXMLFile = pathofApp & "\" & xmlFIleName
@@ -68,6 +74,7 @@ Public Class clsXmlConfig
         Me.MailSender = GetNodeValueString(doc, node_appSettings, "MailSender", "noreply@60sec.ca")
         Me.RelanceJoursAvant = GetNodeValueString(doc, node_appSettings, "RelanceJoursAvant", "0")
         Me.RelanceJoursApres = GetNodeValueString(doc, node_appSettings, "RelanceJoursApres", "30")
+        Me.PlanningRefreshMinutes = GetNodeValueString(doc, node_appSettings, "PlanningRefreshMinutes", "15")
 
         ' Un fichier edite a la main peut contenir n'importe quoi : on retombe
         ' sur des valeurs utilisables plutot que de planter au demarrage.
@@ -76,6 +83,7 @@ Public Class clsXmlConfig
         If ToInt(Me.LockSeconds, 0) < 30 Then Me.LockSeconds = "900"
         If ToInt(Me.RelanceJoursAvant, -1) < 0 Then Me.RelanceJoursAvant = "0"
         If ToInt(Me.RelanceJoursApres, 0) < 1 Then Me.RelanceJoursApres = "30"
+        If ToInt(Me.PlanningRefreshMinutes, -1) < 0 Then Me.PlanningRefreshMinutes = "15"
         If String.IsNullOrWhiteSpace(Me.MailSender) Then Me.MailSender = "noreply@60sec.ca"
     End Sub
 
@@ -108,6 +116,7 @@ Public Class clsXmlConfig
         GetNode(doc, node_appSettings, "MailSender", MailSender)
         GetNode(doc, node_appSettings, "RelanceJoursAvant", RelanceJoursAvant)
         GetNode(doc, node_appSettings, "RelanceJoursApres", RelanceJoursApres)
+        GetNode(doc, node_appSettings, "PlanningRefreshMinutes", PlanningRefreshMinutes)
 
         doc.Save(fullpathToXMLFile)
     End Sub

@@ -9,6 +9,7 @@ Imports Newtonsoft.Json.Linq
 Public Class ExecutionBatchResult
     Public Property Promues As Integer
     Public Property Marquees As Integer
+    Public Property Planifiees As Integer
     Public Property Succes As Integer
     Public Property Echecs As Integer
     Public Property DernierJob As String = ""
@@ -39,6 +40,7 @@ Public Class clsTaskExecutor
 
     ''' <summary>Modeles de courriel que le service sait produire.</summary>
     Private Const MODELE_RAPPEL_FACTURE As String = "RAPPEL_FACTURE"
+    Private Const MODELE_TEST As String = "TEST"
 
     Public Sub New(config As clsXmlConfig)
         _config = config
@@ -56,6 +58,7 @@ Public Class clsTaskExecutor
 
         result.Marquees = _repo.MarquerAApprouver()
         result.Promues = _repo.PromouvoirPlanningEchu()
+        result.Planifiees = RegarnirPlanning()
 
         Dim batchSize As Integer = clsXmlConfig.ToInt(_config.BatchSize, 5)
         Dim lockSeconds As Integer = clsXmlConfig.ToInt(_config.LockSeconds, 900)
@@ -74,6 +77,35 @@ Public Class clsTaskExecutor
         Next
 
         Return result
+    End Function
+
+    ''' <summary>
+    ''' Regarnit le planning, mais pas a chaque tour : sp_GenererPlanningJobs
+    ''' parcourt tous les calendriers au curseur, la faire tourner toutes les
+    ''' minutes serait du gaspillage. Sans elle, un calendrier « toutes les
+    ''' 10 minutes » s'arrete au bout des 500 occurrences que la procedure
+    ''' genere d'avance, soit trois jours et demi.
+    '''
+    ''' Un echec ici n'arrete pas le tour : les occurrences deja planifiees
+    ''' continuent de s'executer.
+    ''' </summary>
+    Private Function RegarnirPlanning() As Integer
+        Dim minutes As Integer = clsXmlConfig.ToInt(_config.PlanningRefreshMinutes, 15)
+        If minutes <= 0 Then Return 0   ' 0 = jamais, le planning est gere ailleurs
+
+        SyncLock thisLock
+            If DernierPlanning <> Date.MinValue AndAlso Date.UtcNow < DernierPlanning.AddMinutes(minutes) Then
+                Return 0
+            End If
+            DernierPlanning = Date.UtcNow
+        End SyncLock
+
+        Try
+            Return _repo.GenererPlanning()
+        Catch ex As Exception
+            clsLog.ErrorWritelog("Génération du planning : " & ex.Message, clsLog.LogType.Erreur)
+            Return 0
+        End Try
     End Function
 
     ''' <summary>
@@ -211,11 +243,12 @@ Public Class clsTaskExecutor
 
         For Each c As String In candidats
             If EstRappelFacture(c) Then Return EnvoyerRappelsFactures(job, parametres)
+            If EstCourrielTest(c) Then Return EnvoyerCourrielTest(job, parametres)
         Next
 
         Return HandlerResult.Ko("Modèle de courriel inconnu : « " &
                                 If(String.IsNullOrWhiteSpace(modele), job.HandlerName, modele) &
-                                " ». Modèle supporté : " & MODELE_RAPPEL_FACTURE & ".")
+                                " ». Modèles supportés : " & MODELE_RAPPEL_FACTURE & ", " & MODELE_TEST & ".")
     End Function
 
     ''' <summary>
@@ -230,6 +263,121 @@ Public Class clsTaskExecutor
                v.Contains("RAPPELSFACTURES") OrElse
                v.Contains("RAPPEL_FACTURES") OrElse
                v.Contains("INVOICE_REMINDER")
+    End Function
+
+    ''' <summary>Reconnait la designation du courriel de test.</summary>
+    Private Shared Function EstCourrielTest(valeur As String) As Boolean
+        If String.IsNullOrWhiteSpace(valeur) Then Return False
+        Return valeur.ToUpperInvariant().Contains(MODELE_TEST)
+    End Function
+
+    ''' <summary>
+    ''' Courriel de verification : il ne sert qu'a prouver que la chaine
+    ''' complete fonctionne — planification, execution, contexte de compagnie et
+    ''' file d'envoi. D'ou le nom de la compagnie dans le message : c'est lui qui
+    ''' montre que le contexte a bien suivi jusqu'au bout.
+    '''
+    ''' Destinataires dans les parametres de la tache, sous « Destinataires »
+    ''' (tableau JSON) ou « To » (adresses separees par ; ou ,).
+    ''' </summary>
+    Private Function EnvoyerCourrielTest(job As JobWorkItem, parametres As Dictionary(Of String, Object)) As HandlerResult
+
+        Dim destinataires As List(Of String) = LireDestinataires(parametres)
+        If destinataires.Count = 0 Then
+            Return HandlerResult.Ko("Aucun destinataire : renseignez « Destinataires » ou « To » dans les paramètres de la tâche.")
+        End If
+
+        Dim info As CompanyMailInfo = _repo.GetCompanyMailInfo(job.CompanyGUID)
+
+        ' Sans compagnie sur l'execution, le courriel partirait en annoncant un
+        ' nom vide : autant le dire franchement, c'est justement ce que ce test
+        ' est cense verifier.
+        Dim nomCompagnie As String = info.CompanyName
+        If String.IsNullOrWhiteSpace(nomCompagnie) Then
+            nomCompagnie = If(job.CompanyGUID = Guid.Empty,
+                              "(aucune compagnie sur la tâche)",
+                              "(compagnie " & job.CompanyGUID.ToString() & " sans nom)")
+        End If
+
+        Dim sujet As String = "Test de l'exécuteur de tâches — " & nomCompagnie
+        Dim corps As String = CorpsTest(job, nomCompagnie)
+
+        Dim envoyes As Integer = 0
+        Dim detail As New StringBuilder()
+
+        For Each adresse As String In destinataires
+            Try
+                _repo.QueueMail(adresse, sujet, corps, _config.MailSender, info.ReplyTo)
+                envoyes += 1
+                detail.AppendLine(adresse & " : déposé.")
+            Catch ex As Exception
+                detail.AppendLine(adresse & " : échec — " & ex.Message)
+                clsLog.ErrorWritelog("Courriel de test vers " & adresse & " : " & ex.Message, clsLog.LogType.Erreur)
+            End Try
+        Next
+
+        Dim message As String = envoyes & " courriel(s) de test déposé(s) pour « " & nomCompagnie & " »."
+        If envoyes = 0 Then Return HandlerResult.Ko(message, detail.ToString())
+        Return HandlerResult.Ok(message, envoyes, detail.ToString())
+    End Function
+
+    ''' <summary>Corps du courriel de test : de quoi dater et situer l'envoi.</summary>
+    Private Shared Function CorpsTest(job As JobWorkItem, nomCompagnie As String) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<div style=""font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#1f2937;"">")
+        sb.Append("<p>Ceci est un courriel de test de l'exécuteur de tâches 60Sec-AI.</p>")
+        sb.Append("<p>Compagnie : <strong>" & Encode(nomCompagnie) & "</strong></p>")
+        sb.Append("<table style=""font-size:13px;color:#475569;border-collapse:collapse;"">")
+        sb.Append(LigneTest("Tâche", job.JobCode & " — " & job.JobNom))
+        sb.Append(LigneTest("Exécution", job.ExecutionId.ToString()))
+        sb.Append(LigneTest("Déclenchement", job.TriggerType))
+        sb.Append(LigneTest("Exécuteur", Environment.MachineName))
+        sb.Append(LigneTest("Horodatage", Date.Now.ToString("yyyy-MM-dd HH:mm:ss")))
+        sb.Append("</table>")
+        sb.Append("<p style=""color:#94a3b8;font-size:12px;"">Pour arrêter ces envois, désactivez la tâche ou son calendrier dans la console d'administration.</p>")
+        sb.Append("</div>")
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function LigneTest(libelle As String, valeur As String) As String
+        Return "<tr><td style=""padding:2px 12px 2px 0;"">" & Encode(libelle) & "</td>" &
+               "<td style=""padding:2px 0;""><strong>" & Encode(valeur) & "</strong></td></tr>"
+    End Function
+
+    ''' <summary>
+    ''' Les destinataires arrivent soit en tableau JSON (« Destinataires »), que
+    ''' ParseParams a laisse sous forme de texte JSON, soit en liste separee par
+    ''' ; ou , (« To »). On accepte les deux plutot que d'imposer une forme.
+    ''' </summary>
+    Private Shared Function LireDestinataires(parametres As Dictionary(Of String, Object)) As List(Of String)
+        Dim liste As New List(Of String)
+
+        For Each cle As String In New String() {"Destinataires", "To", "Destinataire"}
+            Dim v As Object = Lookup(parametres, cle)
+            If v Is Nothing Then Continue For
+
+            Dim brut As String = Convert.ToString(v).Trim()
+            If brut = "" Then Continue For
+
+            If brut.StartsWith("[") Then
+                Try
+                    For Each t As JToken In JArray.Parse(brut)
+                        Dim a As String = Convert.ToString(CType(t, JValue).Value)
+                        If Not String.IsNullOrWhiteSpace(a) Then liste.Add(a.Trim())
+                    Next
+                Catch ex As Exception
+                    clsLog.ErrorWritelog("Liste de destinataires illisible (" & cle & ") : " & ex.Message, clsLog.LogType.Erreur)
+                End Try
+            Else
+                For Each a As String In brut.Split(";"c, ","c)
+                    If Not String.IsNullOrWhiteSpace(a) Then liste.Add(a.Trim())
+                Next
+            End If
+
+            If liste.Count > 0 Then Exit For
+        Next
+
+        Return liste
     End Function
 
     ''' <summary>

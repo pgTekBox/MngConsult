@@ -39,7 +39,7 @@ fichier), et un pipe nommé pour pousser l'état vers l'interface.
 | `HandlerType` | État | Ce qui se passe |
 |---|---|---|
 | `SP` | implémenté | Lance la procédure nommée par `HandlerName`. Les paramètres sont découverts par `DeriveParameters` : ceux du JSON `HandlerParams` sont passés, les autres sont ignorés, et `@CompanyGUID` est comblé par la compagnie de l'exécution. Jetons `@TODAY` et `@NOW` reconnus dans les valeurs. |
-| `EMAIL` | implémenté | Un seul modèle pour l'instant : `RAPPEL_FACTURE` (reconnu par `Template`, `HandlerName` ou `JobCode`). Lit `s0746GetFacturesEnRetard` et dépose un courriel par facture dans `T400Mails` (base **MailService**) — c'est SrvAI qui l'envoie. |
+| `EMAIL` | implémenté | Deux modèles, reconnus par `Template`, `HandlerName` ou `JobCode` : `RAPPEL_FACTURE` (lit `s0746GetFacturesEnRetard`, un courriel par facture échue) et `TEST` (un courriel de vérification portant le nom de la compagnie, aux adresses de `Destinataires`). Le courriel est déposé dans `T400Mails` (base **MailService**) — c'est SrvAI qui l'envoie. |
 | `CONNECTOR` | **non implémenté** | Échec explicite. Un connecteur parle à un système tiers (flux bancaire, export comptable) : c'est un projet à part. |
 | `CUSTOM` | **non implémenté** | Échec explicite. `HandlerName` y désigne une classe .NET que ce service ne charge pas. |
 
@@ -120,6 +120,14 @@ On l'édite par l'interface (**Paramètres...**), jamais à la main.
 | `MailSender` | noreply@60sec.ca | Expéditeur des courriels déposés |
 | `RelanceJoursAvant` | 0 | Rappel préventif : jours **avant** l'échéance |
 | `RelanceJoursApres` | 30 | Jusqu'à combien de jours **après** on relance |
+| `PlanningRefreshMinutes` | 15 | Minutes entre deux appels à `sp_GenererPlanningJobs` (0 = jamais) |
+
+Le regarnissage du planning n'est pas un luxe : `sp_GenererPlanningJobs` ne
+génère que 500 occurrences d'avance par calendrier, soit **trois jours et demi**
+pour un calendrier « toutes les 10 minutes ». Sans lui la tâche s'arrête d'
+elle-même. Il tourne après la promotion, jamais avant : la procédure passe en
+`EXPIRE` toute occurrence `PLANIFIE` dont l'heure est déjà passée, et l'inverse
+effacerait le travail du tour.
 
 Le `From` reste celui du service : SrvAI envoie en direct-to-MX depuis notre IP,
 un `From` au domaine du client échouerait son SPF. C'est le `Reply-To` qui porte
@@ -180,6 +188,28 @@ est dans le script, rien n'est dessiné à la main) :
 ```powershell
 powershell -ExecutionPolicy Bypass -File Resources\GenererIcones.ps1
 ```
+
+## La tâche de test
+
+`Database/T207_Tache_courriel_test.sql` crée `TEST_COURRIEL` : un courriel
+toutes les 10 minutes portant le nom de la compagnie, envoyé à l'adresse des
+paramètres. Elle sert à répondre à une seule question — « est-ce que l'exécuteur
+tourne ? » — et le nom de la compagnie prouve au passage que le contexte a suivi
+jusqu'au bout de la chaîne.
+
+Elle se pilote ensuite dans la console d'administration comme n'importe quelle
+tâche. **Pour arrêter les envois**, décocher `Actif` sur la définition ou sur le
+calendrier, ou mettre le calendrier en pause :
+
+```sql
+UPDATE dbo.T200JobDefinition SET Actif = 0 WHERE JobCode = 'TEST_COURRIEL';
+```
+
+Le script passe par `sp_SaveJobDefinition` et `sp_SaveJobSchedule`, donc par le
+même chemin que les écrans. Il exige `T208_sp_SaveJobDefinition_id.sql`, qui
+corrige un défaut bloquant : `T200JobDefinition.Id` n'est pas une colonne
+`IDENTITY`, mais la procédure lisait `SCOPE_IDENTITY()` après son `INSERT` —
+aucune tâche n'était créable depuis la console.
 
 ## Ajouter un type de tâche
 

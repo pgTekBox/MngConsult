@@ -188,6 +188,8 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Database\T206_Approbation_et_executeur.sql" />
+    <Content Include="Database\T207_Tache_courriel_test.sql" />
+    <Content Include="Database\T208_sp_SaveJobDefinition_id.sql" />
     <Content Include="README.md" />
     <Content Include="Resources\GenererIcones.ps1" />
     <Content Include="Resources\Paused.ico" />
