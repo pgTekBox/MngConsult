@@ -72,6 +72,7 @@
     table.cor tr.decide td { background: #f8fafc }
 
     table.cor .src-c { font-weight: 700; color: #0f172a; white-space: nowrap }
+    table.cor .sans-num { font-weight: 400; font-size: 11px; color: #94a3b8; font-style: italic; white-space: nowrap }
     table.cor .src-n { color: #475569 }
     table.cor .nature { font-size: 11px; color: #64748b; white-space: nowrap }
     table.cor .solde { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums }
@@ -234,7 +235,7 @@
                         <ItemTemplate>
                             <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>'>
                                 <td><%# Eval("LigneNo") %></td>
-                                <td class="src-c"><%# Server.HtmlEncode(Convert.ToString(Eval("Compte"))) %></td>
+                                <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
                                     <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %></div>
                                     <div class="nature"><%# Server.HtmlEncode(Convert.ToString(Eval("TypeNormalise"))) %></div>
@@ -243,6 +244,8 @@
                                 <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom")) %></td>
 
                                 <td>
+                                    <asp:HiddenField runat="server" ID="hfCleSource" Value='<%# Eval("CleSource") %>' />
+                                    <asp:HiddenField runat="server" ID="hfTypeCle" Value='<%# Eval("TypeCle") %>' />
                                     <asp:HiddenField runat="server" ID="hfCompteSource" Value='<%# Eval("Compte") %>' />
                                     <asp:HiddenField runat="server" ID="hfNomSource" Value='<%# Eval("Nom") %>' />
                                     <asp:HiddenField runat="server" ID="hfTypeSource" Value='<%# Eval("TypeNormalise") %>' />

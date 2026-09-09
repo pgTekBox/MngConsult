@@ -187,6 +187,7 @@
     table.col-table .kw { color: #64748b; font-size: 11.5px }
 
     .st-req { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #fef2f2; color: #b91c1c; white-space: nowrap }
+    .st-cle { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #eff6ff; color: #1d4ed8; white-space: nowrap }
     .st-opt { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #f1f5f9; color: #64748b; white-space: nowrap }
 
     .aide-modele {
@@ -287,9 +288,10 @@
 
                         <h4 class="aide-h">Les colonnes attendues</h4>
                         <p class="aide-p">
-                            Une seule est indispensable : <b>le numéro de compte</b>. Sans lui, la ligne
-                            est écartée — c'est la clé qui rattachera ensuite vos factures et vos
-                            écritures. Les autres améliorent le résultat sans être exigées.
+                            Il faut de quoi identifier chaque compte : <b>son numéro, ou son nom</b>.
+                            Le numéro sert de clé quand il existe, le nom le remplace sinon — beaucoup
+                            de plans QuickBooks n'ont pas de numéros, et c'est parfaitement normal.
+                            Une ligne qui n'a ni l'un ni l'autre est écartée.
                         </p>
                         <div class="col-wrap">
                             <asp:Literal ID="litTableauColonnes" runat="server" />

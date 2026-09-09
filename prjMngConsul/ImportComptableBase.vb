@@ -78,21 +78,20 @@ Public MustInherit Class ImportComptableBase
                     .Etapes = New List(Of String) From {
                         "Ouvrez <b>Rapports</b> dans le menu de gauche.",
                         "Cherchez <b>Liste des comptes</b> dans la barre de recherche des rapports. Le rapport se trouve aussi sous <b>Pour mon comptable</b>.",
-                        "Le rapport s'affiche : vérifiez qu'une colonne de <b>numéros de compte</b> y figure. Si elle manque, voyez l'avertissement ci-dessus.",
                         "Cliquez sur l'icône d'<b>exportation</b> en haut à droite du rapport, puis sur <b>Exporter vers Excel</b>.",
                         "Ouvrez le fichier obtenu dans Excel, puis <b>Fichier ▸ Enregistrer sous ▸ CSV (séparateur : point-virgule)</b> ou <b>CSV UTF-8</b>.",
                         "Revenez ici et déposez le fichier CSV."
                     },
                     .Avertissements = New List(Of String) From {
-                        "<b>Les numéros de compte sont masqués par défaut dans QuickBooks en ligne.</b> " &
-                        "Tant qu'ils ne sont pas activés, le rapport sort sans eux et l'importation ne peut pas fonctionner — " &
-                        "le numéro est la seule colonne indispensable. " &
-                        "Activez-les d'abord : <b>⚙️ Paramètres du compte ▸ Avancé ▸ Plan comptable ▸ Activer les numéros de compte</b>. " &
-                        "Si vos comptes n'ont jamais eu de numéros, il faut leur en attribuer — c'est une décision comptable, à prendre avec votre comptable.",
                         "QuickBooks propose souvent <b>Excel</b> mais pas <b>CSV</b> pour ce rapport. " &
                         "Dans ce cas, passez par Excel et enregistrez ensuite en CSV : cette page ne lit pas les fichiers <code>.xlsx</code>."
                     },
                     .Astuces = New List(Of String) From {
+                        "<b>Vos comptes n'ont pas de numéros ?</b> C'est normal : QuickBooks en ligne les rend facultatifs et " &
+                        "les masque par défaut. L'importation fonctionne quand même — <b>le nom du compte sert alors de clé</b>. " &
+                        "Si vous préférez travailler avec des numéros, activez-les avant l'export dans " &
+                        "<b>⚙️ Paramètres du compte ▸ Avancé ▸ Plan comptable ▸ Activer les numéros de compte</b>, " &
+                        "puis attribuez-les à vos comptes — c'est une décision comptable, pas une formalité.",
                         "Si l'export contient une colonne <b>Detail Type</b> en plus de <b>Type</b>, c'est celle qui est le plus à gauche qui sera retenue. L'aperçu vous dira laquelle.",
                         "Les accents en charabia (<code>Ã©</code> au lieu de <code>é</code>) viennent de l'encodage : réessayez en <b>Windows-1252</b>.",
                         "Le rapport peut contenir une ligne de titre ou une ligne de total. Elles seront signalées comme lignes invalides et écartées — c'est sans conséquence."
@@ -385,7 +384,20 @@ Public MustInherit Class ImportComptableBase
         Public Property Libelle As String
         Public Property MotsCles As String() = {}
         Public Property Description As String = ""
+
+        ''' <summary>Exigée à elle seule.</summary>
         Public Property Obligatoire As Boolean = False
+
+        ''' <summary>
+        ''' Participe à l'identification de la ligne. Il en faut au moins une
+        ''' parmi celles marquées ainsi — pas toutes.
+        '''
+        ''' C'est le cas du plan comptable : le numéro identifie le compte quand
+        ''' il existe, le nom quand il n'existe pas. QuickBooks en ligne rend les
+        ''' numéros facultatifs et les désactive par défaut ; exiger le numéro
+        ''' fermait la porte à toutes les compagnies qui n'en ont jamais eu.
+        ''' </summary>
+        Public Property Cle As Boolean = False
     End Class
 
 #End Region

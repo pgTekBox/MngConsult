@@ -40,14 +40,16 @@ Public Class ImportPlanComptable
         Get
             Return New List(Of ColonneDef) From {
                 New ColonneDef With {
-                    .Champ = "Compte", .Libelle = "Numéro de compte", .Obligatoire = True,
+                    .Champ = "Compte", .Libelle = "Numéro de compte",
                     .MotsCles = New String() {"account number", "account no", "acct", "numéro", "numero", "compte", "no compte", "number"},
-                    .Description = "Le numéro, tel qu'il figure au plan d'origine"
+                    .Description = "Le numéro, s'il en existe un au plan d'origine",
+                    .Cle = True
                 },
                 New ColonneDef With {
                     .Champ = "Nom", .Libelle = "Nom du compte",
                     .MotsCles = New String() {"account name", "name", "nom", "description", "libellé", "libelle", "titre"},
-                    .Description = "Le libellé du compte"
+                    .Description = "Le libellé du compte — il tient lieu de clé quand il n'y a pas de numéro",
+                    .Cle = True
                 },
                 New ColonneDef With {
                     .Champ = "Type", .Libelle = "Type",
@@ -195,6 +197,8 @@ Public Class ImportPlanComptable
 
             If c.Obligatoire Then
                 sb.Append("<span class='st-req'>obligatoire</span>")
+            ElseIf c.Cle Then
+                sb.Append("<span class='st-cle'>numéro <i>ou</i> nom</span>")
             Else
                 sb.Append("<span class='st-opt'>facultative</span>")
             End If
@@ -255,6 +259,11 @@ Public Class ImportPlanComptable
         Dim sb As New StringBuilder()
         sb.Append("<table class='map-table'><thead><tr><th>Attendu</th><th>Colonne du fichier</th></tr></thead><tbody>")
 
+        ' Les colonnes qui servent de clé ne sont exigées qu'ensemble : il en
+        ' faut une, pas les deux. On ne signale donc l'absence en rouge que
+        ' lorsqu'il n'en reste aucune.
+        Dim aUneCle As Boolean = Colonnes.Any(Function(c) c.Cle AndAlso map.ContainsKey(c.Champ))
+
         For Each col In Colonnes
             sb.Append("<tr><td>")
             sb.Append(Server.HtmlEncode(col.Libelle))
@@ -263,7 +272,7 @@ Public Class ImportPlanComptable
 
             If map.ContainsKey(col.Champ) AndAlso map(col.Champ) < dt.Columns.Count Then
                 sb.Append("<b>" & Server.HtmlEncode(dt.Columns(map(col.Champ)).ColumnName) & "</b>")
-            ElseIf col.Obligatoire Then
+            ElseIf col.Obligatoire OrElse (col.Cle AndAlso Not aUneCle) Then
                 sb.Append("<span class='miss'>non trouvée</span>")
             Else
                 sb.Append("<span class='none'>—</span>")
@@ -271,6 +280,11 @@ Public Class ImportPlanComptable
 
             sb.Append("</td></tr>")
         Next
+
+        If Not aUneCle Then
+            sb.Append("<tr><td colspan='2' class='miss'>Aucune colonne ne permet d'identifier " &
+                      "un compte : il faut le numéro <i>ou</i> le nom.</td></tr>")
+        End If
 
         sb.Append("</tbody></table>")
         Return sb.ToString()
@@ -296,20 +310,17 @@ Public Class ImportPlanComptable
                 Return
             End If
 
+            ' Il faut de quoi identifier un compte : son numéro, ou son nom.
+            ' Beaucoup de plans QuickBooks n'ont pas de numéros — c'est
+            ' facultatif chez eux — et le nom fait alors office de clé.
             Dim map = AssocierColonnes(dt)
-            If Not map.ContainsKey("Compte") Then
-                ' La cause la plus frequente, de loin : QuickBooks masque les
-                ' numeros de compte tant qu'on ne les a pas actives. On le dit
-                ' en premier, sinon l'utilisateur cherche du cote du fichier.
+            If Not map.ContainsKey("Compte") AndAlso Not map.ContainsKey("Nom") Then
                 Alerte(pnlErreur, litErreur,
-                       "<b>La colonne du numéro de compte n'a pas été trouvée</b> — c'est la seule dont " &
-                       "l'importation ne peut pas se passer.<br /><br />" &
-                       "Dans QuickBooks en ligne, les numéros de compte sont <b>masqués par défaut</b> : " &
-                       "activez-les dans <b>⚙️ Paramètres du compte ▸ Avancé ▸ Plan comptable ▸ " &
-                       "Activer les numéros de compte</b>, puis ressortez le rapport.<br /><br />" &
-                       "Si votre fichier contient bien les numéros, vérifiez le séparateur, ou décochez " &
-                       "« la première ligne contient les noms de colonnes ». " &
-                       "Le bouton <b>Voir un aperçu</b> montre ce que la page a reconnu.")
+                       "<b>Ni le numéro ni le nom des comptes n'ont été trouvés</b> — il faut au moins " &
+                       "l'un des deux pour identifier un compte.<br /><br />" &
+                       "Vérifiez le séparateur, ou décochez « la première ligne contient les noms de " &
+                       "colonnes » si votre fichier n'a pas d'en-tête. " &
+                       "Le bouton <b>Voir un aperçu</b> montre exactement ce que la page a reconnu.")
                 Return
             End If
 

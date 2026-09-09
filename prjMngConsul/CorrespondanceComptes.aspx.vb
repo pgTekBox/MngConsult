@@ -242,6 +242,18 @@ Public Class CorrespondanceComptes
         Return Convert.ToString(origine) = "DECIDE"
     End Function
 
+    ''' <summary>
+    ''' Ce qui identifie le compte d'origine. Quand l'ancien logiciel n'a pas
+    ''' de numéros — c'est courant avec QuickBooks, qui les rend facultatifs —
+    ''' c'est le nom qui tient ce rôle, et la colonne le dit plutôt que de
+    ''' rester vide.
+    ''' </summary>
+    Protected Function CleAffichee(compte As Object, typeCle As Object) As String
+        Dim c = Convert.ToString(compte)
+        If c <> "" Then Return Server.HtmlEncode(c)
+        Return "<span class='sans-num'>sans numéro</span>"
+    End Function
+
 #End Region
 
 #Region "Enregistrer"
@@ -283,10 +295,13 @@ Public Class CorrespondanceComptes
 
         Try
             Dim decisions As New List(Of Object)
+            Dim aCreerSansNumero As Integer = 0
 
             For Each item As RepeaterItem In rptLignes.Items
                 If item.ItemType <> ListItemType.Item AndAlso item.ItemType <> ListItemType.AlternatingItem Then Continue For
 
+                Dim hfCle = TryCast(item.FindControl("hfCleSource"), HiddenField)
+                Dim hfTypeCle = TryCast(item.FindControl("hfTypeCle"), HiddenField)
                 Dim hfSource = TryCast(item.FindControl("hfCompteSource"), HiddenField)
                 Dim hfNom = TryCast(item.FindControl("hfNomSource"), HiddenField)
                 Dim hfType = TryCast(item.FindControl("hfTypeSource"), HiddenField)
@@ -294,17 +309,25 @@ Public Class CorrespondanceComptes
                 Dim txtCpt = TryCast(item.FindControl("txtCompte"), TextBox)
                 Dim txtNot = TryCast(item.FindControl("txtNote"), TextBox)
 
-                If hfSource Is Nothing OrElse ddlAct Is Nothing Then Continue For
+                If hfCle Is Nothing OrElse ddlAct Is Nothing Then Continue For
 
                 Dim action = ddlAct.SelectedValue
                 Dim compte = If(txtCpt Is Nothing, "", txtCpt.Text.Trim())
 
-                ' « Créer » sans numéro n'a pas de sens : on reprend celui de
-                ' l'ancien logiciel, qui est le choix par défaut raisonnable.
-                If action = "CREER" AndAlso compte = "" Then compte = hfSource.Value
+                ' « Créer » sans numéro saisi : on reprend celui de l'ancien
+                ' logiciel quand il en a un. Sinon on laisse vide, et la
+                ' procédure refusera — notre plan n'accepte pas de compte sans
+                ' numéro, et l'inventer serait pire que de le demander.
+                If action = "CREER" AndAlso compte = "" AndAlso hfSource IsNot Nothing Then
+                    compte = hfSource.Value
+                End If
+
+                If action = "CREER" AndAlso compte = "" Then aCreerSansNumero += 1
 
                 decisions.Add(New With {
-                    .CompteSource = hfSource.Value,
+                    .CleSource = hfCle.Value,
+                    .TypeCle = If(hfTypeCle Is Nothing, "", hfTypeCle.Value),
+                    .CompteSource = If(hfSource Is Nothing, "", hfSource.Value),
                     .NomSource = If(hfNom Is Nothing, "", hfNom.Value),
                     .Action = If(action = "", Nothing, action),
                     .CompteCible = compte,
@@ -332,8 +355,19 @@ Public Class CorrespondanceComptes
             ' Un « Lier » vers un compte que le plan ne connaît pas n'est pas
             ' enregistré : la procédure l'écarte, et la ligne revient à décider.
             Dim aDecider = If(r Is Nothing, 0, Convert.ToInt32(r("ADecider")))
+
             If aDecider = 0 Then
                 Alerte(pnlSucces, litSucces, "Correspondances enregistrées. Tous les comptes sont décidés.")
+
+            ElseIf aCreerSansNumero > 0 Then
+                ' Cas propre aux plans sans numéros : « Créer » ne peut pas
+                ' reprendre un numéro d'origine qui n'existe pas.
+                Alerte(pnlAvertissement, litAvertissement,
+                       String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider. " &
+                                     "{1} d'entre eux sont marqués « Créer » <b>sans numéro</b> : votre plan " &
+                                     "comptable exige un numéro pour chaque compte, et votre ancien logiciel " &
+                                     "n'en fournit pas. Saisissez le numéro à donner à ces comptes chez vous.",
+                                     aDecider, aCreerSansNumero))
             Else
                 Alerte(pnlSucces, litSucces,
                        String.Format("Correspondances enregistrées. {0} compte(s) restent à décider — " &
