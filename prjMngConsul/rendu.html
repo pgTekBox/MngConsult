@@ -624,6 +624,8 @@
         <a href="#admin">8 &nbsp;Console d'administration</a>
         <a href="#socle">9 &nbsp;Socle technique</a>
         <a href="#projets">10 &nbsp;Projets Visual Studio</a>
+        <a href="#annexes">11 &nbsp;Documents complémentaires</a>
+        <a href="importcomptable.html" style="margin-top:10px;border-top:1px solid var(--line);padding-top:12px">↗ &nbsp;Migration comptable QuickBooks</a>
     </nav>
 
     <main>
@@ -747,11 +749,12 @@
                 <div class="card">
                     <div class="ico">📬</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service IMAP <span class="st st-wip">En développement</span></h3>
+                    <h3>Service IMAP <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Exposera les courriels de la plateforme par le protocole IMAP, pour que
+                        Expose les courriels de la plateforme par le protocole IMAP, pour que
                         l'abonné puisse consulter sa boîte depuis n'importe quel client de
-                        messagerie plutôt que depuis l'ERP seulement.
+                        messagerie plutôt que depuis l'ERP seulement. Écrit et éprouvé ;
+                        il reste à l'installer sur le serveur.
                     </p>
                     <div class="tags">
                         <span class="tag">IMAP</span>
@@ -762,11 +765,12 @@
                 <div class="card">
                     <div class="ico">🧠</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service de traitements IA <span class="st st-wip">En développement</span></h3>
+                    <h3>Service de traitements IA <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Déportera les traitements d'intelligence artificielle hors de l'application
-                        web : lecture des reçus et des documents exécutée en arrière-plan, sans
-                        faire attendre l'utilisateur devant son écran.
+                        Déporte les traitements d'intelligence artificielle hors de l'application
+                        web : lecture des reçus exécutée en arrière-plan, sans faire attendre
+                        l'utilisateur devant son écran. Il crée le fournisseur et le document,
+                        et les comptabilise si la compagnie l'a demandé.
                     </p>
                     <div class="tags">
                         <span class="tag">Traitement asynchrone</span>
@@ -777,15 +781,17 @@
                 <div class="card">
                     <div class="ico">⏱️</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service de tâches planifiées <span class="st st-wip">En développement</span></h3>
+                    <h3>Service de tâches planifiées <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Exécutera les traitements récurrents à heure fixe : prélèvements
-                        automatiques, synchronisations bancaires et travaux d'entretien, sans
-                        dépendre d'une session ouverte dans le navigateur.
+                        Exécute les traitements récurrents à heure fixe : rappels de factures,
+                        travaux d'entretien, procédures comptables, sans dépendre d'une session
+                        ouverte dans le navigateur. Ce que fait chaque tâche est défini dans la
+                        console d'administration, pas dans le service.
                     </p>
                     <div class="tags">
                         <span class="tag">Ordonnanceur</span>
                         <span class="tag">Traitements récurrents</span>
+                        <span class="tag">Approbation</span>
                     </div>
                 </div>
 
@@ -1703,6 +1709,10 @@
                         <li>Console d'administration interne : compagnies, forfaits, page vitrine,
                             prompts d'IA, diagnostics des webhooks.</li>
                         <li>Accueille depuis peu les écrans de <b>tâches planifiées</b>, venus de l'ERP.</li>
+                        <li>Et, depuis peu également, <b>ce que font ces tâches</b> :
+                            <span class="tag">JobRunner.ashx</span> est appelé par
+                            ServiceExecuteur et porte tout le contenu métier, de sorte qu'une
+                            tâche se modifie ici plutôt que dans un service Windows.</li>
                         <li>Authentification distincte de celle de l'ERP.</li>
                     </ul>
                     <div class="tags">
@@ -1808,6 +1818,21 @@
                 </div>
 
                 <div class="mod">
+                    <h3>⏱️ ServiceExecuteur <span class="st st-test">à déployer</span></h3>
+                    <ul>
+                        <li>L'exécuteur des <b>tâches planifiées</b> : il repère ce qui est dû,
+                            le réserve, et le fait exécuter.</li>
+                        <li>Il ne sait rien d'aucune tâche en particulier. Tout ce qu'une tâche
+                            fait vraiment vit dans la console d'administration, qu'il appelle
+                            par <span class="tag">JobRunner.ashx</span> : modifier une tâche ne
+                            demande donc que de redéployer l'application web.</li>
+                        <li>Boîte de messages dans l'ERP pour les tâches qui exigent une
+                            validation avant de s'exécuter.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 4.7.2</span><span class="tag">clé partagée</span></div>
+                </div>
+
+                <div class="mod">
                     <h3>📤 Service/SrvAI <span class="st st-wip">copie ancienne</span></h3>
                     <ul>
                         <li>Copie du service de courriel conservée dans le dépôt MngConsul.</li>
@@ -1874,14 +1899,25 @@
             </div>
 
             <div class="note" style="margin-top:24px">
-                <h3>⏱️ Tâches planifiées : les écrans existent, l'exécuteur reste à écrire</h3>
+                <h3>⏱️ Tâches planifiées : la chaîne est complète, il reste à l'installer</h3>
                 <p>
                     Les cinq écrans de tâches — définition, calendrier, suivi, exécutions,
-                    tableau de bord — sont en place dans la console d'administration, et une
-                    tâche peut être lancée à la main. En revanche, <b>aucun projet Visual Studio
-                    n'implémente le déclenchement à l'heure dite</b>, et rien dans le code des
-                    applications ne s'en charge : c'est le seul des huit programmes annoncés au
-                    chapitre 1 qui reste à écrire.
+                    tableau de bord — sont en place dans la console d'administration, et
+                    <b>ServiceExecuteur</b> assure désormais le déclenchement à l'heure dite :
+                    c'était le dernier des huit programmes annoncés au chapitre 1 à écrire.
+                </p>
+                <p>
+                    Le partage des rôles mérite d'être connu : le service ne fait
+                    qu'ordonnancer — repérer ce qui est dû, poser un verrou, enregistrer le
+                    résultat. Ce qu'une tâche fait vraiment est écrit dans la console
+                    d'administration, qu'il appelle par <span class="tag">JobRunner.ashx</span>.
+                    Ajouter ou modifier une tâche ne demande donc que de redéployer
+                    l'application web ; le service sur le serveur, lui, ne rebouge pas.
+                </p>
+                <p>
+                    <b>Reste à faire :</b> le service est écrit, compilé et vérifié de bout en
+                    bout, mais il n'est pas encore installé comme service Windows sur le
+                    serveur. Tant qu'il ne tourne pas, aucune tâche ne se déclenche d'elle-même.
                 </p>
             </div>
 
@@ -1891,6 +1927,46 @@
                 comme documentation de référence. Ils ne font pas partie de la plateforme et ne
                 sont pas listés ici.
             </p>
+        </section>
+
+        <!-- ================================= DOCUMENTS COMPLÉMENTAIRES -->
+        <section id="annexes">
+            <h2><span class="num">11</span>Documents complémentaires</h2>
+            <p class="sub">
+                Des procédures détaillées, tenues à part parce qu'elles s'adressent à un autre
+                lectorat que cette cartographie.
+            </p>
+
+            <article class="rail">
+                <div class="rail-head">
+                    <div class="ico" style="background:#eff6ff">📒</div>
+                    <div>
+                        <h3 style="margin:0">
+                            <a href="importcomptable.html">Migration comptable — QuickBooks vers 60sec-AI</a>
+                        </h3>
+                        <p class="fine" style="margin:2px 0 0">importcomptable.html</p>
+                    </div>
+                </div>
+                <div class="rail-body">
+                    <p>
+                        L'ordre à suivre pour reprendre une comptabilité tenue dans QuickBooks :
+                        les deux décisions préalables, les quinze rapports à extraire, la
+                        préparation de l'ERP, les soldes d'ouverture, les contrôles de
+                        réconciliation, et la correspondance champ à champ entre les deux
+                        modèles de données.
+                    </p>
+                    <p>
+                        Destiné au comptable autant qu'au développeur : la correspondance du
+                        plan comptable est le seul travail qui ne peut pas se faire sans lui.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">31 étapes</span>
+                        <span class="tag">6 phases</span>
+                        <span class="tag">13 tables cibles</span>
+                        <span class="tag">5 pièges</span>
+                    </div>
+                </div>
+            </article>
         </section>
 
     </main>

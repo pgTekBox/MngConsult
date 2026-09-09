@@ -369,13 +369,20 @@
     <Content Include="wbfPlaidDiagnostic.aspx" />
     <Content Include="wbfDemoReset.aspx" />
     <Content Include="wbfMail.aspx" />
+    <Content Include="JobRunner.ashx" />
     <Content Include="MailAttachment.ashx" />
   <Content Include="wbfJobs.aspx" /><Content Include="wbfJobEdit.aspx" /><Content Include="wbfJobSchedule.aspx" /><Content Include="wbfJobMonitoring.aspx" /><Content Include="wbfJobExecution.aspx" /><Content Include="wbfJobDashboard.aspx" /></ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
+    <Compile Include="App_Code\clsJobData.vb" />
+    <Compile Include="App_Code\clsJobRunner.vb" />
     <Compile Include="App_Code\clsMime.vb" />
+    <Compile Include="JobRunner.ashx.vb">
+      <DependentUpon>JobRunner.ashx</DependentUpon>
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MailAttachment.ashx.vb">
       <DependentUpon>MailAttachment.ashx</DependentUpon>
       <SubType>Component</SubType>

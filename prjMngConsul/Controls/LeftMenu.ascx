@@ -225,6 +225,13 @@
         border-radius: 999px;
     }
 
+        /* Pastille d'alerte : ce qui attend une décision de l'utilisateur. */
+        .nav-badge.alert {
+            background: #fef3c7;
+            color: #b45309;
+            border-color: #fcd34d;
+        }
+
     .chev {
         display: flex;
         align-items: center;
