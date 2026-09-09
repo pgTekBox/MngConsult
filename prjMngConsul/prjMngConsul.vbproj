@@ -771,6 +771,7 @@
     <Compile Include="App_Code\clsDreamPayments.vb" />
     <Compile Include="App_Code\clsCrypto.vb" />
     <Compile Include="App_Code\clsRememberMe.vb" />
+    <Compile Include="MyClass\OpenAiPlanComptableMapper.vb" />
     <Compile Include="MyClass\OpenAiReceiptReader.vb" />
     <Compile Include="App_Start\BundleConfig.vb" />
     <Compile Include="App_Start\RouteConfig.vb" />

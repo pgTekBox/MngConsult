@@ -30,6 +30,9 @@ Partial Public Class CorrespondanceComptes
     Protected WithEvents ddlLot As Global.System.Web.UI.WebControls.DropDownList
     '''<summary>ddlFiltre</summary>
     Protected WithEvents ddlFiltre As Global.System.Web.UI.WebControls.DropDownList
+    '''<summary>btnIA</summary>
+    Protected WithEvents btnIA As Global.System.Web.UI.WebControls.Button
+
     '''<summary>btnAccepter</summary>
     Protected WithEvents btnAccepter As Global.System.Web.UI.WebControls.Button
 

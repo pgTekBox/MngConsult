@@ -1,4 +1,4 @@
-﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="VB" AutoEventWireup="false" Async="true" MasterPageFile="~/Site.Master"
     CodeBehind="CorrespondanceComptes.aspx.vb" Inherits="MngConsul.CorrespondanceComptes" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
@@ -93,6 +93,16 @@
     .pr-sur { background: #ecfdf5; color: #047857 }
     .pr-moyen { background: #fffbeb; color: #b45309 }
     .pr-aucun { background: #f1f5f9; color: #64748b }
+    .pr-ia { background: #f5f3ff; color: #6d28d9 }
+
+    /* Ce que l'IA avance, et pourquoi. Deliberement discret : c'est un avis,
+       pas un verdict. */
+    .ia-raison { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-style: italic }
+    .ia-conf { font-size: 10.5px; color: #6d28d9; font-weight: 700 }
+    .ia-autre { display: block; margin-top: 3px; font-size: 10.5px; color: #6d28d9 }
+
+    .btn-ia { background: #6d28d9; color: #fff; border-color: #6d28d9 }
+    .btn-ia:hover { background: #5b21b6 }
 
     .tbl-wrap { overflow-x: auto; max-height: 640px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px }
 
@@ -161,6 +171,9 @@
                 </asp:DropDownList>
             </div>
             <div class="acts" style="margin-left:auto">
+                <asp:Button ID="btnIA" runat="server" CssClass="btn btn-ia" CausesValidation="false"
+                    Text="✨ Proposer avec l'IA"
+                    OnClientClick="if (!confirm('Soumettre les comptes encore à décider et votre plan comptable à l&#39;IA ?\n\nElle ne fera que proposer : rien ne sera décidé à votre place.')) { return false; }" />
                 <asp:Button ID="btnAccepter" runat="server" CssClass="btn btn-s" CausesValidation="false"
                     Text="Accepter les correspondances par numéro"
                     OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
@@ -241,7 +254,8 @@
                                     <div class="nature"><%# Server.HtmlEncode(Convert.ToString(Eval("TypeNormalise"))) %></div>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
-                                <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom")) %></td>
+                                <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
+                                                         Eval("IACompte"), Eval("IANom"), Eval("IAConfiance"), Eval("IARaison")) %></td>
 
                                 <td>
                                     <asp:HiddenField runat="server" ID="hfCleSource" Value='<%# Eval("CleSource") %>' />

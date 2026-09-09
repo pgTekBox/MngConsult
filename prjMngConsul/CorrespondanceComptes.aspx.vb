@@ -215,22 +215,60 @@ Public Class CorrespondanceComptes
 #Region "Ce que la ligne affiche"
 
     ''' <summary>Ce que la page propose, en clair, et d'où ça vient.</summary>
-    Protected Function TexteProposition(origine As Object, compte As Object, nom As Object) As String
+    Protected Function TexteProposition(origine As Object, compte As Object, nom As Object,
+                                        iaCompte As Object, iaNom As Object,
+                                        iaConfiance As Object, iaRaison As Object) As String
         Dim c = Convert.ToString(compte)
         Dim n = Convert.ToString(nom)
+        Dim ic = Convert.ToString(iaCompte)
 
         Select Case Convert.ToString(origine)
+
             Case "DECIDE"
                 Return ""
+
             Case "PROPOSE_NUMERO"
                 Return "<span class='pr pr-sur'>même numéro</span> " &
-                       Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n)
+                       Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &
+                       AvisIA(ic, iaNom, c)
+
             Case "PROPOSE_NOM"
                 Return "<span class='pr pr-moyen'>même nom</span> " &
-                       Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n)
+                       Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &
+                       AvisIA(ic, iaNom, c)
+
+            Case "PROPOSE_IA"
+                Dim sb As New StringBuilder()
+                sb.Append("<span class='pr pr-ia'>IA</span> ")
+                sb.Append(Server.HtmlEncode(c)).Append(" — ").Append(Server.HtmlEncode(n))
+
+                If Not IsDBNull(iaConfiance) AndAlso iaConfiance IsNot Nothing Then
+                    sb.Append(" <span class='ia-conf'>").Append(Convert.ToInt32(iaConfiance)).Append("&nbsp;%</span>")
+                End If
+
+                Dim r = Convert.ToString(iaRaison)
+                If r <> "" Then
+                    sb.Append("<span class='ia-raison'>").Append(Server.HtmlEncode(r)).Append("</span>")
+                End If
+
+                Return sb.ToString()
+
             Case Else
-                Return "<span class='pr pr-aucun'>aucune proposition</span>"
+                Return "<span class='pr pr-aucun'>aucune proposition</span>" & AvisIA(ic, iaNom, "")
         End Select
+    End Function
+
+    ''' <summary>
+    ''' L'avis de l'IA quand une autre correspondance est déjà retenue. On ne
+    ''' le montre que s'il désigne un autre compte : répéter le même n'apprend
+    ''' rien, et diverger mérite un coup d'œil.
+    ''' </summary>
+    Private Function AvisIA(iaCompte As String, iaNom As Object, dejaPropose As String) As String
+        If iaCompte = "" OrElse iaCompte = dejaPropose Then Return ""
+
+        Return "<span class='ia-autre'>✨ l'IA suggère plutôt " &
+               Server.HtmlEncode(iaCompte) & " — " &
+               Server.HtmlEncode(Convert.ToString(iaNom)) & "</span>"
     End Function
 
     ''' <summary>La valeur à mettre dans le champ : la décision, sinon la proposition.</summary>
@@ -267,6 +305,124 @@ Public Class CorrespondanceComptes
 #End Region
 
 #Region "Enregistrer"
+
+    ''' <summary>
+    ''' Soumet au modèle les comptes encore à décider et le plan de la
+    ''' compagnie, et range ce qu'il répond comme une <b>proposition</b>.
+    '''
+    ''' Ce que le modèle rend n'est jamais cru sur parole : s0761 vérifie que
+    ''' chaque compte existe au plan de cette compagnie et que sa nature
+    ''' s'accorde avec celle du compte d'origine. Une charge ne se rattache
+    ''' pas à une immobilisation parce que les noms se ressemblent.
+    ''' </summary>
+    Protected Async Sub btnIA_Click(sender As Object, e As EventArgs) Handles btnIA.Click
+        CacherMessages()
+        If LotCourant = 0 Then Return
+
+        Try
+            ' ── Ce qu'on soumet ─────────────────────────────────────────────
+            Dim pSrc As New Collection
+            pSrc.Add(New SqlParameter("@LotId", LotCourant))
+            pSrc.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim dsSrc As DataSet = ExecuteSQLds("s0763GetComptesAProposer", pSrc)
+
+            If dsSrc Is Nothing OrElse dsSrc.Tables.Count = 0 OrElse dsSrc.Tables(0).Rows.Count = 0 Then
+                Alerte(pnlSucces, litSucces,
+                       "Rien à soumettre : tous les comptes sont déjà décidés ou reconnus par leur numéro.")
+                Return
+            End If
+
+            Dim source As New List(Of String)
+            For Each r As DataRow In dsSrc.Tables(0).Rows
+                source.Add(String.Join(" | ",
+                    Convert.ToString(r("CleSource")),
+                    Convert.ToString(r("Nom")),
+                    Convert.ToString(r("TypeNormalise")),
+                    Convert.ToString(r("TypeSource"))))
+            Next
+
+            Dim pPlan As New Collection
+            pPlan.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim dsPlan As DataSet = ExecuteSQLds("s0764GetPlanPourIA", pPlan)
+
+            If dsPlan Is Nothing OrElse dsPlan.Tables.Count = 0 OrElse dsPlan.Tables(0).Rows.Count = 0 Then
+                Alerte(pnlErreur, litErreur,
+                       "Votre plan comptable est vide : il n'y a rien à quoi rattacher ces comptes.")
+                Return
+            End If
+
+            Dim plan As New StringBuilder()
+            For Each r As DataRow In dsPlan.Tables(0).Rows
+                plan.AppendLine(String.Join(" | ",
+                    Convert.ToString(r("Compte")),
+                    Convert.ToString(r("Nom")),
+                    Convert.ToString(r("NomEn")),
+                    Convert.ToString(r("Nature")),
+                    Convert.ToString(r("Classe"))))
+            Next
+
+            ' ── La clé et le prompt, là où vivent les autres ────────────────
+            Dim pCle As New Collection
+            pCle.Add(New SqlParameter("@Parameter", "CHATGPT"))
+            Dim dsCle As DataSet = ExecuteSQLds("s0000GetParameter", pCle)
+
+            If dsCle Is Nothing OrElse dsCle.Tables.Count = 0 OrElse dsCle.Tables(0).Rows.Count = 0 Then
+                Alerte(pnlErreur, litErreur, "La clé d'accès à l'IA n'est pas configurée.")
+                Return
+            End If
+            Dim cle As String = Convert.ToString(dsCle.Tables(0).Rows(0)("Value"))
+
+            Dim pPr As New Collection
+            pPr.Add(New SqlParameter("@Parameter", "PROMPT_MAPPING_COMPTES"))
+            Dim dsPr As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", pPr)
+
+            If dsPr Is Nothing OrElse dsPr.Tables.Count = 0 OrElse dsPr.Tables(0).Rows.Count = 0 Then
+                Alerte(pnlErreur, litErreur, "Le prompt de correspondance des comptes n'est pas configuré.")
+                Return
+            End If
+            Dim prompt As String = Convert.ToString(dsPr.Tables(0).Rows(0)("Prompt"))
+
+            ' ── L'appel ─────────────────────────────────────────────────────
+            Dim mapper As New OpenAiPlanComptableMapper(cle)
+            Dim res = Await mapper.ProposerAsync(prompt, source, plan.ToString())
+
+            If res.Propositions.Count = 0 Then
+                Alerte(pnlAvertissement, litAvertissement,
+                       "L'IA n'a proposé aucune correspondance pour ces comptes.")
+                Return
+            End If
+
+            ' ── L'enregistrement, sous contrôle ─────────────────────────────
+            Dim json = Newtonsoft.Json.JsonConvert.SerializeObject(res.Propositions)
+
+            Dim pSave As New Collection
+            pSave.Add(New SqlParameter("@LotId", LotCourant))
+            pSave.Add(New SqlParameter("@CompanyGUID", Company))
+            pSave.Add(New SqlParameter("@Propositions", json))
+            Dim rSave = PremiereLigne(ExecuteSQLds("s0761EnregistrerPropositionsIA", pSave))
+
+            Dim retenues = If(rSave Is Nothing, 0, Convert.ToInt32(rSave("Retenues")))
+            Dim ecartees = If(rSave Is Nothing, 0, Convert.ToInt32(rSave("Ecartees")))
+
+            Rafraichir()
+
+            Dim msg As New StringBuilder()
+            msg.AppendFormat("<b>{0} proposition(s)</b> sur {1} compte(s) soumis. ", retenues, source.Count)
+
+            If ecartees > 0 Then
+                msg.AppendFormat("{0} réponse(s) écartée(s) : compte inconnu de votre plan, " &
+                                 "ou nature incompatible avec le compte d'origine. ", ecartees)
+            End If
+
+            msg.AppendFormat("Coût estimé : {0} US$. ", res.CoutUsd.ToString("N4"))
+            msg.Append("Ce ne sont que des propositions — rien n'est décidé tant que vous n'avez pas enregistré.")
+
+            Alerte(pnlSucces, litSucces, msg.ToString())
+
+        Catch ex As Exception
+            Alerte(pnlErreur, litErreur, "Appel à l'IA : " & Server.HtmlEncode(ex.Message))
+        End Try
+    End Sub
 
     ''' <summary>
     ''' Accepte d'un coup les correspondances où le numéro de compte concorde.
