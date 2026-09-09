@@ -749,11 +749,12 @@
                 <div class="card">
                     <div class="ico">📬</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service IMAP <span class="st st-wip">En développement</span></h3>
+                    <h3>Service IMAP <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Exposera les courriels de la plateforme par le protocole IMAP, pour que
+                        Expose les courriels de la plateforme par le protocole IMAP, pour que
                         l'abonné puisse consulter sa boîte depuis n'importe quel client de
-                        messagerie plutôt que depuis l'ERP seulement.
+                        messagerie plutôt que depuis l'ERP seulement. Écrit et éprouvé ;
+                        il reste à l'installer sur le serveur.
                     </p>
                     <div class="tags">
                         <span class="tag">IMAP</span>
@@ -764,11 +765,12 @@
                 <div class="card">
                     <div class="ico">🧠</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service de traitements IA <span class="st st-wip">En développement</span></h3>
+                    <h3>Service de traitements IA <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Déportera les traitements d'intelligence artificielle hors de l'application
-                        web : lecture des reçus et des documents exécutée en arrière-plan, sans
-                        faire attendre l'utilisateur devant son écran.
+                        Déporte les traitements d'intelligence artificielle hors de l'application
+                        web : lecture des reçus exécutée en arrière-plan, sans faire attendre
+                        l'utilisateur devant son écran. Il crée le fournisseur et le document,
+                        et les comptabilise si la compagnie l'a demandé.
                     </p>
                     <div class="tags">
                         <span class="tag">Traitement asynchrone</span>
@@ -779,15 +781,17 @@
                 <div class="card">
                     <div class="ico">⏱️</div>
                     <p class="role">Arrière-plan</p>
-                    <h3>Service de tâches planifiées <span class="st st-wip">En développement</span></h3>
+                    <h3>Service de tâches planifiées <span class="st st-test">À déployer</span></h3>
                     <p>
-                        Exécutera les traitements récurrents à heure fixe : prélèvements
-                        automatiques, synchronisations bancaires et travaux d'entretien, sans
-                        dépendre d'une session ouverte dans le navigateur.
+                        Exécute les traitements récurrents à heure fixe : rappels de factures,
+                        travaux d'entretien, procédures comptables, sans dépendre d'une session
+                        ouverte dans le navigateur. Ce que fait chaque tâche est défini dans la
+                        console d'administration, pas dans le service.
                     </p>
                     <div class="tags">
                         <span class="tag">Ordonnanceur</span>
                         <span class="tag">Traitements récurrents</span>
+                        <span class="tag">Approbation</span>
                     </div>
                 </div>
 
