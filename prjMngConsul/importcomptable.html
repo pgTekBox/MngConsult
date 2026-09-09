@@ -1,0 +1,1807 @@
+﻿<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>60sec-AI — Migration comptable QuickBooks</title>
+<style>
+    :root {
+        --ink: #020617;
+        --ink-2: #0f172a;
+        --body: #475569;
+        --muted: #64748b;
+        --faint: #94a3b8;
+        --line: #e2e8f0;
+        --line-2: #f1f5f9;
+        --bg: #ffffff;
+        --bg-2: #f8fafc;
+        --blue: #1d4ed8;
+        --blue-2: #2563eb;
+        --sky: #0ea5e9;
+        --blue-bg: #eff6ff;
+        --emerald: #047857;
+        --emerald-bg: #ecfdf5;
+        --amber: #b45309;
+        --amber-bg: #fffbeb;
+        --rose: #be123c;
+        --rose-bg: #fff1f2;
+        --violet: #6d28d9;
+        --violet-bg: #f5f3ff;
+        --radius: 16px;
+        --font: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        --mono: ui-monospace, SFMono-Regular, "Cascadia Mono", Consolas, "Liberation Mono", monospace;
+    }
+
+    * { box-sizing: border-box }
+
+    html { scroll-behavior: smooth }
+
+    body {
+        margin: 0;
+        font-family: var(--font);
+        color: var(--body);
+        background: var(--bg);
+        line-height: 1.65;
+        -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---------------------------------------------------------- Bandeau */
+    .hero {
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #020617 0%, #0f2c6b 55%, #0369a1 100%);
+        color: #fff;
+        padding: 72px 32px 64px;
+    }
+
+    .hero::after {
+        content: "";
+        position: absolute;
+        inset: 0;
+        background-image: linear-gradient(rgba(255,255,255,.05) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.05) 1px, transparent 1px);
+        background-size: 56px 56px;
+        pointer-events: none;
+    }
+
+    .hero-in {
+        position: relative;
+        z-index: 1;
+        max-width: 1240px;
+        margin: 0 auto;
+    }
+
+    .eyebrow {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .14em;
+        text-transform: uppercase;
+        color: #7dd3fc;
+        margin: 0 0 18px;
+    }
+
+    .eyebrow::before {
+        content: "";
+        width: 26px;
+        height: 2px;
+        background: #7dd3fc;
+        display: block;
+    }
+
+    h1 {
+        margin: 0 0 18px;
+        font-size: clamp(32px, 5vw, 52px);
+        line-height: 1.08;
+        letter-spacing: -.025em;
+        font-weight: 800;
+        color: #fff;
+    }
+
+    .lede {
+        margin: 0 0 36px;
+        max-width: 66ch;
+        font-size: clamp(16px, 1.5vw, 19px);
+        color: #cbd5e1;
+    }
+
+    .stats {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+    }
+
+    .stat {
+        border: 1px solid rgba(255,255,255,.22);
+        background: rgba(255,255,255,.09);
+        border-radius: 12px;
+        padding: 12px 18px;
+        min-width: 132px;
+    }
+
+    .stat b {
+        display: block;
+        font-size: 24px;
+        font-weight: 800;
+        color: #fff;
+        line-height: 1.2;
+    }
+
+    .stat span {
+        font-size: 12.5px;
+        color: #bae6fd;
+    }
+
+    /* ------------------------------------------------------- Structure */
+    .shell {
+        max-width: 1240px;
+        margin: 0 auto;
+        padding: 0 32px 96px;
+        display: grid;
+        grid-template-columns: 232px minmax(0, 1fr);
+        gap: 56px;
+    }
+
+    .toc {
+        position: sticky;
+        top: 28px;
+        align-self: start;
+        padding-top: 56px;
+        font-size: 13.5px;
+    }
+
+    .toc p {
+        margin: 0 0 12px;
+        font-size: 11.5px;
+        font-weight: 700;
+        letter-spacing: .12em;
+        text-transform: uppercase;
+        color: var(--faint);
+    }
+
+    .toc a {
+        display: block;
+        padding: 7px 12px;
+        color: var(--muted);
+        text-decoration: none;
+        border-left: 2px solid var(--line);
+        transition: color .15s, border-color .15s, background .15s;
+    }
+
+    .toc a:hover {
+        color: var(--blue);
+        border-left-color: var(--blue);
+        background: var(--blue-bg);
+    }
+
+    main { min-width: 0 }
+
+    section { padding-top: 56px }
+
+    h2 {
+        margin: 0 0 8px;
+        font-size: clamp(24px, 2.6vw, 32px);
+        line-height: 1.2;
+        letter-spacing: -.02em;
+        font-weight: 800;
+        color: var(--ink);
+    }
+
+    h2 .num {
+        display: inline-block;
+        min-width: 34px;
+        font-size: 14px;
+        font-weight: 700;
+        color: var(--sky);
+        vertical-align: 3px;
+    }
+
+    .sub {
+        margin: 0 0 28px 34px;
+        max-width: 72ch;
+        color: var(--muted);
+        font-size: 15.5px;
+    }
+
+    h3 {
+        margin: 0 0 6px;
+        font-size: 17px;
+        font-weight: 700;
+        color: var(--ink);
+        letter-spacing: -.01em;
+    }
+
+    h4 {
+        margin: 26px 0 10px;
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--faint);
+    }
+
+    p { margin: 0 0 12px }
+
+    a { color: var(--blue) }
+
+    code {
+        font-family: var(--mono);
+        font-size: .88em;
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        color: var(--ink-2);
+    }
+
+    /* ----------------------------------------------------------- Cartes */
+    .grid {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    }
+
+    .card {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 22px;
+        background: var(--bg);
+        break-inside: avoid;
+    }
+
+    .card > p:last-child { margin-bottom: 0 }
+
+    .card h3 .st {
+        margin-left: 8px;
+        vertical-align: 2px;
+    }
+
+    .card .role {
+        font-size: 12px;
+        font-weight: 700;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--sky);
+        margin: 0 0 6px;
+    }
+
+    .card p {
+        font-size: 14.5px;
+        color: var(--body);
+    }
+
+    .ico {
+        width: 40px;
+        height: 40px;
+        border-radius: 11px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 19px;
+        margin-bottom: 14px;
+        background: var(--blue-bg);
+    }
+
+    .tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 6px;
+        margin-top: 14px;
+    }
+
+    .tag {
+        font-size: 12px;
+        padding: 3px 9px;
+        border-radius: 999px;
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    /* ---------------------------------------------------------- Statuts */
+    .st {
+        display: inline-block;
+        font-size: 11.5px;
+        font-weight: 700;
+        padding: 3px 10px;
+        border-radius: 999px;
+        white-space: nowrap;
+    }
+
+    .st-ok { background: var(--emerald-bg); color: var(--emerald) }
+    .st-test { background: var(--blue-bg); color: var(--blue) }
+    .st-wip { background: var(--amber-bg); color: var(--amber) }
+    .st-blocked { background: var(--rose-bg); color: var(--rose) }
+
+    /* --------------------------------------------- Fiches de paiement */
+    .rail {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        overflow: hidden;
+        margin-bottom: 18px;
+        break-inside: avoid;
+    }
+
+    .rail-head {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 18px 22px;
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
+        flex-wrap: wrap;
+    }
+
+    .rail-head .ico {
+        margin: 0;
+        background: #fff;
+        border: 1px solid var(--line);
+    }
+
+    .rail-head h3 { margin: 0 }
+
+    .rail-head .dir {
+        font-size: 13px;
+        color: var(--muted);
+    }
+
+    .rail-head .st { margin-left: auto }
+
+    .rail-body { padding: 22px }
+
+    .rail-body > p:first-child { margin-top: 0 }
+
+    ul.checks {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+    }
+
+    ul.checks li {
+        position: relative;
+        padding: 0 0 0 26px;
+        margin-bottom: 9px;
+        font-size: 14.5px;
+    }
+
+    ul.checks li::before {
+        content: "";
+        position: absolute;
+        left: 6px;
+        top: 9px;
+        width: 6px;
+        height: 6px;
+        border-radius: 999px;
+        background: var(--sky);
+    }
+
+    ul.checks li:last-child { margin-bottom: 0 }
+
+    ul.checks li b { color: var(--ink-2) }
+
+    .note {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        background: var(--amber-bg);
+        border: 1px solid #fde68a;
+        color: #78350f;
+    }
+
+    .note.info {
+        background: var(--blue-bg);
+        border-color: #bfdbfe;
+        color: #1e3a8a;
+    }
+
+    .note .n-ico { flex: 0 0 auto; font-size: 16px; line-height: 1.4 }
+
+    .note p { margin: 0; font-size: 14px }
+
+    /* --------------------------------------------------------- Tableau */
+    .table-wrap {
+        overflow-x: auto;
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+    }
+
+    table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 14px;
+        min-width: 720px;
+    }
+
+    th, td {
+        text-align: left;
+        padding: 12px 16px;
+        border-bottom: 1px solid var(--line-2);
+        vertical-align: top;
+    }
+
+    th {
+        font-size: 11.5px;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--faint);
+        background: var(--bg-2);
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+    }
+
+    td b { color: var(--ink-2) }
+
+    tr:last-child td { border-bottom: 0 }
+
+    /* ------------------------------------------------------- Domaines */
+    .mods {
+        display: grid;
+        gap: 14px;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+    }
+
+    .mod {
+        border: 1px solid var(--line);
+        border-left: 3px solid var(--blue);
+        border-radius: 12px;
+        padding: 18px 20px;
+        break-inside: avoid;
+    }
+
+    .mod h3 {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 10px;
+        font-size: 15.5px;
+    }
+
+    .mod ul {
+        margin: 0;
+        padding-left: 18px;
+        font-size: 14px;
+        color: var(--body);
+    }
+
+    .mod li { margin-bottom: 4px }
+
+    /* --------------------------------------------------------- Divers */
+    .split {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    }
+
+    footer {
+        border-top: 1px solid var(--line);
+        background: var(--bg-2);
+        padding: 36px 32px;
+        font-size: 13.5px;
+        color: var(--muted);
+    }
+
+    .foot-in {
+        max-width: 1240px;
+        margin: 0 auto;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 16px;
+        justify-content: space-between;
+    }
+
+    /* -------------------------------------------------------- Préambule */
+    .preface {
+        display: grid;
+        gap: 16px;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        padding-top: 56px;
+    }
+
+    .panel {
+        border: 1px solid var(--line);
+        border-radius: var(--radius);
+        padding: 24px;
+        break-inside: avoid;
+    }
+
+    .panel h3 {
+        display: flex;
+        align-items: center;
+        gap: 9px;
+        margin-bottom: 12px;
+        font-size: 16px;
+    }
+
+    .panel p {
+        font-size: 14.5px;
+    }
+
+    .panel p:last-child { margin-bottom: 0 }
+
+    .panel-state {
+        background: var(--amber-bg);
+        border-color: #fde68a;
+    }
+
+    .panel-state h3 { color: #78350f }
+
+    .panel-state p { color: #854d0e }
+
+    .panel-demo {
+        background: var(--blue-bg);
+        border-color: #bfdbfe;
+    }
+
+    .panel-demo h3 { color: #1e3a8a }
+
+    .panel-demo p { color: #1e40af }
+
+    .accounts {
+        list-style: none;
+        margin: 14px 0;
+        padding: 0;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+    }
+
+    .accounts li {
+        font-family: var(--mono);
+        font-size: 13.5px;
+        color: var(--ink-2);
+        background: #fff;
+        border: 1px solid #bfdbfe;
+        border-radius: 8px;
+        padding: 6px 12px;
+    }
+
+    .fine {
+        font-size: 13px !important;
+        opacity: .85;
+    }
+
+    @media (max-width: 1023px) {
+        .shell {
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0;
+            padding: 0 24px 64px;
+        }
+
+        .toc { display: none }
+
+        .hero { padding: 56px 24px 48px }
+    }
+
+    @media print {
+        .toc, .hero::after { display: none }
+        .hero { background: #020617; padding: 32px }
+        .shell { display: block; padding: 0 24px }
+        section { padding-top: 32px }
+        .card, .rail, .mod { break-inside: avoid }
+        a { color: inherit; text-decoration: none }
+    }
+
+    /* ------------------------------------- Ajouts propres à cette page */
+    .steps { counter-reset: st; list-style: none; margin: 0; padding: 0 }
+
+    .steps > li {
+        counter-increment: st;
+        position: relative;
+        padding: 0 0 0 46px;
+        margin: 0 0 20px;
+        break-inside: avoid;
+    }
+
+    .steps > li::before {
+        content: counter(st);
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 30px;
+        height: 30px;
+        border-radius: 999px;
+        background: var(--blue-bg);
+        color: var(--blue);
+        font-size: 13px;
+        font-weight: 800;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 1px solid #bfdbfe;
+    }
+
+    .steps > li > h4 {
+        margin: 2px 0 6px;
+        font-size: 16px;
+        color: var(--ink-2);
+        font-weight: 700;
+        /* la feuille partagee met les h4 en petites capitales espacees :
+           ici ce sont des titres d etape, pas des etiquettes */
+        text-transform: none;
+        letter-spacing: -.01em;
+    }
+
+    .steps > li > p { margin: 0 0 8px; font-size: 14.5px }
+
+    .steps.done > li::before { background: var(--emerald-bg); color: var(--emerald); border-color: #a7f3d0 }
+
+    .phase {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        font-size: 11.5px;
+        font-weight: 800;
+        letter-spacing: .1em;
+        text-transform: uppercase;
+        color: var(--muted);
+        margin: 0 0 4px;
+    }
+
+    pre.code {
+        margin: 12px 0 0;
+        padding: 14px 16px;
+        background: var(--ink);
+        color: #e2e8f0;
+        border-radius: 12px;
+        overflow-x: auto;
+        font-family: var(--mono);
+        font-size: 12.5px;
+        line-height: 1.6;
+    }
+
+    pre.code .c { color: #64748b }
+    pre.code .k { color: #7dd3fc }
+    pre.code .s { color: #86efac }
+
+    .danger {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        background: var(--rose-bg);
+        border: 1px solid #fecdd3;
+        color: #881337;
+    }
+
+    .danger p { margin: 0; font-size: 14px }
+    .danger .n-ico { flex: 0 0 auto; font-size: 16px; line-height: 1.4 }
+
+    .good {
+        display: flex;
+        gap: 12px;
+        margin-top: 18px;
+        padding: 14px 16px;
+        border-radius: 12px;
+        font-size: 14px;
+        background: var(--emerald-bg);
+        border: 1px solid #a7f3d0;
+        color: #064e3b;
+    }
+
+    .good p { margin: 0; font-size: 14px }
+    .good .n-ico { flex: 0 0 auto; font-size: 16px; line-height: 1.4 }
+
+    ul.cl { list-style: none; margin: 10px 0 0; padding: 0 }
+
+    ul.cl li {
+        position: relative;
+        padding: 5px 0 5px 30px;
+        font-size: 14.5px;
+        border-bottom: 1px solid var(--line-2);
+    }
+
+    ul.cl li:last-child { border-bottom: 0 }
+
+    ul.cl li::before {
+        content: "";
+        position: absolute;
+        left: 2px;
+        top: 10px;
+        width: 15px;
+        height: 15px;
+        border: 2px solid var(--faint);
+        border-radius: 4px;
+    }
+
+    table td code, table th code, p code, li code {
+        font-family: var(--mono);
+        font-size: 12.5px;
+        background: var(--bg-2);
+        border: 1px solid var(--line);
+        border-radius: 5px;
+        padding: 1px 5px;
+        white-space: nowrap;
+    }
+
+    .arrow { color: var(--faint); padding: 0 4px }
+
+    @media print {
+        .toc { display: none }
+        .hero { padding: 32px }
+    }
+</style>
+</head>
+<body>
+
+<header class="hero">
+    <div class="hero-in">
+        <p class="eyebrow">Migration de données</p>
+        <h1>QuickBooks &nbsp;→&nbsp; 60sec-AI</h1>
+        <p class="lede">
+            L'ordre à suivre pour reprendre une comptabilité tenue dans QuickBooks et
+            obtenir, dans l'ERP, un jeu de données complet et vérifiable. Cet ordre n'est
+            pas arbitraire : il découle des dépendances réelles du schéma. Une ligne
+            d'écriture exige un compte, une écriture exige une période et un journal, un
+            document exige un tiers. On ne peut pas charger dans le désordre.
+        </p>
+        <div class="stats">
+            <div class="stat"><b>6</b><span>phases</span></div>
+            <div class="stat"><b>31</b><span>étapes</span></div>
+            <div class="stat"><b>13</b><span>tables cibles</span></div>
+            <div class="stat"><b>5</b><span>pièges à connaître</span></div>
+            <div class="stat"><b>1</b><span>contrôle qui décide de tout</span></div>
+        </div>
+    </div>
+</header>
+
+<div class="shell">
+
+    <nav class="toc">
+        <p>Sommaire</p>
+        <a href="#avant">Avant de commencer</a>
+        <a href="#decisions">1 &nbsp;Les deux décisions</a>
+        <a href="#extraire">2 &nbsp;Extraire de QuickBooks</a>
+        <a href="#preparer">3 &nbsp;Préparer l'ERP</a>
+        <a href="#referentiels">4 &nbsp;Les référentiels</a>
+        <a href="#soldes">5 &nbsp;Les soldes d'ouverture</a>
+        <a href="#historique">6 &nbsp;L'historique</a>
+        <a href="#controles">7 &nbsp;Les contrôles</a>
+        <a href="#correspondances">8 &nbsp;Correspondances champ à champ</a>
+        <a href="#pieges">9 &nbsp;Les pièges</a>
+        <a href="#chantier">10 &nbsp;Ce qui reste à construire</a>
+        <a href="#annexe">Annexe &nbsp;Ordre récapitulatif</a>
+    </nav>
+
+    <main>
+
+        <!-- ========================================== AVANT DE COMMENCER -->
+        <div class="preface" id="avant">
+
+            <div class="panel panel-state">
+                <h3>⚠️ Une migration comptable n'est pas un import de données</h3>
+                <p>
+                    Le résultat se juge sur un seul critère : <b>la balance de vérification
+                    de l'ERP doit être identique à celle de QuickBooks, au cent près, à la
+                    date de bascule</b>. Tout le reste — clients, produits, factures — n'est
+                    que de la matière première pour y arriver.
+                </p>
+                <p>
+                    Tant que cette égalité n'est pas obtenue, la migration n'est pas finie,
+                    même si toutes les données sont chargées.
+                </p>
+            </div>
+
+            <div class="panel panel-demo">
+                <h3>👥 Qui fait quoi</h3>
+                <ul class="accounts">
+                    <li>Le comptable : décisions, correspondance des comptes, validation</li>
+                    <li>Le développeur : extraction, transformation, chargement</li>
+                    <li>Les deux ensemble : la phase 7, les contrôles</li>
+                </ul>
+                <p class="fine">
+                    La correspondance du plan comptable (étape 13) est le seul travail que le
+                    développeur ne peut pas faire seul.
+                </p>
+            </div>
+
+        </div>
+
+        <!-- ================================================ 1. DÉCISIONS -->
+        <section id="decisions">
+            <h2><span class="num">01</span>Les deux décisions</h2>
+            <p class="sub">
+                Elles commandent tout le reste. Prises à l'envers, elles se paient par une
+                reprise complète. À trancher avant d'écrire la moindre ligne de code.
+            </p>
+
+            <h3>1.1 &nbsp;Quelle version de QuickBooks ?</h3>
+            <p>
+                La méthode d'extraction en dépend entièrement. Ce n'est pas un détail
+                d'outillage : les deux versions ne donnent pas accès aux mêmes données.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>&nbsp;</th>
+                            <th>QuickBooks Online</th>
+                            <th>QuickBooks Desktop</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>Extraction courante</b></td>
+                            <td>Chaque rapport s'exporte en Excel ou CSV</td>
+                            <td>Rapports en Excel, ou export <code>.IIF</code></td>
+                        </tr>
+                        <tr>
+                            <td><b>Extraction complète</b></td>
+                            <td>API REST (OAuth 2.0), tous les objets</td>
+                            <td>SDK <i>QBFC</i> en local, ou <code>.QBW</code> via ODBC tiers</td>
+                        </tr>
+                        <tr>
+                            <td><b>Détail des écritures</b></td>
+                            <td>Rapport <i>General Ledger</i> ou API <code>JournalEntry</code></td>
+                            <td>Rapport <i>General Ledger</i>, ou <code>.IIF</code> (incomplet)</td>
+                        </tr>
+                        <tr>
+                            <td><b>Pièces jointes</b></td>
+                            <td>API <code>Attachable</code></td>
+                            <td>Dossier local, à récupérer à la main</td>
+                        </tr>
+                        <tr>
+                            <td><b>Recommandation</b></td>
+                            <td>API si l'historique est repris, sinon rapports</td>
+                            <td>Rapports Excel — l'<code>.IIF</code> perd trop d'information</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note">
+                <span class="n-ico">💡</span>
+                <p>
+                    L'<code>.IIF</code> paraît séduisant parce qu'il est textuel et simple. Il
+                    ne porte ni les taxes ligne à ligne, ni les liens entre facture et
+                    règlement, ni les pièces jointes. Pour une reprise comptable il coûte plus
+                    cher qu'il ne rapporte.
+                </p>
+            </div>
+
+            <h3 style="margin-top:34px">1.2 &nbsp;Quelle profondeur d'historique ?</h3>
+            <p>
+                Trois stratégies possibles. La deuxième est celle que je recommande dans la
+                très grande majorité des cas.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Stratégie</th>
+                            <th>Ce qu'on charge</th>
+                            <th>Effort</th>
+                            <th>Risque</th>
+                            <th>Ce qu'on perd</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><b>A — Soldes seuls</b></td>
+                            <td>Une écriture d'ouverture, les factures ouvertes, les tiers</td>
+                            <td>Faible</td>
+                            <td>Faible</td>
+                            <td>Tout l'historique : comparatifs, analyses par période</td>
+                        </tr>
+                        <tr>
+                            <td><b>B — Soldes + exercice courant</b> <span class="st st-ok">recommandé</span></td>
+                            <td>A, plus toutes les écritures depuis l'ouverture de l'exercice</td>
+                            <td>Moyen</td>
+                            <td>Moyen</td>
+                            <td>Les exercices antérieurs, qui restent dans QuickBooks</td>
+                        </tr>
+                        <tr>
+                            <td><b>C — Historique complet</b></td>
+                            <td>Chaque écriture depuis le premier jour</td>
+                            <td>Élevé</td>
+                            <td>Élevé</td>
+                            <td>Rien — mais chaque exercice doit être créé et rapproché</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note">
+                <span class="n-ico">📅</span>
+                <p>
+                    <b>La date de bascule doit être une fin d'exercice, ou à défaut une fin de
+                    mois close.</b> Basculer en milieu de période oblige à reprendre un rapport
+                    de taxes partiel et une conciliation bancaire partielle : deux sources
+                    d'écarts qu'on s'évite en attendant la bonne date.
+                </p>
+            </div>
+
+            <div class="danger">
+                <span class="n-ico">🛑</span>
+                <p>
+                    La stratégie C exige de créer les exercices antérieurs dans
+                    <code>T111Exercices</code>. La base ne contient aujourd'hui
+                    <b>que l'exercice 2026, au statut OUVERT</b>. Rien ne peut être daté d'avant
+                    tant que l'exercice correspondant et ses douze périodes n'existent pas.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================================================= 2. EXTRAIRE -->
+        <section id="extraire">
+            <h2><span class="num">02</span>Extraire de QuickBooks</h2>
+            <p class="sub">
+                Dans cet ordre : chaque rapport sert à contrôler le suivant. Et une règle
+                absolue — <b>tous les rapports sont tirés à la même date de bascule</b>, dans
+                la même séance. Un rapport pris trois jours plus tard ne se rapproche plus
+                d'aucun autre.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th style="width:34px">#</th>
+                            <th>Donnée</th>
+                            <th>Rapport QuickBooks</th>
+                            <th>Ce qu'on en fait</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td><b>Plan comptable</b></td>
+                            <td><i>Account Listing</i> / Liste des comptes</td>
+                            <td>La correspondance de l'étape 13</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td><b>Balance de vérification</b></td>
+                            <td><i>Trial Balance</i> à la date de bascule</td>
+                            <td>La pièce maîtresse : la cible du contrôle final</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td><b>Clients</b></td>
+                            <td><i>Customer Contact List</i></td>
+                            <td><code>T050Party</code> + <code>T054PartyAddress</code></td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td><b>Fournisseurs</b></td>
+                            <td><i>Vendor Contact List</i></td>
+                            <td>Idem, avec un autre <code>Type</code></td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td><b>Produits et services</b></td>
+                            <td><i>Item Listing</i> — avec comptes de vente et d'achat</td>
+                            <td><code>T075Products</code></td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td><b>Balance âgée clients</b></td>
+                            <td><i>A/R Aging Detail</i></td>
+                            <td>Contrôle du solde clients</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td><b>Balance âgée fournisseurs</b></td>
+                            <td><i>A/P Aging Detail</i></td>
+                            <td>Contrôle du solde fournisseurs</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td><b>Factures clients ouvertes</b></td>
+                            <td><i>Open Invoices</i>, détaillé par ligne</td>
+                            <td><code>T060Document</code> + <code>T061DocumentLine</code></td>
+                        </tr>
+                        <tr>
+                            <td>9</td>
+                            <td><b>Factures fournisseurs ouvertes</b></td>
+                            <td><i>Unpaid Bills Detail</i></td>
+                            <td>Idem, type document différent</td>
+                        </tr>
+                        <tr>
+                            <td>10</td>
+                            <td><b>Acomptes et règlements partiels</b></td>
+                            <td><i>Transaction List by Customer</i> filtré Payment</td>
+                            <td><code>T140Reglement</code> + <code>T141ReglementDocument</code></td>
+                        </tr>
+                        <tr>
+                            <td>11</td>
+                            <td><b>Soldes bancaires</b></td>
+                            <td>Dernier <i>Reconciliation Report</i> de chaque compte</td>
+                            <td>Contrôle, et <code>T142ReleveBancaire</code></td>
+                        </tr>
+                        <tr>
+                            <td>12</td>
+                            <td><b>Opérations non rapprochées</b></td>
+                            <td><i>Uncleared Transactions</i> par compte</td>
+                            <td>À reporter, sinon le rapprochement suivant est faux</td>
+                        </tr>
+                        <tr>
+                            <td>13</td>
+                            <td><b>Taxes</b></td>
+                            <td><i>Sales Tax Liability</i> / rapport TPS-TVQ</td>
+                            <td>Contrôle des comptes de taxes</td>
+                        </tr>
+                        <tr>
+                            <td>14</td>
+                            <td><b>Grand livre</b></td>
+                            <td><i>General Ledger</i> sur la période retenue</td>
+                            <td>Stratégies B et C seulement</td>
+                        </tr>
+                        <tr>
+                            <td>15</td>
+                            <td><b>Inventaire</b></td>
+                            <td><i>Inventory Valuation Summary</i></td>
+                            <td>Si vous tenez un inventaire permanent</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="danger">
+                <span class="n-ico">📆</span>
+                <p>
+                    <b>Convertissez toutes les dates en <code>aaaa-mm-jj</code> dès
+                    l'extraction.</b> QuickBooks en configuration américaine exporte en
+                    <code>mm/jj/aaaa</code> ; la fonction <code>fn_StringToDateTime</code> de
+                    l'ERP essaie ISO, puis le format <b>103 (jj/mm)</b>, puis 101 (mm/jj). Une
+                    date <code>03/04/2026</code> sera donc lue <b>3 avril</b> au lieu du
+                    4 mars. L'erreur est silencieuse : rien ne plante, les documents partent
+                    simplement dans la mauvaise période.
+                </p>
+            </div>
+
+            <div class="note">
+                <span class="n-ico">🗂️</span>
+                <p>
+                    Conservez les fichiers bruts, non retouchés, dans un dossier daté. Ils sont
+                    la preuve de ce qui a été extrait, et la seule référence si un écart
+                    apparaît trois mois plus tard.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================================================= 3. PRÉPARER -->
+        <section id="preparer">
+            <h2><span class="num">03</span>Préparer l'ERP</h2>
+            <p class="sub">
+                Rien ne se charge avant que ces cinq fondations soient posées. Chacune est une
+                contrainte d'intégrité référentielle : sans elle, l'insertion échoue.
+            </p>
+
+            <ol class="steps" start="16" style="counter-reset:st 15">
+                <li>
+                    <h4>La compagnie et ses paramètres</h4>
+                    <p>
+                        <code>T010Company</code>, puis <code>T100ParamComptable</code> et
+                        <code>T101ParamValues</code>. Chaque compagnie possède son propre jeu de
+                        paramètres, cloné de la compagnie modèle
+                        <code>00000000-…-0001</code> par <code>s0150GetParamsForCompany</code>.
+                        Vérifiez au minimum : dénomination, numéros de TPS et TVQ, adresse,
+                        devise, format de numérotation des factures.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les exercices et les périodes</h4>
+                    <p>
+                        <code>T111Exercices</code> (année, date de début, date de fin, statut)
+                        puis <code>T112Periodes</code> — douze lignes par exercice.
+                        <code>T135Ecritures.PeriodeId</code> ne peut pas être nul : aucune
+                        écriture n'existe sans sa période.
+                    </p>
+                    <pre class="code"><span class="c">-- Un exercice, et ses douze périodes</span>
+<span class="k">INSERT INTO</span> dbo.T111Exercices (annee, date_debut, date_fin, statut, CompanyGUID)
+<span class="k">VALUES</span> (2025, <span class="s">'2025-01-01'</span>, <span class="s">'2025-12-31'</span>, <span class="s">'OUVERT'</span>, @CompanyGUID);
+
+<span class="k">INSERT INTO</span> dbo.T112Periodes (exercice_id, mois, statut, Libelle, CompanyGUID)
+<span class="k">SELECT</span> @ExerciceId, n, <span class="s">'OUVERT'</span>,
+       <span class="k">DATENAME</span>(MONTH, <span class="k">DATEFROMPARTS</span>(2025, n, 1)), @CompanyGUID
+<span class="k">FROM</span> (<span class="k">VALUES</span> (1),(2),(3),(4),(5),(6),(7),(8),(9),(10),(11),(12)) v(n);</pre>
+                </li>
+                <li>
+                    <h4>La correspondance du plan comptable</h4>
+                    <p>
+                        <b>Le travail le plus important de toute la migration</b>, et le seul qui
+                        ne soit pas technique. Voir le piège 1 et la section 8.1.
+                    </p>
+                    <p>
+                        Le livrable est un fichier à trois colonnes : compte QuickBooks, compte
+                        ERP, et une note quand la correspondance n'est pas évidente. Il est
+                        relu et signé par le comptable avant tout chargement.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les journaux</h4>
+                    <p>
+                        <code>T130Journaux</code>. Huit journaux existent déjà :
+                        <span class="tag">VTE</span> ventes,
+                        <span class="tag">ACH</span> achats,
+                        <span class="tag">BAN</span> et <span class="tag">BQ1</span> banque,
+                        <span class="tag">CAI</span> caisse,
+                        <span class="tag">OD</span> opérations diverses,
+                        <span class="tag">PAI</span> paie,
+                        <span class="tag">INV</span> inventaire.
+                        L'écriture d'ouverture ira dans <span class="tag">OD</span>.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les taux de taxes</h4>
+                    <p>
+                        <code>T069TaxeRate</code>, par province (<code>StateId</code>) et par date
+                        de validité. Les taux doivent couvrir toute la période chargée : une
+                        facture de 2024 a besoin des taux de 2024.
+                    </p>
+                </li>
+            </ol>
+        </section>
+
+        <!-- ============================================= 4. RÉFÉRENTIELS -->
+        <section id="referentiels">
+            <h2><span class="num">04</span>Les référentiels</h2>
+            <p class="sub">
+                Tiers, produits et comptes bancaires. C'est la seule phase déjà outillée :
+                l'écran <span class="tag">wbfImport.aspx</span> de l'ERP importe clients,
+                fournisseurs et produits à partir d'un fichier, avec lecture assistée par IA
+                (<code>s0600</code> à <code>s0609</code>).
+            </p>
+
+            <ol class="steps" start="21" style="counter-reset:st 20">
+                <li>
+                    <h4>Les clients</h4>
+                    <p>
+                        <code>T050Party</code> avec <code>Type</code> = client, puis
+                        <code>T054PartyAddress</code>. Conservez le nom QuickBooks à
+                        l'identique dans <code>Name</code> : c'est lui qui servira à rattacher
+                        les factures à l'étape 24.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les fournisseurs</h4>
+                    <p>
+                        Même table, <code>Type</code> différent. Attention aux tiers qui sont à
+                        la fois client et fournisseur dans QuickBooks : ils y existent en deux
+                        fiches, avec deux soldes distincts. Décidez avant de charger si vous
+                        les fusionnez ou non.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les produits et services</h4>
+                    <p>
+                        <code>T075Products</code>. Les colonnes <code>CompteVente</code> et
+                        <code>CompteAchat</code> doivent pointer vers des comptes issus de la
+                        correspondance de l'étape 18 — sinon les documents s'imputeront au
+                        mauvais endroit, et l'erreur ne se verra qu'à la balance.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les comptes bancaires</h4>
+                    <p>
+                        Un compte du plan comptable par compte bancaire réel, plus l'entrée
+                        correspondante côté rapprochement. Notez le solde de chaque compte à la
+                        date de bascule : il servira au contrôle 31.
+                    </p>
+                </li>
+            </ol>
+        </section>
+
+        <!-- ================================================== 5. SOLDES -->
+        <section id="soldes">
+            <h2><span class="num">05</span>Les soldes d'ouverture</h2>
+            <p class="sub">
+                Le cœur de la migration, et l'endroit où se logent les erreurs les plus
+                coûteuses. Lisez le piège 2 avant de commencer cette phase.
+            </p>
+
+            <ol class="steps" start="25" style="counter-reset:st 24">
+                <li>
+                    <h4>L'écriture d'ouverture</h4>
+                    <p>
+                        Une écriture dans le journal <span class="tag">OD</span>, datée du jour
+                        de bascule, qui reprend la balance de vérification de QuickBooks —
+                        <b>moins les postes qui seront réintroduits par les documents ouverts</b>.
+                    </p>
+                    <p>
+                        Elle s'écrit dans <code>T135Ecritures</code> (l'entête) et
+                        <code>T136LignesEcriture</code> (une ligne par compte). Le total des
+                        débits doit égaler le total des crédits.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les factures clients ouvertes</h4>
+                    <p>
+                        <code>T060Document</code> + <code>T061DocumentLine</code>, en brouillon
+                        d'abord, puis comptabilisées. La comptabilisation
+                        (<code>sp_ComptabiliserDocument</code>) génère l'écriture comptable et
+                        le lien dans <code>T137DocumentEcriture</code>.
+                    </p>
+                </li>
+                <li>
+                    <h4>Les factures fournisseurs ouvertes</h4>
+                    <p>Même mécanique, type de document différent.</p>
+                </li>
+                <li>
+                    <h4>Les règlements partiels</h4>
+                    <p>
+                        <code>T140Reglement</code> pour l'encaissement ou le décaissement,
+                        <code>T141ReglementDocument</code> pour son imputation sur une ou
+                        plusieurs factures. Une facture partiellement réglée dans QuickBooks
+                        doit se retrouver avec le même solde ici.
+                    </p>
+                </li>
+            </ol>
+
+            <h3 style="margin-top:34px">Ce qui va dans l'écriture d'ouverture — et ce qui n'y va pas</h3>
+            <p>
+                C'est la table de décision la plus importante du document.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Poste de la balance QuickBooks</th>
+                            <th>Dans l'écriture d'ouverture ?</th>
+                            <th>Pourquoi</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Encaisse, banque</td>
+                            <td><b style="color:var(--emerald)">Oui</b></td>
+                            <td>Aucun document ne le régénère</td>
+                        </tr>
+                        <tr>
+                            <td><b>Comptes clients (A/R)</b></td>
+                            <td><b style="color:var(--rose)">Non</b></td>
+                            <td>Reconstitué par les factures de l'étape 26</td>
+                        </tr>
+                        <tr>
+                            <td><b>Comptes fournisseurs (A/P)</b></td>
+                            <td><b style="color:var(--rose)">Non</b></td>
+                            <td>Reconstitué par les factures de l'étape 27</td>
+                        </tr>
+                        <tr>
+                            <td>Stocks, immobilisations</td>
+                            <td><b style="color:var(--emerald)">Oui</b></td>
+                            <td>Aucun document ne les régénère</td>
+                        </tr>
+                        <tr>
+                            <td>TPS et TVQ à payer / à recevoir</td>
+                            <td><b style="color:var(--amber)">Attention</b></td>
+                            <td>Oui pour la part antérieure ; la part portée par les factures ouvertes revient avec elles</td>
+                        </tr>
+                        <tr>
+                            <td>Dettes, emprunts, capital</td>
+                            <td><b style="color:var(--emerald)">Oui</b></td>
+                            <td>Aucun document ne les régénère</td>
+                        </tr>
+                        <tr>
+                            <td>Produits et charges</td>
+                            <td><b style="color:var(--amber)">Selon la date</b></td>
+                            <td>À zéro si la bascule est une fin d'exercice ; sinon, le cumul depuis l'ouverture</td>
+                        </tr>
+                        <tr>
+                            <td>Bénéfices non répartis</td>
+                            <td><b style="color:var(--emerald)">Oui</b></td>
+                            <td>Sert de contrepartie d'équilibrage</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="good">
+                <span class="n-ico">✅</span>
+                <p>
+                    <b>Le contrôle immédiat :</b> une fois les étapes 25 à 28 passées, la
+                    balance de l'ERP doit déjà égaler celle de QuickBooks. Si ce n'est pas le
+                    cas, ne continuez pas — l'écart ne se résorbera pas tout seul, et chaque
+                    étape suivante le rendra plus difficile à localiser.
+                </p>
+            </div>
+        </section>
+
+        <!-- =============================================== 6. HISTORIQUE -->
+        <section id="historique">
+            <h2><span class="num">06</span>L'historique</h2>
+            <p class="sub">
+                Stratégies B et C seulement. À ne commencer qu'une fois les soldes d'ouverture
+                justes : l'historique s'empile <b>avant</b> la date de bascule et ne doit rien
+                changer au solde de cette date.
+            </p>
+
+            <ol class="steps" start="29" style="counter-reset:st 28">
+                <li>
+                    <h4>Les écritures antérieures, exercice par exercice</h4>
+                    <p>
+                        <code>T135Ecritures</code> et <code>T136LignesEcriture</code>, chargées
+                        du plus ancien au plus récent. Après chaque exercice, comparez la
+                        balance de fin d'exercice de l'ERP à celle de QuickBooks avant de
+                        passer au suivant. Un écart trouvé sur un exercice se corrige en
+                        minutes ; le même écart trouvé cinq exercices plus tard se cherche
+                        pendant des jours.
+                    </p>
+                    <p>
+                        Renseignez <code>SourceType</code> et <code>SourceId</code> pour garder
+                        la trace de l'origine QuickBooks de chaque écriture.
+                    </p>
+                </li>
+            </ol>
+
+            <div class="note">
+                <span class="n-ico">⚖️</span>
+                <p>
+                    Les écritures historiques se chargent <b>directement</b> dans
+                    <code>T135</code>/<code>T136</code>, sans passer par des documents. Recréer
+                    dix ans de factures pour régénérer leurs écritures coûterait beaucoup plus
+                    cher, et les numéros de document seraient de toute façon faux.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================================================ 7. CONTRÔLES -->
+        <section id="controles">
+            <h2><span class="num">07</span>Les contrôles</h2>
+            <p class="sub">
+                On ne bascule pas tant que ces cinq contrôles ne passent pas. Ils se font à
+                deux, développeur et comptable, sur les rapports extraits à la phase 2.
+            </p>
+
+            <ol class="steps" start="30" style="counter-reset:st 29">
+                <li>
+                    <p class="phase">Le contrôle qui décide de tout</p>
+                    <h4>Balance de vérification</h4>
+                    <p>
+                        Compte par compte, ERP contre QuickBooks, à la date de bascule.
+                        <b>Zéro écart toléré.</b> Un écart d'un cent est un écart.
+                    </p>
+                    <pre class="code"><span class="c">-- Balance de vérification de l'ERP à une date donnée</span>
+<span class="k">SELECT</span> pc.Compte, pc.Nom,
+       <span class="k">SUM</span>(l.MontantDebit)  <span class="k">AS</span> Debit,
+       <span class="k">SUM</span>(l.MontantCredit) <span class="k">AS</span> Credit,
+       <span class="k">SUM</span>(l.MontantDebit) - <span class="k">SUM</span>(l.MontantCredit) <span class="k">AS</span> Solde
+  <span class="k">FROM</span> dbo.T136LignesEcriture l
+  <span class="k">JOIN</span> dbo.T135Ecritures     e  <span class="k">ON</span> e.Id = l.EcrituresId
+  <span class="k">JOIN</span> dbo.T121PlanComptable pc <span class="k">ON</span> pc.Id = l.PlanComptableId
+ <span class="k">WHERE</span> e.CompanyGUID  = @CompanyGUID
+   <span class="k">AND</span> e.DateEcriture &lt;= @DateBascule
+ <span class="k">GROUP BY</span> pc.Compte, pc.Nom
+ <span class="k">HAVING</span> <span class="k">SUM</span>(l.MontantDebit) &lt;&gt; 0 <span class="k">OR</span> <span class="k">SUM</span>(l.MontantCredit) &lt;&gt; 0
+ <span class="k">ORDER BY</span> pc.Compte;</pre>
+                </li>
+                <li>
+                    <h4>Les quatre contrôles de détail</h4>
+                    <ul class="cl">
+                        <li><b>Balance âgée clients</b> — total et découpage par tranche d'âge, contre le rapport 6</li>
+                        <li><b>Balance âgée fournisseurs</b> — contre le rapport 7</li>
+                        <li><b>Soldes bancaires</b> — contre le rapport 11, en tenant compte des opérations non rapprochées du rapport 12</li>
+                        <li><b>Comptes de taxes</b> — TPS et TVQ à payer et à recevoir, contre le rapport 13</li>
+                    </ul>
+                    <p style="margin-top:12px">
+                        La balance âgée est le contrôle qui révèle les erreurs de date : un
+                        total juste avec un découpage par âge faux, c'est le piège des dates
+                        américaines (voir phase 2).
+                    </p>
+                </li>
+            </ol>
+
+            <h3 style="margin-top:34px">Après les contrôles</h3>
+            <ul class="cl">
+                <li>Passer QuickBooks en lecture seule, et noter la date et l'heure du gel</li>
+                <li>Archiver les fichiers d'extraction et le fichier de correspondance des comptes</li>
+                <li>Clôturer les périodes antérieures à la bascule dans <code>T112Periodes</code></li>
+                <li>Faire valider et signer la balance d'ouverture par le comptable</li>
+                <li>Garder QuickBooks accessible en consultation au moins un exercice complet</li>
+            </ul>
+        </section>
+
+        <!-- =========================================== 8. CORRESPONDANCES -->
+        <section id="correspondances">
+            <h2><span class="num">08</span>Correspondances champ à champ</h2>
+            <p class="sub">
+                Le détail de ce qui va où. Les noms de colonnes sont ceux du schéma réel.
+            </p>
+
+            <h3>8.1 &nbsp;Types de comptes QuickBooks → classes de l'ERP</h3>
+            <p>
+                <code>T120PlanComptable_Classe</code> porte les classes, avec
+                <code>NumeroDebut</code> et <code>NumeroFin</code> qui délimitent les plages de
+                numéros. La correspondance ci-dessous est un point de départ à valider avec le
+                comptable, pas une règle automatique.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Type QuickBooks</th>
+                            <th>Nature</th>
+                            <th>Sens normal</th>
+                            <th>Va dans</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Bank</td><td>Actif à court terme</td><td>Débit</td><td>Classe actif — encaisse</td></tr>
+                        <tr><td>Accounts Receivable</td><td>Actif à court terme</td><td>Débit</td><td>Classe actif — clients</td></tr>
+                        <tr><td>Other Current Asset</td><td>Actif à court terme</td><td>Débit</td><td>Classe actif</td></tr>
+                        <tr><td>Fixed Asset</td><td>Actif immobilisé</td><td>Débit</td><td>Classe immobilisations</td></tr>
+                        <tr><td>Accounts Payable</td><td>Passif à court terme</td><td>Crédit</td><td>Classe passif — fournisseurs</td></tr>
+                        <tr><td>Credit Card</td><td>Passif à court terme</td><td>Crédit</td><td>Classe passif</td></tr>
+                        <tr><td>Other Current Liability</td><td>Passif à court terme</td><td>Crédit</td><td>Classe passif — dont taxes</td></tr>
+                        <tr><td>Long Term Liability</td><td>Passif à long terme</td><td>Crédit</td><td>Classe dettes long terme</td></tr>
+                        <tr><td>Equity</td><td>Capitaux propres</td><td>Crédit</td><td>Classe capitaux</td></tr>
+                        <tr><td>Income</td><td>Produit</td><td>Crédit</td><td>Classe produits</td></tr>
+                        <tr><td>Other Income</td><td>Produit</td><td>Crédit</td><td>Classe produits</td></tr>
+                        <tr><td>Cost of Goods Sold</td><td>Charge</td><td>Débit</td><td>Classe coût des ventes</td></tr>
+                        <tr><td>Expense</td><td>Charge</td><td>Débit</td><td>Classe charges</td></tr>
+                        <tr><td>Other Expense</td><td>Charge</td><td>Débit</td><td>Classe charges</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top:34px">8.2 &nbsp;Clients et fournisseurs</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>QuickBooks</th><th>Table ERP</th><th>Colonne</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Display Name</td><td><code>T050Party</code></td><td><code>Name</code>, <code>DisplayName</code></td><td>Clé de rattachement des factures</td></tr>
+                        <tr><td>Company Name</td><td><code>T050Party</code></td><td><code>Name</code></td><td>Si distinct du nom d'affichage</td></tr>
+                        <tr><td>Tax Reg. No. (GST)</td><td><code>T050Party</code></td><td><code>TPS</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Tax Reg. No. (QST)</td><td><code>T050Party</code></td><td><code>TVQ</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Website</td><td><code>T050Party</code></td><td><code>WebSite</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Terms</td><td><code>T050Party</code></td><td><code>PaymentTermDays</code></td><td>« Net 30 » <span class="arrow">→</span> 30</td></tr>
+                        <tr><td>Notes</td><td><code>T050Party</code></td><td><code>Note</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Billing Address</td><td><code>T054PartyAddress</code></td><td><code>Address1</code>, <code>City</code>, <code>PostalCode</code>…</td><td><code>AddressTypeId</code> = facturation</td></tr>
+                        <tr><td>Shipping Address</td><td><code>T054PartyAddress</code></td><td>idem</td><td>Deuxième ligne, autre type</td></tr>
+                        <tr><td>Phone / Email</td><td><code>T054PartyAddress</code></td><td><code>Phone</code>, <code>Email</code></td><td>Portés par l'adresse, pas par le tiers</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top:34px">8.3 &nbsp;Produits et services</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>QuickBooks</th><th>Colonne de <code>T075Products</code></th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Name / SKU</td><td><code>Name</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Description</td><td><code>Description</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Sales Price</td><td><code>Prix</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Income Account</td><td><code>CompteVente</code></td><td>Issu de la correspondance 8.1</td></tr>
+                        <tr><td>Expense Account</td><td><code>CompteAchat</code></td><td>Idem</td></tr>
+                        <tr><td>Taxable</td><td><code>NoTaxe</code>, <code>TaxeStatusId</code></td><td>Logique inversée : vérifier</td></tr>
+                        <tr><td>Category</td><td><code>CategoryId</code></td><td>Créer <code>T076ProductCategory</code> d'abord</td></tr>
+                        <tr><td>Active</td><td><code>Actif</code></td><td>&nbsp;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top:34px">8.4 &nbsp;Factures</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>QuickBooks</th><th>Table ERP</th><th>Colonne</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Invoice No.</td><td><code>T060Document</code></td><td><code>DocumentNumber</code></td><td>Conserver le numéro QuickBooks</td></tr>
+                        <tr><td>Date</td><td><code>T060Document</code></td><td><code>DocumentDate</code></td><td>En ISO — voir le piège 3</td></tr>
+                        <tr><td>Due Date</td><td><code>T060Document</code></td><td><code>DueDate</code></td><td>Détermine la balance âgée</td></tr>
+                        <tr><td>Customer</td><td><code>T060Document</code></td><td><code>PartyGUID</code></td><td>Résolu par le nom</td></tr>
+                        <tr><td>P.O. Number</td><td><code>T060Document</code></td><td><code>PoNumber</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Subtotal / GST / QST / Total</td><td><code>T060Document</code></td><td><code>SubTotal</code>, <code>TPS</code>, <code>TVQ</code>, <code>Total</code></td><td>Recalculés à la comptabilisation</td></tr>
+                        <tr><td>Line — Product</td><td><code>T061DocumentLine</code></td><td><code>ProductId</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Line — Description</td><td><code>T061DocumentLine</code></td><td><code>Description</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Line — Qty / Rate / Amount</td><td><code>T061DocumentLine</code></td><td><code>Qty</code>, <code>UnitPrice</code>, <code>Amount</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Line — Tax code</td><td><code>T061DocumentLine</code></td><td><code>TaxeStatus</code></td><td><b>Doit valoir 1 pour que les taxes soient reprises</b></td></tr>
+                        <tr><td>Line — Account</td><td><code>T061DocumentLine</code></td><td><code>CompteComptable</code></td><td>Issu de la correspondance 8.1</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top:34px">8.5 &nbsp;Règlements</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>QuickBooks</th><th>Table ERP</th><th>Colonne</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Payment Date</td><td><code>T140Reglement</code></td><td><code>DateReglement</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Amount</td><td><code>T140Reglement</code></td><td><code>Montant</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Customer / Vendor</td><td><code>T140Reglement</code></td><td><code>PartyId</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Payment Method</td><td><code>T140Reglement</code></td><td><code>TypeReglement</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Deposit To</td><td><code>T140Reglement</code></td><td><code>CompteBanque</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Ref. No.</td><td><code>T140Reglement</code></td><td><code>Reference</code></td><td>Numéro de chèque, référence de virement</td></tr>
+                        <tr><td>Encaissement / décaissement</td><td><code>T140Reglement</code></td><td><code>Sens</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Applied to invoice</td><td><code>T141ReglementDocument</code></td><td><code>DocumentId</code>, <code>MontantImpute</code></td><td>Un règlement peut couvrir plusieurs factures</td></tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <h3 style="margin-top:34px">8.6 &nbsp;Écritures du grand livre</h3>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr><th>QuickBooks</th><th>Table ERP</th><th>Colonne</th><th>Note</th></tr>
+                    </thead>
+                    <tbody>
+                        <tr><td>Date</td><td><code>T135Ecritures</code></td><td><code>DateEcriture</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Journal / Type</td><td><code>T135Ecritures</code></td><td><code>JournauxId</code></td><td>Correspondance vers les 8 journaux</td></tr>
+                        <tr><td>&mdash;</td><td><code>T135Ecritures</code></td><td><code>PeriodeId</code></td><td><b>Obligatoire</b> — déduit de la date</td></tr>
+                        <tr><td>Num</td><td><code>T135Ecritures</code></td><td><code>NumeroPiece</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Memo</td><td><code>T135Ecritures</code></td><td><code>Libelle</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Name</td><td><code>T135Ecritures</code></td><td><code>PartyId</code></td><td>Facultatif</td></tr>
+                        <tr><td>&mdash;</td><td><code>T135Ecritures</code></td><td><code>SourceType</code>, <code>SourceId</code></td><td>Traçabilité vers QuickBooks</td></tr>
+                        <tr><td>Split — Account</td><td><code>T136LignesEcriture</code></td><td><code>PlanComptableId</code></td><td>&nbsp;</td></tr>
+                        <tr><td>Split — Debit / Credit</td><td><code>T136LignesEcriture</code></td><td><code>MontantDebit</code>, <code>MontantCredit</code></td><td>Jamais les deux sur la même ligne</td></tr>
+                        <tr><td>Split — Memo</td><td><code>T136LignesEcriture</code></td><td><code>Libelle</code></td><td>&nbsp;</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <!-- =================================================== 9. PIÈGES -->
+        <section id="pieges">
+            <h2><span class="num">09</span>Les pièges</h2>
+            <p class="sub">
+                Cinq écueils propres à cette installation. Les quatre premiers coûtent une
+                reprise ; le cinquième coûte une demi-journée de perplexité.
+            </p>
+
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>1 · Le plan comptable existe déjà <span class="st st-blocked">critique</span></h3>
+                    <ul>
+                        <li><code>T121PlanComptable</code> est <b>cloné par compagnie</b> :
+                            908 comptes pour 4 compagnies, soit un plan standard déjà en place.</li>
+                        <li>Il faut <b>faire correspondre</b> les comptes QuickBooks à ceux-là,
+                            pas les ajouter à la suite.</li>
+                        <li>Sinon : deux plans parallèles, des soldes éclatés entre l'ancien et
+                            le nouveau, et des états financiers faux sans qu'aucune erreur ne
+                            s'affiche.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>2 · La double comptabilisation <span class="st st-blocked">critique</span></h3>
+                    <ul>
+                        <li><code>sp_ComptabiliserDocument</code> <b>génère l'écriture</b> à
+                            partir du document — c'est le rôle de
+                            <code>T137DocumentEcriture</code>.</li>
+                        <li>Si l'écriture d'ouverture porte déjà les soldes clients et
+                            fournisseurs <b>et</b> que vous chargez ensuite les factures
+                            ouvertes, tout est compté deux fois.</li>
+                        <li>Remède : retirer les postes clients et fournisseurs de l'écriture
+                            d'ouverture, et les laisser venir des documents. Voir la table de
+                            décision de la phase 5.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>3 · Les dates américaines <span class="st st-wip">silencieux</span></h3>
+                    <ul>
+                        <li><code>fn_StringToDateTime</code> essaie ISO, puis <b>103 (jj/mm)</b>,
+                            puis 101 (mm/jj).</li>
+                        <li>QuickBooks en configuration américaine exporte en
+                            <code>mm/jj/aaaa</code> : <code>03/04/2026</code> devient le
+                            <b>3 avril</b> au lieu du 4 mars.</li>
+                        <li>Rien ne plante. Les documents partent simplement dans la mauvaise
+                            période, et la balance âgée est fausse.</li>
+                        <li>Remède : tout convertir en <code>aaaa-mm-jj</code> à l'extraction.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>4 · Un seul exercice ouvert <span class="st st-wip">bloquant</span></h3>
+                    <ul>
+                        <li><code>T111Exercices</code> ne contient que <b>2026, au statut
+                            OUVERT</b>.</li>
+                        <li><code>T135Ecritures.PeriodeId</code> ne peut pas être nul : toute
+                            écriture antérieure exige son exercice et ses douze périodes.</li>
+                        <li>À faire avant tout chargement d'historique, sinon l'insertion
+                            échoue.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>5 · Une colonne en cyrillique <span class="st st-test">curiosité</span></h3>
+                    <ul>
+                        <li>La colonne <code>T140Reglement.RelевeBancaireId</code> contient deux
+                            caractères <b>cyrilliques</b> : <code>е</code> (U+0435) et
+                            <code>в</code> (U+0432), à la place du <code>e</code> et du
+                            <code>v</code> latins.</li>
+                        <li>Une requête écrite normalement échoue sur
+                            « <i>Invalid column name</i> » sans qu'on voie pourquoi — les deux
+                            graphies sont visuellement identiques.</li>
+                        <li>Copiez le nom depuis <code>sys.columns</code> plutôt que de le
+                            retaper.</li>
+                    </ul>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- ================================================= 10. CHANTIER -->
+        <section id="chantier">
+            <h2><span class="num">10</span>Ce qui reste à construire</h2>
+            <p class="sub">
+                État de l'outillage d'importation, aujourd'hui.
+            </p>
+
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Phase</th>
+                            <th>État</th>
+                            <th>Ce qui existe</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Référentiels — clients, fournisseurs, produits</td>
+                            <td><span class="st st-ok">fait</span></td>
+                            <td><span class="tag">wbfImport.aspx</span> avec lecture assistée par IA, <code>s0600</code> à <code>s0609</code></td>
+                        </tr>
+                        <tr>
+                            <td>Plan comptable</td>
+                            <td><span class="st st-blocked">à écrire</span></td>
+                            <td>Écran de correspondance et chargement</td>
+                        </tr>
+                        <tr>
+                            <td>Exercices et périodes</td>
+                            <td><span class="st st-wip">partiel</span></td>
+                            <td>Les tables existent ; la création en lot reste à faire</td>
+                        </tr>
+                        <tr>
+                            <td>Écriture d'ouverture</td>
+                            <td><span class="st st-blocked">à écrire</span></td>
+                            <td>Saisie assistée avec contrôle d'équilibre</td>
+                        </tr>
+                        <tr>
+                            <td>Factures ouvertes</td>
+                            <td><span class="st st-blocked">à écrire</span></td>
+                            <td>Import en lot vers <code>T060</code>/<code>T061</code></td>
+                        </tr>
+                        <tr>
+                            <td>Règlements</td>
+                            <td><span class="st st-blocked">à écrire</span></td>
+                            <td>Import vers <code>T140</code>/<code>T141</code></td>
+                        </tr>
+                        <tr>
+                            <td>Historique des écritures</td>
+                            <td><span class="st st-blocked">à écrire</span></td>
+                            <td>Import en lot vers <code>T135</code>/<code>T136</code></td>
+                        </tr>
+                        <tr>
+                            <td>Rapports de contrôle</td>
+                            <td><span class="st st-ok">fait</span></td>
+                            <td>Balance de vérification, état des résultats, bilan</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+
+            <div class="note">
+                <span class="n-ico">🔨</span>
+                <p>
+                    L'ordre de construction suit l'ordre d'utilisation : le chargeur du plan
+                    comptable d'abord — sans lui rien d'autre ne peut être imputé — puis
+                    l'écriture d'ouverture, puis les documents, puis l'historique.
+                </p>
+            </div>
+        </section>
+
+        <!-- =================================================== ANNEXE -->
+        <section id="annexe">
+            <h2><span class="num">11</span>Annexe — l'ordre en une page</h2>
+            <p class="sub">
+                À imprimer et à cocher.
+            </p>
+
+            <div class="split">
+
+                <div class="card">
+                    <h3>Décisions</h3>
+                    <ul class="cl">
+                        <li>QuickBooks Online ou Desktop</li>
+                        <li>Stratégie A, B ou C</li>
+                        <li>Date de bascule — une fin de période close</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Extraction &nbsp;<span class="fine">(1 à 15)</span></h3>
+                    <ul class="cl">
+                        <li>Plan comptable</li>
+                        <li>Balance de vérification</li>
+                        <li>Clients, fournisseurs</li>
+                        <li>Produits et services</li>
+                        <li>Balances âgées clients et fournisseurs</li>
+                        <li>Factures ouvertes, des deux côtés</li>
+                        <li>Règlements partiels</li>
+                        <li>Soldes bancaires et opérations non rapprochées</li>
+                        <li>Rapport de taxes</li>
+                        <li>Grand livre (B et C)</li>
+                        <li>Inventaire, s'il y a lieu</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Préparation &nbsp;<span class="fine">(16 à 20)</span></h3>
+                    <ul class="cl">
+                        <li>Compagnie et paramètres</li>
+                        <li>Exercices et périodes</li>
+                        <li>Correspondance du plan comptable — signée</li>
+                        <li>Journaux</li>
+                        <li>Taux de taxes</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Référentiels &nbsp;<span class="fine">(21 à 24)</span></h3>
+                    <ul class="cl">
+                        <li>Clients</li>
+                        <li>Fournisseurs</li>
+                        <li>Produits et services</li>
+                        <li>Comptes bancaires</li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Soldes &nbsp;<span class="fine">(25 à 28)</span></h3>
+                    <ul class="cl">
+                        <li>Écriture d'ouverture — équilibrée</li>
+                        <li>Factures clients ouvertes</li>
+                        <li>Factures fournisseurs ouvertes</li>
+                        <li>Règlements partiels</li>
+                        <li><b>Balance intermédiaire — doit déjà tomber juste</b></li>
+                    </ul>
+                </div>
+
+                <div class="card">
+                    <h3>Historique et contrôles &nbsp;<span class="fine">(29 à 31)</span></h3>
+                    <ul class="cl">
+                        <li>Écritures antérieures, exercice par exercice</li>
+                        <li><b>Balance de vérification — zéro écart</b></li>
+                        <li>Balances âgées, banques, taxes</li>
+                        <li>QuickBooks gelé en lecture seule</li>
+                        <li>Périodes antérieures clôturées</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <p class="fine" style="margin-top:22px">
+                Les noms de tables et de colonnes cités dans ce document ont été relevés
+                directement dans la base <span class="tag">MngConsul</span>. Les noms des
+                rapports QuickBooks sont donnés en anglais : ce sont ceux de l'interface, et ils
+                varient selon la version et la langue d'installation.
+            </p>
+        </section>
+
+    </main>
+</div>
+
+<footer>
+    <div class="foot-in">
+        <div>
+            <b>60sec-AI — Migration comptable QuickBooks.</b>
+            Procédure établie à partir du schéma réel de la base.
+            Les étapes de chargement des phases 5 et 6 restent à outiller.
+        </div>
+        <div>Page autonome : aucune dépendance externe, aucun appel réseau.</div>
+    </div>
+</footer>
+
+</body>
+</html>
