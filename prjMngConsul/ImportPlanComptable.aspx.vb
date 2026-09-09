@@ -116,7 +116,97 @@ Public Class ImportPlanComptable
         ddlEncodage.SelectedValue = s.Encodage
         litCheminExport.Text = Server.HtmlEncode(s.CheminExport)
         litNomSysteme.Text = Server.HtmlEncode(s.Nom)
+
+        ConstruireAide(s)
     End Sub
+
+    ''' <summary>
+    ''' L'aide propre au logiciel choisi. Les avertissements passent avant les
+    ''' étapes : ce sont eux qui font échouer l'export, et les lire après coup
+    ''' ne sert plus à rien.
+    ''' </summary>
+    Private Sub ConstruireAide(s As SystemeSource)
+
+        litAideTitre.Text = Server.HtmlEncode(s.Nom)
+
+        ' Le tableau des colonnes et le modèle valent pour tous les logiciels :
+        ' ils restent affichés même quand la marche à suivre propre à celui-ci
+        ' n'est pas encore écrite.
+        litTableauColonnes.Text = ConstruireTableauColonnes()
+
+        pnlAideSysteme.Visible = s.AAide
+        pnlAideAbsente.Visible = Not s.AAide
+
+        If Not s.AAide Then
+            litAideAbsente.Text = "La marche à suivre propre à <b>" & Server.HtmlEncode(s.Nom) &
+                                  "</b> n'est pas encore rédigée. Les colonnes attendues, elles, " &
+                                  "sont les mêmes quel que soit le logiciel d'origine."
+            litAideCorps.Text = ""
+            Return
+        End If
+
+        Dim sb As New StringBuilder()
+
+        If s.NomRapport <> "" Then
+            sb.Append("<p class='aide-rapport'>Le rapport à sortir : <b>")
+            sb.Append(Server.HtmlEncode(s.NomRapport))
+            sb.Append("</b></p>")
+        End If
+
+        For Each a In s.Avertissements
+            sb.Append("<div class='aide-avert'><span>⚠️</span><p>")
+            sb.Append(a)
+            sb.Append("</p></div>")
+        Next
+
+        If s.Etapes.Count > 0 Then
+            sb.Append("<h4 class='aide-h'>Comment sortir le fichier</h4><ol class='aide-etapes'>")
+            For Each e In s.Etapes
+                sb.Append("<li>").Append(e).Append("</li>")
+            Next
+            sb.Append("</ol>")
+        End If
+
+        If s.Astuces.Count > 0 Then
+            sb.Append("<h4 class='aide-h'>Bon à savoir</h4><ul class='aide-astuces'>")
+            For Each a In s.Astuces
+                sb.Append("<li>").Append(a).Append("</li>")
+            Next
+            sb.Append("</ul>")
+        End If
+
+        litAideCorps.Text = sb.ToString()
+    End Sub
+
+    ''' <summary>
+    ''' Le tableau des colonnes, bâti sur la définition réelle. Écrit à la main
+    ''' il finirait par mentir : ici il ne peut pas diverger de ce que la page
+    ''' cherche vraiment.
+    ''' </summary>
+    Private Function ConstruireTableauColonnes() As String
+        Dim sb As New StringBuilder()
+
+        sb.Append("<table class='col-table'><thead><tr>")
+        sb.Append("<th>Colonne</th><th>Statut</th><th>À quoi elle sert</th><th>En-têtes reconnus</th>")
+        sb.Append("</tr></thead><tbody>")
+
+        For Each c In Colonnes
+            sb.Append("<tr><td><b>").Append(Server.HtmlEncode(c.Libelle)).Append("</b></td><td>")
+
+            If c.Obligatoire Then
+                sb.Append("<span class='st-req'>obligatoire</span>")
+            Else
+                sb.Append("<span class='st-opt'>facultative</span>")
+            End If
+
+            sb.Append("</td><td>").Append(Server.HtmlEncode(c.Description)).Append("</td><td class='kw'>")
+            sb.Append(Server.HtmlEncode(String.Join(", ", c.MotsCles)))
+            sb.Append("</td></tr>")
+        Next
+
+        sb.Append("</tbody></table>")
+        Return sb.ToString()
+    End Function
 
     Protected Sub ddlSysteme_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlSysteme.SelectedIndexChanged
         AppliquerReglagesSysteme()
@@ -208,9 +298,18 @@ Public Class ImportPlanComptable
 
             Dim map = AssocierColonnes(dt)
             If Not map.ContainsKey("Compte") Then
+                ' La cause la plus frequente, de loin : QuickBooks masque les
+                ' numeros de compte tant qu'on ne les a pas actives. On le dit
+                ' en premier, sinon l'utilisateur cherche du cote du fichier.
                 Alerte(pnlErreur, litErreur,
-                       "La colonne du numéro de compte n'a pas été trouvée. " &
-                       "Vérifiez le séparateur, ou décochez « le fichier a une ligne d'en-tête ».")
+                       "<b>La colonne du numéro de compte n'a pas été trouvée</b> — c'est la seule dont " &
+                       "l'importation ne peut pas se passer.<br /><br />" &
+                       "Dans QuickBooks en ligne, les numéros de compte sont <b>masqués par défaut</b> : " &
+                       "activez-les dans <b>⚙️ Paramètres du compte ▸ Avancé ▸ Plan comptable ▸ " &
+                       "Activer les numéros de compte</b>, puis ressortez le rapport.<br /><br />" &
+                       "Si votre fichier contient bien les numéros, vérifiez le séparateur, ou décochez " &
+                       "« la première ligne contient les noms de colonnes ». " &
+                       "Le bouton <b>Voir un aperçu</b> montre ce que la page a reconnu.")
                 Return
             End If
 
@@ -454,6 +553,56 @@ Public Class ImportPlanComptable
             Case "EXISTE" : e.Row.CssClass = "row-info"
         End Select
     End Sub
+
+#End Region
+
+#Region "Modèle de fichier"
+
+    ''' <summary>
+    ''' Rend un CSV d'exemple, aux bons en-têtes et au bon séparateur.
+    '''
+    ''' C'est souvent le plus court chemin quand l'export du logiciel ne
+    ''' ressemble à rien d'attendu : on ouvre le modèle, on y colle ses
+    ''' colonnes, et on dépose. Le séparateur suit celui choisi plus haut,
+    ''' sinon le fichier téléchargé ne se relirait pas avec les réglages
+    ''' affichés à l'écran.
+    ''' </summary>
+    Protected Sub btnModele_Click(sender As Object, e As EventArgs) Handles btnModele.Click
+
+        Dim sep As String = ddlSeparateur.SelectedValue
+        If sep = "" Then sep = ";"
+
+        Dim sb As New StringBuilder()
+        sb.AppendLine(String.Join(sep, Colonnes.Select(Function(c) EnteteModele(c.Champ))))
+        sb.AppendLine(String.Join(sep, {"1000", "Encaisse", "Actif", "12500.45", "Debit"}))
+        sb.AppendLine(String.Join(sep, {"2000", "Comptes fournisseurs", "Passif", "-5430.20", "Credit"}))
+        sb.AppendLine(String.Join(sep, {"4000", "Ventes", "Produit", "-87300.00", "Credit"}))
+        sb.AppendLine(String.Join(sep, {"6100", "Loyer", "Charge", "18000.00", "Debit"}))
+
+        ' BOM UTF-8 : sans lui Excel ouvre le fichier en ANSI et abîme les
+        ' accents, ce qui ferait douter de l'encodage au mauvais moment.
+        Dim octets = Encoding.UTF8.GetPreamble().Concat(Encoding.UTF8.GetBytes(sb.ToString())).ToArray()
+
+        Response.Clear()
+        Response.ContentType = "text/csv"
+        Response.AddHeader("Content-Disposition", "attachment; filename=""modele_plan_comptable.csv""")
+        Response.BinaryWrite(octets)
+        Response.Flush()
+        Response.SuppressContent = True
+        HttpContext.Current.ApplicationInstance.CompleteRequest()
+    End Sub
+
+    ''' <summary>L'en-tête que la page reconnaît le plus sûrement pour ce champ.</summary>
+    Private Shared Function EnteteModele(champ As String) As String
+        Select Case champ
+            Case "Compte" : Return "Numero de compte"
+            Case "Nom" : Return "Nom du compte"
+            Case "Type" : Return "Type"
+            Case "Solde" : Return "Solde"
+            Case "Sens" : Return "Sens"
+            Case Else : Return champ
+        End Select
+    End Function
 
 #End Region
 

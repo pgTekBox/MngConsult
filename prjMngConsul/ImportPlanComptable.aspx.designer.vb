@@ -34,6 +34,23 @@ Partial Public Class ImportPlanComptable
     '''<summary>litCheminExport</summary>
     Protected WithEvents litCheminExport As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>pnlAide</summary>
+    Protected WithEvents pnlAide As Global.System.Web.UI.WebControls.Panel
+    '''<summary>litAideTitre</summary>
+    Protected WithEvents litAideTitre As Global.System.Web.UI.WebControls.Literal
+    '''<summary>pnlAideSysteme</summary>
+    Protected WithEvents pnlAideSysteme As Global.System.Web.UI.WebControls.Panel
+    '''<summary>litAideCorps</summary>
+    Protected WithEvents litAideCorps As Global.System.Web.UI.WebControls.Literal
+    '''<summary>litTableauColonnes</summary>
+    Protected WithEvents litTableauColonnes As Global.System.Web.UI.WebControls.Literal
+    '''<summary>btnModele</summary>
+    Protected WithEvents btnModele As Global.System.Web.UI.WebControls.Button
+    '''<summary>pnlAideAbsente</summary>
+    Protected WithEvents pnlAideAbsente As Global.System.Web.UI.WebControls.Panel
+    '''<summary>litAideAbsente</summary>
+    Protected WithEvents litAideAbsente As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>fuFichier</summary>
     Protected WithEvents fuFichier As Global.System.Web.UI.WebControls.FileUpload
     '''<summary>chkEntete</summary>

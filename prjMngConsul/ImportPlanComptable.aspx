@@ -134,6 +134,69 @@
     }
 
     .note-staging p { margin: 0 }
+
+    /* ───── Aide ───── */
+    .aide {
+        margin-top: 14px; border: 1px solid #bfdbfe; border-radius: 12px;
+        background: #f8fbff; overflow: hidden;
+    }
+
+    .aide > summary {
+        cursor: pointer; padding: 12px 15px; font-size: 13.5px; font-weight: 700;
+        color: #1d4ed8; list-style: none; display: flex; align-items: center; gap: 9px;
+    }
+
+    .aide > summary::-webkit-details-marker { display: none }
+    .aide > summary:hover { background: #eff6ff }
+    .aide .aide-ico { font-size: 15px }
+    .aide .aide-chev { margin-left: auto; transition: transform .15s; font-size: 12px }
+    .aide[open] .aide-chev { transform: rotate(180deg) }
+
+    .aide-corps { padding: 4px 15px 16px; border-top: 1px solid #dbeafe }
+
+    .aide-rapport { font-size: 13px; color: #334155; margin: 12px 0 0 }
+
+    .aide-h {
+        font-size: 12px; font-weight: 800; text-transform: uppercase;
+        letter-spacing: .04em; color: #64748b; margin: 16px 0 7px;
+    }
+
+    .aide-p { font-size: 13px; color: #475569; margin: 0 0 8px; line-height: 1.55 }
+
+    .aide-avert {
+        display: flex; gap: 10px; margin-top: 12px; padding: 11px 13px;
+        border-radius: 10px; background: #fffbeb; border: 1px solid #fde68a;
+        color: #78350f; font-size: 13px; line-height: 1.55;
+    }
+
+    .aide-avert p { margin: 0 }
+    .aide-avert span { flex: 0 0 auto }
+
+    ol.aide-etapes { margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6 }
+    ol.aide-etapes li { margin-bottom: 5px }
+
+    ul.aide-astuces { margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6 }
+    ul.aide-astuces li { margin-bottom: 5px }
+
+    .col-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff }
+
+    table.col-table { width: 100%; border-collapse: collapse; font-size: 12.5px }
+    table.col-table th { background: #f8fafc; text-align: left; padding: 8px 11px; font-weight: 700; color: #334155; border-bottom: 1px solid #e2e8f0; white-space: nowrap }
+    table.col-table td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
+    table.col-table tr:last-child td { border-bottom: 0 }
+    table.col-table .kw { color: #64748b; font-size: 11.5px }
+
+    .st-req { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #fef2f2; color: #b91c1c; white-space: nowrap }
+    .st-opt { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #f1f5f9; color: #64748b; white-space: nowrap }
+
+    .aide-modele {
+        display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+        margin-top: 16px; padding: 12px 14px; border-radius: 10px;
+        background: #fff; border: 1px solid #e2e8f0;
+    }
+
+    .aide-modele > div { flex: 1 1 260px }
+    .aide-modele b { font-size: 13px; color: #0f172a }
 </style>
 </asp:Content>
 
@@ -202,6 +265,56 @@
                     <asp:Literal ID="litCheminExport" runat="server" />
                 </p>
             </div>
+
+            <!-- ── Aide : la partie propre au logiciel, puis ce qui vaut pour tous ── -->
+            <asp:Panel ID="pnlAide" runat="server">
+                <details class="aide" open>
+                    <summary>
+                        <span class="aide-ico">❓</span>
+                        Comment sortir ce fichier de <b><asp:Literal ID="litAideTitre" runat="server" /></b>
+                        <span class="aide-chev">▾</span>
+                    </summary>
+                    <div class="aide-corps">
+
+                        <asp:Panel ID="pnlAideSysteme" runat="server">
+                            <asp:Literal ID="litAideCorps" runat="server" />
+                        </asp:Panel>
+
+                        <asp:Panel ID="pnlAideAbsente" runat="server" Visible="false" CssClass="aide-avert" Style="background:#f8fafc;border-color:#e2e8f0;color:#475569">
+                            <span>ℹ️</span>
+                            <p><asp:Literal ID="litAideAbsente" runat="server" /></p>
+                        </asp:Panel>
+
+                        <h4 class="aide-h">Les colonnes attendues</h4>
+                        <p class="aide-p">
+                            Une seule est indispensable : <b>le numéro de compte</b>. Sans lui, la ligne
+                            est écartée — c'est la clé qui rattachera ensuite vos factures et vos
+                            écritures. Les autres améliorent le résultat sans être exigées.
+                        </p>
+                        <div class="col-wrap">
+                            <asp:Literal ID="litTableauColonnes" runat="server" />
+                        </div>
+
+                        <p class="aide-p" style="margin-top:12px">
+                            L'ordre des colonnes n'a pas d'importance : la page les reconnaît par leur
+                            en-tête. Si aucun en-tête n'est reconnu, elle retombe sur l'ordre du tableau
+                            ci-dessus. <b>Servez-vous du bouton « Voir un aperçu »</b> : il montre
+                            exactement ce qu'elle a compris, avant que rien ne soit chargé.
+                        </p>
+
+                        <div class="aide-modele">
+                            <div>
+                                <b>Votre export ne ressemble à rien de tout ça ?</b>
+                                <div class="aide-p" style="margin:2px 0 0">
+                                    Partez du modèle, collez-y vos colonnes, et déposez-le.
+                                </div>
+                            </div>
+                            <asp:Button ID="btnModele" runat="server" CssClass="btn btn-s"
+                                Text="⬇ Télécharger un modèle CSV" CausesValidation="false" />
+                        </div>
+                    </div>
+                </details>
+            </asp:Panel>
         </div>
     </div>
 

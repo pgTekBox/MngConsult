@@ -27,15 +27,40 @@ Public MustInherit Class ImportComptableBase
 
     ''' <summary>
     ''' Un logiciel comptable source, avec ce qu'il faut savoir pour lire ses
-    ''' exports. Ajouter un logiciel, c'est ajouter une entrée ici.
+    ''' exports et ce qu'il faut dire à l'utilisateur pour qu'il les produise.
+    ''' Ajouter un logiciel, c'est ajouter une entrée ici.
     ''' </summary>
     Public Class SystemeSource
         Public Property Code As String
         Public Property Nom As String
         Public Property Separateur As String
         Public Property Encodage As String
-        ''' <summary>Où trouver l'export dans le logiciel, dit à l'utilisateur.</summary>
+
+        ''' <summary>Où trouver l'export, en une ligne, affiché en permanence.</summary>
         Public Property CheminExport As String
+
+        ''' <summary>Le nom du rapport dans le logiciel, tel qu'on l'y voit.</summary>
+        Public Property NomRapport As String = ""
+
+        ''' <summary>Le chemin, clic par clic.</summary>
+        Public Property Etapes As New List(Of String)
+
+        ''' <summary>
+        ''' Ce qui fait échouer l'export si on n'y pense pas d'avance. Ce sont
+        ''' les pièges qui coûtent une demi-heure parce qu'on cherche du mauvais
+        ''' côté — d'où leur place en haut de l'aide, pas en bas.
+        ''' </summary>
+        Public Property Avertissements As New List(Of String)
+
+        ''' <summary>Ce qui fait gagner du temps sans être bloquant.</summary>
+        Public Property Astuces As New List(Of String)
+
+        ''' <summary>Une aide est-elle rédigée pour ce logiciel ?</summary>
+        Public ReadOnly Property AAide As Boolean
+            Get
+                Return Etapes.Count > 0
+            End Get
+        End Property
     End Class
 
     ''' <summary>
@@ -48,7 +73,30 @@ Public MustInherit Class ImportComptableBase
                 New SystemeSource With {
                     .Code = "QBO", .Nom = "QuickBooks",
                     .Separateur = ",", .Encodage = "UTF-8",
-                    .CheminExport = "Rapports ▸ Account Listing ▸ Exporter vers Excel ou CSV"
+                    .CheminExport = "Rapports ▸ Liste des comptes ▸ Exporter",
+                    .NomRapport = "Liste des comptes — « Account List » en anglais, « Account Listing » sur QuickBooks Desktop",
+                    .Etapes = New List(Of String) From {
+                        "Ouvrez <b>Rapports</b> dans le menu de gauche.",
+                        "Cherchez <b>Liste des comptes</b> dans la barre de recherche des rapports. Le rapport se trouve aussi sous <b>Pour mon comptable</b>.",
+                        "Le rapport s'affiche : vérifiez qu'une colonne de <b>numéros de compte</b> y figure. Si elle manque, voyez l'avertissement ci-dessus.",
+                        "Cliquez sur l'icône d'<b>exportation</b> en haut à droite du rapport, puis sur <b>Exporter vers Excel</b>.",
+                        "Ouvrez le fichier obtenu dans Excel, puis <b>Fichier ▸ Enregistrer sous ▸ CSV (séparateur : point-virgule)</b> ou <b>CSV UTF-8</b>.",
+                        "Revenez ici et déposez le fichier CSV."
+                    },
+                    .Avertissements = New List(Of String) From {
+                        "<b>Les numéros de compte sont masqués par défaut dans QuickBooks en ligne.</b> " &
+                        "Tant qu'ils ne sont pas activés, le rapport sort sans eux et l'importation ne peut pas fonctionner — " &
+                        "le numéro est la seule colonne indispensable. " &
+                        "Activez-les d'abord : <b>⚙️ Paramètres du compte ▸ Avancé ▸ Plan comptable ▸ Activer les numéros de compte</b>. " &
+                        "Si vos comptes n'ont jamais eu de numéros, il faut leur en attribuer — c'est une décision comptable, à prendre avec votre comptable.",
+                        "QuickBooks propose souvent <b>Excel</b> mais pas <b>CSV</b> pour ce rapport. " &
+                        "Dans ce cas, passez par Excel et enregistrez ensuite en CSV : cette page ne lit pas les fichiers <code>.xlsx</code>."
+                    },
+                    .Astuces = New List(Of String) From {
+                        "Si l'export contient une colonne <b>Detail Type</b> en plus de <b>Type</b>, c'est celle qui est le plus à gauche qui sera retenue. L'aperçu vous dira laquelle.",
+                        "Les accents en charabia (<code>Ã©</code> au lieu de <code>é</code>) viennent de l'encodage : réessayez en <b>Windows-1252</b>.",
+                        "Le rapport peut contenir une ligne de titre ou une ligne de total. Elles seront signalées comme lignes invalides et écartées — c'est sans conséquence."
+                    }
                 },
                 New SystemeSource With {
                     .Code = "SAGE50", .Nom = "Sage 50",
