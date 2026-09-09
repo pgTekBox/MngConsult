@@ -455,6 +455,7 @@
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPagesNEW.html" />
+    <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="importcomptable.html" />
     <Content Include="rendu.html" />
@@ -697,6 +698,13 @@
     <Compile Include="ImportSageBalanceVerification.aspx.vb">
       <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="CorrespondanceComptes.aspx.designer.vb">
+      <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="CorrespondanceComptes.aspx.vb">
+      <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ImportComptableBase.vb" />
     <Compile Include="ImportPlanComptable.aspx.designer.vb">

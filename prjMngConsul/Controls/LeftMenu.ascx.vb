@@ -139,6 +139,7 @@ Namespace Controls
             sb.Append(GroupStart("📒", "import"))
             sb.Append(Child("~/wbfImport.aspx", "importAll"))
             sb.Append(Child("~/ImportPlanComptable.aspx", "importPlanComptable"))
+            sb.Append(Child("~/CorrespondanceComptes.aspx", "correspondanceComptes"))
             sb.Append(GroupEnd)
 
             ' Footer
@@ -195,6 +196,7 @@ Namespace Controls
                 Case "import" : Return Choose3(lang, "Importation", "Import", "Importación")
                 Case "importAll" : Return Choose3(lang, "Import (clients / fournisseurs / produits)", "Import (customers / suppliers / products)", "Importar (clientes / proveedores / productos)")
                 Case "importPlanComptable" : Return Choose3(lang, "Reprise — plan comptable", "Migration — chart of accounts", "Migración — plan contable")
+                Case "correspondanceComptes" : Return Choose3(lang, "Reprise — correspondance des comptes", "Migration — account mapping", "Migración — correspondencia de cuentas")
                 Case "companyProfile" : Return Choose3(lang, "Profil de l'entreprise", "Company profile", "Perfil de la empresa")
                 Case "users" : Return Choose3(lang, "Utilisateurs", "Users", "Usuarios")
                 Case "settings" : Return Choose3(lang, "Paramètres", "Settings", "Ajustes")
