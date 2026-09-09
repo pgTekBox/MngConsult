@@ -1705,6 +1705,10 @@
                         <li>Console d'administration interne : compagnies, forfaits, page vitrine,
                             prompts d'IA, diagnostics des webhooks.</li>
                         <li>Accueille depuis peu les écrans de <b>tâches planifiées</b>, venus de l'ERP.</li>
+                        <li>Et, depuis peu également, <b>ce que font ces tâches</b> :
+                            <span class="tag">JobRunner.ashx</span> est appelé par
+                            ServiceExecuteur et porte tout le contenu métier, de sorte qu'une
+                            tâche se modifie ici plutôt que dans un service Windows.</li>
                         <li>Authentification distincte de celle de l'ERP.</li>
                     </ul>
                     <div class="tags">
@@ -1810,6 +1814,21 @@
                 </div>
 
                 <div class="mod">
+                    <h3>⏱️ ServiceExecuteur <span class="st st-test">à déployer</span></h3>
+                    <ul>
+                        <li>L'exécuteur des <b>tâches planifiées</b> : il repère ce qui est dû,
+                            le réserve, et le fait exécuter.</li>
+                        <li>Il ne sait rien d'aucune tâche en particulier. Tout ce qu'une tâche
+                            fait vraiment vit dans la console d'administration, qu'il appelle
+                            par <span class="tag">JobRunner.ashx</span> : modifier une tâche ne
+                            demande donc que de redéployer l'application web.</li>
+                        <li>Boîte de messages dans l'ERP pour les tâches qui exigent une
+                            validation avant de s'exécuter.</li>
+                    </ul>
+                    <div class="tags"><span class="tag">VB.NET</span><span class="tag">.NET 4.7.2</span><span class="tag">clé partagée</span></div>
+                </div>
+
+                <div class="mod">
                     <h3>📤 Service/SrvAI <span class="st st-wip">copie ancienne</span></h3>
                     <ul>
                         <li>Copie du service de courriel conservée dans le dépôt MngConsul.</li>
@@ -1876,14 +1895,25 @@
             </div>
 
             <div class="note" style="margin-top:24px">
-                <h3>⏱️ Tâches planifiées : les écrans existent, l'exécuteur reste à écrire</h3>
+                <h3>⏱️ Tâches planifiées : la chaîne est complète, il reste à l'installer</h3>
                 <p>
                     Les cinq écrans de tâches — définition, calendrier, suivi, exécutions,
-                    tableau de bord — sont en place dans la console d'administration, et une
-                    tâche peut être lancée à la main. En revanche, <b>aucun projet Visual Studio
-                    n'implémente le déclenchement à l'heure dite</b>, et rien dans le code des
-                    applications ne s'en charge : c'est le seul des huit programmes annoncés au
-                    chapitre 1 qui reste à écrire.
+                    tableau de bord — sont en place dans la console d'administration, et
+                    <b>ServiceExecuteur</b> assure désormais le déclenchement à l'heure dite :
+                    c'était le dernier des huit programmes annoncés au chapitre 1 à écrire.
+                </p>
+                <p>
+                    Le partage des rôles mérite d'être connu : le service ne fait
+                    qu'ordonnancer — repérer ce qui est dû, poser un verrou, enregistrer le
+                    résultat. Ce qu'une tâche fait vraiment est écrit dans la console
+                    d'administration, qu'il appelle par <span class="tag">JobRunner.ashx</span>.
+                    Ajouter ou modifier une tâche ne demande donc que de redéployer
+                    l'application web ; le service sur le serveur, lui, ne rebouge pas.
+                </p>
+                <p>
+                    <b>Reste à faire :</b> le service est écrit, compilé et vérifié de bout en
+                    bout, mais il n'est pas encore installé comme service Windows sur le
+                    serveur. Tant qu'il ne tourne pas, aucune tâche ne se déclenche d'elle-même.
                 </p>
             </div>
 
