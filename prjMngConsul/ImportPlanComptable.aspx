@@ -57,24 +57,29 @@
 
     .fld .hint { font-size: 11.5px; color: #94a3b8; margin-top: 4px }
 
+    /* Une seule ligne : la zone de dépôt n'a aucune raison d'occuper un tiers
+       de l'écran, et le fichier choisi s'affiche dedans plutôt qu'en dessous. */
     .drop {
-        border: 2px dashed #cbd5e1; border-radius: 13px; padding: 26px 18px;
-        text-align: center; cursor: pointer; transition: border-color .15s, background .15s;
+        display: flex; align-items: center; gap: 9px;
+        border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 9px 13px;
+        cursor: pointer; font-size: 13px; color: #475569;
+        transition: border-color .15s, background .15s;
     }
 
     .drop:hover { border-color: #2563eb; background: rgba(37,99,235,.04) }
-    .drop .di { font-size: 30px; margin-bottom: 6px }
-    .drop p { margin: 0; font-size: 13.5px; color: #475569 }
-    .drop .dh { font-size: 11.5px; color: #94a3b8; margin-top: 5px }
+    .drop .di { font-size: 17px; line-height: 1 }
+    .drop .dt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
+    .drop .dh { margin-left: auto; padding-left: 10px; font-size: 11.5px; color: #94a3b8; white-space: nowrap }
 
-    .chosen {
-        display: none; align-items: center; gap: 11px; margin-top: 11px;
-        padding: 9px 13px; border: 1px solid #e2e8f0; border-radius: 11px;
-        background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(6,182,212,.04));
+    /* Survol d'un fichier glissé. */
+    .drop.over {
+        border-style: solid; border-color: #2563eb;
+        background: rgba(37,99,235,.08); color: #1d4ed8;
     }
 
-    .chosen b { font-size: 13.5px }
-    .chosen span.sz { font-size: 11.5px; color: #64748b }
+    /* Un fichier est en place. */
+    .drop.has { border-style: solid; border-color: #bfdbfe; background: rgba(37,99,235,.05) }
+    .drop.has .dt b { color: #1e293b }
 
     .cbx { display: flex; align-items: center; gap: 7px; margin-top: 13px; font-size: 13px }
 
@@ -134,6 +139,25 @@
     }
 
     .note-staging p { margin: 0 }
+
+    /* La suite du parcours. Sans cela l'écran ne dit nulle part où aller
+       une fois le lot chargé, et l'étape suivante se cherche dans le menu. */
+    .suite {
+        display: flex; align-items: center; gap: 16px; flex-wrap: wrap;
+        margin-top: 14px; padding: 14px 16px; border-radius: 11px;
+        border: 1px solid #bfdbfe; background: linear-gradient(135deg, rgba(37,99,235,.07), rgba(6,182,212,.05));
+    }
+
+    .suite .txt { flex: 1 1 260px; min-width: 0 }
+    .suite b { font-size: 13.5px; color: #1e293b }
+    .suite p { margin: 3px 0 0; font-size: 12.5px; color: #475569 }
+
+    .suite a {
+        padding: 9px 16px; border-radius: 9px; font-size: 13px; font-weight: 700;
+        background: #2563eb; color: #fff; text-decoration: none; white-space: nowrap;
+    }
+
+    .suite a:hover { background: #1d4ed8; color: #fff }
 
     /* ───── Aide ───── */
     .aide {
@@ -326,21 +350,13 @@
         <p class="desc">Un fichier CSV, une ligne par compte. 10 Mo au maximum.</p>
         <div class="body">
 
-            <div class="drop" onclick="document.getElementById('<%= fuFichier.ClientID %>').click();">
-                <div class="di">📁</div>
-                <p><b>Cliquez pour choisir un fichier</b></p>
-                <div class="dh">.csv ou .txt</div>
+            <div class="drop" id="dropZone">
+                <span class="di" id="dropIcone">📁</span>
+                <span class="dt" id="dropTexte"><b>Glissez votre fichier ici</b> ou cliquez pour le choisir</span>
+                <span class="dh" id="dropInfo">.csv ou .txt</span>
             </div>
 
             <asp:FileUpload ID="fuFichier" runat="server" Style="display:none" accept=".csv,.txt" />
-
-            <div class="chosen" id="chosenBox">
-                <span style="font-size:20px">📄</span>
-                <div>
-                    <b id="chosenName"></b>
-                    <div><span class="sz" id="chosenSize"></span></div>
-                </div>
-            </div>
 
             <div class="cbx">
                 <asp:CheckBox ID="chkEntete" runat="server" Checked="true" />
@@ -396,6 +412,19 @@
                     changé. Vous pouvez recharger un autre fichier, ou abandonner ce lot,
                     sans aucune conséquence.
                 </p>
+            </div>
+
+            <div class="suite">
+                <div class="txt">
+                    <b>Étape suivante — la correspondance des comptes</b>
+                    <p>
+                        Chaque compte lu doit maintenant être <b>lié</b> à un compte de votre
+                        plan, <b>créé</b>, ou <b>ignoré</b>. Rien n'est écrit tant que vous
+                        n'avez pas décidé.
+                    </p>
+                </div>
+                <asp:HyperLink ID="hlCorrespondance" runat="server"
+                    Text="Passer à la correspondance →" />
             </div>
         </div>
     </asp:Panel>
@@ -482,18 +511,66 @@
 <script type="text/javascript">
     (function () {
         var input = document.getElementById('<%= fuFichier.ClientID %>');
-        if (!input) return;
+        var zone = document.getElementById('dropZone');
+        if (!input || !zone) return;
+
+        var icone = document.getElementById('dropIcone');
+        var texte = document.getElementById('dropTexte');
+        var info = document.getElementById('dropInfo');
+
+        zone.addEventListener('click', function () { input.click(); });
+
+        // Sans cela le navigateur ouvre le fichier dans l'onglet et la page
+        // en cours est perdue — y compris lorsque le dépôt tombe à côté.
+        ['dragenter', 'dragover', 'dragleave', 'drop'].forEach(function (n) {
+            document.addEventListener(n, function (e) { e.preventDefault(); });
+            zone.addEventListener(n, function (e) { e.preventDefault(); e.stopPropagation(); });
+        });
+
+        zone.addEventListener('dragenter', function () { zone.classList.add('over'); });
+        zone.addEventListener('dragover', function () { zone.classList.add('over'); });
+        zone.addEventListener('dragleave', function (e) {
+            if (!zone.contains(e.relatedTarget)) zone.classList.remove('over');
+        });
+
+        zone.addEventListener('drop', function (e) {
+            zone.classList.remove('over');
+
+            var fs = e.dataTransfer && e.dataTransfer.files;
+            if (!fs || !fs.length) return;
+
+            if (!/\.(csv|txt)$/i.test(fs[0].name)) {
+                alert('Seuls les fichiers .csv et .txt sont acceptés.');
+                return;
+            }
+
+            // On ne garde que le premier : le champ n'en accepte qu'un, et lui
+            // passer la liste entière est refusé par le navigateur.
+            var d = new DataTransfer();
+            d.items.add(fs[0]);
+            input.files = d.files;
+
+            // L'affectation par script ne déclenche pas l'évènement.
+            input.dispatchEvent(new Event('change'));
+        });
 
         input.addEventListener('change', function () {
-            var box = document.getElementById('chosenBox');
-            if (!this.files || !this.files.length) { box.style.display = 'none'; return; }
+            if (!this.files || !this.files.length) { reinitialiser(); return; }
 
             var f = this.files[0];
-            document.getElementById('chosenName').textContent = f.name;
-            document.getElementById('chosenSize').textContent =
-                (f.size / 1024).toFixed(0) + ' Ko';
-            box.style.display = 'flex';
+            icone.textContent = '📄';
+            texte.innerHTML = '<b></b>';
+            texte.firstChild.textContent = f.name;
+            info.textContent = (f.size / 1024).toFixed(0) + ' Ko';
+            zone.classList.add('has');
         });
+
+        function reinitialiser() {
+            icone.textContent = '📁';
+            texte.innerHTML = '<b>Glissez votre fichier ici</b> ou cliquez pour le choisir';
+            info.textContent = '.csv ou .txt';
+            zone.classList.remove('has');
+        }
     })();
 </script>
 </asp:Content>

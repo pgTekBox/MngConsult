@@ -43,7 +43,7 @@ Public Class ImportPlanComptable
                     .Champ = "Compte", .Libelle = "Numéro de compte",
                     .MotsCles = New String() {"account number", "account no", "acct", "numéro", "numero", "compte", "no compte", "number"},
                     .Description = "Le numéro, s'il en existe un au plan d'origine",
-                    .Cle = True
+                    .Cle = True, .EstCode = True, .SiTexte = "Nom"
                 },
                 New ColonneDef With {
                     .Champ = "Nom", .Libelle = "Nom du compte",
@@ -351,6 +351,11 @@ Public Class ImportPlanComptable
             litLues.Text = lues.ToString()
             litRetenues.Text = retenues.ToString()
             litAnomalies.Text = anomalies.ToString()
+
+            ' Le lot est nommé dans le lien : l'écran suivant ouvre celui qu'on
+            ' vient de charger, et non le dernier de la liste.
+            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx?lot=" & lotId.ToString()
+
             pnlResultat.Visible = True
 
             If anomalies = 0 Then
@@ -409,8 +414,16 @@ Public Class ImportPlanComptable
 
         Dim v = brut.Replace(" ", " ").Replace("""", "").Trim()
 
+        ' On ne coupe au tiret que si ce qui précède est vraiment un code :
+        ' « 1000 - Encaisse » donne « 1000 », mais « Owner's Equity - Draws »
+        ' reste entier. Couper sans regarder ramenait trois comptes distincts
+        ' — Owner's Equity, ses apports et ses retraits — à la même clé, et
+        ' l'importation les déclarait doublons.
         Dim tiret = v.IndexOf(" - ", StringComparison.Ordinal)
-        If tiret > 0 Then v = v.Substring(0, tiret).Trim()
+        If tiret > 0 Then
+            Dim tete = v.Substring(0, tiret).Trim()
+            If RessembleAUnCode(tete) Then v = tete
+        End If
 
         Return v
     End Function
@@ -516,6 +529,43 @@ Public Class ImportPlanComptable
         End Try
     End Sub
 
+    ''' <summary>
+    ''' Remet sous les yeux le bilan d'un lot déjà chargé : ses compteurs et le
+    ''' lien vers l'étape suivante. « Revoir » doit montrer ce que montrait le
+    ''' chargement, sinon la suite du parcours disparaît de l'écran.
+    ''' </summary>
+    Private Sub AfficherResultatLot(lotId As Integer)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@TypeDonnees", "PLAN_COMPTABLE"))
+            p.Add(New SqlParameter("@Top", 50))
+
+            Dim ds As DataSet = ExecuteSQLds("s0754GetImportLots", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
+
+            Dim trouvees = ds.Tables(0).Select("Id = " & lotId)
+            If trouvees.Length = 0 Then Return
+
+            Dim r = trouvees(0)
+            litLues.Text = Nombre(r("NbLignesLues"))
+            litRetenues.Text = Nombre(r("NbLignesRetenues"))
+            litAnomalies.Text = Nombre(r("NbAnomalies"))
+
+            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx?lot=" & lotId.ToString()
+            pnlResultat.Visible = True
+
+        Catch
+            ' Ce bilan n'est qu'un rappel : son absence ne doit pas empêcher
+            ' de relire les lignes du lot.
+        End Try
+    End Sub
+
+    Private Shared Function Nombre(v As Object) As String
+        If v Is Nothing OrElse IsDBNull(v) Then Return "0"
+        Return Convert.ToString(v)
+    End Function
+
     ''' <summary>Revoir ou abandonner un lot précédent.</summary>
     Protected Sub gvLots_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvLots.RowCommand
         Dim lotId As Integer
@@ -527,6 +577,7 @@ Public Class ImportPlanComptable
 
             Case "Voir"
                 LotCourant = lotId
+                AfficherResultatLot(lotId)
                 ChargerLignes()
 
             Case "Supprimer"

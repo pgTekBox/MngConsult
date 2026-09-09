@@ -39,6 +39,16 @@ Public Class CorrespondanceComptes
 
         If Not IsPostBack Then
             ChargerLots()
+
+            ' La page d'importation renvoie ici en nommant son lot : on l'ouvre
+            ' plutôt que le plus récent, qui n'est pas forcément le même.
+            Dim demande = Request.QueryString("lot")
+            Dim n As Integer
+            If Integer.TryParse(demande, n) Then
+                Dim item = ddlLot.Items.FindByValue(n.ToString())
+                If item IsNot Nothing Then ddlLot.SelectedValue = item.Value
+            End If
+
             If ddlLot.Items.Count > 0 Then
                 LotCourant = CInt(ddlLot.SelectedValue)
                 ChargerPlanPourSaisie()

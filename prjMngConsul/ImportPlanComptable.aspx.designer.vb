@@ -78,6 +78,9 @@ Partial Public Class ImportPlanComptable
     '''<summary>litAnomalies</summary>
     Protected WithEvents litAnomalies As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>hlCorrespondance</summary>
+    Protected WithEvents hlCorrespondance As Global.System.Web.UI.WebControls.HyperLink
+
     '''<summary>pnlLignes</summary>
     Protected WithEvents pnlLignes As Global.System.Web.UI.WebControls.Panel
     '''<summary>ddlFiltre</summary>

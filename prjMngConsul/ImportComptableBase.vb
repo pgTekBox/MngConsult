@@ -270,12 +270,75 @@ Public MustInherit Class ImportComptableBase
 
         If map.Count < Math.Min(2, Colonnes.Count) Then
             map.Clear()
-            For i = 0 To Math.Min(Colonnes.Count, dt.Columns.Count) - 1
-                map(Colonnes(i).Champ) = i
+            Dim suivante = 0
+            For Each col In Colonnes
+                If suivante >= dt.Columns.Count Then Exit For
+
+                ' Une colonne de code qu'aucun code n'occupe n'existe pas dans
+                ' ce fichier : on la saute au lieu de décaler tout le reste
+                ' d'un cran. Les plans QuickBooks sans numéros commencent
+                ' directement par le nom du compte.
+                If col.EstCode AndAlso Not ColonneDeCodes(dt, suivante) Then Continue For
+
+                map(col.Champ) = suivante
+                suivante += 1
             Next
         End If
 
+        ' Dernier contrôle, quelle que soit la voie empruntée : une colonne
+        ' annoncée comme un code doit contenir des codes. Sinon elle rend à la
+        ' page du texte libre déguisé en numéro — et deux comptes différents
+        ' peuvent alors se retrouver avec la même clé.
+        For Each col In Colonnes
+            If Not col.EstCode Then Continue For
+            If Not map.ContainsKey(col.Champ) Then Continue For
+
+            Dim idx = map(col.Champ)
+            If idx >= dt.Columns.Count OrElse ColonneDeCodes(dt, idx) Then Continue For
+
+            map.Remove(col.Champ)
+            If col.SiTexte <> "" AndAlso Not map.ContainsKey(col.SiTexte) Then map(col.SiTexte) = idx
+        Next
+
         Return map
+    End Function
+
+    ''' <summary>
+    ''' Dit si une valeur a l'allure d'un code : quelques caractères, au moins
+    ''' un chiffre, aucun espace interne. « 1000 », « 4100-01 » et « A.12 »
+    ''' passent ; « Owner's Equity » et « Encaisse » non.
+    ''' </summary>
+    Protected Shared Function RessembleAUnCode(valeur As String) As Boolean
+        If String.IsNullOrWhiteSpace(valeur) Then Return False
+
+        Dim s = valeur.Trim()
+        If s.Length > 20 Then Return False
+        If Not s.Any(AddressOf Char.IsDigit) Then Return False
+
+        Return s.All(Function(c) Char.IsLetterOrDigit(c) OrElse
+                                 c = "-"c OrElse c = "."c OrElse c = "/"c OrElse c = "_"c)
+    End Function
+
+    ''' <summary>
+    ''' Dit si une colonne du fichier contient bien des codes. On regarde les
+    ''' valeurs renseignées d'un échantillon : une colonne entièrement vide
+    ''' n'est pas une colonne de codes non plus.
+    ''' </summary>
+    Private Shared Function ColonneDeCodes(dt As DataTable, index As Integer) As Boolean
+        Dim renseignees As Integer = 0
+        Dim codes As Integer = 0
+
+        For i = 0 To Math.Min(dt.Rows.Count, 200) - 1
+            If IsDBNull(dt.Rows(i)(index)) Then Continue For
+            Dim v = Convert.ToString(dt.Rows(i)(index)).Trim()
+            If v = "" Then Continue For
+
+            renseignees += 1
+            If RessembleAUnCode(v) Then codes += 1
+        Next
+
+        If renseignees = 0 Then Return False
+        Return codes * 2 >= renseignees
     End Function
 
     Protected Shared Function Valeur(r As DataRow, map As Dictionary(Of String, Integer), champ As String) As String
@@ -398,6 +461,20 @@ Public MustInherit Class ImportComptableBase
         ''' fermait la porte à toutes les compagnies qui n'en ont jamais eu.
         ''' </summary>
         Public Property Cle As Boolean = False
+
+        ''' <summary>
+        ''' La colonne ne contient que des codes. Une colonne de texte libre
+        ''' associée par erreur à ce champ est refusée : c'est ce qui arrivait
+        ''' aux plans QuickBooks sans numéros, dont le nom se retrouvait
+        ''' rangé comme numéro de compte.
+        ''' </summary>
+        Public Property EstCode As Boolean = False
+
+        ''' <summary>
+        ''' Champ auquel revient la colonne lorsqu'elle s'avère être du texte
+        ''' et non un code. Vide : la colonne est simplement abandonnée.
+        ''' </summary>
+        Public Property SiTexte As String = ""
     End Class
 
 #End Region

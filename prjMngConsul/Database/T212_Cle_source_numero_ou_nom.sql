@@ -150,15 +150,19 @@ BEGIN
      WHERE [LotId] = @LotId
        AND [CleSource] IS NULL;
 
+    -- Le message nomme la cle et la ligne d'origine : sans cela un doublon
+    -- annonce reste indemontrable pour celui qui relit son fichier.
     ;WITH d AS (
         SELECT [Id],
-               ROW_NUMBER() OVER (PARTITION BY [CleSource] ORDER BY [LigneNo]) AS rn
+               ROW_NUMBER() OVER (PARTITION BY [CleSource] ORDER BY [LigneNo]) AS rn,
+               MIN([LigneNo])  OVER (PARTITION BY [CleSource])                 AS PremiereLigne
           FROM staging.ImportPlanComptable
          WHERE [LotId] = @LotId AND [Statut] = 'OK'
     )
     UPDATE p
        SET p.[Statut]   = 'DOUBLON_FICHIER',
-           p.[Anomalie] = N'Ce compte apparaît plus haut dans le fichier.'
+           p.[Anomalie] = N'Même clé (« ' + p.[CleSource] + N' ») que la ligne '
+                        + CAST(d.PremiereLigne AS NVARCHAR(20)) + N' du fichier.'
       FROM staging.ImportPlanComptable p
      INNER JOIN d ON d.[Id] = p.[Id]
      WHERE d.rn > 1;
@@ -176,18 +180,22 @@ BEGIN
        AND p.[Statut] = 'OK'
        AND p.[TypeCle] = 'NUMERO';
 
-    -- ...par le nom quand il n'y en a pas.
+    -- ...par le nom quand il n'y en a pas. Le plan est trilingue : un export
+    -- QuickBooks anglais dit « Accounts receivable » la ou notre plan francais
+    -- dit « Comptes clients ». On confronte donc les quatre libelles, sinon
+    -- rien ne se reconnait des qu'on change de langue.
     UPDATE p
        SET p.[PlanComptableId] = n.[Id],
            p.[Statut]          = 'EXISTE',
-           p.[Anomalie]        = N'Déjà au plan comptable sous le numéro ' + n.[Compte]
+           p.[Anomalie]        = N'Déjà au plan comptable : ' + n.[Compte] + N' — ' + n.[Nom]
       FROM staging.ImportPlanComptable p
      CROSS APPLY (
-        SELECT TOP 1 pc.[Id], pc.[Compte]
+        SELECT TOP 1 pc.[Id], pc.[Compte], pc.[Nom]
           FROM dbo.T121PlanComptable pc
+         CROSS APPLY (VALUES (pc.[Nom]), (pc.[NomFr]), (pc.[NomEn]), (pc.[NomEs])) AS l([Libelle])
          WHERE pc.[CompanyGUID] = p.[CompanyGUID]
            AND ISNULL(pc.[Actif], 1) = 1
-           AND UPPER(LTRIM(RTRIM(pc.[Nom]))) = p.[CleSource]
+           AND UPPER(LTRIM(RTRIM(l.[Libelle]))) = p.[CleSource]
          ORDER BY pc.[Compte]
      ) n
      WHERE p.[LotId] = @LotId
@@ -301,13 +309,16 @@ BEGIN
            ON c.[CompanyGUID] = @CompanyGUID
           AND c.[SystemeSource] = @Systeme
           AND c.[CleSource] = s.CleSource
+    -- Meme regle qu'au chargement : les quatre libelles du plan sont
+    -- confrontes au nom d'origine, quelle que soit la langue du fichier.
     OUTER APPLY (
         SELECT TOP 1 p2.[Id]
           FROM dbo.T121PlanComptable p2
+         CROSS APPLY (VALUES (p2.[Nom]), (p2.[NomFr]), (p2.[NomEn]), (p2.[NomEs])) AS l([Libelle])
          WHERE s.ProposeAuChargement IS NULL
            AND p2.[CompanyGUID] = @CompanyGUID
            AND ISNULL(p2.[Actif], 1) = 1
-           AND UPPER(LTRIM(RTRIM(p2.[Nom]))) = UPPER(LTRIM(RTRIM(s.Nom)))
+           AND UPPER(LTRIM(RTRIM(l.[Libelle]))) = UPPER(LTRIM(RTRIM(s.Nom)))
          ORDER BY p2.[Compte]
     ) n
     LEFT JOIN dbo.T121PlanComptable pc
