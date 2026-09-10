@@ -455,6 +455,7 @@
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPagesNEW.html" />
+    <Content Include="AppliquerPlanComptable.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="importcomptable.html" />
@@ -701,6 +702,13 @@
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
       <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AppliquerPlanComptable.aspx.vb">
+      <DependentUpon>AppliquerPlanComptable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="AppliquerPlanComptable.aspx.designer.vb">
+      <DependentUpon>AppliquerPlanComptable.aspx</DependentUpon>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.vb">
       <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>

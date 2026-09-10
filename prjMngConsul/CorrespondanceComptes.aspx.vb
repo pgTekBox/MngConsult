@@ -144,6 +144,7 @@ Public Class CorrespondanceComptes
 #Region "Affichage"
 
     Private Sub Rafraichir()
+        hlAppliquer.NavigateUrl = "~/AppliquerPlanComptable.aspx?lot=" & LotCourant.ToString()
         ChargerStats()
         ChargerLignes()
     End Sub
@@ -481,9 +482,8 @@ Public Class CorrespondanceComptes
                 Dim compte = If(txtCpt Is Nothing, "", txtCpt.Text.Trim())
 
                 ' « Créer » sans numéro saisi : on reprend celui de l'ancien
-                ' logiciel quand il en a un. Sinon on laisse vide, et la
-                ' procédure refusera — notre plan n'accepte pas de compte sans
-                ' numéro, et l'inventer serait pire que de le demander.
+                ' logiciel quand il en a un. Sinon on le laisse vide : l'étape 3
+                ' attribuera le numéro dans la plage de la classe choisie.
                 If action = "CREER" AndAlso compte = "" AndAlso hfSource IsNot Nothing Then
                     compte = hfSource.Value
                 End If
@@ -526,13 +526,13 @@ Public Class CorrespondanceComptes
                 Alerte(pnlSucces, litSucces, "Correspondances enregistrées. Tous les comptes sont décidés.")
 
             ElseIf aCreerSansNumero > 0 Then
-                ' Cas propre aux plans sans numéros : « Créer » ne peut pas
-                ' reprendre un numéro d'origine qui n'existe pas.
+                ' Cas courant des plans sans numéros. Ce n'est plus un refus :
+                ' l'étape 3 attribuera les numéros.
                 Alerte(pnlAvertissement, litAvertissement,
                        String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider. " &
-                                     "{1} d'entre eux sont marqués « Créer » <b>sans numéro</b> : votre plan " &
-                                     "comptable exige un numéro pour chaque compte, et votre ancien logiciel " &
-                                     "n'en fournit pas. Saisissez le numéro à donner à ces comptes chez vous.",
+                                     "{1} d'entre eux sont marqués « Créer » <b>sans numéro</b> — ce n'est pas " &
+                                     "un problème : le numéro leur sera attribué à l'étape suivante, dans la " &
+                                     "plage de la classe que vous choisirez.",
                                      aDecider, aCreerSansNumero))
             Else
                 Alerte(pnlSucces, litSucces,

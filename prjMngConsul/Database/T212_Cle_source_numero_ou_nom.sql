@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- Reprise comptable — la cle d'un compte source n'est pas toujours son numero
 -- -----------------------------------------------------------------------------
 -- Le premier modele exigeait un numero de compte. C'etait une erreur : dans
@@ -253,82 +253,13 @@ END
 GO
 
 -- -----------------------------------------------------------------------------
--- 5) s0756GetCorrespondances — jointure sur la cle
+-- 5) s0756GetCorrespondances — sa definition vit dans T214
+--
+--    T214 l'a etendue pour porter la proposition de l'IA. En garder une copie
+--    ici faisait qu'un simple rejeu de T212 effacait ces colonnes et cassait
+--    la page de correspondance. Une procedure, un fichier.
 -- -----------------------------------------------------------------------------
-CREATE OR ALTER PROCEDURE [dbo].[s0756GetCorrespondances]
-    @LotId       INT,
-    @CompanyGUID UNIQUEIDENTIFIER,
-    @Filtre      VARCHAR(20) = NULL,
-    @Top         INT = 1000
-AS
-BEGIN
-    SET NOCOUNT ON;
 
-    DECLARE @Systeme VARCHAR(20) =
-        (SELECT [SystemeSource] FROM staging.ImportLot
-          WHERE [Id] = @LotId AND [CompanyGUID] = @CompanyGUID);
-
-    IF @Systeme IS NULL
-        THROW 50310, 'Lot d''importation introuvable pour cette compagnie.', 1;
-
-    ;WITH src AS (
-        SELECT p.[Id] AS StagingId, p.[LigneNo],
-               p.[CleSource], p.[TypeCle],
-               p.[Compte], p.[Nom], p.[TypeNormalise], p.[Solde],
-               p.[Statut] AS StatutChargement,
-               p.[PlanComptableId] AS ProposeAuChargement
-          FROM staging.ImportPlanComptable p
-         WHERE p.[LotId] = @LotId
-           AND p.[CompanyGUID] = @CompanyGUID
-           AND p.[Statut] IN ('OK', 'EXISTE')
-    )
-    SELECT TOP (@Top)
-        s.StagingId, s.LigneNo, s.CleSource, s.TypeCle,
-        s.Compte, s.Nom, s.TypeNormalise, s.Solde, s.StatutChargement,
-
-        c.[Id]              AS CorrespondanceId,
-        c.[Action],
-        c.[PlanComptableId] AS DecidePlanComptableId,
-        c.[CompteCible],
-        c.[NomCible],
-        c.[Note],
-
-        COALESCE(c.[PlanComptableId], s.ProposeAuChargement, n.[Id]) AS ProposeId,
-        CASE
-            WHEN c.[Id] IS NOT NULL                THEN 'DECIDE'
-            WHEN s.ProposeAuChargement IS NOT NULL AND s.TypeCle = 'NUMERO' THEN 'PROPOSE_NUMERO'
-            WHEN s.ProposeAuChargement IS NOT NULL THEN 'PROPOSE_NOM'
-            WHEN n.[Id] IS NOT NULL                THEN 'PROPOSE_NOM'
-            ELSE 'AUCUN'
-        END AS Origine,
-
-        pc.[Compte] AS ProposeCompte,
-        pc.[Nom]    AS ProposeNom
-    FROM src s
-    LEFT JOIN staging.CorrespondanceCompte c
-           ON c.[CompanyGUID] = @CompanyGUID
-          AND c.[SystemeSource] = @Systeme
-          AND c.[CleSource] = s.CleSource
-    -- Meme regle qu'au chargement : les quatre libelles du plan sont
-    -- confrontes au nom d'origine, quelle que soit la langue du fichier.
-    OUTER APPLY (
-        SELECT TOP 1 p2.[Id]
-          FROM dbo.T121PlanComptable p2
-         CROSS APPLY (VALUES (p2.[Nom]), (p2.[NomFr]), (p2.[NomEn]), (p2.[NomEs])) AS l([Libelle])
-         WHERE s.ProposeAuChargement IS NULL
-           AND p2.[CompanyGUID] = @CompanyGUID
-           AND ISNULL(p2.[Actif], 1) = 1
-           AND UPPER(LTRIM(RTRIM(l.[Libelle]))) = UPPER(LTRIM(RTRIM(s.Nom)))
-         ORDER BY p2.[Compte]
-    ) n
-    LEFT JOIN dbo.T121PlanComptable pc
-           ON pc.[Id] = COALESCE(c.[PlanComptableId], s.ProposeAuChargement, n.[Id])
-    WHERE (@Filtre IS NULL
-           OR (@Filtre = 'DECIDE'    AND c.[Id] IS NOT NULL)
-           OR (@Filtre = 'A_DECIDER' AND c.[Id] IS NULL))
-    ORDER BY s.LigneNo;
-END
-GO
 
 -- -----------------------------------------------------------------------------
 -- 6) s0757SaveCorrespondances — cle, et le numero exige a la creation
@@ -443,13 +374,9 @@ BEGIN
        AND [Action] = 'LIER'
        AND [PlanComptableId] IS NULL;
 
-    -- Un « creer » sans numero non plus : notre plan n'accepte pas de compte
-    -- sans numero, et le deviner serait pire que de le demander.
-    DELETE FROM staging.CorrespondanceCompte
-     WHERE [CompanyGUID] = @CompanyGUID
-       AND [SystemeSource] = @Systeme
-       AND [Action] = 'CREER'
-       AND ISNULL([CompteCible], '') = '';
+    -- Un « creer » sans numero reste recevable : l'etape 3 (T215) attribue le
+    -- numero dans la plage de la classe choisie. L'exiger ici obligeait a
+    -- l'inventer avant meme de savoir ou le compte serait range.
 
     COMMIT TRANSACTION;
 

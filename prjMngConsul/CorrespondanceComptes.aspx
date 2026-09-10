@@ -94,6 +94,8 @@
     .pr-moyen { background: #fffbeb; color: #b45309 }
     .pr-aucun { background: #f1f5f9; color: #64748b }
     .pr-ia { background: #f5f3ff; color: #6d28d9 }
+    .lien-suite { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; background: #047857; color: #fff; text-decoration: none; white-space: nowrap }
+    .lien-suite:hover { background: #065f46; color: #fff }
 
     /* Ce que l'IA avance, et pourquoi. Deliberement discret : c'est un avis,
        pas un verdict. */
@@ -305,6 +307,7 @@
         <div class="barre-bas">
             <asp:Button ID="btnEnregistrer" runat="server" Text="Enregistrer les correspondances"
                 CssClass="btn btn-p" CausesValidation="false" />
+            <asp:HyperLink ID="hlAppliquer" runat="server" CssClass="lien-suite" Text="Créer les comptes au plan →" />
             <span style="font-size:12.5px;color:#64748b">
                 Rien n'est écrit dans votre comptabilité : les décisions sont conservées à part.
             </span>
