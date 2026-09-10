@@ -8,6 +8,9 @@ Option Strict On
 Option Explicit On
 
 Partial Public Class AppliquerPlanComptable
+    '''<summary>ucEtapes</summary>
+    Protected WithEvents ucEtapes As Global.MngConsul.EtapesReprise
+
 
     '''<summary>pnlSucces</summary>
     Protected WithEvents pnlSucces As Global.System.Web.UI.WebControls.Panel

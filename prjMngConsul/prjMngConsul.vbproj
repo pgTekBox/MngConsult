@@ -284,6 +284,7 @@
     <Content Include="Controls\HeaderUser.ascx" />
     <Content Include="Controls\ucReceiptEdit.ascx" />
     <Content Include="Controls\jsonViewer.ascx" />
+    <Content Include="Controls\EtapesReprise.ascx" />
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
@@ -456,6 +457,7 @@
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPagesNEW.html" />
     <Content Include="AppliquerPlanComptable.aspx" />
+    <Content Include="Importations.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="importcomptable.html" />
@@ -703,6 +705,13 @@
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
       <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
     </Compile>
+    <Compile Include="Importations.aspx.vb">
+      <DependentUpon>Importations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Importations.aspx.designer.vb">
+      <DependentUpon>Importations.aspx</DependentUpon>
+    </Compile>
     <Compile Include="AppliquerPlanComptable.aspx.vb">
       <DependentUpon>AppliquerPlanComptable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -813,6 +822,13 @@
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.designer.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EtapesReprise.ascx.vb">
+      <DependentUpon>EtapesReprise.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\EtapesReprise.ascx.designer.vb">
+      <DependentUpon>EtapesReprise.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>

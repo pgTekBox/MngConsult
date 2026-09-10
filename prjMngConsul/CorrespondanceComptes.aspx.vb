@@ -29,6 +29,15 @@ Public Class CorrespondanceComptes
             ViewState("Lot") = value
         End Set
     End Property
+    ''' <summary>
+    ''' Le fil des étapes porte le lot en cours, pour que les deux autres
+    ''' écrans ouvrent celui qu'on regarde et non le dernier chargé. Posé au
+    ''' pré-rendu : à ce moment le lot est connu, quoi qu'ait fait la page.
+    ''' </summary>
+    Protected Sub Page_PreRenderEtapes(sender As Object, e As EventArgs) Handles Me.PreRender
+        ucEtapes.LotId = LotCourant
+    End Sub
+
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
@@ -106,32 +115,52 @@ Public Class CorrespondanceComptes
             Dim ds As DataSet = ExecuteSQLds("s0759GetPlanCompagnie", p)
             If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
 
-            Dim options As New StringBuilder()
             Dim noms As New StringBuilder()
             noms.Append("{")
+
+            ' La grande classe de chaque compte -- niveau 1. C'est par elle que la
+            ' liste de saisie se restreint : « charges d'exploitation » plutot que
+            ' « fournitures et bureau », qu'il faudrait deja connaitre.
+            Dim classes As New StringBuilder()
+            classes.Append("{")
+
+            ' ...et sa grande classe, pour le premier cran du filtre.
+            Dim meres As New StringBuilder()
+            meres.Append("{")
+            Dim premierP As Boolean = True
 
             Dim premier As Boolean = True
             For Each r As DataRow In ds.Tables(0).Rows
                 Dim compte = Convert.ToString(r("Compte"))
                 Dim nom = Convert.ToString(r("Nom"))
 
-                options.Append("<option value=""")
-                options.Append(Server.HtmlEncode(compte))
-                options.Append(""">")
-                options.Append(Server.HtmlEncode(nom))
-                options.Append("</option>")
 
-                If Not premier Then noms.Append(",")
+                If Not premier Then noms.Append(",") : classes.Append(",")
                 noms.Append(Newtonsoft.Json.JsonConvert.ToString(compte))
                 noms.Append(":")
                 noms.Append(Newtonsoft.Json.JsonConvert.ToString(nom))
+
+                classes.Append(Newtonsoft.Json.JsonConvert.ToString(compte))
+                classes.Append(":")
+                classes.Append(If(IsDBNull(r("ClasseId")), "0", Convert.ToString(r("ClasseId"))))
+
+                If Not premierP Then meres.Append(",")
+                meres.Append(Newtonsoft.Json.JsonConvert.ToString(compte))
+                meres.Append(":")
+                meres.Append(If(IsDBNull(r("ClasseParentId")), "0", Convert.ToString(r("ClasseParentId"))))
+                premierP = False
+
                 premier = False
             Next
 
             noms.Append("}")
+            classes.Append("}")
+            meres.Append("}")
 
-            litPlanOptions.Text = options.ToString()
             litPlanJson.Text = noms.ToString()
+            litPlanClsJson.Text = classes.ToString()
+            litPlanMereJson.Text = meres.ToString()
+            litSousClassesJson.Text = SousClassesJson()
             litNbComptesPlan.Text = ds.Tables(0).Rows.Count.ToString()
 
         Catch ex As Exception
@@ -139,6 +168,104 @@ Public Class CorrespondanceComptes
         End Try
     End Sub
 
+
+    ''' <summary>
+    ''' Remplit la liste des classes de chaque ligne. Elle ne sert qu'a
+    ''' restreindre la saisie du compte : 227 comptes dans une seule liste, on
+    ''' n'y retrouve rien. La classe du compte propose est preselectionnee, si
+    ''' bien que la liste arrive deja reduite au bon rayon.
+    '''
+    ''' Les classes offertes sont bornees a la nature du compte d'origine --
+    ''' une charge ne se range pas dans l'actif.
+    ''' </summary>
+    Protected Sub rptLignes_ItemDataBound(sender As Object, e As RepeaterItemEventArgs) Handles rptLignes.ItemDataBound
+        If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then Return
+
+        Dim ddl = TryCast(e.Item.FindControl("ddlClasseFiltre"), DropDownList)
+        If ddl Is Nothing Then Return
+
+
+        ddl.Items.Clear()
+        ddl.Items.Add(New ListItem("tout le plan", ""))
+
+        For Each c As DataRow In ClassesPour("").Rows
+            ddl.Items.Add(New ListItem(Libelle(c), Convert.ToString(c("Id"))))
+        Next
+
+        ' Les neuf classes, sur toutes les lignes. Filtrer sur la nature du
+        ' compte d'origine ne protégeait rien ici : cette classe ne sert qu'à
+        ' raccourcir une liste de recherche, elle n'écrit rien. Et la nature
+        ' vient de l'ancien logiciel, qui se trompe — la classe qu'il faut se
+        ' trouvait alors hors de portée, sans que rien ne l'explique. La vraie
+        ' protection est à l'étape 3, là où la classe décide vraiment.
+
+        ' Aucune classe n'est présélectionnée. Le filtre partirait sinon d'une
+        ' hypothèse : si elle est fausse — et elle l'est dès que la proposition
+        ' l'est — le compte cherché n'apparaît nulle part, sans que rien
+        ' n'explique pourquoi. La liste s'ouvre entière ; la classe ne la
+        ' restreint que si on la choisit.
+    End Sub
+
+    ''' <summary>Les sous-classes d'une nature, lues une fois pour toutes.</summary>
+    Private ReadOnly _classesParNature As New Dictionary(Of String, DataTable)(StringComparer.OrdinalIgnoreCase)
+    ''' <summary>
+    ''' Le libellé d'une classe : son code, son nom, et sa plage de numéros.
+    ''' La plage dit d'un coup d'œil où l'on se trouve dans le plan — c'est
+    ''' souvent elle qu'on reconnaît avant le nom.
+    ''' </summary>
+    Private Shared Function Libelle(c As DataRow) As String
+        Dim texte = String.Format("{0} — {1}", Convert.ToString(c("Code")), Convert.ToString(c("Description")))
+
+        If IsDBNull(c("NumeroDebut")) OrElse IsDBNull(c("NumeroFin")) Then Return texte
+
+        Return String.Format("{0}  ({1}-{2})", texte,
+                             Convert.ToString(c("NumeroDebut")), Convert.ToString(c("NumeroFin")))
+    End Function
+
+    ''' <summary>
+    ''' Les sous-classes du plan, avec leur classe mère. Le navigateur s'en
+    ''' sert pour le deuxième cran du filtre : choisir « charges
+    ''' d'exploitation » ne laisse ensuite que ses onze sous-classes.
+    ''' </summary>
+    Private Function SousClassesJson() As String
+        Dim sb As New StringBuilder()
+        sb.Append("[")
+
+        Dim premier As Boolean = True
+        For Each c As DataRow In ClassesPour("", 2).Rows
+            If Not premier Then sb.Append(",")
+            sb.Append("{""i"":").Append(Convert.ToString(c("Id")))
+            sb.Append(",""p"":").Append(Convert.ToString(c("ParentId")))
+            sb.Append(",""t"":").Append(Newtonsoft.Json.JsonConvert.ToString(Libelle(c)))
+            sb.Append("}")
+            premier = False
+        Next
+
+        sb.Append("]")
+        Return sb.ToString()
+    End Function
+
+
+    Private Function ClassesPour(nature As String, Optional niveau As Integer = 1) As DataTable
+        Dim cle = niveau.ToString() & "|" & If(nature, "")
+        If _classesParNature.ContainsKey(cle) Then Return _classesParNature(cle)
+
+        Dim vide As New DataTable()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@Nature", If(String.IsNullOrEmpty(nature), CType(DBNull.Value, Object), nature)))
+            p.Add(New SqlParameter("@Niveau", niveau))
+
+            Dim ds As DataSet = ExecuteSQLds("s0765GetSousClasses", p)
+            Dim dt = If(ds Is Nothing OrElse ds.Tables.Count = 0, vide, ds.Tables(0))
+            _classesParNature(cle) = dt
+            Return dt
+        Catch
+            _classesParNature(cle) = vide
+            Return vide
+        End Try
+    End Function
 #End Region
 
 #Region "Affichage"
@@ -217,8 +344,10 @@ Public Class CorrespondanceComptes
 
     ''' <summary>Ce que la page propose, en clair, et d'où ça vient.</summary>
     Protected Function TexteProposition(origine As Object, compte As Object, nom As Object,
+                                        classe As Object, classeNom As Object,
                                         iaCompte As Object, iaNom As Object,
-                                        iaConfiance As Object, iaRaison As Object) As String
+                                        iaConfiance As Object, iaRaison As Object,
+                                        iaClasse As Object, iaClasseNom As Object) As String
         Dim c = Convert.ToString(compte)
         Dim n = Convert.ToString(nom)
         Dim ic = Convert.ToString(iaCompte)
@@ -231,12 +360,14 @@ Public Class CorrespondanceComptes
             Case "PROPOSE_NUMERO"
                 Return "<span class='pr pr-sur'>même numéro</span> " &
                        Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &
-                       AvisIA(ic, iaNom, c)
+                       TexteClasse(classe, classeNom) &
+                       AvisIA(ic, iaNom, c, iaClasse, iaClasseNom)
 
             Case "PROPOSE_NOM"
                 Return "<span class='pr pr-moyen'>même nom</span> " &
                        Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &
-                       AvisIA(ic, iaNom, c)
+                       TexteClasse(classe, classeNom) &
+                       AvisIA(ic, iaNom, c, iaClasse, iaClasseNom)
 
             Case "PROPOSE_IA"
                 Dim sb As New StringBuilder()
@@ -247,6 +378,8 @@ Public Class CorrespondanceComptes
                     sb.Append(" <span class='ia-conf'>").Append(Convert.ToInt32(iaConfiance)).Append("&nbsp;%</span>")
                 End If
 
+                sb.Append(TexteClasse(classe, classeNom))
+
                 Dim r = Convert.ToString(iaRaison)
                 If r <> "" Then
                     sb.Append("<span class='ia-raison'>").Append(Server.HtmlEncode(r)).Append("</span>")
@@ -255,8 +388,28 @@ Public Class CorrespondanceComptes
                 Return sb.ToString()
 
             Case Else
-                Return "<span class='pr pr-aucun'>aucune proposition</span>" & AvisIA(ic, iaNom, "")
+                Return "<span class='pr pr-aucun'>aucune proposition</span>" &
+                       AvisIA(ic, iaNom, "", iaClasse, iaClasseNom)
         End Select
+    End Function
+
+    ''' <summary>
+    ''' La classe du compte proposé. Deux comptes peuvent porter des noms
+    ''' voisins sans vivre au même endroit des états financiers : « Outillage »
+    ''' en immobilisations et « Petit outillage » en charges ne se valent pas.
+    ''' La classe est ce qui permet de trancher d'un coup d'œil.
+    ''' </summary>
+    Private Function TexteClasse(code As Object, description As Object) As String
+        Dim c = Convert.ToString(code)
+        If c = "" Then Return ""
+
+        Dim d = Convert.ToString(description)
+        Dim sb As New StringBuilder()
+        sb.Append("<span class='cls'>").Append(Server.HtmlEncode(c))
+        If d <> "" Then sb.Append(" · ").Append(Server.HtmlEncode(d))
+        sb.Append("</span>")
+
+        Return sb.ToString()
     End Function
 
     ''' <summary>
@@ -264,12 +417,14 @@ Public Class CorrespondanceComptes
     ''' le montre que s'il désigne un autre compte : répéter le même n'apprend
     ''' rien, et diverger mérite un coup d'œil.
     ''' </summary>
-    Private Function AvisIA(iaCompte As String, iaNom As Object, dejaPropose As String) As String
+    Private Function AvisIA(iaCompte As String, iaNom As Object, dejaPropose As String,
+                            iaClasse As Object, iaClasseNom As Object) As String
         If iaCompte = "" OrElse iaCompte = dejaPropose Then Return ""
 
         Return "<span class='ia-autre'>✨ l'IA suggère plutôt " &
                Server.HtmlEncode(iaCompte) & " — " &
-               Server.HtmlEncode(Convert.ToString(iaNom)) & "</span>"
+               Server.HtmlEncode(Convert.ToString(iaNom)) &
+               TexteClasse(iaClasse, iaClasseNom) & "</span>"
     End Function
 
     ''' <summary>La valeur à mettre dans le champ : la décision, sinon la proposition.</summary>
@@ -473,13 +628,13 @@ Public Class CorrespondanceComptes
                 Dim hfNom = TryCast(item.FindControl("hfNomSource"), HiddenField)
                 Dim hfType = TryCast(item.FindControl("hfTypeSource"), HiddenField)
                 Dim ddlAct = TryCast(item.FindControl("ddlAction"), DropDownList)
-                Dim txtCpt = TryCast(item.FindControl("txtCompte"), TextBox)
+                Dim hfCpt = TryCast(item.FindControl("hfCompte"), HiddenField)
                 Dim txtNot = TryCast(item.FindControl("txtNote"), TextBox)
 
                 If hfCle Is Nothing OrElse ddlAct Is Nothing Then Continue For
 
                 Dim action = ddlAct.SelectedValue
-                Dim compte = If(txtCpt Is Nothing, "", txtCpt.Text.Trim())
+                Dim compte = If(hfCpt Is Nothing, "", hfCpt.Value.Trim())
 
                 ' « Créer » sans numéro saisi : on reprend celui de l'ancien
                 ' logiciel quand il en a un. Sinon on le laisse vide : l'étape 3

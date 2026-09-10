@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- T214 — Proposition de correspondance assistee par l'IA
 --
 -- Le modele recoit deux listes -- les comptes de l'ancien logiciel et le plan
@@ -278,10 +278,18 @@ BEGIN
         pc.[Compte] AS ProposeCompte,
         pc.[Nom]    AS ProposeNom,
 
+        -- La classe du compte propose : deux comptes peuvent porter des noms
+        -- voisins et ne pas vivre au meme endroit des etats financiers.
+        pcl.[Id]          AS ProposeClasseId,
+        pcl.[Code]        AS ProposeClasse,
+        pcl.[Description] AS ProposeClasseNom,
+
         s.[ProposeIAConfiance] AS IAConfiance,
         s.[ProposeIARaison]    AS IARaison,
         ia.[Compte]            AS IACompte,
-        ia.[Nom]               AS IANom
+        ia.[Nom]               AS IANom,
+        icl.[Code]             AS IAClasse,
+        icl.[Description]      AS IAClasseNom
     FROM src s
     LEFT JOIN staging.CorrespondanceCompte c
            ON c.[CompanyGUID] = @CompanyGUID
@@ -301,8 +309,10 @@ BEGIN
     ) n
     LEFT JOIN dbo.T121PlanComptable pc
            ON pc.[Id] = COALESCE(c.[PlanComptableId], s.ProposeAuChargement, n.[Id], s.[ProposeIAId])
+    LEFT JOIN dbo.T120PlanComptable_Classe pcl ON pcl.[Id] = pc.[ClasseId]
     LEFT JOIN dbo.T121PlanComptable ia
            ON ia.[Id] = s.[ProposeIAId]
+    LEFT JOIN dbo.T120PlanComptable_Classe icl ON icl.[Id] = ia.[ClasseId]
     WHERE (@Filtre IS NULL
            OR (@Filtre = 'DECIDE'    AND c.[Id] IS NOT NULL)
            OR (@Filtre = 'A_DECIDER' AND c.[Id] IS NULL))

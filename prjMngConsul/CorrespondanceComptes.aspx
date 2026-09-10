@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" Async="true" MasterPageFile="~/Site.Master"
     CodeBehind="CorrespondanceComptes.aspx.vb" Inherits="MngConsul.CorrespondanceComptes" %>
+<%@ Register Src="~/Controls/EtapesReprise.ascx" TagPrefix="uc" TagName="EtapesReprise" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Correspondance des comptes — 60Sec-AI
@@ -99,6 +100,11 @@
 
     /* Ce que l'IA avance, et pourquoi. Deliberement discret : c'est un avis,
        pas un verdict. */
+    /* La classe du compte propose, sous son nom. */
+    .cls-f { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
+    .scls-f { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
+    .cpt-sel { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-family: inherit; background: #fff }
+    .cls { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-weight: 700; letter-spacing: .2px }
     .ia-raison { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-style: italic }
     .ia-conf { font-size: 10.5px; color: #6d28d9; font-weight: 700 }
     .ia-autre { display: block; margin-top: 3px; font-size: 10.5px; color: #6d28d9 }
@@ -123,6 +129,8 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="cor-page">
+
+    <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" />
 
     <div class="cor-head">
         <div class="ico">🔗</div>
@@ -241,6 +249,8 @@
                         <th class="solde">Solde</th>
                         <th>Ce que nous proposons</th>
                         <th style="width:118px">Action</th>
+                        <th style="width:210px">Classe</th>
+                        <th style="width:210px">Sous-classe</th>
                         <th style="width:150px">Compte chez vous</th>
                         <th>Note</th>
                     </tr>
@@ -257,7 +267,9 @@
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
                                 <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
-                                                         Eval("IACompte"), Eval("IANom"), Eval("IAConfiance"), Eval("IARaison")) %></td>
+                                                         Eval("ProposeClasse"), Eval("ProposeClasseNom"),
+                                                         Eval("IACompte"), Eval("IANom"), Eval("IAConfiance"), Eval("IARaison"),
+                                                         Eval("IAClasse"), Eval("IAClasseNom")) %></td>
 
                                 <td>
                                     <asp:HiddenField runat="server" ID="hfCleSource" Value='<%# Eval("CleSource") %>' />
@@ -276,10 +288,17 @@
                                 </td>
 
                                 <td>
-                                    <asp:TextBox runat="server" ID="txtCompte" CssClass="cpt-in" list="dlPlan"
-                                        Text='<%# CompteChoisi(Eval("Action"), Eval("CompteCible"), Eval("ProposeCompte")) %>'
-                                        onchange="majNom(this);" onkeyup="majNom(this);" />
-                                    <span class="nom-cible"></span>
+                                    <asp:DropDownList runat="server" ID="ddlClasseFiltre" CssClass="cls-f" />
+                                </td>
+
+                                <td>
+                                    <select class="scls-f"></select>
+                                </td>
+
+                                <td>
+                                    <select class="cpt-sel"></select>
+                                    <asp:HiddenField runat="server" ID="hfCompte"
+                                        Value='<%# CompteChoisi(Eval("Action"), Eval("CompteCible"), Eval("ProposeCompte")) %>' />
                                 </td>
 
                                 <td>
@@ -314,7 +333,6 @@
         </div>
     </asp:Panel>
 
-    <datalist id="dlPlan"><asp:Literal ID="litPlanOptions" runat="server" /></datalist>
 </div>
 
 <script type="text/javascript">
@@ -322,28 +340,97 @@
     // bloc de code inline : sur les pages à panneau Telerik ceux-ci cassent le
     // rendu, et l'habitude vaut mieux que l'exception.
     var PLAN = <asp:Literal ID="litPlanJson" runat="server" Text="{}" />;
+    var PLAN_CLS = <asp:Literal ID="litPlanClsJson" runat="server" Text="{}" />;
+    var PLAN_MERE = <asp:Literal ID="litPlanMereJson" runat="server" Text="{}" />;
+    var SOUS_CLASSES = <asp:Literal ID="litSousClassesJson" runat="server" Text="[]" />;
 
-    // Affiche le nom du compte saisi, pour qu'on voie tout de suite si l'on
-    // s'est trompé de numéro — c'est l'erreur qu'on ne rattrape plus après.
-    function majNom(input) {
-        var span = input.parentNode.querySelector('.nom-cible');
-        if (!span) return;
-
-        var v = (input.value || '').trim();
-        if (v === '') { span.textContent = ''; span.className = 'nom-cible'; return; }
-
-        if (PLAN.hasOwnProperty(v)) {
-            span.textContent = PLAN[v];
-            span.className = 'nom-cible';
-        } else {
-            span.textContent = 'ce numéro n’est pas à votre plan';
-            span.className = 'nom-cible inconnu';
-        }
-    }
-
+    // Le plan se lit en trois crans : la grande classe, puis la sous-classe,
+    // puis le compte. Chacun restreint le suivant. Sans cela le champ propose
+    // les 227 comptes d'un coup, et on n'y retrouve rien.
     (function () {
-        var champs = document.querySelectorAll('input.cpt-in');
-        for (var i = 0; i < champs.length; i++) { majNom(champs[i]); }
+        var lignes = document.querySelectorAll('tbody tr');
+        var n = 0;
+
+        for (var i = 0; i < lignes.length; i++) {
+            (function (tr) {
+                var cls = tr.querySelector('select.cls-f');
+                var scl = tr.querySelector('select.scls-f');
+                var sel = tr.querySelector('select.cpt-sel');
+                var hid = tr.querySelector('input[type=hidden][id*=_hfCompte_]');
+                if (!cls || !scl || !sel || !hid) return;
+
+
+                // 2e cran : les sous-classes de la classe choisie.
+                function remplirSousClasses() {
+                    var k = cls.value;
+                    while (scl.firstChild) { scl.removeChild(scl.firstChild); }
+
+                    var vide = document.createElement('option');
+                    vide.value = '';
+                    vide.textContent = (k === '') ? 'toute la classe' : 'toutes les sous-classes';
+                    scl.appendChild(vide);
+
+                    for (var j = 0; j < SOUS_CLASSES.length; j++) {
+                        var s = SOUS_CLASSES[j];
+                        if (k !== '' && String(s.p) !== k) continue;
+                        var o = document.createElement('option');
+                        o.value = String(s.i);
+                        o.textContent = s.t;
+                        scl.appendChild(o);
+                    }
+                }
+
+                // 3e cran : les comptes de la sous-classe choisie. Le choix
+                // voyage dans un champ cache : le menu est rempli par le
+                // navigateur, le serveur ne connait pas ses options.
+                function remplirComptes() {
+                    var sc = scl.value;
+                    var k = cls.value;
+                    var courant = hid.value;
+
+                    while (sel.firstChild) { sel.removeChild(sel.firstChild); }
+
+                    var vide = document.createElement('option');
+                    vide.value = '';
+                    vide.textContent = '— aucun —';
+                    sel.appendChild(vide);
+
+                    var vu = false;
+                    for (var c in PLAN) {
+                        if (!PLAN.hasOwnProperty(c)) continue;
+                        if (sc !== '') { if (String(PLAN_CLS[c]) !== sc) continue; }
+                        else if (k !== '') { if (String(PLAN_MERE[c]) !== k) continue; }
+
+                        var o = document.createElement('option');
+                        o.value = c;
+                        o.textContent = c + ' — ' + PLAN[c];
+                        sel.appendChild(o);
+                        if (c === courant) vu = true;
+                    }
+
+                    // Le compte deja retenu reste choisissable meme si le
+                    // filtre l'exclut : sinon un simple coup d'oeil aux
+                    // classes effacerait une decision prise.
+                    if (courant !== '' && !vu && PLAN.hasOwnProperty(courant)) {
+                        var g = document.createElement('option');
+                        g.value = courant;
+                        g.textContent = courant + ' — ' + PLAN[courant] + '  (hors filtre)';
+                        sel.appendChild(g);
+                    }
+
+                    sel.value = courant;
+                }
+
+                sel.addEventListener('change', function () { hid.value = sel.value; });
+
+                cls.addEventListener('change', function () { remplirSousClasses(); remplirComptes(); });
+                scl.addEventListener('change', remplirComptes);
+
+                remplirSousClasses();
+                remplirComptes();
+            })(lignes[i]);
+        }
     })();
+
 </script>
 </asp:Content>

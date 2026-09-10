@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ImportPlanComptable.aspx.vb" Inherits="MngConsul.ImportPlanComptable" %>
+<%@ Register Src="~/Controls/EtapesReprise.ascx" TagPrefix="uc" TagName="EtapesReprise" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Importer le plan comptable — 60Sec-AI
@@ -227,6 +228,8 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="imp-page">
+
+    <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="1" />
 
     <div class="imp-head">
         <div class="ico">📊</div>

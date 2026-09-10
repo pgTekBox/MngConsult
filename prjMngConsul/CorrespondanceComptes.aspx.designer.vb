@@ -9,6 +9,9 @@ Option Explicit On
 
 
 Partial Public Class CorrespondanceComptes
+    '''<summary>ucEtapes</summary>
+    Protected WithEvents ucEtapes As Global.MngConsul.EtapesReprise
+
 
     '''<summary>pnlSucces</summary>
     Protected WithEvents pnlSucces As Global.System.Web.UI.WebControls.Panel
@@ -70,9 +73,15 @@ Partial Public Class CorrespondanceComptes
     Protected WithEvents rptLignes As Global.System.Web.UI.WebControls.Repeater
     '''<summary>btnEnregistrer</summary>
     Protected WithEvents btnEnregistrer As Global.System.Web.UI.WebControls.Button
+    '''<summary>litPlanMereJson</summary>
+    Protected WithEvents litPlanMereJson As Global.System.Web.UI.WebControls.Literal
 
-    '''<summary>litPlanOptions</summary>
-    Protected WithEvents litPlanOptions As Global.System.Web.UI.WebControls.Literal
+    '''<summary>litSousClassesJson</summary>
+    Protected WithEvents litSousClassesJson As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPlanClsJson</summary>
+    Protected WithEvents litPlanClsJson As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>litPlanJson</summary>
     Protected WithEvents litPlanJson As Global.System.Web.UI.WebControls.Literal
 
