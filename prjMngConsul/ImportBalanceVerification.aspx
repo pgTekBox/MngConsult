@@ -1,5 +1,5 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
-    CodeBehind="ImportSageBalanceVerification.aspx.vb" Inherits="MngConsul.ImportSageBalanceVerification" %>
+    CodeBehind="ImportBalanceVerification.aspx.vb" Inherits="MngConsul.ImportBalanceVerification" %>
 
 <asp:Content ID="titleContent" ContentPlaceHolderID="TitleContent" runat="server">
     Import Balance de Vérification
@@ -21,20 +21,20 @@
     .imp-section h2 { font-size:15px; font-weight:800; margin:0 0 4px; }
     .imp-section .sec-desc { font-size:13px; color:var(--mc-muted); margin-bottom:16px; }
     .upload-zone {
-        border:2px dashed var(--mc-stroke); border-radius:14px;
-        padding:32px 20px; text-align:center; transition:border-color .2s, background .2s; cursor:pointer;
+        border:1.5px dashed var(--mc-stroke); border-radius:10px;
+        display:flex; align-items:center; gap:9px; padding:9px 13px; transition:border-color .2s, background .2s; cursor:pointer;
     }
     .upload-zone:hover, .upload-zone.dragover { border-color:var(--mc-blue); background:rgba(37,99,235,.05); }
-    .upload-zone .uz-ico { font-size:34px; margin-bottom:8px; }
-    .upload-zone p { font-size:14px; color:var(--mc-muted); margin:0; }
-    .upload-zone .uz-hint { font-size:12px; color:var(--mc-muted); margin-top:6px; opacity:.65; }
+    .upload-zone .uz-ico { font-size:17px; line-height:1; }
+    .upload-zone p { font-size:13px; color:var(--mc-muted); margin:0; }
+    .upload-zone .uz-hint { font-size:11.5px; margin-left:auto; padding-left:10px; white-space:nowrap; opacity:.65; }
     .file-pill {
-        display:flex; align-items:center; gap:12px; padding:10px 14px; margin-top:12px;
+        display:flex; align-items:center; gap:10px; padding:7px 12px; margin-top:10px;
         background:linear-gradient(135deg, rgba(37,99,235,.07), rgba(6,182,212,.05));
         border:1px solid var(--mc-stroke); border-radius:12px;
     }
-    .file-pill .fp-ico { font-size:24px; }
-    .file-pill .fp-name { font-weight:700; font-size:14px; }
+    .file-pill .fp-ico { font-size:17px; }
+    .file-pill .fp-name { font-weight:700; font-size:13px; }
     .file-pill .fp-size { font-size:12px; color:var(--mc-muted); }
     .file-pill .fp-rm { margin-left:auto; color:#ef4444; cursor:pointer; font-size:16px; background:none; border:none; }
     .opts { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
@@ -92,6 +92,11 @@
     .s-ok  { background:#f0fdf4; } .s-ok  .sv { color:#16a34a; }
     .s-wrn { background:#fffbeb; } .s-wrn .sv { color:#d97706; }
     .s-err { background:#fef2f2; } .s-err .sv { color:#dc2626; }
+    .equil { padding:11px 14px; border-radius:12px; margin:16px 0 12px; font-size:13.5px; font-weight:700; border:1px solid transparent; }
+    .equil.ok { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
+    .equil.ko { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
+    .imp-tbl .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .imp-tbl tfoot td { font-weight:800; padding:9px 14px; border-top:2px solid var(--mc-stroke); background:rgba(37,99,235,.04); }
 </style>
 </asp:Content>
 
@@ -102,7 +107,7 @@
             <div class="pg-ico">📋</div>
             <div>
                 <h1>Import Balance de Vérification</h1>
-                <div class="pg-sub">Migration Sage 50 → staging.SageBalanceVerification</div>
+                <div class="pg-sub">Migration → staging.BalanceVerification</div>
             </div>
         </div>
     </div>
@@ -117,10 +122,34 @@
         <span class="al-ico">⚠️</span><div class="al-body"><div class="al-title">Attention</div><asp:Literal ID="litWarning" runat="server" /></div>
     </asp:Panel>
 
+    <asp:Panel ID="pnlResults" runat="server" Visible="false">
+        <div class="imp-section">
+            <h2>Résultat de l'importation</h2>
+            <div class="stats">
+                <div class="stat s-ok"><div class="sv"><asp:Literal ID="litInserted" runat="server" /></div><div class="sl">Insérées</div></div>
+                <div class="stat s-wrn"><div class="sv"><asp:Literal ID="litSkipped" runat="server" /></div><div class="sl">Ignorées</div></div>
+                <div class="stat s-err"><div class="sv"><asp:Literal ID="litErrors" runat="server" /></div><div class="sl">Erreurs</div></div>
+            </div>
+            <asp:Panel ID="pnlBalance" runat="server" Visible="false">
+                <asp:Literal ID="litEquilibre" runat="server" />
+                <asp:Literal ID="litBalance" runat="server" />
+            </asp:Panel>
+            <asp:Panel ID="pnlErrorDetails" runat="server" Visible="false">
+                <h2 style="margin-top:18px;">Détail des erreurs</h2>
+                <div class="tbl-wrap" style="margin-top:10px;"><asp:GridView ID="gvErrors" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" /></div>
+            </asp:Panel>
+            <div class="imp-actions">
+                <asp:Button ID="btnReset" runat="server" Text="🔄 Nouvel import" CssClass="imp-btn imp-btn-secondary" />
+                <asp:Button ID="btnTruncateTable" runat="server" Text="🗑 Vider la table" CssClass="imp-btn imp-btn-danger"
+                    OnClientClick="return confirm('Vider la table ?');" />
+            </div>
+        </div>
+    </asp:Panel>
+
     <asp:Panel ID="pnlUpload" runat="server">
         <div class="imp-section">
             <h2>Étape 1 — Sélectionner le fichier CSV</h2>
-            <p class="sec-desc">Exportez depuis Sage 50 : <strong>Reports &gt; Financials &gt; Trial Balance (à la date de coupure)</strong></p>
+            <p class="sec-desc">Exportez la balance de vérification <strong>à la date de bascule</strong> depuis votre ancien logiciel — dans QuickBooks : <strong>Rapports ▸ Balance de vérification</strong> (Trial Balance), puis exportez en CSV.</p>
 
             <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuCsvFile.ClientID %>').click();">
                 <div class="uz-ico">📁</div>
@@ -140,17 +169,17 @@
                 <div class="opt">
                     <label>Séparateur</label>
                     <asp:DropDownList ID="ddlSeparator" runat="server">
-                        <asp:ListItem Value=";" Text="Point-virgule ( ; )" Selected="True" />
-                        <asp:ListItem Value="," Text="Virgule ( , )" />
+                        <asp:ListItem Value=";" Text="Point-virgule ( ; )" />
+                        <asp:ListItem Value="," Text="Virgule ( , )" Selected="True" />
                         <asp:ListItem Value="&#9;" Text="Tabulation" />
                     </asp:DropDownList>
-                    <div class="hint">Sage 50 utilise généralement le point-virgule</div>
+                    <div class="hint">QuickBooks exporte avec la virgule ; si les colonnes se mélangent, essayez le point-virgule</div>
                 </div>
                 <div class="opt">
                     <label>Encodage</label>
                     <asp:DropDownList ID="ddlEncoding" runat="server">
-                        <asp:ListItem Value="UTF-8" Text="UTF-8" />
-                        <asp:ListItem Value="Windows-1252" Text="Windows-1252 (ANSI)" Selected="True" />
+                        <asp:ListItem Value="UTF-8" Text="UTF-8" Selected="True" />
+                        <asp:ListItem Value="Windows-1252" Text="Windows-1252 (ANSI)" />
                         <asp:ListItem Value="ISO-8859-1" Text="ISO-8859-1" />
                     </asp:DropDownList>
                 </div>
@@ -166,14 +195,14 @@
 
     <div class="imp-section">
         <h2>Correspondance des colonnes</h2>
-        <p class="sec-desc">Colonnes attendues dans le CSV :</p>
+        <p class="sec-desc">Colonnes reconnues. Les lignes de titre avant l'en-tête, la ligne <strong>TOTAL</strong> et le pied de page sont écartés d'eux-mêmes ; le total du fichier sert à contrôler la lecture.</p>
         <table class="map-tbl">
             <thead><tr><th>Colonne CSV</th><th></th><th>Champ SQL</th><th>Type</th><th>Description</th></tr></thead>
             <tbody>
-                <tr><td class="c-csv">Account Number / Numéro</td><td class="c-arr">→</td><td class="c-db">SageCompte</td><td>VARCHAR(20)</td><td>Numéro du compte</td></tr>
-                <tr><td class="c-csv">Account Name / Description</td><td class="c-arr">→</td><td class="c-db">SageDescription</td><td>VARCHAR(200)</td><td>Nom du compte</td></tr>
-                <tr><td class="c-csv">Debit Balance</td><td class="c-arr">→</td><td class="c-db">SageDebit</td><td>DECIMAL(15,2)</td><td>Solde débiteur</td></tr>
-                <tr><td class="c-csv">Credit Balance</td><td class="c-arr">→</td><td class="c-db">SageCredit</td><td>DECIMAL(15,2)</td><td>Solde créditeur</td></tr>
+                <tr><td class="c-csv">Numéro de compte — facultatif</td><td class="c-arr">→</td><td class="c-db">Compte</td><td>VARCHAR(20)</td><td>Absent chez QuickBooks : le nom suffit</td></tr>
+                <tr><td class="c-csv">Account Name / Nom du compte</td><td class="c-arr">→</td><td class="c-db">Description</td><td>VARCHAR(200)</td><td>Nom du compte</td></tr>
+                <tr><td class="c-csv">Debit / Débit</td><td class="c-arr">→</td><td class="c-db">Debit</td><td>DECIMAL(15,2)</td><td>Solde débiteur — « 21,095.57 » comme « 21 095,57 »</td></tr>
+                <tr><td class="c-csv">Credit / Crédit</td><td class="c-arr">→</td><td class="c-db">Credit</td><td>DECIMAL(15,2)</td><td>Solde créditeur</td></tr>
             </tbody>
         </table>
     </div>
@@ -186,26 +215,6 @@
         </div>
     </asp:Panel>
 
-    <asp:Panel ID="pnlResults" runat="server" Visible="false">
-        <div class="imp-section">
-            <h2>Résultats</h2>
-            <div class="stats">
-                <div class="stat s-ok"><div class="sv"><asp:Literal ID="litInserted" runat="server" /></div><div class="sl">Insérées</div></div>
-                <div class="stat s-wrn"><div class="sv"><asp:Literal ID="litSkipped" runat="server" /></div><div class="sl">Ignorées</div></div>
-                <div class="stat s-err"><div class="sv"><asp:Literal ID="litErrors" runat="server" /></div><div class="sl">Erreurs</div></div>
-            </div>
-            <asp:Panel ID="pnlErrorDetails" runat="server" Visible="false">
-                <h2 style="margin-top:18px;">Détail des erreurs</h2>
-                <div class="tbl-wrap" style="margin-top:10px;"><asp:GridView ID="gvErrors" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" /></div>
-            </asp:Panel>
-            <div class="imp-actions">
-                <asp:Button ID="btnReset" runat="server" Text="🔄 Nouvel import" CssClass="imp-btn imp-btn-secondary" />
-                <asp:Button ID="btnTruncateTable" runat="server" Text="🗑 Vider la table" CssClass="imp-btn imp-btn-danger"
-                    OnClientClick="return confirm('Vider la table ?');" />
-            </div>
-        </div>
-    </asp:Panel>
-
     <script>
         (function(){
             var dz=document.getElementById('dropZone'); if(!dz)return;
@@ -214,6 +223,6 @@
             dz.addEventListener('drop',function(e){var fi=document.getElementById('<%= fuCsvFile.ClientID %>');if(e.dataTransfer.files.length>0){fi.files=e.dataTransfer.files;showFileInfo(fi);}});
         })();
         function showFileInfo(i){if(i.files&&i.files.length>0){var f=i.files[0];document.getElementById('fileName').textContent=f.name;document.getElementById('fileSize').textContent=f.size>1048576?(f.size/1048576).toFixed(2)+' Mo':(f.size/1024).toFixed(1)+' Ko';document.getElementById('fileInfoDiv').style.display='block';document.getElementById('dropZone').style.display='none';}}
-        function clearFile(){document.getElementById('<%= fuCsvFile.ClientID %>').value='';document.getElementById('fileInfoDiv').style.display='none';document.getElementById('dropZone').style.display='block';}
+        function clearFile(){document.getElementById('<%= fuCsvFile.ClientID %>').value='';document.getElementById('fileInfoDiv').style.display='none';document.getElementById('dropZone').style.display='';}
     </script>
 </asp:Content>

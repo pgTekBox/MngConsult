@@ -26,13 +26,21 @@
 
     .fil .lib { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 
-    /* L'étape courante : sans lien, elle ne se clique pas. */
+    /* L'étape courante : surlignée, et cliquable comme les autres. */
     .fil .ici { background: #eff6ff; color: #1d4ed8; font-weight: 800 }
     .fil .ici .no { background: #2563eb; color: #fff }
 
-    /* Une étape qu'aucun lot ne rend atteignable pour l'instant. */
-    .fil .hors { color: #cbd5e1; cursor: default }
-    .fil .hors .no { background: #f8fafc; color: #cbd5e1 }
+    /* L'état de l'écran courant, replié par défaut. */
+    .etat { margin: -8px 0 16px; font-size: 12.5px; color: #475569 }
+    .etat summary { cursor: pointer; color: #64748b; font-weight: 700 }
+    .etat .nt { margin-left: 6px; font-weight: 800 }
+    .etat .nt.vert { color: #047857 }
+    .etat .nt.jaune { color: #b45309 }
+    .etat .nt.orange { color: #c2410c }
+    .etat p { margin: 6px 0 0; line-height: 1.55; max-width: 900px }
+    .etat .fait b { color: #047857 }
+    .etat .manque b { color: #b45309 }
 </style>
 
 <div class="fil"><asp:Literal ID="litFil" runat="server" /></div>
+<asp:Literal ID="litEtat" runat="server" />

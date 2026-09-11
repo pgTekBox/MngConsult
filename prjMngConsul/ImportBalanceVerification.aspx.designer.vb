@@ -11,7 +11,7 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class ImportSageBalanceVerification
+Partial Public Class ImportBalanceVerification
 
     '''<summary>
     '''pnlSuccess control.
@@ -237,4 +237,13 @@ Partial Public Class ImportSageBalanceVerification
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnTruncateTable As Global.System.Web.UI.WebControls.Button
+    '''<summary>pnlBalance</summary>
+    Protected WithEvents pnlBalance As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litEquilibre</summary>
+    Protected WithEvents litEquilibre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litBalance</summary>
+    Protected WithEvents litBalance As Global.System.Web.UI.WebControls.Literal
+
 End Class

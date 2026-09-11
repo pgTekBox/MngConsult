@@ -34,51 +34,36 @@ Public Class Importations
     End Class
 
     ''' <summary>
-    ''' La reprise du plan comptable : trois écrans qui s'enchaînent. Les seuls
-    ''' que j'aie éprouvés de bout en bout sur un vrai export.
+    ''' La reprise du plan comptable : une seule boîte, qui mène à l'étape 1.
+    ''' Le détail de chaque étape — ce qui fonctionne, ce qui manque — vit sur
+    ''' l'écran lui-même, sous le fil des étapes. La note est celle de l'étape
+    ''' la plus faible : un parcours ne vaut pas mieux.
+    ''' La balance de vérification vient à côté : c'est la cible du contrôle final.
     ''' </summary>
     Private ReadOnly Property Parcours As List(Of Poste)
         Get
             Return New List(Of Poste) From {
                 New Poste With {
-                    .Etape = "1", .Icone = "📊",
+                    .Icone = "📊",
                     .Titre = "Plan comptable",
                     .Source = "QuickBooks : Liste des comptes (Account List)",
-                    .Destination = "préparation — staging.ImportPlanComptable",
+                    .Destination = "comptabilité — T121PlanComptable, en trois étapes",
                     .Page = "~/ImportPlanComptable.aspx",
-                    .Note = 9,
-                    .Fait = "Lit le CSV, reconnaît les colonnes, contrôle les doublons et les " &
-                            "lignes invalides, met en préparation. Clé par numéro ou par nom, " &
-                            "reconnaissance des comptes déjà au plan dans les quatre langues, " &
-                            "aide propre à QuickBooks, glisser-déposer.",
-                    .Manque = "Ne lit pas les .xlsx — il faut passer par un CSV. L'aide reste " &
-                              "à écrire pour Sage 50 et Acomba."
+                    .Note = EtapesReprise.NoteParcours,
+                    .Fait = "Importer le fichier, décider de la correspondance de chaque compte, " &
+                            "puis créer au plan ceux qui manquent. Chaque écran dit lui-même " &
+                            "ce qui y fonctionne et ce qui y manque."
                 },
                 New Poste With {
-                    .Etape = "2", .Icone = "🔗",
-                    .Titre = "Correspondance des comptes",
-                    .Source = "le lot chargé à l'étape 1",
-                    .Destination = "préparation — staging.CorrespondanceCompte",
-                    .Page = "~/CorrespondanceComptes.aspx",
-                    .Note = 9,
-                    .Fait = "Propose par numéro, par nom dans les quatre langues, et par IA " &
-                            "avec un degré de confiance et un motif. Choix guidé classe ▸ " &
-                            "sous-classe ▸ compte. Rien n'est décidé à votre place.",
-                    .Manque = "Aucun traitement en masse hors « accepter les correspondances " &
-                              "par numéro » : le reste se décide ligne par ligne."
-                },
-                New Poste With {
-                    .Etape = "3", .Icone = "📗",
-                    .Titre = "Créer les comptes au plan",
-                    .Source = "les décisions de l'étape 2",
-                    .Destination = "comptabilité — T121PlanComptable",
-                    .Page = "~/AppliquerPlanComptable.aspx",
-                    .Note = 8,
-                    .Fait = "Crée pour de bon les comptes marqués « Créer ». Numéro attribué " &
-                            "dans la plage de la classe, contrôles avant écriture, tout ou " &
-                            "rien, rejouable sans rien recréer.",
-                    .Manque = "Ne met pas à jour un compte existant et n'en désactive aucun. " &
-                              "Un plan repris de travers se corrige encore à la main."
+                    .Icone = "⚖️",
+                    .Titre = "Balance de vérification",
+                    .Source = "Sage 50 — CSV",
+                    .Destination = "préparation — staging.BalanceVerification",
+                    .Page = "~/ImportBalanceVerification.aspx",
+                    .Note = 4,
+                    .Fait = "Lit le fichier et le met en préparation.",
+                    .Manque = "Rien ne l'applique : les soldes d'ouverture ne sont jamais " &
+                              "écrits. Pas rattachée au socle multi-logiciels ni aux lots."
                 }
             }
         End Get
@@ -102,17 +87,6 @@ Public Class Importations
                             "et migre vraiment vers les tiers et les produits.",
                     .Manque = "Aucun rapprochement avec ce qui existe déjà : un tiers présent " &
                               "sera recréé. Les adresses ne suivent pas encore."
-                },
-                New Poste With {
-                    .Icone = "⚖️",
-                    .Titre = "Balance de vérification",
-                    .Source = "Sage 50 — CSV",
-                    .Destination = "préparation — staging.SageBalanceVerification",
-                    .Page = "~/ImportSageBalanceVerification.aspx",
-                    .Note = 4,
-                    .Fait = "Lit le fichier et le met en préparation.",
-                    .Manque = "Rien ne l'applique : les soldes d'ouverture ne sont jamais " &
-                              "écrits. Pas rattachée au socle multi-logiciels ni aux lots."
                 },
                 New Poste With {
                     .Icone = "🧾",

@@ -41,6 +41,9 @@
 
     .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 14px; margin-top: 12px }
 
+    /* Plan comptable et balance de vérification : côte à côte, toujours. */
+    .grille.duo { grid-template-columns: 1fr 1fr }
+
     .carte {
         background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
         padding: 15px 17px; display: flex; flex-direction: column;
@@ -137,8 +140,8 @@
             <div class="v"><asp:Literal ID="litAFaire" runat="server" Text="0" /></div></div>
     </div>
 
-    <h2 class="sect">Reprise du plan comptable <span>trois écrans qui s'enchaînent — commencez ici</span></h2>
-    <div class="grille"><asp:Literal ID="litParcours" runat="server" /></div>
+    <h2 class="sect">Reprise comptable <span>le plan comptable, puis la balance de vérification</span></h2>
+    <div class="grille duo"><asp:Literal ID="litParcours" runat="server" /></div>
 
     <h2 class="sect">Autres importations <span>indépendantes les unes des autres</span></h2>
     <div class="grille"><asp:Literal ID="litAutres" runat="server" /></div>
@@ -147,10 +150,10 @@
     <div class="grille"><asp:Literal ID="litAVenir" runat="server" /></div>
 
     <p class="note-bas">
-        Les notes des trois écrans de reprise du plan comptable reposent sur des essais
+        La note du plan comptable repose sur des essais
         de bout en bout, sur un vrai export QuickBooks. Les autres sont établies par
         lecture du code : elles disent ce que l'écran fait, pas ce qu'il ferait bien.
-        Elles se corrigent dans <b>Importations.aspx.vb</b>, où chacune est justifiée.
+        Elles se corrigent dans <b>Importations.aspx.vb</b> ; celles des trois étapes du plan comptable, dans <b>Controls/EtapesReprise.ascx.vb</b>.
     </p>
 
 </div>

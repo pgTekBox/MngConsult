@@ -11,4 +11,7 @@ Partial Public Class EtapesReprise
 
     '''<summary>litFil</summary>
     Protected WithEvents litFil As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litEtat</summary>
+    Protected WithEvents litEtat As Global.System.Web.UI.WebControls.Literal
 End Class

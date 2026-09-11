@@ -445,7 +445,7 @@
     <Content Include="Images\plus.png" />
     <Content Include="Images\rondplus45.png" />
     <Content Include="Images\trash.png" />
-    <Content Include="ImportSageBalanceVerification.aspx" />
+    <Content Include="ImportBalanceVerification.aspx" />
     <Content Include="ImportSageComptes.aspx" />
     <Content Include="ImportSageFactureLines.aspx" />
     <Content Include="ImportSageFactures.aspx" />
@@ -695,11 +695,11 @@
       <DependentUpon>PdfViewer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ImportSageBalanceVerification.aspx.designer.vb">
-      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+    <Compile Include="ImportBalanceVerification.aspx.designer.vb">
+      <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ImportSageBalanceVerification.aspx.vb">
-      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+    <Compile Include="ImportBalanceVerification.aspx.vb">
+      <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">

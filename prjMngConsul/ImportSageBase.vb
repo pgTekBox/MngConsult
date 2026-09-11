@@ -1,4 +1,4 @@
-Imports System.Data
+﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.IO
 Imports System.Text
@@ -107,6 +107,7 @@ Public MustInherit Class ImportSageBase
 
             Dim dt = ParseCsvToDataTable(lines)
             Dim result = ImportToDatabase(dt)
+            DerniereImportation = result.Lignes
 
             InsertedLiteral.Text = result.Inserted.ToString()
             SkippedLiteral.Text = result.Skipped.ToString()
@@ -164,6 +165,12 @@ Public MustInherit Class ImportSageBase
     End Sub
 
 #End Region
+
+    ''' <summary>
+    ''' Les lignes écrites par la dernière importation, telles qu'insérées. Vide
+    ''' tant qu'aucune importation n'a eu lieu dans cette requête.
+    ''' </summary>
+    Protected Property DerniereImportation As DataTable
 
 #Region "CSV Parsing"
 
@@ -297,6 +304,13 @@ Public MustInherit Class ImportSageBase
             Dim paramNames = String.Join(", ", cols.Select(Function(c) "@" & c.FieldName))
             Dim insertSql = $"INSERT INTO {StagingTableName} ({colNames}) VALUES ({paramNames})"
 
+            ' Ce qui a été écrit, ligne par ligne : l'écran peut le montrer aussitôt
+            ' sans relire la table — partagée, elle mêlerait d'autres importations.
+            result.Lignes = New DataTable()
+            For Each col In cols
+                result.Lignes.Columns.Add(col.FieldName, GetType(Object))
+            Next
+
             Using cmd As New SqlCommand(insertSql, conn)
                 ' Ajouter les paramètres
                 For Each col In cols
@@ -369,6 +383,11 @@ Public MustInherit Class ImportSageBase
                         Next
 
                         cmd.ExecuteNonQuery()
+                        Dim ecrite = result.Lignes.NewRow()
+                        For Each col In cols
+                            ecrite(col.FieldName) = cmd.Parameters("@" & col.FieldName).Value
+                        Next
+                        result.Lignes.Rows.Add(ecrite)
                         result.Inserted += 1
 
                     Catch sqlEx As SqlException
@@ -503,6 +522,7 @@ NextRow:
         Public Property Inserted As Integer = 0
         Public Property Skipped As Integer = 0
         Public Property Errors As New List(Of ImportError)
+        Public Property Lignes As DataTable
     End Class
 
     Private Class ImportError
