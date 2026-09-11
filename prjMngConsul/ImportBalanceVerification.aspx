@@ -1,4 +1,4 @@
-﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="VB" AutoEventWireup="false" Async="true" MasterPageFile="~/Site.Master"
     CodeBehind="ImportBalanceVerification.aspx.vb" Inherits="MngConsul.ImportBalanceVerification" %>
 
 <asp:Content ID="titleContent" ContentPlaceHolderID="TitleContent" runat="server">
@@ -97,6 +97,21 @@
     .equil.ko { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
     .imp-tbl .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
     .imp-tbl tfoot td { font-weight:800; padding:9px 14px; border-top:2px solid var(--mc-stroke); background:rgba(37,99,235,.04); }
+    .imp-btn-ia { background:#6d28d9; color:#fff; }
+    .imp-btn-ia:hover { background:#5b21b6; }
+    .ia-hint { font-size:12px; color:var(--mc-muted); margin:14px 0 0; text-align:right; }
+    .equil.ia { background:#f5f3ff; color:#5b21b6; border-color:#ddd6fe; font-weight:600; }
+    .origine { font-size:12.5px; color:var(--mc-muted); margin:2px 0 12px; line-height:1.5; }
+    .ctrl { border:1px solid var(--mc-stroke); border-radius:12px; padding:14px 16px; margin:14px 0; background:#fff; }
+    .ctrl h3 { font-size:14px; font-weight:800; margin:0 0 4px; }
+    .ctrl .ctx { font-size:12.5px; color:var(--mc-muted); margin:0 0 10px; line-height:1.5; }
+    .ctrl .chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
+    .ctrl .chip { padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+    .grv { display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px; font-weight:800; white-space:nowrap; }
+    .grv-err { background:#fef2f2; color:#b91c1c; }
+    .grv-ver { background:#fffbeb; color:#b45309; }
+    .grv-inf { background:#f1f5f9; color:#64748b; }
+    .ctrl .rien { padding:10px 12px; border-radius:10px; background:#f0fdf4; color:#166534; font-weight:700; font-size:13px; }
 </style>
 </asp:Content>
 
@@ -113,7 +128,7 @@
     </div>
 
     <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="imp-alert imp-alert-ok">
-        <span class="al-ico">✅</span><div class="al-body"><div class="al-title">Importation réussie</div><asp:Literal ID="litSuccess" runat="server" /></div>
+        <span class="al-ico">✅</span><div class="al-body"><div class="al-title">C'est fait</div><asp:Literal ID="litSuccess" runat="server" /></div>
     </asp:Panel>
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="imp-alert imp-alert-err">
         <span class="al-ico">❌</span><div class="al-body"><div class="al-title">Erreur</div><asp:Literal ID="litError" runat="server" /></div>
@@ -124,12 +139,18 @@
 
     <asp:Panel ID="pnlResults" runat="server" Visible="false">
         <div class="imp-section">
-            <h2>Résultat de l'importation</h2>
+            <h2><asp:Literal ID="litTitreResultat" runat="server" Text="Résultat de l'importation" /></h2>
+            <asp:Literal ID="litOrigine" runat="server" />
+            <asp:Panel ID="pnlStats" runat="server">
             <div class="stats">
                 <div class="stat s-ok"><div class="sv"><asp:Literal ID="litInserted" runat="server" /></div><div class="sl">Insérées</div></div>
                 <div class="stat s-wrn"><div class="sv"><asp:Literal ID="litSkipped" runat="server" /></div><div class="sl">Ignorées</div></div>
                 <div class="stat s-err"><div class="sv"><asp:Literal ID="litErrors" runat="server" /></div><div class="sl">Erreurs</div></div>
             </div>
+            </asp:Panel>
+            <asp:Panel ID="pnlControle" runat="server" Visible="false">
+                <asp:Literal ID="litControle" runat="server" />
+            </asp:Panel>
             <asp:Panel ID="pnlBalance" runat="server" Visible="false">
                 <asp:Literal ID="litEquilibre" runat="server" />
                 <asp:Literal ID="litBalance" runat="server" />
@@ -139,9 +160,10 @@
                 <div class="tbl-wrap" style="margin-top:10px;"><asp:GridView ID="gvErrors" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" /></div>
             </asp:Panel>
             <div class="imp-actions">
+                <asp:Button ID="btnControle" runat="server" Text="🔍 Incohérences avec le plan comptable" CssClass="imp-btn imp-btn-primary" CausesValidation="false" />
                 <asp:Button ID="btnReset" runat="server" Text="🔄 Nouvel import" CssClass="imp-btn imp-btn-secondary" />
-                <asp:Button ID="btnTruncateTable" runat="server" Text="🗑 Vider la table" CssClass="imp-btn imp-btn-danger"
-                    OnClientClick="return confirm('Vider la table ?');" />
+                <asp:Button ID="btnTruncateTable" runat="server" Text="🗑 Supprimer la balance importée" CssClass="imp-btn imp-btn-danger"
+                    OnClientClick="if (!confirm('Supprimer la balance importée de votre compagnie ?')) { return false; }" />
             </div>
         </div>
     </asp:Panel>
@@ -185,9 +207,11 @@
                 </div>
             </div>
             <div class="chk"><asp:CheckBox ID="chkHasHeader" runat="server" Checked="true" /><label for="<%= chkHasHeader.ClientID %>">Ligne d'en-tête</label></div>
-            <div class="chk"><asp:CheckBox ID="chkTruncate" runat="server" Checked="false" /><label for="<%= chkTruncate.ClientID %>">Vider la table avant l'import</label></div>
+            <div class="chk"><asp:CheckBox ID="chkTruncate" runat="server" Checked="true" /><label for="<%= chkTruncate.ClientID %>">Remplacer la balance déjà importée</label></div>
+            <p class="ia-hint">Fichier mal formaté ? <strong>Lire avec l'IA</strong> confie la lecture à ChatGPT. Chaque montant rendu est retrouvé dans le fichier d'origine avant d'être accepté.</p>
             <div class="imp-actions">
                 <asp:Button ID="btnPreview" runat="server" Text="👁 Aperçu" CssClass="imp-btn imp-btn-secondary" />
+                <asp:Button ID="btnIA" runat="server" Text="✨ Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value='⏳ Lecture par l\'IA…';" />
                 <asp:Button ID="btnImport" runat="server" Text="📥 Importer" CssClass="imp-btn imp-btn-primary" />
             </div>
         </div>

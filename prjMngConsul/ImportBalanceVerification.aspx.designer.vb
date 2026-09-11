@@ -246,4 +246,22 @@ Partial Public Class ImportBalanceVerification
     '''<summary>litBalance</summary>
     Protected WithEvents litBalance As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>btnIA</summary>
+    Protected WithEvents btnIA As Global.System.Web.UI.WebControls.Button
+    '''<summary>litTitreResultat</summary>
+    Protected WithEvents litTitreResultat As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litOrigine</summary>
+    Protected WithEvents litOrigine As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>pnlStats</summary>
+    Protected WithEvents pnlStats As Global.System.Web.UI.WebControls.Panel
+    '''<summary>btnControle</summary>
+    Protected WithEvents btnControle As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlControle</summary>
+    Protected WithEvents pnlControle As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litControle</summary>
+    Protected WithEvents litControle As Global.System.Web.UI.WebControls.Literal
 End Class
