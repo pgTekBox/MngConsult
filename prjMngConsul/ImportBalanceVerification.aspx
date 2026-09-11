@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" Async="true" MasterPageFile="~/Site.Master"
     CodeBehind="ImportBalanceVerification.aspx.vb" Inherits="MngConsul.ImportBalanceVerification" %>
+<%@ Register Src="~/Controls/SourceDonnees.ascx" TagPrefix="uc" TagName="SourceDonnees" %>
 
 <asp:Content ID="titleContent" ContentPlaceHolderID="TitleContent" runat="server">
     Import Balance de Vérification
@@ -37,14 +38,6 @@
     .file-pill .fp-name { font-weight:700; font-size:13px; }
     .file-pill .fp-size { font-size:12px; color:var(--mc-muted); }
     .file-pill .fp-rm { margin-left:auto; color:#ef4444; cursor:pointer; font-size:16px; background:none; border:none; }
-    .opts { display:grid; grid-template-columns:1fr 1fr; gap:14px; margin-top:14px; }
-    .opt label { display:block; font-size:13px; font-weight:700; margin-bottom:4px; }
-    .opt select {
-        width:100%; padding:9px 12px; border:1px solid var(--mc-stroke);
-        border-radius:10px; font-size:13px; font-family:inherit; background:#fff; color:var(--mc-text); outline:none;
-    }
-    .opt select:focus { border-color:var(--mc-blue); box-shadow:0 0 0 3px rgba(37,99,235,.12); }
-    .opt .hint { font-size:11px; color:var(--mc-muted); margin-top:3px; }
     .chk { display:flex; align-items:center; gap:8px; margin-top:12px; }
     .chk input[type="checkbox"] { width:16px; height:16px; accent-color:var(--mc-blue); }
     .chk label { font-size:13px; cursor:pointer; }
@@ -168,10 +161,16 @@
         </div>
     </asp:Panel>
 
+    <!-- ══════════ 1 · D'OÙ VIENNENT LES DONNÉES ══════════ -->
+    <div class="imp-section">
+        <uc:SourceDonnees ID="ucSource" runat="server" Donnees="BALANCE" Numero="1" />
+    </div>
+
+    <!-- ══════════ 2 · LE FICHIER ══════════ -->
     <asp:Panel ID="pnlUpload" runat="server">
         <div class="imp-section">
-            <h2>Étape 1 — Sélectionner le fichier CSV</h2>
-            <p class="sec-desc">Exportez la balance de vérification <strong>à la date de bascule</strong> depuis votre ancien logiciel — dans QuickBooks : <strong>Rapports ▸ Balance de vérification</strong> (Trial Balance), puis exportez en CSV.</p>
+            <h2>2 — Le fichier</h2>
+            <p class="sec-desc">La balance de vérification <strong>à la date de bascule</strong>, en CSV ou en texte. 10 Mo au maximum.</p>
 
             <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuCsvFile.ClientID %>').click();">
                 <div class="uz-ico">📁</div>
@@ -187,26 +186,6 @@
                 </div>
             </div>
 
-            <div class="opts">
-                <div class="opt">
-                    <label>Séparateur</label>
-                    <asp:DropDownList ID="ddlSeparator" runat="server">
-                        <asp:ListItem Value=";" Text="Point-virgule ( ; )" />
-                        <asp:ListItem Value="," Text="Virgule ( , )" Selected="True" />
-                        <asp:ListItem Value="&#9;" Text="Tabulation" />
-                    </asp:DropDownList>
-                    <div class="hint">QuickBooks exporte avec la virgule ; si les colonnes se mélangent, essayez le point-virgule</div>
-                </div>
-                <div class="opt">
-                    <label>Encodage</label>
-                    <asp:DropDownList ID="ddlEncoding" runat="server">
-                        <asp:ListItem Value="UTF-8" Text="UTF-8" Selected="True" />
-                        <asp:ListItem Value="Windows-1252" Text="Windows-1252 (ANSI)" />
-                        <asp:ListItem Value="ISO-8859-1" Text="ISO-8859-1" />
-                    </asp:DropDownList>
-                </div>
-            </div>
-            <div class="chk"><asp:CheckBox ID="chkHasHeader" runat="server" Checked="true" /><label for="<%= chkHasHeader.ClientID %>">Ligne d'en-tête</label></div>
             <div class="chk"><asp:CheckBox ID="chkTruncate" runat="server" Checked="true" /><label for="<%= chkTruncate.ClientID %>">Remplacer la balance déjà importée</label></div>
             <p class="ia-hint">Fichier mal formaté ? <strong>Lire avec l'IA</strong> confie la lecture à ChatGPT. Chaque montant rendu est retrouvé dans le fichier d'origine avant d'être accepté.</p>
             <div class="imp-actions">
@@ -214,6 +193,14 @@
                 <asp:Button ID="btnIA" runat="server" Text="✨ Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value='⏳ Lecture par l\'IA…';" />
                 <asp:Button ID="btnImport" runat="server" Text="📥 Importer" CssClass="imp-btn imp-btn-primary" />
             </div>
+        </div>
+    </asp:Panel>
+
+    <asp:Panel ID="pnlPreview" runat="server" Visible="false">
+        <div class="imp-section">
+            <h2>Aperçu</h2>
+            <div class="tbl-wrap"><asp:GridView ID="gvPreview" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true" /></div>
+            <div class="tbl-info">📋 <asp:Literal ID="litPreviewInfo" runat="server" /></div>
         </div>
     </asp:Panel>
 
@@ -230,14 +217,6 @@
             </tbody>
         </table>
     </div>
-
-    <asp:Panel ID="pnlPreview" runat="server" Visible="false">
-        <div class="imp-section">
-            <h2>Aperçu</h2>
-            <div class="tbl-wrap"><asp:GridView ID="gvPreview" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true" /></div>
-            <div class="tbl-info">📋 <asp:Literal ID="litPreviewInfo" runat="server" /></div>
-        </div>
-    </asp:Panel>
 
     <script>
         (function(){

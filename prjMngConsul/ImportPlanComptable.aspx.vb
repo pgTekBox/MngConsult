@@ -6,7 +6,7 @@ Imports System.Text
 ''' Étape 1 de la migration comptable : le plan comptable.
 '''
 ''' L'utilisateur exporte son plan depuis son ancien logiciel — QuickBooks,
-''' Sage 50, Acomba — et le dépose ici. La page lit le fichier, normalise ce
+''' Acomba ou un autre — et le dépose ici. La page lit le fichier, normalise ce
 ''' qu'elle comprend, et met le tout en préparation.
 '''
 ''' Elle n'écrit rien dans <c>T121PlanComptable</c>. Mettre les comptes en

@@ -12,8 +12,7 @@
 '''   l'appliquer pour de bon à la comptabilité
 '''
 ''' Un écran qui lit et prépare sans jamais rien appliquer plafonne : les données
-''' restent en attente, et la reprise n'avance pas. C'est le cas de tous les
-''' écrans Sage hérités.
+''' restent en attente, et la reprise n'avance pas.
 ''' </summary>
 Public Class Importations
     Inherits clsData
@@ -57,78 +56,65 @@ Public Class Importations
                 New Poste With {
                     .Icone = "⚖️",
                     .Titre = "Balance de vérification",
-                    .Source = "Sage 50 — CSV",
+                    .Source = "QuickBooks : Balance de vérification (Trial Balance)",
                     .Destination = "préparation — staging.BalanceVerification",
                     .Page = "~/ImportBalanceVerification.aspx",
-                    .Note = 4,
-                    .Fait = "Lit le fichier et le met en préparation.",
-                    .Manque = "Rien ne l'applique : les soldes d'ouverture ne sont jamais " &
-                              "écrits. Pas rattachée au socle multi-logiciels ni aux lots."
+                    .Note = 5,
+                    .Fait = "Lit l'export tel quel ou par l'IA, contrôle l'équilibre et le total " &
+                            "du fichier, garde la balance par compagnie et la confronte au plan " &
+                            "comptable importé.",
+                    .Manque = "Rien ne l'applique encore : les soldes d'ouverture ne sont pas " &
+                              "écrits en comptabilité."
                 }
             }
         End Get
     End Property
 
     ''' <summary>
-    ''' Le reste. Les écrans Sage datent d'avant le socle multi-logiciels : ils
-    ''' lisent et préparent, mais aucun n'applique quoi que ce soit.
+    ''' Les listes : clients, fournisseurs, produits et services. Un même écran,
+    ''' trois usages — lire le fichier ou l'extraire par l'IA, rapprocher de ce
+    ''' qui existe, créer ce qui est nouveau.
     ''' </summary>
     Private ReadOnly Property Autres As List(Of Poste)
         Get
             Return New List(Of Poste) From {
                 New Poste With {
                     .Icone = "👥",
-                    .Titre = "Clients, fournisseurs et produits",
-                    .Source = "fichier libre, lu par l'IA",
-                    .Destination = "T050Party, T075Products",
-                    .Page = "~/wbfImport.aspx",
-                    .Note = 7,
-                    .Fait = "Lit un fichier de forme quelconque par l'IA, met en préparation, " &
-                            "et migre vraiment vers les tiers et les produits.",
-                    .Manque = "Aucun rapprochement avec ce qui existe déjà : un tiers présent " &
-                              "sera recréé. Les adresses ne suivent pas encore."
+                    .Titre = "Clients",
+                    .Source = "QuickBooks : Ventes ▸ Clients ▸ Exporter",
+                    .Destination = "T050Party + T054PartyAddress",
+                    .Page = "~/ImportClients.aspx",
+                    .Note = 8,
+                    .Fait = "Lit l'export tel quel, ou l'extrait par l'IA quand il est mal formé ; " &
+                            "signale ce qui existe déjà et ce que le fichier répète, puis crée les " &
+                            "nouveaux clients et leur adresse.",
+                    .Manque = "Ne met pas à jour un client existant. Le solde du client n'est pas " &
+                              "repris : il viendra des factures ouvertes."
                 },
                 New Poste With {
-                    .Icone = "🧾",
-                    .Titre = "Factures ouvertes",
-                    .Source = "Sage 50 — CSV, entêtes et lignes",
-                    .Destination = "préparation — staging.SageFactures / SageFactureLines",
-                    .Page = "~/ImportSageFactures.aspx",
-                    .Note = 4,
-                    .Fait = "Lit les entêtes et les lignes, les met en préparation.",
-                    .Manque = "Rien ne crée les documents. Deux écrans séparés là où une " &
-                              "facture est un tout."
-                },
-                New Poste With {
-                    .Icone = "👤",
-                    .Titre = "Tiers — ancien écran Sage",
-                    .Source = "Sage 50 — CSV",
-                    .Destination = "préparation — staging.SageParties",
-                    .Page = "~/ImportSageParties.aspx",
-                    .Note = 3,
-                    .Fait = "Lit le fichier et le met en préparation.",
-                    .Manque = "Rien ne l'applique. Fait double emploi avec l'import assisté " &
-                              "par IA, qui, lui, va jusqu'au bout."
+                    .Icone = "🏭",
+                    .Titre = "Fournisseurs",
+                    .Source = "QuickBooks : Dépenses ▸ Fournisseurs ▸ Exporter",
+                    .Destination = "T050Party + T054PartyAddress",
+                    .Page = "~/ImportFournisseurs.aspx",
+                    .Note = 8,
+                    .Fait = "Lit l'export tel quel, ou l'extrait par l'IA quand il est mal formé ; " &
+                            "signale ce qui existe déjà et ce que le fichier répète, puis crée les " &
+                            "nouveaux fournisseurs et leur adresse.",
+                    .Manque = "Ne met pas à jour un fournisseur existant, et n'en fait pas un client-" &
+                              "fournisseur s'il est déjà client. Le solde dû viendra des factures ouvertes."
                 },
                 New Poste With {
                     .Icone = "🏷️",
-                    .Titre = "Produits — ancien écran Sage",
-                    .Source = "Sage 50 — CSV",
-                    .Destination = "préparation — staging.SageProduits",
-                    .Page = "~/ImportSageProduits.aspx",
-                    .Note = 3,
-                    .Fait = "Lit le fichier et le met en préparation.",
-                    .Manque = "Rien ne l'applique. Même double emploi que ci-dessus."
-                },
-                New Poste With {
-                    .Icone = "⚠️",
-                    .Titre = "Plan comptable — ancien écran Sage",
-                    .Source = "Sage 50 — CSV",
-                    .Destination = "staging.SageComptes — table renommée depuis",
-                    .Page = "~/ImportSageComptes.aspx",
-                    .Note = 1,
-                    .Fait = "Rien : l'écran écrit dans une table qui n'existe plus sous ce nom.",
-                    .Manque = "Remplacé par le parcours en trois étapes ci-dessus. À retirer."
+                    .Titre = "Produits et services",
+                    .Source = "QuickBooks : Ventes ▸ Produits et services ▸ Exporter",
+                    .Destination = "T075Products",
+                    .Page = "~/ImportProduits.aspx",
+                    .Note = 8,
+                    .Fait = "Lit l'export ou l'extrait par l'IA ; reprend le nom, la description, " &
+                            "le prix de vente et la taxabilité ; n'en crée aucun en double.",
+                    .Manque = "Chaque produit prend les comptes de revenus et de dépenses par défaut " &
+                              "de la compagnie ; la catégorie et l'inventaire restent à reprendre."
                 }
             }
         End Get

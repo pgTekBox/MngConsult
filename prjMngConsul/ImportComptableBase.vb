@@ -8,10 +8,10 @@ Imports System.Web.UI.WebControls
 ''' Socle des pages d'importation comptable — une page par étape de la
 ''' migration : plan comptable, tiers, produits, factures, écritures.
 '''
-''' Ce qui distingue cette classe de l'ancienne <see cref="ImportSageBase"/> :
+''' Ce qui la distingue des premiers écrans d'import, retirés depuis :
 '''
-'''   1. elle ne connaît aucun logiciel en particulier. Sage 50, QuickBooks et
-'''      Acomba ne sont que des jeux de réglages — séparateur, encodage,
+'''   1. elle ne connaît aucun logiciel en particulier. QuickBooks et Acomba
+'''      ne sont que des jeux de réglages — séparateur, encodage,
 '''      mots-clés de colonnes, chemin d'export — décrits dans SystemeSource ;
 '''   2. elle n'écrit pas de SQL. Tout passe par des procédures stockées, comme
 '''      partout ailleurs dans l'application ;
@@ -96,11 +96,6 @@ Public MustInherit Class ImportComptableBase
                         "Les accents en charabia (<code>Ã©</code> au lieu de <code>é</code>) viennent de l'encodage : réessayez en <b>Windows-1252</b>.",
                         "Le rapport peut contenir une ligne de titre ou une ligne de total. Elles seront signalées comme lignes invalides et écartées — c'est sans conséquence."
                     }
-                },
-                New SystemeSource With {
-                    .Code = "SAGE50", .Nom = "Sage 50",
-                    .Separateur = ";", .Encodage = "Windows-1252",
-                    .CheminExport = "Reports ▸ Lists ▸ Chart of Accounts ▸ Export CSV"
                 },
                 New SystemeSource With {
                     .Code = "ACOMBA", .Nom = "Acomba",

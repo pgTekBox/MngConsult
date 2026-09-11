@@ -6,151 +6,23 @@ Imports System.Text.RegularExpressions
 Imports System.Threading.Tasks
 Imports Newtonsoft.Json.Linq
 
+''' <summary>
+''' La balance de vérification à la date de bascule : lue telle que les
+''' logiciels la produisent, ou par l'IA quand le fichier est mal formé ;
+''' gardée par compagnie ; contrôlée — équilibre, total annoncé par le fichier —
+''' et confrontée au plan comptable importé.
+'''
+''' Le logiciel d'origine, le séparateur et l'encodage viennent du bloc
+''' « D'où viennent vos données ? », commun à tous les écrans d'importation.
+''' </summary>
 Public Class ImportBalanceVerification
-    Inherits ImportSageBase
+    Inherits clsData
 
-    Protected Overrides ReadOnly Property StagingTableName As String = "staging.BalanceVerification"
-    Protected Overrides ReadOnly Property PageTitle As String = "Import Balance de Vérification"
-    Protected Overrides ReadOnly Property PageSubTitle As String = "Migration → staging.BalanceVerification"
-    Protected Overrides ReadOnly Property PageIcon As String = "📋"
-    Protected Overrides ReadOnly Property SageExportPath As String = "Rapports ▸ Balance de vérification (Trial Balance), à la date de bascule"
-
-    Protected Overrides ReadOnly Property ColumnDefinitions As List(Of ColumnDef)
-        Get
-            Return New List(Of ColumnDef) From {
-                New ColumnDef With {
-                    .FieldName = "Compte", .DbColumnName = "Compte",
-                    .SqlType = SqlDbType.VarChar, .MaxLength = 20,
-                    .IsRequired = False, .CsvHeader = "Numéro de compte",
-                    .DetectKeywords = New String() {"number", "numéro", "numero", "no", "code"},
-                    .Description = "Numéro du compte, s'il existe"
-                },
-                New ColumnDef With {
-                    .FieldName = "Description", .DbColumnName = "Description",
-                    .SqlType = SqlDbType.VarChar, .MaxLength = 200,
-                    .IsRequired = False, .CsvHeader = "Account Name / Nom du compte",
-                    .DetectKeywords = New String() {"name", "nom", "description", "libellé", "libelle", "account"},
-                    .Description = "Nom du compte"
-                },
-                New ColumnDef With {
-                    .FieldName = "Debit", .DbColumnName = "Debit",
-                    .SqlType = SqlDbType.Decimal, .MaxLength = 0,
-                    .IsRequired = False, .CsvHeader = "Debit / Débit",
-                    .DetectKeywords = New String() {"debit", "débit"},
-                    .Description = "Solde débiteur"
-                },
-                New ColumnDef With {
-                    .FieldName = "Credit", .DbColumnName = "Credit",
-                    .SqlType = SqlDbType.Decimal, .MaxLength = 0,
-                    .IsRequired = False, .CsvHeader = "Credit / Crédit",
-                    .DetectKeywords = New String() {"credit", "crédit"},
-                    .Description = "Solde créditeur"
-                }
-            }
-        End Get
-    End Property
-
-    ' ── Contrôles (liés au markup) ──
-    Protected Overrides ReadOnly Property FileUploadControl As System.Web.UI.WebControls.FileUpload
-        Get
-            Return fuCsvFile
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property SeparatorDropDown As System.Web.UI.WebControls.DropDownList
-        Get
-            Return ddlSeparator
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property EncodingDropDown As System.Web.UI.WebControls.DropDownList
-        Get
-            Return ddlEncoding
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property HasHeaderCheckBox As System.Web.UI.WebControls.CheckBox
-        Get
-            Return chkHasHeader
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property TruncateCheckBox As System.Web.UI.WebControls.CheckBox
-        Get
-            Return chkTruncate
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property PreviewGrid As System.Web.UI.WebControls.GridView
-        Get
-            Return gvPreview
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property PreviewInfoLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litPreviewInfo
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property PreviewPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlPreview
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property SuccessPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlSuccess
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ErrorPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlError
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property WarningPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlWarning
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property SuccessLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litSuccess
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ErrorLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litError
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property WarningLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litWarning
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ResultsPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlResults
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property InsertedLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litInserted
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property SkippedLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litSkipped
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ErrorsLiteral As System.Web.UI.WebControls.Literal
-        Get
-            Return litErrors
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ErrorDetailsPanel As System.Web.UI.WebControls.Panel
-        Get
-            Return pnlErrorDetails
-        End Get
-    End Property
-    Protected Overrides ReadOnly Property ErrorsGrid As System.Web.UI.WebControls.GridView
-        Get
-            Return gvErrors
-        End Get
-    End Property
+    ''' <summary>
+    ''' Les comptes de la dernière lecture, ou de la balance en place : ce que
+    ''' le tableau affiche.
+    ''' </summary>
+    Private Property DerniereImportation As DataTable
 
     ' ── Events ──
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -167,7 +39,7 @@ Public Class ImportBalanceVerification
     End Sub
 
     Protected Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
-        DoPreview()
+        Apercu()
     End Sub
 
     Protected Sub btnImport_Click(sender As Object, e As EventArgs) Handles btnImport.Click
@@ -185,12 +57,78 @@ Public Class ImportBalanceVerification
     End Sub
 
     Protected Sub btnReset_Click(sender As Object, e As EventArgs) Handles btnReset.Click
-        DoReset()
+        HideMessages()
+        pnlResults.Visible = False
+        pnlPreview.Visible = False
+        pnlErrorDetails.Visible = False
     End Sub
 
     Protected Sub btnTruncateTable_Click(sender As Object, e As EventArgs) Handles btnTruncateTable.Click
         ViderBalance()
     End Sub
+
+    ''' <summary>
+    ''' Les premières lignes du fichier, découpées avec le séparateur choisi :
+    ''' de quoi voir d'un coup d'œil si le séparateur et l'encodage sont les bons.
+    ''' </summary>
+    Private Sub Apercu()
+        HideMessages()
+        pnlPreview.Visible = False
+
+        Dim texte = LireFichier()
+        If texte Is Nothing Then Return
+
+        Dim sep = SeparateurChoisi()
+        Dim cellules = texte.Replace(vbCrLf, vbLf).Replace(vbCr, vbLf).Split(ChrW(10)) _
+                            .Where(Function(x) Not String.IsNullOrWhiteSpace(x)) _
+                            .Take(15) _
+                            .Select(Function(x) DecouperLigne(x, sep)) _
+                            .ToList()
+
+        Dim dt As New DataTable()
+        Dim largeur = If(cellules.Count = 0, 0, cellules.Max(Function(c) c.Length))
+        For j = 1 To largeur
+            dt.Columns.Add("Colonne " & j)
+        Next
+
+        For Each c In cellules
+            Dim r = dt.NewRow()
+            For j = 0 To c.Length - 1
+                r(j) = c(j).Trim()
+            Next
+            dt.Rows.Add(r)
+        Next
+
+        gvPreview.DataSource = dt
+        gvPreview.DataBind()
+        litPreviewInfo.Text = "Les " & cellules.Count & " premières lignes du fichier, découpées avec le séparateur choisi."
+        pnlPreview.Visible = True
+    End Sub
+
+#Region "Messages"
+
+    Private Sub HideMessages()
+        pnlSuccess.Visible = False
+        pnlError.Visible = False
+        pnlWarning.Visible = False
+    End Sub
+
+    Private Sub ShowSuccess(message As String)
+        litSuccess.Text = message
+        pnlSuccess.Visible = True
+    End Sub
+
+    Private Sub ShowError(message As String)
+        litError.Text = message
+        pnlError.Visible = True
+    End Sub
+
+    Private Sub ShowWarning(message As String)
+        litWarning.Text = message
+        pnlWarning.Visible = True
+    End Sub
+
+#End Region
 
     ''' <summary>
     ''' Supprime la balance importée — celle de la compagnie, et d'aucune autre.
@@ -644,19 +582,13 @@ Public Class ImportBalanceVerification
         Return -1
     End Function
 
+    ''' <summary>Le séparateur et l'encodage viennent du bloc « D'où viennent vos données ? ».</summary>
     Private Function SeparateurChoisi() As Char
-        Dim v = ddlSeparator.SelectedValue
-        If String.IsNullOrEmpty(v) Then Return ","c
-        If v = "&#9;" OrElse v = "\t" Then Return ControlChars.Tab
-        Return v(0)
+        Return ucSource.Separateur
     End Function
 
     Private Function Encodage() As Encoding
-        Dim v = ddlEncoding.SelectedValue
-        If String.IsNullOrEmpty(v) OrElse v.Equals("UTF-8", StringComparison.OrdinalIgnoreCase) Then
-            Return New UTF8Encoding(False)
-        End If
-        Return Encoding.GetEncoding(v)
+        Return ucSource.Encodage
     End Function
 
     Private Shared Function Cellule(c As String(), idx As Integer) As String

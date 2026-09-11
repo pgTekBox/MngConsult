@@ -49,7 +49,7 @@ Public Class EtapesReprise
                     "des comptes déjà au plan dans les quatre langues, aide propre à " &
                     "QuickBooks, glisser-déposer.",
             .Manque = "Ne lit pas les .xlsx — il faut passer par un CSV. L'aide reste à écrire " &
-                      "pour Sage 50 et Acomba."
+                      "pour Acomba."
         },
         New Cran With {
             .No = 2, .Libelle = "Correspondance des comptes", .Page = "~/CorrespondanceComptes.aspx",
