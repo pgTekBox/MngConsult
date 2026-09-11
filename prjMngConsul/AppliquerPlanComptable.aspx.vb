@@ -34,6 +34,15 @@ Public Class AppliquerPlanComptable
     ''' comptes de charge ne justifient pas vingt allers-retours.
     ''' </summary>
     Private ReadOnly _classesParNature As New Dictionary(Of String, DataTable)(StringComparer.OrdinalIgnoreCase)
+    ''' <summary>
+    ''' Le fil des étapes porte le lot en cours, pour que les deux autres
+    ''' écrans ouvrent celui qu'on regarde et non le dernier chargé. Posé au
+    ''' pré-rendu : à ce moment le lot est connu, quoi qu'ait fait la page.
+    ''' </summary>
+    Protected Sub Page_PreRenderEtapes(sender As Object, e As EventArgs) Handles Me.PreRender
+        ucEtapes.LotId = LotCourant
+    End Sub
+
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 

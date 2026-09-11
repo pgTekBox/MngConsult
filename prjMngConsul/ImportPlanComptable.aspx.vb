@@ -6,7 +6,7 @@ Imports System.Text
 ''' Étape 1 de la migration comptable : le plan comptable.
 '''
 ''' L'utilisateur exporte son plan depuis son ancien logiciel — QuickBooks,
-''' Sage 50, Acomba — et le dépose ici. La page lit le fichier, normalise ce
+''' Acomba ou un autre — et le dépose ici. La page lit le fichier, normalise ce
 ''' qu'elle comprend, et met le tout en préparation.
 '''
 ''' Elle n'écrit rien dans <c>T121PlanComptable</c>. Mettre les comptes en
@@ -84,6 +84,15 @@ Public Class ImportPlanComptable
             ViewState("LotCourant") = value
         End Set
     End Property
+    ''' <summary>
+    ''' Le fil des étapes porte le lot en cours, pour que les deux autres
+    ''' écrans ouvrent celui qu'on regarde et non le dernier chargé. Posé au
+    ''' pré-rendu : à ce moment le lot est connu, quoi qu'ait fait la page.
+    ''' </summary>
+    Protected Sub Page_PreRenderEtapes(sender As Object, e As EventArgs) Handles Me.PreRender
+        ucEtapes.LotId = LotCourant
+    End Sub
+
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
@@ -96,6 +105,15 @@ Public Class ImportPlanComptable
             RemplirSystemes()
             AppliquerReglagesSysteme()
             ChargerLots()
+
+            ' Revenir ici depuis l'étape 2 ou 3 doit rouvrir le lot qu'on
+            ' regardait, sinon le fil des étapes perd le fil.
+            Dim n As Integer
+            If Integer.TryParse(Request.QueryString("lot"), n) AndAlso n > 0 Then
+                LotCourant = n
+                AfficherResultatLot(n)
+                ChargerLignes()
+            End If
         End If
     End Sub
 

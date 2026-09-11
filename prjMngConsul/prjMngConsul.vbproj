@@ -284,6 +284,9 @@
     <Content Include="Controls\HeaderUser.ascx" />
     <Content Include="Controls\ucReceiptEdit.ascx" />
     <Content Include="Controls\jsonViewer.ascx" />
+    <Content Include="Controls\EtapesReprise.ascx" />
+    <Content Include="Controls\ImportDonnees.ascx" />
+    <Content Include="Controls\SourceDonnees.ascx" />
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
@@ -444,20 +447,19 @@
     <Content Include="Images\plus.png" />
     <Content Include="Images\rondplus45.png" />
     <Content Include="Images\trash.png" />
-    <Content Include="ImportSageBalanceVerification.aspx" />
-    <Content Include="ImportSageComptes.aspx" />
-    <Content Include="ImportSageFactureLines.aspx" />
-    <Content Include="ImportSageFactures.aspx" />
-    <Content Include="ImportSageParties.aspx" />
-    <Content Include="ImportSageProduits.aspx" />
+    <Content Include="ImportBalanceVerification.aspx" />
     <Content Include="js\JsonView.js" />
     <Content Include="js\RadWindows.js" />
     <Content Include="js\viewport.js" />
     <Content Include="LandingPage.aspx" />
     <Content Include="LandingPagesNEW.html" />
     <Content Include="AppliquerPlanComptable.aspx" />
+    <Content Include="Importations.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
+    <Content Include="ImportClients.aspx" />
+    <Content Include="ImportFournisseurs.aspx" />
+    <Content Include="ImportProduits.aspx" />
     <Content Include="importcomptable.html" />
     <Content Include="rendu.html" />
     <Content Include="PlaidAccounts.aspx" />
@@ -693,15 +695,22 @@
       <DependentUpon>PdfViewer.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ImportSageBalanceVerification.aspx.designer.vb">
-      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+    <Compile Include="ImportBalanceVerification.aspx.designer.vb">
+      <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ImportSageBalanceVerification.aspx.vb">
-      <DependentUpon>ImportSageBalanceVerification.aspx</DependentUpon>
+    <Compile Include="ImportBalanceVerification.aspx.vb">
+      <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
       <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Importations.aspx.vb">
+      <DependentUpon>Importations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Importations.aspx.designer.vb">
+      <DependentUpon>Importations.aspx</DependentUpon>
     </Compile>
     <Compile Include="AppliquerPlanComptable.aspx.vb">
       <DependentUpon>AppliquerPlanComptable.aspx</DependentUpon>
@@ -722,7 +731,25 @@
       <DependentUpon>ImportPlanComptable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
-    <Compile Include="ImportSageBase.vb">
+    <Compile Include="ImportClients.aspx.designer.vb">
+      <DependentUpon>ImportClients.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportClients.aspx.vb">
+      <DependentUpon>ImportClients.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportFournisseurs.aspx.designer.vb">
+      <DependentUpon>ImportFournisseurs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportFournisseurs.aspx.vb">
+      <DependentUpon>ImportFournisseurs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportProduits.aspx.designer.vb">
+      <DependentUpon>ImportProduits.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ImportProduits.aspx.vb">
+      <DependentUpon>ImportProduits.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ExchangeToken.aspx.designer.vb">
@@ -730,41 +757,6 @@
     </Compile>
     <Compile Include="ExchangeToken.aspx.vb">
       <DependentUpon>ExchangeToken.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="ImportSageComptes.aspx.designer.vb">
-      <DependentUpon>ImportSageComptes.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSageComptes.aspx.vb">
-      <DependentUpon>ImportSageComptes.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="ImportSageFactureLines.aspx.designer.vb">
-      <DependentUpon>ImportSageFactureLines.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSageFactureLines.aspx.vb">
-      <DependentUpon>ImportSageFactureLines.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="ImportSageFactures.aspx.designer.vb">
-      <DependentUpon>ImportSageFactures.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSageFactures.aspx.vb">
-      <DependentUpon>ImportSageFactures.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="ImportSageParties.aspx.designer.vb">
-      <DependentUpon>ImportSageParties.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSageParties.aspx.vb">
-      <DependentUpon>ImportSageParties.aspx</DependentUpon>
-      <SubType>ASPXCodebehind</SubType>
-    </Compile>
-    <Compile Include="ImportSageProduits.aspx.designer.vb">
-      <DependentUpon>ImportSageProduits.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="ImportSageProduits.aspx.vb">
-      <DependentUpon>ImportSageProduits.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
     </Compile>
     <Compile Include="InvoicePdfBuilder.vb" />
@@ -813,6 +805,27 @@
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.designer.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\EtapesReprise.ascx.vb">
+      <DependentUpon>EtapesReprise.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\EtapesReprise.ascx.designer.vb">
+      <DependentUpon>EtapesReprise.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImportDonnees.ascx.vb">
+      <DependentUpon>ImportDonnees.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ImportDonnees.ascx.designer.vb">
+      <DependentUpon>ImportDonnees.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\SourceDonnees.ascx.vb">
+      <DependentUpon>SourceDonnees.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\SourceDonnees.ascx.designer.vb">
+      <DependentUpon>SourceDonnees.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>

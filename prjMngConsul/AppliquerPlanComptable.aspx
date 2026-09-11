@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="AppliquerPlanComptable.aspx.vb" Inherits="MngConsul.AppliquerPlanComptable" %>
+<%@ Register Src="~/Controls/EtapesReprise.ascx" TagPrefix="uc" TagName="EtapesReprise" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Créer les comptes au plan — 60Sec-AI
@@ -109,6 +110,8 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="app-page">
+
+    <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="3" />
 
     <div class="app-head">
         <div class="ico">📗</div>

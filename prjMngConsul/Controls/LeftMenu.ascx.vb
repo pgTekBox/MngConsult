@@ -137,10 +137,11 @@ Namespace Controls
 
             ' Importation
             sb.Append(GroupStart("📒", "import"))
-            sb.Append(Child("~/wbfImport.aspx", "importAll"))
-            sb.Append(Child("~/ImportPlanComptable.aspx", "importPlanComptable"))
-            sb.Append(Child("~/CorrespondanceComptes.aspx", "correspondanceComptes"))
-            sb.Append(Child("~/AppliquerPlanComptable.aspx", "appliquerPlanComptable"))
+            ' Une seule porte : les ecrans d'importation s'atteignent depuis la
+            ' page d'accueil des importations, qui dit aussi ou chacun en est.
+            ' Un menu qui les listait tous laissait croire qu'ils se valent, et
+            ' menait droit a l'etape 2 sans avoir fait l'etape 1.
+            sb.Append(Child("~/Importations.aspx", "importations"))
             sb.Append(GroupEnd)
 
             ' Footer
@@ -196,8 +197,8 @@ Namespace Controls
                 Case "aiSales" : Return Choose3(lang, "IA Ventes", "AI Sales", "Ventas con IA")
                 Case "import" : Return Choose3(lang, "Importation", "Import", "Importación")
                 Case "importAll" : Return Choose3(lang, "Import (clients / fournisseurs / produits)", "Import (customers / suppliers / products)", "Importar (clientes / proveedores / productos)")
+                Case "importations" : Return Choose3(lang, "Importation des données", "Data import", "Importación de datos")
                 Case "importPlanComptable" : Return Choose3(lang, "Reprise — plan comptable", "Migration — chart of accounts", "Migración — plan contable")
-                Case "correspondanceComptes" : Return Choose3(lang, "Reprise — correspondance des comptes", "Migration — account mapping", "Migración — correspondencia de cuentas")
                 Case "appliquerPlanComptable" : Return Choose3(lang, "Reprise — créer les comptes", "Migration — create accounts", "Migración — crear las cuentas")
                 Case "companyProfile" : Return Choose3(lang, "Profil de l'entreprise", "Company profile", "Perfil de la empresa")
                 Case "users" : Return Choose3(lang, "Utilisateurs", "Users", "Usuarios")

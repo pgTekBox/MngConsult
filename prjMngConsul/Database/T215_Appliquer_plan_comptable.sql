@@ -38,22 +38,33 @@ GO
 -- -----------------------------------------------------------------------------
 CREATE OR ALTER PROCEDURE [dbo].[s0765GetSousClasses]
     @CompanyGUID UNIQUEIDENTIFIER,
-    @Nature      VARCHAR(20) = NULL
+    @Nature      VARCHAR(20) = NULL,
+    @Niveau      INT = 2
 AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- Deux usages, deux niveaux :
+    --   niveau 2, les sous-classes -- c'est la qu'un compte se cree, il faut
+    --             la classe exacte (etape 3) ;
+    --   niveau 1, les grandes classes -- pour restreindre une liste de saisie
+    --             sans exiger de savoir d'avance dans quel tiroir ranger.
+    --
+    -- La nature d'une classe de niveau 1 se lit sur son propre code ; celle
+    -- d'une sous-classe, sur le code de sa mere.
     SELECT sc.[Id], sc.[Code], sc.[Description], sc.[NumeroDebut], sc.[NumeroFin],
-           p.[Code] AS ParentCode, p.[Description] AS ParentDescription,
-           dbo.fn_NatureCompte(p.[Code]) AS Nature
+           ISNULL(sc.[ParentId], 0) AS ParentId,
+           ISNULL(p.[Code], sc.[Code])               AS ParentCode,
+           ISNULL(p.[Description], sc.[Description]) AS ParentDescription,
+           dbo.fn_NatureCompte(ISNULL(p.[Code], sc.[Code])) AS Nature
       FROM dbo.T120PlanComptable_Classe sc
-      JOIN dbo.T120PlanComptable_Classe p ON p.[Id] = sc.[ParentId]
+      LEFT JOIN dbo.T120PlanComptable_Classe p ON p.[Id] = sc.[ParentId]
      WHERE sc.[CompanyGUID] = @CompanyGUID
-       AND sc.[Niveau] = 2
+       AND sc.[Niveau] = @Niveau
        AND ISNULL(sc.[Actif], 1) = 1
        AND (@Nature IS NULL
-            OR dbo.fn_NatureCompte(p.[Code]) IS NULL
-            OR dbo.fn_NatureCompte(p.[Code]) = @Nature)
+            OR dbo.fn_NatureCompte(ISNULL(p.[Code], sc.[Code])) IS NULL
+            OR dbo.fn_NatureCompte(ISNULL(p.[Code], sc.[Code])) = @Nature)
      ORDER BY sc.[NumeroDebut];
 END
 GO
