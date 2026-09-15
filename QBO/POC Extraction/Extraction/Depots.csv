@@ -1,0 +1,2 @@
+﻿Id;DocNumber;TxnDate;CurrencyRef.value;ExchangeRate;PrivateNote;DepartmentRef.value;DepartmentRef.name;ClassRef.value;ClassRef.name;DepositToAccountRef.value;DepositToAccountRef.name;TotalAmt;CashBack.AccountRef.name;CashBack.Amount;CashBack.Memo;MetaData.CreateTime;MetaData.LastUpdatedTime
+134;;2026-06-09;CAD;1;;;;;;38;Chequing;35000.00;;;;2026-04-01T10:34:23-07:00;2026-04-01T10:34:23-07:00

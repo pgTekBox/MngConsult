@@ -1,0 +1,5 @@
+﻿Id;Name;Type;DueDays;DiscountDays;DiscountPercent;DayOfMonthDue;Active
+1;Due on receipt;STANDARD;0;0;;;true
+2;Net 15;STANDARD;15;0;;;true
+3;Net 30;STANDARD;30;0;;;true
+4;Net 60;STANDARD;60;0;;;true

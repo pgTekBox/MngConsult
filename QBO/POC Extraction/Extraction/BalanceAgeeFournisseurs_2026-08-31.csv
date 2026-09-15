@@ -1,0 +1,6 @@
+﻿Section;Type de ligne;Date;Transaction Type;Transaction Type (Id);#;Supplier;Supplier (Id);Due Date;Past Due;Amount;Open Balance;Foreign Amount;Foreign Open Balance;Currency;Exchange Rate
+91 or more days past due;Entête;91 or more days past due;;;;;;;;;;;;;
+91 or more days past due;Donnée;2026-02-16;Bill;97;;Kristina Gibson;38;2026-03-02;197;508.51;508.51;508.51;508.51;CAD;1.00
+91 or more days past due;Donnée;2026-02-24;Bill;98;;Jennifer Hargreaves;35;2026-03-02;197;226.00;226.00;226.00;226.00;CAD;1.00
+91 or more days past due;Total;Total for 91 or more days past due;;;;;;;;734.51;734.51;;;;
+;Total;TOTAL;;;;;;;;734.51;734.51;;;;

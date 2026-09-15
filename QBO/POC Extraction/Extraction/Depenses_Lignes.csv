@@ -1,0 +1,103 @@
+﻿Parent.Id;Parent.DocNumber;Parent.TxnDate;GroupLine.Id;Id;LineNum;DetailType;Description;Amount;AccountBasedExpenseLineDetail.AccountRef.value;AccountBasedExpenseLineDetail.AccountRef.name;AccountBasedExpenseLineDetail.TaxCodeRef.value;AccountBasedExpenseLineDetail.TaxAmount;AccountBasedExpenseLineDetail.BillableStatus;AccountBasedExpenseLineDetail.CustomerRef.value;AccountBasedExpenseLineDetail.CustomerRef.name;AccountBasedExpenseLineDetail.ClassRef.name;ItemBasedExpenseLineDetail.ItemRef.value;ItemBasedExpenseLineDetail.ItemRef.name;ItemBasedExpenseLineDetail.Qty;ItemBasedExpenseLineDetail.UnitPrice;ItemBasedExpenseLineDetail.TaxCodeRef.value;ItemBasedExpenseLineDetail.BillableStatus;ItemBasedExpenseLineDetail.CustomerRef.value;ItemBasedExpenseLineDetail.CustomerRef.name;ItemBasedExpenseLineDetail.ClassRef.name
+171;2076;2026-04-24;;1;;AccountBasedExpenseLineDetail;;500.00;81;Owner's Equity - Draws;NON;;NotBillable;;;;;;;;;;;;
+170;2075;2026-04-24;;1;;AccountBasedExpenseLineDetail;;95.00;89;Interest expense;NON;;NotBillable;;;;;;;;;;;;
+170;2075;2026-04-24;;2;;AccountBasedExpenseLineDetail;;376.78;57;Note Payable;NON;;NotBillable;;;;;;;;;;;;
+169;2074;2026-04-24;;1;;AccountBasedExpenseLineDetail;monthly water;71.85;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+168;2073;2026-04-24;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;215.52;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+167;2072;2026-04-24;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+166;2071;2026-03-24;;1;;AccountBasedExpenseLineDetail;;500.00;81;Owner's Equity - Draws;NON;;NotBillable;;;;;;;;;;;;
+165;2070;2026-03-24;;1;;AccountBasedExpenseLineDetail;;95.00;89;Interest expense;NON;;NotBillable;;;;;;;;;;;;
+165;2070;2026-03-24;;2;;AccountBasedExpenseLineDetail;;376.78;57;Note Payable;NON;;NotBillable;;;;;;;;;;;;
+164;2069;2026-03-24;;1;;AccountBasedExpenseLineDetail;monthly water;74.21;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+163;2068;2026-03-24;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;202.78;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+162;2067;2026-03-24;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+92;;2026-02-03;;1;;AccountBasedExpenseLineDetail;;217.52;91;Janitorial Expense;5;;NotBillable;;;;;;;;;;;;
+91;2054;2026-01-26;;1;;AccountBasedExpenseLineDetail;;1000.00;79;Visa Credit Card;2;;NotBillable;;;;;;;;;;;;
+86;2050;2026-02-05;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;3750.00;;;;;;;;;3;Catering;75;50;5;HasBeenBilled;12;Hazel Robinson;North
+82;2049;2026-01-26;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;562.50;;;;;;;;;12;Pad folios;75;7.5;5;HasBeenBilled;12;Hazel Robinson;North
+82;2049;2026-01-26;;2;;ItemBasedExpenseLineDetail;Promotional items -- pens engraved;300.00;;;;;;;;;14;Pens;75;4;5;HasBeenBilled;12;Hazel Robinson;North
+82;2049;2026-01-26;;3;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;506.25;;;;;;;;;13;Misc;75;6.75;5;HasBeenBilled;12;Hazel Robinson;North
+52;2030;2025-10-24;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;1225.00;;;;;;;;;3;Catering;35;35;5;HasBeenBilled;10;Lew Plumbing;East
+48;2029;2025-10-24;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;262.50;;;;;;;;;12;Pad folios;35;7.5;5;HasBeenBilled;10;Lew Plumbing;East
+48;2029;2025-10-24;;2;;ItemBasedExpenseLineDetail;Promotional items -- pens engraved;140.00;;;;;;;;;14;Pens;35;4;5;HasBeenBilled;10;Lew Plumbing;East
+48;2029;2025-10-24;;3;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;236.25;;;;;;;;;13;Misc;35;6.75;5;HasBeenBilled;10;Lew Plumbing;East
+133;;2026-02-25;;1;;AccountBasedExpenseLineDetail;;3831.80;58;Opening Balance Equity;NON;;NotBillable;;;;;;;;;;;;
+78;2048;2026-01-16;;5;;AccountBasedExpenseLineDetail;;95.00;89;Interest expense;NON;;NotBillable;;;;;;;;;;;;
+78;2048;2026-01-16;;6;;AccountBasedExpenseLineDetail;;376.78;57;Note Payable;NON;;NotBillable;;;;;;;;;;;;
+69;2041;2025-12-15;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;3750.00;;;;;;;;;3;Catering;50;75;5;HasBeenBilled;4;Cathy's Consulting Company;
+44;2028;2025-10-24;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;187.50;;;;;;;;;12;Pad folios;25;7.5;5;HasBeenBilled;66;Oxon - Retreat;
+44;2028;2025-10-24;;2;;ItemBasedExpenseLineDetail;Promotional items -- pens engraved;100.00;;;;;;;;;14;Pens;25;4;5;HasBeenBilled;66;Oxon - Retreat;
+44;2028;2025-10-24;;3;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;83.25;;;;;;;;;13;Misc;25;3.33;5;HasBeenBilled;66;Oxon - Retreat;
+54;2031;2025-11-07;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;1062.50;;;;;;;;;3;Catering;25;42.5;5;HasBeenBilled;66;Oxon - Retreat;
+56;2032;2025-11-07;;1;;ItemBasedExpenseLineDetail;Venue Rental;1000.00;;;;;;;;;18;Venue Rental;1;1000;5;HasBeenBilled;66;Oxon - Retreat;
+113;2066;2026-03-28;;1;;ItemBasedExpenseLineDetail;Entertainment for the event;750.00;;;;;;;;;6;Entertainment;1;750;5;Billable;61;Abercrombie International Group;
+111;2065;2026-03-28;;1;;ItemBasedExpenseLineDetail;Venue Rental;2500.00;;;;;;;;;18;Venue Rental;1;2500;5;Billable;61;Abercrombie International Group;
+109;2064;2026-03-28;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;12500.00;;;;;;;;;3;Catering;250;50;5;Billable;61;Abercrombie International Group;
+108;2063;2026-03-23;;1;;AccountBasedExpenseLineDetail;;500.00;81;Owner's Equity - Draws;NON;;NotBillable;;;;;;;;;;;;
+107;2062;2026-03-23;;1;;AccountBasedExpenseLineDetail;Insurance - general liability;750.00;51;Insurance Expense-General Liability Insurance;5;;NotBillable;;;;;;;;;;;;
+106;2061;2026-03-13;;1;;AccountBasedExpenseLineDetail;;95.00;89;Interest expense;NON;;NotBillable;;;;;;;;;;;;
+106;2061;2026-03-13;;2;;AccountBasedExpenseLineDetail;;376.78;57;Note Payable;NON;;NotBillable;;;;;;;;;;;;
+105;2060;2026-03-13;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;200.49;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+104;2059;2026-03-13;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+101;2058;2026-03-10;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;1250.00;;;;;;;;;12;Pad folios;250;5;5;Billable;61;Abercrombie International Group;
+101;2058;2026-03-10;;2;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;937.50;;;;;;;;;13;Misc;250;3.75;5;Billable;61;Abercrombie International Group;
+100;2057;2026-03-13;;1;;AccountBasedExpenseLineDetail;;500.00;81;Owner's Equity - Draws;NON;;NotBillable;;;;;;;;;;;;
+95;2056;2026-02-16;;1;;AccountBasedExpenseLineDetail;;95.00;89;Interest expense;NON;;NotBillable;;;;;;;;;;;;
+95;2056;2026-02-16;;2;;AccountBasedExpenseLineDetail;;376.78;57;Note Payable;NON;;NotBillable;;;;;;;;;;;;
+94;2055;2026-02-16;;1;;AccountBasedExpenseLineDetail;;1000.00;79;Visa Credit Card;2;;NotBillable;;;;;;;;;;;;
+90;2053;2026-02-11;;1;;AccountBasedExpenseLineDetail;monthly water;68.12;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+89;2052;2026-02-11;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;210.87;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+88;2051;2026-02-11;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+77;2047;2026-01-11;;1;;AccountBasedExpenseLineDetail;monthly water;74.96;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+76;2046;2026-01-11;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;224.83;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+75;2045;2026-01-11;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+74;2044;2025-12-17;;1;;AccountBasedExpenseLineDetail;Insurance - general liability;750.00;51;Insurance Expense-General Liability Insurance;5;;NotBillable;;;;;;;;;;;;
+73;2043;2025-12-17;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+73;2043;2025-12-17;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+71;2042;2025-12-15;;1;;ItemBasedExpenseLineDetail;Venue Rental;1000.00;;;;;;;;;18;Venue Rental;1;1000;5;HasBeenBilled;4;Cathy's Consulting Company;
+68;2040;2025-12-12;;1;;AccountBasedExpenseLineDetail;monthly water;81.79;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+67;2039;2025-12-12;;3;;AccountBasedExpenseLineDetail;monthly electric / gas bill;249.22;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+66;2038;2025-12-12;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+62;2037;2025-11-16;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;375.00;;;;;;;;;12;Pad folios;50;7.5;5;HasBeenBilled;4;Cathy's Consulting Company;
+62;2037;2025-11-16;;2;;ItemBasedExpenseLineDetail;Promotional items -- pens engraved;200.00;;;;;;;;;14;Pens;50;4;5;HasBeenBilled;4;Cathy's Consulting Company;
+62;2037;2025-11-16;;3;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;166.50;;;;;;;;;13;Misc;50;3.33;5;HasBeenBilled;4;Cathy's Consulting Company;
+61;2036;2025-11-16;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+61;2036;2025-11-16;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+60;2035;2025-11-11;;1;;AccountBasedExpenseLineDetail;monthly water;90.47;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+59;2034;2025-11-11;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;277.12;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+58;2033;2025-11-11;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+43;2027;2025-10-19;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+43;2027;2025-10-19;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+42;2026;2025-10-19;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+42;2026;2025-10-19;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+41;2025;2025-10-14;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;254.71;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+40;2024;2025-10-14;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+39;2023;2025-09-23;;1;;AccountBasedExpenseLineDetail;Insurance - general liability;750.00;51;Insurance Expense-General Liability Insurance;5;;NotBillable;;;;;;;;;;;;
+38;2022;2025-09-18;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+38;2022;2025-09-18;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+36;2021;2025-09-18;;1;;ItemBasedExpenseLineDetail;Venue Rental;750.00;;;;;;;;;18;Venue Rental;1;750;5;HasBeenBilled;3;Benjamin Yeung;
+34;2020;2025-09-18;;1;;ItemBasedExpenseLineDetail;Catering -- food & beverage;700.00;;;;;;;;;3;Catering;20;35;5;HasBeenBilled;3;Benjamin Yeung;
+30;2019;2026-09-13;;1;;ItemBasedExpenseLineDetail;Promotional items - engraved padfolios;112.50;;;;;;;;;12;Pad folios;15;7.5;5;HasBeenBilled;3;Benjamin Yeung;
+30;2019;2026-09-13;;2;;ItemBasedExpenseLineDetail;Promotional items -- pens engraved;60.00;;;;;;;;;14;Pens;15;4;5;HasBeenBilled;3;Benjamin Yeung;
+30;2019;2026-09-13;;3;;ItemBasedExpenseLineDetail;promotional items -- misc engraved items;101.25;;;;;;;;;13;Misc;15;6.75;5;HasBeenBilled;3;Benjamin Yeung;
+29;2018;2026-09-13;;1;;AccountBasedExpenseLineDetail;monthly water;88.72;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+28;2017;2026-09-13;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;214.85;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+27;2016;2026-09-13;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+26;2015;2026-08-18;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+26;2015;2026-08-18;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+25;2013;2026-08-13;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;186.84;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+24;2014;2026-08-13;;1;;AccountBasedExpenseLineDetail;monthly water;68.72;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+23;2012;2026-08-13;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+18;2011;2026-07-19;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+18;2011;2026-07-19;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+17;2010;2026-07-19;;1;;AccountBasedExpenseLineDetail;interest exp on loan;95.00;89;Interest expense;2;;NotBillable;;;;;;;;;;;;
+17;2010;2026-07-19;;2;;AccountBasedExpenseLineDetail;principal;376.78;57;Note Payable;2;;NotBillable;;;;;;;;;;;;
+16;2009;2026-07-15;;1;;AccountBasedExpenseLineDetail;monthly water;51.25;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+15;2008;2026-07-14;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;165.84;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+14;2007;2026-07-14;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+9;2006;2026-06-20;;1;;ItemBasedExpenseLineDetail;Venue Rental;5000.00;;;;;;;;;18;Venue Rental;1;5000;5;Billable;2;Oxon Insurance Agency;
+8;2005;2026-06-15;;1;;AccountBasedExpenseLineDetail;monthly water;53.25;83;Utilities - Water;5;;NotBillable;;;;;;;;;;;;
+7;2004;2026-06-15;;1;;AccountBasedExpenseLineDetail;monthly electric / gas bill;156.94;82;Utilities - Electric & Gas;5;;NotBillable;;;;;;;;;;;;
+6;2003;2026-06-13;;1;;AccountBasedExpenseLineDetail;monthly office rent;1250.00;64;Rent Expense;5;;NotBillable;;;;;;;;;;;;
+5;2002;2026-06-12;;1;;AccountBasedExpenseLineDetail;membership dues;325.00;6;Dues and Subscriptions;5;;NotBillable;;;;;;;;;;;;
+4;2001;2026-06-12;;1;;AccountBasedExpenseLineDetail;Insurance - general liability;750.00;51;Insurance Expense-General Liability Insurance;5;;NotBillable;;;;;;;;;;;;

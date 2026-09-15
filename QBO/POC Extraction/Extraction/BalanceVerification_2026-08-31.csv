@@ -1,0 +1,34 @@
+﻿Section;Type de ligne;Account;Account (Id);Debit;Credit
+;Donnée;Chequing;38;23160.44;
+;Donnée;Accounts Receivable;32;18402.04;
+;Donnée;Inventory Asset;85;281.91;
+;Donnée;Accumulated Depreciation;33;;333.30
+;Donnée;Furniture and Equipment;49;2750.00;
+;Donnée;Accounts Payable;31;;734.51
+;Donnée;Accounts Payable (A/P) - HKD;90;;0.00
+;Donnée;Visa Credit Card;79;;2077.60
+;Donnée;GST/HST Payable;86;;214.32
+;Donnée;GST/HST Suspense;87;;340.69
+;Donnée;Note Payable;57;;20101.86
+;Donnée;Opening Balance Equity;58;7500.00;
+;Donnée;Owner's Equity - Contributions;80;;12750.00
+;Donnée;Owner's Equity - Draws;81;2000.00;
+;Donnée;Retained Earnings;2;;18946.19
+;Donnée;Billable Expenses Income;35;;22131.25
+;Donnée;Markup;29;;851.25
+;Donnée;Sales;65;;6500.00
+;Donnée;Sales of Product Income;67;;19050.00
+;Donnée;Services;1;;3600.00
+;Donnée;Cost of Goods Sold;84;9664.68;
+;Donnée;Cost of Sales - billable expenses;44;28591.24;
+;Donnée;Inventory Shrinkage;88;0.00;
+;Donnée;Dues and Subscriptions;6;325.00;
+;Donnée;Insurance Expense-General Liability Insurance;51;1500.00;
+;Donnée;Interest expense;89;760.00;
+;Donnée;Janitorial Expense;91;417.52;
+;Donnée;Rent Expense;64;10000.00;
+;Donnée;Utilities - Electric & Gas;82;1564.11;
+;Donnée;Utilities - Water;83;462.36;
+;Donnée;Depreciation Expense;45;233.31;
+;Donnée;Exchange Gain or Loss;48;18.36;
+;Total;TOTAL;;107630.97;107630.97

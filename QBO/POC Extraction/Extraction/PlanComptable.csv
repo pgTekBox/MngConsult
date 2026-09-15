@@ -1,0 +1,96 @@
+﻿Id;AcctNum;Name;FullyQualifiedName;SubAccount;ParentRef.value;AccountType;AccountSubType;Classification;Description;CurrentBalance;CurrentBalanceWithSubAccounts;CurrencyRef.value;TaxCodeRef.value;Active;MetaData.CreateTime
+31;;Accounts Payable;Accounts Payable;false;;Accounts Payable;AccountsPayable;Liability;;-734.51;-734.51;CAD;;true;2026-03-31T21:48:10-07:00
+90;;Accounts Payable (A/P) - HKD;Accounts Payable (A/P) - HKD;false;;Accounts Payable;AccountsPayable;Liability;;0;0;HKD;;true;2026-03-31T23:11:00-07:00
+32;;Accounts Receivable;Accounts Receivable;false;;Accounts Receivable;AccountsReceivable;Asset;;18402.04;18402.04;CAD;;true;2026-03-31T21:48:10-07:00
+92;;Accounts Receivable (A/R) - USD;Accounts Receivable (A/R) - USD;false;;Accounts Receivable;AccountsReceivable;Asset;;0;0;USD;;true;2026-04-01T01:15:09-07:00
+33;;Accumulated Depreciation;Accumulated Depreciation;false;;Fixed Asset;AccumulatedDepreciation;Asset;;-366.63;-366.63;CAD;;true;2026-03-31T21:48:10-07:00
+3;;Advertising;Advertising;false;;Expense;AdvertisingPromotional;Expense;;0;0;CAD;;true;2026-02-24T11:22:21-08:00
+34;;Ask My Accountant;Ask My Accountant;false;;Other Expense;OtherMiscellaneousExpense;Expense;;0;0;CAD;;true;2026-03-31T21:48:10-07:00
+4;;Bank charges;Bank charges;false;;Expense;BankCharges;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+30;;Billable Expense Income;Billable Expense Income;false;;Income;ServiceFeeIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:17:25-07:00
+35;;Billable Expenses Income;Billable Expenses Income;false;;Income;OtherPrimaryIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+36;;Business Licenses and Permits;Business Licenses and Permits;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+37;;Charitable Contributions;Charitable Contributions;false;;Expense;CharitableContributions;Expense;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+38;;Chequing;Chequing;false;;Bank;Checking;Asset;;21095.57;21095.57;CAD;;true;2026-03-31T21:48:11-07:00
+39;;Commission Income;Commission Income;false;;Income;OtherPrimaryIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+40;;Commissions Paid;Commissions Paid;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+5;;Commissions and fees;Commissions and fees;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+41;;Computer and Internet Expenses;Computer and Internet Expenses;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+42;;Continuing Education;Continuing Education;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:11-07:00
+84;;Cost of Goods Sold;Cost of Goods Sold;false;;Cost of Goods Sold;SuppliesMaterialsCogs;Expense;;0;0;CAD;;true;2026-03-31T21:50:26-07:00
+44;;Cost of Sales - billable expenses;Cost of Sales - billable expenses;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:12-07:00
+43;;Cost of sales;Cost of sales;false;;Cost of Goods Sold;SuppliesMaterialsCogs;Expense;;0;0;CAD;;true;2026-03-31T21:48:12-07:00
+45;;Depreciation Expense;Depreciation Expense;false;;Other Expense;Depreciation;Expense;;0;0;CAD;;true;2026-03-31T21:48:12-07:00
+28;;Discounts given;Discounts given;false;;Income;DiscountsRefundsGiven;Revenue;;0;0;CAD;;true;2026-03-31T21:12:02-07:00
+6;;Dues and Subscriptions;Dues and Subscriptions;false;;Expense;DuesSubscriptions;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+46;;Entertainment Booking Fees paid on behalf of clients;Entertainment Booking Fees paid on behalf of clients;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:12-07:00
+47;;Equipment rental;Equipment rental;false;;Expense;EquipmentRental;Expense;;0;0;CAD;;true;2026-03-31T21:48:12-07:00
+48;;Exchange Gain or Loss;Exchange Gain or Loss;false;;Other Expense;ExchangeGainOrLoss;Expense;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+7;;Fees Billed;Fees Billed;false;;Income;OtherPrimaryIncome;Revenue;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+49;;Furniture and Equipment;Furniture and Equipment;false;;Fixed Asset;FurnitureAndFixtures;Asset;;2750.00;2750.00;CAD;;true;2026-03-31T21:48:13-07:00
+86;;GST/HST Payable;GST/HST Payable;false;;Other Current Liability;GlobalTaxPayable;Liability;;23.23;23.23;CAD;;true;2026-03-31T21:58:44-07:00
+87;;GST/HST Suspense;GST/HST Suspense;false;;Other Current Liability;GlobalTaxSuspense;Liability;;-340.69;-340.69;CAD;;true;2026-03-31T21:58:44-07:00
+8;;Insurance;Insurance;false;;Expense;Insurance;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+50;;Insurance Expense;Insurance Expense;false;;Expense;Insurance;Expense;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+51;;Insurance Expense-General Liability Insurance;Insurance Expense-General Liability Insurance;false;;Expense;Insurance;Expense;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+52;;Insurance Expense-Health Insurance;Insurance Expense-Health Insurance;false;;Expense;Insurance;Expense;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+53;;Insurance Expense-Life and Disability Insurance;Insurance Expense-Life and Disability Insurance;false;;Expense;Insurance;Expense;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+9;;Interest earned;Interest earned;false;;Other Income;InterestEarned;Revenue;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+89;;Interest expense;Interest expense;false;;Expense;InterestPaid;Expense;;0;0;CAD;;true;2026-03-31T23:09:01-07:00
+54;;Inventory (deleted);Inventory (deleted);false;;Other Current Asset;Inventory;Asset;;0;0;CAD;;false;2026-03-31T21:48:13-07:00
+85;;Inventory Asset;Inventory Asset;false;;Other Current Asset;Inventory;Asset;;7781.91;7781.91;CAD;;true;2026-03-31T21:50:27-07:00
+88;;Inventory Shrinkage;Inventory Shrinkage;false;;Cost of Goods Sold;SuppliesMaterialsCogs;Expense;;0;0;CAD;;true;2026-03-31T23:02:00-07:00
+91;;Janitorial Expense;Janitorial Expense;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T23:58:13-07:00
+55;;Leasehold Improvements;Leasehold Improvements;false;;Fixed Asset;LeaseholdImprovements;Asset;;0;0;CAD;;true;2026-03-31T21:48:13-07:00
+10;;Legal and professional fees;Legal and professional fees;false;;Expense;LegalProfessionalFees;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+29;;Markup;Markup;false;;Income;ServiceFeeIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:17:13-07:00
+11;;Meals and entertainment;Meals and entertainment;false;;Expense;EntertainmentMeals;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+56;;Merchant Account Fees;Merchant Account Fees;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+12;;Miscellaneous;Miscellaneous;false;;Other Expense;OtherMiscellaneousExpense;Expense;;0;0;CAD;;true;2026-02-24T11:22:22-08:00
+57;;Note Payable;Note Payable;false;;Long Term Liability;NotesPayable;Liability;;-20101.86;-20101.86;CAD;;true;2026-03-31T21:48:14-07:00
+13;;Office expenses;Office expenses;false;;Expense;SuppliesMaterials;Expense;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+58;;Opening Balance Equity;Opening Balance Equity;false;;Equity;OpeningBalanceEquity;Equity;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+14;;Other Portfolio Income;Other Portfolio Income;false;;Other Income;OtherInvestmentIncome;Revenue;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+59;;Owner's Equity;Owner's Equity;false;;Equity;OwnersEquity;Equity;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+80;;Owner's Equity - Contributions;Owner's Equity - Contributions;false;;Equity;OwnersEquity;Equity;;-12750.00;-12750.00;CAD;;true;2026-03-31T21:50:04-07:00
+81;;Owner's Equity - Draws;Owner's Equity - Draws;false;;Equity;OwnersEquity;Equity;;2000.00;2000.00;CAD;;true;2026-03-31T21:50:04-07:00
+15;;Penalties and settlements;Penalties and settlements;false;;Other Expense;PenaltiesSettlements;Expense;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+16;;Prepaid expenses;Prepaid expenses;false;;Other Current Asset;PrepaidExpenses;Asset;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+60;;Printed Materials purchased for clients;Printed Materials purchased for clients;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+61;;Printing and Reproduction;Printing and Reproduction;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+62;;Professional Fees;Professional Fees;false;;Expense;LegalProfessionalFees;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+17;;Promotional;Promotional;false;;Expense;PromotionalMeals;Expense;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+63;;Purchases;Purchases;false;;Expense;SuppliesMaterials;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+18;;Refunds-Allowances;Refunds-Allowances;false;;Income;DiscountsRefundsGiven;Revenue;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+64;;Rent Expense;Rent Expense;false;;Expense;RentOrLeaseOfBuildings;Expense;;0;0;CAD;;true;2026-03-31T21:48:14-07:00
+19;;Rent or lease payments;Rent or lease payments;false;;Expense;RentOrLeaseOfBuildings;Expense;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+20;;Repair and maintenance;Repair and maintenance;false;;Expense;RepairMaintenance;Expense;;0;0;CAD;;true;2026-02-24T11:22:23-08:00
+2;;Retained Earnings;Retained Earnings;false;;Equity;RetainedEarnings;Equity;;0;0;CAD;;true;2026-02-24T10:27:10-08:00
+65;;Sales;Sales;false;;Income;OtherPrimaryIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+66;;Sales Discounts;Sales Discounts;false;;Income;DiscountsRefundsGiven;Revenue;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+67;;Sales of Product Income;Sales of Product Income;false;;Income;SalesOfProductIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+1;;Services;Services;false;;Income;ServiceFeeIncome;Revenue;;0;0;CAD;;true;2026-02-24T10:27:10-08:00
+21;;Stationery and printing;Stationery and printing;false;;Expense;SuppliesMaterials;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+68;;Subcontracted Services;Subcontracted Services;false;;Expense;CostOfLabor;Expense;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+22;;Supplies;Supplies;false;;Expense;SuppliesMaterials;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+69;;Taxes - Property;Taxes - Property;false;;Expense;TaxesPaid;Expense;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+23;;Taxes and Licenses;Taxes and Licenses;false;;Expense;TaxesPaid;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+70;;Telephone Expense;Telephone Expense;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:15-07:00
+24;;Travel;Travel;false;;Expense;TravelMeals;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+71;;Travel Expense;Travel Expense;false;;Expense;TravelMeals;Expense;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+25;;Travel meals;Travel meals;false;;Expense;TravelMeals;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+72;;Unapplied Cash Bill Payment Expense;Unapplied Cash Bill Payment Expense;false;;Expense;UnappliedCashBillPaymentExpense;Expense;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+73;;Unapplied Cash Payment Income;Unapplied Cash Payment Income;false;;Income;UnappliedCashPaymentIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+74;;Uncategorised Asset;Uncategorised Asset;false;;Other Current Asset;OtherCurrentAssets;Asset;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+75;;Uncategorised Expense;Uncategorised Expense;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+76;;Uncategorised Income;Uncategorised Income;false;;Income;OtherPrimaryIncome;Revenue;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+93;;Uncategorized Asset;Uncategorized Asset;false;;Other Current Asset;OtherCurrentAssets;Asset;;0;0;CAD;;true;2026-04-01T12:04:25-07:00
+95;;Uncategorized Expense;Uncategorized Expense;false;;Expense;OtherMiscellaneousServiceCost;Expense;;0;0;CAD;;true;2026-04-01T12:27:54-07:00
+94;;Uncategorized Income;Uncategorized Income;false;;Income;ServiceFeeIncome;Revenue;;0;0;CAD;;true;2026-04-01T12:27:53-07:00
+26;;Undeposited Funds;Undeposited Funds;false;;Other Current Asset;UndepositedFunds;Asset;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+27;;Utilities;Utilities;false;;Expense;Utilities;Expense;;0;0;CAD;;true;2026-02-24T11:22:24-08:00
+82;;Utilities - Electric & Gas;Utilities - Electric & Gas;false;;Expense;Utilities;Expense;;0;0;CAD;;true;2026-03-31T21:50:04-07:00
+83;;Utilities - Water;Utilities - Water;false;;Expense;Utilities;Expense;;0;0;CAD;;true;2026-03-31T21:50:04-07:00
+77;;Vehicles;Vehicles;false;;Fixed Asset;Vehicles;Asset;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+78;;Venue Fees paid on behalf of clients;Venue Fees paid on behalf of clients;false;;Cost of Goods Sold;CostOfSales;Expense;;0;0;CAD;;true;2026-03-31T21:48:16-07:00
+79;;Visa Credit Card;Visa Credit Card;false;;Credit Card;CreditCard;Liability;;-2077.60;-2077.60;CAD;;true;2026-03-31T21:48:16-07:00

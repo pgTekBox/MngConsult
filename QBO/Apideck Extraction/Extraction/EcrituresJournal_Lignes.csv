@@ -1,0 +1,1 @@
+﻿parent.id;parent.number;parent.date;line_index;id;line_number;type;description;sub_total;tax_amount;total_amount;base_currency_amount;ledger_account.id;ledger_account.nominal_code;ledger_account.name;tax_rate.id;tax_rate.name;customer.id;customer.display_name;supplier.id;supplier.display_name;department_id;location_id;tracking_categories

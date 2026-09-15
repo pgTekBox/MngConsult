@@ -1,0 +1,3 @@
+﻿Parent.Id;Parent.DocNumber;Parent.TxnDate;GroupLine.Id;Id;LineNum;DetailType;Description;Amount;DepositLineDetail.AccountRef.value;DepositLineDetail.AccountRef.name;DepositLineDetail.Entity.type;DepositLineDetail.Entity.value;DepositLineDetail.Entity.name;DepositLineDetail.PaymentMethodRef.value;DepositLineDetail.CheckNum;DepositLineDetail.ClassRef.name;DepositLineDetail.TaxCodeRef.value;LinkedTxn.TxnType;LinkedTxn.TxnId
+134;;2026-06-09;;1;1;DepositLineDetail;contribution to start business;10000.00;80;Owner's Equity - Contributions;VENDOR;44;Michelle Long;2;;;2;;
+134;;2026-06-09;;2;2;DepositLineDetail;funds borrowed to start business;25000.00;57;Note Payable;VENDOR;57;Bank of AnyCity;;;;2;;

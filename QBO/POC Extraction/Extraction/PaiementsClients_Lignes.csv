@@ -1,0 +1,10 @@
+﻿Parent.Id;Parent.DocNumber;Parent.TxnDate;GroupLine.Id;Amount;LinkedTxn.TxnType;LinkedTxn.TxnId;LinkedTxn
+181;;2026-05-03;;4407.00;Invoice;178;Invoice:178
+179;;2026-04-21;;1356.00;Invoice;174;Invoice:174
+146;;2026-02-25;;8441.10;Invoice;128;Invoice:128
+149;;2025-11-21;;3283.78;Invoice;125;Invoice:125
+152;;2026-08-28;;14704.13;Invoice;122;Invoice:122
+151;;2026-08-28;;10170.00;Invoice;123;Invoice:123
+150;;2025-10-24;;4165.47;Invoice;124;Invoice:124
+148;;2025-12-01;;9284.66;Invoice;126;Invoice:126
+147;;2026-01-04;;10226.28;Invoice;127;Invoice:127

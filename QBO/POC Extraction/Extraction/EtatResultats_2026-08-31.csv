@@ -1,0 +1,27 @@
+﻿Section;Type de ligne;Account;Account (Id);Total
+INCOME;Entête;INCOME;;
+INCOME;Donnée;Billable Expenses Income;35;22131.25
+INCOME;Donnée;Markup;29;851.25
+INCOME;Donnée;Sales;65;6500.00
+INCOME;Donnée;Sales of Product Income;67;19050.00
+INCOME;Donnée;Services;1;3600.00
+INCOME;Total;Total Income;;52132.50
+COST OF GOODS SOLD;Entête;COST OF GOODS SOLD;;
+COST OF GOODS SOLD;Donnée;Cost of Goods Sold;84;9664.68
+COST OF GOODS SOLD;Donnée;Cost of Sales - billable expenses;44;28591.24
+COST OF GOODS SOLD;Donnée;Inventory Shrinkage;88;0.00
+COST OF GOODS SOLD;Total;Total Cost of Goods Sold;;38255.92
+EXPENSES;Entête;EXPENSES;;
+EXPENSES;Donnée;Dues and Subscriptions;6;325.00
+EXPENSES;Donnée;Insurance Expense-General Liability Insurance;51;1500.00
+EXPENSES;Donnée;Interest expense;89;760.00
+EXPENSES;Donnée;Janitorial Expense;91;417.52
+EXPENSES;Donnée;Rent Expense;64;10000.00
+EXPENSES;Donnée;Utilities - Electric & Gas;82;1564.11
+EXPENSES;Donnée;Utilities - Water;83;462.36
+EXPENSES;Donnée;Depreciation Expense;45;233.31
+EXPENSES;Total;Total Expenses;;15262.30
+OTHER EXPENSES;Entête;OTHER EXPENSES;;
+OTHER EXPENSES;Donnée;Exchange Gain or Loss;48;18.36
+OTHER EXPENSES;Total;Total Other Expenses;;18.36
+;Total;PROFIT;;-1404.08
