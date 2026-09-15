@@ -1,0 +1,15 @@
+﻿Section;Type de ligne;Date;Transaction Type;Transaction Type (Id);#;Customer;Customer (Id);Due Date;Amount;Open Balance;Foreign Amount;Foreign Open Balance;Currency;Exchange Rate
+91 or more days past due;Entête;91 or more days past due;;;;;;;;;;;;
+91 or more days past due;Donnée;2025-11-21;Payment;149;;Lew Plumbing;10;2025-11-21;-3738.61;-454.83;-3738.61;-454.83;CAD;1.00
+91 or more days past due;Donnée;2026-02-25;Payment;146;;Hazel Robinson;12;2026-02-25;-9415.73;-974.63;-9415.73;-974.63;CAD;1.00
+91 or more days past due;Donnée;2026-02-16;Invoice;129;1008;Benjamin Yeung;3;2026-03-18;904.00;904.00;904.00;904.00;CAD;1.00
+91 or more days past due;Donnée;2026-02-16;Invoice;130;1009;Benjamin Yeung;3;2026-03-18;7345.00;7345.00;7345.00;7345.00;CAD;1.00
+91 or more days past due;Donnée;2026-03-18;Invoice;132;1011;Jordan Burgess;16;2026-04-17;452.00;452.00;452.00;452.00;CAD;1.00
+91 or more days past due;Donnée;2026-03-18;Invoice;131;1010;Adwin Ko;1;2026-04-17;1695.00;1695.00;1695.00;1695.00;CAD;1.00
+91 or more days past due;Donnée;2026-04-01;Invoice;177;1014;Whitehead and Sons;5;2026-05-01;3672.50;3672.50;3672.50;3672.50;CAD;1.00
+91 or more days past due;Total;Total for 91 or more days past due;;;;;;;914.16;12639.04;;;;
+61 - 90 days past due;Entête;61 - 90 days past due;;;;;;;;;;;;
+61 - 90 days past due;Donnée;2026-05-03;Invoice;175;1013;Whitehead and Sons;5;2026-06-02;1356.00;1356.00;1356.00;1356.00;CAD;1.00
+61 - 90 days past due;Donnée;2026-05-03;Invoice;180;1016;Anilkumar Pillai;60;2026-06-02;4407.00;4407.00;4407.00;4407.00;CAD;1.00
+61 - 90 days past due;Total;Total for 61 - 90 days past due;;;;;;;5763.00;5763.00;;;;
+;Total;TOTAL;;;;;;;6677.16;18402.04;;;;

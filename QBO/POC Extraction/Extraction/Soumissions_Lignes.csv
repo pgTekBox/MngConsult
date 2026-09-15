@@ -1,0 +1,21 @@
+﻿Parent.Id;Parent.DocNumber;Parent.TxnDate;GroupLine.Id;Id;LineNum;DetailType;Description;Amount;SalesItemLineDetail.ItemRef.value;SalesItemLineDetail.ItemRef.name;SalesItemLineDetail.Qty;SalesItemLineDetail.UnitPrice;SalesItemLineDetail.TaxCodeRef.value;SalesItemLineDetail.ServiceDate;SalesItemLineDetail.ItemAccountRef.value;SalesItemLineDetail.ItemAccountRef.name;SalesItemLineDetail.ClassRef.name;SalesItemLineDetail.DiscountRate;SalesItemLineDetail.DiscountAmt;DiscountLineDetail.PercentBased;DiscountLineDetail.DiscountPercent;DiscountLineDetail.DiscountAccountRef.value;DiscountLineDetail.DiscountAccountRef.name;GroupLineDetail.GroupItemRef.value;GroupLineDetail.GroupItemRef.name;GroupLineDetail.Quantity
+119;1002;2026-07-19;;1;1;SalesItemLineDetail;Holiday party - platinum level;3000.00;9;Holiday party:Platinum party;1;3000;5;;65;Sales;;;;;;;;;;
+119;1002;2026-07-19;;2;2;SalesItemLineDetail;promotional items -- misc engraved items - Camelbak water bottles engraved;2000.00;13;Promotional items:Misc;100;20;5;;35;Billable Expenses Income;;;;;;;;;;
+119;1002;2026-07-19;;3;3;SalesItemLineDetail;Venue rental;5000.00;18;General services:Venue Rental;1;5000;5;;35;Billable Expenses Income;;;;;;;;;;
+119;1002;2026-07-19;;;;SubTotalLineDetail;;10000.00;;;;;;;;;;;;;;;;;;
+118;1001;2026-07-07;;1;1;SalesItemLineDetail;Holiday party - gold level;2000.00;8;Holiday party:Gold party;1;2000;5;;65;Sales;;;;;;;;;;
+118;1001;2026-07-07;;2;2;SalesItemLineDetail;Venue rental;10000.00;18;General services:Venue Rental;1;10000;5;;35;Billable Expenses Income;;;;;;;;;;
+118;1001;2026-07-07;;3;3;SalesItemLineDetail;promotional items -- misc engraved items;1012.50;13;Promotional items:Misc;75;13.5;5;;35;Billable Expenses Income;;;;;;;;;;
+118;1001;2026-07-07;;;;SubTotalLineDetail;;13012.50;;;;;;;;;;;;;;;;;;
+121;1004;2026-02-16;;7;1;SalesItemLineDetail;Employee celebration -- Anniversary / Retirement;500.00;4;Employee events:Employee Celebration;1;500;5;;65;Sales;;;;;;;;;;
+121;1004;2026-02-16;;8;2;SalesItemLineDetail;promotional items -- misc engraved items;562.50;13;Promotional items:Misc;75;7.5;5;;35;Billable Expenses Income;;;;;;;;;;
+121;1004;2026-02-16;;4;3;SalesItemLineDetail;Catering -- food & beverage;1875.00;3;General services:Catering;75;25;5;;35;Billable Expenses Income;;;;;;;;;;
+121;1004;2026-02-16;;;;SubTotalLineDetail;;2937.50;;;;;;;;;;;;;;;;;;
+120;1003;2026-01-04;;1;1;SalesItemLineDetail;Employee training off site;2554.65;5;Employee events:Employee Training;1;2554.65;5;;65;Sales;;;;;;;;;;
+120;1003;2026-01-04;;2;2;SalesItemLineDetail;Catering -- food & beverage;18750.00;3;General services:Catering;250;75;5;;35;Billable Expenses Income;;;;;;;;;;
+120;1003;2026-01-04;;3;3;SalesItemLineDetail;Name Badges;1277.32;21;General services:Badges:Name Badges;250;5.1092964;5;;67;Sales of Product Income;;;;;;;;;;
+120;1003;2026-01-04;;4;4;SalesItemLineDetail;Promotional items - engraved padfolios;6386.62;12;Promotional items:Pad folios;250;25.5464818;5;;35;Billable Expenses Income;;;;;;;;;;
+120;1003;2026-01-04;;5;5;SalesItemLineDetail;promotional items -- misc engraved items;1875.00;13;Promotional items:Misc;250;7.5;5;;35;Billable Expenses Income;;;;;;;;;;
+120;1003;2026-01-04;;6;6;SalesItemLineDetail;Venue rental;0;18;General services:Venue Rental;1;0;5;;35;Billable Expenses Income;;;;;;;;;;
+120;1003;2026-01-04;;7;7;SalesItemLineDetail;Entertainment for the event;2500.00;6;General services:Entertainment;1;2500;5;;35;Billable Expenses Income;;;;;;;;;;
+120;1003;2026-01-04;;;;SubTotalLineDetail;;33343.59;;;;;;;;;;;;;;;;;;

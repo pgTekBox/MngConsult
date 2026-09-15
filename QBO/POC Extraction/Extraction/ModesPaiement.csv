@@ -1,0 +1,5 @@
+﻿Id;Name;Type;Active
+1;Cash;NON_CREDIT_CARD;true
+2;Cheque;NON_CREDIT_CARD;true
+3;Credit Card;CREDIT_CARD;true
+4;Direct Debit;NON_CREDIT_CARD;true

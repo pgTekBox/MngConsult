@@ -1,0 +1,10 @@
+﻿Id;DocNumber;TxnDate;CurrencyRef.value;ExchangeRate;PrivateNote;DepartmentRef.value;DepartmentRef.name;ClassRef.value;ClassRef.name;CustomerRef.value;CustomerRef.name;TotalAmt;UnappliedAmt;DepositToAccountRef.value;DepositToAccountRef.name;ARAccountRef.value;PaymentMethodRef.value;PaymentRefNum;MetaData.CreateTime;MetaData.LastUpdatedTime
+181;;2026-05-03;CAD;1;;;;;;60;Anilkumar Pillai;4407.00;0;38;;;;;2026-05-03T09:12:09-07:00;2026-05-03T09:12:09-07:00
+179;;2026-04-21;CAD;1;;;;;;5;Whitehead and Sons;1356.00;0;38;;;;;2026-05-03T09:06:58-07:00;2026-05-03T09:06:58-07:00
+146;;2026-02-25;CAD;1;;;;;;12;Hazel Robinson;9415.73;974.63;38;;;;;2026-04-01T11:10:28-07:00;2026-04-01T12:59:46-07:00
+149;;2025-11-21;CAD;1;;;;;;10;Lew Plumbing;3738.61;454.83;38;;;;;2026-04-01T11:12:41-07:00;2026-04-01T12:54:55-07:00
+152;;2026-08-28;CAD;1;;;;;;8;Ecker Designs;14704.13;0;38;;;;;2026-04-01T11:13:40-07:00;2026-04-01T11:13:40-07:00
+151;;2026-08-28;CAD;1;;;;;;65;Oxon - Holiday Party;10170.00;0;38;;;;;2026-04-01T11:13:21-07:00;2026-04-01T11:13:21-07:00
+150;;2025-10-24;CAD;1;;;;;;3;Benjamin Yeung;4165.47;0;38;;;;;2026-04-01T11:13:02-07:00;2026-04-01T11:13:02-07:00
+148;;2025-12-01;CAD;1;;;;;;66;Oxon - Retreat;9284.66;0;38;;;;;2026-04-01T11:12:19-07:00;2026-04-01T11:12:19-07:00
+147;;2026-01-04;CAD;1;;;;;;4;Cathy's Consulting Company;10226.28;0;38;;;;;2026-04-01T11:10:47-07:00;2026-04-01T11:10:47-07:00

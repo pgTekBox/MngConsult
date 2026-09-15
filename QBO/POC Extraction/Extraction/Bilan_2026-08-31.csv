@@ -1,0 +1,43 @@
+﻿Section;Type de ligne;Account;Account (Id);Total
+Assets;Entête;Assets;;
+Assets > Current Assets;Entête;Current Assets;;
+Assets > Current Assets > Cash and Cash Equivalent;Entête;Cash and Cash Equivalent;;
+Assets > Current Assets > Cash and Cash Equivalent;Donnée;Chequing;38;23160.44
+Assets > Current Assets > Cash and Cash Equivalent;Total;Total Cash and Cash Equivalent;;23160.44
+Assets > Current Assets > Accounts Receivable (A/R);Entête;Accounts Receivable (A/R);;
+Assets > Current Assets > Accounts Receivable (A/R);Donnée;Accounts Receivable;32;18402.04
+Assets > Current Assets > Accounts Receivable (A/R);Total;Total Accounts Receivable (A/R);;18402.04
+Assets > Current Assets;Donnée;Inventory Asset;85;281.91
+Assets > Current Assets;Total;Total Current Assets;;41844.39
+Assets > Non-current Assets;Entête;Non-current Assets;;
+"Assets > Non-current Assets > Property, plant and equipment ";Entête;"Property, plant and equipment ";;
+"Assets > Non-current Assets > Property, plant and equipment ";Donnée;Accumulated Depreciation;33;-333.30
+"Assets > Non-current Assets > Property, plant and equipment ";Donnée;Furniture and Equipment;49;2750.00
+"Assets > Non-current Assets > Property, plant and equipment ";Total;"Total Property, plant and equipment ";;2416.70
+Assets > Non-current Assets;Total;Total Non Current Assets;;2416.70
+Assets;Total;Total Assets;;44261.09
+Liabilities and Equity;Entête;Liabilities and Equity;;
+Liabilities and Equity > Liabilities;Entête;Liabilities;;
+Liabilities and Equity > Liabilities > Current Liabilities;Entête;Current Liabilities;;
+Liabilities and Equity > Liabilities > Current Liabilities > Accounts Payable (A/P);Entête;Accounts Payable (A/P);;
+Liabilities and Equity > Liabilities > Current Liabilities > Accounts Payable (A/P);Donnée;Accounts Payable;31;734.51
+Liabilities and Equity > Liabilities > Current Liabilities > Accounts Payable (A/P);Donnée;Accounts Payable (A/P) - HKD;90;0.00
+Liabilities and Equity > Liabilities > Current Liabilities > Accounts Payable (A/P);Total;Total Accounts Payable (A/P);;734.51
+Liabilities and Equity > Liabilities > Current Liabilities > Credit Card;Entête;Credit Card;;
+Liabilities and Equity > Liabilities > Current Liabilities > Credit Card;Donnée;Visa Credit Card;79;2077.60
+Liabilities and Equity > Liabilities > Current Liabilities > Credit Card;Total;Total Credit Card;;2077.60
+Liabilities and Equity > Liabilities > Current Liabilities;Donnée;GST/HST Payable;86;214.32
+Liabilities and Equity > Liabilities > Current Liabilities;Donnée;GST/HST Suspense;87;340.69
+Liabilities and Equity > Liabilities > Current Liabilities;Total;Total Current Liabilities;;3367.12
+Liabilities and Equity > Liabilities > Non-current Liabilities;Entête;Non-current Liabilities;;
+Liabilities and Equity > Liabilities > Non-current Liabilities;Donnée;Note Payable;57;20101.86
+Liabilities and Equity > Liabilities > Non-current Liabilities;Total;Total Non-current Liabilities;;20101.86
+Liabilities and Equity > Liabilities;Total;Total Liabilities;;23468.98
+Liabilities and Equity > Equity;Entête;Equity;;
+Liabilities and Equity > Equity;Donnée;Opening Balance Equity;58;-7500.00
+Liabilities and Equity > Equity;Donnée;Owner's Equity - Contributions;80;12750.00
+Liabilities and Equity > Equity;Donnée;Owner's Equity - Draws;81;-2000.00
+Liabilities and Equity > Equity;Donnée;Retained Earnings;2;18946.19
+Liabilities and Equity > Equity;Donnée;Profit for the year;;-1404.08
+Liabilities and Equity > Equity;Total;Total Equity;;20792.11
+Liabilities and Equity;Total;Total Liabilities and Equity;;44261.09

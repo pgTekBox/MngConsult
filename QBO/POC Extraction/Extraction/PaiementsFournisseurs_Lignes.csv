@@ -1,0 +1,3 @@
+﻿Parent.Id;Parent.DocNumber;Parent.TxnDate;GroupLine.Id;Amount;LinkedTxn.TxnType;LinkedTxn.TxnId;LinkedTxn
+22;1067;2026-08-08;;3715.26;Bill;20;Bill:20
+21;1068;2026-08-08;;618.75;Bill;19;Bill:19

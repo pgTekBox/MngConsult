@@ -1,0 +1,382 @@
+﻿Section;Type de ligne;Date;Date (Id);Transaction Type;Transaction Type (Id);#;Name;Name (Id);Memo/Description;Split;Split (Id);Amount;Balance
+Chequing;Entête;Chequing;38;;;;;;;;;;
+Chequing;Donnée;Beginning Balance;;;;;;;;;;;-4879.42
+Chequing;Donnée;2026-01-04;;Payment;147;;Cathy's Consulting Company;4;;Accounts Receivable;32;10226.28;5346.86
+Chequing;Donnée;2026-01-11;;Cheque Expense;77;2047;City Water Co;29;;-Split-;;-84.70;5262.16
+Chequing;Donnée;2026-01-11;;Cheque Expense;75;2045;Mark Howard;42;;-Split-;;-1412.50;3849.66
+Chequing;Donnée;2026-01-11;;Cheque Expense;76;2046;Town Electric & Gas Service;55;;-Split-;;-254.06;3595.60
+Chequing;Donnée;2026-01-16;;Cheque Expense;78;2048;Bank of AnyCity;57;;-Split-;;-471.78;3123.82
+Chequing;Donnée;2026-01-26;;Cheque Expense;82;2049;Kristina Gibson;38;;-Split-;;-1546.69;1577.13
+Chequing;Donnée;2026-01-26;;Cheque Expense;91;2054;Bank of AnyCity;57;;-Split-;;-1000.00;577.13
+Chequing;Donnée;2026-02-05;;Cheque Expense;86;2050;Jacque Hudspeth;33;;-Split-;;-4237.50;-3660.37
+Chequing;Donnée;2026-02-11;;Cheque Expense;88;2051;Mark Howard;42;;-Split-;;-1412.50;-5072.87
+Chequing;Donnée;2026-02-11;;Cheque Expense;89;2052;Town Electric & Gas Service;55;;-Split-;;-238.28;-5311.15
+Chequing;Donnée;2026-02-11;;Cheque Expense;90;2053;City Water Co;29;;-Split-;;-76.98;-5388.13
+Chequing;Donnée;2026-02-16;;Cheque Expense;94;2055;Bank of AnyCity;57;;-Split-;;-1000.00;-6388.13
+Chequing;Donnée;2026-02-16;;Cheque Expense;95;2056;Bank of AnyCity;57;;-Split-;;-471.78;-6859.91
+Chequing;Donnée;2026-02-25;;Payment;146;;Hazel Robinson;12;;Accounts Receivable;32;9415.73;2555.82
+Chequing;Donnée;2026-03-10;;Cheque Expense;101;2058;Kristina Gibson;38;;-Split-;;-2471.88;83.94
+Chequing;Donnée;2026-03-13;;Cheque Expense;100;2057;Michelle Long;44;;Owner's Equity - Draws;81;-500.00;-416.06
+Chequing;Donnée;2026-03-13;;Cheque Expense;105;2060;Town Electric & Gas Service;55;;-Split-;;-226.55;-642.61
+Chequing;Donnée;2026-03-13;;Cheque Expense;106;2061;Bank of AnyCity;57;;-Split-;;-471.78;-1114.39
+Chequing;Donnée;2026-03-13;;Cheque Expense;104;2059;Mark Howard;42;;-Split-;;-1412.50;-2526.89
+Chequing;Donnée;2026-03-23;;Cheque Expense;107;2062;Cass Hayden;27;;-Split-;;-847.50;-3374.39
+Chequing;Donnée;2026-03-23;;Cheque Expense;108;2063;Michelle Long;44;;Owner's Equity - Draws;81;-500.00;-3874.39
+Chequing;Donnée;2026-03-24;;Cheque Expense;162;2067;Mark Howard;42;;-Split-;;-1412.50;-5286.89
+Chequing;Donnée;2026-03-24;;Cheque Expense;164;2069;City Water Co;29;;-Split-;;-83.86;-5370.75
+Chequing;Donnée;2026-03-24;;Cheque Expense;163;2068;Town Electric & Gas Service;55;;-Split-;;-229.14;-5599.89
+Chequing;Donnée;2026-03-24;;Cheque Expense;165;2070;Bank of AnyCity;57;;-Split-;;-471.78;-6071.67
+Chequing;Donnée;2026-03-24;;Cheque Expense;166;2071;Michelle Long;44;;Owner's Equity - Draws;81;-500.00;-6571.67
+Chequing;Donnée;2026-03-28;;Cheque Expense;109;2064;Jacque Hudspeth;33;;-Split-;;-14125.00;-20696.67
+Chequing;Donnée;2026-03-28;;Cheque Expense;113;2066;Mauro Giansiracusa;43;;-Split-;;-847.50;-21544.17
+Chequing;Donnée;2026-03-28;;Cheque Expense;111;2065;Garcia's Event Space;41;;-Split-;;-2825.00;-24369.17
+Chequing;Donnée;2026-04-21;;Payment;179;;Whitehead and Sons;5;;Accounts Receivable;32;1356.00;-23013.17
+Chequing;Donnée;2026-04-24;;Cheque Expense;170;2075;Bank of AnyCity;57;;-Split-;;-471.78;-23484.95
+Chequing;Donnée;2026-04-24;;Cheque Expense;167;2072;Mark Howard;42;;-Split-;;-1412.50;-24897.45
+Chequing;Donnée;2026-04-24;;Cheque Expense;171;2076;Michelle Long;44;;Owner's Equity - Draws;81;-500.00;-25397.45
+Chequing;Donnée;2026-04-24;;Cheque Expense;168;2073;Town Electric & Gas Service;55;;-Split-;;-243.54;-25640.99
+Chequing;Donnée;2026-04-24;;Cheque Expense;169;2074;City Water Co;29;;-Split-;;-81.19;-25722.18
+Chequing;Donnée;2026-05-03;;Payment;181;;Anilkumar Pillai;60;;Accounts Receivable;32;4407.00;-21315.18
+Chequing;Donnée;2026-06-09;;Deposit;134;;;;;-Split-;;35000.00;13684.82
+Chequing;Donnée;2026-06-12;;Cheque Expense;5;2002;Organization of Outstanding Events;48;;-Split-;;-367.25;13317.57
+Chequing;Donnée;2026-06-12;;Cheque Expense;4;2001;Cass Hayden;27;;-Split-;;-847.50;12470.07
+Chequing;Donnée;2026-06-13;;Cheque Expense;6;2003;Mark Howard;42;;-Split-;;-1412.50;11057.57
+Chequing;Donnée;2026-06-15;;Cheque Expense;7;2004;Town Electric & Gas Service;55;;-Split-;;-177.34;10880.23
+Chequing;Donnée;2026-06-15;;Cheque Expense;8;2005;City Water Co;29;;-Split-;;-60.17;10820.06
+Chequing;Donnée;2026-06-20;;Cheque Expense;9;2006;Venue Rental;56;;-Split-;;-5650.00;5170.06
+Chequing;Donnée;2026-07-14;;Cheque Expense;14;2007;Mark Howard;42;;-Split-;;-1412.50;3757.56
+Chequing;Donnée;2026-07-14;;Cheque Expense;15;2008;Town Electric & Gas Service;55;;-Split-;;-187.40;3570.16
+Chequing;Donnée;2026-07-15;;Cheque Expense;16;2009;City Water Co;29;;-Split-;;-57.91;3512.25
+Chequing;Donnée;2026-07-19;;Cheque Expense;17;2010;Bank of AnyCity;57;;-Split-;;-471.78;3040.47
+Chequing;Donnée;2026-07-19;;Cheque Expense;18;2011;Bank of AnyCity;57;;-Split-;;-471.78;2568.69
+Chequing;Donnée;2026-08-08;;Bill Payment (Cheque);22;1067;Hall's Promotional International;62;;Accounts Payable (A/P) - HKD;90;-526.08;2042.61
+Chequing;Donnée;2026-08-08;;Bill Payment (Cheque);21;1068;Hall's Promotional International;62;;Accounts Payable (A/P) - HKD;90;-87.62;1954.99
+Chequing;Donnée;2026-08-13;;Cheque Expense;23;2012;Mark Howard;42;;-Split-;;-1412.50;542.49
+Chequing;Donnée;2026-08-13;;Cheque Expense;25;2013;Town Electric & Gas Service;55;;-Split-;;-211.13;331.36
+Chequing;Donnée;2026-08-13;;Cheque Expense;24;2014;City Water Co;29;;-Split-;;-77.65;253.71
+Chequing;Donnée;2026-08-18;;Cheque Expense;26;2015;Bank of AnyCity;57;;-Split-;;-471.78;-218.07
+Chequing;Donnée;2026-08-28;;Payment;151;;Oxon Insurance Agency:Oxon - Holiday Party;65;;Accounts Receivable;32;10170.00;9951.93
+Chequing;Donnée;2026-08-28;;Payment;152;;Ecker Designs;8;;Accounts Receivable;32;14704.13;24656.06
+Chequing;Donnée;2026-08-29;;Sales Tax Payment;160;;;;;-Split-;;-1495.62;23160.44
+Chequing;Total;Total for Chequing;;;;;;;;;;28039.86;
+Accounts Receivable;Entête;Accounts Receivable;32;;;;;;;;;;
+Accounts Receivable;Donnée;Beginning Balance;;;;;;;;;;;9771.45
+Accounts Receivable;Donnée;2026-01-04;;Payment;147;;Cathy's Consulting Company;4;;Chequing;38;-10226.28;-454.83
+Accounts Receivable;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;;-Split-;;8441.10;7986.27
+Accounts Receivable;Donnée;2026-02-16;;Invoice;129;1008;Benjamin Yeung;3;;-Split-;;904.00;8890.27
+Accounts Receivable;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;;-Split-;;7345.00;16235.27
+Accounts Receivable;Donnée;2026-02-25;;Payment;146;;Hazel Robinson;12;;Chequing;38;-9415.73;6819.54
+Accounts Receivable;Donnée;2026-03-18;;Invoice;132;1011;Jordan Burgess;16;;-Split-;;452.00;7271.54
+Accounts Receivable;Donnée;2026-03-18;;Invoice;131;1010;Adwin Ko;1;;-Split-;;1695.00;8966.54
+Accounts Receivable;Donnée;2026-03-29;;Invoice;174;1012;Whitehead and Sons;5;;-Split-;;1356.00;10322.54
+Accounts Receivable;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;;-Split-;;3672.50;13995.04
+Accounts Receivable;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;;-Split-;;4407.00;18402.04
+Accounts Receivable;Donnée;2026-04-21;;Payment;179;;Whitehead and Sons;5;;Chequing;38;-1356.00;17046.04
+Accounts Receivable;Donnée;2026-05-03;;Payment;181;;Anilkumar Pillai;60;;Chequing;38;-4407.00;12639.04
+Accounts Receivable;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;;-Split-;;4407.00;17046.04
+Accounts Receivable;Donnée;2026-05-03;;Invoice;175;1013;Whitehead and Sons;5;;-Split-;;1356.00;18402.04
+Accounts Receivable;Donnée;2026-07-22;;Invoice;122;1001;Ecker Designs;8;;-Split-;;14704.13;33106.17
+Accounts Receivable;Donnée;2026-08-09;;Invoice;123;1002;Oxon Insurance Agency:Oxon - Holiday Party;65;;-Split-;;10170.00;43276.17
+Accounts Receivable;Donnée;2026-08-28;;Payment;151;;Oxon Insurance Agency:Oxon - Holiday Party;65;;Chequing;38;-10170.00;33106.17
+Accounts Receivable;Donnée;2026-08-28;;Payment;152;;Ecker Designs;8;;Chequing;38;-14704.13;18402.04
+Accounts Receivable;Total;Total for Accounts Receivable;;;;;;;;;;8630.59;
+Inventory Asset;Entête;Inventory Asset;85;;;;;;;;;;
+Inventory Asset;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Water bottles - generic;Accounts Receivable;32;-510.35;-510.35
+Inventory Asset;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Name Badges;Accounts Receivable;32;-750.00;-1260.35
+Inventory Asset;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Water bottles - generic;Accounts Receivable;32;-2041.39;-3301.74
+Inventory Asset;Donnée;2026-03-18;;Invoice;131;1010;Adwin Ko;1;Name Badges;Accounts Receivable;32;-750.00;-4051.74
+Inventory Asset;Donnée;2026-03-31;;Inventory Qty Adjust;2;START;;;Opening inventory for Name Badges;Opening Balance Equity;58;.00;-4051.74
+Inventory Asset;Donnée;2026-03-31;;Inventory Qty Adjust;1;START;;;Opening inventory for Guest Book;Opening Balance Equity;58;.00;-4051.74
+Inventory Asset;Donnée;2026-03-31;;Inventory Qty Adjust;3;START;;;Opening inventory for Water Bottles;Opening Balance Equity;58;.00;-4051.74
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;116;1;;;Quantity adjustment for Guest Book;Inventory Shrinkage;88;.00;-4051.74
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;117;2;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;4593.12;541.38
+Inventory Asset;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;-1531.04;-989.66
+Inventory Asset;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Water bottles - generic;Accounts Receivable;32;-255.17;-1244.83
+Inventory Asset;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;-450.00;-1694.83
+Inventory Asset;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Water bottles - generic;Accounts Receivable;32;-1020.69;-2715.52
+Inventory Asset;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Name Badges;Accounts Receivable;32;-375.00;-3090.52
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;117;2;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;.00;-3090.52
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;155;3;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;.00;-3090.52
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;155;3;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;4593.12;1502.60
+Inventory Asset;Donnée;2026-04-01;;Inventory Qty Adjust;116;1;;;Quantity adjustment for Guest Book;Inventory Shrinkage;88;250.00;1752.60
+Inventory Asset;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;-1531.04;221.56
+Inventory Asset;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;-450.00;-228.44
+Inventory Asset;Donnée;2026-07-22;;Bill;20;;Hall's Promotional International;62;Water bottles - generic;Accounts Payable (A/P) - HKD;90;510.35;281.91
+Inventory Asset;Donnée;2026-08-20;;Inventory Qty Adjust;11;START;;;Opening inventory for Water Bottles - Generic;Opening Balance Equity;58;.00;281.91
+Inventory Asset;Total;Total for Inventory Asset;;;;;;;;;;281.91;
+Accumulated Depreciation;Entête;Accumulated Depreciation;33;;;;;;;;;;
+Accumulated Depreciation;Donnée;Beginning Balance;;;;;;;;;;;-99.99
+Accumulated Depreciation;Donnée;2026-01-06;;Journal Entry;143;9;;;monthly depr;-Split-;;-33.33;-133.32
+Accumulated Depreciation;Donnée;2026-02-06;;Journal Entry;144;10;;;monthly depr;-Split-;;-33.33;-166.65
+Accumulated Depreciation;Donnée;2026-03-08;;Journal Entry;145;11;;;monthly depr;-Split-;;-33.33;-199.98
+Accumulated Depreciation;Donnée;2026-04-08;;Journal Entry;157;13;;;monthly depr;-Split-;;-33.33;-233.31
+Accumulated Depreciation;Donnée;2026-07-09;;Journal Entry;136;2;;;depreciation on office equipment and furniture;-Split-;;-33.33;-266.64
+Accumulated Depreciation;Donnée;2026-08-08;;Journal Entry;138;4;;;monthly depr;-Split-;;-33.33;-299.97
+Accumulated Depreciation;Donnée;2026-08-08;;Journal Entry;137;3;;;depr on office equipment & equipment;-Split-;;-33.33;-333.30
+Accumulated Depreciation;Total;Total for Accumulated Depreciation;;;;;;;;;;-233.31;
+Furniture and Equipment;Entête;Furniture and Equipment;49;;;;;;;;;;
+Furniture and Equipment;Donnée;2026-06-09;;Journal Entry;135;1;;;Computers and printer/scanner;-Split-;;1250.00;1250.00
+Furniture and Equipment;Donnée;2026-06-09;;Journal Entry;135;1;;;Office Furniture -- desks, chairs, conference table;-Split-;;1500.00;2750.00
+Furniture and Equipment;Total;Total for Furniture and Equipment;;;;;;;;;;2750.00;
+Accounts Payable;Entête;Accounts Payable;31;;;;;;;;;;
+Accounts Payable;Donnée;2026-02-16;;Bill;97;;Kristina Gibson;38;;-Split-;;508.51;508.51
+Accounts Payable;Donnée;2026-02-24;;Bill;98;;Jennifer Hargreaves;35;;-Split-;;226.00;734.51
+Accounts Payable;Total;Total for Accounts Payable;;;;;;;;;;734.51;
+Accounts Payable (A/P) - HKD;Entête;Accounts Payable (A/P) - HKD;90;;;;;;;;;;
+Accounts Payable (A/P) - HKD;Donnée;2026-07-22;;Bill;19;;Hall's Promotional International;62;;-Split-;;84.99;84.99
+Accounts Payable (A/P) - HKD;Donnée;2026-07-22;;Bill;20;;Hall's Promotional International;62;;-Split-;;510.35;595.34
+Accounts Payable (A/P) - HKD;Donnée;2026-08-08;;Bill Payment (Cheque);21;1068;Hall's Promotional International;62;;Chequing;38;-84.99;510.35
+Accounts Payable (A/P) - HKD;Donnée;2026-08-08;;Bill Payment (Cheque);22;1067;Hall's Promotional International;62;;Chequing;38;-510.35;.00
+Accounts Payable (A/P) - HKD;Total;Total for Accounts Payable (A/P) - HKD;;;;;;;;;;.00;
+Visa Credit Card;Entête;Visa Credit Card;79;;;;;;;;;;
+Visa Credit Card;Donnée;2026-01-26;;Cheque Expense;91;2054;Bank of AnyCity;57;;Chequing;38;-1000.00;-1000.00
+Visa Credit Card;Donnée;2026-02-03;;Expense;92;;Jennifer Hargreaves;35;;-Split-;;245.80;-754.20
+Visa Credit Card;Donnée;2026-02-16;;Cheque Expense;94;2055;Bank of AnyCity;57;;Chequing;38;-1000.00;-1754.20
+Visa Credit Card;Donnée;2026-02-25;;Expense;133;;;;;Opening Balance Equity;58;3831.80;2077.60
+Visa Credit Card;Total;Total for Visa Credit Card;;;;;;;;;;2077.60;
+GST/HST Payable;Entête;GST/HST Payable;86;;;;;;;;;;
+GST/HST Payable;Donnée;Beginning Balance;;;;;;;;;;;834.19
+GST/HST Payable;Donnée;2026-01-11;;Cheque Expense;76;2046;Town Electric & Gas Service;55;;Chequing;38;-29.23;804.96
+GST/HST Payable;Donnée;2026-01-11;;Cheque Expense;77;2047;City Water Co;29;;Chequing;38;-9.74;795.22
+GST/HST Payable;Donnée;2026-01-11;;Cheque Expense;75;2045;Mark Howard;42;;Chequing;38;-162.50;632.72
+GST/HST Payable;Donnée;2026-01-26;;Cheque Expense;91;2054;Bank of AnyCity;57;;Chequing;38;.00;632.72
+GST/HST Payable;Donnée;2026-01-26;;Cheque Expense;82;2049;Kristina Gibson;38;;Chequing;38;-177.94;454.78
+GST/HST Payable;Donnée;2026-02-03;;Expense;92;;Jennifer Hargreaves;35;;Visa Credit Card;79;-28.28;426.50
+GST/HST Payable;Donnée;2026-02-05;;Cheque Expense;86;2050;Jacque Hudspeth;33;;Chequing;38;-487.50;-61.00
+GST/HST Payable;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;;Accounts Receivable;32;971.10;910.10
+GST/HST Payable;Donnée;2026-02-11;;Cheque Expense;89;2052;Town Electric & Gas Service;55;;Chequing;38;-27.41;882.69
+GST/HST Payable;Donnée;2026-02-11;;Cheque Expense;88;2051;Mark Howard;42;;Chequing;38;-162.50;720.19
+GST/HST Payable;Donnée;2026-02-11;;Cheque Expense;90;2053;City Water Co;29;;Chequing;38;-8.86;711.33
+GST/HST Payable;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;;Accounts Receivable;32;845.00;1556.33
+GST/HST Payable;Donnée;2026-02-16;;Bill;97;;Kristina Gibson;38;;Accounts Payable;31;-58.51;1497.82
+GST/HST Payable;Donnée;2026-02-16;;Invoice;129;1008;Benjamin Yeung;3;;Accounts Receivable;32;104.00;1601.82
+GST/HST Payable;Donnée;2026-02-16;;Cheque Expense;94;2055;Bank of AnyCity;57;;Chequing;38;.00;1601.82
+GST/HST Payable;Donnée;2026-02-24;;Bill;98;;Jennifer Hargreaves;35;;Accounts Payable;31;-26.00;1575.82
+GST/HST Payable;Donnée;2026-03-10;;Cheque Expense;101;2058;Kristina Gibson;38;;Chequing;38;-284.38;1291.44
+GST/HST Payable;Donnée;2026-03-13;;Cheque Expense;104;2059;Mark Howard;42;;Chequing;38;-162.50;1128.94
+GST/HST Payable;Donnée;2026-03-13;;Cheque Expense;105;2060;Town Electric & Gas Service;55;;Chequing;38;-26.06;1102.88
+GST/HST Payable;Donnée;2026-03-18;;Invoice;131;1010;Adwin Ko;1;;Accounts Receivable;32;195.00;1297.88
+GST/HST Payable;Donnée;2026-03-18;;Invoice;132;1011;Jordan Burgess;16;;Accounts Receivable;32;52.00;1349.88
+GST/HST Payable;Donnée;2026-03-23;;Cheque Expense;107;2062;Cass Hayden;27;;Chequing;38;-97.50;1252.38
+GST/HST Payable;Donnée;2026-03-24;;Cheque Expense;163;2068;Town Electric & Gas Service;55;;Chequing;38;-26.36;1226.02
+GST/HST Payable;Donnée;2026-03-24;;Cheque Expense;162;2067;Mark Howard;42;;Chequing;38;-162.50;1063.52
+GST/HST Payable;Donnée;2026-03-24;;Cheque Expense;164;2069;City Water Co;29;;Chequing;38;-9.65;1053.87
+GST/HST Payable;Donnée;2026-03-28;;Cheque Expense;109;2064;Jacque Hudspeth;33;;Chequing;38;-1625.00;-571.13
+GST/HST Payable;Donnée;2026-03-28;;Cheque Expense;113;2066;Mauro Giansiracusa;43;;Chequing;38;-97.50;-668.63
+GST/HST Payable;Donnée;2026-03-28;;Cheque Expense;111;2065;Garcia's Event Space;41;;Chequing;38;-325.00;-993.63
+GST/HST Payable;Donnée;2026-03-29;;Invoice;174;1012;Whitehead and Sons;5;;Accounts Receivable;32;156.00;-837.63
+GST/HST Payable;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;;Accounts Receivable;32;507.00;-330.63
+GST/HST Payable;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;;Accounts Receivable;32;422.50;91.87
+GST/HST Payable;Donnée;2026-04-24;;Cheque Expense;168;2073;Town Electric & Gas Service;55;;Chequing;38;-28.02;63.85
+GST/HST Payable;Donnée;2026-04-24;;Cheque Expense;167;2072;Mark Howard;42;;Chequing;38;-162.50;-98.65
+GST/HST Payable;Donnée;2026-04-24;;Cheque Expense;169;2074;City Water Co;29;;Chequing;38;-9.34;-107.99
+GST/HST Payable;Donnée;2026-04-30;;Journal Entry;161;;;;Filed sales tax;-Split-;;-340.69;-448.68
+GST/HST Payable;Donnée;2026-04-30;;Journal Entry;159;;;;Filed sales tax;-Split-;;-1495.62;-1944.30
+GST/HST Payable;Donnée;2026-05-03;;Invoice;175;1013;Whitehead and Sons;5;;Accounts Receivable;32;156.00;-1788.30
+GST/HST Payable;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;;Accounts Receivable;32;507.00;-1281.30
+GST/HST Payable;Donnée;2026-06-09;;Deposit;134;;;;;Chequing;38;.00;-1281.30
+GST/HST Payable;Donnée;2026-06-12;;Cheque Expense;5;2002;Organization of Outstanding Events;48;;Chequing;38;-42.25;-1323.55
+GST/HST Payable;Donnée;2026-06-12;;Cheque Expense;4;2001;Cass Hayden;27;;Chequing;38;-97.50;-1421.05
+GST/HST Payable;Donnée;2026-06-13;;Cheque Expense;6;2003;Mark Howard;42;;Chequing;38;-162.50;-1583.55
+GST/HST Payable;Donnée;2026-06-15;;Cheque Expense;7;2004;Town Electric & Gas Service;55;;Chequing;38;-20.40;-1603.95
+GST/HST Payable;Donnée;2026-06-15;;Cheque Expense;8;2005;City Water Co;29;;Chequing;38;-6.92;-1610.87
+GST/HST Payable;Donnée;2026-06-20;;Cheque Expense;9;2006;Venue Rental;56;;Chequing;38;-650.00;-2260.87
+GST/HST Payable;Donnée;2026-07-14;;Cheque Expense;15;2008;Town Electric & Gas Service;55;;Chequing;38;-21.56;-2282.43
+GST/HST Payable;Donnée;2026-07-14;;Cheque Expense;14;2007;Mark Howard;42;;Chequing;38;-162.50;-2444.93
+GST/HST Payable;Donnée;2026-07-15;;Cheque Expense;16;2009;City Water Co;29;;Chequing;38;-6.66;-2451.59
+GST/HST Payable;Donnée;2026-07-19;;Cheque Expense;17;2010;Bank of AnyCity;57;;Chequing;38;.00;-2451.59
+GST/HST Payable;Donnée;2026-07-19;;Cheque Expense;18;2011;Bank of AnyCity;57;;Chequing;38;.00;-2451.59
+GST/HST Payable;Donnée;2026-07-22;;Bill;20;;Hall's Promotional International;62;;Accounts Payable (A/P) - HKD;90;.00;-2451.59
+GST/HST Payable;Donnée;2026-07-22;;Invoice;122;1001;Ecker Designs;8;;Accounts Receivable;32;1691.63;-759.96
+GST/HST Payable;Donnée;2026-07-22;;Bill;19;;Hall's Promotional International;62;;Accounts Payable (A/P) - HKD;90;.00;-759.96
+GST/HST Payable;Donnée;2026-08-09;;Invoice;123;1002;Oxon Insurance Agency:Oxon - Holiday Party;65;;Accounts Receivable;32;1170.00;410.04
+GST/HST Payable;Donnée;2026-08-13;;Cheque Expense;24;2014;City Water Co;29;;Chequing;38;-8.93;401.11
+GST/HST Payable;Donnée;2026-08-13;;Cheque Expense;25;2013;Town Electric & Gas Service;55;;Chequing;38;-24.29;376.82
+GST/HST Payable;Donnée;2026-08-13;;Cheque Expense;23;2012;Mark Howard;42;;Chequing;38;-162.50;214.32
+GST/HST Payable;Donnée;2026-08-18;;Cheque Expense;26;2015;Bank of AnyCity;57;;Chequing;38;.00;214.32
+GST/HST Payable;Total;Total for GST/HST Payable;;;;;;;;;;-619.87;
+GST/HST Suspense;Entête;GST/HST Suspense;87;;;;;;;;;;
+GST/HST Suspense;Donnée;2026-04-30;;Journal Entry;159;;;;Filed sales tax;-Split-;;1495.62;1495.62
+GST/HST Suspense;Donnée;2026-04-30;;Journal Entry;161;;;;Filed sales tax;-Split-;;340.69;1836.31
+GST/HST Suspense;Donnée;2026-08-29;;Sales Tax Payment;160;;;;;-Split-;;-1495.62;340.69
+GST/HST Suspense;Total;Total for GST/HST Suspense;;;;;;;;;;340.69;
+Note Payable;Entête;Note Payable;57;;;;;;;;;;
+Note Payable;Donnée;Beginning Balance;;;;;;;;;;;-1883.90
+Note Payable;Donnée;2026-01-16;;Cheque Expense;78;2048;Bank of AnyCity;57;;Chequing;38;-376.78;-2260.68
+Note Payable;Donnée;2026-02-16;;Cheque Expense;95;2056;Bank of AnyCity;57;;Chequing;38;-376.78;-2637.46
+Note Payable;Donnée;2026-03-13;;Cheque Expense;106;2061;Bank of AnyCity;57;;Chequing;38;-376.78;-3014.24
+Note Payable;Donnée;2026-03-24;;Cheque Expense;165;2070;Bank of AnyCity;57;;Chequing;38;-376.78;-3391.02
+Note Payable;Donnée;2026-04-24;;Cheque Expense;170;2075;Bank of AnyCity;57;;Chequing;38;-376.78;-3767.80
+Note Payable;Donnée;2026-06-09;;Deposit;134;;;;funds borrowed to start business;Chequing;38;25000.00;21232.20
+Note Payable;Donnée;2026-07-19;;Cheque Expense;17;2010;Bank of AnyCity;57;principal;Chequing;38;-376.78;20855.42
+Note Payable;Donnée;2026-07-19;;Cheque Expense;18;2011;Bank of AnyCity;57;principal;Chequing;38;-376.78;20478.64
+Note Payable;Donnée;2026-08-18;;Cheque Expense;26;2015;Bank of AnyCity;57;principal;Chequing;38;-376.78;20101.86
+Note Payable;Total;Total for Note Payable;;;;;;;;;;21985.76;
+Opening Balance Equity;Entête;Opening Balance Equity;58;;;;;;;;;;
+Opening Balance Equity;Donnée;2026-02-25;;Expense;133;;;;;Visa Credit Card;79;-3831.80;-3831.80
+Opening Balance Equity;Donnée;2026-03-31;;Inventory Qty Adjust;1;START;;;Opening inventory for Guest Book;Inventory Asset;85;.00;-3831.80
+Opening Balance Equity;Donnée;2026-03-31;;Inventory Qty Adjust;2;START;;;Opening inventory for Name Badges;Inventory Asset;85;.00;-3831.80
+Opening Balance Equity;Donnée;2026-03-31;;Inventory Qty Adjust;3;START;;;Opening inventory for Water Bottles;Inventory Asset;85;.00;-3831.80
+Opening Balance Equity;Donnée;2026-04-30;;Journal Entry;158;14;;;;-Split-;;-3668.20;-7500.00
+Opening Balance Equity;Donnée;2026-08-20;;Inventory Qty Adjust;11;START;;;Opening inventory for Water Bottles - Generic;Inventory Asset;85;.00;-7500.00
+Opening Balance Equity;Total;Total for Opening Balance Equity;;;;;;;;;;-7500.00;
+Owner's Equity - Contributions;Entête;Owner's Equity - Contributions;80;;;;;;;;;;
+Owner's Equity - Contributions;Donnée;2026-06-09;;Deposit;134;;;;contribution to start business;Chequing;38;10000.00;10000.00
+Owner's Equity - Contributions;Donnée;2026-06-09;;Journal Entry;135;1;;;office furniture and Computers and printer/scanner;-Split-;;2750.00;12750.00
+Owner's Equity - Contributions;Total;Total for Owner's Equity - Contributions;;;;;;;;;;12750.00;
+Owner's Equity - Draws;Entête;Owner's Equity - Draws;81;;;;;;;;;;
+Owner's Equity - Draws;Donnée;2026-03-13;;Cheque Expense;100;2057;Michelle Long;44;;Chequing;38;-500.00;-500.00
+Owner's Equity - Draws;Donnée;2026-03-23;;Cheque Expense;108;2063;Michelle Long;44;;Chequing;38;-500.00;-1000.00
+Owner's Equity - Draws;Donnée;2026-03-24;;Cheque Expense;166;2071;Michelle Long;44;;Chequing;38;-500.00;-1500.00
+Owner's Equity - Draws;Donnée;2026-04-24;;Cheque Expense;171;2076;Michelle Long;44;;Chequing;38;-500.00;-2000.00
+Owner's Equity - Draws;Total;Total for Owner's Equity - Draws;;;;;;;;;;-2000.00;
+Retained Earnings;Entête;Retained Earnings;2;;;;;;;;;;
+Retained Earnings;Donnée;Beginning Balance;;;;;;;;;;;5841.75
+Retained Earnings;Donnée;2026-04-01;;Journal Entry;156;12;;;adjust inventory adjustments;-Split-;;9436.24;15277.99
+Retained Earnings;Donnée;2026-04-30;;Journal Entry;158;14;;;;-Split-;;3668.20;18946.19
+Retained Earnings;Total;Total for Retained Earnings;;;;;;;;;;13104.44;
+Billable Expenses Income;Entête;Billable Expenses Income;35;;;;;;;;;;
+Billable Expenses Income;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;Promotional items -- pens engraved;Accounts Receivable;32;300.00;300.00
+Billable Expenses Income;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;Catering -- food & beverage;Accounts Receivable;32;3750.00;4050.00
+Billable Expenses Income;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;Promotional items - engraved padfolios;Accounts Receivable;32;562.50;4612.50
+Billable Expenses Income;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;promotional items -- misc engraved items;Accounts Receivable;32;506.25;5118.75
+Billable Expenses Income;Donnée;2026-07-22;;Invoice;122;1001;Ecker Designs;8;promotional items -- misc engraved items;Accounts Receivable;32;1012.50;6131.25
+Billable Expenses Income;Donnée;2026-07-22;;Invoice;122;1001;Ecker Designs;8;Venue rental;Accounts Receivable;32;10000.00;16131.25
+Billable Expenses Income;Donnée;2026-08-09;;Invoice;123;1002;Oxon Insurance Agency:Oxon - Holiday Party;65;Venue rental;Accounts Receivable;32;5000.00;21131.25
+Billable Expenses Income;Donnée;2026-08-09;;Invoice;123;1002;Oxon Insurance Agency:Oxon - Holiday Party;65;promotional items -- misc engraved items - Camelbak water bottles engraved;Accounts Receivable;32;1000.00;22131.25
+Billable Expenses Income;Total;Total for Billable Expenses Income;;;;;;;;;;22131.25;
+Markup;Entête;Markup;29;;;;;;;;;;
+Markup;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;20% markup for Catering -- food & beverage;Accounts Receivable;32;750.00;750.00
+Markup;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;20% markup for promotional items -- misc engraved items;Accounts Receivable;32;101.25;851.25
+Markup;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;100% markup for Promotional items -- pens engraved;Accounts Receivable;32;.00;851.25
+Markup;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;100% markup for Promotional items - engraved padfolios;Accounts Receivable;32;.00;851.25
+Markup;Total;Total for Markup;;;;;;;;;;851.25;
+Sales;Entête;Sales;65;;;;;;;;;;
+Sales;Donnée;2026-02-05;;Invoice;128;1007;Hazel Robinson;12;Employee training off site;Accounts Receivable;32;1500.00;1500.00
+Sales;Donnée;2026-07-22;;Invoice;122;1001;Ecker Designs;8;Holiday party - gold level;Accounts Receivable;32;2000.00;3500.00
+Sales;Donnée;2026-08-09;;Invoice;123;1002;Oxon Insurance Agency:Oxon - Holiday Party;65;Holiday party - platinum level;Accounts Receivable;32;3000.00;6500.00
+Sales;Total;Total for Sales;;;;;;;;;;6500.00;
+Sales of Product Income;Entête;Sales of Product Income;67;;;;;;;;;;
+Sales of Product Income;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Name Badges;Accounts Receivable;32;1500.00;1500.00
+Sales of Product Income;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Water bottles - generic;Accounts Receivable;32;5000.00;6500.00
+Sales of Product Income;Donnée;2026-03-18;;Invoice;131;1010;Adwin Ko;1;Name Badges;Accounts Receivable;32;1500.00;8000.00
+Sales of Product Income;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;3000.00;11000.00
+Sales of Product Income;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Name Badges;Accounts Receivable;32;750.00;11750.00
+Sales of Product Income;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Water bottles - generic;Accounts Receivable;32;2500.00;14250.00
+Sales of Product Income;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;900.00;15150.00
+Sales of Product Income;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;900.00;16050.00
+Sales of Product Income;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;3000.00;19050.00
+Sales of Product Income;Total;Total for Sales of Product Income;;;;;;;;;;19050.00;
+Services;Entête;Services;1;;;;;;;;;;
+Services;Donnée;2026-02-16;;Invoice;129;1008;Benjamin Yeung;3;consulting for their upcoming event;Accounts Receivable;32;800.00;800.00
+Services;Donnée;2026-03-18;;Invoice;132;1011;Jordan Burgess;16;consult on event options and considerations;Accounts Receivable;32;400.00;1200.00
+Services;Donnée;2026-03-29;;Invoice;174;1012;Whitehead and Sons;5;Monthly consulting agreement;Accounts Receivable;32;1200.00;2400.00
+Services;Donnée;2026-05-03;;Invoice;175;1013;Whitehead and Sons;5;Monthly consulting agreement;Accounts Receivable;32;1200.00;3600.00
+Services;Total;Total for Services;;;;;;;;;;3600.00;
+Cost of Goods Sold;Entête;Cost of Goods Sold;84;;;;;;;;;;
+Cost of Goods Sold;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Water bottles - generic;Accounts Receivable;32;2041.39;2041.39
+Cost of Goods Sold;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Water bottles - generic;Accounts Receivable;32;510.35;2551.74
+Cost of Goods Sold;Donnée;2026-02-16;;Invoice;130;1009;Benjamin Yeung;3;Name Badges;Accounts Receivable;32;750.00;3301.74
+Cost of Goods Sold;Donnée;2026-03-18;;Invoice;131;1010;Adwin Ko;1;Name Badges;Accounts Receivable;32;750.00;4051.74
+Cost of Goods Sold;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;1531.04;5582.78
+Cost of Goods Sold;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Water bottles - generic;Accounts Receivable;32;1020.69;6603.47
+Cost of Goods Sold;Donnée;2026-04-01;;Invoice;178;1015;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;450.00;7053.47
+Cost of Goods Sold;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Water bottles - generic;Accounts Receivable;32;255.17;7308.64
+Cost of Goods Sold;Donnée;2026-04-01;;Invoice;177;1014;Whitehead and Sons;5;Name Badges;Accounts Receivable;32;375.00;7683.64
+Cost of Goods Sold;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Name Badges;Accounts Receivable;32;450.00;8133.64
+Cost of Goods Sold;Donnée;2026-05-03;;Invoice;180;1016;Anilkumar Pillai;60;Water bottles - generic;Accounts Receivable;32;1531.04;9664.68
+Cost of Goods Sold;Total;Total for Cost of Goods Sold;;;;;;;;;;9664.68;
+Cost of Sales - billable expenses;Entête;Cost of Sales - billable expenses;44;;;;;;;;;;
+Cost of Sales - billable expenses;Donnée;2026-01-26;;Cheque Expense;82;2049;Kristina Gibson;38;Promotional items -- pens engraved;Chequing;38;300.00;300.00
+Cost of Sales - billable expenses;Donnée;2026-01-26;;Cheque Expense;82;2049;Kristina Gibson;38;promotional items -- misc engraved items;Chequing;38;506.25;806.25
+Cost of Sales - billable expenses;Donnée;2026-01-26;;Cheque Expense;82;2049;Kristina Gibson;38;Promotional items - engraved padfolios;Chequing;38;562.50;1368.75
+Cost of Sales - billable expenses;Donnée;2026-02-05;;Cheque Expense;86;2050;Jacque Hudspeth;33;Catering -- food & beverage;Chequing;38;3750.00;5118.75
+Cost of Sales - billable expenses;Donnée;2026-02-16;;Bill;97;;Kristina Gibson;38;Promotional items - engraved padfolios;Accounts Payable;31;187.50;5306.25
+Cost of Sales - billable expenses;Donnée;2026-02-16;;Bill;97;;Kristina Gibson;38;promotional items -- misc engraved items;Accounts Payable;31;262.50;5568.75
+Cost of Sales - billable expenses;Donnée;2026-03-10;;Cheque Expense;101;2058;Kristina Gibson;38;Promotional items - engraved padfolios;Chequing;38;1250.00;6818.75
+Cost of Sales - billable expenses;Donnée;2026-03-10;;Cheque Expense;101;2058;Kristina Gibson;38;promotional items -- misc engraved items;Chequing;38;937.50;7756.25
+Cost of Sales - billable expenses;Donnée;2026-03-28;;Cheque Expense;113;2066;Mauro Giansiracusa;43;Entertainment for the event;Chequing;38;750.00;8506.25
+Cost of Sales - billable expenses;Donnée;2026-03-28;;Cheque Expense;111;2065;Garcia's Event Space;41;Venue Rental;Chequing;38;2500.00;11006.25
+Cost of Sales - billable expenses;Donnée;2026-03-28;;Cheque Expense;109;2064;Jacque Hudspeth;33;Catering -- food & beverage;Chequing;38;12500.00;23506.25
+Cost of Sales - billable expenses;Donnée;2026-06-20;;Cheque Expense;9;2006;Venue Rental;56;Venue Rental;Chequing;38;5000.00;28506.25
+Cost of Sales - billable expenses;Donnée;2026-07-22;;Bill;19;;Hall's Promotional International;62;promotional items -- misc engraved items;Accounts Payable (A/P) - HKD;90;84.99;28591.24
+Cost of Sales - billable expenses;Total;Total for Cost of Sales - billable expenses;;;;;;;;;;28591.24;
+Inventory Shrinkage;Entête;Inventory Shrinkage;88;;;;;;;;;;
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;116;1;;;Quantity adjustment for Guest Book;Inventory Shrinkage;88;-250.00;-250.00
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;117;2;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;-4593.12;-4843.12
+Inventory Shrinkage;Donnée;2026-04-01;;Journal Entry;156;12;;;adjust inventory adjustments;-Split-;;9436.24;4593.12
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;155;3;;;Quantity adjustment for Water Bottles - Generic;Inventory Asset;85;.00;4593.12
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;116;1;;;Quantity adjustment for Guest Book;Inventory Asset;85;.00;4593.12
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;117;2;;;Quantity adjustment for Water Bottles - Generic;Inventory Asset;85;.00;4593.12
+Inventory Shrinkage;Donnée;2026-04-01;;Inventory Qty Adjust;155;3;;;Quantity adjustment for Water Bottles - Generic;Inventory Shrinkage;88;-4593.12;.00
+Inventory Shrinkage;Total;Total for Inventory Shrinkage;;;;;;;;;;.00;
+Dues and Subscriptions;Entête;Dues and Subscriptions;6;;;;;;;;;;
+Dues and Subscriptions;Donnée;2026-06-12;;Cheque Expense;5;2002;Organization of Outstanding Events;48;membership dues;Chequing;38;325.00;325.00
+Dues and Subscriptions;Total;Total for Dues and Subscriptions;;;;;;;;;;325.00;
+Insurance Expense-General Liability Insurance;Entête;Insurance Expense-General Liability Insurance;51;;;;;;;;;;
+Insurance Expense-General Liability Insurance;Donnée;2026-03-23;;Cheque Expense;107;2062;Cass Hayden;27;Insurance - general liability;Chequing;38;750.00;750.00
+Insurance Expense-General Liability Insurance;Donnée;2026-06-12;;Cheque Expense;4;2001;Cass Hayden;27;Insurance - general liability;Chequing;38;750.00;1500.00
+Insurance Expense-General Liability Insurance;Total;Total for Insurance Expense-General Liability Insurance;;;;;;;;;;1500.00;
+Interest expense;Entête;Interest expense;89;;;;;;;;;;
+Interest expense;Donnée;2026-01-16;;Cheque Expense;78;2048;Bank of AnyCity;57;;Chequing;38;95.00;95.00
+Interest expense;Donnée;2026-02-16;;Cheque Expense;95;2056;Bank of AnyCity;57;;Chequing;38;95.00;190.00
+Interest expense;Donnée;2026-03-13;;Cheque Expense;106;2061;Bank of AnyCity;57;;Chequing;38;95.00;285.00
+Interest expense;Donnée;2026-03-24;;Cheque Expense;165;2070;Bank of AnyCity;57;;Chequing;38;95.00;380.00
+Interest expense;Donnée;2026-04-24;;Cheque Expense;170;2075;Bank of AnyCity;57;;Chequing;38;95.00;475.00
+Interest expense;Donnée;2026-07-19;;Cheque Expense;17;2010;Bank of AnyCity;57;interest exp on loan;Chequing;38;95.00;570.00
+Interest expense;Donnée;2026-07-19;;Cheque Expense;18;2011;Bank of AnyCity;57;interest exp on loan;Chequing;38;95.00;665.00
+Interest expense;Donnée;2026-08-18;;Cheque Expense;26;2015;Bank of AnyCity;57;interest exp on loan;Chequing;38;95.00;760.00
+Interest expense;Total;Total for Interest expense;;;;;;;;;;760.00;
+Janitorial Expense;Entête;Janitorial Expense;91;;;;;;;;;;
+Janitorial Expense;Donnée;2026-02-03;;Expense;92;;Jennifer Hargreaves;35;;Visa Credit Card;79;217.52;217.52
+Janitorial Expense;Donnée;2026-02-24;;Bill;98;;Jennifer Hargreaves;35;;Accounts Payable;31;200.00;417.52
+Janitorial Expense;Total;Total for Janitorial Expense;;;;;;;;;;417.52;
+Rent Expense;Entête;Rent Expense;64;;;;;;;;;;
+Rent Expense;Donnée;2026-01-11;;Cheque Expense;75;2045;Mark Howard;42;monthly office rent;Chequing;38;1250.00;1250.00
+Rent Expense;Donnée;2026-02-11;;Cheque Expense;88;2051;Mark Howard;42;monthly office rent;Chequing;38;1250.00;2500.00
+Rent Expense;Donnée;2026-03-13;;Cheque Expense;104;2059;Mark Howard;42;monthly office rent;Chequing;38;1250.00;3750.00
+Rent Expense;Donnée;2026-03-24;;Cheque Expense;162;2067;Mark Howard;42;monthly office rent;Chequing;38;1250.00;5000.00
+Rent Expense;Donnée;2026-04-24;;Cheque Expense;167;2072;Mark Howard;42;monthly office rent;Chequing;38;1250.00;6250.00
+Rent Expense;Donnée;2026-06-13;;Cheque Expense;6;2003;Mark Howard;42;monthly office rent;Chequing;38;1250.00;7500.00
+Rent Expense;Donnée;2026-07-14;;Cheque Expense;14;2007;Mark Howard;42;monthly office rent;Chequing;38;1250.00;8750.00
+Rent Expense;Donnée;2026-08-13;;Cheque Expense;23;2012;Mark Howard;42;monthly office rent;Chequing;38;1250.00;10000.00
+Rent Expense;Total;Total for Rent Expense;;;;;;;;;;10000.00;
+Utilities - Electric & Gas;Entête;Utilities - Electric & Gas;82;;;;;;;;;;
+Utilities - Electric & Gas;Donnée;2026-01-11;;Cheque Expense;76;2046;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;224.83;224.83
+Utilities - Electric & Gas;Donnée;2026-02-11;;Cheque Expense;89;2052;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;210.87;435.70
+Utilities - Electric & Gas;Donnée;2026-03-13;;Cheque Expense;105;2060;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;200.49;636.19
+Utilities - Electric & Gas;Donnée;2026-03-24;;Cheque Expense;163;2068;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;202.78;838.97
+Utilities - Electric & Gas;Donnée;2026-04-24;;Cheque Expense;168;2073;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;215.52;1054.49
+Utilities - Electric & Gas;Donnée;2026-06-15;;Cheque Expense;7;2004;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;156.94;1211.43
+Utilities - Electric & Gas;Donnée;2026-07-14;;Cheque Expense;15;2008;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;165.84;1377.27
+Utilities - Electric & Gas;Donnée;2026-08-13;;Cheque Expense;25;2013;Town Electric & Gas Service;55;monthly electric / gas bill;Chequing;38;186.84;1564.11
+Utilities - Electric & Gas;Total;Total for Utilities - Electric & Gas;;;;;;;;;;1564.11;
+Utilities - Water;Entête;Utilities - Water;83;;;;;;;;;;
+Utilities - Water;Donnée;2026-01-11;;Cheque Expense;77;2047;City Water Co;29;monthly water;Chequing;38;74.96;74.96
+Utilities - Water;Donnée;2026-02-11;;Cheque Expense;90;2053;City Water Co;29;monthly water;Chequing;38;68.12;143.08
+Utilities - Water;Donnée;2026-03-24;;Cheque Expense;164;2069;City Water Co;29;monthly water;Chequing;38;74.21;217.29
+Utilities - Water;Donnée;2026-04-24;;Cheque Expense;169;2074;City Water Co;29;monthly water;Chequing;38;71.85;289.14
+Utilities - Water;Donnée;2026-06-15;;Cheque Expense;8;2005;City Water Co;29;monthly water;Chequing;38;53.25;342.39
+Utilities - Water;Donnée;2026-07-15;;Cheque Expense;16;2009;City Water Co;29;monthly water;Chequing;38;51.25;393.64
+Utilities - Water;Donnée;2026-08-13;;Cheque Expense;24;2014;City Water Co;29;monthly water;Chequing;38;68.72;462.36
+Utilities - Water;Total;Total for Utilities - Water;;;;;;;;;;462.36;
+Depreciation Expense;Entête;Depreciation Expense;45;;;;;;;;;;
+Depreciation Expense;Donnée;2026-01-06;;Journal Entry;143;9;;;monthly depr;-Split-;;20.83;20.83
+Depreciation Expense;Donnée;2026-01-06;;Journal Entry;143;9;;;monthly depr;-Split-;;12.50;33.33
+Depreciation Expense;Donnée;2026-02-06;;Journal Entry;144;10;;;monthly depr;-Split-;;20.83;54.16
+Depreciation Expense;Donnée;2026-02-06;;Journal Entry;144;10;;;monthly depr;-Split-;;12.50;66.66
+Depreciation Expense;Donnée;2026-03-08;;Journal Entry;145;11;;;monthly depr;-Split-;;20.83;87.49
+Depreciation Expense;Donnée;2026-03-08;;Journal Entry;145;11;;;monthly depr;-Split-;;12.50;99.99
+Depreciation Expense;Donnée;2026-04-08;;Journal Entry;157;13;;;monthly depr;-Split-;;20.83;120.82
+Depreciation Expense;Donnée;2026-04-08;;Journal Entry;157;13;;;monthly depr;-Split-;;12.50;133.32
+Depreciation Expense;Donnée;2026-07-09;;Journal Entry;136;2;;;depreciation on office equipment;-Split-;;20.83;154.15
+Depreciation Expense;Donnée;2026-07-09;;Journal Entry;136;2;;;depreciation on office furniture;-Split-;;12.50;166.65
+Depreciation Expense;Donnée;2026-08-08;;Journal Entry;137;3;;;depr on office equipment;-Split-;;20.83;187.48
+Depreciation Expense;Donnée;2026-08-08;;Journal Entry;138;4;;;monthly depr;-Split-;;12.50;199.98
+Depreciation Expense;Donnée;2026-08-08;;Journal Entry;137;3;;;depr on office furniture;-Split-;;12.50;212.48
+Depreciation Expense;Donnée;2026-08-08;;Journal Entry;138;4;;;monthly depr;-Split-;;20.83;233.31
+Depreciation Expense;Total;Total for Depreciation Expense;;;;;;;;;;233.31;
+Exchange Gain or Loss;Entête;Exchange Gain or Loss;48;;;;;;;;;;
+Exchange Gain or Loss;Donnée;2026-08-08;;Bill Payment (Cheque);22;1067;Hall's Promotional International;62;Exchange Gain Or Loss;Chequing;38;15.73;15.73
+Exchange Gain or Loss;Donnée;2026-08-08;;Bill Payment (Cheque);21;1068;Hall's Promotional International;62;Exchange Gain Or Loss;Chequing;38;2.63;18.36
+Exchange Gain or Loss;Total;Total for Exchange Gain or Loss;;;;;;;;;;18.36;

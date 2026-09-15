@@ -1,0 +1,1 @@
+﻿Id;DocNumber;TxnDate;CurrencyRef.value;ExchangeRate;PrivateNote;DepartmentRef.value;DepartmentRef.name;ClassRef.value;ClassRef.name;VendorRef.value;VendorRef.name;APAccountRef.value;APAccountRef.name;TotalAmt;TxnTaxDetail.TotalTax;TxnTaxDetail.TaxLine;Balance;GlobalTaxCalculation;LinkedTxn;MetaData.CreateTime;MetaData.LastUpdatedTime

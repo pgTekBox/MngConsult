@@ -1,0 +1,15 @@
+﻿Id;Name;Description;RateValue;AgencyRef.value;SpecialTaxType;DisplayType;EffectiveTaxRate.RateValue;EffectiveTaxRate.EffectiveDate;EffectiveTaxRate.EndDate;Active
+1;GST EP;GST;0;1;ZERO_RATE;HideInTransactionForms;0;1978-08-20T00:00:00-07:00;;true
+2;GST ES;GST;0;1;ZERO_RATE;HideInTransactionForms;0;1978-08-20T00:00:00-07:00;;true
+3;GST/HST (ITC) ZR;GST;0;1;ZERO_RATE;;0;1978-08-20T00:00:00-07:00;;true
+5;GST/HST Line 104 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+6;GST/HST Line 107 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+7;GST/HST Line 110 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+8;GST/HST Line 111 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+9;GST/HST Line 205 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+10;GST/HST Line 405 Adjustment;GST;;1;ADJUSTMENT_RATE;HideInAll;;1978-08-20T00:00:00-07:00;;true
+4;GST/HST ZR;GST;0;1;ZERO_RATE;;0;1978-08-20T00:00:00-07:00;;true
+11;HST (ITC) ON;HST (ON);13;1;NONE;;13;1978-08-20T00:00:00-07:00;;true
+12;HST ON;HST (ON);13;1;NONE;;13;1978-08-20T00:00:00-07:00;;true
+13;NOTAXP;No Tax;0;2;NONE;HideInTransactionForms;0;1977-06-22T00:00:00-07:00;;true
+14;NOTAXS;No Tax;0;2;NONE;HideInTransactionForms;0;1977-06-22T00:00:00-07:00;;true

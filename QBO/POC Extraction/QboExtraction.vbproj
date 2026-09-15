@@ -1,0 +1,31 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <RootNamespace>QboExtraction</RootNamespace>
+    <AssemblyName>QboExtraction</AssemblyName>
+    <StartupObject>QboExtraction.Program</StartupObject>
+    <MyType>Empty</MyType>
+    <OptionStrict>On</OptionStrict>
+    <OptionInfer>On</OptionInfer>
+    <OptionExplicit>On</OptionExplicit>
+    <ApplicationHighDpiMode>SystemAware</ApplicationHighDpiMode>
+    <Product>Extraction QuickBooks Online pour MngConsul</Product>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <!-- Chiffre le secret client et le jeton de renouvellement pour l'utilisateur Windows (DPAPI). -->
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Import Include="System.Drawing" />
+    <Import Include="System.IO" />
+    <Import Include="System.Text.Json.Nodes" />
+    <Import Include="System.Threading" />
+    <Import Include="System.Windows.Forms" />
+  </ItemGroup>
+
+</Project>

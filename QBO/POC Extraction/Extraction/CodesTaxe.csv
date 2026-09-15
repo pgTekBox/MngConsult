@@ -1,0 +1,6 @@
+﻿Id;Name;Description;Taxable;TaxGroup;Active;SalesTaxRateList.TaxRateDetail.TaxRateRef.value;SalesTaxRateList.TaxRateDetail.TaxRateRef.name;PurchaseTaxRateList.TaxRateDetail.TaxRateRef.value;PurchaseTaxRateList.TaxRateDetail.TaxRateRef.name
+2;Exempt;Tax-exempt;true;true;true;2;GST ES;1;GST EP
+4;GST/HST Adjustment;Tax adjustment;true;true;true;;;;
+5;HST ON;Harmonized federal and provincial tax (Ontario);true;true;true;12;HST ON;11;HST (ITC) ON
+6;Out of Scope;Out of scope;true;true;true;14;NOTAXS;13;NOTAXP
+3;Zero-rated;Zero-rated;true;true;true;4;GST/HST ZR;3;GST/HST (ITC) ZR
