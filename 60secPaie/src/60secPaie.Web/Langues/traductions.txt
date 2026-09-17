@@ -2865,3 +2865,275 @@ es: R1 casilla {0}
 fr: RPC/RRQ
 en: CPP/QPP
 es: RPC/RRQ
+
+# ---------- Page de présentation (Accueil.aspx) ----------
+
+fr: 60secPaie — la paie du Québec, faite comme il faut
+en: 60secPaie — Quebec payroll, done right
+es: 60secPaie — la nómina de Quebec, bien hecha
+
+fr: Logiciel de paie pour les employeurs du Québec : retenues fédérales et provinciales, relevés T4 et RL-1, remises gouvernementales, dépôt direct et écritures au grand livre.
+en: Payroll software for Quebec employers: federal and provincial deductions, T4 and RL-1 slips, government remittances, direct deposit and general ledger entries.
+es: Software de nómina para empleadores de Quebec: retenciones federales y provinciales, formularios T4 y RL-1, remesas gubernamentales, depósito directo y asientos contables.
+
+fr: Paie canadienne, règles du Québec
+en: Canadian payroll, Quebec rules
+es: Nómina canadiense, reglas de Quebec
+
+fr: Faire la paie ne devrait pas prendre l'après-midi.
+en: Running payroll shouldn't take all afternoon.
+es: Hacer la nómina no debería llevar toda la tarde.
+
+fr: Vous entrez les heures. 60secPaie calcule les retenues, produit les talons, prépare le dépôt direct, retient ce qui revient aux gouvernements et passe l'écriture au grand livre. Vous vérifiez, vous confirmez.
+en: You enter the hours. 60secPaie calculates the deductions, produces the pay stubs, prepares the direct deposit, withholds what the governments are owed and posts the entry to the general ledger. You review, you confirm.
+es: Usted ingresa las horas. 60secPaie calcula las retenciones, genera los comprobantes, prepara el depósito directo, retiene lo que corresponde a los gobiernos y registra el asiento contable. Usted revisa y confirma.
+
+fr: Voir comment ça marche
+en: See how it works
+es: Ver cómo funciona
+
+fr: Vous avez déjà un compte MngConsul ? C'est le même — rien à créer.
+en: Already have a MngConsul account? It's the same one — nothing to create.
+es: ¿Ya tiene una cuenta MngConsul? Es la misma — no hay que crear nada.
+
+fr: Me connecter
+en: Sign in
+es: Iniciar sesión
+
+fr: Mon tableau de bord
+en: My dashboard
+es: Mi panel de control
+
+fr: Commencer une paie
+en: Start a pay run
+es: Comenzar una nómina
+
+fr: Ouvrir mon tableau de bord
+en: Open my dashboard
+es: Abrir mi panel de control
+
+fr: Talon de paie
+en: Pay stub
+es: Comprobante de pago
+
+fr: Exemple
+en: Example
+es: Ejemplo
+
+fr: Période du 1er au 14 juin · 70 h
+en: Period from June 1 to 14 · 70 h
+es: Período del 1 al 14 de junio · 70 h
+
+fr: Salaire brut
+en: Gross pay
+es: Salario bruto
+
+fr: Assurance-emploi
+en: Employment Insurance
+es: Seguro de empleo
+
+fr: Impôt fédéral
+en: Federal tax
+es: Impuesto federal
+
+fr: Impôt du Québec
+en: Quebec tax
+es: Impuesto de Quebec
+
+fr: Net à payer
+en: Net pay
+es: Neto a pagar
+
+fr: Dépôt direct · 14 juin
+en: Direct deposit · June 14
+es: Depósito directo · 14 de junio
+
+fr: Une paie, quatre étapes
+en: One pay run, four steps
+es: Una nómina, cuatro pasos
+
+fr: L'assistant ne vous laisse pas avancer avec un chiffre qui ne tient pas debout. Rien n'est transmis tant que vous n'avez pas confirmé.
+en: The wizard won't let you move on with a figure that doesn't hold up. Nothing is submitted until you confirm.
+es: El asistente no le deja avanzar con una cifra que no cuadra. Nada se transmite hasta que usted confirme.
+
+fr: La période
+en: The period
+es: El período
+
+fr: Hebdomadaire, aux deux semaines, bimensuelle ou mensuelle. La date de paie fixe les taux à appliquer.
+en: Weekly, biweekly, semi-monthly or monthly. The pay date determines which rates apply.
+es: Semanal, quincenal, bimensual o mensual. La fecha de pago determina las tasas aplicables.
+
+fr: La saisie
+en: The entry
+es: La captura
+
+fr: Heures, salaires, primes, vacances. Les éléments récurrents de chaque employé sont déjà là.
+en: Hours, wages, bonuses, vacation. Each employee's recurring items are already there.
+es: Horas, salarios, primas, vacaciones. Los elementos recurrentes de cada empleado ya están ahí.
+
+fr: La révision
+en: The review
+es: La revisión
+
+fr: Le détail employé par employé, retenue par retenue. C'est ici qu'on corrige, pas après.
+en: The detail employee by employee, deduction by deduction. This is where you fix things, not afterwards.
+es: El detalle empleado por empleado, retención por retención. Aquí se corrige, no después.
+
+fr: La confirmation
+en: The confirmation
+es: La confirmación
+
+fr: La paie est scellée : talons, écritures comptables et montants à remettre aux gouvernements.
+en: The pay run is sealed: stubs, accounting entries and the amounts owed to the governments.
+es: La nómina queda sellada: comprobantes, asientos contables e importes a remitir a los gobiernos.
+
+fr: Ce qui sort de chaque paie
+en: What comes out of every pay run
+es: Lo que produce cada nómina
+
+fr: Le calcul n'est que la moitié du travail. L'autre moitié, ce sont les documents que réclament vos employés, vos gouvernements et votre comptabilité.
+en: The calculation is only half the job. The other half is the paperwork your employees, your governments and your books all demand.
+es: El cálculo es solo la mitad del trabajo. La otra mitad son los documentos que exigen sus empleados, sus gobiernos y su contabilidad.
+
+fr: Talons de paie
+en: Pay stubs
+es: Comprobantes de pago
+
+fr: Imprimables ou envoyés par courriel, dans la langue de l'employé.
+en: Printable or emailed, in the employee's language.
+es: Imprimibles o enviados por correo, en el idioma del empleado.
+
+fr: Le fichier des virements, prêt pour votre institution financière.
+en: The transfer file, ready for your financial institution.
+es: El archivo de transferencias, listo para su institución financiera.
+
+fr: Remises gouvernementales
+en: Government remittances
+es: Remesas gubernamentales
+
+fr: Ce que vous devez à l'ARC et à Revenu Québec, avec l'historique des versements.
+en: What you owe the CRA and Revenu Québec, with the payment history.
+es: Lo que debe a la CRA y a Revenu Québec, con el historial de pagos.
+
+fr: T4 et RL-1
+en: T4 and RL-1
+es: T4 y RL-1
+
+fr: Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé.
+en: The year-end slips, built from the employee's year-to-date totals.
+es: Los formularios de fin de año, generados a partir de los acumulados del empleado.
+
+fr: Écritures comptables
+en: Accounting entries
+es: Asientos contables
+
+fr: Le grand livre reçoit la paie selon le plan comptable que vous avez choisi.
+en: The general ledger receives the pay run according to the chart of accounts you chose.
+es: El libro mayor recibe la nómina según el plan de cuentas que usted eligió.
+
+fr: Les masses salariales assurables, par unité de classification.
+en: Insurable payroll totals, by classification unit.
+es: Las masas salariales asegurables, por unidad de clasificación.
+
+fr: Les taux viennent d'où ils doivent venir
+en: The rates come from where they should
+es: Las tasas vienen de donde deben venir
+
+fr: Les retenues à la source ne s'improvisent pas. 60secPaie applique les tables publiées par les administrations elles-mêmes, et vous dit toujours quelle année de taux a servi au calcul.
+en: Source deductions are no place for guesswork. 60secPaie applies the tables published by the administrations themselves, and always tells you which year's rates were used.
+es: Las retenciones en la fuente no se improvisan. 60secPaie aplica las tablas publicadas por las propias administraciones y siempre le indica qué año de tasas se utilizó.
+
+fr: Formules pour le calcul informatisé des retenues sur la paie
+en: Payroll Deductions Formulas for Computer Programs
+es: Fórmulas para el cálculo informatizado de las retenciones de nómina
+
+fr: Agence du revenu du Canada
+en: Canada Revenue Agency
+es: Agencia de Ingresos de Canadá
+
+fr: Table des retenues à la source d'impôt du Québec
+en: Quebec income tax source deduction table
+es: Tabla de retenciones en la fuente del impuesto de Quebec
+
+fr: cotisations de l'employé et de l'employeur
+en: employee and employer contributions
+es: cotizaciones del empleado y del empleador
+
+fr: taux par unité, selon votre classification
+en: rate per unit, according to your classification
+es: tasa por unidad, según su clasificación
+
+fr: Un logiciel ne remplace pas votre jugement : vérifiez toujours une paie avant de la confirmer.
+en: Software is no substitute for your judgement: always check a pay run before confirming it.
+es: Un software no reemplaza su criterio: verifique siempre una nómina antes de confirmarla.
+
+fr: Pour l'employeur
+en: For the employer
+es: Para el empleador
+
+fr: Une compagnie, ses employés, ses paies. Vous ouvrez, vous faites, vous fermez.
+en: One company, its employees, its pay runs. You open, you run, you close.
+es: Una empresa, sus empleados, sus nóminas. Usted abre, ejecuta y cierra.
+
+fr: Pour le comptable
+en: For the accountant
+es: Para el contador
+
+fr: Plusieurs compagnies sous le même compte, et un sélecteur pour passer de l'une à l'autre sans se reconnecter.
+en: Several companies under one account, and a selector to move between them without signing in again.
+es: Varias empresas bajo la misma cuenta, y un selector para pasar de una a otra sin volver a iniciar sesión.
+
+fr: En trois langues
+en: In three languages
+es: En tres idiomas
+
+fr: Français, anglais et espagnol — y compris les talons, que chaque employé reçoit dans sa langue.
+en: French, English and Spanish — including the stubs, which each employee receives in their own language.
+es: Francés, inglés y español — incluidos los comprobantes, que cada empleado recibe en su idioma.
+
+fr: Votre prochaine paie, sans le mal de tête
+en: Your next pay run, without the headache
+es: Su próxima nómina, sin dolor de cabeza
+
+fr: Connectez-vous avec votre compte MngConsul et lancez votre première période.
+en: Sign in with your MngConsul account and start your first period.
+es: Inicie sesión con su cuenta MngConsul y comience su primer período.
+
+fr: — un service de MngConsul. Les montants calculés demeurent sous la responsabilité de l'employeur.
+en: — a MngConsul service. The calculated amounts remain the employer's responsibility.
+es: — un servicio de MngConsul. Los importes calculados son responsabilidad del empleador.
+
+# ---------- Page de connexion ----------
+
+fr: La paie, en quelques minutes.
+en: Payroll, in minutes.
+es: La nómina, en pocos minutos.
+
+fr: Retenues calculées d'après les tables officielles de l'ARC et de Revenu Québec
+en: Deductions calculated from the official CRA and Revenu Québec tables
+es: Retenciones calculadas según las tablas oficiales de la CRA y de Revenu Québec
+
+fr: Talons, T4 et RL-1 produits à partir de vos paies
+en: Stubs, T4 and RL-1 slips produced from your pay runs
+es: Comprobantes, T4 y RL-1 generados a partir de sus nóminas
+
+fr: Remises gouvernementales suivies d'une période à l'autre
+en: Government remittances tracked from one period to the next
+es: Remesas gubernamentales controladas de un período a otro
+
+fr: Un service de MngConsul
+en: A MngConsul service
+es: Un servicio de MngConsul
+
+fr: Connexion
+en: Sign in
+es: Iniciar sesión
+
+fr: vous@entreprise.ca
+en: you@company.ca
+es: usted@empresa.ca
+
+fr: Qu'est-ce que 60secPaie ?
+en: What is 60secPaie?
+es: ¿Qué es 60secPaie?
