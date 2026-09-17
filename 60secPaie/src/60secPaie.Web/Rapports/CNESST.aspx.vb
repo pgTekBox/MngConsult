@@ -25,7 +25,7 @@ Public Class PageCNESST
         If ddlAnnee.Items.Count = 0 Then Return
         Dim employes = ServiceCNESST.ParEmploye(AnneeChoisie)
         Dim maximum = ParametresAnnee.Pour(AnneeChoisie).CNESSTMaxAssurable
-        Dim taux = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
+        Dim taux = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
 
         Dim sb As New StringBuilder("<div class=""carte table-defilante""><table class=""liste""><thead><tr><th>Employé</th>")
         sb.Append("<th class=""num"">Salaire brut</th><th class=""num"">Excédent du maximum (").Append(Argent(maximum)).Append(")</th>")

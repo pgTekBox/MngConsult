@@ -61,7 +61,7 @@ Public NotInheritable Class ServiceRemise
     End Function
 
     Private Shared Function SqlLignes(gouvernement As String, filtre As String) As String
-        Return "SELECT v.Code, v.Libelle, v.Ordre, SUM(v.Montant) AS Montant FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId " &
+        Return "SELECT v.Code, v.Libelle, v.Ordre, SUM(v.Montant) AS Montant FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
                "CROSS APPLY (VALUES " & ValeursLignes(gouvernement) & ") v(Code, Libelle, Ordre, Montant) WHERE " & filtre &
                " GROUP BY v.Code, v.Libelle, v.Ordre"
     End Function
@@ -75,7 +75,7 @@ Public NotInheritable Class ServiceRemise
 
     Public Shared Function Frequence(gouvernement As String) As String
         Dim colonne = If(gouvernement = Federal, "FrequenceRemiseFederale", "FrequenceRemiseQuebec")
-        Return Convert.ToString(Db.Scalaire("SELECT " & colonne & " FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
+        Return Convert.ToString(Db.Scalaire("SELECT " & colonne & " FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
     End Function
 
     ''' <summary>Dernier jour du mois (remise mensuelle) ou du trimestre (remise trimestrielle) de la paie.</summary>
@@ -94,7 +94,7 @@ Public NotInheritable Class ServiceRemise
             "p.ImpotFederal + p.AE + p.EmployeurAE",
             "p.ImpotQuebec + p.RRQ + p.RRQ2 + p.EmployeurRRQ + p.EmployeurRRQ2 + p.RQAP + p.EmployeurRQAP + p.EmployeurFSS + p.EmployeurCNESST")
         Dim r = Db.Ligne("SELECT ISNULL(SUM(" & total & "), 0) AS Montant, COUNT(*) AS NbPaies, MIN(l.DatePaie) AS PlusAncienne " &
-                         "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreNonPaye(gouvernement),
+                         "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreNonPaye(gouvernement),
                          Db.P("@c", Contexte.CompagnieId), Db.P("@fin", New Date(9999, 12, 31)))
         Dim s As New SoldeRemise With {.Montant = r.Dcm("Montant"), .NbPaies = r.Ent("NbPaies"), .PlusAnciennePaie = r.DtN("PlusAncienne")}
         If s.PlusAnciennePaie.HasValue Then
@@ -108,7 +108,7 @@ Public NotInheritable Class ServiceRemise
     ''' <summary>CNT accumulée dans l'année (payable une fois l'an, à titre indicatif).</summary>
     Public Shared Function CntAccumulee(annee As Integer) As Decimal
         Return Convert.ToDecimal(Db.Scalaire(
-            "SELECT ISNULL(SUM(p.EmployeurCNT), 0) FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId " &
+            "SELECT ISNULL(SUM(p.EmployeurCNT), 0) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
             "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)))
     End Function
 
@@ -125,7 +125,7 @@ Public NotInheritable Class ServiceRemise
 
     Private Shared Function SqlLots(filtre As String) As String
         Return "SELECT l.Id, l.DatePaie, l.DateDebutPeriode, l.DateFinPeriode, COUNT(*) AS NbEmployes, SUM(p.BrutVerse + p.AvantagesNonMonetaires) AS Brut " &
-               "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & filtre &
+               "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & filtre &
                " GROUP BY l.Id, l.DatePaie, l.DateDebutPeriode, l.DateFinPeriode ORDER BY l.DatePaie, l.Id"
     End Function
 
@@ -138,21 +138,21 @@ Public NotInheritable Class ServiceRemise
             "SET XACT_ABORT ON; BEGIN TRAN; " &
             "DECLARE @cheque int = NULL; " &
             "IF @parCheque = 1 BEGIN " &
-            "  SELECT @cheque = ProchainNumeroCheque FROM dbo.Compagnie WHERE Id = @c; " &
-            "  UPDATE dbo.Compagnie SET ProchainNumeroCheque = ProchainNumeroCheque + 1 WHERE Id = @c; END; " &
-            "INSERT INTO dbo.Remise (CompagnieId, Gouvernement, DateFinPeriode, DatePaiement, ModePaiement, NumeroCheque, Reference, CreePar) " &
+            "  SELECT @cheque = ProchainNumeroCheque FROM paie.Compagnie WHERE Id = @c; " &
+            "  UPDATE paie.Compagnie SET ProchainNumeroCheque = ProchainNumeroCheque + 1 WHERE Id = @c; END; " &
+            "INSERT INTO paie.Remise (CompagnieId, Gouvernement, DateFinPeriode, DatePaiement, ModePaiement, NumeroCheque, Reference, CreePar) " &
             "VALUES (@c, @g, @fin, @paiement, CASE WHEN @parCheque = 1 THEN 'C' ELSE 'E' END, @cheque, @ref, @u); " &
             "DECLARE @id int = SCOPE_IDENTITY(); " &
-            "UPDATE p SET " & col & " = @id FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreNonPaye(gouvernement) & "; " &
+            "UPDATE p SET " & col & " = @id FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreNonPaye(gouvernement) & "; " &
             "IF @@ROWCOUNT = 0 BEGIN ROLLBACK; SELECT 0; RETURN; END; " &
-            "INSERT INTO dbo.RemiseLigne (RemiseId, Code, Libelle, Ordre, Montant) SELECT @id, x.Code, x.Libelle, x.Ordre, x.Montant FROM (" &
+            "INSERT INTO paie.RemiseLigne (RemiseId, Code, Libelle, Ordre, Montant) SELECT @id, x.Code, x.Libelle, x.Ordre, x.Montant FROM (" &
                 SqlLignes(gouvernement, marquees) & ") x; " &
-            "UPDATE dbo.Remise SET " &
-            "  Total = (SELECT ISNULL(SUM(Montant), 0) FROM dbo.RemiseLigne WHERE RemiseId = @id), " &
-            "  RemunerationBrute = (SELECT ISNULL(SUM(p.BrutVerse + p.AvantagesNonMonetaires), 0) FROM dbo.Paie p WHERE " & marquees & "), " &
-            "  NbPaies = (SELECT COUNT(*) FROM dbo.Paie p WHERE " & marquees & "), " &
-            "  NbEmployesDernierePaie = (SELECT COUNT(*) FROM dbo.Paie p WHERE " & marquees & " AND p.LotPaieId = " &
-            "     (SELECT TOP 1 l.Id FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & marquees & " ORDER BY l.DatePaie DESC, l.Id DESC)) " &
+            "UPDATE paie.Remise SET " &
+            "  Total = (SELECT ISNULL(SUM(Montant), 0) FROM paie.RemiseLigne WHERE RemiseId = @id), " &
+            "  RemunerationBrute = (SELECT ISNULL(SUM(p.BrutVerse + p.AvantagesNonMonetaires), 0) FROM paie.Paie p WHERE " & marquees & "), " &
+            "  NbPaies = (SELECT COUNT(*) FROM paie.Paie p WHERE " & marquees & "), " &
+            "  NbEmployesDernierePaie = (SELECT COUNT(*) FROM paie.Paie p WHERE " & marquees & " AND p.LotPaieId = " &
+            "     (SELECT TOP 1 l.Id FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & marquees & " ORDER BY l.DatePaie DESC, l.Id DESC)) " &
             "WHERE Id = @id; " &
             "COMMIT; SELECT @id;",
             Db.P("@c", Contexte.CompagnieId), Db.P("@g", gouvernement), Db.P("@fin", finPeriode), Db.P("@paiement", datePaiement),
@@ -160,21 +160,21 @@ Public NotInheritable Class ServiceRemise
 
         If id = 0 Then Throw New SaisieInvalideException("Aucune retenue à payer à " & NomGouvernement(gouvernement) & " pour cette période.")
 
-        Dim total = Convert.ToDecimal(Db.Scalaire("SELECT Total FROM dbo.Remise WHERE Id = @id", Db.P("@id", id)))
+        Dim total = Convert.ToDecimal(Db.Scalaire("SELECT Total FROM paie.Remise WHERE Id = @id", Db.P("@id", id)))
         Contexte.Journaliser("Paiement des retenues à " & NomGouvernement(gouvernement) & " : " & Argent(total) & ".", "~/Remises/Detail.aspx?id=" & id.ToString())
         Return id
     End Function
 
     ''' <summary>Annule une remise : les paies redeviennent « à payer ». Le numéro de chèque n'est pas réutilisé.</summary>
     Public Shared Sub Annuler(remiseId As Integer)
-        Dim r = Db.Ligne("SELECT * FROM dbo.Remise WHERE Id = @id AND CompagnieId = @c", Db.P("@id", remiseId), Db.P("@c", Contexte.CompagnieId))
+        Dim r = Db.Ligne("SELECT * FROM paie.Remise WHERE Id = @id AND CompagnieId = @c", Db.P("@id", remiseId), Db.P("@c", Contexte.CompagnieId))
         If r Is Nothing Then Throw New SaisieInvalideException("Remise introuvable.")
         If r.Txt("Statut") <> "P" Then Throw New SaisieInvalideException("Cette remise est déjà annulée.")
 
         Db.Exec("SET XACT_ABORT ON; BEGIN TRAN; " &
-                "UPDATE dbo.Paie SET RemiseFederaleId = NULL WHERE RemiseFederaleId = @id; " &
-                "UPDATE dbo.Paie SET RemiseQuebecId = NULL WHERE RemiseQuebecId = @id; " &
-                "UPDATE dbo.Remise SET Statut = 'A' WHERE Id = @id; COMMIT;", Db.P("@id", remiseId))
+                "UPDATE paie.Paie SET RemiseFederaleId = NULL WHERE RemiseFederaleId = @id; " &
+                "UPDATE paie.Paie SET RemiseQuebecId = NULL WHERE RemiseQuebecId = @id; " &
+                "UPDATE paie.Remise SET Statut = 'A' WHERE Id = @id; COMMIT;", Db.P("@id", remiseId))
         Contexte.Journaliser("Paiement des retenues à " & NomGouvernement(r("Gouvernement")) & " du " & TexteDate(r("DatePaiement")) & " annulé.",
                              "~/Remises/Detail.aspx?id=" & remiseId.ToString())
     End Sub

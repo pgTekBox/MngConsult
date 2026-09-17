@@ -7,7 +7,7 @@ Public Class PageConnexion
     Private Const MinutesVerrouillage As Integer = 15
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim aucunUtilisateur = Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Utilisateur") = 0
+        Dim aucunUtilisateur = Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Utilisateur") = 0
         pnlCreation.Visible = aucunUtilisateur
         pnlConnexion.Visible = Not aucunUtilisateur
     End Sub
@@ -19,7 +19,7 @@ Public Class PageConnexion
 
     Private Sub btnCreer_Click(sender As Object, e As EventArgs) Handles btnCreer.Click
         ' Possible seulement tant qu'aucun utilisateur n'existe.
-        If Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Utilisateur") > 0 Then
+        If Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Utilisateur") > 0 Then
             Response.Redirect("~/Login.aspx", True)
         End If
 
@@ -35,7 +35,7 @@ Public Class PageConnexion
             Afficher("Les deux mots de passe ne sont pas identiques.") : Return
         End If
 
-        Db.Exec("INSERT INTO dbo.Utilisateur (Courriel, NomComplet, MotDePasse, EstAdmin) VALUES (@c, @n, @m, 1)",
+        Db.Exec("INSERT INTO paie.Utilisateur (Courriel, NomComplet, MotDePasse, EstAdmin) VALUES (@c, @n, @m, 1)",
                 Db.P("@c", courriel), Db.P("@n", nom), Db.P("@m", MotsDePasse.Hacher(txtMdp1.Text)))
         FormsAuthentication.RedirectFromLoginPage(courriel, False)
     End Sub
@@ -43,7 +43,7 @@ Public Class PageConnexion
     Private Sub btnConnexion_Click(sender As Object, e As EventArgs) Handles btnConnexion.Click
         Const MessageGenerique As String = "Courriel ou mot de passe invalide."
         Dim courriel = txtCourriel.Text.Trim().ToLowerInvariant()
-        Dim u = Db.Ligne("SELECT * FROM dbo.Utilisateur WHERE Courriel = @c AND Actif = 1", Db.P("@c", courriel))
+        Dim u = Db.Ligne("SELECT * FROM paie.Utilisateur WHERE Courriel = @c AND Actif = 1", Db.P("@c", courriel))
 
         If u Is Nothing Then
             ' Même coût de calcul que pour un compte existant, pour ne pas révéler quels courriels existent.
@@ -57,13 +57,13 @@ Public Class PageConnexion
         End If
 
         If Not MotsDePasse.Verifier(txtMotDePasse.Text, u.Txt("MotDePasse")) Then
-            Db.Exec("UPDATE dbo.Utilisateur SET EchecsConnexion = EchecsConnexion + 1, " &
+            Db.Exec("UPDATE paie.Utilisateur SET EchecsConnexion = EchecsConnexion + 1, " &
                     "VerrouilleJusqua = CASE WHEN EchecsConnexion + 1 >= @max THEN DATEADD(minute, @min, sysdatetime()) ELSE VerrouilleJusqua END WHERE Id = @id",
                     Db.P("@max", EchecsMaximum), Db.P("@min", MinutesVerrouillage), Db.P("@id", u.Ent("Id")))
             Afficher(MessageGenerique) : Return
         End If
 
-        Db.Exec("UPDATE dbo.Utilisateur SET EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id", Db.P("@id", u.Ent("Id")))
+        Db.Exec("UPDATE paie.Utilisateur SET EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id", Db.P("@id", u.Ent("Id")))
         Session.Clear()
         FormsAuthentication.RedirectFromLoginPage(courriel, False)
     End Sub

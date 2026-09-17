@@ -7,7 +7,7 @@ Public Class PageEcritures
         If IsPostBack Then Return
 
         ddlLot.Items.Add(New ListItem("Toutes les paies de la période", "0"))
-        For Each l As DataRow In Db.Table("SELECT TOP 60 Id, DatePaie, DateFinPeriode FROM dbo.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC",
+        For Each l As DataRow In Db.Table("SELECT TOP 60 Id, DatePaie, DateFinPeriode FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC",
                                           Db.P("@c", Contexte.CompagnieId)).Rows
             ddlLot.Items.Add(New ListItem("Paie du " & TexteDate(l("DatePaie")) & " (période au " & TexteDate(l("DateFinPeriode")) & ")", l.Ent("Id").ToString()))
         Next

@@ -5,7 +5,7 @@ Public Class PageEmployes
         Dim t = Db.Table(
             "SELECT e.Id, e.Nom, e.Prenom, e.Poste, e.Actif, e.TauxHoraire, e.SalaireAnnuel, e.DateEmbauche, " &
             "ISNULL(e.PeriodesParAnnee, c.PeriodesParAnnee) AS Periodes " &
-            "FROM dbo.Employe e JOIN dbo.Compagnie c ON c.Id = e.CompagnieId " &
+            "FROM paie.Employe e JOIN paie.Compagnie c ON c.Id = e.CompagnieId " &
             "WHERE e.CompagnieId = @c AND (e.Actif = 1 OR @inactifs = 1) ORDER BY e.Actif DESC, e.Nom, e.Prenom",
             Db.P("@c", Contexte.CompagnieId), Db.P("@inactifs", chkInactifs.Checked))
         rptEmployes.DataSource = t

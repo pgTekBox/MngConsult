@@ -12,7 +12,7 @@ Public Class PageCompagnie
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If IsPostBack Then Return
 
-        Dim c = Db.Ligne("SELECT * FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         If c Is Nothing Then
             txtTauxVacances.Text = "4"
             txtFacteurAE.Text = "1,4"
@@ -69,7 +69,7 @@ Public Class PageCompagnie
 
             If Contexte.CompagnieId = 0 Then
                 Dim id = Db.Inserer(
-                    "INSERT INTO dbo.Compagnie (Nom, Adresse1, Adresse2, Ville, CodePostal, Telephone, Courriel, PeriodesParAnnee, MasseSalarialeEstimee, SecteurFSS, " &
+                    "INSERT INTO paie.Compagnie (Nom, Adresse1, Adresse2, Ville, CodePostal, Telephone, Courriel, PeriodesParAnnee, MasseSalarialeEstimee, SecteurFSS, " &
                     "FacteurAE, TauxVacancesDefaut, TauxCNESST, AssujettiCNT, NumeroEntrepriseFederal, NumeroIdentificationRQ, ProchainNumeroCheque, " &
                     "FrequenceRemiseFederale, FrequenceRemiseQuebec) " &
                     "VALUES (@Nom, @Adresse1, @Adresse2, @Ville, @CodePostal, @Telephone, @Courriel, @Periodes, @Masse, @Secteur, " &
@@ -80,7 +80,7 @@ Public Class PageCompagnie
                 RedirigerAvecMessage("~/Employes/Liste.aspx", "Compagnie enregistrée. Ajoutez maintenant vos employés.")
             Else
                 Db.Exec(
-                    "UPDATE dbo.Compagnie SET Nom=@Nom, Adresse1=@Adresse1, Adresse2=@Adresse2, Ville=@Ville, CodePostal=@CodePostal, Telephone=@Telephone, " &
+                    "UPDATE paie.Compagnie SET Nom=@Nom, Adresse1=@Adresse1, Adresse2=@Adresse2, Ville=@Ville, CodePostal=@CodePostal, Telephone=@Telephone, " &
                     "Courriel=@Courriel, PeriodesParAnnee=@Periodes, MasseSalarialeEstimee=@Masse, SecteurFSS=@Secteur, FacteurAE=@FacteurAE, " &
                     "TauxVacancesDefaut=@TauxVacances, TauxCNESST=@TauxCNESST, AssujettiCNT=@CNT, NumeroEntrepriseFederal=@NEFederal, " &
                     "NumeroIdentificationRQ=@NIRQ, ProchainNumeroCheque=@Cheque, FrequenceRemiseFederale=@FreqFed, FrequenceRemiseQuebec=@FreqQc WHERE Id=@Id", prms)
@@ -95,7 +95,7 @@ Public Class PageCompagnie
     ''' <summary>Éléments de paie de départ, pour pouvoir faire une première paie sans configuration.</summary>
     Private Shared Sub CreerElementsDeBase(compagnieId As Integer)
         For Each code In {"SALAIRE", "SALAIRE_FIXE", "TEMPS_DEMI", "FERIE", "VACANCES", "BONUS"}
-            Db.Exec("INSERT INTO dbo.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, @d, @code)",
+            Db.Exec("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, @d, @code)",
                     Db.P("@c", compagnieId), Db.P("@d", CategoriePaie.ParCode(code).Libelle), Db.P("@code", code))
         Next
     End Sub

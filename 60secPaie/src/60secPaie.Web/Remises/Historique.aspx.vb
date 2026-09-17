@@ -2,7 +2,7 @@ Public Class PageHistoriqueRemises
     Inherits PageBase
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim t = Db.Table("SELECT * FROM dbo.Remise WHERE CompagnieId = @c ORDER BY DatePaiement DESC, Id DESC", Db.P("@c", Contexte.CompagnieId))
+        Dim t = Db.Table("SELECT * FROM paie.Remise WHERE CompagnieId = @c ORDER BY DatePaiement DESC, Id DESC", Db.P("@c", Contexte.CompagnieId))
         rptRemises.DataSource = t
         rptRemises.DataBind()
         rptRemises.Visible = t.Rows.Count > 0

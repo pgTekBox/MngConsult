@@ -12,7 +12,7 @@ Public Class PageMonCompte
     End Property
 
     Private Function Moi() As DataRow
-        Dim u = Db.Ligne("SELECT * FROM dbo.Utilisateur WHERE Courriel = @c AND Actif = 1", Db.P("@c", Contexte.Utilisateur))
+        Dim u = Db.Ligne("SELECT * FROM paie.Utilisateur WHERE Courriel = @c AND Actif = 1", Db.P("@c", Contexte.Utilisateur))
         If u Is Nothing Then
             FormsAuthentication.SignOut()
             Response.Redirect("~/Login.aspx", True)
@@ -34,7 +34,7 @@ Public Class PageMonCompte
 
     Private Sub btnEnregistrerNom_Click(sender As Object, e As EventArgs) Handles btnEnregistrerNom.Click
         Try
-            Db.Exec("UPDATE dbo.Utilisateur SET NomComplet = @n WHERE Id = @id", Db.P("@n", Requis(txtNom.Text, "Nom complet")), Db.P("@id", Moi().Ent("Id")))
+            Db.Exec("UPDATE paie.Utilisateur SET NomComplet = @n WHERE Id = @id", Db.P("@n", Requis(txtNom.Text, "Nom complet")), Db.P("@id", Moi().Ent("Id")))
             Succes("Vos informations sont enregistrées.")
         Catch ex As SaisieInvalideException
             Erreur(ex.Message)
@@ -46,9 +46,9 @@ Public Class PageMonCompte
 
         ' Le mot de passe actuel est exigé : une session laissée ouverte ne suffit pas pour prendre le compte.
         If Not MotsDePasse.Verifier(txtActuel.Text, u.Txt("MotDePasse")) Then
-            Db.Exec("UPDATE dbo.Utilisateur SET EchecsConnexion = EchecsConnexion + 1 WHERE Id = @id", Db.P("@id", u.Ent("Id")))
+            Db.Exec("UPDATE paie.Utilisateur SET EchecsConnexion = EchecsConnexion + 1 WHERE Id = @id", Db.P("@id", u.Ent("Id")))
             If u.Ent("EchecsConnexion") + 1 >= EchecsMaximum Then
-                Db.Exec("UPDATE dbo.Utilisateur SET VerrouilleJusqua = DATEADD(minute, 15, sysdatetime()) WHERE Id = @id", Db.P("@id", u.Ent("Id")))
+                Db.Exec("UPDATE paie.Utilisateur SET VerrouilleJusqua = DATEADD(minute, 15, sysdatetime()) WHERE Id = @id", Db.P("@id", u.Ent("Id")))
                 FormsAuthentication.SignOut()
                 Session.Abandon()
                 Response.Redirect("~/Login.aspx", True)
@@ -67,7 +67,7 @@ Public Class PageMonCompte
             Erreur("Le nouveau mot de passe doit être différent de l'actuel.") : Return
         End If
 
-        Db.Exec("UPDATE dbo.Utilisateur SET MotDePasse = @m, EchecsConnexion = 0, VerrouilleJusqua = NULL, DoitChangerMotDePasse = 0 WHERE Id = @id",
+        Db.Exec("UPDATE paie.Utilisateur SET MotDePasse = @m, EchecsConnexion = 0, VerrouilleJusqua = NULL, DoitChangerMotDePasse = 0 WHERE Id = @id",
                 Db.P("@m", MotsDePasse.Hacher(txtNouveau.Text)), Db.P("@id", u.Ent("Id")))
         Contexte.Journaliser("Mot de passe modifié.")
         Succes("Votre mot de passe a été changé.")

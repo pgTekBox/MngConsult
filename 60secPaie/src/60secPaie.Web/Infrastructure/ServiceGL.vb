@@ -50,7 +50,7 @@ Public NotInheritable Class ServiceGL
 
     Public Shared Function Comptes() As Dictionary(Of String, String)
         Dim d As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
-        For Each r As DataRow In Db.Table("SELECT Cle, Compte FROM dbo.CompteGL WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)).Rows
+        For Each r As DataRow In Db.Table("SELECT Cle, Compte FROM paie.CompteGL WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)).Rows
             d(r.Txt("Cle")) = r.Txt("Compte")
         Next
         Return d
@@ -58,9 +58,9 @@ Public NotInheritable Class ServiceGL
 
     Public Shared Sub EnregistrerCompte(cle As String, compte As String)
         If Not Cles.Any(Function(k) k.Cle = cle) Then Throw New SaisieInvalideException("Clé de compte invalide.")
-        Db.Exec("DELETE FROM dbo.CompteGL WHERE CompagnieId = @c AND Cle = @k", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle))
+        Db.Exec("DELETE FROM paie.CompteGL WHERE CompagnieId = @c AND Cle = @k", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle))
         If Not String.IsNullOrWhiteSpace(compte) Then
-            Db.Exec("INSERT INTO dbo.CompteGL (CompagnieId, Cle, Compte) VALUES (@c, @k, @v)", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle), Db.P("@v", compte.Trim()))
+            Db.Exec("INSERT INTO paie.CompteGL (CompagnieId, Cle, Compte) VALUES (@c, @k, @v)", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle), Db.P("@v", compte.Trim()))
         End If
     End Sub
 
@@ -74,15 +74,15 @@ Public NotInheritable Class ServiceGL
 
     ''' <summary>Écriture équilibrée : dépenses au débit ; retenues, cotisations à payer et paies nettes au crédit.</summary>
     Private Shared Function Ecritures(filtre As String, prms As Func(Of SqlParameter())) As List(Of LigneGL)
-        Dim portee = "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre
+        Dim portee = "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre
         Dim t = Db.Ligne(
             "SELECT ISNULL(SUM(p.ImpotFederal),0) ImpotFederal, ISNULL(SUM(p.ImpotQuebec),0) ImpotQuebec, ISNULL(SUM(p.RRQ + p.RRQ2),0) RRQ, ISNULL(SUM(p.AE),0) AE, " &
             "ISNULL(SUM(p.RQAP),0) RQAP, ISNULL(SUM(p.Net),0) Net, ISNULL(SUM(p.EmployeurRRQ + p.EmployeurRRQ2),0) ERRQ, ISNULL(SUM(p.EmployeurAE),0) EAE, " &
             "ISNULL(SUM(p.EmployeurRQAP),0) ERQAP, ISNULL(SUM(p.EmployeurFSS),0) FSS, ISNULL(SUM(p.EmployeurCNESST),0) CNESST, ISNULL(SUM(p.EmployeurCNT),0) CNT, " &
             "ISNULL(SUM(p.VacancesAccumulees),0) Vacances " & portee, prms())
         Dim lignesPaie = Db.Table(
-            "SELECT el.Description, el.CompteGL, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM dbo.PaieLigne pl JOIN dbo.ElementPaie el ON el.Id = pl.ElementPaieId " &
-            "JOIN dbo.Paie p ON p.Id = pl.PaieId JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre &
+            "SELECT el.Description, el.CompteGL, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.ElementPaie el ON el.Id = pl.ElementPaieId " &
+            "JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre &
             " GROUP BY el.Description, el.CompteGL, pl.CategorieCode ORDER BY el.Description", prms())
 
         Dim cpt = Comptes()
@@ -150,11 +150,11 @@ Public NotInheritable Class ServiceCNESST
         Dim t = Db.Table(
             "SELECT e.Id, e.Nom, e.Prenom, e.ExemptCNESST, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation, " &
             "CAST(0 AS decimal(14,2)) AS Brut, CAST(0 AS decimal(14,2)) AS Excedent " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId JOIN dbo.Employe e ON e.Id = p.EmployeId WHERE " & Filtre &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId WHERE " & Filtre &
             " GROUP BY e.Id, e.Nom, e.Prenom, e.ExemptCNESST ORDER BY e.Nom, e.Prenom", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
         Dim lignes = Db.Table(
-            "SELECT p.EmployeId, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM dbo.PaieLigne pl JOIN dbo.Paie p ON p.Id = pl.PaieId " &
-            "JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY p.EmployeId, pl.CategorieCode", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            "SELECT p.EmployeId, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId " &
+            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY p.EmployeId, pl.CategorieCode", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
 
         t.Columns("Brut").ReadOnly = False
         t.Columns("Excedent").ReadOnly = False
@@ -172,14 +172,14 @@ Public NotInheritable Class ServiceCNESST
     Public Shared Function ParMois(annee As Integer) As DataTable
         Return Db.Table(
             "SELECT MONTH(l.DatePaie) AS Mois, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY MONTH(l.DatePaie) ORDER BY Mois",
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY MONTH(l.DatePaie) ORDER BY Mois",
             Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
     End Function
 
     ''' <summary>Versements périodiques à la CNESST compris dans les remises à Revenu Québec enregistrées pour l'année.</summary>
     Public Shared Function VersementsPayes(annee As Integer) As Decimal
         Return Convert.ToDecimal(Db.Scalaire(
-            "SELECT ISNULL(SUM(rl.Montant), 0) FROM dbo.RemiseLigne rl JOIN dbo.Remise r ON r.Id = rl.RemiseId " &
+            "SELECT ISNULL(SUM(rl.Montant), 0) FROM paie.RemiseLigne rl JOIN paie.Remise r ON r.Id = rl.RemiseId " &
             "WHERE r.CompagnieId = @c AND r.Statut = 'P' AND rl.Code = 'CNESST' AND YEAR(r.DateFinPeriode) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)))
     End Function
 

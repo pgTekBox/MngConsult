@@ -27,7 +27,7 @@ Public NotInheritable Class ServiceDepotDirect
     ''' <summary>Vérifie ce qui manque pour produire le fichier du lot ; liste vide si tout est prêt.</summary>
     Public Shared Function Problemes(lotId As Integer) As List(Of String)
         Dim p As New List(Of String)()
-        Dim c = Db.Ligne("SELECT * FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         If c.Txt("DDNumeroEmetteur").Length = 0 OrElse c.Txt("DDCentreTraitement").Length <> 5 OrElse c.Txt("DDNomCourt").Length = 0 OrElse
            c.Txt("DDInstitution").Length <> 3 OrElse c.Txt("DDTransit").Length <> 5 OrElse c.Txt("DDCompteChiffre").Length = 0 Then
             p.Add("Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct).")
@@ -44,20 +44,20 @@ Public NotInheritable Class ServiceDepotDirect
     Public Shared Function Depots(lotId As Integer) As DataTable
         Return Db.Table(
             "SELECT p.Id AS PaieId, p.Net, e.Id AS EmployeId, e.Code, e.Prenom, e.Nom, e.Institution, e.Transit, e.CompteChiffre " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId JOIN dbo.Employe e ON e.Id = p.EmployeId " &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId " &
             "WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.DepotDirect = 1 AND p.Net > 0 ORDER BY e.Nom, e.Prenom",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
 
     Public Shared Function Generer(lotId As Integer) As Resultat
-        Dim lot = Db.Ligne("SELECT * FROM dbo.LotPaie WHERE Id = @l AND CompagnieId = @c AND Statut = 'C'", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Dim lot = Db.Ligne("SELECT * FROM paie.LotPaie WHERE Id = @l AND CompagnieId = @c AND Statut = 'C'", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         If lot Is Nothing Then Throw New SaisieInvalideException("Le fichier de dépôt direct se produit à partir d'une paie confirmée.")
         Dim depots = ServiceDepotDirect.Depots(lotId)
         If depots.Rows.Count = 0 Then Throw New SaisieInvalideException("Aucun employé de cette paie n'est payé par dépôt direct.")
         Dim manques = Problemes(lotId)
         If manques.Count > 0 Then Throw New SaisieInvalideException(String.Join(" ", manques))
 
-        Dim c = Db.Ligne("SELECT * FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         Dim emetteur = Gauche(c.Txt("DDNumeroEmetteur"), 10)
         Dim numeroFichier = c.Ent("DDProchainNumeroFichier")
         If numeroFichier < 1 OrElse numeroFichier > 9999 Then numeroFichier = 1
@@ -116,8 +116,8 @@ Public NotInheritable Class ServiceDepotDirect
                             New String("0"c, 14) & New String("0"c, 8) & New String("0"c, 14) & New String("0"c, 8))).Append(vbCrLf)
 
         Dim suivant = If(numeroFichier >= 9999, 1, numeroFichier + 1)
-        Db.Exec("UPDATE dbo.Compagnie SET DDProchainNumeroFichier = @n WHERE Id = @c; " &
-                "UPDATE dbo.LotPaie SET DepotDirectNumeroFichier = @f, DepotDirectGenereLe = sysdatetime() WHERE Id = @l",
+        Db.Exec("UPDATE paie.Compagnie SET DDProchainNumeroFichier = @n WHERE Id = @c; " &
+                "UPDATE paie.LotPaie SET DepotDirectNumeroFichier = @f, DepotDirectGenereLe = sysdatetime() WHERE Id = @l",
                 Db.P("@n", suivant), Db.P("@c", Contexte.CompagnieId), Db.P("@f", numeroFichier), Db.P("@l", lotId))
         Contexte.Journaliser("Fichier de dépôt direct n° " & numeroFichier.ToString("0000") & " produit : " & segments.Count.ToString() & " dépôt(s), " & Argent(total) & ".",
                              "~/Paie/Detail.aspx?lot=" & lotId.ToString())

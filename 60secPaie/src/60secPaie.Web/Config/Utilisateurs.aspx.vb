@@ -36,7 +36,7 @@ Public Class PageUtilisateurs
             Return
         End If
 
-        Dim u = Db.Ligne("SELECT * FROM dbo.Utilisateur WHERE Id = @id", Db.P("@id", UtilisateurId))
+        Dim u = Db.Ligne("SELECT * FROM paie.Utilisateur WHERE Id = @id", Db.P("@id", UtilisateurId))
         If u Is Nothing Then Response.Redirect("~/Config/Utilisateurs.aspx", True)
 
         litTitreFormulaire.Text = "Modifier l'utilisateur"
@@ -60,7 +60,7 @@ Public Class PageUtilisateurs
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
         rptUtilisateurs.DataSource = Db.Table(
-            "SELECT Id, NomComplet, Courriel, Actif, EstAdmin, VerrouilleJusqua, DoitChangerMotDePasse FROM dbo.Utilisateur ORDER BY Actif DESC, NomComplet")
+            "SELECT Id, NomComplet, Courriel, Actif, EstAdmin, VerrouilleJusqua, DoitChangerMotDePasse FROM paie.Utilisateur ORDER BY Actif DESC, NomComplet")
         rptUtilisateurs.DataBind()
     End Sub
 
@@ -72,7 +72,7 @@ Public Class PageUtilisateurs
     End Function
 
     Private Shared Function AutresAdminsActifs(saufId As Integer) As Integer
-        Return Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Utilisateur WHERE EstAdmin = 1 AND Actif = 1 AND Id <> @id", Db.P("@id", saufId))
+        Return Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Utilisateur WHERE EstAdmin = 1 AND Actif = 1 AND Id <> @id", Db.P("@id", saufId))
     End Function
 
     Private Function NouveauMotDePasse(requis As Boolean) As String
@@ -91,18 +91,18 @@ Public Class PageUtilisateurs
             If UtilisateurId = 0 Then
                 Dim courriel = Requis(txtCourriel.Text, "Courriel").ToLowerInvariant()
                 If Not courriel.Contains("@") OrElse courriel.Contains(" ") Then Throw New SaisieInvalideException("Le courriel est invalide.")
-                If Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Utilisateur WHERE Courriel = @c", Db.P("@c", courriel)) > 0 Then
+                If Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Utilisateur WHERE Courriel = @c", Db.P("@c", courriel)) > 0 Then
                     Throw New SaisieInvalideException("Un utilisateur existe déjà avec ce courriel.")
                 End If
 
-                Db.Exec("INSERT INTO dbo.Utilisateur (Courriel, NomComplet, MotDePasse, Actif, EstAdmin, DoitChangerMotDePasse) VALUES (@c, @n, @m, @a, @adm, 1)",
+                Db.Exec("INSERT INTO paie.Utilisateur (Courriel, NomComplet, MotDePasse, Actif, EstAdmin, DoitChangerMotDePasse) VALUES (@c, @n, @m, @a, @adm, 1)",
                         Db.P("@c", courriel), Db.P("@n", nom), Db.P("@m", NouveauMotDePasse(True)),
                         Db.P("@a", chkActif.Checked), Db.P("@adm", chkAdmin.Checked))
                 Contexte.Journaliser("Utilisateur créé : " & courriel & If(chkAdmin.Checked, " (administrateur).", "."))
                 RedirigerAvecMessage("~/Config/Utilisateurs.aspx", "Utilisateur créé. Remettez-lui son mot de passe temporaire de façon sécuritaire.")
             End If
 
-            Dim u = Db.Ligne("SELECT * FROM dbo.Utilisateur WHERE Id = @id", Db.P("@id", UtilisateurId))
+            Dim u = Db.Ligne("SELECT * FROM paie.Utilisateur WHERE Id = @id", Db.P("@id", UtilisateurId))
             If u Is Nothing Then Throw New SaisieInvalideException("Utilisateur introuvable.")
 
             ' Ses propres droits ne changent pas ici ; et il doit toujours rester un administrateur actif.
@@ -112,13 +112,13 @@ Public Class PageUtilisateurs
                 Throw New SaisieInvalideException("Il doit rester au moins un administrateur actif.")
             End If
 
-            Db.Exec("UPDATE dbo.Utilisateur SET NomComplet = @n, EstAdmin = @adm, Actif = @a WHERE Id = @id",
+            Db.Exec("UPDATE paie.Utilisateur SET NomComplet = @n, EstAdmin = @adm, Actif = @a WHERE Id = @id",
                     Db.P("@n", nom), Db.P("@adm", estAdmin), Db.P("@a", actif), Db.P("@id", UtilisateurId))
 
             Dim message = "Utilisateur enregistré."
             Dim hache = If(EstMoi, Nothing, NouveauMotDePasse(False))
             If hache IsNot Nothing Then
-                Db.Exec("UPDATE dbo.Utilisateur SET MotDePasse = @m, DoitChangerMotDePasse = 1, EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id",
+                Db.Exec("UPDATE paie.Utilisateur SET MotDePasse = @m, DoitChangerMotDePasse = 1, EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id",
                         Db.P("@m", hache), Db.P("@id", UtilisateurId))
                 Contexte.Journaliser("Mot de passe réinitialisé pour " & u.Txt("Courriel") & ".")
                 message = "Mot de passe réinitialisé. La personne devra le changer à sa prochaine connexion."
@@ -133,7 +133,7 @@ Public Class PageUtilisateurs
     End Sub
 
     Private Sub btnDeverrouiller_Click(sender As Object, e As EventArgs) Handles btnDeverrouiller.Click
-        Db.Exec("UPDATE dbo.Utilisateur SET EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id", Db.P("@id", UtilisateurId))
+        Db.Exec("UPDATE paie.Utilisateur SET EchecsConnexion = 0, VerrouilleJusqua = NULL WHERE Id = @id", Db.P("@id", UtilisateurId))
         RedirigerAvecMessage("~/Config/Utilisateurs.aspx", "Compte déverrouillé.")
     End Sub
 

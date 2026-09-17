@@ -20,7 +20,7 @@ Public Class PageFeuillet
         Dim f = ServiceFeuillets.Preparer(annee).FirstOrDefault(Function(x) x.Employe.Ent("Id") = IdRequete("employe"))
         If f Is Nothing Then Response.Redirect("~/Rapports/Feuillets.aspx", True)
 
-        Dim compagnie = Db.Ligne("SELECT * FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         Dim emp = f.Employe
         Dim nas = Secret.Reveler(emp.Txt("NASChiffre"))
         Dim nasAffiche = If(nas.Length = 0, "NAS manquant dans la fiche", If(_nasComplet, nas, Secret.Masquer(nas)))

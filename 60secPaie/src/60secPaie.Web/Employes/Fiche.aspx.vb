@@ -23,7 +23,7 @@ Public Class PageFicheEmploye
             Return
         End If
 
-        Dim r = Db.Ligne("SELECT * FROM dbo.Employe WHERE Id = @id AND CompagnieId = @c", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
+        Dim r = Db.Ligne("SELECT * FROM paie.Employe WHERE Id = @id AND CompagnieId = @c", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
         If r Is Nothing Then Response.Redirect("~/Employes/Liste.aspx", True)
 
         litTitre.Text = Server.HtmlEncode(r.Txt("Prenom") & " " & r.Txt("Nom"))
@@ -102,7 +102,7 @@ Public Class PageFicheEmploye
         Try
             Dim actuel As DataRow = Nothing
             If EmployeId > 0 Then
-                actuel = Db.Ligne("SELECT NASChiffre, CompteChiffre FROM dbo.Employe WHERE Id = @id AND CompagnieId = @c",
+                actuel = Db.Ligne("SELECT NASChiffre, CompteChiffre FROM paie.Employe WHERE Id = @id AND CompagnieId = @c",
                                   Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
                 If actuel Is Nothing Then Throw New SaisieInvalideException("Employé introuvable.")
             End If
@@ -167,7 +167,7 @@ Public Class PageFicheEmploye
 
             If EmployeId = 0 Then
                 Dim id = Db.Inserer(
-                    "INSERT INTO dbo.Employe (CompagnieId, Actif, Code, Prenom, Nom, Adresse1, Adresse2, Ville, CodePostal, Courriel, Telephone, DateNaissance, Langue, " &
+                    "INSERT INTO paie.Employe (CompagnieId, Actif, Code, Prenom, Nom, Adresse1, Adresse2, Ville, CodePostal, Courriel, Telephone, DateNaissance, Langue, " &
                     "NASChiffre, Poste, DateEmbauche, DateFinEmploi, PeriodesParAnnee, HeuresSemaine, TauxHoraire, SalaireAnnuel, TauxVacances, " &
                     "ExemptImpotFederal, ExemptImpotQuebec, ExemptRRQ, ExemptRQAP, ExemptAE, ExemptFSS, ExemptCNESST, " &
                     "TD1MontantDemande, TD1ImpotAdditionnel, TD1DeductionZone, TD1DeductionsAnnuelles, TD1AutresCredits, " &
@@ -182,7 +182,7 @@ Public Class PageFicheEmploye
                                      "Employé enregistré. Vous pouvez maintenant définir ses éléments de paie récurrents." & RappelExemptions())
             Else
                 Db.Exec(
-                    "UPDATE dbo.Employe SET Actif=@Actif, Code=@Code, Prenom=@Prenom, Nom=@Nom, Adresse1=@Adresse1, Adresse2=@Adresse2, Ville=@Ville, " &
+                    "UPDATE paie.Employe SET Actif=@Actif, Code=@Code, Prenom=@Prenom, Nom=@Nom, Adresse1=@Adresse1, Adresse2=@Adresse2, Ville=@Ville, " &
                     "CodePostal=@CodePostal, Courriel=@Courriel, Telephone=@Telephone, DateNaissance=@DateNaissance, Langue=@Langue, NASChiffre=@NAS, " &
                     "Poste=@Poste, DateEmbauche=@DateEmbauche, DateFinEmploi=@DateFin, PeriodesParAnnee=@Periodes, HeuresSemaine=@HeuresSemaine, " &
                     "TauxHoraire=@TauxHoraire, SalaireAnnuel=@SalaireAnnuel, TauxVacances=@TauxVacances, " &

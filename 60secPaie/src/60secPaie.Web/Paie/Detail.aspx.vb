@@ -10,7 +10,7 @@ Public Class PageDetailLot
     End Property
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-        Dim lot = Db.Ligne("SELECT * FROM dbo.LotPaie WHERE Id = @l AND CompagnieId = @c", Db.P("@l", LotId), Db.P("@c", Contexte.CompagnieId))
+        Dim lot = Db.Ligne("SELECT * FROM paie.LotPaie WHERE Id = @l AND CompagnieId = @c", Db.P("@l", LotId), Db.P("@c", Contexte.CompagnieId))
         If lot Is Nothing Then Response.Redirect("~/Paie/Historique.aspx", True)
         If lot.Txt("Statut") = "B" Then Response.Redirect("~/Paie/Calculer.aspx?lot=" & LotId.ToString(), True)
 

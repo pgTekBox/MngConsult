@@ -16,11 +16,34 @@ Le modèle fonctionnel est Nubis (voir [docs/analyse-nubis.md](docs/analyse-nubi
 
 ## Démarrer
 
-1. Créer la base : `sqlcmd -S "(localdb)\MSSQLLocalDB" -f 65001 -i Database\01_schema.sql`
+1. Créer la base : `sqlcmd -S "(localdb)\MSSQLLocalDB" -f 65001 -v Base=60secPaie -i Database\01_schema.sql`
+   puis copier `src\60secPaie.Web\ConnectionStrings.exemple.config` sous le nom `ConnectionStrings.config`.
 2. Ouvrir `60secPaie.sln`, définir **60secPaie.Web** comme projet de démarrage, F5 (IIS Express, port 50960).
 3. À la première visite, créer le compte administrateur, puis configurer la compagnie, les employés, et lancer **Calculer la paie**.
 
-La chaîne de connexion `Paie` est dans `Web.config` (LocalDB par défaut).
+La chaîne de connexion `Paie` est dans `ConnectionStrings.config`, **exclu de git** parce qu'il peut contenir le mot de passe du serveur SQL.
+
+### Base de données : schéma « paie », base partagée MngConsul
+
+Toutes les tables sont dans le **schéma `paie`** (`paie.Employe`, `paie.Paie`...). L'application peut donc loger dans la base partagée
+`MngConsul` du serveur `192.168.0.203` sans conflit avec les tables `dbo` des autres applications ; le script de schéma ne touche à rien hors de `paie`.
+
+Transférer la base de développement vers le serveur (sans `-P`, sqlcmd **demande** le mot de passe : il ne reste dans aucun fichier ni historique) :
+
+```
+cd Database
+sqlcmd -S 192.168.0.203 -U MngConsul -C -f 65001 -v Base=MngConsul -i 01_schema.sql
+powershell -ExecutionPolicy Bypass -File .\Exporter-Donnees.ps1
+sqlcmd -S 192.168.0.203 -U MngConsul -C -f 65001 -v Base=MngConsul -i export\02_donnees.sql
+```
+
+Le script de données refuse de s'exécuter si la destination contient déjà des données de paie, conserve les identifiants et s'exécute en une
+transaction. `Database\export` est exclu de git (renseignements personnels) : supprimer le fichier après le transfert.
+Activer ensuite l'entrée « Serveur » de `ConnectionStrings.config`.
+
+**NAS et comptes bancaires** : ils sont chiffrés avec la clé machine d'ASP.NET du poste qui les a saisis. Tant que l'application tourne sur ce
+poste (seule la base est sur le serveur), rien ne change. Le jour où l'application est installée sur un autre serveur IIS, définir la même
+`machineKey` fixe des deux côtés avant, sinon il faudra ressaisir ces deux renseignements.
 
 ## Ce que fait la version 1
 

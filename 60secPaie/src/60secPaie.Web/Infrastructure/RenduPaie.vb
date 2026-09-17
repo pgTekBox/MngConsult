@@ -12,8 +12,8 @@ Public NotInheritable Class RenduPaie
 
     Private Shared Function PaiesDuLot(lotId As Integer) As DataTable
         Return Db.Table(
-            "SELECT p.*, e.Prenom, e.Nom, e.DepotDirect FROM dbo.Paie p JOIN dbo.Employe e ON e.Id = p.EmployeId " &
-            "JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c ORDER BY e.Nom, e.Prenom",
+            "SELECT p.*, e.Prenom, e.Nom, e.DepotDirect FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId " &
+            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c ORDER BY e.Nom, e.Prenom",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
 
@@ -83,7 +83,7 @@ Public NotInheritable Class RenduPaie
 
         sb.Append("<details><summary>Détail et vérification des calculs - ").Append(H(p.Txt("Prenom") & " " & p.Txt("Nom"))).Append("</summary>")
         sb.Append("<table class=""liste""><thead><tr><th>Ligne</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
-        For Each l As DataRow In Db.Table("SELECT * FROM dbo.PaieLigne WHERE PaieId = @p ORDER BY Id", Db.P("@p", p.Ent("Id"))).Rows
+        For Each l As DataRow In Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p ORDER BY Id", Db.P("@p", p.Ent("Id"))).Rows
             sb.Append("<tr><td>").Append(H(l.Txt("Description"))).Append("</td><td class=""num"">").Append(If(l.Dcm("Heures") > 0D, Nombre(l("Heures")), ""))
             sb.Append("</td><td class=""num"">").Append(If(l.Dcm("Taux") > 0D, Argent(l("Taux")), "")).Append("</td><td class=""num"">").Append(Argent(l("Montant"))).Append("</td></tr>")
         Next
@@ -105,12 +105,12 @@ Public NotInheritable Class RenduPaie
             "ISNULL(SUM(AE),0) AE, ISNULL(SUM(RQAP),0) RQAP, ISNULL(SUM(EmployeurRRQ),0) EmployeurRRQ, ISNULL(SUM(EmployeurRRQ2),0) EmployeurRRQ2, " &
             "ISNULL(SUM(EmployeurAE),0) EmployeurAE, ISNULL(SUM(EmployeurRQAP),0) EmployeurRQAP, ISNULL(SUM(EmployeurFSS),0) EmployeurFSS, " &
             "ISNULL(SUM(EmployeurCNESST),0) EmployeurCNESST, ISNULL(SUM(EmployeurCNT),0) EmployeurCNT " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c",
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
 
         Dim lignes = Db.Table(
             "SELECT pl.Description, CASE WHEN pl.CategorieCode LIKE 'DED[_]%' THEN 1 ELSE 0 END AS EstDeduction, SUM(pl.Montant) AS Montant " &
-            "FROM dbo.PaieLigne pl JOIN dbo.Paie p ON p.Id = pl.PaieId JOIN dbo.LotPaie l ON l.Id = p.LotPaieId " &
+            "FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
             "WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c " &
             "GROUP BY pl.Description, CASE WHEN pl.CategorieCode LIKE 'DED[_]%' THEN 1 ELSE 0 END ORDER BY pl.Description",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
@@ -155,7 +155,7 @@ Public NotInheritable Class RenduPaie
             "SELECT p.*, l.DateDebutPeriode, l.DateFinPeriode, l.DatePaie, l.Statut, l.Id AS LotId, " &
             "e.Prenom, e.Nom, e.Code, e.Adresse1, e.Adresse2, e.Ville, e.Province, e.CodePostal, e.DepotDirect, " &
             "c.Nom AS CompagnieNom, c.Adresse1 AS CAdresse1, c.Ville AS CVille, c.Province AS CProvince, c.CodePostal AS CCodePostal " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId JOIN dbo.Employe e ON e.Id = p.EmployeId JOIN dbo.Compagnie c ON c.Id = l.CompagnieId " &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
             "WHERE p.Id = @p AND l.CompagnieId = @c", Db.P("@p", paieId), Db.P("@c", Contexte.CompagnieId))
         If p Is Nothing Then Return "<p class=""note"">Talon introuvable.</p>"
 
@@ -163,13 +163,13 @@ Public NotInheritable Class RenduPaie
         Dim cumul = Db.Ligne(
             "SELECT ISNULL(SUM(x.BrutVerse),0) Brut, ISNULL(SUM(x.ImpotFederal),0) ImpotFederal, ISNULL(SUM(x.ImpotQuebec),0) ImpotQuebec, " &
             "ISNULL(SUM(x.RRQ + x.RRQ2),0) RRQ, ISNULL(SUM(x.AE),0) AE, ISNULL(SUM(x.RQAP),0) RQAP, ISNULL(SUM(x.AutresDeductions),0) Autres, ISNULL(SUM(x.Net),0) Net " &
-            "FROM dbo.Paie x JOIN dbo.LotPaie lx ON lx.Id = x.LotPaieId " &
+            "FROM paie.Paie x JOIN paie.LotPaie lx ON lx.Id = x.LotPaieId " &
             "WHERE x.EmployeId = @e AND x.Inclus = 1 AND YEAR(lx.DatePaie) = @a AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId")))
-        Dim depart = Db.Ligne("SELECT * FROM dbo.CumulatifDepart WHERE EmployeId = @e AND Annee = @a", Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year))
+        Dim depart = Db.Ligne("SELECT * FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a", Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year))
         Dim soldeVacances = Convert.ToDecimal(Db.Scalaire(
-            "SELECT ISNULL((SELECT SUM(VacancesSolde) FROM dbo.CumulatifDepart WHERE EmployeId = @e), 0) + " &
-            "ISNULL((SELECT SUM(x.VacancesAccumulees - x.VacancesPayees) FROM dbo.Paie x JOIN dbo.LotPaie lx ON lx.Id = x.LotPaieId " &
+            "SELECT ISNULL((SELECT SUM(VacancesSolde) FROM paie.CumulatifDepart WHERE EmployeId = @e), 0) + " &
+            "ISNULL((SELECT SUM(x.VacancesAccumulees - x.VacancesPayees) FROM paie.Paie x JOIN paie.LotPaie lx ON lx.Id = x.LotPaieId " &
             "        WHERE x.EmployeId = @e AND x.Inclus = 1 AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))), 0)",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId"))))
 
@@ -196,7 +196,7 @@ Public NotInheritable Class RenduPaie
         sb.Append("<br/>").Append(H(Lieu(p.Txt("Ville"), p.Txt("Province"), p.Txt("CodePostal")))).Append("</p>")
 
         sb.Append("<div class=""talon-colonnes""><div><table><thead><tr><th>Revenus et avantages</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
-        Dim lignes = Db.Table("SELECT * FROM dbo.PaieLigne WHERE PaieId = @p AND MasquerSurTalon = 0 ORDER BY Id", Db.P("@p", paieId))
+        Dim lignes = Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p AND MasquerSurTalon = 0 ORDER BY Id", Db.P("@p", paieId))
         For Each l As DataRow In lignes.Select("CategorieCode NOT LIKE 'DED_%'")
             sb.Append("<tr><td>").Append(H(l.Txt("Description"))).Append("</td><td class=""num"">").Append(If(l.Dcm("Heures") > 0D, Nombre(l("Heures")), ""))
             sb.Append("</td><td class=""num"">").Append(If(l.Dcm("Taux") > 0D, Argent(l("Taux")), "")).Append("</td><td class=""num"">").Append(Argent(l("Montant"))).Append("</td></tr>")

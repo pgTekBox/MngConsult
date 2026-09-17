@@ -47,14 +47,14 @@ Public NotInheritable Class ServiceCourriel
     ''' <summary>Employés du lot qui reçoivent leur talon par courriel.</summary>
     Public Shared Function Destinataires(lotId As Integer) As DataTable
         Return Db.Table(
-            "SELECT p.Id AS PaieId, p.TalonEnvoyeLe, e.Prenom, e.Nom, e.Courriel FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId " &
-            "JOIN dbo.Employe e ON e.Id = p.EmployeId WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.TalonParCourriel = 1 " &
+            "SELECT p.Id AS PaieId, p.TalonEnvoyeLe, e.Prenom, e.Nom, e.Courriel FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
+            "JOIN paie.Employe e ON e.Id = p.EmployeId WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.TalonParCourriel = 1 " &
             "ORDER BY e.Nom, e.Prenom", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
 
     ''' <summary>Envoie les talons du lot. Par défaut, ceux déjà envoyés ne sont pas renvoyés.</summary>
     Public Shared Function EnvoyerTalons(lotId As Integer, renvoyer As Boolean) As Bilan
-        Dim lot = Db.Ligne("SELECT l.*, c.Nom AS CompagnieNom, c.Courriel AS CompagnieCourriel FROM dbo.LotPaie l JOIN dbo.Compagnie c ON c.Id = l.CompagnieId " &
+        Dim lot = Db.Ligne("SELECT l.*, c.Nom AS CompagnieNom, c.Courriel AS CompagnieCourriel FROM paie.LotPaie l JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
                            "WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C'", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         If lot Is Nothing Then Throw New SaisieInvalideException("Les talons s'envoient à partir d'une paie confirmée.")
 
@@ -93,7 +93,7 @@ Public NotInheritable Class ServiceCourriel
                         message.Body = CorpsHtml(d.Ent("PaieId"), nom, lot.Txt("CompagnieNom"))
                         client.Send(message)
                     End Using
-                    Db.Exec("UPDATE dbo.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
+                    Db.Exec("UPDATE paie.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
                     bilan.Envoyes += 1
                 Catch ex As FormatException
                     bilan.Erreurs.Add(nom & " : adresse de courriel invalide.")

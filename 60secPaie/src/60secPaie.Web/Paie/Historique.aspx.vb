@@ -6,7 +6,7 @@ Public Class PageHistorique
             "SELECT l.Id, l.DatePaie, l.DateDebutPeriode, l.DateFinPeriode, l.PeriodesParAnnee, l.Statut, " &
             "COUNT(p.Id) AS NbEmployes, ISNULL(SUM(p.BrutVerse),0) AS Brut, ISNULL(SUM(p.Net),0) AS Net, " &
             "ISNULL(SUM(p.EmployeurRRQ + p.EmployeurRRQ2 + p.EmployeurAE + p.EmployeurRQAP + p.EmployeurFSS + p.EmployeurCNESST + p.EmployeurCNT),0) AS Employeur " &
-            "FROM dbo.LotPaie l LEFT JOIN dbo.Paie p ON p.LotPaieId = l.Id AND p.Inclus = 1 WHERE l.CompagnieId = @c " &
+            "FROM paie.LotPaie l LEFT JOIN paie.Paie p ON p.LotPaieId = l.Id AND p.Inclus = 1 WHERE l.CompagnieId = @c " &
             "GROUP BY l.Id, l.DatePaie, l.DateDebutPeriode, l.DateFinPeriode, l.PeriodesParAnnee, l.Statut ORDER BY l.DatePaie DESC, l.Id DESC",
             Db.P("@c", Contexte.CompagnieId))
         rptLots.DataSource = t

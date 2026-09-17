@@ -84,7 +84,7 @@ Public NotInheritable Class ServiceFeuillets
     ''' <summary>Années pour lesquelles des paies confirmées existent et dont les taux sont définis.</summary>
     Public Shared Function AnneesDisponibles() As List(Of Integer)
         Dim annees As New List(Of Integer)()
-        For Each r As DataRow In Db.Table("SELECT DISTINCT YEAR(DatePaie) AS Annee FROM dbo.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY Annee DESC",
+        For Each r As DataRow In Db.Table("SELECT DISTINCT YEAR(DatePaie) AS Annee FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY Annee DESC",
                                           Db.P("@c", Contexte.CompagnieId)).Rows
             If ParametresAnnee.EstDisponible(r.Ent("Annee")) Then annees.Add(r.Ent("Annee"))
         Next
@@ -101,13 +101,13 @@ Public NotInheritable Class ServiceFeuillets
             "SELECT p.EmployeId, SUM(p.BrutImposableFederal) BrutFed, SUM(p.BrutImposableQuebec) BrutQc, SUM(p.ImpotFederal) ImpotFederal, " &
             "SUM(p.ImpotQuebec) ImpotQuebec, SUM(p.RRQ) RRQ, SUM(p.RRQ2) RRQ2, SUM(p.AE) AE, SUM(p.RQAP) RQAP, " &
             "SUM(p.GainsRRQ) GainsRRQ, SUM(p.GainsAE) GainsAE, SUM(p.GainsRQAP) GainsRQAP " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId", Db.P("@c", c), Db.P("@a", annee))
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId", Db.P("@c", c), Db.P("@a", annee))
         Dim lignes = Db.Table(
-            "SELECT p.EmployeId, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM dbo.PaieLigne pl JOIN dbo.Paie p ON p.Id = pl.PaieId " &
-            "JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId, pl.CategorieCode", Db.P("@c", c), Db.P("@a", annee))
+            "SELECT p.EmployeId, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId " &
+            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId, pl.CategorieCode", Db.P("@c", c), Db.P("@a", annee))
         Dim departs = Db.Table(
-            "SELECT d.* FROM dbo.CumulatifDepart d JOIN dbo.Employe e ON e.Id = d.EmployeId WHERE e.CompagnieId = @c AND d.Annee = @a", Db.P("@c", c), Db.P("@a", annee))
-        Dim employes = Db.Table("SELECT * FROM dbo.Employe WHERE CompagnieId = @c ORDER BY Nom, Prenom", Db.P("@c", c))
+            "SELECT d.* FROM paie.CumulatifDepart d JOIN paie.Employe e ON e.Id = d.EmployeId WHERE e.CompagnieId = @c AND d.Annee = @a", Db.P("@c", c), Db.P("@a", annee))
+        Dim employes = Db.Table("SELECT * FROM paie.Employe WHERE CompagnieId = @c ORDER BY Nom, Prenom", Db.P("@c", c))
 
         Dim feuillets As New List(Of Feuillet)()
         For Each e As DataRow In employes.Rows
@@ -185,9 +185,9 @@ Public NotInheritable Class ServiceFeuillets
             "ISNULL(SUM(p.EmployeurFSS),0) FSS, ISNULL(SUM(p.GainsFSS),0) MasseFSS, ISNULL(SUM(p.EmployeurCNESST),0) CNESST, ISNULL(SUM(p.EmployeurCNT),0) CNT, " &
             "ISNULL(SUM(p.ImpotFederal + p.AE + p.EmployeurAE),0) DuFederal, " &
             "ISNULL(SUM(p.ImpotQuebec + p.RRQ + p.RRQ2 + p.EmployeurRRQ + p.EmployeurRRQ2 + p.RQAP + p.EmployeurRQAP + p.EmployeurFSS + p.EmployeurCNESST),0) DuQuebec, " &
-            "(SELECT ISNULL(SUM(Total),0) FROM dbo.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'F' AND YEAR(DateFinPeriode) = @a) PayeFederal, " &
-            "(SELECT ISNULL(SUM(Total),0) FROM dbo.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'Q' AND YEAR(DateFinPeriode) = @a) PayeQuebec " &
-            "FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee, Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            "(SELECT ISNULL(SUM(Total),0) FROM paie.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'F' AND YEAR(DateFinPeriode) = @a) PayeFederal, " &
+            "(SELECT ISNULL(SUM(Total),0) FROM paie.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'Q' AND YEAR(DateFinPeriode) = @a) PayeQuebec " &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee, Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
     End Function
 
 End Class

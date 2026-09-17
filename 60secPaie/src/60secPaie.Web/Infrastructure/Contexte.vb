@@ -9,7 +9,7 @@ Public NotInheritable Class Contexte
         Get
             Dim ctx = HttpContext.Current
             If ctx.Items("CompagnieId") Is Nothing Then
-                ctx.Items("CompagnieId") = Db.ScalaireEntier("SELECT TOP 1 Id FROM dbo.Compagnie ORDER BY Id")
+                ctx.Items("CompagnieId") = Db.ScalaireEntier("SELECT TOP 1 Id FROM paie.Compagnie ORDER BY Id")
             End If
             Return CInt(ctx.Items("CompagnieId"))
         End Get
@@ -32,7 +32,7 @@ Public NotInheritable Class Contexte
             Dim ctx = HttpContext.Current
             If Not ctx.Items.Contains("Compte") Then
                 ctx.Items("Compte") = Db.Ligne(
-                    "SELECT Id, Courriel, NomComplet, EstAdmin, DoitChangerMotDePasse FROM dbo.Utilisateur WHERE Courriel = @c AND Actif = 1",
+                    "SELECT Id, Courriel, NomComplet, EstAdmin, DoitChangerMotDePasse FROM paie.Utilisateur WHERE Courriel = @c AND Actif = 1",
                     Db.P("@c", Utilisateur))
             End If
             Return DirectCast(ctx.Items("Compte"), DataRow)
@@ -46,7 +46,7 @@ Public NotInheritable Class Contexte
     End Property
 
     Public Shared Sub Journaliser(description As String, Optional lien As String = Nothing)
-        Db.Exec("INSERT INTO dbo.JournalActivite (Utilisateur, Description, Lien) VALUES (@u, @d, @l)",
+        Db.Exec("INSERT INTO paie.JournalActivite (Utilisateur, Description, Lien) VALUES (@u, @d, @l)",
                 Db.P("@u", If(Utilisateur.Length = 0, "système", Utilisateur)), Db.P("@d", description), Db.P("@l", lien))
     End Sub
 

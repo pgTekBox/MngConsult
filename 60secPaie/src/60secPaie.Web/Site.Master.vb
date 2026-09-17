@@ -12,7 +12,7 @@ Public Class SiteMaster
         lnkCompte.Text = Server.HtmlEncode(Contexte.Utilisateur)
         If Contexte.CompagnieId > 0 Then
             lblCompagnie.Text = Server.HtmlEncode(Convert.ToString(
-                Db.Scalaire("SELECT Nom FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))))
+                Db.Scalaire("SELECT Nom FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))))
         End If
 
         Dim chemin = Request.AppRelativeCurrentExecutionFilePath.ToLowerInvariant()
