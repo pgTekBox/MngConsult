@@ -31,7 +31,7 @@
                 </ul>
             </div>
 
-            <p class="connexion-marque-pied">Un service de MngConsul</p>
+            <p class="connexion-marque-pied">Un service de 60Sec</p>
         </aside>
 
         <%-- ---------- Le côté formulaire ---------- --%>
@@ -41,7 +41,7 @@
                 <div class="langues"><asp:Literal ID="litLangues" runat="server" /></div>
 
                 <h2 class="connexion-titre">Connexion</h2>
-                <p class="connexion-sous-titre">Connectez-vous avec votre compte MngConsul pour faire vos paies.</p>
+                <p class="connexion-sous-titre">Connectez-vous avec votre compte 60Sec pour faire vos paies.</p>
 
                 <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="message erreur">
                     <asp:Literal ID="litErreur" runat="server" />
@@ -62,7 +62,7 @@
                     <asp:Button ID="btnConnexion" runat="server" Text="Me connecter" CssClass="connexion-bouton" />
 
                     <p class="note connexion-note">
-                        Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de MngConsul.
+                        Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de 60Sec.
                     </p>
                 </asp:Panel>
 

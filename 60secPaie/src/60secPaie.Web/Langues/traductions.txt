@@ -58,9 +58,9 @@ es: 60secPaie · Tasas 2026: T4127 (ARC) y TP-1015.F (Revenu Québec). Revise si
 
 # ---------- Connexion ----------
 
-fr: Connectez-vous avec votre compte MngConsul pour faire vos paies.
-en: Sign in with your MngConsul account to run your payroll.
-es: Inicie sesión con su cuenta de MngConsul para hacer sus nóminas.
+fr: Connectez-vous avec votre compte 60Sec pour faire vos paies.
+en: Sign in with your 60Sec account to run your payroll.
+es: Inicie sesión con su cuenta de 60Sec para hacer sus nóminas.
 
 fr: Courriel
 en: Email
@@ -74,9 +74,9 @@ fr: Me connecter
 en: Sign in
 es: Iniciar sesión
 
-fr: Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de MngConsul.
-en: Forgot your password? Reset it from the MngConsul sign-in page.
-es: ¿Olvidó su contraseña? Restablézcala desde la página de inicio de sesión de MngConsul.
+fr: Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de 60Sec.
+en: Forgot your password? Reset it from the 60Sec sign-in page.
+es: ¿Olvidó su contraseña? Restablézcala desde la página de inicio de sesión de 60Sec.
 
 fr: Trop de tentatives. Réessayez dans quelques minutes.
 en: Too many attempts. Try again in a few minutes.
@@ -2892,9 +2892,9 @@ fr: Voir comment ça marche
 en: See how it works
 es: Ver cómo funciona
 
-fr: Vous avez déjà un compte MngConsul ? C'est le même — rien à créer.
-en: Already have a MngConsul account? It's the same one — nothing to create.
-es: ¿Ya tiene una cuenta MngConsul? Es la misma — no hay que crear nada.
+fr: Vous avez déjà un compte 60Sec ? C'est le même — rien à créer.
+en: Already have a 60Sec account? It's the same one — nothing to create.
+es: ¿Ya tiene una cuenta 60Sec? Es la misma — no hay que crear nada.
 
 fr: Me connecter
 en: Sign in
@@ -3096,13 +3096,13 @@ fr: Votre prochaine paie, sans le mal de tête
 en: Your next pay run, without the headache
 es: Su próxima nómina, sin dolor de cabeza
 
-fr: Connectez-vous avec votre compte MngConsul et lancez votre première période.
-en: Sign in with your MngConsul account and start your first period.
-es: Inicie sesión con su cuenta MngConsul y comience su primer período.
+fr: Connectez-vous avec votre compte 60Sec et lancez votre première période.
+en: Sign in with your 60Sec account and start your first period.
+es: Inicie sesión con su cuenta 60Sec y comience su primer período.
 
-fr: — un service de MngConsul. Les montants calculés demeurent sous la responsabilité de l'employeur.
-en: — a MngConsul service. The calculated amounts remain the employer's responsibility.
-es: — un servicio de MngConsul. Los importes calculados son responsabilidad del empleador.
+fr: — un service de 60Sec. Les montants calculés demeurent sous la responsabilité de l'employeur.
+en: — a 60Sec service. The calculated amounts remain the employer's responsibility.
+es: — un servicio de 60Sec. Los importes calculados son responsabilidad del empleador.
 
 # ---------- Page de connexion ----------
 
@@ -3122,9 +3122,9 @@ fr: Remises gouvernementales suivies d'une période à l'autre
 en: Government remittances tracked from one period to the next
 es: Remesas gubernamentales controladas de un período a otro
 
-fr: Un service de MngConsul
-en: A MngConsul service
-es: Un servicio de MngConsul
+fr: Un service de 60Sec
+en: A 60Sec service
+es: Un servicio de 60Sec
 
 fr: Connexion
 en: Sign in

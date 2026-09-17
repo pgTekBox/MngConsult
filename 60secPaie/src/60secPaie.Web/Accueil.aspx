@@ -39,7 +39,7 @@
                     <a href="#ce-que-ca-fait" class="pres-lien-discret">Voir comment ça marche</a>
                 </div>
                 <p class="pres-note-heros">
-                    Vous avez déjà un compte MngConsul ? C'est le même — rien à créer.
+                    Vous avez déjà un compte 60Sec ? C'est le même — rien à créer.
                 </p>
             </div>
 
@@ -189,14 +189,14 @@
     <section class="pres-appel">
         <div class="pres-largeur">
             <h2>Votre prochaine paie, sans le mal de tête</h2>
-            <p>Connectez-vous avec votre compte MngConsul et lancez votre première période.</p>
+            <p>Connectez-vous avec votre compte 60Sec et lancez votre première période.</p>
             <asp:HyperLink ID="lnkAppel" runat="server" CssClass="bouton pres-bouton-grand pres-bouton-clair" />
         </div>
     </section>
 
     <footer class="pres-pied">
         <div class="pres-largeur">
-            60sec<span translate="no">Paie</span> — un service de MngConsul.
+            60sec<span translate="no">Paie</span> — un service de 60Sec.
             Les montants calculés demeurent sous la responsabilité de l'employeur.
         </div>
     </footer>
