@@ -40,6 +40,7 @@ Partial Public Class PageFicheEmploye
     Protected WithEvents txtTD1Additionnel As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTD1Zone As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTD1Deductions As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlDentaire As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtTD1Credits As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTPMontant As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents litBaseQc As Global.System.Web.UI.WebControls.Literal

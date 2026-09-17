@@ -16,6 +16,18 @@
     </div>
     <asp:Literal ID="litSommaire" runat="server" />
 
+    <asp:Panel ID="pnlSuites" runat="server" Visible="false" CssClass="carte sans-impression">
+        <h2>Paiement et suites de cette paie</h2>
+        <asp:Literal ID="litSuites" runat="server" />
+        <div class="actions">
+            <asp:Button ID="btnDepotDirect" runat="server" Text="Télécharger le fichier de dépôt direct" CssClass="secondaire" />
+            <asp:Button ID="btnTalons" runat="server" Text="Envoyer les talons par courriel" CssClass="secondaire"
+                OnClientClick="return confirm('Envoyer les talons de paie par courriel aux employés qui l\'ont demandé ?');" />
+            <asp:CheckBox ID="chkRenvoyer" runat="server" Text="renvoyer aussi les talons déjà envoyés" />
+            <asp:HyperLink ID="lnkEcritures" runat="server" CssClass="bouton secondaire">Écritures comptables</asp:HyperLink>
+        </div>
+    </asp:Panel>
+
     <asp:Panel ID="pnlAnnuler" runat="server" Visible="false" CssClass="carte sans-impression">
         <h2>Annuler cette paie</h2>
         <p>La paie confirmée la plus récente peut être annulée, par exemple pour corriger une erreur. Elle sera retirée des cumulatifs ;

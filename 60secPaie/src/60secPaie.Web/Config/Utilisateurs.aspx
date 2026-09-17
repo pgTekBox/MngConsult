@@ -1,11 +1,7 @@
 <%@ Page Title="Utilisateurs" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="false" CodeBehind="Utilisateurs.aspx.vb" Inherits="Paie60Sec.Web.PageUtilisateurs" %>
 <asp:Content ContentPlaceHolderID="Contenu" runat="server">
     <h1>Configuration</h1>
-    <div class="sous-menu">
-        <a runat="server" href="~/Config/Compagnie.aspx">Ma compagnie</a>
-        <a runat="server" href="~/Config/ElementsPaie.aspx">Éléments de paie</a>
-        <a runat="server" href="~/Config/Utilisateurs.aspx" class="actif">Utilisateurs</a>
-    </div>
+    <%= SousMenuConfig("utilisateurs") %>
 
     <div class="deux-colonnes">
         <div class="carte">

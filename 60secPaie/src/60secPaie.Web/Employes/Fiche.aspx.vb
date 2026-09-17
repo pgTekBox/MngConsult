@@ -72,6 +72,7 @@ Public Class PageFicheEmploye
         txtTD1Zone.Text = ChampNonNul(r("TD1DeductionZone"))
         txtTD1Deductions.Text = ChampNonNul(r("TD1DeductionsAnnuelles"))
         txtTD1Credits.Text = ChampNonNul(r("TD1AutresCredits"))
+        ddlDentaire.SelectedValue = Math.Max(1, Math.Min(5, r.Ent("CodeDentaireT4"))).ToString()
 
         txtTPMontant.Text = Champ(r("TP1015Montant"))
         txtTPAdditionnel.Text = ChampNonNul(r("TP1015ImpotAdditionnel"))
@@ -162,7 +163,7 @@ Public Class PageFicheEmploye
                 Db.P("@TPK1", Dec(txtTP1016Credits.Text, "TP-1016 - Crédits")),
                 Db.P("@Depot", chkDepot.Checked), Db.P("@Transit", transit), Db.P("@Institution", institution),
                 Db.P("@Compte", compteChiffre), Db.P("@TalonCourriel", chkTalonCourriel.Checked), Db.P("@Note", txtNote.Text),
-                Db.P("@Id", EmployeId), Db.P("@c", Contexte.CompagnieId)}
+                Db.P("@Id", EmployeId), Db.P("@c", Contexte.CompagnieId), Db.P("@Dentaire", Math.Max(1, Math.Min(5, Integer.Parse(ddlDentaire.SelectedValue))))}
 
             If EmployeId = 0 Then
                 Dim id = Db.Inserer(
@@ -171,11 +172,11 @@ Public Class PageFicheEmploye
                     "ExemptImpotFederal, ExemptImpotQuebec, ExemptRRQ, ExemptRQAP, ExemptAE, ExemptFSS, ExemptCNESST, " &
                     "TD1MontantDemande, TD1ImpotAdditionnel, TD1DeductionZone, TD1DeductionsAnnuelles, TD1AutresCredits, " &
                     "TP1015Montant, TP1015ImpotAdditionnel, TP1015DeductionsLigne19, TP1016Deductions, TP1016Credits, " &
-                    "DepotDirect, Transit, Institution, CompteChiffre, TalonParCourriel, Note) VALUES (" &
+                    "DepotDirect, Transit, Institution, CompteChiffre, TalonParCourriel, Note, CodeDentaireT4) VALUES (" &
                     "@c, @Actif, @Code, @Prenom, @Nom, @Adresse1, @Adresse2, @Ville, @CodePostal, @Courriel, @Telephone, @DateNaissance, @Langue, " &
                     "@NAS, @Poste, @DateEmbauche, @DateFin, @Periodes, @HeuresSemaine, @TauxHoraire, @SalaireAnnuel, @TauxVacances, " &
                     "@ExFed, @ExQc, @ExRRQ, @ExRQAP, @ExAE, @ExFSS, @ExCNESST, @TD1Montant, @TD1L, @TD1HD, @TD1F1, @TD1K3, " &
-                    "@TPMontant, @TPL, @TPJ, @TPJ1, @TPK1, @Depot, @Transit, @Institution, @Compte, @TalonCourriel, @Note)", prms)
+                    "@TPMontant, @TPL, @TPJ, @TPJ1, @TPK1, @Depot, @Transit, @Institution, @Compte, @TalonCourriel, @Note, @Dentaire)", prms)
                 Contexte.Journaliser("Employé ajouté : " & txtPrenom.Text.Trim() & " " & txtNom.Text.Trim() & ".", "~/Employes/Fiche.aspx?id=" & id.ToString())
                 RedirigerAvecMessage("~/Employes/ElementsPaie.aspx?id=" & id.ToString(),
                                      "Employé enregistré. Vous pouvez maintenant définir ses éléments de paie récurrents." & RappelExemptions())
@@ -188,7 +189,7 @@ Public Class PageFicheEmploye
                     "ExemptImpotFederal=@ExFed, ExemptImpotQuebec=@ExQc, ExemptRRQ=@ExRRQ, ExemptRQAP=@ExRQAP, ExemptAE=@ExAE, ExemptFSS=@ExFSS, ExemptCNESST=@ExCNESST, " &
                     "TD1MontantDemande=@TD1Montant, TD1ImpotAdditionnel=@TD1L, TD1DeductionZone=@TD1HD, TD1DeductionsAnnuelles=@TD1F1, TD1AutresCredits=@TD1K3, " &
                     "TP1015Montant=@TPMontant, TP1015ImpotAdditionnel=@TPL, TP1015DeductionsLigne19=@TPJ, TP1016Deductions=@TPJ1, TP1016Credits=@TPK1, " &
-                    "DepotDirect=@Depot, Transit=@Transit, Institution=@Institution, CompteChiffre=@Compte, TalonParCourriel=@TalonCourriel, Note=@Note " &
+                    "DepotDirect=@Depot, Transit=@Transit, Institution=@Institution, CompteChiffre=@Compte, TalonParCourriel=@TalonCourriel, Note=@Note, CodeDentaireT4=@Dentaire " &
                     "WHERE Id=@Id AND CompagnieId=@c", prms)
                 RedirigerAvecMessage("~/Employes/Liste.aspx", "Employé enregistré." & RappelExemptions())
             End If

@@ -45,6 +45,30 @@ La chaîne de connexion `Paie` est dans `Web.config` (LocalDB par défaut).
   Les fréquences accélérées (versements hebdomadaires ou bimensuels des grands employeurs) ne sont pas gérées.
 - 60secPaie **ne transmet aucun paiement** : il calcule le montant, fournit les renseignements du formulaire de versement et tient l'historique.
 
+### Rapports de fin d'année et de période (menu Rapports)
+
+- **T4 et Relevés 1** : montants de chaque case par employé (paies confirmées + cumulatifs de départ), feuillet de travail imprimable,
+  sommaire T4 / sommaire 1 avec conciliation des remises, export CSV (sans NAS). Le NAS complet ne s'affiche que sur demande, et c'est journalisé.
+  **60secPaie ne transmet pas les feuillets** : les montants se saisissent dans Formulaires Web (ARC) et Mon dossier (Revenu Québec).
+  La transmission XML n'est pas faite (Revenu Québec exige un logiciel certifié). Les cases B.A / B.B du Relevé 1 et 17A du T4
+  (cotisations supplémentaires au RRQ) sont à vérifier avec les guides de l'année (RL-1.G, RC4120).
+- **Déclaration des salaires CNESST** : salaire brut, excédent du maximum assurable, salaire assurable et cotisation par employé et par mois,
+  conciliation avec les versements périodiques des remises.
+- **Écritures comptables** : écriture équilibrée par paie ou par période (débit : dépenses ; crédit : retenues, cotisations à payer, paies nettes),
+  export CSV. Les comptes se définissent dans Configuration → Plan comptable ; chaque élément de paie peut avoir son compte.
+  Les vacances sont provisionnées (dépense à l'accumulation, réduction du passif au paiement). Les avantages non monétaires ne génèrent pas d'écriture.
+
+### Dépôt direct et talons par courriel (détail d'une paie confirmée)
+
+- **Fichier de dépôt direct** : norme 005 de Paiements Canada (enregistrements A, C, Z de 1 464 caractères, type de transaction 200 « paie »).
+  Paramètres dans Configuration → Dépôt direct. **À valider avec un fichier d'essai auprès de l'institution financière** avant le premier
+  dépôt réel ; certaines institutions (dont Desjardins pour certains services) exigent leur propre format.
+  Le fichier contient des numéros de compte : il n'est pas conservé sur le serveur, seulement téléchargé.
+- **Talons par courriel** : envoyés aux employés dont la fiche a la case « Envoyer le talon de paie par courriel » et un courriel.
+  Un talon déjà envoyé n'est pas renvoyé sans le demander. En développement, la clé `Courriel:DossierTest` écrit les courriels en
+  fichiers `.eml` dans `App_Data\courriels` ; en production, configurer `system.net/mailSettings` avec un serveur SMTP en TLS.
+  Le talon voyage dans le corps du courriel : c'est un renseignement personnel, à n'activer qu'avec l'accord de l'employé.
+
 ## Taux gouvernementaux
 
 Les taux sont dans `src/60secPaie.Calcul/ParametresAnnee.vb`. **Seule l'année 2026 est définie.**
@@ -96,5 +120,7 @@ Les tests d'intégration recréent la base jetable `60secPaie_Test` sur LocalDB 
 
 ## Phase 2 (à venir)
 
-~~Paiement des retenues et historique~~ (fait), T4 / Relevés 1 et sommaires, déclaration des salaires CNESST,
+Fait : paiement des retenues, feuillets T4 / Relevés 1 (montants), déclaration CNESST, écritures comptables, dépôt direct, talons par courriel.
+Reste : transmission XML des feuillets, rapport de vacances, portail employé sécurisé pour les talons, plusieurs unités de classification CNESST,
+commissions (méthode cumulative), pourboires, relevé d'emploi (RE). Ancienne liste : T4 / Relevés 1 et sommaires, déclaration des salaires CNESST,
 rapport d'écritures comptables (GL), rapport de vacances, fichier de dépôt direct, envoi des talons par courriel, gestion des utilisateurs.

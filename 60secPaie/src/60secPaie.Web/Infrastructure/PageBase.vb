@@ -40,6 +40,63 @@ Public Class PageBase
         MyBase.OnLoad(e)
     End Sub
 
+    ' ---------- Sous-menus ----------
+
+    Private Function SousMenu(actif As String, ParamArray items As String()()) As String
+        Dim sb As New System.Text.StringBuilder("<div class=""sous-menu sans-impression"">")
+        For Each item In items
+            sb.Append("<a href=""").Append(ResolveUrl(item(1))).Append("""").Append(If(item(0) = actif, " class=""actif""", "")).Append(">")
+            sb.Append(HttpUtility.HtmlEncode(item(2))).Append("</a>")
+        Next
+        Return sb.Append("</div>").ToString()
+    End Function
+
+    Protected Function SousMenuConfig(actif As String) As String
+        Return SousMenu(actif,
+            {"compagnie", "~/Config/Compagnie.aspx", "Ma compagnie"},
+            {"elements", "~/Config/ElementsPaie.aspx", "Éléments de paie"},
+            {"comptes", "~/Config/PlanComptable.aspx", "Plan comptable"},
+            {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"},
+            {"utilisateurs", "~/Config/Utilisateurs.aspx", "Utilisateurs"})
+    End Function
+
+    Protected Function SousMenuRapports(actif As String) As String
+        Return SousMenu(actif,
+            {"feuillets", "~/Rapports/Feuillets.aspx", "T4 et Relevés 1"},
+            {"cnesst", "~/Rapports/CNESST.aspx", "Déclaration des salaires CNESST"},
+            {"ecritures", "~/Rapports/Ecritures.aspx", "Écritures comptables"})
+    End Function
+
+    ' ---------- Fichiers ----------
+
+    ''' <summary>Envoie un fichier en téléchargement et termine la requête.</summary>
+    Protected Sub EnvoyerFichier(nomFichier As String, contenu As Byte(), typeMime As String)
+        Response.Clear()
+        Response.ContentType = typeMime
+        Response.AddHeader("Content-Disposition", "attachment; filename=""" & nomFichier.Replace("""", "") & """")
+        Response.AddHeader("Cache-Control", "no-store")
+        Response.BinaryWrite(contenu)
+        Response.End()
+    End Sub
+
+    ''' <summary>CSV pour Excel en français : séparateur point-virgule, UTF-8 avec BOM.</summary>
+    Protected Sub EnvoyerCsv(nomFichier As String, lignes As IEnumerable(Of String()))
+        Dim sb As New System.Text.StringBuilder()
+        For Each ligne In lignes
+            sb.AppendLine(String.Join(";", ligne.Select(Function(c) CelluleCsv(c))))
+        Next
+        Dim utf8 = New System.Text.UTF8Encoding(True)
+        EnvoyerFichier(nomFichier, utf8.GetPreamble().Concat(utf8.GetBytes(sb.ToString())).ToArray(), "text/csv")
+    End Sub
+
+    Private Shared Function CelluleCsv(valeur As String) As String
+        Dim v = If(valeur, "")
+        ' Neutralise les formules (injection CSV) dans les textes issus de la base.
+        If v.Length > 0 AndAlso "=+@".IndexOf(v(0)) >= 0 Then v = "'" & v
+        If v.IndexOfAny({";"c, """"c, ControlChars.Cr, ControlChars.Lf}) >= 0 Then v = """" & v.Replace("""", """""") & """"
+        Return v
+    End Function
+
     Protected Function IdRequete(nom As String) As Integer
         Dim v As Integer
         Return If(Integer.TryParse(Request.QueryString(nom), v) AndAlso v > 0, v, 0)

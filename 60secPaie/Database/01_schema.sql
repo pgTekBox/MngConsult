@@ -288,6 +288,40 @@ IF COL_LENGTH(N'dbo.Paie', N'RemiseQuebecId') IS NULL
     ALTER TABLE dbo.Paie ADD RemiseQuebecId int NULL CONSTRAINT FK_Paie_RemiseQuebec REFERENCES dbo.Remise(Id);
 GO
 
+/* ---------- Feuillets, écritures comptables, dépôt direct, talons par courriel ---------- */
+
+-- T4, case 45 : accès à un régime de soins dentaires offert par l'employeur (1 = aucun accès ... 5).
+IF COL_LENGTH(N'dbo.Employe', N'CodeDentaireT4') IS NULL
+    ALTER TABLE dbo.Employe ADD CodeDentaireT4 tinyint NOT NULL CONSTRAINT DF_Employe_Dentaire DEFAULT (1);
+IF COL_LENGTH(N'dbo.Paie', N'TalonEnvoyeLe') IS NULL
+    ALTER TABLE dbo.Paie ADD TalonEnvoyeLe datetime2(0) NULL;
+IF COL_LENGTH(N'dbo.LotPaie', N'DepotDirectNumeroFichier') IS NULL
+    ALTER TABLE dbo.LotPaie ADD DepotDirectNumeroFichier int NULL, DepotDirectGenereLe datetime2(0) NULL;
+GO
+
+-- Paramètres du fichier de dépôt direct (norme 005 de Paiements Canada), fournis par l'institution financière.
+IF COL_LENGTH(N'dbo.Compagnie', N'DDNumeroEmetteur') IS NULL
+    ALTER TABLE dbo.Compagnie ADD
+        DDNumeroEmetteur        nvarchar(10) NULL,
+        DDCentreTraitement      nvarchar(5) NULL,
+        DDNomCourt              nvarchar(15) NULL,
+        DDNomLong               nvarchar(30) NULL,
+        DDInstitution           nvarchar(3) NULL,
+        DDTransit               nvarchar(5) NULL,
+        DDCompteChiffre         nvarchar(400) NULL,     -- chiffré par l'application
+        DDProchainNumeroFichier int NOT NULL CONSTRAINT DF_Compagnie_DDFichier DEFAULT (1);
+GO
+
+-- Plan comptable : un numéro de compte par clé (voir ServiceGL.vb). Les éléments de paie ont leur propre CompteGL.
+IF OBJECT_ID(N'dbo.CompteGL') IS NULL
+CREATE TABLE dbo.CompteGL (
+    CompagnieId int NOT NULL CONSTRAINT FK_CompteGL_Compagnie REFERENCES dbo.Compagnie(Id),
+    Cle         varchar(30) NOT NULL,
+    Compte      nvarchar(30) NOT NULL,
+    CONSTRAINT PK_CompteGL PRIMARY KEY (CompagnieId, Cle)
+);
+GO
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Paie_Employe')
     CREATE INDEX IX_Paie_Employe ON dbo.Paie (EmployeId) INCLUDE (LotPaieId);
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_LotPaie_DatePaie')

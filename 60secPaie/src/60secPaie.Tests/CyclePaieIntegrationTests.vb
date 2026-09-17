@@ -108,6 +108,9 @@ Public Class CyclePaieIntegrationTests
 
         Dim lot2 = ServicePaie.CreerLot(26, New Date(2026, 1, 24), New Date(2026, 1, 29))
         Db.Exec("UPDATE dbo.Paie SET Inclus = 0 WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", annuel))
+        ' Cotisation de 100 $ à un RPA, avec son propre compte de grand livre.
+        Dim rpa = Db.Inserer("INSERT INTO dbo.ElementPaie (CompagnieId, Description, CategorieCode, CompteGL) VALUES (@c, N'RPA', 'DED_RPA', N'2350')", Db.P("@c", compagnieId))
+        ServicePaie.AjouterLigne(Db.ScalaireEntier("SELECT Id FROM dbo.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", horaire)), rpa, 0D, 0D, 100D)
         ServicePaie.CalculerLot(lot2)
         ServicePaie.ConfirmerLot(lot2)
         Assert.AreEqual(1, Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)), "L'employé exclu est retiré à la confirmation.")
@@ -115,6 +118,80 @@ Public Class CyclePaieIntegrationTests
 
         Dim talon2 = RenduPaie.Talon(Db.ScalaireEntier("SELECT Id FROM dbo.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
         StringAssert.Contains(talon2, Outils.Argent(2900D + 2400D), "Le brut cumulatif additionne les deux paies.")
+
+        ' --- Feuillets T4 et Relevés 1
+        Dim feuillets = ServiceFeuillets.Preparer(2026)
+        Assert.AreEqual(2, feuillets.Count)
+        Dim fa = feuillets.First(Function(f) f.Employe.Ent("Id") = horaire)
+        Dim sommeAlice = Db.Ligne("SELECT SUM(p.ImpotFederal) Fed, SUM(p.ImpotQuebec) Qc, SUM(p.RRQ) RRQ FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId " &
+                                  "WHERE p.EmployeId = @e AND l.Statut = 'C'", Db.P("@e", horaire))
+        Assert.AreEqual(5300D, fa.CaseT4("14"))
+        Assert.AreEqual(5300D, fa.CaseR1("A"))
+        Assert.AreEqual(sommeAlice.Dcm("Fed"), fa.CaseT4("22"))
+        Assert.AreEqual(sommeAlice.Dcm("Qc"), fa.CaseR1("E"))
+        Assert.AreEqual(sommeAlice.Dcm("RRQ"), fa.CaseT4("17"))
+        Assert.AreEqual(fa.CaseT4("17"), fa.CaseR1("B.A"))
+        Assert.AreEqual(5300D, fa.CaseT4("24"))
+        Assert.AreEqual(100D, fa.CaseT4("20"), "La cotisation au RPA va à la case 20 du T4...")
+        Assert.AreEqual(100D, fa.CaseR1("D"), "...et à la case D du Relevé 1.")
+        Assert.AreEqual(0D, fa.CaseT4("44"))
+        Dim sommaire = ServiceFeuillets.SommaireEmployeur(2026)
+        Assert.AreEqual(sommaire.Dcm("DuFederal"), CDec(Db.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'")))
+
+        ' --- Déclaration des salaires CNESST
+        Dim cnesst = ServiceCNESST.ParEmploye(2026).Select("Id = " & horaire.ToString())(0)
+        Assert.AreEqual(5300D, cnesst.Dcm("Brut"))
+        Assert.AreEqual(5300D, cnesst.Dcm("Assurable"))
+        Assert.AreEqual(0D, cnesst.Dcm("Excedent"))
+        Assert.AreEqual(79.5D, cnesst.Dcm("Cotisation"))      ' 5 300 $ × 1,5 %
+        Assert.AreEqual(1, ServiceCNESST.ParMois(2026).Rows.Count)
+
+        ' --- Écritures comptables : équilibrées, avec les comptes configurés
+        ServiceGL.EnregistrerCompte("BANQUE", "1010")
+        Dim ecritures = ServiceGL.EcrituresDuLot(lot2)
+        Assert.AreEqual(ecritures.Sum(Function(x) x.Debit), ecritures.Sum(Function(x) x.Credit), "L'écriture doit être équilibrée.")
+        Assert.AreEqual(100D, ecritures.Single(Function(x) x.Compte = "2350").Credit)
+        Assert.AreEqual(CDec(Db.Scalaire("SELECT SUM(Net) FROM dbo.Paie WHERE LotPaieId = @l", Db.P("@l", lot2))), ecritures.Single(Function(x) x.Compte = "1010").Credit)
+        Dim ecrituresMois = ServiceGL.EcrituresDeLaPeriode(New Date(2026, 1, 1), New Date(2026, 1, 31))
+        Assert.AreEqual(ecrituresMois.Sum(Function(x) x.Debit), ecrituresMois.Sum(Function(x) x.Credit))
+        Assert.IsTrue(ecrituresMois.Sum(Function(x) x.Debit) > ecritures.Sum(Function(x) x.Debit), "Le mois couvre les deux paies.")
+
+        ' --- Fichier de dépôt direct (Bruno est payé par dépôt direct dans la première paie)
+        Assert.IsTrue(ServiceDepotDirect.Problemes(lot1).Count > 0, "Paramètres et coordonnées bancaires manquants.")
+        Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceDepotDirect.Generer(lot1))
+        Db.Exec("UPDATE dbo.Compagnie SET DDNumeroEmetteur = 'ABC1234567', DDCentreTraitement = '86900', DDNomCourt = N'Essai inc', DDInstitution = '815', " &
+                "DDTransit = '30000', DDCompteChiffre = @cpt, Courriel = N'paie@exemple.ca' WHERE Id = @c", Db.P("@cpt", Secret.Proteger("1234567")), Db.P("@c", compagnieId))
+        Db.Exec("UPDATE dbo.Employe SET Institution = '006', Transit = '12345', CompteChiffre = @cpt WHERE Id = @e", Db.P("@cpt", Secret.Proteger("7654321")), Db.P("@e", annuel))
+        Assert.AreEqual(0, ServiceDepotDirect.Problemes(lot1).Count)
+
+        Dim fichier = ServiceDepotDirect.Generer(lot1)
+        Dim enregistrements = System.Text.Encoding.ASCII.GetString(fichier.Contenu).Split({vbCrLf}, StringSplitOptions.RemoveEmptyEntries)
+        Assert.AreEqual(3, enregistrements.Length, "Un en-tête A, un enregistrement C et un total Z.")
+        Assert.IsTrue(enregistrements.All(Function(x) x.Length = 1464))
+        Assert.IsTrue(enregistrements(0).StartsWith("A000000001ABC12345670001"))
+        Dim netBruno = bruno.Dcm("Net")
+        StringAssert.StartsWith(enregistrements(1), "C000000002ABC12345670001200" & CLng(netBruno * 100D).ToString("0000000000") & ServiceDepotDirect.Julien(New Date(2026, 1, 15)) & "0006123457654321")
+        StringAssert.Contains(enregistrements(1), "GAGNON BRUNO")
+        StringAssert.StartsWith(enregistrements(2), "Z000000003ABC12345670001" & New String("0"c, 22) & CLng(netBruno * 100D).ToString("00000000000000") & "00000001")
+        Assert.AreEqual(1, fichier.NbDepots)
+        Assert.AreEqual(2, Db.ScalaireEntier("SELECT DDProchainNumeroFichier FROM dbo.Compagnie WHERE Id = @c", Db.P("@c", compagnieId)))
+
+        ' --- Talons par courriel (écrits dans un dossier au lieu d'être envoyés)
+        Dim dossier = Path.Combine(Path.GetTempPath(), "60secPaie-tests-" & Guid.NewGuid().ToString("N"))
+        Directory.CreateDirectory(dossier)
+        ServiceCourriel.FabriqueClient = Function() New Net.Mail.SmtpClient With {
+            .DeliveryMethod = Net.Mail.SmtpDeliveryMethod.SpecifiedPickupDirectory, .PickupDirectoryLocation = dossier}
+        Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceCourriel.EnvoyerTalons(lot1, False), "Personne n'a demandé son talon par courriel.")
+        Db.Exec("UPDATE dbo.Employe SET TalonParCourriel = 1, Courriel = N'alice@exemple.ca' WHERE Id = @e", Db.P("@e", horaire))
+        Dim bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
+        Assert.AreEqual(1, bilan.Envoyes)
+        Assert.AreEqual(0, bilan.Erreurs.Count)
+        Dim courriel = File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single())
+        StringAssert.Contains(courriel, "alice@exemple.ca")
+        bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
+        Assert.AreEqual(0, bilan.Envoyes)
+        Assert.AreEqual(1, bilan.DejaEnvoyes, "Un talon déjà envoyé n'est pas renvoyé sans le demander.")
+        Directory.Delete(dossier, True)
 
         ' --- Remises gouvernementales
         Dim soldeFed = ServiceRemise.Solde(ServiceRemise.Federal)
@@ -169,7 +246,8 @@ Public Class CyclePaieIntegrationTests
         ServiceRemise.Annuler(remiseQc)
         Assert.IsTrue(ServicePaie.PeutAnnuler(lot1))
 
-        Assert.AreEqual(7, Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.JournalActivite"))
+        ' 2 confirmations, 1 dépôt direct, 1 envoi de talons, 2 remises, 2 annulations de remise, 1 annulation de paie
+        Assert.AreEqual(9, Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.JournalActivite"))
     End Sub
 
     <TestMethod>

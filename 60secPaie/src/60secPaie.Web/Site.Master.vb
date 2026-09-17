@@ -20,6 +20,7 @@ Public Class SiteMaster
         Activer(lnkPaie, chemin = "~/paie/calculer.aspx")
         Activer(lnkHistorique, chemin.StartsWith("~/paie/") AndAlso chemin <> "~/paie/calculer.aspx")
         Activer(lnkRemises, chemin.StartsWith("~/remises/"))
+        Activer(lnkRapports, chemin.StartsWith("~/rapports/"))
         Activer(lnkEmployes, chemin.StartsWith("~/employes/"))
         Activer(lnkConfig, chemin.StartsWith("~/config/"))
     End Sub

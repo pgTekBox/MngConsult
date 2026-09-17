@@ -102,6 +102,15 @@
                 <asp:TextBox ID="txtTD1Zone" runat="server" MaxLength="12" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTD1Deductions">T1213 - Déductions annuelles autorisées ($)</asp:Label>
                 <asp:TextBox ID="txtTD1Deductions" runat="server" MaxLength="12" /></div>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlDentaire">T4, case 45 - Soins dentaires offerts par l'employeur</asp:Label>
+                <asp:DropDownList ID="ddlDentaire" runat="server">
+                    <asp:ListItem Value="1">1 - Aucun accès</asp:ListItem>
+                    <asp:ListItem Value="2">2 - Accès : employé seulement</asp:ListItem>
+                    <asp:ListItem Value="3">3 - Accès : employé, conjoint et enfants à charge</asp:ListItem>
+                    <asp:ListItem Value="4">4 - Accès : employé et conjoint</asp:ListItem>
+                    <asp:ListItem Value="5">5 - Accès : employé et enfants à charge</asp:ListItem>
+                </asp:DropDownList>
+                <div class="aide">Case obligatoire sur le T4 : accès au 31 décembre à une assurance dentaire de l'employeur.</div></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTD1Credits">Autres crédits d'impôt fédéraux autorisés ($)</asp:Label>
                 <asp:TextBox ID="txtTD1Credits" runat="server" MaxLength="12" /></div>
         </div>

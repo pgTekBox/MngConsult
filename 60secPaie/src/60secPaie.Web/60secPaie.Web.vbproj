@@ -78,6 +78,12 @@
     <Content Include="Employes\Fiche.aspx" />
     <Content Include="Employes\ElementsPaie.aspx" />
     <Content Include="Employes\Cumulatifs.aspx" />
+    <Content Include="Config\PlanComptable.aspx" />
+    <Content Include="Config\DepotDirect.aspx" />
+    <Content Include="Rapports\Feuillets.aspx" />
+    <Content Include="Rapports\Feuillet.aspx" />
+    <Content Include="Rapports\CNESST.aspx" />
+    <Content Include="Rapports\Ecritures.aspx" />
     <Content Include="Remises\Payer.aspx" />
     <Content Include="Remises\Historique.aspx" />
     <Content Include="Remises\Detail.aspx" />
@@ -101,6 +107,52 @@
     <Compile Include="Infrastructure\ServicePaie.vb" />
     <Compile Include="Infrastructure\RenduPaie.vb" />
     <Compile Include="Infrastructure\ServiceRemise.vb" />
+    <Compile Include="Infrastructure\ServiceFeuillets.vb" />
+    <Compile Include="Infrastructure\ServiceGL.vb" />
+    <Compile Include="Infrastructure\ServiceDepotDirect.vb" />
+    <Compile Include="Infrastructure\ServiceCourriel.vb" />
+    <Compile Include="Config\PlanComptable.aspx.vb">
+      <DependentUpon>PlanComptable.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\PlanComptable.aspx.designer.vb">
+      <DependentUpon>PlanComptable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\DepotDirect.aspx.vb">
+      <DependentUpon>DepotDirect.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\DepotDirect.aspx.designer.vb">
+      <DependentUpon>DepotDirect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Rapports\Feuillets.aspx.vb">
+      <DependentUpon>Feuillets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rapports\Feuillets.aspx.designer.vb">
+      <DependentUpon>Feuillets.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Rapports\Feuillet.aspx.vb">
+      <DependentUpon>Feuillet.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rapports\Feuillet.aspx.designer.vb">
+      <DependentUpon>Feuillet.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Rapports\CNESST.aspx.vb">
+      <DependentUpon>CNESST.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rapports\CNESST.aspx.designer.vb">
+      <DependentUpon>CNESST.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Rapports\Ecritures.aspx.vb">
+      <DependentUpon>Ecritures.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Rapports\Ecritures.aspx.designer.vb">
+      <DependentUpon>Ecritures.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Remises\Payer.aspx.vb">
       <DependentUpon>Payer.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

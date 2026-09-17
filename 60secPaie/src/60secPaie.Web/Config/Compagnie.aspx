@@ -1,11 +1,7 @@
 <%@ Page Title="Ma compagnie" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="false" CodeBehind="Compagnie.aspx.vb" Inherits="Paie60Sec.Web.PageCompagnie" %>
 <asp:Content ContentPlaceHolderID="Contenu" runat="server">
     <h1>Configuration</h1>
-    <div class="sous-menu">
-        <a runat="server" href="~/Config/Compagnie.aspx" class="actif">Ma compagnie</a>
-        <a runat="server" href="~/Config/ElementsPaie.aspx">Éléments de paie</a>
-        <a runat="server" href="~/Config/Utilisateurs.aspx">Utilisateurs</a>
-    </div>
+    <%= SousMenuConfig("compagnie") %>
 
     <fieldset>
         <legend>Informations de base</legend>

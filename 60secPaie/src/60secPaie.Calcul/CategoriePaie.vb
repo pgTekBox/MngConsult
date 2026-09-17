@@ -131,7 +131,7 @@ Public Class CategoriePaie
         l.Add(New CategoriePaie With {
             .Code = "AV_ASSURANCE_MALADIE", .Libelle = "Régime privé d'assurance maladie - part de l'employeur", .Type = TypeCategorie.Avantage,
             .ImpotFederal = False, .ImpotQuebec = True, .AE = False, .RRQ = True, .RQAP = False, .FSS = True, .CNESST = True,
-            .CaseT4 = "85", .CaseR1 = "A & J"})
+            .CaseT4 = "", .CaseR1 = "A & J"})
 
         ' ---------- Déductions ----------
         l.Add(Deduction("DED_REER", "REER", True, True))
@@ -141,7 +141,8 @@ Public Class CategoriePaie
         l.Add(Deduction("DED_SYNDICAT", "Cotisation syndicale", True, False, "44", "F"))
         Dim ftq = Deduction("DED_FTQ", "Fonds de solidarité FTQ", False, False) : ftq.Fonds = FondsTravailleurs.FTQ : l.Add(ftq)
         Dim fa = Deduction("DED_FONDACTION", "Fondaction CSN", False, False) : fa.Fonds = FondsTravailleurs.Fondaction : l.Add(fa)
-        l.Add(Deduction("DED_ASSURANCE", "Assurance collective - part de l'employé", False, False))
+        ' Primes payées par l'employé à un régime privé d'assurance maladie : T4 case 85, Relevé 1 code 235.
+        l.Add(Deduction("DED_ASSURANCE", "Assurance collective - part de l'employé", False, False, "85", "235"))
         l.Add(Deduction("DED_DON", "Don de bienfaisance", False, False, "46", "N"))
         l.Add(Deduction("DED_AUTRE", "Autre déduction (après impôt)", False, False))
 
