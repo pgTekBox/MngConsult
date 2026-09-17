@@ -24,6 +24,15 @@ packages/
 [Pp]ublish/
 PublishProfiles/*.pubxml.user
 
+# Certificats et cles de signature.
+# Un .pfx contient la cle PRIVEE : une fois pousse, il est compromis, et le
+# retirer du depot ne le decompromet pas — il faut le remplacer.
+# Ces fichiers restent sur le poste et sur le serveur, jamais dans git.
+*.pfx
+*.p12
+*.snk
+*.pem
+
 # Fichiers temporaires
 *.tmp
 *~
