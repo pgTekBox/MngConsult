@@ -1,0 +1,2867 @@
+# ======================================================================================================
+# Traductions de 60secPaie : français (langue source) -> anglais (en) et espagnol (es).
+#
+# Un bloc par texte, les blocs sont séparés par une ligne vide :
+#     fr: Texte exactement comme il paraît à l'écran en français
+#     en: English text
+#     es: Texto en español
+#
+# Textes avec des données :  {0} = un texte quelconque   {#0} = un nombre, un montant ou une date
+#     fr: Paie du {#0} confirmée.
+#     en: Pay run of {#0} confirmed.
+#
+# Un texte absent de ce fichier reste en français. Le fichier est relu automatiquement dès qu'il est enregistré.
+# Sigles : en anglais RRQ=QPP, RQAP=QPIP, AE=EI, FSS=HSF, NAS=SIN, RPA=RPP, REER=RRSP. En espagnol, les sigles officiels restent.
+# ======================================================================================================
+
+# ---------- Menu, en-tête, pied de page ----------
+
+fr: Tableau de bord
+en: Dashboard
+es: Panel de control
+
+fr: Calculer la paie
+en: Run payroll
+es: Calcular la nómina
+
+fr: Historique
+en: History
+es: Historial
+
+fr: Retenues
+en: Remittances
+es: Retenciones
+
+fr: Rapports
+en: Reports
+es: Informes
+
+fr: Employés
+en: Employees
+es: Empleados
+
+fr: Configuration
+en: Settings
+es: Configuración
+
+fr: Me déconnecter
+en: Sign out
+es: Cerrar sesión
+
+fr: Changer de compagnie
+en: Switch company
+es: Cambiar de empresa
+
+fr: 60secPaie · Taux 2026 : T4127 (ARC) et TP-1015.F (Revenu Québec). Vérifiez toujours vos paies avant de les confirmer.
+en: 60secPaie · 2026 rates: T4127 (CRA) and TP-1015.F (Revenu Québec). Always review your pay runs before confirming them.
+es: 60secPaie · Tasas 2026: T4127 (ARC) y TP-1015.F (Revenu Québec). Revise siempre sus nóminas antes de confirmarlas.
+
+# ---------- Connexion ----------
+
+fr: Connectez-vous avec votre compte MngConsul pour faire vos paies.
+en: Sign in with your MngConsul account to run your payroll.
+es: Inicie sesión con su cuenta de MngConsul para hacer sus nóminas.
+
+fr: Courriel
+en: Email
+es: Correo electrónico
+
+fr: Mot de passe
+en: Password
+es: Contraseña
+
+fr: Me connecter
+en: Sign in
+es: Iniciar sesión
+
+fr: Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de MngConsul.
+en: Forgot your password? Reset it from the MngConsul sign-in page.
+es: ¿Olvidó su contraseña? Restablézcala desde la página de inicio de sesión de MngConsul.
+
+fr: Trop de tentatives. Réessayez dans quelques minutes.
+en: Too many attempts. Try again in a few minutes.
+es: Demasiados intentos. Vuelva a intentarlo en unos minutos.
+
+fr: Votre compte n'est associé à aucune compagnie dans MngConsul.
+en: Your account is not linked to any company in MngConsul.
+es: Su cuenta no está asociada a ninguna empresa en MngConsul.
+
+fr: Courriel ou mot de passe invalide.
+en: Invalid email or password.
+es: Correo electrónico o contraseña no válidos.
+
+fr: Cette page est réservée aux administrateurs.
+en: This page is restricted to administrators.
+es: Esta página está reservada a los administradores.
+
+fr: La paie n'est pas encore configurée pour {0}. Commencez par ses paramètres de paie.
+en: Payroll is not set up yet for {0}. Start with its payroll settings.
+es: La nómina aún no está configurada para {0}. Comience por sus parámetros de nómina.
+
+# ---------- Tableau de bord ----------
+
+fr: {#0} employés actifs · dernière paie : {#1}
+en: {#0} active employees · last pay run: {#1}
+es: {#0} empleados activos · última nómina: {#1}
+
+fr: {#0} employé actif · dernière paie : {#1}
+en: {#0} active employee · last pay run: {#1}
+es: {#0} empleado activo · última nómina: {#1}
+
+fr: {#0} employés actifs · aucune paie confirmée
+en: {#0} active employees · no confirmed pay run
+es: {#0} empleados activos · ninguna nómina confirmada
+
+fr: {#0} employé actif · aucune paie confirmée
+en: {#0} active employee · no confirmed pay run
+es: {#0} empleado activo · ninguna nómina confirmada
+
+fr: Une paie est en préparation (période se terminant le {#0}).
+en: A pay run is in progress (period ending {#0}).
+es: Hay una nómina en preparación (período que termina el {#0}).
+
+fr: Continuer cette paie
+en: Continue this pay run
+es: Continuar esta nómina
+
+fr: Faites vos paies
+en: Run your payroll
+es: Haga sus nóminas
+
+fr: L'assistant vous guide en 4 étapes : période, saisie, révision et confirmation.
+en: The wizard guides you through 4 steps: period, entry, review and confirmation.
+es: El asistente le guía en 4 pasos: período, captura, revisión y confirmación.
+
+fr: Paiement des retenues
+en: Remittance payment
+es: Pago de retenciones
+
+fr: Payer
+en: Pay
+es: Pagar
+
+fr: Historique de paie
+en: Payroll history
+es: Historial de nómina
+
+fr: Consultez le détail des paies déjà calculées et imprimez les talons de paie.
+en: View the details of completed pay runs and print pay stubs.
+es: Consulte el detalle de las nóminas ya calculadas e imprima los talones de pago.
+
+fr: Consulter
+en: View
+es: Consultar
+
+fr: Fiches, renseignements fiscaux (TD1, TP-1015.3) et éléments de paie récurrents.
+en: Employee files, tax information (TD1, TP-1015.3) and recurring pay items.
+es: Fichas, datos fiscales (TD1, TP-1015.3) y elementos de nómina recurrentes.
+
+fr: Gérer
+en: Manage
+es: Gestionar
+
+fr: Compagnie, taux de l'employeur (FSS, CNESST) et éléments de paie.
+en: Company, employer rates (HSF, CNESST) and pay items.
+es: Empresa, tasas del empleador (FSS, CNESST) y elementos de nómina.
+
+fr: Configurer
+en: Configure
+es: Configurar
+
+fr: Activités récentes
+en: Recent activity
+es: Actividad reciente
+
+fr: Aucune activité pour l'instant.
+en: No activity yet.
+es: Ninguna actividad por el momento.
+
+fr: Fédéral : rien à payer.
+en: Federal: nothing to pay.
+es: Federal: nada que pagar.
+
+fr: Revenu Québec : rien à payer.
+en: Revenu Québec: nothing to pay.
+es: Revenu Québec: nada que pagar.
+
+fr: Fédéral :
+en: Federal:
+es: Federal:
+
+fr: Revenu Québec :
+en: Revenu Québec:
+es: Revenu Québec:
+
+fr: à payer, échéance le {#0}.
+en: to pay, due {#0}.
+es: por pagar, vence el {#0}.
+
+fr: à payer, en retard depuis le {#0}.
+en: to pay, overdue since {#0}.
+es: por pagar, atrasado desde el {#0}.
+
+# ---------- Journal d'activités ----------
+
+fr: Paie du {#0} confirmée.
+en: Pay run of {#0} confirmed.
+es: Nómina del {#0} confirmada.
+
+fr: Paie du {#0} annulée.
+en: Pay run of {#0} cancelled.
+es: Nómina del {#0} anulada.
+
+fr: Paiement des retenues à {0} : {#1}.
+en: Remittance paid to {0}: {#1}.
+es: Pago de retenciones a {0}: {#1}.
+
+fr: Paiement des retenues à {0} du {#1} annulé.
+en: Remittance to {0} of {#1} cancelled.
+es: Pago de retenciones a {0} del {#1} anulado.
+
+fr: Fichier de dépôt direct n° {#0} produit : {#1} dépôt(s), {#2}.
+en: Direct deposit file no. {#0} generated: {#1} deposit(s), {#2}.
+es: Archivo de depósito directo n.º {#0} generado: {#1} depósito(s), {#2}.
+
+fr: {#0} talon(s) de la paie du {#1} envoyé(s) par courriel.
+en: {#0} pay stub(s) for the pay run of {#1} sent by email.
+es: {#0} talón(es) de la nómina del {#1} enviado(s) por correo.
+
+fr: Paie configurée pour la compagnie.
+en: Payroll set up for the company.
+es: Nómina configurada para la empresa.
+
+fr: Paie configurée pour {0}.
+en: Payroll set up for {0}.
+es: Nómina configurada para {0}.
+
+fr: NAS complet affiché pour le feuillet de l'employé n° {#0}.
+en: Full SIN displayed for the slip of employee no. {#0}.
+es: NAS completo mostrado para el comprobante del empleado n.º {#0}.
+
+# ---------- Configuration : sous-menu ----------
+
+fr: Paramètres de paie
+en: Payroll settings
+es: Parámetros de nómina
+
+fr: Éléments de paie
+en: Pay items
+es: Elementos de nómina
+
+fr: Plan comptable
+en: Chart of accounts
+es: Plan de cuentas
+
+fr: Dépôt direct
+en: Direct deposit
+es: Depósito directo
+
+# ---------- Configuration : paramètres de paie de la compagnie ----------
+
+fr: Compagnie
+en: Company
+es: Empresa
+
+fr: Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise).
+en: The company name and contact details are edited in MngConsul (business settings).
+es: El nombre y los datos de la empresa se modifican en MngConsul (parámetros de la empresa).
+
+fr: Nom
+en: Name
+es: Nombre
+
+fr: Adresse
+en: Address
+es: Dirección
+
+fr: Ville
+en: City
+es: Ciudad
+
+fr: Téléphone
+en: Phone
+es: Teléfono
+
+fr: Numéro d'entreprise (NE)
+en: Business number (BN)
+es: Número de empresa (NE)
+
+fr: Informations de paie
+en: Payroll information
+es: Información de nómina
+
+fr: Période de paie par défaut
+en: Default pay period
+es: Período de pago predeterminado
+
+fr: Hebdomadaire (52 périodes)
+en: Weekly (52 periods)
+es: Semanal (52 períodos)
+
+fr: Aux 2 semaines (26 périodes)
+en: Biweekly (26 periods)
+es: Cada 2 semanas (26 períodos)
+
+fr: Bimensuel (24 périodes)
+en: Semi-monthly (24 periods)
+es: Quincenal (24 períodos)
+
+fr: Mensuel (12 périodes)
+en: Monthly (12 periods)
+es: Mensual (12 períodos)
+
+fr: Hebdomadaire (52)
+en: Weekly (52)
+es: Semanal (52)
+
+fr: Aux 2 semaines (26)
+en: Biweekly (26)
+es: Cada 2 semanas (26)
+
+fr: Bimensuel (24)
+en: Semi-monthly (24)
+es: Quincenal (24)
+
+fr: Mensuel (12)
+en: Monthly (12)
+es: Mensual (12)
+
+fr: {#0} périodes
+en: {#0} periods
+es: {#0} períodos
+
+fr: Taux de vacances par défaut (%)
+en: Default vacation rate (%)
+es: Tasa de vacaciones predeterminada (%)
+
+fr: Prochain numéro de chèque
+en: Next cheque number
+es: Próximo número de cheque
+
+fr: Fréquence de paiement des retenues fédérales
+en: Federal remittance frequency
+es: Frecuencia de pago de las retenciones federales
+
+fr: Fréquence de paiement des retenues à Revenu Québec
+en: Revenu Québec remittance frequency
+es: Frecuencia de pago de las retenciones a Revenu Québec
+
+fr: Mensuelle (dû le 15 du mois suivant)
+en: Monthly (due on the 15th of the following month)
+es: Mensual (vence el 15 del mes siguiente)
+
+fr: Trimestrielle (dû le 15 suivant le trimestre)
+en: Quarterly (due on the 15th following the quarter)
+es: Trimestral (vence el 15 siguiente al trimestre)
+
+fr: La fréquence est celle que l'ARC et Revenu Québec vous ont attribuée.
+en: The frequency is the one assigned to you by the CRA and Revenu Québec.
+es: La frecuencia es la que le asignaron la ARC y Revenu Québec.
+
+fr: Numéro d'entreprise fédéral (RP)
+en: Federal payroll account number (RP)
+es: Número de empresa federal (RP)
+
+fr: Numéro d'identification Revenu Québec (RS)
+en: Revenu Québec identification number (RS)
+es: Número de identificación de Revenu Québec (RS)
+
+fr: Cotisations de l'employeur
+en: Employer contributions
+es: Aportes del empleador
+
+fr: Masse salariale totale estimée ($)
+en: Estimated total payroll ($)
+es: Masa salarial total estimada ($)
+
+fr: Sert à déterminer le taux de cotisation au FSS.
+en: Used to determine the HSF contribution rate.
+es: Sirve para determinar la tasa de aporte al FSS.
+
+fr: Secteur d'activité (FSS)
+en: Business sector (HSF)
+es: Sector de actividad (FSS)
+
+fr: Général
+en: General
+es: General
+
+fr: Primaire et manufacturier
+en: Primary and manufacturing
+es: Primario y manufacturero
+
+fr: Secteur public
+en: Public sector
+es: Sector público
+
+fr: Taux FSS appliqué : {0}
+en: HSF rate applied: {0}
+es: Tasa FSS aplicada: {0}
+
+fr: Facteur de cotisation de l'employeur à l'AE
+en: Employer EI premium factor
+es: Factor de aporte del empleador al AE
+
+fr: 1,4 sauf si vous bénéficiez d'un taux réduit.
+en: 1.4 unless you have a reduced rate.
+es: 1,4 salvo que tenga una tasa reducida.
+
+fr: Taux de la CNESST ($ par 100 $ assurables)
+en: CNESST rate ($ per $100 of insurable wages)
+es: Tasa de la CNESST ($ por cada 100 $ asegurables)
+
+fr: Inscrit sur votre décision de classification.
+en: Shown on your classification decision.
+es: Figura en su decisión de clasificación.
+
+fr: Assujetti à la cotisation relative aux normes du travail (CNT)
+en: Subject to the labour standards contribution (CNT)
+es: Sujeto al aporte relativo a las normas laborales (CNT)
+
+fr: Enregistrer
+en: Save
+es: Guardar
+
+fr: Paramètres de paie enregistrés.
+en: Payroll settings saved.
+es: Parámetros de nómina guardados.
+
+fr: Paramètres de paie enregistrés. Configurez maintenant la paie de vos employés.
+en: Payroll settings saved. Now set up payroll for your employees.
+es: Parámetros de nómina guardados. Configure ahora la nómina de sus empleados.
+
+fr: Le facteur de cotisation à l'AE doit se situer entre 1 et 1,4.
+en: The EI premium factor must be between 1 and 1.4.
+es: El factor de aporte al AE debe estar entre 1 y 1,4.
+
+fr: Le taux de vacances semble trop élevé.
+en: The vacation rate seems too high.
+es: La tasa de vacaciones parece demasiado alta.
+
+# ---------- Configuration : éléments de paie ----------
+
+fr: Nouvel élément
+en: New item
+es: Nuevo elemento
+
+fr: Catégorie
+en: Category
+es: Categoría
+
+fr: Statut
+en: Status
+es: Estado
+
+fr: Actif
+en: Active
+es: Activo
+
+fr: Inactif
+en: Inactive
+es: Inactivo
+
+fr: Nouvel élément de paie
+en: New pay item
+es: Nuevo elemento de nómina
+
+fr: Modifier l'élément de paie
+en: Edit pay item
+es: Modificar el elemento de nómina
+
+fr: Description
+en: Description
+es: Descripción
+
+fr: Catégorie de paie
+en: Pay category
+es: Categoría de nómina
+
+fr: Compte de grand livre
+en: General ledger account
+es: Cuenta del libro mayor
+
+fr: Ne pas afficher sur le talon de paie
+en: Do not show on the pay stub
+es: No mostrar en el talón de pago
+
+fr: Supprimer
+en: Delete
+es: Eliminar
+
+fr: Supprimer cet élément de paie ?
+en: Delete this pay item?
+es: ¿Eliminar este elemento de nómina?
+
+fr: Assujettissement de la catégorie
+en: How this category is treated
+es: Tratamiento de la categoría
+
+fr: Vous n'avez rien à configurer : la catégorie détermine les retenues, les cotisations de l'employeur et les cases des feuillets.
+en: Nothing to configure: the category determines the deductions, the employer contributions and the slip boxes.
+es: No tiene nada que configurar: la categoría determina las retenciones, los aportes del empleador y las casillas de los comprobantes.
+
+fr: Impôt fédéral
+en: Federal tax
+es: Impuesto federal
+
+fr: Impôt du Québec
+en: Québec tax
+es: Impuesto de Quebec
+
+fr: Vacances
+en: Vacation
+es: Vacaciones
+
+fr: Case T4
+en: T4 box
+es: Casilla T4
+
+fr: Case R1
+en: RL-1 box
+es: Casilla R1
+
+fr: Réduit l'impôt fédéral
+en: Reduces federal tax
+es: Reduce el impuesto federal
+
+fr: Réduit l'impôt du Québec
+en: Reduces Québec tax
+es: Reduce el impuesto de Quebec
+
+fr: Crédit fonds de travailleurs
+en: Labour-sponsored fund credit
+es: Crédito por fondo de trabajadores
+
+fr: Oui
+en: Yes
+es: Sí
+
+fr: Non
+en: No
+es: No
+
+fr: Paiement forfaitaire : l'impôt est calculé selon la méthode des gratifications et paiements rétroactifs.
+en: Lump-sum payment: tax is calculated using the bonus and retroactive pay method.
+es: Pago global: el impuesto se calcula según el método de gratificaciones y pagos retroactivos.
+
+fr: Avantage non monétaire : il est imposé mais ne s'ajoute pas à la paie nette.
+en: Non-cash benefit: it is taxed but not added to net pay.
+es: Beneficio no monetario: se grava pero no se suma al salario neto.
+
+fr: Catégorie invalide.
+en: Invalid category.
+es: Categoría no válida.
+
+fr: Cet élément a déjà servi dans une paie : sa catégorie ne peut plus changer. Créez plutôt un nouvel élément.
+en: This item has already been used in a pay run: its category can no longer change. Create a new item instead.
+es: Este elemento ya se usó en una nómina: su categoría ya no puede cambiar. Cree un nuevo elemento.
+
+fr: Élément de paie enregistré.
+en: Pay item saved.
+es: Elemento de nómina guardado.
+
+fr: Cet élément est utilisé par des employés ou des paies. Rendez-le inactif plutôt que de le supprimer.
+en: This item is used by employees or pay runs. Make it inactive instead of deleting it.
+es: Este elemento lo usan empleados o nóminas. Desactívelo en lugar de eliminarlo.
+
+fr: Élément de paie supprimé.
+en: Pay item deleted.
+es: Elemento de nómina eliminado.
+
+# ---------- Catégories de paie ----------
+
+fr: Revenu - {0}
+en: Earnings - {0}
+es: Ingreso - {0}
+
+fr: Avantage - {0}
+en: Benefit - {0}
+es: Beneficio - {0}
+
+fr: Déduction - {0}
+en: Deduction - {0}
+es: Deducción - {0}
+
+fr: {0} (Revenu - {1})
+en: {0} (Earnings - {1})
+es: {0} (Ingreso - {1})
+
+fr: {0} (Avantage - {1})
+en: {0} (Benefit - {1})
+es: {0} (Beneficio - {1})
+
+fr: {0} (Déduction - {1})
+en: {0} (Deduction - {1})
+es: {0} (Deducción - {1})
+
+fr: Salaire
+en: Wages
+es: Salario
+
+fr: Salaire fixe
+en: Salary
+es: Salario fijo
+
+fr: Temps et demi
+en: Time and a half
+es: Tiempo y medio
+
+fr: Temps double
+en: Double time
+es: Tiempo doble
+
+fr: Jours fériés
+en: Statutory holidays
+es: Días feriados
+
+fr: Congé de maladie
+en: Sick leave
+es: Licencia por enfermedad
+
+fr: Commission
+en: Commission
+es: Comisión
+
+fr: Autre type de revenu imposable
+en: Other taxable earnings
+es: Otro tipo de ingreso gravable
+
+fr: Paie de vacances
+en: Vacation pay
+es: Pago de vacaciones
+
+fr: Vacances versées à chaque paie
+en: Vacation pay paid each pay period
+es: Vacaciones pagadas en cada nómina
+
+fr: Gratification (bonus)
+en: Bonus
+es: Gratificación (bono)
+
+fr: Salaire rétroactif
+en: Retroactive pay
+es: Salario retroactivo
+
+fr: Remboursement de dépenses (non imposable)
+en: Expense reimbursement (non-taxable)
+es: Reembolso de gastos (no gravable)
+
+fr: Autre avantage imposable (monétaire)
+en: Other taxable benefit (cash)
+es: Otro beneficio gravable (monetario)
+
+fr: Autre avantage imposable (non monétaire)
+en: Other taxable benefit (non-cash)
+es: Otro beneficio gravable (no monetario)
+
+fr: Véhicule à moteur (non monétaire)
+en: Motor vehicle (non-cash)
+es: Vehículo de motor (no monetario)
+
+fr: Régime privé d'assurance maladie - part de l'employeur
+en: Private health insurance plan - employer share
+es: Seguro médico privado - parte del empleador
+
+fr: REER
+en: RRSP
+es: REER
+
+fr: Régime de pension agréé (RPA)
+en: Registered pension plan (RPP)
+es: Plan de pensiones registrado (RPA)
+
+fr: RVER / RPAC
+en: VRSP / PRPP
+es: RVER / RPAC
+
+fr: Cotisation syndicale
+en: Union dues
+es: Cuota sindical
+
+fr: Fonds de solidarité FTQ
+en: Fonds de solidarité FTQ
+es: Fonds de solidarité FTQ
+
+fr: Assurance collective - part de l'employé
+en: Group insurance - employee share
+es: Seguro colectivo - parte del empleado
+
+fr: Don de bienfaisance
+en: Charitable donation
+es: Donación benéfica
+
+fr: Autre déduction (après impôt)
+en: Other deduction (after tax)
+es: Otra deducción (después de impuestos)
+
+# ---------- Configuration : plan comptable ----------
+
+fr: Numéros de compte de votre grand livre, utilisés par le rapport d'écritures comptables. Laissez vide ce que vous n'utilisez pas.
+en: Your general ledger account numbers, used by the journal entries report. Leave blank what you do not use.
+es: Números de cuenta de su libro mayor, usados por el informe de asientos contables. Deje vacío lo que no utilice.
+
+fr: Comptes de la paie
+en: Payroll accounts
+es: Cuentas de nómina
+
+fr: Groupe
+en: Group
+es: Grupo
+
+fr: Compte
+en: Account
+es: Cuenta
+
+fr: Numéro
+en: Number
+es: Número
+
+fr: Comptes des éléments de paie
+en: Pay item accounts
+es: Cuentas de los elementos de nómina
+
+fr: Compte de dépense d'un revenu, ou compte à payer d'une déduction. Vide = compte par défaut.
+en: Expense account for earnings, or payable account for a deduction. Blank = default account.
+es: Cuenta de gasto de un ingreso, o cuenta por pagar de una deducción. Vacío = cuenta predeterminada.
+
+fr: Élément
+en: Item
+es: Elemento
+
+fr: Plan comptable enregistré.
+en: Chart of accounts saved.
+es: Plan de cuentas guardado.
+
+fr: Actif et passif
+en: Assets and liabilities
+es: Activo y pasivo
+
+fr: Dépenses
+en: Expenses
+es: Gastos
+
+fr: Compte de banque (paies nettes)
+en: Bank account (net pay)
+es: Cuenta bancaria (salarios netos)
+
+fr: Vacances à payer
+en: Vacation payable
+es: Vacaciones por pagar
+
+fr: Impôt fédéral à payer
+en: Federal tax payable
+es: Impuesto federal por pagar
+
+fr: Impôt du Québec à payer
+en: Québec tax payable
+es: Impuesto de Quebec por pagar
+
+fr: RRQ à payer (employés et employeur)
+en: QPP payable (employees and employer)
+es: RRQ por pagar (empleados y empleador)
+
+fr: Assurance-emploi à payer (employés et employeur)
+en: EI payable (employees and employer)
+es: Seguro de empleo por pagar (empleados y empleador)
+
+fr: RQAP à payer (employés et employeur)
+en: QPIP payable (employees and employer)
+es: RQAP por pagar (empleados y empleador)
+
+fr: FSS à payer
+en: HSF payable
+es: FSS por pagar
+
+fr: CNESST à payer
+en: CNESST payable
+es: CNESST por pagar
+
+fr: Normes du travail (CNT) à payer
+en: Labour standards (CNT) payable
+es: Normas laborales (CNT) por pagar
+
+fr: Autres déductions à payer (par défaut)
+en: Other deductions payable (default)
+es: Otras deducciones por pagar (predeterminado)
+
+fr: Salaires (par défaut des éléments de paie)
+en: Wages (default for pay items)
+es: Salarios (predeterminado de los elementos de nómina)
+
+fr: Dépense de vacances
+en: Vacation expense
+es: Gasto de vacaciones
+
+fr: Dépense - part de l'employeur au RRQ
+en: Expense - employer QPP share
+es: Gasto - parte del empleador al RRQ
+
+fr: Dépense - part de l'employeur à l'assurance-emploi
+en: Expense - employer EI share
+es: Gasto - parte del empleador al seguro de empleo
+
+fr: Dépense - part de l'employeur au RQAP
+en: Expense - employer QPIP share
+es: Gasto - parte del empleador al RQAP
+
+fr: Dépense - FSS
+en: Expense - HSF
+es: Gasto - FSS
+
+fr: Dépense - CNESST
+en: Expense - CNESST
+es: Gasto - CNESST
+
+fr: Dépense - normes du travail (CNT)
+en: Expense - labour standards (CNT)
+es: Gasto - normas laborales (CNT)
+
+# ---------- Configuration : dépôt direct ----------
+
+fr: Ces renseignements vous sont remis par votre institution financière lorsque vous adhérez à son service de dépôt direct (transfert automatisé de fonds). Le fichier produit suit la
+en: Your financial institution gives you this information when you sign up for its direct deposit service (automated funds transfer). The file follows
+es: Su institución financiera le entrega estos datos al adherirse a su servicio de depósito directo (transferencia automatizada de fondos). El archivo sigue la
+
+fr: norme 005 de Paiements Canada
+en: Payments Canada Standard 005
+es: norma 005 de Payments Canada
+
+fr: (1 464 caractères). Faites valider un
+en: (1,464 characters). Have a
+es: (1 464 caracteres). Haga validar un
+
+fr: fichier d'essai
+en: test file
+es: archivo de prueba
+
+fr: par votre institution avant le premier dépôt réel : certaines exigent un format qui leur est propre.
+en: validated by your institution before the first real deposit: some require their own format.
+es: por su institución antes del primer depósito real: algunas exigen un formato propio.
+
+fr: Paramètres du fichier de dépôt direct
+en: Direct deposit file settings
+es: Parámetros del archivo de depósito directo
+
+fr: Numéro d'émetteur (10 caractères)
+en: Originator ID (10 characters)
+es: Número de emisor (10 caracteres)
+
+fr: Centre de traitement de destination (5 chiffres)
+en: Destination data centre (5 digits)
+es: Centro de procesamiento de destino (5 dígitos)
+
+fr: Nom abrégé de la compagnie (15 caractères)
+en: Company short name (15 characters)
+es: Nombre abreviado de la empresa (15 caracteres)
+
+fr: Paraît sur le relevé bancaire de l'employé.
+en: Appears on the employee's bank statement.
+es: Aparece en el estado de cuenta bancario del empleado.
+
+fr: Nom complet (30 caractères)
+en: Full name (30 characters)
+es: Nombre completo (30 caracteres)
+
+fr: Prochain numéro de fichier (1 à 9999)
+en: Next file number (1 to 9999)
+es: Próximo número de archivo (1 a 9999)
+
+fr: Compte de la compagnie (retours et règlement)
+en: Company account (returns and settlement)
+es: Cuenta de la empresa (devoluciones y liquidación)
+
+fr: Numéro d'institution (3 chiffres)
+en: Institution number (3 digits)
+es: Número de institución (3 dígitos)
+
+fr: Numéro de transit (5 chiffres)
+en: Transit number (5 digits)
+es: Número de tránsito (5 dígitos)
+
+fr: Numéro de compte
+en: Account number
+es: Número de cuenta
+
+fr: Aucun compte au dossier.
+en: No account on file.
+es: Ninguna cuenta en el expediente.
+
+fr: Compte au dossier : {0}. Laissez vide pour le conserver.
+en: Account on file: {0}. Leave blank to keep it.
+es: Cuenta en el expediente: {0}. Deje vacío para conservarla.
+
+fr: Le centre de traitement compte 5 chiffres.
+en: The data centre number has 5 digits.
+es: El centro de procesamiento tiene 5 dígitos.
+
+fr: Le numéro d'institution compte 3 chiffres.
+en: The institution number has 3 digits.
+es: El número de institución tiene 3 dígitos.
+
+fr: Le numéro de transit compte 5 chiffres.
+en: The transit number has 5 digits.
+es: El número de tránsito tiene 5 dígitos.
+
+fr: Le numéro de fichier doit se situer entre 1 et 9999.
+en: The file number must be between 1 and 9999.
+es: El número de archivo debe estar entre 1 y 9999.
+
+fr: Paramètres de dépôt direct enregistrés.
+en: Direct deposit settings saved.
+es: Parámetros de depósito directo guardados.
+
+# ---------- Employés : liste ----------
+
+fr: Afficher aussi les employés inactifs
+en: Also show inactive employees
+es: Mostrar también los empleados inactivos
+
+fr: Les employés sont ceux de MngConsul : ils s'y ajoutent et s'y modifient (nom, adresse, poste, date d'embauche). Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.
+en: Employees come from MngConsul: they are added and edited there (name, address, job title, hire date). Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard.
+es: Los empleados son los de MngConsul: allí se agregan y se modifican (nombre, dirección, puesto, fecha de contratación). Aquí usted configura su nómina. Solo los empleados con la nómina configurada aparecen en el asistente de nómina.
+
+fr: Poste
+en: Job title
+es: Puesto
+
+fr: Rémunération
+en: Compensation
+es: Remuneración
+
+fr: Fréquence
+en: Frequency
+es: Frecuencia
+
+fr: Date d'embauche
+en: Hire date
+es: Fecha de contratación
+
+fr: Paie
+en: Payroll
+es: Nómina
+
+fr: Configurée
+en: Set up
+es: Configurada
+
+fr: À configurer
+en: To set up
+es: Por configurar
+
+fr: Cumulatifs
+en: Year-to-date
+es: Acumulados
+
+fr: / an
+en: / year
+es: / año
+
+fr: Aucun employé pour cette compagnie. Ajoutez-les dans MngConsul.
+en: No employees for this company. Add them in MngConsul.
+es: Ningún empleado para esta empresa. Agréguelos en MngConsul.
+
+# ---------- Employés : paramètres de paie ----------
+
+fr: Cumulatifs de départ
+en: Opening balances
+es: Acumulados iniciales
+
+fr: Employé (MngConsul)
+en: Employee (MngConsul)
+es: Empleado (MngConsul)
+
+fr: Ces renseignements proviennent de MngConsul et s'y modifient.
+en: This information comes from MngConsul and is edited there.
+es: Estos datos provienen de MngConsul y se modifican allí.
+
+fr: Code employé
+en: Employee code
+es: Código de empleado
+
+fr: Date de fin d'emploi
+en: Termination date
+es: Fecha de fin de empleo
+
+fr: Renseignements personnels pour la paie
+en: Personal information for payroll
+es: Datos personales para la nómina
+
+fr: Date de naissance
+en: Date of birth
+es: Fecha de nacimiento
+
+fr: Langue des talons et courriels
+en: Language for pay stubs and emails
+es: Idioma de los talones y correos
+
+fr: Numéro d'assurance sociale (NAS)
+en: Social insurance number (SIN)
+es: Número de seguro social (NAS)
+
+fr: Aucun NAS au dossier.
+en: No SIN on file.
+es: Ningún NAS en el expediente.
+
+fr: NAS au dossier : {0}. Laissez vide pour le conserver.
+en: SIN on file: {0}. Leave blank to keep it.
+es: NAS en el expediente: {0}. Deje vacío para conservarlo.
+
+fr: Période de paie
+en: Pay period
+es: Período de pago
+
+fr: Par défaut (MngConsul, sinon la compagnie)
+en: Default (MngConsul, otherwise the company)
+es: Predeterminado (MngConsul, si no la empresa)
+
+fr: Heures par semaine
+en: Hours per week
+es: Horas por semana
+
+fr: Taux horaire ($)
+en: Hourly rate ($)
+es: Tarifa por hora ($)
+
+fr: Salaire annuel ($)
+en: Annual salary ($)
+es: Salario anual ($)
+
+fr: Utilisé si aucun taux horaire n'est inscrit.
+en: Used if no hourly rate is entered.
+es: Se usa si no se indica ninguna tarifa por hora.
+
+fr: Taux de vacances (%)
+en: Vacation rate (%)
+es: Tasa de vacaciones (%)
+
+fr: Vide = taux par défaut de la compagnie.
+en: Blank = company default rate.
+es: Vacío = tasa predeterminada de la empresa.
+
+fr: Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.
+en: The suggested hourly rate, salary and frequency come from MngConsul when entered there; what you save here applies to payroll.
+es: La tarifa por hora, el salario y la frecuencia propuestos provienen de MngConsul cuando están indicados allí; lo que guarde aquí se aplica a la nómina.
+
+fr: Exemptions (cas particuliers seulement)
+en: Exemptions (special cases only)
+es: Exenciones (solo casos particulares)
+
+fr: Laissez tout décoché pour un employé ordinaire :
+en: Leave everything unchecked for a regular employee:
+es: Deje todo sin marcar para un empleado ordinario:
+
+fr: toutes les retenues et cotisations sont calculées automatiquement. Une case cochée signifie que la retenue
+en: all deductions and contributions are calculated automatically. A checked box means the deduction
+es: todas las retenciones y aportes se calculan automáticamente. Una casilla marcada significa que la retención
+
+fr: n'est pas calculée
+en: is not calculated
+es: no se calcula
+
+fr: (elle sera à 0 $).
+en: (it will be $0).
+es: (será de 0 $).
+
+fr: Ne pas retenir l'impôt fédéral
+en: Do not withhold federal tax
+es: No retener el impuesto federal
+
+fr: Ne pas retenir l'impôt du Québec
+en: Do not withhold Québec tax
+es: No retener el impuesto de Quebec
+
+fr: Ne pas cotiser au RRQ
+en: Do not contribute to the QPP
+es: No aportar al RRQ
+
+fr: Ne pas cotiser au RQAP
+en: Do not contribute to the QPIP
+es: No aportar al RQAP
+
+fr: Ne pas cotiser à l'assurance-emploi
+en: Do not pay EI premiums
+es: No aportar al seguro de empleo
+
+fr: Exclure du FSS
+en: Exclude from the HSF
+es: Excluir del FSS
+
+fr: Exclure de la CNESST / CNT
+en: Exclude from CNESST / CNT
+es: Excluir de la CNESST / CNT
+
+fr: Imposition fédérale
+en: Federal taxation
+es: Tributación federal
+
+fr: TD1 - Montant total de la demande ($)
+en: TD1 - Total claim amount ($)
+es: TD1 - Monto total de la solicitud ($)
+
+fr: Vide = montant personnel de base ({0}).
+en: Blank = basic personal amount ({0}).
+es: Vacío = monto personal básico ({0}).
+
+fr: TD1 - Impôt additionnel par paie ($)
+en: TD1 - Additional tax per pay ($)
+es: TD1 - Impuesto adicional por nómina ($)
+
+fr: TD1 - Déduction pour zone visée, annuelle ($)
+en: TD1 - Prescribed zone deduction, annual ($)
+es: TD1 - Deducción por zona designada, anual ($)
+
+fr: T1213 - Déductions annuelles autorisées ($)
+en: T1213 - Authorized annual deductions ($)
+es: T1213 - Deducciones anuales autorizadas ($)
+
+fr: T4, case 45 - Soins dentaires offerts par l'employeur
+en: T4, box 45 - Employer-offered dental benefits
+es: T4, casilla 45 - Atención dental ofrecida por el empleador
+
+fr: 1 - Aucun accès
+en: 1 - No access
+es: 1 - Sin acceso
+
+fr: 2 - Accès : employé seulement
+en: 2 - Access: employee only
+es: 2 - Acceso: solo el empleado
+
+fr: 3 - Accès : employé, conjoint et enfants à charge
+en: 3 - Access: employee, spouse and dependent children
+es: 3 - Acceso: empleado, cónyuge e hijos a cargo
+
+fr: 4 - Accès : employé et conjoint
+en: 4 - Access: employee and spouse
+es: 4 - Acceso: empleado y cónyuge
+
+fr: 5 - Accès : employé et enfants à charge
+en: 5 - Access: employee and dependent children
+es: 5 - Acceso: empleado e hijos a cargo
+
+fr: Case obligatoire sur le T4 : accès au 31 décembre à une assurance dentaire de l'employeur.
+en: Mandatory T4 box: access on December 31 to employer dental insurance.
+es: Casilla obligatoria del T4: acceso al 31 de diciembre a un seguro dental del empleador.
+
+fr: Autres crédits d'impôt fédéraux autorisés ($)
+en: Other authorized federal tax credits ($)
+es: Otros créditos fiscales federales autorizados ($)
+
+fr: Imposition du Québec
+en: Québec taxation
+es: Tributación de Quebec
+
+fr: TP-1015.3 - Montant de la ligne 10 ($)
+en: TP-1015.3 - Amount on line 10 ($)
+es: TP-1015.3 - Monto de la línea 10 ($)
+
+fr: Retenue supplémentaire par paie ($)
+en: Additional withholding per pay ($)
+es: Retención adicional por nómina ($)
+
+fr: TP-1015.3 - Déductions de la ligne 19 ($)
+en: TP-1015.3 - Deductions on line 19 ($)
+es: TP-1015.3 - Deducciones de la línea 19 ($)
+
+fr: TP-1016 - Déductions annuelles autorisées ($)
+en: TP-1016 - Authorized annual deductions ($)
+es: TP-1016 - Deducciones anuales autorizadas ($)
+
+fr: TP-1016 - Crédits d'impôt autorisés ($)
+en: TP-1016 - Authorized tax credits ($)
+es: TP-1016 - Créditos fiscales autorizados ($)
+
+fr: Paiement
+en: Payment
+es: Pago
+
+fr: Cet employé est payé par dépôt direct
+en: This employee is paid by direct deposit
+es: Este empleado cobra por depósito directo
+
+fr: Envoyer le talon de paie par courriel
+en: Send the pay stub by email
+es: Enviar el talón de pago por correo
+
+fr: Notes
+en: Notes
+es: Notas
+
+fr: Annuler
+en: Cancel
+es: Cancelar
+
+fr: La paie de cet employé n'est pas encore configurée. Vérifiez les valeurs proposées, puis enregistrez.
+en: Payroll is not set up yet for this employee. Check the suggested values, then save.
+es: La nómina de este empleado aún no está configurada. Verifique los valores propuestos y guarde.
+
+fr: Paramètres de paie enregistrés. Vous pouvez maintenant définir ses éléments de paie récurrents.
+en: Payroll settings saved. You can now define this employee's recurring pay items.
+es: Parámetros de nómina guardados. Ahora puede definir sus elementos de nómina recurrentes.
+
+fr: Attention : {0} exemption(s) cochée(s), ces retenues ou cotisations ne seront pas calculées pour cet employé.
+en: Warning: {0} exemption(s) checked, these deductions or contributions will not be calculated for this employee.
+es: Atención: {0} exención(es) marcada(s); estas retenciones o aportes no se calcularán para este empleado.
+
+fr: Le numéro d'assurance sociale est invalide.
+en: The social insurance number is invalid.
+es: El número de seguro social no es válido.
+
+fr: Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte.
+en: Direct deposit: enter the transit (5 digits), the institution (3 digits) and the account number.
+es: Depósito directo: indique el tránsito (5 dígitos), la institución (3 dígitos) y el número de cuenta.
+
+fr: La date de naissance est dans le futur.
+en: The date of birth is in the future.
+es: La fecha de nacimiento está en el futuro.
+
+# ---------- Employés : éléments récurrents et cumulatifs ----------
+
+fr: Éléments de paie de {0}
+en: Pay items for {0}
+es: Elementos de nómina de {0}
+
+fr: Ces lignes sont proposées automatiquement à chaque paie. Vous pourrez toujours les ajuster dans l'assistant de paie.
+en: These lines are suggested automatically for each pay run. You can always adjust them in the payroll wizard.
+es: Estas líneas se proponen automáticamente en cada nómina. Siempre podrá ajustarlas en el asistente de nómina.
+
+fr: Élément de paie
+en: Pay item
+es: Elemento de nómina
+
+fr: Heures
+en: Hours
+es: Horas
+
+fr: Taux horaire
+en: Hourly rate
+es: Tarifa por hora
+
+fr: Montant
+en: Amount
+es: Monto
+
+fr: Retirer
+en: Remove
+es: Quitar
+
+fr: Aucun élément récurrent. Sans gabarit, la paie proposera le salaire horaire (heures par semaine) ou le salaire annuel de la fiche.
+en: No recurring items. Without a template, the pay run will suggest the hourly wages (hours per week) or the annual salary from the employee file.
+es: Ningún elemento recurrente. Sin plantilla, la nómina propondrá el salario por hora (horas por semana) o el salario anual de la ficha.
+
+fr: Ajouter un élément
+en: Add an item
+es: Agregar un elemento
+
+fr: ou montant fixe ($)
+en: or fixed amount ($)
+es: o monto fijo ($)
+
+fr: Inscrivez des heures et un taux (le temps et demi et le temps double sont majorés automatiquement), ou un montant fixe.
+en: Enter hours and a rate (time and a half and double time are increased automatically), or a fixed amount.
+es: Indique horas y una tarifa (el tiempo y medio y el tiempo doble se incrementan automáticamente), o un monto fijo.
+
+fr: Ajouter
+en: Add
+es: Agregar
+
+fr: Retour à la fiche
+en: Back to the employee file
+es: Volver a la ficha
+
+fr: Liste des employés
+en: Employee list
+es: Lista de empleados
+
+fr: Choisissez un élément de paie.
+en: Choose a pay item.
+es: Elija un elemento de nómina.
+
+fr: Élément de paie introuvable.
+en: Pay item not found.
+es: Elemento de nómina no encontrado.
+
+fr: Inscrivez des heures et un taux, ou un montant.
+en: Enter hours and a rate, or an amount.
+es: Indique horas y una tarifa, o un monto.
+
+fr: Élément ajouté.
+en: Item added.
+es: Elemento agregado.
+
+fr: Élément retiré.
+en: Item removed.
+es: Elemento quitado.
+
+fr: Cumulatifs de départ de {0}
+en: Opening balances for {0}
+es: Acumulados iniciales de {0}
+
+fr: Si vous commencez à utiliser 60secPaie en cours d'année, inscrivez ici les montants déjà versés et retenus dans votre ancien système. Ils servent à respecter les maximums annuels (RRQ, AE, RQAP, CNESST) et s'ajoutent aux cumulatifs du talon de paie.
+en: If you start using 60secPaie during the year, enter here the amounts already paid and withheld in your previous system. They are used to respect the annual maximums (QPP, EI, QPIP, CNESST) and are added to the year-to-date amounts on the pay stub.
+es: Si comienza a usar 60secPaie durante el año, indique aquí los montos ya pagados y retenidos en su sistema anterior. Sirven para respetar los máximos anuales (RRQ, AE, RQAP, CNESST) y se suman a los acumulados del talón de pago.
+
+fr: Année
+en: Year
+es: Año
+
+fr: Rémunération brute ($)
+en: Gross pay ($)
+es: Remuneración bruta ($)
+
+fr: Impôt fédéral retenu ($)
+en: Federal tax withheld ($)
+es: Impuesto federal retenido ($)
+
+fr: Impôt du Québec retenu ($)
+en: Québec tax withheld ($)
+es: Impuesto de Quebec retenido ($)
+
+fr: Salaire admissible au RRQ ($)
+en: QPP pensionable earnings ($)
+es: Salario admisible al RRQ ($)
+
+fr: Cotisation au RRQ (base + 1re suppl.) ($)
+en: QPP contribution (base + 1st additional) ($)
+es: Aporte al RRQ (base + 1.ª adicional) ($)
+
+fr: 2e cotisation supplémentaire au RRQ ($)
+en: Second additional QPP contribution ($)
+es: 2.º aporte adicional al RRQ ($)
+
+fr: Cotisation à l'assurance-emploi ($)
+en: EI premium ($)
+es: Aporte al seguro de empleo ($)
+
+fr: Cotisation au RQAP - employé ($)
+en: QPIP premium - employee ($)
+es: Aporte al RQAP - empleado ($)
+
+fr: Cotisation au RQAP - employeur ($)
+en: QPIP premium - employer ($)
+es: Aporte al RQAP - empleador ($)
+
+fr: Salaire assurable CNESST ($)
+en: CNESST insurable wages ($)
+es: Salario asegurable CNESST ($)
+
+fr: Solde de vacances à payer ($)
+en: Vacation balance payable ($)
+es: Saldo de vacaciones por pagar ($)
+
+fr: Cumulatifs de départ {#0} enregistrés.
+en: Opening balances for {#0} saved.
+es: Acumulados iniciales de {#0} guardados.
+
+# ---------- Saisie : messages de validation ----------
+
+fr: « {0} » : nombre invalide.
+en: "{0}": invalid number.
+es: «{0}»: número no válido.
+
+fr: « {0} » ne peut pas être négatif.
+en: "{0}" cannot be negative.
+es: «{0}» no puede ser negativo.
+
+fr: « {0} » : nombre entier invalide.
+en: "{0}": invalid whole number.
+es: «{0}»: número entero no válido.
+
+fr: « {0} » : date invalide (format AAAA-MM-JJ).
+en: "{0}": invalid date (format YYYY-MM-DD).
+es: «{0}»: fecha no válida (formato AAAA-MM-DD).
+
+fr: « {0} » est requis.
+en: "{0}" is required.
+es: «{0}» es obligatorio.
+
+fr: Taux de vacances
+en: Vacation rate
+es: Tasa de vacaciones
+
+fr: Masse salariale
+en: Total payroll
+es: Masa salarial
+
+fr: Taux CNESST
+en: CNESST rate
+es: Tasa CNESST
+
+fr: Facteur AE
+en: EI factor
+es: Factor AE
+
+fr: Salaire annuel
+en: Annual salary
+es: Salario anual
+
+fr: Prochain numéro de fichier
+en: Next file number
+es: Próximo número de archivo
+
+# ---------- Assistant de paie ----------
+
+fr: Période du {#0} au {#1} · payée le {#2} · {3}
+en: Period from {#0} to {#1} · paid on {#2} · {3}
+es: Período del {#0} al {#1} · pagada el {#2} · {3}
+
+fr: Période du {#0} au {#1} · payée le {#2} · {3} · préparée par {4}
+en: Period from {#0} to {#1} · paid on {#2} · {3} · prepared by {4}
+es: Período del {#0} al {#1} · pagada el {#2} · {3} · preparada por {4}
+
+fr: 1. Période de paie
+en: 1. Pay period
+es: 1. Período de pago
+
+fr: 2. Employés et rémunération
+en: 2. Employees and pay
+es: 2. Empleados y remuneración
+
+fr: 3. Révision des calculs
+en: 3. Review calculations
+es: 3. Revisión de los cálculos
+
+fr: 4. Confirmation
+en: 4. Confirmation
+es: 4. Confirmación
+
+fr: Une paie est déjà en préparation
+en: A pay run is already in progress
+es: Ya hay una nómina en preparación
+
+fr: Période se terminant le {#0}, payée le {#1}.
+en: Period ending {#0}, paid on {#1}.
+es: Período que termina el {#0}, pagada el {#1}.
+
+fr: Supprimer ce brouillon
+en: Delete this draft
+es: Eliminar este borrador
+
+fr: Supprimer la paie en préparation ?
+en: Delete the pay run in progress?
+es: ¿Eliminar la nómina en preparación?
+
+fr: Étape 1 de 4 : période de paie
+en: Step 1 of 4: pay period
+es: Paso 1 de 4: período de pago
+
+fr: En indiquant les dates suivantes, 60secPaie détermine la période de paie et prépare la paie de chaque employé actif.
+en: From the following dates, 60secPaie determines the pay period and prepares the pay of each active employee.
+es: Con las fechas siguientes, 60secPaie determina el período de pago y prepara la nómina de cada empleado activo.
+
+fr: Fréquence de paie
+en: Pay frequency
+es: Frecuencia de pago
+
+fr: Heures travaillées jusqu'au
+en: Hours worked up to
+es: Horas trabajadas hasta el
+
+fr: Payer le
+en: Pay on
+es: Pagar el
+
+fr: Continuer
+en: Continue
+es: Continuar
+
+fr: Étape 2 de 4 : employés et rémunération
+en: Step 2 of 4: employees and pay
+es: Paso 2 de 4: empleados y remuneración
+
+fr: Inclure
+en: Include
+es: Incluir
+
+fr: Employé
+en: Employee
+es: Empleado
+
+fr: Lignes de paie
+en: Pay lines
+es: Líneas de nómina
+
+fr: Brut prévu
+en: Expected gross
+es: Bruto previsto
+
+fr: Modifier les lignes
+en: Edit lines
+es: Modificar las líneas
+
+fr: Aucune ligne
+en: No lines
+es: Ninguna línea
+
+fr: Abandonner cette paie
+en: Discard this pay run
+es: Abandonar esta nómina
+
+fr: Lignes de paie de {0}
+en: Pay lines for {0}
+es: Líneas de nómina de {0}
+
+fr: Taux
+en: Rate
+es: Tarifa
+
+fr: Aucune ligne : cet employé ne sera pas payé.
+en: No lines: this employee will not be paid.
+es: Ninguna línea: este empleado no cobrará.
+
+fr: Ajouter une ligne
+en: Add a line
+es: Agregar una línea
+
+fr: ou montant ($)
+en: or amount ($)
+es: o monto ($)
+
+fr: Ajouter la ligne
+en: Add line
+es: Agregar la línea
+
+fr: Retour à la liste des employés
+en: Back to the employee list
+es: Volver a la lista de empleados
+
+fr: Étape 3 de 4 : révision des calculs
+en: Step 3 of 4: review calculations
+es: Paso 3 de 4: revisión de los cálculos
+
+fr: Confirmer la paie
+en: Confirm pay run
+es: Confirmar la nómina
+
+fr: Confirmer cette paie ? Elle sera ajoutée aux cumulatifs des employés.
+en: Confirm this pay run? It will be added to the employees' year-to-date amounts.
+es: ¿Confirmar esta nómina? Se sumará a los acumulados de los empleados.
+
+fr: Modifier la saisie
+en: Edit entries
+es: Modificar la captura
+
+fr: Étape 4 de 4 : paie confirmée
+en: Step 4 of 4: pay run confirmed
+es: Paso 4 de 4: nómina confirmada
+
+fr: La paie est enregistrée. Vous pouvez maintenant imprimer les talons de paie et émettre les paiements.
+en: The pay run is saved. You can now print the pay stubs and issue the payments.
+es: La nómina está guardada. Ahora puede imprimir los talones de pago y emitir los pagos.
+
+fr: Voir le détail et les talons
+en: View details and pay stubs
+es: Ver el detalle y los talones
+
+fr: Inscrivez la fin de la période et la date de paie.
+en: Enter the period end and the pay date.
+es: Indique el fin del período y la fecha de pago.
+
+fr: La date de paie est trop éloignée de la fin de la période.
+en: The pay date is too far from the period end.
+es: La fecha de pago está demasiado lejos del fin del período.
+
+fr: Le brouillon a été supprimé.
+en: The draft has been deleted.
+es: El borrador fue eliminado.
+
+fr: La paie en préparation a été supprimée.
+en: The pay run in progress has been deleted.
+es: La nómina en preparación fue eliminada.
+
+fr: Ligne ajoutée.
+en: Line added.
+es: Línea agregada.
+
+fr: Ligne retirée.
+en: Line removed.
+es: Línea quitada.
+
+fr: Les taux gouvernementaux de {#0} ne sont pas encore définis dans le logiciel.
+en: The government rates for {#0} are not yet defined in the software.
+es: Las tasas gubernamentales de {#0} aún no están definidas en el programa.
+
+fr: Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord.
+en: A pay run is already in progress. Finish it or delete it first.
+es: Ya hay una nómina en preparación. Termínela o elimínela primero.
+
+fr: Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés.
+en: No active employee with payroll set up is paid at this frequency for this period. Check the Employees page.
+es: Ningún empleado activo con la nómina configurada cobra con esta frecuencia en este período. Verifique la página Empleados.
+
+fr: Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant).
+en: The line amount must be greater than 0 (hours × rate, or amount).
+es: El monto de la línea debe ser mayor que 0 (horas × tarifa, o monto).
+
+fr: La paie doit être calculée avant d'être confirmée.
+en: The pay run must be calculated before it is confirmed.
+es: La nómina debe calcularse antes de confirmarse.
+
+fr: Aucun employé n'est inclus dans cette paie.
+en: No employee is included in this pay run.
+es: Ningún empleado está incluido en esta nómina.
+
+fr: Au moins une paie nette est négative. Corrigez les lignes avant de confirmer.
+en: At least one net pay is negative. Correct the lines before confirming.
+es: Al menos un salario neto es negativo. Corrija las líneas antes de confirmar.
+
+fr: Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues.
+en: The deductions for this pay run have already been remitted. Cancel the remittance payment first.
+es: Las retenciones de esta nómina ya fueron pagadas. Anule primero el pago de retenciones.
+
+fr: Seule la paie confirmée la plus récente peut être annulée.
+en: Only the most recent confirmed pay run can be cancelled.
+es: Solo se puede anular la nómina confirmada más reciente.
+
+fr: Lot de paie introuvable.
+en: Pay run not found.
+es: Nómina no encontrada.
+
+fr: Cette paie n'est plus modifiable.
+en: This pay run can no longer be edited.
+es: Esta nómina ya no se puede modificar.
+
+# ---------- Résultats de paie : tableau, détail, avertissements ----------
+
+fr: Aucun employé inclus dans cette paie.
+en: No employee included in this pay run.
+es: Ningún empleado incluido en esta nómina.
+
+fr: Brut
+en: Gross
+es: Bruto
+
+fr: Impôt féd.
+en: Fed. tax
+es: Imp. fed.
+
+fr: Impôt Qc
+en: Qc tax
+es: Imp. Qc
+
+fr: RRQ
+en: QPP
+es: RRQ
+
+fr: RRQ 2
+en: QPP 2
+es: RRQ 2
+
+fr: AE
+en: EI
+es: AE
+
+fr: RQAP
+en: QPIP
+es: RQAP
+
+fr: FSS
+en: HSF
+es: FSS
+
+fr: Autres déd.
+en: Other ded.
+es: Otras ded.
+
+fr: Net
+en: Net
+es: Neto
+
+fr: Parts employeur
+en: Employer share
+es: Aportes empleador
+
+fr: Chèque n° {#0}
+en: Cheque no. {#0}
+es: Cheque n.º {#0}
+
+fr: Grand total
+en: Grand total
+es: Total general
+
+fr: Talon
+en: Pay stub
+es: Talón
+
+fr: Détail et vérification des calculs - {0}
+en: Details and calculation check - {0}
+es: Detalle y verificación de los cálculos - {0}
+
+fr: Ligne
+en: Line
+es: Línea
+
+fr: Parts de l'employeur pour cette paie.
+en: Employer contributions for this pay.
+es: Aportes del empleador para esta nómina.
+
+fr: Revenus et avantages
+en: Earnings and benefits
+es: Ingresos y beneficios
+
+fr: Déductions
+en: Deductions
+es: Deducciones
+
+fr: Parts de l'employeur
+en: Employer contributions
+es: Aportes del empleador
+
+fr: RRQ - 2e cotisation suppl.
+en: QPP - 2nd additional contribution
+es: RRQ - 2.º aporte adicional
+
+fr: Assurance-emploi
+en: Employment insurance
+es: Seguro de empleo
+
+fr: CNT (normes du travail)
+en: CNT (labour standards)
+es: CNT (normas laborales)
+
+fr: Total
+en: Total
+es: Total
+
+fr: Exemptions cochées dans la fiche de l'employé, donc non calculé : {0}.
+en: Exemptions checked in the employee file, so not calculated: {0}.
+es: Exenciones marcadas en la ficha del empleado, por lo tanto no calculado: {0}.
+
+fr: Employé de moins de 18 ans : aucune cotisation au RRQ.
+en: Employee under 18: no QPP contribution.
+es: Empleado menor de 18 años: ningún aporte al RRQ.
+
+fr: La paie nette est négative : les retenues et déductions dépassent la rémunération versée.
+en: Net pay is negative: deductions exceed the pay.
+es: El salario neto es negativo: las retenciones y deducciones superan la remuneración pagada.
+
+# ---------- Historique et détail d'une paie ----------
+
+fr: Les paies de chaque période sont regroupées en lots.
+en: The pays of each period are grouped into pay runs.
+es: Las nóminas de cada período se agrupan en lotes.
+
+fr: Calculer une paie
+en: Run a payroll
+es: Calcular una nómina
+
+fr: Date de paie
+en: Pay date
+es: Fecha de pago
+
+fr: Période
+en: Period
+es: Período
+
+fr: {#0} au {#1}
+en: {#0} to {#1}
+es: {#0} al {#1}
+
+fr: Paie brute
+en: Gross pay
+es: Salario bruto
+
+fr: Paie nette
+en: Net pay
+es: Salario neto
+
+fr: Brouillon
+en: Draft
+es: Borrador
+
+fr: Confirmé
+en: Confirmed
+es: Confirmado
+
+fr: Annulé
+en: Cancelled
+es: Anulado
+
+fr: Aucune paie pour l'instant.
+en: No pay runs yet.
+es: Ninguna nómina por el momento.
+
+fr: Détail de la paie
+en: Pay run details
+es: Detalle de la nómina
+
+fr: Imprimer
+en: Print
+es: Imprimir
+
+fr: Paiement et suites de cette paie
+en: Payment and follow-up for this pay run
+es: Pago y seguimiento de esta nómina
+
+fr: {#0} employé(s), {1} - fichier pas encore produit
+en: {#0} employee(s), {1} - file not generated yet
+es: {#0} empleado(s), {1} - archivo aún no generado
+
+fr: {#0} employé(s), {1} - fichier n° {#2} produit le {#3}
+en: {#0} employee(s), {1} - file no. {#2} generated on {#3}
+es: {#0} empleado(s), {1} - archivo n.º {#2} generado el {#3}
+
+fr: Talons par courriel
+en: Pay stubs by email
+es: Talones por correo
+
+fr: {#0} envoyé(s) sur {#1}
+en: {#0} sent out of {#1}
+es: {#0} enviado(s) de {#1}
+
+fr: Mode test : les courriels sont écrits dans le dossier App_Data\courriels au lieu d'être envoyés.
+en: Test mode: emails are written to the App_Data\courriels folder instead of being sent.
+es: Modo de prueba: los correos se escriben en la carpeta App_Data\courriels en lugar de enviarse.
+
+fr: Aucun employé de cette paie n'a demandé son talon par courriel (fiche de l'employé).
+en: No employee in this pay run has asked for the pay stub by email (employee file).
+es: Ningún empleado de esta nómina pidió su talón por correo (ficha del empleado).
+
+fr: Télécharger le fichier de dépôt direct
+en: Download the direct deposit file
+es: Descargar el archivo de depósito directo
+
+fr: Envoyer les talons par courriel
+en: Send pay stubs by email
+es: Enviar los talones por correo
+
+fr: renvoyer aussi les talons déjà envoyés
+en: also resend pay stubs already sent
+es: reenviar también los talones ya enviados
+
+fr: Envoyer les talons de paie par courriel aux employés qui en ont fait la demande ?
+en: Send the pay stubs by email to the employees who asked for it?
+es: ¿Enviar los talones de pago por correo a los empleados que lo solicitaron?
+
+fr: Écritures comptables
+en: Journal entries
+es: Asientos contables
+
+fr: Annuler cette paie
+en: Cancel this pay run
+es: Anular esta nómina
+
+fr: La paie confirmée la plus récente peut être annulée, par exemple pour corriger une erreur. Elle sera retirée des cumulatifs ; les numéros de chèque déjà attribués ne sont pas réutilisés.
+en: The most recent confirmed pay run can be cancelled, for example to correct an error. It will be removed from the year-to-date amounts; cheque numbers already assigned are not reused.
+es: La nómina confirmada más reciente puede anularse, por ejemplo para corregir un error. Se quitará de los acumulados; los números de cheque ya asignados no se reutilizan.
+
+fr: Annuler la paie
+en: Cancel pay run
+es: Anular la nómina
+
+fr: Annuler définitivement cette paie ?
+en: Permanently cancel this pay run?
+es: ¿Anular definitivamente esta nómina?
+
+fr: La paie a été annulée.
+en: The pay run has been cancelled.
+es: La nómina fue anulada.
+
+fr: {#0} talon(s) envoyé(s).
+en: {#0} pay stub(s) sent.
+es: {#0} talón(es) enviado(s).
+
+fr: {#0} talon(s) envoyé(s), {#1} déjà envoyé(s).
+en: {#0} pay stub(s) sent, {#1} already sent.
+es: {#0} talón(es) enviado(s), {#1} ya enviado(s).
+
+fr: {#0} talon(s) envoyé(s). Problèmes : {1}
+en: {#0} pay stub(s) sent. Problems: {1}
+es: {#0} talón(es) enviado(s). Problemas: {1}
+
+fr: Les talons s'envoient à partir d'une paie confirmée.
+en: Pay stubs are sent from a confirmed pay run.
+es: Los talones se envían desde una nómina confirmada.
+
+fr: Aucun employé de cette paie n'a demandé son talon par courriel (case à cocher dans la fiche de l'employé).
+en: No employee in this pay run has asked for the pay stub by email (checkbox in the employee file).
+es: Ningún empleado de esta nómina pidió su talón por correo (casilla en la ficha del empleado).
+
+fr: Le serveur de courriel n'est pas configuré (section mailSettings de Web.config).
+en: The mail server is not configured (mailSettings section of Web.config).
+es: El servidor de correo no está configurado (sección mailSettings de Web.config).
+
+fr: Aucune adresse d'expéditeur : inscrivez le courriel de la compagnie ou la clé Courriel:Expediteur de Web.config.
+en: No sender address: enter the company email or the Courriel:Expediteur key in Web.config.
+es: Ninguna dirección de remitente: indique el correo de la empresa o la clave Courriel:Expediteur de Web.config.
+
+fr: Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct).
+en: The company's direct deposit settings are incomplete (Settings → Direct deposit).
+es: Los parámetros de depósito directo de la empresa están incompletos (Configuración → Depósito directo).
+
+fr: Coordonnées bancaires incomplètes pour {0}.
+en: Incomplete banking information for {0}.
+es: Datos bancarios incompletos de {0}.
+
+fr: Le fichier de dépôt direct se produit à partir d'une paie confirmée.
+en: The direct deposit file is generated from a confirmed pay run.
+es: El archivo de depósito directo se genera desde una nómina confirmada.
+
+fr: Aucun employé de cette paie n'est payé par dépôt direct.
+en: No employee in this pay run is paid by direct deposit.
+es: Ningún empleado de esta nómina cobra por depósito directo.
+
+# ---------- Talon de paie ----------
+
+fr: Imprimer le talon
+en: Print pay stub
+es: Imprimir el talón
+
+fr: Retour au détail de la paie
+en: Back to pay run details
+es: Volver al detalle de la nómina
+
+fr: Talon introuvable.
+en: Pay stub not found.
+es: Talón no encontrado.
+
+fr: Aperçu : cette paie n'est pas encore confirmée.
+en: Preview: this pay run is not confirmed yet.
+es: Vista previa: esta nómina aún no está confirmada.
+
+fr: Cette paie a été annulée.
+en: This pay run has been cancelled.
+es: Esta nómina fue anulada.
+
+fr: Talon de paie
+en: Pay stub
+es: Talón de pago
+
+fr: Période : {#0} au {#1}
+en: Period: {#0} to {#1}
+es: Período: {#0} al {#1}
+
+fr: Date de paie : {#0}
+en: Pay date: {#0}
+es: Fecha de pago: {#0}
+
+fr: dont avantages imposables non versés en argent
+en: including taxable benefits not paid in cash
+es: de los cuales beneficios gravables no pagados en dinero
+
+fr: Retenues et déductions
+en: Deductions
+es: Retenciones y deducciones
+
+fr: Courant
+en: Current
+es: Actual
+
+fr: Cumulatif
+en: Year-to-date
+es: Acumulado
+
+fr: Cumulatifs de l'année
+en: Year-to-date
+es: Acumulados del año
+
+fr: Vacances accumulées ({#0} %)
+en: Vacation accrued ({#0}%)
+es: Vacaciones acumuladas ({#0} %)
+
+fr: Solde de vacances
+en: Vacation balance
+es: Saldo de vacaciones
+
+fr: Talon de paie du {#0}
+en: Pay stub for {#0}
+es: Talón de pago del {#0}
+
+fr: Bonjour {0},
+en: Hello {0},
+es: Hola {0}:
+
+fr: Voici votre talon de paie.
+en: Here is your pay stub.
+es: Aquí está su talón de pago.
+
+fr: Ce message contient des renseignements personnels et confidentiels. Si vous l'avez reçu par erreur, veuillez le supprimer et en aviser {0}.
+en: This message contains personal and confidential information. If you received it in error, please delete it and notify {0}.
+es: Este mensaje contiene información personal y confidencial. Si lo recibió por error, elimínelo y avise a {0}.
+
+# ---------- Retenues (remises) ----------
+
+fr: Historique des paiements
+en: Payment history
+es: Historial de pagos
+
+fr: Receveur général du Canada
+en: Receiver General for Canada
+es: Receptor General de Canadá
+
+fr: Revenu Québec
+en: Revenu Québec
+es: Revenu Québec
+
+fr: Aucune retenue à payer.
+en: No deductions to remit.
+es: Ninguna retención por pagar.
+
+fr: À payer :
+en: To pay:
+es: Por pagar:
+
+fr: ({#0} paies)
+en: ({#0} pay records)
+es: ({#0} nóminas)
+
+fr: ({#0} paie)
+en: ({#0} pay record)
+es: ({#0} nómina)
+
+fr: Prochaine échéance : {#0} pour la période se terminant le {#1}.
+en: Next due date: {#0} for the period ending {#1}.
+es: Próximo vencimiento: {#0} para el período que termina el {#1}.
+
+fr: En retard : échéance du {#0} pour la période se terminant le {#1}.
+en: Overdue: due {#0} for the period ending {#1}.
+es: Atrasado: vencía el {#0} para el período que termina el {#1}.
+
+fr: Normes du travail (CNT)
+en: Labour standards (CNT)
+es: Normas laborales (CNT)
+
+fr: Accumulée en {#0} :
+en: Accrued in {#0}:
+es: Acumulada en {#0}:
+
+fr: Payable une fois l'an à Revenu Québec, avec le sommaire 1. Elle ne fait pas partie des remises périodiques.
+en: Payable once a year to Revenu Québec, with the RL-1 summary. It is not part of the periodic remittances.
+es: Se paga una vez al año a Revenu Québec, con el sumario 1. No forma parte de las remesas periódicas.
+
+fr: Paiement des retenues sur salaire
+en: Payroll remittance
+es: Pago de las retenciones salariales
+
+fr: Gouvernement
+en: Government
+es: Gobierno
+
+fr: Fédéral - Receveur général du Canada
+en: Federal - Receiver General for Canada
+es: Federal - Receptor General de Canadá
+
+fr: Provincial - Revenu Québec
+en: Provincial - Revenu Québec
+es: Provincial - Revenu Québec
+
+fr: Retenues accumulées au
+en: Deductions accrued as of
+es: Retenciones acumuladas al
+
+fr: Toutes les paies confirmées jusqu'à cette date, dont les retenues ne sont pas encore payées.
+en: All confirmed pay runs up to this date whose deductions have not been remitted yet.
+es: Todas las nóminas confirmadas hasta esta fecha cuyas retenciones aún no se han pagado.
+
+fr: Date du paiement
+en: Payment date
+es: Fecha del pago
+
+fr: Mode de paiement
+en: Payment method
+es: Forma de pago
+
+fr: Paiement en ligne (institution financière, Mon dossier)
+en: Online payment (financial institution, My Account)
+es: Pago en línea (institución financiera, Mon dossier)
+
+fr: Chèque (le prochain numéro de chèque est attribué)
+en: Cheque (the next cheque number is assigned)
+es: Cheque (se asigna el próximo número de cheque)
+
+fr: Numéro de confirmation (facultatif)
+en: Confirmation number (optional)
+es: Número de confirmación (opcional)
+
+fr: Calculer les retenues
+en: Calculate remittance
+es: Calcular las retenciones
+
+fr: Montant à payer à {0} - retenues accumulées au {#1}
+en: Amount to pay to {0} - deductions accrued as of {#1}
+es: Monto por pagar a {0} - retenciones acumuladas al {#1}
+
+fr: Retenue ou cotisation
+en: Deduction or contribution
+es: Retención o aporte
+
+fr: Total à payer
+en: Total to pay
+es: Total por pagar
+
+fr: Paies couvertes
+en: Pay runs covered
+es: Nóminas cubiertas
+
+fr: Rémunération brute
+en: Gross pay
+es: Remuneración bruta
+
+fr: Assurance-emploi - cotisations des employés
+en: Employment insurance - employee premiums
+es: Seguro de empleo - aportes de los empleados
+
+fr: Assurance-emploi - cotisation de l'employeur
+en: Employment insurance - employer premium
+es: Seguro de empleo - aporte del empleador
+
+fr: RRQ - cotisations des employés
+en: QPP - employee contributions
+es: RRQ - aportes de los empleados
+
+fr: RRQ - cotisation de l'employeur
+en: QPP - employer contribution
+es: RRQ - aporte del empleador
+
+fr: RQAP - cotisations des employés
+en: QPIP - employee premiums
+es: RQAP - aportes de los empleados
+
+fr: RQAP - cotisation de l'employeur
+en: QPIP - employer premium
+es: RQAP - aporte del empleador
+
+fr: Fonds des services de santé (FSS)
+en: Health Services Fund (HSF)
+es: Fondo de servicios de salud (FSS)
+
+fr: CNESST - versement périodique
+en: CNESST - periodic payment
+es: CNESST - pago periódico
+
+fr: 60secPaie ne transmet aucun paiement : effectuez-le auprès de votre institution financière ou dans Mon dossier, puis enregistrez-le ici pour que ces retenues ne soient plus à payer.
+en: 60secPaie does not transmit any payment: make it through your financial institution or in My Account, then record it here so these deductions are no longer outstanding.
+es: 60secPaie no transmite ningún pago: efectúelo en su institución financiera o en Mon dossier, y luego regístrelo aquí para que estas retenciones ya no queden por pagar.
+
+fr: Enregistrer le paiement
+en: Record payment
+es: Registrar el pago
+
+fr: Enregistrer ce paiement ? Les paies couvertes ne pourront plus être annulées.
+en: Record this payment? The pay runs covered can no longer be cancelled.
+es: ¿Registrar este pago? Las nóminas cubiertas ya no podrán anularse.
+
+fr: Inscrivez les deux dates.
+en: Enter both dates.
+es: Indique las dos fechas.
+
+fr: La date du paiement est trop éloignée.
+en: The payment date is too far away.
+es: La fecha del pago está demasiado lejos.
+
+fr: Aucune retenue à payer à {0} pour les paies jusqu'au {#1}.
+en: No deductions to remit to {0} for pay runs up to {#1}.
+es: Ninguna retención por pagar a {0} para las nóminas hasta el {#1}.
+
+fr: Aucune retenue à payer à {0} pour cette période.
+en: No deductions to remit to {0} for this period.
+es: Ninguna retención por pagar a {0} para este período.
+
+fr: Paiement enregistré.
+en: Payment recorded.
+es: Pago registrado.
+
+fr: Paies
+en: Pay records
+es: Nóminas
+
+fr: Payé
+en: Paid
+es: Pagado
+
+fr: En ligne
+en: Online
+es: En línea
+
+fr: En ligne - {0}
+en: Online - {0}
+es: En línea - {0}
+
+fr: Aucun paiement de retenues enregistré.
+en: No remittance payments recorded.
+es: Ningún pago de retenciones registrado.
+
+fr: Paiement des retenues
+en: Remittance payment
+es: Pago de retenciones
+
+fr: {0} · retenues accumulées au {#1} · payé le {#2} · {3} · enregistré par {4}
+en: {0} · deductions accrued as of {#1} · paid on {#2} · {3} · recorded by {4}
+es: {0} · retenciones acumuladas al {#1} · pagado el {#2} · {3} · registrado por {4}
+
+fr: Renseignements pour le formulaire de versement
+en: Information for the remittance form
+es: Datos para el formulario de remesa
+
+fr: Numéro de compte de retenues (RP)
+en: Payroll deductions account number (RP)
+es: Número de cuenta de retenciones (RP)
+
+fr: Rémunération brute de la période
+en: Gross payroll for the period
+es: Remuneración bruta del período
+
+fr: Nombre d'employés à la dernière période de paie
+en: Number of employees in the last pay period
+es: Número de empleados en el último período de pago
+
+fr: Numéro d'identification (RS)
+en: Identification number (RS)
+es: Número de identificación (RS)
+
+fr: Période se terminant le
+en: Period ending
+es: Período que termina el
+
+fr: Montant du paiement
+en: Payment amount
+es: Monto del pago
+
+fr: Annuler ce paiement
+en: Cancel this payment
+es: Anular este pago
+
+fr: À utiliser si le paiement a été enregistré par erreur. Les retenues des paies couvertes redeviendront « à payer ».
+en: Use this if the payment was recorded by mistake. The deductions of the pay runs covered will become outstanding again.
+es: Úselo si el pago se registró por error. Las retenciones de las nóminas cubiertas volverán a quedar «por pagar».
+
+fr: Annuler le paiement
+en: Cancel payment
+es: Anular el pago
+
+fr: Annuler ce paiement de retenues ?
+en: Cancel this remittance payment?
+es: ¿Anular este pago de retenciones?
+
+fr: Le paiement a été annulé. Les retenues sont de nouveau à payer.
+en: The payment has been cancelled. The deductions are outstanding again.
+es: El pago fue anulado. Las retenciones vuelven a estar por pagar.
+
+fr: Remise introuvable.
+en: Remittance not found.
+es: Remesa no encontrada.
+
+fr: Cette remise est déjà annulée.
+en: This remittance is already cancelled.
+es: Esta remesa ya está anulada.
+
+# ---------- Rapports : T4 et Relevés 1 ----------
+
+fr: T4 et Relevés 1
+en: T4 and RL-1 slips
+es: T4 y Relevés 1
+
+fr: Déclaration des salaires CNESST
+en: CNESST statement of wages
+es: Declaración de salarios CNESST
+
+fr: Feuillets T4 et Relevés 1 de l'année
+en: T4 and RL-1 slips for the year
+es: Comprobantes T4 y Relevés 1 del año
+
+fr: Montants calculés à partir des paies confirmées et des cumulatifs de départ.
+en: Amounts calculated from confirmed pay runs and opening balances.
+es: Montos calculados a partir de las nóminas confirmadas y de los acumulados iniciales.
+
+fr: Exporter en CSV
+en: Export to CSV
+es: Exportar a CSV
+
+fr: 60secPaie calcule les montants de chaque case ; il ne transmet pas les feuillets. Saisissez-les dans
+en: 60secPaie calculates the amount of each box; it does not file the slips. Enter them in
+es: 60secPaie calcula los montos de cada casilla; no transmite los comprobantes. Captúrelos en
+
+fr: Formulaires Web
+en: Web Forms
+es: Formulaires Web
+
+fr: (ARC) et dans
+en: (CRA) and in
+es: (ARC) y en
+
+fr: Mon dossier pour les entreprises
+en: My Account for businesses
+es: Mon dossier pour les entreprises
+
+fr: (Revenu Québec), au plus tard le dernier jour de février. Vérifiez les cases avec les guides RC4120 (T4) et RL-1.G (Relevé 1) de l'année.
+en: (Revenu Québec), no later than the last day of February. Check the boxes against the year's RC4120 (T4) and RL-1.G (RL-1) guides.
+es: (Revenu Québec), a más tardar el último día de febrero. Verifique las casillas con las guías RC4120 (T4) y RL-1.G (Relevé 1) del año.
+
+fr: T4 (cases)
+en: T4 (boxes)
+es: T4 (casillas)
+
+fr: Relevé 1
+en: RL-1
+es: Relevé 1
+
+fr: Feuillet
+en: Slip
+es: Comprobante
+
+fr: inclut des cumulatifs de départ
+en: includes opening balances
+es: incluye acumulados iniciales
+
+fr: Total ({#0} feuillets)
+en: Total ({#0} slips)
+es: Total ({#0} comprobantes)
+
+fr: Total ({#0} feuillet)
+en: Total ({#0} slip)
+es: Total ({#0} comprobante)
+
+fr: Sommaire T4 (ARC)
+en: T4 Summary (CRA)
+es: Sumario T4 (ARC)
+
+fr: Cotisations des employés à l'AE (case 18)
+en: Employees' EI premiums (box 18)
+es: Aportes de los empleados al AE (casilla 18)
+
+fr: Cotisations de l'employeur à l'AE (case 19)
+en: Employer's EI premiums (box 19)
+es: Aportes del empleador al AE (casilla 19)
+
+fr: Retenues et cotisations de l'année
+en: Deductions and contributions for the year
+es: Retenciones y aportes del año
+
+fr: Remises enregistrées
+en: Remittances recorded
+es: Remesas registradas
+
+fr: Solde à payer
+en: Balance due
+es: Saldo por pagar
+
+fr: Sommaire 1 (Revenu Québec)
+en: RL-1 Summary (Revenu Québec)
+es: Sumario 1 (Revenu Québec)
+
+fr: RRQ - employés
+en: QPP - employees
+es: RRQ - empleados
+
+fr: RRQ - employeur
+en: QPP - employer
+es: RRQ - empleador
+
+fr: RQAP - employés
+en: QPIP - employees
+es: RQAP - empleados
+
+fr: RQAP - employeur
+en: QPIP - employer
+es: RQAP - empleador
+
+fr: Salaires assujettis au FSS
+en: Wages subject to the HSF
+es: Salarios sujetos al FSS
+
+fr: Cotisation au FSS
+en: HSF contribution
+es: Aporte al FSS
+
+fr: CNESST - versements périodiques calculés
+en: CNESST - periodic payments calculated
+es: CNESST - pagos periódicos calculados
+
+fr: Cotisation aux normes du travail (CNT), payable avec le sommaire 1
+en: Labour standards contribution (CNT), payable with the RL-1 summary
+es: Aporte a las normas laborales (CNT), pagadero con el sumario 1
+
+fr: Le taux réel du FSS est établi sur la masse salariale totale de l'année : un écart avec le taux estimé utilisé pendant l'année se règle dans le sommaire 1.
+en: The actual HSF rate is based on the total payroll for the year: any difference with the estimated rate used during the year is settled in the RL-1 summary.
+es: La tasa real del FSS se establece sobre la masa salarial total del año: cualquier diferencia con la tasa estimada usada durante el año se regulariza en el sumario 1.
+
+fr: Afficher le NAS complet
+en: Show full SIN
+es: Mostrar el NAS completo
+
+fr: Retour aux feuillets
+en: Back to slips
+es: Volver a los comprobantes
+
+fr: Feuillets {#0}
+en: Slips {#0}
+es: Comprobantes {#0}
+
+fr: N° de compte RP : {0}
+en: RP account no.: {0}
+es: N.º de cuenta RP: {0}
+
+fr: N° de compte RP :
+en: RP account no.:
+es: N.º de cuenta RP:
+
+fr: N° d'identification RS : {0}
+en: RS identification no.: {0}
+es: N.º de identificación RS: {0}
+
+fr: N° d'identification RS :
+en: RS identification no.:
+es: N.º de identificación RS:
+
+fr: NAS : {0}
+en: SIN: {0}
+es: NAS: {0}
+
+fr: NAS manquant dans la fiche
+en: SIN missing from the employee file
+es: NAS faltante en la ficha
+
+fr: Ces montants incluent des cumulatifs de départ saisis à la main. Les gains assurables (cases 24, 26, 56, G et I) ont été estimés à partir de la rémunération brute : vérifiez-les avec votre ancien système.
+en: These amounts include opening balances entered by hand. Insurable earnings (boxes 24, 26, 56, G and I) were estimated from gross pay: check them against your previous system.
+es: Estos montos incluyen acumulados iniciales capturados a mano. Los ingresos asegurables (casillas 24, 26, 56, G e I) se estimaron a partir de la remuneración bruta: verifíquelos con su sistema anterior.
+
+fr: T4 - État de la rémunération payée
+en: T4 - Statement of Remuneration Paid
+es: T4 - Estado de la remuneración pagada
+
+fr: Province d'emploi
+en: Province of employment
+es: Provincia de empleo
+
+fr: Exemptions
+en: Exemptions
+es: Exenciones
+
+fr: Aucune
+en: None
+es: Ninguna
+
+fr: Soins dentaires offerts par l'employeur
+en: Employer-offered dental benefits
+es: Atención dental ofrecida por el empleador
+
+fr: Relevé 1 - Revenus d'emploi et revenus divers
+en: RL-1 - Employment and Other Income
+es: Relevé 1 - Ingresos de empleo e ingresos diversos
+
+fr: Les cases J, L, M et W sont déjà comprises dans la case A.
+en: Boxes J, L, M and W are already included in box A.
+es: Las casillas J, L, M y W ya están incluidas en la casilla A.
+
+fr: Revenus d'emploi
+en: Employment income
+es: Ingresos de empleo
+
+fr: Cotisations de l'employé au RRQ
+en: Employee's QPP contributions
+es: Aportes del empleado al RRQ
+
+fr: Deuxièmes cotisations supplémentaires de l'employé au RRQ
+en: Employee's second additional QPP contributions
+es: Segundos aportes adicionales del empleado al RRQ
+
+fr: Cotisations de l'employé à l'AE
+en: Employee's EI premiums
+es: Aportes del empleado al AE
+
+fr: Cotisations à un RPA
+en: RPP contributions
+es: Aportes a un RPA
+
+fr: Impôt sur le revenu retenu
+en: Income tax deducted
+es: Impuesto sobre la renta retenido
+
+fr: Gains assurables d'AE
+en: EI insurable earnings
+es: Ingresos asegurables del AE
+
+fr: Gains ouvrant droit à pension - RPC/RRQ
+en: CPP/QPP pensionable earnings
+es: Ingresos pensionables - RPC/RRQ
+
+fr: Usage personnel d'une automobile de l'employeur
+en: Personal use of employer's automobile
+es: Uso personal de un automóvil del empleador
+
+fr: Autres allocations et avantages imposables
+en: Other taxable allowances and benefits
+es: Otras asignaciones y beneficios gravables
+
+fr: Commissions d'emploi
+en: Employment commissions
+es: Comisiones de empleo
+
+fr: Cotisations syndicales
+en: Union dues
+es: Cuotas sindicales
+
+fr: Dons de bienfaisance
+en: Charitable donations
+es: Donaciones benéficas
+
+fr: Cotisations de l'employé au RPAP (RQAP)
+en: Employee's PPIP (QPIP) premiums
+es: Aportes del empleado al RPAP (RQAP)
+
+fr: Gains assurables du RPAP (RQAP)
+en: PPIP (QPIP) insurable earnings
+es: Ingresos asegurables del RPAP (RQAP)
+
+fr: Primes versées par l'employé à un régime privé d'assurance-maladie
+en: Employee-paid premiums for private health services plans
+es: Primas pagadas por el empleado a un seguro médico privado
+
+fr: Cotisation au RRQ
+en: QPP contribution
+es: Aporte al RRQ
+
+fr: Cotisation supplémentaire au RRQ (deuxième)
+en: Second additional QPP contribution
+es: Aporte adicional al RRQ (segundo)
+
+fr: Cotisation à l'assurance emploi
+en: Employment insurance premium
+es: Aporte al seguro de empleo
+
+fr: Cotisation à un RPA
+en: RPP contribution
+es: Aporte a un RPA
+
+fr: Impôt du Québec retenu
+en: Québec income tax withheld
+es: Impuesto de Quebec retenido
+
+fr: Salaire admissible au RRQ
+en: QPP pensionable salary or wages
+es: Salario admisible al RRQ
+
+fr: Cotisation au RQAP
+en: QPIP premium
+es: Aporte al RQAP
+
+fr: Salaire admissible au RQAP
+en: QPIP eligible salary or wages
+es: Salario admisible al RQAP
+
+fr: Régime privé d'assurance maladie
+en: Private health services plan
+es: Seguro médico privado
+
+fr: Autres avantages
+en: Other benefits
+es: Otros beneficios
+
+fr: Commissions
+en: Commissions
+es: Comisiones
+
+fr: Véhicule à moteur
+en: Motor vehicle
+es: Vehículo de motor
+
+fr: Cotisation à un régime privé d'assurance maladie (renseignement complémentaire)
+en: Premium paid to a private health services plan (additional information)
+es: Aporte a un seguro médico privado (información complementaria)
+
+fr: 1 - Aucun accès à une assurance ou à des soins dentaires
+en: 1 - No access to any dental care insurance or coverage
+es: 1 - Sin acceso a un seguro o a atención dental
+
+fr: 2 - Accès : payeur seulement
+en: 2 - Access: payee only
+es: 2 - Acceso: solo el beneficiario
+
+fr: 3 - Accès : payeur, époux ou conjoint de fait et enfants à charge
+en: 3 - Access: payee, spouse or common-law partner and dependent children
+es: 3 - Acceso: beneficiario, cónyuge o pareja de hecho e hijos a cargo
+
+fr: 4 - Accès : payeur et époux ou conjoint de fait
+en: 4 - Access: payee and spouse or common-law partner
+es: 4 - Acceso: beneficiario y cónyuge o pareja de hecho
+
+fr: 5 - Accès : payeur et enfants à charge
+en: 5 - Access: payee and dependent children
+es: 5 - Acceso: beneficiario e hijos a cargo
+
+# ---------- Rapports : CNESST ----------
+
+fr: Déclaration des salaires pour la CNESST, année
+en: CNESST statement of wages, year
+es: Declaración de salarios para la CNESST, año
+
+fr: Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année.
+en: Gross wages paid, amounts over the maximum insurable and periodic payments for the year.
+es: Salarios brutos pagados, excedentes del máximo asegurable y pagos periódicos del año.
+
+fr: Aucune paie confirmée pour l'instant.
+en: No confirmed pay runs yet.
+es: Ninguna nómina confirmada por el momento.
+
+fr: Salaire brut
+en: Gross wages
+es: Salario bruto
+
+fr: Excédent du maximum ({0})
+en: Excess over the maximum ({0})
+es: Excedente del máximo ({0})
+
+fr: Salaire assurable
+en: Insurable wages
+es: Salario asegurable
+
+fr: Cotisation calculée
+en: Calculated premium
+es: Aporte calculado
+
+fr: exclu de la CNESST (fiche de l'employé)
+en: excluded from CNESST (employee file)
+es: excluido de la CNESST (ficha del empleado)
+
+fr: Par mois
+en: By month
+es: Por mes
+
+fr: Mois
+en: Month
+es: Mes
+
+fr: Cotisation
+en: Premium
+es: Aporte
+
+fr: Conciliation
+en: Reconciliation
+es: Conciliación
+
+fr: Taux de versement périodique
+en: Periodic payment rate
+es: Tasa de pago periódico
+
+fr: Cotisation calculée sur les paies
+en: Premium calculated on pay runs
+es: Aporte calculado sobre las nóminas
+
+fr: Versements périodiques enregistrés (remises à Revenu Québec)
+en: Periodic payments recorded (remittances to Revenu Québec)
+es: Pagos periódicos registrados (remesas a Revenu Québec)
+
+fr: Écart
+en: Difference
+es: Diferencia
+
+fr: La Déclaration des salaires se produit dans Mon Espace CNESST avant le 15 mars. La CNESST établit ensuite la prime réelle et l'ajuste par rapport aux versements périodiques. Les salaires des travailleurs non couverts doivent être exclus selon les règles de la CNESST.
+en: The Statement of Wages is filed in Mon Espace CNESST before March 15. The CNESST then determines the actual premium and adjusts it against the periodic payments. Wages of workers who are not covered must be excluded according to CNESST rules.
+es: La Declaración de salarios se presenta en Mon Espace CNESST antes del 15 de marzo. La CNESST establece luego la prima real y la ajusta según los pagos periódicos. Los salarios de los trabajadores no cubiertos deben excluirse según las reglas de la CNESST.
+
+# ---------- Rapports : écritures comptables ----------
+
+fr: Rapport d'écritures comptables
+en: Journal entries report
+es: Informe de asientos contables
+
+fr: Toutes les paies de la période
+en: All pay runs in the period
+es: Todas las nóminas del período
+
+fr: Paie du {#0} (période au {#1})
+en: Pay run of {#0} (period ending {#1})
+es: Nómina del {#0} (período al {#1})
+
+fr: Paies payées du
+en: Pay runs paid from
+es: Nóminas pagadas del
+
+fr: au
+en: to
+es: al
+
+fr: Paies payées du {#0} au {#1}
+en: Pay runs paid from {#0} to {#1}
+es: Nóminas pagadas del {#0} al {#1}
+
+fr: Choisissez une paie précise, ou « Toutes les paies de la période » pour une écriture sommaire (un mois, par exemple).
+en: Choose a specific pay run, or "All pay runs in the period" for a summary entry (one month, for example).
+es: Elija una nómina específica, o «Todas las nóminas del período» para un asiento resumido (un mes, por ejemplo).
+
+fr: Afficher
+en: Show
+es: Mostrar
+
+fr: Définir les numéros de compte
+en: Define account numbers
+es: Definir los números de cuenta
+
+fr: Débit
+en: Debit
+es: Débito
+
+fr: Crédit
+en: Credit
+es: Crédito
+
+fr: à définir
+en: to be defined
+es: por definir
+
+fr: Aucune paie confirmée pour cette sélection.
+en: No confirmed pay run for this selection.
+es: Ninguna nómina confirmada para esta selección.
+
+fr: La période est invalide.
+en: The period is invalid.
+es: El período no es válido.
+
+fr: L'écriture n'est pas équilibrée : écart de {0}.
+en: The entry is not balanced: difference of {0}.
+es: El asiento no está balanceado: diferencia de {0}.
+
+fr: {#0} ligne(s) sans numéro de compte : définissez-les dans Configuration → Plan comptable.
+en: {#0} line(s) without an account number: define them in Settings → Chart of accounts.
+es: {#0} línea(s) sin número de cuenta: defínalas en Configuración → Plan de cuentas.
+
+fr: {0} à payer
+en: {0} payable
+es: {0} por pagar
+
+fr: {0} (vacances déjà provisionnées)
+en: {0} (vacation already accrued)
+es: {0} (vacaciones ya provisionadas)
+
+fr: Vacances accumulées
+en: Vacation accrued
+es: Vacaciones acumuladas
+
+fr: RRQ - part de l'employeur
+en: QPP - employer share
+es: RRQ - parte del empleador
+
+fr: Assurance-emploi - part de l'employeur
+en: Employment insurance - employer share
+es: Seguro de empleo - parte del empleador
+
+fr: RQAP - part de l'employeur
+en: QPIP - employer share
+es: RQAP - parte del empleador
+
+fr: Fonds des services de santé
+en: Health Services Fund
+es: Fondo de servicios de salud
+
+fr: RRQ à payer
+en: QPP payable
+es: RRQ por pagar
+
+fr: Assurance-emploi à payer
+en: Employment insurance payable
+es: Seguro de empleo por pagar
+
+fr: RQAP à payer
+en: QPIP payable
+es: RQAP por pagar
+
+fr: CNT à payer
+en: CNT payable
+es: CNT por pagar
+
+fr: Paies nettes
+en: Net pay
+es: Salarios netos
+
+fr: aucun courriel dans la fiche.
+en: no email in the employee file.
+es: ningún correo en la ficha.
+
+fr: adresse de courriel invalide.
+en: invalid email address.
+es: dirección de correo no válida.
+
+fr: {#0} talon(s) envoyé(s), {#1} déjà envoyé(s). Problèmes : {2}
+en: {#0} pay stub(s) sent, {#1} already sent. Problems: {2}
+es: {#0} talón(es) enviado(s), {#1} ya enviado(s). Problemas: {2}
+
+# ---------- Noms de champs cités dans les messages de validation ----------
+
+fr: RQAP employé
+en: QPIP employee
+es: RQAP empleado
+
+fr: RQAP employeur
+en: QPIP employer
+es: RQAP empleador
+
+fr: Salaire assurable CNESST
+en: CNESST insurable wages
+es: Salario asegurable CNESST
+
+fr: Autres crédits fédéraux
+en: Other federal credits
+es: Otros créditos federales
+
+fr: Retenue supplémentaire
+en: Additional withholding
+es: Retención adicional
+
+fr: T1213 - Déductions annuelles
+en: T1213 - Annual deductions
+es: T1213 - Deducciones anuales
+
+fr: TD1 - Déduction pour zone visée
+en: TD1 - Prescribed zone deduction
+es: TD1 - Deducción por zona designada
+
+fr: TD1 - Impôt additionnel
+en: TD1 - Additional tax
+es: TD1 - Impuesto adicional
+
+fr: TD1 - Montant de la demande
+en: TD1 - Claim amount
+es: TD1 - Monto de la solicitud
+
+fr: TP-1015.3 - Ligne 10
+en: TP-1015.3 - Line 10
+es: TP-1015.3 - Línea 10
+
+fr: TP-1015.3 - Ligne 19
+en: TP-1015.3 - Line 19
+es: TP-1015.3 - Línea 19
+
+fr: TP-1016 - Crédits
+en: TP-1016 - Credits
+es: TP-1016 - Créditos
+
+fr: TP-1016 - Déductions
+en: TP-1016 - Deductions
+es: TP-1016 - Deducciones
+
+fr: Gouvernement invalide.
+en: Invalid government.
+es: Gobierno no válido.
+
+fr: Clé de compte invalide.
+en: Invalid account key.
+es: Clave de cuenta no válida.
+
+# ---------- En-têtes des fichiers CSV ----------
+
+fr: Prénom
+en: First name
+es: Nombre de pila
+
+fr: Code
+en: Code
+es: Código
+
+fr: Excédent
+en: Excess
+es: Excedente
+
+fr: Libellé
+en: Description
+es: Descripción
+
+fr: T4 case {0}
+en: T4 box {0}
+es: T4 casilla {0}
+
+fr: R1 case {0}
+en: RL-1 box {0}
+es: R1 casilla {0}
+
+fr: RPC/RRQ
+en: CPP/QPP
+es: RPC/RRQ

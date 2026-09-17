@@ -1,0 +1,47 @@
+<%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.Master.vb" Inherits="Paie60Sec.Web.SiteMaster" %>
+<!DOCTYPE html>
+<html lang="<%= I18n.Langue %>">
+<head runat="server">
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>60secPaie</title>
+    <link href="~/Content/site.css" rel="stylesheet" />
+</head>
+<body>
+    <form runat="server">
+        <header class="entete">
+            <div class="entete-haut">
+                <a runat="server" href="~/Default.aspx" class="logo">60sec<span translate="no">Paie</span></a>
+                <div class="session">
+                    <%-- Une seule compagnie : son nom. Plusieurs (comptable) : liste déroulante, comme dans MngConsul. --%>
+                    <asp:Label ID="lblCompagnie" runat="server" CssClass="session-compagnie" />
+                    <asp:DropDownList ID="ddlCompagnie" runat="server" AutoPostBack="true" CausesValidation="false" CssClass="session-select" Visible="false" ToolTip="Changer de compagnie" />
+                    <span class="langues"><asp:Literal ID="litLangues" runat="server" /></span>
+                    <asp:Label ID="lblUtilisateur" runat="server" />
+                    <asp:LinkButton ID="lnkDeconnexion" runat="server" CausesValidation="false">Me déconnecter</asp:LinkButton>
+                </div>
+            </div>
+            <nav class="menu">
+                <a runat="server" id="lnkTableau" href="~/Default.aspx">Tableau de bord</a>
+                <a runat="server" id="lnkPaie" href="~/Paie/Calculer.aspx">Calculer la paie</a>
+                <a runat="server" id="lnkHistorique" href="~/Paie/Historique.aspx">Historique</a>
+                <a runat="server" id="lnkRemises" href="~/Remises/Payer.aspx">Retenues</a>
+                <a runat="server" id="lnkRapports" href="~/Rapports/Feuillets.aspx">Rapports</a>
+                <a runat="server" id="lnkEmployes" href="~/Employes/Liste.aspx">Employés</a>
+                <a runat="server" id="lnkConfig" href="~/Config/Compagnie.aspx">Configuration</a>
+            </nav>
+        </header>
+
+        <main class="contenu">
+            <asp:Panel ID="pnlMessage" runat="server" Visible="false">
+                <asp:Literal ID="litMessage" runat="server" />
+            </asp:Panel>
+            <asp:ContentPlaceHolder ID="Contenu" runat="server" />
+        </main>
+
+        <footer class="pied">
+            60secPaie &middot; Taux 2026 : T4127 (ARC) et TP-1015.F (Revenu Québec). Vérifiez toujours vos paies avant de les confirmer.
+        </footer>
+    </form>
+</body>
+</html>

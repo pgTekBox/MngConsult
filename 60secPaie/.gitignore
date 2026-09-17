@@ -1,0 +1,28 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Compilation
+bin/
+obj/
+TestResults/
+
+# Secrets de production (chaîne de connexion, machineKey)
+Web.Production.config
+
+# Document commercial de Nubis : référence locale seulement
+docs/nubis_plans_fr.pdf
+
+# Courriels de test et autres données locales
+App_Data/
+
+# Le .gitignore racine ignore web.config. Celui-ci est requis (authentification, sécurité) et ne contient AUCUN secret :
+# les secrets de production vont dans la configuration du serveur ou un fichier hors dépôt (configSource).
+!src/60secPaie.Web/Web.config
+
+# Export de données pour un transfert (renseignements personnels)
+Database/export/
+
+# Chaîne de connexion réelle (mot de passe du serveur SQL)
+ConnectionStrings.config
