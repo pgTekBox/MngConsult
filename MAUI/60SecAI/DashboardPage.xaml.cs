@@ -25,7 +25,7 @@ public partial class DashboardPage : ContentPage
 		=> await Shell.Current.GoToAsync(nameof(NewInvoicePage));
 
 	private async void OnCollectTapped(object? sender, TappedEventArgs e)
-		=> await DisplayAlertAsync("AI Sales", "Collecter les montants en retard.", "OK");
+		=> await DisplayAlertAsync("Factures clients", "Collecter les montants en retard.", "OK");
 
 	private async void OnSalesStatusTapped(object? sender, TappedEventArgs e)
 	{

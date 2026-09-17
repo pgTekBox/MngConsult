@@ -88,6 +88,19 @@ public class SalesService
 		return await response.Content.ReadFromJsonAsync<SendInvoiceResult>(JsonOptions, ct);
 	}
 
+	/// <summary>Envoie une photo de facture par courriel via le serveur (destinataire optionnel).</summary>
+	public async Task<SendInvoiceResult?> SendPhotoEmailAsync(int invoiceId, int photoId, string? to, CancellationToken ct = default)
+	{
+		using var response = await _http.PostAsJsonAsync(
+			$"api/sales/invoices/{invoiceId}/photos/{photoId}/email", new SendPhotoEmailRequest(to), JsonOptions, ct);
+		if (!response.IsSuccessStatusCode)
+		{
+			return null;
+		}
+
+		return await response.Content.ReadFromJsonAsync<SendInvoiceResult>(JsonOptions, ct);
+	}
+
 	/// <summary>Génère (sans courriel) un lien de paiement Square pour la facture.</summary>
 	public async Task<PaymentLinkResult?> CreatePaymentLinkAsync(int invoiceId, CancellationToken ct = default)
 	{

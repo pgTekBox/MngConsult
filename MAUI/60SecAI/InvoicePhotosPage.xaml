@@ -53,8 +53,10 @@
                                        TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
                                 <Label Text="{Binding SizeText}" FontSize="11" TextColor="{StaticResource Gray400}" />
                             </VerticalStackLayout>
-                            <Label Grid.Column="2" Text="&#8250;" FontSize="18"
-                                   TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
+                            <Button Grid.Column="2" Text="&#128228;" FontSize="18"
+                                    Clicked="OnSendPhotoClicked"
+                                    BackgroundColor="Transparent" BorderWidth="0" Padding="0"
+                                    WidthRequest="44" HeightRequest="44" VerticalOptions="Center" />
                         </Grid>
                     </Border>
                 </DataTemplate>

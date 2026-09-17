@@ -10,6 +10,7 @@ public record InvoiceDto(
 	int Id,
 	string Number,
 	string ClientName,
+	string ClientEmail,
 	string Description,
 	decimal Amount,
 	string Status,
@@ -41,6 +42,8 @@ public record CreateInvoiceRequest(
 public record CreateInvoiceResult(int Id);
 
 public record SendInvoiceRequest(bool IncludeSquare = false);
+
+public record SendPhotoEmailRequest(string? To = null);
 
 public record SendInvoiceResult(string Status, string? Email, string? DocNumber, string SquareStatus, string? SquareError);
 

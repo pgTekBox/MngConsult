@@ -41,7 +41,7 @@ public partial class PaymentRow : ContentView
 		if (Application.Current?.Windows.Count > 0 &&
 			Application.Current.Windows[0].Page is Page page)
 		{
-			await page.DisplayAlertAsync("AI Payment", $"Payer {Payer} — {Amount}.", "OK");
+			await page.DisplayAlertAsync("Factures fournisseurs", $"Payer {Payer} — {Amount}.", "OK");
 		}
 	}
 }

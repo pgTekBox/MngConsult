@@ -139,6 +139,56 @@ public partial class InvoicePhotosPage : ContentPage
 		return page;
 	}
 
+	/// <summary>Envoie la photo par courriel (pièce jointe) ou par SMS/partage (image).</summary>
+	private async void OnSendPhotoClicked(object? sender, EventArgs e)
+	{
+		if ((sender as BindableObject)?.BindingContext is not PhotoItem item || item.Bytes is null || item.Bytes.Length == 0)
+		{
+			return;
+		}
+
+		var loc = LocalizationResourceManager.Instance;
+		var choice = await DisplayActionSheetAsync(loc["PhotoSendTitle"], loc["Cancel"], null, loc["ByEmail"], loc["BySms"]);
+
+		try
+		{
+			if (choice == loc["ByEmail"])
+			{
+				// Courriel : TOUJOURS via le serveur de courriels, au client de la facture (sans invite).
+				var result = await _sales.SendPhotoEmailAsync(_invoiceId, item.Id, null);
+				await DisplayAlertAsync(loc["PhotoSendTitle"], BuildPhotoEmailMessage(result, loc), "OK");
+			}
+			else if (choice == loc["BySms"])
+			{
+				// SMS/MMS avec image : feuille de partage native (Messages, etc.).
+				var path = Path.Combine(FileSystem.CacheDirectory, $"facture-photo-{item.Id}.jpg");
+				await File.WriteAllBytesAsync(path, item.Bytes);
+				await SharePhotoAsync(path, loc);
+			}
+		}
+		catch (Exception ex)
+		{
+			await DisplayAlertAsync(loc["PhotoSendTitle"], ex.Message, "OK");
+		}
+	}
+
+	private static string BuildPhotoEmailMessage(SendInvoiceResult? result, LocalizationResourceManager loc)
+		=> result?.Status switch
+		{
+			"Sent" => string.Format(loc["PhotoSentMsg"], result.Email),
+			"NoEmail" => loc["SendNoEmail"],
+			"NotFound" => loc["PhotoNotFound"],
+			_ => loc["SendFailed"],
+		};
+
+	/// <summary>Partage la photo via la feuille native (courriel, Messages, etc.).</summary>
+	private static Task SharePhotoAsync(string path, LocalizationResourceManager loc)
+		=> Share.Default.RequestAsync(new ShareFileRequest
+		{
+			Title = loc["PhotoSendTitle"],
+			File = new ShareFile(path),
+		});
+
 	private async void OnCancel(object? sender, TappedEventArgs e) => await Navigation.PopModalAsync();
 }
 

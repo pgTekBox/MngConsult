@@ -36,7 +36,7 @@
                               ColumnSpacing="8"
                               VerticalOptions="Center">
                             <Label Grid.Column="0"
-                                   Text="AI Sales"
+                                   Text="Factures clients"
                                    FontSize="20"
                                    FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
@@ -203,7 +203,7 @@
                               ColumnSpacing="8"
                               VerticalOptions="Center">
                             <Label Grid.Column="0"
-                                   Text="AI Payment"
+                                   Text="Factures fournisseurs"
                                    FontSize="20"
                                    FontAttributes="Bold"
                                    TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"

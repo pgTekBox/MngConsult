@@ -355,6 +355,15 @@ public class SalesController : ControllerBase
 		return Ok(list);
 	}
 
+	/// <summary>Envoie une photo de facture par courriel via le serveur de courriels (jamais le client mail de l'appareil).</summary>
+	[HttpPost("invoices/{id:int}/photos/{photoId:int}/email")]
+	public async Task<ActionResult> SendPhotoEmail(int id, int photoId, [FromBody] SendPhotoEmailRequest? request,
+		[FromServices] InvoiceEmailService emailService)
+	{
+		var result = await emailService.SendPhotoEmailAsync(CompanyGuid, id, photoId, request?.To);
+		return Ok(result);
+	}
+
 	/// <summary>Contenu binaire d'une photo (s0721GetInvoicePhotoContent) — renvoyé comme image.</summary>
 	[HttpGet("invoices/{id:int}/photos/{photoId:int}")]
 	public async Task<ActionResult> GetInvoicePhotoContent(int id, int photoId)
@@ -592,6 +601,7 @@ public class SalesController : ControllerBase
 		var idIdx = Ordinal(reader, cols, "Id");
 		var numberIdx = Ordinal(reader, cols, "DocumentNumber", "RefNo", "NoFacture", "Numero");
 		var nameIdx = Ordinal(reader, cols, "DisplayName", "Name", "NomClient", "Beneficiaire", "Nom");
+		var emailIdx = Ordinal(reader, cols, "Email", "Courriel");
 		var descIdx = Ordinal(reader, cols, "Description", "Note");
 		var amountIdx = Ordinal(reader, cols, "Total", "Montant");
 		var statutIdx = Ordinal(reader, cols, "StatutPaiement", "Statut");
@@ -602,7 +612,9 @@ public class SalesController : ControllerBase
 		{
 			var id = idIdx is int ii && !reader.IsDBNull(ii) ? Convert.ToInt32(reader.GetValue(ii)) : 0;
 			var number = StripHtml(ReadString(reader, numberIdx, string.Empty));
-			var name = StripHtml(ReadString(reader, nameIdx, "Client"));
+			// La colonne Name contient « <div>nom adresse</div><div class="cust-email">courriel</div> ».
+			var name = ExtractNameAddress(ReadString(reader, nameIdx, "Client"));
+			var email = StripHtml(ReadString(reader, emailIdx, string.Empty));
 			var desc = StripHtml(ReadString(reader, descIdx, string.Empty));
 			var amount = ReadDecimal(reader, amountIdx);
 			var status = MapStatus(ReadString(reader, statutIdx, string.Empty));
@@ -610,7 +622,7 @@ public class SalesController : ControllerBase
 			var due = ReadDate(reader, dueIdx);
 
 			list.Add(new InvoiceDto(
-				id, number, name, desc, amount, status,
+				id, number, name, email, desc, amount, status,
 				issued.HasValue ? DateOnly.FromDateTime(issued.Value) : DateOnly.FromDateTime(DateTime.Today),
 				due.HasValue ? DateOnly.FromDateTime(due.Value) : DateOnly.FromDateTime(DateTime.Today)));
 		}
@@ -651,6 +663,29 @@ public class SalesController : ControllerBase
 
 	private static DateTime? ReadDate(SqlDataReader reader, int? idx)
 		=> idx is int i && !reader.IsDBNull(i) ? Convert.ToDateTime(reader.GetValue(i)) : null;
+
+	/// <summary>
+	/// Extrait « nom + adresse » de la colonne Name (HTML) en retirant le bloc courriel
+	/// (&lt;div class="cust-email"&gt;…&lt;/div&gt;) avant de nettoyer le HTML.
+	/// </summary>
+	private static string ExtractNameAddress(string? html)
+	{
+		if (string.IsNullOrEmpty(html))
+		{
+			return string.Empty;
+		}
+
+		var idx = html.IndexOf("cust-email", StringComparison.OrdinalIgnoreCase);
+		var head = html;
+		if (idx >= 0)
+		{
+			// Couper avant la balise ouvrante du bloc courriel (le « < » qui précède).
+			var lt = html.LastIndexOf('<', idx);
+			head = lt >= 0 ? html[..lt] : html[..idx];
+		}
+
+		return StripHtml(head);
+	}
 
 	/// <summary>Retire les balises HTML et décode les entités (certaines colonnes contiennent du HTML).</summary>
 	private static string StripHtml(string? value)

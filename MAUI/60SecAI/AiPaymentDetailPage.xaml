@@ -14,7 +14,7 @@
 
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
-                              PageTitle="AI Payment"
+                              PageTitle="Factures fournisseurs"
                               Subtitle="{loc:Translate RealtimeSubtitle}"
                               Balance="48320.55"
                               ShowHome="True" />

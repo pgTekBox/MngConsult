@@ -295,6 +295,7 @@ public class SuppliersController : ControllerBase
 		var idIdx = Ordinal(reader, cols, "Id");
 		var numberIdx = Ordinal(reader, cols, "DocumentNumber", "RefNo", "NoFacture", "Numero");
 		var nameIdx = Ordinal(reader, cols, "DisplayName", "Name", "NomFournisseur", "Fournisseur", "Nom");
+		var emailIdx = Ordinal(reader, cols, "Email", "Courriel");
 		var descIdx = Ordinal(reader, cols, "Description", "Note");
 		var amountIdx = Ordinal(reader, cols, "Total", "Montant");
 		var statutIdx = Ordinal(reader, cols, "StatutPaiement", "Statut");
@@ -306,6 +307,7 @@ public class SuppliersController : ControllerBase
 			var id = idIdx is int ii && !reader.IsDBNull(ii) ? Convert.ToInt32(reader.GetValue(ii)) : 0;
 			var number = StripHtml(ReadString(reader, numberIdx, string.Empty));
 			var name = StripHtml(ReadString(reader, nameIdx, "Fournisseur"));
+			var email = StripHtml(ReadString(reader, emailIdx, string.Empty));
 			var desc = StripHtml(ReadString(reader, descIdx, string.Empty));
 			var amount = ReadDecimal(reader, amountIdx);
 			var status = MapStatus(ReadString(reader, statutIdx, string.Empty));
@@ -313,7 +315,7 @@ public class SuppliersController : ControllerBase
 			var due = ReadDate(reader, dueIdx);
 
 			list.Add(new InvoiceDto(
-				id, number, name, desc, amount, status,
+				id, number, name, email, desc, amount, status,
 				issued.HasValue ? DateOnly.FromDateTime(issued.Value) : DateOnly.FromDateTime(DateTime.Today),
 				due.HasValue ? DateOnly.FromDateTime(due.Value) : (issued.HasValue ? DateOnly.FromDateTime(issued.Value) : DateOnly.FromDateTime(DateTime.Today))));
 		}
