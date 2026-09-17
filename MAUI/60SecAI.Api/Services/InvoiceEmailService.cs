@@ -212,6 +212,61 @@ public sealed class InvoiceEmailService
 		return new PaymentInfo(docNumber, email, phone, companyName, reste);
 	}
 
+	/// <summary>
+	/// Envoie une photo de facture par courriel VIA LE SERVEUR DE COURRIELS (jamais le
+	/// client mail de l'appareil). Destinataire = <paramref name="toOverride"/> si fourni,
+	/// sinon le courriel du client de la facture.
+	/// </summary>
+	public async Task<SendResult> SendPhotoEmailAsync(Guid companyGuid, int invoiceId, int photoId, string? toOverride)
+	{
+		var info = await LoadPaymentInfoAsync(invoiceId);
+		var docNumber = info?.DocNumber ?? invoiceId.ToString();
+
+		var toEmail = !string.IsNullOrWhiteSpace(toOverride) ? toOverride.Trim() : (info?.Email ?? "");
+		if (string.IsNullOrWhiteSpace(toEmail))
+		{
+			return new SendResult("NoEmail", null, docNumber, "NotRequested", null);
+		}
+
+		var (bytes, contentType) = await LoadPhotoAsync(invoiceId, photoId);
+		if (bytes is null || bytes.Length == 0)
+		{
+			return new SendResult("NotFound", toEmail, docNumber, "NotRequested", null);
+		}
+
+		var ext = contentType.Contains("png", StringComparison.OrdinalIgnoreCase) ? ".png" : ".jpg";
+		var fileName = $"Facture_{docNumber}_photo_{photoId}{ext}";
+		var subject = "Photo — Facture " + docNumber;
+
+		var body = new StringBuilder();
+		body.Append("<div style=\"font-family:Arial,sans-serif;font-size:14px;color:#0f172a\">");
+		body.Append("<p>Bonjour,</p>");
+		body.Append("<p>Veuillez trouver ci-jointe une photo liée à la facture <strong>").Append(HtmlEncode(docNumber)).Append("</strong>.</p>");
+		body.Append("<p>Merci.</p>");
+		body.Append("</div>");
+
+		await _mail.QueueEmailWithAttachmentAsync(companyGuid, toEmail, subject, body.ToString(), bytes, fileName, contentType);
+		return new SendResult("Sent", toEmail, docNumber, "NotRequested", null);
+	}
+
+	private async Task<(byte[]? Bytes, string ContentType)> LoadPhotoAsync(int invoiceId, int photoId)
+	{
+		await using var conn = new SqlConnection(_connectionString);
+		await using var cmd = new SqlCommand("s0721GetInvoicePhotoContent", conn) { CommandType = CommandType.StoredProcedure };
+		cmd.Parameters.AddWithValue("@DocumentId", invoiceId);
+		cmd.Parameters.AddWithValue("@PhotoId", photoId);
+		await conn.OpenAsync();
+		await using var reader = await cmd.ExecuteReaderAsync();
+		if (!await reader.ReadAsync())
+		{
+			return (null, "image/jpeg");
+		}
+
+		var ct = reader["ContentType"] is DBNull ? "image/jpeg" : reader["ContentType"].ToString()!;
+		var blob = reader["ImageSource"] is DBNull ? null : (byte[])reader["ImageSource"];
+		return (blob, string.IsNullOrWhiteSpace(ct) ? "image/jpeg" : ct);
+	}
+
 	private async Task<(DataRow? Row, DataSet Ds)> LoadAsync(int invoiceId)
 	{
 		var ds = new DataSet();

@@ -28,8 +28,13 @@ public sealed class MailQueueService
 	}
 
 	/// <summary>Dépose un courriel HTML avec une pièce jointe PDF. Retourne le MailId créé.</summary>
-	public async Task<int> QueueEmailWithPdfAsync(
+	public Task<int> QueueEmailWithPdfAsync(
 		Guid companyGuid, string toEmail, string subject, string htmlBody, byte[] pdfBytes, string fileName)
+		=> QueueEmailWithAttachmentAsync(companyGuid, toEmail, subject, htmlBody, pdfBytes, fileName, "application/pdf");
+
+	/// <summary>Dépose un courriel HTML avec une pièce jointe (type quelconque). Retourne le MailId créé.</summary>
+	public async Task<int> QueueEmailWithAttachmentAsync(
+		Guid companyGuid, string toEmail, string subject, string htmlBody, byte[] content, string fileName, string contentType)
 	{
 		var replyTo = await GetVerifiedReplyToAsync(companyGuid);
 
@@ -47,14 +52,14 @@ public sealed class MailQueueService
 			mailId = result is null || result is DBNull ? 0 : Convert.ToInt32(result);
 		}
 
-		// 2. Pièce jointe PDF
+		// 2. Pièce jointe
 		await using (var conn = new SqlConnection(_mailConnectionString))
 		{
 			await using var cmd = new SqlCommand("s1579InsertAttachemnt_A", conn) { CommandType = CommandType.StoredProcedure };
 			cmd.Parameters.AddWithValue("@FileName", fileName);
-			cmd.Parameters.Add(new SqlParameter("@content", SqlDbType.VarBinary, -1) { Value = pdfBytes });
+			cmd.Parameters.Add(new SqlParameter("@content", SqlDbType.VarBinary, -1) { Value = content });
 			cmd.Parameters.AddWithValue("@MailId", mailId);
-			cmd.Parameters.AddWithValue("@ContentType", "application/pdf");
+			cmd.Parameters.AddWithValue("@ContentType", string.IsNullOrWhiteSpace(contentType) ? "application/octet-stream" : contentType);
 			cmd.Parameters.AddWithValue("@ContentId", "");
 			await conn.OpenAsync();
 			await cmd.ExecuteNonQueryAsync();

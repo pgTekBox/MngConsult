@@ -14,7 +14,7 @@
 
         <!-- Menu commun (haut) -->
         <controls:TopMenuView Grid.Row="0"
-                              PageTitle="AI Sales"
+                              PageTitle="Factures clients"
                               Subtitle="{loc:Translate RealtimeSubtitle}"
                               Balance="48320.55"
                               ShowHome="True" />
@@ -125,36 +125,49 @@
                             <TapGestureRecognizer Command="{Binding BindingContext.OpenInvoiceCommand, Source={x:Reference Page}}"
                                                   CommandParameter="{Binding Id}" />
                         </Border.GestureRecognizers>
-                        <Grid ColumnDefinitions="Auto,*,Auto,Auto,Auto,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
-                            <Label Grid.Column="0" Text="{Binding Icon}" FontSize="16"
-                                   TextColor="{Binding AmountColor}" VerticalOptions="Center" />
-                            <VerticalStackLayout Grid.Column="1" Spacing="1" VerticalOptions="Center">
-                                <Label Text="{Binding Number}" FontSize="14" FontAttributes="Bold"
-                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" />
-                                <Label Text="{Binding ClientName}" FontSize="11" TextColor="{StaticResource Gray400}" />
-                            </VerticalStackLayout>
-                            <HorizontalStackLayout Grid.Column="2" Spacing="10" VerticalOptions="Center">
-                                <Label Text="{Binding DateText}" FontSize="11" TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
-                                <Label Text="{Binding AmountText}" FontSize="14" FontAttributes="Bold"
+                        <VerticalStackLayout Spacing="4">
+
+                            <!-- Ligne 1 : n° de facture + nom / adresse du client -->
+                            <Grid ColumnDefinitions="Auto,Auto,*" ColumnSpacing="6" VerticalOptions="Center">
+                                <Label Grid.Column="0" Text="{Binding Icon}" FontSize="14"
                                        TextColor="{Binding AmountColor}" VerticalOptions="Center" />
+                                <Label Grid.Column="1" Text="{Binding Number}" FontSize="14" FontAttributes="Bold"
+                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding ClientName}" FontSize="13"
+                                       TextColor="{AppThemeBinding Light=#1F1F1F, Dark=White}"
+                                       VerticalOptions="Center" LineBreakMode="TailTruncation" />
+                            </Grid>
+
+                            <!-- Ligne 2 : courriel + date de facturation + montant -->
+                            <Grid ColumnDefinitions="*,Auto,Auto" ColumnSpacing="8" VerticalOptions="Center">
+                                <Label Grid.Column="0" Text="{Binding ClientEmail}" FontSize="11"
+                                       TextColor="{StaticResource Gray400}" VerticalOptions="Center"
+                                       LineBreakMode="TailTruncation" />
+                                <Label Grid.Column="1" Text="{Binding DateText}" FontSize="11"
+                                       TextColor="{StaticResource Gray400}" VerticalOptions="Center" />
+                                <Label Grid.Column="2" Text="{Binding AmountText}" FontSize="14" FontAttributes="Bold"
+                                       TextColor="{Binding AmountColor}" VerticalOptions="Center" />
+                            </Grid>
+
+                            <!-- Ligne 3 : icônes d'action alignées à droite -->
+                            <HorizontalStackLayout HorizontalOptions="End" Spacing="4">
+                                <Label Text="&#128247;" FontSize="18" Padding="6,4">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnAddPhotoTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Text="&#128444;&#65039;" FontSize="18" Padding="6,4">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnViewPhotosTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
+                                <Label Text="&#128231;" FontSize="18" Padding="6,4">
+                                    <Label.GestureRecognizers>
+                                        <TapGestureRecognizer Tapped="OnSendInvoiceTapped" />
+                                    </Label.GestureRecognizers>
+                                </Label>
                             </HorizontalStackLayout>
-                            <Label Grid.Column="3" Text="&#128247;" FontSize="18" VerticalOptions="Center" Padding="6,4">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnAddPhotoTapped" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="4" Text="&#128444;&#65039;" FontSize="18" VerticalOptions="Center" Padding="6,4">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnViewPhotosTapped" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="5" Text="&#128231;" FontSize="18" VerticalOptions="Center" Padding="6,4">
-                                <Label.GestureRecognizers>
-                                    <TapGestureRecognizer Tapped="OnSendInvoiceTapped" />
-                                </Label.GestureRecognizers>
-                            </Label>
-                            <Label Grid.Column="6" Text="&#8250;" FontSize="18" TextColor="{StaticResource Gray300}" VerticalOptions="Center" />
-                        </Grid>
+                        </VerticalStackLayout>
                     </Border>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

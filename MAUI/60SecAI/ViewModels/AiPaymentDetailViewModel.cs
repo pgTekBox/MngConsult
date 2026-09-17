@@ -106,6 +106,7 @@ public partial class AiPaymentDetailViewModel : BaseViewModel
 				inv.Id,
 				string.IsNullOrWhiteSpace(inv.Number) ? $"#{inv.Id}" : inv.Number,
 				inv.ClientName,
+				inv.ClientEmail,
 				inv.IssuedOn.ToString("yyyy-MM-dd", FrCulture),
 				inv.Amount.ToString("N2", FrCulture) + " $",
 				color,

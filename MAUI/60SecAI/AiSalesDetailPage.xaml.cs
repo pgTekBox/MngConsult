@@ -9,6 +9,10 @@ public partial class AiSalesDetailPage : ContentPage
 {
 	private readonly AiSalesDetailViewModel _vm;
 
+	/// <summary>Le statut du deep-link n'est appliqué qu'une fois, pour ne pas écraser
+	/// le filtre choisi par l'utilisateur quand Shell ré-applique la requête au retour.</summary>
+	private bool _statusApplied;
+
 	public AiSalesDetailPage()
 	{
 		InitializeComponent();
@@ -22,9 +26,10 @@ public partial class AiSalesDetailPage : ContentPage
 		get => _vm.SelectedStatus;
 		set
 		{
-			if (!string.IsNullOrEmpty(value))
+			if (!_statusApplied && !string.IsNullOrEmpty(value))
 			{
 				_vm.SelectedStatus = value;
+				_statusApplied = true;
 			}
 		}
 	}

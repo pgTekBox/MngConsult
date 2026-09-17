@@ -4,6 +4,7 @@ public record InvoiceDto(
 	int Id,
 	string Number,
 	string ClientName,
+	string ClientEmail,
 	string Description,
 	decimal Amount,
 	string Status,
@@ -39,6 +40,9 @@ public record CreateInvoiceResult(int Id);
 
 // ----- Envoi de facture par courriel -----
 public record SendInvoiceRequest(bool IncludeSquare = false);
+
+/// <summary>Destinataire optionnel ; vide = courriel du client de la facture.</summary>
+public record SendPhotoEmailRequest(string? To = null);
 
 /// <summary>Status : Sent | NotFound | NoEmail | PdfFail. SquareStatus : NotRequested | Included | AlreadyPaid | NotConnected | NotGenerated | Error.</summary>
 public record SendInvoiceResult(string Status, string? Email, string? DocNumber, string SquareStatus, string? SquareError);
