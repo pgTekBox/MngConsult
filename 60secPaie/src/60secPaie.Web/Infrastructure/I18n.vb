@@ -12,7 +12,9 @@ Imports System.Web.Caching
 '''
 ''' Traduction : les pages sont écrites en français. À la sortie, <see cref="TraduireHtml"/> remplace chaque texte
 ''' (nœuds de texte, boutons, placeholder, title, confirm) par sa traduction, cherchée dans Langues\traductions.txt.
-''' Un texte absent du dictionnaire reste en français. Les textes construits avec des données utilisent T("... {0} ...", valeur).
+''' Un texte absent du dictionnaire reste en français.
+''' Le dictionnaire accepte des modèles pour les textes qui contiennent des données :
+'''   {0} = texte quelconque (traduit à son tour s'il est connu), {#0} = nombre, montant ou date.
 ''' </summary>
 Public NotInheritable Class I18n
 
@@ -26,7 +28,7 @@ Public NotInheritable Class I18n
 
     ' ---------- Langue courante ----------
 
-    Private Shared Function Valide(code As String) As Boolean
+    Public Shared Function Valide(code As String) As Boolean
         Return code = "fr" OrElse code = "en" OrElse code = "es"
     End Function
 
@@ -60,6 +62,23 @@ Public NotInheritable Class I18n
         End Set
     End Property
 
+    ''' <summary>
+    ''' Exécute un rendu dans une autre langue que celle de l'utilisateur (courriel dans la langue de l'employé) :
+    ''' les montants et les textes produits par <paramref name="rendu"/> suivent cette langue. Rien n'est mémorisé.
+    ''' </summary>
+    Public Shared Function DansLaLangue(code As String, rendu As Func(Of String)) As String
+        code = If(code, "").Trim().ToLowerInvariant()
+        If Not Valide(code) Then code = "fr"
+        Dim ctx = HttpContext.Current
+        Dim avant = Langue
+        ctx.Items(CleSession) = code
+        Try
+            Return rendu()
+        Finally
+            ctx.Items(CleSession) = avant
+        End Try
+    End Function
+
     Private Shared Sub Memoriser(ctx As HttpContext, code As String)
         If ctx.Session IsNot Nothing Then ctx.Session(CleSession) = code
         ctx.Response.Cookies.Set(New HttpCookie(NomTemoin, code) With {.Expires = Date.Now.AddYears(1), .HttpOnly = True})
@@ -68,13 +87,17 @@ Public NotInheritable Class I18n
     ''' <summary>Culture de mise en forme des nombres et des mois (les dates s'affichent toujours en AAAA-MM-JJ).</summary>
     Public Shared ReadOnly Property Culture As CultureInfo
         Get
-            Select Case Langue
-                Case "en" : Return CultureInfo.GetCultureInfo("en-CA")
-                Case "es" : Return CultureInfo.GetCultureInfo("es-MX")
-                Case Else : Return CultureInfo.GetCultureInfo("fr-CA")
-            End Select
+            Return CultureDe(Langue)
         End Get
     End Property
+
+    Public Shared Function CultureDe(code As String) As CultureInfo
+        Select Case code
+            Case "en" : Return CultureInfo.GetCultureInfo("en-CA")
+            Case "es" : Return CultureInfo.GetCultureInfo("es-MX")
+            Case Else : Return CultureInfo.GetCultureInfo("fr-CA")
+        End Select
+    End Function
 
     ''' <summary>Liens FR | EN | ES vers la page courante, en conservant les autres paramètres de l'URL.</summary>
     Public Shared Function SelecteurLangues(requete As HttpRequest) As String
@@ -98,21 +121,49 @@ Public NotInheritable Class I18n
     ''' <summary>Emplacement du fichier de traductions lorsqu'il n'est pas celui du site (tests).</summary>
     Public Shared Property CheminFichier As String
 
-    ''' <summary>Dictionnaire de la langue : texte français normalisé → traduction. Rechargé dès que le fichier change.</summary>
-    Private Shared Function Dictionnaire(code As String) As Dictionary(Of String, String)
-        Dim cle = "I18n." & code
-        Dim d = TryCast(HttpRuntime.Cache(cle), Dictionary(Of String, String))
-        If d IsNot Nothing Then Return d
+    ''' <summary>Traductions d'une langue : textes exacts, et modèles contenant des données.</summary>
+    Private Class Lexique
+        Public ReadOnly Exacts As New Dictionary(Of String, String)(StringComparer.Ordinal)
+        Public ReadOnly Modeles As New List(Of KeyValuePair(Of Regex, String))()
+        ''' <summary>Les modèles tels qu'écrits dans le fichier, pour T(gabarit, valeurs).</summary>
+        Public ReadOnly Gabarits As New Dictionary(Of String, String)(StringComparer.Ordinal)
+    End Class
 
+    Private Shared Function LexiqueDe(code As String) As Lexique
         Dim chemin = If(CheminFichier, HttpContext.Current.Server.MapPath(FichierTraductions))
-        d = Charger(chemin, code)
-        HttpRuntime.Cache.Insert(cle, d, New CacheDependency(chemin))
-        Return d
+        Dim cle = "I18n." & code & "|" & chemin
+        Dim l = TryCast(HttpRuntime.Cache(cle), Lexique)
+        If l IsNot Nothing Then Return l
+
+        l = New Lexique()
+        ' Les modèles les plus longs d'abord : le plus précis l'emporte.
+        For Each paire In Charger(chemin, code).OrderByDescending(Function(p) p.Key.Length)
+            If paire.Key.Contains("{") Then
+                l.Modeles.Add(New KeyValuePair(Of Regex, String)(ModeleVersRegex(paire.Key), paire.Value))
+                l.Gabarits(paire.Key) = paire.Value
+            Else
+                l.Exacts(paire.Key) = paire.Value
+            End If
+        Next
+        HttpRuntime.Cache.Insert(cle, l, New CacheDependency(chemin))
+        Return l
+    End Function
+
+    ' Après Regex.Escape, « {#0} » devient « \{\#0} » et « {0} » devient « \{0} ».
+    Private Shared ReadOnly JetonNombreEchappe As New Regex("\\\{\\#(\d)\}", RegexOptions.Compiled)
+    Private Shared ReadOnly JetonTexteEchappe As New Regex("\\\{(\d)\}", RegexOptions.Compiled)
+    Private Shared ReadOnly Jeton As New Regex("\{#?(\d)\}", RegexOptions.Compiled)
+
+    Private Shared Function ModeleVersRegex(modele As String) As Regex
+        Dim motif = Regex.Escape(modele)
+        motif = JetonNombreEchappe.Replace(motif, "(?<g$1>[\d\s.,:$$%/\-]+?)")
+        motif = JetonTexteEchappe.Replace(motif, "(?<g$1>.+?)")
+        Return New Regex("^" & motif & "$", RegexOptions.Singleline)
     End Function
 
     ''' <summary>
     ''' Format du fichier : des blocs séparés par une ligne vide.
-    '''   fr: Texte français
+    '''   fr: Texte français          (peut contenir {0} = texte variable, {#0} = nombre, montant ou date)
     '''   en: English text
     '''   es: Texto en español
     ''' Les lignes qui commencent par # sont des commentaires.
@@ -143,18 +194,58 @@ Public NotInheritable Class I18n
         Return Espaces.Replace(texte.Replace(ChrW(160), " "c), " ").Trim()
     End Function
 
-    ''' <summary>Traduction d'un texte français ; le français est retourné tel quel s'il n'y a pas de traduction.</summary>
-    Public Shared Function T(fr As String) As String
-        If String.IsNullOrEmpty(fr) Then Return fr
-        Dim code = Langue
-        If code = "fr" Then Return fr
+    ''' <summary>Traduction dans une langue donnée ; Nothing s'il n'y en a pas.</summary>
+    Private Shared Function Chercher(fr As String, code As String, avecModeles As Boolean) As String
+        Dim cle = Normaliser(fr)
+        If cle.Length = 0 Then Return Nothing
+        Dim l = LexiqueDe(code)
         Dim traduction As String = Nothing
-        Return If(Dictionnaire(code).TryGetValue(Normaliser(fr), traduction), traduction, fr)
+        If l.Exacts.TryGetValue(cle, traduction) Then Return traduction
+        If Not avecModeles Then Return Nothing
+
+        For Each modele In l.Modeles
+            Dim m = modele.Key.Match(cle)
+            If Not m.Success Then Continue For
+            ' Les données capturées sont traduites à leur tour lorsqu'elles sont connues (ex. « Receveur général du Canada »).
+            Return Jeton.Replace(modele.Value, Function(j)
+                                                   Dim valeur = m.Groups("g" & j.Groups(1).Value).Value
+                                                   If j.Value.Contains("#") Then Return MontantDansLaLangue(valeur, code)
+                                                   Return If(Chercher(valeur, code, True), valeur)
+                                               End Function)
+        Next
+        Return Nothing
+    End Function
+
+    Private Shared ReadOnly MontantFrancais As New Regex("^(-?)([\d ]+),(\d{2}) \$$", RegexOptions.Compiled)
+
+    ''' <summary>Un montant enregistré en français (journal d'activités : « 1 234,50 $ ») s'affiche au format de la langue.</summary>
+    Private Shared Function MontantDansLaLangue(valeur As String, code As String) As String
+        Dim m = MontantFrancais.Match(valeur)
+        If Not m.Success Then Return valeur
+        Dim montant = Decimal.Parse(m.Groups(2).Value.Replace(" ", "") & "." & m.Groups(3).Value, CultureInfo.InvariantCulture)
+        Return m.Groups(1).Value & "$" & montant.ToString("N2", CultureDe(code))
+    End Function
+
+    ''' <summary>Traduction d'un texte français dans la langue courante ; le français est retourné s'il n'y a pas de traduction.</summary>
+    Public Shared Function T(fr As String) As String
+        Return Traduire(fr, Langue)
+    End Function
+
+    Public Shared Function Traduire(fr As String, code As String) As String
+        If String.IsNullOrEmpty(fr) OrElse code = "fr" OrElse Not Valide(code) Then Return fr
+        Return If(Chercher(fr, code, True), fr)
     End Function
 
     ''' <summary>Texte avec des données : T("{0} employés actifs", 3). Le gabarit est traduit, puis les valeurs y sont insérées.</summary>
     Public Shared Function T(fr As String, ParamArray valeurs As Object()) As String
-        Return String.Format(Culture, T(fr), valeurs)
+        Dim code = Langue
+        Dim gabarit = fr
+        If code <> "fr" Then
+            Dim l = LexiqueDe(code)
+            Dim traduit As String = Nothing
+            If l.Gabarits.TryGetValue(Normaliser(fr), traduit) OrElse l.Exacts.TryGetValue(Normaliser(fr), traduit) Then gabarit = traduit
+        End If
+        Return String.Format(Culture, gabarit.Replace("{#", "{"), valeurs)
     End Function
 
     ' ---------- Traduction du HTML produit ----------
@@ -167,32 +258,42 @@ Public NotInheritable Class I18n
     Private Shared ReadOnly EstBouton As New Regex("\btype=""(submit|button)""", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
     Private Shared ReadOnly Confirmation As New Regex("confirm\(&#39;(.*?)&#39;\)|confirm\('(.*?)'\)", RegexOptions.Compiled)
 
-    Public Shared Function TraduireHtml(html As String) As String
-        If Langue = "fr" OrElse String.IsNullOrEmpty(html) Then Return html
+    ''' <summary>Traduit le HTML dans la langue courante, ou dans la langue donnée (courriels dans la langue de l'employé).</summary>
+    Public Shared Function TraduireHtml(html As String, Optional code As String = Nothing) As String
+        If code Is Nothing Then code = Langue
+        If code = "fr" OrElse Not Valide(code) OrElse String.IsNullOrEmpty(html) Then Return html
 
         Dim morceaux = Decoupage.Split(html)
         Dim sb As New StringBuilder(html.Length + 256)
+        Dim intouchable = False     ' le texte qui suit une balise translate="no" (nom du produit) n'est pas traduit
         For i = 0 To morceaux.Length - 1
             Dim m = morceaux(i)
             If i Mod 2 = 0 Then
-                sb.Append(TraduireTexte(m))                 ' texte entre deux balises
-            ElseIf m.StartsWith("<input", StringComparison.OrdinalIgnoreCase) OrElse m.StartsWith("<a ", StringComparison.OrdinalIgnoreCase) OrElse
-                   m.StartsWith("<button", StringComparison.OrdinalIgnoreCase) OrElse m.StartsWith("<img", StringComparison.OrdinalIgnoreCase) OrElse
-                   m.StartsWith("<textarea", StringComparison.OrdinalIgnoreCase) OrElse m.StartsWith("<span", StringComparison.OrdinalIgnoreCase) Then
-                sb.Append(TraduireBalise(m))
+                sb.Append(If(intouchable, m, TraduireTexte(m, code)))           ' texte entre deux balises
+                intouchable = False
+            ElseIf EstBaliseOuvrante(m) Then
+                intouchable = m.IndexOf("translate=""no""", StringComparison.OrdinalIgnoreCase) >= 0
+                sb.Append(TraduireBalise(m, code))
             Else
-                sb.Append(m)
+                sb.Append(m)                                ' script, style, pre, textarea, commentaire, balise fermante
             End If
         Next
         Return sb.ToString()
     End Function
 
-    Private Shared Function TraduireTexte(texte As String) As String
+    Private Shared Function EstBaliseOuvrante(m As String) As Boolean
+        If m.Length < 3 OrElse m(1) = "/"c OrElse m(1) = "!"c Then Return False
+        For Each exclue In {"<script", "<style", "<pre", "<textarea"}
+            If m.StartsWith(exclue, StringComparison.OrdinalIgnoreCase) Then Return False
+        Next
+        Return True
+    End Function
+
+    Private Shared Function TraduireTexte(texte As String, code As String) As String
         If texte.Trim().Length = 0 Then Return texte
-        Dim coeur = texte.Trim()
-        Dim fr = HttpUtility.HtmlDecode(coeur)
-        Dim traduction = T(fr)
-        If Object.ReferenceEquals(traduction, fr) OrElse traduction = fr Then Return texte
+        Dim fr = HttpUtility.HtmlDecode(texte.Trim())
+        Dim traduction = Traduire(fr, code)
+        If traduction = fr Then Return texte
 
         Dim debut = texte.Substring(0, texte.Length - texte.TrimStart().Length)
         Dim fin = texte.Substring(texte.TrimEnd().Length)
@@ -204,21 +305,24 @@ Public NotInheritable Class I18n
         Return texte.Replace("&", "&amp;").Replace("<", "&lt;").Replace(">", "&gt;").Replace("""", "&quot;")
     End Function
 
-    Private Shared Function TraduireBalise(balise As String) As String
-        Dim r = AttributsTexte.Replace(balise, Function(m) m.Groups(1).Value & "=""" & TraduireAttribut(m.Groups(2).Value) & """")
-        If EstBouton.IsMatch(r) Then r = AttributValeur.Replace(r, Function(m) "value=""" & TraduireAttribut(m.Groups(1).Value) & """")
-        r = Confirmation.Replace(r, Function(m)
-                                        Dim encode = m.Groups(1).Success
-                                        Dim fr = HttpUtility.HtmlDecode(If(encode, m.Groups(1).Value, m.Groups(2).Value)).Replace("\'", "'")
-                                        Dim js = T(fr).Replace("\", "\\").Replace("'", "\'")
-                                        Return If(encode, "confirm(&#39;" & Encoder(js).Replace("'", "&#39;") & "&#39;)", "confirm('" & js & "')")
-                                    End Function)
+    Private Shared Function TraduireBalise(balise As String, code As String) As String
+        If balise.IndexOf("="c) < 0 Then Return balise
+        Dim r = AttributsTexte.Replace(balise, Function(m) m.Groups(1).Value & "=""" & TraduireAttribut(m.Groups(2).Value, code) & """")
+        If EstBouton.IsMatch(r) Then r = AttributValeur.Replace(r, Function(m) "value=""" & TraduireAttribut(m.Groups(1).Value, code) & """")
+        If r.IndexOf("confirm(", StringComparison.Ordinal) >= 0 Then
+            r = Confirmation.Replace(r, Function(m)
+                                            Dim encode = m.Groups(1).Success
+                                            Dim fr = HttpUtility.HtmlDecode(If(encode, m.Groups(1).Value, m.Groups(2).Value))
+                                            Dim js = Traduire(fr, code).Replace("\", "\\").Replace("'", "\'")
+                                            Return If(encode, "confirm(&#39;" & Encoder(js).Replace("'", "&#39;") & "&#39;)", "confirm('" & js & "')")
+                                        End Function)
+        End If
         Return r
     End Function
 
-    Private Shared Function TraduireAttribut(valeurEncodee As String) As String
+    Private Shared Function TraduireAttribut(valeurEncodee As String, code As String) As String
         Dim fr = HttpUtility.HtmlDecode(valeurEncodee)
-        Dim traduction = T(fr)
+        Dim traduction = Traduire(fr, code)
         Return If(traduction = fr, valeurEncodee, Encoder(traduction))
     End Function
 

@@ -112,6 +112,11 @@ Public Module Outils
         Return If(montant < 0D, "-", "") & "$" & Math.Abs(montant).ToString("N2", I18n.Culture)
     End Function
 
+    ''' <summary>Montant au format français, pour les textes enregistrés (journal d'activités) : ils sont traduits à l'affichage.</summary>
+    Public Function ArgentFr(valeur As Object) As String
+        Return Convert.ToDecimal(valeur).ToString("N2", FrCa) & " $"
+    End Function
+
     ''' <summary>Traduction d'un texte français (voir I18n). Avec des valeurs : Tr("{0} employés", 3).</summary>
     Public Function Tr(fr As String) As String
         Return I18n.T(fr)

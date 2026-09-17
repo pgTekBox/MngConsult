@@ -72,7 +72,7 @@ Public Class PageEcritures
             Dim titre As String = ""
             Dim lignes As New List(Of String()) From {New String() {"Compte", "Description", "Débit", "Crédit"}}
             For Each l In Calculer(titre)
-                lignes.Add({l.Compte, l.Libelle, l.Debit.ToString("0.00", FrCa), l.Credit.ToString("0.00", FrCa)})
+                lignes.Add({l.Compte, Tr(l.Libelle), l.Debit.ToString("0.00", FrCa), l.Credit.ToString("0.00", FrCa)})
             Next
             EnvoyerCsv("ecritures-paie.csv", lignes)
         Catch ex As SaisieInvalideException

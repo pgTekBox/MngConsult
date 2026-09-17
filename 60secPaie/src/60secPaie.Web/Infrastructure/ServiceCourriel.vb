@@ -47,7 +47,7 @@ Public NotInheritable Class ServiceCourriel
     ''' <summary>Employés du lot qui reçoivent leur talon par courriel.</summary>
     Public Shared Function Destinataires(lotId As Integer) As DataTable
         Return Db.Table(
-            "SELECT p.Id AS PaieId, p.TalonEnvoyeLe, e.Prenom, e.Nom, e.Courriel FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
+            "SELECT p.Id AS PaieId, p.TalonEnvoyeLe, e.Prenom, e.Nom, e.Courriel, e.Langue FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
             "JOIN paie.Employe e ON e.Id = p.EmployeId WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.TalonParCourriel = 1 " &
             "ORDER BY e.Nom, e.Prenom", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
@@ -78,25 +78,30 @@ Public NotInheritable Class ServiceCourriel
                     Continue For
                 End If
                 If d.Txt("Courriel").Length = 0 Then
-                    bilan.Erreurs.Add(nom & " : aucun courriel dans la fiche.")
+                    bilan.Erreurs.Add(nom & " : " & Tr("aucun courriel dans la fiche."))
                     Continue For
                 End If
 
+                ' Le talon part dans la langue de l'employé, pas dans celle de la personne qui fait la paie.
+                Dim langue = d.Txt("Langue").ToLowerInvariant()
+                If Not I18n.Valide(langue) Then langue = "fr"
+                Dim paieId = d.Ent("PaieId")
+                Dim compagnie = lot.Txt("CompagnieNom")
                 Try
                     Using message As New MailMessage()
                         message.From = New MailAddress(expediteur, lot.Txt("CompagnieNom"))
                         message.To.Add(New MailAddress(d.Txt("Courriel"), nom))
-                        message.Subject = "Talon de paie du " & TexteDate(lot("DatePaie"))
+                        message.Subject = I18n.Traduire("Talon de paie du " & TexteDate(lot("DatePaie")), langue)
                         message.SubjectEncoding = Encoding.UTF8
                         message.BodyEncoding = Encoding.UTF8
                         message.IsBodyHtml = True
-                        message.Body = CorpsHtml(d.Ent("PaieId"), nom, lot.Txt("CompagnieNom"))
+                        message.Body = I18n.DansLaLangue(langue, Function() I18n.TraduireHtml(CorpsHtml(paieId, nom, compagnie, langue)))
                         client.Send(message)
                     End Using
                     Db.Exec("UPDATE paie.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
                     bilan.Envoyes += 1
                 Catch ex As FormatException
-                    bilan.Erreurs.Add(nom & " : adresse de courriel invalide.")
+                    bilan.Erreurs.Add(nom & " : " & Tr("adresse de courriel invalide."))
                 Catch ex As SmtpException
                     bilan.Erreurs.Add(nom & " : " & ex.Message)
                 End Try
@@ -111,9 +116,9 @@ Public NotInheritable Class ServiceCourriel
     End Function
 
     ''' <summary>Courriel autonome : les styles sont dans le message, car la feuille de style du site n'est pas accessible au destinataire.</summary>
-    Private Shared Function CorpsHtml(paieId As Integer, nomEmploye As String, compagnie As String) As String
+    Private Shared Function CorpsHtml(paieId As Integer, nomEmploye As String, compagnie As String, langue As String) As String
         Dim sb As New StringBuilder()
-        sb.Append("<!DOCTYPE html><html lang=""fr""><head><meta charset=""utf-8""/><style>")
+        sb.Append("<!DOCTYPE html><html lang=""").Append(langue).Append("""><head><meta charset=""utf-8""/><style>")
         sb.Append("body{font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#1d2733}")
         sb.Append("table{border-collapse:collapse;width:100%;margin-bottom:12px}th{text-align:left;border-bottom:1px solid #1d2733;padding:4px 6px;font-size:12px}")
         sb.Append("td{padding:4px 6px;border-bottom:1px solid #e3e7eb}.num{text-align:right}.note{color:#5b6877;font-size:12px}")

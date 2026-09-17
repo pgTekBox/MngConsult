@@ -161,7 +161,7 @@ Public NotInheritable Class ServiceRemise
         If id = 0 Then Throw New SaisieInvalideException("Aucune retenue à payer à " & NomGouvernement(gouvernement) & " pour cette période.")
 
         Dim total = Convert.ToDecimal(Db.Scalaire("SELECT Total FROM paie.Remise WHERE Id = @id", Db.P("@id", id)))
-        Contexte.Journaliser("Paiement des retenues à " & NomGouvernement(gouvernement) & " : " & Argent(total) & ".", "~/Remises/Detail.aspx?id=" & id.ToString())
+        Contexte.Journaliser("Paiement des retenues à " & NomGouvernement(gouvernement) & " : " & ArgentFr(total) & ".", "~/Remises/Detail.aspx?id=" & id.ToString())
         Return id
     End Function
 

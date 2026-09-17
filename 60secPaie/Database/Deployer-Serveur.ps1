@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Déploie le schéma « paie » (et, sur demande, les données exportées) sur un serveur SQL, en lisant la chaîne de connexion
+    Déploie le schéma « paie » sur un serveur SQL, en lisant la chaîne de connexion
     dans le fichier de configuration d'une application existante. Le mot de passe n'est jamais affiché.
 
 .PARAMETER Config
@@ -14,7 +14,7 @@
 param(
     [string]$Config = 'C:\MesSources\MngConsult\prjMngConsul\Web.config',
     [string]$Cle = 'ConnectionString',
-    [ValidateSet('Verifier', 'Schema', 'Donnees', 'Configurer')][string]$Action = 'Verifier'
+    [ValidateSet('Verifier', 'Schema', 'Configurer')][string]$Action = 'Verifier'
 )
 
 $ErrorActionPreference = 'Stop'
@@ -88,10 +88,6 @@ SELECT @@SERVERNAME AS Serveur, DB_NAME() AS Base, SUSER_SNAME() AS Compte,
     elseif ($Action -eq 'Schema') {
         Invoke-Script $cn (Join-Path $PSScriptRoot '01_schema.sql')
         Write-Output 'Schéma paie déployé.'
-    }
-    elseif ($Action -eq 'Donnees') {
-        Invoke-Script $cn (Join-Path $PSScriptRoot 'export\02_donnees.sql')
-        Write-Output 'Données transférées.'
     }
 }
 finally {

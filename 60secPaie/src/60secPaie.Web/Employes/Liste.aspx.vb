@@ -17,7 +17,7 @@ Public Class PageEmployes
 
     Protected Function Remuneration(tauxHoraire As Object, salaireAnnuel As Object) As String
         If Not IsDBNull(tauxHoraire) AndAlso Convert.ToDecimal(tauxHoraire) > 0D Then Return Argent(tauxHoraire) & " / h"
-        If Not IsDBNull(salaireAnnuel) AndAlso Convert.ToDecimal(salaireAnnuel) > 0D Then Return Argent(salaireAnnuel) & Tr(" / an")
+        If Not IsDBNull(salaireAnnuel) AndAlso Convert.ToDecimal(salaireAnnuel) > 0D Then Return Argent(salaireAnnuel) & " " & Tr("/ an")
         Return ""
     End Function
 

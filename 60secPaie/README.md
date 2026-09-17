@@ -1,6 +1,7 @@
 # 60secPaie
 
-Application Web de calcul de la paie pour un employeur du **Québec**.
+Application Web de calcul de la paie pour des employeurs du **Québec**, **multi-compagnie** et en **trois langues** (français, anglais, espagnol).
+Les utilisateurs, les compagnies et les employés sont ceux de **MngConsul** (même base de données).
 ASP.NET Web Forms en **VB.NET** (.NET Framework 4.8), SQL Server, Visual Studio 2022/2026.
 Le modèle fonctionnel est Nubis (voir [docs/analyse-nubis.md](docs/analyse-nubis.md)).
 
@@ -11,39 +12,60 @@ Le modèle fonctionnel est Nubis (voir [docs/analyse-nubis.md](docs/analyse-nubi
 | `src/60secPaie.Calcul` | Moteur de calcul, sans dépendance Web ni SQL : taux de l'année, catégories de paie, formules. |
 | `src/60secPaie.Web` | Application Web Forms : pages, accès SQL (ADO.NET paramétré), sécurité, assistant de paie. |
 | `src/60secPaie.Tests` | Tests MSTest : exemples chiffrés de Revenu Québec + cycle de paie complet sur LocalDB. |
-| `Database` | Script du schéma SQL Server (relançable). |
+| `Database` | Script du schéma SQL Server (relançable), déploiement sur le serveur, répliques des tables de MngConsul pour les tests. |
+| `lib` | BCrypt.Net-Next 3.2.1 (vérification des mots de passe de MngConsul) ; le projet n'utilise pas NuGet. |
 | `docs` | Analyse de Nubis, guide TP-1015.F 2026 de Revenu Québec. |
 
 ## Démarrer
 
-1. Créer la base : `sqlcmd -S "(localdb)\MSSQLLocalDB" -f 65001 -v Base=60secPaie -i Database\01_schema.sql`
-   puis copier `src\60secPaie.Web\ConnectionStrings.exemple.config` sous le nom `ConnectionStrings.config`.
+1. Copier `src\60secPaie.Web\ConnectionStrings.exemple.config` sous le nom `ConnectionStrings.config` et y inscrire la connexion à la base
+   MngConsul (ou lancer `Database\Deployer-Serveur.ps1 -Action Configurer`, qui la reprend de `prjMngConsul` sans l'afficher).
 2. Ouvrir `60secPaie.sln`, définir **60secPaie.Web** comme projet de démarrage, F5 (IIS Express, port 50960).
-3. À la première visite, créer le compte administrateur, puis configurer la compagnie, les employés, et lancer **Calculer la paie**.
+3. Se connecter avec son **compte MngConsul**, enregistrer les paramètres de paie de la compagnie (Configuration), configurer la paie des
+   employés (Employés → Configurer), puis lancer **Calculer la paie**.
 
 La chaîne de connexion `Paie` est dans `ConnectionStrings.config`, **exclu de git** parce qu'il peut contenir le mot de passe du serveur SQL.
 
-### Base de données : schéma « paie », base partagée MngConsul
+### Base de données : schéma « paie » dans la base MngConsul
 
-Toutes les tables sont dans le **schéma `paie`** (`paie.Employe`, `paie.Paie`...). L'application peut donc loger dans la base partagée
-`MngConsul` du serveur `192.168.0.203` sans conflit avec les tables `dbo` des autres applications ; le script de schéma ne touche à rien hors de `paie`.
+Toutes les tables de 60secPaie sont dans le **schéma `paie`** de la base `MngConsul` (serveur `192.168.0.203`). Le script de schéma ne crée et
+ne modifie rien hors de `paie`, et 60secPaie **n'écrit jamais dans les tables de MngConsul** : il les lit.
 
-Transférer la base de développement vers le serveur (sans `-P`, sqlcmd **demande** le mot de passe : il ne reste dans aucun fichier ni historique) :
+`Database\Deployer-Serveur.ps1` lit la chaîne de connexion dans le `Web.config` de `prjMngConsul` (clé `ConnectionString`) et ne l'affiche jamais.
+Actions : `-Action Verifier` (lecture seule), `Schema` (exécute `01_schema.sql`, relançable), `Configurer` (écrit `ConnectionStrings.config`).
+
+### Ce qui vient de MngConsul
+
+| Donnée | Source (lecture seule) | Dans 60secPaie |
+|---|---|---|
+| Utilisateurs, mots de passe | `dbo.T015User` (BCrypt) | Connexion par courriel ; aucun mot de passe n'est stocké ni modifié ici. Mot de passe oublié : le réinitialiser dans MngConsul. |
+| Compagnies accessibles | `dbo.s0210GetUserCompanies` | Un utilisateur voit sa compagnie ; un comptable, celles de ses clients. Sélecteur de compagnie dans l'en-tête. |
+| Nom et coordonnées de la compagnie | `dbo.fCompanyName`, `dbo.fParamS` | Affichés en lecture seule ; `paie.Compagnie` ne garde que les paramètres de paie (liée par `CompanyGUID`). |
+| Employés | `dbo.T300Employees` | Nom, adresse, poste, embauche, courriel : lecture seule. La paie (NAS, TD1, TP-1015.3, exemptions, taux, dépôt direct, langue) est dans `paie.EmployePaie`. |
+
+La vue `paie.Employe` réunit `T300Employees` et `paie.EmployePaie`. Un employé n'est proposé dans l'assistant de paie qu'une fois sa paie
+configurée. Chaque requête est filtrée par la compagnie courante, elle-même revalidée à chaque page contre les compagnies de l'utilisateur.
+
+Non fait : vérification de l'abonnement (`T020Subscription`) à la connexion, connexion unique (SSO) avec MngConsul.
+
+### Trois langues
+
+Même convention que MngConsul : `?lang=fr|en|es`, puis la session, puis le français ; 60secPaie ajoute un témoin pour s'en souvenir.
+Les pages sont écrites en français ; à la sortie, `I18n.TraduireHtml` remplace chaque texte par sa traduction, prise dans
+**`src\60secPaie.Web\Langues\traductions.txt`** (relu automatiquement dès qu'il est enregistré, aucune recompilation) :
 
 ```
-cd Database
-sqlcmd -S 192.168.0.203 -U MngConsul -C -f 65001 -v Base=MngConsul -i 01_schema.sql
-powershell -ExecutionPolicy Bypass -File .\Exporter-Donnees.ps1
-sqlcmd -S 192.168.0.203 -U MngConsul -C -f 65001 -v Base=MngConsul -i export\02_donnees.sql
+fr: Paie du {#0} confirmée.
+en: Pay run of {#0} confirmed.
+es: Nómina del {#0} confirmada.
 ```
 
-Variante sans taper de mot de passe : `Database\Deployer-Serveur.ps1` lit la chaîne de connexion dans le `Web.config` d'une application
-existante (par défaut `prjMngConsul`, clé `ConnectionString`) et ne l'affiche jamais. Actions : `-Action Verifier` (lecture seule),
-`Schema`, `Donnees`, `Configurer` (écrit `ConnectionStrings.config`). C'est ainsi que la base a été déployée sur le serveur le 2026-09-17.
-
-Le script de données refuse de s'exécuter si la destination contient déjà des données de paie, conserve les identifiants et s'exécute en une
-transaction. `Database\export` est exclu de git (renseignements personnels) : supprimer le fichier après le transfert.
-Activer ensuite l'entrée « Serveur » de `ConnectionStrings.config`.
+`{0}` = un texte variable (traduit à son tour s'il est connu), `{#0}` = un nombre, un montant ou une date. Un texte absent du fichier reste en
+français. `translate="no"` sur une balise protège son texte (nom du produit). Les montants et les nombres suivent la langue (1 234,50 $ / $1,234.50) ;
+la saisie accepte les deux formats ; les dates restent en AAAA-MM-JJ. Le journal d'activités est enregistré en français et traduit à l'affichage.
+Le **talon par courriel part dans la langue de l'employé** (fiche de l'employé), quelle que soit la langue de la personne qui fait la paie.
+Les feuillets T4 / Relevé 1 affichent les libellés officiels traduits ; les sigles deviennent QPP, QPIP, EI, HSF, SIN en anglais.
+Un test vérifie que chaque texte du fichier a ses deux traductions et les mêmes jetons.
 
 **NAS et comptes bancaires** : ils sont chiffrés avec la clé machine d'ASP.NET du poste qui les a saisis. Tant que l'application tourne sur ce
 poste (seule la base est sur le serveur), rien ne change. Le jour où l'application est installée sur un autre serveur IIS, définir la même
@@ -121,20 +143,12 @@ Les tests `Annexe…` reproduisent les exemples chiffrés du TP-1015.F 2026 au c
 
 ## Sécurité
 
-- Authentification par formulaire, mots de passe hachés PBKDF2-SHA256 (120 000 itérations), verrouillage après 5 échecs.
+- Authentification par formulaire avec les comptes de MngConsul (BCrypt, vérification seulement), verrouillage après 5 échecs (`paie.TentativeConnexion`).
+- Cloisonnement par compagnie : toutes les requêtes portent la compagnie courante, revalidée à chaque page ; le journal d'activités aussi.
 - NAS et numéro de compte **chiffrés en base** (`MachineKey.Protect`) et jamais renvoyés au navigateur (masqués).
   **En production, définir une `machineKey` fixe** dans la configuration du serveur, sinon ces données deviennent illisibles après un changement de serveur.
 - Requêtes SQL paramétrées, sorties HTML encodées, ViewState chiffré et lié à l'utilisateur (anti-CSRF), en-têtes de sécurité.
 - En production : HTTPS obligatoire (`Web.Release.config` active `requireSSL`), chaîne de connexion hors du dépôt.
-
-### Utilisateurs et mots de passe
-
-- **Mon compte** (clic sur son courriel, en haut à droite) : changer son nom et son mot de passe (le mot de passe actuel est exigé).
-- **Configuration → Utilisateurs** (administrateurs seulement) : créer un utilisateur avec un mot de passe temporaire, le rendre administrateur,
-  le désactiver, le déverrouiller, réinitialiser son mot de passe. Après une création ou une réinitialisation, la personne **doit choisir un nouveau
-  mot de passe** à sa prochaine connexion. Il reste toujours au moins un administrateur actif ; on ne peut pas se désactiver soi-même.
-- **Gardez deux administrateurs.** Si le seul administrateur perd son mot de passe, il faut passer par SQL Server : supprimer sa ligne dans
-  `dbo.Utilisateur` s'il est le seul utilisateur (la page « Première utilisation » réapparaît), sinon demander à quelqu'un qui a accès à la base.
 
 ## Tests
 
@@ -143,11 +157,11 @@ msbuild 60secPaie.sln -restore
 vstest.console src\60secPaie.Tests\bin\Debug\net48\60secPaie.Tests.dll
 ```
 
-Les tests d'intégration recréent la base jetable `60secPaie_Test` sur LocalDB ; ils ne touchent jamais à la base `60secPaie`.
+Les tests d'intégration recréent la base jetable `60secPaie_Test` sur LocalDB, avec des répliques minimales des tables de MngConsul
+(`Database	ests _stubs_mngconsul.sql`) ; ils ne touchent jamais au serveur.
 
 ## Phase 2 (à venir)
 
-Fait : paiement des retenues, feuillets T4 / Relevés 1 (montants), déclaration CNESST, écritures comptables, dépôt direct, talons par courriel.
+Fait : multi-compagnie et comptes MngConsul, trois langues, paiement des retenues, feuillets T4 / Relevés 1 (montants), déclaration CNESST, écritures comptables, dépôt direct, talons par courriel.
 Reste : transmission XML des feuillets, rapport de vacances, portail employé sécurisé pour les talons, plusieurs unités de classification CNESST,
-commissions (méthode cumulative), pourboires, relevé d'emploi (RE). Ancienne liste : T4 / Relevés 1 et sommaires, déclaration des salaires CNESST,
-rapport d'écritures comptables (GL), rapport de vacances, fichier de dépôt direct, envoi des talons par courriel, gestion des utilisateurs.
+commissions (méthode cumulative), pourboires, relevé d'emploi (RE).

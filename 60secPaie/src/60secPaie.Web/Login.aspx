@@ -11,7 +11,7 @@
     <form runat="server" class="page-connexion">
         <div class="boite-connexion">
             <div class="langues"><asp:Literal ID="litLangues" runat="server" /></div>
-            <span class="logo">60sec<span>Paie</span></span>
+            <span class="logo">60sec<span translate="no">Paie</span></span>
 
             <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="message erreur">
                 <asp:Literal ID="litErreur" runat="server" />

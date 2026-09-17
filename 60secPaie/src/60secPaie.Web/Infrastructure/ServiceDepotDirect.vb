@@ -119,7 +119,7 @@ Public NotInheritable Class ServiceDepotDirect
         Db.Exec("UPDATE paie.Compagnie SET DDProchainNumeroFichier = @n WHERE Id = @c; " &
                 "UPDATE paie.LotPaie SET DepotDirectNumeroFichier = @f, DepotDirectGenereLe = sysdatetime() WHERE Id = @l",
                 Db.P("@n", suivant), Db.P("@c", Contexte.CompagnieId), Db.P("@f", numeroFichier), Db.P("@l", lotId))
-        Contexte.Journaliser("Fichier de dépôt direct n° " & numeroFichier.ToString("0000") & " produit : " & segments.Count.ToString() & " dépôt(s), " & Argent(total) & ".",
+        Contexte.Journaliser("Fichier de dépôt direct n° " & numeroFichier.ToString("0000") & " produit : " & segments.Count.ToString() & " dépôt(s), " & ArgentFr(total) & ".",
                              "~/Paie/Detail.aspx?lot=" & lotId.ToString())
 
         Return New Resultat With {

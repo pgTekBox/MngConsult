@@ -217,6 +217,15 @@ Public Class CyclePaieIntegrationTests
         bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
         Assert.AreEqual(0, bilan.Envoyes)
         Assert.AreEqual(1, bilan.DejaEnvoyes, "Un talon déjà envoyé n'est pas renvoyé sans le demander.")
+
+        ' Le talon part dans la langue de l'employé, même si la personne qui fait la paie travaille en français.
+        I18n.CheminFichier = IntegrationMngConsulTests.DictionnaireDuSite()
+        Db.Exec("UPDATE paie.EmployePaie SET Langue = 'EN' WHERE EmployeId = @e", Db.P("@e", horaire))
+        For Each ancien In Directory.GetFiles(dossier, "*.eml") : File.Delete(ancien) : Next
+        Assert.AreEqual(1, ServiceCourriel.EnvoyerTalons(lot1, True).Envoyes)
+        StringAssert.Contains(File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single()), "Subject: Pay stub for ")
+        Assert.AreEqual("fr", I18n.Langue)
+        I18n.CheminFichier = Nothing
         Directory.Delete(dossier, True)
 
         ' --- Remises gouvernementales
@@ -272,17 +281,12 @@ Public Class CyclePaieIntegrationTests
         ServiceRemise.Annuler(remiseQc)
         Assert.IsTrue(ServicePaie.PeutAnnuler(lot1))
 
-        ' 2 confirmations, 1 dépôt direct, 1 envoi de talons, 2 remises, 2 annulations de remise, 1 annulation de paie
-        Assert.AreEqual(9, Db.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))
+        ' 2 confirmations, 1 dépôt direct, 2 envois de talons (français, puis anglais), 2 remises, 2 annulations de remise, 1 annulation de paie
+        Assert.AreEqual(10, Db.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))
     End Sub
 
     <TestMethod>
-    Public Sub Securite_MotsDePasse_et_NAS()
-        Dim hache = MotsDePasse.Hacher("un mot de passe solide")
-        Assert.IsTrue(MotsDePasse.Verifier("un mot de passe solide", hache))
-        Assert.IsFalse(MotsDePasse.Verifier("un autre", hache))
-        Assert.AreNotEqual(hache, MotsDePasse.Hacher("un mot de passe solide"), "Le sel est aléatoire.")
-
+    Public Sub Securite_NAS()
         Assert.IsTrue(Outils.NasValide("046454286"))
         Assert.IsFalse(Outils.NasValide("123456789"))
         Assert.AreEqual("••••••286", Secret.Masquer("046454286"))

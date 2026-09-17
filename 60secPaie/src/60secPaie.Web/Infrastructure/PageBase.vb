@@ -85,8 +85,11 @@ Public Class PageBase
     ''' <summary>CSV pour Excel : séparateur point-virgule, UTF-8 avec BOM.</summary>
     Protected Sub EnvoyerCsv(nomFichier As String, lignes As IEnumerable(Of String()))
         Dim sb As New System.Text.StringBuilder()
+        Dim entete = True      ' la première ligne porte les titres de colonnes : ils suivent la langue de l'utilisateur
         For Each ligne In lignes
-            sb.AppendLine(String.Join(";", ligne.Select(Function(c) CelluleCsv(c))))
+            Dim estEntete = entete
+            sb.AppendLine(String.Join(";", ligne.Select(Function(c) CelluleCsv(If(estEntete, I18n.T(c), c)))))
+            entete = False
         Next
         Dim utf8 = New System.Text.UTF8Encoding(True)
         EnvoyerFichier(nomFichier, utf8.GetPreamble().Concat(utf8.GetBytes(sb.ToString())).ToArray(), "text/csv")

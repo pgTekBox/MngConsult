@@ -11,7 +11,7 @@
     <form runat="server">
         <header class="entete">
             <div class="entete-haut">
-                <a runat="server" href="~/Default.aspx" class="logo">60sec<span>Paie</span></a>
+                <a runat="server" href="~/Default.aspx" class="logo">60sec<span translate="no">Paie</span></a>
                 <div class="session">
                     <%-- Une seule compagnie : son nom. Plusieurs (comptable) : liste déroulante, comme dans MngConsul. --%>
                     <asp:Label ID="lblCompagnie" runat="server" CssClass="session-compagnie" />

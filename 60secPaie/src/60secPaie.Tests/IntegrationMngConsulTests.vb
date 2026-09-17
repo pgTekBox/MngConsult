@@ -75,7 +75,7 @@ Public Class IntegrationMngConsulTests
         I18n.CheminFichier = fichier
         Try
             Dim html = "<h1>  Employés </h1><input type=""submit"" value=""Enregistrer"" onclick=""return confirm(&#39;Supprimer cet élément de paie ?&#39;);"" />" &
-                       "<td>L&#39;impôt du Québec</td><td>Tremblay, Alice</td><input type=""text"" value=""Enregistrer"" /><script>var x = 'Employés';</script>"
+                       "<td>L&#39;impôt du Québec</td><td>Tremblay, Alice</td><input type=""text"" value=""Enregistrer"" /><script>var x = 'Employés';</script><b translate=""no"">Employés</b>"
 
             Requete("x@y.ca", "lang=en")
             Dim en = I18n.TraduireHtml(html)
@@ -86,6 +86,7 @@ Public Class IntegrationMngConsulTests
             StringAssert.Contains(en, "<td>Tremblay, Alice</td>", "Les données ne sont pas touchées.")
             StringAssert.Contains(en, "type=""text"" value=""Enregistrer""", "La valeur d'un champ de saisie n'est jamais traduite.")
             StringAssert.Contains(en, "var x = 'Employés';", "Les scripts ne sont pas traduits.")
+            StringAssert.Contains(en, "<b translate=""no"">Employés</b>", "translate=""no"" protège un texte (nom du produit).")
             Assert.AreEqual("3 active employees", I18n.T("{0} employés actifs", 3))
             Assert.AreEqual("$1,234.50", Outils.Argent(1234.5D))
 
@@ -98,9 +99,53 @@ Public Class IntegrationMngConsulTests
             Assert.AreEqual("1 234,50 $", Outils.Argent(1234.5D).Replace(ChrW(160), " "c))
         Finally
             I18n.CheminFichier = Nothing
-            HttpRuntime.Cache.Remove("I18n.en")
-            HttpRuntime.Cache.Remove("I18n.es")
             File.Delete(fichier)
+        End Try
+    End Sub
+
+    Friend Shared Function DictionnaireDuSite() As String
+        Dim dossier = AppDomain.CurrentDomain.BaseDirectory
+        Return Path.GetFullPath(Path.Combine(dossier, "..\..\..\..\60secPaie.Web\Langues\traductions.txt"))
+    End Function
+
+    <TestMethod>
+    Public Sub Traduction_DictionnaireDuSiteComplet()
+        Dim en = I18n.Charger(DictionnaireDuSite(), "en")
+        Dim es = I18n.Charger(DictionnaireDuSite(), "es")
+        Assert.IsTrue(en.Count > 500, "Le dictionnaire du site est chargé.")
+        CollectionAssert.AreEquivalent(en.Keys.ToList(), es.Keys.ToList(), "Chaque texte a sa traduction anglaise et espagnole.")
+
+        ' Une traduction doit reprendre exactement les jetons ({0}, {#1}…) de son modèle français.
+        Dim jetons As New System.Text.RegularExpressions.Regex("\{#?\d\}")
+        Dim jetonsDe = Function(t As String) String.Join(" ", jetons.Matches(t).Cast(Of System.Text.RegularExpressions.Match)().Select(Function(m) m.Value).OrderBy(Function(v) v, StringComparer.Ordinal))
+        For Each d In {en, es}
+            For Each paire In d
+                Assert.AreEqual(jetonsDe(paire.Key), jetonsDe(paire.Value), "Jetons différents : " & paire.Key)
+            Next
+        Next
+    End Sub
+
+    <TestMethod>
+    Public Sub Traduction_TextesAvecDonnees()
+        I18n.CheminFichier = DictionnaireDuSite()
+        Try
+            Requete("x@y.ca", "lang=en")
+            Assert.AreEqual("Pay run of 2026-01-15 confirmed.", I18n.Traduire("Paie du 2026-01-15 confirmée.", "en"))
+            Assert.AreEqual("Remittance paid to Revenu Québec: $1,234.50.", I18n.Traduire("Paiement des retenues à Revenu Québec : 1 234,50 $.", "en"),
+                            "Le journal est enregistré en français ; le montant suit la langue d'affichage.")
+            Assert.AreEqual("Remittance paid to Receiver General for Canada: $80.00.", I18n.Traduire("Paiement des retenues à Receveur général du Canada : 80,00 $.", "en"))
+            Assert.AreEqual("«Tarifa por hora»: número no válido.", I18n.Traduire("« Taux horaire » : nombre invalide.", "es"), "Le nom du champ est traduit à son tour.")
+            StringAssert.Contains(I18n.Traduire("Receveur général du Canada · retenues accumulées au 2026-01-31 · payé le 2026-02-10 · Chèque n° 12 · enregistré par x@y.ca", "en"),
+                                  "· Cheque no. 12 · recorded by x@y.ca")
+            Assert.AreEqual("Earnings - Wages", I18n.Traduire("Revenu - Salaire", "en"))
+            Assert.AreEqual("3 active employees · last pay run: 2026-01-15", I18n.Traduire("3 employés actifs · dernière paie : 2026-01-15", "en"))
+            Assert.AreEqual("Tremblay, Alice", I18n.Traduire("Tremblay, Alice", "en"), "Une donnée sans traduction reste telle quelle.")
+
+            ' Rendu dans la langue de l'employé (courriel), sans changer celle de l'utilisateur.
+            Assert.AreEqual("es|Talón de pago", I18n.DansLaLangue("ES", Function() I18n.Langue & "|" & I18n.T("Talon de paie")))
+            Assert.AreEqual("en", I18n.Langue)
+        Finally
+            I18n.CheminFichier = Nothing
         End Try
     End Sub
 
