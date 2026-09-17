@@ -240,6 +240,54 @@ CREATE TABLE dbo.JournalActivite (
 );
 GO
 
+/* ---------- Remises gouvernementales (paiement des retenues) ---------- */
+
+IF COL_LENGTH(N'dbo.Compagnie', N'FrequenceRemiseFederale') IS NULL
+    ALTER TABLE dbo.Compagnie ADD FrequenceRemiseFederale char(1) NOT NULL CONSTRAINT DF_Compagnie_FreqFed DEFAULT ('M');  -- M mensuelle, T trimestrielle
+IF COL_LENGTH(N'dbo.Compagnie', N'FrequenceRemiseQuebec') IS NULL
+    ALTER TABLE dbo.Compagnie ADD FrequenceRemiseQuebec char(1) NOT NULL CONSTRAINT DF_Compagnie_FreqQc DEFAULT ('M');
+GO
+
+IF OBJECT_ID(N'dbo.Remise') IS NULL
+CREATE TABLE dbo.Remise (
+    Id                  int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Remise PRIMARY KEY,
+    CompagnieId         int NOT NULL CONSTRAINT FK_Remise_Compagnie REFERENCES dbo.Compagnie(Id),
+    Gouvernement        char(1) NOT NULL,              -- F fédéral (Receveur général), Q Revenu Québec
+    DateFinPeriode      date NOT NULL,                 -- retenues accumulées au
+    DatePaiement        date NOT NULL,
+    ModePaiement        char(1) NOT NULL CONSTRAINT DF_Remise_Mode DEFAULT ('E'),   -- E en ligne, C chèque
+    NumeroCheque        int NULL,
+    Reference           nvarchar(60) NULL,             -- numéro de confirmation du paiement
+    Total               decimal(14,2) NOT NULL CONSTRAINT DF_Remise_Total DEFAULT (0),
+    RemunerationBrute   decimal(14,2) NOT NULL CONSTRAINT DF_Remise_Brut DEFAULT (0),
+    NbPaies             int NOT NULL CONSTRAINT DF_Remise_NbPaies DEFAULT (0),
+    NbEmployesDernierePaie int NOT NULL CONSTRAINT DF_Remise_NbEmp DEFAULT (0),
+    Statut              char(1) NOT NULL CONSTRAINT DF_Remise_Statut DEFAULT ('P'), -- P payée, A annulée
+    CreePar             nvarchar(256) NOT NULL,
+    DateCreation        datetime2(0) NOT NULL CONSTRAINT DF_Remise_Date DEFAULT (sysdatetime()),
+    CONSTRAINT CK_Remise_Gouvernement CHECK (Gouvernement IN ('F','Q')),
+    CONSTRAINT CK_Remise_Statut CHECK (Statut IN ('P','A'))
+);
+GO
+
+IF OBJECT_ID(N'dbo.RemiseLigne') IS NULL
+CREATE TABLE dbo.RemiseLigne (
+    Id          int IDENTITY(1,1) NOT NULL CONSTRAINT PK_RemiseLigne PRIMARY KEY,
+    RemiseId    int NOT NULL CONSTRAINT FK_RemiseLigne_Remise REFERENCES dbo.Remise(Id) ON DELETE CASCADE,
+    Code        varchar(30) NOT NULL,
+    Libelle     nvarchar(100) NOT NULL,
+    Ordre       int NOT NULL,
+    Montant     decimal(14,2) NOT NULL
+);
+GO
+
+-- Chaque paie est remise une fois à chaque gouvernement.
+IF COL_LENGTH(N'dbo.Paie', N'RemiseFederaleId') IS NULL
+    ALTER TABLE dbo.Paie ADD RemiseFederaleId int NULL CONSTRAINT FK_Paie_RemiseFederale REFERENCES dbo.Remise(Id);
+IF COL_LENGTH(N'dbo.Paie', N'RemiseQuebecId') IS NULL
+    ALTER TABLE dbo.Paie ADD RemiseQuebecId int NULL CONSTRAINT FK_Paie_RemiseQuebec REFERENCES dbo.Remise(Id);
+GO
+
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Paie_Employe')
     CREATE INDEX IX_Paie_Employe ON dbo.Paie (EmployeId) INCLUDE (LotPaieId);
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_LotPaie_DatePaie')

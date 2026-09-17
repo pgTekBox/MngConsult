@@ -17,11 +17,20 @@ Public Class PageAccueil
             lnkBrouillon.NavigateUrl = "~/Paie/Calculer.aspx?lot=" & brouillon.Ent("Id").ToString()
         End If
 
+        litRetenues.Text = LigneSolde(ServiceRemise.Federal, "Fédéral") & LigneSolde(ServiceRemise.Quebec, "Revenu Québec")
+
         Dim activites = Db.Table("SELECT TOP 8 * FROM dbo.JournalActivite ORDER BY Id DESC")
         rptActivites.DataSource = activites
         rptActivites.DataBind()
         rptActivites.Visible = activites.Rows.Count > 0
         lblAucuneActivite.Visible = activites.Rows.Count = 0
     End Sub
+
+    Private Function LigneSolde(gouvernement As String, nom As String) As String
+        Dim s = ServiceRemise.Solde(gouvernement)
+        If s.NbPaies = 0 Then Return "<p>" & nom & " : rien à payer.</p>"
+        Return "<p" & If(s.EnRetard, " class=""message erreur""", "") & ">" & nom & " : <strong>" & Argent(s.Montant) & "</strong> à payer, " &
+               If(s.EnRetard, "en retard depuis le ", "échéance le ") & TexteDate(s.Echeance.Value) & ".</p>"
+    End Function
 
 End Class

@@ -14,6 +14,7 @@ Partial Public Class SiteMaster
     Protected WithEvents lnkTableau As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkPaie As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkHistorique As Global.System.Web.UI.HtmlControls.HtmlAnchor
+    Protected WithEvents lnkRemises As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkEmployes As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkConfig As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents pnlMessage As Global.System.Web.UI.WebControls.Panel

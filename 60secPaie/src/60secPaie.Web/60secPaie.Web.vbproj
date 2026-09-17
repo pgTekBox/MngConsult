@@ -78,6 +78,9 @@
     <Content Include="Employes\Fiche.aspx" />
     <Content Include="Employes\ElementsPaie.aspx" />
     <Content Include="Employes\Cumulatifs.aspx" />
+    <Content Include="Remises\Payer.aspx" />
+    <Content Include="Remises\Historique.aspx" />
+    <Content Include="Remises\Detail.aspx" />
     <Content Include="Paie\Calculer.aspx" />
     <Content Include="Paie\Historique.aspx" />
     <Content Include="Paie\Detail.aspx" />
@@ -97,6 +100,28 @@
     </Compile>
     <Compile Include="Infrastructure\ServicePaie.vb" />
     <Compile Include="Infrastructure\RenduPaie.vb" />
+    <Compile Include="Infrastructure\ServiceRemise.vb" />
+    <Compile Include="Remises\Payer.aspx.vb">
+      <DependentUpon>Payer.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Remises\Payer.aspx.designer.vb">
+      <DependentUpon>Payer.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Remises\Historique.aspx.vb">
+      <DependentUpon>Historique.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Remises\Historique.aspx.designer.vb">
+      <DependentUpon>Historique.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Remises\Detail.aspx.vb">
+      <DependentUpon>Detail.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Remises\Detail.aspx.designer.vb">
+      <DependentUpon>Detail.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Site.Master.vb">
       <DependentUpon>Site.Master</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

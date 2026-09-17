@@ -116,15 +116,60 @@ Public Class CyclePaieIntegrationTests
         Dim talon2 = RenduPaie.Talon(Db.ScalaireEntier("SELECT Id FROM dbo.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
         StringAssert.Contains(talon2, Outils.Argent(2900D + 2400D), "Le brut cumulatif additionne les deux paies.")
 
+        ' --- Remises gouvernementales
+        Dim soldeFed = ServiceRemise.Solde(ServiceRemise.Federal)
+        Dim attenduFed = CDec(Db.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM dbo.Paie p JOIN dbo.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'"))
+        Assert.AreEqual(3, soldeFed.NbPaies)
+        Assert.AreEqual(attenduFed, soldeFed.Montant)
+        Assert.AreEqual(New Date(2026, 1, 31), soldeFed.FinPeriode.Value)
+        Assert.AreEqual(New Date(2026, 2, 15), soldeFed.Echeance.Value)
+        Assert.AreEqual(New Date(2026, 4, 15), ServiceRemise.Echeance(New Date(2026, 1, 15), "T"), "Remise trimestrielle : le 15 suivant la fin du trimestre.")
+
+        ' Revenu Québec, retenues accumulées au 20 janvier : seule la première paie (payée le 15) est couverte.
+        Dim finQc = New Date(2026, 1, 20)
+        Dim lignesQc = ServiceRemise.LignesAPayer(ServiceRemise.Quebec, finQc)
+        Assert.AreEqual(7, lignesQc.Rows.Count)
+        Assert.AreEqual(lignesQc.Select("Code = 'RRQ_EMPLOYE'")(0).Dcm("Montant"), lignesQc.Select("Code = 'RRQ_EMPLOYEUR'")(0).Dcm("Montant"))
+        StringAssert.Contains(ServiceRemise.Rendu(lignesQc, ServiceRemise.LotsAPayer(ServiceRemise.Quebec, finQc)), "Total à payer")
+
+        Dim remiseQc = ServiceRemise.Enregistrer(ServiceRemise.Quebec, finQc, New Date(2026, 2, 10), True, "")
+        Dim rq = Db.Ligne("SELECT * FROM dbo.Remise WHERE Id = @id", Db.P("@id", remiseQc))
+        Assert.AreEqual(102, rq.Ent("NumeroCheque"), "Le chèque de remise suit les chèques de paie 100 et 101.")
+        Assert.AreEqual(2, rq.Ent("NbPaies"))
+        Assert.AreEqual(2, rq.Ent("NbEmployesDernierePaie"))
+        Assert.AreEqual(6900D, rq.Dcm("RemunerationBrute"))   ' 2 900 $ + 4 000 $
+        Assert.AreEqual(CDec(lignesQc.Compute("SUM(Montant)", "")), rq.Dcm("Total"))
+        Assert.AreEqual(1, ServiceRemise.Solde(ServiceRemise.Quebec).NbPaies, "Il reste la deuxième paie à remettre au Québec.")
+        Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceRemise.Enregistrer(ServiceRemise.Quebec, finQc, New Date(2026, 2, 10), False, ""), "Rien à payer deux fois.")
+
+        ' Fédéral, tout le mois de janvier : les trois paies.
+        Dim remiseFed = ServiceRemise.Enregistrer(ServiceRemise.Federal, New Date(2026, 1, 31), New Date(2026, 2, 12), False, "CONF-123")
+        Dim rf = Db.Ligne("SELECT * FROM dbo.Remise WHERE Id = @id", Db.P("@id", remiseFed))
+        Assert.AreEqual(attenduFed, rf.Dcm("Total"))
+        Assert.AreEqual(1, rf.Ent("NbEmployesDernierePaie"))
+        Assert.IsTrue(rf.IsNull("NumeroCheque"))
+        Assert.AreEqual(0, ServiceRemise.Solde(ServiceRemise.Federal).NbPaies)
+
+        ' Une paie dont les retenues sont payées ne peut plus être annulée...
+        Assert.IsFalse(ServicePaie.PeutAnnuler(lot2))
+        Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServicePaie.AnnulerLot(lot2))
+        ' ...tant que le paiement des retenues n'est pas lui-même annulé.
+        ServiceRemise.Annuler(remiseFed)
+        Assert.AreEqual(3, ServiceRemise.Solde(ServiceRemise.Federal).NbPaies)
+        Assert.AreEqual(2, ServiceRemise.LotsDeLaRemise(remiseQc, ServiceRemise.Quebec).Rows(0).Ent("NbEmployes"))
+        Assert.IsTrue(ServicePaie.PeutAnnuler(lot2))
+
         ' --- Annulation : seulement la paie la plus récente
         Assert.IsFalse(ServicePaie.PeutAnnuler(lot1))
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServicePaie.AnnulerLot(lot1))
         ServicePaie.AnnulerLot(lot2)
         Assert.AreEqual("A", Convert.ToString(Db.Scalaire("SELECT Statut FROM dbo.LotPaie WHERE Id = @l", Db.P("@l", lot2))))
         Assert.AreEqual(alice.Dcm("RRQ"), ServicePaie.CumulatifsEmploye(horaire, 2026, 0).RRQ, "La paie annulée sort des cumulatifs.")
+        Assert.IsFalse(ServicePaie.PeutAnnuler(lot1), "Ses retenues sont payées à Revenu Québec.")
+        ServiceRemise.Annuler(remiseQc)
         Assert.IsTrue(ServicePaie.PeutAnnuler(lot1))
 
-        Assert.AreEqual(3, Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.JournalActivite"))
+        Assert.AreEqual(7, Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.JournalActivite"))
     End Sub
 
     <TestMethod>

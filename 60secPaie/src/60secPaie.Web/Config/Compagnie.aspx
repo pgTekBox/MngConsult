@@ -41,6 +41,17 @@
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtProchainCheque">Prochain numéro de chèque</asp:Label>
                 <asp:TextBox ID="txtProchainCheque" runat="server" MaxLength="9" /></div>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlFreqFederale">Fréquence de paiement des retenues fédérales</asp:Label>
+                <asp:DropDownList ID="ddlFreqFederale" runat="server">
+                    <asp:ListItem Value="M">Mensuelle (dû le 15 du mois suivant)</asp:ListItem>
+                    <asp:ListItem Value="T">Trimestrielle (dû le 15 suivant le trimestre)</asp:ListItem>
+                </asp:DropDownList></div>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlFreqQuebec">Fréquence de paiement des retenues à Revenu Québec</asp:Label>
+                <asp:DropDownList ID="ddlFreqQuebec" runat="server">
+                    <asp:ListItem Value="M">Mensuelle (dû le 15 du mois suivant)</asp:ListItem>
+                    <asp:ListItem Value="T">Trimestrielle (dû le 15 suivant le trimestre)</asp:ListItem>
+                </asp:DropDownList>
+                <div class="aide">La fréquence est celle que l'ARC et Revenu Québec vous ont attribuée.</div></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtNEFederal">Numéro d'entreprise fédéral (RP)</asp:Label>
                 <asp:TextBox ID="txtNEFederal" runat="server" MaxLength="20" placeholder="123456789RP0001" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtNIRQ">Numéro d'identification Revenu Québec (RS)</asp:Label>

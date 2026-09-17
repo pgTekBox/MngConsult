@@ -17,6 +17,11 @@
                     <a runat="server" href="~/Paie/Calculer.aspx" class="bouton">Calculer la paie</a>
                 </div>
                 <div class="carte">
+                    <h2>Paiement des retenues</h2>
+                    <asp:Literal ID="litRetenues" runat="server" />
+                    <a runat="server" href="~/Remises/Payer.aspx" class="bouton secondaire">Payer</a>
+                </div>
+                <div class="carte">
                     <h2>Historique de paie</h2>
                     <p>Consultez le détail des paies déjà calculées et imprimez les talons de paie.</p>
                     <a runat="server" href="~/Paie/Historique.aspx" class="bouton secondaire">Consulter</a>

@@ -241,10 +241,20 @@ Public NotInheritable Class ServicePaie
     Public Shared Function PeutAnnuler(lotId As Integer) As Boolean
         Dim dernier = Db.ScalaireEntier("SELECT TOP 1 Id FROM dbo.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC",
                                         Db.P("@c", Contexte.CompagnieId))
-        Return dernier = lotId
+        If dernier <> lotId Then Return False
+        Return Not RetenuesPayees(lotId)
+    End Function
+
+    ''' <summary>Vrai si les retenues d'au moins une paie du lot ont déjà été payées à un gouvernement.</summary>
+    Public Shared Function RetenuesPayees(lotId As Integer) As Boolean
+        Return Db.ScalaireEntier("SELECT COUNT(*) FROM dbo.Paie WHERE LotPaieId = @l AND (RemiseFederaleId IS NOT NULL OR RemiseQuebecId IS NOT NULL)",
+                                 Db.P("@l", lotId)) > 0
     End Function
 
     Public Shared Sub AnnulerLot(lotId As Integer)
+        If RetenuesPayees(lotId) Then
+            Throw New SaisieInvalideException("Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues.")
+        End If
         If Not PeutAnnuler(lotId) Then Throw New SaisieInvalideException("Seule la paie confirmée la plus récente peut être annulée.")
         Dim lot = Db.Ligne("SELECT * FROM dbo.LotPaie WHERE Id = @l", Db.P("@l", lotId))
         Db.Exec("UPDATE dbo.LotPaie SET Statut = 'A' WHERE Id = @l AND Statut = 'C' AND CompagnieId = @c", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))

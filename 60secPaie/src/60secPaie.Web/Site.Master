@@ -22,6 +22,7 @@
                 <a runat="server" id="lnkTableau" href="~/Default.aspx">Tableau de bord</a>
                 <a runat="server" id="lnkPaie" href="~/Paie/Calculer.aspx">Calculer la paie</a>
                 <a runat="server" id="lnkHistorique" href="~/Paie/Historique.aspx">Historique</a>
+                <a runat="server" id="lnkRemises" href="~/Remises/Payer.aspx">Retenues</a>
                 <a runat="server" id="lnkEmployes" href="~/Employes/Liste.aspx">Employés</a>
                 <a runat="server" id="lnkConfig" href="~/Config/Compagnie.aspx">Configuration</a>
             </nav>

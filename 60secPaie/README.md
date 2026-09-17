@@ -33,6 +33,18 @@ La chaîne de connexion `Paie` est dans `Web.config` (LocalDB par défaut).
 - **Calculs** : impôt fédéral (T4127, employé du Québec : abattement de 16,5 %, K2Q), impôt du Québec (TP-1015.F), RRQ et 2e cotisation supplémentaire,
   AE au taux du Québec, RQAP, FSS, CNESST, CNT, paiements forfaitaires (bonus, rétroactif), indemnité de vacances.
 
+### Remises gouvernementales (menu Retenues)
+
+- **Fédéral (Receveur général)** : impôt fédéral + assurance-emploi des employés et de l'employeur.
+- **Revenu Québec** : impôt du Québec + RRQ et RQAP (employés et employeur) + FSS + versement périodique à la CNESST.
+- La **CNT** se paie une fois l'an avec le sommaire 1 : elle est affichée à titre indicatif, hors remises.
+- « Retenues accumulées au » : toutes les paies confirmées jusqu'à cette date dont les retenues ne sont pas encore payées à ce gouvernement.
+  Le paiement enregistré fige les montants et rattache les paies ; **une paie dont les retenues sont payées ne peut plus être annulée**
+  (annuler d'abord le paiement des retenues).
+- Fréquence mensuelle ou trimestrielle (page Compagnie) : échéance le 15 suivant la période, avec alerte de retard au tableau de bord.
+  Les fréquences accélérées (versements hebdomadaires ou bimensuels des grands employeurs) ne sont pas gérées.
+- 60secPaie **ne transmet aucun paiement** : il calcule le montant, fournit les renseignements du formulaire de versement et tient l'historique.
+
 ## Taux gouvernementaux
 
 Les taux sont dans `src/60secPaie.Calcul/ParametresAnnee.vb`. **Seule l'année 2026 est définie.**
@@ -84,5 +96,5 @@ Les tests d'intégration recréent la base jetable `60secPaie_Test` sur LocalDB 
 
 ## Phase 2 (à venir)
 
-Paiement des retenues (remises fédérales et provinciales) et historique, T4 / Relevés 1 et sommaires, déclaration des salaires CNESST,
+~~Paiement des retenues et historique~~ (fait), T4 / Relevés 1 et sommaires, déclaration des salaires CNESST,
 rapport d'écritures comptables (GL), rapport de vacances, fichier de dépôt direct, envoi des talons par courriel, gestion des utilisateurs.

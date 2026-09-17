@@ -12,6 +12,8 @@ Partial Public Class PageCompagnie
     Protected WithEvents ddlPeriodes As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtTauxVacances As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtProchainCheque As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlFreqFederale As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents ddlFreqQuebec As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtNEFederal As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtNIRQ As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtMasse As Global.System.Web.UI.WebControls.TextBox

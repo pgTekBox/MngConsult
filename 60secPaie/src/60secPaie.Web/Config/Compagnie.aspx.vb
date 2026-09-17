@@ -32,6 +32,8 @@ Public Class PageCompagnie
         ddlPeriodes.SelectedValue = c.Ent("PeriodesParAnnee").ToString()
         txtTauxVacances.Text = Champ(c("TauxVacancesDefaut"))
         txtProchainCheque.Text = c.Ent("ProchainNumeroCheque").ToString()
+        ddlFreqFederale.SelectedValue = If(c.Txt("FrequenceRemiseFederale") = "T", "T", "M")
+        ddlFreqQuebec.SelectedValue = If(c.Txt("FrequenceRemiseQuebec") = "T", "T", "M")
         txtNEFederal.Text = c.Txt("NumeroEntrepriseFederal")
         txtNIRQ.Text = c.Txt("NumeroIdentificationRQ")
         txtMasse.Text = Champ(c("MasseSalarialeEstimee"))
@@ -62,14 +64,16 @@ Public Class PageCompagnie
                 Db.P("@Masse", masse), Db.P("@Secteur", secteur), Db.P("@FacteurAE", facteurAE), Db.P("@TauxVacances", tauxVacances),
                 Db.P("@TauxCNESST", Dec(txtTauxCNESST.Text, "Taux CNESST")), Db.P("@CNT", chkCNT.Checked),
                 Db.P("@NEFederal", txtNEFederal.Text.ToUpperInvariant()), Db.P("@NIRQ", txtNIRQ.Text.ToUpperInvariant()),
-                Db.P("@Cheque", If(EntierN(txtProchainCheque.Text, "Prochain numéro de chèque"), 1)), Db.P("@Id", Contexte.CompagnieId)}
+                Db.P("@Cheque", If(EntierN(txtProchainCheque.Text, "Prochain numéro de chèque"), 1)), Db.P("@Id", Contexte.CompagnieId),
+                Db.P("@FreqFed", If(ddlFreqFederale.SelectedValue = "T", "T", "M")), Db.P("@FreqQc", If(ddlFreqQuebec.SelectedValue = "T", "T", "M"))}
 
             If Contexte.CompagnieId = 0 Then
                 Dim id = Db.Inserer(
                     "INSERT INTO dbo.Compagnie (Nom, Adresse1, Adresse2, Ville, CodePostal, Telephone, Courriel, PeriodesParAnnee, MasseSalarialeEstimee, SecteurFSS, " &
-                    "FacteurAE, TauxVacancesDefaut, TauxCNESST, AssujettiCNT, NumeroEntrepriseFederal, NumeroIdentificationRQ, ProchainNumeroCheque) " &
+                    "FacteurAE, TauxVacancesDefaut, TauxCNESST, AssujettiCNT, NumeroEntrepriseFederal, NumeroIdentificationRQ, ProchainNumeroCheque, " &
+                    "FrequenceRemiseFederale, FrequenceRemiseQuebec) " &
                     "VALUES (@Nom, @Adresse1, @Adresse2, @Ville, @CodePostal, @Telephone, @Courriel, @Periodes, @Masse, @Secteur, " &
-                    "@FacteurAE, @TauxVacances, @TauxCNESST, @CNT, @NEFederal, @NIRQ, @Cheque)", prms)
+                    "@FacteurAE, @TauxVacances, @TauxCNESST, @CNT, @NEFederal, @NIRQ, @Cheque, @FreqFed, @FreqQc)", prms)
                 CreerElementsDeBase(id)
                 Contexte.OublierCompagnie()
                 Contexte.Journaliser("Compagnie créée.")
@@ -79,7 +83,7 @@ Public Class PageCompagnie
                     "UPDATE dbo.Compagnie SET Nom=@Nom, Adresse1=@Adresse1, Adresse2=@Adresse2, Ville=@Ville, CodePostal=@CodePostal, Telephone=@Telephone, " &
                     "Courriel=@Courriel, PeriodesParAnnee=@Periodes, MasseSalarialeEstimee=@Masse, SecteurFSS=@Secteur, FacteurAE=@FacteurAE, " &
                     "TauxVacancesDefaut=@TauxVacances, TauxCNESST=@TauxCNESST, AssujettiCNT=@CNT, NumeroEntrepriseFederal=@NEFederal, " &
-                    "NumeroIdentificationRQ=@NIRQ, ProchainNumeroCheque=@Cheque WHERE Id=@Id", prms)
+                    "NumeroIdentificationRQ=@NIRQ, ProchainNumeroCheque=@Cheque, FrequenceRemiseFederale=@FreqFed, FrequenceRemiseQuebec=@FreqQc WHERE Id=@Id", prms)
                 AfficherTauxFSS(masse, secteur)
                 Succes("Compagnie enregistrée.")
             End If
