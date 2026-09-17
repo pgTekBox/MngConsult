@@ -37,6 +37,10 @@ powershell -ExecutionPolicy Bypass -File .\Exporter-Donnees.ps1
 sqlcmd -S 192.168.0.203 -U MngConsul -C -f 65001 -v Base=MngConsul -i export\02_donnees.sql
 ```
 
+Variante sans taper de mot de passe : `Database\Deployer-Serveur.ps1` lit la chaîne de connexion dans le `Web.config` d'une application
+existante (par défaut `prjMngConsul`, clé `ConnectionString`) et ne l'affiche jamais. Actions : `-Action Verifier` (lecture seule),
+`Schema`, `Donnees`, `Configurer` (écrit `ConnectionStrings.config`). C'est ainsi que la base a été déployée sur le serveur le 2026-09-17.
+
 Le script de données refuse de s'exécuter si la destination contient déjà des données de paie, conserve les identifiants et s'exécute en une
 transaction. `Database\export` est exclu de git (renseignements personnels) : supprimer le fichier après le transfert.
 Activer ensuite l'entrée « Serveur » de `ConnectionStrings.config`.
