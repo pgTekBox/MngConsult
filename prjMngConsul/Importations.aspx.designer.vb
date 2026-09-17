@@ -21,6 +21,9 @@ Partial Public Class Importations
     '''<summary>litAFaire</summary>
     Protected WithEvents litAFaire As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litConnexion</summary>
+    Protected WithEvents litConnexion As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>litParcours</summary>
     Protected WithEvents litParcours As Global.System.Web.UI.WebControls.Literal
 
@@ -29,4 +32,12 @@ Partial Public Class Importations
 
     '''<summary>litAVenir</summary>
     Protected WithEvents litAVenir As Global.System.Web.UI.WebControls.Literal
+    '''<summary>litViderCie</summary>
+    Protected WithEvents litViderCie As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litViderEtat</summary>
+    Protected WithEvents litViderEtat As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>btnVider</summary>
+    Protected WithEvents btnVider As Global.System.Web.UI.WebControls.Button
 End Class

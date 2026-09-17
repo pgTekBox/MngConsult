@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Data.SqlClient
+Imports System.Text
 
 ''' <summary>
 ''' Le point d'entrée de toutes les importations. Chaque écran d'import s'atteint
@@ -70,6 +71,77 @@ Public Class Importations
         End Get
     End Property
 
+    ''' <summary>
+    ''' La lecture directe, par connecteur. Les autres postes partent d'un
+    ''' fichier que le client a exporté ; celui-ci part de sa comptabilité
+    ''' elle-même. Il est à part parce qu'il ne remplace aucun écran : il les
+    ''' alimente. Ce qu'il rapatrie se dépose en préparation, et les écrans
+    ''' ci-dessous décident ensuite de ce qui est créé.
+    ''' </summary>
+    Private ReadOnly Property Connexion As List(Of Poste)
+        Get
+            Return New List(Of Poste) From {
+                New Poste With {
+                    .Icone = "🔌",
+                    .Titre = "QuickBooks, en direct",
+                    .Source = "Apideck : lecture de la comptabilité source, sans export",
+                    .Destination = "préparation — staging.ConnecteurDonnee, puis les écrans ci-dessous",
+                    .Page = "~/ImportApideck.aspx",
+                    .Note = 6,
+                    .Fait = "Le client relie son QuickBooks une fois ; chaque extraction ramène " &
+                            "les vingt-sept ressources d'Apideck en préparation. Douze sont en plus " &
+                            "interprétées : le plan comptable, les clients, les fournisseurs et les " &
+                            "produits rejoignent les écrans d'import existants ; les factures clients " &
+                            "et fournisseurs sont déposées avec leurs lignes, leur tiers reconnu et " &
+                            "leur verdict, prêtes à être validées une par une.",
+                    .Manque = "Les quinze autres " &
+                              "ressources se déposent sans être interprétées. Sage passera par le " &
+                              "même chemin, c'est un autre connecteur d'Apideck."
+                },
+                New Poste With {
+                    .Icone = "🧾",
+                    .Titre = "Valider les factures importées",
+                    .Source = "ce que l'extraction a déposé, clients et fournisseurs",
+                    .Destination = "T060Document + T061DocumentLine, en brouillon",
+                    .Page = "~/ValiderFactures.aspx",
+                    .Note = 7,
+                    .Fait = "Montre chaque facture avec son détail, son tiers et son verdict — " &
+                            "nouvelle, déjà en comptabilité, ou à corriger. On rapproche le tiers " &
+                            "quand la source ne l'a pas retrouvé, on répartit les taxes, on coche, " &
+                            "et les documents sont créés en brouillon : rien ne part au grand livre.",
+                    .Manque = "Les montants et les lignes ne se retouchent pas ici — il faut corriger " &
+                              "à la source. Et la comptabilisation reste à faire depuis la grille des factures."
+                },
+                New Poste With {
+                    .Icone = "🏢",
+                    .Titre = "Comparer la fiche d'entreprise",
+                    .Source = "les informations de la société lues chez la source",
+                    .Destination = "les paramètres de la compagnie — T100/T101, après validation",
+                    .Page = "~/ValiderSociete.aspx",
+                    .Note = 7,
+                    .Fait = "Le seul import qui ne crée rien : le nom légal, l'adresse et le " &
+                            "téléphone existent déjà ici. Chaque champ est montré des deux côtés, " &
+                            "avec son écart, et seuls les champs cochés remplacent la valeur en place.",
+                    .Manque = "Ce que la source connaît sans équivalent chez nous — devise, méthode " &
+                              "comptable, mois de début d'exercice — s'affiche sans pouvoir être repris."
+                },
+                New Poste With {
+                    .Icone = "🗂️",
+                    .Titre = "Listes de structure",
+                    .Source = "modes de paiement, catégories de suivi, départements, emplacements",
+                    .Destination = "préparation seulement — aucune destination dans 60Sec-AI à ce jour",
+                    .Page = "~/ValiderListes.aspx",
+                    .Note = 5,
+                    .Fait = "Quatre listes lues, chacune dans sa table, avec leurs doublons et leurs " &
+                            "éléments inutilisables signalés. Une nouvelle extraction remplace la " &
+                            "liste du même genre, sans toucher aux autres.",
+                    .Manque = "Rien ne s'applique : l'application n'a pas d'écran des modes de " &
+                              "paiement ni des départements. Les comptes bancaires et les journaux " &
+                              "ont été retirés — Apideck ne les expose pas chez QuickBooks."
+                }
+            }
+        End Get
+    End Property
     ''' <summary>
     ''' Les listes : clients, fournisseurs, produits et services. Un même écran,
     ''' trois usages — lire le fichier ou l'extraire par l'IA, rapprocher de ce
@@ -173,8 +245,11 @@ Public Class Importations
             Return
         End If
 
+        PreparerVidage()
+
         If IsPostBack Then Return
 
+        litConnexion.Text = Rendre(Connexion)
         litParcours.Text = Rendre(Parcours)
         litAutres.Text = Rendre(Autres)
         litAVenir.Text = Rendre(AVenir)
@@ -189,6 +264,7 @@ Public Class Importations
     ''' </summary>
     Private Sub AfficherAvancement()
         Dim tous = New List(Of Poste)
+        tous.AddRange(Connexion)
         tous.AddRange(Parcours)
         tous.AddRange(Autres)
         tous.AddRange(AVenir)
@@ -265,6 +341,79 @@ Public Class Importations
         If note >= 5 Then Return "jaune"
         If note >= 2 Then Return "orange"
         Return "gris"
+    End Function
+
+#End Region
+
+
+#Region "Vider la préparation"
+
+    ''' <summary>
+    ''' Le staging est un brouillon : on relit la même comptabilité plusieurs fois
+    ''' avant d'appliquer quoi que ce soit, et il faut pouvoir repartir à zéro
+    ''' entre deux essais. Ce bouton efface la préparation de CETTE compagnie —
+    ''' pas des autres, et jamais la comptabilité elle-même.
+    '''
+    ''' Le garde-fou est côté navigateur : le geste est irréversible et mérite
+    ''' d'être confirmé une fois. Piège maison : les asp:Button de l'ERP sont
+    ''' rendus en type="button", donc un OnClientClick qui commence par « return »
+    ''' avale le postback et le bouton ne fait plus rien. D'où le « return false »
+    ''' à l'intérieur du test, et lui seul.
+    ''' </summary>
+    Private Sub PreparerVidage()
+        litViderCie.Text = Server.HtmlEncode(If(CompanyName, "cette compagnie"))
+
+        ' Le nom part dans un littéral JavaScript, lui-même dans un attribut HTML
+        ' entre guillemets doubles : l'apostrophe s'échappe, le guillemet s'enlève.
+        Dim nom As String = If(CompanyName, "cette compagnie")
+        nom = nom.Replace("\", "\\").Replace("'", "\'").Replace("""", "")
+
+        Dim question As String =
+            "Vider toutes les tables de préparation de " & nom & " ?\n\n" &
+            "Tout ce qui attend une validation sera effacé et devra être réimporté. " &
+            "Ce qui est déjà passé en comptabilité n'est pas touché."
+
+        btnVider.OnClientClick = "if (!confirm('" & question & "')) { return false; }"
+    End Sub
+
+    Protected Sub btnVider_Click(sender As Object, e As EventArgs) Handles btnVider.Click
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+
+            Dim ds As DataSet = ExecuteSQLds("s0790ViderStaging", p)
+            litViderEtat.Text = ResumerVidage(ds)
+
+        Catch ex As Exception
+            litViderEtat.Text = "<div class=""fait"" style=""color:#b91c1c"">Le vidage a échoué : " &
+                                Server.HtmlEncode(ex.Message) & "</div>"
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Ce qui a été effacé, table par table. Un simple « c'est fait » laisserait
+    ''' planer un doute sur ce qui est parti ; le détail lève ce doute.
+    ''' </summary>
+    Private Function ResumerVidage(ds As DataSet) As String
+        If ds Is Nothing OrElse ds.Tables.Count < 2 Then Return "<div class=""fait"">Préparation vidée.</div>"
+
+        Dim total As Integer = 0
+        If ds.Tables(1).Rows.Count > 0 AndAlso Not IsDBNull(ds.Tables(1).Rows(0)("Total")) Then
+            total = Convert.ToInt32(ds.Tables(1).Rows(0)("Total"))
+        End If
+
+        If total = 0 Then Return "<div class=""fait"">La préparation était déjà vide.</div>"
+
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""fait"">Préparation vidée : ").Append(total).Append(" ligne(s) — ")
+
+        Dim bouts As New List(Of String)
+        For Each r As DataRow In ds.Tables(0).Rows
+            bouts.Add(Server.HtmlEncode(Convert.ToString(r("Table"))) & " " & Convert.ToString(r("Lignes")))
+        Next
+        sb.Append(String.Join(", ", bouts.ToArray())).Append(".</div>")
+
+        Return sb.ToString()
     End Function
 
 #End Region

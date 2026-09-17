@@ -347,11 +347,58 @@ Public MustInherit Class ImportComptableBase
 
 #Region "Écriture en préparation"
 
+    ''' <summary>
+    ''' Inscrit le fichier d'origine dans staging.ImportFiles et rend son
+    ''' identifiant. C'est le registre de tout ce qui entre : le plan comptable
+    ''' y figure comme les listes, même si son détail vit ailleurs.
+    '''
+    ''' Aucune extraction n'est déclenchée — s0604 ne connaît que les listes et
+    ''' lèverait sur un type qu'il ne sait pas éclater. Le fichier est simplement
+    ''' déposé, marqué traité, et le lot pointera dessus.
+    ''' </summary>
+    Protected Function EnregistrerFichier(typeImport As String, nom As String,
+                                          octets As Byte(), contentType As String,
+                                          Optional provenance As String = Nothing) As Integer
+        If octets Is Nothing Then octets = New Byte() {}
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@TypeImport", typeImport))
+        p.Add(New SqlParameter("@OriginalName", If(nom, "")))
+        p.Add(New SqlParameter("@FileExtension", IO.Path.GetExtension(If(nom, "")).ToLowerInvariant()))
+        p.Add(New SqlParameter("@FileSize", CObj(CLng(octets.Length))))
+        p.Add(New SqlParameter("@ContentType", If(contentType, "application/octet-stream")))
+        p.Add(New SqlParameter("@FileContent", octets))
+        p.Add(New SqlParameter("@UploadedBy", CObj(UserId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+
+        Dim ds As DataSet = ExecuteSQLds("s0600InsertImportFile", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Throw New InvalidOperationException("Le fichier d'importation n'a pas pu être enregistré.")
+        End If
+        Dim id As Integer = Convert.ToInt32(ds.Tables(0).Rows(0)(0))
+
+        ' Pas d'IA ici : les compteurs restent à zéro, et la provenance dit d'où
+        ' vient la donnée — un fichier déposé, ou un connecteur.
+        Dim p2 As New Collection
+        p2.Add(New SqlParameter("@Id", CObj(id)))
+        p2.Add(New SqlParameter("@JsonResult", DBNull.Value))
+        p2.Add(New SqlParameter("@InputTokens", CObj(0)))
+        p2.Add(New SqlParameter("@OutputTokens", CObj(0)))
+        p2.Add(New SqlParameter("@EstimatedCostUsd", CObj(0D)))
+        p2.Add(New SqlParameter("@ModelUsed", If(provenance Is Nothing, CObj(DBNull.Value), CObj(provenance))))
+        p2.Add(New SqlParameter("@Status", "Done"))
+        p2.Add(New SqlParameter("@ErrorMessage", DBNull.Value))
+        ExecuteSQL("s0602UpdateImportFileResult", p2)
+
+        Return id
+    End Function
+
     ''' <summary>Ouvre un lot et rend son identifiant.</summary>
     Protected Function OuvrirLot(systemeSource As String,
                                  nomFichier As String,
                                  separateur As String,
-                                 encodage As String) As Integer
+                                 encodage As String,
+                                 Optional importFileId As Integer = 0) As Integer
 
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
@@ -361,6 +408,7 @@ Public MustInherit Class ImportComptableBase
         p.Add(New SqlParameter("@Separateur", If(separateur, "")))
         p.Add(New SqlParameter("@Encodage", If(encodage, "")))
         p.Add(New SqlParameter("@UserId", UserId))
+        p.Add(New SqlParameter("@ImportFileId", If(importFileId > 0, CObj(importFileId), CObj(DBNull.Value))))
 
         Dim ds As DataSet = ExecuteSQLds("s0751OuvrirImportLot", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
