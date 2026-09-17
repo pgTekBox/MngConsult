@@ -1,0 +1,15 @@
+# Visual Studio
+.vs/
+*.user
+*.suo
+
+# Compilation
+bin/
+obj/
+TestResults/
+
+# Secrets de production (chaîne de connexion, machineKey)
+Web.Production.config
+
+# Document commercial de Nubis : référence locale seulement
+docs/nubis_plans_fr.pdf
