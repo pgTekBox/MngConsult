@@ -2,13 +2,7 @@ Option Strict On
 Option Explicit On
 
 Partial Public Class PageCompagnie
-    Protected WithEvents txtNom As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtAdresse1 As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtAdresse2 As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtVille As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtCodePostal As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtTelephone As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtCourriel As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents litIdentite As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents ddlPeriodes As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtTauxVacances As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtProchainCheque As Global.System.Web.UI.WebControls.TextBox

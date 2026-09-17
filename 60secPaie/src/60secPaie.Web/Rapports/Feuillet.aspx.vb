@@ -22,7 +22,7 @@ Public Class PageFeuillet
 
         Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         Dim emp = f.Employe
-        Dim nas = Secret.Reveler(emp.Txt("NASChiffre"))
+        Dim nas = NasDe(emp)
         Dim nasAffiche = If(nas.Length = 0, "NAS manquant dans la fiche", If(_nasComplet, nas, Secret.Masquer(nas)))
         btnNas.Visible = nas.Length > 0 AndAlso Not _nasComplet
 

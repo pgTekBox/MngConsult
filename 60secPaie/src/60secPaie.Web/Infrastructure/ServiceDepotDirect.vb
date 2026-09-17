@@ -33,7 +33,7 @@ Public NotInheritable Class ServiceDepotDirect
             p.Add("Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct).")
         End If
         For Each e As DataRow In Depots(lotId).Rows
-            If e.Txt("Institution").Length <> 3 OrElse e.Txt("Transit").Length <> 5 OrElse Secret.Reveler(e.Txt("CompteChiffre")).Length = 0 Then
+            If e.Txt("Institution").Length <> 3 OrElse e.Txt("Transit").Length <> 5 OrElse CompteDe(e).Length = 0 Then
                 p.Add("Coordonnées bancaires incomplètes pour " & e.Txt("Prenom") & " " & e.Txt("Nom") & ".")
             End If
         Next
@@ -43,7 +43,7 @@ Public NotInheritable Class ServiceDepotDirect
     ''' <summary>Paies du lot à verser par dépôt direct.</summary>
     Public Shared Function Depots(lotId As Integer) As DataTable
         Return Db.Table(
-            "SELECT p.Id AS PaieId, p.Net, e.Id AS EmployeId, e.Code, e.Prenom, e.Nom, e.Institution, e.Transit, e.CompteChiffre " &
+            "SELECT p.Id AS PaieId, p.Net, e.Id AS EmployeId, e.Code, e.Prenom, e.Nom, e.Institution, e.Transit, e.CompteChiffre, e.CompteMngConsul " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId " &
             "WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.DepotDirect = 1 AND p.Net > 0 ORDER BY e.Nom, e.Prenom",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
@@ -84,7 +84,7 @@ Public NotInheritable Class ServiceDepotDirect
             s.Append(CLng(d.Dcm("Net") * 100D).ToString("0000000000"))
             s.Append(Julien(datePaie))
             s.Append("0").Append(d.Txt("Institution")).Append(d.Txt("Transit"))
-            s.Append(Gauche(Secret.Reveler(d.Txt("CompteChiffre")), 12))
+            s.Append(Gauche(CompteDe(d), 12))
             s.Append(retourInstitution).Append(numeroFichier.ToString("0000")).Append(sequence.ToString("000000000"))   ' numéro de repérage (22)
             s.Append("000")                                                     ' type de transaction stocké
             s.Append(Gauche(c.Txt("DDNomCourt"), 15))

@@ -19,7 +19,7 @@ Public Class PageAccueil
 
         litRetenues.Text = LigneSolde(ServiceRemise.Federal, "Fédéral") & LigneSolde(ServiceRemise.Quebec, "Revenu Québec")
 
-        Dim activites = Db.Table("SELECT TOP 8 * FROM paie.JournalActivite ORDER BY Id DESC")
+        Dim activites = Db.Table("SELECT TOP 8 * FROM paie.JournalActivite WHERE CompagnieId = @c ORDER BY Id DESC", Db.P("@c", Contexte.CompagnieId))
         rptActivites.DataSource = activites
         rptActivites.DataBind()
         rptActivites.Visible = activites.Rows.Count > 0

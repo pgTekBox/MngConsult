@@ -1,0 +1,4 @@
+BCrypt.Net-Next 3.2.1 (licence MIT, https://github.com/BcryptNet/bcrypt.net), version net472.
+Sert a verifier les mots de passe BCrypt des comptes MngConsul (dbo.T015User).
+Cette version est choisie parce qu'elle n'a AUCUNE dependance (les versions 3.5+ et 4.x exigent System.Memory
+et des redirections d'assemblages dans Web.config). Elle verifie les memes hachages $2a$ que la version 4.1.0 de MngConsul.

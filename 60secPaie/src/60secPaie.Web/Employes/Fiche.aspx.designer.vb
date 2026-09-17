@@ -6,23 +6,11 @@ Partial Public Class PageFicheEmploye
     Protected WithEvents pnlLiens As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents lnkElements As Global.System.Web.UI.WebControls.HyperLink
     Protected WithEvents lnkCumulatifs As Global.System.Web.UI.WebControls.HyperLink
-    Protected WithEvents chkActif As Global.System.Web.UI.WebControls.CheckBox
-    Protected WithEvents txtPrenom As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtNom As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtCode As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents litIdentite As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents txtDateNaissance As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtAdresse1 As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtAdresse2 As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtVille As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtCodePostal As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtCourriel As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtTelephone As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents ddlLangue As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtNAS As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents litNasActuel As Global.System.Web.UI.WebControls.Literal
-    Protected WithEvents txtPoste As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtDateEmbauche As Global.System.Web.UI.WebControls.TextBox
-    Protected WithEvents txtDateFin As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents ddlPeriodes As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtHeuresSemaine As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTauxHoraire As Global.System.Web.UI.WebControls.TextBox

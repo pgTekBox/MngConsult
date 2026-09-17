@@ -9,35 +9,23 @@
     </div>
 
     <fieldset>
-        <legend>Informations de l'employé</legend>
-        <div class="cases"><span><asp:CheckBox ID="chkActif" runat="server" Text="Actif" Checked="true" /></span></div>
+        <legend>Employé (MngConsul)</legend>
+        <asp:Literal ID="litIdentite" runat="server" />
+        <p class="note">Ces renseignements proviennent de MngConsul et s'y modifient.</p>
+    </fieldset>
+
+    <fieldset>
+        <legend>Renseignements personnels pour la paie</legend>
         <div class="champs">
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtPrenom" CssClass="requis">Prénom</asp:Label>
-                <asp:TextBox ID="txtPrenom" runat="server" MaxLength="100" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtNom" CssClass="requis">Nom</asp:Label>
-                <asp:TextBox ID="txtNom" runat="server" MaxLength="100" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtCode">Code employé</asp:Label>
-                <asp:TextBox ID="txtCode" runat="server" MaxLength="20" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtDateNaissance">Date de naissance</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtDateNaissance" Text="Date de naissance" />
                 <asp:TextBox ID="txtDateNaissance" runat="server" TextMode="Date" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtAdresse1">Adresse - ligne 1</asp:Label>
-                <asp:TextBox ID="txtAdresse1" runat="server" MaxLength="200" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtAdresse2">Adresse - ligne 2</asp:Label>
-                <asp:TextBox ID="txtAdresse2" runat="server" MaxLength="200" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtVille">Ville</asp:Label>
-                <asp:TextBox ID="txtVille" runat="server" MaxLength="100" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtCodePostal">Code postal</asp:Label>
-                <asp:TextBox ID="txtCodePostal" runat="server" MaxLength="7" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtCourriel">Courriel</asp:Label>
-                <asp:TextBox ID="txtCourriel" runat="server" MaxLength="256" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTelephone">Téléphone</asp:Label>
-                <asp:TextBox ID="txtTelephone" runat="server" MaxLength="30" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlLangue">Langue</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlLangue" Text="Langue des talons et courriels" />
                 <asp:DropDownList ID="ddlLangue" runat="server">
                     <asp:ListItem Value="FR">Français</asp:ListItem>
-                    <asp:ListItem Value="EN">Anglais</asp:ListItem>
+                    <asp:ListItem Value="EN">English</asp:ListItem>
+                    <asp:ListItem Value="ES">Español</asp:ListItem>
                 </asp:DropDownList></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtNAS">Numéro d'assurance sociale (NAS)</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtNAS" Text="Numéro d'assurance sociale (NAS)" />
                 <asp:TextBox ID="txtNAS" runat="server" MaxLength="11" autocomplete="off" />
                 <div class="aide"><asp:Literal ID="litNasActuel" runat="server" /></div></div>
         </div>
@@ -46,31 +34,26 @@
     <fieldset>
         <legend>Informations de paie</legend>
         <div class="champs">
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtPoste">Poste</asp:Label>
-                <asp:TextBox ID="txtPoste" runat="server" MaxLength="100" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtDateEmbauche">Date d'embauche</asp:Label>
-                <asp:TextBox ID="txtDateEmbauche" runat="server" TextMode="Date" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtDateFin">Date de fin d'emploi</asp:Label>
-                <asp:TextBox ID="txtDateFin" runat="server" TextMode="Date" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlPeriodes">Période de paie</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlPeriodes" Text="Période de paie" />
                 <asp:DropDownList ID="ddlPeriodes" runat="server">
-                    <asp:ListItem Value="">Par défaut de la compagnie</asp:ListItem>
+                    <asp:ListItem Value="">Par défaut (MngConsul, sinon la compagnie)</asp:ListItem>
                     <asp:ListItem Value="52">Hebdomadaire (52 périodes)</asp:ListItem>
                     <asp:ListItem Value="26">Aux 2 semaines (26 périodes)</asp:ListItem>
                     <asp:ListItem Value="24">Bimensuel (24 périodes)</asp:ListItem>
                     <asp:ListItem Value="12">Mensuel (12 périodes)</asp:ListItem>
                 </asp:DropDownList></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtHeuresSemaine">Heures par semaine</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtHeuresSemaine" Text="Heures par semaine" />
                 <asp:TextBox ID="txtHeuresSemaine" runat="server" MaxLength="6" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxHoraire">Taux horaire ($)</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxHoraire" Text="Taux horaire ($)" />
                 <asp:TextBox ID="txtTauxHoraire" runat="server" MaxLength="10" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtSalaireAnnuel">Salaire annuel ($)</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtSalaireAnnuel" Text="Salaire annuel ($)" />
                 <asp:TextBox ID="txtSalaireAnnuel" runat="server" MaxLength="12" />
                 <div class="aide">Utilisé si aucun taux horaire n'est inscrit.</div></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxVacances">Taux de vacances (%)</asp:Label>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxVacances" Text="Taux de vacances (%)" />
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" />
                 <div class="aide">Vide = taux par défaut de la compagnie.</div></div>
         </div>
+        <p class="note">Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.</p>
     </fieldset>
 
     <fieldset>

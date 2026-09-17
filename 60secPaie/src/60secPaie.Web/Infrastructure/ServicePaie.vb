@@ -36,12 +36,12 @@ Public NotInheritable Class ServicePaie
         Dim debut = DebutPeriode(finPeriode, periodes)
 
         Dim employes = Db.Table(
-            "SELECT * FROM paie.Employe WHERE CompagnieId = @c AND Actif = 1 AND ISNULL(PeriodesParAnnee, @pDefaut) = @p " &
+            "SELECT * FROM paie.Employe WHERE CompagnieId = @c AND Actif = 1 AND PaieConfiguree = 1 AND ISNULL(PeriodesParAnnee, @pDefaut) = @p " &
             "AND (DateEmbauche IS NULL OR DateEmbauche <= @fin) AND (DateFinEmploi IS NULL OR DateFinEmploi >= @debut) ORDER BY Nom, Prenom",
             Db.P("@c", Contexte.CompagnieId), Db.P("@pDefaut", compagnie.Ent("PeriodesParAnnee")), Db.P("@p", periodes),
             Db.P("@fin", finPeriode), Db.P("@debut", debut))
         If employes.Rows.Count = 0 Then
-            Throw New SaisieInvalideException("Aucun employé actif n'est payé à cette fréquence pour cette période.")
+            Throw New SaisieInvalideException(Tr("Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés."))
         End If
 
         Dim lotId = Db.Inserer(

@@ -19,7 +19,11 @@ Public Module Outils
 
     Private Function Nettoyer(texte As String) As String
         If texte Is Nothing Then Return ""
-        Return texte.Replace(ChrW(160), "").Replace(ChrW(8239), "").Replace(" ", "").Replace("$", "").Replace("%", "").Replace(",", ".").Trim()
+        Dim t = texte.Replace(ChrW(160), "").Replace(ChrW(8239), "").Replace(" ", "").Replace("$", "").Replace("%", "").Trim()
+        ' « 1,234.56 » (anglais) ou « 1.234,56 » (espagnol) : le premier des deux symboles est un séparateur de milliers.
+        Dim virgule = t.IndexOf(","c), point = t.IndexOf("."c)
+        If virgule >= 0 AndAlso point >= 0 Then t = t.Replace(If(virgule < point, ",", "."), "")
+        Return t.Replace(",", ".")
     End Function
 
     ''' <summary>Nombre décimal ; accepte la virgule ou le point. Vide = Nothing.</summary>
@@ -84,22 +88,48 @@ Public Module Outils
         Return somme Mod 10 = 0
     End Function
 
+    ''' <summary>NAS de l'employé : celui chiffré par 60secPaie, sinon celui inscrit dans MngConsul (T300Employees.SIN).</summary>
+    Public Function NasDe(employe As DataRow) As String
+        Dim nas = Secret.Reveler(employe.Txt("NASChiffre"))
+        If nas.Length = 0 AndAlso employe.Table.Columns.Contains("NASMngConsul") Then nas = Chiffres(employe.Txt("NASMngConsul"))
+        Return nas
+    End Function
+
+    ''' <summary>Compte bancaire de l'employé : celui chiffré par 60secPaie, sinon celui inscrit dans MngConsul.</summary>
+    Public Function CompteDe(employe As DataRow) As String
+        Dim compte = Secret.Reveler(employe.Txt("CompteChiffre"))
+        If compte.Length = 0 AndAlso employe.Table.Columns.Contains("CompteMngConsul") Then compte = Chiffres(employe.Txt("CompteMngConsul"))
+        Return compte
+    End Function
+
     ' ---------- Mise en forme ----------
 
+    ''' <summary>Montant en dollars selon la langue : « 1 234,56 $ » en français, « $1,234.56 » en anglais et en espagnol.</summary>
     Public Function Argent(valeur As Object) As String
         If valeur Is Nothing OrElse valeur Is DBNull.Value Then Return ""
-        Return Convert.ToDecimal(valeur).ToString("N2", FrCa) & " $"
+        Dim montant = Convert.ToDecimal(valeur)
+        If I18n.Langue = "fr" Then Return montant.ToString("N2", FrCa) & " $"
+        Return If(montant < 0D, "-", "") & "$" & Math.Abs(montant).ToString("N2", I18n.Culture)
+    End Function
+
+    ''' <summary>Traduction d'un texte français (voir I18n). Avec des valeurs : Tr("{0} employés", 3).</summary>
+    Public Function Tr(fr As String) As String
+        Return I18n.T(fr)
+    End Function
+
+    Public Function Tr(fr As String, ParamArray valeurs As Object()) As String
+        Return I18n.T(fr, valeurs)
     End Function
 
     Public Function Nombre(valeur As Object) As String
         If valeur Is Nothing OrElse valeur Is DBNull.Value Then Return ""
-        Return Convert.ToDecimal(valeur).ToString("0.##", FrCa)
+        Return Convert.ToDecimal(valeur).ToString("0.##", I18n.Culture)
     End Function
 
     ''' <summary>Valeur pour un champ de saisie numérique (vide si NULL).</summary>
     Public Function Champ(valeur As Object) As String
         If valeur Is Nothing OrElse valeur Is DBNull.Value Then Return ""
-        Return Convert.ToDecimal(valeur).ToString("0.####", FrCa)
+        Return Convert.ToDecimal(valeur).ToString("0.####", I18n.Culture)
     End Function
 
     Public Function TexteDate(valeur As Object) As String

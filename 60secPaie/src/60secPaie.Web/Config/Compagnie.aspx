@@ -4,23 +4,9 @@
     <%= SousMenuConfig("compagnie") %>
 
     <fieldset>
-        <legend>Informations de base</legend>
-        <div class="champs">
-            <div class="champ large"><asp:Label runat="server" AssociatedControlID="txtNom" CssClass="requis">Nom de la compagnie</asp:Label>
-                <asp:TextBox ID="txtNom" runat="server" MaxLength="200" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtAdresse1">Adresse - ligne 1</asp:Label>
-                <asp:TextBox ID="txtAdresse1" runat="server" MaxLength="200" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtAdresse2">Adresse - ligne 2</asp:Label>
-                <asp:TextBox ID="txtAdresse2" runat="server" MaxLength="200" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtVille">Ville</asp:Label>
-                <asp:TextBox ID="txtVille" runat="server" MaxLength="100" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtCodePostal">Code postal</asp:Label>
-                <asp:TextBox ID="txtCodePostal" runat="server" MaxLength="7" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTelephone">Téléphone</asp:Label>
-                <asp:TextBox ID="txtTelephone" runat="server" MaxLength="30" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtCourriel">Courriel</asp:Label>
-                <asp:TextBox ID="txtCourriel" runat="server" MaxLength="256" /></div>
-        </div>
+        <legend>Compagnie</legend>
+        <asp:Literal ID="litIdentite" runat="server" />
+        <p class="note">Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise).</p>
     </fieldset>
 
     <fieldset>

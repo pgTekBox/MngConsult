@@ -44,6 +44,10 @@
     <NoWarn>42016,41999,42017,42018,42019,42032,42036,42020,42021,42022</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="BCrypt.Net-Next">
+      <HintPath>..\..\lib\BCrypt.Net-Next.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -70,12 +74,11 @@
     <Content Include="Global.asax" />
     <Content Include="Site.Master" />
     <Content Include="Content\site.css" />
+    <Content Include="Langues\traductions.txt" />
     <Content Include="Login.aspx" />
     <Content Include="Default.aspx" />
-    <Content Include="MonCompte.aspx" />
     <Content Include="Config\Compagnie.aspx" />
     <Content Include="Config\ElementsPaie.aspx" />
-    <Content Include="Config\Utilisateurs.aspx" />
     <Content Include="Employes\Liste.aspx" />
     <Content Include="Employes\Fiche.aspx" />
     <Content Include="Employes\ElementsPaie.aspx" />
@@ -103,6 +106,8 @@
     <Compile Include="Infrastructure\Outils.vb" />
     <Compile Include="Infrastructure\Securite.vb" />
     <Compile Include="Infrastructure\Contexte.vb" />
+    <Compile Include="Infrastructure\ServiceConnexion.vb" />
+    <Compile Include="Infrastructure\I18n.vb" />
     <Compile Include="Infrastructure\PageBase.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -190,13 +195,6 @@
     <Compile Include="Login.aspx.designer.vb">
       <DependentUpon>Login.aspx</DependentUpon>
     </Compile>
-    <Compile Include="MonCompte.aspx.vb">
-      <DependentUpon>MonCompte.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="MonCompte.aspx.designer.vb">
-      <DependentUpon>MonCompte.aspx</DependentUpon>
-    </Compile>
     <Compile Include="Default.aspx.vb">
       <DependentUpon>Default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -210,13 +208,6 @@
     </Compile>
     <Compile Include="Config\Compagnie.aspx.designer.vb">
       <DependentUpon>Compagnie.aspx</DependentUpon>
-    </Compile>
-    <Compile Include="Config\Utilisateurs.aspx.vb">
-      <DependentUpon>Utilisateurs.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
-    </Compile>
-    <Compile Include="Config\Utilisateurs.aspx.designer.vb">
-      <DependentUpon>Utilisateurs.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\ElementsPaie.aspx.vb">
       <DependentUpon>ElementsPaie.aspx</DependentUpon>

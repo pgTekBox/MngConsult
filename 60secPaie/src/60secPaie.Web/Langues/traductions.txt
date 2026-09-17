@@ -1,0 +1,5 @@
+# Traductions de 60secPaie : voir I18n.vb pour le format.
+
+fr: Employés
+en: Employees
+es: Empleados

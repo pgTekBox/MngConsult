@@ -1,6 +1,9 @@
 Imports System.Web.Security
 
-''' <summary>Page de base : compte actif, changement de mot de passe forcé, rôle administrateur, compagnie configurée, messages.</summary>
+''' <summary>
+''' Page de base : compte MngConsul actif, rôle administrateur, compagnie courante configurée pour la paie,
+''' traduction du HTML à la sortie, messages, sous-menus et téléchargements.
+''' </summary>
 Public Class PageBase
     Inherits System.Web.UI.Page
 
@@ -17,27 +20,28 @@ Public Class PageBase
     End Property
 
     Protected Overrides Sub OnLoad(e As EventArgs)
-        ' Compte supprimé ou désactivé pendant la session : on ferme la session.
-        If Contexte.Compte Is Nothing Then
+        ' Compte supprimé ou désactivé dans MngConsul pendant la session, ou plus aucune compagnie accessible : on ferme la session.
+        If Contexte.Compte Is Nothing OrElse Contexte.CompanyGuid = Guid.Empty Then
             FormsAuthentication.SignOut()
             Session.Abandon()
             Response.Redirect("~/Login.aspx", True)
         End If
 
-        ' Mot de passe réinitialisé par un administrateur : il doit être changé avant toute autre chose.
-        If Contexte.Compte.Bln("DoitChangerMotDePasse") AndAlso Not TypeOf Me Is PageMonCompte Then
-            Response.Redirect("~/MonCompte.aspx", True)
-        End If
-
         If ExigeAdmin AndAlso Not Contexte.EstAdmin Then
-            RedirigerAvecMessage("~/Default.aspx", "Cette page est réservée aux administrateurs.")
+            RedirigerAvecMessage("~/Default.aspx", Tr("Cette page est réservée aux administrateurs."))
         End If
 
+        ' La paie n'est pas encore configurée pour la compagnie courante.
         If ExigeCompagnie AndAlso Contexte.CompagnieId = 0 Then
-            Session("flash") = "Bienvenue ! Commencez par configurer votre compagnie."
+            Session("flash") = Tr("La paie n'est pas encore configurée pour {0}. Commencez par ses paramètres de paie.", Contexte.NomCompagnie)
             Response.Redirect("~/Config/Compagnie.aspx", True)
         End If
         MyBase.OnLoad(e)
+    End Sub
+
+    ''' <summary>Les pages sont écrites en français ; le HTML produit est traduit ici, en un seul endroit.</summary>
+    Protected Overrides Sub Render(writer As HtmlTextWriter)
+        I18n.RendreTraduit(writer, Sub(w) MyBase.Render(w))
     End Sub
 
     ' ---------- Sous-menus ----------
@@ -53,11 +57,10 @@ Public Class PageBase
 
     Protected Function SousMenuConfig(actif As String) As String
         Return SousMenu(actif,
-            {"compagnie", "~/Config/Compagnie.aspx", "Ma compagnie"},
+            {"compagnie", "~/Config/Compagnie.aspx", "Paramètres de paie"},
             {"elements", "~/Config/ElementsPaie.aspx", "Éléments de paie"},
             {"comptes", "~/Config/PlanComptable.aspx", "Plan comptable"},
-            {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"},
-            {"utilisateurs", "~/Config/Utilisateurs.aspx", "Utilisateurs"})
+            {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"})
     End Function
 
     Protected Function SousMenuRapports(actif As String) As String
@@ -79,7 +82,7 @@ Public Class PageBase
         Response.End()
     End Sub
 
-    ''' <summary>CSV pour Excel en français : séparateur point-virgule, UTF-8 avec BOM.</summary>
+    ''' <summary>CSV pour Excel : séparateur point-virgule, UTF-8 avec BOM.</summary>
     Protected Sub EnvoyerCsv(nomFichier As String, lignes As IEnumerable(Of String()))
         Dim sb As New System.Text.StringBuilder()
         For Each ligne In lignes
@@ -101,6 +104,8 @@ Public Class PageBase
         Dim v As Integer
         Return If(Integer.TryParse(Request.QueryString(nom), v) AndAlso v > 0, v, 0)
     End Function
+
+    ' ---------- Messages ----------
 
     Protected Sub Succes(message As String)
         DirectCast(Master, SiteMaster).Afficher(message, False)

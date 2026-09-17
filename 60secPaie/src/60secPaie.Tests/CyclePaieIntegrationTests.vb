@@ -17,15 +17,16 @@ Public Class CyclePaieIntegrationTests
     Private Const BaseTest As String = "60secPaie_Test"
     Private Const Maitre As String = "Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=master;Integrated Security=True"
 
-    <ClassInitialize>
+    <AssemblyInitialize>
     Public Shared Sub CreerBase(contexte As TestContext)
         ExecuterLots(Maitre,
             "IF DB_ID(N'" & BaseTest & "') IS NOT NULL BEGIN ALTER DATABASE [" & BaseTest & "] SET SINGLE_USER WITH ROLLBACK IMMEDIATE; DROP DATABASE [" & BaseTest & "]; END" & vbCrLf & "GO" & vbCrLf &
             "CREATE DATABASE [" & BaseTest & "];")
 
         Dim racine = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "..", "..", "..", "..", ".."))
-        Dim schema = File.ReadAllText(Path.Combine(racine, "Database", "01_schema.sql")).Replace("$(Base)", BaseTest)
-        ExecuterLots(Maitre, schema)
+        For Each script In {Path.Combine("tests", "00_stubs_mngconsul.sql"), "01_schema.sql"}
+            ExecuterLots(Maitre, File.ReadAllText(Path.Combine(racine, "Database", script)).Replace("$(Base)", BaseTest))
+        Next
     End Sub
 
     Private Shared Sub ExecuterLots(chaine As String, script As String)
@@ -48,17 +49,42 @@ Public Class CyclePaieIntegrationTests
 
     <TestMethod>
     Public Sub CycleComplet_DeuxPaies_PuisAnnulation()
-        ' --- Données de base
-        Dim compagnieId = Db.Inserer("INSERT INTO paie.Compagnie (Nom, PeriodesParAnnee, TauxCNESST, ProchainNumeroCheque) VALUES (N'Compagnie d''essai', 26, 1.5, 100)")
+        ' --- Données de base. Côté MngConsul (répliques) : une compagnie, ses employés. Côté 60secPaie : les paramètres de paie.
+        Dim guidCompagnie = Guid.NewGuid()
+        Db.Exec("INSERT INTO dbo.T010Company (CompanyGUID, CompanyCode) VALUES (@g, 'ESSAI'); " &
+                "INSERT INTO dbo.StubParam (CompanyGUID, ShortName, sVal) VALUES (@g, 'LEGAL_NAME', 'Compagnie d''essai inc.'), (@g, 'CITY', 'Longueuil');", Db.P("@g", guidCompagnie))
+        HttpContext.Current.Items("CompanyGuid") = guidCompagnie
+
+        Dim compagnieId = Db.Inserer("INSERT INTO paie.Compagnie (CompanyGUID, Nom, PeriodesParAnnee, TauxCNESST, ProchainNumeroCheque) VALUES (@g, N'Compagnie d''essai', 26, 1.5, 100)",
+                                     Db.P("@g", guidCompagnie))
         Assert.AreEqual(compagnieId, Contexte.CompagnieId)
+        Contexte.SynchroniserCompagnie()
+        Assert.AreEqual("Compagnie d'essai inc.", Convert.ToString(Db.Scalaire("SELECT Nom FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId))), "Le nom vient de MngConsul.")
 
         Dim horaire = Db.Inserer(
-            "INSERT INTO paie.Employe (CompagnieId, Prenom, Nom, DateNaissance, DateEmbauche, HeuresSemaine, TauxHoraire) VALUES (@c, N'Alice', N'Tremblay <test>', '1990-05-01', '2025-01-01', 40, 30)",
-            Db.P("@c", compagnieId))
+            "INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, DateOfBirth, HireDate, HourlyRate, PayFrequency, StateId, Active) " &
+            "VALUES (@g, 'Alice', 'Tremblay <test>', '1990-05-01', '2025-01-01', 30, 'BiWeekly', 2, 1)", Db.P("@g", guidCompagnie))
         Dim annuel = Db.Inserer(
-            "INSERT INTO paie.Employe (CompagnieId, Prenom, Nom, DateEmbauche, SalaireAnnuel, DepotDirect) VALUES (@c, N'Bruno', N'Gagnon', '2025-01-01', 104000, 1)",
-            Db.P("@c", compagnieId))
-        Db.Exec("INSERT INTO paie.Employe (CompagnieId, Prenom, Nom, Actif, SalaireAnnuel) VALUES (@c, N'Inactif', N'Exclu', 0, 50000)", Db.P("@c", compagnieId))
+            "INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, HireDate, AnnualSalary, PayFrequency, Active, [SIN], BankAccount) " &
+            "VALUES (@g, 'Bruno', 'Gagnon', '2025-01-01', 104000, 'BiWeekly', 1, '046 454 286', '7654321')", Db.P("@g", guidCompagnie))
+        Db.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Inactif', 'Exclu', 50000, 'BiWeekly', 0)", Db.P("@g", guidCompagnie))
+        Dim nonConfigure = Db.Inserer("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Carl', 'Sans-Paie', 60000, 'BiWeekly', 1)",
+                                      Db.P("@g", guidCompagnie))
+        ' Employé d'une AUTRE compagnie : ne doit jamais apparaître.
+        Db.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, Active) VALUES (NEWID(), 'Autre', 'Compagnie', 70000, 1)")
+
+        ' La paie est configurée pour Alice (40 h/semaine) et Bruno (dépôt direct) ; pas pour Carl.
+        Db.Exec("INSERT INTO paie.EmployePaie (EmployeId, HeuresSemaine) VALUES (@e, 40)", Db.P("@e", horaire))
+        Db.Exec("INSERT INTO paie.EmployePaie (EmployeId, DepotDirect) VALUES (@e, 1)", Db.P("@e", annuel))
+
+        Dim vue = Db.Table("SELECT * FROM paie.Employe WHERE CompagnieId = @c ORDER BY Id", Db.P("@c", compagnieId))
+        Assert.AreEqual(4, vue.Rows.Count, "La vue ne montre que les employés de la compagnie.")
+        Dim vueAlice = vue.Select("Id = " & horaire.ToString())(0)
+        Assert.AreEqual(30D, vueAlice.Dcm("TauxHoraire"), "Le taux horaire de MngConsul sert de valeur par défaut.")
+        Assert.AreEqual(26, vueAlice.Ent("PeriodesParAnnee"), "BiWeekly = 26 périodes.")
+        Assert.AreEqual("QC", vueAlice.Txt("Province"))
+        Assert.AreEqual("046454286", Outils.NasDe(vue.Select("Id = " & annuel.ToString())(0)), "À défaut de NAS chiffré, celui de MngConsul est repris.")
+        Assert.IsFalse(vue.Select("Id = " & nonConfigure.ToString())(0).Bln("PaieConfiguree"))
 
         ' --- Étape 1 : création du lot
         Dim lot1 = ServicePaie.CreerLot(26, New Date(2026, 1, 10), New Date(2026, 1, 15))
@@ -161,7 +187,7 @@ Public Class CyclePaieIntegrationTests
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceDepotDirect.Generer(lot1))
         Db.Exec("UPDATE paie.Compagnie SET DDNumeroEmetteur = 'ABC1234567', DDCentreTraitement = '86900', DDNomCourt = N'Essai inc', DDInstitution = '815', " &
                 "DDTransit = '30000', DDCompteChiffre = @cpt, Courriel = N'paie@exemple.ca' WHERE Id = @c", Db.P("@cpt", Secret.Proteger("1234567")), Db.P("@c", compagnieId))
-        Db.Exec("UPDATE paie.Employe SET Institution = '006', Transit = '12345', CompteChiffre = @cpt WHERE Id = @e", Db.P("@cpt", Secret.Proteger("7654321")), Db.P("@e", annuel))
+        Db.Exec("UPDATE paie.EmployePaie SET Institution = '006', Transit = '12345' WHERE EmployeId = @e", Db.P("@e", annuel))   ' le compte vient de MngConsul
         Assert.AreEqual(0, ServiceDepotDirect.Problemes(lot1).Count)
 
         Dim fichier = ServiceDepotDirect.Generer(lot1)
@@ -182,7 +208,7 @@ Public Class CyclePaieIntegrationTests
         ServiceCourriel.FabriqueClient = Function() New Net.Mail.SmtpClient With {
             .DeliveryMethod = Net.Mail.SmtpDeliveryMethod.SpecifiedPickupDirectory, .PickupDirectoryLocation = dossier}
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceCourriel.EnvoyerTalons(lot1, False), "Personne n'a demandé son talon par courriel.")
-        Db.Exec("UPDATE paie.Employe SET TalonParCourriel = 1, Courriel = N'alice@exemple.ca' WHERE Id = @e", Db.P("@e", horaire))
+        Db.Exec("UPDATE paie.EmployePaie SET TalonParCourriel = 1 WHERE EmployeId = @e; UPDATE dbo.T300Employees SET Email = 'alice@exemple.ca' WHERE Id = @e", Db.P("@e", horaire))
         Dim bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
         Assert.AreEqual(1, bilan.Envoyes)
         Assert.AreEqual(0, bilan.Erreurs.Count)

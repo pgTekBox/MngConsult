@@ -42,28 +42,15 @@ BEGIN
 END
 GO
 
-IF OBJECT_ID(N'paie.Utilisateur') IS NULL
-CREATE TABLE paie.Utilisateur (
-    Id            int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Utilisateur PRIMARY KEY,
-    Courriel      nvarchar(256) NOT NULL CONSTRAINT UQ_Utilisateur_Courriel UNIQUE,
-    NomComplet    nvarchar(200) NOT NULL,
-    MotDePasse    nvarchar(400) NOT NULL,          -- PBKDF2 : iterations:sel:hachage
-    Actif         bit NOT NULL CONSTRAINT DF_Utilisateur_Actif DEFAULT (1),
-    EchecsConnexion int NOT NULL CONSTRAINT DF_Utilisateur_Echecs DEFAULT (0),
+-- Les UTILISATEURS sont ceux de MngConsul (dbo.T015User, mots de passe BCrypt) : 60secPaie n'a pas sa propre table.
+-- MngConsul n'a pas de verrouillage après des échecs de connexion ; 60secPaie tient le sien ici, sans toucher à dbo.T015User.
+IF OBJECT_ID(N'paie.TentativeConnexion') IS NULL
+CREATE TABLE paie.TentativeConnexion (
+    Courriel         nvarchar(200) NOT NULL CONSTRAINT PK_TentativeConnexion PRIMARY KEY,
+    Echecs           int NOT NULL CONSTRAINT DF_TentativeConnexion_Echecs DEFAULT (0),
     VerrouilleJusqua datetime2(0) NULL,
-    DateCreation  datetime2(0) NOT NULL CONSTRAINT DF_Utilisateur_Date DEFAULT (sysdatetime())
+    DernierEchec     datetime2(0) NULL
 );
-GO
-
--- Gestion des utilisateurs : rôle administrateur et changement de mot de passe forcé après une réinitialisation.
-IF COL_LENGTH(N'paie.Utilisateur', N'EstAdmin') IS NULL
-    ALTER TABLE paie.Utilisateur ADD EstAdmin bit NOT NULL CONSTRAINT DF_Utilisateur_EstAdmin DEFAULT (0);
-IF COL_LENGTH(N'paie.Utilisateur', N'DoitChangerMotDePasse') IS NULL
-    ALTER TABLE paie.Utilisateur ADD DoitChangerMotDePasse bit NOT NULL CONSTRAINT DF_Utilisateur_DoitChanger DEFAULT (0);
-GO
--- Le plus ancien compte devient administrateur s'il n'y en a aucun (bases créées avant l'ajout des rôles).
-IF NOT EXISTS (SELECT 1 FROM paie.Utilisateur WHERE EstAdmin = 1)
-    UPDATE paie.Utilisateur SET EstAdmin = 1 WHERE Id = (SELECT MIN(Id) FROM paie.Utilisateur);
 GO
 
 IF OBJECT_ID(N'paie.Compagnie') IS NULL
@@ -102,66 +89,12 @@ CREATE TABLE paie.ElementPaie (
 );
 GO
 
-IF OBJECT_ID(N'paie.Employe') IS NULL
-CREATE TABLE paie.Employe (
-    Id                  int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Employe PRIMARY KEY,
-    CompagnieId         int NOT NULL CONSTRAINT FK_Employe_Compagnie REFERENCES paie.Compagnie(Id),
-    Actif               bit NOT NULL CONSTRAINT DF_Employe_Actif DEFAULT (1),
-    Code                nvarchar(20) NULL,
-    Prenom              nvarchar(100) NOT NULL,
-    Nom                 nvarchar(100) NOT NULL,
-    Adresse1            nvarchar(200) NULL,
-    Adresse2            nvarchar(200) NULL,
-    Ville               nvarchar(100) NULL,
-    Province            nchar(2) NOT NULL CONSTRAINT DF_Employe_Province DEFAULT (N'QC'),
-    CodePostal          nvarchar(10) NULL,
-    Courriel            nvarchar(256) NULL,
-    Telephone           nvarchar(30) NULL,
-    DateNaissance       date NULL,
-    Langue              nchar(2) NOT NULL CONSTRAINT DF_Employe_Langue DEFAULT (N'FR'),
-    NASChiffre          nvarchar(400) NULL,        -- chiffré par l'application (MachineKey)
-    Poste               nvarchar(100) NULL,
-    DateEmbauche        date NULL,
-    DateFinEmploi       date NULL,
-    PeriodesParAnnee    int NULL,                  -- NULL = valeur de la compagnie
-    HeuresSemaine       decimal(6,2) NULL,
-    TauxHoraire         decimal(10,4) NULL,
-    SalaireAnnuel       decimal(12,2) NULL,
-    TauxVacances        decimal(5,2) NULL,         -- NULL = valeur de la compagnie
-
-    ExemptImpotFederal  bit NOT NULL CONSTRAINT DF_Employe_ExFed DEFAULT (0),
-    ExemptImpotQuebec   bit NOT NULL CONSTRAINT DF_Employe_ExQc DEFAULT (0),
-    ExemptRRQ           bit NOT NULL CONSTRAINT DF_Employe_ExRRQ DEFAULT (0),
-    ExemptRQAP          bit NOT NULL CONSTRAINT DF_Employe_ExRQAP DEFAULT (0),
-    ExemptAE            bit NOT NULL CONSTRAINT DF_Employe_ExAE DEFAULT (0),
-    ExemptFSS           bit NOT NULL CONSTRAINT DF_Employe_ExFSS DEFAULT (0),
-    ExemptCNESST        bit NOT NULL CONSTRAINT DF_Employe_ExCNESST DEFAULT (0),
-
-    TD1MontantDemande       decimal(12,2) NULL,    -- NULL = montant personnel de base de l'année
-    TD1ImpotAdditionnel     decimal(10,2) NOT NULL CONSTRAINT DF_Employe_TD1L DEFAULT (0),
-    TD1DeductionZone        decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TD1HD DEFAULT (0),
-    TD1DeductionsAnnuelles  decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TD1F1 DEFAULT (0),
-    TD1AutresCredits        decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TD1K3 DEFAULT (0),
-
-    TP1015Montant           decimal(12,2) NULL,    -- NULL = montant personnel de base de l'année
-    TP1015ImpotAdditionnel  decimal(10,2) NOT NULL CONSTRAINT DF_Employe_TPL DEFAULT (0),
-    TP1015DeductionsLigne19 decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TPJ DEFAULT (0),
-    TP1016Deductions        decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TPJ1 DEFAULT (0),
-    TP1016Credits           decimal(12,2) NOT NULL CONSTRAINT DF_Employe_TPK1 DEFAULT (0),
-
-    DepotDirect         bit NOT NULL CONSTRAINT DF_Employe_Depot DEFAULT (0),
-    Transit             nvarchar(5) NULL,
-    Institution         nvarchar(3) NULL,
-    CompteChiffre       nvarchar(400) NULL,        -- chiffré par l'application
-    TalonParCourriel    bit NOT NULL CONSTRAINT DF_Employe_Talon DEFAULT (0),
-    Note                nvarchar(max) NULL
-);
-GO
+-- Les EMPLOYÉS sont ceux de MngConsul (dbo.T300Employees), en lecture seule. Voir plus bas : paie.EmployePaie et la vue paie.Employe.
 
 IF OBJECT_ID(N'paie.EmployeElement') IS NULL
 CREATE TABLE paie.EmployeElement (   -- gabarit de paie récurrent de l'employé
     Id            int IDENTITY(1,1) NOT NULL CONSTRAINT PK_EmployeElement PRIMARY KEY,
-    EmployeId     int NOT NULL CONSTRAINT FK_EmployeElement_Employe REFERENCES paie.Employe(Id) ON DELETE CASCADE,
+    EmployeId     int NOT NULL,
     ElementPaieId int NOT NULL CONSTRAINT FK_EmployeElement_Element REFERENCES paie.ElementPaie(Id),
     Heures        decimal(8,2) NOT NULL CONSTRAINT DF_EmployeElement_Heures DEFAULT (0),
     Taux          decimal(10,4) NOT NULL CONSTRAINT DF_EmployeElement_Taux DEFAULT (0),
@@ -172,7 +105,7 @@ GO
 IF OBJECT_ID(N'paie.CumulatifDepart') IS NULL
 CREATE TABLE paie.CumulatifDepart (  -- soldes de départ lors d'une conversion en cours d'année
     Id              int IDENTITY(1,1) NOT NULL CONSTRAINT PK_CumulatifDepart PRIMARY KEY,
-    EmployeId       int NOT NULL CONSTRAINT FK_CumulatifDepart_Employe REFERENCES paie.Employe(Id) ON DELETE CASCADE,
+    EmployeId       int NOT NULL,
     Annee           int NOT NULL,
     Brut            decimal(12,2) NOT NULL DEFAULT (0),
     ImpotFederal    decimal(12,2) NOT NULL DEFAULT (0),
@@ -210,7 +143,7 @@ IF OBJECT_ID(N'paie.Paie') IS NULL
 CREATE TABLE paie.Paie (
     Id                  int IDENTITY(1,1) NOT NULL CONSTRAINT PK_Paie PRIMARY KEY,
     LotPaieId           int NOT NULL CONSTRAINT FK_Paie_Lot REFERENCES paie.LotPaie(Id) ON DELETE CASCADE,
-    EmployeId           int NOT NULL CONSTRAINT FK_Paie_Employe REFERENCES paie.Employe(Id),
+    EmployeId           int NOT NULL,
     Inclus              bit NOT NULL CONSTRAINT DF_Paie_Inclus DEFAULT (1),
     NumeroCheque        int NULL,
     Heures              decimal(8,2) NOT NULL DEFAULT (0),
@@ -324,9 +257,6 @@ GO
 
 /* ---------- Feuillets, écritures comptables, dépôt direct, talons par courriel ---------- */
 
--- T4, case 45 : accès à un régime de soins dentaires offert par l'employeur (1 = aucun accès ... 5).
-IF COL_LENGTH(N'paie.Employe', N'CodeDentaireT4') IS NULL
-    ALTER TABLE paie.Employe ADD CodeDentaireT4 tinyint NOT NULL CONSTRAINT DF_Employe_Dentaire DEFAULT (1);
 IF COL_LENGTH(N'paie.Paie', N'TalonEnvoyeLe') IS NULL
     ALTER TABLE paie.Paie ADD TalonEnvoyeLe datetime2(0) NULL;
 IF COL_LENGTH(N'paie.LotPaie', N'DepotDirectNumeroFichier') IS NULL
@@ -354,6 +284,131 @@ CREATE TABLE paie.CompteGL (
     Compte      nvarchar(30) NOT NULL,
     CONSTRAINT PK_CompteGL PRIMARY KEY (CompagnieId, Cle)
 );
+GO
+
+/* ---------- Intégration à MngConsul : compagnies (T010Company), utilisateurs (T015User), employés (T300Employees) ----------
+   60secPaie LIT ces tables et n'y écrit JAMAIS. Aucune clé étrangère n'est créée vers elles, pour ne rien changer au
+   comportement de MngConsul (suppressions, migrations). */
+
+-- Multi-compagnie : chaque activité appartient à une compagnie (le tableau de bord ne montre que celles de la compagnie courante).
+IF COL_LENGTH(N'paie.JournalActivite', N'CompagnieId') IS NULL
+    ALTER TABLE paie.JournalActivite ADD CompagnieId int NULL;
+GO
+
+-- Une ligne de paie.Compagnie = les paramètres de paie d'une compagnie de MngConsul. Le nom et l'adresse y sont recopiés
+-- à partir des paramètres de MngConsul (fCompanyName / fParamS) à chaque ouverture de session.
+IF COL_LENGTH(N'paie.Compagnie', N'CompanyGUID') IS NULL
+    ALTER TABLE paie.Compagnie ADD CompanyGUID uniqueidentifier NULL;
+GO
+IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'UX_Compagnie_CompanyGUID' AND object_id = OBJECT_ID(N'paie.Compagnie'))
+    CREATE UNIQUE INDEX UX_Compagnie_CompanyGUID ON paie.Compagnie (CompanyGUID) WHERE CompanyGUID IS NOT NULL;
+GO
+
+-- Bases créées avant l'intégration : l'ancienne table paie.Employe est conservée sous un autre nom (rien n'est supprimé)
+-- et les clés étrangères qui pointaient vers elle sont retirées.
+IF OBJECT_ID(N'paie.FK_EmployeElement_Employe', N'F') IS NOT NULL ALTER TABLE paie.EmployeElement DROP CONSTRAINT FK_EmployeElement_Employe;
+IF OBJECT_ID(N'paie.FK_CumulatifDepart_Employe', N'F') IS NOT NULL ALTER TABLE paie.CumulatifDepart DROP CONSTRAINT FK_CumulatifDepart_Employe;
+IF OBJECT_ID(N'paie.FK_Paie_Employe', N'F') IS NOT NULL ALTER TABLE paie.Paie DROP CONSTRAINT FK_Paie_Employe;
+IF OBJECT_ID(N'paie.Employe', N'U') IS NOT NULL EXEC sp_rename N'paie.Employe', N'Employe_V1';
+GO
+
+-- Paramètres de paie d'un employé de MngConsul. EmployeId = dbo.T300Employees.Id.
+-- Une valeur NULL signifie « reprendre la valeur de MngConsul » (taux horaire, salaire, fréquence, date de naissance...).
+IF OBJECT_ID(N'paie.EmployePaie') IS NULL
+CREATE TABLE paie.EmployePaie (
+    EmployeId           int NOT NULL CONSTRAINT PK_EmployePaie PRIMARY KEY,
+    Langue              nchar(2) NOT NULL CONSTRAINT DF_EmployePaie_Langue DEFAULT (N'FR'),
+    DateNaissance       date NULL,
+    NASChiffre          nvarchar(400) NULL,        -- chiffré par l'application (MachineKey)
+    PeriodesParAnnee    int NULL,                  -- NULL = fréquence de MngConsul, sinon celle de la compagnie
+    HeuresSemaine       decimal(6,2) NULL,
+    TauxHoraire         decimal(10,4) NULL,
+    SalaireAnnuel       decimal(12,2) NULL,
+    TauxVacances        decimal(5,2) NULL,         -- NULL = valeur de la compagnie
+
+    ExemptImpotFederal  bit NOT NULL CONSTRAINT DF_EmployePaie_ExFed DEFAULT (0),
+    ExemptImpotQuebec   bit NOT NULL CONSTRAINT DF_EmployePaie_ExQc DEFAULT (0),
+    ExemptRRQ           bit NOT NULL CONSTRAINT DF_EmployePaie_ExRRQ DEFAULT (0),
+    ExemptRQAP          bit NOT NULL CONSTRAINT DF_EmployePaie_ExRQAP DEFAULT (0),
+    ExemptAE            bit NOT NULL CONSTRAINT DF_EmployePaie_ExAE DEFAULT (0),
+    ExemptFSS           bit NOT NULL CONSTRAINT DF_EmployePaie_ExFSS DEFAULT (0),
+    ExemptCNESST        bit NOT NULL CONSTRAINT DF_EmployePaie_ExCNESST DEFAULT (0),
+
+    TD1MontantDemande       decimal(12,2) NULL,    -- NULL = montant personnel de base de l'année
+    TD1ImpotAdditionnel     decimal(10,2) NOT NULL CONSTRAINT DF_EmployePaie_TD1L DEFAULT (0),
+    TD1DeductionZone        decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TD1HD DEFAULT (0),
+    TD1DeductionsAnnuelles  decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TD1F1 DEFAULT (0),
+    TD1AutresCredits        decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TD1K3 DEFAULT (0),
+    CodeDentaireT4          tinyint NOT NULL CONSTRAINT DF_EmployePaie_Dentaire DEFAULT (1),
+
+    TP1015Montant           decimal(12,2) NULL,
+    TP1015ImpotAdditionnel  decimal(10,2) NOT NULL CONSTRAINT DF_EmployePaie_TPL DEFAULT (0),
+    TP1015DeductionsLigne19 decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TPJ DEFAULT (0),
+    TP1016Deductions        decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TPJ1 DEFAULT (0),
+    TP1016Credits           decimal(12,2) NOT NULL CONSTRAINT DF_EmployePaie_TPK1 DEFAULT (0),
+
+    DepotDirect         bit NOT NULL CONSTRAINT DF_EmployePaie_Depot DEFAULT (0),
+    Transit             nvarchar(5) NULL,
+    Institution         nvarchar(3) NULL,
+    CompteChiffre       nvarchar(400) NULL,        -- chiffré par l'application
+    TalonParCourriel    bit NOT NULL CONSTRAINT DF_EmployePaie_Talon DEFAULT (0),
+    Note                nvarchar(max) NULL,
+    ModifiePar          nvarchar(200) NULL,
+    ModifieLe           datetime2(0) NOT NULL CONSTRAINT DF_EmployePaie_ModifieLe DEFAULT (sysdatetime())
+);
+GO
+
+-- Vue utilisée partout dans l'application : l'identité vient de MngConsul, la paie de paie.EmployePaie.
+-- Seuls les employés des compagnies dont la paie est configurée (paie.Compagnie) y figurent.
+CREATE OR ALTER VIEW paie.Employe AS
+SELECT
+    t.Id,
+    c.Id                                   AS CompagnieId,
+    CAST(ISNULL(t.Active, 1) AS bit)       AS Actif,
+    CAST(CASE WHEN ep.EmployeId IS NULL THEN 0 ELSE 1 END AS bit) AS PaieConfiguree,
+    t.EmployeeNumber                       AS Code,
+    ISNULL(t.FirstName, N'')               AS Prenom,
+    ISNULL(t.LastName, N'')                AS Nom,
+    t.Address1                             AS Adresse1,
+    t.Address2                             AS Adresse2,
+    t.City                                 AS Ville,
+    CAST(CASE s.Name WHEN 'Quebec' THEN N'QC' WHEN 'Ontario' THEN N'ON' WHEN 'Alberta' THEN N'AB' WHEN 'British Columbia' THEN N'BC'
+              WHEN 'Manitoba' THEN N'MB' WHEN 'New Brunswick' THEN N'NB' WHEN 'Nova Scotia' THEN N'NS' WHEN 'Saskatchewan' THEN N'SK'
+              WHEN 'Prince Edward Island' THEN N'PE' WHEN 'Newfoundland and Labrador' THEN N'NL' ELSE N'QC' END AS nchar(2)) AS Province,
+    t.PostalCode                           AS CodePostal,
+    t.Email                                AS Courriel,
+    COALESCE(NULLIF(t.Phone, ''), t.Mobile) AS Telephone,
+    COALESCE(ep.DateNaissance, t.DateOfBirth) AS DateNaissance,
+    ISNULL(ep.Langue, N'FR')               AS Langue,
+    ep.NASChiffre,
+    t.SIN                                  AS NASMngConsul,
+    t.JobTitle                             AS Poste,
+    t.HireDate                             AS DateEmbauche,
+    t.TerminationDate                      AS DateFinEmploi,
+    COALESCE(ep.PeriodesParAnnee, CASE t.PayFrequency WHEN 'Weekly' THEN 52 WHEN 'BiWeekly' THEN 26 WHEN 'SemiMonthly' THEN 24 WHEN 'Monthly' THEN 12 END) AS PeriodesParAnnee,
+    ep.HeuresSemaine,
+    COALESCE(ep.TauxHoraire, NULLIF(t.HourlyRate, 0))     AS TauxHoraire,
+    COALESCE(ep.SalaireAnnuel, NULLIF(t.AnnualSalary, 0)) AS SalaireAnnuel,
+    ep.TauxVacances,
+    ISNULL(ep.ExemptImpotFederal, 0) AS ExemptImpotFederal, ISNULL(ep.ExemptImpotQuebec, 0) AS ExemptImpotQuebec,
+    ISNULL(ep.ExemptRRQ, 0) AS ExemptRRQ, ISNULL(ep.ExemptRQAP, 0) AS ExemptRQAP, ISNULL(ep.ExemptAE, 0) AS ExemptAE,
+    ISNULL(ep.ExemptFSS, 0) AS ExemptFSS, ISNULL(ep.ExemptCNESST, 0) AS ExemptCNESST,
+    ep.TD1MontantDemande, ISNULL(ep.TD1ImpotAdditionnel, 0) AS TD1ImpotAdditionnel, ISNULL(ep.TD1DeductionZone, 0) AS TD1DeductionZone,
+    ISNULL(ep.TD1DeductionsAnnuelles, 0) AS TD1DeductionsAnnuelles, ISNULL(ep.TD1AutresCredits, 0) AS TD1AutresCredits,
+    ISNULL(ep.CodeDentaireT4, 1) AS CodeDentaireT4,
+    ep.TP1015Montant, ISNULL(ep.TP1015ImpotAdditionnel, 0) AS TP1015ImpotAdditionnel, ISNULL(ep.TP1015DeductionsLigne19, 0) AS TP1015DeductionsLigne19,
+    ISNULL(ep.TP1016Deductions, 0) AS TP1016Deductions, ISNULL(ep.TP1016Credits, 0) AS TP1016Credits,
+    ISNULL(ep.DepotDirect, 0)              AS DepotDirect,
+    COALESCE(ep.Transit, LEFT(t.BankTransit, 5))         AS Transit,
+    COALESCE(ep.Institution, LEFT(t.BankInstitution, 3)) AS Institution,
+    ep.CompteChiffre,
+    t.BankAccount                          AS CompteMngConsul,
+    ISNULL(ep.TalonParCourriel, 0)         AS TalonParCourriel,
+    ep.Note
+FROM dbo.T300Employees t
+JOIN paie.Compagnie c ON c.CompanyGUID = t.CompanyGUID
+LEFT JOIN paie.EmployePaie ep ON ep.EmployeId = t.Id
+LEFT JOIN dbo.T053State s ON s.Id = t.StateId;
 GO
 
 IF NOT EXISTS (SELECT 1 FROM sys.indexes WHERE name = N'IX_Paie_Employe' AND object_id = OBJECT_ID(N'paie.Paie'))

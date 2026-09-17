@@ -22,7 +22,7 @@
         <div class="actions">
             <asp:Button ID="btnDepotDirect" runat="server" Text="Télécharger le fichier de dépôt direct" CssClass="secondaire" />
             <asp:Button ID="btnTalons" runat="server" Text="Envoyer les talons par courriel" CssClass="secondaire"
-                OnClientClick="return confirm('Envoyer les talons de paie par courriel aux employés qui l\'ont demandé ?');" />
+                OnClientClick="return confirm('Envoyer les talons de paie par courriel aux employés qui en ont fait la demande ?');" />
             <asp:CheckBox ID="chkRenvoyer" runat="server" Text="renvoyer aussi les talons déjà envoyés" />
             <asp:HyperLink ID="lnkEcritures" runat="server" CssClass="bouton secondaire">Écritures comptables</asp:HyperLink>
         </div>

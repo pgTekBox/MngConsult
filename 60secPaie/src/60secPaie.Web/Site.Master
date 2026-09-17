@@ -1,6 +1,6 @@
 <%@ Master Language="VB" AutoEventWireup="false" CodeBehind="Site.Master.vb" Inherits="Paie60Sec.Web.SiteMaster" %>
 <!DOCTYPE html>
-<html lang="fr">
+<html lang="<%= I18n.Langue %>">
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -13,8 +13,11 @@
             <div class="entete-haut">
                 <a runat="server" href="~/Default.aspx" class="logo">60sec<span>Paie</span></a>
                 <div class="session">
+                    <%-- Une seule compagnie : son nom. Plusieurs (comptable) : liste déroulante, comme dans MngConsul. --%>
                     <asp:Label ID="lblCompagnie" runat="server" CssClass="session-compagnie" />
-                    <asp:HyperLink ID="lnkCompte" runat="server" NavigateUrl="~/MonCompte.aspx" ToolTip="Mon compte : nom et mot de passe" />
+                    <asp:DropDownList ID="ddlCompagnie" runat="server" AutoPostBack="true" CausesValidation="false" CssClass="session-select" Visible="false" ToolTip="Changer de compagnie" />
+                    <span class="langues"><asp:Literal ID="litLangues" runat="server" /></span>
+                    <asp:Label ID="lblUtilisateur" runat="server" />
                     <asp:LinkButton ID="lnkDeconnexion" runat="server" CausesValidation="false">Me déconnecter</asp:LinkButton>
                 </div>
             </div>

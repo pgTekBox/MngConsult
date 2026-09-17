@@ -9,7 +9,9 @@ Option Explicit On
 
 Partial Public Class SiteMaster
     Protected WithEvents lblCompagnie As Global.System.Web.UI.WebControls.Label
-    Protected WithEvents lnkCompte As Global.System.Web.UI.WebControls.HyperLink
+    Protected WithEvents ddlCompagnie As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents litLangues As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lblUtilisateur As Global.System.Web.UI.WebControls.Label
     Protected WithEvents lnkDeconnexion As Global.System.Web.UI.WebControls.LinkButton
     Protected WithEvents lnkTableau As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkPaie As Global.System.Web.UI.HtmlControls.HtmlAnchor

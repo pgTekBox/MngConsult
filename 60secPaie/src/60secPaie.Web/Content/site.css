@@ -141,3 +141,12 @@ pre.verification { background: #f4f6f8; border: 1px solid var(--bord); border-ra
 .boite-connexion { width: 100%; max-width: 420px; background: #fff; border: 1px solid var(--bord); border-radius: 10px; padding: 28px; }
 .boite-connexion .logo { color: var(--accent-fonce); display: block; margin-bottom: 6px; }
 .boite-connexion .champ { margin-bottom: 12px; }
+
+/* ---------- Langues et compagnie courante ---------- */
+.langues { font-size: 12px; letter-spacing: .5px; }
+.session .langues a { color: #cfe8f3; text-decoration: none; }
+.session .langues strong { color: #fff; }
+.boite-connexion .langues { text-align: right; margin-bottom: 8px; color: var(--encre-douce); }
+.session-select { width: auto; max-width: 260px; padding: 4px 8px; font-size: 13px; font-weight: 600; }
+.identite { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 20px; margin-bottom: 8px; }
+.identite div span { display: block; font-size: 12px; color: var(--encre-douce); }
