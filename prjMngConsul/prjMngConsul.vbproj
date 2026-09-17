@@ -457,6 +457,10 @@
     <Content Include="Importations.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
+    <Content Include="ImportApideck.aspx" />
+    <Content Include="ValiderFactures.aspx" />
+    <Content Include="ValiderSociete.aspx" />
+    <Content Include="ValiderListes.aspx" />
     <Content Include="ImportClients.aspx" />
     <Content Include="ImportFournisseurs.aspx" />
     <Content Include="ImportProduits.aspx" />
@@ -734,7 +738,31 @@
     <Compile Include="ImportClients.aspx.designer.vb">
       <DependentUpon>ImportClients.aspx</DependentUpon>
     </Compile>
-    <Compile Include="ImportClients.aspx.vb">
+    <Compile Include="ValiderFactures.aspx.vb">
+      <DependentUpon>ValiderFactures.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>    <Compile Include="ValiderSociete.aspx.vb">
+      <DependentUpon>ValiderSociete.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderSociete.aspx.designer.vb">
+      <DependentUpon>ValiderSociete.aspx</DependentUpon>
+    </Compile>    <Compile Include="ValiderListes.aspx.vb">
+      <DependentUpon>ValiderListes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderListes.aspx.designer.vb">
+      <DependentUpon>ValiderListes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderFactures.aspx.designer.vb">
+      <DependentUpon>ValiderFactures.aspx</DependentUpon>
+    </Compile>    <Compile Include="ImportApideck.aspx.vb">
+      <DependentUpon>ImportApideck.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ImportApideck.aspx.designer.vb">
+      <DependentUpon>ImportApideck.aspx</DependentUpon>
+    </Compile>    <Compile Include="ImportClients.aspx.vb">
       <DependentUpon>ImportClients.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -769,6 +797,7 @@
     </Compile>
     <Compile Include="App_Code\clsSquare.vb" />
     <Compile Include="App_Code\clsDreamPayments.vb" />
+    <Compile Include="App_Code\clsApideck.vb" />
     <Compile Include="App_Code\clsCrypto.vb" />
     <Compile Include="App_Code\clsRememberMe.vb" />
     <Compile Include="MyClass\OpenAiPlanComptableMapper.vb" />

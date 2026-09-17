@@ -351,8 +351,14 @@ Public Class ImportPlanComptable
                 lignes.Add(Normaliser(valeurs, If(chkEntete.Checked, i + 2, i + 1)))
             Next
 
+            ' Le fichier lui-même est inscrit au registre avant le lot : c'est ce
+            ' qui permet de retrouver plus tard ce qui est réellement entré, et
+            ' de le relire si une correspondance se révèle fausse.
+            Dim fichierId = EnregistrerFichier("PlanComptable", fuFichier.FileName,
+                                               fuFichier.FileBytes, "text/csv")
             Dim lotId = OuvrirLot(ddlSysteme.SelectedValue, fuFichier.FileName,
-                                  ddlSeparateur.SelectedValue, ddlEncodage.SelectedValue)
+                                  ddlSeparateur.SelectedValue, ddlEncodage.SelectedValue,
+                                  fichierId)
             LotCourant = lotId
 
             Dim r = ChargerLot(lotId, lignes)

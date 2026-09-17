@@ -107,6 +107,20 @@
         margin-top: 26px; padding-top: 12px; border-top: 1px solid #e2e8f0;
         font-size: 12.5px; color: #64748b; line-height: 1.6; max-width: 860px;
     }
+    .vider {
+        margin-top: 26px; padding: 16px 18px; border: 1px solid #fecaca;
+        border-radius: 10px; background: #fef2f2;
+        display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
+    }
+    .vider .txt { flex: 1 1 380px; font-size: 12.5px; color: #7f1d1d; line-height: 1.6 }
+    .vider .txt b { color: #991b1b }
+    .vider .btn {
+        border: 1px solid #b91c1c; background: #fff; color: #b91c1c;
+        padding: 9px 16px; border-radius: 8px; font-size: 13px; font-weight: 600;
+        cursor: pointer;
+    }
+    .vider .btn:hover { background: #b91c1c; color: #fff }
+    .vider .fait { font-size: 12.5px; color: #166534; font-weight: 600 }
 </style>
 </asp:Content>
 
@@ -140,6 +154,9 @@
             <div class="v"><asp:Literal ID="litAFaire" runat="server" Text="0" /></div></div>
     </div>
 
+    <h2 class="sect">Lecture directe <span>sans demander d'export au client</span></h2>
+    <div class="grille"><asp:Literal ID="litConnexion" runat="server" /></div>
+
     <h2 class="sect">Reprise comptable <span>le plan comptable, puis la balance de vérification</span></h2>
     <div class="grille duo"><asp:Literal ID="litParcours" runat="server" /></div>
 
@@ -155,6 +172,18 @@
         lecture du code : elles disent ce que l'écran fait, pas ce qu'il ferait bien.
         Elles se corrigent dans <b>Importations.aspx.vb</b> ; celles des trois étapes du plan comptable, dans <b>Controls/EtapesReprise.ascx.vb</b>.
     </p>
+
+    <div class="vider">
+        <div class="txt">
+            <b>Vider la préparation.</b> Efface tout ce qui attend d'être validé pour
+            <asp:Literal ID="litViderCie" runat="server" /> : ressources lues chez la source,
+            fichiers importés, plan comptable, tiers, produits, factures et fiche d'entreprise.
+            Les autres compagnies ne sont pas touchées, et rien de ce qui est déjà passé en
+            comptabilité n'est retiré — seulement le brouillon.
+            <asp:Literal ID="litViderEtat" runat="server" />
+        </div>
+        <asp:Button ID="btnVider" runat="server" CssClass="btn" Text="Vider les tables de préparation" />
+    </div>
 
 </div>
 </asp:Content>
