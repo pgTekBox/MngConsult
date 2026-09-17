@@ -75,6 +75,7 @@
     <Content Include="Site.Master" />
     <Content Include="Content\site.css" />
     <Content Include="Langues\traductions.txt" />
+    <Content Include="Accueil.aspx" />
     <Content Include="Login.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Config\Compagnie.aspx" />
@@ -187,6 +188,13 @@
     </Compile>
     <Compile Include="Site.Master.designer.vb">
       <DependentUpon>Site.Master</DependentUpon>
+    </Compile>
+    <Compile Include="Accueil.aspx.vb">
+      <DependentUpon>Accueil.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Accueil.aspx.designer.vb">
+      <DependentUpon>Accueil.aspx</DependentUpon>
     </Compile>
     <Compile Include="Login.aspx.vb">
       <DependentUpon>Login.aspx</DependentUpon>

@@ -136,17 +136,224 @@ pre.verification { background: #f4f6f8; border: 1px solid var(--bord); border-ra
     .talon { border: none; padding: 0; }
 }
 
-/* ---------- Connexion ---------- */
-.page-connexion { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 16px; }
-.boite-connexion { width: 100%; max-width: 420px; background: #fff; border: 1px solid var(--bord); border-radius: 10px; padding: 28px; }
-.boite-connexion .logo { color: var(--accent-fonce); display: block; margin-bottom: 6px; }
-.boite-connexion .champ { margin-bottom: 12px; }
+/* ---------- Page de connexion ---------- */
+/* Deux panneaux : la marque à gauche, le formulaire à droite. Le bleu et le
+   talon sont ceux de la page de présentation — celui qui arrive ici depuis
+   l'accueil doit reconnaître l'endroit. Sur un écran étroit, la marque se
+   réduit à un bandeau : un formulaire de connexion au téléphone doit tenir
+   au-dessus du clavier. */
+
+.page-connexion { min-height: 100vh; background: var(--carte); }
+.connexion-cadre { display: grid; grid-template-columns: 1.05fr 1fr; min-height: 100vh; }
+
+/* ---------- Le côté marque ---------- */
+.connexion-marque {
+    background: linear-gradient(160deg, var(--accent-fonce) 0%, #0a6288 55%, #0b6e99 100%);
+    color: #fff;
+    padding: 40px 52px;
+    display: flex; flex-direction: column; justify-content: space-between;
+}
+.connexion-marque .logo { color: #fff; }
+.connexion-marque-corps { max-width: 27em; }
+.connexion-marque h1 { font-size: 33px; line-height: 1.2; font-weight: 700; margin: 0 0 26px; color: #fff; }
+
+.connexion-points { list-style: none; margin: 0; padding: 0; }
+.connexion-points li {
+    position: relative; padding-left: 30px; margin-bottom: 16px;
+    color: #dcecf5; font-size: 15px; line-height: 1.5;
+}
+/* Une coche dessinée en CSS : pas de police d'icônes à charger pour trois traits. */
+.connexion-points li::before {
+    content: ""; position: absolute; left: 0; top: 4px;
+    width: 16px; height: 9px;
+    border-left: 2.5px solid #7fc9e6; border-bottom: 2.5px solid #7fc9e6;
+    transform: rotate(-45deg);
+}
+.connexion-marque-pied { color: #9fc4d6; font-size: 13px; margin: 0; }
+
+/* ---------- Le côté formulaire ---------- */
+.connexion-panneau { display: flex; align-items: center; justify-content: center; padding: 40px 24px; }
+.connexion-boite { width: 100%; max-width: 380px; }
+.connexion-boite .langues { text-align: right; font-size: 13px; margin-bottom: 26px; }
+
+.connexion-titre { font-size: 26px; font-weight: 700; margin: 0 0 6px; }
+.connexion-sous-titre { color: var(--encre-douce); font-size: 14.5px; margin: 0 0 26px; }
+
+.connexion-boite .champ { margin-bottom: 16px; }
+.connexion-boite .champ label { font-size: 13.5px; font-weight: 600; color: var(--encre); margin-bottom: 5px; }
+.connexion-boite input[type=email],
+.connexion-boite input[type=password] { padding: 11px 12px; font-size: 15px; border-radius: 6px; }
+.connexion-boite input::placeholder { color: #a8b3bf; }
+
+.connexion-bouton { width: 100%; padding: 11px 18px; font-size: 15.5px; border-radius: 6px; margin-top: 6px; }
+.connexion-note { margin: 16px 0 0; line-height: 1.5; }
+
+.connexion-retour { margin-top: 30px; padding-top: 18px; border-top: 1px solid var(--bord); font-size: 13.5px; }
+
+/* ---------- Écrans étroits ---------- */
+@media (max-width: 860px) {
+    .connexion-cadre { grid-template-columns: 1fr; min-height: 0; }
+    .connexion-marque { padding: 22px 24px 26px; }
+    .connexion-marque h1 { font-size: 23px; margin-bottom: 18px; }
+    .connexion-marque-corps { margin-top: 18px; }
+    /* Les arguments de vente ne doivent pas repousser le formulaire hors de
+       l'écran : au téléphone, on vient ici pour entrer, pas pour lire. */
+    .connexion-points { display: none; }
+    .connexion-marque-pied { display: none; }
+    .connexion-panneau { padding: 30px 22px 44px; }
+}
 
 /* ---------- Langues et compagnie courante ---------- */
 .langues { font-size: 12px; letter-spacing: .5px; }
 .session .langues a { color: #cfe8f3; text-decoration: none; }
 .session .langues strong { color: #fff; }
-.boite-connexion .langues { text-align: right; margin-bottom: 8px; color: var(--encre-douce); }
+.connexion-boite .langues a { color: var(--accent); }
 .session-select { width: auto; max-width: 260px; padding: 4px 8px; font-size: 13px; font-weight: 600; }
 .identite { display: grid; grid-template-columns: repeat(auto-fill, minmax(230px, 1fr)); gap: 8px 20px; margin-bottom: 8px; }
 .identite div span { display: block; font-size: 12px; color: var(--encre-douce); }
+
+/* ====================================================================== */
+/* Page de présentation (Accueil.aspx)                                    */
+/*                                                                        */
+/* Même palette que le reste du service : ce n'est pas une vitrine à part, */
+/* c'est la première page du produit. Le visiteur qui se connecte doit     */
+/* reconnaître l'endroit, pas découvrir un autre logiciel.                 */
+/* ====================================================================== */
+
+.page-presentation { background: var(--carte); }
+.pres-largeur { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
+
+/* ---------- En-tête ---------- */
+.pres-entete { background: var(--accent-fonce); }
+.pres-entete-contenu { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-top: 14px; padding-bottom: 14px; }
+.pres-entete-droite { display: flex; align-items: center; gap: 18px; }
+.pres-entete .langues { font-size: 13px; }
+.pres-entete .langues a { color: #cfe8f3; }
+
+/* ---------- Héros ---------- */
+.pres-heros {
+    background: linear-gradient(160deg, var(--accent-fonce) 0%, #0a6288 55%, #0b6e99 100%);
+    color: #fff;
+    padding: 64px 0 76px;
+}
+.pres-heros-grille { display: grid; grid-template-columns: 1.15fr .85fr; gap: 56px; align-items: center; }
+
+.pres-surtitre {
+    text-transform: uppercase; letter-spacing: 1.4px; font-size: 12px; font-weight: 700;
+    color: #9fd4ea; margin: 0 0 14px;
+}
+.pres-heros h1 { font-size: 40px; line-height: 1.15; font-weight: 700; margin: 0 0 18px; color: #fff; }
+.pres-promesse { font-size: 17px; line-height: 1.6; color: #dcecf5; margin: 0 0 28px; max-width: 34em; }
+
+.pres-actions { display: flex; align-items: center; gap: 22px; flex-wrap: wrap; }
+.pres-bouton-grand { padding: 12px 26px; font-size: 16px; border-radius: 6px; }
+.pres-bouton-clair { background: #fff; color: var(--accent-fonce); border-color: #fff; }
+.pres-bouton-clair:hover { background: #e8f3f9; color: var(--accent-fonce); }
+/* Dans l'en-tête, un bouton plein entrerait en concurrence avec l'appel du héros.
+   Le contour dit « c'est ici si vous savez déjà où vous allez », sans crier. */
+.pres-bouton-contour { background: transparent; color: #fff; border-color: rgba(255,255,255,.55); }
+.pres-bouton-contour:hover { background: rgba(255,255,255,.14); color: #fff; border-color: #fff; }
+.pres-lien-discret { color: #cfe8f3; text-decoration: underline; text-underline-offset: 3px; font-size: 14px; }
+.pres-note-heros { font-size: 13.5px; color: #a8cfe2; margin: 22px 0 0; }
+
+/* ---------- La maquette de talon ---------- */
+/* Un aperçu de ce que l'outil produit vaut mieux qu'une photo de bureau. */
+.pres-heros-visuel { display: flex; justify-content: center; }
+.talon {
+    width: 100%; max-width: 340px; background: #fff; color: var(--encre);
+    border-radius: 10px; padding: 20px 22px 16px;
+    box-shadow: 0 18px 40px rgba(4, 44, 63, .34);
+}
+.talon-entete { display: flex; align-items: center; justify-content: space-between; margin-bottom: 14px; }
+.talon-titre { font-weight: 700; font-size: 15px; }
+.talon-etiquette {
+    font-size: 10.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .6px;
+    color: var(--encre-douce); background: var(--fond); border: 1px solid var(--bord);
+    border-radius: 999px; padding: 2px 9px;
+}
+.talon-employe { padding-bottom: 12px; border-bottom: 1px solid var(--bord); margin-bottom: 10px; }
+.talon-employe strong { display: block; font-size: 15px; }
+.talon-employe span { font-size: 12.5px; color: var(--encre-douce); }
+
+.talon-lignes { width: 100%; border-collapse: collapse; font-size: 13.5px; }
+.talon-lignes td { padding: 5px 0; }
+.talon-lignes td:last-child { text-align: right; font-variant-numeric: tabular-nums; color: var(--encre-douce); }
+.talon-lignes .talon-brut td { font-weight: 600; color: var(--encre); }
+.talon-lignes .talon-brut td:last-child { color: var(--encre); }
+
+.talon-net {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-top: 12px; padding-top: 12px; border-top: 2px solid var(--encre);
+}
+.talon-net span { font-weight: 600; }
+.talon-net strong { font-size: 20px; font-variant-numeric: tabular-nums; }
+.talon-pied { margin-top: 10px; font-size: 12px; color: var(--encre-douce); }
+
+/* ---------- Sections ---------- */
+.pres-section { padding: 68px 0; }
+.pres-section-pale { background: var(--fond); }
+.pres-titre-section { font-size: 28px; font-weight: 700; margin: 0 0 10px; }
+.pres-intro { color: var(--encre-douce); font-size: 16px; max-width: 62ch; margin: 0 0 34px; }
+
+/* ---------- Les quatre étapes ---------- */
+.pres-etapes { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(4, 1fr); gap: 26px; counter-reset: none; }
+.pres-etapes li { position: relative; padding-top: 6px; }
+.pres-numero {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 34px; height: 34px; border-radius: 50%;
+    background: var(--accent); color: #fff; font-weight: 700; font-size: 15px;
+    margin-bottom: 12px;
+}
+.pres-etapes h3 { font-size: 17px; font-weight: 600; margin: 0 0 6px; }
+.pres-etapes p { color: var(--encre-douce); font-size: 14.5px; margin: 0; }
+
+/* ---------- Ce que ça produit ---------- */
+.pres-grille { display: grid; grid-template-columns: repeat(auto-fit, minmax(270px, 1fr)); gap: 18px; }
+.pres-carte {
+    background: var(--carte); border: 1px solid var(--bord); border-radius: 9px;
+    padding: 20px 22px; border-top: 3px solid var(--accent);
+}
+.pres-carte h3 { font-size: 16.5px; font-weight: 600; margin: 0 0 6px; }
+.pres-carte p { color: var(--encre-douce); font-size: 14.5px; margin: 0; }
+
+/* ---------- Les sources officielles ---------- */
+.pres-deux-colonnes { display: grid; grid-template-columns: 1.25fr .75fr; gap: 48px; align-items: start; }
+.pres-deux-colonnes > div > p { color: var(--encre-douce); max-width: 60ch; }
+.pres-liste { list-style: none; margin: 22px 0; padding: 0; }
+.pres-liste li { padding: 12px 0; border-bottom: 1px solid var(--bord); font-size: 14.5px; }
+.pres-liste li:last-child { border-bottom: none; }
+.pres-source { display: block; color: var(--encre-douce); font-size: 13px; margin-top: 2px; }
+.pres-avertissement {
+    background: var(--avert-fond); border: 1px solid #ecd98f; border-radius: 6px;
+    padding: 12px 15px; font-size: 14px; color: var(--encre); margin-top: 6px;
+}
+
+.pres-encadre { background: var(--fond); border: 1px solid var(--bord); border-radius: 10px; padding: 24px 26px; }
+.pres-encadre h3 { font-size: 15.5px; font-weight: 700; margin: 0 0 6px; color: var(--accent-fonce); }
+.pres-encadre h3 + p { margin: 0 0 20px; color: var(--encre-douce); font-size: 14.5px; }
+.pres-encadre p:last-child { margin-bottom: 0; }
+
+/* ---------- Appel final ---------- */
+.pres-appel { background: var(--accent-fonce); color: #fff; text-align: center; padding: 60px 0; }
+.pres-appel h2 { font-size: 27px; font-weight: 700; margin: 0 0 10px; }
+.pres-appel p { color: #cfe8f3; margin: 0 0 26px; font-size: 16px; }
+
+.pres-pied { background: #072f42; color: #9fc4d6; font-size: 13px; padding: 22px 0; text-align: center; }
+.pres-pied span { font-weight: 300; }
+
+/* ---------- Écrans étroits ---------- */
+/* Une page publique se lit au téléphone : c'est souvent le premier contact. */
+@media (max-width: 900px) {
+    .pres-heros-grille { grid-template-columns: 1fr; gap: 40px; }
+    .pres-heros h1 { font-size: 31px; }
+    .pres-etapes { grid-template-columns: repeat(2, 1fr); }
+    .pres-deux-colonnes { grid-template-columns: 1fr; gap: 32px; }
+}
+@media (max-width: 560px) {
+    .pres-heros { padding: 44px 0 52px; }
+    .pres-heros h1 { font-size: 27px; }
+    .pres-section { padding: 46px 0; }
+    .pres-titre-section { font-size: 23px; }
+    .pres-etapes { grid-template-columns: 1fr; gap: 22px; }
+    .pres-entete-contenu { flex-wrap: wrap; }
+}
