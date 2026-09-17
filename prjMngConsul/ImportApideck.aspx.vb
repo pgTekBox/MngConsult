@@ -651,14 +651,6 @@ Public Class ImportApideck
     End Function
 
     ''' <summary>
-    ''' Une ligne de comparaison. Les champs vides des deux côtés ne valent pas
-    ''' la peine d'être montrés : ils allongeraient l'écran sans rien dire.
-    ''' </summary>
-
-
-
-
-    ''' <summary>
     ''' Les pièces jointes — ce que le client a agrafé à ses factures : le PDF du
     ''' fournisseur, la photo du reçu. Sans elles, une facture reprise n'a pas son
     ''' justificatif.
@@ -1524,6 +1516,10 @@ Public Class ImportApideck
     End Function
 
 
+    ''' <summary>
+    ''' Une ligne de comparaison. Les champs vides des deux côtés ne valent pas
+    ''' la peine d'être montrés : ils allongeraient l'écran sans rien dire.
+    ''' </summary>
     Private Shared Sub Ajouter(champs As JArray, nom As String, libelle As String, valeur As String)
         If nom = "" AndAlso valeur = "" Then Exit Sub
 
