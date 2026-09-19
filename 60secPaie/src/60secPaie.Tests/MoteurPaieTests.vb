@@ -221,11 +221,38 @@ Public Class MoteurPaieTests
 
     <TestMethod>
     Public Sub TauxFSS_SelonMasseSalariale()
-        Assert.AreEqual(1.65D, ParametresAnnee.TauxFSS(500000D, SecteurFSS.General))
-        Assert.AreEqual(1.25D, ParametresAnnee.TauxFSS(500000D, SecteurFSS.PrimaireManufacturier))
-        Assert.AreEqual(4.26D, ParametresAnnee.TauxFSS(9000000D, SecteurFSS.General))
-        Assert.AreEqual(4.26D, ParametresAnnee.TauxFSS(100000D, SecteurFSS.SecteurPublic))
-        Assert.AreEqual(2.42D, ParametresAnnee.TauxFSS(3000000D, SecteurFSS.General))
+        Assert.AreEqual(1.65D, ParametresAnnee.Pour(2026).TauxFSS(500000D, SecteurFSS.General))
+        Assert.AreEqual(1.25D, ParametresAnnee.Pour(2026).TauxFSS(500000D, SecteurFSS.PrimaireManufacturier))
+        Assert.AreEqual(4.26D, ParametresAnnee.Pour(2026).TauxFSS(9000000D, SecteurFSS.General))
+        Assert.AreEqual(4.26D, ParametresAnnee.Pour(2026).TauxFSS(100000D, SecteurFSS.SecteurPublic))
+        Assert.AreEqual(2.42D, ParametresAnnee.Pour(2026).TauxFSS(3000000D, SecteurFSS.General))
+    End Sub
+
+    ''' <summary>
+    ''' EstDisponible et Pour doivent dire la même chose : c'est tout l'intérêt
+    ''' de les faire découler d'une seule table. Une année acceptée par l'une et
+    ''' refusée par l'autre donnerait un écran qui propose une paie que le moteur
+    ''' refusera ensuite de calculer.
+    ''' </summary>
+    <TestMethod>
+    Public Sub AnneesDisponibles_EstDisponibleEtPourSaccordent()
+        For annee As Integer = 2020 To 2035
+            Dim a As Integer = annee   ' copie locale : une lambda ne doit pas capturer la variable de boucle
+            If ParametresAnnee.EstDisponible(a) Then
+                Assert.AreEqual(a, ParametresAnnee.Pour(a).Annee, "Pour doit rendre l'année demandée.")
+            Else
+                Assert.ThrowsException(Of NotSupportedException)(
+                    Sub() ParametresAnnee.Pour(a),
+                    "Une année indisponible doit être refusée, pas calculée avec les taux d'une autre.")
+            End If
+        Next
+    End Sub
+
+    ''' <summary>L'année de référence affichée doit toujours être une année que l'on sait calculer.</summary>
+    <TestMethod>
+    Public Sub DerniereAnneeConnue_EstToujoursDisponible()
+        Assert.IsTrue(ParametresAnnee.EstDisponible(ParametresAnnee.DerniereAnneeConnue()))
+        Assert.AreEqual(ParametresAnnee.DerniereAnneeConnue(), ParametresAnnee.PourAffichage().Annee)
     End Sub
 
 End Class

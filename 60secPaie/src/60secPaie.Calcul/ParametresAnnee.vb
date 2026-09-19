@@ -20,6 +20,11 @@ End Enum
 ''' <summary>
 ''' Taux et plafonds gouvernementaux d'une année, pour un employé du Québec.
 ''' Sources 2026 : T4127 (122e et 123e éditions, ARC) et TP-1015.F (2026-01, Revenu Québec).
+'''
+''' POUR AJOUTER UNE ANNÉE : écrire une fonction Annee20XX() sur le modèle de
+''' Annee2026(), puis ajouter un seul Case dans Construire(). Tout le reste —
+''' Pour, EstDisponible, DerniereAnneeConnue — en découle. Aucune valeur qui
+''' change d'une année à l'autre ne doit vivre ailleurs que dans ces fonctions.
 ''' </summary>
 Public Class ParametresAnnee
 
@@ -70,24 +75,65 @@ Public Class ParametresAnnee
     Public Property RQAPTauxEmployeur As Decimal
     Public Property RQAPMaxEmployeur As Decimal
 
+    ' --- Fonds des services de santé, FSS (TP-1015.F, partie 5) ---
+    ' Le taux se calcule : constante + coefficient x masse salariale en millions,
+    ' la masse étant d'abord ramenée entre le plancher et le plafond. Ces quatre
+    ' nombres et ces deux bornes changent d'une année à l'autre comme le reste.
+    Public Property FSSTauxSecteurPublic As Decimal
+    Public Property FSSMassePlancher As Decimal
+    Public Property FSSMassePlafond As Decimal
+    Public Property FSSGeneralConstante As Decimal
+    Public Property FSSGeneralCoefficient As Decimal
+    Public Property FSSPrimaireConstante As Decimal
+    Public Property FSSPrimaireCoefficient As Decimal
+
     ' --- Cotisations de l'employeur ---
     Public Property CNESSTMaxAssurable As Decimal
     Public Property CNTTaux As Decimal
     Public Property CNTMaxAssujetti As Decimal
 
+    ''' <summary>Les taux de l'année, ou une exception si elle n'est pas encore définie.</summary>
     Public Shared Function Pour(annee As Integer) As ParametresAnnee
+        Dim p = Construire(annee)
+        If p Is Nothing Then
+            Throw New NotSupportedException(
+                "Les taux de l'année " & annee.ToString() & " ne sont pas encore définis dans ParametresAnnee. " &
+                "Ajoutez-les à partir des guides T4127 (ARC) et TP-1015.F (Revenu Québec).")
+        End If
+        Return p
+    End Function
+
+    ''' <summary>Vrai si les taux de l'année sont connus. Se déduit de Construire : une seule vérité.</summary>
+    Public Shared Function EstDisponible(annee As Integer) As Boolean
+        Return Construire(annee) IsNot Nothing
+    End Function
+
+    ''' <summary>
+    ''' L'année courante si ses taux sont connus, sinon la plus récente qui le soit.
+    ''' Sert aux écrans qui affichent une valeur de référence (montant personnel de
+    ''' base, taux du FSS) : mieux vaut montrer l'année précédente que rien du tout.
+    ''' </summary>
+    Public Shared Function DerniereAnneeConnue() As Integer
+        Dim courante As Integer = Date.Today.Year
+        For recul As Integer = 0 To 20
+            If EstDisponible(courante - recul) Then Return courante - recul
+        Next
+        Return courante   ' aucune année connue : l'appel à Pour dira ce qui manque
+    End Function
+
+    ''' <summary>Les taux à afficher hors d'un calcul de paie : ceux de DerniereAnneeConnue.</summary>
+    Public Shared Function PourAffichage() As ParametresAnnee
+        Return Pour(DerniereAnneeConnue())
+    End Function
+
+    ''' <summary>Le seul endroit où une année existe. Retourne Nothing si elle n'est pas définie.</summary>
+    Private Shared Function Construire(annee As Integer) As ParametresAnnee
         Select Case annee
             Case 2026
                 Return Annee2026()
             Case Else
-                Throw New NotSupportedException(
-                    "Les taux de l'année " & annee.ToString() & " ne sont pas encore définis dans ParametresAnnee. " &
-                    "Ajoutez-les à partir des guides T4127 (ARC) et TP-1015.F (Revenu Québec).")
+                Return Nothing
         End Select
-    End Function
-
-    Public Shared Function EstDisponible(annee As Integer) As Boolean
-        Return annee = 2026
     End Function
 
     Private Shared Function Annee2026() As ParametresAnnee
@@ -145,6 +191,15 @@ Public Class ParametresAnnee
         p.RQAPTauxEmployeur = 0.00602D
         p.RQAPMaxEmployeur = 620.06D
 
+        ' TP-1015.F (2026-01), partie 5 : cotisation au FSS selon la masse salariale
+        p.FSSTauxSecteurPublic = 4.26D
+        p.FSSMassePlancher = 1000000D
+        p.FSSMassePlafond = 7800000D
+        p.FSSGeneralConstante = 1.2662D
+        p.FSSGeneralCoefficient = 0.3838D
+        p.FSSPrimaireConstante = 0.8074D
+        p.FSSPrimaireCoefficient = 0.4426D
+
         ' À VALIDER auprès de la CNESST : salaire maximum assurable et taux de la cotisation
         ' relative aux normes du travail pour 2026.
         p.CNESSTMaxAssurable = 103000D
@@ -155,18 +210,21 @@ Public Class ParametresAnnee
     End Function
 
     ''' <summary>Taux de cotisation au FSS (en %), selon la masse salariale totale et le secteur (TP-1015.F, partie 5).</summary>
-    Public Shared Function TauxFSS(masseSalarialeTotale As Decimal, secteur As SecteurFSS) As Decimal
-        If secteur = SecteurFSS.SecteurPublic Then Return 4.26D
+    Public Function TauxFSS(masseSalarialeTotale As Decimal, secteur As SecteurFSS) As Decimal
+        If secteur = SecteurFSS.SecteurPublic Then Return FSSTauxSecteurPublic
 
-        Dim s As Decimal = masseSalarialeTotale / 1000000D
-        If s < 1D Then s = 1D
-        If s > 7.8D Then s = 7.8D
+        Dim masse As Decimal = masseSalarialeTotale
+        If masse < FSSMassePlancher Then masse = FSSMassePlancher
+        If masse > FSSMassePlafond Then masse = FSSMassePlafond
+
+        ' La formule du guide s'exprime en millions de dollars.
+        Dim s As Decimal = masse / 1000000D
 
         Dim taux As Decimal
         If secteur = SecteurFSS.PrimaireManufacturier Then
-            taux = 0.8074D + (0.4426D * s)
+            taux = FSSPrimaireConstante + (FSSPrimaireCoefficient * s)
         Else
-            taux = 1.2662D + (0.3838D * s)
+            taux = FSSGeneralConstante + (FSSGeneralCoefficient * s)
         End If
         Return Math.Round(taux, 2, MidpointRounding.AwayFromZero)
     End Function

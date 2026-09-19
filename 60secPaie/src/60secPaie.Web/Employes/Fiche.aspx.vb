@@ -29,8 +29,7 @@ Public Class PageFicheEmploye
         lnkCumulatifs.NavigateUrl = "~/Employes/Cumulatifs.aspx?id=" & EmployeId.ToString()
         If IsPostBack Then Return
 
-        Dim annee = If(ParametresAnnee.EstDisponible(Date.Today.Year), Date.Today.Year, 2026)
-        Dim prm = ParametresAnnee.Pour(annee)
+        Dim prm = ParametresAnnee.PourAffichage()
         litBaseFed.Text = Argent(prm.FedMontantPersonnelBase)
         litBaseQc.Text = Argent(prm.QcMontantPersonnelBase)
 

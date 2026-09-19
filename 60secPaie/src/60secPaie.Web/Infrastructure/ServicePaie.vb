@@ -148,7 +148,7 @@ Public NotInheritable Class ServicePaie
 
         Dim employeur As New ProfilEmployeur With {
             .FacteurAE = compagnie.Dcm("FacteurAE"),
-            .TauxFSS = ParametresAnnee.TauxFSS(compagnie.Dcm("MasseSalarialeEstimee"), CType(compagnie.Ent("SecteurFSS"), SecteurFSS)),
+            .TauxFSS = ParametresAnnee.Pour(datePaie.Year).TauxFSS(compagnie.Dcm("MasseSalarialeEstimee"), CType(compagnie.Ent("SecteurFSS"), SecteurFSS)),
             .TauxCNESST = compagnie.Dcm("TauxCNESST"),
             .AssujettiCNT = compagnie.Bln("AssujettiCNT")}
 

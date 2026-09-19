@@ -24,7 +24,7 @@ Public Class PageCompagnie
             txtFacteurAE.Text = Champ(1.4D)
             txtProchainCheque.Text = "1"
             chkCNT.Checked = True
-            litTauxFSS.Text = ParametresAnnee.TauxFSS(0D, SecteurFSS.General).ToString("N2", I18n.Culture) & " %"
+            litTauxFSS.Text = ParametresAnnee.PourAffichage().TauxFSS(0D, SecteurFSS.General).ToString("N2", I18n.Culture) & " %"
             Return
         End If
 
@@ -61,7 +61,7 @@ Public Class PageCompagnie
     End Sub
 
     Private Sub AfficherTauxFSS(masse As Decimal, secteur As Integer)
-        litTauxFSS.Text = ParametresAnnee.TauxFSS(masse, CType(secteur, SecteurFSS)).ToString("N2", I18n.Culture) & " %"
+        litTauxFSS.Text = ParametresAnnee.PourAffichage().TauxFSS(masse, CType(secteur, SecteurFSS)).ToString("N2", I18n.Culture) & " %"
     End Sub
 
     Private Sub btnEnregistrer_Click(sender As Object, e As EventArgs) Handles btnEnregistrer.Click
