@@ -393,41 +393,22 @@ Public MustInherit Class ImportComptableBase
         Return id
     End Function
 
-    ''' <summary>Ouvre un lot et rend son identifiant.</summary>
-    Protected Function OuvrirLot(systemeSource As String,
-                                 nomFichier As String,
-                                 separateur As String,
-                                 encodage As String,
-                                 Optional importFileId As Integer = 0) As Integer
+    ''' <summary>
+    ''' Envoie tout le fichier en un appel. Le JSON évite un aller-retour par
+    ''' ligne, et laisse la procédure voir l'ensemble d'un coup — c'est ce qui
+    ''' lui permet de repérer les doublons internes au fichier.
+    '''
+    ''' L'import remplace le précédent de la compagnie : il n'y en a qu'un à la
+    ''' fois en préparation, et plus de numéro de lot à traîner.
+    ''' </summary>
+    Protected Function Charger(systemeSource As String, importFileId As Integer,
+                               lignes As List(Of Dictionary(Of String, Object))) As DataRow
+        Dim json As String = Newtonsoft.Json.JsonConvert.SerializeObject(lignes)
 
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@SystemeSource", systemeSource))
-        p.Add(New SqlParameter("@TypeDonnees", TypeDonnees))
-        p.Add(New SqlParameter("@NomFichier", If(nomFichier, "")))
-        p.Add(New SqlParameter("@Separateur", If(separateur, "")))
-        p.Add(New SqlParameter("@Encodage", If(encodage, "")))
-        p.Add(New SqlParameter("@UserId", UserId))
         p.Add(New SqlParameter("@ImportFileId", If(importFileId > 0, CObj(importFileId), CObj(DBNull.Value))))
-
-        Dim ds As DataSet = ExecuteSQLds("s0751OuvrirImportLot", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            Throw New InvalidOperationException("Le lot d'importation n'a pas pu être ouvert.")
-        End If
-        Return Convert.ToInt32(ds.Tables(0).Rows(0)("LotId"))
-    End Function
-
-    ''' <summary>
-    ''' Envoie tout le fichier en un appel. Le JSON évite un aller-retour par
-    ''' ligne, et laisse la procédure voir l'ensemble du lot — c'est ce qui lui
-    ''' permet de repérer les doublons internes au fichier.
-    ''' </summary>
-    Protected Function ChargerLot(lotId As Integer, lignes As List(Of Dictionary(Of String, Object))) As DataRow
-        Dim json As String = Newtonsoft.Json.JsonConvert.SerializeObject(lignes)
-
-        Dim p As New Collection
-        p.Add(New SqlParameter("@LotId", lotId))
-        p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@Lignes", json))
 
         Dim ds As DataSet = ExecuteSQLds(ProcedureChargement, p)

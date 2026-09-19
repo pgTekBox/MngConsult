@@ -29,8 +29,6 @@ Partial Public Class CorrespondanceComptes
     '''<summary>pnlAucunLot</summary>
     Protected WithEvents pnlAucunLot As Global.System.Web.UI.WebControls.Panel
 
-    '''<summary>ddlLot</summary>
-    Protected WithEvents ddlLot As Global.System.Web.UI.WebControls.DropDownList
     '''<summary>ddlFiltre</summary>
     Protected WithEvents ddlFiltre As Global.System.Web.UI.WebControls.DropDownList
     '''<summary>hlAppliquer</summary>

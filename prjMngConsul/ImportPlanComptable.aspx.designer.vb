@@ -91,9 +91,10 @@ Partial Public Class ImportPlanComptable
     '''<summary>gvLignes</summary>
     Protected WithEvents gvLignes As Global.System.Web.UI.WebControls.GridView
 
-    '''<summary>pnlLots</summary>
-    Protected WithEvents pnlLots As Global.System.Web.UI.WebControls.Panel
-    '''<summary>gvLots</summary>
-    Protected WithEvents gvLots As Global.System.Web.UI.WebControls.GridView
 
+    '''<summary>pnlAbandon</summary>
+    Protected WithEvents pnlAbandon As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>btnVider</summary>
+    Protected WithEvents btnVider As Global.System.Web.UI.WebControls.Button
 End Class

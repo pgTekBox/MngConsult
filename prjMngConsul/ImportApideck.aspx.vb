@@ -375,20 +375,11 @@ Public Class ImportApideck
     ''' correspondance est justement le travail de l'écran suivant.
     ''' </summary>
     Private Function VerserPlanComptable(brut As JArray) As String
-        ' Le plan comptable emprunte le rail du lot, mais son origine s'inscrit
-        ' au même registre que les listes : ImportFiles porte la réponse brute
-        ' d'Apideck, et le lot pointe dessus.
+        ' Le plan comptable s'inscrit au registre comme les autres listes :
+        ' ImportFiles porte la réponse brute d'Apideck, et les lignes pointent
+        ' dessus. Il n'y a plus de lot à ouvrir — s0752 fait tout en un appel,
+        ' et remplace le plan comptable précédent de la compagnie.
         Dim fichierId As Integer = InscrireAuRegistre("PlanComptable", "plan comptable", brut)
-        Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        p.Add(New SqlParameter("@SystemeSource", "APIDECK"))
-        p.Add(New SqlParameter("@TypeDonnees", "PLAN_COMPTABLE"))
-        p.Add(New SqlParameter("@NomFichier", "QuickBooks — Plan comptable (Apideck)"))
-        p.Add(New SqlParameter("@UserId", CObj(UserId)))
-        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
-
-        Dim ds As DataSet = ExecuteSQLds("s0751OuvrirImportLot", p)
-        Dim lotId As Integer = Convert.ToInt32(ds.Tables(0).Rows(0)(0))
 
         Dim lignes As New JArray()
         Dim no As Integer = 0
@@ -409,19 +400,27 @@ Public Class ImportApideck
             o("Nom") = nom
             ' Option Strict est à Off : affecter l'Object rendu par Nombre() à un
             ' champ JSON compile, mais lève à l'exécution. C'est ce qui vidait le
-            ' lot du plan comptable — le lot était créé, aucune ligne dedans.
+            ' plan comptable — l'import était ouvert, aucune ligne dedans.
             Dim solde As Object = Nombre(Valeur(c, "current_balance", "balance"))
             If solde IsNot Nothing Then o("Solde") = CDec(solde)
             lignes.Add(o)
         Next
 
-        Dim p2 As New Collection
-        p2.Add(New SqlParameter("@LotId", CObj(lotId)))
-        p2.Add(New SqlParameter("@CompanyGUID", Company))
-        p2.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
-        ExecuteSQLds("s0752ChargerPlanComptableStaging", p2)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@SystemeSource", "APIDECK"))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
 
-        Return "versé au plan comptable — lot " & lotId
+        Dim ds As DataSet = ExecuteSQLds("s0752ChargerPlanComptableStaging", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Return "versé au plan comptable"
+        End If
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = "versé au plan comptable : " & Lire(r, "NbLignesRetenues") & " compte(s)"
+        If Lire(r, "NbAnomalies") > 0 Then texte &= ", " & Lire(r, "NbAnomalies") & " à corriger"
+        Return texte
     End Function
 
     ''' <summary>
@@ -1532,6 +1531,33 @@ Public Class ImportApideck
     End Sub
 
     ''' <summary>
+    ''' Écarte l'extraction Apideck précédente de ce type, s'il y en a une.
+    '''
+    ''' Le registre garde une ligne par import, et c'est ce qui permet de
+    ''' répondre à « qu'est-ce qui est entré, et quand ». Mais une extraction
+    ''' relit toujours la même source : répétée, elle empile des copies. Trente
+    ''' deux fichiers pour dix ressources, et quatre cent cinquante et un tiers
+    ''' là où la source en compte deux cent un.
+    '''
+    ''' Un fichier déposé à la main, lui, garde son sens en plusieurs
+    ''' exemplaires — trois listes de clients de trois succursales sont trois
+    ''' fichiers distincts. La procédure ne touche donc QUE les extractions,
+    ''' reconnues à leur ModelUsed « apideck/… ».
+    '''
+    ''' Un échec ici ne doit pas faire perdre l'extraction : le doublon est un
+    ''' encombrement, pas une faute.
+    ''' </summary>
+    Private Sub RemplacerExtractionPrecedente(typeImport As String)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@TypeImport", typeImport))
+            ExecuteSQLds("s0819RemplacerImportApideck", p)
+        Catch
+            ' On continue : mieux vaut un doublon qu'une extraction perdue.
+        End Try
+    End Sub
+    ''' <summary>
     ''' Inscrit une ressource au registre des imports sans l'éclater. Sert aux
     ''' ressources qui ont leur propre rail — le plan comptable — pour qu'elles
     ''' figurent quand même dans staging.ImportFiles avec leur contenu d'origine.
@@ -1544,6 +1570,11 @@ Public Class ImportApideck
         Dim octets As Byte() = Encoding.UTF8.GetBytes(json)
         Dim nom As String = "QuickBooks — " & genre & " (Apideck) — " &
                             DateTime.Now.ToString("yyyy-MM-dd HH:mm") & ".json"
+
+        ' Une extraction relit toujours la même source : la précédente du même
+        ' type n'a plus rien à apprendre et serait un doublon. Elle cède la
+        ' place — ce qui a déjà été créé dans l'application reste intact.
+        RemplacerExtractionPrecedente(typeImport)
 
         Dim p As New Collection
         p.Add(New SqlParameter("@TypeImport", typeImport))
@@ -1585,6 +1616,11 @@ Public Class ImportApideck
         Dim octets As Byte() = Encoding.UTF8.GetBytes(json)
         Dim nom As String = "QuickBooks — " & genre & " (Apideck) — " &
                             DateTime.Now.ToString("yyyy-MM-dd HH:mm") & ".json"
+
+        ' Une extraction relit toujours la même source : la précédente du même
+        ' type n'a plus rien à apprendre et serait un doublon. Elle cède la
+        ' place — ce qui a déjà été créé dans l'application reste intact.
+        RemplacerExtractionPrecedente(typeImport)
 
         Dim p As New Collection
         p.Add(New SqlParameter("@TypeImport", typeImport))

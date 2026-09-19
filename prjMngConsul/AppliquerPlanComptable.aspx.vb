@@ -20,12 +20,17 @@ Public Class AppliquerPlanComptable
 
 #Region "Cycle de vie"
 
-    Private Property LotCourant As Integer
+    ''' <summary>
+    ''' Y a-t-il un plan comptable en préparation ? Remplace l'ancien numéro de
+    ''' lot : il n'y en a plus qu'un par compagnie, la seule question est de
+    ''' savoir s'il existe.
+    ''' </summary>
+    Private Property PlanCharge As Boolean
         Get
-            Return If(ViewState("Lot") Is Nothing, 0, CInt(ViewState("Lot")))
+            Return If(ViewState("PlanCharge") Is Nothing, False, CBool(ViewState("PlanCharge")))
         End Get
-        Set(value As Integer)
-            ViewState("Lot") = value
+        Set(value As Boolean)
+            ViewState("PlanCharge") = value
         End Set
     End Property
 
@@ -34,14 +39,6 @@ Public Class AppliquerPlanComptable
     ''' comptes de charge ne justifient pas vingt allers-retours.
     ''' </summary>
     Private ReadOnly _classesParNature As New Dictionary(Of String, DataTable)(StringComparer.OrdinalIgnoreCase)
-    ''' <summary>
-    ''' Le fil des étapes porte le lot en cours, pour que les deux autres
-    ''' écrans ouvrent celui qu'on regarde et non le dernier chargé. Posé au
-    ''' pré-rendu : à ce moment le lot est connu, quoi qu'ait fait la page.
-    ''' </summary>
-    Protected Sub Page_PreRenderEtapes(sender As Object, e As EventArgs) Handles Me.PreRender
-        ucEtapes.LotId = LotCourant
-    End Sub
 
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -52,17 +49,9 @@ Public Class AppliquerPlanComptable
         End If
 
         If Not IsPostBack Then
-            ChargerLots()
+            PlanCharge = LirePlanCharge()
 
-            ' L'écran précédent renvoie ici en nommant son lot.
-            Dim n As Integer
-            If Integer.TryParse(Request.QueryString("lot"), n) Then
-                Dim item = ddlLot.Items.FindByValue(n.ToString())
-                If item IsNot Nothing Then ddlLot.SelectedValue = item.Value
-            End If
-
-            If ddlLot.Items.Count > 0 Then
-                LotCourant = CInt(ddlLot.SelectedValue)
+            If PlanCharge Then
                 Rafraichir()
             Else
                 pnlAucunLot.Visible = True
@@ -70,46 +59,30 @@ Public Class AppliquerPlanComptable
         End If
     End Sub
 
-    Private Sub ChargerLots()
+    ''' <summary>
+    ''' Un plan comptable attend-il en préparation ? Une seule question, là où
+    ''' il fallait auparavant lister les lots et en choisir un.
+    ''' </summary>
+    Private Function LirePlanCharge() As Boolean
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
-        p.Add(New SqlParameter("@TypeDonnees", "PLAN_COMPTABLE"))
-        p.Add(New SqlParameter("@Top", 20))
 
-        Dim ds As DataSet = ExecuteSQLds("s0754GetImportLots", p)
-        ddlLot.Items.Clear()
-
-        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
-
-        For Each r As DataRow In ds.Tables(0).Rows
-            Dim libelle = String.Format("Lot {0} — {1} — {2} ({3})",
-                                        r("Id"),
-                                        Convert.ToDateTime(r("Created")).ToString("yyyy-MM-dd HH:mm"),
-                                        Convert.ToString(r("SystemeSource")),
-                                        Convert.ToString(r("Statut")))
-            ddlLot.Items.Add(New ListItem(libelle, Convert.ToString(r("Id"))))
-        Next
-    End Sub
-
-    Protected Sub ddlLot_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlLot.SelectedIndexChanged
-        CacherMessages()
-        pnlCrees.Visible = False
-        LotCourant = CInt(ddlLot.SelectedValue)
-        Rafraichir()
-    End Sub
+        Dim ds As DataSet = ExecuteSQLds("s0758StatsCorrespondance", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return False
+        Return Convert.ToInt32(ds.Tables(0).Rows(0)("Total")) > 0
+    End Function
 
 #End Region
 
 #Region "Affichage"
 
     Private Sub Rafraichir()
-        If LotCourant = 0 Then Return
+        If Not PlanCharge Then Return
 
-        hlRetour.NavigateUrl = "~/CorrespondanceComptes.aspx?lot=" & LotCourant.ToString()
+        hlRetour.NavigateUrl = "~/CorrespondanceComptes.aspx"
 
         Try
             Dim p As New Collection
-            p.Add(New SqlParameter("@LotId", LotCourant))
             p.Add(New SqlParameter("@CompanyGUID", Company))
 
             Dim ds As DataSet = ExecuteSQLds("s0766GetAAppliquer", p)
@@ -216,7 +189,7 @@ Public Class AppliquerPlanComptable
     Protected Sub btnCreer_Click(sender As Object, e As EventArgs) Handles btnCreer.Click
         CacherMessages()
         pnlCrees.Visible = False
-        If LotCourant = 0 Then Return
+        If Not PlanCharge Then Return
 
         Try
             Dim lignes As New List(Of Object)
@@ -252,7 +225,6 @@ Public Class AppliquerPlanComptable
             End If
 
             Dim p As New Collection
-            p.Add(New SqlParameter("@LotId", LotCourant))
             p.Add(New SqlParameter("@CompanyGUID", Company))
             p.Add(New SqlParameter("@UserId", UserId))
             p.Add(New SqlParameter("@Lignes", Newtonsoft.Json.JsonConvert.SerializeObject(lignes)))

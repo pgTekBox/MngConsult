@@ -152,7 +152,6 @@
         <div class="bar-top">
             <div class="fld">
                 <label>Lot à appliquer</label>
-                <asp:DropDownList ID="ddlLot" runat="server" AutoPostBack="true" Width="420" />
             </div>
             <asp:HyperLink ID="hlRetour" runat="server" CssClass="lien-retour"
                 Text="← revenir à la correspondance" />

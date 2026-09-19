@@ -30,8 +30,6 @@ Partial Public Class AppliquerPlanComptable
     '''<summary>litAvertissement</summary>
     Protected WithEvents litAvertissement As Global.System.Web.UI.WebControls.Literal
 
-    '''<summary>ddlLot</summary>
-    Protected WithEvents ddlLot As Global.System.Web.UI.WebControls.DropDownList
 
     '''<summary>hlRetour</summary>
     Protected WithEvents hlRetour As Global.System.Web.UI.WebControls.HyperLink

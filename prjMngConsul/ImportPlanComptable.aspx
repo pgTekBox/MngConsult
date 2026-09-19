@@ -476,36 +476,20 @@
         </div>
     </asp:Panel>
 
-    <!-- ══════════ LES LOTS PRÉCÉDENTS ══════════ -->
-    <asp:Panel ID="pnlLots" runat="server" Visible="false" CssClass="step">
-        <h2><span class="n">🗂</span>Chargements précédents</h2>
-        <p class="desc">Chaque dépôt de fichier forme un lot, que l'on peut revoir ou abandonner.</p>
+    <!-- ══════════ ABANDONNER ══════════ -->
+    <%-- Il n'y a plus de « chargements précédents » à parcourir : un seul plan
+         comptable attend en préparation, et le suivant le remplace. Reste une
+         seule action, celle d'y renoncer. --%>
+    <asp:Panel ID="pnlAbandon" runat="server" CssClass="step">
+        <h2><span class="n">🗑</span>Abandonner</h2>
+        <p class="desc">
+            Efface le plan comptable en préparation. Refusé si des comptes en ont
+            déjà été créés : on n'efface pas la trace de ce qui existe.
+        </p>
         <div class="body">
-            <div class="tbl-wrap">
-                <asp:GridView ID="gvLots" runat="server" AutoGenerateColumns="false"
-                    CssClass="g" GridLines="None" UseAccessibleHeader="true" DataKeyNames="Id">
-                    <Columns>
-                        <asp:BoundField DataField="Id" HeaderText="Lot" />
-                        <asp:BoundField DataField="Created" HeaderText="Date" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
-                        <asp:BoundField DataField="SystemeSource" HeaderText="Origine" />
-                        <asp:BoundField DataField="NomFichier" HeaderText="Fichier" />
-                        <asp:BoundField DataField="NbLignesRetenues" HeaderText="Retenus" />
-                        <asp:BoundField DataField="NbAnomalies" HeaderText="Anomalies" />
-                        <asp:BoundField DataField="Statut" HeaderText="État" />
-                        <asp:BoundField DataField="CreeParEmail" HeaderText="Par" />
-                        <asp:TemplateField>
-                            <ItemTemplate>
-                                <asp:LinkButton runat="server" Text="Revoir" CommandName="Voir"
-                                    CommandArgument='<%# Eval("Id") %>' CausesValidation="false" />
-                                &nbsp;·&nbsp;
-                                <asp:LinkButton runat="server" Text="Abandonner" CommandName="Supprimer"
-                                    CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
-                                    OnClientClick="if (!confirm('Abandonner ce lot et tout son contenu ?')) { return false; }" />
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                    </Columns>
-                </asp:GridView>
-            </div>
+            <asp:Button ID="btnVider" runat="server" Text="Abandonner la préparation"
+                CssClass="btn secondaire" CausesValidation="false"
+                OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?')) { return false; }" />
         </div>
     </asp:Panel>
 

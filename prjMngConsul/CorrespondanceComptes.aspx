@@ -170,7 +170,6 @@
         <div class="bar-top">
             <div class="fld">
                 <label>Lot à traiter</label>
-                <asp:DropDownList ID="ddlLot" runat="server" AutoPostBack="true" Width="380" />
             </div>
             <div class="fld">
                 <label>Afficher</label>

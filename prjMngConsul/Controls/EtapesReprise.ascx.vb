@@ -20,13 +20,6 @@ Public Class EtapesReprise
     ''' <summary>1, 2 ou 3 — l'étape où l'on se trouve.</summary>
     Public Property Etape As Integer = 0
 
-    ''' <summary>
-    ''' Le lot en cours, passé aux deux autres écrans. À zéro, les liens
-    ''' partent sans lot : chaque écran ouvre alors le dernier lot chargé,
-    ''' ou dit qu'il n'y en a aucun.
-    ''' </summary>
-    Public Property LotId As Integer = 0
-
     Private Structure Cran
         Public No As Integer
         Public Libelle As String
@@ -90,11 +83,10 @@ Public Class EtapesReprise
         Dim sb As New StringBuilder()
 
         For Each c In Crans
-            ' Les trois crans sont des liens, toujours. Sans lot, ils partent
-            ' sans : chaque écran ouvre alors le dernier lot chargé, ou dit
-            ' qu'il n'y en a aucun. L'étape courante reste surlignée.
+            ' Les trois crans sont des liens, toujours : il n'y a qu'un plan
+            ' comptable en préparation par compagnie, donc rien à désigner dans
+            ' l'adresse. L'étape courante reste surlignée.
             Dim url = ResolveUrl(c.Page)
-            If LotId > 0 Then url &= "?lot=" & LotId.ToString()
 
             sb.Append("<a href='").Append(url).Append("'")
             If c.No = Etape Then sb.Append(" class='ici'")

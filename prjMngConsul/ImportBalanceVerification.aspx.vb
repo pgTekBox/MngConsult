@@ -744,7 +744,7 @@ Public Class ImportBalanceVerification
 
             sb.Append("<div class='ctrl'><h3>🔍 Incohérences avec le plan comptable</h3>")
 
-            If IsDBNull(ctx("LotPlan")) Then
+            If IsDBNull(ctx("SystemePlan")) Then
                 sb.Append("<p class='ctx'>Aucun plan comptable n'a encore été importé pour cette compagnie : ")
                 sb.Append("il n'y a rien à comparer. Commencez par l'étape 1 de la reprise du plan comptable.</p></div>")
                 litControle.Text = sb.ToString()
@@ -755,7 +755,7 @@ Public Class ImportBalanceVerification
             Dim datePlan = Convert.ToDateTime(ctx("DatePlan")).ToString("d MMMM yyyy", fr)
             sb.Append("<p class='ctx'>Balance : ").Append(ctx("ComptesBalance")).Append(" compte(s)")
             If Not IsDBNull(ctx("FichierBalance")) Then sb.Append(" — « ").Append(Server.HtmlEncode(Convert.ToString(ctx("FichierBalance")))).Append(" »")
-            sb.Append("<br />Plan comptable : lot ").Append(ctx("LotPlan")).Append(", ").Append(ctx("ComptesPlan")).Append(" compte(s)")
+            sb.Append("<br />Plan comptable : ").Append(ctx("SystemePlan")).Append(", ").Append(ctx("ComptesPlan")).Append(" compte(s)")
             If Not IsDBNull(ctx("FichierPlan")) Then sb.Append(" — « ").Append(Server.HtmlEncode(Convert.ToString(ctx("FichierPlan")))).Append(" »")
             sb.Append(", importé le ").Append(Server.HtmlEncode(datePlan)).Append(".<br />")
             sb.Append("Rapprochement par le numéro quand les deux en ont un, sinon par le nom : un compte renommé entre les deux exports apparaît comme absent.</p>")

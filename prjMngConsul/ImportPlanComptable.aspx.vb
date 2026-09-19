@@ -74,24 +74,6 @@ Public Class ImportPlanComptable
 
 #Region "Cycle de vie"
 
-    ''' <summary>Le lot en cours, conservé entre les allers-retours.</summary>
-    Private Property LotCourant As Integer
-        Get
-            Dim v = ViewState("LotCourant")
-            Return If(v Is Nothing, 0, CInt(v))
-        End Get
-        Set(value As Integer)
-            ViewState("LotCourant") = value
-        End Set
-    End Property
-    ''' <summary>
-    ''' Le fil des étapes porte le lot en cours, pour que les deux autres
-    ''' écrans ouvrent celui qu'on regarde et non le dernier chargé. Posé au
-    ''' pré-rendu : à ce moment le lot est connu, quoi qu'ait fait la page.
-    ''' </summary>
-    Protected Sub Page_PreRenderEtapes(sender As Object, e As EventArgs) Handles Me.PreRender
-        ucEtapes.LotId = LotCourant
-    End Sub
 
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -104,16 +86,11 @@ Public Class ImportPlanComptable
         If Not IsPostBack Then
             RemplirSystemes()
             AppliquerReglagesSysteme()
-            ChargerLots()
 
-            ' Revenir ici depuis l'étape 2 ou 3 doit rouvrir le lot qu'on
-            ' regardait, sinon le fil des étapes perd le fil.
-            Dim n As Integer
-            If Integer.TryParse(Request.QueryString("lot"), n) AndAlso n > 0 Then
-                LotCourant = n
-                AfficherResultatLot(n)
-                ChargerLignes()
-            End If
+            ' Il n'y a qu'un plan comptable en préparation par compagnie : rien
+            ' à choisir, rien à désigner dans l'adresse. On l'ouvre s'il existe.
+            AfficherResultat()
+            ChargerLignes()
         End If
     End Sub
 
@@ -351,17 +328,13 @@ Public Class ImportPlanComptable
                 lignes.Add(Normaliser(valeurs, If(chkEntete.Checked, i + 2, i + 1)))
             Next
 
-            ' Le fichier lui-même est inscrit au registre avant le lot : c'est ce
-            ' qui permet de retrouver plus tard ce qui est réellement entré, et
-            ' de le relire si une correspondance se révèle fausse.
+            ' Le fichier lui-même est inscrit au registre : c'est ce qui permet
+            ' de retrouver plus tard ce qui est réellement entré, et de le relire
+            ' si une correspondance se révèle fausse.
             Dim fichierId = EnregistrerFichier("PlanComptable", fuFichier.FileName,
                                                fuFichier.FileBytes, "text/csv")
-            Dim lotId = OuvrirLot(ddlSysteme.SelectedValue, fuFichier.FileName,
-                                  ddlSeparateur.SelectedValue, ddlEncodage.SelectedValue,
-                                  fichierId)
-            LotCourant = lotId
 
-            Dim r = ChargerLot(lotId, lignes)
+            Dim r = Charger(ddlSysteme.SelectedValue, fichierId, lignes)
 
             If r Is Nothing Then
                 Alerte(pnlErreur, litErreur, "Le chargement n'a rien retourné.")
@@ -376,9 +349,9 @@ Public Class ImportPlanComptable
             litRetenues.Text = retenues.ToString()
             litAnomalies.Text = anomalies.ToString()
 
-            ' Le lot est nommé dans le lien : l'écran suivant ouvre celui qu'on
-            ' vient de charger, et non le dernier de la liste.
-            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx?lot=" & lotId.ToString()
+            ' Plus rien à nommer dans le lien : il n'y a qu'un plan comptable en
+            ' préparation par compagnie, et c'est celui qu'on vient de charger.
+            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx"
 
             pnlResultat.Visible = True
 
@@ -391,7 +364,6 @@ Public Class ImportPlanComptable
             End If
 
             ChargerLignes()
-            ChargerLots()
 
         Catch ex As SqlException
             Alerte(pnlErreur, litErreur, "Base de données : " & Server.HtmlEncode(ex.Message))
@@ -506,14 +478,13 @@ Public Class ImportPlanComptable
 #Region "Ce qui est en préparation"
 
     Private Sub ChargerLignes()
-        If LotCourant = 0 Then
+        If Not PlanCharge() Then
             pnlLignes.Visible = False
             Return
         End If
 
         Try
             Dim p As New Collection
-            p.Add(New SqlParameter("@LotId", LotCourant))
             p.Add(New SqlParameter("@CompanyGUID", Company))
             p.Add(New SqlParameter("@Statut", If(ddlFiltre.SelectedValue = "", CType(DBNull.Value, Object), ddlFiltre.SelectedValue)))
             p.Add(New SqlParameter("@Top", 500))
@@ -534,99 +505,77 @@ Public Class ImportPlanComptable
         ChargerLignes()
     End Sub
 
-    Private Sub ChargerLots()
-        Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@TypeDonnees", TypeDonnees))
-            p.Add(New SqlParameter("@Top", 20))
-
-            Dim ds As DataSet = ExecuteSQLds("s0754GetImportLots", p)
-            Dim dt As DataTable = If(ds Is Nothing OrElse ds.Tables.Count = 0, Nothing, ds.Tables(0))
-
-            gvLots.DataSource = dt
-            gvLots.DataBind()
-            pnlLots.Visible = (dt IsNot Nothing AndAlso dt.Rows.Count > 0)
-
-        Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture des lots : " & Server.HtmlEncode(ex.Message))
-        End Try
-    End Sub
-
     ''' <summary>
-    ''' Remet sous les yeux le bilan d'un lot déjà chargé : ses compteurs et le
-    ''' lien vers l'étape suivante. « Revoir » doit montrer ce que montrait le
-    ''' chargement, sinon la suite du parcours disparaît de l'écran.
+    ''' Un plan comptable attend-il en préparation pour cette compagnie ?
+    ''' Remplace l'ancienne liste de lots : il n'y en a qu'un, la seule question
+    ''' est de savoir s'il existe.
     ''' </summary>
-    Private Sub AfficherResultatLot(lotId As Integer)
+    Private Function PlanCharge() As Boolean
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@TypeDonnees", "PLAN_COMPTABLE"))
-            p.Add(New SqlParameter("@Top", 50))
 
-            Dim ds As DataSet = ExecuteSQLds("s0754GetImportLots", p)
-            If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return
+            Dim ds As DataSet = ExecuteSQLds("s0758StatsCorrespondance", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return False
+            Return Convert.ToInt32(ds.Tables(0).Rows(0)("Total")) > 0
+        Catch
+            Return False
+        End Try
+    End Function
+    ''' <summary>
+    ''' Le bilan du plan comptable en préparation. Il se compte sur les lignes
+    ''' elles-mêmes : il n'y a plus d'entête qui prétende les résumer, donc plus
+    ''' de risque que le résumé et le détail se contredisent.
+    ''' </summary>
+    Private Sub AfficherResultat()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
 
-            Dim trouvees = ds.Tables(0).Select("Id = " & lotId)
-            If trouvees.Length = 0 Then Return
+            Dim ds As DataSet = ExecuteSQLds("s0758StatsCorrespondance", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
 
-            Dim r = trouvees(0)
-            litLues.Text = Nombre(r("NbLignesLues"))
-            litRetenues.Text = Nombre(r("NbLignesRetenues"))
-            litAnomalies.Text = Nombre(r("NbAnomalies"))
+            Dim r = ds.Tables(0).Rows(0)
+            If Convert.ToInt32(r("Total")) = 0 Then Return
 
-            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx?lot=" & lotId.ToString()
+            litLues.Text = Nombre(r("Total"))
+            litRetenues.Text = Nombre(r("Total"))
+            litAnomalies.Text = "0"
+
+            hlCorrespondance.NavigateUrl = "~/CorrespondanceComptes.aspx"
             pnlResultat.Visible = True
 
         Catch
             ' Ce bilan n'est qu'un rappel : son absence ne doit pas empêcher
-            ' de relire les lignes du lot.
+            ' de relire les lignes.
         End Try
     End Sub
-
     Private Shared Function Nombre(v As Object) As String
         If v Is Nothing OrElse IsDBNull(v) Then Return "0"
         Return Convert.ToString(v)
     End Function
 
-    ''' <summary>Revoir ou abandonner un lot précédent.</summary>
-    Protected Sub gvLots_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvLots.RowCommand
-        Dim lotId As Integer
-        If Not Integer.TryParse(Convert.ToString(e.CommandArgument), lotId) Then Return
-
+    ''' <summary>
+    ''' Abandonner le plan comptable en préparation. Il n'y en a qu'un, donc
+    ''' rien à désigner — et s0755 refuse si des comptes sont déjà passés au
+    ''' plan : on n'efface pas la trace de ce qui a été créé.
+    ''' </summary>
+    Protected Sub btnVider_Click(sender As Object, e As EventArgs) Handles btnVider.Click
         CacherMessages()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            ExecuteSQL("s0755ViderImportPlan", p)
 
-        Select Case e.CommandName
+            pnlLignes.Visible = False
+            pnlResultat.Visible = False
+            Alerte(pnlSucces, litSucces, "Le plan comptable en préparation a été abandonné.")
 
-            Case "Voir"
-                LotCourant = lotId
-                AfficherResultatLot(lotId)
-                ChargerLignes()
-
-            Case "Supprimer"
-                Try
-                    Dim p As New Collection
-                    p.Add(New SqlParameter("@LotId", lotId))
-                    p.Add(New SqlParameter("@CompanyGUID", Company))
-                    ExecuteSQL("s0755SupprimerImportLot", p)
-
-                    If LotCourant = lotId Then
-                        LotCourant = 0
-                        pnlLignes.Visible = False
-                        pnlResultat.Visible = False
-                    End If
-
-                    Alerte(pnlSucces, litSucces, "Le lot a été abandonné.")
-                    ChargerLots()
-
-                Catch ex As SqlException
-                    ' 50303 : le lot est déjà appliqué. Ce n'est pas une panne.
-                    Alerte(pnlErreur, litErreur, Server.HtmlEncode(ex.Message))
-                End Try
-        End Select
+        Catch ex As SqlException
+            ' 50303 : des comptes ont déjà été créés. Ce n'est pas une panne.
+            Alerte(pnlErreur, litErreur, Server.HtmlEncode(ex.Message))
+        End Try
     End Sub
-
     ''' <summary>Colore la ligne selon son verdict, pour repérer les anomalies d'un coup d'œil.</summary>
     Protected Sub gvLignes_RowDataBound(sender As Object, e As GridViewRowEventArgs) Handles gvLignes.RowDataBound
         If e.Row.RowType <> DataControlRowType.DataRow Then Return
