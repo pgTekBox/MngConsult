@@ -600,7 +600,7 @@
             moyens de paiement intégrés.
         </p>
         <div class="stats">
-            <div class="stat"><b>8</b><span>applications et services</span></div>
+            <div class="stat"><b>9</b><span>applications et services</span></div>
             <div class="stat"><b>11</b><span>domaines fonctionnels</span></div>
             <div class="stat"><b>7</b><span>rails de paiement</span></div>
             <div class="stat"><b>3</b><span>langues (FR/EN/ES)</span></div>
@@ -620,11 +620,12 @@
         <a href="#comparatif">4 &nbsp;Comparatif des rails</a>
         <a href="#ia">5 &nbsp;Intelligence artificielle</a>
         <a href="#infra">6 &nbsp;60secPaiement</a>
-        <a href="#mobile">7 &nbsp;Application mobile</a>
-        <a href="#admin">8 &nbsp;Console d'administration</a>
-        <a href="#socle">9 &nbsp;Socle technique</a>
-        <a href="#projets">10 &nbsp;Projets Visual Studio</a>
-        <a href="#annexes">11 &nbsp;Documents complémentaires</a>
+        <a href="#paie">7 &nbsp;60secPaie</a>
+        <a href="#mobile">8 &nbsp;Application mobile</a>
+        <a href="#admin">9 &nbsp;Console d'administration</a>
+        <a href="#socle">10 &nbsp;Socle technique</a>
+        <a href="#projets">11 &nbsp;Projets Visual Studio</a>
+        <a href="#annexes">12 &nbsp;Documents complémentaires</a>
         <a href="importcomptable.html" style="margin-top:10px;border-top:1px solid var(--line);padding-top:12px">↗ &nbsp;Migration comptable QuickBooks</a>
     </nav>
 
@@ -663,7 +664,7 @@
         <section id="ecosysteme">
             <h2><span class="num">01</span>L'écosystème</h2>
             <p class="sub">
-                La plateforme n'est pas une application unique mais un ensemble de huit programmes
+                La plateforme n'est pas une application unique mais un ensemble de neuf programmes
                 qui partagent la même base de données et les mêmes comptes utilisateurs.
             </p>
 
@@ -727,6 +728,24 @@
                         <span class="tag">3 portails</span>
                         <span class="tag">API REST v1</span>
                         <span class="tag">Grand livre</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">💵</div>
+                    <p class="role">Produit distinct</p>
+                    <h3>60secPaie</h3>
+                    <p>
+                        La paie d'un employeur du Québec : configuration, assistant de calcul,
+                        remises aux deux gouvernements, feuillets de fin d'année, dépôt direct.
+                        Mêmes comptes et mêmes employés que l'ERP, qu'elle lit sans jamais y
+                        écrire.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">VB.NET WebForms</span>
+                        <span class="tag">.NET 4.8</span>
+                        <span class="tag">T4127 / TP-1015.F</span>
+                        <span class="tag">FR / EN / ES</span>
                     </div>
                 </div>
 
@@ -814,6 +833,11 @@
                             <td>Abonnés</td>
                         </tr>
                         <tr>
+                            <td><b>60secPaie — la paie</b></td>
+                            <td><code>https://60sec.ca:8765</code></td>
+                            <td>Abonnés</td>
+                        </tr>
+                        <tr>
                             <td><b>Application mobile — APK Android</b></td>
                             <td><code>https://60sec.ca/AppAndroid.ashx</code></td>
                             <td>Public</td>
@@ -854,10 +878,10 @@
             <div class="note info" style="margin-top:16px">
                 <span class="n-ico">ℹ️</span>
                 <p>
-                    L'ERP, la console d'administration et les trois portails de 60secPaiement sont
-                    déployés sur le domaine public, chacun sur son propre port. L'API REST de
-                    60secPaiement s'atteint sous le chemin <code>/api/v1</code>, avec sa console
-                    d'essai <code>docs.html</code>.
+                    L'ERP, 60secPaie, la console d'administration et les trois portails de
+                    60secPaiement sont déployés sur le domaine public, chacun sur son propre
+                    port. L'API REST de 60secPaiement s'atteint sous le chemin
+                    <code>/api/v1</code>, avec sa console d'essai <code>docs.html</code>.
                 </p>
             </div>
         </section>
@@ -1481,9 +1505,163 @@
             </div>
         </section>
 
-        <!-- ================================================ 7. MOBILE -->
+        <!-- =================================================== 7. PAIE -->
+        <section id="paie">
+            <h2><span class="num">07</span>60secPaie — la paie</h2>
+            <p class="sub">
+                Application distincte de l'ERP, mais branchée sur les mêmes comptes, les mêmes
+                compagnies et les mêmes employés : la paie d'un employeur du Québec, de la
+                période de paie jusqu'aux feuillets de fin d'année. Elle lit les données de
+                l'ERP et n'y écrit jamais ; ses propres tables vivent dans un schéma séparé.
+            </p>
+
+            <div class="grid">
+
+                <div class="card">
+                    <div class="ico">⚙️</div>
+                    <p class="role">Préparer</p>
+                    <h3>Compagnie et employés</h3>
+                    <p>
+                        Fréquence de paie, taux de vacances, FSS selon la masse salariale,
+                        CNESST, CNT, éléments de paie. Puis, par employé : TD1 et TP-1015.3,
+                        exemptions, taux, dépôt direct, gabarit de paie récurrent et cumulatifs
+                        de départ pour une conversion en cours d'année.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Multi-compagnie</span>
+                        <span class="tag">Gabarit récurrent</span>
+                        <span class="tag">Reprise en cours d'année</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🧾</div>
+                    <p class="role">Faire la paie</p>
+                    <h3>Assistant en quatre étapes</h3>
+                    <p>
+                        Période, puis employés et lignes, puis révision avec un rapport de
+                        vérification des formules, puis confirmation et numérotation des
+                        chèques. Historique par lot, détail en trois colonnes, talon
+                        imprimable, annulation de la dernière paie.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Révision avant confirmation</span>
+                        <span class="tag">Talon de paie</span>
+                        <span class="tag">Annulation</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">🏛️</div>
+                    <p class="role">Payer les gouvernements</p>
+                    <h3>Remises</h3>
+                    <p>
+                        Deux versements distincts : le fédéral au receveur général (impôt et
+                        assurance-emploi) et Revenu Québec (impôt, RRQ, RQAP, FSS, CNESST).
+                        Échéance le 15 suivant la période, avec alerte de retard au tableau
+                        de bord.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">Mensuel ou trimestriel</span>
+                        <span class="tag">Historique des versements</span>
+                        <span class="tag">Alerte de retard</span>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="ico">📄</div>
+                    <p class="role">Fin d'année</p>
+                    <h3>Feuillets et rapports</h3>
+                    <p>
+                        T4 et Relevés 1 case par case, feuillet de travail imprimable,
+                        sommaires avec conciliation des remises. S'y ajoutent la déclaration
+                        des salaires à la CNESST et les écritures comptables équilibrées,
+                        exportables en CSV.
+                    </p>
+                    <div class="tags">
+                        <span class="tag">T4 / Relevé 1</span>
+                        <span class="tag">Déclaration CNESST</span>
+                        <span class="tag">Écritures comptables</span>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4 style="margin-top:34px">Ce qui se passe une fois la paie confirmée</h4>
+            <div class="mods">
+
+                <div class="mod">
+                    <h3>🏦 Dépôt direct <span class="st st-wip">à valider avec la banque</span></h3>
+                    <ul>
+                        <li>Fichier à la norme 005 de Paiements Canada, type de transaction 200
+                            « paie » — le même rail bancaire que 60secPaiement.</li>
+                        <li>Le fichier contient des numéros de compte : il est téléchargé,
+                            jamais conservé sur le serveur.</li>
+                        <li>Un fichier d'essai doit être accepté par l'institution financière
+                            avant le premier dépôt réel.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>✉️ Talons par courriel</h3>
+                    <ul>
+                        <li>Envoyés aux employés qui l'ont demandé, dans <b>leur</b> langue et
+                            non dans celle de la personne qui fait la paie.</li>
+                        <li>Un talon déjà envoyé n'est pas renvoyé sans le demander.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🔢 Ce qui est calculé</h3>
+                    <ul>
+                        <li>Impôt fédéral (T4127, abattement du Québec de 16,5 %) et impôt du
+                            Québec (TP-1015.F).</li>
+                        <li>RRQ et deuxième cotisation supplémentaire, AE au taux du Québec,
+                            RQAP, FSS, CNESST, CNT.</li>
+                        <li>Paiements forfaitaires (bonus, rétroactif) et indemnité de vacances.</li>
+                    </ul>
+                </div>
+
+                <div class="mod">
+                    <h3>🔐 Cloisonnement et données sensibles</h3>
+                    <ul>
+                        <li>Connexion par le compte de l'ERP ; aucun mot de passe n'est stocké
+                            ici, seulement vérifié.</li>
+                        <li>NAS et numéros de compte chiffrés en base et jamais renvoyés au
+                            navigateur ; l'affichage d'un NAS complet est journalisé.</li>
+                        <li>Chaque requête porte la compagnie courante, revalidée à chaque page.</li>
+                    </ul>
+                </div>
+
+            </div>
+
+            <div class="note" style="margin-top:22px">
+                <span class="n-ico">⚠️</span>
+                <p>
+                    <b>60secPaie ne transmet rien aux gouvernements.</b> Elle calcule les
+                    montants, fournit les renseignements du formulaire de versement et tient
+                    l'historique ; le versement et la production des feuillets se font dans les
+                    services en ligne de l'ARC et de Revenu Québec. La transmission XML des
+                    feuillets exige un logiciel certifié par Revenu Québec, ce qui reste à
+                    faire. Les taux ne sont définis que pour <b>2026</b> : chaque nouvelle année
+                    demande une mise à jour à partir des guides T4127 et TP-1015.F.
+                </p>
+            </div>
+
+            <div class="note info" style="margin-top:16px">
+                <span class="n-ico">🌐</span>
+                <p>
+                    L'application s'atteint à <code>https://60sec.ca:8765</code> et se présente
+                    en français, en anglais et en espagnol, selon la même mécanique que l'ERP :
+                    les pages sont écrites en français et traduites au moment de l'affichage,
+                    de sorte que corriger une tournure ne demande aucune recompilation.
+                </p>
+            </div>
+        </section>
+
+        <!-- ================================================ 8. MOBILE -->
         <section id="mobile">
-            <h2><span class="num">07</span>Application mobile</h2>
+            <h2><span class="num">08</span>Application mobile</h2>
             <p class="sub">
                 Application native Android et iOS bâtie avec .NET MAUI, connectée au même compte
                 et à la même base de données que le site web.
@@ -1518,9 +1696,9 @@
             </div>
         </section>
 
-        <!-- ================================================= 8. ADMIN -->
+        <!-- ================================================= 9. ADMIN -->
         <section id="admin">
-            <h2><span class="num">08</span>La console d'administration</h2>
+            <h2><span class="num">09</span>La console d'administration</h2>
             <p class="sub">
                 Application distincte de l'ERP, réservée à l'équipe 60sec, mais branchée sur la
                 même base de données. C'est le poste de pilotage : elle sert à administrer les
@@ -1625,9 +1803,9 @@
             </div>
         </section>
 
-        <!-- ================================================= 9. SOCLE -->
+        <!-- ================================================= 10. SOCLE -->
         <section id="socle">
-            <h2><span class="num">09</span>Socle technique</h2>
+            <h2><span class="num">10</span>Socle technique</h2>
             <p class="sub">
                 Les choix structurants, communs à toutes les applications de la plateforme.
             </p>
@@ -1681,11 +1859,11 @@
 
         <!-- ============================================== PROJETS VS -->
         <section id="projets">
-            <h2><span class="num">10</span>Projets Visual Studio</h2>
+            <h2><span class="num">11</span>Projets Visual Studio</h2>
             <p class="sub">
                 L'inventaire des solutions qui composent la plateforme, relevé dans le code
-                source. Deux dépôts : <b>MngConsul</b> pour l'ERP et l'infrastructure de
-                paiement, <b>MailServer</b> pour le courriel.
+                source. Deux dépôts : <b>MngConsul</b> pour l'ERP, la paie et l'infrastructure
+                de paiement, <b>MailServer</b> pour le courriel.
             </p>
 
             <h3 style="margin-top:26px">Dépôt MngConsul — applications web</h3>
@@ -1729,6 +1907,24 @@
                     </ul>
                     <div class="tags">
                         <span class="tag">C#</span><span class="tag">.NET 8</span>
+                    </div>
+                </div>
+
+                <div class="mod">
+                    <h3>💵 60secPaie</h3>
+                    <ul>
+                        <li>Solution à part (<span class="tag">60secPaie.sln</span>), trois
+                            projets : le moteur de calcul, l'application Web, les tests.</li>
+                        <li>Le moteur n'a aucune dépendance Web ni SQL — les formules de l'ARC
+                            et de Revenu Québec se testent seules, et les tests reproduisent au
+                            cent près les exemples chiffrés du guide TP-1015.F.</li>
+                        <li>Ses tables sont dans le schéma <span class="tag">paie</span> de la
+                            base MngConsul, dont elle lit les utilisateurs, les compagnies et
+                            les employés sans jamais y écrire.</li>
+                    </ul>
+                    <div class="tags">
+                        <span class="tag">VB.NET WebForms</span><span class="tag">.NET 4.8</span>
+                        <span class="tag">MSTest</span><span class="tag">schéma paie</span>
                     </div>
                 </div>
 
@@ -1929,7 +2125,7 @@
 
         <!-- ================================= DOCUMENTS COMPLÉMENTAIRES -->
         <section id="annexes">
-            <h2><span class="num">11</span>Documents complémentaires</h2>
+            <h2><span class="num">12</span>Documents complémentaires</h2>
             <p class="sub">
                 Des procédures détaillées, tenues à part parce qu'elles s'adressent à un autre
                 lectorat que cette cartographie.
