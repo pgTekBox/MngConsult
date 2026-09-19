@@ -241,8 +241,9 @@ Public NotInheritable Class RenduPaie
         If d.Statut = "B" Then sb.Append("<div class=""avertissement"">Aperçu : cette paie n'est pas encore confirmée.</div>")
         If d.Statut = "A" Then sb.Append("<div class=""message erreur"">Cette paie a été annulée.</div>")
 
-        sb.Append("<div class=""talon-entete""><div><strong>").Append(H(d.CompagnieNom)).Append("</strong><br/>")
-        sb.Append(H(d.CompagnieAdresse)).Append("<br/>").Append(H(d.CompagnieLieu)).Append("</div>")
+        sb.Append("<div class=""talon-entete""><div><strong>").Append(H(d.CompagnieNom)).Append("</strong>")
+        Lignes(sb, d.CompagnieAdresse, d.CompagnieLieu)
+        sb.Append("</div>")
         sb.Append("<div><strong>Talon de paie</strong><br/>Période : ").Append(TexteDate(d.DateDebut)).Append(" au ").Append(TexteDate(d.DateFin))
         sb.Append("<br/>Date de paie : ").Append(TexteDate(d.DatePaie)).Append("<br/>")
         sb.Append(H(d.ModePaiement))
@@ -250,9 +251,8 @@ Public NotInheritable Class RenduPaie
 
         sb.Append("<p><strong>").Append(H(d.EmployeNom)).Append("</strong>")
         If d.EmployeCode.Length > 0 Then sb.Append(" (").Append(H(d.EmployeCode)).Append(")")
-        sb.Append("<br/>").Append(H(d.EmployeAdresse1))
-        If d.EmployeAdresse2.Length > 0 Then sb.Append("<br/>").Append(H(d.EmployeAdresse2))
-        sb.Append("<br/>").Append(H(d.EmployeLieu)).Append("</p>")
+        Lignes(sb, d.EmployeAdresse1, d.EmployeAdresse2, d.EmployeLieu)
+        sb.Append("</p>")
 
         sb.Append("<div class=""talon-colonnes""><div><table><thead><tr><th>Revenus et avantages</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
         For Each l In d.Revenus
@@ -286,6 +286,17 @@ Public NotInheritable Class RenduPaie
         sb.Append("</div>")
         Return sb.ToString()
     End Function
+
+    ''' <summary>
+    ''' Les lignes d'une adresse, sautées quand elles sont vides. Une compagnie sans
+    ''' rue ou un employé sans adresse laissaient sinon une ligne blanche au milieu
+    ''' du bloc — le talon avait l'air inachevé alors qu'il ne manquait rien.
+    ''' </summary>
+    Private Shared Sub Lignes(sb As StringBuilder, ParamArray textes As String())
+        For Each texte In textes
+            If Not String.IsNullOrWhiteSpace(texte) Then sb.Append("<br/>").Append(H(texte))
+        Next
+    End Sub
 
     Private Shared Function DepartDe(depart As DataRow, colonne As String) As Decimal
         Return If(depart Is Nothing, 0D, depart.Dcm(colonne))

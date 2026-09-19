@@ -46,28 +46,28 @@
             <%-- Une maquette plutôt qu'une image : elle montre ce que l'outil produit
                  réellement, et elle reste lisible à l'impression comme au téléphone. --%>
             <div class="pres-heros-visuel" aria-hidden="true">
-                <div class="talon">
-                    <div class="talon-entete">
-                        <span class="talon-titre">Talon de paie</span>
-                        <span class="talon-etiquette">Exemple</span>
+                <div class="maquette-talon">
+                    <div class="maquette-entete">
+                        <span class="maquette-titre">Talon de paie</span>
+                        <span class="maquette-etiquette">Exemple</span>
                     </div>
-                    <div class="talon-employe">
+                    <div class="maquette-employe">
                         <strong>Marie Gagnon</strong>
                         <span>Période du 1<sup>er</sup> au 14 juin · 70 h</span>
                     </div>
-                    <table class="talon-lignes">
-                        <tr class="talon-brut"><td>Salaire brut</td><td>1 500,00</td></tr>
+                    <table class="maquette-lignes">
+                        <tr class="maquette-brut"><td>Salaire brut</td><td>1 500,00</td></tr>
                         <tr><td>RRQ</td><td>−89,28</td></tr>
                         <tr><td>RQAP</td><td>−7,41</td></tr>
                         <tr><td>Assurance-emploi</td><td>−19,65</td></tr>
                         <tr><td>Impôt fédéral</td><td>−139,50</td></tr>
                         <tr><td>Impôt du Québec</td><td>−165,20</td></tr>
                     </table>
-                    <div class="talon-net">
+                    <div class="maquette-net">
                         <span>Net à payer</span>
                         <strong>1 078,96 $</strong>
                     </div>
-                    <div class="talon-pied">Dépôt direct · 14 juin</div>
+                    <div class="maquette-pied">Dépôt direct · 14 juin</div>
                 </div>
             </div>
 
