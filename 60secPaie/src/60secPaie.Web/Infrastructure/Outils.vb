@@ -142,6 +142,12 @@ Public Module Outils
         Return Convert.ToDateTime(valeur).ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)
     End Function
 
+    ''' <summary>Retire le point final : « Boulangerie Lévesque inc. » dans une phrase n'en demande pas un second.</summary>
+    Public Function SansPointFinal(texte As String) As String
+        If String.IsNullOrEmpty(texte) Then Return ""
+        Return If(texte.EndsWith(".", StringComparison.Ordinal), texte.Substring(0, texte.Length - 1), texte)
+    End Function
+
     Public Function LibellePeriodes(periodes As Object) As String
         If periodes Is Nothing OrElse periodes Is DBNull.Value Then Return ""
         Select Case Convert.ToInt32(periodes)

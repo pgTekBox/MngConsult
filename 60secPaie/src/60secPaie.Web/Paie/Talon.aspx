@@ -2,6 +2,7 @@
 <asp:Content ContentPlaceHolderID="Contenu" runat="server">
     <div class="actions sans-impression" style="margin-bottom:16px">
         <a href="javascript:window.print()" class="bouton">Imprimer le talon</a>
+        <asp:Button ID="btnPdf" runat="server" Text="Télécharger en PDF" CssClass="secondaire" />
         <asp:HyperLink ID="lnkRetour" runat="server" CssClass="bouton secondaire">Retour au détail de la paie</asp:HyperLink>
     </div>
     <asp:Literal ID="litTalon" runat="server" />

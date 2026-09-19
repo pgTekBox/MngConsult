@@ -214,6 +214,10 @@ Public Class CyclePaieIntegrationTests
         Assert.AreEqual(0, bilan.Erreurs.Count)
         Dim courriel = File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single())
         StringAssert.Contains(courriel, "alice@exemple.ca")
+        StringAssert.Contains(courriel, "<paie@60sec.ca>", "Un talon part toujours de 60sec.ca : le domaine de l'employeur ne passerait pas SPF.")
+        StringAssert.Contains(courriel, "Reply-To:", "L'employé qui répond doit joindre son employeur, pas la plateforme.")
+        StringAssert.Contains(courriel, "application/pdf", "Le talon est aussi joint en PDF.")
+        Assert.AreEqual("%PDF-1.4", DebutDuPdf(courriel), "La pièce jointe est un vrai PDF.")
         bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
         Assert.AreEqual(0, bilan.Envoyes)
         Assert.AreEqual(1, bilan.DejaEnvoyes, "Un talon déjà envoyé n'est pas renvoyé sans le demander.")
@@ -291,5 +295,14 @@ Public Class CyclePaieIntegrationTests
         Assert.IsFalse(Outils.NasValide("123456789"))
         Assert.AreEqual("••••••286", Secret.Masquer("046454286"))
     End Sub
+
+    ''' <summary>Les premiers octets de la pièce jointe : de quoi vérifier que c'est bien un PDF et non une page d'erreur encodée.</summary>
+    Private Shared Function DebutDuPdf(eml As String) As String
+        Dim entete = eml.IndexOf("application/pdf", StringComparison.Ordinal)
+        Dim corps = eml.Substring(eml.IndexOf(vbCrLf & vbCrLf, entete, StringComparison.Ordinal) + 4)
+        Dim base64 = corps.Substring(0, corps.IndexOf("--", StringComparison.Ordinal))
+        Dim octets = Convert.FromBase64String(base64.Replace(vbCr, "").Replace(vbLf, ""))
+        Return Text.Encoding.ASCII.GetString(octets, 0, 8)
+    End Function
 
 End Class

@@ -116,12 +116,20 @@ poste (seule la base est sur le serveur), rien ne change. Le jour où l'applicat
 - **Talons par courriel** : envoyés aux employés dont la fiche a la case « Envoyer le talon de paie par courriel » et un courriel.
   Un talon déjà envoyé n'est pas renvoyé sans le demander. En développement, la clé `Courriel:DossierTest` écrit les courriels en
   fichiers `.eml` dans `App_Data\courriels` ; en production, configurer `system.net/mailSettings` avec un serveur SMTP en TLS.
-  Le talon voyage dans le corps du courriel : c'est un renseignement personnel, à n'activer qu'avec l'accord de l'employé.
+  Le talon voyage dans le corps du courriel **et en pièce jointe PDF** (`Talon-de-paie-AAAA-MM-JJ.pdf`, nommé et rendu dans la langue
+  de l'employé) : c'est un renseignement personnel, à n'activer qu'avec l'accord de l'employé.
+- **Expéditeur** : tout courriel part de **60sec.ca** (`Courriel:Expediteur`, `paie@60sec.ca` à défaut). Une adresse d'un autre domaine
+  est refusée à l'envoi. Le nom affiché est celui de l'employeur et son adresse va en **Reply-To** : mise dans le `From`, elle ferait
+  échouer SPF et DMARC de son domaine, et le talon n'arriverait pas — sans que personne ne s'en aperçoive.
+- **Le PDF** est écrit par `Infrastructure\PdfSimple.vb`, un générateur maison d'environ 250 lignes (Helvetica, WinAnsi, pas de
+  dépendance ni de partie native). Il lit le même `DonneesTalon` que le rendu HTML : les deux ne peuvent pas diverger.
 
 ## Taux gouvernementaux
 
 Les taux sont dans `src/60secPaie.Calcul/ParametresAnnee.vb`. **Seule l'année 2026 est définie.**
-Chaque année (et lors d'une mise à jour de mi-année), ajouter un `Case` à partir de :
+Pour ajouter une année : écrire une fonction `Annee20XX()` sur le modèle de `Annee2026()`, puis ajouter **un seul `Case`** dans `Construire()`.
+Tout le reste — `Pour`, `EstDisponible`, `DerniereAnneeConnue` — en découle, et le test `AnneesDisponibles_EstDisponibleEtPourSaccordent` vérifie qu'aucune des deux réponses ne diverge.
+Tout ce qui change d'une année à l'autre vit dans cette seule fonction, **y compris la formule du FSS** (taux du secteur public, plancher et plafond de masse salariale, constantes et coefficients). Sources :
 
 - ARC, guide **T4127** - Formules pour le calcul des retenues sur la paie ;
 - Revenu Québec, guide **TP-1015.F** - Formules pour le calcul des retenues à la source et des cotisations.

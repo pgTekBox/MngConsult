@@ -149,15 +149,20 @@ Public NotInheritable Class RenduPaie
         Return sb.ToString()
     End Function
 
-    ''' <summary>Talon de paie d'un employé, avec les cumulatifs de l'année.</summary>
-    Public Shared Function Talon(paieId As Integer) As String
+    ''' <summary>
+    ''' Le contenu du talon, lu une seule fois et rendu deux fois : en HTML pour
+    ''' l'écran et le corps du courriel, en PDF pour la pièce jointe. Les deux
+    ''' rendus partent d'ici, sinon ils finiraient par ne plus dire la même chose.
+    ''' </summary>
+    Public Shared Function Lire(paieId As Integer) As DonneesTalon
+        Dim d As New DonneesTalon()
         Dim p = Db.Ligne(
             "SELECT p.*, l.DateDebutPeriode, l.DateFinPeriode, l.DatePaie, l.Statut, l.Id AS LotId, " &
             "e.Prenom, e.Nom, e.Code, e.Adresse1, e.Adresse2, e.Ville, e.Province, e.CodePostal, e.DepotDirect, " &
             "c.Nom AS CompagnieNom, c.Adresse1 AS CAdresse1, c.Ville AS CVille, c.Province AS CProvince, c.CodePostal AS CCodePostal " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
             "WHERE p.Id = @p AND l.CompagnieId = @c", Db.P("@p", paieId), Db.P("@c", Contexte.CompagnieId))
-        If p Is Nothing Then Return "<p class=""note"">Talon introuvable.</p>"
+        If p Is Nothing Then Return d
 
         Dim datePaie = p.DtN("DatePaie").Value
         Dim cumul = Db.Ligne(
@@ -173,62 +178,111 @@ Public NotInheritable Class RenduPaie
             "        WHERE x.EmployeId = @e AND x.Inclus = 1 AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))), 0)",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId"))))
 
-        Dim sb As New StringBuilder()
-        sb.Append("<div class=""talon"">")
-        If p.Txt("Statut") = "B" Then sb.Append("<div class=""avertissement"">Aperçu : cette paie n'est pas encore confirmée.</div>")
-        If p.Txt("Statut") = "A" Then sb.Append("<div class=""message erreur"">Cette paie a été annulée.</div>")
+        d.Trouve = True
+        d.Statut = p.Txt("Statut")
 
-        sb.Append("<div class=""talon-entete""><div><strong>").Append(H(p.Txt("CompagnieNom"))).Append("</strong><br/>")
-        sb.Append(H(p.Txt("CAdresse1"))).Append("<br/>").Append(H(Lieu(p.Txt("CVille"), p.Txt("CProvince"), p.Txt("CCodePostal")))).Append("</div>")
-        sb.Append("<div><strong>Talon de paie</strong><br/>Période : ").Append(TexteDate(p("DateDebutPeriode"))).Append(" au ").Append(TexteDate(p("DateFinPeriode")))
-        sb.Append("<br/>Date de paie : ").Append(TexteDate(p("DatePaie"))).Append("<br/>")
-        If p.Bln("DepotDirect") Then
-            sb.Append("Dépôt direct")
-        ElseIf Not p.IsNull("NumeroCheque") Then
-            sb.Append("Chèque n° ").Append(p.Ent("NumeroCheque"))
-        End If
-        sb.Append("</div></div>")
+        d.CompagnieNom = p.Txt("CompagnieNom")
+        d.CompagnieAdresse = p.Txt("CAdresse1")
+        d.CompagnieLieu = Lieu(p.Txt("CVille"), p.Txt("CProvince"), p.Txt("CCodePostal"))
 
-        sb.Append("<p><strong>").Append(H(p.Txt("Prenom") & " " & p.Txt("Nom"))).Append("</strong>")
-        If p.Txt("Code").Length > 0 Then sb.Append(" (").Append(H(p.Txt("Code"))).Append(")")
-        sb.Append("<br/>").Append(H(p.Txt("Adresse1")))
-        If p.Txt("Adresse2").Length > 0 Then sb.Append("<br/>").Append(H(p.Txt("Adresse2")))
-        sb.Append("<br/>").Append(H(Lieu(p.Txt("Ville"), p.Txt("Province"), p.Txt("CodePostal")))).Append("</p>")
+        d.EmployeNom = p.Txt("Prenom") & " " & p.Txt("Nom")
+        d.EmployeCode = p.Txt("Code")
+        d.EmployeAdresse1 = p.Txt("Adresse1")
+        d.EmployeAdresse2 = p.Txt("Adresse2")
+        d.EmployeLieu = Lieu(p.Txt("Ville"), p.Txt("Province"), p.Txt("CodePostal"))
 
-        sb.Append("<div class=""talon-colonnes""><div><table><thead><tr><th>Revenus et avantages</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
+        d.DateDebut = p.DtN("DateDebutPeriode").Value
+        d.DateFin = p.DtN("DateFinPeriode").Value
+        d.DatePaie = datePaie
+        d.DepotDirect = p.Bln("DepotDirect")
+        If Not p.IsNull("NumeroCheque") Then d.NumeroCheque = p.Ent("NumeroCheque")
+
         Dim lignes = Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p AND MasquerSurTalon = 0 ORDER BY Id", Db.P("@p", paieId))
         For Each l As DataRow In lignes.Select("CategorieCode NOT LIKE 'DED_%'")
-            sb.Append("<tr><td>").Append(H(l.Txt("Description"))).Append("</td><td class=""num"">").Append(If(l.Dcm("Heures") > 0D, Nombre(l("Heures")), ""))
-            sb.Append("</td><td class=""num"">").Append(If(l.Dcm("Taux") > 0D, Argent(l("Taux")), "")).Append("</td><td class=""num"">").Append(Argent(l("Montant"))).Append("</td></tr>")
+            d.Revenus.Add(New LigneTalon With {
+                .Description = l.Txt("Description"), .Heures = l.Dcm("Heures"), .Taux = l.Dcm("Taux"), .Montant = l.Dcm("Montant")})
         Next
-        sb.Append("<tr><td><strong>Paie brute</strong></td><td class=""num"">").Append(Nombre(p("Heures"))).Append("</td><td></td><td class=""num""><strong>")
-        sb.Append(Argent(p("BrutVerse"))).Append("</strong></td></tr>")
-        If p.Dcm("AvantagesNonMonetaires") > 0D Then
-            sb.Append("<tr><td colspan=""3"" class=""note"">dont avantages imposables non versés en argent</td><td class=""num note"">").Append(Argent(p("AvantagesNonMonetaires"))).Append("</td></tr>")
+        d.Heures = p.Dcm("Heures")
+        d.BrutVerse = p.Dcm("BrutVerse")
+        d.AvantagesNonMonetaires = p.Dcm("AvantagesNonMonetaires")
+
+        AjouterRetenue(d, "Impôt fédéral", p.Dcm("ImpotFederal"), cumul.Dcm("ImpotFederal") + DepartDe(depart, "ImpotFederal"))
+        AjouterRetenue(d, "Impôt du Québec", p.Dcm("ImpotQuebec"), cumul.Dcm("ImpotQuebec") + DepartDe(depart, "ImpotQuebec"))
+        AjouterRetenue(d, "RRQ", p.Dcm("RRQ") + p.Dcm("RRQ2"), cumul.Dcm("RRQ") + DepartDe(depart, "RRQ") + DepartDe(depart, "RRQ2"))
+        AjouterRetenue(d, "Assurance-emploi", p.Dcm("AE"), cumul.Dcm("AE") + DepartDe(depart, "AE"))
+        AjouterRetenue(d, "RQAP", p.Dcm("RQAP"), cumul.Dcm("RQAP") + DepartDe(depart, "RQAP"))
+        For Each l As DataRow In lignes.Select("CategorieCode LIKE 'DED_%'")
+            d.Retenues.Add(New RetenueTalon With {.Libelle = l.Txt("Description"), .Courant = l.Dcm("Montant"), .AvecCumulatif = False})
+        Next
+        d.TotalRetenues = p.Dcm("ImpotFederal") + p.Dcm("ImpotQuebec") + p.Dcm("RRQ") + p.Dcm("RRQ2") + p.Dcm("AE") + p.Dcm("RQAP") + p.Dcm("AutresDeductions")
+
+        d.Net = p.Dcm("Net")
+        d.CumulBrut = cumul.Dcm("Brut") + DepartDe(depart, "Brut")
+        d.CumulNet = cumul.Dcm("Net")
+        d.TauxVacances = p.Dcm("TauxVacances")
+        d.VacancesAccumulees = p.Dcm("VacancesAccumulees")
+        d.SoldeVacances = soldeVacances
+        Return d
+    End Function
+
+    ''' <summary>Une retenue à zéro qui n'a rien accumulé ne dit rien : on ne l'affiche pas.</summary>
+    Private Shared Sub AjouterRetenue(d As DonneesTalon, libelle As String, courant As Decimal, cumulatif As Decimal)
+        If courant = 0D AndAlso cumulatif = 0D Then Return
+        d.Retenues.Add(New RetenueTalon With {.Libelle = libelle, .Courant = courant, .Cumulatif = cumulatif, .AvecCumulatif = True})
+    End Sub
+
+    ''' <summary>Talon de paie d'un employé, avec les cumulatifs de l'année.</summary>
+    Public Shared Function Talon(paieId As Integer) As String
+        Dim d = Lire(paieId)
+        If Not d.Trouve Then Return "<p class=""note"">Talon introuvable.</p>"
+
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""talon"">")
+        If d.Statut = "B" Then sb.Append("<div class=""avertissement"">Aperçu : cette paie n'est pas encore confirmée.</div>")
+        If d.Statut = "A" Then sb.Append("<div class=""message erreur"">Cette paie a été annulée.</div>")
+
+        sb.Append("<div class=""talon-entete""><div><strong>").Append(H(d.CompagnieNom)).Append("</strong><br/>")
+        sb.Append(H(d.CompagnieAdresse)).Append("<br/>").Append(H(d.CompagnieLieu)).Append("</div>")
+        sb.Append("<div><strong>Talon de paie</strong><br/>Période : ").Append(TexteDate(d.DateDebut)).Append(" au ").Append(TexteDate(d.DateFin))
+        sb.Append("<br/>Date de paie : ").Append(TexteDate(d.DatePaie)).Append("<br/>")
+        sb.Append(H(d.ModePaiement))
+        sb.Append("</div></div>")
+
+        sb.Append("<p><strong>").Append(H(d.EmployeNom)).Append("</strong>")
+        If d.EmployeCode.Length > 0 Then sb.Append(" (").Append(H(d.EmployeCode)).Append(")")
+        sb.Append("<br/>").Append(H(d.EmployeAdresse1))
+        If d.EmployeAdresse2.Length > 0 Then sb.Append("<br/>").Append(H(d.EmployeAdresse2))
+        sb.Append("<br/>").Append(H(d.EmployeLieu)).Append("</p>")
+
+        sb.Append("<div class=""talon-colonnes""><div><table><thead><tr><th>Revenus et avantages</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
+        For Each l In d.Revenus
+            sb.Append("<tr><td>").Append(H(l.Description)).Append("</td><td class=""num"">").Append(If(l.Heures > 0D, Nombre(l.Heures), ""))
+            sb.Append("</td><td class=""num"">").Append(If(l.Taux > 0D, Argent(l.Taux), "")).Append("</td><td class=""num"">").Append(Argent(l.Montant)).Append("</td></tr>")
+        Next
+        sb.Append("<tr><td><strong>Paie brute</strong></td><td class=""num"">").Append(Nombre(d.Heures)).Append("</td><td></td><td class=""num""><strong>")
+        sb.Append(Argent(d.BrutVerse)).Append("</strong></td></tr>")
+        If d.AvantagesNonMonetaires > 0D Then
+            sb.Append("<tr><td colspan=""3"" class=""note"">dont avantages imposables non versés en argent</td><td class=""num note"">").Append(Argent(d.AvantagesNonMonetaires)).Append("</td></tr>")
         End If
         sb.Append("</tbody></table></div>")
 
         sb.Append("<div><table><thead><tr><th>Retenues et déductions</th><th class=""num"">Courant</th><th class=""num"">Cumulatif</th></tr></thead><tbody>")
-        LigneRetenue(sb, "Impôt fédéral", p.Dcm("ImpotFederal"), cumul.Dcm("ImpotFederal") + DepartDe(depart, "ImpotFederal"))
-        LigneRetenue(sb, "Impôt du Québec", p.Dcm("ImpotQuebec"), cumul.Dcm("ImpotQuebec") + DepartDe(depart, "ImpotQuebec"))
-        LigneRetenue(sb, "RRQ", p.Dcm("RRQ") + p.Dcm("RRQ2"), cumul.Dcm("RRQ") + DepartDe(depart, "RRQ") + DepartDe(depart, "RRQ2"))
-        LigneRetenue(sb, "Assurance-emploi", p.Dcm("AE"), cumul.Dcm("AE") + DepartDe(depart, "AE"))
-        LigneRetenue(sb, "RQAP", p.Dcm("RQAP"), cumul.Dcm("RQAP") + DepartDe(depart, "RQAP"))
-        For Each l As DataRow In lignes.Select("CategorieCode LIKE 'DED_%'")
-            sb.Append("<tr><td>").Append(H(l.Txt("Description"))).Append("</td><td class=""num"">").Append(Argent(l("Montant"))).Append("</td><td></td></tr>")
+        For Each r In d.Retenues
+            sb.Append("<tr><td>").Append(H(r.Libelle)).Append("</td><td class=""num"">").Append(Argent(r.Courant)).Append("</td><td class=""num"">")
+            If r.AvecCumulatif Then sb.Append(Argent(r.Cumulatif))
+            sb.Append("</td></tr>")
         Next
-        Dim retenues = p.Dcm("ImpotFederal") + p.Dcm("ImpotQuebec") + p.Dcm("RRQ") + p.Dcm("RRQ2") + p.Dcm("AE") + p.Dcm("RQAP") + p.Dcm("AutresDeductions")
-        sb.Append("<tr><td><strong>Total</strong></td><td class=""num""><strong>").Append(Argent(retenues)).Append("</strong></td><td></td></tr>")
+        sb.Append("<tr><td><strong>Total</strong></td><td class=""num""><strong>").Append(Argent(d.TotalRetenues)).Append("</strong></td><td></td></tr>")
         sb.Append("</tbody></table></div></div>")
 
-        sb.Append("<div class=""talon-net""><span>Paie nette</span><span>").Append(Argent(p("Net"))).Append("</span></div>")
+        sb.Append("<div class=""talon-net""><span>Paie nette</span><span>").Append(Argent(d.Net)).Append("</span></div>")
 
         sb.Append("<table style=""margin-top:16px""><thead><tr><th>Cumulatifs de l'année</th><th class=""num"">Brut</th><th class=""num"">Net</th>")
-        sb.Append("<th class=""num"">Vacances accumulées (").Append(Nombre(p("TauxVacances"))).Append(" %)</th><th class=""num"">Solde de vacances</th></tr></thead><tbody><tr><td></td>")
-        sb.Append("<td class=""num"">").Append(Argent(cumul.Dcm("Brut") + DepartDe(depart, "Brut"))).Append("</td>")
-        sb.Append("<td class=""num"">").Append(Argent(cumul.Dcm("Net"))).Append("</td>")
-        sb.Append("<td class=""num"">").Append(Argent(p("VacancesAccumulees"))).Append("</td>")
-        sb.Append("<td class=""num"">").Append(Argent(soldeVacances)).Append("</td></tr></tbody></table>")
+        sb.Append("<th class=""num"">Vacances accumulées (").Append(Nombre(d.TauxVacances)).Append(" %)</th><th class=""num"">Solde de vacances</th></tr></thead><tbody><tr><td></td>")
+        sb.Append("<td class=""num"">").Append(Argent(d.CumulBrut)).Append("</td>")
+        sb.Append("<td class=""num"">").Append(Argent(d.CumulNet)).Append("</td>")
+        sb.Append("<td class=""num"">").Append(Argent(d.VacancesAccumulees)).Append("</td>")
+        sb.Append("<td class=""num"">").Append(Argent(d.SoldeVacances)).Append("</td></tr></tbody></table>")
         sb.Append("</div>")
         Return sb.ToString()
     End Function
@@ -236,11 +290,6 @@ Public NotInheritable Class RenduPaie
     Private Shared Function DepartDe(depart As DataRow, colonne As String) As Decimal
         Return If(depart Is Nothing, 0D, depart.Dcm(colonne))
     End Function
-
-    Private Shared Sub LigneRetenue(sb As StringBuilder, libelle As String, courant As Decimal, cumulatif As Decimal)
-        If courant = 0D AndAlso cumulatif = 0D Then Return
-        sb.Append("<tr><td>").Append(H(libelle)).Append("</td><td class=""num"">").Append(Argent(courant)).Append("</td><td class=""num"">").Append(Argent(cumulatif)).Append("</td></tr>")
-    End Sub
 
     Private Shared Function Lieu(ville As String, province As String, codePostal As String) As String
         Dim s = ville

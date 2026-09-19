@@ -12,4 +12,15 @@ Public Class PageTalon
         litTalon.Text = RenduPaie.Talon(paieId)
     End Sub
 
+    ''' <summary>
+    ''' Le même document que l'employé reçoit en pièce jointe, mais dans la langue
+    ''' de la personne qui le télécharge : ici, c'est elle qui va le lire.
+    ''' Page_Load a déjà vérifié que la paie appartient à la compagnie courante.
+    ''' </summary>
+    Private Sub btnPdf_Click(sender As Object, e As EventArgs) Handles btnPdf.Click
+        Dim d = RenduPaie.Lire(IdRequete("paie"))
+        If Not d.Trouve Then Return
+        EnvoyerFichier(TalonPdf.NomFichier(d), TalonPdf.Produire(d), "application/pdf")
+    End Sub
+
 End Class
