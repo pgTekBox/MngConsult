@@ -1711,7 +1711,7 @@ en: QPP - 2nd additional contribution
 es: RRQ - 2.º aporte adicional
 
 fr: Assurance-emploi
-en: Employment insurance
+en: Employment Insurance
 es: Seguro de empleo
 
 fr: CNT (normes du travail)
@@ -1819,6 +1819,10 @@ es: Ningún empleado de esta nómina pidió su talón por correo (ficha del empl
 fr: Télécharger le fichier de dépôt direct
 en: Download the direct deposit file
 es: Descargar el archivo de depósito directo
+
+fr: Télécharger en PDF
+en: Download as PDF
+es: Descargar en PDF
 
 fr: Envoyer les talons par courriel
 en: Send pay stubs by email
@@ -1961,6 +1965,14 @@ es: Vacaciones acumuladas ({#0} %)
 fr: Solde de vacances
 en: Vacation balance
 es: Saldo de vacaciones
+
+fr: Document confidentiel remis à {0}.
+en: Confidential document issued to {0}.
+es: Documento confidencial entregado a {0}.
+
+fr: Page {#0} de {#1}
+en: Page {#0} of {#1}
+es: Página {#0} de {#1}
 
 fr: Talon de paie du {#0}
 en: Pay stub for {#0}
@@ -2179,10 +2191,6 @@ es: En línea - {0}
 fr: Aucun paiement de retenues enregistré.
 en: No remittance payments recorded.
 es: Ningún pago de retenciones registrado.
-
-fr: Paiement des retenues
-en: Remittance payment
-es: Pago de retenciones
 
 fr: {0} · retenues accumulées au {#1} · payé le {#2} · {3} · enregistré par {4}
 en: {0} · deductions accrued as of {#1} · paid on {#2} · {3} · recorded by {4}
@@ -2593,7 +2601,7 @@ en: No confirmed pay runs yet.
 es: Ninguna nómina confirmada por el momento.
 
 fr: Salaire brut
-en: Gross wages
+en: Gross pay
 es: Salario bruto
 
 fr: Excédent du maximum ({0})
@@ -2896,10 +2904,6 @@ fr: Vous avez déjà un compte 60Sec ? C'est le même — rien à créer.
 en: Already have a 60Sec account? It's the same one — nothing to create.
 es: ¿Ya tiene una cuenta 60Sec? Es la misma — no hay que crear nada.
 
-fr: Me connecter
-en: Sign in
-es: Iniciar sesión
-
 fr: Mon tableau de bord
 en: My dashboard
 es: Mi panel de control
@@ -2912,10 +2916,6 @@ fr: Ouvrir mon tableau de bord
 en: Open my dashboard
 es: Abrir mi panel de control
 
-fr: Talon de paie
-en: Pay stub
-es: Comprobante de pago
-
 fr: Exemple
 en: Example
 es: Ejemplo
@@ -2923,22 +2923,6 @@ es: Ejemplo
 fr: Période du 1er au 14 juin · 70 h
 en: Period from June 1 to 14 · 70 h
 es: Período del 1 al 14 de junio · 70 h
-
-fr: Salaire brut
-en: Gross pay
-es: Salario bruto
-
-fr: Assurance-emploi
-en: Employment Insurance
-es: Seguro de empleo
-
-fr: Impôt fédéral
-en: Federal tax
-es: Impuesto federal
-
-fr: Impôt du Québec
-en: Quebec tax
-es: Impuesto de Quebec
 
 fr: Net à payer
 en: Net pay
@@ -3023,10 +3007,6 @@ es: T4 y RL-1
 fr: Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé.
 en: The year-end slips, built from the employee's year-to-date totals.
 es: Los formularios de fin de año, generados a partir de los acumulados del empleado.
-
-fr: Écritures comptables
-en: Accounting entries
-es: Asientos contables
 
 fr: Le grand livre reçoit la paie selon le plan comptable que vous avez choisi.
 en: The general ledger receives the pay run according to the chart of accounts you chose.

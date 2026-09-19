@@ -115,6 +115,16 @@ Public Class IntegrationMngConsulTests
         Assert.IsTrue(en.Count > 500, "Le dictionnaire du site est chargé.")
         CollectionAssert.AreEquivalent(en.Keys.ToList(), es.Keys.ToList(), "Chaque texte a sa traduction anglaise et espagnole.")
 
+        ' Un même texte français ne doit figurer qu'une fois : le fichier se lit de
+        ' haut en bas et le dernier bloc écrase le premier, sans rien signaler. Le
+        ' doublon ne se voit alors qu'à l'écran, dans la langue qu'on regarde le moins.
+        Dim vus As New HashSet(Of String)(StringComparer.Ordinal)
+        For Each ligne In File.ReadAllLines(DictionnaireDuSite())
+            If ligne.StartsWith("fr: ", StringComparison.Ordinal) Then
+                Assert.IsTrue(vus.Add(ligne.Substring(4)), "Texte français en double dans le dictionnaire : " & ligne.Substring(4))
+            End If
+        Next
+
         ' Une traduction doit reprendre exactement les jetons ({0}, {#1}…) de son modèle français.
         Dim jetons As New System.Text.RegularExpressions.Regex("\{#?\d\}")
         Dim jetonsDe = Function(t As String) String.Join(" ", jetons.Matches(t).Cast(Of System.Text.RegularExpressions.Match)().Select(Function(m) m.Value).OrderBy(Function(v) v, StringComparer.Ordinal))
