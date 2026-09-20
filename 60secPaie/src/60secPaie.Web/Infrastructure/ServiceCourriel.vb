@@ -5,10 +5,18 @@ Imports System.Text
 
 ''' <summary>
 ''' Envoi des talons de paie par courriel aux employés qui l'ont demandé (case « Envoyer le talon de paie par courriel » de leur fiche).
-''' Configuration dans Web.config :
-'''   - production : section system.net/mailSettings (serveur SMTP, TLS) et la clé Courriel:Expediteur ;
-'''   - développement : la clé Courriel:DossierTest écrit les courriels en fichiers .eml dans un dossier au lieu de les envoyer.
-''' Un talon contient des renseignements personnels : n'utiliser qu'un serveur SMTP avec chiffrement TLS.
+'''
+''' EN PRODUCTION, le courriel est remis au service d'envoi de la plateforme : il
+''' est déposé dans la base MailService (connexion « Mail »), et SrvAI le livre.
+''' 60secPaie n'a donc pas son propre serveur de courriel, et le talon suit le
+''' même chemin que les factures de l'ERP.
+'''
+''' EN DÉVELOPPEMENT, la clé Courriel:DossierTest écrit les courriels en fichiers
+''' .eml dans un dossier plutôt que de les envoyer : on regarde ce qui partirait
+''' sans rien envoyer à un employé. C'est ce réglage, et lui seul, qui détourne
+''' l'envoi — retiré par Web.Release.config.
+'''
+''' Un talon contient des renseignements personnels.
 ''' </summary>
 Public NotInheritable Class ServiceCourriel
 
@@ -48,6 +56,32 @@ Public NotInheritable Class ServiceCourriel
         End Get
     End Property
 
+    ''' <summary>Imposé dans les tests ; Nothing = le transport se choisit tout seul.</summary>
+    Public Shared Property Transport As ITransportCourriel
+
+    ''' <summary>
+    ''' Par où sort le courriel.
+    '''
+    ''' À défaut d'instruction, le dossier d'essai l'emporte : tant qu'il est
+    ''' configuré, rien ne part vers un employé, fût-ce par mégarde. Sur un poste
+    ''' de développement, c'est ce qu'on veut.
+    '''
+    ''' La clé Courriel:Transport = « service » force la remise réelle malgré le
+    ''' dossier d'essai. Il faut l'écrire pour que ça parte : un envoi de talons
+    ''' ne doit jamais être le résultat d'un oubli de configuration.
+    ''' </summary>
+    Public Shared Function TransportCourant() As ITransportCourriel
+        If Transport IsNot Nothing Then Return Transport
+
+        Dim choix = If(ConfigurationManager.AppSettings("Courriel:Transport"), "").Trim().ToLowerInvariant()
+        If choix = "service" Then Return New TransportServiceMail()
+        If choix = "smtp" Then Return New TransportSmtp(FabriqueClient)
+
+        If ModeTest Then Return New TransportSmtp(FabriqueClient)
+        If DbMail.EstConfigure Then Return New TransportServiceMail()
+        Return New TransportSmtp(FabriqueClient)
+    End Function
+
     ''' <summary>Employés du lot qui reçoivent leur talon par courriel.</summary>
     Public Shared Function Destinataires(lotId As Integer) As DataTable
         Return Db.Table(
@@ -71,49 +105,47 @@ Public NotInheritable Class ServiceCourriel
         Dim repondreA = lot.Txt("CompagnieCourriel")
 
         Dim bilan As New Bilan()
-        Using client = FabriqueClient()()
-            For Each d As DataRow In destinataires.Rows
-                Dim nom = d.Txt("Prenom") & " " & d.Txt("Nom")
-                If Not d.IsNull("TalonEnvoyeLe") AndAlso Not renvoyer Then
-                    bilan.DejaEnvoyes += 1
-                    Continue For
-                End If
-                If d.Txt("Courriel").Length = 0 Then
-                    bilan.Erreurs.Add(nom & " : " & Tr("aucun courriel dans la fiche."))
-                    Continue For
-                End If
+        Dim transport = TransportCourant()
+        For Each d As DataRow In destinataires.Rows
+            Dim nom = d.Txt("Prenom") & " " & d.Txt("Nom")
+            If Not d.IsNull("TalonEnvoyeLe") AndAlso Not renvoyer Then
+                bilan.DejaEnvoyes += 1
+                Continue For
+            End If
+            If d.Txt("Courriel").Length = 0 Then
+                bilan.Erreurs.Add(nom & " : " & Tr("aucun courriel dans la fiche."))
+                Continue For
+            End If
 
-                ' Le talon part dans la langue de l'employé, pas dans celle de la personne qui fait la paie.
-                Dim langue = d.Txt("Langue").ToLowerInvariant()
-                If Not I18n.Valide(langue) Then langue = "fr"
-                Dim paieId = d.Ent("PaieId")
-                Dim compagnie = lot.Txt("CompagnieNom")
-                Try
-                    Using message As New MailMessage()
-                        ' Le courriel part TOUJOURS de 60sec.ca, au nom de l'employeur.
-                        ' Écrire l'adresse de la compagnie dans le From ferait échouer
-                        ' les vérifications SPF et DMARC de son domaine : le talon
-                        ' n'arriverait pas, et sans que personne ne le sache.
-                        message.From = New MailAddress(adresseEnvoi, lot.Txt("CompagnieNom"))
-                        If repondreA.Length > 0 Then message.ReplyToList.Add(New MailAddress(repondreA, lot.Txt("CompagnieNom")))
-                        message.To.Add(New MailAddress(d.Txt("Courriel"), nom))
-                        message.Subject = I18n.Traduire("Talon de paie du " & TexteDate(lot("DatePaie")), langue)
-                        message.SubjectEncoding = Encoding.UTF8
-                        message.BodyEncoding = Encoding.UTF8
-                        message.IsBodyHtml = True
-                        message.Body = I18n.DansLaLangue(langue, Function() I18n.TraduireHtml(CorpsHtml(paieId, nom, compagnie, langue)))
-                        Joindre(message, paieId, langue)
-                        client.Send(message)
-                    End Using
-                    Db.Exec("UPDATE paie.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
-                    bilan.Envoyes += 1
-                Catch ex As FormatException
-                    bilan.Erreurs.Add(nom & " : " & Tr("adresse de courriel invalide."))
-                Catch ex As SmtpException
-                    bilan.Erreurs.Add(nom & " : " & ex.Message)
-                End Try
-            Next
-        End Using
+            ' Le talon part dans la langue de l'employé, pas dans celle de la personne qui fait la paie.
+            Dim langue = d.Txt("Langue").ToLowerInvariant()
+            If Not I18n.Valide(langue) Then langue = "fr"
+            Dim paieId = d.Ent("PaieId")
+            Dim compagnie = lot.Txt("CompagnieNom")
+            Try
+                Dim courriel As New CourrielSortant() With {
+                    .Destinataire = d.Txt("Courriel"),
+                    .NomDestinataire = nom,
+                    .Expediteur = adresseEnvoi,
+                    .NomExpediteur = compagnie,
+                    .RepondreA = repondreA,
+                    .Sujet = I18n.Traduire("Talon de paie du " & TexteDate(lot("DatePaie")), langue),
+                    .CorpsHtml = I18n.DansLaLangue(langue, Function() I18n.TraduireHtml(CorpsHtml(paieId, nom, compagnie, langue)))}
+                Joindre(courriel, paieId, langue)
+                transport.Envoyer(courriel)
+
+                Db.Exec("UPDATE paie.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
+                bilan.Envoyes += 1
+            Catch ex As FormatException
+                bilan.Erreurs.Add(nom & " : " & Tr("adresse de courriel invalide."))
+            Catch ex As SmtpException
+                bilan.Erreurs.Add(nom & " : " & ex.Message)
+            Catch ex As SqlClient.SqlException
+                ' Le service d'envoi est injoignable : c'est la remise qui échoue,
+                ' pas la paie. Les autres employés doivent tout de même être servis.
+                bilan.Erreurs.Add(nom & " : " & ex.Message)
+            End Try
+        Next
 
         If bilan.Envoyes > 0 Then
             Contexte.Journaliser(bilan.Envoyes.ToString() & " talon(s) de la paie du " & TexteDate(lot("DatePaie")) & " envoyé(s) par courriel.",
@@ -154,7 +186,7 @@ Public NotInheritable Class ServiceCourriel
     ''' se classe et s'envoie à un tiers sans traîner la mise en page d'un
     ''' courriel derrière lui.
     ''' </summary>
-    Private Shared Sub Joindre(message As MailMessage, paieId As Integer, langue As String)
+    Private Shared Sub Joindre(courriel As CourrielSortant, paieId As Integer, langue As String)
         Dim d = RenduPaie.Lire(paieId)
         If Not d.Trouve Then Return
 
@@ -166,7 +198,8 @@ Public NotInheritable Class ServiceCourriel
                                       Return ""
                                   End Function)
         If contenu Is Nothing Then Return
-        message.Attachments.Add(New Attachment(New MemoryStream(contenu), nomFichier, "application/pdf"))
+        courriel.PiecesJointes.Add(New PieceJointeCourriel With {
+            .Nom = nomFichier, .Contenu = contenu, .TypeMime = "application/pdf"})
     End Sub
 
     ''' <summary>Courriel autonome : les styles sont dans le message, car la feuille de style du site n'est pas accessible au destinataire.</summary>

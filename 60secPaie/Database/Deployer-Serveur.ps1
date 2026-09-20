@@ -14,6 +14,7 @@
 param(
     [string]$Config = 'C:\MesSources\MngConsult\prjMngConsul\Web.config',
     [string]$Cle = 'ConnectionString',
+    [string]$CleMail = 'ConnectionStringMail',
     [ValidateSet('Verifier', 'Schema', 'Configurer')][string]$Action = 'Verifier'
 )
 
@@ -59,6 +60,28 @@ if ($Action -eq 'Configurer') {
     $add.SetAttribute('connectionString', $b.ConnectionString)
     $add.SetAttribute('providerName', 'System.Data.SqlClient')
     [void]$racine.AppendChild($add)
+
+    # Le service d'envoi de la plateforme : même fichier, autre clé. Sans cette
+    # entrée, 60secPaie retombe sur SMTP et les talons ne passent plus par SrvAI.
+    $noeudMail = $xml.configuration.appSettings.add | Where-Object { $_.key -eq $CleMail } | Select-Object -First 1
+    if ($noeudMail) {
+        $origineMail = New-Object System.Data.SqlClient.SqlConnectionStringBuilder $noeudMail.value
+        $m = New-Object System.Data.SqlClient.SqlConnectionStringBuilder
+        $m['Data Source'] = $origineMail['Data Source']
+        $m['Initial Catalog'] = $origineMail['Initial Catalog']
+        $m['User ID'] = $origineMail['User ID']
+        $m['Password'] = $origineMail['Password']
+        $m['Connect Timeout'] = 30
+        $addMail = $doc.CreateElement('add')
+        $addMail.SetAttribute('name', 'Mail')
+        $addMail.SetAttribute('connectionString', $m.ConnectionString)
+        $addMail.SetAttribute('providerName', 'System.Data.SqlClient')
+        [void]$racine.AppendChild($addMail)
+        Write-Output "Service d'envoi : $($m['Data Source']) / $($m['Initial Catalog'])."
+    }
+    else {
+        Write-Warning "Cle '$CleMail' absente de $Config : les courriels retomberont sur SMTP."
+    }
     $doc.Save((Join-Path $dossier 'ConnectionStrings.config'))
     Write-Output "ConnectionStrings.config pointe maintenant vers $($b['Data Source']) / $base."
     return

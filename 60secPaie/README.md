@@ -114,10 +114,18 @@ poste (seule la base est sur le serveur), rien ne change. Le jour où l'applicat
   dépôt réel ; certaines institutions (dont Desjardins pour certains services) exigent leur propre format.
   Le fichier contient des numéros de compte : il n'est pas conservé sur le serveur, seulement téléchargé.
 - **Talons par courriel** : envoyés aux employés dont la fiche a la case « Envoyer le talon de paie par courriel » et un courriel.
-  Un talon déjà envoyé n'est pas renvoyé sans le demander. En développement, la clé `Courriel:DossierTest` écrit les courriels en
-  fichiers `.eml` dans `App_Data\courriels` ; en production, configurer `system.net/mailSettings` avec un serveur SMTP en TLS.
-  Le talon voyage dans le corps du courriel **et en pièce jointe PDF** (`Talon-de-paie-AAAA-MM-JJ.pdf`, nommé et rendu dans la langue
-  de l'employé) : c'est un renseignement personnel, à n'activer qu'avec l'accord de l'employé.
+  Un talon déjà envoyé n'est pas renvoyé sans le demander.
+- **Par où part le courriel** : par le **service d'envoi de la plateforme**, comme les factures de l'ERP. 60secPaie dépose le message
+  dans la base `MailService` (connexion `Mail`, procédures `s0610InsertOutboundMail` et `s1579InsertAttachemnt_A`), et le service
+  Windows **SrvAI** le remet lui-même aux serveurs de destination. 60secPaie ne parle donc à aucun serveur SMTP et ne détient aucun
+  mot de passe de messagerie ; un seul domaine est à faire autoriser (SPF, DKIM) et un seul journal est à consulter quand un courriel
+  n'arrive pas. `Deployer-Serveur.ps1 -Action Configurer` écrit la connexion `Mail` en même temps que `Paie`.
+  En développement, la clé `Courriel:DossierTest` écrit plutôt les courriels en fichiers `.eml` dans `App_Data\courriels` :
+  **rien ne part vers un employé tant qu'elle est là**. Pour envoyer réellement depuis un poste de développement, écrire
+  `Courriel:Transport = service` — il faut le vouloir. Sans connexion `Mail` ni dossier d'essai, l'envoi retombe sur SMTP
+  (`system.net/mailSettings`).
+- **Ce que reçoit l'employé** : le talon dans le corps du message **et en pièce jointe PDF** (`Talon-de-paie-AAAA-MM-JJ.pdf`, nommé
+  et rendu dans sa langue). C'est un renseignement personnel, à n'activer qu'avec son accord.
 - **Expéditeur** : tout courriel part de **60sec.ca** (`Courriel:Expediteur`, `paie@60sec.ca` à défaut). Une adresse d'un autre domaine
   est refusée à l'envoi. Le nom affiché est celui de l'employeur et son adresse va en **Reply-To** : mise dans le `From`, elle ferait
   échouer SPF et DMARC de son domaine, et le talon n'arriverait pas — sans que personne ne s'en aperçoive.

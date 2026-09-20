@@ -122,6 +122,8 @@
     <Compile Include="Infrastructure\ServiceGL.vb" />
     <Compile Include="Infrastructure\ServiceDepotDirect.vb" />
     <Compile Include="Infrastructure\ServiceCourriel.vb" />
+    <Compile Include="Infrastructure\DbMail.vb" />
+    <Compile Include="Infrastructure\TransportCourriel.vb" />
     <Compile Include="Config\PlanComptable.aspx.vb">
       <DependentUpon>PlanComptable.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
