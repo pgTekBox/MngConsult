@@ -81,6 +81,9 @@ Partial Public Class ImportBalanceVerification
     '''<summary>ucSource</summary>
     Protected WithEvents ucSource As Global.MngConsul.SourceDonnees
 
+    '''<summary>detFichier</summary>
+    Protected WithEvents detFichier As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>pnlUpload</summary>
     Protected WithEvents pnlUpload As Global.System.Web.UI.WebControls.Panel
 

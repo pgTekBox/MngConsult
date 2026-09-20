@@ -8,52 +8,96 @@
 
 <asp:Content ID="headContent" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .pg-header { display:flex; align-items:center; gap:14px; }
-    .pg-header .pg-ico {
-        width:44px; height:44px; border-radius:12px;
+    /* La page reprend la mise en forme des autres écrans d'importation : une
+       page centrée, des cartes blanches, des titres à pastille. Les classes
+       propres à cet écran — équilibre, incohérences, pastilles de gravité — ne
+       changent pas de nom : le code-behind les écrit lui-même. */
+
+    .imp-page { max-width: 1150px; margin: 0 auto; padding: 16px }
+
+    .imp-head { display:flex; align-items:center; gap:14px; margin-bottom:6px; }
+    .imp-head .ico {
+        width:46px; height:46px; border-radius:13px;
         background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-        border:1px solid var(--mc-stroke);
-        display:flex; align-items:center; justify-content:center; font-size:20px;
+        border:1px solid #e2e8f0;
+        display:flex; align-items:center; justify-content:center; font-size:21px;
     }
-    .pg-header h1 { font-size:20px; font-weight:800; margin:0; }
-    .pg-header .pg-sub { font-size:13px; color:var(--mc-muted); margin-top:1px; }
-    .imp-section { padding:20px; border-bottom:1px solid var(--mc-stroke); }
-    .imp-section:last-child { border-bottom:none; }
-    .imp-section h2 { font-size:15px; font-weight:800; margin:0 0 4px; }
-    .imp-section .sec-desc { font-size:13px; color:var(--mc-muted); margin-bottom:16px; }
+    .imp-head h1 { font-size:21px; font-weight:800; margin:0; color:#0f172a }
+    .imp-head .sub { font-size:13px; color:#64748b; margin-top:2px }
+
+    .imp-lede { font-size:13.5px; color:#475569; margin:0 0 18px; max-width:760px; line-height:1.6 }
+
+    .imp-section {
+        background:#fff; border:1px solid #e2e8f0; border-radius:14px;
+        padding:20px; margin-bottom:16px;
+    }
+
+    .imp-section h2 {
+        font-size:15px; font-weight:800; margin:0 0 3px; color:#0f172a;
+        display:flex; align-items:center; gap:9px;
+    }
+
+    .imp-section h2 .n {
+        width:24px; height:24px; border-radius:999px; flex:0 0 auto;
+        background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;
+        font-size:12px; display:flex; align-items:center; justify-content:center;
+    }
+
+    .imp-section .sec-desc { font-size:13px; color:#64748b; margin:0 0 15px; padding-left:33px }
+    .imp-section > .body { padding-left:33px }
+
+    /* Section repliable : le titre devient la poignée, le chevron dit le sens. */
+    details.imp-section > summary { list-style:none; cursor:pointer; border-radius:8px }
+    details.imp-section > summary::-webkit-details-marker { display:none }
+    details.imp-section > summary::marker { content: "" }
+    details.imp-section > summary h2 { margin:0 }
+    details.imp-section > summary:hover h2 { color:#1d4ed8 }
+    details.imp-section[open] > summary h2 { margin-bottom:3px }
+    .imp-chev { margin-left:auto; font-size:12px; color:#94a3b8; transition:transform .15s }
+    details.imp-section[open] .imp-chev { transform:rotate(180deg) }
+
     .upload-zone {
-        border:1.5px dashed var(--mc-stroke); border-radius:10px;
-        display:flex; align-items:center; gap:9px; padding:9px 13px; transition:border-color .2s, background .2s; cursor:pointer;
+        border:1.5px dashed #cbd5e1; border-radius:10px;
+        display:flex; align-items:center; gap:9px; padding:9px 13px;
+        transition:border-color .2s, background .2s; cursor:pointer;
     }
-    .upload-zone:hover, .upload-zone.dragover { border-color:var(--mc-blue); background:rgba(37,99,235,.05); }
+    .upload-zone:hover, .upload-zone.dragover { border-color:#2563eb; background:rgba(37,99,235,.05); }
     .upload-zone .uz-ico { font-size:17px; line-height:1; }
-    .upload-zone p { font-size:13px; color:var(--mc-muted); margin:0; }
+    .upload-zone p { font-size:13px; color:#64748b; margin:0; }
     .upload-zone .uz-hint { font-size:11.5px; margin-left:auto; padding-left:10px; white-space:nowrap; opacity:.65; }
+
     .file-pill {
         display:flex; align-items:center; gap:10px; padding:7px 12px; margin-top:10px;
-        background:linear-gradient(135deg, rgba(37,99,235,.07), rgba(6,182,212,.05));
-        border:1px solid var(--mc-stroke); border-radius:12px;
+        background:rgba(37,99,235,.05); border:1px solid #bfdbfe; border-radius:12px;
     }
     .file-pill .fp-ico { font-size:17px; }
     .file-pill .fp-name { font-weight:700; font-size:13px; }
-    .file-pill .fp-size { font-size:12px; color:var(--mc-muted); }
+    .file-pill .fp-size { font-size:12px; color:#64748b; }
     .file-pill .fp-rm { margin-left:auto; color:#ef4444; cursor:pointer; font-size:16px; background:none; border:none; }
-    .chk { display:flex; align-items:center; gap:8px; margin-top:12px; }
-    .chk input[type="checkbox"] { width:16px; height:16px; accent-color:var(--mc-blue); }
-    .chk label { font-size:13px; cursor:pointer; }
-    .imp-actions { display:flex; gap:10px; margin-top:18px; justify-content:flex-end; flex-wrap:wrap; }
+
+    .chk { display:flex; align-items:center; gap:7px; margin-top:13px; font-size:13px }
+    .chk input[type="checkbox"] { width:16px; height:16px; accent-color:#2563eb; }
+    .chk label { cursor:pointer; }
+
+    /* Les actions restent à gauche, sous ce qu'elles commandent — comme ailleurs. */
+    .imp-actions { display:flex; gap:9px; flex-wrap:wrap; margin-top:16px; }
+
     .imp-btn {
-        padding:10px 20px; border-radius:10px; font-size:14px; font-weight:700;
-        font-family:inherit; cursor:pointer; border:none; display:inline-flex; align-items:center; gap:7px; transition:all .15s;
+        padding:9px 15px; border-radius:9px; font-size:13px; font-weight:700;
+        border:1px solid transparent; cursor:pointer; font-family:inherit;
+        display:inline-flex; align-items:center; gap:7px;
     }
-    .imp-btn-primary { background:var(--mc-blue); color:#fff; }
+    .imp-btn-primary { background:#2563eb; color:#fff; }
     .imp-btn-primary:hover { filter:brightness(.92); }
-    .imp-btn-secondary { background:#fff; color:var(--mc-text); border:1px solid var(--mc-stroke); }
-    .imp-btn-secondary:hover { background:var(--mc-bg); }
-    .imp-btn-danger { background:#ef4444; color:#fff; }
-    .imp-btn-danger:hover { background:#dc2626; }
+    .imp-btn-secondary { background:#f1f5f9; color:#334155; border-color:#e2e8f0; }
+    .imp-btn-secondary:hover { background:#e2e8f0; }
+    .imp-btn-danger { background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
+    .imp-btn-danger:hover { background:#fee2e2; }
+    .imp-btn-ia { background:#6d28d9; color:#fff; }
+    .imp-btn-ia:hover { background:#5b21b6; }
+
     .imp-alert {
-        padding:12px 16px; border-radius:12px; font-size:13px; margin:16px 20px 0;
+        padding:12px 16px; border-radius:12px; font-size:13px; margin:0 0 16px;
         display:flex; align-items:flex-start; gap:10px; border:1px solid transparent;
     }
     .imp-alert-ok  { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
@@ -62,64 +106,74 @@
     .imp-alert .al-ico { font-size:17px; flex-shrink:0; }
     .imp-alert .al-body { flex:1; }
     .imp-alert .al-title { font-weight:700; margin-bottom:2px; }
-    .tbl-wrap { overflow-x:auto; border:1px solid var(--mc-stroke); border-radius:12px; }
-    .imp-tbl { width:100%; border-collapse:collapse; font-size:13px; }
+
+    /* La grille défile dans son cadre, l'entête reste visible : une balance de
+       deux cents comptes ne doit pas repousser les boutons hors de l'écran. */
+    .tbl-wrap { overflow:auto; max-height:540px; border:1px solid #e2e8f0; border-radius:12px; margin-top:12px }
+
+    .imp-tbl { width:100%; border-collapse:collapse; font-size:12.5px; }
     .imp-tbl thead th {
-        background:var(--mc-blue); color:#fff; padding:10px 14px;
-        text-align:left; font-weight:700; font-size:12px; text-transform:uppercase; letter-spacing:.3px;
+        background:#f8fafc; color:#334155; text-align:left; padding:9px 11px;
+        font-weight:700; white-space:nowrap; border-bottom:1px solid #e2e8f0;
+        position:sticky; top:0; z-index:1;
     }
-    .imp-tbl tbody td { padding:8px 14px; border-bottom:1px solid rgba(0,0,0,.05); }
-    .imp-tbl tbody tr:nth-child(even) { background:rgba(37,99,235,.025); }
-    .imp-tbl tbody tr:hover { background:rgba(37,99,235,.06); }
-    .tbl-info { font-size:12px; color:var(--mc-muted); margin-top:8px; display:flex; align-items:center; gap:6px; }
-    .map-tbl { width:100%; font-size:12px; border-collapse:collapse; }
-    .map-tbl th { background:rgba(37,99,235,.06); padding:8px 12px; text-align:left; font-weight:700; border-bottom:2px solid var(--mc-stroke); }
-    .map-tbl td { padding:6px 12px; border-bottom:1px solid rgba(0,0,0,.04); }
-    .c-csv { color:var(--mc-blue); font-weight:700; }
-    .c-arr { color:var(--mc-muted); text-align:center; }
-    .c-db  { color:#16a34a; font-weight:700; }
+    .imp-tbl tbody td { padding:7px 11px; border-bottom:1px solid #f1f5f9; vertical-align:top }
+    .imp-tbl tbody tr:last-child td { border-bottom:0 }
+    .imp-tbl tbody tr:hover { background:#f8fafc; }
+    .imp-tbl .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
+    .imp-tbl tfoot td { font-weight:800; padding:9px 11px; border-top:2px solid #e2e8f0; background:#f8fafc; }
+    .tbl-info { font-size:12px; color:#94a3b8; margin-top:8px; display:flex; align-items:center; gap:6px; }
+
     .stats { display:flex; gap:12px; flex-wrap:wrap; }
-    .stat { flex:1; min-width:110px; padding:16px; border-radius:14px; text-align:center; border:1px solid var(--mc-stroke); }
-    .stat .sv { font-size:28px; font-weight:800; }
-    .stat .sl { font-size:12px; color:var(--mc-muted); margin-top:3px; }
-    .s-ok  { background:#f0fdf4; } .s-ok  .sv { color:#16a34a; }
-    .s-wrn { background:#fffbeb; } .s-wrn .sv { color:#d97706; }
-    .s-err { background:#fef2f2; } .s-err .sv { color:#dc2626; }
+    .stat { flex:1; min-width:110px; padding:14px 16px; border-radius:12px; border:1px solid #e2e8f0; }
+    .stat .sv { font-size:26px; font-weight:800; color:#0f172a }
+    .stat .sl { font-size:11.5px; color:#64748b; margin-top:2px; text-transform:uppercase; letter-spacing:.3px }
+    .s-ok  { background:#f0fdf4; border-color:#bbf7d0 } .s-ok  .sv { color:#16a34a; }
+    .s-wrn { background:#fffbeb; border-color:#fde68a } .s-wrn .sv { color:#d97706; }
+    .s-err { background:#fef2f2; border-color:#fecaca } .s-err .sv { color:#dc2626; }
+
     .equil { padding:11px 14px; border-radius:12px; margin:16px 0 12px; font-size:13.5px; font-weight:700; border:1px solid transparent; }
     .equil.ok { background:#f0fdf4; color:#166534; border-color:#bbf7d0; }
     .equil.ko { background:#fef2f2; color:#991b1b; border-color:#fecaca; }
-    .imp-tbl .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
-    .imp-tbl tfoot td { font-weight:800; padding:9px 14px; border-top:2px solid var(--mc-stroke); background:rgba(37,99,235,.04); }
-    .imp-btn-ia { background:#6d28d9; color:#fff; }
-    .imp-btn-ia:hover { background:#5b21b6; }
-    .ia-hint { font-size:12px; color:var(--mc-muted); margin:14px 0 0; text-align:right; }
     .equil.ia { background:#f5f3ff; color:#5b21b6; border-color:#ddd6fe; font-weight:600; }
-    .origine { font-size:12.5px; color:var(--mc-muted); margin:2px 0 12px; line-height:1.5; }
-    .ctrl { border:1px solid var(--mc-stroke); border-radius:12px; padding:14px 16px; margin:14px 0; background:#fff; }
+
+    .ia-hint { font-size:12px; color:#94a3b8; margin:14px 0 0; }
+    .origine { font-size:12.5px; color:#64748b; margin:2px 0 12px; line-height:1.5; }
+
+    .ctrl { border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin:14px 0; background:#fff; }
     .ctrl h3 { font-size:14px; font-weight:800; margin:0 0 4px; }
-    .ctrl .ctx { font-size:12.5px; color:var(--mc-muted); margin:0 0 10px; line-height:1.5; }
+    .ctrl .ctx { font-size:12.5px; color:#64748b; margin:0 0 10px; line-height:1.5; }
     .ctrl .chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
     .ctrl .chip { padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; }
+    .ctrl .rien { padding:10px 12px; border-radius:10px; background:#f0fdf4; color:#166534; font-weight:700; font-size:13px; }
+
     .grv { display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px; font-weight:800; white-space:nowrap; }
     .grv-err { background:#fef2f2; color:#b91c1c; }
     .grv-ver { background:#fffbeb; color:#b45309; }
     .grv-inf { background:#f1f5f9; color:#64748b; }
-    .ctrl .rien { padding:10px 12px; border-radius:10px; background:#f0fdf4; color:#166534; font-weight:700; font-size:13px; }
 </style>
 </asp:Content>
 
 <asp:Content ID="mainContent" ContentPlaceHolderID="MainContent" runat="server">
+<div class="imp-page">
 
-    <div class="toolbar">
-        <div class="pg-header">
-            <div class="pg-ico">📋</div>
-            <div>
-                <h1>Import Balance de Vérification</h1>
-                <div class="pg-sub">Migration → staging.BalanceVerification</div>
-            </div>
+    <div class="imp-head">
+        <div class="ico">⚖️</div>
+        <div>
+            <h1>Importer la balance de vérification</h1>
+            <div class="sub">Les soldes d'ouverture de la reprise comptable</div>
         </div>
     </div>
 
+    <p class="imp-lede">
+        Déposez la balance de vérification de votre ancien logiciel, <b>arrêtée à la date
+        de bascule</b>. Elle est lue, contrôlée et mise en préparation. <b>Aucune écriture
+        n'est passée dans vos livres à cette étape</b> : la balance reste en préparation, à
+        côté du plan comptable, et sert d'abord à vérifier que les deux exports concordent.
+        La création des soldes d'ouverture, elle, reste à faire.
+    </p>
+
+    <!-- ══════════ MESSAGES ══════════ -->
     <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="imp-alert imp-alert-ok">
         <span class="al-ico">✅</span><div class="al-body"><div class="al-title">C'est fait</div><asp:Literal ID="litSuccess" runat="server" /></div>
     </asp:Panel>
@@ -130,16 +184,19 @@
         <span class="al-ico">⚠️</span><div class="al-body"><div class="al-title">Attention</div><asp:Literal ID="litWarning" runat="server" /></div>
     </asp:Panel>
 
-    <asp:Panel ID="pnlResults" runat="server" Visible="false">
-        <div class="imp-section">
-            <h2><asp:Literal ID="litTitreResultat" runat="server" Text="Résultat de l'importation" /></h2>
+    <!-- ══════════ CE QUI A ÉTÉ LU ══════════ -->
+    <%-- En premier, comme sur les autres écrans d'importation : ce qui vient
+         d'être lu se vérifie avant tout le reste. --%>
+    <asp:Panel ID="pnlResults" runat="server" Visible="false" CssClass="imp-section">
+        <h2><span class="n">✓</span><asp:Literal ID="litTitreResultat" runat="server" Text="Ce qui a été lu — à vérifier" /></h2>
+        <div class="body">
             <asp:Literal ID="litOrigine" runat="server" />
             <asp:Panel ID="pnlStats" runat="server">
-            <div class="stats">
-                <div class="stat s-ok"><div class="sv"><asp:Literal ID="litInserted" runat="server" /></div><div class="sl">Insérées</div></div>
-                <div class="stat s-wrn"><div class="sv"><asp:Literal ID="litSkipped" runat="server" /></div><div class="sl">Ignorées</div></div>
-                <div class="stat s-err"><div class="sv"><asp:Literal ID="litErrors" runat="server" /></div><div class="sl">Erreurs</div></div>
-            </div>
+                <div class="stats">
+                    <div class="stat s-ok"><div class="sv"><asp:Literal ID="litInserted" runat="server" /></div><div class="sl">Insérées</div></div>
+                    <div class="stat s-wrn"><div class="sv"><asp:Literal ID="litSkipped" runat="server" /></div><div class="sl">Ignorées</div></div>
+                    <div class="stat s-err"><div class="sv"><asp:Literal ID="litErrors" runat="server" /></div><div class="sl">Erreurs</div></div>
+                </div>
             </asp:Panel>
             <asp:Panel ID="pnlControle" runat="server" Visible="false">
                 <asp:Literal ID="litControle" runat="server" />
@@ -149,9 +206,12 @@
                 <asp:Literal ID="litBalance" runat="server" />
             </asp:Panel>
             <asp:Panel ID="pnlErrorDetails" runat="server" Visible="false">
-                <h2 style="margin-top:18px;">Détail des erreurs</h2>
-                <div class="tbl-wrap" style="margin-top:10px;"><asp:GridView ID="gvErrors" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" /></div>
+                <h3 style="font-size:13px;font-weight:800;margin:18px 0 0;color:#334155">Détail des erreurs</h3>
+                <div class="tbl-wrap"><asp:GridView ID="gvErrors" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" /></div>
             </asp:Panel>
+
+            <%-- Les actions sont sous ce qu'elles commandent : on décide après avoir
+                 regardé, pas dans un encadré à part au bas de la page. --%>
             <div class="imp-actions">
                 <asp:Button ID="btnControle" runat="server" Text="🔍 Incohérences avec le plan comptable" CssClass="imp-btn imp-btn-primary" CausesValidation="false" />
                 <asp:Button ID="btnReset" runat="server" Text="🔄 Nouvel import" CssClass="imp-btn imp-btn-secondary" />
@@ -161,62 +221,67 @@
         </div>
     </asp:Panel>
 
-    <!-- ══════════ 1 · D'OÙ VIENNENT LES DONNÉES ══════════ -->
-    <div class="imp-section">
-        <uc:SourceDonnees ID="ucSource" runat="server" Donnees="BALANCE" Numero="1" />
-    </div>
-
-    <!-- ══════════ 2 · LE FICHIER ══════════ -->
+    <!-- ══════════ 1 · LE FICHIER ET SON ORIGINE ══════════ -->
+    <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul
+         geste. Repliable, et refermée une fois la balance importée — ce qui
+         compte est alors le résultat, plus haut. --%>
     <asp:Panel ID="pnlUpload" runat="server">
-        <div class="imp-section">
-            <h2>2 — Le fichier</h2>
-            <p class="sec-desc">La balance de vérification <strong>à la date de bascule</strong>, en CSV ou en texte. 10 Mo au maximum.</p>
+        <details class="imp-section" id="detFichier" runat="server" open="open">
+            <summary>
+                <h2><span class="n">1</span>Le fichier à importer<span class="imp-chev">▾</span></h2>
+            </summary>
+            <p class="sec-desc">
+                Dites d'où vient l'export, puis déposez-le. Un fichier CSV ou texte,
+                une ligne par compte. 10 Mo au maximum.
+            </p>
+            <div class="body">
 
-            <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuCsvFile.ClientID %>').click();">
-                <div class="uz-ico">📁</div>
-                <p><strong>Glissez votre fichier ici</strong> ou cliquez pour parcourir</p>
-                <p class="uz-hint">Formats : .csv, .txt | Max : 10 Mo</p>
-            </div>
-            <asp:FileUpload ID="fuCsvFile" runat="server" style="display:none;" onchange="showFileInfo(this);" accept=".csv,.txt" />
-            <div id="fileInfoDiv" style="display:none;">
-                <div class="file-pill">
-                    <span class="fp-ico">📄</span>
-                    <div><div class="fp-name" id="fileName"></div><div class="fp-size" id="fileSize"></div></div>
-                    <button type="button" class="fp-rm" onclick="clearFile();">✕</button>
+                <uc:SourceDonnees ID="ucSource" runat="server" Donnees="BALANCE" AvecEntete="false" />
+
+                <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuCsvFile.ClientID %>').click();">
+                    <div class="uz-ico">📁</div>
+                    <p><strong>Glissez votre fichier ici</strong> ou cliquez pour parcourir</p>
+                    <p class="uz-hint">Formats : .csv, .txt | Max : 10 Mo</p>
                 </div>
-            </div>
+                <asp:FileUpload ID="fuCsvFile" runat="server" style="display:none;" onchange="showFileInfo(this);" accept=".csv,.txt" />
+                <div id="fileInfoDiv" style="display:none;">
+                    <div class="file-pill">
+                        <span class="fp-ico">📄</span>
+                        <div><div class="fp-name" id="fileName"></div><div class="fp-size" id="fileSize"></div></div>
+                        <button type="button" class="fp-rm" onclick="clearFile();">✕</button>
+                    </div>
+                </div>
 
-            <div class="chk"><asp:CheckBox ID="chkTruncate" runat="server" Checked="true" /><label for="<%= chkTruncate.ClientID %>">Remplacer la balance déjà importée</label></div>
-            <p class="ia-hint">Fichier mal formaté ? <strong>Lire avec l'IA</strong> confie la lecture à ChatGPT. Chaque montant rendu est retrouvé dans le fichier d'origine avant d'être accepté.</p>
-            <div class="imp-actions">
-                <asp:Button ID="btnPreview" runat="server" Text="👁 Aperçu" CssClass="imp-btn imp-btn-secondary" />
-                <asp:Button ID="btnIA" runat="server" Text="✨ Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value='⏳ Lecture par l\'IA…';" />
-                <asp:Button ID="btnImport" runat="server" Text="📥 Importer" CssClass="imp-btn imp-btn-primary" />
+                <div class="chk">
+                    <asp:CheckBox ID="chkTruncate" runat="server" Checked="true" />
+                    <label for="<%= chkTruncate.ClientID %>">Remplacer la balance déjà importée</label>
+                </div>
+
+                <div class="imp-actions">
+                    <asp:Button ID="btnPreview" runat="server" Text="👁 Voir un aperçu" CssClass="imp-btn imp-btn-secondary" />
+                    <asp:Button ID="btnIA" runat="server" Text="✨ Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value='⏳ Lecture par l\'IA…';" />
+                    <asp:Button ID="btnImport" runat="server" Text="📥 Importer" CssClass="imp-btn imp-btn-primary" />
+                </div>
+
+                <p class="ia-hint">
+                    <b>Importer</b> reconnaît les colonnes par leur en-tête ; les lignes de titre,
+                    la ligne <b>TOTAL</b> et le pied de page sont écartés d'eux-mêmes, et le total
+                    annoncé sert à contrôler la lecture. Pour un fichier mal formé,
+                    <b>Lire avec l'IA</b> confie la lecture à ChatGPT : chaque montant rendu est
+                    retrouvé dans le fichier d'origine avant d'être accepté.
+                </p>
             </div>
-        </div>
+        </details>
     </asp:Panel>
 
-    <asp:Panel ID="pnlPreview" runat="server" Visible="false">
-        <div class="imp-section">
-            <h2>Aperçu</h2>
+    <!-- ══════════ APERÇU ══════════ -->
+    <asp:Panel ID="pnlPreview" runat="server" Visible="false" CssClass="imp-section">
+        <h2><span class="n">👁</span>Aperçu — ce que la lecture a compris</h2>
+        <div class="body">
             <div class="tbl-wrap"><asp:GridView ID="gvPreview" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true" /></div>
             <div class="tbl-info">📋 <asp:Literal ID="litPreviewInfo" runat="server" /></div>
         </div>
     </asp:Panel>
-
-    <div class="imp-section">
-        <h2>Correspondance des colonnes</h2>
-        <p class="sec-desc">Colonnes reconnues. Les lignes de titre avant l'en-tête, la ligne <strong>TOTAL</strong> et le pied de page sont écartés d'eux-mêmes ; le total du fichier sert à contrôler la lecture.</p>
-        <table class="map-tbl">
-            <thead><tr><th>Colonne CSV</th><th></th><th>Champ SQL</th><th>Type</th><th>Description</th></tr></thead>
-            <tbody>
-                <tr><td class="c-csv">Numéro de compte — facultatif</td><td class="c-arr">→</td><td class="c-db">Compte</td><td>VARCHAR(20)</td><td>Absent chez QuickBooks : le nom suffit</td></tr>
-                <tr><td class="c-csv">Account Name / Nom du compte</td><td class="c-arr">→</td><td class="c-db">Description</td><td>VARCHAR(200)</td><td>Nom du compte</td></tr>
-                <tr><td class="c-csv">Debit / Débit</td><td class="c-arr">→</td><td class="c-db">Debit</td><td>DECIMAL(15,2)</td><td>Solde débiteur — « 21,095.57 » comme « 21 095,57 »</td></tr>
-                <tr><td class="c-csv">Credit / Crédit</td><td class="c-arr">→</td><td class="c-db">Credit</td><td>DECIMAL(15,2)</td><td>Solde créditeur</td></tr>
-            </tbody>
-        </table>
-    </div>
 
     <script>
         (function(){
@@ -228,4 +293,6 @@
         function showFileInfo(i){if(i.files&&i.files.length>0){var f=i.files[0];document.getElementById('fileName').textContent=f.name;document.getElementById('fileSize').textContent=f.size>1048576?(f.size/1048576).toFixed(2)+' Mo':(f.size/1024).toFixed(1)+' Ko';document.getElementById('fileInfoDiv').style.display='block';document.getElementById('dropZone').style.display='none';}}
         function clearFile(){document.getElementById('<%= fuCsvFile.ClientID %>').value='';document.getElementById('fileInfoDiv').style.display='none';document.getElementById('dropZone').style.display='';}
     </script>
+
+</div>
 </asp:Content>

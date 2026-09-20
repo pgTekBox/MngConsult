@@ -38,6 +38,44 @@ Public Class ImportBalanceVerification
         If Not IsPostBack Then AfficherBalanceEnPlace()
     End Sub
 
+
+    ''' <summary>
+    ''' Le tableau des colonnes attendues, passé au bloc « D'où viennent vos
+    ''' données ? » pour qu'il apparaisse dans son aide — au même endroit que sur
+    ''' les autres écrans d'importation, plutôt que dans une section du bas que
+    ''' personne ne lit avant d'avoir déposé son fichier.
+    ''' </summary>
+    Private Shared Function TableauColonnes() As String
+        Return "<table class='sd-coltbl'><thead><tr><th>Colonne</th><th>À quoi elle sert</th><th>En-têtes reconnus</th></tr></thead><tbody>" &
+               "<tr><td><b>Numéro de compte</b></td><td>Sert de clé quand il existe. Absent des exports QuickBooks, et ce n'est pas un problème : le nom suffit.</td>" &
+               "<td class='sd-kw'>compte, numéro, account, account number, no</td></tr>" &
+               "<tr><td><b>Nom du compte</b><span class='sd-req'>obligatoire</span></td><td>Ce qui identifie le compte quand il n'a pas de numéro.</td>" &
+               "<td class='sd-kw'>nom, description, account name, libellé</td></tr>" &
+               "<tr><td><b>Débit</b></td><td>Solde débiteur. « 21,095.57 » se lit comme « 21 095,57 ».</td>" &
+               "<td class='sd-kw'>débit, debit, dr</td></tr>" &
+               "<tr><td><b>Crédit</b></td><td>Solde créditeur.</td>" &
+               "<td class='sd-kw'>crédit, credit, cr</td></tr>" &
+               "</tbody></table>" &
+               "<p class='sd-p'>L'ordre des colonnes n'a pas d'importance : elles sont reconnues par leur en-tête, " &
+               "en français comme en anglais. Les lignes de titre avant l'en-tête, la ligne <b>TOTAL</b> et le pied " &
+               "de page sont écartés d'eux-mêmes — et le total annoncé par le fichier sert à contrôler la lecture. " &
+               "Un fichier que rien de tout ça ne décrit se lit avec <b>Lire avec l'IA</b>.</p>"
+    End Function
+    ''' <summary>
+    ''' La boîte du dépôt se referme dès qu'une balance est à l'écran : ce qui
+    ''' compte est alors le résultat, au-dessus. Un clic sur le titre la ramène.
+    ''' Décidé au PreRender, quand tous les panneaux ont choisi leur visibilité.
+    ''' </summary>
+    Protected Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        ucSource.ColonnesHtml = TableauColonnes()
+
+        If pnlResults.Visible Then
+            detFichier.Attributes.Remove("open")
+        Else
+            detFichier.Attributes("open") = "open"
+        End If
+    End Sub
+
     Protected Sub btnPreview_Click(sender As Object, e As EventArgs) Handles btnPreview.Click
         Apercu()
     End Sub
@@ -550,7 +588,7 @@ Public Class ImportBalanceVerification
 
         pnlResults.Visible = True
         pnlStats.Visible = True
-        litTitreResultat.Text = "Résultat de l'importation"
+        litTitreResultat.Text = "Ce qui a été lu — à vérifier"
         litOrigine.Text = ""
         pnlControle.Visible = False
         DerniereImportation = lus
@@ -708,7 +746,7 @@ Public Class ImportBalanceVerification
             sb.Append(" — ").Append(src.Rows.Count).Append(" compte(s). ")
             sb.Append("Pour la remplacer, importez simplement un nouveau fichier.</p>")
 
-            litTitreResultat.Text = "Balance importée"
+            litTitreResultat.Text = "La balance déjà importée"
             litOrigine.Text = sb.ToString()
             pnlStats.Visible = False
             pnlResults.Visible = True
