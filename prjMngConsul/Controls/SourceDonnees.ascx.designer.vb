@@ -9,6 +9,12 @@ Option Explicit On
 
 Partial Public Class SourceDonnees
 
+    '''<summary>pnlEntete</summary>
+    Protected WithEvents pnlEntete As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>divCorps</summary>
+    Protected WithEvents divCorps As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>litNumero</summary>
     Protected WithEvents litNumero As Global.System.Web.UI.WebControls.Literal
 

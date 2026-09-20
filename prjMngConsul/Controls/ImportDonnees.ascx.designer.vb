@@ -63,6 +63,9 @@ Partial Public Class ImportDonnees
     '''<summary>btnAbandonner</summary>
     Protected WithEvents btnAbandonner As Global.System.Web.UI.WebControls.Button
 
+    '''<summary>detFichier</summary>
+    Protected WithEvents detFichier As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>ucSource</summary>
     Protected WithEvents ucSource As Global.MngConsul.SourceDonnees
 
@@ -92,10 +95,4 @@ Partial Public Class ImportDonnees
 
     '''<summary>litApercu</summary>
     Protected WithEvents litApercu As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>pnlFichiers</summary>
-    Protected WithEvents pnlFichiers As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>gvFichiers</summary>
-    Protected WithEvents gvFichiers As Global.System.Web.UI.WebControls.GridView
 End Class

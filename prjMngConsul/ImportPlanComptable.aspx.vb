@@ -94,6 +94,31 @@ Public Class ImportPlanComptable
         End If
     End Sub
 
+    ''' <summary>Le pliage se décide au dernier moment : tout le monde a fini de montrer ou cacher ses panneaux.</summary>
+    Protected Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        AjusterPliageSource()
+    End Sub
+
+    ''' <summary>
+    ''' Replie ou déplie « D'où viennent vos données ? ».
+    '''
+    ''' Tant que rien n'a été lu, c'est par là qu'on commence : la boîte reste
+    ''' ouverte. Dès qu'un plan attend en préparation, ce qui compte est le
+    ''' résultat, affiché au-dessus — les réglages se referment pour lui laisser
+    ''' l'écran, sans disparaître : un clic sur le titre les ramène.
+    '''
+    ''' Le pliage est rendu côté serveur à chaque affichage : après un postback,
+    ''' la boîte reprend l'état qui correspond à ce qu'il y a à voir, et non
+    ''' celui qu'elle avait avant le clic.
+    ''' </summary>
+    Private Sub AjusterPliageSource()
+        If pnlResultat.Visible OrElse pnlLignes.Visible Then
+            detSource.Attributes.Remove("open")
+        Else
+            detSource.Attributes("open") = "open"
+        End If
+    End Sub
+
     Private Sub RemplirSystemes()
         ddlSysteme.Items.Clear()
         For Each s In SystemesSupportes

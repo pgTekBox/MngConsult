@@ -23,12 +23,14 @@
 
     .idn-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; margin-bottom: 16px }
 
-    .idn-step > h2 {
+    .idn-step > h2,
+    .idn-step > summary > h2 {
         font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a;
         display: flex; align-items: center; gap: 9px;
     }
 
-    .idn-step > h2 .n {
+    .idn-step > h2 .n,
+    .idn-step > summary > h2 .n {
         width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto;
         background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
         font-size: 12px; display: flex; align-items: center; justify-content: center;
@@ -36,6 +38,17 @@
 
     .idn-step > .desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
     .idn-step > .body { padding-left: 33px }
+
+    /* Une étape repliable : le titre devient la poignée, le chevron dit le sens.
+       Le marqueur du navigateur est retiré, il ne ressemble à rien d'autre ici. */
+    details.idn-step > summary { list-style: none; cursor: pointer; border-radius: 8px }
+    details.idn-step > summary::-webkit-details-marker { display: none }
+    details.idn-step > summary::marker { content: "" }
+    details.idn-step > summary:hover h2 { color: #1d4ed8 }
+    details.idn-step > summary > h2 { margin: 0 }
+    details.idn-step[open] > summary > h2 { margin-bottom: 3px }
+    .idn-chev { margin-left: auto; font-size: 12px; color: #94a3b8; transition: transform .15s }
+    details.idn-step[open] .idn-chev { transform: rotate(180deg) }
 
     /* Une seule ligne : la zone de dépôt n'a aucune raison d'occuper l'écran. */
     .idn-drop {
@@ -157,16 +170,22 @@
         </div>
     </asp:Panel>
 
-    <!-- ══════════ 1 · D'OÙ VIENNENT LES DONNÉES ══════════ -->
-    <div class="idn-step">
-        <uc:SourceDonnees ID="ucSource" runat="server" Numero="1" />
-    </div>
-
-    <!-- ══════════ 2 · LE FICHIER ══════════ -->
-    <div class="idn-step">
-        <h2><span class="n">2</span>Le fichier</h2>
-        <p class="desc">Un fichier CSV ou texte, une ligne par <asp:Literal ID="litUn" runat="server" />. 10 Mo au maximum.</p>
+    <!-- ══════════ 1 · LE FICHIER ET SON ORIGINE ══════════ -->
+    <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul
+         geste, et les séparer obligeait à lire deux titres pour une action.
+         Repliable, et refermée dès qu'un dépôt attend d'être vérifié — le code
+         du contrôle pose l'attribut « open ». --%>
+    <details class="idn-step" id="detFichier" runat="server" open="open">
+        <summary>
+            <h2><span class="n">1</span>Le fichier à importer<span class="idn-chev">▾</span></h2>
+        </summary>
+        <p class="desc">
+            Dites d'où vient l'export, puis déposez-le. Un fichier CSV ou texte, une ligne
+            par <asp:Literal ID="litUn" runat="server" />. 10 Mo au maximum.
+        </p>
         <div class="body">
+
+            <uc:SourceDonnees ID="ucSource" runat="server" AvecEntete="false" />
 
             <div class="idn-drop" id="idnDrop">
                 <span class="di" id="idnIcone">📁</span>
@@ -194,44 +213,13 @@
                 créé avant que vous ne l'ayez décidé.
             </p>
         </div>
-    </div>
+    </details>
 
     <!-- ══════════ APERÇU ══════════ -->
     <asp:Panel ID="pnlApercu" runat="server" Visible="false" CssClass="idn-step">
         <h2><span class="n">👁</span>Aperçu — ce que la lecture a compris</h2>
         <div class="body">
             <asp:Literal ID="litApercu" runat="server" />
-        </div>
-    </asp:Panel>
-
-    <!-- ══════════ LES FICHIERS PRÉCÉDENTS ══════════ -->
-    <asp:Panel ID="pnlFichiers" runat="server" Visible="false" CssClass="idn-step">
-        <h2><span class="n">🗂</span>Fichiers déjà déposés</h2>
-        <p class="desc">Chaque dépôt se revoit ou s'abandonne. Abandonner ne retire rien de ce qui a été créé.</p>
-        <div class="body">
-            <div class="idn-tbl">
-                <asp:GridView ID="gvFichiers" runat="server" AutoGenerateColumns="false"
-                    CssClass="idn-g" GridLines="None" UseAccessibleHeader="true">
-                    <Columns>
-                        <asp:BoundField DataField="UploadDate" HeaderText="Déposé le" DataFormatString="{0:yyyy-MM-dd HH:mm}" />
-                        <asp:BoundField DataField="OriginalName" HeaderText="Fichier" />
-                        <asp:BoundField DataField="Lecture" HeaderText="Lu par" />
-                        <asp:BoundField DataField="Lignes" HeaderText="Lignes" />
-                        <asp:BoundField DataField="Crees" HeaderText="Créés" />
-                        <asp:BoundField DataField="EnAttente" HeaderText="En attente" />
-                        <asp:TemplateField>
-                            <ItemTemplate>
-                                <asp:LinkButton runat="server" Text="Revoir" CommandName="Voir"
-                                    CommandArgument='<%# Eval("Id") %>' CausesValidation="false" />
-                                &nbsp;·&nbsp;
-                                <asp:LinkButton runat="server" Text="Abandonner" CommandName="Supprimer"
-                                    CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
-                                    OnClientClick="if (!confirm('Abandonner ce fichier et ses lignes en préparation ?')) { return false; }" />
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                    </Columns>
-                </asp:GridView>
-            </div>
         </div>
     </asp:Panel>
 

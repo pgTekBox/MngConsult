@@ -17,6 +17,7 @@
 
     .sd-desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
     .sd-body { padding-left: 33px }
+    .sd-plat { padding-left: 0 }
 
     .sd-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px }
 
@@ -91,10 +92,12 @@
 </style>
 
 <div class="sd">
+    <asp:Panel ID="pnlEntete" runat="server">
     <h2 class="sd-h"><span class="sd-n"><asp:Literal ID="litNumero" runat="server" /></span>D'où viennent vos données ?</h2>
     <p class="sd-desc">Le séparateur et l'encodage sont ajustés au logiciel choisi — vous pouvez les changer.</p>
+    </asp:Panel>
 
-    <div class="sd-body">
+    <div class="sd-body" id="divCorps" runat="server">
         <div class="sd-grid">
             <div class="sd-fld">
                 <label>Logiciel d'origine</label>

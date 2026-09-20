@@ -26,6 +26,9 @@ Partial Public Class ImportPlanComptable
     '''<summary>litErreur</summary>
     Protected WithEvents litErreur As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>detSource</summary>
+    Protected WithEvents detSource As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>ddlSysteme</summary>
     Protected WithEvents ddlSysteme As Global.System.Web.UI.WebControls.DropDownList
     '''<summary>ddlSeparateur</summary>
@@ -92,8 +95,6 @@ Partial Public Class ImportPlanComptable
     Protected WithEvents gvLignes As Global.System.Web.UI.WebControls.GridView
 
 
-    '''<summary>pnlAbandon</summary>
-    Protected WithEvents pnlAbandon As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>btnVider</summary>
     Protected WithEvents btnVider As Global.System.Web.UI.WebControls.Button

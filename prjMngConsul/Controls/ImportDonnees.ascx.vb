@@ -192,7 +192,7 @@ Public Class ImportDonnees
 
         ' En revenant sur l'écran, on retrouve le dernier fichier déposé : il
         ' est en base, l'écran n'a qu'à le montrer.
-        Dim dernier = ChargerFichiers()
+        Dim dernier = DernierFichier()
         If dernier > 0 Then Afficher(dernier)
     End Sub
 
@@ -204,6 +204,14 @@ Public Class ImportDonnees
                                 (garde.Octets.Length / 1024.0).ToString("N0", Fr) &
                                 " Ko) est gardé depuis votre dernier dépôt : les boutons ci-dessous s'en servent. " &
                                 "Déposez-en un autre pour le remplacer."
+        End If
+
+        ' La boîte du dépôt se referme dès qu'un fichier attend d'être vérifié :
+        ' ce qui compte est alors au-dessus. Un clic sur le titre la ramène.
+        If pnlResultat.Visible Then
+            detFichier.Attributes.Remove("open")
+        Else
+            detFichier.Attributes("open") = "open"
         End If
     End Sub
 
@@ -258,7 +266,6 @@ Public Class ImportDonnees
             If l.Ecartees > 0 Then msg &= " " & l.Ecartees & " ligne(s) sans nom — titres, totaux, pied de page — ont été écartées."
             ShowSucces(msg & " Rien n'est encore créé : vérifiez ci-dessous, puis décidez.")
 
-            ChargerFichiers()
             Afficher(id)
         Catch ex As Exception
             ShowErreur("Lecture du fichier : " & H(ex.Message))
@@ -309,24 +316,12 @@ Public Class ImportDonnees
             ShowErreur("Création : " & H(ex.Message))
         End Try
 
-        ChargerFichiers()
         Afficher(FichierCourant)
     End Sub
 
     Protected Sub btnAbandonner_Click(sender As Object, e As EventArgs) Handles btnAbandonner.Click
         Cacher()
         If FichierCourant > 0 Then Abandonner(FichierCourant)
-    End Sub
-
-    Protected Sub gvFichiers_RowCommand(sender As Object, e As GridViewCommandEventArgs) Handles gvFichiers.RowCommand
-        Dim id As Integer
-        If Not Integer.TryParse(Convert.ToString(e.CommandArgument), id) OrElse id <= 0 Then Return
-
-        Cacher()
-        Select Case e.CommandName
-            Case "Voir" : Afficher(id)
-            Case "Supprimer" : Abandonner(id)
-        End Select
     End Sub
 
     Private Sub Abandonner(id As Integer)
@@ -351,7 +346,10 @@ Public Class ImportDonnees
             ShowErreur("Abandon du fichier : " & H(ex.Message))
         End Try
 
-        ChargerFichiers()
+        ' Le dépôt abandonné disparaît de l'écran. S'il en reste un autre en
+        ' préparation, on le montre : il n'y a plus de liste pour y revenir.
+        Dim reste = DernierFichier()
+        If reste > 0 Then Afficher(reste)
     End Sub
 
 #End Region
@@ -712,7 +710,6 @@ Public Class ImportDonnees
             ShowSucces(msg)
         End If
 
-        ChargerFichiers()
         Afficher(id)
     End Function
 
@@ -804,8 +801,15 @@ Public Class ImportDonnees
         Return id
     End Function
 
-    ''' <summary>La liste des fichiers déposés. Rend le plus récent, ou 0.</summary>
-    Private Function ChargerFichiers() As Integer
+    ''' <summary>
+    ''' L'identifiant du dépôt le plus récent, ou 0.
+    '''
+    ''' L'écran montrait autrefois la liste de tous les dépôts. Elle ne servait
+    ''' à personne : ce qui intéresse celui qui importe, c'est ce qu'il vient de
+    ''' déposer, pas l'inventaire de ses tentatives. Reste ce dont l'écran a
+    ''' vraiment besoin — savoir lequel afficher.
+    ''' </summary>
+    Private Function DernierFichier() As Integer
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
@@ -813,20 +817,9 @@ Public Class ImportDonnees
             Dim ds As DataSet = ExecuteSQLds("s0772GetImportFichiers", p)
             Dim dt = ds.Tables(0)
 
-            dt.Columns.Add("Lecture", GetType(String))
-            For Each r As DataRow In dt.Rows
-                Dim m = Txt(r("ModelUsed"))
-                r("Lecture") = If(m = LectureDirecte, "lecture directe", If(m = "", "—", "IA"))
-            Next
-
-            gvFichiers.DataSource = dt
-            gvFichiers.DataBind()
-            pnlFichiers.Visible = dt.Rows.Count > 0
-
             Return If(dt.Rows.Count > 0, Convert.ToInt32(dt.Rows(0)("Id")), 0)
         Catch ex As Exception
             ShowErreur("Liste des fichiers : " & H(ex.Message))
-            pnlFichiers.Visible = False
             Return 0
         End Try
     End Function

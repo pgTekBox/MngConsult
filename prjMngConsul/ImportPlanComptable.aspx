@@ -32,12 +32,14 @@
         padding: 20px; margin-bottom: 16px;
     }
 
-    .step > h2 {
+    .step > h2,
+    .step > summary > h2 {
         font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a;
         display: flex; align-items: center; gap: 9px;
     }
 
-    .step > h2 .n {
+    .step > h2 .n,
+    .step > summary > h2 .n {
         width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto;
         background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
         font-size: 12px; display: flex; align-items: center; justify-content: center;
@@ -45,6 +47,26 @@
 
     .step > .desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
     .step > .body { padding-left: 33px }
+
+    /* Une étape qu'on peut replier : le titre devient le bouton, et le chevron
+       dit dans quel sens ça va. Le marqueur du navigateur est retiré — il ne
+       ressemble à rien d'autre dans cette page. */
+    details.step > summary {
+        list-style: none; cursor: pointer; border-radius: 8px;
+    }
+
+    details.step > summary::-webkit-details-marker { display: none }
+    details.step > summary::marker { content: "" }
+    details.step > summary:hover h2 { color: #1d4ed8 }
+    details.step > summary > h2 { margin: 0 }
+    details.step[open] > summary > h2 { margin-bottom: 3px }
+
+    .step-chev {
+        margin-left: auto; font-size: 12px; color: #94a3b8;
+        transition: transform .15s;
+    }
+
+    details.step[open] .step-chev { transform: rotate(180deg) }
 
     .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px }
     .grid3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px }
@@ -85,6 +107,7 @@
     .cbx { display: flex; align-items: center; gap: 7px; margin-top: 13px; font-size: 13px }
 
     .acts { display: flex; gap: 9px; flex-wrap: wrap; margin-top: 16px }
+    .hint-abandon { font-size: 12px; color: #94a3b8; margin: 8px 0 0; max-width: 62ch }
 
     .btn {
         padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700;
@@ -112,10 +135,12 @@
     .stat.wa { background: #fffbeb; border-color: #fde68a }
     .stat.wa .v { color: #b45309 }
 
-    .tbl-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px }
+    /* La grille défile dans son cadre : deux cents comptes ne doivent pas pousser
+       le bouton d'abandon hors de l'écran. L'entête reste visible en défilant. */
+    .tbl-wrap { overflow: auto; max-height: 540px; border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px }
 
     table.g { width: 100%; border-collapse: collapse; font-size: 12.5px }
-    table.g th { background: #f8fafc; text-align: left; padding: 9px 11px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0 }
+    table.g th { background: #f8fafc; text-align: left; padding: 9px 11px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1 }
     table.g td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.g tr:last-child td { border-bottom: 0 }
     table.g tr.row-ko td { background: #fef2f2 }
@@ -257,10 +282,118 @@
         <span class="ai">❌</span><div><asp:Literal ID="litErreur" runat="server" /></div>
     </asp:Panel>
 
-    <!-- ══════════ 1 · D'OÙ VIENNENT LES DONNÉES ══════════ -->
-    <div class="step">
-        <h2><span class="n">1</span>D'où viennent vos données ?</h2>
-        <p class="desc">Le séparateur et l'encodage sont ajustés pour vous — vous pouvez les changer.</p>
+    <!-- ══════════ RÉSULTAT ══════════ -->
+    <asp:Panel ID="pnlResultat" runat="server" Visible="false" CssClass="step">
+        <h2><span class="n">✓</span>Ce qui a été lu — à vérifier avant d'aller plus loin</h2>
+        <div class="body">
+            <div class="stats">
+                <div class="stat">
+                    <div class="l">Lignes lues</div>
+                    <div class="v"><asp:Literal ID="litLues" runat="server" Text="0" /></div>
+                </div>
+                <div class="stat">
+                    <div class="l">Comptes retenus</div>
+                    <div class="v"><asp:Literal ID="litRetenues" runat="server" Text="0" /></div>
+                </div>
+                <div class="stat wa">
+                    <div class="l">À regarder</div>
+                    <div class="v"><asp:Literal ID="litAnomalies" runat="server" Text="0" /></div>
+                </div>
+            </div>
+
+            <div class="note-staging">
+                <span>🛡️</span>
+                <p>
+                    Ces comptes sont <b>en préparation</b>. Votre plan comptable n'a pas
+                    changé. Vous pouvez recharger un autre fichier, ou abandonner ce lot,
+                    sans aucune conséquence.
+                </p>
+            </div>
+
+            <div class="suite">
+                <div class="txt">
+                    <b>Étape suivante — la correspondance des comptes</b>
+                    <p>
+                        Chaque compte lu doit maintenant être <b>lié</b> à un compte de votre
+                        plan, <b>créé</b>, ou <b>ignoré</b>. Rien n'est écrit tant que vous
+                        n'avez pas décidé.
+                    </p>
+                </div>
+                <asp:HyperLink ID="hlCorrespondance" runat="server"
+                    Text="Passer à la correspondance →" />
+            </div>
+        </div>
+    </asp:Panel>
+
+    <!-- ══════════ CE QUI EST EN PRÉPARATION ══════════ -->
+    <asp:Panel ID="pnlLignes" runat="server" Visible="false" CssClass="step">
+        <h2><span class="n">📋</span>Ce qui est en préparation</h2>
+        <p class="desc">
+            « Déjà au plan » n'est pas une erreur : ce compte existe chez vous, il sera
+            mis en correspondance plutôt que créé.
+        </p>
+        <div class="body">
+
+            <div class="fld" style="max-width:260px">
+                <label>Afficher</label>
+                <asp:DropDownList ID="ddlFiltre" runat="server" AutoPostBack="true">
+                    <asp:ListItem Value="" Text="Tout" />
+                    <asp:ListItem Value="OK" Text="Nouveaux comptes" />
+                    <asp:ListItem Value="EXISTE" Text="Déjà au plan" />
+                    <asp:ListItem Value="DOUBLON_FICHIER" Text="Doublons du fichier" />
+                    <asp:ListItem Value="INVALIDE" Text="Lignes invalides" />
+                </asp:DropDownList>
+            </div>
+
+            <div class="tbl-wrap">
+                <asp:GridView ID="gvLignes" runat="server" AutoGenerateColumns="false"
+                    CssClass="g" GridLines="None" UseAccessibleHeader="true">
+                    <Columns>
+                        <asp:BoundField DataField="LigneNo" HeaderText="Ligne" />
+                        <asp:BoundField DataField="Compte" HeaderText="Compte" />
+                        <asp:BoundField DataField="Nom" HeaderText="Nom" />
+                        <asp:BoundField DataField="TypeNormalise" HeaderText="Nature" />
+                        <asp:BoundField DataField="Solde" HeaderText="Solde" DataFormatString="{0:N2}" />
+                        <asp:BoundField DataField="Sens" HeaderText="Sens" />
+                        <asp:TemplateField HeaderText="Verdict">
+                            <ItemTemplate>
+                                <span class='pill <%# PilleClasse(Eval("Statut")) %>'>
+                                    <%# PilleTexte(Eval("Statut")) %></span>
+                            </ItemTemplate>
+                        </asp:TemplateField>
+                        <asp:BoundField DataField="Anomalie" HeaderText="Détail" />
+                        <asp:BoundField DataField="TypeSource" HeaderText="Type d'origine" />
+                    </Columns>
+                </asp:GridView>
+
+            </div>
+            <%-- L'abandon est en bas de la grille, là où on arrive après avoir
+                 regardé les lignes : c'est à ce moment qu'on décide d'y renoncer,
+                 pas au fond d'un encadré à part. --%>
+            <div class="acts">
+                <asp:Button ID="btnVider" runat="server" Text="🗑 Abandonner la préparation"
+                    CssClass="btn secondaire" CausesValidation="false"
+                    OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?')) { return false; }" />
+            </div>
+            <p class="hint-abandon">
+                Efface le plan comptable en préparation. Refusé si des comptes en ont déjà
+                été créés : on n'efface pas la trace de ce qui existe.
+            </p>
+        </div>
+    </asp:Panel>
+
+    <!-- ══════════ 1 · LE FICHIER ET SON ORIGINE ══════════ -->
+    <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul
+         geste. Repliable, et refermée dès qu'un plan attend en préparation — ce
+         qui compte est alors plus haut. Le code-behind pose l'attribut « open ». --%>
+    <details class="step" id="detSource" runat="server" open="open">
+        <summary>
+            <h2><span class="n">1</span>Le fichier à importer<span class="step-chev">▾</span></h2>
+        </summary>
+        <p class="desc">
+            Dites d'où vient l'export, puis déposez-le. Un fichier CSV, une ligne par compte.
+            10 Mo au maximum — le séparateur et l'encodage s'ajustent au logiciel choisi.
+        </p>
         <div class="body">
             <div class="grid3">
                 <div class="fld">
@@ -344,14 +477,7 @@
                     </div>
                 </details>
             </asp:Panel>
-        </div>
-    </div>
 
-    <!-- ══════════ 2 · LE FICHIER ══════════ -->
-    <div class="step">
-        <h2><span class="n">2</span>Le fichier</h2>
-        <p class="desc">Un fichier CSV, une ligne par compte. 10 Mo au maximum.</p>
-        <div class="body">
 
             <div class="drop" id="dropZone">
                 <span class="di" id="dropIcone">📁</span>
@@ -371,7 +497,7 @@
                 <asp:Button ID="btnCharger" runat="server" Text="Charger en préparation" CssClass="btn btn-p" CausesValidation="false" />
             </div>
         </div>
-    </div>
+    </details>
 
     <!-- ══════════ APERÇU ══════════ -->
     <asp:Panel ID="pnlApercu" runat="server" Visible="false" CssClass="step">
@@ -386,110 +512,6 @@
                 <asp:GridView ID="gvApercu" runat="server" AutoGenerateColumns="true"
                     CssClass="g" GridLines="None" UseAccessibleHeader="true" />
             </div>
-        </div>
-    </asp:Panel>
-
-    <!-- ══════════ RÉSULTAT ══════════ -->
-    <asp:Panel ID="pnlResultat" runat="server" Visible="false" CssClass="step">
-        <h2><span class="n">✓</span>Résultat du chargement</h2>
-        <div class="body">
-            <div class="stats">
-                <div class="stat">
-                    <div class="l">Lignes lues</div>
-                    <div class="v"><asp:Literal ID="litLues" runat="server" Text="0" /></div>
-                </div>
-                <div class="stat">
-                    <div class="l">Comptes retenus</div>
-                    <div class="v"><asp:Literal ID="litRetenues" runat="server" Text="0" /></div>
-                </div>
-                <div class="stat wa">
-                    <div class="l">À regarder</div>
-                    <div class="v"><asp:Literal ID="litAnomalies" runat="server" Text="0" /></div>
-                </div>
-            </div>
-
-            <div class="note-staging">
-                <span>🛡️</span>
-                <p>
-                    Ces comptes sont <b>en préparation</b>. Votre plan comptable n'a pas
-                    changé. Vous pouvez recharger un autre fichier, ou abandonner ce lot,
-                    sans aucune conséquence.
-                </p>
-            </div>
-
-            <div class="suite">
-                <div class="txt">
-                    <b>Étape suivante — la correspondance des comptes</b>
-                    <p>
-                        Chaque compte lu doit maintenant être <b>lié</b> à un compte de votre
-                        plan, <b>créé</b>, ou <b>ignoré</b>. Rien n'est écrit tant que vous
-                        n'avez pas décidé.
-                    </p>
-                </div>
-                <asp:HyperLink ID="hlCorrespondance" runat="server"
-                    Text="Passer à la correspondance →" />
-            </div>
-        </div>
-    </asp:Panel>
-
-    <!-- ══════════ CE QUI EST EN PRÉPARATION ══════════ -->
-    <asp:Panel ID="pnlLignes" runat="server" Visible="false" CssClass="step">
-        <h2><span class="n">📋</span>Ce qui est en préparation</h2>
-        <p class="desc">
-            « Déjà au plan » n'est pas une erreur : ce compte existe chez vous, il sera
-            mis en correspondance plutôt que créé.
-        </p>
-        <div class="body">
-
-            <div class="fld" style="max-width:260px">
-                <label>Afficher</label>
-                <asp:DropDownList ID="ddlFiltre" runat="server" AutoPostBack="true">
-                    <asp:ListItem Value="" Text="Tout" />
-                    <asp:ListItem Value="OK" Text="Nouveaux comptes" />
-                    <asp:ListItem Value="EXISTE" Text="Déjà au plan" />
-                    <asp:ListItem Value="DOUBLON_FICHIER" Text="Doublons du fichier" />
-                    <asp:ListItem Value="INVALIDE" Text="Lignes invalides" />
-                </asp:DropDownList>
-            </div>
-
-            <div class="tbl-wrap">
-                <asp:GridView ID="gvLignes" runat="server" AutoGenerateColumns="false"
-                    CssClass="g" GridLines="None" UseAccessibleHeader="true">
-                    <Columns>
-                        <asp:BoundField DataField="LigneNo" HeaderText="Ligne" />
-                        <asp:BoundField DataField="Compte" HeaderText="Compte" />
-                        <asp:BoundField DataField="Nom" HeaderText="Nom" />
-                        <asp:BoundField DataField="TypeNormalise" HeaderText="Nature" />
-                        <asp:BoundField DataField="Solde" HeaderText="Solde" DataFormatString="{0:N2}" />
-                        <asp:BoundField DataField="Sens" HeaderText="Sens" />
-                        <asp:TemplateField HeaderText="Verdict">
-                            <ItemTemplate>
-                                <span class='pill <%# PilleClasse(Eval("Statut")) %>'>
-                                    <%# PilleTexte(Eval("Statut")) %></span>
-                            </ItemTemplate>
-                        </asp:TemplateField>
-                        <asp:BoundField DataField="Anomalie" HeaderText="Détail" />
-                        <asp:BoundField DataField="TypeSource" HeaderText="Type d'origine" />
-                    </Columns>
-                </asp:GridView>
-            </div>
-        </div>
-    </asp:Panel>
-
-    <!-- ══════════ ABANDONNER ══════════ -->
-    <%-- Il n'y a plus de « chargements précédents » à parcourir : un seul plan
-         comptable attend en préparation, et le suivant le remplace. Reste une
-         seule action, celle d'y renoncer. --%>
-    <asp:Panel ID="pnlAbandon" runat="server" CssClass="step">
-        <h2><span class="n">🗑</span>Abandonner</h2>
-        <p class="desc">
-            Efface le plan comptable en préparation. Refusé si des comptes en ont
-            déjà été créés : on n'efface pas la trace de ce qui existe.
-        </p>
-        <div class="body">
-            <asp:Button ID="btnVider" runat="server" Text="Abandonner la préparation"
-                CssClass="btn secondaire" CausesValidation="false"
-                OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?')) { return false; }" />
         </div>
     </asp:Panel>
 

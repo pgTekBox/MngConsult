@@ -20,6 +20,13 @@ Public Class SourceDonnees
     Public Property Numero As String = "1"
 
     ''' <summary>
+    ''' Faux quand l'écran englobe ce bloc dans sa propre boîte : le titre et
+    ''' l'explication appartiennent alors à l'écran, et le répéter ici ferait
+    ''' deux titres l'un sous l'autre.
+    ''' </summary>
+    Public Property AvecEntete As Boolean = True
+
+    ''' <summary>
     ''' Le tableau des colonnes attendues, bâti par l'écran qui sait ce qu'il
     ''' cherche. Vide : le tableau n'est pas affiché.
     ''' </summary>
@@ -80,6 +87,8 @@ Public Class SourceDonnees
     End Sub
 
     Protected Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        pnlEntete.Visible = AvecEntete
+        divCorps.Attributes("class") = If(AvecEntete, "sd-body", "sd-body sd-plat")
         litNumero.Text = Server.HtmlEncode(Numero)
         litColonnes.Text = ColonnesHtml
         pnlColonnes.Visible = Not String.IsNullOrEmpty(ColonnesHtml)
