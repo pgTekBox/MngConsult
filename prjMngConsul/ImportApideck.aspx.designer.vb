@@ -27,6 +27,9 @@ Partial Public Class ImportApideck
     '''<summary>litRessources</summary>
     Protected WithEvents litRessources As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>txtDateBalance</summary>
+    Protected WithEvents txtDateBalance As Global.System.Web.UI.WebControls.TextBox
+
     '''<summary>btnImporter</summary>
     Protected WithEvents btnImporter As Global.System.Web.UI.WebControls.Button
 

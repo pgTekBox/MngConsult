@@ -52,6 +52,21 @@
     .ress .grp:first-child { margin-top: 0 }
     .ress .vers { font-size: 11.5px; color: #047857; margin-left: 4px }
 
+    .datebloc {
+        display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
+        margin-top: 14px; padding: 12px 14px; border-radius: 11px;
+        background: #f8fafc; border: 1px solid #e2e8f0;
+    }
+
+    .datebloc label { font-size: 13px; font-weight: 700; color: #334155 }
+
+    .datechamp {
+        padding: 7px 10px; border: 1px solid #cbd5e1; border-radius: 9px;
+        font-size: 13px; font-family: inherit; background: #fff;
+    }
+
+    .datebloc .aide { font-size: 12px; color: #64748b; flex: 1; min-width: 280px; line-height: 1.5 }
+
     .barre { display: flex; gap: 10px; align-items: center; margin-top: 16px; flex-wrap: wrap }
     .barre .aide { font-size: 12.5px; color: #64748b }
 
@@ -107,6 +122,20 @@
     <h2 class="sect">2. Ce qu'on rapatrie <span>tout est déposé en préparation</span></h2>
     <div class="bloc">
         <asp:Literal ID="litRessources" runat="server" />
+
+        <%-- La balance de vérification est la seule ressource qui demande une
+             date : QuickBooks la rend pour une période, et une balance à la
+             mauvaise date ressemble à s'y méprendre à une bonne. --%>
+        <div class="datebloc">
+            <label for="<%= txtDateBalance.ClientID %>">Balance de vérification arrêtée au</label>
+            <asp:TextBox ID="txtDateBalance" runat="server" TextMode="Date" CssClass="datechamp" />
+            <span class="aide">
+                La date de bascule — la veille du premier jour tenu ici. QuickBooks exige une
+                période : les comptes de résultats couvriront l'année civile jusqu'à cette date,
+                les comptes de bilan porteront leur solde à cette date.
+            </span>
+        </div>
+
 
         <div class="barre">
             <asp:Button ID="btnImporter" runat="server" CssClass="btn primaire" Text="Importer dans la préparation" CausesValidation="false" />

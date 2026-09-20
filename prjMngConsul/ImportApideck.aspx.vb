@@ -95,6 +95,7 @@ Public Class ImportApideck
                 New Ressource With {.Groupe = "Contrôle", .Cle = "profit-and-loss", .Libelle = "Résultats", .Unique = True, .Vers = "RESULTATS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "aged-debtors", .Libelle = "Balance âgée clients", .Unique = True, .Vers = "AGEE_CLIENTS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "aged-creditors", .Libelle = "Balance âgée fournisseurs", .Unique = True, .Vers = "AGEE_FOURNISSEURS"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "trial-balance", .Libelle = "Balance de vérification", .Vers = "BALANCE_VERIF", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"}
             }
         End Get
@@ -291,7 +292,10 @@ Public Class ImportApideck
     Private Function LireRessource(api As clsApideck, r As Ressource) As JArray
         Select Case r.Mode
             Case "PAR_DOCUMENT" : Return LirePiecesJointes(api)
-            Case "PASSERELLE" : Return LireConditionsPaiement(api)
+            Case "PASSERELLE"
+                ' Deux ressources passent par le langage natif de QuickBooks.
+                If r.Vers = "BALANCE_VERIF" Then Return LireBalanceVerification(api)
+                Return LireConditionsPaiement(api)
         End Select
 
         If Not r.Unique Then Return api.ListAll(r.Cle)
@@ -357,6 +361,7 @@ Public Class ImportApideck
             Case "RESULTATS" : Return VerserResultats(brut, runId)
             Case "AGEE_CLIENTS" : Return VerserBalanceAgee(brut, "Client", runId)
             Case "AGEE_FOURNISSEURS" : Return VerserBalanceAgee(brut, "Fournisseur", runId)
+            Case "BALANCE_VERIF" : Return VerserBalanceVerification(brut, runId)
             Case "CONDITIONS" : Return VerserConditionsPaiement(brut, runId)
             Case "PIECES_JOINTES" : Return VerserPiecesJointes(brut, runId)
             Case "SOCIETE" : Return VerserSociete(brut, runId)
@@ -1197,6 +1202,161 @@ Public Class ImportApideck
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
 
         Return "en préparation : " & Lire(ds.Tables(0).Rows(0), "NbLignes") & " poste(s)"
+    End Function
+
+
+    ''' <summary>
+    ''' La date à laquelle la balance est arrêtée, saisie sur l'écran.
+    ''' Vide tant que la ressource n'est pas demandée : c'est la seule qui en a
+    ''' besoin, et on ne va pas imposer une date à qui rapatrie des clients.
+    ''' </summary>
+    Private Function DateBalance() As Date?
+        Dim t As String = If(txtDateBalance.Text, "").Trim()
+        If t.Length = 0 Then Return Nothing
+
+        Dim d As Date
+        If Date.TryParse(t, Globalization.CultureInfo.InvariantCulture,
+                         Globalization.DateTimeStyles.None, d) Then Return d
+        If Date.TryParse(t, d) Then Return d
+        Return Nothing
+    End Function
+
+    ''' <summary>
+    ''' La balance de vérification, par la passerelle.
+    '''
+    ''' Apideck ne traduit pas ce rapport dans son API unifiée — l'adresse
+    ''' /accounting/trial-balance n'existe pas. On demande donc à Apideck de
+    ''' poser la question à QuickBooks dans son propre langage et de rendre la
+    ''' réponse telle quelle. C'est Apideck qui appelle Intuit, jamais nous.
+    '''
+    ''' LES DEUX DATES SONT OBLIGATOIRES : essayé, QuickBooks ignore purement et
+    ''' simplement une end_date seule et retourne « ce mois-ci à ce jour ». La
+    ''' période va donc du 1er janvier de l'année choisie à la date d'arrêt.
+    ''' </summary>
+    Private Function LireBalanceVerification(api As clsApideck) As JArray
+        Dim arrete As Date? = DateBalance()
+        If Not arrete.HasValue Then
+            Throw New Exception("Indiquez la date à laquelle la balance de vérification est arrêtée.")
+        End If
+
+        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+        Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
+                            "/reports/TrialBalance?start_date=" & debut &
+                            "&end_date=" & fin & "&minorversion=70"
+
+        Dim rapport As JObject = api.Proxy(url)
+        Dim liste As New JArray()
+        If rapport Is Nothing Then Return liste
+
+        ' Le rapport se lit en trois colonnes : le compte, son débit, son crédit.
+        ' La ligne de total porte « Summary » plutôt que « ColData » : elle est
+        ' un résultat, pas un compte, et n'a rien à faire dans la préparation.
+        Dim rangs As JArray = TryCast(rapport.SelectToken("Rows.Row"), JArray)
+        If rangs Is Nothing Then Return liste
+
+        Dim rang As Integer = 0
+        AjouterComptesBalance(rangs, liste, rang)
+
+        ' L'entête voyage avec les lignes : la période que QuickBooks a
+        ' réellement retenue vaut mieux que celle qu'on croit avoir demandée.
+        If liste.Count > 0 Then
+            Dim e As New JObject()
+            e("entete") = "1"
+            e("debut") = Valeur(rapport.SelectToken("Header"), "StartPeriod")
+            e("fin") = Valeur(rapport.SelectToken("Header"), "EndPeriod")
+            e("devise") = Valeur(rapport.SelectToken("Header"), "Currency")
+            liste.Add(e)
+        End If
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Dépose la balance dans staging.BalanceVerification — la table de l'écran
+
+    ''' <summary>
+    ''' Parcourt les lignes du rapport et retient les comptes.
+    '''
+    ''' QuickBooks peut grouper : une ligne porte alors ses propres lignes au
+    ''' lieu de colonnes. On descend dedans plutôt que de l'ignorer — un compte
+    ''' rangé dans une section n'est pas un compte de moins.
+    '''
+    ''' La ligne de total porte « Summary » et non « ColData » : c'est un
+    ''' résultat, pas un compte, et elle n'entre pas dans la préparation.
+    ''' </summary>
+    Private Shared Sub AjouterComptesBalance(rangs As JArray, liste As JArray, ByRef rang As Integer)
+        If rangs Is Nothing Then Return
+
+        For Each ligne As JToken In rangs
+            Dim filles As JArray = TryCast(ligne.SelectToken("Rows.Row"), JArray)
+            If filles IsNot Nothing Then AjouterComptesBalance(filles, liste, rang)
+
+            Dim cells As JArray = TryCast(ligne("ColData"), JArray)
+            If cells Is Nothing OrElse cells.Count < 3 Then Continue For
+
+            Dim nom As String = Valeur(cells(0), "value").Trim()
+            If nom.Length = 0 Then Continue For
+
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("nom") = nom
+            o("externe_id") = Valeur(cells(0), "id")
+            o("debit") = Valeur(cells(1), "value")
+            o("credit") = Valeur(cells(2), "value")
+            liste.Add(o)
+        Next
+    End Sub
+    ''' dédié, pas celle des rapports. Tout ce qui existe déjà s'y applique :
+    ''' l'équilibre, les totaux, et le contrôle contre le plan comptable.
+    '''
+    ''' QuickBooks ne donne PAS le numéro de compte dans ce rapport, seulement
+    ''' son nom et son identifiant interne. La colonne Compte reste donc vide et
+    ''' le rapprochement se fera par le nom — ce que s0771 sait faire. Un compte
+    ''' renommé entre deux extractions ressortira comme absent.
+    ''' </summary>
+    Private Function VerserBalanceVerification(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then Return "aucune ligne"
+
+        Dim lignes As New JArray()
+        Dim periode As String = ""
+
+        For Each t As JToken In brut
+            If Valeur(t, "entete") <> "" Then
+                periode = Valeur(t, "debut") & " au " & Valeur(t, "fin")
+                Continue For
+            End If
+
+            Dim o As New JObject()
+            o("Description") = Valeur(t, "nom")
+
+            ' Option Strict est à Off : affecter l'Object rendu par Nombre() à un
+            ' champ JSON compile, mais lève à l'exécution. On passe par CDec.
+            Dim d As Object = Nombre(Valeur(t, "debit"))
+            Dim c As Object = Nombre(Valeur(t, "credit"))
+            o("Debit") = If(d Is Nothing, 0D, CDec(d))
+            o("Credit") = If(c Is Nothing, 0D, CDec(c))
+            lignes.Add(o)
+        Next
+
+        If lignes.Count = 0 Then Return "aucun compte"
+
+        Dim nom As String = "QuickBooks — balance de vérification (Apideck)"
+        If periode <> "" Then nom &= " — " & periode
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
+        p.Add(New SqlParameter("@Vider", True))        ' une balance à la fois, la nouvelle remplace
+        p.Add(New SqlParameter("@NomFichier", nom))
+        p.Add(New SqlParameter("@Source", "APIDECK"))
+        ExecuteSQLds("s0768ImporterBalanceVerification", p)
+
+        InscrireAuRegistre("BalanceVerification", "balance de vérification", brut)
+
+        Return lignes.Count & " compte(s) — écran « Balance de vérification »"
     End Function
 
     ''' <summary>
