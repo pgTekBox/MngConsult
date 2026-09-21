@@ -489,6 +489,12 @@
     <Content Include="ValiderBalanceAgee.aspx" />
     <Content Include="ValiderGrandLivre.aspx" />
     <Content Include="ValiderRapportTaxes.aspx" />
+    <Content Include="ValiderSoldesBancaires.aspx" />
+    <Content Include="ValiderReglements.aspx" />
+    <Content Include="ValiderNonRapprochees.aspx" />
+    <Content Include="ValiderPaie.aspx" />
+    <Content Include="ValiderRemisesDas.aspx" />
+    <Content Include="ValiderInventaire.aspx" />
     <Content Include="ImportClients.aspx" />
     <Content Include="ImportFournisseurs.aspx" />
     <Content Include="ImportProduits.aspx" />
@@ -800,6 +806,48 @@
     </Compile>
     <Compile Include="ValiderRapportTaxes.aspx.designer.vb">
       <DependentUpon>ValiderRapportTaxes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderSoldesBancaires.aspx.vb">
+      <DependentUpon>ValiderSoldesBancaires.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderSoldesBancaires.aspx.designer.vb">
+      <DependentUpon>ValiderSoldesBancaires.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderReglements.aspx.vb">
+      <DependentUpon>ValiderReglements.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderReglements.aspx.designer.vb">
+      <DependentUpon>ValiderReglements.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderNonRapprochees.aspx.vb">
+      <DependentUpon>ValiderNonRapprochees.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderNonRapprochees.aspx.designer.vb">
+      <DependentUpon>ValiderNonRapprochees.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderPaie.aspx.vb">
+      <DependentUpon>ValiderPaie.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderPaie.aspx.designer.vb">
+      <DependentUpon>ValiderPaie.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderRemisesDas.aspx.vb">
+      <DependentUpon>ValiderRemisesDas.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderRemisesDas.aspx.designer.vb">
+      <DependentUpon>ValiderRemisesDas.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderInventaire.aspx.vb">
+      <DependentUpon>ValiderInventaire.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderInventaire.aspx.designer.vb">
+      <DependentUpon>ValiderInventaire.aspx</DependentUpon>
     </Compile>
     <Compile Include="ValiderListes.aspx.designer.vb">
       <DependentUpon>ValiderListes.aspx</DependentUpon>

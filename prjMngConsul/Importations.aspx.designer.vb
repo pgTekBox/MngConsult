@@ -30,6 +30,9 @@ Partial Public Class Importations
     '''<summary>litAutres</summary>
     Protected WithEvents litAutres As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litTitreAVenir</summary>
+    Protected WithEvents litTitreAVenir As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>litAVenir</summary>
     Protected WithEvents litAVenir As Global.System.Web.UI.WebControls.Literal
     '''<summary>litViderCie</summary>

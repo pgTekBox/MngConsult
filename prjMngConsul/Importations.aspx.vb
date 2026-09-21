@@ -191,6 +191,131 @@ Public Class Importations
                               "administration déclarée. Il ne couvre pas les déclarations déjà " &
                               "produites une à une : il rend l'état de la période demandée, du " &
                               "1er janvier à la date d'arrêt."
+                },
+                New Poste With {
+                    .Icone = "🏦",
+                    .Titre = "Soldes bancaires",
+                    .Source = "QuickBooks : les comptes de banque et de carte de crédit, par la passerelle",
+                    .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
+                    .Page = "~/ValiderSoldesBancaires.aspx",
+                    .Note = 6,
+                    .Fait = "Les comptes de banque et de carte de crédit arrivent avec leur nature, " &
+                            "leur devise, leur hiérarchie et leurs deux soldes — celui du compte " &
+                            "seul et celui qui inclut les sous-comptes. La lecture est paginée : " &
+                            "QuickBooks rend cent comptes et s'arrête là sans le dire, et un compte " &
+                            "bancaire perdu au-delà ne se remarquerait qu'au rapprochement suivant.",
+                    .Manque = "CE N'EST PAS LE RAPPROCHEMENT, et ça ne peut pas le devenir. Le " &
+                              "rapport de rapprochement n'existe pas dans l'API — ReconciliationReport, " &
+                              "Reconciliation, BankReconciliation et UnclearedTransactions sont tous " &
+                              "refusés — et la colonne « pointé » demandée à TransactionList est " &
+                              "silencieusement retirée de la réponse. T142ReleveBancaire reste donc " &
+                              "vide : elle porte le relevé de LA BANQUE, et le fabriquer à partir des " &
+                              "mouvements comptables reviendrait à rapprocher les livres d'eux-mêmes. " &
+                              "Le solde, lui, est celui de l'instant de l'extraction : pour un solde " &
+                              "arrêté à une date, c'est la balance de vérification qu'il faut lire."
+                },
+                New Poste With {
+                    .Icone = "💵",
+                    .Titre = "Acomptes et règlements partiels",
+                    .Source = "QuickBooks : encaissements, décaissements et remboursements, avec leurs imputations",
+                    .Destination = "staging.PaiementImport — contrôle avant reprise",
+                    .Page = "~/ValiderReglements.aspx",
+                    .Note = 7,
+                    .Fait = "Chaque mouvement arrive avec ses imputations : ce qu'il règle, et " &
+                            "sur quel document. L'écran nomme les trois cas au lieu de laisser " &
+                            "lire des chiffres — soldé, partiel, et acompte quand une part ne " &
+                            "règle encore rien. Le « partiel » ne se devine pas : s0826 va " &
+                            "chercher ce que vaut le document visé, et une imputation vers un " &
+                            "document absent de la reprise est signalée plutôt que passée sous " &
+                            "silence — c'est le signe qu'il manque une facture.",
+                    .Manque = "L'acompte est repris comme un montant non imputé, pas comme un " &
+                              "document : il faudra décider à quel compte il s'impute à la " &
+                              "création. Et l'imputation dépend des factures — reprenez-les " &
+                              "avant, sinon tout ressort « document absent »."
+                },
+                New Poste With {
+                    .Icone = "🔍",
+                    .Titre = "Opérations non rapprochées",
+                    .Source = "QuickBooks : la colonne is_cleared de la liste des opérations, par la passerelle",
+                    .Destination = "contrôle seulement — T142ReleveBancaire n'est pas touchée",
+                    .Page = "~/ValiderNonRapprochees.aspx",
+                    .Note = 7,
+                    .Fait = "À la bascule la base est vide : c'est le pointage de la source qui " &
+                            "fait foi, et il est repris tel quel. La lettre est conservée en plus " &
+                            "du oui/non — « C » compensée, « R » rapprochée dans un rapprochement " &
+                            "clos — parce que les deux états ne se valent pas. L'écran s'ouvre sur " &
+                            "ce qui reste en suspens, groupé par compte, avec le montant total.",
+                    .Manque = "Il n'existe PAS de rapport « opérations non rapprochées » dans " &
+                              "l'API — cherché, refusé trois fois. C'est une colonne de la liste " &
+                              "des opérations, et elle s'appelle « is_cleared » : demandée sous un " &
+                              "autre nom, QuickBooks la retire de la réponse sans rien dire. Le " &
+                              "lecteur repère donc les colonnes par leur clé et s'arrête si " &
+                              "celle-ci manque. Une opération qui ne touche aucun compte bancaire " &
+                              "ressort non pointée, ce qui est exact mais sans portée."
+                },
+                New Poste With {
+                    .Icone = "🧾",
+                    .Titre = "Paie",
+                    .Source = "aucune : QuickBooks n'expose pas la paie par son API",
+                    .Destination = "staging.PaieEmployeImport, PaieLotImport, PaieImport, PaieLigneImport",
+                    .Page = "~/ValiderPaie.aspx",
+                    .Note = 4,
+                    .Fait = "Les quatre tables de la reprise sont en place et chargées d'un seul " &
+                            "coup, en une transaction : employés, lots, paies et lignes de talon. " &
+                            "L'équilibre — brut moins retenues égale net — est vérifié à " &
+                            "l'arrivée, et un écart est SIGNALÉ sans jamais être corrigé : on " &
+                            "reprend ce qui a été versé, pas ce qui aurait dû l'être, sinon la " &
+                            "reprise diverge des T4 et relevés 1 déjà produits. Le NAS et le " &
+                            "numéro de compte ne sont pas repris — seulement de quoi savoir ce " &
+                            "qu'il restera à saisir.",
+                    .Manque = "LA SOURCE NE DONNE RIEN. L'entité Employee revient vide (trois " &
+                              "essais), TimeActivity aussi, /accounting/employees répond 404 pour " &
+                              "ce connecteur et l'API HRIS d'Apideck répond 401 : la paie de " &
+                              "QuickBooks est un produit séparé qui ne passe pas par cette porte. " &
+                              "Le point d'arrivée est donc prêt avant la porte d'entrée — la " &
+                              "reprise viendra d'un fichier ou d'un autre connecteur. Ce qui est " &
+                              "en préparation aujourd'hui est simulé, et le registre le dit."
+                },
+                New Poste With {
+                    .Icone = "🏛️",
+                    .Titre = "Remises de DAS",
+                    .Source = "QuickBooks : les comptes de retenues du grand livre, par la passerelle",
+                    .Destination = "contrôle seulement — ce qui reste dû au fédéral et au Québec",
+                    .Page = "~/ValiderRemisesDas.aspx",
+                    .Note = 6,
+                    .Fait = "Les retenues s'accumulent au crédit d'un compte de passif à chaque " &
+                            "paie et s'éteignent au débit à chaque remise : la différence est la " &
+                            "dette envers chaque autorité, et c'est elle que la bascule doit " &
+                            "reprendre. L'écran la donne par autorité, avec le détail des " &
+                            "mouvements en dessous.",
+                    .Manque = "PAS PAR LA PAIE. L'API HRIS d'Apideck répond 401 et le compte n'a " &
+                              "qu'une connexion — « accounting / quickbooks » : les remises ne " &
+                              "sont pas récupérables comme objets de paie. Elles le sont comme " &
+                              "PAIEMENTS, dans le grand livre, et c'est par là qu'on passe. " &
+                              "L'autorité est donc devinée au nom du compte : ce qui ne tranche " &
+                              "pas ressort « À classer » plutôt que d'être rangé de force, parce " &
+                              "qu'une remise fédérale comptée au Québec, c'est deux déclarations " &
+                              "fausses."
+                },
+                New Poste With {
+                    .Icone = "📦",
+                    .Titre = "Inventaire",
+                    .Source = "QuickBooks : l'entité Item, par la passerelle",
+                    .Destination = "contrôle seulement — rapproché du compte d'actif de stock",
+                    .Page = "~/ValiderInventaire.aspx",
+                    .Note = 6,
+                    .Fait = "Quantité en main, coût unitaire et compte de stock par article, avec " &
+                            "la valeur calculée à côté de ses deux facteurs. L'écran rapproche la " &
+                            "somme des articles du solde du compte d'actif de stock au grand " &
+                            "livre : c'est la seule vérification qui attrape une reprise " &
+                            "silencieusement fausse. Deux anomalies sont nommées — quantité " &
+                            "négative, et quantité en main sans coût — et remontent en tête.",
+                    .Manque = "La quantité est celle du JOUR de l'extraction : QuickBooks ne rend " &
+                              "pas « le stock au 30 juin ». Le rapport InventoryValuationSummary " &
+                              "n'apporte rien de plus — deux colonnes, dont une « Calcul " &
+                              "Moyenne » — alors on lit l'entité Item directement. La lecture est " &
+                              "paginée : cette compagnie a 214 articles, et sans cela on en " &
+                              "perdrait 114."
                 }
             }
         End Get
@@ -252,20 +377,10 @@ Public Class Importations
     ''' </summary>
     Private ReadOnly Property AVenir As List(Of Poste)
         Get
-            Return New List(Of Poste) From {
-                New Poste With {.Icone = "💵", .Titre = "Acomptes et règlements partiels", .Note = 1,
-                    .Source = "QuickBooks : Transaction List by Customer",
-                    .Destination = "T140Reglement + T141ReglementDocument", .Manque = "À faire."},
-                New Poste With {.Icone = "🏦", .Titre = "Soldes bancaires", .Note = 1,
-                    .Source = "QuickBooks : dernier Reconciliation Report",
-                    .Destination = "T142ReleveBancaire", .Manque = "À faire."},
-                New Poste With {.Icone = "🔍", .Titre = "Opérations non rapprochées", .Note = 1,
-                    .Source = "QuickBooks : Uncleared Transactions",
-                    .Destination = "sans quoi le rapprochement suivant est faux", .Manque = "À faire."},
-                New Poste With {.Icone = "📦", .Titre = "Inventaire", .Note = 1,
-                    .Source = "QuickBooks : Inventory Valuation Summary",
-                    .Destination = "si vous tenez un inventaire permanent", .Manque = "À faire."}
-            }
+            ' Plus rien. Tous les postes de la reprise ont leur rail et leur écran —
+            ' ce qui reste à faire est écrit dans le « Manque » de chacun, là où ça
+            ' se lit au moment de s'en servir.
+            Return New List(Of Poste)
         End Get
     End Property
 
@@ -287,7 +402,17 @@ Public Class Importations
         litConnexion.Text = Rendre(Connexion)
         litParcours.Text = Rendre(Parcours)
         litAutres.Text = Rendre(Autres)
-        litAVenir.Text = Rendre(AVenir)
+        ' La section « À construire » disparaît quand il n'y a plus rien à
+        ' construire : un titre suivi du vide ressemble à un écran cassé.
+        Dim reste As List(Of Poste) = AVenir
+        If reste.Count > 0 Then
+            litTitreAVenir.Text = "<h2 class='sect'>À construire " &
+                                  "<span>l'ordre d'une reprise complète</span></h2>"
+            litAVenir.Text = Rendre(reste)
+        Else
+            litTitreAVenir.Text = ""
+            litAVenir.Text = ""
+        End If
 
         AfficherAvancement()
     End Sub

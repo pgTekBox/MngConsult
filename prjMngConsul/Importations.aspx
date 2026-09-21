@@ -163,7 +163,7 @@
     <h2 class="sect">Autres importations <span>indépendantes les unes des autres</span></h2>
     <div class="grille"><asp:Literal ID="litAutres" runat="server" /></div>
 
-    <h2 class="sect">À construire <span>l'ordre d'une reprise complète</span></h2>
+    <asp:Literal ID="litTitreAVenir" runat="server" />
     <div class="grille"><asp:Literal ID="litAVenir" runat="server" /></div>
 
     <p class="note-bas">

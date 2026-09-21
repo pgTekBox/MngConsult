@@ -98,6 +98,10 @@ Public Class ImportApideck
                 New Ressource With {.Groupe = "Contrôle", .Cle = "aged-creditors", .Libelle = "Balance âgée fournisseurs", .Unique = True, .Vers = "AGEE_FOURNISSEURS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "trial-balance", .Libelle = "Balance de vérification", .Vers = "BALANCE_VERIF", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "tax-summary", .Libelle = "Rapport de taxes", .Vers = "RAPPORT_TAXES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "bank-accounts", .Libelle = "Comptes et soldes bancaires", .Vers = "BANQUES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "uncleared", .Libelle = "Opérations non rapprochées", .Vers = "RAPPROCHEMENT", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "das", .Libelle = "Remises de DAS", .Vers = "REMISES_DAS", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "inventory", .Libelle = "Inventaire", .Vers = "INVENTAIRE", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"}
             }
         End Get
@@ -295,10 +299,14 @@ Public Class ImportApideck
         Select Case r.Mode
             Case "PAR_DOCUMENT" : Return LirePiecesJointes(api)
             Case "PASSERELLE"
-                ' Quatre ressources passent par le langage natif de QuickBooks.
+                ' Huit ressources passent par le langage natif de QuickBooks.
                 If r.Vers = "BALANCE_VERIF" Then Return LireBalanceVerification(api)
                 If r.Vers = "GRAND_LIVRE" Then Return LireGrandLivre(api)
                 If r.Vers = "RAPPORT_TAXES" Then Return LireRapportTaxes(api)
+                If r.Vers = "BANQUES" Then Return LireComptesBancaires(api)
+                If r.Vers = "RAPPROCHEMENT" Then Return LireOperationsRapprochement(api)
+                If r.Vers = "REMISES_DAS" Then Return LireRemisesDas(api)
+                If r.Vers = "INVENTAIRE" Then Return LireInventaire(api)
                 Return LireConditionsPaiement(api)
         End Select
 
@@ -368,6 +376,10 @@ Public Class ImportApideck
             Case "BALANCE_VERIF" : Return VerserBalanceVerification(brut, runId)
             Case "GRAND_LIVRE" : Return VerserGrandLivre(brut, runId)
             Case "RAPPORT_TAXES" : Return VerserRapportTaxes(brut, runId)
+            Case "BANQUES" : Return VerserComptesBancaires(brut, runId)
+            Case "RAPPROCHEMENT" : Return VerserOperationsRapprochement(brut, runId)
+            Case "REMISES_DAS" : Return VerserRemisesDas(brut, runId)
+            Case "INVENTAIRE" : Return VerserInventaire(brut, runId)
             Case "CONDITIONS" : Return VerserConditionsPaiement(brut, runId)
             Case "PIECES_JOINTES" : Return VerserPiecesJointes(brut, runId)
             Case "SOCIETE" : Return VerserSociete(brut, runId)
@@ -1712,6 +1724,559 @@ Public Class ImportApideck
         Return texte
     End Function
 
+
+    ''' <summary>
+    ''' L'inventaire, par la passerelle.
+    '''
+    ''' Apideck rend bien les articles, mais pas leurs QUANTITÉS : ni QtyOnHand,
+    ''' ni le compte d'actif de stock. Or c'est tout l'objet d'une reprise
+    ''' d'inventaire. On passe donc par l'entité Item native.
+    '''
+    ''' LE RAPPORT NE SERT À RIEN ICI. InventoryValuationSummary répond, mais ne
+    ''' rend que deux colonnes — dont une « Calcul Moyenne » — et rien que
+    ''' l'article ne porte déjà. Autant lire la source directement.
+    '''
+    ''' PAGINÉ, ET FILTRÉ ICI. QuickBooks rend cent articles par défaut et
+    ''' s'arrête sans le dire : cette compagnie en a 214, et sans pagination on
+    ''' en perdrait 114. Le tri sur le type se fait en VB plutôt que par une
+    ''' clause WHERE — elle voyagerait encodée dans une URL relayée par un
+    ''' tiers, et une apostrophe mal passée rendrait une liste vide qui
+    ''' ressemble à une absence de stock.
+    '''
+    ''' LA VALEUR N'EST PAS LUE, ELLE EST CALCULÉE — quantité × coût — parce que
+    ''' la source ne la rend pas sur l'article. Les deux facteurs sont déposés à
+    ''' côté du produit pour qu'on puisse refaire la multiplication.
+    ''' </summary>
+    Private Function LireInventaire(api As clsApideck) As JArray
+        Dim realm As String = api.RealmId()
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        ' La date d'arrêt est facultative ici : QuickBooks rend la quantité
+        ' D'AUJOURD'HUI, pas celle d'une date passée. On note donc la date
+        ' demandée quand il y en a une, et celle du jour sinon — pour que
+        ' personne ne prenne ce stock pour celui de la bascule.
+        Dim arrete As Date? = DateBalance()
+        Dim quand As String = If(arrete.HasValue, arrete.Value, Date.Today).ToString(
+            "yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+        For Each a As JToken In ArticlesDeLaSource(api, realm)
+            If Valeur(a, "Type") <> "Inventory" Then Continue For
+
+            rang += 1
+            Dim o As New JObject()
+            o("arrete") = quand
+            o("devise") = ""
+            o("rang") = rang
+            o("externe_id") = Valeur(a, "Id")
+            o("sku") = Valeur(a, "Sku")
+            o("nom") = Valeur(a, "Name")
+            o("nom_complet") = Valeur(a, "FullyQualifiedName")
+            o("description") = Valeur(a, "Description")
+            o("compte_actif") = Valeur(a, "AssetAccountRef.name")
+            o("compte_revenu") = Valeur(a, "IncomeAccountRef.name")
+            o("compte_cout") = Valeur(a, "ExpenseAccountRef.name")
+            o("qte") = Valeur(a, "QtyOnHand")
+            o("cout") = Valeur(a, "PurchaseCost")
+            o("prix") = Valeur(a, "UnitPrice")
+            o("point_commande") = Valeur(a, "ReorderPoint")
+            o("debut_suivi") = Valeur(a, "InvStartDate")
+            o("actif") = Valeur(a, "Active")
+            liste.Add(o)
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Tous les articles de la source, page par page. Même boucle que pour les
+    ''' comptes, et pour la même raison : une page courte est le seul signal que
+    ''' QuickBooks donne pour dire qu'il a fini.
+    ''' </summary>
+    Private Shared Function ArticlesDeLaSource(api As clsApideck, realm As String) As JArray
+        Const TAILLE_PAGE As Integer = 100
+        Const PLAFOND As Integer = 200
+
+        Dim tous As New JArray()
+        Dim depart As Integer = 1
+
+        For tour As Integer = 1 To PLAFOND
+            Dim requete As String = Uri.EscapeDataString(
+                "select * from Item startposition " & depart & " maxresults " & TAILLE_PAGE)
+            Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & realm &
+                                "/query?query=" & requete & "&minorversion=75"
+
+            Dim r As JObject = api.Proxy(url)
+            If r Is Nothing Then Exit For
+
+            Dim page As JArray = TryCast(r.SelectToken("QueryResponse.Item"), JArray)
+            If page Is Nothing OrElse page.Count = 0 Then Exit For
+
+            For Each a As JToken In page
+                tous.Add(a)
+            Next
+
+            If page.Count < TAILLE_PAGE Then Exit For
+            depart += TAILLE_PAGE
+        Next
+
+        Return tous
+    End Function
+
+    ''' <summary>
+    ''' Dépose l'inventaire en préparation. Aucun article n'est créé, aucune
+    ''' écriture de stock n'est passée : c'est une pièce de contrôle, et son
+    ''' intérêt est le rapprochement avec le compte d'actif de stock que
+    ''' l'écran affiche.
+    ''' </summary>
+    Private Function VerserInventaire(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then
+            Return "aucun article d'inventaire — la source n'en tient pas"
+        End If
+
+        Dim fichierId As Integer = InscrireAuRegistre("Inventaire", "inventaire", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Articles", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0833ChargerInventaire", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = Lire(r, "NbArticles") & " article(s)"
+        If Lire(r, "NbAnomalies") > 0 Then texte &= ", " & Lire(r, "NbAnomalies") & " à vérifier"
+        Return texte
+    End Function
+
+    ''' <summary>
+    ''' Les remises de DAS, par la passerelle — et par la comptabilité, faute
+    ''' de mieux.
+    '''
+    ''' CE QUI NE MARCHE PAS, ET POURQUOI. La paie de QuickBooks est un produit
+    ''' séparé : l'API HRIS d'Apideck répond 401, et le compte n'a qu'une seule
+    ''' connexion — « accounting / quickbooks ». Les remises ne sont donc pas
+    ''' récupérables comme objets de paie.
+    '''
+    ''' CE QUI MARCHE. Une remise de DAS est un paiement au Receveur général ou
+    ''' à Revenu Québec qui DÉBITE un compte de passif de retenues. Ce mouvement
+    ''' est dans le grand livre, et le grand livre passe par la passerelle. On
+    ''' lit donc le rapport GeneralLedger et on ne garde que les sections dont
+    ''' le compte est un compte de DAS.
+    '''
+    ''' LE CRÉDIT ACCUMULE, LE DÉBIT ÉTEINT. Sur un compte de passif, chaque
+    ''' paie crédite la retenue et chaque remise la débite. La différence est ce
+    ''' qui reste dû — et c'est le seul chiffre que la bascule doit reprendre.
+    '''
+    ''' LES COLONNES SONT DEMANDÉES EXPLICITEMENT, comme pour le grand livre :
+    ''' sans « columns », QuickBooks rend un solde cumulé sous l'entête
+    ''' « Crédit », et le reste dû serait faux d'autant.
+    ''' </summary>
+    Private Function LireRemisesDas(api As clsApideck) As JArray
+        Dim arrete As Date? = DateBalance()
+        If Not arrete.HasValue Then
+            Throw New Exception("Indiquez la date d'arrêt : les remises se lisent sur une période.")
+        End If
+
+        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+        Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
+                            "/reports/GeneralLedger?start_date=" & debut & "&end_date=" & fin &
+                            "&columns=tx_date,txn_type,doc_num,name,memo,split_acc,debt_amt,credit_amt" &
+                            "&minorversion=70"
+
+        Dim rapport As JObject = api.Proxy(url)
+        Dim liste As New JArray()
+        If rapport Is Nothing Then Return liste
+
+        Dim entete As JToken = rapport.SelectToken("Header")
+        Dim debutReel As String = Valeur(entete, "StartPeriod")
+        Dim finReelle As String = Valeur(entete, "EndPeriod")
+        Dim devise As String = Valeur(entete, "Currency")
+
+        Dim sections As JArray = TryCast(rapport.SelectToken("Rows.Row"), JArray)
+        If sections Is Nothing Then Return liste
+
+        Dim rang As Integer = 0
+        For Each section As JToken In sections
+            Dim compte As String = Valeur(section.SelectToken("Header.ColData[0]"), "value")
+            If compte = "" Then compte = Valeur(section.SelectToken("Summary.ColData[0]"), "value")
+
+            Dim autorite As String = AutoriteDuCompte(compte)
+            If autorite Is Nothing Then Continue For
+
+            Dim operations As JArray = TryCast(section.SelectToken("Rows.Row"), JArray)
+            If operations Is Nothing Then Continue For
+
+            For Each op As JToken In operations
+                Dim c As JArray = TryCast(op("ColData"), JArray)
+                If c Is Nothing OrElse c.Count < 8 Then Continue For
+
+                rang += 1
+                Dim o As New JObject()
+                o("debut") = debutReel
+                o("fin") = finReelle
+                o("devise") = devise
+                o("rang") = rang
+                o("autorite") = autorite
+                o("compte") = compte
+                o("date") = Valeur(c(0), "value")
+                o("type") = Valeur(c(1), "value")
+                o("numero") = Valeur(c(2), "value")
+                o("tiers") = Valeur(c(3), "value")
+                o("memo") = Valeur(c(4), "value")
+                o("debit") = Valeur(c(6), "value")
+                o("credit") = Valeur(c(7), "value")
+                liste.Add(o)
+            Next
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' L'autorité à qui la retenue est due, déduite du nom du compte. Rend
+    ''' Nothing quand le compte n'est pas un compte de DAS — c'est ce qui filtre
+    ''' le grand livre.
+    '''
+    ''' LA RECONNAISSANCE EST VOLONTAIREMENT LARGE côté « est-ce une DAS », et
+    ''' PRUDENTE côté « laquelle ». Un compte de retenues qu'on raterait ferait
+    ''' disparaître une dette ; un compte fédéral rangé au Québec ferait deux
+    ''' déclarations fausses. Ce qui ne tranche pas ressort en « Autre », et
+    ''' l'écran le montre à part pour qu'on le classe à la main.
+    ''' </summary>
+    Private Shared Function AutoriteDuCompte(compte As String) As String
+        Dim n As String = If(compte, "").ToLowerInvariant()
+        If n = "" Then Return Nothing
+
+        ' Est-ce un compte de retenues à la source ?
+        Dim estDas As Boolean =
+            n.Contains("das") OrElse n.Contains("retenue") OrElse
+            n.Contains("source deduction") OrElse n.Contains("payroll") OrElse
+            n.Contains("paie à payer") OrElse n.Contains("paie a payer") OrElse
+            n.Contains("rrq") OrElse n.Contains("rqap") OrElse n.Contains("qpp") OrElse
+            n.Contains("rpc") OrElse n.Contains("cpp") OrElse
+            n.Contains("assurance-emploi") OrElse n.Contains("assurance emploi") OrElse
+            n.Contains("receveur") OrElse n.Contains("receiver general") OrElse
+            n.Contains("cnesst") OrElse n.Contains("fss")
+
+        If Not estDas Then Return Nothing
+
+        ' À qui ? Le Québec d'abord : « RRQ Québec » doit tomber au Québec, pas
+        ' au fédéral parce que le mot « impôt » traîne ailleurs dans le nom.
+        If n.Contains("québec") OrElse n.Contains("quebec") OrElse n.Contains("qc") OrElse
+           n.Contains("rrq") OrElse n.Contains("rqap") OrElse n.Contains("qpp") OrElse
+           n.Contains("fss") OrElse n.Contains("cnesst") OrElse n.Contains("revenu qu") Then
+            Return "Quebec"
+        End If
+
+        If n.Contains("fédéral") OrElse n.Contains("federal") OrElse
+           n.Contains("receveur général") OrElse n.Contains("receveur general") OrElse
+           n.Contains("receiver general") OrElse n.Contains("arc") OrElse n.Contains("cra") OrElse
+           n.Contains("rpc") OrElse n.Contains("cpp") OrElse n.Contains("assurance-emploi") OrElse
+           n.Contains("assurance emploi") Then
+            Return "Federal"
+        End If
+
+        Return "Autre"
+    End Function
+
+    ''' <summary>
+    ''' Dépose les remises de DAS en préparation. Rien ne s'applique : ni à la
+    ''' comptabilité, ni à paie.Paie. C'est une pièce de contrôle — elle dit ce
+    ''' qui reste dû à chaque autorité au moment de la bascule.
+    ''' </summary>
+    Private Function VerserRemisesDas(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then
+            Return "aucun compte de retenues à la source dans le grand livre"
+        End If
+
+        Dim fichierId As Integer = InscrireAuRegistre("RemiseDas", "remises de DAS", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Mouvements", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0831ChargerRemisesDas", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = Lire(r, "NbMouvements") & " mouvement(s), " &
+                              Lire(r, "NbRemises") & " remise(s)"
+        If Lire(r, "NbAClasser") > 0 Then
+            texte &= ", " & Lire(r, "NbAClasser") & " à classer par autorité"
+        End If
+        Return texte
+    End Function
+
+    ''' <summary>
+    ''' L'état de pointage des opérations, par la passerelle.
+    '''
+    ''' À la bascule, la base de l'ERP est VIDE : c'est le pointage de la source
+    ''' qui fait foi. Sans lui, le premier rapprochement bancaire est faux de
+    ''' tous les chèques émis avant la bascule et encaissés après.
+    '''
+    ''' OÙ IL SE TROUVE, ET POURQUOI JE NE L'AI PAS TROUVÉ DU PREMIER COUP. Le
+    ''' rapport « UnclearedTransactions » n'existe pas — refusé, trois essais.
+    ''' La colonne demandée à TransactionList s'appelle « is_cleared », pas
+    ''' « cleared » : sous le mauvais nom, QuickBooks la retire de la réponse
+    ''' SANS RIEN DIRE. On demande huit colonnes, on en reçoit sept, et rien ne
+    ''' signale laquelle a sauté.
+    '''
+    ''' D'OÙ LE REPÉRAGE PAR CLÉ. Les colonnes sont localisées par leur ColKey
+    ''' dans la réponse, jamais par leur rang. Si « is_cleared » manque, on
+    ''' s'arrête au lieu de lire la colonne d'à côté et de prendre un montant
+    ''' pour un état de pointage — c'est exactement l'erreur commise sur le
+    ''' grand livre, où la huitième colonne s'est avérée être un solde cumulé.
+    '''
+    ''' CE QUE PORTE LA COLONNE : vide si l'opération n'est pas pointée, « C »
+    ''' si elle est compensée, « R » si elle a été rapprochée dans un
+    ''' rapprochement clos. La lettre est gardée telle quelle en plus du
+    ''' booléen : les deux états ne se valent pas.
+    ''' </summary>
+    Private Function LireOperationsRapprochement(api As clsApideck) As JArray
+        Dim arrete As Date? = DateBalance()
+        If Not arrete.HasValue Then
+            Throw New Exception("Indiquez la date d'arrêt : le pointage se lit sur une période.")
+        End If
+
+        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+        Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
+                            "/reports/TransactionList?start_date=" & debut & "&end_date=" & fin &
+                            "&columns=tx_date,txn_type,doc_num,name,memo,account_name,is_cleared,subt_nat_amount" &
+                            "&minorversion=75"
+
+        Dim rapport As JObject = api.Proxy(url)
+        Dim liste As New JArray()
+        If rapport Is Nothing Then Return liste
+
+        ' Les colonnes, repérées par leur clé et pas par leur rang.
+        Dim ou As Dictionary(Of String, Integer) = PositionsColonnes(rapport)
+        If Not ou.ContainsKey("is_cleared") Then
+            Throw New Exception("QuickBooks n'a pas rendu la colonne « is_cleared » : " &
+                                "l'état de pointage ne peut pas être repris sans elle.")
+        End If
+
+        Dim entete As JToken = rapport.SelectToken("Header")
+        Dim debutReel As String = Valeur(entete, "StartPeriod")
+        Dim finReelle As String = Valeur(entete, "EndPeriod")
+        Dim devise As String = Valeur(entete, "Currency")
+
+        Dim rangs As JArray = TryCast(rapport.SelectToken("Rows.Row"), JArray)
+        If rangs Is Nothing Then Return liste
+
+        Dim rang As Integer = 0
+        For Each r As JToken In rangs
+            Dim c As JArray = TryCast(r("ColData"), JArray)
+            If c Is Nothing Then Continue For
+
+            rang += 1
+            Dim o As New JObject()
+            o("debut") = debutReel
+            o("fin") = finReelle
+            o("devise") = devise
+            o("rang") = rang
+            o("date") = Cellule(c, ou, "tx_date")
+            o("type") = Cellule(c, ou, "txn_type")
+            o("numero") = Cellule(c, ou, "doc_num")
+            o("tiers") = Cellule(c, ou, "name")
+            o("memo") = Cellule(c, ou, "memo")
+            o("compte") = Cellule(c, ou, "account_name")
+            o("pointage") = Cellule(c, ou, "is_cleared")
+            o("montant") = Cellule(c, ou, "subt_nat_amount")
+            liste.Add(o)
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Où se trouve chaque colonne, d'après la clé que la source lui donne.
+    ''' Une colonne demandée sous un nom que QuickBooks ne connaît pas est
+    ''' retirée en silence : sans ce relevé, on lirait la suivante à sa place.
+    ''' </summary>
+    Private Shared Function PositionsColonnes(rapport As JObject) As Dictionary(Of String, Integer)
+        Dim ou As New Dictionary(Of String, Integer)
+        Dim colonnes As JArray = TryCast(rapport.SelectToken("Columns.Column"), JArray)
+        If colonnes Is Nothing Then Return ou
+
+        For i As Integer = 0 To colonnes.Count - 1
+            Dim cle As String = CleColonne(colonnes(i))
+            If cle <> "" AndAlso Not ou.ContainsKey(cle) Then ou(cle) = i
+        Next
+        Return ou
+    End Function
+
+    ''' <summary>La valeur d'une colonne, ou vide si la source ne l'a pas rendue.</summary>
+    Private Shared Function Cellule(cellules As JArray, ou As Dictionary(Of String, Integer),
+                                    cle As String) As String
+        Dim i As Integer
+        If Not ou.TryGetValue(cle, i) Then Return ""
+        If i < 0 OrElse i >= cellules.Count Then Return ""
+        Return Valeur(cellules(i), "value")
+    End Function
+
+    ''' <summary>
+    ''' Dépose l'état de pointage en préparation. Rien ne s'applique à la
+    ''' comptabilité : T142ReleveBancaire porte le relevé de la banque et n'est
+    ''' pas touchée. Ce qui est déposé ici dit ce que la SOURCE tenait pour
+    ''' pointé au moment de la bascule.
+    ''' </summary>
+    Private Function VerserOperationsRapprochement(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then
+            Return "aucune opération sur la période"
+        End If
+
+        Dim fichierId As Integer = InscrireAuRegistre("Rapprochement", "état de pointage", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Operations", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0827ChargerOperationsRapprochement", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Return Lire(r, "NbOperations") & " opération(s), " &
+               Lire(r, "NbNonPointees") & " non pointée(s)"
+    End Function
+
+    ''' <summary>
+    ''' Les comptes et soldes bancaires, par la passerelle.
+    '''
+    ''' Apideck ne les expose pas : /accounting/bank-accounts répond 404 pour
+    ''' QuickBooks. On interroge donc l'entité Account dans son langage natif.
+    '''
+    ''' CE N'EST PAS LE RAPPROCHEMENT, ET ÇA NE PEUT PAS L'ÊTRE. La feuille de
+    ''' route visait T142ReleveBancaire à partir du « dernier Reconciliation
+    ''' Report ». Ce rapport n'existe pas dans l'API : ReconciliationReport,
+    ''' Reconciliation, BankReconciliation et UnclearedTransactions sont tous
+    ''' refusés, et la colonne « cleared » demandée à TransactionList est
+    ''' silencieusement retirée de la réponse — on la demande, on reçoit sept
+    ''' colonnes au lieu de huit, sans un mot.
+    '''
+    ''' Et même exposé, il ne faudrait pas le verser dans T142 : cette table
+    ''' porte le relevé de LA BANQUE, celui contre lequel les livres se
+    ''' rapprochent. Le fabriquer à partir des mouvements comptables de la
+    ''' source reviendrait à rapprocher les livres d'eux-mêmes.
+    '''
+    ''' LA PAGINATION N'EST PAS UN LUXE. QuickBooks rend 100 lignes par défaut
+    ''' et s'arrête là, sans dire qu'il en reste. Un plan comptable de 140
+    ''' comptes perdrait ses 40 derniers — et si un compte bancaire s'y trouve,
+    ''' le solde manquant ne se remarquerait qu'au rapprochement suivant.
+    ''' </summary>
+    Private Function LireComptesBancaires(api As clsApideck) As JArray
+        Dim realm As String = api.RealmId()
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+        Dim arrete As String = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss",
+                                                     Globalization.CultureInfo.InvariantCulture)
+
+        For Each c As JToken In ComptesDeLaSource(api, realm)
+            Dim genre As String = Valeur(c, "AccountType")
+            If genre <> "Bank" AndAlso genre <> "Credit Card" Then Continue For
+
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(c, "Id")
+            o("numero") = Valeur(c, "AcctNum")
+            o("nom") = Valeur(c, "Name")
+            o("nom_complet") = Valeur(c, "FullyQualifiedName")
+            o("description") = Valeur(c, "Description")
+            o("type") = genre
+            o("sous_type") = Valeur(c, "AccountSubType")
+            o("devise") = Valeur(c, "CurrencyRef.value")
+            o("masque") = Valeur(c, "AcctNum")
+            o("solde") = Valeur(c, "CurrentBalance")
+            o("solde_avec_sous") = Valeur(c, "CurrentBalanceWithSubAccounts")
+            o("sous_compte") = Valeur(c, "SubAccount")
+            o("parent_id") = Valeur(c, "ParentRef.value")
+            o("actif") = Valeur(c, "Active")
+            o("arrete_le") = arrete
+            liste.Add(o)
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Tous les comptes de la source, page par page.
+    '''
+    ''' On ne filtre pas sur AccountType dans la requête : une clause WHERE
+    ''' voyage encodée dans une URL relayée par un tiers, et une apostrophe mal
+    ''' passée rend une liste vide qui ressemble à une absence de comptes. Le
+    ''' tri se fait ici, où il se lit.
+    '''
+    ''' La boucle s'arrête quand une page revient plus courte que demandée —
+    ''' c'est le seul signal que QuickBooks donne — ou au garde-fou, pour qu'une
+    ''' réponse inattendue ne tourne pas en rond.
+    ''' </summary>
+    Private Shared Function ComptesDeLaSource(api As clsApideck, realm As String) As JArray
+        Const TAILLE_PAGE As Integer = 100
+        Const PLAFOND As Integer = 100
+
+        Dim tous As New JArray()
+        Dim depart As Integer = 1
+
+        For tour As Integer = 1 To PLAFOND
+            Dim requete As String = Uri.EscapeDataString(
+                "select * from Account startposition " & depart & " maxresults " & TAILLE_PAGE)
+            Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & realm &
+                                "/query?query=" & requete & "&minorversion=75"
+
+            Dim r As JObject = api.Proxy(url)
+            If r Is Nothing Then Exit For
+
+            Dim page As JArray = TryCast(r.SelectToken("QueryResponse.Account"), JArray)
+            If page Is Nothing OrElse page.Count = 0 Then Exit For
+
+            For Each c As JToken In page
+                tous.Add(c)
+            Next
+
+            If page.Count < TAILLE_PAGE Then Exit For
+            depart += TAILLE_PAGE
+        Next
+
+        Return tous
+    End Function
+
+    ''' <summary>
+    ''' Dépose les comptes bancaires en préparation. Rien ne s'applique à la
+    ''' comptabilité : c'est une pièce de contrôle, comme le grand livre et les
+    ''' déclarations de taxes — on la confronte, on ne la reprend pas.
+    ''' </summary>
+    Private Function VerserComptesBancaires(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then
+            Return "aucun compte bancaire — la source n'en déclare pas"
+        End If
+
+        Dim fichierId As Integer = InscrireAuRegistre("CompteBancaire", "comptes bancaires", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Comptes", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0824ChargerComptesBancaires", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = Lire(r, "NbComptes") & " compte(s)"
+        If Lire(r, "NbCartes") > 0 Then texte &= ", dont " & Lire(r, "NbCartes") & " carte(s) de crédit"
+        Return texte
+    End Function
 
     ''' <summary>
     ''' Les rapports de taxes, par la passerelle.
