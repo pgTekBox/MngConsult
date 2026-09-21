@@ -88,6 +88,15 @@
     .msg.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af }
     .vide { font-size: 13.5px; color: #64748b; padding: 22px; text-align: center;
             border: 1px dashed #cbd5e1; border-radius: 12px; background: #fff }
+
+    /* L'état de paiement, à côté du solde. Rien ne s'affiche pour une facture
+       entièrement due : c'est le cas ordinaire d'une reprise. */
+    .pay {
+        display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
+        font-size: 10.5px; font-weight: 800; background: #f1f5f9; color: #475569;
+    }
+
+    .pay.part { background: #fef3c7; color: #92400e }
 </style>
 <script>
     function toutCocher(source) {
@@ -123,6 +132,14 @@
         <asp:DropDownList ID="ddlType" runat="server" AutoPostBack="true" CssClass="btn">
             <asp:ListItem Value="1" Text="Factures clients" />
             <asp:ListItem Value="2" Text="Factures fournisseurs" />
+        </asp:DropDownList>
+
+        <%-- Ouvertes ou fermées : une facture déjà payée reprise telle quelle
+             gonflerait les comptes clients d'un montant qui n'est plus dû. --%>
+        <asp:DropDownList ID="ddlEtat" runat="server" AutoPostBack="true" CssClass="btn">
+            <asp:ListItem Value="" Text="Toutes" />
+            <asp:ListItem Value="O" Text="Ouvertes seulement" />
+            <asp:ListItem Value="F" Text="Fermées seulement" />
         </asp:DropDownList>
 
         <span class="esp"></span>

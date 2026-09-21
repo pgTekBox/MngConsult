@@ -91,11 +91,13 @@ Public Class ImportApideck
                 New Ressource With {.Groupe = "Achats", .Cle = "purchase-orders", .Libelle = "Bons de commande", .Vers = "BONS_COMMANDE"},
                 New Ressource With {.Groupe = "Achats", .Cle = "expenses", .Libelle = "Dépenses", .Vers = "DEPENSES"},
                 New Ressource With {.Groupe = "Grand livre", .Cle = "journal-entries", .Libelle = "Écritures de journal", .Vers = "ECRITURES"},
+                New Ressource With {.Groupe = "Grand livre", .Cle = "general-ledger", .Libelle = "Grand livre", .Vers = "GRAND_LIVRE", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "balance-sheet", .Libelle = "Bilan", .Unique = True, .Vers = "BILAN"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "profit-and-loss", .Libelle = "Résultats", .Unique = True, .Vers = "RESULTATS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "aged-debtors", .Libelle = "Balance âgée clients", .Unique = True, .Vers = "AGEE_CLIENTS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "aged-creditors", .Libelle = "Balance âgée fournisseurs", .Unique = True, .Vers = "AGEE_FOURNISSEURS"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "trial-balance", .Libelle = "Balance de vérification", .Vers = "BALANCE_VERIF", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "tax-summary", .Libelle = "Rapport de taxes", .Vers = "RAPPORT_TAXES", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"}
             }
         End Get
@@ -293,8 +295,10 @@ Public Class ImportApideck
         Select Case r.Mode
             Case "PAR_DOCUMENT" : Return LirePiecesJointes(api)
             Case "PASSERELLE"
-                ' Deux ressources passent par le langage natif de QuickBooks.
+                ' Quatre ressources passent par le langage natif de QuickBooks.
                 If r.Vers = "BALANCE_VERIF" Then Return LireBalanceVerification(api)
+                If r.Vers = "GRAND_LIVRE" Then Return LireGrandLivre(api)
+                If r.Vers = "RAPPORT_TAXES" Then Return LireRapportTaxes(api)
                 Return LireConditionsPaiement(api)
         End Select
 
@@ -362,6 +366,8 @@ Public Class ImportApideck
             Case "AGEE_CLIENTS" : Return VerserBalanceAgee(brut, "Client", runId)
             Case "AGEE_FOURNISSEURS" : Return VerserBalanceAgee(brut, "Fournisseur", runId)
             Case "BALANCE_VERIF" : Return VerserBalanceVerification(brut, runId)
+            Case "GRAND_LIVRE" : Return VerserGrandLivre(brut, runId)
+            Case "RAPPORT_TAXES" : Return VerserRapportTaxes(brut, runId)
             Case "CONDITIONS" : Return VerserConditionsPaiement(brut, runId)
             Case "PIECES_JOINTES" : Return VerserPiecesJointes(brut, runId)
             Case "SOCIETE" : Return VerserSociete(brut, runId)
@@ -519,7 +525,12 @@ Public Class ImportApideck
             o("taxes") = Valeur(d, "total_tax")
             o("total") = Valeur(d, "total")
             o("solde") = Valeur(d, "balance")
-            o("statut") = Valeur(d, "status")
+            ' QuickBooks ne remplit pas « status » à travers Apideck : on déduit
+            ' l'état des montants. Sans lui, rien ne distinguerait une facture
+            ' payée d'une facture due, et les deux se créeraient pareillement.
+            Dim etat As String = Valeur(d, "status")
+            If etat = "" Then etat = EtatDocument(Valeur(d, "total"), Valeur(d, "balance"))
+            o("statut") = etat
 
             Dim lignes As New JArray()
             Dim lot As JArray = TryCast(d("line_items"), JArray)
@@ -527,6 +538,7 @@ Public Class ImportApideck
 
             If lot IsNot Nothing Then
                 For Each l As JToken In lot
+                    If LigneDeRecapitulation(l) Then Continue For
                     no += 1
                     Dim ligne As New JObject()
                     ligne("no") = no
@@ -1029,6 +1041,27 @@ Public Class ImportApideck
         Return texte
     End Function
 
+
+    ''' <summary>
+    ''' Une ligne de récapitulation, pas une ligne de contenu.
+    '''
+    ''' Apideck rend le sous-total de la pièce COMME UNE LIGNE, à côté des vraies :
+    ''' la facture 1002 de 123 $ arrive avec une ligne « sales_item » de 123 $ et
+    ''' une ligne « sub_total » de 123 $. Reprises toutes les deux, les lignes
+    ''' totalisent le double de la pièce — et plus rien ne boucle. C'est la
+    ''' répartition des taxes qui l'a fait ressortir : elle compare la somme des
+    ''' lignes au total de l'entête, et les trois pièces en préparation étaient
+    ''' déclarées déséquilibrées sans qu'une taxe soit en cause.
+    '''
+    ''' On écarte donc les types qui répètent ce que l'entête porte déjà. Tout le
+    ''' reste passe — un rabais ou une ligne de description sont du contenu, même
+    ''' quand ils ne ressemblent pas à un article.
+    ''' </summary>
+    Private Shared Function LigneDeRecapitulation(l As JToken) As Boolean
+        Dim genre As String = Valeur(l, "type").Trim().ToLowerInvariant()
+        Return genre = "sub_total" OrElse genre = "subtotal" OrElse genre = "total"
+    End Function
+
     ''' <summary>Les lignes d'articles, forme partagée par les pièces commerciales.</summary>
     Private Shared Function LignesArticles(d As JToken) As JArray
         Dim lignes As New JArray()
@@ -1037,6 +1070,7 @@ Public Class ImportApideck
 
         Dim no As Integer = 0
         For Each l As JToken In lot
+            If LigneDeRecapitulation(l) Then Continue For
             no += 1
             Dim ligne As New JObject()
             ligne("no") = no
@@ -1188,7 +1222,9 @@ Public Class ImportApideck
     Private Function DeposerRapport(genre As String, libelle As String,
                                     entete As JObject, lignes As JArray,
                                     brut As JArray, runId As Integer) As String
-        Dim fichierId As Integer = InscrireAuRegistre("Rapport", libelle, brut)
+        ' Même raison que pour la balance âgée : le bilan et l'état des résultats
+        ' ne doivent pas se remplacer l'un l'autre au registre.
+        Dim fichierId As Integer = InscrireAuRegistre("Rapport" & genre, libelle, brut)
 
         Dim p As New Collection
         p.Add(New SqlParameter("@RunId", CObj(runId)))
@@ -1309,6 +1345,113 @@ Public Class ImportApideck
             liste.Add(o)
         Next
     End Sub
+
+    ''' <summary>
+    ''' Le grand livre, par la passerelle.
+    '''
+    ''' Apideck ne l'expose pas — /accounting/general-ledger-transactions répond
+    ''' 404 pour QuickBooks. On demande donc le rapport natif, et Apideck le
+    ''' relaie tel quel.
+    '''
+    ''' LES COLONNES SONT DEMANDÉES EXPLICITEMENT. Sans « columns », QuickBooks
+    ''' rend un montant et un solde cumulé sous les entêtes « Débit » et
+    ''' « Crédit » : essayé, la deuxième colonne valait 123,00 puis 346,00 pour
+    ''' deux factures de 123 et 223. Prendre ce cumul pour un crédit aurait
+    ''' produit un grand livre faux et vraisemblable.
+    '''
+    ''' La période est celle du champ de date de l'écran, comme la balance de
+    ''' vérification : du 1er janvier de l'année à la date choisie.
+    ''' </summary>
+    Private Function LireGrandLivre(api As clsApideck) As JArray
+        Dim arrete As Date? = DateBalance()
+        If Not arrete.HasValue Then
+            Throw New Exception("Indiquez la date d'arrêt : le grand livre est lu sur une période.")
+        End If
+
+        Dim fin As String = arrete.Value.ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+        Dim debut As String = New Date(arrete.Value.Year, 1, 1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+        Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & api.RealmId() &
+                            "/reports/GeneralLedger?start_date=" & debut & "&end_date=" & fin &
+                            "&columns=tx_date,txn_type,doc_num,name,memo,split_acc,debt_amt,credit_amt" &
+                            "&minorversion=70"
+
+        Dim rapport As JObject = api.Proxy(url)
+        Dim liste As New JArray()
+        If rapport Is Nothing Then Return liste
+
+        Dim entete As JToken = rapport.SelectToken("Header")
+        Dim debutReel As String = Valeur(entete, "StartPeriod")
+        Dim finReelle As String = Valeur(entete, "EndPeriod")
+        Dim devise As String = Valeur(entete, "Currency")
+
+        Dim sections As JArray = TryCast(rapport.SelectToken("Rows.Row"), JArray)
+        If sections Is Nothing Then Return liste
+
+        Dim ordreCompte As Integer = 0
+        For Each section As JToken In sections
+            ' Chaque section est un compte ; son entête en porte le nom.
+            Dim compte As String = Valeur(section.SelectToken("Header.ColData[0]"), "value")
+            If compte = "" Then compte = Valeur(section.SelectToken("Summary.ColData[0]"), "value")
+
+            Dim operations As JArray = TryCast(section.SelectToken("Rows.Row"), JArray)
+            If operations Is Nothing Then Continue For
+
+            ordreCompte += 1
+            Dim ordreLigne As Integer = 0
+
+            For Each op As JToken In operations
+                Dim c As JArray = TryCast(op("ColData"), JArray)
+                If c Is Nothing OrElse c.Count < 8 Then Continue For
+
+                ordreLigne += 1
+                Dim o As New JObject()
+                o("debut") = debutReel
+                o("fin") = finReelle
+                o("devise") = devise
+                o("compte_ordre") = ordreCompte
+                o("compte") = compte
+                o("ligne_ordre") = ordreLigne
+                o("date") = Valeur(c(0), "value")
+                o("type") = Valeur(c(1), "value")
+                o("numero") = Valeur(c(2), "value")
+                o("tiers") = Valeur(c(3), "value")
+                o("memo") = Valeur(c(4), "value")
+                o("contrepartie") = Valeur(c(5), "value")
+                o("debit") = Valeur(c(6), "value")
+                o("credit") = Valeur(c(7), "value")
+                liste.Add(o)
+            Next
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Dépose le grand livre en préparation. Rien ne s'applique à la
+    ''' comptabilité : c'est une pièce de contrôle, comme la balance de
+    ''' vérification — on la confronte, on ne la reprend pas.
+    ''' </summary>
+    Private Function VerserGrandLivre(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then Return "aucune écriture"
+
+        Dim fichierId As Integer = InscrireAuRegistre("GrandLivre", "grand livre", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Lignes", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0820ChargerGrandLivre", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Return Lire(r, "NbLignes") & " écriture(s) sur " & Lire(r, "NbComptes") & " compte(s)"
+    End Function
+
+    ''' <summary>
+    ''' Dépose la balance dans staging.BalanceVerification — la table de l'écran
     ''' dédié, pas celle des rapports. Tout ce qui existe déjà s'y applique :
     ''' l'équilibre, les totaux, et le contrôle contre le plan comptable.
     '''
@@ -1411,7 +1554,10 @@ Public Class ImportApideck
 
         If lignes.Count = 0 Then Return "aucun solde en souffrance"
 
-        Dim typeImport As String = "BalanceAgee"
+        ' Le type porte le genre : clients et fournisseurs sont deux extractions
+        ' distinctes. Un type commun les ferait s'effacer l'une l'autre, puisque
+        ' s0819 remplace la précédente extraction DU MÊME TYPE.
+        Dim typeImport As String = "BalanceAgee" & genre
         Dim libelle As String = If(genre = "Client", "balance âgée clients", "balance âgée fournisseurs")
         Dim fichierId As Integer = InscrireAuRegistre(typeImport, libelle, brut)
 
@@ -1566,6 +1712,329 @@ Public Class ImportApideck
         Return texte
     End Function
 
+
+    ''' <summary>
+    ''' Les rapports de taxes, par la passerelle.
+    '''
+    ''' Apideck ne les expose pas : on demande le rapport natif « TaxSummary »,
+    ''' et Apideck le relaie tel quel.
+    '''
+    ''' UN ABONNÉ N'A PAS UN RAPPORT, IL EN A PLUSIEURS — un par période de
+    ''' déclaration et par administration fiscale. Un trimestriel québécois
+    ''' arrivé en septembre en a trois : janvier-mars, avril-juin, puis le
+    ''' trimestre en cours arrêté à la date demandée. On les rapatrie tous, et
+    ''' l'écran les met côte à côte.
+    '''
+    ''' LA FRÉQUENCE VIENT DE L'ÉCRAN, PAS DE LA SOURCE. QuickBooks ne l'expose
+    ''' nulle part : ni Preferences.TaxPrefs, qui ne dit que « UsingSalesTax »,
+    ''' ni TaxAgency, qui ne porte que le nom et le numéro d'inscription.
+    ''' Cherché, et pas trouvé. Alors on demande plutôt que de supposer — se
+    ''' tromper de découpage produirait des déclarations d'apparence juste qui
+    ''' ne correspondraient à aucune de celles qui ont été produites.
+    '''
+    ''' LE DÉBUT D'EXERCICE, LUI, EST CONNU : Preferences le donne, et c'est de
+    ''' là que les périodes se comptent.
+    '''
+    ''' LES DEUX DATES SONT OBLIGATOIRES, ET ENSEMBLE. Une date isolée est
+    ''' silencieusement ignorée : QuickBooks retombe alors sur « ce trimestre-ci »
+    ''' et rend un rapport juste, mais pas celui qu'on a demandé. Même piège que
+    ''' la balance de vérification, vérifié à la main sur ce rapport-ci.
+    '''
+    ''' « TaxSummary » EXIGE agency_id. Sans lui, QuickBooks répond 200 avec
+    ''' « NoReportData: true » — poliment, sans nommer le paramètre qui manque.
+    ''' On cherche longtemps une donnée qui est pourtant là.
+    '''
+    ''' ON NE PRÉSUME RIEN DES COLONNES. Au Québec le rapport en a une seule,
+    ''' « Total », et ses lignes sont celles du formulaire : 101 les ventes, 106
+    ''' le CTI, 206 le RTI, 217 le montant à payer ou à rembourser. Ailleurs ce
+    ''' ne sont pas les mêmes. Alors on lit les entêtes que la source donne et on
+    ''' les emporte avec chaque valeur, plutôt que de compter sur un ordre.
+    ''' </summary>
+    Private Function LireRapportTaxes(api As clsApideck) As JArray
+        Dim arrete As Date? = DateBalance()
+        If Not arrete.HasValue Then
+            Throw New Exception("Indiquez la date d'arrêt : les rapports de taxes portent sur des périodes.")
+        End If
+
+        Dim realm As String = api.RealmId()
+        Dim periodes As List(Of Date()) = PeriodesDeclaration(arrete.Value, PremierMoisExercice(api))
+        Dim agences As JArray = api.QuickBooksQuery("TaxAgency", realm)
+
+        Dim liste As New JArray()
+        Dim ordre As Integer = 0
+        Dim rang As Integer = 0
+
+        For Each p As Date() In periodes
+            rang += 1
+            Dim debut As String = p(0).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+            Dim fin As String = p(1).ToString("yyyy-MM-dd", Globalization.CultureInfo.InvariantCulture)
+
+            For Each agence As JToken In agences
+                Dim agenceId As String = Valeur(agence, "Id")
+                Dim agenceNom As String = Valeur(agence, "DisplayName", "Name")
+                If agenceId = "" Then Continue For
+
+                Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & realm &
+                                    "/reports/TaxSummary?agency_id=" & Uri.EscapeDataString(agenceId) &
+                                    "&start_date=" & debut & "&end_date=" & fin &
+                                    "&minorversion=75"
+
+                Dim rapport As JObject = api.Proxy(url)
+                If rapport Is Nothing Then Continue For
+
+                AjouterRapportTaxes(rapport, rang, agenceId, agenceNom, liste, ordre)
+            Next
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Le premier mois de l'exercice, tel que la source le déclare. Janvier par
+    ''' défaut : c'est le cas de la très grande majorité, et une année civile
+    ''' mal devinée se voit tout de suite sur les dates du rapport.
+    ''' </summary>
+    Private Shared Function PremierMoisExercice(api As clsApideck) As Integer
+        Try
+            Dim prefs As JObject = api.Proxy("https://quickbooks.api.intuit.com/v3/company/" &
+                                             api.RealmId() & "/preferences?minorversion=75")
+            Dim nom As String = Valeur(prefs, "Preferences.AccountingInfoPrefs.FirstMonthOfFiscalYear")
+            If nom = "" Then Return 1
+
+            Dim mois As Date
+            If Date.TryParseExact(nom, "MMMM", Globalization.CultureInfo.GetCultureInfo("en-US"),
+                                  Globalization.DateTimeStyles.None, mois) Then
+                Return mois.Month
+            End If
+        Catch
+            ' La préférence est un confort : son absence ne doit pas faire
+            ' échouer l'extraction.
+        End Try
+        Return 1
+    End Function
+
+    ''' <summary>
+    ''' Les périodes de déclaration de l'exercice en cours, jusqu'à la date
+    ''' d'arrêt. La dernière est TRONQUÉE à cette date : c'est la déclaration en
+    ''' cours, et la source la rend ainsi.
+    '''
+    ''' L'exercice retenu est celui qui CONTIENT la date d'arrêt, pas l'année
+    ''' civile : un exercice commençant en juillet donnerait autrement des
+    ''' périodes à cheval sur deux déclarations.
+    ''' </summary>
+    Private Function PeriodesDeclaration(arrete As Date, premierMois As Integer) As List(Of Date())
+        Dim mois As Integer = MoisParPeriode()
+        Dim liste As New List(Of Date())
+
+        ' Le début de l'exercice qui contient la date d'arrêt.
+        Dim debutExercice As New Date(arrete.Year, premierMois, 1)
+        If debutExercice > arrete Then debutExercice = debutExercice.AddYears(-1)
+
+        Dim debut As Date = debutExercice
+        While debut <= arrete
+            Dim fin As Date = debut.AddMonths(mois).AddDays(-1)
+            If fin > arrete Then fin = arrete
+            liste.Add(New Date() {debut, fin})
+            debut = debut.AddMonths(mois)
+        End While
+
+        Return liste
+    End Function
+
+    ''' <summary>
+    ''' Le nombre de mois d'une période de déclaration, choisi sur l'écran.
+    ''' Trimestriel par défaut — le cas le plus courant ici.
+    ''' </summary>
+    Private Function MoisParPeriode() As Integer
+        Dim choix As String = If(ddlFrequenceTaxes Is Nothing, "", If(ddlFrequenceTaxes.SelectedValue, ""))
+        Select Case choix
+            Case "1" : Return 1
+            Case "12" : Return 12
+            Case Else : Return 3
+        End Select
+    End Function
+
+    ''' <summary>
+    ''' Une déclaration : celle d'une administration, pour une période. Les
+    ''' administrations qui n'ont rien à déclarer sur la période répondent sans
+    ''' lignes — elles passent leur tour sans bruit, ce n'est pas une anomalie.
+    ''' </summary>
+    Private Shared Sub AjouterRapportTaxes(rapport As JObject, periodeOrdre As Integer,
+                                           agenceId As String, agenceNom As String,
+                                           liste As JArray, ByRef ordre As Integer)
+        Dim entete As JToken = rapport.SelectToken("Header")
+        Dim debutReel As String = Valeur(entete, "StartPeriod")
+        Dim finReelle As String = Valeur(entete, "EndPeriod")
+        Dim devise As String = Valeur(entete, "Currency")
+
+        ' Les colonnes telles que la source les nomme, titre et clé technique.
+        Dim titres As New List(Of String)
+        Dim cles As New List(Of String)
+        Dim colonnes As JArray = TryCast(rapport.SelectToken("Columns.Column"), JArray)
+        If colonnes IsNot Nothing Then
+            For Each c As JToken In colonnes
+                titres.Add(Valeur(c, "ColTitle"))
+                cles.Add(CleColonne(c))
+            Next
+        End If
+
+        Dim rangs As JArray = TryCast(rapport.SelectToken("Rows.Row"), JArray)
+        If rangs Is Nothing Then Exit Sub
+
+        AjouterRangsTaxes(rangs, "", 0, titres, cles, periodeOrdre, debutReel, finReelle, devise,
+                          agenceId, agenceNom, liste, ordre)
+    End Sub
+
+    ''' <summary>
+    ''' La clé technique d'une colonne, quand la source en donne une. Elle vit
+    ''' dans un tableau de paires : MetaData = [{ Name: "ColKey", Value: "…" }].
+    ''' </summary>
+    Private Shared Function CleColonne(colonne As JToken) As String
+        Dim meta As JArray = TryCast(colonne("MetaData"), JArray)
+        If meta Is Nothing Then Return ""
+
+        For Each m As JToken In meta
+            If String.Equals(Valeur(m, "Name"), "ColKey", StringComparison.OrdinalIgnoreCase) Then
+                Return Valeur(m, "Value")
+            End If
+        Next
+        Return ""
+    End Function
+
+    ''' <summary>
+    ''' Descend le rapport. QuickBooks y mêle trois sortes de rangs : une ligne
+    ''' ordinaire porte son ColData ; une section porte un Header, des Rows et
+    ''' un Summary. On les traite tous les trois, et la récursion garde le nom
+    ''' de la section qui contient — sans quoi une ligne « Total » ne dirait pas
+    ''' de quoi elle est le total.
+    ''' </summary>
+    Private Shared Sub AjouterRangsTaxes(rangs As JArray, groupe As String, niveau As Integer,
+                                         titres As List(Of String), cles As List(Of String),
+                                         periodeOrdre As Integer,
+                                         debut As String, fin As String, devise As String,
+                                         agenceId As String, agenceNom As String,
+                                         liste As JArray, ByRef ordre As Integer)
+        For Each r As JToken In rangs
+            Dim propre As JArray = TryCast(r("ColData"), JArray)
+            If propre IsNot Nothing Then
+                ordre += 1
+                CellulesTaxes(propre, Valeur(r, "group"), groupe, niveau, False, titres, cles, periodeOrdre, debut, fin, devise, agenceId, agenceNom, liste, ordre)
+            End If
+
+            Dim enteteSection As JArray = TryCast(r.SelectToken("Header.ColData"), JArray)
+            If enteteSection IsNot Nothing Then
+                ordre += 1
+                CellulesTaxes(enteteSection, Valeur(r, "group"), groupe, niveau, False, titres, cles, periodeOrdre, debut, fin, devise, agenceId, agenceNom, liste, ordre)
+            End If
+
+            Dim dedans As JArray = TryCast(r.SelectToken("Rows.Row"), JArray)
+            If dedans IsNot Nothing Then
+                Dim nom As String = groupe
+                If enteteSection IsNot Nothing AndAlso enteteSection.Count > 0 Then
+                    nom = Valeur(enteteSection(0), "value")
+                End If
+                AjouterRangsTaxes(dedans, nom, niveau + 1, titres, cles, periodeOrdre, debut, fin, devise, agenceId, agenceNom, liste, ordre)
+            End If
+
+            Dim totalSection As JArray = TryCast(r.SelectToken("Summary.ColData"), JArray)
+            If totalSection IsNot Nothing Then
+                ordre += 1
+                CellulesTaxes(totalSection, Valeur(r, "group"), groupe, niveau, True, titres, cles, periodeOrdre, debut, fin, devise, agenceId, agenceNom, liste, ordre)
+            End If
+        Next
+    End Sub
+
+    ''' <summary>
+    ''' Une ligne devient autant d'enregistrements qu'elle a de valeurs. La
+    ''' PREMIÈRE colonne n'en est pas une : c'est le libellé de la ligne, et il
+    ''' est recopié sur chaque cellule pour qu'aucune ne se retrouve orpheline.
+    '''
+    ''' Une ligne sans colonne de valeur — le titre d'une section, par exemple —
+    ''' produit quand même un enregistrement. Sinon elle disparaîtrait du
+    ''' rapport, et sa section avec elle.
+    ''' </summary>
+    Private Shared Sub CellulesTaxes(cellules As JArray, ligneCode As String, groupe As String,
+                                     niveau As Integer, estTotal As Boolean,
+                                     titres As List(Of String), cles As List(Of String),
+                                     periodeOrdre As Integer,
+                                     debut As String, fin As String, devise As String,
+                                     agenceId As String, agenceNom As String,
+                                     liste As JArray, ordre As Integer)
+        Dim libelle As String = ""
+        If cellules.Count > 0 Then libelle = Valeur(cellules(0), "value")
+
+        If cellules.Count <= 1 Then
+            liste.Add(CelluleTaxes(periodeOrdre, debut, fin, devise, agenceId, agenceNom, ordre, niveau,
+                                   ligneCode, groupe, libelle, estTotal, 0, "", "", ""))
+            Exit Sub
+        End If
+
+        For i As Integer = 1 To cellules.Count - 1
+            Dim titre As String = If(i < titres.Count, titres(i), "")
+            Dim cle As String = If(i < cles.Count, cles(i), "")
+            liste.Add(CelluleTaxes(periodeOrdre, debut, fin, devise, agenceId, agenceNom, ordre, niveau,
+                                   ligneCode, groupe, libelle, estTotal,
+                                   i, titre, cle, Valeur(cellules(i), "value")))
+        Next
+    End Sub
+
+    Private Shared Function CelluleTaxes(periodeOrdre As Integer,
+                                         debut As String, fin As String, devise As String,
+                                         agenceId As String, agenceNom As String,
+                                         ordre As Integer, niveau As Integer,
+                                         ligneCode As String, groupe As String,
+                                         libelle As String, estTotal As Boolean,
+                                         colonne As Integer, titre As String, cle As String,
+                                         valeur As String) As JObject
+        Dim o As New JObject()
+        o("periode_ordre") = periodeOrdre
+        o("debut") = debut
+        o("fin") = fin
+        o("devise") = devise
+        o("agence_id") = agenceId
+        o("agence") = agenceNom
+        o("ligne_ordre") = ordre
+        o("niveau") = niveau
+        o("ligne_code") = ligneCode
+        o("groupe") = groupe
+        o("libelle") = libelle
+        o("est_total") = If(estTotal, "1", "0")
+        o("colonne_ordre") = colonne
+        o("colonne_titre") = titre
+        o("colonne_cle") = cle
+        o("valeur") = valeur
+        Return o
+    End Function
+
+    ''' <summary>
+    ''' Dépose le rapport de taxes en préparation. Rien ne s'applique à la
+    ''' comptabilité : c'est une pièce de contrôle, comme le grand livre et la
+    ''' balance âgée — on la confronte, on ne la reprend pas. Aucune écriture,
+    ''' aucun compte de taxe, aucune déclaration.
+    ''' </summary>
+    Private Function VerserRapportTaxes(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then
+            Return "aucune donnée — la source ne déclare aucune opération taxée sur l'exercice"
+        End If
+
+        Dim fichierId As Integer = InscrireAuRegistre("RapportTaxes", "rapport de taxes", brut)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Lignes", brut.ToString(Formatting.None)))
+
+        Dim ds As DataSet = ExecuteSQLds("s0822ChargerRapportTaxes", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = Lire(r, "NbPeriodes") & " déclaration(s), " &
+                              Lire(r, "NbLignes") & " ligne(s)"
+        If Lire(r, "NbAgences") > 1 Then texte &= ", " & Lire(r, "NbAgences") & " administrations"
+        Return texte
+    End Function
+
     ''' <summary>
     ''' Les taux de taxe de la source.
     '''
@@ -1656,11 +2125,13 @@ Public Class ImportApideck
 
             Dim r As DataRow = ds.Tables(0).Rows(0)
             Dim coupees As Integer = Lire(r, "NbLignesCoupees") + Lire(r, "NbDocumentsParTotal")
+            Dim sousTotaux As Integer = Lire(r, "NbSousTotaux")
             Dim boiteux As Integer = Lire(r, "NbDesequilibres")
 
-            If coupees = 0 AndAlso boiteux = 0 Then Return ""
+            If coupees = 0 AndAlso sousTotaux = 0 AndAlso boiteux = 0 Then Return ""
 
             Dim texte As String = "Taxes réparties : " & coupees & " élément(s)."
+            If sousTotaux > 0 Then texte &= " " & sousTotaux & " sous-total(aux) déduit(s) du total et des taxes."
             If boiteux > 0 Then
                 texte &= " " & boiteux & " document(s) ne bouclent toujours pas — " &
                          "ils ne pourront pas être créés tant que la répartition n'est pas faite."
@@ -1977,6 +2448,31 @@ Public Class ImportApideck
         Return a(0)
     End Function
 
+
+    ''' <summary>
+    ''' L'état d'un document déduit de ses montants : « Payée » quand il ne
+    ''' reste rien, « Partielle » quand il reste moins que le total, « Ouverte »
+    ''' sinon.
+    '''
+    ''' On déduit parce que la source ne dit rien — Apideck laisse « status »
+    ''' vide pour QuickBooks. Le solde, lui, est toujours là, et c'est
+    ''' précisément ce qu'on veut savoir d'une facture reprise : reste-t-il
+    ''' quelque chose à encaisser ou à payer.
+    '''
+    ''' Rend une chaîne vide quand le solde est absent : mieux vaut ne rien
+    ''' affirmer que d'affirmer « Ouverte » sur un document dont on ignore tout.
+    ''' </summary>
+    Private Shared Function EtatDocument(total As String, solde As String) As String
+        Dim s As Object = Nombre(solde)
+        If s Is Nothing Then Return ""
+
+        Dim reste As Decimal = CDec(s)
+        If Math.Abs(reste) <= 0.01D Then Return "Payée"
+
+        Dim t As Object = Nombre(total)
+        If t IsNot Nothing AndAlso Math.Abs(CDec(t) - reste) > 0.01D Then Return "Partielle"
+        Return "Ouverte"
+    End Function
     ''' <summary>Un nombre lisible par SQL, ou rien : le point décimal, jamais la virgule.</summary>
     Private Shared Function Nombre(texte As String) As Object
         Dim d As Decimal

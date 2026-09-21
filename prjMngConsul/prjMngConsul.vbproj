@@ -486,6 +486,9 @@
     <Content Include="ValiderFactures.aspx" />
     <Content Include="ValiderSociete.aspx" />
     <Content Include="ValiderListes.aspx" />
+    <Content Include="ValiderBalanceAgee.aspx" />
+    <Content Include="ValiderGrandLivre.aspx" />
+    <Content Include="ValiderRapportTaxes.aspx" />
     <Content Include="ImportClients.aspx" />
     <Content Include="ImportFournisseurs.aspx" />
     <Content Include="ImportProduits.aspx" />
@@ -775,6 +778,27 @@
     </Compile>    <Compile Include="ValiderListes.aspx.vb">
       <DependentUpon>ValiderListes.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderBalanceAgee.aspx.vb">
+      <DependentUpon>ValiderBalanceAgee.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderBalanceAgee.aspx.designer.vb">
+      <DependentUpon>ValiderBalanceAgee.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderGrandLivre.aspx.vb">
+      <DependentUpon>ValiderGrandLivre.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderGrandLivre.aspx.designer.vb">
+      <DependentUpon>ValiderGrandLivre.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderRapportTaxes.aspx.vb">
+      <DependentUpon>ValiderRapportTaxes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderRapportTaxes.aspx.designer.vb">
+      <DependentUpon>ValiderRapportTaxes.aspx</DependentUpon>
     </Compile>
     <Compile Include="ValiderListes.aspx.designer.vb">
       <DependentUpon>ValiderListes.aspx</DependentUpon>

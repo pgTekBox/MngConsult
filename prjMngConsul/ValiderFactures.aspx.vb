@@ -42,6 +42,10 @@ Public Class ValiderFactures
         Afficher()
     End Sub
 
+    Protected Sub ddlEtat_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlEtat.SelectedIndexChanged
+        Afficher()
+    End Sub
+
 #End Region
 
 #Region "Les actions"
@@ -200,6 +204,35 @@ Public Class ValiderFactures
         Dim entetes As DataTable = ds.Tables(0)
         Dim lignes As DataTable = If(ds.Tables.Count > 1, ds.Tables(1), Nothing)
 
+        ' Le filtre porte sur le SOLDE, pas sur le libellé venu de la source :
+        ' c'est le solde qui décide s'il reste quelque chose à encaisser, et
+        ' c'est lui que l'écran affiche. Un libellé et un montant qui se
+        ' contrediraient laisseraient l'utilisateur sans recours.
+        Dim voulu As String = If(ddlEtat.SelectedValue, "")
+        If voulu <> "" Then
+            Dim garde As New List(Of DataRow)
+            For Each r As DataRow In entetes.Rows
+                Dim solde As Decimal = If(IsDBNull(r("Solde")), 0D, Convert.ToDecimal(r("Solde")))
+                Dim ouverte As Boolean = (Math.Abs(solde) > 0.01D)
+                If (voulu = "O" AndAlso ouverte) OrElse (voulu = "F" AndAlso Not ouverte) Then garde.Add(r)
+            Next
+
+            Dim filtre As DataTable = entetes.Clone()
+            For Each r As DataRow In garde
+                filtre.ImportRow(r)
+            Next
+            entetes = filtre
+        End If
+
+        If entetes.Rows.Count = 0 Then
+            litBilan.Text = ""
+            litDocs.Text = "<div class='vide'>Aucune facture " &
+                           If(voulu = "O", "ouverte", If(voulu = "F", "fermée", "")) &
+                           " dans la préparation de ce type.</div>"
+            Return
+        End If
+
+
         litBilan.Text = Bilan(entetes)
         litDocs.Text = Tableau(entetes, lignes, typeDoc)
     End Sub
@@ -303,7 +336,7 @@ Public Class ValiderFactures
             sb.Append("<td class='n'>").Append(Champ("tvq_" & id, r("TVQ"), migre)).Append("</td>")
 
             sb.Append("<td class='n'><b>").Append(Somme(r("Total"))).Append("</b></td>")
-            sb.Append("<td class='n'>").Append(Somme(r("Solde"))).Append("</td>")
+            sb.Append("<td class='n'>").Append(Somme(r("Solde"))).Append(EtatPastille(r)).Append("</td>")
 
             sb.Append("<td>").Append(Etiquette(statut, sansTiers)).Append("</td>")
             sb.Append("</tr>")
@@ -368,6 +401,26 @@ Public Class ValiderFactures
         Dim ds As DataSet = ExecuteSQLds("s0786GetTiersPourImport", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
+    End Function
+
+    ''' <summary>
+    ''' « Payée » ou « Partielle » à côté du solde. Rien pour une facture
+    ''' entièrement due : c'est le cas ordinaire d'une reprise, et le signaler
+    ''' sur chaque ligne noierait les deux qui méritent un regard.
+    '''
+    ''' Le mot vient du solde, pas de StatutSource : c'est le montant qui décide,
+    ''' et c'est lui qui est affiché juste à gauche.
+    ''' </summary>
+    Private Shared Function EtatPastille(r As DataRow) As String
+        Dim solde As Decimal = If(IsDBNull(r("Solde")), 0D, Convert.ToDecimal(r("Solde")))
+        If Math.Abs(solde) > 0.01D Then
+            Dim total As Decimal = If(IsDBNull(r("Total")), 0D, Convert.ToDecimal(r("Total")))
+            If total <> 0D AndAlso Math.Abs(total - solde) > 0.01D Then
+                Return " <span class='pay part'>partielle</span>"
+            End If
+            Return ""
+        End If
+        Return " <span class='pay'>payée</span>"
     End Function
 
     Private Shared Function Etiquette(statut As String, sansTiers As Boolean) As String

@@ -30,6 +30,9 @@ Partial Public Class ImportApideck
     '''<summary>txtDateBalance</summary>
     Protected WithEvents txtDateBalance As Global.System.Web.UI.WebControls.TextBox
 
+    '''<summary>ddlFrequenceTaxes</summary>
+    Protected WithEvents ddlFrequenceTaxes As Global.System.Web.UI.WebControls.DropDownList
+
     '''<summary>btnImporter</summary>
     Protected WithEvents btnImporter As Global.System.Web.UI.WebControls.Button
 

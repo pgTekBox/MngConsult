@@ -106,9 +106,11 @@ Public Class Importations
                     .Page = "~/ValiderFactures.aspx",
                     .Note = 7,
                     .Fait = "Montre chaque facture avec son détail, son tiers et son verdict — " &
-                            "nouvelle, déjà en comptabilité, ou à corriger. On rapproche le tiers " &
-                            "quand la source ne l'a pas retrouvé, on répartit les taxes, on coche, " &
-                            "et les documents sont créés en brouillon : rien ne part au grand livre.",
+                            "nouvelle, déjà en comptabilité, ou à corriger. Toutes les factures sont " &
+                            "rapatriées, payées comme dues, et un filtre « ouvertes / fermées » trie " &
+                            "avant de cocher. On rapproche le tiers quand la source ne l'a pas " &
+                            "retrouvé, on répartit les taxes, et les documents sont créés en " &
+                            "brouillon : rien ne part au grand livre.",
                     .Manque = "Les montants et les lignes ne se retouchent pas ici — il faut corriger " &
                               "à la source. Et la comptabilisation reste à faire depuis la grille des factures."
                 },
@@ -138,6 +140,57 @@ Public Class Importations
                     .Manque = "Rien ne s'applique : l'application n'a pas d'écran des modes de " &
                               "paiement ni des départements. Les comptes bancaires et les journaux " &
                               "ont été retirés — Apideck ne les expose pas chez QuickBooks."
+                },
+                New Poste With {
+                    .Icone = "📉",
+                    .Titre = "Balance âgée",
+                    .Source = "QuickBooks : soldes en souffrance, clients et fournisseurs",
+                    .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
+                    .Page = "~/ValiderBalanceAgee.aspx",
+                    .Note = 6,
+                    .Fait = "Les tranches d'ancienneté redeviennent des colonnes, et le total est " &
+                            "rapproché du solde des factures en préparation, tiers par tiers, par " &
+                            "l'identifiant de la source. L'écart est nommé quand il y en a un.",
+                    .Manque = "Le rapport est agrégé : aucun numéro de facture, donc un écart se " &
+                              "constate sans qu'on sache quelle facture manque. Le rapprochement " &
+                              "suppose que les deux extractions viennent de la même journée."
+                },
+                New Poste With {
+                    .Icone = "📚",
+                    .Titre = "Grand livre",
+                    .Source = "QuickBooks : General Ledger, par la passerelle",
+                    .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
+                    .Page = "~/ValiderGrandLivre.aspx",
+                    .Note = 6,
+                    .Fait = "Chaque écriture est reprise sous le compte qu'elle touche, avec sa " &
+                            "contrepartie, dans l'ordre de la source. Les colonnes sont demandées " &
+                            "explicitement — sans quoi QuickBooks rend un solde cumulé sous " &
+                            "l'entête « Crédit ». L'équilibre débit-crédit est vérifié à l'écran.",
+                    .Manque = "Le rapport porte sur une période, du 1er janvier à la date " &
+                              "indiquée : les soldes d'ouverture n'y sont pas, et il ne se " &
+                              "compare donc pas compte à compte avec la balance de vérification."
+                },
+                New Poste With {
+                    .Icone = "🧮",
+                    .Titre = "Taxes",
+                    .Source = "QuickBooks : taux de taxe, et le rapport TaxSummary par la passerelle",
+                    .Destination = "les taux coupent la TPS et la TVQ des pièces ; le rapport, contrôle seulement",
+                    .Page = "~/ValiderRapportTaxes.aspx",
+                    .Note = 8,
+                    .Fait = "Les taux arrivent avec leurs composantes, et le classement québécois " &
+                            "est fait : un taux unique à 14,975 % ressort en TPS 5 % et TVQ 9,975 %. " &
+                            "Ceux qui ne se répartissent pas — détaxé, exonéré, redressements — sont " &
+                            "signalés avec leur motif plutôt que devinés. La répartition coupe ensuite " &
+                            "les taxes des pièces en préparation et en déduit le sous-total, que la " &
+                            "source ne donne jamais. Le rapport, lui, est la déclaration elle-même : " &
+                            "les lignes du formulaire, 101 aux ventes, 106 le CTI, 206 le RTI, 217 le " &
+                            "montant à payer ou à rembourser — une par administration fiscale, et " &
+                            "rien ne s'applique à la comptabilité.",
+                    .Manque = "Le rapport exige le paramètre agency_id, faute de quoi QuickBooks " &
+                              "répond vide sans dire ce qui manque ; on interroge donc chaque " &
+                              "administration déclarée. Il ne couvre pas les déclarations déjà " &
+                              "produites une à une : il rend l'état de la période demandée, du " &
+                              "1er janvier à la date d'arrêt."
                 }
             }
         End Get
@@ -200,18 +253,6 @@ Public Class Importations
     Private ReadOnly Property AVenir As List(Of Poste)
         Get
             Return New List(Of Poste) From {
-                New Poste With {.Icone = "📉", .Titre = "Balance âgée clients", .Note = 1,
-                    .Source = "QuickBooks : A/R Aging Detail",
-                    .Destination = "contrôle du solde clients", .Manque = "À faire."},
-                New Poste With {.Icone = "📈", .Titre = "Balance âgée fournisseurs", .Note = 1,
-                    .Source = "QuickBooks : A/P Aging Detail",
-                    .Destination = "contrôle du solde fournisseurs", .Manque = "À faire."},
-                New Poste With {.Icone = "🧾", .Titre = "Factures clients ouvertes", .Note = 1,
-                    .Source = "QuickBooks : Open Invoices, par ligne",
-                    .Destination = "T060Document + T061DocumentLine", .Manque = "À faire."},
-                New Poste With {.Icone = "📥", .Titre = "Factures fournisseurs ouvertes", .Note = 1,
-                    .Source = "QuickBooks : Unpaid Bills Detail",
-                    .Destination = "T060Document, autre type", .Manque = "À faire."},
                 New Poste With {.Icone = "💵", .Titre = "Acomptes et règlements partiels", .Note = 1,
                     .Source = "QuickBooks : Transaction List by Customer",
                     .Destination = "T140Reglement + T141ReglementDocument", .Manque = "À faire."},
@@ -221,12 +262,6 @@ Public Class Importations
                 New Poste With {.Icone = "🔍", .Titre = "Opérations non rapprochées", .Note = 1,
                     .Source = "QuickBooks : Uncleared Transactions",
                     .Destination = "sans quoi le rapprochement suivant est faux", .Manque = "À faire."},
-                New Poste With {.Icone = "🧮", .Titre = "Taxes", .Note = 1,
-                    .Source = "QuickBooks : Sales Tax Liability",
-                    .Destination = "contrôle des comptes de taxes", .Manque = "À faire."},
-                New Poste With {.Icone = "📚", .Titre = "Grand livre", .Note = 1,
-                    .Source = "QuickBooks : General Ledger",
-                    .Destination = "reprise détaillée seulement", .Manque = "À faire."},
                 New Poste With {.Icone = "📦", .Titre = "Inventaire", .Note = 1,
                     .Source = "QuickBooks : Inventory Valuation Summary",
                     .Destination = "si vous tenez un inventaire permanent", .Manque = "À faire."}

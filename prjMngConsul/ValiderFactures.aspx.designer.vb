@@ -15,6 +15,9 @@ Partial Public Class ValiderFactures
     '''<summary>ddlType</summary>
     Protected WithEvents ddlType As Global.System.Web.UI.WebControls.DropDownList
 
+    '''<summary>ddlEtat</summary>
+    Protected WithEvents ddlEtat As Global.System.Web.UI.WebControls.DropDownList
+
     '''<summary>btnEnregistrer</summary>
     Protected WithEvents btnEnregistrer As Global.System.Web.UI.WebControls.Button
 
