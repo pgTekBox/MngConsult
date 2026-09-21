@@ -1,0 +1,9 @@
+bin/
+obj/
+.vs/
+
+# Holds the Dream sandbox client ID and secret in clear text.
+# Kept out of the repository: the file stays on the machine and never ships.
+# Consequence: a fresh clone does not have this file and will not build until
+# it is recreated with your own credentials.
+Settings.vb

@@ -1,0 +1,55 @@
+﻿------------------------------------------------------------------------------
+Retrouver les bénéficiaires de MCPUSSB0100037   2026-09-16 09:48:02
+--> POST https://partner-userpool-test-insuretech.auth.us-east-1.amazoncognito.com/oauth2/token
+    grant_type=client_credentials (Basic : identifiant + secret)
+<-- 200 
+{"access_token": "... masked ...","expires_in":3600,"token_type":"Bearer"}
+--> POST https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payments
+{"query":{"size":100,"startIndex":0}}
+<-- 200 OK
+{"listInfo":{"totalSize":25,"listSize":25},"paymentList":{"paymentListInfo":[{"paymentId":"092c6d0d8da54c888860409af80a7425","draftNumber":"A80000010","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payoutDate":"2026-07-23T00:00:00.000Z","creationDate":"2026-07-23T15:00:16.314Z","sendDate":null,"paymentType":"Expense","paymentMethod":null,"orderStatus":"EMAIL_SENT","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"912b8ac0eb5a483d82ffbc9f9f524e7d","draftNumber":"A80000009","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payoutDate":"2026-07-23T00:00:00.000Z","creationDate":"2026-07-23T14:59:17.945Z","sendDate":null,"paymentType":"Expense","paymentMethod":null,"orderStatus":"EMAIL_SENT","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"78fc1ef0393e441f8bf580043c8a098f","draftNumber":"1234567890","claimNumber":"11223344","legalEntity":"MCPUSSB0100003","amount":{"currencyCode":"CAD","value":1000},"payoutDate":"2026-08-06T00:00:00.000Z","creationDate":"2026-08-06T14:14:08.803Z","sendDate":null,"paymentType":"demo","paymentMethod":null,"orderStatus":"PENDING_APPROVAL","accountName":"ABC Inc","clientBusinessName":"DreamSB"},{"paymentId":"a92fc8e72aa24aa2a25351709c75b4aa","draftNumber":"A81000009","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payoutDate":"2026-07-23T00:00:00.000Z","creationDate":"2026-07-23T15:13:16.623Z","sendDate":null,"paymentType":"Expense","paymentMethod":null,"orderStatus":"EMAIL_SENT","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"6bf9e5f8ccda4cc9a0a656f3735d560e","draftNumber":"A80000002","claimNumber":"60000001","legalEntity":"MCPUSSB0100001","amount":{"currencyCode":"USD","value":2000},"payoutDate":"2026-07-17T00:00:00.000Z","creationDate":"2026-07-17T16:13:07.439Z","sendDate":null,"paymentType":"Expense","paymentMethod":"RTP_EP","orderStatus":"COMPLETED","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"a667e6284fce4df58f04f40a0a8ca7a1","draftNumber":"A80000007","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payoutDate":"2026-07-23T00:00:00.000Z","creationDate":"2026-07-23T13:51:55.359Z","sendDate":null,"paymentType":"Expense","paymentMethod":"EFTC","orderStatus":"FAILED","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"0b33ddf2d42249058f8ce1b27dbb80d1","draftNumber":"A80000003","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"USD","value":2000},"payoutDate":"2026-07-22T00:00:00.000Z","creationDate":"2026-07-22T18:35:49.758Z","sendDate":null,"paymentType":"Expense","paymentMethod":null,"orderStatus":"EMAIL_SENT","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"899dab659517419ba10874d0dff96eeb","draftNumber":"A80000008","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payoutDate":"2026-07-23T00:00:00.000Z","creationDate":"2026-07-23T14:58:37.675Z","sendDate":null,"paymentType":"Expense","paymentMethod":null,"orderStatus":"PENDING_APPROVAL","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"e69e4a89e385431a98aaaa1ef8d3923a","draftNumber":"A80000004","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"USD","value":2000},"payoutDate":"2026-07-22T00:00:00.000Z","creationDate":"2026-07-22T18:50:04.780Z","sendDate":null,"paymentType":"Expense","paymentMethod":"RTP_EP","orderStatus":"COMPLETED","accountName":"Complete Business Inc","clientBusinessName":"AcmeCorp"},{"paymentId":"49f1a49e3e224fed8d2f2d7f4259f338","draftNumber":"A80000005","claimNumber":"60000001","legalEntity":"MCPUSSB0100002","amount":{"currencyCode":"CAD","value":2000},"payo... (truncated)
+--> GET https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payments/f862db561e2d4034ab404813a1290505
+<-- 200 OK
+{"payment":{"paymentInfo":{"amount":{"currencyCode":"CAD","value":100},"payoutDate":"2026-06-04T00:00:00.000Z","legalEntity":"MCPUSSB0100037","paymentType":"Expense","memo":"Testing SMB R1.2 payment.","claimNumber":"60006001","policyNumber":"1235811100","pcoNumber":"001","draftNumber":"A930060061","externalReferenceData":null,"attachmentIds":null,"checkNumber":null,"paymentReceivedDate":null,"invoiceDate":null},"orderId":"f862db561e2d4034ab404813a1290505","payeeId":"4eb6229938b14308abe4bddbc42c0b48","orderNumber":"0000004013","orderStatus":"EMAIL_SENT","internalReferenceId":"00000000000000000000000000219734","paymentDate":"2026-09-15T18:19:00.465Z","issueDate":null,"serviceDetails":{"serviceId":"AcceptWithdrawalPayment","appId":"CmPos","serviceName":"AcceptWithdrawalPayment","servicesType":"BANKING","serviceSubType":"PERSONAL","serviceStatus":"ACTIVE","transactionType":"WITHDRAWAL","serviceDescription":"Withdrawal transactions."},"bankAccount":null,"createdBy":{"operatorId":"958b49adb4534ee1b6f6907feace4406","name":{"firstName":"Personnel","lastName":"DreamOps"},"email":{"emailId":"d8c60a4d84bc41bdb3dc049f202bbdbc","address":"devops+60secsdreamopspersonnel@dreampayments.com","emailStatus":"NOT_VERIFIED"}},"failureReason":null,"allowablePaymentMethods":["JPM_ET"],"operatorId":"958b49adb4534ee1b6f6907feace4406","paymentMethod":null,"notifyOperator":null,"checkRecipientName":null,"checkRecipientAddress":null,"clientBusinessName":"60Sec"}}
+--> GET https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payees/4eb6229938b14308abe4bddbc42c0b48
+<-- 200 OK
+{"payeeAccount":{"companyId":"7e0ff086a03042bbb52b57d2e353daea","name":"Huy Nguyen","companyAddresses":{"address":[{"address":"address 1","address2":null,"city":"city","countryCode":null,"province":"NY","zipCode":"10003","addressId":"1aa0df6f8e0e4c3db2621be7e83ef9ca","addressType":null,"primary":true}]},"businessDetails":{"legalName":"Huy Nguyen","businessNumber":null,"parentCompanyId":null,"websiteURL":null,"corporateNumber":null,"taxId":null,"taxId2":null,"businessDesc":null,"businessSector":null,"dateRegistered":"2026-09-15T18:18:29.593Z","mcc":null,"mid":null,"seasonal":false,"regBusinessName":null,"beneficialOwnership":null,"serviceAgreements":null,"withholdingLimit":null,"activationDate":null,"businessType":"INSURED"},"companyNumber":"0000001906","payeeCustomerId":"4eb6229938b14308abe4bddbc42c0b48","payeeAccountStatus":"ACTIVE","contactInfo":[],"principal":null,"payeeServices":{"customerServices":[{"serviceId":"AcceptWithdrawalPayment","customerServiceStatus":"ACTIVE"}]},"createdTime":"2026-09-15T18:18:29.561Z","lastModifiedTime":"2026-09-15T18:18:29.561Z","primaryPayeeUserId":"384fe4f685cc4f26bc978022d1622c1b"},"payeeType":"Individual"}
+--> GET https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payees/4eb6229938b14308abe4bddbc42c0b48/accounts
+<-- 200 OK
+{"bankAccounts":{"bankAccount":[{"maskedAccountNumber":"***4567","genAccountDbId":"a896565a4440473d80db42f418f293b4","swiftCode":null,"bankName":null,"bankAddress":null,"accountHolderAddress":null,"accountName":"Huy Nguyen","transitNumber":"44581","institutionNumber":"004","accountNumber":"***4567","currencyCode":"CAD","countryCode":"CA","routingNumber":null,"sortCode":null,"iban":null,"bankCode":null,"branchCode":null,"clabe":null,"bankAccountType":"CHEQUING","genericAccountStatus":"ACTIVE","failureReason":null,"genericAccountType":"BANK","token":null,"autoAcceptPaymentMethod":null}]}}
+
+1 bénéficiaire(s) retrouvé(s). Cliquez-en un pour remplir payeeId et payeeUserId, puis lancez l'étape 2 pour rattacher un compte bancaire.
+[ok] Retrouver les bénéficiaires de MCPUSSB0100037 : réussi.
+Bénéficiaire choisi : Huy Nguyen (4eb6229938b14308abe4bddbc42c0b48).
+------------------------------------------------------------------------------
+Lister les comptes   2026-09-16 09:48:24
+--> GET https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payees/4eb6229938b14308abe4bddbc42c0b48/accounts
+<-- 200 OK
+{"bankAccounts":{"bankAccount":[{"maskedAccountNumber":"***4567","genAccountDbId":"a896565a4440473d80db42f418f293b4","swiftCode":null,"bankName":null,"bankAddress":null,"accountHolderAddress":null,"accountName":"Huy Nguyen","transitNumber":"44581","institutionNumber":"004","accountNumber":"***4567","currencyCode":"CAD","countryCode":"CA","routingNumber":null,"sortCode":null,"iban":null,"bankCode":null,"branchCode":null,"clabe":null,"bankAccountType":"CHEQUING","genericAccountStatus":"ACTIVE","failureReason":null,"genericAccountType":"BANK","token":null,"autoAcceptPaymentMethod":null}]}}
+    004 44581 CHEQUING CAD   a896565a4440473d80db42f418f293b4
+    -> a896565a4440473d80db42f418f293b4
+[ok] Lister les comptes : réussi.
+------------------------------------------------------------------------------
+Créer le paiement   2026-09-16 09:48:38
+--> POST https://fapi-test-insuretechv2.npe.dreampayments.com/v1/payments/add
+{
+  "payeeId": "4eb6229938b14308abe4bddbc42c0b48",
+  "payeeUserId": "384fe4f685cc4f26bc978022d1622c1b",
+  "paymentInfo": {
+    "amount": {
+      "currencyCode": "CAD",
+      "value": 1000
+    },
+    "memo": "Facture fournisseur #12345",
+    "paymentType": "EXPENSE",
+    "externalReferenceData": "12345",
+    "legalEntity": "MCPUSSB0100037"
+  },
+  "allowablePaymentMethods": [
+    "EFT"
+  ]
+}
+<-- 500 Internal Server Error
+{"errorCode":"G00021","errorMessage":"Invalid state. Multiple payers exist"}
+[x] Dream G00021 sur /payments/add : Invalid state. Multiple payers exist — Les identifiants portent plusieurs payeurs et Dream ne sait pas lequel utiliser. Demandez à Dream soit de restreindre les identifiants à un seul payeur, soit le nom de l'en-tête (ou du champ) qui désigne le payeur, puis renseignez « Payer header » ou « legalEntityLabel » dans l'onglet Connection.
+[x] paymentId est requis pour cet appel. Lancez le parcours complet, ou les étapes précédentes.

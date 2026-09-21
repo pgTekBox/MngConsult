@@ -1,0 +1,195 @@
+{
+  "openapi": "3.0.0",
+  "x-stoplight": {
+    "id": "al6xk1il28ui8"
+  },
+  "info": {
+    "version": "1.2",
+    "title": "Authorization API",
+    "description": "This is the Dream Payments Authorization API reference, which contains a full index of API and how to integrate with it. All responses are shown in JSON.",
+    "contact": {
+      "name": "Karl Weckworth",
+      "url": "https://dreampayments.ca",
+      "email": "karl.weckworth@dreampayments.com"
+    },
+    "license": {
+      "name": "Proprietary",
+      "url": "https://dreampayments.ca"
+    }
+  },
+  "paths": {
+    "/token": {
+      "post": {
+        "operationId": "post-token",
+        "summary": "Authorize",
+        "tags": [
+          "Authorization APIs"
+        ],
+        "description": "This API authorizes access to the InsureTech system. Currently, only system-to-system access is supported (i.e. the OAuth 2.0 `client_credentials` grant type flow).\n\nOnce the authorization is successful, an access token is returned allowing subsequent APIs to be invoked for as long as the token is valid.\n\nAll authorization attempts are logged, capturing information that can help identify the invoking party and the date and time the attempt is made.\n\n**_Errors_**\n\n- Authorization error.\n- Invalid argument.\n\n_Note_: All errors are accompanied by error code and error text.",
+        "requestBody": {
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "$ref": "#/components/schemas/OauthAuthRequest"
+              }
+            }
+          },
+          "description": "OAuth 2.0 authorization request."
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Token"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Unauthorized",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "403": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/Status"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "BasicAuth": []
+          }
+        ],
+        "x-stoplight": {
+          "id": "jfa9e9vyidlkt"
+        }
+      }
+    }
+  },
+  "tags": [
+    {
+      "name": "Authorization APIs",
+      "description": "Authorization APIs"
+    }
+  ],
+  "servers": [
+    {
+      "url": "https://paymenttech-dreampayments-com.auth.us-east-1.amazoncognito.com"
+    }
+  ],
+  "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "http",
+        "scheme": "basic"
+      }
+    },
+    "schemas": {
+      "OauthAuthRequest": {
+        "title": "OauthAuthRequest",
+        "type": "object",
+        "properties": {
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "client_credentials"
+            ]
+          }
+        },
+        "required": [
+          "grant_type"
+        ],
+        "x-stoplight": {
+          "id": "t75lfa9whzsb0"
+        }
+      },
+      "Status": {
+        "title": "Status",
+        "type": "object",
+        "properties": {
+          "errorCode": {
+            "type": "string"
+          },
+          "errorMessage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "errorCode"
+        ],
+        "x-stoplight": {
+          "id": "rwsyv4y9wn1b1"
+        }
+      },
+      "Token": {
+        "title": "Token",
+        "type": "object",
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "expires_in": {
+            "type": "integer",
+            "format": "int64"
+          },
+          "token_type": {
+            "type": "string",
+            "enum": [
+              "bearer"
+            ]
+          }
+        },
+        "required": [
+          "access_token",
+          "token_type"
+        ],
+        "x-stoplight": {
+          "id": "muz3tj3mxprz9"
+        }
+      }
+    }
+  }
+}
