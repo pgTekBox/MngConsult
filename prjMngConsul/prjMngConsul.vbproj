@@ -585,6 +585,7 @@
     <Content Include="wbfMailbox.aspx" />
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
+    <Content Include="wbfApprobations.aspx" />
     <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
     <Content Include="wbfAutoPayHistory.aspx" />
@@ -1259,6 +1260,13 @@
     <Compile Include="wbfNewUser.aspx.vb">
       <DependentUpon>wbfNewUser.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfApprobations.aspx.vb">
+      <DependentUpon>wbfApprobations.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfApprobations.aspx.designer.vb">
+      <DependentUpon>wbfApprobations.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfPayment.aspx.designer.vb">
       <DependentUpon>wbfPayment.aspx</DependentUpon>
