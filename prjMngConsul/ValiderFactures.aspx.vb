@@ -342,7 +342,24 @@ Public Class ValiderFactures
 
         For Each l As DataRow In siennes
             sb.Append("<tr><td>").Append(Server.HtmlEncode(Texte(l("Description")))).Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(Texte(l("ProduitNom")))).Append("</td>")
+            ' Le produit, tel que la PRÉPARATION le connaît : créé, importé mais
+            ' pas encore créé, ou absent. Aucun ne bloque : une ligne peut être
+            ' du texte libre, et le document se crée avec un produit vide.
+            sb.Append("<td>")
+            Dim produitSource As String = Texte(l("ProduitNom"))
+            Dim produitReconnu As String = Texte(l("ProduitReconnu"))
+            If produitSource = "" AndAlso produitReconnu = "" Then
+                sb.Append("<span style='color:#94a3b8'>—</span>")
+            ElseIf Not IsDBNull(l("ProductId")) Then
+                sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
+            ElseIf Not IsDBNull(l("ProductImportId")) Then
+                sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
+                sb.Append(" <span class='etiq anomalie'>en préparation, pas encore créé</span>")
+            Else
+                sb.Append(Server.HtmlEncode(produitSource))
+                sb.Append(" <span class='etiq anomalie'>absent de la préparation</span>")
+            End If
+            sb.Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(Texte(l("CompteSource"))))
             If Texte(l("CompteNom")) <> "" Then
                 sb.Append(" <span style='color:#94a3b8'>").Append(Server.HtmlEncode(Texte(l("CompteNom")))).Append("</span>")
