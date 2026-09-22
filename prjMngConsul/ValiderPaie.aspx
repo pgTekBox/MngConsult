@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderPaie.aspx.vb" Inherits="MngConsul.ValiderPaie" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Paie importée — 60Sec-AI
@@ -109,6 +110,7 @@
         recalculer ferait diverger la reprise des T4 et relevés 1 déjà produits. L'équilibre
         — brut moins retenues égale net — est <b>vérifié, jamais corrigé</b>.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="employees-native" />
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litRepere" runat="server" />

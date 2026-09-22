@@ -130,7 +130,7 @@ Public Class Importations
                 New Poste With {
                     .Icone = "🗂️",
                     .Titre = "Listes de structure",
-                    .Source = "modes de paiement, catégories de suivi, départements, emplacements",
+                    .Source = "modes de paiement, catégories de suivi, départements, emplacements — et, par la passerelle, classes, agences de taxes, devises et taux de change",
                     .Destination = "préparation seulement — aucune destination dans 60Sec-AI à ce jour",
                     .Page = "~/ValiderListes.aspx",
                     .Note = 5,
@@ -256,7 +256,7 @@ Public Class Importations
                 New Poste With {
                     .Icone = "🧾",
                     .Titre = "Paie",
-                    .Source = "aucune : QuickBooks n'expose pas la paie par son API",
+                    .Source = "QuickBooks : l'entité Employee par la passerelle pour les employés ; la paie elle-même n'est pas exposée",
                     .Destination = "staging.PaieEmployeImport, PaieLotImport, PaieImport, PaieLigneImport",
                     .Page = "~/ValiderPaie.aspx",
                     .Note = 4,
@@ -333,6 +333,57 @@ Public Class Importations
                               "encore où 60Sec-AI range un fichier sur un client. Le lien de " &
                               "téléchargement de QuickBooks n'est valable que quelques minutes ; " &
                               "une pièce qui a échoué se relit à la prochaine extraction."
+                },
+                New Poste With {
+                    .Icone = "🏧",
+                    .Titre = "Dépôts et virements bancaires",
+                    .Source = "QuickBooks : les entités Deposit et Transfer, par la passerelle",
+                    .Destination = "contrôle seulement — staging.MouvementBancaireImport, avec les lignes des dépôts",
+                    .Page = "~/ValiderMouvementsBancaires.aspx",
+                    .Note = 5,
+                    .Fait = "Chaque dépôt avec ses lignes — le montant, la contrepartie, le tiers, " &
+                            "le mode de paiement, l'encaissement d'origine — et chaque virement " &
+                            "avec ses deux comptes. Par genre, avec le total et la période.",
+                    .Manque = "Rien n'est créé : ni règlement, ni ligne de relevé. C'est une pièce " &
+                              "de contrôle pour le premier rapprochement bancaire."
+                },
+                New Poste With {
+                    .Icone = "🔁",
+                    .Titre = "Transactions récurrentes",
+                    .Source = "QuickBooks : l'entité RecurringTransaction, par la passerelle",
+                    .Destination = "contrôle seulement — staging.TransactionRecurrenteImport, modèle complet gardé",
+                    .Page = "~/ValiderRecurrentes.aspx",
+                    .Note = 5,
+                    .Fait = "Chaque modèle avec son type, sa cadence dite en clair, son tiers, son " &
+                            "montant et sa prochaine échéance. Les suspendus sont grisés.",
+                    .Manque = "60Sec-AI n'a pas de transactions récurrentes : la liste dit ce qu'il " &
+                              "faudra recréer à la main, et quand."
+                },
+                New Poste With {
+                    .Icone = "🎯",
+                    .Titre = "Budgets",
+                    .Source = "QuickBooks : l'entité Budget, par la passerelle",
+                    .Destination = "contrôle seulement — staging.BudgetImport, une ligne par compte et par période",
+                    .Page = "~/ValiderBudgets.aspx",
+                    .Note = 5,
+                    .Fait = "Chaque budget, puis ses lignes par compte avec le sous-total du compte " &
+                            "et le total, et la ventilation par client, classe ou département " &
+                            "quand la source l'a faite.",
+                    .Manque = "Les comptes sont des noms ; rien n'est repris dans un budget d'ici, " &
+                              "qui n'existe pas encore."
+                },
+                New Poste With {
+                    .Icone = "⏱️",
+                    .Titre = "Feuilles de temps",
+                    .Source = "QuickBooks : l'entité TimeActivity, par la passerelle",
+                    .Destination = "contrôle seulement — staging.FeuilleTempsImport",
+                    .Page = "~/ValiderFeuillesTemps.aspx",
+                    .Note = 5,
+                    .Fait = "Par personne, les heures saisies et celles qui restent à facturer ; " &
+                            "puis chaque activité avec le client, l'article, la durée, le taux et " &
+                            "son état de facturation.",
+                    .Manque = "Le temps à facturer n'est pas transformé en factures : c'est ce que " &
+                              "la bascule doit régler avant de fermer la source."
                 }
             }
         End Get

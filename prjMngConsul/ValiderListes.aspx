@@ -88,7 +88,7 @@
         savoir ce que la comptabilité source contient avant de décider quoi en faire,
         et avoir la donnée sous la main le jour où la fonction existera.
     </p>
-    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="payment-methods,tracking-categories,departments,locations" />
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="payment-methods,tracking-categories,departments,locations,classes,tax-agencies,currencies" />
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litListe" runat="server" />

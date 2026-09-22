@@ -38,7 +38,11 @@ Public Class ValiderListes
         {"ModePaiement", "Modes de paiement"},
         {"CategorieSuivi", "Catégories de suivi"},
         {"Departement", "Départements"},
-        {"Emplacement", "Emplacements"}
+        {"Emplacement", "Emplacements"},
+        {"Classe", "Classes"},
+        {"AgenceTaxe", "Agences de taxes"},
+        {"Devise", "Devises"},
+        {"TauxChange", "Taux de change"}
     }
 
 #Region "Cycle de vie"

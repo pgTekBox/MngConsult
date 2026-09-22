@@ -488,6 +488,10 @@
     <Content Include="ValiderSociete.aspx" />
     <Content Include="ValiderListes.aspx" />
     <Content Include="ValiderPiecesJointes.aspx" />
+    <Content Include="ValiderMouvementsBancaires.aspx" />
+    <Content Include="ValiderRecurrentes.aspx" />
+    <Content Include="ValiderBudgets.aspx" />
+    <Content Include="ValiderFeuillesTemps.aspx" />
     <Content Include="PieceJointe.ashx" />
     <Content Include="ValiderBalanceAgee.aspx" />
     <Content Include="ValiderGrandLivre.aspx" />
@@ -862,6 +866,34 @@
     </Compile>
     <Compile Include="ValiderPiecesJointes.aspx.designer.vb">
       <DependentUpon>ValiderPiecesJointes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderMouvementsBancaires.aspx.vb">
+      <DependentUpon>ValiderMouvementsBancaires.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderMouvementsBancaires.aspx.designer.vb">
+      <DependentUpon>ValiderMouvementsBancaires.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderRecurrentes.aspx.vb">
+      <DependentUpon>ValiderRecurrentes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderRecurrentes.aspx.designer.vb">
+      <DependentUpon>ValiderRecurrentes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderBudgets.aspx.vb">
+      <DependentUpon>ValiderBudgets.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderBudgets.aspx.designer.vb">
+      <DependentUpon>ValiderBudgets.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderFeuillesTemps.aspx.vb">
+      <DependentUpon>ValiderFeuillesTemps.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderFeuillesTemps.aspx.designer.vb">
+      <DependentUpon>ValiderFeuillesTemps.aspx</DependentUpon>
     </Compile>
     <Compile Include="ValiderFactures.aspx.designer.vb">
       <DependentUpon>ValiderFactures.aspx</DependentUpon>

@@ -81,6 +81,11 @@ Public Class ApideckExtraction
                 New Ressource With {.Groupe = "Structure", .Cle = "tracking-categories", .Libelle = "Catégories de suivi", .Vers = "CATEGORIE_SUIVI"},
                 New Ressource With {.Groupe = "Structure", .Cle = "departments", .Libelle = "Départements", .Vers = "DEPARTEMENT"},
                 New Ressource With {.Groupe = "Structure", .Cle = "locations", .Libelle = "Emplacements", .Vers = "EMPLACEMENT"},
+                New Ressource With {.Groupe = "Structure", .Cle = "classes", .Libelle = "Classes", .Vers = "CLASSES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Structure", .Cle = "tax-agencies", .Libelle = "Agences de taxes", .Vers = "AGENCES_TAXE", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Structure", .Cle = "currencies", .Libelle = "Devises et taux de change", .Vers = "DEVISES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Structure", .Cle = "employees-native", .Libelle = "Employés", .Vers = "EMPLOYES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Structure", .Cle = "recurring-transactions", .Libelle = "Transactions récurrentes", .Vers = "RECURRENTES", .Mode = "PASSERELLE"},
                 New Ressource With {.Groupe = "Tiers et articles", .Cle = "customers", .Libelle = "Clients", .Vers = "CLIENTS"},
                 New Ressource With {.Groupe = "Tiers et articles", .Cle = "suppliers", .Libelle = "Fournisseurs", .Vers = "FOURNISSEURS"},
                 New Ressource With {.Groupe = "Tiers et articles", .Cle = "invoice-items", .Libelle = "Produits et services", .Vers = "PRODUITS"},
@@ -108,7 +113,10 @@ Public Class ApideckExtraction
                 New Ressource With {.Groupe = "Contrôle", .Cle = "das", .Libelle = "Remises de DAS", .Vers = "REMISES_DAS", .Mode = "PASSERELLE", .AvecDate = True},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "inventory", .Libelle = "Inventaire", .Vers = "INVENTAIRE", .Mode = "PASSERELLE", .AvecDate = True},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"},
-                New Ressource With {.Groupe = "Contrôle", .Cle = "attachments-all", .Libelle = "Pièces jointes de toutes les entités, fichiers compris", .Vers = "PIECES_JOINTES_TOUTES", .Mode = "PASSERELLE"}
+                New Ressource With {.Groupe = "Contrôle", .Cle = "attachments-all", .Libelle = "Pièces jointes de toutes les entités, fichiers compris", .Vers = "PIECES_JOINTES_TOUTES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "bank-movements", .Libelle = "Dépôts et virements bancaires", .Vers = "MOUVEMENTS_BANCAIRES", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "budgets", .Libelle = "Budgets", .Vers = "BUDGETS", .Mode = "PASSERELLE"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "time-activities", .Libelle = "Feuilles de temps", .Vers = "FEUILLES_TEMPS", .Mode = "PASSERELLE"}
             }
         End Get
     End Property
@@ -311,6 +319,14 @@ Public Class ApideckExtraction
                 If r.Vers = "REMISES_DAS" Then Return LireRemisesDas(api)
                 If r.Vers = "INVENTAIRE" Then Return LireInventaire(api)
                 If r.Vers = "PIECES_JOINTES_TOUTES" Then Return LireAttachables(api)
+                If r.Vers = "EMPLOYES" Then Return LireEntiteNative(api, "Employee")
+                If r.Vers = "CLASSES" Then Return LireEntiteNative(api, "Class")
+                If r.Vers = "AGENCES_TAXE" Then Return LireEntiteNative(api, "TaxAgency")
+                If r.Vers = "DEVISES" Then Return LireDevises(api)
+                If r.Vers = "MOUVEMENTS_BANCAIRES" Then Return LireMouvementsBancaires(api)
+                If r.Vers = "RECURRENTES" Then Return LireEntiteNative(api, "RecurringTransaction")
+                If r.Vers = "BUDGETS" Then Return LireEntiteNative(api, "Budget")
+                If r.Vers = "FEUILLES_TEMPS" Then Return LireEntiteNative(api, "TimeActivity")
                 Return LireConditionsPaiement(api)
         End Select
 
@@ -387,6 +403,14 @@ Public Class ApideckExtraction
             Case "CONDITIONS" : Return VerserConditionsPaiement(brut, runId)
             Case "PIECES_JOINTES" : Return VerserPiecesJointes(brut, runId)
             Case "PIECES_JOINTES_TOUTES" : Return VerserAttachables(brut, runId)
+            Case "EMPLOYES" : Return VerserEmployes(brut, runId)
+            Case "CLASSES" : Return VerserClasses(brut, runId)
+            Case "AGENCES_TAXE" : Return VerserAgencesTaxe(brut, runId)
+            Case "DEVISES" : Return VerserDevises(brut, runId)
+            Case "MOUVEMENTS_BANCAIRES" : Return VerserMouvementsBancaires(brut, runId)
+            Case "RECURRENTES" : Return VerserTransactionsRecurrentes(brut, runId)
+            Case "BUDGETS" : Return VerserBudgets(brut, runId)
+            Case "FEUILLES_TEMPS" : Return VerserFeuillesTemps(brut, runId)
             Case "SOCIETE" : Return VerserSociete(brut, runId)
             Case "TAXES" : Return VerserTaxes(brut, runId)
             Case "MODE_PAIEMENT" : Return VerserModesPaiement(brut, runId)
@@ -3240,6 +3264,388 @@ Public Class ApideckExtraction
     End Function
 
 #End Region
+
+#Region "Les entités natives de QuickBooks (T260)"
+
+    ''' <summary>Toutes les pages d'une entité native, par le realm de la connexion.</summary>
+    Private Function LireEntiteNative(api As clsApideck, entite As String) As JArray
+        Return EntitesDeLaSource(api, api.RealmId(), entite)
+    End Function
+
+    ''' <summary>
+    ''' Les employés, par l'entité Employee. QuickBooks masque le NAS
+    ''' (« XXX-XX-1234ers ») : on ne garde qu'un indicateur, comme la paie le
+    ''' veut. Le taux de facturation (BillRate) tient lieu de taux horaire —
+    ''' c'est le seul que l'entité donne.
+    ''' </summary>
+    Private Function VerserEmployes(brut As JArray, runId As Integer) As String
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(e, "Id")
+            o("code") = Valeur(e, "EmployeeNumber")
+            o("prenom") = Valeur(e, "GivenName")
+            o("nom") = If(Valeur(e, "FamilyName") <> "", Valeur(e, "FamilyName"), Valeur(e, "DisplayName"))
+            o("courriel") = Valeur(e, "PrimaryEmailAddr.Address")
+            o("telephone") = Valeur(e, "PrimaryPhone.FreeFormNumber", "Mobile.FreeFormNumber")
+            o("adresse1") = Valeur(e, "PrimaryAddr.Line1")
+            o("ville") = Valeur(e, "PrimaryAddr.City")
+            o("province") = Valeur(e, "PrimaryAddr.CountrySubDivisionCode")
+            o("code_postal") = Valeur(e, "PrimaryAddr.PostalCode")
+            o("date_naissance") = Valeur(e, "BirthDate")
+            o("nas_fourni") = If(Valeur(e, "SSN") <> "", "true", "false")
+            o("poste") = Valeur(e, "Title")
+            o("date_embauche") = Valeur(e, "HiredDate")
+            o("date_fin") = Valeur(e, "ReleasedDate")
+            o("actif") = Valeur(e, "Active")
+            o("taux_horaire") = Valeur(e, "BillRate")
+            liste.Add(o)
+        Next
+
+        Return DeposerListe(liste, "s0842ChargerEmployesImport", "Employe", "employés", brut, runId)
+    End Function
+
+    ''' <summary>Les classes, avec leur nom complet « Parent:Enfant » et leur parent.</summary>
+    Private Function VerserClasses(brut As JArray, runId As Integer) As String
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(e, "Id")
+            o("code") = ""
+            o("nom") = Valeur(e, "Name")
+            o("nom_complet") = Valeur(e, "FullyQualifiedName")
+            o("parent_id") = Valeur(e, "ParentRef.value")
+            o("statut") = If(Valeur(e, "Active") = "False", "inactive", "active")
+            o("extra") = e
+            liste.Add(o)
+        Next
+
+        Return DeposerListe(liste, "s0843ChargerClassesImport", "Classe", "classes", brut, runId)
+    End Function
+
+    ''' <summary>Les agences de taxes : à qui l'on déclare, sous quel numéro, et depuis quand.</summary>
+    Private Function VerserAgencesTaxe(brut As JArray, runId As Integer) As String
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(e, "Id")
+            o("nom") = Valeur(e, "DisplayName")
+            o("numero") = Valeur(e, "TaxRegistrationNumber")
+            o("suivi_ventes") = Valeur(e, "TaxTrackedOnSales")
+            o("suivi_achats") = Valeur(e, "TaxTrackedOnPurchases")
+            o("derniere_declaration") = Valeur(e, "LastFileDate")
+            o("statut") = If(Valeur(e, "Active") = "False", "inactive", "active")
+            o("extra") = e
+            liste.Add(o)
+        Next
+
+        Return DeposerListe(liste, "s0844ChargerAgencesTaxeImport", "AgenceTaxe", "agences de taxes", brut, runId)
+    End Function
+
+    ''' <summary>
+    ''' Les devises et les taux de change, en une seule ressource : l'une sans
+    ''' l'autre ne dit rien. Une société sans multidevise refuse ces deux
+    ''' entités (400) — ce n'est pas un échec, c'est une réponse : rien.
+    ''' </summary>
+    Private Function LireDevises(api As clsApideck) As JArray
+        Dim tout As New JArray()
+
+        For Each entite As String In {"CompanyCurrency", "ExchangeRate"}
+            Try
+                For Each e As JToken In LireEntiteNative(api, entite)
+                    Dim o As JObject = CType(e.DeepClone(), JObject)
+                    o("_genre") = entite
+                    tout.Add(o)
+                Next
+            Catch ex As Exception
+                ' Multidevise désactivé : QuickBooks refuse l'entité. On passe.
+                If Not ex.Message.Contains("400") AndAlso Not ex.Message.ToLowerInvariant().Contains("multi") Then Throw
+            End Try
+        Next
+
+        Return tout
+    End Function
+
+    Private Function VerserDevises(brut As JArray, runId As Integer) As String
+        Dim devises As New JArray(), taux As New JArray()
+        Dim brutDevises As New JArray(), brutTaux As New JArray()
+        Dim rd As Integer = 0, rt As Integer = 0
+
+        For Each e As JToken In brut
+            If Valeur(e, "_genre") = "ExchangeRate" Then
+                rt += 1
+                Dim o As New JObject()
+                o("rang") = rt
+                o("source") = Valeur(e, "SourceCurrencyCode")
+                o("cible") = Valeur(e, "TargetCurrencyCode")
+                o("taux") = Valeur(e, "Rate")
+                o("date") = Valeur(e, "AsOfDate")
+                o("extra") = e
+                taux.Add(o) : brutTaux.Add(e)
+            Else
+                rd += 1
+                Dim o As New JObject()
+                o("rang") = rd
+                o("externe_id") = Valeur(e, "Id")
+                o("code") = Valeur(e, "Code")
+                o("nom") = Valeur(e, "Name")
+                o("actif") = Valeur(e, "Active")
+                o("statut") = If(Valeur(e, "Active") = "False", "inactive", "active")
+                o("extra") = e
+                devises.Add(o) : brutDevises.Add(e)
+            End If
+        Next
+
+        Dim texte As String = "devises " & DeposerListe(devises, "s0845ChargerDevisesImport", "Devise", "devises", brutDevises, runId)
+        texte &= " ; taux " & DeposerListe(taux, "s0846ChargerTauxChangeImport", "TauxChange", "taux de change", brutTaux, runId)
+        Return texte
+    End Function
+
+    ''' <summary>
+    ''' Les dépôts et les virements, deux entités natives réunies : ce sont les
+    ''' deux façons dont l'argent bouge entre comptes sans passer par une
+    ''' facture. Chaque enregistrement porte son genre.
+    ''' </summary>
+    Private Function LireMouvementsBancaires(api As clsApideck) As JArray
+        Dim tout As New JArray()
+        For Each entite As String In {"Deposit", "Transfer"}
+            For Each e As JToken In LireEntiteNative(api, entite)
+                Dim o As JObject = CType(e.DeepClone(), JObject)
+                o("_genre") = If(entite = "Deposit", "Depot", "Virement")
+                tout.Add(o)
+            Next
+        Next
+        Return tout
+    End Function
+
+    Private Function VerserMouvementsBancaires(brut As JArray, runId As Integer) As String
+        Dim entetes As New JArray(), lignes As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim genre As String = Valeur(e, "_genre")
+            Dim o As New JObject()
+            o("rang") = rang
+            o("genre") = genre
+            o("externe_id") = Valeur(e, "Id")
+            o("date") = Valeur(e, "TxnDate")
+            o("montant") = Valeur(e, "TotalAmt", "Amount")
+            o("devise") = Valeur(e, "CurrencyRef.value")
+            o("note") = Valeur(e, "PrivateNote")
+
+            If genre = "Virement" Then
+                o("compte_vers") = Valeur(e, "ToAccountRef.name")
+                o("compte_vers_id") = Valeur(e, "ToAccountRef.value")
+                o("compte_depuis") = Valeur(e, "FromAccountRef.name")
+                o("compte_depuis_id") = Valeur(e, "FromAccountRef.value")
+            Else
+                o("compte_vers") = Valeur(e, "DepositToAccountRef.name")
+                o("compte_vers_id") = Valeur(e, "DepositToAccountRef.value")
+                o("compte_depuis") = ""
+                o("compte_depuis_id") = ""
+
+                Dim r As Integer = 0
+                For Each l As JToken In If(TryCast(e("Line"), JArray), New JArray())
+                    r += 1
+                    Dim li As New JObject()
+                    li("entete_rang") = rang
+                    li("rang") = r
+                    li("montant") = Valeur(l, "Amount")
+                    li("compte") = Valeur(l, "DepositLineDetail.AccountRef.name")
+                    li("compte_id") = Valeur(l, "DepositLineDetail.AccountRef.value")
+                    li("tiers") = Valeur(l, "DepositLineDetail.Entity.name")
+                    li("tiers_id") = Valeur(l, "DepositLineDetail.Entity.value")
+                    li("mode") = Valeur(l, "DepositLineDetail.PaymentMethodRef.name")
+                    li("cheque") = Valeur(l, "DepositLineDetail.CheckNum")
+                    li("paiement_id") = Valeur(Premier(l, "LinkedTxn"), "TxnId")
+                    li("description") = Valeur(l, "Description")
+                    lignes.Add(li)
+                Next
+            End If
+
+            Dim extra As JObject = CType(e.DeepClone(), JObject)
+            extra.Remove("Line")
+            o("extra") = extra
+            entetes.Add(o)
+        Next
+
+        If entetes.Count = 0 Then Return "aucun mouvement"
+
+        Dim fichierId As Integer = InscrireAuRegistre("MouvementBancaire", "dépôts et virements", brut)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", hote.Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Entetes", entetes.ToString(Formatting.None)))
+        p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
+
+        Dim ds As DataSet = hote.ExecuteSQLds("s0847ChargerMouvementsBancaires", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim row As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = "en préparation : " & Lire(row, "NbDepots") & " dépôt(s), " & Lire(row, "NbVirements") &
+                              " virement(s), " & Lire(row, "NbLignes") & " ligne(s)"
+        If Lire(row, "NbInvalides") > 0 Then texte &= ", " & Lire(row, "NbInvalides") & " sans montant"
+        Return texte
+    End Function
+
+    ''' <summary>
+    ''' Les transactions récurrentes. QuickBooks les rend sous une forme
+    ''' curieuse : chaque élément est un objet à UNE propriété, nommée d'après
+    ''' le type de transaction (Invoice, Bill…), qui porte le modèle et son
+    ''' RecurringInfo. On déplie.
+    ''' </summary>
+    Private Function VerserTransactionsRecurrentes(brut As JArray, runId As Integer) As String
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            Dim conteneur As JObject = TryCast(e, JObject)
+            If conteneur Is Nothing Then Continue For
+
+            Dim typeTxn As String = ""
+            Dim txn As JToken = Nothing
+            For Each prop As JProperty In conteneur.Properties()
+                If TypeOf prop.Value Is JObject Then
+                    typeTxn = prop.Name : txn = prop.Value
+                    Exit For
+                End If
+            Next
+            If txn Is Nothing Then Continue For
+
+            rang += 1
+            Dim info As JToken = txn("RecurringInfo")
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(txn, "Id")
+            o("nom") = Valeur(info, "Name")
+            o("type_txn") = typeTxn
+            o("type_rec") = Valeur(info, "RecurType")
+            o("actif") = Valeur(info, "Active")
+            o("intervalle") = Valeur(info, "ScheduleInfo.IntervalType")
+            o("num_intervalle") = Valeur(info, "ScheduleInfo.NumInterval")
+            o("jour_mois") = Valeur(info, "ScheduleInfo.DayOfMonth")
+            o("jour_semaine") = Valeur(info, "ScheduleInfo.DayOfWeek")
+            o("debut") = Valeur(info, "ScheduleInfo.StartDate")
+            o("prochaine") = Valeur(info, "ScheduleInfo.NextDate")
+            o("fin") = Valeur(info, "ScheduleInfo.EndDate")
+            o("tiers") = Valeur(txn, "CustomerRef.name", "VendorRef.name", "EntityRef.name")
+            o("montant") = Valeur(txn, "TotalAmt", "Amount")
+            o("devise") = Valeur(txn, "CurrencyRef.value")
+            o("extra") = txn
+            liste.Add(o)
+        Next
+
+        Return DeposerListe(liste, "s0849ChargerTransactionsRecurrentes", "TransactionRecurrente",
+                            "transactions récurrentes", brut, runId)
+    End Function
+
+    ''' <summary>Les budgets, entête et lignes (une par compte et par période).</summary>
+    Private Function VerserBudgets(brut As JArray, runId As Integer) As String
+        Dim entetes As New JArray(), lignes As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(e, "Id")
+            o("nom") = Valeur(e, "Name")
+            o("type_budget") = Valeur(e, "BudgetType")
+            o("type_saisie") = Valeur(e, "BudgetEntryType")
+            o("debut") = Valeur(e, "StartDate")
+            o("fin") = Valeur(e, "EndDate")
+            o("actif") = Valeur(e, "Active")
+
+            Dim r As Integer = 0
+            For Each l As JToken In If(TryCast(e("BudgetDetail"), JArray), New JArray())
+                r += 1
+                Dim li As New JObject()
+                li("entete_rang") = rang
+                li("rang") = r
+                li("date") = Valeur(l, "BudgetDate")
+                li("montant") = Valeur(l, "Amount")
+                li("compte") = Valeur(l, "AccountRef.name")
+                li("compte_id") = Valeur(l, "AccountRef.value")
+                li("tiers") = Valeur(l, "CustomerRef.name")
+                li("classe") = Valeur(l, "ClassRef.name")
+                li("departement") = Valeur(l, "DepartmentRef.name")
+                lignes.Add(li)
+            Next
+
+            Dim extra As JObject = CType(e.DeepClone(), JObject)
+            extra.Remove("BudgetDetail")
+            o("extra") = extra
+            entetes.Add(o)
+        Next
+
+        If entetes.Count = 0 Then Return "aucun budget"
+
+        Dim fichierId As Integer = InscrireAuRegistre("Budget", "budgets", brut)
+        Dim p As New Collection
+        p.Add(New SqlParameter("@RunId", CObj(runId)))
+        p.Add(New SqlParameter("@CompanyGUID", hote.Company))
+        p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+        p.Add(New SqlParameter("@Entetes", entetes.ToString(Formatting.None)))
+        p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
+
+        Dim ds As DataSet = hote.ExecuteSQLds("s0851ChargerBudgets", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return "en préparation"
+
+        Dim row As DataRow = ds.Tables(0).Rows(0)
+        Dim texte As String = "en préparation : " & Lire(row, "NbNouveaux") & " budget(s), " & Lire(row, "NbLignes") & " ligne(s)"
+        If Lire(row, "NbInvalides") > 0 Then texte &= ", " & Lire(row, "NbInvalides") & " sans nom"
+        Return texte
+    End Function
+
+    ''' <summary>Les feuilles de temps : qui, pour qui, combien de temps, facturable ou non.</summary>
+    Private Function VerserFeuillesTemps(brut As JArray, runId As Integer) As String
+        Dim liste As New JArray()
+        Dim rang As Integer = 0
+
+        For Each e As JToken In brut
+            rang += 1
+            Dim o As New JObject()
+            o("rang") = rang
+            o("externe_id") = Valeur(e, "Id")
+            o("date") = Valeur(e, "TxnDate")
+            o("personne_type") = Valeur(e, "NameOf")
+            o("personne") = Valeur(e, "EmployeeRef.name", "VendorRef.name")
+            o("personne_id") = Valeur(e, "EmployeeRef.value", "VendorRef.value")
+            o("client") = Valeur(e, "CustomerRef.name")
+            o("client_id") = Valeur(e, "CustomerRef.value")
+            o("article") = Valeur(e, "ItemRef.name")
+            o("classe") = Valeur(e, "ClassRef.name")
+            o("facturable") = Valeur(e, "BillableStatus")
+            o("taxable") = Valeur(e, "Taxable")
+            o("taux") = Valeur(e, "HourlyRate")
+            o("heures") = Valeur(e, "Hours")
+            o("minutes") = Valeur(e, "Minutes")
+            o("debut") = Valeur(e, "StartTime")
+            o("fin") = Valeur(e, "EndTime")
+            o("description") = Valeur(e, "Description")
+            o("extra") = e
+            liste.Add(o)
+        Next
+
+        Return DeposerListe(liste, "s0853ChargerFeuillesTemps", "FeuilleTemps", "feuilles de temps", brut, runId)
+    End Function
+
+#End Region
+
 
 #Region "La base"
 
