@@ -487,6 +487,8 @@
     <Content Include="ValiderFactures.aspx" />
     <Content Include="ValiderSociete.aspx" />
     <Content Include="ValiderListes.aspx" />
+    <Content Include="ValiderPiecesJointes.aspx" />
+    <Content Include="PieceJointe.ashx" />
     <Content Include="ValiderBalanceAgee.aspx" />
     <Content Include="ValiderGrandLivre.aspx" />
     <Content Include="ValiderRapportTaxes.aspx" />
@@ -853,6 +855,13 @@
     </Compile>
     <Compile Include="ValiderListes.aspx.designer.vb">
       <DependentUpon>ValiderListes.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="ValiderPiecesJointes.aspx.vb">
+      <DependentUpon>ValiderPiecesJointes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderPiecesJointes.aspx.designer.vb">
+      <DependentUpon>ValiderPiecesJointes.aspx</DependentUpon>
     </Compile>
     <Compile Include="ValiderFactures.aspx.designer.vb">
       <DependentUpon>ValiderFactures.aspx</DependentUpon>

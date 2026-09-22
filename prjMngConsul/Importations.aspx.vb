@@ -316,6 +316,23 @@ Public Class Importations
                               "Moyenne » — alors on lit l'entité Item directement. La lecture est " &
                               "paginée : cette compagnie a 214 articles, et sans cela on en " &
                               "perdrait 114."
+                },
+                New Poste With {
+                    .Icone = "📎",
+                    .Titre = "Pièces jointes",
+                    .Source = "QuickBooks : l'entité Attachable, par la passerelle — tout ce qui est attaché, à qui que ce soit",
+                    .Destination = "préparation — staging.PieceJointeImport, fichiers compris",
+                    .Page = "~/ValiderPiecesJointes.aspx",
+                    .Note = 5,
+                    .Fait = "Toutes les pièces, quelle que soit l'entité porteuse — client, " &
+                            "fournisseur, article, dépense, écriture — avec le fichier lui-même " &
+                            "téléchargé pendant l'extraction et gardé en préparation, jusqu'à " &
+                            "25 Mo par pièce. L'écran les montre par entité, dit lesquelles sont " &
+                            "déjà retrouvées ici, et ouvre chaque fichier.",
+                    .Manque = "Rien n'est rattaché aux fiches de l'application : on ne sait pas " &
+                              "encore où 60Sec-AI range un fichier sur un client. Le lien de " &
+                              "téléchargement de QuickBooks n'est valable que quelques minutes ; " &
+                              "une pièce qui a échoué se relit à la prochaine extraction."
                 }
             }
         End Get

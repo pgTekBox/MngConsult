@@ -107,7 +107,8 @@ Public Class ApideckExtraction
                 New Ressource With {.Groupe = "Contrôle", .Cle = "uncleared", .Libelle = "Opérations non rapprochées", .Vers = "RAPPROCHEMENT", .Mode = "PASSERELLE", .AvecDate = True},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "das", .Libelle = "Remises de DAS", .Vers = "REMISES_DAS", .Mode = "PASSERELLE", .AvecDate = True},
                 New Ressource With {.Groupe = "Contrôle", .Cle = "inventory", .Libelle = "Inventaire", .Vers = "INVENTAIRE", .Mode = "PASSERELLE", .AvecDate = True},
-                New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"}
+                New Ressource With {.Groupe = "Contrôle", .Cle = "attachments", .Libelle = "Pièces jointes", .Vers = "PIECES_JOINTES", .Mode = "PAR_DOCUMENT"},
+                New Ressource With {.Groupe = "Contrôle", .Cle = "attachments-all", .Libelle = "Pièces jointes de toutes les entités, fichiers compris", .Vers = "PIECES_JOINTES_TOUTES", .Mode = "PASSERELLE"}
             }
         End Get
     End Property
@@ -309,6 +310,7 @@ Public Class ApideckExtraction
                 If r.Vers = "RAPPROCHEMENT" Then Return LireOperationsRapprochement(api)
                 If r.Vers = "REMISES_DAS" Then Return LireRemisesDas(api)
                 If r.Vers = "INVENTAIRE" Then Return LireInventaire(api)
+                If r.Vers = "PIECES_JOINTES_TOUTES" Then Return LireAttachables(api)
                 Return LireConditionsPaiement(api)
         End Select
 
@@ -384,6 +386,7 @@ Public Class ApideckExtraction
             Case "INVENTAIRE" : Return VerserInventaire(brut, runId)
             Case "CONDITIONS" : Return VerserConditionsPaiement(brut, runId)
             Case "PIECES_JOINTES" : Return VerserPiecesJointes(brut, runId)
+            Case "PIECES_JOINTES_TOUTES" : Return VerserAttachables(brut, runId)
             Case "SOCIETE" : Return VerserSociete(brut, runId)
             Case "TAXES" : Return VerserTaxes(brut, runId)
             Case "MODE_PAIEMENT" : Return VerserModesPaiement(brut, runId)
@@ -960,6 +963,228 @@ Public Class ApideckExtraction
                               Lire(r, "NbDocuments") & " document(s)"
         If Lire(r, "NbSansLien") > 0 Then texte &= ", " & Lire(r, "NbSansLien") & " sans adresse"
         Return texte
+    End Function
+
+    ''' <summary>
+    ''' Les pièces jointes de TOUTES les entités, par la passerelle.
+    '''
+    ''' L'API unifiée ne rend les pièces que de quatre types de document ; l'entité
+    ''' Attachable de QuickBooks les rend toutes, avec le porteur — client,
+    ''' fournisseur, article, dépense, écriture — et une adresse de téléchargement
+    ''' temporaire (TempDownloadUri). Une pièce attachée à plusieurs entités donne
+    ''' une ligne par entité ; une pièce sans porteur va sous « Aucune ».
+    '''
+    ''' Le fichier n'est pas lu ici : la lecture ne fait que lister, et c'est le
+    ''' versement qui télécharge, une fois par pièce, tant que l'adresse est valide.
+    ''' </summary>
+    Private Function LireAttachables(api As clsApideck) As JArray
+        Dim realm As String = api.RealmId()
+        Dim liste As New JArray()
+
+        For Each a As JToken In EntitesDeLaSource(api, realm, "Attachable")
+            Dim refs As JArray = TryCast(a("AttachableRef"), JArray)
+
+            If refs Is Nothing OrElse refs.Count = 0 Then
+                liste.Add(LigneAttachable(a, "Aucune", "", ""))
+                Continue For
+            End If
+
+            For Each rf As JToken In refs
+                liste.Add(LigneAttachable(a,
+                                          Valeur(rf, "EntityRef.type"),
+                                          Valeur(rf, "EntityRef.value"),
+                                          Valeur(rf, "EntityRef.name")))
+            Next
+        Next
+
+        Return liste
+    End Function
+
+    ''' <summary>Une pièce, telle que le versement et le dépôt brut la liront.</summary>
+    Private Shared Function LigneAttachable(a As JToken, genre As String, entiteId As String, entiteNom As String) As JObject
+        Dim o As New JObject()
+        o("id") = Valeur(a, "Id")
+        o("genre") = If(genre = "", "Aucune", genre)
+        o("document_id") = entiteId
+        o("entite_nom") = entiteNom
+        o("externe_id") = Valeur(a, "Id")
+        o("nom") = Valeur(a, "FileName")
+        o("note") = Valeur(a, "Note")
+        o("type") = Valeur(a, "ContentType")
+        o("taille") = Valeur(a, "Size")
+        o("url") = Valeur(a, "TempDownloadUri")
+        o("date") = Valeur(a, "MetaData.LastUpdatedTime", "MetaData.CreateTime")
+        o("categorie") = Valeur(a, "Category")
+        o("etiquette") = Valeur(a, "Tag")
+        Return o
+    End Function
+
+    ''' <summary>
+    ''' Toutes les pages d'une entité native de QuickBooks : la même lecture que
+    ''' pour les articles et les comptes, sur n'importe quelle entité. Cent par
+    ''' page, deux cents pages au plus — vingt mille lignes, la garde contre une
+    ''' boucle qui ne finirait pas.
+    ''' </summary>
+    Private Shared Function EntitesDeLaSource(api As clsApideck, realm As String, entite As String) As JArray
+        Const TAILLE_PAGE As Integer = 100
+        Const PLAFOND As Integer = 200
+
+        If realm = "" Then Throw New Exception("Apideck : identifiant de société QuickBooks introuvable.")
+
+        Dim tous As New JArray()
+        Dim depart As Integer = 1
+
+        For tour As Integer = 1 To PLAFOND
+            Dim requete As String = Uri.EscapeDataString(
+                "select * from " & entite & " startposition " & depart & " maxresults " & TAILLE_PAGE)
+            Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & realm &
+                                "/query?query=" & requete & "&minorversion=75"
+
+            Dim r As JObject = api.Proxy(url)
+            If r Is Nothing Then Exit For
+
+            Dim page As JArray = TryCast(r.SelectToken("QueryResponse." & entite), JArray)
+            If page Is Nothing OrElse page.Count = 0 Then Exit For
+
+            For Each a As JToken In page
+                tous.Add(a)
+            Next
+
+            If page.Count < TAILLE_PAGE Then Exit For
+            depart += TAILLE_PAGE
+        Next
+
+        Return tous
+    End Function
+
+    ''' <summary>Au-delà, le fichier n'est pas téléchargé : la table est une archive, pas un entrepôt.</summary>
+    Private Const PLAFOND_PIECE As Long = 25L * 1024 * 1024
+
+    ''' <summary>
+    ''' Verse les pièces de la passerelle, et TÉLÉCHARGE chaque fichier pendant
+    ''' que l'adresse de QuickBooks est encore valide — elle expire en quelques
+    ''' minutes, c'est maintenant ou jamais. Une pièce à la fois vers la base,
+    ''' parce que le fichier voyage en binaire, pas en JSON. Une pièce attachée
+    ''' à plusieurs entités n'est téléchargée qu'une fois.
+    '''
+    ''' Un téléchargement refusé ne fait pas échouer la ressource : la ligne
+    ''' garde son nom, son adresse et l'anomalie, et se relira la prochaine fois.
+    ''' </summary>
+    Private Function VerserAttachables(brut As JArray, runId As Integer) As String
+        If brut Is Nothing OrElse brut.Count = 0 Then Return "aucune pièce jointe"
+
+        Dim fichierId As Integer = InscrireAuRegistre("PieceJointe", "pièces jointes, passerelle", brut)
+
+        Dim pv As New Collection
+        pv.Add(New SqlParameter("@CompanyGUID", hote.Company))
+        hote.ExecuteSQLds("s0835ViderPiecesJointesPasserelle", pv)
+
+        Dim cache As New Dictionary(Of String, Byte())
+        Dim refus As New Dictionary(Of String, String)
+        Dim nb As Integer = 0, gardes As Integer = 0, echecs As Integer = 0, lies As Integer = 0
+
+        For Each pj As JToken In brut
+            Dim externe As String = Valeur(pj, "externe_id")
+            Dim url As String = Valeur(pj, "url")
+            Dim taille As Object = Nombre(Valeur(pj, "taille"))
+
+            Dim contenu As Byte() = Nothing
+            Dim statut As String = "SANS_LIEN"
+            Dim anomalie As String = "La source ne donne pas d'adresse de téléchargement : le fichier restera inaccessible."
+
+            If url <> "" Then
+                If cache.ContainsKey(externe) Then
+                    contenu = cache(externe)
+                    statut = "TELECHARGE" : anomalie = ""
+                ElseIf refus.ContainsKey(externe) Then
+                    statut = "ECHEC" : anomalie = refus(externe)
+                ElseIf taille IsNot Nothing AndAlso CDec(taille) > PLAFOND_PIECE Then
+                    statut = "TROP_GROS"
+                    anomalie = "Le fichier dépasse 25 Mo : il n'est pas gardé en préparation, l'adresse seule est conservée."
+                Else
+                    Try
+                        contenu = Telecharger(url)
+                        cache(externe) = contenu
+                        statut = "TELECHARGE" : anomalie = ""
+                    Catch ex As Exception
+                        statut = "ECHEC"
+                        anomalie = "Téléchargement refusé : " & ex.Message
+                        refus(externe) = anomalie
+                    End Try
+                End If
+            End If
+
+            Dim p As New Collection
+            p.Add(New SqlParameter("@RunId", CObj(runId)))
+            p.Add(New SqlParameter("@CompanyGUID", hote.Company))
+            p.Add(New SqlParameter("@ImportFileId", CObj(fichierId)))
+            p.Add(New SqlParameter("@Genre", Valeur(pj, "genre")))
+            p.Add(New SqlParameter("@EntiteId", Valeur(pj, "document_id")))
+            p.Add(New SqlParameter("@EntiteNom", Valeur(pj, "entite_nom")))
+            p.Add(New SqlParameter("@ExterneId", externe))
+            p.Add(New SqlParameter("@Nom", Valeur(pj, "nom")))
+            p.Add(New SqlParameter("@Note", Valeur(pj, "note")))
+            p.Add(New SqlParameter("@Type", Valeur(pj, "type")))
+            p.Add(New SqlParameter("@Taille", If(taille Is Nothing, CObj(DBNull.Value), CObj(CLng(CDec(taille))))))
+            p.Add(New SqlParameter("@Url", url))
+            p.Add(New SqlParameter("@Date", DateOuRien(Valeur(pj, "date"))))
+            p.Add(New SqlParameter("@Categorie", Valeur(pj, "categorie")))
+            p.Add(New SqlParameter("@Etiquette", Valeur(pj, "etiquette")))
+            p.Add(New SqlParameter("@Statut", statut))
+            p.Add(New SqlParameter("@Anomalie", If(anomalie = "", CObj(DBNull.Value), CObj(anomalie))))
+
+            Dim pc As New SqlParameter("@Contenu", SqlDbType.VarBinary, -1)
+            pc.Value = If(contenu Is Nothing, CObj(DBNull.Value), CObj(contenu))
+            p.Add(pc)
+
+            Dim ds As DataSet = hote.ExecuteSQLds("s0836ChargerPieceJointePasserelle", p)
+            nb += 1
+            If statut = "TELECHARGE" Then gardes += 1
+            If statut = "ECHEC" Then echecs += 1
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+               Not IsDBNull(ds.Tables(0).Rows(0)("LieId")) Then lies += 1
+        Next
+
+        Dim texte As String = "en préparation : " & nb & " pièce(s), " & gardes & " fichier(s) gardé(s)"
+        If lies > 0 Then texte &= ", " & lies & " rattachée(s) à un tiers ou un document d'ici"
+        If echecs > 0 Then texte &= ", " & echecs & " téléchargement(s) refusé(s)"
+        Return texte
+    End Function
+
+    ''' <summary>
+    ''' Va chercher le fichier à l'adresse temporaire de QuickBooks. C'est une
+    ''' adresse signée : elle ne demande ni jeton ni Apideck, et Apideck n'y est
+    ''' pour rien — c'est le seul appel de tout le moteur qui ne passe pas par lui.
+    ''' </summary>
+    Private Shared Function Telecharger(url As String) As Byte()
+        Dim req As Net.HttpWebRequest = CType(Net.WebRequest.Create(url), Net.HttpWebRequest)
+        req.Method = "GET"
+        req.Timeout = 120000
+        req.ReadWriteTimeout = 120000
+        req.AllowAutoRedirect = True
+
+        Using rep As Net.HttpWebResponse = CType(req.GetResponse(), Net.HttpWebResponse)
+            Using flux As IO.Stream = rep.GetResponseStream()
+                Using mem As New IO.MemoryStream()
+                    Dim tampon(81919) As Byte
+                    Dim lu As Integer = flux.Read(tampon, 0, tampon.Length)
+                    While lu > 0
+                        mem.Write(tampon, 0, lu)
+                        If mem.Length > PLAFOND_PIECE Then Throw New Exception("le fichier dépasse 25 Mo.")
+                        lu = flux.Read(tampon, 0, tampon.Length)
+                    End While
+                    Return mem.ToArray()
+                End Using
+            End Using
+        End Using
+    End Function
+
+    ''' <summary>Une date de la source, ou NULL pour SQL — jamais une date inventée.</summary>
+    Private Shared Function DateOuRien(texte As String) As Object
+        Dim d As DateTimeOffset
+        If DateTimeOffset.TryParse(If(texte, ""), Globalization.CultureInfo.InvariantCulture,
+                                   Globalization.DateTimeStyles.None, d) Then Return d.DateTime
+        Return DBNull.Value
     End Function
 
     ''' <summary>
