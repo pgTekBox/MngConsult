@@ -1,4 +1,4 @@
-<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderMouvementsBancaires.aspx.vb" Inherits="MngConsul.ValiderMouvementsBancaires" %>
 <%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 

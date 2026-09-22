@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- T260 — Huit entités que seule la passerelle rend : employés, classes,
 --        agences de taxes, devises et taux de change, dépôts et virements
 --        bancaires, transactions récurrentes, budgets, feuilles de temps

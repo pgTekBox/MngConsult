@@ -1,4 +1,4 @@
-<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
+﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderRecurrentes.aspx.vb" Inherits="MngConsul.ValiderRecurrentes" %>
 <%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
