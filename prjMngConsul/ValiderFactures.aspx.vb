@@ -2,7 +2,7 @@
 Imports System.Text
 
 ''' <summary>
-''' Valider les factures importées — le pas entre la préparation et la
+''' Factures clients et fournisseurs — le pas entre la préparation et la
 ''' comptabilité.
 '''
 ''' Les listes se valident en masse : on regarde une colonne, on crée tout ce qui
@@ -10,11 +10,10 @@ Imports System.Text
 ''' totaux, et chacun peut être faux séparément. Cet écran les montre donc un par
 ''' un, avec leur verdict, et ne crée que ce qui est coché.
 '''
-''' Deux corrections sont possibles ici, et deux seulement :
-'''
-'''   · le tiers, quand le nom de la source n'a retrouvé personne — sans lui, la
-'''     facture n'appartient à personne et ne peut pas être créée ;
-'''   · la répartition TPS/TVQ, que la source ne donne pas de façon fiable.
+''' Une seule correction est possible ici : la répartition TPS/TVQ, que la
+''' source ne donne pas de façon fiable. Le tiers ne se choisit pas : il est
+''' reconnu parmi les clients et fournisseurs EN PRÉPARATION (T261), et la
+''' facture attend qu'il soit créé depuis son écran.
 '''
 ''' Le reste — numéro, dates, montants, lignes — vient de la source et ne se
 ''' retouche pas : si c'est faux, c'est la source qu'il faut corriger, pas la
@@ -66,18 +65,11 @@ Public Class ValiderFactures
 
             Dim tps As Object = Montant(Request.Form("tps_" & id))
             Dim tvq As Object = Montant(Request.Form("tvq_" & id))
-            Dim tiers As String = If(Request.Form("party_" & id), "")
-
-            Dim party As Object = DBNull.Value
-            Dim g As Guid
-            If tiers <> "" AndAlso Guid.TryParse(tiers, g) Then party = g
-
-            If tps Is DBNull.Value AndAlso tvq Is DBNull.Value AndAlso party Is DBNull.Value Then Continue For
+            If tps Is DBNull.Value AndAlso tvq Is DBNull.Value Then Continue For
 
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
             p.Add(New SqlParameter("@EnteteId", CObj(id)))
-            p.Add(New SqlParameter("@PartyGUID", party))
             p.Add(New SqlParameter("@TPS", tps))
             p.Add(New SqlParameter("@TVQ", tvq))
             ExecuteSQL("s0784MajDocumentImport", p)
@@ -124,7 +116,7 @@ Public Class ValiderFactures
             texte.Append(crees).Append(" document(s) créés en brouillon. ")
             texte.Append("Rien n'est encore au grand livre : comptabilisez-les depuis la grille des factures.")
             If sansTiers > 0 Then
-                texte.Append(" ").Append(sansTiers).Append(" ont été écartés faute de tiers reconnu.")
+                texte.Append(" ").Append(sansTiers).Append(" ont été écartés parce que leur client ou fournisseur n'est pas encore créé.")
             End If
             If ecartes > 0 Then
                 texte.Append(" ").Append(ecartes).Append(" portaient une anomalie.")
@@ -267,7 +259,6 @@ Public Class ValiderFactures
     End Function
 
     Private Function Tableau(entetes As DataTable, lignes As DataTable, typeDoc As Integer) As String
-        Dim tiers As DataTable = ListeTiers()
 
         Dim sb As New StringBuilder()
         sb.Append("<table class='docs'><tr>")
@@ -316,17 +307,7 @@ Public Class ValiderFactures
             sb.Append("<td>").Append(DateCourte(r("DateEcheance"))).Append("</td>")
 
             ' ── Le tiers ────────────────────────────────────────────────────
-            sb.Append("<td>")
-            If Not sansTiers Then
-                sb.Append(Server.HtmlEncode(Texte(r("TiersReconnu"))))
-            ElseIf migre Then
-                sb.Append(Server.HtmlEncode(Texte(r("TiersNom"))))
-            Else
-                sb.Append("<div class='sansTiers'>").Append(Server.HtmlEncode(Texte(r("TiersNom"))))
-                sb.Append(" — inconnu ici</div>")
-                sb.Append(Choix(id, tiers))
-            End If
-            sb.Append("</td>")
+            sb.Append("<td>").Append(CelluleTiers(r, migre, sansTiers)).Append("</td>")
 
             sb.Append("<td class='n'>").Append(Somme(r("SousTotal"))).Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(r("TotalTaxes"))).Append("</td>")
@@ -376,31 +357,30 @@ Public Class ValiderFactures
         Return sb.ToString()
     End Function
 
-    ''' <summary>La liste des tiers, offerte seulement quand le nom n'a rien retrouvé.</summary>
-    Private Function Choix(id As Integer, tiers As DataTable) As String
-        If tiers Is Nothing OrElse tiers.Rows.Count = 0 Then Return ""
+    ''' <summary>
+    ''' Le tiers, tel que la PRÉPARATION le connaît — jamais choisi à la main.
+    ''' Reconnu parmi les clients ou fournisseurs importés : s'il est déjà créé,
+    ''' la facture peut l'être ; sinon elle attend qu'on le crée depuis son
+    ''' écran. Absent de la préparation : il faut d'abord l'importer.
+    ''' </summary>
+    Private Function CelluleTiers(r As DataRow, migre As Boolean, sansTiers As Boolean) As String
+        Dim reconnu As String = Texte(r("TiersReconnu"))
+        Dim source As String = Texte(r("TiersNom"))
+        Dim enPreparation As Boolean = Not IsDBNull(r("PartyImportId"))
+        Dim ecran As String = If(CInt(ddlType.SelectedValue) = 2, "Fournisseurs", "Clients")
 
-        Dim sb As New StringBuilder()
-        sb.Append("<select class='tiers' name='party_").Append(id).Append("'>")
-        sb.Append("<option value=''>— rapprocher d'un tiers —</option>")
+        If migre OrElse Not sansTiers Then
+            Return Server.HtmlEncode(If(reconnu <> "", reconnu, source))
+        End If
 
-        For Each t As DataRow In tiers.Rows
-            Dim nom As String = Texte(t("Name"))
-            If nom = "" Then nom = Texte(t("DisplayName"))
-            sb.Append("<option value='").Append(t("PartyGUID").ToString()).Append("'>")
-            sb.Append(Server.HtmlEncode(nom)).Append("</option>")
-        Next
+        If enPreparation Then
+            Return "<div class='sansTiers'>" & Server.HtmlEncode(If(reconnu <> "", reconnu, source)) &
+                   " — en préparation, pas encore créé</div>" &
+                   "<span class='anom'>Créez-le depuis l'écran " & ecran & ".</span>"
+        End If
 
-        sb.Append("</select>")
-        Return sb.ToString()
-    End Function
-
-    Private Function ListeTiers() As DataTable
-        Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim ds As DataSet = ExecuteSQLds("s0786GetTiersPourImport", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
-        Return ds.Tables(0)
+        Return "<div class='sansTiers'>" & Server.HtmlEncode(source) & " — absent de la préparation</div>" &
+               "<span class='anom'>Importez d'abord vos " & ecran.ToLowerInvariant() & ", puis créez-le.</span>"
     End Function
 
     ''' <summary>
@@ -429,7 +409,7 @@ Public Class ValiderFactures
             Case "EXISTE" : Return "<span class='etiq existe'>déjà en comptabilité</span>"
             Case "INVALIDE", "DOUBLON_FICHIER" : Return "<span class='etiq anomalie'>à corriger</span>"
             Case Else
-                If sansTiers Then Return "<span class='etiq anomalie'>tiers manquant</span>"
+                If sansTiers Then Return "<span class='etiq anomalie'>tiers à créer</span>"
                 Return "<span class='etiq ok'>prête</span>"
         End Select
     End Function

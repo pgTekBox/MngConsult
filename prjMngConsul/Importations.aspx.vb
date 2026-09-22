@@ -100,7 +100,7 @@ Public Class Importations
                 },
                 New Poste With {
                     .Icone = "🧾",
-                    .Titre = "Valider les factures importées",
+                    .Titre = "Factures clients et fournisseurs",
                     .Source = "ce que l'extraction a déposé, clients et fournisseurs",
                     .Destination = "T060Document + T061DocumentLine, en brouillon",
                     .Page = "~/ValiderFactures.aspx",

@@ -3,7 +3,7 @@
 <%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
-    Valider les factures importées — 60Sec-AI
+    Factures clients et fournisseurs — 60Sec-AI
 </asp:Content>
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
@@ -115,14 +115,15 @@
     <div class="val-head">
         <div class="ico">🧾</div>
         <div>
-            <h1>Valider les factures importées</h1>
+            <h1>Factures clients et fournisseurs</h1>
             <div class="sub">Ce qui a été rapatrié attend votre accord</div>
         </div>
     </div>
 
     <p class="val-lede">
-        Chaque facture est affichée avec son détail, son tiers et son verdict. Corrigez ce qui doit
-        l'être, cochez ce que vous acceptez, et créez. Les documents sont créés
+        Chaque facture est affichée avec son détail, son tiers et son verdict. Le tiers est reconnu
+        parmi vos clients et fournisseurs importés : créez-les d'abord depuis leurs écrans. Corrigez
+        les taxes s'il le faut, cochez ce que vous acceptez, et créez. Les documents sont créés
         <b>en brouillon</b> : rien n'est écrit au grand livre tant que vous ne les comptabilisez
         pas depuis les écrans habituels.
     </p>
