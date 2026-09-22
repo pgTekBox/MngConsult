@@ -1,5 +1,7 @@
 -- =============================================================================
 -- s0607MigratePartyImportToProd
+-- ⚠ Version d'origine. Remplacée par Database/T257_Promotion_champs_complets.sql
+--   (toutes les colonnes Apideck portées en dbo) : c'est T257 qui fait foi.
 -- Pousse les lignes staging.PartyImport (Status='Pending') vers la production
 -- T050Party + T054PartyAddress. Saute les doublons par Name dans la même Company.
 --

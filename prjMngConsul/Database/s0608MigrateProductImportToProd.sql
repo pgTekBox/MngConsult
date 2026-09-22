@@ -1,5 +1,7 @@
 -- =============================================================================
 -- s0608MigrateProductImportToProd
+-- ⚠ Version d'origine. Remplacée par Database/T257_Promotion_champs_complets.sql
+--   (toutes les colonnes Apideck portées en dbo) : c'est T257 qui fait foi.
 -- Pousse les lignes staging.ProductImport (Status='Pending') vers la production
 -- via la procédure existante s0079InsertProduct.
 --
