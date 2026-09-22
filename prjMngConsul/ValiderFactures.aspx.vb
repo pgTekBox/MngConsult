@@ -402,13 +402,23 @@ Public Class ValiderFactures
         Dim enPreparation As Boolean = Not IsDBNull(r("PartyImportId"))
         Dim ecran As String = If(CInt(ddlType.SelectedValue) = 2, "Fournisseurs", "Clients")
 
+        ' La source ne donne que le nom d'affichage (« Amanda Reid »). Le nom de
+        ' l'entreprise vient du tiers en préparation, quand il est reconnu : on
+        ' l'affiche en premier, comme sur les écrans Clients et Fournisseurs, et
+        ' le nom d'affichage en dessous quand il diffère.
+        Dim entreprise As String = If(reconnu <> "", reconnu, source)
+        Dim sous As String = ""
+        If reconnu <> "" AndAlso source <> "" AndAlso Not String.Equals(reconnu, source, StringComparison.OrdinalIgnoreCase) Then
+            sous = "<span style='display:block;font-size:11.5px;color:#64748b'>" & Server.HtmlEncode(source) & "</span>"
+        End If
+
         If migre OrElse Not sansTiers Then
-            Return Server.HtmlEncode(If(reconnu <> "", reconnu, source))
+            Return Server.HtmlEncode(entreprise) & sous
         End If
 
         If enPreparation Then
-            Return "<div class='sansTiers'>" & Server.HtmlEncode(If(reconnu <> "", reconnu, source)) &
-                   " — en préparation, pas encore créé</div>" &
+            Return "<div class='sansTiers'>" & Server.HtmlEncode(entreprise) &
+                   " — en préparation, pas encore créé</div>" & sous &
                    "<span class='anom'>Créez-le depuis l'écran " & ecran & ".</span>"
         End If
 
