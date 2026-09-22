@@ -83,6 +83,7 @@ Public Class wbfCustomerEdit
             CreatePartyAddressTable()
             CustomerId = CInt(Request.QueryString("Id"))
             BindData()
+            AfficherPiecesJointes()
         End If
 
 
@@ -797,6 +798,81 @@ Public Class wbfCustomerEdit
         Return acc & sep & part.Trim()
     End Function
 
+    ''' <summary>
+    ''' Les pièces jointes rattachées à ce tiers (dbo.T057PartyDocument) —
+    ''' reprises de QuickBooks par l'import, pour l'instant. Rendues dans un
+    ''' Literal : la page porte un RadAjaxManager. Chaque fichier s'ouvre par
+    ''' PieceJointe.ashx?doc=, sous la compagnie de la session.
+    ''' </summary>
+    Private Sub AfficherPiecesJointes()
+        litPjTitre.Text = L("pjTitle")
+
+        If CustomerId <= 0 Then
+            litPiecesJointes.Text = "<div class='pj-vide'>" & Server.HtmlEncode(L("pjNew")) & "</div>"
+            Return
+        End If
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@PartyId", CustomerId))
+            Dim ds As DataSet = ExecuteSQLds("s0840GetPartyDocuments", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                litPiecesJointes.Text = "<div class='pj-vide'>" & Server.HtmlEncode(L("pjNone")) & "</div>"
+                Return
+            End If
+
+            Dim sb As New System.Text.StringBuilder()
+            sb.Append("<table class='pj-tbl'><thead><tr><th>").Append(Server.HtmlEncode(L("pjFile")))
+            sb.Append("</th><th>").Append(Server.HtmlEncode(L("pjType")))
+            sb.Append("</th><th style='text-align:right'>").Append(Server.HtmlEncode(L("pjSize")))
+            sb.Append("</th><th>").Append(Server.HtmlEncode(L("pjNote")))
+            sb.Append("</th><th>").Append(Server.HtmlEncode(L("pjSource"))).Append("</th></tr></thead><tbody>")
+
+            For Each r As DataRow In ds.Tables(0).Rows
+                Dim nom As String = If(IsDBNull(r("NomFichier")), "", Convert.ToString(r("NomFichier")))
+                If nom = "" Then nom = "(" & L("pjNoName") & ")"
+
+                sb.Append("<tr><td><a href='PieceJointe.ashx?doc=").Append(Convert.ToInt32(r("Id")))
+                sb.Append("' target='_blank'>").Append(Server.HtmlEncode(nom)).Append("</a>")
+                If Not IsDBNull(r("Categorie")) AndAlso Convert.ToString(r("Categorie")) <> "" Then
+                    sb.Append("<span class='sous'>").Append(Server.HtmlEncode(Convert.ToString(r("Categorie")))).Append("</span>")
+                End If
+                sb.Append("</td>")
+
+                sb.Append("<td>").Append(Server.HtmlEncode(If(IsDBNull(r("TypeContenu")), "", Convert.ToString(r("TypeContenu"))))).Append("</td>")
+
+                sb.Append("<td class='n'>")
+                If Not IsDBNull(r("Octets")) Then
+                    Dim octets As Long = Convert.ToInt64(r("Octets"))
+                    If octets < 1024 Then
+                        sb.Append(octets).Append(" o")
+                    ElseIf octets < 1024 * 1024 Then
+                        sb.Append((octets / 1024).ToString("N0")).Append(" Ko")
+                    Else
+                        sb.Append((octets / (1024 * 1024)).ToString("N1")).Append(" Mo")
+                    End If
+                End If
+                sb.Append("</td>")
+
+                sb.Append("<td>").Append(Server.HtmlEncode(If(IsDBNull(r("Note")), "", Convert.ToString(r("Note"))))).Append("</td>")
+
+                sb.Append("<td>").Append(Server.HtmlEncode(If(IsDBNull(r("Source")), "", Convert.ToString(r("Source")))))
+                If Not IsDBNull(r("DateSource")) Then
+                    sb.Append("<span class='sous'>").Append(Convert.ToDateTime(r("DateSource")).ToString("yyyy-MM-dd")).Append("</span>")
+                End If
+                sb.Append("</td></tr>")
+            Next
+
+            sb.Append("</tbody></table>")
+            litPiecesJointes.Text = sb.ToString()
+
+        Catch ex As Exception
+            litPiecesJointes.Text = "<div class='pj-vide'>" & Server.HtmlEncode(ex.Message) & "</div>"
+        End Try
+    End Sub
+
     Private Sub ShowUpload(msg As String)
         pnlUpload.Visible = True
         litUpload.Text = Server.HtmlEncode(msg)
@@ -863,6 +939,15 @@ Public Class wbfCustomerEdit
             Case "scanBtn" : Return Choose3(lang, "Analyser le document", "Analyze document", "Analizar documento")
             Case "scanToggle" : Return Choose3(lang, "Réduire / Agrandir", "Collapse / Expand", "Contraer / Expandir")
             Case "upChoose" : Return Choose3(lang, "Veuillez d'abord choisir un fichier.", "Please choose a file first.", "Elija un archivo primero.")
+            Case "pjTitle" : Return Choose3(lang, "Pièces jointes", "Attachments", "Archivos adjuntos")
+            Case "pjNew" : Return Choose3(lang, "Enregistrez d'abord la fiche.", "Save the record first.", "Guarde primero la ficha.")
+            Case "pjNone" : Return Choose3(lang, "Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches.", "No attachments. QuickBooks files come in through Imports ▸ Attachments ▸ Attach to records.", "Sin archivos adjuntos. Los de QuickBooks llegan por Importaciones ▸ Archivos adjuntos ▸ Vincular a las fichas.")
+            Case "pjFile" : Return Choose3(lang, "Fichier", "File", "Archivo")
+            Case "pjType" : Return Choose3(lang, "Type", "Type", "Tipo")
+            Case "pjSize" : Return Choose3(lang, "Taille", "Size", "Tamaño")
+            Case "pjNote" : Return Choose3(lang, "Note", "Note", "Nota")
+            Case "pjSource" : Return Choose3(lang, "Provenance", "Source", "Origen")
+            Case "pjNoName" : Return Choose3(lang, "sans nom", "unnamed", "sin nombre")
             Case "upEmpty" : Return Choose3(lang, "Le fichier est vide.", "The file is empty.", "El archivo está vacío.")
             Case "upNoKey" : Return Choose3(lang, "Clé OpenAI absente. Contactez l'administrateur.", "OpenAI key missing. Contact the administrator.", "Falta la clave de OpenAI. Contacte al administrador.")
             Case "upFormat" : Return Choose3(lang, "Format non pris en charge (PDF, JPG ou PNG uniquement).", "Unsupported format (PDF, JPG or PNG only).", "Formato no admitido (solo PDF, JPG o PNG).")

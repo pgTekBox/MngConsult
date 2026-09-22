@@ -12,6 +12,12 @@ Partial Public Class ValiderPiecesJointes
     '''<summary>ucApideck</summary>
     Protected WithEvents ucApideck As Global.MngConsul.ImportApideckBouton
 
+    '''<summary>litMsg</summary>
+    Protected WithEvents litMsg As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>btnRattacher</summary>
+    Protected WithEvents btnRattacher As Global.System.Web.UI.WebControls.Button
+
     '''<summary>litOnglets</summary>
     Protected WithEvents litOnglets As Global.System.Web.UI.WebControls.Literal
 

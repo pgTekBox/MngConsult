@@ -349,4 +349,9 @@ Partial Public Class wbfCustomerEdit
 
     '''<summary>litUpload control.</summary>
     Protected WithEvents litUpload As Global.System.Web.UI.WebControls.Literal
+    '''<summary>litPjTitre</summary>
+    Protected WithEvents litPjTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPiecesJointes</summary>
+    Protected WithEvents litPiecesJointes As Global.System.Web.UI.WebControls.Literal
 End Class

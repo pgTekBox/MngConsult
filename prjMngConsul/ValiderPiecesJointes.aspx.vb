@@ -168,7 +168,7 @@ Public Class ValiderPiecesJointes
 
         For Each r As DataRow In lignes
             Dim statut As String = Texte(r, "Statut")
-            Dim souci As Boolean = statut <> "TELECHARGE" AndAlso statut <> "NOUVEAU"
+            Dim souci As Boolean = statut <> "TELECHARGE" AndAlso statut <> "NOUVEAU" AndAlso statut <> "RATTACHE"
 
             sb.Append("<tr")
             If souci Then sb.Append(" class=""souci""")
@@ -256,6 +256,53 @@ Public Class ValiderPiecesJointes
 
 #End Region
 
+#Region "Le rattachement aux fiches"
+
+    ''' <summary>
+    ''' Copie sur la fiche de chaque client ou fournisseur retrouvé les fichiers
+    ''' qui lui appartiennent (dbo.T057PartyDocument, script T259). Tout se fait
+    ''' en SQL, y compris la reconnaissance par le nom des tiers d'avant T257 ;
+    ''' l'écran ne fait que dire ce qui s'est passé, puis se relit.
+    ''' </summary>
+    Protected Sub btnRattacher_Click(sender As Object, e As EventArgs) Handles btnRattacher.Click
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@UserId", CObj(UserId)))
+            Dim ds As DataSet = ExecuteSQLds("s0839RattacherPiecesJointes", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+                Message("Le rattachement n'a rien rendu.", "err")
+            Else
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                Dim texte As String = Convert.ToInt32(r("NbRattachees")) & " fichier(s) copié(s) sur les fiches ; " &
+                                      Convert.ToInt32(r("NbSurFiche")) & " pièce(s) de tiers y sont maintenant."
+                If Convert.ToInt32(r("NbSansTiers")) > 0 Then
+                    texte &= " " & Convert.ToInt32(r("NbSansTiers")) & " pièce(s) de client ou de fournisseur sans tiers retrouvé ici : " &
+                             "créez d'abord ces tiers depuis les écrans Clients et Fournisseurs, puis recommencez."
+                End If
+                If Convert.ToInt32(r("NbSansFichier")) > 0 Then
+                    texte &= " " & Convert.ToInt32(r("NbSansFichier")) & " sans fichier (trop grosse ou refusée) : rien à copier."
+                End If
+                If Convert.ToInt32(r("NbAutresEntites")) > 0 Then
+                    texte &= " " & Convert.ToInt32(r("NbAutresEntites")) & " pièce(s) d'autres entités restent en préparation."
+                End If
+                Message(texte, "ok")
+            End If
+
+        Catch ex As Exception
+            Message("Le rattachement a échoué : " & ex.Message, "err")
+        End Try
+
+        Afficher()
+    End Sub
+
+    Private Sub Message(texte As String, genre As String)
+        litMsg.Text = "<div class=""msg " & genre & """>" & Server.HtmlEncode(texte) & "</div>"
+    End Sub
+
+#End Region
+
 #Region "Petits secours"
 
     Private Shared Function Nommer(genre As String) As String
@@ -266,6 +313,7 @@ Public Class ValiderPiecesJointes
 
     Private Shared Function Dire(statut As String) As String
         Select Case statut
+            Case "RATTACHE" : Return "Sur la fiche"
             Case "TELECHARGE" : Return "Fichier gardé"
             Case "NOUVEAU" : Return "Lu"
             Case "SANS_LIEN" : Return "Sans adresse"

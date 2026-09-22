@@ -1,4 +1,4 @@
-﻿<%@ WebHandler Language="VB" Class="PieceJointeHandler" %>
+<%@ WebHandler Language="VB" Class="PieceJointeHandler" %>
 
 Imports System
 Imports System.Web
@@ -6,9 +6,11 @@ Imports System.Web.SessionState
 Imports System.Data
 Imports System.Data.SqlClient
 
-' Sert une pièce jointe gardée en préparation (staging.PieceJointeImport.Contenu)
-' par son Id (?id=...). La session dit la compagnie : une pièce d'une autre
-' compagnie, ou un visiteur sans session, ne reçoivent rien.
+' Sert un fichier, deux provenances :
+'   ?id=N   une pièce jointe encore en préparation (staging.PieceJointeImport) ;
+'   ?doc=N  une pièce rattachée à une fiche (dbo.T057PartyDocument).
+' La session dit la compagnie : une pièce d'une autre compagnie, ou un visiteur
+' sans session, ne reçoivent rien.
 '
 ' Ce handler est compilé au runtime : il peut référencer MngConsul.clsData de
 ' l'assembly principal, comme InvoicePdf.ashx le fait.
@@ -26,7 +28,13 @@ Public Class PieceJointeHandler
         End If
 
         Dim id As Integer
-        If Not Integer.TryParse(ctx.Request.QueryString("id"), id) OrElse id <= 0 Then
+        Dim procedure As String
+
+        If Integer.TryParse(ctx.Request.QueryString("doc"), id) AndAlso id > 0 Then
+            procedure = "s0841GetPartyDocumentContenu"
+        ElseIf Integer.TryParse(ctx.Request.QueryString("id"), id) AndAlso id > 0 Then
+            procedure = "s0838GetPieceJointeContenu"
+        Else
             ctx.Response.StatusCode = 400
             Return
         End If
@@ -35,7 +43,7 @@ Public Class PieceJointeHandler
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", compagnie))
         p.Add(New SqlParameter("@Id", id))
-        Dim ds As DataSet = d.ExecuteSQLds("s0838GetPieceJointeContenu", p)
+        Dim ds As DataSet = d.ExecuteSQLds(procedure, p)
 
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
             ctx.Response.StatusCode = 404
@@ -46,7 +54,7 @@ Public Class PieceJointeHandler
         If IsDBNull(row("Contenu")) Then
             ctx.Response.StatusCode = 404
             ctx.Response.ContentType = "text/plain; charset=utf-8"
-            ctx.Response.Write("Cette pièce n'a pas de fichier en préparation.")
+            ctx.Response.Write("Cette pièce n'a pas de fichier.")
             Return
         End If
 

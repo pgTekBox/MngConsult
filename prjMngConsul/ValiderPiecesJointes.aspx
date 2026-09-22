@@ -68,6 +68,20 @@
     .verdict.NOUVEAU { background: #eff6ff; color: #1d4ed8 }
     .verdict.SANS_LIEN, .verdict.TROP_GROS { background: #fef3c7; color: #92400e }
     .verdict.ECHEC { background: #fee2e2; color: #991b1b }
+    .verdict.RATTACHE { background: #dcfce7; color: #166534 }
+
+    .barre { display: flex; gap: 12px; align-items: center; flex-wrap: wrap; margin: 0 0 16px }
+    .barre .aide { font-size: 12.5px; color: #64748b }
+    .btn {
+        display: inline-block; padding: 8px 15px; border-radius: 9px; border: 1px solid #cbd5e1;
+        background: #fff; color: #0f172a; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit;
+    }
+    .btn.primaire { background: #2563eb; border-color: #2563eb; color: #fff }
+    .btn.primaire:hover { background: #1d4ed8 }
+
+    .msg { border-radius: 10px; padding: 11px 14px; font-size: 13.5px; margin: 0 0 14px; line-height: 1.55 }
+    .msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
+    .msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
 
     .note {
         margin-top: 16px; padding: 12px 15px; border-radius: 10px;
@@ -102,6 +116,17 @@
     </p>
 
     <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="attachments-all" />
+
+    <asp:Literal ID="litMsg" runat="server" />
+
+    <%-- Le second geste : ce qui a un fichier et un tiers retrouvé rejoint la
+         fiche du client ou du fournisseur (T057PartyDocument). Idempotent. --%>
+    <div class="barre">
+        <asp:Button ID="btnRattacher" runat="server" CssClass="btn primaire" CausesValidation="false"
+            Text="📎 Rattacher aux fiches clients et fournisseurs"
+            OnClientClick="if (!confirm('Copier sur la fiche de chaque client ou fournisseur retrouvé les fichiers qui lui appartiennent ? Les pièces déjà rattachées ne sont pas dupliquées.')) { return false; }" />
+        <span class="aide">Les pièces des autres entités (factures, articles…) restent en préparation.</span>
+    </div>
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litRepere" runat="server" />

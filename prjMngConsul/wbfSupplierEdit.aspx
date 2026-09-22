@@ -758,6 +758,31 @@
 
             </div><%-- /card adresses --%>
 
+            <%-- ===== CARD : PIÈCES JOINTES (T057PartyDocument) =====
+                 Les fichiers rattachés à ce tiers — repris de QuickBooks par
+                 l'import, pour l'instant. Rendus par le code-behind dans un
+                 Literal : la page porte un RadAjaxManager, et un bloc de code
+                 inline y casserait le rendu. --%>
+            <div class="card">
+                <div class="cardHead">
+                    <div class="h"><asp:Literal ID="litPjTitre" runat="server" /></div>
+                </div>
+                <div class="cardBody">
+                    <style>
+                        table.pj-tbl { width: 100%; border-collapse: collapse; font-size: 13px }
+                        table.pj-tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
+                                          color: #64748b; border-bottom: 1px solid #e2e8f0; padding: 7px 8px; font-weight: 700 }
+                        table.pj-tbl td { border-bottom: 1px solid #f1f5f9; padding: 7px 8px; vertical-align: top }
+                        table.pj-tbl td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums }
+                        table.pj-tbl a { color: #1d4ed8; text-decoration: none; font-weight: 600 }
+                        table.pj-tbl a:hover { text-decoration: underline }
+                        table.pj-tbl .sous { display: block; font-size: 11.5px; color: #64748b; margin-top: 2px }
+                        .pj-vide { font-size: 13px; color: #64748b; padding: 4px 0 }
+                    </style>
+                    <asp:Literal ID="litPiecesJointes" runat="server" />
+                </div>
+            </div>
+
         </div><%-- /wrap --%>
 
         <%-- Bouton caché pour rebind après fermeture de la fenêtre adresse --%>
