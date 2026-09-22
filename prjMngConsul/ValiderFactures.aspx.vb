@@ -360,9 +360,25 @@ Public Class ValiderFactures
                 sb.Append(" <span class='etiq anomalie'>absent de la préparation</span>")
             End If
             sb.Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(Texte(l("CompteSource"))))
-            If Texte(l("CompteNom")) <> "" Then
-                sb.Append(" <span style='color:#94a3b8'>").Append(Server.HtmlEncode(Texte(l("CompteNom")))).Append("</span>")
+            ' Le compte, tel que le PLAN COMPTABLE IMPORTÉ le connaît : lié à un
+            ' compte d'ici (numéro affiché), reconnu mais pas encore appliqué,
+            ' ou absent du plan importé. Aucun ne bloque : le brouillon se
+            ' corrige avant comptabilisation, mais on le dit.
+            sb.Append("<td>")
+            Dim compteNom As String = Texte(l("CompteNom"))
+            If compteNom = "" Then compteNom = Texte(l("CompteSource"))
+            Dim compteCible As String = Texte(l("CompteCible"))
+            If compteNom = "" AndAlso compteCible = "" Then
+                sb.Append("<span style='color:#94a3b8'>—</span>")
+            ElseIf compteCible <> "" Then
+                sb.Append("<b>").Append(Server.HtmlEncode(compteCible)).Append("</b>")
+                sb.Append(" <span style='color:#94a3b8'>").Append(Server.HtmlEncode(compteNom)).Append("</span>")
+            ElseIf Not IsDBNull(l("CompteImportId")) Then
+                sb.Append(Server.HtmlEncode(compteNom))
+                sb.Append(" <span class='etiq anomalie'>en préparation, pas encore appliqué</span>")
+            Else
+                sb.Append(Server.HtmlEncode(compteNom))
+                sb.Append(" <span class='etiq anomalie'>absent du plan comptable importé</span>")
             End If
             sb.Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("Quantite"))).Append("</td>")
