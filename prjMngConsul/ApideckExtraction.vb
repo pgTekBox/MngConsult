@@ -454,13 +454,25 @@ Public Class ApideckExtraction
     ''' posé comme résultat, et s0604 l'éclate vers staging.PartyImport. L'écran
     ''' Clients ou Fournisseurs le voit alors comme n'importe quel import.
     ''' </summary>
+    ''' <summary>
+    ''' Un tiers, en entier. Les douze premières clés sont celles que l'import
+    ''' par fichier connaît déjà ; les autres n'existent que par Apideck, et
+    ''' s0604 les lit quand elles y sont (script T256).
+    '''
+    ''' Deux adresses : la facturation, celle qu'on retient, et la livraison à
+    ''' part. Trois téléphones : principal, mobile, fax — et le premier des
+    ''' autres. Ce qui n'a pas de colonne (banques, champs personnalisés, taxes
+    ''' multiples, contacts en surnombre) part tel quel dans « extra ».
+    ''' </summary>
     Private Function VerserParties(brut As JArray, typeImport As String, genre As String) As String
         Dim lignes As New JArray()
 
         For Each t As JToken In brut
-            Dim adr As JToken = Premier(t, "addresses")
+            Dim adr As JToken = AdresseDe(t, "billing")
+            Dim liv As JToken = AdresseDe(t, "shipping")
 
             Dim o As New JObject()
+            ' — ce que l'import par fichier connaît déjà —
             o("name") = Valeur(t, "company_name", "display_name", "name")
             o("contact_name") = Valeur(t, "display_name", "first_name")
             o("address1") = Valeur(adr, "line1", "street_name")
@@ -468,26 +480,207 @@ Public Class ApideckExtraction
             o("city") = Valeur(adr, "city")
             o("province") = Valeur(adr, "state", "region")
             o("postal_code") = Valeur(adr, "postal_code", "zip_code")
-            o("phone") = Valeur(Premier(t, "phone_numbers"), "number")
-            o("email") = Valeur(Premier(t, "emails"), "email")
+            o("phone") = Telephone(t, "primary", "work", "office", "home", "billing")
+            o("email") = Valeur(CourrielDe(t), "email")
             o("tps") = Valeur(t, "tax_number")
             o("tvq") = ""
             o("balance") = Valeur(t, "balance")
+
+            ' — l'identité —
+            o("source_id") = Valeur(t, "id")
+            o("display_name") = Valeur(t, "display_name")
+            o("company_name") = Valeur(t, "company_name")
+            o("title") = Valeur(t, "title")
+            o("first_name") = Valeur(t, "first_name")
+            o("middle_name") = Valeur(t, "middle_name")
+            o("last_name") = Valeur(t, "last_name")
+            o("suffix") = Valeur(t, "suffix")
+            o("individual") = Valeur(t, "individual")
+            o("is_project") = Valeur(t, "project")
+            o("category") = Valeur(t, "customer_category", "supplier_category")
+
+            ' — l'adresse, au complet, et la livraison —
+            o("address3") = Lignes3a5(adr)
+            o("country") = Valeur(adr, "country")
+            o("ship_attention") = Valeur(liv, "contact_name", "name")
+            o("ship_address1") = Valeur(liv, "line1", "street_name")
+            o("ship_address2") = String.Join(", ", New String() {Valeur(liv, "line2"), Lignes3a5(liv)}.Where(Function(x) x <> ""))
+            o("ship_city") = Valeur(liv, "city")
+            o("ship_province") = Valeur(liv, "state", "region")
+            o("ship_postal_code") = Valeur(liv, "postal_code", "zip_code")
+            o("ship_country") = Valeur(liv, "country")
+
+            ' — les autres moyens de joindre —
+            o("mobile") = Telephone(t, "mobile")
+            o("fax") = Telephone(t, "fax")
+            o("alt_phone") = AutreTelephone(t)
+            o("website") = Valeur(Premier(t, "websites"), "url")
+
+            ' — le commercial et le fiscal —
+            o("taxable") = Valeur(t, "taxable")
+            o("tax_rate_name") = Valeur(t, "tax_rate.name")
+            o("tax_rate_code") = Valeur(t, "tax_rate.code")
+            o("tax_rate") = Valeur(t, "tax_rate.rate")
+            o("currency") = Valeur(t, "currency")
+            o("terms") = Valeur(t, "terms")
+            o("payment_method") = Valeur(t, "payment_method")
+            o("parent_name") = Valeur(t, "parent.name")
+            o("account_name") = Valeur(t, "account.name", "account.nominal_code")
+            o("note") = Valeur(t, "notes")
+
+            ' — la source —
+            o("source_status") = Valeur(t, "status")
+            o("source_created") = Valeur(t, "created_at")
+            o("source_updated") = Valeur(t, "updated_at")
+            o("extra") = Reste(t, "bank_accounts", "custom_fields", "tax_details", "tax_status_details",
+                               "phone_numbers", "emails", "websites", "addresses")
             lignes.Add(o)
         Next
 
         Return Livrer(typeImport, genre, lignes)
     End Function
 
+    ''' <summary>L'adresse d'un type ; à défaut, pour la facturation, la première venue.</summary>
+    Private Shared Function AdresseDe(t As JToken, type As String) As JToken
+        Dim liste As JArray = TryCast(If(t Is Nothing, Nothing, t("addresses")), JArray)
+        If liste Is Nothing OrElse liste.Count = 0 Then Return Nothing
+
+        For Each a As JToken In liste
+            If String.Equals(Valeur(a, "type"), type, StringComparison.OrdinalIgnoreCase) Then
+                ' Une adresse de livraison vide n'en est pas une.
+                If type = "shipping" AndAlso Valeur(a, "line1", "city", "postal_code", "string") = "" Then Return Nothing
+                Return a
+            End If
+        Next
+
+        ' Pas de « billing » explicite : on prend la première qui n'est pas une livraison.
+        If type = "billing" Then
+            For Each a As JToken In liste
+                If Not String.Equals(Valeur(a, "type"), "shipping", StringComparison.OrdinalIgnoreCase) Then Return a
+            Next
+        End If
+        Return Nothing
+    End Function
+
+    ''' <summary>Les lignes 3, 4 et 5 d'une adresse, réunies — rares, mais QuickBooks les rend.</summary>
+    Private Shared Function Lignes3a5(adr As JToken) As String
+        Return String.Join(", ", New String() {Valeur(adr, "line3"), Valeur(adr, "line4"), Valeur(adr, "line5")}.
+                           Where(Function(x) x <> ""))
+    End Function
+
+    ''' <summary>Le premier numéro dont le type est l'un de ceux demandés, dans cet ordre de préférence.</summary>
+    Private Shared Function Telephone(t As JToken, ParamArray types As String()) As String
+        Dim liste As JArray = TryCast(If(t Is Nothing, Nothing, t("phone_numbers")), JArray)
+        If liste Is Nothing Then Return ""
+
+        For Each type As String In types
+            For Each p As JToken In liste
+                If String.Equals(Valeur(p, "type"), type, StringComparison.OrdinalIgnoreCase) Then
+                    Dim n As String = Valeur(p, "number")
+                    Dim ext As String = Valeur(p, "extension")
+                    Return If(ext = "", n, n & " poste " & ext)
+                End If
+            Next
+        Next
+        Return ""
+    End Function
+
+    ''' <summary>Le premier numéro qui n'est ni principal, ni mobile, ni fax — l'« autre » de la fiche.</summary>
+    Private Shared Function AutreTelephone(t As JToken) As String
+        Dim liste As JArray = TryCast(If(t Is Nothing, Nothing, t("phone_numbers")), JArray)
+        If liste Is Nothing Then Return ""
+
+        Dim pris As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase) From
+            {"primary", "work", "office", "home", "billing", "mobile", "fax"}
+        For Each p As JToken In liste
+            If Not pris.Contains(Valeur(p, "type")) Then Return Valeur(p, "number")
+        Next
+        Return ""
+    End Function
+
+    ''' <summary>Le courriel principal ; à défaut, le premier.</summary>
+    Private Shared Function CourrielDe(t As JToken) As JToken
+        Dim liste As JArray = TryCast(If(t Is Nothing, Nothing, t("emails")), JArray)
+        If liste Is Nothing OrElse liste.Count = 0 Then Return Nothing
+
+        For Each e As JToken In liste
+            If String.Equals(Valeur(e, "type"), "primary", StringComparison.OrdinalIgnoreCase) Then Return e
+        Next
+        Return liste(0)
+    End Function
+
+    ''' <summary>
+    ''' Ce qui n'a pas de colonne, réuni en un seul objet JSON — ou rien du tout
+    ''' quand la source n'a rien donné, pour ne pas remplir la table de « {} ».
+    ''' </summary>
+    Private Shared Function Reste(t As JToken, ParamArray noms As String()) As JToken
+        Dim o As New JObject()
+        For Each nom As String In noms
+            Dim v As JToken = If(t Is Nothing, Nothing, t(nom))
+            If v Is Nothing OrElse v.Type = JTokenType.Null Then Continue For
+            If TypeOf v Is JArray AndAlso CType(v, JArray).Count = 0 Then Continue For
+            If TypeOf v Is JObject AndAlso Not CType(v, JObject).HasValues Then Continue For
+            o(nom) = v
+        Next
+        Return If(o.HasValues, o, Nothing)
+    End Function
+
+    ''' <summary>
+    ''' Un article, en entier. Les quatre premières clés sont celles de l'import
+    ''' par fichier ; les autres — type, coût, unités, taxes de vente et
+    ''' d'achat, comptes de la source, quantité en main — n'existent que par
+    ''' Apideck (script T256). Les comptes de la source restent des NOMS : la
+    ''' correspondance avec le plan d'ici est un autre travail.
+    ''' </summary>
     Private Function VerserProduits(brut As JArray) As String
         Dim lignes As New JArray()
 
         For Each a As JToken In brut
             Dim o As New JObject()
+            ' — ce que l'import par fichier connaît déjà —
             o("name") = Valeur(a, "name", "code")
             o("description") = Valeur(a, "description", "sales_details.description")
             o("price") = Valeur(a, "unit_price", "sales_details.unit_price")
             o("taxable") = Valeur(a, "taxable")
+
+            ' — l'article lui-même —
+            o("source_id") = Valeur(a, "id")
+            o("code") = Valeur(a, "code", "display_id")
+            o("item_type") = Valeur(a, "type")
+            o("active") = Valeur(a, "active")
+            o("sold") = Valeur(a, "sold")
+            o("purchased") = Valeur(a, "purchased")
+            o("tracked") = Valeur(a, "tracked")
+            o("category") = Valeur(a, "tracking_category.name", "category_id")
+            o("parent_name") = Valeur(a, "parent.name")
+            o("currency") = Valeur(a, "currency")
+
+            ' — la vente et l'achat —
+            o("unit") = Valeur(a, "sales_details.unit_of_measure")
+            o("sales_tax_inclusive") = Valeur(a, "sales_details.tax_inclusive")
+            o("sales_tax_rate_name") = Valeur(a, "sales_details.tax_rate.name")
+            o("sales_tax_rate") = Valeur(a, "sales_details.tax_rate.rate")
+            o("purchase_price") = Valeur(a, "purchase_details.unit_price")
+            o("purchase_unit") = Valeur(a, "purchase_details.unit_of_measure")
+            o("purchase_tax_inclusive") = Valeur(a, "purchase_details.tax_inclusive")
+            o("purchase_tax_rate_name") = Valeur(a, "purchase_details.tax_rate.name")
+            o("purchase_tax_rate") = Valeur(a, "purchase_details.tax_rate.rate")
+
+            ' — les comptes de la source, et le stock —
+            o("income_account_name") = Valeur(a, "income_account.name")
+            o("income_account_code") = Valeur(a, "income_account.nominal_code", "income_account.code")
+            o("expense_account_name") = Valeur(a, "expense_account.name")
+            o("expense_account_code") = Valeur(a, "expense_account.nominal_code", "expense_account.code")
+            o("asset_account_name") = Valeur(a, "asset_account.name")
+            o("asset_account_code") = Valeur(a, "asset_account.nominal_code", "asset_account.code")
+            o("quantity") = Valeur(a, "quantity")
+            o("inventory_date") = Valeur(a, "inventory_date")
+
+            ' — la source —
+            o("source_created") = Valeur(a, "created_at")
+            o("source_updated") = Valeur(a, "updated_at")
+            o("extra") = Reste(a, "tracking_categories", "custom_fields", "department_id", "location_id",
+                               "subsidiary_id", "tax_schedule_id")
             lignes.Add(o)
         Next
 

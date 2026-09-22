@@ -1,5 +1,7 @@
 -- =============================================================================
 -- s0604ProcessImportJson
+-- ⚠ Version d'origine. Remplacée par Database/T256_Champs_complets_import_apideck.sql
+--   (toutes les colonnes Apideck) : c'est T256 qui fait foi.
 -- Lit staging.ImportFiles.JsonResult pour @ImportFileId, parse le JSON via
 -- OPENJSON, et insère les lignes dans staging.PartyImport (Client/Fournisseur)
 -- ou staging.ProductImport (Produit) selon TypeImport.

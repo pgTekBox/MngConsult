@@ -923,7 +923,8 @@ Public Class ImportDonnees
 
         For Each r As DataRow In lignes.Rows
             sb.Append("<tr><td>").Append(Ent(r("LineNumber"))).Append("</td>")
-            sb.Append("<td><b>").Append(H(Txt(r("Name")))).Append("</b></td>")
+            sb.Append("<td><b>").Append(H(Txt(r("Name")))).Append("</b>")
+            sb.Append(Detail(If(EstProduit, DetailProduit(r), DetailTiers(r)))).Append("</td>")
 
             If EstProduit Then
                 Dim d = Txt(r("Description"))
@@ -936,17 +937,33 @@ Public Class ImportDonnees
                 sb.Append("</td>")
             Else
                 Dim adresse = String.Join(", ", New String() {
-                    Txt(r("Address1")), Txt(r("Address2")), Txt(r("City")), Txt(r("Province")), Txt(r("PostalCode"))
+                    Txt(r("Address1")), Txt(r("Address2")), Txt(r("Address3")), Txt(r("City")), Txt(r("Province")),
+                    Txt(r("PostalCode")), Txt(r("Country"))
                 }.Where(Function(x) x <> ""))
                 Dim taxes = String.Join(" · ", New String() {
                     If(Txt(r("TPS")) <> "", "TPS " & Txt(r("TPS")), ""),
-                    If(Txt(r("TVQ")) <> "", "TVQ " & Txt(r("TVQ")), "")
+                    If(Txt(r("TVQ")) <> "", "TVQ " & Txt(r("TVQ")), ""),
+                    Txt(r("TaxRateName"))
+                }.Where(Function(x) x <> ""))
+                Dim telephones = String.Join(" · ", New String() {
+                    Txt(r("Phone")),
+                    If(Txt(r("Mobile")) <> "", "mobile " & Txt(r("Mobile")), ""),
+                    If(Txt(r("Fax")) <> "", "fax " & Txt(r("Fax")), ""),
+                    Txt(r("AltPhone"))
                 }.Where(Function(x) x <> ""))
 
                 sb.Append("<td>").Append(H(Txt(r("Attention")))).Append("</td>")
-                sb.Append("<td>").Append(H(Txt(r("Email")))).Append("</td>")
-                sb.Append("<td>").Append(H(Txt(r("Phone")))).Append("</td>")
-                sb.Append("<td>").Append(H(adresse)).Append("</td>")
+                sb.Append("<td>").Append(H(Txt(r("Email"))))
+                If Txt(r("WebSite")) <> "" Then sb.Append(Detail(Txt(r("WebSite"))))
+                sb.Append("</td>")
+                sb.Append("<td>").Append(H(telephones)).Append("</td>")
+                sb.Append("<td>").Append(H(adresse))
+                Dim livraison = String.Join(", ", New String() {
+                    Txt(r("ShipAddress1")), Txt(r("ShipAddress2")), Txt(r("ShipCity")), Txt(r("ShipProvince")),
+                    Txt(r("ShipPostalCode")), Txt(r("ShipCountry"))
+                }.Where(Function(x) x <> ""))
+                If livraison <> "" Then sb.Append(Detail("Livraison : " & livraison))
+                sb.Append("</td>")
                 sb.Append("<td>").Append(H(taxes)).Append("</td>")
             End If
 
@@ -984,6 +1001,70 @@ Public Class ImportDonnees
     Private Function Detail(texte As String) As String
         If texte = "" Then Return ""
         Return "<span class='idn-det'>" & H(texte) & "</span>"
+    End Function
+
+    ''' <summary>
+    ''' Ce qu'Apideck sait d'un tiers en plus des colonnes : prénom et nom,
+    ''' devise, conditions, statut… Une ligne sous le nom, seulement ce qui est
+    ''' renseigné. Un fichier CSV n'en donne rien, et la ligne reste vide.
+    ''' </summary>
+    Private Function DetailTiers(r As DataRow) As String
+        Dim nomPersonne = String.Join(" ", New String() {
+            Txt(r("Title")), Txt(r("FirstName")), Txt(r("MiddleName")), Txt(r("LastName")), Txt(r("Suffix"))
+        }.Where(Function(x) x <> ""))
+
+        Dim morceaux As New List(Of String)
+        If Txt(r("DisplayName")) <> "" AndAlso Txt(r("DisplayName")) <> Txt(r("Name")) Then morceaux.Add("affiché « " & Txt(r("DisplayName")) & " »")
+        If nomPersonne <> "" Then morceaux.Add(nomPersonne)
+        If Txt(r("ParentName")) <> "" Then morceaux.Add("sous " & Txt(r("ParentName")))
+        If Txt(r("Category")) <> "" Then morceaux.Add(Txt(r("Category")))
+        If Txt(r("Currency")) <> "" AndAlso Txt(r("Currency")) <> "CAD" Then morceaux.Add(Txt(r("Currency")))
+        If Txt(r("Terms")) <> "" Then morceaux.Add("conditions " & Txt(r("Terms")))
+        If Txt(r("PaymentMethod")) <> "" Then morceaux.Add("paie par " & Txt(r("PaymentMethod")))
+        If Txt(r("AccountName")) <> "" Then morceaux.Add("compte " & Txt(r("AccountName")))
+        If Not IsDBNull(r("Taxable")) AndAlso Not Convert.ToBoolean(r("Taxable")) Then morceaux.Add("non taxable")
+        If Not IsDBNull(r("IsProject")) AndAlso Convert.ToBoolean(r("IsProject")) Then morceaux.Add("projet")
+        If Txt(r("SourceStatus")) <> "" AndAlso Txt(r("SourceStatus")) <> "active" Then morceaux.Add("statut " & Txt(r("SourceStatus")))
+        If Txt(r("Note")) <> "" Then morceaux.Add(Tronquer(Txt(r("Note")), 120))
+        If Txt(r("SourceId")) <> "" Then morceaux.Add("id source " & Txt(r("SourceId")))
+        Return String.Join(" · ", morceaux)
+    End Function
+
+    ''' <summary>Même idée pour un article : type, code, coût, unités, comptes de la source, stock.</summary>
+    Private Function DetailProduit(r As DataRow) As String
+        Dim morceaux As New List(Of String)
+        If Txt(r("ItemType")) <> "" Then morceaux.Add(TypeArticle(Txt(r("ItemType"))))
+        If Txt(r("Code")) <> "" Then morceaux.Add("code " & Txt(r("Code")))
+        If Txt(r("Category")) <> "" Then morceaux.Add(Txt(r("Category")))
+        If Txt(r("ParentName")) <> "" Then morceaux.Add("sous " & Txt(r("ParentName")))
+        If Not IsDBNull(r("PurchasePrice")) AndAlso Convert.ToDecimal(r("PurchasePrice")) <> 0D Then
+            morceaux.Add("coût " & Convert.ToDecimal(r("PurchasePrice")).ToString("N2", Fr) & " $")
+        End If
+        If Txt(r("Unit")) <> "" Then morceaux.Add("par " & Txt(r("Unit")))
+        If Not IsDBNull(r("Quantity")) Then
+            morceaux.Add("en main " & Convert.ToDecimal(r("Quantity")).ToString("N2", Fr) &
+                         If(Txt(r("InventoryDate")) <> "", " au " & Convert.ToDateTime(r("InventoryDate")).ToString("yyyy-MM-dd"), ""))
+        End If
+        If Txt(r("IncomeAccountName")) <> "" Then morceaux.Add("revenu → " & Txt(r("IncomeAccountName")))
+        If Txt(r("ExpenseAccountName")) <> "" Then morceaux.Add("dépense → " & Txt(r("ExpenseAccountName")))
+        If Txt(r("AssetAccountName")) <> "" Then morceaux.Add("stock → " & Txt(r("AssetAccountName")))
+        If Txt(r("SalesTaxRateName")) <> "" Then morceaux.Add("taxe vente " & Txt(r("SalesTaxRateName")))
+        If Txt(r("PurchaseTaxRateName")) <> "" Then morceaux.Add("taxe achat " & Txt(r("PurchaseTaxRateName")))
+        If Txt(r("Currency")) <> "" AndAlso Txt(r("Currency")) <> "CAD" Then morceaux.Add(Txt(r("Currency")))
+        If Not IsDBNull(r("Active")) AndAlso Not Convert.ToBoolean(r("Active")) Then morceaux.Add("inactif")
+        If Txt(r("SourceId")) <> "" Then morceaux.Add("id source " & Txt(r("SourceId")))
+        Return String.Join(" · ", morceaux)
+    End Function
+
+    ''' <summary>Le type d'article d'Apideck, dit en français.</summary>
+    Private Shared Function TypeArticle(type As String) As String
+        Select Case type.ToLowerInvariant()
+            Case "inventory" : Return "article en stock"
+            Case "non_inventory" : Return "article hors stock"
+            Case "service" : Return "service"
+            Case "description" : Return "ligne descriptive"
+            Case Else : Return type
+        End Select
     End Function
 
 #End Region
