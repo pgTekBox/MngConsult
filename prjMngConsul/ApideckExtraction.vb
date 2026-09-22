@@ -755,7 +755,18 @@ Public Class ApideckExtraction
             o("tiers_id") = Valeur(tiers, "id")
             o("tiers") = Valeur(tiers, "display_name", "company_name", "name")
             o("devise") = Valeur(d, "currency")
-            o("sous_total") = Valeur(d, "sub_total")
+            ' QuickBooks ne rend pas de sous-total sur une facture fournisseur :
+            ' on le déduit du total et des taxes, sinon la facture arrive sans
+            ' sous-total et ne peut jamais boucler.
+            Dim sousTotal As String = Valeur(d, "sub_total")
+            If sousTotal = "" Then
+                Dim tot As Object = Nombre(Valeur(d, "total"))
+                Dim tax As Object = Nombre(Valeur(d, "total_tax"))
+                If tot IsNot Nothing Then
+                    sousTotal = (CDec(tot) - If(tax Is Nothing, 0D, CDec(tax))).ToString(Globalization.CultureInfo.InvariantCulture)
+                End If
+            End If
+            o("sous_total") = sousTotal
             o("taxes") = Valeur(d, "total_tax")
             o("total") = Valeur(d, "total")
             o("solde") = Valeur(d, "balance")
@@ -1294,7 +1305,18 @@ Public Class ApideckExtraction
             o("tiers_id") = Valeur(tiers, "id")
             o("tiers") = Valeur(tiers, "display_name", "company_name", "name")
             o("devise") = Valeur(d, "currency")
-            o("sous_total") = Valeur(d, "sub_total")
+            ' QuickBooks ne rend pas de sous-total sur une facture fournisseur :
+            ' on le déduit du total et des taxes, sinon la facture arrive sans
+            ' sous-total et ne peut jamais boucler.
+            Dim sousTotal As String = Valeur(d, "sub_total")
+            If sousTotal = "" Then
+                Dim tot As Object = Nombre(Valeur(d, "total"))
+                Dim tax As Object = Nombre(Valeur(d, "total_tax"))
+                If tot IsNot Nothing Then
+                    sousTotal = (CDec(tot) - If(tax Is Nothing, 0D, CDec(tax))).ToString(Globalization.CultureInfo.InvariantCulture)
+                End If
+            End If
+            o("sous_total") = sousTotal
             o("taxes") = Valeur(d, "total_tax")
             o("total") = Valeur(d, "total", "total_amount")
             o("statut") = Valeur(d, "status")
@@ -3686,7 +3708,15 @@ Public Class ApideckExtraction
             Dim v As JToken = t.SelectToken(c)
             If v Is Nothing OrElse v.Type = JTokenType.Null Then Continue For
 
-            Dim s As String = v.ToString()
+            ' Un nombre se rend avec le POINT décimal, quelle que soit la culture
+            ' du serveur : sous fr-CA, ToString() donnait « 1418,79 », que SQL
+            ' refusait en silence — et la facture arrivait sans total.
+            Dim s As String
+            If v.Type = JTokenType.Float OrElse v.Type = JTokenType.Integer Then
+                s = Convert.ToString(CType(v, JValue).Value, Globalization.CultureInfo.InvariantCulture)
+            Else
+                s = v.ToString()
+            End If
             If s <> "" Then Return s
         Next
         Return ""
