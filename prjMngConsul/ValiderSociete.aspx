@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderSociete.aspx.vb" Inherits="MngConsul.ValiderSociete" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Comparer la fiche d'entreprise — 60Sec-AI
@@ -101,6 +102,7 @@
     </p>
 
     <asp:Literal ID="litMsg" runat="server" />
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="company-info" />
 
     <div class="bilan">
         <div class="bil ec"><div class="l">Écarts</div>

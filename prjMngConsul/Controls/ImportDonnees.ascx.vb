@@ -56,6 +56,7 @@ Public Class ImportDonnees
         Public Nouveaux As String
         Public Prompt As String
         Public Liste As String
+        Public Ressource As String       ' la clé Apideck de cette liste
         Public Colonnes As List(Of Colonne)
     End Class
 
@@ -80,20 +81,20 @@ Public Class ImportDonnees
                 Return New Definition With {
                     .TypeImport = "Fournisseur", .Titre = "Importer les fournisseurs", .Icone = "🏭",
                     .Un = "fournisseur", .Des = "fournisseurs", .Nouveaux = "nouveaux fournisseurs",
-                    .Prompt = "PROMPT_IMPORT_FOURNISSEURS", .Liste = "~/wbfSuppliers.aspx",
+                    .Prompt = "PROMPT_IMPORT_FOURNISSEURS", .Liste = "~/wbfSuppliers.aspx", .Ressource = "suppliers",
                     .Colonnes = ColonnesTiers("fournisseur")}
             Case "PRODUITS"
                 Return New Definition With {
                     .TypeImport = "Produit", .Titre = "Importer les produits et services", .Icone = "🏷️",
                     .Un = "produit ou service", .Des = "produits et services",
                     .Nouveaux = "nouveaux produits et services",
-                    .Prompt = "PROMPT_IMPORT_PRODUITS", .Liste = "~/wbfProducts.aspx",
+                    .Prompt = "PROMPT_IMPORT_PRODUITS", .Liste = "~/wbfProducts.aspx", .Ressource = "invoice-items",
                     .Colonnes = ColonnesProduits()}
             Case Else
                 Return New Definition With {
                     .TypeImport = "Client", .Titre = "Importer les clients", .Icone = "👥",
                     .Un = "client", .Des = "clients", .Nouveaux = "nouveaux clients",
-                    .Prompt = "PROMPT_IMPORT_CLIENTS", .Liste = "~/wbfCustomers.aspx",
+                    .Prompt = "PROMPT_IMPORT_CLIENTS", .Liste = "~/wbfCustomers.aspx", .Ressource = "customers",
                     .Colonnes = ColonnesTiers("client")}
         End Select
     End Function
@@ -179,6 +180,9 @@ Public Class ImportDonnees
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         ucSource.ColonnesHtml = TableauColonnes()
+
+        ' Le bouton QuickBooks ne rapatrie que la liste de cet écran.
+        ucApideck.Ressources = Def.Ressource
 
         If IsPostBack Then Return
 

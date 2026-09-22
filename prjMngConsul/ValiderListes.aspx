@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderListes.aspx.vb" Inherits="MngConsul.ValiderListes" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Listes de structure importées — 60Sec-AI
@@ -87,6 +88,7 @@
         savoir ce que la comptabilité source contient avant de décider quoi en faire,
         et avoir la donnée sous la main le jour où la fonction existera.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="payment-methods,tracking-categories,departments,locations" />
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litListe" runat="server" />

@@ -287,6 +287,7 @@
     <Content Include="Controls\EtapesReprise.ascx" />
     <Content Include="Controls\ImportDonnees.ascx" />
     <Content Include="Controls\SourceDonnees.ascx" />
+    <Content Include="Controls\ImportApideckBouton.ascx" />
     <Content Include="Controls\LeftMenu.ascx" />
     <Content Include="Controls\PdfViewer.ascx" />
     <Content Include="css\JsonViewer.css" />
@@ -763,6 +764,7 @@
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="ImportComptableBase.vb" />
+    <Compile Include="ApideckExtraction.vb" />
     <Compile Include="ImportPlanComptable.aspx.designer.vb">
       <DependentUpon>ImportPlanComptable.aspx</DependentUpon>
     </Compile>
@@ -953,6 +955,13 @@
     </Compile>
     <Compile Include="Controls\SourceDonnees.ascx.designer.vb">
       <DependentUpon>SourceDonnees.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\ImportApideckBouton.ascx.vb">
+      <DependentUpon>ImportApideckBouton.ascx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Controls\ImportApideckBouton.ascx.designer.vb">
+      <DependentUpon>ImportApideckBouton.ascx</DependentUpon>
     </Compile>
     <Compile Include="Controls\LeftMenu.ascx.vb">
       <DependentUpon>LeftMenu.ascx</DependentUpon>

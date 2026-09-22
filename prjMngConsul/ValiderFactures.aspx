@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderFactures.aspx.vb" Inherits="MngConsul.ValiderFactures" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Valider les factures importées — 60Sec-AI
@@ -127,6 +128,7 @@
     </p>
 
     <asp:Literal ID="litMsg" runat="server" />
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="invoices,bills" />
 
     <div class="barre">
         <asp:DropDownList ID="ddlType" runat="server" AutoPostBack="true" CssClass="btn">

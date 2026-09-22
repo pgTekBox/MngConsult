@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderSoldesBancaires.aspx.vb" Inherits="MngConsul.ValiderSoldesBancaires" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Soldes bancaires importés — 60Sec-AI
@@ -85,6 +86,7 @@
         la comptabilité source tient, et ce qu'ils portent — de quoi confronter une reprise
         à son origine avant le premier rapprochement.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="bank-accounts" />
 
     <asp:Literal ID="litRepere" runat="server" />
     <asp:Literal ID="litTableau" runat="server" />

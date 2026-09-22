@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderGrandLivre.aspx.vb" Inherits="MngConsul.ValiderGrandLivre" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Grand livre importé — 60Sec-AI
@@ -102,6 +103,7 @@
         Il montre, compte par compte, ce que la comptabilité source contient sur la période
         demandée — de quoi confronter une reprise à son origine, ligne à ligne.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="general-ledger" />
 
     <asp:Literal ID="litRepere" runat="server" />
 

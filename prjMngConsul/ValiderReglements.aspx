@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderReglements.aspx.vb" Inherits="MngConsul.ValiderReglements" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Règlements importés — 60Sec-AI
@@ -100,6 +101,7 @@
         ce qui n'en paie qu'une part, et ce qui ne règle encore rien — l'<b>acompte</b>.
         C'est ce dernier qui fait diverger la balance âgée du solde des factures.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="payments,bill-payments,refunds" />
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litRepere" runat="server" />

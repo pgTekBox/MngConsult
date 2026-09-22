@@ -69,6 +69,9 @@ Partial Public Class ImportDonnees
     '''<summary>ucSource</summary>
     Protected WithEvents ucSource As Global.MngConsul.SourceDonnees
 
+    '''<summary>ucApideck</summary>
+    Protected WithEvents ucApideck As Global.MngConsul.ImportApideckBouton
+
     '''<summary>litUn</summary>
     Protected WithEvents litUn As Global.System.Web.UI.WebControls.Literal
 

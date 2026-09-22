@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderNonRapprochees.aspx.vb" Inherits="MngConsul.ValiderNonRapprochees" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Opérations non rapprochées — 60Sec-AI
@@ -94,6 +95,7 @@
         avant la bascule et encaissés après. Cet écran montre ce que la comptabilité source
         tenait pour non pointé — rien ne s'applique à la comptabilité d'ici.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="uncleared" />
 
     <asp:Literal ID="litRepere" runat="server" />
 

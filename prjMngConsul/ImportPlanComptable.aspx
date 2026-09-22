@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ImportPlanComptable.aspx.vb" Inherits="MngConsul.ImportPlanComptable" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 <%@ Register Src="~/Controls/EtapesReprise.ascx" TagPrefix="uc" TagName="EtapesReprise" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
@@ -381,6 +382,8 @@
             </p>
         </div>
     </asp:Panel>
+
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="ledger-accounts" />
 
     <!-- ══════════ 1 · LE FICHIER ET SON ORIGINE ══════════ -->
     <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul

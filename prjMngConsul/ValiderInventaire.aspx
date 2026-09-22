@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderInventaire.aspx.vb" Inherits="MngConsul.ValiderInventaire" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Inventaire importé — 60Sec-AI
@@ -102,6 +103,7 @@
         Sans elles, le premier coût des marchandises vendues est faux — et la marge avec.
         Rien ici ne s'applique à la comptabilité.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="inventory" />
 
     <asp:Literal ID="litRepere" runat="server" />
     <asp:Literal ID="litControle" runat="server" />

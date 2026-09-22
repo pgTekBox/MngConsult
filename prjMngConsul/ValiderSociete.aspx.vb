@@ -117,8 +117,7 @@ Public Class ValiderSociete
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
             litChamps.Text =
                 "<div class=""rien"">Aucune fiche d'entreprise en préparation." &
-                "<br />Lancez une importation QuickBooks en cochant " &
-                "<b>Informations de la société</b>, puis revenez ici.</div>"
+                "<br />Le bouton <b>Importer depuis QuickBooks</b>, ci-dessus, la rapatrie en direct.</div>"
             litEcarts.Text = "0"
             litNouveaux.Text = "0"
             litIdentiques.Text = "0"

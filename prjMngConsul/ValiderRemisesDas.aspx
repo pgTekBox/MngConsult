@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderRemisesDas.aspx.vb" Inherits="MngConsul.ValiderRemisesDas" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Remises de DAS importées — 60Sec-AI
@@ -113,6 +114,7 @@
         c'est le chiffre que la bascule doit reprendre, sans quoi la première remise dans
         l'application sera fausse. Rien ici ne s'applique à la comptabilité.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="das" />
 
     <asp:Literal ID="litRepere" runat="server" />
     <asp:Literal ID="litDus" runat="server" />

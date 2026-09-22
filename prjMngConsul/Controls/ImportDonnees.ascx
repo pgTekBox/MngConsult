@@ -1,5 +1,6 @@
 ﻿<%@ Control Language="vb" AutoEventWireup="false" CodeBehind="ImportDonnees.ascx.vb" Inherits="MngConsul.ImportDonnees" %>
 <%@ Register Src="~/Controls/SourceDonnees.ascx" TagPrefix="uc" TagName="SourceDonnees" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <%-- L'importation des clients, des fournisseurs ou des produits et services :
      un même écran, trois usages. Chaque page le pose avec son Genre. --%>
@@ -169,6 +170,8 @@
             </div>
         </div>
     </asp:Panel>
+
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" />
 
     <!-- ══════════ 1 · LE FICHIER ET SON ORIGINE ══════════ -->
     <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul

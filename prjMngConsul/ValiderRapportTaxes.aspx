@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderRapportTaxes.aspx.vb" Inherits="MngConsul.ValiderRapportTaxes" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Rapport de taxes importé — 60Sec-AI
@@ -84,6 +85,7 @@
         aucun compte de taxe, aucune déclaration. Il sert à confronter ce que la source
         déclare à ce que la reprise a repris.
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="tax-rates,tax-summary" />
 
     <asp:Literal ID="litRepere" runat="server" />
     <asp:Literal ID="litTableau" runat="server" />

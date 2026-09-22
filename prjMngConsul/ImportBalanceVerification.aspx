@@ -1,6 +1,7 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" Async="true" MasterPageFile="~/Site.Master"
     CodeBehind="ImportBalanceVerification.aspx.vb" Inherits="MngConsul.ImportBalanceVerification" %>
 <%@ Register Src="~/Controls/SourceDonnees.ascx" TagPrefix="uc" TagName="SourceDonnees" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="titleContent" ContentPlaceHolderID="TitleContent" runat="server">
     Import Balance de Vérification
@@ -225,6 +226,8 @@
     <%-- Une seule boîte : dire d'où vient le fichier et le déposer sont un seul
          geste. Repliable, et refermée une fois la balance importée — ce qui
          compte est alors le résultat, plus haut. --%>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="trial-balance" />
+
     <asp:Panel ID="pnlUpload" runat="server">
         <details class="imp-section" id="detFichier" runat="server" open="open">
             <summary>

@@ -197,7 +197,7 @@ Public Class ValiderFactures
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
             litBilan.Text = ""
             litDocs.Text = "<div class='vide'>Aucune facture en préparation pour ce type. " &
-                           "Lancez une extraction depuis l'écran <b>Importer depuis QuickBooks</b>.</div>"
+                           "Le bouton <b>Importer depuis QuickBooks</b>, ci-dessus, les rapatrie en direct.</div>"
             Return
         End If
 

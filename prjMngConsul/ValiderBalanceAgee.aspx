@@ -1,5 +1,6 @@
 ﻿<%@ Page Language="VB" AutoEventWireup="false" MasterPageFile="~/Site.Master"
     CodeBehind="ValiderBalanceAgee.aspx.vb" Inherits="MngConsul.ValiderBalanceAgee" %>
+<%@ Register Src="~/Controls/ImportApideckBouton.ascx" TagPrefix="uc" TagName="ImportApideckBouton" %>
 
 <asp:Content ID="cTitle" ContentPlaceHolderID="TitleContent" runat="server">
     Balance âgée importée — 60Sec-AI
@@ -91,6 +92,7 @@
         comptabilité source. Son rôle est de répondre à une seule question — les factures
         que vous vous apprêtez à créer totalisent-elles bien ce que la source annonce ?
     </p>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="aged-debtors,aged-creditors" />
 
     <asp:Literal ID="litOnglets" runat="server" />
     <asp:Literal ID="litRepere" runat="server" />

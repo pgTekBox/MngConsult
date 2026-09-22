@@ -73,8 +73,7 @@ Public Class ValiderListes
             litNote.Text = ""
             litListe.Text =
                 "<div class=""rien"">Aucune liste de structure en préparation." &
-                "<br />Lancez une importation QuickBooks en cochant les ressources du groupe " &
-                "<b>Structure</b>, puis revenez ici.</div>"
+                "<br />Le bouton <b>Importer depuis QuickBooks</b>, ci-dessus, les rapatrie en direct.</div>"
             Return
         End If
 
