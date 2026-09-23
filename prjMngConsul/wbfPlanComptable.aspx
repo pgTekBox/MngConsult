@@ -306,7 +306,8 @@
         Modal="true"
         VisibleOnPageLoad="false"
         Behaviors="Close,Move,Resize"
-        DestroyOnClose="true"
+        DestroyOnClose="false"
+        ReloadOnShow="true"
         ClientIDMode="Static"
         Title="Ajouter / Modifier un compte"
         OnClientClose="rwCompte_OnClientClose">
