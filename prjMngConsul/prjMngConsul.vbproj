@@ -506,6 +506,7 @@
     <Content Include="ImportFournisseurs.aspx" />
     <Content Include="ImportProduits.aspx" />
     <Content Include="importcomptable.html" />
+    <Content Include="PlanReprise.html" />
     <Content Include="rendu.html" />
     <Content Include="PlaidAccounts.aspx" />
     <Content Include="PlaidCreateLinkToken.aspx" />

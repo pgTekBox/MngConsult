@@ -1,0 +1,295 @@
+﻿<!doctype html>
+<html lang="fr-CA">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>60Sec-AI — Plan de reprise d'une comptabilité QuickBooks</title>
+<style>
+    :root {
+        --ink: #020617; --ink-2: #0f172a; --body: #475569; --muted: #64748b; --faint: #94a3b8;
+        --line: #e2e8f0; --line-2: #f1f5f9; --bg: #ffffff; --bg-2: #f8fafc;
+        --blue: #1d4ed8; --blue-2: #2563eb; --blue-bg: #eff6ff;
+        --emerald: #047857; --emerald-bg: #ecfdf5;
+        --amber: #b45309; --amber-bg: #fffbeb;
+        --rose: #be123c; --rose-bg: #fff1f2;
+        --violet: #6d28d9; --violet-bg: #f5f3ff;
+    }
+    * { box-sizing: border-box }
+    html, body { margin: 0; background: var(--bg); color: var(--ink-2);
+        font: 14px/1.6 -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif }
+    .page { max-width: 980px; margin: 0 auto; padding: 28px 24px 60px }
+
+    header { display: flex; align-items: center; gap: 16px; margin-bottom: 10px }
+    header .ico { width: 52px; height: 52px; border-radius: 14px; border: 1px solid var(--line);
+        background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
+        display: flex; align-items: center; justify-content: center; font-size: 24px }
+    h1 { font-size: 24px; font-weight: 800; margin: 0; letter-spacing: -.01em }
+    header .sub { font-size: 13.5px; color: var(--muted); margin-top: 3px }
+    .lede { font-size: 15px; color: var(--body); margin: 14px 0 22px; line-height: 1.65 }
+    .lede b { color: var(--ink-2) }
+
+    nav.toc { border: 1px solid var(--line); border-radius: 14px; background: var(--bg-2); padding: 14px 18px; margin-bottom: 26px }
+    nav.toc .t { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: .06em; color: var(--muted); margin-bottom: 8px }
+    nav.toc ol { margin: 0; padding-left: 20px; columns: 2; column-gap: 28px }
+    nav.toc li { margin: 3px 0; break-inside: avoid }
+    nav.toc a { color: var(--blue); text-decoration: none; font-weight: 600 }
+    nav.toc a:hover { text-decoration: underline }
+
+    h2 { font-size: 19px; font-weight: 800; margin: 34px 0 6px; padding-top: 6px; letter-spacing: -.01em; display: flex; align-items: center; gap: 10px }
+    h2 .n { width: 30px; height: 30px; border-radius: 999px; flex: none; background: var(--blue-bg); color: var(--blue);
+        border: 1px solid #bfdbfe; font-size: 13px; display: flex; align-items: center; justify-content: center }
+    h3 { font-size: 15px; font-weight: 800; margin: 20px 0 6px; color: var(--ink-2) }
+    p { margin: 8px 0; color: var(--body) }
+    p b, li b { color: var(--ink-2) }
+    ul, ol { margin: 8px 0 8px; padding-left: 22px; color: var(--body) }
+    li { margin: 4px 0 }
+    code { font: 12.5px ui-monospace, Menlo, Consolas, monospace; background: var(--line-2); padding: 1px 6px; border-radius: 6px; color: var(--ink-2) }
+
+    .card { border: 1px solid var(--line); border-radius: 14px; padding: 16px 18px; margin: 12px 0; background: var(--bg) }
+    .card.blue { background: var(--blue-bg); border-color: #bfdbfe }
+    .card.amber { background: var(--amber-bg); border-color: #fde68a }
+    .card.rose { background: var(--rose-bg); border-color: #fecdd3 }
+    .card.green { background: var(--emerald-bg); border-color: #a7f3d0 }
+    .card.violet { background: var(--violet-bg); border-color: #ddd6fe }
+    .card .t { font-weight: 800; color: var(--ink-2); margin-bottom: 4px; display: flex; align-items: center; gap: 8px }
+
+    .etat { display: inline-block; padding: 2px 9px; border-radius: 999px; font-size: 11px; font-weight: 800; white-space: nowrap; vertical-align: middle }
+    .etat.fait { background: #d1fae5; color: #065f46 }
+    .etat.partiel { background: #fef3c7; color: #92400e }
+    .etat.afaire { background: #fee2e2; color: #991b1b }
+    .etat.regle { background: var(--violet-bg); color: var(--violet) }
+
+    table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 10px 0 14px; background: var(--bg); border: 1px solid var(--line); border-radius: 12px; overflow: hidden }
+    th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .04em; color: var(--muted);
+        background: var(--bg-2); border-bottom: 1px solid var(--line); padding: 9px 11px; font-weight: 800 }
+    td { border-bottom: 1px solid var(--line-2); padding: 8px 11px; vertical-align: top; color: var(--ink-2) }
+    tr:last-child td { border-bottom: 0 }
+    td.dim { color: var(--muted) }
+
+    .flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin: 14px 0 }
+    .flow .step { border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; background: var(--bg-2); position: relative }
+    .flow .step .k { font-size: 11px; font-weight: 800; color: var(--blue); text-transform: uppercase; letter-spacing: .05em }
+    .flow .step .v { font-weight: 700; color: var(--ink-2); font-size: 13px; margin-top: 2px }
+    .flow .step .d { font-size: 12px; color: var(--muted); margin-top: 2px }
+    @media (max-width: 760px) { .flow { grid-template-columns: 1fr 1fr } nav.toc ol { columns: 1 } }
+
+    .check { list-style: none; padding: 0 }
+    .check li { padding-left: 28px; position: relative }
+    .check li::before { content: "☐"; position: absolute; left: 4px; top: 0; color: var(--faint); font-size: 16px }
+
+    footer { margin-top: 40px; padding-top: 14px; border-top: 1px solid var(--line); font-size: 12px; color: var(--faint) }
+</style>
+</head>
+<body>
+<div class="page">
+
+<header>
+    <div class="ico">🧭</div>
+    <div>
+        <h1>Plan de reprise d'une comptabilité QuickBooks</h1>
+        <div class="sub">Fermeture au 31 décembre 2025, rejeu de toutes les transactions de 2026</div>
+    </div>
+</header>
+
+<p class="lede">
+    La reprise se fait en deux temps. <b>Un point de départ</b> : la situation au 31 décembre 2025,
+    reprise en une seule écriture d'ouverture. <b>Puis le détail</b> : chaque transaction de 2026,
+    factures, règlements, écritures, mouvements bancaires, rejouée une à une à sa date. Au bout,
+    le grand livre de 60Sec-AI est identique à celui de QuickBooks au jour de la bascule finale,
+    compte par compte, et l'on peut fermer QuickBooks.
+</p>
+
+<nav class="toc">
+    <div class="t">Les étapes</div>
+    <ol>
+        <li><a href="#s0">Préparer la compagnie</a></li>
+        <li><a href="#s1">Relier QuickBooks</a></li>
+        <li><a href="#s2">Le plan comptable</a></li>
+        <li><a href="#s3">Les tiers et les produits</a></li>
+        <li><a href="#s4">L'écriture d'ouverture au 31 décembre</a></li>
+        <li><a href="#s5">Les factures ouvertes au 31 décembre</a></li>
+        <li><a href="#s6">Les transactions de 2026</a></li>
+        <li><a href="#s7">Le contrôle final</a></li>
+        <li><a href="#s8">Les règles à ne pas contourner</a></li>
+        <li><a href="#s9">État du code, étape par étape</a></li>
+    </ol>
+</nav>
+
+<div class="flow">
+    <div class="step"><div class="k">0 · 1</div><div class="v">Préparer, relier</div><div class="d">périodes, liaison Apideck</div></div>
+    <div class="step"><div class="k">2 · 3</div><div class="v">Structure</div><div class="d">plan, tiers, produits</div></div>
+    <div class="step"><div class="k">4 · 5</div><div class="v">31 décembre</div><div class="d">ouverture, factures ouvertes</div></div>
+    <div class="step"><div class="k">6</div><div class="v">2026</div><div class="d">tout le détail, à sa date</div></div>
+    <div class="step"><div class="k">7</div><div class="v">Contrôle</div><div class="d">balance à aujourd'hui</div></div>
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s0"><span class="n">0</span>Préparer la compagnie</h2>
+<p>Avant toute extraction, la compagnie doit savoir où commence sa comptabilité tenue ici.</p>
+<ul>
+    <li><b>Date de bascule</b> : le 31 décembre 2025. Tout ce qui est antérieur n'entre que par l'écriture d'ouverture ; tout ce qui est postérieur entre en détail.</li>
+    <li><b>Périodes</b> : l'exercice 2025 fermé, l'exercice 2026 ouvert du 1<sup>er</sup> janvier. Une transaction 2026 doit trouver sa période, sinon elle ne peut pas s'écrire.</li>
+    <li><b>Comptes par défaut</b> (paramètres de la compagnie) : comptes clients, fournisseurs, ventes, achats, TPS et TVQ à recevoir et à payer, bénéfices non répartis. L'écriture d'ouverture et le rejeu s'en servent.</li>
+    <li><b>Statuts de taxes</b> : TAXABLE et EXEMPT existent pour la compagnie ; les lignes de factures les reçoivent selon leur code de taxe.</li>
+</ul>
+<div class="card amber"><div class="t">⚠️ À trancher une fois</div>
+    Une reprise qui change de date de bascule en cours de route mélange deux logiques. La date se fixe ici et ne bouge plus.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s1"><span class="n">1</span>Relier QuickBooks</h2>
+<p>Écran <b>QuickBooks, en direct</b>. Le client relie sa comptabilité une fois, dans la page hébergée par Apideck ; 60Sec-AI ne voit jamais ses identifiants. Ensuite, chaque écran d'import porte son propre bouton « Importer depuis QuickBooks » et ne rapatrie que ce qu'il sait montrer.</p>
+<ul>
+    <li>Tout ce qui est rapatrié va d'abord en <b>préparation</b> (tables <code>staging</code>). Rien n'entre en comptabilité sans un geste explicite.</li>
+    <li>Une extraction relit toujours toute la source : la précédente du même type est remplacée. Ce qui a déjà été créé dans l'application reste intact.</li>
+    <li>La <b>passerelle</b> sert pour ce que l'API unifiée ne couvre pas : balance de vérification, grand livre, rapports de taxes, comptes bancaires, dépôts et virements, budgets, feuilles de temps, pièces jointes de toutes les entités.</li>
+</ul>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s2"><span class="n">2</span>Le plan comptable</h2>
+<p>C'est la fondation : chaque transaction de 2026 et chaque ligne de l'ouverture doit trouver son compte ici.</p>
+<ol>
+    <li><b>Importer</b> la liste des comptes (Plan comptable ▸ Importer depuis QuickBooks). QuickBooks en ligne n'a pas de numéros de comptes : la reconnaissance se fait par le <b>nom</b>.</li>
+    <li><b>Décider la correspondance</b> de chaque compte source : lier à un compte existant d'ici, ou créer. Un compte non décidé bloquera plus tard toute transaction qui le touche.</li>
+    <li><b>Appliquer</b> : les comptes manquants sont créés au plan de la compagnie, et chaque compte source garde son lien vers le compte d'ici.</li>
+</ol>
+<div class="card blue"><div class="t">Pourquoi avant tout le reste</div>
+    Les lignes de factures, les écritures de journal, les dépôts et les budgets nomment tous des comptes. Tant que la correspondance n'est pas complète, ces données s'affichent avec la mention « en préparation, pas encore appliqué » et ne peuvent pas être passées.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s3"><span class="n">3</span>Les tiers et les produits</h2>
+<p>Écrans <b>Clients</b>, <b>Fournisseurs</b>, <b>Produits et services</b>. Pour chacun : Importer depuis QuickBooks, vérifier la liste, <b>Créer</b>.</p>
+<ul>
+    <li>Tous les champs de la source sont repris : identité, adresses de facturation et de livraison, téléphones, courriel, site web, devise, conditions de paiement, taxes, comptes de la source, coût d'achat, quantités en stock…</li>
+    <li>Chaque fiche créée garde l'<b>identifiant QuickBooks</b>. C'est lui qui permet aux factures de reconnaître leur tiers et leurs produits, et qui empêche de créer deux fois la même fiche.</li>
+    <li>Un tiers ou un produit qui existe déjà n'est pas recréé : il est relié.</li>
+</ul>
+<div class="card violet"><div class="t">Règle de la préparation</div>
+    Une facture reconnaît son client, son fournisseur et ses produits <b>parmi ce qui a été importé et créé par ces écrans</b>, jamais parmi ce qui a été saisi à la main dans l'application. L'ordre compte : tiers et produits d'abord, factures ensuite.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s4"><span class="n">4</span>L'écriture d'ouverture au 31 décembre 2025</h2>
+<p>Écran <b>Balance de vérification</b>. On extrait la balance <b>arrêtée au 31 décembre 2025</b> — pas à aujourd'hui — et on la transforme en une seule écriture de journal datée du 31 décembre.</p>
+<h3>Ce que contient l'écriture</h3>
+<ul>
+    <li><b>Les comptes de bilan seulement</b> : actifs, passifs, capitaux. Une ligne par compte, au débit ou au crédit selon son solde.</li>
+    <li><b>Les comptes de résultats de 2025 ne sont pas repris.</b> Leur solde net (revenus moins charges) est versé aux bénéfices non répartis, exactement comme QuickBooks le fait lui-même à la fermeture d'exercice. C'est ce qui donne un état des résultats 2026 propre, sans traîner l'année précédente.</li>
+    <li><b>Comptes clients et fournisseurs</b> : pour leur solde global. Le détail des factures ouvertes vient à l'étape 5, sans réécrire ces comptes.</li>
+    <li><b>Comptes de banque</b> : à leur solde <i>comptable</i>, pas celui du relevé. Les chèques émis avant le 31 décembre et encaissés en 2026 viennent des opérations non rapprochées, pour le premier rapprochement bancaire.</li>
+</ul>
+<h3>Ce que l'écran vérifie avant d'écrire</h3>
+<ul class="check">
+    <li>La balance est équilibrée : total des débits = total des crédits.</li>
+    <li>Chaque compte de la balance est lié à un compte d'ici (étape 2 terminée).</li>
+    <li>Aucune écriture d'ouverture n'existe déjà pour cette compagnie à cette date. Une seconde extraction propose de remplacer la première, qui est alors contre-passée — jamais dupliquée.</li>
+    <li>Le compte des bénéfices non répartis est défini dans les paramètres.</li>
+</ul>
+<div class="card green"><div class="t">Résultat</div>
+    Le bilan de 60Sec-AI au 31 décembre 2025 est celui de QuickBooks à la même date. À partir du 1<sup>er</sup> janvier 2026, les deux livres avancent en parallèle.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s5"><span class="n">5</span>Les factures ouvertes au 31 décembre</h2>
+<p>Les factures clients et fournisseurs de 2025 encore impayées au 31 décembre doivent exister ici : pour l'âge des comptes, pour recevoir les paiements de 2026, pour les relances. Mais leur montant est <b>déjà</b> dans les comptes clients et fournisseurs de l'écriture d'ouverture.</p>
+<ul>
+    <li>Elles sont créées comme <b>documents d'ouverture</b> : présents dans les grilles, avec leur solde, mais <b>sans écriture au grand livre</b>. Sinon on compterait deux fois.</li>
+    <li>L'écran vérifie que la somme des soldes de ces factures égale le solde des comptes clients (et fournisseurs) de la balance. Un écart signale une facture manquante ou un solde faux dans la source.</li>
+    <li>Un paiement de 2026 qui règle une de ces factures s'écrit normalement : banque contre comptes clients.</li>
+</ul>
+<div class="card amber"><div class="t">⚠️ Mode à construire</div>
+    Aujourd'hui l'écran des factures crée des brouillons destinés à être comptabilisés. Le mode « document d'ouverture, comptabilisé sans écriture » n'existe pas encore.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s6"><span class="n">6</span>Les transactions de 2026</h2>
+<p>Tout ce qui s'est passé du 1<sup>er</sup> janvier 2026 à aujourd'hui, rejoué à sa date, par nature et dans cet ordre. Chaque transaction créée garde son identifiant QuickBooks : une seconde extraction reconnaît ce qui est déjà passé et n'en crée pas un double. On peut donc reprendre en plusieurs fois, jusqu'au jour où l'on ferme QuickBooks.</p>
+
+<table>
+    <tr><th>Ordre</th><th>Nature</th><th>Ce que QuickBooks donne</th><th>Ce qui est créé ici</th><th>État</th></tr>
+    <tr><td>1</td><td><b>Factures clients et fournisseurs</b></td><td class="dim">invoices, bills — entête, lignes, tiers, taxes</td><td>documents créés en brouillon, puis <b>comptabilisés</b> à leur date : écriture ventes/achats, taxes, comptes clients ou fournisseurs</td><td><span class="etat partiel">partiel</span></td></tr>
+    <tr><td>2</td><td><b>Notes de crédit, dépenses, reçus de vente</b></td><td class="dim">credit-notes, bill-credit-notes, expenses, sales-receipts</td><td>documents de leur type, comptabilisés ; le reçu de vente crée aussi son encaissement</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>3</td><td><b>Encaissements, décaissements, remboursements</b></td><td class="dim">payments, bill-payments, refunds — avec leurs imputations</td><td>règlements imputés aux factures (y compris celles d'ouverture), écriture banque contre comptes clients ou fournisseurs ; les acomptes sans facture restent en avance</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>4</td><td><b>Écritures de journal</b></td><td class="dim">journal-entries — lignes débit/crédit par compte</td><td>écritures de journal telles quelles, sur les comptes liés</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>5</td><td><b>Dépôts et virements bancaires</b></td><td class="dim">Deposit, Transfer — par la passerelle</td><td>écritures de banque ; un dépôt qui regroupe des encaissements déjà passés ne réécrit pas ceux-ci, il les pointe</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6</td><td><b>Remises de DAS</b></td><td class="dim">grand livre, comptes de retenues</td><td>décaissements vers le fédéral et le Québec</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>7</td><td><b>Paie</b></td><td class="dim">non exposée par QuickBooks</td><td>par fichier, ou par les écritures de journal de paie déjà passées à l'étape 4</td><td><span class="etat partiel">partiel</span></td></tr>
+</table>
+
+<h3>Pourquoi cet ordre</h3>
+<ul>
+    <li>Une facture avant son règlement : le règlement s'impute sur elle.</li>
+    <li>Un règlement avant le dépôt qui le regroupe : le dépôt pointe des encaissements existants au lieu de les recréer.</li>
+    <li>Les écritures de journal après les documents : beaucoup d'entre elles corrigent ou reclassent ce que les documents ont écrit.</li>
+</ul>
+
+<h3>Ce qui fait échouer une transaction, et ce qu'on en fait</h3>
+<ul>
+    <li><b>Tiers absent</b> : la facture attend que son client ou fournisseur soit importé puis créé. Elle n'est jamais créée sans tiers.</li>
+    <li><b>Compte non lié</b> : la ligne attend que le plan comptable soit appliqué. Pour une facture, ce n'est pas bloquant à la création du brouillon, ça l'est à la comptabilisation.</li>
+    <li><b>Taxes qui ne bouclent pas</b> : sous-total + TPS + TVQ doit faire le total au cent près. La répartition automatique s'appuie sur les taux importés ; les cases TPS et TVQ restent corrigeables sur l'écran des factures.</li>
+    <li><b>Doublon</b> : une transaction dont l'identifiant QuickBooks est déjà passé est ignorée et signalée, jamais recréée.</li>
+</ul>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s7"><span class="n">7</span>Le contrôle final</h2>
+<p>Quand tout 2026 est rejoué : une balance de vérification extraite <b>à aujourd'hui</b> dans QuickBooks, comparée compte par compte à celle de 60Sec-AI.</p>
+<ul>
+    <li>Écart nul partout : la reprise est finie, on peut fermer QuickBooks.</li>
+    <li>Écart sur un compte : c'est une transaction manquante, doublée ou passée sur le mauvais compte. Le grand livre importé (par la passerelle, du 1<sup>er</sup> janvier à aujourd'hui) permet de la retrouver ligne à ligne.</li>
+    <li>Les écrans de contrôle existants aident à cerner : balance âgée (clients et fournisseurs), soldes bancaires, rapport de taxes, inventaire.</li>
+</ul>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s8"><span class="n">8</span>Les règles à ne pas contourner</h2>
+<div class="card rose"><div class="t">Ne jamais compter deux fois</div>
+    Les comptes clients et fournisseurs sont dans l'écriture d'ouverture <b>ou</b> reconstitués par les factures, jamais les deux. Ici : dans l'ouverture, et les factures ouvertes de 2025 n'écrivent rien.
+</div>
+<div class="card rose"><div class="t">Les résultats de 2025 restent en 2025</div>
+    Aucune transaction datée de 2025 ne s'écrit au grand livre d'ici, hormis l'écriture d'ouverture. Une facture de 2025 comptabilisée en 2026 fausserait les deux exercices.
+</div>
+<div class="card rose"><div class="t">Ce qui vient de la source ne se retouche pas ici</div>
+    Numéros, dates, montants, lignes viennent de QuickBooks. Si c'est faux, on corrige dans QuickBooks et on ré-extrait. Seules les taxes, que la source ne sait pas répartir, se corrigent à l'écran. Sinon les deux comptabilités divergent en silence.
+</div>
+<div class="card rose"><div class="t">La préparation ne regarde jamais la production</div>
+    Une facture reconnaît son tiers, ses produits et ses comptes parmi ce qui a été importé et créé par les écrans d'import. Le bouton « Créer » de chaque écran est le seul pont entre la préparation et l'application.
+</div>
+<div class="card rose"><div class="t">Chaque chose garde son identifiant source</div>
+    Tiers, produits, documents, règlements, écritures : tous portent l'identifiant QuickBooks. C'est ce qui rend la reprise reprenable, en plusieurs fois, sans doublon.
+</div>
+
+<!-- ─────────────────────────────────────────────────────────────────── -->
+<h2 id="s9"><span class="n">9</span>État du code, étape par étape</h2>
+<table>
+    <tr><th>Étape</th><th>Fait</th><th>Reste à faire</th><th>État</th></tr>
+    <tr><td>0 · Préparer</td><td>Paramètres de la compagnie, statuts de taxes, comptes par défaut</td><td>Écran de la date de bascule et de l'ouverture de l'exercice 2026</td><td><span class="etat partiel">partiel</span></td></tr>
+    <tr><td>1 · Relier</td><td>Liaison Apideck, bouton sur chaque écran, passerelle, registre des imports</td><td>—</td><td><span class="etat fait">fait</span></td></tr>
+    <tr><td>2 · Plan comptable</td><td>Import, correspondance, application en trois étapes</td><td>—</td><td><span class="etat fait">fait</span></td></tr>
+    <tr><td>3 · Tiers et produits</td><td>Import complet, création avec identifiant source, adresses, tous les champs</td><td>—</td><td><span class="etat fait">fait</span></td></tr>
+    <tr><td>4 · Écriture d'ouverture</td><td>Balance extraite à une date, contrôle d'équilibre, confrontation au plan</td><td>Fermeture des résultats 2025, l'écriture elle-même, la contre-passation</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>5 · Factures ouvertes de 2025</td><td>Factures en préparation avec verdict, filtre ouvertes/fermées</td><td>Mode « document d'ouverture » sans écriture, contrôle contre la balance</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6.1 · Factures 2026</td><td>Préparation, tiers/produits/comptes reconnus, taxes réparties, création en brouillon</td><td>Comptabilisation en masse à la date, identifiant source sur T060</td><td><span class="etat partiel">partiel</span></td></tr>
+    <tr><td>6.2 · Autres documents</td><td>En préparation (types 3, 4, 6, 7)</td><td>Écran et création</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6.3 · Règlements</td><td>En préparation avec imputations, écran de contrôle</td><td>Création des règlements et de leurs écritures</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6.4 · Écritures de journal</td><td>En préparation</td><td>Écran et création</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6.5 · Dépôts et virements</td><td>En préparation, écran de contrôle</td><td>Création des écritures de banque</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>6.6 · Remises de DAS</td><td>En préparation, écran de contrôle</td><td>Création des décaissements</td><td><span class="etat afaire">à faire</span></td></tr>
+    <tr><td>7 · Contrôle final</td><td>Balance, balance âgée, grand livre, soldes bancaires, taxes, inventaire en contrôle</td><td>Comparaison automatique compte par compte avec la balance d'ici</td><td><span class="etat partiel">partiel</span></td></tr>
+</table>
+
+<h3>Ordre de construction proposé</h3>
+<ol>
+    <li>L'écriture d'ouverture au 31 décembre, avec la fermeture des résultats et sa contre-passation.</li>
+    <li>Les documents d'ouverture (factures ouvertes de 2025) et leur contrôle contre la balance.</li>
+    <li>La comptabilisation en masse des factures 2026, puis les quatre autres types de documents.</li>
+    <li>Les règlements imputés, puis les dépôts qui les regroupent.</li>
+    <li>Les écritures de journal, les remises de DAS.</li>
+    <li>Le contrôle final automatique.</li>
+</ol>
+
+<footer>60Sec-AI — plan de reprise, rédigé le 23 septembre 2026. Ce document décrit la méthode ; l'état du code est celui du hub des importations, qui fait foi.</footer>
+
+</div>
+</body>
+</html>

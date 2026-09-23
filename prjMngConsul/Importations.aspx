@@ -143,6 +143,70 @@
         les données restent en attente et la reprise n'avance pas.
     </p>
 
+    <%-- Le plan de reprise : la méthode, étape par étape, dans une fenêtre
+         par-dessus la page. Un document HTML autonome (PlanReprise.html),
+         pour qu'on puisse aussi l'ouvrir seul ou l'imprimer. --%>
+    <style>
+        .plan-lien { display: flex; align-items: center; gap: 12px; padding: 12px 15px; margin: 0 0 18px;
+            border: 1px solid #bfdbfe; border-radius: 12px;
+            background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(16,185,129,.05)) }
+        .plan-lien .ico { font-size: 20px; flex: none }
+        .plan-lien .txt { flex: 1; font-size: 13px; color: #0f172a; line-height: 1.45 }
+        .plan-lien .txt span { display: block; color: #64748b; font-size: 12.5px }
+        .plan-lien button { padding: 8px 15px; border-radius: 9px; border: 1px solid #2563eb; background: #2563eb;
+            color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap }
+        .plan-lien button:hover { background: #1d4ed8 }
+        .plan-lien a { font-size: 12.5px; color: #1d4ed8; text-decoration: none; white-space: nowrap }
+        .plan-lien a:hover { text-decoration: underline }
+
+        .plan-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000;
+            display: none; align-items: center; justify-content: center; padding: 24px }
+        .plan-voile.ouvert { display: flex }
+        .plan-fen { width: min(1040px, 100%); height: min(92vh, 100%); background: #fff; border-radius: 16px;
+            box-shadow: 0 30px 80px rgba(2,6,23,.35); display: flex; flex-direction: column; overflow: hidden }
+        .plan-fen .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; background: #f8fafc }
+        .plan-fen .barre b { flex: 1; font-size: 14px; color: #0f172a }
+        .plan-fen .barre a, .plan-fen .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer }
+        .plan-fen .barre a { color: #1d4ed8; text-decoration: none; margin-right: 8px }
+        .plan-fen .barre button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0f172a; font-weight: 700 }
+        .plan-fen iframe { flex: 1; border: 0; width: 100% }
+    </style>
+
+    <div class="plan-lien">
+        <span class="ico">🧭</span>
+        <div class="txt">
+            <b>Plan de reprise d'une comptabilité QuickBooks</b>
+            <span>Fermeture au 31 décembre, rejeu de toutes les transactions de 2026 — la méthode, étape par étape, et l'état du code pour chacune.</span>
+        </div>
+        <button type="button" onclick="ouvrirPlan()">Lire le plan</button>
+        <a href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
+    </div>
+
+    <div class="plan-voile" id="planVoile" onclick="if (event.target === this) fermerPlan();">
+        <div class="plan-fen" role="dialog" aria-modal="true" aria-label="Plan de reprise">
+            <div class="barre">
+                <b>Plan de reprise d'une comptabilité QuickBooks</b>
+                <a href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
+                <button type="button" onclick="fermerPlan()">Fermer ✕</button>
+            </div>
+            <iframe id="planCadre" title="Plan de reprise"></iframe>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        function ouvrirPlan() {
+            var cadre = document.getElementById('planCadre');
+            if (!cadre.getAttribute('src')) cadre.setAttribute('src', 'PlanReprise.html');
+            document.getElementById('planVoile').classList.add('ouvert');
+            document.body.style.overflow = 'hidden';
+        }
+        function fermerPlan() {
+            document.getElementById('planVoile').classList.remove('ouvert');
+            document.body.style.overflow = '';
+        }
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fermerPlan(); });
+    </script>
+
     <div class="bilan">
         <div class="bil"><div class="l">Postes recensés</div>
             <div class="v"><asp:Literal ID="litTotal" runat="server" Text="0" /></div></div>
