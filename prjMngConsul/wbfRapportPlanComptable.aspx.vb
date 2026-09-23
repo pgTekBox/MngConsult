@@ -182,15 +182,21 @@ Public Class wbfRapportPlanComptable
 
     ' ── Accès aux données ──
 
+    ' Les classes sont propres à chaque compagnie (65 par compagnie) : sans le
+    ' filtre, le rapport montrait le même plan une fois par compagnie.
     Private Function GetClasses(filtre As String) As DataSet
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@Filtre", filtre))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
 
         Return ExecuteSQLds("s0082GetClassesForReport", p)
     End Function
 
     Private Function GetSousClasses() As DataSet
-        Return ExecuteSQLds("s0083GetSousClassesForReport")
+        Dim p As New Collection
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+
+        Return ExecuteSQLds("s0083GetSousClassesForReport", p)
     End Function
 
     Private Function GetComptes(filtre As String) As DataSet
