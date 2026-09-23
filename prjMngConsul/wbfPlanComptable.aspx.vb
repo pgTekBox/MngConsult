@@ -16,6 +16,12 @@ Public Class wbfPlanComptable
         If Not IsPostBack Then
             ViewState("Filter") = "ALL"
             rlvComptes.Rebind()
+        ElseIf Request("__EVENTTARGET") = "rlvComptes" AndAlso Request("__EVENTARGUMENT") = "Rebind" Then
+            ' La fenêtre d'édition vient de se fermer : rwCompte_OnClientClose
+            ' lance __doPostBack("rlvComptes", "Rebind"). Le RadListView ne
+            ' traite pas cet argument de lui-même — sans ce relais, la liste
+            ' restait telle quelle après l'ajout d'un compte.
+            rlvComptes.Rebind()
         End If
     End Sub
 
