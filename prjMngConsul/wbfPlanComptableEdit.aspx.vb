@@ -34,8 +34,11 @@ Public Class wbfPlanComptableEdit
 
     Sub BindDDL()
         ' Classes parentes (Niveau 1)
+        ' Les classes sont propres à chaque compagnie : sans le filtre, chaque
+        ' classe apparaissait une fois par compagnie.
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@Niveau", 1))
+        p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         SetDDL(rddlClasseParent, "Name", "Value", "s0051GetClassesByNiveau", p)
     End Sub
 
