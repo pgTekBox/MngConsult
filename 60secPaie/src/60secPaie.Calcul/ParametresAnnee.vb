@@ -1,3 +1,6 @@
+Imports System.Data
+Imports System.Globalization
+
 ''' <summary>Tranche d'imposition : s'applique au revenu imposable annuel inférieur ou égal à <see cref="SeuilMax"/>.</summary>
 Public Structure Tranche
     Public ReadOnly SeuilMax As Decimal
@@ -21,10 +24,15 @@ End Enum
 ''' Taux et plafonds gouvernementaux d'une année, pour un employé du Québec.
 ''' Sources 2026 : T4127 (122e et 123e éditions, ARC) et TP-1015.F (2026-01, Revenu Québec).
 '''
-''' POUR AJOUTER UNE ANNÉE : écrire une fonction Annee20XX() sur le modèle de
-''' Annee2026(), puis ajouter un seul Case dans Construire(). Tout le reste —
-''' Pour, EstDisponible, DerniereAnneeConnue — en découle. Aucune valeur qui
-''' change d'une année à l'autre ne doit vivre ailleurs que dans ces fonctions.
+''' D'OÙ VIENNENT LES TAUX. Deux sources, dans cet ordre :
+'''   1. le <see cref="Fournisseur"/>, branché par l'application (table paie.ParametresAnnee,
+'''      tenue à jour dans la console Sec60Admin : une ligne par année, validée ou non) ;
+'''   2. à défaut, les fonctions Annee20XX() de ce fichier — la référence de secours,
+'''      et ce que les tests unitaires exercent.
+''' Une année absente des deux n'est pas calculable : Pour() le dit en clair.
+'''
+''' Les tranches d'imposition s'échangent avec la base en texte
+''' « seuil|taux|constante;… », « * » marquant la dernière tranche, sans plafond.
 ''' </summary>
 Public Class ParametresAnnee
 
@@ -92,13 +100,21 @@ Public Class ParametresAnnee
     Public Property CNTTaux As Decimal
     Public Property CNTMaxAssujetti As Decimal
 
+    ''' <summary>
+    ''' La source vivante des taux : une fonction qui rend les paramètres d'une
+    ''' année, ou Nothing si elle ne les connaît pas (année absente, non validée,
+    ''' base injoignable). L'application web la branche au démarrage sur
+    ''' paie.ParametresAnnee ; sans elle, seules les années du code existent.
+    ''' </summary>
+    Public Shared Property Fournisseur As Func(Of Integer, ParametresAnnee)
+
     ''' <summary>Les taux de l'année, ou une exception si elle n'est pas encore définie.</summary>
     Public Shared Function Pour(annee As Integer) As ParametresAnnee
         Dim p = Construire(annee)
         If p Is Nothing Then
             Throw New NotSupportedException(
-                "Les taux de l'année " & annee.ToString() & " ne sont pas encore définis dans ParametresAnnee. " &
-                "Ajoutez-les à partir des guides T4127 (ARC) et TP-1015.F (Revenu Québec).")
+                "Les taux de l'année " & annee.ToString() & " ne sont pas encore définis ni validés. " &
+                "Saisissez-les dans Sec60Admin (Paie › Taux de l'année) à partir des guides T4127 (ARC) et TP-1015.F (Revenu Québec).")
         End If
         Return p
     End Function
@@ -126,8 +142,21 @@ Public Class ParametresAnnee
         Return Pour(DerniereAnneeConnue())
     End Function
 
-    ''' <summary>Le seul endroit où une année existe. Retourne Nothing si elle n'est pas définie.</summary>
+    ''' <summary>
+    ''' Le seul endroit où une année existe : le fournisseur d'abord, le code ensuite.
+    ''' Retourne Nothing si aucun des deux ne la connaît.
+    ''' </summary>
     Private Shared Function Construire(annee As Integer) As ParametresAnnee
+        Dim f = Fournisseur
+        If f IsNot Nothing Then
+            Dim p = f(annee)
+            If p IsNot Nothing Then Return p
+        End If
+        Return DuCode(annee)
+    End Function
+
+    ''' <summary>Les années écrites dans le code, référence de secours et base des tests.</summary>
+    Public Shared Function DuCode(annee As Integer) As ParametresAnnee
         Select Case annee
             Case 2026
                 Return Annee2026()
@@ -135,6 +164,117 @@ Public Class ParametresAnnee
                 Return Nothing
         End Select
     End Function
+
+    ' ------------------------------------------------------------------
+    ' Échange avec la base : une ligne de paie.ParametresAnnee <-> l'objet
+    ' ------------------------------------------------------------------
+
+    ''' <summary>Construit les paramètres depuis une ligne de paie.ParametresAnnee (mêmes noms de colonnes que les propriétés).</summary>
+    Public Shared Function DepuisLigne(r As DataRow) As ParametresAnnee
+        If r Is Nothing Then Return Nothing
+        Dim p As New ParametresAnnee()
+        p.Annee = Convert.ToInt32(r("Annee"), CultureInfo.InvariantCulture)
+
+        p.FedTranches = LireTranches(Convert.ToString(r("FedTranches"), CultureInfo.InvariantCulture))
+        p.FedMontantPersonnelBase = D(r, "FedMontantPersonnelBase")
+        p.FedTauxCredits = D(r, "FedTauxCredits")
+        p.FedMontantEmploi = D(r, "FedMontantEmploi")
+        p.FedAbattementQuebec = D(r, "FedAbattementQuebec")
+        p.FedCreditFondsTravailleursTaux = D(r, "FedCreditFondsTravailleursTaux")
+        p.FedCreditFondsTravailleursMax = D(r, "FedCreditFondsTravailleursMax")
+        p.FedSeuilForfaitaireTauxFixe = D(r, "FedSeuilForfaitaireTauxFixe")
+        p.FedTauxFixeForfaitaireQuebec = D(r, "FedTauxFixeForfaitaireQuebec")
+
+        p.AEMaxAssurable = D(r, "AEMaxAssurable")
+        p.AETaux = D(r, "AETaux")
+        p.AEMaxEmploye = D(r, "AEMaxEmploye")
+
+        p.QcTranches = LireTranches(Convert.ToString(r("QcTranches"), CultureInfo.InvariantCulture))
+        p.QcMontantPersonnelBase = D(r, "QcMontantPersonnelBase")
+        p.QcTauxCredits = D(r, "QcTauxCredits")
+        p.QcDeductionTravailleurTaux = D(r, "QcDeductionTravailleurTaux")
+        p.QcDeductionTravailleurMax = D(r, "QcDeductionTravailleurMax")
+        p.QcCreditFondsTravailleursTaux = D(r, "QcCreditFondsTravailleursTaux")
+        p.QcFondsTravailleursMaxAnnuel = D(r, "QcFondsTravailleursMaxAnnuel")
+        p.QcSeuilForfaitaireTauxFixe = D(r, "QcSeuilForfaitaireTauxFixe")
+        p.QcTauxFixeForfaitaire = D(r, "QcTauxFixeForfaitaire")
+
+        p.RRQMaxGainsAdmissibles = D(r, "RRQMaxGainsAdmissibles")
+        p.RRQExemption = D(r, "RRQExemption")
+        p.RRQTaux = D(r, "RRQTaux")
+        p.RRQTauxBase = D(r, "RRQTauxBase")
+        p.RRQMaxEmploye = D(r, "RRQMaxEmploye")
+        p.RRQMaxBaseEmploye = D(r, "RRQMaxBaseEmploye")
+        p.RRQ2MaxSupplementaire = D(r, "RRQ2MaxSupplementaire")
+        p.RRQ2Taux = D(r, "RRQ2Taux")
+        p.RRQ2MaxEmploye = D(r, "RRQ2MaxEmploye")
+
+        p.RQAPMaxAssurable = D(r, "RQAPMaxAssurable")
+        p.RQAPTauxEmploye = D(r, "RQAPTauxEmploye")
+        p.RQAPMaxEmploye = D(r, "RQAPMaxEmploye")
+        p.RQAPTauxEmployeur = D(r, "RQAPTauxEmployeur")
+        p.RQAPMaxEmployeur = D(r, "RQAPMaxEmployeur")
+
+        p.FSSTauxSecteurPublic = D(r, "FSSTauxSecteurPublic")
+        p.FSSMassePlancher = D(r, "FSSMassePlancher")
+        p.FSSMassePlafond = D(r, "FSSMassePlafond")
+        p.FSSGeneralConstante = D(r, "FSSGeneralConstante")
+        p.FSSGeneralCoefficient = D(r, "FSSGeneralCoefficient")
+        p.FSSPrimaireConstante = D(r, "FSSPrimaireConstante")
+        p.FSSPrimaireCoefficient = D(r, "FSSPrimaireCoefficient")
+
+        p.CNESSTMaxAssurable = D(r, "CNESSTMaxAssurable")
+        p.CNTTaux = D(r, "CNTTaux")
+        p.CNTMaxAssujetti = D(r, "CNTMaxAssujetti")
+        Return p
+    End Function
+
+    Private Shared Function D(r As DataRow, colonne As String) As Decimal
+        Dim v = r(colonne)
+        If v Is Nothing OrElse v Is DBNull.Value Then Return 0D
+        Return Convert.ToDecimal(v, CultureInfo.InvariantCulture)
+    End Function
+
+    ''' <summary>« 58523|0.14|0;117045|0.205|3804;*|0.33|26024 » → tranches. « * » = sans plafond.</summary>
+    Public Shared Function LireTranches(texte As String) As Tranche()
+        Dim liste As New List(Of Tranche)()
+        If String.IsNullOrWhiteSpace(texte) Then Return liste.ToArray()
+        For Each morceau In texte.Split(";"c)
+            If morceau.Trim().Length = 0 Then Continue For
+            Dim champs = morceau.Split("|"c)
+            If champs.Length <> 3 Then Throw New FormatException("Tranche illisible : « " & morceau & " ». Attendu : seuil|taux|constante.")
+            Dim seuilTexte = champs(0).Trim()
+            Dim seuil As Decimal = If(seuilTexte = "*", Decimal.MaxValue, Nombre(seuilTexte))
+            liste.Add(New Tranche(seuil, Nombre(champs(1)), Nombre(champs(2))))
+        Next
+        If liste.Count = 0 Then Throw New FormatException("Aucune tranche d'imposition.")
+        If liste(liste.Count - 1).SeuilMax <> Decimal.MaxValue Then Throw New FormatException("La dernière tranche doit être sans plafond (« * »).")
+        For i = 1 To liste.Count - 1
+            If liste(i).SeuilMax <= liste(i - 1).SeuilMax Then Throw New FormatException("Les seuils des tranches doivent être croissants.")
+        Next
+        Return liste.ToArray()
+    End Function
+
+    ''' <summary>Tranches → texte « seuil|taux|constante;… », l'inverse de LireTranches.</summary>
+    Public Shared Function EcrireTranches(tranches As Tranche()) As String
+        If tranches Is Nothing Then Return ""
+        Dim parts As New List(Of String)()
+        For Each t In tranches
+            Dim seuil = If(t.SeuilMax = Decimal.MaxValue, "*", t.SeuilMax.ToString("0.##", CultureInfo.InvariantCulture))
+            parts.Add(seuil & "|" & t.Taux.ToString("0.#####", CultureInfo.InvariantCulture) & "|" & t.Constante.ToString("0.##", CultureInfo.InvariantCulture))
+        Next
+        Return String.Join(";", parts)
+    End Function
+
+    Private Shared Function Nombre(texte As String) As Decimal
+        Dim v As Decimal
+        If Decimal.TryParse(texte.Trim().Replace(" ", "").Replace(",", "."), NumberStyles.Any, CultureInfo.InvariantCulture, v) Then Return v
+        Throw New FormatException("Nombre illisible : « " & texte & " ».")
+    End Function
+
+    ' ------------------------------------------------------------------
+    ' Les années du code
+    ' ------------------------------------------------------------------
 
     Private Shared Function Annee2026() As ParametresAnnee
         Dim p As New ParametresAnnee()

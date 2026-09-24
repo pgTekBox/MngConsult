@@ -168,7 +168,7 @@ mark{background:#ffe89a}
   <li>Il <strong>ne transmet aucun paiement</strong> ni aux employés, ni aux gouvernements. Il prépare le fichier de dépôt direct que vous remettez à votre banque, et il calcule les remises que vous payez vous-même.</li>
   <li>Il <strong>ne transmet pas les feuillets</strong>. Il calcule chaque case ; vous les saisissez dans Formulaires Web (ARC) et Mon dossier pour les entreprises (Revenu Québec).</li>
   <li>Il ne gère pas les employés hors Québec : la province d'emploi est toujours QC.</li>
-  <li>Il ne connaît que les taux de <strong>2026</strong>. Une paie datée d'une autre année est refusée tant que ses taux ne sont pas ajoutés au logiciel.</li>
+  <li>Il ne connaît que les taux des années <strong>validées par 60Sec</strong> dans sa console d'administration (2026 aujourd'hui ; 2027 se prépare en décembre). Une paie datée d'une année non validée est refusée.</li>
   <li>Il ne remplace pas votre jugement : « Vérifiez toujours vos paies avant de les confirmer. » Les montants calculés demeurent sous la responsabilité de l'employeur.</li>
 </ul>
 
@@ -485,7 +485,7 @@ mark{background:#ffe89a}
 <tr><th>Message</th><th>Sens</th></tr>
 <tr><td>« Inscrivez la fin de la période et la date de paie. »</td><td>Les deux dates sont requises.</td></tr>
 <tr><td>« La date de paie est trop éloignée de la fin de la période. »</td><td>La date de paie doit se situer entre 31 jours avant et 45 jours après la fin de période.</td></tr>
-<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>L'année des taux est celle de la <strong>date de paie</strong>. Seule 2026 est définie.</td></tr>
+<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>L'année des taux est celle de la <strong>date de paie</strong>. Les taux de chaque année sont saisis et validés par 60Sec dans sa console d'administration dès la parution des guides.</td></tr>
 <tr><td>« Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord. »</td><td>Un seul brouillon à la fois.</td></tr>
 <tr><td>« Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés. »</td><td>Aucun employé ne répond aux critères ci-dessous.</td></tr>
 </table>
@@ -793,7 +793,7 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="parametres">Comprendre les calculs › Paramètres de l'année 2026</h2>
-<p>L'année des taux est celle de la <strong>date de paie</strong>. Seule 2026 est définie dans le logiciel.</p>
+<p>L'année des taux est celle de la <strong>date de paie</strong>. Les taux vivent dans la base de données, une ligne par année, validée par 60Sec dans sa console d'administration ; ceux de 2026 sont reproduits ci-dessous. Une validation est visible dans 60secPaie dans les cinq minutes.</p>
 <div class="deux">
 <div class="carte"><h4>Impôt fédéral (T4127)</h4>
 <table><tr><th>Revenu imposable annuel</th><th>Taux</th><th>K</th></tr>
@@ -944,7 +944,7 @@ mark{background:#ffe89a}
   <li><span class="chemin">Rapports › T4 et Relevés 1</span> : vérifiez chaque employé (NAS présent, cases cohérentes), exportez le CSV, saisissez les feuillets dans Formulaires Web et Mon dossier pour les entreprises avant le dernier jour de février. Comparez les sommaires T4 et 1 avec vos remises ; payez le solde, dont la CNT.</li>
   <li><span class="chemin">Rapports › Déclaration des salaires CNESST</span> : déclarez dans Mon Espace CNESST avant le 15 mars ; la carte « Conciliation » donne l'écart avec vos versements.</li>
   <li>Réglez la case 45 (dentaire) et vérifiez les exemptions avant de produire les T4.</li>
-  <li>Les taux de l'année suivante doivent être ajoutés au logiciel avant la première paie de janvier ; sinon l'assistant refuse la paie (« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »).</li>
+  <li>Les taux de l'année suivante doivent être validés par 60Sec dans sa console d'administration avant la première paie de janvier ; sinon l'assistant refuse la paie (« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »).</li>
 </ol>
 
 <!-- ============================================================ -->
@@ -954,7 +954,7 @@ mark{background:#ffe89a}
 <tr><th>Message</th><th>Où</th><th>Solution</th></tr>
 <tr><td>« La paie n'est pas encore configurée pour {compagnie}. Commencez par ses paramètres de paie. »</td><td>Toute page</td><td>Remplissez et enregistrez Configuration › Paramètres de paie.</td></tr>
 <tr><td>« Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés. »</td><td>Assistant, étape 1</td><td>Vérifiez que l'employé est actif, « Configurée », à la même fréquence que le lot, embauché avant la fin de période.</td></tr>
-<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>Assistant, étape 1</td><td>La date de paie doit être en 2026 ; sinon les taux de l'année doivent être ajoutés au logiciel.</td></tr>
+<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>Assistant, étape 1</td><td>La date de paie tombe dans une année dont les taux ne sont pas encore validés. 60Sec les saisit dans sa console dès la parution des guides ; en attendant, datez la paie dans une année validée.</td></tr>
 <tr><td>« Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord. »</td><td>Assistant, étape 1</td><td>Continuez ou supprimez le brouillon.</td></tr>
 <tr><td>« La date de paie est trop éloignée de la fin de la période. »</td><td>Assistant, étape 1</td><td>Entre 31 jours avant et 45 jours après la fin de période.</td></tr>
 <tr><td>« Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant). »</td><td>Lignes de paie</td><td>Entrez des heures et un taux, ou un montant.</td></tr>

@@ -168,7 +168,7 @@ mark{background:#ffe89a}
   <li><strong>No transmite ningún pago</strong>, ni a los empleados ni a los gobiernos. Prepara el archivo de depósito directo que usted entrega a su banco, y calcula las remesas que usted mismo paga.</li>
   <li><strong>No transmite los comprobantes</strong>. Calcula cada casilla; usted los captura en Formulaires Web (ARC) y Mon dossier pour les entreprises (Revenu Québec).</li>
   <li>No gestiona empleados fuera de Quebec: la provincia de empleo siempre es QC.</li>
-  <li>Solo conoce las tasas de <strong>2026</strong>. Una nómina fechada en otro año se rechaza mientras sus tasas no se añadan al programa.</li>
+  <li>Solo conoce las tasas de los años <strong>validados por 60Sec</strong> en su consola de administración (2026 hoy; 2027 se prepara en diciembre). Una nómina fechada en un año no validado se rechaza.</li>
   <li>No reemplaza su criterio: « Revise siempre sus nóminas antes de confirmarlas. » Los montos calculados quedan bajo la responsabilidad del empleador.</li>
 </ul>
 
@@ -485,7 +485,7 @@ mark{background:#ffe89a}
 <tr><th>Mensaje</th><th>Significado</th></tr>
 <tr><td>« Indique el fin del período y la fecha de pago. »</td><td>Las dos fechas son obligatorias.</td></tr>
 <tr><td>« La fecha de pago está demasiado lejos del fin del período. »</td><td>La fecha de pago debe estar entre 31 días antes y 45 días después del fin de período.</td></tr>
-<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>El año de las tasas es el de la <strong>fecha de pago</strong>. Solo 2026 está definido.</td></tr>
+<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>El año de las tasas es el de la <strong>fecha de pago</strong>. Las tasas de cada año las ingresa y valida 60Sec en su consola de administración en cuanto se publican las guías.</td></tr>
 <tr><td>« Ya hay una nómina en preparación. Termínela o elimínela primero. »</td><td>Un solo borrador a la vez.</td></tr>
 <tr><td>« Ningún empleado activo con la nómina configurada cobra con esta frecuencia en este período. Verifique la página Empleados. »</td><td>Ningún empleado cumple los criterios de abajo.</td></tr>
 </table>
@@ -793,7 +793,7 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="parametres">Entender los cálculos › Parámetros del año 2026</h2>
-<p>El año de las tasas es el de la <strong>fecha de pago</strong>. Solo 2026 está definido en el programa.</p>
+<p>El año de las tasas es el de la <strong>fecha de pago</strong>. Las tasas viven en la base de datos, una línea por año, validada por 60Sec en su consola de administración; las de 2026 se reproducen a continuación. Una validación es visible en 60secPaie en cinco minutos.</p>
 <div class="deux">
 <div class="carte"><h4>Impuesto federal (T4127)</h4>
 <table><tr><th>Ingreso gravable anual</th><th>Tasa</th><th>K</th></tr>
@@ -944,7 +944,7 @@ mark{background:#ffe89a}
   <li><span class="chemin">Informes › T4 y Relevés 1</span>: verifique cada empleado (NAS presente, casillas coherentes), exporte el CSV, capture los comprobantes en Formulaires Web y Mon dossier pour les entreprises antes del último día de febrero. Compare los sumarios T4 y 1 con sus remesas; pague el saldo, incluida la CNT.</li>
   <li><span class="chemin">Informes › Declaración de salarios CNESST</span>: declare en Mon Espace CNESST antes del 15 de marzo; la tarjeta « Conciliación » da la diferencia con sus pagos.</li>
   <li>Configure la casilla 45 (dental) y verifique las exenciones antes de generar los T4.</li>
-  <li>Las tasas del año siguiente deben añadirse al programa antes de la primera nómina de enero; si no, el asistente rechaza la nómina (« Las tasas gubernamentales de {año} aún no están definidas en el programa. »).</li>
+  <li>Las tasas del año siguiente deben ser validadas por 60Sec en su consola de administración antes de la primera nómina de enero; si no, el asistente rechaza la nómina (« Las tasas gubernamentales de {año} aún no están definidas en el programa. »).</li>
 </ol>
 
 <!-- ============================================================ -->
@@ -954,7 +954,7 @@ mark{background:#ffe89a}
 <tr><th>Mensaje</th><th>Dónde</th><th>Solución</th></tr>
 <tr><td>« La nómina aún no está configurada para {empresa}. Comience por sus parámetros de nómina. »</td><td>Cualquier página</td><td>Complete y guarde Configuración › Parámetros de nómina.</td></tr>
 <tr><td>« Ningún empleado activo con la nómina configurada cobra con esta frecuencia en este período. Verifique la página Empleados. »</td><td>Asistente, paso 1</td><td>Verifique que el empleado esté activo, « Configurada », con la misma frecuencia que el lote, contratado antes del fin de período.</td></tr>
-<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>Asistente, paso 1</td><td>La fecha de pago debe estar en 2026; si no, las tasas del año deben añadirse al programa.</td></tr>
+<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>Asistente, paso 1</td><td>La fecha de pago cae en un año cuyas tasas aún no están validadas. 60Sec las ingresa en su consola en cuanto se publican las guías; mientras tanto, feche la nómina en un año validado.</td></tr>
 <tr><td>« Ya hay una nómina en preparación. Termínela o elimínela primero. »</td><td>Asistente, paso 1</td><td>Continúe o elimine el borrador.</td></tr>
 <tr><td>« La fecha de pago está demasiado lejos del fin del período. »</td><td>Asistente, paso 1</td><td>Entre 31 días antes y 45 días después del fin de período.</td></tr>
 <tr><td>« El monto de la línea debe ser mayor que 0 (horas × tarifa, o monto). »</td><td>Líneas de nómina</td><td>Ingrese horas y una tarifa, o un monto.</td></tr>

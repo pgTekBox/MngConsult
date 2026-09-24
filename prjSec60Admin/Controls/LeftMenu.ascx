@@ -124,6 +124,29 @@
                 </div>
             </div>
 
+            <!-- Sous-menu Paie : ce que 60secPaie ne laisse pas à ses utilisateurs,
+                 parce que cela vaut pour toutes les compagnies : les taux de l'année. -->
+            <div class="nav-group" data-accordion>
+                <button type="button" class="nav-parent" aria-expanded="true">
+                    <span class="nav-ico" aria-hidden="true">🧾</span>
+                    <span class="nav-txt">Paie</span>
+                    <span class="nav-meta">
+                        <span class="chev" aria-hidden="true">
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                            </svg>
+                        </span>
+                    </span>
+                </button>
+
+                <div class="nav-children">
+                    <a class="nav-child" href="~/wbfPaieAnnees.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Taux de l'année
+                    </a>
+                </div>
+            </div>
+
             <!-- Sous-menu Tâches : venu de l'ERP, ces pages pilotent des
                  traitements de fond et non le travail quotidien. Elles sont
                  cadrées sur la compagnie courante de la console. -->

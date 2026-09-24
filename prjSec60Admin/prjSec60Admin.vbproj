@@ -354,6 +354,8 @@
     <Content Include="wbfUserEdit.aspx" />
     <Content Include="wbfPlans.aspx" />
     <Content Include="wbfPlanEdit.aspx" />
+    <Content Include="wbfPaieAnnees.aspx" />
+    <Content Include="wbfPaieAnneeEdit.aspx" />
     <Content Include="wbfLanding.aspx" />
     <Content Include="wbfLogin.aspx" />
     <Content Include="wbfLogout.aspx" />
@@ -428,6 +430,20 @@
     </Compile>
     <Compile Include="wbfPlanEdit.aspx.designer.vb">
       <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPaieAnnees.aspx.vb">
+      <DependentUpon>wbfPaieAnnees.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPaieAnnees.aspx.designer.vb">
+      <DependentUpon>wbfPaieAnnees.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPaieAnneeEdit.aspx.vb">
+      <DependentUpon>wbfPaieAnneeEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPaieAnneeEdit.aspx.designer.vb">
+      <DependentUpon>wbfPaieAnneeEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfLanding.aspx.vb">
       <DependentUpon>wbfLanding.aspx</DependentUpon>
@@ -544,6 +560,14 @@
   <PropertyGroup>
     <OptionInfer>On</OptionInfer>
   </PropertyGroup>
+  <ItemGroup>
+    <!-- Le moteur de paie de 60secPaie (build net472 du projet 60secPaie.Calcul) : la console vérifie
+         une année de taux avec le vrai calcul avant de la valider. -->
+    <Reference Include="60secPaie.Calcul">
+      <HintPath>..\60secPaie\src\60secPaie.Calcul\bin\Debug\net472\60secPaie.Calcul.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.VisualBasic.targets" />
   <Import Project="$(VSToolsPath)\WebApplications\Microsoft.WebApplication.targets" Condition="'$(VSToolsPath)' != ''" />
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v10.0\WebApplications\Microsoft.WebApplication.targets" Condition="false" />

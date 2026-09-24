@@ -168,7 +168,7 @@ mark{background:#ffe89a}
   <li>It <strong>transmits no payment</strong>, neither to employees nor to governments. It prepares the direct deposit file that you hand over to your bank, and it calculates the remittances that you pay yourself.</li>
   <li>It <strong>does not file the slips</strong>. It calculates every box; you enter them in Web Forms (CRA) and My Account for businesses (Revenu Québec).</li>
   <li>It does not handle employees outside Quebec: the province of employment is always QC.</li>
-  <li>It only knows the <strong>2026</strong> rates. A pay run dated in another year is refused until its rates are added to the software.</li>
+  <li>It only knows the rates of the years <strong>validated by 60Sec</strong> in its administration console (2026 today; 2027 is prepared in December). A pay run dated in a year that is not validated is refused.</li>
   <li>It does not replace your judgement: "Always review your pay runs before confirming them." The calculated amounts remain the employer's responsibility.</li>
 </ul>
 
@@ -485,7 +485,7 @@ mark{background:#ffe89a}
 <tr><th>Message</th><th>Meaning</th></tr>
 <tr><td>"Enter the period end and the pay date."</td><td>Both dates are required.</td></tr>
 <tr><td>"The pay date is too far from the period end."</td><td>The pay date must be between 31 days before and 45 days after the period end.</td></tr>
-<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>The rate year is that of the <strong>pay date</strong>. Only 2026 is defined.</td></tr>
+<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>The rate year is that of the <strong>pay date</strong>. Each year's rates are entered and validated by 60Sec in its administration console as soon as the guides are published.</td></tr>
 <tr><td>"A pay run is already in progress. Finish it or delete it first."</td><td>Only one draft at a time.</td></tr>
 <tr><td>"No active employee with payroll set up is paid at this frequency for this period. Check the Employees page."</td><td>No employee meets the criteria below.</td></tr>
 </table>
@@ -793,7 +793,7 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="parametres">Understanding the calculations › 2026 parameters</h2>
-<p>The rate year is that of the <strong>pay date</strong>. Only 2026 is defined in the software.</p>
+<p>The rate year is that of the <strong>pay date</strong>. The rates live in the database, one row per year, validated by 60Sec in its administration console; the 2026 values are reproduced below. A validation is visible in 60secPaie within five minutes.</p>
 <div class="deux">
 <div class="carte"><h4>Federal tax (T4127)</h4>
 <table><tr><th>Annual taxable income</th><th>Rate</th><th>K</th></tr>
@@ -944,7 +944,7 @@ mark{background:#ffe89a}
   <li><span class="chemin">Reports › T4 and RL-1 slips</span>: check each employee (SIN present, consistent boxes), export the CSV, enter the slips in Web Forms and My Account for businesses before the last day of February. Compare the T4 and RL-1 summaries with your remittances; pay the balance, including the CNT.</li>
   <li><span class="chemin">Reports › CNESST statement of wages</span>: file in Mon Espace CNESST before March 15; the "Reconciliation" card gives the difference with your payments.</li>
   <li>Set box 45 (dental) and check the exemptions before producing the T4s.</li>
-  <li>The following year's rates must be added to the software before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software.").</li>
+  <li>The following year's rates must be validated by 60Sec in its administration console before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software.").</li>
 </ol>
 
 <!-- ============================================================ -->
@@ -954,7 +954,7 @@ mark{background:#ffe89a}
 <tr><th>Message</th><th>Where</th><th>Solution</th></tr>
 <tr><td>"Payroll is not set up yet for {company}. Start with its payroll settings."</td><td>Any page</td><td>Fill in and save Settings › Payroll settings.</td></tr>
 <tr><td>"No active employee with payroll set up is paid at this frequency for this period. Check the Employees page."</td><td>Wizard, step 1</td><td>Check that the employee is active, "Set up", at the same frequency as the run, hired before the period end.</td></tr>
-<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>Wizard, step 1</td><td>The pay date must be in 2026; otherwise the year's rates must be added to the software.</td></tr>
+<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>Wizard, step 1</td><td>The pay date falls in a year whose rates are not yet validated. 60Sec enters them in its console as soon as the guides are published; meanwhile, date the pay run in a validated year.</td></tr>
 <tr><td>"A pay run is already in progress. Finish it or delete it first."</td><td>Wizard, step 1</td><td>Continue or delete the draft.</td></tr>
 <tr><td>"The pay date is too far from the period end."</td><td>Wizard, step 1</td><td>Between 31 days before and 45 days after the period end.</td></tr>
 <tr><td>"The line amount must be greater than 0 (hours × rate, or amount)."</td><td>Pay lines</td><td>Enter hours and a rate, or an amount.</td></tr>

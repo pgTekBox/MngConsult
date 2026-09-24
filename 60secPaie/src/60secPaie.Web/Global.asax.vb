@@ -1,6 +1,11 @@
 Public Class Global_asax
     Inherits System.Web.HttpApplication
 
+    ''' <summary>Les taux de l'année viennent de la base (Sec60Admin › Paie › Taux de l'année) ; le code reste la référence de secours.</summary>
+    Sub Application_Start(sender As Object, e As EventArgs)
+        ServiceParametres.Brancher()
+    End Sub
+
     ''' <summary>
     ''' La racine du site montre la présentation, pas la page de connexion.
     '''

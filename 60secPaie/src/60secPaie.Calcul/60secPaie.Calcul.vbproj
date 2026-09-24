@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net48</TargetFramework>
+    <TargetFrameworks>net48;net472</TargetFrameworks>
     <RootNamespace>Paie60Sec.Calcul</RootNamespace>
     <AssemblyName>60secPaie.Calcul</AssemblyName>
     <OptionStrict>On</OptionStrict>

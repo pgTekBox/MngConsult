@@ -11,11 +11,16 @@ Public NotInheritable Class MoteurPaie
     Private Sub New()
     End Sub
 
-    Public Shared Function Calculer(e As EntreePaie) As ResultatPaie
+    ''' <summary>
+    ''' Calcule une paie. Les taux sont ceux de l'année de la paie (ParametresAnnee.Pour),
+    ''' sauf si <paramref name="parametres"/> en fournit d'autres — c'est ainsi que la
+    ''' console vérifie une année encore en brouillon sans l'activer.
+    ''' </summary>
+    Public Shared Function Calculer(e As EntreePaie, Optional parametres As ParametresAnnee = Nothing) As ResultatPaie
         If e Is Nothing Then Throw New ArgumentNullException(NameOf(e))
         If e.PeriodesParAnnee <= 0 Then Throw New ArgumentException("Le nombre de périodes de paie par année doit être supérieur à 0.")
 
-        Dim prm = ParametresAnnee.Pour(e.Annee)
+        Dim prm = If(parametres, ParametresAnnee.Pour(e.Annee))
         Dim P As Decimal = e.PeriodesParAnnee
         Dim emp = e.Employe
         Dim cum = e.Cumul
