@@ -23,6 +23,7 @@
     .cor-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
 
     .cor-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 800px; line-height: 1.6 }
+    .ia-note { font-size: 12.5px; color: #6b21a8; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; line-height: 1.55 }
 
     .card {
         background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
@@ -177,6 +178,8 @@
                     <asp:ListItem Value="" Text="Tout" />
                     <asp:ListItem Value="A_DECIDER" Text="À décider seulement" />
                     <asp:ListItem Value="DECIDE" Text="Déjà décidés" />
+                    <asp:ListItem Value="ORIGINE:AJOUTE" Text="Ajoutés après l'ouverture" />
+                    <asp:ListItem Value="ORIGINE:DEFAUT" Text="Par défaut dans QuickBooks" />
                 </asp:DropDownList>
             </div>
             <div class="acts" style="margin-left:auto">
@@ -188,6 +191,14 @@
                     OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
             </div>
         </div>
+
+        <p class="ia-note">
+            ✨ <b>Proposer avec l'IA</b> lui soumet, pour chaque compte encore à décider : le nom
+            complet, la nature, le type et le sous-type QuickBooks, l'origine (par défaut ou ajouté,
+            et quand), le solde et la description — et votre plan entier : numéro, noms, nature,
+            classe, sous-classe, sens et description. Elle rend un compte proposé, une confiance et
+            une raison ; la page vérifie que le compte existe et que la nature concorde, et vous tranchez.
+        </p>
 
         <div class="avance">
             <div class="lbl">

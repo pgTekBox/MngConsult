@@ -290,8 +290,20 @@ Public Class CorrespondanceComptes
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@Filtre", If(ddlFiltre.SelectedValue = "", CType(DBNull.Value, Object), ddlFiltre.SelectedValue)))
+            ' Le même choix filtre soit par état (à décider / décidé), soit par
+            ' origine (T272) : « ORIGINE:AJOUTE » ne montre que les comptes nés
+            ' après l'ouverture de la société dans QuickBooks.
+            Dim choix As String = ddlFiltre.SelectedValue
+            Dim filtre As Object = DBNull.Value
+            Dim origine As Object = DBNull.Value
+            If choix.StartsWith("ORIGINE:") Then
+                origine = choix.Substring(8)
+            ElseIf choix <> "" Then
+                filtre = choix
+            End If
+            p.Add(New SqlParameter("@Filtre", filtre))
             p.Add(New SqlParameter("@Top", 1000))
+            p.Add(New SqlParameter("@Origine", origine))
 
             Dim ds As DataSet = ExecuteSQLds("s0756GetCorrespondances", p)
             Dim dt As DataTable = If(ds Is Nothing OrElse ds.Tables.Count = 0, Nothing, ds.Tables(0))
@@ -530,13 +542,21 @@ Public Class CorrespondanceComptes
                 Return
             End If
 
+            ' Tout ce que la source dit du compte (T272) : le nom complet
+            ' « Parent:Enfant », la nature, le type et le sous-type QuickBooks,
+            ' l'origine et sa date, le solde, la description. Le modèle juge sur
+            ' la classification et l'usage, pas seulement sur le nom.
             Dim source As New List(Of String)
             For Each r As DataRow In dsSrc.Tables(0).Rows
                 source.Add(String.Join(" | ",
                     Convert.ToString(r("CleSource")),
-                    Convert.ToString(r("Nom")),
+                    Plat(r("NomComplet")),
                     Convert.ToString(r("TypeNormalise")),
-                    Convert.ToString(r("TypeSource"))))
+                    Convert.ToString(r("TypeSource")),
+                    Convert.ToString(r("SousTypeSource")),
+                    OrigineIA(r),
+                    If(IsDBNull(r("Solde")), "", CDec(r("Solde")).ToString("0.00", Globalization.CultureInfo.InvariantCulture)),
+                    Plat(r("DescriptionSource"))))
             Next
 
             Dim pPlan As New Collection
@@ -553,10 +573,13 @@ Public Class CorrespondanceComptes
             For Each r As DataRow In dsPlan.Tables(0).Rows
                 plan.AppendLine(String.Join(" | ",
                     Convert.ToString(r("Compte")),
-                    Convert.ToString(r("Nom")),
-                    Convert.ToString(r("NomEn")),
+                    Plat(r("Nom")),
+                    Plat(r("NomEn")),
                     Convert.ToString(r("Nature")),
-                    Convert.ToString(r("Classe"))))
+                    Plat(r("ClasseParent")),
+                    Plat(r("Classe")),
+                    Convert.ToString(r("Sens")),
+                    Plat(r("Description"))))
             Next
 
             ' ── La clé et le prompt, là où vivent les autres ────────────────
@@ -620,6 +643,29 @@ Public Class CorrespondanceComptes
             Alerte(pnlErreur, litErreur, "Appel à l'IA : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
+
+    ''' <summary>
+    ''' L'origine d'un compte, dite au modèle : « défaut QuickBooks » pour les
+    ''' comptes génériques nés à l'ouverture de la société, « ajouté le … » pour
+    ''' ceux créés ensuite — spécifiques à l'entreprise, donc à lire de près.
+    ''' </summary>
+    Private Shared Function OrigineIA(r As DataRow) As String
+        Select Case Convert.ToString(r("Origine"))
+            Case "DEFAUT" : Return "défaut QuickBooks"
+            Case "AJOUTE"
+                If IsDBNull(r("CreeLe")) Then Return "ajouté"
+                Return "ajouté le " & CDate(r("CreeLe")).ToString("yyyy-MM-dd")
+        End Select
+        Return ""
+    End Function
+
+    ''' <summary>
+    ''' Une valeur sur une seule ligne, sans la barre qui sépare les colonnes.
+    ''' </summary>
+    Private Shared Function Plat(v As Object) As String
+        If v Is Nothing OrElse IsDBNull(v) Then Return ""
+        Return Convert.ToString(v).Replace("|", "/").Replace(vbCrLf, " ").Replace(vbLf, " ").Trim()
+    End Function
 
     ''' <summary>
     ''' Accepte d'un coup les correspondances où le numéro de compte concorde.

@@ -61,7 +61,8 @@ Public Class OpenAiPlanComptableMapper
 
     ''' <summary>
     ''' <paramref name="source"/> : les comptes à reprendre, sous la forme
-    ''' « clé | nom | nature | type d'origine ».
+    ''' « clé | nom complet | nature | type QuickBooks | sous-type QuickBooks |
+    ''' origine | solde | description » (T272).
     ''' <paramref name="plan"/> : le plan de destination, déjà mis en forme.
     ''' </summary>
     Public Async Function ProposerAsync(prompt As String,
@@ -77,13 +78,13 @@ Public Class OpenAiPlanComptableMapper
             demande.AppendLine(prompt)
             demande.AppendLine()
             demande.AppendLine("=== LISTE A — comptes à reprendre ===")
-            demande.AppendLine("clé | nom | nature | type d'origine")
+            demande.AppendLine("clé | nom complet | nature | type QuickBooks | sous-type QuickBooks | origine | solde | description")
             For Each l In paquet
                 demande.AppendLine(l)
             Next
             demande.AppendLine()
             demande.AppendLine("=== LISTE B — plan comptable de destination ===")
-            demande.AppendLine("numéro | nom | nom anglais | nature | classe")
+            demande.AppendLine("numéro | nom | nom anglais | nature | classe | sous-classe | sens | description")
             demande.AppendLine(plan)
 
             Dim brut = Await AppelerAsync(demande.ToString(), res).ConfigureAwait(False)
