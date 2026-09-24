@@ -262,7 +262,7 @@
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
                                     <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %></div>
-                                    <div class="nature"><%# Server.HtmlEncode(Convert.ToString(Eval("TypeNormalise"))) %></div>
+                                    <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
                                 <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),

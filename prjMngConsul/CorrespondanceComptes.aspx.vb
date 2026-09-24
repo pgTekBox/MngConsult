@@ -423,6 +423,59 @@ Public Class CorrespondanceComptes
     ''' c'est le nom qui tient ce rôle, et la colonne le dit plutôt que de
     ''' rester vide.
     ''' </summary>
+    ''' <summary>
+    ''' Tout ce qu'on sait du compte source, sous son nom : nature, type et
+    ''' sous-type QuickBooks, numéro et nom tels que la source les écrit quand
+    ''' ils diffèrent, solde et sens d'origine, système, et l'anomalie du
+    ''' chargement. Seulement ce qui est renseigné — une ligne vide n'apprend rien.
+    ''' </summary>
+    Protected Function FicheSource(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+
+        Dim nature As String = Champ(r, "TypeNormalise")
+        Dim typeQbo As String = Champ(r, "TypeSource")
+        Dim sousType As String = Champ(r, "SousTypeSource")
+        Dim numeroSrc As String = Champ(r, "CompteSource")
+        Dim nomSrc As String = Champ(r, "NomSource")
+        Dim soldeSrc As String = Champ(r, "SoldeSource")
+        Dim sensSrc As String = Champ(r, "SensSource")
+        Dim systeme As String = Champ(r, "SystemeSource")
+        Dim anomalie As String = Champ(r, "AnomalieChargement")
+        Dim statut As String = Champ(r, "StatutChargement")
+
+        Dim sb As New StringBuilder()
+
+        ' 1) la nature et le type : ce qui décide de la classe cible
+        Dim ligne1 As New List(Of String)
+        If nature <> "" Then ligne1.Add("<b>" & Server.HtmlEncode(nature) & "</b>")
+        If typeQbo <> "" Then ligne1.Add(Server.HtmlEncode(typeQbo))
+        If sousType <> "" Then ligne1.Add(Server.HtmlEncode(sousType))
+        If ligne1.Count > 0 Then sb.Append("<div class='nature'>").Append(String.Join(" · ", ligne1)).Append("</div>")
+
+        ' 2) ce que la source écrit, quand ça diffère de ce qu'on a retenu
+        Dim ligne2 As New List(Of String)
+        If numeroSrc <> "" AndAlso numeroSrc <> Champ(r, "Compte") Then ligne2.Add("n° source " & Server.HtmlEncode(numeroSrc))
+        If nomSrc <> "" AndAlso Not String.Equals(nomSrc, Champ(r, "Nom"), StringComparison.OrdinalIgnoreCase) Then ligne2.Add("« " & Server.HtmlEncode(nomSrc) & " »")
+        If soldeSrc <> "" Then ligne2.Add("solde source " & Server.HtmlEncode(soldeSrc) & If(sensSrc <> "", " " & Server.HtmlEncode(sensSrc), ""))
+        If systeme <> "" Then ligne2.Add(Server.HtmlEncode(systeme.ToLowerInvariant()))
+        If ligne2.Count > 0 Then sb.Append("<div class='nature'>").Append(String.Join(" · ", ligne2)).Append("</div>")
+
+        ' 3) ce que le chargement a conclu
+        If statut = "EXISTE" AndAlso anomalie <> "" Then
+            sb.Append("<div class='nature' style='color:#047857'>").Append(Server.HtmlEncode(anomalie)).Append("</div>")
+        ElseIf anomalie <> "" Then
+            sb.Append("<div class='nature' style='color:#b45309;white-space:normal'>").Append(Server.HtmlEncode(anomalie)).Append("</div>")
+        End If
+
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function Champ(r As DataRowView, nom As String) As String
+        If Not r.Row.Table.Columns.Contains(nom) OrElse IsDBNull(r(nom)) Then Return ""
+        Return Convert.ToString(r(nom)).Trim()
+    End Function
+
     Protected Function CleAffichee(compte As Object, typeCle As Object) As String
         Dim c = Convert.ToString(compte)
         If c <> "" Then Return Server.HtmlEncode(c)
