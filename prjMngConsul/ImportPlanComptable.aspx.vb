@@ -511,7 +511,19 @@ Public Class ImportPlanComptable
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@Statut", If(ddlFiltre.SelectedValue = "", CType(DBNull.Value, Object), ddlFiltre.SelectedValue)))
+            ' Le même choix filtre soit par verdict, soit par origine (T271) :
+            ' « ORIGINE:AJOUTE » ne regarde que les comptes nés après la création
+            ' de la société dans QuickBooks.
+            Dim choix As String = ddlFiltre.SelectedValue
+            Dim statut As Object = DBNull.Value
+            Dim origine As Object = DBNull.Value
+            If choix.StartsWith("ORIGINE:") Then
+                origine = choix.Substring(8)
+            ElseIf choix <> "" Then
+                statut = choix
+            End If
+            p.Add(New SqlParameter("@Statut", statut))
+            p.Add(New SqlParameter("@Origine", origine))
             p.Add(New SqlParameter("@Top", 500))
 
             Dim ds As DataSet = ExecuteSQLds("s0753GetPlanComptableStaging", p)
@@ -525,6 +537,21 @@ Public Class ImportPlanComptable
             Alerte(pnlErreur, litErreur, "Lecture de la préparation : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
+
+    ''' <summary>
+    ''' D'où vient le compte : créé par QuickBooks à l'ouverture de la société,
+    ''' ou ajouté ensuite — par l'utilisateur, ou par QuickBooks au fil de
+    ''' l'usage. Avec la date, pour les ajoutés : c'est elle qui a tranché.
+    ''' </summary>
+    Protected Function OrigineTexte(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+        Dim origine As String = Convert.ToString(r("Origine"))
+        If origine = "DEFAUT" Then Return "Défaut QuickBooks"
+        If origine <> "AJOUTE" Then Return ""
+        If IsDBNull(r("CreeLe")) Then Return "Ajouté"
+        Return "Ajouté le " & CDate(r("CreeLe")).ToString("yyyy-MM-dd")
+    End Function
 
     Protected Sub ddlFiltre_SelectedIndexChanged(sender As Object, e As EventArgs) Handles ddlFiltre.SelectedIndexChanged
         ChargerLignes()

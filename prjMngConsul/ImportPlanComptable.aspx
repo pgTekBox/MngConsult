@@ -343,6 +343,8 @@
                     <asp:ListItem Value="EXISTE" Text="Déjà au plan" />
                     <asp:ListItem Value="DOUBLON_FICHIER" Text="Doublons du fichier" />
                     <asp:ListItem Value="INVALIDE" Text="Lignes invalides" />
+                    <asp:ListItem Value="ORIGINE:AJOUTE" Text="Ajoutés après l'ouverture" />
+                    <asp:ListItem Value="ORIGINE:DEFAUT" Text="Par défaut dans QuickBooks" />
                 </asp:DropDownList>
             </div>
 
@@ -365,6 +367,9 @@
                         <asp:BoundField DataField="Anomalie" HeaderText="Détail" />
                         <asp:BoundField DataField="TypeSource" HeaderText="Type d'origine" />
                         <asp:BoundField DataField="SousTypeSource" HeaderText="Sous-type" />
+                        <asp:TemplateField HeaderText="Origine">
+                            <ItemTemplate><%# OrigineTexte(Container.DataItem) %></ItemTemplate>
+                        </asp:TemplateField>
                     </Columns>
                 </asp:GridView>
 

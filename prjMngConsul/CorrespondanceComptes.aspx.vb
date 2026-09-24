@@ -418,12 +418,6 @@ Public Class CorrespondanceComptes
     End Function
 
     ''' <summary>
-    ''' Ce qui identifie le compte d'origine. Quand l'ancien logiciel n'a pas
-    ''' de numéros — c'est courant avec QuickBooks, qui les rend facultatifs —
-    ''' c'est le nom qui tient ce rôle, et la colonne le dit plutôt que de
-    ''' rester vide.
-    ''' </summary>
-    ''' <summary>
     ''' Tout ce qu'on sait du compte source, sous son nom : nature, type et
     ''' sous-type QuickBooks, numéro et nom tels que la source les écrit quand
     ''' ils diffèrent, solde et sens d'origine, système, et l'anomalie du
@@ -443,6 +437,11 @@ Public Class CorrespondanceComptes
         Dim systeme As String = Champ(r, "SystemeSource")
         Dim anomalie As String = Champ(r, "AnomalieChargement")
         Dim statut As String = Champ(r, "StatutChargement")
+        Dim origine As String = Champ(r, "Origine")
+        Dim creeLe As String = If(IsDBNull(r("CreeLe")), "", CDate(r("CreeLe")).ToString("yyyy-MM-dd"))
+        Dim descriptionSrc As String = Champ(r, "DescriptionSource")
+        Dim nomComplet As String = Champ(r, "NomComplet")
+        Dim sousCompte As Boolean = (Champ(r, "SousCompte") = "True")
 
         Dim sb As New StringBuilder()
 
@@ -461,6 +460,20 @@ Public Class CorrespondanceComptes
         If systeme <> "" Then ligne2.Add(Server.HtmlEncode(systeme.ToLowerInvariant()))
         If ligne2.Count > 0 Then sb.Append("<div class='nature'>").Append(String.Join(" · ", ligne2)).Append("</div>")
 
+        ' 2b) d'où il vient (T271) : par défaut dans QuickBooks, ou ajouté — et
+        ' quand ; sous-compte de qui ; ce que la description en dit.
+        Dim ligne3 As New List(Of String)
+        If origine = "AJOUTE" Then
+            ligne3.Add("<b>ajouté" & If(creeLe <> "", " le " & creeLe, "") & "</b>")
+        ElseIf origine = "DEFAUT" Then
+            ligne3.Add("par défaut dans QuickBooks")
+        End If
+        If sousCompte AndAlso nomComplet <> "" AndAlso nomComplet.Contains(":") Then
+            ligne3.Add("sous-compte de « " & Server.HtmlEncode(nomComplet.Substring(0, nomComplet.LastIndexOf(":"c))) & " »")
+        End If
+        If descriptionSrc <> "" Then ligne3.Add("<i>" & Server.HtmlEncode(descriptionSrc) & "</i>")
+        If ligne3.Count > 0 Then sb.Append("<div class='nature' style='white-space:normal'>").Append(String.Join(" · ", ligne3)).Append("</div>")
+
         ' 3) ce que le chargement a conclu
         If statut = "EXISTE" AndAlso anomalie <> "" Then
             sb.Append("<div class='nature' style='color:#047857'>").Append(Server.HtmlEncode(anomalie)).Append("</div>")
@@ -476,6 +489,12 @@ Public Class CorrespondanceComptes
         Return Convert.ToString(r(nom)).Trim()
     End Function
 
+    ''' <summary>
+    ''' Ce qui identifie le compte d'origine. Quand l'ancien logiciel n'a pas
+    ''' de numéros — c'est courant avec QuickBooks, qui les rend facultatifs —
+    ''' c'est le nom qui tient ce rôle, et la colonne le dit plutôt que de
+    ''' rester vide.
+    ''' </summary>
     Protected Function CleAffichee(compte As Object, typeCle As Object) As String
         Dim c = Convert.ToString(compte)
         If c <> "" Then Return Server.HtmlEncode(c)

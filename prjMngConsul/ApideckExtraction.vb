@@ -455,6 +455,15 @@ Public Class ApideckExtraction
             o("TypeNormalise") = NatureDuCompte(Valeur(c, "classification"), Valeur(c, "type"))
             o("SoldeSource") = Valeur(c, "current_balance", "balance")
             o("SensSource") = ""
+            ' Ce que QuickBooks dit encore du compte (T271) : quand il est né —
+            ' c'est ce qui distingue les comptes par défaut de ceux que
+            ' l'utilisateur a ajoutés —, sa description, s'il est un sous-compte,
+            ' et son nom complet « Parent:Enfant ».
+            o("CreeLe") = Valeur(c, "created_at")
+            o("ModifieLe") = Valeur(c, "updated_at")
+            o("DescriptionSource") = Valeur(c, "description")
+            o("SousCompte") = Valeur(c, "sub_account")
+            o("NomComplet") = Valeur(c, "fully_qualified_name")
             o("Compte") = numero
             o("Nom") = nom
             ' Option Strict est à Off : affecter l'Object rendu par Nombre() à un
