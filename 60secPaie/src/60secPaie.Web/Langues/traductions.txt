@@ -916,9 +916,9 @@ fr: Afficher aussi les employés inactifs
 en: Also show inactive employees
 es: Mostrar también los empleados inactivos
 
-fr: Les employés sont ceux de MngConsul : ils s'y ajoutent et s'y modifient (nom, adresse, poste, date d'embauche). Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.
-en: Employees come from MngConsul: they are added and edited there (name, address, job title, hire date). Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard.
-es: Los empleados son los de MngConsul: allí se agregan y se modifican (nombre, dirección, puesto, fecha de contratación). Aquí usted configura su nómina. Solo los empleados con la nómina configurada aparecen en el asistente de nómina.
+fr: Les employés sont partagés avec MngConsul : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans MngConsul. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.
+en: Employees are shared with MngConsul: create them here or there; their identity (name, address, position, hire date) is edited in MngConsul. Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard.
+es: Los empleados se comparten con MngConsul: créelos aquí o allá; su identidad (nombre, dirección, puesto, fecha de contratación) se modifica en MngConsul. Aquí configura su nómina. Solo los empleados con la nómina configurada se proponen en el asistente de nómina.
 
 fr: Poste
 en: Job title
@@ -3117,3 +3117,81 @@ es: usted@empresa.ca
 fr: Qu'est-ce que 60secPaie ?
 en: What is 60secPaie?
 es: ¿Qué es 60secPaie?
+
+# ---------- Nouvel employé ----------
+
+fr: Nouvel employé
+en: New employee
+es: Nuevo empleado
+
+fr: Créer l'employé
+en: Create employee
+es: Crear el empleado
+
+fr: Nom de famille
+en: Last name
+es: Apellido
+
+fr: Adresse (suite)
+en: Address (line 2)
+es: Dirección (línea 2)
+
+fr: Province
+en: Province
+es: Provincia
+
+fr: Code postal
+en: Postal code
+es: Código postal
+
+fr: Identité
+en: Identity
+es: Identidad
+
+fr: Coordonnées
+en: Contact details
+es: Datos de contacto
+
+fr: Facultatif. Doit être unique dans la compagnie.
+en: Optional. Must be unique within the company.
+es: Opcional. Debe ser único en la empresa.
+
+fr: Nécessaire pour envoyer le talon de paie par courriel.
+en: Required to email the pay stub.
+es: Necesario para enviar el talón de pago por correo electrónico.
+
+fr: L'employé est créé dans la compagnie courante et apparaît aussitôt dans MngConsul, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct.
+en: The employee is created in the current company and appears in MngConsul right away, where their identity is edited from then on. Once created, you set up their payroll on their record: SIN, pay period, rates, exemptions, direct deposit.
+es: El empleado se crea en la empresa actual y aparece de inmediato en MngConsul, donde luego se modifica su identidad. Una vez creado, configura su nómina en su ficha: NAS, período de pago, tasas, exenciones, depósito directo.
+
+fr: Il s'agit d'une autre personne : créer quand même
+en: This is a different person: create anyway
+es: Se trata de otra persona: crear de todos modos
+
+fr: Un employé actif s'appelle déjà {0} {1}.
+en: An active employee is already named {0} {1}.
+es: Ya hay un empleado activo llamado {0} {1}.
+
+fr: Voir sa fiche
+en: View their record
+es: Ver su ficha
+
+fr: Un employé actif porte déjà ce nom. Vérifiez, puis cochez « créer quand même » s'il s'agit bien d'une autre personne.
+en: An active employee already has this name. Check, then tick "create anyway" if this really is a different person.
+es: Un empleado activo ya tiene este nombre. Verifique y marque «crear de todos modos» si realmente es otra persona.
+
+fr: Le code employé {0} est déjà utilisé dans cette compagnie.
+en: Employee code {0} is already used in this company.
+es: El código de empleado {0} ya se usa en esta empresa.
+
+fr: Le courriel est invalide.
+en: The email address is invalid.
+es: El correo electrónico no es válido.
+
+fr: Employé créé. Configurez maintenant sa paie : vérifiez les valeurs proposées, puis enregistrez.
+en: Employee created. Now set up their payroll: check the proposed values, then save.
+es: Empleado creado. Configure ahora su nómina: verifique los valores propuestos y guarde.
+
+fr: Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul.
+en: No employees for this company. Create the first one with the button above, or add them in MngConsul.
+es: No hay empleados para esta empresa. Cree el primero con el botón de arriba o agréguelos en MngConsul.

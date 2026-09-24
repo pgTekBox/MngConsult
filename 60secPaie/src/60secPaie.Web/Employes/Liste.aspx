@@ -5,8 +5,11 @@
             <h1>Employés</h1>
             <asp:CheckBox ID="chkInactifs" runat="server" AutoPostBack="true" Text="Afficher aussi les employés inactifs" />
         </div>
+        <div class="actions">
+            <a runat="server" href="~/Employes/Nouveau.aspx" class="bouton">Nouvel employé</a>
+        </div>
     </div>
-    <p class="note">Les employés sont ceux de MngConsul : ils s'y ajoutent et s'y modifient (nom, adresse, poste, date d'embauche).
+    <p class="note">Les employés sont partagés avec MngConsul : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans MngConsul.
        Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.</p>
 
     <div class="carte table-defilante">
@@ -31,6 +34,6 @@
             </ItemTemplate>
             <FooterTemplate></tbody></table></FooterTemplate>
         </asp:Repeater>
-        <asp:Label ID="lblAucun" runat="server" CssClass="note" Visible="false" Text="Aucun employé pour cette compagnie. Ajoutez-les dans MngConsul." />
+        <asp:Label ID="lblAucun" runat="server" CssClass="note" Visible="false" Text="Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul." />
     </div>
 </asp:Content>

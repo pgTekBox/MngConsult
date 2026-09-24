@@ -82,6 +82,7 @@
     <Content Include="Config\ElementsPaie.aspx" />
     <Content Include="Employes\Liste.aspx" />
     <Content Include="Employes\Fiche.aspx" />
+    <Content Include="Employes\Nouveau.aspx" />
     <Content Include="Employes\ElementsPaie.aspx" />
     <Content Include="Employes\Cumulatifs.aspx" />
     <Content Include="Config\PlanComptable.aspx" />
@@ -242,6 +243,13 @@
     </Compile>
     <Compile Include="Employes\Fiche.aspx.designer.vb">
       <DependentUpon>Fiche.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Employes\Nouveau.aspx.vb">
+      <DependentUpon>Nouveau.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Employes\Nouveau.aspx.designer.vb">
+      <DependentUpon>Nouveau.aspx</DependentUpon>
     </Compile>
     <Compile Include="Employes\ElementsPaie.aspx.vb">
       <DependentUpon>ElementsPaie.aspx</DependentUpon>
