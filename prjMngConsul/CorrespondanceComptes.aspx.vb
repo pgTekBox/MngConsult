@@ -449,7 +449,7 @@ Public Class CorrespondanceComptes
         Dim systeme As String = Champ(r, "SystemeSource")
         Dim anomalie As String = Champ(r, "AnomalieChargement")
         Dim statut As String = Champ(r, "StatutChargement")
-        Dim origine As String = Champ(r, "Origine")
+        Dim origine As String = Champ(r, "OrigineSource")
         Dim creeLe As String = If(IsDBNull(r("CreeLe")), "", CDate(r("CreeLe")).ToString("yyyy-MM-dd"))
         Dim descriptionSrc As String = Champ(r, "DescriptionSource")
         Dim nomComplet As String = Champ(r, "NomComplet")
