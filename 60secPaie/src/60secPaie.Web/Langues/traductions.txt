@@ -3203,3 +3203,11 @@ es: Empleado creado. Configure ahora su nómina: verifique los valores propuesto
 fr: Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul.
 en: No employees for this company. Create the first one with the button above, or add them in MngConsul.
 es: No hay empleados para esta empresa. Cree el primero con el botón de arriba o agréguelos en MngConsul.
+
+fr: Aide
+en: Help
+es: Ayuda
+
+fr: Guide complet de 60secPaie
+en: Complete 60secPaie guide
+es: Guía completa de 60secPaie

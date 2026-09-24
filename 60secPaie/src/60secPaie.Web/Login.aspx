@@ -68,6 +68,7 @@
 
                 <div class="connexion-retour">
                     <a runat="server" href="~/Accueil.aspx">Qu'est-ce que 60secPaie ?</a>
+                    &middot; <a runat="server" href="~/Aide.html" target="_blank" rel="noopener">Aide</a>
                 </div>
 
             </div>

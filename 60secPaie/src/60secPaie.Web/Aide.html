@@ -1,0 +1,1055 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aide 60secPaie</title>
+<meta name="description" content="Guide complet de 60secPaie : configuration, employés, calcul de la paie, retenues, rapports, feuillets, dépôt direct, écritures, formules et messages.">
+<style>
+:root{--encre:#1d2733;--encre-douce:#5b6877;--fond:#f4f6f8;--carte:#fff;--bord:#d9dfe6;--accent:#0b6e99;--accent-fonce:#085373;--succes:#1b7a43;--succes-fond:#e6f4ec;--erreur:#a4262c;--erreur-fond:#fbeaea;--avert-fond:#fff6da;--avert:#8a6100}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--encre);background:var(--fond);line-height:1.55;font-size:15px}
+header.entete{background:var(--accent-fonce);color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.entete-haut{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 24px;flex-wrap:wrap}
+.logo{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:.2px}
+.logo span{opacity:.85;font-weight:500}
+.entete-outils{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.entete-outils input{padding:7px 10px;border:1px solid #6ea4bf;border-radius:6px;min-width:240px;font-size:14px}
+.entete-outils a,.entete-outils button{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:6px;text-decoration:none;font-size:13px;cursor:pointer}
+.page{display:grid;grid-template-columns:290px 1fr;gap:0;max-width:1400px;margin:0 auto}
+nav.sommaire{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 58px);overflow:auto;padding:18px 14px 40px 22px;border-right:1px solid var(--bord);background:var(--carte);font-size:13.5px}
+nav.sommaire h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--encre-douce);margin:14px 0 6px}
+nav.sommaire a{display:block;color:var(--encre);text-decoration:none;padding:3px 6px;border-radius:4px}
+nav.sommaire a:hover{background:var(--fond);color:var(--accent-fonce)}
+nav.sommaire a.n2{padding-left:18px;color:var(--encre-douce)}
+nav.sommaire a.cache{display:none}
+main{padding:24px 40px 80px;min-width:0}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:22px;margin:44px 0 12px;padding-top:14px;border-top:2px solid var(--bord);color:var(--accent-fonce)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--encre)}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lede{font-size:16px;color:var(--encre-douce);max-width:860px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:8px;padding:14px 18px;margin:12px 0}
+.note{background:var(--fond);border-left:4px solid var(--accent);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.avert{background:var(--avert-fond);border-left:4px solid var(--avert);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.erreur{background:var(--erreur-fond);border-left:4px solid var(--erreur);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.succes{background:var(--succes-fond);border-left:4px solid var(--succes);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+table{border-collapse:collapse;width:100%;margin:10px 0 16px;background:var(--carte);font-size:14px}
+th,td{border:1px solid var(--bord);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#eef3f7;font-weight:600}
+td.num,th.num{text-align:right;white-space:nowrap}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:13px;background:#eef3f7;padding:1px 5px;border-radius:4px}
+pre{background:#1d2733;color:#e8eef4;padding:12px 14px;border-radius:6px;overflow:auto;font-size:13px}
+.chemin{display:inline-block;background:#eef3f7;border:1px solid var(--bord);border-radius:4px;padding:1px 8px;font-size:13px;color:var(--accent-fonce);font-weight:600}
+.etiquette{display:inline-block;padding:1px 8px;border-radius:12px;font-size:12px;font-weight:600}
+.etiquette.B{background:var(--avert-fond);color:var(--avert)}
+.etiquette.C{background:var(--succes-fond);color:var(--succes)}
+.etiquette.A{background:var(--erreur-fond);color:var(--erreur)}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+dl.def dt{font-weight:600;margin-top:10px}
+dl.def dd{margin:2px 0 0 18px;color:var(--encre)}
+ol.etapes li{margin:6px 0}
+.faq details{background:var(--carte);border:1px solid var(--bord);border-radius:6px;padding:8px 14px;margin:6px 0}
+.faq summary{cursor:pointer;font-weight:600}
+.retour{font-size:12px;margin-top:8px}
+.retour a{color:var(--encre-douce)}
+mark{background:#ffe89a}
+@media (max-width:980px){.page{grid-template-columns:1fr}nav.sommaire{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--bord)}main{padding:18px 16px 60px}.deux{grid-template-columns:1fr}}
+@media print{header.entete,nav.sommaire,.retour{display:none}main{padding:0}h2{break-before:page}body{background:#fff;font-size:12px}}
+</style>
+</head>
+<body>
+<header class="entete">
+  <div class="entete-haut">
+    <a class="logo" href="#haut">60sec<span>Paie</span> · Aide</a>
+    <div class="entete-outils">
+      <input type="search" id="recherche" placeholder="Filtrer le sommaire… (ex. RRQ, chèque, T4)" aria-label="Filtrer le sommaire">
+      <button type="button" onclick="window.print()">Imprimer</button>
+      <a href="Default.aspx">Retour à 60secPaie</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+<nav class="sommaire" id="sommaire">
+  <h2>Pour commencer</h2>
+  <a href="#intro">Vue d'ensemble</a>
+  <a href="#cycle" class="n2">Le cycle d'une paie</a>
+  <a href="#limites" class="n2">Ce que 60secPaie ne fait pas</a>
+  <a href="#demarrer">Connexion et session</a>
+  <a href="#comptes" class="n2">Comptes et mots de passe</a>
+  <a href="#compagnies" class="n2">Compagnies et changement de compagnie</a>
+  <a href="#langues" class="n2">Langues (FR, EN, ES)</a>
+  <a href="#securite" class="n2">Sécurité et données sensibles</a>
+  <a href="#conventions">Conventions de l'écran</a>
+  <a href="#tableau">Tableau de bord</a>
+  <h2>Configuration</h2>
+  <a href="#config">Paramètres de paie</a>
+  <a href="#config-elements">Éléments de paie</a>
+  <a href="#config-plan">Plan comptable</a>
+  <a href="#config-depot">Dépôt direct</a>
+  <h2>Employés</h2>
+  <a href="#emp-liste">Liste des employés</a>
+  <a href="#emp-nouveau">Nouvel employé</a>
+  <a href="#emp-fiche">Fiche : paramètres de paie</a>
+  <a href="#emp-elements">Éléments de paie récurrents</a>
+  <a href="#emp-cumulatifs">Cumulatifs de départ</a>
+  <h2>Faire la paie</h2>
+  <a href="#paie">Calculer la paie (4 étapes)</a>
+  <a href="#paie-etape1" class="n2">Étape 1 : période</a>
+  <a href="#paie-etape2" class="n2">Étape 2 : employés et lignes</a>
+  <a href="#paie-etape3" class="n2">Étape 3 : révision</a>
+  <a href="#paie-etape4" class="n2">Étape 4 : confirmation</a>
+  <a href="#historique">Historique de paie</a>
+  <a href="#detail">Détail d'une paie</a>
+  <a href="#detail-depot" class="n2">Fichier de dépôt direct</a>
+  <a href="#detail-courriel" class="n2">Talons par courriel</a>
+  <a href="#detail-annuler" class="n2">Annuler une paie</a>
+  <a href="#talon">Talon de paie</a>
+  <h2>Retenues</h2>
+  <a href="#remises">Paiement des retenues</a>
+  <a href="#remises-calendrier" class="n2">Fréquences et échéances</a>
+  <a href="#remises-historique">Historique et détail des paiements</a>
+  <h2>Rapports</h2>
+  <a href="#feuillets">T4 et Relevés 1</a>
+  <a href="#feuillet-employe" class="n2">Feuillet d'un employé</a>
+  <a href="#cnesst">Déclaration CNESST</a>
+  <a href="#ecritures">Écritures comptables</a>
+  <h2>Comprendre les calculs</h2>
+  <a href="#categories">Catégories de paie</a>
+  <a href="#parametres">Paramètres de l'année 2026</a>
+  <a href="#formules">Formules, retenue par retenue</a>
+  <a href="#arrondis">Arrondis</a>
+  <a href="#exemple">Exemple chiffré</a>
+  <h2>Cas pratiques</h2>
+  <a href="#cas-demarrage">Premier démarrage</a>
+  <a href="#cas-conversion">Conversion en cours d'année</a>
+  <a href="#cas-nouvel-employe">Embaucher quelqu'un</a>
+  <a href="#cas-depart">Départ d'un employé</a>
+  <a href="#cas-assurance">Assurance collective</a>
+  <a href="#cas-bonus">Bonus et paiement rétroactif</a>
+  <a href="#cas-vacances">Vacances</a>
+  <a href="#cas-annuelle">Paie annuelle</a>
+  <a href="#cas-corriger">Corriger une paie</a>
+  <a href="#cas-depot">Premier dépôt direct</a>
+  <a href="#cas-fin-annee">Fin d'année</a>
+  <h2>Référence</h2>
+  <a href="#messages">Messages et leur solution</a>
+  <a href="#faq">Questions fréquentes</a>
+  <a href="#glossaire">Glossaire</a>
+</nav>
+
+<main id="haut">
+<h1>Aide de 60secPaie</h1>
+<p class="lede">Ce guide décrit chaque écran, chaque champ, chaque règle et chaque message de 60secPaie, le service de paie pour le Québec de 60Sec. Il suit l'ordre du menu. Les mots entre guillemets « » sont ceux que vous voyez à l'écran. Utilisez le filtre en haut pour retrouver un sujet, ou <kbd>Ctrl</kbd>+<kbd>F</kbd> pour chercher un mot dans toute la page.</p>
+<div class="note">Version du guide : septembre 2026. Taux en vigueur dans le logiciel : année 2026, d'après le guide T4127 de l'ARC et le guide TP-1015.F de Revenu Québec.</div>
+
+<!-- ============================================================ -->
+<h2 id="intro">Vue d'ensemble</h2>
+<p>60secPaie calcule la paie d'employés qui travaillent au Québec : impôt fédéral, impôt du Québec, RRQ, assurance-emploi, RQAP, et les cotisations de l'employeur (RRQ, AE, RQAP, FSS, CNESST, CNT). À partir des paies confirmées, il produit les talons de paie, le fichier de dépôt direct, le montant des retenues à remettre aux deux gouvernements, les cases des feuillets T4 et Relevé 1, la déclaration des salaires CNESST et les écritures comptables.</p>
+<p>Il partage ses comptes utilisateurs et ses compagnies avec 60Sec (MngConsul). Les employés sont aussi ceux de MngConsul : ils peuvent être créés d'un côté ou de l'autre, mais leur identité (nom, adresse, poste) se modifie dans MngConsul. 60secPaie y ajoute tout ce qui concerne la paie.</p>
+
+<h3 id="cycle">Le cycle d'une paie</h3>
+<ol class="etapes">
+  <li><strong>Configurer la compagnie</strong> une fois : fréquence de paie, numéros RP et RS, taux FSS et CNESST (<span class="chemin">Configuration › Paramètres de paie</span>).</li>
+  <li><strong>Configurer chaque employé</strong> une fois : NAS, fréquence, taux ou salaire, TD1 et TP-1015.3, dépôt direct (<span class="chemin">Employés › Paramètres de paie</span>), puis ses lignes récurrentes (<span class="chemin">Éléments de paie</span>).</li>
+  <li><strong>Calculer la paie</strong> à chaque période, en 4 étapes : période, saisie, révision, confirmation.</li>
+  <li><strong>Payer les employés</strong> : chèques numérotés ou fichier de dépôt direct ; envoyer les talons par courriel.</li>
+  <li><strong>Remettre les retenues</strong> aux échéances, dans <span class="chemin">Retenues</span>.</li>
+  <li><strong>En fin d'année</strong> : T4, Relevés 1, sommaires, déclaration CNESST, dans <span class="chemin">Rapports</span>.</li>
+</ol>
+
+<h3 id="limites">Ce que 60secPaie ne fait pas</h3>
+<ul>
+  <li>Il <strong>ne transmet aucun paiement</strong> ni aux employés, ni aux gouvernements. Il prépare le fichier de dépôt direct que vous remettez à votre banque, et il calcule les remises que vous payez vous-même.</li>
+  <li>Il <strong>ne transmet pas les feuillets</strong>. Il calcule chaque case ; vous les saisissez dans Formulaires Web (ARC) et Mon dossier pour les entreprises (Revenu Québec).</li>
+  <li>Il ne gère pas les employés hors Québec : la province d'emploi est toujours QC.</li>
+  <li>Il ne connaît que les taux de <strong>2026</strong>. Une paie datée d'une autre année est refusée tant que ses taux ne sont pas ajoutés au logiciel.</li>
+  <li>Il ne remplace pas votre jugement : « Vérifiez toujours vos paies avant de les confirmer. » Les montants calculés demeurent sous la responsabilité de l'employeur.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="demarrer">Connexion et session</h2>
+<p>La page <span class="chemin">Login.aspx</span> demande votre « Courriel » et votre « Mot de passe ». La touche Entrée déclenche la connexion. Après la connexion, vous arrivez sur la page demandée, sinon sur le tableau de bord.</p>
+<table>
+<tr><th>Message</th><th>Cause</th><th>Quoi faire</th></tr>
+<tr><td>« Courriel ou mot de passe invalide. »</td><td>Le couple ne correspond à aucun compte actif de 60Sec, ou un champ est vide.</td><td>Vérifiez la casse du mot de passe. Le courriel est comparé en minuscules.</td></tr>
+<tr><td>« Trop de tentatives. Réessayez dans quelques minutes. »</td><td>5 échecs : le compte est verrouillé 15 minutes. Un nouvel échec après l'expiration reverrouille aussitôt.</td><td>Attendez 15 minutes, puis entrez le bon mot de passe du premier coup. Une connexion réussie remet le compteur à zéro.</td></tr>
+<tr><td>« Votre compte n'est associé à aucune compagnie dans MngConsul. »</td><td>Le compte existe mais n'a pas de compagnie.</td><td>Faites rattacher votre compte à une compagnie dans MngConsul.</td></tr>
+</table>
+<p>La session dure <strong>60 minutes</strong> et se prolonge à chaque action. Il n'y a pas d'option « Se souvenir de moi ». « Me déconnecter », en haut à droite, ferme la session.</p>
+<p>Un visiteur non connecté qui arrive sur la racine du site voit la page de présentation (<span class="chemin">Accueil.aspx</span>), avec « Me connecter » et « Qu'est-ce que 60secPaie ? ».</p>
+
+<h3 id="comptes">Comptes et mots de passe</h3>
+<p>Les comptes sont ceux de <strong>60Sec (MngConsul)</strong>. 60secPaie ne crée pas de compte et ne change pas de mot de passe : « Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de 60Sec. » Un compte désactivé ou supprimé dans MngConsul perd l'accès immédiatement, même en cours de session.</p>
+<p>Tous les utilisateurs qui ont accès à une compagnie y ont les mêmes droits dans 60secPaie. Le rôle administrateur de MngConsul est lu, mais aucune page ne l'exige pour l'instant.</p>
+
+<h3 id="compagnies">Compagnies et changement de compagnie</h3>
+<p>La liste des compagnies accessibles suit la règle de MngConsul : un utilisateur ordinaire voit sa compagnie, un comptable voit toutes celles dont il est le comptable. Avec une seule compagnie, son nom s'affiche en haut à droite. Avec plusieurs, une liste déroulante (« Changer de compagnie ») les propose ; après un changement, vous revenez au tableau de bord.</p>
+<p>La compagnie courante est la même que dans MngConsul (même clé de session). Son nom et son adresse sont recopiés depuis MngConsul une fois par session, pour les talons, les rapports et les fichiers.</p>
+
+<h3 id="langues">Langues (FR, EN, ES)</h3>
+<p>Les liens « FR | EN | ES » de l'en-tête, de la page de connexion et de la page d'accueil changent la langue de tout l'écran : textes, boutons, infobulles, confirmations, titres des exports CSV. Le choix est mémorisé dans un témoin pendant un an et survit à la déconnexion. Vous pouvez aussi ajouter <code>?lang=en</code> ou <code>?lang=es</code> à une adresse.</p>
+<ul>
+  <li>Les dates sont toujours au format <strong>AAAA-MM-JJ</strong>, dans les trois langues.</li>
+  <li>Les montants s'écrivent « 1 234,56 $ » en français, « $1,234.56 » en anglais et en espagnol.</li>
+  <li>Le talon envoyé par courriel et son PDF sont dans la <strong>langue de l'employé</strong> (choisie dans sa fiche). Le PDF téléchargé depuis l'écran est dans la langue de l'utilisateur.</li>
+  <li>Ce guide n'est offert qu'en français.</li>
+</ul>
+
+<h3 id="securite">Sécurité et données sensibles</h3>
+<ul>
+  <li>Le <strong>NAS</strong> et les <strong>numéros de compte bancaire</strong> (employés et compagnie) sont chiffrés. Ils ne sont jamais renvoyés au navigateur : les écrans n'en montrent que les 3 derniers caractères (« ••••••123 »). Un champ laissé vide conserve la valeur au dossier.</li>
+  <li>Le NAS complet ne s'affiche qu'à la demande, sur le feuillet d'un employé, et cette consultation est inscrite au journal d'activité.</li>
+  <li>Les exports CSV n'incluent jamais le NAS.</li>
+  <li>Les formulaires sont protégés contre la falsification de requête, et les pages ne peuvent pas être affichées dans un cadre d'un autre site.</li>
+  <li>Le <strong>journal d'activité</strong> conserve, par compagnie, les événements importants : employé créé, paie configurée, paie confirmée ou annulée, talons envoyés, fichier de dépôt direct produit, paiement de retenues enregistré ou annulé, NAS complet affiché. Les 8 dernières entrées sont sur le tableau de bord.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="conventions">Conventions de l'écran</h2>
+<ul>
+  <li>Un astérisque rouge marque un champ <strong>requis</strong>.</li>
+  <li>Les nombres acceptent la virgule ou le point ; les espaces, « $ » et « % » sont ignorés. « 1,234.56 » et « 1.234,56 » sont compris tous les deux.</li>
+  <li>Un bandeau vert confirme une action réussie, un bandeau rouge signale une erreur. Après une redirection, le message s'affiche une fois sur la page suivante.</li>
+  <li>Les exports CSV utilisent le point-virgule et l'encodage UTF-8 avec BOM : ils s'ouvrent directement dans Excel. Les montants y sont au format « 0,00 ».</li>
+  <li>Le bouton « Imprimer » utilise l'impression du navigateur ; l'en-tête, le menu et les boutons ne s'impriment pas.</li>
+</ul>
+<h4>Statuts d'une paie</h4>
+<table>
+<tr><th>Pastille</th><th>Sens</th></tr>
+<tr><td><span class="etiquette B">Brouillon</span></td><td>Paie en préparation. Elle ne compte nulle part. Une seule à la fois par compagnie.</td></tr>
+<tr><td><span class="etiquette C">Confirmé</span></td><td>Paie enregistrée : elle compte dans les cumulatifs, les remises, les feuillets et les écritures.</td></tr>
+<tr><td><span class="etiquette A">Annulé</span></td><td>Paie retirée des cumulatifs. La ligne est grisée dans les listes. Les numéros de chèque attribués ne sont pas réutilisés.</td></tr>
+</table>
+<h4>Fréquences de paie</h4>
+<table>
+<tr><th>Libellé</th><th>Périodes par année</th><th>Début de période calculé</th></tr>
+<tr><td>Hebdomadaire</td><td class="num">52</td><td>fin de période − 6 jours</td></tr>
+<tr><td>Aux 2 semaines</td><td class="num">26</td><td>fin − 13 jours</td></tr>
+<tr><td>Bimensuel</td><td class="num">24</td><td>le 1er ou le 16 du mois, selon que la fin tombe au plus tard le 15 ou après</td></tr>
+<tr><td>Mensuel</td><td class="num">12</td><td>le 1er du mois</td></tr>
+<tr><td>Annuelle</td><td class="num">1</td><td>le 1er janvier de l'année</td></tr>
+</table>
+<h4>Messages de saisie génériques</h4>
+<ul>
+  <li>« « {champ} » : nombre invalide. » et « « {champ} » ne peut pas être négatif. »</li>
+  <li>« « {champ} » : nombre entier invalide. »</li>
+  <li>« « {champ} » : date invalide (format AAAA-MM-JJ). »</li>
+  <li>« « {champ} » est requis. »</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="tableau">Tableau de bord</h2>
+<p><span class="chemin">Default.aspx</span>. Le sous-titre indique le nombre d'employés actifs et la date de la dernière paie confirmée (« aucune paie confirmée » sinon).</p>
+<ul>
+  <li><strong>Bandeau jaune</strong> « Une paie est en préparation (période se terminant le …). » avec « Continuer cette paie », s'il existe un brouillon.</li>
+  <li><strong>« Faites vos paies »</strong> : bouton « Calculer la paie ».</li>
+  <li><strong>« Paiement des retenues »</strong> : une ligne par gouvernement. « Fédéral : rien à payer. », ou « Fédéral : X $ à payer, échéance le … », ou en rouge « … en retard depuis le … » quand l'échéance est passée. Bouton « Payer ».</li>
+  <li><strong>« Historique de paie »</strong>, <strong>« Employés »</strong>, <strong>« Configuration »</strong> : raccourcis.</li>
+  <li><strong>« Activités récentes »</strong> : les 8 dernières entrées du journal, avec la date, la description (cliquable quand elle mène à une page) et le courriel de l'utilisateur.</li>
+</ul>
+<div class="note">Tant que la paie de la compagnie n'est pas configurée, toutes les pages renvoient à <span class="chemin">Configuration › Paramètres de paie</span> avec le message « La paie n'est pas encore configurée pour {compagnie}. Commencez par ses paramètres de paie. »</div>
+
+<!-- ============================================================ -->
+<h2 id="config">Configuration › Paramètres de paie</h2>
+<p><span class="chemin">Config/Compagnie.aspx</span>. Seule page accessible avant que la paie de la compagnie soit configurée. Le sous-menu de Configuration offre : « Paramètres de paie », « Éléments de paie », « Plan comptable », « Dépôt direct ».</p>
+<h3>« Compagnie » (lecture seule)</h3>
+<p>Nom, adresse, ville, téléphone et « Numéro d'entreprise (NE) » viennent de MngConsul : « Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise). »</p>
+<h3>« Informations de paie »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Valeur par défaut, validation</th></tr>
+<tr><td>« Période de paie par défaut » *</td><td>Fréquence proposée dans l'assistant et appliquée aux employés qui n'en ont pas de propre.</td><td>Aux 2 semaines (26). Choix : 52, 26, 24, 12, 1.</td></tr>
+<tr><td>« Taux de vacances par défaut (%) » *</td><td>Taux d'indemnité de vacances des employés sans taux propre.</td><td>4. Refusé au-delà de 20 : « Le taux de vacances semble trop élevé. »</td></tr>
+<tr><td>« Prochain numéro de chèque »</td><td>Premier numéro attribué aux paies par chèque et aux remises par chèque.</td><td>1. Vide = 1. Avance automatiquement.</td></tr>
+<tr><td>« Fréquence de paiement des retenues fédérales »</td><td>Détermine les échéances des remises à l'ARC.</td><td>« Mensuelle (dû le 15 du mois suivant) » ou « Trimestrielle (dû le 15 suivant le trimestre) ».</td></tr>
+<tr><td>« Fréquence de paiement des retenues à Revenu Québec »</td><td>Idem pour Revenu Québec. « La fréquence est celle que l'ARC et Revenu Québec vous ont attribuée. »</td><td>Mensuelle.</td></tr>
+<tr><td>« Numéro d'entreprise fédéral (RP) »</td><td>Compte de retenues à la source, imprimé sur les feuillets et le détail des remises.</td><td>Format 123456789RP0001, mis en majuscules.</td></tr>
+<tr><td>« Numéro d'identification Revenu Québec (RS) »</td><td>Idem pour Revenu Québec.</td><td>Format 1234567890RS0001.</td></tr>
+</table>
+<h3>« Cotisations de l'employeur »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Notes</th></tr>
+<tr><td>« Masse salariale totale estimée ($) »</td><td>Sert à déterminer le taux de cotisation au FSS.</td><td>Le taux réel est établi sur la masse de l'année ; l'écart se règle dans le Sommaire 1.</td></tr>
+<tr><td>« Secteur d'activité (FSS) »</td><td>« Général », « Primaire et manufacturier » ou « Secteur public ».</td><td>L'aide affiche « Taux FSS appliqué : x,xx % ». Voir <a href="#parametres">les paramètres 2026</a>.</td></tr>
+<tr><td>« Facteur de cotisation de l'employeur à l'AE » *</td><td>Multiplicateur de la cotisation de l'employé.</td><td>1,4, « sauf si vous bénéficiez d'un taux réduit ». Doit se situer entre 1 et 1,4.</td></tr>
+<tr><td>« Taux de la CNESST ($ par 100 $ assurables) »</td><td>Taux de versement périodique.</td><td>« Inscrit sur votre décision de classification. »</td></tr>
+<tr><td>« Assujetti à la cotisation relative aux normes du travail (CNT) »</td><td>Ajoute la CNT (0,06 %) aux parts de l'employeur.</td><td>Cochée par défaut.</td></tr>
+</table>
+<h3>« Enregistrer »</h3>
+<p>Au <strong>premier enregistrement</strong>, 60secPaie crée les paramètres de paie de la compagnie, crée six éléments de paie de base (« Salaire », « Salaire fixe », « Temps et demi », « Jours fériés », « Paie de vacances », « Gratification (bonus) »), inscrit l'événement au journal et vous envoie vers Employés : « Paramètres de paie enregistrés. Configurez maintenant la paie de vos employés. » Ensuite : « Paramètres de paie enregistrés. »</p>
+
+<!-- ============================================================ -->
+<h2 id="config-elements">Configuration › Éléments de paie</h2>
+<p><span class="chemin">Config/ElementsPaie.aspx</span>. Un élément de paie est une ligne réutilisable : un revenu (salaire, temps et demi, commission…), un avantage imposable (véhicule, assurance maladie payée par l'employeur…) ou une déduction (REER, syndicat, assurance collective…). Sa <strong>catégorie</strong> décide de tout : retenues, cotisations de l'employeur, cases des feuillets. « Vous n'avez rien à configurer : la catégorie détermine les retenues, les cotisations de l'employeur et les cases des feuillets. »</p>
+<h3>Liste « Éléments de paie »</h3>
+<p>Colonnes « Nom » (lien vers la modification), « Catégorie », « Statut » (Actif ou Inactif ; les inactifs sont grisés et en dernier). Bouton « Nouvel élément ».</p>
+<h3>Formulaire « Nouvel élément de paie » / « Modifier l'élément de paie »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th></tr>
+<tr><td>« Description » *</td><td>Le libellé qui paraît sur le talon, dans l'assistant et dans les écritures (100 caractères).</td></tr>
+<tr><td>« Catégorie de paie » *</td><td>Une des catégories système, au format « Revenu - … », « Avantage - … », « Déduction - … ». Voir <a href="#categories">le tableau des catégories</a>. Changer la catégorie met à jour la matrice d'assujettissement à droite.</td></tr>
+<tr><td>« Compte de grand livre »</td><td>Compte de dépense (revenu) ou compte à payer (déduction) pour les écritures comptables. Vide = compte par défaut du plan comptable.</td></tr>
+<tr><td>« Actif »</td><td>Décoché, l'élément n'est plus proposé, mais son historique reste.</td></tr>
+<tr><td>« Ne pas afficher sur le talon de paie »</td><td>La ligne est calculée et comptée, mais n'apparaît pas au talon (utile pour une ligne technique). Une déduction masquée est comptée dans le « Total » des retenues du talon.</td></tr>
+</table>
+<h3>Carte « Assujettissement de la catégorie »</h3>
+<p>Une matrice Oui/Non : pour un revenu ou un avantage, Impôt fédéral, Impôt du Québec, AE, RRQ, RQAP, FSS, CNESST, Vacances, Case T4, Case R1 ; pour une déduction, Réduit l'impôt fédéral, Réduit l'impôt du Québec, Crédit fonds de travailleurs, Case T4, Case R1. Deux notes possibles : « Paiement forfaitaire : l'impôt est calculé selon la méthode des gratifications et paiements rétroactifs. » et « Avantage non monétaire : il est imposé mais ne s'ajoute pas à la paie nette. »</p>
+<h3>Messages</h3>
+<table>
+<tr><th>Message</th><th>Sens et solution</th></tr>
+<tr><td>« Élément de paie enregistré. » / « Élément de paie supprimé. »</td><td>Succès.</td></tr>
+<tr><td>« « Description » est requis. »</td><td>Donnez un libellé.</td></tr>
+<tr><td>« Catégorie invalide. »</td><td>Choisissez une catégorie de la liste.</td></tr>
+<tr><td>« Cet élément a déjà servi dans une paie : sa catégorie ne peut plus changer. Créez plutôt un nouvel élément. »</td><td>Une paie confirmée dépend de sa catégorie. Créez un nouvel élément et rendez l'ancien inactif.</td></tr>
+<tr><td>« Cet élément est utilisé par des employés ou des paies. Rendez-le inactif plutôt que de le supprimer. »</td><td>La suppression n'est possible que pour un élément jamais utilisé.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="config-plan">Configuration › Plan comptable</h2>
+<p><span class="chemin">Config/PlanComptable.aspx</span>. « Numéros de compte de votre grand livre, utilisés par le rapport d'écritures comptables. Laissez vide ce que vous n'utilisez pas. » Les numéros ont 30 caractères au plus ; ils sont libres, ils doivent seulement correspondre à votre grand livre.</p>
+<div class="deux">
+<div class="carte"><h4>Actif et passif</h4>
+<ul>
+<li>« Compte de banque (paies nettes) »</li>
+<li>« Vacances à payer »</li>
+<li>« Impôt fédéral à payer »</li>
+<li>« Impôt du Québec à payer »</li>
+<li>« RRQ à payer (employés et employeur) »</li>
+<li>« Assurance-emploi à payer (employés et employeur) »</li>
+<li>« RQAP à payer (employés et employeur) »</li>
+<li>« FSS à payer »</li>
+<li>« CNESST à payer »</li>
+<li>« Normes du travail (CNT) à payer »</li>
+<li>« Autres déductions à payer (par défaut) »</li>
+</ul></div>
+<div class="carte"><h4>Dépenses</h4>
+<ul>
+<li>« Salaires (par défaut des éléments de paie) »</li>
+<li>« Dépense de vacances »</li>
+<li>« Dépense - part de l'employeur au RRQ »</li>
+<li>« Dépense - part de l'employeur à l'assurance-emploi »</li>
+<li>« Dépense - part de l'employeur au RQAP »</li>
+<li>« Dépense - FSS »</li>
+<li>« Dépense - CNESST »</li>
+<li>« Dépense - normes du travail (CNT) »</li>
+</ul></div>
+</div>
+<p>« Comptes des éléments de paie » liste les éléments actifs : « Compte de dépense d'un revenu, ou compte à payer d'une déduction. Vide = compte par défaut. » Bouton « Enregistrer » : « Plan comptable enregistré. » Voir <a href="#ecritures">Écritures comptables</a> pour l'usage de chaque compte.</p>
+
+<!-- ============================================================ -->
+<h2 id="config-depot">Configuration › Dépôt direct</h2>
+<p><span class="chemin">Config/DepotDirect.aspx</span>. « Ces renseignements vous sont remis par votre institution financière lorsque vous adhérez à son service de dépôt direct (transfert automatisé de fonds). Le fichier produit suit la norme 005 de Paiements Canada (1 464 caractères). Faites valider un fichier d'essai par votre institution avant le premier dépôt réel : certaines exigent un format qui leur est propre. »</p>
+<h3>« Paramètres du fichier de dépôt direct »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Validation</th></tr>
+<tr><td>« Numéro d'émetteur (10 caractères) »</td><td>Identifiant que la banque vous attribue. Mis en majuscules.</td><td>—</td></tr>
+<tr><td>« Centre de traitement de destination (5 chiffres) »</td><td>Centre de données de la banque.</td><td>« Le centre de traitement compte 5 chiffres. »</td></tr>
+<tr><td>« Nom abrégé de la compagnie (15 caractères) »</td><td>« Paraît sur le relevé bancaire de l'employé. »</td><td>—</td></tr>
+<tr><td>« Nom complet (30 caractères) »</td><td>Nom long dans le fichier ; à défaut, le nom de la compagnie.</td><td>—</td></tr>
+<tr><td>« Prochain numéro de fichier (1 à 9999) »</td><td>Numéro de séquence du prochain fichier.</td><td>« Le numéro de fichier doit se situer entre 1 et 9999. »</td></tr>
+</table>
+<h3>« Compte de la compagnie (retours et règlement) »</h3>
+<p>« Numéro d'institution (3 chiffres) » (« Le numéro d'institution compte 3 chiffres. »), « Numéro de transit (5 chiffres) » (« Le numéro de transit compte 5 chiffres. ») et « Numéro de compte » (chiffré ; « Compte au dossier : •••123. Laissez vide pour le conserver. »). Succès : « Paramètres de dépôt direct enregistrés. »</p>
+<p>La production du fichier se fait depuis le <a href="#detail-depot">détail d'une paie confirmée</a>.</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-liste">Employés › Liste</h2>
+<p><span class="chemin">Employes/Liste.aspx</span>. « Les employés sont partagés avec MngConsul : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans MngConsul. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie. »</p>
+<ul>
+  <li>Case « Afficher aussi les employés inactifs » : la liste se recharge ; les inactifs sont grisés.</li>
+  <li>Bouton « Nouvel employé ».</li>
+  <li>Colonnes : « Nom » (Nom, Prénom, lien vers la fiche), « Poste », « Rémunération » (« X $ / h » ou « X $ / an »), « Fréquence » (celle de l'employé, sinon celle de la compagnie), « Date d'embauche », « Paie » (pastille verte « Configurée » ou jaune « À configurer »), puis les liens « Paramètres de paie · Éléments de paie · Cumulatifs ».</li>
+  <li>Liste vide : « Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul. »</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="emp-nouveau">Employés › Nouvel employé</h2>
+<p><span class="chemin">Employes/Nouveau.aspx</span>. « L'employé est créé dans la compagnie courante et apparaît aussitôt dans MngConsul, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct. »</p>
+<table>
+<tr><th>Bloc</th><th>Champs</th></tr>
+<tr><td>« Identité »</td><td>« Prénom » *, « Nom de famille » *, « Code employé » (« Facultatif. Doit être unique dans la compagnie. »), « Poste », « Date de naissance », « Date d'embauche » (aujourd'hui par défaut).</td></tr>
+<tr><td>« Coordonnées »</td><td>« Adresse », « Adresse (suite) », « Ville », « Province » (le Québec est proposé), « Code postal » (mis en majuscules), « Courriel » (« Nécessaire pour envoyer le talon de paie par courriel. »), « Téléphone ».</td></tr>
+</table>
+<p>Boutons « Créer l'employé » et « Annuler ». Après la création, vous arrivez sur la fiche : « Employé créé. Configurez maintenant sa paie : vérifiez les valeurs proposées, puis enregistrez. »</p>
+<table>
+<tr><th>Message</th><th>Solution</th></tr>
+<tr><td>« « Prénom » est requis. » / « « Nom de famille » est requis. »</td><td>Les deux noms sont obligatoires.</td></tr>
+<tr><td>« La date de naissance est dans le futur. »</td><td>Corrigez la date.</td></tr>
+<tr><td>« Le courriel est invalide. »</td><td>Il faut un « @ » et un point après lui.</td></tr>
+<tr><td>« Le code employé {code} est déjà utilisé dans cette compagnie. »</td><td>Choisissez un autre code, ou laissez-le vide.</td></tr>
+<tr><td>« Un employé actif porte déjà ce nom. Vérifiez, puis cochez « créer quand même » s'il s'agit bien d'une autre personne. »</td><td>Un bandeau montre « Un employé actif s'appelle déjà {Prénom} {Nom}. » avec « Voir sa fiche ». S'il s'agit vraiment d'une autre personne, cochez « Il s'agit d'une autre personne : créer quand même » et recommencez.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="emp-fiche">Employés › Fiche : paramètres de paie</h2>
+<p><span class="chemin">Employes/Fiche.aspx?id=</span>. Le titre est le nom de l'employé ; les boutons « Éléments de paie » et « Cumulatifs de départ » mènent aux deux autres pages de l'employé. Un employé jamais configuré affiche « La paie de cet employé n'est pas encore configurée. Vérifiez les valeurs proposées, puis enregistrez. » : les valeurs proposées viennent de MngConsul (fréquence, taux horaire, salaire, NAS, coordonnées bancaires, date de naissance).</p>
+<h3>« Employé (MngConsul) »</h3>
+<p>Lecture seule : Nom, Code employé, Poste, Adresse, Ville, Courriel, Téléphone, Date d'embauche, Date de fin d'emploi, Statut. « Ces renseignements proviennent de MngConsul et s'y modifient. »</p>
+<h3>« Renseignements personnels pour la paie »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th></tr>
+<tr><td>« Date de naissance »</td><td>Sert à la règle du RRQ : aucune cotisation avant 18 ans. Sans date, l'employé est présumé majeur.</td></tr>
+<tr><td>« Langue des talons et courriels »</td><td>Français, English ou Español. Langue du talon envoyé par courriel et de son PDF.</td></tr>
+<tr><td>« Numéro d'assurance sociale (NAS) »</td><td>Espaces et tirets ignorés ; vérifié par l'algorithme de Luhn (« Le numéro d'assurance sociale est invalide. »). Chiffré. « NAS au dossier : ••••••123. Laissez vide pour le conserver. »</td></tr>
+</table>
+<h3>« Informations de paie »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th></tr>
+<tr><td>« Période de paie »</td><td>« Par défaut (MngConsul, sinon la compagnie) », ou une fréquence propre : 52, 26, 24, 12 ou « Annuelle (1 période) ». Un employé n'entre dans une paie que si sa fréquence est celle du lot.</td></tr>
+<tr><td>« Heures par semaine »</td><td>Avec le taux horaire, produit la ligne « Salaire » par défaut : heures/semaine × 52 ÷ périodes.</td></tr>
+<tr><td>« Taux horaire ($) »</td><td>Taux de base ; « Temps et demi » et « Temps double » le majorent.</td></tr>
+<tr><td>« Salaire annuel ($) »</td><td>« Utilisé si aucun taux horaire n'est inscrit. » Produit la ligne « Salaire fixe » = salaire ÷ périodes.</td></tr>
+<tr><td>« Taux de vacances (%) »</td><td>« Vide = taux par défaut de la compagnie. » Refusé au-delà de 20.</td></tr>
+</table>
+<div class="note">« Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie. » Ces valeurs par défaut ne servent que si l'employé n'a pas d'éléments de paie récurrents.</div>
+<h3>« Exemptions (cas particuliers seulement) »</h3>
+<div class="avert">« Laissez tout décoché pour un employé ordinaire : toutes les retenues et cotisations sont calculées automatiquement. Une case cochée signifie que la retenue n'est pas calculée (elle sera à 0 $). »</div>
+<ul>
+  <li>« Ne pas retenir l'impôt fédéral » ; « Ne pas retenir l'impôt du Québec » : employé qui a un certificat d'exemption, par exemple.</li>
+  <li>« Ne pas cotiser au RRQ » : retraité de 70 ans et plus, bénéficiaire d'une rente d'invalidité, etc. (la règle des moins de 18 ans est automatique).</li>
+  <li>« Ne pas cotiser au RQAP » ; « Ne pas cotiser à l'assurance-emploi » : emploi non assurable, par exemple un actionnaire qui contrôle plus de 40 % des actions votantes.</li>
+  <li>« Exclure du FSS » ; « Exclure de la CNESST / CNT » (supprime aussi la CNT).</li>
+</ul>
+<p>À l'enregistrement, le message rappelle « Attention : {n} exemption(s) cochée(s), ces retenues ou cotisations ne seront pas calculées pour cet employé. » et l'étape 3 de la paie le répète.</p>
+<h3>« Imposition fédérale »</h3>
+<table>
+<tr><th>Champ</th><th>Où l'employé le déclare</th><th>Effet</th></tr>
+<tr><td>« TD1 - Montant total de la demande ($) »</td><td>Formulaire TD1, total des crédits. « Vide = montant personnel de base (16 452,00 $). »</td><td>Crédit K1 = 14 % du montant.</td></tr>
+<tr><td>« TD1 - Impôt additionnel par paie ($) »</td><td>TD1, demande de retenue supplémentaire.</td><td>Ajouté tel quel à l'impôt fédéral de chaque paie.</td></tr>
+<tr><td>« TD1 - Déduction pour zone visée, annuelle ($) »</td><td>TD1, résidents des zones nordiques.</td><td>Déduction HD, annuelle.</td></tr>
+<tr><td>« T1213 - Déductions annuelles autorisées ($) »</td><td>Lettre d'autorisation de l'ARC (T1213).</td><td>Déduction F1, annuelle.</td></tr>
+<tr><td>« T4, case 45 - Soins dentaires offerts par l'employeur »</td><td>Codes 1 à 5. « Case obligatoire sur le T4 : accès au 31 décembre à une assurance dentaire de l'employeur. »</td><td>Reporté sur le T4.</td></tr>
+<tr><td>« Autres crédits d'impôt fédéraux autorisés ($) »</td><td>Autorisation de l'ARC.</td><td>Crédit K3.</td></tr>
+</table>
+<h3>« Imposition du Québec »</h3>
+<table>
+<tr><th>Champ</th><th>Où l'employé le déclare</th><th>Effet</th></tr>
+<tr><td>« TP-1015.3 - Montant de la ligne 10 ($) »</td><td>Formulaire TP-1015.3. « Vide = montant personnel de base (18 952,00 $). »</td><td>Crédits E : 14 % du montant.</td></tr>
+<tr><td>« Retenue supplémentaire par paie ($) »</td><td>TP-1015.3, ligne 11.</td><td>Ajoutée à l'impôt du Québec de chaque paie.</td></tr>
+<tr><td>« TP-1015.3 - Déductions de la ligne 19 ($) »</td><td>TP-1015.3.</td><td>Déduction J, annuelle.</td></tr>
+<tr><td>« TP-1016 - Déductions annuelles autorisées ($) »</td><td>Autorisation de Revenu Québec (TP-1016).</td><td>Déduction J1.</td></tr>
+<tr><td>« TP-1016 - Crédits d'impôt autorisés ($) »</td><td>TP-1016.</td><td>Crédit K1 (Québec).</td></tr>
+</table>
+<h3>« Paiement »</h3>
+<ul>
+  <li>« Cet employé est payé par dépôt direct » : sinon, un numéro de chèque lui est attribué à la confirmation de chaque paie.</li>
+  <li>« Envoyer le talon de paie par courriel » : nécessite un courriel dans MngConsul.</li>
+  <li>« Numéro de transit (5 chiffres) », « Numéro d'institution (3 chiffres) », « Numéro de compte » (chiffré ; « Compte au dossier : ••••123. Laissez vide pour le conserver. »). Si le dépôt direct est coché et qu'il manque quelque chose : « Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte. »</li>
+</ul>
+<h3>« Notes » et enregistrement</h3>
+<p>Texte libre. « Enregistrer » : au premier enregistrement, l'employé passe à « Configurée », l'événement est journalisé et vous arrivez sur ses éléments de paie : « Paramètres de paie enregistrés. Vous pouvez maintenant définir ses éléments de paie récurrents. » Ensuite : retour à la liste, « Paramètres de paie enregistrés. »</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-elements">Employés › Éléments de paie récurrents</h2>
+<p><span class="chemin">Employes/ElementsPaie.aspx?id=</span>. « Ces lignes sont proposées automatiquement à chaque paie. Vous pourrez toujours les ajuster dans l'assistant de paie. » C'est le <strong>gabarit</strong> de l'employé : salaire, primes fixes, déductions récurrentes (REER, assurance collective, syndicat), avantages imposables récurrents.</p>
+<ul>
+  <li>Colonnes : « Élément de paie », « Catégorie » (ex. « Revenu - Salaire »), « Heures », « Taux horaire », « Montant », lien « Retirer ».</li>
+  <li>Liste vide : « Aucun élément récurrent. Sans gabarit, la paie proposera le salaire horaire (heures par semaine) ou le salaire annuel de la fiche. »</li>
+  <li>« Ajouter un élément » : « Élément de paie » (éléments actifs), « Heures », « Taux horaire ($) », « ou montant fixe ($) ». « Inscrivez des heures et un taux (le temps et demi et le temps double sont majorés automatiquement), ou un montant fixe. » Le montant est calculé une fois, à l'ajout : heures × taux × multiplicateur.</li>
+  <li>Messages : « Choisissez un élément de paie. », « Élément de paie introuvable. », « Inscrivez des heures et un taux, ou un montant. », « Élément ajouté. », « Élément retiré. »</li>
+</ul>
+<div class="note">Dès qu'un employé a au moins un élément récurrent, le salaire par défaut de la fiche n'est plus ajouté : le gabarit remplace la fiche, il ne s'y ajoute pas. Mettez donc le salaire lui-même dans le gabarit si vous y mettez une déduction.</div>
+
+<!-- ============================================================ -->
+<h2 id="emp-cumulatifs">Employés › Cumulatifs de départ</h2>
+<p><span class="chemin">Employes/Cumulatifs.aspx?id=</span>. « Si vous commencez à utiliser 60secPaie en cours d'année, inscrivez ici les montants déjà versés et retenus dans votre ancien système. Ils servent à respecter les maximums annuels (RRQ, AE, RQAP, CNESST) et s'ajoutent aux cumulatifs du talon de paie. »</p>
+<p>« Année » : l'année courante ou la précédente. Champs (vide = 0) : « Rémunération brute ($) », « Impôt fédéral retenu ($) », « Impôt du Québec retenu ($) », « Salaire admissible au RRQ ($) », « Cotisation au RRQ (base + 1re suppl.) ($) », « 2e cotisation supplémentaire au RRQ ($) », « Cotisation à l'assurance-emploi ($) », « Cotisation au RQAP - employé ($) », « Cotisation au RQAP - employeur ($) », « Salaire assurable CNESST ($) », « Solde de vacances à payer ($) ». « Enregistrer » : « Cumulatifs de départ {année} enregistrés. »</p>
+<table>
+<tr><th>Montant</th><th>À quoi il sert</th></tr>
+<tr><td>RRQ, RRQ 2e suppl., salaire admissible RRQ, AE, RQAP employé et employeur, salaire assurable CNESST</td><td>Le moteur les ajoute aux cumulatifs pour plafonner les cotisations aux maximums annuels.</td></tr>
+<tr><td>Rémunération brute, impôts retenus</td><td>Cumulatifs du talon (colonne « Cumulatif ») et feuillets T4 / RL-1.</td></tr>
+<tr><td>Solde de vacances</td><td>Ajouté au « Solde de vacances » du talon.</td></tr>
+</table>
+<div class="avert">Les feuillets d'un employé qui a des cumulatifs de départ portent l'avertissement « Ces montants incluent des cumulatifs de départ saisis à la main. Les gains assurables (cases 24, 26, 56, G et I) ont été estimés à partir de la rémunération brute : vérifiez-les avec votre ancien système. »</div>
+
+<!-- ============================================================ -->
+<h2 id="paie">Calculer la paie (assistant en 4 étapes)</h2>
+<p><span class="chemin">Paie/Calculer.aspx</span>. La barre d'étapes montre « 1. Période de paie », « 2. Employés et rémunération », « 3. Révision des calculs », « 4. Confirmation ». L'état est conservé en base : une paie en préparation (brouillon) survit à la déconnexion, et le tableau de bord propose de la continuer. Il n'y a qu'un brouillon à la fois par compagnie.</p>
+
+<h3 id="paie-etape1">Étape 1 de 4 : période de paie</h3>
+<p>« En indiquant les dates suivantes, 60secPaie détermine la période de paie et prépare la paie de chaque employé actif. »</p>
+<table>
+<tr><th>Champ</th><th>Valeur proposée</th></tr>
+<tr><td>« Fréquence de paie » *</td><td>La fréquence par défaut de la compagnie ; s'il existe une paie confirmée, celle de la dernière paie confirmée.</td></tr>
+<tr><td>« Heures travaillées jusqu'au » * (fin de période)</td><td rowspan="2">La période qui suit la dernière paie confirmée : +7 jours (hebdomadaire), +14 jours (aux 2 semaines), le mois suivant (mensuel), +1 an (annuelle). En bimensuel, rien n'est proposé. Sans paie confirmée, les champs sont vides.</td></tr>
+<tr><td>« Payer le » * (date de paie)</td></tr>
+</table>
+<p>S'il existe déjà un brouillon, la carte « Une paie est déjà en préparation » le remplace, avec « Continuer cette paie » et « Supprimer ce brouillon » (confirmation « Supprimer la paie en préparation ? », puis « Le brouillon a été supprimé. »).</p>
+<p>« Continuer » vérifie, dans l'ordre :</p>
+<table>
+<tr><th>Message</th><th>Sens</th></tr>
+<tr><td>« Inscrivez la fin de la période et la date de paie. »</td><td>Les deux dates sont requises.</td></tr>
+<tr><td>« La date de paie est trop éloignée de la fin de la période. »</td><td>La date de paie doit se situer entre 31 jours avant et 45 jours après la fin de période.</td></tr>
+<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>L'année des taux est celle de la <strong>date de paie</strong>. Seule 2026 est définie.</td></tr>
+<tr><td>« Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord. »</td><td>Un seul brouillon à la fois.</td></tr>
+<tr><td>« Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés. »</td><td>Aucun employé ne répond aux critères ci-dessous.</td></tr>
+</table>
+<h4>Ce que fait « Continuer »</h4>
+<ul>
+  <li>Calcule le début de période selon la fréquence (voir <a href="#conventions">les conventions</a>).</li>
+  <li>Retient les employés <strong>actifs</strong>, dont la <strong>paie est configurée</strong>, dont la <strong>fréquence</strong> (la leur, sinon celle de la compagnie) est celle choisie, embauchés au plus tard à la fin de la période, et dont la date de fin d'emploi est vide ou postérieure au début de la période.</li>
+  <li>Fige le <strong>taux de vacances</strong> de chaque paie : celui de l'employé, sinon celui de la compagnie.</li>
+  <li>Copie les <strong>éléments récurrents</strong> actifs de chaque employé. Sans gabarit : une ligne « Salaire » (heures/semaine × 52 ÷ périodes, au taux horaire) ou « Salaire fixe » (salaire annuel ÷ périodes). Sans taux ni salaire : aucune ligne, l'employé apparaît avec « Aucune ligne ».</li>
+</ul>
+
+<h3 id="paie-etape2">Étape 2 de 4 : employés et rémunération</h3>
+<table>
+<tr><th>Colonne</th><th>Contenu</th></tr>
+<tr><td>« Inclure »</td><td>Cochée par défaut. Décochez pour exclure un employé de cette paie (absent, en congé…).</td></tr>
+<tr><td>« Employé »</td><td>Nom, Prénom.</td></tr>
+<tr><td>« Lignes de paie »</td><td>Les descriptions des lignes, ou « Aucune ligne ».</td></tr>
+<tr><td>« Brut prévu »</td><td>Somme des lignes de revenu, sans les déductions ni les avantages.</td></tr>
+<tr><td>—</td><td>Lien « Modifier les lignes ».</td></tr>
+</table>
+<div class="avert">Les cases « Inclure » ne sont enregistrées qu'en cliquant « Calculer la paie ». Si vous cliquez « Modifier les lignes » avant, vos changements de cases sont perdus : refaites-les au retour.</div>
+<p>Boutons : « Calculer la paie » (enregistre les inclusions, calcule toutes les paies incluses, passe à l'étape 3) et « Abandonner cette paie » (confirmation « Supprimer la paie en préparation ? », puis « La paie en préparation a été supprimée. »).</p>
+<h4>Sous-écran « Lignes de paie de {Prénom Nom} »</h4>
+<p>Colonnes « Élément de paie », « Heures », « Taux », « Montant », lien « Retirer ». Sans ligne : « Aucune ligne : cet employé ne sera pas payé. »</p>
+<p>« Ajouter une ligne » : « Élément de paie » (« {Description} ({Type} - {Catégorie}) »), « Heures », « Taux horaire ($) », « ou montant ($) ». Règle : si des heures <em>et</em> un taux sont inscrits, montant = heures × taux × multiplicateur de la catégorie (1,5 pour « Temps et demi », 2 pour « Temps double »), arrondi au cent ; sinon, c'est le montant saisi. Boutons « Ajouter la ligne » et « Retour à la liste des employés ». Toute modification marque le lot « à recalculer » ; le recalcul est automatique à l'étape 3.</p>
+<table>
+<tr><th>Message</th><th>Sens</th></tr>
+<tr><td>« Choisissez un élément de paie. »</td><td>Aucun élément sélectionné.</td></tr>
+<tr><td>« Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant). »</td><td>Une ligne à 0 n'est pas acceptée.</td></tr>
+<tr><td>« Cette paie n'est plus modifiable. »</td><td>Le lot n'est plus un brouillon.</td></tr>
+<tr><td>« Ligne ajoutée. » / « Ligne retirée. »</td><td>Succès.</td></tr>
+</table>
+<div class="note">Heures supplémentaires : ajoutez une ligne « Temps et demi » avec les heures et le taux <em>de base</em> ; la majoration est automatique. Bonus : une ligne « Gratification (bonus) » avec le montant ; l'impôt suit la méthode des paiements forfaitaires.</div>
+
+<h3 id="paie-etape3">Étape 3 de 4 : révision des calculs</h3>
+<p>Le lot est recalculé si besoin. Le grand tableau donne, par employé inclus : « Heures », « Brut », « Impôt féd. », « Impôt Qc », « RRQ » (base, 1re et 2e cotisations supplémentaires), « AE », « RQAP », « Autres déd. », « Net », « Parts employeur » (RRQ, RRQ2, AE, RQAP, FSS, CNESST, CNT), « Vacances » (accumulées dans cette paie), et une ligne « Grand total ».</p>
+<h4>Avertissements par employé (bandeau jaune)</h4>
+<ul>
+  <li>« Exemptions cochées dans la fiche de l'employé, donc non calculé : {liste}. »</li>
+  <li>« Employé de moins de 18 ans : aucune cotisation au RRQ. »</li>
+  <li>« La paie nette est négative : les retenues et déductions dépassent la rémunération versée. » La confirmation sera refusée tant que ce n'est pas corrigé.</li>
+</ul>
+<h4>« Détail et vérification des calculs »</h4>
+<p>Un bloc dépliable par employé : le tableau des lignes, le rapport de vérification et la matrice des parts de l'employeur. Le rapport de vérification reprend les variables des guides officiels, ce qui permet de refaire le calcul à la main ou de le comparer au calculateur en ligne de l'ARC et de Revenu Québec :</p>
+<table>
+<tr><th>Ligne</th><th>Signification</th></tr>
+<tr><td>« RRQ S3 (salaire admissible) »</td><td>Gains de la paie soumis au RRQ.</td></tr>
+<tr><td>« RRQ exemption par période »</td><td>3 500 $ ÷ périodes, tronqué à 2 décimales.</td></tr>
+<tr><td>« RRQ CS (cotisations supplémentaires déductibles) »</td><td>La part des cotisations RRQ déductible du revenu imposable.</td></tr>
+<tr><td>« QC E (crédits personnels) »</td><td>Montant de la ligne 10 du TP-1015.3.</td></tr>
+<tr><td>« QC H (déduction pour travailleur) »</td><td>6 % du salaire, plafonné.</td></tr>
+<tr><td>« QC CSA (cot. suppl. RRQ, régulier) »</td><td>Part de CS rattachée à la rémunération régulière.</td></tr>
+<tr><td>« QC I (revenu imposable annuel) », « QC Y (impôt pour l'année) »</td><td>Revenu et impôt annualisés du Québec.</td></tr>
+<tr><td>« QC Impôt sur la rémunération régulière », « QC Impôt sur le paiement forfaitaire »</td><td>Les deux composantes de l'impôt du Québec de la paie.</td></tr>
+<tr><td>« FED TC (montant de la demande TD1) », « FED A (revenu imposable annuel) », « FED K1 », « FED K2Q », « FED T1 (impôt fédéral annuel après abattement) »</td><td>Variables du T4127 : crédits personnels, crédits pour RRQ/AE/RQAP, impôt annuel après l'abattement du Québec de 16,5 %.</td></tr>
+<tr><td>« FED Impôt sur la rémunération régulière », « FED Impôt sur le paiement forfaitaire »</td><td>Les deux composantes de l'impôt fédéral de la paie.</td></tr>
+</table>
+<h4>Sommaire en trois cartes</h4>
+<p>« Revenus et avantages » (par description de ligne), « Déductions » (« Impôt fédéral », « Impôt du Québec », « RRQ », « RRQ - 2e cotisation suppl. », « Assurance-emploi », « RQAP », puis chaque déduction), « Parts de l'employeur » (« RRQ », « RRQ - 2e cotisation suppl. », « Assurance-emploi », « RQAP », « FSS », « CNESST », « CNT (normes du travail) »). Les montants nuls sont masqués.</p>
+<h4>Boutons</h4>
+<p>« Confirmer la paie » (confirmation « Confirmer cette paie ? Elle sera ajoutée aux cumulatifs des employés. ») et « Modifier la saisie » (retour à l'étape 2).</p>
+<table>
+<tr><th>Refus à la confirmation</th><th>Sens</th></tr>
+<tr><td>« La paie doit être calculée avant d'être confirmée. »</td><td>Retournez à l'étape 2 puis « Calculer la paie ».</td></tr>
+<tr><td>« Aucun employé n'est inclus dans cette paie. »</td><td>Cochez au moins un employé.</td></tr>
+<tr><td>« Au moins une paie nette est négative. Corrigez les lignes avant de confirmer. »</td><td>Réduisez la déduction ou augmentez le revenu de l'employé en cause.</td></tr>
+</table>
+<h4>Ce que fait la confirmation</h4>
+<ol>
+  <li>Les employés non inclus sont retirés du lot.</li>
+  <li>Les employés <strong>non</strong> payés par dépôt direct reçoivent, par ordre alphabétique, des numéros de chèque consécutifs à partir du « Prochain numéro de chèque » de la compagnie, qui avance d'autant.</li>
+  <li>Le statut passe à « Confirmé ». La paie compte désormais dans les cumulatifs, les remises, les feuillets et les écritures.</li>
+  <li>L'événement « Paie du {date} confirmée. » est journalisé.</li>
+</ol>
+
+<h3 id="paie-etape4">Étape 4 de 4 : paie confirmée</h3>
+<p>« La paie est enregistrée. Vous pouvez maintenant imprimer les talons de paie et émettre les paiements. » Le tableau résume chaque employé avec, sous son nom, « Chèque n° N » ou « Dépôt direct ». Boutons « Voir le détail et les talons » et « Tableau de bord ».</p>
+
+<!-- ============================================================ -->
+<h2 id="historique">Historique de paie</h2>
+<p><span class="chemin">Paie/Historique.aspx</span>. « Les paies de chaque période sont regroupées en lots. » Colonnes : « Date de paie » (lien vers l'assistant pour un brouillon, vers le détail sinon), « Période », « Fréquence », « Employés », « Paie brute », « Paie nette », « Parts employeur », « Statut ». Tri par date de paie décroissante. Bouton « Calculer une paie ». Liste vide : « Aucune paie pour l'instant. »</p>
+
+<!-- ============================================================ -->
+<h2 id="detail">Détail d'une paie</h2>
+<p><span class="chemin">Paie/Detail.aspx?lot=</span>. Titre « Détail de la paie » avec la pastille de statut ; sous-titre « Période du … au … · payée le … · {fréquence} · préparée par {courriel} ». Boutons « Imprimer » et « Historique ». Le contenu est celui de l'étape 3 (tableau, vérification par employé, sommaire), avec en plus un lien « Talon » par employé.</p>
+<h3>Panneau « Paiement et suites de cette paie » (paie confirmée)</h3>
+<ul>
+  <li>« Dépôt direct » : « {n} employé(s), {total} », puis « fichier pas encore produit » ou « fichier n° 0001 produit le … ». Les problèmes s'affichent ici : « Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct). » et « Coordonnées bancaires incomplètes pour {Prénom Nom}. »</li>
+  <li>« Talons par courriel » : « {x} envoyé(s) sur {n} ». En mode test : « Mode test : les courriels sont écrits dans le dossier App_Data\courriels au lieu d'être envoyés. » Si personne ne l'a demandé : « Aucun employé de cette paie n'a demandé son talon par courriel (fiche de l'employé). »</li>
+  <li>Lien « Écritures comptables » : le rapport d'écritures pour cette paie.</li>
+</ul>
+
+<h3 id="detail-depot">Fichier de dépôt direct</h3>
+<p>Bouton « Télécharger le fichier de dépôt direct », visible s'il y a au moins un employé en dépôt direct. Le fichier comprend les employés inclus, payés par dépôt direct, dont le net est supérieur à 0.</p>
+<ul>
+  <li>Nom du fichier : <code>depot-direct-AAAA-MM-JJ-NNNN.txt</code>.</li>
+  <li>Format : norme 005 de Paiements Canada (CPA-005). Enregistrements de 1 464 caractères, texte en majuscules sans accents, dates au format julien. Un enregistrement A (en-tête avec votre numéro d'émetteur, le numéro de fichier, la date, le centre de traitement, « CAD »), des enregistrements C (une transaction de type 200 par employé : net en cents, date d'échéance = date de paie, institution, transit et compte de l'employé, nom abrégé de la compagnie, « NOM PRÉNOM », référence = code employé ou « EMP{id} », mention « PAIE AAAA-MM-JJ »), et un enregistrement Z (total et nombre de crédits).</li>
+  <li><strong>Numérotation</strong> : chaque production consomme un nouveau numéro de fichier, même pour reproduire le même lot. Après 9999, on repart à 1. Le lot garde le dernier numéro et la date ; l'événement est journalisé.</li>
+  <li>Remettez ce fichier à votre institution par le canal qu'elle vous a fourni. 60secPaie ne le transmet pas.</li>
+</ul>
+<table>
+<tr><th>Message</th><th>Solution</th></tr>
+<tr><td>« Le fichier de dépôt direct se produit à partir d'une paie confirmée. »</td><td>Confirmez la paie d'abord.</td></tr>
+<tr><td>« Aucun employé de cette paie n'est payé par dépôt direct. »</td><td>Cochez « Cet employé est payé par dépôt direct » dans les fiches.</td></tr>
+<tr><td>« Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct). »</td><td>Remplissez la page Dépôt direct de la configuration.</td></tr>
+<tr><td>« Coordonnées bancaires incomplètes pour {Prénom Nom}. »</td><td>Complétez transit, institution et compte dans la fiche.</td></tr>
+</table>
+
+<h3 id="detail-courriel">Talons par courriel</h3>
+<p>Bouton « Envoyer les talons par courriel » (confirmation « Envoyer les talons de paie par courriel aux employés qui en ont fait la demande ? »), avec la case « renvoyer aussi les talons déjà envoyés ». Résultat : « {n} talon(s) envoyé(s), {m} déjà envoyé(s). », suivi au besoin de « Problèmes : {Nom} : aucun courriel dans la fiche. / {Nom} : adresse de courriel invalide. / … ».</p>
+<ul>
+  <li>Seuls les employés inclus dont la fiche a « Envoyer le talon de paie par courriel » reçoivent un courriel. La date d'envoi est mémorisée : un talon déjà envoyé n'est pas renvoyé, sauf si la case est cochée.</li>
+  <li>Expéditeur : une adresse @60sec.ca (par défaut paie@60sec.ca), avec le nom de votre compagnie ; les réponses vont au courriel de la compagnie défini dans MngConsul.</li>
+  <li>Sujet : « Talon de paie du AAAA-MM-JJ ». Corps : « Bonjour {Prénom Nom}, », « Voici votre talon de paie. », le talon complet, puis un avis de confidentialité. Pièce jointe : le PDF du talon. Le tout dans la langue de l'employé.</li>
+  <li>Les talons ne s'envoient que d'une paie confirmée : « Les talons s'envoient à partir d'une paie confirmée. »</li>
+</ul>
+
+<h3 id="detail-annuler">Annuler une paie</h3>
+<p>Panneau « Annuler cette paie », visible seulement pour la <strong>paie confirmée la plus récente</strong> dont les retenues n'ont pas encore été payées. « La paie confirmée la plus récente peut être annulée, par exemple pour corriger une erreur. Elle sera retirée des cumulatifs ; les numéros de chèque déjà attribués ne sont pas réutilisés. » Bouton « Annuler la paie », confirmation « Annuler définitivement cette paie ? », puis « La paie a été annulée. »</p>
+<table>
+<tr><th>Refus</th><th>Solution</th></tr>
+<tr><td>« Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues. »</td><td>Dans Retenues › Historique, ouvrez le paiement et annulez-le ; les retenues redeviennent « à payer ». Puis annulez la paie.</td></tr>
+<tr><td>« Seule la paie confirmée la plus récente peut être annulée. »</td><td>Annulez d'abord les paies plus récentes, de la plus récente à la plus ancienne.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="talon">Talon de paie</h2>
+<p><span class="chemin">Paie/Talon.aspx?paie=</span>. Boutons « Imprimer le talon », « Télécharger en PDF », « Retour au détail de la paie ». Bandeaux : « Aperçu : cette paie n'est pas encore confirmée. » ou « Cette paie a été annulée. »</p>
+<table>
+<tr><th>Zone</th><th>Contenu</th></tr>
+<tr><td>En-tête</td><td>Compagnie (nom, adresse, ville, code postal) ; « Talon de paie », « Période : … au … », « Date de paie : … », puis « Dépôt direct » ou « Chèque n° N » une fois la paie confirmée.</td></tr>
+<tr><td>Employé</td><td>Prénom Nom (code), adresse.</td></tr>
+<tr><td>« Revenus et avantages »</td><td>« Heures », « Taux », « Montant » pour chaque ligne non-déduction visible ; « Paie brute » (total des heures et brut versé) ; « dont avantages imposables non versés en argent » s'il y a lieu.</td></tr>
+<tr><td>« Retenues et déductions »</td><td>« Courant » et « Cumulatif » pour « Impôt fédéral », « Impôt du Québec », « RRQ » (y compris la 2e supplémentaire), « Assurance-emploi », « RQAP » ; puis chaque déduction de l'employeur, sans cumulatif ; ligne « Total ».</td></tr>
+<tr><td>« Paie nette »</td><td>Brut versé moins toutes les retenues et déductions.</td></tr>
+<tr><td>« Cumulatifs de l'année »</td><td>« Brut » (paies confirmées de l'année jusqu'à celle-ci, plus le brut de départ), « Net » (sans les cumulatifs de départ), « Vacances accumulées (x %) » (dans cette paie), « Solde de vacances » (soldes de départ + vacances accumulées − vacances payées, toutes années confondues).</td></tr>
+</table>
+<p>Le PDF (format lettre) reprend le même contenu ; pied de page « Document confidentiel remis à {compagnie}. » et « 60secPaie · Page i de n » s'il y a plusieurs pages. Nom du fichier : « Talon-de-paie-AAAA-MM-JJ.pdf ».</p>
+
+<!-- ============================================================ -->
+<h2 id="remises">Retenues › Paiement des retenues</h2>
+<p><span class="chemin">Remises/Payer.aspx</span>. Sous-menu : « Paiement des retenues » | « Historique des paiements ». Deux cartes de solde, « Receveur général du Canada » et « Revenu Québec » : « Aucune retenue à payer. », ou « À payer : X $ (n paies) » suivi de « Prochaine échéance : … pour la période se terminant le … », en rouge « En retard : échéance du … » si dépassée. Une carte « Normes du travail (CNT) » apparaît quand le montant est positif : « Accumulée en {année} : X $ », « Payable une fois l'an à Revenu Québec, avec le sommaire 1. Elle ne fait pas partie des remises périodiques. »</p>
+<h3>Formulaire « Paiement des retenues sur salaire »</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Valeur par défaut</th></tr>
+<tr><td>« Gouvernement » *</td><td>« Fédéral - Receveur général du Canada » ou « Provincial - Revenu Québec ». Peut être présélectionné par le bouton « Payer » du tableau de bord.</td><td>Fédéral. Changer de gouvernement recalcule les dates.</td></tr>
+<tr><td>« Retenues accumulées au » *</td><td>« Toutes les paies confirmées jusqu'à cette date, dont les retenues ne sont pas encore payées. »</td><td>Fin de la période de remise de la plus ancienne paie non payée, sinon aujourd'hui.</td></tr>
+<tr><td>« Date du paiement » *</td><td>Date réelle du paiement.</td><td>Aujourd'hui. Refusé plus de 31 jours dans le futur : « La date du paiement est trop éloignée. »</td></tr>
+<tr><td>« Mode de paiement »</td><td>« Paiement en ligne (institution financière, Mon dossier) » ou « Chèque (le prochain numéro de chèque est attribué) ».</td><td>En ligne.</td></tr>
+<tr><td>« Numéro de confirmation (facultatif) »</td><td>Référence de votre paiement en ligne (60 caractères).</td><td>—</td></tr>
+</table>
+<p>« Calculer les retenues » affiche l'aperçu « Montant à payer à {gouvernement} - retenues accumulées au … » : le tableau « Retenue ou cotisation » / « Montant » avec « Total à payer », et le tableau « Paies couvertes » (« Date de paie », « Période », « Employés », « Rémunération brute »). « 60secPaie ne transmet aucun paiement : effectuez-le auprès de votre institution financière ou dans Mon dossier, puis enregistrez-le ici pour que ces retenues ne soient plus à payer. »</p>
+<p>« Enregistrer le paiement » (confirmation « Enregistrer ce paiement ? Les paies couvertes ne pourront plus être annulées. ») mène au détail du paiement avec « Paiement enregistré. ». En mode chèque, le prochain numéro de chèque de la compagnie est consommé.</p>
+<h4>Composition des montants</h4>
+<div class="deux">
+<div class="carte"><h4>Receveur général du Canada</h4><ol><li>« Impôt fédéral »</li><li>« Assurance-emploi - cotisations des employés »</li><li>« Assurance-emploi - cotisation de l'employeur »</li></ol></div>
+<div class="carte"><h4>Revenu Québec</h4><ol><li>« Impôt du Québec »</li><li>« RRQ - cotisations des employés » (base et 2e supplémentaire)</li><li>« RRQ - cotisation de l'employeur »</li><li>« RQAP - cotisations des employés »</li><li>« RQAP - cotisation de l'employeur »</li><li>« Fonds des services de santé (FSS) »</li><li>« CNESST - versement périodique »</li></ol></div>
+</div>
+<p>La CNT n'en fait pas partie : elle se paie une fois l'an avec le Sommaire 1. Chaque paie confirmée est remise une seule fois à chaque gouvernement.</p>
+<table>
+<tr><th>Message</th><th>Sens</th></tr>
+<tr><td>« Inscrivez les deux dates. »</td><td>Les deux dates sont requises.</td></tr>
+<tr><td>« Aucune retenue à payer à {gouvernement} pour les paies jusqu'au … »</td><td>Toutes les paies jusqu'à cette date sont déjà remises, ou il n'y en a pas.</td></tr>
+<tr><td>« Aucune retenue à payer à {gouvernement} pour cette période. »</td><td>Idem, à l'enregistrement.</td></tr>
+</table>
+
+<h3 id="remises-calendrier">Fréquences et échéances</h3>
+<table>
+<tr><th>Fréquence (Configuration)</th><th>Période de remise</th><th>Échéance</th></tr>
+<tr><td>Mensuelle</td><td>Le mois de la date de paie</td><td>Le 15 du mois suivant</td></tr>
+<tr><td>Trimestrielle</td><td>Le trimestre civil de la date de paie</td><td>Le 15 du mois qui suit le trimestre</td></tr>
+</table>
+<p>« En retard » signifie que l'échéance est antérieure à aujourd'hui. Le solde affiché se fonde sur la plus ancienne paie non payée. Les fréquences réelles que l'ARC et Revenu Québec vous attribuent (accélérée, mensuelle, trimestrielle) dépendent de vos retenues moyennes ; 60secPaie ne connaît que mensuelle et trimestrielle, choisissez celle qui correspond à votre avis de cotisation.</p>
+
+<!-- ============================================================ -->
+<h2 id="remises-historique">Retenues › Historique et détail des paiements</h2>
+<p><span class="chemin">Remises/Historique.aspx</span> : « Date du paiement » (lien), « Gouvernement », « Retenues accumulées au », « Paiement » (« Chèque n° N » ou « En ligne - {référence} »), « Paies », « Total », « Statut » (« Payé » en vert, « Annulé » en rouge et grisé). Liste vide : « Aucun paiement de retenues enregistré. »</p>
+<p><span class="chemin">Remises/Detail.aspx?id=</span> : titre « Paiement des retenues » avec le statut ; sous-titre « {gouvernement} · retenues accumulées au … · payé le … · {mode} · enregistré par {courriel} ». Tableau des montants figés au moment du paiement, paies couvertes, et la carte « Renseignements pour le formulaire de versement » : « Numéro de compte de retenues (RP) » ou « Numéro d'identification (RS) », « Rémunération brute de la période », « Nombre d'employés à la dernière période de paie » (fédéral), « Période se terminant le », « Montant du paiement ».</p>
+<p>Panneau « Annuler ce paiement » : « À utiliser si le paiement a été enregistré par erreur. Les retenues des paies couvertes redeviendront « à payer ». » Bouton « Annuler le paiement », confirmation « Annuler ce paiement de retenues ? », puis « Le paiement a été annulé. Les retenues sont de nouveau à payer. » N'importe quel paiement peut être annulé, pas seulement le dernier ; un numéro de chèque n'est pas réutilisé.</p>
+
+<!-- ============================================================ -->
+<h2 id="feuillets">Rapports › T4 et Relevés 1</h2>
+<p><span class="chemin">Rapports/Feuillets.aspx</span>. Sous-menu de Rapports : « T4 et Relevés 1 » | « Déclaration des salaires CNESST » | « Écritures comptables ». En-tête « Feuillets T4 et Relevés 1 de l'année [année] » ; « Montants calculés à partir des paies confirmées et des cumulatifs de départ. » Boutons « Exporter en CSV » et « Imprimer ».</p>
+<div class="avert">« 60secPaie calcule les montants de chaque case ; il ne transmet pas les feuillets. Saisissez-les dans Formulaires Web (ARC) et dans Mon dossier pour les entreprises (Revenu Québec), au plus tard le dernier jour de février. Vérifiez les cases avec les guides RC4120 (T4) et RL-1.G (Relevé 1) de l'année. »</div>
+<p>Tableau : « Employé » (avec « inclut des cumulatifs de départ » s'il y a lieu), les cases T4 14, 22, 17, 17A, 18, 55, 24, 26, 56, les cases Relevé 1 A et E, et un lien « Feuillet ». Pied « Total (n feuillets) ». Les montants nuls sont laissés vides.</p>
+<h3>Correspondance des cases</h3>
+<table>
+<tr><th>Case T4</th><th>Libellé</th><th>Calcul</th></tr>
+<tr><td>14</td><td>Revenus d'emploi</td><td>Brut imposable au fédéral, plus le brut des cumulatifs de départ</td></tr>
+<tr><td>17</td><td>Cotisations de l'employé au RRQ</td><td>RRQ (base et 1re supplémentaire)</td></tr>
+<tr><td>17A</td><td>Deuxièmes cotisations supplémentaires au RRQ</td><td>RRQ2</td></tr>
+<tr><td>18</td><td>Cotisations de l'employé à l'AE</td><td>AE</td></tr>
+<tr><td>22</td><td>Impôt sur le revenu retenu</td><td>Impôt fédéral</td></tr>
+<tr><td>24</td><td>Gains assurables d'AE</td><td>min(gains AE ; 68 900 $)</td></tr>
+<tr><td>26</td><td>Gains ouvrant droit à pension</td><td>min(gains RRQ ; 85 000 $)</td></tr>
+<tr><td>55</td><td>Cotisations de l'employé au RPAP (RQAP)</td><td>RQAP</td></tr>
+<tr><td>56</td><td>Gains assurables du RPAP</td><td>min(gains RQAP ; 103 000 $)</td></tr>
+<tr><td>20 / 52</td><td>Cotisations à un RPA / facteur d'équivalence</td><td>Lignes « Régime de pension agréé (RPA) »</td></tr>
+<tr><td>34</td><td>Usage personnel d'une automobile</td><td>Lignes « Véhicule à moteur »</td></tr>
+<tr><td>40</td><td>Autres allocations et avantages imposables</td><td>Lignes « Autre avantage imposable » (monétaire ou non)</td></tr>
+<tr><td>42</td><td>Commissions d'emploi</td><td>Lignes « Commission »</td></tr>
+<tr><td>44</td><td>Cotisations syndicales</td><td>Lignes « Cotisation syndicale »</td></tr>
+<tr><td>46</td><td>Dons de bienfaisance</td><td>Lignes « Don de bienfaisance »</td></tr>
+<tr><td>85</td><td>Primes à un régime privé d'assurance maladie</td><td>Lignes « Assurance collective - part de l'employé »</td></tr>
+<tr><td>28</td><td>Exemptions</td><td>RPC/RRQ, AE, RPAP selon les exemptions cochées, ou « Aucune »</td></tr>
+<tr><td>45</td><td>Soins dentaires</td><td>Code de la fiche</td></tr>
+</table>
+<table>
+<tr><th>Case Relevé 1</th><th>Libellé</th><th>Calcul</th></tr>
+<tr><td>A</td><td>Revenus d'emploi</td><td>Brut imposable au Québec, plus le départ (comprend J, L, M et W)</td></tr>
+<tr><td>B.A / B.B</td><td>Cotisation au RRQ / deuxième cotisation supplémentaire</td><td>RRQ / RRQ2</td></tr>
+<tr><td>C</td><td>Cotisation à l'assurance emploi</td><td>AE</td></tr>
+<tr><td>D</td><td>Cotisation à un RPA</td><td>Lignes RPA</td></tr>
+<tr><td>E</td><td>Impôt du Québec retenu</td><td>Impôt du Québec</td></tr>
+<tr><td>F</td><td>Cotisation syndicale</td><td>Lignes syndicat</td></tr>
+<tr><td>G</td><td>Salaire admissible au RRQ</td><td>min(gains RRQ ; 85 000 $)</td></tr>
+<tr><td>H / I</td><td>Cotisation au RQAP / salaire admissible au RQAP</td><td>RQAP / min(gains ; 103 000 $)</td></tr>
+<tr><td>J</td><td>Régime privé d'assurance maladie (part de l'employeur)</td><td>Lignes « Régime privé d'assurance maladie - part de l'employeur »</td></tr>
+<tr><td>L</td><td>Autres avantages</td><td>Lignes « Autre avantage imposable »</td></tr>
+<tr><td>M</td><td>Commissions</td><td>Lignes « Commission »</td></tr>
+<tr><td>N</td><td>Dons de bienfaisance</td><td>Lignes « Don de bienfaisance »</td></tr>
+<tr><td>W</td><td>Véhicule à moteur</td><td>Lignes « Véhicule à moteur »</td></tr>
+<tr><td>235</td><td>Cotisation à un régime privé d'assurance maladie</td><td>Lignes « Assurance collective - part de l'employé »</td></tr>
+</table>
+<h3>Sommaires</h3>
+<p><strong>« Sommaire T4 (ARC) »</strong> : « Cotisations des employés à l'AE (case 18) », « Cotisations de l'employeur à l'AE (case 19) », « Retenues et cotisations de l'année », « Remises enregistrées » (remises fédérales payées dont la fin de période tombe dans l'année), « Solde à payer ».</p>
+<p><strong>« Sommaire 1 (Revenu Québec) »</strong> : RRQ employés et employeur, RQAP employés et employeur, « Salaires assujettis au FSS », « Cotisation au FSS », « CNESST - versements périodiques calculés », « Retenues et cotisations de l'année », « Remises enregistrées », « Solde à payer », « Cotisation aux normes du travail (CNT), payable avec le sommaire 1 ». « Le taux réel du FSS est établi sur la masse salariale totale de l'année : un écart avec le taux estimé utilisé pendant l'année se règle dans le sommaire 1. »</p>
+<p>Le CSV <code>feuillets-AAAA.csv</code> contient « Code », « Nom », « Prénom » et une colonne par case T4 et Relevé 1. <strong>Le NAS n'est volontairement pas exporté.</strong></p>
+
+<h3 id="feuillet-employe">Feuillet d'un employé</h3>
+<p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. Boutons « Imprimer », « Retour aux feuillets », « Afficher le NAS complet » (action journalisée). En-tête : compagnie, « N° de compte RP », « N° d'identification RS », « Feuillets {année} », nom, adresse, « NAS : ••••••123 » (ou « NAS manquant dans la fiche »). Puis les deux tableaux « T4 - État de la rémunération payée » (case 10 « Province d'emploi » = QC, les cases non nulles, la case 28 « Exemptions » et la case 45) et « Relevé 1 - Revenus d'emploi et revenus divers » (cases A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235 ; « Les cases J, L, M et W sont déjà comprises dans la case A. »).</p>
+
+<!-- ============================================================ -->
+<h2 id="cnesst">Rapports › Déclaration des salaires CNESST</h2>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année. » Boutons « Exporter en CSV » (<code>cnesst-AAAA.csv</code> : Nom, Prénom, Salaire brut, Excédent, Salaire assurable, Cotisation calculée) et « Imprimer ».</p>
+<ul>
+  <li>Par employé : « Salaire brut » (lignes des catégories assujetties à la CNESST), « Excédent du maximum (103 000,00 $) », « Salaire assurable », « Cotisation calculée » ; note « exclu de la CNESST (fiche de l'employé) » s'il y a lieu ; ligne « Total ».</li>
+  <li>« Par mois » : « Mois », « Salaire assurable », « Cotisation ».</li>
+  <li>« Conciliation » : « Taux de versement périodique », « Cotisation calculée sur les paies », « Versements périodiques enregistrés (remises à Revenu Québec) », « Écart ».</li>
+</ul>
+<div class="note">« La Déclaration des salaires se produit dans Mon Espace CNESST avant le 15 mars. La CNESST établit ensuite la prime réelle et l'ajuste par rapport aux versements périodiques. Les salaires des travailleurs non couverts doivent être exclus selon les règles de la CNESST. »</div>
+
+<!-- ============================================================ -->
+<h2 id="ecritures">Rapports › Écritures comptables</h2>
+<p><span class="chemin">Rapports/Ecritures.aspx</span>. Formulaire « Rapport d'écritures comptables » : « Paie » (« Toutes les paies de la période » ou l'une des 60 dernières paies confirmées, « Paie du … (période au …) »), « Paies payées du » / « au » (mois courant par défaut ; utilisés seulement avec « Toutes les paies de la période »). « Choisissez une paie précise, ou « Toutes les paies de la période » pour une écriture sommaire (un mois, par exemple). » Boutons « Afficher », « Exporter en CSV » (<code>ecritures-paie.csv</code> : Compte, Description, Débit, Crédit), « Imprimer », lien « Définir les numéros de compte ».</p>
+<p>Le tableau donne « Compte » (« à définir » si vide), « Description », « Débit », « Crédit » et un « Total ». Les lignes à 0 sont omises.</p>
+<table>
+<tr><th>Débits (dépenses)</th><th>Crédits (passifs)</th></tr>
+<tr><td>
+<ul>
+<li>Chaque ligne de revenu, par élément : le compte de l'élément, sinon « Salaires ». Le remboursement de dépenses et l'avantage monétaire aussi.</li>
+<li>« Paie de vacances » : « Vacances à payer », libellé « {description} (vacances déjà provisionnées) ».</li>
+<li>« Vacances accumulées » : Dépense de vacances.</li>
+<li>« RRQ - part de l'employeur », « Assurance-emploi - part de l'employeur », « RQAP - part de l'employeur », « Fonds des services de santé », « CNESST », « Normes du travail (CNT) » : leurs comptes de dépense.</li>
+<li>Avantages non monétaires : aucune écriture.</li>
+</ul></td><td>
+<ul>
+<li>Chaque déduction : « {description} à payer », au compte de l'élément, sinon « Autres déductions à payer ».</li>
+<li>« Impôt fédéral à payer », « Impôt du Québec à payer », « RRQ à payer » (employé et employeur), « Assurance-emploi à payer », « RQAP à payer », « FSS à payer », « CNESST à payer », « CNT à payer ».</li>
+<li>« Vacances à payer » (vacances accumulées).</li>
+<li>« Paies nettes » : le compte de banque.</li>
+</ul></td></tr>
+</table>
+<table>
+<tr><th>Message</th><th>Sens</th></tr>
+<tr><td>« La période est invalide. »</td><td>La date « du » est après la date « au ».</td></tr>
+<tr><td>« Aucune paie confirmée pour cette sélection. »</td><td>Rien à comptabiliser.</td></tr>
+<tr><td>« L'écriture n'est pas équilibrée : écart de X. »</td><td>Ne devrait pas survenir ; signalez-le.</td></tr>
+<tr><td>« {n} ligne(s) sans numéro de compte : définissez-les dans Configuration → Plan comptable. »</td><td>Complétez le plan comptable.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="categories">Comprendre les calculs › Catégories de paie</h2>
+<p>Chaque ligne de paie appartient à une catégorie système. C'est la catégorie, non le libellé, qui décide de l'assujettissement. Un revenu « standard » est assujetti à tout : impôt fédéral, impôt du Québec, AE, RRQ, RQAP, FSS, CNESST ; il va à la case 14 du T4 et à la case A du Relevé 1.</p>
+<table>
+<tr><th>Catégorie</th><th>Type</th><th>Assujettissement et particularités</th><th>Cases</th></tr>
+<tr><td>Salaire</td><td>Revenu</td><td>standard ; ouvre droit aux vacances</td><td>14 / A</td></tr>
+<tr><td>Salaire fixe</td><td>Revenu</td><td>standard ; vacances</td><td>14 / A</td></tr>
+<tr><td>Temps et demi</td><td>Revenu</td><td>standard ; vacances ; taux × 1,5</td><td>14 / A</td></tr>
+<tr><td>Temps double</td><td>Revenu</td><td>standard ; vacances ; taux × 2</td><td>14 / A</td></tr>
+<tr><td>Jours fériés</td><td>Revenu</td><td>standard ; vacances</td><td>14 / A</td></tr>
+<tr><td>Congé de maladie</td><td>Revenu</td><td>standard ; vacances</td><td>14 / A</td></tr>
+<tr><td>Commission</td><td>Revenu</td><td>standard ; vacances</td><td>14 et 42 / A et M</td></tr>
+<tr><td>Autre type de revenu imposable</td><td>Revenu</td><td>standard ; vacances</td><td>14 / A</td></tr>
+<tr><td>Paie de vacances</td><td>Revenu</td><td>standard ; vacances ; <strong>réduit le solde de vacances</strong></td><td>14 / A</td></tr>
+<tr><td>Vacances versées à chaque paie</td><td>Revenu</td><td>standard ; <strong>n'ouvre pas droit aux vacances</strong></td><td>14 / A</td></tr>
+<tr><td>Gratification (bonus)</td><td>Revenu</td><td>standard ; vacances ; <strong>paiement forfaitaire</strong></td><td>14 / A</td></tr>
+<tr><td>Salaire rétroactif</td><td>Revenu</td><td>standard ; vacances ; <strong>paiement forfaitaire</strong></td><td>14 / A</td></tr>
+<tr><td>Remboursement de dépenses (non imposable)</td><td>Revenu</td><td>aucun assujettissement ; s'ajoute au brut versé et au net</td><td>—</td></tr>
+<tr><td>Autre avantage imposable (monétaire)</td><td>Avantage</td><td>tout assujetti ; <strong>versé en argent</strong> ; pas de vacances</td><td>14 et 40 / A et L</td></tr>
+<tr><td>Autre avantage imposable (non monétaire)</td><td>Avantage</td><td>impôts, RRQ, FSS, CNESST ; <strong>ni AE ni RQAP</strong> ; imposé mais non versé</td><td>14 et 40 / A et L</td></tr>
+<tr><td>Véhicule à moteur (non monétaire)</td><td>Avantage</td><td>comme le non monétaire</td><td>14 et 34 / A et W</td></tr>
+<tr><td>Régime privé d'assurance maladie - part de l'employeur</td><td>Avantage</td><td><strong>pas d'impôt fédéral</strong> ; impôt du Québec, RRQ, FSS, CNESST ; ni AE ni RQAP ; non versé</td><td>— / A et J</td></tr>
+<tr><td>REER</td><td>Déduction</td><td>réduit les deux impôts</td><td>—</td></tr>
+<tr><td>Régime de pension agréé (RPA)</td><td>Déduction</td><td>réduit les deux impôts</td><td>20 et 52 / D</td></tr>
+<tr><td>RVER / RPAC</td><td>Déduction</td><td>réduit les deux impôts</td><td>—</td></tr>
+<tr><td>Cotisation syndicale</td><td>Déduction</td><td>réduit l'impôt fédéral seulement</td><td>44 / F</td></tr>
+<tr><td>Fonds de solidarité FTQ</td><td>Déduction</td><td>ne réduit pas le revenu ; <strong>crédit fonds de travailleurs</strong> de 15 % aux deux paliers</td><td>—</td></tr>
+<tr><td>Fondaction CSN</td><td>Déduction</td><td>idem</td><td>—</td></tr>
+<tr><td>Assurance collective - part de l'employé</td><td>Déduction</td><td>après impôt</td><td>85 / 235</td></tr>
+<tr><td>Don de bienfaisance</td><td>Déduction</td><td>après impôt</td><td>46 / N</td></tr>
+<tr><td>Autre déduction (après impôt)</td><td>Déduction</td><td>aucun effet fiscal</td><td>—</td></tr>
+</table>
+<p>Le <strong>brut versé</strong> = revenus + avantages versés en argent. Les avantages non monétaires sont imposés mais ne s'ajoutent pas au net. Les déductions s'additionnent dans « Autres déductions ».</p>
+
+<!-- ============================================================ -->
+<h2 id="parametres">Comprendre les calculs › Paramètres de l'année 2026</h2>
+<p>L'année des taux est celle de la <strong>date de paie</strong>. Seule 2026 est définie dans le logiciel.</p>
+<div class="deux">
+<div class="carte"><h4>Impôt fédéral (T4127)</h4>
+<table><tr><th>Revenu imposable annuel</th><th>Taux</th><th>K</th></tr>
+<tr><td>jusqu'à 58 523 $</td><td class="num">14 %</td><td class="num">0</td></tr>
+<tr><td>jusqu'à 117 045 $</td><td class="num">20,5 %</td><td class="num">3 804</td></tr>
+<tr><td>jusqu'à 181 440 $</td><td class="num">26 %</td><td class="num">10 241</td></tr>
+<tr><td>jusqu'à 258 482 $</td><td class="num">29 %</td><td class="num">15 685</td></tr>
+<tr><td>au-delà</td><td class="num">33 %</td><td class="num">26 024</td></tr></table>
+<ul><li>Montant personnel de base : 16 452 $ ; taux des crédits : 14 %.</li><li>Montant canadien pour emploi : 1 501 $.</li><li>Abattement du Québec : 16,5 %.</li><li>Crédit fonds de travailleurs : 15 %, maximum 750 $.</li><li>Forfaitaire : seuil 5 000 $, taux fixe 10 %.</li></ul></div>
+<div class="carte"><h4>Impôt du Québec (TP-1015.F)</h4>
+<table><tr><th>Revenu imposable annuel</th><th>Taux</th><th>K</th></tr>
+<tr><td>jusqu'à 54 345 $</td><td class="num">14 %</td><td class="num">0</td></tr>
+<tr><td>jusqu'à 108 680 $</td><td class="num">19 %</td><td class="num">2 717</td></tr>
+<tr><td>jusqu'à 132 245 $</td><td class="num">24 %</td><td class="num">8 151</td></tr>
+<tr><td>au-delà</td><td class="num">25,75 %</td><td class="num">10 465</td></tr></table>
+<ul><li>Montant personnel de base : 18 952 $ ; taux des crédits : 14 %.</li><li>Déduction pour travailleur : 6 %, maximum 1 450 $.</li><li>Crédit fonds de travailleurs : 15 %.</li><li>Forfaitaire : seuil 18 952 $, taux fixe 7 %.</li></ul></div>
+</div>
+<table>
+<tr><th>Régime</th><th>Paramètres 2026</th></tr>
+<tr><td>RRQ</td><td>Maximum des gains admissibles 74 600 $ ; exemption 3 500 $ ; taux 6,3 % (dont 5,3 % de base) ; cotisation maximale de l'employé 4 479,30 $ (partie de base 3 768,30 $). Deuxième cotisation supplémentaire (RRQ2) : de 74 600 $ à 85 000 $, taux 4 %, maximum 416 $. L'employeur verse la même chose.</td></tr>
+<tr><td>Assurance-emploi</td><td>Maximum assurable 68 900 $ ; taux de l'employé (Québec) 1,30 %, maximum 895,70 $ ; employeur = employé × facteur (1,4).</td></tr>
+<tr><td>RQAP</td><td>Maximum assurable 103 000 $ ; employé 0,43 % (max. 442,90 $) ; employeur 0,602 % (max. 620,06 $).</td></tr>
+<tr><td>FSS</td><td>Taux selon la masse salariale S (en millions, ramenée entre 1 et 7,8) : général 1,2662 + 0,3838 × S (de 1,65 % à 4,26 %) ; primaire et manufacturier 0,8074 + 0,4426 × S (de 1,25 % à 4,26 %) ; secteur public 4,26 %. Arrondi à 2 décimales.</td></tr>
+<tr><td>CNESST</td><td>Maximum assurable 103 000 $ ; taux : celui de votre décision de classification ($ par 100 $).</td></tr>
+<tr><td>CNT</td><td>0,06 % du salaire assurable CNESST, si la compagnie y est assujettie.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="formules">Comprendre les calculs › Formules, retenue par retenue</h2>
+<p>Notation : P = périodes par année ; G = rémunération régulière imposable de la paie ; B = rémunération forfaitaire (bonus, rétro) ; F = déductions qui réduisent le revenu imposable ; Q = retenues pour les fonds de travailleurs. Les cumulatifs de l'année = paies confirmées + cumulatifs de départ.</p>
+<dl class="def">
+<dt>RRQ</dt>
+<dd>Assujetti si non exempté et âgé de 18 ans ou plus à la date de paie. Exemption par période = 3 500 ÷ P, tronquée. C = 6,3 % × (S3 − exemption), plafonnée à 4 479,30 − cumul. RRQ2 : C2 = 4 % × (gains au-delà de 74 600 $), plafonnée à 416 − cumul. Part de l'employeur = celle de l'employé. CS (part déductible du revenu) = C × 1/6,3 + C2.</dd>
+<dt>Assurance-emploi</dt>
+<dd>AE = 1,30 % × gains assurables, plafonnée à 895,70 − cumul. Employeur = AE × facteur (1,4 par défaut).</dd>
+<dt>RQAP</dt>
+<dd>Employé = 0,43 % × gains, plafonné à 442,90 − cumul. Employeur = 0,602 % × gains, plafonné à 620,06 − cumul.</dd>
+<dt>Impôt du Québec (TP-1015.F)</dt>
+<dd>E = ligne 10 du TP-1015.3 (18 952 $ par défaut). H = min(6 % × G ; 1 450 ÷ P). I = P × (G − F − H − CSA) − J − J1, plancher 0. Crédits = K1 + 14 % × E + 15 % × P × Q. Y = T × I − K − crédits, plancher 0. Impôt de la paie = Y ÷ P, plus la retenue supplémentaire. Forfaitaire : 7 % si P × G + forfaitaires antérieurs + B ≤ 18 952 $, sinon l'écart d'impôt annuel avec et sans le forfaitaire.</dd>
+<dt>Impôt fédéral (T4127, employé du Québec)</dt>
+<dd>TC = montant du TD1 (16 452 $ par défaut). A = P × (G − F − CSA) − HD − F1, plancher 0. K1 = 14 % × TC. K2Q = 14 % × [RRQ de base annualisée plafonnée + AE annualisée plafonnée + RQAP annualisé plafonné]. K4 = min(14 % × A ; 14 % × 1 501). K3 = autres crédits. LCF = min(750 ; 15 % × P × Q). T3 = R × A − K − K1 − K2Q − K3 − K4, plancher 0. T1 = (T3 − LCF) − 16,5 % × T3 : c'est l'abattement du Québec. Impôt de la paie = T1 ÷ P, plus l'impôt additionnel du TD1. Forfaitaire : 10 % si le seuil de 5 000 $ n'est pas dépassé, sinon la méthode de l'écart.</dd>
+<dt>FSS</dt>
+<dd>gains FSS × taux FSS ÷ 100. Aucun FSS pour un employé exempté.</dd>
+<dt>CNESST et CNT</dt>
+<dd>Gains = min(gains ; 103 000 − cumul). CNESST = gains × taux ÷ 100. CNT = gains × 0,06 %. L'exclusion CNESST de la fiche supprime les deux.</dd>
+<dt>Vacances</dt>
+<dd>Accumulées = gains ouvrant droit aux vacances × taux ÷ 100. C'est une provision : elle n'est pas versée. Les lignes « Paie de vacances » réduisent le solde.</dd>
+<dt>Paie nette</dt>
+<dd>Brut versé − (impôt fédéral + impôt du Québec + RRQ + RRQ2 + AE + RQAP + autres déductions).</dd>
+</dl>
+
+<h3 id="arrondis">Arrondis</h3>
+<ul>
+  <li>Au cent, le demi-cent vers le haut.</li>
+  <li>L'exemption RRQ par période est tronquée, non arrondie.</li>
+  <li>Le montant E (crédits personnels du Québec) est arrondi au dollar.</li>
+  <li>Montant d'une ligne = heures × taux × multiplicateur, arrondi au cent.</li>
+  <li>Toutes les valeurs intermédiaires ont un plancher à 0.</li>
+</ul>
+
+<h3 id="exemple">Exemple chiffré</h3>
+<p>Salaire de 60 000 $ en 2026, employé ordinaire (montants de base, aucune déduction, aucune exemption). Les totaux annuels obtenus en une seule paie annuelle et en 26 paies aux deux semaines coïncident au cent près ; les écarts viennent des arrondis par période.</p>
+<table>
+<tr><th>Retenue</th><th class="num">Paie annuelle (1 période)</th><th class="num">26 paies de 2 307,69 $, cumulées</th></tr>
+<tr><td>Impôt fédéral</td><td class="num">4 427,34 $</td><td class="num">4 427,28 $</td></tr>
+<tr><td>Impôt du Québec</td><td class="num">5 646,87 $</td><td class="num">5 646,94 $</td></tr>
+<tr><td>RRQ (6,3 % × (60 000 − 3 500))</td><td class="num">3 559,50 $</td><td class="num">3 559,40 $</td></tr>
+<tr><td>Assurance-emploi (1,30 %)</td><td class="num">780,00 $</td><td class="num">780,00 $</td></tr>
+<tr><td>RQAP (0,43 %)</td><td class="num">258,00 $</td><td class="num">257,92 $</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="cas-demarrage">Cas pratique › Premier démarrage</h2>
+<ol class="etapes">
+  <li>Connectez-vous avec votre compte 60Sec. Vous êtes envoyé à <span class="chemin">Configuration › Paramètres de paie</span>.</li>
+  <li>Remplissez la fréquence par défaut, le taux de vacances, les numéros RP et RS, la fréquence des remises, la masse salariale estimée, le secteur FSS, le facteur AE et le taux CNESST. « Enregistrer » crée six éléments de paie de base.</li>
+  <li>Dans <span class="chemin">Configuration › Éléments de paie</span>, ajoutez ce qui vous manque : commissions, REER, assurance collective, cotisation syndicale…</li>
+  <li>Dans <span class="chemin">Configuration › Plan comptable</span>, entrez vos numéros de compte si vous voulez le rapport d'écritures.</li>
+  <li>Dans <span class="chemin">Configuration › Dépôt direct</span>, entrez les paramètres remis par votre banque, si vous payez par dépôt direct.</li>
+  <li>Dans <span class="chemin">Employés</span>, créez ou vérifiez chaque employé, puis ouvrez « Paramètres de paie » : NAS, fréquence, taux ou salaire, TD1 et TP-1015.3, dépôt direct, talon par courriel. Enregistrez, puis définissez ses éléments récurrents.</li>
+  <li>Si vous partez en cours d'année, entrez les <a href="#emp-cumulatifs">cumulatifs de départ</a>.</li>
+  <li>Faites une première paie et comparez-la avec votre ancien système ou le calculateur de l'ARC et de Revenu Québec avant de la confirmer.</li>
+</ol>
+
+<h2 id="cas-conversion">Cas pratique › Conversion en cours d'année</h2>
+<p>Pour chaque employé, dans <span class="chemin">Employés › Cumulatifs</span>, entrez les cumulatifs de l'année tirés de votre ancien système : brut, impôts retenus, salaire admissible et cotisations RRQ (base et 2e supplémentaire), AE, RQAP employé et employeur, salaire assurable CNESST, solde de vacances. Sans eux, 60secPaie continuerait de retenir RRQ, AE et RQAP après les maximums, et les feuillets seraient incomplets. Les remises déjà faites dans l'ancien système ne s'entrent pas dans 60secPaie : ses sommaires ne couvrent que les paies qu'il a confirmées, ajustez les sommaires de fin d'année en conséquence.</p>
+
+<h2 id="cas-nouvel-employe">Cas pratique › Embaucher quelqu'un</h2>
+<ol class="etapes">
+  <li><span class="chemin">Employés › Nouvel employé</span> : identité et coordonnées. Il apparaît aussitôt dans MngConsul.</li>
+  <li>Sur sa fiche : NAS (demandez-le, il est obligatoire pour les feuillets), date de naissance, langue, fréquence si elle diffère de la compagnie, taux horaire et heures par semaine ou salaire annuel, TD1 et TP-1015.3 remis par l'employé (laissez vide pour les montants de base), dépôt direct et courriel.</li>
+  <li>Éléments de paie : ajoutez son salaire si vous voulez un gabarit, et ses déductions récurrentes.</li>
+  <li>Il entre dans la prochaine paie dont la fin de période est postérieure à sa date d'embauche.</li>
+</ol>
+
+<h2 id="cas-depart">Cas pratique › Départ d'un employé</h2>
+<ol class="etapes">
+  <li>Faites sa dernière paie normalement, avec une ligne « Paie de vacances » pour lui verser son solde de vacances (visible sur son talon, « Solde de vacances »).</li>
+  <li>Dans MngConsul, inscrivez sa date de fin d'emploi ou rendez-le inactif. Il n'entre plus dans les paies dont le début de période est postérieur à sa date de fin.</li>
+  <li>Le relevé d'emploi (RE) se produit dans RE Web de Service Canada ; 60secPaie ne le produit pas. Ses feuillets T4 et RL-1 sortent en fin d'année comme pour les autres.</li>
+</ol>
+
+<h2 id="cas-assurance">Cas pratique › Assurance collective</h2>
+<table>
+<tr><th>Composante</th><th>Élément de paie à créer</th><th>Traitement</th></tr>
+<tr><td>Part de l'employé (maladie, dentaire)</td><td>Déduction « Assurance collective - part de l'employé »</td><td>Après impôt. T4 case 85, RL-1 code 235 (frais médicaux).</td></tr>
+<tr><td>Part de l'employé (vie, invalidité)</td><td>Déduction « Autre déduction (après impôt) »</td><td>Après impôt, sans case : ces primes ne sont pas des frais médicaux.</td></tr>
+<tr><td>Part de l'employeur, maladie et dentaire</td><td>Avantage « Régime privé d'assurance maladie - part de l'employeur »</td><td>Imposable au Québec seulement (RL-1 A et J), RRQ, FSS, CNESST ; pas d'impôt fédéral, pas d'AE ni de RQAP. Incluez la taxe de 9 % sur les primes.</td></tr>
+<tr><td>Part de l'employeur, assurance vie et DMA</td><td>Avantage « Autre avantage imposable (non monétaire) »</td><td>Imposable aux deux paliers (T4 40, RL-1 L), RRQ, FSS, CNESST ; ni AE ni RQAP.</td></tr>
+<tr><td>Part de l'employeur, invalidité</td><td>Aucun</td><td>Pas un avantage imposable, mais les prestations deviennent imposables. Se comptabilise hors paie. Pratique courante : l'employé paie 100 % de cette prime.</td></tr>
+</table>
+<p>Ajoutez ces éléments aux éléments récurrents de chaque employé assuré, en montant fixe par paie (prime mensuelle × 12 ÷ périodes, taxe comprise). Réglez la case 45 (soins dentaires) dans la fiche. Le versement à l'assureur se fait hors paie ; l'écriture comptable indique le montant à lui verser si les comptes sont définis.</p>
+
+<h2 id="cas-bonus">Cas pratique › Bonus et paiement rétroactif</h2>
+<p>Ajoutez une ligne « Gratification (bonus) » ou « Salaire rétroactif » dans la paie de l'employé (étape 2, « Modifier les lignes »). L'impôt de cette ligne suit la méthode des paiements forfaitaires : taux fixe (10 % au fédéral sous 5 000 $, 7 % au Québec sous 18 952 $ de revenu annuel), sinon l'écart d'impôt annuel avec et sans le paiement. Le rapport de vérification montre « Impôt sur le paiement forfaitaire » séparément. RRQ, AE et RQAP s'appliquent normalement, dans la limite des maximums.</p>
+
+<h2 id="cas-vacances">Cas pratique › Vacances</h2>
+<ul>
+  <li><strong>Accumulation</strong> : chaque paie accumule le taux de vacances (4 % ou 6 %) sur les gains admissibles. C'est une provision visible au talon (« Vacances accumulées », « Solde de vacances ») et dans les écritures (« Dépense de vacances » / « Vacances à payer »).</li>
+  <li><strong>Vacances prises</strong> : ajoutez une ligne « Paie de vacances » avec le montant versé. Elle réduit le solde et se comptabilise contre « Vacances à payer ».</li>
+  <li><strong>Vacances payées à chaque paie</strong> (employés à temps partiel ou temporaires) : utilisez « Vacances versées à chaque paie » ; cette ligne n'accumule pas de vacances sur elle-même.</li>
+  <li>Un solde de départ s'entre dans les cumulatifs de départ.</li>
+</ul>
+
+<h2 id="cas-annuelle">Cas pratique › Paie annuelle</h2>
+<p>Pour un propriétaire qui se verse un salaire une fois l'an : dans sa fiche, « Période de paie » = « Annuelle (1 période) », et son salaire annuel. Dans l'assistant, choisissez « Annuelle (1 période) » ; la période va du 1er janvier à la fin choisie. Les retenues sont calculées sur l'année entière, avec l'exemption RRQ de 3 500 $ en entier. L'assistant ne mélange pas les fréquences : les employés aux deux semaines et l'employé annuel font l'objet de lots distincts.</p>
+
+<h2 id="cas-corriger">Cas pratique › Corriger une paie</h2>
+<ol class="etapes">
+  <li>Si la paie est encore en brouillon : retournez à l'étape 2, modifiez les lignes, recalculez.</li>
+  <li>Si elle est confirmée et qu'elle est la plus récente : ouvrez son détail et « Annuler la paie ». Si ses retenues ont déjà été payées, annulez d'abord ce paiement dans Retenues › Historique. Refaites ensuite la paie. Les chèques déjà émis gardent leur numéro ; les nouveaux en reçoivent un nouveau.</li>
+  <li>Si une paie plus ancienne est en cause : annulez les paies suivantes une à une, de la plus récente à la plus ancienne, ou corrigez par une ligne d'ajustement (« Salaire rétroactif » ou une déduction) dans la prochaine paie. Les cumulatifs et les feuillets refléteront la correction.</li>
+</ol>
+
+<h2 id="cas-depot">Cas pratique › Premier dépôt direct</h2>
+<ol class="etapes">
+  <li>Adhérez au service de transfert automatisé de votre banque ; elle vous remet un numéro d'émetteur, un centre de traitement et un canal de dépôt des fichiers.</li>
+  <li>Entrez ces paramètres et le compte de la compagnie dans <span class="chemin">Configuration › Dépôt direct</span>.</li>
+  <li>Dans la fiche de chaque employé, cochez « Cet employé est payé par dépôt direct » et entrez transit, institution et compte (sur un spécimen de chèque : transit 5 chiffres, institution 3 chiffres, puis le compte).</li>
+  <li>Confirmez une paie, puis « Télécharger le fichier de dépôt direct » dans son détail. Faites valider ce premier fichier par la banque (fichier d'essai) avant un dépôt réel.</li>
+  <li>Remettez le fichier à la banque avant la date de paie, selon son délai.</li>
+</ol>
+
+<h2 id="cas-fin-annee">Cas pratique › Fin d'année</h2>
+<ol class="etapes">
+  <li>Confirmez toutes les paies datées de l'année. La date de paie décide de l'année : une période de décembre payée en janvier appartient à l'année suivante.</li>
+  <li>Enregistrez les dernières remises de l'année dans Retenues.</li>
+  <li><span class="chemin">Rapports › T4 et Relevés 1</span> : vérifiez chaque employé (NAS présent, cases cohérentes), exportez le CSV, saisissez les feuillets dans Formulaires Web et Mon dossier pour les entreprises avant le dernier jour de février. Comparez les sommaires T4 et 1 avec vos remises ; payez le solde, dont la CNT.</li>
+  <li><span class="chemin">Rapports › Déclaration des salaires CNESST</span> : déclarez dans Mon Espace CNESST avant le 15 mars ; la carte « Conciliation » donne l'écart avec vos versements.</li>
+  <li>Réglez la case 45 (dentaire) et vérifiez les exemptions avant de produire les T4.</li>
+  <li>Les taux de l'année suivante doivent être ajoutés au logiciel avant la première paie de janvier ; sinon l'assistant refuse la paie (« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »).</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="messages">Référence › Messages et leur solution</h2>
+<p>Les messages sont regroupés par écran dans les sections ci-dessus. Voici les plus fréquents, en un seul tableau.</p>
+<table>
+<tr><th>Message</th><th>Où</th><th>Solution</th></tr>
+<tr><td>« La paie n'est pas encore configurée pour {compagnie}. Commencez par ses paramètres de paie. »</td><td>Toute page</td><td>Remplissez et enregistrez Configuration › Paramètres de paie.</td></tr>
+<tr><td>« Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés. »</td><td>Assistant, étape 1</td><td>Vérifiez que l'employé est actif, « Configurée », à la même fréquence que le lot, embauché avant la fin de période.</td></tr>
+<tr><td>« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</td><td>Assistant, étape 1</td><td>La date de paie doit être en 2026 ; sinon les taux de l'année doivent être ajoutés au logiciel.</td></tr>
+<tr><td>« Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord. »</td><td>Assistant, étape 1</td><td>Continuez ou supprimez le brouillon.</td></tr>
+<tr><td>« La date de paie est trop éloignée de la fin de la période. »</td><td>Assistant, étape 1</td><td>Entre 31 jours avant et 45 jours après la fin de période.</td></tr>
+<tr><td>« Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant). »</td><td>Lignes de paie</td><td>Entrez des heures et un taux, ou un montant.</td></tr>
+<tr><td>« Au moins une paie nette est négative. Corrigez les lignes avant de confirmer. »</td><td>Assistant, étape 3</td><td>Réduisez la déduction en cause.</td></tr>
+<tr><td>« Cette paie n'est plus modifiable. »</td><td>Assistant</td><td>La paie est confirmée ou annulée. Pour corriger, annulez-la (si c'est la plus récente) et refaites-la.</td></tr>
+<tr><td>« Seule la paie confirmée la plus récente peut être annulée. »</td><td>Détail</td><td>Annulez les paies plus récentes d'abord.</td></tr>
+<tr><td>« Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues. »</td><td>Détail</td><td>Retenues › Historique › ouvrir le paiement › « Annuler le paiement ».</td></tr>
+<tr><td>« Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct). »</td><td>Détail</td><td>Complétez la page Dépôt direct.</td></tr>
+<tr><td>« Coordonnées bancaires incomplètes pour {Prénom Nom}. »</td><td>Détail</td><td>Fiche de l'employé, bloc Paiement.</td></tr>
+<tr><td>« {Nom} : aucun courriel dans la fiche. »</td><td>Talons par courriel</td><td>Ajoutez son courriel dans MngConsul.</td></tr>
+<tr><td>« Le numéro d'assurance sociale est invalide. »</td><td>Fiche</td><td>Vérifiez les 9 chiffres ; le NAS a une clé de contrôle.</td></tr>
+<tr><td>« Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte. »</td><td>Fiche</td><td>Complétez les trois champs ou décochez le dépôt direct.</td></tr>
+<tr><td>« Le taux de vacances semble trop élevé. »</td><td>Fiche, Configuration</td><td>Le taux est en pourcentage (4 ou 6), pas en dollars.</td></tr>
+<tr><td>« Le facteur de cotisation à l'AE doit se situer entre 1 et 1,4. »</td><td>Configuration</td><td>1,4 sauf taux réduit accordé par l'ARC.</td></tr>
+<tr><td>« Cet élément a déjà servi dans une paie : sa catégorie ne peut plus changer. Créez plutôt un nouvel élément. »</td><td>Éléments de paie</td><td>Créez un nouvel élément, rendez l'ancien inactif.</td></tr>
+<tr><td>« Cet élément est utilisé par des employés ou des paies. Rendez-le inactif plutôt que de le supprimer. »</td><td>Éléments de paie</td><td>Décochez « Actif ».</td></tr>
+<tr><td>« Le code employé {code} est déjà utilisé dans cette compagnie. »</td><td>Nouvel employé</td><td>Autre code, ou vide.</td></tr>
+<tr><td>« Un employé actif porte déjà ce nom. … »</td><td>Nouvel employé</td><td>Vérifiez la fiche existante ; cochez « créer quand même » s'il s'agit d'une autre personne.</td></tr>
+<tr><td>« Aucune retenue à payer à {gouvernement} pour les paies jusqu'au … »</td><td>Retenues</td><td>Rien n'est dû à cette date, ou tout est déjà remis.</td></tr>
+<tr><td>« La date du paiement est trop éloignée. »</td><td>Retenues</td><td>Au plus 31 jours dans le futur.</td></tr>
+<tr><td>« {n} ligne(s) sans numéro de compte : définissez-les dans Configuration → Plan comptable. »</td><td>Écritures</td><td>Complétez le plan comptable.</td></tr>
+<tr><td>« Trop de tentatives. Réessayez dans quelques minutes. »</td><td>Connexion</td><td>Attendez 15 minutes.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="faq">Référence › Questions fréquentes</h2>
+<div class="faq">
+<details><summary>Un employé n'apparaît pas dans la paie. Pourquoi ?</summary><p>Quatre conditions : il est actif dans MngConsul ; sa paie est « Configurée » (fiche enregistrée au moins une fois) ; sa fréquence (la sienne, sinon celle de la compagnie) est celle du lot ; sa date d'embauche est au plus tard la fin de période et sa date de fin d'emploi est vide ou postérieure au début de période. Vérifiez aussi qu'il a des lignes : sans gabarit ni taux ni salaire, il apparaît avec « Aucune ligne ».</p></details>
+<details><summary>Le RRQ d'un employé est à 0.</summary><p>Il a moins de 18 ans à la date de paie, ou « Ne pas cotiser au RRQ » est coché, ou son maximum annuel (4 479,30 $ plus 416 $ de RRQ2) est atteint, cumulatifs de départ compris, ou sa paie est inférieure à l'exemption par période (3 500 $ ÷ périodes).</p></details>
+<details><summary>Pourquoi l'impôt fédéral est-il plus bas que dans une autre province ?</summary><p>Les employés du Québec bénéficient de l'abattement du Québec de 16,5 % sur l'impôt fédéral, et leur taux d'AE est réduit (1,30 %) parce qu'ils cotisent au RQAP.</p></details>
+<details><summary>Puis-je avoir deux brouillons en même temps ?</summary><p>Non. Un seul brouillon par compagnie. Terminez-le ou supprimez-le avant d'en commencer un autre. Deux fréquences (par exemple aux deux semaines et mensuelle) se paient donc en deux lots successifs.</p></details>
+<details><summary>Comment changer le nom ou l'adresse d'un employé ?</summary><p>Dans MngConsul. 60secPaie n'y écrit que pour créer un employé ; tout le reste de l'identité se modifie dans MngConsul et se répercute ici aussitôt.</p></details>
+<details><summary>Le NAS s'affiche « ••••••123 ». Où est le reste ?</summary><p>Chiffré. Il n'est jamais renvoyé au navigateur. Sur le feuillet d'un employé, « Afficher le NAS complet » le montre, et cette consultation est journalisée.</p></details>
+<details><summary>Le montant proposé pour les retenues ne correspond pas à mon relevé de l'ARC.</summary><p>60secPaie ne connaît que les paies qu'il a confirmées. Les paies faites ailleurs ou avant la conversion ne sont pas dans ses remises. La fréquence de remise configurée doit aussi correspondre à celle que l'ARC vous a attribuée.</p></details>
+<details><summary>Le FSS du Sommaire 1 diffère de ce que Revenu Québec calcule.</summary><p>Le taux appliqué pendant l'année vient de la masse salariale estimée dans la configuration. Le taux réel se calcule sur la masse de l'année ; l'écart se règle dans le Sommaire 1, comme l'indique la note du rapport.</p></details>
+<details><summary>Je veux imprimer tous les talons d'une paie.</summary><p>Ouvrez le détail de la paie et le lien « Talon » de chaque employé ; chaque talon a « Imprimer le talon » et « Télécharger en PDF ». Pour un envoi groupé, utilisez « Envoyer les talons par courriel ».</p></details>
+<details><summary>Que veut dire « Vacances accumulées » sur le talon ?</summary><p>La provision de vacances gagnée dans cette paie (taux × gains admissibles). Elle n'est pas versée ; elle s'ajoute au « Solde de vacances », qui se vide par des lignes « Paie de vacances ».</p></details>
+<details><summary>Une ligne d'élément masquée compte-t-elle ?</summary><p>Oui. « Ne pas afficher sur le talon de paie » ne change que l'affichage : la ligne est calculée, imposée et comptabilisée normalement.</p></details>
+<details><summary>Puis-je payer un fournisseur ou un travailleur autonome ?</summary><p>Non. 60secPaie ne traite que des employés au sens des lois fiscales, avec retenues à la source. Un travailleur autonome se paie par une facture, dans MngConsul.</p></details>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="glossaire">Référence › Glossaire</h2>
+<dl class="def">
+<dt>AE</dt><dd>Assurance-emploi, régime fédéral. Employee Insurance (EI) en anglais.</dd>
+<dt>ARC</dt><dd>Agence du revenu du Canada.</dd>
+<dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Prime d'assurance contre les accidents du travail, versée périodiquement à Revenu Québec.</dd>
+<dt>CNT</dt><dd>Cotisation relative aux normes du travail, 0,06 % des salaires assurables, payée une fois l'an avec le Sommaire 1.</dd>
+<dt>Cumulatifs</dt><dd>Sommes de l'année à ce jour : brut, retenues, gains assurables. Servent aux maximums annuels et aux feuillets.</dd>
+<dt>Élément de paie</dt><dd>Ligne réutilisable (revenu, avantage ou déduction) rattachée à une catégorie système.</dd>
+<dt>FSS</dt><dd>Fonds des services de santé, cotisation de l'employeur au Québec, en pourcentage de la masse salariale.</dd>
+<dt>Gabarit</dt><dd>Les éléments de paie récurrents d'un employé, copiés dans chaque nouvelle paie.</dd>
+<dt>Lot de paie</dt><dd>Une période de paie pour tous les employés inclus : brouillon, confirmé ou annulé.</dd>
+<dt>MGA / MSGA</dt><dd>Maximum des gains admissibles au RRQ (74 600 $) et maximum supplémentaire (85 000 $) pour la 2e cotisation supplémentaire.</dd>
+<dt>NAS</dt><dd>Numéro d'assurance sociale (SIN en anglais).</dd>
+<dt>Paiement forfaitaire</dt><dd>Bonus ou rétroactivité, imposé selon une méthode particulière plutôt qu'annualisé comme le salaire régulier.</dd>
+<dt>RP / RS</dt><dd>Numéro de compte de retenues à la source de l'ARC (…RP0001) et numéro d'identification de Revenu Québec (…RS0001).</dd>
+<dt>RQAP</dt><dd>Régime québécois d'assurance parentale (QPIP en anglais). Sur le T4, il s'appelle RPAP.</dd>
+<dt>RRQ</dt><dd>Régime de rentes du Québec (QPP en anglais). Comprend la cotisation de base, la première et la deuxième cotisation supplémentaire.</dd>
+<dt>T4127</dt><dd>Guide de l'ARC : formules pour le calcul des retenues sur la paie.</dd>
+<dt>TD1</dt><dd>Déclaration des crédits d'impôt personnels (fédéral), remplie par l'employé.</dd>
+<dt>TP-1015.3</dt><dd>Déclaration pour la retenue d'impôt (Québec), remplie par l'employé.</dd>
+<dt>TP-1015.F</dt><dd>Guide de Revenu Québec : formules pour le calcul des retenues à la source.</dd>
+<dt>Talon</dt><dd>Le bulletin de paie remis à l'employé.</dd>
+</dl>
+
+<p class="retour"><a href="#haut">Retour en haut</a> · <a href="Default.aspx">Retour à 60secPaie</a></p>
+</main>
+</div>
+
+<script>
+(function () {
+  var champ = document.getElementById('recherche');
+  var liens = document.querySelectorAll('#sommaire a');
+  var titres = document.querySelectorAll('#sommaire h2');
+  champ.addEventListener('input', function () {
+    var q = champ.value.trim().toLowerCase();
+    for (var i = 0; i < liens.length; i++) {
+      var a = liens[i];
+      var texte = a.textContent.toLowerCase();
+      var cible = document.querySelector(a.getAttribute('href'));
+      var corps = '';
+      if (cible && q.length > 0) {
+        var n = cible.nextElementSibling;
+        corps = cible.textContent;
+        while (n && !/^H[12]$/.test(n.tagName)) { corps += ' ' + n.textContent; if (corps.length > 20000) break; n = n.nextElementSibling; }
+        corps = corps.toLowerCase();
+      }
+      a.classList.toggle('cache', q.length > 0 && texte.indexOf(q) < 0 && corps.indexOf(q) < 0);
+    }
+    for (var j = 0; j < titres.length; j++) {
+      var h = titres[j], visible = false, s = h.nextElementSibling;
+      while (s && s.tagName === 'A') { if (!s.classList.contains('cache')) { visible = true; break; } s = s.nextElementSibling; }
+      h.style.display = visible ? '' : 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>
