@@ -445,7 +445,14 @@ Public Class ApideckExtraction
             o("LigneNo") = no
             o("CompteSource") = numero
             o("NomSource") = nom
-            o("TypeSource") = Valeur(c, "classification", "type")
+            ' Trois niveaux chez Apideck : classification (asset, liability…),
+            ' type (bank, fixed_asset, costs_of_sales…), sous-type (Checking,
+            ' TravelMeals…). Le type et le sous-type sont gardés tels quels ;
+            ' la nature normalisée (T269) vient de la classification, ou du
+            ' type quand elle manque.
+            o("TypeSource") = Valeur(c, "type", "classification")
+            o("SousTypeSource") = Valeur(c, "sub_type")
+            o("TypeNormalise") = NatureDuCompte(Valeur(c, "classification"), Valeur(c, "type"))
             o("SoldeSource") = Valeur(c, "current_balance", "balance")
             o("SensSource") = ""
             o("Compte") = numero
@@ -3755,6 +3762,36 @@ Public Class ApideckExtraction
         If t IsNot Nothing AndAlso Math.Abs(CDec(t) - reste) > 0.01D Then Return "Partielle"
         Return "Ouverte"
     End Function
+    ''' <summary>
+    ''' La nature d'un compte au sens du plan d'ici — ACTIF, PASSIF, CAPITAUX,
+    ''' PRODUIT, CHARGE — d'après la classification d'Apideck, ou son type
+    ''' quand la classification manque. Vide si rien ne permet de trancher :
+    ''' mieux vaut ne rien affirmer qu'une nature devinée.
+    ''' </summary>
+    Private Shared Function NatureDuCompte(classification As String, type As String) As String
+        Select Case If(classification, "").ToLowerInvariant()
+            Case "asset" : Return "ACTIF"
+            Case "liability" : Return "PASSIF"
+            Case "equity" : Return "CAPITAUX"
+            Case "revenue", "income" : Return "PRODUIT"
+            Case "expense" : Return "CHARGE"
+        End Select
+
+        Select Case If(type, "").ToLowerInvariant()
+            Case "bank", "accounts_receivable", "current_asset", "fixed_asset", "other_asset", "non_current_asset"
+                Return "ACTIF"
+            Case "accounts_payable", "credit_card", "current_liability", "non_current_liability", "other_liability"
+                Return "PASSIF"
+            Case "equity"
+                Return "CAPITAUX"
+            Case "revenue", "other_income", "income"
+                Return "PRODUIT"
+            Case "expense", "costs_of_sales", "other_expense", "cost_of_goods_sold"
+                Return "CHARGE"
+        End Select
+        Return ""
+    End Function
+
     ''' <summary>Un nombre lisible par SQL, ou rien : le point décimal, jamais la virgule.</summary>
     Private Shared Function Nombre(texte As String) As Object
         Dim d As Decimal

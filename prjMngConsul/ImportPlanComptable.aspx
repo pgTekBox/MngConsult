@@ -364,6 +364,7 @@
                         </asp:TemplateField>
                         <asp:BoundField DataField="Anomalie" HeaderText="Détail" />
                         <asp:BoundField DataField="TypeSource" HeaderText="Type d'origine" />
+                        <asp:BoundField DataField="SousTypeSource" HeaderText="Sous-type" />
                     </Columns>
                 </asp:GridView>
 
