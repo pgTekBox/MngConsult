@@ -329,13 +329,16 @@
                 <b>Créer</b> l'ajoutera à votre plan lors de l'application.
                 <b>Ignorer</b> l'écarte — utile pour les comptes techniques de l'ancien
                 logiciel. Un « Lier » vers un numéro que votre plan ne connaît pas
-                n'est pas enregistré.
+                n'est pas enregistré. <b>Un compte chez vous ne reçoit qu'un seul compte</b>
+                de l'ancien logiciel : deux comptes liés au même fusionneraient leurs soldes
+                sans que rien ne le dise, alors la page le refuse.
             </p>
         </div>
 
         <div class="barre-bas">
             <asp:Button ID="btnEnregistrer" runat="server" Text="Enregistrer les correspondances"
-                CssClass="btn btn-p" CausesValidation="false" />
+                CssClass="btn btn-p" CausesValidation="false"
+                OnClientClick="if (!ciblesUniques()) { return false; }" />
             <asp:HyperLink ID="hlAppliquer" runat="server" CssClass="lien-suite" Text="Créer les comptes au plan →" />
             <span style="font-size:12.5px;color:#64748b">
                 Rien n'est écrit dans votre comptabilité : les décisions sont conservées à part.
@@ -353,6 +356,33 @@
     var PLAN_CLS = <asp:Literal ID="litPlanClsJson" runat="server" Text="{}" />;
     var PLAN_MERE = <asp:Literal ID="litPlanMereJson" runat="server" Text="{}" />;
     var SOUS_CLASSES = <asp:Literal ID="litSousClassesJson" runat="server" Text="[]" />;
+
+    // Un compte chez nous ne reçoit qu'un seul compte de l'ancien logiciel
+    // (T275). La base le refuse de toute façon ; ici on le dit avant l'envoi,
+    // avec les lignes en cause, pour ne pas perdre la saisie de la page.
+    function ciblesUniques() {
+        var lignes = document.querySelectorAll('tbody tr');
+        var parCible = {};
+        for (var i = 0; i < lignes.length; i++) {
+            var tr = lignes[i];
+            var act = tr.querySelector('select.act');
+            var hid = tr.querySelector('input[type=hidden][id*=_hfCompte_]');
+            if (!act || !hid || act.value !== 'LIER' || hid.value === '') continue;
+            var no = tr.querySelector('td') ? tr.querySelector('td').textContent.trim() : String(i + 1);
+            var nom = tr.querySelector('.src-n') ? tr.querySelector('.src-n').textContent.trim() : '';
+            if (!parCible[hid.value]) parCible[hid.value] = [];
+            parCible[hid.value].push('ligne ' + no + (nom ? ' (' + nom + ')' : ''));
+        }
+        var fautes = [];
+        for (var c in parCible) {
+            if (!parCible.hasOwnProperty(c) || parCible[c].length < 2) continue;
+            fautes.push('Compte ' + c + (PLAN[c] ? ' — ' + PLAN[c] : '') + ' : ' + parCible[c].join(', '));
+        }
+        if (fautes.length === 0) return true;
+        alert('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
+            + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.');
+        return false;
+    }
 
     // Le plan se lit en trois crans : la grande classe, puis la sous-classe,
     // puis le compte. Chacun restreint le suivant. Sans cela le champ propose
