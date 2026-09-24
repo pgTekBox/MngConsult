@@ -326,7 +326,8 @@
             <span>💡</span>
             <p>
                 <b>Lier</b> rattache le compte à un compte existant chez vous.
-                <b>Créer</b> l'ajoutera à votre plan lors de l'application.
+                <b>Créer</b> l'ajoutera à votre plan lors de l'application, sous un numéro
+                attribué à l'étape suivante — un numéro que votre plan connaît déjà est refusé.
                 <b>Ignorer</b> l'écarte — utile pour les comptes techniques de l'ancien
                 logiciel. Un « Lier » vers un numéro que votre plan ne connaît pas
                 n'est pas enregistré. <b>Un compte chez vous ne reçoit qu'un seul compte</b>
@@ -378,10 +379,32 @@
             if (!parCible.hasOwnProperty(c) || parCible[c].length < 2) continue;
             fautes.push('Compte ' + c + (PLAN[c] ? ' — ' + PLAN[c] : '') + ' : ' + parCible[c].join(', '));
         }
-        if (fautes.length === 0) return true;
-        alert('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
-            + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.');
-        return false;
+        if (fautes.length > 0) {
+            alert('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
+                + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.');
+            return false;
+        }
+
+        // « Créer » avec un compte choisi dans la liste : ce compte existe
+        // déjà, on ne le crée pas une seconde fois (T276). C'est « Lier »
+        // qu'il faut, ou laisser le compte vide.
+        var creerPris = [];
+        for (var k = 0; k < lignes.length; k++) {
+            var tr2 = lignes[k];
+            var act2 = tr2.querySelector('select.act');
+            var hid2 = tr2.querySelector('input[type=hidden][id*=_hfCompte_]');
+            if (!act2 || !hid2 || act2.value !== 'CREER' || hid2.value === '') continue;
+            if (!PLAN.hasOwnProperty(hid2.value)) continue;
+            var no2 = tr2.querySelector('td') ? tr2.querySelector('td').textContent.trim() : String(k + 1);
+            creerPris.push('ligne ' + no2 + ' : le numéro ' + hid2.value + ' — ' + PLAN[hid2.value] + ' existe déjà');
+        }
+        if (creerPris.length > 0) {
+            alert('« Créer » ne peut pas reprendre un numéro que votre plan connaît déjà.\n\n'
+                + creerPris.join('\n')
+                + '\n\nPour le rattacher à ce compte, choisissez « Lier ». Pour en créer un nouveau, laissez le compte vide : le numéro sera attribué à l\'étape suivante.');
+            return false;
+        }
+        return true;
     }
 
     // Le plan se lit en trois crans : la grande classe, puis la sous-classe,
@@ -462,6 +485,17 @@
                 }
 
                 sel.addEventListener('change', function () { hid.value = sel.value; });
+
+                // « Créer » n'a pas de compte chez nous à choisir : le compte
+                // n'existe pas encore. Le choix précédent est effacé, sinon un
+                // « Lier » devenu « Créer » demanderait de recréer un compte
+                // qui existe (T276).
+                var act = tr.querySelector('select.act');
+                if (act) {
+                    act.addEventListener('change', function () {
+                        if (act.value === 'CREER') { hid.value = ''; sel.value = ''; }
+                    });
+                }
 
                 cls.addEventListener('change', function () { remplirSousClasses(); remplirComptes(); });
                 scl.addEventListener('change', remplirComptes);
