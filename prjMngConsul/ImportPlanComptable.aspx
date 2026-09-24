@@ -380,10 +380,11 @@
             <div class="acts">
                 <asp:Button ID="btnVider" runat="server" Text="🗑 Abandonner la préparation"
                     CssClass="btn secondaire" CausesValidation="false"
-                    OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?')) { return false; }" />
+                    OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?\n\nLes correspondances déjà décidées pour ce plan seront effacées aussi.')) { return false; }" />
             </div>
             <p class="hint-abandon">
-                Efface le plan comptable en préparation. Refusé si des comptes en ont déjà
+                Efface le plan comptable en préparation et les correspondances décidées
+                pour lui. Refusé si des comptes en ont déjà
                 été créés : on n'efface pas la trace de ce qui existe.
             </p>
         </div>

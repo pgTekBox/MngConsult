@@ -621,7 +621,7 @@ Public Class ImportPlanComptable
 
             pnlLignes.Visible = False
             pnlResultat.Visible = False
-            Alerte(pnlSucces, litSucces, "Le plan comptable en préparation a été abandonné.")
+            Alerte(pnlSucces, litSucces, "Le plan comptable en préparation a été abandonné, et ses correspondances avec lui.")
 
         Catch ex As SqlException
             ' 50303 : des comptes ont déjà été créés. Ce n'est pas une panne.
