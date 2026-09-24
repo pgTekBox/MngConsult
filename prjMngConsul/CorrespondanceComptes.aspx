@@ -268,7 +268,7 @@
                 <tbody>
                     <asp:Repeater ID="rptLignes" runat="server">
                         <ItemTemplate>
-                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>'>
+                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>' data-cree='<%# If(EstCree(Container.DataItem), "1", "0") %>'>
                                 <td><%# Eval("LigneNo") %></td>
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
@@ -276,7 +276,7 @@
                                     <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
-                                <td><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
+                                <td><%# TexteCree(Container.DataItem) %><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
                                                          Eval("ProposeClasse"), Eval("ProposeClasseNom"),
                                                          Eval("IACompte"), Eval("IANom"), Eval("IAConfiance"), Eval("IARaison"),
                                                          Eval("IAClasse"), Eval("IAClasseNom")) %></td>
@@ -366,6 +366,7 @@
         var parCible = {};
         for (var i = 0; i < lignes.length; i++) {
             var tr = lignes[i];
+            if (tr.getAttribute('data-cree') === '1') continue;
             var act = tr.querySelector('select.act');
             var hid = tr.querySelector('input[type=hidden][id*=_hfCompte_]');
             if (!act || !hid || act.value !== 'LIER' || hid.value === '') continue;
@@ -391,6 +392,7 @@
         var creerPris = [];
         for (var k = 0; k < lignes.length; k++) {
             var tr2 = lignes[k];
+            if (tr2.getAttribute('data-cree') === '1') continue;
             var act2 = tr2.querySelector('select.act');
             var hid2 = tr2.querySelector('input[type=hidden][id*=_hfCompte_]');
             if (!act2 || !hid2 || act2.value !== 'CREER' || hid2.value === '') continue;
@@ -420,6 +422,12 @@
                 var scl = tr.querySelector('select.scls-f');
                 var sel = tr.querySelector('select.cpt-sel');
                 var hid = tr.querySelector('input[type=hidden][id*=_hfCompte_]');
+                // Compte déjà créé au plan (T277) : plus rien à choisir ici.
+                if (tr.getAttribute('data-cree') === '1') {
+                    if (scl) scl.style.display = 'none';
+                    if (sel) sel.style.display = 'none';
+                    return;
+                }
                 if (!cls || !scl || !sel || !hid) return;
 
 

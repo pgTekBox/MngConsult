@@ -158,6 +158,22 @@ Public Class CorrespondanceComptes
         Dim ddl = TryCast(e.Item.FindControl("ddlClasseFiltre"), DropDownList)
         If ddl Is Nothing Then Return
 
+        ' Compte déjà créé au plan (T277) : la ligne se lit, elle ne se
+        ' rediscute pas. L'action est figée sur « Créé », la note aussi ;
+        ' s0757 ignore de toute façon ce que la page renverrait pour elle.
+        If EstCree(e.Item.DataItem) Then
+            Dim ddlAct = TryCast(e.Item.FindControl("ddlAction"), DropDownList)
+            If ddlAct IsNot Nothing Then
+                ddlAct.Items.Clear()
+                ddlAct.Items.Add(New ListItem("Créé ✓", "CREER"))
+                ddlAct.Enabled = False
+            End If
+            Dim txtNot = TryCast(e.Item.FindControl("txtNote"), TextBox)
+            If txtNot IsNot Nothing Then txtNot.ReadOnly = True
+            ddl.Visible = False
+            Return
+        End If
+
 
         ddl.Items.Clear()
         ddl.Items.Add(New ListItem("tout le plan", ""))
@@ -427,6 +443,27 @@ Public Class CorrespondanceComptes
 
     Protected Function EstDecide(origine As Object) As Boolean
         Return Convert.ToString(origine) = "DECIDE"
+    End Function
+
+    ''' <summary>
+    ''' Le compte de cette ligne a-t-il déjà été créé au plan par l'étape 3 ?
+    ''' Un « Créer » qui porte un PlanComptableId, c'est un compte qui existe :
+    ''' la décision n'est plus ouverte (T277).
+    ''' </summary>
+    Protected Function EstCree(item As Object) As Boolean
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return False
+        Return Convert.ToString(r("Action")) = "CREER" AndAlso Not IsDBNull(r("DecidePlanComptableId"))
+    End Function
+
+    ''' <summary>Ce qu'affiche la colonne « proposition » pour un compte déjà créé.</summary>
+    Protected Function TexteCree(item As Object) As String
+        If Not EstCree(item) Then Return ""
+        Dim r As DataRowView = CType(item, DataRowView)
+        Return "<span class='pr pr-sur'>créé au plan</span> " &
+               Server.HtmlEncode(Convert.ToString(r("ProposeCompte"))) & " — " &
+               Server.HtmlEncode(Convert.ToString(r("ProposeNom"))) &
+               TexteClasse(r("ProposeClasse"), r("ProposeClasseNom"))
     End Function
 
     ''' <summary>
