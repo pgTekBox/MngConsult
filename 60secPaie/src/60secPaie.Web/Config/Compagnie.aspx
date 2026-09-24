@@ -18,6 +18,7 @@
                     <asp:ListItem Value="26" Selected="True">Aux 2 semaines (26 périodes)</asp:ListItem>
                     <asp:ListItem Value="24">Bimensuel (24 périodes)</asp:ListItem>
                     <asp:ListItem Value="12">Mensuel (12 périodes)</asp:ListItem>
+                    <asp:ListItem Value="1">Annuelle (1 période)</asp:ListItem>
                 </asp:DropDownList></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxVacances" CssClass="requis">Taux de vacances par défaut (%)</asp:Label>
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" /></div>

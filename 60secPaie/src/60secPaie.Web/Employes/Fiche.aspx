@@ -41,6 +41,7 @@
                     <asp:ListItem Value="26">Aux 2 semaines (26 périodes)</asp:ListItem>
                     <asp:ListItem Value="24">Bimensuel (24 périodes)</asp:ListItem>
                     <asp:ListItem Value="12">Mensuel (12 périodes)</asp:ListItem>
+                    <asp:ListItem Value="1">Annuelle (1 période)</asp:ListItem>
                 </asp:DropDownList></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtHeuresSemaine" Text="Heures par semaine" />
                 <asp:TextBox ID="txtHeuresSemaine" runat="server" MaxLength="6" /></div>

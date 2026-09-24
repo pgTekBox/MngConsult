@@ -310,6 +310,10 @@ fr: Mensuel (12 périodes)
 en: Monthly (12 periods)
 es: Mensual (12 períodos)
 
+fr: Annuelle (1 période)
+en: Annual (1 period)
+es: Anual (1 período)
+
 fr: Hebdomadaire (52)
 en: Weekly (52)
 es: Semanal (52)
@@ -325,6 +329,10 @@ es: Quincenal (24)
 fr: Mensuel (12)
 en: Monthly (12)
 es: Mensual (12)
+
+fr: Annuelle (1)
+en: Annual (1)
+es: Anual (1)
 
 fr: {#0} périodes
 en: {#0} periods

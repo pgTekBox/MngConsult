@@ -155,6 +155,7 @@ Public Module Outils
             Case 26 : Return "Aux 2 semaines (26)"
             Case 24 : Return "Bimensuel (24)"
             Case 12 : Return "Mensuel (12)"
+            Case 1 : Return "Annuelle (1)"
             Case Else : Return Convert.ToInt32(periodes).ToString() & " périodes"
         End Select
     End Function

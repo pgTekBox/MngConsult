@@ -385,7 +385,7 @@ SELECT
     t.JobTitle                             AS Poste,
     t.HireDate                             AS DateEmbauche,
     t.TerminationDate                      AS DateFinEmploi,
-    COALESCE(ep.PeriodesParAnnee, CASE t.PayFrequency WHEN 'Weekly' THEN 52 WHEN 'BiWeekly' THEN 26 WHEN 'SemiMonthly' THEN 24 WHEN 'Monthly' THEN 12 END) AS PeriodesParAnnee,
+    COALESCE(ep.PeriodesParAnnee, CASE t.PayFrequency WHEN 'Weekly' THEN 52 WHEN 'BiWeekly' THEN 26 WHEN 'SemiMonthly' THEN 24 WHEN 'Monthly' THEN 12 WHEN 'Annually' THEN 1 WHEN 'Yearly' THEN 1 END) AS PeriodesParAnnee,
     ep.HeuresSemaine,
     COALESCE(ep.TauxHoraire, NULLIF(t.HourlyRate, 0))     AS TauxHoraire,
     COALESCE(ep.SalaireAnnuel, NULLIF(t.AnnualSalary, 0)) AS SalaireAnnuel,

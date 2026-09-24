@@ -98,6 +98,7 @@ Public Class PageCalculerPaie
                 Case 52 : fin = fin.AddDays(7) : paie = paie.AddDays(7)
                 Case 26 : fin = fin.AddDays(14) : paie = paie.AddDays(14)
                 Case 12 : fin = fin.AddDays(1).AddMonths(1).AddDays(-1) : paie = paie.AddMonths(1)
+                Case 1 : fin = fin.AddYears(1) : paie = paie.AddYears(1)
                 Case Else : fin = Nothing : paie = Nothing
             End Select
             If fin <> Nothing Then
