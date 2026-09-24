@@ -3,7 +3,7 @@
     <div class="barre">
         <h1>Nouvel employé</h1>
     </div>
-    <p class="note">L'employé est créé dans la compagnie courante et apparaît aussitôt dans MngConsul, où son identité se modifie ensuite.
+    <p class="note">L'employé est créé dans la compagnie courante et apparaît aussitôt dans 60Sec, où son identité se modifie ensuite.
        Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct.</p>
 
     <fieldset>

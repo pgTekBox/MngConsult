@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ayuda 60secPaie</title>
+<meta name="description" content="Guía completa de 60secPaie: configuración, empleados, cálculo de la nómina, retenciones, informes, comprobantes, depósito directo, asientos, fórmulas y mensajes.">
+<style>
+:root{--encre:#1d2733;--encre-douce:#5b6877;--fond:#f4f6f8;--carte:#fff;--bord:#d9dfe6;--accent:#0b6e99;--accent-fonce:#085373;--succes:#1b7a43;--succes-fond:#e6f4ec;--erreur:#a4262c;--erreur-fond:#fbeaea;--avert-fond:#fff6da;--avert:#8a6100}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--encre);background:var(--fond);line-height:1.55;font-size:15px}
+header.entete{background:var(--accent-fonce);color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.entete-haut{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 24px;flex-wrap:wrap}
+.logo{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:.2px}
+.logo span{opacity:.85;font-weight:500}
+.entete-outils{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.entete-outils input{padding:7px 10px;border:1px solid #6ea4bf;border-radius:6px;min-width:240px;font-size:14px}
+.entete-outils .langues{color:#fff;font-size:13px;margin-right:4px}.entete-outils .langues a{background:none;border:0;padding:0 2px;text-decoration:underline}
+.entete-outils a,.entete-outils button{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:6px;text-decoration:none;font-size:13px;cursor:pointer}
+.page{display:grid;grid-template-columns:290px 1fr;gap:0;max-width:1400px;margin:0 auto}
+nav.sommaire{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 58px);overflow:auto;padding:18px 14px 40px 22px;border-right:1px solid var(--bord);background:var(--carte);font-size:13.5px}
+nav.sommaire h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--encre-douce);margin:14px 0 6px}
+nav.sommaire a{display:block;color:var(--encre);text-decoration:none;padding:3px 6px;border-radius:4px}
+nav.sommaire a:hover{background:var(--fond);color:var(--accent-fonce)}
+nav.sommaire a.n2{padding-left:18px;color:var(--encre-douce)}
+nav.sommaire a.cache{display:none}
+main{padding:24px 40px 80px;min-width:0}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:22px;margin:44px 0 12px;padding-top:14px;border-top:2px solid var(--bord);color:var(--accent-fonce)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--encre)}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lede{font-size:16px;color:var(--encre-douce);max-width:860px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:8px;padding:14px 18px;margin:12px 0}
+.note{background:var(--fond);border-left:4px solid var(--accent);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.avert{background:var(--avert-fond);border-left:4px solid var(--avert);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.erreur{background:var(--erreur-fond);border-left:4px solid var(--erreur);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.succes{background:var(--succes-fond);border-left:4px solid var(--succes);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+table{border-collapse:collapse;width:100%;margin:10px 0 16px;background:var(--carte);font-size:14px}
+th,td{border:1px solid var(--bord);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#eef3f7;font-weight:600}
+td.num,th.num{text-align:right;white-space:nowrap}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:13px;background:#eef3f7;padding:1px 5px;border-radius:4px}
+pre{background:#1d2733;color:#e8eef4;padding:12px 14px;border-radius:6px;overflow:auto;font-size:13px}
+.chemin{display:inline-block;background:#eef3f7;border:1px solid var(--bord);border-radius:4px;padding:1px 8px;font-size:13px;color:var(--accent-fonce);font-weight:600}
+.etiquette{display:inline-block;padding:1px 8px;border-radius:12px;font-size:12px;font-weight:600}
+.etiquette.B{background:var(--avert-fond);color:var(--avert)}
+.etiquette.C{background:var(--succes-fond);color:var(--succes)}
+.etiquette.A{background:var(--erreur-fond);color:var(--erreur)}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+dl.def dt{font-weight:600;margin-top:10px}
+dl.def dd{margin:2px 0 0 18px;color:var(--encre)}
+ol.etapes li{margin:6px 0}
+.faq details{background:var(--carte);border:1px solid var(--bord);border-radius:6px;padding:8px 14px;margin:6px 0}
+.faq summary{cursor:pointer;font-weight:600}
+.retour{font-size:12px;margin-top:8px}
+.retour a{color:var(--encre-douce)}
+mark{background:#ffe89a}
+@media (max-width:980px){.page{grid-template-columns:1fr}nav.sommaire{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--bord)}main{padding:18px 16px 60px}.deux{grid-template-columns:1fr}}
+@media print{header.entete,nav.sommaire,.retour{display:none}main{padding:0}h2{break-before:page}body{background:#fff;font-size:12px}}
+</style>
+</head>
+<body>
+<header class="entete">
+  <div class="entete-haut">
+    <a class="logo" href="#haut">60sec<span>Paie</span> · Ayuda</a>
+    <div class="entete-outils">
+      <input type="search" id="recherche" placeholder="Filtrar el índice… (ej. RRQ, cheque, T4)" aria-label="Filtrar el índice">
+      <span class="langues" aria-label="Idioma de la guía"><a href="Aide.html">FR</a> · <a href="Aide-en.html">EN</a> · <strong>ES</strong></span>
+      <button type="button" onclick="window.print()">Imprimir</button>
+      <a href="Default.aspx">Volver a 60secPaie</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+<nav class="sommaire" id="sommaire">
+  <h2>Para comenzar</h2>
+  <a href="#intro">Visión general</a>
+  <a href="#cycle" class="n2">El ciclo de una nómina</a>
+  <a href="#limites" class="n2">Lo que 60secPaie no hace</a>
+  <a href="#demarrer">Inicio de sesión y sesión</a>
+  <a href="#comptes" class="n2">Cuentas y contraseñas</a>
+  <a href="#compagnies" class="n2">Empresas y cambio de empresa</a>
+  <a href="#langues" class="n2">Idiomas (FR, EN, ES)</a>
+  <a href="#securite" class="n2">Seguridad y datos sensibles</a>
+  <a href="#conventions">Convenciones de la pantalla</a>
+  <a href="#tableau">Panel de control</a>
+  <h2>Configuración</h2>
+  <a href="#config">Parámetros de nómina</a>
+  <a href="#config-elements">Elementos de nómina</a>
+  <a href="#config-plan">Plan de cuentas</a>
+  <a href="#config-depot">Depósito directo</a>
+  <h2>Empleados</h2>
+  <a href="#emp-liste">Lista de empleados</a>
+  <a href="#emp-nouveau">Nuevo empleado</a>
+  <a href="#emp-fiche">Ficha: parámetros de nómina</a>
+  <a href="#emp-elements">Elementos de nómina recurrentes</a>
+  <a href="#emp-cumulatifs">Acumulados iniciales</a>
+  <h2>Hacer la nómina</h2>
+  <a href="#paie">Calcular la nómina (4 pasos)</a>
+  <a href="#paie-etape1" class="n2">Paso 1: período</a>
+  <a href="#paie-etape2" class="n2">Paso 2: empleados y líneas</a>
+  <a href="#paie-etape3" class="n2">Paso 3: revisión</a>
+  <a href="#paie-etape4" class="n2">Paso 4: confirmación</a>
+  <a href="#historique">Historial de nómina</a>
+  <a href="#detail">Detalle de una nómina</a>
+  <a href="#detail-depot" class="n2">Archivo de depósito directo</a>
+  <a href="#detail-courriel" class="n2">Talones por correo</a>
+  <a href="#detail-annuler" class="n2">Anular una nómina</a>
+  <a href="#talon">Talón de pago</a>
+  <h2>Retenciones</h2>
+  <a href="#remises">Pago de retenciones</a>
+  <a href="#remises-calendrier" class="n2">Frecuencias y vencimientos</a>
+  <a href="#remises-historique">Historial y detalle de los pagos</a>
+  <h2>Informes</h2>
+  <a href="#feuillets">T4 y Relevés 1</a>
+  <a href="#feuillet-employe" class="n2">Comprobante de un empleado</a>
+  <a href="#cnesst">Declaración CNESST</a>
+  <a href="#ecritures">Asientos contables</a>
+  <h2>Entender los cálculos</h2>
+  <a href="#categories">Categorías de nómina</a>
+  <a href="#parametres">Parámetros del año 2026</a>
+  <a href="#formules">Fórmulas, retención por retención</a>
+  <a href="#arrondis">Redondeos</a>
+  <a href="#exemple">Ejemplo con cifras</a>
+  <h2>Casos prácticos</h2>
+  <a href="#cas-demarrage">Primer arranque</a>
+  <a href="#cas-conversion">Conversión a mitad de año</a>
+  <a href="#cas-nouvel-employe">Contratar a alguien</a>
+  <a href="#cas-depart">Salida de un empleado</a>
+  <a href="#cas-assurance">Seguro colectivo</a>
+  <a href="#cas-bonus">Bono y pago retroactivo</a>
+  <a href="#cas-vacances">Vacaciones</a>
+  <a href="#cas-annuelle">Nómina anual</a>
+  <a href="#cas-corriger">Corregir una nómina</a>
+  <a href="#cas-depot">Primer depósito directo</a>
+  <a href="#cas-fin-annee">Fin de año</a>
+  <h2>Referencia</h2>
+  <a href="#messages">Mensajes y su solución</a>
+  <a href="#faq">Preguntas frecuentes</a>
+  <a href="#glossaire">Glosario</a>
+</nav>
+
+<main id="haut">
+<h1>Ayuda de 60secPaie</h1>
+<p class="lede">Esta guía describe cada pantalla, cada campo, cada regla y cada mensaje de 60secPaie, el servicio de nómina para Quebec de 60Sec. Sigue el orden del menú. Las palabras entre comillas « » son las que usted ve en la pantalla. Use el filtro de arriba para encontrar un tema, o <kbd>Ctrl</kbd>+<kbd>F</kbd> para buscar una palabra en toda la página.</p>
+<div class="note">Versión de la guía: septiembre de 2026. Tasas vigentes en el programa: año 2026, según la guía T4127 de la ARC y la guía TP-1015.F de Revenu Québec.</div>
+
+<!-- ============================================================ -->
+<h2 id="intro">Visión general</h2>
+<p>60secPaie calcula la nómina de los empleados que trabajan en Quebec: impuesto federal, impuesto de Quebec, RRQ, seguro de empleo, RQAP, y los aportes del empleador (RRQ, AE, RQAP, FSS, CNESST, CNT). A partir de las nóminas confirmadas, genera los talones de pago, el archivo de depósito directo, el monto de las retenciones por remitir a los dos gobiernos, las casillas de los comprobantes T4 y Relevé 1, la declaración de salarios CNESST y los asientos contables.</p>
+<p>Comparte sus cuentas de usuario y sus empresas con 60Sec. Los empleados también son los de 60Sec: pueden crearse de un lado o del otro, pero su identidad (nombre, dirección, puesto) se modifica en 60Sec. 60secPaie le añade todo lo que concierne a la nómina.</p>
+
+<h3 id="cycle">El ciclo de una nómina</h3>
+<ol class="etapes">
+  <li><strong>Configurar la empresa</strong> una vez: frecuencia de pago, números RP y RS, tasas FSS y CNESST (<span class="chemin">Configuración › Parámetros de nómina</span>).</li>
+  <li><strong>Configurar cada empleado</strong> una vez: NAS, frecuencia, tarifa o salario, TD1 y TP-1015.3, depósito directo (<span class="chemin">Empleados › Parámetros de nómina</span>), luego sus líneas recurrentes (<span class="chemin">Elementos de nómina</span>).</li>
+  <li><strong>Calcular la nómina</strong> en cada período, en 4 pasos: período, captura, revisión, confirmación.</li>
+  <li><strong>Pagar a los empleados</strong>: cheques numerados o archivo de depósito directo; enviar los talones por correo.</li>
+  <li><strong>Remitir las retenciones</strong> en los vencimientos, en <span class="chemin">Retenciones</span>.</li>
+  <li><strong>A fin de año</strong>: T4, Relevés 1, sumarios, declaración CNESST, en <span class="chemin">Informes</span>.</li>
+</ol>
+
+<h3 id="limites">Lo que 60secPaie no hace</h3>
+<ul>
+  <li><strong>No transmite ningún pago</strong>, ni a los empleados ni a los gobiernos. Prepara el archivo de depósito directo que usted entrega a su banco, y calcula las remesas que usted mismo paga.</li>
+  <li><strong>No transmite los comprobantes</strong>. Calcula cada casilla; usted los captura en Formulaires Web (ARC) y Mon dossier pour les entreprises (Revenu Québec).</li>
+  <li>No gestiona empleados fuera de Quebec: la provincia de empleo siempre es QC.</li>
+  <li>Solo conoce las tasas de <strong>2026</strong>. Una nómina fechada en otro año se rechaza mientras sus tasas no se añadan al programa.</li>
+  <li>No reemplaza su criterio: « Revise siempre sus nóminas antes de confirmarlas. » Los montos calculados quedan bajo la responsabilidad del empleador.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="demarrer">Inicio de sesión y sesión</h2>
+<p>La página <span class="chemin">Login.aspx</span> pide su « Correo electrónico » y su « Contraseña ». La tecla Entrar inicia la sesión. Después de iniciar sesión, llega a la página solicitada, o si no al panel de control.</p>
+<table>
+<tr><th>Mensaje</th><th>Causa</th><th>Qué hacer</th></tr>
+<tr><td>« Correo electrónico o contraseña no válidos. »</td><td>El par no corresponde a ninguna cuenta activa de 60Sec, o un campo está vacío.</td><td>Verifique las mayúsculas y minúsculas de la contraseña. El correo se compara en minúsculas.</td></tr>
+<tr><td>« Demasiados intentos. Vuelva a intentarlo en unos minutos. »</td><td>5 fallos: la cuenta se bloquea 15 minutos. Un nuevo fallo tras el vencimiento la vuelve a bloquear de inmediato.</td><td>Espere 15 minutos, luego ingrese la contraseña correcta a la primera. Un inicio de sesión exitoso pone el contador en cero.</td></tr>
+<tr><td>« Su cuenta no está asociada a ninguna empresa en 60Sec. »</td><td>La cuenta existe pero no tiene empresa.</td><td>Haga vincular su cuenta a una empresa en 60Sec.</td></tr>
+</table>
+<p>La sesión dura <strong>60 minutos</strong> y se prolonga con cada acción. No hay opción « Recordarme ». « Cerrar sesión », arriba a la derecha, cierra la sesión.</p>
+<p>Un visitante no conectado que llega a la raíz del sitio ve la página de presentación (<span class="chemin">Accueil.aspx</span>), con « Iniciar sesión » y « ¿Qué es 60secPaie? ».</p>
+
+<h3 id="comptes">Cuentas y contraseñas</h3>
+<p>Las cuentas son las de <strong>60Sec</strong>. 60secPaie no crea cuentas ni cambia contraseñas: « ¿Olvidó su contraseña? Restablézcala desde la página de inicio de sesión de 60Sec. » Una cuenta desactivada o eliminada en 60Sec pierde el acceso de inmediato, incluso durante una sesión.</p>
+<p>Todos los usuarios que tienen acceso a una empresa tienen en ella los mismos derechos en 60secPaie. El rol de administrador de 60Sec se lee, pero por ahora ninguna página lo exige.</p>
+
+<h3 id="compagnies">Empresas y cambio de empresa</h3>
+<p>La lista de empresas accesibles sigue la regla de 60Sec: un usuario ordinario ve su empresa, un contador ve todas aquellas de las que es contador. Con una sola empresa, su nombre se muestra arriba a la derecha. Con varias, una lista desplegable (« Cambiar de empresa ») las propone; después de un cambio, vuelve al panel de control.</p>
+<p>La empresa actual es la misma que en 60Sec (misma clave de sesión). Su nombre y su dirección se copian desde 60Sec una vez por sesión, para los talones, los informes y los archivos.</p>
+
+<h3 id="langues">Idiomas (FR, EN, ES)</h3>
+<p>Los enlaces « FR | EN | ES » del encabezado, de la página de inicio de sesión y de la página de inicio cambian el idioma de toda la pantalla: textos, botones, ayudas emergentes, confirmaciones, títulos de las exportaciones CSV. La elección se memoriza en una cookie durante un año y sobrevive al cierre de sesión. También puede añadir <code>?lang=en</code> o <code>?lang=es</code> a una dirección.</p>
+<ul>
+  <li>Las fechas siempre están en formato <strong>AAAA-MM-DD</strong>, en los tres idiomas.</li>
+  <li>Los montos se escriben « 1 234,56 $ » en francés, « $1,234.56 » en inglés y en español.</li>
+  <li>El talón enviado por correo y su PDF están en el <strong>idioma del empleado</strong> (elegido en su ficha). El PDF descargado desde la pantalla está en el idioma del usuario.</li>
+  <li>Esta guía está disponible en francés, inglés y español.</li>
+</ul>
+
+<h3 id="securite">Seguridad y datos sensibles</h3>
+<ul>
+  <li>El <strong>NAS</strong> y los <strong>números de cuenta bancaria</strong> (empleados y empresa) están cifrados. Nunca se devuelven al navegador: las pantallas solo muestran los 3 últimos caracteres (« ••••••123 »). Un campo dejado vacío conserva el valor del expediente.</li>
+  <li>El NAS completo solo se muestra a pedido, en el comprobante de un empleado, y esa consulta se inscribe en el registro de actividad.</li>
+  <li>Las exportaciones CSV nunca incluyen el NAS.</li>
+  <li>Los formularios están protegidos contra la falsificación de solicitudes, y las páginas no pueden mostrarse dentro de un marco de otro sitio.</li>
+  <li>El <strong>registro de actividad</strong> conserva, por empresa, los eventos importantes: empleado creado, nómina configurada, nómina confirmada o anulada, talones enviados, archivo de depósito directo generado, pago de retenciones registrado o anulado, NAS completo mostrado. Las 8 últimas entradas están en el panel de control.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="conventions">Convenciones de la pantalla</h2>
+<ul>
+  <li>Un asterisco rojo marca un campo <strong>obligatorio</strong>.</li>
+  <li>Los números aceptan la coma o el punto; los espacios, « $ » y « % » se ignoran. « 1,234.56 » y « 1.234,56 » se entienden ambos.</li>
+  <li>Una franja verde confirma una acción exitosa, una franja roja señala un error. Después de una redirección, el mensaje se muestra una vez en la página siguiente.</li>
+  <li>Las exportaciones CSV usan el punto y coma y la codificación UTF-8 con BOM: se abren directamente en Excel. Los montos están en formato « 0,00 ».</li>
+  <li>El botón « Imprimir » usa la impresión del navegador; el encabezado, el menú y los botones no se imprimen.</li>
+</ul>
+<h4>Estados de una nómina</h4>
+<table>
+<tr><th>Distintivo</th><th>Significado</th></tr>
+<tr><td><span class="etiquette B">Borrador</span></td><td>Nómina en preparación. No cuenta en ningún lado. Solo una a la vez por empresa.</td></tr>
+<tr><td><span class="etiquette C">Confirmado</span></td><td>Nómina registrada: cuenta en los acumulados, las remesas, los comprobantes y los asientos.</td></tr>
+<tr><td><span class="etiquette A">Anulado</span></td><td>Nómina retirada de los acumulados. La línea aparece en gris en las listas. Los números de cheque asignados no se reutilizan.</td></tr>
+</table>
+<h4>Frecuencias de pago</h4>
+<table>
+<tr><th>Etiqueta</th><th>Períodos por año</th><th>Inicio de período calculado</th></tr>
+<tr><td>Semanal</td><td class="num">52</td><td>fin de período − 6 días</td></tr>
+<tr><td>Cada 2 semanas</td><td class="num">26</td><td>fin − 13 días</td></tr>
+<tr><td>Quincenal</td><td class="num">24</td><td>el 1 o el 16 del mes, según que el fin caiga a más tardar el 15 o después</td></tr>
+<tr><td>Mensual</td><td class="num">12</td><td>el 1 del mes</td></tr>
+<tr><td>Anual</td><td class="num">1</td><td>el 1 de enero del año</td></tr>
+</table>
+<h4>Mensajes de captura genéricos</h4>
+<ul>
+  <li>« «{campo}»: número no válido. » y « «{campo}» no puede ser negativo. »</li>
+  <li>« «{campo}»: número entero no válido. »</li>
+  <li>« «{campo}»: fecha no válida (formato AAAA-MM-DD). »</li>
+  <li>« «{campo}» es obligatorio. »</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="tableau">Panel de control</h2>
+<p><span class="chemin">Default.aspx</span>. El subtítulo indica el número de empleados activos y la fecha de la última nómina confirmada (« ninguna nómina confirmada » si no la hay).</p>
+<ul>
+  <li><strong>Franja amarilla</strong> « Hay una nómina en preparación (período que termina el …). » con « Continuar esta nómina », si existe un borrador.</li>
+  <li><strong>« Haga sus nóminas »</strong>: botón « Calcular la nómina ».</li>
+  <li><strong>« Pago de retenciones »</strong>: una línea por gobierno. « Federal: nada que pagar. », o « Federal: $X por pagar, vence el … », o en rojo « … por pagar, atrasado desde el … » cuando el vencimiento pasó. Botón « Pagar ».</li>
+  <li><strong>« Historial de nómina »</strong>, <strong>« Empleados »</strong>, <strong>« Configuración »</strong>: accesos directos.</li>
+  <li><strong>« Actividad reciente »</strong>: las 8 últimas entradas del registro, con la fecha, la descripción (clicable cuando lleva a una página) y el correo del usuario.</li>
+</ul>
+<div class="note">Mientras la nómina de la empresa no esté configurada, todas las páginas remiten a <span class="chemin">Configuración › Parámetros de nómina</span> con el mensaje « La nómina aún no está configurada para {empresa}. Comience por sus parámetros de nómina. »</div>
+
+<!-- ============================================================ -->
+<h2 id="config">Configuración › Parámetros de nómina</h2>
+<p><span class="chemin">Config/Compagnie.aspx</span>. Única página accesible antes de que la nómina de la empresa esté configurada. El submenú de Configuración ofrece: « Parámetros de nómina », « Elementos de nómina », « Plan de cuentas », « Depósito directo ».</p>
+<h3>« Empresa » (solo lectura)</h3>
+<p>Nombre, dirección, ciudad, teléfono y « Número de empresa (NE) » vienen de 60Sec: « El nombre y los datos de la empresa se modifican en 60Sec (parámetros de la empresa). »</p>
+<h3>« Información de nómina »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Valor predeterminado, validación</th></tr>
+<tr><td>« Período de pago predeterminado » *</td><td>Frecuencia propuesta en el asistente y aplicada a los empleados que no tienen una propia.</td><td>Cada 2 semanas (26). Opciones: 52, 26, 24, 12, 1.</td></tr>
+<tr><td>« Tasa de vacaciones predeterminada (%) » *</td><td>Tasa de indemnización de vacaciones de los empleados sin tasa propia.</td><td>4. Rechazada por encima de 20: « La tasa de vacaciones parece demasiado alta. »</td></tr>
+<tr><td>« Próximo número de cheque »</td><td>Primer número asignado a las nóminas por cheque y a las remesas por cheque.</td><td>1. Vacío = 1. Avanza automáticamente.</td></tr>
+<tr><td>« Frecuencia de pago de las retenciones federales »</td><td>Determina los vencimientos de las remesas a la ARC.</td><td>« Mensual (vence el 15 del mes siguiente) » o « Trimestral (vence el 15 siguiente al trimestre) ».</td></tr>
+<tr><td>« Frecuencia de pago de las retenciones a Revenu Québec »</td><td>Ídem para Revenu Québec. « La frecuencia es la que le asignaron la ARC y Revenu Québec. »</td><td>Mensual.</td></tr>
+<tr><td>« Número de empresa federal (RP) »</td><td>Cuenta de retenciones en la fuente, impresa en los comprobantes y en el detalle de las remesas.</td><td>Formato 123456789RP0001, convertido a mayúsculas.</td></tr>
+<tr><td>« Número de identificación de Revenu Québec (RS) »</td><td>Ídem para Revenu Québec.</td><td>Formato 1234567890RS0001.</td></tr>
+</table>
+<h3>« Aportes del empleador »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Notas</th></tr>
+<tr><td>« Masa salarial total estimada ($) »</td><td>Sirve para determinar la tasa de aporte al FSS.</td><td>La tasa real se establece sobre la masa del año; la diferencia se regulariza en el Sumario 1.</td></tr>
+<tr><td>« Sector de actividad (FSS) »</td><td>« General », « Primario y manufacturero » o « Sector público ».</td><td>La ayuda muestra « Tasa FSS aplicada: x.xx % ». Vea <a href="#parametres">los parámetros 2026</a>.</td></tr>
+<tr><td>« Factor de aporte del empleador al AE » *</td><td>Multiplicador del aporte del empleado.</td><td>1.4, « salvo que tenga una tasa reducida ». Debe estar entre 1 y 1.4.</td></tr>
+<tr><td>« Tasa de la CNESST ($ por cada 100 $ asegurables) »</td><td>Tasa de pago periódico.</td><td>« Figura en su decisión de clasificación. »</td></tr>
+<tr><td>« Sujeto al aporte relativo a las normas laborales (CNT) »</td><td>Añade la CNT (0.06 %) a las partes del empleador.</td><td>Marcada de forma predeterminada.</td></tr>
+</table>
+<h3>« Guardar »</h3>
+<p>Al <strong>primer guardado</strong>, 60secPaie crea los parámetros de nómina de la empresa, crea seis elementos de nómina básicos (« Salario », « Salario fijo », « Tiempo y medio », « Días feriados », « Pago de vacaciones », « Gratificación (bono) »), inscribe el evento en el registro y lo envía a Empleados: « Parámetros de nómina guardados. Configure ahora la nómina de sus empleados. » Después: « Parámetros de nómina guardados. »</p>
+
+<!-- ============================================================ -->
+<h2 id="config-elements">Configuración › Elementos de nómina</h2>
+<p><span class="chemin">Config/ElementsPaie.aspx</span>. Un elemento de nómina es una línea reutilizable: un ingreso (salario, tiempo y medio, comisión…), un beneficio gravable (vehículo, seguro médico pagado por el empleador…) o una deducción (REER, sindicato, seguro colectivo…). Su <strong>categoría</strong> lo decide todo: retenciones, aportes del empleador, casillas de los comprobantes. « No tiene nada que configurar: la categoría determina las retenciones, los aportes del empleador y las casillas de los comprobantes. »</p>
+<h3>Lista « Elementos de nómina »</h3>
+<p>Columnas « Nombre » (enlace a la modificación), « Categoría », « Estado » (Activo o Inactivo; los inactivos aparecen en gris y al final). Botón « Nuevo elemento ».</p>
+<h3>Formulario « Nuevo elemento de nómina » / « Modificar el elemento de nómina »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th></tr>
+<tr><td>« Descripción » *</td><td>La etiqueta que aparece en el talón, en el asistente y en los asientos (100 caracteres).</td></tr>
+<tr><td>« Categoría de nómina » *</td><td>Una de las categorías del sistema, en formato « Ingreso - … », « Beneficio - … », « Deducción - … ». Vea <a href="#categories">la tabla de categorías</a>. Cambiar la categoría actualiza la matriz de tratamiento a la derecha.</td></tr>
+<tr><td>« Cuenta del libro mayor »</td><td>Cuenta de gasto (ingreso) o cuenta por pagar (deducción) para los asientos contables. Vacío = cuenta predeterminada del plan de cuentas.</td></tr>
+<tr><td>« Activo »</td><td>Sin marcar, el elemento ya no se propone, pero su historial permanece.</td></tr>
+<tr><td>« No mostrar en el talón de pago »</td><td>La línea se calcula y se cuenta, pero no aparece en el talón (útil para una línea técnica). Una deducción oculta se cuenta en el « Total » de retenciones del talón.</td></tr>
+</table>
+<h3>Tarjeta « Tratamiento de la categoría »</h3>
+<p>Una matriz Sí/No: para un ingreso o un beneficio, Impuesto federal, Impuesto de Quebec, AE, RRQ, RQAP, FSS, CNESST, Vacaciones, Casilla T4, Casilla R1; para una deducción, Reduce el impuesto federal, Reduce el impuesto de Quebec, Crédito por fondo de trabajadores, Casilla T4, Casilla R1. Dos notas posibles: « Pago global: el impuesto se calcula según el método de gratificaciones y pagos retroactivos. » y « Beneficio no monetario: se grava pero no se suma al salario neto. »</p>
+<h3>Mensajes</h3>
+<table>
+<tr><th>Mensaje</th><th>Significado y solución</th></tr>
+<tr><td>« Elemento de nómina guardado. » / « Elemento de nómina eliminado. »</td><td>Éxito.</td></tr>
+<tr><td>« «Descripción» es obligatorio. »</td><td>Indique una etiqueta.</td></tr>
+<tr><td>« Categoría no válida. »</td><td>Elija una categoría de la lista.</td></tr>
+<tr><td>« Este elemento ya se usó en una nómina: su categoría ya no puede cambiar. Cree un nuevo elemento. »</td><td>Una nómina confirmada depende de su categoría. Cree un nuevo elemento y desactive el antiguo.</td></tr>
+<tr><td>« Este elemento lo usan empleados o nóminas. Desactívelo en lugar de eliminarlo. »</td><td>La eliminación solo es posible para un elemento nunca usado.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="config-plan">Configuración › Plan de cuentas</h2>
+<p><span class="chemin">Config/PlanComptable.aspx</span>. « Números de cuenta de su libro mayor, usados por el informe de asientos contables. Deje vacío lo que no utilice. » Los números tienen 30 caracteres como máximo; son libres, solo deben corresponder a su libro mayor.</p>
+<div class="deux">
+<div class="carte"><h4>Activo y pasivo</h4>
+<ul>
+<li>« Cuenta bancaria (salarios netos) »</li>
+<li>« Vacaciones por pagar »</li>
+<li>« Impuesto federal por pagar »</li>
+<li>« Impuesto de Quebec por pagar »</li>
+<li>« RRQ por pagar (empleados y empleador) »</li>
+<li>« Seguro de empleo por pagar (empleados y empleador) »</li>
+<li>« RQAP por pagar (empleados y empleador) »</li>
+<li>« FSS por pagar »</li>
+<li>« CNESST por pagar »</li>
+<li>« Normas laborales (CNT) por pagar »</li>
+<li>« Otras deducciones por pagar (predeterminado) »</li>
+</ul></div>
+<div class="carte"><h4>Gastos</h4>
+<ul>
+<li>« Salarios (predeterminado de los elementos de nómina) »</li>
+<li>« Gasto de vacaciones »</li>
+<li>« Gasto - parte del empleador al RRQ »</li>
+<li>« Gasto - parte del empleador al seguro de empleo »</li>
+<li>« Gasto - parte del empleador al RQAP »</li>
+<li>« Gasto - FSS »</li>
+<li>« Gasto - CNESST »</li>
+<li>« Gasto - normas laborales (CNT) »</li>
+</ul></div>
+</div>
+<p>« Cuentas de los elementos de nómina » enumera los elementos activos: « Cuenta de gasto de un ingreso, o cuenta por pagar de una deducción. Vacío = cuenta predeterminada. » Botón « Guardar »: « Plan de cuentas guardado. » Vea <a href="#ecritures">Asientos contables</a> para el uso de cada cuenta.</p>
+
+<!-- ============================================================ -->
+<h2 id="config-depot">Configuración › Depósito directo</h2>
+<p><span class="chemin">Config/DepotDirect.aspx</span>. « Su institución financiera le entrega estos datos al adherirse a su servicio de depósito directo (transferencia automatizada de fondos). El archivo sigue la norma 005 de Payments Canada (1 464 caracteres). Haga validar un archivo de prueba por su institución antes del primer depósito real: algunas exigen un formato propio. »</p>
+<h3>« Parámetros del archivo de depósito directo »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Validación</th></tr>
+<tr><td>« Número de emisor (10 caracteres) »</td><td>Identificador que el banco le asigna. Convertido a mayúsculas.</td><td>—</td></tr>
+<tr><td>« Centro de procesamiento de destino (5 dígitos) »</td><td>Centro de datos del banco.</td><td>« El centro de procesamiento tiene 5 dígitos. »</td></tr>
+<tr><td>« Nombre abreviado de la empresa (15 caracteres) »</td><td>« Aparece en el estado de cuenta bancario del empleado. »</td><td>—</td></tr>
+<tr><td>« Nombre completo (30 caracteres) »</td><td>Nombre largo en el archivo; a falta de él, el nombre de la empresa.</td><td>—</td></tr>
+<tr><td>« Próximo número de archivo (1 a 9999) »</td><td>Número de secuencia del próximo archivo.</td><td>« El número de archivo debe estar entre 1 y 9999. »</td></tr>
+</table>
+<h3>« Cuenta de la empresa (devoluciones y liquidación) »</h3>
+<p>« Número de institución (3 dígitos) » (« El número de institución tiene 3 dígitos. »), « Número de tránsito (5 dígitos) » (« El número de tránsito tiene 5 dígitos. ») y « Número de cuenta » (cifrado; « Cuenta en el expediente: •••123. Deje vacío para conservarla. »). Éxito: « Parámetros de depósito directo guardados. »</p>
+<p>La generación del archivo se hace desde el <a href="#detail-depot">detalle de una nómina confirmada</a>.</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-liste">Empleados › Lista</h2>
+<p><span class="chemin">Employes/Liste.aspx</span>. « Los empleados se comparten con 60Sec: créelos aquí o allá; su identidad (nombre, dirección, puesto, fecha de contratación) se modifica en 60Sec. Aquí configura su nómina. Solo los empleados con la nómina configurada se proponen en el asistente de nómina. »</p>
+<ul>
+  <li>Casilla « Mostrar también los empleados inactivos »: la lista se recarga; los inactivos aparecen en gris.</li>
+  <li>Botón « Nuevo empleado ».</li>
+  <li>Columnas: « Nombre » (Apellido, Nombre de pila, enlace a la ficha), « Puesto », « Remuneración » (« $X / h » o « $X / año »), « Frecuencia » (la del empleado, o si no la de la empresa), « Fecha de contratación », « Nómina » (distintivo verde « Configurada » o amarillo « Por configurar »), y luego los enlaces « Parámetros de nómina · Elementos de nómina · Acumulados ».</li>
+  <li>Lista vacía: « No hay empleados para esta empresa. Cree el primero con el botón de arriba o agréguelos en 60Sec. »</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="emp-nouveau">Empleados › Nuevo empleado</h2>
+<p><span class="chemin">Employes/Nouveau.aspx</span>. « El empleado se crea en la empresa actual y aparece de inmediato en 60Sec, donde luego se modifica su identidad. Una vez creado, configura su nómina en su ficha: NAS, período de pago, tasas, exenciones, depósito directo. »</p>
+<table>
+<tr><th>Bloque</th><th>Campos</th></tr>
+<tr><td>« Identidad »</td><td>« Nombre de pila » *, « Apellido » *, « Código de empleado » (« Opcional. Debe ser único en la empresa. »), « Puesto », « Fecha de nacimiento », « Fecha de contratación » (hoy de forma predeterminada).</td></tr>
+<tr><td>« Datos de contacto »</td><td>« Dirección », « Dirección (línea 2) », « Ciudad », « Provincia » (se propone Quebec), « Código postal » (convertido a mayúsculas), « Correo electrónico » (« Necesario para enviar el talón de pago por correo electrónico. »), « Teléfono ».</td></tr>
+</table>
+<p>Botones « Crear el empleado » y « Cancelar ». Después de la creación, llega a la ficha: « Empleado creado. Configure ahora su nómina: verifique los valores propuestos y guarde. »</p>
+<table>
+<tr><th>Mensaje</th><th>Solución</th></tr>
+<tr><td>« «Nombre de pila» es obligatorio. » / « «Apellido» es obligatorio. »</td><td>Los dos nombres son obligatorios.</td></tr>
+<tr><td>« La fecha de nacimiento está en el futuro. »</td><td>Corrija la fecha.</td></tr>
+<tr><td>« El correo electrónico no es válido. »</td><td>Hace falta una « @ » y un punto después de ella.</td></tr>
+<tr><td>« El código de empleado {código} ya se usa en esta empresa. »</td><td>Elija otro código, o déjelo vacío.</td></tr>
+<tr><td>« Un empleado activo ya tiene este nombre. Verifique y marque «crear de todos modos» si realmente es otra persona. »</td><td>Una franja muestra « Ya hay un empleado activo llamado {Nombre} {Apellido}. » con « Ver su ficha ». Si realmente se trata de otra persona, marque « Se trata de otra persona: crear de todos modos » y vuelva a empezar.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="emp-fiche">Empleados › Ficha: parámetros de nómina</h2>
+<p><span class="chemin">Employes/Fiche.aspx?id=</span>. El título es el nombre del empleado; los botones « Elementos de nómina » y « Acumulados iniciales » llevan a las otras dos páginas del empleado. Un empleado nunca configurado muestra « La nómina de este empleado aún no está configurada. Verifique los valores propuestos y guarde. »: los valores propuestos vienen de 60Sec (frecuencia, tarifa por hora, salario, NAS, datos bancarios, fecha de nacimiento).</p>
+<h3>« Empleado (60Sec) »</h3>
+<p>Solo lectura: Nombre, Código de empleado, Puesto, Dirección, Ciudad, Correo electrónico, Teléfono, Fecha de contratación, Fecha de fin de empleo, Estado. « Estos datos provienen de 60Sec y se modifican allí. »</p>
+<h3>« Datos personales para la nómina »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th></tr>
+<tr><td>« Fecha de nacimiento »</td><td>Sirve para la regla del RRQ: ningún aporte antes de los 18 años. Sin fecha, se presume que el empleado es mayor de edad.</td></tr>
+<tr><td>« Idioma de los talones y correos »</td><td>Français, English o Español. Idioma del talón enviado por correo y de su PDF.</td></tr>
+<tr><td>« Número de seguro social (NAS) »</td><td>Se ignoran espacios y guiones; verificado por el algoritmo de Luhn (« El número de seguro social no es válido. »). Cifrado. « NAS en el expediente: ••••••123. Deje vacío para conservarlo. »</td></tr>
+</table>
+<h3>« Información de nómina »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th></tr>
+<tr><td>« Período de pago »</td><td>« Predeterminado (60Sec, si no la empresa) », o una frecuencia propia: 52, 26, 24, 12 o « Anual (1 período) ». Un empleado solo entra en una nómina si su frecuencia es la del lote.</td></tr>
+<tr><td>« Horas por semana »</td><td>Con la tarifa por hora, produce la línea « Salario » predeterminada: horas/semana × 52 ÷ períodos.</td></tr>
+<tr><td>« Tarifa por hora ($) »</td><td>Tarifa base; « Tiempo y medio » y « Tiempo doble » la incrementan.</td></tr>
+<tr><td>« Salario anual ($) »</td><td>« Se usa si no se indica ninguna tarifa por hora. » Produce la línea « Salario fijo » = salario ÷ períodos.</td></tr>
+<tr><td>« Tasa de vacaciones (%) »</td><td>« Vacío = tasa predeterminada de la empresa. » Rechazada por encima de 20.</td></tr>
+</table>
+<div class="note">« La tarifa por hora, el salario y la frecuencia propuestos provienen de 60Sec cuando están indicados allí; lo que guarde aquí se aplica a la nómina. » Estos valores predeterminados solo sirven si el empleado no tiene elementos de nómina recurrentes.</div>
+<h3>« Exenciones (solo casos particulares) »</h3>
+<div class="avert">« Deje todo sin marcar para un empleado ordinario: todas las retenciones y aportes se calculan automáticamente. Una casilla marcada significa que la retención no se calcula (será de 0 $). »</div>
+<ul>
+  <li>« No retener el impuesto federal »; « No retener el impuesto de Quebec »: empleado que tiene un certificado de exención, por ejemplo.</li>
+  <li>« No aportar al RRQ »: jubilado de 70 años o más, beneficiario de una pensión de invalidez, etc. (la regla de los menores de 18 años es automática).</li>
+  <li>« No aportar al RQAP »; « No aportar al seguro de empleo »: empleo no asegurable, por ejemplo un accionista que controla más del 40 % de las acciones con derecho a voto.</li>
+  <li>« Excluir del FSS »; « Excluir de la CNESST / CNT » (suprime también la CNT).</li>
+</ul>
+<p>Al guardar, el mensaje recuerda « Atención: {n} exención(es) marcada(s); estas retenciones o aportes no se calcularán para este empleado. » y el paso 3 de la nómina lo repite.</p>
+<h3>« Tributación federal »</h3>
+<table>
+<tr><th>Campo</th><th>Dónde lo declara el empleado</th><th>Efecto</th></tr>
+<tr><td>« TD1 - Monto total de la solicitud ($) »</td><td>Formulario TD1, total de los créditos. « Vacío = monto personal básico ($16,452.00). »</td><td>Crédito K1 = 14 % del monto.</td></tr>
+<tr><td>« TD1 - Impuesto adicional por nómina ($) »</td><td>TD1, solicitud de retención suplementaria.</td><td>Se añade tal cual al impuesto federal de cada nómina.</td></tr>
+<tr><td>« TD1 - Deducción por zona designada, anual ($) »</td><td>TD1, residentes de las zonas del norte.</td><td>Deducción HD, anual.</td></tr>
+<tr><td>« T1213 - Deducciones anuales autorizadas ($) »</td><td>Carta de autorización de la ARC (T1213).</td><td>Deducción F1, anual.</td></tr>
+<tr><td>« T4, casilla 45 - Atención dental ofrecida por el empleador »</td><td>Códigos 1 a 5. « Casilla obligatoria del T4: acceso al 31 de diciembre a un seguro dental del empleador. »</td><td>Se traslada al T4.</td></tr>
+<tr><td>« Otros créditos fiscales federales autorizados ($) »</td><td>Autorización de la ARC.</td><td>Crédito K3.</td></tr>
+</table>
+<h3>« Tributación de Quebec »</h3>
+<table>
+<tr><th>Campo</th><th>Dónde lo declara el empleado</th><th>Efecto</th></tr>
+<tr><td>« TP-1015.3 - Monto de la línea 10 ($) »</td><td>Formulario TP-1015.3. « Vacío = monto personal básico ($18,952.00). »</td><td>Créditos E: 14 % del monto.</td></tr>
+<tr><td>« Retención adicional por nómina ($) »</td><td>TP-1015.3, línea 11.</td><td>Se añade al impuesto de Quebec de cada nómina.</td></tr>
+<tr><td>« TP-1015.3 - Deducciones de la línea 19 ($) »</td><td>TP-1015.3.</td><td>Deducción J, anual.</td></tr>
+<tr><td>« TP-1016 - Deducciones anuales autorizadas ($) »</td><td>Autorización de Revenu Québec (TP-1016).</td><td>Deducción J1.</td></tr>
+<tr><td>« TP-1016 - Créditos fiscales autorizados ($) »</td><td>TP-1016.</td><td>Crédito K1 (Quebec).</td></tr>
+</table>
+<h3>« Pago »</h3>
+<ul>
+  <li>« Este empleado cobra por depósito directo »: si no, se le asigna un número de cheque al confirmar cada nómina.</li>
+  <li>« Enviar el talón de pago por correo »: requiere un correo electrónico en 60Sec.</li>
+  <li>« Número de tránsito (5 dígitos) », « Número de institución (3 dígitos) », « Número de cuenta » (cifrado; « Cuenta en el expediente: ••••123. Deje vacío para conservarla. »). Si el depósito directo está marcado y falta algo: « Depósito directo: indique el tránsito (5 dígitos), la institución (3 dígitos) y el número de cuenta. »</li>
+</ul>
+<h3>« Notas » y guardado</h3>
+<p>Texto libre. « Guardar »: al primer guardado, el empleado pasa a « Configurada », el evento se registra y usted llega a sus elementos de nómina: « Parámetros de nómina guardados. Ahora puede definir sus elementos de nómina recurrentes. » Después: vuelta a la lista, « Parámetros de nómina guardados. »</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-elements">Empleados › Elementos de nómina recurrentes</h2>
+<p><span class="chemin">Employes/ElementsPaie.aspx?id=</span>. « Estas líneas se proponen automáticamente en cada nómina. Siempre podrá ajustarlas en el asistente de nómina. » Es la <strong>plantilla</strong> del empleado: salario, primas fijas, deducciones recurrentes (REER, seguro colectivo, sindicato), beneficios gravables recurrentes.</p>
+<ul>
+  <li>Columnas: « Elemento de nómina », « Categoría » (ej. « Ingreso - Salario »), « Horas », « Tarifa por hora », « Monto », enlace « Quitar ».</li>
+  <li>Lista vacía: « Ningún elemento recurrente. Sin plantilla, la nómina propondrá el salario por hora (horas por semana) o el salario anual de la ficha. »</li>
+  <li>« Agregar un elemento »: « Elemento de nómina » (elementos activos), « Horas », « Tarifa por hora ($) », « o monto fijo ($) ». « Indique horas y una tarifa (el tiempo y medio y el tiempo doble se incrementan automáticamente), o un monto fijo. » El monto se calcula una vez, al agregar: horas × tarifa × multiplicador.</li>
+  <li>Mensajes: « Elija un elemento de nómina. », « Elemento de nómina no encontrado. », « Indique horas y una tarifa, o un monto. », « Elemento agregado. », « Elemento quitado. »</li>
+</ul>
+<div class="note">En cuanto un empleado tiene al menos un elemento recurrente, el salario predeterminado de la ficha ya no se añade: la plantilla reemplaza la ficha, no se suma a ella. Ponga entonces el salario mismo en la plantilla si pone en ella una deducción.</div>
+
+<!-- ============================================================ -->
+<h2 id="emp-cumulatifs">Empleados › Acumulados iniciales</h2>
+<p><span class="chemin">Employes/Cumulatifs.aspx?id=</span>. « Si comienza a usar 60secPaie durante el año, indique aquí los montos ya pagados y retenidos en su sistema anterior. Sirven para respetar los máximos anuales (RRQ, AE, RQAP, CNESST) y se suman a los acumulados del talón de pago. »</p>
+<p>« Año »: el año en curso o el anterior. Campos (vacío = 0): « Remuneración bruta ($) », « Impuesto federal retenido ($) », « Impuesto de Quebec retenido ($) », « Salario admisible al RRQ ($) », « Aporte al RRQ (base + 1.ª adicional) ($) », « 2.º aporte adicional al RRQ ($) », « Aporte al seguro de empleo ($) », « Aporte al RQAP - empleado ($) », « Aporte al RQAP - empleador ($) », « Salario asegurable CNESST ($) », « Saldo de vacaciones por pagar ($) ». « Guardar »: « Acumulados iniciales de {año} guardados. »</p>
+<table>
+<tr><th>Monto</th><th>Para qué sirve</th></tr>
+<tr><td>RRQ, RRQ 2.º adicional, salario admisible RRQ, AE, RQAP empleado y empleador, salario asegurable CNESST</td><td>El motor los añade a los acumulados para limitar los aportes a los máximos anuales.</td></tr>
+<tr><td>Remuneración bruta, impuestos retenidos</td><td>Acumulados del talón (columna « Acumulado ») y comprobantes T4 / RL-1.</td></tr>
+<tr><td>Saldo de vacaciones</td><td>Se añade al « Saldo de vacaciones » del talón.</td></tr>
+</table>
+<div class="avert">Los comprobantes de un empleado que tiene acumulados iniciales llevan la advertencia « Estos montos incluyen acumulados iniciales capturados a mano. Los ingresos asegurables (casillas 24, 26, 56, G e I) se estimaron a partir de la remuneración bruta: verifíquelos con su sistema anterior. »</div>
+
+<!-- ============================================================ -->
+<h2 id="paie">Calcular la nómina (asistente en 4 pasos)</h2>
+<p><span class="chemin">Paie/Calculer.aspx</span>. La barra de pasos muestra « 1. Período de pago », « 2. Empleados y remuneración », « 3. Revisión de los cálculos », « 4. Confirmación ». El estado se conserva en la base de datos: una nómina en preparación (borrador) sobrevive al cierre de sesión, y el panel de control propone continuarla. Solo hay un borrador a la vez por empresa.</p>
+
+<h3 id="paie-etape1">Paso 1 de 4: período de pago</h3>
+<p>« Con las fechas siguientes, 60secPaie determina el período de pago y prepara la nómina de cada empleado activo. »</p>
+<table>
+<tr><th>Campo</th><th>Valor propuesto</th></tr>
+<tr><td>« Frecuencia de pago » *</td><td>La frecuencia predeterminada de la empresa; si existe una nómina confirmada, la de la última nómina confirmada.</td></tr>
+<tr><td>« Horas trabajadas hasta el » * (fin de período)</td><td rowspan="2">El período que sigue a la última nómina confirmada: +7 días (semanal), +14 días (cada 2 semanas), el mes siguiente (mensual), +1 año (anual). En quincenal, no se propone nada. Sin nómina confirmada, los campos están vacíos.</td></tr>
+<tr><td>« Pagar el » * (fecha de pago)</td></tr>
+</table>
+<p>Si ya existe un borrador, la tarjeta « Ya hay una nómina en preparación » lo reemplaza, con « Continuar esta nómina » y « Eliminar este borrador » (confirmación « ¿Eliminar la nómina en preparación? », luego « El borrador fue eliminado. »).</p>
+<p>« Continuar » verifica, en orden:</p>
+<table>
+<tr><th>Mensaje</th><th>Significado</th></tr>
+<tr><td>« Indique el fin del período y la fecha de pago. »</td><td>Las dos fechas son obligatorias.</td></tr>
+<tr><td>« La fecha de pago está demasiado lejos del fin del período. »</td><td>La fecha de pago debe estar entre 31 días antes y 45 días después del fin de período.</td></tr>
+<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>El año de las tasas es el de la <strong>fecha de pago</strong>. Solo 2026 está definido.</td></tr>
+<tr><td>« Ya hay una nómina en preparación. Termínela o elimínela primero. »</td><td>Un solo borrador a la vez.</td></tr>
+<tr><td>« Ningún empleado activo con la nómina configurada cobra con esta frecuencia en este período. Verifique la página Empleados. »</td><td>Ningún empleado cumple los criterios de abajo.</td></tr>
+</table>
+<h4>Lo que hace « Continuar »</h4>
+<ul>
+  <li>Calcula el inicio de período según la frecuencia (vea <a href="#conventions">las convenciones</a>).</li>
+  <li>Retiene a los empleados <strong>activos</strong>, cuya <strong>nómina está configurada</strong>, cuya <strong>frecuencia</strong> (la suya, o si no la de la empresa) es la elegida, contratados a más tardar al fin del período, y cuya fecha de fin de empleo está vacía o es posterior al inicio del período.</li>
+  <li>Fija la <strong>tasa de vacaciones</strong> de cada nómina: la del empleado, o si no la de la empresa.</li>
+  <li>Copia los <strong>elementos recurrentes</strong> activos de cada empleado. Sin plantilla: una línea « Salario » (horas/semana × 52 ÷ períodos, a la tarifa por hora) o « Salario fijo » (salario anual ÷ períodos). Sin tarifa ni salario: ninguna línea, el empleado aparece con « Ninguna línea ».</li>
+</ul>
+
+<h3 id="paie-etape2">Paso 2 de 4: empleados y remuneración</h3>
+<table>
+<tr><th>Columna</th><th>Contenido</th></tr>
+<tr><td>« Incluir »</td><td>Marcada de forma predeterminada. Desmarque para excluir a un empleado de esta nómina (ausente, con licencia…).</td></tr>
+<tr><td>« Empleado »</td><td>Apellido, Nombre de pila.</td></tr>
+<tr><td>« Líneas de nómina »</td><td>Las descripciones de las líneas, o « Ninguna línea ».</td></tr>
+<tr><td>« Bruto previsto »</td><td>Suma de las líneas de ingreso, sin las deducciones ni los beneficios.</td></tr>
+<tr><td>—</td><td>Enlace « Modificar las líneas ».</td></tr>
+</table>
+<div class="avert">Las casillas « Incluir » solo se guardan al hacer clic en « Calcular la nómina ». Si hace clic en « Modificar las líneas » antes, sus cambios de casillas se pierden: vuelva a hacerlos al regresar.</div>
+<p>Botones: « Calcular la nómina » (guarda las inclusiones, calcula todas las nóminas incluidas, pasa al paso 3) y « Abandonar esta nómina » (confirmación « ¿Eliminar la nómina en preparación? », luego « La nómina en preparación fue eliminada. »).</p>
+<h4>Subpantalla « Líneas de nómina de {Nombre Apellido} »</h4>
+<p>Columnas « Elemento de nómina », « Horas », « Tarifa », « Monto », enlace « Quitar ». Sin línea: « Ninguna línea: este empleado no cobrará. »</p>
+<p>« Agregar una línea »: « Elemento de nómina » (« {Descripción} ({Tipo} - {Categoría}) »), « Horas », « Tarifa por hora ($) », « o monto ($) ». Regla: si se indican horas <em>y</em> una tarifa, monto = horas × tarifa × multiplicador de la categoría (1.5 para « Tiempo y medio », 2 para « Tiempo doble »), redondeado al centavo; si no, es el monto capturado. Botones « Agregar la línea » y « Volver a la lista de empleados ». Toda modificación marca el lote « por recalcular »; el recálculo es automático en el paso 3.</p>
+<table>
+<tr><th>Mensaje</th><th>Significado</th></tr>
+<tr><td>« Elija un elemento de nómina. »</td><td>Ningún elemento seleccionado.</td></tr>
+<tr><td>« El monto de la línea debe ser mayor que 0 (horas × tarifa, o monto). »</td><td>Una línea en 0 no se acepta.</td></tr>
+<tr><td>« Esta nómina ya no se puede modificar. »</td><td>El lote ya no es un borrador.</td></tr>
+<tr><td>« Línea agregada. » / « Línea quitada. »</td><td>Éxito.</td></tr>
+</table>
+<div class="note">Horas extra: agregue una línea « Tiempo y medio » con las horas y la tarifa <em>base</em>; el incremento es automático. Bono: una línea « Gratificación (bono) » con el monto; el impuesto sigue el método de los pagos globales.</div>
+
+<h3 id="paie-etape3">Paso 3 de 4: revisión de los cálculos</h3>
+<p>El lote se recalcula si hace falta. La tabla grande da, por empleado incluido: « Horas », « Bruto », « Imp. fed. », « Imp. Qc », « RRQ » (base, 1.º y 2.º aportes adicionales), « AE », « RQAP », « Otras ded. », « Neto », « Aportes empleador » (RRQ, RRQ2, AE, RQAP, FSS, CNESST, CNT), « Vacaciones » (acumuladas en esta nómina), y una línea « Total general ».</p>
+<h4>Advertencias por empleado (franja amarilla)</h4>
+<ul>
+  <li>« Exenciones marcadas en la ficha del empleado, por lo tanto no calculado: {lista}. »</li>
+  <li>« Empleado menor de 18 años: ningún aporte al RRQ. »</li>
+  <li>« El salario neto es negativo: las retenciones y deducciones superan la remuneración pagada. » La confirmación se rechazará mientras no se corrija.</li>
+</ul>
+<h4>« Detalle y verificación de los cálculos »</h4>
+<p>Un bloque desplegable por empleado: la tabla de las líneas, el informe de verificación y la matriz de los aportes del empleador. El informe de verificación retoma las variables de las guías oficiales, lo que permite rehacer el cálculo a mano o compararlo con la calculadora en línea de la ARC y de Revenu Québec:</p>
+<table>
+<tr><th>Línea</th><th>Significado</th></tr>
+<tr><td>« RRQ S3 (salario admisible) »</td><td>Ingresos de la nómina sujetos al RRQ.</td></tr>
+<tr><td>« RRQ exención por período »</td><td>$3,500 ÷ períodos, truncado a 2 decimales.</td></tr>
+<tr><td>« RRQ CS (aportes adicionales deducibles) »</td><td>La parte de los aportes RRQ deducible del ingreso gravable.</td></tr>
+<tr><td>« QC E (créditos personales) »</td><td>Monto de la línea 10 del TP-1015.3.</td></tr>
+<tr><td>« QC H (deducción por trabajador) »</td><td>6 % del salario, con tope.</td></tr>
+<tr><td>« QC CSA (aporte adic. RRQ, regular) »</td><td>Parte de CS vinculada a la remuneración regular.</td></tr>
+<tr><td>« QC I (ingreso gravable anual) », « QC Y (impuesto del año) »</td><td>Ingreso e impuesto anualizados de Quebec.</td></tr>
+<tr><td>« QC Impuesto sobre la remuneración regular », « QC Impuesto sobre el pago global »</td><td>Los dos componentes del impuesto de Quebec de la nómina.</td></tr>
+<tr><td>« FED TC (monto de la solicitud TD1) », « FED A (ingreso gravable anual) », « FED K1 », « FED K2Q », « FED T1 (impuesto federal anual después de la reducción) »</td><td>Variables del T4127: créditos personales, créditos por RRQ/AE/RQAP, impuesto anual después de la reducción de Quebec del 16.5 %.</td></tr>
+<tr><td>« FED Impuesto sobre la remuneración regular », « FED Impuesto sobre el pago global »</td><td>Los dos componentes del impuesto federal de la nómina.</td></tr>
+</table>
+<h4>Resumen en tres tarjetas</h4>
+<p>« Ingresos y beneficios » (por descripción de línea), « Deducciones » (« Impuesto federal », « Impuesto de Quebec », « RRQ », « RRQ - 2.º aporte adicional », « Seguro de empleo », « RQAP », luego cada deducción), « Aportes del empleador » (« RRQ », « RRQ - 2.º aporte adicional », « Seguro de empleo », « RQAP », « FSS », « CNESST », « CNT (normas laborales) »). Los montos nulos se ocultan.</p>
+<h4>Botones</h4>
+<p>« Confirmar la nómina » (confirmación « ¿Confirmar esta nómina? Se sumará a los acumulados de los empleados. ») y « Modificar la captura » (vuelta al paso 2).</p>
+<table>
+<tr><th>Rechazo al confirmar</th><th>Significado</th></tr>
+<tr><td>« La nómina debe calcularse antes de confirmarse. »</td><td>Vuelva al paso 2 y luego « Calcular la nómina ».</td></tr>
+<tr><td>« Ningún empleado está incluido en esta nómina. »</td><td>Marque al menos un empleado.</td></tr>
+<tr><td>« Al menos un salario neto es negativo. Corrija las líneas antes de confirmar. »</td><td>Reduzca la deducción o aumente el ingreso del empleado en cuestión.</td></tr>
+</table>
+<h4>Lo que hace la confirmación</h4>
+<ol>
+  <li>Los empleados no incluidos se retiran del lote.</li>
+  <li>Los empleados <strong>no</strong> pagados por depósito directo reciben, en orden alfabético, números de cheque consecutivos a partir del « Próximo número de cheque » de la empresa, que avanza en la misma medida.</li>
+  <li>El estado pasa a « Confirmado ». La nómina cuenta desde entonces en los acumulados, las remesas, los comprobantes y los asientos.</li>
+  <li>El evento « Nómina del {fecha} confirmada. » se registra.</li>
+</ol>
+
+<h3 id="paie-etape4">Paso 4 de 4: nómina confirmada</h3>
+<p>« La nómina está guardada. Ahora puede imprimir los talones de pago y emitir los pagos. » La tabla resume cada empleado con, bajo su nombre, « Cheque n.º N » o « Depósito directo ». Botones « Ver el detalle y los talones » y « Panel de control ».</p>
+
+<!-- ============================================================ -->
+<h2 id="historique">Historial de nómina</h2>
+<p><span class="chemin">Paie/Historique.aspx</span>. « Las nóminas de cada período se agrupan en lotes. » Columnas: « Fecha de pago » (enlace al asistente para un borrador, al detalle en los demás casos), « Período », « Frecuencia », « Empleados », « Salario bruto », « Salario neto », « Aportes empleador », « Estado ». Orden por fecha de pago descendente. Botón « Calcular una nómina ». Lista vacía: « Ninguna nómina por el momento. »</p>
+
+<!-- ============================================================ -->
+<h2 id="detail">Detalle de una nómina</h2>
+<p><span class="chemin">Paie/Detail.aspx?lot=</span>. Título « Detalle de la nómina » con el distintivo de estado; subtítulo « Período del … al … · pagada el … · {frecuencia} · preparada por {correo} ». Botones « Imprimir » e « Historial ». El contenido es el del paso 3 (tabla, verificación por empleado, resumen), con además un enlace « Talón » por empleado.</p>
+<h3>Panel « Pago y seguimiento de esta nómina » (nómina confirmada)</h3>
+<ul>
+  <li>« Depósito directo »: « {n} empleado(s), {total} », luego « archivo aún no generado » o « archivo n.º 0001 generado el … ». Los problemas se muestran aquí: « Los parámetros de depósito directo de la empresa están incompletos (Configuración → Depósito directo). » y « Datos bancarios incompletos de {Nombre Apellido}. »</li>
+  <li>« Talones por correo »: « {x} enviado(s) de {n} ». En modo de prueba: « Modo de prueba: los correos se escriben en la carpeta App_Data\courriels en lugar de enviarse. » Si nadie lo pidió: « Ningún empleado de esta nómina pidió su talón por correo (ficha del empleado). »</li>
+  <li>Enlace « Asientos contables »: el informe de asientos para esta nómina.</li>
+</ul>
+
+<h3 id="detail-depot">Archivo de depósito directo</h3>
+<p>Botón « Descargar el archivo de depósito directo », visible si hay al menos un empleado con depósito directo. El archivo comprende los empleados incluidos, pagados por depósito directo, cuyo neto es mayor que 0.</p>
+<ul>
+  <li>Nombre del archivo: <code>depot-direct-AAAA-MM-DD-NNNN.txt</code>.</li>
+  <li>Formato: norma 005 de Payments Canada (CPA-005). Registros de 1 464 caracteres, texto en mayúsculas sin acentos, fechas en formato juliano. Un registro A (encabezado con su número de emisor, el número de archivo, la fecha, el centro de procesamiento, « CAD »), registros C (una transacción de tipo 200 por empleado: neto en centavos, fecha de vencimiento = fecha de pago, institución, tránsito y cuenta del empleado, nombre abreviado de la empresa, « APELLIDO NOMBRE », referencia = código de empleado o « EMP{id} », mención « PAIE AAAA-MM-DD »), y un registro Z (total y número de créditos).</li>
+  <li><strong>Numeración</strong>: cada generación consume un nuevo número de archivo, incluso para reproducir el mismo lote. Después de 9999, se vuelve a empezar en 1. El lote conserva el último número y la fecha; el evento se registra.</li>
+  <li>Entregue este archivo a su institución por el canal que ella le proporcionó. 60secPaie no lo transmite.</li>
+</ul>
+<table>
+<tr><th>Mensaje</th><th>Solución</th></tr>
+<tr><td>« El archivo de depósito directo se genera desde una nómina confirmada. »</td><td>Confirme la nómina primero.</td></tr>
+<tr><td>« Ningún empleado de esta nómina cobra por depósito directo. »</td><td>Marque « Este empleado cobra por depósito directo » en las fichas.</td></tr>
+<tr><td>« Los parámetros de depósito directo de la empresa están incompletos (Configuración → Depósito directo). »</td><td>Complete la página Depósito directo de la configuración.</td></tr>
+<tr><td>« Datos bancarios incompletos de {Nombre Apellido}. »</td><td>Complete tránsito, institución y cuenta en la ficha.</td></tr>
+</table>
+
+<h3 id="detail-courriel">Talones por correo</h3>
+<p>Botón « Enviar los talones por correo » (confirmación « ¿Enviar los talones de pago por correo a los empleados que lo solicitaron? »), con la casilla « reenviar también los talones ya enviados ». Resultado: « {n} talón(es) enviado(s), {m} ya enviado(s). », seguido si hace falta de « Problemas: {Nombre}: ningún correo en la ficha. / {Nombre}: dirección de correo no válida. / … ».</p>
+<ul>
+  <li>Solo los empleados incluidos cuya ficha tiene « Enviar el talón de pago por correo » reciben un correo. La fecha de envío se memoriza: un talón ya enviado no se reenvía, salvo si la casilla está marcada.</li>
+  <li>Remitente: una dirección @60sec.ca (de forma predeterminada paie@60sec.ca), con el nombre de su empresa; las respuestas van al correo de la empresa definido en 60Sec.</li>
+  <li>Asunto: « Talón de pago del AAAA-MM-DD ». Cuerpo: « Hola {Nombre Apellido}: », « Aquí está su talón de pago. », el talón completo, luego un aviso de confidencialidad. Adjunto: el PDF del talón. Todo en el idioma del empleado.</li>
+  <li>Los talones solo se envían desde una nómina confirmada: « Los talones se envían desde una nómina confirmada. »</li>
+</ul>
+
+<h3 id="detail-annuler">Anular una nómina</h3>
+<p>Panel « Anular esta nómina », visible solo para la <strong>nómina confirmada más reciente</strong> cuyas retenciones aún no se hayan pagado. « La nómina confirmada más reciente puede anularse, por ejemplo para corregir un error. Se quitará de los acumulados; los números de cheque ya asignados no se reutilizan. » Botón « Anular la nómina », confirmación « ¿Anular definitivamente esta nómina? », luego « La nómina fue anulada. »</p>
+<table>
+<tr><th>Rechazo</th><th>Solución</th></tr>
+<tr><td>« Las retenciones de esta nómina ya fueron pagadas. Anule primero el pago de retenciones. »</td><td>En Retenciones › Historial, abra el pago y anúlelo; las retenciones vuelven a quedar « por pagar ». Luego anule la nómina.</td></tr>
+<tr><td>« Solo se puede anular la nómina confirmada más reciente. »</td><td>Anule primero las nóminas más recientes, de la más reciente a la más antigua.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="talon">Talón de pago</h2>
+<p><span class="chemin">Paie/Talon.aspx?paie=</span>. Botones « Imprimir el talón », « Descargar en PDF », « Volver al detalle de la nómina ». Franjas: « Vista previa: esta nómina aún no está confirmada. » o « Esta nómina fue anulada. »</p>
+<table>
+<tr><th>Zona</th><th>Contenido</th></tr>
+<tr><td>Encabezado</td><td>Empresa (nombre, dirección, ciudad, código postal); « Talón de pago », « Período: … al … », « Fecha de pago: … », luego « Depósito directo » o « Cheque n.º N » una vez confirmada la nómina.</td></tr>
+<tr><td>Empleado</td><td>Nombre Apellido (código), dirección.</td></tr>
+<tr><td>« Ingresos y beneficios »</td><td>« Horas », « Tarifa », « Monto » para cada línea visible que no sea deducción; « Salario bruto » (total de horas y bruto pagado); « de los cuales beneficios gravables no pagados en dinero » si corresponde.</td></tr>
+<tr><td>« Retenciones y deducciones »</td><td>« Actual » y « Acumulado » para « Impuesto federal », « Impuesto de Quebec », « RRQ » (incluido el 2.º adicional), « Seguro de empleo », « RQAP »; luego cada deducción del empleador, sin acumulado; línea « Total ».</td></tr>
+<tr><td>« Salario neto »</td><td>Bruto pagado menos todas las retenciones y deducciones.</td></tr>
+<tr><td>« Acumulados del año »</td><td>« Bruto » (nóminas confirmadas del año hasta esta, más el bruto inicial), « Neto » (sin los acumulados iniciales), « Vacaciones acumuladas (x %) » (en esta nómina), « Saldo de vacaciones » (saldos iniciales + vacaciones acumuladas − vacaciones pagadas, todos los años juntos).</td></tr>
+</table>
+<p>El PDF (formato carta) retoma el mismo contenido; pie de página « Documento confidencial entregado a {empresa}. » y « 60secPaie · Página i de n » si hay varias páginas. Nombre del archivo: « Talon-de-paie-AAAA-MM-DD.pdf ».</p>
+
+<!-- ============================================================ -->
+<h2 id="remises">Retenciones › Pago de retenciones</h2>
+<p><span class="chemin">Remises/Payer.aspx</span>. Submenú: « Pago de retenciones » | « Historial de pagos ». Dos tarjetas de saldo, « Receptor General de Canadá » y « Revenu Québec »: « Ninguna retención por pagar. », o « Por pagar: $X (n nóminas) » seguido de « Próximo vencimiento: … para el período que termina el … », en rojo « Atrasado: vencía el … » si ya pasó. Una tarjeta « Normas laborales (CNT) » aparece cuando el monto es positivo: « Acumulada en {año}: $X », « Se paga una vez al año a Revenu Québec, con el sumario 1. No forma parte de las remesas periódicas. »</p>
+<h3>Formulario « Pago de las retenciones salariales »</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Valor predeterminado</th></tr>
+<tr><td>« Gobierno » *</td><td>« Federal - Receptor General de Canadá » o « Provincial - Revenu Québec ». Puede estar preseleccionado por el botón « Pagar » del panel de control.</td><td>Federal. Cambiar de gobierno recalcula las fechas.</td></tr>
+<tr><td>« Retenciones acumuladas al » *</td><td>« Todas las nóminas confirmadas hasta esta fecha cuyas retenciones aún no se han pagado. »</td><td>Fin del período de remesa de la nómina no pagada más antigua, o si no hoy.</td></tr>
+<tr><td>« Fecha del pago » *</td><td>Fecha real del pago.</td><td>Hoy. Rechazada más de 31 días en el futuro: « La fecha del pago está demasiado lejos. »</td></tr>
+<tr><td>« Forma de pago »</td><td>« Pago en línea (institución financiera, Mon dossier) » o « Cheque (se asigna el próximo número de cheque) ».</td><td>En línea.</td></tr>
+<tr><td>« Número de confirmación (opcional) »</td><td>Referencia de su pago en línea (60 caracteres).</td><td>—</td></tr>
+</table>
+<p>« Calcular las retenciones » muestra la vista previa « Monto por pagar a {gobierno} - retenciones acumuladas al … »: la tabla « Retención o aporte » / « Monto » con « Total por pagar », y la tabla « Nóminas cubiertas » (« Fecha de pago », « Período », « Empleados », « Remuneración bruta »). « 60secPaie no transmite ningún pago: efectúelo en su institución financiera o en Mon dossier, y luego regístrelo aquí para que estas retenciones ya no queden por pagar. »</p>
+<p>« Registrar el pago » (confirmación « ¿Registrar este pago? Las nóminas cubiertas ya no podrán anularse. ») lleva al detalle del pago con « Pago registrado. ». En modo cheque, se consume el próximo número de cheque de la empresa.</p>
+<h4>Composición de los montos</h4>
+<div class="deux">
+<div class="carte"><h4>Receptor General de Canadá</h4><ol><li>« Impuesto federal »</li><li>« Seguro de empleo - aportes de los empleados »</li><li>« Seguro de empleo - aporte del empleador »</li></ol></div>
+<div class="carte"><h4>Revenu Québec</h4><ol><li>« Impuesto de Quebec »</li><li>« RRQ - aportes de los empleados » (base y 2.º adicional)</li><li>« RRQ - aporte del empleador »</li><li>« RQAP - aportes de los empleados »</li><li>« RQAP - aporte del empleador »</li><li>« Fondo de servicios de salud (FSS) »</li><li>« CNESST - pago periódico »</li></ol></div>
+</div>
+<p>La CNT no forma parte de ello: se paga una vez al año con el Sumario 1. Cada nómina confirmada se remite una sola vez a cada gobierno.</p>
+<table>
+<tr><th>Mensaje</th><th>Significado</th></tr>
+<tr><td>« Indique las dos fechas. »</td><td>Las dos fechas son obligatorias.</td></tr>
+<tr><td>« Ninguna retención por pagar a {gobierno} para las nóminas hasta el … »</td><td>Todas las nóminas hasta esa fecha ya están remitidas, o no las hay.</td></tr>
+<tr><td>« Ninguna retención por pagar a {gobierno} para este período. »</td><td>Ídem, al registrar.</td></tr>
+</table>
+
+<h3 id="remises-calendrier">Frecuencias y vencimientos</h3>
+<table>
+<tr><th>Frecuencia (Configuración)</th><th>Período de remesa</th><th>Vencimiento</th></tr>
+<tr><td>Mensual</td><td>El mes de la fecha de pago</td><td>El 15 del mes siguiente</td></tr>
+<tr><td>Trimestral</td><td>El trimestre civil de la fecha de pago</td><td>El 15 del mes que sigue al trimestre</td></tr>
+</table>
+<p>« Atrasado » significa que el vencimiento es anterior a hoy. El saldo mostrado se basa en la nómina no pagada más antigua. Las frecuencias reales que la ARC y Revenu Québec le asignan (acelerada, mensual, trimestral) dependen de sus retenciones promedio; 60secPaie solo conoce mensual y trimestral, elija la que corresponda a su aviso de cotización.</p>
+
+<!-- ============================================================ -->
+<h2 id="remises-historique">Retenciones › Historial y detalle de los pagos</h2>
+<p><span class="chemin">Remises/Historique.aspx</span>: « Fecha del pago » (enlace), « Gobierno », « Retenciones acumuladas al », « Pago » (« Cheque n.º N » o « En línea - {referencia} »), « Nóminas », « Total », « Estado » (« Pagado » en verde, « Anulado » en rojo y en gris). Lista vacía: « Ningún pago de retenciones registrado. »</p>
+<p><span class="chemin">Remises/Detail.aspx?id=</span>: título « Pago de retenciones » con el estado; subtítulo « {gobierno} · retenciones acumuladas al … · pagado el … · {forma} · registrado por {correo} ». Tabla de los montos fijados al momento del pago, nóminas cubiertas, y la tarjeta « Datos para el formulario de remesa »: « Número de cuenta de retenciones (RP) » o « Número de identificación (RS) », « Remuneración bruta del período », « Número de empleados en el último período de pago » (federal), « Período que termina el », « Monto del pago ».</p>
+<p>Panel « Anular este pago »: « Úselo si el pago se registró por error. Las retenciones de las nóminas cubiertas volverán a quedar «por pagar». » Botón « Anular el pago », confirmación « ¿Anular este pago de retenciones? », luego « El pago fue anulado. Las retenciones vuelven a estar por pagar. » Cualquier pago puede anularse, no solo el último; un número de cheque no se reutiliza.</p>
+
+<!-- ============================================================ -->
+<h2 id="feuillets">Informes › T4 y Relevés 1</h2>
+<p><span class="chemin">Rapports/Feuillets.aspx</span>. Submenú de Informes: « T4 y Relevés 1 » | « Declaración de salarios CNESST » | « Asientos contables ». Encabezado « Comprobantes T4 y Relevés 1 del año [año] »; « Montos calculados a partir de las nóminas confirmadas y de los acumulados iniciales. » Botones « Exportar a CSV » e « Imprimir ».</p>
+<div class="avert">« 60secPaie calcula los montos de cada casilla; no transmite los comprobantes. Captúrelos en Formulaires Web (ARC) y en Mon dossier pour les entreprises (Revenu Québec), a más tardar el último día de febrero. Verifique las casillas con las guías RC4120 (T4) y RL-1.G (Relevé 1) del año. »</div>
+<p>Tabla: « Empleado » (con « incluye acumulados iniciales » si corresponde), las casillas T4 14, 22, 17, 17A, 18, 55, 24, 26, 56, las casillas Relevé 1 A y E, y un enlace « Comprobante ». Pie « Total (n comprobantes) ». Los montos nulos se dejan vacíos.</p>
+<h3>Correspondencia de las casillas</h3>
+<table>
+<tr><th>Casilla T4</th><th>Descripción</th><th>Cálculo</th></tr>
+<tr><td>14</td><td>Ingresos de empleo</td><td>Bruto gravable a nivel federal, más el bruto de los acumulados iniciales</td></tr>
+<tr><td>17</td><td>Aportes del empleado al RRQ</td><td>RRQ (base y 1.º adicional)</td></tr>
+<tr><td>17A</td><td>Segundos aportes adicionales al RRQ</td><td>RRQ2</td></tr>
+<tr><td>18</td><td>Aportes del empleado al AE</td><td>AE</td></tr>
+<tr><td>22</td><td>Impuesto sobre la renta retenido</td><td>Impuesto federal</td></tr>
+<tr><td>24</td><td>Ingresos asegurables del AE</td><td>mín(ingresos AE; $68,900)</td></tr>
+<tr><td>26</td><td>Ingresos pensionables</td><td>mín(ingresos RRQ; $85,000)</td></tr>
+<tr><td>55</td><td>Aportes del empleado al RPAP (RQAP)</td><td>RQAP</td></tr>
+<tr><td>56</td><td>Ingresos asegurables del RPAP</td><td>mín(ingresos RQAP; $103,000)</td></tr>
+<tr><td>20 / 52</td><td>Aportes a un RPA / factor de equivalencia</td><td>Líneas « Plan de pensiones registrado (RPA) »</td></tr>
+<tr><td>34</td><td>Uso personal de un automóvil</td><td>Líneas « Vehículo de motor »</td></tr>
+<tr><td>40</td><td>Otras asignaciones y beneficios gravables</td><td>Líneas « Otro beneficio gravable » (monetario o no)</td></tr>
+<tr><td>42</td><td>Comisiones de empleo</td><td>Líneas « Comisión »</td></tr>
+<tr><td>44</td><td>Cuotas sindicales</td><td>Líneas « Cuota sindical »</td></tr>
+<tr><td>46</td><td>Donaciones benéficas</td><td>Líneas « Donación benéfica »</td></tr>
+<tr><td>85</td><td>Primas a un seguro médico privado</td><td>Líneas « Seguro colectivo - parte del empleado »</td></tr>
+<tr><td>28</td><td>Exenciones</td><td>RPC/RRQ, AE, RPAP según las exenciones marcadas, o « Ninguna »</td></tr>
+<tr><td>45</td><td>Atención dental</td><td>Código de la ficha</td></tr>
+</table>
+<table>
+<tr><th>Casilla Relevé 1</th><th>Descripción</th><th>Cálculo</th></tr>
+<tr><td>A</td><td>Ingresos de empleo</td><td>Bruto gravable en Quebec, más el inicial (comprende J, L, M y W)</td></tr>
+<tr><td>B.A / B.B</td><td>Aporte al RRQ / segundo aporte adicional</td><td>RRQ / RRQ2</td></tr>
+<tr><td>C</td><td>Aporte al seguro de empleo</td><td>AE</td></tr>
+<tr><td>D</td><td>Aporte a un RPA</td><td>Líneas RPA</td></tr>
+<tr><td>E</td><td>Impuesto de Quebec retenido</td><td>Impuesto de Quebec</td></tr>
+<tr><td>F</td><td>Cuota sindical</td><td>Líneas sindicato</td></tr>
+<tr><td>G</td><td>Salario admisible al RRQ</td><td>mín(ingresos RRQ; $85,000)</td></tr>
+<tr><td>H / I</td><td>Aporte al RQAP / salario admisible al RQAP</td><td>RQAP / mín(ingresos; $103,000)</td></tr>
+<tr><td>J</td><td>Seguro médico privado (parte del empleador)</td><td>Líneas « Seguro médico privado - parte del empleador »</td></tr>
+<tr><td>L</td><td>Otros beneficios</td><td>Líneas « Otro beneficio gravable »</td></tr>
+<tr><td>M</td><td>Comisiones</td><td>Líneas « Comisión »</td></tr>
+<tr><td>N</td><td>Donaciones benéficas</td><td>Líneas « Donación benéfica »</td></tr>
+<tr><td>W</td><td>Vehículo de motor</td><td>Líneas « Vehículo de motor »</td></tr>
+<tr><td>235</td><td>Aporte a un seguro médico privado</td><td>Líneas « Seguro colectivo - parte del empleado »</td></tr>
+</table>
+<h3>Sumarios</h3>
+<p><strong>« Sumario T4 (ARC) »</strong>: « Aportes de los empleados al AE (casilla 18) », « Aportes del empleador al AE (casilla 19) », « Retenciones y aportes del año », « Remesas registradas » (remesas federales pagadas cuyo fin de período cae en el año), « Saldo por pagar ».</p>
+<p><strong>« Sumario 1 (Revenu Québec) »</strong>: RRQ empleados y empleador, RQAP empleados y empleador, « Salarios sujetos al FSS », « Aporte al FSS », « CNESST - pagos periódicos calculados », « Retenciones y aportes del año », « Remesas registradas », « Saldo por pagar », « Aporte a las normas laborales (CNT), pagadero con el sumario 1 ». « La tasa real del FSS se establece sobre la masa salarial total del año: cualquier diferencia con la tasa estimada usada durante el año se regulariza en el sumario 1. »</p>
+<p>El CSV <code>feuillets-AAAA.csv</code> contiene « Código », « Nombre », « Nombre de pila » y una columna por casilla T4 y Relevé 1. <strong>El NAS deliberadamente no se exporta.</strong></p>
+
+<h3 id="feuillet-employe">Comprobante de un empleado</h3>
+<p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. Botones « Imprimir », « Volver a los comprobantes », « Mostrar el NAS completo » (acción registrada). Encabezado: empresa, « N.º de cuenta RP », « N.º de identificación RS », « Comprobantes {año} », nombre, dirección, « NAS: ••••••123 » (o « NAS faltante en la ficha »). Luego las dos tablas « T4 - Estado de la remuneración pagada » (casilla 10 « Provincia de empleo » = QC, las casillas no nulas, la casilla 28 « Exenciones » y la casilla 45) y « Relevé 1 - Ingresos de empleo e ingresos diversos » (casillas A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235; « Las casillas J, L, M y W ya están incluidas en la casilla A. »).</p>
+
+<!-- ============================================================ -->
+<h2 id="cnesst">Informes › Declaración de salarios CNESST</h2>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salarios brutos pagados, excedentes del máximo asegurable y pagos periódicos del año. » Botones « Exportar a CSV » (<code>cnesst-AAAA.csv</code>: Nombre, Nombre de pila, Salario bruto, Excedente, Salario asegurable, Aporte calculado) e « Imprimir ».</p>
+<ul>
+  <li>Por empleado: « Salario bruto » (líneas de las categorías sujetas a la CNESST), « Excedente del máximo ($103,000.00) », « Salario asegurable », « Aporte calculado »; nota « excluido de la CNESST (ficha del empleado) » si corresponde; línea « Total ».</li>
+  <li>« Por mes »: « Mes », « Salario asegurable », « Aporte ».</li>
+  <li>« Conciliación »: « Tasa de pago periódico », « Aporte calculado sobre las nóminas », « Pagos periódicos registrados (remesas a Revenu Québec) », « Diferencia ».</li>
+</ul>
+<div class="note">« La Declaración de salarios se presenta en Mon Espace CNESST antes del 15 de marzo. La CNESST establece luego la prima real y la ajusta según los pagos periódicos. Los salarios de los trabajadores no cubiertos deben excluirse según las reglas de la CNESST. »</div>
+
+<!-- ============================================================ -->
+<h2 id="ecritures">Informes › Asientos contables</h2>
+<p><span class="chemin">Rapports/Ecritures.aspx</span>. Formulario « Informe de asientos contables »: « Nómina » (« Todas las nóminas del período » o una de las 60 últimas nóminas confirmadas, « Nómina del … (período al …) »), « Nóminas pagadas del » / « al » (mes en curso de forma predeterminada; usados solo con « Todas las nóminas del período »). « Elija una nómina específica, o «Todas las nóminas del período» para un asiento resumido (un mes, por ejemplo). » Botones « Mostrar », « Exportar a CSV » (<code>ecritures-paie.csv</code>: Cuenta, Descripción, Débito, Crédito), « Imprimir », enlace « Definir los números de cuenta ».</p>
+<p>La tabla da « Cuenta » (« por definir » si está vacía), « Descripción », « Débito », « Crédito » y un « Total ». Las líneas en 0 se omiten.</p>
+<table>
+<tr><th>Débitos (gastos)</th><th>Créditos (pasivos)</th></tr>
+<tr><td>
+<ul>
+<li>Cada línea de ingreso, por elemento: la cuenta del elemento, o si no « Salarios ». El reembolso de gastos y el beneficio monetario también.</li>
+<li>« Pago de vacaciones »: « Vacaciones por pagar », descripción « {descripción} (vacaciones ya provisionadas) ».</li>
+<li>« Vacaciones acumuladas »: Gasto de vacaciones.</li>
+<li>« RRQ - parte del empleador », « Seguro de empleo - parte del empleador », « RQAP - parte del empleador », « Fondo de servicios de salud », « CNESST », « Normas laborales (CNT) »: sus cuentas de gasto.</li>
+<li>Beneficios no monetarios: ningún asiento.</li>
+</ul></td><td>
+<ul>
+<li>Cada deducción: « {descripción} por pagar », en la cuenta del elemento, o si no « Otras deducciones por pagar ».</li>
+<li>« Impuesto federal por pagar », « Impuesto de Quebec por pagar », « RRQ por pagar » (empleado y empleador), « Seguro de empleo por pagar », « RQAP por pagar », « FSS por pagar », « CNESST por pagar », « CNT por pagar ».</li>
+<li>« Vacaciones por pagar » (vacaciones acumuladas).</li>
+<li>« Salarios netos »: la cuenta bancaria.</li>
+</ul></td></tr>
+</table>
+<table>
+<tr><th>Mensaje</th><th>Significado</th></tr>
+<tr><td>« El período no es válido. »</td><td>La fecha « del » es posterior a la fecha « al ».</td></tr>
+<tr><td>« Ninguna nómina confirmada para esta selección. »</td><td>Nada que contabilizar.</td></tr>
+<tr><td>« El asiento no está balanceado: diferencia de X. »</td><td>No debería ocurrir; repórtelo.</td></tr>
+<tr><td>« {n} línea(s) sin número de cuenta: defínalas en Configuración → Plan de cuentas. »</td><td>Complete el plan de cuentas.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="categories">Entender los cálculos › Categorías de nómina</h2>
+<p>Cada línea de nómina pertenece a una categoría del sistema. Es la categoría, no la descripción, la que decide el tratamiento. Un ingreso « estándar » está sujeto a todo: impuesto federal, impuesto de Quebec, AE, RRQ, RQAP, FSS, CNESST; va a la casilla 14 del T4 y a la casilla A del Relevé 1.</p>
+<table>
+<tr><th>Categoría</th><th>Tipo</th><th>Tratamiento y particularidades</th><th>Casillas</th></tr>
+<tr><td>Salario</td><td>Ingreso</td><td>estándar; da derecho a vacaciones</td><td>14 / A</td></tr>
+<tr><td>Salario fijo</td><td>Ingreso</td><td>estándar; vacaciones</td><td>14 / A</td></tr>
+<tr><td>Tiempo y medio</td><td>Ingreso</td><td>estándar; vacaciones; tarifa × 1.5</td><td>14 / A</td></tr>
+<tr><td>Tiempo doble</td><td>Ingreso</td><td>estándar; vacaciones; tarifa × 2</td><td>14 / A</td></tr>
+<tr><td>Días feriados</td><td>Ingreso</td><td>estándar; vacaciones</td><td>14 / A</td></tr>
+<tr><td>Licencia por enfermedad</td><td>Ingreso</td><td>estándar; vacaciones</td><td>14 / A</td></tr>
+<tr><td>Comisión</td><td>Ingreso</td><td>estándar; vacaciones</td><td>14 y 42 / A y M</td></tr>
+<tr><td>Otro tipo de ingreso gravable</td><td>Ingreso</td><td>estándar; vacaciones</td><td>14 / A</td></tr>
+<tr><td>Pago de vacaciones</td><td>Ingreso</td><td>estándar; vacaciones; <strong>reduce el saldo de vacaciones</strong></td><td>14 / A</td></tr>
+<tr><td>Vacaciones pagadas en cada nómina</td><td>Ingreso</td><td>estándar; <strong>no da derecho a vacaciones</strong></td><td>14 / A</td></tr>
+<tr><td>Gratificación (bono)</td><td>Ingreso</td><td>estándar; vacaciones; <strong>pago global</strong></td><td>14 / A</td></tr>
+<tr><td>Salario retroactivo</td><td>Ingreso</td><td>estándar; vacaciones; <strong>pago global</strong></td><td>14 / A</td></tr>
+<tr><td>Reembolso de gastos (no gravable)</td><td>Ingreso</td><td>sin tratamiento; se suma al bruto pagado y al neto</td><td>—</td></tr>
+<tr><td>Otro beneficio gravable (monetario)</td><td>Beneficio</td><td>sujeto a todo; <strong>pagado en dinero</strong>; sin vacaciones</td><td>14 y 40 / A y L</td></tr>
+<tr><td>Otro beneficio gravable (no monetario)</td><td>Beneficio</td><td>impuestos, RRQ, FSS, CNESST; <strong>ni AE ni RQAP</strong>; gravado pero no pagado</td><td>14 y 40 / A y L</td></tr>
+<tr><td>Vehículo de motor (no monetario)</td><td>Beneficio</td><td>como el no monetario</td><td>14 y 34 / A y W</td></tr>
+<tr><td>Seguro médico privado - parte del empleador</td><td>Beneficio</td><td><strong>sin impuesto federal</strong>; impuesto de Quebec, RRQ, FSS, CNESST; ni AE ni RQAP; no pagado</td><td>— / A y J</td></tr>
+<tr><td>REER</td><td>Deducción</td><td>reduce los dos impuestos</td><td>—</td></tr>
+<tr><td>Plan de pensiones registrado (RPA)</td><td>Deducción</td><td>reduce los dos impuestos</td><td>20 y 52 / D</td></tr>
+<tr><td>RVER / RPAC</td><td>Deducción</td><td>reduce los dos impuestos</td><td>—</td></tr>
+<tr><td>Cuota sindical</td><td>Deducción</td><td>reduce solo el impuesto federal</td><td>44 / F</td></tr>
+<tr><td>Fonds de solidarité FTQ</td><td>Deducción</td><td>no reduce el ingreso; <strong>crédito por fondo de trabajadores</strong> del 15 % en los dos niveles</td><td>—</td></tr>
+<tr><td>Fondaction CSN</td><td>Deducción</td><td>ídem</td><td>—</td></tr>
+<tr><td>Seguro colectivo - parte del empleado</td><td>Deducción</td><td>después de impuestos</td><td>85 / 235</td></tr>
+<tr><td>Donación benéfica</td><td>Deducción</td><td>después de impuestos</td><td>46 / N</td></tr>
+<tr><td>Otra deducción (después de impuestos)</td><td>Deducción</td><td>sin efecto fiscal</td><td>—</td></tr>
+</table>
+<p>El <strong>bruto pagado</strong> = ingresos + beneficios pagados en dinero. Los beneficios no monetarios se gravan pero no se suman al neto. Las deducciones se suman en « Otras deducciones ».</p>
+
+<!-- ============================================================ -->
+<h2 id="parametres">Entender los cálculos › Parámetros del año 2026</h2>
+<p>El año de las tasas es el de la <strong>fecha de pago</strong>. Solo 2026 está definido en el programa.</p>
+<div class="deux">
+<div class="carte"><h4>Impuesto federal (T4127)</h4>
+<table><tr><th>Ingreso gravable anual</th><th>Tasa</th><th>K</th></tr>
+<tr><td>hasta $58,523</td><td class="num">14 %</td><td class="num">0</td></tr>
+<tr><td>hasta $117,045</td><td class="num">20.5 %</td><td class="num">3,804</td></tr>
+<tr><td>hasta $181,440</td><td class="num">26 %</td><td class="num">10,241</td></tr>
+<tr><td>hasta $258,482</td><td class="num">29 %</td><td class="num">15,685</td></tr>
+<tr><td>más allá</td><td class="num">33 %</td><td class="num">26,024</td></tr></table>
+<ul><li>Monto personal básico: $16,452; tasa de los créditos: 14 %.</li><li>Monto canadiense por empleo: $1,501.</li><li>Reducción de Quebec: 16.5 %.</li><li>Crédito por fondo de trabajadores: 15 %, máximo $750.</li><li>Pago global: umbral $5,000, tasa fija 10 %.</li></ul></div>
+<div class="carte"><h4>Impuesto de Quebec (TP-1015.F)</h4>
+<table><tr><th>Ingreso gravable anual</th><th>Tasa</th><th>K</th></tr>
+<tr><td>hasta $54,345</td><td class="num">14 %</td><td class="num">0</td></tr>
+<tr><td>hasta $108,680</td><td class="num">19 %</td><td class="num">2,717</td></tr>
+<tr><td>hasta $132,245</td><td class="num">24 %</td><td class="num">8,151</td></tr>
+<tr><td>más allá</td><td class="num">25.75 %</td><td class="num">10,465</td></tr></table>
+<ul><li>Monto personal básico: $18,952; tasa de los créditos: 14 %.</li><li>Deducción por trabajador: 6 %, máximo $1,450.</li><li>Crédito por fondo de trabajadores: 15 %.</li><li>Pago global: umbral $18,952, tasa fija 7 %.</li></ul></div>
+</div>
+<table>
+<tr><th>Régimen</th><th>Parámetros 2026</th></tr>
+<tr><td>RRQ</td><td>Máximo de ingresos admisibles $74,600; exención $3,500; tasa 6.3 % (de la cual 5.3 % de base); aporte máximo del empleado $4,479.30 (parte base $3,768.30). Segundo aporte adicional (RRQ2): de $74,600 a $85,000, tasa 4 %, máximo $416. El empleador paga lo mismo.</td></tr>
+<tr><td>Seguro de empleo</td><td>Máximo asegurable $68,900; tasa del empleado (Quebec) 1.30 %, máximo $895.70; empleador = empleado × factor (1.4).</td></tr>
+<tr><td>RQAP</td><td>Máximo asegurable $103,000; empleado 0.43 % (máx. $442.90); empleador 0.602 % (máx. $620.06).</td></tr>
+<tr><td>FSS</td><td>Tasa según la masa salarial S (en millones, ajustada entre 1 y 7.8): general 1.2662 + 0.3838 × S (de 1.65 % a 4.26 %); primario y manufacturero 0.8074 + 0.4426 × S (de 1.25 % a 4.26 %); sector público 4.26 %. Redondeado a 2 decimales.</td></tr>
+<tr><td>CNESST</td><td>Máximo asegurable $103,000; tasa: la de su decisión de clasificación ($ por cada 100 $).</td></tr>
+<tr><td>CNT</td><td>0.06 % del salario asegurable CNESST, si la empresa está sujeta a ella.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="formules">Entender los cálculos › Fórmulas, retención por retención</h2>
+<p>Notación: P = períodos por año; G = remuneración regular gravable de la nómina; B = remuneración global (bono, retro); F = deducciones que reducen el ingreso gravable; Q = retenciones para los fondos de trabajadores. Los acumulados del año = nóminas confirmadas + acumulados iniciales.</p>
+<dl class="def">
+<dt>RRQ</dt>
+<dd>Sujeto si no está exento y tiene 18 años o más en la fecha de pago. Exención por período = 3,500 ÷ P, truncada. C = 6.3 % × (S3 − exención), con tope en 4,479.30 − acumulado. RRQ2: C2 = 4 % × (ingresos por encima de $74,600), con tope en 416 − acumulado. Parte del empleador = la del empleado. CS (parte deducible del ingreso) = C × 1/6.3 + C2.</dd>
+<dt>Seguro de empleo</dt>
+<dd>AE = 1.30 % × ingresos asegurables, con tope en 895.70 − acumulado. Empleador = AE × factor (1.4 de forma predeterminada).</dd>
+<dt>RQAP</dt>
+<dd>Empleado = 0.43 % × ingresos, con tope en 442.90 − acumulado. Empleador = 0.602 % × ingresos, con tope en 620.06 − acumulado.</dd>
+<dt>Impuesto de Quebec (TP-1015.F)</dt>
+<dd>E = línea 10 del TP-1015.3 ($18,952 de forma predeterminada). H = mín(6 % × G; 1,450 ÷ P). I = P × (G − F − H − CSA) − J − J1, piso 0. Créditos = K1 + 14 % × E + 15 % × P × Q. Y = T × I − K − créditos, piso 0. Impuesto de la nómina = Y ÷ P, más la retención adicional. Pago global: 7 % si P × G + pagos globales anteriores + B ≤ $18,952, si no la diferencia de impuesto anual con y sin el pago global.</dd>
+<dt>Impuesto federal (T4127, empleado de Quebec)</dt>
+<dd>TC = monto del TD1 ($16,452 de forma predeterminada). A = P × (G − F − CSA) − HD − F1, piso 0. K1 = 14 % × TC. K2Q = 14 % × [RRQ base anualizado con tope + AE anualizado con tope + RQAP anualizado con tope]. K4 = mín(14 % × A; 14 % × 1,501). K3 = otros créditos. LCF = mín(750; 15 % × P × Q). T3 = R × A − K − K1 − K2Q − K3 − K4, piso 0. T1 = (T3 − LCF) − 16.5 % × T3: es la reducción de Quebec. Impuesto de la nómina = T1 ÷ P, más el impuesto adicional del TD1. Pago global: 10 % si no se supera el umbral de $5,000, si no el método de la diferencia.</dd>
+<dt>FSS</dt>
+<dd>ingresos FSS × tasa FSS ÷ 100. Ningún FSS para un empleado exento.</dd>
+<dt>CNESST y CNT</dt>
+<dd>Ingresos = mín(ingresos; 103,000 − acumulado). CNESST = ingresos × tasa ÷ 100. CNT = ingresos × 0.06 %. La exclusión CNESST de la ficha suprime los dos.</dd>
+<dt>Vacaciones</dt>
+<dd>Acumuladas = ingresos que dan derecho a vacaciones × tasa ÷ 100. Es una provisión: no se paga. Las líneas « Pago de vacaciones » reducen el saldo.</dd>
+<dt>Salario neto</dt>
+<dd>Bruto pagado − (impuesto federal + impuesto de Quebec + RRQ + RRQ2 + AE + RQAP + otras deducciones).</dd>
+</dl>
+
+<h3 id="arrondis">Redondeos</h3>
+<ul>
+  <li>Al centavo, el medio centavo hacia arriba.</li>
+  <li>La exención RRQ por período se trunca, no se redondea.</li>
+  <li>El monto E (créditos personales de Quebec) se redondea al dólar.</li>
+  <li>Monto de una línea = horas × tarifa × multiplicador, redondeado al centavo.</li>
+  <li>Todos los valores intermedios tienen un piso en 0.</li>
+</ul>
+
+<h3 id="exemple">Ejemplo con cifras</h3>
+<p>Salario de $60,000 en 2026, empleado ordinario (montos básicos, ninguna deducción, ninguna exención). Los totales anuales obtenidos en una sola nómina anual y en 26 nóminas cada dos semanas coinciden al centavo; las diferencias vienen de los redondeos por período.</p>
+<table>
+<tr><th>Retención</th><th class="num">Nómina anual (1 período)</th><th class="num">26 nóminas de $2,307.69, acumuladas</th></tr>
+<tr><td>Impuesto federal</td><td class="num">$4,427.34</td><td class="num">$4,427.28</td></tr>
+<tr><td>Impuesto de Quebec</td><td class="num">$5,646.87</td><td class="num">$5,646.94</td></tr>
+<tr><td>RRQ (6.3 % × (60,000 − 3,500))</td><td class="num">$3,559.50</td><td class="num">$3,559.40</td></tr>
+<tr><td>Seguro de empleo (1.30 %)</td><td class="num">$780.00</td><td class="num">$780.00</td></tr>
+<tr><td>RQAP (0.43 %)</td><td class="num">$258.00</td><td class="num">$257.92</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="cas-demarrage">Caso práctico › Primer arranque</h2>
+<ol class="etapes">
+  <li>Inicie sesión con su cuenta 60Sec. Se le envía a <span class="chemin">Configuración › Parámetros de nómina</span>.</li>
+  <li>Complete la frecuencia predeterminada, la tasa de vacaciones, los números RP y RS, la frecuencia de las remesas, la masa salarial estimada, el sector FSS, el factor AE y la tasa CNESST. « Guardar » crea seis elementos de nómina básicos.</li>
+  <li>En <span class="chemin">Configuración › Elementos de nómina</span>, agregue lo que le falte: comisiones, REER, seguro colectivo, cuota sindical…</li>
+  <li>En <span class="chemin">Configuración › Plan de cuentas</span>, ingrese sus números de cuenta si quiere el informe de asientos.</li>
+  <li>En <span class="chemin">Configuración › Depósito directo</span>, ingrese los parámetros entregados por su banco, si paga por depósito directo.</li>
+  <li>En <span class="chemin">Empleados</span>, cree o verifique cada empleado, luego abra « Parámetros de nómina »: NAS, frecuencia, tarifa o salario, TD1 y TP-1015.3, depósito directo, talón por correo. Guarde, luego defina sus elementos recurrentes.</li>
+  <li>Si comienza a mitad de año, ingrese los <a href="#emp-cumulatifs">acumulados iniciales</a>.</li>
+  <li>Haga una primera nómina y compárela con su sistema anterior o con la calculadora de la ARC y de Revenu Québec antes de confirmarla.</li>
+</ol>
+
+<h2 id="cas-conversion">Caso práctico › Conversión a mitad de año</h2>
+<p>Para cada empleado, en <span class="chemin">Empleados › Acumulados</span>, ingrese los acumulados del año tomados de su sistema anterior: bruto, impuestos retenidos, salario admisible y aportes RRQ (base y 2.º adicional), AE, RQAP empleado y empleador, salario asegurable CNESST, saldo de vacaciones. Sin ellos, 60secPaie seguiría reteniendo RRQ, AE y RQAP después de los máximos, y los comprobantes quedarían incompletos. Las remesas ya hechas en el sistema anterior no se ingresan en 60secPaie: sus sumarios solo cubren las nóminas que él confirmó; ajuste los sumarios de fin de año en consecuencia.</p>
+
+<h2 id="cas-nouvel-employe">Caso práctico › Contratar a alguien</h2>
+<ol class="etapes">
+  <li><span class="chemin">Empleados › Nuevo empleado</span>: identidad y datos de contacto. Aparece de inmediato en 60Sec.</li>
+  <li>En su ficha: NAS (pídalo, es obligatorio para los comprobantes), fecha de nacimiento, idioma, frecuencia si difiere de la de la empresa, tarifa por hora y horas por semana o salario anual, TD1 y TP-1015.3 entregados por el empleado (deje vacío para los montos básicos), depósito directo y correo electrónico.</li>
+  <li>Elementos de nómina: agregue su salario si quiere una plantilla, y sus deducciones recurrentes.</li>
+  <li>Entra en la próxima nómina cuyo fin de período sea posterior a su fecha de contratación.</li>
+</ol>
+
+<h2 id="cas-depart">Caso práctico › Salida de un empleado</h2>
+<ol class="etapes">
+  <li>Haga su última nómina normalmente, con una línea « Pago de vacaciones » para pagarle su saldo de vacaciones (visible en su talón, « Saldo de vacaciones »).</li>
+  <li>En 60Sec, inscriba su fecha de fin de empleo o desactívelo. Ya no entra en las nóminas cuyo inicio de período sea posterior a su fecha de fin.</li>
+  <li>El registro de empleo (RE) se genera en RE Web de Service Canada; 60secPaie no lo genera. Sus comprobantes T4 y RL-1 salen a fin de año como para los demás.</li>
+</ol>
+
+<h2 id="cas-assurance">Caso práctico › Seguro colectivo</h2>
+<table>
+<tr><th>Componente</th><th>Elemento de nómina por crear</th><th>Tratamiento</th></tr>
+<tr><td>Parte del empleado (médico, dental)</td><td>Deducción « Seguro colectivo - parte del empleado »</td><td>Después de impuestos. T4 casilla 85, RL-1 código 235 (gastos médicos).</td></tr>
+<tr><td>Parte del empleado (vida, invalidez)</td><td>Deducción « Otra deducción (después de impuestos) »</td><td>Después de impuestos, sin casilla: estas primas no son gastos médicos.</td></tr>
+<tr><td>Parte del empleador, médico y dental</td><td>Beneficio « Seguro médico privado - parte del empleador »</td><td>Gravable solo en Quebec (RL-1 A y J), RRQ, FSS, CNESST; sin impuesto federal, sin AE ni RQAP. Incluya el impuesto del 9 % sobre las primas.</td></tr>
+<tr><td>Parte del empleador, seguro de vida y DMA</td><td>Beneficio « Otro beneficio gravable (no monetario) »</td><td>Gravable en los dos niveles (T4 40, RL-1 L), RRQ, FSS, CNESST; ni AE ni RQAP.</td></tr>
+<tr><td>Parte del empleador, invalidez</td><td>Ninguno</td><td>No es un beneficio gravable, pero las prestaciones pasan a ser gravables. Se contabiliza fuera de la nómina. Práctica corriente: el empleado paga el 100 % de esta prima.</td></tr>
+</table>
+<p>Agregue estos elementos a los elementos recurrentes de cada empleado asegurado, en monto fijo por nómina (prima mensual × 12 ÷ períodos, impuesto incluido). Configure la casilla 45 (atención dental) en la ficha. El pago al asegurador se hace fuera de la nómina; el asiento contable indica el monto por pagarle si las cuentas están definidas.</p>
+
+<h2 id="cas-bonus">Caso práctico › Bono y pago retroactivo</h2>
+<p>Agregue una línea « Gratificación (bono) » o « Salario retroactivo » en la nómina del empleado (paso 2, « Modificar las líneas »). El impuesto de esta línea sigue el método de los pagos globales: tasa fija (10 % a nivel federal por debajo de $5,000, 7 % en Quebec por debajo de $18,952 de ingreso anual), si no la diferencia de impuesto anual con y sin el pago. El informe de verificación muestra « Impuesto sobre el pago global » por separado. RRQ, AE y RQAP se aplican normalmente, dentro del límite de los máximos.</p>
+
+<h2 id="cas-vacances">Caso práctico › Vacaciones</h2>
+<ul>
+  <li><strong>Acumulación</strong>: cada nómina acumula la tasa de vacaciones (4 % o 6 %) sobre los ingresos admisibles. Es una provisión visible en el talón (« Vacaciones acumuladas », « Saldo de vacaciones ») y en los asientos (« Gasto de vacaciones » / « Vacaciones por pagar »).</li>
+  <li><strong>Vacaciones tomadas</strong>: agregue una línea « Pago de vacaciones » con el monto pagado. Reduce el saldo y se contabiliza contra « Vacaciones por pagar ».</li>
+  <li><strong>Vacaciones pagadas en cada nómina</strong> (empleados a tiempo parcial o temporales): use « Vacaciones pagadas en cada nómina »; esta línea no acumula vacaciones sobre sí misma.</li>
+  <li>Un saldo inicial se ingresa en los acumulados iniciales.</li>
+</ul>
+
+<h2 id="cas-annuelle">Caso práctico › Nómina anual</h2>
+<p>Para un propietario que se paga un salario una vez al año: en su ficha, « Período de pago » = « Anual (1 período) », y su salario anual. En el asistente, elija « Anual (1 período) »; el período va del 1 de enero al fin elegido. Las retenciones se calculan sobre el año entero, con la exención RRQ de $3,500 completa. El asistente no mezcla las frecuencias: los empleados cada dos semanas y el empleado anual son objeto de lotes distintos.</p>
+
+<h2 id="cas-corriger">Caso práctico › Corregir una nómina</h2>
+<ol class="etapes">
+  <li>Si la nómina todavía está en borrador: vuelva al paso 2, modifique las líneas, recalcule.</li>
+  <li>Si está confirmada y es la más reciente: abra su detalle y « Anular la nómina ». Si sus retenciones ya fueron pagadas, anule primero ese pago en Retenciones › Historial. Rehaga luego la nómina. Los cheques ya emitidos conservan su número; los nuevos reciben uno nuevo.</li>
+  <li>Si se trata de una nómina más antigua: anule las nóminas siguientes una por una, de la más reciente a la más antigua, o corrija mediante una línea de ajuste (« Salario retroactivo » o una deducción) en la próxima nómina. Los acumulados y los comprobantes reflejarán la corrección.</li>
+</ol>
+
+<h2 id="cas-depot">Caso práctico › Primer depósito directo</h2>
+<ol class="etapes">
+  <li>Adhiérase al servicio de transferencia automatizada de su banco; este le entrega un número de emisor, un centro de procesamiento y un canal de depósito de los archivos.</li>
+  <li>Ingrese estos parámetros y la cuenta de la empresa en <span class="chemin">Configuración › Depósito directo</span>.</li>
+  <li>En la ficha de cada empleado, marque « Este empleado cobra por depósito directo » e ingrese tránsito, institución y cuenta (en un cheque de muestra: tránsito 5 dígitos, institución 3 dígitos, luego la cuenta).</li>
+  <li>Confirme una nómina, luego « Descargar el archivo de depósito directo » en su detalle. Haga validar este primer archivo por el banco (archivo de prueba) antes de un depósito real.</li>
+  <li>Entregue el archivo al banco antes de la fecha de pago, según su plazo.</li>
+</ol>
+
+<h2 id="cas-fin-annee">Caso práctico › Fin de año</h2>
+<ol class="etapes">
+  <li>Confirme todas las nóminas fechadas en el año. La fecha de pago decide el año: un período de diciembre pagado en enero pertenece al año siguiente.</li>
+  <li>Registre las últimas remesas del año en Retenciones.</li>
+  <li><span class="chemin">Informes › T4 y Relevés 1</span>: verifique cada empleado (NAS presente, casillas coherentes), exporte el CSV, capture los comprobantes en Formulaires Web y Mon dossier pour les entreprises antes del último día de febrero. Compare los sumarios T4 y 1 con sus remesas; pague el saldo, incluida la CNT.</li>
+  <li><span class="chemin">Informes › Declaración de salarios CNESST</span>: declare en Mon Espace CNESST antes del 15 de marzo; la tarjeta « Conciliación » da la diferencia con sus pagos.</li>
+  <li>Configure la casilla 45 (dental) y verifique las exenciones antes de generar los T4.</li>
+  <li>Las tasas del año siguiente deben añadirse al programa antes de la primera nómina de enero; si no, el asistente rechaza la nómina (« Las tasas gubernamentales de {año} aún no están definidas en el programa. »).</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="messages">Referencia › Mensajes y su solución</h2>
+<p>Los mensajes están agrupados por pantalla en las secciones anteriores. Estos son los más frecuentes, en una sola tabla.</p>
+<table>
+<tr><th>Mensaje</th><th>Dónde</th><th>Solución</th></tr>
+<tr><td>« La nómina aún no está configurada para {empresa}. Comience por sus parámetros de nómina. »</td><td>Cualquier página</td><td>Complete y guarde Configuración › Parámetros de nómina.</td></tr>
+<tr><td>« Ningún empleado activo con la nómina configurada cobra con esta frecuencia en este período. Verifique la página Empleados. »</td><td>Asistente, paso 1</td><td>Verifique que el empleado esté activo, « Configurada », con la misma frecuencia que el lote, contratado antes del fin de período.</td></tr>
+<tr><td>« Las tasas gubernamentales de {año} aún no están definidas en el programa. »</td><td>Asistente, paso 1</td><td>La fecha de pago debe estar en 2026; si no, las tasas del año deben añadirse al programa.</td></tr>
+<tr><td>« Ya hay una nómina en preparación. Termínela o elimínela primero. »</td><td>Asistente, paso 1</td><td>Continúe o elimine el borrador.</td></tr>
+<tr><td>« La fecha de pago está demasiado lejos del fin del período. »</td><td>Asistente, paso 1</td><td>Entre 31 días antes y 45 días después del fin de período.</td></tr>
+<tr><td>« El monto de la línea debe ser mayor que 0 (horas × tarifa, o monto). »</td><td>Líneas de nómina</td><td>Ingrese horas y una tarifa, o un monto.</td></tr>
+<tr><td>« Al menos un salario neto es negativo. Corrija las líneas antes de confirmar. »</td><td>Asistente, paso 3</td><td>Reduzca la deducción en cuestión.</td></tr>
+<tr><td>« Esta nómina ya no se puede modificar. »</td><td>Asistente</td><td>La nómina está confirmada o anulada. Para corregir, anúlela (si es la más reciente) y rehágala.</td></tr>
+<tr><td>« Solo se puede anular la nómina confirmada más reciente. »</td><td>Detalle</td><td>Anule primero las nóminas más recientes.</td></tr>
+<tr><td>« Las retenciones de esta nómina ya fueron pagadas. Anule primero el pago de retenciones. »</td><td>Detalle</td><td>Retenciones › Historial › abrir el pago › « Anular el pago ».</td></tr>
+<tr><td>« Los parámetros de depósito directo de la empresa están incompletos (Configuración → Depósito directo). »</td><td>Detalle</td><td>Complete la página Depósito directo.</td></tr>
+<tr><td>« Datos bancarios incompletos de {Nombre Apellido}. »</td><td>Detalle</td><td>Ficha del empleado, bloque Pago.</td></tr>
+<tr><td>« {Nombre}: ningún correo en la ficha. »</td><td>Talones por correo</td><td>Agregue su correo electrónico en 60Sec.</td></tr>
+<tr><td>« El número de seguro social no es válido. »</td><td>Ficha</td><td>Verifique los 9 dígitos; el NAS tiene una clave de control.</td></tr>
+<tr><td>« Depósito directo: indique el tránsito (5 dígitos), la institución (3 dígitos) y el número de cuenta. »</td><td>Ficha</td><td>Complete los tres campos o desmarque el depósito directo.</td></tr>
+<tr><td>« La tasa de vacaciones parece demasiado alta. »</td><td>Ficha, Configuración</td><td>La tasa es en porcentaje (4 o 6), no en dólares.</td></tr>
+<tr><td>« El factor de aporte al AE debe estar entre 1 y 1,4. »</td><td>Configuración</td><td>1.4 salvo tasa reducida concedida por la ARC.</td></tr>
+<tr><td>« Este elemento ya se usó en una nómina: su categoría ya no puede cambiar. Cree un nuevo elemento. »</td><td>Elementos de nómina</td><td>Cree un nuevo elemento, desactive el antiguo.</td></tr>
+<tr><td>« Este elemento lo usan empleados o nóminas. Desactívelo en lugar de eliminarlo. »</td><td>Elementos de nómina</td><td>Desmarque « Activo ».</td></tr>
+<tr><td>« El código de empleado {código} ya se usa en esta empresa. »</td><td>Nuevo empleado</td><td>Otro código, o vacío.</td></tr>
+<tr><td>« Un empleado activo ya tiene este nombre. … »</td><td>Nuevo empleado</td><td>Verifique la ficha existente; marque « crear de todos modos » si se trata de otra persona.</td></tr>
+<tr><td>« Ninguna retención por pagar a {gobierno} para las nóminas hasta el … »</td><td>Retenciones</td><td>Nada se debe a esa fecha, o todo ya está remitido.</td></tr>
+<tr><td>« La fecha del pago está demasiado lejos. »</td><td>Retenciones</td><td>Como máximo 31 días en el futuro.</td></tr>
+<tr><td>« {n} línea(s) sin número de cuenta: defínalas en Configuración → Plan de cuentas. »</td><td>Asientos</td><td>Complete el plan de cuentas.</td></tr>
+<tr><td>« Demasiados intentos. Vuelva a intentarlo en unos minutos. »</td><td>Inicio de sesión</td><td>Espere 15 minutos.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="faq">Referencia › Preguntas frecuentes</h2>
+<div class="faq">
+<details><summary>Un empleado no aparece en la nómina. ¿Por qué?</summary><p>Cuatro condiciones: está activo en 60Sec; su nómina está « Configurada » (ficha guardada al menos una vez); su frecuencia (la suya, o si no la de la empresa) es la del lote; su fecha de contratación es a más tardar el fin de período y su fecha de fin de empleo está vacía o es posterior al inicio de período. Verifique también que tenga líneas: sin plantilla, ni tarifa, ni salario, aparece con « Ninguna línea ».</p></details>
+<details><summary>El RRQ de un empleado está en 0.</summary><p>Tiene menos de 18 años en la fecha de pago, o « No aportar al RRQ » está marcado, o su máximo anual ($4,479.30 más $416 de RRQ2) está alcanzado, acumulados iniciales incluidos, o su nómina es inferior a la exención por período ($3,500 ÷ períodos).</p></details>
+<details><summary>¿Por qué el impuesto federal es más bajo que en otra provincia?</summary><p>Los empleados de Quebec se benefician de la reducción de Quebec del 16.5 % sobre el impuesto federal, y su tasa de AE es reducida (1.30 %) porque aportan al RQAP.</p></details>
+<details><summary>¿Puedo tener dos borradores al mismo tiempo?</summary><p>No. Un solo borrador por empresa. Termínelo o elimínelo antes de comenzar otro. Dos frecuencias (por ejemplo cada dos semanas y mensual) se pagan entonces en dos lotes sucesivos.</p></details>
+<details><summary>¿Cómo cambiar el nombre o la dirección de un empleado?</summary><p>En 60Sec. 60secPaie solo escribe allí para crear un empleado; todo el resto de la identidad se modifica en 60Sec y se refleja aquí de inmediato.</p></details>
+<details><summary>El NAS se muestra « ••••••123 ». ¿Dónde está el resto?</summary><p>Cifrado. Nunca se devuelve al navegador. En el comprobante de un empleado, « Mostrar el NAS completo » lo muestra, y esa consulta se registra.</p></details>
+<details><summary>El monto propuesto para las retenciones no corresponde a mi estado de cuenta de la ARC.</summary><p>60secPaie solo conoce las nóminas que él confirmó. Las nóminas hechas en otro lugar o antes de la conversión no están en sus remesas. La frecuencia de remesa configurada también debe corresponder a la que la ARC le asignó.</p></details>
+<details><summary>El FSS del Sumario 1 difiere de lo que calcula Revenu Québec.</summary><p>La tasa aplicada durante el año viene de la masa salarial estimada en la configuración. La tasa real se calcula sobre la masa del año; la diferencia se regulariza en el Sumario 1, como lo indica la nota del informe.</p></details>
+<details><summary>Quiero imprimir todos los talones de una nómina.</summary><p>Abra el detalle de la nómina y el enlace « Talón » de cada empleado; cada talón tiene « Imprimir el talón » y « Descargar en PDF ». Para un envío agrupado, use « Enviar los talones por correo ».</p></details>
+<details><summary>¿Qué significa « Vacaciones acumuladas » en el talón?</summary><p>La provisión de vacaciones ganada en esta nómina (tasa × ingresos admisibles). No se paga; se suma al « Saldo de vacaciones », que se vacía mediante líneas « Pago de vacaciones ».</p></details>
+<details><summary>¿Cuenta una línea de elemento oculta?</summary><p>Sí. « No mostrar en el talón de pago » solo cambia la visualización: la línea se calcula, se grava y se contabiliza normalmente.</p></details>
+<details><summary>¿Puedo pagar a un proveedor o a un trabajador autónomo?</summary><p>No. 60secPaie solo trata empleados en el sentido de las leyes fiscales, con retenciones en la fuente. Un trabajador autónomo se paga mediante una factura, en 60Sec.</p></details>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="glossaire">Referencia › Glosario</h2>
+<dl class="def">
+<dt>AE</dt><dd>Seguro de empleo (assurance-emploi), régimen federal. Employment Insurance (EI) en inglés.</dd>
+<dt>ARC</dt><dd>Agencia de Ingresos de Canadá (Agence du revenu du Canada).</dd>
+<dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Prima de seguro contra accidentes de trabajo, pagada periódicamente a Revenu Québec.</dd>
+<dt>CNT</dt><dd>Aporte relativo a las normas laborales, 0.06 % de los salarios asegurables, pagado una vez al año con el Sumario 1.</dd>
+<dt>Acumulados</dt><dd>Sumas del año a la fecha: bruto, retenciones, ingresos asegurables. Sirven para los máximos anuales y los comprobantes.</dd>
+<dt>Elemento de nómina</dt><dd>Línea reutilizable (ingreso, beneficio o deducción) vinculada a una categoría del sistema.</dd>
+<dt>FSS</dt><dd>Fondo de servicios de salud (Fonds des services de santé), aporte del empleador en Quebec, en porcentaje de la masa salarial.</dd>
+<dt>Plantilla</dt><dd>Los elementos de nómina recurrentes de un empleado, copiados en cada nueva nómina.</dd>
+<dt>Lote de nómina</dt><dd>Un período de pago para todos los empleados incluidos: borrador, confirmado o anulado.</dd>
+<dt>MGA / MSGA</dt><dd>Máximo de ingresos admisibles al RRQ ($74,600) y máximo adicional ($85,000) para el 2.º aporte adicional.</dd>
+<dt>NAS</dt><dd>Número de seguro social (SIN en inglés).</dd>
+<dt>Pago global</dt><dd>Bono o retroactividad, gravado según un método particular en lugar de anualizado como el salario regular.</dd>
+<dt>RP / RS</dt><dd>Número de cuenta de retenciones en la fuente de la ARC (…RP0001) y número de identificación de Revenu Québec (…RS0001).</dd>
+<dt>RQAP</dt><dd>Régimen quebequense de seguro parental (Régime québécois d'assurance parentale; QPIP en inglés). En el T4 se llama RPAP.</dd>
+<dt>RRQ</dt><dd>Régimen de rentas de Quebec (Régime de rentes du Québec; QPP en inglés). Comprende el aporte base, el primer y el segundo aporte adicional.</dd>
+<dt>T4127</dt><dd>Guía de la ARC: fórmulas para el cálculo de las retenciones de nómina.</dd>
+<dt>TD1</dt><dd>Declaración de créditos fiscales personales (federal), completada por el empleado.</dd>
+<dt>TP-1015.3</dt><dd>Declaración para la retención de impuesto (Quebec), completada por el empleado.</dd>
+<dt>TP-1015.F</dt><dd>Guía de Revenu Québec: fórmulas para el cálculo de las retenciones en la fuente.</dd>
+<dt>Talón</dt><dd>El comprobante de pago entregado al empleado.</dd>
+</dl>
+
+<p class="retour"><a href="#haut">Volver arriba</a> · <a href="Default.aspx">Volver a 60secPaie</a></p>
+</main>
+</div>
+
+<script>
+(function () {
+  var champ = document.getElementById('recherche');
+  var liens = document.querySelectorAll('#sommaire a');
+  var titres = document.querySelectorAll('#sommaire h2');
+  champ.addEventListener('input', function () {
+    var q = champ.value.trim().toLowerCase();
+    for (var i = 0; i < liens.length; i++) {
+      var a = liens[i];
+      var texte = a.textContent.toLowerCase();
+      var cible = document.querySelector(a.getAttribute('href'));
+      var corps = '';
+      if (cible && q.length > 0) {
+        var n = cible.nextElementSibling;
+        corps = cible.textContent;
+        while (n && !/^H[12]$/.test(n.tagName)) { corps += ' ' + n.textContent; if (corps.length > 20000) break; n = n.nextElementSibling; }
+        corps = corps.toLowerCase();
+      }
+      a.classList.toggle('cache', q.length > 0 && texte.indexOf(q) < 0 && corps.indexOf(q) < 0);
+    }
+    for (var j = 0; j < titres.length; j++) {
+      var h = titres[j], visible = false, s = h.nextElementSibling;
+      while (s && s.tagName === 'A') { if (!s.classList.contains('cache')) { visible = true; break; } s = s.nextElementSibling; }
+      h.style.display = visible ? '' : 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>

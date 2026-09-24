@@ -82,9 +82,9 @@ fr: Trop de tentatives. Réessayez dans quelques minutes.
 en: Too many attempts. Try again in a few minutes.
 es: Demasiados intentos. Vuelva a intentarlo en unos minutos.
 
-fr: Votre compte n'est associé à aucune compagnie dans MngConsul.
-en: Your account is not linked to any company in MngConsul.
-es: Su cuenta no está asociada a ninguna empresa en MngConsul.
+fr: Votre compte n'est associé à aucune compagnie dans 60Sec.
+en: Your account is not linked to any company in 60Sec.
+es: Su cuenta no está asociada a ninguna empresa en 60Sec.
 
 fr: Courriel ou mot de passe invalide.
 en: Invalid email or password.
@@ -262,9 +262,9 @@ fr: Compagnie
 en: Company
 es: Empresa
 
-fr: Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise).
-en: The company name and contact details are edited in MngConsul (business settings).
-es: El nombre y los datos de la empresa se modifican en MngConsul (parámetros de la empresa).
+fr: Le nom et les coordonnées de la compagnie se modifient dans 60Sec (paramètres de l'entreprise).
+en: The company name and contact details are edited in 60Sec (business settings).
+es: El nombre y los datos de la empresa se modifican en 60Sec (parámetros de la empresa).
 
 fr: Nom
 en: Name
@@ -924,9 +924,9 @@ fr: Afficher aussi les employés inactifs
 en: Also show inactive employees
 es: Mostrar también los empleados inactivos
 
-fr: Les employés sont partagés avec MngConsul : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans MngConsul. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.
-en: Employees are shared with MngConsul: create them here or there; their identity (name, address, position, hire date) is edited in MngConsul. Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard.
-es: Los empleados se comparten con MngConsul: créelos aquí o allá; su identidad (nombre, dirección, puesto, fecha de contratación) se modifica en MngConsul. Aquí configura su nómina. Solo los empleados con la nómina configurada se proponen en el asistente de nómina.
+fr: Les employés sont partagés avec 60Sec : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans 60Sec. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie.
+en: Employees are shared with 60Sec: create them here or there; their identity (name, address, position, hire date) is edited in 60Sec. Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard.
+es: Los empleados se comparten con 60Sec: créelos aquí o allá; su identidad (nombre, dirección, puesto, fecha de contratación) se modifica en 60Sec. Aquí configura su nómina. Solo los empleados con la nómina configurada se proponen en el asistente de nómina.
 
 fr: Poste
 en: Job title
@@ -964,9 +964,9 @@ fr: / an
 en: / year
 es: / año
 
-fr: Aucun employé pour cette compagnie. Ajoutez-les dans MngConsul.
-en: No employees for this company. Add them in MngConsul.
-es: Ningún empleado para esta empresa. Agréguelos en MngConsul.
+fr: Aucun employé pour cette compagnie. Ajoutez-les dans 60Sec.
+en: No employees for this company. Add them in 60Sec.
+es: Ningún empleado para esta empresa. Agréguelos en 60Sec.
 
 # ---------- Employés : paramètres de paie ----------
 
@@ -974,13 +974,13 @@ fr: Cumulatifs de départ
 en: Opening balances
 es: Acumulados iniciales
 
-fr: Employé (MngConsul)
-en: Employee (MngConsul)
-es: Empleado (MngConsul)
+fr: Employé (60Sec)
+en: Employee (60Sec)
+es: Empleado (60Sec)
 
-fr: Ces renseignements proviennent de MngConsul et s'y modifient.
-en: This information comes from MngConsul and is edited there.
-es: Estos datos provienen de MngConsul y se modifican allí.
+fr: Ces renseignements proviennent de 60Sec et s'y modifient.
+en: This information comes from 60Sec and is edited there.
+es: Estos datos provienen de 60Sec y se modifican allí.
 
 fr: Code employé
 en: Employee code
@@ -1018,9 +1018,9 @@ fr: Période de paie
 en: Pay period
 es: Período de pago
 
-fr: Par défaut (MngConsul, sinon la compagnie)
-en: Default (MngConsul, otherwise the company)
-es: Predeterminado (MngConsul, si no la empresa)
+fr: Par défaut (60Sec, sinon la compagnie)
+en: Default (60Sec, otherwise the company)
+es: Predeterminado (60Sec, si no la empresa)
 
 fr: Heures par semaine
 en: Hours per week
@@ -1046,9 +1046,9 @@ fr: Vide = taux par défaut de la compagnie.
 en: Blank = company default rate.
 es: Vacío = tasa predeterminada de la empresa.
 
-fr: Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.
-en: The suggested hourly rate, salary and frequency come from MngConsul when entered there; what you save here applies to payroll.
-es: La tarifa por hora, el salario y la frecuencia propuestos provienen de MngConsul cuando están indicados allí; lo que guarde aquí se aplica a la nómina.
+fr: Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.
+en: The suggested hourly rate, salary and frequency come from 60Sec when entered there; what you save here applies to payroll.
+es: La tarifa por hora, el salario y la frecuencia propuestos provienen de 60Sec cuando están indicados allí; lo que guarde aquí se aplica a la nómina.
 
 fr: Exemptions (cas particuliers seulement)
 en: Exemptions (special cases only)
@@ -3168,9 +3168,9 @@ fr: Nécessaire pour envoyer le talon de paie par courriel.
 en: Required to email the pay stub.
 es: Necesario para enviar el talón de pago por correo electrónico.
 
-fr: L'employé est créé dans la compagnie courante et apparaît aussitôt dans MngConsul, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct.
-en: The employee is created in the current company and appears in MngConsul right away, where their identity is edited from then on. Once created, you set up their payroll on their record: SIN, pay period, rates, exemptions, direct deposit.
-es: El empleado se crea en la empresa actual y aparece de inmediato en MngConsul, donde luego se modifica su identidad. Una vez creado, configura su nómina en su ficha: NAS, período de pago, tasas, exenciones, depósito directo.
+fr: L'employé est créé dans la compagnie courante et apparaît aussitôt dans 60Sec, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct.
+en: The employee is created in the current company and appears in 60Sec right away, where their identity is edited from then on. Once created, you set up their payroll on their record: SIN, pay period, rates, exemptions, direct deposit.
+es: El empleado se crea en la empresa actual y aparece de inmediato en 60Sec, donde luego se modifica su identidad. Una vez creado, configura su nómina en su ficha: NAS, período de pago, tasas, exenciones, depósito directo.
 
 fr: Il s'agit d'une autre personne : créer quand même
 en: This is a different person: create anyway
@@ -3200,9 +3200,9 @@ fr: Employé créé. Configurez maintenant sa paie : vérifiez les valeurs propo
 en: Employee created. Now set up their payroll: check the proposed values, then save.
 es: Empleado creado. Configure ahora su nómina: verifique los valores propuestos y guarde.
 
-fr: Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul.
-en: No employees for this company. Create the first one with the button above, or add them in MngConsul.
-es: No hay empleados para esta empresa. Cree el primero con el botón de arriba o agréguelos en MngConsul.
+fr: Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans 60Sec.
+en: No employees for this company. Create the first one with the button above, or add them in 60Sec.
+es: No hay empleados para esta empresa. Cree el primero con el botón de arriba o agréguelos en 60Sec.
 
 fr: Aide
 en: Help

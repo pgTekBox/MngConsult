@@ -16,6 +16,7 @@ header.entete{background:var(--accent-fonce);color:#fff;position:sticky;top:0;z-
 .logo span{opacity:.85;font-weight:500}
 .entete-outils{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
 .entete-outils input{padding:7px 10px;border:1px solid #6ea4bf;border-radius:6px;min-width:240px;font-size:14px}
+.entete-outils .langues{color:#fff;font-size:13px;margin-right:4px}.entete-outils .langues a{background:none;border:0;padding:0 2px;text-decoration:underline}
 .entete-outils a,.entete-outils button{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:6px;text-decoration:none;font-size:13px;cursor:pointer}
 .page{display:grid;grid-template-columns:290px 1fr;gap:0;max-width:1400px;margin:0 auto}
 nav.sommaire{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 58px);overflow:auto;padding:18px 14px 40px 22px;border-right:1px solid var(--bord);background:var(--carte);font-size:13.5px}
@@ -66,6 +67,7 @@ mark{background:#ffe89a}
     <a class="logo" href="#haut">60sec<span>Paie</span> · Aide</a>
     <div class="entete-outils">
       <input type="search" id="recherche" placeholder="Filtrer le sommaire… (ex. RRQ, chèque, T4)" aria-label="Filtrer le sommaire">
+      <span class="langues" aria-label="Langue du guide"><strong>FR</strong> · <a href="Aide-en.html">EN</a> · <a href="Aide-es.html">ES</a></span>
       <button type="button" onclick="window.print()">Imprimer</button>
       <a href="Default.aspx">Retour à 60secPaie</a>
     </div>
@@ -149,7 +151,7 @@ mark{background:#ffe89a}
 <!-- ============================================================ -->
 <h2 id="intro">Vue d'ensemble</h2>
 <p>60secPaie calcule la paie d'employés qui travaillent au Québec : impôt fédéral, impôt du Québec, RRQ, assurance-emploi, RQAP, et les cotisations de l'employeur (RRQ, AE, RQAP, FSS, CNESST, CNT). À partir des paies confirmées, il produit les talons de paie, le fichier de dépôt direct, le montant des retenues à remettre aux deux gouvernements, les cases des feuillets T4 et Relevé 1, la déclaration des salaires CNESST et les écritures comptables.</p>
-<p>Il partage ses comptes utilisateurs et ses compagnies avec 60Sec (MngConsul). Les employés sont aussi ceux de MngConsul : ils peuvent être créés d'un côté ou de l'autre, mais leur identité (nom, adresse, poste) se modifie dans MngConsul. 60secPaie y ajoute tout ce qui concerne la paie.</p>
+<p>Il partage ses comptes utilisateurs et ses compagnies avec 60Sec. Les employés sont aussi ceux de 60Sec : ils peuvent être créés d'un côté ou de l'autre, mais leur identité (nom, adresse, poste) se modifie dans 60Sec. 60secPaie y ajoute tout ce qui concerne la paie.</p>
 
 <h3 id="cycle">Le cycle d'une paie</h3>
 <ol class="etapes">
@@ -177,18 +179,18 @@ mark{background:#ffe89a}
 <tr><th>Message</th><th>Cause</th><th>Quoi faire</th></tr>
 <tr><td>« Courriel ou mot de passe invalide. »</td><td>Le couple ne correspond à aucun compte actif de 60Sec, ou un champ est vide.</td><td>Vérifiez la casse du mot de passe. Le courriel est comparé en minuscules.</td></tr>
 <tr><td>« Trop de tentatives. Réessayez dans quelques minutes. »</td><td>5 échecs : le compte est verrouillé 15 minutes. Un nouvel échec après l'expiration reverrouille aussitôt.</td><td>Attendez 15 minutes, puis entrez le bon mot de passe du premier coup. Une connexion réussie remet le compteur à zéro.</td></tr>
-<tr><td>« Votre compte n'est associé à aucune compagnie dans MngConsul. »</td><td>Le compte existe mais n'a pas de compagnie.</td><td>Faites rattacher votre compte à une compagnie dans MngConsul.</td></tr>
+<tr><td>« Votre compte n'est associé à aucune compagnie dans 60Sec. »</td><td>Le compte existe mais n'a pas de compagnie.</td><td>Faites rattacher votre compte à une compagnie dans 60Sec.</td></tr>
 </table>
 <p>La session dure <strong>60 minutes</strong> et se prolonge à chaque action. Il n'y a pas d'option « Se souvenir de moi ». « Me déconnecter », en haut à droite, ferme la session.</p>
 <p>Un visiteur non connecté qui arrive sur la racine du site voit la page de présentation (<span class="chemin">Accueil.aspx</span>), avec « Me connecter » et « Qu'est-ce que 60secPaie ? ».</p>
 
 <h3 id="comptes">Comptes et mots de passe</h3>
-<p>Les comptes sont ceux de <strong>60Sec (MngConsul)</strong>. 60secPaie ne crée pas de compte et ne change pas de mot de passe : « Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de 60Sec. » Un compte désactivé ou supprimé dans MngConsul perd l'accès immédiatement, même en cours de session.</p>
-<p>Tous les utilisateurs qui ont accès à une compagnie y ont les mêmes droits dans 60secPaie. Le rôle administrateur de MngConsul est lu, mais aucune page ne l'exige pour l'instant.</p>
+<p>Les comptes sont ceux de <strong>60Sec</strong>. 60secPaie ne crée pas de compte et ne change pas de mot de passe : « Mot de passe oublié ? Réinitialisez-le à partir de la page de connexion de 60Sec. » Un compte désactivé ou supprimé dans 60Sec perd l'accès immédiatement, même en cours de session.</p>
+<p>Tous les utilisateurs qui ont accès à une compagnie y ont les mêmes droits dans 60secPaie. Le rôle administrateur de 60Sec est lu, mais aucune page ne l'exige pour l'instant.</p>
 
 <h3 id="compagnies">Compagnies et changement de compagnie</h3>
-<p>La liste des compagnies accessibles suit la règle de MngConsul : un utilisateur ordinaire voit sa compagnie, un comptable voit toutes celles dont il est le comptable. Avec une seule compagnie, son nom s'affiche en haut à droite. Avec plusieurs, une liste déroulante (« Changer de compagnie ») les propose ; après un changement, vous revenez au tableau de bord.</p>
-<p>La compagnie courante est la même que dans MngConsul (même clé de session). Son nom et son adresse sont recopiés depuis MngConsul une fois par session, pour les talons, les rapports et les fichiers.</p>
+<p>La liste des compagnies accessibles suit la règle de 60Sec : un utilisateur ordinaire voit sa compagnie, un comptable voit toutes celles dont il est le comptable. Avec une seule compagnie, son nom s'affiche en haut à droite. Avec plusieurs, une liste déroulante (« Changer de compagnie ») les propose ; après un changement, vous revenez au tableau de bord.</p>
+<p>La compagnie courante est la même que dans 60Sec (même clé de session). Son nom et son adresse sont recopiés depuis 60Sec une fois par session, pour les talons, les rapports et les fichiers.</p>
 
 <h3 id="langues">Langues (FR, EN, ES)</h3>
 <p>Les liens « FR | EN | ES » de l'en-tête, de la page de connexion et de la page d'accueil changent la langue de tout l'écran : textes, boutons, infobulles, confirmations, titres des exports CSV. Le choix est mémorisé dans un témoin pendant un an et survit à la déconnexion. Vous pouvez aussi ajouter <code>?lang=en</code> ou <code>?lang=es</code> à une adresse.</p>
@@ -196,7 +198,7 @@ mark{background:#ffe89a}
   <li>Les dates sont toujours au format <strong>AAAA-MM-JJ</strong>, dans les trois langues.</li>
   <li>Les montants s'écrivent « 1 234,56 $ » en français, « $1,234.56 » en anglais et en espagnol.</li>
   <li>Le talon envoyé par courriel et son PDF sont dans la <strong>langue de l'employé</strong> (choisie dans sa fiche). Le PDF téléchargé depuis l'écran est dans la langue de l'utilisateur.</li>
-  <li>Ce guide n'est offert qu'en français.</li>
+  <li>Ce guide est offert en français, en anglais et en espagnol : utilisez FR, EN ou ES en haut de cette page.</li>
 </ul>
 
 <h3 id="securite">Sécurité et données sensibles</h3>
@@ -257,7 +259,7 @@ mark{background:#ffe89a}
 <h2 id="config">Configuration › Paramètres de paie</h2>
 <p><span class="chemin">Config/Compagnie.aspx</span>. Seule page accessible avant que la paie de la compagnie soit configurée. Le sous-menu de Configuration offre : « Paramètres de paie », « Éléments de paie », « Plan comptable », « Dépôt direct ».</p>
 <h3>« Compagnie » (lecture seule)</h3>
-<p>Nom, adresse, ville, téléphone et « Numéro d'entreprise (NE) » viennent de MngConsul : « Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise). »</p>
+<p>Nom, adresse, ville, téléphone et « Numéro d'entreprise (NE) » viennent de 60Sec : « Le nom et les coordonnées de la compagnie se modifient dans 60Sec (paramètres de l'entreprise). »</p>
 <h3>« Informations de paie »</h3>
 <table>
 <tr><th>Champ</th><th>Rôle</th><th>Valeur par défaut, validation</th></tr>
@@ -357,17 +359,17 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="emp-liste">Employés › Liste</h2>
-<p><span class="chemin">Employes/Liste.aspx</span>. « Les employés sont partagés avec MngConsul : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans MngConsul. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie. »</p>
+<p><span class="chemin">Employes/Liste.aspx</span>. « Les employés sont partagés avec 60Sec : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans 60Sec. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie. »</p>
 <ul>
   <li>Case « Afficher aussi les employés inactifs » : la liste se recharge ; les inactifs sont grisés.</li>
   <li>Bouton « Nouvel employé ».</li>
   <li>Colonnes : « Nom » (Nom, Prénom, lien vers la fiche), « Poste », « Rémunération » (« X $ / h » ou « X $ / an »), « Fréquence » (celle de l'employé, sinon celle de la compagnie), « Date d'embauche », « Paie » (pastille verte « Configurée » ou jaune « À configurer »), puis les liens « Paramètres de paie · Éléments de paie · Cumulatifs ».</li>
-  <li>Liste vide : « Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans MngConsul. »</li>
+  <li>Liste vide : « Aucun employé pour cette compagnie. Créez le premier avec le bouton ci-dessus, ou ajoutez-les dans 60Sec. »</li>
 </ul>
 
 <!-- ============================================================ -->
 <h2 id="emp-nouveau">Employés › Nouvel employé</h2>
-<p><span class="chemin">Employes/Nouveau.aspx</span>. « L'employé est créé dans la compagnie courante et apparaît aussitôt dans MngConsul, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct. »</p>
+<p><span class="chemin">Employes/Nouveau.aspx</span>. « L'employé est créé dans la compagnie courante et apparaît aussitôt dans 60Sec, où son identité se modifie ensuite. Une fois créé, vous configurez sa paie dans sa fiche : NAS, période de paie, taux, exemptions, dépôt direct. »</p>
 <table>
 <tr><th>Bloc</th><th>Champs</th></tr>
 <tr><td>« Identité »</td><td>« Prénom » *, « Nom de famille » *, « Code employé » (« Facultatif. Doit être unique dans la compagnie. »), « Poste », « Date de naissance », « Date d'embauche » (aujourd'hui par défaut).</td></tr>
@@ -385,9 +387,9 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="emp-fiche">Employés › Fiche : paramètres de paie</h2>
-<p><span class="chemin">Employes/Fiche.aspx?id=</span>. Le titre est le nom de l'employé ; les boutons « Éléments de paie » et « Cumulatifs de départ » mènent aux deux autres pages de l'employé. Un employé jamais configuré affiche « La paie de cet employé n'est pas encore configurée. Vérifiez les valeurs proposées, puis enregistrez. » : les valeurs proposées viennent de MngConsul (fréquence, taux horaire, salaire, NAS, coordonnées bancaires, date de naissance).</p>
-<h3>« Employé (MngConsul) »</h3>
-<p>Lecture seule : Nom, Code employé, Poste, Adresse, Ville, Courriel, Téléphone, Date d'embauche, Date de fin d'emploi, Statut. « Ces renseignements proviennent de MngConsul et s'y modifient. »</p>
+<p><span class="chemin">Employes/Fiche.aspx?id=</span>. Le titre est le nom de l'employé ; les boutons « Éléments de paie » et « Cumulatifs de départ » mènent aux deux autres pages de l'employé. Un employé jamais configuré affiche « La paie de cet employé n'est pas encore configurée. Vérifiez les valeurs proposées, puis enregistrez. » : les valeurs proposées viennent de 60Sec (fréquence, taux horaire, salaire, NAS, coordonnées bancaires, date de naissance).</p>
+<h3>« Employé (60Sec) »</h3>
+<p>Lecture seule : Nom, Code employé, Poste, Adresse, Ville, Courriel, Téléphone, Date d'embauche, Date de fin d'emploi, Statut. « Ces renseignements proviennent de 60Sec et s'y modifient. »</p>
 <h3>« Renseignements personnels pour la paie »</h3>
 <table>
 <tr><th>Champ</th><th>Rôle</th></tr>
@@ -398,13 +400,13 @@ mark{background:#ffe89a}
 <h3>« Informations de paie »</h3>
 <table>
 <tr><th>Champ</th><th>Rôle</th></tr>
-<tr><td>« Période de paie »</td><td>« Par défaut (MngConsul, sinon la compagnie) », ou une fréquence propre : 52, 26, 24, 12 ou « Annuelle (1 période) ». Un employé n'entre dans une paie que si sa fréquence est celle du lot.</td></tr>
+<tr><td>« Période de paie »</td><td>« Par défaut (60Sec, sinon la compagnie) », ou une fréquence propre : 52, 26, 24, 12 ou « Annuelle (1 période) ». Un employé n'entre dans une paie que si sa fréquence est celle du lot.</td></tr>
 <tr><td>« Heures par semaine »</td><td>Avec le taux horaire, produit la ligne « Salaire » par défaut : heures/semaine × 52 ÷ périodes.</td></tr>
 <tr><td>« Taux horaire ($) »</td><td>Taux de base ; « Temps et demi » et « Temps double » le majorent.</td></tr>
 <tr><td>« Salaire annuel ($) »</td><td>« Utilisé si aucun taux horaire n'est inscrit. » Produit la ligne « Salaire fixe » = salaire ÷ périodes.</td></tr>
 <tr><td>« Taux de vacances (%) »</td><td>« Vide = taux par défaut de la compagnie. » Refusé au-delà de 20.</td></tr>
 </table>
-<div class="note">« Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie. » Ces valeurs par défaut ne servent que si l'employé n'a pas d'éléments de paie récurrents.</div>
+<div class="note">« Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie. » Ces valeurs par défaut ne servent que si l'employé n'a pas d'éléments de paie récurrents.</div>
 <h3>« Exemptions (cas particuliers seulement) »</h3>
 <div class="avert">« Laissez tout décoché pour un employé ordinaire : toutes les retenues et cotisations sont calculées automatiquement. Une case cochée signifie que la retenue n'est pas calculée (elle sera à 0 $). »</div>
 <ul>
@@ -436,7 +438,7 @@ mark{background:#ffe89a}
 <h3>« Paiement »</h3>
 <ul>
   <li>« Cet employé est payé par dépôt direct » : sinon, un numéro de chèque lui est attribué à la confirmation de chaque paie.</li>
-  <li>« Envoyer le talon de paie par courriel » : nécessite un courriel dans MngConsul.</li>
+  <li>« Envoyer le talon de paie par courriel » : nécessite un courriel dans 60Sec.</li>
   <li>« Numéro de transit (5 chiffres) », « Numéro d'institution (3 chiffres) », « Numéro de compte » (chiffré ; « Compte au dossier : ••••123. Laissez vide pour le conserver. »). Si le dépôt direct est coché et qu'il manque quelque chose : « Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte. »</li>
 </ul>
 <h3>« Notes » et enregistrement</h3>
@@ -596,7 +598,7 @@ mark{background:#ffe89a}
 <p>Bouton « Envoyer les talons par courriel » (confirmation « Envoyer les talons de paie par courriel aux employés qui en ont fait la demande ? »), avec la case « renvoyer aussi les talons déjà envoyés ». Résultat : « {n} talon(s) envoyé(s), {m} déjà envoyé(s). », suivi au besoin de « Problèmes : {Nom} : aucun courriel dans la fiche. / {Nom} : adresse de courriel invalide. / … ».</p>
 <ul>
   <li>Seuls les employés inclus dont la fiche a « Envoyer le talon de paie par courriel » reçoivent un courriel. La date d'envoi est mémorisée : un talon déjà envoyé n'est pas renvoyé, sauf si la case est cochée.</li>
-  <li>Expéditeur : une adresse @60sec.ca (par défaut paie@60sec.ca), avec le nom de votre compagnie ; les réponses vont au courriel de la compagnie défini dans MngConsul.</li>
+  <li>Expéditeur : une adresse @60sec.ca (par défaut paie@60sec.ca), avec le nom de votre compagnie ; les réponses vont au courriel de la compagnie défini dans 60Sec.</li>
   <li>Sujet : « Talon de paie du AAAA-MM-JJ ». Corps : « Bonjour {Prénom Nom}, », « Voici votre talon de paie. », le talon complet, puis un avis de confidentialité. Pièce jointe : le PDF du talon. Le tout dans la langue de l'employé.</li>
   <li>Les talons ne s'envoient que d'une paie confirmée : « Les talons s'envoient à partir d'une paie confirmée. »</li>
 </ul>
@@ -881,7 +883,7 @@ mark{background:#ffe89a}
 
 <h2 id="cas-nouvel-employe">Cas pratique › Embaucher quelqu'un</h2>
 <ol class="etapes">
-  <li><span class="chemin">Employés › Nouvel employé</span> : identité et coordonnées. Il apparaît aussitôt dans MngConsul.</li>
+  <li><span class="chemin">Employés › Nouvel employé</span> : identité et coordonnées. Il apparaît aussitôt dans 60Sec.</li>
   <li>Sur sa fiche : NAS (demandez-le, il est obligatoire pour les feuillets), date de naissance, langue, fréquence si elle diffère de la compagnie, taux horaire et heures par semaine ou salaire annuel, TD1 et TP-1015.3 remis par l'employé (laissez vide pour les montants de base), dépôt direct et courriel.</li>
   <li>Éléments de paie : ajoutez son salaire si vous voulez un gabarit, et ses déductions récurrentes.</li>
   <li>Il entre dans la prochaine paie dont la fin de période est postérieure à sa date d'embauche.</li>
@@ -890,7 +892,7 @@ mark{background:#ffe89a}
 <h2 id="cas-depart">Cas pratique › Départ d'un employé</h2>
 <ol class="etapes">
   <li>Faites sa dernière paie normalement, avec une ligne « Paie de vacances » pour lui verser son solde de vacances (visible sur son talon, « Solde de vacances »).</li>
-  <li>Dans MngConsul, inscrivez sa date de fin d'emploi ou rendez-le inactif. Il n'entre plus dans les paies dont le début de période est postérieur à sa date de fin.</li>
+  <li>Dans 60Sec, inscrivez sa date de fin d'emploi ou rendez-le inactif. Il n'entre plus dans les paies dont le début de période est postérieur à sa date de fin.</li>
   <li>Le relevé d'emploi (RE) se produit dans RE Web de Service Canada ; 60secPaie ne le produit pas. Ses feuillets T4 et RL-1 sortent en fin d'année comme pour les autres.</li>
 </ol>
 
@@ -962,7 +964,7 @@ mark{background:#ffe89a}
 <tr><td>« Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues. »</td><td>Détail</td><td>Retenues › Historique › ouvrir le paiement › « Annuler le paiement ».</td></tr>
 <tr><td>« Les paramètres de dépôt direct de la compagnie sont incomplets (Configuration → Dépôt direct). »</td><td>Détail</td><td>Complétez la page Dépôt direct.</td></tr>
 <tr><td>« Coordonnées bancaires incomplètes pour {Prénom Nom}. »</td><td>Détail</td><td>Fiche de l'employé, bloc Paiement.</td></tr>
-<tr><td>« {Nom} : aucun courriel dans la fiche. »</td><td>Talons par courriel</td><td>Ajoutez son courriel dans MngConsul.</td></tr>
+<tr><td>« {Nom} : aucun courriel dans la fiche. »</td><td>Talons par courriel</td><td>Ajoutez son courriel dans 60Sec.</td></tr>
 <tr><td>« Le numéro d'assurance sociale est invalide. »</td><td>Fiche</td><td>Vérifiez les 9 chiffres ; le NAS a une clé de contrôle.</td></tr>
 <tr><td>« Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte. »</td><td>Fiche</td><td>Complétez les trois champs ou décochez le dépôt direct.</td></tr>
 <tr><td>« Le taux de vacances semble trop élevé. »</td><td>Fiche, Configuration</td><td>Le taux est en pourcentage (4 ou 6), pas en dollars.</td></tr>
@@ -980,18 +982,18 @@ mark{background:#ffe89a}
 <!-- ============================================================ -->
 <h2 id="faq">Référence › Questions fréquentes</h2>
 <div class="faq">
-<details><summary>Un employé n'apparaît pas dans la paie. Pourquoi ?</summary><p>Quatre conditions : il est actif dans MngConsul ; sa paie est « Configurée » (fiche enregistrée au moins une fois) ; sa fréquence (la sienne, sinon celle de la compagnie) est celle du lot ; sa date d'embauche est au plus tard la fin de période et sa date de fin d'emploi est vide ou postérieure au début de période. Vérifiez aussi qu'il a des lignes : sans gabarit ni taux ni salaire, il apparaît avec « Aucune ligne ».</p></details>
+<details><summary>Un employé n'apparaît pas dans la paie. Pourquoi ?</summary><p>Quatre conditions : il est actif dans 60Sec ; sa paie est « Configurée » (fiche enregistrée au moins une fois) ; sa fréquence (la sienne, sinon celle de la compagnie) est celle du lot ; sa date d'embauche est au plus tard la fin de période et sa date de fin d'emploi est vide ou postérieure au début de période. Vérifiez aussi qu'il a des lignes : sans gabarit ni taux ni salaire, il apparaît avec « Aucune ligne ».</p></details>
 <details><summary>Le RRQ d'un employé est à 0.</summary><p>Il a moins de 18 ans à la date de paie, ou « Ne pas cotiser au RRQ » est coché, ou son maximum annuel (4 479,30 $ plus 416 $ de RRQ2) est atteint, cumulatifs de départ compris, ou sa paie est inférieure à l'exemption par période (3 500 $ ÷ périodes).</p></details>
 <details><summary>Pourquoi l'impôt fédéral est-il plus bas que dans une autre province ?</summary><p>Les employés du Québec bénéficient de l'abattement du Québec de 16,5 % sur l'impôt fédéral, et leur taux d'AE est réduit (1,30 %) parce qu'ils cotisent au RQAP.</p></details>
 <details><summary>Puis-je avoir deux brouillons en même temps ?</summary><p>Non. Un seul brouillon par compagnie. Terminez-le ou supprimez-le avant d'en commencer un autre. Deux fréquences (par exemple aux deux semaines et mensuelle) se paient donc en deux lots successifs.</p></details>
-<details><summary>Comment changer le nom ou l'adresse d'un employé ?</summary><p>Dans MngConsul. 60secPaie n'y écrit que pour créer un employé ; tout le reste de l'identité se modifie dans MngConsul et se répercute ici aussitôt.</p></details>
+<details><summary>Comment changer le nom ou l'adresse d'un employé ?</summary><p>Dans 60Sec. 60secPaie n'y écrit que pour créer un employé ; tout le reste de l'identité se modifie dans 60Sec et se répercute ici aussitôt.</p></details>
 <details><summary>Le NAS s'affiche « ••••••123 ». Où est le reste ?</summary><p>Chiffré. Il n'est jamais renvoyé au navigateur. Sur le feuillet d'un employé, « Afficher le NAS complet » le montre, et cette consultation est journalisée.</p></details>
 <details><summary>Le montant proposé pour les retenues ne correspond pas à mon relevé de l'ARC.</summary><p>60secPaie ne connaît que les paies qu'il a confirmées. Les paies faites ailleurs ou avant la conversion ne sont pas dans ses remises. La fréquence de remise configurée doit aussi correspondre à celle que l'ARC vous a attribuée.</p></details>
 <details><summary>Le FSS du Sommaire 1 diffère de ce que Revenu Québec calcule.</summary><p>Le taux appliqué pendant l'année vient de la masse salariale estimée dans la configuration. Le taux réel se calcule sur la masse de l'année ; l'écart se règle dans le Sommaire 1, comme l'indique la note du rapport.</p></details>
 <details><summary>Je veux imprimer tous les talons d'une paie.</summary><p>Ouvrez le détail de la paie et le lien « Talon » de chaque employé ; chaque talon a « Imprimer le talon » et « Télécharger en PDF ». Pour un envoi groupé, utilisez « Envoyer les talons par courriel ».</p></details>
 <details><summary>Que veut dire « Vacances accumulées » sur le talon ?</summary><p>La provision de vacances gagnée dans cette paie (taux × gains admissibles). Elle n'est pas versée ; elle s'ajoute au « Solde de vacances », qui se vide par des lignes « Paie de vacances ».</p></details>
 <details><summary>Une ligne d'élément masquée compte-t-elle ?</summary><p>Oui. « Ne pas afficher sur le talon de paie » ne change que l'affichage : la ligne est calculée, imposée et comptabilisée normalement.</p></details>
-<details><summary>Puis-je payer un fournisseur ou un travailleur autonome ?</summary><p>Non. 60secPaie ne traite que des employés au sens des lois fiscales, avec retenues à la source. Un travailleur autonome se paie par une facture, dans MngConsul.</p></details>
+<details><summary>Puis-je payer un fournisseur ou un travailleur autonome ?</summary><p>Non. 60secPaie ne traite que des employés au sens des lois fiscales, avec retenues à la source. Un travailleur autonome se paie par une facture, dans 60Sec.</p></details>
 </div>
 
 <!-- ============================================================ -->

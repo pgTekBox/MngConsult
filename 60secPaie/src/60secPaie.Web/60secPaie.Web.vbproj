@@ -77,6 +77,8 @@
     <Content Include="Langues\traductions.txt" />
     <Content Include="Accueil.aspx" />
     <Content Include="Aide.html" />
+    <Content Include="Aide-en.html" />
+    <Content Include="Aide-es.html" />
     <Content Include="Login.aspx" />
     <Content Include="Default.aspx" />
     <Content Include="Config\Compagnie.aspx" />

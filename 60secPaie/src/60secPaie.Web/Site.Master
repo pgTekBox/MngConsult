@@ -18,7 +18,7 @@
                     <asp:DropDownList ID="ddlCompagnie" runat="server" AutoPostBack="true" CausesValidation="false" CssClass="session-select" Visible="false" ToolTip="Changer de compagnie" />
                     <span class="langues"><asp:Literal ID="litLangues" runat="server" /></span>
                     <asp:Label ID="lblUtilisateur" runat="server" />
-                    <a runat="server" href="~/Aide.html" target="_blank" rel="noopener" title="Guide complet de 60secPaie">Aide</a>
+                    <a runat="server" id="lnkAideHaut" href="~/Aide.html" target="_blank" rel="noopener" title="Guide complet de 60secPaie">Aide</a>
                     <asp:LinkButton ID="lnkDeconnexion" runat="server" CausesValidation="false">Me déconnecter</asp:LinkButton>
                 </div>
             </div>
@@ -42,7 +42,7 @@
 
         <footer class="pied">
             60secPaie &middot; Taux 2026 : T4127 (ARC) et TP-1015.F (Revenu Québec). Vérifiez toujours vos paies avant de les confirmer.
-            &middot; <a runat="server" href="~/Aide.html" target="_blank" rel="noopener">Aide</a>
+            &middot; <a runat="server" id="lnkAidePied" href="~/Aide.html" target="_blank" rel="noopener">Aide</a>
         </footer>
     </form>
 </body>

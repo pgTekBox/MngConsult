@@ -15,6 +15,8 @@ Public Class SiteMaster
             lblUtilisateur.ToolTip = compte.Txt("Courriel")
         End If
         litLangues.Text = I18n.SelecteurLangues(Request)
+        lnkAideHaut.HRef = I18n.CheminAide()
+        lnkAidePied.HRef = I18n.CheminAide()
 
         If Not IsPostBack Then RemplirCompagnies()
 

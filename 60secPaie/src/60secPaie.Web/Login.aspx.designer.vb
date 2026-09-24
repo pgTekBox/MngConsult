@@ -3,6 +3,7 @@ Option Explicit On
 
 Partial Public Class PageConnexion
     Protected WithEvents litLangues As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lnkAide As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents pnlErreur As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litErreur As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents pnlConnexion As Global.System.Web.UI.WebControls.Panel

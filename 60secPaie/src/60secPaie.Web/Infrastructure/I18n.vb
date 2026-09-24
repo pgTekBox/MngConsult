@@ -32,6 +32,15 @@ Public NotInheritable Class I18n
         Return code = "fr" OrElse code = "en" OrElse code = "es"
     End Function
 
+    ''' <summary>Le guide de l'utilisateur dans la langue courante : Aide.html (fr), Aide-en.html, Aide-es.html.</summary>
+    Public Shared Function CheminAide() As String
+        Select Case Langue
+            Case "en" : Return "~/Aide-en.html"
+            Case "es" : Return "~/Aide-es.html"
+            Case Else : Return "~/Aide.html"
+        End Select
+    End Function
+
     Public Shared Property Langue As String
         Get
             Dim ctx = HttpContext.Current

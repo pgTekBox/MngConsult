@@ -1,11 +1,12 @@
 Imports System.Web.Security
 
-''' <summary>Connexion avec les comptes de MngConsul (dbo.T015User).</summary>
+''' <summary>Connexion avec les comptes de 60Sec (dbo.T015User).</summary>
 Public Class PageConnexion
     Inherits System.Web.UI.Page
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         litLangues.Text = I18n.SelecteurLangues(Request)
+        lnkAide.HRef = I18n.CheminAide()
     End Sub
 
     Protected Overrides Sub Render(writer As HtmlTextWriter)
@@ -24,7 +25,7 @@ Public Class PageConnexion
             Case ServiceConnexion.Issue.Verrouillee
                 Afficher("Trop de tentatives. Réessayez dans quelques minutes.")
             Case ServiceConnexion.Issue.AucuneCompagnie
-                Afficher("Votre compte n'est associé à aucune compagnie dans MngConsul.")
+                Afficher("Votre compte n'est associé à aucune compagnie dans 60Sec.")
             Case ServiceConnexion.Issue.Refusee
                 Afficher("Courriel ou mot de passe invalide.")
             Case Else

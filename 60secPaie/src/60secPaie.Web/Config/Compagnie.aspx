@@ -6,7 +6,7 @@
     <fieldset>
         <legend>Compagnie</legend>
         <asp:Literal ID="litIdentite" runat="server" />
-        <p class="note">Le nom et les coordonnées de la compagnie se modifient dans MngConsul (paramètres de l'entreprise).</p>
+        <p class="note">Le nom et les coordonnées de la compagnie se modifient dans 60Sec (paramètres de l'entreprise).</p>
     </fieldset>
 
     <fieldset>

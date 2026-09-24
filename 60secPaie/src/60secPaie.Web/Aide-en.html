@@ -1,0 +1,1057 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>60secPaie Help</title>
+<meta name="description" content="Complete 60secPaie guide: settings, employees, running payroll, remittances, reports, slips, direct deposit, journal entries, formulas and messages.">
+<style>
+:root{--encre:#1d2733;--encre-douce:#5b6877;--fond:#f4f6f8;--carte:#fff;--bord:#d9dfe6;--accent:#0b6e99;--accent-fonce:#085373;--succes:#1b7a43;--succes-fond:#e6f4ec;--erreur:#a4262c;--erreur-fond:#fbeaea;--avert-fond:#fff6da;--avert:#8a6100}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:70px}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--encre);background:var(--fond);line-height:1.55;font-size:15px}
+header.entete{background:var(--accent-fonce);color:#fff;position:sticky;top:0;z-index:10;box-shadow:0 1px 4px rgba(0,0,0,.25)}
+.entete-haut{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:10px 24px;flex-wrap:wrap}
+.logo{color:#fff;text-decoration:none;font-weight:700;font-size:20px;letter-spacing:.2px}
+.logo span{opacity:.85;font-weight:500}
+.entete-outils{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.entete-outils input{padding:7px 10px;border:1px solid #6ea4bf;border-radius:6px;min-width:240px;font-size:14px}
+.entete-outils .langues{color:#fff;font-size:13px;margin-right:4px}.entete-outils .langues a{background:none;border:0;padding:0 2px;text-decoration:underline}
+.entete-outils a,.entete-outils button{color:#fff;background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.35);padding:7px 12px;border-radius:6px;text-decoration:none;font-size:13px;cursor:pointer}
+.page{display:grid;grid-template-columns:290px 1fr;gap:0;max-width:1400px;margin:0 auto}
+nav.sommaire{position:sticky;top:58px;align-self:start;max-height:calc(100vh - 58px);overflow:auto;padding:18px 14px 40px 22px;border-right:1px solid var(--bord);background:var(--carte);font-size:13.5px}
+nav.sommaire h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--encre-douce);margin:14px 0 6px}
+nav.sommaire a{display:block;color:var(--encre);text-decoration:none;padding:3px 6px;border-radius:4px}
+nav.sommaire a:hover{background:var(--fond);color:var(--accent-fonce)}
+nav.sommaire a.n2{padding-left:18px;color:var(--encre-douce)}
+nav.sommaire a.cache{display:none}
+main{padding:24px 40px 80px;min-width:0}
+h1{font-size:28px;margin:0 0 6px}
+h2{font-size:22px;margin:44px 0 12px;padding-top:14px;border-top:2px solid var(--bord);color:var(--accent-fonce)}
+h3{font-size:17px;margin:26px 0 8px;color:var(--encre)}
+h4{font-size:15px;margin:18px 0 6px}
+p{margin:8px 0}
+.lede{font-size:16px;color:var(--encre-douce);max-width:860px}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:8px;padding:14px 18px;margin:12px 0}
+.note{background:var(--fond);border-left:4px solid var(--accent);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.avert{background:var(--avert-fond);border-left:4px solid var(--avert);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.erreur{background:var(--erreur-fond);border-left:4px solid var(--erreur);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.succes{background:var(--succes-fond);border-left:4px solid var(--succes);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+table{border-collapse:collapse;width:100%;margin:10px 0 16px;background:var(--carte);font-size:14px}
+th,td{border:1px solid var(--bord);padding:7px 10px;text-align:left;vertical-align:top}
+th{background:#eef3f7;font-weight:600}
+td.num,th.num{text-align:right;white-space:nowrap}
+code,kbd{font-family:Consolas,"Courier New",monospace;font-size:13px;background:#eef3f7;padding:1px 5px;border-radius:4px}
+pre{background:#1d2733;color:#e8eef4;padding:12px 14px;border-radius:6px;overflow:auto;font-size:13px}
+.chemin{display:inline-block;background:#eef3f7;border:1px solid var(--bord);border-radius:4px;padding:1px 8px;font-size:13px;color:var(--accent-fonce);font-weight:600}
+.etiquette{display:inline-block;padding:1px 8px;border-radius:12px;font-size:12px;font-weight:600}
+.etiquette.B{background:var(--avert-fond);color:var(--avert)}
+.etiquette.C{background:var(--succes-fond);color:var(--succes)}
+.etiquette.A{background:var(--erreur-fond);color:var(--erreur)}
+.deux{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+dl.def dt{font-weight:600;margin-top:10px}
+dl.def dd{margin:2px 0 0 18px;color:var(--encre)}
+ol.etapes li{margin:6px 0}
+.faq details{background:var(--carte);border:1px solid var(--bord);border-radius:6px;padding:8px 14px;margin:6px 0}
+.faq summary{cursor:pointer;font-weight:600}
+.retour{font-size:12px;margin-top:8px}
+.retour a{color:var(--encre-douce)}
+mark{background:#ffe89a}
+@media (max-width:980px){.page{grid-template-columns:1fr}nav.sommaire{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--bord)}main{padding:18px 16px 60px}.deux{grid-template-columns:1fr}}
+@media print{header.entete,nav.sommaire,.retour{display:none}main{padding:0}h2{break-before:page}body{background:#fff;font-size:12px}}
+</style>
+</head>
+<body>
+<header class="entete">
+  <div class="entete-haut">
+    <a class="logo" href="#haut">60sec<span>Paie</span> · Help</a>
+    <div class="entete-outils">
+      <input type="search" id="recherche" placeholder="Filter the contents… (e.g. QPP, cheque, T4)" aria-label="Filter the contents">
+      <span class="langues" aria-label="Guide language"><a href="Aide.html">FR</a> · <strong>EN</strong> · <a href="Aide-es.html">ES</a></span>
+      <button type="button" onclick="window.print()">Print</button>
+      <a href="Default.aspx">Back to 60secPaie</a>
+    </div>
+  </div>
+</header>
+
+<div class="page">
+<nav class="sommaire" id="sommaire">
+  <h2>Getting started</h2>
+  <a href="#intro">Overview</a>
+  <a href="#cycle" class="n2">The payroll cycle</a>
+  <a href="#limites" class="n2">What 60secPaie does not do</a>
+  <a href="#demarrer">Signing in and session</a>
+  <a href="#comptes" class="n2">Accounts and passwords</a>
+  <a href="#compagnies" class="n2">Companies and switching company</a>
+  <a href="#langues" class="n2">Languages (FR, EN, ES)</a>
+  <a href="#securite" class="n2">Security and sensitive data</a>
+  <a href="#conventions">Screen conventions</a>
+  <a href="#tableau">Dashboard</a>
+  <h2>Settings</h2>
+  <a href="#config">Payroll settings</a>
+  <a href="#config-elements">Pay items</a>
+  <a href="#config-plan">Chart of accounts</a>
+  <a href="#config-depot">Direct deposit</a>
+  <h2>Employees</h2>
+  <a href="#emp-liste">Employee list</a>
+  <a href="#emp-nouveau">New employee</a>
+  <a href="#emp-fiche">Record: payroll settings</a>
+  <a href="#emp-elements">Recurring pay items</a>
+  <a href="#emp-cumulatifs">Opening balances</a>
+  <h2>Running payroll</h2>
+  <a href="#paie">Run payroll (4 steps)</a>
+  <a href="#paie-etape1" class="n2">Step 1: period</a>
+  <a href="#paie-etape2" class="n2">Step 2: employees and lines</a>
+  <a href="#paie-etape3" class="n2">Step 3: review</a>
+  <a href="#paie-etape4" class="n2">Step 4: confirmation</a>
+  <a href="#historique">Payroll history</a>
+  <a href="#detail">Pay run details</a>
+  <a href="#detail-depot" class="n2">Direct deposit file</a>
+  <a href="#detail-courriel" class="n2">Pay stubs by email</a>
+  <a href="#detail-annuler" class="n2">Cancelling a pay run</a>
+  <a href="#talon">Pay stub</a>
+  <h2>Remittances</h2>
+  <a href="#remises">Remittance payment</a>
+  <a href="#remises-calendrier" class="n2">Frequencies and due dates</a>
+  <a href="#remises-historique">Payment history and details</a>
+  <h2>Reports</h2>
+  <a href="#feuillets">T4 and RL-1 slips</a>
+  <a href="#feuillet-employe" class="n2">An employee's slips</a>
+  <a href="#cnesst">CNESST statement</a>
+  <a href="#ecritures">Journal entries</a>
+  <h2>Understanding the calculations</h2>
+  <a href="#categories">Pay categories</a>
+  <a href="#parametres">2026 parameters</a>
+  <a href="#formules">Formulas, deduction by deduction</a>
+  <a href="#arrondis">Rounding</a>
+  <a href="#exemple">Worked example</a>
+  <h2>Practical cases</h2>
+  <a href="#cas-demarrage">First start-up</a>
+  <a href="#cas-conversion">Mid-year conversion</a>
+  <a href="#cas-nouvel-employe">Hiring someone</a>
+  <a href="#cas-depart">Employee departure</a>
+  <a href="#cas-assurance">Group insurance</a>
+  <a href="#cas-bonus">Bonus and retroactive pay</a>
+  <a href="#cas-vacances">Vacation</a>
+  <a href="#cas-annuelle">Annual payroll</a>
+  <a href="#cas-corriger">Correcting a pay run</a>
+  <a href="#cas-depot">First direct deposit</a>
+  <a href="#cas-fin-annee">Year end</a>
+  <h2>Reference</h2>
+  <a href="#messages">Messages and their solutions</a>
+  <a href="#faq">Frequently asked questions</a>
+  <a href="#glossaire">Glossary</a>
+</nav>
+
+<main id="haut">
+<h1>60secPaie Help</h1>
+<p class="lede">This guide describes every screen, every field, every rule and every message of 60secPaie, 60Sec's payroll service for Quebec. It follows the order of the menu. The words in quotation marks " " are those you see on screen. Use the filter at the top to find a topic, or <kbd>Ctrl</kbd>+<kbd>F</kbd> to search for a word across the whole page.</p>
+<div class="note">Guide version: September 2026. Rates in effect in the software: year 2026, based on the CRA's T4127 guide and Revenu Québec's TP-1015.F guide.</div>
+
+<!-- ============================================================ -->
+<h2 id="intro">Overview</h2>
+<p>60secPaie calculates the pay of employees who work in Quebec: federal tax, Québec tax, QPP, Employment Insurance, QPIP, and the employer contributions (QPP, EI, QPIP, HSF, CNESST, CNT). From confirmed pay runs, it produces the pay stubs, the direct deposit file, the amount of deductions to remit to both governments, the boxes of the T4 and RL-1 slips, the CNESST statement of wages and the journal entries.</p>
+<p>It shares its user accounts and its companies with 60Sec. Employees are also those of 60Sec: they can be created on either side, but their identity (name, address, position) is edited in 60Sec. 60secPaie adds everything that concerns payroll.</p>
+
+<h3 id="cycle">The payroll cycle</h3>
+<ol class="etapes">
+  <li><strong>Set up the company</strong> once: pay frequency, RP and RS numbers, HSF and CNESST rates (<span class="chemin">Settings › Payroll settings</span>).</li>
+  <li><strong>Set up each employee</strong> once: SIN, frequency, rate or salary, TD1 and TP-1015.3, direct deposit (<span class="chemin">Employees › Payroll settings</span>), then their recurring lines (<span class="chemin">Pay items</span>).</li>
+  <li><strong>Run payroll</strong> each period, in 4 steps: period, entry, review, confirmation.</li>
+  <li><strong>Pay the employees</strong>: numbered cheques or direct deposit file; send the pay stubs by email.</li>
+  <li><strong>Remit the deductions</strong> by the due dates, in <span class="chemin">Remittances</span>.</li>
+  <li><strong>At year end</strong>: T4, RL-1 slips, summaries, CNESST statement, in <span class="chemin">Reports</span>.</li>
+</ol>
+
+<h3 id="limites">What 60secPaie does not do</h3>
+<ul>
+  <li>It <strong>transmits no payment</strong>, neither to employees nor to governments. It prepares the direct deposit file that you hand over to your bank, and it calculates the remittances that you pay yourself.</li>
+  <li>It <strong>does not file the slips</strong>. It calculates every box; you enter them in Web Forms (CRA) and My Account for businesses (Revenu Québec).</li>
+  <li>It does not handle employees outside Quebec: the province of employment is always QC.</li>
+  <li>It only knows the <strong>2026</strong> rates. A pay run dated in another year is refused until its rates are added to the software.</li>
+  <li>It does not replace your judgement: "Always review your pay runs before confirming them." The calculated amounts remain the employer's responsibility.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="demarrer">Signing in and session</h2>
+<p>The <span class="chemin">Login.aspx</span> page asks for your "Email" and your "Password". The Enter key triggers sign-in. After signing in, you land on the page you requested, otherwise on the dashboard.</p>
+<table>
+<tr><th>Message</th><th>Cause</th><th>What to do</th></tr>
+<tr><td>"Invalid email or password."</td><td>The pair matches no active 60Sec account, or a field is empty.</td><td>Check the case of the password. The email is compared in lowercase.</td></tr>
+<tr><td>"Too many attempts. Try again in a few minutes."</td><td>5 failures: the account is locked for 15 minutes. A new failure after expiry locks it again immediately.</td><td>Wait 15 minutes, then enter the right password on the first try. A successful sign-in resets the counter.</td></tr>
+<tr><td>"Your account is not linked to any company in 60Sec."</td><td>The account exists but has no company.</td><td>Have your account attached to a company in 60Sec.</td></tr>
+</table>
+<p>The session lasts <strong>60 minutes</strong> and is extended with each action. There is no "Remember me" option. "Sign out", at the top right, closes the session.</p>
+<p>A visitor who is not signed in and arrives at the site root sees the presentation page (<span class="chemin">Accueil.aspx</span>), with "Sign in" and "What is 60secPaie?".</p>
+
+<h3 id="comptes">Accounts and passwords</h3>
+<p>Accounts are those of <strong>60Sec</strong>. 60secPaie does not create accounts and does not change passwords: "Forgot your password? Reset it from the 60Sec sign-in page." An account deactivated or deleted in 60Sec loses access immediately, even mid-session.</p>
+<p>All users who have access to a company have the same rights in 60secPaie. The 60Sec administrator role is read, but no page requires it for now.</p>
+
+<h3 id="compagnies">Companies and switching company</h3>
+<p>The list of accessible companies follows the 60Sec rule: an ordinary user sees their company, an accountant sees all those for which they are the accountant. With a single company, its name appears at the top right. With several, a drop-down list ("Switch company") offers them; after a switch, you return to the dashboard.</p>
+<p>The current company is the same as in 60Sec (same session key). Its name and address are copied from 60Sec once per session, for the pay stubs, reports and files.</p>
+
+<h3 id="langues">Languages (FR, EN, ES)</h3>
+<p>The "FR | EN | ES" links in the header, on the sign-in page and on the home page change the language of the whole screen: texts, buttons, tooltips, confirmations, CSV export headers. The choice is remembered in a cookie for one year and survives sign-out. You can also add <code>?lang=en</code> or <code>?lang=es</code> to an address.</p>
+<ul>
+  <li>Dates are always in <strong>YYYY-MM-DD</strong> format, in all three languages.</li>
+  <li>Amounts are written "1 234,56 $" in French, "$1,234.56" in English and Spanish.</li>
+  <li>The pay stub sent by email and its PDF are in the <strong>employee's language</strong> (chosen on their record). The PDF downloaded from the screen is in the user's language.</li>
+  <li>This guide is available in French, English and Spanish.</li>
+</ul>
+
+<h3 id="securite">Security and sensitive data</h3>
+<ul>
+  <li>The <strong>SIN</strong> and the <strong>bank account numbers</strong> (employees and company) are encrypted. They are never sent back to the browser: the screens show only their last 3 characters ("••••••123"). A field left blank keeps the value on file.</li>
+  <li>The full SIN is displayed only on request, on an employee's slip, and this viewing is recorded in the activity log.</li>
+  <li>CSV exports never include the SIN.</li>
+  <li>Forms are protected against request forgery, and pages cannot be displayed in a frame on another site.</li>
+  <li>The <strong>activity log</strong> keeps, per company, the important events: employee created, payroll set up, pay run confirmed or cancelled, pay stubs sent, direct deposit file generated, remittance payment recorded or cancelled, full SIN displayed. The last 8 entries are on the dashboard.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="conventions">Screen conventions</h2>
+<ul>
+  <li>A red asterisk marks a <strong>required</strong> field.</li>
+  <li>Numbers accept a comma or a period; spaces, "$" and "%" are ignored. "1,234.56" and "1.234,56" are both understood.</li>
+  <li>A green banner confirms a successful action, a red banner reports an error. After a redirect, the message is displayed once on the next page.</li>
+  <li>CSV exports use the semicolon and UTF-8 encoding with BOM: they open directly in Excel. Amounts there use the "0,00" format.</li>
+  <li>The "Print" button uses the browser's printing; the header, the menu and the buttons are not printed.</li>
+</ul>
+<h4>Pay run statuses</h4>
+<table>
+<tr><th>Badge</th><th>Meaning</th></tr>
+<tr><td><span class="etiquette B">Draft</span></td><td>Pay run being prepared. It counts nowhere. Only one at a time per company.</td></tr>
+<tr><td><span class="etiquette C">Confirmed</span></td><td>Recorded pay run: it counts in the year-to-date amounts, remittances, slips and journal entries.</td></tr>
+<tr><td><span class="etiquette A">Cancelled</span></td><td>Pay run removed from the year-to-date amounts. The row is greyed out in lists. Cheque numbers already assigned are not reused.</td></tr>
+</table>
+<h4>Pay frequencies</h4>
+<table>
+<tr><th>Label</th><th>Periods per year</th><th>Calculated period start</th></tr>
+<tr><td>Weekly</td><td class="num">52</td><td>period end − 6 days</td></tr>
+<tr><td>Biweekly</td><td class="num">26</td><td>end − 13 days</td></tr>
+<tr><td>Semi-monthly</td><td class="num">24</td><td>the 1st or the 16th of the month, depending on whether the end falls on or before the 15th, or after</td></tr>
+<tr><td>Monthly</td><td class="num">12</td><td>the 1st of the month</td></tr>
+<tr><td>Annual</td><td class="num">1</td><td>January 1 of the year</td></tr>
+</table>
+<h4>Generic entry messages</h4>
+<ul>
+  <li>“"{field}": invalid number.” and “"{field}" cannot be negative.”</li>
+  <li>“"{field}": invalid whole number.”</li>
+  <li>“"{field}": invalid date (format YYYY-MM-DD).”</li>
+  <li>“"{field}" is required.”</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="tableau">Dashboard</h2>
+<p><span class="chemin">Default.aspx</span>. The subtitle shows the number of active employees and the date of the last confirmed pay run ("no confirmed pay run" otherwise).</p>
+<ul>
+  <li><strong>Yellow banner</strong> "A pay run is in progress (period ending …)." with "Continue this pay run", if a draft exists.</li>
+  <li><strong>"Run your payroll"</strong>: "Run payroll" button.</li>
+  <li><strong>"Remittance payment"</strong>: one line per government. "Federal: nothing to pay.", or "Federal: $X to pay, due …", or in red "… to pay, overdue since …" when the due date has passed. "Pay" button.</li>
+  <li><strong>"Payroll history"</strong>, <strong>"Employees"</strong>, <strong>"Settings"</strong>: shortcuts.</li>
+  <li><strong>"Recent activity"</strong>: the last 8 log entries, with the date, the description (clickable when it leads to a page) and the user's email.</li>
+</ul>
+<div class="note">As long as the company's payroll is not set up, every page redirects to <span class="chemin">Settings › Payroll settings</span> with the message "Payroll is not set up yet for {company}. Start with its payroll settings."</div>
+
+<!-- ============================================================ -->
+<h2 id="config">Settings › Payroll settings</h2>
+<p><span class="chemin">Config/Compagnie.aspx</span>. The only page accessible before the company's payroll is set up. The Settings submenu offers: "Payroll settings", "Pay items", "Chart of accounts", "Direct deposit".</p>
+<h3>"Company" (read-only)</h3>
+<p>Name, address, city, phone and "Business number (BN)" come from 60Sec: "The company name and contact details are edited in 60Sec (business settings)."</p>
+<h3>"Payroll information"</h3>
+<table>
+<tr><th>Field</th><th>Role</th><th>Default value, validation</th></tr>
+<tr><td>"Default pay period" *</td><td>Frequency suggested in the wizard and applied to employees who have none of their own.</td><td>Biweekly (26). Choices: 52, 26, 24, 12, 1.</td></tr>
+<tr><td>"Default vacation rate (%)" *</td><td>Vacation pay rate for employees without a rate of their own.</td><td>4. Refused above 20: "The vacation rate seems too high."</td></tr>
+<tr><td>"Next cheque number"</td><td>First number assigned to pay runs by cheque and to remittances by cheque.</td><td>1. Blank = 1. Advances automatically.</td></tr>
+<tr><td>"Federal remittance frequency"</td><td>Determines the due dates of remittances to the CRA.</td><td>"Monthly (due on the 15th of the following month)" or "Quarterly (due on the 15th following the quarter)".</td></tr>
+<tr><td>"Revenu Québec remittance frequency"</td><td>Same for Revenu Québec. "The frequency is the one assigned to you by the CRA and Revenu Québec."</td><td>Monthly.</td></tr>
+<tr><td>"Federal payroll account number (RP)"</td><td>Source deductions account, printed on the slips and on the remittance details.</td><td>Format 123456789RP0001, converted to uppercase.</td></tr>
+<tr><td>"Revenu Québec identification number (RS)"</td><td>Same for Revenu Québec.</td><td>Format 1234567890RS0001.</td></tr>
+</table>
+<h3>"Employer contributions"</h3>
+<table>
+<tr><th>Field</th><th>Role</th><th>Notes</th></tr>
+<tr><td>"Estimated total payroll ($)"</td><td>Used to determine the HSF contribution rate.</td><td>The actual rate is based on the year's payroll; the difference is settled in the RL-1 Summary.</td></tr>
+<tr><td>"Business sector (HSF)"</td><td>"General", "Primary and manufacturing" or "Public sector".</td><td>The help shows "HSF rate applied: x.xx%". See <a href="#parametres">the 2026 parameters</a>.</td></tr>
+<tr><td>"Employer EI premium factor" *</td><td>Multiplier of the employee's premium.</td><td>1.4, "unless you have a reduced rate". Must be between 1 and 1.4.</td></tr>
+<tr><td>"CNESST rate ($ per $100 of insurable wages)"</td><td>Periodic payment rate.</td><td>"Shown on your classification decision."</td></tr>
+<tr><td>"Subject to the labour standards contribution (CNT)"</td><td>Adds the CNT (0.06%) to the employer's shares.</td><td>Checked by default.</td></tr>
+</table>
+<h3>"Save"</h3>
+<p>On the <strong>first save</strong>, 60secPaie creates the company's payroll settings, creates six basic pay items ("Wages", "Salary", "Time and a half", "Statutory holidays", "Vacation pay", "Bonus"), records the event in the log and sends you to Employees: "Payroll settings saved. Now set up payroll for your employees." Afterwards: "Payroll settings saved."</p>
+
+<!-- ============================================================ -->
+<h2 id="config-elements">Settings › Pay items</h2>
+<p><span class="chemin">Config/ElementsPaie.aspx</span>. A pay item is a reusable line: earnings (wages, time and a half, commission…), a taxable benefit (vehicle, employer-paid health insurance…) or a deduction (RRSP, union, group insurance…). Its <strong>category</strong> decides everything: deductions, employer contributions, slip boxes. "Nothing to configure: the category determines the deductions, the employer contributions and the slip boxes."</p>
+<h3>"Pay items" list</h3>
+<p>Columns "Name" (link to edit), "Category", "Status" (Active or Inactive; inactive items are greyed out and listed last). "New item" button.</p>
+<h3>"New pay item" / "Edit pay item" form</h3>
+<table>
+<tr><th>Field</th><th>Role</th></tr>
+<tr><td>"Description" *</td><td>The label that appears on the pay stub, in the wizard and in the journal entries (100 characters).</td></tr>
+<tr><td>"Pay category" *</td><td>One of the system categories, in the format "Earnings - …", "Benefit - …", "Deduction - …". See <a href="#categories">the table of categories</a>. Changing the category updates the treatment matrix on the right.</td></tr>
+<tr><td>"General ledger account"</td><td>Expense account (earnings) or payable account (deduction) for the journal entries. Blank = default account from the chart of accounts.</td></tr>
+<tr><td>"Active"</td><td>Unchecked, the item is no longer offered, but its history remains.</td></tr>
+<tr><td>"Do not show on the pay stub"</td><td>The line is calculated and counted, but does not appear on the stub (useful for a technical line). A hidden deduction is counted in the "Total" of the stub's deductions.</td></tr>
+</table>
+<h3>"How this category is treated" card</h3>
+<p>A Yes/No matrix: for earnings or a benefit, Federal tax, Québec tax, EI, QPP, QPIP, HSF, CNESST, Vacation, T4 box, RL-1 box; for a deduction, Reduces federal tax, Reduces Québec tax, Labour-sponsored fund credit, T4 box, RL-1 box. Two possible notes: "Lump-sum payment: tax is calculated using the bonus and retroactive pay method." and "Non-cash benefit: it is taxed but not added to net pay."</p>
+<h3>Messages</h3>
+<table>
+<tr><th>Message</th><th>Meaning and solution</th></tr>
+<tr><td>"Pay item saved." / "Pay item deleted."</td><td>Success.</td></tr>
+<tr><td>“"Description" is required.”</td><td>Give it a label.</td></tr>
+<tr><td>"Invalid category."</td><td>Choose a category from the list.</td></tr>
+<tr><td>"This item has already been used in a pay run: its category can no longer change. Create a new item instead."</td><td>A confirmed pay run depends on its category. Create a new item and make the old one inactive.</td></tr>
+<tr><td>"This item is used by employees or pay runs. Make it inactive instead of deleting it."</td><td>Deletion is only possible for an item that has never been used.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="config-plan">Settings › Chart of accounts</h2>
+<p><span class="chemin">Config/PlanComptable.aspx</span>. "Your general ledger account numbers, used by the journal entries report. Leave blank what you do not use." Numbers have at most 30 characters; they are free-form, they only need to match your general ledger.</p>
+<div class="deux">
+<div class="carte"><h4>Assets and liabilities</h4>
+<ul>
+<li>"Bank account (net pay)"</li>
+<li>"Vacation payable"</li>
+<li>"Federal tax payable"</li>
+<li>"Québec tax payable"</li>
+<li>"QPP payable (employees and employer)"</li>
+<li>"EI payable (employees and employer)"</li>
+<li>"QPIP payable (employees and employer)"</li>
+<li>"HSF payable"</li>
+<li>"CNESST payable"</li>
+<li>"Labour standards (CNT) payable"</li>
+<li>"Other deductions payable (default)"</li>
+</ul></div>
+<div class="carte"><h4>Expenses</h4>
+<ul>
+<li>"Wages (default for pay items)"</li>
+<li>"Vacation expense"</li>
+<li>"Expense - employer QPP share"</li>
+<li>"Expense - employer EI share"</li>
+<li>"Expense - employer QPIP share"</li>
+<li>"Expense - HSF"</li>
+<li>"Expense - CNESST"</li>
+<li>"Expense - labour standards (CNT)"</li>
+</ul></div>
+</div>
+<p>"Pay item accounts" lists the active items: "Expense account for earnings, or payable account for a deduction. Blank = default account." "Save" button: "Chart of accounts saved." See <a href="#ecritures">Journal entries</a> for the use of each account.</p>
+
+<!-- ============================================================ -->
+<h2 id="config-depot">Settings › Direct deposit</h2>
+<p><span class="chemin">Config/DepotDirect.aspx</span>. "Your financial institution gives you this information when you sign up for its direct deposit service (automated funds transfer). The file follows Payments Canada Standard 005 (1,464 characters). Have a test file validated by your institution before the first real deposit: some require their own format."</p>
+<h3>"Direct deposit file settings"</h3>
+<table>
+<tr><th>Field</th><th>Role</th><th>Validation</th></tr>
+<tr><td>"Originator ID (10 characters)"</td><td>Identifier assigned to you by the bank. Converted to uppercase.</td><td>—</td></tr>
+<tr><td>"Destination data centre (5 digits)"</td><td>The bank's data centre.</td><td>"The data centre number has 5 digits."</td></tr>
+<tr><td>"Company short name (15 characters)"</td><td>"Appears on the employee's bank statement."</td><td>—</td></tr>
+<tr><td>"Full name (30 characters)"</td><td>Long name in the file; failing that, the company name.</td><td>—</td></tr>
+<tr><td>"Next file number (1 to 9999)"</td><td>Sequence number of the next file.</td><td>"The file number must be between 1 and 9999."</td></tr>
+</table>
+<h3>"Company account (returns and settlement)"</h3>
+<p>"Institution number (3 digits)" ("The institution number has 3 digits."), "Transit number (5 digits)" ("The transit number has 5 digits.") and "Account number" (encrypted; "Account on file: •••123. Leave blank to keep it."). Success: "Direct deposit settings saved."</p>
+<p>The file is generated from the <a href="#detail-depot">details of a confirmed pay run</a>.</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-liste">Employees › List</h2>
+<p><span class="chemin">Employes/Liste.aspx</span>. "Employees are shared with 60Sec: create them here or there; their identity (name, address, position, hire date) is edited in 60Sec. Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard."</p>
+<ul>
+  <li>"Also show inactive employees" checkbox: the list reloads; inactive employees are greyed out.</li>
+  <li>"New employee" button.</li>
+  <li>Columns: "Name" (Last name, First name, link to the record), "Job title", "Compensation" ("$X / h" or "$X / year"), "Frequency" (the employee's, otherwise the company's), "Hire date", "Payroll" (green badge "Set up" or yellow "To set up"), then the links "Payroll settings · Pay items · Year-to-date".</li>
+  <li>Empty list: "No employees for this company. Create the first one with the button above, or add them in 60Sec."</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="emp-nouveau">Employees › New employee</h2>
+<p><span class="chemin">Employes/Nouveau.aspx</span>. "The employee is created in the current company and appears in 60Sec right away, where their identity is edited from then on. Once created, you set up their payroll on their record: SIN, pay period, rates, exemptions, direct deposit."</p>
+<table>
+<tr><th>Block</th><th>Fields</th></tr>
+<tr><td>"Identity"</td><td>"First name" *, "Last name" *, "Employee code" ("Optional. Must be unique within the company."), "Job title", "Date of birth", "Hire date" (today by default).</td></tr>
+<tr><td>"Contact details"</td><td>"Address", "Address (line 2)", "City", "Province" (Quebec is suggested), "Postal code" (converted to uppercase), "Email" ("Required to email the pay stub."), "Phone".</td></tr>
+</table>
+<p>"Create employee" and "Cancel" buttons. After creation, you land on the record: "Employee created. Now set up their payroll: check the proposed values, then save."</p>
+<table>
+<tr><th>Message</th><th>Solution</th></tr>
+<tr><td>“"First name" is required.” / “"Last name" is required.”</td><td>Both names are mandatory.</td></tr>
+<tr><td>"The date of birth is in the future."</td><td>Correct the date.</td></tr>
+<tr><td>"The email address is invalid."</td><td>It needs an "@" and a period after it.</td></tr>
+<tr><td>"Employee code {code} is already used in this company."</td><td>Choose another code, or leave it blank.</td></tr>
+<tr><td>“An active employee already has this name. Check, then tick "create anyway" if this really is a different person.”</td><td>A banner shows "An active employee is already named {First name} {Last name}." with "View their record". If it really is a different person, tick "This is a different person: create anyway" and try again.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="emp-fiche">Employees › Record: payroll settings</h2>
+<p><span class="chemin">Employes/Fiche.aspx?id=</span>. The title is the employee's name; the "Pay items" and "Opening balances" buttons lead to the employee's two other pages. An employee who has never been set up shows "Payroll is not set up yet for this employee. Check the suggested values, then save.": the suggested values come from 60Sec (frequency, hourly rate, salary, SIN, banking details, date of birth).</p>
+<h3>"Employee (60Sec)"</h3>
+<p>Read-only: Name, Employee code, Job title, Address, City, Email, Phone, Hire date, Termination date, Status. "This information comes from 60Sec and is edited there."</p>
+<h3>"Personal information for payroll"</h3>
+<table>
+<tr><th>Field</th><th>Role</th></tr>
+<tr><td>"Date of birth"</td><td>Used for the QPP rule: no contribution before age 18. Without a date, the employee is presumed to be of age.</td></tr>
+<tr><td>"Language for pay stubs and emails"</td><td>Français, English or Español. Language of the pay stub sent by email and of its PDF.</td></tr>
+<tr><td>"Social insurance number (SIN)"</td><td>Spaces and hyphens ignored; checked with the Luhn algorithm ("The social insurance number is invalid."). Encrypted. "SIN on file: ••••••123. Leave blank to keep it."</td></tr>
+</table>
+<h3>"Payroll information"</h3>
+<table>
+<tr><th>Field</th><th>Role</th></tr>
+<tr><td>"Pay period"</td><td>"Default (60Sec, otherwise the company)", or a frequency of their own: 52, 26, 24, 12 or "Annual (1 period)". An employee is only included in a pay run if their frequency is that of the run.</td></tr>
+<tr><td>"Hours per week"</td><td>With the hourly rate, produces the default "Wages" line: hours/week × 52 ÷ periods.</td></tr>
+<tr><td>"Hourly rate ($)"</td><td>Base rate; "Time and a half" and "Double time" increase it.</td></tr>
+<tr><td>"Annual salary ($)"</td><td>"Used if no hourly rate is entered." Produces the "Salary" line = salary ÷ periods.</td></tr>
+<tr><td>"Vacation rate (%)"</td><td>"Blank = company default rate." Refused above 20.</td></tr>
+</table>
+<div class="note">"The suggested hourly rate, salary and frequency come from 60Sec when entered there; what you save here applies to payroll." These default values are only used if the employee has no recurring pay items.</div>
+<h3>"Exemptions (special cases only)"</h3>
+<div class="avert">"Leave everything unchecked for a regular employee: all deductions and contributions are calculated automatically. A checked box means the deduction is not calculated (it will be $0)."</div>
+<ul>
+  <li>"Do not withhold federal tax"; "Do not withhold Québec tax": an employee who has an exemption certificate, for example.</li>
+  <li>"Do not contribute to the QPP": retiree aged 70 or over, disability pension beneficiary, etc. (the under-18 rule is automatic).</li>
+  <li>"Do not contribute to the QPIP"; "Do not pay EI premiums": non-insurable employment, for example a shareholder who controls more than 40% of the voting shares.</li>
+  <li>"Exclude from the HSF"; "Exclude from CNESST / CNT" (also removes the CNT).</li>
+</ul>
+<p>On save, the message reminds you "Warning: {n} exemption(s) checked, these deductions or contributions will not be calculated for this employee." and step 3 of the pay run repeats it.</p>
+<h3>"Federal taxation"</h3>
+<table>
+<tr><th>Field</th><th>Where the employee declares it</th><th>Effect</th></tr>
+<tr><td>"TD1 - Total claim amount ($)"</td><td>TD1 form, total of the credits. "Blank = basic personal amount ($16,452.00)."</td><td>K1 credit = 14% of the amount.</td></tr>
+<tr><td>"TD1 - Additional tax per pay ($)"</td><td>TD1, request for additional withholding.</td><td>Added as is to the federal tax of each pay.</td></tr>
+<tr><td>"TD1 - Prescribed zone deduction, annual ($)"</td><td>TD1, residents of northern zones.</td><td>HD deduction, annual.</td></tr>
+<tr><td>"T1213 - Authorized annual deductions ($)"</td><td>CRA letter of authority (T1213).</td><td>F1 deduction, annual.</td></tr>
+<tr><td>"T4, box 45 - Employer-offered dental benefits"</td><td>Codes 1 to 5. "Mandatory T4 box: access on December 31 to employer dental insurance."</td><td>Carried over to the T4.</td></tr>
+<tr><td>"Other authorized federal tax credits ($)"</td><td>CRA authorization.</td><td>K3 credit.</td></tr>
+</table>
+<h3>"Québec taxation"</h3>
+<table>
+<tr><th>Field</th><th>Where the employee declares it</th><th>Effect</th></tr>
+<tr><td>"TP-1015.3 - Amount on line 10 ($)"</td><td>TP-1015.3 form. "Blank = basic personal amount ($18,952.00)."</td><td>E credits: 14% of the amount.</td></tr>
+<tr><td>"Additional withholding per pay ($)"</td><td>TP-1015.3, line 11.</td><td>Added to the Québec tax of each pay.</td></tr>
+<tr><td>"TP-1015.3 - Deductions on line 19 ($)"</td><td>TP-1015.3.</td><td>J deduction, annual.</td></tr>
+<tr><td>"TP-1016 - Authorized annual deductions ($)"</td><td>Revenu Québec authorization (TP-1016).</td><td>J1 deduction.</td></tr>
+<tr><td>"TP-1016 - Authorized tax credits ($)"</td><td>TP-1016.</td><td>K1 credit (Québec).</td></tr>
+</table>
+<h3>"Payment"</h3>
+<ul>
+  <li>"This employee is paid by direct deposit": otherwise, a cheque number is assigned to them when each pay run is confirmed.</li>
+  <li>"Send the pay stub by email": requires an email in 60Sec.</li>
+  <li>"Transit number (5 digits)", "Institution number (3 digits)", "Account number" (encrypted; "Account on file: ••••123. Leave blank to keep it."). If direct deposit is checked and something is missing: "Direct deposit: enter the transit (5 digits), the institution (3 digits) and the account number."</li>
+</ul>
+<h3>"Notes" and saving</h3>
+<p>Free text. "Save": on the first save, the employee becomes "Set up", the event is logged and you land on their pay items: "Payroll settings saved. You can now define this employee's recurring pay items." Afterwards: back to the list, "Payroll settings saved."</p>
+
+<!-- ============================================================ -->
+<h2 id="emp-elements">Employees › Recurring pay items</h2>
+<p><span class="chemin">Employes/ElementsPaie.aspx?id=</span>. "These lines are suggested automatically for each pay run. You can always adjust them in the payroll wizard." This is the employee's <strong>template</strong>: wages, fixed bonuses, recurring deductions (RRSP, group insurance, union), recurring taxable benefits.</p>
+<ul>
+  <li>Columns: "Pay item", "Category" (e.g. "Earnings - Wages"), "Hours", "Hourly rate", "Amount", "Remove" link.</li>
+  <li>Empty list: "No recurring items. Without a template, the pay run will suggest the hourly wages (hours per week) or the annual salary from the employee file."</li>
+  <li>"Add an item": "Pay item" (active items), "Hours", "Hourly rate ($)", "or fixed amount ($)". "Enter hours and a rate (time and a half and double time are increased automatically), or a fixed amount." The amount is calculated once, when added: hours × rate × multiplier.</li>
+  <li>Messages: "Choose a pay item.", "Pay item not found.", "Enter hours and a rate, or an amount.", "Item added.", "Item removed."</li>
+</ul>
+<div class="note">As soon as an employee has at least one recurring item, the default wages from the record are no longer added: the template replaces the record, it does not add to it. So put the wages themselves in the template if you put a deduction in it.</div>
+
+<!-- ============================================================ -->
+<h2 id="emp-cumulatifs">Employees › Opening balances</h2>
+<p><span class="chemin">Employes/Cumulatifs.aspx?id=</span>. "If you start using 60secPaie during the year, enter here the amounts already paid and withheld in your previous system. They are used to respect the annual maximums (QPP, EI, QPIP, CNESST) and are added to the year-to-date amounts on the pay stub."</p>
+<p>"Year": the current year or the previous one. Fields (blank = 0): "Gross pay ($)", "Federal tax withheld ($)", "Québec tax withheld ($)", "QPP pensionable earnings ($)", "QPP contribution (base + 1st additional) ($)", "Second additional QPP contribution ($)", "EI premium ($)", "QPIP premium - employee ($)", "QPIP premium - employer ($)", "CNESST insurable wages ($)", "Vacation balance payable ($)". "Save": "Opening balances for {year} saved."</p>
+<table>
+<tr><th>Amount</th><th>What it is used for</th></tr>
+<tr><td>QPP, 2nd additional QPP, QPP pensionable earnings, EI, QPIP employee and employer, CNESST insurable wages</td><td>The engine adds them to the year-to-date amounts to cap contributions at the annual maximums.</td></tr>
+<tr><td>Gross pay, taxes withheld</td><td>Pay stub year-to-date amounts ("Year-to-date" column) and T4 / RL-1 slips.</td></tr>
+<tr><td>Vacation balance</td><td>Added to the "Vacation balance" on the pay stub.</td></tr>
+</table>
+<div class="avert">The slips of an employee who has opening balances carry the warning "These amounts include opening balances entered by hand. Insurable earnings (boxes 24, 26, 56, G and I) were estimated from gross pay: check them against your previous system."</div>
+
+<!-- ============================================================ -->
+<h2 id="paie">Run payroll (4-step wizard)</h2>
+<p><span class="chemin">Paie/Calculer.aspx</span>. The step bar shows "1. Pay period", "2. Employees and pay", "3. Review calculations", "4. Confirmation". The state is kept in the database: a pay run in progress (draft) survives sign-out, and the dashboard offers to continue it. There is only one draft at a time per company.</p>
+
+<h3 id="paie-etape1">Step 1 of 4: pay period</h3>
+<p>"From the following dates, 60secPaie determines the pay period and prepares the pay of each active employee."</p>
+<table>
+<tr><th>Field</th><th>Suggested value</th></tr>
+<tr><td>"Pay frequency" *</td><td>The company's default frequency; if a confirmed pay run exists, that of the last confirmed pay run.</td></tr>
+<tr><td>"Hours worked up to" * (period end)</td><td rowspan="2">The period following the last confirmed pay run: +7 days (weekly), +14 days (biweekly), the following month (monthly), +1 year (annual). For semi-monthly, nothing is suggested. Without a confirmed pay run, the fields are empty.</td></tr>
+<tr><td>"Pay on" * (pay date)</td></tr>
+</table>
+<p>If a draft already exists, the "A pay run is already in progress" card replaces it, with "Continue this pay run" and "Delete this draft" (confirmation "Delete the pay run in progress?", then "The draft has been deleted.").</p>
+<p>"Continue" checks, in order:</p>
+<table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td>"Enter the period end and the pay date."</td><td>Both dates are required.</td></tr>
+<tr><td>"The pay date is too far from the period end."</td><td>The pay date must be between 31 days before and 45 days after the period end.</td></tr>
+<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>The rate year is that of the <strong>pay date</strong>. Only 2026 is defined.</td></tr>
+<tr><td>"A pay run is already in progress. Finish it or delete it first."</td><td>Only one draft at a time.</td></tr>
+<tr><td>"No active employee with payroll set up is paid at this frequency for this period. Check the Employees page."</td><td>No employee meets the criteria below.</td></tr>
+</table>
+<h4>What "Continue" does</h4>
+<ul>
+  <li>Calculates the period start according to the frequency (see <a href="#conventions">the conventions</a>).</li>
+  <li>Selects employees who are <strong>active</strong>, whose <strong>payroll is set up</strong>, whose <strong>frequency</strong> (their own, otherwise the company's) is the one chosen, hired no later than the period end, and whose termination date is blank or later than the period start.</li>
+  <li>Freezes the <strong>vacation rate</strong> of each pay: the employee's, otherwise the company's.</li>
+  <li>Copies each employee's active <strong>recurring items</strong>. Without a template: a "Wages" line (hours/week × 52 ÷ periods, at the hourly rate) or a "Salary" line (annual salary ÷ periods). Without a rate or salary: no line, the employee appears with "No lines".</li>
+</ul>
+
+<h3 id="paie-etape2">Step 2 of 4: employees and pay</h3>
+<table>
+<tr><th>Column</th><th>Content</th></tr>
+<tr><td>"Include"</td><td>Checked by default. Uncheck to exclude an employee from this pay run (absent, on leave…).</td></tr>
+<tr><td>"Employee"</td><td>Last name, First name.</td></tr>
+<tr><td>"Pay lines"</td><td>The descriptions of the lines, or "No lines".</td></tr>
+<tr><td>"Expected gross"</td><td>Sum of the earnings lines, without deductions or benefits.</td></tr>
+<tr><td>—</td><td>"Edit lines" link.</td></tr>
+</table>
+<div class="avert">The "Include" boxes are only saved when you click "Run payroll". If you click "Edit lines" first, your checkbox changes are lost: redo them when you return.</div>
+<p>Buttons: "Run payroll" (saves the inclusions, calculates all included pays, moves to step 3) and "Discard this pay run" (confirmation "Delete the pay run in progress?", then "The pay run in progress has been deleted.").</p>
+<h4>"Pay lines for {First name Last name}" sub-screen</h4>
+<p>Columns "Pay item", "Hours", "Rate", "Amount", "Remove" link. Without a line: "No lines: this employee will not be paid."</p>
+<p>"Add a line": "Pay item" ("{Description} ({Type} - {Category})"), "Hours", "Hourly rate ($)", "or amount ($)". Rule: if hours <em>and</em> a rate are entered, amount = hours × rate × category multiplier (1.5 for "Time and a half", 2 for "Double time"), rounded to the cent; otherwise, it is the amount entered. "Add line" and "Back to the employee list" buttons. Any change marks the run "to be recalculated"; recalculation is automatic at step 3.</p>
+<table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td>"Choose a pay item."</td><td>No item selected.</td></tr>
+<tr><td>"The line amount must be greater than 0 (hours × rate, or amount)."</td><td>A line at 0 is not accepted.</td></tr>
+<tr><td>"This pay run can no longer be edited."</td><td>The run is no longer a draft.</td></tr>
+<tr><td>"Line added." / "Line removed."</td><td>Success.</td></tr>
+</table>
+<div class="note">Overtime: add a "Time and a half" line with the hours and the <em>base</em> rate; the premium is automatic. Bonus: a "Bonus" line with the amount; tax follows the lump-sum payment method.</div>
+
+<h3 id="paie-etape3">Step 3 of 4: review calculations</h3>
+<p>The run is recalculated if needed. The main table gives, per included employee: "Hours", "Gross", "Fed. tax", "Qc tax", "QPP" (base, 1st and 2nd additional contributions), "EI", "QPIP", "Other ded.", "Net", "Employer share" (QPP, QPP2, EI, QPIP, HSF, CNESST, CNT), "Vacation" (accrued in this pay), and a "Grand total" row.</p>
+<h4>Warnings per employee (yellow banner)</h4>
+<ul>
+  <li>"Exemptions checked in the employee file, so not calculated: {list}."</li>
+  <li>"Employee under 18: no QPP contribution."</li>
+  <li>"Net pay is negative: deductions exceed the pay." Confirmation will be refused until this is corrected.</li>
+</ul>
+<h4>"Details and calculation check"</h4>
+<p>One expandable block per employee: the table of lines, the check report and the matrix of employer shares. The check report uses the variables from the official guides, which lets you redo the calculation by hand or compare it with the CRA's and Revenu Québec's online calculators:</p>
+<table>
+<tr><th>Line</th><th>Meaning</th></tr>
+<tr><td>"QPP S3 (pensionable earnings)"</td><td>Earnings of the pay subject to the QPP.</td></tr>
+<tr><td>"QPP exemption per period"</td><td>$3,500 ÷ periods, truncated to 2 decimals.</td></tr>
+<tr><td>"QPP CS (deductible additional contributions)"</td><td>The portion of QPP contributions deductible from taxable income.</td></tr>
+<tr><td>"QC E (personal credits)"</td><td>Amount on line 10 of the TP-1015.3.</td></tr>
+<tr><td>"QC H (deduction for workers)"</td><td>6% of wages, capped.</td></tr>
+<tr><td>"QC CSA (add. QPP contr., regular)"</td><td>Portion of CS attached to regular pay.</td></tr>
+<tr><td>"QC I (annual taxable income)", "QC Y (tax for the year)"</td><td>Annualized Québec income and tax.</td></tr>
+<tr><td>"QC Tax on regular pay", "QC Tax on lump-sum payment"</td><td>The two components of the pay's Québec tax.</td></tr>
+<tr><td>"FED TC (TD1 claim amount)", "FED A (annual taxable income)", "FED K1", "FED K2Q", "FED T1 (annual federal tax after abatement)"</td><td>T4127 variables: personal credits, credits for QPP/EI/QPIP, annual tax after the 16.5% Québec abatement.</td></tr>
+<tr><td>"FED Tax on regular pay", "FED Tax on lump-sum payment"</td><td>The two components of the pay's federal tax.</td></tr>
+</table>
+<h4>Summary in three cards</h4>
+<p>"Earnings and benefits" (by line description), "Deductions" ("Federal tax", "Québec tax", "QPP", "QPP - 2nd additional contribution", "Employment Insurance", "QPIP", then each deduction), "Employer contributions" ("QPP", "QPP - 2nd additional contribution", "Employment Insurance", "QPIP", "HSF", "CNESST", "CNT (labour standards)"). Zero amounts are hidden.</p>
+<h4>Buttons</h4>
+<p>"Confirm pay run" (confirmation "Confirm this pay run? It will be added to the employees' year-to-date amounts.") and "Edit entries" (back to step 2).</p>
+<table>
+<tr><th>Refusal on confirmation</th><th>Meaning</th></tr>
+<tr><td>"The pay run must be calculated before it is confirmed."</td><td>Go back to step 2 then "Run payroll".</td></tr>
+<tr><td>"No employee is included in this pay run."</td><td>Check at least one employee.</td></tr>
+<tr><td>"At least one net pay is negative. Correct the lines before confirming."</td><td>Reduce the deduction or increase the earnings of the employee concerned.</td></tr>
+</table>
+<h4>What confirmation does</h4>
+<ol>
+  <li>Employees not included are removed from the run.</li>
+  <li>Employees <strong>not</strong> paid by direct deposit receive, in alphabetical order, consecutive cheque numbers starting from the company's "Next cheque number", which advances accordingly.</li>
+  <li>The status becomes "Confirmed". The pay run now counts in the year-to-date amounts, remittances, slips and journal entries.</li>
+  <li>The event "Pay run of {date} confirmed." is logged.</li>
+</ol>
+
+<h3 id="paie-etape4">Step 4 of 4: pay run confirmed</h3>
+<p>"The pay run is saved. You can now print the pay stubs and issue the payments." The table summarizes each employee with, under their name, "Cheque no. N" or "Direct deposit". "View details and pay stubs" and "Dashboard" buttons.</p>
+
+<!-- ============================================================ -->
+<h2 id="historique">Payroll history</h2>
+<p><span class="chemin">Paie/Historique.aspx</span>. "The pays of each period are grouped into pay runs." Columns: "Pay date" (link to the wizard for a draft, to the details otherwise), "Period", "Frequency", "Employees", "Gross pay", "Net pay", "Employer share", "Status". Sorted by pay date, descending. "Run a payroll" button. Empty list: "No pay runs yet."</p>
+
+<!-- ============================================================ -->
+<h2 id="detail">Pay run details</h2>
+<p><span class="chemin">Paie/Detail.aspx?lot=</span>. Title "Pay run details" with the status badge; subtitle "Period from … to … · paid on … · {frequency} · prepared by {email}". "Print" and "History" buttons. The content is that of step 3 (table, per-employee check, summary), plus a "Pay stub" link per employee.</p>
+<h3>"Payment and follow-up for this pay run" panel (confirmed pay run)</h3>
+<ul>
+  <li>"Direct deposit": "{n} employee(s), {total}", then "file not generated yet" or "file no. 0001 generated on …". Problems are displayed here: "The company's direct deposit settings are incomplete (Settings → Direct deposit)." and "Incomplete banking information for {First name Last name}."</li>
+  <li>"Pay stubs by email": "{x} sent out of {n}". In test mode: "Test mode: emails are written to the App_Data\courriels folder instead of being sent." If nobody asked for it: "No employee in this pay run has asked for the pay stub by email (employee file)."</li>
+  <li>"Journal entries" link: the journal entries report for this pay run.</li>
+</ul>
+
+<h3 id="detail-depot">Direct deposit file</h3>
+<p>"Download the direct deposit file" button, visible if there is at least one employee on direct deposit. The file includes the included employees, paid by direct deposit, whose net pay is greater than 0.</p>
+<ul>
+  <li>File name: <code>depot-direct-YYYY-MM-DD-NNNN.txt</code>.</li>
+  <li>Format: Payments Canada Standard 005 (CPA-005). 1,464-character records, uppercase text without accents, dates in Julian format. One A record (header with your originator ID, the file number, the date, the data centre, "CAD"), C records (one type 200 transaction per employee: net pay in cents, due date = pay date, the employee's institution, transit and account, company short name, "LAST NAME FIRST NAME", reference = employee code or "EMP{id}", note "PAIE YYYY-MM-DD"), and one Z record (total and number of credits).</li>
+  <li><strong>Numbering</strong>: each generation consumes a new file number, even to reproduce the same run. After 9999, it starts again at 1. The run keeps the last number and date; the event is logged.</li>
+  <li>Submit this file to your institution through the channel it provided. 60secPaie does not transmit it.</li>
+</ul>
+<table>
+<tr><th>Message</th><th>Solution</th></tr>
+<tr><td>"The direct deposit file is generated from a confirmed pay run."</td><td>Confirm the pay run first.</td></tr>
+<tr><td>"No employee in this pay run is paid by direct deposit."</td><td>Check "This employee is paid by direct deposit" on the records.</td></tr>
+<tr><td>"The company's direct deposit settings are incomplete (Settings → Direct deposit)."</td><td>Fill in the Direct deposit page in Settings.</td></tr>
+<tr><td>"Incomplete banking information for {First name Last name}."</td><td>Complete transit, institution and account on the record.</td></tr>
+</table>
+
+<h3 id="detail-courriel">Pay stubs by email</h3>
+<p>"Send pay stubs by email" button (confirmation "Send the pay stubs by email to the employees who asked for it?"), with the "also resend pay stubs already sent" checkbox. Result: "{n} pay stub(s) sent, {m} already sent.", followed if necessary by "Problems: {Name}: no email in the employee file. / {Name}: invalid email address. / …".</p>
+<ul>
+  <li>Only included employees whose record has "Send the pay stub by email" receive an email. The send date is remembered: a stub already sent is not resent, unless the box is checked.</li>
+  <li>Sender: an @60sec.ca address (paie@60sec.ca by default), with your company's name; replies go to the company email defined in 60Sec.</li>
+  <li>Subject: "Pay stub for YYYY-MM-DD". Body: "Hello {First name Last name},", "Here is your pay stub.", the full stub, then a confidentiality notice. Attachment: the stub's PDF. All in the employee's language.</li>
+  <li>Stubs are only sent from a confirmed pay run: "Pay stubs are sent from a confirmed pay run."</li>
+</ul>
+
+<h3 id="detail-annuler">Cancelling a pay run</h3>
+<p>"Cancel this pay run" panel, visible only for the <strong>most recent confirmed pay run</strong> whose deductions have not yet been remitted. "The most recent confirmed pay run can be cancelled, for example to correct an error. It will be removed from the year-to-date amounts; cheque numbers already assigned are not reused." "Cancel pay run" button, confirmation "Permanently cancel this pay run?", then "The pay run has been cancelled."</p>
+<table>
+<tr><th>Refusal</th><th>Solution</th></tr>
+<tr><td>"The deductions for this pay run have already been remitted. Cancel the remittance payment first."</td><td>In Remittances › History, open the payment and cancel it; the deductions become outstanding again. Then cancel the pay run.</td></tr>
+<tr><td>"Only the most recent confirmed pay run can be cancelled."</td><td>Cancel the more recent pay runs first, from the most recent to the oldest.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="talon">Pay stub</h2>
+<p><span class="chemin">Paie/Talon.aspx?paie=</span>. "Print pay stub", "Download as PDF", "Back to pay run details" buttons. Banners: "Preview: this pay run is not confirmed yet." or "This pay run has been cancelled."</p>
+<table>
+<tr><th>Area</th><th>Content</th></tr>
+<tr><td>Header</td><td>Company (name, address, city, postal code); "Pay stub", "Period: … to …", "Pay date: …", then "Direct deposit" or "Cheque no. N" once the pay run is confirmed.</td></tr>
+<tr><td>Employee</td><td>First name Last name (code), address.</td></tr>
+<tr><td>"Earnings and benefits"</td><td>"Hours", "Rate", "Amount" for each visible non-deduction line; "Gross pay" (total hours and gross paid); "including taxable benefits not paid in cash" if applicable.</td></tr>
+<tr><td>"Deductions"</td><td>"Current" and "Year-to-date" for "Federal tax", "Québec tax", "QPP" (including the 2nd additional), "Employment Insurance", "QPIP"; then each of the employer's deduction items, without year-to-date; "Total" row.</td></tr>
+<tr><td>"Net pay"</td><td>Gross paid minus all deductions.</td></tr>
+<tr><td>"Year-to-date"</td><td>"Gross" (confirmed pay runs of the year up to this one, plus the opening gross), "Net" (without opening balances), "Vacation accrued (x%)" (in this pay), "Vacation balance" (opening balances + vacation accrued − vacation paid, all years combined).</td></tr>
+</table>
+<p>The PDF (letter format) has the same content; footer "Confidential document issued to {company}." and "60secPaie · Page i of n" if there are several pages. File name: "Talon-de-paie-YYYY-MM-DD.pdf".</p>
+
+<!-- ============================================================ -->
+<h2 id="remises">Remittances › Remittance payment</h2>
+<p><span class="chemin">Remises/Payer.aspx</span>. Submenu: "Remittance payment" | "Payment history". Two balance cards, "Receiver General for Canada" and "Revenu Québec": "No deductions to remit.", or "To pay: $X (n pay records)" followed by "Next due date: … for the period ending …", in red "Overdue: due … for the period ending …" if past. A "Labour standards (CNT)" card appears when the amount is positive: "Accrued in {year}: $X", "Payable once a year to Revenu Québec, with the RL-1 summary. It is not part of the periodic remittances."</p>
+<h3>"Payroll remittance" form</h3>
+<table>
+<tr><th>Field</th><th>Role</th><th>Default value</th></tr>
+<tr><td>"Government" *</td><td>"Federal - Receiver General for Canada" or "Provincial - Revenu Québec". Can be preselected by the dashboard's "Pay" button.</td><td>Federal. Switching government recalculates the dates.</td></tr>
+<tr><td>"Deductions accrued as of" *</td><td>"All confirmed pay runs up to this date whose deductions have not been remitted yet."</td><td>End of the remittance period of the oldest unremitted pay run, otherwise today.</td></tr>
+<tr><td>"Payment date" *</td><td>Actual date of the payment.</td><td>Today. Refused more than 31 days in the future: "The payment date is too far away."</td></tr>
+<tr><td>"Payment method"</td><td>"Online payment (financial institution, My Account)" or "Cheque (the next cheque number is assigned)".</td><td>Online.</td></tr>
+<tr><td>"Confirmation number (optional)"</td><td>Reference of your online payment (60 characters).</td><td>—</td></tr>
+</table>
+<p>"Calculate remittance" displays the preview "Amount to pay to {government} - deductions accrued as of …": the "Deduction or contribution" / "Amount" table with "Total to pay", and the "Pay runs covered" table ("Pay date", "Period", "Employees", "Gross pay"). "60secPaie does not transmit any payment: make it through your financial institution or in My Account, then record it here so these deductions are no longer outstanding."</p>
+<p>"Record payment" (confirmation "Record this payment? The pay runs covered can no longer be cancelled.") leads to the payment details with "Payment recorded.". In cheque mode, the company's next cheque number is consumed.</p>
+<h4>Composition of the amounts</h4>
+<div class="deux">
+<div class="carte"><h4>Receiver General for Canada</h4><ol><li>"Federal tax"</li><li>"Employment insurance - employee premiums"</li><li>"Employment insurance - employer premium"</li></ol></div>
+<div class="carte"><h4>Revenu Québec</h4><ol><li>"Québec tax"</li><li>"QPP - employee contributions" (base and 2nd additional)</li><li>"QPP - employer contribution"</li><li>"QPIP - employee premiums"</li><li>"QPIP - employer premium"</li><li>"Health Services Fund (HSF)"</li><li>"CNESST - periodic payment"</li></ol></div>
+</div>
+<p>The CNT is not part of it: it is paid once a year with the RL-1 Summary. Each confirmed pay run is remitted only once to each government.</p>
+<table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td>"Enter both dates."</td><td>Both dates are required.</td></tr>
+<tr><td>"No deductions to remit to {government} for pay runs up to …"</td><td>All pay runs up to this date are already remitted, or there are none.</td></tr>
+<tr><td>"No deductions to remit to {government} for this period."</td><td>Same, on recording.</td></tr>
+</table>
+
+<h3 id="remises-calendrier">Frequencies and due dates</h3>
+<table>
+<tr><th>Frequency (Settings)</th><th>Remittance period</th><th>Due date</th></tr>
+<tr><td>Monthly</td><td>The month of the pay date</td><td>The 15th of the following month</td></tr>
+<tr><td>Quarterly</td><td>The calendar quarter of the pay date</td><td>The 15th of the month following the quarter</td></tr>
+</table>
+<p>"Overdue" means the due date is before today. The balance shown is based on the oldest unremitted pay run. The actual frequencies assigned to you by the CRA and Revenu Québec (accelerated, monthly, quarterly) depend on your average deductions; 60secPaie only knows monthly and quarterly, choose the one that matches your notice of assessment.</p>
+
+<!-- ============================================================ -->
+<h2 id="remises-historique">Remittances › Payment history and details</h2>
+<p><span class="chemin">Remises/Historique.aspx</span>: "Payment date" (link), "Government", "Deductions accrued as of", "Payment" ("Cheque no. N" or "Online - {reference}"), "Pay records", "Total", "Status" ("Paid" in green, "Cancelled" in red and greyed out). Empty list: "No remittance payments recorded."</p>
+<p><span class="chemin">Remises/Detail.aspx?id=</span>: title "Remittance payment" with the status; subtitle "{government} · deductions accrued as of … · paid on … · {method} · recorded by {email}". Table of the amounts frozen at the time of payment, pay runs covered, and the "Information for the remittance form" card: "Payroll deductions account number (RP)" or "Identification number (RS)", "Gross payroll for the period", "Number of employees in the last pay period" (federal), "Period ending", "Payment amount".</p>
+<p>"Cancel this payment" panel: "Use this if the payment was recorded by mistake. The deductions of the pay runs covered will become outstanding again." "Cancel payment" button, confirmation "Cancel this remittance payment?", then "The payment has been cancelled. The deductions are outstanding again." Any payment can be cancelled, not just the last one; a cheque number is not reused.</p>
+
+<!-- ============================================================ -->
+<h2 id="feuillets">Reports › T4 and RL-1 slips</h2>
+<p><span class="chemin">Rapports/Feuillets.aspx</span>. Reports submenu: "T4 and RL-1 slips" | "CNESST statement of wages" | "Journal entries". Heading "T4 and RL-1 slips for the year [year]"; "Amounts calculated from confirmed pay runs and opening balances." "Export to CSV" and "Print" buttons.</p>
+<div class="avert">"60secPaie calculates the amount of each box; it does not file the slips. Enter them in Web Forms (CRA) and in My Account for businesses (Revenu Québec), no later than the last day of February. Check the boxes against the year's RC4120 (T4) and RL-1.G (RL-1) guides."</div>
+<p>Table: "Employee" (with "includes opening balances" if applicable), T4 boxes 14, 22, 17, 17A, 18, 55, 24, 26, 56, RL-1 boxes A and E, and a "Slip" link. Footer "Total (n slips)". Zero amounts are left blank.</p>
+<h3>Box mapping</h3>
+<table>
+<tr><th>T4 box</th><th>Label</th><th>Calculation</th></tr>
+<tr><td>14</td><td>Employment income</td><td>Federally taxable gross, plus the gross from opening balances</td></tr>
+<tr><td>17</td><td>Employee's QPP contributions</td><td>QPP (base and 1st additional)</td></tr>
+<tr><td>17A</td><td>Employee's second additional QPP contributions</td><td>QPP2</td></tr>
+<tr><td>18</td><td>Employee's EI premiums</td><td>EI</td></tr>
+<tr><td>22</td><td>Income tax deducted</td><td>Federal tax</td></tr>
+<tr><td>24</td><td>EI insurable earnings</td><td>min(EI earnings; $68,900)</td></tr>
+<tr><td>26</td><td>Pensionable earnings</td><td>min(QPP earnings; $85,000)</td></tr>
+<tr><td>55</td><td>Employee's PPIP (QPIP) premiums</td><td>QPIP</td></tr>
+<tr><td>56</td><td>PPIP insurable earnings</td><td>min(QPIP earnings; $103,000)</td></tr>
+<tr><td>20 / 52</td><td>RPP contributions / pension adjustment</td><td>"Registered pension plan (RPP)" lines</td></tr>
+<tr><td>34</td><td>Personal use of an automobile</td><td>"Motor vehicle" lines</td></tr>
+<tr><td>40</td><td>Other taxable allowances and benefits</td><td>"Other taxable benefit" lines (cash or non-cash)</td></tr>
+<tr><td>42</td><td>Employment commissions</td><td>"Commission" lines</td></tr>
+<tr><td>44</td><td>Union dues</td><td>"Union dues" lines</td></tr>
+<tr><td>46</td><td>Charitable donations</td><td>"Charitable donation" lines</td></tr>
+<tr><td>85</td><td>Premiums for a private health services plan</td><td>"Group insurance - employee share" lines</td></tr>
+<tr><td>28</td><td>Exemptions</td><td>CPP/QPP, EI, PPIP according to the exemptions checked, or "None"</td></tr>
+<tr><td>45</td><td>Dental benefits</td><td>Code from the record</td></tr>
+</table>
+<table>
+<tr><th>RL-1 box</th><th>Label</th><th>Calculation</th></tr>
+<tr><td>A</td><td>Employment income</td><td>Québec taxable gross, plus opening balances (includes J, L, M and W)</td></tr>
+<tr><td>B.A / B.B</td><td>QPP contribution / second additional contribution</td><td>QPP / QPP2</td></tr>
+<tr><td>C</td><td>Employment insurance premium</td><td>EI</td></tr>
+<tr><td>D</td><td>RPP contribution</td><td>RPP lines</td></tr>
+<tr><td>E</td><td>Québec income tax withheld</td><td>Québec tax</td></tr>
+<tr><td>F</td><td>Union dues</td><td>Union lines</td></tr>
+<tr><td>G</td><td>QPP pensionable salary or wages</td><td>min(QPP earnings; $85,000)</td></tr>
+<tr><td>H / I</td><td>QPIP premium / QPIP eligible salary or wages</td><td>QPIP / min(earnings; $103,000)</td></tr>
+<tr><td>J</td><td>Private health services plan (employer share)</td><td>"Private health insurance plan - employer share" lines</td></tr>
+<tr><td>L</td><td>Other benefits</td><td>"Other taxable benefit" lines</td></tr>
+<tr><td>M</td><td>Commissions</td><td>"Commission" lines</td></tr>
+<tr><td>N</td><td>Charitable donations</td><td>"Charitable donation" lines</td></tr>
+<tr><td>W</td><td>Motor vehicle</td><td>"Motor vehicle" lines</td></tr>
+<tr><td>235</td><td>Premium paid to a private health services plan</td><td>"Group insurance - employee share" lines</td></tr>
+</table>
+<h3>Summaries</h3>
+<p><strong>"T4 Summary (CRA)"</strong>: "Employees' EI premiums (box 18)", "Employer's EI premiums (box 19)", "Deductions and contributions for the year", "Remittances recorded" (federal remittances paid whose period end falls in the year), "Balance due".</p>
+<p><strong>"RL-1 Summary (Revenu Québec)"</strong>: QPP employees and employer, QPIP employees and employer, "Wages subject to the HSF", "HSF contribution", "CNESST - periodic payments calculated", "Deductions and contributions for the year", "Remittances recorded", "Balance due", "Labour standards contribution (CNT), payable with the RL-1 summary". "The actual HSF rate is based on the total payroll for the year: any difference with the estimated rate used during the year is settled in the RL-1 summary."</p>
+<p>The <code>feuillets-YYYY.csv</code> CSV contains "Code", "Name", "First name" and one column per T4 and RL-1 box. <strong>The SIN is deliberately not exported.</strong></p>
+
+<h3 id="feuillet-employe">An employee's slips</h3>
+<p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. "Print", "Back to slips", "Show full SIN" (logged action) buttons. Header: company, "RP account no.", "RS identification no.", "Slips {year}", name, address, "SIN: ••••••123" (or "SIN missing from the employee file"). Then the two tables "T4 - Statement of Remuneration Paid" (box 10 "Province of employment" = QC, the non-zero boxes, box 28 "Exemptions" and box 45) and "RL-1 - Employment and Other Income" (boxes A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235; "Boxes J, L, M and W are already included in box A.").</p>
+
+<!-- ============================================================ -->
+<h2 id="cnesst">Reports › CNESST statement of wages</h2>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. "Gross wages paid, amounts over the maximum insurable and periodic payments for the year." "Export to CSV" (<code>cnesst-YYYY.csv</code>: Name, First name, Gross pay, Excess, Insurable wages, Calculated premium) and "Print" buttons.</p>
+<ul>
+  <li>Per employee: "Gross pay" (lines of categories subject to CNESST), "Excess over the maximum ($103,000.00)", "Insurable wages", "Calculated premium"; note "excluded from CNESST (employee file)" if applicable; "Total" row.</li>
+  <li>"By month": "Month", "Insurable wages", "Premium".</li>
+  <li>"Reconciliation": "Periodic payment rate", "Premium calculated on pay runs", "Periodic payments recorded (remittances to Revenu Québec)", "Difference".</li>
+</ul>
+<div class="note">"The Statement of Wages is filed in Mon Espace CNESST before March 15. The CNESST then determines the actual premium and adjusts it against the periodic payments. Wages of workers who are not covered must be excluded according to CNESST rules."</div>
+
+<!-- ============================================================ -->
+<h2 id="ecritures">Reports › Journal entries</h2>
+<p><span class="chemin">Rapports/Ecritures.aspx</span>. "Journal entries report" form: "Payroll" ("All pay runs in the period" or one of the last 60 confirmed pay runs, "Pay run of … (period ending …)"), "Pay runs paid from" / "to" (current month by default; used only with "All pay runs in the period"). “Choose a specific pay run, or "All pay runs in the period" for a summary entry (one month, for example).” "Show", "Export to CSV" (<code>ecritures-paie.csv</code>: Account, Description, Debit, Credit), "Print" buttons, "Define account numbers" link.</p>
+<p>The table gives "Account" ("to be defined" if blank), "Description", "Debit", "Credit" and a "Total". Zero lines are omitted.</p>
+<table>
+<tr><th>Debits (expenses)</th><th>Credits (liabilities)</th></tr>
+<tr><td>
+<ul>
+<li>Each earnings line, per item: the item's account, otherwise "Wages". Expense reimbursements and cash benefits too.</li>
+<li>"Vacation pay": "Vacation payable", labelled "{description} (vacation already accrued)".</li>
+<li>"Vacation accrued": Vacation expense.</li>
+<li>"QPP - employer share", "Employment insurance - employer share", "QPIP - employer share", "Health Services Fund", "CNESST", "Labour standards (CNT)": their expense accounts.</li>
+<li>Non-cash benefits: no entry.</li>
+</ul></td><td>
+<ul>
+<li>Each deduction: "{description} payable", to the item's account, otherwise "Other deductions payable".</li>
+<li>"Federal tax payable", "Québec tax payable", "QPP payable" (employee and employer), "Employment insurance payable", "QPIP payable", "HSF payable", "CNESST payable", "CNT payable".</li>
+<li>"Vacation payable" (vacation accrued).</li>
+<li>"Net pay": the bank account.</li>
+</ul></td></tr>
+</table>
+<table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td>"The period is invalid."</td><td>The "from" date is after the "to" date.</td></tr>
+<tr><td>"No confirmed pay run for this selection."</td><td>Nothing to post.</td></tr>
+<tr><td>"The entry is not balanced: difference of X."</td><td>Should not happen; report it.</td></tr>
+<tr><td>"{n} line(s) without an account number: define them in Settings → Chart of accounts."</td><td>Complete the chart of accounts.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="categories">Understanding the calculations › Pay categories</h2>
+<p>Each pay line belongs to a system category. It is the category, not the label, that decides the treatment. "Standard" earnings are subject to everything: federal tax, Québec tax, EI, QPP, QPIP, HSF, CNESST; they go to box 14 of the T4 and box A of the RL-1.</p>
+<table>
+<tr><th>Category</th><th>Type</th><th>Treatment and particularities</th><th>Boxes</th></tr>
+<tr><td>Wages</td><td>Earnings</td><td>standard; earns vacation</td><td>14 / A</td></tr>
+<tr><td>Salary</td><td>Earnings</td><td>standard; vacation</td><td>14 / A</td></tr>
+<tr><td>Time and a half</td><td>Earnings</td><td>standard; vacation; rate × 1.5</td><td>14 / A</td></tr>
+<tr><td>Double time</td><td>Earnings</td><td>standard; vacation; rate × 2</td><td>14 / A</td></tr>
+<tr><td>Statutory holidays</td><td>Earnings</td><td>standard; vacation</td><td>14 / A</td></tr>
+<tr><td>Sick leave</td><td>Earnings</td><td>standard; vacation</td><td>14 / A</td></tr>
+<tr><td>Commission</td><td>Earnings</td><td>standard; vacation</td><td>14 and 42 / A and M</td></tr>
+<tr><td>Other taxable earnings</td><td>Earnings</td><td>standard; vacation</td><td>14 / A</td></tr>
+<tr><td>Vacation pay</td><td>Earnings</td><td>standard; vacation; <strong>reduces the vacation balance</strong></td><td>14 / A</td></tr>
+<tr><td>Vacation pay paid each pay period</td><td>Earnings</td><td>standard; <strong>does not earn vacation</strong></td><td>14 / A</td></tr>
+<tr><td>Bonus</td><td>Earnings</td><td>standard; vacation; <strong>lump-sum payment</strong></td><td>14 / A</td></tr>
+<tr><td>Retroactive pay</td><td>Earnings</td><td>standard; vacation; <strong>lump-sum payment</strong></td><td>14 / A</td></tr>
+<tr><td>Expense reimbursement (non-taxable)</td><td>Earnings</td><td>subject to nothing; added to gross paid and to net pay</td><td>—</td></tr>
+<tr><td>Other taxable benefit (cash)</td><td>Benefit</td><td>subject to everything; <strong>paid in cash</strong>; no vacation</td><td>14 and 40 / A and L</td></tr>
+<tr><td>Other taxable benefit (non-cash)</td><td>Benefit</td><td>taxes, QPP, HSF, CNESST; <strong>neither EI nor QPIP</strong>; taxed but not paid out</td><td>14 and 40 / A and L</td></tr>
+<tr><td>Motor vehicle (non-cash)</td><td>Benefit</td><td>same as non-cash</td><td>14 and 34 / A and W</td></tr>
+<tr><td>Private health insurance plan - employer share</td><td>Benefit</td><td><strong>no federal tax</strong>; Québec tax, QPP, HSF, CNESST; neither EI nor QPIP; not paid out</td><td>— / A and J</td></tr>
+<tr><td>RRSP</td><td>Deduction</td><td>reduces both taxes</td><td>—</td></tr>
+<tr><td>Registered pension plan (RPP)</td><td>Deduction</td><td>reduces both taxes</td><td>20 and 52 / D</td></tr>
+<tr><td>VRSP / PRPP</td><td>Deduction</td><td>reduces both taxes</td><td>—</td></tr>
+<tr><td>Union dues</td><td>Deduction</td><td>reduces federal tax only</td><td>44 / F</td></tr>
+<tr><td>Fonds de solidarité FTQ</td><td>Deduction</td><td>does not reduce income; <strong>labour-sponsored fund credit</strong> of 15% at both levels</td><td>—</td></tr>
+<tr><td>Fondaction CSN</td><td>Deduction</td><td>same</td><td>—</td></tr>
+<tr><td>Group insurance - employee share</td><td>Deduction</td><td>after tax</td><td>85 / 235</td></tr>
+<tr><td>Charitable donation</td><td>Deduction</td><td>after tax</td><td>46 / N</td></tr>
+<tr><td>Other deduction (after tax)</td><td>Deduction</td><td>no tax effect</td><td>—</td></tr>
+</table>
+<p><strong>Gross paid</strong> = earnings + benefits paid in cash. Non-cash benefits are taxed but not added to net pay. Deductions add up in "Other deductions".</p>
+
+<!-- ============================================================ -->
+<h2 id="parametres">Understanding the calculations › 2026 parameters</h2>
+<p>The rate year is that of the <strong>pay date</strong>. Only 2026 is defined in the software.</p>
+<div class="deux">
+<div class="carte"><h4>Federal tax (T4127)</h4>
+<table><tr><th>Annual taxable income</th><th>Rate</th><th>K</th></tr>
+<tr><td>up to $58,523</td><td class="num">14%</td><td class="num">0</td></tr>
+<tr><td>up to $117,045</td><td class="num">20.5%</td><td class="num">3,804</td></tr>
+<tr><td>up to $181,440</td><td class="num">26%</td><td class="num">10,241</td></tr>
+<tr><td>up to $258,482</td><td class="num">29%</td><td class="num">15,685</td></tr>
+<tr><td>above</td><td class="num">33%</td><td class="num">26,024</td></tr></table>
+<ul><li>Basic personal amount: $16,452; credit rate: 14%.</li><li>Canada employment amount: $1,501.</li><li>Québec abatement: 16.5%.</li><li>Labour-sponsored fund credit: 15%, maximum $750.</li><li>Lump sum: threshold $5,000, flat rate 10%.</li></ul></div>
+<div class="carte"><h4>Québec tax (TP-1015.F)</h4>
+<table><tr><th>Annual taxable income</th><th>Rate</th><th>K</th></tr>
+<tr><td>up to $54,345</td><td class="num">14%</td><td class="num">0</td></tr>
+<tr><td>up to $108,680</td><td class="num">19%</td><td class="num">2,717</td></tr>
+<tr><td>up to $132,245</td><td class="num">24%</td><td class="num">8,151</td></tr>
+<tr><td>above</td><td class="num">25.75%</td><td class="num">10,465</td></tr></table>
+<ul><li>Basic personal amount: $18,952; credit rate: 14%.</li><li>Deduction for workers: 6%, maximum $1,450.</li><li>Labour-sponsored fund credit: 15%.</li><li>Lump sum: threshold $18,952, flat rate 7%.</li></ul></div>
+</div>
+<table>
+<tr><th>Plan</th><th>2026 parameters</th></tr>
+<tr><td>QPP</td><td>Maximum pensionable earnings $74,600; exemption $3,500; rate 6.3% (of which 5.3% base); maximum employee contribution $4,479.30 (base portion $3,768.30). Second additional contribution (QPP2): from $74,600 to $85,000, rate 4%, maximum $416. The employer pays the same.</td></tr>
+<tr><td>Employment Insurance</td><td>Maximum insurable earnings $68,900; employee rate (Quebec) 1.30%, maximum $895.70; employer = employee × factor (1.4).</td></tr>
+<tr><td>QPIP</td><td>Maximum insurable earnings $103,000; employee 0.43% (max. $442.90); employer 0.602% (max. $620.06).</td></tr>
+<tr><td>HSF</td><td>Rate according to total payroll S (in millions, brought within 1 to 7.8): general 1.2662 + 0.3838 × S (from 1.65% to 4.26%); primary and manufacturing 0.8074 + 0.4426 × S (from 1.25% to 4.26%); public sector 4.26%. Rounded to 2 decimals.</td></tr>
+<tr><td>CNESST</td><td>Maximum insurable earnings $103,000; rate: that of your classification decision ($ per $100).</td></tr>
+<tr><td>CNT</td><td>0.06% of CNESST insurable wages, if the company is subject to it.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="formules">Understanding the calculations › Formulas, deduction by deduction</h2>
+<p>Notation: P = periods per year; G = taxable regular pay for the period; B = lump-sum pay (bonus, retro); F = deductions that reduce taxable income; Q = withholdings for labour-sponsored funds. Year-to-date amounts = confirmed pay runs + opening balances.</p>
+<dl class="def">
+<dt>QPP</dt>
+<dd>Subject if not exempt and aged 18 or over on the pay date. Exemption per period = 3,500 ÷ P, truncated. C = 6.3% × (S3 − exemption), capped at 4,479.30 − year-to-date. QPP2: C2 = 4% × (earnings above $74,600), capped at 416 − year-to-date. Employer share = the employee's. CS (portion deductible from income) = C × 1/6.3 + C2.</dd>
+<dt>Employment Insurance</dt>
+<dd>EI = 1.30% × insurable earnings, capped at 895.70 − year-to-date. Employer = EI × factor (1.4 by default).</dd>
+<dt>QPIP</dt>
+<dd>Employee = 0.43% × earnings, capped at 442.90 − year-to-date. Employer = 0.602% × earnings, capped at 620.06 − year-to-date.</dd>
+<dt>Québec tax (TP-1015.F)</dt>
+<dd>E = line 10 of the TP-1015.3 ($18,952 by default). H = min(6% × G; 1,450 ÷ P). I = P × (G − F − H − CSA) − J − J1, floor 0. Credits = K1 + 14% × E + 15% × P × Q. Y = T × I − K − credits, floor 0. Tax for the period = Y ÷ P, plus the additional withholding. Lump sum: 7% if P × G + previous lump sums + B ≤ $18,952, otherwise the difference in annual tax with and without the lump sum.</dd>
+<dt>Federal tax (T4127, Quebec employee)</dt>
+<dd>TC = TD1 amount ($16,452 by default). A = P × (G − F − CSA) − HD − F1, floor 0. K1 = 14% × TC. K2Q = 14% × [annualized base QPP, capped + annualized EI, capped + annualized QPIP, capped]. K4 = min(14% × A; 14% × 1,501). K3 = other credits. LCF = min(750; 15% × P × Q). T3 = R × A − K − K1 − K2Q − K3 − K4, floor 0. T1 = (T3 − LCF) − 16.5% × T3: this is the Québec abatement. Tax for the period = T1 ÷ P, plus the TD1 additional tax. Lump sum: 10% if the $5,000 threshold is not exceeded, otherwise the difference method.</dd>
+<dt>HSF</dt>
+<dd>HSF earnings × HSF rate ÷ 100. No HSF for an exempt employee.</dd>
+<dt>CNESST and CNT</dt>
+<dd>Earnings = min(earnings; 103,000 − year-to-date). CNESST = earnings × rate ÷ 100. CNT = earnings × 0.06%. The CNESST exclusion on the record removes both.</dd>
+<dt>Vacation</dt>
+<dd>Accrued = vacationable earnings × rate ÷ 100. It is an accrual: it is not paid out. "Vacation pay" lines reduce the balance.</dd>
+<dt>Net pay</dt>
+<dd>Gross paid − (federal tax + Québec tax + QPP + QPP2 + EI + QPIP + other deductions).</dd>
+</dl>
+
+<h3 id="arrondis">Rounding</h3>
+<ul>
+  <li>To the cent, half a cent rounded up.</li>
+  <li>The QPP exemption per period is truncated, not rounded.</li>
+  <li>Amount E (Québec personal credits) is rounded to the dollar.</li>
+  <li>Line amount = hours × rate × multiplier, rounded to the cent.</li>
+  <li>All intermediate values have a floor of 0.</li>
+</ul>
+
+<h3 id="exemple">Worked example</h3>
+<p>Salary of $60,000 in 2026, regular employee (basic amounts, no deductions, no exemptions). The annual totals obtained in a single annual pay and in 26 biweekly pays agree to within a few cents; the differences come from per-period rounding.</p>
+<table>
+<tr><th>Deduction</th><th class="num">Annual pay (1 period)</th><th class="num">26 pays of $2,307.69, cumulated</th></tr>
+<tr><td>Federal tax</td><td class="num">$4,427.34</td><td class="num">$4,427.28</td></tr>
+<tr><td>Québec tax</td><td class="num">$5,646.87</td><td class="num">$5,646.94</td></tr>
+<tr><td>QPP (6.3% × (60,000 − 3,500))</td><td class="num">$3,559.50</td><td class="num">$3,559.40</td></tr>
+<tr><td>Employment Insurance (1.30%)</td><td class="num">$780.00</td><td class="num">$780.00</td></tr>
+<tr><td>QPIP (0.43%)</td><td class="num">$258.00</td><td class="num">$257.92</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="cas-demarrage">Practical case › First start-up</h2>
+<ol class="etapes">
+  <li>Sign in with your 60Sec account. You are sent to <span class="chemin">Settings › Payroll settings</span>.</li>
+  <li>Fill in the default frequency, the vacation rate, the RP and RS numbers, the remittance frequency, the estimated payroll, the HSF sector, the EI factor and the CNESST rate. "Save" creates six basic pay items.</li>
+  <li>In <span class="chemin">Settings › Pay items</span>, add what you are missing: commissions, RRSP, group insurance, union dues…</li>
+  <li>In <span class="chemin">Settings › Chart of accounts</span>, enter your account numbers if you want the journal entries report.</li>
+  <li>In <span class="chemin">Settings › Direct deposit</span>, enter the settings provided by your bank, if you pay by direct deposit.</li>
+  <li>In <span class="chemin">Employees</span>, create or check each employee, then open "Payroll settings": SIN, frequency, rate or salary, TD1 and TP-1015.3, direct deposit, pay stub by email. Save, then define their recurring items.</li>
+  <li>If you are starting mid-year, enter the <a href="#emp-cumulatifs">opening balances</a>.</li>
+  <li>Run a first pay run and compare it with your previous system or with the CRA's and Revenu Québec's calculators before confirming it.</li>
+</ol>
+
+<h2 id="cas-conversion">Practical case › Mid-year conversion</h2>
+<p>For each employee, in <span class="chemin">Employees › Opening balances</span>, enter the year's cumulative amounts taken from your previous system: gross, taxes withheld, QPP pensionable earnings and contributions (base and 2nd additional), EI, QPIP employee and employer, CNESST insurable wages, vacation balance. Without them, 60secPaie would keep withholding QPP, EI and QPIP past the maximums, and the slips would be incomplete. Remittances already made in the previous system are not entered in 60secPaie: its summaries cover only the pay runs it confirmed, adjust the year-end summaries accordingly.</p>
+
+<h2 id="cas-nouvel-employe">Practical case › Hiring someone</h2>
+<ol class="etapes">
+  <li><span class="chemin">Employees › New employee</span>: identity and contact details. They appear in 60Sec right away.</li>
+  <li>On their record: SIN (ask for it, it is mandatory for the slips), date of birth, language, frequency if it differs from the company's, hourly rate and hours per week or annual salary, TD1 and TP-1015.3 provided by the employee (leave blank for the basic amounts), direct deposit and email.</li>
+  <li>Pay items: add their wages if you want a template, and their recurring deductions.</li>
+  <li>They are included in the next pay run whose period end is after their hire date.</li>
+</ol>
+
+<h2 id="cas-depart">Practical case › Employee departure</h2>
+<ol class="etapes">
+  <li>Run their last pay normally, with a "Vacation pay" line to pay out their vacation balance (visible on their stub, "Vacation balance").</li>
+  <li>In 60Sec, enter their termination date or make them inactive. They are no longer included in pay runs whose period start is after their termination date.</li>
+  <li>The Record of Employment (ROE) is produced in Service Canada's ROE Web; 60secPaie does not produce it. Their T4 and RL-1 slips come out at year end like everyone else's.</li>
+</ol>
+
+<h2 id="cas-assurance">Practical case › Group insurance</h2>
+<table>
+<tr><th>Component</th><th>Pay item to create</th><th>Treatment</th></tr>
+<tr><td>Employee share (health, dental)</td><td>Deduction "Group insurance - employee share"</td><td>After tax. T4 box 85, RL-1 code 235 (medical expenses).</td></tr>
+<tr><td>Employee share (life, disability)</td><td>Deduction "Other deduction (after tax)"</td><td>After tax, no box: these premiums are not medical expenses.</td></tr>
+<tr><td>Employer share, health and dental</td><td>Benefit "Private health insurance plan - employer share"</td><td>Taxable in Québec only (RL-1 A and J), QPP, HSF, CNESST; no federal tax, no EI or QPIP. Include the 9% tax on premiums.</td></tr>
+<tr><td>Employer share, life and AD&amp;D insurance</td><td>Benefit "Other taxable benefit (non-cash)"</td><td>Taxable at both levels (T4 40, RL-1 L), QPP, HSF, CNESST; neither EI nor QPIP.</td></tr>
+<tr><td>Employer share, disability</td><td>None</td><td>Not a taxable benefit, but the benefits become taxable. Accounted for outside payroll. Common practice: the employee pays 100% of this premium.</td></tr>
+</table>
+<p>Add these items to the recurring items of each insured employee, as a fixed amount per pay (monthly premium × 12 ÷ periods, tax included). Set box 45 (dental benefits) on the record. Payment to the insurer is made outside payroll; the journal entry shows the amount to pay them if the accounts are defined.</p>
+
+<h2 id="cas-bonus">Practical case › Bonus and retroactive pay</h2>
+<p>Add a "Bonus" or "Retroactive pay" line to the employee's pay (step 2, "Edit lines"). The tax on this line follows the lump-sum payment method: flat rate (10% federal under $5,000, 7% Québec under $18,952 of annual income), otherwise the difference in annual tax with and without the payment. The check report shows "Tax on lump-sum payment" separately. QPP, EI and QPIP apply normally, up to the maximums.</p>
+
+<h2 id="cas-vacances">Practical case › Vacation</h2>
+<ul>
+  <li><strong>Accrual</strong>: each pay accrues the vacation rate (4% or 6%) on eligible earnings. It is an accrual visible on the stub ("Vacation accrued", "Vacation balance") and in the journal entries ("Vacation expense" / "Vacation payable").</li>
+  <li><strong>Vacation taken</strong>: add a "Vacation pay" line with the amount paid. It reduces the balance and is posted against "Vacation payable".</li>
+  <li><strong>Vacation paid each pay</strong> (part-time or temporary employees): use "Vacation pay paid each pay period"; this line does not accrue vacation on itself.</li>
+  <li>An opening balance is entered in the opening balances.</li>
+</ul>
+
+<h2 id="cas-annuelle">Practical case › Annual payroll</h2>
+<p>For an owner who pays themselves a salary once a year: on their record, "Pay period" = "Annual (1 period)", and their annual salary. In the wizard, choose "Annual (1 period)"; the period runs from January 1 to the chosen end. Deductions are calculated on the whole year, with the full $3,500 QPP exemption. The wizard does not mix frequencies: biweekly employees and the annual employee are handled in separate pay runs.</p>
+
+<h2 id="cas-corriger">Practical case › Correcting a pay run</h2>
+<ol class="etapes">
+  <li>If the pay run is still a draft: go back to step 2, edit the lines, recalculate.</li>
+  <li>If it is confirmed and it is the most recent: open its details and "Cancel pay run". If its deductions have already been remitted, cancel that payment first in Remittances › History. Then redo the pay run. Cheques already issued keep their number; new ones get a new one.</li>
+  <li>If an older pay run is involved: cancel the subsequent pay runs one by one, from the most recent to the oldest, or correct with an adjustment line ("Retroactive pay" or a deduction) in the next pay run. The year-to-date amounts and the slips will reflect the correction.</li>
+</ol>
+
+<h2 id="cas-depot">Practical case › First direct deposit</h2>
+<ol class="etapes">
+  <li>Sign up for your bank's automated funds transfer service; it gives you an originator ID, a data centre and a channel for submitting files.</li>
+  <li>Enter these settings and the company account in <span class="chemin">Settings › Direct deposit</span>.</li>
+  <li>On each employee's record, check "This employee is paid by direct deposit" and enter transit, institution and account (on a void cheque: 5-digit transit, 3-digit institution, then the account).</li>
+  <li>Confirm a pay run, then "Download the direct deposit file" from its details. Have this first file validated by the bank (test file) before a real deposit.</li>
+  <li>Submit the file to the bank before the pay date, according to its lead time.</li>
+</ol>
+
+<h2 id="cas-fin-annee">Practical case › Year end</h2>
+<ol class="etapes">
+  <li>Confirm all pay runs dated in the year. The pay date decides the year: a December period paid in January belongs to the following year.</li>
+  <li>Record the year's last remittances in Remittances.</li>
+  <li><span class="chemin">Reports › T4 and RL-1 slips</span>: check each employee (SIN present, consistent boxes), export the CSV, enter the slips in Web Forms and My Account for businesses before the last day of February. Compare the T4 and RL-1 summaries with your remittances; pay the balance, including the CNT.</li>
+  <li><span class="chemin">Reports › CNESST statement of wages</span>: file in Mon Espace CNESST before March 15; the "Reconciliation" card gives the difference with your payments.</li>
+  <li>Set box 45 (dental) and check the exemptions before producing the T4s.</li>
+  <li>The following year's rates must be added to the software before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software.").</li>
+</ol>
+
+<!-- ============================================================ -->
+<h2 id="messages">Reference › Messages and their solutions</h2>
+<p>Messages are grouped by screen in the sections above. Here are the most frequent, in a single table.</p>
+<table>
+<tr><th>Message</th><th>Where</th><th>Solution</th></tr>
+<tr><td>"Payroll is not set up yet for {company}. Start with its payroll settings."</td><td>Any page</td><td>Fill in and save Settings › Payroll settings.</td></tr>
+<tr><td>"No active employee with payroll set up is paid at this frequency for this period. Check the Employees page."</td><td>Wizard, step 1</td><td>Check that the employee is active, "Set up", at the same frequency as the run, hired before the period end.</td></tr>
+<tr><td>"The government rates for {year} are not yet defined in the software."</td><td>Wizard, step 1</td><td>The pay date must be in 2026; otherwise the year's rates must be added to the software.</td></tr>
+<tr><td>"A pay run is already in progress. Finish it or delete it first."</td><td>Wizard, step 1</td><td>Continue or delete the draft.</td></tr>
+<tr><td>"The pay date is too far from the period end."</td><td>Wizard, step 1</td><td>Between 31 days before and 45 days after the period end.</td></tr>
+<tr><td>"The line amount must be greater than 0 (hours × rate, or amount)."</td><td>Pay lines</td><td>Enter hours and a rate, or an amount.</td></tr>
+<tr><td>"At least one net pay is negative. Correct the lines before confirming."</td><td>Wizard, step 3</td><td>Reduce the deduction concerned.</td></tr>
+<tr><td>"This pay run can no longer be edited."</td><td>Wizard</td><td>The pay run is confirmed or cancelled. To correct it, cancel it (if it is the most recent) and redo it.</td></tr>
+<tr><td>"Only the most recent confirmed pay run can be cancelled."</td><td>Details</td><td>Cancel the more recent pay runs first.</td></tr>
+<tr><td>"The deductions for this pay run have already been remitted. Cancel the remittance payment first."</td><td>Details</td><td>Remittances › History › open the payment › "Cancel payment".</td></tr>
+<tr><td>"The company's direct deposit settings are incomplete (Settings → Direct deposit)."</td><td>Details</td><td>Complete the Direct deposit page.</td></tr>
+<tr><td>"Incomplete banking information for {First name Last name}."</td><td>Details</td><td>Employee record, Payment block.</td></tr>
+<tr><td>"{Name}: no email in the employee file."</td><td>Pay stubs by email</td><td>Add their email in 60Sec.</td></tr>
+<tr><td>"The social insurance number is invalid."</td><td>Record</td><td>Check the 9 digits; the SIN has a check digit.</td></tr>
+<tr><td>"Direct deposit: enter the transit (5 digits), the institution (3 digits) and the account number."</td><td>Record</td><td>Complete the three fields or uncheck direct deposit.</td></tr>
+<tr><td>"The vacation rate seems too high."</td><td>Record, Settings</td><td>The rate is a percentage (4 or 6), not dollars.</td></tr>
+<tr><td>"The EI premium factor must be between 1 and 1.4."</td><td>Settings</td><td>1.4 unless a reduced rate is granted by the CRA.</td></tr>
+<tr><td>"This item has already been used in a pay run: its category can no longer change. Create a new item instead."</td><td>Pay items</td><td>Create a new item, make the old one inactive.</td></tr>
+<tr><td>"This item is used by employees or pay runs. Make it inactive instead of deleting it."</td><td>Pay items</td><td>Uncheck "Active".</td></tr>
+<tr><td>"Employee code {code} is already used in this company."</td><td>New employee</td><td>Another code, or blank.</td></tr>
+<tr><td>"An active employee already has this name. …"</td><td>New employee</td><td>Check the existing record; tick "create anyway" if it is a different person.</td></tr>
+<tr><td>"No deductions to remit to {government} for pay runs up to …"</td><td>Remittances</td><td>Nothing is due at this date, or everything is already remitted.</td></tr>
+<tr><td>"The payment date is too far away."</td><td>Remittances</td><td>At most 31 days in the future.</td></tr>
+<tr><td>"{n} line(s) without an account number: define them in Settings → Chart of accounts."</td><td>Journal entries</td><td>Complete the chart of accounts.</td></tr>
+<tr><td>"Too many attempts. Try again in a few minutes."</td><td>Sign-in</td><td>Wait 15 minutes.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="faq">Reference › Frequently asked questions</h2>
+<div class="faq">
+<details><summary>An employee does not appear in the pay run. Why?</summary><p>Four conditions: they are active in 60Sec; their payroll is "Set up" (record saved at least once); their frequency (their own, otherwise the company's) is that of the run; their hire date is no later than the period end and their termination date is blank or after the period start. Also check that they have lines: without a template, rate or salary, they appear with "No lines".</p></details>
+<details><summary>An employee's QPP is 0.</summary><p>They are under 18 on the pay date, or "Do not contribute to the QPP" is checked, or their annual maximum ($4,479.30 plus $416 of QPP2) is reached, opening balances included, or their pay is below the per-period exemption ($3,500 ÷ periods).</p></details>
+<details><summary>Why is federal tax lower than in another province?</summary><p>Quebec employees benefit from the 16.5% Québec abatement on federal tax, and their EI rate is reduced (1.30%) because they contribute to the QPIP.</p></details>
+<details><summary>Can I have two drafts at the same time?</summary><p>No. Only one draft per company. Finish it or delete it before starting another. Two frequencies (for example biweekly and monthly) are therefore paid in two successive runs.</p></details>
+<details><summary>How do I change an employee's name or address?</summary><p>In 60Sec. 60secPaie only writes there to create an employee; the rest of the identity is edited in 60Sec and is reflected here immediately.</p></details>
+<details><summary>The SIN shows "••••••123". Where is the rest?</summary><p>Encrypted. It is never sent back to the browser. On an employee's slip, "Show full SIN" displays it, and this viewing is logged.</p></details>
+<details><summary>The suggested remittance amount does not match my CRA statement.</summary><p>60secPaie only knows the pay runs it confirmed. Pay runs done elsewhere or before the conversion are not in its remittances. The configured remittance frequency must also match the one the CRA assigned to you.</p></details>
+<details><summary>The HSF on the RL-1 Summary differs from what Revenu Québec calculates.</summary><p>The rate applied during the year comes from the estimated payroll in Settings. The actual rate is calculated on the year's payroll; the difference is settled in the RL-1 Summary, as the report's note indicates.</p></details>
+<details><summary>I want to print all the pay stubs of a pay run.</summary><p>Open the pay run details and the "Pay stub" link for each employee; each stub has "Print pay stub" and "Download as PDF". For a group send, use "Send pay stubs by email".</p></details>
+<details><summary>What does "Vacation accrued" mean on the stub?</summary><p>The vacation accrual earned in this pay (rate × eligible earnings). It is not paid out; it is added to the "Vacation balance", which is drawn down by "Vacation pay" lines.</p></details>
+<details><summary>Does a hidden item line count?</summary><p>Yes. "Do not show on the pay stub" only changes the display: the line is calculated, taxed and posted normally.</p></details>
+<details><summary>Can I pay a supplier or a self-employed worker?</summary><p>No. 60secPaie only handles employees within the meaning of tax laws, with source deductions. A self-employed worker is paid by invoice, in 60Sec.</p></details>
+</div>
+
+<!-- ============================================================ -->
+<h2 id="glossaire">Reference › Glossary</h2>
+<dl class="def">
+<dt>EI</dt><dd>Employment Insurance, federal plan. Assurance-emploi (AE) in French.</dd>
+<dt>CRA</dt><dd>Canada Revenue Agency (ARC in French).</dd>
+<dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Workplace accident insurance premium, paid periodically to Revenu Québec.</dd>
+<dt>CNT</dt><dd>Labour standards contribution, 0.06% of insurable wages, paid once a year with the RL-1 Summary.</dd>
+<dt>Year-to-date</dt><dd>Amounts for the year so far: gross, deductions, insurable earnings. Used for the annual maximums and the slips.</dd>
+<dt>Pay item</dt><dd>Reusable line (earnings, benefit or deduction) attached to a system category.</dd>
+<dt>HSF</dt><dd>Health Services Fund (FSS in French), Québec employer contribution, as a percentage of total payroll.</dd>
+<dt>Template</dt><dd>An employee's recurring pay items, copied into each new pay run.</dd>
+<dt>Pay run</dt><dd>One pay period for all included employees: draft, confirmed or cancelled.</dd>
+<dt>YMPE / YAMPE</dt><dd>Maximum pensionable earnings for the QPP ($74,600) and additional maximum ($85,000) for the 2nd additional contribution (MGA / MSGA in French).</dd>
+<dt>SIN</dt><dd>Social insurance number (NAS in French).</dd>
+<dt>Lump-sum payment</dt><dd>Bonus or retroactive pay, taxed using a specific method rather than annualized like regular wages.</dd>
+<dt>RP / RS</dt><dd>CRA payroll deductions account number (…RP0001) and Revenu Québec identification number (…RS0001).</dd>
+<dt>QPIP</dt><dd>Quebec Parental Insurance Plan (RQAP in French). On the T4, it is called PPIP.</dd>
+<dt>QPP</dt><dd>Quebec Pension Plan (RRQ in French). Includes the base contribution, the first and the second additional contribution.</dd>
+<dt>T4127</dt><dd>CRA guide: formulas for calculating payroll deductions.</dd>
+<dt>TD1</dt><dd>Personal Tax Credits Return (federal), completed by the employee.</dd>
+<dt>TP-1015.3</dt><dd>Source Deductions Return (Québec), completed by the employee.</dd>
+<dt>TP-1015.F</dt><dd>Revenu Québec guide: formulas for calculating source deductions.</dd>
+<dt>Pay stub</dt><dd>The pay statement given to the employee.</dd>
+</dl>
+
+<p class="retour"><a href="#haut">Back to top</a> · <a href="Default.aspx">Back to 60secPaie</a></p>
+</main>
+</div>
+
+<script>
+(function () {
+  var champ = document.getElementById('recherche');
+  var liens = document.querySelectorAll('#sommaire a');
+  var titres = document.querySelectorAll('#sommaire h2');
+  champ.addEventListener('input', function () {
+    var q = champ.value.trim().toLowerCase();
+    for (var i = 0; i < liens.length; i++) {
+      var a = liens[i];
+      var texte = a.textContent.toLowerCase();
+      var cible = document.querySelector(a.getAttribute('href'));
+      var corps = '';
+      if (cible && q.length > 0) {
+        var n = cible.nextElementSibling;
+        corps = cible.textContent;
+        while (n && !/^H[12]$/.test(n.tagName)) { corps += ' ' + n.textContent; if (corps.length > 20000) break; n = n.nextElementSibling; }
+        corps = corps.toLowerCase();
+      }
+      a.classList.toggle('cache', q.length > 0 && texte.indexOf(q) < 0 && corps.indexOf(q) < 0);
+    }
+    for (var j = 0; j < titres.length; j++) {
+      var h = titres[j], visible = false, s = h.nextElementSibling;
+      while (s && s.tagName === 'A') { if (!s.classList.contains('cache')) { visible = true; break; } s = s.nextElementSibling; }
+      h.style.display = visible ? '' : 'none';
+    }
+  });
+})();
+</script>
+</body>
+</html>

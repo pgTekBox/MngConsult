@@ -9,9 +9,9 @@
     </div>
 
     <fieldset>
-        <legend>Employé (MngConsul)</legend>
+        <legend>Employé (60Sec)</legend>
         <asp:Literal ID="litIdentite" runat="server" />
-        <p class="note">Ces renseignements proviennent de MngConsul et s'y modifient.</p>
+        <p class="note">Ces renseignements proviennent de 60Sec et s'y modifient.</p>
     </fieldset>
 
     <fieldset>
@@ -36,7 +36,7 @@
         <div class="champs">
             <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlPeriodes" Text="Période de paie" />
                 <asp:DropDownList ID="ddlPeriodes" runat="server">
-                    <asp:ListItem Value="">Par défaut (MngConsul, sinon la compagnie)</asp:ListItem>
+                    <asp:ListItem Value="">Par défaut (60Sec, sinon la compagnie)</asp:ListItem>
                     <asp:ListItem Value="52">Hebdomadaire (52 périodes)</asp:ListItem>
                     <asp:ListItem Value="26">Aux 2 semaines (26 périodes)</asp:ListItem>
                     <asp:ListItem Value="24">Bimensuel (24 périodes)</asp:ListItem>
@@ -54,7 +54,7 @@
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" />
                 <div class="aide">Vide = taux par défaut de la compagnie.</div></div>
         </div>
-        <p class="note">Le taux horaire, le salaire et la fréquence proposés viennent de MngConsul lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.</p>
+        <p class="note">Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.</p>
     </fieldset>
 
     <fieldset>
