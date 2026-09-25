@@ -3459,3 +3459,41 @@ es: Perfil actualizado.
 fr: Envoyer
 en: Send
 es: Enviar
+
+# ---------- Assistant flottant ----------
+
+fr: L'assistant réfléchit…
+en: The assistant is thinking…
+es: El asistente está pensando…
+
+fr: L'assistant n'a pas pu répondre. Réessayez dans un instant.
+en: The assistant could not answer. Try again in a moment.
+es: El asistente no pudo responder. Vuelva a intentarlo en un momento.
+
+fr: Effacer la conversation ?
+en: Clear the conversation?
+es: ¿Borrar la conversación?
+
+fr: Guide de 60secPaie et profil de la compagnie
+en: 60secPaie guide and company profile
+es: Guía de 60secPaie y perfil de la empresa
+
+fr: Ouvrir la page complète
+en: Open the full page
+es: Abrir la página completa
+
+fr: Fermer
+en: Close
+es: Cerrar
+
+fr: Bonjour ! Posez votre question sur la paie de cette compagnie : où cliquer, pourquoi une retenue est nulle, quand payer les retenues… Employés, NAS et comptes bancaires ne sont jamais envoyés.
+en: Hello! Ask your question about this company's payroll: where to click, why a deduction is zero, when to pay source deductions… Employee names, SINs and bank accounts are never sent.
+es: ¡Hola! Haga su pregunta sobre la nómina de esta empresa: dónde hacer clic, por qué una retención es cero, cuándo pagar las retenciones… Nombres de empleados, NAS y cuentas bancarias nunca se envían.
+
+fr: Votre question… (Entrée pour envoyer)
+en: Your question… (Enter to send)
+es: Su pregunta… (Intro para enviar)
+
+fr: La paie n'est pas encore configurée pour cette compagnie.
+en: Payroll is not yet set up for this company.
+es: La nómina aún no está configurada para esta empresa.

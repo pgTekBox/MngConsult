@@ -23,6 +23,7 @@ Partial Public Class SiteMaster
     Protected WithEvents lnkEmployes As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkConfig As Global.System.Web.UI.HtmlControls.HtmlAnchor
     Protected WithEvents lnkAssistant As Global.System.Web.UI.HtmlControls.HtmlAnchor
+    Protected WithEvents lnkCss As Global.System.Web.UI.HtmlControls.HtmlLink
     Protected WithEvents pnlMessage As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litMessage As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents Contenu As Global.System.Web.UI.WebControls.ContentPlaceHolder

@@ -79,6 +79,7 @@
     <Content Include="Langues\traductions.txt" />
     <Content Include="Accueil.aspx" />
     <Content Include="Assistant.aspx" />
+    <Content Include="AssistantIA.ashx" />
     <Content Include="Aide.html" />
     <Content Include="Aide-en.html" />
     <Content Include="Aide-es.html" />
@@ -108,6 +109,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="AssistantIA.ashx.vb">
+      <DependentUpon>AssistantIA.ashx</DependentUpon>
+    </Compile>
     <Compile Include="Assistant.aspx.vb">
       <DependentUpon>Assistant.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

@@ -9,6 +9,10 @@ Public Class SiteMaster
     End Sub
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' La feuille de style porte la date de sa dernière modification : un navigateur qui
+        ' l'avait en cache la recharge dès qu'elle change (sinon l'assistant flottant, par
+        ' exemple, apparaîtrait sans ses styles jusqu'à expiration du cache).
+        lnkCss.Href = ResolveUrl("~/Content/site.css") & "?v=" & IO.File.GetLastWriteTimeUtc(Server.MapPath("~/Content/site.css")).Ticks.ToString()
         Dim compte = Contexte.Compte
         If compte IsNot Nothing Then
             lblUtilisateur.Text = Server.HtmlEncode(If(compte.Txt("NomComplet").Length > 0, compte.Txt("NomComplet"), compte.Txt("Courriel")))
