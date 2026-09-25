@@ -109,7 +109,8 @@ SELECT @@SERVERNAME AS Serveur, DB_NAME() AS Base, SUSER_SNAME() AS Compte,
         $r.Close()
     }
     elseif ($Action -eq 'Schema') {
-        Invoke-Script $cn (Join-Path $PSScriptRoot '01_schema.sql')
+        # Tous les scripts numérotés, dans l'ordre : 01_schema, 02_parametres_annee, 03_unites_cnesst…
+        foreach ($script in Get-ChildItem -Path $PSScriptRoot -Filter '0?_*.sql' | Sort-Object Name) { Invoke-Script $cn $script.FullName }
         Write-Output 'Schéma paie déployé.'
     }
 }

@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Éléments de paie</a>
   <a href="#config-plan">Plan comptable</a>
   <a href="#config-depot">Dépôt direct</a>
+  <a href="#config-unites">Unités CNESST</a>
   <h2>Employés</h2>
   <a href="#emp-liste">Liste des employés</a>
   <a href="#emp-nouveau">Nouvel employé</a>
@@ -257,7 +258,7 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="config">Configuration › Paramètres de paie</h2>
-<p><span class="chemin">Config/Compagnie.aspx</span>. Seule page accessible avant que la paie de la compagnie soit configurée. Le sous-menu de Configuration offre : « Paramètres de paie », « Éléments de paie », « Plan comptable », « Dépôt direct ».</p>
+<p><span class="chemin">Config/Compagnie.aspx</span>. Seule page accessible avant que la paie de la compagnie soit configurée. Le sous-menu de Configuration offre : « Paramètres de paie », « Éléments de paie », « Plan comptable », « Dépôt direct », « Unités CNESST ».</p>
 <h3>« Compagnie » (lecture seule)</h3>
 <p>Nom, adresse, ville, téléphone et « Numéro d'entreprise (NE) » viennent de 60Sec : « Le nom et les coordonnées de la compagnie se modifient dans 60Sec (paramètres de l'entreprise). »</p>
 <h3>« Informations de paie »</h3>
@@ -277,7 +278,7 @@ mark{background:#ffe89a}
 <tr><td>« Masse salariale totale estimée ($) »</td><td>Sert à déterminer le taux de cotisation au FSS.</td><td>Le taux réel est établi sur la masse de l'année ; l'écart se règle dans le Sommaire 1.</td></tr>
 <tr><td>« Secteur d'activité (FSS) »</td><td>« Général », « Primaire et manufacturier » ou « Secteur public ».</td><td>L'aide affiche « Taux FSS appliqué : x,xx % ». Voir <a href="#parametres">les paramètres 2026</a>.</td></tr>
 <tr><td>« Facteur de cotisation de l'employeur à l'AE » *</td><td>Multiplicateur de la cotisation de l'employé.</td><td>1,4, « sauf si vous bénéficiez d'un taux réduit ». Doit se situer entre 1 et 1,4.</td></tr>
-<tr><td>« Taux de la CNESST ($ par 100 $ assurables) »</td><td>Taux de versement périodique.</td><td>« Inscrit sur votre décision de classification. »</td></tr>
+<tr><td>« Taux de la CNESST ($ par 100 $ assurables) »</td><td>Taux de versement périodique, appliqué aux employés sans unité de classification.</td><td>« Inscrit sur votre décision de classification. » Avec plusieurs unités, voir <a href="#config-unites">Unités CNESST</a>.</td></tr>
 <tr><td>« Assujetti à la cotisation relative aux normes du travail (CNT) »</td><td>Ajoute la CNT (0,06 %) aux parts de l'employeur.</td><td>Cochée par défaut.</td></tr>
 </table>
 <h3>« Enregistrer »</h3>
@@ -358,6 +359,17 @@ mark{background:#ffe89a}
 <p>La production du fichier se fait depuis le <a href="#detail-depot">détail d'une paie confirmée</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-unites">Configuration › Unités CNESST</h2>
+<p><span class="chemin">Config/UnitesCNESST.aspx</span>. La CNESST classe votre entreprise dans une ou plusieurs <strong>unités de classification</strong> selon l'activité, chacune avec son taux en dollars par 100 $ de salaire assurable. Cette page sert aux entreprises qui en ont plusieurs : avec une seule activité, le taux de la compagnie suffit et la page peut rester vide.</p>
+<ul>
+  <li>Liste : « Code », « Description », « Taux ($ / 100 $) », « Employés » (combien y sont affectés), « Statut » (Active ou Inactive). Cliquer un code ouvre sa modification.</li>
+  <li>Formulaire « Ajouter une unité » / « Modifier l'unité … » : « Code de l'unité » * (« Tel qu'il paraît sur la décision de classification, ex. 80030. »), « Description » *, « Taux ($ par 100 $ assurables) » * (« Le taux de l'unité pour l'année en cours. »), case « Active ».</li>
+  <li>Une unité utilisée par un employé ou une paie ne se supprime pas : « Cette unité est utilisée par des employés ou des paies. Rendez-la inactive plutôt que de la supprimer. » Un employé dont l'unité est désactivée retombe sur le taux de la compagnie.</li>
+  <li>Messages : « L'unité {code} existe déjà. », « Le taux semble trop élevé : il s'exprime en dollars par 100 $ de salaire. », « Unité {code} enregistrée. », « Unité supprimée. »</li>
+</ul>
+<p>Chaque employé choisit son unité dans sa fiche. À chaque paie, le taux de son unité est appliqué et figé sur la paie : la <a href="#cnesst">Déclaration des salaires</a> se regroupe ensuite par unité, même si l'employé en a changé en cours d'année. Chaque année, à la réception de la nouvelle décision de classification, mettez les taux à jour ici et le taux de versement périodique dans Paramètres de paie.</p>
+
+<!-- ============================================================ -->
 <h2 id="emp-liste">Employés › Liste</h2>
 <p><span class="chemin">Employes/Liste.aspx</span>. « Les employés sont partagés avec 60Sec : créez-les ici ou là-bas, leur identité (nom, adresse, poste, date d'embauche) se modifie dans 60Sec. Ici, vous configurez leur paie. Seuls les employés dont la paie est configurée sont proposés dans l'assistant de paie. »</p>
 <ul>
@@ -405,6 +417,7 @@ mark{background:#ffe89a}
 <tr><td>« Taux horaire ($) »</td><td>Taux de base ; « Temps et demi » et « Temps double » le majorent.</td></tr>
 <tr><td>« Salaire annuel ($) »</td><td>« Utilisé si aucun taux horaire n'est inscrit. » Produit la ligne « Salaire fixe » = salaire ÷ périodes.</td></tr>
 <tr><td>« Taux de vacances (%) »</td><td>« Vide = taux par défaut de la compagnie. » Refusé au-delà de 20.</td></tr>
+<tr><td>« Unité de classification CNESST »</td><td>« Taux de la compagnie (x,xx $ / 100 $) » ou une unité définie dans <a href="#config-unites">Configuration › Unités CNESST</a>. « Sans unité, le taux de versement périodique de la compagnie s'applique. »</td></tr>
 </table>
 <div class="note">« Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie. » Ces valeurs par défaut ne servent que si l'employé n'a pas d'éléments de paie récurrents.</div>
 <h3>« Exemptions (cas particuliers seulement) »</h3>
@@ -720,9 +733,10 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="cnesst">Rapports › Déclaration des salaires CNESST</h2>
-<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année. » Boutons « Exporter en CSV » (<code>cnesst-AAAA.csv</code> : Nom, Prénom, Salaire brut, Excédent, Salaire assurable, Cotisation calculée) et « Imprimer ».</p>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année. » Boutons « Exporter en CSV » (<code>cnesst-AAAA.csv</code> : Nom, Prénom, Unité, Salaire brut, Excédent, Salaire assurable, Cotisation calculée) et « Imprimer ».</p>
 <ul>
-  <li>Par employé : « Salaire brut » (lignes des catégories assujetties à la CNESST), « Excédent du maximum (103 000,00 $) », « Salaire assurable », « Cotisation calculée » ; note « exclu de la CNESST (fiche de l'employé) » s'il y a lieu ; ligne « Total ».</li>
+  <li>Par employé et par unité : « Unité » (« — » pour le taux de la compagnie), « Salaire brut » (lignes des catégories assujetties à la CNESST), « Excédent du maximum (103 000,00 $) », « Salaire assurable », « Cotisation calculée » ; note « exclu de la CNESST (fiche de l'employé) » s'il y a lieu ; ligne « Total ».</li>
+  <li>« Par unité de classification », dès qu'une unité est utilisée : « Unité », « Description », « Taux ($ / 100 $) », « Employés », « Salaire assurable », « Cotisation ». C'est le tableau à recopier dans la Déclaration des salaires ; un employé qui a changé d'unité compte dans chacune pour la période correspondante.</li>
   <li>« Par mois » : « Mois », « Salaire assurable », « Cotisation ».</li>
   <li>« Conciliation » : « Taux de versement périodique », « Cotisation calculée sur les paies », « Versements périodiques enregistrés (remises à Revenu Québec) », « Écart ».</li>
 </ul>

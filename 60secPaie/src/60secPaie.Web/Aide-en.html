@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Pay items</a>
   <a href="#config-plan">Chart of accounts</a>
   <a href="#config-depot">Direct deposit</a>
+  <a href="#config-unites">CNESST units</a>
   <h2>Employees</h2>
   <a href="#emp-liste">Employee list</a>
   <a href="#emp-nouveau">New employee</a>
@@ -358,6 +359,17 @@ mark{background:#ffe89a}
 <p>The file is generated from the <a href="#detail-depot">details of a confirmed pay run</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-unites">Settings › CNESST units</h2>
+<p><span class="chemin">Config/UnitesCNESST.aspx</span>. The CNESST classifies your business into one or more <strong>classification units</strong> by activity, each with its own rate in dollars per $100 of insurable wages. This page is for businesses that have several: with a single activity, the company rate is enough and the page can stay empty.</p>
+<ul>
+  <li>List: "Code", "Description", "Rate ($ / $100)", "Employees" (how many are assigned), "Status" (Active or Inactive). Clicking a code opens it for editing.</li>
+  <li>Form "Add a unit" / "Edit unit …": "Unit code" * ("As shown on the classification decision, e.g. 80030."), "Description" *, "Rate ($ per $100 insurable)" * ("The unit's rate for the current year."), "Active" checkbox.</li>
+  <li>A unit used by an employee or a pay run cannot be deleted: "This unit is used by employees or pay runs. Make it inactive instead of deleting it." An employee whose unit is inactive falls back to the company rate.</li>
+  <li>Messages: "Unit {code} already exists.", "The rate seems too high: it is expressed in dollars per $100 of wages.", "Unit {code} saved.", "Unit deleted."</li>
+</ul>
+<p>Each employee chooses their unit on their record. At each pay run, the unit's rate is applied and frozen on the pay: the <a href="#cnesst">Statement of Wages</a> is then grouped by unit, even if the employee changed unit during the year. Each year, when the new classification decision arrives, update the rates here and the periodic payment rate in Payroll settings.</p>
+
+<!-- ============================================================ -->
 <h2 id="emp-liste">Employees › List</h2>
 <p><span class="chemin">Employes/Liste.aspx</span>. "Employees are shared with 60Sec: create them here or there; their identity (name, address, position, hire date) is edited in 60Sec. Here, you set up their payroll. Only employees whose payroll is set up are offered in the payroll wizard."</p>
 <ul>
@@ -405,6 +417,7 @@ mark{background:#ffe89a}
 <tr><td>"Hourly rate ($)"</td><td>Base rate; "Time and a half" and "Double time" increase it.</td></tr>
 <tr><td>"Annual salary ($)"</td><td>"Used if no hourly rate is entered." Produces the "Salary" line = salary ÷ periods.</td></tr>
 <tr><td>"Vacation rate (%)"</td><td>"Blank = company default rate." Refused above 20.</td></tr>
+<tr><td>"CNESST classification unit"</td><td>"Company rate ($x.xx / $100)" or a unit defined under <a href="#config-unites">Settings › CNESST units</a>. "Without a unit, the company's periodic payment rate applies."</td></tr>
 </table>
 <div class="note">"The suggested hourly rate, salary and frequency come from 60Sec when entered there; what you save here applies to payroll." These default values are only used if the employee has no recurring pay items.</div>
 <h3>"Exemptions (special cases only)"</h3>
@@ -720,9 +733,10 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="cnesst">Reports › CNESST statement of wages</h2>
-<p><span class="chemin">Rapports/CNESST.aspx</span>. "Gross wages paid, amounts over the maximum insurable and periodic payments for the year." "Export to CSV" (<code>cnesst-YYYY.csv</code>: Name, First name, Gross pay, Excess, Insurable wages, Calculated premium) and "Print" buttons.</p>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. "Gross wages paid, amounts over the maximum insurable and periodic payments for the year." "Export to CSV" (<code>cnesst-YYYY.csv</code>: Name, First name, Unit, Gross pay, Excess, Insurable wages, Calculated premium) and "Print" buttons.</p>
 <ul>
-  <li>Per employee: "Gross pay" (lines of categories subject to CNESST), "Excess over the maximum ($103,000.00)", "Insurable wages", "Calculated premium"; note "excluded from CNESST (employee file)" if applicable; "Total" row.</li>
+  <li>Per employee and per unit: "Unit" ("—" for the company rate), "Gross pay" (lines of categories subject to CNESST), "Excess over the maximum ($103,000.00)", "Insurable wages", "Calculated premium"; note "excluded from CNESST (employee file)" if applicable; "Total" row.</li>
+  <li>"By classification unit", as soon as a unit is used: "Unit", "Description", "Rate ($ / $100)", "Employees", "Insurable wages", "Premium". This is the table to copy into the Statement of Wages; an employee who changed unit counts in each one for the corresponding period.</li>
   <li>"By month": "Month", "Insurable wages", "Premium".</li>
   <li>"Reconciliation": "Periodic payment rate", "Premium calculated on pay runs", "Periodic payments recorded (remittances to Revenu Québec)", "Difference".</li>
 </ul>

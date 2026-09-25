@@ -27,7 +27,7 @@ Public Class PageCNESST
         Dim maximum = ParametresAnnee.Pour(AnneeChoisie).CNESSTMaxAssurable
         Dim taux = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
 
-        Dim sb As New StringBuilder("<div class=""carte table-defilante""><table class=""liste""><thead><tr><th>Employé</th>")
+        Dim sb As New StringBuilder("<div class=""carte table-defilante""><table class=""liste""><thead><tr><th>Employé</th><th>Unité</th>")
         sb.Append("<th class=""num"">Salaire brut</th><th class=""num"">Excédent du maximum (").Append(Argent(maximum)).Append(")</th>")
         sb.Append("<th class=""num"">Salaire assurable</th><th class=""num"">Cotisation calculée</th></tr></thead><tbody>")
         Dim tBrut, tExcedent, tAssurable, tCotisation As Decimal
@@ -35,11 +35,26 @@ Public Class PageCNESST
             tBrut += r.Dcm("Brut") : tExcedent += r.Dcm("Excedent") : tAssurable += r.Dcm("Assurable") : tCotisation += r.Dcm("Cotisation")
             sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(r.Txt("Nom") & ", " & r.Txt("Prenom")))
             If r.Bln("ExemptCNESST") Then sb.Append("<div class=""note"">exclu de la CNESST (fiche de l'employé)</div>")
+            sb.Append("</td><td>").Append(HttpUtility.HtmlEncode(If(r.Txt("Unite").Length = 0, "—", r.Txt("Unite"))))
             sb.Append("</td><td class=""num"">").Append(Argent(r("Brut"))).Append("</td><td class=""num"">").Append(Argent(r("Excedent")))
             sb.Append("</td><td class=""num"">").Append(Argent(r("Assurable"))).Append("</td><td class=""num"">").Append(Argent(r("Cotisation"))).Append("</td></tr>")
         Next
-        sb.Append("</tbody><tfoot><tr><td>Total</td><td class=""num"">").Append(Argent(tBrut)).Append("</td><td class=""num"">").Append(Argent(tExcedent))
+        sb.Append("</tbody><tfoot><tr><td>Total</td><td></td><td class=""num"">").Append(Argent(tBrut)).Append("</td><td class=""num"">").Append(Argent(tExcedent))
         sb.Append("</td><td class=""num"">").Append(Argent(tAssurable)).Append("</td><td class=""num"">").Append(Argent(tCotisation)).Append("</td></tr></tfoot></table></div>")
+
+        ' Par unité de classification : ce que la Déclaration des salaires demande.
+        Dim unites = ServiceCNESST.ParUnite(AnneeChoisie)
+        If unites.Rows.Count > 1 OrElse (unites.Rows.Count = 1 AndAlso unites.Rows(0).Txt("Code").Length > 0) Then
+            sb.Append("<div class=""carte table-defilante""><h2>Par unité de classification</h2><table class=""liste""><thead><tr><th>Unité</th><th>Description</th>")
+            sb.Append("<th class=""num"">Taux ($ / 100 $)</th><th class=""num"">Employés</th><th class=""num"">Salaire assurable</th><th class=""num"">Cotisation</th></tr></thead><tbody>")
+            For Each u As DataRow In unites.Rows
+                sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(If(u.Txt("Code").Length = 0, "—", u.Txt("Code")))).Append("</td><td>").Append(HttpUtility.HtmlEncode(u.Txt("Description")))
+                sb.Append("</td><td class=""num"">").Append(If(u.IsNull("Taux"), "", u.Dcm("Taux").ToString("0.00##", FrCa))).Append("</td><td class=""num"">").Append(u.Ent("NbEmployes"))
+                sb.Append("</td><td class=""num"">").Append(Argent(u("Assurable"))).Append("</td><td class=""num"">").Append(Argent(u("Cotisation"))).Append("</td></tr>")
+            Next
+            sb.Append("</tbody></table><p class=""note"">Une ligne par unité de votre décision de classification ; « — » regroupe les paies calculées au taux de la compagnie. ")
+            sb.Append("Un employé qui a changé d'unité en cours d'année compte dans chacune, pour la période correspondante.</p></div>")
+        End If
 
         sb.Append("<div class=""grille-cartes""><div class=""carte""><h2>Par mois</h2><table class=""liste""><thead><tr><th>Mois</th>")
         sb.Append("<th class=""num"">Salaire assurable</th><th class=""num"">Cotisation</th></tr></thead><tbody>")
@@ -61,9 +76,9 @@ Public Class PageCNESST
     End Sub
 
     Private Sub btnCsv_Click(sender As Object, e As EventArgs) Handles btnCsv.Click
-        Dim lignes As New List(Of String()) From {New String() {"Nom", "Prénom", "Salaire brut", "Excédent", "Salaire assurable", "Cotisation calculée"}}
+        Dim lignes As New List(Of String()) From {New String() {"Nom", "Prénom", "Unité", "Salaire brut", "Excédent", "Salaire assurable", "Cotisation calculée"}}
         For Each r As DataRow In ServiceCNESST.ParEmploye(AnneeChoisie).Rows
-            lignes.Add({r.Txt("Nom"), r.Txt("Prenom"), Nb(r, "Brut"), Nb(r, "Excedent"), Nb(r, "Assurable"), Nb(r, "Cotisation")})
+            lignes.Add({r.Txt("Nom"), r.Txt("Prenom"), r.Txt("Unite"), Nb(r, "Brut"), Nb(r, "Excedent"), Nb(r, "Assurable"), Nb(r, "Cotisation")})
         Next
         EnvoyerCsv("cnesst-" & AnneeChoisie.ToString() & ".csv", lignes)
     End Sub

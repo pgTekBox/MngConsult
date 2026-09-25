@@ -90,6 +90,7 @@
     <Content Include="Employes\Cumulatifs.aspx" />
     <Content Include="Config\PlanComptable.aspx" />
     <Content Include="Config\DepotDirect.aspx" />
+    <Content Include="Config\UnitesCNESST.aspx" />
     <Content Include="Rapports\Feuillets.aspx" />
     <Content Include="Rapports\Feuillet.aspx" />
     <Content Include="Rapports\CNESST.aspx" />
@@ -142,6 +143,13 @@
     </Compile>
     <Compile Include="Config\DepotDirect.aspx.designer.vb">
       <DependentUpon>DepotDirect.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\UnitesCNESST.aspx.vb">
+      <DependentUpon>UnitesCNESST.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\UnitesCNESST.aspx.designer.vb">
+      <DependentUpon>UnitesCNESST.aspx</DependentUpon>
     </Compile>
     <Compile Include="Rapports\Feuillets.aspx.vb">
       <DependentUpon>Feuillets.aspx</DependentUpon>

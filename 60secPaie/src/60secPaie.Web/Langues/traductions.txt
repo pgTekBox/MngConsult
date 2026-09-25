@@ -3211,3 +3211,113 @@ es: Ayuda
 fr: Guide complet de 60secPaie
 en: Complete 60secPaie guide
 es: Guía completa de 60secPaie
+
+# ---------- Unités de classification CNESST ----------
+
+fr: Unités CNESST
+en: CNESST units
+es: Unidades CNESST
+
+fr: Unité de classification CNESST
+en: CNESST classification unit
+es: Unidad de clasificación CNESST
+
+fr: Sans unité, le taux de versement périodique de la compagnie s'applique. Les unités se définissent dans Configuration.
+en: Without a unit, the company's periodic payment rate applies. Units are defined in Settings.
+es: Sin unidad, se aplica la tasa de pago periódico de la empresa. Las unidades se definen en Configuración.
+
+fr: Taux de la compagnie ({0} $ / 100 $)
+en: Company rate (${0} / $100)
+es: Tasa de la empresa (${0} / $100)
+
+fr: inactive
+en: inactive
+es: inactiva
+
+fr: La CNESST classe votre entreprise dans une ou plusieurs unités de classification selon l'activité, chacune avec son taux. Inscrivez ici les unités de votre décision de classification. Dans la fiche de chaque employé, vous choisissez son unité ; sans unité, c'est le taux de versement périodique de la compagnie (Paramètres de paie) qui s'applique. La Déclaration des salaires se regroupe ensuite par unité.
+en: The CNESST classifies your business into one or more classification units by activity, each with its own rate. Enter here the units from your classification decision. On each employee's record you choose their unit; without a unit, the company's periodic payment rate (Payroll settings) applies. The Statement of Wages is then grouped by unit.
+es: La CNESST clasifica su empresa en una o varias unidades de clasificación según la actividad, cada una con su tasa. Ingrese aquí las unidades de su decisión de clasificación. En la ficha de cada empleado elige su unidad; sin unidad, se aplica la tasa de pago periódico de la empresa (Parámetros de nómina). La Declaración de salarios se agrupa luego por unidad.
+
+fr: Taux ($ / 100 $)
+en: Rate ($ / $100)
+es: Tasa ($ / $100)
+
+fr: Active
+en: Active
+es: Activa
+
+fr: Inactive
+en: Inactive
+es: Inactiva
+
+fr: Modifier
+en: Edit
+es: Modificar
+
+fr: Aucune unité de classification. Avec une seule activité, vous n'en avez pas besoin : le taux de la compagnie suffit.
+en: No classification unit. With a single activity you do not need any: the company rate is enough.
+es: Ninguna unidad de clasificación. Con una sola actividad no la necesita: la tasa de la empresa basta.
+
+fr: Ajouter une unité
+en: Add a unit
+es: Agregar una unidad
+
+fr: Modifier l'unité {0}
+en: Edit unit {0}
+es: Modificar la unidad {0}
+
+fr: Code de l'unité
+en: Unit code
+es: Código de la unidad
+
+fr: Tel qu'il paraît sur la décision de classification, ex. 80030.
+en: As shown on the classification decision, e.g. 80030.
+es: Tal como aparece en la decisión de clasificación, p. ej. 80030.
+
+fr: Taux ($ par 100 $ assurables)
+en: Rate ($ per $100 insurable)
+es: Tasa ($ por $100 asegurables)
+
+fr: Le taux de l'unité pour l'année en cours.
+en: The unit's rate for the current year.
+es: La tasa de la unidad para el año en curso.
+
+fr: Supprimer cette unité ?
+en: Delete this unit?
+es: ¿Eliminar esta unidad?
+
+fr: Le taux semble trop élevé : il s'exprime en dollars par 100 $ de salaire.
+en: The rate seems too high: it is expressed in dollars per $100 of wages.
+es: La tasa parece demasiado alta: se expresa en dólares por $100 de salario.
+
+fr: L'unité {0} existe déjà.
+en: Unit {0} already exists.
+es: La unidad {0} ya existe.
+
+fr: Unité {0} enregistrée.
+en: Unit {0} saved.
+es: Unidad {0} guardada.
+
+fr: Cette unité est utilisée par des employés ou des paies. Rendez-la inactive plutôt que de la supprimer.
+en: This unit is used by employees or pay runs. Make it inactive instead of deleting it.
+es: Esta unidad la usan empleados o nóminas. Desactívela en lugar de eliminarla.
+
+fr: Unité supprimée.
+en: Unit deleted.
+es: Unidad eliminada.
+
+fr: Unité
+en: Unit
+es: Unidad
+
+fr: Par unité de classification
+en: By classification unit
+es: Por unidad de clasificación
+
+fr: Une ligne par unité de votre décision de classification ; « — » regroupe les paies calculées au taux de la compagnie. Un employé qui a changé d'unité en cours d'année compte dans chacune, pour la période correspondante.
+en: One row per unit of your classification decision; "—" groups the pay runs calculated at the company rate. An employee who changed unit during the year counts in each one, for the corresponding period.
+es: Una línea por unidad de su decisión de clasificación; « — » agrupa las nóminas calculadas con la tasa de la empresa. Un empleado que cambió de unidad durante el año cuenta en cada una, por el período correspondiente.
+
+fr: Taux de versement périodique de votre décision de classification. Avec plusieurs unités, définissez-les dans « Unités CNESST » et affectez chaque employé à la sienne.
+en: Periodic payment rate from your classification decision. With several units, define them under "CNESST units" and assign each employee to theirs.
+es: Tasa de pago periódico de su decisión de clasificación. Con varias unidades, defínalas en « Unidades CNESST » y asigne a cada empleado la suya.

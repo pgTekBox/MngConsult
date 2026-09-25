@@ -53,6 +53,9 @@
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxVacances" Text="Taux de vacances (%)" />
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" />
                 <div class="aide">Vide = taux par défaut de la compagnie.</div></div>
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlUniteCNESST" Text="Unité de classification CNESST" />
+                <asp:DropDownList ID="ddlUniteCNESST" runat="server" />
+                <div class="aide">Sans unité, le taux de versement périodique de la compagnie s'applique. Les unités se définissent dans Configuration.</div></div>
         </div>
         <p class="note">Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.</p>
     </fieldset>

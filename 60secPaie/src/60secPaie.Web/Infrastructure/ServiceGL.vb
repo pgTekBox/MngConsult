@@ -145,28 +145,51 @@ Public NotInheritable Class ServiceCNESST
 
     Private Const Filtre As String = "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a"
 
-    ''' <summary>Par employé : salaire brut, excédent du maximum assurable, salaire assurable et cotisation calculée.</summary>
+    ''' <summary>
+    ''' Par employé et par unité de classification : salaire brut, excédent du maximum
+    ''' assurable, salaire assurable et cotisation calculée. Un employé qui a changé
+    ''' d'unité en cours d'année a une ligne par unité — c'est ainsi que la CNESST
+    ''' veut la Déclaration des salaires. L'unité est celle figée sur chaque paie.
+    ''' </summary>
     Public Shared Function ParEmploye(annee As Integer) As DataTable
         Dim t = Db.Table(
-            "SELECT e.Id, e.Nom, e.Prenom, e.ExemptCNESST, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation, " &
+            "SELECT e.Id, e.Nom, e.Prenom, e.ExemptCNESST, ISNULL(u.Code, N'') AS Unite, ISNULL(u.Description, N'') AS UniteDescription, " &
+            "ISNULL(p.UniteCNESSTId, 0) AS UniteId, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation, " &
             "CAST(0 AS decimal(14,2)) AS Brut, CAST(0 AS decimal(14,2)) AS Excedent " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId WHERE " & Filtre &
-            " GROUP BY e.Id, e.Nom, e.Prenom, e.ExemptCNESST ORDER BY e.Nom, e.Prenom", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId " &
+            "LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
+            " GROUP BY e.Id, e.Nom, e.Prenom, e.ExemptCNESST, u.Code, u.Description, ISNULL(p.UniteCNESSTId, 0) ORDER BY e.Nom, e.Prenom, u.Code",
+            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
         Dim lignes = Db.Table(
-            "SELECT p.EmployeId, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId " &
-            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY p.EmployeId, pl.CategorieCode", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            "SELECT p.EmployeId, ISNULL(p.UniteCNESSTId, 0) AS UniteId, pl.CategorieCode, SUM(pl.Montant) AS Montant " &
+            "FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre &
+            " GROUP BY p.EmployeId, ISNULL(p.UniteCNESSTId, 0), pl.CategorieCode", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
 
         t.Columns("Brut").ReadOnly = False
         t.Columns("Excedent").ReadOnly = False
         For Each e As DataRow In t.Rows
             Dim brut As Decimal = 0D
-            For Each l In lignes.Select("EmployeId = " & e.Ent("Id").ToString())
+            For Each l In lignes.Select("EmployeId = " & e.Ent("Id").ToString() & " AND UniteId = " & e.Ent("UniteId").ToString())
                 If CategoriePaie.Existe(l.Txt("CategorieCode")) AndAlso CategoriePaie.ParCode(l.Txt("CategorieCode")).CNESST Then brut += l.Dcm("Montant")
             Next
             e("Brut") = brut
             e("Excedent") = If(e.Bln("ExemptCNESST"), 0D, Math.Max(0D, brut - e.Dcm("Assurable")))
         Next
         Return t
+    End Function
+
+    ''' <summary>
+    ''' Par unité de classification : le taux appliqué, le nombre d'employés, le salaire
+    ''' assurable et la cotisation. Les paies sans unité forment la ligne « Taux de la
+    ''' compagnie ». C'est le tableau à recopier dans la Déclaration des salaires.
+    ''' </summary>
+    Public Shared Function ParUnite(annee As Integer) As DataTable
+        Return Db.Table(
+            "SELECT ISNULL(u.Code, N'') AS Code, ISNULL(u.Description, N'Taux de la compagnie') AS Description, MAX(p.TauxCNESST) AS Taux, " &
+            "COUNT(DISTINCT p.EmployeId) AS NbEmployes, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
+            " GROUP BY u.Code, u.Description ORDER BY CASE WHEN u.Code IS NULL THEN 1 ELSE 0 END, u.Code",
+            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
     End Function
 
     Public Shared Function ParMois(annee As Integer) As DataTable

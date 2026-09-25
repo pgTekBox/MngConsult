@@ -60,7 +60,8 @@ Public Class PageBase
             {"compagnie", "~/Config/Compagnie.aspx", "Paramètres de paie"},
             {"elements", "~/Config/ElementsPaie.aspx", "Éléments de paie"},
             {"comptes", "~/Config/PlanComptable.aspx", "Plan comptable"},
-            {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"})
+            {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"},
+            {"unites", "~/Config/UnitesCNESST.aspx", "Unités CNESST"})
     End Function
 
     Protected Function SousMenuRapports(actif As String) As String

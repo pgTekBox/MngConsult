@@ -57,6 +57,21 @@ Public Class PageFicheEmploye
         txtSalaireAnnuel.Text = Champ(r("SalaireAnnuel"))
         txtTauxVacances.Text = Champ(r("TauxVacances"))
 
+        ' L'unité de classification CNESST : celles de la compagnie, actives — plus
+        ' celle de l'employé si elle a été désactivée depuis, pour ne pas la perdre
+        ' en silence à l'enregistrement.
+        Dim tauxCompagnie = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
+        ddlUniteCNESST.Items.Clear()
+        ddlUniteCNESST.Items.Add(New ListItem(Tr("Taux de la compagnie ({0} $ / 100 $)", tauxCompagnie.ToString("0.00##", Globalization.CultureInfo.GetCultureInfo("fr-CA"))), ""))
+        For Each u As DataRow In Db.Table("SELECT Id, Code, Description, Taux, Actif FROM paie.UniteCNESST WHERE CompagnieId = @c AND (Actif = 1 OR Id = @u) ORDER BY Code",
+                                          Db.P("@c", Contexte.CompagnieId), Db.P("@u", If(r.IsNull("UniteCNESSTId"), 0, r.Ent("UniteCNESSTId")))).Rows
+            ddlUniteCNESST.Items.Add(New ListItem(u.Txt("Code") & " — " & u.Txt("Description") & " (" & u.Dcm("Taux").ToString("0.00##", Globalization.CultureInfo.GetCultureInfo("fr-CA")) & " $ / 100 $)" &
+                                                  If(u.Bln("Actif"), "", " — " & Tr("inactive")), u.Ent("Id").ToString()))
+        Next
+        If Not r.IsNull("UniteCNESSTId") AndAlso ddlUniteCNESST.Items.FindByValue(r.Ent("UniteCNESSTId").ToString()) IsNot Nothing Then
+            ddlUniteCNESST.SelectedValue = r.Ent("UniteCNESSTId").ToString()
+        End If
+
         chkExFed.Checked = r.Bln("ExemptImpotFederal")
         chkExQc.Checked = r.Bln("ExemptImpotQuebec")
         chkExRRQ.Checked = r.Bln("ExemptRRQ")
@@ -143,7 +158,7 @@ Public Class PageFicheEmploye
                 "SET XACT_ABORT ON; BEGIN TRAN; " &
                 "IF NOT EXISTS (SELECT 1 FROM paie.EmployePaie WHERE EmployeId = @Id) INSERT INTO paie.EmployePaie (EmployeId) VALUES (@Id); " &
                 "UPDATE paie.EmployePaie SET Langue=@Langue, DateNaissance=@DateNaissance, NASChiffre=@NAS, PeriodesParAnnee=@Periodes, HeuresSemaine=@HeuresSemaine, " &
-                "TauxHoraire=@TauxHoraire, SalaireAnnuel=@SalaireAnnuel, TauxVacances=@TauxVacances, " &
+                "TauxHoraire=@TauxHoraire, SalaireAnnuel=@SalaireAnnuel, TauxVacances=@TauxVacances, UniteCNESSTId=@Unite, " &
                 "ExemptImpotFederal=@ExFed, ExemptImpotQuebec=@ExQc, ExemptRRQ=@ExRRQ, ExemptRQAP=@ExRQAP, ExemptAE=@ExAE, ExemptFSS=@ExFSS, ExemptCNESST=@ExCNESST, " &
                 "TD1MontantDemande=@TD1Montant, TD1ImpotAdditionnel=@TD1L, TD1DeductionZone=@TD1HD, TD1DeductionsAnnuelles=@TD1F1, TD1AutresCredits=@TD1K3, " &
                 "CodeDentaireT4=@Dentaire, TP1015Montant=@TPMontant, TP1015ImpotAdditionnel=@TPL, TP1015DeductionsLigne19=@TPJ, TP1016Deductions=@TPJ1, " &
@@ -155,6 +170,7 @@ Public Class PageFicheEmploye
                 Db.P("@TauxHoraire", DecN(txtTauxHoraire.Text, "Taux horaire")),
                 Db.P("@SalaireAnnuel", DecN(txtSalaireAnnuel.Text, "Salaire annuel")),
                 Db.P("@TauxVacances", tauxVacances),
+                Db.P("@Unite", EntierN(ddlUniteCNESST.SelectedValue, "Unité de classification CNESST")),
                 Db.P("@ExFed", chkExFed.Checked), Db.P("@ExQc", chkExQc.Checked), Db.P("@ExRRQ", chkExRRQ.Checked), Db.P("@ExRQAP", chkExRQAP.Checked),
                 Db.P("@ExAE", chkExAE.Checked), Db.P("@ExFSS", chkExFSS.Checked), Db.P("@ExCNESST", chkExCNESST.Checked),
                 Db.P("@TD1Montant", DecN(txtTD1Montant.Text, "TD1 - Montant de la demande")),

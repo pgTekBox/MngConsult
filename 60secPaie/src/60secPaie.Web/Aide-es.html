@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Elementos de nómina</a>
   <a href="#config-plan">Plan de cuentas</a>
   <a href="#config-depot">Depósito directo</a>
+  <a href="#config-unites">Unidades CNESST</a>
   <h2>Empleados</h2>
   <a href="#emp-liste">Lista de empleados</a>
   <a href="#emp-nouveau">Nuevo empleado</a>
@@ -358,6 +359,17 @@ mark{background:#ffe89a}
 <p>La generación del archivo se hace desde el <a href="#detail-depot">detalle de una nómina confirmada</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-unites">Configuración › Unidades CNESST</h2>
+<p><span class="chemin">Config/UnitesCNESST.aspx</span>. La CNESST clasifica su empresa en una o varias <strong>unidades de clasificación</strong> según la actividad, cada una con su tasa en dólares por $100 de salario asegurable. Esta página es para las empresas que tienen varias: con una sola actividad, la tasa de la empresa basta y la página puede quedar vacía.</p>
+<ul>
+  <li>Lista: « Código », « Descripción », « Tasa ($ / $100) », « Empleados » (cuántos están asignados), « Estado » (Activa o Inactiva). Al hacer clic en un código se abre su modificación.</li>
+  <li>Formulario « Agregar una unidad » / « Modificar la unidad … »: « Código de la unidad » * (« Tal como aparece en la decisión de clasificación, p. ej. 80030. »), « Descripción » *, « Tasa ($ por $100 asegurables) » * (« La tasa de la unidad para el año en curso. »), casilla « Activa ».</li>
+  <li>Una unidad usada por un empleado o una nómina no se elimina: « Esta unidad la usan empleados o nóminas. Desactívela en lugar de eliminarla. » Un empleado cuya unidad está inactiva vuelve a la tasa de la empresa.</li>
+  <li>Mensajes: « La unidad {código} ya existe. », « La tasa parece demasiado alta: se expresa en dólares por $100 de salario. », « Unidad {código} guardada. », « Unidad eliminada. »</li>
+</ul>
+<p>Cada empleado elige su unidad en su ficha. En cada nómina se aplica la tasa de su unidad y se fija en la nómina: la <a href="#cnesst">Declaración de salarios</a> se agrupa luego por unidad, aunque el empleado haya cambiado de unidad durante el año. Cada año, al recibir la nueva decisión de clasificación, actualice las tasas aquí y la tasa de pago periódico en Parámetros de nómina.</p>
+
+<!-- ============================================================ -->
 <h2 id="emp-liste">Empleados › Lista</h2>
 <p><span class="chemin">Employes/Liste.aspx</span>. « Los empleados se comparten con 60Sec: créelos aquí o allá; su identidad (nombre, dirección, puesto, fecha de contratación) se modifica en 60Sec. Aquí configura su nómina. Solo los empleados con la nómina configurada se proponen en el asistente de nómina. »</p>
 <ul>
@@ -405,6 +417,7 @@ mark{background:#ffe89a}
 <tr><td>« Tarifa por hora ($) »</td><td>Tarifa base; « Tiempo y medio » y « Tiempo doble » la incrementan.</td></tr>
 <tr><td>« Salario anual ($) »</td><td>« Se usa si no se indica ninguna tarifa por hora. » Produce la línea « Salario fijo » = salario ÷ períodos.</td></tr>
 <tr><td>« Tasa de vacaciones (%) »</td><td>« Vacío = tasa predeterminada de la empresa. » Rechazada por encima de 20.</td></tr>
+<tr><td>« Unidad de clasificación CNESST »</td><td>« Tasa de la empresa ($x.xx / $100) » o una unidad definida en <a href="#config-unites">Configuración › Unidades CNESST</a>. « Sin unidad, se aplica la tasa de pago periódico de la empresa. »</td></tr>
 </table>
 <div class="note">« La tarifa por hora, el salario y la frecuencia propuestos provienen de 60Sec cuando están indicados allí; lo que guarde aquí se aplica a la nómina. » Estos valores predeterminados solo sirven si el empleado no tiene elementos de nómina recurrentes.</div>
 <h3>« Exenciones (solo casos particulares) »</h3>
@@ -720,9 +733,10 @@ mark{background:#ffe89a}
 
 <!-- ============================================================ -->
 <h2 id="cnesst">Informes › Declaración de salarios CNESST</h2>
-<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salarios brutos pagados, excedentes del máximo asegurable y pagos periódicos del año. » Botones « Exportar a CSV » (<code>cnesst-AAAA.csv</code>: Nombre, Nombre de pila, Salario bruto, Excedente, Salario asegurable, Aporte calculado) e « Imprimir ».</p>
+<p><span class="chemin">Rapports/CNESST.aspx</span>. « Salarios brutos pagados, excedentes del máximo asegurable y pagos periódicos del año. » Botones « Exportar a CSV » (<code>cnesst-AAAA.csv</code>: Nombre, Nombre de pila, Unidad, Salario bruto, Excedente, Salario asegurable, Aporte calculado) e « Imprimir ».</p>
 <ul>
-  <li>Por empleado: « Salario bruto » (líneas de las categorías sujetas a la CNESST), « Excedente del máximo ($103,000.00) », « Salario asegurable », « Aporte calculado »; nota « excluido de la CNESST (ficha del empleado) » si corresponde; línea « Total ».</li>
+  <li>Por empleado y por unidad: « Unidad » (« — » para la tasa de la empresa), « Salario bruto » (líneas de las categorías sujetas a la CNESST), « Excedente del máximo ($103,000.00) », « Salario asegurable », « Aporte calculado »; nota « excluido de la CNESST (ficha del empleado) » si corresponde; línea « Total ».</li>
+  <li>« Por unidad de clasificación », en cuanto se usa una unidad: « Unidad », « Descripción », « Tasa ($ / $100) », « Empleados », « Salario asegurable », « Aporte ». Es la tabla que se copia en la Declaración de salarios; un empleado que cambió de unidad cuenta en cada una por el período correspondiente.</li>
   <li>« Por mes »: « Mes », « Salario asegurable », « Aporte ».</li>
   <li>« Conciliación »: « Tasa de pago periódico », « Aporte calculado sobre las nóminas », « Pagos periódicos registrados (remesas a Revenu Québec) », « Diferencia ».</li>
 </ul>

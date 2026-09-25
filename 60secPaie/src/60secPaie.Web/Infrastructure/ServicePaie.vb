@@ -167,7 +167,13 @@ Public NotInheritable Class ServicePaie
                     .Heures = ligne.Dcm("Heures"), .Taux = ligne.Dcm("Taux"), .Montant = ligne.Dcm("Montant")})
             Next
 
+            ' Le taux CNESST est celui de l'unité de classification de l'employé, sinon
+            ' celui de la compagnie. Il est figé sur la paie avec l'unité : la Déclaration
+            ' des salaires se regroupe par unité, même si l'employé en change en cours d'année.
+            employeur.TauxCNESST = If(row.DcmN("UniteCNESSTTaux"), compagnie.Dcm("TauxCNESST"))
             Enregistrer(row.Ent("PaieId"), MoteurPaie.Calculer(entree))
+            Db.Exec("UPDATE paie.Paie SET UniteCNESSTId = @u, TauxCNESST = @t WHERE Id = @p",
+                    Db.P("@u", row("UniteCNESSTId")), Db.P("@t", employeur.TauxCNESST), Db.P("@p", row.Ent("PaieId")))
         Next
 
         Db.Exec("UPDATE paie.LotPaie SET Calcule = 1 WHERE Id = @l", Db.P("@l", lotId))

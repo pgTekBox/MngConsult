@@ -16,6 +16,7 @@ Partial Public Class PageFicheEmploye
     Protected WithEvents txtTauxHoraire As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtSalaireAnnuel As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTauxVacances As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents ddlUniteCNESST As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents chkExFed As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExQc As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExRRQ As Global.System.Web.UI.WebControls.CheckBox

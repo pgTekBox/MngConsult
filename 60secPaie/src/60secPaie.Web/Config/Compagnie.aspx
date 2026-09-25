@@ -60,6 +60,7 @@
                 <div class="aide">1,4 sauf si vous bénéficiez d'un taux réduit.</div></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxCNESST">Taux de la CNESST ($ par 100 $ assurables)</asp:Label>
                 <asp:TextBox ID="txtTauxCNESST" runat="server" MaxLength="8" />
+                <div class="aide">Taux de versement périodique de votre décision de classification. Avec plusieurs unités, définissez-les dans « Unités CNESST » et affectez chaque employé à la sienne.</div>
                 <div class="aide">Inscrit sur votre décision de classification.</div></div>
         </div>
         <div class="cases">
