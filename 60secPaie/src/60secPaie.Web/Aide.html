@@ -990,6 +990,8 @@ mark{background:#ffe89a}
 <tr><td>« Aucune retenue à payer à {gouvernement} pour les paies jusqu'au … »</td><td>Retenues</td><td>Rien n'est dû à cette date, ou tout est déjà remis.</td></tr>
 <tr><td>« La date du paiement est trop éloignée. »</td><td>Retenues</td><td>Au plus 31 jours dans le futur.</td></tr>
 <tr><td>« {n} ligne(s) sans numéro de compte : définissez-les dans Configuration → Plan comptable. »</td><td>Écritures</td><td>Complétez le plan comptable.</td></tr>
+<tr><td>« Cette unité est utilisée par des employés ou des paies. Rendez-la inactive plutôt que de la supprimer. »</td><td>Unités CNESST</td><td>Décochez « Active » au lieu de supprimer.</td></tr>
+<tr><td>« L'unité {code} existe déjà. »</td><td>Unités CNESST</td><td>Chaque code est unique dans la compagnie ; modifiez l'unité existante.</td></tr>
 <tr><td>« Trop de tentatives. Réessayez dans quelques minutes. »</td><td>Connexion</td><td>Attendez 15 minutes.</td></tr>
 </table>
 
@@ -1008,6 +1010,8 @@ mark{background:#ffe89a}
 <details><summary>Que veut dire « Vacances accumulées » sur le talon ?</summary><p>La provision de vacances gagnée dans cette paie (taux × gains admissibles). Elle n'est pas versée ; elle s'ajoute au « Solde de vacances », qui se vide par des lignes « Paie de vacances ».</p></details>
 <details><summary>Une ligne d'élément masquée compte-t-elle ?</summary><p>Oui. « Ne pas afficher sur le talon de paie » ne change que l'affichage : la ligne est calculée, imposée et comptabilisée normalement.</p></details>
 <details><summary>Puis-je payer un fournisseur ou un travailleur autonome ?</summary><p>Non. 60secPaie ne traite que des employés au sens des lois fiscales, avec retenues à la source. Un travailleur autonome se paie par une facture, dans 60Sec.</p></details>
+<details><summary>Comment les taux de 2027 arrivent-ils dans le logiciel ?</summary><p>Les taux de chaque année (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) sont saisis et validés par 60Sec dans sa console d'administration dès la parution des guides, en décembre. Vous n'avez rien à faire : dès la validation, 60secPaie les utilise pour toute paie datée de l'année, dans les cinq minutes. Tant qu'une année n'est pas validée, l'assistant refuse une paie datée de cette année.</p></details>
+<details><summary>J'ai plusieurs unités de classification CNESST. Comment faire ?</summary><p>Inscrivez chaque unité et son taux dans Configuration › Unités CNESST, puis choisissez l'unité de chaque employé dans sa fiche. Le taux de l'unité s'applique à ses paies, et le rapport CNESST donne un tableau par unité, prêt pour la Déclaration des salaires. Les employés sans unité restent au taux de la compagnie.</p></details>
 </div>
 
 <!-- ============================================================ -->
@@ -1017,6 +1021,7 @@ mark{background:#ffe89a}
 <dt>ARC</dt><dd>Agence du revenu du Canada.</dd>
 <dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Prime d'assurance contre les accidents du travail, versée périodiquement à Revenu Québec.</dd>
 <dt>CNT</dt><dd>Cotisation relative aux normes du travail, 0,06 % des salaires assurables, payée une fois l'an avec le Sommaire 1.</dd>
+<dt>Unité de classification</dt><dd>Catégorie d'activité dans laquelle la CNESST classe un employeur, avec un taux de prime par 100 $ de salaire assurable. Une entreprise peut en avoir plusieurs.</dd>
 <dt>Cumulatifs</dt><dd>Sommes de l'année à ce jour : brut, retenues, gains assurables. Servent aux maximums annuels et aux feuillets.</dd>
 <dt>Élément de paie</dt><dd>Ligne réutilisable (revenu, avantage ou déduction) rattachée à une catégorie système.</dd>
 <dt>FSS</dt><dd>Fonds des services de santé, cotisation de l'employeur au Québec, en pourcentage de la masse salariale.</dd>

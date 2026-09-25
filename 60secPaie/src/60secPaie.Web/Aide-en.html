@@ -990,6 +990,8 @@ mark{background:#ffe89a}
 <tr><td>"No deductions to remit to {government} for pay runs up to …"</td><td>Remittances</td><td>Nothing is due at this date, or everything is already remitted.</td></tr>
 <tr><td>"The payment date is too far away."</td><td>Remittances</td><td>At most 31 days in the future.</td></tr>
 <tr><td>"{n} line(s) without an account number: define them in Settings → Chart of accounts."</td><td>Journal entries</td><td>Complete the chart of accounts.</td></tr>
+<tr><td>"This unit is used by employees or pay runs. Make it inactive instead of deleting it."</td><td>CNESST units</td><td>Untick "Active" instead of deleting.</td></tr>
+<tr><td>"Unit {code} already exists."</td><td>CNESST units</td><td>Each code is unique within the company; edit the existing unit.</td></tr>
 <tr><td>"Too many attempts. Try again in a few minutes."</td><td>Sign-in</td><td>Wait 15 minutes.</td></tr>
 </table>
 
@@ -1008,6 +1010,8 @@ mark{background:#ffe89a}
 <details><summary>What does "Vacation accrued" mean on the stub?</summary><p>The vacation accrual earned in this pay (rate × eligible earnings). It is not paid out; it is added to the "Vacation balance", which is drawn down by "Vacation pay" lines.</p></details>
 <details><summary>Does a hidden item line count?</summary><p>Yes. "Do not show on the pay stub" only changes the display: the line is calculated, taxed and posted normally.</p></details>
 <details><summary>Can I pay a supplier or a self-employed worker?</summary><p>No. 60secPaie only handles employees within the meaning of tax laws, with source deductions. A self-employed worker is paid by invoice, in 60Sec.</p></details>
+<details><summary>How do the 2027 rates get into the software?</summary><p>Each year's rates (T4127, TP-1015.F, QPP, EI, QPIP, HSF, CNESST) are entered and validated by 60Sec in its administration console as soon as the guides are published, in December. You have nothing to do: once validated, 60secPaie uses them for any pay run dated in that year, within five minutes. Until a year is validated, the wizard refuses a pay run dated in that year.</p></details>
+<details><summary>I have several CNESST classification units. What do I do?</summary><p>Enter each unit and its rate under Settings › CNESST units, then pick each employee's unit on their record. The unit's rate applies to their pay runs, and the CNESST report gives a table per unit, ready for the Statement of Wages. Employees without a unit stay at the company rate.</p></details>
 </div>
 
 <!-- ============================================================ -->
@@ -1017,6 +1021,7 @@ mark{background:#ffe89a}
 <dt>CRA</dt><dd>Canada Revenue Agency (ARC in French).</dd>
 <dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Workplace accident insurance premium, paid periodically to Revenu Québec.</dd>
 <dt>CNT</dt><dd>Labour standards contribution, 0.06% of insurable wages, paid once a year with the RL-1 Summary.</dd>
+<dt>Classification unit</dt><dd>Activity category in which the CNESST classifies an employer, with a premium rate per $100 of insurable wages. A business can have several.</dd>
 <dt>Year-to-date</dt><dd>Amounts for the year so far: gross, deductions, insurable earnings. Used for the annual maximums and the slips.</dd>
 <dt>Pay item</dt><dd>Reusable line (earnings, benefit or deduction) attached to a system category.</dd>
 <dt>HSF</dt><dd>Health Services Fund (FSS in French), Québec employer contribution, as a percentage of total payroll.</dd>

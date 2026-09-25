@@ -990,6 +990,8 @@ mark{background:#ffe89a}
 <tr><td>« Ninguna retención por pagar a {gobierno} para las nóminas hasta el … »</td><td>Retenciones</td><td>Nada se debe a esa fecha, o todo ya está remitido.</td></tr>
 <tr><td>« La fecha del pago está demasiado lejos. »</td><td>Retenciones</td><td>Como máximo 31 días en el futuro.</td></tr>
 <tr><td>« {n} línea(s) sin número de cuenta: defínalas en Configuración → Plan de cuentas. »</td><td>Asientos</td><td>Complete el plan de cuentas.</td></tr>
+<tr><td>« Esta unidad la usan empleados o nóminas. Desactívela en lugar de eliminarla. »</td><td>Unidades CNESST</td><td>Desmarque « Activa » en lugar de eliminar.</td></tr>
+<tr><td>« La unidad {código} ya existe. »</td><td>Unidades CNESST</td><td>Cada código es único en la empresa; modifique la unidad existente.</td></tr>
 <tr><td>« Demasiados intentos. Vuelva a intentarlo en unos minutos. »</td><td>Inicio de sesión</td><td>Espere 15 minutos.</td></tr>
 </table>
 
@@ -1008,6 +1010,8 @@ mark{background:#ffe89a}
 <details><summary>¿Qué significa « Vacaciones acumuladas » en el talón?</summary><p>La provisión de vacaciones ganada en esta nómina (tasa × ingresos admisibles). No se paga; se suma al « Saldo de vacaciones », que se vacía mediante líneas « Pago de vacaciones ».</p></details>
 <details><summary>¿Cuenta una línea de elemento oculta?</summary><p>Sí. « No mostrar en el talón de pago » solo cambia la visualización: la línea se calcula, se grava y se contabiliza normalmente.</p></details>
 <details><summary>¿Puedo pagar a un proveedor o a un trabajador autónomo?</summary><p>No. 60secPaie solo trata empleados en el sentido de las leyes fiscales, con retenciones en la fuente. Un trabajador autónomo se paga mediante una factura, en 60Sec.</p></details>
+<details><summary>¿Cómo llegan las tasas de 2027 al programa?</summary><p>Las tasas de cada año (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) las ingresa y valida 60Sec en su consola de administración en cuanto se publican las guías, en diciembre. Usted no tiene que hacer nada: una vez validadas, 60secPaie las usa para toda nómina fechada en ese año, en cinco minutos. Mientras un año no esté validado, el asistente rechaza una nómina fechada en ese año.</p></details>
+<details><summary>Tengo varias unidades de clasificación CNESST. ¿Qué hago?</summary><p>Ingrese cada unidad y su tasa en Configuración › Unidades CNESST y elija la unidad de cada empleado en su ficha. La tasa de la unidad se aplica a sus nóminas, y el informe CNESST da una tabla por unidad, lista para la Declaración de salarios. Los empleados sin unidad se quedan con la tasa de la empresa.</p></details>
 </div>
 
 <!-- ============================================================ -->
@@ -1017,6 +1021,7 @@ mark{background:#ffe89a}
 <dt>ARC</dt><dd>Agencia de Ingresos de Canadá (Agence du revenu du Canada).</dd>
 <dt>CNESST</dt><dd>Commission des normes, de l'équité, de la santé et de la sécurité du travail. Prima de seguro contra accidentes de trabajo, pagada periódicamente a Revenu Québec.</dd>
 <dt>CNT</dt><dd>Aporte relativo a las normas laborales, 0.06 % de los salarios asegurables, pagado una vez al año con el Sumario 1.</dd>
+<dt>Unidad de clasificación</dt><dd>Categoría de actividad en la que la CNESST clasifica a un empleador, con una tasa de prima por $100 de salario asegurable. Una empresa puede tener varias.</dd>
 <dt>Acumulados</dt><dd>Sumas del año a la fecha: bruto, retenciones, ingresos asegurables. Sirven para los máximos anuales y los comprobantes.</dd>
 <dt>Elemento de nómina</dt><dd>Línea reutilizable (ingreso, beneficio o deducción) vinculada a una categoría del sistema.</dd>
 <dt>FSS</dt><dd>Fondo de servicios de salud (Fonds des services de santé), aporte del empleador en Quebec, en porcentaje de la masa salarial.</dd>
