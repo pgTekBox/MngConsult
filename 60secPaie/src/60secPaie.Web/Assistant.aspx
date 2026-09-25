@@ -48,6 +48,8 @@
                 <asp:TextBox ID="txtQuestion" runat="server" TextMode="MultiLine" placeholder="Votre question… (Ctrl+Entrée pour envoyer)" />
                 <div class="actions">
                     <asp:Button ID="btnEnvoyer" runat="server" Text="Envoyer" />
+                    <button type="button" class="ia-micro" id="pageMicro" hidden style="width:44px" title="Poser la question à voix haute" aria-label="Poser la question à voix haute"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17v3M9 20h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    <span hidden id="pageTxtEcoute">Je vous écoute… parlez, puis faites une pause.</span>
                     <span class="note"><asp:Literal ID="litCout" runat="server" /></span>
                 </div>
             </div>
@@ -93,6 +95,24 @@
             var zone = document.getElementById('<%= txtQuestion.ClientID %>');
             if (zone) zone.addEventListener('keydown', function (e) {
                 if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); document.getElementById('<%= btnEnvoyer.ClientID %>').click(); }
+            });
+        })();
+        (function () {
+            // Le micro de la page complète : la question dictée part comme si on avait cliqué « Envoyer ».
+            var R = window.SpeechRecognition || window.webkitSpeechRecognition, m = document.getElementById('pageMicro');
+            if (!R || !m) return;
+            var zone = document.getElementById('<%= txtQuestion.ClientID %>'), initial = zone.getAttribute('placeholder'), rec = null, ecoute = false;
+            var langue = { fr: 'fr-CA', en: 'en-CA', es: 'es-MX' }[document.documentElement.lang] || 'fr-CA';
+            m.hidden = false;
+            m.addEventListener('click', function () {
+                if (ecoute) { rec.stop(); return; }
+                rec = new R(); rec.lang = langue; rec.interimResults = true; rec.continuous = false;
+                var finale = '';
+                rec.onresult = function (e) { var c = ''; for (var i = e.resultIndex; i < e.results.length; i++) { if (e.results[i].isFinal) finale += e.results[i][0].transcript; else c += e.results[i][0].transcript; } zone.value = (finale + ' ' + c).trim(); };
+                rec.onerror = function () { ecoute = false; m.classList.remove('actif'); zone.setAttribute('placeholder', initial); };
+                rec.onend = function () { ecoute = false; m.classList.remove('actif'); zone.setAttribute('placeholder', initial); if (finale.trim()) { zone.value = finale.trim(); document.getElementById('<%= btnEnvoyer.ClientID %>').click(); } };
+                ecoute = true; m.classList.add('actif'); zone.setAttribute('placeholder', document.getElementById('pageTxtEcoute').textContent); zone.value = '';
+                try { rec.start(); } catch (err) { ecoute = false; m.classList.remove('actif'); }
             });
         })();
         function exemple(b) {

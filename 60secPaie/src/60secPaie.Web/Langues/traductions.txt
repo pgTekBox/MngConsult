@@ -3497,3 +3497,21 @@ es: Su pregunta… (Intro para enviar)
 fr: La paie n'est pas encore configurée pour cette compagnie.
 en: Payroll is not yet set up for this company.
 es: La nómina aún no está configurada para esta empresa.
+
+# ---------- Assistant : la voix ----------
+
+fr: Poser la question à voix haute
+en: Ask the question out loud
+es: Hacer la pregunta en voz alta
+
+fr: Arrêter la lecture
+en: Stop reading
+es: Detener la lectura
+
+fr: Je vous écoute… parlez, puis faites une pause.
+en: I'm listening… speak, then pause.
+es: Le escucho… hable y luego haga una pausa.
+
+fr: Le micro n'est pas autorisé : vérifiez la permission du navigateur.
+en: The microphone is not allowed: check the browser permission.
+es: El micrófono no está autorizado: revise el permiso del navegador.

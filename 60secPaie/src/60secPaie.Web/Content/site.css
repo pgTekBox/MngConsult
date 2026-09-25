@@ -391,6 +391,13 @@ pre.verification { background: #f4f6f8; border: 1px solid var(--bord); border-ra
 .ia-saisie { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid var(--bord); background: var(--carte); }
 .ia-saisie textarea { flex: 1; resize: none; font: inherit; font-size: 13.5px; padding: 8px 10px; border: 1px solid var(--bord); border-radius: 8px; }
 .ia-saisie .bouton { align-self: flex-end; }
+.ia-boutons { display: flex; flex-direction: column; gap: 6px; align-items: stretch; justify-content: flex-end; }
+.ia-micro { width: 100%; min-width: 44px; height: 34px; border: 1px solid var(--bord); border-radius: 8px; background: #fff; color: var(--accent-fonce); cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+.ia-micro:hover { background: var(--fond); }
+.ia-micro[hidden] { display: none; }
+.ia-micro.actif { background: #C21F1F; border-color: #C21F1F; color: #fff; animation: ia-pulse 1.2s ease-in-out infinite; }
+.ia-micro.ia-stop { color: #b45309; }
+@keyframes ia-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(194,31,31,.45); } 50% { box-shadow: 0 0 0 8px rgba(194,31,31,0); } }
 .ia-pied { display: flex; justify-content: space-between; gap: 8px; padding: 6px 12px 8px; font-size: 11.5px; color: var(--encre-douce); background: var(--carte); }
 .ia-pied a { color: var(--accent-fonce); }
 @media (max-width: 600px) { .ia-flottant { right: 10px; bottom: 10px; } .ia-panneau { height: calc(100vh - 20px); } }

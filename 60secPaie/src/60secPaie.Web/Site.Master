@@ -52,6 +52,8 @@
             <span hidden id="iaTxtErreur">L'assistant n'a pas pu répondre. Réessayez dans un instant.</span>
             <span hidden id="iaTxtCout">Coût des questions ce mois-ci : {0} US$</span>
             <span hidden id="iaTxtConfirmer">Effacer la conversation ?</span>
+            <span hidden id="iaTxtEcoute">Je vous écoute… parlez, puis faites une pause.</span>
+            <span hidden id="iaTxtMicroRefuse">Le micro n'est pas autorisé : vérifiez la permission du navigateur.</span>
             <button type="button" class="ia-bouton" id="iaBouton" aria-label="Assistant" title="Assistant"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/><g><circle cx="224.5" cy="42" r="23" fill="#5B4BC4" stroke="#fff" stroke-width="4"/><text x="224.5" y="52" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="27" text-anchor="middle" fill="#fff">?</text></g></svg></button>
             <div class="ia-panneau" id="iaPanneau" hidden>
                 <div class="ia-tete">
@@ -65,7 +67,11 @@
                 </div>
                 <div class="ia-saisie">
                     <textarea id="iaQuestion" rows="2" placeholder="Votre question… (Entrée pour envoyer)"></textarea>
-                    <button type="button" class="bouton" id="iaEnvoyer">Envoyer</button>
+                    <div class="ia-boutons">
+                        <button type="button" class="ia-micro" id="iaMicro" hidden title="Poser la question à voix haute" aria-label="Poser la question à voix haute"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17v3M9 20h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="ia-micro ia-stop" id="iaStopVoix" hidden title="Arrêter la lecture" aria-label="Arrêter la lecture"><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                        <button type="button" class="bouton" id="iaEnvoyer">Envoyer</button>
+                    </div>
                 </div>
                 <div class="ia-pied"><span id="iaCout"></span><a href="#" id="iaNouvelle">Nouvelle conversation</a></div>
             </div>
@@ -79,6 +85,44 @@
             var envoyer = document.getElementById('iaEnvoyer'), avatar = document.getElementById('iaAvatar'), cout = document.getElementById('iaCout');
             var txt = function (id) { return document.getElementById(id).textContent; };
             var charge = false, occupe = false;
+
+            // ── La voix : le micro pour poser la question, la synthèse pour lire la réponse. ──
+            // Web Speech API : Chrome, Edge, Safari. Sans elle, le micro reste caché et tout marche au clavier.
+            var micro = document.getElementById('iaMicro'), stopVoix = document.getElementById('iaStopVoix');
+            var langueVoix = { fr: 'fr-CA', en: 'en-CA', es: 'es-MX' }[document.documentElement.lang] || 'fr-CA';
+            var Reconnaissance = window.SpeechRecognition || window.webkitSpeechRecognition;
+            var rec = null, ecoute = false, placeholderInitial = zone.getAttribute('placeholder');
+            function lire(texte) {
+                if (!window.speechSynthesis) return;
+                var u = new SpeechSynthesisUtterance(texte.replace(/\*\*/g, ''));
+                u.lang = langueVoix;
+                u.onend = function () { stopVoix.hidden = true; };
+                speechSynthesis.cancel(); speechSynthesis.speak(u); stopVoix.hidden = false;
+            }
+            function taire() { if (window.speechSynthesis) speechSynthesis.cancel(); stopVoix.hidden = true; }
+            function finEcoute() { ecoute = false; micro.classList.remove('actif'); zone.setAttribute('placeholder', placeholderInitial); }
+            if (Reconnaissance) {
+                micro.hidden = false;
+                micro.addEventListener('click', function () {
+                    if (ecoute) { rec.stop(); return; }
+                    taire();
+                    rec = new Reconnaissance();
+                    rec.lang = langueVoix; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+                    var finale = '';
+                    rec.onresult = function (e) {
+                        var courant = '';
+                        for (var i = e.resultIndex; i < e.results.length; i++) {
+                            if (e.results[i].isFinal) finale += e.results[i][0].transcript; else courant += e.results[i][0].transcript;
+                        }
+                        zone.value = (finale + ' ' + courant).trim();
+                    };
+                    rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') alert(txt('iaTxtMicroRefuse')); };
+                    rec.onend = function () { finEcoute(); if (finale.trim()) { zone.value = finale.trim(); demander(true); } };
+                    ecoute = true; micro.classList.add('actif'); zone.setAttribute('placeholder', txt('iaTxtEcoute')); zone.value = '';
+                    try { rec.start(); } catch (err) { finEcoute(); }
+                });
+                stopVoix.addEventListener('click', taire);
+            }
 
             function etat(e) { avatar.setAttribute('data-etat', e); }
             function html(t) {
@@ -99,8 +143,8 @@
                     (j.tours || []).forEach(function (t) { ajouter(t.role, t.texte, t.quand); }); montrerCout(j.cout);
                 }).catch(function () {});
             }
-            function fermer() { panneau.hidden = true; bouton.hidden = false; }
-            function demander() {
+            function fermer() { panneau.hidden = true; bouton.hidden = false; taire(); if (ecoute && rec) rec.stop(); }
+            function demander(vocal) {
                 var q = zone.value.trim(); if (!q || occupe) return;
                 occupe = true; envoyer.disabled = true; zone.value = ''; etat('reflechit');
                 ajouter('user', q, '');
@@ -109,7 +153,7 @@
                     .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
                     .then(function (x) {
                         attente.remove();
-                        if (x.ok) { ajouter('assistant', x.j.reponse, x.j.quand); montrerCout(x.j.cout); etat('repondu'); setTimeout(function () { etat('repos'); }, 2500); }
+                        if (x.ok) { ajouter('assistant', x.j.reponse, x.j.quand); montrerCout(x.j.cout); etat('repondu'); if (vocal === true) { try { lire(x.j.reponse); } catch (err) { taire(); } } setTimeout(function () { etat('repos'); }, 2500); }
                         else { ajouter('assistant', x.j.erreur || txt('iaTxtErreur'), ''); etat('erreur'); setTimeout(function () { etat('repos'); }, 4000); }
                     })
                     .catch(function () { attente.remove(); ajouter('assistant', txt('iaTxtErreur'), ''); etat('erreur'); setTimeout(function () { etat('repos'); }, 4000); })
@@ -117,7 +161,7 @@
             }
             bouton.addEventListener('click', ouvrir);
             document.getElementById('iaFermer').addEventListener('click', fermer);
-            envoyer.addEventListener('click', demander);
+            envoyer.addEventListener('click', function () { demander(false); });
             zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); demander(); } });
             document.getElementById('iaNouvelle').addEventListener('click', function (e) {
                 e.preventDefault(); if (!confirm(txt('iaTxtConfirmer'))) return;
