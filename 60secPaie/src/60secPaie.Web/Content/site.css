@@ -364,14 +364,17 @@ pre.verification { background: #f4f6f8; border: 1px solid var(--bord); border-ra
 
 /* ---------- Assistant flottant (la boîte à droite, sur toutes les pages) ---------- */
 .ia-flottant { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-size: 14px; }
-.ia-bouton { width: 64px; height: 64px; padding: 0; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); transition: transform .15s ease; }
+.ia-bouton { width: 96px; height: 96px; padding: 0; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); transition: transform .15s ease; }
 .ia-bouton:hover { transform: scale(1.06); }
-.ia-bouton svg { width: 64px; height: 64px; display: block; }
-.ia-panneau { width: min(400px, calc(100vw - 32px)); height: min(620px, calc(100vh - 40px)); background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.22); display: flex; flex-direction: column; overflow: hidden; }
+.ia-bouton svg { width: 96px; height: 96px; display: block; }
+/* Le panneau est lui-même fixé à l'écran : on le déplace par sa barre de titre, et il reste au-dessus de tout. */
+.ia-panneau { position: fixed; right: 20px; bottom: 20px; z-index: 61; width: min(400px, calc(100vw - 32px)); height: min(620px, calc(100vh - 40px)); background: var(--carte); border: 1px solid var(--bord); border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.22); display: flex; flex-direction: column; overflow: hidden; }
 .ia-panneau[hidden] { display: none; }
-.ia-tete { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--accent-fonce); color: #fff; }
-.ia-avatar { width: 40px; height: 40px; flex: 0 0 40px; position: relative; }
-.ia-avatar svg { width: 40px; height: 40px; position: absolute; left: 0; top: 0; display: none; }
+.ia-panneau.ia-deplace { box-shadow: 0 24px 56px rgba(0,0,0,.32); }
+.ia-tete { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--accent-fonce); color: #fff; cursor: move; user-select: none; touch-action: none; }
+.ia-tete .ia-ico { cursor: pointer; }
+.ia-avatar { width: 60px; height: 60px; flex: 0 0 60px; position: relative; }
+.ia-avatar svg { width: 60px; height: 60px; position: absolute; left: 0; top: 0; display: none; }
 .ia-avatar[data-etat="repos"] svg[data-etat="repos"], .ia-avatar[data-etat="reflechit"] svg[data-etat="reflechit"],
 .ia-avatar[data-etat="repondu"] svg[data-etat="repondu"], .ia-avatar[data-etat="erreur"] svg[data-etat="erreur"] { display: block; }
 .ia-titre { flex: 1; min-width: 0; line-height: 1.2; }
@@ -400,4 +403,4 @@ pre.verification { background: #f4f6f8; border: 1px solid var(--bord); border-ra
 @keyframes ia-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(194,31,31,.45); } 50% { box-shadow: 0 0 0 8px rgba(194,31,31,0); } }
 .ia-pied { display: flex; justify-content: space-between; gap: 8px; padding: 6px 12px 8px; font-size: 11.5px; color: var(--encre-douce); background: var(--carte); }
 .ia-pied a { color: var(--accent-fonce); }
-@media (max-width: 600px) { .ia-flottant { right: 10px; bottom: 10px; } .ia-panneau { height: calc(100vh - 20px); } }
+@media (max-width: 600px) { .ia-flottant { right: 10px; bottom: 10px; } .ia-panneau { right: 10px; bottom: 10px; height: calc(100vh - 20px); } }

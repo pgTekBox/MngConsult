@@ -137,7 +137,7 @@
             }
             function montrerCout(v) { if (typeof v === 'number') cout.textContent = txt('iaTxtCout').replace('{0}', v.toFixed(4)); }
             function ouvrir() {
-                panneau.hidden = false; bouton.hidden = true; zone.focus();
+                panneau.hidden = false; bouton.hidden = true; zone.focus(); restaurer();
                 if (charge) return; charge = true;
                 fetch(url, { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (j) {
                     (j.tours || []).forEach(function (t) { ajouter(t.role, t.texte, t.quand); }); montrerCout(j.cout);
@@ -168,6 +168,30 @@
                 fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
             });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panneau.hidden) fermer(); });
+
+            // ── Déplacer la boîte par sa barre de titre ; la position est retenue dans ce navigateur. ──
+            var tete = panneau.querySelector('.ia-tete'), glisse = null;
+            function placer(x, y) {
+                var w = panneau.offsetWidth, h = panneau.offsetHeight;
+                x = Math.max(0, Math.min(x, window.innerWidth - w)); y = Math.max(0, Math.min(y, window.innerHeight - h));
+                panneau.style.left = x + 'px'; panneau.style.top = y + 'px'; panneau.style.right = 'auto'; panneau.style.bottom = 'auto';
+            }
+            function retenir() { try { localStorage.setItem('iaPanneauPos', JSON.stringify({ x: panneau.offsetLeft, y: panneau.offsetTop })); } catch (e) { } }
+            function restaurer() {
+                try {
+                    var p = JSON.parse(localStorage.getItem('iaPanneauPos') || 'null');
+                    if (p && typeof p.x === 'number' && typeof p.y === 'number') placer(p.x, p.y);
+                } catch (e) { }
+            }
+            tete.addEventListener('pointerdown', function (e) {
+                if (e.target.closest('.ia-ico')) return;
+                glisse = { dx: e.clientX - panneau.offsetLeft, dy: e.clientY - panneau.offsetTop };
+                panneau.classList.add('ia-deplace'); tete.setPointerCapture(e.pointerId); e.preventDefault();
+            });
+            tete.addEventListener('pointermove', function (e) { if (glisse) placer(e.clientX - glisse.dx, e.clientY - glisse.dy); });
+            function lacher(e) { if (!glisse) return; glisse = null; panneau.classList.remove('ia-deplace'); retenir(); }
+            tete.addEventListener('pointerup', lacher); tete.addEventListener('pointercancel', lacher);
+            window.addEventListener('resize', function () { if (!panneau.hidden && panneau.style.left) placer(panneau.offsetLeft, panneau.offsetTop); });
             etat('repos');
         })();
         </script>
