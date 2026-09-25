@@ -1,0 +1,610 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Agenda — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Agenda</h1>
+            <p class="intro">Le calendrier des rendez-vous de votre compagnie. Chaque rendez-vous peut être rattaché à un client et à un employé, et peut être transformé en facture. Menu <span class="chemin">Agenda</span>.</p>
+
+            <section id="fr-agenda">
+                <h2>Agenda</h2>
+                <p>L’écran <span class="chemin">Agenda</span> affiche les rendez-vous de la compagnie sous forme de calendrier. Les employés sont les « ressources » de l’agenda : chaque rendez-vous peut être attribué à l’un d’eux, et un filtre par employé permet de n’afficher que les rendez-vous qui vous intéressent. Le titre de la page est « Agenda — 60Sec-AI ».</p>
+
+                <h3>But</h3>
+                <p>Voir d’un coup d’œil les rendez-vous du mois, de la semaine ou de la journée ; en créer de nouveaux ; les déplacer ; ouvrir leur fiche pour les modifier, les supprimer ou les facturer. Les employés qui apparaissent dans l’agenda sont ceux créés dans <a href="employes.html#fr-employes">Employés</a>.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>‹</kbd> (info-bulle « Précédent ») et <kbd>›</kbd> (info-bulle « Suivant ») : reculent ou avancent d’un mois, d’une semaine ou d’un jour, selon la vue affichée.</li>
+                    <li><kbd>●</kbd> (info-bulle « Aujourd’hui ») : revient à la date du jour.</li>
+                    <li><kbd>Mois</kbd>, <kbd>Semaine</kbd>, <kbd>Jour</kbd> : changent de vue. Le bouton de la vue active est surligné.</li>
+                    <li><kbd>+ Rendez-vous</kbd> : ouvre la fenêtre « Rendez-vous » avec un nouveau rendez-vous fixé à 9 h 00, à la date affichée.</li>
+                    <li><strong>Double-clic sur une case du mois</strong> : crée un nouveau rendez-vous à 9 h 00 ce jour-là.</li>
+                    <li><strong>Double-clic sur une plage de 30 minutes</strong> (vues Semaine et Jour) : crée un nouveau rendez-vous à cette heure précise.</li>
+                    <li><strong>Clic sur un rendez-vous</strong> : ouvre sa fiche en modification (voir <a href="#fr-rendez-vous">Fiche rendez-vous</a>).</li>
+                    <li><strong>Glisser-déposer un rendez-vous</strong> : le déplace.
+                        <ul>
+                            <li>En vue Mois, la date change, mais l’heure et la durée sont conservées.</li>
+                            <li>En vue Semaine ou Jour, l’heure de début devient la plage de 30 minutes où vous relâchez le rendez-vous ; la durée est conservée.</li>
+                            <li>L’enregistrement est immédiat, sans confirmation.</li>
+                        </ul>
+                    </li>
+                    <li><strong>« +N de plus »</strong> (vue Mois, quand une journée compte plus de 3 rendez-vous) : bascule en vue Jour sur cette journée.</li>
+                </ul>
+                <p>La fenêtre du rendez-vous est modale : elle mesure environ 1300 × 700 pixels et se réduit sur un petit écran. L’agenda se recharge automatiquement dès que vous la fermez.</p>
+
+                <h3>Vues</h3>
+                <table>
+                    <thead><tr><th>Vue</th><th>Ce qu’elle affiche</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mois</td><td>Grille de 6 semaines × 7 jours commençant le lundi (Lun … Dim). Le jour courant porte une pastille bleue. Les jours des mois voisins sont grisés. Chaque case affiche au plus 3 rendez-vous, précédés de leur heure (sauf ceux « toute la journée ») ; au-delà, la mention « +N de plus » apparaît.</td></tr>
+                        <tr><td>Semaine</td><td>Sept colonnes, une par jour, découpées en plages de 30 minutes de 07:00 à 20:00. Une rangée « Toute la journée » figure en haut. Une ligne rouge indique l’heure actuelle.</td></tr>
+                        <tr><td>Jour</td><td>Une seule journée, avec les mêmes plages de 30 minutes de 07:00 à 20:00, la rangée « Toute la journée » et la ligne rouge de l’heure actuelle.</td></tr>
+                    </tbody>
+                </table>
+                <p>Dans les vues Semaine et Jour, un rendez-vous qui commence avant 7 h ou finit après 20 h est rogné à ces bornes à l’écran (il n’est pas modifié). Chaque bloc affiche « début – fin », le titre, puis « · client ».</p>
+
+                <h3>Filtres et recherche</h3>
+                <p>Le filtre « Employés : » présente une pastille de couleur par employé actif. La couleur est celle choisie dans la fiche de l’employé.</p>
+                <ul>
+                    <li>Au départ, tous les employés sont affichés.</li>
+                    <li>Le premier clic sur une pastille masque cet employé seulement (les autres restent visibles).</li>
+                    <li>Les clics suivants masquent ou réaffichent chaque employé individuellement.</li>
+                    <li>Quand tous les employés sont de nouveau sélectionnés, le filtre revient à « tous ».</li>
+                    <li>Les rendez-vous <strong>sans employé</strong> restent toujours visibles, quel que soit le filtre.</li>
+                </ul>
+                <p>Il n’y a pas de zone de recherche par texte dans l’agenda : naviguez avec les boutons de période et les vues.</p>
+
+                <h3>Données affichées</h3>
+                <table>
+                    <thead><tr><th>Donnée</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Titre</td><td>Le titre saisi dans la fiche du rendez-vous.</td></tr>
+                        <tr><td>Heure</td><td>L’heure de début (vue Mois) ou « début – fin » (vues Semaine et Jour). Rien pour un rendez-vous « toute la journée ».</td></tr>
+                        <tr><td>Client</td><td>Le nom du client, dans l’info-bulle ou dans le bloc, précédé de « · ».</td></tr>
+                        <tr><td>Couleur</td><td>La couleur du bloc vient du <strong>type</strong> de rendez-vous (bleu par défaut), et non de l’employé.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Seuls les employés <strong>actifs</strong> de la compagnie apparaissent comme ressources (filtre et liste « Employé » de la fiche). Un employé désactivé disparaît de l’agenda, mais ses rendez-vous restent.</li>
+                    <li><strong>Rappels</strong> : si un rendez-vous a un rappel, une notification apparaît en haut à droite de l’écran pendant 8 secondes : « 🔔 Titre » puis « À HH:MM — Client ». Elle se déclenche entre (heure de début − délai du rappel) et l’heure de début du rendez-vous.</li>
+                    <li>La vérification des rappels a lieu chaque minute, <strong>uniquement tant que la page Agenda est ouverte</strong> dans votre navigateur.</li>
+                    <li>En vue Mois, un rendez-vous qui s’étend sur plusieurs jours apparaît dans chaque case concernée.</li>
+                </ul>
+
+                <h3>Marche à suivre</h3>
+                <p>Pour créer un rendez-vous à une heure précise :</p>
+                <ol>
+                    <li>Passez en vue <kbd>Semaine</kbd> ou <kbd>Jour</kbd> et rendez-vous à la bonne date avec <kbd>‹</kbd> / <kbd>›</kbd>.</li>
+                    <li>Double-cliquez sur la plage de 30 minutes voulue.</li>
+                    <li>Remplissez au moins le « Titre », vérifiez la date et l’heure de fin, puis cliquez sur <kbd>Enregistrer</kbd>.</li>
+                </ol>
+                <p>Pour déplacer un rendez-vous d’une journée à une autre sans changer l’heure : passez en vue <kbd>Mois</kbd> et glissez le rendez-vous dans la nouvelle case.</p>
+
+                <h3>Messages</h3>
+                <p>L’écran Agenda n’affiche pas de message propre. Le déplacement par glisser-déposer se fait sans confirmation ni avis.</p>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Un glisser-déposer mal placé modifie tout de suite le rendez-vous, sans confirmation. Pour annuler, redéplacez-le à sa place d’origine.</div>
+                <div class="attention" data-titre="Attention">Le rappel n’est ni un courriel ni une notification de votre système : il apparaît seulement dans la page Agenda, et seulement si elle est ouverte au moment prévu.</div>
+                <div class="note" data-titre="Bon à savoir">En vue Mois, une journée n’affiche que 3 rendez-vous ; cliquez sur « +N de plus » pour voir la journée complète.</div>
+                <div class="astuce" data-titre="Astuce">Pour ne voir que vos propres rendez-vous, cliquez une seule fois sur votre pastille dans le filtre « Employés : » : au premier clic, elle masque… l’employé cliqué. Cliquez donc plutôt sur les pastilles des collègues que vous souhaitez masquer, ou cliquez sur la vôtre puis de nouveau sur la vôtre pour la réafficher après avoir masqué les autres.</div>
+            </section>
+
+            <section id="fr-rendez-vous">
+                <h2>Fiche rendez-vous</h2>
+                <p>La fiche s’ouvre dans la fenêtre « Rendez-vous » de l’agenda. Son titre est « Nouveau rendez-vous » à la création et « Modifier le rendez-vous » en modification. Sous-titre : « Remplissez les informations du rendez-vous. »</p>
+
+                <h3>But</h3>
+                <p>Créer, modifier, supprimer ou facturer un rendez-vous : titre, client, employé, statut, type, dates et heures, lieu, récurrence, rappel et description.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Supprimer</kbd> (en modification seulement) : demande la confirmation « Supprimer ce rendez-vous ? », supprime le rendez-vous puis ferme la fenêtre.</li>
+                    <li><kbd>← Annuler</kbd> : ferme la fenêtre sans rien enregistrer.</li>
+                    <li><kbd>Facturer</kbd> (info-bulle « Sauvegarder le rendez-vous et créer une facture ») : enregistre le rendez-vous, puis ouvre dans la même fenêtre une nouvelle facture client préremplie à partir du rendez-vous (voir <a href="ventes.html">Ventes</a>).</li>
+                    <li><kbd>Enregistrer</kbd> : enregistre puis ferme la fenêtre, ce qui rafraîchit l’agenda.</li>
+                </ul>
+
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Section</th><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Informations</td><td>Titre</td><td>Oui</td><td>Le texte affiché dans l’agenda.</td></tr>
+                        <tr><td></td><td>Client</td><td>Non</td><td>Liste des clients, avec le choix « -- Aucun -- ».</td></tr>
+                        <tr><td></td><td>Employé</td><td>Non</td><td>Liste des employés actifs, avec le choix « -- Aucun -- ».</td></tr>
+                        <tr><td></td><td>Statut</td><td>Non</td><td>« Planifié » (par défaut), « Confirmé », « Terminé », « Annulé », « No-show ».</td></tr>
+                        <tr><td>Date et durée</td><td>Type</td><td>Non</td><td>Liste affichée sous la forme « Nom (N min) ». Texte d’aide : « La durée du type ajustera automatiquement la date de fin. » Le type donne aussi sa couleur au bloc dans l’agenda.</td></tr>
+                        <tr><td></td><td>Date de début</td><td>Oui</td><td>Format aaaa-mm-jj.</td></tr>
+                        <tr><td></td><td>Heure de début</td><td>Oui</td><td>Choix par pas de 30 minutes, de 07:00 à 20:00.</td></tr>
+                        <tr><td></td><td>Toute la journée</td><td>Non</td><td>Case à cocher.</td></tr>
+                        <tr><td></td><td>Date de fin</td><td>Oui</td><td>Format aaaa-mm-jj.</td></tr>
+                        <tr><td></td><td>Heure de fin</td><td>Oui</td><td>Même liste que l’heure de début.</td></tr>
+                        <tr><td>Options</td><td>Lieu</td><td>Non</td><td>Texte libre.</td></tr>
+                        <tr><td></td><td>Récurrence</td><td>Non</td><td>« Aucune », « Tous les jours », « Toutes les semaines », « Toutes les 2 semaines », « Tous les mois », « Tous les ans ».</td></tr>
+                        <tr><td></td><td>Rappel</td><td>Non</td><td>« Aucun », « 5 minutes avant », « 15 minutes avant », « 30 minutes avant », « 1 heure avant », « 1 jour avant ».</td></tr>
+                        <tr><td></td><td>Description</td><td>Non</td><td>Zone de texte multiligne.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Nouveau rendez-vous : le début est la date et l’heure reçues de l’agenda (9 h 00 par défaut) ; la fin est fixée automatiquement 1 heure plus tard.</li>
+                    <li>Choisir un <strong>Type</strong> recalcule la fin : début + durée du type.</li>
+                    <li>Modifier le <strong>début</strong> décale la fin du même écart, ce qui conserve la durée. Si la fin tombait avant le nouveau début, elle est fixée à début + 1 h.</li>
+                    <li>La fin doit toujours être après le début, même quand « Toute la journée » est coché.</li>
+                    <li>Supprimer un employé ne supprime pas ses rendez-vous : ils perdent seulement leur employé.</li>
+                    <li><kbd>Facturer</kbd> enregistre d’abord le rendez-vous : si une validation échoue, la facturation n’a pas lieu.</li>
+                </ul>
+
+                <h3>Marche à suivre</h3>
+                <p>Pour facturer un rendez-vous terminé :</p>
+                <ol>
+                    <li>Cliquez sur le rendez-vous dans l’agenda pour ouvrir sa fiche.</li>
+                    <li>Vérifiez que le « Client » est renseigné (la facture lui sera adressée) et, au besoin, passez le « Statut » à « Terminé ».</li>
+                    <li>Cliquez sur <kbd>Facturer</kbd> : le rendez-vous est enregistré, puis une facture préremplie s’ouvre dans la même fenêtre. Complétez-la et enregistrez-la comme toute facture client.</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Le titre est obligatoire. »</span> — saisissez un titre avant d’enregistrer.</li>
+                    <li><span class="msg">« Les dates de début et de fin sont obligatoires. »</span> — l’une des deux dates est vide ; remplissez-la au format aaaa-mm-jj.</li>
+                    <li><span class="msg">« Les heures de début et de fin sont obligatoires. »</span> — choisissez une heure dans chacune des deux listes, même pour un rendez-vous « toute la journée ».</li>
+                    <li><span class="msg">« La date/heure de fin doit être après la date/heure de début. »</span> — corrigez la fin (ou le début) : la fin ne peut pas précéder ni égaler le début.</li>
+                    <li><span class="msg">« Impossible de récupérer l’identifiant du rendez-vous sauvegardé. »</span> — (bouton <kbd>Facturer</kbd>) le rendez-vous a été enregistré, mais la facture n’a pas pu être ouverte. Fermez la fenêtre, rouvrez le rendez-vous depuis l’agenda et cliquez de nouveau sur <kbd>Facturer</kbd>.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Cocher « Toute la journée » ne vide pas les heures : l’heure de fin doit rester après l’heure de début, sinon le message de validation apparaît.</div>
+                <div class="piege" data-titre="Piège">La « Récurrence » est enregistrée avec le rendez-vous, mais l’agenda n’affiche que l’occurrence enregistrée : aucune répétition n’est générée à l’écran. Créez les autres occurrences vous-même si vous devez les voir.</div>
+                <div class="note" data-titre="Bon à savoir">Les listes d’heures ne proposent que 07:00 à 20:00, par pas de 30 minutes. Un rendez-vous à 6 h 45 ou à 21 h ne peut pas être saisi.</div>
+                <div class="astuce" data-titre="Astuce">Définissez des types de rendez-vous avec leur durée habituelle : choisir le type suffit alors à fixer l’heure de fin, et la couleur du type rend les blocs reconnaissables dans l’agenda.</div>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Pourquoi un employé n’apparaît-il pas dans le filtre « Employés : » ni dans la liste « Employé » ?</summary><p>Seuls les employés <strong>actifs</strong> sont proposés. Ouvrez sa fiche dans <a href="employes.html#fr-fiche-employe">Employés</a> et cochez « Employé actif ».</p></details>
+                <details><summary>J’ai déplacé un rendez-vous par erreur. Comment annuler ?</summary><p>Le déplacement est enregistré immédiatement, sans confirmation. Glissez simplement le rendez-vous à sa position d’origine (même vue), ou ouvrez sa fiche et corrigez la date et l’heure.</p></details>
+                <details><summary>Le rappel ne s’est pas affiché. Pourquoi ?</summary><p>Le rappel n’est vérifié que chaque minute, et seulement tant que la page Agenda est ouverte dans votre navigateur. Il n’envoie ni courriel ni notification système. Gardez l’Agenda ouvert sur la période du rappel.</p></details>
+                <details><summary>Pourquoi mon rendez-vous hebdomadaire n’apparaît-il qu’une fois ?</summary><p>La récurrence est enregistrée dans la fiche, mais l’agenda n’affiche que l’occurrence saisie ; aucune répétition n’est générée automatiquement. Créez les occurrences suivantes au besoin.</p></details>
+                <details><summary>Pourquoi le bloc du rendez-vous n’a-t-il pas la couleur de l’employé ?</summary><p>Dans l’agenda, la couleur du bloc vient du <strong>type</strong> de rendez-vous (bleu par défaut). La couleur de l’employé sert seulement aux pastilles du filtre « Employés : ».</p></details>
+                <details><summary>Je ne vois que 3 rendez-vous dans une journée du mois, mais j’en ai plus.</summary><p>La vue Mois limite l’affichage à 3 rendez-vous par case. Cliquez sur « +N de plus » pour passer en vue Jour sur cette date et tout voir.</p></details>
+                <details><summary>Puis-je saisir un rendez-vous avant 7 h ou après 20 h ?</summary><p>Non : les listes d’heures vont de 07:00 à 20:00 par pas de 30 minutes. Un rendez-vous existant qui dépasse ces bornes est rogné à l’écran, mais pas modifié.</p></details>
+                <details><summary>Que se passe-t-il quand je clique sur « Facturer » ?</summary><p>Le rendez-vous est d’abord enregistré (les validations s’appliquent), puis une nouvelle facture client préremplie s’ouvre dans la même fenêtre. Si une validation échoue, la facture ne s’ouvre pas.</p></details>
+                <details><summary>Que deviennent les rendez-vous d’un employé supprimé ?</summary><p>Ils sont conservés, mais n’ont plus d’employé. Ils restent visibles dans l’agenda quel que soit le filtre, puisque les rendez-vous sans employé sont toujours affichés.</p></details>
+                <details><summary>Comment revenir rapidement à aujourd’hui ?</summary><p>Cliquez sur le bouton <kbd>●</kbd> (info-bulle « Aujourd’hui »). Le jour courant porte une pastille bleue en vue Mois et une ligne rouge marque l’heure actuelle dans les vues Semaine et Jour.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ressource</td><td>Employé auquel un rendez-vous peut être attribué. Seuls les employés actifs sont des ressources de l’agenda.</td></tr>
+                        <tr><td>Type de rendez-vous</td><td>Catégorie (« Nom (N min) ») qui fixe la durée par défaut et la couleur du bloc dans l’agenda.</td></tr>
+                        <tr><td>Statut</td><td>Étape du rendez-vous : Planifié, Confirmé, Terminé, Annulé ou No-show (client absent).</td></tr>
+                        <tr><td>No-show</td><td>Statut indiquant que le client ne s’est pas présenté.</td></tr>
+                        <tr><td>Toute la journée</td><td>Rendez-vous sans heure affichée, placé dans la rangée « Toute la journée » des vues Semaine et Jour.</td></tr>
+                        <tr><td>Récurrence</td><td>Fréquence de répétition enregistrée dans la fiche (jour, semaine, 2 semaines, mois, an) ; l’agenda n’en génère pas les occurrences.</td></tr>
+                        <tr><td>Rappel</td><td>Délai avant le début (de 5 minutes à 1 jour) à partir duquel une notification apparaît dans la page Agenda.</td></tr>
+                        <tr><td>Glisser-déposer</td><td>Déplacement d’un rendez-vous à la souris, enregistré immédiatement sans confirmation.</td></tr>
+                        <tr><td>Facturer</td><td>Bouton qui enregistre le rendez-vous puis crée une facture client préremplie.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Agenda</h1>
+            <p class="intro">Your company’s appointment calendar. Each appointment can be linked to a customer and an employee, and can be turned into an invoice. Menu <span class="chemin">Agenda</span>.</p>
+
+            <section id="en-calendar">
+                <h2>Agenda</h2>
+                <p>The <span class="chemin">Agenda</span> screen shows the company’s appointments as a calendar. Employees are the agenda’s “resources”: each appointment can be assigned to one of them, and an employee filter lets you display only the appointments you care about. The page title is “Agenda — 60Sec-AI”.</p>
+
+                <h3>Purpose</h3>
+                <p>See at a glance the appointments of the month, week or day; create new ones; move them; open their form to edit, delete or invoice them. The employees shown in the agenda are those created in <a href="employes.html#en-employees">Employees</a>.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>‹</kbd> (tooltip “Précédent”, previous) and <kbd>›</kbd> (tooltip “Suivant”, next): move back or forward by one month, one week or one day, depending on the current view.</li>
+                    <li><kbd>●</kbd> (tooltip “Aujourd’hui”, today): returns to today’s date.</li>
+                    <li><kbd>Mois</kbd> (Month), <kbd>Semaine</kbd> (Week), <kbd>Jour</kbd> (Day): switch views. The active view’s button is highlighted.</li>
+                    <li><kbd>+ Rendez-vous</kbd>: opens the “Rendez-vous” window with a new appointment set at 9:00 a.m. on the displayed date.</li>
+                    <li><strong>Double-click on a month cell</strong>: creates a new appointment at 9:00 a.m. on that day.</li>
+                    <li><strong>Double-click on a 30-minute slot</strong> (Week and Day views): creates a new appointment at that exact time.</li>
+                    <li><strong>Click on an appointment</strong>: opens its form for editing (see <a href="#en-appointment">Appointment form</a>).</li>
+                    <li><strong>Drag and drop an appointment</strong>: moves it.
+                        <ul>
+                            <li>In Month view, the date changes but the time and duration are kept.</li>
+                            <li>In Week or Day view, the start time becomes the 30-minute slot where you release the appointment; the duration is kept.</li>
+                            <li>The change is saved immediately, without confirmation.</li>
+                        </ul>
+                    </li>
+                    <li><strong>“+N de plus”</strong> (Month view, when a day has more than 3 appointments): switches to Day view on that day.</li>
+                </ul>
+                <p>The appointment window is modal: it measures about 1300 × 700 pixels and shrinks on small screens. The agenda reloads automatically as soon as you close it.</p>
+
+                <h3>Views</h3>
+                <table>
+                    <thead><tr><th>View</th><th>What it shows</th></tr></thead>
+                    <tbody>
+                        <tr><td>Month</td><td>A grid of 6 weeks × 7 days starting on Monday (Lun … Dim). Today has a blue dot. Days from neighbouring months are greyed out. Each cell shows at most 3 appointments, preceded by their time (except “all day” ones); beyond that, “+N de plus” appears.</td></tr>
+                        <tr><td>Week</td><td>Seven columns, one per day, split into 30-minute slots from 07:00 to 20:00. A “Toute la journée” (all day) row sits at the top. A red line marks the current time.</td></tr>
+                        <tr><td>Day</td><td>A single day, with the same 30-minute slots from 07:00 to 20:00, the “all day” row and the red current-time line.</td></tr>
+                    </tbody>
+                </table>
+                <p>In the Week and Day views, an appointment that starts before 7 a.m. or ends after 8 p.m. is clipped to those limits on screen (it is not modified). Each block shows “start – end”, the title, then “· customer”.</p>
+
+                <h3>Filters and search</h3>
+                <p>The “Employés :” filter shows one coloured dot per active employee. The colour is the one chosen in the employee’s form.</p>
+                <ul>
+                    <li>Initially, all employees are displayed.</li>
+                    <li>The first click on a dot hides that employee only (the others stay visible).</li>
+                    <li>Subsequent clicks hide or show each employee individually.</li>
+                    <li>When every employee is selected again, the filter returns to “all”.</li>
+                    <li>Appointments <strong>without an employee</strong> always stay visible, whatever the filter.</li>
+                </ul>
+                <p>There is no text search box in the agenda: navigate with the period buttons and the views.</p>
+
+                <h3>Data displayed</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Title</td><td>The title entered in the appointment form.</td></tr>
+                        <tr><td>Time</td><td>The start time (Month view) or “start – end” (Week and Day views). Nothing for an “all day” appointment.</td></tr>
+                        <tr><td>Customer</td><td>The customer’s name, in the tooltip or the block, preceded by “·”.</td></tr>
+                        <tr><td>Colour</td><td>The block colour comes from the appointment <strong>type</strong> (blue by default), not from the employee.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>Only the company’s <strong>active</strong> employees appear as resources (filter and “Employé” list of the form). A deactivated employee disappears from the agenda, but their appointments remain.</li>
+                    <li><strong>Reminders</strong>: if an appointment has a reminder, a notification appears at the top right of the screen for 8 seconds: “🔔 Title” then “À HH:MM — Customer”. It fires between (start time − reminder lead) and the appointment’s start time.</li>
+                    <li>Reminders are checked every minute, <strong>only while the Agenda page is open</strong> in your browser.</li>
+                    <li>In Month view, an appointment spanning several days appears in every cell concerned.</li>
+                </ul>
+
+                <h3>Step by step</h3>
+                <p>To create an appointment at a precise time:</p>
+                <ol>
+                    <li>Switch to <kbd>Semaine</kbd> or <kbd>Jour</kbd> view and go to the right date with <kbd>‹</kbd> / <kbd>›</kbd>.</li>
+                    <li>Double-click the desired 30-minute slot.</li>
+                    <li>Fill in at least the “Titre” (title), check the end date and time, then click <kbd>Enregistrer</kbd> (save).</li>
+                </ol>
+                <p>To move an appointment to another day without changing its time: switch to <kbd>Mois</kbd> view and drag the appointment into the new cell.</p>
+
+                <h3>Messages</h3>
+                <p>The Agenda screen has no messages of its own. Drag-and-drop moves happen without confirmation or notice.</p>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">A misplaced drag and drop changes the appointment immediately, without confirmation. To undo, drag it back to its original position.</div>
+                <div class="attention" data-titre="Warning">The reminder is neither an e-mail nor a system notification: it only shows inside the Agenda page, and only if that page is open at the scheduled moment.</div>
+                <div class="note" data-titre="Good to know">In Month view a day shows only 3 appointments; click “+N de plus” to see the full day.</div>
+                <div class="astuce" data-titre="Tip">To see only your own appointments, remember that the first click on a dot hides the employee you clicked. Click the dots of the colleagues you want to hide instead, or click your own dot twice after hiding the others.</div>
+            </section>
+
+            <section id="en-appointment">
+                <h2>Appointment form</h2>
+                <p>The form opens in the agenda’s “Rendez-vous” window. Its title is “Nouveau rendez-vous” (new appointment) when creating and “Modifier le rendez-vous” (edit appointment) when editing. Subtitle: “Remplissez les informations du rendez-vous.” (fill in the appointment details).</p>
+
+                <h3>Purpose</h3>
+                <p>Create, edit, delete or invoice an appointment: title, customer, employee, status, type, dates and times, location, recurrence, reminder and description.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Supprimer</kbd> (delete, editing only): asks for confirmation “Supprimer ce rendez-vous ?”, deletes the appointment and closes the window.</li>
+                    <li><kbd>← Annuler</kbd> (cancel): closes the window without saving.</li>
+                    <li><kbd>Facturer</kbd> (invoice; tooltip “Sauvegarder le rendez-vous et créer une facture”): saves the appointment, then opens in the same window a new customer invoice pre-filled from the appointment (see <a href="ventes.html">Sales</a>).</li>
+                    <li><kbd>Enregistrer</kbd> (save): saves and closes the window, which refreshes the agenda.</li>
+                </ul>
+
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Section</th><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Informations</td><td>Titre (title)</td><td>Yes</td><td>The text shown in the agenda.</td></tr>
+                        <tr><td></td><td>Client (customer)</td><td>No</td><td>Customer list, with the choice “-- Aucun --” (none).</td></tr>
+                        <tr><td></td><td>Employé (employee)</td><td>No</td><td>List of active employees, with the choice “-- Aucun --”.</td></tr>
+                        <tr><td></td><td>Statut (status)</td><td>No</td><td>“Planifié” (scheduled, default), “Confirmé” (confirmed), “Terminé” (done), “Annulé” (cancelled), “No-show”.</td></tr>
+                        <tr><td>Date et durée</td><td>Type</td><td>No</td><td>List shown as “Name (N min)”. Help text: “La durée du type ajustera automatiquement la date de fin.” (the type’s duration automatically adjusts the end date). The type also gives the block its colour in the agenda.</td></tr>
+                        <tr><td></td><td>Date de début (start date)</td><td>Yes</td><td>Format yyyy-mm-dd.</td></tr>
+                        <tr><td></td><td>Heure de début (start time)</td><td>Yes</td><td>Choices in 30-minute steps, from 07:00 to 20:00.</td></tr>
+                        <tr><td></td><td>Toute la journée (all day)</td><td>No</td><td>Checkbox.</td></tr>
+                        <tr><td></td><td>Date de fin (end date)</td><td>Yes</td><td>Format yyyy-mm-dd.</td></tr>
+                        <tr><td></td><td>Heure de fin (end time)</td><td>Yes</td><td>Same list as the start time.</td></tr>
+                        <tr><td>Options</td><td>Lieu (location)</td><td>No</td><td>Free text.</td></tr>
+                        <tr><td></td><td>Récurrence (recurrence)</td><td>No</td><td>“Aucune” (none), “Tous les jours” (daily), “Toutes les semaines” (weekly), “Toutes les 2 semaines” (every 2 weeks), “Tous les mois” (monthly), “Tous les ans” (yearly).</td></tr>
+                        <tr><td></td><td>Rappel (reminder)</td><td>No</td><td>“Aucun” (none), “5 minutes avant”, “15 minutes avant”, “30 minutes avant”, “1 heure avant”, “1 jour avant” (5, 15, 30 minutes, 1 hour, 1 day before).</td></tr>
+                        <tr><td></td><td>Description</td><td>No</td><td>Multi-line text area.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>New appointment: the start is the date and time received from the agenda (9:00 a.m. by default); the end is automatically set 1 hour later.</li>
+                    <li>Choosing a <strong>Type</strong> recalculates the end: start + the type’s duration.</li>
+                    <li>Changing the <strong>start</strong> shifts the end by the same amount, which keeps the duration. If the end would fall before the new start, it is set to start + 1 h.</li>
+                    <li>The end must always be after the start, even when “Toute la journée” is checked.</li>
+                    <li>Deleting an employee does not delete their appointments: they simply lose their employee.</li>
+                    <li><kbd>Facturer</kbd> saves the appointment first: if a validation fails, no invoice is created.</li>
+                </ul>
+
+                <h3>Step by step</h3>
+                <p>To invoice a completed appointment:</p>
+                <ol>
+                    <li>Click the appointment in the agenda to open its form.</li>
+                    <li>Check that the “Client” is filled in (the invoice will be addressed to them) and, if needed, set the “Statut” to “Terminé”.</li>
+                    <li>Click <kbd>Facturer</kbd>: the appointment is saved, then a pre-filled invoice opens in the same window. Complete it and save it like any customer invoice.</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Le titre est obligatoire. »</span> — the title is required; enter one before saving.</li>
+                    <li><span class="msg">« Les dates de début et de fin sont obligatoires. »</span> — one of the two dates is empty; fill it in as yyyy-mm-dd.</li>
+                    <li><span class="msg">« Les heures de début et de fin sont obligatoires. »</span> — pick a time in both lists, even for an “all day” appointment.</li>
+                    <li><span class="msg">« La date/heure de fin doit être après la date/heure de début. »</span> — fix the end (or the start): the end cannot precede or equal the start.</li>
+                    <li><span class="msg">« Impossible de récupérer l’identifiant du rendez-vous sauvegardé. »</span> — (<kbd>Facturer</kbd> button) the appointment was saved but the invoice could not be opened. Close the window, reopen the appointment from the agenda and click <kbd>Facturer</kbd> again.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Checking “Toute la journée” does not clear the times: the end time must still be after the start time, otherwise the validation message appears.</div>
+                <div class="piege" data-titre="Pitfall">The “Récurrence” is saved with the appointment, but the agenda shows only the saved occurrence: no repetition is generated on screen. Create the other occurrences yourself if you need to see them.</div>
+                <div class="note" data-titre="Good to know">The time lists only offer 07:00 to 20:00, in 30-minute steps. An appointment at 6:45 a.m. or 9 p.m. cannot be entered.</div>
+                <div class="astuce" data-titre="Tip">Define appointment types with their usual duration: choosing the type is then enough to set the end time, and the type’s colour makes blocks recognizable in the agenda.</div>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>Why doesn’t an employee appear in the “Employés :” filter or in the “Employé” list?</summary><p>Only <strong>active</strong> employees are offered. Open their form in <a href="employes.html#en-employee-form">Employees</a> and check “Employé actif”.</p></details>
+                <details><summary>I moved an appointment by mistake. How do I undo?</summary><p>The move is saved immediately, without confirmation. Simply drag the appointment back to its original position (same view), or open its form and correct the date and time.</p></details>
+                <details><summary>The reminder did not show. Why?</summary><p>Reminders are checked every minute, and only while the Agenda page is open in your browser. They send no e-mail and no system notification. Keep the Agenda open during the reminder period.</p></details>
+                <details><summary>Why does my weekly appointment appear only once?</summary><p>The recurrence is stored in the form, but the agenda shows only the entered occurrence; no repetition is generated automatically. Create the following occurrences as needed.</p></details>
+                <details><summary>Why doesn’t the appointment block have the employee’s colour?</summary><p>In the agenda, the block colour comes from the appointment <strong>type</strong> (blue by default). The employee colour is used only for the dots of the “Employés :” filter.</p></details>
+                <details><summary>I only see 3 appointments in a day of the month, but I have more.</summary><p>Month view limits the display to 3 appointments per cell. Click “+N de plus” to switch to Day view on that date and see everything.</p></details>
+                <details><summary>Can I enter an appointment before 7 a.m. or after 8 p.m.?</summary><p>No: the time lists run from 07:00 to 20:00 in 30-minute steps. An existing appointment beyond those limits is clipped on screen, but not modified.</p></details>
+                <details><summary>What happens when I click “Facturer”?</summary><p>The appointment is saved first (validations apply), then a new pre-filled customer invoice opens in the same window. If a validation fails, the invoice does not open.</p></details>
+                <details><summary>What becomes of a deleted employee’s appointments?</summary><p>They are kept, but no longer have an employee. They stay visible in the agenda whatever the filter, since appointments without an employee are always displayed.</p></details>
+                <details><summary>How do I quickly get back to today?</summary><p>Click the <kbd>●</kbd> button (tooltip “Aujourd’hui”). Today has a blue dot in Month view and a red line marks the current time in the Week and Day views.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Resource</td><td>Employee to whom an appointment can be assigned. Only active employees are agenda resources.</td></tr>
+                        <tr><td>Appointment type</td><td>Category (“Name (N min)”) that sets the default duration and the block colour in the agenda.</td></tr>
+                        <tr><td>Status</td><td>Stage of the appointment: Planifié (scheduled), Confirmé, Terminé (done), Annulé (cancelled) or No-show.</td></tr>
+                        <tr><td>No-show</td><td>Status indicating that the customer did not turn up.</td></tr>
+                        <tr><td>All day (Toute la journée)</td><td>Appointment without a displayed time, placed in the “Toute la journée” row of the Week and Day views.</td></tr>
+                        <tr><td>Recurrence</td><td>Repetition frequency stored in the form (day, week, 2 weeks, month, year); the agenda does not generate the occurrences.</td></tr>
+                        <tr><td>Reminder</td><td>Lead time before the start (from 5 minutes to 1 day) from which a notification appears in the Agenda page.</td></tr>
+                        <tr><td>Drag and drop</td><td>Moving an appointment with the mouse, saved immediately without confirmation.</td></tr>
+                        <tr><td>Facturer (invoice)</td><td>Button that saves the appointment and then creates a pre-filled customer invoice.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Agenda</h1>
+            <p class="intro">El calendario de citas de su empresa. Cada cita puede vincularse a un cliente y a un empleado, y puede convertirse en factura. Menú <span class="chemin">Agenda</span>.</p>
+
+            <section id="es-agenda">
+                <h2>Agenda</h2>
+                <p>La pantalla <span class="chemin">Agenda</span> muestra las citas de la empresa en forma de calendario. Los empleados son los «recursos» de la agenda: cada cita puede asignarse a uno de ellos, y un filtro por empleado permite mostrar solo las citas que le interesan. El título de la página es «Agenda — 60Sec-AI».</p>
+
+                <h3>Objetivo</h3>
+                <p>Ver de un vistazo las citas del mes, de la semana o del día; crear nuevas; moverlas; abrir su ficha para modificarlas, eliminarlas o facturarlas. Los empleados que aparecen en la agenda son los creados en <a href="employes.html#es-empleados">Empleados</a>.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>‹</kbd> (ayuda «Précédent», anterior) y <kbd>›</kbd> (ayuda «Suivant», siguiente): retroceden o avanzan un mes, una semana o un día, según la vista activa.</li>
+                    <li><kbd>●</kbd> (ayuda «Aujourd’hui», hoy): vuelve a la fecha de hoy.</li>
+                    <li><kbd>Mois</kbd> (mes), <kbd>Semaine</kbd> (semana), <kbd>Jour</kbd> (día): cambian de vista. El botón de la vista activa aparece resaltado.</li>
+                    <li><kbd>+ Rendez-vous</kbd>: abre la ventana «Rendez-vous» con una cita nueva fijada a las 9:00 en la fecha mostrada.</li>
+                    <li><strong>Doble clic en una casilla del mes</strong>: crea una cita nueva a las 9:00 de ese día.</li>
+                    <li><strong>Doble clic en una franja de 30 minutos</strong> (vistas Semana y Día): crea una cita nueva a esa hora exacta.</li>
+                    <li><strong>Clic en una cita</strong>: abre su ficha para modificarla (vea <a href="#es-cita">Ficha de cita</a>).</li>
+                    <li><strong>Arrastrar y soltar una cita</strong>: la mueve.
+                        <ul>
+                            <li>En la vista Mes cambia la fecha, pero se conservan la hora y la duración.</li>
+                            <li>En la vista Semana o Día, la hora de inicio pasa a ser la franja de 30 minutos donde suelta la cita; la duración se conserva.</li>
+                            <li>El guardado es inmediato, sin confirmación.</li>
+                        </ul>
+                    </li>
+                    <li><strong>«+N de plus»</strong> (vista Mes, cuando un día tiene más de 3 citas): pasa a la vista Día en ese día.</li>
+                </ul>
+                <p>La ventana de la cita es modal: mide unos 1300 × 700 píxeles y se reduce en pantallas pequeñas. La agenda se recarga automáticamente en cuanto la cierra.</p>
+
+                <h3>Vistas</h3>
+                <table>
+                    <thead><tr><th>Vista</th><th>Qué muestra</th></tr></thead>
+                    <tbody>
+                        <tr><td>Mes</td><td>Cuadrícula de 6 semanas × 7 días que empieza el lunes (Lun … Dim). El día de hoy lleva un punto azul. Los días de los meses vecinos aparecen en gris. Cada casilla muestra como máximo 3 citas, precedidas de su hora (salvo las de «todo el día»); si hay más, aparece «+N de plus».</td></tr>
+                        <tr><td>Semana</td><td>Siete columnas, una por día, divididas en franjas de 30 minutos de 07:00 a 20:00. Arriba hay una fila «Toute la journée» (todo el día). Una línea roja indica la hora actual.</td></tr>
+                        <tr><td>Día</td><td>Un solo día, con las mismas franjas de 30 minutos de 07:00 a 20:00, la fila «todo el día» y la línea roja de la hora actual.</td></tr>
+                    </tbody>
+                </table>
+                <p>En las vistas Semana y Día, una cita que empieza antes de las 7 h o termina después de las 20 h se recorta en pantalla a esos límites (no se modifica). Cada bloque muestra «inicio – fin», el título y luego «· cliente».</p>
+
+                <h3>Filtros y búsqueda</h3>
+                <p>El filtro «Employés :» presenta un punto de color por cada empleado activo. El color es el elegido en la ficha del empleado.</p>
+                <ul>
+                    <li>Al principio se muestran todos los empleados.</li>
+                    <li>El primer clic en un punto oculta solo a ese empleado (los demás siguen visibles).</li>
+                    <li>Los clics siguientes ocultan o vuelven a mostrar cada empleado individualmente.</li>
+                    <li>Cuando todos los empleados vuelven a estar seleccionados, el filtro regresa a «todos».</li>
+                    <li>Las citas <strong>sin empleado</strong> permanecen siempre visibles, sea cual sea el filtro.</li>
+                </ul>
+                <p>No hay campo de búsqueda por texto en la agenda: navegue con los botones de periodo y las vistas.</p>
+
+                <h3>Datos mostrados</h3>
+                <table>
+                    <thead><tr><th>Dato</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Título</td><td>El título escrito en la ficha de la cita.</td></tr>
+                        <tr><td>Hora</td><td>La hora de inicio (vista Mes) o «inicio – fin» (vistas Semana y Día). Nada para una cita de «todo el día».</td></tr>
+                        <tr><td>Cliente</td><td>El nombre del cliente, en la ayuda emergente o en el bloque, precedido de «·».</td></tr>
+                        <tr><td>Color</td><td>El color del bloque procede del <strong>tipo</strong> de cita (azul por defecto), no del empleado.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Solo los empleados <strong>activos</strong> de la empresa aparecen como recursos (filtro y lista «Employé» de la ficha). Un empleado desactivado desaparece de la agenda, pero sus citas se conservan.</li>
+                    <li><strong>Recordatorios</strong>: si una cita tiene recordatorio, aparece una notificación arriba a la derecha durante 8 segundos: «🔔 Título» y luego «À HH:MM — Cliente». Se activa entre (hora de inicio − antelación del recordatorio) y la hora de inicio de la cita.</li>
+                    <li>La comprobación de recordatorios se hace cada minuto, <strong>solo mientras la página Agenda esté abierta</strong> en su navegador.</li>
+                    <li>En la vista Mes, una cita que abarca varios días aparece en cada casilla afectada.</li>
+                </ul>
+
+                <h3>Paso a paso</h3>
+                <p>Para crear una cita a una hora precisa:</p>
+                <ol>
+                    <li>Pase a la vista <kbd>Semaine</kbd> o <kbd>Jour</kbd> y vaya a la fecha correcta con <kbd>‹</kbd> / <kbd>›</kbd>.</li>
+                    <li>Haga doble clic en la franja de 30 minutos deseada.</li>
+                    <li>Rellene al menos el «Titre» (título), compruebe la fecha y la hora de fin, y haga clic en <kbd>Enregistrer</kbd> (guardar).</li>
+                </ol>
+                <p>Para mover una cita a otro día sin cambiar la hora: pase a la vista <kbd>Mois</kbd> y arrastre la cita a la nueva casilla.</p>
+
+                <h3>Mensajes</h3>
+                <p>La pantalla Agenda no muestra mensajes propios. El desplazamiento por arrastrar y soltar se hace sin confirmación ni aviso.</p>
+
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Un arrastre mal colocado modifica la cita de inmediato, sin confirmación. Para deshacerlo, vuelva a arrastrarla a su posición original.</div>
+                <div class="attention" data-titre="Atención">El recordatorio no es un correo ni una notificación del sistema: solo aparece dentro de la página Agenda, y solo si está abierta en el momento previsto.</div>
+                <div class="note" data-titre="Conviene saber">En la vista Mes, un día muestra solo 3 citas; haga clic en «+N de plus» para ver el día completo.</div>
+                <div class="astuce" data-titre="Consejo">Para ver solo sus propias citas, recuerde que el primer clic en un punto oculta al empleado en el que hizo clic. Haga clic en los puntos de los compañeros que desea ocultar, o haga clic dos veces en el suyo tras ocultar a los demás.</div>
+            </section>
+
+            <section id="es-cita">
+                <h2>Ficha de cita</h2>
+                <p>La ficha se abre en la ventana «Rendez-vous» de la agenda. Su título es «Nouveau rendez-vous» (nueva cita) al crear y «Modifier le rendez-vous» (modificar la cita) al editar. Subtítulo: «Remplissez les informations du rendez-vous.» (rellene los datos de la cita).</p>
+
+                <h3>Objetivo</h3>
+                <p>Crear, modificar, eliminar o facturar una cita: título, cliente, empleado, estado, tipo, fechas y horas, lugar, periodicidad, recordatorio y descripción.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Supprimer</kbd> (eliminar, solo al editar): pide la confirmación «Supprimer ce rendez-vous ?», elimina la cita y cierra la ventana.</li>
+                    <li><kbd>← Annuler</kbd> (cancelar): cierra la ventana sin guardar.</li>
+                    <li><kbd>Facturer</kbd> (facturar; ayuda «Sauvegarder le rendez-vous et créer une facture»): guarda la cita y luego abre, en la misma ventana, una nueva factura de cliente rellenada a partir de la cita (vea <a href="ventes.html">Ventas</a>).</li>
+                    <li><kbd>Enregistrer</kbd> (guardar): guarda y cierra la ventana, lo que actualiza la agenda.</li>
+                </ul>
+
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Sección</th><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Informations</td><td>Titre (título)</td><td>Sí</td><td>El texto que se muestra en la agenda.</td></tr>
+                        <tr><td></td><td>Client (cliente)</td><td>No</td><td>Lista de clientes, con la opción «-- Aucun --» (ninguno).</td></tr>
+                        <tr><td></td><td>Employé (empleado)</td><td>No</td><td>Lista de empleados activos, con la opción «-- Aucun --».</td></tr>
+                        <tr><td></td><td>Statut (estado)</td><td>No</td><td>«Planifié» (planificada, por defecto), «Confirmé» (confirmada), «Terminé» (terminada), «Annulé» (anulada), «No-show».</td></tr>
+                        <tr><td>Date et durée</td><td>Type (tipo)</td><td>No</td><td>Lista mostrada como «Nombre (N min)». Texto de ayuda: «La durée du type ajustera automatiquement la date de fin.» (la duración del tipo ajustará automáticamente la fecha de fin). El tipo también da su color al bloque en la agenda.</td></tr>
+                        <tr><td></td><td>Date de début (fecha de inicio)</td><td>Sí</td><td>Formato aaaa-mm-dd.</td></tr>
+                        <tr><td></td><td>Heure de début (hora de inicio)</td><td>Sí</td><td>Opciones cada 30 minutos, de 07:00 a 20:00.</td></tr>
+                        <tr><td></td><td>Toute la journée (todo el día)</td><td>No</td><td>Casilla de verificación.</td></tr>
+                        <tr><td></td><td>Date de fin (fecha de fin)</td><td>Sí</td><td>Formato aaaa-mm-dd.</td></tr>
+                        <tr><td></td><td>Heure de fin (hora de fin)</td><td>Sí</td><td>Misma lista que la hora de inicio.</td></tr>
+                        <tr><td>Options</td><td>Lieu (lugar)</td><td>No</td><td>Texto libre.</td></tr>
+                        <tr><td></td><td>Récurrence (periodicidad)</td><td>No</td><td>«Aucune» (ninguna), «Tous les jours» (diaria), «Toutes les semaines» (semanal), «Toutes les 2 semaines» (cada 2 semanas), «Tous les mois» (mensual), «Tous les ans» (anual).</td></tr>
+                        <tr><td></td><td>Rappel (recordatorio)</td><td>No</td><td>«Aucun» (ninguno), «5 minutes avant», «15 minutes avant», «30 minutes avant», «1 heure avant», «1 jour avant» (5, 15, 30 minutos, 1 hora, 1 día antes).</td></tr>
+                        <tr><td></td><td>Description (descripción)</td><td>No</td><td>Área de texto de varias líneas.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Cita nueva: el inicio es la fecha y hora recibidas de la agenda (9:00 por defecto); el fin se fija automáticamente 1 hora después.</li>
+                    <li>Elegir un <strong>Tipo</strong> recalcula el fin: inicio + duración del tipo.</li>
+                    <li>Modificar el <strong>inicio</strong> desplaza el fin en la misma medida, con lo que se conserva la duración. Si el fin quedara antes del nuevo inicio, se fija en inicio + 1 h.</li>
+                    <li>El fin siempre debe ser posterior al inicio, incluso con «Toute la journée» marcado.</li>
+                    <li>Eliminar un empleado no elimina sus citas: solo pierden su empleado.</li>
+                    <li><kbd>Facturer</kbd> guarda primero la cita: si falla una validación, no se crea la factura.</li>
+                </ul>
+
+                <h3>Paso a paso</h3>
+                <p>Para facturar una cita terminada:</p>
+                <ol>
+                    <li>Haga clic en la cita en la agenda para abrir su ficha.</li>
+                    <li>Compruebe que el «Client» está indicado (la factura irá dirigida a él) y, si procede, cambie el «Statut» a «Terminé».</li>
+                    <li>Haga clic en <kbd>Facturer</kbd>: la cita se guarda y luego se abre una factura rellenada en la misma ventana. Complétela y guárdela como cualquier factura de cliente.</li>
+                </ol>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Le titre est obligatoire. »</span> — el título es obligatorio; escríbalo antes de guardar.</li>
+                    <li><span class="msg">« Les dates de début et de fin sont obligatoires. »</span> — una de las dos fechas está vacía; rellénela con el formato aaaa-mm-dd.</li>
+                    <li><span class="msg">« Les heures de début et de fin sont obligatoires. »</span> — elija una hora en cada una de las dos listas, incluso para una cita de «todo el día».</li>
+                    <li><span class="msg">« La date/heure de fin doit être après la date/heure de début. »</span> — corrija el fin (o el inicio): el fin no puede ser anterior ni igual al inicio.</li>
+                    <li><span class="msg">« Impossible de récupérer l’identifiant du rendez-vous sauvegardé. »</span> — (botón <kbd>Facturer</kbd>) la cita se guardó, pero la factura no pudo abrirse. Cierre la ventana, vuelva a abrir la cita desde la agenda y haga clic de nuevo en <kbd>Facturer</kbd>.</li>
+                </ul>
+
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Marcar «Toute la journée» no vacía las horas: la hora de fin debe seguir siendo posterior a la de inicio, o aparecerá el mensaje de validación.</div>
+                <div class="piege" data-titre="Trampa">La «Récurrence» se guarda con la cita, pero la agenda solo muestra la ocurrencia guardada: no se genera ninguna repetición en pantalla. Cree usted mismo las demás ocurrencias si necesita verlas.</div>
+                <div class="note" data-titre="Conviene saber">Las listas de horas solo ofrecen de 07:00 a 20:00, en pasos de 30 minutos. No es posible registrar una cita a las 6:45 ni a las 21:00.</div>
+                <div class="astuce" data-titre="Consejo">Defina tipos de cita con su duración habitual: elegir el tipo basta entonces para fijar la hora de fin, y el color del tipo hace reconocibles los bloques en la agenda.</div>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Por qué un empleado no aparece en el filtro «Employés :» ni en la lista «Employé»?</summary><p>Solo se proponen los empleados <strong>activos</strong>. Abra su ficha en <a href="employes.html#es-ficha-empleado">Empleados</a> y marque «Employé actif».</p></details>
+                <details><summary>Moví una cita por error. ¿Cómo lo deshago?</summary><p>El desplazamiento se guarda de inmediato, sin confirmación. Arrastre la cita de vuelta a su posición original (misma vista), o abra su ficha y corrija la fecha y la hora.</p></details>
+                <details><summary>El recordatorio no se mostró. ¿Por qué?</summary><p>Los recordatorios se comprueban cada minuto, y solo mientras la página Agenda esté abierta en su navegador. No envían correo ni notificación del sistema. Mantenga la Agenda abierta durante el periodo del recordatorio.</p></details>
+                <details><summary>¿Por qué mi cita semanal aparece una sola vez?</summary><p>La periodicidad se guarda en la ficha, pero la agenda solo muestra la ocurrencia registrada; no se genera ninguna repetición automática. Cree las ocurrencias siguientes según necesite.</p></details>
+                <details><summary>¿Por qué el bloque de la cita no tiene el color del empleado?</summary><p>En la agenda, el color del bloque procede del <strong>tipo</strong> de cita (azul por defecto). El color del empleado se usa solo en los puntos del filtro «Employés :».</p></details>
+                <details><summary>Solo veo 3 citas en un día del mes, pero tengo más.</summary><p>La vista Mes limita la visualización a 3 citas por casilla. Haga clic en «+N de plus» para pasar a la vista Día en esa fecha y verlo todo.</p></details>
+                <details><summary>¿Puedo registrar una cita antes de las 7 h o después de las 20 h?</summary><p>No: las listas de horas van de 07:00 a 20:00 en pasos de 30 minutos. Una cita existente que supere esos límites se recorta en pantalla, pero no se modifica.</p></details>
+                <details><summary>¿Qué ocurre al hacer clic en «Facturer»?</summary><p>Primero se guarda la cita (se aplican las validaciones) y luego se abre una nueva factura de cliente rellenada en la misma ventana. Si falla una validación, la factura no se abre.</p></details>
+                <details><summary>¿Qué pasa con las citas de un empleado eliminado?</summary><p>Se conservan, pero ya no tienen empleado. Siguen visibles en la agenda sea cual sea el filtro, porque las citas sin empleado se muestran siempre.</p></details>
+                <details><summary>¿Cómo vuelvo rápidamente a hoy?</summary><p>Haga clic en el botón <kbd>●</kbd> (ayuda «Aujourd’hui»). El día de hoy lleva un punto azul en la vista Mes y una línea roja marca la hora actual en las vistas Semana y Día.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Recurso</td><td>Empleado al que puede asignarse una cita. Solo los empleados activos son recursos de la agenda.</td></tr>
+                        <tr><td>Tipo de cita</td><td>Categoría («Nombre (N min)») que fija la duración por defecto y el color del bloque en la agenda.</td></tr>
+                        <tr><td>Estado</td><td>Etapa de la cita: Planifié (planificada), Confirmé, Terminé (terminada), Annulé (anulada) o No-show.</td></tr>
+                        <tr><td>No-show</td><td>Estado que indica que el cliente no se presentó.</td></tr>
+                        <tr><td>Todo el día (Toute la journée)</td><td>Cita sin hora mostrada, colocada en la fila «Toute la journée» de las vistas Semana y Día.</td></tr>
+                        <tr><td>Periodicidad</td><td>Frecuencia de repetición guardada en la ficha (día, semana, 2 semanas, mes, año); la agenda no genera las ocurrencias.</td></tr>
+                        <tr><td>Recordatorio</td><td>Antelación respecto al inicio (de 5 minutos a 1 día) a partir de la cual aparece una notificación en la página Agenda.</td></tr>
+                        <tr><td>Arrastrar y soltar</td><td>Desplazamiento de una cita con el ratón, guardado de inmediato sin confirmación.</td></tr>
+                        <tr><td>Facturer (facturar)</td><td>Botón que guarda la cita y luego crea una factura de cliente rellenada.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

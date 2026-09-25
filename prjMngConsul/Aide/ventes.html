@@ -1,0 +1,1471 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Ventes — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <!-- ============================================================ FR -->
+        <article class="langue" lang="fr">
+            <h1>Ventes</h1>
+            <p class="intro">La section <span class="chemin">Ventes</span> regroupe tout ce qui touche vos clients et l’argent qu’ils vous doivent : la liste des clients et leur fiche, les factures clients (brouillon, comptabilisation, envoi par courriel), l’encaissement en ligne par Square, le PDF de facture et le dépôt de PDF numérisés que l’IA transforme en factures. Toute l’intégration de paiement client passe par Square : le compte Square de la compagnie est connecté une seule fois dans <span class="chemin">Administration › Processeur de paiement</span> et le jeton est renouvelé automatiquement par la suite.</p>
+
+            <!-- ---------------------------------------------------------- Clients -->
+            <section id="fr-clients">
+                <h2>Clients</h2>
+                <h3>But</h3>
+                <p>L’écran <span class="chemin">Ventes › Clients</span> affiche la liste des clients de la compagnie avec, pour chacun, le solde qu’il vous reste à recevoir. C’est aussi d’ici que vous synchronisez vos clients avec Square, dans les deux sens.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Ajouter Client</kbd> : ouvre la fenêtre « Ajouter un client » (voir <a href="#fr-fiche-client">Fiche client</a>). Sur mobile, le bouton flottant <kbd>+</kbd> fait la même chose.</li>
+                    <li><kbd>Exporter vers Square</kbd> : envoie tous les clients à Square. Un client qui possède déjà un identifiant Square est mis à jour ; les autres sont créés, et leur identifiant Square est ensuite mémorisé sur leur fiche. Aucune confirmation n’est demandée.</li>
+                    <li><kbd>Importer depuis Square</kbd> : rapatrie tous les clients de votre compte Square. Ceux qui existent déjà sont mis à jour, les autres sont créés localement. Aucune confirmation n’est demandée.</li>
+                    <li>Bouton loupe : lance la recherche tapée dans la zone « Rechercher (nom, email, téléphone…) ».</li>
+                    <li><kbd>Effacer</kbd> : vide la zone de recherche et réaffiche la liste complète.</li>
+                    <li>Sur chaque ligne : <kbd>Modifier</kbd> ouvre la fenêtre « Modifier un client » ; <kbd>Supprimer</kbd> supprime le client.</li>
+                </ul>
+
+                <h3>Filtres et recherche</h3>
+                <p>La liste n’est pas paginée : tous les clients s’affichent d’un coup. Deux en-têtes de colonne permettent de trier : « Nom » et « À recevoir ». Un premier clic trie en ordre croissant, un second en ordre décroissant ; une flèche ▲ ou ▼ indique le sens. Par défaut, la liste est triée par nom croissant.</p>
+                <p>La liste se rafraîchit automatiquement quand vous fermez la fiche d’un client, et votre position de défilement est conservée.</p>
+
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>Le nom du client, puis son adresse et son courriel en gris.</td></tr>
+                        <tr><td>À recevoir</td><td>Le solde impayé, sous la forme « 1 234,56 $ », ou « — » si le client ne doit rien.</td></tr>
+                        <tr><td>Action</td><td>Les boutons <kbd>Modifier</kbd> et <kbd>Supprimer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <p>Les messages de synchronisation s’affichent dans une fenêtre intitulée « Square ».</p>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun client à exporter. »</span> — la liste des clients est vide ; créez d’abord des clients.</li>
+                    <li><span class="msg">« {n} client(s) exporté(s) vers Square sur {total}. »</span> — l’export a réussi ; si n est inférieur au total, certains clients n’ont pas pu être envoyés (vérifiez leurs coordonnées).</li>
+                    <li><span class="msg">« Erreur lors de l’export Square : … »</span> — Square a refusé l’opération ; le détail suit. Vérifiez que le compte Square est bien connecté dans <span class="chemin">Administration › Processeur de paiement</span>.</li>
+                    <li><span class="msg">« Aucun client à importer depuis Square. »</span> — votre compte Square ne contient aucun client.</li>
+                    <li><span class="msg">« {n} client(s) créé(s) et {m} mis à jour depuis Square ({t} trouvé(s)). »</span> — l’import a réussi ; le total trouvé chez Square est indiqué entre parenthèses.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square n’a pas répondu correctement ; réessayez plus tard ou vérifiez la connexion Square.</li>
+                    <li><span class="msg">« Aucun client trouvé. »</span> — la recherche ne renvoie rien, ou la liste est vide.</li>
+                </ul>
+
+                <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> agit tout de suite, sans demander de confirmation. Seule la base de données peut refuser la suppression si le client possède déjà des factures. Vérifiez bien la ligne avant de cliquer.</div>
+                <div class="astuce" data-titre="Astuce">Le solde « À recevoir » correspond au reste à payer de toutes les factures comptabilisées du client. Pour voir le détail, ouvrez <a href="#fr-factures">Factures clients</a> et cherchez le nom du client.</div>
+                <div class="note" data-titre="Bon à savoir">L’export et l’import Square ne demandent aucune confirmation et traitent tous les clients d’un coup. Lancez-les de préférence une fois la liste bien nettoyée, pour éviter de propager des doublons.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Fiche client -->
+            <section id="fr-fiche-client">
+                <h2>Fiche client</h2>
+                <h3>But</h3>
+                <p>La fiche client s’ouvre en fenêtre depuis <span class="chemin">Ventes › Clients</span> (bouton <kbd>Ajouter Client</kbd> ou <kbd>Modifier</kbd>). Elle sert à créer ou modifier un client, à gérer ses adresses et à consulter ses pièces jointes. Elle contient aussi un outil de remplissage automatique par l’IA à partir d’un document.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>← Retour à la liste</kbd> (barre du haut) : ferme la fiche <strong>sans enregistrer</strong> et sans avertissement.</li>
+                    <li><kbd>Enregistrer</kbd> (barre du haut) : sauvegarde le client, puis toutes les modifications d’adresses en une seule fois, puis ferme la fiche.</li>
+                    <li><kbd>Réduire</kbd> / <kbd>Agrandir</kbd> : replie ou déplie l’encadré « Remplissage automatique par document ».</li>
+                    <li><kbd>Analyser le document</kbd> : envoie le fichier déposé à l’IA pour remplir les champs vides.</li>
+                    <li><kbd>+ Ajouter une adresse</kbd> : ouvre la fenêtre « Édition adresse ».</li>
+                    <li>Dans la liste des adresses : <kbd>Modifier</kbd> et <kbd>Supprimer</kbd>.</li>
+                    <li>Dans la fenêtre « Édition adresse » : <kbd>Enregistrer</kbd> (valide l’adresse dans la liste à l’écran) et <kbd>Annuler</kbd>.</li>
+                </ul>
+
+                <h3>Champs</h3>
+                <p>Carte « Informations Client » :</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Origine</td><td>—</td><td>Lecture seule. Indique d’où vient le client (saisie, Square, importation…).</td></tr>
+                        <tr><td>Créé</td><td>—</td><td>Lecture seule, sur une fiche existante. Date et heure de création (aaaa-MM-jj HH:mm).</td></tr>
+                        <tr><td>Nom</td><td>Non</td><td>500 caractères au maximum. Rien n’oblige à le remplir, mais un client sans nom est inutilisable dans les factures.</td></tr>
+                        <tr><td>Nom d’affichage</td><td>Non</td><td>500 caractères au maximum. Nom court affiché dans les listes.</td></tr>
+                        <tr><td>Type</td><td>Non</td><td>Liste « Sélectionner… » des types de tiers client.</td></tr>
+                        <tr><td>Site web</td><td>Non</td><td>200 caractères au maximum.</td></tr>
+                        <tr><td>No TPS</td><td>Non</td><td>20 caractères au maximum.</td></tr>
+                        <tr><td>No TVQ</td><td>Non</td><td>20 caractères au maximum.</td></tr>
+                        <tr><td>Délai de paiement (jours)</td><td>Non</td><td>Entier de 0 à 365, 30 par défaut. Sert à calculer la date d’échéance quand une facture est comptabilisée sans échéance.</td></tr>
+                        <tr><td>Note</td><td>Non</td><td>Texte libre sur plusieurs lignes.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Fenêtre « Édition adresse » (aucun champ n’est obligatoire) :</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>Non</td><td>Type d’adresse, par exemple « Facturation » ou « Livraison ».</td></tr>
+                        <tr><td>Nom</td><td>Non</td><td>Nom du destinataire ou de l’établissement.</td></tr>
+                        <tr><td>Adresse 1</td><td>Non</td><td>Numéro et rue.</td></tr>
+                        <tr><td>Adresse 2</td><td>Non</td><td>Complément (bureau, appartement…).</td></tr>
+                        <tr><td>Ville</td><td>Non</td><td></td></tr>
+                        <tr><td>Pays</td><td>Non</td><td>À choisir en premier : la liste des provinces en dépend.</td></tr>
+                        <tr><td>Province</td><td>Non</td><td>Filtrée selon le pays choisi.</td></tr>
+                        <tr><td>Code postal</td><td>Non</td><td></td></tr>
+                        <tr><td>Courriel</td><td>Non</td><td>Pour l’adresse de type « Facturation », c’est l’adresse à laquelle les factures sont envoyées.</td></tr>
+                        <tr><td>Note</td><td>Non</td><td>Texte libre. L’IA y place le téléphone extrait (« Tél. : … »).</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Remplissage automatique par document</h3>
+                <p>L’encadré repliable « Remplissage automatique par document » affiche : « Déposez une carte d’affaires, une facture ou un en-tête de lettre : l’IA remplit les champs vides. » Vous déposez le fichier dans la zone « Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG) », puis vous cliquez sur <kbd>Analyser le document</kbd>.</p>
+                <p>Pour remplir une fiche à partir d’une carte d’affaires :</p>
+                <ol>
+                    <li>Ouvrez <kbd>Ajouter Client</kbd>.</li>
+                    <li>Glissez la photo ou le PDF de la carte dans la zone de dépôt.</li>
+                    <li>Cliquez sur <kbd>Analyser le document</kbd> et attendez le message de résultat.</li>
+                    <li>Vérifiez chaque champ rempli, corrigez au besoin.</li>
+                    <li>Cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche.</li>
+                </ol>
+                <h3>Règles</h3>
+                <ul>
+                    <li>L’IA ne remplit que les champs <strong>vides</strong> ; elle n’écrase jamais une valeur déjà saisie.</li>
+                    <li>L’adresse extraite devient une adresse de type « Facturation » <strong>seulement si le client n’a encore aucune adresse</strong>.</li>
+                    <li>Le numéro de téléphone extrait est placé dans la note de l’adresse, sous la forme « Tél. : … ».</li>
+                    <li>Seuls les formats PDF, JPG et PNG sont acceptés.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord choisir un fichier. »</span> — vous avez cliqué sur <kbd>Analyser le document</kbd> sans déposer de fichier.</li>
+                    <li><span class="msg">« Le fichier est vide. »</span> — le fichier déposé ne contient rien ; choisissez-en un autre.</li>
+                    <li><span class="msg">« Clé OpenAI absente. Contactez l’administrateur. »</span> — la clé d’accès à l’IA n’est pas configurée pour la compagnie ; l’administrateur doit la saisir dans les paramètres.</li>
+                    <li><span class="msg">« Format non pris en charge (PDF, JPG ou PNG uniquement). »</span> — convertissez votre document dans l’un de ces formats.</li>
+                    <li><span class="msg">« {n} champ(s) rempli(s) automatiquement. Vérifiez avant d’enregistrer. »</span> — l’analyse a réussi ; relisez les champs avant de sauvegarder.</li>
+                    <li><span class="msg">« Aucune information exploitable trouvée (ou champs déjà remplis). »</span> — le document ne contenait rien d’utile, ou tous les champs étaient déjà remplis.</li>
+                    <li><span class="msg">« Erreur lors de l’analyse du document. »</span> — l’IA n’a pas répondu ; réessayez plus tard.</li>
+                </ul>
+
+                <h3>Adresses et pièces jointes</h3>
+                <p>La carte « Adresses » présente les colonnes « Type », « Adresse » et « Actions » (Modifier / Supprimer). Si le client n’a aucune adresse : « Aucune adresse enregistrée pour ce client. »</p>
+                <p>La carte « Pièces jointes » présente les colonnes Fichier (lien pour ouvrir), Type, Taille, Note et Provenance. Sur une nouvelle fiche, on lit « Enregistrez d’abord la fiche. » ; sans pièce jointe : « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (voir <a href="importation.html">Importation</a>).</p>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Ajouter, modifier ou supprimer une adresse ne fait que mettre la liste à jour à l’écran. <strong>Rien n’est écrit</strong> tant que vous n’avez pas cliqué sur <kbd>Enregistrer</kbd> en haut de la fiche. Si vous quittez par <kbd>← Retour à la liste</kbd>, toutes les modifications d’adresses sont perdues, sans avertissement.</div>
+                <div class="piege" data-titre="Piège">La suppression d’une adresse ne demande aucune confirmation.</div>
+                <div class="astuce" data-titre="Astuce">Le courriel de l’adresse de type « Facturation » est celui auquel les factures sont envoyées et qui préremplit la page de paiement Square. Sans lui, l’envoi d’une facture échoue avec « Aucun courriel de facturation pour ce client. » Donnez à chaque client au moins une adresse de facturation avec un courriel.</div>
+                <div class="note" data-titre="Bon à savoir">Le « Délai de paiement (jours) » n’a d’effet qu’à la comptabilisation d’une facture dont l’échéance est vide : l’échéance devient la date de facture plus ce délai.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Factures clients -->
+            <section id="fr-factures">
+                <h2>Factures clients</h2>
+                <h3>But</h3>
+                <p>L’écran <span class="chemin">Ventes › Factures clients</span> liste toutes les factures clients. C’est le poste de commande principal : on y crée les brouillons, on les comptabilise, on enregistre les encaissements, on envoie les factures par courriel avec ou sans lien de paiement Square, et on consulte les photos et la géolocalisation envoyées par l’application mobile.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Ajouter une facture</kbd> (ou <kbd>+</kbd> sur mobile) : ouvre la fenêtre « Ajouter une facture » (voir <a href="#fr-edition-facture">Édition d’une facture</a>).</li>
+                    <li><kbd>Importer depuis Square</kbd> (infobulle « Rapatrier les factures et paiements Square comme factures clients ») : les factures Square deviennent des factures clients avec leur en-tête, leurs lignes et les taxes TPS/TVQ ; le client est créé au besoin. Les paiements Square sont rapprochés d’une facture existante ; s’il n’y en a pas, une facture déjà payée est créée avec une seule ligne « Vente au terminal (Square) », sans taxes.</li>
+                    <li>Filtre « État : tous » : cases <strong>Brouillon</strong>, <strong>Comptabilisé</strong> et « Tout cocher ».</li>
+                    <li>Filtre « Paiement : tous » : cases <strong>Ouverte</strong>, <strong>Partielle</strong>, <strong>En retard</strong>, <strong>Payée</strong>, <strong>En cours (brouillon)</strong>.</li>
+                    <li>Zone « Rechercher (nom, courriel, téléphone…) », bouton loupe.</li>
+                    <li><kbd>Effacer</kbd> : vide la recherche <strong>et décoche les deux filtres</strong>.</li>
+                </ul>
+
+                <h3>Filtres et recherche</h3>
+                <p>Cocher ou décocher une case recharge la liste immédiatement. Les filtres et le tri sont mémorisés pour la durée de votre session. Le tri par défaut est la « Date » décroissante (les plus récentes en haut). Toutes les colonnes se trient sauf « Action ». La liste n’est pas paginée.</p>
+                <div class="piege" data-titre="Piège">Malgré l’intitulé de la zone de recherche, la recherche ne porte que sur le <strong>nom du client</strong>. Un courriel ou un numéro de téléphone ne renvoie rien.</div>
+
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Le numéro de la facture. C’est un lien qui ouvre le PDF dans une visionneuse (voir <a href="#fr-pdf-facture">PDF de facture</a>).</td></tr>
+                        <tr><td>Date</td><td>Date de facture au format « 26 sept. », l’année en dessous.</td></tr>
+                        <tr><td>Échéance</td><td>Date d’échéance, même format.</td></tr>
+                        <tr><td>Client</td><td>Nom, adresse et courriel. Si l’application mobile a envoyé des données, des badges s’ajoutent : un appareil photo avec un nombre (« {n} photo(s) prise(s) sur place — cliquer pour voir », ouvre la fenêtre « Photos — facture {n°} ») et une épingle (« Lieu d’intervention — ouvrir la carte », ouvre Google Maps).</td></tr>
+                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE ou IN_PROGRESS (brouillon en cours).</td></tr>
+                        <tr><td>Reste à payer</td><td>Solde encore dû.</td></tr>
+                        <tr><td>Déjà reçu</td><td>Somme des encaissements.</td></tr>
+                        <tr><td>Total</td><td>Total de la facture, taxes incluses.</td></tr>
+                        <tr><td>État</td><td>Brouillon ou Comptabilisé.</td></tr>
+                        <tr><td>Action</td><td>Les boutons décrits ci-dessous.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Actions sur une ligne</h3>
+                <table>
+                    <thead><tr><th>Bouton (infobulle)</th><th>Visible quand</th><th>Effet</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Comptabiliser la facture</kbd></td><td>Brouillon seulement</td><td>Demande confirmation, puis comptabilise la facture.</td></tr>
+                        <tr><td><kbd>Encaissement</kbd></td><td>Comptabilisée et non payée</td><td>Ouvre « Ajouter un encaissement » pour ce client (voir <a href="comptabilite.html">Comptabilité</a>).</td></tr>
+                        <tr><td><kbd>Envoyer la facture / Encaisser</kbd></td><td>Comptabilisée et non payée</td><td>Ouvre le dialogue d’envoi décrit plus bas.</td></tr>
+                        <tr><td><kbd>Modifier</kbd></td><td>Toujours</td><td>Ouvre la facture (en lecture seule si elle est comptabilisée).</td></tr>
+                        <tr><td><kbd>Supprimer</kbd></td><td>Toujours</td><td>Supprime tout de suite. Sur une facture comptabilisée, le bouton est remplacé par un cadenas rouge inactif.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Comptabiliser une facture</h3>
+                <p>La fenêtre de confirmation s’intitule « Comptabiliser la facture » et affiche : « Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l’échéance seront attribués, et la facture ne pourra plus être modifiée. »</p>
+                <ul class="messages">
+                    <li><span class="msg">« Facture comptabilisée. »</span> — la facture a reçu son numéro officiel et son écriture au journal.</li>
+                    <li><span class="msg">« Comptabilisation impossible. »</span> — suivi de l’erreur détaillée ; consultez la liste des erreurs de comptabilisation dans <a href="#fr-edition-facture">Édition d’une facture</a>.</li>
+                </ul>
+
+                <h3>Dialogue « Envoyer la facture / Encaisser »</h3>
+                <p>Le dialogue demande « Que voulez-vous faire ? ». Si la facture possède des photos ou une position, un encadré « À inclure dans le courriel » propose deux cases, décochées à chaque ouverture : « Joindre les {n} photo(s) prises sur place » et « Inclure le lien vers le lieu d’intervention ».</p>
+                <ol>
+                    <li><kbd>Envoyer la facture par courriel</kbd> — « PDF en pièce jointe, sans lien de paiement. »</li>
+                    <li><kbd>Envoyer par courriel avec lien de paiement</kbd> — « PDF en pièce jointe + bouton « Payer maintenant » (Square). »</li>
+                    <li><kbd>Obtenir le lien de paiement seulement</kbd> — « Génère le lien Square à copier (texto, téléphone, en personne). Aucun courriel envoyé. » Ouvre la fenêtre <a href="#fr-encaisser-square">Encaisser (Square)</a>.</li>
+                    <li><kbd>Annuler</kbd> — ou un clic sur le fond sombre, ou la touche <kbd>Échap</kbd>.</li>
+                </ol>
+                <p>Si la facture est déjà payée, les options 2 et 3 sont masquées et une note précise : « Facture déjà payée : les options de paiement ne sont pas offertes. »</p>
+
+                <h3>Contenu du courriel envoyé</h3>
+                <ul>
+                    <li>Objet : « Facture {n°} — {compagnie} ».</li>
+                    <li>Bouton « Voir la facture (PDF) », qui pointe vers un lien public du PDF.</li>
+                    <li>Bouton vert « Payer maintenant (x,xx $) » si vous avez demandé le lien de paiement. Le lien Square porte sur le <strong>solde restant</strong>, pas sur le total.</li>
+                    <li>Mention des photos et du lieu d’intervention si vous avez coché les cases ; les photos sont réduites pour le courriel.</li>
+                    <li>Le PDF en pièce jointe, généré au besoin.</li>
+                    <li>L’adresse de réponse est le courriel vérifié de la compagnie (voir <a href="courriel.html">Courriel</a>).</li>
+                    <li>Après paiement, le client voit une page de remerciement aux couleurs de la compagnie.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« {n} facture(s) et {m} paiement(s) traités depuis Square. »</span> — l’import Square a réussi.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square n’a pas répondu ; vérifiez la connexion Square.</li>
+                    <li><span class="msg">« Facture introuvable. »</span> — la facture a été supprimée entre-temps ; rechargez la liste.</li>
+                    <li><span class="msg">« Aucun courriel de facturation pour ce client. »</span> — ajoutez une adresse de type « Facturation » avec un courriel sur la <a href="#fr-fiche-client">fiche client</a>, puis réessayez.</li>
+                    <li><span class="msg">« Impossible de générer le PDF de la facture. »</span> — la facture est probablement incomplète (sans client ou sans ligne) ; ouvrez-la et vérifiez.</li>
+                    <li><span class="msg">« Facture {n°} envoyée à {courriel}. »</span> — l’envoi a réussi. Le message peut être suivi d’une précision : « (lien Square non ajouté : facture déjà payée) », « (lien Square non ajouté : compte Square non connecté) », « (lien Square non généré) », « (lien Square non ajouté : {erreur}) », « ({n} photo(s) jointe(s), {taille}) », « (lieu d’intervention inclus) ».</li>
+                    <li><span class="msg">« Aucune photo pour cette facture. »</span> — la visionneuse de photos n’a rien à montrer.</li>
+                    <li><span class="msg">« Lieu d’intervention : lat, long (capté le …) — Ouvrir dans Google Maps »</span> — position envoyée par l’application mobile.</li>
+                    <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> (titre « Confirmation ») — vous fermez la fenêtre de facture avec des changements ; choisissez Annuler pour revenir et enregistrer.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> un brouillon ne demande <strong>aucune confirmation</strong>. La suppression est immédiate.</div>
+                <div class="piege" data-titre="Piège">Depuis la liste, un brouillon ne peut pas être envoyé : il faut d’abord le comptabiliser. (L’écran d’édition, lui, permet d’envoyer un brouillon avec son numéro provisoire ; voir <a href="#fr-edition-facture">Édition d’une facture</a>.)</div>
+                <div class="astuce" data-titre="Astuce">Pour retrouver rapidement les factures en souffrance, cochez « En retard » dans le filtre « Paiement », puis triez par « Échéance ». Le filtre reste actif jusqu’à ce que vous cliquiez sur <kbd>Effacer</kbd> ou fermiez la session.</div>
+                <div class="note" data-titre="Bon à savoir">Un paiement Square sans facture correspondante crée une facture payée avec une ligne « Vente au terminal (Square) » sans taxes. Si la vente était taxable, corrigez l’écriture comptable dans <a href="comptabilite.html#fr-journaux">Comptabilité › Journaux</a>.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Édition d'une facture -->
+            <section id="fr-edition-facture">
+                <h2>Édition d’une facture</h2>
+                <h3>But</h3>
+                <p>La fenêtre de facture s’ouvre depuis <span class="chemin">Ventes › Factures clients</span> (<kbd>Ajouter une facture</kbd> ou <kbd>Modifier</kbd>). On y saisit le client, les dates, les lignes et on y voit les totaux calculés avec TPS et TVQ. On peut aussi enregistrer, comptabiliser dans la foulée et envoyer la facture au client.</p>
+
+                <h3>Champs de l’en-tête</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Badge « Comptabilisé 🔒 »</td><td>—</td><td>Affiché quand la facture est comptabilisée ; tout devient en lecture seule.</td></tr>
+                        <tr><td>Numéro</td><td>—</td><td>Visible dès le premier enregistrement. Provisoire tant que la facture est un brouillon.</td></tr>
+                        <tr><td>Client</td><td>Non (mais indispensable)</td><td>Sélecteur « Rechercher un client… » présentant des cartes avec le nom et l’adresse de facturation. Sur une nouvelle facture, on lit « Sélectionner un client ».</td></tr>
+                        <tr><td>Date de facture</td><td>Non</td><td>Calendrier. Si vide à la comptabilisation, la date du jour est utilisée.</td></tr>
+                        <tr><td>Date d’échéance</td><td>Non</td><td>Calendrier. Si vide à la comptabilisation, calculée à partir du délai de paiement du client.</td></tr>
+                        <tr><td>Comptabilisé</td><td>Non</td><td>Case à cocher. Si elle est cochée quand vous cliquez sur <kbd>Enregistrer</kbd>, la facture est comptabilisée dans la foulée.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Lignes</h3>
+                <p>Le tableau des lignes comporte les colonnes Produit, Compte, Qté, Prix unitaire, Total, Tx et Ordre.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit</td><td>La description (1000 caractères au maximum). Le sélecteur ▾ « Rechercher un produit… » remplit la description, le prix, le compte et le statut de taxe, et met la quantité à 1 (voir <a href="produits.html">Produits</a>).</td></tr>
+                        <tr><td>Compte</td><td>Sélecteur « Rechercher un compte… » : seuls les comptes de revenus sont proposés.</td></tr>
+                        <tr><td>Qté</td><td>Chiffres et point seulement (la virgule est convertie), 2 décimales au maximum. Le signe moins est retiré : impossible de saisir une ligne négative.</td></tr>
+                        <tr><td>Prix unitaire</td><td>Mêmes règles que la quantité.</td></tr>
+                        <tr><td>Total</td><td>Quantité × prix unitaire, calculé automatiquement.</td></tr>
+                        <tr><td>Tx</td><td>Statut de taxe de la ligne. Seul « taxable » entre dans la base de calcul de la TPS et de la TVQ.</td></tr>
+                        <tr><td>Ordre</td><td>Flèches haut et bas pour réordonner les lignes.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Corbeille : supprime la ligne après la question « Supprimer cette ligne ? ».</li>
+                    <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide avec quantité 1 et prix 0.</li>
+                    <li>Listes vides : « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
+                </ul>
+
+                <h3>Totaux</h3>
+                <p>Le bloc des totaux affiche « Sous-total », « TPS », « TVQ » et « Total ». La TPS est de 5 % et la TVQ de 9,975 % du sous-total <strong>taxable</strong> (somme des lignes dont le statut est « taxable »), chacune arrondie au cent.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Enregistrer</kbd> : sauvegarde la facture, régénère le PDF et ferme la fenêtre.</li>
+                    <li><kbd>Envoyer au client</kbd> (visible seulement si la facture a déjà été enregistrée) : ouvre le dialogue « Envoyer la facture par courriel » qui demande « Voulez-vous inclure un lien de paiement Square dans le courriel ? » avec les boutons <kbd>Annuler</kbd>, <kbd>Envoyer sans lien</kbd> et <kbd>Avec lien Square</kbd>.</li>
+                </ul>
+                <p>Pour créer et comptabiliser une facture en une fois :</p>
+                <ol>
+                    <li>Cliquez sur <kbd>Ajouter une facture</kbd> dans la liste.</li>
+                    <li>Choisissez le client dans « Rechercher un client… ».</li>
+                    <li>Ajoutez des lignes avec <kbd>+</kbd>, choisissez le produit ou tapez la description, la quantité et le prix.</li>
+                    <li>Vérifiez le statut de taxe « Tx » de chaque ligne et les totaux.</li>
+                    <li>Cochez « Comptabilisé », puis cliquez sur <kbd>Enregistrer</kbd>.</li>
+                </ol>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li><strong>Brouillon</strong> : facture non comptabilisée. Son numéro provisoire est « {préfixe}-{Id} », avec le préfixe « BRO » par défaut (réglable dans <span class="chemin">Administration › Paramètres › Facture</span>, champ « Préfixe de brouillon »). Les dates sont facultatives.</li>
+                    <li><strong>Comptabilisation</strong> : le numéro officiel est attribué une seule fois, selon le format réglé dans les paramètres ({PREFIXE}-{AAAA}-{NUMERO} par défaut, numéro sur 4 chiffres, compteur remis à zéro chaque année si l’option est activée). Une date de facture vide devient la date du jour ; une échéance vide devient la date de facture plus le délai de paiement du client.</li>
+                    <li><strong>Écriture au journal</strong> : comptes clients 1100 au débit ; revenus au crédit (le compte de la ligne, sinon 4000) ; TPS à payer 2200 ; TVQ à payer 2210. Voir <a href="comptabilite.html#fr-journaux">Comptabilité › Journaux</a>.</li>
+                    <li><strong>Facture comptabilisée</strong> : en lecture seule. Seul <kbd>Envoyer au client</kbd> reste possible.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord enregistrer la facture. »</span> — vous tentez d’envoyer une facture jamais enregistrée ; cliquez sur <kbd>Enregistrer</kbd>, rouvrez-la, puis envoyez.</li>
+                    <li><span class="msg">« Ce document est déjà comptabilisé. »</span> — la facture a déjà son numéro officiel ; rien à faire.</li>
+                    <li><span class="msg">« Aucune ligne dans … »</span> — la facture n’a aucune ligne ; ajoutez-en au moins une.</li>
+                    <li><span class="msg">« Total TTC = 0 dans … »</span> — le total est nul ; une facture à 0 $ ne peut pas être comptabilisée. Vérifiez quantités et prix.</li>
+                    <li><span class="msg">« Incohérence montants. … »</span> — les totaux ne correspondent plus aux lignes ; rouvrez la facture, enregistrez-la de nouveau pour recalculer, puis recommencez.</li>
+                    <li><span class="msg">« Période comptable clôturée ou inexistante. »</span> — la date de facture tombe dans une période fermée ou non créée ; changez la date ou ouvrez la période dans <a href="comptabilite.html">Comptabilité</a>.</li>
+                    <li><span class="msg">« Certaines lignes n ont pas de compte comptable résolu. Vérifier les produits et catégories. »</span> — une ligne n’a ni compte ni produit rattaché à un compte de revenus ; choisissez un compte sur chaque ligne.</li>
+                    <li><span class="msg">« Tiers introuvable … »</span> — la facture n’a pas de client (ou le client a été supprimé) ; sélectionnez un client.</li>
+                    <li><span class="msg">« Journal introuvable … »</span> — le journal des ventes n’existe pas pour la compagnie ; demandez à l’administrateur de le créer.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Rien n’empêche d’enregistrer une facture <strong>sans client</strong>. Elle ne pourra ni être comptabilisée (« Tiers introuvable ») ni être envoyée. Choisissez toujours le client en premier.</div>
+                <div class="piege" data-titre="Piège">Depuis cet écran, on <strong>peut</strong> envoyer un brouillon : le client recevra une facture avec un numéro provisoire (« BRO-… ») qui changera à la comptabilisation. Comptabilisez avant d’envoyer.</div>
+                <div class="attention" data-titre="Attention">Le lien Square créé depuis cet écran ne renvoie pas vers la page de remerciement de la compagnie et ne joint pas les photos. Pour ces options, passez par le bouton <kbd>Envoyer la facture / Encaisser</kbd> de la <a href="#fr-factures">liste des factures</a>.</div>
+                <div class="astuce" data-titre="Astuce">Le sélecteur de produit remplit automatiquement le compte de revenus et le statut de taxe. Si vous tapez une description libre, pensez à choisir le compte vous-même, sinon la comptabilisation échouera.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Encaisser (Square) -->
+            <section id="fr-encaisser-square">
+                <h2>Encaisser (Square)</h2>
+                <h3>But</h3>
+                <p>La fenêtre « Encaisser (Square) » génère un lien de paiement Square pour le solde d’une facture. Le client paie par carte ou Interac sur une page hébergée par Square, et le paiement est rapproché automatiquement de la facture. On y accède par l’option <kbd>Obtenir le lien de paiement seulement</kbd> du dialogue d’envoi de la <a href="#fr-factures">liste des factures</a>.</p>
+
+                <h3>Champs</h3>
+                <p>Sous le titre « Encaisser (Square) » et le sous-titre « Lien de paiement — le client paie en ligne », une carte rappelle le <strong>Client</strong>, la <strong>Facture #</strong> et le <strong>Montant à encaisser</strong>, avec la note : « Le client peut payer par carte ou Interac sur la page hébergée par Square. Le paiement sera rapproché automatiquement. »</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Fermer</kbd> : referme la fenêtre.</li>
+                    <li><kbd>Générer le lien</kbd> : crée le lien Square, préremplit le courriel du client sur la page de paiement et associe la commande Square à la facture pour un rapprochement automatique sans doublon.</li>
+                    <li>Une fois le lien créé, la zone « Lien de paiement à envoyer au client » s’affiche avec <kbd>Copier</kbd> (copie le lien dans le presse-papiers) et <kbd>Ouvrir</kbd> (ouvre la page de paiement dans un nouvel onglet).</li>
+                </ul>
+                <p>Pour faire payer un client par texto :</p>
+                <ol>
+                    <li>Dans la liste des factures, cliquez sur <kbd>Envoyer la facture / Encaisser</kbd>.</li>
+                    <li>Choisissez <kbd>Obtenir le lien de paiement seulement</kbd>.</li>
+                    <li>Cliquez sur <kbd>Générer le lien</kbd>, puis sur <kbd>Copier</kbd>.</li>
+                    <li>Collez le lien dans votre texto. Le paiement sera rapproché automatiquement dès réception.</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun compte Square connecté pour cette entreprise. »</span> — le bouton <kbd>Générer le lien</kbd> est désactivé ; connectez Square dans <span class="chemin">Administration › Processeur de paiement</span>.</li>
+                    <li><span class="msg">« Montant invalide. »</span> — le solde à encaisser est nul ou négatif ; la facture est sans doute déjà payée.</li>
+                    <li><span class="msg">« Erreur Square : (URL vide) »</span> — Square n’a pas renvoyé de lien ; réessayez.</li>
+                    <li><span class="msg">« Erreur Square : … »</span> — Square a refusé la demande ; le détail suit.</li>
+                    <li><span class="msg">« Lien de paiement généré. »</span> — le lien est prêt à être copié.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">Chaque clic sur <kbd>Générer le lien</kbd> crée un <strong>nouveau</strong> lien et remplace l’association précédente. Ne transmettez qu’un seul lien au client : un ancien lien payé pourrait ne plus être rapproché correctement.</div>
+                <div class="note" data-titre="Bon à savoir">Le montant du lien est toujours le <strong>solde restant</strong> de la facture, ce qui permet de réclamer la différence après un paiement partiel.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- PDF de facture -->
+            <section id="fr-pdf-facture">
+                <h2>PDF de facture</h2>
+                <h3>But</h3>
+                <p>Chaque facture possède un PDF, celui que vous ouvrez en cliquant sur le numéro dans la <a href="#fr-factures">liste des factures</a>, qui est joint aux courriels et qu’ouvre le bouton « Voir la facture (PDF) » des courriels.</p>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Le lien du bouton « Voir la facture (PDF) » est <strong>public</strong> : il fonctionne sans ouvrir de session, grâce à un identifiant unique et impossible à deviner. Le client peut donc le consulter directement.</li>
+                    <li>Si le PDF n’existe pas encore au moment où quelqu’un ouvre ce lien, il est généré et conservé à ce premier accès.</li>
+                    <li>Le PDF est régénéré à chaque enregistrement de la facture et avant chaque envoi par courriel.</li>
+                    <li>Le fichier se nomme « Invoice_{n°}.pdf ».</li>
+                </ul>
+
+                <h3>Mise en page</h3>
+                <ul>
+                    <li>Le logo de la compagnie (ou sa première lettre à défaut), avec le nom commercial en sous-titre s’il diffère du nom légal.</li>
+                    <li>Le mot « FACTURE » et « N° … ».</li>
+                    <li>Trois cartes : « DATE D’ÉMISSION », « DATE D’ÉCHÉANCE » et « MONTANT DÛ » (le <strong>total de la facture</strong>, pas le solde restant).</li>
+                    <li>« FACTURÉ PAR » (avec les numéros TPS/TVH et TVQ de la compagnie) et « FACTURÉ À » (le client).</li>
+                    <li>Le tableau DESCRIPTION, QTÉ, PRIX, MONTANT.</li>
+                    <li>Sous-total, « TPS (5 %) » et « TVQ (9,975 %) » quand elles sont supérieures à zéro, puis « TOTAL ».</li>
+                    <li>Les encadrés « CONDITIONS DE PAIEMENT » et « NOTES », dont le texte se règle dans <span class="chemin">Administration › Paramètres › Facture</span>.</li>
+                    <li>Un pied de page avec le nom de la compagnie, son adresse, son courriel et « Page x / y ».</li>
+                    <li>Un tampon rouge « PAYÉ » quand la facture est entièrement réglée.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Pour un brouillon sans dates, le PDF affiche la date du jour et une échéance à +30 jours. Ces dates ne sont pas celles qui seront attribuées à la comptabilisation.</div>
+                <div class="note" data-titre="Bon à savoir">« MONTANT DÛ » sur le PDF est le total de la facture. Après un paiement partiel, le PDF n’indique pas le solde : c’est le lien de paiement Square qui reflète le reste à payer.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- PDF numérisés -->
+            <section id="fr-pdf-numerises">
+                <h2>PDF numérisés</h2>
+                <h3>But</h3>
+                <p>L’écran <span class="chemin">Ventes › PDF numérisés</span> permet de déposer des PDF de factures clients, de les faire lire par l’IA, puis de créer le client et la facture à partir du résultat. Cet écran n’est pas traduit : certains boutons apparaissent en anglais.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li>Zone de téléversement : un seul fichier « .pdf » à la fois ; l’envoi est automatique dès la sélection.</li>
+                    <li>Zone « Rechercher (fournisseur, fichier, statut…) », loupe et <kbd>Effacer</kbd>.</li>
+                    <li><kbd>Delete</kbd> : supprime le PDF, sans confirmation.</li>
+                    <li><kbd>Process AI</kbd> : envoie le PDF à l’IA (OpenAI), enregistre le JSON obtenu et le coût de l’appel.</li>
+                    <li><kbd>Voir JSON</kbd> : affiche le résultat brut de la lecture.</li>
+                    <li><kbd>Process JSON</kbd> : crée ou met à jour le client, puis crée la facture à partir du JSON.</li>
+                </ul>
+                <p>Pour transformer un PDF numérisé en facture :</p>
+                <ol>
+                    <li>Téléversez le PDF ; il apparaît dans la liste.</li>
+                    <li>Cliquez sur <kbd>Process AI</kbd> et attendez que le statut change.</li>
+                    <li>Cliquez sur <kbd>Voir JSON</kbd> pour vérifier ce que l’IA a lu.</li>
+                    <li>Cliquez une seule fois sur <kbd>Process JSON</kbd>.</li>
+                    <li>Retrouvez le brouillon dans <span class="chemin">Ventes › Factures clients</span> et complétez-le avant de le comptabiliser.</li>
+                </ol>
+
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fichier</td><td>Nom du PDF déposé.</td></tr>
+                        <tr><td>Statut</td><td>Étape du traitement (déposé, lu par l’IA, traité).</td></tr>
+                        <tr><td>Actions</td><td>Les quatre boutons décrits ci-dessus.</td></tr>
+                    </tbody>
+                </table>
+                <p>Liste vide : « Aucun PDF trouvé. »</p>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Seuls les fichiers PDF sont acceptés. »</span> — le fichier déposé n’est pas un PDF.</li>
+                    <li><span class="msg">« Fichier PDF vide ou invalide. »</span> — le PDF est corrompu ou vide ; numérisez-le de nouveau.</li>
+                    <li><span class="msg">« JSON vide »</span> — <kbd>Process JSON</kbd> a été lancé avant <kbd>Process AI</kbd>, ou la lecture n’a rien donné.</li>
+                    <li><span class="msg">« JSON invalide »</span> / <span class="msg">« Erreur parsing JSON reçu : … »</span> — le résultat de l’IA est inexploitable ; relancez <kbd>Process AI</kbd>.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">La zone de recherche est sans effet sur cette liste.</div>
+                <div class="piege" data-titre="Piège">Un <kbd>Process JSON</kbd> lancé deux fois sur le même PDF peut créer un client ou une facture en double. Ne cliquez qu’une fois.</div>
+                <div class="attention" data-titre="Attention">Chaque <kbd>Process AI</kbd> est un appel payant à l’IA. Ne relancez la lecture que si le résultat est inexploitable.</div>
+                <div class="piege" data-titre="Piège"><kbd>Delete</kbd> supprime le PDF immédiatement, sans confirmation.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- FAQ -->
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Pourquoi ma facture porte-t-elle un numéro « BRO-… » ?</summary><p>C’est le numéro provisoire d’un brouillon. Le numéro officiel n’est attribué qu’à la comptabilisation, selon le format réglé dans <span class="chemin">Administration › Paramètres › Facture</span>. Le préfixe « BRO » est lui aussi réglable.</p></details>
+                <details><summary>Je ne peux plus modifier une facture, pourquoi ?</summary><p>Elle est comptabilisée (badge « Comptabilisé 🔒 »). Une facture comptabilisée est en lecture seule ; seul <kbd>Envoyer au client</kbd> reste possible. Pour corriger, passez par une écriture d’ajustement en <a href="comptabilite.html">Comptabilité</a>.</p></details>
+                <details><summary>L’envoi échoue avec « Aucun courriel de facturation pour ce client. »</summary><p>Ouvrez la fiche du client, ajoutez ou modifiez une adresse de type « Facturation » et renseignez son champ « Courriel », puis cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche.</p></details>
+                <details><summary>Pourquoi le bouton <kbd>Générer le lien</kbd> est-il grisé ?</summary><p>Aucun compte Square n’est connecté pour la compagnie. Connectez-le dans <span class="chemin">Administration › Processeur de paiement</span>.</p></details>
+                <details><summary>Le lien de paiement porte-t-il sur le total ou sur le solde ?</summary><p>Sur le solde restant. Après un paiement partiel, un nouveau lien réclame seulement la différence.</p></details>
+                <details><summary>Comment retrouver les factures en retard ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, cochez « En retard » dans le filtre « Paiement ». Le filtre reste mémorisé pour la session.</p></details>
+                <details><summary>Puis-je saisir une ligne négative (crédit) sur une facture ?</summary><p>Non : le signe moins est retiré des champs Qté et Prix unitaire. Pour un crédit, utilisez une écriture en <a href="comptabilite.html">Comptabilité</a>.</p></details>
+                <details><summary>Pourquoi la TPS et la TVQ semblent-elles trop basses ?</summary><p>Elles ne se calculent que sur les lignes dont le statut « Tx » est « taxable ». Vérifiez le statut de chaque ligne.</p></details>
+                <details><summary>J’ai supprimé un client par erreur : est-ce récupérable ?</summary><p>Non, la suppression est immédiate et sans confirmation. Si le client avait des factures, la base l’a toutefois refusée. Sinon, recréez le client ou réimportez-le depuis Square s’il y existait.</p></details>
+                <details><summary>Un paiement Square importé a créé une facture « Vente au terminal (Square) » sans taxes. Est-ce normal ?</summary><p>Oui : quand aucun brouillon ou facture ne correspond au paiement, une facture payée est créée avec cette ligne unique, sans taxes. Corrigez l’écriture si la vente était taxable.</p></details>
+                <details><summary>Les modifications d’adresses que j’ai faites ont disparu.</summary><p>Vous avez quitté la fiche par <kbd>← Retour à la liste</kbd>. Les adresses ne sont écrites que lorsque vous cliquez sur <kbd>Enregistrer</kbd> en haut de la fiche client.</p></details>
+                <details><summary>Le PDF d’un brouillon montre des dates que je n’ai pas saisies.</summary><p>Pour un brouillon sans dates, le PDF utilise la date du jour et une échéance à +30 jours. Les vraies dates sont attribuées à la comptabilisation.</p></details>
+            </section>
+
+            <!-- ---------------------------------------------------------- Glossaire -->
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <dl>
+                    <dt>Brouillon</dt><dd>Facture non comptabilisée, modifiable, portant un numéro provisoire (« BRO-{Id} » par défaut).</dd>
+                    <dt>Comptabilisation</dt><dd>Opération qui attribue le numéro officiel, fixe les dates, passe l’écriture au journal des ventes et verrouille la facture.</dd>
+                    <dt>Adresse de facturation</dt><dd>Adresse de type « Facturation » sur la fiche client ; son courriel reçoit les factures et préremplit la page de paiement Square.</dd>
+                    <dt>Délai de paiement</dt><dd>Nombre de jours (0 à 365, 30 par défaut) ajouté à la date de facture pour calculer l’échéance quand celle-ci est vide.</dd>
+                    <dt>Lien de paiement Square</dt><dd>Adresse web d’une page hébergée par Square où le client paie par carte ou Interac le solde restant de la facture.</dd>
+                    <dt>Rapprochement</dt><dd>Association automatique d’un paiement Square à la facture correspondante, sans doublon.</dd>
+                    <dt>Statut de paiement</dt><dd>OUVERTE (rien reçu), PARTIELLE (acompte reçu), EN_RETARD (échéance dépassée), PAYEE (réglée), IN_PROGRESS (brouillon en cours).</dd>
+                    <dt>Statut de taxe (Tx)</dt><dd>Indique si une ligne entre dans la base de calcul de la TPS (5 %) et de la TVQ (9,975 %). Seul « taxable » y entre.</dd>
+                    <dt>Sous-total taxable</dt><dd>Somme des lignes taxables, base de calcul des taxes.</dd>
+                    <dt>Reste à payer</dt><dd>Total de la facture moins les encaissements déjà reçus.</dd>
+                    <dt>Vente au terminal (Square)</dt><dd>Ligne unique, sans taxes, d’une facture payée créée automatiquement pour un paiement Square sans facture correspondante.</dd>
+                    <dt>JSON</dt><dd>Résultat structuré de la lecture d’un PDF par l’IA, utilisé pour créer le client et la facture.</dd>
+                    <dt>Lieu d’intervention</dt><dd>Position GPS captée par l’application mobile et rattachée à la facture ; ouvrable dans Google Maps.</dd>
+                </dl>
+            </section>
+        </article>
+
+        <!-- ============================================================ EN -->
+        <article class="langue" lang="en">
+            <h1>Sales</h1>
+            <p class="intro">The <span class="chemin">Sales</span> section covers everything related to your customers and the money they owe you: the customer list and record, customer invoices (draft, posting, sending by email), online collection through Square, the invoice PDF, and the drop zone for scanned PDFs that the AI turns into invoices. All customer payment integration goes through Square: the company’s Square account is connected once in <span class="chemin">Administration › Payment processor</span>, and the token is renewed automatically afterwards.</p>
+
+            <!-- ---------------------------------------------------------- Customers -->
+            <section id="en-customers">
+                <h2>Customers</h2>
+                <h3>Purpose</h3>
+                <p>The <span class="chemin">Sales › Customers</span> screen lists the company’s customers with, for each one, the balance still to be received. This is also where you synchronize your customers with Square, in both directions.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Ajouter Client</kbd> (Add customer): opens the “Ajouter un client” window (see <a href="#en-customer-record">Customer record</a>). On mobile, the floating <kbd>+</kbd> button does the same.</li>
+                    <li><kbd>Exporter vers Square</kbd> (Export to Square): sends all customers to Square. A customer that already has a Square identifier is updated; the others are created, and their Square identifier is then stored on their record. No confirmation is asked.</li>
+                    <li><kbd>Importer depuis Square</kbd> (Import from Square): pulls all customers from your Square account. Existing ones are updated, the others are created locally. No confirmation is asked.</li>
+                    <li>Magnifier button: runs the search typed in the “Rechercher (nom, email, téléphone…)” box.</li>
+                    <li><kbd>Effacer</kbd> (Clear): empties the search box and shows the full list again.</li>
+                    <li>On each row: <kbd>Modifier</kbd> (Edit) opens the “Modifier un client” window; <kbd>Supprimer</kbd> (Delete) deletes the customer.</li>
+                </ul>
+
+                <h3>Filters and search</h3>
+                <p>The list is not paginated: all customers appear at once. Two column headers sort the list: “Nom” (Name) and “À recevoir” (Receivable). A first click sorts ascending, a second click descending; a ▲ or ▼ arrow shows the direction. By default the list is sorted by name, ascending.</p>
+                <p>The list refreshes automatically when you close a customer record, and your scroll position is kept.</p>
+
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>The customer’s name, then the address and email in grey.</td></tr>
+                        <tr><td>À recevoir</td><td>The unpaid balance, shown as “1 234,56 $”, or “—” when the customer owes nothing.</td></tr>
+                        <tr><td>Action</td><td>The <kbd>Modifier</kbd> and <kbd>Supprimer</kbd> buttons.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <p>Synchronization messages appear in a window titled “Square”.</p>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun client à exporter. »</span> — the customer list is empty; create customers first.</li>
+                    <li><span class="msg">« {n} client(s) exporté(s) vers Square sur {total}. »</span> — the export succeeded; if n is lower than the total, some customers could not be sent (check their details).</li>
+                    <li><span class="msg">« Erreur lors de l’export Square : … »</span> — Square refused the operation; the detail follows. Check that the Square account is connected in <span class="chemin">Administration › Payment processor</span>.</li>
+                    <li><span class="msg">« Aucun client à importer depuis Square. »</span> — your Square account contains no customers.</li>
+                    <li><span class="msg">« {n} client(s) créé(s) et {m} mis à jour depuis Square ({t} trouvé(s)). »</span> — the import succeeded; the total found at Square is shown in parentheses.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square did not answer correctly; try again later or check the Square connection.</li>
+                    <li><span class="msg">« Aucun client trouvé. »</span> — the search returns nothing, or the list is empty.</li>
+                </ul>
+
+                <div class="piege" data-titre="Pitfall"><kbd>Supprimer</kbd> acts immediately, without asking for confirmation. Only the database can refuse the deletion when the customer already has invoices. Double-check the row before clicking.</div>
+                <div class="astuce" data-titre="Tip">The “À recevoir” balance is the remaining amount of all the customer’s posted invoices. For the detail, open <a href="#en-invoices">Customer invoices</a> and search for the customer’s name.</div>
+                <div class="note" data-titre="Good to know">The Square export and import ask for no confirmation and process every customer at once. Run them preferably once the list is clean, to avoid spreading duplicates.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Customer record -->
+            <section id="en-customer-record">
+                <h2>Customer record</h2>
+                <h3>Purpose</h3>
+                <p>The customer record opens as a window from <span class="chemin">Sales › Customers</span> (<kbd>Ajouter Client</kbd> or <kbd>Modifier</kbd> button). It is used to create or edit a customer, manage their addresses and view their attachments. It also contains an AI auto-fill tool that reads a document.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>← Retour à la liste</kbd> (Back to list, top bar): closes the record <strong>without saving</strong> and without warning.</li>
+                    <li><kbd>Enregistrer</kbd> (Save, top bar): saves the customer, then all address changes in one go, then closes the record.</li>
+                    <li><kbd>Réduire</kbd> / <kbd>Agrandir</kbd>: collapses or expands the “Remplissage automatique par document” panel.</li>
+                    <li><kbd>Analyser le document</kbd> (Analyze document): sends the dropped file to the AI to fill the empty fields.</li>
+                    <li><kbd>+ Ajouter une adresse</kbd> (Add address): opens the “Édition adresse” window.</li>
+                    <li>In the address list: <kbd>Modifier</kbd> and <kbd>Supprimer</kbd>.</li>
+                    <li>In the “Édition adresse” window: <kbd>Enregistrer</kbd> (validates the address in the on-screen list) and <kbd>Annuler</kbd> (Cancel).</li>
+                </ul>
+
+                <h3>Fields</h3>
+                <p>“Informations Client” card:</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Origine</td><td>—</td><td>Read-only. Where the customer came from (manual entry, Square, import…).</td></tr>
+                        <tr><td>Créé</td><td>—</td><td>Read-only, on an existing record. Creation date and time (yyyy-MM-dd HH:mm).</td></tr>
+                        <tr><td>Nom (Name)</td><td>No</td><td>500 characters maximum. Nothing forces you to fill it, but a nameless customer is unusable on invoices.</td></tr>
+                        <tr><td>Nom d’affichage (Display name)</td><td>No</td><td>500 characters maximum. Short name shown in lists.</td></tr>
+                        <tr><td>Type</td><td>No</td><td>“Sélectionner…” list of customer party types.</td></tr>
+                        <tr><td>Site web</td><td>No</td><td>200 characters maximum.</td></tr>
+                        <tr><td>No TPS (GST number)</td><td>No</td><td>20 characters maximum.</td></tr>
+                        <tr><td>No TVQ (QST number)</td><td>No</td><td>20 characters maximum.</td></tr>
+                        <tr><td>Délai de paiement (jours) (Payment terms, days)</td><td>No</td><td>Integer from 0 to 365, 30 by default. Used to compute the due date when an invoice is posted without one.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Free multi-line text.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>“Édition adresse” window (no field is required):</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>No</td><td>Address type, for example “Facturation” (Billing) or “Livraison” (Shipping).</td></tr>
+                        <tr><td>Nom</td><td>No</td><td>Recipient or site name.</td></tr>
+                        <tr><td>Adresse 1</td><td>No</td><td>Number and street.</td></tr>
+                        <tr><td>Adresse 2</td><td>No</td><td>Suite, apartment…</td></tr>
+                        <tr><td>Ville (City)</td><td>No</td><td></td></tr>
+                        <tr><td>Pays (Country)</td><td>No</td><td>Choose it first: the province list depends on it.</td></tr>
+                        <tr><td>Province</td><td>No</td><td>Filtered by the chosen country.</td></tr>
+                        <tr><td>Code postal</td><td>No</td><td></td></tr>
+                        <tr><td>Courriel (Email)</td><td>No</td><td>For the “Facturation” address, this is where invoices are sent.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Free text. The AI puts the extracted phone number here (“Tél. : …”).</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Auto-fill from a document</h3>
+                <p>The collapsible “Remplissage automatique par document” panel reads: « Déposez une carte d’affaires, une facture ou un en-tête de lettre : l’IA remplit les champs vides. » (Drop a business card, an invoice or a letterhead: the AI fills the empty fields.) Drop the file in the “Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG)” zone, then click <kbd>Analyser le document</kbd>.</p>
+                <p>To fill a record from a business card:</p>
+                <ol>
+                    <li>Open <kbd>Ajouter Client</kbd>.</li>
+                    <li>Drag the photo or PDF of the card into the drop zone.</li>
+                    <li>Click <kbd>Analyser le document</kbd> and wait for the result message.</li>
+                    <li>Check every filled field and correct as needed.</li>
+                    <li>Click <kbd>Enregistrer</kbd> at the top of the record.</li>
+                </ol>
+                <h3>Rules</h3>
+                <ul>
+                    <li>The AI only fills <strong>empty</strong> fields; it never overwrites a value already entered.</li>
+                    <li>The extracted address becomes a “Facturation” address <strong>only if the customer has no address yet</strong>.</li>
+                    <li>The extracted phone number is stored in the address note as “Tél. : …”.</li>
+                    <li>Only PDF, JPG and PNG are accepted.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord choisir un fichier. »</span> — you clicked <kbd>Analyser le document</kbd> without dropping a file.</li>
+                    <li><span class="msg">« Le fichier est vide. »</span> — the dropped file is empty; choose another one.</li>
+                    <li><span class="msg">« Clé OpenAI absente. Contactez l’administrateur. »</span> — the AI access key is not configured for the company; the administrator must enter it in the settings.</li>
+                    <li><span class="msg">« Format non pris en charge (PDF, JPG ou PNG uniquement). »</span> — convert your document to one of these formats.</li>
+                    <li><span class="msg">« {n} champ(s) rempli(s) automatiquement. Vérifiez avant d’enregistrer. »</span> — the analysis succeeded; review the fields before saving.</li>
+                    <li><span class="msg">« Aucune information exploitable trouvée (ou champs déjà remplis). »</span> — the document contained nothing usable, or all fields were already filled.</li>
+                    <li><span class="msg">« Erreur lors de l’analyse du document. »</span> — the AI did not answer; try again later.</li>
+                </ul>
+
+                <h3>Addresses and attachments</h3>
+                <p>The “Adresses” card shows the columns “Type”, “Adresse” and “Actions” (Modifier / Supprimer). When the customer has no address: « Aucune adresse enregistrée pour ce client. »</p>
+                <p>The “Pièces jointes” (Attachments) card shows the columns Fichier (link to open), Type, Taille (Size), Note and Provenance (Source). On a new record it reads « Enregistrez d’abord la fiche. » (Save the record first); with no attachment: « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (see <a href="importation.html">Import</a>).</p>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Adding, editing or deleting an address only updates the on-screen list. <strong>Nothing is written</strong> until you click <kbd>Enregistrer</kbd> at the top of the record. If you leave with <kbd>← Retour à la liste</kbd>, all address changes are lost, without warning.</div>
+                <div class="piege" data-titre="Pitfall">Deleting an address asks for no confirmation.</div>
+                <div class="astuce" data-titre="Tip">The email of the “Facturation” address is the one invoices are sent to and the one that pre-fills the Square payment page. Without it, sending an invoice fails with « Aucun courriel de facturation pour ce client. » Give every customer at least one billing address with an email.</div>
+                <div class="note" data-titre="Good to know">“Délai de paiement (jours)” only takes effect when an invoice with an empty due date is posted: the due date becomes the invoice date plus this number of days.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Customer invoices -->
+            <section id="en-invoices">
+                <h2>Customer invoices</h2>
+                <h3>Purpose</h3>
+                <p>The <span class="chemin">Sales › Customer invoices</span> screen lists all customer invoices. It is the main control post: you create drafts, post them, record receipts, send invoices by email with or without a Square payment link, and view the photos and geolocation sent by the mobile app.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Ajouter une facture</kbd> (Add invoice, or <kbd>+</kbd> on mobile): opens the “Ajouter une facture” window (see <a href="#en-invoice-editing">Editing an invoice</a>).</li>
+                    <li><kbd>Importer depuis Square</kbd> (tooltip « Rapatrier les factures et paiements Square comme factures clients »): Square invoices become customer invoices with their header, lines and GST/QST; the customer is created if needed. Square payments are matched to an existing invoice; when none matches, a paid invoice is created with a single line “Vente au terminal (Square)”, without taxes.</li>
+                    <li>“État : tous” filter (Status): <strong>Brouillon</strong> (Draft), <strong>Comptabilisé</strong> (Posted) and “Tout cocher” (Check all).</li>
+                    <li>“Paiement : tous” filter (Payment): <strong>Ouverte</strong> (Open), <strong>Partielle</strong> (Partial), <strong>En retard</strong> (Overdue), <strong>Payée</strong> (Paid), <strong>En cours (brouillon)</strong> (In progress, draft).</li>
+                    <li>“Rechercher (nom, courriel, téléphone…)” box and magnifier button.</li>
+                    <li><kbd>Effacer</kbd>: clears the search <strong>and unchecks both filters</strong>.</li>
+                </ul>
+
+                <h3>Filters and search</h3>
+                <p>Checking or unchecking a box reloads the list immediately. Filters and sort order are remembered for your session. The default sort is “Date” descending (newest first). Every column sorts except “Action”. The list is not paginated.</p>
+                <div class="piege" data-titre="Pitfall">Despite the search box label, the search only matches the <strong>customer name</strong>. An email or phone number returns nothing.</div>
+
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>The invoice number. It is a link that opens the PDF in a viewer (see <a href="#en-invoice-pdf">Invoice PDF</a>).</td></tr>
+                        <tr><td>Date</td><td>Invoice date as “26 sept.”, with the year underneath.</td></tr>
+                        <tr><td>Échéance</td><td>Due date, same format.</td></tr>
+                        <tr><td>Client</td><td>Name, address and email. When the mobile app sent data, badges appear: a camera with a count (« {n} photo(s) prise(s) sur place — cliquer pour voir », opens the “Photos — facture {no}” window) and a pin (« Lieu d’intervention — ouvrir la carte », opens Google Maps).</td></tr>
+                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE or IN_PROGRESS (draft in progress).</td></tr>
+                        <tr><td>Reste à payer</td><td>Balance still due.</td></tr>
+                        <tr><td>Déjà reçu</td><td>Sum of receipts.</td></tr>
+                        <tr><td>Total</td><td>Invoice total, taxes included.</td></tr>
+                        <tr><td>État</td><td>Brouillon or Comptabilisé.</td></tr>
+                        <tr><td>Action</td><td>The buttons described below.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Row actions</h3>
+                <table>
+                    <thead><tr><th>Button (tooltip)</th><th>Visible when</th><th>Effect</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Comptabiliser la facture</kbd> (Post)</td><td>Draft only</td><td>Asks for confirmation, then posts the invoice.</td></tr>
+                        <tr><td><kbd>Encaissement</kbd> (Receipt)</td><td>Posted and unpaid</td><td>Opens “Ajouter un encaissement” for this customer (see <a href="comptabilite.html">Accounting</a>).</td></tr>
+                        <tr><td><kbd>Envoyer la facture / Encaisser</kbd> (Send / Collect)</td><td>Posted and unpaid</td><td>Opens the send dialog described below.</td></tr>
+                        <tr><td><kbd>Modifier</kbd> (Edit)</td><td>Always</td><td>Opens the invoice (read-only when posted).</td></tr>
+                        <tr><td><kbd>Supprimer</kbd> (Delete)</td><td>Always</td><td>Deletes immediately. On a posted invoice the button is replaced by an inactive red padlock.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Posting an invoice</h3>
+                <p>The confirmation window is titled « Comptabiliser la facture » and reads: « Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l’échéance seront attribués, et la facture ne pourra plus être modifiée. » (Post this draft? The official number, invoice date and due date will be assigned, and the invoice can no longer be edited.)</p>
+                <ul class="messages">
+                    <li><span class="msg">« Facture comptabilisée. »</span> — the invoice received its official number and its journal entry.</li>
+                    <li><span class="msg">« Comptabilisation impossible. »</span> — followed by the detailed error; see the list of posting errors in <a href="#en-invoice-editing">Editing an invoice</a>.</li>
+                </ul>
+
+                <h3>“Envoyer la facture / Encaisser” dialog</h3>
+                <p>The dialog asks « Que voulez-vous faire ? » (What do you want to do?). When the invoice has photos or a location, an “À inclure dans le courriel” panel offers two boxes, unchecked each time the dialog opens: « Joindre les {n} photo(s) prises sur place » (attach the on-site photos) and « Inclure le lien vers le lieu d’intervention » (include the link to the job site).</p>
+                <ol>
+                    <li><kbd>Envoyer la facture par courriel</kbd> — « PDF en pièce jointe, sans lien de paiement. » (PDF attached, no payment link.)</li>
+                    <li><kbd>Envoyer par courriel avec lien de paiement</kbd> — « PDF en pièce jointe + bouton « Payer maintenant » (Square). » (PDF attached plus a “Pay now” button.)</li>
+                    <li><kbd>Obtenir le lien de paiement seulement</kbd> — « Génère le lien Square à copier (texto, téléphone, en personne). Aucun courriel envoyé. » Opens the <a href="#en-collect-square">Collect (Square)</a> window.</li>
+                    <li><kbd>Annuler</kbd> — or a click on the dark background, or the <kbd>Esc</kbd> key.</li>
+                </ol>
+                <p>When the invoice is already paid, options 2 and 3 are hidden and a note says: « Facture déjà payée : les options de paiement ne sont pas offertes. »</p>
+
+                <h3>Content of the email sent</h3>
+                <ul>
+                    <li>Subject: « Facture {no} — {company} ».</li>
+                    <li>A “Voir la facture (PDF)” button pointing to a public link to the PDF.</li>
+                    <li>A green “Payer maintenant (x,xx $)” button when you asked for the payment link. The Square link covers the <strong>remaining balance</strong>, not the total.</li>
+                    <li>A mention of the photos and job site if you checked the boxes; photos are downsized for the email.</li>
+                    <li>The PDF attached, generated if needed.</li>
+                    <li>The reply address is the company’s verified email (see <a href="courriel.html">Email</a>).</li>
+                    <li>After paying, the customer sees a thank-you page in the company’s colours.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« {n} facture(s) et {m} paiement(s) traités depuis Square. »</span> — the Square import succeeded.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square did not answer; check the Square connection.</li>
+                    <li><span class="msg">« Facture introuvable. »</span> — the invoice was deleted in the meantime; reload the list.</li>
+                    <li><span class="msg">« Aucun courriel de facturation pour ce client. »</span> — add a “Facturation” address with an email on the <a href="#en-customer-record">customer record</a>, then try again.</li>
+                    <li><span class="msg">« Impossible de générer le PDF de la facture. »</span> — the invoice is probably incomplete (no customer or no line); open it and check.</li>
+                    <li><span class="msg">« Facture {no} envoyée à {email}. »</span> — the send succeeded. It may be followed by a note: « (lien Square non ajouté : facture déjà payée) », « (lien Square non ajouté : compte Square non connecté) », « (lien Square non généré) », « (lien Square non ajouté : {error}) », « ({n} photo(s) jointe(s), {size}) », « (lieu d’intervention inclus) ».</li>
+                    <li><span class="msg">« Aucune photo pour cette facture. »</span> — the photo viewer has nothing to show.</li>
+                    <li><span class="msg">« Lieu d’intervention : lat, long (capté le …) — Ouvrir dans Google Maps »</span> — location sent by the mobile app.</li>
+                    <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> (title « Confirmation ») — you are closing the invoice window with unsaved changes; choose Cancel to go back and save.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall"><kbd>Supprimer</kbd> on a draft asks for <strong>no confirmation</strong>. Deletion is immediate.</div>
+                <div class="piege" data-titre="Pitfall">From the list, a draft cannot be sent: it must be posted first. (The editing screen, however, lets you send a draft with its provisional number; see <a href="#en-invoice-editing">Editing an invoice</a>.)</div>
+                <div class="astuce" data-titre="Tip">To find overdue invoices quickly, check “En retard” in the “Paiement” filter, then sort by “Échéance”. The filter stays active until you click <kbd>Effacer</kbd> or end the session.</div>
+                <div class="note" data-titre="Good to know">A Square payment with no matching invoice creates a paid invoice with a tax-free “Vente au terminal (Square)” line. If the sale was taxable, correct the journal entry in <a href="comptabilite.html">Accounting › Journals</a>.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Editing an invoice -->
+            <section id="en-invoice-editing">
+                <h2>Editing an invoice</h2>
+                <h3>Purpose</h3>
+                <p>The invoice window opens from <span class="chemin">Sales › Customer invoices</span> (<kbd>Ajouter une facture</kbd> or <kbd>Modifier</kbd>). You enter the customer, the dates and the lines, and you see the totals computed with GST and QST. You can also save, post on the spot and send the invoice to the customer.</p>
+
+                <h3>Header fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>“Comptabilisé 🔒” badge</td><td>—</td><td>Shown when the invoice is posted; everything becomes read-only.</td></tr>
+                        <tr><td>Numéro (Number)</td><td>—</td><td>Visible from the first save. Provisional while the invoice is a draft.</td></tr>
+                        <tr><td>Client</td><td>No (but essential)</td><td>“Rechercher un client…” picker showing cards with the name and billing address. On a new invoice it reads « Sélectionner un client ».</td></tr>
+                        <tr><td>Date de facture (Invoice date)</td><td>No</td><td>Calendar. If empty at posting, today’s date is used.</td></tr>
+                        <tr><td>Date d’échéance (Due date)</td><td>No</td><td>Calendar. If empty at posting, computed from the customer’s payment terms.</td></tr>
+                        <tr><td>Comptabilisé (Posted)</td><td>No</td><td>Checkbox. If checked when you click <kbd>Enregistrer</kbd>, the invoice is posted on the spot.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Lines</h3>
+                <p>The line table has the columns Produit, Compte, Qté, Prix unitaire, Total, Tx and Ordre.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit</td><td>The description (1000 characters maximum). The ▾ “Rechercher un produit…” picker fills the description, price, account and tax status, and sets the quantity to 1 (see <a href="produits.html">Products</a>).</td></tr>
+                        <tr><td>Compte (Account)</td><td>“Rechercher un compte…” picker: only revenue accounts are offered.</td></tr>
+                        <tr><td>Qté (Qty)</td><td>Digits and a dot only (a comma is converted), 2 decimals maximum. The minus sign is removed: a negative line cannot be entered.</td></tr>
+                        <tr><td>Prix unitaire (Unit price)</td><td>Same rules as the quantity.</td></tr>
+                        <tr><td>Total</td><td>Quantity × unit price, computed automatically.</td></tr>
+                        <tr><td>Tx</td><td>Tax status of the line. Only “taxable” enters the GST and QST base.</td></tr>
+                        <tr><td>Ordre (Order)</td><td>Up and down arrows to reorder lines.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Trash can: deletes the line after the question « Supprimer cette ligne ? ».</li>
+                    <li>Round <kbd>+</kbd> button (« Ajouter une ligne »): adds an empty line with quantity 1 and price 0.</li>
+                    <li>Empty lists: « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
+                </ul>
+
+                <h3>Totals</h3>
+                <p>The totals block shows “Sous-total”, “TPS”, “TVQ” and “Total”. GST is 5 % and QST 9.975 % of the <strong>taxable</strong> subtotal (sum of the lines whose status is “taxable”), each rounded to the cent.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Enregistrer</kbd> (Save): saves the invoice, regenerates the PDF and closes the window.</li>
+                    <li><kbd>Envoyer au client</kbd> (Send to customer, visible only once the invoice has been saved): opens the “Envoyer la facture par courriel” dialog asking « Voulez-vous inclure un lien de paiement Square dans le courriel ? » with the buttons <kbd>Annuler</kbd>, <kbd>Envoyer sans lien</kbd> (Send without link) and <kbd>Avec lien Square</kbd> (With Square link).</li>
+                </ul>
+                <p>To create and post an invoice in one go:</p>
+                <ol>
+                    <li>Click <kbd>Ajouter une facture</kbd> in the list.</li>
+                    <li>Choose the customer in “Rechercher un client…”.</li>
+                    <li>Add lines with <kbd>+</kbd>, pick the product or type the description, quantity and price.</li>
+                    <li>Check the “Tx” tax status of each line and the totals.</li>
+                    <li>Check “Comptabilisé”, then click <kbd>Enregistrer</kbd>.</li>
+                </ol>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li><strong>Draft</strong>: an unposted invoice. Its provisional number is “{prefix}-{Id}”, with the prefix “BRO” by default (set in <span class="chemin">Administration › Settings › Invoice</span>, “Préfixe de brouillon” field). Dates are optional.</li>
+                    <li><strong>Posting</strong>: the official number is assigned once, following the format set in the settings ({PREFIXE}-{AAAA}-{NUMERO} by default, 4-digit number, counter reset every year if the option is on). An empty invoice date becomes today; an empty due date becomes the invoice date plus the customer’s payment terms.</li>
+                    <li><strong>Journal entry</strong>: accounts receivable 1100 debited; revenue credited (the line’s account, otherwise 4000); GST payable 2200; QST payable 2210. See <a href="comptabilite.html">Accounting › Journals</a>.</li>
+                    <li><strong>Posted invoice</strong>: read-only. Only <kbd>Envoyer au client</kbd> remains available.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord enregistrer la facture. »</span> — you are trying to send an invoice that was never saved; click <kbd>Enregistrer</kbd>, reopen it, then send.</li>
+                    <li><span class="msg">« Ce document est déjà comptabilisé. »</span> — the invoice already has its official number; nothing to do.</li>
+                    <li><span class="msg">« Aucune ligne dans … »</span> — the invoice has no line; add at least one.</li>
+                    <li><span class="msg">« Total TTC = 0 dans … »</span> — the total is zero; a $0 invoice cannot be posted. Check quantities and prices.</li>
+                    <li><span class="msg">« Incohérence montants. … »</span> — the totals no longer match the lines; reopen the invoice, save it again to recalculate, then retry.</li>
+                    <li><span class="msg">« Période comptable clôturée ou inexistante. »</span> — the invoice date falls in a closed or missing period; change the date or open the period in <a href="comptabilite.html">Accounting</a>.</li>
+                    <li><span class="msg">« Certaines lignes n ont pas de compte comptable résolu. Vérifier les produits et catégories. »</span> — a line has neither an account nor a product linked to a revenue account; choose an account on every line.</li>
+                    <li><span class="msg">« Tiers introuvable … »</span> — the invoice has no customer (or the customer was deleted); select a customer.</li>
+                    <li><span class="msg">« Journal introuvable … »</span> — the sales journal does not exist for the company; ask the administrator to create it.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Nothing prevents saving an invoice <strong>without a customer</strong>. It can then be neither posted (« Tiers introuvable ») nor sent. Always pick the customer first.</div>
+                <div class="piege" data-titre="Pitfall">From this screen you <strong>can</strong> send a draft: the customer will receive an invoice with a provisional number (“BRO-…”) that will change at posting. Post before sending.</div>
+                <div class="attention" data-titre="Warning">The Square link created from this screen does not lead to the company’s thank-you page and does not attach the photos. For those options, use the <kbd>Envoyer la facture / Encaisser</kbd> button in the <a href="#en-invoices">invoice list</a>.</div>
+                <div class="astuce" data-titre="Tip">The product picker automatically fills the revenue account and the tax status. If you type a free description, remember to choose the account yourself, otherwise posting will fail.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Collect (Square) -->
+            <section id="en-collect-square">
+                <h2>Collect (Square)</h2>
+                <h3>Purpose</h3>
+                <p>The “Encaisser (Square)” window generates a Square payment link for an invoice’s balance. The customer pays by card or Interac on a page hosted by Square, and the payment is automatically matched to the invoice. You reach it through the <kbd>Obtenir le lien de paiement seulement</kbd> option of the send dialog in the <a href="#en-invoices">invoice list</a>.</p>
+
+                <h3>Fields</h3>
+                <p>Under the title “Encaisser (Square)” and the subtitle « Lien de paiement — le client paie en ligne » (Payment link — the customer pays online), a card recalls the <strong>Client</strong>, the <strong>Facture #</strong> and the <strong>Montant à encaisser</strong> (amount to collect), with the note: « Le client peut payer par carte ou Interac sur la page hébergée par Square. Le paiement sera rapproché automatiquement. »</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Fermer</kbd> (Close): closes the window.</li>
+                    <li><kbd>Générer le lien</kbd> (Generate link): creates the Square link, pre-fills the customer’s email on the payment page and ties the Square order to the invoice for automatic, duplicate-free matching.</li>
+                    <li>Once the link is created, the « Lien de paiement à envoyer au client » zone appears with <kbd>Copier</kbd> (copies the link to the clipboard) and <kbd>Ouvrir</kbd> (opens the payment page in a new tab).</li>
+                </ul>
+                <p>To get a customer to pay by text message:</p>
+                <ol>
+                    <li>In the invoice list, click <kbd>Envoyer la facture / Encaisser</kbd>.</li>
+                    <li>Choose <kbd>Obtenir le lien de paiement seulement</kbd>.</li>
+                    <li>Click <kbd>Générer le lien</kbd>, then <kbd>Copier</kbd>.</li>
+                    <li>Paste the link in your text message. The payment will be matched automatically on receipt.</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun compte Square connecté pour cette entreprise. »</span> — the <kbd>Générer le lien</kbd> button is disabled; connect Square in <span class="chemin">Administration › Payment processor</span>.</li>
+                    <li><span class="msg">« Montant invalide. »</span> — the balance to collect is zero or negative; the invoice is probably already paid.</li>
+                    <li><span class="msg">« Erreur Square : (URL vide) »</span> — Square returned no link; try again.</li>
+                    <li><span class="msg">« Erreur Square : … »</span> — Square refused the request; the detail follows.</li>
+                    <li><span class="msg">« Lien de paiement généré. »</span> — the link is ready to be copied.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">Every click on <kbd>Générer le lien</kbd> creates a <strong>new</strong> link and replaces the previous association. Send the customer a single link: an older link that gets paid might no longer be matched correctly.</div>
+                <div class="note" data-titre="Good to know">The link amount is always the invoice’s <strong>remaining balance</strong>, which lets you request the difference after a partial payment.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Invoice PDF -->
+            <section id="en-invoice-pdf">
+                <h2>Invoice PDF</h2>
+                <h3>Purpose</h3>
+                <p>Every invoice has a PDF: the one you open by clicking the number in the <a href="#en-invoices">invoice list</a>, the one attached to emails, and the one opened by the “Voir la facture (PDF)” button in emails.</p>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>The link behind “Voir la facture (PDF)” is <strong>public</strong>: it works without signing in, thanks to a unique identifier that cannot be guessed. The customer can therefore open it directly.</li>
+                    <li>If the PDF does not exist yet when someone opens this link, it is generated and kept at that first access.</li>
+                    <li>The PDF is regenerated every time the invoice is saved and before every email.</li>
+                    <li>The file is named “Invoice_{no}.pdf”.</li>
+                </ul>
+
+                <h3>Layout</h3>
+                <ul>
+                    <li>The company logo (or its first letter), with the trade name as a subtitle when it differs from the legal name.</li>
+                    <li>The word “FACTURE” and “N° …”.</li>
+                    <li>Three cards: “DATE D’ÉMISSION” (issue date), “DATE D’ÉCHÉANCE” (due date) and “MONTANT DÛ” (amount due: the <strong>invoice total</strong>, not the remaining balance).</li>
+                    <li>“FACTURÉ PAR” (billed by, with the company’s GST/HST and QST numbers) and “FACTURÉ À” (billed to, the customer).</li>
+                    <li>The DESCRIPTION, QTÉ, PRIX, MONTANT table.</li>
+                    <li>Subtotal, “TPS (5 %)” and “TVQ (9,975 %)” when greater than zero, then “TOTAL”.</li>
+                    <li>The “CONDITIONS DE PAIEMENT” and “NOTES” boxes, whose text is set in <span class="chemin">Administration › Settings › Invoice</span>.</li>
+                    <li>A footer with the company name, address, email and “Page x / y”.</li>
+                    <li>A red “PAYÉ” (paid) stamp when the invoice is fully settled.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">For a draft without dates, the PDF shows today’s date and a due date 30 days later. These are not the dates that will be assigned at posting.</div>
+                <div class="note" data-titre="Good to know">“MONTANT DÛ” on the PDF is the invoice total. After a partial payment the PDF does not show the balance: the Square payment link is what reflects the amount still due.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Scanned PDFs -->
+            <section id="en-scanned-pdf">
+                <h2>Scanned PDFs</h2>
+                <h3>Purpose</h3>
+                <p>The <span class="chemin">Sales › Scanned PDFs</span> screen lets you drop PDFs of customer invoices, have the AI read them, then create the customer and the invoice from the result. This screen is not translated: some buttons appear in English.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li>Upload zone: a single “.pdf” file at a time; the upload starts as soon as the file is selected.</li>
+                    <li>“Rechercher (fournisseur, fichier, statut…)” box, magnifier and <kbd>Effacer</kbd>.</li>
+                    <li><kbd>Delete</kbd>: removes the PDF, without confirmation.</li>
+                    <li><kbd>Process AI</kbd>: sends the PDF to the AI (OpenAI), stores the resulting JSON and the cost of the call.</li>
+                    <li><kbd>Voir JSON</kbd>: shows the raw reading result.</li>
+                    <li><kbd>Process JSON</kbd>: creates or updates the customer, then creates the invoice from the JSON.</li>
+                </ul>
+                <p>To turn a scanned PDF into an invoice:</p>
+                <ol>
+                    <li>Upload the PDF; it appears in the list.</li>
+                    <li>Click <kbd>Process AI</kbd> and wait for the status to change.</li>
+                    <li>Click <kbd>Voir JSON</kbd> to check what the AI read.</li>
+                    <li>Click <kbd>Process JSON</kbd> once.</li>
+                    <li>Find the draft in <span class="chemin">Sales › Customer invoices</span> and complete it before posting.</li>
+                </ol>
+
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fichier</td><td>Name of the uploaded PDF.</td></tr>
+                        <tr><td>Statut</td><td>Processing stage (uploaded, read by the AI, processed).</td></tr>
+                        <tr><td>Actions</td><td>The four buttons described above.</td></tr>
+                    </tbody>
+                </table>
+                <p>Empty list: « Aucun PDF trouvé. »</p>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Seuls les fichiers PDF sont acceptés. »</span> — the dropped file is not a PDF.</li>
+                    <li><span class="msg">« Fichier PDF vide ou invalide. »</span> — the PDF is corrupted or empty; scan it again.</li>
+                    <li><span class="msg">« JSON vide »</span> — <kbd>Process JSON</kbd> was run before <kbd>Process AI</kbd>, or the reading produced nothing.</li>
+                    <li><span class="msg">« JSON invalide »</span> / <span class="msg">« Erreur parsing JSON reçu : … »</span> — the AI result is unusable; run <kbd>Process AI</kbd> again.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">The search box has no effect on this list.</div>
+                <div class="piege" data-titre="Pitfall">Running <kbd>Process JSON</kbd> twice on the same PDF can create a duplicate customer or invoice. Click only once.</div>
+                <div class="attention" data-titre="Warning">Every <kbd>Process AI</kbd> is a paid call to the AI. Only run the reading again if the result is unusable.</div>
+                <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> removes the PDF immediately, without confirmation.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- FAQ -->
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>Why does my invoice have a “BRO-…” number?</summary><p>It is the provisional number of a draft. The official number is assigned only at posting, following the format set in <span class="chemin">Administration › Settings › Invoice</span>. The “BRO” prefix can be changed too.</p></details>
+                <details><summary>I can no longer edit an invoice. Why?</summary><p>It is posted (“Comptabilisé 🔒” badge). A posted invoice is read-only; only <kbd>Envoyer au client</kbd> remains available. To correct it, make an adjusting entry in <a href="comptabilite.html">Accounting</a>.</p></details>
+                <details><summary>Sending fails with « Aucun courriel de facturation pour ce client. »</summary><p>Open the customer record, add or edit a “Facturation” address, fill its “Courriel” field, then click <kbd>Enregistrer</kbd> at the top of the record.</p></details>
+                <details><summary>Why is the <kbd>Générer le lien</kbd> button greyed out?</summary><p>No Square account is connected for the company. Connect it in <span class="chemin">Administration › Payment processor</span>.</p></details>
+                <details><summary>Does the payment link cover the total or the balance?</summary><p>The remaining balance. After a partial payment, a new link requests only the difference.</p></details>
+                <details><summary>How do I find overdue invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, check “En retard” in the “Paiement” filter. The filter is remembered for the session.</p></details>
+                <details><summary>Can I enter a negative (credit) line on an invoice?</summary><p>No: the minus sign is removed from the Qté and Prix unitaire fields. For a credit, use an entry in <a href="comptabilite.html">Accounting</a>.</p></details>
+                <details><summary>Why do GST and QST look too low?</summary><p>They are computed only on the lines whose “Tx” status is “taxable”. Check the status of each line.</p></details>
+                <details><summary>I deleted a customer by mistake. Can I recover it?</summary><p>No, deletion is immediate and without confirmation. If the customer had invoices, however, the database refused it. Otherwise, recreate the customer or re-import it from Square if it existed there.</p></details>
+                <details><summary>An imported Square payment created a tax-free “Vente au terminal (Square)” invoice. Is that normal?</summary><p>Yes: when no draft or invoice matches the payment, a paid invoice is created with that single tax-free line. Correct the entry if the sale was taxable.</p></details>
+                <details><summary>The address changes I made have disappeared.</summary><p>You left the record with <kbd>← Retour à la liste</kbd>. Addresses are only written when you click <kbd>Enregistrer</kbd> at the top of the customer record.</p></details>
+                <details><summary>The PDF of a draft shows dates I never entered.</summary><p>For a draft without dates, the PDF uses today’s date and a due date 30 days later. The real dates are assigned at posting.</p></details>
+            </section>
+
+            <!-- ---------------------------------------------------------- Glossary -->
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <dl>
+                    <dt>Draft (Brouillon)</dt><dd>An unposted, editable invoice with a provisional number (“BRO-{Id}” by default).</dd>
+                    <dt>Posting (Comptabilisation)</dt><dd>The operation that assigns the official number, fixes the dates, records the entry in the sales journal and locks the invoice.</dd>
+                    <dt>Billing address (Adresse de facturation)</dt><dd>An address of type “Facturation” on the customer record; its email receives invoices and pre-fills the Square payment page.</dd>
+                    <dt>Payment terms (Délai de paiement)</dt><dd>Number of days (0 to 365, 30 by default) added to the invoice date to compute the due date when it is empty.</dd>
+                    <dt>Square payment link</dt><dd>Web address of a page hosted by Square where the customer pays the invoice’s remaining balance by card or Interac.</dd>
+                    <dt>Matching (Rapprochement)</dt><dd>Automatic association of a Square payment with the corresponding invoice, without duplicates.</dd>
+                    <dt>Payment status</dt><dd>OUVERTE (nothing received), PARTIELLE (deposit received), EN_RETARD (past due), PAYEE (settled), IN_PROGRESS (draft in progress).</dd>
+                    <dt>Tax status (Tx)</dt><dd>Says whether a line enters the GST (5 %) and QST (9.975 %) base. Only “taxable” does.</dd>
+                    <dt>Taxable subtotal</dt><dd>Sum of the taxable lines, the base for computing taxes.</dd>
+                    <dt>Remaining balance (Reste à payer)</dt><dd>Invoice total minus receipts already received.</dd>
+                    <dt>Vente au terminal (Square)</dt><dd>Single tax-free line of a paid invoice created automatically for a Square payment with no matching invoice.</dd>
+                    <dt>JSON</dt><dd>Structured result of the AI reading a PDF, used to create the customer and the invoice.</dd>
+                    <dt>Job site (Lieu d’intervention)</dt><dd>GPS position captured by the mobile app and attached to the invoice; can be opened in Google Maps.</dd>
+                </dl>
+            </section>
+        </article>
+
+        <!-- ============================================================ ES -->
+        <article class="langue" lang="es">
+            <h1>Ventas</h1>
+            <p class="intro">La sección <span class="chemin">Ventas</span> reúne todo lo relativo a sus clientes y al dinero que le deben: la lista de clientes y su ficha, las facturas de clientes (borrador, contabilización, envío por correo electrónico), el cobro en línea mediante Square, el PDF de la factura y la zona de depósito de PDF escaneados que la IA convierte en facturas. Toda la integración de pagos de clientes pasa por Square: la cuenta Square de la empresa se conecta una sola vez en <span class="chemin">Administración › Procesador de pagos</span> y el token se renueva automáticamente después.</p>
+
+            <!-- ---------------------------------------------------------- Clientes -->
+            <section id="es-clientes">
+                <h2>Clientes</h2>
+                <h3>Objetivo</h3>
+                <p>La pantalla <span class="chemin">Ventas › Clientes</span> muestra la lista de clientes de la empresa con, para cada uno, el saldo que queda por cobrar. Desde aquí también se sincronizan los clientes con Square, en ambos sentidos.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Ajouter Client</kbd> (Añadir cliente): abre la ventana « Ajouter un client » (vea <a href="#es-ficha-cliente">Ficha de cliente</a>). En móvil, el botón flotante <kbd>+</kbd> hace lo mismo.</li>
+                    <li><kbd>Exporter vers Square</kbd> (Exportar a Square): envía todos los clientes a Square. Un cliente que ya tiene identificador Square se actualiza; los demás se crean y su identificador Square se guarda luego en su ficha. No se pide confirmación.</li>
+                    <li><kbd>Importer depuis Square</kbd> (Importar desde Square): trae todos los clientes de su cuenta Square. Los que ya existen se actualizan, los demás se crean localmente. No se pide confirmación.</li>
+                    <li>Botón lupa: ejecuta la búsqueda escrita en el cuadro « Rechercher (nom, email, téléphone…) ».</li>
+                    <li><kbd>Effacer</kbd> (Borrar): vacía el cuadro de búsqueda y vuelve a mostrar la lista completa.</li>
+                    <li>En cada fila: <kbd>Modifier</kbd> (Modificar) abre la ventana « Modifier un client »; <kbd>Supprimer</kbd> (Eliminar) elimina el cliente.</li>
+                </ul>
+
+                <h3>Filtros y búsqueda</h3>
+                <p>La lista no está paginada: todos los clientes aparecen a la vez. Dos encabezados de columna permiten ordenar: « Nom » (Nombre) y « À recevoir » (Por cobrar). Un primer clic ordena de forma ascendente, un segundo de forma descendente; una flecha ▲ o ▼ indica el sentido. De forma predeterminada, la lista se ordena por nombre ascendente.</p>
+                <p>La lista se actualiza automáticamente al cerrar la ficha de un cliente, y se conserva la posición de desplazamiento.</p>
+
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>El nombre del cliente, luego su dirección y correo electrónico en gris.</td></tr>
+                        <tr><td>À recevoir</td><td>El saldo pendiente, con el formato « 1 234,56 $ », o « — » si el cliente no debe nada.</td></tr>
+                        <tr><td>Action</td><td>Los botones <kbd>Modifier</kbd> y <kbd>Supprimer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Mensajes</h3>
+                <p>Los mensajes de sincronización aparecen en una ventana titulada « Square ».</p>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun client à exporter. »</span> — la lista de clientes está vacía; cree clientes primero.</li>
+                    <li><span class="msg">« {n} client(s) exporté(s) vers Square sur {total}. »</span> — la exportación tuvo éxito; si n es inferior al total, algunos clientes no pudieron enviarse (revise sus datos).</li>
+                    <li><span class="msg">« Erreur lors de l’export Square : … »</span> — Square rechazó la operación; sigue el detalle. Compruebe que la cuenta Square esté conectada en <span class="chemin">Administración › Procesador de pagos</span>.</li>
+                    <li><span class="msg">« Aucun client à importer depuis Square. »</span> — su cuenta Square no contiene ningún cliente.</li>
+                    <li><span class="msg">« {n} client(s) créé(s) et {m} mis à jour depuis Square ({t} trouvé(s)). »</span> — la importación tuvo éxito; el total encontrado en Square se indica entre paréntesis.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square no respondió correctamente; inténtelo más tarde o revise la conexión Square.</li>
+                    <li><span class="msg">« Aucun client trouvé. »</span> — la búsqueda no devuelve nada, o la lista está vacía.</li>
+                </ul>
+
+                <div class="piege" data-titre="Trampa"><kbd>Supprimer</kbd> actúa de inmediato, sin pedir confirmación. Solo la base de datos puede rechazar la eliminación si el cliente ya tiene facturas. Revise bien la fila antes de hacer clic.</div>
+                <div class="astuce" data-titre="Consejo">El saldo « À recevoir » corresponde al importe pendiente de todas las facturas contabilizadas del cliente. Para ver el detalle, abra <a href="#es-facturas">Facturas de clientes</a> y busque el nombre del cliente.</div>
+                <div class="note" data-titre="Conviene saber">La exportación y la importación Square no piden confirmación y tratan todos los clientes de una vez. Ejecútelas preferiblemente con la lista ya depurada, para no propagar duplicados.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Ficha de cliente -->
+            <section id="es-ficha-cliente">
+                <h2>Ficha de cliente</h2>
+                <h3>Objetivo</h3>
+                <p>La ficha de cliente se abre en una ventana desde <span class="chemin">Ventas › Clientes</span> (botón <kbd>Ajouter Client</kbd> o <kbd>Modifier</kbd>). Sirve para crear o modificar un cliente, gestionar sus direcciones y consultar sus archivos adjuntos. También contiene una herramienta de relleno automático por IA a partir de un documento.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>← Retour à la liste</kbd> (Volver a la lista, barra superior): cierra la ficha <strong>sin guardar</strong> y sin aviso.</li>
+                    <li><kbd>Enregistrer</kbd> (Guardar, barra superior): guarda el cliente, luego todas las modificaciones de direcciones de una vez, y cierra la ficha.</li>
+                    <li><kbd>Réduire</kbd> / <kbd>Agrandir</kbd>: pliega o despliega el recuadro « Remplissage automatique par document ».</li>
+                    <li><kbd>Analyser le document</kbd> (Analizar el documento): envía el archivo depositado a la IA para rellenar los campos vacíos.</li>
+                    <li><kbd>+ Ajouter une adresse</kbd> (Añadir dirección): abre la ventana « Édition adresse ».</li>
+                    <li>En la lista de direcciones: <kbd>Modifier</kbd> y <kbd>Supprimer</kbd>.</li>
+                    <li>En la ventana « Édition adresse »: <kbd>Enregistrer</kbd> (valida la dirección en la lista en pantalla) y <kbd>Annuler</kbd> (Cancelar).</li>
+                </ul>
+
+                <h3>Campos</h3>
+                <p>Tarjeta « Informations Client »:</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Origine</td><td>—</td><td>Solo lectura. Indica de dónde proviene el cliente (captura manual, Square, importación…).</td></tr>
+                        <tr><td>Créé</td><td>—</td><td>Solo lectura, en una ficha existente. Fecha y hora de creación (aaaa-MM-dd HH:mm).</td></tr>
+                        <tr><td>Nom (Nombre)</td><td>No</td><td>500 caracteres como máximo. Nada obliga a rellenarlo, pero un cliente sin nombre es inutilizable en las facturas.</td></tr>
+                        <tr><td>Nom d’affichage (Nombre para mostrar)</td><td>No</td><td>500 caracteres como máximo. Nombre corto que aparece en las listas.</td></tr>
+                        <tr><td>Type</td><td>No</td><td>Lista « Sélectionner… » de tipos de tercero cliente.</td></tr>
+                        <tr><td>Site web</td><td>No</td><td>200 caracteres como máximo.</td></tr>
+                        <tr><td>No TPS (número GST)</td><td>No</td><td>20 caracteres como máximo.</td></tr>
+                        <tr><td>No TVQ (número QST)</td><td>No</td><td>20 caracteres como máximo.</td></tr>
+                        <tr><td>Délai de paiement (jours) (Plazo de pago, días)</td><td>No</td><td>Entero de 0 a 365, 30 de forma predeterminada. Sirve para calcular la fecha de vencimiento cuando una factura se contabiliza sin ella.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Texto libre de varias líneas.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Ventana « Édition adresse » (ningún campo es obligatorio):</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>No</td><td>Tipo de dirección, por ejemplo « Facturation » (Facturación) o « Livraison » (Entrega).</td></tr>
+                        <tr><td>Nom</td><td>No</td><td>Nombre del destinatario o del establecimiento.</td></tr>
+                        <tr><td>Adresse 1</td><td>No</td><td>Número y calle.</td></tr>
+                        <tr><td>Adresse 2</td><td>No</td><td>Complemento (oficina, apartamento…).</td></tr>
+                        <tr><td>Ville (Ciudad)</td><td>No</td><td></td></tr>
+                        <tr><td>Pays (País)</td><td>No</td><td>Elíjalo primero: la lista de provincias depende de él.</td></tr>
+                        <tr><td>Province</td><td>No</td><td>Filtrada según el país elegido.</td></tr>
+                        <tr><td>Code postal</td><td>No</td><td></td></tr>
+                        <tr><td>Courriel (Correo electrónico)</td><td>No</td><td>Para la dirección de tipo « Facturation », es la dirección a la que se envían las facturas.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Texto libre. La IA coloca aquí el teléfono extraído (« Tél. : … »).</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Relleno automático por documento</h3>
+                <p>El recuadro plegable « Remplissage automatique par document » indica: « Déposez une carte d’affaires, une facture ou un en-tête de lettre : l’IA remplit les champs vides. » (Deposite una tarjeta de visita, una factura o un membrete: la IA rellena los campos vacíos.) Deposite el archivo en la zona « Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG) » y haga clic en <kbd>Analyser le document</kbd>.</p>
+                <p>Para rellenar una ficha a partir de una tarjeta de visita:</p>
+                <ol>
+                    <li>Abra <kbd>Ajouter Client</kbd>.</li>
+                    <li>Arrastre la foto o el PDF de la tarjeta a la zona de depósito.</li>
+                    <li>Haga clic en <kbd>Analyser le document</kbd> y espere el mensaje de resultado.</li>
+                    <li>Revise cada campo rellenado y corrija si hace falta.</li>
+                    <li>Haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha.</li>
+                </ol>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>La IA solo rellena los campos <strong>vacíos</strong>; nunca sobrescribe un valor ya introducido.</li>
+                    <li>La dirección extraída se convierte en dirección de tipo « Facturation » <strong>solo si el cliente aún no tiene ninguna dirección</strong>.</li>
+                    <li>El número de teléfono extraído se guarda en la nota de la dirección con el formato « Tél. : … ».</li>
+                    <li>Solo se aceptan los formatos PDF, JPG y PNG.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord choisir un fichier. »</span> — hizo clic en <kbd>Analyser le document</kbd> sin depositar un archivo.</li>
+                    <li><span class="msg">« Le fichier est vide. »</span> — el archivo depositado está vacío; elija otro.</li>
+                    <li><span class="msg">« Clé OpenAI absente. Contactez l’administrateur. »</span> — la clave de acceso a la IA no está configurada para la empresa; el administrador debe introducirla en los parámetros.</li>
+                    <li><span class="msg">« Format non pris en charge (PDF, JPG ou PNG uniquement). »</span> — convierta su documento a uno de estos formatos.</li>
+                    <li><span class="msg">« {n} champ(s) rempli(s) automatiquement. Vérifiez avant d’enregistrer. »</span> — el análisis tuvo éxito; relea los campos antes de guardar.</li>
+                    <li><span class="msg">« Aucune information exploitable trouvée (ou champs déjà remplis). »</span> — el documento no contenía nada útil, o todos los campos ya estaban rellenados.</li>
+                    <li><span class="msg">« Erreur lors de l’analyse du document. »</span> — la IA no respondió; inténtelo más tarde.</li>
+                </ul>
+
+                <h3>Direcciones y archivos adjuntos</h3>
+                <p>La tarjeta « Adresses » presenta las columnas « Type », « Adresse » y « Actions » (Modifier / Supprimer). Si el cliente no tiene ninguna dirección: « Aucune adresse enregistrée pour ce client. »</p>
+                <p>La tarjeta « Pièces jointes » (Archivos adjuntos) presenta las columnas Fichier (enlace para abrir), Type, Taille (Tamaño), Note y Provenance (Origen). En una ficha nueva se lee « Enregistrez d’abord la fiche. » (Guarde primero la ficha); sin adjuntos: « Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. » (vea <a href="importation.html">Importación</a>).</p>
+
+                <h3>Trucos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Añadir, modificar o eliminar una dirección solo actualiza la lista en pantalla. <strong>No se escribe nada</strong> hasta que haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha. Si sale con <kbd>← Retour à la liste</kbd>, todas las modificaciones de direcciones se pierden, sin aviso.</div>
+                <div class="piege" data-titre="Trampa">La eliminación de una dirección no pide ninguna confirmación.</div>
+                <div class="astuce" data-titre="Consejo">El correo electrónico de la dirección de tipo « Facturation » es aquel al que se envían las facturas y el que rellena previamente la página de pago Square. Sin él, el envío de una factura falla con « Aucun courriel de facturation pour ce client. » Dé a cada cliente al menos una dirección de facturación con correo electrónico.</div>
+                <div class="note" data-titre="Conviene saber">El « Délai de paiement (jours) » solo tiene efecto al contabilizar una factura cuyo vencimiento está vacío: el vencimiento pasa a ser la fecha de factura más ese plazo.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Facturas de clientes -->
+            <section id="es-facturas">
+                <h2>Facturas de clientes</h2>
+                <h3>Objetivo</h3>
+                <p>La pantalla <span class="chemin">Ventas › Facturas de clientes</span> lista todas las facturas de clientes. Es el puesto de mando principal: aquí se crean los borradores, se contabilizan, se registran los cobros, se envían las facturas por correo electrónico con o sin enlace de pago Square, y se consultan las fotos y la geolocalización enviadas por la aplicación móvil.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Ajouter une facture</kbd> (Añadir factura, o <kbd>+</kbd> en móvil): abre la ventana « Ajouter une facture » (vea <a href="#es-edicion-factura">Edición de una factura</a>).</li>
+                    <li><kbd>Importer depuis Square</kbd> (descripción « Rapatrier les factures et paiements Square comme factures clients »): las facturas Square se convierten en facturas de clientes con su encabezado, sus líneas y los impuestos TPS/TVQ; el cliente se crea si hace falta. Los pagos Square se concilian con una factura existente; si no hay ninguna, se crea una factura ya pagada con una sola línea « Vente au terminal (Square) », sin impuestos.</li>
+                    <li>Filtro « État : tous » (Estado): casillas <strong>Brouillon</strong> (Borrador), <strong>Comptabilisé</strong> (Contabilizada) y « Tout cocher » (Marcar todo).</li>
+                    <li>Filtro « Paiement : tous » (Pago): casillas <strong>Ouverte</strong> (Abierta), <strong>Partielle</strong> (Parcial), <strong>En retard</strong> (Vencida), <strong>Payée</strong> (Pagada), <strong>En cours (brouillon)</strong> (En curso, borrador).</li>
+                    <li>Cuadro « Rechercher (nom, courriel, téléphone…) » y botón lupa.</li>
+                    <li><kbd>Effacer</kbd>: vacía la búsqueda <strong>y desmarca los dos filtros</strong>.</li>
+                </ul>
+
+                <h3>Filtros y búsqueda</h3>
+                <p>Marcar o desmarcar una casilla recarga la lista de inmediato. Los filtros y el orden se recuerdan durante la sesión. El orden predeterminado es « Date » descendente (las más recientes arriba). Todas las columnas se ordenan salvo « Action ». La lista no está paginada.</p>
+                <div class="piege" data-titre="Trampa">A pesar del rótulo del cuadro de búsqueda, la búsqueda solo se aplica al <strong>nombre del cliente</strong>. Un correo electrónico o un número de teléfono no devuelve nada.</div>
+
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>El número de la factura. Es un enlace que abre el PDF en un visor (vea <a href="#es-pdf-factura">PDF de factura</a>).</td></tr>
+                        <tr><td>Date</td><td>Fecha de factura con el formato « 26 sept. », el año debajo.</td></tr>
+                        <tr><td>Échéance</td><td>Fecha de vencimiento, mismo formato.</td></tr>
+                        <tr><td>Client</td><td>Nombre, dirección y correo electrónico. Si la aplicación móvil envió datos, se añaden insignias: una cámara con un número (« {n} photo(s) prise(s) sur place — cliquer pour voir », abre la ventana « Photos — facture {n°} ») y una chincheta (« Lieu d’intervention — ouvrir la carte », abre Google Maps).</td></tr>
+                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE o IN_PROGRESS (borrador en curso).</td></tr>
+                        <tr><td>Reste à payer</td><td>Saldo aún pendiente.</td></tr>
+                        <tr><td>Déjà reçu</td><td>Suma de los cobros.</td></tr>
+                        <tr><td>Total</td><td>Total de la factura, impuestos incluidos.</td></tr>
+                        <tr><td>État</td><td>Brouillon o Comptabilisé.</td></tr>
+                        <tr><td>Action</td><td>Los botones descritos a continuación.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Acciones en una fila</h3>
+                <table>
+                    <thead><tr><th>Botón (descripción)</th><th>Visible cuando</th><th>Efecto</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Comptabiliser la facture</kbd> (Contabilizar)</td><td>Solo borrador</td><td>Pide confirmación y luego contabiliza la factura.</td></tr>
+                        <tr><td><kbd>Encaissement</kbd> (Cobro)</td><td>Contabilizada y no pagada</td><td>Abre « Ajouter un encaissement » para este cliente (vea <a href="comptabilite.html">Contabilidad</a>).</td></tr>
+                        <tr><td><kbd>Envoyer la facture / Encaisser</kbd> (Enviar / Cobrar)</td><td>Contabilizada y no pagada</td><td>Abre el diálogo de envío descrito más abajo.</td></tr>
+                        <tr><td><kbd>Modifier</kbd> (Modificar)</td><td>Siempre</td><td>Abre la factura (en solo lectura si está contabilizada).</td></tr>
+                        <tr><td><kbd>Supprimer</kbd> (Eliminar)</td><td>Siempre</td><td>Elimina de inmediato. En una factura contabilizada, el botón se sustituye por un candado rojo inactivo.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Contabilizar una factura</h3>
+                <p>La ventana de confirmación se titula « Comptabiliser la facture » y muestra: « Comptabiliser ce brouillon ? Le numéro officiel, la date de facture et l’échéance seront attribués, et la facture ne pourra plus être modifiée. » (¿Contabilizar este borrador? Se asignarán el número oficial, la fecha de factura y el vencimiento, y la factura ya no podrá modificarse.)</p>
+                <ul class="messages">
+                    <li><span class="msg">« Facture comptabilisée. »</span> — la factura recibió su número oficial y su asiento en el diario.</li>
+                    <li><span class="msg">« Comptabilisation impossible. »</span> — seguido del error detallado; consulte la lista de errores de contabilización en <a href="#es-edicion-factura">Edición de una factura</a>.</li>
+                </ul>
+
+                <h3>Diálogo « Envoyer la facture / Encaisser »</h3>
+                <p>El diálogo pregunta « Que voulez-vous faire ? » (¿Qué desea hacer?). Si la factura tiene fotos o una posición, un recuadro « À inclure dans le courriel » propone dos casillas, desmarcadas en cada apertura: « Joindre les {n} photo(s) prises sur place » (adjuntar las fotos tomadas en el lugar) e « Inclure le lien vers le lieu d’intervention » (incluir el enlace al lugar de intervención).</p>
+                <ol>
+                    <li><kbd>Envoyer la facture par courriel</kbd> — « PDF en pièce jointe, sans lien de paiement. » (PDF adjunto, sin enlace de pago.)</li>
+                    <li><kbd>Envoyer par courriel avec lien de paiement</kbd> — « PDF en pièce jointe + bouton « Payer maintenant » (Square). » (PDF adjunto más un botón « Pagar ahora ».)</li>
+                    <li><kbd>Obtenir le lien de paiement seulement</kbd> — « Génère le lien Square à copier (texto, téléphone, en personne). Aucun courriel envoyé. » Abre la ventana <a href="#es-cobrar-square">Cobrar (Square)</a>.</li>
+                    <li><kbd>Annuler</kbd> — o un clic en el fondo oscuro, o la tecla <kbd>Esc</kbd>.</li>
+                </ol>
+                <p>Si la factura ya está pagada, las opciones 2 y 3 quedan ocultas y una nota indica: « Facture déjà payée : les options de paiement ne sont pas offertes. »</p>
+
+                <h3>Contenido del correo enviado</h3>
+                <ul>
+                    <li>Asunto: « Facture {n°} — {empresa} ».</li>
+                    <li>Botón « Voir la facture (PDF) », que apunta a un enlace público del PDF.</li>
+                    <li>Botón verde « Payer maintenant (x,xx $) » si pidió el enlace de pago. El enlace Square cubre el <strong>saldo restante</strong>, no el total.</li>
+                    <li>Mención de las fotos y del lugar de intervención si marcó las casillas; las fotos se reducen para el correo.</li>
+                    <li>El PDF adjunto, generado si hace falta.</li>
+                    <li>La dirección de respuesta es el correo verificado de la empresa (vea <a href="courriel.html">Correo electrónico</a>).</li>
+                    <li>Tras el pago, el cliente ve una página de agradecimiento con los colores de la empresa.</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« {n} facture(s) et {m} paiement(s) traités depuis Square. »</span> — la importación Square tuvo éxito.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : … »</span> — Square no respondió; revise la conexión Square.</li>
+                    <li><span class="msg">« Facture introuvable. »</span> — la factura fue eliminada entretanto; recargue la lista.</li>
+                    <li><span class="msg">« Aucun courriel de facturation pour ce client. »</span> — añada una dirección de tipo « Facturation » con correo electrónico en la <a href="#es-ficha-cliente">ficha de cliente</a> y vuelva a intentarlo.</li>
+                    <li><span class="msg">« Impossible de générer le PDF de la facture. »</span> — la factura probablemente está incompleta (sin cliente o sin línea); ábrala y compruebe.</li>
+                    <li><span class="msg">« Facture {n°} envoyée à {courriel}. »</span> — el envío tuvo éxito. Puede ir seguido de una precisión: « (lien Square non ajouté : facture déjà payée) », « (lien Square non ajouté : compte Square non connecté) », « (lien Square non généré) », « (lien Square non ajouté : {error}) », « ({n} photo(s) jointe(s), {tamaño}) », « (lieu d’intervention inclus) ».</li>
+                    <li><span class="msg">« Aucune photo pour cette facture. »</span> — el visor de fotos no tiene nada que mostrar.</li>
+                    <li><span class="msg">« Lieu d’intervention : lat, long (capté le …) — Ouvrir dans Google Maps »</span> — posición enviada por la aplicación móvil.</li>
+                    <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> (título « Confirmation ») — está cerrando la ventana de factura con cambios sin guardar; elija Cancelar para volver y guardar.</li>
+                </ul>
+
+                <h3>Trucos y trampas</h3>
+                <div class="piege" data-titre="Trampa"><kbd>Supprimer</kbd> un borrador no pide <strong>ninguna confirmación</strong>. La eliminación es inmediata.</div>
+                <div class="piege" data-titre="Trampa">Desde la lista, un borrador no puede enviarse: primero hay que contabilizarlo. (La pantalla de edición, en cambio, permite enviar un borrador con su número provisional; vea <a href="#es-edicion-factura">Edición de una factura</a>.)</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar rápidamente las facturas vencidas, marque « En retard » en el filtro « Paiement » y ordene por « Échéance ». El filtro permanece activo hasta que haga clic en <kbd>Effacer</kbd> o cierre la sesión.</div>
+                <div class="note" data-titre="Conviene saber">Un pago Square sin factura correspondiente crea una factura pagada con una línea « Vente au terminal (Square) » sin impuestos. Si la venta era gravable, corrija el asiento en <a href="comptabilite.html">Contabilidad › Diarios</a>.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Edición de una factura -->
+            <section id="es-edicion-factura">
+                <h2>Edición de una factura</h2>
+                <h3>Objetivo</h3>
+                <p>La ventana de factura se abre desde <span class="chemin">Ventas › Facturas de clientes</span> (<kbd>Ajouter une facture</kbd> o <kbd>Modifier</kbd>). Aquí se introduce el cliente, las fechas y las líneas, y se ven los totales calculados con TPS y TVQ. También se puede guardar, contabilizar al momento y enviar la factura al cliente.</p>
+
+                <h3>Campos del encabezado</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Insignia « Comptabilisé 🔒 »</td><td>—</td><td>Se muestra cuando la factura está contabilizada; todo pasa a solo lectura.</td></tr>
+                        <tr><td>Numéro (Número)</td><td>—</td><td>Visible desde el primer guardado. Provisional mientras la factura sea un borrador.</td></tr>
+                        <tr><td>Client</td><td>No (pero indispensable)</td><td>Selector « Rechercher un client… » con tarjetas que muestran el nombre y la dirección de facturación. En una factura nueva se lee « Sélectionner un client ».</td></tr>
+                        <tr><td>Date de facture (Fecha de factura)</td><td>No</td><td>Calendario. Si está vacía al contabilizar, se usa la fecha de hoy.</td></tr>
+                        <tr><td>Date d’échéance (Fecha de vencimiento)</td><td>No</td><td>Calendario. Si está vacía al contabilizar, se calcula a partir del plazo de pago del cliente.</td></tr>
+                        <tr><td>Comptabilisé (Contabilizada)</td><td>No</td><td>Casilla. Si está marcada al hacer clic en <kbd>Enregistrer</kbd>, la factura se contabiliza al momento.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Líneas</h3>
+                <p>La tabla de líneas tiene las columnas Produit, Compte, Qté, Prix unitaire, Total, Tx y Ordre.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit</td><td>La descripción (1000 caracteres como máximo). El selector ▾ « Rechercher un produit… » rellena la descripción, el precio, la cuenta y el estado de impuesto, y pone la cantidad en 1 (vea <a href="produits.html">Productos</a>).</td></tr>
+                        <tr><td>Compte (Cuenta)</td><td>Selector « Rechercher un compte… »: solo se proponen cuentas de ingresos.</td></tr>
+                        <tr><td>Qté (Cant.)</td><td>Solo cifras y punto (la coma se convierte), 2 decimales como máximo. El signo menos se elimina: no se puede introducir una línea negativa.</td></tr>
+                        <tr><td>Prix unitaire (Precio unitario)</td><td>Mismas reglas que la cantidad.</td></tr>
+                        <tr><td>Total</td><td>Cantidad × precio unitario, calculado automáticamente.</td></tr>
+                        <tr><td>Tx</td><td>Estado de impuesto de la línea. Solo « taxable » entra en la base de cálculo de TPS y TVQ.</td></tr>
+                        <tr><td>Ordre (Orden)</td><td>Flechas arriba y abajo para reordenar las líneas.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Papelera: elimina la línea tras la pregunta « Supprimer cette ligne ? ».</li>
+                    <li>Botón redondo <kbd>+</kbd> (« Ajouter une ligne »): añade una línea vacía con cantidad 1 y precio 0.</li>
+                    <li>Listas vacías: « Aucun produit trouvé. », « Aucun client trouvé. », « Aucun compte trouvé. »</li>
+                </ul>
+
+                <h3>Totales</h3>
+                <p>El bloque de totales muestra « Sous-total », « TPS », « TVQ » y « Total ». La TPS es del 5 % y la TVQ del 9,975 % del subtotal <strong>gravable</strong> (suma de las líneas cuyo estado es « taxable »), cada una redondeada al centavo.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Enregistrer</kbd> (Guardar): guarda la factura, regenera el PDF y cierra la ventana.</li>
+                    <li><kbd>Envoyer au client</kbd> (Enviar al cliente, visible solo si la factura ya fue guardada): abre el diálogo « Envoyer la facture par courriel » que pregunta « Voulez-vous inclure un lien de paiement Square dans le courriel ? » con los botones <kbd>Annuler</kbd>, <kbd>Envoyer sans lien</kbd> (Enviar sin enlace) y <kbd>Avec lien Square</kbd> (Con enlace Square).</li>
+                </ul>
+                <p>Para crear y contabilizar una factura de una vez:</p>
+                <ol>
+                    <li>Haga clic en <kbd>Ajouter une facture</kbd> en la lista.</li>
+                    <li>Elija el cliente en « Rechercher un client… ».</li>
+                    <li>Añada líneas con <kbd>+</kbd>, elija el producto o escriba la descripción, la cantidad y el precio.</li>
+                    <li>Compruebe el estado de impuesto « Tx » de cada línea y los totales.</li>
+                    <li>Marque « Comptabilisé » y haga clic en <kbd>Enregistrer</kbd>.</li>
+                </ol>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li><strong>Borrador</strong>: factura no contabilizada. Su número provisional es « {prefijo}-{Id} », con el prefijo « BRO » de forma predeterminada (ajustable en <span class="chemin">Administración › Parámetros › Factura</span>, campo « Préfixe de brouillon »). Las fechas son opcionales.</li>
+                    <li><strong>Contabilización</strong>: el número oficial se asigna una sola vez, según el formato definido en los parámetros ({PREFIXE}-{AAAA}-{NUMERO} de forma predeterminada, número de 4 cifras, contador reiniciado cada año si la opción está activada). Una fecha de factura vacía pasa a ser la de hoy; un vencimiento vacío pasa a ser la fecha de factura más el plazo de pago del cliente.</li>
+                    <li><strong>Asiento en el diario</strong>: cuentas por cobrar 1100 al debe; ingresos al haber (la cuenta de la línea, si no 4000); TPS por pagar 2200; TVQ por pagar 2210. Vea <a href="comptabilite.html">Contabilidad › Diarios</a>.</li>
+                    <li><strong>Factura contabilizada</strong>: solo lectura. Solo <kbd>Envoyer au client</kbd> sigue disponible.</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord enregistrer la facture. »</span> — intenta enviar una factura nunca guardada; haga clic en <kbd>Enregistrer</kbd>, vuelva a abrirla y luego envíe.</li>
+                    <li><span class="msg">« Ce document est déjà comptabilisé. »</span> — la factura ya tiene su número oficial; no hay nada que hacer.</li>
+                    <li><span class="msg">« Aucune ligne dans … »</span> — la factura no tiene ninguna línea; añada al menos una.</li>
+                    <li><span class="msg">« Total TTC = 0 dans … »</span> — el total es nulo; una factura de 0 $ no puede contabilizarse. Revise cantidades y precios.</li>
+                    <li><span class="msg">« Incohérence montants. … »</span> — los totales ya no coinciden con las líneas; vuelva a abrir la factura, guárdela de nuevo para recalcular y reintente.</li>
+                    <li><span class="msg">« Période comptable clôturée ou inexistante. »</span> — la fecha de factura cae en un período cerrado o no creado; cambie la fecha o abra el período en <a href="comptabilite.html">Contabilidad</a>.</li>
+                    <li><span class="msg">« Certaines lignes n ont pas de compte comptable résolu. Vérifier les produits et catégories. »</span> — una línea no tiene ni cuenta ni producto vinculado a una cuenta de ingresos; elija una cuenta en cada línea.</li>
+                    <li><span class="msg">« Tiers introuvable … »</span> — la factura no tiene cliente (o el cliente fue eliminado); seleccione un cliente.</li>
+                    <li><span class="msg">« Journal introuvable … »</span> — el diario de ventas no existe para la empresa; pida al administrador que lo cree.</li>
+                </ul>
+
+                <h3>Trucos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Nada impide guardar una factura <strong>sin cliente</strong>. No podrá contabilizarse (« Tiers introuvable ») ni enviarse. Elija siempre el cliente primero.</div>
+                <div class="piege" data-titre="Trampa">Desde esta pantalla <strong>sí se puede</strong> enviar un borrador: el cliente recibirá una factura con un número provisional (« BRO-… ») que cambiará al contabilizar. Contabilice antes de enviar.</div>
+                <div class="attention" data-titre="Atención">El enlace Square creado desde esta pantalla no lleva a la página de agradecimiento de la empresa ni adjunta las fotos. Para esas opciones, use el botón <kbd>Envoyer la facture / Encaisser</kbd> de la <a href="#es-facturas">lista de facturas</a>.</div>
+                <div class="astuce" data-titre="Consejo">El selector de producto rellena automáticamente la cuenta de ingresos y el estado de impuesto. Si escribe una descripción libre, recuerde elegir la cuenta usted mismo; de lo contrario la contabilización fallará.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- Cobrar (Square) -->
+            <section id="es-cobrar-square">
+                <h2>Cobrar (Square)</h2>
+                <h3>Objetivo</h3>
+                <p>La ventana « Encaisser (Square) » genera un enlace de pago Square por el saldo de una factura. El cliente paga con tarjeta o Interac en una página alojada por Square, y el pago se concilia automáticamente con la factura. Se accede mediante la opción <kbd>Obtenir le lien de paiement seulement</kbd> del diálogo de envío de la <a href="#es-facturas">lista de facturas</a>.</p>
+
+                <h3>Campos</h3>
+                <p>Bajo el título « Encaisser (Square) » y el subtítulo « Lien de paiement — le client paie en ligne » (Enlace de pago — el cliente paga en línea), una tarjeta recuerda el <strong>Client</strong>, la <strong>Facture #</strong> y el <strong>Montant à encaisser</strong> (importe a cobrar), con la nota: « Le client peut payer par carte ou Interac sur la page hébergée par Square. Le paiement sera rapproché automatiquement. »</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Fermer</kbd> (Cerrar): cierra la ventana.</li>
+                    <li><kbd>Générer le lien</kbd> (Generar el enlace): crea el enlace Square, rellena previamente el correo del cliente en la página de pago y asocia el pedido Square a la factura para una conciliación automática sin duplicados.</li>
+                    <li>Una vez creado el enlace, aparece la zona « Lien de paiement à envoyer au client » con <kbd>Copier</kbd> (copia el enlace al portapapeles) y <kbd>Ouvrir</kbd> (abre la página de pago en una pestaña nueva).</li>
+                </ul>
+                <p>Para que un cliente pague por mensaje de texto:</p>
+                <ol>
+                    <li>En la lista de facturas, haga clic en <kbd>Envoyer la facture / Encaisser</kbd>.</li>
+                    <li>Elija <kbd>Obtenir le lien de paiement seulement</kbd>.</li>
+                    <li>Haga clic en <kbd>Générer le lien</kbd> y luego en <kbd>Copier</kbd>.</li>
+                    <li>Pegue el enlace en su mensaje. El pago se conciliará automáticamente al recibirse.</li>
+                </ol>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun compte Square connecté pour cette entreprise. »</span> — el botón <kbd>Générer le lien</kbd> está desactivado; conecte Square en <span class="chemin">Administración › Procesador de pagos</span>.</li>
+                    <li><span class="msg">« Montant invalide. »</span> — el saldo a cobrar es nulo o negativo; la factura probablemente ya está pagada.</li>
+                    <li><span class="msg">« Erreur Square : (URL vide) »</span> — Square no devolvió ningún enlace; inténtelo de nuevo.</li>
+                    <li><span class="msg">« Erreur Square : … »</span> — Square rechazó la solicitud; sigue el detalle.</li>
+                    <li><span class="msg">« Lien de paiement généré. »</span> — el enlace está listo para copiarse.</li>
+                </ul>
+
+                <h3>Trucos y trampas</h3>
+                <div class="attention" data-titre="Atención">Cada clic en <kbd>Générer le lien</kbd> crea un enlace <strong>nuevo</strong> y sustituye la asociación anterior. Envíe al cliente un solo enlace: un enlace antiguo que se pague podría no conciliarse correctamente.</div>
+                <div class="note" data-titre="Conviene saber">El importe del enlace siempre es el <strong>saldo restante</strong> de la factura, lo que permite reclamar la diferencia tras un pago parcial.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- PDF de factura -->
+            <section id="es-pdf-factura">
+                <h2>PDF de factura</h2>
+                <h3>Objetivo</h3>
+                <p>Cada factura tiene un PDF: el que abre al hacer clic en el número en la <a href="#es-facturas">lista de facturas</a>, el que se adjunta a los correos y el que abre el botón « Voir la facture (PDF) » de los correos.</p>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>El enlace del botón « Voir la facture (PDF) » es <strong>público</strong>: funciona sin iniciar sesión, gracias a un identificador único imposible de adivinar. El cliente puede por tanto consultarlo directamente.</li>
+                    <li>Si el PDF aún no existe cuando alguien abre ese enlace, se genera y se conserva en ese primer acceso.</li>
+                    <li>El PDF se regenera cada vez que se guarda la factura y antes de cada envío por correo.</li>
+                    <li>El archivo se llama « Invoice_{n°}.pdf ».</li>
+                </ul>
+
+                <h3>Diseño</h3>
+                <ul>
+                    <li>El logotipo de la empresa (o su primera letra en su defecto), con el nombre comercial como subtítulo si difiere del nombre legal.</li>
+                    <li>La palabra « FACTURE » y « N° … ».</li>
+                    <li>Tres tarjetas: « DATE D’ÉMISSION » (fecha de emisión), « DATE D’ÉCHÉANCE » (fecha de vencimiento) y « MONTANT DÛ » (importe debido: el <strong>total de la factura</strong>, no el saldo restante).</li>
+                    <li>« FACTURÉ PAR » (facturado por, con los números TPS/TVH y TVQ de la empresa) y « FACTURÉ À » (facturado a, el cliente).</li>
+                    <li>La tabla DESCRIPTION, QTÉ, PRIX, MONTANT.</li>
+                    <li>Subtotal, « TPS (5 %) » y « TVQ (9,975 %) » cuando son mayores que cero, luego « TOTAL ».</li>
+                    <li>Los recuadros « CONDITIONS DE PAIEMENT » y « NOTES », cuyo texto se define en <span class="chemin">Administración › Parámetros › Factura</span>.</li>
+                    <li>Un pie de página con el nombre de la empresa, su dirección, su correo y « Page x / y ».</li>
+                    <li>Un sello rojo « PAYÉ » (pagado) cuando la factura está totalmente saldada.</li>
+                </ul>
+
+                <h3>Trucos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Para un borrador sin fechas, el PDF muestra la fecha de hoy y un vencimiento a +30 días. No son las fechas que se asignarán al contabilizar.</div>
+                <div class="note" data-titre="Conviene saber">« MONTANT DÛ » en el PDF es el total de la factura. Tras un pago parcial el PDF no indica el saldo: es el enlace de pago Square el que refleja lo que queda por pagar.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- PDF escaneados -->
+            <section id="es-pdf-escaneados">
+                <h2>PDF escaneados</h2>
+                <h3>Objetivo</h3>
+                <p>La pantalla <span class="chemin">Ventas › PDF escaneados</span> permite depositar PDF de facturas de clientes, hacer que la IA los lea y luego crear el cliente y la factura a partir del resultado. Esta pantalla no está traducida: algunos botones aparecen en inglés.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li>Zona de carga: un solo archivo « .pdf » a la vez; el envío es automático al seleccionarlo.</li>
+                    <li>Cuadro « Rechercher (fournisseur, fichier, statut…) », lupa y <kbd>Effacer</kbd>.</li>
+                    <li><kbd>Delete</kbd>: elimina el PDF, sin confirmación.</li>
+                    <li><kbd>Process AI</kbd>: envía el PDF a la IA (OpenAI), guarda el JSON obtenido y el costo de la llamada.</li>
+                    <li><kbd>Voir JSON</kbd>: muestra el resultado bruto de la lectura.</li>
+                    <li><kbd>Process JSON</kbd>: crea o actualiza el cliente y luego crea la factura a partir del JSON.</li>
+                </ul>
+                <p>Para convertir un PDF escaneado en factura:</p>
+                <ol>
+                    <li>Cargue el PDF; aparece en la lista.</li>
+                    <li>Haga clic en <kbd>Process AI</kbd> y espere a que cambie el estado.</li>
+                    <li>Haga clic en <kbd>Voir JSON</kbd> para comprobar lo que leyó la IA.</li>
+                    <li>Haga clic una sola vez en <kbd>Process JSON</kbd>.</li>
+                    <li>Busque el borrador en <span class="chemin">Ventas › Facturas de clientes</span> y complételo antes de contabilizarlo.</li>
+                </ol>
+
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fichier</td><td>Nombre del PDF depositado.</td></tr>
+                        <tr><td>Statut</td><td>Etapa del tratamiento (depositado, leído por la IA, tratado).</td></tr>
+                        <tr><td>Actions</td><td>Los cuatro botones descritos arriba.</td></tr>
+                    </tbody>
+                </table>
+                <p>Lista vacía: « Aucun PDF trouvé. »</p>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Seuls les fichiers PDF sont acceptés. »</span> — el archivo depositado no es un PDF.</li>
+                    <li><span class="msg">« Fichier PDF vide ou invalide. »</span> — el PDF está dañado o vacío; escanéelo de nuevo.</li>
+                    <li><span class="msg">« JSON vide »</span> — se lanzó <kbd>Process JSON</kbd> antes que <kbd>Process AI</kbd>, o la lectura no produjo nada.</li>
+                    <li><span class="msg">« JSON invalide »</span> / <span class="msg">« Erreur parsing JSON reçu : … »</span> — el resultado de la IA es inutilizable; vuelva a lanzar <kbd>Process AI</kbd>.</li>
+                </ul>
+
+                <h3>Trucos y trampas</h3>
+                <div class="piege" data-titre="Trampa">El cuadro de búsqueda no tiene efecto en esta lista.</div>
+                <div class="piege" data-titre="Trampa">Un <kbd>Process JSON</kbd> lanzado dos veces sobre el mismo PDF puede crear un cliente o una factura duplicados. Haga clic una sola vez.</div>
+                <div class="attention" data-titre="Atención">Cada <kbd>Process AI</kbd> es una llamada de pago a la IA. Vuelva a lanzar la lectura solo si el resultado es inutilizable.</div>
+                <div class="piege" data-titre="Trampa"><kbd>Delete</kbd> elimina el PDF de inmediato, sin confirmación.</div>
+            </section>
+
+            <!-- ---------------------------------------------------------- FAQ -->
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Por qué mi factura lleva un número « BRO-… »?</summary><p>Es el número provisional de un borrador. El número oficial solo se asigna al contabilizar, según el formato definido en <span class="chemin">Administración › Parámetros › Factura</span>. El prefijo « BRO » también es ajustable.</p></details>
+                <details><summary>Ya no puedo modificar una factura, ¿por qué?</summary><p>Está contabilizada (insignia « Comptabilisé 🔒 »). Una factura contabilizada es de solo lectura; solo <kbd>Envoyer au client</kbd> sigue disponible. Para corregir, haga un asiento de ajuste en <a href="comptabilite.html">Contabilidad</a>.</p></details>
+                <details><summary>El envío falla con « Aucun courriel de facturation pour ce client. »</summary><p>Abra la ficha del cliente, añada o modifique una dirección de tipo « Facturation » y rellene su campo « Courriel »; luego haga clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha.</p></details>
+                <details><summary>¿Por qué el botón <kbd>Générer le lien</kbd> está atenuado?</summary><p>No hay ninguna cuenta Square conectada para la empresa. Conéctela en <span class="chemin">Administración › Procesador de pagos</span>.</p></details>
+                <details><summary>¿El enlace de pago cubre el total o el saldo?</summary><p>El saldo restante. Tras un pago parcial, un nuevo enlace reclama solo la diferencia.</p></details>
+                <details><summary>¿Cómo encuentro las facturas vencidas?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, marque « En retard » en el filtro « Paiement ». El filtro se recuerda durante la sesión.</p></details>
+                <details><summary>¿Puedo introducir una línea negativa (crédito) en una factura?</summary><p>No: el signo menos se elimina de los campos Qté y Prix unitaire. Para un crédito, use un asiento en <a href="comptabilite.html">Contabilidad</a>.</p></details>
+                <details><summary>¿Por qué la TPS y la TVQ parecen demasiado bajas?</summary><p>Solo se calculan sobre las líneas cuyo estado « Tx » es « taxable ». Compruebe el estado de cada línea.</p></details>
+                <details><summary>Eliminé un cliente por error: ¿se puede recuperar?</summary><p>No, la eliminación es inmediata y sin confirmación. Si el cliente tenía facturas, la base de datos la habrá rechazado. En caso contrario, vuelva a crear el cliente o reimpórtelo desde Square si existía allí.</p></details>
+                <details><summary>Un pago Square importado creó una factura « Vente au terminal (Square) » sin impuestos. ¿Es normal?</summary><p>Sí: cuando ningún borrador ni factura corresponde al pago, se crea una factura pagada con esa única línea, sin impuestos. Corrija el asiento si la venta era gravable.</p></details>
+                <details><summary>Las modificaciones de direcciones que hice han desaparecido.</summary><p>Salió de la ficha con <kbd>← Retour à la liste</kbd>. Las direcciones solo se escriben cuando hace clic en <kbd>Enregistrer</kbd> en la parte superior de la ficha de cliente.</p></details>
+                <details><summary>El PDF de un borrador muestra fechas que no introduje.</summary><p>Para un borrador sin fechas, el PDF usa la fecha de hoy y un vencimiento a +30 días. Las fechas reales se asignan al contabilizar.</p></details>
+            </section>
+
+            <!-- ---------------------------------------------------------- Glosario -->
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <dl>
+                    <dt>Borrador (Brouillon)</dt><dd>Factura no contabilizada, modificable, con un número provisional (« BRO-{Id} » de forma predeterminada).</dd>
+                    <dt>Contabilización (Comptabilisation)</dt><dd>Operación que asigna el número oficial, fija las fechas, registra el asiento en el diario de ventas y bloquea la factura.</dd>
+                    <dt>Dirección de facturación (Adresse de facturation)</dt><dd>Dirección de tipo « Facturation » en la ficha de cliente; su correo recibe las facturas y rellena previamente la página de pago Square.</dd>
+                    <dt>Plazo de pago (Délai de paiement)</dt><dd>Número de días (0 a 365, 30 de forma predeterminada) que se suma a la fecha de factura para calcular el vencimiento cuando está vacío.</dd>
+                    <dt>Enlace de pago Square</dt><dd>Dirección web de una página alojada por Square donde el cliente paga con tarjeta o Interac el saldo restante de la factura.</dd>
+                    <dt>Conciliación (Rapprochement)</dt><dd>Asociación automática de un pago Square con la factura correspondiente, sin duplicados.</dd>
+                    <dt>Estado de pago</dt><dd>OUVERTE (nada recibido), PARTIELLE (anticipo recibido), EN_RETARD (vencimiento superado), PAYEE (saldada), IN_PROGRESS (borrador en curso).</dd>
+                    <dt>Estado de impuesto (Tx)</dt><dd>Indica si una línea entra en la base de cálculo de la TPS (5 %) y la TVQ (9,975 %). Solo « taxable » entra.</dd>
+                    <dt>Subtotal gravable</dt><dd>Suma de las líneas gravables, base de cálculo de los impuestos.</dd>
+                    <dt>Saldo restante (Reste à payer)</dt><dd>Total de la factura menos los cobros ya recibidos.</dd>
+                    <dt>Vente au terminal (Square)</dt><dd>Línea única, sin impuestos, de una factura pagada creada automáticamente para un pago Square sin factura correspondiente.</dd>
+                    <dt>JSON</dt><dd>Resultado estructurado de la lectura de un PDF por la IA, usado para crear el cliente y la factura.</dd>
+                    <dt>Lugar de intervención (Lieu d’intervention)</dt><dd>Posición GPS captada por la aplicación móvil y vinculada a la factura; puede abrirse en Google Maps.</dd>
+                </dl>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

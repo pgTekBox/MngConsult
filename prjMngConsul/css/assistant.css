@@ -1,0 +1,47 @@
+/* ---------- Assistant flottant (la boîte à droite, sur toutes les pages de l'ERP) ----------
+   Même boîte que dans 60secPaie : bouton visage violet, panneau déplaçable par sa barre de
+   titre, visages d'état (repos / réfléchit / répondu / erreur), micro et lecture à voix haute. */
+.ia-flottant { position: fixed; right: 20px; bottom: 20px; z-index: 60; font-size: 14px; font-family: var(--mc-font, system-ui, sans-serif); color: #0f172a; }
+.ia-bouton { width: 96px; height: 96px; padding: 0; border: 0; background: transparent; cursor: pointer; filter: drop-shadow(0 6px 14px rgba(0,0,0,.25)); transition: transform .15s ease; }
+.ia-bouton:hover { transform: scale(1.06); }
+.ia-bouton svg { width: 96px; height: 96px; display: block; }
+.ia-bouton[hidden] { display: none; }
+/* Le panneau est lui-même fixé à l'écran : on le déplace par sa barre de titre, et il reste au-dessus de tout. */
+.ia-panneau { position: fixed; right: 20px; bottom: 20px; z-index: 61; width: min(400px, calc(100vw - 32px)); height: min(620px, calc(100vh - 40px)); background: #fff; border: 1px solid #e5e7eb; border-radius: 14px; box-shadow: 0 16px 40px rgba(0,0,0,.22); display: flex; flex-direction: column; overflow: hidden; }
+.ia-panneau[hidden] { display: none; }
+.ia-panneau.ia-deplace { box-shadow: 0 24px 56px rgba(0,0,0,.32); }
+.ia-tete { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: #1e3a8a; color: #fff; cursor: move; user-select: none; touch-action: none; }
+.ia-tete .ia-ico { cursor: pointer; }
+.ia-avatar { width: 60px; height: 60px; flex: 0 0 60px; position: relative; }
+.ia-avatar svg { width: 60px; height: 60px; position: absolute; left: 0; top: 0; display: none; }
+.ia-avatar[data-etat="repos"] svg[data-etat="repos"], .ia-avatar[data-etat="reflechit"] svg[data-etat="reflechit"],
+.ia-avatar[data-etat="repondu"] svg[data-etat="repondu"], .ia-avatar[data-etat="erreur"] svg[data-etat="erreur"] { display: block; }
+.ia-titre { flex: 1; min-width: 0; line-height: 1.2; }
+.ia-titre b { display: block; font-size: 15px; }
+.ia-titre span { font-size: 11.5px; opacity: .85; }
+.ia-ico { color: #fff; background: rgba(255,255,255,.14); border: 0; border-radius: 8px; width: 30px; height: 30px; font-size: 18px; line-height: 30px; text-align: center; text-decoration: none; cursor: pointer; padding: 0; }
+.ia-ico:hover { background: rgba(255,255,255,.28); color: #fff; }
+.ia-messages { flex: 1; overflow: auto; padding: 12px; background: #fff; }
+.ia-accueil { color: #64748b; font-size: 13.5px; line-height: 1.5; margin: 4px 0; }
+.ia-tour { margin: 0 0 10px; display: flex; flex-direction: column; }
+.ia-tour.user { align-items: flex-end; }
+.ia-tour .ia-bulle { max-width: 88%; padding: 8px 12px; border-radius: 12px; line-height: 1.5; font-size: 13.5px; }
+.ia-tour.user .ia-bulle { background: #2563eb; color: #fff; border-bottom-right-radius: 4px; }
+.ia-tour.assistant .ia-bulle { background: #f8fafc; border: 1px solid #e5e7eb; border-bottom-left-radius: 4px; }
+.ia-tour.ia-attente .ia-bulle { color: #64748b; font-style: italic; }
+.ia-quand { font-size: 10.5px; color: #64748b; margin-top: 2px; }
+.ia-saisie { display: flex; gap: 8px; padding: 10px 12px; border-top: 1px solid #e5e7eb; background: #fff; }
+.ia-saisie textarea { flex: 1; resize: none; font: inherit; font-size: 13.5px; padding: 8px 10px; border: 1px solid #e5e7eb; border-radius: 8px; }
+.ia-boutons { display: flex; flex-direction: column; gap: 6px; align-items: stretch; justify-content: flex-end; }
+.ia-envoyer { border: 1px solid #2563eb; background: #2563eb; color: #fff; border-radius: 8px; padding: 8px 12px; font-weight: 700; cursor: pointer; font: inherit; }
+.ia-envoyer:disabled { opacity: .6; cursor: default; }
+.ia-micro { width: 100%; min-width: 44px; height: 34px; border: 1px solid #e5e7eb; border-radius: 8px; background: #fff; color: #1e3a8a; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; }
+.ia-micro:hover { background: #f8fafc; }
+.ia-micro[hidden] { display: none; }
+.ia-micro.actif { background: #C21F1F; border-color: #C21F1F; color: #fff; animation: ia-pulse 1.2s ease-in-out infinite; }
+.ia-micro.ia-stop { color: #b45309; }
+@keyframes ia-pulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(194,31,31,.45); } 50% { box-shadow: 0 0 0 8px rgba(194,31,31,0); } }
+.ia-pied { display: flex; justify-content: space-between; gap: 8px; padding: 6px 12px 8px; font-size: 11.5px; color: #64748b; background: #fff; }
+.ia-pied a { color: #1e3a8a; }
+@media (max-width: 600px) { .ia-flottant { right: 10px; bottom: 10px; } .ia-panneau { right: 10px; bottom: 10px; height: calc(100vh - 20px); } }
+@media print { .ia-flottant, .ia-panneau { display: none !important; } }

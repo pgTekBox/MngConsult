@@ -17,6 +17,7 @@ Public Class HeaderUser
 
         ' Le sélecteur de langue doit être rendu à chaque chargement (aussi au postback).
         BuildLangSwitcher()
+        BuildHelpLink()
 
         If IsPostBack Then Return
 
@@ -140,6 +141,22 @@ Public Class HeaderUser
             Case Else : Return fr
         End Select
     End Function
+
+    ''' <summary>
+    ''' Le bouton « ? » : l'aide de la section de la page courante, dans une
+    ''' fenêtre à part (window.open) qui reste la même d'un clic à l'autre.
+    ''' La section vient de clsAide.SectionPourPage ; la langue, de la session.
+    ''' </summary>
+    Private Sub BuildHelpLink()
+        Dim lang As String = CurrentLang
+        Dim section As String = clsAide.SectionPourPage(Page.AppRelativeVirtualPath)
+        Dim url As String = ResolveUrl(clsAide.Url(section, lang))
+        lnkAide.HRef = url
+        lnkAide.Target = "aide60sec"
+        lnkAide.Title = Choose3(lang, "Aide : " & clsAide.Titre(section, lang), "Help: " & clsAide.Titre(section, lang), "Ayuda: " & clsAide.Titre(section, lang))
+        lnkAide.Attributes("onclick") =
+            "window.open(" & HttpUtility.JavaScriptStringEncode(url, True) & ",'aide60sec','width=1040,height=780,resizable=yes,scrollbars=yes'); return false;"
+    End Sub
 
     ''' <summary>
     ''' Construit le sélecteur FR / EN / ES. Chaque lien recharge la page courante

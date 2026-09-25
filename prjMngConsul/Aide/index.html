@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Aide — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Aide de 60Sec-AI</h1>
+            <p class="intro">Une section d’aide par partie du logiciel. Le bouton <kbd>?</kbd> de l’en-tête ouvre directement la section de l’écran où vous êtes ; l’assistant IA (le visage en bas à droite) répond à vos questions à partir de ces mêmes pages.</p>
+
+            <section id="fr-sections">
+                <h2>Les sections</h2>
+                <div class="grille-cartes">
+                    <a class="carte" href="tableau-de-bord.html"><b>🏠 Tableau de bord</b><span>Se repérer, le menu, les indicateurs, premiers pas.</span></a>
+                    <a class="carte" href="ventes.html"><b>🧾 Ventes</b><span>Clients, factures clients, encaissements, liens de paiement Square, PDF.</span></a>
+                    <a class="carte" href="achats.html"><b>📦 Achats</b><span>Fournisseurs, factures fournisseurs, paiements Stripe, décaissements, reçus lus par l’IA.</span></a>
+                    <a class="carte" href="produits.html"><b>🏷️ Produits et services</b><span>Catalogue, catégories, comptes de vente et d’achat, synchronisation Square.</span></a>
+                    <a class="carte" href="comptabilite.html"><b>📒 Comptabilité</b><span>Journaux, écritures, modèles, banques Plaid, relevé, taxes TPS/TVQ, fermeture d’année, plan comptable.</span></a>
+                    <a class="carte" href="rapports.html"><b>📊 Rapports</b><span>Plan comptable, état des résultats, bilan, flux de trésorerie, bénéfices non répartis, balance, IA Paiement et IA Ventes.</span></a>
+                    <a class="carte" href="importation.html"><b>⬇️ Importation des données</b><span>Reprise depuis QuickBooks ou un fichier : plan comptable, tiers, produits, balance, factures, contrôles.</span></a>
+                    <a class="carte" href="agenda.html"><b>📅 Agenda</b><span>Rendez-vous, vues mois/semaine/jour, employés, rappels, facturer un rendez-vous.</span></a>
+                    <a class="carte" href="employes.html"><b>👥 Employés</b><span>Fiches, couleur d’agenda, boîte @60sec.ca et mot de passe.</span></a>
+                    <a class="carte" href="courriel.html"><b>✉️ Courriel</b><span>Boîte de la compagnie : réception, envoi, pièces jointes, courriels automatiques.</span></a>
+                    <a class="carte" href="approbations.html"><b>📥 Tâches à approuver</b><span>Les tâches planifiées qui attendent votre décision.</span></a>
+                    <a class="carte" href="administration.html"><b>⚙️ Administration et compte</b><span>Profil, utilisateurs, paramètres, processeurs de paiement, paiements automatiques, abonnement, connexion, assistant IA.</span></a>
+                </div>
+            </section>
+
+            <section id="fr-utiliser">
+                <h2>Utiliser cette aide</h2>
+                <ul>
+                    <li><kbd>?</kbd> dans l’en-tête de 60Sec-AI : ouvre l’aide de la section courante dans une fenêtre à part, que vous pouvez garder ouverte à côté du logiciel.</li>
+                    <li><kbd>FR</kbd> <kbd>EN</kbd> <kbd>ES</kbd> : la langue de l’aide suit celle du logiciel ; vous pouvez la changer ici.</li>
+                    <li>La zone <kbd>Rechercher dans la page</kbd> ne garde que les parties de la section qui contiennent le mot cherché, et le surligne.</li>
+                    <li>Le sommaire à gauche suit votre lecture ; <kbd>Imprimer</kbd> produit une version papier ou PDF sans les menus.</li>
+                    <li>Les libellés entre guillemets sont ceux des écrans, tels quels.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">L’assistant IA lit exactement ces pages. Si une réponse vous semble incomplète, la section correspondante contient toujours le détail (champs, messages, pièges).</div>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>60Sec-AI help</h1>
+            <p class="intro">One help section per part of the software. The <kbd>?</kbd> button in the header opens the section of the screen you are on; the AI assistant (the face at the bottom right) answers your questions from these same pages.</p>
+
+            <section id="en-sections">
+                <h2>Sections</h2>
+                <div class="grille-cartes">
+                    <a class="carte" href="tableau-de-bord.html"><b>🏠 Dashboard</b><span>Getting around, the menu, indicators, first steps.</span></a>
+                    <a class="carte" href="ventes.html"><b>🧾 Sales</b><span>Customers, customer invoices, receipts, Square payment links, PDF.</span></a>
+                    <a class="carte" href="achats.html"><b>📦 Purchases</b><span>Suppliers, supplier invoices, Stripe payments, disbursements, AI-read receipts.</span></a>
+                    <a class="carte" href="produits.html"><b>🏷️ Products and services</b><span>Catalog, categories, sales and purchase accounts, Square sync.</span></a>
+                    <a class="carte" href="comptabilite.html"><b>📒 Accounting</b><span>Journals, entries, templates, Plaid banks, statement, GST/QST, year-end close, chart of accounts.</span></a>
+                    <a class="carte" href="rapports.html"><b>📊 Reports</b><span>Chart of accounts, income statement, balance sheet, cash flow, retained earnings, trial balance, AI Payment and AI Sales.</span></a>
+                    <a class="carte" href="importation.html"><b>⬇️ Data import</b><span>Migration from QuickBooks or a file: chart of accounts, parties, products, trial balance, invoices, checks.</span></a>
+                    <a class="carte" href="agenda.html"><b>📅 Agenda</b><span>Appointments, month/week/day views, employees, reminders, invoicing an appointment.</span></a>
+                    <a class="carte" href="employes.html"><b>👥 Employees</b><span>Records, agenda color, @60sec.ca mailbox and password.</span></a>
+                    <a class="carte" href="courriel.html"><b>✉️ Mail</b><span>Company mailbox: inbox, sending, attachments, automatic emails.</span></a>
+                    <a class="carte" href="approbations.html"><b>📥 Tasks to approve</b><span>Scheduled tasks waiting for your decision.</span></a>
+                    <a class="carte" href="administration.html"><b>⚙️ Administration and account</b><span>Profile, users, settings, payment processors, automatic payments, subscription, sign-in, AI assistant.</span></a>
+                </div>
+            </section>
+
+            <section id="en-using">
+                <h2>Using this help</h2>
+                <ul>
+                    <li><kbd>?</kbd> in the 60Sec-AI header: opens the help of the current section in a separate window you can keep open next to the software.</li>
+                    <li><kbd>FR</kbd> <kbd>EN</kbd> <kbd>ES</kbd>: the help follows the software language; you can change it here.</li>
+                    <li>The <kbd>Search this page</kbd> box keeps only the parts of the section containing the word, and highlights it.</li>
+                    <li>The table of contents on the left follows your reading; <kbd>Print</kbd> produces a paper or PDF version without the menus.</li>
+                    <li>Quoted labels are those of the screens, verbatim.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">The AI assistant reads exactly these pages. If an answer seems incomplete, the matching section always has the details (fields, messages, pitfalls).</div>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Ayuda de 60Sec-AI</h1>
+            <p class="intro">Una sección de ayuda por cada parte del programa. El botón <kbd>?</kbd> del encabezado abre la sección de la pantalla en la que está; el asistente de IA (la cara abajo a la derecha) responde a sus preguntas a partir de estas mismas páginas.</p>
+
+            <section id="es-secciones">
+                <h2>Las secciones</h2>
+                <div class="grille-cartes">
+                    <a class="carte" href="tableau-de-bord.html"><b>🏠 Panel de control</b><span>Orientarse, el menú, los indicadores, primeros pasos.</span></a>
+                    <a class="carte" href="ventes.html"><b>🧾 Ventas</b><span>Clientes, facturas de clientes, cobros, enlaces de pago Square, PDF.</span></a>
+                    <a class="carte" href="achats.html"><b>📦 Compras</b><span>Proveedores, facturas de proveedores, pagos Stripe, desembolsos, recibos leídos por la IA.</span></a>
+                    <a class="carte" href="produits.html"><b>🏷️ Productos y servicios</b><span>Catálogo, categorías, cuentas de venta y compra, sincronización Square.</span></a>
+                    <a class="carte" href="comptabilite.html"><b>📒 Contabilidad</b><span>Diarios, asientos, plantillas, bancos Plaid, extracto, TPS/TVQ, cierre del ejercicio, plan contable.</span></a>
+                    <a class="carte" href="rapports.html"><b>📊 Informes</b><span>Plan contable, estado de resultados, balance, flujo de efectivo, resultados acumulados, balance de comprobación, IA Pagos e IA Ventas.</span></a>
+                    <a class="carte" href="importation.html"><b>⬇️ Importación de datos</b><span>Migración desde QuickBooks o un archivo: plan contable, terceros, productos, balance, facturas, controles.</span></a>
+                    <a class="carte" href="agenda.html"><b>📅 Agenda</b><span>Citas, vistas mes/semana/día, empleados, recordatorios, facturar una cita.</span></a>
+                    <a class="carte" href="employes.html"><b>👥 Empleados</b><span>Fichas, color de agenda, buzón @60sec.ca y contraseña.</span></a>
+                    <a class="carte" href="courriel.html"><b>✉️ Correo</b><span>Buzón de la compañía: recepción, envío, adjuntos, correos automáticos.</span></a>
+                    <a class="carte" href="approbations.html"><b>📥 Tareas por aprobar</b><span>Las tareas programadas que esperan su decisión.</span></a>
+                    <a class="carte" href="administration.html"><b>⚙️ Administración y cuenta</b><span>Perfil, usuarios, ajustes, procesadores de pago, pagos automáticos, suscripción, inicio de sesión, asistente de IA.</span></a>
+                </div>
+            </section>
+
+            <section id="es-usar">
+                <h2>Usar esta ayuda</h2>
+                <ul>
+                    <li><kbd>?</kbd> en el encabezado de 60Sec-AI: abre la ayuda de la sección actual en una ventana aparte, que puede dejar abierta junto al programa.</li>
+                    <li><kbd>FR</kbd> <kbd>EN</kbd> <kbd>ES</kbd>: la ayuda sigue el idioma del programa; puede cambiarlo aquí.</li>
+                    <li>El cuadro <kbd>Buscar en la página</kbd> conserva solo las partes de la sección que contienen la palabra y la resalta.</li>
+                    <li>El índice de la izquierda sigue su lectura; <kbd>Imprimir</kbd> produce una versión en papel o PDF sin los menús.</li>
+                    <li>Las etiquetas entre comillas son las de las pantallas, tal cual.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">El asistente de IA lee exactamente estas páginas. Si una respuesta le parece incompleta, la sección correspondiente siempre tiene el detalle (campos, mensajes, trampas).</div>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

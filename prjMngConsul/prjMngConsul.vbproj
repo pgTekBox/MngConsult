@@ -293,6 +293,22 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="css\assistant.css" />
+    <Content Include="Aide\aide.css" />
+    <Content Include="Aide\aide.js" />
+    <Content Include="Aide\index.html" />
+    <Content Include="Aide\tableau-de-bord.html" />
+    <Content Include="Aide\ventes.html" />
+    <Content Include="Aide\achats.html" />
+    <Content Include="Aide\produits.html" />
+    <Content Include="Aide\comptabilite.html" />
+    <Content Include="Aide\rapports.html" />
+    <Content Include="Aide\importation.html" />
+    <Content Include="Aide\agenda.html" />
+    <Content Include="Aide\employes.html" />
+    <Content Include="Aide\courriel.html" />
+    <Content Include="Aide\approbations.html" />
+    <Content Include="Aide\administration.html" />
     <Content Include="Images\logo.svg" />
     <Content Include="js\lucide.min.js" />
     <Content Include="img\landingpage-1.jpg" />
@@ -600,6 +616,8 @@
     <Content Include="wbfAIPaiement.aspx" />
     <Content Include="wbfAISale.aspx" />
     <Content Include="wbfApprobations.aspx" />
+    <Content Include="wbfAssistant.aspx" />
+    <Content Include="AssistantIA.ashx" />
     <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
     <Content Include="wbfAutoPayHistory.aspx" />
@@ -696,6 +714,8 @@
     <Compile Include="App_Code\clsQrCode.vb" />
     <Compile Include="App_Code\clsAutoPayEngine.vb" />
     <Compile Include="App_Code\clsMime.vb" />
+    <Compile Include="MyClass\clsAide.vb" />
+    <Compile Include="MyClass\clsAssistantIA.vb" />
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
     </Compile>
@@ -1359,6 +1379,16 @@
     <Compile Include="wbfNewUser.aspx.vb">
       <DependentUpon>wbfNewUser.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfAssistant.aspx.vb">
+      <DependentUpon>wbfAssistant.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfAssistant.aspx.designer.vb">
+      <DependentUpon>wbfAssistant.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssistantIA.ashx.vb">
+      <DependentUpon>AssistantIA.ashx</DependentUpon>
     </Compile>
     <Compile Include="wbfApprobations.aspx.vb">
       <DependentUpon>wbfApprobations.aspx</DependentUpon>

@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Courriel — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Courriel</h1>
+            <p class="intro">La messagerie web de la boîte @60sec.ca de votre compagnie : réception, messages envoyés et rédaction. Cette section explique aussi comment partent les courriels automatiques de 60Sec-AI (factures, relances, avis). Menu <span class="chemin">Courriel</span>.</p>
+
+            <section id="fr-courriel">
+                <h2>Courriel de la compagnie</h2>
+                <p>L’écran <span class="chemin">Courriel</span> est une messagerie web simple pour la <strong>boîte @60sec.ca de la compagnie</strong>. L’adresse de la boîte s’affiche dans une pastille à côté du titre « ✉️ Courriel ».</p>
+
+                <h3>But</h3>
+                <p>Lire les courriels reçus à l’adresse de la compagnie, consulter les messages envoyés et leur statut, rédiger et envoyer un courriel avec pièces jointes, au nom de la compagnie. Les boîtes personnelles des employés ne s’affichent pas ici (voir <a href="employes.html#fr-employes">Employés</a>).</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li>Onglet <kbd>📥 Réception</kbd> : liste des messages reçus.</li>
+                    <li>Onglet <kbd>📤 Envoyés</kbd> : liste des messages envoyés ou en attente d’envoi.</li>
+                    <li>Onglet <kbd>✍️ Composer</kbd> : rédaction d’un nouveau courriel.</li>
+                    <li><strong>Clic sur un message</strong> (Réception ou Envoyés) : le message s’affiche dans le panneau de droite.</li>
+                    <li><strong>Liens 📎 des pièces jointes</strong> : téléchargent le fichier (courriels reçus seulement).</li>
+                    <li><kbd>Envoyer</kbd> (onglet Composer) : met le courriel en file d’envoi.</li>
+                </ul>
+                <p>Il n’y a ni bouton « Répondre », ni « Transférer », ni « Supprimer », ni dossiers autres que Réception et Envoyés. Pour répondre, utilisez l’onglet Composer et saisissez l’adresse du correspondant.</p>
+
+                <h3>Vues</h3>
+                <table>
+                    <thead><tr><th>Vue</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Réception</td><td>Les 300 derniers messages adressés à l’adresse de la compagnie, du plus récent au plus ancien. Chaque ligne montre l’expéditeur, la date (aaaa-mm-jj hh:mm) et le sujet.</td></tr>
+                        <tr><td>Envoyés</td><td>Les 300 derniers messages dont l’expéditeur est l’adresse de la compagnie. Chaque ligne montre « → destinataire », la date, le sujet et un statut : « envoyé », « en file » (en attente d’envoi) ou « non envoyé » (échec).</td></tr>
+                        <tr><td>Lecture (panneau de droite)</td><td>Le sujet, puis « De : », « À : », « Date : », puis « 📎 Pièces jointes : » quand il y en a, puis le corps du message.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li><strong>Adresse de la compagnie</strong> : si elle n’existe pas encore, elle est créée automatiquement à la première ouverture de l’écran. Elle est tirée du nom commercial de la compagnie, par exemple <code>macompagnie@60sec.ca</code> (avec un suffixe -2 si le nom est déjà pris).</li>
+                    <li><strong>Sécurité de lecture</strong> : les courriels reçus sont affichés dans un cadre isolé où leurs scripts ne s’exécutent pas ; les liens s’ouvrent dans un nouvel onglet ; une pièce jointe ne peut être téléchargée que depuis la boîte de sa propre compagnie ; sans session ouverte, le téléchargement est refusé.</li>
+                    <li>La date de réception est enregistrée en heure universelle (UTC) et affichée telle quelle : elle peut paraître décalée de 4 à 5 heures par rapport à l’heure du Québec.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun message. »</span> — la liste (Réception ou Envoyés) est vide.</li>
+                    <li><span class="msg">« Sélectionnez un message pour le lire. »</span> — aucun message n’est ouvert dans le panneau de droite ; cliquez sur une ligne.</li>
+                    <li><span class="msg">« (sans sujet) »</span> — affiché à la place du sujet quand il est vide.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="note" data-titre="Bon à savoir">L’écran ne montre que la boîte de la compagnie. Chaque employé consulte sa boîte @60sec.ca avec son propre logiciel de messagerie (IMAP/SMTP).</div>
+                <div class="piege" data-titre="Piège">Les heures de réception sont affichées en UTC : un courriel reçu à 9 h 00 au Québec apparaît à 13:00 ou 14:00 selon la saison.</div>
+                <div class="astuce" data-titre="Astuce">Pour retrouver un ancien message au-delà des 300 derniers, configurez la boîte de la compagnie dans un logiciel de messagerie (IMAP) : l’écran Courriel n’est qu’un accès de commodité.</div>
+            </section>
+
+            <section id="fr-envoi">
+                <h2>Envoi d’un courriel</h2>
+                <p>L’onglet <kbd>✍️ Composer</kbd> permet de rédiger un courriel envoyé au nom de la compagnie, avec mise en forme et pièces jointes.</p>
+
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>De</td><td>—</td><td>L’adresse @60sec.ca de la compagnie, non modifiable.</td></tr>
+                        <tr><td>À</td><td>Oui</td><td>Adresse du destinataire (exemple affiché : destinataire@exemple.com). Saisissez une seule adresse.</td></tr>
+                        <tr><td>Cc</td><td>Non</td><td>Adresse en copie.</td></tr>
+                        <tr><td>Sujet</td><td>Oui</td><td>Objet du courriel.</td></tr>
+                        <tr><td>Message</td><td>Oui</td><td>Éditeur de texte enrichi : gras, italique, souligné, barré, alignements, retraits, listes, couleurs, tableau, police et taille.</td></tr>
+                        <tr><td>Pièces jointes</td><td>Non</td><td>Sélection de plusieurs fichiers. Mention affichée : « Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total). »</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Le message est d’abord mis en <strong>file d’attente</strong>, puis expédié par le service d’envoi de 60Sec-AI. Le statut passe de « en file » à « envoyé » (ou « non envoyé » en cas d’échec) dans l’onglet Envoyés.</li>
+                    <li>L’expéditeur est l’adresse @60sec.ca de la compagnie.</li>
+                    <li>Une version texte du message est générée automatiquement pour les logiciels qui n’affichent pas la mise en forme.</li>
+                    <li>Les pièces jointes partent avec le message, dans la limite de 50 Mo au total.</li>
+                    <li>Les pièces jointes des messages <strong>envoyés</strong> ne sont pas listées quand on relit le message dans l’onglet Envoyés.</li>
+                </ul>
+
+                <h3>Marche à suivre</h3>
+                <p>Pour envoyer un courriel avec une pièce jointe :</p>
+                <ol>
+                    <li>Ouvrez l’onglet <kbd>✍️ Composer</kbd>.</li>
+                    <li>Saisissez l’adresse dans « À », le « Sujet » et le « Message ».</li>
+                    <li>Dans « Pièces jointes », sélectionnez le ou les fichiers (50 Mo au maximum au total).</li>
+                    <li>Cliquez sur <kbd>Envoyer</kbd>. Le message « ✔ Courriel mis en file d’envoi… » confirme la mise en file.</li>
+                    <li>Quelques minutes plus tard, vérifiez dans <kbd>📤 Envoyés</kbd> que le statut est « envoyé ».</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — affiché avant l’envoi ; seuls les champs réellement manquants sont listés. Complétez-les.</li>
+                    <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — le serveur a reçu un envoi incomplet ; remplissez les trois champs.</li>
+                    <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — la boîte de la compagnie n’a pas pu être créée ou trouvée ; rechargez l’écran Courriel, qui crée l’adresse à l’ouverture.</li>
+                    <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — succès ; la mention des pièces jointes n’apparaît que s’il y en a. Le courriel partira au prochain passage du service d’envoi.</li>
+                    <li><span class="msg">« ✖ Échec de l’envoi : … »</span> — le courriel n’a pas pu être mis en file ; lisez le détail, corrigez et réessayez (en resélectionnant les pièces jointes).</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">« Envoyé » dans la liste veut d’abord dire « en file » : le courriel n’est pas encore parti. Vérifiez le statut plus tard dans l’onglet Envoyés.</div>
+                <div class="piege" data-titre="Piège">Si l’envoi est refusé, les fichiers joints sont perdus : il faut les resélectionner avant de cliquer de nouveau sur <kbd>Envoyer</kbd>.</div>
+                <div class="attention" data-titre="Attention">Ne mettez qu’une adresse dans « À » : le champ ne prévoit pas la saisie de plusieurs destinataires. Utilisez « Cc » pour une deuxième personne.</div>
+            </section>
+
+            <section id="fr-reception">
+                <h2>Réception et pièces jointes</h2>
+                <p>L’onglet <kbd>📥 Réception</kbd> affiche les courriels reçus à l’adresse de la compagnie.</p>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Seuls les messages destinés à l’adresse de la compagnie sont visibles. Les courriels adressés aux boîtes des employés n’apparaissent pas ici.</li>
+                    <li>Les 300 messages les plus récents sont affichés, du plus récent au plus ancien.</li>
+                    <li>Le contenu d’un courriel reçu est affiché dans un cadre isolé : ses scripts ne s’exécutent pas et ses liens s’ouvrent dans un nouvel onglet.</li>
+                    <li>Les pièces jointes reçues se téléchargent depuis les liens 📎 du panneau de lecture. Le téléchargement n’est possible que depuis la boîte de votre propre compagnie et avec une session ouverte.</li>
+                </ul>
+
+                <h3>Pièces jointes et reçus</h3>
+                <p>Cet écran ne propose <strong>aucun</strong> envoi direct d’une pièce jointe vers les reçus ou les factures fournisseurs. Pour comptabiliser une facture reçue par courriel :</p>
+                <ol>
+                    <li>Ouvrez le message dans <kbd>📥 Réception</kbd> et cliquez sur le lien 📎 de la pièce jointe pour la télécharger.</li>
+                    <li>Allez dans l’écran des reçus (menu <span class="chemin">Achats</span>, voir <a href="achats.html">Achats</a>) et importez le fichier téléchargé.</li>
+                </ol>
+
+                <h3>Trucs et pièges</h3>
+                <div class="note" data-titre="Bon à savoir">Il n’existe pas de suppression : un courriel reçu reste dans la liste. Les plus anciens sortent simplement des 300 derniers.</div>
+                <div class="astuce" data-titre="Astuce">Un courriel affiché en « (sans sujet) » a un objet vide : ouvrez-le pour voir son contenu.</div>
+            </section>
+
+            <section id="fr-automatiques">
+                <h2>Courriels automatiques</h2>
+                <p>60Sec-AI envoie de lui-même certains courriels au nom de la compagnie : factures clients, relances, avis de paiement automatique aux fournisseurs, courriels liés à l’intégration Stripe, et liens de réinitialisation destinés aux employés. Ils n’apparaissent pas dans l’onglet Envoyés de l’écran Courriel, car ils ne partent pas de l’adresse de la compagnie.</p>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Les courriels automatiques partent de l’adresse <code>noreply@60sec.ca</code>.</li>
+                    <li>L’adresse courriel de la compagnie est placée en « répondre à » (Reply-To) <strong>seulement si elle a été vérifiée</strong> dans les Paramètres (voir <a href="administration.html">Administration</a>). Sinon, le courriel n’a pas d’adresse de réponse et vos clients ne peuvent pas vous répondre d’un simple clic.</li>
+                    <li>Les liens de réinitialisation de mot de passe destinés aux employés partent aussi de <code>noreply@60sec.ca</code> (voir <a href="employes.html#fr-reinitialisation">Réinitialisation de la boîte courriel</a>).</li>
+                </ul>
+
+                <h3>Marche à suivre</h3>
+                <p>Pour que vos clients puissent répondre aux factures et relances envoyées automatiquement :</p>
+                <ol>
+                    <li>Dans les Paramètres de la compagnie, renseignez l’adresse courriel de la compagnie.</li>
+                    <li>Faites vérifier cette adresse (procédure de vérification des Paramètres).</li>
+                    <li>Dès qu’elle est vérifiée, les courriels automatiques portent cette adresse en « répondre à ».</li>
+                </ol>
+
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">Tant que l’adresse de la compagnie n’est pas vérifiée dans les Paramètres, les réponses de vos clients aux courriels automatiques n’ont aucune destination.</div>
+                <div class="note" data-titre="Bon à savoir">Les avis de paiement automatique aux fournisseurs (préavis 24 h pour les cartes, 3 jours pour les prélèvements bancaires, débit bloqué par un plafond, échec, authentification 3D Secure) sont eux aussi des courriels automatiques : voir <a href="approbations.html#fr-regles">Tâches à approuver</a>.</div>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Mon courriel affiche « en file » depuis un moment. Est-il parti ?</summary><p>Pas encore : « en file » signifie qu’il attend le service d’envoi. Revenez plus tard dans l’onglet Envoyés ; le statut passera à « envoyé » ou « non envoyé ».</p></details>
+                <details><summary>Pourquoi les factures envoyées à mes clients n’apparaissent-elles pas dans Envoyés ?</summary><p>Les courriels automatiques (factures, relances, avis) partent de <code>noreply@60sec.ca</code>, pas de l’adresse de la compagnie. Ils ne figurent donc pas dans cette boîte.</p></details>
+                <details><summary>Mes clients ne peuvent pas répondre à mes factures. Pourquoi ?</summary><p>L’adresse de la compagnie n’est ajoutée en « répondre à » que si elle a été vérifiée dans les Paramètres. Vérifiez-la pour que les réponses vous parviennent.</p></details>
+                <details><summary>Comment répondre à un courriel reçu ?</summary><p>Il n’y a pas de bouton « Répondre ». Ouvrez l’onglet Composer, saisissez l’adresse de l’expéditeur dans « À », reprenez le sujet et rédigez votre réponse.</p></details>
+                <details><summary>Puis-je envoyer à plusieurs destinataires ?</summary><p>Le champ « À » est prévu pour une seule adresse. Ajoutez une deuxième personne en « Cc », ou envoyez plusieurs courriels.</p></details>
+                <details><summary>Pourquoi l’heure de réception est-elle décalée ?</summary><p>La date de réception est enregistrée et affichée en heure universelle (UTC), soit 4 à 5 heures d’avance sur l’heure du Québec.</p></details>
+                <details><summary>Où sont les pièces jointes d’un message que j’ai envoyé ?</summary><p>Elles sont bien parties avec le message, mais elles ne sont pas listées quand vous relisez le courriel dans l’onglet Envoyés. Conservez vos fichiers d’origine.</p></details>
+                <details><summary>Comment mettre une facture reçue par courriel dans mes reçus ?</summary><p>Téléchargez la pièce jointe avec son lien 📎, puis importez le fichier manuellement dans l’écran des reçus (menu Achats). L’écran Courriel ne l’envoie pas automatiquement.</p></details>
+                <details><summary>Où est la boîte @60sec.ca de mon employé ?</summary><p>Pas dans cet écran : il n’affiche que la boîte de la compagnie. L’employé lit sa boîte avec son logiciel de messagerie configuré en IMAP/SMTP.</p></details>
+                <details><summary>L’envoi a échoué et mes fichiers ont disparu de la sélection.</summary><p>C’est normal : après un refus, les pièces jointes sont perdues. Resélectionnez-les avant de cliquer de nouveau sur Envoyer.</p></details>
+                <details><summary>Comment est choisie l’adresse @60sec.ca de la compagnie ?</summary><p>Elle est créée à la première ouverture de l’écran, à partir du nom commercial (par exemple <code>macompagnie@60sec.ca</code>), avec un suffixe -2 si le nom est déjà pris.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Boîte de la compagnie</td><td>Adresse @60sec.ca de la compagnie, tirée de son nom commercial, utilisée par l’écran Courriel.</td></tr>
+                        <tr><td>Réception</td><td>Onglet listant les 300 derniers courriels reçus à l’adresse de la compagnie.</td></tr>
+                        <tr><td>Envoyés</td><td>Onglet listant les 300 derniers courriels partis de l’adresse de la compagnie, avec leur statut.</td></tr>
+                        <tr><td>En file</td><td>Statut d’un courriel en attente d’expédition par le service d’envoi.</td></tr>
+                        <tr><td>Non envoyé</td><td>Statut d’un courriel dont l’expédition a échoué.</td></tr>
+                        <tr><td>File d’attente</td><td>Liste des courriels que le service d’envoi expédie à intervalle régulier.</td></tr>
+                        <tr><td>Cc</td><td>Copie conforme : destinataire secondaire du courriel.</td></tr>
+                        <tr><td>noreply@60sec.ca</td><td>Adresse d’expédition des courriels automatiques de 60Sec-AI ; elle n’accepte pas de réponses.</td></tr>
+                        <tr><td>Répondre à (Reply-To)</td><td>Adresse à laquelle les réponses sont envoyées ; pour les courriels automatiques, l’adresse vérifiée de la compagnie.</td></tr>
+                        <tr><td>Adresse vérifiée</td><td>Adresse courriel de la compagnie dont la propriété a été confirmée dans les Paramètres.</td></tr>
+                        <tr><td>UTC</td><td>Temps universel coordonné ; heure de référence sans décalage, en avance de 4 ou 5 heures sur le Québec.</td></tr>
+                        <tr><td>IMAP / SMTP</td><td>Protocoles de réception et d’envoi utilisés par les logiciels de messagerie pour les boîtes @60sec.ca.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Mail</h1>
+            <p class="intro">The webmail of your company’s @60sec.ca mailbox: inbox, sent messages and composing. This section also explains how 60Sec-AI’s automatic e-mails (invoices, reminders, notices) are sent. Menu <span class="chemin">Courriel</span>.</p>
+
+            <section id="en-mail">
+                <h2>Company mailbox</h2>
+                <p>The <span class="chemin">Courriel</span> screen is a simple webmail for the <strong>company’s @60sec.ca mailbox</strong>. The mailbox address is shown in a badge next to the title “✉️ Courriel”.</p>
+
+                <h3>Purpose</h3>
+                <p>Read e-mails received at the company address, review sent messages and their status, compose and send an e-mail with attachments on behalf of the company. Employees’ personal mailboxes are not shown here (see <a href="employes.html#en-employees">Employees</a>).</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>📥 Réception</kbd> tab (inbox): list of received messages.</li>
+                    <li><kbd>📤 Envoyés</kbd> tab (sent): list of sent or queued messages.</li>
+                    <li><kbd>✍️ Composer</kbd> tab (compose): writing a new e-mail.</li>
+                    <li><strong>Click on a message</strong> (inbox or sent): the message is displayed in the right-hand panel.</li>
+                    <li><strong>📎 attachment links</strong>: download the file (received e-mails only).</li>
+                    <li><kbd>Envoyer</kbd> (send, Compose tab): queues the e-mail for sending.</li>
+                </ul>
+                <p>There is no “Reply”, “Forward” or “Delete” button, and no folders other than inbox and sent. To reply, use the Compose tab and type the correspondent’s address.</p>
+
+                <h3>Views</h3>
+                <table>
+                    <thead><tr><th>View</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Réception (inbox)</td><td>The last 300 messages addressed to the company address, newest first. Each row shows the sender, the date (yyyy-mm-dd hh:mm) and the subject.</td></tr>
+                        <tr><td>Envoyés (sent)</td><td>The last 300 messages whose sender is the company address. Each row shows “→ recipient”, the date, the subject and a status: “envoyé” (sent), “en file” (queued, waiting to be sent) or “non envoyé” (not sent, failed).</td></tr>
+                        <tr><td>Reading (right panel)</td><td>The subject, then “De :” (from), “À :” (to), “Date :”, then “📎 Pièces jointes :” (attachments) when there are any, then the message body.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li><strong>Company address</strong>: if it does not exist yet, it is created automatically the first time the screen is opened. It is derived from the company’s trade name, for example <code>macompagnie@60sec.ca</code> (with a -2 suffix if the name is already taken).</li>
+                    <li><strong>Reading security</strong>: received e-mails are displayed in an isolated frame where their scripts do not run; links open in a new tab; an attachment can only be downloaded from its own company’s mailbox; without an open session, downloads are refused.</li>
+                    <li>The reception date is stored in universal time (UTC) and displayed as is: it may look 4 to 5 hours ahead of Quebec time.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun message. »</span> — the list (inbox or sent) is empty.</li>
+                    <li><span class="msg">« Sélectionnez un message pour le lire. »</span> — no message is open in the right panel; click a row.</li>
+                    <li><span class="msg">« (sans sujet) »</span> — shown instead of the subject when it is empty.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="note" data-titre="Good to know">The screen only shows the company mailbox. Each employee reads their @60sec.ca mailbox with their own mail software (IMAP/SMTP).</div>
+                <div class="piege" data-titre="Pitfall">Reception times are shown in UTC: an e-mail received at 9:00 a.m. in Quebec appears at 13:00 or 14:00 depending on the season.</div>
+                <div class="astuce" data-titre="Tip">To find an old message beyond the last 300, set up the company mailbox in a mail client (IMAP): the Mail screen is only a convenience.</div>
+            </section>
+
+            <section id="en-sending">
+                <h2>Sending an e-mail</h2>
+                <p>The <kbd>✍️ Composer</kbd> tab lets you write an e-mail sent on behalf of the company, with formatting and attachments.</p>
+
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>De (from)</td><td>—</td><td>The company’s @60sec.ca address, not editable.</td></tr>
+                        <tr><td>À (to)</td><td>Yes</td><td>Recipient address (example shown: destinataire@exemple.com). Enter a single address.</td></tr>
+                        <tr><td>Cc</td><td>No</td><td>Copied address.</td></tr>
+                        <tr><td>Sujet (subject)</td><td>Yes</td><td>E-mail subject.</td></tr>
+                        <tr><td>Message</td><td>Yes</td><td>Rich text editor: bold, italic, underline, strikethrough, alignment, indents, lists, colours, table, font and size.</td></tr>
+                        <tr><td>Pièces jointes (attachments)</td><td>No</td><td>Multiple file selection. Note shown: “Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).” (you may select several files, 50 MB max in total).</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>The message is first placed in a <strong>queue</strong>, then dispatched by 60Sec-AI’s sending service. The status goes from “en file” to “envoyé” (or “non envoyé” on failure) in the Sent tab.</li>
+                    <li>The sender is the company’s @60sec.ca address.</li>
+                    <li>A plain-text version of the message is generated automatically for mail software that does not display formatting.</li>
+                    <li>Attachments go with the message, up to 50 MB in total.</li>
+                    <li>Attachments of <strong>sent</strong> messages are not listed when you reread the message in the Sent tab.</li>
+                </ul>
+
+                <h3>Step by step</h3>
+                <p>To send an e-mail with an attachment:</p>
+                <ol>
+                    <li>Open the <kbd>✍️ Composer</kbd> tab.</li>
+                    <li>Enter the address in “À”, the “Sujet” and the “Message”.</li>
+                    <li>In “Pièces jointes”, select the file(s) (50 MB max in total).</li>
+                    <li>Click <kbd>Envoyer</kbd>. The message “✔ Courriel mis en file d’envoi…” confirms queuing.</li>
+                    <li>A few minutes later, check in <kbd>📤 Envoyés</kbd> that the status is “envoyé”.</li>
+                </ol>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — shown before sending; only the fields actually missing are listed (recipient, subject, message). Fill them in.</li>
+                    <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — the server received an incomplete submission; fill in all three fields.</li>
+                    <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — the company mailbox could not be created or found; reload the Mail screen, which creates the address on opening.</li>
+                    <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — success; the attachments mention only appears when there are some. The e-mail will leave on the sending service’s next pass.</li>
+                    <li><span class="msg">« ✖ Échec de l’envoi : … »</span> — the e-mail could not be queued; read the detail, fix it and try again (reselecting the attachments).</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">“Sent” in the list first means “queued”: the e-mail has not left yet. Check the status later in the Sent tab.</div>
+                <div class="piege" data-titre="Pitfall">If sending is refused, the attached files are lost: reselect them before clicking <kbd>Envoyer</kbd> again.</div>
+                <div class="attention" data-titre="Warning">Put only one address in “À”: the field is not designed for several recipients. Use “Cc” for a second person.</div>
+            </section>
+
+            <section id="en-receiving">
+                <h2>Inbox and attachments</h2>
+                <p>The <kbd>📥 Réception</kbd> tab shows e-mails received at the company address.</p>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>Only messages addressed to the company address are visible. E-mails sent to employee mailboxes do not appear here.</li>
+                    <li>The 300 most recent messages are shown, newest first.</li>
+                    <li>The content of a received e-mail is displayed in an isolated frame: its scripts do not run and its links open in a new tab.</li>
+                    <li>Received attachments are downloaded from the 📎 links in the reading panel. Downloading is only possible from your own company’s mailbox and with an open session.</li>
+                </ul>
+
+                <h3>Attachments and receipts</h3>
+                <p>This screen offers <strong>no</strong> direct transfer of an attachment to receipts or supplier invoices. To record an invoice received by e-mail:</p>
+                <ol>
+                    <li>Open the message in <kbd>📥 Réception</kbd> and click the attachment’s 📎 link to download it.</li>
+                    <li>Go to the receipts screen (menu <span class="chemin">Achats</span>, see <a href="achats.html">Purchases</a>) and import the downloaded file.</li>
+                </ol>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="note" data-titre="Good to know">There is no deletion: a received e-mail stays in the list. Older ones simply drop out of the last 300.</div>
+                <div class="astuce" data-titre="Tip">An e-mail shown as “(sans sujet)” has an empty subject: open it to see its content.</div>
+            </section>
+
+            <section id="en-automatic">
+                <h2>Automatic e-mails</h2>
+                <p>60Sec-AI sends certain e-mails on the company’s behalf by itself: customer invoices, reminders, automatic payment notices to suppliers, e-mails related to the Stripe integration, and reset links for employees. They do not appear in the Sent tab of the Mail screen, because they do not leave from the company address.</p>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>Automatic e-mails are sent from <code>noreply@60sec.ca</code>.</li>
+                    <li>The company’s e-mail address is set as “reply to” (Reply-To) <strong>only if it has been verified</strong> in Settings (see <a href="administration.html">Administration</a>). Otherwise, the e-mail has no reply address and your customers cannot reply with a single click.</li>
+                    <li>Password reset links for employees also leave from <code>noreply@60sec.ca</code> (see <a href="employes.html#en-mailbox-reset">Mailbox password reset</a>).</li>
+                </ul>
+
+                <h3>Step by step</h3>
+                <p>So that your customers can reply to automatically sent invoices and reminders:</p>
+                <ol>
+                    <li>In the company Settings, enter the company’s e-mail address.</li>
+                    <li>Have this address verified (Settings verification procedure).</li>
+                    <li>Once verified, automatic e-mails carry this address as “reply to”.</li>
+                </ol>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">As long as the company address is not verified in Settings, your customers’ replies to automatic e-mails have no destination.</div>
+                <div class="note" data-titre="Good to know">Automatic payment notices to suppliers (24-hour advance notice for cards, 3 days for bank debits, debit blocked by a cap, failure, 3D Secure authentication) are also automatic e-mails: see <a href="approbations.html#en-rules">Tasks to approve</a>.</div>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>My e-mail has shown “en file” for a while. Has it left?</summary><p>Not yet: “en file” means it is waiting for the sending service. Come back later to the Sent tab; the status will change to “envoyé” or “non envoyé”.</p></details>
+                <details><summary>Why don’t the invoices sent to my customers appear in Sent?</summary><p>Automatic e-mails (invoices, reminders, notices) are sent from <code>noreply@60sec.ca</code>, not from the company address. They therefore do not appear in this mailbox.</p></details>
+                <details><summary>My customers cannot reply to my invoices. Why?</summary><p>The company address is only added as “reply to” if it has been verified in Settings. Verify it so that replies reach you.</p></details>
+                <details><summary>How do I reply to a received e-mail?</summary><p>There is no “Reply” button. Open the Compose tab, type the sender’s address in “À”, repeat the subject and write your reply.</p></details>
+                <details><summary>Can I send to several recipients?</summary><p>The “À” field is designed for a single address. Add a second person in “Cc”, or send several e-mails.</p></details>
+                <details><summary>Why is the reception time off?</summary><p>The reception date is stored and displayed in universal time (UTC), 4 to 5 hours ahead of Quebec time.</p></details>
+                <details><summary>Where are the attachments of a message I sent?</summary><p>They did go with the message, but they are not listed when you reread the e-mail in the Sent tab. Keep your original files.</p></details>
+                <details><summary>How do I put an invoice received by e-mail into my receipts?</summary><p>Download the attachment with its 📎 link, then import the file manually in the receipts screen (Achats menu). The Mail screen does not send it automatically.</p></details>
+                <details><summary>Where is my employee’s @60sec.ca mailbox?</summary><p>Not in this screen: it only shows the company mailbox. The employee reads their mailbox with their mail software set up with IMAP/SMTP.</p></details>
+                <details><summary>Sending failed and my files disappeared from the selection.</summary><p>That is expected: after a refusal, attachments are lost. Reselect them before clicking Send again.</p></details>
+                <details><summary>How is the company’s @60sec.ca address chosen?</summary><p>It is created the first time the screen is opened, from the trade name (for example <code>macompagnie@60sec.ca</code>), with a -2 suffix if the name is already taken.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Company mailbox</td><td>The company’s @60sec.ca address, derived from its trade name, used by the Mail screen.</td></tr>
+                        <tr><td>Réception (inbox)</td><td>Tab listing the last 300 e-mails received at the company address.</td></tr>
+                        <tr><td>Envoyés (sent)</td><td>Tab listing the last 300 e-mails sent from the company address, with their status.</td></tr>
+                        <tr><td>En file (queued)</td><td>Status of an e-mail waiting to be dispatched by the sending service.</td></tr>
+                        <tr><td>Non envoyé (not sent)</td><td>Status of an e-mail whose dispatch failed.</td></tr>
+                        <tr><td>Queue</td><td>List of e-mails that the sending service dispatches at regular intervals.</td></tr>
+                        <tr><td>Cc</td><td>Carbon copy: secondary recipient of the e-mail.</td></tr>
+                        <tr><td>noreply@60sec.ca</td><td>Sending address of 60Sec-AI’s automatic e-mails; it does not accept replies.</td></tr>
+                        <tr><td>Reply-To</td><td>Address to which replies are sent; for automatic e-mails, the company’s verified address.</td></tr>
+                        <tr><td>Verified address</td><td>Company e-mail address whose ownership has been confirmed in Settings.</td></tr>
+                        <tr><td>UTC</td><td>Coordinated Universal Time; reference time with no offset, 4 or 5 hours ahead of Quebec.</td></tr>
+                        <tr><td>IMAP / SMTP</td><td>Receiving and sending protocols used by mail software for @60sec.ca mailboxes.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Correo</h1>
+            <p class="intro">El correo web del buzón @60sec.ca de su empresa: recepción, mensajes enviados y redacción. Esta sección también explica cómo se envían los correos automáticos de 60Sec-AI (facturas, recordatorios, avisos). Menú <span class="chemin">Courriel</span>.</p>
+
+            <section id="es-correo">
+                <h2>Buzón de la empresa</h2>
+                <p>La pantalla <span class="chemin">Courriel</span> es un correo web sencillo para el <strong>buzón @60sec.ca de la empresa</strong>. La dirección del buzón se muestra en una etiqueta junto al título «✉️ Courriel».</p>
+
+                <h3>Objetivo</h3>
+                <p>Leer los correos recibidos en la dirección de la empresa, consultar los mensajes enviados y su estado, redactar y enviar un correo con adjuntos en nombre de la empresa. Los buzones personales de los empleados no se muestran aquí (vea <a href="employes.html#es-empleados">Empleados</a>).</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li>Pestaña <kbd>📥 Réception</kbd> (recepción): lista de mensajes recibidos.</li>
+                    <li>Pestaña <kbd>📤 Envoyés</kbd> (enviados): lista de mensajes enviados o en espera de envío.</li>
+                    <li>Pestaña <kbd>✍️ Composer</kbd> (redactar): redacción de un correo nuevo.</li>
+                    <li><strong>Clic en un mensaje</strong> (recepción o enviados): el mensaje se muestra en el panel derecho.</li>
+                    <li><strong>Enlaces 📎 de los adjuntos</strong>: descargan el archivo (solo correos recibidos).</li>
+                    <li><kbd>Envoyer</kbd> (enviar, pestaña Redactar): pone el correo en cola de envío.</li>
+                </ul>
+                <p>No hay botón «Responder», «Reenviar» ni «Eliminar», ni carpetas aparte de Recepción y Enviados. Para responder, use la pestaña Redactar y escriba la dirección del remitente.</p>
+
+                <h3>Vistas</h3>
+                <table>
+                    <thead><tr><th>Vista</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Réception (recepción)</td><td>Los últimos 300 mensajes dirigidos a la dirección de la empresa, del más reciente al más antiguo. Cada fila muestra el remitente, la fecha (aaaa-mm-dd hh:mm) y el asunto.</td></tr>
+                        <tr><td>Envoyés (enviados)</td><td>Los últimos 300 mensajes cuyo remitente es la dirección de la empresa. Cada fila muestra «→ destinatario», la fecha, el asunto y un estado: «envoyé» (enviado), «en file» (en cola, pendiente de envío) o «non envoyé» (no enviado, fallo).</td></tr>
+                        <tr><td>Lectura (panel derecho)</td><td>El asunto, luego «De :» (de), «À :» (para), «Date :», luego «📎 Pièces jointes :» (adjuntos) cuando los hay, y por último el cuerpo del mensaje.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li><strong>Dirección de la empresa</strong>: si aún no existe, se crea automáticamente la primera vez que se abre la pantalla. Se deriva del nombre comercial de la empresa, por ejemplo <code>macompagnie@60sec.ca</code> (con un sufijo -2 si el nombre ya está ocupado).</li>
+                    <li><strong>Seguridad de lectura</strong>: los correos recibidos se muestran en un marco aislado donde sus scripts no se ejecutan; los enlaces se abren en una pestaña nueva; un adjunto solo puede descargarse desde el buzón de su propia empresa; sin sesión abierta, la descarga se rechaza.</li>
+                    <li>La fecha de recepción se guarda en hora universal (UTC) y se muestra tal cual: puede parecer adelantada 4 o 5 horas respecto a la hora de Quebec.</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun message. »</span> — la lista (recepción o enviados) está vacía.</li>
+                    <li><span class="msg">« Sélectionnez un message pour le lire. »</span> — no hay ningún mensaje abierto en el panel derecho; haga clic en una fila.</li>
+                    <li><span class="msg">« (sans sujet) »</span> — se muestra en lugar del asunto cuando está vacío.</li>
+                </ul>
+
+                <h3>Consejos y trampas</h3>
+                <div class="note" data-titre="Conviene saber">La pantalla solo muestra el buzón de la empresa. Cada empleado consulta su buzón @60sec.ca con su propio programa de correo (IMAP/SMTP).</div>
+                <div class="piege" data-titre="Trampa">Las horas de recepción se muestran en UTC: un correo recibido a las 9:00 en Quebec aparece a las 13:00 o 14:00 según la estación.</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar un mensaje antiguo más allá de los últimos 300, configure el buzón de la empresa en un programa de correo (IMAP): la pantalla Correo es solo un acceso de conveniencia.</div>
+            </section>
+
+            <section id="es-envio">
+                <h2>Envío de un correo</h2>
+                <p>La pestaña <kbd>✍️ Composer</kbd> permite redactar un correo enviado en nombre de la empresa, con formato y adjuntos.</p>
+
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>De (de)</td><td>—</td><td>La dirección @60sec.ca de la empresa, no modificable.</td></tr>
+                        <tr><td>À (para)</td><td>Sí</td><td>Dirección del destinatario (ejemplo mostrado: destinataire@exemple.com). Escriba una sola dirección.</td></tr>
+                        <tr><td>Cc</td><td>No</td><td>Dirección en copia.</td></tr>
+                        <tr><td>Sujet (asunto)</td><td>Sí</td><td>Asunto del correo.</td></tr>
+                        <tr><td>Message (mensaje)</td><td>Sí</td><td>Editor de texto enriquecido: negrita, cursiva, subrayado, tachado, alineaciones, sangrías, listas, colores, tabla, fuente y tamaño.</td></tr>
+                        <tr><td>Pièces jointes (adjuntos)</td><td>No</td><td>Selección de varios archivos. Nota mostrada: «Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).» (puede seleccionar varios archivos, 50 MB máx. en total).</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>El mensaje se pone primero en <strong>cola</strong> y luego lo expide el servicio de envío de 60Sec-AI. El estado pasa de «en file» a «envoyé» (o «non envoyé» si falla) en la pestaña Enviados.</li>
+                    <li>El remitente es la dirección @60sec.ca de la empresa.</li>
+                    <li>Se genera automáticamente una versión en texto plano del mensaje para los programas que no muestran el formato.</li>
+                    <li>Los adjuntos van con el mensaje, hasta 50 MB en total.</li>
+                    <li>Los adjuntos de los mensajes <strong>enviados</strong> no se listan al releer el mensaje en la pestaña Enviados.</li>
+                </ul>
+
+                <h3>Paso a paso</h3>
+                <p>Para enviar un correo con un adjunto:</p>
+                <ol>
+                    <li>Abra la pestaña <kbd>✍️ Composer</kbd>.</li>
+                    <li>Escriba la dirección en «À», el «Sujet» y el «Message».</li>
+                    <li>En «Pièces jointes», seleccione el archivo o archivos (50 MB máx. en total).</li>
+                    <li>Haga clic en <kbd>Envoyer</kbd>. El mensaje «✔ Courriel mis en file d’envoi…» confirma la puesta en cola.</li>
+                    <li>Unos minutos después, compruebe en <kbd>📤 Envoyés</kbd> que el estado es «envoyé».</li>
+                </ol>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — se muestra antes del envío; solo se listan los campos que realmente faltan (destinatario, asunto, mensaje). Complételos.</li>
+                    <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — el servidor recibió un envío incompleto; rellene los tres campos.</li>
+                    <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — el buzón de la empresa no pudo crearse o encontrarse; vuelva a cargar la pantalla Correo, que crea la dirección al abrirse.</li>
+                    <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — éxito; la mención de los adjuntos solo aparece si los hay. El correo saldrá en la próxima pasada del servicio de envío.</li>
+                    <li><span class="msg">« ✖ Échec de l’envoi : … »</span> — el correo no pudo ponerse en cola; lea el detalle, corrija e inténtelo de nuevo (volviendo a seleccionar los adjuntos).</li>
+                </ul>
+
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">«Enviado» en la lista significa primero «en cola»: el correo aún no ha salido. Compruebe el estado más tarde en la pestaña Enviados.</div>
+                <div class="piege" data-titre="Trampa">Si el envío se rechaza, los archivos adjuntos se pierden: vuelva a seleccionarlos antes de hacer clic de nuevo en <kbd>Envoyer</kbd>.</div>
+                <div class="attention" data-titre="Atención">Ponga una sola dirección en «À»: el campo no está previsto para varios destinatarios. Use «Cc» para una segunda persona.</div>
+            </section>
+
+            <section id="es-recepcion">
+                <h2>Recepción y adjuntos</h2>
+                <p>La pestaña <kbd>📥 Réception</kbd> muestra los correos recibidos en la dirección de la empresa.</p>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Solo son visibles los mensajes dirigidos a la dirección de la empresa. Los correos enviados a los buzones de los empleados no aparecen aquí.</li>
+                    <li>Se muestran los 300 mensajes más recientes, del más nuevo al más antiguo.</li>
+                    <li>El contenido de un correo recibido se muestra en un marco aislado: sus scripts no se ejecutan y sus enlaces se abren en una pestaña nueva.</li>
+                    <li>Los adjuntos recibidos se descargan desde los enlaces 📎 del panel de lectura. La descarga solo es posible desde el buzón de su propia empresa y con sesión abierta.</li>
+                </ul>
+
+                <h3>Adjuntos y recibos</h3>
+                <p>Esta pantalla no ofrece <strong>ningún</strong> traspaso directo de un adjunto a los recibos o facturas de proveedor. Para registrar una factura recibida por correo:</p>
+                <ol>
+                    <li>Abra el mensaje en <kbd>📥 Réception</kbd> y haga clic en el enlace 📎 del adjunto para descargarlo.</li>
+                    <li>Vaya a la pantalla de recibos (menú <span class="chemin">Achats</span>, vea <a href="achats.html">Compras</a>) e importe el archivo descargado.</li>
+                </ol>
+
+                <h3>Consejos y trampas</h3>
+                <div class="note" data-titre="Conviene saber">No existe la eliminación: un correo recibido permanece en la lista. Los más antiguos simplemente salen de los últimos 300.</div>
+                <div class="astuce" data-titre="Consejo">Un correo mostrado como «(sans sujet)» tiene el asunto vacío: ábralo para ver su contenido.</div>
+            </section>
+
+            <section id="es-automaticos">
+                <h2>Correos automáticos</h2>
+                <p>60Sec-AI envía por sí mismo ciertos correos en nombre de la empresa: facturas de clientes, recordatorios, avisos de pago automático a proveedores, correos relacionados con la integración de Stripe y enlaces de restablecimiento para empleados. No aparecen en la pestaña Enviados de la pantalla Correo, porque no salen de la dirección de la empresa.</p>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Los correos automáticos salen de la dirección <code>noreply@60sec.ca</code>.</li>
+                    <li>La dirección de correo de la empresa se coloca como «responder a» (Reply-To) <strong>solo si ha sido verificada</strong> en los Parámetros (vea <a href="administration.html">Administración</a>). Si no, el correo no tiene dirección de respuesta y sus clientes no pueden responderle con un simple clic.</li>
+                    <li>Los enlaces de restablecimiento de contraseña para los empleados también salen de <code>noreply@60sec.ca</code> (vea <a href="employes.html#es-restablecimiento">Restablecimiento del buzón de correo</a>).</li>
+                </ul>
+
+                <h3>Paso a paso</h3>
+                <p>Para que sus clientes puedan responder a las facturas y recordatorios enviados automáticamente:</p>
+                <ol>
+                    <li>En los Parámetros de la empresa, indique la dirección de correo de la empresa.</li>
+                    <li>Haga verificar esa dirección (procedimiento de verificación de los Parámetros).</li>
+                    <li>En cuanto esté verificada, los correos automáticos llevan esa dirección como «responder a».</li>
+                </ol>
+
+                <h3>Consejos y trampas</h3>
+                <div class="attention" data-titre="Atención">Mientras la dirección de la empresa no esté verificada en los Parámetros, las respuestas de sus clientes a los correos automáticos no tienen destino.</div>
+                <div class="note" data-titre="Conviene saber">Los avisos de pago automático a proveedores (preaviso de 24 h para tarjetas, 3 días para débitos bancarios, débito bloqueado por un límite, fallo, autenticación 3D Secure) también son correos automáticos: vea <a href="approbations.html#es-reglas">Tareas por aprobar</a>.</div>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>Mi correo muestra «en file» desde hace rato. ¿Ha salido?</summary><p>Todavía no: «en file» significa que espera al servicio de envío. Vuelva más tarde a la pestaña Enviados; el estado cambiará a «envoyé» o «non envoyé».</p></details>
+                <details><summary>¿Por qué las facturas enviadas a mis clientes no aparecen en Enviados?</summary><p>Los correos automáticos (facturas, recordatorios, avisos) salen de <code>noreply@60sec.ca</code>, no de la dirección de la empresa. Por eso no figuran en este buzón.</p></details>
+                <details><summary>Mis clientes no pueden responder a mis facturas. ¿Por qué?</summary><p>La dirección de la empresa solo se añade como «responder a» si ha sido verificada en los Parámetros. Verifíquela para que las respuestas le lleguen.</p></details>
+                <details><summary>¿Cómo respondo a un correo recibido?</summary><p>No hay botón «Responder». Abra la pestaña Redactar, escriba la dirección del remitente en «À», repita el asunto y redacte su respuesta.</p></details>
+                <details><summary>¿Puedo enviar a varios destinatarios?</summary><p>El campo «À» está previsto para una sola dirección. Añada a una segunda persona en «Cc» o envíe varios correos.</p></details>
+                <details><summary>¿Por qué la hora de recepción está desfasada?</summary><p>La fecha de recepción se guarda y se muestra en hora universal (UTC), 4 o 5 horas por delante de la hora de Quebec.</p></details>
+                <details><summary>¿Dónde están los adjuntos de un mensaje que envié?</summary><p>Salieron con el mensaje, pero no se listan al releer el correo en la pestaña Enviados. Conserve sus archivos originales.</p></details>
+                <details><summary>¿Cómo paso una factura recibida por correo a mis recibos?</summary><p>Descargue el adjunto con su enlace 📎 y luego importe el archivo manualmente en la pantalla de recibos (menú Achats). La pantalla Correo no lo envía automáticamente.</p></details>
+                <details><summary>¿Dónde está el buzón @60sec.ca de mi empleado?</summary><p>No en esta pantalla: solo muestra el buzón de la empresa. El empleado lee su buzón con su programa de correo configurado con IMAP/SMTP.</p></details>
+                <details><summary>El envío falló y mis archivos desaparecieron de la selección.</summary><p>Es normal: tras un rechazo, los adjuntos se pierden. Vuelva a seleccionarlos antes de hacer clic de nuevo en Enviar.</p></details>
+                <details><summary>¿Cómo se elige la dirección @60sec.ca de la empresa?</summary><p>Se crea la primera vez que se abre la pantalla, a partir del nombre comercial (por ejemplo <code>macompagnie@60sec.ca</code>), con un sufijo -2 si el nombre ya está ocupado.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Buzón de la empresa</td><td>Dirección @60sec.ca de la empresa, derivada de su nombre comercial, usada por la pantalla Correo.</td></tr>
+                        <tr><td>Réception (recepción)</td><td>Pestaña que lista los últimos 300 correos recibidos en la dirección de la empresa.</td></tr>
+                        <tr><td>Envoyés (enviados)</td><td>Pestaña que lista los últimos 300 correos salidos de la dirección de la empresa, con su estado.</td></tr>
+                        <tr><td>En file (en cola)</td><td>Estado de un correo pendiente de expedición por el servicio de envío.</td></tr>
+                        <tr><td>Non envoyé (no enviado)</td><td>Estado de un correo cuya expedición falló.</td></tr>
+                        <tr><td>Cola de envío</td><td>Lista de correos que el servicio de envío expide a intervalos regulares.</td></tr>
+                        <tr><td>Cc</td><td>Copia: destinatario secundario del correo.</td></tr>
+                        <tr><td>noreply@60sec.ca</td><td>Dirección de envío de los correos automáticos de 60Sec-AI; no acepta respuestas.</td></tr>
+                        <tr><td>Responder a (Reply-To)</td><td>Dirección a la que se envían las respuestas; en los correos automáticos, la dirección verificada de la empresa.</td></tr>
+                        <tr><td>Dirección verificada</td><td>Dirección de correo de la empresa cuya propiedad se ha confirmado en los Parámetros.</td></tr>
+                        <tr><td>UTC</td><td>Tiempo universal coordinado; hora de referencia sin desfase, 4 o 5 horas por delante de Quebec.</td></tr>
+                        <tr><td>IMAP / SMTP</td><td>Protocolos de recepción y envío que usan los programas de correo para los buzones @60sec.ca.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

@@ -1,0 +1,1246 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Produits et services — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Produits et services</h1>
+            <p class="intro">Le catalogue de ce que vous vendez et achetez : les produits et services, leurs prix, leur statut de taxe et les comptes du plan comptable qui s’y rattachent, regroupés en catégories. C’est aussi ici que le catalogue se synchronise avec Square. Menu <span class="chemin">Produits et services</span>, qui contient deux entrées : <span class="chemin">Produits</span> et <span class="chemin">Catégorie de produit</span>. Les écrans existent en français, en anglais et en espagnol ; les libellés cités dans cette aide sont ceux de la version française.</p>
+
+            <section id="fr-produits">
+                <h2>Produits</h2>
+                <p>L’écran <span class="chemin">Produits et services › Produits</span> présente la liste « Produits et services ». Il sert à consulter, chercher et filtrer les produits et services de l’entreprise, à en ajouter, en modifier ou en supprimer, et à synchroniser le catalogue avec Square. Sous le titre, un compteur indique « N produit(s) ».</p>
+
+                <h3>But</h3>
+                <p>Un produit ou un service est ce que vous placez sur les lignes de vos factures clients et de vos factures fournisseurs. Sa fiche fixe le nom, la description, le prix unitaire, la quantité proposée par défaut, le statut de taxe et, au besoin, les comptes de revenus et de charges utilisés à la comptabilisation. Un produit et un service se saisissent exactement de la même façon : il n’y a pas de champ « type ».</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Exporter vers Square</kbd> : envoie les produits actifs vers le catalogue Square (voir <a href="#fr-square">Synchronisation Square du catalogue</a>). Aucune confirmation n’est demandée.</li>
+                    <li><kbd>Importer depuis Square</kbd> : récupère le catalogue Square dans 60Sec-AI (voir la même section). Aucune confirmation n’est demandée.</li>
+                    <li><kbd>Ajouter un produit</kbd> : ouvre la fenêtre « Ajouter un produit ». Sur mobile, un bouton flottant <kbd>+</kbd> fait la même chose.</li>
+                    <li>Sur chaque ligne :
+                        <ul>
+                            <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier un produit ».</li>
+                            <li><kbd>Corbeille</kbd> : supprime le produit <strong>immédiatement, sans confirmation</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>À la fermeture de la fenêtre d’édition, la liste se recharge automatiquement : vous voyez tout de suite le résultat de vos changements.</li>
+                </ul>
+
+                <h3>Filtres et recherche</h3>
+                <ul>
+                    <li>La zone « Rechercher (nom, description…) » accompagnée d’une loupe : tapez un mot du nom ou de la description, puis cliquez sur la <kbd>loupe</kbd> pour lancer la recherche.</li>
+                    <li>Le bouton <kbd>X</kbd> vide la zone de recherche <strong>et</strong> remet le filtre de catégorie à « Toutes ».</li>
+                    <li>Le filtre « Catégorie : » est une liste déroulante, à « Toutes » par défaut. La liste se met à jour dès que vous choisissez une catégorie ; il n’y a pas de bouton à cliquer.</li>
+                </ul>
+
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit</td><td>Le nom en gras. En dessous, la description coupée à 60 caractères et terminée par « … ». La description complète se lit dans la fiche.</td></tr>
+                        <tr><td>Catégorie</td><td>La catégorie du produit, affichée sous forme d’étiquette. Vide si le produit n’a pas de catégorie.</td></tr>
+                        <tr><td>Prix</td><td>Le prix unitaire, au format « 1 234,56 $ ». Un tiret « — » s’affiche si le prix est vide.</td></tr>
+                        <tr><td>Qté déf.</td><td>La quantité par défaut : un nombre entier, ou deux décimales s’il y a une fraction (par exemple « 1,50 »).</td></tr>
+                        <tr><td>Taxe</td><td>Pastille « Taxable » en bleu ou « Exempt » en ambre. Sinon « — » (aucun statut, ou statut « Détaxé »).</td></tr>
+                        <tr><td>Actif</td><td>Pastille verte si le produit est actif, rouge s’il est inactif.</td></tr>
+                        <tr><td>Action</td><td>Les boutons <kbd>Crayon</kbd> et <kbd>Corbeille</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun produit trouvé. »</span> — la liste est vide, ou la recherche et le filtre de catégorie ne renvoient rien. Cliquez sur <kbd>X</kbd> pour tout réinitialiser.</li>
+                </ul>
+
+                <div class="piege" data-titre="Piège">La <kbd>Corbeille</kbd> supprime le produit dès le premier clic, sans demander de confirmation. Pour retirer un produit du choix courant tout en gardant son historique, ouvrez plutôt sa fiche et décochez « Produit actif ».</div>
+                <div class="astuce" data-titre="Astuce">Le bouton <kbd>X</kbd> efface aussi le filtre de catégorie. Si votre liste vous semble incomplète, vérifiez d’abord que « Catégorie : » est bien à « Toutes ».</div>
+                <div class="note" data-titre="Bon à savoir">Un produit « Détaxé » s’affiche avec « — » dans la colonne Taxe, exactement comme un produit sans statut de taxe. C’est normal : seuls « Taxable » et « Exempt » ont une pastille. Ouvrez la fiche pour connaître le statut exact.</div>
+
+                <p>Pour ajouter rapidement un produit :</p>
+                <ol>
+                    <li>Ouvrez <span class="chemin">Produits et services › Produits</span>.</li>
+                    <li>Cliquez sur <kbd>Ajouter un produit</kbd>.</li>
+                    <li>Saisissez au moins le « Nom du produit / service », puis le prix unitaire et le statut de taxe.</li>
+                    <li>Choisissez une catégorie si vous voulez hériter de ses comptes du plan comptable.</li>
+                    <li>Cliquez sur <kbd>Enregistrer</kbd> : la fenêtre se ferme et la liste se recharge.</li>
+                </ol>
+            </section>
+
+            <section id="fr-fiche-produit">
+                <h2>Fiche produit</h2>
+                <p>La fenêtre « Nouveau produit » (en création) ou « Modifier le produit » (en modification) s’ouvre depuis la liste des produits. Elle sert à créer ou à modifier un produit ou un service.</p>
+
+                <h3>But</h3>
+                <ul>
+                    <li>En création, le sous-titre est « Remplissez les informations du produit ou service ».</li>
+                    <li>En modification, le sous-titre affiche le nom du produit.</li>
+                </ul>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Enregistrer</kbd> : valide les champs, enregistre, puis ferme la fenêtre automatiquement. Aucun message de succès ne s’affiche : la fermeture de la fenêtre et le rafraîchissement de la liste sont la confirmation.</li>
+                    <li><kbd>Fermer</kbd> : ferme la fenêtre sans enregistrer. Aucune confirmation n’est demandée, même si des changements n’ont pas été sauvegardés.</li>
+                </ul>
+
+                <h3>Champs</h3>
+                <p>Carte « Informations générales »</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom du produit / service *</td><td>Oui</td><td>500 caractères au maximum. C’est le libellé qui apparaît sur les factures et dans Square.</td></tr>
+                        <tr><td>Catégorie</td><td>Non</td><td>Liste des catégories de produits. Par défaut « Aucune catégorie », ce qui est permis.</td></tr>
+                        <tr><td>Description</td><td>Non</td><td>Texte sur plusieurs lignes, 2 000 caractères au maximum.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Carte « Prix et quantités »</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Prix unitaire ($)</td><td>Non</td><td>Format monétaire, 2 décimales, pas de valeur négative. S’il est laissé vide, il est enregistré à <strong>0</strong>.</td></tr>
+                        <tr><td>Quantité par défaut</td><td>Non</td><td>2 décimales, pas de valeur négative, vaut 1 par défaut. S’il est vide, il est enregistré à <strong>1</strong>.</td></tr>
+                        <tr><td>Statut de taxe</td><td>Non</td><td>« Sélectionner… », puis Taxable, Exempt ou Détaxé. Détermine si la TPS (5 %) et la TVQ (9,975 %) s’appliquent à la ligne de facture.</td></tr>
+                        <tr><td>Ajouter auto aux factures</td><td>Non</td><td>Case à cocher, décochée par défaut. Cochée, le produit est proposé automatiquement sur les nouvelles factures.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Carte « Comptes du plan comptable »</p>
+                <p>Le texte d’aide de la carte indique que ces comptes remplacent ceux de la catégorie pour ce produit seulement. S’ils sont laissés vides, les comptes de la catégorie s’appliquent.</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Compte de vente (Revenus)</td><td>Non</td><td>Ne liste que les comptes de revenus du plan comptable. Par défaut « Utiliser le compte de la catégorie ».</td></tr>
+                        <tr><td>Compte d’achat (Coût / Charges)</td><td>Non</td><td>Ne liste que les comptes de coût des ventes et de charges d’exploitation. Par défaut « Utiliser le compte de la catégorie ».</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Dernière carte</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit actif</td><td>Non</td><td>Case à cocher, cochée par défaut. Un produit inactif reste dans la liste (pastille rouge) mais n’est pas exporté vers Square.</td></tr>
+                        <tr><td>ID :</td><td>—</td><td>En modification seulement. Identifiant interne, non modifiable.</td></tr>
+                        <tr><td>Créé le :</td><td>—</td><td>En modification seulement. Date et heure de création, au format AAAA-MM-JJ HH:MM.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Il n’y a pas de champ « type produit/service », d’unité de mesure, de gestion d’inventaire, de code SKU ni de coût d’achat. Un produit et un service se saisissent de la même façon.</li>
+                    <li>Choisir une catégorie <strong>ne préremplit pas</strong> le statut de taxe du produit. Il faut le choisir vous-même dans « Statut de taxe ».</li>
+                    <li>Le compte choisi sur le produit l’emporte sur celui de la catégorie. Laissez « Utiliser le compte de la catégorie » pour hériter automatiquement.</li>
+                    <li>Aucun contrôle de doublon n’est fait sur le nom : deux produits peuvent porter le même nom.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Le nom du produit est obligatoire. »</span> — bandeau rouge ; la fenêtre reste ouverte. Saisissez un nom, puis cliquez de nouveau sur <kbd>Enregistrer</kbd>.</li>
+                </ul>
+
+                <div class="piege" data-titre="Piège">Un prix laissé vide est enregistré à 0,00 $. Si vous voulez fixer le prix ligne par ligne à la facturation, c’est acceptable ; sinon, saisissez le prix avant d’enregistrer.</div>
+                <div class="attention" data-titre="Attention"><kbd>Fermer</kbd> abandonne vos modifications sans avertissement. Cliquez sur <kbd>Enregistrer</kbd> avant de fermer la fenêtre.</div>
+                <div class="astuce" data-titre="Astuce">Réglez les comptes du plan comptable sur la catégorie plutôt que sur chaque produit. Ne remplissez les comptes de la fiche produit que pour les exceptions, par exemple un service dont les revenus vont dans un compte distinct. Consultez la section <a href="comptabilite.html">Comptabilité</a> pour le plan comptable.</div>
+            </section>
+
+            <section id="fr-categories">
+                <h2>Catégories de produits</h2>
+                <p>L’écran <span class="chemin">Produits et services › Catégorie de produit</span> présente la liste « Catégories de produits ». Il sert à regrouper les produits et à leur attribuer par défaut des comptes de grand livre (GL) et un statut de taxe. Sous le titre, un compteur indique « N catégorie(s) ».</p>
+
+                <h3>But</h3>
+                <p>Une catégorie porte un code court, un nom, un statut de taxe par défaut et deux comptes du plan comptable (vente et achat). Les produits rattachés à la catégorie utilisent ces comptes automatiquement à la facturation, sauf s’ils en définissent d’autres dans leur propre fiche. La catégorie sert aussi de filtre dans la liste des produits.</p>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Ajouter une catégorie</kbd> : ouvre la fenêtre « Ajouter une catégorie ». Sur mobile, le bouton flottant <kbd>+</kbd> fait la même chose.</li>
+                    <li>Sur chaque ligne :
+                        <ul>
+                            <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier une catégorie ».</li>
+                            <li><kbd>Corbeille</kbd> : supprime la catégorie <strong>immédiatement, sans confirmation</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>La liste se recharge quand vous fermez la fenêtre d’édition.</li>
+                </ul>
+
+                <h3>Filtres et recherche</h3>
+                <ul>
+                    <li>La zone « Rechercher (code, nom…) » avec une <kbd>loupe</kbd> pour lancer la recherche et un bouton <kbd>X</kbd> pour l’effacer.</li>
+                    <li>Il n’y a pas d’autre filtre.</li>
+                </ul>
+
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Code</td><td>Le code de la catégorie, en police à chasse fixe.</td></tr>
+                        <tr><td>Nom</td><td>Le nom, avec la description en dessous.</td></tr>
+                        <tr><td>Compte vente</td><td>Le numéro du compte de revenus, avec son nom en dessous.</td></tr>
+                        <tr><td>Compte achat</td><td>Le numéro du compte d’achat ou de coût des ventes, avec son nom en dessous.</td></tr>
+                        <tr><td>Taxe</td><td>Taxable, Exempt ou « — ».</td></tr>
+                        <tr><td>Actif</td><td>Pastille verte (active) ou rouge (inactive).</td></tr>
+                        <tr><td>Action</td><td>Les boutons <kbd>Crayon</kbd> et <kbd>Corbeille</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucune catégorie trouvée. »</span> — aucune catégorie n’existe encore, ou la recherche ne renvoie rien. Cliquez sur <kbd>X</kbd> pour effacer la recherche.</li>
+                </ul>
+
+                <div class="piege" data-titre="Piège">Comme pour les produits, la <kbd>Corbeille</kbd> supprime la catégorie dès le premier clic, sans confirmation. Préférez décocher « Catégorie active » pour une catégorie que vous n’utilisez plus.</div>
+                <div class="astuce" data-titre="Astuce">Créez vos catégories avec leurs comptes du plan comptable <strong>avant</strong> de créer les produits : chaque nouveau produit rattaché à la catégorie en hérite, ce qui vous évite de régler les comptes produit par produit.</div>
+            </section>
+
+            <section id="fr-fiche-categorie">
+                <h2>Fiche catégorie</h2>
+                <p>La fenêtre « Nouvelle catégorie » (en création) ou « Modifier la catégorie » (en modification) s’ouvre depuis la liste des catégories.</p>
+
+                <h3>But</h3>
+                <ul>
+                    <li>En création, le sous-titre est « Remplissez les informations de la catégorie de produit ».</li>
+                    <li>En modification, le sous-titre prend la forme « CODE — Nom ».</li>
+                </ul>
+
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Enregistrer</kbd> : valide, enregistre et ferme la fenêtre, sans message de succès.</li>
+                    <li><kbd>Fermer</kbd> : ferme sans enregistrer et sans confirmation.</li>
+                </ul>
+                <p>Les deux boutons se comportent exactement comme dans la fiche produit.</p>
+
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Code *</td><td>Oui</td><td><strong>10 caractères au maximum</strong>. Court identifiant affiché en police à chasse fixe dans la liste et dans le sous-titre « CODE — Nom ».</td></tr>
+                        <tr><td>Nom *</td><td>Oui</td><td>100 caractères au maximum.</td></tr>
+                        <tr><td>Description</td><td>Non</td><td>250 caractères au maximum. Affichée sous le nom dans la liste.</td></tr>
+                        <tr><td>Statut de taxe par défaut</td><td>Non</td><td>« Sélectionner… », puis Taxable, Exempt ou Détaxé.</td></tr>
+                        <tr><td>Catégorie active</td><td>Non</td><td>Case à cocher, cochée par défaut.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Carte « Comptes du plan comptable »</p>
+                <p>Le texte d’aide explique qu’un compte de revenus et un compte d’achats / coût des ventes s’associent à la catégorie et s’utilisent automatiquement à la facturation.</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Compte de vente (Revenus)</td><td>Non</td><td>Par défaut « Aucun compte sélectionné ». Ne liste que les comptes de revenus.</td></tr>
+                        <tr><td>Compte d’achat (Coût des ventes / Charges)</td><td>Non</td><td>Par défaut « Aucun compte sélectionné ». Ne liste que les comptes de coût des ventes et de charges d’exploitation.</td></tr>
+                    </tbody>
+                </table>
+                <p>Les listes de comptes sont les mêmes que dans la fiche produit.</p>
+
+                <p>En modification seulement, l’écran affiche aussi des informations non modifiables :</p>
+                <table>
+                    <thead><tr><th>Information</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID :</td><td>Identifiant interne de la catégorie.</td></tr>
+                        <tr><td>GUID :</td><td>Identifiant unique universel.</td></tr>
+                        <tr><td>Créé le :</td><td>Date et heure de création.</td></tr>
+                        <tr><td>Ordre :</td><td>Rang d’affichage de la catégorie.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Aucun contrôle de doublon n’est fait sur le code : deux catégories peuvent porter le même code. Choisissez une convention (par exemple « SERV », « PIECES », « LOGIC ») et tenez-vous-y.</li>
+                    <li>Le statut de taxe par défaut de la catégorie n’est pas recopié dans les fiches produits : il sert de référence, mais chaque produit garde son propre « Statut de taxe ».</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <p>Les vérifications se font dans cet ordre ; seul le premier message applicable s’affiche.</p>
+                <ul class="messages">
+                    <li><span class="msg">« Le code est obligatoire. »</span> — saisissez un code de 10 caractères au maximum.</li>
+                    <li><span class="msg">« Le nom est obligatoire. »</span> — saisissez un nom de 100 caractères au maximum.</li>
+                </ul>
+
+                <div class="note" data-titre="Bon à savoir">La limite de 10 caractères du code est courte. Un code trop long est bloqué à la saisie : abrégez (« ENTRETIEN » plutôt que « ENTRETIEN-MENSUEL »).</div>
+
+                <p>Pour créer une catégorie complète :</p>
+                <ol>
+                    <li>Ouvrez <span class="chemin">Produits et services › Catégorie de produit</span>, puis cliquez sur <kbd>Ajouter une catégorie</kbd>.</li>
+                    <li>Saisissez le « Code » (10 caractères au plus) et le « Nom ».</li>
+                    <li>Choisissez le « Statut de taxe par défaut ».</li>
+                    <li>Dans « Comptes du plan comptable », choisissez le compte de vente (revenus) et le compte d’achat (coût des ventes / charges).</li>
+                    <li>Cliquez sur <kbd>Enregistrer</kbd>.</li>
+                </ol>
+            </section>
+
+            <section id="fr-square">
+                <h2>Synchronisation Square du catalogue</h2>
+                <p>Les deux boutons <kbd>Exporter vers Square</kbd> et <kbd>Importer depuis Square</kbd> de la liste des produits échangent le catalogue entre 60Sec-AI et Square. Tous les messages Square s’affichent dans une boîte titrée « Square ».</p>
+
+                <h3>Connexion</h3>
+                <ul>
+                    <li>La connexion à Square ne se fait plus dans l’écran des produits. Elle se fait dans le menu <span class="chemin">Processeur de paiement</span> (voir la section <a href="administration.html">Administration</a>).</li>
+                    <li>Au retour de la connexion Square sur la page Produits, l’un de ces messages peut s’afficher :</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">« Compte Square connecté avec succès. »</span> — la connexion est établie ; vous pouvez exporter et importer.</li>
+                    <li><span class="msg">« Connexion Square refusée par l’utilisateur. »</span> — vous avez refusé l’autorisation dans Square. Recommencez la connexion et acceptez.</li>
+                    <li><span class="msg">« Échec de sécurité OAuth (state invalide). Réessaie la connexion. »</span> — la vérification de sécurité a échoué (page rappelée trop tard ou dans un autre navigateur). Relancez la connexion depuis « Processeur de paiement ».</li>
+                    <li><span class="msg">« Erreur lors de la connexion à Square. »</span> — problème général ; réessayez, puis vérifiez votre compte Square.</li>
+                </ul>
+
+                <h3>Exporter vers Square (de 60Sec-AI vers Square)</h3>
+                <ul>
+                    <li>Seuls les produits <strong>actifs et ayant un nom</strong> sont envoyés.</li>
+                    <li>Données transmises : <strong>nom, description et prix</strong>, en <strong>dollars canadiens (CAD)</strong>. Square reçoit un seul format de vente, appelé « Standard ».</li>
+                    <li>Données <strong>non</strong> transmises : catégorie, taxes, quantité par défaut, comptes du plan comptable.</li>
+                    <li>Un produit déjà lié à Square est mis à jour ; sinon, il est créé dans Square et le lien est mémorisé pour les fois suivantes.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun produit actif à exporter. »</span> — tous vos produits sont inactifs ou sans nom. Activez-les d’abord.</li>
+                    <li><span class="msg">« {X} produit(s) exporté(s) vers Square sur {Y}. »</span> — bilan de l’export : X envoyés sur Y candidats. Si X est inférieur à Y, certains produits n’ont pas pu être envoyés.</li>
+                    <li><span class="msg">« Erreur lors de l’export Square : »</span> suivi du détail technique — l’export s’est interrompu. Vérifiez la connexion Square et réessayez.</li>
+                </ul>
+
+                <h3>Importer depuis Square (de Square vers 60Sec-AI)</h3>
+                <ul>
+                    <li>L’import lit tout le catalogue Square. Pour chaque article, seul le <strong>premier</strong> format de vente est pris en compte, avec son prix.</li>
+                    <li>Pour décider s’il crée ou met à jour un produit, l’import procède ainsi :
+                        <ol>
+                            <li>il cherche un produit déjà lié à cet article Square ;</li>
+                            <li>sinon, il cherche un produit <strong>actif portant le même nom</strong> (sans tenir compte des majuscules ni des espaces en début et en fin) et le lie à l’article ;</li>
+                            <li>sinon, il <strong>crée</strong> le produit.</li>
+                        </ol>
+                    </li>
+                    <li>Un produit créé par l’import est actif, avec une quantité par défaut de 1, sans catégorie, sans statut de taxe et sans comptes du plan comptable. S’il n’a pas de nom dans Square, il s’appelle « (Sans nom) ».</li>
+                    <li>Lors d’une mise à jour, le <strong>nom, la description et le prix locaux sont écrasés</strong> par les valeurs Square, sauf quand la valeur Square est vide. Un prix de 0 dans Square n’écrase pas le prix local.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun produit à importer depuis Square. »</span> — le catalogue Square est vide.</li>
+                    <li><span class="msg">« {X} produit(s) créé(s) et {Y} mis à jour depuis Square ({Z} trouvé(s)). »</span> — bilan de l’import : Z articles lus, X nouveaux produits, Y produits existants mis à jour.</li>
+                    <li><span class="msg">« Erreur lors de l’import Square : »</span> suivi du détail — l’import s’est interrompu. Vérifiez la connexion Square et réessayez.</li>
+                    <li><span class="msg">« …Square.AccessToken n’est pas configure dans Web.config. »</span> — la connexion Square n’est pas configurée. Connectez Square dans <span class="chemin">Processeur de paiement</span>, puis réessayez.</li>
+                </ul>
+
+                <h3>Synchronisation automatique</h3>
+                <p>Toute modification du catalogue dans Square déclenche le même import en arrière-plan, sans action de votre part. Les règles d’écrasement décrites ci-dessus s’appliquent donc aussi aux changements faits directement dans Square.</p>
+
+                <h3>Règles</h3>
+                <ul>
+                    <li>Les produits inactifs ne sont jamais exportés, mais un import peut les laisser intacts et créer un doublon actif si Square contient un article du même nom (l’appariement par nom ne considère que les produits actifs).</li>
+                    <li>Après l’import, complétez les produits créés : catégorie, statut de taxe et comptes du plan comptable ne viennent pas de Square.</li>
+                </ul>
+
+                <div class="attention" data-titre="Attention">Modifier le nom ou le prix d’un article dans Square, puis importer (ou laisser la synchronisation automatique agir), <strong>écrase</strong> les valeurs saisies dans 60Sec-AI. Faites vos corrections de nom et de prix dans un seul système, de préférence 60Sec-AI, puis exportez.</div>
+                <div class="piege" data-titre="Piège">L’import rapproche les produits par nom. Si deux produits actifs portent le même nom, l’article Square peut être lié au mauvais. Faites un <kbd>Exporter vers Square</kbd> avant votre premier <kbd>Importer depuis Square</kbd> : les liens seront créés proprement et les doublons évités.</div>
+                <div class="note" data-titre="Bon à savoir">L’export suppose que vos prix sont en dollars canadiens. Square n’applique pas vos statuts de taxe : configurez les taxes TPS et TVQ directement dans Square.</div>
+
+                <p>Pour mettre en place la synchronisation la première fois :</p>
+                <ol>
+                    <li>Connectez votre compte Square dans <span class="chemin">Processeur de paiement</span> et attendez le message « Compte Square connecté avec succès. ».</li>
+                    <li>Dans <span class="chemin">Produits et services › Produits</span>, vérifiez que vos produits à vendre sont actifs et nommés, avec un prix en dollars canadiens.</li>
+                    <li>Cliquez sur <kbd>Exporter vers Square</kbd> et lisez le bilan « {X} produit(s) exporté(s) vers Square sur {Y}. ».</li>
+                    <li>Ensuite seulement, cliquez sur <kbd>Importer depuis Square</kbd> pour rapatrier les articles qui n’existaient que dans Square.</li>
+                    <li>Complétez les produits créés par l’import : catégorie, statut de taxe, comptes.</li>
+                </ol>
+            </section>
+
+            <section id="fr-regles">
+                <h2>Règles métier</h2>
+                <ul>
+                    <li><strong>Priorité des comptes du plan comptable</strong> : le compte choisi sur le produit l’emporte. S’il est vide (« Utiliser le compte de la catégorie »), c’est celui de la catégorie qui s’applique à la facturation.</li>
+                    <li><strong>Catégorie vers produit</strong> : choisir une catégorie ne préremplit pas le statut de taxe du produit. Il faut le choisir soi-même.</li>
+                    <li><strong>Suppression</strong> : aucune vérification d’utilisation n’est faite dans les écrans. Si la suppression d’un produit ou d’une catégorie déjà utilisés est refusée par le système, rien ne l’indique dans l’écran : le produit reste simplement dans la liste après le rechargement.</li>
+                    <li><strong>Produits inactifs</strong> : ils restent dans la liste (pastille rouge) mais ne sont pas exportés vers Square.</li>
+                    <li><strong>Unicité</strong> : aucun contrôle de doublon n’est fait à l’écran, ni sur le nom d’un produit ni sur le code d’une catégorie.</li>
+                    <li><strong>Valeurs par défaut</strong> : prix vide → 0 ; quantité vide → 1 ; « Produit actif » et « Catégorie active » cochés ; « Ajouter auto aux factures » décoché.</li>
+                    <li><strong>Formats</strong> : les prix sont saisis avec 2 décimales et affichés au format « 1 234,56 $ » ; les quantités acceptent 2 décimales.</li>
+                </ul>
+            </section>
+
+            <section id="fr-trucs">
+                <h2>Trucs et pièges</h2>
+                <ul>
+                    <li><strong>Suppression sans confirmation</strong> sur les deux listes : un clic sur la <kbd>Corbeille</kbd> suffit. Pour garder l’historique, il vaut mieux décocher « Produit actif » ou « Catégorie active ».</li>
+                    <li>Un produit « <strong>Détaxé</strong> » s’affiche avec « — » dans la colonne Taxe, comme un produit sans statut. C’est normal.</li>
+                    <li>Un prix laissé vide est enregistré à 0,00 $.</li>
+                    <li>L’export Square suppose que les prix sont en dollars canadiens.</li>
+                    <li><strong>Faire un export avant un import</strong> évite les doublons. Sinon, l’import rapproche les produits par nom : deux produits actifs au même nom peuvent être mal liés.</li>
+                    <li><strong>Modifier le nom ou le prix dans Square</strong> puis importer, ou laisser la synchronisation automatique agir, écrase les valeurs saisies dans 60Sec-AI.</li>
+                    <li>Si la connexion Square n’est pas configurée, l’erreur affichée est technique (« …Square.AccessToken n’est pas configure dans Web.config. »). Il faut alors connecter Square dans <span class="chemin">Processeur de paiement</span>.</li>
+                    <li><strong>Créer les catégories avec leurs comptes du plan comptable d’abord</strong> : les produits en héritent, ce qui évite de régler les comptes produit par produit.</li>
+                    <li>Le bouton <kbd>X</kbd> de la liste Produits efface <strong>aussi</strong> le filtre de catégorie.</li>
+                    <li><kbd>Fermer</kbd> ne prévient pas si vous avez des changements non enregistrés : prenez l’habitude d’<kbd>Enregistrer</kbd> avant de fermer.</li>
+                    <li>Aucun message de succès n’apparaît après <kbd>Enregistrer</kbd> : la fermeture de la fenêtre et le rechargement de la liste tiennent lieu de confirmation.</li>
+                </ul>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Comment distinguer un produit d’un service ?</summary><p>Il n’y a pas de champ « type » : produits et services se saisissent de la même façon dans la même fiche. Si vous tenez à les distinguer, créez des catégories différentes (par exemple « SERV » et « PROD ») et rattachez-y vos fiches ; le filtre « Catégorie : » de la liste vous permettra ensuite de les voir séparément.</p></details>
+                <details><summary>J’ai supprimé un produit par erreur. Puis-je le récupérer ?</summary><p>Non : la corbeille supprime immédiatement, sans confirmation ni corbeille de récupération. Il faut recréer le produit. À l’avenir, décochez plutôt « Produit actif » pour retirer un produit sans le perdre.</p></details>
+                <details><summary>Pourquoi mon produit « Détaxé » affiche-t-il « — » dans la colonne Taxe ?</summary><p>Seuls les statuts « Taxable » (pastille bleue) et « Exempt » (pastille ambre) ont une pastille dans la liste. « Détaxé » et l’absence de statut s’affichent tous deux par « — ». Ouvrez la fiche pour voir le statut exact.</p></details>
+                <details><summary>Quel compte de revenus sera utilisé sur ma facture ?</summary><p>Celui de la fiche produit s’il est rempli ; sinon celui de la catégorie du produit. Si ni l’un ni l’autre n’est rempli, aucun compte n’est proposé par le produit : renseignez au moins la catégorie.</p></details>
+                <details><summary>J’ai choisi une catégorie « Taxable » mais mon produit n’a pas de statut de taxe. Pourquoi ?</summary><p>La catégorie ne préremplit pas le statut de taxe du produit. Choisissez-le vous-même dans « Statut de taxe » de la fiche produit.</p></details>
+                <details><summary>Le bouton « Exporter vers Square » dit « Aucun produit actif à exporter. » alors que j’ai des produits.</summary><p>Seuls les produits actifs et ayant un nom sont exportés. Vérifiez la pastille « Actif » (verte) dans la liste et activez les produits concernés.</p></details>
+                <details><summary>Mes prix ont changé tout seuls après une modification dans Square. Est-ce normal ?</summary><p>Oui. La synchronisation automatique importe toute modification faite dans Square et écrase le nom, la description et le prix locaux (sauf si la valeur Square est vide ou si le prix Square est 0). Faites vos changements de prix dans 60Sec-AI puis exportez, pour que 60Sec-AI reste la référence.</p></details>
+                <details><summary>Pourquoi l’import a-t-il créé des doublons ?</summary><p>L’import lie un article Square à un produit déjà lié, sinon à un produit actif de même nom, sinon il en crée un. Si vos produits locaux étaient inactifs ou nommés différemment, de nouveaux produits ont été créés. Exportez d’abord, importez ensuite, et gardez des noms identiques dans les deux systèmes.</p></details>
+                <details><summary>Où connecter mon compte Square ?</summary><p>Dans le menu <span class="chemin">Processeur de paiement</span>, pas dans l’écran des produits. Après la connexion, le message « Compte Square connecté avec succès. » apparaît sur la page Produits.</p></details>
+                <details><summary>Les taxes et la catégorie sont-elles envoyées à Square ?</summary><p>Non. L’export transmet seulement le nom, la description et le prix (en dollars canadiens). Catégorie, statut de taxe, quantité par défaut et comptes du plan comptable restent dans 60Sec-AI.</p></details>
+                <details><summary>Puis-je avoir deux catégories avec le même code ?</summary><p>L’écran ne l’empêche pas, mais c’est déconseillé : le code sert à reconnaître la catégorie dans les listes et le sous-titre « CODE — Nom ». Donnez un code unique de 10 caractères au maximum.</p></details>
+                <details><summary>À quoi sert « Ajouter auto aux factures » ?</summary><p>Cochée, cette case fait proposer le produit automatiquement sur les nouvelles factures. Réservez-la aux frais que vous facturez presque toujours (par exemple des frais de déplacement ou d’administration). Voir la section <a href="ventes.html">Ventes</a>.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit / service</td><td>Élément du catalogue placé sur les lignes de factures : nom, description, prix unitaire, quantité par défaut, statut de taxe, comptes.</td></tr>
+                        <tr><td>Catégorie de produit</td><td>Regroupement de produits qui porte un code, un statut de taxe par défaut et des comptes du plan comptable hérités par ses produits.</td></tr>
+                        <tr><td>Statut de taxe</td><td>Taxable (TPS 5 % et TVQ 9,975 % appliquées), Exempt (aucune taxe) ou Détaxé (taxe au taux de 0 %).</td></tr>
+                        <tr><td>Compte de vente (Revenus)</td><td>Compte du plan comptable crédité lors de la comptabilisation d’une facture client contenant le produit.</td></tr>
+                        <tr><td>Compte d’achat (Coût / Charges)</td><td>Compte de coût des ventes ou de charges d’exploitation débité lors de la comptabilisation d’une facture fournisseur contenant le produit.</td></tr>
+                        <tr><td>Grand livre (GL)</td><td>Registre comptable où sont portées les écritures ; les comptes du plan comptable en sont les rubriques.</td></tr>
+                        <tr><td>Quantité par défaut</td><td>Quantité proposée automatiquement quand le produit est ajouté à une facture (1 si non précisée).</td></tr>
+                        <tr><td>Produit actif / inactif</td><td>Un produit inactif reste dans la liste (pastille rouge) mais n’est pas exporté vers Square.</td></tr>
+                        <tr><td>Square</td><td>Processeur de paiement et catalogue externe avec lequel 60Sec-AI échange les produits (export, import, synchronisation automatique).</td></tr>
+                        <tr><td>Format de vente (« Standard »)</td><td>Déclinaison d’un article dans Square. L’export n’en crée qu’une, « Standard » ; l’import ne lit que la première.</td></tr>
+                        <tr><td>Lien Square</td><td>Association mémorisée entre un produit 60Sec-AI et un article Square, créée à l’export ou à l’import.</td></tr>
+                        <tr><td>OAuth</td><td>Mécanisme d’autorisation par lequel vous connectez votre compte Square à 60Sec-AI depuis « Processeur de paiement ».</td></tr>
+                        <tr><td>CAD</td><td>Dollar canadien, devise supposée pour tous les prix exportés vers Square.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Products and services</h1>
+            <p class="intro">The catalog of what you sell and buy: products and services, their prices, their tax status and the chart-of-accounts entries attached to them, grouped into categories. This is also where the catalog is synchronized with Square. Menu <span class="chemin">Products and services</span>, which has two entries: <span class="chemin">Products</span> and <span class="chemin">Product category</span>. The screens exist in French, English and Spanish; the labels quoted in this help are those of the French version, translated.</p>
+
+            <section id="en-products">
+                <h2>Products</h2>
+                <p>The <span class="chemin">Products and services › Products</span> screen shows the “Products and services” list. It lets you view, search and filter the company’s products and services, add, edit or delete them, and synchronize the catalog with Square. Under the title, a counter shows “N product(s)”.</p>
+
+                <h3>Purpose</h3>
+                <p>A product or service is what you place on the lines of your customer invoices and supplier invoices. Its form sets the name, description, unit price, default quantity, tax status and, when needed, the revenue and expense accounts used at posting time. A product and a service are entered exactly the same way: there is no “type” field.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Export to Square</kbd>: sends the active products to the Square catalog (see <a href="#en-square">Square catalog synchronization</a>). No confirmation is requested.</li>
+                    <li><kbd>Import from Square</kbd>: fetches the Square catalog into 60Sec-AI (see the same section). No confirmation is requested.</li>
+                    <li><kbd>Add a product</kbd>: opens the “Add a product” window. On mobile, a floating <kbd>+</kbd> button does the same.</li>
+                    <li>On each row:
+                        <ul>
+                            <li><kbd>Pencil</kbd>: opens the “Edit a product” window.</li>
+                            <li><kbd>Trash</kbd>: deletes the product <strong>immediately, without confirmation</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>When the edit window closes, the list reloads automatically, so you see the result of your changes right away.</li>
+                </ul>
+
+                <h3>Filters and search</h3>
+                <ul>
+                    <li>The “Search (name, description…)” box with a magnifying glass: type a word from the name or description, then click the <kbd>magnifying glass</kbd> to run the search.</li>
+                    <li>The <kbd>X</kbd> button clears the search box <strong>and</strong> resets the category filter to “All”.</li>
+                    <li>The “Category:” filter is a drop-down list, set to “All” by default. The list refreshes as soon as you pick a category; there is no button to click.</li>
+                </ul>
+
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Product</td><td>The name in bold. Below it, the description cut at 60 characters and ended with “…”. The full description is in the form.</td></tr>
+                        <tr><td>Category</td><td>The product’s category, shown as a tag. Empty if the product has no category.</td></tr>
+                        <tr><td>Price</td><td>The unit price, in the “1 234,56 $” format. A dash “—” is shown if the price is empty.</td></tr>
+                        <tr><td>Def. qty</td><td>The default quantity: a whole number, or two decimals if there is a fraction (for example “1,50”).</td></tr>
+                        <tr><td>Tax</td><td>A blue “Taxable” badge or an amber “Exempt” badge. Otherwise “—” (no status, or “Zero-rated” status).</td></tr>
+                        <tr><td>Active</td><td>Green badge if the product is active, red if it is inactive.</td></tr>
+                        <tr><td>Action</td><td>The <kbd>Pencil</kbd> and <kbd>Trash</kbd> buttons.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No product found.”</span> — the list is empty, or the search and the category filter return nothing. Click <kbd>X</kbd> to reset everything.</li>
+                </ul>
+
+                <div class="piege" data-titre="Pitfall">The <kbd>Trash</kbd> deletes the product on the first click, without asking for confirmation. To remove a product from everyday use while keeping its history, open its form instead and uncheck “Active product”.</div>
+                <div class="astuce" data-titre="Tip">The <kbd>X</kbd> button also clears the category filter. If your list looks incomplete, first check that “Category:” is set to “All”.</div>
+                <div class="note" data-titre="Good to know">A “Zero-rated” product shows “—” in the Tax column, exactly like a product with no tax status. This is normal: only “Taxable” and “Exempt” have a badge. Open the form to see the exact status.</div>
+
+                <p>To add a product quickly:</p>
+                <ol>
+                    <li>Open <span class="chemin">Products and services › Products</span>.</li>
+                    <li>Click <kbd>Add a product</kbd>.</li>
+                    <li>Enter at least the “Product / service name”, then the unit price and the tax status.</li>
+                    <li>Pick a category if you want to inherit its chart-of-accounts entries.</li>
+                    <li>Click <kbd>Save</kbd>: the window closes and the list reloads.</li>
+                </ol>
+            </section>
+
+            <section id="en-product-form">
+                <h2>Product form</h2>
+                <p>The “New product” window (when creating) or “Edit product” window (when editing) opens from the product list. It is used to create or edit a product or service.</p>
+
+                <h3>Purpose</h3>
+                <ul>
+                    <li>When creating, the subtitle is “Fill in the product or service information”.</li>
+                    <li>When editing, the subtitle shows the product name.</li>
+                </ul>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Save</kbd>: validates the fields, saves, then closes the window automatically. No success message is shown: the window closing and the list refreshing are the confirmation.</li>
+                    <li><kbd>Close</kbd>: closes the window without saving. No confirmation is requested, even if changes have not been saved.</li>
+                </ul>
+
+                <h3>Fields</h3>
+                <p>“General information” card</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Product / service name *</td><td>Yes</td><td>500 characters at most. This is the label that appears on invoices and in Square.</td></tr>
+                        <tr><td>Category</td><td>No</td><td>List of product categories. “No category” by default, which is allowed.</td></tr>
+                        <tr><td>Description</td><td>No</td><td>Multi-line text, 2,000 characters at most.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>“Prices and quantities” card</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Unit price ($)</td><td>No</td><td>Currency format, 2 decimals, no negative value. If left empty, it is saved as <strong>0</strong>.</td></tr>
+                        <tr><td>Default quantity</td><td>No</td><td>2 decimals, no negative value, 1 by default. If empty, it is saved as <strong>1</strong>.</td></tr>
+                        <tr><td>Tax status</td><td>No</td><td>“Select…”, then Taxable, Exempt or Zero-rated. Determines whether GST (5%) and QST (9.975%) apply to the invoice line.</td></tr>
+                        <tr><td>Auto-add to invoices</td><td>No</td><td>Checkbox, unchecked by default. When checked, the product is proposed automatically on new invoices.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>“Chart of accounts” card</p>
+                <p>The card’s help text states that these accounts replace the category’s accounts for this product only. If left empty, the category’s accounts apply.</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Sales account (Revenue)</td><td>No</td><td>Lists only the revenue accounts of the chart of accounts. “Use the category’s account” by default.</td></tr>
+                        <tr><td>Purchase account (Cost / Expenses)</td><td>No</td><td>Lists only the cost-of-sales and operating-expense accounts. “Use the category’s account” by default.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Last card</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Active product</td><td>No</td><td>Checkbox, checked by default. An inactive product stays in the list (red badge) but is not exported to Square.</td></tr>
+                        <tr><td>ID:</td><td>—</td><td>When editing only. Internal identifier, read-only.</td></tr>
+                        <tr><td>Created on:</td><td>—</td><td>When editing only. Creation date and time, in YYYY-MM-DD HH:MM format.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>There is no “product/service type” field, no unit of measure, no inventory management, no SKU code and no purchase cost. A product and a service are entered the same way.</li>
+                    <li>Picking a category <strong>does not prefill</strong> the product’s tax status. You must pick it yourself in “Tax status”.</li>
+                    <li>The account chosen on the product overrides the category’s. Leave “Use the category’s account” to inherit automatically.</li>
+                    <li>No duplicate check is made on the name: two products can have the same name.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“The product name is required.”</span> — red banner; the window stays open. Enter a name, then click <kbd>Save</kbd> again.</li>
+                </ul>
+
+                <div class="piege" data-titre="Pitfall">A price left empty is saved as 0,00 $. If you intend to set the price line by line at invoicing time, that is fine; otherwise, enter the price before saving.</div>
+                <div class="attention" data-titre="Warning"><kbd>Close</kbd> discards your changes without warning. Click <kbd>Save</kbd> before closing the window.</div>
+                <div class="astuce" data-titre="Tip">Set the chart-of-accounts entries on the category rather than on each product. Fill in the product form’s accounts only for exceptions, for example a service whose revenue goes to a separate account. See the <a href="comptabilite.html">Accounting</a> section for the chart of accounts.</div>
+            </section>
+
+            <section id="en-categories">
+                <h2>Product categories</h2>
+                <p>The <span class="chemin">Products and services › Product category</span> screen shows the “Product categories” list. It groups products and assigns them default general ledger (GL) accounts and a tax status. Under the title, a counter shows “N category(ies)”.</p>
+
+                <h3>Purpose</h3>
+                <p>A category has a short code, a name, a default tax status and two chart-of-accounts entries (sales and purchase). Products attached to the category use these accounts automatically at invoicing time, unless they define other accounts in their own form. The category is also used as a filter in the product list.</p>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Add a category</kbd>: opens the “Add a category” window. On mobile, the floating <kbd>+</kbd> button does the same.</li>
+                    <li>On each row:
+                        <ul>
+                            <li><kbd>Pencil</kbd>: opens the “Edit a category” window.</li>
+                            <li><kbd>Trash</kbd>: deletes the category <strong>immediately, without confirmation</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>The list reloads when you close the edit window.</li>
+                </ul>
+
+                <h3>Filters and search</h3>
+                <ul>
+                    <li>The “Search (code, name…)” box with a <kbd>magnifying glass</kbd> to run the search and an <kbd>X</kbd> button to clear it.</li>
+                    <li>There is no other filter.</li>
+                </ul>
+
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Code</td><td>The category code, in a monospaced font.</td></tr>
+                        <tr><td>Name</td><td>The name, with the description below.</td></tr>
+                        <tr><td>Sales account</td><td>The revenue account number, with its name below.</td></tr>
+                        <tr><td>Purchase account</td><td>The purchase or cost-of-sales account number, with its name below.</td></tr>
+                        <tr><td>Tax</td><td>Taxable, Exempt or “—”.</td></tr>
+                        <tr><td>Active</td><td>Green (active) or red (inactive) badge.</td></tr>
+                        <tr><td>Action</td><td>The <kbd>Pencil</kbd> and <kbd>Trash</kbd> buttons.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No category found.”</span> — no category exists yet, or the search returns nothing. Click <kbd>X</kbd> to clear the search.</li>
+                </ul>
+
+                <div class="piege" data-titre="Pitfall">As with products, the <kbd>Trash</kbd> deletes the category on the first click, without confirmation. Prefer unchecking “Active category” for a category you no longer use.</div>
+                <div class="astuce" data-titre="Tip">Create your categories with their chart-of-accounts entries <strong>before</strong> creating products: every new product attached to the category inherits them, which saves you from setting accounts product by product.</div>
+            </section>
+
+            <section id="en-category-form">
+                <h2>Category form</h2>
+                <p>The “New category” window (when creating) or “Edit category” window (when editing) opens from the category list.</p>
+
+                <h3>Purpose</h3>
+                <ul>
+                    <li>When creating, the subtitle is “Fill in the product category information”.</li>
+                    <li>When editing, the subtitle takes the form “CODE — Name”.</li>
+                </ul>
+
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Save</kbd>: validates, saves and closes the window, with no success message.</li>
+                    <li><kbd>Close</kbd>: closes without saving and without confirmation.</li>
+                </ul>
+                <p>Both buttons behave exactly as in the product form.</p>
+
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Code *</td><td>Yes</td><td><strong>10 characters at most</strong>. Short identifier shown in a monospaced font in the list and in the “CODE — Name” subtitle.</td></tr>
+                        <tr><td>Name *</td><td>Yes</td><td>100 characters at most.</td></tr>
+                        <tr><td>Description</td><td>No</td><td>250 characters at most. Shown under the name in the list.</td></tr>
+                        <tr><td>Default tax status</td><td>No</td><td>“Select…”, then Taxable, Exempt or Zero-rated.</td></tr>
+                        <tr><td>Active category</td><td>No</td><td>Checkbox, checked by default.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>“Chart of accounts” card</p>
+                <p>The help text explains that a revenue account and a purchases / cost-of-sales account are associated with the category and used automatically at invoicing time.</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Sales account (Revenue)</td><td>No</td><td>“No account selected” by default. Lists only revenue accounts.</td></tr>
+                        <tr><td>Purchase account (Cost of sales / Expenses)</td><td>No</td><td>“No account selected” by default. Lists only cost-of-sales and operating-expense accounts.</td></tr>
+                    </tbody>
+                </table>
+                <p>The account lists are the same as in the product form.</p>
+
+                <p>When editing only, the screen also shows read-only information:</p>
+                <table>
+                    <thead><tr><th>Information</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID:</td><td>Internal identifier of the category.</td></tr>
+                        <tr><td>GUID:</td><td>Universally unique identifier.</td></tr>
+                        <tr><td>Created on:</td><td>Creation date and time.</td></tr>
+                        <tr><td>Order:</td><td>Display rank of the category.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>No duplicate check is made on the code: two categories can have the same code. Choose a convention (for example “SERV”, “PARTS”, “SOFT”) and stick to it.</li>
+                    <li>The category’s default tax status is not copied into product forms: it is a reference, but each product keeps its own “Tax status”.</li>
+                </ul>
+
+                <h3>Messages</h3>
+                <p>Checks are made in this order; only the first applicable message is shown.</p>
+                <ul class="messages">
+                    <li><span class="msg">“The code is required.”</span> — enter a code of 10 characters at most.</li>
+                    <li><span class="msg">“The name is required.”</span> — enter a name of 100 characters at most.</li>
+                </ul>
+
+                <div class="note" data-titre="Good to know">The 10-character limit on the code is short. A code that is too long is blocked at entry: abbreviate (“MAINT” rather than “MONTHLY-MAINTENANCE”).</div>
+
+                <p>To create a complete category:</p>
+                <ol>
+                    <li>Open <span class="chemin">Products and services › Product category</span>, then click <kbd>Add a category</kbd>.</li>
+                    <li>Enter the “Code” (10 characters at most) and the “Name”.</li>
+                    <li>Pick the “Default tax status”.</li>
+                    <li>In “Chart of accounts”, pick the sales account (revenue) and the purchase account (cost of sales / expenses).</li>
+                    <li>Click <kbd>Save</kbd>.</li>
+                </ol>
+            </section>
+
+            <section id="en-square">
+                <h2>Square catalog synchronization</h2>
+                <p>The two buttons <kbd>Export to Square</kbd> and <kbd>Import from Square</kbd> in the product list exchange the catalog between 60Sec-AI and Square. All Square messages are shown in a box titled “Square”.</p>
+
+                <h3>Connection</h3>
+                <ul>
+                    <li>The Square connection is no longer made from the products screen. It is made from the <span class="chemin">Payment processor</span> menu (see the <a href="administration.html">Administration</a> section).</li>
+                    <li>When you come back from the Square connection to the Products page, one of these messages may appear:</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">“Square account connected successfully.”</span> — the connection is established; you can export and import.</li>
+                    <li><span class="msg">“Square connection refused by the user.”</span> — you declined the authorization in Square. Start the connection again and accept.</li>
+                    <li><span class="msg">“OAuth security failure (invalid state). Retry the connection.”</span> — the security check failed (page called back too late or in another browser). Restart the connection from “Payment processor”.</li>
+                    <li><span class="msg">“Error while connecting to Square.”</span> — general problem; try again, then check your Square account.</li>
+                </ul>
+
+                <h3>Export to Square (from 60Sec-AI to Square)</h3>
+                <ul>
+                    <li>Only products that are <strong>active and have a name</strong> are sent.</li>
+                    <li>Data sent: <strong>name, description and price</strong>, in <strong>Canadian dollars (CAD)</strong>. Square receives a single variation, called “Standard”.</li>
+                    <li>Data <strong>not</strong> sent: category, taxes, default quantity, chart-of-accounts entries.</li>
+                    <li>A product already linked to Square is updated; otherwise, it is created in Square and the link is remembered for next time.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">“No active product to export.”</span> — all your products are inactive or unnamed. Activate them first.</li>
+                    <li><span class="msg">“{X} product(s) exported to Square out of {Y}.”</span> — export summary: X sent out of Y candidates. If X is less than Y, some products could not be sent.</li>
+                    <li><span class="msg">“Error during Square export:”</span> followed by the technical detail — the export stopped. Check the Square connection and try again.</li>
+                </ul>
+
+                <h3>Import from Square (from Square to 60Sec-AI)</h3>
+                <ul>
+                    <li>The import reads the whole Square catalog. For each item, only the <strong>first</strong> variation is taken into account, with its price.</li>
+                    <li>To decide whether it creates or updates a product, the import proceeds as follows:
+                        <ol>
+                            <li>it looks for a product already linked to this Square item;</li>
+                            <li>otherwise, it looks for an <strong>active product with the same name</strong> (ignoring case and leading/trailing spaces) and links it to the item;</li>
+                            <li>otherwise, it <strong>creates</strong> the product.</li>
+                        </ol>
+                    </li>
+                    <li>A product created by the import is active, with a default quantity of 1, no category, no tax status and no chart-of-accounts entries. If it has no name in Square, it is called “(Unnamed)”.</li>
+                    <li>During an update, the <strong>local name, description and price are overwritten</strong> by the Square values, except when the Square value is empty. A price of 0 in Square does not overwrite the local price.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">“No product to import from Square.”</span> — the Square catalog is empty.</li>
+                    <li><span class="msg">“{X} product(s) created and {Y} updated from Square ({Z} found).”</span> — import summary: Z items read, X new products, Y existing products updated.</li>
+                    <li><span class="msg">“Error during Square import:”</span> followed by the detail — the import stopped. Check the Square connection and try again.</li>
+                    <li><span class="msg">“…Square.AccessToken is not configured in Web.config.”</span> — the Square connection is not configured. Connect Square in <span class="chemin">Payment processor</span>, then try again.</li>
+                </ul>
+
+                <h3>Automatic synchronization</h3>
+                <p>Any change to the catalog in Square triggers the same import in the background, with no action on your part. The overwrite rules described above therefore also apply to changes made directly in Square.</p>
+
+                <h3>Rules</h3>
+                <ul>
+                    <li>Inactive products are never exported, but an import may leave them untouched and create an active duplicate if Square holds an item with the same name (name matching only considers active products).</li>
+                    <li>After the import, complete the created products: category, tax status and chart-of-accounts entries do not come from Square.</li>
+                </ul>
+
+                <div class="attention" data-titre="Warning">Changing an item’s name or price in Square, then importing (or letting the automatic synchronization run), <strong>overwrites</strong> the values entered in 60Sec-AI. Make your name and price corrections in one system only, preferably 60Sec-AI, then export.</div>
+                <div class="piege" data-titre="Pitfall">The import matches products by name. If two active products have the same name, the Square item may be linked to the wrong one. Run <kbd>Export to Square</kbd> before your first <kbd>Import from Square</kbd>: links are created cleanly and duplicates are avoided.</div>
+                <div class="note" data-titre="Good to know">The export assumes your prices are in Canadian dollars. Square does not apply your tax statuses: configure GST and QST directly in Square.</div>
+
+                <p>To set up the synchronization for the first time:</p>
+                <ol>
+                    <li>Connect your Square account in <span class="chemin">Payment processor</span> and wait for the “Square account connected successfully.” message.</li>
+                    <li>In <span class="chemin">Products and services › Products</span>, check that the products you sell are active and named, with a price in Canadian dollars.</li>
+                    <li>Click <kbd>Export to Square</kbd> and read the summary “{X} product(s) exported to Square out of {Y}.”.</li>
+                    <li>Only then, click <kbd>Import from Square</kbd> to bring back items that existed only in Square.</li>
+                    <li>Complete the products created by the import: category, tax status, accounts.</li>
+                </ol>
+            </section>
+
+            <section id="en-rules">
+                <h2>Business rules</h2>
+                <ul>
+                    <li><strong>Priority of chart-of-accounts entries</strong>: the account chosen on the product wins. If it is empty (“Use the category’s account”), the category’s account applies at invoicing time.</li>
+                    <li><strong>Category to product</strong>: picking a category does not prefill the product’s tax status. You must pick it yourself.</li>
+                    <li><strong>Deletion</strong>: no usage check is made in the screens. If the system refuses to delete a product or category already in use, nothing indicates it on screen: the product simply stays in the list after the reload.</li>
+                    <li><strong>Inactive products</strong>: they stay in the list (red badge) but are not exported to Square.</li>
+                    <li><strong>Uniqueness</strong>: no duplicate check is made on screen, neither on a product name nor on a category code.</li>
+                    <li><strong>Default values</strong>: empty price → 0; empty quantity → 1; “Active product” and “Active category” checked; “Auto-add to invoices” unchecked.</li>
+                    <li><strong>Formats</strong>: prices are entered with 2 decimals and shown in the “1 234,56 $” format; quantities accept 2 decimals.</li>
+                </ul>
+            </section>
+
+            <section id="en-tips">
+                <h2>Tips and pitfalls</h2>
+                <ul>
+                    <li><strong>Deletion without confirmation</strong> in both lists: one click on the <kbd>Trash</kbd> is enough. To keep history, it is better to uncheck “Active product” or “Active category”.</li>
+                    <li>A “<strong>Zero-rated</strong>” product shows “—” in the Tax column, like a product with no status. This is normal.</li>
+                    <li>A price left empty is saved as 0,00 $.</li>
+                    <li>The Square export assumes prices are in Canadian dollars.</li>
+                    <li><strong>Exporting before importing</strong> avoids duplicates. Otherwise, the import matches products by name: two active products with the same name may be linked incorrectly.</li>
+                    <li><strong>Changing the name or price in Square</strong> then importing, or letting the automatic synchronization run, overwrites the values entered in 60Sec-AI.</li>
+                    <li>If the Square connection is not configured, the error shown is technical (“…Square.AccessToken is not configured in Web.config.”). You must then connect Square in <span class="chemin">Payment processor</span>.</li>
+                    <li><strong>Create categories with their chart-of-accounts entries first</strong>: products inherit them, which avoids setting accounts product by product.</li>
+                    <li>The <kbd>X</kbd> button of the Products list <strong>also</strong> clears the category filter.</li>
+                    <li><kbd>Close</kbd> does not warn you about unsaved changes: get into the habit of clicking <kbd>Save</kbd> before closing.</li>
+                    <li>No success message appears after <kbd>Save</kbd>: the window closing and the list reloading serve as confirmation.</li>
+                </ul>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>How do I tell a product from a service?</summary><p>There is no “type” field: products and services are entered the same way in the same form. If you want to tell them apart, create different categories (for example “SERV” and “PROD”) and attach your items to them; the “Category:” filter in the list will then let you see them separately.</p></details>
+                <details><summary>I deleted a product by mistake. Can I get it back?</summary><p>No: the trash deletes immediately, with no confirmation and no recycle bin. You must recreate the product. In the future, uncheck “Active product” instead to withdraw a product without losing it.</p></details>
+                <details><summary>Why does my “Zero-rated” product show “—” in the Tax column?</summary><p>Only the “Taxable” (blue badge) and “Exempt” (amber badge) statuses have a badge in the list. “Zero-rated” and no status are both shown as “—”. Open the form to see the exact status.</p></details>
+                <details><summary>Which revenue account will be used on my invoice?</summary><p>The one in the product form if filled in; otherwise the one of the product’s category. If neither is filled in, the product proposes no account: fill in at least the category.</p></details>
+                <details><summary>I picked a “Taxable” category but my product has no tax status. Why?</summary><p>The category does not prefill the product’s tax status. Pick it yourself in “Tax status” in the product form.</p></details>
+                <details><summary>“Export to Square” says “No active product to export.” although I have products.</summary><p>Only active products with a name are exported. Check the “Active” badge (green) in the list and activate the products concerned.</p></details>
+                <details><summary>My prices changed by themselves after a change in Square. Is that normal?</summary><p>Yes. The automatic synchronization imports every change made in Square and overwrites the local name, description and price (unless the Square value is empty or the Square price is 0). Make your price changes in 60Sec-AI and then export, so that 60Sec-AI stays the reference.</p></details>
+                <details><summary>Why did the import create duplicates?</summary><p>The import links a Square item to an already linked product, otherwise to an active product with the same name, otherwise it creates one. If your local products were inactive or named differently, new products were created. Export first, import second, and keep identical names in both systems.</p></details>
+                <details><summary>Where do I connect my Square account?</summary><p>In the <span class="chemin">Payment processor</span> menu, not in the products screen. After the connection, the “Square account connected successfully.” message appears on the Products page.</p></details>
+                <details><summary>Are taxes and the category sent to Square?</summary><p>No. The export sends only the name, description and price (in Canadian dollars). Category, tax status, default quantity and chart-of-accounts entries stay in 60Sec-AI.</p></details>
+                <details><summary>Can I have two categories with the same code?</summary><p>The screen does not prevent it, but it is not advisable: the code identifies the category in lists and in the “CODE — Name” subtitle. Give a unique code of 10 characters at most.</p></details>
+                <details><summary>What is “Auto-add to invoices” for?</summary><p>When checked, this box makes the product proposed automatically on new invoices. Reserve it for charges you bill almost always (for example travel or administration fees). See the <a href="ventes.html">Sales</a> section.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Product / service</td><td>Catalog item placed on invoice lines: name, description, unit price, default quantity, tax status, accounts.</td></tr>
+                        <tr><td>Product category</td><td>Grouping of products that carries a code, a default tax status and chart-of-accounts entries inherited by its products.</td></tr>
+                        <tr><td>Tax status</td><td>Taxable (GST 5% and QST 9.975% applied), Exempt (no tax) or Zero-rated (tax at 0%).</td></tr>
+                        <tr><td>Sales account (Revenue)</td><td>Chart-of-accounts entry credited when a customer invoice containing the product is posted.</td></tr>
+                        <tr><td>Purchase account (Cost / Expenses)</td><td>Cost-of-sales or operating-expense account debited when a supplier invoice containing the product is posted.</td></tr>
+                        <tr><td>General ledger (GL)</td><td>Accounting register where entries are recorded; the chart-of-accounts entries are its headings.</td></tr>
+                        <tr><td>Default quantity</td><td>Quantity proposed automatically when the product is added to an invoice (1 if not specified).</td></tr>
+                        <tr><td>Active / inactive product</td><td>An inactive product stays in the list (red badge) but is not exported to Square.</td></tr>
+                        <tr><td>Square</td><td>Payment processor and external catalog with which 60Sec-AI exchanges products (export, import, automatic synchronization).</td></tr>
+                        <tr><td>Variation (“Standard”)</td><td>Version of an item in Square. The export creates only one, “Standard”; the import reads only the first.</td></tr>
+                        <tr><td>Square link</td><td>Remembered association between a 60Sec-AI product and a Square item, created at export or import.</td></tr>
+                        <tr><td>OAuth</td><td>Authorization mechanism by which you connect your Square account to 60Sec-AI from “Payment processor”.</td></tr>
+                        <tr><td>CAD</td><td>Canadian dollar, the currency assumed for all prices exported to Square.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Productos y servicios</h1>
+            <p class="intro">El catálogo de lo que usted vende y compra: los productos y servicios, sus precios, su estado fiscal y las cuentas del plan contable asociadas, agrupados en categorías. Aquí también se sincroniza el catálogo con Square. Menú <span class="chemin">Productos y servicios</span>, que contiene dos entradas: <span class="chemin">Productos</span> y <span class="chemin">Categoría de producto</span>. Las pantallas existen en francés, inglés y español; los rótulos citados en esta ayuda son los de la versión francesa, traducidos.</p>
+
+            <section id="es-productos">
+                <h2>Productos</h2>
+                <p>La pantalla <span class="chemin">Productos y servicios › Productos</span> muestra la lista «Productos y servicios». Sirve para consultar, buscar y filtrar los productos y servicios de la empresa, agregarlos, modificarlos o eliminarlos, y sincronizar el catálogo con Square. Bajo el título, un contador indica «N producto(s)».</p>
+
+                <h3>Objetivo</h3>
+                <p>Un producto o servicio es lo que usted coloca en las líneas de sus facturas de clientes y de proveedores. Su ficha fija el nombre, la descripción, el precio unitario, la cantidad propuesta por defecto, el estado fiscal y, si hace falta, las cuentas de ingresos y de gastos utilizadas al contabilizar. Un producto y un servicio se registran exactamente de la misma manera: no existe un campo «tipo».</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Exportar a Square</kbd>: envía los productos activos al catálogo de Square (vea <a href="#es-square">Sincronización del catálogo con Square</a>). No se pide confirmación.</li>
+                    <li><kbd>Importar desde Square</kbd>: recupera el catálogo de Square en 60Sec-AI (vea la misma sección). No se pide confirmación.</li>
+                    <li><kbd>Agregar un producto</kbd>: abre la ventana «Agregar un producto». En móvil, un botón flotante <kbd>+</kbd> hace lo mismo.</li>
+                    <li>En cada línea:
+                        <ul>
+                            <li><kbd>Lápiz</kbd>: abre la ventana «Modificar un producto».</li>
+                            <li><kbd>Papelera</kbd>: elimina el producto <strong>de inmediato, sin confirmación</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>Al cerrar la ventana de edición, la lista se recarga automáticamente: verá enseguida el resultado de sus cambios.</li>
+                </ul>
+
+                <h3>Filtros y búsqueda</h3>
+                <ul>
+                    <li>La casilla «Buscar (nombre, descripción…)» acompañada de una lupa: escriba una palabra del nombre o de la descripción y haga clic en la <kbd>lupa</kbd> para lanzar la búsqueda.</li>
+                    <li>El botón <kbd>X</kbd> vacía la casilla de búsqueda <strong>y</strong> restablece el filtro de categoría a «Todas».</li>
+                    <li>El filtro «Categoría:» es una lista desplegable, en «Todas» por defecto. La lista se actualiza en cuanto elige una categoría; no hay ningún botón que pulsar.</li>
+                </ul>
+
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Producto</td><td>El nombre en negrita. Debajo, la descripción cortada a 60 caracteres y terminada con «…». La descripción completa se lee en la ficha.</td></tr>
+                        <tr><td>Categoría</td><td>La categoría del producto, mostrada como etiqueta. Vacía si el producto no tiene categoría.</td></tr>
+                        <tr><td>Precio</td><td>El precio unitario, en formato «1 234,56 $». Se muestra un guion «—» si el precio está vacío.</td></tr>
+                        <tr><td>Cant. pred.</td><td>La cantidad por defecto: un número entero, o dos decimales si hay fracción (por ejemplo «1,50»).</td></tr>
+                        <tr><td>Impuesto</td><td>Distintivo «Gravable» en azul o «Exento» en ámbar. Si no, «—» (sin estado, o estado «Tasa cero»).</td></tr>
+                        <tr><td>Activo</td><td>Distintivo verde si el producto está activo, rojo si está inactivo.</td></tr>
+                        <tr><td>Acción</td><td>Los botones <kbd>Lápiz</kbd> y <kbd>Papelera</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«No se encontró ningún producto.»</span> — la lista está vacía, o la búsqueda y el filtro de categoría no devuelven nada. Haga clic en <kbd>X</kbd> para restablecerlo todo.</li>
+                </ul>
+
+                <div class="piege" data-titre="Trampa">La <kbd>Papelera</kbd> elimina el producto al primer clic, sin pedir confirmación. Para retirar un producto del uso corriente conservando su historial, abra su ficha y desmarque «Producto activo».</div>
+                <div class="astuce" data-titre="Consejo">El botón <kbd>X</kbd> también borra el filtro de categoría. Si su lista le parece incompleta, compruebe primero que «Categoría:» esté en «Todas».</div>
+                <div class="note" data-titre="Conviene saber">Un producto «Tasa cero» se muestra con «—» en la columna Impuesto, exactamente igual que un producto sin estado fiscal. Es normal: solo «Gravable» y «Exento» tienen distintivo. Abra la ficha para conocer el estado exacto.</div>
+
+                <p>Para agregar rápidamente un producto:</p>
+                <ol>
+                    <li>Abra <span class="chemin">Productos y servicios › Productos</span>.</li>
+                    <li>Haga clic en <kbd>Agregar un producto</kbd>.</li>
+                    <li>Escriba al menos el «Nombre del producto / servicio», luego el precio unitario y el estado fiscal.</li>
+                    <li>Elija una categoría si desea heredar sus cuentas del plan contable.</li>
+                    <li>Haga clic en <kbd>Guardar</kbd>: la ventana se cierra y la lista se recarga.</li>
+                </ol>
+            </section>
+
+            <section id="es-ficha-producto">
+                <h2>Ficha de producto</h2>
+                <p>La ventana «Nuevo producto» (al crear) o «Modificar el producto» (al modificar) se abre desde la lista de productos. Sirve para crear o modificar un producto o servicio.</p>
+
+                <h3>Objetivo</h3>
+                <ul>
+                    <li>Al crear, el subtítulo es «Complete la información del producto o servicio».</li>
+                    <li>Al modificar, el subtítulo muestra el nombre del producto.</li>
+                </ul>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Guardar</kbd>: valida los campos, guarda y cierra la ventana automáticamente. No aparece ningún mensaje de éxito: el cierre de la ventana y la actualización de la lista son la confirmación.</li>
+                    <li><kbd>Cerrar</kbd>: cierra la ventana sin guardar. No se pide confirmación, aunque haya cambios sin guardar.</li>
+                </ul>
+
+                <h3>Campos</h3>
+                <p>Tarjeta «Información general»</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nombre del producto / servicio *</td><td>Sí</td><td>500 caracteres como máximo. Es el rótulo que aparece en las facturas y en Square.</td></tr>
+                        <tr><td>Categoría</td><td>No</td><td>Lista de las categorías de productos. Por defecto «Sin categoría», lo cual está permitido.</td></tr>
+                        <tr><td>Descripción</td><td>No</td><td>Texto de varias líneas, 2 000 caracteres como máximo.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Tarjeta «Precios y cantidades»</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Precio unitario ($)</td><td>No</td><td>Formato monetario, 2 decimales, sin valores negativos. Si se deja vacío, se guarda como <strong>0</strong>.</td></tr>
+                        <tr><td>Cantidad por defecto</td><td>No</td><td>2 decimales, sin valores negativos, vale 1 por defecto. Si está vacía, se guarda como <strong>1</strong>.</td></tr>
+                        <tr><td>Estado fiscal</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero. Determina si el TPS (5 %) y el TVQ (9,975 %) se aplican a la línea de factura.</td></tr>
+                        <tr><td>Agregar auto a las facturas</td><td>No</td><td>Casilla, desmarcada por defecto. Marcada, el producto se propone automáticamente en las facturas nuevas.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Tarjeta «Cuentas del plan contable»</p>
+                <p>El texto de ayuda de la tarjeta indica que estas cuentas reemplazan las de la categoría solo para este producto. Si se dejan vacías, se aplican las cuentas de la categoría.</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cuenta de venta (Ingresos)</td><td>No</td><td>Solo lista las cuentas de ingresos del plan contable. Por defecto «Usar la cuenta de la categoría».</td></tr>
+                        <tr><td>Cuenta de compra (Costo / Gastos)</td><td>No</td><td>Solo lista las cuentas de costo de ventas y de gastos de explotación. Por defecto «Usar la cuenta de la categoría».</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Última tarjeta</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Producto activo</td><td>No</td><td>Casilla, marcada por defecto. Un producto inactivo permanece en la lista (distintivo rojo) pero no se exporta a Square.</td></tr>
+                        <tr><td>ID:</td><td>—</td><td>Solo al modificar. Identificador interno, no modificable.</td></tr>
+                        <tr><td>Creado el:</td><td>—</td><td>Solo al modificar. Fecha y hora de creación, en formato AAAA-MM-DD HH:MM.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>No hay campo «tipo producto/servicio», ni unidad de medida, ni gestión de inventario, ni código SKU, ni costo de compra. Un producto y un servicio se registran igual.</li>
+                    <li>Elegir una categoría <strong>no rellena</strong> el estado fiscal del producto. Debe elegirlo usted mismo en «Estado fiscal».</li>
+                    <li>La cuenta elegida en el producto prevalece sobre la de la categoría. Deje «Usar la cuenta de la categoría» para heredar automáticamente.</li>
+                    <li>No se hace ningún control de duplicados sobre el nombre: dos productos pueden llevar el mismo nombre.</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«El nombre del producto es obligatorio.»</span> — banda roja; la ventana permanece abierta. Escriba un nombre y haga clic de nuevo en <kbd>Guardar</kbd>.</li>
+                </ul>
+
+                <div class="piege" data-titre="Trampa">Un precio dejado vacío se guarda como 0,00 $. Si piensa fijar el precio línea por línea al facturar, es aceptable; si no, escriba el precio antes de guardar.</div>
+                <div class="attention" data-titre="Atención"><kbd>Cerrar</kbd> descarta sus modificaciones sin aviso. Haga clic en <kbd>Guardar</kbd> antes de cerrar la ventana.</div>
+                <div class="astuce" data-titre="Consejo">Configure las cuentas del plan contable en la categoría en lugar de en cada producto. Rellene las cuentas de la ficha de producto solo para las excepciones, por ejemplo un servicio cuyos ingresos van a una cuenta distinta. Consulte la sección <a href="comptabilite.html">Contabilidad</a> para el plan contable.</div>
+            </section>
+
+            <section id="es-categorias">
+                <h2>Categorías de productos</h2>
+                <p>La pantalla <span class="chemin">Productos y servicios › Categoría de producto</span> muestra la lista «Categorías de productos». Sirve para agrupar los productos y asignarles por defecto cuentas del libro mayor (GL) y un estado fiscal. Bajo el título, un contador indica «N categoría(s)».</p>
+
+                <h3>Objetivo</h3>
+                <p>Una categoría tiene un código corto, un nombre, un estado fiscal por defecto y dos cuentas del plan contable (venta y compra). Los productos vinculados a la categoría usan estas cuentas automáticamente al facturar, salvo que definan otras en su propia ficha. La categoría sirve también de filtro en la lista de productos.</p>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Agregar una categoría</kbd>: abre la ventana «Agregar una categoría». En móvil, el botón flotante <kbd>+</kbd> hace lo mismo.</li>
+                    <li>En cada línea:
+                        <ul>
+                            <li><kbd>Lápiz</kbd>: abre la ventana «Modificar una categoría».</li>
+                            <li><kbd>Papelera</kbd>: elimina la categoría <strong>de inmediato, sin confirmación</strong>.</li>
+                        </ul>
+                    </li>
+                    <li>La lista se recarga al cerrar la ventana de edición.</li>
+                </ul>
+
+                <h3>Filtros y búsqueda</h3>
+                <ul>
+                    <li>La casilla «Buscar (código, nombre…)» con una <kbd>lupa</kbd> para lanzar la búsqueda y un botón <kbd>X</kbd> para borrarla.</li>
+                    <li>No hay ningún otro filtro.</li>
+                </ul>
+
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Código</td><td>El código de la categoría, en fuente de ancho fijo.</td></tr>
+                        <tr><td>Nombre</td><td>El nombre, con la descripción debajo.</td></tr>
+                        <tr><td>Cuenta venta</td><td>El número de la cuenta de ingresos, con su nombre debajo.</td></tr>
+                        <tr><td>Cuenta compra</td><td>El número de la cuenta de compra o de costo de ventas, con su nombre debajo.</td></tr>
+                        <tr><td>Impuesto</td><td>Gravable, Exento o «—».</td></tr>
+                        <tr><td>Activo</td><td>Distintivo verde (activa) o rojo (inactiva).</td></tr>
+                        <tr><td>Acción</td><td>Los botones <kbd>Lápiz</kbd> y <kbd>Papelera</kbd>.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«No se encontró ninguna categoría.»</span> — todavía no existe ninguna categoría, o la búsqueda no devuelve nada. Haga clic en <kbd>X</kbd> para borrar la búsqueda.</li>
+                </ul>
+
+                <div class="piege" data-titre="Trampa">Como con los productos, la <kbd>Papelera</kbd> elimina la categoría al primer clic, sin confirmación. Prefiera desmarcar «Categoría activa» para una categoría que ya no utiliza.</div>
+                <div class="astuce" data-titre="Consejo">Cree sus categorías con sus cuentas del plan contable <strong>antes</strong> de crear los productos: cada producto nuevo vinculado a la categoría las hereda, lo que le evita configurar las cuentas producto por producto.</div>
+            </section>
+
+            <section id="es-ficha-categoria">
+                <h2>Ficha de categoría</h2>
+                <p>La ventana «Nueva categoría» (al crear) o «Modificar la categoría» (al modificar) se abre desde la lista de categorías.</p>
+
+                <h3>Objetivo</h3>
+                <ul>
+                    <li>Al crear, el subtítulo es «Complete la información de la categoría de producto».</li>
+                    <li>Al modificar, el subtítulo toma la forma «CÓDIGO — Nombre».</li>
+                </ul>
+
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Guardar</kbd>: valida, guarda y cierra la ventana, sin mensaje de éxito.</li>
+                    <li><kbd>Cerrar</kbd>: cierra sin guardar y sin confirmación.</li>
+                </ul>
+                <p>Ambos botones se comportan exactamente como en la ficha de producto.</p>
+
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Código *</td><td>Sí</td><td><strong>10 caracteres como máximo</strong>. Identificador corto mostrado en fuente de ancho fijo en la lista y en el subtítulo «CÓDIGO — Nombre».</td></tr>
+                        <tr><td>Nombre *</td><td>Sí</td><td>100 caracteres como máximo.</td></tr>
+                        <tr><td>Descripción</td><td>No</td><td>250 caracteres como máximo. Se muestra bajo el nombre en la lista.</td></tr>
+                        <tr><td>Estado fiscal por defecto</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero.</td></tr>
+                        <tr><td>Categoría activa</td><td>No</td><td>Casilla, marcada por defecto.</td></tr>
+                    </tbody>
+                </table>
+
+                <p>Tarjeta «Cuentas del plan contable»</p>
+                <p>El texto de ayuda explica que una cuenta de ingresos y una cuenta de compras / costo de ventas se asocian a la categoría y se usan automáticamente al facturar.</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cuenta de venta (Ingresos)</td><td>No</td><td>Por defecto «Ninguna cuenta seleccionada». Solo lista las cuentas de ingresos.</td></tr>
+                        <tr><td>Cuenta de compra (Costo de ventas / Gastos)</td><td>No</td><td>Por defecto «Ninguna cuenta seleccionada». Solo lista las cuentas de costo de ventas y de gastos de explotación.</td></tr>
+                    </tbody>
+                </table>
+                <p>Las listas de cuentas son las mismas que en la ficha de producto.</p>
+
+                <p>Solo al modificar, la pantalla muestra además información no modificable:</p>
+                <table>
+                    <thead><tr><th>Información</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID:</td><td>Identificador interno de la categoría.</td></tr>
+                        <tr><td>GUID:</td><td>Identificador único universal.</td></tr>
+                        <tr><td>Creado el:</td><td>Fecha y hora de creación.</td></tr>
+                        <tr><td>Orden:</td><td>Rango de visualización de la categoría.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>No se hace ningún control de duplicados sobre el código: dos categorías pueden llevar el mismo código. Elija una convención (por ejemplo «SERV», «PIEZAS», «SOFT») y manténgala.</li>
+                    <li>El estado fiscal por defecto de la categoría no se copia en las fichas de producto: sirve de referencia, pero cada producto conserva su propio «Estado fiscal».</li>
+                </ul>
+
+                <h3>Mensajes</h3>
+                <p>Las verificaciones se hacen en este orden; solo se muestra el primer mensaje aplicable.</p>
+                <ul class="messages">
+                    <li><span class="msg">«El código es obligatorio.»</span> — escriba un código de 10 caracteres como máximo.</li>
+                    <li><span class="msg">«El nombre es obligatorio.»</span> — escriba un nombre de 100 caracteres como máximo.</li>
+                </ul>
+
+                <div class="note" data-titre="Conviene saber">El límite de 10 caracteres del código es corto. Un código demasiado largo se bloquea al escribirlo: abrevie («MANT» en lugar de «MANTENIMIENTO-MENSUAL»).</div>
+
+                <p>Para crear una categoría completa:</p>
+                <ol>
+                    <li>Abra <span class="chemin">Productos y servicios › Categoría de producto</span> y haga clic en <kbd>Agregar una categoría</kbd>.</li>
+                    <li>Escriba el «Código» (10 caracteres como máximo) y el «Nombre».</li>
+                    <li>Elija el «Estado fiscal por defecto».</li>
+                    <li>En «Cuentas del plan contable», elija la cuenta de venta (ingresos) y la cuenta de compra (costo de ventas / gastos).</li>
+                    <li>Haga clic en <kbd>Guardar</kbd>.</li>
+                </ol>
+            </section>
+
+            <section id="es-square">
+                <h2>Sincronización del catálogo con Square</h2>
+                <p>Los dos botones <kbd>Exportar a Square</kbd> e <kbd>Importar desde Square</kbd> de la lista de productos intercambian el catálogo entre 60Sec-AI y Square. Todos los mensajes de Square se muestran en un cuadro titulado «Square».</p>
+
+                <h3>Conexión</h3>
+                <ul>
+                    <li>La conexión a Square ya no se hace en la pantalla de productos. Se hace en el menú <span class="chemin">Procesador de pagos</span> (vea la sección <a href="administration.html">Administración</a>).</li>
+                    <li>Al volver de la conexión a Square a la página Productos, puede aparecer uno de estos mensajes:</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">«Cuenta Square conectada con éxito.»</span> — la conexión está establecida; puede exportar e importar.</li>
+                    <li><span class="msg">«Conexión a Square rechazada por el usuario.»</span> — usted rechazó la autorización en Square. Vuelva a iniciar la conexión y acepte.</li>
+                    <li><span class="msg">«Fallo de seguridad OAuth (state inválido). Reintente la conexión.»</span> — la verificación de seguridad falló (página llamada demasiado tarde o en otro navegador). Reinicie la conexión desde «Procesador de pagos».</li>
+                    <li><span class="msg">«Error al conectar con Square.»</span> — problema general; reintente y luego verifique su cuenta Square.</li>
+                </ul>
+
+                <h3>Exportar a Square (de 60Sec-AI hacia Square)</h3>
+                <ul>
+                    <li>Solo se envían los productos <strong>activos y con nombre</strong>.</li>
+                    <li>Datos transmitidos: <strong>nombre, descripción y precio</strong>, en <strong>dólares canadienses (CAD)</strong>. Square recibe un solo formato de venta, llamado «Standard».</li>
+                    <li>Datos <strong>no</strong> transmitidos: categoría, impuestos, cantidad por defecto, cuentas del plan contable.</li>
+                    <li>Un producto ya vinculado a Square se actualiza; si no, se crea en Square y el vínculo se memoriza para las próximas veces.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">«Ningún producto activo para exportar.»</span> — todos sus productos están inactivos o sin nombre. Actívelos primero.</li>
+                    <li><span class="msg">«{X} producto(s) exportado(s) a Square de {Y}.»</span> — balance de la exportación: X enviados de Y candidatos. Si X es inferior a Y, algunos productos no pudieron enviarse.</li>
+                    <li><span class="msg">«Error durante la exportación a Square:»</span> seguido del detalle técnico — la exportación se interrumpió. Verifique la conexión a Square y reintente.</li>
+                </ul>
+
+                <h3>Importar desde Square (de Square hacia 60Sec-AI)</h3>
+                <ul>
+                    <li>La importación lee todo el catálogo de Square. Para cada artículo, solo se tiene en cuenta el <strong>primer</strong> formato de venta, con su precio.</li>
+                    <li>Para decidir si crea o actualiza un producto, la importación procede así:
+                        <ol>
+                            <li>busca un producto ya vinculado a ese artículo de Square;</li>
+                            <li>si no, busca un producto <strong>activo con el mismo nombre</strong> (sin distinguir mayúsculas ni espacios al inicio y al final) y lo vincula al artículo;</li>
+                            <li>si no, <strong>crea</strong> el producto.</li>
+                        </ol>
+                    </li>
+                    <li>Un producto creado por la importación está activo, con una cantidad por defecto de 1, sin categoría, sin estado fiscal y sin cuentas del plan contable. Si no tiene nombre en Square, se llama «(Sin nombre)».</li>
+                    <li>En una actualización, el <strong>nombre, la descripción y el precio locales se sobrescriben</strong> con los valores de Square, salvo cuando el valor de Square está vacío. Un precio de 0 en Square no sobrescribe el precio local.</li>
+                </ul>
+                <ul class="messages">
+                    <li><span class="msg">«Ningún producto para importar desde Square.»</span> — el catálogo de Square está vacío.</li>
+                    <li><span class="msg">«{X} producto(s) creado(s) y {Y} actualizado(s) desde Square ({Z} encontrado(s)).»</span> — balance de la importación: Z artículos leídos, X productos nuevos, Y productos existentes actualizados.</li>
+                    <li><span class="msg">«Error durante la importación desde Square:»</span> seguido del detalle — la importación se interrumpió. Verifique la conexión a Square y reintente.</li>
+                    <li><span class="msg">«…Square.AccessToken no está configurado en Web.config.»</span> — la conexión a Square no está configurada. Conecte Square en <span class="chemin">Procesador de pagos</span> y reintente.</li>
+                </ul>
+
+                <h3>Sincronización automática</h3>
+                <p>Cualquier modificación del catálogo en Square desencadena la misma importación en segundo plano, sin acción de su parte. Las reglas de sobrescritura descritas arriba se aplican por tanto también a los cambios hechos directamente en Square.</p>
+
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Los productos inactivos nunca se exportan, pero una importación puede dejarlos intactos y crear un duplicado activo si Square contiene un artículo con el mismo nombre (el emparejamiento por nombre solo considera los productos activos).</li>
+                    <li>Después de la importación, complete los productos creados: la categoría, el estado fiscal y las cuentas del plan contable no vienen de Square.</li>
+                </ul>
+
+                <div class="attention" data-titre="Atención">Modificar el nombre o el precio de un artículo en Square y luego importar (o dejar actuar la sincronización automática) <strong>sobrescribe</strong> los valores registrados en 60Sec-AI. Haga sus correcciones de nombre y de precio en un solo sistema, preferiblemente 60Sec-AI, y luego exporte.</div>
+                <div class="piege" data-titre="Trampa">La importación empareja los productos por nombre. Si dos productos activos llevan el mismo nombre, el artículo de Square puede vincularse al equivocado. Haga un <kbd>Exportar a Square</kbd> antes de su primer <kbd>Importar desde Square</kbd>: los vínculos se crearán correctamente y se evitarán los duplicados.</div>
+                <div class="note" data-titre="Conviene saber">La exportación supone que sus precios están en dólares canadienses. Square no aplica sus estados fiscales: configure los impuestos TPS y TVQ directamente en Square.</div>
+
+                <p>Para poner en marcha la sincronización la primera vez:</p>
+                <ol>
+                    <li>Conecte su cuenta Square en <span class="chemin">Procesador de pagos</span> y espere el mensaje «Cuenta Square conectada con éxito.».</li>
+                    <li>En <span class="chemin">Productos y servicios › Productos</span>, verifique que los productos que vende estén activos y con nombre, con un precio en dólares canadienses.</li>
+                    <li>Haga clic en <kbd>Exportar a Square</kbd> y lea el balance «{X} producto(s) exportado(s) a Square de {Y}.».</li>
+                    <li>Solo entonces, haga clic en <kbd>Importar desde Square</kbd> para traer los artículos que solo existían en Square.</li>
+                    <li>Complete los productos creados por la importación: categoría, estado fiscal, cuentas.</li>
+                </ol>
+            </section>
+
+            <section id="es-reglas">
+                <h2>Reglas de negocio</h2>
+                <ul>
+                    <li><strong>Prioridad de las cuentas del plan contable</strong>: la cuenta elegida en el producto prevalece. Si está vacía («Usar la cuenta de la categoría»), se aplica la de la categoría al facturar.</li>
+                    <li><strong>De la categoría al producto</strong>: elegir una categoría no rellena el estado fiscal del producto. Hay que elegirlo uno mismo.</li>
+                    <li><strong>Eliminación</strong>: no se hace ninguna verificación de uso en las pantallas. Si el sistema rechaza la eliminación de un producto o de una categoría ya utilizados, nada lo indica en la pantalla: el producto simplemente permanece en la lista tras la recarga.</li>
+                    <li><strong>Productos inactivos</strong>: permanecen en la lista (distintivo rojo) pero no se exportan a Square.</li>
+                    <li><strong>Unicidad</strong>: no se hace ningún control de duplicados en pantalla, ni sobre el nombre de un producto ni sobre el código de una categoría.</li>
+                    <li><strong>Valores por defecto</strong>: precio vacío → 0; cantidad vacía → 1; «Producto activo» y «Categoría activa» marcados; «Agregar auto a las facturas» desmarcado.</li>
+                    <li><strong>Formatos</strong>: los precios se escriben con 2 decimales y se muestran en formato «1 234,56 $»; las cantidades aceptan 2 decimales.</li>
+                </ul>
+            </section>
+
+            <section id="es-trucos">
+                <h2>Trucos y trampas</h2>
+                <ul>
+                    <li><strong>Eliminación sin confirmación</strong> en ambas listas: basta un clic en la <kbd>Papelera</kbd>. Para conservar el historial, es mejor desmarcar «Producto activo» o «Categoría activa».</li>
+                    <li>Un producto «<strong>Tasa cero</strong>» se muestra con «—» en la columna Impuesto, como un producto sin estado. Es normal.</li>
+                    <li>Un precio dejado vacío se guarda como 0,00 $.</li>
+                    <li>La exportación a Square supone que los precios están en dólares canadienses.</li>
+                    <li><strong>Exportar antes de importar</strong> evita los duplicados. Si no, la importación empareja los productos por nombre: dos productos activos con el mismo nombre pueden vincularse mal.</li>
+                    <li><strong>Modificar el nombre o el precio en Square</strong> y luego importar, o dejar actuar la sincronización automática, sobrescribe los valores registrados en 60Sec-AI.</li>
+                    <li>Si la conexión a Square no está configurada, el error mostrado es técnico («…Square.AccessToken no está configurado en Web.config.»). Entonces hay que conectar Square en <span class="chemin">Procesador de pagos</span>.</li>
+                    <li><strong>Crear primero las categorías con sus cuentas del plan contable</strong>: los productos las heredan, lo que evita configurar las cuentas producto por producto.</li>
+                    <li>El botón <kbd>X</kbd> de la lista Productos borra <strong>también</strong> el filtro de categoría.</li>
+                    <li><kbd>Cerrar</kbd> no avisa si tiene cambios sin guardar: acostúmbrese a <kbd>Guardar</kbd> antes de cerrar.</li>
+                    <li>No aparece ningún mensaje de éxito tras <kbd>Guardar</kbd>: el cierre de la ventana y la recarga de la lista hacen de confirmación.</li>
+                </ul>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Cómo distinguir un producto de un servicio?</summary><p>No hay campo «tipo»: productos y servicios se registran igual en la misma ficha. Si desea distinguirlos, cree categorías distintas (por ejemplo «SERV» y «PROD») y vincule sus fichas a ellas; el filtro «Categoría:» de la lista le permitirá verlos por separado.</p></details>
+                <details><summary>Eliminé un producto por error. ¿Puedo recuperarlo?</summary><p>No: la papelera elimina de inmediato, sin confirmación ni papelera de recuperación. Hay que volver a crear el producto. En adelante, desmarque «Producto activo» para retirar un producto sin perderlo.</p></details>
+                <details><summary>¿Por qué mi producto «Tasa cero» muestra «—» en la columna Impuesto?</summary><p>Solo los estados «Gravable» (distintivo azul) y «Exento» (distintivo ámbar) tienen distintivo en la lista. «Tasa cero» y la ausencia de estado se muestran ambos con «—». Abra la ficha para ver el estado exacto.</p></details>
+                <details><summary>¿Qué cuenta de ingresos se usará en mi factura?</summary><p>La de la ficha de producto si está rellena; si no, la de la categoría del producto. Si ninguna de las dos está rellena, el producto no propone ninguna cuenta: rellene al menos la categoría.</p></details>
+                <details><summary>Elegí una categoría «Gravable» pero mi producto no tiene estado fiscal. ¿Por qué?</summary><p>La categoría no rellena el estado fiscal del producto. Elíjalo usted mismo en «Estado fiscal» de la ficha de producto.</p></details>
+                <details><summary>«Exportar a Square» dice «Ningún producto activo para exportar.» aunque tengo productos.</summary><p>Solo se exportan los productos activos y con nombre. Verifique el distintivo «Activo» (verde) en la lista y active los productos correspondientes.</p></details>
+                <details><summary>Mis precios cambiaron solos tras una modificación en Square. ¿Es normal?</summary><p>Sí. La sincronización automática importa toda modificación hecha en Square y sobrescribe el nombre, la descripción y el precio locales (salvo si el valor de Square está vacío o si el precio de Square es 0). Haga sus cambios de precio en 60Sec-AI y luego exporte, para que 60Sec-AI siga siendo la referencia.</p></details>
+                <details><summary>¿Por qué la importación creó duplicados?</summary><p>La importación vincula un artículo de Square a un producto ya vinculado, si no a un producto activo con el mismo nombre, y si no crea uno. Si sus productos locales estaban inactivos o con otro nombre, se crearon productos nuevos. Exporte primero, importe después y mantenga nombres idénticos en ambos sistemas.</p></details>
+                <details><summary>¿Dónde conecto mi cuenta Square?</summary><p>En el menú <span class="chemin">Procesador de pagos</span>, no en la pantalla de productos. Tras la conexión, el mensaje «Cuenta Square conectada con éxito.» aparece en la página Productos.</p></details>
+                <details><summary>¿Se envían los impuestos y la categoría a Square?</summary><p>No. La exportación transmite solo el nombre, la descripción y el precio (en dólares canadienses). Categoría, estado fiscal, cantidad por defecto y cuentas del plan contable se quedan en 60Sec-AI.</p></details>
+                <details><summary>¿Puedo tener dos categorías con el mismo código?</summary><p>La pantalla no lo impide, pero no es aconsejable: el código sirve para reconocer la categoría en las listas y en el subtítulo «CÓDIGO — Nombre». Asigne un código único de 10 caracteres como máximo.</p></details>
+                <details><summary>¿Para qué sirve «Agregar auto a las facturas»?</summary><p>Marcada, esta casilla hace que el producto se proponga automáticamente en las facturas nuevas. Resérvela para los cargos que factura casi siempre (por ejemplo gastos de desplazamiento o de administración). Vea la sección <a href="ventes.html">Ventas</a>.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Producto / servicio</td><td>Elemento del catálogo colocado en las líneas de factura: nombre, descripción, precio unitario, cantidad por defecto, estado fiscal, cuentas.</td></tr>
+                        <tr><td>Categoría de producto</td><td>Agrupación de productos que lleva un código, un estado fiscal por defecto y cuentas del plan contable heredadas por sus productos.</td></tr>
+                        <tr><td>Estado fiscal</td><td>Gravable (TPS 5 % y TVQ 9,975 % aplicados), Exento (sin impuesto) o Tasa cero (impuesto al 0 %).</td></tr>
+                        <tr><td>Cuenta de venta (Ingresos)</td><td>Cuenta del plan contable acreditada al contabilizar una factura de cliente que contiene el producto.</td></tr>
+                        <tr><td>Cuenta de compra (Costo / Gastos)</td><td>Cuenta de costo de ventas o de gastos de explotación debitada al contabilizar una factura de proveedor que contiene el producto.</td></tr>
+                        <tr><td>Libro mayor (GL)</td><td>Registro contable donde se anotan los asientos; las cuentas del plan contable son sus rúbricas.</td></tr>
+                        <tr><td>Cantidad por defecto</td><td>Cantidad propuesta automáticamente cuando el producto se agrega a una factura (1 si no se indica).</td></tr>
+                        <tr><td>Producto activo / inactivo</td><td>Un producto inactivo permanece en la lista (distintivo rojo) pero no se exporta a Square.</td></tr>
+                        <tr><td>Square</td><td>Procesador de pagos y catálogo externo con el que 60Sec-AI intercambia los productos (exportación, importación, sincronización automática).</td></tr>
+                        <tr><td>Formato de venta («Standard»)</td><td>Variante de un artículo en Square. La exportación crea solo una, «Standard»; la importación lee solo la primera.</td></tr>
+                        <tr><td>Vínculo Square</td><td>Asociación memorizada entre un producto de 60Sec-AI y un artículo de Square, creada al exportar o al importar.</td></tr>
+                        <tr><td>OAuth</td><td>Mecanismo de autorización mediante el cual conecta su cuenta Square a 60Sec-AI desde «Procesador de pagos».</td></tr>
+                        <tr><td>CAD</td><td>Dólar canadiense, moneda supuesta para todos los precios exportados a Square.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

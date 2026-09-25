@@ -19,6 +19,11 @@ Partial Public Class HeaderUser
     Protected WithEvents pnlTrial As Global.System.Web.UI.WebControls.Panel
 
     '''<summary>
+    '''lnkAide control.
+    '''</summary>
+    Protected WithEvents lnkAide As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+    '''<summary>
     '''litTrial control.
     '''</summary>
     Protected WithEvents litTrial As Global.System.Web.UI.WebControls.Literal

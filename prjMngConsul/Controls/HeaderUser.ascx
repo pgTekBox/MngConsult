@@ -36,6 +36,9 @@
         <asp:Literal ID="litCompanyName" runat="server" />
     </asp:Panel>
 
+    <%-- Aide en ligne de la section courante, dans une fenêtre à part (Aide/xxx.html?lang=). --%>
+    <a id="lnkAide" runat="server" class="header-action header-aide" href="#" title="Aide">?</a>
+
     <div class="header-action" title="Notifications">
         🔔
     </div>
@@ -229,6 +232,14 @@
     background:white;
     cursor:pointer;
 }
+
+.header-aide{
+    font-weight:900;
+    font-size:18px;
+    color:var(--primary);
+    text-decoration:none;
+}
+.header-aide:hover{ background:var(--primary-weak,#eff6ff); }
 
 /* === User === */
 .header-user{

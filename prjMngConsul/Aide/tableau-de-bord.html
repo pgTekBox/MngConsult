@@ -1,0 +1,880 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Tableau de bord — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Tableau de bord</h1>
+            <p class="intro">Le Tableau de bord est la page d’accueil de 60Sec-AI après la connexion. Cette section explique aussi comment se repérer dans l’application : l’en-tête (pastilles, langue, compagnie, aide, assistant IA), le menu de gauche et la marche à suivre pour démarrer une nouvelle compagnie. Menu <span class="chemin">Tableau de bord</span> (icône de maison, en haut du menu).</p>
+
+            <section id="fr-reperer">
+                <h2>Se repérer dans 60Sec-AI</h2>
+                <p>Toutes les pages internes de 60Sec-AI partagent la même structure : un en-tête en haut de l’écran, un menu à gauche et le contenu de l’écran au centre. L’en-tête donne l’état de votre compte et de vos connexions, permet de changer de langue ou de compagnie, et ouvre l’aide ou l’assistant IA.</p>
+
+                <h3>Pastilles d’état de l’en-tête</h3>
+                <p>Les pastilles n’apparaissent que lorsqu’elles ont quelque chose à dire. Elles renseignent, mais ne se cliquent pas toutes.</p>
+                <table>
+                    <thead><tr><th>Pastille</th><th>Quand elle apparaît</th><th>Ce qu’elle indique</th></tr></thead>
+                    <tbody>
+                        <tr><td>Essai (sablier)</td><td>Si l’abonnement actif est en période d’essai.</td><td>Libellés « Essai · N jours », « Essai · 1 jour », « Essai · dernier jour », puis « Essai expiré ». La pastille passe en couleur d’alerte à 3 jours ou moins de la fin, et en couleur de danger après l’échéance. Son info-bulle affiche « Votre essai gratuit se termine le [date] ».</td></tr>
+                        <tr><td>« Square connecté »</td><td>Si votre compte Square est relié.</td><td>Vos encaissements par carte ou Interac et la synchronisation des factures et paiements Square sont actifs. La connexion se fait dans <span class="chemin">Processeur de paiement</span>.</td></tr>
+                        <tr><td>Plaid</td><td>Toujours, sous deux formes.</td><td>Nombre de banques connectées, ou « Plaid non connecté » si aucune banque n’est reliée. La connexion d’une banque se fait depuis le <span class="chemin">Comptabilité › Relevé bancaire</span>.</td></tr>
+                        <tr><td>« N fournisseurs Stripe »</td><td>Si des fournisseurs sont configurés pour être payés par Stripe.</td><td>Nombre de fournisseurs pour lesquels un paiement automatique par carte ou débit préautorisé est possible. Voir <a href="administration.html">Paiements automatiques</a>.</td></tr>
+                    </tbody>
+                </table>
+                <div class="attention" data-titre="Attention">Quand la pastille d’essai affiche « Essai · dernier jour » ou « Essai expiré », il est temps de régler votre abonnement. Aucune carte n’est demandée pendant l’essai ; un avis vous est envoyé 7 jours avant la fin.</div>
+
+                <h3>Sélecteur de langue FR / EN / ES</h3>
+                <ul>
+                    <li>Les trois boutons <kbd>FR</kbd>, <kbd>EN</kbd> et <kbd>ES</kbd> changent la langue de toute l’interface.</li>
+                    <li>Un clic recharge la page courante en conservant vos paramètres (filtres, écran ouvert).</li>
+                    <li>La langue choisie est mémorisée pour toute la durée de votre session. À la prochaine connexion, l’application reprend la langue par défaut.</li>
+                    <li>Les libellés cités dans cette aide sont ceux de l’interface en français ; leurs traductions apparaissent dans les versions anglaise et espagnole de l’aide.</li>
+                </ul>
+
+                <h3>Sélecteur de compagnie</h3>
+                <ul>
+                    <li>Si vous n’avez accès qu’à une seule compagnie, l’en-tête affiche simplement son logo, une icône d’immeuble et son nom. Rien à cliquer.</li>
+                    <li>Si vous êtes <strong>comptable</strong> relié à plusieurs compagnies, ce libellé devient une liste déroulante. Choisissez la compagnie sur laquelle travailler.</li>
+                    <li>Changer de compagnie vérifie d’abord votre droit d’accès, puis vous renvoie au Tableau de bord de la compagnie choisie. Toutes les données affichées ensuite (clients, factures, journaux, rapports) sont celles de la compagnie active.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">Un comptable est relié à une compagnie grâce à la <strong>clé comptable</strong> que le propriétaire de cette compagnie lui communique (onglet « Comptable » de <span class="chemin">Paramètres</span>). Il n’a pas besoin d’être créé comme utilisateur de cette compagnie.</div>
+
+                <h3>Avatar et rôle</h3>
+                <p>À droite de l’en-tête, l’avatar montre vos initiales, votre nom et votre rôle dans la compagnie active :</p>
+                <table>
+                    <thead><tr><th>Rôle affiché</th><th>Ce qu’il permet</th></tr></thead>
+                    <tbody>
+                        <tr><td>« Administrateur »</td><td>Accès à tous les écrans, y compris <span class="chemin">Utilisateurs</span> (gestion des comptes de la compagnie).</td></tr>
+                        <tr><td>« Utilisateur »</td><td>Accès à tous les écrans de sa compagnie, sauf la gestion des utilisateurs.</td></tr>
+                        <tr><td>« Comptable »</td><td>Accès aux compagnies qui l’ont désigné par leur clé comptable ; peut changer de compagnie par le sélecteur de l’en-tête.</td></tr>
+                        <tr><td>« Comptable · Admin »</td><td>Comptable qui est aussi administrateur de la compagnie active.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Bouton ? (Aide)</h3>
+                <ul>
+                    <li>Le bouton <kbd>?</kbd> ouvre l’aide de la <strong>section courante</strong> dans une fenêtre séparée : depuis un écran de ventes, vous arrivez sur l’aide Ventes ; depuis un journal, sur l’aide Comptabilité, etc.</li>
+                    <li>La fenêtre d’aide reste ouverte pendant que vous travaillez : vous pouvez la placer à côté de l’application.</li>
+                    <li>Dans l’aide, le lien <kbd>Sommaire de l’aide</kbd> revient à la table des matières générale ; le champ « Rechercher dans la page… » filtre les sections de la page ; les boutons FR / EN / ES changent la langue de l’aide ; <kbd>Imprimer</kbd> lance l’impression.</li>
+                </ul>
+
+                <h3>Bouton Assistant IA</h3>
+                <p>Un visage violet flotte en bas à droite de toutes les pages internes : c’est l’assistant IA de votre compagnie. Il répond à vos questions sur l’utilisation de 60Sec-AI et sur votre comptabilité, en tenant compte du profil de votre entreprise.</p>
+                <ul>
+                    <li><strong>Boîte flottante</strong> : un clic sur le visage ouvre une boîte de dialogue. Vous pouvez la déplacer en la saisissant par sa barre de titre ; elle reste au-dessus de l’écran de travail.</li>
+                    <li><strong>Question au clavier ou au micro</strong> : tapez votre question, ou cliquez sur le micro et parlez. Le texte reconnu s’affiche avant l’envoi.</li>
+                    <li><strong>Réponse lue à voix haute</strong> : la réponse s’affiche et peut être lue par la synthèse vocale de votre navigateur.</li>
+                    <li><strong>Page complète</strong> : un lien dans la boîte ouvre la page de l’assistant, qui montre le profil de la compagnie tel que l’assistant le comprend (secteur, taxes, particularités) et les particularités que votre comptable a notées. C’est là que vous vérifiez que l’assistant a la bonne image de votre entreprise.</li>
+                </ul>
+                <div class="note" data-titre="Confidentialité">L’assistant ne transmet <strong>aucun nom de client, de fournisseur ou d’employé</strong> et <strong>aucun numéro de compte</strong> au service d’intelligence artificielle. Seuls le profil général de la compagnie et votre question sont envoyés. Évitez néanmoins de coller vous-même des renseignements personnels dans une question.</div>
+                <div class="astuce" data-titre="Astuce">Posez des questions concrètes : « Comment corriger une facture déjà comptabilisée ? », « Quel compte utiliser pour l’assurance du camion ? ». L’assistant s’appuie sur les particularités de votre compagnie pour proposer un compte ou une marche à suivre.</div>
+
+                <h3>Déconnexion</h3>
+                <ul>
+                    <li>Le bouton de sortie de l’en-tête (icône ⎋) et l’entrée <span class="chemin">Déconnexion</span> du menu ferment votre session.</li>
+                    <li>La déconnexion efface aussi le cookie « Se souvenir de moi » : à la prochaine visite, vous devrez saisir votre courriel et votre mot de passe.</li>
+                    <li>Si vous fermez simplement le navigateur sans vous déconnecter, le cookie « Se souvenir de moi » (valide 7 jours, renouvelé à chaque retour) vous reconnecte automatiquement.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Sur un ordinateur partagé, déconnectez-vous toujours par le bouton : fermer l’onglet ne suffit pas si « Se souvenir de moi » avait été coché à la connexion.</div>
+            </section>
+
+            <section id="fr-menu">
+                <h2>Menu de gauche</h2>
+                <p>Le menu de gauche liste tous les écrans de 60Sec-AI, regroupés par domaine. Le Tableau de bord (icône de maison) est en haut ; les écrans d’administration et la déconnexion sont au bas de la barre. Un clic sur un groupe déplie ses entrées.</p>
+                <table>
+                    <thead><tr><th>Entrée du menu</th><th>Ce qu’elle ouvre</th><th>Aide</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="chemin">Tableau de bord</span></td><td>La page d’accueil : bienvenue, indicateurs, accès rapides (voir plus bas).</td><td>Cette page</td></tr>
+                        <tr><td><span class="chemin">Ventes › Clients</span></td><td>La liste de vos clients et leurs fiches (adresse, courriel de facturation, coordonnées).</td><td><a href="ventes.html#fr-clients">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Ventes › Factures clients</span></td><td>Les factures que vous émettez : brouillons, factures comptabilisées, encaissements, PDF, liens de paiement Square.</td><td><a href="ventes.html">Ventes</a></td></tr>
+                        <tr><td><span class="chemin">Achats › Fournisseurs</span></td><td>La liste de vos fournisseurs et leurs fiches, dont le paiement par Stripe.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Achats › Factures fournisseurs</span></td><td>Les factures reçues de vos fournisseurs, leur comptabilisation et leur paiement.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Achats › Reçus</span></td><td>Les reçus de dépenses (photo ou PDF lus par l’IA) et leur comptabilisation.</td><td><a href="achats.html">Achats</a></td></tr>
+                        <tr><td><span class="chemin">Produits et services › Produits</span></td><td>Le catalogue de vos produits et services (prix, taxes, compte de vente).</td><td><a href="produits.html">Produits</a></td></tr>
+                        <tr><td><span class="chemin">Produits et services › Catégorie de produit</span></td><td>Les catégories qui regroupent vos produits.</td><td><a href="produits.html">Produits</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Journaux</span></td><td>Les écritures comptables (journal d’opérations diverses et journaux spécialisés).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Modèles de journaux</span></td><td>Des écritures types réutilisables (loyer, salaires, amortissement).</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Comptes bancaires</span></td><td>Vos comptes de banque et de carte de crédit.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Relevé bancaire</span></td><td>Les transactions bancaires importées (connexion Plaid ou fichier) et leur rapprochement.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Rapport de taxes</span></td><td>La déclaration de TPS et de TVQ pour une période de remise.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Fermeture d’année fiscale</span></td><td>La clôture d’un exercice et le report du bénéfice net aux bénéfices non répartis.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Comptabilité › Plan comptable</span></td><td>La liste de vos comptes (actif, passif, capitaux, revenus, dépenses) et leur entretien.</td><td><a href="comptabilite.html">Comptabilité</a></td></tr>
+                        <tr><td><span class="chemin">Agenda</span></td><td>Vos rendez-vous et la planification de vos services.</td><td><a href="agenda.html">Agenda</a></td></tr>
+                        <tr><td><span class="chemin">Employés</span></td><td>Les fiches de vos employés.</td><td><a href="employes.html">Employés</a></td></tr>
+                        <tr><td><span class="chemin">Courriel</span></td><td>La boîte courriel de la compagnie (adresse @60sec.ca) : courriels envoyés et reçus.</td><td><a href="courriel.html">Courriel</a></td></tr>
+                        <tr><td><span class="chemin">Tâches à approuver</span></td><td>Les éléments en attente de votre approbation. Une <strong>pastille</strong> sur l’entrée affiche le nombre de tâches en attente.</td><td><a href="approbations.html">Approbations</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › Plan comptable</span></td><td>Le plan comptable imprimable avec les soldes.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › État des résultats</span></td><td>Revenus, dépenses et bénéfice net d’une période.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › Bilan</span></td><td>Actif, passif et capitaux propres à une date.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › Flux de trésorerie</span></td><td>Entrées et sorties d’argent d’une période.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › Bénéfices non répartis</span></td><td>L’évolution des bénéfices non répartis.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › Balance de vérification</span></td><td>Les soldes débiteurs et créditeurs de tous les comptes.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › IA Paiement</span></td><td>Analyse par l’IA de vos paiements et de vos comptes à payer.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Rapports › IA Ventes</span></td><td>Analyse par l’IA de vos ventes et de vos clients.</td><td><a href="rapports.html">Rapports</a></td></tr>
+                        <tr><td><span class="chemin">Importation des données</span></td><td>L’import de vos données depuis un fichier ou depuis votre ancien logiciel comptable (QuickBooks et autres).</td><td><a href="importation.html">Importation</a></td></tr>
+                        <tr><td><span class="chemin">Profil de l’entreprise</span></td><td>L’identité de l’administrateur et les numéros fiscaux de l’entreprise (NEQ, BN, TPS, TVQ) ; remplissage automatique par document.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Utilisateurs</span></td><td>La gestion des comptes de la compagnie (<strong>administrateurs seulement</strong>).</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Paramètres</span></td><td>Les onglets Entreprise, Taxes, Email, Facture, Traitement, Comptabilité, Bancaire et Comptable.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Processeur de paiement</span></td><td>La connexion de Square, de Plaid et de Stripe.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Paiements automatiques</span></td><td>Les autorisations, le calendrier et l’historique des paiements automatiques aux fournisseurs.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Déconnexion</span></td><td>Ferme la session et efface le cookie « Se souvenir de moi ».</td><td>Cette page</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Piège">Si vous n’êtes pas administrateur, l’entrée <span class="chemin">Utilisateurs</span> vous renvoie au Tableau de bord sans message. Demandez à un administrateur de la compagnie de créer ou de modifier les comptes.</div>
+                <div class="note" data-titre="Bon à savoir">Toutes les données affichées dans les écrans du menu sont filtrées sur la compagnie active. Un comptable qui change de compagnie dans l’en-tête voit le menu se rafraîchir avec les données de cette compagnie.</div>
+            </section>
+
+            <section id="fr-tableau-de-bord">
+                <h2>Tableau de bord</h2>
+                <h3>But</h3>
+                <p>Le Tableau de bord (<span class="chemin">Tableau de bord</span>) est la page qui s’ouvre après la connexion, après un changement de compagnie et après l’enregistrement du profil d’une nouvelle entreprise. Il accueille les nouveaux clients, affiche quelques indicateurs de la compagnie et offre des raccourcis vers les écrans les plus utilisés.</p>
+
+                <h3>Boîte de bienvenue</h3>
+                <p>En haut de la page, une boîte repliable souhaite la bienvenue : « Bienvenue, [Prénom] ! » (ou « Bienvenue, à bord ! » si le prénom n’est pas encore saisi). Cliquez sur son titre pour la replier ou la déplier.</p>
+                <table>
+                    <thead><tr><th>Élément</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ligne de forfait</td><td>« Forfait [Solo] · Essai gratuit jusqu’au [date] — Voir vos prochaines étapes ». La date est celle de la prochaine facturation de votre abonnement ; sans abonnement actif, c’est aujourd’hui plus 30 jours.</td></tr>
+                        <tr><td>« Vos prochaines étapes »</td><td>Quatre étapes numérotées avec lien direct : 1. Compléter votre profil → <span class="chemin">Profil de l’entreprise</span> ; 2. Ajouter vos clients → <span class="chemin">Ventes › Clients</span> ; 3. Configurer vos services → <span class="chemin">Produits et services › Produits</span> ; 4. Planifier votre agenda → <span class="chemin">Agenda</span>.</td></tr>
+                        <tr><td>« Quelques conseils… »</td><td>Rappels : vos sauvegardes sont chiffrées ; aucune carte n’est requise pendant l’essai (un avis est envoyé 7 jours avant la fin) ; la TPS 5 % et la TVQ 9,975 % sont calculées automatiquement ; le soutien répond à support@60sec.ca.</td></tr>
+                        <tr><td>« Ressources utiles »</td><td>Liens vers le Centre d’aide, les Tutoriels vidéo et Contacter le support.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Bandeau principal</h3>
+                <p>Sous la boîte de bienvenue, le bandeau « Bienvenue dans 60Sec-AI » propose trois boutons et des mini-statistiques.</p>
+                <ul>
+                    <li><kbd>Nouvelle facture</kbd> : ouvre directement la fenêtre d’édition d’une facture client.</li>
+                    <li><kbd>Voir les clients</kbd> : ouvre <span class="chemin">Ventes › Clients</span>.</li>
+                    <li><kbd>Paramètres</kbd> : ouvre <span class="chemin">Paramètres</span>.</li>
+                    <li>Mini-statistiques « Ventes du mois », « Factures ouvertes », « Clients actifs », « Produits » : ce sont des <strong>exemples de présentation</strong>, pas vos chiffres (voir « Trucs et pièges »).</li>
+                </ul>
+
+                <h3>Cartes KPI (données réelles)</h3>
+                <p>Quatre cartes affichent des chiffres réels de la compagnie active. Elles sont recalculées à chaque ouverture de la page.</p>
+                <table>
+                    <thead><tr><th>Carte</th><th>Ce qu’elle compte</th></tr></thead>
+                    <tbody>
+                        <tr><td>« Clients »</td><td>Le nombre de tiers de type client, ou de type « client et fournisseur ».</td></tr>
+                        <tr><td>« Factures fournisseur »</td><td>Le nombre de documents de type facture fournisseur, toutes périodes confondues.</td></tr>
+                        <tr><td>« Produits »</td><td>Le nombre d’articles de votre catalogue de produits et services.</td></tr>
+                        <tr><td>« Revenus »</td><td>Le total des factures clients <strong>comptabilisées</strong> datées du mois courant, arrondi au dollar et suivi de « $ ». Par exemple « 12 345 $ ».</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Autres panneaux</h3>
+                <ul>
+                    <li><strong>Modules</strong> : six tuiles d’accès rapide : Clients, Factures, Produits, Fournisseurs, Reçus, Paramètres.</li>
+                    <li><strong>Factures récentes</strong> : une liste d’exemple avec un lien « Voir tout ».</li>
+                    <li><strong>Actions rapides</strong> : Créer une facture, Ajouter un client, Ajouter un produit, Voir les reçus.</li>
+                    <li><strong>Activité récente</strong> et <strong>Résumé</strong> : panneaux de présentation.</li>
+                </ul>
+
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Plusieurs panneaux du Tableau de bord sont des <strong>exemples de présentation</strong> : les mini-statistiques du bandeau, « Factures récentes », « Activité récente » et « Résumé » ne reflètent pas vos données. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) sont réelles. Pour vos vrais chiffres, utilisez les écrans du menu et les <a href="rapports.html">Rapports</a>.</div>
+                <div class="piege" data-titre="Piège">Dans le panneau Modules, la tuile <strong>Factures</strong> ouvre les factures <strong>fournisseurs</strong>, pas les factures clients. Pour vos factures de vente, passez par <span class="chemin">Ventes › Factures clients</span> ou par le bouton <kbd>Nouvelle facture</kbd>.</div>
+                <div class="attention" data-titre="Attention">La carte « Revenus » exclut les factures clients qui ne sont pas encore comptabilisées (brouillons). Si le total vous semble bas, vérifiez qu’il ne reste pas de brouillons à comptabiliser dans <span class="chemin">Ventes › Factures clients</span>.</div>
+                <div class="note" data-titre="Bon à savoir">En cas d’erreur de lecture des données, les quatre cartes affichent 0 plutôt qu’un message d’erreur. Rechargez la page ; si les zéros persistent alors que vous avez des données, contactez le soutien.</div>
+                <div class="astuce" data-titre="Astuce">Une fois votre compagnie démarrée, repliez la boîte de bienvenue : le bandeau et les cartes KPI remontent en haut de la page.</div>
+            </section>
+
+            <section id="fr-premiers-pas">
+                <h2>Premiers pas avec une nouvelle compagnie</h2>
+                <p>Voici l’ordre recommandé pour mettre en route une nouvelle compagnie. Chaque étape renvoie à l’écran concerné et à la section d’aide qui le détaille. Comptez une trentaine de minutes pour les étapes 1 à 5 ; la première facture suit tout de suite après.</p>
+
+                <h3>Étape 1 : Profil de l’entreprise</h3>
+                <p>Menu <span class="chemin">Profil de l’entreprise</span>. C’est aussi l’écran d’accueil proposé après l’inscription.</p>
+                <ol>
+                    <li>Saisissez votre <strong>Prénom</strong> et votre <strong>Nom de famille</strong> (obligatoires). Le courriel n’est pas modifiable ici.</li>
+                    <li>Pour aller vite, glissez un document officiel (immatriculation au REQ, lettre de l’ARC ou de Revenu Québec, certificat de constitution ; PDF, JPG ou PNG) puis cliquez <kbd>Analyser le document</kbd> : l’IA remplit le nom légal, le NEQ, le BN, les numéros de TPS, TVQ et TVH, la date de constitution et la fin d’exercice. Vérifiez chaque champ.</li>
+                    <li>Complétez à la main ce qui manque. La barre « Progression du profil » indique le pourcentage rempli sur 12 champs.</li>
+                    <li>Cliquez <kbd>Enregistrer et continuer →</kbd> : l’essai gratuit de 30 jours démarre et le Tableau de bord s’ouvre.</li>
+                </ol>
+                <div class="piege" data-titre="Piège">Dans cet écran, l’analyse par IA <strong>écrase</strong> les champs déjà remplis. Analysez d’abord, corrigez ensuite. (Dans <span class="chemin">Paramètres</span>, au contraire, l’IA ne remplit que les champs vides.)</div>
+
+                <h3>Étape 2 : Paramètres de l’entreprise</h3>
+                <p>Menu <span class="chemin">Paramètres</span>, onglet « Entreprise ».</p>
+                <ol>
+                    <li>Téléversez votre <strong>logo</strong> (PNG, JPG ou SVG, 1 Mo maximum) : il apparaît sur vos factures PDF et dans l’en-tête.</li>
+                    <li>Vérifiez le nom légal, le <strong>nom commercial</strong>, l’adresse complète, la province et la date de fin d’année fiscale.</li>
+                    <li>Cliquez <kbd>Enregistrer</kbd>. Dès que le nom commercial est connu, 60Sec-AI initialise les données de la compagnie et lui attribue sa boîte courriel @60sec.ca.</li>
+                </ol>
+
+                <h3>Étape 3 : Taxes</h3>
+                <p>Menu <span class="chemin">Paramètres</span>, onglet « Taxes ».</p>
+                <ol>
+                    <li>Saisissez vos numéros de <strong>TPS</strong> et de <strong>TVQ</strong> (et de TVH si vous facturez hors Québec), avec leurs dates d’inscription.</li>
+                    <li>Vérifiez les taux : TPS 5 % et TVQ 9,975 %.</li>
+                    <li>Choisissez la <strong>fréquence de remise</strong> (Mensuelle, Trimestrielle ou Annuelle) : elle sert au <span class="chemin">Comptabilité › Rapport de taxes</span>.</li>
+                    <li>Choisissez le <strong>mode de taxes</strong> (« Taxes en sus » par défaut, ou « Taxes incluses ») et l’<strong>arrondi</strong> (2 décimales par défaut).</li>
+                    <li>Indiquez le compte de banque qui servira à la remise des taxes, puis <kbd>Enregistrer</kbd>.</li>
+                </ol>
+                <div class="note" data-titre="Bon à savoir">Si vous n’êtes pas inscrit aux taxes (petit fournisseur), laissez les numéros vides : les factures n’afficheront pas de TPS ni de TVQ.</div>
+
+                <h3>Étape 4 : Plan comptable et comptes par défaut</h3>
+                <p>Menu <span class="chemin">Comptabilité › Plan comptable</span>, puis <span class="chemin">Paramètres</span>, onglet « Comptabilité ».</p>
+                <ol>
+                    <li>Parcourez le plan comptable fourni avec la compagnie. Ajoutez, renommez ou désactivez des comptes selon votre activité (voir <a href="comptabilite.html">Comptabilité</a>).</li>
+                    <li>Créez vos comptes de banque et de carte de crédit dans <span class="chemin">Comptabilité › Comptes bancaires</span>.</li>
+                    <li>Dans l’onglet « Comptabilité » des Paramètres, vérifiez les comptes par défaut utilisés par la comptabilisation automatique : Vente de produit, Achat produits, Crédit client, Crédit fournisseur, Dépense payée perso, Bénéfices non répartis, Bénéfice net de l’exercice, et le code du journal d’opérations diverses.</li>
+                    <li>Si vous venez d’un autre logiciel, envisagez <span class="chemin">Importation des données</span> pour reprendre vos clients, fournisseurs, produits et soldes (voir <a href="importation.html">Importation</a>).</li>
+                </ol>
+
+                <h3>Étape 5 : Clients et produits</h3>
+                <ol>
+                    <li>Dans <span class="chemin">Ventes › Clients</span>, cliquez <kbd>Ajouter Client</kbd> pour chaque client : nom, adresse de facturation et courriel (c’est à ce courriel que partent les factures).</li>
+                    <li>Dans <span class="chemin">Produits et services › Produits</span>, créez vos produits et services avec leur prix, leurs taxes et leur compte de vente. Regroupez-les au besoin par <span class="chemin">Catégorie de produit</span>.</li>
+                </ol>
+                <div class="astuce" data-titre="Astuce">Les boutons <kbd>Voir les clients</kbd> du bandeau et les tuiles « Clients » et « Produits » du panneau Modules mènent aux mêmes écrans depuis le Tableau de bord.</div>
+
+                <h3>Étape 6 : Première facture</h3>
+                <ol>
+                    <li>Depuis le Tableau de bord, cliquez <kbd>Nouvelle facture</kbd> (ou <span class="chemin">Ventes › Factures clients</span>).</li>
+                    <li>Choisissez le client, ajoutez les lignes de produits ou de services, vérifiez la TPS et la TVQ calculées.</li>
+                    <li>Enregistrez : la facture est un <strong>brouillon</strong> (numéro « BRO-… »). Comptabilisez-la pour obtenir son numéro définitif selon le format choisi dans <span class="chemin">Paramètres</span>, onglet « Facture » (par exemple PREFIXE-2026-0001).</li>
+                    <li>Envoyez le PDF par courriel ou, si Square est connecté, joignez un lien de paiement.</li>
+                    <li>Retournez au Tableau de bord : la carte « Revenus » reflète maintenant la facture comptabilisée.</li>
+                </ol>
+                <div class="note" data-titre="Bon à savoir">Avant d’envoyer des courriels au nom de la compagnie, vérifiez votre adresse d’expéditeur dans <span class="chemin">Paramètres</span>, onglet « Email » (<kbd>Vérifier cette adresse</kbd>) : une adresse vérifiée devient l’adresse de réponse de vos courriels.</div>
+
+                <h3>Étapes optionnelles</h3>
+                <ul>
+                    <li><span class="chemin">Utilisateurs</span> (administrateur) : ajoutez vos collègues et donnez la clé comptable de <span class="chemin">Paramètres</span> › « Comptable » à votre comptable.</li>
+                    <li><span class="chemin">Processeur de paiement</span> : connectez Square pour encaisser par carte ou Interac, et une banque par Plaid pour importer vos transactions.</li>
+                    <li><span class="chemin">Agenda</span> et <span class="chemin">Employés</span> : planifiez vos services et créez vos fiches d’employés.</li>
+                </ul>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Pourquoi les « Factures récentes » et l’« Activité récente » ne correspondent-elles pas à mes données ?</summary><p>Ces panneaux, comme les mini-statistiques du bandeau et le « Résumé », sont des exemples de présentation. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) affichent des chiffres réels. Consultez les écrans du menu ou les Rapports pour vos données.</p></details>
+                <details><summary>Ma carte « Revenus » n’inclut pas une facture que je viens de créer. Pourquoi ?</summary><p>La carte ne compte que les factures clients comptabilisées et datées du mois courant. Un brouillon n’y figure pas : comptabilisez la facture dans <span class="chemin">Ventes › Factures clients</span>. Une facture datée d’un autre mois n’est pas comptée non plus.</p></details>
+                <details><summary>Les quatre cartes affichent 0 alors que j’ai des données.</summary><p>En cas d’erreur de lecture, les cartes affichent 0. Rechargez la page. Vérifiez aussi que la bonne compagnie est sélectionnée dans l’en-tête si vous êtes comptable. Si le problème persiste, contactez support@60sec.ca.</p></details>
+                <details><summary>Comment savoir combien de jours d’essai il me reste ?</summary><p>La pastille d’essai de l’en-tête indique « Essai · N jours » et son info-bulle donne la date exacte. La ligne de forfait de la boîte de bienvenue affiche aussi « Essai gratuit jusqu’au [date] ».</p></details>
+                <details><summary>Je suis comptable : comment passer d’une compagnie à l’autre ?</summary><p>Utilisez la liste déroulante de compagnie dans l’en-tête. Après vérification de votre accès, vous êtes ramené au Tableau de bord de la compagnie choisie et tous les écrans affichent ses données.</p></details>
+                <details><summary>Le sélecteur de compagnie n’apparaît pas dans mon en-tête.</summary><p>Il n’apparaît que si vous êtes relié à plusieurs compagnies. Avec une seule compagnie, l’en-tête affiche simplement son nom. Pour être relié à une autre compagnie, obtenez sa clé comptable auprès de son propriétaire.</p></details>
+                <details><summary>Que fait le bouton ? de l’en-tête ?</summary><p>Il ouvre, dans une fenêtre séparée, l’aide de la section où vous vous trouvez. Vous pouvez y changer de langue, rechercher dans la page, imprimer, ou revenir au sommaire général de l’aide.</p></details>
+                <details><summary>L’assistant IA voit-il mes clients et mes numéros de compte ?</summary><p>Non. Aucun nom de client, de fournisseur ou d’employé et aucun numéro de compte n’est envoyé au service d’IA. Seuls le profil général de la compagnie, ses particularités et votre question sont transmis.</p></details>
+                <details><summary>Comment poser une question à l’assistant à la voix ?</summary><p>Ouvrez la boîte de l’assistant (visage violet en bas à droite), cliquez sur le micro et parlez. Le texte reconnu s’affiche ; envoyez-le. La réponse peut être lue à voix haute. La reconnaissance vocale dépend de votre navigateur : autorisez l’accès au micro quand il vous le demande.</p></details>
+                <details><summary>La tuile « Factures » du panneau Modules ouvre les factures fournisseurs. Où sont mes factures clients ?</summary><p>Dans <span class="chemin">Ventes › Factures clients</span>, ou par le bouton <kbd>Nouvelle facture</kbd> du bandeau pour en créer une.</p></details>
+                <details><summary>Je change la langue avec FR / EN / ES, mais elle revient au français à ma prochaine connexion.</summary><p>La langue est mémorisée pour la session seulement. Choisissez-la de nouveau après la connexion ; vos données et vos paramètres ne sont pas touchés.</p></details>
+                <details><summary>Je ne vois pas l’entrée « Utilisateurs » ou elle me renvoie au Tableau de bord.</summary><p>Cet écran est réservé aux administrateurs. Votre rôle est affiché sous votre nom dans l’en-tête. Demandez à un administrateur de la compagnie de gérer les comptes.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Administrateur</td><td>Utilisateur d’une compagnie qui peut, en plus, gérer les comptes des autres utilisateurs (écran Utilisateurs).</td></tr>
+                        <tr><td>Assistant IA</td><td>Aide conversationnelle propre à votre compagnie, accessible par le visage violet en bas à droite. Répond au clavier ou à la voix, sans transmettre vos données nominatives.</td></tr>
+                        <tr><td>Boîte de bienvenue</td><td>Encadré repliable en haut du Tableau de bord : forfait, prochaines étapes, conseils et ressources.</td></tr>
+                        <tr><td>Carte KPI</td><td>Indicateur clé affiché sur le Tableau de bord : Clients, Factures fournisseur, Produits et Revenus. Ce sont les seules données réelles de la page.</td></tr>
+                        <tr><td>Clé comptable</td><td>Code fourni dans Paramètres › Comptable qui permet à un comptable externe d’accéder à la compagnie sans y être créé comme utilisateur.</td></tr>
+                        <tr><td>Compagnie active</td><td>La compagnie choisie dans l’en-tête ; toutes les données affichées lui appartiennent.</td></tr>
+                        <tr><td>Comptable</td><td>Rôle qui donne accès à plusieurs compagnies (celles qui ont communiqué leur clé comptable) et au sélecteur de compagnie.</td></tr>
+                        <tr><td>Comptabilisée (facture)</td><td>Facture passée du statut brouillon au statut définitif : elle reçoit son numéro et ses écritures sont inscrites au journal. Seules ces factures entrent dans la carte Revenus.</td></tr>
+                        <tr><td>Essai</td><td>Période gratuite de 30 jours qui commence à l’enregistrement du profil de l’entreprise. Son état est affiché par la pastille sablier de l’en-tête.</td></tr>
+                        <tr><td>Pastille</td><td>Petit indicateur de l’en-tête (essai, Square, Plaid, Stripe) ou du menu (nombre de tâches à approuver).</td></tr>
+                        <tr><td>Plaid</td><td>Service de connexion bancaire qui importe vos transactions dans le Relevé bancaire.</td></tr>
+                        <tr><td>Se souvenir de moi</td><td>Option de la page de connexion qui conserve votre session 7 jours grâce à un cookie sécurisé, renouvelé à chaque retour et effacé à la déconnexion.</td></tr>
+                        <tr><td>Square</td><td>Processeur de paiement pour encaisser vos clients par carte ou Interac et synchroniser factures et paiements.</td></tr>
+                        <tr><td>Stripe</td><td>Service qui gère votre abonnement 60Sec-AI et les paiements automatiques à vos fournisseurs (carte ou débit préautorisé).</td></tr>
+                        <tr><td>TPS / TVQ</td><td>Taxe sur les produits et services (5 %) et taxe de vente du Québec (9,975 %), calculées automatiquement sur les factures.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Dashboard</h1>
+            <p class="intro">The Dashboard is the home page of 60Sec-AI after you sign in. This section also explains how to find your way around the application: the header (status badges, language, company, help, AI assistant), the left menu and the steps to start a new company. Menu <span class="chemin">Dashboard</span> (house icon, at the top of the menu).</p>
+
+            <section id="en-getting-around">
+                <h2>Getting around 60Sec-AI</h2>
+                <p>Every internal page of 60Sec-AI shares the same layout: a header at the top, a menu on the left and the screen content in the centre. The header shows the state of your account and connections, lets you switch language or company, and opens the help or the AI assistant.</p>
+
+                <h3>Header status badges</h3>
+                <p>Badges only appear when they have something to say. They inform you; not all of them can be clicked.</p>
+                <table>
+                    <thead><tr><th>Badge</th><th>When it appears</th><th>What it tells you</th></tr></thead>
+                    <tbody>
+                        <tr><td>Trial (hourglass)</td><td>If the active subscription is in its trial period.</td><td>Labels “Trial · N days”, “Trial · 1 day”, “Trial · last day”, then “Trial expired”. The badge turns to the alert colour 3 days or less before the end, and to the danger colour once the date has passed. Its tooltip shows “Your free trial ends on [date]”.</td></tr>
+                        <tr><td>“Square connected”</td><td>If your Square account is linked.</td><td>Card or Interac payments from customers and the synchronisation of Square invoices and payments are active. The connection is made in <span class="chemin">Payment processor</span>.</td></tr>
+                        <tr><td>Plaid</td><td>Always, in one of two forms.</td><td>Number of connected banks, or “Plaid not connected” if no bank is linked. Banks are connected from <span class="chemin">Accounting › Bank statement</span>.</td></tr>
+                        <tr><td>“N Stripe suppliers”</td><td>If suppliers are set up to be paid through Stripe.</td><td>Number of suppliers for which an automatic payment by card or pre-authorised debit is possible. See <a href="administration.html">Automatic payments</a>.</td></tr>
+                    </tbody>
+                </table>
+                <div class="attention" data-titre="Warning">When the trial badge reads “Trial · last day” or “Trial expired”, it is time to pay for your subscription. No card is required during the trial; a notice is sent 7 days before the end.</div>
+
+                <h3>Language selector FR / EN / ES</h3>
+                <ul>
+                    <li>The three buttons <kbd>FR</kbd>, <kbd>EN</kbd> and <kbd>ES</kbd> change the language of the whole interface.</li>
+                    <li>A click reloads the current page while keeping your settings (filters, open screen).</li>
+                    <li>The chosen language is remembered for the whole session. At your next sign-in, the application returns to the default language.</li>
+                    <li>The labels quoted in this help are those of the French interface; their translations appear in the English and Spanish versions of the help.</li>
+                </ul>
+
+                <h3>Company selector</h3>
+                <ul>
+                    <li>If you have access to a single company, the header simply shows its logo, a building icon and its name. Nothing to click.</li>
+                    <li>If you are an <strong>accountant</strong> linked to several companies, this label becomes a drop-down list. Choose the company you want to work on.</li>
+                    <li>Switching company first checks your access right, then sends you to the Dashboard of the chosen company. All data shown afterwards (customers, invoices, journals, reports) belongs to the active company.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">An accountant is linked to a company through the <strong>accountant key</strong> that the owner of that company gives them (“Accountant” tab of <span class="chemin">Settings</span>). They do not need to be created as a user of that company.</div>
+
+                <h3>Avatar and role</h3>
+                <p>On the right of the header, the avatar shows your initials, your name and your role in the active company:</p>
+                <table>
+                    <thead><tr><th>Role shown</th><th>What it allows</th></tr></thead>
+                    <tbody>
+                        <tr><td>“Administrator”</td><td>Access to every screen, including <span class="chemin">Users</span> (management of the company’s accounts).</td></tr>
+                        <tr><td>“User”</td><td>Access to every screen of their company, except user management.</td></tr>
+                        <tr><td>“Accountant”</td><td>Access to the companies that designated them through their accountant key; can switch company with the header selector.</td></tr>
+                        <tr><td>“Accountant · Admin”</td><td>Accountant who is also an administrator of the active company.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>? button (Help)</h3>
+                <ul>
+                    <li>The <kbd>?</kbd> button opens the help of the <strong>current section</strong> in a separate window: from a sales screen you land on the Sales help; from a journal, on the Accounting help, and so on.</li>
+                    <li>The help window stays open while you work: you can place it next to the application.</li>
+                    <li>In the help, the <kbd>Help contents</kbd> link goes back to the general table of contents; the “Search this page…” field filters the sections of the page; the FR / EN / ES buttons change the help language; <kbd>Print</kbd> starts printing.</li>
+                </ul>
+
+                <h3>AI Assistant button</h3>
+                <p>A purple face floats at the bottom right of every internal page: it is your company’s AI assistant. It answers your questions about using 60Sec-AI and about your bookkeeping, taking your company profile into account.</p>
+                <ul>
+                    <li><strong>Floating box</strong>: a click on the face opens a dialogue box. You can move it by dragging its title bar; it stays above the working screen.</li>
+                    <li><strong>Question by keyboard or microphone</strong>: type your question, or click the microphone and speak. The recognised text is shown before sending.</li>
+                    <li><strong>Answer read aloud</strong>: the answer is displayed and can be read by your browser’s speech synthesis.</li>
+                    <li><strong>Full page</strong>: a link in the box opens the assistant page, which shows the company profile as the assistant understands it (sector, taxes, specifics) and the particularities your accountant has noted. This is where you check that the assistant has the right picture of your business.</li>
+                </ul>
+                <div class="note" data-titre="Privacy">The assistant sends <strong>no customer, supplier or employee name</strong> and <strong>no account number</strong> to the artificial-intelligence service. Only the general company profile and your question are sent. Still, avoid pasting personal information into a question yourself.</div>
+                <div class="astuce" data-titre="Tip">Ask concrete questions: “How do I correct an invoice that is already posted?”, “Which account should I use for the truck insurance?”. The assistant relies on your company’s particularities to suggest an account or a procedure.</div>
+
+                <h3>Sign out</h3>
+                <ul>
+                    <li>The exit button in the header (⎋ icon) and the <span class="chemin">Sign out</span> menu entry close your session.</li>
+                    <li>Signing out also clears the “Remember me” cookie: at your next visit you will have to enter your e-mail and password.</li>
+                    <li>If you simply close the browser without signing out, the “Remember me” cookie (valid 7 days, renewed at every return) signs you in again automatically.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">On a shared computer, always sign out with the button: closing the tab is not enough if “Remember me” was ticked at sign-in.</div>
+            </section>
+
+            <section id="en-left-menu">
+                <h2>Left menu</h2>
+                <p>The left menu lists every screen of 60Sec-AI, grouped by area. The Dashboard (house icon) is at the top; the administration screens and sign-out are at the bottom of the bar. Clicking a group expands its entries.</p>
+                <table>
+                    <thead><tr><th>Menu entry</th><th>What it opens</th><th>Help</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="chemin">Dashboard</span></td><td>The home page: welcome, indicators, shortcuts (see below).</td><td>This page</td></tr>
+                        <tr><td><span class="chemin">Sales › Customers</span></td><td>The list of your customers and their records (address, billing e-mail, contact details).</td><td><a href="ventes.html#en-customers">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Sales › Customer invoices</span></td><td>The invoices you issue: drafts, posted invoices, receipts, PDFs, Square payment links.</td><td><a href="ventes.html">Sales</a></td></tr>
+                        <tr><td><span class="chemin">Purchases › Suppliers</span></td><td>The list of your suppliers and their records, including payment through Stripe.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Purchases › Supplier invoices</span></td><td>The invoices received from your suppliers, their posting and their payment.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Purchases › Receipts</span></td><td>Expense receipts (photo or PDF read by the AI) and their posting.</td><td><a href="achats.html">Purchases</a></td></tr>
+                        <tr><td><span class="chemin">Products and services › Products</span></td><td>Your catalogue of products and services (price, taxes, sales account).</td><td><a href="produits.html">Products</a></td></tr>
+                        <tr><td><span class="chemin">Products and services › Product category</span></td><td>The categories that group your products.</td><td><a href="produits.html">Products</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Journals</span></td><td>Accounting entries (general journal and specialised journals).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Journal templates</span></td><td>Reusable standard entries (rent, salaries, depreciation).</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Bank accounts</span></td><td>Your bank and credit-card accounts.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Bank statement</span></td><td>Imported bank transactions (Plaid connection or file) and their reconciliation.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Tax report</span></td><td>The GST and QST return for a remittance period.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Fiscal year-end</span></td><td>Closing a fiscal year and carrying net income to retained earnings.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Accounting › Chart of accounts</span></td><td>The list of your accounts (assets, liabilities, equity, revenue, expenses) and their upkeep.</td><td><a href="comptabilite.html">Accounting</a></td></tr>
+                        <tr><td><span class="chemin">Calendar</span></td><td>Your appointments and the scheduling of your services.</td><td><a href="agenda.html">Calendar</a></td></tr>
+                        <tr><td><span class="chemin">Employees</span></td><td>Your employee records.</td><td><a href="employes.html">Employees</a></td></tr>
+                        <tr><td><span class="chemin">E-mail</span></td><td>The company mailbox (@60sec.ca address): sent and received e-mails.</td><td><a href="courriel.html">E-mail</a></td></tr>
+                        <tr><td><span class="chemin">Tasks to approve</span></td><td>Items awaiting your approval. A <strong>badge</strong> on the entry shows the number of pending tasks.</td><td><a href="approbations.html">Approvals</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Chart of accounts</span></td><td>The printable chart of accounts with balances.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Income statement</span></td><td>Revenue, expenses and net income for a period.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Balance sheet</span></td><td>Assets, liabilities and equity at a date.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Cash flow</span></td><td>Cash inflows and outflows for a period.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Retained earnings</span></td><td>The evolution of retained earnings.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › Trial balance</span></td><td>Debit and credit balances of all accounts.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › AI Payments</span></td><td>AI analysis of your payments and accounts payable.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Reports › AI Sales</span></td><td>AI analysis of your sales and customers.</td><td><a href="rapports.html">Reports</a></td></tr>
+                        <tr><td><span class="chemin">Data import</span></td><td>Importing your data from a file or from your former accounting software (QuickBooks and others).</td><td><a href="importation.html">Import</a></td></tr>
+                        <tr><td><span class="chemin">Company profile</span></td><td>The administrator’s identity and the company’s tax numbers (NEQ, BN, GST, QST); automatic fill from a document.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Users</span></td><td>Management of the company’s accounts (<strong>administrators only</strong>).</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Settings</span></td><td>The Company, Taxes, Email, Invoice, Processing, Accounting, Banking and Accountant tabs.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Payment processor</span></td><td>Connecting Square, Plaid and Stripe.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Automatic payments</span></td><td>Authorisations, calendar and history of automatic payments to suppliers.</td><td><a href="administration.html">Administration</a></td></tr>
+                        <tr><td><span class="chemin">Sign out</span></td><td>Closes the session and clears the “Remember me” cookie.</td><td>This page</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Pitfall">If you are not an administrator, the <span class="chemin">Users</span> entry sends you back to the Dashboard without any message. Ask an administrator of the company to create or modify accounts.</div>
+                <div class="note" data-titre="Good to know">All data shown in the menu screens is filtered on the active company. An accountant who switches company in the header sees the menu refresh with that company’s data.</div>
+            </section>
+
+            <section id="en-dashboard">
+                <h2>Dashboard</h2>
+                <h3>Purpose</h3>
+                <p>The Dashboard (<span class="chemin">Dashboard</span>) is the page that opens after sign-in, after a company switch and after saving the profile of a new company. It welcomes new customers, shows a few company indicators and offers shortcuts to the most used screens.</p>
+
+                <h3>Welcome box</h3>
+                <p>At the top of the page, a collapsible box greets you: “Welcome, [First name]!” (or “Welcome aboard!” if the first name has not been entered yet). Click its title to collapse or expand it.</p>
+                <table>
+                    <thead><tr><th>Element</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Plan line</td><td>“Plan [Solo] · Free trial until [date] — See your next steps”. The date is that of your subscription’s next billing; without an active subscription, it is today plus 30 days.</td></tr>
+                        <tr><td>“Your next steps”</td><td>Four numbered steps with a direct link: 1. Complete your profile → <span class="chemin">Company profile</span>; 2. Add your customers → <span class="chemin">Sales › Customers</span>; 3. Set up your services → <span class="chemin">Products and services › Products</span>; 4. Plan your calendar → <span class="chemin">Calendar</span>.</td></tr>
+                        <tr><td>“A few tips…”</td><td>Reminders: your backups are encrypted; no card is required during the trial (a notice is sent 7 days before the end); GST 5% and QST 9.975% are calculated automatically; support answers at support@60sec.ca.</td></tr>
+                        <tr><td>“Useful resources”</td><td>Links to the Help centre, Video tutorials and Contact support.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Main banner</h3>
+                <p>Below the welcome box, the “Welcome to 60Sec-AI” banner offers three buttons and mini-statistics.</p>
+                <ul>
+                    <li><kbd>New invoice</kbd>: opens the customer-invoice editing window directly.</li>
+                    <li><kbd>View customers</kbd>: opens <span class="chemin">Sales › Customers</span>.</li>
+                    <li><kbd>Settings</kbd>: opens <span class="chemin">Settings</span>.</li>
+                    <li>Mini-statistics “Sales this month”, “Open invoices”, “Active customers”, “Products”: these are <strong>presentation samples</strong>, not your figures (see “Tips and pitfalls”).</li>
+                </ul>
+
+                <h3>KPI cards (real data)</h3>
+                <p>Four cards show real figures of the active company. They are recalculated every time the page opens.</p>
+                <table>
+                    <thead><tr><th>Card</th><th>What it counts</th></tr></thead>
+                    <tbody>
+                        <tr><td>“Customers”</td><td>The number of third parties of type customer, or of type “customer and supplier”.</td></tr>
+                        <tr><td>“Supplier invoices”</td><td>The number of documents of type supplier invoice, all periods together.</td></tr>
+                        <tr><td>“Products”</td><td>The number of items in your product and service catalogue.</td></tr>
+                        <tr><td>“Revenue”</td><td>The total of <strong>posted</strong> customer invoices dated in the current month, rounded to the dollar and followed by “$”. For example “12 345 $”.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Other panels</h3>
+                <ul>
+                    <li><strong>Modules</strong>: six quick-access tiles: Customers, Invoices, Products, Suppliers, Receipts, Settings.</li>
+                    <li><strong>Recent invoices</strong>: a sample list with a “View all” link.</li>
+                    <li><strong>Quick actions</strong>: Create an invoice, Add a customer, Add a product, View receipts.</li>
+                    <li><strong>Recent activity</strong> and <strong>Summary</strong>: presentation panels.</li>
+                </ul>
+
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Several Dashboard panels are <strong>presentation samples</strong>: the banner mini-statistics, “Recent invoices”, “Recent activity” and “Summary” do not reflect your data. Only the four KPI cards (Customers, Supplier invoices, Products, Revenue) are real. For your real figures, use the menu screens and the <a href="rapports.html">Reports</a>.</div>
+                <div class="piege" data-titre="Pitfall">In the Modules panel, the <strong>Invoices</strong> tile opens <strong>supplier</strong> invoices, not customer invoices. For your sales invoices, go through <span class="chemin">Sales › Customer invoices</span> or the <kbd>New invoice</kbd> button.</div>
+                <div class="attention" data-titre="Warning">The “Revenue” card excludes customer invoices that are not yet posted (drafts). If the total looks low, check that no drafts remain to be posted in <span class="chemin">Sales › Customer invoices</span>.</div>
+                <div class="note" data-titre="Good to know">If the data cannot be read, the four cards show 0 rather than an error message. Reload the page; if the zeros persist although you have data, contact support.</div>
+                <div class="astuce" data-titre="Tip">Once your company is up and running, collapse the welcome box: the banner and the KPI cards move up to the top of the page.</div>
+            </section>
+
+            <section id="en-first-steps">
+                <h2>First steps with a new company</h2>
+                <p>Here is the recommended order to get a new company going. Each step points to the screen involved and to the help section that details it. Allow about thirty minutes for steps 1 to 5; the first invoice follows right after.</p>
+
+                <h3>Step 1: Company profile</h3>
+                <p>Menu <span class="chemin">Company profile</span>. It is also the welcome screen offered after registration.</p>
+                <ol>
+                    <li>Enter your <strong>First name</strong> and <strong>Last name</strong> (required). The e-mail cannot be changed here.</li>
+                    <li>To go faster, drag an official document (Quebec enterprise registration, letter from the CRA or Revenu Québec, certificate of incorporation; PDF, JPG or PNG) and click <kbd>Analyse the document</kbd>: the AI fills in the legal name, NEQ, BN, GST, QST and HST numbers, incorporation date and fiscal year-end. Check every field.</li>
+                    <li>Complete what is missing by hand. The “Profile progress” bar shows the percentage filled out of 12 fields.</li>
+                    <li>Click <kbd>Save and continue →</kbd>: the 30-day free trial starts and the Dashboard opens.</li>
+                </ol>
+                <div class="piege" data-titre="Pitfall">On this screen, the AI analysis <strong>overwrites</strong> fields that are already filled. Analyse first, correct afterwards. (In <span class="chemin">Settings</span>, on the contrary, the AI only fills empty fields.)</div>
+
+                <h3>Step 2: Company settings</h3>
+                <p>Menu <span class="chemin">Settings</span>, “Company” tab.</p>
+                <ol>
+                    <li>Upload your <strong>logo</strong> (PNG, JPG or SVG, 1 MB maximum): it appears on your PDF invoices and in the header.</li>
+                    <li>Check the legal name, the <strong>trade name</strong>, the full address, the province and the fiscal year-end date.</li>
+                    <li>Click <kbd>Save</kbd>. As soon as the trade name is known, 60Sec-AI initialises the company data and assigns its @60sec.ca mailbox.</li>
+                </ol>
+
+                <h3>Step 3: Taxes</h3>
+                <p>Menu <span class="chemin">Settings</span>, “Taxes” tab.</p>
+                <ol>
+                    <li>Enter your <strong>GST</strong> and <strong>QST</strong> numbers (and HST if you invoice outside Quebec), with their registration dates.</li>
+                    <li>Check the rates: GST 5% and QST 9.975%.</li>
+                    <li>Choose the <strong>remittance frequency</strong> (Monthly, Quarterly or Annual): it is used by <span class="chemin">Accounting › Tax report</span>.</li>
+                    <li>Choose the <strong>tax mode</strong> (“Taxes extra” by default, or “Taxes included”) and the <strong>rounding</strong> (2 decimals by default).</li>
+                    <li>Indicate the bank account used for tax remittances, then <kbd>Save</kbd>.</li>
+                </ol>
+                <div class="note" data-titre="Good to know">If you are not registered for taxes (small supplier), leave the numbers empty: invoices will show neither GST nor QST.</div>
+
+                <h3>Step 4: Chart of accounts and default accounts</h3>
+                <p>Menu <span class="chemin">Accounting › Chart of accounts</span>, then <span class="chemin">Settings</span>, “Accounting” tab.</p>
+                <ol>
+                    <li>Browse the chart of accounts supplied with the company. Add, rename or deactivate accounts according to your activity (see <a href="comptabilite.html">Accounting</a>).</li>
+                    <li>Create your bank and credit-card accounts in <span class="chemin">Accounting › Bank accounts</span>.</li>
+                    <li>In the “Accounting” tab of Settings, check the default accounts used by automatic posting: Product sales, Product purchases, Customer credit, Supplier credit, Expense paid personally, Retained earnings, Net income for the year, and the code of the general journal.</li>
+                    <li>If you come from another software, consider <span class="chemin">Data import</span> to bring over your customers, suppliers, products and balances (see <a href="importation.html">Import</a>).</li>
+                </ol>
+
+                <h3>Step 5: Customers and products</h3>
+                <ol>
+                    <li>In <span class="chemin">Sales › Customers</span>, click <kbd>Add Customer</kbd> for each customer: name, billing address and e-mail (invoices are sent to this e-mail).</li>
+                    <li>In <span class="chemin">Products and services › Products</span>, create your products and services with their price, taxes and sales account. Group them by <span class="chemin">Product category</span> if needed.</li>
+                </ol>
+                <div class="astuce" data-titre="Tip">The <kbd>View customers</kbd> button of the banner and the “Customers” and “Products” tiles of the Modules panel lead to the same screens from the Dashboard.</div>
+
+                <h3>Step 6: First invoice</h3>
+                <ol>
+                    <li>From the Dashboard, click <kbd>New invoice</kbd> (or <span class="chemin">Sales › Customer invoices</span>).</li>
+                    <li>Choose the customer, add the product or service lines, check the calculated GST and QST.</li>
+                    <li>Save: the invoice is a <strong>draft</strong> (number “BRO-…”). Post it to get its final number according to the format chosen in <span class="chemin">Settings</span>, “Invoice” tab (for example PREFIX-2026-0001).</li>
+                    <li>Send the PDF by e-mail or, if Square is connected, attach a payment link.</li>
+                    <li>Return to the Dashboard: the “Revenue” card now reflects the posted invoice.</li>
+                </ol>
+                <div class="note" data-titre="Good to know">Before sending e-mails on behalf of the company, verify your sender address in <span class="chemin">Settings</span>, “Email” tab (<kbd>Verify this address</kbd>): a verified address becomes the reply address of your e-mails.</div>
+
+                <h3>Optional steps</h3>
+                <ul>
+                    <li><span class="chemin">Users</span> (administrator): add your colleagues and give the accountant key from <span class="chemin">Settings</span> › “Accountant” to your accountant.</li>
+                    <li><span class="chemin">Payment processor</span>: connect Square to collect by card or Interac, and a bank through Plaid to import your transactions.</li>
+                    <li><span class="chemin">Calendar</span> and <span class="chemin">Employees</span>: schedule your services and create your employee records.</li>
+                </ul>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>Why do “Recent invoices” and “Recent activity” not match my data?</summary><p>These panels, like the banner mini-statistics and the “Summary”, are presentation samples. Only the four KPI cards (Customers, Supplier invoices, Products, Revenue) show real figures. Use the menu screens or the Reports for your data.</p></details>
+                <details><summary>My “Revenue” card does not include an invoice I just created. Why?</summary><p>The card only counts posted customer invoices dated in the current month. A draft is not included: post the invoice in <span class="chemin">Sales › Customer invoices</span>. An invoice dated in another month is not counted either.</p></details>
+                <details><summary>The four cards show 0 although I have data.</summary><p>If the data cannot be read, the cards show 0. Reload the page. Also check that the right company is selected in the header if you are an accountant. If the problem persists, contact support@60sec.ca.</p></details>
+                <details><summary>How do I know how many trial days I have left?</summary><p>The trial badge in the header reads “Trial · N days” and its tooltip gives the exact date. The plan line of the welcome box also shows “Free trial until [date]”.</p></details>
+                <details><summary>I am an accountant: how do I switch from one company to another?</summary><p>Use the company drop-down list in the header. After your access is checked, you are taken to the Dashboard of the chosen company and every screen shows its data.</p></details>
+                <details><summary>The company selector does not appear in my header.</summary><p>It only appears if you are linked to several companies. With a single company, the header simply shows its name. To be linked to another company, get its accountant key from its owner.</p></details>
+                <details><summary>What does the ? button in the header do?</summary><p>It opens, in a separate window, the help of the section you are in. There you can change language, search the page, print, or go back to the general help contents.</p></details>
+                <details><summary>Does the AI assistant see my customers and my account numbers?</summary><p>No. No customer, supplier or employee name and no account number is sent to the AI service. Only the general company profile, its particularities and your question are transmitted.</p></details>
+                <details><summary>How do I ask the assistant a question by voice?</summary><p>Open the assistant box (purple face at the bottom right), click the microphone and speak. The recognised text is displayed; send it. The answer can be read aloud. Speech recognition depends on your browser: allow microphone access when asked.</p></details>
+                <details><summary>The “Invoices” tile of the Modules panel opens supplier invoices. Where are my customer invoices?</summary><p>In <span class="chemin">Sales › Customer invoices</span>, or through the banner’s <kbd>New invoice</kbd> button to create one.</p></details>
+                <details><summary>I change the language with FR / EN / ES, but it goes back to French at my next sign-in.</summary><p>The language is remembered for the session only. Choose it again after signing in; your data and settings are not affected.</p></details>
+                <details><summary>I do not see the “Users” entry, or it sends me back to the Dashboard.</summary><p>This screen is reserved for administrators. Your role is shown under your name in the header. Ask an administrator of the company to manage accounts.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Administrator</td><td>User of a company who can, in addition, manage the accounts of other users (Users screen).</td></tr>
+                        <tr><td>AI assistant</td><td>Conversational help specific to your company, reached through the purple face at the bottom right. Answers by keyboard or voice, without transmitting your personal data.</td></tr>
+                        <tr><td>Welcome box</td><td>Collapsible box at the top of the Dashboard: plan, next steps, tips and resources.</td></tr>
+                        <tr><td>KPI card</td><td>Key indicator shown on the Dashboard: Customers, Supplier invoices, Products and Revenue. They are the only real data on the page.</td></tr>
+                        <tr><td>Accountant key</td><td>Code provided in Settings › Accountant that lets an external accountant access the company without being created as a user.</td></tr>
+                        <tr><td>Active company</td><td>The company chosen in the header; all data shown belongs to it.</td></tr>
+                        <tr><td>Accountant</td><td>Role that gives access to several companies (those that shared their accountant key) and to the company selector.</td></tr>
+                        <tr><td>Posted (invoice)</td><td>Invoice moved from draft to final status: it receives its number and its entries are recorded in the journal. Only these invoices enter the Revenue card.</td></tr>
+                        <tr><td>Trial</td><td>Free 30-day period that starts when the company profile is saved. Its state is shown by the hourglass badge in the header.</td></tr>
+                        <tr><td>Badge</td><td>Small indicator in the header (trial, Square, Plaid, Stripe) or in the menu (number of tasks to approve).</td></tr>
+                        <tr><td>Plaid</td><td>Bank connection service that imports your transactions into the Bank statement.</td></tr>
+                        <tr><td>Remember me</td><td>Sign-in page option that keeps your session for 7 days through a secure cookie, renewed at every return and cleared at sign-out.</td></tr>
+                        <tr><td>Square</td><td>Payment processor to collect from your customers by card or Interac and synchronise invoices and payments.</td></tr>
+                        <tr><td>Stripe</td><td>Service that handles your 60Sec-AI subscription and automatic payments to your suppliers (card or pre-authorised debit).</td></tr>
+                        <tr><td>GST / QST</td><td>Goods and services tax (5%) and Quebec sales tax (9.975%), calculated automatically on invoices.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Panel de control</h1>
+            <p class="intro">El Panel de control es la página de inicio de 60Sec-AI después de iniciar sesión. Esta sección explica también cómo orientarse en la aplicación: la cabecera (indicadores, idioma, empresa, ayuda, asistente IA), el menú de la izquierda y los pasos para poner en marcha una nueva empresa. Menú <span class="chemin">Panel de control</span> (icono de casa, arriba del menú).</p>
+
+            <section id="es-orientarse">
+                <h2>Orientarse en 60Sec-AI</h2>
+                <p>Todas las páginas internas de 60Sec-AI comparten la misma estructura: una cabecera en la parte superior, un menú a la izquierda y el contenido de la pantalla en el centro. La cabecera muestra el estado de su cuenta y de sus conexiones, permite cambiar de idioma o de empresa, y abre la ayuda o el asistente IA.</p>
+
+                <h3>Indicadores de estado de la cabecera</h3>
+                <p>Los indicadores solo aparecen cuando tienen algo que decir. Informan, pero no todos se pueden pulsar.</p>
+                <table>
+                    <thead><tr><th>Indicador</th><th>Cuándo aparece</th><th>Qué indica</th></tr></thead>
+                    <tbody>
+                        <tr><td>Prueba (reloj de arena)</td><td>Si la suscripción activa está en período de prueba.</td><td>Etiquetas «Prueba · N días», «Prueba · 1 día», «Prueba · último día» y luego «Prueba vencida». El indicador pasa al color de alerta a 3 días o menos del final, y al color de peligro una vez pasada la fecha. Su descripción emergente muestra «Su prueba gratuita termina el [fecha]».</td></tr>
+                        <tr><td>«Square conectado»</td><td>Si su cuenta Square está vinculada.</td><td>Los cobros a clientes con tarjeta o Interac y la sincronización de facturas y pagos de Square están activos. La conexión se hace en <span class="chemin">Procesador de pago</span>.</td></tr>
+                        <tr><td>Plaid</td><td>Siempre, en una de dos formas.</td><td>Número de bancos conectados, o «Plaid no conectado» si no hay ningún banco vinculado. Los bancos se conectan desde <span class="chemin">Contabilidad › Extracto bancario</span>.</td></tr>
+                        <tr><td>«N proveedores Stripe»</td><td>Si hay proveedores configurados para pagarse por Stripe.</td><td>Número de proveedores para los que es posible un pago automático con tarjeta o débito preautorizado. Vea <a href="administration.html">Pagos automáticos</a>.</td></tr>
+                    </tbody>
+                </table>
+                <div class="attention" data-titre="Atención">Cuando el indicador de prueba muestra «Prueba · último día» o «Prueba vencida», es hora de pagar su suscripción. No se pide ninguna tarjeta durante la prueba; se envía un aviso 7 días antes del final.</div>
+
+                <h3>Selector de idioma FR / EN / ES</h3>
+                <ul>
+                    <li>Los tres botones <kbd>FR</kbd>, <kbd>EN</kbd> y <kbd>ES</kbd> cambian el idioma de toda la interfaz.</li>
+                    <li>Un clic recarga la página actual conservando sus parámetros (filtros, pantalla abierta).</li>
+                    <li>El idioma elegido se memoriza durante toda la sesión. En el siguiente inicio de sesión, la aplicación vuelve al idioma predeterminado.</li>
+                    <li>Las etiquetas citadas en esta ayuda son las de la interfaz en francés; sus traducciones aparecen en las versiones inglesa y española de la ayuda.</li>
+                </ul>
+
+                <h3>Selector de empresa</h3>
+                <ul>
+                    <li>Si solo tiene acceso a una empresa, la cabecera muestra simplemente su logotipo, un icono de edificio y su nombre. Nada que pulsar.</li>
+                    <li>Si es <strong>contador</strong> vinculado a varias empresas, esta etiqueta se convierte en una lista desplegable. Elija la empresa con la que quiere trabajar.</li>
+                    <li>Cambiar de empresa verifica primero su derecho de acceso y luego lo lleva al Panel de control de la empresa elegida. Todos los datos mostrados después (clientes, facturas, diarios, informes) son los de la empresa activa.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">Un contador se vincula a una empresa mediante la <strong>clave de contador</strong> que el propietario de esa empresa le comunica (pestaña «Contador» de <span class="chemin">Configuración</span>). No necesita ser creado como usuario de esa empresa.</div>
+
+                <h3>Avatar y rol</h3>
+                <p>A la derecha de la cabecera, el avatar muestra sus iniciales, su nombre y su rol en la empresa activa:</p>
+                <table>
+                    <thead><tr><th>Rol mostrado</th><th>Qué permite</th></tr></thead>
+                    <tbody>
+                        <tr><td>«Administrador»</td><td>Acceso a todas las pantallas, incluida <span class="chemin">Usuarios</span> (gestión de las cuentas de la empresa).</td></tr>
+                        <tr><td>«Usuario»</td><td>Acceso a todas las pantallas de su empresa, salvo la gestión de usuarios.</td></tr>
+                        <tr><td>«Contador»</td><td>Acceso a las empresas que lo designaron mediante su clave de contador; puede cambiar de empresa con el selector de la cabecera.</td></tr>
+                        <tr><td>«Contador · Admin»</td><td>Contador que también es administrador de la empresa activa.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Botón ? (Ayuda)</h3>
+                <ul>
+                    <li>El botón <kbd>?</kbd> abre la ayuda de la <strong>sección actual</strong> en una ventana aparte: desde una pantalla de ventas llega a la ayuda de Ventas; desde un diario, a la ayuda de Contabilidad, etc.</li>
+                    <li>La ventana de ayuda permanece abierta mientras trabaja: puede colocarla junto a la aplicación.</li>
+                    <li>En la ayuda, el enlace <kbd>Índice de la ayuda</kbd> vuelve al índice general; el campo «Buscar en la página…» filtra las secciones de la página; los botones FR / EN / ES cambian el idioma de la ayuda; <kbd>Imprimir</kbd> inicia la impresión.</li>
+                </ul>
+
+                <h3>Botón Asistente IA</h3>
+                <p>Una cara violeta flota abajo a la derecha de todas las páginas internas: es el asistente IA de su empresa. Responde a sus preguntas sobre el uso de 60Sec-AI y sobre su contabilidad, teniendo en cuenta el perfil de su empresa.</p>
+                <ul>
+                    <li><strong>Cuadro flotante</strong>: un clic en la cara abre un cuadro de diálogo. Puede moverlo arrastrándolo por su barra de título; se mantiene por encima de la pantalla de trabajo.</li>
+                    <li><strong>Pregunta por teclado o micrófono</strong>: escriba su pregunta, o pulse el micrófono y hable. El texto reconocido se muestra antes del envío.</li>
+                    <li><strong>Respuesta leída en voz alta</strong>: la respuesta se muestra y puede ser leída por la síntesis de voz de su navegador.</li>
+                    <li><strong>Página completa</strong>: un enlace del cuadro abre la página del asistente, que muestra el perfil de la empresa tal como el asistente lo entiende (sector, impuestos, particularidades) y las particularidades que su contador ha anotado. Ahí comprueba que el asistente tiene la imagen correcta de su negocio.</li>
+                </ul>
+                <div class="note" data-titre="Confidencialidad">El asistente no transmite <strong>ningún nombre de cliente, proveedor o empleado</strong> ni <strong>ningún número de cuenta</strong> al servicio de inteligencia artificial. Solo se envían el perfil general de la empresa y su pregunta. Aun así, evite pegar usted mismo información personal en una pregunta.</div>
+                <div class="astuce" data-titre="Consejo">Haga preguntas concretas: «¿Cómo corrijo una factura ya contabilizada?», «¿Qué cuenta uso para el seguro del camión?». El asistente se apoya en las particularidades de su empresa para proponer una cuenta o un procedimiento.</div>
+
+                <h3>Cerrar sesión</h3>
+                <ul>
+                    <li>El botón de salida de la cabecera (icono ⎋) y la entrada <span class="chemin">Cerrar sesión</span> del menú cierran su sesión.</li>
+                    <li>Cerrar sesión borra también la cookie «Recordarme»: en su próxima visita deberá introducir su correo y su contraseña.</li>
+                    <li>Si simplemente cierra el navegador sin cerrar sesión, la cookie «Recordarme» (válida 7 días, renovada en cada regreso) vuelve a conectarlo automáticamente.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">En un ordenador compartido, cierre siempre la sesión con el botón: cerrar la pestaña no basta si «Recordarme» estaba marcado al iniciar sesión.</div>
+            </section>
+
+            <section id="es-menu-izquierdo">
+                <h2>Menú de la izquierda</h2>
+                <p>El menú de la izquierda enumera todas las pantallas de 60Sec-AI, agrupadas por área. El Panel de control (icono de casa) está arriba; las pantallas de administración y el cierre de sesión están al pie de la barra. Un clic en un grupo despliega sus entradas.</p>
+                <table>
+                    <thead><tr><th>Entrada del menú</th><th>Qué abre</th><th>Ayuda</th></tr></thead>
+                    <tbody>
+                        <tr><td><span class="chemin">Panel de control</span></td><td>La página de inicio: bienvenida, indicadores, accesos rápidos (vea más abajo).</td><td>Esta página</td></tr>
+                        <tr><td><span class="chemin">Ventas › Clientes</span></td><td>La lista de sus clientes y sus fichas (dirección, correo de facturación, datos de contacto).</td><td><a href="ventes.html#es-clientes">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Ventas › Facturas de clientes</span></td><td>Las facturas que emite: borradores, facturas contabilizadas, cobros, PDF, enlaces de pago Square.</td><td><a href="ventes.html">Ventas</a></td></tr>
+                        <tr><td><span class="chemin">Compras › Proveedores</span></td><td>La lista de sus proveedores y sus fichas, incluido el pago por Stripe.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Compras › Facturas de proveedores</span></td><td>Las facturas recibidas de sus proveedores, su contabilización y su pago.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Compras › Recibos</span></td><td>Los recibos de gastos (foto o PDF leídos por la IA) y su contabilización.</td><td><a href="achats.html">Compras</a></td></tr>
+                        <tr><td><span class="chemin">Productos y servicios › Productos</span></td><td>El catálogo de sus productos y servicios (precio, impuestos, cuenta de ventas).</td><td><a href="produits.html">Productos</a></td></tr>
+                        <tr><td><span class="chemin">Productos y servicios › Categoría de producto</span></td><td>Las categorías que agrupan sus productos.</td><td><a href="produits.html">Productos</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Diarios</span></td><td>Los asientos contables (diario general y diarios especializados).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Plantillas de diarios</span></td><td>Asientos tipo reutilizables (alquiler, sueldos, amortización).</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Cuentas bancarias</span></td><td>Sus cuentas bancarias y de tarjeta de crédito.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Extracto bancario</span></td><td>Las transacciones bancarias importadas (conexión Plaid o archivo) y su conciliación.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Informe de impuestos</span></td><td>La declaración de GST/TPS y QST/TVQ para un período de remisión.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Cierre del ejercicio fiscal</span></td><td>El cierre de un ejercicio y el traspaso del beneficio neto a beneficios no distribuidos.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Contabilidad › Plan de cuentas</span></td><td>La lista de sus cuentas (activo, pasivo, capital, ingresos, gastos) y su mantenimiento.</td><td><a href="comptabilite.html">Contabilidad</a></td></tr>
+                        <tr><td><span class="chemin">Agenda</span></td><td>Sus citas y la planificación de sus servicios.</td><td><a href="agenda.html">Agenda</a></td></tr>
+                        <tr><td><span class="chemin">Empleados</span></td><td>Las fichas de sus empleados.</td><td><a href="employes.html">Empleados</a></td></tr>
+                        <tr><td><span class="chemin">Correo</span></td><td>El buzón de correo de la empresa (dirección @60sec.ca): correos enviados y recibidos.</td><td><a href="courriel.html">Correo</a></td></tr>
+                        <tr><td><span class="chemin">Tareas por aprobar</span></td><td>Los elementos en espera de su aprobación. Un <strong>indicador</strong> en la entrada muestra el número de tareas pendientes.</td><td><a href="approbations.html">Aprobaciones</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Plan de cuentas</span></td><td>El plan de cuentas imprimible con los saldos.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Estado de resultados</span></td><td>Ingresos, gastos y beneficio neto de un período.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Balance general</span></td><td>Activo, pasivo y capital propio a una fecha.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Flujo de caja</span></td><td>Entradas y salidas de dinero de un período.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Beneficios no distribuidos</span></td><td>La evolución de los beneficios no distribuidos.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › Balance de comprobación</span></td><td>Los saldos deudores y acreedores de todas las cuentas.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › IA Pagos</span></td><td>Análisis por IA de sus pagos y de sus cuentas por pagar.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Informes › IA Ventas</span></td><td>Análisis por IA de sus ventas y de sus clientes.</td><td><a href="rapports.html">Informes</a></td></tr>
+                        <tr><td><span class="chemin">Importación de datos</span></td><td>La importación de sus datos desde un archivo o desde su antiguo programa contable (QuickBooks y otros).</td><td><a href="importation.html">Importación</a></td></tr>
+                        <tr><td><span class="chemin">Perfil de la empresa</span></td><td>La identidad del administrador y los números fiscales de la empresa (NEQ, BN, GST/TPS, QST/TVQ); relleno automático a partir de un documento.</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Usuarios</span></td><td>La gestión de las cuentas de la empresa (<strong>solo administradores</strong>).</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Configuración</span></td><td>Las pestañas Empresa, Impuestos, Email, Factura, Tratamiento, Contabilidad, Bancaria y Contador.</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Procesador de pago</span></td><td>La conexión de Square, Plaid y Stripe.</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Pagos automáticos</span></td><td>Las autorizaciones, el calendario y el historial de los pagos automáticos a proveedores.</td><td><a href="administration.html">Administración</a></td></tr>
+                        <tr><td><span class="chemin">Cerrar sesión</span></td><td>Cierra la sesión y borra la cookie «Recordarme».</td><td>Esta página</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Trampa">Si no es administrador, la entrada <span class="chemin">Usuarios</span> lo devuelve al Panel de control sin mensaje. Pida a un administrador de la empresa que cree o modifique las cuentas.</div>
+                <div class="note" data-titre="Conviene saber">Todos los datos mostrados en las pantallas del menú se filtran por la empresa activa. Un contador que cambia de empresa en la cabecera ve el menú actualizarse con los datos de esa empresa.</div>
+            </section>
+
+            <section id="es-panel-de-control">
+                <h2>Panel de control</h2>
+                <h3>Objetivo</h3>
+                <p>El Panel de control (<span class="chemin">Panel de control</span>) es la página que se abre después de iniciar sesión, después de un cambio de empresa y después de guardar el perfil de una nueva empresa. Da la bienvenida a los nuevos clientes, muestra algunos indicadores de la empresa y ofrece accesos directos a las pantallas más usadas.</p>
+
+                <h3>Cuadro de bienvenida</h3>
+                <p>En la parte superior de la página, un cuadro plegable le da la bienvenida: «¡Bienvenido, [Nombre]!» (o «¡Bienvenido a bordo!» si aún no se ha introducido el nombre). Pulse su título para plegarlo o desplegarlo.</p>
+                <table>
+                    <thead><tr><th>Elemento</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Línea de plan</td><td>«Plan [Solo] · Prueba gratuita hasta el [fecha] — Ver sus próximos pasos». La fecha es la de la próxima facturación de su suscripción; sin suscripción activa, es hoy más 30 días.</td></tr>
+                        <tr><td>«Sus próximos pasos»</td><td>Cuatro pasos numerados con enlace directo: 1. Completar su perfil → <span class="chemin">Perfil de la empresa</span>; 2. Añadir sus clientes → <span class="chemin">Ventas › Clientes</span>; 3. Configurar sus servicios → <span class="chemin">Productos y servicios › Productos</span>; 4. Planificar su agenda → <span class="chemin">Agenda</span>.</td></tr>
+                        <tr><td>«Algunos consejos…»</td><td>Recordatorios: sus copias de seguridad están cifradas; no se requiere tarjeta durante la prueba (se envía un aviso 7 días antes del final); la GST/TPS 5 % y la QST/TVQ 9,975 % se calculan automáticamente; el soporte responde en support@60sec.ca.</td></tr>
+                        <tr><td>«Recursos útiles»</td><td>Enlaces al Centro de ayuda, los Tutoriales en vídeo y Contactar con el soporte.</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Banda principal</h3>
+                <p>Bajo el cuadro de bienvenida, la banda «Bienvenido a 60Sec-AI» ofrece tres botones y miniestadísticas.</p>
+                <ul>
+                    <li><kbd>Nueva factura</kbd>: abre directamente la ventana de edición de una factura de cliente.</li>
+                    <li><kbd>Ver los clientes</kbd>: abre <span class="chemin">Ventas › Clientes</span>.</li>
+                    <li><kbd>Configuración</kbd>: abre <span class="chemin">Configuración</span>.</li>
+                    <li>Miniestadísticas «Ventas del mes», «Facturas abiertas», «Clientes activos», «Productos»: son <strong>ejemplos de presentación</strong>, no sus cifras (vea «Consejos y trampas»).</li>
+                </ul>
+
+                <h3>Tarjetas KPI (datos reales)</h3>
+                <p>Cuatro tarjetas muestran cifras reales de la empresa activa. Se recalculan cada vez que se abre la página.</p>
+                <table>
+                    <thead><tr><th>Tarjeta</th><th>Qué cuenta</th></tr></thead>
+                    <tbody>
+                        <tr><td>«Clientes»</td><td>El número de terceros de tipo cliente, o de tipo «cliente y proveedor».</td></tr>
+                        <tr><td>«Facturas de proveedor»</td><td>El número de documentos de tipo factura de proveedor, todos los períodos juntos.</td></tr>
+                        <tr><td>«Productos»</td><td>El número de artículos de su catálogo de productos y servicios.</td></tr>
+                        <tr><td>«Ingresos»</td><td>El total de las facturas de clientes <strong>contabilizadas</strong> fechadas en el mes en curso, redondeado al dólar y seguido de «$». Por ejemplo «12 345 $».</td></tr>
+                    </tbody>
+                </table>
+
+                <h3>Otros paneles</h3>
+                <ul>
+                    <li><strong>Módulos</strong>: seis mosaicos de acceso rápido: Clientes, Facturas, Productos, Proveedores, Recibos, Configuración.</li>
+                    <li><strong>Facturas recientes</strong>: una lista de ejemplo con un enlace «Ver todo».</li>
+                    <li><strong>Acciones rápidas</strong>: Crear una factura, Añadir un cliente, Añadir un producto, Ver los recibos.</li>
+                    <li><strong>Actividad reciente</strong> y <strong>Resumen</strong>: paneles de presentación.</li>
+                </ul>
+
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Varios paneles del Panel de control son <strong>ejemplos de presentación</strong>: las miniestadísticas de la banda, «Facturas recientes», «Actividad reciente» y «Resumen» no reflejan sus datos. Solo las cuatro tarjetas KPI (Clientes, Facturas de proveedor, Productos, Ingresos) son reales. Para sus cifras reales, use las pantallas del menú y los <a href="rapports.html">Informes</a>.</div>
+                <div class="piege" data-titre="Trampa">En el panel Módulos, el mosaico <strong>Facturas</strong> abre las facturas de <strong>proveedores</strong>, no las facturas de clientes. Para sus facturas de venta, pase por <span class="chemin">Ventas › Facturas de clientes</span> o por el botón <kbd>Nueva factura</kbd>.</div>
+                <div class="attention" data-titre="Atención">La tarjeta «Ingresos» excluye las facturas de clientes que aún no están contabilizadas (borradores). Si el total le parece bajo, compruebe que no queden borradores por contabilizar en <span class="chemin">Ventas › Facturas de clientes</span>.</div>
+                <div class="note" data-titre="Conviene saber">Si los datos no pueden leerse, las cuatro tarjetas muestran 0 en lugar de un mensaje de error. Recargue la página; si los ceros persisten aunque tenga datos, contacte con el soporte.</div>
+                <div class="astuce" data-titre="Consejo">Una vez puesta en marcha su empresa, pliegue el cuadro de bienvenida: la banda y las tarjetas KPI suben a la parte superior de la página.</div>
+            </section>
+
+            <section id="es-primeros-pasos">
+                <h2>Primeros pasos con una nueva empresa</h2>
+                <p>Este es el orden recomendado para poner en marcha una nueva empresa. Cada paso remite a la pantalla implicada y a la sección de ayuda que la detalla. Cuente unos treinta minutos para los pasos 1 a 5; la primera factura viene justo después.</p>
+
+                <h3>Paso 1: Perfil de la empresa</h3>
+                <p>Menú <span class="chemin">Perfil de la empresa</span>. Es también la pantalla de bienvenida propuesta tras el registro.</p>
+                <ol>
+                    <li>Introduzca su <strong>Nombre</strong> y su <strong>Apellido</strong> (obligatorios). El correo no se puede modificar aquí.</li>
+                    <li>Para ir más rápido, arrastre un documento oficial (inscripción en el registro de empresas de Quebec, carta de la CRA o de Revenu Québec, certificado de constitución; PDF, JPG o PNG) y pulse <kbd>Analizar el documento</kbd>: la IA rellena el nombre legal, el NEQ, el BN, los números de GST/TPS, QST/TVQ y HST/TVH, la fecha de constitución y el cierre del ejercicio. Verifique cada campo.</li>
+                    <li>Complete a mano lo que falte. La barra «Progreso del perfil» indica el porcentaje rellenado sobre 12 campos.</li>
+                    <li>Pulse <kbd>Guardar y continuar →</kbd>: la prueba gratuita de 30 días comienza y se abre el Panel de control.</li>
+                </ol>
+                <div class="piege" data-titre="Trampa">En esta pantalla, el análisis por IA <strong>sobrescribe</strong> los campos ya rellenados. Analice primero, corrija después. (En <span class="chemin">Configuración</span>, al contrario, la IA solo rellena los campos vacíos.)</div>
+
+                <h3>Paso 2: Configuración de la empresa</h3>
+                <p>Menú <span class="chemin">Configuración</span>, pestaña «Empresa».</p>
+                <ol>
+                    <li>Suba su <strong>logotipo</strong> (PNG, JPG o SVG, 1 MB máximo): aparece en sus facturas PDF y en la cabecera.</li>
+                    <li>Verifique el nombre legal, el <strong>nombre comercial</strong>, la dirección completa, la provincia y la fecha de cierre del ejercicio fiscal.</li>
+                    <li>Pulse <kbd>Guardar</kbd>. En cuanto se conoce el nombre comercial, 60Sec-AI inicializa los datos de la empresa y le asigna su buzón de correo @60sec.ca.</li>
+                </ol>
+
+                <h3>Paso 3: Impuestos</h3>
+                <p>Menú <span class="chemin">Configuración</span>, pestaña «Impuestos».</p>
+                <ol>
+                    <li>Introduzca sus números de <strong>GST/TPS</strong> y de <strong>QST/TVQ</strong> (y de HST/TVH si factura fuera de Quebec), con sus fechas de inscripción.</li>
+                    <li>Verifique las tasas: GST/TPS 5 % y QST/TVQ 9,975 %.</li>
+                    <li>Elija la <strong>frecuencia de remisión</strong> (Mensual, Trimestral o Anual): la usa <span class="chemin">Contabilidad › Informe de impuestos</span>.</li>
+                    <li>Elija el <strong>modo de impuestos</strong> («Impuestos aparte» por defecto, o «Impuestos incluidos») y el <strong>redondeo</strong> (2 decimales por defecto).</li>
+                    <li>Indique la cuenta bancaria que servirá para la remisión de impuestos y luego <kbd>Guardar</kbd>.</li>
+                </ol>
+                <div class="note" data-titre="Conviene saber">Si no está inscrito en los impuestos (pequeño proveedor), deje los números vacíos: las facturas no mostrarán ni GST/TPS ni QST/TVQ.</div>
+
+                <h3>Paso 4: Plan de cuentas y cuentas por defecto</h3>
+                <p>Menú <span class="chemin">Contabilidad › Plan de cuentas</span>, luego <span class="chemin">Configuración</span>, pestaña «Contabilidad».</p>
+                <ol>
+                    <li>Recorra el plan de cuentas suministrado con la empresa. Añada, renombre o desactive cuentas según su actividad (vea <a href="comptabilite.html">Contabilidad</a>).</li>
+                    <li>Cree sus cuentas bancarias y de tarjeta de crédito en <span class="chemin">Contabilidad › Cuentas bancarias</span>.</li>
+                    <li>En la pestaña «Contabilidad» de Configuración, verifique las cuentas por defecto usadas por la contabilización automática: Venta de productos, Compra de productos, Crédito de cliente, Crédito de proveedor, Gasto pagado personalmente, Beneficios no distribuidos, Beneficio neto del ejercicio, y el código del diario general.</li>
+                    <li>Si viene de otro programa, considere <span class="chemin">Importación de datos</span> para recuperar sus clientes, proveedores, productos y saldos (vea <a href="importation.html">Importación</a>).</li>
+                </ol>
+
+                <h3>Paso 5: Clientes y productos</h3>
+                <ol>
+                    <li>En <span class="chemin">Ventas › Clientes</span>, pulse <kbd>Añadir cliente</kbd> para cada cliente: nombre, dirección de facturación y correo (a ese correo se envían las facturas).</li>
+                    <li>En <span class="chemin">Productos y servicios › Productos</span>, cree sus productos y servicios con su precio, sus impuestos y su cuenta de ventas. Agrúpelos si lo desea por <span class="chemin">Categoría de producto</span>.</li>
+                </ol>
+                <div class="astuce" data-titre="Consejo">El botón <kbd>Ver los clientes</kbd> de la banda y los mosaicos «Clientes» y «Productos» del panel Módulos llevan a las mismas pantallas desde el Panel de control.</div>
+
+                <h3>Paso 6: Primera factura</h3>
+                <ol>
+                    <li>Desde el Panel de control, pulse <kbd>Nueva factura</kbd> (o <span class="chemin">Ventas › Facturas de clientes</span>).</li>
+                    <li>Elija el cliente, añada las líneas de productos o servicios, verifique la GST/TPS y la QST/TVQ calculadas.</li>
+                    <li>Guarde: la factura es un <strong>borrador</strong> (número «BRO-…»). Contabilícela para obtener su número definitivo según el formato elegido en <span class="chemin">Configuración</span>, pestaña «Factura» (por ejemplo PREFIJO-2026-0001).</li>
+                    <li>Envíe el PDF por correo o, si Square está conectado, adjunte un enlace de pago.</li>
+                    <li>Vuelva al Panel de control: la tarjeta «Ingresos» refleja ahora la factura contabilizada.</li>
+                </ol>
+                <div class="note" data-titre="Conviene saber">Antes de enviar correos en nombre de la empresa, verifique su dirección de remitente en <span class="chemin">Configuración</span>, pestaña «Email» (<kbd>Verificar esta dirección</kbd>): una dirección verificada se convierte en la dirección de respuesta de sus correos.</div>
+
+                <h3>Pasos opcionales</h3>
+                <ul>
+                    <li><span class="chemin">Usuarios</span> (administrador): añada a sus compañeros y entregue la clave de contador de <span class="chemin">Configuración</span> › «Contador» a su contador.</li>
+                    <li><span class="chemin">Procesador de pago</span>: conecte Square para cobrar con tarjeta o Interac, y un banco mediante Plaid para importar sus transacciones.</li>
+                    <li><span class="chemin">Agenda</span> y <span class="chemin">Empleados</span>: planifique sus servicios y cree las fichas de sus empleados.</li>
+                </ul>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Por qué «Facturas recientes» y «Actividad reciente» no corresponden a mis datos?</summary><p>Esos paneles, como las miniestadísticas de la banda y el «Resumen», son ejemplos de presentación. Solo las cuatro tarjetas KPI (Clientes, Facturas de proveedor, Productos, Ingresos) muestran cifras reales. Consulte las pantallas del menú o los Informes para sus datos.</p></details>
+                <details><summary>Mi tarjeta «Ingresos» no incluye una factura que acabo de crear. ¿Por qué?</summary><p>La tarjeta solo cuenta las facturas de clientes contabilizadas y fechadas en el mes en curso. Un borrador no aparece: contabilice la factura en <span class="chemin">Ventas › Facturas de clientes</span>. Una factura fechada en otro mes tampoco se cuenta.</p></details>
+                <details><summary>Las cuatro tarjetas muestran 0 aunque tengo datos.</summary><p>Si los datos no pueden leerse, las tarjetas muestran 0. Recargue la página. Compruebe también que la empresa correcta esté seleccionada en la cabecera si es contador. Si el problema persiste, contacte con support@60sec.ca.</p></details>
+                <details><summary>¿Cómo sé cuántos días de prueba me quedan?</summary><p>El indicador de prueba de la cabecera muestra «Prueba · N días» y su descripción emergente da la fecha exacta. La línea de plan del cuadro de bienvenida muestra también «Prueba gratuita hasta el [fecha]».</p></details>
+                <details><summary>Soy contador: ¿cómo paso de una empresa a otra?</summary><p>Use la lista desplegable de empresa en la cabecera. Tras verificar su acceso, se le lleva al Panel de control de la empresa elegida y todas las pantallas muestran sus datos.</p></details>
+                <details><summary>El selector de empresa no aparece en mi cabecera.</summary><p>Solo aparece si está vinculado a varias empresas. Con una sola empresa, la cabecera muestra simplemente su nombre. Para vincularse a otra empresa, obtenga su clave de contador de su propietario.</p></details>
+                <details><summary>¿Qué hace el botón ? de la cabecera?</summary><p>Abre, en una ventana aparte, la ayuda de la sección en la que se encuentra. Ahí puede cambiar de idioma, buscar en la página, imprimir o volver al índice general de la ayuda.</p></details>
+                <details><summary>¿El asistente IA ve mis clientes y mis números de cuenta?</summary><p>No. No se envía al servicio de IA ningún nombre de cliente, proveedor o empleado ni ningún número de cuenta. Solo se transmiten el perfil general de la empresa, sus particularidades y su pregunta.</p></details>
+                <details><summary>¿Cómo hago una pregunta al asistente por voz?</summary><p>Abra el cuadro del asistente (cara violeta abajo a la derecha), pulse el micrófono y hable. El texto reconocido se muestra; envíelo. La respuesta puede leerse en voz alta. El reconocimiento de voz depende de su navegador: autorice el acceso al micrófono cuando se lo pida.</p></details>
+                <details><summary>El mosaico «Facturas» del panel Módulos abre las facturas de proveedores. ¿Dónde están mis facturas de clientes?</summary><p>En <span class="chemin">Ventas › Facturas de clientes</span>, o mediante el botón <kbd>Nueva factura</kbd> de la banda para crear una.</p></details>
+                <details><summary>Cambio el idioma con FR / EN / ES, pero vuelve al francés en mi siguiente inicio de sesión.</summary><p>El idioma se memoriza solo durante la sesión. Elíjalo de nuevo tras iniciar sesión; sus datos y su configuración no se ven afectados.</p></details>
+                <details><summary>No veo la entrada «Usuarios» o me devuelve al Panel de control.</summary><p>Esa pantalla está reservada a los administradores. Su rol se muestra bajo su nombre en la cabecera. Pida a un administrador de la empresa que gestione las cuentas.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Administrador</td><td>Usuario de una empresa que puede, además, gestionar las cuentas de los demás usuarios (pantalla Usuarios).</td></tr>
+                        <tr><td>Asistente IA</td><td>Ayuda conversacional propia de su empresa, accesible por la cara violeta abajo a la derecha. Responde por teclado o por voz, sin transmitir sus datos nominativos.</td></tr>
+                        <tr><td>Cuadro de bienvenida</td><td>Recuadro plegable en la parte superior del Panel de control: plan, próximos pasos, consejos y recursos.</td></tr>
+                        <tr><td>Tarjeta KPI</td><td>Indicador clave mostrado en el Panel de control: Clientes, Facturas de proveedor, Productos e Ingresos. Son los únicos datos reales de la página.</td></tr>
+                        <tr><td>Clave de contador</td><td>Código proporcionado en Configuración › Contador que permite a un contador externo acceder a la empresa sin ser creado como usuario.</td></tr>
+                        <tr><td>Empresa activa</td><td>La empresa elegida en la cabecera; todos los datos mostrados le pertenecen.</td></tr>
+                        <tr><td>Contador</td><td>Rol que da acceso a varias empresas (las que comunicaron su clave de contador) y al selector de empresa.</td></tr>
+                        <tr><td>Contabilizada (factura)</td><td>Factura que pasa del estado borrador al estado definitivo: recibe su número y sus asientos se registran en el diario. Solo esas facturas entran en la tarjeta Ingresos.</td></tr>
+                        <tr><td>Prueba</td><td>Período gratuito de 30 días que comienza al guardar el perfil de la empresa. Su estado se muestra con el indicador de reloj de arena de la cabecera.</td></tr>
+                        <tr><td>Indicador</td><td>Pequeño distintivo de la cabecera (prueba, Square, Plaid, Stripe) o del menú (número de tareas por aprobar).</td></tr>
+                        <tr><td>Plaid</td><td>Servicio de conexión bancaria que importa sus transacciones en el Extracto bancario.</td></tr>
+                        <tr><td>Recordarme</td><td>Opción de la página de inicio de sesión que conserva su sesión 7 días mediante una cookie segura, renovada en cada regreso y borrada al cerrar sesión.</td></tr>
+                        <tr><td>Square</td><td>Procesador de pago para cobrar a sus clientes con tarjeta o Interac y sincronizar facturas y pagos.</td></tr>
+                        <tr><td>Stripe</td><td>Servicio que gestiona su suscripción a 60Sec-AI y los pagos automáticos a sus proveedores (tarjeta o débito preautorizado).</td></tr>
+                        <tr><td>GST/TPS y QST/TVQ</td><td>Impuesto sobre bienes y servicios (5 %) e impuesto de venta de Quebec (9,975 %), calculados automáticamente en las facturas.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

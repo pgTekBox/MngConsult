@@ -202,6 +202,7 @@ a{
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link id="lnkAssistantCss" runat="server" rel="stylesheet" type="text/css" />
 <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>
 
@@ -287,6 +288,171 @@ a{
         document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") { closeAppMessage(); }
         });
+    </script>
+
+    <%-- L'assistant IA flottant : la même boîte que dans 60secPaie, sur toutes les pages.
+         Même conversation que la page wbfAssistant (session), même journal. Le visage
+         change avec l'état. Les libellés viennent du dictionnaire JS selon data-lang ;
+         data-url, data-section et data-page sont posés par Site.Master.vb.
+         Aucun <%= %> ici : le master sert aussi des pages RadAjax. --%>
+    <div id="divAssistant" runat="server" class="ia-flottant" visible="false">
+        <button type="button" class="ia-bouton" id="iaBouton" aria-label="Assistant" title="Assistant"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true"><circle cx="128" cy="128" r="104" fill="#5E35C9"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="162" cy="106" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12" transform="rotate(12 160 110)"/><path d="M148 68 q16 -9 30 0" fill="none" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M108 170 q20 6 40 -6" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/><g><circle cx="224.5" cy="42" r="23" fill="#5B4BC4" stroke="#fff" stroke-width="4"/><text x="224.5" y="52" font-family="Arial,Helvetica,sans-serif" font-weight="700" font-size="27" text-anchor="middle" fill="#fff">?</text></g></svg></button>
+        <div class="ia-panneau" id="iaPanneau" hidden>
+            <div class="ia-tete">
+                <span class="ia-avatar" id="iaAvatar"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true" data-etat="repos"><style>.iaz{transform-box:fill-box;transform-origin:center;animation:iabl 5s infinite}@keyframes iabl{0%,93%,100%{transform:scaleY(1)}96%{transform:scaleY(.1)}}</style><circle cx="128" cy="128" r="104" fill="#4E5D6C"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><path d="M142 110 q18 10 36 0" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><path d="M108.0 168 q20.0 4 40 0" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true" data-etat="reflechit"><style>.iasp{transform-box:fill-box;transform-origin:center;animation:iarot 1.2s linear infinite}@keyframes iarot{to{transform:rotate(360deg)}}</style><circle cx="128" cy="128" r="104" fill="#0A827C"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse class="iasp" cx="160" cy="110" rx="21" ry="21" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-dasharray="88 44" stroke-linecap="round"/><path d="M106.0 168 q22.0 6 44 0" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true" data-etat="repondu"><circle cx="128" cy="128" r="104" fill="#128A45"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><path d="M142 116 q18 -24 36 0" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><path d="M97.0 164 q31.0 24 62 0" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/><g><circle cx="224.5" cy="42" r="23" fill="#1E9E5A" stroke="#fff" stroke-width="4"/><path d="M214 42 l7.5 7.5 l13 -15" fill="none" stroke="#fff" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/></g></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 256 256" overflow="visible" aria-hidden="true" data-etat="erreur"><circle cx="128" cy="128" r="104" fill="#C21F1F"/><circle cx="96" cy="120" r="16" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#FFFFFF" stroke-width="12" stroke-linecap="round"/><ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#FFFFFF" stroke-width="12"/><path d="M144 74 l30 -9" stroke="#FFFFFF" stroke-width="9" stroke-linecap="round"/><path d="M103.0 178 q25.0 -14 50 0" fill="none" stroke="#FFFFFF" stroke-width="10" stroke-linecap="round"/><g><circle cx="224.5" cy="42" r="23" fill="#C62E2E" stroke="#fff" stroke-width="4"/><path d="M216 33.5 l17 17 M233 33.5 l-17 17" stroke="#fff" stroke-width="6" stroke-linecap="round"/></g></svg></span>
+                <div class="ia-titre"><b id="iaTitre">Assistant</b><span id="iaSousTitre"></span></div>
+                <a href="#" id="iaPage" class="ia-ico" title="" aria-label="">&#x2922;</a>
+                <button type="button" class="ia-ico" id="iaFermer" title="" aria-label="">&times;</button>
+            </div>
+            <div class="ia-messages" id="iaMessages">
+                <p class="ia-accueil" id="iaAccueil"></p>
+            </div>
+            <div class="ia-saisie">
+                <textarea id="iaQuestion" rows="2"></textarea>
+                <div class="ia-boutons">
+                    <button type="button" class="ia-micro" id="iaMicro" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor"/><path d="M6 11a6 6 0 0 0 12 0" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/><path d="M12 17v3M9 20h6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    <button type="button" class="ia-micro ia-stop" id="iaStopVoix" hidden><svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 9h4l5-4v14l-5-4H4z" fill="currentColor"/><path d="M16 9l5 6M21 9l-5 6" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg></button>
+                    <button type="button" class="ia-envoyer" id="iaEnvoyer"></button>
+                </div>
+            </div>
+            <div class="ia-pied"><span id="iaCout"></span><a href="#" id="iaNouvelle"></a></div>
+        </div>
+    </div>
+    <script type="text/javascript">
+    (function () {
+        var boite = document.getElementById('divAssistant'); if (!boite) return;
+        var url = boite.getAttribute('data-url'), section = boite.getAttribute('data-section') || '', lang = boite.getAttribute('data-lang') || 'fr';
+        var T = {
+            fr: { titre: 'Assistant', sousTitre: 'Aide de 60Sec-AI et profil de la compagnie', page: 'Ouvrir la page complète', fermer: 'Fermer', accueil: 'Bonjour ! Posez votre question sur 60Sec-AI : où cliquer, pourquoi une facture n’a pas de numéro, comment faire la remise de taxes… Aucun nom de client, de fournisseur ni de compte n’est envoyé.', placeholder: 'Votre question… (Entrée pour envoyer)', envoyer: 'Envoyer', nouvelle: 'Nouvelle conversation', attente: 'L’assistant réfléchit…', erreur: 'L’assistant n’a pas pu répondre. Réessayez dans un instant.', cout: 'Coût des questions ce mois-ci : {0} US$', confirmer: 'Effacer la conversation ?', ecoute: 'Je vous écoute… parlez, puis faites une pause.', micro: 'Poser la question à voix haute', stop: 'Arrêter la lecture', refuse: 'Le micro n’est pas autorisé : vérifiez la permission du navigateur.', voix: 'fr-CA' },
+            en: { titre: 'Assistant', sousTitre: '60Sec-AI help and company profile', page: 'Open the full page', fermer: 'Close', accueil: 'Hello! Ask your question about 60Sec-AI: where to click, why an invoice has no number, how to remit taxes… No customer, supplier or account name is ever sent.', placeholder: 'Your question… (Enter to send)', envoyer: 'Send', nouvelle: 'New conversation', attente: 'The assistant is thinking…', erreur: 'The assistant could not answer. Try again in a moment.', cout: 'Cost of questions this month: US${0}', confirmer: 'Clear the conversation?', ecoute: 'I’m listening… speak, then pause.', micro: 'Ask the question out loud', stop: 'Stop reading', refuse: 'The microphone is not allowed: check the browser permission.', voix: 'en-CA' },
+            es: { titre: 'Asistente', sousTitre: 'Ayuda de 60Sec-AI y perfil de la compañía', page: 'Abrir la página completa', fermer: 'Cerrar', accueil: '¡Hola! Haga su pregunta sobre 60Sec-AI: dónde hacer clic, por qué una factura no tiene número, cómo remitir los impuestos… Nunca se envía ningún nombre de cliente, proveedor ni cuenta.', placeholder: 'Su pregunta… (Intro para enviar)', envoyer: 'Enviar', nouvelle: 'Nueva conversación', attente: 'El asistente está pensando…', erreur: 'El asistente no pudo responder. Inténtelo de nuevo en un momento.', cout: 'Costo de las preguntas este mes: {0} US$', confirmer: '¿Borrar la conversación?', ecoute: 'Le escucho… hable y luego haga una pausa.', micro: 'Hacer la pregunta en voz alta', stop: 'Detener la lectura', refuse: 'El micrófono no está autorizado: revise el permiso del navegador.', voix: 'es-MX' }
+        }[lang] || null;
+        if (!T) T = { titre: 'Assistant' };
+        var txt = function (k) { return T[k] || ''; };
+        var panneau = document.getElementById('iaPanneau'), bouton = document.getElementById('iaBouton');
+        var messages = document.getElementById('iaMessages'), zone = document.getElementById('iaQuestion');
+        var envoyer = document.getElementById('iaEnvoyer'), avatar = document.getElementById('iaAvatar'), cout = document.getElementById('iaCout');
+        var charge = false, occupe = false;
+
+        // Les libellés dans la langue de la session.
+        document.getElementById('iaTitre').textContent = txt('titre');
+        document.getElementById('iaSousTitre').textContent = txt('sousTitre');
+        var lienPage = document.getElementById('iaPage'); lienPage.href = boite.getAttribute('data-page') || '#'; lienPage.title = txt('page'); lienPage.setAttribute('aria-label', txt('page'));
+        var fermerBtn = document.getElementById('iaFermer'); fermerBtn.title = txt('fermer'); fermerBtn.setAttribute('aria-label', txt('fermer'));
+        document.getElementById('iaAccueil').textContent = txt('accueil');
+        zone.setAttribute('placeholder', txt('placeholder'));
+        envoyer.textContent = txt('envoyer');
+        document.getElementById('iaNouvelle').textContent = txt('nouvelle');
+        bouton.title = txt('titre'); bouton.setAttribute('aria-label', txt('titre'));
+
+        // ── La voix : le micro pour poser la question, la synthèse pour lire la réponse. ──
+        var micro = document.getElementById('iaMicro'), stopVoix = document.getElementById('iaStopVoix');
+        micro.title = txt('micro'); micro.setAttribute('aria-label', txt('micro')); stopVoix.title = txt('stop'); stopVoix.setAttribute('aria-label', txt('stop'));
+        var langueVoix = txt('voix') || 'fr-CA';
+        var Reconnaissance = window.SpeechRecognition || window.webkitSpeechRecognition;
+        var rec = null, ecoute = false, placeholderInitial = zone.getAttribute('placeholder');
+        function lire(texte) {
+            if (!window.speechSynthesis) return;
+            var u = new SpeechSynthesisUtterance(texte.replace(/\*\*/g, ''));
+            u.lang = langueVoix;
+            u.onend = function () { stopVoix.hidden = true; };
+            speechSynthesis.cancel(); speechSynthesis.speak(u); stopVoix.hidden = false;
+        }
+        function taire() { if (window.speechSynthesis) speechSynthesis.cancel(); stopVoix.hidden = true; }
+        function finEcoute() { ecoute = false; micro.classList.remove('actif'); zone.setAttribute('placeholder', placeholderInitial); }
+        if (Reconnaissance) {
+            micro.hidden = false;
+            micro.addEventListener('click', function () {
+                if (ecoute) { rec.stop(); return; }
+                taire();
+                rec = new Reconnaissance();
+                rec.lang = langueVoix; rec.interimResults = true; rec.continuous = false; rec.maxAlternatives = 1;
+                var finale = '';
+                rec.onresult = function (e) {
+                    var courant = '';
+                    for (var i = e.resultIndex; i < e.results.length; i++) {
+                        if (e.results[i].isFinal) finale += e.results[i][0].transcript; else courant += e.results[i][0].transcript;
+                    }
+                    zone.value = (finale + ' ' + courant).trim();
+                };
+                rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') alert(txt('refuse')); };
+                rec.onend = function () { finEcoute(); if (finale.trim()) { zone.value = finale.trim(); demander(true); } };
+                ecoute = true; micro.classList.add('actif'); zone.setAttribute('placeholder', txt('ecoute')); zone.value = '';
+                try { rec.start(); } catch (err) { finEcoute(); }
+            });
+            stopVoix.addEventListener('click', taire);
+        }
+
+        function etat(e) { avatar.setAttribute('data-etat', e); }
+        function html(t) {
+            var d = document.createElement('div'); d.textContent = t || ''; var s = d.innerHTML;
+            return s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>').replace(/\n/g, '<br>');
+        }
+        function ajouter(role, texte, quand) {
+            var acc = messages.querySelector('.ia-accueil'); if (acc) acc.remove();
+            var t = document.createElement('div'); t.className = 'ia-tour ' + role;
+            t.innerHTML = '<div class="ia-bulle">' + html(texte) + '</div>' + (quand ? '<div class="ia-quand">' + quand + '</div>' : '');
+            messages.appendChild(t); messages.scrollTop = messages.scrollHeight; return t;
+        }
+        function montrerCout(v) { if (typeof v === 'number') cout.textContent = txt('cout').replace('{0}', v.toFixed(4)); }
+        function ouvrir() {
+            panneau.hidden = false; bouton.hidden = true; zone.focus(); restaurer();
+            if (charge) return; charge = true;
+            fetch(url, { credentials: 'same-origin' }).then(function (r) { return r.json(); }).then(function (j) {
+                (j.tours || []).forEach(function (t) { ajouter(t.role, t.texte, t.quand); }); montrerCout(j.cout);
+            }).catch(function () {});
+        }
+        function fermer() { panneau.hidden = true; bouton.hidden = false; taire(); if (ecoute && rec) rec.stop(); }
+        function demander(vocal) {
+            var q = zone.value.trim(); if (!q || occupe) return;
+            occupe = true; envoyer.disabled = true; zone.value = ''; etat('reflechit');
+            ajouter('user', q, '');
+            var attente = ajouter('assistant', txt('attente'), ''); attente.classList.add('ia-attente');
+            fetch(url, { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ question: q, section: section }) })
+                .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+                .then(function (x) {
+                    attente.remove();
+                    if (x.ok) { ajouter('assistant', x.j.reponse, x.j.quand); montrerCout(x.j.cout); etat('repondu'); if (vocal === true) { try { lire(x.j.reponse); } catch (err) { taire(); } } setTimeout(function () { etat('repos'); }, 2500); }
+                    else { ajouter('assistant', x.j.erreur || txt('erreur'), ''); etat('erreur'); setTimeout(function () { etat('repos'); }, 4000); }
+                })
+                .catch(function () { attente.remove(); ajouter('assistant', txt('erreur'), ''); etat('erreur'); setTimeout(function () { etat('repos'); }, 4000); })
+                .then(function () { occupe = false; envoyer.disabled = false; zone.focus(); });
+        }
+        bouton.addEventListener('click', ouvrir);
+        fermerBtn.addEventListener('click', fermer);
+        envoyer.addEventListener('click', function () { demander(false); });
+        zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); demander(); } });
+        document.getElementById('iaNouvelle').addEventListener('click', function (e) {
+            e.preventDefault(); if (!confirm(txt('confirmer'))) return;
+            fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
+        });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panneau.hidden) fermer(); });
+
+        // ── Déplacer la boîte par sa barre de titre ; la position est retenue dans ce navigateur. ──
+        var tete = panneau.querySelector('.ia-tete'), glisse = null;
+        function placer(x, y) {
+            var w = panneau.offsetWidth, h = panneau.offsetHeight;
+            x = Math.max(0, Math.min(x, window.innerWidth - w)); y = Math.max(0, Math.min(y, window.innerHeight - h));
+            panneau.style.left = x + 'px'; panneau.style.top = y + 'px'; panneau.style.right = 'auto'; panneau.style.bottom = 'auto';
+        }
+        function retenir() { try { localStorage.setItem('iaPanneauPos', JSON.stringify({ x: panneau.offsetLeft, y: panneau.offsetTop })); } catch (e) { } }
+        function restaurer() {
+            try {
+                var p = JSON.parse(localStorage.getItem('iaPanneauPos') || 'null');
+                if (p && typeof p.x === 'number' && typeof p.y === 'number') placer(p.x, p.y);
+            } catch (e) { }
+        }
+        tete.addEventListener('pointerdown', function (e) {
+            if (e.target.closest('.ia-ico')) return;
+            glisse = { dx: e.clientX - panneau.offsetLeft, dy: e.clientY - panneau.offsetTop };
+            panneau.classList.add('ia-deplace'); tete.setPointerCapture(e.pointerId); e.preventDefault();
+        });
+        tete.addEventListener('pointermove', function (e) { if (glisse) placer(e.clientX - glisse.dx, e.clientY - glisse.dy); });
+        function lacher() { if (!glisse) return; glisse = null; panneau.classList.remove('ia-deplace'); retenir(); }
+        tete.addEventListener('pointerup', lacher); tete.addEventListener('pointercancel', lacher);
+        window.addEventListener('resize', function () { if (!panneau.hidden && panneau.style.left) placer(panneau.offsetLeft, panneau.offsetTop); });
+        etat('repos');
+    })();
     </script>
 
 </form>

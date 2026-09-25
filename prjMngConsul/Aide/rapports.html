@@ -1,0 +1,1505 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Rapports — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Rapports</h1>
+            <p class="intro">Les six rapports comptables de 60Sec-AI (plan comptable, état des résultats, bilan, état des flux de trésorerie, état des bénéfices non répartis, balance de vérification) et les deux tableaux de bord « IA Paiement » et « IA Ventes ». Menu <span class="chemin">Rapports</span>. Le menu de gauche présente les écrans dans cet ordre : Plan comptable, État des résultats, Bilan, État des flux de trésorerie, État des bénéfices non répartis, Balance de vérification, IA Paiement et IA Ventes.</p>
+
+            <section id="fr-regles">
+                <h2>Règles communes aux rapports comptables</h2>
+                <p>Les six rapports comptables partagent le même fonctionnement. Ce qui suit s’applique à chacun d’eux, sauf mention contraire dans la section de l’écran.</p>
+                <h3>Accès et compagnie</h3>
+                <ul>
+                    <li>Un utilisateur qui n’est pas connecté est renvoyé à la page de connexion.</li>
+                    <li>Chaque rapport porte sur la compagnie active de votre session. Il n’y a pas de sélecteur de compagnie dans les rapports : pour consulter une autre compagnie, changez d’abord de compagnie active dans l’application.</li>
+                    <li>Aucun rapport ne propose d’exercice précédent ni de colonne de comparaison. Pour comparer deux périodes, générez le rapport deux fois et conservez les deux PDF.</li>
+                </ul>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit le rapport avec les dates saisies. Le rapport se construit automatiquement à l’ouverture avec les valeurs par défaut ; après un changement de date, il faut cliquer sur <kbd>Générer</kbd> pour voir le nouveau résultat.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : ouvre la fenêtre d’impression du navigateur. C’est le seul bouton de sortie. Pour obtenir un fichier, choisissez « Enregistrer en PDF » comme imprimante. Aucun rapport n’offre d’export Excel ou CSV.</li>
+                </ul>
+                <p>Pour obtenir un rapport en PDF : 1. Réglez les dates. 2. Cliquez sur <kbd>Générer</kbd>. 3. Cliquez sur <kbd>🖨 Imprimer / PDF</kbd>. 4. Dans la fenêtre du navigateur, choisissez « Enregistrer en PDF » puis confirmez.</p>
+                <h3>Mise en page à l’impression</h3>
+                <ul>
+                    <li>Format lettre, orientation portrait, marges de 1,5 cm.</li>
+                    <li>La barre d’outils, les filtres et le menu disparaissent à l’impression. Seuls l’en-tête et le corps du rapport sont imprimés.</li>
+                </ul>
+                <h3>Présentation des dates et des montants</h3>
+                <table>
+                    <thead><tr><th>Élément</th><th>Affichage</th></tr></thead>
+                    <tbody>
+                        <tr><td>Dates</td><td>Format AAAA-MM-JJ, par exemple 2026-09-25.</td></tr>
+                        <tr><td>Montant nul</td><td>« — » (tiret). Exception : la Balance de vérification affiche « 0,00 $ » dans ses cartes du haut.</td></tr>
+                        <tr><td>Montant négatif</td><td>Entre parenthèses et en rouge, par exemple « (1 234,56 $) ».</td></tr>
+                        <tr><td>Montant positif</td><td>En vert.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Piège">L’en-tête imprimé affiche toujours « Mon entreprise ». Le nom de votre compagnie n’est jamais inscrit dans cette étiquette. Si vous transmettez un PDF à un tiers (banquier, comptable), ajoutez le nom de la compagnie dans le nom du fichier ou dans le courriel.</div>
+                <div class="note" data-titre="Bon à savoir">Les rapports lisent les écritures comptabilisées dans le grand livre. Une facture en brouillon ou une écriture non comptabilisée n’y apparaît pas. Voyez la section <a href="comptabilite.html">Comptabilité</a> pour la saisie des écritures.</div>
+            </section>
+
+            <section id="fr-plan-comptable">
+                <h2>Plan comptable</h2>
+                <p>Liste structurée de tous les comptes de la compagnie, sur trois niveaux : classe, sous-classe, compte (<span class="chemin">Rapports › Plan comptable</span>). Ce rapport ne contient aucun montant : il sert à connaître et à documenter la structure du plan comptable.</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>Le plan comptable est la « table des matières » de votre comptabilité. Chaque vente, chaque achat et chaque paiement est classé dans un de ces comptes. Un plan clair et bien découpé donne des états financiers lisibles ; un plan encombré de comptes inutiles ou mal classés donne des rapports difficiles à interpréter. Imprimez-le une fois par année et passez-le en revue avec votre comptable.</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Tous</kbd> : affiche toutes les classes.</li>
+                    <li><kbd>Bilan</kbd> : n’affiche que les classes du groupe BILAN (actif, passif, capitaux propres).</li>
+                    <li><kbd>Résultats</kbd> : n’affiche que les classes du groupe RESULTAT (revenus, coûts, charges, impôts).</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Filtres et recherche</h3>
+                <p>Il n’y a aucune date à saisir. Les trois boutons de filtre (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) sont les seuls paramètres.</p>
+                <h3>Présentation</h3>
+                <ul>
+                    <li>Sous le titre : « X classe(s) · Y compte(s) ». L’en-tête indique « Généré le AAAA-MM-JJ HH:mm ».</li>
+                    <li><strong>Bandeau de classe</strong> : code et description de la classe, plage de numéros « (début à fin) » et un badge BILAN ou RESULTAT.</li>
+                    <li><strong>Sous-classes</strong> : code, description et plage « début – fin ».</li>
+                    <li><strong>Pied de chaque classe</strong> : « N compte(s) ».</li>
+                    <li><strong>Carte « Sommaire »</strong> en bas de page : nombre de comptes par classe, puis une ligne « Total ».</li>
+                </ul>
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Numéro du compte (par exemple 1000, 4010).</td></tr>
+                        <tr><td>Nom du compte</td><td>Libellé court du compte.</td></tr>
+                        <tr><td>Description</td><td>Description plus longue, si elle a été saisie.</td></tr>
+                        <tr><td>Type</td><td>Type du compte (nature comptable).</td></tr>
+                        <tr><td>Sens</td><td>Badge « D » pour un compte à solde normalement débiteur, « C » pour un compte à solde normalement créditeur.</td></tr>
+                        <tr><td>Actif</td><td>Pastille verte si le compte est actif, rouge s’il est inactif.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Seules les classes et sous-classes actives de la compagnie courante sont affichées.</li>
+                    <li>Les comptes inactifs restent affichés, avec la pastille rouge.</li>
+                    <li>Les comptes sont triés selon l’ordre défini dans le plan comptable.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Un compte rattaché directement à une classe principale, sans sous-classe, n’apparaît pas dans ce rapport. Si un compte « manque », vérifiez qu’il est bien rattaché à une sous-classe.</div>
+                <div class="note" data-titre="Bon à savoir">Une sous-classe qui ne contient aucun compte affiche son en-tête sans tableau. Ce n’est pas une erreur.</div>
+                <div class="piege" data-titre="Piège">Le bouton de filtre en cours (<kbd>Tous</kbd>, <kbd>Bilan</kbd> ou <kbd>Résultats</kbd>) n’est pas mis en évidence. Fiez-vous au contenu affiché et aux badges BILAN / RESULTAT pour savoir quel filtre est actif.</div>
+            </section>
+
+            <section id="fr-etat-resultats">
+                <h2>État des résultats</h2>
+                <p>Revenus, coûts et charges de la période, jusqu’au bénéfice net (<span class="chemin">Rapports › État des résultats</span>).</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>L’état des résultats répond à la question « Est-ce que j’ai fait de l’argent pendant cette période ? ». Il part de ce que vous avez vendu, retire ce que ces ventes vous ont coûté (bénéfice brut), puis les frais de fonctionnement (bénéfice avant impôts), puis les impôts. Le bénéfice brut vous dit si votre prix de vente couvre vos coûts directs ; le bénéfice net vous dit ce qui reste réellement. Un bénéfice net positif n’est pas de l’argent en banque : un client qui n’a pas encore payé compte déjà dans les revenus. Pour la trésorerie, consultez l’<a href="#fr-flux-tresorerie">État des flux de trésorerie</a>.</p>
+                <h3>Filtres et recherche</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du :</td><td>Non</td><td>Début de la période. Par défaut le 1er janvier de l’année courante. Un champ vide reprend la valeur par défaut.</td></tr>
+                        <tr><td>Au :</td><td>Non</td><td>Fin de la période. Par défaut aujourd’hui. Un champ vide reprend la valeur par défaut.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit le rapport pour la période saisie.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Structure du rapport</h3>
+                <p>L’en-tête indique « Période du … au … ». Le rapport a trois colonnes : numéro de compte, nom du compte, montant. Pour chaque section : un bandeau de section, puis les sous-classes avec leurs comptes, puis une ligne « Total — [sous-classe] », puis le total de la section. Dans l’ordre :</p>
+                <ol>
+                    <li>« Revenus », puis « Total des revenus » ;</li>
+                    <li>« Coût des ventes », puis « Total du coût des ventes » ;</li>
+                    <li>ligne calculée « Bénéfice brut » ;</li>
+                    <li>« Charges d’exploitation », puis « Total des charges d’exploitation » ;</li>
+                    <li>ligne calculée « Bénéfice avant impôts et éléments extraordinaires » ;</li>
+                    <li>« Impôts et éléments extraordinaires », puis « Total des impôts et éléments extraordinaires » ;</li>
+                    <li>ligne finale sur fond foncé « Bénéfice net ».</li>
+                </ol>
+                <h3>Règles et calculs</h3>
+                <ul>
+                    <li>Bénéfice brut = Revenus − Coût des ventes.</li>
+                    <li>Bénéfice avant impôts = Bénéfice brut − Charges d’exploitation.</li>
+                    <li>Bénéfice net = Bénéfice avant impôts − Impôts et éléments extraordinaires.</li>
+                    <li>Les sections correspondent aux classes parentes 6 (Revenus), 7 (Coût des ventes), 8 (Charges d’exploitation) et 9 (Impôts et éléments extraordinaires) du plan comptable.</li>
+                    <li>Une sous-classe sans mouvement pendant la période n’apparaît pas.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucune donnée pour cette période. »</span> — aucune écriture comptabilisée dans les comptes de résultats entre les deux dates. Élargissez la période ou vérifiez que les factures sont comptabilisées.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">La date « Au : » doit être postérieure à la date « Du : ». L’écran ne vérifie pas ce point : une période inversée donne un rapport vide ou incohérent sans message d’erreur.</div>
+                <div class="note" data-titre="Bon à savoir">Un bénéfice net négatif (une perte) s’affiche entre parenthèses sur la ligne finale, mais pas en rouge, contrairement aux autres montants négatifs.</div>
+                <div class="astuce" data-titre="Astuce">Pour un état des résultats mensuel, saisissez le premier et le dernier jour du mois, puis cliquez sur <kbd>Générer</kbd>. Pour l’année complète, laissez les deux champs vides : le rapport reprend le 1er janvier et aujourd’hui.</div>
+            </section>
+
+            <section id="fr-bilan">
+                <h2>Bilan</h2>
+                <p>Situation financière de la compagnie à une date donnée : ce qu’elle possède (actif), ce qu’elle doit (passif) et ce qui appartient aux propriétaires (capitaux propres) (<span class="chemin">Rapports › Bilan</span>).</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>Le bilan est une photographie de votre entreprise à une date précise. L’actif énumère ce que vous avez (argent en banque, comptes clients, stocks, équipements) ; le passif énumère ce que vous devez (fournisseurs, taxes, emprunts) ; les capitaux propres représentent la valeur nette qui revient aux propriétaires. La règle de base : Actif = Passif + Capitaux propres. Deux lectures utiles : l’actif à court terme comparé au passif à court terme vous dit si vous pouvez payer vos dettes des douze prochains mois ; le poids du passif par rapport aux capitaux propres montre votre dépendance au crédit. C’est le rapport que votre banquier demandera en premier.</p>
+                <h3>Filtres et recherche</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du :</td><td>Non</td><td>Date de la photographie. Par défaut aujourd’hui.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit le bilan à la date saisie.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Structure du rapport</h3>
+                <p>L’en-tête indique « Au AAAA-MM-JJ ». Trois grands blocs :</p>
+                <ul>
+                    <li><strong>ACTIF</strong>
+                        <ul>
+                            <li>« Actif à court terme (1000 – 1499) », puis « Total de l’actif à court terme » ;</li>
+                            <li>« Actif à long terme (1500 – 1999) », puis « Total de l’actif à long terme » ;</li>
+                            <li>« TOTAL DE L’ACTIF ».</li>
+                        </ul>
+                    </li>
+                    <li><strong>PASSIF</strong>
+                        <ul>
+                            <li>« Passif à court terme (2000 – 2499) », puis son total ;</li>
+                            <li>« Passif à long terme (2500 – 2999) », puis son total ;</li>
+                            <li>« TOTAL DU PASSIF ».</li>
+                        </ul>
+                    </li>
+                    <li><strong>CAPITAUX PROPRES</strong>
+                        <ul>
+                            <li>« Capitaux propres (3000 – 3999) » ;</li>
+                            <li>bloc « Résultat de l’exercice courant », avec une ligne en italique bleu « Bénéfice net de l’exercice » ou « Perte nette de l’exercice », puis « Total — Résultat de l’exercice » ;</li>
+                            <li>« TOTAL DES CAPITAUX PROPRES » ;</li>
+                            <li>« TOTAL DU PASSIF ET DES CAPITAUX PROPRES ».</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Règles et calculs</h3>
+                <ul>
+                    <li>Le bénéfice net de l’exercice (revenus moins charges, depuis le début de l’exercice jusqu’à la date du bilan) est calculé automatiquement et ajouté aux capitaux propres pour équilibrer le bilan.</li>
+                    <li>Contrôle d’équilibre : Total de l’actif − (Total du passif + Total des capitaux propres). Un écart de moins de 0,01 $ est toléré (arrondi).</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✓ Le bilan est en équilibre »</span> — l’actif égale le passif plus les capitaux propres. Tout est normal.</li>
+                    <li><span class="msg">« ✗ Écart de [montant] — Le bilan n’est pas en équilibre »</span> — une écriture déséquilibrée ou un compte mal classé fausse le bilan. Consultez la <a href="#fr-balance">Balance de vérification</a> à la même date pour trouver la source.</li>
+                    <li><span class="msg">« Note : Le bénéfice net de l’exercice ([montant]) est calculé automatiquement à partir des comptes de résultats et intégré aux capitaux propres. »</span> — affichée seulement si le bénéfice n’est pas nul. Simple rappel du calcul.</li>
+                    <li><span class="msg">« Aucune donnée disponible. »</span> — aucune écriture comptabilisée jusqu’à la date demandée.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">Un bilan déséquilibré signale presque toujours une écriture déséquilibrée ou un compte rattaché à la mauvaise classe (par exemple un compte de charges numéroté dans la plage 1000 – 1999). Générez la Balance de vérification à la même date : si elle aussi affiche un écart, le problème vient d’une écriture ; si elle est en équilibre, le problème vient du classement d’un compte.</div>
+                <div class="piege" data-titre="Piège">Si la clôture de l’exercice a déjà été passée dans le compte des bénéfices non répartis, vérifiez que le bénéfice n’est pas compté deux fois : une fois dans le compte 3300 et une fois dans la ligne « Bénéfice net de l’exercice » calculée automatiquement.</div>
+                <div class="astuce" data-titre="Astuce">Pour le bilan de fin d’exercice, saisissez le 31 décembre (ou la date de fin de votre exercice) dans « En date du : », même si des écritures postérieures existent : seules les écritures jusqu’à cette date sont prises en compte.</div>
+            </section>
+
+            <section id="fr-flux-tresorerie">
+                <h2>État des flux de trésorerie</h2>
+                <p>Explique la variation de l’argent disponible entre le début et la fin de la période, selon la méthode indirecte (<span class="chemin">Rapports › État des flux de trésorerie</span>).</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>Une entreprise peut être rentable et manquer d’argent, ou perdre de l’argent et avoir un compte bien garni. Cet état réconcilie les deux : il part du bénéfice net et explique où l’argent est réellement allé. Trois questions y trouvent réponse : est-ce que mon exploitation courante génère de l’argent (activités d’exploitation) ? combien ai-je investi dans des équipements ou des placements (activités d’investissement) ? combien ai-je emprunté, remboursé, reçu ou retiré comme propriétaire (activités de financement) ? Un flux d’exploitation négatif de façon répétée est le signal d’alarme le plus important pour une PME, même quand l’état des résultats est positif.</p>
+                <h3>Filtres et recherche</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du :</td><td>Non</td><td>Début de la période. Par défaut le 1er janvier de l’année courante.</td></tr>
+                        <tr><td>Au :</td><td>Non</td><td>Fin de la période. Par défaut aujourd’hui.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit l’état pour la période saisie.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Structure du rapport</h3>
+                <p><strong>A. « Activités d’exploitation »</strong></p>
+                <ul>
+                    <li>Bénéfice net de la période.</li>
+                    <li>Sous-titre « Ajustements pour éléments sans effet sur la trésorerie » : Amortissement ; Créances douteuses ; Gain/Perte sur disposition d’actifs ; Impôts différés ; puis « Total des ajustements ».</li>
+                    <li>Sous-titre « Variation des éléments du fonds de roulement » : Comptes clients, Stocks, Frais payés d’avance, Taxes à recevoir ; Comptes fournisseurs, Charges à payer, Taxes à payer, Retenues salariales, Revenus reportés ; puis « Variation nette du fonds de roulement ».</li>
+                    <li>Total : « Flux de trésorerie liés aux activités d’exploitation ».</li>
+                </ul>
+                <p><strong>B. « Activités d’investissement »</strong></p>
+                <ul>
+                    <li>Acquisition et disposition d’immobilisations corporelles ; Acquisition d’immobilisations incorporelles ; Acquisition et disposition de placements.</li>
+                    <li>Total : « Flux de trésorerie liés aux activités d’investissement ».</li>
+                </ul>
+                <p><strong>C. « Activités de financement »</strong></p>
+                <ul>
+                    <li>Nouveaux emprunts ; Remboursement d’emprunts ; Émission d’actions ; Dividendes versés ; Apports du propriétaire ; Retraits du propriétaire.</li>
+                    <li>Total : « Flux de trésorerie liés aux activités de financement ».</li>
+                </ul>
+                <p><strong>Fin du rapport</strong> : « Variation nette de la trésorerie » ; « Trésorerie au début de la période » ; « Trésorerie à la fin de la période ».</p>
+                <h3>Règles et calculs</h3>
+                <ul>
+                    <li><strong>Méthode indirecte</strong>, confirmée par la note au bas du rapport : on part du bénéfice net, on ajoute les éléments sans effet sur la trésorerie (par exemple l’amortissement, qui est une charge sans sortie d’argent), puis on applique les variations du fonds de roulement (une hausse des comptes clients réduit la trésorerie ; une hausse des comptes fournisseurs l’augmente).</li>
+                    <li>Variation nette = Exploitation + Investissement + Financement.</li>
+                    <li>Trésorerie de fin = Trésorerie de début + Variation nette.</li>
+                    <li>Toutes les lignes sont affichées, même quand leur montant est nul (« — »).</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Note : Cet état des flux de trésorerie est préparé selon la méthode indirecte… »</span> — note fixe au bas du rapport, rappelant la méthode de calcul.</li>
+                    <li><span class="msg">« Aucune donnée pour cette période. »</span> — aucune écriture comptabilisée entre les deux dates.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">La « Trésorerie à la fin de la période » est calculée (début + variation nette), et non lue dans les comptes de banque. Rapprochez vous-même ce montant avec le solde bancaire réel à la date de fin. Un écart révèle une écriture manquante ou mal classée.</div>
+                <div class="astuce" data-titre="Astuce">Générez cet état pour la même période que l’état des résultats. Si le bénéfice net est positif mais que le flux d’exploitation est négatif, regardez d’abord la ligne « Comptes clients » : ce sont souvent des factures impayées qui retiennent l’argent.</div>
+            </section>
+
+            <section id="fr-bnr">
+                <h2>État des bénéfices non répartis</h2>
+                <p>Passage des bénéfices non répartis (BNR) du début à la fin de l’exercice (<span class="chemin">Rapports › État des bénéfices non répartis</span>).</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>Les bénéfices non répartis sont les profits accumulés depuis la création de l’entreprise et laissés dans celle-ci, après les dividendes ou les retraits des propriétaires. Cet état montre, pour l’exercice, ce que vous avez gagné, ce que vous avez sorti (dividendes, retraits) et ce qui reste réinvesti dans l’entreprise. C’est l’indicateur de la « réserve » que vous vous constituez. Des BNR qui diminuent d’année en année signifient que vous retirez plus que vous ne gagnez.</p>
+                <h3>Filtres et recherche</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Exercice du :</td><td>Non</td><td>Début de l’exercice. Par défaut le 1er janvier de l’année courante.</td></tr>
+                        <tr><td>au :</td><td>Non</td><td>Fin de l’exercice. Par défaut le 31 décembre de l’année courante.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit l’état pour l’exercice saisi.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Structure du rapport</h3>
+                <p>L’en-tête indique « Pour l’exercice terminé le … ». Les lignes, dans l’ordre :</p>
+                <ol>
+                    <li>« Bénéfices non répartis au début de l’exercice (date) » ;</li>
+                    <li>« Ajouter : Bénéfice net de l’exercice », ou « Moins : Perte nette de l’exercice » en cas de perte ;</li>
+                    <li>si des distributions existent : « Moins : Distributions aux propriétaires / actionnaires », avec les lignes « Dividendes déclarés » et « Retraits du propriétaire », toujours entre parenthèses, puis « Total des distributions » ;</li>
+                    <li>« Bénéfices non répartis avant ajustements » ;</li>
+                    <li>si des ajustements existent : bloc « Ajustements » avec « Correction d’exercice antérieur », « Autres ajustements », puis « Total des ajustements » ;</li>
+                    <li>« Bénéfices non répartis à la fin de l’exercice (date) ».</li>
+                </ol>
+                <h3>Règles et calculs</h3>
+                <ul>
+                    <li>BNR avant ajustements = BNR d’ouverture + Bénéfice net − (Dividendes + Retraits).</li>
+                    <li>BNR de clôture = BNR avant ajustements + Corrections d’exercice antérieur + Autres ajustements.</li>
+                    <li>Le résultat calculé est comparé au solde réel du compte 3300 Bénéfices non répartis.</li>
+                    <li>Les blocs « Distributions » et « Ajustements » n’apparaissent que s’ils contiennent des montants.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✓ Le solde calculé correspond au solde du compte 3300 Bénéfices non répartis »</span> — l’état concorde avec le grand livre.</li>
+                    <li><span class="msg">« ✗ Écart de [montant] avec le solde du compte 3300 — Vérifier les écritures »</span> — le solde calculé diffère du compte 3300. Avant la clôture d’exercice, c’est normal (voir ci-dessous) ; après la clôture, cherchez une écriture passée directement au compte 3300.</li>
+                    <li><span class="msg">« Aucune donnée disponible. »</span> — aucune écriture comptabilisée pour l’exercice.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="note" data-titre="Bon à savoir">La vérification avec le compte 3300 n’apparaît que si ce compte a un solde non nul. La comparaison est exacte, sans tolérance d’arrondi : un écart de 0,01 $ est signalé.</div>
+                <div class="piege" data-titre="Piège">Par défaut, la date de fin est le 31 décembre, donc une date future en cours d’année. Le bénéfice net inclut alors toutes les écritures jusqu’à aujourd’hui. Si votre exercice ne se termine pas le 31 décembre, corrigez les deux dates avant de cliquer sur <kbd>Générer</kbd>.</div>
+                <div class="note" data-titre="Bon à savoir">Avant la clôture de l’exercice, un écart avec le compte 3300 est normal : le bénéfice de l’année n’y est pas encore reporté. L’écart devrait alors être égal au bénéfice net de l’exercice moins les distributions.</div>
+            </section>
+
+            <section id="fr-balance">
+                <h2>Balance de vérification</h2>
+                <p>Solde débiteur ou créditeur de chaque compte à une date donnée, pour vérifier que le total des débits égale le total des crédits (<span class="chemin">Rapports › Balance de vérification</span>).</p>
+                <h3>Ce que ce rapport signifie pour un dirigeant</h3>
+                <p>La balance de vérification est l’outil de contrôle du comptable. En comptabilité à partie double, chaque écriture a un débit et un crédit égaux ; la balance confirme que cette règle a été respectée partout. Elle ne vous dit pas si l’entreprise va bien, mais elle vous dit si les chiffres des autres rapports sont fiables. C’est le premier rapport à consulter quand le bilan affiche un écart, et celui que votre comptable vous demandera pour préparer les états financiers de fin d’année.</p>
+                <h3>Filtres et recherche</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du :</td><td>Non</td><td>Date de la balance. Par défaut aujourd’hui.</td></tr>
+                        <tr><td>Masquer les comptes à solde zéro</td><td>Non</td><td>Case à cocher. Cocher ou décocher la case régénère le rapport immédiatement, sans cliquer sur <kbd>Générer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> : reconstruit la balance à la date saisie.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> : impression ou enregistrement en PDF.</li>
+                </ul>
+                <h3>Structure du rapport</h3>
+                <ul>
+                    <li><strong>Quatre cartes en haut</strong> : « Total débits », « Total crédits », « Écart » (en vert si nul, sinon signalé comme déséquilibré) et « Comptes ». Quand le filtre « Masquer les comptes à solde zéro » est actif, la carte « Comptes » affiche « affichés / total ».</li>
+                    <li>Sous le titre : « Au [date] · N compte(s) ».</li>
+                    <li><strong>Regroupement par classe parente</strong> : bandeau de la classe, lignes des comptes, puis « Total — [classe] ». Une classe sans ligne affichée est omise.</li>
+                    <li><strong>Dernière ligne</strong> : « TOTAL ».</li>
+                </ul>
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Numéro du compte.</td></tr>
+                        <tr><td>Nom du compte</td><td>Libellé du compte.</td></tr>
+                        <tr><td>Classe</td><td>Description de la sous-classe à laquelle le compte est rattaché.</td></tr>
+                        <tr><td>Débit</td><td>Solde débiteur du compte à la date, ou « — » s’il est nul.</td></tr>
+                        <tr><td>Crédit</td><td>Solde créditeur du compte à la date, ou « — » s’il est nul.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles et calculs</h3>
+                <ul>
+                    <li>Écart = Total des débits − Total des crédits.</li>
+                    <li>L’équilibre exige un écart exactement nul : aucune tolérance.</li>
+                    <li>Dans le tableau, un montant nul s’affiche « — ». Dans les cartes du haut, il s’affiche « 0,00 $ ».</li>
+                    <li>Masquer les comptes à solde zéro ne change pas les totaux.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✓ La balance est en équilibre — Total débits = Total crédits »</span> — toutes les écritures sont équilibrées.</li>
+                    <li><span class="msg">« ✗ Écart de [montant] — La balance n’est PAS en équilibre »</span> — au moins une écriture est déséquilibrée. Cherchez dans le journal des écritures une pièce dont le total des débits diffère du total des crédits (voyez la section <a href="comptabilite.html">Comptabilité</a>).</li>
+                    <li><span class="msg">« Aucune donnée disponible. »</span> — aucune écriture comptabilisée jusqu’à la date demandée.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="astuce" data-titre="Astuce">Cochez « Masquer les comptes à solde zéro » avant d’imprimer pour obtenir un document plus court. Les totaux restent identiques.</div>
+                <div class="astuce" data-titre="Astuce">Pour trouver l’origine d’un écart, générez la balance à plusieurs dates (fin de chaque mois) : le mois où l’écart apparaît contient l’écriture fautive.</div>
+            </section>
+
+            <section id="fr-ia-paiement">
+                <h2>IA Paiement</h2>
+                <p>Tableau de bord des paiements à venir, répartis en trois catégories : Gouvernemental, Fournisseur et Employé (<span class="chemin">Rapports › IA Paiement</span>). L’écran porte le titre « AI Payment — Gestion en temps réel avec AI ».</p>
+                <h3>But</h3>
+                <p>Voir d’un coup d’œil combien d’argent devra sortir dans les prochains jours, la prochaine semaine, le prochain mois ou les trois prochains mois, et pour qui. Il n’y a aucune saisie de texte dans cet écran.</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li>Boutons de période <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> et <kbd>3 Months</kbd> (par défaut <kbd>3 Months</kbd>) : choisissent l’horizon des paiements affichés. Chaque bouton montre trois compteurs colorés, un par catégorie.</li>
+                    <li>Cliquer sur une carte de catégorie la déplie ou la replie. La catégorie Fournisseur est dépliée par défaut.</li>
+                    <li><kbd>Payer tout</kbd> (dans une catégorie dépliée) : demande une confirmation, puis affiche un message pour l’ensemble de la catégorie.</li>
+                    <li><kbd>Payer</kbd> (sur une ligne) : affiche un message pour la transaction, sans confirmation.</li>
+                    <li>Bouton Retour : revient à l’écran précédent.</li>
+                    <li>Case « Devise : CAD $ » : texte fixe, non modifiable.</li>
+                </ul>
+                <h3>Présentation</h3>
+                <ul>
+                    <li><strong>Carte « Période de paiement »</strong> : totaux « Transactions » et « Montant total » pour la période choisie.</li>
+                    <li><strong>Une carte par catégorie</strong> (Gouvernemental, Fournisseur, Employé) : « N paiement(s) en attente », « Total à payer » et le badge « N à traiter ». Une fois dépliée : « N transaction(s) — [période] », le bouton <kbd>Payer tout</kbd> et le tableau des paiements.</li>
+                </ul>
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID</td><td>Identifiant du paiement, préfixé selon la catégorie : GOV-001, FRN-012, EMP-003.</td></tr>
+                        <tr><td>Description</td><td>Objet du paiement.</td></tr>
+                        <tr><td>Bénéficiaire</td><td>Organisme, fournisseur ou employé à payer.</td></tr>
+                        <tr><td>Échéance</td><td>Date d’exécution prévue.</td></tr>
+                        <tr><td>Montant</td><td>Montant arrondi au dollar, sans décimales.</td></tr>
+                        <tr><td>(bouton)</td><td><kbd>Payer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Seuls les paiements dont la date d’exécution prévue tombe aujourd’hui ou plus tard sont pris en compte.</li>
+                    <li><kbd>Today</kbd> = aujourd’hui seulement ; <kbd>Week</kbd> = les 7 prochains jours ; <kbd>Month</kbd> = jusqu’à la même date le mois suivant ; <kbd>3 Months</kbd> = trois mois.</li>
+                    <li>Les compteurs sont cumulatifs : Today est inclus dans Week, Week dans Month, Month dans 3 Months.</li>
+                    <li>Les montants sont arrondis au dollar près, sans décimales.</li>
+                    <li>Malgré son nom, cet écran n’envoie rien à un service d’intelligence artificielle : il lit directement les paiements planifiés de la base de données.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Confirmer le paiement de [montant] ? Toutes les transactions de cette catégorie seront marquées payées. »</span> — confirmation demandée par <kbd>Payer tout</kbd>. Cliquez sur Annuler si vous n’êtes pas certain.</li>
+                    <li><span class="msg">« Paiement groupé déclenché pour la catégorie [nom]. (Action à brancher au backend.) »</span> — affiché après <kbd>Payer tout</kbd>. Aucun paiement n’a réellement été effectué.</li>
+                    <li><span class="msg">« Paiement déclenché pour la transaction Id=[n]. (Action à brancher au backend.) »</span> — affiché après <kbd>Payer</kbd>. Aucun paiement n’a réellement été effectué.</li>
+                    <li><span class="msg">« Erreur : [détail] »</span> — la lecture des paiements a échoué. Rechargez la page ; si l’erreur persiste, notez le détail affiché.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">Les boutons <kbd>Payer</kbd> et <kbd>Payer tout</kbd> ne paient rien pour l’instant. Ils affichent seulement le message ci-dessus. Pour payer réellement un fournisseur, passez par la section <a href="achats.html">Achats</a>.</div>
+                <div class="piege" data-titre="Piège"><kbd>Payer</kbd> sur une ligne ne demande aucune confirmation, contrairement à <kbd>Payer tout</kbd>.</div>
+                <div class="piege" data-titre="Piège">Les paiements dont l’échéance est déjà passée n’apparaissent pas dans ce tableau de bord. Un paiement en retard n’y est donc pas visible.</div>
+                <div class="note" data-titre="Bon à savoir">Les libellés des périodes (« Today », « Week », « Month », « 3 Months ») sont en anglais, quelle que soit la langue choisie. La devise « CAD $ » est un texte fixe.</div>
+            </section>
+
+            <section id="fr-ia-ventes">
+                <h2>IA Ventes</h2>
+                <p>Suivi des encaissements sur les ventes et factures : montants collectés, à recevoir et en retard (<span class="chemin">Rapports › IA Ventes</span>). L’écran porte le titre « AI Sales — Gestion intelligente des ventes ».</p>
+                <h3>But</h3>
+                <p>Savoir rapidement ce qui a été encaissé, ce qui reste à recevoir et ce qui est en retard autour de la date d’aujourd’hui, et voir le solde bancaire. Il n’y a aucune saisie dans cet écran.</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li>Boutons de période <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> et <kbd>3 Months</kbd> (par défaut <kbd>3 Months</kbd>).</li>
+                    <li>Onglets <kbd>Collecté</kbd> (par défaut), <kbd>À recevoir</kbd> et <kbd>Retard</kbd> : filtrent le détail par statut de facture. Chaque onglet affiche un compteur.</li>
+                    <li>Icône en forme d’œil sur le widget « Solde bancaire » : masque ou affiche le solde.</li>
+                </ul>
+                <h3>Présentation</h3>
+                <ul>
+                    <li><strong>En-tête</strong> : « AI Sales — Gestion intelligente des ventes » et le widget « Solde bancaire ». Le solde est affiché avec deux décimales, suivi de « US$ » si le compte est en dollars américains. Il est lu sur le compte bancaire désigné dans les paramètres de la compagnie (paramètre « COMPTE_BANQUE » de la catégorie « BANCAIRE », voyez <a href="administration.html">Administration</a>).</li>
+                    <li><strong>Carte « Période de vente »</strong> : pour chaque période, « N ventes » et trois montants : « Collecté », « À recevoir », « En retard ».</li>
+                    <li><strong>Section « Détail — [période] »</strong> : une ligne par facture, triée de l’échéance la plus récente à la plus ancienne.</li>
+                </ul>
+                <h3>Colonnes du détail</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Icône</td><td>Symbole du statut.</td></tr>
+                        <tr><td>Client</td><td>Nom du client facturé.</td></tr>
+                        <tr><td>Description</td><td>Objet de la facture.</td></tr>
+                        <tr><td>Échéance</td><td>Date d’échéance de la facture.</td></tr>
+                        <tr><td>Numéro</td><td>Numéro de facture, par exemple INV-0001.</td></tr>
+                        <tr><td>Montant</td><td>Montant arrondi au dollar.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles</h3>
+                <ul>
+                    <li>« Collecté » = factures au statut payée. « À recevoir » = factures ouvertes, en cours ou partiellement payées. « Retard » = factures au statut en retard.</li>
+                    <li>La période se mesure en écart absolu autour d’aujourd’hui, dans le passé comme dans le futur : ±1 jour (Today), ±7 jours (Week), ±30 jours (Month) ou ±90 jours (3 Months).</li>
+                    <li>La date utilisée est la date d’échéance de la facture ou, à défaut, sa date d’exécution prévue.</li>
+                    <li>Les montants sont arrondis au dollar.</li>
+                    <li>Malgré son nom, cet écran n’envoie rien à un service d’intelligence artificielle : ce sont des lectures directes de la base de données.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucune vente dans cette catégorie pour cette période. »</span> — aucune facture du statut choisi dans l’intervalle. Changez d’onglet ou élargissez la période.</li>
+                    <li><span class="msg">« Non configuré »</span> (solde bancaire) — aucun compte bancaire n’est désigné dans les paramètres. Renseignez le paramètre « COMPTE_BANQUE ».</li>
+                    <li><span class="msg">« — »</span> (solde bancaire) — la lecture du solde a échoué.</li>
+                    <li><span class="msg">« Erreur : [détail] »</span> — la lecture des ventes a échoué. Rechargez la page.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">« Today » couvre aussi hier et demain (±1 jour), et non la seule journée d’aujourd’hui.</div>
+                <div class="piege" data-titre="Piège">Le compteur « N ventes » compte les factures de tous les statuts, alors que les trois montants ne portent que sur les trois statuts listés (payée, à recevoir, en retard). Le nombre de lignes dans le détail peut donc être inférieur à « N ventes », et la somme des trois montants peut différer du total des ventes.</div>
+                <div class="note" data-titre="Bon à savoir">Le libellé de l’onglet est « Retard », celui de la carte « En retard » : ce sont les mêmes factures.</div>
+                <div class="note" data-titre="Bon à savoir">Le masquage du solde bancaire n’est pas mémorisé : il revient à l’affichage dès que la page est rechargée.</div>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Comment obtenir un rapport en Excel ou en CSV ?</summary><p>Ce n’est pas possible : le seul bouton de sortie est <kbd>🖨 Imprimer / PDF</kbd>. Choisissez « Enregistrer en PDF » dans la fenêtre d’impression du navigateur pour obtenir un fichier.</p></details>
+                <details><summary>J’ai changé la date, mais le rapport n’a pas bougé.</summary><p>Après un changement de date, il faut cliquer sur <kbd>Générer</kbd>. Seule la case « Masquer les comptes à solde zéro » de la Balance de vérification régénère le rapport immédiatement.</p></details>
+                <details><summary>Pourquoi l’en-tête imprimé indique-t-il « Mon entreprise » ?</summary><p>Cette étiquette est fixe et n’affiche jamais le nom de votre compagnie. Ajoutez le nom de la compagnie dans le nom du fichier PDF ou dans le message qui l’accompagne.</p></details>
+                <details><summary>Le bilan affiche « ✗ Écart de … — Le bilan n’est pas en équilibre ». Que faire ?</summary><p>Générez la Balance de vérification à la même date. Si elle affiche aussi un écart, une écriture est déséquilibrée : retrouvez-la dans le journal. Si elle est en équilibre, un compte est rattaché à la mauvaise classe (par exemple un compte de charges dans la plage de l’actif) : corrigez son classement dans le plan comptable.</p></details>
+                <details><summary>L’état des bénéfices non répartis signale un écart avec le compte 3300. Est-ce grave ?</summary><p>Avant la clôture de l’exercice, non : le bénéfice de l’année n’a pas encore été reporté dans le compte 3300, et l’écart correspond au bénéfice net moins les distributions. Après la clôture, cherchez une écriture passée directement au compte 3300.</p></details>
+                <details><summary>Mon état des résultats montre un bénéfice, mais je n’ai pas cet argent en banque. Pourquoi ?</summary><p>Le bénéfice comprend les factures émises et non encore encaissées, et exclut certains décaissements (achats d’équipement, remboursements d’emprunts, retraits). Consultez l’État des flux de trésorerie : il part du bénéfice net et explique où l’argent est allé.</p></details>
+                <details><summary>Un compte n’apparaît pas dans le rapport Plan comptable.</summary><p>Un compte rattaché directement à une classe principale, sans sous-classe, n’est pas affiché. Rattachez-le à une sous-classe. Les comptes inactifs, eux, restent affichés avec une pastille rouge.</p></details>
+                <details><summary>Une sous-classe manque dans l’état des résultats.</summary><p>Une sous-classe sans mouvement pendant la période n’est pas affichée. Ce n’est pas une erreur.</p></details>
+                <details><summary>Est-ce que « Payer tout » dans IA Paiement effectue vraiment les paiements ?</summary><p>Non. Pour l’instant, <kbd>Payer</kbd> et <kbd>Payer tout</kbd> n’affichent qu’un message. Aucun paiement n’est transmis. Pour payer un fournisseur, utilisez la section Achats.</p></details>
+                <details><summary>Pourquoi le solde bancaire d’IA Ventes affiche-t-il « Non configuré » ?</summary><p>Aucun compte bancaire n’est désigné dans les paramètres de la compagnie. Renseignez le paramètre « COMPTE_BANQUE » (catégorie « BANCAIRE ») dans l’administration.</p></details>
+                <details><summary>La trésorerie de fin de l’état des flux ne correspond pas à mon relevé bancaire.</summary><p>Ce montant est calculé (trésorerie de début + variation nette) et non lu dans les comptes de banque. Un écart révèle une écriture manquante, une écriture mal classée ou un rapprochement bancaire incomplet.</p></details>
+                <details><summary>Puis-je comparer cette année avec l’année dernière ?</summary><p>Pas dans un même rapport : aucun rapport n’offre de colonne comparative. Générez le rapport pour chaque période et conservez les deux PDF.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Actif</td><td>Ce que l’entreprise possède : encaisse, comptes clients, stocks, équipements. Court terme (1000 – 1499) : convertible en argent d’ici un an ; long terme (1500 – 1999) : le reste.</td></tr>
+                        <tr><td>Passif</td><td>Ce que l’entreprise doit : fournisseurs, taxes, salaires, emprunts. Court terme (2000 – 2499) : exigible d’ici un an ; long terme (2500 – 2999) : le reste.</td></tr>
+                        <tr><td>Capitaux propres</td><td>Valeur nette revenant aux propriétaires (3000 – 3999) : mises de fonds, bénéfices non répartis, résultat de l’exercice.</td></tr>
+                        <tr><td>Bénéfices non répartis (BNR)</td><td>Profits accumulés et laissés dans l’entreprise, après dividendes et retraits. Compte 3300.</td></tr>
+                        <tr><td>Bénéfice brut</td><td>Revenus moins coût des ventes.</td></tr>
+                        <tr><td>Bénéfice net</td><td>Ce qui reste après toutes les charges et les impôts. Négatif, on parle de perte nette.</td></tr>
+                        <tr><td>Balance de vérification</td><td>Liste des soldes de tous les comptes, dont le total des débits doit égaler le total des crédits.</td></tr>
+                        <tr><td>Débit / Crédit (D / C)</td><td>Les deux côtés d’une écriture. L’actif et les charges augmentent au débit ; le passif, les capitaux propres et les revenus augmentent au crédit.</td></tr>
+                        <tr><td>Classe / Sous-classe</td><td>Les deux niveaux de regroupement des comptes dans le plan comptable, chacun avec une plage de numéros.</td></tr>
+                        <tr><td>Groupe BILAN / RESULTAT</td><td>Indique si une classe alimente le bilan (actif, passif, capitaux propres) ou l’état des résultats (revenus, coûts, charges, impôts).</td></tr>
+                        <tr><td>Méthode indirecte</td><td>Façon de préparer l’état des flux de trésorerie en partant du bénéfice net et en l’ajustant, plutôt qu’en listant les encaissements et décaissements.</td></tr>
+                        <tr><td>Fonds de roulement</td><td>Actif à court terme moins passif à court terme. Ses variations (clients, stocks, fournisseurs…) expliquent une partie de l’écart entre bénéfice et trésorerie.</td></tr>
+                        <tr><td>Amortissement</td><td>Charge qui répartit le coût d’un équipement sur sa durée d’utilisation. Sans sortie d’argent, elle est rajoutée au bénéfice dans l’état des flux.</td></tr>
+                        <tr><td>Exercice</td><td>Période comptable d’un an, par défaut du 1er janvier au 31 décembre.</td></tr>
+                        <tr><td>Clôture d’exercice</td><td>Écriture qui reporte le bénéfice de l’année dans les bénéfices non répartis et remet les comptes de résultats à zéro.</td></tr>
+                        <tr><td>Collecté / À recevoir / Retard</td><td>Dans IA Ventes : factures payées ; factures ouvertes, en cours ou partielles ; factures au statut en retard.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+        <article class="langue" lang="en">
+            <h1>Reports</h1>
+            <p class="intro">The six accounting reports of 60Sec-AI (chart of accounts, income statement, balance sheet, cash flow statement, statement of retained earnings, trial balance) and the two dashboards “AI Payment” and “AI Sales”. Menu <span class="chemin">Reports</span>. The left-hand menu lists the screens in this order: Chart of Accounts, Income Statement, Balance Sheet, Cash Flow Statement, Statement of Retained Earnings, Trial Balance, AI Payment and AI Sales.</p>
+
+            <section id="en-common-rules">
+                <h2>Rules common to the accounting reports</h2>
+                <p>The six accounting reports work the same way. Everything below applies to each of them, unless the screen’s own section says otherwise.</p>
+                <h3>Access and company</h3>
+                <ul>
+                    <li>A user who is not signed in is sent back to the login page.</li>
+                    <li>Each report covers the active company of your session. There is no company selector in the reports: to look at another company, switch the active company in the application first.</li>
+                    <li>No report offers a previous fiscal year or a comparison column. To compare two periods, generate the report twice and keep both PDFs.</li>
+                </ul>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> (Generate): rebuilds the report with the dates entered. The report is built automatically when the screen opens, using the default values; after changing a date, you must click <kbd>Générer</kbd> to see the new result.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> (Print / PDF): opens the browser’s print window. It is the only output button. To get a file, choose “Save as PDF” as the printer. No report offers an Excel or CSV export.</li>
+                </ul>
+                <p>To get a report as a PDF: 1. Set the dates. 2. Click <kbd>Générer</kbd>. 3. Click <kbd>🖨 Imprimer / PDF</kbd>. 4. In the browser window, choose “Save as PDF” and confirm.</p>
+                <h3>Print layout</h3>
+                <ul>
+                    <li>Letter format, portrait orientation, 1.5 cm margins.</li>
+                    <li>The toolbar, the filters and the menu disappear when printing. Only the header and the body of the report are printed.</li>
+                </ul>
+                <h3>How dates and amounts are shown</h3>
+                <table>
+                    <thead><tr><th>Item</th><th>Display</th></tr></thead>
+                    <tbody>
+                        <tr><td>Dates</td><td>YYYY-MM-DD format, for example 2026-09-25.</td></tr>
+                        <tr><td>Zero amount</td><td>“—” (dash). Exception: the Trial Balance shows “0,00 $” in its top cards.</td></tr>
+                        <tr><td>Negative amount</td><td>In parentheses and in red, for example “(1 234,56 $)”.</td></tr>
+                        <tr><td>Positive amount</td><td>In green.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Pitfall">The printed header always reads “Mon entreprise”. Your company’s name is never written in that label. If you send a PDF to a third party (banker, accountant), put the company name in the file name or in the e-mail.</div>
+                <div class="note" data-titre="Good to know">The reports read the entries posted to the general ledger. A draft invoice or an unposted entry does not appear in them. See the <a href="comptabilite.html">Accounting</a> section for entering journal entries.</div>
+            </section>
+
+            <section id="en-chart-of-accounts">
+                <h2>Chart of Accounts</h2>
+                <p>Structured list of all the company’s accounts, on three levels: class, sub-class, account (<span class="chemin">Reports › Chart of Accounts</span>). This report contains no amounts: it is used to know and document the structure of the chart of accounts.</p>
+                <h3>What this report means for a business owner</h3>
+                <p>The chart of accounts is the “table of contents” of your books. Every sale, purchase and payment is filed under one of these accounts. A clear, well-organized chart gives readable financial statements; a chart cluttered with useless or misfiled accounts gives reports that are hard to interpret. Print it once a year and review it with your accountant.</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Tous</kbd> (All): shows every class.</li>
+                    <li><kbd>Bilan</kbd> (Balance sheet): shows only the classes of the BILAN group (assets, liabilities, equity).</li>
+                    <li><kbd>Résultats</kbd> (Income): shows only the classes of the RESULTAT group (revenues, costs, expenses, taxes).</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Filters and search</h3>
+                <p>There is no date to enter. The three filter buttons (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) are the only parameters.</p>
+                <h3>Layout</h3>
+                <ul>
+                    <li>Under the title: “X classe(s) · Y compte(s)” (classes and accounts). The header shows “Généré le YYYY-MM-DD HH:mm” (generated on).</li>
+                    <li><strong>Class banner</strong>: class code and description, number range “(start à end)” and a BILAN or RESULTAT badge.</li>
+                    <li><strong>Sub-classes</strong>: code, description and range “start – end”.</li>
+                    <li><strong>Footer of each class</strong>: “N compte(s)”.</li>
+                    <li><strong>“Sommaire” (Summary) card</strong> at the bottom: number of accounts per class, then a “Total” line.</li>
+                </ul>
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Account number (for example 1000, 4010).</td></tr>
+                        <tr><td>Nom du compte</td><td>Short name of the account.</td></tr>
+                        <tr><td>Description</td><td>Longer description, if one was entered.</td></tr>
+                        <tr><td>Type</td><td>Account type (accounting nature).</td></tr>
+                        <tr><td>Sens</td><td>“D” badge for an account with a normal debit balance, “C” for a normal credit balance.</td></tr>
+                        <tr><td>Actif</td><td>Green dot if the account is active, red if it is inactive.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules</h3>
+                <ul>
+                    <li>Only the active classes and sub-classes of the current company are shown.</li>
+                    <li>Inactive accounts are still listed, with the red dot.</li>
+                    <li>Accounts are sorted in the order defined in the chart of accounts.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">An account attached directly to a main class, without a sub-class, does not appear in this report. If an account is “missing”, check that it is attached to a sub-class.</div>
+                <div class="note" data-titre="Good to know">A sub-class with no accounts shows its header without a table. This is not an error.</div>
+                <div class="piege" data-titre="Pitfall">The current filter button (<kbd>Tous</kbd>, <kbd>Bilan</kbd> or <kbd>Résultats</kbd>) is not highlighted. Rely on the content shown and on the BILAN / RESULTAT badges to know which filter is active.</div>
+            </section>
+
+            <section id="en-income-statement">
+                <h2>Income Statement</h2>
+                <p>Revenues, costs and expenses of the period, down to net income (<span class="chemin">Reports › Income Statement</span>).</p>
+                <h3>What this report means for a business owner</h3>
+                <p>The income statement answers the question “Did I make money during this period?”. It starts from what you sold, subtracts what those sales cost you (gross profit), then your operating expenses (income before taxes), then taxes. Gross profit tells you whether your selling price covers your direct costs; net income tells you what is really left. A positive net income is not cash in the bank: a customer who has not paid yet already counts as revenue. For cash, see the <a href="#en-cash-flow">Cash Flow Statement</a>.</p>
+                <h3>Filters and search</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du : (From)</td><td>No</td><td>Start of the period. Defaults to January 1 of the current year. An empty field falls back to the default.</td></tr>
+                        <tr><td>Au : (To)</td><td>No</td><td>End of the period. Defaults to today. An empty field falls back to the default.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: rebuilds the report for the period entered.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Report structure</h3>
+                <p>The header reads “Période du … au …” (period from … to …). The report has three columns: account number, account name, amount. For each section: a section banner, then the sub-classes with their accounts, then a “Total — [sub-class]” line, then the section total. In order:</p>
+                <ol>
+                    <li>“Revenus” (Revenues), then “Total des revenus”;</li>
+                    <li>“Coût des ventes” (Cost of sales), then “Total du coût des ventes”;</li>
+                    <li>calculated line “Bénéfice brut” (Gross profit);</li>
+                    <li>“Charges d’exploitation” (Operating expenses), then “Total des charges d’exploitation”;</li>
+                    <li>calculated line “Bénéfice avant impôts et éléments extraordinaires” (Income before taxes and extraordinary items);</li>
+                    <li>“Impôts et éléments extraordinaires” (Taxes and extraordinary items), then “Total des impôts et éléments extraordinaires”;</li>
+                    <li>final line on a dark background “Bénéfice net” (Net income).</li>
+                </ol>
+                <h3>Rules and calculations</h3>
+                <ul>
+                    <li>Gross profit = Revenues − Cost of sales.</li>
+                    <li>Income before taxes = Gross profit − Operating expenses.</li>
+                    <li>Net income = Income before taxes − Taxes and extraordinary items.</li>
+                    <li>The sections correspond to parent classes 6 (Revenues), 7 (Cost of sales), 8 (Operating expenses) and 9 (Taxes and extraordinary items) of the chart of accounts.</li>
+                    <li>A sub-class with no activity during the period is not shown.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Aucune donnée pour cette période.”</span> — no entry posted to the income accounts between the two dates. Widen the period or check that the invoices are posted.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">The “Au :” date must be later than the “Du :” date. The screen does not check this: a reversed period gives an empty or inconsistent report with no error message.</div>
+                <div class="note" data-titre="Good to know">A negative net income (a loss) is shown in parentheses on the final line, but not in red, unlike the other negative amounts.</div>
+                <div class="astuce" data-titre="Tip">For a monthly income statement, enter the first and last day of the month, then click <kbd>Générer</kbd>. For the full year, leave both fields empty: the report falls back to January 1 and today.</div>
+            </section>
+
+            <section id="en-balance-sheet">
+                <h2>Balance Sheet</h2>
+                <p>Financial position of the company at a given date: what it owns (assets), what it owes (liabilities) and what belongs to the owners (equity) (<span class="chemin">Reports › Balance Sheet</span>).</p>
+                <h3>What this report means for a business owner</h3>
+                <p>The balance sheet is a snapshot of your business on a precise date. Assets list what you have (cash in the bank, receivables, inventory, equipment); liabilities list what you owe (suppliers, taxes, loans); equity is the net value that belongs to the owners. The basic rule: Assets = Liabilities + Equity. Two useful readings: current assets compared with current liabilities tell you whether you can pay your debts over the next twelve months; the weight of liabilities compared with equity shows how much you depend on credit. It is the report your banker will ask for first.</p>
+                <h3>Filters and search</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du : (As at)</td><td>No</td><td>Date of the snapshot. Defaults to today.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: rebuilds the balance sheet at the date entered.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Report structure</h3>
+                <p>The header reads “Au YYYY-MM-DD” (as at). Three main blocks:</p>
+                <ul>
+                    <li><strong>ACTIF</strong> (Assets)
+                        <ul>
+                            <li>“Actif à court terme (1000 – 1499)” (current assets), then “Total de l’actif à court terme”;</li>
+                            <li>“Actif à long terme (1500 – 1999)” (long-term assets), then “Total de l’actif à long terme”;</li>
+                            <li>“TOTAL DE L’ACTIF”.</li>
+                        </ul>
+                    </li>
+                    <li><strong>PASSIF</strong> (Liabilities)
+                        <ul>
+                            <li>“Passif à court terme (2000 – 2499)” (current liabilities), then its total;</li>
+                            <li>“Passif à long terme (2500 – 2999)” (long-term liabilities), then its total;</li>
+                            <li>“TOTAL DU PASSIF”.</li>
+                        </ul>
+                    </li>
+                    <li><strong>CAPITAUX PROPRES</strong> (Equity)
+                        <ul>
+                            <li>“Capitaux propres (3000 – 3999)”;</li>
+                            <li>block “Résultat de l’exercice courant” (current year result), with a line in blue italics “Bénéfice net de l’exercice” (net income for the year) or “Perte nette de l’exercice” (net loss for the year), then “Total — Résultat de l’exercice”;</li>
+                            <li>“TOTAL DES CAPITAUX PROPRES”;</li>
+                            <li>“TOTAL DU PASSIF ET DES CAPITAUX PROPRES”.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Rules and calculations</h3>
+                <ul>
+                    <li>The net income for the year (revenues minus expenses, from the start of the fiscal year to the balance sheet date) is calculated automatically and added to equity to balance the balance sheet.</li>
+                    <li>Balance check: Total assets − (Total liabilities + Total equity). A difference of less than $0.01 is tolerated (rounding).</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“✓ Le bilan est en équilibre”</span> — assets equal liabilities plus equity. Everything is normal.</li>
+                    <li><span class="msg">“✗ Écart de [amount] — Le bilan n’est pas en équilibre”</span> — an unbalanced entry or a misfiled account distorts the balance sheet. Check the <a href="#en-trial-balance">Trial Balance</a> at the same date to find the source.</li>
+                    <li><span class="msg">“Note : Le bénéfice net de l’exercice ([amount]) est calculé automatiquement à partir des comptes de résultats et intégré aux capitaux propres.”</span> — shown only when net income is not zero. A simple reminder of the calculation.</li>
+                    <li><span class="msg">“Aucune donnée disponible.”</span> — no entry posted up to the requested date.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">An unbalanced balance sheet almost always points to an unbalanced entry or to an account attached to the wrong class (for example an expense account numbered in the 1000 – 1999 range). Generate the Trial Balance at the same date: if it also shows a difference, the problem is an entry; if it balances, the problem is the filing of an account.</div>
+                <div class="piege" data-titre="Pitfall">If the year-end closing has already been posted to the retained earnings account, check that the income is not counted twice: once in account 3300 and once in the automatically calculated “Bénéfice net de l’exercice” line.</div>
+                <div class="astuce" data-titre="Tip">For the year-end balance sheet, enter December 31 (or your fiscal year-end date) in “En date du :”, even if later entries exist: only the entries up to that date are taken into account.</div>
+            </section>
+
+            <section id="en-cash-flow">
+                <h2>Cash Flow Statement</h2>
+                <p>Explains the change in available cash between the start and the end of the period, using the indirect method (<span class="chemin">Reports › Cash Flow Statement</span>).</p>
+                <h3>What this report means for a business owner</h3>
+                <p>A business can be profitable and run out of cash, or lose money and have a healthy bank account. This statement reconciles the two: it starts from net income and explains where the money really went. It answers three questions: does my day-to-day business generate cash (operating activities)? how much did I invest in equipment or investments (investing activities)? how much did I borrow, repay, receive or withdraw as an owner (financing activities)? A repeatedly negative operating cash flow is the most important warning sign for a small business, even when the income statement is positive.</p>
+                <h3>Filters and search</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du : (From)</td><td>No</td><td>Start of the period. Defaults to January 1 of the current year.</td></tr>
+                        <tr><td>Au : (To)</td><td>No</td><td>End of the period. Defaults to today.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: rebuilds the statement for the period entered.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Report structure</h3>
+                <p><strong>A. “Activités d’exploitation”</strong> (Operating activities)</p>
+                <ul>
+                    <li>Net income for the period.</li>
+                    <li>Sub-heading “Ajustements pour éléments sans effet sur la trésorerie” (adjustments for non-cash items): Amortissement (depreciation); Créances douteuses (doubtful accounts); Gain/Perte sur disposition d’actifs (gain/loss on disposal of assets); Impôts différés (deferred taxes); then “Total des ajustements”.</li>
+                    <li>Sub-heading “Variation des éléments du fonds de roulement” (changes in working capital): Comptes clients (receivables), Stocks (inventory), Frais payés d’avance (prepaid expenses), Taxes à recevoir (taxes receivable); Comptes fournisseurs (payables), Charges à payer (accrued expenses), Taxes à payer (taxes payable), Retenues salariales (payroll deductions), Revenus reportés (deferred revenue); then “Variation nette du fonds de roulement”.</li>
+                    <li>Total: “Flux de trésorerie liés aux activités d’exploitation”.</li>
+                </ul>
+                <p><strong>B. “Activités d’investissement”</strong> (Investing activities)</p>
+                <ul>
+                    <li>Acquisition and disposal of tangible fixed assets; Acquisition of intangible assets; Acquisition and disposal of investments.</li>
+                    <li>Total: “Flux de trésorerie liés aux activités d’investissement”.</li>
+                </ul>
+                <p><strong>C. “Activités de financement”</strong> (Financing activities)</p>
+                <ul>
+                    <li>New loans; Loan repayments; Share issues; Dividends paid; Owner contributions; Owner withdrawals.</li>
+                    <li>Total: “Flux de trésorerie liés aux activités de financement”.</li>
+                </ul>
+                <p><strong>End of the report</strong>: “Variation nette de la trésorerie” (net change in cash); “Trésorerie au début de la période” (cash at the beginning of the period); “Trésorerie à la fin de la période” (cash at the end of the period).</p>
+                <h3>Rules and calculations</h3>
+                <ul>
+                    <li><strong>Indirect method</strong>, confirmed by the note at the bottom of the report: start from net income, add back the non-cash items (for example depreciation, an expense with no cash outflow), then apply the changes in working capital (an increase in receivables reduces cash; an increase in payables increases it).</li>
+                    <li>Net change = Operating + Investing + Financing.</li>
+                    <li>Ending cash = Beginning cash + Net change.</li>
+                    <li>All lines are shown, even when their amount is zero (“—”).</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Note : Cet état des flux de trésorerie est préparé selon la méthode indirecte…”</span> — fixed note at the bottom of the report, recalling the calculation method.</li>
+                    <li><span class="msg">“Aucune donnée pour cette période.”</span> — no entry posted between the two dates.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">“Trésorerie à la fin de la période” is calculated (beginning + net change), not read from the bank accounts. Reconcile this amount yourself with the real bank balance at the end date. A difference reveals a missing or misfiled entry.</div>
+                <div class="astuce" data-titre="Tip">Generate this statement for the same period as the income statement. If net income is positive but operating cash flow is negative, look first at the “Comptes clients” line: unpaid invoices are often what holds the cash back.</div>
+            </section>
+
+            <section id="en-retained-earnings">
+                <h2>Statement of Retained Earnings</h2>
+                <p>Movement of retained earnings from the beginning to the end of the fiscal year (<span class="chemin">Reports › Statement of Retained Earnings</span>).</p>
+                <h3>What this report means for a business owner</h3>
+                <p>Retained earnings are the profits accumulated since the company was created and left in it, after dividends or owner withdrawals. This statement shows, for the year, what you earned, what you took out (dividends, withdrawals) and what stays reinvested in the business. It is the measure of the “reserve” you are building. Retained earnings that shrink year after year mean you are taking out more than you earn.</p>
+                <h3>Filters and search</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Exercice du : (Fiscal year from)</td><td>No</td><td>Start of the fiscal year. Defaults to January 1 of the current year.</td></tr>
+                        <tr><td>au : (to)</td><td>No</td><td>End of the fiscal year. Defaults to December 31 of the current year.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: rebuilds the statement for the fiscal year entered.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Report structure</h3>
+                <p>The header reads “Pour l’exercice terminé le …” (for the year ended). The lines, in order:</p>
+                <ol>
+                    <li>“Bénéfices non répartis au début de l’exercice (date)” (retained earnings at the beginning of the year);</li>
+                    <li>“Ajouter : Bénéfice net de l’exercice” (add: net income), or “Moins : Perte nette de l’exercice” (less: net loss) in case of a loss;</li>
+                    <li>if distributions exist: “Moins : Distributions aux propriétaires / actionnaires”, with the lines “Dividendes déclarés” (dividends declared) and “Retraits du propriétaire” (owner withdrawals), always in parentheses, then “Total des distributions”;</li>
+                    <li>“Bénéfices non répartis avant ajustements” (retained earnings before adjustments);</li>
+                    <li>if adjustments exist: “Ajustements” block with “Correction d’exercice antérieur” (prior-period correction), “Autres ajustements” (other adjustments), then “Total des ajustements”;</li>
+                    <li>“Bénéfices non répartis à la fin de l’exercice (date)” (retained earnings at the end of the year).</li>
+                </ol>
+                <h3>Rules and calculations</h3>
+                <ul>
+                    <li>Retained earnings before adjustments = Opening retained earnings + Net income − (Dividends + Withdrawals).</li>
+                    <li>Closing retained earnings = Retained earnings before adjustments + Prior-period corrections + Other adjustments.</li>
+                    <li>The calculated result is compared with the actual balance of account 3300 Bénéfices non répartis (Retained earnings).</li>
+                    <li>The “Distributions” and “Ajustements” blocks appear only when they contain amounts.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“✓ Le solde calculé correspond au solde du compte 3300 Bénéfices non répartis”</span> — the statement agrees with the general ledger.</li>
+                    <li><span class="msg">“✗ Écart de [amount] avec le solde du compte 3300 — Vérifier les écritures”</span> — the calculated balance differs from account 3300. Before the year-end closing this is normal (see below); after the closing, look for an entry posted directly to account 3300.</li>
+                    <li><span class="msg">“Aucune donnée disponible.”</span> — no entry posted for the fiscal year.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="note" data-titre="Good to know">The check against account 3300 appears only if that account has a non-zero balance. The comparison is exact, with no rounding tolerance: a $0.01 difference is flagged.</div>
+                <div class="piege" data-titre="Pitfall">By default the end date is December 31, which is a future date during the year. Net income then includes all entries up to today. If your fiscal year does not end on December 31, correct both dates before clicking <kbd>Générer</kbd>.</div>
+                <div class="note" data-titre="Good to know">Before the year-end closing, a difference with account 3300 is normal: the year’s income has not been transferred to it yet. The difference should then equal the net income for the year minus distributions.</div>
+            </section>
+
+            <section id="en-trial-balance">
+                <h2>Trial Balance</h2>
+                <p>Debit or credit balance of every account at a given date, to check that total debits equal total credits (<span class="chemin">Reports › Trial Balance</span>).</p>
+                <h3>What this report means for a business owner</h3>
+                <p>The trial balance is the accountant’s control tool. In double-entry bookkeeping every entry has equal debits and credits; the trial balance confirms that this rule was respected everywhere. It does not tell you whether the business is doing well, but it tells you whether the figures in the other reports can be trusted. It is the first report to check when the balance sheet shows a difference, and the one your accountant will ask for to prepare the year-end financial statements.</p>
+                <h3>Filters and search</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du : (As at)</td><td>No</td><td>Date of the trial balance. Defaults to today.</td></tr>
+                        <tr><td>Masquer les comptes à solde zéro (Hide zero-balance accounts)</td><td>No</td><td>Checkbox. Checking or unchecking it regenerates the report immediately, without clicking <kbd>Générer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: rebuilds the trial balance at the date entered.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: print or save as PDF.</li>
+                </ul>
+                <h3>Report structure</h3>
+                <ul>
+                    <li><strong>Four cards at the top</strong>: “Total débits”, “Total crédits”, “Écart” (difference; green when zero, otherwise flagged as unbalanced) and “Comptes” (accounts). When the “Masquer les comptes à solde zéro” filter is active, the “Comptes” card shows “shown / total”.</li>
+                    <li>Under the title: “Au [date] · N compte(s)”.</li>
+                    <li><strong>Grouping by parent class</strong>: class banner, account lines, then “Total — [class]”. A class with no line shown is omitted.</li>
+                    <li><strong>Last line</strong>: “TOTAL”.</li>
+                </ul>
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Account number.</td></tr>
+                        <tr><td>Nom du compte</td><td>Account name.</td></tr>
+                        <tr><td>Classe</td><td>Description of the sub-class the account belongs to.</td></tr>
+                        <tr><td>Débit</td><td>Debit balance of the account at the date, or “—” if zero.</td></tr>
+                        <tr><td>Crédit</td><td>Credit balance of the account at the date, or “—” if zero.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules and calculations</h3>
+                <ul>
+                    <li>Difference = Total debits − Total credits.</li>
+                    <li>Balance requires a difference of exactly zero: no tolerance.</li>
+                    <li>In the table, a zero amount is shown as “—”. In the top cards, it is shown as “0,00 $”.</li>
+                    <li>Hiding zero-balance accounts does not change the totals.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“✓ La balance est en équilibre — Total débits = Total crédits”</span> — all entries are balanced.</li>
+                    <li><span class="msg">“✗ Écart de [amount] — La balance n’est PAS en équilibre”</span> — at least one entry is unbalanced. Look in the journal for a document whose total debits differ from its total credits (see the <a href="comptabilite.html">Accounting</a> section).</li>
+                    <li><span class="msg">“Aucune donnée disponible.”</span> — no entry posted up to the requested date.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="astuce" data-titre="Tip">Check “Masquer les comptes à solde zéro” before printing to get a shorter document. The totals stay the same.</div>
+                <div class="astuce" data-titre="Tip">To find the origin of a difference, generate the trial balance at several dates (end of each month): the month where the difference first appears contains the faulty entry.</div>
+            </section>
+
+            <section id="en-ai-payment">
+                <h2>AI Payment</h2>
+                <p>Dashboard of upcoming payments, split into three categories: Government (Gouvernemental), Supplier (Fournisseur) and Employee (Employé) (<span class="chemin">Reports › AI Payment</span>). The screen is titled “AI Payment — Gestion en temps réel avec AI”.</p>
+                <h3>Purpose</h3>
+                <p>See at a glance how much money will have to go out today, in the next week, month or three months, and to whom. There is no text entry on this screen.</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li>Period buttons <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> and <kbd>3 Months</kbd> (default <kbd>3 Months</kbd>): choose the horizon of the payments shown. Each button shows three coloured counters, one per category.</li>
+                    <li>Clicking a category card expands or collapses it. The Supplier category is expanded by default.</li>
+                    <li><kbd>Payer tout</kbd> (Pay all, in an expanded category): asks for confirmation, then shows a message for the whole category.</li>
+                    <li><kbd>Payer</kbd> (Pay, on a line): shows a message for the transaction, with no confirmation.</li>
+                    <li>Back button: returns to the previous screen.</li>
+                    <li>“Devise : CAD $” box: fixed text, not editable.</li>
+                </ul>
+                <h3>Layout</h3>
+                <ul>
+                    <li><strong>“Période de paiement” card</strong>: “Transactions” and “Montant total” totals for the chosen period.</li>
+                    <li><strong>One card per category</strong> (Gouvernemental, Fournisseur, Employé): “N paiement(s) en attente” (pending payments), “Total à payer” (total to pay) and the “N à traiter” (to process) badge. Once expanded: “N transaction(s) — [period]”, the <kbd>Payer tout</kbd> button and the payments table.</li>
+                </ul>
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID</td><td>Payment identifier, prefixed by category: GOV-001, FRN-012, EMP-003.</td></tr>
+                        <tr><td>Description</td><td>Purpose of the payment.</td></tr>
+                        <tr><td>Bénéficiaire</td><td>Agency, supplier or employee to pay.</td></tr>
+                        <tr><td>Échéance</td><td>Scheduled execution date.</td></tr>
+                        <tr><td>Montant</td><td>Amount rounded to the dollar, no decimals.</td></tr>
+                        <tr><td>(button)</td><td><kbd>Payer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules</h3>
+                <ul>
+                    <li>Only payments whose scheduled execution date is today or later are taken into account.</li>
+                    <li><kbd>Today</kbd> = today only; <kbd>Week</kbd> = the next 7 days; <kbd>Month</kbd> = up to the same date next month; <kbd>3 Months</kbd> = three months.</li>
+                    <li>The counters are cumulative: Today is included in Week, Week in Month, Month in 3 Months.</li>
+                    <li>Amounts are rounded to the nearest dollar, with no decimals.</li>
+                    <li>Despite its name, this screen sends nothing to an artificial-intelligence service: it reads the scheduled payments directly from the database.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Confirmer le paiement de [amount] ? Toutes les transactions de cette catégorie seront marquées payées.”</span> — confirmation requested by <kbd>Payer tout</kbd>. Click Cancel if you are not sure.</li>
+                    <li><span class="msg">“Paiement groupé déclenché pour la catégorie [name]. (Action à brancher au backend.)”</span> — shown after <kbd>Payer tout</kbd>. No payment was actually made.</li>
+                    <li><span class="msg">“Paiement déclenché pour la transaction Id=[n]. (Action à brancher au backend.)”</span> — shown after <kbd>Payer</kbd>. No payment was actually made.</li>
+                    <li><span class="msg">“Erreur : [detail]”</span> — reading the payments failed. Reload the page; if the error persists, note the detail shown.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">The <kbd>Payer</kbd> and <kbd>Payer tout</kbd> buttons do not pay anything for now. They only show the message above. To actually pay a supplier, go through the <a href="achats.html">Purchases</a> section.</div>
+                <div class="piege" data-titre="Pitfall"><kbd>Payer</kbd> on a line asks for no confirmation, unlike <kbd>Payer tout</kbd>.</div>
+                <div class="piege" data-titre="Pitfall">Payments whose due date has already passed do not appear on this dashboard. A late payment is therefore not visible here.</div>
+                <div class="note" data-titre="Good to know">The period labels (“Today”, “Week”, “Month”, “3 Months”) are in English whatever the chosen language. The “CAD $” currency is fixed text.</div>
+            </section>
+
+            <section id="en-ai-sales">
+                <h2>AI Sales</h2>
+                <p>Tracking of collections on sales and invoices: amounts collected, receivable and overdue (<span class="chemin">Reports › AI Sales</span>). The screen is titled “AI Sales — Gestion intelligente des ventes”.</p>
+                <h3>Purpose</h3>
+                <p>Quickly know what has been collected, what is still receivable and what is overdue around today’s date, and see the bank balance. There is no data entry on this screen.</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li>Period buttons <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> and <kbd>3 Months</kbd> (default <kbd>3 Months</kbd>).</li>
+                    <li>Tabs <kbd>Collecté</kbd> (Collected, default), <kbd>À recevoir</kbd> (Receivable) and <kbd>Retard</kbd> (Overdue): filter the detail by invoice status. Each tab shows a counter.</li>
+                    <li>Eye icon on the “Solde bancaire” (bank balance) widget: hides or shows the balance.</li>
+                </ul>
+                <h3>Layout</h3>
+                <ul>
+                    <li><strong>Header</strong>: “AI Sales — Gestion intelligente des ventes” and the “Solde bancaire” widget. The balance is shown with two decimals, followed by “US$” if the account is in US dollars. It is read from the bank account designated in the company settings (“COMPTE_BANQUE” parameter, “BANCAIRE” category, see <a href="administration.html">Administration</a>).</li>
+                    <li><strong>“Période de vente” card</strong>: for each period, “N ventes” (sales) and three amounts: “Collecté”, “À recevoir”, “En retard”.</li>
+                    <li><strong>“Détail — [period]” section</strong>: one line per invoice, sorted from the most recent due date to the oldest.</li>
+                </ul>
+                <h3>Detail columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Icon</td><td>Status symbol.</td></tr>
+                        <tr><td>Client</td><td>Name of the invoiced customer.</td></tr>
+                        <tr><td>Description</td><td>Purpose of the invoice.</td></tr>
+                        <tr><td>Échéance</td><td>Invoice due date.</td></tr>
+                        <tr><td>Numéro</td><td>Invoice number, for example INV-0001.</td></tr>
+                        <tr><td>Montant</td><td>Amount rounded to the dollar.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules</h3>
+                <ul>
+                    <li>“Collecté” = invoices with the paid status. “À recevoir” = open, in-progress or partially paid invoices. “Retard” = invoices with the overdue status.</li>
+                    <li>The period is measured as an absolute distance around today, in the past as well as in the future: ±1 day (Today), ±7 days (Week), ±30 days (Month) or ±90 days (3 Months).</li>
+                    <li>The date used is the invoice due date or, failing that, its scheduled execution date.</li>
+                    <li>Amounts are rounded to the dollar.</li>
+                    <li>Despite its name, this screen sends nothing to an artificial-intelligence service: these are direct reads from the database.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Aucune vente dans cette catégorie pour cette période.”</span> — no invoice with the chosen status in the interval. Change tab or widen the period.</li>
+                    <li><span class="msg">“Non configuré”</span> (bank balance) — no bank account is designated in the settings. Fill in the “COMPTE_BANQUE” parameter.</li>
+                    <li><span class="msg">“—”</span> (bank balance) — reading the balance failed.</li>
+                    <li><span class="msg">“Erreur : [detail]”</span> — reading the sales failed. Reload the page.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">“Today” also covers yesterday and tomorrow (±1 day), not just today.</div>
+                <div class="piege" data-titre="Pitfall">The “N ventes” counter counts invoices of every status, whereas the three amounts cover only the three statuses listed (paid, receivable, overdue). The number of lines in the detail can therefore be lower than “N ventes”, and the sum of the three amounts can differ from total sales.</div>
+                <div class="note" data-titre="Good to know">The tab label is “Retard” while the card label is “En retard”: they are the same invoices.</div>
+                <div class="note" data-titre="Good to know">Hiding the bank balance is not remembered: it is shown again as soon as the page is reloaded.</div>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>How do I get a report in Excel or CSV?</summary><p>You cannot: the only output button is <kbd>🖨 Imprimer / PDF</kbd>. Choose “Save as PDF” in the browser’s print window to get a file.</p></details>
+                <details><summary>I changed the date, but the report did not change.</summary><p>After changing a date, you must click <kbd>Générer</kbd>. Only the “Masquer les comptes à solde zéro” checkbox of the Trial Balance regenerates the report immediately.</p></details>
+                <details><summary>Why does the printed header say “Mon entreprise”?</summary><p>That label is fixed and never shows your company’s name. Put the company name in the PDF file name or in the message that goes with it.</p></details>
+                <details><summary>The balance sheet shows “✗ Écart de … — Le bilan n’est pas en équilibre”. What should I do?</summary><p>Generate the Trial Balance at the same date. If it also shows a difference, an entry is unbalanced: find it in the journal. If it balances, an account is attached to the wrong class (for example an expense account in the assets range): fix its filing in the chart of accounts.</p></details>
+                <details><summary>The statement of retained earnings flags a difference with account 3300. Is it serious?</summary><p>Before the year-end closing, no: the year’s income has not been transferred to account 3300 yet, and the difference equals net income minus distributions. After the closing, look for an entry posted directly to account 3300.</p></details>
+                <details><summary>My income statement shows a profit, but I do not have that money in the bank. Why?</summary><p>Profit includes invoices issued but not yet collected, and excludes some cash outflows (equipment purchases, loan repayments, withdrawals). Check the Cash Flow Statement: it starts from net income and explains where the money went.</p></details>
+                <details><summary>An account does not appear in the Chart of Accounts report.</summary><p>An account attached directly to a main class, without a sub-class, is not shown. Attach it to a sub-class. Inactive accounts, on the other hand, are still shown with a red dot.</p></details>
+                <details><summary>A sub-class is missing from the income statement.</summary><p>A sub-class with no activity during the period is not shown. This is not an error.</p></details>
+                <details><summary>Does “Payer tout” in AI Payment really make the payments?</summary><p>No. For now, <kbd>Payer</kbd> and <kbd>Payer tout</kbd> only show a message. No payment is transmitted. To pay a supplier, use the Purchases section.</p></details>
+                <details><summary>Why does the AI Sales bank balance say “Non configuré”?</summary><p>No bank account is designated in the company settings. Fill in the “COMPTE_BANQUE” parameter (“BANCAIRE” category) in Administration.</p></details>
+                <details><summary>The ending cash on the cash flow statement does not match my bank statement.</summary><p>That amount is calculated (beginning cash + net change), not read from the bank accounts. A difference reveals a missing entry, a misfiled entry or an incomplete bank reconciliation.</p></details>
+                <details><summary>Can I compare this year with last year?</summary><p>Not within one report: no report offers a comparison column. Generate the report for each period and keep both PDFs.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Assets (Actif)</td><td>What the company owns: cash, receivables, inventory, equipment. Current (1000 – 1499): convertible to cash within a year; long-term (1500 – 1999): the rest.</td></tr>
+                        <tr><td>Liabilities (Passif)</td><td>What the company owes: suppliers, taxes, wages, loans. Current (2000 – 2499): due within a year; long-term (2500 – 2999): the rest.</td></tr>
+                        <tr><td>Equity (Capitaux propres)</td><td>Net value belonging to the owners (3000 – 3999): capital contributions, retained earnings, current year result.</td></tr>
+                        <tr><td>Retained earnings (Bénéfices non répartis)</td><td>Accumulated profits left in the business, after dividends and withdrawals. Account 3300.</td></tr>
+                        <tr><td>Gross profit (Bénéfice brut)</td><td>Revenues minus cost of sales.</td></tr>
+                        <tr><td>Net income (Bénéfice net)</td><td>What is left after all expenses and taxes. When negative, it is a net loss.</td></tr>
+                        <tr><td>Trial balance (Balance de vérification)</td><td>List of the balances of all accounts, whose total debits must equal total credits.</td></tr>
+                        <tr><td>Debit / Credit (D / C)</td><td>The two sides of an entry. Assets and expenses increase on the debit side; liabilities, equity and revenues increase on the credit side.</td></tr>
+                        <tr><td>Class / Sub-class</td><td>The two grouping levels of accounts in the chart of accounts, each with a number range.</td></tr>
+                        <tr><td>BILAN / RESULTAT group</td><td>Indicates whether a class feeds the balance sheet (assets, liabilities, equity) or the income statement (revenues, costs, expenses, taxes).</td></tr>
+                        <tr><td>Indirect method</td><td>Way of preparing the cash flow statement by starting from net income and adjusting it, rather than listing receipts and disbursements.</td></tr>
+                        <tr><td>Working capital (Fonds de roulement)</td><td>Current assets minus current liabilities. Its changes (receivables, inventory, payables…) explain part of the gap between profit and cash.</td></tr>
+                        <tr><td>Depreciation (Amortissement)</td><td>Expense that spreads the cost of equipment over its useful life. With no cash outflow, it is added back to income in the cash flow statement.</td></tr>
+                        <tr><td>Fiscal year (Exercice)</td><td>One-year accounting period, by default January 1 to December 31.</td></tr>
+                        <tr><td>Year-end closing</td><td>Entry that transfers the year’s income to retained earnings and resets the income accounts to zero.</td></tr>
+                        <tr><td>Collecté / À recevoir / Retard</td><td>In AI Sales: paid invoices; open, in-progress or partial invoices; invoices with the overdue status.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+        <article class="langue" lang="es">
+            <h1>Informes</h1>
+            <p class="intro">Los seis informes contables de 60Sec-AI (plan de cuentas, estado de resultados, balance general, estado de flujos de efectivo, estado de resultados acumulados, balance de comprobación) y los dos tableros «IA Pagos» e «IA Ventas». Menú <span class="chemin">Informes</span>. El menú de la izquierda presenta las pantallas en este orden: Plan de cuentas, Estado de resultados, Balance general, Estado de flujos de efectivo, Estado de resultados acumulados, Balance de comprobación, IA Pagos e IA Ventas.</p>
+
+            <section id="es-reglas">
+                <h2>Reglas comunes a los informes contables</h2>
+                <p>Los seis informes contables funcionan de la misma manera. Lo que sigue se aplica a cada uno de ellos, salvo indicación contraria en la sección de la pantalla.</p>
+                <h3>Acceso y empresa</h3>
+                <ul>
+                    <li>Un usuario que no ha iniciado sesión es devuelto a la página de inicio de sesión.</li>
+                    <li>Cada informe se refiere a la empresa activa de su sesión. No hay selector de empresa en los informes: para consultar otra empresa, cambie primero la empresa activa en la aplicación.</li>
+                    <li>Ningún informe ofrece un ejercicio anterior ni una columna de comparación. Para comparar dos períodos, genere el informe dos veces y conserve los dos PDF.</li>
+                </ul>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd> (Generar): reconstruye el informe con las fechas introducidas. El informe se construye automáticamente al abrir la pantalla con los valores predeterminados; después de cambiar una fecha, hay que hacer clic en <kbd>Générer</kbd> para ver el nuevo resultado.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd> (Imprimir / PDF): abre la ventana de impresión del navegador. Es el único botón de salida. Para obtener un archivo, elija «Guardar como PDF» como impresora. Ningún informe ofrece exportación a Excel o CSV.</li>
+                </ul>
+                <p>Para obtener un informe en PDF: 1. Ajuste las fechas. 2. Haga clic en <kbd>Générer</kbd>. 3. Haga clic en <kbd>🖨 Imprimer / PDF</kbd>. 4. En la ventana del navegador, elija «Guardar como PDF» y confirme.</p>
+                <h3>Diseño de impresión</h3>
+                <ul>
+                    <li>Formato carta, orientación vertical, márgenes de 1,5 cm.</li>
+                    <li>La barra de herramientas, los filtros y el menú desaparecen al imprimir. Solo se imprimen el encabezado y el cuerpo del informe.</li>
+                </ul>
+                <h3>Presentación de fechas e importes</h3>
+                <table>
+                    <thead><tr><th>Elemento</th><th>Visualización</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fechas</td><td>Formato AAAA-MM-DD, por ejemplo 2026-09-25.</td></tr>
+                        <tr><td>Importe nulo</td><td>«—» (guion). Excepción: el Balance de comprobación muestra «0,00 $» en sus tarjetas superiores.</td></tr>
+                        <tr><td>Importe negativo</td><td>Entre paréntesis y en rojo, por ejemplo «(1 234,56 $)».</td></tr>
+                        <tr><td>Importe positivo</td><td>En verde.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Trampa">El encabezado impreso siempre indica «Mon entreprise». El nombre de su empresa nunca se escribe en esa etiqueta. Si envía un PDF a un tercero (banquero, contador), añada el nombre de la empresa al nombre del archivo o al correo.</div>
+                <div class="note" data-titre="Conviene saber">Los informes leen los asientos contabilizados en el libro mayor. Una factura en borrador o un asiento no contabilizado no aparece en ellos. Consulte la sección <a href="comptabilite.html">Contabilidad</a> para el registro de asientos.</div>
+            </section>
+
+            <section id="es-plan-de-cuentas">
+                <h2>Plan de cuentas</h2>
+                <p>Lista estructurada de todas las cuentas de la empresa, en tres niveles: clase, subclase, cuenta (<span class="chemin">Informes › Plan de cuentas</span>). Este informe no contiene ningún importe: sirve para conocer y documentar la estructura del plan de cuentas.</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>El plan de cuentas es el «índice» de su contabilidad. Cada venta, cada compra y cada pago se clasifica en una de estas cuentas. Un plan claro y bien dividido produce estados financieros legibles; un plan lleno de cuentas inútiles o mal clasificadas produce informes difíciles de interpretar. Imprímalo una vez al año y revíselo con su contador.</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Tous</kbd> (Todos): muestra todas las clases.</li>
+                    <li><kbd>Bilan</kbd> (Balance): muestra solo las clases del grupo BILAN (activo, pasivo, patrimonio).</li>
+                    <li><kbd>Résultats</kbd> (Resultados): muestra solo las clases del grupo RESULTAT (ingresos, costos, gastos, impuestos).</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Filtros y búsqueda</h3>
+                <p>No hay ninguna fecha que introducir. Los tres botones de filtro (<kbd>Tous</kbd>, <kbd>Bilan</kbd>, <kbd>Résultats</kbd>) son los únicos parámetros.</p>
+                <h3>Presentación</h3>
+                <ul>
+                    <li>Bajo el título: «X classe(s) · Y compte(s)» (clases y cuentas). El encabezado indica «Généré le AAAA-MM-DD HH:mm» (generado el).</li>
+                    <li><strong>Banda de clase</strong>: código y descripción de la clase, rango de números «(inicio à fin)» y una insignia BILAN o RESULTAT.</li>
+                    <li><strong>Subclases</strong>: código, descripción y rango «inicio – fin».</li>
+                    <li><strong>Pie de cada clase</strong>: «N compte(s)».</li>
+                    <li><strong>Tarjeta «Sommaire» (Resumen)</strong> al final: número de cuentas por clase, y luego una línea «Total».</li>
+                </ul>
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Número de la cuenta (por ejemplo 1000, 4010).</td></tr>
+                        <tr><td>Nom du compte</td><td>Nombre corto de la cuenta.</td></tr>
+                        <tr><td>Description</td><td>Descripción más larga, si se ha introducido.</td></tr>
+                        <tr><td>Type</td><td>Tipo de cuenta (naturaleza contable).</td></tr>
+                        <tr><td>Sens</td><td>Insignia «D» para una cuenta de saldo normalmente deudor, «C» para una cuenta de saldo normalmente acreedor.</td></tr>
+                        <tr><td>Actif</td><td>Punto verde si la cuenta está activa, rojo si está inactiva.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Solo se muestran las clases y subclases activas de la empresa actual.</li>
+                    <li>Las cuentas inactivas siguen apareciendo, con el punto rojo.</li>
+                    <li>Las cuentas se ordenan según el orden definido en el plan de cuentas.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Una cuenta vinculada directamente a una clase principal, sin subclase, no aparece en este informe. Si una cuenta «falta», compruebe que está vinculada a una subclase.</div>
+                <div class="note" data-titre="Conviene saber">Una subclase sin cuentas muestra su encabezado sin tabla. No es un error.</div>
+                <div class="piege" data-titre="Trampa">El botón de filtro en curso (<kbd>Tous</kbd>, <kbd>Bilan</kbd> o <kbd>Résultats</kbd>) no se resalta. Fíese del contenido mostrado y de las insignias BILAN / RESULTAT para saber qué filtro está activo.</div>
+            </section>
+
+            <section id="es-estado-de-resultados">
+                <h2>Estado de resultados</h2>
+                <p>Ingresos, costos y gastos del período, hasta la utilidad neta (<span class="chemin">Informes › Estado de resultados</span>).</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>El estado de resultados responde a la pregunta «¿Gané dinero durante este período?». Parte de lo que vendió, resta lo que esas ventas le costaron (utilidad bruta), luego los gastos de funcionamiento (utilidad antes de impuestos) y luego los impuestos. La utilidad bruta le dice si su precio de venta cubre sus costos directos; la utilidad neta le dice lo que realmente queda. Una utilidad neta positiva no es dinero en el banco: un cliente que aún no ha pagado ya cuenta como ingreso. Para la tesorería, consulte el <a href="#es-flujo-de-efectivo">Estado de flujos de efectivo</a>.</p>
+                <h3>Filtros y búsqueda</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du : (Del)</td><td>No</td><td>Inicio del período. Por defecto el 1 de enero del año en curso. Un campo vacío retoma el valor predeterminado.</td></tr>
+                        <tr><td>Au : (Al)</td><td>No</td><td>Fin del período. Por defecto hoy. Un campo vacío retoma el valor predeterminado.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: reconstruye el informe para el período introducido.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Estructura del informe</h3>
+                <p>El encabezado indica «Période du … au …» (período del … al …). El informe tiene tres columnas: número de cuenta, nombre de la cuenta, importe. Para cada sección: una banda de sección, luego las subclases con sus cuentas, luego una línea «Total — [subclase]», luego el total de la sección. En este orden:</p>
+                <ol>
+                    <li>«Revenus» (Ingresos), luego «Total des revenus»;</li>
+                    <li>«Coût des ventes» (Costo de ventas), luego «Total du coût des ventes»;</li>
+                    <li>línea calculada «Bénéfice brut» (Utilidad bruta);</li>
+                    <li>«Charges d’exploitation» (Gastos de operación), luego «Total des charges d’exploitation»;</li>
+                    <li>línea calculada «Bénéfice avant impôts et éléments extraordinaires» (Utilidad antes de impuestos y partidas extraordinarias);</li>
+                    <li>«Impôts et éléments extraordinaires» (Impuestos y partidas extraordinarias), luego «Total des impôts et éléments extraordinaires»;</li>
+                    <li>línea final sobre fondo oscuro «Bénéfice net» (Utilidad neta).</li>
+                </ol>
+                <h3>Reglas y cálculos</h3>
+                <ul>
+                    <li>Utilidad bruta = Ingresos − Costo de ventas.</li>
+                    <li>Utilidad antes de impuestos = Utilidad bruta − Gastos de operación.</li>
+                    <li>Utilidad neta = Utilidad antes de impuestos − Impuestos y partidas extraordinarias.</li>
+                    <li>Las secciones corresponden a las clases principales 6 (Ingresos), 7 (Costo de ventas), 8 (Gastos de operación) y 9 (Impuestos y partidas extraordinarias) del plan de cuentas.</li>
+                    <li>Una subclase sin movimiento durante el período no aparece.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Aucune donnée pour cette période.»</span> — ningún asiento contabilizado en las cuentas de resultados entre las dos fechas. Amplíe el período o compruebe que las facturas están contabilizadas.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">La fecha «Au :» debe ser posterior a la fecha «Du :». La pantalla no lo comprueba: un período invertido produce un informe vacío o incoherente sin mensaje de error.</div>
+                <div class="note" data-titre="Conviene saber">Una utilidad neta negativa (una pérdida) se muestra entre paréntesis en la línea final, pero no en rojo, a diferencia de los demás importes negativos.</div>
+                <div class="astuce" data-titre="Consejo">Para un estado de resultados mensual, introduzca el primer y el último día del mes y haga clic en <kbd>Générer</kbd>. Para el año completo, deje los dos campos vacíos: el informe retoma el 1 de enero y hoy.</div>
+            </section>
+
+            <section id="es-balance">
+                <h2>Balance general</h2>
+                <p>Situación financiera de la empresa en una fecha dada: lo que posee (activo), lo que debe (pasivo) y lo que pertenece a los propietarios (patrimonio) (<span class="chemin">Informes › Balance general</span>).</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>El balance general es una fotografía de su empresa en una fecha precisa. El activo enumera lo que tiene (dinero en el banco, cuentas por cobrar, inventario, equipos); el pasivo enumera lo que debe (proveedores, impuestos, préstamos); el patrimonio representa el valor neto que corresponde a los propietarios. La regla básica: Activo = Pasivo + Patrimonio. Dos lecturas útiles: el activo corriente comparado con el pasivo corriente le dice si puede pagar sus deudas de los próximos doce meses; el peso del pasivo frente al patrimonio muestra su dependencia del crédito. Es el informe que su banquero pedirá primero.</p>
+                <h3>Filtros y búsqueda</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du : (Al)</td><td>No</td><td>Fecha de la fotografía. Por defecto hoy.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: reconstruye el balance en la fecha introducida.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Estructura del informe</h3>
+                <p>El encabezado indica «Au AAAA-MM-DD» (al). Tres grandes bloques:</p>
+                <ul>
+                    <li><strong>ACTIF</strong> (Activo)
+                        <ul>
+                            <li>«Actif à court terme (1000 – 1499)» (activo corriente), luego «Total de l’actif à court terme»;</li>
+                            <li>«Actif à long terme (1500 – 1999)» (activo no corriente), luego «Total de l’actif à long terme»;</li>
+                            <li>«TOTAL DE L’ACTIF».</li>
+                        </ul>
+                    </li>
+                    <li><strong>PASSIF</strong> (Pasivo)
+                        <ul>
+                            <li>«Passif à court terme (2000 – 2499)» (pasivo corriente), luego su total;</li>
+                            <li>«Passif à long terme (2500 – 2999)» (pasivo no corriente), luego su total;</li>
+                            <li>«TOTAL DU PASSIF».</li>
+                        </ul>
+                    </li>
+                    <li><strong>CAPITAUX PROPRES</strong> (Patrimonio)
+                        <ul>
+                            <li>«Capitaux propres (3000 – 3999)»;</li>
+                            <li>bloque «Résultat de l’exercice courant» (resultado del ejercicio en curso), con una línea en cursiva azul «Bénéfice net de l’exercice» (utilidad neta del ejercicio) o «Perte nette de l’exercice» (pérdida neta del ejercicio), luego «Total — Résultat de l’exercice»;</li>
+                            <li>«TOTAL DES CAPITAUX PROPRES»;</li>
+                            <li>«TOTAL DU PASSIF ET DES CAPITAUX PROPRES».</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Reglas y cálculos</h3>
+                <ul>
+                    <li>La utilidad neta del ejercicio (ingresos menos gastos, desde el inicio del ejercicio hasta la fecha del balance) se calcula automáticamente y se añade al patrimonio para equilibrar el balance.</li>
+                    <li>Control de equilibrio: Total del activo − (Total del pasivo + Total del patrimonio). Se tolera una diferencia inferior a 0,01 $ (redondeo).</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«✓ Le bilan est en équilibre»</span> — el activo es igual al pasivo más el patrimonio. Todo es normal.</li>
+                    <li><span class="msg">«✗ Écart de [importe] — Le bilan n’est pas en équilibre»</span> — un asiento descuadrado o una cuenta mal clasificada distorsiona el balance. Consulte el <a href="#es-balance-de-comprobacion">Balance de comprobación</a> en la misma fecha para encontrar el origen.</li>
+                    <li><span class="msg">«Note : Le bénéfice net de l’exercice ([importe]) est calculé automatiquement à partir des comptes de résultats et intégré aux capitaux propres.»</span> — se muestra solo si la utilidad no es nula. Simple recordatorio del cálculo.</li>
+                    <li><span class="msg">«Aucune donnée disponible.»</span> — ningún asiento contabilizado hasta la fecha solicitada.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="attention" data-titre="Atención">Un balance descuadrado señala casi siempre un asiento descuadrado o una cuenta vinculada a la clase equivocada (por ejemplo una cuenta de gastos numerada en el rango 1000 – 1999). Genere el Balance de comprobación en la misma fecha: si también muestra una diferencia, el problema viene de un asiento; si está cuadrado, el problema viene de la clasificación de una cuenta.</div>
+                <div class="piege" data-titre="Trampa">Si el cierre del ejercicio ya se ha registrado en la cuenta de resultados acumulados, compruebe que la utilidad no se cuenta dos veces: una vez en la cuenta 3300 y otra en la línea «Bénéfice net de l’exercice» calculada automáticamente.</div>
+                <div class="astuce" data-titre="Consejo">Para el balance de cierre de ejercicio, introduzca el 31 de diciembre (o la fecha de cierre de su ejercicio) en «En date du :», aunque existan asientos posteriores: solo se tienen en cuenta los asientos hasta esa fecha.</div>
+            </section>
+
+            <section id="es-flujo-de-efectivo">
+                <h2>Estado de flujos de efectivo</h2>
+                <p>Explica la variación del dinero disponible entre el inicio y el fin del período, según el método indirecto (<span class="chemin">Informes › Estado de flujos de efectivo</span>).</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>Una empresa puede ser rentable y quedarse sin dinero, o perder dinero y tener una cuenta bien provista. Este estado concilia ambas cosas: parte de la utilidad neta y explica adónde fue realmente el dinero. Responde a tres preguntas: ¿mi actividad corriente genera dinero (actividades de operación)? ¿cuánto invertí en equipos o inversiones (actividades de inversión)? ¿cuánto pedí prestado, reembolsé, recibí o retiré como propietario (actividades de financiación)? Un flujo de operación negativo de forma repetida es la señal de alarma más importante para una pyme, incluso cuando el estado de resultados es positivo.</p>
+                <h3>Filtros y búsqueda</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Du : (Del)</td><td>No</td><td>Inicio del período. Por defecto el 1 de enero del año en curso.</td></tr>
+                        <tr><td>Au : (Al)</td><td>No</td><td>Fin del período. Por defecto hoy.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: reconstruye el estado para el período introducido.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Estructura del informe</h3>
+                <p><strong>A. «Activités d’exploitation»</strong> (Actividades de operación)</p>
+                <ul>
+                    <li>Utilidad neta del período.</li>
+                    <li>Subtítulo «Ajustements pour éléments sans effet sur la trésorerie» (ajustes por partidas sin efecto en el efectivo): Amortissement (depreciación); Créances douteuses (cuentas dudosas); Gain/Perte sur disposition d’actifs (ganancia/pérdida por venta de activos); Impôts différés (impuestos diferidos); luego «Total des ajustements».</li>
+                    <li>Subtítulo «Variation des éléments du fonds de roulement» (variación del capital de trabajo): Comptes clients (cuentas por cobrar), Stocks (inventario), Frais payés d’avance (gastos pagados por anticipado), Taxes à recevoir (impuestos por cobrar); Comptes fournisseurs (cuentas por pagar), Charges à payer (gastos acumulados), Taxes à payer (impuestos por pagar), Retenues salariales (retenciones salariales), Revenus reportés (ingresos diferidos); luego «Variation nette du fonds de roulement».</li>
+                    <li>Total: «Flux de trésorerie liés aux activités d’exploitation».</li>
+                </ul>
+                <p><strong>B. «Activités d’investissement»</strong> (Actividades de inversión)</p>
+                <ul>
+                    <li>Adquisición y venta de inmovilizado material; Adquisición de inmovilizado intangible; Adquisición y venta de inversiones.</li>
+                    <li>Total: «Flux de trésorerie liés aux activités d’investissement».</li>
+                </ul>
+                <p><strong>C. «Activités de financement»</strong> (Actividades de financiación)</p>
+                <ul>
+                    <li>Nuevos préstamos; Reembolso de préstamos; Emisión de acciones; Dividendos pagados; Aportes del propietario; Retiros del propietario.</li>
+                    <li>Total: «Flux de trésorerie liés aux activités de financement».</li>
+                </ul>
+                <p><strong>Fin del informe</strong>: «Variation nette de la trésorerie» (variación neta del efectivo); «Trésorerie au début de la période» (efectivo al inicio del período); «Trésorerie à la fin de la période» (efectivo al final del período).</p>
+                <h3>Reglas y cálculos</h3>
+                <ul>
+                    <li><strong>Método indirecto</strong>, confirmado por la nota al pie del informe: se parte de la utilidad neta, se añaden las partidas sin efecto en el efectivo (por ejemplo la depreciación, un gasto sin salida de dinero) y luego se aplican las variaciones del capital de trabajo (un aumento de las cuentas por cobrar reduce el efectivo; un aumento de las cuentas por pagar lo aumenta).</li>
+                    <li>Variación neta = Operación + Inversión + Financiación.</li>
+                    <li>Efectivo final = Efectivo inicial + Variación neta.</li>
+                    <li>Todas las líneas se muestran, incluso cuando su importe es nulo («—»).</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Note : Cet état des flux de trésorerie est préparé selon la méthode indirecte…»</span> — nota fija al pie del informe, que recuerda el método de cálculo.</li>
+                    <li><span class="msg">«Aucune donnée pour cette période.»</span> — ningún asiento contabilizado entre las dos fechas.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="attention" data-titre="Atención">El «Trésorerie à la fin de la période» es calculado (inicio + variación neta), no leído en las cuentas bancarias. Concilie usted mismo este importe con el saldo bancario real en la fecha de fin. Una diferencia revela un asiento faltante o mal clasificado.</div>
+                <div class="astuce" data-titre="Consejo">Genere este estado para el mismo período que el estado de resultados. Si la utilidad neta es positiva pero el flujo de operación es negativo, mire primero la línea «Comptes clients»: a menudo son facturas impagadas las que retienen el dinero.</div>
+            </section>
+
+            <section id="es-resultados-acumulados">
+                <h2>Estado de resultados acumulados</h2>
+                <p>Movimiento de los resultados acumulados (utilidades retenidas) del inicio al fin del ejercicio (<span class="chemin">Informes › Estado de resultados acumulados</span>).</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>Los resultados acumulados son las utilidades acumuladas desde la creación de la empresa y dejadas en ella, después de los dividendos o los retiros de los propietarios. Este estado muestra, para el ejercicio, lo que ganó, lo que sacó (dividendos, retiros) y lo que queda reinvertido en la empresa. Es el indicador de la «reserva» que usted está constituyendo. Unos resultados acumulados que disminuyen año tras año significan que retira más de lo que gana.</p>
+                <h3>Filtros y búsqueda</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Exercice du : (Ejercicio del)</td><td>No</td><td>Inicio del ejercicio. Por defecto el 1 de enero del año en curso.</td></tr>
+                        <tr><td>au : (al)</td><td>No</td><td>Fin del ejercicio. Por defecto el 31 de diciembre del año en curso.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: reconstruye el estado para el ejercicio introducido.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Estructura del informe</h3>
+                <p>El encabezado indica «Pour l’exercice terminé le …» (para el ejercicio terminado el). Las líneas, en orden:</p>
+                <ol>
+                    <li>«Bénéfices non répartis au début de l’exercice (fecha)» (resultados acumulados al inicio del ejercicio);</li>
+                    <li>«Ajouter : Bénéfice net de l’exercice» (añadir: utilidad neta), o «Moins : Perte nette de l’exercice» (menos: pérdida neta) en caso de pérdida;</li>
+                    <li>si existen distribuciones: «Moins : Distributions aux propriétaires / actionnaires», con las líneas «Dividendes déclarés» (dividendos declarados) y «Retraits du propriétaire» (retiros del propietario), siempre entre paréntesis, luego «Total des distributions»;</li>
+                    <li>«Bénéfices non répartis avant ajustements» (resultados acumulados antes de ajustes);</li>
+                    <li>si existen ajustes: bloque «Ajustements» con «Correction d’exercice antérieur» (corrección de ejercicio anterior), «Autres ajustements» (otros ajustes), luego «Total des ajustements»;</li>
+                    <li>«Bénéfices non répartis à la fin de l’exercice (fecha)» (resultados acumulados al final del ejercicio).</li>
+                </ol>
+                <h3>Reglas y cálculos</h3>
+                <ul>
+                    <li>Resultados acumulados antes de ajustes = Resultados acumulados de apertura + Utilidad neta − (Dividendos + Retiros).</li>
+                    <li>Resultados acumulados de cierre = Resultados acumulados antes de ajustes + Correcciones de ejercicio anterior + Otros ajustes.</li>
+                    <li>El resultado calculado se compara con el saldo real de la cuenta 3300 Bénéfices non répartis (Resultados acumulados).</li>
+                    <li>Los bloques «Distributions» y «Ajustements» solo aparecen si contienen importes.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«✓ Le solde calculé correspond au solde du compte 3300 Bénéfices non répartis»</span> — el estado concuerda con el libro mayor.</li>
+                    <li><span class="msg">«✗ Écart de [importe] avec le solde du compte 3300 — Vérifier les écritures»</span> — el saldo calculado difiere de la cuenta 3300. Antes del cierre del ejercicio es normal (véase más abajo); después del cierre, busque un asiento registrado directamente en la cuenta 3300.</li>
+                    <li><span class="msg">«Aucune donnée disponible.»</span> — ningún asiento contabilizado para el ejercicio.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="note" data-titre="Conviene saber">La verificación con la cuenta 3300 solo aparece si esa cuenta tiene un saldo no nulo. La comparación es exacta, sin tolerancia de redondeo: una diferencia de 0,01 $ se señala.</div>
+                <div class="piege" data-titre="Trampa">Por defecto, la fecha de fin es el 31 de diciembre, es decir una fecha futura durante el año. La utilidad neta incluye entonces todos los asientos hasta hoy. Si su ejercicio no termina el 31 de diciembre, corrija las dos fechas antes de hacer clic en <kbd>Générer</kbd>.</div>
+                <div class="note" data-titre="Conviene saber">Antes del cierre del ejercicio, una diferencia con la cuenta 3300 es normal: la utilidad del año aún no se ha trasladado a ella. La diferencia debería entonces ser igual a la utilidad neta del ejercicio menos las distribuciones.</div>
+            </section>
+
+            <section id="es-balance-de-comprobacion">
+                <h2>Balance de comprobación</h2>
+                <p>Saldo deudor o acreedor de cada cuenta en una fecha dada, para comprobar que el total de débitos es igual al total de créditos (<span class="chemin">Informes › Balance de comprobación</span>).</p>
+                <h3>Qué significa este informe para un dirigente</h3>
+                <p>El balance de comprobación es la herramienta de control del contador. En contabilidad por partida doble, cada asiento tiene un débito y un crédito iguales; el balance de comprobación confirma que esa regla se ha respetado en todas partes. No le dice si la empresa va bien, pero le dice si las cifras de los demás informes son fiables. Es el primer informe que consultar cuando el balance general muestra una diferencia, y el que su contador le pedirá para preparar los estados financieros de fin de año.</p>
+                <h3>Filtros y búsqueda</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>En date du : (Al)</td><td>No</td><td>Fecha del balance de comprobación. Por defecto hoy.</td></tr>
+                        <tr><td>Masquer les comptes à solde zéro (Ocultar las cuentas con saldo cero)</td><td>No</td><td>Casilla de verificación. Marcarla o desmarcarla regenera el informe inmediatamente, sin hacer clic en <kbd>Générer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Générer</kbd>: reconstruye el balance de comprobación en la fecha introducida.</li>
+                    <li><kbd>🖨 Imprimer / PDF</kbd>: impresión o guardado en PDF.</li>
+                </ul>
+                <h3>Estructura del informe</h3>
+                <ul>
+                    <li><strong>Cuatro tarjetas arriba</strong>: «Total débits», «Total crédits», «Écart» (diferencia; en verde si es nula, si no señalada como descuadrada) y «Comptes» (cuentas). Cuando el filtro «Masquer les comptes à solde zéro» está activo, la tarjeta «Comptes» muestra «mostradas / total».</li>
+                    <li>Bajo el título: «Au [fecha] · N compte(s)».</li>
+                    <li><strong>Agrupación por clase principal</strong>: banda de la clase, líneas de las cuentas, luego «Total — [clase]». Una clase sin línea mostrada se omite.</li>
+                    <li><strong>Última línea</strong>: «TOTAL».</li>
+                </ul>
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Numéro</td><td>Número de la cuenta.</td></tr>
+                        <tr><td>Nom du compte</td><td>Nombre de la cuenta.</td></tr>
+                        <tr><td>Classe</td><td>Descripción de la subclase a la que pertenece la cuenta.</td></tr>
+                        <tr><td>Débit</td><td>Saldo deudor de la cuenta en la fecha, o «—» si es nulo.</td></tr>
+                        <tr><td>Crédit</td><td>Saldo acreedor de la cuenta en la fecha, o «—» si es nulo.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas y cálculos</h3>
+                <ul>
+                    <li>Diferencia = Total de débitos − Total de créditos.</li>
+                    <li>El equilibrio exige una diferencia exactamente nula: sin tolerancia.</li>
+                    <li>En la tabla, un importe nulo se muestra «—». En las tarjetas superiores, se muestra «0,00 $».</li>
+                    <li>Ocultar las cuentas con saldo cero no cambia los totales.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«✓ La balance est en équilibre — Total débits = Total crédits»</span> — todos los asientos están cuadrados.</li>
+                    <li><span class="msg">«✗ Écart de [importe] — La balance n’est PAS en équilibre»</span> — al menos un asiento está descuadrado. Busque en el diario un documento cuyo total de débitos difiera de su total de créditos (véase la sección <a href="comptabilite.html">Contabilidad</a>).</li>
+                    <li><span class="msg">«Aucune donnée disponible.»</span> — ningún asiento contabilizado hasta la fecha solicitada.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="astuce" data-titre="Consejo">Marque «Masquer les comptes à solde zéro» antes de imprimir para obtener un documento más corto. Los totales siguen siendo los mismos.</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar el origen de una diferencia, genere el balance de comprobación en varias fechas (fin de cada mes): el mes en que aparece la diferencia contiene el asiento erróneo.</div>
+            </section>
+
+            <section id="es-ia-pagos">
+                <h2>IA Pagos</h2>
+                <p>Tablero de los pagos por venir, repartidos en tres categorías: Gubernamental (Gouvernemental), Proveedor (Fournisseur) y Empleado (Employé) (<span class="chemin">Informes › IA Pagos</span>). La pantalla lleva el título «AI Payment — Gestion en temps réel avec AI».</p>
+                <h3>Finalidad</h3>
+                <p>Ver de un vistazo cuánto dinero deberá salir hoy, en la próxima semana, el próximo mes o los próximos tres meses, y a quién. No hay ninguna entrada de texto en esta pantalla.</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li>Botones de período <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> y <kbd>3 Months</kbd> (por defecto <kbd>3 Months</kbd>): eligen el horizonte de los pagos mostrados. Cada botón muestra tres contadores de colores, uno por categoría.</li>
+                    <li>Hacer clic en una tarjeta de categoría la despliega o la pliega. La categoría Proveedor está desplegada por defecto.</li>
+                    <li><kbd>Payer tout</kbd> (Pagar todo, en una categoría desplegada): pide confirmación y luego muestra un mensaje para toda la categoría.</li>
+                    <li><kbd>Payer</kbd> (Pagar, en una línea): muestra un mensaje para la transacción, sin confirmación.</li>
+                    <li>Botón Volver: regresa a la pantalla anterior.</li>
+                    <li>Casilla «Devise : CAD $»: texto fijo, no modificable.</li>
+                </ul>
+                <h3>Presentación</h3>
+                <ul>
+                    <li><strong>Tarjeta «Période de paiement»</strong>: totales «Transactions» y «Montant total» para el período elegido.</li>
+                    <li><strong>Una tarjeta por categoría</strong> (Gouvernemental, Fournisseur, Employé): «N paiement(s) en attente» (pagos pendientes), «Total à payer» (total a pagar) y la insignia «N à traiter» (por procesar). Una vez desplegada: «N transaction(s) — [período]», el botón <kbd>Payer tout</kbd> y la tabla de pagos.</li>
+                </ul>
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>ID</td><td>Identificador del pago, con prefijo según la categoría: GOV-001, FRN-012, EMP-003.</td></tr>
+                        <tr><td>Description</td><td>Objeto del pago.</td></tr>
+                        <tr><td>Bénéficiaire</td><td>Organismo, proveedor o empleado a pagar.</td></tr>
+                        <tr><td>Échéance</td><td>Fecha de ejecución prevista.</td></tr>
+                        <tr><td>Montant</td><td>Importe redondeado al dólar, sin decimales.</td></tr>
+                        <tr><td>(botón)</td><td><kbd>Payer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Solo se tienen en cuenta los pagos cuya fecha de ejecución prevista es hoy o posterior.</li>
+                    <li><kbd>Today</kbd> = solo hoy; <kbd>Week</kbd> = los próximos 7 días; <kbd>Month</kbd> = hasta la misma fecha del mes siguiente; <kbd>3 Months</kbd> = tres meses.</li>
+                    <li>Los contadores son acumulativos: Today está incluido en Week, Week en Month, Month en 3 Months.</li>
+                    <li>Los importes se redondean al dólar, sin decimales.</li>
+                    <li>A pesar de su nombre, esta pantalla no envía nada a un servicio de inteligencia artificial: lee directamente los pagos planificados de la base de datos.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Confirmer le paiement de [importe] ? Toutes les transactions de cette catégorie seront marquées payées.»</span> — confirmación pedida por <kbd>Payer tout</kbd>. Haga clic en Cancelar si no está seguro.</li>
+                    <li><span class="msg">«Paiement groupé déclenché pour la catégorie [nombre]. (Action à brancher au backend.)»</span> — se muestra después de <kbd>Payer tout</kbd>. No se ha efectuado realmente ningún pago.</li>
+                    <li><span class="msg">«Paiement déclenché pour la transaction Id=[n]. (Action à brancher au backend.)»</span> — se muestra después de <kbd>Payer</kbd>. No se ha efectuado realmente ningún pago.</li>
+                    <li><span class="msg">«Erreur : [detalle]»</span> — la lectura de los pagos ha fallado. Recargue la página; si el error persiste, anote el detalle mostrado.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="attention" data-titre="Atención">Los botones <kbd>Payer</kbd> y <kbd>Payer tout</kbd> no pagan nada por ahora. Solo muestran el mensaje indicado arriba. Para pagar realmente a un proveedor, pase por la sección <a href="achats.html">Compras</a>.</div>
+                <div class="piege" data-titre="Trampa"><kbd>Payer</kbd> en una línea no pide ninguna confirmación, a diferencia de <kbd>Payer tout</kbd>.</div>
+                <div class="piege" data-titre="Trampa">Los pagos cuyo vencimiento ya ha pasado no aparecen en este tablero. Un pago atrasado no es visible aquí.</div>
+                <div class="note" data-titre="Conviene saber">Las etiquetas de los períodos («Today», «Week», «Month», «3 Months») están en inglés, sea cual sea el idioma elegido. La divisa «CAD $» es un texto fijo.</div>
+            </section>
+
+            <section id="es-ia-ventas">
+                <h2>IA Ventas</h2>
+                <p>Seguimiento de los cobros sobre ventas y facturas: importes cobrados, por cobrar y atrasados (<span class="chemin">Informes › IA Ventas</span>). La pantalla lleva el título «AI Sales — Gestion intelligente des ventes».</p>
+                <h3>Finalidad</h3>
+                <p>Saber rápidamente qué se ha cobrado, qué queda por cobrar y qué está atrasado en torno a la fecha de hoy, y ver el saldo bancario. No hay ninguna entrada de datos en esta pantalla.</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li>Botones de período <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> y <kbd>3 Months</kbd> (por defecto <kbd>3 Months</kbd>).</li>
+                    <li>Pestañas <kbd>Collecté</kbd> (Cobrado, por defecto), <kbd>À recevoir</kbd> (Por cobrar) y <kbd>Retard</kbd> (Atraso): filtran el detalle por estado de factura. Cada pestaña muestra un contador.</li>
+                    <li>Icono en forma de ojo en el widget «Solde bancaire» (saldo bancario): oculta o muestra el saldo.</li>
+                </ul>
+                <h3>Presentación</h3>
+                <ul>
+                    <li><strong>Encabezado</strong>: «AI Sales — Gestion intelligente des ventes» y el widget «Solde bancaire». El saldo se muestra con dos decimales, seguido de «US$» si la cuenta está en dólares estadounidenses. Se lee en la cuenta bancaria designada en los parámetros de la empresa (parámetro «COMPTE_BANQUE» de la categoría «BANCAIRE», véase <a href="administration.html">Administración</a>).</li>
+                    <li><strong>Tarjeta «Période de vente»</strong>: para cada período, «N ventes» (ventas) y tres importes: «Collecté», «À recevoir», «En retard».</li>
+                    <li><strong>Sección «Détail — [período]»</strong>: una línea por factura, ordenada del vencimiento más reciente al más antiguo.</li>
+                </ul>
+                <h3>Columnas del detalle</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Icono</td><td>Símbolo del estado.</td></tr>
+                        <tr><td>Client</td><td>Nombre del cliente facturado.</td></tr>
+                        <tr><td>Description</td><td>Objeto de la factura.</td></tr>
+                        <tr><td>Échéance</td><td>Fecha de vencimiento de la factura.</td></tr>
+                        <tr><td>Numéro</td><td>Número de factura, por ejemplo INV-0001.</td></tr>
+                        <tr><td>Montant</td><td>Importe redondeado al dólar.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>«Collecté» = facturas con estado pagada. «À recevoir» = facturas abiertas, en curso o parcialmente pagadas. «Retard» = facturas con estado atrasada.</li>
+                    <li>El período se mide como distancia absoluta en torno a hoy, tanto en el pasado como en el futuro: ±1 día (Today), ±7 días (Week), ±30 días (Month) o ±90 días (3 Months).</li>
+                    <li>La fecha utilizada es la fecha de vencimiento de la factura o, en su defecto, su fecha de ejecución prevista.</li>
+                    <li>Los importes se redondean al dólar.</li>
+                    <li>A pesar de su nombre, esta pantalla no envía nada a un servicio de inteligencia artificial: son lecturas directas de la base de datos.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Aucune vente dans cette catégorie pour cette période.»</span> — ninguna factura con el estado elegido en el intervalo. Cambie de pestaña o amplíe el período.</li>
+                    <li><span class="msg">«Non configuré»</span> (saldo bancario) — no hay ninguna cuenta bancaria designada en los parámetros. Rellene el parámetro «COMPTE_BANQUE».</li>
+                    <li><span class="msg">«—»</span> (saldo bancario) — la lectura del saldo ha fallado.</li>
+                    <li><span class="msg">«Erreur : [detalle]»</span> — la lectura de las ventas ha fallado. Recargue la página.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">«Today» cubre también ayer y mañana (±1 día), y no solo el día de hoy.</div>
+                <div class="piege" data-titre="Trampa">El contador «N ventes» cuenta las facturas de todos los estados, mientras que los tres importes solo abarcan los tres estados listados (pagada, por cobrar, atrasada). El número de líneas del detalle puede por tanto ser inferior a «N ventes», y la suma de los tres importes puede diferir del total de ventas.</div>
+                <div class="note" data-titre="Conviene saber">La etiqueta de la pestaña es «Retard» y la de la tarjeta «En retard»: son las mismas facturas.</div>
+                <div class="note" data-titre="Conviene saber">La ocultación del saldo bancario no se memoriza: vuelve a mostrarse en cuanto se recarga la página.</div>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Cómo obtener un informe en Excel o CSV?</summary><p>No es posible: el único botón de salida es <kbd>🖨 Imprimer / PDF</kbd>. Elija «Guardar como PDF» en la ventana de impresión del navegador para obtener un archivo.</p></details>
+                <details><summary>Cambié la fecha, pero el informe no cambió.</summary><p>Después de cambiar una fecha, hay que hacer clic en <kbd>Générer</kbd>. Solo la casilla «Masquer les comptes à solde zéro» del Balance de comprobación regenera el informe inmediatamente.</p></details>
+                <details><summary>¿Por qué el encabezado impreso indica «Mon entreprise»?</summary><p>Esa etiqueta es fija y nunca muestra el nombre de su empresa. Añada el nombre de la empresa al nombre del archivo PDF o al mensaje que lo acompaña.</p></details>
+                <details><summary>El balance muestra «✗ Écart de … — Le bilan n’est pas en équilibre». ¿Qué hacer?</summary><p>Genere el Balance de comprobación en la misma fecha. Si también muestra una diferencia, un asiento está descuadrado: encuéntrelo en el diario. Si está cuadrado, una cuenta está vinculada a la clase equivocada (por ejemplo una cuenta de gastos en el rango del activo): corrija su clasificación en el plan de cuentas.</p></details>
+                <details><summary>El estado de resultados acumulados señala una diferencia con la cuenta 3300. ¿Es grave?</summary><p>Antes del cierre del ejercicio, no: la utilidad del año aún no se ha trasladado a la cuenta 3300, y la diferencia corresponde a la utilidad neta menos las distribuciones. Después del cierre, busque un asiento registrado directamente en la cuenta 3300.</p></details>
+                <details><summary>Mi estado de resultados muestra una utilidad, pero no tengo ese dinero en el banco. ¿Por qué?</summary><p>La utilidad incluye las facturas emitidas y aún no cobradas, y excluye ciertos desembolsos (compras de equipos, reembolsos de préstamos, retiros). Consulte el Estado de flujos de efectivo: parte de la utilidad neta y explica adónde fue el dinero.</p></details>
+                <details><summary>Una cuenta no aparece en el informe Plan de cuentas.</summary><p>Una cuenta vinculada directamente a una clase principal, sin subclase, no se muestra. Vincúlela a una subclase. Las cuentas inactivas, en cambio, siguen apareciendo con un punto rojo.</p></details>
+                <details><summary>Falta una subclase en el estado de resultados.</summary><p>Una subclase sin movimiento durante el período no se muestra. No es un error.</p></details>
+                <details><summary>¿«Payer tout» en IA Pagos efectúa realmente los pagos?</summary><p>No. Por ahora, <kbd>Payer</kbd> y <kbd>Payer tout</kbd> solo muestran un mensaje. No se transmite ningún pago. Para pagar a un proveedor, utilice la sección Compras.</p></details>
+                <details><summary>¿Por qué el saldo bancario de IA Ventas muestra «Non configuré»?</summary><p>No hay ninguna cuenta bancaria designada en los parámetros de la empresa. Rellene el parámetro «COMPTE_BANQUE» (categoría «BANCAIRE») en Administración.</p></details>
+                <details><summary>El efectivo final del estado de flujos no coincide con mi extracto bancario.</summary><p>Ese importe es calculado (efectivo inicial + variación neta) y no leído en las cuentas bancarias. Una diferencia revela un asiento faltante, un asiento mal clasificado o una conciliación bancaria incompleta.</p></details>
+                <details><summary>¿Puedo comparar este año con el año pasado?</summary><p>No en un mismo informe: ningún informe ofrece una columna comparativa. Genere el informe para cada período y conserve los dos PDF.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Activo (Actif)</td><td>Lo que la empresa posee: efectivo, cuentas por cobrar, inventario, equipos. Corriente (1000 – 1499): convertible en dinero en menos de un año; no corriente (1500 – 1999): el resto.</td></tr>
+                        <tr><td>Pasivo (Passif)</td><td>Lo que la empresa debe: proveedores, impuestos, salarios, préstamos. Corriente (2000 – 2499): exigible en menos de un año; no corriente (2500 – 2999): el resto.</td></tr>
+                        <tr><td>Patrimonio (Capitaux propres)</td><td>Valor neto que corresponde a los propietarios (3000 – 3999): aportes de capital, resultados acumulados, resultado del ejercicio.</td></tr>
+                        <tr><td>Resultados acumulados (Bénéfices non répartis)</td><td>Utilidades acumuladas y dejadas en la empresa, después de dividendos y retiros. Cuenta 3300.</td></tr>
+                        <tr><td>Utilidad bruta (Bénéfice brut)</td><td>Ingresos menos costo de ventas.</td></tr>
+                        <tr><td>Utilidad neta (Bénéfice net)</td><td>Lo que queda después de todos los gastos e impuestos. Si es negativa, se habla de pérdida neta.</td></tr>
+                        <tr><td>Balance de comprobación (Balance de vérification)</td><td>Lista de los saldos de todas las cuentas, cuyo total de débitos debe ser igual al total de créditos.</td></tr>
+                        <tr><td>Débito / Crédito (D / C)</td><td>Los dos lados de un asiento. El activo y los gastos aumentan por el débito; el pasivo, el patrimonio y los ingresos aumentan por el crédito.</td></tr>
+                        <tr><td>Clase / Subclase</td><td>Los dos niveles de agrupación de las cuentas en el plan de cuentas, cada uno con un rango de números.</td></tr>
+                        <tr><td>Grupo BILAN / RESULTAT</td><td>Indica si una clase alimenta el balance general (activo, pasivo, patrimonio) o el estado de resultados (ingresos, costos, gastos, impuestos).</td></tr>
+                        <tr><td>Método indirecto</td><td>Forma de preparar el estado de flujos de efectivo partiendo de la utilidad neta y ajustándola, en lugar de listar los cobros y los pagos.</td></tr>
+                        <tr><td>Capital de trabajo (Fonds de roulement)</td><td>Activo corriente menos pasivo corriente. Sus variaciones (clientes, inventario, proveedores…) explican parte de la diferencia entre utilidad y efectivo.</td></tr>
+                        <tr><td>Depreciación (Amortissement)</td><td>Gasto que reparte el costo de un equipo a lo largo de su vida útil. Sin salida de dinero, se vuelve a sumar a la utilidad en el estado de flujos.</td></tr>
+                        <tr><td>Ejercicio (Exercice)</td><td>Período contable de un año, por defecto del 1 de enero al 31 de diciembre.</td></tr>
+                        <tr><td>Cierre del ejercicio</td><td>Asiento que traslada la utilidad del año a los resultados acumulados y pone a cero las cuentas de resultados.</td></tr>
+                        <tr><td>Collecté / À recevoir / Retard</td><td>En IA Ventas: facturas pagadas; facturas abiertas, en curso o parciales; facturas con estado atrasada.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>
