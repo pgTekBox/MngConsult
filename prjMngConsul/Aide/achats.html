@@ -1,0 +1,1687 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Achats — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Achats</h1>
+            <p class="intro">Fournisseurs, factures fournisseurs, paiements par Stripe ou par décaissement manuel, et lecture des reçus par l’intelligence artificielle. Le menu <span class="chemin">Achats</span> contient trois entrées : « Fournisseurs », « Factures fournisseurs » et « Reçus ». Les autres écrans décrits ici s’ouvrent depuis ces trois pages, dans une fenêtre ou dans un nouvel onglet.</p>
+
+            <section id="fr-fournisseurs">
+                <h2>Fournisseurs (liste)</h2>
+                <p>L’écran <span class="chemin">Achats › Fournisseurs</span> sert à consulter, rechercher, créer, modifier et supprimer vos fournisseurs. Il montre aussi, pour chacun, le solde que vous lui devez et l’état de son compte Stripe (peut-il recevoir vos paiements en ligne ou non).</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Ajouter Fournisseur</kbd> (sur mobile : bouton flottant <kbd>+</kbd>) : ouvre la fenêtre « Ajouter un fournisseur ». Quand la fenêtre se ferme, la liste se recharge.</li>
+                    <li><kbd>Modifier</kbd> (par ligne) : ouvre la fiche du fournisseur (voir <a href="#fr-fiche-fournisseur">Fiche fournisseur</a>).</li>
+                    <li><kbd>Supprimer</kbd> (par ligne) : supprime le fournisseur immédiatement.</li>
+                    <li>Carte violette « Configurer paiements Stripe Connect » (colonne Action) : ouvre l’inscription Stripe du fournisseur dans un nouvel onglet (voir <a href="#fr-inscription-stripe">Inscription Stripe Connect</a>).</li>
+                    <li>Clic sur la pastille de la colonne Stripe : ouvre « Voir le statut Stripe » dans un nouvel onglet.</li>
+                </ul>
+                <h3>Filtres et recherche</h3>
+                <ul>
+                    <li>Champ « Rechercher (nom, email, téléphone…) » suivi de la loupe : la recherche porte sur le nom, le courriel et le téléphone.</li>
+                    <li><kbd>Effacer</kbd> : vide le champ et réaffiche tous les fournisseurs.</li>
+                </ul>
+                <h3>Colonnes</h3>
+                <p>Un clic sur un en-tête trie la liste ; un second clic inverse l’ordre (▲/▼). Tri par défaut : Nom croissant.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>Nom du fournisseur, adresse complète et courriel (en gris).</td></tr>
+                        <tr><td>À payer</td><td>Solde dû, sous la forme « 1 234,56 $ », ou « — » si vous ne devez rien.</td></tr>
+                        <tr><td>Stripe</td><td>Pastille verte « Compte Stripe » si le fournisseur peut recevoir des paiements, pastille grise « Aucun compte Stripe » sinon. Un clic ouvre « Voir le statut Stripe » dans un nouvel onglet.</td></tr>
+                        <tr><td>Action</td><td>Carte « Configurer paiements Stripe Connect », puis <kbd>Modifier</kbd> et <kbd>Supprimer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun fournisseur trouvé. »</span> — la recherche ne renvoie rien ; cliquez sur <kbd>Effacer</kbd> ou vérifiez l’orthographe.</li>
+                </ul>
+                <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> agit tout de suite, sans demander de confirmation. Vérifiez la ligne avant de cliquer.</div>
+                <div class="astuce" data-titre="Astuce">Le solde « À payer » se met à jour dès qu’une facture fournisseur est comptabilisée ou réglée. Pour voir le détail, ouvrez <span class="chemin">Achats › Factures fournisseurs</span> et recherchez le fournisseur.</div>
+            </section>
+
+            <section id="fr-fiche-fournisseur">
+                <h2>Fiche fournisseur</h2>
+                <p>La fenêtre « Édition — Fournisseur » s’ouvre par <kbd>Ajouter Fournisseur</kbd> ou <kbd>Modifier</kbd> depuis la liste. Elle regroupe les informations du fournisseur, ses adresses et ses pièces jointes.</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>← Retour à la liste</kbd> : ferme la fenêtre <strong>sans enregistrer et sans avertissement</strong>.</li>
+                    <li><kbd>Enregistrer</kbd> : enregistre la fiche et ses adresses, puis ferme la fenêtre.</li>
+                </ul>
+                <p>Sur une fiche existante, l’en-tête affiche « Origine » (d’où vient la fiche, par exemple une importation) et « Créé » (date et heure, aaaa-mm-jj hh:mm).</p>
+                <h3>Champs de la carte « Informations Fournisseur »</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>Non</td><td>500 caractères au maximum. Aucun contrôle : on peut enregistrer un nom vide.</td></tr>
+                        <tr><td>Nom d’affichage</td><td>Non</td><td>500 caractères au maximum.</td></tr>
+                        <tr><td>Type</td><td>Non (mais recommandé)</td><td>Liste des types de tiers fournisseur ; « Sélectionner… » par défaut.</td></tr>
+                        <tr><td>Site web</td><td>Non</td><td>200 caractères au maximum.</td></tr>
+                        <tr><td>No TPS</td><td>Non</td><td>20 caractères au maximum.</td></tr>
+                        <tr><td>No TVQ</td><td>Non</td><td>20 caractères au maximum.</td></tr>
+                        <tr><td>Note</td><td>Non</td><td>Texte libre, multiligne.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Remplissage automatique par document</h3>
+                <p>L’encadré « Remplissage automatique par document » est replié par défaut. Il invite à déposer une facture, une carte d’affaires ou un en-tête de lettre : « l’IA remplit les champs vides ».</p>
+                <p>Pour remplir une fiche à partir d’un document :</p>
+                <ol>
+                    <li>Dépliez l’encadré.</li>
+                    <li>Glissez un fichier dans la zone « Glissez un fichier ici ou cliquez pour choisir (PDF, JPG, PNG) », ou cliquez pour le choisir.</li>
+                    <li>Cliquez sur <kbd>Analyser le document</kbd>.</li>
+                    <li>Vérifiez les champs remplis, puis cliquez sur <kbd>Enregistrer</kbd>.</li>
+                </ol>
+                <h3>Règles</h3>
+                <ul>
+                    <li>L’IA remplit <strong>uniquement les champs vides</strong> : Nom, Nom d’affichage, Site web, No TPS et No TVQ. Un champ déjà rempli n’est jamais écrasé.</li>
+                    <li>Elle ajoute une adresse de type Facturation (rue, ville, code postal, courriel) <strong>seulement si le fournisseur n’a encore aucune adresse</strong>.</li>
+                    <li>Le téléphone trouvé est placé dans la note de l’adresse, sous la forme « Tél. : … ».</li>
+                    <li>Formats acceptés : PDF, JPG et PNG.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez d’abord choisir un fichier. »</span> — aucun fichier n’a été déposé avant de cliquer sur <kbd>Analyser le document</kbd>.</li>
+                    <li><span class="msg">« Le fichier est vide. »</span> — le fichier déposé ne contient rien ; choisissez-en un autre.</li>
+                    <li><span class="msg">« Clé OpenAI absente. Contactez l’administrateur. »</span> — l’accès à l’IA n’est pas configuré pour votre compagnie ; l’administrateur doit l’activer.</li>
+                    <li><span class="msg">« Format non pris en charge (PDF, JPG ou PNG uniquement). »</span> — convertissez le document dans un de ces formats.</li>
+                    <li><span class="msg">« {n} champ(s) rempli(s) automatiquement. Vérifiez avant d’enregistrer. »</span> — l’analyse a réussi ; relisez chaque champ rempli avant d’enregistrer.</li>
+                    <li><span class="msg">« Aucune information exploitable trouvée (ou champs déjà remplis). »</span> — le document n’a rien apporté, ou tous les champs étaient déjà remplis.</li>
+                    <li><span class="msg">« Erreur lors de l’analyse du document. »</span> — l’analyse a échoué ; réessayez, ou remplissez la fiche à la main.</li>
+                </ul>
+                <h3>Carte « Adresses »</h3>
+                <ul>
+                    <li><kbd>+ Ajouter une adresse</kbd> : ouvre la fenêtre « Édition adresse ».</li>
+                    <li>Par ligne : <kbd>Modifier</kbd> et <kbd>Supprimer</kbd> (sans confirmation).</li>
+                </ul>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>Pastille indiquant le type d’adresse (Facturation, Livraison, etc.).</td></tr>
+                        <tr><td>Adresse</td><td>Adresse complète.</td></tr>
+                        <tr><td>Actions</td><td><kbd>Modifier</kbd> / <kbd>Supprimer</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <p>Quand il n’y a aucune adresse : « Aucune adresse enregistrée pour ce fournisseur. »</p>
+                <h3>Champs de la fenêtre « Édition adresse »</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>Non</td><td>Type de l’adresse (Facturation, Livraison…).</td></tr>
+                        <tr><td>Nom</td><td>Non</td><td>200 caractères au maximum.</td></tr>
+                        <tr><td>Adresse 1, Adresse 2</td><td>Non</td><td>500 caractères au maximum chacune.</td></tr>
+                        <tr><td>Ville</td><td>Non</td><td>50 caractères au maximum.</td></tr>
+                        <tr><td>Pays</td><td>Non</td><td>Liste ; le pays choisi filtre la liste des provinces.</td></tr>
+                        <tr><td>Province</td><td>Non</td><td>Liste, selon le pays.</td></tr>
+                        <tr><td>Code postal</td><td>Non</td><td>20 caractères au maximum.</td></tr>
+                        <tr><td>Courriel</td><td>Non</td><td>200 caractères au maximum.</td></tr>
+                        <tr><td>Note</td><td>Non</td><td>Texte libre.</td></tr>
+                    </tbody>
+                </table>
+                <p>Boutons : <kbd>Enregistrer</kbd> conserve l’adresse dans la fiche, <kbd>Annuler</kbd> ferme sans rien changer.</p>
+                <h3>Carte « Pièces jointes »</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fichier</td><td>Lien vers le fichier, avec sa catégorie en dessous.</td></tr>
+                        <tr><td>Type</td><td>Type du fichier.</td></tr>
+                        <tr><td>Taille</td><td>Taille du fichier.</td></tr>
+                        <tr><td>Note</td><td>Note associée.</td></tr>
+                        <tr><td>Provenance</td><td>D’où vient la pièce, avec la date.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">« Enregistrez d’abord la fiche. »</span> — sur une nouvelle fiche, les pièces jointes n’apparaissent qu’après le premier enregistrement.</li>
+                    <li><span class="msg">« Aucune pièce jointe. Celles de QuickBooks arrivent par Importations ▸ Pièces jointes ▸ Rattacher aux fiches. »</span> — aucun document n’est rattaché ; voir <a href="importation.html">Importation</a>.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">On ne peut pas ajouter de pièce jointe directement dans la fiche : elles arrivent par les importations (par exemple depuis QuickBooks) et sont ensuite rattachées aux fiches.</div>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Les ajouts, modifications et suppressions d’adresses restent en mémoire <strong>jusqu’au clic sur <kbd>Enregistrer</kbd> de la fiche</strong>. Fermer avec <kbd>← Retour à la liste</kbd> ou la croix les perd tous. À l’inverse, une adresse supprimée par erreur revient si vous fermez sans enregistrer.</div>
+                <div class="attention" data-titre="Attention">Choisissez toujours un <strong>Type</strong> de fournisseur avant d’enregistrer : la fiche s’enregistre même sans type, mais plusieurs rapports et classements s’appuient dessus.</div>
+                <div class="astuce" data-titre="Astuce">Le courriel de l’adresse de facturation est celui qui sert aux invitations Stripe et aux avis de paiement. Renseignez-le dès la création du fournisseur.</div>
+            </section>
+
+            <section id="fr-factures-fournisseurs">
+                <h2>Factures fournisseurs (liste)</h2>
+                <p>L’écran <span class="chemin">Achats › Factures fournisseurs</span> permet de suivre vos factures d’achat : leur saisie, leur comptabilisation et leur paiement (par Stripe, par paiement automatique ou par décaissement manuel).</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Ajouter Facture</kbd> (ou <kbd>+</kbd>) : ouvre la fenêtre « Ajouter une facture ».</li>
+                    <li>Boutons par ligne, de gauche à droite :
+                        <ol>
+                            <li><kbd>Décaissement</kbd> : ouvre le paiement manuel (voir <a href="#fr-decaissement">Paiement manuel</a>) ; toutes les factures ouvertes du fournisseur y sont listées.</li>
+                            <li><kbd>Payer avec Stripe (Interac / ACSS / Carte)</kbd> : visible seulement si la facture est comptabilisée et non payée. Ouvre « Payer le fournisseur » avec le reste à payer (voir <a href="#fr-payer-stripe">Payer par Stripe</a>).</li>
+                            <li><kbd>Synchroniser les paiements Stripe (si webhook a échoué)</kbd> : toujours visible ; ouvre la synchronisation dans une nouvelle fenêtre (voir <a href="#fr-synchroniser-stripe">Synchroniser Stripe</a>).</li>
+                            <li><kbd>Paiement automatique</kbd> : visible si la facture est comptabilisée, non payée, <strong>et</strong> qu’une autorisation de paiement automatique active existe pour ce fournisseur. Icône violette « Programmer un paiement automatique » quand rien n’est programmé ; icône verte « Auto-paiement programmé - cliquer pour gérer » sinon. Ouvre « Programmer paiement automatique ».</li>
+                            <li><kbd>Modifier</kbd> : ouvre la facture.</li>
+                            <li><kbd>Supprimer</kbd> : supprime la facture, <strong>sans confirmation</strong>. Sur une facture comptabilisée, le bouton est remplacé par un cadenas rouge inactif.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Filtres et recherche</h3>
+                <ul>
+                    <li>Filtre <strong>État</strong> (libellé « État : tous ») : cases Brouillon, Comptabilisé.</li>
+                    <li>Filtre <strong>Statut paiement</strong> (libellé « Statut paiement : tous ») : cases Ouverte, Partielle, Payée.</li>
+                    <li>Chaque filtre propose « Tout cocher ». Ne rien cocher équivaut à ne pas filtrer. La grille se recharge à chaque case cochée ou décochée. Les filtres sont <strong>mémorisés pendant la session</strong>.</li>
+                    <li>Champ de recherche avec la loupe, et <kbd>Effacer</kbd>.</li>
+                </ul>
+                <h3>Colonnes</h3>
+                <p>Toutes les colonnes se trient, sauf Action ; le tri est mémorisé. Par défaut, les factures les plus récentes sont en premier.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Numéro de facture du fournisseur (le « No facture fournisseur » saisi dans la facture).</td></tr>
+                        <tr><td>Date échéance</td><td>Date à laquelle la facture doit être payée.</td></tr>
+                        <tr><td>Fournisseur</td><td>Nom du fournisseur.</td></tr>
+                        <tr><td>Statut paiement</td><td>Ouverte, Partielle ou Payée.</td></tr>
+                        <tr><td>Reste à payer</td><td>Montant encore dû.</td></tr>
+                        <tr><td>Déjà payé</td><td>Somme des règlements déjà enregistrés.</td></tr>
+                        <tr><td>Total</td><td>Total de la facture, taxes comprises.</td></tr>
+                        <tr><td>État</td><td>Brouillon ou Comptabilisé.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucune facture trouvée. »</span> — aucun résultat pour la recherche ou les filtres en cours ; décochez les filtres ou cliquez sur <kbd>Effacer</kbd>.</li>
+                    <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> (titre « Confirmation ») — vous fermez la fenêtre de facture avec des changements non enregistrés ; répondez Non pour revenir et cliquer sur <kbd>Enregistrer</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> ne demande aucune confirmation sur une facture en brouillon. Seules les factures comptabilisées sont protégées (cadenas).</div>
+                <div class="astuce" data-titre="Astuce">Pour retrouver rapidement ce qu’il reste à payer, cochez « Ouverte » et « Partielle » dans le filtre Statut paiement : la sélection reste active jusqu’à la fin de votre session.</div>
+            </section>
+
+            <section id="fr-facture-fournisseur">
+                <h2>Facture fournisseur</h2>
+                <p>La fenêtre « Facture fournisseur — Édition » sert à saisir une facture d’achat : le fournisseur, les dates, les lignes de dépense et les taxes. Elle s’ouvre depuis <span class="chemin">Achats › Factures fournisseurs</span> par <kbd>Ajouter Facture</kbd> ou <kbd>Modifier</kbd>.</p>
+                <h3>Champs de l’en-tête</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fournisseur</td><td>Non (mais indispensable)</td><td>Cliquez sur « Sélectionner un fournisseur » : un panneau « Rechercher un fournisseur... » filtre la liste au fur et à mesure, en ignorant les accents.</td></tr>
+                        <tr><td>Date facture</td><td>Non</td><td>Calendrier.</td></tr>
+                        <tr><td>Date d’échéance</td><td>Non</td><td>Calendrier ; c’est la date affichée dans la liste et utilisée par le paiement automatique.</td></tr>
+                        <tr><td>Date de réception</td><td>Non</td><td>Calendrier. Elle s’affiche mais n’est pas conservée.</td></tr>
+                        <tr><td>Comptabilisé</td><td>—</td><td>Case à cocher ; voir les règles de comptabilisation ci-dessous.</td></tr>
+                        <tr><td>No facture fournisseur</td><td>Non</td><td>Aide « Référence fournisseur… », 200 caractères au maximum. C’est ce numéro qui apparaît dans la colonne « # » de la liste.</td></tr>
+                        <tr><td>No bon de commande</td><td>Non</td><td>Aide « PO-… », 50 caractères au maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Carte « Lignes »</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Produit / Description</td><td>Description libre (1000 caractères au maximum). Le bouton <kbd>▾</kbd> ouvre « Rechercher un produit... » : le produit choisi remplit la description, met la quantité à 1 et reprend le prix, le compte de dépense et le statut de taxe du produit.</td></tr>
+                        <tr><td>Compte</td><td>« Rechercher un compte... » parmi les comptes d’achat (dépenses).</td></tr>
+                        <tr><td>Qté</td><td>Quantité ; la virgule est convertie en point, 2 décimales au maximum.</td></tr>
+                        <tr><td>Prix unitaire</td><td>Même règle : virgule → point, 2 décimales au maximum.</td></tr>
+                        <tr><td>Total</td><td>Quantité × prix unitaire, calculé automatiquement.</td></tr>
+                        <tr><td>Tx</td><td>Statut de taxe de la ligne ; seules les lignes taxables entrent dans le calcul de la TPS et de la TVQ.</td></tr>
+                        <tr><td>Ordre</td><td>Flèches haut / bas pour déplacer la ligne ; corbeille pour la supprimer (« Supprimer cette ligne ? »).</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide.</li>
+                    <li>Pied de page : Sous-total, TPS (5 % des lignes taxables), TVQ (9,975 % des lignes taxables) et Total, recalculés en direct à chaque modification.</li>
+                    <li><kbd>Enregistrer</kbd> : enregistre l’en-tête et les lignes, puis ferme la fenêtre.</li>
+                </ul>
+                <p>Pour saisir une facture fournisseur :</p>
+                <ol>
+                    <li>Cliquez sur <kbd>Ajouter Facture</kbd>, puis choisissez le fournisseur.</li>
+                    <li>Saisissez la date de la facture, la date d’échéance et le numéro de facture du fournisseur.</li>
+                    <li>Ajoutez une ligne par dépense : produit ou description, compte, quantité, prix, statut de taxe.</li>
+                    <li>Vérifiez le Sous-total, la TPS, la TVQ et le Total avec la facture papier.</li>
+                    <li>Cliquez sur <kbd>Enregistrer</kbd>. Laissez la facture en brouillon tant qu’elle n’est pas vérifiée.</li>
+                    <li>Quand tout est exact, rouvrez-la, cochez « Comptabilisé » et enregistrez de nouveau.</li>
+                </ol>
+                <h3>Règles de comptabilisation</h3>
+                <ul>
+                    <li>Cocher <strong>Comptabilisé</strong> puis enregistrer rend la facture <strong>définitive</strong> : badge « Comptabilisé 🔒 », champs et lignes bloqués, boutons <kbd>Enregistrer</kbd> et <kbd>+</kbd> masqués, suppression bloquée depuis la liste.</li>
+                    <li><strong>Aucune confirmation n’est demandée avant de comptabiliser.</strong></li>
+                    <li>Seules les factures comptabilisées peuvent être payées par Stripe ou programmées en paiement automatique. Le décaissement manuel, lui, reste accessible.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Supprimer cette ligne ? »</span> — confirmation avant de retirer une ligne de la facture.</li>
+                    <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> — vous fermez la fenêtre sans avoir enregistré.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="attention" data-titre="Attention">Aucun contrôle n’oblige à choisir un fournisseur ou à saisir une date : une facture sans fournisseur s’enregistre, mais elle ne pourra être ni payée ni rattachée correctement. Vérifiez l’en-tête avant de cocher « Comptabilisé ».</div>
+                <div class="piege" data-titre="Piège">La comptabilisation est immédiate et irréversible dès l’enregistrement. Relisez les lignes et les taxes avant de cocher la case.</div>
+                <div class="note" data-titre="Bon à savoir">On ne peut pas saisir de montant négatif : une note de crédit du fournisseur ne se saisit pas comme une ligne de crédit dans cette fenêtre. La « Date de réception » n’est pas conservée après l’enregistrement.</div>
+            </section>
+
+            <section id="fr-payer-stripe">
+                <h2>Payer le fournisseur par Stripe</h2>
+                <p>La fenêtre « Payer le fournisseur » s’ouvre depuis la liste des factures par <kbd>Payer avec Stripe (Interac / ACSS / Carte)</kbd>. Elle permet de régler en ligne tout ou partie d’une facture comptabilisée, par carte ou par débit préautorisé, et d’autoriser au besoin le paiement automatique des prochaines factures de ce fournisseur.</p>
+                <h3>Récapitulatif « Facture à payer »</h3>
+                <ul>
+                    <li>Nom du fournisseur.</li>
+                    <li>« Facture n° X » : il s’agit du <strong>numéro interne</strong> de 60Sec-AI, pas du numéro de facture du fournisseur.</li>
+                    <li>« Reste à payer … $ CAD ».</li>
+                </ul>
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>💰 Montant à payer maintenant</td><td>Oui</td><td>Prérempli avec le reste à payer. Le paiement partiel est permis : « Vous pouvez payer une partie ou la totalité (min 0,01 $, max … $) ».</td></tr>
+                        <tr><td>Choisir une méthode de paiement</td><td>Oui</td><td>Carte de crédit ou débit, ou ACSS Debit (PAD bancaire). La dernière méthode utilisée porte le badge « Dernière utilisée ».</td></tr>
+                        <tr><td>🤖 Autoriser le paiement automatique pour [fournisseur]</td><td>Non</td><td>Case à cocher ; « Les prochaines factures seront prélevées automatiquement à leur date d’échéance. »</td></tr>
+                        <tr><td>Plafond mensuel maximum (sécurité)</td><td>Si la case est cochée</td><td>5 000 $ par mois par défaut. Limite les prélèvements automatiques.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Méthodes de paiement</h3>
+                <table>
+                    <thead><tr><th>Méthode</th><th>Moyens acceptés</th><th>Frais</th><th>Délai</th></tr></thead>
+                    <tbody>
+                        <tr><td>Carte de crédit ou débit</td><td>Visa, Mastercard, Amex, Visa Debit / MC Debit, Apple Pay, Google Pay</td><td>2,9 % + 0,30 $</td><td>Instantané</td></tr>
+                        <tr><td>ACSS Debit (PAD bancaire)</td><td>Débit préautorisé canadien</td><td>1 %, plafonnés à 12 $</td><td>3 à 5 jours ouvrables</td></tr>
+                    </tbody>
+                </table>
+                <p>Le bloc du total affiche « Montant facture », « Frais de transaction » et « Total à débourser ». Les frais sont <strong>ajoutés</strong> au montant : le fournisseur reçoit exactement le montant que vous avez saisi, et vous payez les frais en plus.</p>
+                <h3>Paiement automatique</h3>
+                <ul>
+                    <li>Sans autorisation existante : cochez « 🤖 Autoriser le paiement automatique pour [fournisseur] ». Le champ « Plafond mensuel maximum (sécurité) » apparaît, ainsi que les conditions selon la méthode :
+                        <ul>
+                            <li>« Carte de crédit/débit (MIT) » : préavis de 24 h avant chaque prélèvement ;</li>
+                            <li>« Convention PAD » : préavis de 3 jours, contestation possible sous 10 jours et remboursement sous 90 jours.</li>
+                        </ul>
+                        L’autorisation est révocable depuis l’écran « Paiements automatiques ».</li>
+                    <li>Autorisation déjà active : le message « ✅ Paiement automatique déjà activé pour ce fournisseur » indique la méthode (par exemple « Visa se terminant par 1234 »).</li>
+                </ul>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Payer avec Stripe →</kbd> : ouvre la page de paiement Stripe dans toute la fenêtre du navigateur. Si vous annulez sur Stripe, vous revenez à la liste des factures.</li>
+                    <li>Lien « Configurer ce fournisseur → » : affiché quand le fournisseur n’a pas de compte Stripe ; ouvre son inscription (voir <a href="#fr-inscription-stripe">Inscription Stripe Connect</a>). Le bouton principal affiche alors « Fournisseur non configuré ».</li>
+                </ul>
+                <p>Pour payer une facture par Stripe :</p>
+                <ol>
+                    <li>Dans <span class="chemin">Achats › Factures fournisseurs</span>, cliquez sur <kbd>Payer avec Stripe</kbd> sur une facture comptabilisée et non payée.</li>
+                    <li>Ajustez au besoin le « Montant à payer maintenant ».</li>
+                    <li>Choisissez la méthode (carte ou ACSS) et vérifiez le « Total à débourser ».</li>
+                    <li>Cochez, si vous le souhaitez, l’autorisation de paiement automatique et fixez le plafond mensuel.</li>
+                    <li>Cliquez sur <kbd>Payer avec Stripe →</kbd> et terminez sur la page Stripe.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ⚠ Le montant doit être supérieur à 0. »</span> — montant nul ou vide ; le bouton de paiement est désactivé.</li>
+                    <li><span class="msg">« ⚠ Le montant ne peut dépasser … $ »</span> — montant supérieur au reste à payer ; le bouton est désactivé.</li>
+                    <li><span class="msg">« ⚠️ Ce fournisseur n’est pas encore configuré pour recevoir des paiements Stripe. »</span> — inscrivez d’abord le fournisseur avec « Configurer ce fournisseur → ».</li>
+                    <li><span class="msg">« Veuillez choisir une méthode de paiement. »</span> — aucune méthode sélectionnée.</li>
+                    <li><span class="msg">« Veuillez saisir un montant valide. »</span> — le montant n’est pas un nombre.</li>
+                    <li><span class="msg">« Le montant dépasse le reste à payer. »</span> / <span class="msg">« Le montant ne peut dépasser le reste à payer (… $). »</span> — réduisez le montant.</li>
+                    <li><span class="msg">« Le montant doit être supérieur à 0. »</span> — saisissez un montant positif.</li>
+                    <li><span class="msg">« Méthode de paiement invalide. »</span> — rechargez la fenêtre et choisissez de nouveau la méthode.</li>
+                    <li><span class="msg">« Le fournisseur n’a pas de compte Stripe Connect configuré. »</span> — faites l’inscription du fournisseur.</li>
+                    <li><span class="msg">« Erreur lors de la création de la session de paiement : … »</span> — Stripe a refusé la demande ; lisez le détail, puis réessayez.</li>
+                    <li><span class="msg">« Fournisseur introuvable. »</span> — la facture ne renvoie plus à un fournisseur existant ; ouvrez la facture et vérifiez le fournisseur.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">Les frais de transaction sont à votre charge, pas à celle du fournisseur. Pour un gros montant, la méthode ACSS (1 %, maximum 12 $) coûte bien moins cher que la carte (2,9 % + 0,30 $), mais le règlement prend 3 à 5 jours ouvrables.</div>
+                <div class="astuce" data-titre="Astuce">Le plafond mensuel du paiement automatique est une sécurité : fixez-le au montant que vous acceptez de voir prélever au maximum dans un mois pour ce fournisseur.</div>
+            </section>
+
+            <section id="fr-paiement-reussi">
+                <h2>Paiement réussi (retour de Stripe)</h2>
+                <p>Après un paiement terminé sur la page Stripe, vous revenez dans 60Sec-AI sur l’écran de confirmation.</p>
+                <h3>Contenu de l’écran</h3>
+                <p>« Paiement réussi ! Le paiement à [fournisseur] a été traité avec succès. », suivi du bloc « Détails du paiement » :</p>
+                <table>
+                    <thead><tr><th>Champ</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Facture</td><td>Numéro interne de la facture.</td></tr>
+                        <tr><td>Date</td><td>Date du paiement.</td></tr>
+                        <tr><td>Méthode</td><td>Carte de crédit, ACSS Debit (PAD) ou Interac en ligne.</td></tr>
+                        <tr><td>N° transaction</td><td>Identifiant de la transaction Stripe.</td></tr>
+                        <tr><td>Frais Stripe</td><td>« + … $ (incluses) ».</td></tr>
+                        <tr><td>Montant payé</td><td>Montant total débité.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Retour aux factures →</kbd> : ramène à la liste des factures fournisseurs.</li>
+                </ul>
+                <p>Une note précise : « Le règlement est automatiquement enregistré dans votre comptabilité. »</p>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ⏳ Le paiement est en cours de traitement. La confirmation peut prendre quelques minutes. »</span> — Stripe n’a pas encore confirmé (fréquent avec ACSS) ; revenez plus tard sur la liste des factures.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">L’enregistrement comptable dépend de l’avis automatique envoyé par Stripe. Si la facture reste « Ouverte » alors que le paiement est réussi, utilisez <kbd>Synchroniser les paiements Stripe</kbd> depuis la liste des factures (voir <a href="#fr-synchroniser-stripe">Synchroniser Stripe</a>).</div>
+            </section>
+
+            <section id="fr-synchroniser-stripe">
+                <h2>Synchroniser les paiements Stripe</h2>
+                <p>Cet écran sert à rattraper un paiement réussi chez Stripe mais absent de votre comptabilité (par exemple si l’avis automatique de Stripe n’est pas arrivé). Il s’ouvre depuis la liste des factures par <kbd>Synchroniser les paiements Stripe (si webhook a échoué)</kbd>, dans une nouvelle fenêtre.</p>
+                <h3>Contenu de l’écran</h3>
+                <ul>
+                    <li>En-tête : « 🔄 Synchroniser les paiements Stripe · Facture #… · Fournisseur … ».</li>
+                    <li>Liste « Paiements Stripe trouvés » : une carte par tentative de paiement, avec le montant, la date, l’identifiant et deux badges :
+                        <ul>
+                            <li>« Stripe : Payé » ou « Stripe : [statut] » — l’état chez Stripe ;</li>
+                            <li>« ✓ Enregistré en BD » ou « ⚠ Manquant en BD » — le paiement est-il déjà dans votre comptabilité.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Importer dans 60Sec-AI →</kbd> : affiché sur les paiements « Payé » mais « Manquant en BD ». Crée le décaissement correspondant, sans créer de doublon.</li>
+                    <li><kbd>🔄 Vérifier à nouveau</kbd> : réinterroge Stripe.</li>
+                    <li><kbd>Fermer</kbd> : ferme la fenêtre.</li>
+                </ul>
+                <p>Pour rattraper un paiement manquant :</p>
+                <ol>
+                    <li>Sur la facture concernée, cliquez sur <kbd>Synchroniser les paiements Stripe</kbd>.</li>
+                    <li>Repérez la carte « Stripe : Payé » + « ⚠ Manquant en BD ».</li>
+                    <li>Cliquez sur <kbd>Importer dans 60Sec-AI →</kbd>.</li>
+                    <li>Fermez, puis vérifiez que la facture est passée à « Payée » ou « Partielle » dans la liste.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« ✓ Paiement importé avec succès dans la comptabilité. »</span> — le décaissement a été créé.</li>
+                    <li><span class="msg">« Aucun paiement Stripe trouvé pour cette facture. »</span> — aucune tentative de paiement n’existe chez Stripe pour cette facture.</li>
+                    <li><span class="msg">« Ce fournisseur n’a pas de compte Stripe Connect configuré. Aucune session à synchroniser. »</span> — rien à rattraper : le fournisseur n’a jamais pu recevoir de paiement Stripe.</li>
+                    <li><span class="msg">« Erreur Stripe : … »</span> — Stripe a renvoyé une erreur ; lisez le détail et réessayez avec <kbd>Vérifier à nouveau</kbd>.</li>
+                    <li><span class="msg">« Impossible de retrouver le compte Stripe du fournisseur (…). Veuillez recharger la page. »</span> — rechargez la fenêtre.</li>
+                    <li><span class="msg">« Session Stripe introuvable : … »</span> — la tentative n’existe plus chez Stripe.</li>
+                    <li><span class="msg">« Impossible de déterminer le montant de la facture pour cette session. »</span> — la tentative Stripe ne peut pas être reliée au montant de la facture ; enregistrez le paiement par décaissement manuel.</li>
+                    <li><span class="msg">« Erreur lors de l’import : … »</span> — la création du décaissement a échoué ; notez le détail et réessayez.</li>
+                </ul>
+                <div class="astuce" data-titre="Astuce">L’importation ne crée jamais de doublon : vous pouvez cliquer sur <kbd>Vérifier à nouveau</kbd> sans risque pour contrôler que tout est bien « ✓ Enregistré en BD ».</div>
+            </section>
+
+            <section id="fr-inscription-stripe">
+                <h2>Inscription Stripe Connect du fournisseur</h2>
+                <p>L’écran « Configuration des paiements » (« Permettre à ce fournisseur de recevoir des paiements via 60Sec-AI ») s’ouvre depuis la liste des fournisseurs (carte « Configurer paiements Stripe Connect » ou pastille Stripe) ou depuis la fenêtre de paiement (« Configurer ce fournisseur → »). Il affiche le nom et le courriel du fournisseur, ou « Courriel non renseigné dans la fiche » si la fiche n’en a pas.</p>
+                <h3>États et boutons</h3>
+                <ul>
+                    <li><strong>« ⚠ Paiements non configurés »</strong> — deux façons d’inscrire le fournisseur :
+                        <ul>
+                            <li><kbd>🖥️ Configurer maintenant →</kbd> : vous saisissez vous-même les informations du fournisseur sur Stripe (NEQ, coordonnées bancaires, etc.).</li>
+                            <li><kbd>✉️ Envoyer une invitation par courriel</kbd> (« Recommandé en B2B ») : champ « Courriel du fournisseur », puis bouton <kbd>Envoyer l’invitation par courriel ✉️</kbd>. Confirmation : « ✓ Invitation envoyée — Un courriel a été envoyé à … ». Le fournisseur remplit lui-même son inscription.</li>
+                        </ul>
+                    </li>
+                    <li><strong>« ⏳ Inscription en cours »</strong> ou <strong>« ⚠ Action requise »</strong> (avec « Documents requis : … ») : boutons <kbd>Reprendre l’inscription →</kbd> et <kbd>Renvoyer l’invitation ✉️</kbd>.</li>
+                    <li><strong>« ✓ Compte actif »</strong> : identifiant du compte et mention « Ce fournisseur peut recevoir des paiements ». La pastille de la liste des fournisseurs devient verte.</li>
+                </ul>
+                <p>Pour inscrire un fournisseur par invitation :</p>
+                <ol>
+                    <li>Vérifiez que le courriel de facturation est renseigné dans la fiche du fournisseur.</li>
+                    <li>Dans <span class="chemin">Achats › Fournisseurs</span>, cliquez sur « Configurer paiements Stripe Connect ».</li>
+                    <li>Choisissez <kbd>✉️ Envoyer une invitation par courriel</kbd>, contrôlez l’adresse, puis cliquez sur <kbd>Envoyer l’invitation par courriel ✉️</kbd>.</li>
+                    <li>Suivez l’état ; s’il passe à « ⚠ Action requise », demandez au fournisseur de fournir les documents indiqués.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez saisir un courriel valide pour le fournisseur. »</span> — l’adresse est vide ou mal formée.</li>
+                    <li><span class="msg">« Aucun courriel disponible pour ce fournisseur. »</span> — ajoutez un courriel dans l’adresse de facturation de la fiche, ou saisissez-le dans le champ « Courriel du fournisseur ».</li>
+                    <li><span class="msg">« Erreur lors de l’envoi de l’invitation : … »</span> — l’envoi a échoué ; lisez le détail, puis cliquez sur <kbd>Renvoyer l’invitation ✉️</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Le lien d’invitation expire après quelques minutes. Si le fournisseur ne l’ouvre pas tout de suite, cliquez sur <kbd>Renvoyer l’invitation ✉️</kbd> pour en générer un nouveau.</div>
+            </section>
+
+            <section id="fr-decaissement">
+                <h2>Paiement manuel (Décaissement)</h2>
+                <p>La fenêtre « Décaissement » (aussi appelée « Paiement fournisseur ») enregistre un règlement fait en dehors de Stripe : chèque, virement, espèces, carte ou autre. Elle s’ouvre depuis la liste des factures par <kbd>Décaissement</kbd> et liste toutes les factures ouvertes du fournisseur, pour répartir un même paiement sur plusieurs factures.</p>
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fournisseur</td><td>Oui</td><td>Sélecteur « Rechercher un fournisseur… » ; le choix charge ses factures ouvertes.</td></tr>
+                        <tr><td>Date de l’opération</td><td>Non</td><td>Aujourd’hui par défaut.</td></tr>
+                        <tr><td>Type de règlement</td><td>Non</td><td>Chèque (par défaut), Virement, Espèces, Carte, Autre.</td></tr>
+                        <tr><td>Référence (No chèque, etc.)</td><td>Non</td><td>Numéro de chèque ou référence du virement.</td></tr>
+                        <tr><td>Comptabilisé</td><td>—</td><td>Case à cocher : comptabilise le règlement à l’enregistrement.</td></tr>
+                        <tr><td>Compte banque</td><td>Oui</td><td>« Sélectionner un compte banque » : compte d’où sort l’argent.</td></tr>
+                        <tr><td>Montant payé total</td><td>Non</td><td>Montant global du règlement, à répartir sur les factures.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Grille « Factures ouvertes à payer »</h3>
+                <p>Les factures sont classées de la plus ancienne à la plus récente.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>No facture</td><td>Numéro de la facture.</td></tr>
+                        <tr><td>Date</td><td>Date de la facture.</td></tr>
+                        <tr><td>Total</td><td>Total de la facture.</td></tr>
+                        <tr><td>Déjà reçu</td><td>Montant déjà réglé (le libellé dit « reçu » même pour un fournisseur).</td></tr>
+                        <tr><td>Reste</td><td>Montant restant dû.</td></tr>
+                        <tr><td>À imputer</td><td>Montant du règlement affecté à cette facture (modifiable).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>+</kbd> « Imputer le reste complet » (par ligne) : met le reste de la facture dans « À imputer ».</li>
+                    <li><kbd>Imputer automatiquement</kbd> : répartit le « Montant payé total » sur les factures, en commençant par la plus ancienne.</li>
+                    <li><kbd>Enregistrer le paiement</kbd> : enregistre le règlement sur toutes les factures imputées, régénère les PDF, puis ferme la fenêtre.</li>
+                </ul>
+                <p>Pied de la grille : « Total dû » (des factures sélectionnées), « Total imputé » et « Différence » (payé − imputé), colorée selon qu’elle est nulle ou non.</p>
+                <p>Pour enregistrer un chèque couvrant plusieurs factures :</p>
+                <ol>
+                    <li>Choisissez le fournisseur ; ses factures ouvertes s’affichent.</li>
+                    <li>Saisissez la date, le type « Chèque », le numéro de chèque en référence et le compte banque.</li>
+                    <li>Saisissez le « Montant payé total », puis cliquez sur <kbd>Imputer automatiquement</kbd>.</li>
+                    <li>Vérifiez que la « Différence » est nulle ; ajustez « À imputer » au besoin.</li>
+                    <li>Cochez « Comptabilisé » si le règlement est définitif, puis cliquez sur <kbd>Enregistrer le paiement</kbd>.</li>
+                </ol>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Les contrôles s’exécutent dans cet ordre : fournisseur, compte banque, au moins un montant à imputer, aucun montant imputé supérieur au reste.</li>
+                    <li>Toutes les factures sont enregistrées ensemble, ou aucune : en cas d’erreur, rien n’est écrit.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Veuillez saisir d’abord le montant reçu total. »</span> — vous avez cliqué sur <kbd>Imputer automatiquement</kbd> avec un « Montant payé total » vide.</li>
+                    <li><span class="msg">« Veuillez sélectionner un fournisseur. »</span> — aucun fournisseur choisi.</li>
+                    <li><span class="msg">« Veuillez sélectionner un compte banque. »</span> — le compte banque est obligatoire.</li>
+                    <li><span class="msg">« Aucun montant à imputer. Saisissez au moins un montant dans la colonne « À imputer ». »</span> — la colonne est vide sur toutes les lignes.</li>
+                    <li><span class="msg">« Le montant à imputer sur la facture {n} dépasse le reste. »</span> — réduisez le montant de cette ligne.</li>
+                    <li><span class="msg">« Erreur lors de l’enregistrement : … »</span> — rien n’a été enregistré ; lisez le détail et réessayez.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Une « Différence » non nulle n’empêche pas l’enregistrement : si vous imputez moins que le montant payé, l’écart n’est affecté à aucune facture. Visez toujours une différence de 0,00 $.</div>
+                <div class="note" data-titre="Bon à savoir">La colonne s’appelle « Déjà reçu » même s’il s’agit d’un paiement à un fournisseur : lisez-la comme « déjà payé ».</div>
+            </section>
+
+            <section id="fr-recus">
+                <h2>Reçus et lecture IA</h2>
+                <p>L’écran <span class="chemin">Achats › Reçus</span> transforme des reçus ou des factures reçus sous forme de fichiers (photo JPEG, PDF ou texte de courriel) en données comptables : l’IA lit le document, puis 60Sec-AI crée le marchand (fournisseur) et le document d’achat.</p>
+                <h3>Filtres et recherche</h3>
+                <ul>
+                    <li>Champ « Rechercher (fournisseur, fichier, statut…) » avec la loupe, et <kbd>Effacer</kbd>.</li>
+                </ul>
+                <h3>Colonnes et boutons</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Fichier</td><td>Liens vers le fichier original et vers sa version optimisée.</td></tr>
+                        <tr><td>Fournisseur</td><td>Marchand reconnu.</td></tr>
+                        <tr><td>Optimize and AI</td><td>Bouton <kbd>Process AI</kbd>, actif quand l’analyse est possible.</td></tr>
+                        <tr><td>Voir JSON</td><td>Visible une fois l’analyse faite ; ouvre « 🤖 Résultat Analyse AI (JSON) » pour contrôler les données extraites.</td></tr>
+                        <tr><td>Process to Database</td><td>Bouton <kbd>Process JSON</kbd> : crée le marchand (fournisseur) et le document à partir des données extraites.</td></tr>
+                        <tr><td>Statut</td><td>Avancement du traitement du reçu.</td></tr>
+                        <tr><td>Action</td><td>Corbeille : supprime le reçu <strong>sans confirmation</strong>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Déroulement de la lecture IA</h3>
+                <ol>
+                    <li><kbd>Process AI</kbd> : une photo JPEG est d’abord optimisée (1024 px de large, niveaux de gris, contraste renforcé), puis lue ; un PDF est lu directement ; un texte de courriel est analysé comme du texte.</li>
+                    <li>L’IA extrait : le type de reçu et son numéro ; le marchand (nom, courriel, No TPS, No TVQ, site web, adresse, ville, province, pays, code postal, téléphone) ; la date et la devise ; le sous-total, les taxes, le total et le pourboire ; le mode de paiement et les 4 derniers chiffres de la carte ; les articles (description, quantité, prix unitaire, montant) ; des notes de confiance sur la lecture.</li>
+                    <li>Contrôlez le résultat avec <kbd>Voir JSON</kbd>, puis cliquez sur <kbd>Process JSON</kbd> pour créer le fournisseur et le document.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucun reçu trouvé. »</span> — aucun reçu n’a encore été reçu par la compagnie.</li>
+                </ul>
+                <h3>Trucs et pièges</h3>
+                <div class="piege" data-titre="Piège">Chaque clic sur <kbd>Process AI</kbd> déclenche un nouvel appel payant à l’IA. Ne cliquez pas plusieurs fois sur <kbd>Process AI</kbd> ni sur <kbd>Process JSON</kbd> pour le même reçu : vous risquez des frais et des doublons.</div>
+                <div class="attention" data-titre="Attention">Les images PNG (et tout format autre que JPEG, PDF et texte) ne sont pas traitées, et aucun message ne l’indique. Convertissez les captures d’écran en JPEG ou en PDF avant de les envoyer.</div>
+                <div class="note" data-titre="Bon à savoir">La recherche de cet écran ne filtre pas la liste : tous les reçus restent affichés. Les reçus arrivent aussi par l’application mobile (photo) et par courriel (pièces jointes envoyées à la boîte de la compagnie).</div>
+                <div class="piege" data-titre="Piège">La corbeille supprime le reçu immédiatement, sans confirmation.</div>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Pourquoi le bouton « Payer avec Stripe » n’apparaît-il pas sur ma facture ?</summary><p>Il n’est visible que si la facture est comptabilisée et non payée. Ouvrez la facture, cochez « Comptabilisé » et enregistrez ; le bouton apparaîtra dans la liste.</p></details>
+                <details><summary>Le fournisseur a été payé sur Stripe, mais la facture reste « Ouverte ». Que faire ?</summary><p>L’enregistrement dépend de l’avis automatique de Stripe. Cliquez sur <kbd>Synchroniser les paiements Stripe</kbd> sur la facture, puis sur <kbd>Importer dans 60Sec-AI →</kbd> pour le paiement marqué « ⚠ Manquant en BD ».</p></details>
+                <details><summary>Qui paie les frais Stripe ?</summary><p>Vous. Les frais (2,9 % + 0,30 $ par carte, 1 % plafonné à 12 $ en ACSS) s’ajoutent au montant : le fournisseur reçoit exactement ce que vous avez saisi.</p></details>
+                <details><summary>Puis-je payer une partie d’une facture par Stripe ?</summary><p>Oui. Modifiez le « Montant à payer maintenant » (minimum 0,01 $, maximum le reste à payer). La facture passera à « Partielle ».</p></details>
+                <details><summary>Comment enregistrer un chèque qui couvre plusieurs factures ?</summary><p>Utilisez <kbd>Décaissement</kbd> : saisissez le « Montant payé total », cliquez sur <kbd>Imputer automatiquement</kbd>, vérifiez que la « Différence » est nulle, puis enregistrez.</p></details>
+                <details><summary>Comment annuler la comptabilisation d’une facture ?</summary><p>Ce n’est pas possible : une facture comptabilisée est définitive (badge « Comptabilisé 🔒 »). Vérifiez soigneusement les lignes et les taxes avant de cocher la case.</p></details>
+                <details><summary>Mes adresses de fournisseur ont disparu après les avoir ajoutées. Pourquoi ?</summary><p>Les adresses ne sont enregistrées qu’au clic sur <kbd>Enregistrer</kbd> de la fiche. Fermer avec « ← Retour à la liste » ou la croix perd les modifications d’adresses.</p></details>
+                <details><summary>Le fournisseur n’a pas reçu l’invitation Stripe, ou le lien ne fonctionne plus.</summary><p>Le lien expire après quelques minutes. Ouvrez l’inscription Stripe du fournisseur et cliquez sur <kbd>Renvoyer l’invitation ✉️</kbd>. Vérifiez aussi que le courriel de facturation est correct.</p></details>
+                <details><summary>Pourquoi le numéro dans « Payer le fournisseur » ne correspond-il pas à celui de la facture ?</summary><p>La fenêtre de paiement et l’écran « Paiement réussi » affichent le numéro interne de 60Sec-AI. La colonne « # » de la liste affiche le numéro de facture du fournisseur.</p></details>
+                <details><summary>Mon reçu PNG n’est jamais traité.</summary><p>Seuls les fichiers JPEG, PDF et les textes de courriel sont lus, et aucun message ne prévient. Convertissez le PNG en JPEG ou en PDF.</p></details>
+                <details><summary>Comment ajouter une pièce jointe à un fournisseur ?</summary><p>Pas directement dans la fiche : les pièces jointes arrivent par les importations (Importations ▸ Pièces jointes ▸ Rattacher aux fiches). Voir <a href="importation.html">Importation</a>.</p></details>
+                <details><summary>Comment activer le paiement automatique d’un fournisseur ?</summary><p>Lors d’un paiement Stripe, cochez « 🤖 Autoriser le paiement automatique pour [fournisseur] » et fixez le plafond mensuel. Ensuite, le bouton « Paiement automatique » apparaît sur ses factures comptabilisées non payées.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>ACSS (PAD)</td><td>Débit préautorisé bancaire canadien, proposé par Stripe : frais de 1 % (maximum 12 $), règlement en 3 à 5 jours ouvrables.</td></tr>
+                        <tr><td>Brouillon</td><td>État d’une facture fournisseur encore modifiable, non comptabilisée.</td></tr>
+                        <tr><td>Comptabilisé</td><td>État définitif d’une facture : elle est inscrite dans la comptabilité et ne peut plus être modifiée ni supprimée.</td></tr>
+                        <tr><td>Décaissement</td><td>Règlement d’une ou de plusieurs factures fournisseurs, enregistré à la main (chèque, virement, espèces, carte, autre) ou importé depuis Stripe.</td></tr>
+                        <tr><td>Imputer</td><td>Affecter une partie d’un paiement à une facture précise.</td></tr>
+                        <tr><td>MIT</td><td>Transaction initiée par le marchand : prélèvement automatique par carte, avec préavis de 24 h.</td></tr>
+                        <tr><td>Paiement automatique</td><td>Autorisation donnée pour qu’un fournisseur soit payé automatiquement à l’échéance de ses factures, dans la limite d’un plafond mensuel.</td></tr>
+                        <tr><td>Reste à payer</td><td>Montant d’une facture qui n’a pas encore été réglé.</td></tr>
+                        <tr><td>Statut paiement</td><td>Ouverte (rien payé), Partielle (payée en partie) ou Payée.</td></tr>
+                        <tr><td>Stripe Connect</td><td>Service Stripe qui permet à un fournisseur d’ouvrir un compte pour recevoir vos paiements via 60Sec-AI.</td></tr>
+                        <tr><td>Synchronisation Stripe</td><td>Vérification manuelle des paiements chez Stripe pour importer ceux qui manquent dans la comptabilité.</td></tr>
+                        <tr><td>TPS / TVQ</td><td>Taxe sur les produits et services (5 %) et taxe de vente du Québec (9,975 %), calculées sur les lignes taxables.</td></tr>
+                        <tr><td>Webhook</td><td>Avis automatique envoyé par Stripe à 60Sec-AI pour confirmer un paiement.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Purchases</h1>
+            <p class="intro">Suppliers, supplier invoices, payments through Stripe or manual disbursement, and receipt reading by artificial intelligence. The <span class="chemin">Purchases</span> menu has three entries: “Suppliers”, “Supplier invoices” and “Receipts”. The other screens described here open from those three pages, in a dialog or in a new tab.</p>
+
+            <section id="en-suppliers">
+                <h2>Suppliers (list)</h2>
+                <p>The <span class="chemin">Purchases › Suppliers</span> screen lets you browse, search, create, edit and delete your suppliers. For each one it also shows the balance you owe and the state of its Stripe account (whether it can receive your online payments or not).</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Add Supplier</kbd> (on mobile: floating <kbd>+</kbd> button): opens the “Add a supplier” dialog. When the dialog closes, the list reloads.</li>
+                    <li><kbd>Edit</kbd> (per row): opens the supplier record (see <a href="#en-supplier-record">Supplier record</a>).</li>
+                    <li><kbd>Delete</kbd> (per row): deletes the supplier immediately.</li>
+                    <li>Purple card “Set up Stripe Connect payments” (Action column): opens the supplier’s Stripe onboarding in a new tab (see <a href="#en-stripe-onboarding">Stripe Connect onboarding</a>).</li>
+                    <li>Clicking the badge in the Stripe column opens “View Stripe status” in a new tab.</li>
+                </ul>
+                <h3>Filters and search</h3>
+                <ul>
+                    <li>“Search (name, email, phone…)” field followed by the magnifying glass: the search covers name, email and phone.</li>
+                    <li><kbd>Clear</kbd>: empties the field and shows all suppliers again.</li>
+                </ul>
+                <h3>Columns</h3>
+                <p>Clicking a header sorts the list; a second click reverses the order (▲/▼). Default sort: Name ascending.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Name</td><td>Supplier name, full address and email (in grey).</td></tr>
+                        <tr><td>Payable</td><td>Balance due, shown as “1 234,56 $”, or “—” if you owe nothing.</td></tr>
+                        <tr><td>Stripe</td><td>Green badge “Stripe account” when the supplier can receive payments, grey badge “No Stripe account” otherwise. A click opens “View Stripe status” in a new tab.</td></tr>
+                        <tr><td>Action</td><td>“Set up Stripe Connect payments” card, then <kbd>Edit</kbd> and <kbd>Delete</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No supplier found.”</span> — the search returns nothing; click <kbd>Clear</kbd> or check the spelling.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> acts immediately, without asking for confirmation. Check the row before clicking.</div>
+                <div class="astuce" data-titre="Tip">The “Payable” balance updates as soon as a supplier invoice is posted or settled. For details, open <span class="chemin">Purchases › Supplier invoices</span> and search for the supplier.</div>
+            </section>
+
+            <section id="en-supplier-record">
+                <h2>Supplier record</h2>
+                <p>The “Edit — Supplier” dialog opens through <kbd>Add Supplier</kbd> or <kbd>Edit</kbd> from the list. It groups the supplier’s information, addresses and attachments.</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>← Back to list</kbd>: closes the dialog <strong>without saving and without warning</strong>.</li>
+                    <li><kbd>Save</kbd>: saves the record and its addresses, then closes the dialog.</li>
+                </ul>
+                <p>On an existing record, the header shows “Origin” (where the record came from, for example an import) and “Created” (date and time, yyyy-mm-dd hh:mm).</p>
+                <h3>Fields of the “Supplier information” card</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Name</td><td>No</td><td>500 characters maximum. No check: an empty name can be saved.</td></tr>
+                        <tr><td>Display name</td><td>No</td><td>500 characters maximum.</td></tr>
+                        <tr><td>Type</td><td>No (but recommended)</td><td>List of supplier party types; “Select…” by default.</td></tr>
+                        <tr><td>Website</td><td>No</td><td>200 characters maximum.</td></tr>
+                        <tr><td>GST no.</td><td>No</td><td>20 characters maximum.</td></tr>
+                        <tr><td>QST no.</td><td>No</td><td>20 characters maximum.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Free multi-line text.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Automatic fill from a document</h3>
+                <p>The “Automatic fill from a document” panel is collapsed by default. It invites you to drop an invoice, a business card or a letterhead: “the AI fills the empty fields”.</p>
+                <p>To fill a record from a document:</p>
+                <ol>
+                    <li>Expand the panel.</li>
+                    <li>Drag a file into the “Drop a file here or click to choose (PDF, JPG, PNG)” zone, or click to pick one.</li>
+                    <li>Click <kbd>Analyze document</kbd>.</li>
+                    <li>Check the filled fields, then click <kbd>Save</kbd>.</li>
+                </ol>
+                <h3>Rules</h3>
+                <ul>
+                    <li>The AI fills <strong>only the empty fields</strong>: Name, Display name, Website, GST no. and QST no. A field that already has a value is never overwritten.</li>
+                    <li>It adds a Billing address (street, city, postal code, email) <strong>only if the supplier has no address yet</strong>.</li>
+                    <li>The phone number found goes into the address note, as “Tél. : …”.</li>
+                    <li>Accepted formats: PDF, JPG and PNG.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Please choose a file first.”</span> — no file was dropped before clicking <kbd>Analyze document</kbd>.</li>
+                    <li><span class="msg">“The file is empty.”</span> — the dropped file has no content; choose another one.</li>
+                    <li><span class="msg">“OpenAI key missing. Contact the administrator.”</span> — AI access is not set up for your company; the administrator must enable it.</li>
+                    <li><span class="msg">“Unsupported format (PDF, JPG or PNG only).”</span> — convert the document to one of those formats.</li>
+                    <li><span class="msg">“{n} field(s) filled automatically. Check before saving.”</span> — the analysis succeeded; reread every filled field before saving.</li>
+                    <li><span class="msg">“No usable information found (or fields already filled).”</span> — the document brought nothing, or all fields were already filled.</li>
+                    <li><span class="msg">“Error while analyzing the document.”</span> — the analysis failed; try again, or fill the record by hand.</li>
+                </ul>
+                <h3>“Addresses” card</h3>
+                <ul>
+                    <li><kbd>+ Add an address</kbd>: opens the “Edit address” dialog.</li>
+                    <li>Per row: <kbd>Edit</kbd> and <kbd>Delete</kbd> (no confirmation).</li>
+                </ul>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>Badge showing the address type (Billing, Shipping, etc.).</td></tr>
+                        <tr><td>Address</td><td>Full address.</td></tr>
+                        <tr><td>Actions</td><td><kbd>Edit</kbd> / <kbd>Delete</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <p>When there is no address: “No address saved for this supplier.”</p>
+                <h3>Fields of the “Edit address” dialog</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Type</td><td>No</td><td>Address type (Billing, Shipping…).</td></tr>
+                        <tr><td>Name</td><td>No</td><td>200 characters maximum.</td></tr>
+                        <tr><td>Address 1, Address 2</td><td>No</td><td>500 characters maximum each.</td></tr>
+                        <tr><td>City</td><td>No</td><td>50 characters maximum.</td></tr>
+                        <tr><td>Country</td><td>No</td><td>List; the chosen country filters the Province list.</td></tr>
+                        <tr><td>Province</td><td>No</td><td>List, depending on the country.</td></tr>
+                        <tr><td>Postal code</td><td>No</td><td>20 characters maximum.</td></tr>
+                        <tr><td>Email</td><td>No</td><td>200 characters maximum.</td></tr>
+                        <tr><td>Note</td><td>No</td><td>Free text.</td></tr>
+                    </tbody>
+                </table>
+                <p>Buttons: <kbd>Save</kbd> keeps the address in the record, <kbd>Cancel</kbd> closes without changes.</p>
+                <h3>“Attachments” card</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>File</td><td>Link to the file, with its category underneath.</td></tr>
+                        <tr><td>Type</td><td>File type.</td></tr>
+                        <tr><td>Size</td><td>File size.</td></tr>
+                        <tr><td>Note</td><td>Associated note.</td></tr>
+                        <tr><td>Source</td><td>Where the attachment came from, with the date.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">“Save the record first.”</span> — on a new record, attachments only appear after the first save.</li>
+                    <li><span class="msg">“No attachment. Those from QuickBooks arrive through Imports ▸ Attachments ▸ Link to records.”</span> — no document is attached; see <a href="importation.html">Import</a>.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">Attachments cannot be added directly in the record: they arrive through imports (for example from QuickBooks) and are then linked to the records.</div>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Address additions, changes and deletions stay in memory <strong>until you click the record’s <kbd>Save</kbd></strong>. Closing with <kbd>← Back to list</kbd> or the cross loses them all. Conversely, an address deleted by mistake comes back if you close without saving.</div>
+                <div class="attention" data-titre="Warning">Always choose a supplier <strong>Type</strong> before saving: the record saves without one, but several reports and groupings rely on it.</div>
+                <div class="astuce" data-titre="Tip">The billing address email is the one used for Stripe invitations and payment notices. Fill it in as soon as you create the supplier.</div>
+            </section>
+
+            <section id="en-supplier-invoices">
+                <h2>Supplier invoices (list)</h2>
+                <p>The <span class="chemin">Purchases › Supplier invoices</span> screen tracks your purchase invoices: entry, posting and payment (through Stripe, automatic payment or manual disbursement).</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Add Invoice</kbd> (or <kbd>+</kbd>): opens the “Add an invoice” dialog.</li>
+                    <li>Per-row buttons, from left to right:
+                        <ol>
+                            <li><kbd>Disbursement</kbd>: opens the manual payment (see <a href="#en-disbursement">Manual payment</a>); all the supplier’s open invoices are listed there.</li>
+                            <li><kbd>Pay with Stripe (Interac / ACSS / Card)</kbd>: visible only when the invoice is posted and unpaid. Opens “Pay the supplier” with the remaining balance (see <a href="#en-pay-stripe">Pay with Stripe</a>).</li>
+                            <li><kbd>Sync Stripe payments (if webhook failed)</kbd>: always visible; opens the synchronization in a new window (see <a href="#en-sync-stripe">Sync Stripe</a>).</li>
+                            <li><kbd>Automatic payment</kbd>: visible when the invoice is posted, unpaid, <strong>and</strong> an active automatic-payment authorization exists for this supplier. Purple icon “Schedule an automatic payment” when nothing is scheduled; green icon “Auto-payment scheduled - click to manage” otherwise. Opens “Schedule automatic payment”.</li>
+                            <li><kbd>Edit</kbd>: opens the invoice.</li>
+                            <li><kbd>Delete</kbd>: deletes the invoice, <strong>without confirmation</strong>. On a posted invoice the button is replaced by an inactive red padlock.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Filters and search</h3>
+                <ul>
+                    <li><strong>State</strong> filter (label “State: all”): Draft, Posted checkboxes.</li>
+                    <li><strong>Payment status</strong> filter (label “Payment status: all”): Open, Partial, Paid checkboxes.</li>
+                    <li>Each filter offers “Check all”. Checking nothing means no filter. The grid reloads on every box checked or unchecked. Filters are <strong>remembered for the session</strong>.</li>
+                    <li>Search field with the magnifying glass, and <kbd>Clear</kbd>.</li>
+                </ul>
+                <h3>Columns</h3>
+                <p>Every column sorts except Action; the sort is remembered. By default the most recent invoices come first.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>The supplier’s invoice number (the “Supplier invoice no.” entered in the invoice).</td></tr>
+                        <tr><td>Due date</td><td>Date the invoice must be paid.</td></tr>
+                        <tr><td>Supplier</td><td>Supplier name.</td></tr>
+                        <tr><td>Payment status</td><td>Open, Partial or Paid.</td></tr>
+                        <tr><td>Balance due</td><td>Amount still owed.</td></tr>
+                        <tr><td>Already paid</td><td>Sum of the settlements already recorded.</td></tr>
+                        <tr><td>Total</td><td>Invoice total, taxes included.</td></tr>
+                        <tr><td>State</td><td>Draft or Posted.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No invoice found.”</span> — no result for the current search or filters; uncheck the filters or click <kbd>Clear</kbd>.</li>
+                    <li><span class="msg">“⚠️ You have unsaved changes. Do you really want to close?”</span> (title “Confirmation”) — you are closing the invoice dialog with unsaved changes; answer No to go back and click <kbd>Save</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> asks for no confirmation on a draft invoice. Only posted invoices are protected (padlock).</div>
+                <div class="astuce" data-titre="Tip">To quickly find what remains to be paid, check “Open” and “Partial” in the Payment status filter: the selection stays active until the end of your session.</div>
+            </section>
+
+            <section id="en-supplier-invoice">
+                <h2>Supplier invoice</h2>
+                <p>The “Supplier invoice — Edit” dialog is where you enter a purchase invoice: supplier, dates, expense lines and taxes. It opens from <span class="chemin">Purchases › Supplier invoices</span> through <kbd>Add Invoice</kbd> or <kbd>Edit</kbd>.</p>
+                <h3>Header fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Supplier</td><td>No (but essential)</td><td>Click “Select a supplier”: a “Search a supplier...” panel filters the list as you type, ignoring accents.</td></tr>
+                        <tr><td>Invoice date</td><td>No</td><td>Calendar.</td></tr>
+                        <tr><td>Due date</td><td>No</td><td>Calendar; this is the date shown in the list and used by automatic payment.</td></tr>
+                        <tr><td>Receipt date</td><td>No</td><td>Calendar. It is displayed but not kept.</td></tr>
+                        <tr><td>Posted</td><td>—</td><td>Checkbox; see the posting rules below.</td></tr>
+                        <tr><td>Supplier invoice no.</td><td>No</td><td>Hint “Supplier reference…”, 200 characters maximum. This is the number shown in the list’s “#” column.</td></tr>
+                        <tr><td>Purchase order no.</td><td>No</td><td>Hint “PO-…”, 50 characters maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>“Lines” card</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Product / Description</td><td>Free description (1000 characters maximum). The <kbd>▾</kbd> button opens “Search a product...”: the chosen product fills the description, sets the quantity to 1 and takes the product’s price, expense account and tax status.</td></tr>
+                        <tr><td>Account</td><td>“Search an account...” among purchase (expense) accounts.</td></tr>
+                        <tr><td>Qty</td><td>Quantity; a comma is converted to a point, 2 decimals maximum.</td></tr>
+                        <tr><td>Unit price</td><td>Same rule: comma → point, 2 decimals maximum.</td></tr>
+                        <tr><td>Total</td><td>Quantity × unit price, computed automatically.</td></tr>
+                        <tr><td>Tx</td><td>Tax status of the line; only taxable lines count toward GST and QST.</td></tr>
+                        <tr><td>Order</td><td>Up / down arrows to move the line; trash icon to remove it (“Delete this line?”).</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Round <kbd>+</kbd> button (“Add a line”): adds an empty line.</li>
+                    <li>Footer: Subtotal, GST (5 % of taxable lines), QST (9.975 % of taxable lines) and Total, recalculated live on every change.</li>
+                    <li><kbd>Save</kbd>: saves the header and the lines, then closes the dialog.</li>
+                </ul>
+                <p>To enter a supplier invoice:</p>
+                <ol>
+                    <li>Click <kbd>Add Invoice</kbd>, then choose the supplier.</li>
+                    <li>Enter the invoice date, the due date and the supplier’s invoice number.</li>
+                    <li>Add one line per expense: product or description, account, quantity, price, tax status.</li>
+                    <li>Compare Subtotal, GST, QST and Total with the paper invoice.</li>
+                    <li>Click <kbd>Save</kbd>. Leave the invoice as a draft until it is checked.</li>
+                    <li>When everything is right, reopen it, check “Posted” and save again.</li>
+                </ol>
+                <h3>Posting rules</h3>
+                <ul>
+                    <li>Checking <strong>Posted</strong> then saving makes the invoice <strong>final</strong>: “Posted 🔒” badge, fields and lines locked, <kbd>Save</kbd> and <kbd>+</kbd> hidden, deletion blocked from the list.</li>
+                    <li><strong>No confirmation is asked before posting.</strong></li>
+                    <li>Only posted invoices can be paid through Stripe or scheduled for automatic payment. Manual disbursement remains available.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Delete this line?”</span> — confirmation before removing a line from the invoice.</li>
+                    <li><span class="msg">“⚠️ You have unsaved changes. Do you really want to close?”</span> — you are closing the dialog without saving.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="attention" data-titre="Warning">Nothing forces you to choose a supplier or enter a date: an invoice with no supplier saves, but it can be neither paid nor linked properly. Check the header before ticking “Posted”.</div>
+                <div class="piege" data-titre="Pitfall">Posting is immediate and irreversible as soon as you save. Reread the lines and taxes before ticking the box.</div>
+                <div class="note" data-titre="Good to know">Negative amounts cannot be entered: a supplier credit note cannot be entered as a credit line in this dialog. The “Receipt date” is not kept after saving.</div>
+            </section>
+
+            <section id="en-pay-stripe">
+                <h2>Pay the supplier with Stripe</h2>
+                <p>The “Pay the supplier” dialog opens from the invoice list through <kbd>Pay with Stripe (Interac / ACSS / Card)</kbd>. It lets you settle all or part of a posted invoice online, by card or pre-authorized debit, and optionally authorize automatic payment of this supplier’s next invoices.</p>
+                <h3>“Invoice to pay” summary</h3>
+                <ul>
+                    <li>Supplier name.</li>
+                    <li>“Invoice no. X”: this is 60Sec-AI’s <strong>internal number</strong>, not the supplier’s invoice number.</li>
+                    <li>“Balance due … $ CAD”.</li>
+                </ul>
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>💰 Amount to pay now</td><td>Yes</td><td>Prefilled with the balance due. Partial payment is allowed: “You can pay part or all (min 0,01 $, max … $)”.</td></tr>
+                        <tr><td>Choose a payment method</td><td>Yes</td><td>Credit or debit card, or ACSS Debit (bank PAD). The last method used carries the “Last used” badge.</td></tr>
+                        <tr><td>🤖 Authorize automatic payment for [supplier]</td><td>No</td><td>Checkbox; “The next invoices will be debited automatically on their due date.”</td></tr>
+                        <tr><td>Maximum monthly cap (safety)</td><td>If the box is checked</td><td>5 000 $ per month by default. Limits automatic debits.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Payment methods</h3>
+                <table>
+                    <thead><tr><th>Method</th><th>Accepted means</th><th>Fees</th><th>Delay</th></tr></thead>
+                    <tbody>
+                        <tr><td>Credit or debit card</td><td>Visa, Mastercard, Amex, Visa Debit / MC Debit, Apple Pay, Google Pay</td><td>2.9 % + 0,30 $</td><td>Instant</td></tr>
+                        <tr><td>ACSS Debit (bank PAD)</td><td>Canadian pre-authorized debit</td><td>1 %, capped at 12 $</td><td>3 to 5 business days</td></tr>
+                    </tbody>
+                </table>
+                <p>The total block shows “Invoice amount”, “Transaction fees” and “Total to disburse”. Fees are <strong>added</strong> to the amount: the supplier receives exactly the amount you entered, and you pay the fees on top.</p>
+                <h3>Automatic payment</h3>
+                <ul>
+                    <li>Without an existing authorization: check “🤖 Authorize automatic payment for [supplier]”. The “Maximum monthly cap (safety)” field appears, along with the conditions for the method:
+                        <ul>
+                            <li>“Credit/debit card (MIT)”: 24-hour notice before each debit;</li>
+                            <li>“PAD agreement”: 3-day notice, dispute possible within 10 days and refund within 90 days.</li>
+                        </ul>
+                        The authorization can be revoked from the “Automatic payments” screen.</li>
+                    <li>Authorization already active: the message “✅ Automatic payment already enabled for this supplier” shows the method (for example “Visa ending in 1234”).</li>
+                </ul>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Pay with Stripe →</kbd>: opens the Stripe payment page in the whole browser window. If you cancel on Stripe, you return to the invoice list.</li>
+                    <li>“Set up this supplier →” link: shown when the supplier has no Stripe account; opens its onboarding (see <a href="#en-stripe-onboarding">Stripe Connect onboarding</a>). The main button then reads “Supplier not set up”.</li>
+                </ul>
+                <p>To pay an invoice with Stripe:</p>
+                <ol>
+                    <li>In <span class="chemin">Purchases › Supplier invoices</span>, click <kbd>Pay with Stripe</kbd> on a posted, unpaid invoice.</li>
+                    <li>Adjust the “Amount to pay now” if needed.</li>
+                    <li>Choose the method (card or ACSS) and check the “Total to disburse”.</li>
+                    <li>Optionally check the automatic-payment authorization and set the monthly cap.</li>
+                    <li>Click <kbd>Pay with Stripe →</kbd> and finish on the Stripe page.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“⚠ The amount must be greater than 0.”</span> — amount is zero or empty; the pay button is disabled.</li>
+                    <li><span class="msg">“⚠ The amount cannot exceed … $”</span> — amount above the balance due; the button is disabled.</li>
+                    <li><span class="msg">“⚠️ This supplier is not yet set up to receive Stripe payments.”</span> — onboard the supplier first with “Set up this supplier →”.</li>
+                    <li><span class="msg">“Please choose a payment method.”</span> — no method selected.</li>
+                    <li><span class="msg">“Please enter a valid amount.”</span> — the amount is not a number.</li>
+                    <li><span class="msg">“The amount exceeds the balance due.”</span> / <span class="msg">“The amount cannot exceed the balance due (… $).”</span> — lower the amount.</li>
+                    <li><span class="msg">“The amount must be greater than 0.”</span> — enter a positive amount.</li>
+                    <li><span class="msg">“Invalid payment method.”</span> — reload the dialog and choose the method again.</li>
+                    <li><span class="msg">“The supplier has no Stripe Connect account set up.”</span> — onboard the supplier.</li>
+                    <li><span class="msg">“Error while creating the payment session: …”</span> — Stripe refused the request; read the details, then try again.</li>
+                    <li><span class="msg">“Supplier not found.”</span> — the invoice no longer points to an existing supplier; open the invoice and check the supplier.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">Transaction fees are yours, not the supplier’s. For a large amount, ACSS (1 %, maximum 12 $) costs far less than card (2.9 % + 0,30 $), but settlement takes 3 to 5 business days.</div>
+                <div class="astuce" data-titre="Tip">The automatic-payment monthly cap is a safety net: set it to the maximum you accept to see debited in one month for this supplier.</div>
+            </section>
+
+            <section id="en-payment-success">
+                <h2>Payment successful (return from Stripe)</h2>
+                <p>After a payment completed on the Stripe page, you come back to 60Sec-AI on the confirmation screen.</p>
+                <h3>Screen content</h3>
+                <p>“Payment successful! The payment to [supplier] was processed successfully.”, followed by the “Payment details” block:</p>
+                <table>
+                    <thead><tr><th>Field</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Invoice</td><td>Internal invoice number.</td></tr>
+                        <tr><td>Date</td><td>Payment date.</td></tr>
+                        <tr><td>Method</td><td>Credit card, ACSS Debit (PAD) or Interac online.</td></tr>
+                        <tr><td>Transaction no.</td><td>Stripe transaction identifier.</td></tr>
+                        <tr><td>Stripe fees</td><td>“+ … $ (included)”.</td></tr>
+                        <tr><td>Amount paid</td><td>Total amount debited.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Back to invoices →</kbd>: returns to the supplier invoice list.</li>
+                </ul>
+                <p>A note states: “The settlement is automatically recorded in your accounting.”</p>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“⏳ The payment is being processed. Confirmation may take a few minutes.”</span> — Stripe has not confirmed yet (common with ACSS); come back later to the invoice list.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">The accounting entry depends on the automatic notice sent by Stripe. If the invoice stays “Open” although the payment succeeded, use <kbd>Sync Stripe payments</kbd> from the invoice list (see <a href="#en-sync-stripe">Sync Stripe</a>).</div>
+            </section>
+
+            <section id="en-sync-stripe">
+                <h2>Sync Stripe payments</h2>
+                <p>This screen catches up a payment that succeeded on Stripe but is missing from your accounting (for example when Stripe’s automatic notice did not arrive). It opens from the invoice list through <kbd>Sync Stripe payments (if webhook failed)</kbd>, in a new window.</p>
+                <h3>Screen content</h3>
+                <ul>
+                    <li>Header: “🔄 Sync Stripe payments · Invoice #… · Supplier …”.</li>
+                    <li>“Stripe payments found” list: one card per payment attempt, with amount, date, identifier and two badges:
+                        <ul>
+                            <li>“Stripe: Paid” or “Stripe: [status]” — the state on Stripe;</li>
+                            <li>“✓ Recorded in DB” or “⚠ Missing in DB” — whether the payment is already in your accounting.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Import into 60Sec-AI →</kbd>: shown on payments that are “Paid” but “Missing in DB”. Creates the matching disbursement, without creating a duplicate.</li>
+                    <li><kbd>🔄 Check again</kbd>: queries Stripe again.</li>
+                    <li><kbd>Close</kbd>: closes the window.</li>
+                </ul>
+                <p>To catch up a missing payment:</p>
+                <ol>
+                    <li>On the invoice concerned, click <kbd>Sync Stripe payments</kbd>.</li>
+                    <li>Find the card marked “Stripe: Paid” + “⚠ Missing in DB”.</li>
+                    <li>Click <kbd>Import into 60Sec-AI →</kbd>.</li>
+                    <li>Close, then check that the invoice is now “Paid” or “Partial” in the list.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“✓ Payment imported successfully into the accounting.”</span> — the disbursement was created.</li>
+                    <li><span class="msg">“No Stripe payment found for this invoice.”</span> — no payment attempt exists on Stripe for this invoice.</li>
+                    <li><span class="msg">“This supplier has no Stripe Connect account set up. No session to sync.”</span> — nothing to catch up: the supplier could never receive a Stripe payment.</li>
+                    <li><span class="msg">“Stripe error: …”</span> — Stripe returned an error; read the details and try again with <kbd>Check again</kbd>.</li>
+                    <li><span class="msg">“Unable to find the supplier’s Stripe account (…). Please reload the page.”</span> — reload the window.</li>
+                    <li><span class="msg">“Stripe session not found: …”</span> — the attempt no longer exists on Stripe.</li>
+                    <li><span class="msg">“Unable to determine the invoice amount for this session.”</span> — the Stripe attempt cannot be tied to the invoice amount; record the payment through manual disbursement.</li>
+                    <li><span class="msg">“Error during import: …”</span> — creating the disbursement failed; note the details and try again.</li>
+                </ul>
+                <div class="astuce" data-titre="Tip">The import never creates a duplicate: you can safely click <kbd>Check again</kbd> to confirm that everything shows “✓ Recorded in DB”.</div>
+            </section>
+
+            <section id="en-stripe-onboarding">
+                <h2>Supplier Stripe Connect onboarding</h2>
+                <p>The “Payment setup” screen (“Allow this supplier to receive payments through 60Sec-AI”) opens from the supplier list (“Set up Stripe Connect payments” card or Stripe badge) or from the payment dialog (“Set up this supplier →”). It shows the supplier’s name and email, or “Email not filled in the record” if the record has none.</p>
+                <h3>States and buttons</h3>
+                <ul>
+                    <li><strong>“⚠ Payments not set up”</strong> — two ways to onboard the supplier:
+                        <ul>
+                            <li><kbd>🖥️ Set up now →</kbd>: you enter the supplier’s information on Stripe yourself (NEQ, bank details, etc.).</li>
+                            <li><kbd>✉️ Send an invitation by email</kbd> (“Recommended in B2B”): “Supplier email” field, then <kbd>Send the invitation by email ✉️</kbd> button. Confirmation: “✓ Invitation sent — An email was sent to …”. The supplier completes the onboarding themselves.</li>
+                        </ul>
+                    </li>
+                    <li><strong>“⏳ Onboarding in progress”</strong> or <strong>“⚠ Action required”</strong> (with “Required documents: …”): <kbd>Resume onboarding →</kbd> and <kbd>Resend the invitation ✉️</kbd> buttons.</li>
+                    <li><strong>“✓ Account active”</strong>: account identifier and the note “This supplier can receive payments”. The badge in the supplier list turns green.</li>
+                </ul>
+                <p>To onboard a supplier by invitation:</p>
+                <ol>
+                    <li>Check that the billing email is filled in the supplier record.</li>
+                    <li>In <span class="chemin">Purchases › Suppliers</span>, click “Set up Stripe Connect payments”.</li>
+                    <li>Choose <kbd>✉️ Send an invitation by email</kbd>, check the address, then click <kbd>Send the invitation by email ✉️</kbd>.</li>
+                    <li>Follow the state; if it becomes “⚠ Action required”, ask the supplier to provide the listed documents.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Please enter a valid email for the supplier.”</span> — the address is empty or malformed.</li>
+                    <li><span class="msg">“No email available for this supplier.”</span> — add an email in the record’s billing address, or type it in the “Supplier email” field.</li>
+                    <li><span class="msg">“Error while sending the invitation: …”</span> — sending failed; read the details, then click <kbd>Resend the invitation ✉️</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">The invitation link expires after a few minutes. If the supplier does not open it right away, click <kbd>Resend the invitation ✉️</kbd> to generate a new one.</div>
+            </section>
+
+            <section id="en-disbursement">
+                <h2>Manual payment (Disbursement)</h2>
+                <p>The “Disbursement” dialog (also called “Supplier payment”) records a settlement made outside Stripe: cheque, transfer, cash, card or other. It opens from the invoice list through <kbd>Disbursement</kbd> and lists all the supplier’s open invoices, so one payment can be spread over several invoices.</p>
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Supplier</td><td>Yes</td><td>“Search a supplier…” selector; choosing one loads its open invoices.</td></tr>
+                        <tr><td>Operation date</td><td>No</td><td>Today by default.</td></tr>
+                        <tr><td>Settlement type</td><td>No</td><td>Cheque (default), Transfer, Cash, Card, Other.</td></tr>
+                        <tr><td>Reference (cheque no., etc.)</td><td>No</td><td>Cheque number or transfer reference.</td></tr>
+                        <tr><td>Posted</td><td>—</td><td>Checkbox: posts the settlement on save.</td></tr>
+                        <tr><td>Bank account</td><td>Yes</td><td>“Select a bank account”: the account the money leaves from.</td></tr>
+                        <tr><td>Total amount paid</td><td>No</td><td>Overall settlement amount, to be spread over the invoices.</td></tr>
+                    </tbody>
+                </table>
+                <h3>“Open invoices to pay” grid</h3>
+                <p>Invoices are sorted from oldest to newest.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Invoice no.</td><td>Invoice number.</td></tr>
+                        <tr><td>Date</td><td>Invoice date.</td></tr>
+                        <tr><td>Total</td><td>Invoice total.</td></tr>
+                        <tr><td>Already received</td><td>Amount already settled (the label says “received” even for a supplier).</td></tr>
+                        <tr><td>Balance</td><td>Amount still owed.</td></tr>
+                        <tr><td>To apply</td><td>Part of the settlement assigned to this invoice (editable).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>+</kbd> “Apply the full balance” (per row): puts the invoice balance in “To apply”.</li>
+                    <li><kbd>Apply automatically</kbd>: spreads the “Total amount paid” over the invoices, starting with the oldest.</li>
+                    <li><kbd>Save the payment</kbd>: records the settlement on every applied invoice, regenerates the PDFs, then closes the dialog.</li>
+                </ul>
+                <p>Grid footer: “Total due” (of the selected invoices), “Total applied” and “Difference” (paid − applied), coloured depending on whether it is zero or not.</p>
+                <p>To record a cheque covering several invoices:</p>
+                <ol>
+                    <li>Choose the supplier; its open invoices appear.</li>
+                    <li>Enter the date, the “Cheque” type, the cheque number as reference and the bank account.</li>
+                    <li>Enter the “Total amount paid”, then click <kbd>Apply automatically</kbd>.</li>
+                    <li>Check that the “Difference” is zero; adjust “To apply” if needed.</li>
+                    <li>Check “Posted” if the settlement is final, then click <kbd>Save the payment</kbd>.</li>
+                </ol>
+                <h3>Rules</h3>
+                <ul>
+                    <li>Checks run in this order: supplier, bank account, at least one amount to apply, no applied amount above the balance.</li>
+                    <li>All invoices are saved together, or none: on error, nothing is written.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Please enter the total amount received first.”</span> — you clicked <kbd>Apply automatically</kbd> with an empty “Total amount paid”.</li>
+                    <li><span class="msg">“Please select a supplier.”</span> — no supplier chosen.</li>
+                    <li><span class="msg">“Please select a bank account.”</span> — the bank account is required.</li>
+                    <li><span class="msg">“No amount to apply. Enter at least one amount in the “To apply” column.”</span> — the column is empty on every row.</li>
+                    <li><span class="msg">“The amount to apply on invoice {n} exceeds the balance.”</span> — lower the amount on that row.</li>
+                    <li><span class="msg">“Error while saving: …”</span> — nothing was saved; read the details and try again.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">A non-zero “Difference” does not block saving: if you apply less than the amount paid, the gap is assigned to no invoice. Always aim for a difference of 0,00 $.</div>
+                <div class="note" data-titre="Good to know">The column is called “Already received” even though this is a payment to a supplier: read it as “already paid”.</div>
+            </section>
+
+            <section id="en-receipts">
+                <h2>Receipts and AI reading</h2>
+                <p>The <span class="chemin">Purchases › Receipts</span> screen turns receipts or invoices received as files (JPEG photo, PDF or email text) into accounting data: the AI reads the document, then 60Sec-AI creates the merchant (supplier) and the purchase document.</p>
+                <h3>Filters and search</h3>
+                <ul>
+                    <li>“Search (supplier, file, status…)” field with the magnifying glass, and <kbd>Clear</kbd>.</li>
+                </ul>
+                <h3>Columns and buttons</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>File</td><td>Links to the original file and to its optimized version.</td></tr>
+                        <tr><td>Supplier</td><td>Recognized merchant.</td></tr>
+                        <tr><td>Optimize and AI</td><td><kbd>Process AI</kbd> button, active when analysis is possible.</td></tr>
+                        <tr><td>View JSON</td><td>Visible once the analysis is done; opens “🤖 AI Analysis Result (JSON)” to check the extracted data.</td></tr>
+                        <tr><td>Process to Database</td><td><kbd>Process JSON</kbd> button: creates the merchant (supplier) and the document from the extracted data.</td></tr>
+                        <tr><td>Status</td><td>Progress of the receipt’s processing.</td></tr>
+                        <tr><td>Action</td><td>Trash icon: deletes the receipt <strong>without confirmation</strong>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>How AI reading works</h3>
+                <ol>
+                    <li><kbd>Process AI</kbd>: a JPEG photo is first optimized (1024 px wide, greyscale, enhanced contrast), then read; a PDF is read directly; an email text is analyzed as text.</li>
+                    <li>The AI extracts: receipt type and number; merchant (name, email, GST no., QST no., website, address, city, province, country, postal code, phone); date and currency; subtotal, taxes, total and tip; payment method and last 4 card digits; items (description, quantity, unit price, amount); confidence notes about the reading.</li>
+                    <li>Check the result with <kbd>View JSON</kbd>, then click <kbd>Process JSON</kbd> to create the supplier and the document.</li>
+                </ol>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No receipt found.”</span> — the company has not received any receipt yet.</li>
+                </ul>
+                <h3>Tips and pitfalls</h3>
+                <div class="piege" data-titre="Pitfall">Every click on <kbd>Process AI</kbd> triggers a new paid call to the AI. Do not click <kbd>Process AI</kbd> or <kbd>Process JSON</kbd> several times for the same receipt: you risk fees and duplicates.</div>
+                <div class="attention" data-titre="Warning">PNG images (and any format other than JPEG, PDF and text) are not processed, and no message says so. Convert screenshots to JPEG or PDF before sending them.</div>
+                <div class="note" data-titre="Good to know">This screen’s search does not filter the list: all receipts stay displayed. Receipts also arrive from the mobile app (photo) and by email (attachments sent to the company mailbox).</div>
+                <div class="piege" data-titre="Pitfall">The trash icon deletes the receipt immediately, without confirmation.</div>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>Why is the “Pay with Stripe” button missing on my invoice?</summary><p>It is only visible when the invoice is posted and unpaid. Open the invoice, check “Posted” and save; the button will appear in the list.</p></details>
+                <details><summary>The supplier was paid on Stripe, but the invoice stays “Open”. What now?</summary><p>Recording depends on Stripe’s automatic notice. Click <kbd>Sync Stripe payments</kbd> on the invoice, then <kbd>Import into 60Sec-AI →</kbd> on the payment marked “⚠ Missing in DB”.</p></details>
+                <details><summary>Who pays the Stripe fees?</summary><p>You do. Fees (2.9 % + 0,30 $ by card, 1 % capped at 12 $ by ACSS) are added to the amount: the supplier receives exactly what you entered.</p></details>
+                <details><summary>Can I pay part of an invoice with Stripe?</summary><p>Yes. Change the “Amount to pay now” (minimum 0,01 $, maximum the balance due). The invoice becomes “Partial”.</p></details>
+                <details><summary>How do I record a cheque that covers several invoices?</summary><p>Use <kbd>Disbursement</kbd>: enter the “Total amount paid”, click <kbd>Apply automatically</kbd>, check that the “Difference” is zero, then save.</p></details>
+                <details><summary>How do I undo the posting of an invoice?</summary><p>You cannot: a posted invoice is final (“Posted 🔒” badge). Check the lines and taxes carefully before ticking the box.</p></details>
+                <details><summary>My supplier addresses vanished after I added them. Why?</summary><p>Addresses are saved only when you click the record’s <kbd>Save</kbd>. Closing with “← Back to list” or the cross loses the address changes.</p></details>
+                <details><summary>The supplier did not get the Stripe invitation, or the link no longer works.</summary><p>The link expires after a few minutes. Open the supplier’s Stripe onboarding and click <kbd>Resend the invitation ✉️</kbd>. Also check that the billing email is correct.</p></details>
+                <details><summary>Why does the number in “Pay the supplier” differ from the invoice number?</summary><p>The payment dialog and the “Payment successful” screen show 60Sec-AI’s internal number. The list’s “#” column shows the supplier’s invoice number.</p></details>
+                <details><summary>My PNG receipt is never processed.</summary><p>Only JPEG, PDF and email text are read, and no message warns you. Convert the PNG to JPEG or PDF.</p></details>
+                <details><summary>How do I add an attachment to a supplier?</summary><p>Not directly in the record: attachments arrive through imports (Imports ▸ Attachments ▸ Link to records). See <a href="importation.html">Import</a>.</p></details>
+                <details><summary>How do I enable automatic payment for a supplier?</summary><p>During a Stripe payment, check “🤖 Authorize automatic payment for [supplier]” and set the monthly cap. Afterwards, the “Automatic payment” button appears on its posted, unpaid invoices.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>ACSS (PAD)</td><td>Canadian pre-authorized bank debit offered by Stripe: 1 % fee (maximum 12 $), settlement in 3 to 5 business days.</td></tr>
+                        <tr><td>Draft</td><td>State of a supplier invoice that is still editable, not posted.</td></tr>
+                        <tr><td>Posted</td><td>Final state of an invoice: it is recorded in the accounting and can no longer be edited or deleted.</td></tr>
+                        <tr><td>Disbursement</td><td>Settlement of one or more supplier invoices, recorded by hand (cheque, transfer, cash, card, other) or imported from Stripe.</td></tr>
+                        <tr><td>Apply</td><td>Assign part of a payment to a specific invoice.</td></tr>
+                        <tr><td>MIT</td><td>Merchant-initiated transaction: automatic card debit, with 24-hour notice.</td></tr>
+                        <tr><td>Automatic payment</td><td>Authorization for a supplier to be paid automatically when its invoices fall due, within a monthly cap.</td></tr>
+                        <tr><td>Balance due</td><td>Part of an invoice not yet settled.</td></tr>
+                        <tr><td>Payment status</td><td>Open (nothing paid), Partial (partly paid) or Paid.</td></tr>
+                        <tr><td>Stripe Connect</td><td>Stripe service that lets a supplier open an account to receive your payments through 60Sec-AI.</td></tr>
+                        <tr><td>Stripe sync</td><td>Manual check of payments on Stripe to import those missing from the accounting.</td></tr>
+                        <tr><td>GST / QST</td><td>Goods and services tax (5 %) and Quebec sales tax (9.975 %), computed on taxable lines.</td></tr>
+                        <tr><td>Webhook</td><td>Automatic notice sent by Stripe to 60Sec-AI to confirm a payment.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Compras</h1>
+            <p class="intro">Proveedores, facturas de proveedores, pagos por Stripe o por desembolso manual, y lectura de recibos por inteligencia artificial. El menú <span class="chemin">Compras</span> tiene tres entradas: «Proveedores», «Facturas de proveedores» y «Recibos». Las demás pantallas descritas aquí se abren desde esas tres páginas, en una ventana o en una pestaña nueva.</p>
+
+            <section id="es-proveedores">
+                <h2>Proveedores (lista)</h2>
+                <p>La pantalla <span class="chemin">Compras › Proveedores</span> sirve para consultar, buscar, crear, modificar y eliminar sus proveedores. También muestra, para cada uno, el saldo que usted le debe y el estado de su cuenta Stripe (si puede recibir o no sus pagos en línea).</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Agregar Proveedor</kbd> (en móvil: botón flotante <kbd>+</kbd>): abre la ventana «Agregar un proveedor». Al cerrarse la ventana, la lista se recarga.</li>
+                    <li><kbd>Modificar</kbd> (por fila): abre la ficha del proveedor (ver <a href="#es-ficha-proveedor">Ficha de proveedor</a>).</li>
+                    <li><kbd>Eliminar</kbd> (por fila): elimina el proveedor de inmediato.</li>
+                    <li>Tarjeta morada «Configurar pagos Stripe Connect» (columna Acción): abre la inscripción Stripe del proveedor en una pestaña nueva (ver <a href="#es-inscripcion-stripe">Inscripción Stripe Connect</a>).</li>
+                    <li>Clic en la insignia de la columna Stripe: abre «Ver el estado Stripe» en una pestaña nueva.</li>
+                </ul>
+                <h3>Filtros y búsqueda</h3>
+                <ul>
+                    <li>Campo «Buscar (nombre, email, teléfono…)» seguido de la lupa: la búsqueda cubre nombre, correo y teléfono.</li>
+                    <li><kbd>Borrar</kbd>: vacía el campo y vuelve a mostrar todos los proveedores.</li>
+                </ul>
+                <h3>Columnas</h3>
+                <p>Un clic en un encabezado ordena la lista; un segundo clic invierte el orden (▲/▼). Orden predeterminado: Nombre ascendente.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nombre</td><td>Nombre del proveedor, dirección completa y correo (en gris).</td></tr>
+                        <tr><td>A pagar</td><td>Saldo adeudado, en la forma «1 234,56 $», o «—» si no debe nada.</td></tr>
+                        <tr><td>Stripe</td><td>Insignia verde «Cuenta Stripe» si el proveedor puede recibir pagos, insignia gris «Sin cuenta Stripe» si no. Un clic abre «Ver el estado Stripe» en una pestaña nueva.</td></tr>
+                        <tr><td>Acción</td><td>Tarjeta «Configurar pagos Stripe Connect», luego <kbd>Modificar</kbd> y <kbd>Eliminar</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«No se encontró ningún proveedor.»</span> — la búsqueda no devuelve nada; haga clic en <kbd>Borrar</kbd> o revise la ortografía.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa"><kbd>Eliminar</kbd> actúa de inmediato, sin pedir confirmación. Verifique la fila antes de hacer clic.</div>
+                <div class="astuce" data-titre="Consejo">El saldo «A pagar» se actualiza en cuanto una factura de proveedor se contabiliza o se paga. Para ver el detalle, abra <span class="chemin">Compras › Facturas de proveedores</span> y busque el proveedor.</div>
+            </section>
+
+            <section id="es-ficha-proveedor">
+                <h2>Ficha de proveedor</h2>
+                <p>La ventana «Edición — Proveedor» se abre con <kbd>Agregar Proveedor</kbd> o <kbd>Modificar</kbd> desde la lista. Reúne la información del proveedor, sus direcciones y sus archivos adjuntos.</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>← Volver a la lista</kbd>: cierra la ventana <strong>sin guardar y sin aviso</strong>.</li>
+                    <li><kbd>Guardar</kbd>: guarda la ficha y sus direcciones, luego cierra la ventana.</li>
+                </ul>
+                <p>En una ficha existente, el encabezado muestra «Origen» (de dónde viene la ficha, por ejemplo una importación) y «Creado» (fecha y hora, aaaa-mm-dd hh:mm).</p>
+                <h3>Campos de la tarjeta «Información del proveedor»</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nombre</td><td>No</td><td>500 caracteres como máximo. Sin control: se puede guardar un nombre vacío.</td></tr>
+                        <tr><td>Nombre para mostrar</td><td>No</td><td>500 caracteres como máximo.</td></tr>
+                        <tr><td>Tipo</td><td>No (pero recomendado)</td><td>Lista de tipos de tercero proveedor; «Seleccionar…» por defecto.</td></tr>
+                        <tr><td>Sitio web</td><td>No</td><td>200 caracteres como máximo.</td></tr>
+                        <tr><td>N.º TPS</td><td>No</td><td>20 caracteres como máximo.</td></tr>
+                        <tr><td>N.º TVQ</td><td>No</td><td>20 caracteres como máximo.</td></tr>
+                        <tr><td>Nota</td><td>No</td><td>Texto libre, multilínea.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Relleno automático a partir de un documento</h3>
+                <p>El recuadro «Relleno automático por documento» está plegado por defecto. Invita a depositar una factura, una tarjeta de presentación o un membrete: «la IA rellena los campos vacíos».</p>
+                <p>Para rellenar una ficha a partir de un documento:</p>
+                <ol>
+                    <li>Despliegue el recuadro.</li>
+                    <li>Arrastre un archivo a la zona «Arrastre un archivo aquí o haga clic para elegir (PDF, JPG, PNG)», o haga clic para elegirlo.</li>
+                    <li>Haga clic en <kbd>Analizar el documento</kbd>.</li>
+                    <li>Verifique los campos rellenados y luego haga clic en <kbd>Guardar</kbd>.</li>
+                </ol>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>La IA rellena <strong>únicamente los campos vacíos</strong>: Nombre, Nombre para mostrar, Sitio web, N.º TPS y N.º TVQ. Un campo ya rellenado nunca se sobrescribe.</li>
+                    <li>Agrega una dirección de tipo Facturación (calle, ciudad, código postal, correo) <strong>solo si el proveedor aún no tiene ninguna dirección</strong>.</li>
+                    <li>El teléfono encontrado se coloca en la nota de la dirección, en la forma «Tél. : …».</li>
+                    <li>Formatos aceptados: PDF, JPG y PNG.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Elija primero un archivo.»</span> — no se depositó ningún archivo antes de hacer clic en <kbd>Analizar el documento</kbd>.</li>
+                    <li><span class="msg">«El archivo está vacío.»</span> — el archivo depositado no contiene nada; elija otro.</li>
+                    <li><span class="msg">«Falta la clave OpenAI. Contacte al administrador.»</span> — el acceso a la IA no está configurado para su compañía; el administrador debe activarlo.</li>
+                    <li><span class="msg">«Formato no admitido (solo PDF, JPG o PNG).»</span> — convierta el documento a uno de esos formatos.</li>
+                    <li><span class="msg">«{n} campo(s) rellenado(s) automáticamente. Verifique antes de guardar.»</span> — el análisis tuvo éxito; relea cada campo rellenado antes de guardar.</li>
+                    <li><span class="msg">«No se encontró información aprovechable (o campos ya rellenados).»</span> — el documento no aportó nada, o todos los campos ya estaban rellenados.</li>
+                    <li><span class="msg">«Error al analizar el documento.»</span> — el análisis falló; vuelva a intentarlo o rellene la ficha a mano.</li>
+                </ul>
+                <h3>Tarjeta «Direcciones»</h3>
+                <ul>
+                    <li><kbd>+ Agregar una dirección</kbd>: abre la ventana «Edición de dirección».</li>
+                    <li>Por fila: <kbd>Modificar</kbd> y <kbd>Eliminar</kbd> (sin confirmación).</li>
+                </ul>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tipo</td><td>Insignia que indica el tipo de dirección (Facturación, Entrega, etc.).</td></tr>
+                        <tr><td>Dirección</td><td>Dirección completa.</td></tr>
+                        <tr><td>Acciones</td><td><kbd>Modificar</kbd> / <kbd>Eliminar</kbd>.</td></tr>
+                    </tbody>
+                </table>
+                <p>Cuando no hay ninguna dirección: «No hay ninguna dirección registrada para este proveedor.»</p>
+                <h3>Campos de la ventana «Edición de dirección»</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tipo</td><td>No</td><td>Tipo de la dirección (Facturación, Entrega…).</td></tr>
+                        <tr><td>Nombre</td><td>No</td><td>200 caracteres como máximo.</td></tr>
+                        <tr><td>Dirección 1, Dirección 2</td><td>No</td><td>500 caracteres como máximo cada una.</td></tr>
+                        <tr><td>Ciudad</td><td>No</td><td>50 caracteres como máximo.</td></tr>
+                        <tr><td>País</td><td>No</td><td>Lista; el país elegido filtra la lista de provincias.</td></tr>
+                        <tr><td>Provincia</td><td>No</td><td>Lista, según el país.</td></tr>
+                        <tr><td>Código postal</td><td>No</td><td>20 caracteres como máximo.</td></tr>
+                        <tr><td>Correo</td><td>No</td><td>200 caracteres como máximo.</td></tr>
+                        <tr><td>Nota</td><td>No</td><td>Texto libre.</td></tr>
+                    </tbody>
+                </table>
+                <p>Botones: <kbd>Guardar</kbd> conserva la dirección en la ficha, <kbd>Cancelar</kbd> cierra sin cambiar nada.</p>
+                <h3>Tarjeta «Archivos adjuntos»</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Archivo</td><td>Enlace al archivo, con su categoría debajo.</td></tr>
+                        <tr><td>Tipo</td><td>Tipo del archivo.</td></tr>
+                        <tr><td>Tamaño</td><td>Tamaño del archivo.</td></tr>
+                        <tr><td>Nota</td><td>Nota asociada.</td></tr>
+                        <tr><td>Procedencia</td><td>De dónde viene el adjunto, con la fecha.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">«Guarde primero la ficha.»</span> — en una ficha nueva, los adjuntos solo aparecen después del primer guardado.</li>
+                    <li><span class="msg">«Ningún archivo adjunto. Los de QuickBooks llegan por Importaciones ▸ Archivos adjuntos ▸ Vincular a las fichas.»</span> — no hay ningún documento vinculado; ver <a href="importation.html">Importación</a>.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">No se pueden agregar adjuntos directamente en la ficha: llegan por las importaciones (por ejemplo desde QuickBooks) y luego se vinculan a las fichas.</div>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Las adiciones, modificaciones y eliminaciones de direcciones se quedan en memoria <strong>hasta el clic en <kbd>Guardar</kbd> de la ficha</strong>. Cerrar con <kbd>← Volver a la lista</kbd> o con la cruz las pierde todas. A la inversa, una dirección eliminada por error vuelve si cierra sin guardar.</div>
+                <div class="attention" data-titre="Atención">Elija siempre un <strong>Tipo</strong> de proveedor antes de guardar: la ficha se guarda aun sin tipo, pero varios informes y agrupaciones se apoyan en él.</div>
+                <div class="astuce" data-titre="Consejo">El correo de la dirección de facturación es el que sirve para las invitaciones Stripe y los avisos de pago. Rellénelo desde la creación del proveedor.</div>
+            </section>
+
+            <section id="es-facturas-proveedores">
+                <h2>Facturas de proveedores (lista)</h2>
+                <p>La pantalla <span class="chemin">Compras › Facturas de proveedores</span> permite seguir sus facturas de compra: su captura, su contabilización y su pago (por Stripe, por pago automático o por desembolso manual).</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Agregar Factura</kbd> (o <kbd>+</kbd>): abre la ventana «Agregar una factura».</li>
+                    <li>Botones por fila, de izquierda a derecha:
+                        <ol>
+                            <li><kbd>Desembolso</kbd>: abre el pago manual (ver <a href="#es-desembolso">Pago manual</a>); allí se listan todas las facturas abiertas del proveedor.</li>
+                            <li><kbd>Pagar con Stripe (Interac / ACSS / Tarjeta)</kbd>: visible solo si la factura está contabilizada y no pagada. Abre «Pagar al proveedor» con el saldo pendiente (ver <a href="#es-pagar-stripe">Pagar por Stripe</a>).</li>
+                            <li><kbd>Sincronizar los pagos Stripe (si el webhook falló)</kbd>: siempre visible; abre la sincronización en una ventana nueva (ver <a href="#es-sincronizar-stripe">Sincronizar Stripe</a>).</li>
+                            <li><kbd>Pago automático</kbd>: visible si la factura está contabilizada, no pagada, <strong>y</strong> existe una autorización de pago automático activa para este proveedor. Icono morado «Programar un pago automático» cuando no hay nada programado; icono verde «Autopago programado - clic para gestionar» en caso contrario. Abre «Programar pago automático».</li>
+                            <li><kbd>Modificar</kbd>: abre la factura.</li>
+                            <li><kbd>Eliminar</kbd>: elimina la factura, <strong>sin confirmación</strong>. En una factura contabilizada, el botón se reemplaza por un candado rojo inactivo.</li>
+                        </ol>
+                    </li>
+                </ul>
+                <h3>Filtros y búsqueda</h3>
+                <ul>
+                    <li>Filtro <strong>Estado</strong> (etiqueta «Estado: todos»): casillas Borrador, Contabilizado.</li>
+                    <li>Filtro <strong>Estado de pago</strong> (etiqueta «Estado de pago: todos»): casillas Abierta, Parcial, Pagada.</li>
+                    <li>Cada filtro ofrece «Marcar todo». No marcar nada equivale a no filtrar. La cuadrícula se recarga con cada casilla marcada o desmarcada. Los filtros se <strong>recuerdan durante la sesión</strong>.</li>
+                    <li>Campo de búsqueda con la lupa, y <kbd>Borrar</kbd>.</li>
+                </ul>
+                <h3>Columnas</h3>
+                <p>Todas las columnas se ordenan, salvo Acción; el orden se recuerda. Por defecto, las facturas más recientes van primero.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Número de factura del proveedor (el «N.º factura proveedor» capturado en la factura).</td></tr>
+                        <tr><td>Fecha de vencimiento</td><td>Fecha en que debe pagarse la factura.</td></tr>
+                        <tr><td>Proveedor</td><td>Nombre del proveedor.</td></tr>
+                        <tr><td>Estado de pago</td><td>Abierta, Parcial o Pagada.</td></tr>
+                        <tr><td>Saldo pendiente</td><td>Monto aún adeudado.</td></tr>
+                        <tr><td>Ya pagado</td><td>Suma de los pagos ya registrados.</td></tr>
+                        <tr><td>Total</td><td>Total de la factura, impuestos incluidos.</td></tr>
+                        <tr><td>Estado</td><td>Borrador o Contabilizado.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«No se encontró ninguna factura.»</span> — sin resultado para la búsqueda o los filtros actuales; desmarque los filtros o haga clic en <kbd>Borrar</kbd>.</li>
+                    <li><span class="msg">«⚠️ Tiene modificaciones sin guardar. ¿Realmente desea cerrar?»</span> (título «Confirmación») — está cerrando la ventana de factura con cambios sin guardar; responda No para volver y hacer clic en <kbd>Guardar</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa"><kbd>Eliminar</kbd> no pide ninguna confirmación en una factura en borrador. Solo las facturas contabilizadas están protegidas (candado).</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar rápidamente lo que queda por pagar, marque «Abierta» y «Parcial» en el filtro Estado de pago: la selección se mantiene activa hasta el final de su sesión.</div>
+            </section>
+
+            <section id="es-factura-proveedor">
+                <h2>Factura de proveedor</h2>
+                <p>La ventana «Factura de proveedor — Edición» sirve para capturar una factura de compra: el proveedor, las fechas, las líneas de gasto y los impuestos. Se abre desde <span class="chemin">Compras › Facturas de proveedores</span> con <kbd>Agregar Factura</kbd> o <kbd>Modificar</kbd>.</p>
+                <h3>Campos del encabezado</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Proveedor</td><td>No (pero indispensable)</td><td>Haga clic en «Seleccionar un proveedor»: un panel «Buscar un proveedor...» filtra la lista a medida que escribe, ignorando los acentos.</td></tr>
+                        <tr><td>Fecha de factura</td><td>No</td><td>Calendario.</td></tr>
+                        <tr><td>Fecha de vencimiento</td><td>No</td><td>Calendario; es la fecha mostrada en la lista y usada por el pago automático.</td></tr>
+                        <tr><td>Fecha de recepción</td><td>No</td><td>Calendario. Se muestra pero no se conserva.</td></tr>
+                        <tr><td>Contabilizado</td><td>—</td><td>Casilla; ver las reglas de contabilización más abajo.</td></tr>
+                        <tr><td>N.º factura proveedor</td><td>No</td><td>Ayuda «Referencia del proveedor…», 200 caracteres como máximo. Es el número que aparece en la columna «#» de la lista.</td></tr>
+                        <tr><td>N.º orden de compra</td><td>No</td><td>Ayuda «PO-…», 50 caracteres como máximo.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Tarjeta «Líneas»</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Producto / Descripción</td><td>Descripción libre (1000 caracteres como máximo). El botón <kbd>▾</kbd> abre «Buscar un producto...»: el producto elegido rellena la descripción, pone la cantidad en 1 y toma el precio, la cuenta de gasto y el estado de impuesto del producto.</td></tr>
+                        <tr><td>Cuenta</td><td>«Buscar una cuenta...» entre las cuentas de compra (gastos).</td></tr>
+                        <tr><td>Cant.</td><td>Cantidad; la coma se convierte en punto, 2 decimales como máximo.</td></tr>
+                        <tr><td>Precio unitario</td><td>Misma regla: coma → punto, 2 decimales como máximo.</td></tr>
+                        <tr><td>Total</td><td>Cantidad × precio unitario, calculado automáticamente.</td></tr>
+                        <tr><td>Tx</td><td>Estado de impuesto de la línea; solo las líneas gravables entran en el cálculo de la TPS y la TVQ.</td></tr>
+                        <tr><td>Orden</td><td>Flechas arriba / abajo para mover la línea; papelera para eliminarla («¿Eliminar esta línea?»).</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Botón redondo <kbd>+</kbd> («Agregar una línea»): agrega una línea vacía.</li>
+                    <li>Pie de página: Subtotal, TPS (5 % de las líneas gravables), TVQ (9,975 % de las líneas gravables) y Total, recalculados en vivo con cada modificación.</li>
+                    <li><kbd>Guardar</kbd>: guarda el encabezado y las líneas, luego cierra la ventana.</li>
+                </ul>
+                <p>Para capturar una factura de proveedor:</p>
+                <ol>
+                    <li>Haga clic en <kbd>Agregar Factura</kbd> y elija el proveedor.</li>
+                    <li>Capture la fecha de la factura, la fecha de vencimiento y el número de factura del proveedor.</li>
+                    <li>Agregue una línea por gasto: producto o descripción, cuenta, cantidad, precio, estado de impuesto.</li>
+                    <li>Compare Subtotal, TPS, TVQ y Total con la factura en papel.</li>
+                    <li>Haga clic en <kbd>Guardar</kbd>. Deje la factura en borrador mientras no esté verificada.</li>
+                    <li>Cuando todo sea exacto, vuelva a abrirla, marque «Contabilizado» y guarde de nuevo.</li>
+                </ol>
+                <h3>Reglas de contabilización</h3>
+                <ul>
+                    <li>Marcar <strong>Contabilizado</strong> y guardar hace la factura <strong>definitiva</strong>: insignia «Contabilizado 🔒», campos y líneas bloqueados, botones <kbd>Guardar</kbd> y <kbd>+</kbd> ocultos, eliminación bloqueada desde la lista.</li>
+                    <li><strong>No se pide ninguna confirmación antes de contabilizar.</strong></li>
+                    <li>Solo las facturas contabilizadas pueden pagarse por Stripe o programarse en pago automático. El desembolso manual sigue disponible.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«¿Eliminar esta línea?»</span> — confirmación antes de quitar una línea de la factura.</li>
+                    <li><span class="msg">«⚠️ Tiene modificaciones sin guardar. ¿Realmente desea cerrar?»</span> — está cerrando la ventana sin haber guardado.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="attention" data-titre="Atención">Ningún control obliga a elegir un proveedor ni a capturar una fecha: una factura sin proveedor se guarda, pero no podrá pagarse ni vincularse correctamente. Verifique el encabezado antes de marcar «Contabilizado».</div>
+                <div class="piege" data-titre="Trampa">La contabilización es inmediata e irreversible desde el guardado. Relea las líneas y los impuestos antes de marcar la casilla.</div>
+                <div class="note" data-titre="Conviene saber">No se puede capturar un monto negativo: una nota de crédito del proveedor no se captura como línea de crédito en esta ventana. La «Fecha de recepción» no se conserva después de guardar.</div>
+            </section>
+
+            <section id="es-pagar-stripe">
+                <h2>Pagar al proveedor por Stripe</h2>
+                <p>La ventana «Pagar al proveedor» se abre desde la lista de facturas con <kbd>Pagar con Stripe (Interac / ACSS / Tarjeta)</kbd>. Permite liquidar en línea todo o parte de una factura contabilizada, con tarjeta o débito preautorizado, y autorizar si se desea el pago automático de las próximas facturas de este proveedor.</p>
+                <h3>Resumen «Factura a pagar»</h3>
+                <ul>
+                    <li>Nombre del proveedor.</li>
+                    <li>«Factura n.º X»: se trata del <strong>número interno</strong> de 60Sec-AI, no del número de factura del proveedor.</li>
+                    <li>«Saldo pendiente … $ CAD».</li>
+                </ul>
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>💰 Monto a pagar ahora</td><td>Sí</td><td>Prellenado con el saldo pendiente. Se permite el pago parcial: «Puede pagar una parte o la totalidad (mín. 0,01 $, máx. … $)».</td></tr>
+                        <tr><td>Elegir un método de pago</td><td>Sí</td><td>Tarjeta de crédito o débito, o ACSS Debit (PAD bancario). El último método usado lleva la insignia «Último usado».</td></tr>
+                        <tr><td>🤖 Autorizar el pago automático para [proveedor]</td><td>No</td><td>Casilla; «Las próximas facturas se debitarán automáticamente en su fecha de vencimiento.»</td></tr>
+                        <tr><td>Tope mensual máximo (seguridad)</td><td>Si la casilla está marcada</td><td>5 000 $ por mes por defecto. Limita los débitos automáticos.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Métodos de pago</h3>
+                <table>
+                    <thead><tr><th>Método</th><th>Medios aceptados</th><th>Comisiones</th><th>Plazo</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tarjeta de crédito o débito</td><td>Visa, Mastercard, Amex, Visa Debit / MC Debit, Apple Pay, Google Pay</td><td>2,9 % + 0,30 $</td><td>Instantáneo</td></tr>
+                        <tr><td>ACSS Debit (PAD bancario)</td><td>Débito preautorizado canadiense</td><td>1 %, con tope de 12 $</td><td>3 a 5 días hábiles</td></tr>
+                    </tbody>
+                </table>
+                <p>El bloque del total muestra «Monto de la factura», «Comisiones de transacción» y «Total a desembolsar». Las comisiones se <strong>agregan</strong> al monto: el proveedor recibe exactamente el monto que usted capturó, y usted paga las comisiones aparte.</p>
+                <h3>Pago automático</h3>
+                <ul>
+                    <li>Sin autorización existente: marque «🤖 Autorizar el pago automático para [proveedor]». Aparece el campo «Tope mensual máximo (seguridad)», así como las condiciones según el método:
+                        <ul>
+                            <li>«Tarjeta de crédito/débito (MIT)»: preaviso de 24 h antes de cada débito;</li>
+                            <li>«Convenio PAD»: preaviso de 3 días, impugnación posible en 10 días y reembolso en 90 días.</li>
+                        </ul>
+                        La autorización es revocable desde la pantalla «Pagos automáticos».</li>
+                    <li>Autorización ya activa: el mensaje «✅ Pago automático ya activado para este proveedor» indica el método (por ejemplo «Visa terminada en 1234»).</li>
+                </ul>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Pagar con Stripe →</kbd>: abre la página de pago de Stripe en toda la ventana del navegador. Si cancela en Stripe, vuelve a la lista de facturas.</li>
+                    <li>Enlace «Configurar este proveedor →»: se muestra cuando el proveedor no tiene cuenta Stripe; abre su inscripción (ver <a href="#es-inscripcion-stripe">Inscripción Stripe Connect</a>). El botón principal muestra entonces «Proveedor no configurado».</li>
+                </ul>
+                <p>Para pagar una factura por Stripe:</p>
+                <ol>
+                    <li>En <span class="chemin">Compras › Facturas de proveedores</span>, haga clic en <kbd>Pagar con Stripe</kbd> en una factura contabilizada y no pagada.</li>
+                    <li>Ajuste si hace falta el «Monto a pagar ahora».</li>
+                    <li>Elija el método (tarjeta o ACSS) y verifique el «Total a desembolsar».</li>
+                    <li>Marque, si lo desea, la autorización de pago automático y fije el tope mensual.</li>
+                    <li>Haga clic en <kbd>Pagar con Stripe →</kbd> y termine en la página de Stripe.</li>
+                </ol>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«⚠ El monto debe ser mayor que 0.»</span> — monto nulo o vacío; el botón de pago está desactivado.</li>
+                    <li><span class="msg">«⚠ El monto no puede superar … $»</span> — monto superior al saldo pendiente; el botón está desactivado.</li>
+                    <li><span class="msg">«⚠️ Este proveedor aún no está configurado para recibir pagos Stripe.»</span> — inscriba primero al proveedor con «Configurar este proveedor →».</li>
+                    <li><span class="msg">«Elija un método de pago.»</span> — ningún método seleccionado.</li>
+                    <li><span class="msg">«Capture un monto válido.»</span> — el monto no es un número.</li>
+                    <li><span class="msg">«El monto supera el saldo pendiente.»</span> / <span class="msg">«El monto no puede superar el saldo pendiente (… $).»</span> — reduzca el monto.</li>
+                    <li><span class="msg">«El monto debe ser mayor que 0.»</span> — capture un monto positivo.</li>
+                    <li><span class="msg">«Método de pago inválido.»</span> — recargue la ventana y elija de nuevo el método.</li>
+                    <li><span class="msg">«El proveedor no tiene cuenta Stripe Connect configurada.»</span> — haga la inscripción del proveedor.</li>
+                    <li><span class="msg">«Error al crear la sesión de pago: …»</span> — Stripe rechazó la solicitud; lea el detalle y vuelva a intentarlo.</li>
+                    <li><span class="msg">«Proveedor no encontrado.»</span> — la factura ya no apunta a un proveedor existente; abra la factura y verifique el proveedor.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">Las comisiones de transacción corren por su cuenta, no por la del proveedor. Para un monto grande, el método ACSS (1 %, máximo 12 $) cuesta mucho menos que la tarjeta (2,9 % + 0,30 $), pero la liquidación tarda de 3 a 5 días hábiles.</div>
+                <div class="astuce" data-titre="Consejo">El tope mensual del pago automático es una seguridad: fíjelo en el monto máximo que acepta ver debitado en un mes para este proveedor.</div>
+            </section>
+
+            <section id="es-pago-exitoso">
+                <h2>Pago exitoso (regreso de Stripe)</h2>
+                <p>Después de un pago terminado en la página de Stripe, usted vuelve a 60Sec-AI en la pantalla de confirmación.</p>
+                <h3>Contenido de la pantalla</h3>
+                <p>«¡Pago exitoso! El pago a [proveedor] se procesó con éxito.», seguido del bloque «Detalles del pago»:</p>
+                <table>
+                    <thead><tr><th>Campo</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Factura</td><td>Número interno de la factura.</td></tr>
+                        <tr><td>Fecha</td><td>Fecha del pago.</td></tr>
+                        <tr><td>Método</td><td>Tarjeta de crédito, ACSS Debit (PAD) o Interac en línea.</td></tr>
+                        <tr><td>N.º de transacción</td><td>Identificador de la transacción Stripe.</td></tr>
+                        <tr><td>Comisiones Stripe</td><td>«+ … $ (incluidas)».</td></tr>
+                        <tr><td>Monto pagado</td><td>Monto total debitado.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Volver a las facturas →</kbd>: regresa a la lista de facturas de proveedores.</li>
+                </ul>
+                <p>Una nota precisa: «El pago se registra automáticamente en su contabilidad.»</p>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«⏳ El pago está en proceso. La confirmación puede tardar unos minutos.»</span> — Stripe aún no ha confirmado (frecuente con ACSS); vuelva más tarde a la lista de facturas.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">El registro contable depende del aviso automático enviado por Stripe. Si la factura sigue «Abierta» aunque el pago tuvo éxito, use <kbd>Sincronizar los pagos Stripe</kbd> desde la lista de facturas (ver <a href="#es-sincronizar-stripe">Sincronizar Stripe</a>).</div>
+            </section>
+
+            <section id="es-sincronizar-stripe">
+                <h2>Sincronizar los pagos Stripe</h2>
+                <p>Esta pantalla sirve para recuperar un pago exitoso en Stripe pero ausente de su contabilidad (por ejemplo si el aviso automático de Stripe no llegó). Se abre desde la lista de facturas con <kbd>Sincronizar los pagos Stripe (si el webhook falló)</kbd>, en una ventana nueva.</p>
+                <h3>Contenido de la pantalla</h3>
+                <ul>
+                    <li>Encabezado: «🔄 Sincronizar los pagos Stripe · Factura #… · Proveedor …».</li>
+                    <li>Lista «Pagos Stripe encontrados»: una tarjeta por intento de pago, con el monto, la fecha, el identificador y dos insignias:
+                        <ul>
+                            <li>«Stripe: Pagado» o «Stripe: [estado]» — el estado en Stripe;</li>
+                            <li>«✓ Registrado en BD» o «⚠ Falta en BD» — si el pago ya está en su contabilidad.</li>
+                        </ul>
+                    </li>
+                </ul>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Importar en 60Sec-AI →</kbd>: se muestra en los pagos «Pagado» pero «Falta en BD». Crea el desembolso correspondiente, sin crear duplicados.</li>
+                    <li><kbd>🔄 Verificar de nuevo</kbd>: vuelve a consultar Stripe.</li>
+                    <li><kbd>Cerrar</kbd>: cierra la ventana.</li>
+                </ul>
+                <p>Para recuperar un pago faltante:</p>
+                <ol>
+                    <li>En la factura en cuestión, haga clic en <kbd>Sincronizar los pagos Stripe</kbd>.</li>
+                    <li>Ubique la tarjeta «Stripe: Pagado» + «⚠ Falta en BD».</li>
+                    <li>Haga clic en <kbd>Importar en 60Sec-AI →</kbd>.</li>
+                    <li>Cierre y verifique que la factura pasó a «Pagada» o «Parcial» en la lista.</li>
+                </ol>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«✓ Pago importado con éxito en la contabilidad.»</span> — el desembolso fue creado.</li>
+                    <li><span class="msg">«No se encontró ningún pago Stripe para esta factura.»</span> — no existe ningún intento de pago en Stripe para esta factura.</li>
+                    <li><span class="msg">«Este proveedor no tiene cuenta Stripe Connect configurada. Ninguna sesión que sincronizar.»</span> — nada que recuperar: el proveedor nunca pudo recibir un pago Stripe.</li>
+                    <li><span class="msg">«Error Stripe: …»</span> — Stripe devolvió un error; lea el detalle y vuelva a intentarlo con <kbd>Verificar de nuevo</kbd>.</li>
+                    <li><span class="msg">«Imposible encontrar la cuenta Stripe del proveedor (…). Recargue la página.»</span> — recargue la ventana.</li>
+                    <li><span class="msg">«Sesión Stripe no encontrada: …»</span> — el intento ya no existe en Stripe.</li>
+                    <li><span class="msg">«Imposible determinar el monto de la factura para esta sesión.»</span> — el intento Stripe no puede vincularse al monto de la factura; registre el pago por desembolso manual.</li>
+                    <li><span class="msg">«Error durante la importación: …»</span> — la creación del desembolso falló; anote el detalle y vuelva a intentarlo.</li>
+                </ul>
+                <div class="astuce" data-titre="Consejo">La importación nunca crea duplicados: puede hacer clic en <kbd>Verificar de nuevo</kbd> sin riesgo para comprobar que todo esté «✓ Registrado en BD».</div>
+            </section>
+
+            <section id="es-inscripcion-stripe">
+                <h2>Inscripción Stripe Connect del proveedor</h2>
+                <p>La pantalla «Configuración de pagos» («Permitir a este proveedor recibir pagos a través de 60Sec-AI») se abre desde la lista de proveedores (tarjeta «Configurar pagos Stripe Connect» o insignia Stripe) o desde la ventana de pago («Configurar este proveedor →»). Muestra el nombre y el correo del proveedor, o «Correo no indicado en la ficha» si la ficha no tiene ninguno.</p>
+                <h3>Estados y botones</h3>
+                <ul>
+                    <li><strong>«⚠ Pagos no configurados»</strong> — dos maneras de inscribir al proveedor:
+                        <ul>
+                            <li><kbd>🖥️ Configurar ahora →</kbd>: usted mismo captura la información del proveedor en Stripe (NEQ, datos bancarios, etc.).</li>
+                            <li><kbd>✉️ Enviar una invitación por correo</kbd> («Recomendado en B2B»): campo «Correo del proveedor», luego botón <kbd>Enviar la invitación por correo ✉️</kbd>. Confirmación: «✓ Invitación enviada — Se envió un correo a …». El proveedor completa él mismo su inscripción.</li>
+                        </ul>
+                    </li>
+                    <li><strong>«⏳ Inscripción en curso»</strong> o <strong>«⚠ Acción requerida»</strong> (con «Documentos requeridos: …»): botones <kbd>Reanudar la inscripción →</kbd> y <kbd>Reenviar la invitación ✉️</kbd>.</li>
+                    <li><strong>«✓ Cuenta activa»</strong>: identificador de la cuenta y la mención «Este proveedor puede recibir pagos». La insignia de la lista de proveedores se vuelve verde.</li>
+                </ul>
+                <p>Para inscribir a un proveedor por invitación:</p>
+                <ol>
+                    <li>Verifique que el correo de facturación esté indicado en la ficha del proveedor.</li>
+                    <li>En <span class="chemin">Compras › Proveedores</span>, haga clic en «Configurar pagos Stripe Connect».</li>
+                    <li>Elija <kbd>✉️ Enviar una invitación por correo</kbd>, revise la dirección y haga clic en <kbd>Enviar la invitación por correo ✉️</kbd>.</li>
+                    <li>Siga el estado; si pasa a «⚠ Acción requerida», pida al proveedor los documentos indicados.</li>
+                </ol>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Capture un correo válido para el proveedor.»</span> — la dirección está vacía o mal formada.</li>
+                    <li><span class="msg">«Ningún correo disponible para este proveedor.»</span> — agregue un correo en la dirección de facturación de la ficha, o captúrelo en el campo «Correo del proveedor».</li>
+                    <li><span class="msg">«Error al enviar la invitación: …»</span> — el envío falló; lea el detalle y haga clic en <kbd>Reenviar la invitación ✉️</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">El enlace de invitación caduca después de unos minutos. Si el proveedor no lo abre de inmediato, haga clic en <kbd>Reenviar la invitación ✉️</kbd> para generar uno nuevo.</div>
+            </section>
+
+            <section id="es-desembolso">
+                <h2>Pago manual (Desembolso)</h2>
+                <p>La ventana «Desembolso» (también llamada «Pago a proveedor») registra un pago hecho fuera de Stripe: cheque, transferencia, efectivo, tarjeta u otro. Se abre desde la lista de facturas con <kbd>Desembolso</kbd> y lista todas las facturas abiertas del proveedor, para repartir un mismo pago entre varias facturas.</p>
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Proveedor</td><td>Sí</td><td>Selector «Buscar un proveedor…»; la elección carga sus facturas abiertas.</td></tr>
+                        <tr><td>Fecha de la operación</td><td>No</td><td>Hoy por defecto.</td></tr>
+                        <tr><td>Tipo de pago</td><td>No</td><td>Cheque (por defecto), Transferencia, Efectivo, Tarjeta, Otro.</td></tr>
+                        <tr><td>Referencia (N.º de cheque, etc.)</td><td>No</td><td>Número de cheque o referencia de la transferencia.</td></tr>
+                        <tr><td>Contabilizado</td><td>—</td><td>Casilla: contabiliza el pago al guardar.</td></tr>
+                        <tr><td>Cuenta bancaria</td><td>Sí</td><td>«Seleccionar una cuenta bancaria»: cuenta de la que sale el dinero.</td></tr>
+                        <tr><td>Monto total pagado</td><td>No</td><td>Monto global del pago, a repartir entre las facturas.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Cuadrícula «Facturas abiertas a pagar»</h3>
+                <p>Las facturas se ordenan de la más antigua a la más reciente.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>N.º factura</td><td>Número de la factura.</td></tr>
+                        <tr><td>Fecha</td><td>Fecha de la factura.</td></tr>
+                        <tr><td>Total</td><td>Total de la factura.</td></tr>
+                        <tr><td>Ya recibido</td><td>Monto ya pagado (la etiqueta dice «recibido» aun para un proveedor).</td></tr>
+                        <tr><td>Saldo</td><td>Monto aún adeudado.</td></tr>
+                        <tr><td>A imputar</td><td>Parte del pago asignada a esta factura (modificable).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>+</kbd> «Imputar el saldo completo» (por fila): pone el saldo de la factura en «A imputar».</li>
+                    <li><kbd>Imputar automáticamente</kbd>: reparte el «Monto total pagado» entre las facturas, empezando por la más antigua.</li>
+                    <li><kbd>Guardar el pago</kbd>: registra el pago en todas las facturas imputadas, regenera los PDF y cierra la ventana.</li>
+                </ul>
+                <p>Pie de la cuadrícula: «Total adeudado» (de las facturas seleccionadas), «Total imputado» y «Diferencia» (pagado − imputado), coloreada según sea nula o no.</p>
+                <p>Para registrar un cheque que cubre varias facturas:</p>
+                <ol>
+                    <li>Elija el proveedor; aparecen sus facturas abiertas.</li>
+                    <li>Capture la fecha, el tipo «Cheque», el número de cheque como referencia y la cuenta bancaria.</li>
+                    <li>Capture el «Monto total pagado» y haga clic en <kbd>Imputar automáticamente</kbd>.</li>
+                    <li>Verifique que la «Diferencia» sea nula; ajuste «A imputar» si hace falta.</li>
+                    <li>Marque «Contabilizado» si el pago es definitivo y haga clic en <kbd>Guardar el pago</kbd>.</li>
+                </ol>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Los controles se ejecutan en este orden: proveedor, cuenta bancaria, al menos un monto a imputar, ningún monto imputado superior al saldo.</li>
+                    <li>Todas las facturas se guardan juntas, o ninguna: en caso de error, no se escribe nada.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«Capture primero el monto total recibido.»</span> — hizo clic en <kbd>Imputar automáticamente</kbd> con un «Monto total pagado» vacío.</li>
+                    <li><span class="msg">«Seleccione un proveedor.»</span> — ningún proveedor elegido.</li>
+                    <li><span class="msg">«Seleccione una cuenta bancaria.»</span> — la cuenta bancaria es obligatoria.</li>
+                    <li><span class="msg">«Ningún monto a imputar. Capture al menos un monto en la columna «A imputar».»</span> — la columna está vacía en todas las filas.</li>
+                    <li><span class="msg">«El monto a imputar en la factura {n} supera el saldo.»</span> — reduzca el monto de esa fila.</li>
+                    <li><span class="msg">«Error al guardar: …»</span> — no se guardó nada; lea el detalle y vuelva a intentarlo.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Una «Diferencia» no nula no impide el guardado: si imputa menos que el monto pagado, la diferencia no se asigna a ninguna factura. Busque siempre una diferencia de 0,00 $.</div>
+                <div class="note" data-titre="Conviene saber">La columna se llama «Ya recibido» aunque se trate de un pago a un proveedor: léala como «ya pagado».</div>
+            </section>
+
+            <section id="es-recibos">
+                <h2>Recibos y lectura por IA</h2>
+                <p>La pantalla <span class="chemin">Compras › Recibos</span> transforma recibos o facturas recibidos como archivos (foto JPEG, PDF o texto de correo) en datos contables: la IA lee el documento y luego 60Sec-AI crea el comerciante (proveedor) y el documento de compra.</p>
+                <h3>Filtros y búsqueda</h3>
+                <ul>
+                    <li>Campo «Buscar (proveedor, archivo, estado…)» con la lupa, y <kbd>Borrar</kbd>.</li>
+                </ul>
+                <h3>Columnas y botones</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Archivo</td><td>Enlaces al archivo original y a su versión optimizada.</td></tr>
+                        <tr><td>Proveedor</td><td>Comerciante reconocido.</td></tr>
+                        <tr><td>Optimize and AI</td><td>Botón <kbd>Process AI</kbd>, activo cuando el análisis es posible.</td></tr>
+                        <tr><td>Ver JSON</td><td>Visible una vez hecho el análisis; abre «🤖 Resultado Análisis AI (JSON)» para revisar los datos extraídos.</td></tr>
+                        <tr><td>Process to Database</td><td>Botón <kbd>Process JSON</kbd>: crea el comerciante (proveedor) y el documento a partir de los datos extraídos.</td></tr>
+                        <tr><td>Estado</td><td>Avance del tratamiento del recibo.</td></tr>
+                        <tr><td>Acción</td><td>Papelera: elimina el recibo <strong>sin confirmación</strong>.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Desarrollo de la lectura por IA</h3>
+                <ol>
+                    <li><kbd>Process AI</kbd>: una foto JPEG se optimiza primero (1024 px de ancho, escala de grises, contraste reforzado) y luego se lee; un PDF se lee directamente; un texto de correo se analiza como texto.</li>
+                    <li>La IA extrae: el tipo de recibo y su número; el comerciante (nombre, correo, N.º TPS, N.º TVQ, sitio web, dirección, ciudad, provincia, país, código postal, teléfono); la fecha y la moneda; el subtotal, los impuestos, el total y la propina; el método de pago y los 4 últimos dígitos de la tarjeta; los artículos (descripción, cantidad, precio unitario, monto); notas de confianza sobre la lectura.</li>
+                    <li>Revise el resultado con <kbd>Ver JSON</kbd> y luego haga clic en <kbd>Process JSON</kbd> para crear el proveedor y el documento.</li>
+                </ol>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">«No se encontró ningún recibo.»</span> — la compañía aún no ha recibido ningún recibo.</li>
+                </ul>
+                <h3>Consejos y trampas</h3>
+                <div class="piege" data-titre="Trampa">Cada clic en <kbd>Process AI</kbd> desencadena una nueva llamada de pago a la IA. No haga clic varias veces en <kbd>Process AI</kbd> ni en <kbd>Process JSON</kbd> para el mismo recibo: se arriesga a comisiones y duplicados.</div>
+                <div class="attention" data-titre="Atención">Las imágenes PNG (y cualquier formato distinto de JPEG, PDF y texto) no se procesan, y ningún mensaje lo indica. Convierta las capturas de pantalla a JPEG o PDF antes de enviarlas.</div>
+                <div class="note" data-titre="Conviene saber">La búsqueda de esta pantalla no filtra la lista: todos los recibos siguen mostrándose. Los recibos también llegan por la aplicación móvil (foto) y por correo (adjuntos enviados al buzón de la compañía).</div>
+                <div class="piege" data-titre="Trampa">La papelera elimina el recibo de inmediato, sin confirmación.</div>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿Por qué no aparece el botón «Pagar con Stripe» en mi factura?</summary><p>Solo es visible si la factura está contabilizada y no pagada. Abra la factura, marque «Contabilizado» y guarde; el botón aparecerá en la lista.</p></details>
+                <details><summary>El proveedor fue pagado en Stripe, pero la factura sigue «Abierta». ¿Qué hago?</summary><p>El registro depende del aviso automático de Stripe. Haga clic en <kbd>Sincronizar los pagos Stripe</kbd> en la factura y luego en <kbd>Importar en 60Sec-AI →</kbd> en el pago marcado «⚠ Falta en BD».</p></details>
+                <details><summary>¿Quién paga las comisiones de Stripe?</summary><p>Usted. Las comisiones (2,9 % + 0,30 $ con tarjeta, 1 % con tope de 12 $ en ACSS) se agregan al monto: el proveedor recibe exactamente lo que usted capturó.</p></details>
+                <details><summary>¿Puedo pagar una parte de una factura por Stripe?</summary><p>Sí. Modifique el «Monto a pagar ahora» (mínimo 0,01 $, máximo el saldo pendiente). La factura pasará a «Parcial».</p></details>
+                <details><summary>¿Cómo registro un cheque que cubre varias facturas?</summary><p>Use <kbd>Desembolso</kbd>: capture el «Monto total pagado», haga clic en <kbd>Imputar automáticamente</kbd>, verifique que la «Diferencia» sea nula y guarde.</p></details>
+                <details><summary>¿Cómo anulo la contabilización de una factura?</summary><p>No es posible: una factura contabilizada es definitiva (insignia «Contabilizado 🔒»). Verifique con cuidado las líneas y los impuestos antes de marcar la casilla.</p></details>
+                <details><summary>Mis direcciones de proveedor desaparecieron después de agregarlas. ¿Por qué?</summary><p>Las direcciones solo se guardan al hacer clic en <kbd>Guardar</kbd> de la ficha. Cerrar con «← Volver a la lista» o con la cruz pierde las modificaciones de direcciones.</p></details>
+                <details><summary>El proveedor no recibió la invitación Stripe, o el enlace ya no funciona.</summary><p>El enlace caduca después de unos minutos. Abra la inscripción Stripe del proveedor y haga clic en <kbd>Reenviar la invitación ✉️</kbd>. Verifique también que el correo de facturación sea correcto.</p></details>
+                <details><summary>¿Por qué el número en «Pagar al proveedor» no coincide con el de la factura?</summary><p>La ventana de pago y la pantalla «Pago exitoso» muestran el número interno de 60Sec-AI. La columna «#» de la lista muestra el número de factura del proveedor.</p></details>
+                <details><summary>Mi recibo PNG nunca se procesa.</summary><p>Solo se leen los archivos JPEG, PDF y los textos de correo, y ningún mensaje lo advierte. Convierta el PNG a JPEG o PDF.</p></details>
+                <details><summary>¿Cómo agrego un adjunto a un proveedor?</summary><p>No directamente en la ficha: los adjuntos llegan por las importaciones (Importaciones ▸ Archivos adjuntos ▸ Vincular a las fichas). Ver <a href="importation.html">Importación</a>.</p></details>
+                <details><summary>¿Cómo activo el pago automático de un proveedor?</summary><p>Durante un pago Stripe, marque «🤖 Autorizar el pago automático para [proveedor]» y fije el tope mensual. Después, el botón «Pago automático» aparece en sus facturas contabilizadas no pagadas.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>ACSS (PAD)</td><td>Débito bancario preautorizado canadiense, ofrecido por Stripe: comisión del 1 % (máximo 12 $), liquidación en 3 a 5 días hábiles.</td></tr>
+                        <tr><td>Borrador</td><td>Estado de una factura de proveedor aún modificable, no contabilizada.</td></tr>
+                        <tr><td>Contabilizado</td><td>Estado definitivo de una factura: está inscrita en la contabilidad y ya no puede modificarse ni eliminarse.</td></tr>
+                        <tr><td>Desembolso</td><td>Pago de una o varias facturas de proveedores, registrado a mano (cheque, transferencia, efectivo, tarjeta, otro) o importado desde Stripe.</td></tr>
+                        <tr><td>Imputar</td><td>Asignar una parte de un pago a una factura precisa.</td></tr>
+                        <tr><td>MIT</td><td>Transacción iniciada por el comerciante: débito automático con tarjeta, con preaviso de 24 h.</td></tr>
+                        <tr><td>Pago automático</td><td>Autorización dada para que un proveedor sea pagado automáticamente al vencimiento de sus facturas, dentro de un tope mensual.</td></tr>
+                        <tr><td>Saldo pendiente</td><td>Monto de una factura que aún no se ha pagado.</td></tr>
+                        <tr><td>Estado de pago</td><td>Abierta (nada pagado), Parcial (pagada en parte) o Pagada.</td></tr>
+                        <tr><td>Stripe Connect</td><td>Servicio de Stripe que permite a un proveedor abrir una cuenta para recibir sus pagos a través de 60Sec-AI.</td></tr>
+                        <tr><td>Sincronización Stripe</td><td>Verificación manual de los pagos en Stripe para importar los que faltan en la contabilidad.</td></tr>
+                        <tr><td>TPS / TVQ</td><td>Impuesto sobre productos y servicios (5 %) e impuesto de venta de Quebec (9,975 %), calculados sobre las líneas gravables.</td></tr>
+                        <tr><td>Webhook</td><td>Aviso automático enviado por Stripe a 60Sec-AI para confirmar un pago.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

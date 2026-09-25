@@ -1,0 +1,1519 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Importation des données — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Importation des données</h1>
+            <p class="intro">Reprendre dans 60Sec-AI une comptabilité tenue ailleurs (QuickBooks, Acomba ou un autre logiciel) : plan comptable, clients, fournisseurs, produits, balance de vérification et factures. Tout passe d’abord par une zone de préparation ; rien n’entre en comptabilité sans un geste explicite de votre part. Menu <span class="chemin">Importation</span>.</p>
+
+            <section id="fr-demarche">
+                <h2>La démarche globale de reprise</h2>
+                <p>Le point d’entrée unique est l’écran <span class="chemin">Importation › Importation des données</span>. Tous les écrans d’import s’ouvrent depuis cette page par leur bouton <kbd>Ouvrir →</kbd>.</p>
+                <h3>Principe de base</h3>
+                <p>Ce qui entre va d’abord <strong>en préparation</strong>. Rien ne touche la comptabilité tant que vous ne cliquez pas sur un bouton du type <kbd>Créer…</kbd> ou <kbd>Appliquer…</kbd>. Vous pouvez donc lire, relire, corriger et abandonner sans conséquence.</p>
+                <h3>Ordre recommandé</h3>
+                <table>
+                    <thead><tr><th>Étape</th><th>Ce qu’on fait</th><th>Ce que ça produit</th></tr></thead>
+                    <tbody>
+                        <tr><td>0. Préparer la compagnie</td><td>Fixer la date de bascule, les périodes, les comptes par défaut et les statuts de taxes TAXABLE / EXEMPT.</td><td>Prérequis. La date de bascule se fixe ici et ne bouge plus.</td></tr>
+                        <tr><td>1. Relier QuickBooks</td><td>« Importer depuis QuickBooks », une seule fois par compagnie.</td><td>Accès en lecture à la comptabilité source.</td></tr>
+                        <tr><td>2. Plan comptable, en 3 écrans</td><td>Importer, puis Correspondance, puis Créer les comptes au plan.</td><td>Comptes créés au plan : <strong>la première écriture réelle</strong>.</td></tr>
+                        <tr><td>3. Tiers et produits</td><td>Clients, Fournisseurs, Produits et services.</td><td>Fiches créées. Une fiche existante n’est jamais recréée.</td></tr>
+                        <tr><td>4. Balance de vérification</td><td>Arrêtée à la date de bascule.</td><td>Contrôle d’équilibre et comparaison avec le plan. L’écriture d’ouverture n’est pas créée automatiquement.</td></tr>
+                        <tr><td>5. Factures</td><td>« Factures clients et fournisseurs ».</td><td>Documents créés <strong>en brouillon</strong>, sans rien au grand livre.</td></tr>
+                        <tr><td>6. Écrans de contrôle</td><td>Balance âgée, grand livre, taxes, banques, etc.</td><td>Lecture seule.</td></tr>
+                        <tr><td>7. Contrôle final</td><td>Balance QuickBooks tirée à aujourd’hui, comparée à celle de 60Sec-AI.</td><td>Manuel.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles d’ordre</h3>
+                <ul>
+                    <li>Le plan comptable passe avant tout. Une ligne de facture qui vise un compte non lié affiche « en préparation, pas encore appliqué ».</li>
+                    <li>Les tiers et les produits passent avant les factures. Une facture reconnaît son tiers <strong>seulement parmi les tiers importés puis créés par les écrans d’import</strong>, jamais parmi les fiches saisies à la main.</li>
+                    <li>Les factures passent avant les règlements, sinon le règlement affiche « document absent ».</li>
+                    <li>Tous les rapports de la source doivent être tirés à la <strong>même date de bascule</strong>.</li>
+                </ul>
+                <div class="attention" data-titre="Attention">La date de bascule est la veille du premier jour tenu dans 60Sec-AI. Fixez-la avant de tirer le moindre rapport et n’en changez plus : une balance arrêtée à une autre date ne se compare à rien.</div>
+            </section>
+
+            <section id="fr-hub">
+                <h2>Hub « Importation des données »</h2>
+                <p>Écran d’accueil de la reprise (<span class="chemin">Importation › Importation des données</span>). Il recense tous les postes d’import, leur donne une note sur 10 et ouvre chaque écran.</p>
+                <h3>Compteurs</h3>
+                <table>
+                    <thead><tr><th>Compteur</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Postes recensés</td><td>Nombre total d’écrans d’import.</td></tr>
+                        <tr><td>Utilisables</td><td>Écrans notés 7 ou plus.</td></tr>
+                        <tr><td>Partiels</td><td>Écrans notés de 2 à 6.</td></tr>
+                        <tr><td>À faire</td><td>Écrans notés 1 ou moins.</td></tr>
+                    </tbody>
+                </table>
+                <p>La note repose sur quatre critères : lire le fichier, le contrôler, le mettre en préparation, l’appliquer à la comptabilité.</p>
+                <h3>Sections et cartes</h3>
+                <ul>
+                    <li>« Lecture directe » : QuickBooks en direct et les écrans « Valider… ».</li>
+                    <li>« Reprise comptable » : plan comptable et balance de vérification.</li>
+                    <li>« Autres importations » : Clients, Fournisseurs, Produits.</li>
+                </ul>
+                <p>Chaque carte affiche une icône, le titre, la source, la note sur 10 avec une jauge, la destination (« → … »), « Ce qui fonctionne », « Ce qui manque » et le bouton <kbd>Ouvrir →</kbd>.</p>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Lire le plan</kbd> : ouvre le plan de reprise dans une fenêtre (<kbd>Fermer ✕</kbd> ou touche Échap). Le lien « ouvrir dans un onglet » l’affiche en pleine page.</li>
+                    <li><kbd>Vider les tables de préparation</kbd> : efface tout ce qui attend une validation pour cette compagnie seulement. Confirmation : « Vider toutes les tables de préparation de [compagnie] ? Tout ce qui attend une validation sera effacé et devra être réimporté. Ce qui est déjà passé en comptabilité n’est pas touché. »</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Préparation vidée : N ligne(s) — [table] n, … »</span> — le vidage a réussi ; le détail par zone est donné.</li>
+                    <li><span class="msg">« La préparation était déjà vide. »</span> — il n’y avait rien à effacer.</li>
+                    <li><span class="msg">« Le vidage a échoué : … »</span> — rien n’a été effacé ; relisez le motif et réessayez.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">« Vider les tables de préparation » efface aussi les <strong>correspondances de comptes</strong> et la balance importée, y compris les correspondances des comptes déjà créés à l’étape 3. Évitez ce bouton une fois le plan appliqué.</div>
+            </section>
+
+            <section id="fr-quickbooks">
+                <h2>Importer depuis QuickBooks</h2>
+                <p>Lecture directe de la comptabilité QuickBooks, sans fichier à exporter (<span class="chemin">Importation › Importer depuis QuickBooks</span>). L’écran se lit en trois blocs.</p>
+                <h3>1. La liaison</h3>
+                <ul>
+                    <li>Pastille verte : reliée. Orange : non reliée. Rouge : non configurée sur le serveur ou injoignable.</li>
+                    <li><kbd>Relier QuickBooks</kbd> : vous envoie vers la page de liaison où vous saisissez vos identifiants QuickBooks. 60Sec-AI ne les voit jamais.</li>
+                    <li><kbd>Vérifier la liaison</kbd> : relit l’état.</li>
+                    <li>Tant que la liaison n’est pas faite, <kbd>Importer</kbd> reste désactivé.</li>
+                </ul>
+                <h3>2. Ce qu’on rapatrie</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ressources</td><td>Au moins une</td><td>Groupées en Structure, Tiers et articles, Ventes, Achats, Grand livre, Contrôle ; toutes cochées d’avance. Liens <kbd>Tout décocher</kbd> · <kbd>Tout cocher</kbd> et compteur « n sur N choisies ».</td></tr>
+                        <tr><td>Balance de vérification et grand livre arrêtés au</td><td>Oui pour les ressources datées</td><td>La date de bascule : « la veille du premier jour tenu ici ».</td></tr>
+                        <tr><td>Taxes déclarées par</td><td>Non</td><td>Trimestre (défaut), mois ou année.</td></tr>
+                    </tbody>
+                </table>
+                <p><kbd>Importer dans la préparation</kbd> lance l’extraction. « Une extraction volumineuse peut prendre quelques minutes. »</p>
+                <h3>3. Ce qui est arrivé</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ressource</td><td>Nom de la ressource demandée.</td></tr>
+                        <tr><td>Enregistrements</td><td>Nombre lu.</td></tr>
+                        <tr><td>Ce qui en a été fait</td><td>« versé au plan comptable : N compte(s), M à corriger », « déposé en préparation », ou l’erreur en rouge.</td></tr>
+                    </tbody>
+                </table>
+                <p>Une ressource en échec n’arrête pas les autres.</p>
+                <h3>Les extractions précédentes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Quand</td><td>Date et heure.</td></tr>
+                        <tr><td>Source</td><td>Logiciel relié.</td></tr>
+                        <tr><td>Ressources</td><td>Ressources demandées.</td></tr>
+                        <tr><td>Enregistrements</td><td>Total lu.</td></tr>
+                        <tr><td>État</td><td>TERMINE ou PARTIEL (une ressource au moins a échoué).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Choisissez au moins une ressource à rapatrier. »</span> — cochez une ressource.</li>
+                    <li><span class="msg">« Indiquez la date d’arrêt : cette lecture porte sur une période. »</span> — une ressource datée est cochée sans date de bascule.</li>
+                    <li><span class="msg">« Apideck n’est pas configuré sur ce serveur… »</span> — la lecture directe n’est pas disponible ; passez par les fichiers CSV.</li>
+                    <li><span class="msg">« Cette compagnie n’a pas encore relié sa comptabilité. »</span> — cliquez <kbd>Relier QuickBooks</kbd>.</li>
+                    <li><span class="msg">« N enregistrement(s) déposés en préparation, sur M ressource(s) demandée(s). … Rien n’a été écrit en comptabilité… »</span> — l’extraction est terminée ; passez aux écrans de préparation.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">La liaison ne se fait qu’une fois par compagnie. Les extractions suivantes réutilisent la même liaison.</div>
+            </section>
+
+            <section id="fr-bouton-quickbooks">
+                <h2>Le bouton QuickBooks sur chaque écran</h2>
+                <p>Chaque écran d’import porte un encadré « QuickBooks, en direct — sans fichier à exporter » avec le bouton <kbd>⬇ Importer depuis QuickBooks</kbd>. Il ne rapatrie <strong>que</strong> ce que l’écran sait montrer (par exemple, seulement les clients sur l’écran des clients).</p>
+                <h3>Champs</h3>
+                <ul>
+                    <li>« Arrêté au » : affiché pour les ressources datées (balance, grand livre).</li>
+                    <li>« Taxes par trimestre / mois / année » : affiché pour le rapport de taxes.</li>
+                </ul>
+                <h3>Déroulement</h3>
+                <ol>
+                    <li>Cliquez <kbd>⬇ Importer depuis QuickBooks</kbd>.</li>
+                    <li>L’encadré affiche « ⏳ Extraction en cours… ».</li>
+                    <li>L’écran se recharge avec les données en préparation. Un rafraîchissement du navigateur ne relance pas l’extraction.</li>
+                </ol>
+                <p>Selon l’état de la liaison, l’encadré propose « Gérer la liaison », « Vérifier la liaison » ou « Relier QuickBooks ».</p>
+                <div class="note" data-titre="Bon à savoir">La date saisie est retenue pour la session et commune à tous les écrans. L’état de la liaison est gardé 10 minutes : après une liaison toute fraîche, cliquez « Vérifier la liaison » si la pastille n’a pas encore changé.</div>
+            </section>
+
+            <section id="fr-plan-etape1">
+                <h2>Étape 1 : Importer le plan comptable</h2>
+                <p>Charge le plan comptable de l’ancien logiciel en préparation (<span class="chemin">Importation › Importer le plan comptable</span>). Un fil des 3 étapes, cliquable, et un bloc « État de cet écran » figurent en haut de page.</p>
+                <h3>Le fichier à importer (bloc repliable)</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Logiciel d’origine</td><td>Oui</td><td>QuickBooks, Acomba ou Autre logiciel. Règle d’avance le séparateur et l’encodage.</td></tr>
+                        <tr><td>Séparateur</td><td>Oui</td><td>Point-virgule, Virgule ou Tabulation.</td></tr>
+                        <tr><td>Encodage</td><td>Oui</td><td>UTF-8, Windows-1252 (ANSI) ou ISO-8859-1. « Des accents en charabia = mauvais encodage ».</td></tr>
+                        <tr><td>Fichier</td><td>Oui</td><td>Zone de dépôt ; .csv ou .txt seulement, 10 Mo au maximum.</td></tr>
+                        <tr><td>La première ligne contient les noms de colonnes</td><td>Non</td><td>Cochée par défaut.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li>Aide « Comment sortir ce fichier de QuickBooks » : rapport « Liste des comptes » (« Account List », ou « Account Listing » sur Desktop), étapes et colonnes attendues.</li>
+                    <li><kbd>⬇ Télécharger un modèle CSV</kbd> : fichier modèle avec les colonnes attendues.</li>
+                    <li><kbd>Voir un aperçu</kbd> : lit le fichier sans rien enregistrer.</li>
+                    <li><kbd>Charger en préparation</kbd> : dépose les comptes en préparation. Un nouveau chargement <strong>remplace</strong> le plan en préparation.</li>
+                    <li><kbd>Passer à la correspondance →</kbd> : ouvre l’étape 2.</li>
+                    <li><kbd>🗑 Abandonner la préparation</kbd> : confirmation « Abandonner le plan comptable en préparation ? Les correspondances déjà décidées pour ce plan seront effacées aussi. » Refusé si des comptes ont déjà été appliqués.</li>
+                </ul>
+                <h3>Aperçu</h3>
+                <p>Tableau « Colonnes reconnues » (Attendu / Colonne du fichier, « non trouvée » en rouge) puis les 15 premières lignes.</p>
+                <h3>Ce qui a été lu</h3>
+                <p>Compteurs Lignes lues, Comptes retenus, À regarder, et le rappel « Ces comptes sont en préparation… ».</p>
+                <h3>Ce qui est en préparation</h3>
+                <p>Filtre « Afficher » : Tout, Nouveaux comptes, Déjà au plan, Doublons du fichier, Lignes invalides, Ajoutés après l’ouverture, Par défaut dans QuickBooks.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ligne</td><td>Numéro de ligne dans le fichier.</td></tr>
+                        <tr><td>Compte</td><td>Numéro du compte source.</td></tr>
+                        <tr><td>Nom</td><td>Nom du compte source.</td></tr>
+                        <tr><td>Nature</td><td>ACTIF, PASSIF, CAPITAUX, PRODUIT ou CHARGE.</td></tr>
+                        <tr><td>Solde / Sens</td><td>Solde lu et sens débit ou crédit.</td></tr>
+                        <tr><td>Verdict</td><td>Nouveau, Déjà au plan, Doublon ou Invalide.</td></tr>
+                        <tr><td>Détail</td><td>Explication du verdict ou anomalie.</td></tr>
+                        <tr><td>Type d’origine / Sous-type</td><td>Type et sous-type de l’ancien logiciel.</td></tr>
+                        <tr><td>Origine</td><td>« Défaut QuickBooks » ou « Ajouté le aaaa-mm-jj » (lecture directe seulement).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Choisissez d’abord un fichier. »</span> — déposez un fichier avant de cliquer.</li>
+                    <li><span class="msg">« Seuls les fichiers .csv et .txt sont acceptés. Depuis Excel : Fichier ▸ Enregistrer sous ▸ CSV. »</span> — convertissez votre .xlsx.</li>
+                    <li><span class="msg">« Fichier trop volumineux : 10 Mo au maximum. »</span> — découpez le fichier.</li>
+                    <li><span class="msg">« Le fichier ne contient aucune ligne de données. »</span> — vérifiez l’export.</li>
+                    <li><span class="msg">« Ni le numéro ni le nom des comptes n’ont été trouvés — il faut au moins l’un des deux… »</span> — les en-têtes ne sont pas reconnus ; vérifiez le séparateur et l’aperçu.</li>
+                    <li><span class="msg">« N compte(s) en préparation. Rien n’a encore été écrit dans votre plan comptable. »</span> — chargement réussi.</li>
+                    <li><span class="msg">« N compte(s) en préparation, M ligne(s) à regarder de près. »</span> — des lignes portent un verdict Doublon ou Invalide.</li>
+                    <li><span class="msg">« Le plan comptable en préparation a été abandonné, et ses correspondances avec lui. »</span> — l’abandon a réussi.</li>
+                    <li><span class="msg">« Cet import a été appliqué au plan comptable : il ne peut plus être supprimé. »</span> — l’abandon est refusé après l’étape 3.</li>
+                    <li><span class="msg">« Ligne sans numéro ni nom de compte : rien ne permet de l’identifier. »</span> — ligne Invalide.</li>
+                    <li><span class="msg">« Même clé (« X ») que la ligne n du fichier. »</span> — doublon du fichier.</li>
+                    <li><span class="msg">« Déjà au plan comptable : … »</span> — le compte existe déjà chez vous.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Si l’export contient « Detail Type » en plus de « Type », la colonne la plus à gauche est retenue. Vérifiez avec l’aperçu.</div>
+                <div class="astuce" data-titre="Astuce">Accents en charabia (Ã©) ? Réessayez avec l’encodage Windows-1252.</div>
+            </section>
+
+            <section id="fr-plan-etape2">
+                <h2>Étape 2 : Correspondance des comptes</h2>
+                <p>Décide, compte par compte, ce que devient chaque compte de l’ancien logiciel : le lier à un compte existant, le créer, ou l’ignorer (<span class="chemin">Importation › Correspondance des comptes</span>). Rien n’est écrit en comptabilité : les décisions sont conservées à part.</p>
+                <h3>Barre du haut</h3>
+                <ul>
+                    <li>Filtre : Tout, À décider seulement, Déjà décidés, Ajoutés après l’ouverture, Par défaut dans QuickBooks.</li>
+                    <li><kbd>✨ Proposer avec l’IA</kbd> : confirmation « Soumettre les comptes encore à décider et votre plan comptable à l’IA ? Elle ne fera que proposer : rien ne sera décidé à votre place. »</li>
+                    <li><kbd>Accepter les correspondances par numéro</kbd> : « Retenir toutes les correspondances où le numéro de compte concorde ? » Lie toutes les propositions reconnues par numéro <strong>ou nom</strong>, avec la note « Proposition acceptée : même numéro/nom de compte. »</li>
+                </ul>
+                <h3>Avancement</h3>
+                <p>« n sur N (x %) » et compteurs À décider, Liés, À créer, Ignorés, Comptes au plan. Quand tout est décidé : « Tous les comptes sont décidés. La correspondance est prête à être relue et signée par votre comptable… »</p>
+                <h3>Colonnes</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Rang.</td></tr>
+                        <tr><td>Compte de l’ancien logiciel</td><td>Numéro (ou « sans numéro »), nom, et fiche source : nature, type et sous-type QuickBooks, solde source, origine (« ajouté le … » ou « par défaut dans QuickBooks »), « sous-compte de « … » », description, anomalie.</td></tr>
+                        <tr><td>Solde</td><td>Solde source.</td></tr>
+                        <tr><td>Ce que nous proposons</td><td>Pastille « même numéro », « même nom », « IA » (avec % de confiance et raison), « aucune proposition » ou « créé au plan ». Si l’IA diverge : « ✨ l’IA suggère plutôt … ».</td></tr>
+                        <tr><td>Action</td><td>« — à décider », Lier, Créer ou Ignorer.</td></tr>
+                        <tr><td>Classe, Sous-classe, Compte chez vous</td><td>Trois listes en cascade (classe avec code, nom et plage de numéros). Un compte hors filtre reste affiché « (hors filtre) ».</td></tr>
+                        <tr><td>Note</td><td>500 caractères au maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Bas de page</h3>
+                <ul>
+                    <li>Rappel « Lier / Créer / Ignorer ».</li>
+                    <li><kbd>Enregistrer les correspondances</kbd> : conserve les décisions.</li>
+                    <li><kbd>Créer les comptes au plan →</kbd> : ouvre l’étape 3.</li>
+                </ul>
+                <h3>Règles</h3>
+                <ul>
+                    <li><strong>Lier</strong> rattache à un compte existant. <strong>Créer</strong> ajoute le compte à l’étape 3 (numéro source repris ; s’il est déjà pris, le champ est vidé et le numéro sera automatique). <strong>Ignorer</strong> écarte le compte. Remettre « — à décider » annule la décision.</li>
+                    <li><strong>Un seul compte source par compte cible</strong> (vérifié dans le navigateur, puis par la base).</li>
+                    <li>« Créer » ne peut pas reprendre un numéro que le plan connaît déjà, ni le même numéro deux fois.</li>
+                    <li>Les comptes créés sont verrouillés : « Créé ✓ » grisé, note en lecture seule.</li>
+                    <li>Proposition par IA : l’IA reçoit les comptes encore à décider (nom complet, nature, type, sous-type, origine, solde, description) et tout votre plan. Une réponse est écartée si le compte est inconnu ou la nature incompatible. Rien n’est décidé avant <kbd>Enregistrer</kbd>.</li>
+                    <li>Affichage limité à 1 000 lignes.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Rien à soumettre : tous les comptes sont déjà décidés ou reconnus par leur numéro. »</span> — l’IA n’a rien à proposer.</li>
+                    <li><span class="msg">« Votre plan comptable est vide : il n’y a rien à quoi rattacher ces comptes. »</span> — créez d’abord un plan.</li>
+                    <li><span class="msg">« N proposition(s) sur M compte(s) soumis. K réponse(s) écartée(s) … Coût estimé : x US$. Ce ne sont que des propositions… »</span> — relisez et enregistrez ce que vous retenez.</li>
+                    <li><span class="msg">« Les correspondances par numéro de compte ont été retenues. Ce qui reste demande une décision. »</span> — acceptation en lot terminée.</li>
+                    <li><span class="msg">« Correspondances enregistrées. Tous les comptes sont décidés. »</span> — passez à l’étape 3.</li>
+                    <li><span class="msg">« …N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… »</span> — un numéro automatique sera attribué.</li>
+                    <li><span class="msg">« Un compte chez vous ne reçoit qu’un seul compte de l’ancien logiciel. … Liez les autres ailleurs, ou créez-les. »</span> — deux comptes source visent le même compte cible.</li>
+                    <li><span class="msg">« « Créer » ne peut pas reprendre un numéro que votre plan connaît déjà. … »</span> — choisissez « Lier » ou videz le numéro.</li>
+                    <li><span class="msg">« « X » : le numéro N existe déjà dans votre plan (…). Pour le rattacher à ce compte, choisissez « Lier »… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Le compte N recevrait k comptes de l’ancien logiciel (…)… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Le compte N est déjà lié à « X »… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Le numéro N serait créé k fois… Un numéro ne se crée qu’une fois. »</span> — refus à l’enregistrement.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Le plan standard de 60Sec-AI existe déjà. Il faut <strong>lier</strong> les comptes QuickBooks aux comptes existants, pas tout créer. Sinon vous obtenez deux plans parallèles et des états financiers faux.</div>
+                <div class="piege" data-titre="Piège">Le fichier CSV et la lecture directe QuickBooks ne partagent pas leurs décisions. Changer de voie fait réapparaître les comptes « à décider ». Recharger un plan garde les décisions dont la clé est identique ; changer un nom dans QuickBooks change la clé.</div>
+            </section>
+
+            <section id="fr-plan-etape3">
+                <h2>Étape 3 : Créer les comptes au plan</h2>
+                <p>« C’est la première étape qui écrit dans votre comptabilité. » (<span class="chemin">Importation › Créer les comptes au plan</span>). Lien « ← revenir à la correspondance ».</p>
+                <h3>Compteurs</h3>
+                <p>À créer, Déjà créés, Liés, Ignorés, Encore à décider.</p>
+                <h3>Colonnes du tableau des comptes à créer</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Obligatoire</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>—</td><td>Rang.</td></tr>
+                        <tr><td>Compte de l’ancien logiciel</td><td>—</td><td>Numéro et nom source.</td></tr>
+                        <tr><td>Classe — où le ranger</td><td>Oui</td><td>« — choisir une classe — » puis les sous-classes compatibles avec la nature, avec leur plage de numéros.</td></tr>
+                        <tr><td>Numéro</td><td>Non</td><td>Pré-rempli avec le numéro source, ou « auto ». Doit être numérique, dans la plage de la classe et libre.</td></tr>
+                        <tr><td>Nom du compte</td><td>Oui</td><td>150 caractères au maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>Créer les comptes</kbd> : confirmation « Créer ces comptes dans votre plan comptable ? C’est une écriture réelle : les comptes existeront pour de bon. »</li>
+                </ul>
+                <p>Le tableau « Comptes créés » affiche Numéro, Nom et « Venait de ».</p>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Tout ou rien : la moindre erreur annule la création complète.</li>
+                    <li>Contrôles : classe choisie, nom non vide, numéro numérique dans la plage de la classe, libre, et pas demandé deux fois.</li>
+                    <li>Sans numéro : premier numéro libre de la plage (les dizaines sont privilégiées).</li>
+                    <li>Une ligne sans classe est laissée de côté ; relancez ensuite sans recréer ce qui l’est déjà.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« N compte(s) ne sont pas encore décidés à l’étape 2. Ils ne seront pas repris… »</span> — retournez à l’étape 2 si nécessaire.</li>
+                    <li><span class="msg">« Aucune classe n’a été choisie : il n’y a rien à créer. »</span> — choisissez une classe sur au moins une ligne.</li>
+                    <li><span class="msg">« N compte(s) créé(s) dans votre plan comptable. k ligne(s) laissée(s) de côté, faute de classe choisie. »</span> — création réussie.</li>
+                    <li><span class="msg">« Rien n’a été créé. »</span> — suivi du motif : « « X » : le numéro N est hors de la plage a-b de la classe C. » ; « … n’est pas un numéro. » ; « Le numéro N est déjà utilisé dans votre plan. » ; « … la plage de numéros de cette classe est pleine. »</li>
+                </ul>
+                <div class="astuce" data-titre="Astuce">Un numéro QuickBooks hors plage fait échouer l’étape entière. Videz le champ Numéro : un numéro automatique sera pris dans la plage de la classe.</div>
+            </section>
+
+            <section id="fr-tiers-produits">
+                <h2>Clients, Fournisseurs, Produits et services</h2>
+                <p>Un même écran, titré « Importer les clients », « Importer les fournisseurs » ou « Importer les produits et services » (<span class="chemin">Importation › Clients / Fournisseurs / Produits et services</span>), avec le bouton QuickBooks.</p>
+                <h3>Le fichier à importer</h3>
+                <ul>
+                    <li>« D’où viennent vos données ? » : logiciel, séparateur, encodage, marche à suivre et colonnes attendues.</li>
+                    <li>Zone de dépôt. Le fichier est gardé en session : « … est gardé depuis votre dernier dépôt : les boutons ci-dessous s’en servent. Déposez-en un autre pour le remplacer. »</li>
+                </ul>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>👁 Voir un aperçu</kbd> : en-tête trouvé, correspondance « Ce que nous cherchons / Colonne du fichier » (ou « absente »), 10 premières lignes.</li>
+                    <li><kbd>✨ Extraire avec l’IA</kbd> : lecture par l’IA d’un fichier mal structuré (150 000 caractères au maximum).</li>
+                    <li><kbd>📥 Lire le fichier</kbd> : lecture directe et dépôt en préparation.</li>
+                    <li><kbd>✅ Créer les N nouveaux …</kbd> : « Créer N nouveaux … dans l’application ? Ce qui existe déjà ne sera pas touché. »</li>
+                    <li><kbd>Voir vos … →</kbd> : ouvre la liste des fiches (<a href="ventes.html#fr-clients">Clients</a>, <a href="achats.html">Fournisseurs</a>, <a href="produits.html">Produits</a>).</li>
+                    <li><kbd>🗑 Abandonner ce fichier</kbd> : « … Ce qui a déjà été créé dans l’application reste en place. »</li>
+                </ul>
+                <h3>Ce qui a été lu</h3>
+                <p>Origine (« « fichier », déposé le … — lecture directe » ou « extrait par l’IA, coût estimé … US$ ») et pastilles : lignes, à créer, déjà dans l’application, doublon(s) du fichier, créé(s), écarté(s), en erreur.</p>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ligne</td><td>Numéro de ligne du fichier.</td></tr>
+                        <tr><td>Nom, Contact, Courriel, Téléphone, Adresse (et Livraison), Taxes</td><td>Tiers.</td></tr>
+                        <tr><td>Description, Prix, Taxable</td><td>Produits et services.</td></tr>
+                        <tr><td>Ce qu’il en adviendra</td><td>Verdict : À créer, Existe déjà, Doublon du fichier, Créé, Écarté, Erreur.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Colonnes attendues dans le fichier</h3>
+                <table>
+                    <thead><tr><th>Colonne</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nom</td><td>Oui</td><td>Clé du tiers ou du produit.</td></tr>
+                        <tr><td>Courriel, Téléphone, Contact, Adresse, Adresse (suite), Ville, Province, Code postal, No TPS, No TVQ</td><td>Non</td><td>Tiers.</td></tr>
+                        <tr><td>Solde</td><td>Non</td><td>Tiers ; sert au contrôle seulement.</td></tr>
+                        <tr><td>Description, Prix, Taxable</td><td>Non</td><td>Produits.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Un nom existant n’est jamais recréé.</li>
+                    <li>Doublon du fichier : seule la première ligne est retenue.</li>
+                    <li>L’IA refuse une ligne dont le nom ne figure pas dans le fichier.</li>
+                    <li>Les produits reçoivent les comptes de revenus et de dépenses par défaut de la compagnie.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">Les factures reprises ne reconnaissent que les tiers créés par ces écrans. Importez et créez clients, fournisseurs et produits <strong>avant</strong> les factures.</div>
+            </section>
+
+            <section id="fr-balance">
+                <h2>Importer la balance de vérification</h2>
+                <p>Charge la balance de l’ancien logiciel arrêtée à la date de bascule (<span class="chemin">Importation › Balance de vérification</span>), pour contrôler l’équilibre et la comparer au plan. Rapport source : « Balance de vérification — Trial Balance ». « La date compte plus que tout… ».</p>
+                <h3>Champs</h3>
+                <table>
+                    <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
+                    <tbody>
+                        <tr><td>D’où viennent vos données ?</td><td>Oui</td><td>Logiciel, séparateur, encodage.</td></tr>
+                        <tr><td>Fichier</td><td>Oui</td><td>.csv ou .txt ; ligne d’en-tête avec <strong>Débit et Crédit</strong> dans les 40 premières lignes ; Nom obligatoire ; lecture arrêtée à TOTAL (qui sert de contrôle).</td></tr>
+                        <tr><td>Remplacer la balance déjà importée</td><td>Non</td><td>Cochée par défaut. Décochée, les lignes s’ajoutent à l’ancienne balance.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Boutons et actions</h3>
+                <ul>
+                    <li><kbd>👁 Voir un aperçu</kbd> ; <kbd>✨ Lire avec l’IA</kbd> (200 000 caractères au maximum) ; <kbd>📥 Importer</kbd>.</li>
+                    <li><kbd>🔍 Incohérences avec le plan comptable</kbd> : contrôle croisé (voir Règles).</li>
+                    <li><kbd>🔄 Nouvel import</kbd> : revient au dépôt de fichier.</li>
+                    <li><kbd>🗑 Supprimer la balance importée</kbd> : « Supprimer la balance importée de votre compagnie ? »</li>
+                </ul>
+                <h3>Résultat</h3>
+                <p>Compteurs Insérées, Ignorées, Erreurs ; tableau Compte, Nom du compte, Débit, Crédit, avec total ; bandeaux d’équilibre et de total annoncé ; « Détail des erreurs ». Au retour sur l’écran : « La balance déjà importée — Importée le … depuis « … » — n compte(s). Pour la remplacer, importez simplement un nouveau fichier. »</p>
+                <h3>Règles du contrôle « Incohérences »</h3>
+                <ul>
+                    <li><strong>Erreur</strong> : compte absent du plan avec solde ; compte « Ignorer » avec solde ; compte en double.</li>
+                    <li><strong>À vérifier</strong> : solde de sens contraire ; solde différent.</li>
+                    <li><strong>Info</strong> : compte absent sans solde ; compte du plan absent de la balance.</li>
+                    <li>Rapprochement par numéro, sinon par nom.</li>
+                    <li>L’écriture d’ouverture n’est pas créée automatiquement : votre comptable la saisit dans <a href="comptabilite.html#fr-journaux">Comptabilité › Journaux</a>.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Aucune ligne d’en-tête portant une colonne Débit et une colonne Crédit n’a été trouvée… »</span> — vérifiez le rapport exporté.</li>
+                    <li><span class="msg">« ⚖️ Balance équilibrée — … »</span> — débits = crédits.</li>
+                    <li><span class="msg">« ⚠️ Balance déséquilibrée — écart de … »</span> — une ligne manque ou a été mal lue.</li>
+                    <li><span class="msg">« ⚠️ Aucun montant n’a été lu — tous les soldes valent zéro… »</span> — colonnes de montants non reconnues ; vérifiez l’aperçu.</li>
+                    <li><span class="msg">« ✔ Le total annoncé par le fichier (…) correspond à la somme des lignes lues… »</span> — la lecture est complète.</li>
+                    <li><span class="msg">« Montant introuvable dans le fichier (…) : ligne refusée. »</span> — l’IA a proposé un montant absent du fichier ; la ligne est écartée.</li>
+                </ul>
+                <div class="attention" data-titre="Attention">Un compte « Ignorer » qui porte un solde fait disparaître ce montant. Le contrôle le signale en Erreur : liez-le ou créez-le.</div>
+            </section>
+
+            <section id="fr-valider">
+                <h2>Les écrans « Valider… »</h2>
+                <p>Écrans de contrôle des données rapatriées par QuickBooks en direct. La plupart sont en lecture seule ; deux d’entre eux écrivent dans l’application.</p>
+                <table>
+                    <thead><tr><th>Écran</th><th>Ce qu’il montre et vérifie</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr><td>Factures clients et fournisseurs</td><td>Filtres Type et « Toutes / Ouvertes seulement / Fermées seulement ». Compteurs En préparation, Prêtes à créer, À corriger, Déjà créées. Colonnes : case à cocher, Numéro (anomalie et « n ligne(s) »), Date, Échéance, Client/Fournisseur, Sous-total, Taxes, TPS, TVQ (modifiables), Total, Solde, État (prête, tiers à créer, à corriger, déjà en comptabilité, créée).</td><td><kbd>Enregistrer les corrections</kbd> (TPS/TVQ), <kbd>Créer les documents cochés</kbd> (en brouillon), <kbd>Retirer de la préparation</kbd> (sans confirmation).</td></tr>
+                        <tr><td>Fiche d’entreprise</td><td>Écarts, Absents ici, Identiques, Absents à la source. Colonnes : case, Champ, Valeur actuelle, Valeur chez la source, État.</td><td><kbd>Cocher tous les écarts</kbd>, <kbd>Tout décocher</kbd>, <kbd>Appliquer les champs cochés</kbd>.</td></tr>
+                        <tr><td>Listes de structure</td><td>Onglets par liste : Nom, Code, Type, Parent, Identifiant source, État (Lu, En double, Inutilisable).</td><td>Aucune.</td></tr>
+                        <tr><td>Balance âgée</td><td>Onglets Clients / Fournisseurs. Arrêtée au, Tranches, Tiers, Total annoncé. Rapprochement avec le solde des factures en préparation.</td><td>Aucune.</td></tr>
+                        <tr><td>Grand livre</td><td>Période, Comptes, Écritures, Totaux. Filtre « Compte : ». « Débits et crédits s’équilibrent » ou « Écart de … ».</td><td>Aucune.</td></tr>
+                        <tr><td>Rapport de taxes</td><td>Exercice, Déclarations, Administrations, lignes du formulaire.</td><td>Aucune.</td></tr>
+                        <tr><td>Soldes bancaires</td><td>Compte, Nº, Nature, Devise, Solde. Ce n’est pas un rapprochement.</td><td>Aucune.</td></tr>
+                        <tr><td>Acomptes et règlements</td><td>Encaissements / Décaissements. Imputations : « soldé », « partiel sur … », « document absent de la reprise ».</td><td>Aucune.</td></tr>
+                        <tr><td>Opérations non rapprochées</td><td>Case « Montrer aussi les opérations déjà pointées ». Pointage compensée (C) ou rapprochée (R).</td><td>Aucune.</td></tr>
+                        <tr><td>Paie, Remises de DAS, Inventaire, Dépôts et virements, Récurrentes, Budgets, Feuilles de temps</td><td>Contrôle seulement.</td><td>Aucune.</td></tr>
+                        <tr><td>Pièces jointes</td><td>Onglets par entité. État : Lu, Fichier gardé, Sur la fiche, Sans adresse, Trop gros, Téléchargement refusé.</td><td><kbd>📎 Rattacher aux fiches clients et fournisseurs</kbd> (avec confirmation, sans doublon).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages (factures)</h3>
+                <ul class="messages">
+                    <li><span class="msg">« N document(s) créés en brouillon. Rien n’est encore au grand livre : comptabilisez-les depuis la grille des factures. »</span> — voir <a href="ventes.html">Ventes</a> et <a href="achats.html">Achats</a>.</li>
+                    <li><span class="msg">« …écartés parce que leur client ou fournisseur n’est pas encore créé. »</span> — créez d’abord les tiers.</li>
+                    <li><span class="msg">« …ne s’additionnent pas (sous-total + TPS + TVQ ≠ total) : répartissez les taxes avant de les créer. »</span> — corrigez TPS/TVQ puis <kbd>Enregistrer les corrections</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">« Retirer de la préparation » agit tout de suite, sans confirmation. Une nouvelle extraction ramène les documents.</div>
+                <div class="astuce" data-titre="Astuce">Le filtre « Ouvertes seulement » évite de reprendre des factures déjà payées.</div>
+            </section>
+
+            <section id="fr-regles">
+                <h2>Règles générales</h2>
+                <h3>Formats de fichiers</h3>
+                <ul>
+                    <li>Seuls .csv et .txt sont acceptés, jamais .xlsx (Excel ▸ Enregistrer sous ▸ CSV UTF-8). Taille maximale : 10 Mo.</li>
+                    <li>Lecture par l’IA : 150 000 caractères pour les listes, 200 000 pour la balance.</li>
+                    <li>Montants acceptés : « 1 234,56 », « 1,234.56 », « $… », « (366.63) » (négatif). Le dernier séparateur est la décimale.</li>
+                    <li>Dates : 03/04/2026 est lu comme le 3 avril. Exportez en aaaa-mm-jj.</li>
+                </ul>
+                <h3>Colonnes du plan comptable</h3>
+                <ul>
+                    <li>Numéro <strong>ou</strong> nom obligatoire ; sans numéro, le nom sert de clé (normal pour QuickBooks en ligne).</li>
+                    <li>Type, Solde et Sens facultatifs. En-têtes reconnus en français ou en anglais, sinon l’ordre des colonnes s’applique.</li>
+                    <li>« 1000 - Encaisse » devient 1000. Le type est ramené à ACTIF, PASSIF, CAPITAUX, PRODUIT ou CHARGE. Le sens vient de la colonne, sinon du signe du solde (négatif = crédit).</li>
+                </ul>
+                <h3>Doublons et verdicts</h3>
+                <ul>
+                    <li>Invalide : ni numéro ni nom. Doublon : même clé qu’une ligne précédente. « Déjà au plan » : même numéro, ou même nom dans une des 4 langues, avec une nature compatible. Même nom mais nature différente : « à décider ».</li>
+                    <li>Origine (lecture directe seulement) : « Défaut QuickBooks » = compte créé dans les 10 minutes qui suivent le premier compte ; « Ajouté » = créé plus tard (comptes propres à l’entreprise, à lire de près). Le filtre « Origine » ne sert donc que pour un import par lecture directe.</li>
+                    <li>Limites d’affichage : 500 lignes (plan en préparation), 1 000 lignes (correspondance).</li>
+                </ul>
+            </section>
+
+            <section id="fr-pieges">
+                <h2>Trucs et pièges</h2>
+                <ol>
+                    <li>Le plan standard existe déjà : liez, ne créez pas tout.</li>
+                    <li>Le fichier et la lecture directe ne partagent pas leurs décisions.</li>
+                    <li>Recharger un plan garde les décisions dont la clé est identique ; un nom changé dans QuickBooks change la clé.</li>
+                    <li>« Vider les tables de préparation » efface aussi les correspondances des comptes déjà créés : à éviter après l’étape 3.</li>
+                    <li>Un numéro QuickBooks hors plage fait échouer l’étape 3 : videz le champ Numéro.</li>
+                    <li>Le filtre « Origine » ne sert que pour la lecture directe.</li>
+                    <li>Limites d’affichage : 500 lignes (préparation), 1 000 lignes (correspondance).</li>
+                    <li>« Detail Type » et « Type » : la colonne la plus à gauche est retenue ; vérifiez l’aperçu.</li>
+                    <li>Accents en charabia (Ã©) : réessayez en Windows-1252.</li>
+                    <li>La balance doit être arrêtée à la date de bascule ; laissez « Remplacer la balance déjà importée » cochée.</li>
+                    <li>Un compte ignoré qui porte un solde fait disparaître ce montant.</li>
+                    <li>Factures : importez et créez d’abord les tiers et les produits ; corrigez les montants dans QuickBooks puis relancez ; « Ouvertes seulement » évite les factures déjà payées.</li>
+                    <li>« Retirer de la préparation » part sans confirmation ; une nouvelle extraction ramène les documents.</li>
+                    <li>Dates américaines : exportez en aaaa-mm-jj.</li>
+                    <li>Ne comptez jamais deux fois les comptes clients et fournisseurs entre l’écriture d’ouverture et les factures reprises.</li>
+                </ol>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <details><summary>Dans quel ordre dois-je importer ?</summary><p>Compagnie préparée, liaison QuickBooks, plan comptable (3 étapes), tiers et produits, balance de vérification, factures, écrans de contrôle, contrôle final. Le plan comptable passe avant tout.</p></details>
+                <details><summary>À quel moment quelque chose est-il écrit dans ma comptabilité ?</summary><p>Seulement à l’étape 3 « Créer les comptes au plan », au bouton « Créer les N nouveaux … » des tiers et produits, à « Créer les documents cochés » (factures en brouillon), à « Appliquer les champs cochés » (fiche d’entreprise) et à « Rattacher aux fiches ». Tout le reste est en préparation.</p></details>
+                <details><summary>Mon fichier Excel est refusé.</summary><p>Seuls .csv et .txt sont acceptés. Dans Excel : Fichier ▸ Enregistrer sous ▸ CSV UTF-8.</p></details>
+                <details><summary>Les accents s’affichent en charabia (Ã©).</summary><p>Mauvais encodage. Réessayez avec Windows-1252 (ANSI) ou ISO-8859-1.</p></details>
+                <details><summary>Dois-je créer tous les comptes QuickBooks ?</summary><p>Non. Le plan standard existe déjà : liez les comptes QuickBooks aux comptes existants et ne créez que ceux qui n’ont pas d’équivalent.</p></details>
+                <details><summary>Mes décisions de correspondance ont disparu.</summary><p>Vous avez peut-être changé de voie (fichier ↔ lecture directe), renommé un compte dans QuickBooks, abandonné la préparation ou vidé les tables de préparation. Chacune de ces actions fait réapparaître des comptes « à décider ».</p></details>
+                <details><summary>L’étape 3 refuse un numéro « hors de la plage ».</summary><p>Videz le champ Numéro : un numéro automatique sera pris dans la plage de la classe choisie.</p></details>
+                <details><summary>La balance est déséquilibrée.</summary><p>Une ligne manque ou a été mal lue. Vérifiez l’aperçu, les colonnes Débit et Crédit et le total annoncé. Assurez-vous aussi que le rapport est arrêté à la date de bascule.</p></details>
+                <details><summary>L’écriture d’ouverture est-elle créée automatiquement ?</summary><p>Non. La balance importée sert au contrôle et à la comparaison avec le plan ; l’écriture d’ouverture est saisie par votre comptable.</p></details>
+                <details><summary>Une facture est « écartée » parce que son tiers n’est pas créé.</summary><p>Importez et créez d’abord les clients et fournisseurs par les écrans d’import, puis relancez l’extraction des factures. Une fiche saisie à la main n’est pas reconnue.</p></details>
+                <details><summary>Que fait l’IA dans la correspondance ?</summary><p>Elle propose un compte cible pour chaque compte encore à décider, avec un pourcentage de confiance et une raison. Rien n’est décidé avant que vous n’enregistriez.</p></details>
+            </section>
+
+            <section id="fr-glossaire">
+                <h2>Glossaire</h2>
+                <table>
+                    <thead><tr><th>Terme</th><th>Définition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Préparation</td><td>Zone d’attente où les données importées sont déposées avant toute écriture en comptabilité.</td></tr>
+                        <tr><td>Date de bascule</td><td>Veille du premier jour tenu dans 60Sec-AI ; date d’arrêt de tous les rapports repris.</td></tr>
+                        <tr><td>Lecture directe</td><td>Rapatriement des données depuis QuickBooks par la liaison, sans fichier.</td></tr>
+                        <tr><td>Correspondance</td><td>Décision Lier / Créer / Ignorer prise pour chaque compte de l’ancien logiciel.</td></tr>
+                        <tr><td>Lier</td><td>Rattacher un compte source à un compte existant du plan.</td></tr>
+                        <tr><td>Créer</td><td>Ajouter un compte source au plan, à l’étape 3.</td></tr>
+                        <tr><td>Ignorer</td><td>Écarter un compte source de la reprise.</td></tr>
+                        <tr><td>Verdict</td><td>Sort d’une ligne lue : Nouveau, Déjà au plan, Doublon, Invalide (ou À créer, Existe déjà, Créé, Écarté, Erreur pour les tiers et produits).</td></tr>
+                        <tr><td>Nature</td><td>Grande famille d’un compte : ACTIF, PASSIF, CAPITAUX, PRODUIT, CHARGE.</td></tr>
+                        <tr><td>Classe / Sous-classe</td><td>Regroupement du plan comptable, avec une plage de numéros.</td></tr>
+                        <tr><td>Balance de vérification</td><td>Liste des comptes avec leurs soldes débiteurs et créditeurs à une date donnée.</td></tr>
+                        <tr><td>Écriture d’ouverture</td><td>Écriture qui reporte les soldes de la balance dans 60Sec-AI à la date de bascule.</td></tr>
+                        <tr><td>Brouillon</td><td>Facture créée mais non comptabilisée : rien au grand livre.</td></tr>
+                        <tr><td>TPS / TVQ</td><td>Taxes de vente canadienne (5 %) et québécoise (9,975 %).</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Data import</h1>
+            <p class="intro">Bring into 60Sec-AI a set of books kept elsewhere (QuickBooks, Acomba or another application): chart of accounts, customers, suppliers, products, trial balance and invoices. Everything first goes through a staging area; nothing enters the books without an explicit action on your part. Menu <span class="chemin">Import</span>.</p>
+
+            <section id="en-approach">
+                <h2>The overall migration approach</h2>
+                <p>The single entry point is the <span class="chemin">Import › Data import</span> screen. Every import screen opens from that page through its <kbd>Open →</kbd> button.</p>
+                <h3>Basic principle</h3>
+                <p>Whatever comes in goes first <strong>into staging</strong>. Nothing touches the books until you click a button such as <kbd>Create…</kbd> or <kbd>Apply…</kbd>. You can read, re-read, correct and abandon without consequence.</p>
+                <h3>Recommended order</h3>
+                <table>
+                    <thead><tr><th>Step</th><th>What you do</th><th>What it produces</th></tr></thead>
+                    <tbody>
+                        <tr><td>0. Prepare the company</td><td>Set the cut-over date, the periods, the default accounts and the TAXABLE / EXEMPT tax statuses.</td><td>Prerequisite. The cut-over date is set here and never moves again.</td></tr>
+                        <tr><td>1. Connect QuickBooks</td><td>“Import from QuickBooks”, once per company.</td><td>Read access to the source books.</td></tr>
+                        <tr><td>2. Chart of accounts, in 3 screens</td><td>Import, then Mapping, then Create the accounts in the chart.</td><td>Accounts created in the chart: <strong>the first real write</strong>.</td></tr>
+                        <tr><td>3. Third parties and products</td><td>Customers, Suppliers, Products and services.</td><td>Records created. An existing record is never recreated.</td></tr>
+                        <tr><td>4. Trial balance</td><td>As at the cut-over date.</td><td>Balance check and comparison with the chart. The opening entry is not created automatically.</td></tr>
+                        <tr><td>5. Invoices</td><td>“Customer and supplier invoices”.</td><td>Documents created <strong>as drafts</strong>, nothing in the general ledger.</td></tr>
+                        <tr><td>6. Control screens</td><td>Aged balance, general ledger, taxes, banks, etc.</td><td>Read only.</td></tr>
+                        <tr><td>7. Final check</td><td>QuickBooks trial balance as of today, compared with the 60Sec-AI one.</td><td>Manual.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Ordering rules</h3>
+                <ul>
+                    <li>The chart of accounts comes before everything. An invoice line on an unmapped account shows “in staging, not applied yet”.</li>
+                    <li>Third parties and products come before invoices. An invoice recognizes its third party <strong>only among the third parties imported and then created by the import screens</strong>, never among records typed by hand.</li>
+                    <li>Invoices come before payments, otherwise the payment shows “document missing”.</li>
+                    <li>Every source report must be run as at the <strong>same cut-over date</strong>.</li>
+                </ul>
+                <div class="attention" data-titre="Warning">The cut-over date is the day before the first day kept in 60Sec-AI. Set it before running any report and never change it: a trial balance as at another date compares with nothing.</div>
+            </section>
+
+            <section id="en-hub">
+                <h2>“Data import” hub</h2>
+                <p>Home screen of the migration (<span class="chemin">Import › Data import</span>). It lists every import item, scores it out of 10 and opens each screen.</p>
+                <h3>Counters</h3>
+                <table>
+                    <thead><tr><th>Counter</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Items listed</td><td>Total number of import screens.</td></tr>
+                        <tr><td>Usable</td><td>Screens scored 7 or more.</td></tr>
+                        <tr><td>Partial</td><td>Screens scored 2 to 6.</td></tr>
+                        <tr><td>To do</td><td>Screens scored 1 or less.</td></tr>
+                    </tbody>
+                </table>
+                <p>The score rests on four criteria: read the file, check it, put it in staging, apply it to the books.</p>
+                <h3>Sections and cards</h3>
+                <ul>
+                    <li>“Direct read”: QuickBooks live and the “Validate…” screens.</li>
+                    <li>“Accounting migration”: chart of accounts and trial balance.</li>
+                    <li>“Other imports”: Customers, Suppliers, Products.</li>
+                </ul>
+                <p>Each card shows an icon, the title, the source, the score out of 10 with a gauge, the destination (“→ …”), “What works”, “What is missing” and the <kbd>Open →</kbd> button.</p>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Read the plan</kbd>: opens the migration plan in a window (<kbd>Close ✕</kbd> or Escape key). The “open in a tab” link shows it full page.</li>
+                    <li><kbd>Empty the staging tables</kbd>: erases everything awaiting validation, for this company only. Confirmation: “Empty all staging tables of [company]? Everything awaiting validation will be erased and must be imported again. What has already reached the books is not touched.”</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Staging emptied: N row(s) — [table] n, …”</span> — the purge succeeded; the detail per area is given.</li>
+                    <li><span class="msg">“Staging was already empty.”</span> — there was nothing to erase.</li>
+                    <li><span class="msg">“The purge failed: …”</span> — nothing was erased; read the reason and try again.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">“Empty the staging tables” also erases the <strong>account mappings</strong> and the imported trial balance, including the mappings of accounts already created in step 3. Avoid this button once the chart has been applied.</div>
+            </section>
+
+            <section id="en-quickbooks">
+                <h2>Import from QuickBooks</h2>
+                <p>Direct read of the QuickBooks books, with no file to export (<span class="chemin">Import › Import from QuickBooks</span>). The screen has three blocks.</p>
+                <h3>1. The connection</h3>
+                <ul>
+                    <li>Green dot: connected. Orange: not connected. Red: not configured on the server, or unreachable.</li>
+                    <li><kbd>Connect QuickBooks</kbd>: sends you to the connection page where you enter your QuickBooks credentials. 60Sec-AI never sees them.</li>
+                    <li><kbd>Check the connection</kbd>: re-reads the status.</li>
+                    <li>Until the connection is made, <kbd>Import</kbd> stays disabled.</li>
+                </ul>
+                <h3>2. What to fetch</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Resources</td><td>At least one</td><td>Grouped as Structure, Third parties and items, Sales, Purchases, General ledger, Control; all checked by default. Links <kbd>Uncheck all</kbd> · <kbd>Check all</kbd> and counter “n of N selected”.</td></tr>
+                        <tr><td>Trial balance and general ledger as at</td><td>Yes for dated resources</td><td>The cut-over date: “the day before the first day kept here”.</td></tr>
+                        <tr><td>Taxes filed by</td><td>No</td><td>Quarter (default), month or year.</td></tr>
+                    </tbody>
+                </table>
+                <p><kbd>Import into staging</kbd> starts the extraction. “A large extraction may take a few minutes.”</p>
+                <h3>3. What arrived</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Resource</td><td>Name of the requested resource.</td></tr>
+                        <tr><td>Records</td><td>Number read.</td></tr>
+                        <tr><td>What was done with it</td><td>“posted to the chart of accounts: N account(s), M to fix”, “placed in staging”, or the error in red.</td></tr>
+                    </tbody>
+                </table>
+                <p>A failed resource does not stop the others.</p>
+                <h3>Previous extractions</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>When</td><td>Date and time.</td></tr>
+                        <tr><td>Source</td><td>Connected application.</td></tr>
+                        <tr><td>Resources</td><td>Resources requested.</td></tr>
+                        <tr><td>Records</td><td>Total read.</td></tr>
+                        <tr><td>Status</td><td>TERMINE (complete) or PARTIEL (at least one resource failed).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Choose at least one resource to fetch.”</span> — check a resource.</li>
+                    <li><span class="msg">“Enter the cut-off date: this read covers a period.”</span> — a dated resource is checked without a cut-over date.</li>
+                    <li><span class="msg">“Apideck is not configured on this server…”</span> — direct read is not available; use CSV files.</li>
+                    <li><span class="msg">“This company has not connected its books yet.”</span> — click <kbd>Connect QuickBooks</kbd>.</li>
+                    <li><span class="msg">“N record(s) placed in staging, over M requested resource(s). … Nothing has been written to the books…”</span> — extraction done; move on to the staging screens.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">The connection is made only once per company. Later extractions reuse the same connection.</div>
+            </section>
+
+            <section id="en-quickbooks-button">
+                <h2>The QuickBooks button on every screen</h2>
+                <p>Every import screen carries a box titled “QuickBooks, live — no file to export” with the <kbd>⬇ Import from QuickBooks</kbd> button. It fetches <strong>only</strong> what the screen can show (for instance, only customers on the customers screen).</p>
+                <h3>Fields</h3>
+                <ul>
+                    <li>“As at”: shown for dated resources (trial balance, general ledger).</li>
+                    <li>“Taxes by quarter / month / year”: shown for the tax report.</li>
+                </ul>
+                <h3>How it goes</h3>
+                <ol>
+                    <li>Click <kbd>⬇ Import from QuickBooks</kbd>.</li>
+                    <li>The box shows “⏳ Extraction in progress…”.</li>
+                    <li>The screen reloads with the data in staging. Refreshing the browser does not restart the extraction.</li>
+                </ol>
+                <p>Depending on the connection status, the box offers “Manage the connection”, “Check the connection” or “Connect QuickBooks”.</p>
+                <div class="note" data-titre="Good to know">The date entered is kept for the session and shared by all screens. The connection status is cached for 10 minutes: right after a fresh connection, click “Check the connection” if the dot has not changed yet.</div>
+            </section>
+
+            <section id="en-chart-step1">
+                <h2>Step 1: Import the chart of accounts</h2>
+                <p>Loads the chart of accounts of the former application into staging (<span class="chemin">Import › Import the chart of accounts</span>). A clickable 3-step trail and a “Status of this screen” block sit at the top.</p>
+                <h3>The file to import (collapsible block)</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Source application</td><td>Yes</td><td>QuickBooks, Acomba or Other application. Presets the separator and encoding.</td></tr>
+                        <tr><td>Separator</td><td>Yes</td><td>Semicolon, Comma or Tab.</td></tr>
+                        <tr><td>Encoding</td><td>Yes</td><td>UTF-8, Windows-1252 (ANSI) or ISO-8859-1. “Garbled accents = wrong encoding”.</td></tr>
+                        <tr><td>File</td><td>Yes</td><td>Drop zone; .csv or .txt only, 10 MB maximum.</td></tr>
+                        <tr><td>The first row contains the column names</td><td>No</td><td>Checked by default.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li>Help “How to get this file out of QuickBooks”: “Account List” report (“Account Listing” on Desktop), steps and expected columns.</li>
+                    <li><kbd>⬇ Download a CSV template</kbd>: template file with the expected columns.</li>
+                    <li><kbd>Preview</kbd>: reads the file without saving anything.</li>
+                    <li><kbd>Load into staging</kbd>: places the accounts in staging. A new load <strong>replaces</strong> the chart in staging.</li>
+                    <li><kbd>Go to mapping →</kbd>: opens step 2.</li>
+                    <li><kbd>🗑 Abandon staging</kbd>: confirmation “Abandon the chart of accounts in staging? Mappings already decided for this chart will be erased too.” Refused if accounts have already been applied.</li>
+                </ul>
+                <h3>Preview</h3>
+                <p>“Recognized columns” table (Expected / File column, “not found” in red) then the first 15 rows.</p>
+                <h3>What was read</h3>
+                <p>Counters Rows read, Accounts kept, To review, and the reminder “These accounts are in staging…”.</p>
+                <h3>What is in staging</h3>
+                <p>“Show” filter: All, New accounts, Already in the chart, File duplicates, Invalid rows, Added after opening, QuickBooks defaults.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Row</td><td>Row number in the file.</td></tr>
+                        <tr><td>Account</td><td>Source account number.</td></tr>
+                        <tr><td>Name</td><td>Source account name.</td></tr>
+                        <tr><td>Nature</td><td>ASSET, LIABILITY, EQUITY, REVENUE or EXPENSE.</td></tr>
+                        <tr><td>Balance / Side</td><td>Balance read and debit or credit side.</td></tr>
+                        <tr><td>Verdict</td><td>New, Already in the chart, Duplicate or Invalid.</td></tr>
+                        <tr><td>Detail</td><td>Explanation of the verdict or anomaly.</td></tr>
+                        <tr><td>Source type / Subtype</td><td>Type and subtype from the former application.</td></tr>
+                        <tr><td>Origin</td><td>“QuickBooks default” or “Added on yyyy-mm-dd” (direct read only).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Choose a file first.”</span> — drop a file before clicking.</li>
+                    <li><span class="msg">“Only .csv and .txt files are accepted. From Excel: File ▸ Save As ▸ CSV.”</span> — convert your .xlsx.</li>
+                    <li><span class="msg">“File too large: 10 MB maximum.”</span> — split the file.</li>
+                    <li><span class="msg">“The file contains no data rows.”</span> — check the export.</li>
+                    <li><span class="msg">“Neither the account number nor the account name was found — at least one of the two is needed…”</span> — headers not recognized; check the separator and the preview.</li>
+                    <li><span class="msg">“N account(s) in staging. Nothing has been written to your chart of accounts yet.”</span> — load succeeded.</li>
+                    <li><span class="msg">“N account(s) in staging, M row(s) to look at closely.”</span> — some rows carry a Duplicate or Invalid verdict.</li>
+                    <li><span class="msg">“The chart of accounts in staging has been abandoned, along with its mappings.”</span> — abandon succeeded.</li>
+                    <li><span class="msg">“This import has been applied to the chart of accounts: it can no longer be deleted.”</span> — abandon refused after step 3.</li>
+                    <li><span class="msg">“Row with neither account number nor name: nothing identifies it.”</span> — Invalid row.</li>
+                    <li><span class="msg">“Same key (“X”) as row n of the file.”</span> — file duplicate.</li>
+                    <li><span class="msg">“Already in the chart of accounts: …”</span> — the account already exists on your side.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">If the export contains “Detail Type” in addition to “Type”, the leftmost column is kept. Check with the preview.</div>
+                <div class="astuce" data-titre="Tip">Garbled accents (Ã©)? Try again with the Windows-1252 encoding.</div>
+            </section>
+
+            <section id="en-chart-step2">
+                <h2>Step 2: Account mapping</h2>
+                <p>Decides, account by account, what becomes of each account of the former application: link it to an existing account, create it, or ignore it (<span class="chemin">Import › Account mapping</span>). Nothing is written to the books: decisions are kept aside.</p>
+                <h3>Top bar</h3>
+                <ul>
+                    <li>Filter: All, To decide only, Already decided, Added after opening, QuickBooks defaults.</li>
+                    <li><kbd>✨ Suggest with AI</kbd>: confirmation “Submit the accounts still to decide and your chart of accounts to the AI? It will only suggest: nothing will be decided for you.”</li>
+                    <li><kbd>Accept mappings by number</kbd>: “Keep every mapping where the account number matches?” Links every suggestion recognized by number <strong>or name</strong>, with the note “Suggestion accepted: same account number/name.”</li>
+                </ul>
+                <h3>Progress</h3>
+                <p>“n of N (x %)” and counters To decide, Linked, To create, Ignored, Accounts in the chart. Once everything is decided: “All accounts are decided. The mapping is ready to be reviewed and signed by your accountant…”</p>
+                <h3>Columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Rank.</td></tr>
+                        <tr><td>Account in the former application</td><td>Number (or “no number”), name, and source card: nature, QuickBooks type and subtype, source balance, origin (“added on …” or “QuickBooks default”), “sub-account of “…””, description, anomaly.</td></tr>
+                        <tr><td>Balance</td><td>Source balance.</td></tr>
+                        <tr><td>What we suggest</td><td>Badge “same number”, “same name”, “AI” (with confidence % and reason), “no suggestion” or “created in the chart”. If the AI differs: “✨ the AI rather suggests …”.</td></tr>
+                        <tr><td>Action</td><td>“— to decide”, Link, Create or Ignore.</td></tr>
+                        <tr><td>Class, Subclass, Your account</td><td>Three cascading lists (class with code, name and number range). An account outside the filter stays shown as “(outside filter)”.</td></tr>
+                        <tr><td>Note</td><td>500 characters maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Bottom of page</h3>
+                <ul>
+                    <li>Reminder “Link / Create / Ignore”.</li>
+                    <li><kbd>Save mappings</kbd>: keeps the decisions.</li>
+                    <li><kbd>Create the accounts in the chart →</kbd>: opens step 3.</li>
+                </ul>
+                <h3>Rules</h3>
+                <ul>
+                    <li><strong>Link</strong> attaches to an existing account. <strong>Create</strong> adds the account in step 3 (source number reused; if already taken, the field is cleared and the number will be automatic). <strong>Ignore</strong> sets the account aside. Putting back “— to decide” cancels the decision.</li>
+                    <li><strong>One source account per target account</strong> (checked in the browser, then by the database).</li>
+                    <li>“Create” cannot reuse a number the chart already knows, nor the same number twice.</li>
+                    <li>Created accounts are locked: “Created ✓” greyed out, read-only note.</li>
+                    <li>AI suggestion: the AI receives the accounts still to decide (full name, nature, type, subtype, origin, balance, description) and your whole chart. An answer is discarded if the account is unknown or the nature incompatible. Nothing is decided before <kbd>Save</kbd>.</li>
+                    <li>Display limited to 1,000 rows.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Nothing to submit: all accounts are already decided or recognized by their number.”</span> — the AI has nothing to suggest.</li>
+                    <li><span class="msg">“Your chart of accounts is empty: there is nothing to attach these accounts to.”</span> — create a chart first.</li>
+                    <li><span class="msg">“N suggestion(s) over M submitted account(s). K answer(s) discarded … Estimated cost: x US$. These are only suggestions…”</span> — review and save what you keep.</li>
+                    <li><span class="msg">“Mappings by account number have been kept. What remains needs a decision.”</span> — bulk acceptance done.</li>
+                    <li><span class="msg">“Mappings saved. All accounts are decided.”</span> — go to step 3.</li>
+                    <li><span class="msg">“…N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…”</span> — an automatic number will be assigned.</li>
+                    <li><span class="msg">“One of your accounts receives only one account from the former application. … Link the others elsewhere, or create them.”</span> — two source accounts target the same account.</li>
+                    <li><span class="msg">““Create” cannot reuse a number your chart already knows. …”</span> — choose “Link” or clear the number.</li>
+                    <li><span class="msg">““X”: number N already exists in your chart (…). To attach it to that account, choose “Link”…”</span> — refused on save.</li>
+                    <li><span class="msg">“Account N would receive k accounts from the former application (…)…”</span> — refused on save.</li>
+                    <li><span class="msg">“Account N is already linked to “X”…”</span> — refused on save.</li>
+                    <li><span class="msg">“Number N would be created k times… A number is created only once.”</span> — refused on save.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">The standard 60Sec-AI chart already exists. You must <strong>link</strong> the QuickBooks accounts to the existing ones, not create everything. Otherwise you get two parallel charts and wrong financial statements.</div>
+                <div class="piege" data-titre="Pitfall">The CSV file and the QuickBooks direct read do not share their decisions. Switching paths makes accounts reappear as “to decide”. Reloading a chart keeps decisions whose key is identical; renaming an account in QuickBooks changes the key.</div>
+            </section>
+
+            <section id="en-chart-step3">
+                <h2>Step 3: Create the accounts in the chart</h2>
+                <p>“This is the first step that writes to your books.” (<span class="chemin">Import › Create the accounts in the chart</span>). Link “← back to mapping”.</p>
+                <h3>Counters</h3>
+                <p>To create, Already created, Linked, Ignored, Still to decide.</p>
+                <h3>Columns of the accounts-to-create table</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Required</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>—</td><td>Rank.</td></tr>
+                        <tr><td>Account in the former application</td><td>—</td><td>Source number and name.</td></tr>
+                        <tr><td>Class — where to file it</td><td>Yes</td><td>“— choose a class —” then the subclasses compatible with the nature, with their number range.</td></tr>
+                        <tr><td>Number</td><td>No</td><td>Prefilled with the source number, or “auto”. Must be numeric, within the class range and free.</td></tr>
+                        <tr><td>Account name</td><td>Yes</td><td>150 characters maximum.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>Create the accounts</kbd>: confirmation “Create these accounts in your chart of accounts? This is a real write: the accounts will exist for good.”</li>
+                </ul>
+                <p>The “Accounts created” table shows Number, Name and “Came from”.</p>
+                <h3>Rules</h3>
+                <ul>
+                    <li>All or nothing: the slightest error cancels the whole creation.</li>
+                    <li>Checks: class chosen, non-empty name, numeric number within the class range, free, and not requested twice.</li>
+                    <li>Without a number: first free number in the range (tens are preferred).</li>
+                    <li>A row without a class is left aside; run again later without recreating what already exists.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“N account(s) are not decided yet in step 2. They will not be taken…”</span> — go back to step 2 if needed.</li>
+                    <li><span class="msg">“No class was chosen: there is nothing to create.”</span> — choose a class on at least one row.</li>
+                    <li><span class="msg">“N account(s) created in your chart of accounts. k row(s) left aside, no class chosen.”</span> — creation succeeded.</li>
+                    <li><span class="msg">“Nothing was created.”</span> — followed by the reason: ““X”: number N is outside the a-b range of class C.”; “… is not a number.”; “Number N is already used in your chart.”; “… the number range of this class is full.”</li>
+                </ul>
+                <div class="astuce" data-titre="Tip">A QuickBooks number outside the range makes the whole step fail. Clear the Number field: an automatic number will be taken from the class range.</div>
+            </section>
+
+            <section id="en-parties-products">
+                <h2>Customers, Suppliers, Products and services</h2>
+                <p>One common screen, titled “Import customers”, “Import suppliers” or “Import products and services” (<span class="chemin">Import › Customers / Suppliers / Products and services</span>), with the QuickBooks button.</p>
+                <h3>The file to import</h3>
+                <ul>
+                    <li>“Where does your data come from?”: application, separator, encoding, step-by-step and expected columns.</li>
+                    <li>Drop zone. The file is kept in the session: “… has been kept since your last drop: the buttons below use it. Drop another one to replace it.”</li>
+                </ul>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>👁 Preview</kbd>: header found, mapping “What we look for / File column” (or “missing”), first 10 rows.</li>
+                    <li><kbd>✨ Extract with AI</kbd>: AI reading of a poorly structured file (150,000 characters maximum).</li>
+                    <li><kbd>📥 Read the file</kbd>: direct read and placement in staging.</li>
+                    <li><kbd>✅ Create the N new …</kbd>: “Create N new … in the application? What already exists will not be touched.”</li>
+                    <li><kbd>See your … →</kbd>: opens the list of records (<a href="ventes.html#en-customers">Customers</a>, <a href="achats.html">Suppliers</a>, <a href="produits.html">Products</a>).</li>
+                    <li><kbd>🗑 Abandon this file</kbd>: “… What has already been created in the application stays in place.”</li>
+                </ul>
+                <h3>What was read</h3>
+                <p>Origin (““file”, dropped on … — direct read” or “extracted by AI, estimated cost … US$”) and badges: rows, to create, already in the application, file duplicate(s), created, discarded, in error.</p>
+                <table>
+                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Row</td><td>Row number in the file.</td></tr>
+                        <tr><td>Name, Contact, Email, Phone, Address (and Shipping), Taxes</td><td>Third parties.</td></tr>
+                        <tr><td>Description, Price, Taxable</td><td>Products and services.</td></tr>
+                        <tr><td>What will become of it</td><td>Verdict: To create, Already exists, File duplicate, Created, Discarded, Error.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Expected file columns</h3>
+                <table>
+                    <thead><tr><th>Column</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Name</td><td>Yes</td><td>Key of the third party or product.</td></tr>
+                        <tr><td>Email, Phone, Contact, Address, Address (cont.), City, Province, Postal code, GST No., QST No.</td><td>No</td><td>Third parties.</td></tr>
+                        <tr><td>Balance</td><td>No</td><td>Third parties; used for control only.</td></tr>
+                        <tr><td>Description, Price, Taxable</td><td>No</td><td>Products.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules</h3>
+                <ul>
+                    <li>An existing name is never recreated.</li>
+                    <li>File duplicate: only the first row is kept.</li>
+                    <li>The AI refuses a row whose name is not in the file.</li>
+                    <li>Products receive the company’s default revenue and expense accounts.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">Migrated invoices recognize only the third parties created by these screens. Import and create customers, suppliers and products <strong>before</strong> the invoices.</div>
+            </section>
+
+            <section id="en-trial-balance">
+                <h2>Import the trial balance</h2>
+                <p>Loads the trial balance of the former application as at the cut-over date (<span class="chemin">Import › Trial balance</span>), to check that it balances and compare it with the chart. Source report: “Trial Balance”. “The date matters more than anything…”.</p>
+                <h3>Fields</h3>
+                <table>
+                    <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
+                    <tbody>
+                        <tr><td>Where does your data come from?</td><td>Yes</td><td>Application, separator, encoding.</td></tr>
+                        <tr><td>File</td><td>Yes</td><td>.csv or .txt; header row with <strong>Debit and Credit</strong> within the first 40 rows; Name required; reading stops at TOTAL (used as a check).</td></tr>
+                        <tr><td>Replace the trial balance already imported</td><td>No</td><td>Checked by default. Unchecked, the rows are added to the former balance.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Buttons and actions</h3>
+                <ul>
+                    <li><kbd>👁 Preview</kbd>; <kbd>✨ Read with AI</kbd> (200,000 characters maximum); <kbd>📥 Import</kbd>.</li>
+                    <li><kbd>🔍 Inconsistencies with the chart of accounts</kbd>: cross-check (see Rules).</li>
+                    <li><kbd>🔄 New import</kbd>: back to the file drop.</li>
+                    <li><kbd>🗑 Delete the imported trial balance</kbd>: “Delete your company’s imported trial balance?”</li>
+                </ul>
+                <h3>Result</h3>
+                <p>Counters Inserted, Ignored, Errors; table Account, Account name, Debit, Credit, with total; balance and announced-total banners; “Error details”. Back on the screen: “The trial balance already imported — Imported on … from “…” — n account(s). To replace it, simply import a new file.”</p>
+                <h3>Rules of the “Inconsistencies” check</h3>
+                <ul>
+                    <li><strong>Error</strong>: account missing from the chart with a balance; “Ignore” account with a balance; duplicate account.</li>
+                    <li><strong>To check</strong>: balance on the opposite side; different balance.</li>
+                    <li><strong>Info</strong>: missing account without balance; chart account missing from the trial balance.</li>
+                    <li>Matching by number, otherwise by name.</li>
+                    <li>The opening entry is not created automatically: your accountant enters it in <a href="comptabilite.html">Accounting › Journals</a>.</li>
+                </ul>
+                <h3>Messages</h3>
+                <ul class="messages">
+                    <li><span class="msg">“No header row with a Debit column and a Credit column was found…”</span> — check the exported report.</li>
+                    <li><span class="msg">“⚖️ Balanced trial balance — …”</span> — debits = credits.</li>
+                    <li><span class="msg">“⚠️ Unbalanced trial balance — difference of …”</span> — a row is missing or was misread.</li>
+                    <li><span class="msg">“⚠️ No amount was read — all balances are zero…”</span> — amount columns not recognized; check the preview.</li>
+                    <li><span class="msg">“✔ The total announced by the file (…) matches the sum of the rows read…”</span> — the read is complete.</li>
+                    <li><span class="msg">“Amount not found in the file (…): row refused.”</span> — the AI proposed an amount absent from the file; the row is discarded.</li>
+                </ul>
+                <div class="attention" data-titre="Warning">An “Ignore” account carrying a balance makes that amount vanish. The check flags it as an Error: link it or create it.</div>
+            </section>
+
+            <section id="en-validate">
+                <h2>The “Validate…” screens</h2>
+                <p>Control screens for the data fetched by the QuickBooks direct read. Most are read only; two of them write to the application.</p>
+                <table>
+                    <thead><tr><th>Screen</th><th>What it shows and checks</th><th>Actions</th></tr></thead>
+                    <tbody>
+                        <tr><td>Customer and supplier invoices</td><td>Filters Type and “All / Open only / Closed only”. Counters In staging, Ready to create, To fix, Already created. Columns: checkbox, Number (anomaly and “n line(s)”), Date, Due date, Customer/Supplier, Subtotal, Taxes, GST, QST (editable), Total, Balance, Status (ready, third party to create, to fix, already in the books, created).</td><td><kbd>Save corrections</kbd> (GST/QST), <kbd>Create the checked documents</kbd> (as drafts), <kbd>Remove from staging</kbd> (no confirmation).</td></tr>
+                        <tr><td>Company profile</td><td>Differences, Missing here, Identical, Missing at source. Columns: checkbox, Field, Current value, Value at source, Status.</td><td><kbd>Check all differences</kbd>, <kbd>Uncheck all</kbd>, <kbd>Apply the checked fields</kbd>.</td></tr>
+                        <tr><td>Structure lists</td><td>Tabs per list: Name, Code, Type, Parent, Source identifier, Status (Read, Duplicate, Unusable).</td><td>None.</td></tr>
+                        <tr><td>Aged balance</td><td>Customers / Suppliers tabs. As at, Buckets, Third parties, Announced total. Reconciliation with the balance of invoices in staging.</td><td>None.</td></tr>
+                        <tr><td>General ledger</td><td>Period, Accounts, Entries, Totals. “Account:” filter. “Debits and credits balance” or “Difference of …”.</td><td>None.</td></tr>
+                        <tr><td>Tax report</td><td>Fiscal year, Returns, Authorities, form lines.</td><td>None.</td></tr>
+                        <tr><td>Bank balances</td><td>Account, No., Nature, Currency, Balance. This is not a reconciliation.</td><td>None.</td></tr>
+                        <tr><td>Deposits and payments</td><td>Receipts / Disbursements. Allocations: “settled”, “partial on …”, “document missing from the migration”.</td><td>None.</td></tr>
+                        <tr><td>Unreconciled transactions</td><td>Checkbox “Also show transactions already cleared”. Cleared (C) or reconciled (R) marking.</td><td>None.</td></tr>
+                        <tr><td>Payroll, Source deduction remittances, Inventory, Deposits and transfers, Recurring, Budgets, Timesheets</td><td>Control only.</td><td>None.</td></tr>
+                        <tr><td>Attachments</td><td>Tabs per entity. Status: Read, File kept, On the record, No address, Too large, Download refused.</td><td><kbd>📎 Attach to customer and supplier records</kbd> (with confirmation, no duplicates).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Messages (invoices)</h3>
+                <ul class="messages">
+                    <li><span class="msg">“N document(s) created as drafts. Nothing is in the general ledger yet: post them from the invoice grid.”</span> — see <a href="ventes.html">Sales</a> and <a href="achats.html">Purchases</a>.</li>
+                    <li><span class="msg">“…discarded because their customer or supplier is not created yet.”</span> — create the third parties first.</li>
+                    <li><span class="msg">“…do not add up (subtotal + GST + QST ≠ total): split the taxes before creating them.”</span> — fix GST/QST then <kbd>Save corrections</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">“Remove from staging” acts at once, without confirmation. A new extraction brings the documents back.</div>
+                <div class="astuce" data-titre="Tip">The “Open only” filter avoids migrating invoices already paid.</div>
+            </section>
+
+            <section id="en-rules">
+                <h2>General rules</h2>
+                <h3>File formats</h3>
+                <ul>
+                    <li>Only .csv and .txt are accepted, never .xlsx (Excel ▸ Save As ▸ CSV UTF-8). Maximum size: 10 MB.</li>
+                    <li>AI reading: 150,000 characters for lists, 200,000 for the trial balance.</li>
+                    <li>Accepted amounts: “1 234,56”, “1,234.56”, “$…”, “(366.63)” (negative). The last separator is the decimal one.</li>
+                    <li>Dates: 03/04/2026 is read as April 3. Export as yyyy-mm-dd.</li>
+                </ul>
+                <h3>Chart of accounts columns</h3>
+                <ul>
+                    <li>Number <strong>or</strong> name required; without a number, the name is the key (normal for QuickBooks Online).</li>
+                    <li>Type, Balance and Side optional. Headers recognized in French or English, otherwise column order applies.</li>
+                    <li>“1000 - Cash” becomes 1000. The type is reduced to ASSET, LIABILITY, EQUITY, REVENUE or EXPENSE. The side comes from the column, otherwise from the sign of the balance (negative = credit).</li>
+                </ul>
+                <h3>Duplicates and verdicts</h3>
+                <ul>
+                    <li>Invalid: neither number nor name. Duplicate: same key as a previous row. “Already in the chart”: same number, or same name in one of the 4 languages, with a compatible nature. Same name but different nature: “to decide”.</li>
+                    <li>Origin (direct read only): “QuickBooks default” = account created within 10 minutes of the first account; “Added” = created later (accounts specific to the business, to read closely). The “Origin” filter is therefore useful only for a direct-read import.</li>
+                    <li>Display limits: 500 rows (chart in staging), 1,000 rows (mapping).</li>
+                </ul>
+            </section>
+
+            <section id="en-pitfalls">
+                <h2>Tips and pitfalls</h2>
+                <ol>
+                    <li>The standard chart already exists: link, do not create everything.</li>
+                    <li>The file and the direct read do not share their decisions.</li>
+                    <li>Reloading a chart keeps decisions whose key is identical; a name changed in QuickBooks changes the key.</li>
+                    <li>“Empty the staging tables” also erases the mappings of accounts already created: avoid after step 3.</li>
+                    <li>A QuickBooks number outside the range makes step 3 fail: clear the Number field.</li>
+                    <li>The “Origin” filter is useful only for the direct read.</li>
+                    <li>Display limits: 500 rows (staging), 1,000 rows (mapping).</li>
+                    <li>“Detail Type” and “Type”: the leftmost column is kept; check the preview.</li>
+                    <li>Garbled accents (Ã©): try again with Windows-1252.</li>
+                    <li>The trial balance must be as at the cut-over date; leave “Replace the trial balance already imported” checked.</li>
+                    <li>An ignored account carrying a balance makes that amount vanish.</li>
+                    <li>Invoices: import and create third parties and products first; fix the amounts in QuickBooks then run again; “Open only” avoids invoices already paid.</li>
+                    <li>“Remove from staging” acts without confirmation; a new extraction brings the documents back.</li>
+                    <li>US dates: export as yyyy-mm-dd.</li>
+                    <li>Never count customer and supplier accounts twice between the opening entry and the migrated invoices.</li>
+                </ol>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <details><summary>In what order should I import?</summary><p>Company prepared, QuickBooks connection, chart of accounts (3 steps), third parties and products, trial balance, invoices, control screens, final check. The chart of accounts comes before everything.</p></details>
+                <details><summary>When is something written to my books?</summary><p>Only in step 3 “Create the accounts in the chart”, with the “Create the N new …” button for third parties and products, with “Create the checked documents” (draft invoices), with “Apply the checked fields” (company profile) and with “Attach to records”. Everything else is in staging.</p></details>
+                <details><summary>My Excel file is refused.</summary><p>Only .csv and .txt are accepted. In Excel: File ▸ Save As ▸ CSV UTF-8.</p></details>
+                <details><summary>Accents show as gibberish (Ã©).</summary><p>Wrong encoding. Try again with Windows-1252 (ANSI) or ISO-8859-1.</p></details>
+                <details><summary>Must I create every QuickBooks account?</summary><p>No. The standard chart already exists: link the QuickBooks accounts to the existing ones and create only those with no equivalent.</p></details>
+                <details><summary>My mapping decisions disappeared.</summary><p>You may have switched paths (file ↔ direct read), renamed an account in QuickBooks, abandoned staging or emptied the staging tables. Each of these makes accounts reappear as “to decide”.</p></details>
+                <details><summary>Step 3 refuses a number “outside the range”.</summary><p>Clear the Number field: an automatic number will be taken from the range of the chosen class.</p></details>
+                <details><summary>The trial balance is unbalanced.</summary><p>A row is missing or was misread. Check the preview, the Debit and Credit columns and the announced total. Also make sure the report is as at the cut-over date.</p></details>
+                <details><summary>Is the opening entry created automatically?</summary><p>No. The imported trial balance is for checking and comparing with the chart; the opening entry is entered by your accountant.</p></details>
+                <details><summary>An invoice is “discarded” because its third party is not created.</summary><p>Import and create the customers and suppliers through the import screens first, then run the invoice extraction again. A record typed by hand is not recognized.</p></details>
+                <details><summary>What does the AI do in the mapping?</summary><p>It suggests a target account for every account still to decide, with a confidence percentage and a reason. Nothing is decided until you save.</p></details>
+            </section>
+
+            <section id="en-glossary">
+                <h2>Glossary</h2>
+                <table>
+                    <thead><tr><th>Term</th><th>Definition</th></tr></thead>
+                    <tbody>
+                        <tr><td>Staging</td><td>Waiting area where imported data is placed before any write to the books.</td></tr>
+                        <tr><td>Cut-over date</td><td>Day before the first day kept in 60Sec-AI; cut-off date of every migrated report.</td></tr>
+                        <tr><td>Direct read</td><td>Fetching data from QuickBooks through the connection, with no file.</td></tr>
+                        <tr><td>Mapping</td><td>Link / Create / Ignore decision taken for each account of the former application.</td></tr>
+                        <tr><td>Link</td><td>Attach a source account to an existing account of the chart.</td></tr>
+                        <tr><td>Create</td><td>Add a source account to the chart, in step 3.</td></tr>
+                        <tr><td>Ignore</td><td>Leave a source account out of the migration.</td></tr>
+                        <tr><td>Verdict</td><td>Fate of a row read: New, Already in the chart, Duplicate, Invalid (or To create, Already exists, Created, Discarded, Error for third parties and products).</td></tr>
+                        <tr><td>Nature</td><td>Main family of an account: ASSET, LIABILITY, EQUITY, REVENUE, EXPENSE.</td></tr>
+                        <tr><td>Class / Subclass</td><td>Grouping of the chart of accounts, with a number range.</td></tr>
+                        <tr><td>Trial balance</td><td>List of accounts with their debit and credit balances at a given date.</td></tr>
+                        <tr><td>Opening entry</td><td>Entry that carries the trial balance amounts into 60Sec-AI at the cut-over date.</td></tr>
+                        <tr><td>Draft</td><td>Invoice created but not posted: nothing in the general ledger.</td></tr>
+                        <tr><td>GST / QST</td><td>Canadian (5%) and Quebec (9.975%) sales taxes.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Importación de datos</h1>
+            <p class="intro">Traer a 60Sec-AI una contabilidad llevada en otro lugar (QuickBooks, Acomba u otro programa): plan de cuentas, clientes, proveedores, productos, balance de comprobación y facturas. Todo pasa primero por una zona de preparación; nada entra en la contabilidad sin una acción explícita de su parte. Menú <span class="chemin">Importación</span>.</p>
+
+            <section id="es-metodo">
+                <h2>El método global de migración</h2>
+                <p>El punto de entrada único es la pantalla <span class="chemin">Importación › Importación de datos</span>. Todas las pantallas de importación se abren desde esa página con su botón <kbd>Abrir →</kbd>.</p>
+                <h3>Principio básico</h3>
+                <p>Lo que entra va primero <strong>a preparación</strong>. Nada toca la contabilidad mientras no pulse un botón del tipo <kbd>Crear…</kbd> o <kbd>Aplicar…</kbd>. Puede leer, releer, corregir y abandonar sin consecuencias.</p>
+                <h3>Orden recomendado</h3>
+                <table>
+                    <thead><tr><th>Etapa</th><th>Qué se hace</th><th>Qué produce</th></tr></thead>
+                    <tbody>
+                        <tr><td>0. Preparar la empresa</td><td>Fijar la fecha de corte, los períodos, las cuentas por defecto y los estados de impuestos TAXABLE / EXEMPT.</td><td>Requisito previo. La fecha de corte se fija aquí y ya no cambia.</td></tr>
+                        <tr><td>1. Conectar QuickBooks</td><td>« Importar desde QuickBooks », una sola vez por empresa.</td><td>Acceso de lectura a la contabilidad de origen.</td></tr>
+                        <tr><td>2. Plan de cuentas, en 3 pantallas</td><td>Importar, luego Correspondencia, luego Crear las cuentas en el plan.</td><td>Cuentas creadas en el plan: <strong>la primera escritura real</strong>.</td></tr>
+                        <tr><td>3. Terceros y productos</td><td>Clientes, Proveedores, Productos y servicios.</td><td>Fichas creadas. Una ficha existente nunca se vuelve a crear.</td></tr>
+                        <tr><td>4. Balance de comprobación</td><td>Cerrado a la fecha de corte.</td><td>Control de equilibrio y comparación con el plan. El asiento de apertura no se crea automáticamente.</td></tr>
+                        <tr><td>5. Facturas</td><td>« Facturas de clientes y proveedores ».</td><td>Documentos creados <strong>en borrador</strong>, sin nada en el libro mayor.</td></tr>
+                        <tr><td>6. Pantallas de control</td><td>Antigüedad de saldos, libro mayor, impuestos, bancos, etc.</td><td>Solo lectura.</td></tr>
+                        <tr><td>7. Control final</td><td>Balance de QuickBooks a hoy, comparado con el de 60Sec-AI.</td><td>Manual.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas de orden</h3>
+                <ul>
+                    <li>El plan de cuentas va antes que todo. Una línea de factura sobre una cuenta no vinculada muestra « en preparación, aún no aplicada ».</li>
+                    <li>Los terceros y los productos van antes que las facturas. Una factura reconoce su tercero <strong>solo entre los terceros importados y luego creados por las pantallas de importación</strong>, nunca entre las fichas escritas a mano.</li>
+                    <li>Las facturas van antes que los pagos; si no, el pago muestra « documento ausente ».</li>
+                    <li>Todos los informes de origen deben sacarse a la <strong>misma fecha de corte</strong>.</li>
+                </ul>
+                <div class="attention" data-titre="Atención">La fecha de corte es la víspera del primer día llevado en 60Sec-AI. Fíjela antes de sacar cualquier informe y no la cambie más: un balance cerrado a otra fecha no se compara con nada.</div>
+            </section>
+
+            <section id="es-centro">
+                <h2>Centro « Importación de datos »</h2>
+                <p>Pantalla de inicio de la migración (<span class="chemin">Importación › Importación de datos</span>). Enumera todos los elementos de importación, les da una nota sobre 10 y abre cada pantalla.</p>
+                <h3>Contadores</h3>
+                <table>
+                    <thead><tr><th>Contador</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Elementos censados</td><td>Número total de pantallas de importación.</td></tr>
+                        <tr><td>Utilizables</td><td>Pantallas con nota 7 o más.</td></tr>
+                        <tr><td>Parciales</td><td>Pantallas con nota de 2 a 6.</td></tr>
+                        <tr><td>Por hacer</td><td>Pantallas con nota 1 o menos.</td></tr>
+                    </tbody>
+                </table>
+                <p>La nota se basa en cuatro criterios: leer el archivo, controlarlo, ponerlo en preparación, aplicarlo a la contabilidad.</p>
+                <h3>Secciones y tarjetas</h3>
+                <ul>
+                    <li>« Lectura directa »: QuickBooks en directo y las pantallas « Validar… ».</li>
+                    <li>« Migración contable »: plan de cuentas y balance de comprobación.</li>
+                    <li>« Otras importaciones »: Clientes, Proveedores, Productos.</li>
+                </ul>
+                <p>Cada tarjeta muestra un icono, el título, la fuente, la nota sobre 10 con un indicador, el destino (« → … »), « Lo que funciona », « Lo que falta » y el botón <kbd>Abrir →</kbd>.</p>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Leer el plan</kbd>: abre el plan de migración en una ventana (<kbd>Cerrar ✕</kbd> o tecla Esc). El enlace « abrir en una pestaña » lo muestra a página completa.</li>
+                    <li><kbd>Vaciar las tablas de preparación</kbd>: borra todo lo que espera validación, solo para esta empresa. Confirmación: « ¿Vaciar todas las tablas de preparación de [empresa]? Todo lo que espera validación se borrará y deberá importarse de nuevo. Lo que ya pasó a la contabilidad no se toca. »</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Preparación vaciada: N línea(s) — [tabla] n, … »</span> — el vaciado tuvo éxito; se da el detalle por zona.</li>
+                    <li><span class="msg">« La preparación ya estaba vacía. »</span> — no había nada que borrar.</li>
+                    <li><span class="msg">« El vaciado falló: … »</span> — no se borró nada; lea el motivo y vuelva a intentar.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">« Vaciar las tablas de preparación » borra también las <strong>correspondencias de cuentas</strong> y el balance importado, incluidas las correspondencias de las cuentas ya creadas en la etapa 3. Evite este botón una vez aplicado el plan.</div>
+            </section>
+
+            <section id="es-quickbooks">
+                <h2>Importar desde QuickBooks</h2>
+                <p>Lectura directa de la contabilidad QuickBooks, sin archivo que exportar (<span class="chemin">Importación › Importar desde QuickBooks</span>). La pantalla tiene tres bloques.</p>
+                <h3>1. La conexión</h3>
+                <ul>
+                    <li>Punto verde: conectada. Naranja: no conectada. Rojo: no configurada en el servidor o inaccesible.</li>
+                    <li><kbd>Conectar QuickBooks</kbd>: lo envía a la página de conexión donde escribe sus credenciales de QuickBooks. 60Sec-AI nunca las ve.</li>
+                    <li><kbd>Verificar la conexión</kbd>: vuelve a leer el estado.</li>
+                    <li>Mientras la conexión no esté hecha, <kbd>Importar</kbd> queda desactivado.</li>
+                </ul>
+                <h3>2. Qué se trae</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Recursos</td><td>Al menos uno</td><td>Agrupados en Estructura, Terceros y artículos, Ventas, Compras, Libro mayor, Control; todos marcados por defecto. Enlaces <kbd>Desmarcar todo</kbd> · <kbd>Marcar todo</kbd> y contador « n de N elegidos ».</td></tr>
+                        <tr><td>Balance de comprobación y libro mayor cerrados al</td><td>Sí para los recursos con fecha</td><td>La fecha de corte: « la víspera del primer día llevado aquí ».</td></tr>
+                        <tr><td>Impuestos declarados por</td><td>No</td><td>Trimestre (por defecto), mes o año.</td></tr>
+                    </tbody>
+                </table>
+                <p><kbd>Importar a la preparación</kbd> lanza la extracción. « Una extracción voluminosa puede tardar unos minutos. »</p>
+                <h3>3. Qué llegó</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Recurso</td><td>Nombre del recurso solicitado.</td></tr>
+                        <tr><td>Registros</td><td>Número leído.</td></tr>
+                        <tr><td>Qué se hizo con él</td><td>« volcado al plan de cuentas: N cuenta(s), M por corregir », « depositado en preparación », o el error en rojo.</td></tr>
+                    </tbody>
+                </table>
+                <p>Un recurso fallido no detiene a los demás.</p>
+                <h3>Las extracciones anteriores</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cuándo</td><td>Fecha y hora.</td></tr>
+                        <tr><td>Fuente</td><td>Programa conectado.</td></tr>
+                        <tr><td>Recursos</td><td>Recursos solicitados.</td></tr>
+                        <tr><td>Registros</td><td>Total leído.</td></tr>
+                        <tr><td>Estado</td><td>TERMINE (completa) o PARTIEL (al menos un recurso falló).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Elija al menos un recurso que traer. »</span> — marque un recurso.</li>
+                    <li><span class="msg">« Indique la fecha de cierre: esta lectura abarca un período. »</span> — un recurso con fecha está marcado sin fecha de corte.</li>
+                    <li><span class="msg">« Apideck no está configurado en este servidor… »</span> — la lectura directa no está disponible; use archivos CSV.</li>
+                    <li><span class="msg">« Esta empresa aún no ha conectado su contabilidad. »</span> — pulse <kbd>Conectar QuickBooks</kbd>.</li>
+                    <li><span class="msg">« N registro(s) depositados en preparación, sobre M recurso(s) solicitado(s). … Nada se ha escrito en contabilidad… »</span> — extracción terminada; pase a las pantallas de preparación.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">La conexión se hace una sola vez por empresa. Las extracciones siguientes reutilizan la misma conexión.</div>
+            </section>
+
+            <section id="es-boton-quickbooks">
+                <h2>El botón QuickBooks en cada pantalla</h2>
+                <p>Cada pantalla de importación lleva un recuadro « QuickBooks, en directo — sin archivo que exportar » con el botón <kbd>⬇ Importar desde QuickBooks</kbd>. Solo trae <strong>lo que</strong> la pantalla sabe mostrar (por ejemplo, solo los clientes en la pantalla de clientes).</p>
+                <h3>Campos</h3>
+                <ul>
+                    <li>« Cerrado al »: se muestra para los recursos con fecha (balance, libro mayor).</li>
+                    <li>« Impuestos por trimestre / mes / año »: se muestra para el informe de impuestos.</li>
+                </ul>
+                <h3>Desarrollo</h3>
+                <ol>
+                    <li>Pulse <kbd>⬇ Importar desde QuickBooks</kbd>.</li>
+                    <li>El recuadro muestra « ⏳ Extracción en curso… ».</li>
+                    <li>La pantalla se recarga con los datos en preparación. Actualizar el navegador no relanza la extracción.</li>
+                </ol>
+                <p>Según el estado de la conexión, el recuadro propone « Gestionar la conexión », « Verificar la conexión » o « Conectar QuickBooks ».</p>
+                <div class="note" data-titre="Conviene saber">La fecha escrita se conserva durante la sesión y es común a todas las pantallas. El estado de la conexión se guarda 10 minutos: tras una conexión muy reciente, pulse « Verificar la conexión » si el punto aún no cambió.</div>
+            </section>
+
+            <section id="es-plan-etapa1">
+                <h2>Etapa 1: Importar el plan de cuentas</h2>
+                <p>Carga en preparación el plan de cuentas del programa anterior (<span class="chemin">Importación › Importar el plan de cuentas</span>). Arriba figuran un hilo de las 3 etapas, pulsable, y un bloque « Estado de esta pantalla ».</p>
+                <h3>El archivo que importar (bloque plegable)</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Programa de origen</td><td>Sí</td><td>QuickBooks, Acomba u Otro programa. Predefine el separador y la codificación.</td></tr>
+                        <tr><td>Separador</td><td>Sí</td><td>Punto y coma, Coma o Tabulación.</td></tr>
+                        <tr><td>Codificación</td><td>Sí</td><td>UTF-8, Windows-1252 (ANSI) o ISO-8859-1. « Acentos ilegibles = codificación incorrecta ».</td></tr>
+                        <tr><td>Archivo</td><td>Sí</td><td>Zona de depósito; solo .csv o .txt, 10 MB como máximo.</td></tr>
+                        <tr><td>La primera línea contiene los nombres de columnas</td><td>No</td><td>Marcada por defecto.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li>Ayuda « Cómo sacar este archivo de QuickBooks »: informe « Lista de cuentas » (« Account List », o « Account Listing » en Desktop), pasos y columnas esperadas.</li>
+                    <li><kbd>⬇ Descargar un modelo CSV</kbd>: archivo modelo con las columnas esperadas.</li>
+                    <li><kbd>Ver una vista previa</kbd>: lee el archivo sin guardar nada.</li>
+                    <li><kbd>Cargar en preparación</kbd>: deposita las cuentas en preparación. Una nueva carga <strong>reemplaza</strong> el plan en preparación.</li>
+                    <li><kbd>Pasar a la correspondencia →</kbd>: abre la etapa 2.</li>
+                    <li><kbd>🗑 Abandonar la preparación</kbd>: confirmación « ¿Abandonar el plan de cuentas en preparación? Las correspondencias ya decididas para este plan se borrarán también. » Rechazado si ya se aplicaron cuentas.</li>
+                </ul>
+                <h3>Vista previa</h3>
+                <p>Tabla « Columnas reconocidas » (Esperada / Columna del archivo, « no encontrada » en rojo) y luego las 15 primeras líneas.</p>
+                <h3>Qué se leyó</h3>
+                <p>Contadores Líneas leídas, Cuentas retenidas, Por revisar, y el recordatorio « Estas cuentas están en preparación… ».</p>
+                <h3>Qué está en preparación</h3>
+                <p>Filtro « Mostrar »: Todo, Cuentas nuevas, Ya en el plan, Duplicados del archivo, Líneas inválidas, Añadidas tras la apertura, Por defecto en QuickBooks.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Línea</td><td>Número de línea en el archivo.</td></tr>
+                        <tr><td>Cuenta</td><td>Número de la cuenta de origen.</td></tr>
+                        <tr><td>Nombre</td><td>Nombre de la cuenta de origen.</td></tr>
+                        <tr><td>Naturaleza</td><td>ACTIVO, PASIVO, CAPITAL, INGRESO o GASTO.</td></tr>
+                        <tr><td>Saldo / Sentido</td><td>Saldo leído y sentido debe o haber.</td></tr>
+                        <tr><td>Veredicto</td><td>Nueva, Ya en el plan, Duplicado o Inválida.</td></tr>
+                        <tr><td>Detalle</td><td>Explicación del veredicto o anomalía.</td></tr>
+                        <tr><td>Tipo de origen / Subtipo</td><td>Tipo y subtipo del programa anterior.</td></tr>
+                        <tr><td>Origen</td><td>« Por defecto QuickBooks » o « Añadida el aaaa-mm-dd » (solo lectura directa).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Elija primero un archivo. »</span> — deposite un archivo antes de pulsar.</li>
+                    <li><span class="msg">« Solo se aceptan archivos .csv y .txt. Desde Excel: Archivo ▸ Guardar como ▸ CSV. »</span> — convierta su .xlsx.</li>
+                    <li><span class="msg">« Archivo demasiado grande: 10 MB como máximo. »</span> — divida el archivo.</li>
+                    <li><span class="msg">« El archivo no contiene ninguna línea de datos. »</span> — verifique la exportación.</li>
+                    <li><span class="msg">« No se encontró ni el número ni el nombre de las cuentas — hace falta al menos uno de los dos… »</span> — encabezados no reconocidos; verifique el separador y la vista previa.</li>
+                    <li><span class="msg">« N cuenta(s) en preparación. Aún no se ha escrito nada en su plan de cuentas. »</span> — carga correcta.</li>
+                    <li><span class="msg">« N cuenta(s) en preparación, M línea(s) por mirar de cerca. »</span> — algunas líneas llevan un veredicto Duplicado o Inválida.</li>
+                    <li><span class="msg">« El plan de cuentas en preparación se abandonó, junto con sus correspondencias. »</span> — abandono correcto.</li>
+                    <li><span class="msg">« Esta importación se aplicó al plan de cuentas: ya no puede eliminarse. »</span> — abandono rechazado tras la etapa 3.</li>
+                    <li><span class="msg">« Línea sin número ni nombre de cuenta: nada permite identificarla. »</span> — línea Inválida.</li>
+                    <li><span class="msg">« Misma clave (« X ») que la línea n del archivo. »</span> — duplicado del archivo.</li>
+                    <li><span class="msg">« Ya en el plan de cuentas: … »</span> — la cuenta ya existe en su lado.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">Si la exportación contiene « Detail Type » además de « Type », se retiene la columna más a la izquierda. Verifique con la vista previa.</div>
+                <div class="astuce" data-titre="Consejo">¿Acentos ilegibles (Ã©)? Vuelva a intentar con la codificación Windows-1252.</div>
+            </section>
+
+            <section id="es-plan-etapa2">
+                <h2>Etapa 2: Correspondencia de cuentas</h2>
+                <p>Decide, cuenta por cuenta, qué pasa con cada cuenta del programa anterior: vincularla a una cuenta existente, crearla o ignorarla (<span class="chemin">Importación › Correspondencia de cuentas</span>). Nada se escribe en contabilidad: las decisiones se guardan aparte.</p>
+                <h3>Barra superior</h3>
+                <ul>
+                    <li>Filtro: Todo, Solo por decidir, Ya decididas, Añadidas tras la apertura, Por defecto en QuickBooks.</li>
+                    <li><kbd>✨ Proponer con la IA</kbd>: confirmación « ¿Enviar las cuentas aún por decidir y su plan de cuentas a la IA? Solo propondrá: nada se decidirá en su lugar. »</li>
+                    <li><kbd>Aceptar las correspondencias por número</kbd>: « ¿Retener todas las correspondencias donde el número de cuenta coincide? » Vincula todas las propuestas reconocidas por número <strong>o nombre</strong>, con la nota « Propuesta aceptada: mismo número/nombre de cuenta. »</li>
+                </ul>
+                <h3>Avance</h3>
+                <p>« n de N (x %) » y contadores Por decidir, Vinculadas, Por crear, Ignoradas, Cuentas en el plan. Cuando todo está decidido: « Todas las cuentas están decididas. La correspondencia está lista para ser revisada y firmada por su contador… »</p>
+                <h3>Columnas</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>Orden.</td></tr>
+                        <tr><td>Cuenta del programa anterior</td><td>Número (o « sin número »), nombre y ficha de origen: naturaleza, tipo y subtipo QuickBooks, saldo de origen, origen (« añadida el … » o « por defecto en QuickBooks »), « subcuenta de « … » », descripción, anomalía.</td></tr>
+                        <tr><td>Saldo</td><td>Saldo de origen.</td></tr>
+                        <tr><td>Lo que proponemos</td><td>Etiqueta « mismo número », « mismo nombre », « IA » (con % de confianza y razón), « ninguna propuesta » o « creada en el plan ». Si la IA difiere: « ✨ la IA sugiere más bien … ».</td></tr>
+                        <tr><td>Acción</td><td>« — por decidir », Vincular, Crear o Ignorar.</td></tr>
+                        <tr><td>Clase, Subclase, Cuenta en su plan</td><td>Tres listas en cascada (clase con código, nombre y rango de números). Una cuenta fuera del filtro sigue mostrándose « (fuera del filtro) ».</td></tr>
+                        <tr><td>Nota</td><td>500 caracteres como máximo.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Pie de página</h3>
+                <ul>
+                    <li>Recordatorio « Vincular / Crear / Ignorar ».</li>
+                    <li><kbd>Guardar las correspondencias</kbd>: conserva las decisiones.</li>
+                    <li><kbd>Crear las cuentas en el plan →</kbd>: abre la etapa 3.</li>
+                </ul>
+                <h3>Reglas</h3>
+                <ul>
+                    <li><strong>Vincular</strong> asocia a una cuenta existente. <strong>Crear</strong> añade la cuenta en la etapa 3 (se reutiliza el número de origen; si ya está tomado, el campo se vacía y el número será automático). <strong>Ignorar</strong> descarta la cuenta. Volver a « — por decidir » anula la decisión.</li>
+                    <li><strong>Una sola cuenta de origen por cuenta destino</strong> (verificado en el navegador y luego por la base).</li>
+                    <li>« Crear » no puede reutilizar un número que el plan ya conoce, ni el mismo número dos veces.</li>
+                    <li>Las cuentas creadas quedan bloqueadas: « Creada ✓ » en gris, nota de solo lectura.</li>
+                    <li>Propuesta por IA: la IA recibe las cuentas aún por decidir (nombre completo, naturaleza, tipo, subtipo, origen, saldo, descripción) y todo su plan. Una respuesta se descarta si la cuenta es desconocida o la naturaleza incompatible. Nada se decide antes de <kbd>Guardar</kbd>.</li>
+                    <li>Visualización limitada a 1 000 líneas.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Nada que enviar: todas las cuentas ya están decididas o reconocidas por su número. »</span> — la IA no tiene nada que proponer.</li>
+                    <li><span class="msg">« Su plan de cuentas está vacío: no hay nada a lo que vincular estas cuentas. »</span> — cree primero un plan.</li>
+                    <li><span class="msg">« N propuesta(s) sobre M cuenta(s) enviadas. K respuesta(s) descartada(s) … Costo estimado: x US$. Solo son propuestas… »</span> — revise y guarde lo que retenga.</li>
+                    <li><span class="msg">« Se retuvieron las correspondencias por número de cuenta. Lo que queda requiere una decisión. »</span> — aceptación en lote terminada.</li>
+                    <li><span class="msg">« Correspondencias guardadas. Todas las cuentas están decididas. »</span> — pase a la etapa 3.</li>
+                    <li><span class="msg">« …N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… »</span> — se asignará un número automático.</li>
+                    <li><span class="msg">« Una cuenta suya solo recibe una cuenta del programa anterior. … Vincule las demás en otro lugar, o créelas. »</span> — dos cuentas de origen apuntan a la misma cuenta destino.</li>
+                    <li><span class="msg">« « Crear » no puede reutilizar un número que su plan ya conoce. … »</span> — elija « Vincular » o vacíe el número.</li>
+                    <li><span class="msg">« « X »: el número N ya existe en su plan (…). Para asociarla a esa cuenta, elija « Vincular »… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« La cuenta N recibiría k cuentas del programa anterior (…)… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« La cuenta N ya está vinculada a « X »… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« El número N se crearía k veces… Un número solo se crea una vez. »</span> — rechazo al guardar.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">El plan estándar de 60Sec-AI ya existe. Hay que <strong>vincular</strong> las cuentas de QuickBooks a las cuentas existentes, no crearlo todo. Si no, obtendrá dos planes paralelos y estados financieros falsos.</div>
+                <div class="piege" data-titre="Trampa">El archivo CSV y la lectura directa de QuickBooks no comparten sus decisiones. Cambiar de vía hace reaparecer las cuentas « por decidir ». Recargar un plan conserva las decisiones cuya clave es idéntica; cambiar un nombre en QuickBooks cambia la clave.</div>
+            </section>
+
+            <section id="es-plan-etapa3">
+                <h2>Etapa 3: Crear las cuentas en el plan</h2>
+                <p>« Es la primera etapa que escribe en su contabilidad. » (<span class="chemin">Importación › Crear las cuentas en el plan</span>). Enlace « ← volver a la correspondencia ».</p>
+                <h3>Contadores</h3>
+                <p>Por crear, Ya creadas, Vinculadas, Ignoradas, Aún por decidir.</p>
+                <h3>Columnas de la tabla de cuentas por crear</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Obligatorio</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>#</td><td>—</td><td>Orden.</td></tr>
+                        <tr><td>Cuenta del programa anterior</td><td>—</td><td>Número y nombre de origen.</td></tr>
+                        <tr><td>Clase — dónde ubicarla</td><td>Sí</td><td>« — elegir una clase — » y luego las subclases compatibles con la naturaleza, con su rango de números.</td></tr>
+                        <tr><td>Número</td><td>No</td><td>Prellenado con el número de origen, o « auto ». Debe ser numérico, dentro del rango de la clase y libre.</td></tr>
+                        <tr><td>Nombre de la cuenta</td><td>Sí</td><td>150 caracteres como máximo.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>Crear las cuentas</kbd>: confirmación « ¿Crear estas cuentas en su plan de cuentas? Es una escritura real: las cuentas existirán definitivamente. »</li>
+                </ul>
+                <p>La tabla « Cuentas creadas » muestra Número, Nombre y « Venía de ».</p>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Todo o nada: el menor error anula la creación completa.</li>
+                    <li>Controles: clase elegida, nombre no vacío, número numérico dentro del rango de la clase, libre y no pedido dos veces.</li>
+                    <li>Sin número: primer número libre del rango (se privilegian las decenas).</li>
+                    <li>Una línea sin clase se deja de lado; relance después sin volver a crear lo que ya existe.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« N cuenta(s) aún no están decididas en la etapa 2. No se tomarán… »</span> — vuelva a la etapa 2 si hace falta.</li>
+                    <li><span class="msg">« No se eligió ninguna clase: no hay nada que crear. »</span> — elija una clase en al menos una línea.</li>
+                    <li><span class="msg">« N cuenta(s) creada(s) en su plan de cuentas. k línea(s) dejada(s) de lado, sin clase elegida. »</span> — creación correcta.</li>
+                    <li><span class="msg">« No se creó nada. »</span> — seguido del motivo: « « X »: el número N está fuera del rango a-b de la clase C. »; « … no es un número. »; « El número N ya se usa en su plan. »; « … el rango de números de esta clase está lleno. »</li>
+                </ul>
+                <div class="astuce" data-titre="Consejo">Un número de QuickBooks fuera del rango hace fallar toda la etapa. Vacíe el campo Número: se tomará un número automático dentro del rango de la clase.</div>
+            </section>
+
+            <section id="es-terceros-productos">
+                <h2>Clientes, Proveedores, Productos y servicios</h2>
+                <p>Una misma pantalla, titulada « Importar los clientes », « Importar los proveedores » o « Importar los productos y servicios » (<span class="chemin">Importación › Clientes / Proveedores / Productos y servicios</span>), con el botón QuickBooks.</p>
+                <h3>El archivo que importar</h3>
+                <ul>
+                    <li>« ¿De dónde vienen sus datos? »: programa, separador, codificación, pasos a seguir y columnas esperadas.</li>
+                    <li>Zona de depósito. El archivo se guarda en la sesión: « … se conserva desde su último depósito: los botones de abajo lo usan. Deposite otro para reemplazarlo. »</li>
+                </ul>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>👁 Ver una vista previa</kbd>: encabezado encontrado, correspondencia « Lo que buscamos / Columna del archivo » (o « ausente »), 10 primeras líneas.</li>
+                    <li><kbd>✨ Extraer con la IA</kbd>: lectura por la IA de un archivo mal estructurado (150 000 caracteres como máximo).</li>
+                    <li><kbd>📥 Leer el archivo</kbd>: lectura directa y depósito en preparación.</li>
+                    <li><kbd>✅ Crear los N nuevos …</kbd>: « ¿Crear N nuevos … en la aplicación? Lo que ya existe no se tocará. »</li>
+                    <li><kbd>Ver sus … →</kbd>: abre la lista de fichas (<a href="ventes.html#es-clientes">Clientes</a>, <a href="achats.html">Proveedores</a>, <a href="produits.html">Productos</a>).</li>
+                    <li><kbd>🗑 Abandonar este archivo</kbd>: « … Lo que ya se creó en la aplicación permanece. »</li>
+                </ul>
+                <h3>Qué se leyó</h3>
+                <p>Origen (« « archivo », depositado el … — lectura directa » o « extraído por la IA, costo estimado … US$ ») y etiquetas: líneas, por crear, ya en la aplicación, duplicado(s) del archivo, creado(s), descartado(s), con error.</p>
+                <table>
+                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Línea</td><td>Número de línea del archivo.</td></tr>
+                        <tr><td>Nombre, Contacto, Correo, Teléfono, Dirección (y Entrega), Impuestos</td><td>Terceros.</td></tr>
+                        <tr><td>Descripción, Precio, Gravable</td><td>Productos y servicios.</td></tr>
+                        <tr><td>Qué pasará con él</td><td>Veredicto: Por crear, Ya existe, Duplicado del archivo, Creado, Descartado, Error.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Columnas esperadas en el archivo</h3>
+                <table>
+                    <thead><tr><th>Columna</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>Nombre</td><td>Sí</td><td>Clave del tercero o del producto.</td></tr>
+                        <tr><td>Correo, Teléfono, Contacto, Dirección, Dirección (cont.), Ciudad, Provincia, Código postal, N.º TPS, N.º TVQ</td><td>No</td><td>Terceros.</td></tr>
+                        <tr><td>Saldo</td><td>No</td><td>Terceros; solo sirve para control.</td></tr>
+                        <tr><td>Descripción, Precio, Gravable</td><td>No</td><td>Productos.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Un nombre existente nunca se vuelve a crear.</li>
+                    <li>Duplicado del archivo: solo se retiene la primera línea.</li>
+                    <li>La IA rechaza una línea cuyo nombre no figura en el archivo.</li>
+                    <li>Los productos reciben las cuentas de ingresos y gastos por defecto de la empresa.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">Las facturas migradas solo reconocen los terceros creados por estas pantallas. Importe y cree clientes, proveedores y productos <strong>antes</strong> que las facturas.</div>
+            </section>
+
+            <section id="es-balance">
+                <h2>Importar el balance de comprobación</h2>
+                <p>Carga el balance del programa anterior cerrado a la fecha de corte (<span class="chemin">Importación › Balance de comprobación</span>), para controlar el equilibrio y compararlo con el plan. Informe de origen: « Balance de comprobación — Trial Balance ». « La fecha importa más que nada… ».</p>
+                <h3>Campos</h3>
+                <table>
+                    <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
+                    <tbody>
+                        <tr><td>¿De dónde vienen sus datos?</td><td>Sí</td><td>Programa, separador, codificación.</td></tr>
+                        <tr><td>Archivo</td><td>Sí</td><td>.csv o .txt; línea de encabezado con <strong>Debe y Haber</strong> en las 40 primeras líneas; Nombre obligatorio; lectura detenida en TOTAL (que sirve de control).</td></tr>
+                        <tr><td>Reemplazar el balance ya importado</td><td>No</td><td>Marcada por defecto. Desmarcada, las líneas se añaden al balance anterior.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Botones y acciones</h3>
+                <ul>
+                    <li><kbd>👁 Ver una vista previa</kbd>; <kbd>✨ Leer con la IA</kbd> (200 000 caracteres como máximo); <kbd>📥 Importar</kbd>.</li>
+                    <li><kbd>🔍 Incoherencias con el plan de cuentas</kbd>: control cruzado (ver Reglas).</li>
+                    <li><kbd>🔄 Nueva importación</kbd>: vuelve al depósito de archivo.</li>
+                    <li><kbd>🗑 Eliminar el balance importado</kbd>: « ¿Eliminar el balance importado de su empresa? »</li>
+                </ul>
+                <h3>Resultado</h3>
+                <p>Contadores Insertadas, Ignoradas, Errores; tabla Cuenta, Nombre de la cuenta, Debe, Haber, con total; bandas de equilibrio y de total anunciado; « Detalle de los errores ». Al volver a la pantalla: « El balance ya importado — Importado el … desde « … » — n cuenta(s). Para reemplazarlo, simplemente importe un nuevo archivo. »</p>
+                <h3>Reglas del control « Incoherencias »</h3>
+                <ul>
+                    <li><strong>Error</strong>: cuenta ausente del plan con saldo; cuenta « Ignorar » con saldo; cuenta duplicada.</li>
+                    <li><strong>Por verificar</strong>: saldo de sentido contrario; saldo diferente.</li>
+                    <li><strong>Info</strong>: cuenta ausente sin saldo; cuenta del plan ausente del balance.</li>
+                    <li>Conciliación por número; si no, por nombre.</li>
+                    <li>El asiento de apertura no se crea automáticamente: su contador lo registra en <a href="comptabilite.html">Contabilidad › Diarios</a>.</li>
+                </ul>
+                <h3>Mensajes</h3>
+                <ul class="messages">
+                    <li><span class="msg">« No se encontró ninguna línea de encabezado con una columna Debe y una columna Haber… »</span> — verifique el informe exportado.</li>
+                    <li><span class="msg">« ⚖️ Balance equilibrado — … »</span> — debe = haber.</li>
+                    <li><span class="msg">« ⚠️ Balance desequilibrado — diferencia de … »</span> — falta una línea o se leyó mal.</li>
+                    <li><span class="msg">« ⚠️ No se leyó ningún importe — todos los saldos valen cero… »</span> — columnas de importes no reconocidas; verifique la vista previa.</li>
+                    <li><span class="msg">« ✔ El total anunciado por el archivo (…) corresponde a la suma de las líneas leídas… »</span> — la lectura está completa.</li>
+                    <li><span class="msg">« Importe no encontrado en el archivo (…): línea rechazada. »</span> — la IA propuso un importe ausente del archivo; la línea se descarta.</li>
+                </ul>
+                <div class="attention" data-titre="Atención">Una cuenta « Ignorar » que lleva saldo hace desaparecer ese importe. El control lo señala como Error: vincúlela o créela.</div>
+            </section>
+
+            <section id="es-validar">
+                <h2>Las pantallas « Validar… »</h2>
+                <p>Pantallas de control de los datos traídos por la lectura directa de QuickBooks. La mayoría son de solo lectura; dos de ellas escriben en la aplicación.</p>
+                <table>
+                    <thead><tr><th>Pantalla</th><th>Qué muestra y verifica</th><th>Acciones</th></tr></thead>
+                    <tbody>
+                        <tr><td>Facturas de clientes y proveedores</td><td>Filtros Tipo y « Todas / Solo abiertas / Solo cerradas ». Contadores En preparación, Listas para crear, Por corregir, Ya creadas. Columnas: casilla, Número (anomalía y « n línea(s) »), Fecha, Vencimiento, Cliente/Proveedor, Subtotal, Impuestos, TPS, TVQ (modificables), Total, Saldo, Estado (lista, tercero por crear, por corregir, ya en contabilidad, creada).</td><td><kbd>Guardar las correcciones</kbd> (TPS/TVQ), <kbd>Crear los documentos marcados</kbd> (en borrador), <kbd>Retirar de la preparación</kbd> (sin confirmación).</td></tr>
+                        <tr><td>Ficha de la empresa</td><td>Diferencias, Ausentes aquí, Idénticos, Ausentes en el origen. Columnas: casilla, Campo, Valor actual, Valor en el origen, Estado.</td><td><kbd>Marcar todas las diferencias</kbd>, <kbd>Desmarcar todo</kbd>, <kbd>Aplicar los campos marcados</kbd>.</td></tr>
+                        <tr><td>Listas de estructura</td><td>Pestañas por lista: Nombre, Código, Tipo, Padre, Identificador de origen, Estado (Leído, Duplicado, Inutilizable).</td><td>Ninguna.</td></tr>
+                        <tr><td>Antigüedad de saldos</td><td>Pestañas Clientes / Proveedores. Cerrado al, Tramos, Terceros, Total anunciado. Conciliación con el saldo de las facturas en preparación.</td><td>Ninguna.</td></tr>
+                        <tr><td>Libro mayor</td><td>Período, Cuentas, Asientos, Totales. Filtro « Cuenta: ». « Debe y haber se equilibran » o « Diferencia de … ».</td><td>Ninguna.</td></tr>
+                        <tr><td>Informe de impuestos</td><td>Ejercicio, Declaraciones, Administraciones, líneas del formulario.</td><td>Ninguna.</td></tr>
+                        <tr><td>Saldos bancarios</td><td>Cuenta, N.º, Naturaleza, Moneda, Saldo. No es una conciliación.</td><td>Ninguna.</td></tr>
+                        <tr><td>Anticipos y pagos</td><td>Cobros / Pagos. Imputaciones: « saldado », « parcial sobre … », « documento ausente de la migración ».</td><td>Ninguna.</td></tr>
+                        <tr><td>Operaciones no conciliadas</td><td>Casilla « Mostrar también las operaciones ya punteadas ». Punteo compensada (C) o conciliada (R).</td><td>Ninguna.</td></tr>
+                        <tr><td>Nómina, Remesas de retenciones, Inventario, Depósitos y transferencias, Recurrentes, Presupuestos, Hojas de tiempo</td><td>Solo control.</td><td>Ninguna.</td></tr>
+                        <tr><td>Adjuntos</td><td>Pestañas por entidad. Estado: Leído, Archivo guardado, En la ficha, Sin dirección, Demasiado grande, Descarga rechazada.</td><td><kbd>📎 Adjuntar a las fichas de clientes y proveedores</kbd> (con confirmación, sin duplicados).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Mensajes (facturas)</h3>
+                <ul class="messages">
+                    <li><span class="msg">« N documento(s) creados en borrador. Nada está aún en el libro mayor: contabilícelos desde la cuadrícula de facturas. »</span> — vea <a href="ventes.html">Ventas</a> y <a href="achats.html">Compras</a>.</li>
+                    <li><span class="msg">« …descartados porque su cliente o proveedor aún no está creado. »</span> — cree primero los terceros.</li>
+                    <li><span class="msg">« …no suman (subtotal + TPS + TVQ ≠ total): reparta los impuestos antes de crearlos. »</span> — corrija TPS/TVQ y luego <kbd>Guardar las correcciones</kbd>.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">« Retirar de la preparación » actúa de inmediato, sin confirmación. Una nueva extracción devuelve los documentos.</div>
+                <div class="astuce" data-titre="Consejo">El filtro « Solo abiertas » evita migrar facturas ya pagadas.</div>
+            </section>
+
+            <section id="es-reglas">
+                <h2>Reglas generales</h2>
+                <h3>Formatos de archivo</h3>
+                <ul>
+                    <li>Solo se aceptan .csv y .txt, nunca .xlsx (Excel ▸ Guardar como ▸ CSV UTF-8). Tamaño máximo: 10 MB.</li>
+                    <li>Lectura por la IA: 150 000 caracteres para las listas, 200 000 para el balance.</li>
+                    <li>Importes aceptados: « 1 234,56 », « 1,234.56 », « $… », « (366.63) » (negativo). El último separador es el decimal.</li>
+                    <li>Fechas: 03/04/2026 se lee como el 3 de abril. Exporte en aaaa-mm-dd.</li>
+                </ul>
+                <h3>Columnas del plan de cuentas</h3>
+                <ul>
+                    <li>Número <strong>o</strong> nombre obligatorio; sin número, el nombre sirve de clave (normal en QuickBooks en línea).</li>
+                    <li>Tipo, Saldo y Sentido opcionales. Encabezados reconocidos en francés o en inglés; si no, se aplica el orden de las columnas.</li>
+                    <li>« 1000 - Caja » se convierte en 1000. El tipo se reduce a ACTIVO, PASIVO, CAPITAL, INGRESO o GASTO. El sentido viene de la columna; si no, del signo del saldo (negativo = haber).</li>
+                </ul>
+                <h3>Duplicados y veredictos</h3>
+                <ul>
+                    <li>Inválida: ni número ni nombre. Duplicado: misma clave que una línea anterior. « Ya en el plan »: mismo número, o mismo nombre en uno de los 4 idiomas, con naturaleza compatible. Mismo nombre pero naturaleza distinta: « por decidir ».</li>
+                    <li>Origen (solo lectura directa): « Por defecto QuickBooks » = cuenta creada en los 10 minutos siguientes a la primera cuenta; « Añadida » = creada después (cuentas propias de la empresa, por leer de cerca). El filtro « Origen » solo sirve, por tanto, para una importación por lectura directa.</li>
+                    <li>Límites de visualización: 500 líneas (plan en preparación), 1 000 líneas (correspondencia).</li>
+                </ul>
+            </section>
+
+            <section id="es-trampas">
+                <h2>Consejos y trampas</h2>
+                <ol>
+                    <li>El plan estándar ya existe: vincule, no lo cree todo.</li>
+                    <li>El archivo y la lectura directa no comparten sus decisiones.</li>
+                    <li>Recargar un plan conserva las decisiones cuya clave es idéntica; un nombre cambiado en QuickBooks cambia la clave.</li>
+                    <li>« Vaciar las tablas de preparación » borra también las correspondencias de las cuentas ya creadas: evítelo tras la etapa 3.</li>
+                    <li>Un número de QuickBooks fuera del rango hace fallar la etapa 3: vacíe el campo Número.</li>
+                    <li>El filtro « Origen » solo sirve para la lectura directa.</li>
+                    <li>Límites de visualización: 500 líneas (preparación), 1 000 líneas (correspondencia).</li>
+                    <li>« Detail Type » y « Type »: se retiene la columna más a la izquierda; verifique la vista previa.</li>
+                    <li>Acentos ilegibles (Ã©): vuelva a intentar con Windows-1252.</li>
+                    <li>El balance debe cerrarse a la fecha de corte; deje marcada « Reemplazar el balance ya importado ».</li>
+                    <li>Una cuenta ignorada que lleva saldo hace desaparecer ese importe.</li>
+                    <li>Facturas: importe y cree primero los terceros y los productos; corrija los importes en QuickBooks y relance; « Solo abiertas » evita las facturas ya pagadas.</li>
+                    <li>« Retirar de la preparación » actúa sin confirmación; una nueva extracción devuelve los documentos.</li>
+                    <li>Fechas americanas: exporte en aaaa-mm-dd.</li>
+                    <li>Nunca cuente dos veces las cuentas de clientes y proveedores entre el asiento de apertura y las facturas migradas.</li>
+                </ol>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <details><summary>¿En qué orden debo importar?</summary><p>Empresa preparada, conexión QuickBooks, plan de cuentas (3 etapas), terceros y productos, balance de comprobación, facturas, pantallas de control, control final. El plan de cuentas va antes que todo.</p></details>
+                <details><summary>¿En qué momento se escribe algo en mi contabilidad?</summary><p>Solo en la etapa 3 « Crear las cuentas en el plan », con el botón « Crear los N nuevos … » de terceros y productos, con « Crear los documentos marcados » (facturas en borrador), con « Aplicar los campos marcados » (ficha de la empresa) y con « Adjuntar a las fichas ». Todo lo demás está en preparación.</p></details>
+                <details><summary>Mi archivo Excel es rechazado.</summary><p>Solo se aceptan .csv y .txt. En Excel: Archivo ▸ Guardar como ▸ CSV UTF-8.</p></details>
+                <details><summary>Los acentos se ven ilegibles (Ã©).</summary><p>Codificación incorrecta. Vuelva a intentar con Windows-1252 (ANSI) o ISO-8859-1.</p></details>
+                <details><summary>¿Debo crear todas las cuentas de QuickBooks?</summary><p>No. El plan estándar ya existe: vincule las cuentas de QuickBooks a las existentes y cree solo las que no tengan equivalente.</p></details>
+                <details><summary>Mis decisiones de correspondencia desaparecieron.</summary><p>Quizá cambió de vía (archivo ↔ lectura directa), renombró una cuenta en QuickBooks, abandonó la preparación o vació las tablas de preparación. Cada una de estas acciones hace reaparecer cuentas « por decidir ».</p></details>
+                <details><summary>La etapa 3 rechaza un número « fuera del rango ».</summary><p>Vacíe el campo Número: se tomará un número automático dentro del rango de la clase elegida.</p></details>
+                <details><summary>El balance está desequilibrado.</summary><p>Falta una línea o se leyó mal. Verifique la vista previa, las columnas Debe y Haber y el total anunciado. Asegúrese también de que el informe esté cerrado a la fecha de corte.</p></details>
+                <details><summary>¿El asiento de apertura se crea automáticamente?</summary><p>No. El balance importado sirve para el control y la comparación con el plan; el asiento de apertura lo registra su contador.</p></details>
+                <details><summary>Una factura está « descartada » porque su tercero no está creado.</summary><p>Importe y cree primero los clientes y proveedores mediante las pantallas de importación, y luego relance la extracción de facturas. Una ficha escrita a mano no se reconoce.</p></details>
+                <details><summary>¿Qué hace la IA en la correspondencia?</summary><p>Propone una cuenta destino para cada cuenta aún por decidir, con un porcentaje de confianza y una razón. Nada se decide hasta que usted guarde.</p></details>
+            </section>
+
+            <section id="es-glosario">
+                <h2>Glosario</h2>
+                <table>
+                    <thead><tr><th>Término</th><th>Definición</th></tr></thead>
+                    <tbody>
+                        <tr><td>Preparación</td><td>Zona de espera donde se depositan los datos importados antes de cualquier escritura en contabilidad.</td></tr>
+                        <tr><td>Fecha de corte</td><td>Víspera del primer día llevado en 60Sec-AI; fecha de cierre de todos los informes migrados.</td></tr>
+                        <tr><td>Lectura directa</td><td>Obtención de datos desde QuickBooks mediante la conexión, sin archivo.</td></tr>
+                        <tr><td>Correspondencia</td><td>Decisión Vincular / Crear / Ignorar tomada para cada cuenta del programa anterior.</td></tr>
+                        <tr><td>Vincular</td><td>Asociar una cuenta de origen a una cuenta existente del plan.</td></tr>
+                        <tr><td>Crear</td><td>Añadir una cuenta de origen al plan, en la etapa 3.</td></tr>
+                        <tr><td>Ignorar</td><td>Dejar una cuenta de origen fuera de la migración.</td></tr>
+                        <tr><td>Veredicto</td><td>Destino de una línea leída: Nueva, Ya en el plan, Duplicado, Inválida (o Por crear, Ya existe, Creado, Descartado, Error para terceros y productos).</td></tr>
+                        <tr><td>Naturaleza</td><td>Gran familia de una cuenta: ACTIVO, PASIVO, CAPITAL, INGRESO, GASTO.</td></tr>
+                        <tr><td>Clase / Subclase</td><td>Agrupación del plan de cuentas, con un rango de números.</td></tr>
+                        <tr><td>Balance de comprobación</td><td>Lista de cuentas con sus saldos deudores y acreedores a una fecha dada.</td></tr>
+                        <tr><td>Asiento de apertura</td><td>Asiento que traslada los saldos del balance a 60Sec-AI en la fecha de corte.</td></tr>
+                        <tr><td>Borrador</td><td>Factura creada pero no contabilizada: nada en el libro mayor.</td></tr>
+                        <tr><td>TPS / TVQ</td><td>Impuestos sobre las ventas canadiense (5 %) y quebequense (9,975 %).</td></tr>
+                    </tbody>
+                </table>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>
