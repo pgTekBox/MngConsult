@@ -142,6 +142,8 @@ mark{background:#ffe89a}
   <a href="#messages">Messages and their solutions</a>
   <a href="#faq">Frequently asked questions</a>
   <a href="#glossaire">Glossary</a>
+  <h2>Assistant</h2>
+  <a href="#assistant">The AI assistant</a>
 </nav>
 
 <main id="haut">
@@ -1013,6 +1015,26 @@ mark{background:#ffe89a}
 <details><summary>How do the 2027 rates get into the software?</summary><p>Each year's rates (T4127, TP-1015.F, QPP, EI, QPIP, HSF, CNESST) are entered and validated by 60Sec in its administration console as soon as the guides are published, in December. You have nothing to do: once validated, 60secPaie uses them for any pay run dated in that year, within five minutes. Until a year is validated, the wizard refuses a pay run dated in that year.</p></details>
 <details><summary>I have several CNESST classification units. What do I do?</summary><p>Enter each unit and its rate under Settings › CNESST units, then pick each employee's unit on their record. The unit's rate applies to their pay runs, and the CNESST report gives a table per unit, ready for the Statement of Wages. Employees without a unit stay at the company rate.</p></details>
 </div>
+
+<!-- ============================================================ -->
+<h2 id="assistant">The AI assistant</h2>
+<p><span class="chemin">Assistant.aspx</span>, "Assistant" menu. You ask a question in French, English or Spanish; the assistant answers from this guide and from your <strong>company profile</strong>, naming the screen to use. It explains and guides; it changes nothing in your data. Ctrl+Enter sends the question; "New conversation" starts over. The conversation does not survive signing out.</p>
+<h3>The company profile</h3>
+<ul>
+  <li>Generated automatically from your data: payroll settings, CNESST units, pay items, employees with their parameters (frequency, rate or salary, exemptions, unit, direct deposit), current state (last pay run, draft, deductions to remit), rates of the year. It is rebuilt when it is more than an hour old or when the employee list changed; "Refresh the profile" rebuilds it right away.</li>
+  <li>"Specifics (written by you)": what the software does not know, for example a prevention mutual, seasonal employees, a payroll habit. The assistant takes them into account from the next question.</li>
+  <li>"Employee codes": in the profile, employees are called E1, E2… The mapping to names is shown here, for you only.</li>
+  <li>"View the profile sent to the assistant" shows exactly what is sent.</li>
+</ul>
+<h3>Privacy</h3>
+<p>Each question is sent to OpenAI (gpt-4.1-mini model) with this guide and the profile. <strong>No employee name, SIN, account number, email or address is sent.</strong> Do not write them in your questions. Exchanges are kept by 60secPaie, with their cost (shown under the input box, a few thousandths of a dollar per question). The assistant's answers do not replace an accountant's advice: for a binding decision, it points to the guide's rule and recommends confirming it.</p>
+<table>
+<tr><th>Message</th><th>Meaning</th></tr>
+<tr><td>"Write a question."</td><td>The box is empty.</td></tr>
+<tr><td>"The question is too long (4000 characters at most)."</td><td>Shorten it.</td></tr>
+<tr><td>"The AI access key is not configured." / "The assistant's prompt is not configured."</td><td>Configuration on 60Sec's side: report it.</td></tr>
+<tr><td>"The assistant could not answer: …"</td><td>The service is unavailable or refused the request; try again later.</td></tr>
+</table>
 
 <!-- ============================================================ -->
 <h2 id="glossaire">Reference › Glossary</h2>

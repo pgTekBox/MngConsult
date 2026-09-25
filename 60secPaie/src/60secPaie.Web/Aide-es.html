@@ -142,6 +142,8 @@ mark{background:#ffe89a}
   <a href="#messages">Mensajes y su solución</a>
   <a href="#faq">Preguntas frecuentes</a>
   <a href="#glossaire">Glosario</a>
+  <h2>Asistente</h2>
+  <a href="#assistant">El asistente de IA</a>
 </nav>
 
 <main id="haut">
@@ -1013,6 +1015,26 @@ mark{background:#ffe89a}
 <details><summary>¿Cómo llegan las tasas de 2027 al programa?</summary><p>Las tasas de cada año (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) las ingresa y valida 60Sec en su consola de administración en cuanto se publican las guías, en diciembre. Usted no tiene que hacer nada: una vez validadas, 60secPaie las usa para toda nómina fechada en ese año, en cinco minutos. Mientras un año no esté validado, el asistente rechaza una nómina fechada en ese año.</p></details>
 <details><summary>Tengo varias unidades de clasificación CNESST. ¿Qué hago?</summary><p>Ingrese cada unidad y su tasa en Configuración › Unidades CNESST y elija la unidad de cada empleado en su ficha. La tasa de la unidad se aplica a sus nóminas, y el informe CNESST da una tabla por unidad, lista para la Declaración de salarios. Los empleados sin unidad se quedan con la tasa de la empresa.</p></details>
 </div>
+
+<!-- ============================================================ -->
+<h2 id="assistant">El asistente de IA</h2>
+<p><span class="chemin">Assistant.aspx</span>, menú « Asistente ». Usted hace una pregunta en francés, inglés o español; el asistente responde a partir de esta guía y del <strong>perfil de su empresa</strong>, nombrando la pantalla que debe usar. Explica y guía; no modifica nada en sus datos. Ctrl+Intro envía la pregunta; « Nueva conversación » empieza de cero. La conversación no sobrevive al cierre de sesión.</p>
+<h3>El perfil de la empresa</h3>
+<ul>
+  <li>Generado automáticamente a partir de sus datos: configuración de nómina, unidades CNESST, elementos de nómina, empleados con sus parámetros (frecuencia, tasa o salario, exenciones, unidad, depósito directo), estado actual (última nómina, borrador, retenciones por remitir), tasas del año. Se rehace cuando tiene más de una hora o cuando cambió la lista de empleados; « Actualizar el perfil » lo rehace de inmediato.</li>
+  <li>« Particularidades (escritas por usted) »: lo que el programa no sabe, por ejemplo una mutual de prevención, empleados de temporada, un hábito de nómina. El asistente las tiene en cuenta desde la próxima pregunta.</li>
+  <li>« Códigos de los empleados »: en el perfil, los empleados se llaman E1, E2… La correspondencia con los nombres se muestra aquí, solo para usted.</li>
+  <li>« Ver el perfil enviado al asistente » muestra exactamente lo que se envía.</li>
+</ul>
+<h3>Confidencialidad</h3>
+<p>Cada pregunta se envía a OpenAI (modelo gpt-4.1-mini) con esta guía y el perfil. <strong>No se envía ningún nombre de empleado, NAS, número de cuenta, correo ni dirección.</strong> No los escriba en sus preguntas. 60secPaie conserva los intercambios, con su costo (mostrado bajo el cuadro de texto, unas milésimas de dólar por pregunta). Las respuestas del asistente no reemplazan la opinión de un contador: para una decisión que compromete, remite a la regla de la guía y recomienda confirmarla.</p>
+<table>
+<tr><th>Mensaje</th><th>Sentido</th></tr>
+<tr><td>« Escriba una pregunta. »</td><td>El cuadro está vacío.</td></tr>
+<tr><td>« La pregunta es demasiado larga (4000 caracteres como máximo). »</td><td>Acórtela.</td></tr>
+<tr><td>« La clave de acceso a la IA no está configurada. » / « El prompt del asistente no está configurado. »</td><td>Configuración del lado de 60Sec: infórmelo.</td></tr>
+<tr><td>« El asistente no pudo responder: … »</td><td>El servicio no está disponible o rechazó la solicitud; vuelva a intentarlo más tarde.</td></tr>
+</table>
 
 <!-- ============================================================ -->
 <h2 id="glossaire">Referencia › Glosario</h2>

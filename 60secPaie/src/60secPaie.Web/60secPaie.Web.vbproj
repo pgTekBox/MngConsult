@@ -54,6 +54,8 @@
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
     <Reference Include="System.Web" />
+    <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.ApplicationServices" />
     <Reference Include="System.Xml" />
   </ItemGroup>
@@ -76,6 +78,7 @@
     <Content Include="Content\site.css" />
     <Content Include="Langues\traductions.txt" />
     <Content Include="Accueil.aspx" />
+    <Content Include="Assistant.aspx" />
     <Content Include="Aide.html" />
     <Content Include="Aide-en.html" />
     <Content Include="Aide-es.html" />
@@ -105,6 +108,13 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="My Project\AssemblyInfo.vb" />
+    <Compile Include="Assistant.aspx.vb">
+      <DependentUpon>Assistant.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Assistant.aspx.designer.vb">
+      <DependentUpon>Assistant.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.vb">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -119,6 +129,8 @@
     </Compile>
     <Compile Include="Infrastructure\ServicePaie.vb" />
     <Compile Include="Infrastructure\ServiceParametres.vb" />
+    <Compile Include="Infrastructure\ServiceProfilIA.vb" />
+    <Compile Include="Infrastructure\AssistantIA.vb" />
     <Compile Include="Infrastructure\RenduPaie.vb" />
     <Compile Include="Infrastructure\TalonModele.vb" />
     <Compile Include="Infrastructure\PdfSimple.vb" />

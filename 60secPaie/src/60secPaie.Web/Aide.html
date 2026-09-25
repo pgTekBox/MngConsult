@@ -142,6 +142,8 @@ mark{background:#ffe89a}
   <a href="#messages">Messages et leur solution</a>
   <a href="#faq">Questions fréquentes</a>
   <a href="#glossaire">Glossaire</a>
+  <h2>Assistant</h2>
+  <a href="#assistant">L'assistant IA</a>
 </nav>
 
 <main id="haut">
@@ -1013,6 +1015,26 @@ mark{background:#ffe89a}
 <details><summary>Comment les taux de 2027 arrivent-ils dans le logiciel ?</summary><p>Les taux de chaque année (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) sont saisis et validés par 60Sec dans sa console d'administration dès la parution des guides, en décembre. Vous n'avez rien à faire : dès la validation, 60secPaie les utilise pour toute paie datée de l'année, dans les cinq minutes. Tant qu'une année n'est pas validée, l'assistant refuse une paie datée de cette année.</p></details>
 <details><summary>J'ai plusieurs unités de classification CNESST. Comment faire ?</summary><p>Inscrivez chaque unité et son taux dans Configuration › Unités CNESST, puis choisissez l'unité de chaque employé dans sa fiche. Le taux de l'unité s'applique à ses paies, et le rapport CNESST donne un tableau par unité, prêt pour la Déclaration des salaires. Les employés sans unité restent au taux de la compagnie.</p></details>
 </div>
+
+<!-- ============================================================ -->
+<h2 id="assistant">L'assistant IA</h2>
+<p><span class="chemin">Assistant.aspx</span>, menu « Assistant ». Vous posez une question en français, en anglais ou en espagnol ; l'assistant répond à partir de ce guide et du <strong>profil de votre compagnie</strong>, en nommant l'écran à utiliser. Il explique et guide, il ne modifie rien dans vos données. Ctrl+Entrée envoie la question ; « Nouvelle conversation » repart de zéro. La conversation ne survit pas à la déconnexion.</p>
+<h3>Le profil de la compagnie</h3>
+<ul>
+  <li>Généré automatiquement depuis vos données : configuration de paie, unités CNESST, éléments de paie, employés avec leurs paramètres (fréquence, taux ou salaire, exemptions, unité, dépôt direct), état courant (dernière paie, brouillon, retenues à remettre), taux de l'année. Il est refait quand il date de plus d'une heure ou que la liste des employés a changé ; « Actualiser le profil » le refait tout de suite.</li>
+  <li>« Particularités (écrites par vous) » : ce que le logiciel ne sait pas, par exemple une mutuelle de prévention, des employés saisonniers, une habitude de paie. L'assistant en tient compte dès la question suivante.</li>
+  <li>« Codes des employés » : dans le profil, les employés sont désignés E1, E2… La correspondance avec les noms s'affiche ici, pour vous seulement.</li>
+  <li>« Voir le profil envoyé à l'assistant » montre exactement ce qui part.</li>
+</ul>
+<h3>Confidentialité</h3>
+<p>Chaque question part vers OpenAI (modèle gpt-4.1-mini) avec ce guide et le profil. <strong>Aucun nom d'employé, NAS, numéro de compte, courriel ni adresse n'est envoyé.</strong> Ne les écrivez pas dans vos questions. Les échanges sont conservés par 60secPaie, avec leur coût (affiché sous la zone de saisie, quelques millièmes de dollar par question). Les réponses de l'assistant ne remplacent pas l'avis d'un comptable : pour une décision qui engage, il renvoie à la règle du guide et vous recommande de la confirmer.</p>
+<table>
+<tr><th>Message</th><th>Sens</th></tr>
+<tr><td>« Écrivez une question. »</td><td>La zone est vide.</td></tr>
+<tr><td>« La question est trop longue (4000 caractères au plus). »</td><td>Raccourcissez.</td></tr>
+<tr><td>« La clé d'accès à l'IA n'est pas configurée. » / « Le prompt de l'assistant n'est pas configuré. »</td><td>Configuration côté 60Sec : signalez-le.</td></tr>
+<tr><td>« L'assistant n'a pas pu répondre : … »</td><td>Le service est indisponible ou a refusé la demande ; réessayez plus tard.</td></tr>
+</table>
 
 <!-- ============================================================ -->
 <h2 id="glossaire">Référence › Glossaire</h2>

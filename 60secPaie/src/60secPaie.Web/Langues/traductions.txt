@@ -3321,3 +3321,141 @@ es: Una línea por unidad de su decisión de clasificación; « — » agrupa la
 fr: Taux de versement périodique de votre décision de classification. Avec plusieurs unités, définissez-les dans « Unités CNESST » et affectez chaque employé à la sienne.
 en: Periodic payment rate from your classification decision. With several units, define them under "CNESST units" and assign each employee to theirs.
 es: Tasa de pago periódico de su decisión de clasificación. Con varias unidades, defínalas en « Unidades CNESST » y asigne a cada empleado la suya.
+
+# ---------- Assistant IA ----------
+
+fr: Assistant
+en: Assistant
+es: Asistente
+
+fr: Posez vos questions sur la paie de cette compagnie : l'assistant connaît le guide de 60secPaie et le profil de la compagnie.
+en: Ask your questions about this company's payroll: the assistant knows the 60secPaie guide and the company's profile.
+es: Haga sus preguntas sobre la nómina de esta empresa: el asistente conoce la guía de 60secPaie y el perfil de la empresa.
+
+fr: Nouvelle conversation
+en: New conversation
+es: Nueva conversación
+
+fr: Aucune question pour l'instant. Par exemple :
+en: No question yet. For example:
+es: Ninguna pregunta por ahora. Por ejemplo:
+
+fr: Pourquoi le RRQ d'un employé est-il à 0 ?
+en: Why is an employee's QPP at 0?
+es: ¿Por qué el RRQ de un empleado está en 0?
+
+fr: Comment ajouter l'assurance collective ?
+en: How do I add group insurance?
+es: ¿Cómo agrego el seguro colectivo?
+
+fr: Quand dois-je payer mes retenues ?
+en: When do I have to pay my source deductions?
+es: ¿Cuándo debo pagar mis retenciones?
+
+fr: Comment produire le fichier de dépôt direct ?
+en: How do I produce the direct deposit file?
+es: ¿Cómo genero el archivo de depósito directo?
+
+fr: Que faire pour un employé qui quitte ?
+en: What do I do when an employee leaves?
+es: ¿Qué hago cuando un empleado se va?
+
+fr: Votre question… (Ctrl+Entrée pour envoyer)
+en: Your question… (Ctrl+Enter to send)
+es: Su pregunta… (Ctrl+Intro para enviar)
+
+fr: Coût des questions ce mois-ci : {0} US$
+en: Cost of questions this month: US${0}
+es: Costo de las preguntas este mes: US${0}
+
+fr: Profil de la compagnie
+en: Company profile
+es: Perfil de la empresa
+
+fr: Ce que l'assistant sait de cette compagnie. Il est généré depuis vos données et refait automatiquement quand elles changent.
+en: What the assistant knows about this company. It is generated from your data and rebuilt automatically when it changes.
+es: Lo que el asistente sabe de esta empresa. Se genera a partir de sus datos y se rehace automáticamente cuando cambian.
+
+fr: Profil généré le {0}.
+en: Profile generated on {0}.
+es: Perfil generado el {0}.
+
+fr: Le profil sera généré à la première question.
+en: The profile will be generated with the first question.
+es: El perfil se generará con la primera pregunta.
+
+fr: Particularités (écrites par vous)
+en: Specifics (written by you)
+es: Particularidades (escritas por usted)
+
+fr: Ce que le logiciel ne sait pas : mutuelle de prévention, employés saisonniers, habitudes de paie, ententes particulières…
+en: What the software does not know: prevention mutual, seasonal employees, payroll habits, special agreements…
+es: Lo que el programa no sabe: mutual de prevención, empleados de temporada, hábitos de nómina, acuerdos especiales…
+
+fr: Enregistrer les particularités
+en: Save the specifics
+es: Guardar las particularidades
+
+fr: Actualiser le profil
+en: Refresh the profile
+es: Actualizar el perfil
+
+fr: Codes des employés (visibles ici seulement)
+en: Employee codes (visible here only)
+es: Códigos de los empleados (visibles solo aquí)
+
+fr: Voir le profil envoyé à l'assistant
+en: View the profile sent to the assistant
+es: Ver el perfil enviado al asistente
+
+fr: Confidentialité
+en: Privacy
+es: Confidencialidad
+
+fr: Chaque question part vers OpenAI avec le guide de 60secPaie et le profil ci-dessus. Les employés y sont désignés par un code (E1, E2…), jamais par leur nom. Aucun NAS, numéro de compte, courriel ni adresse n'est envoyé. Ne les écrivez pas dans vos questions. Les échanges sont conservés par 60secPaie pour améliorer l'assistant. Ses réponses ne remplacent pas l'avis d'un comptable.
+en: Each question is sent to OpenAI with the 60secPaie guide and the profile above. Employees are referred to by a code (E1, E2…), never by name. No SIN, account number, email or address is sent. Do not write them in your questions. Exchanges are kept by 60secPaie to improve the assistant. Its answers do not replace an accountant's advice.
+es: Cada pregunta se envía a OpenAI con la guía de 60secPaie y el perfil de arriba. Los empleados se designan con un código (E1, E2…), nunca por su nombre. No se envía ningún NAS, número de cuenta, correo ni dirección. No los escriba en sus preguntas. 60secPaie conserva los intercambios para mejorar el asistente. Sus respuestas no reemplazan la opinión de un contador.
+
+fr: Aucun employé.
+en: No employee.
+es: Ningún empleado.
+
+fr: Pas encore généré.
+en: Not generated yet.
+es: Aún no generado.
+
+fr: inactif
+en: inactive
+es: inactivo
+
+fr: Écrivez une question.
+en: Write a question.
+es: Escriba una pregunta.
+
+fr: La question est trop longue ({0} caractères au plus).
+en: The question is too long ({0} characters at most).
+es: La pregunta es demasiado larga ({0} caracteres como máximo).
+
+fr: L'assistant n'a pas pu répondre : {0}
+en: The assistant could not answer: {0}
+es: El asistente no pudo responder: {0}
+
+fr: La clé d'accès à l'IA n'est pas configurée.
+en: The AI access key is not configured.
+es: La clave de acceso a la IA no está configurada.
+
+fr: Le prompt de l'assistant n'est pas configuré.
+en: The assistant's prompt is not configured.
+es: El prompt del asistente no está configurado.
+
+fr: Particularités enregistrées : l'assistant en tiendra compte dès la prochaine question.
+en: Specifics saved: the assistant will take them into account from the next question.
+es: Particularidades guardadas: el asistente las tendrá en cuenta desde la próxima pregunta.
+
+fr: Profil actualisé.
+en: Profile refreshed.
+es: Perfil actualizado.
+
+fr: Envoyer
+en: Send
+es: Enviar

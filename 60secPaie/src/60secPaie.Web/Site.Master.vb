@@ -35,6 +35,7 @@ Public Class SiteMaster
         Activer(lnkRapports, chemin.StartsWith("~/rapports/"))
         Activer(lnkEmployes, chemin.StartsWith("~/employes/"))
         Activer(lnkConfig, chemin.StartsWith("~/config/"))
+        Activer(lnkAssistant, chemin = "~/assistant.aspx")
     End Sub
 
     ''' <summary>Une compagnie : son nom. Plusieurs (utilisateur comptable dans MngConsul) : liste déroulante.</summary>

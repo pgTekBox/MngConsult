@@ -30,6 +30,7 @@
                 <a runat="server" id="lnkRapports" href="~/Rapports/Feuillets.aspx">Rapports</a>
                 <a runat="server" id="lnkEmployes" href="~/Employes/Liste.aspx">Employés</a>
                 <a runat="server" id="lnkConfig" href="~/Config/Compagnie.aspx">Configuration</a>
+                <a runat="server" id="lnkAssistant" href="~/Assistant.aspx">Assistant</a>
             </nav>
         </header>
 
