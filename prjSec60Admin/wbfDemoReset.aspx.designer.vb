@@ -18,4 +18,29 @@ Partial Public Class wbfDemoReset
     Protected WithEvents pnlMsgSnap As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents litMsgSnap As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>
+    '''ddlCie control.
+    '''</summary>
+    Protected WithEvents ddlCie As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>
+    '''txtConfirmZero control.
+    '''</summary>
+    Protected WithEvents txtConfirmZero As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>
+    '''btnZero control.
+    '''</summary>
+    Protected WithEvents btnZero As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>
+    '''pnlMsgZero control.
+    '''</summary>
+    Protected WithEvents pnlMsgZero As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>
+    '''litMsgZero control.
+    '''</summary>
+    Protected WithEvents litMsgZero As Global.System.Web.UI.WebControls.Literal
+
 End Class

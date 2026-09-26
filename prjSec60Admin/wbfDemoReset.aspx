@@ -85,5 +85,43 @@
                 <asp:Literal ID="litMsgSnap" runat="server" />
             </asp:Panel>
         </div>
+
+        <hr class="demo-hr" />
+
+        <h1>Remettre la comptabilité à zéro</h1>
+        <div class="demo-sub">Repartir une comptabilité neuve pour <b>n'importe quelle compagnie</b> (démo ou réelle), sans perdre sa configuration.</div>
+
+        <div class="demo-card">
+            <div class="demo-select">
+                <label for="<%= ddlCie.ClientID %>">Compagnie :</label>
+                <asp:DropDownList ID="ddlCie" runat="server" />
+            </div>
+            <div class="demo-warn">
+                🧹 Cette action <b>efface définitivement</b> les données vivantes de la compagnie choisie :
+                clients et fournisseurs (avec adresses et pièces jointes), factures et documents, reçus,
+                écritures, règlements, relevé bancaire, rapports de taxes, produits et catégories,
+                autorisations de paiement automatique, tables de préparation d'importation, conversations de l'assistant.
+                Les compteurs de numérotation repartent à zéro.
+            </div>
+            <div class="demo-info">
+                <b>Conservé</b> pour redémarrer : la fiche de la compagnie, ses utilisateurs et son abonnement,
+                les paramètres (taxes, numérotation, comptes par défaut), le <b>plan comptable</b> et ses classes,
+                les journaux, les exercices et périodes (rouverts), les modèles d'écritures, les banques connectées (Plaid),
+                les tâches planifiées, les employés et les rendez-vous (détachés de leur client).<br />
+                Appelle la proc <code>s0863ResetCompanyAccounting</code>. Aucune restauration possible : faites une sauvegarde avant.
+            </div>
+            <div class="demo-select" style="margin-top:14px">
+                <label for="<%= txtConfirmZero.ClientID %>">Tapez <code>ZERO</code> pour confirmer :</label>
+                <asp:TextBox ID="txtConfirmZero" runat="server" MaxLength="10" autocomplete="off" />
+            </div>
+
+            <asp:Button ID="btnZero" runat="server" CssClass="btn-reset"
+                Text="Remettre la comptabilité à zéro maintenant"
+                OnClientClick="if (!confirm('Effacer clients, fournisseurs, produits, factures, écritures et règlements de la compagnie choisie ? Le plan comptable et la configuration sont conservés. Cette action est irréversible.')) { return false; }" />
+
+            <asp:Panel ID="pnlMsgZero" runat="server" Visible="false">
+                <asp:Literal ID="litMsgZero" runat="server" />
+            </asp:Panel>
+        </div>
     </div>
 </asp:Content>
