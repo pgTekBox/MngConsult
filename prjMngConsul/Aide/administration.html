@@ -387,6 +387,42 @@
                 </ul>
             </section>
 
+            <section id="fr-remise-a-zero">
+                <h2>Remettre la comptabilité à zéro</h2>
+                <h3>But</h3>
+                <p>Repartir une comptabilité neuve pour une compagnie, sans refaire sa configuration : les données vivantes sont effacées, tout ce qui sert à démarrer est conservé. L’opération se fait dans la <b>console d’administration de 60Sec</b> (réservée à l’équipe 60Sec, écran <span class="chemin">Gestion des démos › Remettre la comptabilité à zéro</span>) : demandez-la à votre soutien, elle n’est pas offerte depuis l’ERP.</p>
+                <h3>Ce qui est effacé</h3>
+                <ul>
+                    <li>Les clients et les fournisseurs, avec leurs adresses et leurs pièces jointes.</li>
+                    <li>Les factures clients et fournisseurs, leurs lignes, leurs photos, leurs liens de règlement, et les compteurs de numérotation (le prochain numéro repart du début).</li>
+                    <li>Les reçus déposés et leurs analyses par l’IA.</li>
+                    <li>Les écritures et leurs lignes, les règlements (encaissements et décaissements), le relevé bancaire importé, les rapports de taxes.</li>
+                    <li>Les produits et les catégories de produits.</li>
+                    <li>Les autorisations de paiement automatique et leurs tentatives.</li>
+                    <li>Les tables de préparation de l’importation (comme « Vider les tables de préparation »).</li>
+                    <li>Le profil et les conversations de l’assistant IA (le profil se régénère à la première question).</li>
+                </ul>
+                <h3>Ce qui est conservé</h3>
+                <ul>
+                    <li>La fiche de la compagnie, ses utilisateurs et son abonnement.</li>
+                    <li>Les paramètres : taxes, numérotation des factures, comptes par défaut, courriel, logo.</li>
+                    <li>Le <b>plan comptable</b> et ses classes, les journaux, les modèles d’écritures.</li>
+                    <li>Les exercices et leurs périodes, tous <b>rouverts</b> pour que la nouvelle comptabilité puisse écrire.</li>
+                    <li>Les banques connectées par Plaid, les tâches planifiées.</li>
+                    <li>Les employés et l’agenda ; les rendez-vous perdent seulement leur client.</li>
+                </ul>
+                <h3>Déroulement</h3>
+                <ol>
+                    <li>L’administrateur 60Sec choisit la compagnie dans la liste (la compagnie modèle ne peut pas être choisie).</li>
+                    <li>Il confirme la boîte de dialogue, puis tape le mot <kbd>ZERO</kbd> dans la case prévue : sans ce mot, rien ne se passe (message « Tapez ZERO dans la case pour confirmer la remise à zéro. »).</li>
+                    <li>Tout est effacé en une seule opération : si une étape échoue, rien n’est modifié.</li>
+                    <li>Le message de fin donne le nombre de lignes effacées et rappelle ce qui est conservé.</li>
+                </ol>
+                <div class="piege" data-titre="Piège">L’opération est <b>irréversible</b> : aucune restauration n’est prévue. Demandez une sauvegarde avant, ou exportez ce dont vous aurez besoin (rapports imprimés en PDF, liste des clients par « Exporter vers Square »…).</div>
+                <div class="attention" data-titre="Attention">Les intégrations restent branchées : Square et Plaid sont toujours connectés. Les clients et produits synchronisés avec Square ne sont plus liés côté 60Sec-AI ; un « Importer depuis Square » les recréera, sans doublon.</div>
+                <div class="note" data-titre="Bon à savoir">Après la remise à zéro, la démarche est celle d’une nouvelle compagnie : vérifiez <span class="chemin">Paramètres</span>, puis créez vos catégories, vos produits, vos clients, et votre première facture. Pour reprendre une comptabilité existante, passez par <a href="importation.html#fr-demarche">Importation des données</a>.</div>
+            </section>
+
             <section id="fr-roles">
                 <h2>Rôles et plusieurs compagnies</h2>
                 <table>
@@ -407,7 +443,8 @@
 
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
-                <details><summary>Pourquoi ne puis-je pas ouvrir l’écran Utilisateurs ?</summary><p>Il est réservé aux administrateurs ; les autres rôles sont renvoyés au Tableau de bord. Demandez à un administrateur de cocher « Administrateur » sur votre fiche.</p></details>
+                                <details><summary>Puis-je tout effacer et repartir à neuf sans perdre mon plan comptable ?</summary><p>Oui : c’est la <a href="#fr-remise-a-zero">remise à zéro de la comptabilité</a>, faite par l’équipe 60Sec depuis sa console d’administration. Clients, fournisseurs, produits, factures, écritures et règlements disparaissent ; plan comptable, journaux, exercices, paramètres, utilisateurs et employés restent. Elle est irréversible.</p></details>
+<details><summary>Pourquoi ne puis-je pas ouvrir l’écran Utilisateurs ?</summary><p>Il est réservé aux administrateurs ; les autres rôles sont renvoyés au Tableau de bord. Demandez à un administrateur de cocher « Administrateur » sur votre fiche.</p></details>
                 <details><summary>Comment donner accès à mon comptable ?</summary><p>Remettez-lui la « Clé comptable » de l’onglet Comptable des Paramètres. Le rôle Comptable ne se crée pas dans Utilisateurs.</p></details>
                 <details><summary>L’analyse IA a remplacé mes valeurs, pourquoi ?</summary><p>Dans Profil de l’entreprise, l’analyse écrase les champs remplis. Utilisez plutôt le remplissage automatique des Paramètres, qui ne touche que les champs vides.</p></details>
                 <details><summary>Le badge du courriel d’expéditeur reste « en attente », que faire ?</summary><p>Ouvrez le courriel « Vérifiez l’adresse courriel de votre entreprise » et cliquez « Confirmer mon adresse » dans les 24 h ; sinon <kbd>Renvoyer le lien</kbd>.</p></details>
@@ -807,6 +844,42 @@
                 </ul>
             </section>
 
+            <section id="en-reset-accounting">
+                <h2>Resetting the accounting</h2>
+                <h3>Purpose</h3>
+                <p>Start a fresh set of books for a company without redoing its configuration: live data is erased, everything needed to start again is kept. The operation is done in the <b>60Sec administration console</b> (reserved to the 60Sec team, screen <span class="chemin">Demo management › Reset the accounting</span>): ask your support for it, it is not offered from the ERP.</p>
+                <h3>What is erased</h3>
+                <ul>
+                    <li>Customers and suppliers, with their addresses and attachments.</li>
+                    <li>Customer and supplier invoices, their lines, photos, payment links, and the numbering counters (the next number starts over).</li>
+                    <li>Uploaded receipts and their AI analyses.</li>
+                    <li>Journal entries and their lines, payments (receipts and disbursements), the imported bank statement, tax reports.</li>
+                    <li>Products and product categories.</li>
+                    <li>Automatic payment authorizations and their attempts.</li>
+                    <li>The import staging tables (as “Clear the staging tables” does).</li>
+                    <li>The AI assistant profile and conversations (the profile is rebuilt at the first question).</li>
+                </ul>
+                <h3>What is kept</h3>
+                <ul>
+                    <li>The company record, its users and its subscription.</li>
+                    <li>Settings: taxes, invoice numbering, default accounts, email, logo.</li>
+                    <li>The <b>chart of accounts</b> and its classes, journals, journal templates.</li>
+                    <li>Fiscal years and their periods, all <b>reopened</b> so the new books can post.</li>
+                    <li>Banks connected through Plaid, scheduled tasks.</li>
+                    <li>Employees and the agenda; appointments only lose their customer.</li>
+                </ul>
+                <h3>How it goes</h3>
+                <ol>
+                    <li>The 60Sec administrator picks the company in the list (the template company cannot be chosen).</li>
+                    <li>They confirm the dialog, then type the word <kbd>ZERO</kbd> in the box: without it nothing happens (message “Type ZERO in the box to confirm the reset.”).</li>
+                    <li>Everything is erased in a single operation: if one step fails, nothing is changed.</li>
+                    <li>The final message gives the number of rows erased and recalls what is kept.</li>
+                </ol>
+                <div class="piege" data-titre="Pitfall">The operation is <b>irreversible</b>: no restore is provided. Ask for a backup first, or export what you will need (reports printed to PDF, customer list through “Export to Square”…).</div>
+                <div class="attention" data-titre="Warning">Integrations stay connected: Square and Plaid are still linked. Customers and products synced with Square are no longer linked on the 60Sec-AI side; an “Import from Square” recreates them without duplicates.</div>
+                <div class="note" data-titre="Good to know">After the reset, proceed as for a new company: check <span class="chemin">Settings</span>, then create your categories, products, customers and your first invoice. To take over existing books, use <a href="importation.html#en-approach">Data import</a>.</div>
+            </section>
+
             <section id="en-roles">
                 <h2>Roles and multiple companies</h2>
                 <table>
@@ -827,7 +900,8 @@
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>Why can’t I open the Users screen?</summary><p>It is for administrators only; other roles are sent back to the Dashboard. Ask an administrator to check “Administrator” on your record.</p></details>
+                                <details><summary>Can I erase everything and start over without losing my chart of accounts?</summary><p>Yes: that is the <a href="#en-reset-accounting">accounting reset</a>, done by the 60Sec team from its administration console. Customers, suppliers, products, invoices, entries and payments disappear; chart of accounts, journals, fiscal years, settings, users and employees stay. It is irreversible.</p></details>
+<details><summary>Why can’t I open the Users screen?</summary><p>It is for administrators only; other roles are sent back to the Dashboard. Ask an administrator to check “Administrator” on your record.</p></details>
                 <details><summary>How do I give my accountant access?</summary><p>Hand them the “Accountant key” from the Accountant tab of Settings. The Accountant role is not created in Users.</p></details>
                 <details><summary>Why did the AI analysis replace my values?</summary><p>In Company profile, the analysis overwrites filled fields. Use the automatic fill in Settings instead, which only touches empty fields.</p></details>
                 <details><summary>The sender email badge stays “awaiting”, what now?</summary><p>Open the “Verify your company’s email address” email and click “Confirm my address” within 24 h; otherwise <kbd>Resend link</kbd>.</p></details>
@@ -1227,6 +1301,42 @@
                 </ul>
             </section>
 
+            <section id="es-reinicio-contabilidad">
+                <h2>Reiniciar la contabilidad a cero</h2>
+                <h3>Objetivo</h3>
+                <p>Empezar una contabilidad nueva para una compañía sin rehacer su configuración: los datos vivos se borran y todo lo necesario para arrancar se conserva. La operación se hace en la <b>consola de administración de 60Sec</b> (reservada al equipo de 60Sec, pantalla <span class="chemin">Gestión de demos › Reiniciar la contabilidad a cero</span>): pídala a su soporte, no está disponible desde el ERP.</p>
+                <h3>Lo que se borra</h3>
+                <ul>
+                    <li>Los clientes y proveedores, con sus direcciones y adjuntos.</li>
+                    <li>Las facturas de clientes y proveedores, sus líneas, fotos, vínculos de pago y los contadores de numeración (el próximo número vuelve a empezar).</li>
+                    <li>Los recibos depositados y sus análisis por la IA.</li>
+                    <li>Los asientos y sus líneas, los pagos (cobros y desembolsos), el extracto bancario importado, los informes de impuestos.</li>
+                    <li>Los productos y las categorías de productos.</li>
+                    <li>Las autorizaciones de pago automático y sus intentos.</li>
+                    <li>Las tablas de preparación de la importación (como «Vaciar las tablas de preparación»).</li>
+                    <li>El perfil y las conversaciones del asistente de IA (el perfil se regenera con la primera pregunta).</li>
+                </ul>
+                <h3>Lo que se conserva</h3>
+                <ul>
+                    <li>La ficha de la compañía, sus usuarios y su suscripción.</li>
+                    <li>Los ajustes: impuestos, numeración de facturas, cuentas por defecto, correo, logotipo.</li>
+                    <li>El <b>plan contable</b> y sus clases, los diarios, las plantillas de asientos.</li>
+                    <li>Los ejercicios y sus períodos, todos <b>reabiertos</b> para que la nueva contabilidad pueda registrar.</li>
+                    <li>Los bancos conectados por Plaid, las tareas programadas.</li>
+                    <li>Los empleados y la agenda; las citas solo pierden su cliente.</li>
+                </ul>
+                <h3>Cómo se desarrolla</h3>
+                <ol>
+                    <li>El administrador de 60Sec elige la compañía en la lista (la compañía modelo no puede elegirse).</li>
+                    <li>Confirma el cuadro de diálogo y luego escribe la palabra <kbd>ZERO</kbd> en la casilla: sin ella no pasa nada (mensaje «Escriba ZERO en la casilla para confirmar el reinicio.»).</li>
+                    <li>Todo se borra en una sola operación: si un paso falla, nada se modifica.</li>
+                    <li>El mensaje final indica el número de líneas borradas y recuerda lo que se conserva.</li>
+                </ol>
+                <div class="piege" data-titre="Trampa">La operación es <b>irreversible</b>: no hay restauración prevista. Pida una copia de seguridad antes, o exporte lo que necesitará (informes impresos en PDF, lista de clientes con «Exportar a Square»…).</div>
+                <div class="attention" data-titre="Atención">Las integraciones siguen conectadas: Square y Plaid permanecen vinculados. Los clientes y productos sincronizados con Square ya no están vinculados del lado de 60Sec-AI; un «Importar desde Square» los recrea sin duplicados.</div>
+                <div class="note" data-titre="Conviene saber">Tras el reinicio, proceda como con una compañía nueva: revise <span class="chemin">Ajustes</span>, luego cree sus categorías, productos, clientes y su primera factura. Para retomar una contabilidad existente, use <a href="importation.html#es-metodo">Importación de datos</a>.</div>
+            </section>
+
             <section id="es-roles">
                 <h2>Roles y varias compañías</h2>
                 <table>
@@ -1247,7 +1357,8 @@
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>¿Por qué no puedo abrir la pantalla Usuarios?</summary><p>Está reservada a los administradores; los demás roles vuelven al Tablero. Pida a un administrador que marque «Administrador» en su ficha.</p></details>
+                                <details><summary>¿Puedo borrarlo todo y empezar de nuevo sin perder mi plan contable?</summary><p>Sí: es el <a href="#es-reinicio-contabilidad">reinicio de la contabilidad a cero</a>, que hace el equipo de 60Sec desde su consola de administración. Clientes, proveedores, productos, facturas, asientos y pagos desaparecen; plan contable, diarios, ejercicios, ajustes, usuarios y empleados se conservan. Es irreversible.</p></details>
+<details><summary>¿Por qué no puedo abrir la pantalla Usuarios?</summary><p>Está reservada a los administradores; los demás roles vuelven al Tablero. Pida a un administrador que marque «Administrador» en su ficha.</p></details>
                 <details><summary>¿Cómo doy acceso a mi contador?</summary><p>Entréguele la «Clave contable» de la pestaña Contador de Parámetros. El rol Contador no se crea en Usuarios.</p></details>
                 <details><summary>¿Por qué el análisis IA reemplazó mis valores?</summary><p>En Perfil de la empresa, el análisis sobrescribe los campos rellenados. Use mejor el relleno automático de Parámetros, que solo toca los campos vacíos.</p></details>
                 <details><summary>La insignia del correo remitente sigue «en espera», ¿qué hago?</summary><p>Abra el correo «Verifique la dirección de correo de su empresa» y haga clic en «Confirmar mi dirección» dentro de las 24 h; si no, <kbd>Reenviar el enlace</kbd>.</p></details>
