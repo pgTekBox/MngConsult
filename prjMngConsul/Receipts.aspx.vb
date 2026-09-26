@@ -38,7 +38,9 @@ Public Class Receipts
 
 
 
-        Dim dt As DataTable = Me.ExecuteSQLds("s0001GetReceipts").Tables(0)
+        Dim pCie As New Collection
+        pCie.Add(New Data.SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim dt As DataTable = Me.ExecuteSQLds("s0001GetReceipts", pCie).Tables(0)
         If dt Is Nothing Then Return
         gvReceipts.DataSource = dt
         gvReceipts.DataBind()

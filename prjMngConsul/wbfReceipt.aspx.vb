@@ -33,7 +33,9 @@ Public Class wbfReceipt
         'p.Add(New SqlClient.SqlParameter("@q", q))
         'Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts", p)
 
-        Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts")
+        Dim pCie As New Collection
+        pCie.Add(New Data.SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts", pCie)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
     End Function

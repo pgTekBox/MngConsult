@@ -52,6 +52,9 @@ BEGIN
     DECLARE @log TABLE (StepNo int IDENTITY(1,1), TableName sysname, RowsDeleted int);
     DECLARE @d uniqueidentifier = @CompanyGUID;
 
+    -- Les reçus arrivés par courriel sans compagnie : on les rattache d'abord (T280), sinon ils resteraient.
+    EXEC dbo.s0864AttribuerRecusCourriel @d;
+
     BEGIN TRY
         BEGIN TRAN;
 
