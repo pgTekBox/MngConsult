@@ -526,7 +526,12 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">« Aucun reçu trouvé. »</span> — aucun reçu n’a encore été reçu par la compagnie.</li>
-                </ul>
+                </ul>                <h3>Reçus arrivés par courriel et reçus orphelins</h3>
+                <p>Un reçu peut arriver par courriel : un fournisseur (ou vous-même) envoie la facture à la boîte <b>@60sec.ca</b> de la compagnie, ou à celle d’un de ses employés (voir <a href="courriel.html">Courriel</a> et <a href="employes.html">Employés</a>). Le courriel est lu, ses pièces jointes deviennent des reçus, et le reçu est rattaché à la compagnie dont la boîte était destinataire. Il apparaît alors ici, dans <span class="chemin">Achats › Reçus</span>, comme un reçu déposé à la main.</p>
+                <p>La liste ne montre que les reçus de la <b>compagnie active</b> : un comptable qui change de compagnie dans l’en-tête voit une autre liste.</p>
+                <p>Un courriel adressé à une boîte @60sec.ca qui n’appartient à aucune compagnie ni à aucun employé produit un <b>reçu orphelin</b> : il n’a pas de compagnie, il n’apparaît dans aucune liste et une remise à zéro ne l’efface pas. L’équipe 60Sec le voit dans sa console d’administration (bloc « Reçus orphelins »), où elle peut le <b>rattacher</b> à la bonne compagnie ou le <b>supprimer</b>. Si un reçu envoyé par courriel n’apparaît pas, vérifiez l’adresse utilisée, puis demandez à votre soutien de le rattacher.</p>
+                <div class="note" data-titre="Bon à savoir">L’adresse @60sec.ca de la compagnie s’affiche dans <span class="chemin">Courriel</span> ; celle d’un employé, dans <span class="chemin">Employés</span>. Un reçu envoyé à l’une ou l’autre arrive dans la même liste.</div>
+
                 <h3>Trucs et pièges</h3>
                 <div class="piege" data-titre="Piège">Chaque clic sur <kbd>Process AI</kbd> déclenche un nouvel appel payant à l’IA. Ne cliquez pas plusieurs fois sur <kbd>Process AI</kbd> ni sur <kbd>Process JSON</kbd> pour le même reçu : vous risquez des frais et des doublons.</div>
                 <div class="attention" data-titre="Attention">Les images PNG (et tout format autre que JPEG, PDF et texte) ne sont pas traitées, et aucun message ne l’indique. Convertissez les captures d’écran en JPEG ou en PDF avant de les envoyer.</div>
@@ -536,7 +541,8 @@
 
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
-                <details><summary>Pourquoi le bouton « Payer avec Stripe » n’apparaît-il pas sur ma facture ?</summary><p>Il n’est visible que si la facture est comptabilisée et non payée. Ouvrez la facture, cochez « Comptabilisé » et enregistrez ; le bouton apparaîtra dans la liste.</p></details>
+                                <details><summary>J’ai envoyé un reçu par courriel et il n’apparaît pas. Pourquoi ?</summary><p>Le courriel doit être adressé à la boîte @60sec.ca de la compagnie ou d’un de ses employés : c’est le destinataire qui décide de la compagnie. Envoyé à une autre adresse, le reçu devient <a href="#fr-recus">orphelin</a> et seule l’équipe 60Sec peut le rattacher ou le supprimer depuis sa console. Vérifiez aussi que la compagnie active dans l’en-tête est la bonne.</p></details>
+<details><summary>Pourquoi le bouton « Payer avec Stripe » n’apparaît-il pas sur ma facture ?</summary><p>Il n’est visible que si la facture est comptabilisée et non payée. Ouvrez la facture, cochez « Comptabilisé » et enregistrez ; le bouton apparaîtra dans la liste.</p></details>
                 <details><summary>Le fournisseur a été payé sur Stripe, mais la facture reste « Ouverte ». Que faire ?</summary><p>L’enregistrement dépend de l’avis automatique de Stripe. Cliquez sur <kbd>Synchroniser les paiements Stripe</kbd> sur la facture, puis sur <kbd>Importer dans 60Sec-AI →</kbd> pour le paiement marqué « ⚠ Manquant en BD ».</p></details>
                 <details><summary>Qui paie les frais Stripe ?</summary><p>Vous. Les frais (2,9 % + 0,30 $ par carte, 1 % plafonné à 12 $ en ACSS) s’ajoutent au montant : le fournisseur reçoit exactement ce que vous avez saisi.</p></details>
                 <details><summary>Puis-je payer une partie d’une facture par Stripe ?</summary><p>Oui. Modifiez le « Montant à payer maintenant » (minimum 0,01 $, maximum le reste à payer). La facture passera à « Partielle ».</p></details>
@@ -1079,7 +1085,12 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“No receipt found.”</span> — the company has not received any receipt yet.</li>
-                </ul>
+                </ul>                <h3>Receipts received by email and orphan receipts</h3>
+                <p>A receipt can arrive by email: a supplier (or you) sends the invoice to the company’s <b>@60sec.ca</b> mailbox, or to one of its employees’ (see <a href="courriel.html">Mail</a> and <a href="employes.html">Employees</a>). The email is read, its attachments become receipts, and the receipt is attached to the company whose mailbox was the recipient. It then shows here, in <span class="chemin">Purchases › Receipts</span>, like a receipt uploaded by hand.</p>
+                <p>The list only shows the receipts of the <b>active company</b>: an accountant who switches company in the header sees another list.</p>
+                <p>An email sent to a @60sec.ca mailbox that belongs to no company and no employee produces an <b>orphan receipt</b>: it has no company, appears in no list, and a reset does not erase it. The 60Sec team sees it in its administration console (“Orphan receipts” block), where it can <b>attach</b> it to the right company or <b>delete</b> it. If a receipt sent by email does not show up, check the address used, then ask your support to attach it.</p>
+                <div class="note" data-titre="Good to know">The company’s @60sec.ca address is shown in <span class="chemin">Mail</span>; an employee’s, in <span class="chemin">Employees</span>. A receipt sent to either one lands in the same list.</div>
+
                 <h3>Tips and pitfalls</h3>
                 <div class="piege" data-titre="Pitfall">Every click on <kbd>Process AI</kbd> triggers a new paid call to the AI. Do not click <kbd>Process AI</kbd> or <kbd>Process JSON</kbd> several times for the same receipt: you risk fees and duplicates.</div>
                 <div class="attention" data-titre="Warning">PNG images (and any format other than JPEG, PDF and text) are not processed, and no message says so. Convert screenshots to JPEG or PDF before sending them.</div>
@@ -1089,7 +1100,8 @@
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>Why is the “Pay with Stripe” button missing on my invoice?</summary><p>It is only visible when the invoice is posted and unpaid. Open the invoice, check “Posted” and save; the button will appear in the list.</p></details>
+                                <details><summary>I emailed a receipt and it does not show up. Why?</summary><p>The email must be addressed to the @60sec.ca mailbox of the company or of one of its employees: the recipient decides the company. Sent to another address, the receipt becomes an <a href="#en-receipts">orphan</a> and only the 60Sec team can attach or delete it from its console. Also check that the active company in the header is the right one.</p></details>
+<details><summary>Why is the “Pay with Stripe” button missing on my invoice?</summary><p>It is only visible when the invoice is posted and unpaid. Open the invoice, check “Posted” and save; the button will appear in the list.</p></details>
                 <details><summary>The supplier was paid on Stripe, but the invoice stays “Open”. What now?</summary><p>Recording depends on Stripe’s automatic notice. Click <kbd>Sync Stripe payments</kbd> on the invoice, then <kbd>Import into 60Sec-AI →</kbd> on the payment marked “⚠ Missing in DB”.</p></details>
                 <details><summary>Who pays the Stripe fees?</summary><p>You do. Fees (2.9 % + 0,30 $ by card, 1 % capped at 12 $ by ACSS) are added to the amount: the supplier receives exactly what you entered.</p></details>
                 <details><summary>Can I pay part of an invoice with Stripe?</summary><p>Yes. Change the “Amount to pay now” (minimum 0,01 $, maximum the balance due). The invoice becomes “Partial”.</p></details>
@@ -1632,7 +1644,12 @@
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«No se encontró ningún recibo.»</span> — la compañía aún no ha recibido ningún recibo.</li>
-                </ul>
+                </ul>                <h3>Recibos recibidos por correo y recibos huérfanos</h3>
+                <p>Un recibo puede llegar por correo: un proveedor (o usted mismo) envía la factura al buzón <b>@60sec.ca</b> de la compañía, o al de uno de sus empleados (vea <a href="courriel.html">Correo</a> y <a href="employes.html">Empleados</a>). El correo se lee, sus adjuntos se convierten en recibos y el recibo se vincula a la compañía cuyo buzón era el destinatario. Aparece entonces aquí, en <span class="chemin">Compras › Recibos</span>, como un recibo depositado a mano.</p>
+                <p>La lista solo muestra los recibos de la <b>compañía activa</b>: un contador que cambia de compañía en el encabezado ve otra lista.</p>
+                <p>Un correo dirigido a un buzón @60sec.ca que no pertenece a ninguna compañía ni a ningún empleado produce un <b>recibo huérfano</b>: no tiene compañía, no aparece en ninguna lista y un reinicio a cero no lo borra. El equipo de 60Sec lo ve en su consola de administración (bloque «Recibos huérfanos»), donde puede <b>vincularlo</b> a la compañía correcta o <b>eliminarlo</b>. Si un recibo enviado por correo no aparece, revise la dirección usada y pida a su soporte que lo vincule.</p>
+                <div class="note" data-titre="Conviene saber">La dirección @60sec.ca de la compañía se muestra en <span class="chemin">Correo</span>; la de un empleado, en <span class="chemin">Empleados</span>. Un recibo enviado a cualquiera de las dos llega a la misma lista.</div>
+
                 <h3>Consejos y trampas</h3>
                 <div class="piege" data-titre="Trampa">Cada clic en <kbd>Process AI</kbd> desencadena una nueva llamada de pago a la IA. No haga clic varias veces en <kbd>Process AI</kbd> ni en <kbd>Process JSON</kbd> para el mismo recibo: se arriesga a comisiones y duplicados.</div>
                 <div class="attention" data-titre="Atención">Las imágenes PNG (y cualquier formato distinto de JPEG, PDF y texto) no se procesan, y ningún mensaje lo indica. Convierta las capturas de pantalla a JPEG o PDF antes de enviarlas.</div>
@@ -1642,7 +1659,8 @@
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>¿Por qué no aparece el botón «Pagar con Stripe» en mi factura?</summary><p>Solo es visible si la factura está contabilizada y no pagada. Abra la factura, marque «Contabilizado» y guarde; el botón aparecerá en la lista.</p></details>
+                                <details><summary>Envié un recibo por correo y no aparece. ¿Por qué?</summary><p>El correo debe dirigirse al buzón @60sec.ca de la compañía o de uno de sus empleados: el destinatario decide la compañía. Enviado a otra dirección, el recibo se vuelve <a href="#es-recibos">huérfano</a> y solo el equipo de 60Sec puede vincularlo o eliminarlo desde su consola. Revise también que la compañía activa en el encabezado sea la correcta.</p></details>
+<details><summary>¿Por qué no aparece el botón «Pagar con Stripe» en mi factura?</summary><p>Solo es visible si la factura está contabilizada y no pagada. Abra la factura, marque «Contabilizado» y guarde; el botón aparecerá en la lista.</p></details>
                 <details><summary>El proveedor fue pagado en Stripe, pero la factura sigue «Abierta». ¿Qué hago?</summary><p>El registro depende del aviso automático de Stripe. Haga clic en <kbd>Sincronizar los pagos Stripe</kbd> en la factura y luego en <kbd>Importar en 60Sec-AI →</kbd> en el pago marcado «⚠ Falta en BD».</p></details>
                 <details><summary>¿Quién paga las comisiones de Stripe?</summary><p>Usted. Las comisiones (2,9 % + 0,30 $ con tarjeta, 1 % con tope de 12 $ en ACSS) se agregan al monto: el proveedor recibe exactamente lo que usted capturó.</p></details>
                 <details><summary>¿Puedo pagar una parte de una factura por Stripe?</summary><p>Sí. Modifique el «Monto a pagar ahora» (mínimo 0,01 $, máximo el saldo pendiente). La factura pasará a «Parcial».</p></details>
