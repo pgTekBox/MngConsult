@@ -269,16 +269,16 @@
                             <div class="receipt-file">
                                 <asp:Literal ID="litHtml" runat="server"
                                     Mode="PassThrough"
-                                    Text='<%# Server.HtmlDecode(CStr(Eval("SourceFileName"))) %>' />
+                                    Text='<%# Server.HtmlDecode(Convert.ToString(Eval("SourceFileName"))) %>' />
                                 <asp:Literal ID="litHtmlOp" runat="server"
                                     Mode="PassThrough"
-                                    Text='<%# Server.HtmlDecode(CStr(Eval("Optimized"))) %>' />
+                                    Text='<%# Server.HtmlDecode(Convert.ToString(Eval("Optimized"))) %>' />
                             </div>
 
                             <div class="receipt-supplier">
                                 <asp:Literal ID="litinfo" runat="server"
                                     Mode="PassThrough"
-                                    Text='<%# Server.HtmlDecode(CStr(Eval("SupplierInfo"))) %>' />
+                                    Text='<%# Server.HtmlDecode(Convert.ToString(Eval("SupplierInfo"))) %>' />
                             </div>
 
                             <div class="receipt-process">
