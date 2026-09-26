@@ -43,4 +43,14 @@ Partial Public Class wbfDemoReset
     '''</summary>
     Protected WithEvents litMsgZero As Global.System.Web.UI.WebControls.Literal
 
+    Protected WithEvents rptOrphelins As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents pnlAucunOrphelin As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents pnlOrphActions As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents chkTousOrph As Global.System.Web.UI.WebControls.CheckBox
+    Protected WithEvents ddlCieOrph As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents btnRattacher As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnSupprimerOrph As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents pnlMsgOrph As Global.System.Web.UI.WebControls.Panel
+    Protected WithEvents litMsgOrph As Global.System.Web.UI.WebControls.Literal
+
 End Class

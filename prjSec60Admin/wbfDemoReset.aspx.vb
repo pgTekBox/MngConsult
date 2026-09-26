@@ -16,6 +16,7 @@ Public Class wbfDemoReset
         If Not IsPostBack Then
             SetDDL(ddlDemo, "Name", "CompanyGUID", "s0711GetDemoCompanies")
             RemplirCompagnies()
+            ChargerOrphelins()
         End If
     End Sub
 
@@ -35,6 +36,7 @@ Public Class wbfDemoReset
             Dim nom As String = If(IsDBNull(r("Name")), "", r("Name").ToString())
             If nom.Length = 0 Then nom = If(IsDBNull(r("LegalName")), g, r("LegalName").ToString())
             ddlCie.Items.Add(New ListItem(nom, g))
+            ddlCieOrph.Items.Add(New ListItem(nom, g))
         Next
     End Sub
 
@@ -117,6 +119,95 @@ Public Class wbfDemoReset
             Show(pnlMsgSnap, litMsgSnap, "err", "✖ Échec de la recapture : " & ex.Message)
         End Try
     End Sub
+
+#Region "Reçus orphelins"
+
+    ''' <summary>
+    ''' Les reçus arrivés par courriel qu'aucune boîte @60sec.ca connue ne
+    ''' réclame (s0865). L'admin les rattache à une compagnie (s0866) ou les
+    ''' supprime (s0867) ; les deux procs n'agissent que sur des reçus encore
+    ''' sans compagnie.
+    ''' </summary>
+    Private Sub ChargerOrphelins()
+        Dim ds As DataSet = Nothing
+        Try
+            ds = ExecuteSQLds("s0865GetOrphanReceipts")
+        Catch ex As Exception
+            Show(pnlMsgOrph, litMsgOrph, "err", "✖ Lecture impossible : " & ex.Message)
+        End Try
+        Dim dt As DataTable = If(ds IsNot Nothing AndAlso ds.Tables.Count > 0, ds.Tables(0), New DataTable())
+        rptOrphelins.DataSource = dt
+        rptOrphelins.DataBind()
+        Dim vide As Boolean = dt.Rows.Count = 0
+        pnlAucunOrphelin.Visible = vide
+        pnlOrphActions.Visible = Not vide
+        chkTousOrph.Checked = False
+    End Sub
+
+    ''' <summary>Les Ids cochés, en liste « 12,15,18 » pour les procs.</summary>
+    Private Function IdsCoches() As String
+        Dim ids As New List(Of String)
+        For Each item As RepeaterItem In rptOrphelins.Items
+            Dim chk As CheckBox = TryCast(item.FindControl("chk"), CheckBox)
+            Dim hf As HiddenField = TryCast(item.FindControl("hfId"), HiddenField)
+            If chk IsNot Nothing AndAlso chk.Checked AndAlso hf IsNot Nothing Then ids.Add(hf.Value)
+        Next
+        Return String.Join(",", ids)
+    End Function
+
+    Protected Sub btnRattacher_Click(sender As Object, e As EventArgs) Handles btnRattacher.Click
+        Dim ids As String = IdsCoches()
+        If ids.Length = 0 Then
+            Show(pnlMsgOrph, litMsgOrph, "err", "✖ Cochez au moins un reçu.")
+            ChargerOrphelins()
+            Return
+        End If
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Ids", ids))
+            p.Add(New SqlParameter("@CompanyGUID", New Guid(ddlCieOrph.SelectedValue)))
+            Dim ds As DataSet = ExecuteSQLds("s0866AssignOrphanReceipts", p)
+            Dim nb As Integer = If(ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0, CInt(ds.Tables(0).Rows(0)("Nb")), 0)
+            Show(pnlMsgOrph, litMsgOrph, "ok", "✔ " & nb & " reçu(s) rattaché(s) à " & ddlCieOrph.SelectedItem.Text & ".")
+        Catch ex As Exception
+            Show(pnlMsgOrph, litMsgOrph, "err", "✖ Échec du rattachement : " & ex.Message)
+        End Try
+        ChargerOrphelins()
+    End Sub
+
+    Protected Sub btnSupprimerOrph_Click(sender As Object, e As EventArgs) Handles btnSupprimerOrph.Click
+        Dim ids As String = IdsCoches()
+        If ids.Length = 0 Then
+            Show(pnlMsgOrph, litMsgOrph, "err", "✖ Cochez au moins un reçu.")
+            ChargerOrphelins()
+            Return
+        End If
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@Ids", ids))
+            Dim ds As DataSet = ExecuteSQLds("s0867DeleteOrphanReceipts", p)
+            Dim nb As Integer = If(ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0, CInt(ds.Tables(0).Rows(0)("Nb")), 0)
+            Show(pnlMsgOrph, litMsgOrph, "ok", "✔ " & nb & " reçu(s) supprimé(s).")
+        Catch ex As Exception
+            Show(pnlMsgOrph, litMsgOrph, "err", "✖ Échec de la suppression : " & ex.Message)
+        End Try
+        ChargerOrphelins()
+    End Sub
+
+    Protected Function FormatDate(v As Object) As String
+        If v Is Nothing OrElse v Is DBNull.Value Then Return ""
+        Return CDate(v).ToString("yyyy-MM-dd HH:mm")
+    End Function
+
+    Protected Function FormatTaille(v As Object) As String
+        If v Is Nothing OrElse v Is DBNull.Value Then Return ""
+        Dim n As Long = CLng(v)
+        If n >= 1048576 Then Return (n / 1048576).ToString("0.0") & " Mo"
+        If n >= 1024 Then Return (n / 1024).ToString("0") & " Ko"
+        Return n & " o"
+    End Function
+
+#End Region
 
     Private Sub Show(pnl As Panel, lit As Literal, kind As String, text As String)
         pnl.Visible = True
