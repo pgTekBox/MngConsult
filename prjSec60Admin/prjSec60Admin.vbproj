@@ -370,6 +370,7 @@
     <Content Include="wbfSquareWebhookDiagnostic.aspx" />
     <Content Include="wbfPlaidDiagnostic.aspx" />
     <Content Include="wbfDemoReset.aspx" />
+    <Content Include="wbfReservations.aspx" />
     <Content Include="wbfMail.aspx" />
     <Content Include="JobRunner.ashx" />
     <Content Include="MailAttachment.ashx" />
@@ -528,6 +529,13 @@
     </Compile>
     <Compile Include="wbfPlaidDiagnostic.aspx.designer.vb">
       <DependentUpon>wbfPlaidDiagnostic.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfReservations.aspx.vb">
+      <DependentUpon>wbfReservations.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfReservations.aspx.designer.vb">
+      <DependentUpon>wbfReservations.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfDemoReset.aspx.vb">
       <DependentUpon>wbfDemoReset.aspx</DependentUpon>

@@ -105,6 +105,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         LandingPage
                     </a>
+                    <a class="nav-child" href="~/wbfReservations.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Réservations
+                    </a>
                     <a class="nav-child" href="~/wbfCompanies.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Compagnies

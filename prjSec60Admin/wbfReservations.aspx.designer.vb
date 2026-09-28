@@ -8,5 +8,9 @@ Option Strict On
 Option Explicit On
 
 
-Partial Public Class LandingPage
+Partial Public Class wbfReservations
+
+    Protected WithEvents litNb As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents rpt As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents pnlVide As Global.System.Web.UI.WebControls.Panel
 End Class
