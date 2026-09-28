@@ -1,0 +1,1 @@
+if(window.Av) window.Av.mount();

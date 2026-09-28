@@ -30,12 +30,12 @@
             <asp:Repeater ID="rpt" runat="server">
                 <HeaderTemplate>
                     <table class="res-table">
-                        <thead><tr><th>#</th><th>Reçue le</th><th>Profil</th><th>Nom</th><th>Courriel</th><th>Société / cabinet</th><th>Secteur</th><th>Détails</th><th>Langue</th><th>Avis</th><th>Statut</th></tr></thead>
+                        <thead><tr><th>N°</th><th>Reçue le</th><th>Profil</th><th>Nom</th><th>Courriel</th><th>Société / cabinet</th><th>Secteur</th><th>Détails</th><th>Langue</th><th>Avis</th><th>Source</th><th>Statut</th></tr></thead>
                         <tbody>
                 </HeaderTemplate>
                 <ItemTemplate>
                     <tr>
-                        <td><%# Eval("Id") %></td>
+                        <td><%# Server.HtmlEncode(Convert.ToString(If(IsDBNull(Eval("Numero")), Eval("Id"), Eval("Numero")))) %><%# If(Convert.ToBoolean(Eval("AvantLancement")), "<br /><span class='res-pill'>avant lancement</span>", "") %></td>
                         <td><%# FormatDate(Eval("Created")) %></td>
                         <td><span class='res-pill <%# If(Convert.ToString(Eval("Profil")) = "cab", "cab", "") %>'><%# Server.HtmlEncode(Convert.ToString(Eval("ProfilLibelle"))) %></span></td>
                         <td><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %></td>
@@ -45,6 +45,7 @@
                         <td class="wrap"><%# Details(Container.DataItem) %></td>
                         <td><%# Libelle(Eval("Langue")) %></td>
                         <td><%# If(Convert.ToBoolean(Eval("AvisLancement")), "✔", "—") %></td>
+                        <td><%# If(Convert.ToString(Eval("Source")) = "fenetre", "fenêtre « Le grand départ »", If(Convert.ToString(Eval("Source")) = "page", "section Inscription", Server.HtmlEncode(Convert.ToString(Eval("Source"))))) %></td>
                         <td><%# Server.HtmlEncode(Convert.ToString(Eval("Statut"))) %></td>
                     </tr>
                 </ItemTemplate>

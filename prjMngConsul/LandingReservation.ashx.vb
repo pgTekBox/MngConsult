@@ -54,44 +54,55 @@ Public Class LandingReservationHandler
         End If
 
         Try
+            ' Deux vocabulaires acceptés : celui de la page (rec de window.Inscriptions : societe, employes, tpsTvq,
+            ' consentementTraitement…) et celui, plus explicite, des premiers essais (societeNom, nbEmployes, taxes…).
+            Dim profil As String = Texte(d, "profil", 10)
+            Dim societe As String = If(Texte(d, "societe", 200), Texte(d, "societeNom", 200))
             Dim p As New List(Of SqlParameter) From {
-                Param("@Profil", Texte(d, "profil", 10)),
-                Param("@ProfilLibelle", Texte(d, "profilLibelle", 60)),
+                Param("@Profil", profil),
+                Param("@ProfilLibelle", If(Texte(d, "profilLibelle", 60), LibelleProfil(profil))),
                 Param("@Nom", Texte(d, "nom", 200)),
                 Param("@Courriel", Texte(d, "courriel", 320)),
-                Param("@Secteur", Texte(d, "secteur", 200)),
+                Param("@Secteur", If(Texte(d, "secteur", 200), Texte(d, "activite", 200))),
                 Param("@SousCategorie", Texte(d, "sousCategorie", 200)),
                 Param("@ActiviteAutre", Texte(d, "activiteAutre", 200)),
-                Param("@Taxes", Texte(d, "taxes", 60)),
-                Param("@SocieteNom", Texte(d, "societeNom", 200)),
+                Param("@Taxes", If(Texte(d, "taxes", 60), Texte(d, "tpsTvq", 60))),
+                Param("@SocieteNom", If(profil = "cab", Nothing, societe)),
                 Param("@FinExercice", Texte(d, "finExercice", 60)),
-                Param("@NbEmployes", Entier(d, "nbEmployes")),
+                Param("@NbEmployes", If(Entier(d, "nbEmployes"), Entier(d, "employes"))),
                 Param("@FrequencePaie", Texte(d, "frequencePaie", 60)),
-                Param("@CabinetNom", Texte(d, "cabinetNom", 200)),
-                Param("@NbDossiers", Texte(d, "nbDossiers", 60)),
+                Param("@CabinetNom", If(Texte(d, "cabinetNom", 200), If(profil = "cab", societe, Nothing))),
+                Param("@NbDossiers", If(Texte(d, "nbDossiers", 60), Texte(d, "dossiers", 60))),
                 Param("@Logiciel", Texte(d, "logiciel", 60)),
                 Param("@Pilote", Bit(d, "pilote")),
-                Param("@Langue", Texte(d, "langue", 60)),
-                Param("@Estimation", Texte(d, "estimation", 60)),
+                Param("@Langue", If(Texte(d, "langue", 60), Texte(d, "langueTravail", 60))),
+                Param("@Estimation", If(Texte(d, "estimation", 60), Texte(d, "forfaitEstime", 60))),
                 Param("@Fondateur", Bit(d, "fondateur")),
-                Param("@Consentement", If(Bit(d, "consentement"), True, False)),
-                Param("@AvisLancement", If(Bit(d, "avisLancement"), True, False)),
-                Param("@Destinataire", Texte(d, "destinataire", 320)),
+                Param("@Consentement", If(If(Bit(d, "consentement"), Bit(d, "consentementTraitement")), False)),
+                Param("@AvisLancement", If(If(Bit(d, "avisLancement"), Bit(d, "consentementAvis")), False)),
+                Param("@Destinataire", If(Texte(d, "destinataire", 320), If(profil = "cab", "certifies@60secondes.ca", "info@60secondes.ca"))),
                 Param("@Page", Texte(d, "page", 500)),
                 Param("@Ip", Gauche(context.Request.UserHostAddress, 64)),
                 Param("@UserAgent", Gauche(context.Request.UserAgent, 400)),
-                Param("@Brut", Gauche(brut, 30000))}
+                Param("@Brut", Gauche(brut, 30000)),
+                Param("@Source", Texte(d, "source", 20)),
+                Param("@LanguePage", Texte(d, "languePage", 10))}
 
-            Dim id As Integer = 0
+            Dim id As Integer = 0, numero As String = "", avant As Boolean = True
             Using conn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
                 Using cmd As New SqlCommand("s0868InsertLandingReservation", conn) With {.CommandType = CommandType.StoredProcedure}
                     cmd.Parameters.AddRange(p.ToArray())
                     conn.Open()
-                    Dim r As Object = cmd.ExecuteScalar()
-                    If r IsNot Nothing AndAlso Not IsDBNull(r) Then id = Convert.ToInt32(r)
+                    Using rd As SqlDataReader = cmd.ExecuteReader()
+                        If rd.Read() Then
+                            id = Convert.ToInt32(rd("Id"))
+                            numero = Convert.ToString(rd("Numero"))
+                            avant = Convert.ToBoolean(rd("AvantLancement"))
+                        End If
+                    End Using
                 End Using
             End Using
-            context.Response.Write(js.Serialize(New With {.id = id}))
+            context.Response.Write(js.Serialize(New With {.id = id, .numero = numero, .avantLancement = avant}))
         Catch ex As SqlException When ex.Class = 16
             context.Response.StatusCode = 400
             context.Response.Write(js.Serialize(New With {.erreur = ex.Message}))
@@ -100,6 +111,16 @@ Public Class LandingReservationHandler
             context.Response.Write(js.Serialize(New With {.erreur = "La demande n'a pas pu être enregistrée."}))
         End Try
     End Sub
+
+    Private Shared Function LibelleProfil(profil As String) As String
+        Select Case If(profil, "")
+            Case "ta" : Return "travailleur autonome"
+            Case "c0" : Return "société sans employé"
+            Case "c4" : Return "société avec employés"
+            Case "cab" : Return "cabinet comptable"
+            Case Else : Return Nothing
+        End Select
+    End Function
 
     Private Shared Function Param(nom As String, valeur As Object) As SqlParameter
         Return New SqlParameter(nom, If(valeur, DBNull.Value))

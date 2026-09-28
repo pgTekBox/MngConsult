@@ -75,7 +75,7 @@
 <section class="hero" aria-labelledby="h-hero">
   <div class="wrap">
     <div>
-      <p class="hero-launch"><span aria-hidden="true">●</span><b>Lancement le 1<sup>er</sup> janvier 2027</b></p>
+      <p class="hero-launch" role="button" tabindex="0" aria-haspopup="dialog"><span aria-hidden="true">●</span><b>Lancement le 1<sup>er</sup> janvier 2027</b></p>
       <p class="eyebrow">Travailleurs autonomes et PME de 0 à 49 employés</p>
       <h1 id="h-hero" style="margin-top:16px">Votre administration financière <em>100&nbsp;% automatisée</em>.<sup class="n"><a href="#note-6" aria-label="Note 6">6</a></sup></h1>
       <p class="punch">Vous pouvez maintenant vous concentrer sur vos clients&nbsp;!</p>
@@ -1081,6 +1081,47 @@
 </div>
 
 <!-- LE 60 : assistant de discussion (hors #app, garde la conversation au changement de langue) -->
+<dialog class="gd-dlg" id="gd-dlg" aria-labelledby="gd-h">
+  <div class="gd-in" id="gd-step1">
+    <button type="button" class="gd-x" id="gd-x" aria-label="Fermer">×</button>
+    <div class="gd-top"><span class="gd-flags" aria-hidden="true"><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#0F4DA5"/><rect x="13" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/><g fill="#fff"><circle cx="6.5" cy="4" r="1.6"/><circle cx="23.5" cy="4" r="1.6"/><circle cx="6.5" cy="16" r="1.6"/><circle cx="23.5" cy="16" r="1.6"/></g></svg><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="7.5" height="20" fill="#D52B1E"/><rect x="22.5" width="7.5" height="20" fill="#D52B1E"/><path d="M15 4.5l1 2 1.2-.6-.4 2.8 1.8-1.7.5 1.1 1.8-.4-.7 2 .9.5-3 2.4.4 1.1-2.9-.4v2.6h-1.2v-2.6l-2.9.4.4-1.1-3-2.4.9-.5-.7-2 1.8.4.5-1.1 1.8 1.7-.4-2.8 1.2.6z" fill="#D52B1E"/></svg></span><p class="gd-k">Le grand départ</p></div>
+    <h2 class="gd-h" id="gd-h">60secondes sera lancée le <em>1<sup>er</sup> janvier 2027</em>.</h2>
+    <div class="gd-cd" aria-label="Temps restant avant le lancement">
+      <div><output id="gd-d">0</output><span>jours</span></div>
+      <div><output id="gd-hh">0</output><span>heures</span></div>
+      <div><output id="gd-m">0</output><span>minutes</span></div>
+      <div><output id="gd-s">0</output><span>secondes</span></div>
+    </div>
+    <p class="gd-p">D'ici là, le grand départ se prépare. Inscrivez-vous dès maintenant pour faire partie des premiers clients à profiter d'un produit innovateur, <b>100&nbsp;% québécois et canadien</b>.</p>
+    <ul class="gd-l">
+      <li>Accès en priorité dès le lancement</li>
+      <li>Transfert de vos données sans frais</li>
+      <li>Aucuns frais ni engagement avant le lancement</li>
+    </ul>
+    <div class="gd-a"><button type="button" class="gd-go" id="gd-go" autofocus>Je m'inscris</button><button type="button" class="gd-later" id="gd-later">Plus tard</button></div>
+    <p class="gd-f">Date de lancement prévue, et non un engagement<sup class="n"><a href="#note-3" aria-label="Note 3">3</a></sup>. Données hébergées et traitées au Québec et au Canada<sup class="n"><a href="#note-5" aria-label="Note 5">5</a></sup>.</p>
+  </div>
+  <div class="gd-in gd-step2" id="gd-step2" hidden>
+    <button type="button" class="gd-x" id="gd-x2" aria-label="Fermer">×</button>
+    <div class="gd-top"><span class="gd-flags" aria-hidden="true"><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#0F4DA5"/><rect x="13" width="4" height="20" fill="#fff"/><rect y="8" width="30" height="4" fill="#fff"/><g fill="#fff"><circle cx="6.5" cy="4" r="1.6"/><circle cx="23.5" cy="4" r="1.6"/><circle cx="6.5" cy="16" r="1.6"/><circle cx="23.5" cy="16" r="1.6"/></g></svg><svg class="flag" viewBox="0 0 30 20" width="36" height="24" aria-hidden="true"><rect width="30" height="20" fill="#fff"/><rect width="7.5" height="20" fill="#D52B1E"/><rect x="22.5" width="7.5" height="20" fill="#D52B1E"/><path d="M15 4.5l1 2 1.2-.6-.4 2.8 1.8-1.7.5 1.1 1.8-.4-.7 2 .9.5-3 2.4.4 1.1-2.9-.4v2.6h-1.2v-2.6l-2.9.4.4-1.1-3-2.4.9-.5-.7-2 1.8.4.5-1.1 1.8 1.7-.4-2.8 1.2.6z" fill="#D52B1E"/></svg></span><p class="gd-k">Le grand départ · Inscription</p></div>
+    <p class="gd-p gd-p2">Réservez votre place parmi les premiers clients. Seuls le courriel et le premier consentement sont obligatoires.</p>
+    <div class="gd-form" id="gd-slot"></div>
+    <button type="button" class="gd-back" id="gd-back">‹ Retour</button>
+  </div>
+</dialog>
+<script src="js/landing2-1.js?v=%%V%%"></script>
+<dialog class="an-dlg ins-dlg" id="ins-dlg" aria-labelledby="ins-h">
+  <div class="dh"><div><h3 id="ins-h">Inscriptions avant le lancement</h3><p class="an-fsub">Visible seulement par vous et les éditeurs de cette page.</p></div><button type="button" class="an-x" id="ins-x" aria-label="Fermer">×</button></div>
+  <div class="db">
+    <div class="ins-kpi"><div><b id="ins-n">0</b><span>inscriptions</span></div><div><b id="ins-early">0</b><span>avant le lancement</span></div><div><b id="ins-fd">0</b><span>clients-fondateurs</span></div><div><b id="ins-cab">0</b><span>cabinets</span></div></div>
+    <div class="ins-bar"><input id="ins-q" type="search" placeholder="Rechercher un nom, un courriel, une entreprise…" aria-label="Rechercher"><select id="ins-f" aria-label="Filtrer"><option value="">Tous les profils</option><option value="ta">Travailleurs autonomes</option><option value="c0">Sociétés sans employé</option><option value="c4">Sociétés avec employés</option><option value="cab">Cabinets comptables</option><option value="fd">Clients-fondateurs</option></select><button type="button" class="btn btn-primary" id="ins-csv">Exporter (CSV)</button></div>
+    <div class="ins-wrap"><table class="ins-t"><thead><tr><th>N°</th><th>Inscrit le</th><th>Nom</th><th>Courriel</th><th>Profil</th><th>Entreprise / détail</th><th>Statut</th><th>Options</th></tr></thead><tbody id="ins-body"></tbody></table></div>
+    <p class="fine" id="ins-empty" hidden>Aucune inscription pour l'instant.</p>
+    <p class="fine" id="ins-err" hidden></p>
+  </div>
+</dialog>
+<button type="button" class="ins-open" id="ins-open" hidden>Inscriptions <b id="ins-open-n">0</b></button>
+<script src="js/landing2-2.js?v=%%V%%"></script>
 <div class="chat-launch early">
   <div class="chat-tease" id="chat-tease" role="note"><b>Une question ?</b>Je réponds en quelques secondes.<button type="button" id="chat-tease-x" aria-label="Masquer ce message">×</button></div>
   <button type="button" class="chat-fab" id="chat-fab" aria-expanded="false" aria-controls="chat" aria-label="Discuter avec Le 60"></button>
@@ -1100,15 +1141,15 @@
   </form>
 </section>
 
-<script src="js/landing2-1.js?v=%%V%%"></script>
+<script src="js/landing2-3.js?v=%%V%%"></script>
 
-<script src="js/landing2-2.js?v=%%V%%"></script>
+<script src="js/landing2-4.js?v=%%V%%"></script>
 
 <!-- Gabarits de traduction : coller ici la page traduite (mêmes id). Vides = repli sur le français. -->
-<script src="js/landing2-3.js?v=%%V%%"></script>
+<script src="js/landing2-5.js?v=%%V%%"></script>
 <template id="tpl-en"></template>
 <template id="tpl-es"></template>
-<script src="js/landing2-4.js?v=%%V%%"></script>
-<script src="js/landing2-5.js?v=%%V%%"></script>
+<script src="js/landing2-6.js?v=%%V%%"></script>
+<script src="js/landing2-7.js?v=%%V%%"></script>
 </body>
 </html>
