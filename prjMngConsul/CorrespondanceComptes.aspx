@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .cor-page { max-width: 1280px; margin: 0 auto; padding: 16px }
+    .cor-page { max-width: 1800px; margin: 0 auto; padding: 16px }
 
     .cor-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 
@@ -67,7 +67,7 @@
 
     .acts { display: flex; gap: 9px; flex-wrap: wrap; align-items: center }
 
-    table.cor { width: 100%; border-collapse: collapse; font-size: 12.5px }
+    table.cor { width: 100%; min-width: 1900px; border-collapse: collapse; font-size: 12.5px }
     table.cor th { background: #f8fafc; text-align: left; padding: 9px 10px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1 }
     table.cor td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle }
     table.cor tr:last-child td { border-bottom: 0 }
@@ -86,7 +86,7 @@
 
     table.cor input.cpt-in { width: 110px }
     table.cor input.note-in { width: 100% ; min-width: 120px }
-    table.cor select.act { width: 108px }
+    table.cor select.act { width: 120px }
 
     .nom-cible { font-size: 11.5px; color: #047857; display: block; margin-top: 2px; min-height: 14px }
     .nom-cible.inconnu { color: #b45309 }
@@ -102,9 +102,9 @@
     /* Ce que l'IA avance, et pourquoi. Deliberement discret : c'est un avis,
        pas un verdict. */
     /* La classe du compte propose, sous son nom. */
-    .cls-f { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
-    .scls-f { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
-    .cpt-sel { width: 100%; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-family: inherit; background: #fff }
+    .cls-f { width: 100%; min-width: 320px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
+    .scls-f { width: 100%; min-width: 320px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
+    .cpt-sel { width: 100%; min-width: 240px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-family: inherit; background: #fff }
     .cls { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-weight: 700; letter-spacing: .2px }
     .ia-raison { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-style: italic }
     .ia-conf { font-size: 10.5px; color: #6d28d9; font-weight: 700 }
@@ -113,7 +113,7 @@
     .btn-ia { background: #6d28d9; color: #fff; border-color: #6d28d9 }
     .btn-ia:hover { background: #5b21b6 }
 
-    .tbl-wrap { overflow-x: auto; max-height: 640px; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px }
+    .tbl-wrap { overflow-x: auto; max-height: 75vh; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px }
 
     .vide { text-align: center; padding: 34px; color: #64748b; font-size: 13.5px }
 
@@ -258,10 +258,10 @@
                         <th colspan="2">Compte de l'ancien logiciel</th>
                         <th class="solde">Solde</th>
                         <th>Ce que nous proposons</th>
-                        <th style="width:118px">Action</th>
-                        <th style="width:210px">Classe</th>
-                        <th style="width:210px">Sous-classe</th>
-                        <th style="width:150px">Compte chez vous</th>
+                        <th style="width:130px">Action</th>
+                        <th style="width:320px">Classe</th>
+                        <th style="width:320px">Sous-classe</th>
+                        <th style="width:240px">Compte chez vous</th>
                         <th>Note</th>
                     </tr>
                 </thead>
