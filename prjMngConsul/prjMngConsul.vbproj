@@ -628,6 +628,7 @@
     <Content Include="wbfApprobations.aspx" />
     <Content Include="wbfAssistant.aspx" />
     <Content Include="AssistantIA.ashx" />
+    <Content Include="AssistantCompte.ashx" />
     <Content Include="wbfAppointmentEdit.aspx" />
     <Content Include="wbfAutoPayAuthorizations.aspx" />
     <Content Include="wbfAutoPayHistory.aspx" />
@@ -1409,6 +1410,9 @@
     </Compile>
     <Compile Include="AssistantIA.ashx.vb">
       <DependentUpon>AssistantIA.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="AssistantCompte.ashx.vb">
+      <DependentUpon>AssistantCompte.ashx</DependentUpon>
     </Compile>
     <Compile Include="wbfApprobations.aspx.vb">
       <DependentUpon>wbfApprobations.aspx</DependentUpon>

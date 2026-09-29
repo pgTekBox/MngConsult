@@ -189,6 +189,76 @@ Public NotInheritable Class clsAssistantIA
         End Try
     End Function
 
+    ''' <summary>
+    ''' Un appel isolé, sans conversation : un prompt système fourni par l'appelant
+    ''' et une seule question. Sert aux aides ponctuelles (ex. : expliquer un compte
+    ''' de l'ancien logiciel à l'étape de correspondance). Journalisé comme les autres,
+    ''' avec sa section, pour le coût du mois.
+    ''' </summary>
+    Public Shared Async Function RepondreAsync(companyGuid As Guid, utilisateur As String, langue As String, section As String,
+                                              systeme As String, question As String, journalQuestion As String,
+                                              Optional maxTokens As Integer = 1500) As Task(Of Reponse)
+        If companyGuid = Guid.Empty Then Throw New SaisieAssistantException(Tr(langue, "Aucune compagnie active.", "No active company.", "Ninguna compañía activa."))
+
+        Dim chrono = Diagnostics.Stopwatch.StartNew()
+        Dim journalId As Integer = 0
+        Dim dj As DataSet = Ds("s0859LogAssistantQuestion", P("@CompanyGUID", companyGuid), P("@Utilisateur", utilisateur),
+                               P("@Langue", If(langue = "en" OrElse langue = "es", langue, "fr")), P("@Section", section),
+                               P("@Question", If(journalQuestion, question)), P("@Modele", Modele))
+        If dj.Tables.Count > 0 AndAlso dj.Tables(0).Rows.Count > 0 Then journalId = Convert.ToInt32(dj.Tables(0).Rows(0)("Id"))
+
+        Try
+            Dim entrees As New List(Of Object)()
+            entrees.Add(New Dictionary(Of String, Object) From {{"role", "system"}, {"content", systeme}})
+            entrees.Add(New Dictionary(Of String, Object) From {{"role", "user"}, {"content", question}})
+
+            Dim js As New JavaScriptSerializer() With {.MaxJsonLength = Integer.MaxValue}
+            Dim charge As String = js.Serialize(New Dictionary(Of String, Object) From {
+                {"model", Modele}, {"input", entrees}, {"max_output_tokens", maxTokens}})
+
+            Dim brut As String
+            Using http As New HttpClient()
+                http.Timeout = TimeSpan.FromSeconds(90)
+                http.DefaultRequestHeaders.Authorization = New AuthenticationHeaderValue("Bearer", Cle())
+                Dim rep = Await http.PostAsync(Url, New StringContent(charge, Encoding.UTF8, "application/json")).ConfigureAwait(False)
+                brut = Await rep.Content.ReadAsStringAsync().ConfigureAwait(False)
+                If Not rep.IsSuccessStatusCode Then Throw New InvalidOperationException("OpenAI " & CInt(rep.StatusCode).ToString() & " : " & Gauche(brut, 400))
+            End Using
+
+            Dim jo = TryCast(js.DeserializeObject(brut), Dictionary(Of String, Object))
+            If jo Is Nothing Then Throw New InvalidOperationException("Réponse illisible du modèle.")
+            Dim r As New Reponse With {.Texte = ExtraireTexte(jo)}
+            Dim usage = TryCast(Valeur(jo, "usage"), Dictionary(Of String, Object))
+            If usage IsNot Nothing Then
+                r.InputTokens = Convert.ToInt32(If(Valeur(usage, "input_tokens"), 0))
+                r.OutputTokens = Convert.ToInt32(If(Valeur(usage, "output_tokens"), 0))
+            End If
+            chrono.Stop()
+            If journalId > 0 Then
+                Exec("s0860UpdateAssistantReponse", P("@Id", journalId), P("@Reponse", r.Texte), P("@InputTokens", r.InputTokens),
+                     P("@OutputTokens", r.OutputTokens), P("@CoutUsd", r.CoutUsd), P("@DureeMs", CInt(chrono.ElapsedMilliseconds)), P("@Erreur", Nothing))
+            End If
+            Return r
+        Catch ex As Exception
+            chrono.Stop()
+            If journalId > 0 Then
+                Try
+                    Exec("s0860UpdateAssistantReponse", P("@Id", journalId), P("@Reponse", Nothing), P("@InputTokens", 0), P("@OutputTokens", 0),
+                         P("@CoutUsd", 0D), P("@DureeMs", CInt(chrono.ElapsedMilliseconds)), P("@Erreur", Gauche(ex.Message, 1000)))
+                Catch
+                End Try
+            End If
+            Throw
+        End Try
+    End Function
+
+    ''' <summary>Un prompt nommé de T0000Parameters (vide → erreur de configuration à montrer).</summary>
+    Public Shared Function PromptNomme(nom As String) As String
+        Dim v As String = Parametre(nom)
+        If v.Length = 0 Then Throw New SaisieAssistantException("Le prompt " & nom & " n'est pas configuré (Sec60Admin › Prompts OpenAI).")
+        Return v
+    End Function
+
     Private Shared Function Valeur(d As Dictionary(Of String, Object), cle As String) As Object
         Dim v As Object = Nothing
         If d IsNot Nothing AndAlso d.TryGetValue(cle, v) Then Return v

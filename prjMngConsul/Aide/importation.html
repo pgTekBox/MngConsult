@@ -249,7 +249,11 @@
                     <li>Rappel « Lier / Créer / Ignorer ».</li>
                     <li><kbd>Enregistrer les correspondances</kbd> : conserve les décisions.</li>
                     <li><kbd>Créer les comptes au plan →</kbd> : ouvre l’étape 3.</li>
-                </ul>
+                </ul>                <h3>Le bouton « ✨ Assistant » sur chaque compte</h3>
+                <p>Dans la colonne « Compte de l’ancien logiciel », chaque ligne porte un petit bouton <kbd>✨ Assistant</kbd> à côté du nom. Il ouvre une fenêtre flottante (déplaçable par sa barre bleue) où l’assistant IA explique ce compte le plus complètement possible, en quatre parties : ce que le compte représente (définition, opérations typiques), ce que disent ses attributs (nature, type et sous-type QuickBooks, sens du solde, solde actuel, origine « par défaut » ou « ajouté », sous-compte, description, anomalie), où le ranger dans 60Sec-AI (classe, sous-classe, compte existant le plus proche, ou « Créer » avec un numéro dans la plage), et les points d’attention.</p>
+                <p>L’assistant reçoit la fiche complète du compte, la décision déjà prise s’il y en a une, et votre plan comptable. Il ne décide rien : ses suggestions se retrouvent dans la fenêtre seulement, à vous de choisir Lier, Créer ou Ignorer. La réponse prend une dizaine de secondes ; <kbd>Copier</kbd> la met dans le presse-papiers, <kbd>Fermer</kbd> ou Échap referme la fenêtre. Chaque question a un coût (quelques cents), affiché au bas de la fenêtre avec le total du mois.</p>
+                <div class="note" data-titre="Bon à savoir">Le texte de ses réponses se règle dans la console Sec60 (prompt « PROMPT_ASSISTANT_COMPTE »). Aucun nom de client ou de fournisseur n’est envoyé : seulement le compte et le plan comptable.</div>
+
                 <h3>Règles</h3>
                 <ul>
                     <li><strong>Lier</strong> rattache à un compte existant. <strong>Créer</strong> ajoute le compte à l’étape 3 (numéro source repris ; s’il est déjà pris, le champ est vidé et le numéro sera automatique). <strong>Ignorer</strong> écarte le compte. Remettre « — à décider » annule la décision.</li>
@@ -480,7 +484,8 @@
 
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
-                <details><summary>Dans quel ordre dois-je importer ?</summary><p>Compagnie préparée, liaison QuickBooks, plan comptable (3 étapes), tiers et produits, balance de vérification, factures, écrans de contrôle, contrôle final. Le plan comptable passe avant tout.</p></details>
+                                <details><summary>À quoi sert le bouton « ✨ Assistant » à côté d’un compte de l’ancien logiciel ?</summary><p>Il demande à l’IA une explication complète du compte (définition, sens de ses attributs, où le ranger dans votre plan, points d’attention), affichée dans une fenêtre flottante. C’est une aide à la décision : rien n’est enregistré tant que vous ne choisissez pas Lier, Créer ou Ignorer et n’enregistrez pas.</p></details>
+<details><summary>Dans quel ordre dois-je importer ?</summary><p>Compagnie préparée, liaison QuickBooks, plan comptable (3 étapes), tiers et produits, balance de vérification, factures, écrans de contrôle, contrôle final. Le plan comptable passe avant tout.</p></details>
                 <details><summary>À quel moment quelque chose est-il écrit dans ma comptabilité ?</summary><p>Seulement à l’étape 3 « Créer les comptes au plan », au bouton « Créer les N nouveaux … » des tiers et produits, à « Créer les documents cochés » (factures en brouillon), à « Appliquer les champs cochés » (fiche d’entreprise) et à « Rattacher aux fiches ». Tout le reste est en préparation.</p></details>
                 <details><summary>Mon fichier Excel est refusé.</summary><p>Seuls .csv et .txt sont acceptés. Dans Excel : Fichier ▸ Enregistrer sous ▸ CSV UTF-8.</p></details>
                 <details><summary>Les accents s’affichent en charabia (Ã©).</summary><p>Mauvais encodage. Réessayez avec Windows-1252 (ANSI) ou ISO-8859-1.</p></details>
@@ -746,7 +751,11 @@
                     <li>Reminder “Link / Create / Ignore”.</li>
                     <li><kbd>Save mappings</kbd>: keeps the decisions.</li>
                     <li><kbd>Create the accounts in the chart →</kbd>: opens step 3.</li>
-                </ul>
+                </ul>                <h3>The “✨ Assistant” button on each account</h3>
+                <p>In the “Account from the old software” column, every row has a small <kbd>✨ Assistant</kbd> button next to the name. It opens a floating window (drag it by its blue bar) where the AI assistant explains the account as completely as possible, in four parts: what the account represents (definition, typical transactions), what its attributes mean (nature, QuickBooks type and subtype, normal balance side, current balance, “default” or “added” origin, sub-account, description, anomaly), where to file it in 60Sec-AI (class, subclass, closest existing account, or “Create” with a number in the class range), and points to watch.</p>
+                <p>The assistant receives the full account card, the decision already made if any, and your chart of accounts. It decides nothing: its suggestions stay in the window, you still choose Link, Create or Ignore. The answer takes about ten seconds; <kbd>Copy</kbd> puts it on the clipboard, <kbd>Close</kbd> or Escape closes the window. Each question has a cost (a few cents), shown at the bottom with the month’s total.</p>
+                <div class="note" data-titre="Good to know">The wording of its answers is set in the 60Sec console (prompt “PROMPT_ASSISTANT_COMPTE”). No customer or supplier name is sent: only the account and the chart of accounts.</div>
+
                 <h3>Rules</h3>
                 <ul>
                     <li><strong>Link</strong> attaches to an existing account. <strong>Create</strong> adds the account in step 3 (source number reused; if already taken, the field is cleared and the number will be automatic). <strong>Ignore</strong> sets the account aside. Putting back “— to decide” cancels the decision.</li>
@@ -977,7 +986,8 @@
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>In what order should I import?</summary><p>Company prepared, QuickBooks connection, chart of accounts (3 steps), third parties and products, trial balance, invoices, control screens, final check. The chart of accounts comes before everything.</p></details>
+                                <details><summary>What is the “✨ Assistant” button next to an old-software account for?</summary><p>It asks the AI for a complete explanation of the account (definition, meaning of its attributes, where to file it in your chart, points to watch), shown in a floating window. It is decision support only: nothing is saved until you choose Link, Create or Ignore and save.</p></details>
+<details><summary>In what order should I import?</summary><p>Company prepared, QuickBooks connection, chart of accounts (3 steps), third parties and products, trial balance, invoices, control screens, final check. The chart of accounts comes before everything.</p></details>
                 <details><summary>When is something written to my books?</summary><p>Only in step 3 “Create the accounts in the chart”, with the “Create the N new …” button for third parties and products, with “Create the checked documents” (draft invoices), with “Apply the checked fields” (company profile) and with “Attach to records”. Everything else is in staging.</p></details>
                 <details><summary>My Excel file is refused.</summary><p>Only .csv and .txt are accepted. In Excel: File ▸ Save As ▸ CSV UTF-8.</p></details>
                 <details><summary>Accents show as gibberish (Ã©).</summary><p>Wrong encoding. Try again with Windows-1252 (ANSI) or ISO-8859-1.</p></details>
@@ -1243,7 +1253,11 @@
                     <li>Recordatorio « Vincular / Crear / Ignorar ».</li>
                     <li><kbd>Guardar las correspondencias</kbd>: conserva las decisiones.</li>
                     <li><kbd>Crear las cuentas en el plan →</kbd>: abre la etapa 3.</li>
-                </ul>
+                </ul>                <h3>El botón «✨ Asistente» en cada cuenta</h3>
+                <p>En la columna «Cuenta del programa anterior», cada línea lleva un pequeño botón <kbd>✨ Assistant</kbd> junto al nombre. Abre una ventana flotante (arrástrela por su barra azul) donde el asistente de IA explica la cuenta lo más completamente posible, en cuatro partes: qué representa la cuenta (definición, operaciones típicas), qué dicen sus atributos (naturaleza, tipo y subtipo de QuickBooks, sentido del saldo, saldo actual, origen «por defecto» o «añadida», subcuenta, descripción, anomalía), dónde ubicarla en 60Sec-AI (clase, subclase, cuenta existente más cercana, o «Crear» con un número en el rango), y puntos de atención.</p>
+                <p>El asistente recibe la ficha completa de la cuenta, la decisión ya tomada si la hay, y su plan contable. No decide nada: sus sugerencias quedan en la ventana, usted sigue eligiendo Vincular, Crear o Ignorar. La respuesta tarda unos diez segundos; <kbd>Copiar</kbd> la pone en el portapapeles, <kbd>Cerrar</kbd> o Esc cierra la ventana. Cada pregunta tiene un costo (unos centavos), mostrado abajo con el total del mes.</p>
+                <div class="note" data-titre="Conviene saber">La redacción de sus respuestas se ajusta en la consola 60Sec (prompt «PROMPT_ASSISTANT_COMPTE»). No se envía ningún nombre de cliente o proveedor: solo la cuenta y el plan contable.</div>
+
                 <h3>Reglas</h3>
                 <ul>
                     <li><strong>Vincular</strong> asocia a una cuenta existente. <strong>Crear</strong> añade la cuenta en la etapa 3 (se reutiliza el número de origen; si ya está tomado, el campo se vacía y el número será automático). <strong>Ignorar</strong> descarta la cuenta. Volver a « — por decidir » anula la decisión.</li>
@@ -1474,7 +1488,8 @@
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>¿En qué orden debo importar?</summary><p>Empresa preparada, conexión QuickBooks, plan de cuentas (3 etapas), terceros y productos, balance de comprobación, facturas, pantallas de control, control final. El plan de cuentas va antes que todo.</p></details>
+                                <details><summary>¿Para qué sirve el botón «✨ Assistant» junto a una cuenta del programa anterior?</summary><p>Pide a la IA una explicación completa de la cuenta (definición, significado de sus atributos, dónde ubicarla en su plan, puntos de atención), mostrada en una ventana flotante. Es una ayuda para decidir: nada se guarda hasta que elija Vincular, Crear o Ignorar y guarde.</p></details>
+<details><summary>¿En qué orden debo importar?</summary><p>Empresa preparada, conexión QuickBooks, plan de cuentas (3 etapas), terceros y productos, balance de comprobación, facturas, pantallas de control, control final. El plan de cuentas va antes que todo.</p></details>
                 <details><summary>¿En qué momento se escribe algo en mi contabilidad?</summary><p>Solo en la etapa 3 « Crear las cuentas en el plan », con el botón « Crear los N nuevos … » de terceros y productos, con « Crear los documentos marcados » (facturas en borrador), con « Aplicar los campos marcados » (ficha de la empresa) y con « Adjuntar a las fichas ». Todo lo demás está en preparación.</p></details>
                 <details><summary>Mi archivo Excel es rechazado.</summary><p>Solo se aceptan .csv y .txt. En Excel: Archivo ▸ Guardar como ▸ CSV UTF-8.</p></details>
                 <details><summary>Los acentos se ven ilegibles (Ã©).</summary><p>Codificación incorrecta. Vuelva a intentar con Windows-1252 (ANSI) o ISO-8859-1.</p></details>

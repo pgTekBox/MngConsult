@@ -76,6 +76,27 @@
     table.cor .src-c { font-weight: 700; color: #0f172a; white-space: nowrap }
     table.cor .sans-num { font-weight: 400; font-size: 11px; color: #94a3b8; font-style: italic; white-space: nowrap }
     table.cor .src-n { color: #475569 }
+    /* Bouton Assistant sur chaque compte source, et la fenêtre flottante qui montre la réponse. */
+    .ia-cpt { margin-left: 8px; padding: 1px 7px; border: 1px solid #c7d2fe; border-radius: 999px; background: #eef2ff; color: #4338ca; font-size: 10.5px; font-weight: 800; cursor: pointer; vertical-align: middle; white-space: nowrap }
+    .ia-cpt:hover { background: #e0e7ff }
+    .iac-overlay { position: fixed; inset: 0; z-index: 9000; background: rgba(15,23,42,.45); display: flex; align-items: center; justify-content: center }
+    .iac-overlay[hidden] { display: none }
+    .iac-dlg { position: fixed; width: min(760px, calc(100vw - 32px)); max-height: min(85vh, 900px); background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(2,6,23,.35); display: flex; flex-direction: column; overflow: hidden; font-size: 14px }
+    .iac-tete { display: flex; align-items: center; gap: 10px; padding: 12px 16px; background: #1e3a8a; color: #fff; cursor: move; user-select: none; touch-action: none }
+    .iac-tete b { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-size: 15px }
+    .iac-tete small { opacity: .8; font-size: 11.5px; white-space: nowrap }
+    .iac-x { border: 0; background: rgba(255,255,255,.14); color: #fff; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; cursor: pointer }
+    .iac-x:hover { background: rgba(255,255,255,.3) }
+    .iac-corps { padding: 16px 20px; overflow: auto; line-height: 1.55; color: #0f172a }
+    .iac-corps h2 { font-size: 15px; margin: 14px 0 6px; color: #1e3a8a }
+    .iac-corps h2:first-child { margin-top: 0 }
+    .iac-corps ul { margin: 4px 0 8px; padding-left: 20px }
+    .iac-corps p { margin: 6px 0 }
+    .iac-attente { color: #64748b; font-style: italic }
+    .iac-erreur { color: #b91c1c; font-weight: 700 }
+    .iac-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid #e2e8f0; background: #f8fafc; font-size: 12px; color: #64748b }
+    .iac-pied button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; cursor: pointer; margin-left: 6px }
+    .iac-pied button:hover { background: #f1f5f9 }
     table.cor .nature { font-size: 11px; color: #64748b; white-space: nowrap }
     table.cor .solde { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums }
 
@@ -272,7 +293,7 @@
                                 <td><%# Eval("LigneNo") %></td>
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
-                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %></div>
+                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %><button type="button" class="ia-cpt" data-id='<%# Eval("StagingId") %>' title="Assistant : que représente ce compte et où le ranger ?" aria-label="Assistant pour ce compte">✨ Assistant</button></div>
                                     <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
@@ -349,6 +370,85 @@
 
 </div>
 
+<div class="iac-overlay" id="iacOverlay" hidden>
+    <div class="iac-dlg" id="iacDlg" role="dialog" aria-modal="true" aria-labelledby="iacTitre">
+        <div class="iac-tete" id="iacTete">
+            <b id="iacTitre">Assistant</b>
+            <small>✨ explication du compte</small>
+            <button type="button" class="iac-x" id="iacFermer" title="Fermer" aria-label="Fermer">&times;</button>
+        </div>
+        <div class="iac-corps" id="iacCorps"></div>
+        <div class="iac-pied">
+            <span id="iacCout"></span>
+            <span><button type="button" id="iacCopier">Copier</button><button type="button" id="iacFermer2">Fermer</button></span>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+    // ── Assistant sur un compte source : fenêtre flottante (déplaçable par sa barre) avec la réponse de l'IA. ──
+    (function () {
+        var overlay = document.getElementById('iacOverlay'), dlg = document.getElementById('iacDlg'), corps = document.getElementById('iacCorps');
+        var titre = document.getElementById('iacTitre'), cout = document.getElementById('iacCout'), tete = document.getElementById('iacTete');
+        if (!overlay) return;
+        var texteBrut = '';
+        function html(t) {
+            var d = document.createElement('div'); d.textContent = t || ''; var s = d.innerHTML;
+            s = s.replace(/\*\*(.+?)\*\*/g, '<b>$1</b>');
+            var lignes = s.split(/\r?\n/), out = [], liste = false;
+            lignes.forEach(function (l) {
+                var m;
+                if ((m = l.match(/^\s*##+\s*(.+)$/))) { if (liste) { out.push('</ul>'); liste = false; } out.push('<h2>' + m[1] + '</h2>'); }
+                else if ((m = l.match(/^\s*[-•]\s+(.+)$/))) { if (!liste) { out.push('<ul>'); liste = true; } out.push('<li>' + m[1] + '</li>'); }
+                else if (l.trim() === '') { if (liste) { out.push('</ul>'); liste = false; } }
+                else { if (liste) { out.push('</ul>'); liste = false; } out.push('<p>' + l + '</p>'); }
+            });
+            if (liste) out.push('</ul>');
+            return out.join('');
+        }
+        function ouvrir(nom, id) {
+            titre.textContent = nom; corps.innerHTML = '<p class="iac-attente">L’assistant réfléchit… (une dizaine de secondes)</p>'; cout.textContent = ''; texteBrut = '';
+            overlay.hidden = false; dlg.style.left = ''; dlg.style.top = '';
+            fetch('AssistantCompte.ashx', { method: 'POST', credentials: 'same-origin', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ stagingId: id }) })
+                .then(function (r) { return r.json().then(function (j) { return { ok: r.ok, j: j }; }); })
+                .then(function (x) {
+                    if (x.ok) { texteBrut = x.j.reponse || ''; corps.innerHTML = html(texteBrut); if (typeof x.j.cout === 'number') cout.textContent = 'Coût des questions ce mois-ci : ' + x.j.cout.toFixed(4) + ' US$'; }
+                    else { corps.innerHTML = '<p class="iac-erreur">' + html(x.j.erreur || 'L’assistant n’a pas pu répondre.') + '</p>'; }
+                })
+                .catch(function () { corps.innerHTML = '<p class="iac-erreur">L’assistant n’a pas pu répondre. Réessayez dans un instant.</p>'; });
+        }
+        function fermer() { overlay.hidden = true; }
+        document.addEventListener('click', function (e) {
+            var b = e.target.closest('button.ia-cpt'); if (!b) return;
+            e.preventDefault();
+            var tr = b.closest('tr'), num = tr && tr.querySelector('.src-c') ? tr.querySelector('.src-c').textContent.trim() : '';
+            var nom = b.parentNode.firstChild && b.parentNode.firstChild.nodeType === 3 ? b.parentNode.firstChild.textContent.trim() : '';
+            ouvrir((num ? num + ' — ' : '') + nom, parseInt(b.getAttribute('data-id'), 10));
+        });
+        document.getElementById('iacFermer').addEventListener('click', fermer);
+        document.getElementById('iacFermer2').addEventListener('click', fermer);
+        overlay.addEventListener('click', function (e) { if (e.target === overlay) fermer(); });
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !overlay.hidden) fermer(); });
+        document.getElementById('iacCopier').addEventListener('click', function () {
+            if (!texteBrut) return;
+            if (navigator.clipboard) navigator.clipboard.writeText(titre.textContent + '\n\n' + texteBrut);
+        });
+        // Déplacement par la barre de titre, borné à la fenêtre.
+        var glisse = null;
+        function placer(x, y) {
+            var w = dlg.offsetWidth, h = dlg.offsetHeight;
+            x = Math.max(0, Math.min(x, window.innerWidth - w)); y = Math.max(0, Math.min(y, window.innerHeight - h));
+            dlg.style.left = x + 'px'; dlg.style.top = y + 'px';
+        }
+        tete.addEventListener('pointerdown', function (e) {
+            if (e.target.closest('.iac-x')) return;
+            var r = dlg.getBoundingClientRect(); glisse = { dx: e.clientX - r.left, dy: e.clientY - r.top };
+            tete.setPointerCapture(e.pointerId); e.preventDefault();
+        });
+        tete.addEventListener('pointermove', function (e) { if (glisse) placer(e.clientX - glisse.dx, e.clientY - glisse.dy); });
+        tete.addEventListener('pointerup', function () { glisse = null; });
+        tete.addEventListener('pointercancel', function () { glisse = null; });
+    })();
+</script>
 <script type="text/javascript">
     // Le plan de la compagnie, écrit par le serveur. Un Literal plutôt qu'un
     // bloc de code inline : sur les pages à panneau Telerik ceux-ci cassent le
