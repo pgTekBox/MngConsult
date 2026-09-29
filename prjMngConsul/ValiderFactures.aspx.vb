@@ -519,9 +519,16 @@ Public Class ValiderFactures
             If taxeCode = "" Then
                 sb.Append("<td><span style='color:#94a3b8'>—</span></td>")
             ElseIf taxeNom <> "" Then
-                sb.Append("<td title='").Append(Server.HtmlEncode("Code " & taxeCode & " chez la source")).Append("'>").Append(Server.HtmlEncode(taxeNom)).Append("</td>")
+                ' Le nom, et le code à côté : c'est le code que l'écran « Codes et taux de taxe » manipule.
+                sb.Append("<td>").Append(Server.HtmlEncode(taxeNom))
+                If Not String.Equals(taxeNom, taxeCode, StringComparison.OrdinalIgnoreCase) Then
+                    sb.Append(" <span style='color:#94a3b8;font-size:11px' title='Code de taxe chez la source'>· code ").Append(Server.HtmlEncode(taxeCode)).Append("</span>")
+                End If
+                sb.Append("</td>")
             Else
-                sb.Append("<td title='Code de taxe de la source : les taux n&#39;ont pas été rapatriés (relancez le bouton QuickBooks)'>code ").Append(Server.HtmlEncode(taxeCode)).Append("</td>")
+                ' Code inconnu des taux rapatriés : un lien mène à l'écran qui permet de le décrire.
+                sb.Append("<td><a href='ValiderTaxes' class='etiq anomalie' style='text-decoration:none' title='Aucun taux ne décrit ce code : cliquez pour le décrire dans l&#39;écran Codes et taux de taxe'>code ")
+                sb.Append(Server.HtmlEncode(taxeCode)).Append(" · inconnu</a></td>")
             End If
             sb.Append("<td class='n'>").Append(If(IsDBNull(l("TPS")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TPS")))).Append("</td>")
             sb.Append("<td class='n'>").Append(If(IsDBNull(l("TVQ")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TVQ")))).Append("</td></tr>")
