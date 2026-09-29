@@ -18,6 +18,9 @@ Partial Public Class ValiderFactures
     '''<summary>ddlEtat</summary>
     Protected WithEvents ddlEtat As Global.System.Web.UI.WebControls.DropDownList
 
+    '''<summary>btnTaxes</summary>
+    Protected WithEvents btnTaxes As Global.System.Web.UI.WebControls.Button
+
     '''<summary>btnEnregistrer</summary>
     Protected WithEvents btnEnregistrer As Global.System.Web.UI.WebControls.Button
 

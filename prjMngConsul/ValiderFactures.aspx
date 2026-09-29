@@ -132,7 +132,8 @@
     </p>
 
     <asp:Literal ID="litMsg" runat="server" />
-    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="invoices,bills" />
+    <%-- Les taux de taxes (tax-rates) viennent avec les factures : sans eux, TPS et TVQ resteraient vides. --%>
+    <uc:ImportApideckBouton ID="ucApideck" runat="server" Ressources="tax-rates,invoices,bills" />
 
     <div class="barre">
         <asp:DropDownList ID="ddlType" runat="server" AutoPostBack="true" CssClass="btn">
@@ -150,6 +151,7 @@
 
         <span class="esp"></span>
 
+        <asp:Button ID="btnTaxes" runat="server" CssClass="btn" Text="Répartir les taxes" ToolTip="Coupe le total des taxes en TPS et TVQ d'après les taux de la source, ou les taux du Québec à défaut" CausesValidation="false" />
         <asp:Button ID="btnEnregistrer" runat="server" CssClass="btn" Text="Enregistrer les corrections" CausesValidation="false" />
         <asp:Button ID="btnCreer" runat="server" CssClass="btn primaire" Text="Créer les documents cochés" CausesValidation="false" />
         <asp:Button ID="btnSupprimer" runat="server" CssClass="btn danger" Text="Retirer de la préparation" CausesValidation="false" />

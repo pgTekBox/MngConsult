@@ -54,6 +54,44 @@ Public Class ValiderFactures
     ''' réellement changé : réécrire deux cents documents identiques pour en
     ''' corriger un serait du bruit.
     ''' </summary>
+    ''' <summary>
+    ''' Répartit le total des taxes en TPS et TVQ sur tout ce qui est en préparation :
+    ''' d'après les taux rapatriés de la source, ou les taux du Québec à défaut (s0794).
+    ''' </summary>
+    Protected Sub btnTaxes_Click(sender As Object, e As EventArgs) Handles btnTaxes.Click
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0794RepartirTaxesImport", p)
+            Afficher()
+
+            Dim coupes As Integer = 0, defaut As Integer = 0, restants As Integer = 0, boiteux As Integer = 0
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                coupes = Entier(r, "NbLignesCoupees") + Entier(r, "NbDocumentsParTotal")
+                defaut = Entier(r, "NbParDefaut")
+                restants = Entier(r, "NbSansRepartition")
+                boiteux = Entier(r, "NbDesequilibres")
+            End If
+
+            Dim texte As New StringBuilder()
+            If coupes = 0 AndAlso defaut = 0 Then
+                texte.Append("Rien à répartir : les taxes sont déjà réparties, ou aucun document ne porte de taxes.")
+            Else
+                texte.Append("Taxes réparties sur ").Append(coupes + defaut).Append(" élément(s)")
+                If defaut > 0 Then texte.Append(", dont ").Append(defaut).Append(" aux taux du Québec (5 % + 9,975 %) faute de taux dans la source")
+                texte.Append(".")
+            End If
+            If restants > 0 Then texte.Append(" ").Append(restants).Append(" document(s) restent sans répartition : saisissez TPS et TVQ, puis Enregistrer les corrections.")
+            If boiteux > 0 Then texte.Append(" ").Append(boiteux).Append(" ne bouclent pas (sous-total + taxes ≠ total).")
+            Message(texte.ToString(), If(restants > 0 OrElse boiteux > 0, "info", "ok"))
+
+        Catch ex As Exception
+            Afficher()
+            Message("La répartition a échoué : " & ex.Message, "err")
+        End Try
+    End Sub
+
     Protected Sub btnEnregistrer_Click(sender As Object, e As EventArgs) Handles btnEnregistrer.Click
         Dim touches As Integer = 0
 
