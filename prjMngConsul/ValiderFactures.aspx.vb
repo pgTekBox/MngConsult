@@ -68,7 +68,7 @@ Public Class ValiderFactures
             Dim coupes As Integer = 0, defaut As Integer = 0, restants As Integer = 0, boiteux As Integer = 0
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                 Dim r As DataRow = ds.Tables(0).Rows(0)
-                coupes = Entier(r, "NbLignesCoupees") + Entier(r, "NbDocumentsParTotal")
+                coupes = Entier(r, "NbLignesCoupees") + Entier(r, "NbLignesParCode") + Entier(r, "NbDocumentsParTotal")
                 defaut = Entier(r, "NbParDefaut")
                 restants = Entier(r, "NbSansRepartition")
                 boiteux = Entier(r, "NbDesequilibres")

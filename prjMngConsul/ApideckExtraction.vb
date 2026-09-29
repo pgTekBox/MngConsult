@@ -3139,7 +3139,7 @@ Public Class ApideckExtraction
             If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return ""
 
             Dim r As DataRow = ds.Tables(0).Rows(0)
-            Dim coupees As Integer = Lire(r, "NbLignesCoupees") + Lire(r, "NbDocumentsParTotal")
+            Dim coupees As Integer = Lire(r, "NbLignesCoupees") + Lire(r, "NbLignesParCode") + Lire(r, "NbDocumentsParTotal")
             Dim sousTotaux As Integer = Lire(r, "NbSousTotaux")
             Dim boiteux As Integer = Lire(r, "NbDesequilibres")
 
