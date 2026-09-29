@@ -334,8 +334,18 @@ Public Class ValiderFactures
         Dim siennes = lignes.Select("EnteteId = " & enteteId)
         If siennes.Length = 0 Then Return ""
 
+        ' Le résumé de la ligne repliée : combien de comptes sont liés, à créer,
+        ' à décider… pour savoir d'un coup d'œil si le document est prêt.
+        Dim comptes As New Dictionary(Of String, Integer), produits As New Dictionary(Of String, Integer)
+        For Each l As DataRow In siennes
+            Compter(comptes, Texte(l("CompteEtat")))
+            Compter(produits, Texte(l("ProduitEtat")))
+        Next
+
         Dim sb As New StringBuilder()
-        sb.Append("<details class='lignes'><summary>").Append(siennes.Length).Append(" ligne(s)</summary>")
+        sb.Append("<details class='lignes'><summary>").Append(siennes.Length).Append(" ligne(s)")
+        sb.Append(ResumeEtats(" — comptes : ", comptes, LibellesCompte)).Append(ResumeEtats(" — produits : ", produits, LibellesProduit))
+        sb.Append("</summary>")
         sb.Append("<table class='lig'><tr><th>Description</th><th>Produit</th><th>Compte</th>")
         sb.Append("<th style='text-align:right'>Qté</th><th style='text-align:right'>Prix</th>")
         sb.Append("<th style='text-align:right'>Montant</th></tr>")
@@ -348,38 +358,62 @@ Public Class ValiderFactures
             sb.Append("<td>")
             Dim produitSource As String = Texte(l("ProduitNom"))
             Dim produitReconnu As String = Texte(l("ProduitReconnu"))
-            If produitSource = "" AndAlso produitReconnu = "" Then
-                sb.Append("<span style='color:#94a3b8'>—</span>")
-            ElseIf Not IsDBNull(l("ProductId")) Then
-                sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
-            ElseIf Not IsDBNull(l("ProductImportId")) Then
-                sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
-                sb.Append(" <span class='etiq anomalie'>en préparation, pas encore créé</span>")
-            Else
-                sb.Append(Server.HtmlEncode(produitSource))
-                sb.Append(" <span class='etiq anomalie'>absent de la préparation</span>")
-            End If
+            Dim produitEtat As String = Texte(l("ProduitEtat"))
+            Select Case produitEtat
+                Case "AUCUN"
+                    sb.Append("<span style='color:#94a3b8'>—</span>")
+                Case "CREE"
+                    sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
+                    sb.Append(" <span class='etiq ok'>créé</span>")
+                Case "A_CREER"
+                    sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
+                    sb.Append(" <span class='etiq existe'>à créer (écran Produits)</span>")
+                Case Else
+                    sb.Append(Server.HtmlEncode(produitSource))
+                    sb.Append(" <span class='etiq anomalie'>absent de la préparation</span>")
+            End Select
             sb.Append("</td>")
-            ' Le compte, tel que le PLAN COMPTABLE IMPORTÉ le connaît : lié à un
-            ' compte d'ici (numéro affiché), reconnu mais pas encore appliqué,
-            ' ou absent du plan importé. Aucun ne bloque : le brouillon se
-            ' corrige avant comptabilisation, mais on le dit.
+            ' Le compte : ce que l'étape 2 (Correspondance) en a décidé et ce que
+            ' l'étape 3 en a fait. Lié / existe / créé → le numéro d'ici ; à créer
+            ' → le numéro que l'étape 3 donnera ; à décider, ignoré, absent → à
+            ' régler avant de comptabiliser. Aucun ne bloque la création du
+            ' brouillon, mais on le dit clairement.
             sb.Append("<td>")
             Dim compteNom As String = Texte(l("CompteNom"))
             If compteNom = "" Then compteNom = Texte(l("CompteSource"))
-            Dim compteCible As String = Texte(l("CompteCible"))
-            If compteNom = "" AndAlso compteCible = "" Then
-                sb.Append("<span style='color:#94a3b8'>—</span>")
-            ElseIf compteCible <> "" Then
-                sb.Append("<b>").Append(Server.HtmlEncode(compteCible)).Append("</b>")
-                sb.Append(" <span style='color:#94a3b8'>").Append(Server.HtmlEncode(compteNom)).Append("</span>")
-            ElseIf Not IsDBNull(l("CompteImportId")) Then
-                sb.Append(Server.HtmlEncode(compteNom))
-                sb.Append(" <span class='etiq anomalie'>en préparation, pas encore appliqué</span>")
-            Else
-                sb.Append(Server.HtmlEncode(compteNom))
-                sb.Append(" <span class='etiq anomalie'>absent du plan comptable importé</span>")
-            End If
+            Dim etat As String = Texte(l("CompteEtat"))
+            Dim numero As String = Texte(l("CompteEtatNumero"))
+            Dim nomCible As String = Texte(l("CompteEtatNom"))
+            Dim cible As String = If(numero <> "", "<b>" & Server.HtmlEncode(numero) & "</b>" & If(nomCible <> "", " " & Server.HtmlEncode(nomCible), ""), "")
+            Select Case etat
+                Case "AUCUN"
+                    sb.Append("<span style='color:#94a3b8'>—</span>")
+                Case "LIE"
+                    sb.Append("<span class='etiq ok'>lié</span> → ").Append(cible)
+                    sb.Append(" <span style='color:#94a3b8'>(").Append(Server.HtmlEncode(compteNom)).Append(")</span>")
+                Case "EXISTE"
+                    sb.Append("<span class='etiq ok'>existe au plan</span> → ").Append(cible)
+                    sb.Append(" <span style='color:#94a3b8'>(").Append(Server.HtmlEncode(compteNom)).Append(")</span>")
+                Case "CREE"
+                    sb.Append("<span class='etiq migre'>créé à l'étape 3</span> → ").Append(cible)
+                    sb.Append(" <span style='color:#94a3b8'>(").Append(Server.HtmlEncode(compteNom)).Append(")</span>")
+                Case "A_CREER"
+                    sb.Append(Server.HtmlEncode(compteNom))
+                    sb.Append(" <span class='etiq existe'>à créer (étape 3)</span>")
+                    If cible <> "" Then sb.Append(" → ").Append(cible)
+                Case "LIE_SANS_CIBLE"
+                    sb.Append(Server.HtmlEncode(compteNom))
+                    sb.Append(" <span class='etiq anomalie'>lié, sans compte cible (étape 2)</span>")
+                Case "IGNORE"
+                    sb.Append(Server.HtmlEncode(compteNom))
+                    sb.Append(" <span class='etiq anomalie'>ignoré à l'étape 2 : aucun compte</span>")
+                Case "A_DECIDER"
+                    sb.Append(Server.HtmlEncode(compteNom))
+                    sb.Append(" <span class='etiq anomalie'>à décider (étape 2)</span>")
+                Case Else
+                    sb.Append(Server.HtmlEncode(compteNom))
+                    sb.Append(" <span class='etiq anomalie'>absent du plan comptable importé</span>")
+            End Select
             sb.Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("Quantite"))).Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("PrixUnitaire"))).Append("</td>")
@@ -388,6 +422,33 @@ Public Class ValiderFactures
 
         sb.Append("</table></details>")
         Return sb.ToString()
+    End Function
+
+    Private Shared ReadOnly LibellesCompte As New Dictionary(Of String, String) From {
+        {"LIE", "lié"}, {"EXISTE", "existe au plan"}, {"CREE", "créé"}, {"A_CREER", "à créer"},
+        {"LIE_SANS_CIBLE", "lié sans compte cible"}, {"IGNORE", "ignoré"}, {"A_DECIDER", "à décider"}, {"ABSENT", "absent du plan importé"}}
+    Private Shared ReadOnly LibellesProduit As New Dictionary(Of String, String) From {
+        {"CREE", "créé"}, {"A_CREER", "à créer"}, {"ABSENT", "absent"}}
+
+    Private Shared Sub Compter(d As Dictionary(Of String, Integer), cle As String)
+        If cle = "" OrElse cle = "AUCUN" Then Return
+        If d.ContainsKey(cle) Then d(cle) += 1 Else d(cle) = 1
+    End Sub
+
+    ''' <summary>« — comptes : 2 liés · 1 à créer · 1 à décider », dans l'ordre des libellés.</summary>
+    Private Function ResumeEtats(prefixe As String, d As Dictionary(Of String, Integer), libelles As Dictionary(Of String, String)) As String
+        If d.Count = 0 Then Return ""
+        Dim parts As New List(Of String)
+        For Each kv In libelles
+            If d.ContainsKey(kv.Key) Then
+                Dim n As Integer = d(kv.Key)
+                Dim libelle As String = kv.Value
+                ' accord du pluriel pour les participes (lié → liés, créé → créés) ; « à créer », « à décider » ne bougent pas.
+                If n > 1 AndAlso (libelle.EndsWith("é") OrElse libelle.EndsWith("gnoré")) Then libelle &= "s"
+                parts.Add(n & " " & libelle)
+            End If
+        Next
+        Return Server.HtmlEncode(prefixe & String.Join(" · ", parts))
     End Function
 
     ''' <summary>
