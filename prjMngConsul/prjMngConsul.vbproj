@@ -854,6 +854,13 @@
     <Compile Include="ValiderSoldesBancaires.aspx.designer.vb">
       <DependentUpon>ValiderSoldesBancaires.aspx</DependentUpon>
     </Compile>
+    <Compile Include="ValiderTaxes.aspx.vb">
+      <DependentUpon>ValiderTaxes.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="ValiderTaxes.aspx.designer.vb">
+      <DependentUpon>ValiderTaxes.aspx</DependentUpon>
+    </Compile>
     <Compile Include="ValiderReglements.aspx.vb">
       <DependentUpon>ValiderReglements.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>

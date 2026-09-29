@@ -172,7 +172,22 @@ Public Class Importations
                 },
                 New Poste With {
                     .Icone = "🧮",
-                    .Titre = "Taxes",
+                    .Titre = "Codes et taux de taxe",
+                    .Source = "QuickBooks : les taux de taxe avec leurs composantes — ou saisis ici, ou par fichier",
+                    .Destination = "préparation — staging.TaxeImport ; ce que la répartition lit pour couper TPS et TVQ",
+                    .Page = "~/ValiderTaxes.aspx",
+                    .Note = 8,
+                    .Fait = "Montre chaque code de l'ancien logiciel avec son nom, ses composantes " &
+                            "TPS et TVQ et le nombre de lignes de factures qui s'en servent ; signale " &
+                            "les codes que les lignes portent sans qu'aucun taux ne les décrive. On " &
+                            "ajoute ou corrige un taux à la main ou par fichier, la saisie survit au " &
+                            "prochain rapatriement, et la répartition des factures se lance d'ici.",
+                    .Manque = "Rien ne s'applique aux taxes de la comptabilité : ces taux ne servent " &
+                              "qu'à couper les factures en préparation."
+                },
+                New Poste With {
+                    .Icone = "📑",
+                    .Titre = "Rapport de taxes",
                     .Source = "QuickBooks : taux de taxe, et le rapport TaxSummary par la passerelle",
                     .Destination = "les taux coupent la TPS et la TVQ des pièces ; le rapport, contrôle seulement",
                     .Page = "~/ValiderRapportTaxes.aspx",
