@@ -360,15 +360,16 @@ Public Class ValiderFactures
                 Dim ce As String = Texte(l("CompteEtat"))
                 If ce <> "LIE" AndAlso ce <> "EXISTE" AndAlso ce <> "CREE" Then comptesKo += 1
                 Dim pe As String = Texte(l("ProduitEtat"))
-                If pe <> "CREE" AndAlso pe <> "AUCUN" Then produitsKo += 1
+                ' Un produit en préparation (A_CREER) est en règle : l'écran Produits le créera avec la facture.
+                If pe <> "CREE" AndAlso pe <> "A_CREER" AndAlso pe <> "AUCUN" Then produitsKo += 1
             Next
         End If
         If nbLignes = 0 Then raisons.Add("aucune ligne")
         If comptesKo > 0 Then raisons.Add(comptesKo & " ligne(s) sans compte lié, existant ou créé")
-        If produitsKo > 0 Then raisons.Add(produitsKo & " ligne(s) dont le produit n'est pas créé")
+        If produitsKo > 0 Then raisons.Add(produitsKo & " ligne(s) dont le produit est absent de la préparation")
 
         If raisons.Count = 0 Then
-            Return "<span class='conf ok' title='Conforme : tiers créé, comptes liés, produits créés, montants cohérents'>✅</span>"
+            Return "<span class='conf ok' title='Conforme : tiers créé, comptes liés, produits créés ou en préparation, montants cohérents'>✅</span>"
         End If
         Return "<span class='conf non' title='" & Server.HtmlEncode("Non conforme : " & String.Join(" · ", raisons)) & "'>⚠️</span>"
     End Function
@@ -413,7 +414,7 @@ Public Class ValiderFactures
                     sb.Append(" <span class='etiq ok'>créé</span>")
                 Case "A_CREER"
                     sb.Append(Server.HtmlEncode(If(produitReconnu <> "", produitReconnu, produitSource)))
-                    sb.Append(" <span class='etiq existe'>à créer (écran Produits)</span>")
+                    sb.Append(" <span class='etiq ok'>en préparation</span>")
                 Case Else
                     sb.Append(Server.HtmlEncode(produitSource))
                     sb.Append(" <span class='etiq anomalie'>absent de la préparation</span>")
@@ -474,7 +475,7 @@ Public Class ValiderFactures
         {"LIE", "lié"}, {"EXISTE", "existe au plan"}, {"CREE", "créé"}, {"A_CREER", "à créer"},
         {"LIE_SANS_CIBLE", "lié sans compte cible"}, {"IGNORE", "ignoré"}, {"A_DECIDER", "à décider"}, {"ABSENT", "absent du plan importé"}}
     Private Shared ReadOnly LibellesProduit As New Dictionary(Of String, String) From {
-        {"CREE", "créé"}, {"A_CREER", "à créer"}, {"ABSENT", "absent"}}
+        {"CREE", "créé"}, {"A_CREER", "en préparation"}, {"ABSENT", "absent"}}
 
     Private Shared Sub Compter(d As Dictionary(Of String, Integer), cle As String)
         If cle = "" OrElse cle = "AUCUN" Then Return
