@@ -512,8 +512,17 @@ Public Class ValiderFactures
             sb.Append("<td class='n'>").Append(Somme(l("Quantite"))).Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("PrixUnitaire"))).Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("Montant"))).Append("</td>")
+            ' Le nom du taux rapatrié (« TPS/TVQ QC - 9,975 ») ; à défaut le code brut de la
+            ' source, avec une info-bulle qui dit pourquoi (T290).
             Dim taxeCode As String = Texte(l("TaxeCode"))
-            sb.Append("<td>").Append(If(taxeCode = "", "<span style='color:#94a3b8'>—</span>", Server.HtmlEncode(taxeCode))).Append("</td>")
+            Dim taxeNom As String = Texte(l("TaxeNom"))
+            If taxeCode = "" Then
+                sb.Append("<td><span style='color:#94a3b8'>—</span></td>")
+            ElseIf taxeNom <> "" Then
+                sb.Append("<td title='").Append(Server.HtmlEncode("Code " & taxeCode & " chez la source")).Append("'>").Append(Server.HtmlEncode(taxeNom)).Append("</td>")
+            Else
+                sb.Append("<td title='Code de taxe de la source : les taux n&#39;ont pas été rapatriés (relancez le bouton QuickBooks)'>code ").Append(Server.HtmlEncode(taxeCode)).Append("</td>")
+            End If
             sb.Append("<td class='n'>").Append(If(IsDBNull(l("TPS")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TPS")))).Append("</td>")
             sb.Append("<td class='n'>").Append(If(IsDBNull(l("TVQ")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TVQ")))).Append("</td></tr>")
         Next
