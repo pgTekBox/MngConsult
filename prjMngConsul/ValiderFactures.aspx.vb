@@ -69,7 +69,7 @@ Public Class ValiderFactures
             If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
                 Dim r As DataRow = ds.Tables(0).Rows(0)
                 coupes = Entier(r, "NbLignesCoupees") + Entier(r, "NbLignesParCode") + Entier(r, "NbDocumentsParTotal")
-                defaut = Entier(r, "NbParDefaut")
+                defaut = Entier(r, "NbParDefaut") + Entier(r, "NbLignesParDefaut")
                 restants = Entier(r, "NbSansRepartition")
                 boiteux = Entier(r, "NbDesequilibres")
             End If
@@ -439,7 +439,10 @@ Public Class ValiderFactures
         sb.Append("</summary>")
         sb.Append("<table class='lig'><tr><th>Description</th><th>Produit</th><th>Compte</th>")
         sb.Append("<th style='text-align:right'>Qté</th><th style='text-align:right'>Prix</th>")
-        sb.Append("<th style='text-align:right'>Montant</th></tr>")
+        sb.Append("<th style='text-align:right'>Montant</th>")
+        ' Les taxes de la ligne : le code venu de la source, puis TPS et TVQ calculées
+        ' ligne par ligne (T288). Vides tant que « Répartir les taxes » n'a pas tourné.
+        sb.Append("<th>Taxe</th><th style='text-align:right'>TPS</th><th style='text-align:right'>TVQ</th></tr>")
 
         For Each l As DataRow In siennes
             sb.Append("<tr><td>").Append(Server.HtmlEncode(Texte(l("Description")))).Append("</td>")
@@ -508,7 +511,11 @@ Public Class ValiderFactures
             sb.Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("Quantite"))).Append("</td>")
             sb.Append("<td class='n'>").Append(Somme(l("PrixUnitaire"))).Append("</td>")
-            sb.Append("<td class='n'>").Append(Somme(l("Montant"))).Append("</td></tr>")
+            sb.Append("<td class='n'>").Append(Somme(l("Montant"))).Append("</td>")
+            Dim taxeCode As String = Texte(l("TaxeCode"))
+            sb.Append("<td>").Append(If(taxeCode = "", "<span style='color:#94a3b8'>—</span>", Server.HtmlEncode(taxeCode))).Append("</td>")
+            sb.Append("<td class='n'>").Append(If(IsDBNull(l("TPS")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TPS")))).Append("</td>")
+            sb.Append("<td class='n'>").Append(If(IsDBNull(l("TVQ")), "<span style='color:#94a3b8' title='Pas encore répartie'>—</span>", Somme(l("TVQ")))).Append("</td></tr>")
         Next
 
         sb.Append("</table></details>")
