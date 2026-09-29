@@ -329,10 +329,11 @@ Public Class ValiderFactures
 
     ''' <summary>
     ''' L'icône devant le numéro : la facture est-elle conforme, c'est-à-dire
-    ''' prête à devenir un brouillon qui se comptabilisera sans surprise ?
-    ''' Conforme = pas d'anomalie de chargement, tiers créé, chaque ligne sur un
-    ''' compte lié / existant / créé, chaque produit créé (ou ligne sans produit),
-    ''' et sous-total + TPS + TVQ = total. Sinon l'info-bulle dit ce qui manque.
+    ''' tout ce qu'il lui faut est validé en préparation, avant tout passage en
+    ''' comptabilité ? Conforme = pas d'anomalie de chargement, tiers créé ou en
+    ''' préparation, chaque ligne sur un compte lié / existant / créé / à créer,
+    ''' chaque produit créé ou en préparation (ou ligne sans produit), et
+    ''' sous-total + taxes = total. Sinon l'info-bulle dit ce qui manque.
     ''' Un document déjà créé garde un crochet gris.
     ''' </summary>
     Private Function IconeConformite(r As DataRow, lignes As DataTable, migre As Boolean) As String
@@ -341,7 +342,8 @@ Public Class ValiderFactures
         Dim raisons As New List(Of String)
         Dim statut As String = r("Statut").ToString()
         If statut = "INVALIDE" OrElse statut = "DOUBLON_FICHIER" Then raisons.Add("anomalie de chargement : " & Texte(r("Anomalie")))
-        If IsDBNull(r("PartyGUID")) Then raisons.Add(If(Not IsDBNull(r("PartyImportId")), "tiers en préparation, pas encore créé", "tiers absent de la préparation"))
+        ' Un tiers en préparation est en règle : tout se valide en préparation avant de passer en comptabilité.
+        If IsDBNull(r("PartyGUID")) AndAlso IsDBNull(r("PartyImportId")) Then raisons.Add("tiers absent de la préparation")
 
         Dim sousTotal As Decimal = If(IsDBNull(r("SousTotal")), 0D, Convert.ToDecimal(r("SousTotal")))
         Dim tps As Decimal = If(IsDBNull(r("TPS")), 0D, Convert.ToDecimal(r("TPS")))
@@ -358,18 +360,22 @@ Public Class ValiderFactures
             For Each l As DataRow In lignes.Select("EnteteId = " & Convert.ToInt32(r("Id")))
                 nbLignes += 1
                 Dim ce As String = Texte(l("CompteEtat"))
-                If ce <> "LIE" AndAlso ce <> "EXISTE" AndAlso ce <> "CREE" Then comptesKo += 1
+                ' Une ligne de texte seul (ni compte, ni produit, ni montant : une note sur la facture) n'a rien à valider.
+                Dim montantLigne As Decimal = If(IsDBNull(l("Montant")), 0D, Convert.ToDecimal(l("Montant")))
+                If ce = "AUCUN" AndAlso Texte(l("ProduitEtat")) = "AUCUN" AndAlso montantLigne = 0D Then Continue For
+                ' Un compte décidé « Créer » (A_CREER) est en règle lui aussi : l'étape 3 le créera.
+                If ce <> "LIE" AndAlso ce <> "EXISTE" AndAlso ce <> "CREE" AndAlso ce <> "A_CREER" Then comptesKo += 1
                 Dim pe As String = Texte(l("ProduitEtat"))
                 ' Un produit en préparation (A_CREER) est en règle : l'écran Produits le créera avec la facture.
                 If pe <> "CREE" AndAlso pe <> "A_CREER" AndAlso pe <> "AUCUN" Then produitsKo += 1
             Next
         End If
         If nbLignes = 0 Then raisons.Add("aucune ligne")
-        If comptesKo > 0 Then raisons.Add(comptesKo & " ligne(s) sans compte lié, existant ou créé")
+        If comptesKo > 0 Then raisons.Add(comptesKo & " ligne(s) sans compte lié, existant, créé ou à créer")
         If produitsKo > 0 Then raisons.Add(produitsKo & " ligne(s) dont le produit est absent de la préparation")
 
         If raisons.Count = 0 Then
-            Return "<span class='conf ok' title='Conforme : tiers créé, comptes liés, produits créés ou en préparation, montants cohérents'>✅</span>"
+            Return "<span class='conf ok' title='Conforme : tout est validé en préparation (tiers, comptes, produits) et les montants bouclent'>✅</span>"
         End If
         Return "<span class='conf non' title='" & Server.HtmlEncode("Non conforme : " & String.Join(" · ", raisons)) & "'>⚠️</span>"
     End Function
