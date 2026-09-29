@@ -69,6 +69,9 @@
     .etiq.migre { background: #e0e7ff; color: #3730a3 }
 
     .anom { font-size: 12px; color: #b45309; display: block; margin-top: 3px }
+    /* L'icône de conformité devant le numéro : ✅ prête, ⚠️ il manque quelque chose (info-bulle), ✔ déjà créée. */
+    .conf { display: inline-block; margin-right: 6px; font-size: 14px; cursor: help; vertical-align: middle }
+    .conf.cree { color: #94a3b8; font-weight: 800 }
     .sansTiers { font-size: 12px; color: #b91c1c }
 
     input.mt { width: 82px; padding: 4px 6px; border: 1px solid #cbd5e1; border-radius: 7px;

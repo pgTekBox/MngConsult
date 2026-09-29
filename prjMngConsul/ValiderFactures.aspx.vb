@@ -296,7 +296,7 @@ Public Class ValiderFactures
             End If
             sb.Append("</td>")
 
-            sb.Append("<td><b>").Append(Server.HtmlEncode(Texte(r("Numero")))).Append("</b>")
+            sb.Append("<td>").Append(IconeConformite(r, lignes, migre)).Append("<b>").Append(Server.HtmlEncode(Texte(r("Numero")))).Append("</b>")
             If Not IsDBNull(r("Anomalie")) AndAlso r("Anomalie").ToString() <> "" Then
                 sb.Append("<span class='anom'>").Append(Server.HtmlEncode(r("Anomalie").ToString())).Append("</span>")
             End If
@@ -325,6 +325,52 @@ Public Class ValiderFactures
 
         sb.Append("</table>")
         Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' L'icône devant le numéro : la facture est-elle conforme, c'est-à-dire
+    ''' prête à devenir un brouillon qui se comptabilisera sans surprise ?
+    ''' Conforme = pas d'anomalie de chargement, tiers créé, chaque ligne sur un
+    ''' compte lié / existant / créé, chaque produit créé (ou ligne sans produit),
+    ''' et sous-total + TPS + TVQ = total. Sinon l'info-bulle dit ce qui manque.
+    ''' Un document déjà créé garde un crochet gris.
+    ''' </summary>
+    Private Function IconeConformite(r As DataRow, lignes As DataTable, migre As Boolean) As String
+        If migre Then Return "<span class='conf cree' title='Déjà créée dans la comptabilité'>✔</span>"
+
+        Dim raisons As New List(Of String)
+        Dim statut As String = r("Statut").ToString()
+        If statut = "INVALIDE" OrElse statut = "DOUBLON_FICHIER" Then raisons.Add("anomalie de chargement : " & Texte(r("Anomalie")))
+        If IsDBNull(r("PartyGUID")) Then raisons.Add(If(Not IsDBNull(r("PartyImportId")), "tiers en préparation, pas encore créé", "tiers absent de la préparation"))
+
+        Dim sousTotal As Decimal = If(IsDBNull(r("SousTotal")), 0D, Convert.ToDecimal(r("SousTotal")))
+        Dim tps As Decimal = If(IsDBNull(r("TPS")), 0D, Convert.ToDecimal(r("TPS")))
+        Dim tvq As Decimal = If(IsDBNull(r("TVQ")), 0D, Convert.ToDecimal(r("TVQ")))
+        Dim total As Decimal = If(IsDBNull(r("Total")), 0D, Convert.ToDecimal(r("Total")))
+        Dim totalTaxes As Decimal = If(IsDBNull(r("TotalTaxes")), 0D, Convert.ToDecimal(r("TotalTaxes")))
+        ' Les taxes viennent soit réparties (TPS, TVQ), soit en bloc (TotalTaxes) : l'une ou l'autre doit boucler.
+        If Math.Abs(sousTotal + tps + tvq - total) > 0.02D AndAlso Math.Abs(sousTotal + totalTaxes - total) > 0.02D Then
+            raisons.Add("montants : sous-total + taxes ≠ total")
+        End If
+
+        Dim nbLignes As Integer = 0, comptesKo As Integer = 0, produitsKo As Integer = 0
+        If lignes IsNot Nothing Then
+            For Each l As DataRow In lignes.Select("EnteteId = " & Convert.ToInt32(r("Id")))
+                nbLignes += 1
+                Dim ce As String = Texte(l("CompteEtat"))
+                If ce <> "LIE" AndAlso ce <> "EXISTE" AndAlso ce <> "CREE" Then comptesKo += 1
+                Dim pe As String = Texte(l("ProduitEtat"))
+                If pe <> "CREE" AndAlso pe <> "AUCUN" Then produitsKo += 1
+            Next
+        End If
+        If nbLignes = 0 Then raisons.Add("aucune ligne")
+        If comptesKo > 0 Then raisons.Add(comptesKo & " ligne(s) sans compte lié, existant ou créé")
+        If produitsKo > 0 Then raisons.Add(produitsKo & " ligne(s) dont le produit n'est pas créé")
+
+        If raisons.Count = 0 Then
+            Return "<span class='conf ok' title='Conforme : tiers créé, comptes liés, produits créés, montants cohérents'>✅</span>"
+        End If
+        Return "<span class='conf non' title='" & Server.HtmlEncode("Non conforme : " & String.Join(" · ", raisons)) & "'>⚠️</span>"
     End Function
 
     ''' <summary>Le détail du document, replié : on ne l'ouvre que si on doute.</summary>
