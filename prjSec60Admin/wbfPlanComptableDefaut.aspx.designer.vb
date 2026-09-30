@@ -92,4 +92,19 @@ Partial Public Class wbfPlanComptableDefaut
 
     '''<summary>btnAjouterModele</summary>
     Protected WithEvents btnAjouterModele As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>ddlCieResync</summary>
+    Protected WithEvents ddlCieResync As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>chkSupprimerEnTrop</summary>
+    Protected WithEvents chkSupprimerEnTrop As Global.System.Web.UI.WebControls.CheckBox
+
+    '''<summary>btnSimulerResync</summary>
+    Protected WithEvents btnSimulerResync As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>btnAppliquerResync</summary>
+    Protected WithEvents btnAppliquerResync As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>litResync</summary>
+    Protected WithEvents litResync As Global.System.Web.UI.WebControls.Literal
 End Class

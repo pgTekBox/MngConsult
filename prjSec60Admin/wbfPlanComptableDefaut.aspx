@@ -182,6 +182,30 @@
             </div>
         </div>
 
+        <div class="pc-card">
+            <h2>Resynchroniser une compagnie avec le plan par défaut</h2>
+            <p class="aide">
+                Le plan d'une compagnie est copié du modèle à sa création et n'est jamais retouché ensuite. Ce bloc le remet
+                au niveau du plan par défaut : <b>ajoute</b> les comptes du modèle qu'elle n'a pas (par numéro, dans la sous-classe
+                de même code, alias compris), <b>aligne</b> sur les comptes communs les alias QuickBooks, les noms anglais et
+                espagnol et la description (le nom français et l'état actif de la compagnie ne bougent pas), et, si vous le
+                demandez, <b>retire</b> les comptes absents du modèle qui ne sont ni système ni référencés par une écriture,
+                un modèle d'écriture ou une liaison de reprise. <b>Simuler</b> montre tout sans rien écrire.
+            </p>
+            <div class="champs">
+                <div class="champ"><label>Compagnie</label>
+                    <asp:DropDownList ID="ddlCieResync" runat="server" /></div>
+                <div class="champ"><label>Comptes en trop</label>
+                    <div class="case"><asp:CheckBox ID="chkSupprimerEnTrop" runat="server" Text=" retirer ceux qui ne sont ni système ni référencés" /></div></div>
+                <div class="champ"><asp:Button ID="btnSimulerResync" runat="server" CssClass="btn" Text="Simuler" CausesValidation="false" /></div>
+                <div class="champ"><asp:Button ID="btnAppliquerResync" runat="server" CssClass="btn primaire" Text="Appliquer" CausesValidation="false"
+                    OnClientClick="if (!confirm('Resynchroniser le plan comptable de cette compagnie avec le plan par défaut ? Les ajouts et alignements sont réels.')) { return false; }" /></div>
+            </div>
+            <div style="margin-top:12px">
+                <asp:Literal ID="litResync" runat="server" />
+            </div>
+        </div>
+
         <div class="iac-overlay" id="iacOverlay" hidden>
             <div class="iac-dlg" id="iacDlg" role="dialog" aria-modal="true" aria-labelledby="iacTitre">
                 <div class="iac-tete" id="iacTete">

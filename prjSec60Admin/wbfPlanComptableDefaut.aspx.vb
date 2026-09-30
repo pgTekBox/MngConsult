@@ -24,6 +24,7 @@ Public Class wbfPlanComptableDefaut
             ChargerClasses()
             ViderFormulaire()
             ChargerCompagnies()
+            ChargerCompagniesResync()
         Else
             ' Les boutons « Corriger » et « Retirer » du tableau sont des <button>
             ' natifs nommés « act » : ils arrivent ici, avant les asp:Button.
@@ -396,6 +397,101 @@ Public Class wbfPlanComptableDefaut
     End Sub
 
     ' =========================================================================
+    ' RESYNCHRONISER UNE COMPAGNIE AVEC LE PLAN PAR DÉFAUT (T294)
+    ' =========================================================================
+
+    ''' <summary>Toutes les compagnies de la console, sauf le modèle lui-même.</summary>
+    Private Sub ChargerCompagniesResync()
+        ddlCieResync.Items.Clear()
+        ddlCieResync.Items.Add(New ListItem("— choisir —", ""))
+        Try
+            Dim q As New Collection
+            q.Add(New SqlParameter("@Search", ""))
+            Dim dc As DataSet = ExecuteSQLds("s0653GetCompaniesList", q)
+            If dc Is Nothing OrElse dc.Tables.Count = 0 Then Return
+            For Each r As DataRow In dc.Tables(0).Rows
+                Dim guid As String = Txt(r("CompanyGUID"))
+                If String.Equals(guid, ModelGUID.ToString(), StringComparison.OrdinalIgnoreCase) Then Continue For
+                ddlCieResync.Items.Add(New ListItem(Txt(r("Name")) & If(Txt(r("CompanyCode")) <> "", " (" & Txt(r("CompanyCode")) & ")", ""), guid))
+            Next
+        Catch ex As Exception
+            Message("La liste des compagnies n'a pas pu être lue : " & ex.Message, "err")
+        End Try
+    End Sub
+
+    Protected Sub btnSimulerResync_Click(sender As Object, e As EventArgs) Handles btnSimulerResync.Click
+        Resynchroniser(True)
+    End Sub
+
+    Protected Sub btnAppliquerResync_Click(sender As Object, e As EventArgs) Handles btnAppliquerResync.Click
+        Resynchroniser(False)
+        Afficher()
+    End Sub
+
+    ''' <summary>s0877 : le bilan et le détail, en simulation (ROLLBACK côté SQL) ou pour de vrai.</summary>
+    Private Sub Resynchroniser(simuler As Boolean)
+        If String.IsNullOrEmpty(ddlCieResync.SelectedValue) Then
+            litResync.Text = "<div class='msg err'>Choisissez une compagnie.</div>"
+            Return
+        End If
+
+        Dim ds As DataSet
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", New Guid(ddlCieResync.SelectedValue)))
+            p.Add(New SqlParameter("@SupprimerEnTrop", chkSupprimerEnTrop.Checked))
+            p.Add(New SqlParameter("@Simuler", simuler))
+            ds = ExecuteSQLds("s0877ResyncPlanComptableDepuisModele", p)
+        Catch ex As Exception
+            litResync.Text = "<div class='msg err'>La resynchronisation a échoué : " & Server.HtmlEncode(ex.Message) & "</div>"
+            Return
+        End Try
+        If ds Is Nothing OrElse ds.Tables.Count < 2 OrElse ds.Tables(0).Rows.Count = 0 Then
+            litResync.Text = "<div class='msg err'>Aucun résultat.</div>"
+            Return
+        End If
+
+        Dim b As DataRow = ds.Tables(0).Rows(0)
+        Dim sb As New StringBuilder()
+        sb.Append("<div class='msg ").Append(If(simuler, "info", "ok")).Append("'>")
+        sb.Append(If(simuler, "<b>Simulation</b> — rien n'a été écrit. ", "<b>Appliqué.</b> "))
+        sb.Append(Ent(b("NbAjoutes"))).Append(" compte(s) ajouté(s), ").Append(Ent(b("NbMisAJour"))).Append(" aligné(s), ")
+        sb.Append(Ent(b("NbSupprimes"))).Append(" retiré(s), ").Append(Ent(b("NbGardes"))).Append(" gardé(s) bien qu'absents du modèle")
+        If Ent(b("NbRefuses")) > 0 Then sb.Append(", ").Append(Ent(b("NbRefuses"))).Append(" refusé(s)")
+        sb.Append(".</div>")
+
+        If ds.Tables(1).Rows.Count > 0 Then
+            sb.Append("<div class='pc-tbl-wrap' style='max-height:50vh'><table class='pc-table'><thead><tr><th>Action</th><th>Numéro</th><th>Nom</th><th>Motif</th></tr></thead><tbody>")
+            For Each r As DataRow In ds.Tables(1).Rows
+                Dim act As String = Txt(r("Action"))
+                Dim pill As String = "pill"
+                If act = "SUPPRIME" OrElse act = "REFUSE" Then
+                    pill = "pill off"
+                ElseIf act = "GARDE" Then
+                    pill = "pill sys"
+                End If
+                sb.Append("<tr><td><span class='").Append(pill).Append("'>").Append(Server.HtmlEncode(LibelleResync(act))).Append("</span></td>")
+                sb.Append("<td class='num'>").Append(Server.HtmlEncode(Txt(r("Compte")))).Append("</td>")
+                sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom")))).Append("</td>")
+                sb.Append("<td class='desc'>").Append(Server.HtmlEncode(Txt(r("Motif")))).Append("</td></tr>")
+            Next
+            sb.Append("</tbody></table></div>")
+        End If
+        litResync.Text = sb.ToString()
+    End Sub
+
+    Private Shared Function LibelleResync(action As String) As String
+        Select Case action
+            Case "AJOUTE" : Return "ajouté"
+            Case "MIS_A_JOUR" : Return "aligné"
+            Case "SUPPRIME" : Return "retiré"
+            Case "GARDE" : Return "gardé"
+            Case "REFUSE" : Return "refusé"
+            Case Else : Return action
+        End Select
+    End Function
+
+    ' =========================================================================
     ' L'AFFICHAGE
     ' =========================================================================
 
@@ -499,6 +595,10 @@ Public Class wbfPlanComptableDefaut
     Private Shared Function Vide(texte As String) As Object
         Dim t As String = If(texte, "").Trim()
         Return If(t = "", CObj(DBNull.Value), t)
+    End Function
+
+    Private Shared Function Ent(v As Object) As Integer
+        Return If(v Is Nothing OrElse IsDBNull(v), 0, Convert.ToInt32(v))
     End Function
 
     Private Shared Function Bit(v As Object) As Boolean
