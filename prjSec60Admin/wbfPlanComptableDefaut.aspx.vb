@@ -304,6 +304,9 @@ Public Class wbfPlanComptableDefaut
             sb.Append("<tr").Append(If(deja <> "", " class='inactif'", "")).Append(">")
             sb.Append("<td><input type='checkbox' name='cand' value='").Append(id).Append("'").Append(If(deja <> "", " disabled", "")).Append(" /></td>")
             sb.Append("<td class='num' style='white-space:normal'>").Append(Server.HtmlEncode(Txt(r("NomSource"))))
+            ' L'assistant IA : ce que ce compte QuickBooks représente, et s'il mérite le plan par défaut.
+            sb.Append(" <button type='button' class='ia-cpt' data-id='").Append(id).Append("' data-cie='").Append(Server.HtmlEncode(ddlCompagnie.SelectedValue))
+            sb.Append("' data-nom='").Append(Server.HtmlEncode(Txt(r("NomSource")))).Append("' title='Demander à l&#39;IA d&#39;expliquer ce compte et de dire s&#39;il doit entrer dans le plan par défaut'>✨ Assistant</button>")
             If Txt(r("NomCible")) <> "" AndAlso Txt(r("NomCible")) <> Txt(r("NomSource")) Then
                 sb.Append("<span class='desc' style='display:block;font-weight:400'>chez nous : ").Append(Server.HtmlEncode(Txt(r("NomCible")))).Append("</span>")
             End If

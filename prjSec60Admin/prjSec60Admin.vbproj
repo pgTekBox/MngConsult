@@ -53,6 +53,9 @@
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Web.Extensions" />
+    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
+      <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
+    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -374,6 +377,7 @@
     <Content Include="wbfPlanComptableDefaut.aspx" />
     <Content Include="wbfMail.aspx" />
     <Content Include="JobRunner.ashx" />
+    <Content Include="AssistantCompteQBO.ashx" />
     <Content Include="MailAttachment.ashx" />
   <Content Include="wbfJobs.aspx" /><Content Include="wbfJobEdit.aspx" /><Content Include="wbfJobSchedule.aspx" /><Content Include="wbfJobMonitoring.aspx" /><Content Include="wbfJobExecution.aspx" /><Content Include="wbfJobDashboard.aspx" /></ItemGroup>
   <ItemGroup>
@@ -387,6 +391,10 @@
       <DependentUpon>JobRunner.ashx</DependentUpon>
       <SubType>Component</SubType>
     </Compile>
+    <Compile Include="AssistantCompteQBO.ashx.vb">
+      <DependentUpon>AssistantCompteQBO.ashx</DependentUpon>
+    </Compile>
+    <Compile Include="MyClass\clsAssistantCompteQBO.vb" />
     <Compile Include="MailAttachment.ashx.vb">
       <DependentUpon>MailAttachment.ashx</DependentUpon>
       <SubType>Component</SubType>
