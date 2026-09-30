@@ -243,10 +243,15 @@ Public Class wbfPlanComptableDefaut
         Catch
         End Try
 
+        ' Toutes les compagnies qui ont un plan QuickBooks en préparation (T295), même
+        ' sans candidat : on voit alors combien de comptes restent à décider à l'étape 2.
         For Each r As DataRow In ds.Tables(0).Rows
             Dim guid As String = Txt(r("CompanyGUID"))
             Dim nom As String = If(noms.ContainsKey(guid), noms(guid), guid)
-            ddlCompagnie.Items.Add(New ListItem(nom & " — " & Txt(r("NbCandidats")) & " candidat(s)", guid))
+            Dim libelle As String = nom & " — " & Txt(r("NbCandidats")) & " candidat(s) « Créer »"
+            If Ent(r("NbADecider")) > 0 Then libelle &= ", " & Txt(r("NbADecider")) & " à décider"
+            libelle &= " sur " & Txt(r("NbEnPreparation")) & " en préparation"
+            ddlCompagnie.Items.Add(New ListItem(libelle, guid))
         Next
     End Sub
 
@@ -276,7 +281,9 @@ Public Class wbfPlanComptableDefaut
             Return
         End Try
         If ds Is Nothing OrElse ds.Tables.Count < 2 OrElse ds.Tables(0).Rows.Count = 0 Then
-            litCandidats.Text = "<div class='msg info'>Aucun compte décidé « Créer » pour cette compagnie.</div>"
+            litCandidats.Text = "<div class='msg info'>Aucun compte décidé « Créer » pour cette compagnie. " &
+                                "Les candidats viennent de l'étape 2 de sa reprise (Correspondance des comptes) : un compte QuickBooks " &
+                                "sans équivalent y est décidé « Créer », et il apparaît ici. Un rechargement du plan remet ces décisions à zéro.</div>"
             Return
         End If
 
