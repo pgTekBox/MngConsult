@@ -138,6 +138,28 @@
             </div>
         </div>
 
+        <div class="pc-card">
+            <h2>Ajouter depuis un import QuickBooks</h2>
+            <p class="aide">
+                Les comptes QuickBooks qu'une compagnie a décidé de <b>Créer</b> à l'étape 2 de sa reprise sont ceux qui
+                n'ont aucun équivalent dans notre plan. Choisissez la compagnie, cochez ceux qui méritent d'entrer dans le
+                plan par défaut, donnez-leur leur sous-classe, et ajoutez : chaque compte est créé dans le modèle avec son
+                <b>alias QuickBooks</b>, et le prochain client QuickBooks se le voit lier d'office. Rien ne change chez la compagnie d'origine.
+            </p>
+            <div class="champs">
+                <div class="champ"><label>Compagnie</label>
+                    <asp:DropDownList ID="ddlCompagnie" runat="server" /></div>
+                <div class="champ"><asp:Button ID="btnVoir" runat="server" CssClass="btn" Text="Voir les candidats" CausesValidation="false" /></div>
+            </div>
+            <div style="margin-top:12px">
+                <asp:Literal ID="litCandidats" runat="server" />
+            </div>
+            <div class="champs" style="margin-top:10px">
+                <div class="champ"><asp:Button ID="btnAjouterModele" runat="server" CssClass="btn primaire" Text="Ajouter les comptes cochés au plan par défaut" CausesValidation="false" Visible="false"
+                    OnClientClick="if (!confirm('Ajouter les comptes cochés au plan comptable par défaut ? Les prochaines compagnies les recevront.')) { return false; }" /></div>
+            </div>
+        </div>
+
         <div class="pc-note">
             <b>Ce qui n'est pas ici.</b> Les classes et sous-classes (T120) et les journaux (T130) du modèle ne se modifient pas
             dans cette page. Les compagnies déjà créées ne sont jamais resynchronisées : un compte ajouté ici n'apparaît pas chez elles.

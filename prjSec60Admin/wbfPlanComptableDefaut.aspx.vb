@@ -23,6 +23,7 @@ Public Class wbfPlanComptableDefaut
         If Not IsPostBack Then
             ChargerClasses()
             ViderFormulaire()
+            ChargerCompagnies()
         Else
             ' Les boutons « Corriger » et « Retirer » du tableau sont des <button>
             ' natifs nommés « act » : ils arrivent ici, avant les asp:Button.
@@ -211,6 +212,184 @@ Public Class wbfPlanComptableDefaut
         ChargerSousClasses()
         litTitreForm.Text = "Ajouter un compte au plan par défaut"
         btnAnnuler.Visible = False
+    End Sub
+
+    ' =========================================================================
+    ' AJOUTER DEPUIS UN IMPORT QUICKBOOKS (T293)
+    ' =========================================================================
+
+    ''' <summary>Les compagnies qui ont des comptes QBO décidés « Créer », avec leur nom.</summary>
+    Private Sub ChargerCompagnies()
+        ddlCompagnie.Items.Clear()
+        ddlCompagnie.Items.Add(New ListItem("— choisir —", ""))
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", DBNull.Value))
+        Dim ds As DataSet = ExecuteSQLds("s0875GetCandidatsPlanDefaut", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
+
+        ' Les noms viennent de la liste des compagnies de la console.
+        Dim noms As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
+        Try
+            Dim q As New Collection
+            q.Add(New SqlParameter("@Search", ""))
+            Dim dc As DataSet = ExecuteSQLds("s0653GetCompaniesList", q)
+            If dc IsNot Nothing AndAlso dc.Tables.Count > 0 Then
+                For Each r As DataRow In dc.Tables(0).Rows
+                    noms(Txt(r("CompanyGUID"))) = Txt(r("Name")) & If(Txt(r("CompanyCode")) <> "", " (" & Txt(r("CompanyCode")) & ")", "")
+                Next
+            End If
+        Catch
+        End Try
+
+        For Each r As DataRow In ds.Tables(0).Rows
+            Dim guid As String = Txt(r("CompanyGUID"))
+            Dim nom As String = If(noms.ContainsKey(guid), noms(guid), guid)
+            ddlCompagnie.Items.Add(New ListItem(nom & " — " & Txt(r("NbCandidats")) & " candidat(s)", guid))
+        Next
+    End Sub
+
+    Protected Sub btnVoir_Click(sender As Object, e As EventArgs) Handles btnVoir.Click
+        AfficherCandidats()
+    End Sub
+
+    ''' <summary>
+    ''' Les candidats de la compagnie choisie : une case, le nom QBO, son sous-type,
+    ''' sa nature, son origine, ce que le modèle en sait déjà, et la sous-classe
+    ''' du modèle à choisir (proposée quand le compte a déjà été créé chez le client).
+    ''' </summary>
+    Private Sub AfficherCandidats()
+        btnAjouterModele.Visible = False
+        If String.IsNullOrEmpty(ddlCompagnie.SelectedValue) Then
+            litCandidats.Text = ""
+            Return
+        End If
+
+        Dim ds As DataSet
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", New Guid(ddlCompagnie.SelectedValue)))
+            ds = ExecuteSQLds("s0875GetCandidatsPlanDefaut", p)
+        Catch ex As Exception
+            litCandidats.Text = "<div class='msg err'>Les candidats n'ont pas pu être lus : " & Server.HtmlEncode(ex.Message) & "</div>"
+            Return
+        End Try
+        If ds Is Nothing OrElse ds.Tables.Count < 2 OrElse ds.Tables(0).Rows.Count = 0 Then
+            litCandidats.Text = "<div class='msg info'>Aucun compte décidé « Créer » pour cette compagnie.</div>"
+            Return
+        End If
+
+        ' Les sous-classes du modèle, en options HTML réutilisées sur chaque ligne.
+        Dim options As New StringBuilder("<option value=''>— sous-classe —</option>")
+        Dim parent As String = Nothing
+        For Each c As DataRow In ds.Tables(1).Rows
+            If Txt(c("ParentCode")) <> parent Then
+                If parent IsNot Nothing Then options.Append("</optgroup>")
+                parent = Txt(c("ParentCode"))
+                options.Append("<optgroup label='").Append(Server.HtmlEncode(parent & " — " & Txt(c("ParentDescription")))).Append("'>")
+            End If
+            options.Append("<option value='").Append(Txt(c("Id"))).Append("' data-type='").Append(Txt(c("TypeBilan"))).Append("'>")
+            options.Append(Server.HtmlEncode(Txt(c("Code")) & " — " & Txt(c("Description")) & " (" & Txt(c("NumeroDebut")) & "-" & Txt(c("NumeroFin")) & ")")).Append("</option>")
+        Next
+        If parent IsNot Nothing Then options.Append("</optgroup>")
+
+        Dim sb As New StringBuilder("<table class='pc-table'><thead><tr>")
+        sb.Append("<th><input type='checkbox' onclick=""var c=document.querySelectorAll('input[name=cand]');for(var i=0;i<c.length;i++){if(!c[i].disabled)c[i].checked=this.checked;}"" title='Tout cocher' /></th>")
+        sb.Append("<th>Compte QuickBooks</th><th>Sous-type</th><th>Nature</th><th>Origine</th><th>Au modèle</th><th>Sous-classe du modèle</th>")
+        sb.Append("</tr></thead><tbody>")
+
+        For Each r As DataRow In ds.Tables(0).Rows
+            Dim id As String = Txt(r("StagingId"))
+            Dim deja As String = Txt(r("DejaModeleCompte"))
+            sb.Append("<tr").Append(If(deja <> "", " class='inactif'", "")).Append(">")
+            sb.Append("<td><input type='checkbox' name='cand' value='").Append(id).Append("'").Append(If(deja <> "", " disabled", "")).Append(" /></td>")
+            sb.Append("<td class='num' style='white-space:normal'>").Append(Server.HtmlEncode(Txt(r("NomSource"))))
+            If Txt(r("NomCible")) <> "" AndAlso Txt(r("NomCible")) <> Txt(r("NomSource")) Then
+                sb.Append("<span class='desc' style='display:block;font-weight:400'>chez nous : ").Append(Server.HtmlEncode(Txt(r("NomCible")))).Append("</span>")
+            End If
+            If Txt(r("CreeChezClientCompte")) <> "" Then
+                sb.Append("<span class='desc' style='display:block;font-weight:400'>créé chez le client : ").Append(Server.HtmlEncode(Txt(r("CreeChezClientCompte")) & " (" & Txt(r("ClasseCodeClient")) & ")")).Append("</span>")
+            End If
+            sb.Append("</td>")
+            sb.Append("<td class='desc'>").Append(Server.HtmlEncode(Txt(r("SousTypeSource")))).Append("</td>")
+            sb.Append("<td>").Append(Server.HtmlEncode(LibelleType(Txt(r("TypeBilan"))))).Append("</td>")
+            sb.Append("<td>").Append(If(Txt(r("Origine")) = "DEFAUT", "<span class='pill'>par défaut QBO</span>", "<span class='pill off'>ajouté par le client</span>")).Append("</td>")
+            sb.Append("<td>")
+            If deja <> "" Then
+                sb.Append("<span class='pill sys'>déjà là</span> ").Append(Server.HtmlEncode(deja & " " & Txt(r("DejaModeleNom")))).Append("<span class='desc' style='display:block'>").Append(Server.HtmlEncode(Txt(r("DejaModeleMotif")))).Append("</span>")
+            Else
+                sb.Append("<span class='desc'>absent</span>")
+            End If
+            sb.Append("</td>")
+            sb.Append("<td>")
+            If deja = "" Then
+                ' La sous-classe proposée : celle du compte créé chez le client, si elle existe au modèle.
+                Dim sel As String = Txt(r("ModelClasseIdSuggere"))
+                Dim opts As String = options.ToString()
+                If sel <> "" Then opts = opts.Replace("<option value='" & sel & "'", "<option value='" & sel & "' selected")
+                sb.Append("<select name='cls_").Append(id).Append("' style='max-width:320px;padding:5px 7px;border:1px solid #cbd5e1;border-radius:8px;font-size:12.5px'>").Append(opts).Append("</select>")
+            End If
+            sb.Append("</td></tr>")
+        Next
+        sb.Append("</tbody></table>")
+        sb.Append("<p class='aide' style='margin:8px 0 0'>Un compte « ajouté par le client » porte souvent un nom qui n'appartient qu'à lui : n'en faites un compte par défaut que s'il est vraiment générique.</p>")
+        litCandidats.Text = sb.ToString()
+        btnAjouterModele.Visible = True
+    End Sub
+
+    Protected Sub btnAjouterModele_Click(sender As Object, e As EventArgs) Handles btnAjouterModele.Click
+        Dim coches As String() = Request.Form.GetValues("cand")
+        If coches Is Nothing OrElse coches.Length = 0 OrElse String.IsNullOrEmpty(ddlCompagnie.SelectedValue) Then
+            Message("Cochez au moins un compte à ajouter.", "err")
+            AfficherCandidats()
+            Return
+        End If
+
+        Dim crees As Integer = 0, existants As Integer = 0, refuses As Integer = 0
+        Dim details As New List(Of String)
+        For Each idTexte As String In coches
+            Dim id As Integer
+            If Not Integer.TryParse(idTexte, id) Then Continue For
+            Dim classe As Integer
+            If Not Integer.TryParse(If(Request.Form("cls_" & id), ""), classe) Then
+                refuses += 1
+                details.Add("compte " & id & " : aucune sous-classe choisie")
+                Continue For
+            End If
+            Try
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", New Guid(ddlCompagnie.SelectedValue)))
+                p.Add(New SqlParameter("@StagingId", id))
+                p.Add(New SqlParameter("@ClasseId", classe))
+                Dim ds As DataSet = ExecuteSQLds("s0876AjouterCandidatAuPlanDefaut", p)
+                Dim r As DataRow = ds.Tables(0).Rows(0)
+                Select Case Txt(r("Action"))
+                    Case "CREE" : crees += 1
+                    Case "EXISTE" : existants += 1
+                    Case Else : refuses += 1
+                End Select
+                details.Add(Txt(r("Message")))
+            Catch ex As Exception
+                refuses += 1
+                details.Add("compte " & id & " : " & ex.Message)
+            End Try
+        Next
+
+        Dim texte As New StringBuilder()
+        texte.Append(crees).Append(" compte(s) ajouté(s) au plan par défaut")
+        If existants > 0 Then texte.Append(", ").Append(existants).Append(" déjà présent(s)")
+        If refuses > 0 Then texte.Append(", ").Append(refuses).Append(" refusé(s)")
+        texte.Append(". ").Append(String.Join(" · ", details.Take(12)))
+        Message(texte.ToString(), If(crees > 0, "ok", If(refuses > 0, "err", "info")))
+
+        ' La liste des compagnies se recharge (les compteurs de candidats bougent) :
+        ' on retient la compagnie AVANT, sinon la sélection se perd avec les items.
+        Dim cie As String = ddlCompagnie.SelectedValue
+        ChargerCompagnies()
+        Choisir(ddlCompagnie, cie)
+        AfficherCandidats()
+        ' Le tableau du modèle et ses compteurs ont été rendus avant l'ajout : on les refait.
+        Afficher()
     End Sub
 
     ' =========================================================================

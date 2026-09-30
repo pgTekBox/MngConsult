@@ -80,4 +80,16 @@ Partial Public Class wbfPlanComptableDefaut
 
     '''<summary>btnAnnuler</summary>
     Protected WithEvents btnAnnuler As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>ddlCompagnie</summary>
+    Protected WithEvents ddlCompagnie As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>btnVoir</summary>
+    Protected WithEvents btnVoir As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>litCandidats</summary>
+    Protected WithEvents litCandidats As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>btnAjouterModele</summary>
+    Protected WithEvents btnAjouterModele As Global.System.Web.UI.WebControls.Button
 End Class
