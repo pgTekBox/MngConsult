@@ -356,6 +356,14 @@ Public Class CorrespondanceComptes
             Case "DECIDE"
                 Return ""
 
+            Case "PROPOSE_QBO"
+                ' Le nom (ou le sous-type) QuickBooks est connu du plan : alias posé
+                ' sur le compte dans le plan par défaut (T292). Aussi sûr qu'un numéro.
+                Return "<span class='pr pr-sur' title='Ce nom QuickBooks est connu du plan comptable (alias)'>nom QuickBooks connu</span> " &
+                       Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &
+                       TexteClasse(classe, classeNom) &
+                       AvisIA(ic, iaNom, c, iaClasse, iaClasseNom)
+
             Case "PROPOSE_NUMERO"
                 Return "<span class='pr pr-sur'>même numéro</span> " &
                        Server.HtmlEncode(c) & " — " & Server.HtmlEncode(n) &

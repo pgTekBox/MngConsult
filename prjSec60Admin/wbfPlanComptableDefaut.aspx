@@ -118,6 +118,21 @@
             <div class="champs" style="margin-top:10px">
                 <div class="champ"><label>Description</label>
                     <asp:TextBox ID="txtDescription" runat="server" CssClass="desc" MaxLength="250" /></div>
+            </div>
+            <p class="aide" style="margin-top:12px">
+                <b>Alias QuickBooks.</b> Le nom que QuickBooks donne à ce compte, en français et en anglais, et son sous-type
+                (par exemple <i>UndepositedFunds</i>). À la reprise d'un plan QuickBooks, un compte qui porte ce nom ou ce sous-type
+                est lié d'office à celui-ci, sans passer par l'IA. Laissez vide si aucun compte QuickBooks par défaut n'y correspond.
+            </p>
+            <div class="champs">
+                <div class="champ"><label>Nom QBO (français)</label>
+                    <asp:TextBox ID="txtQboFr" runat="server" CssClass="nom" MaxLength="200" placeholder="Fonds non déposés" /></div>
+                <div class="champ"><label>Nom QBO (anglais)</label>
+                    <asp:TextBox ID="txtQboEn" runat="server" CssClass="nom" MaxLength="200" placeholder="Undeposited Funds" /></div>
+                <div class="champ"><label>Sous-type QBO</label>
+                    <asp:TextBox ID="txtQboSousType" runat="server" CssClass="nom" MaxLength="100" placeholder="UndepositedFunds" /></div>
+            </div>
+            <div class="champs" style="margin-top:10px">
                 <div class="champ"><asp:Button ID="btnSave" runat="server" CssClass="btn primaire" Text="Enregistrer" CausesValidation="false" /></div>
                 <div class="champ"><asp:Button ID="btnAnnuler" runat="server" CssClass="btn" Text="Annuler" CausesValidation="false" Visible="false" /></div>
             </div>

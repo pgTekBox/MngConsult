@@ -66,6 +66,15 @@ Partial Public Class wbfPlanComptableDefaut
     '''<summary>txtDescription</summary>
     Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
 
+    '''<summary>txtQboFr</summary>
+    Protected WithEvents txtQboFr As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>txtQboEn</summary>
+    Protected WithEvents txtQboEn As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>txtQboSousType</summary>
+    Protected WithEvents txtQboSousType As Global.System.Web.UI.WebControls.TextBox
+
     '''<summary>btnSave</summary>
     Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
 

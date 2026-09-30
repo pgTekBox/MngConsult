@@ -238,7 +238,7 @@
                         <tr><td>#</td><td>Rang.</td></tr>
                         <tr><td>Compte de l’ancien logiciel</td><td>Numéro (ou « sans numéro »), nom, et fiche source : nature, type et sous-type QuickBooks, solde source, origine (« ajouté le … » ou « par défaut dans QuickBooks »), « sous-compte de « … » », description, anomalie.</td></tr>
                         <tr><td>Solde</td><td>Solde source.</td></tr>
-                        <tr><td>Ce que nous proposons</td><td>Pastille « même numéro », « même nom », « IA » (avec % de confiance et raison), « aucune proposition » ou « créé au plan ». Si l’IA diverge : « ✨ l’IA suggère plutôt … ».</td></tr>
+                        <tr><td>Ce que nous proposons</td><td>Pastille « même numéro », « même nom », « nom QuickBooks connu » (le nom, français ou anglais, ou le sous-type QuickBooks est un alias posé sur un compte du plan par défaut : aussi sûr qu’un numéro), « IA » (avec % de confiance et raison), « aucune proposition » ou « créé au plan ». Si l’IA diverge : « ✨ l’IA suggère plutôt … ».</td></tr>
                         <tr><td>Action</td><td>« — à décider », Lier, Créer ou Ignorer.</td></tr>
                         <tr><td>Classe, Sous-classe, Compte chez vous</td><td>Trois listes en cascade (classe avec code, nom et plage de numéros). Un compte hors filtre reste affiché « (hors filtre) ».</td></tr>
                         <tr><td>Note</td><td>500 caractères au maximum.</td></tr>
@@ -475,7 +475,7 @@
                 </ul>
                 <h3>Doublons et verdicts</h3>
                 <ul>
-                    <li>Invalide : ni numéro ni nom. Doublon : même clé qu’une ligne précédente. « Déjà au plan » : même numéro, ou même nom dans une des 4 langues, avec une nature compatible. Même nom mais nature différente : « à décider ».</li>
+                    <li>Invalide : ni numéro ni nom. Doublon : même clé qu’une ligne précédente. « Déjà au plan » : même numéro, ou même nom dans une des 4 langues, avec une nature compatible. Même nom mais nature différente : « à décider ». Puis, pour ce qui reste, par <b>alias QuickBooks</b> : un compte QuickBooks dont le nom (français ou anglais) ou le sous-type est connu du plan par défaut (Sec60Admin › Plan comptable par défaut) est lié d’office au compte de même numéro chez vous ; le sous-type ne sert que s’il ne désigne qu’un seul compte.</li>
                     <li>Origine (lecture directe seulement) : « Défaut QuickBooks » = compte créé dans les 10 minutes qui suivent le premier compte ; « Ajouté » = créé plus tard (comptes propres à l’entreprise, à lire de près). Le filtre « Origine » ne sert donc que pour un import par lecture directe.</li>
                     <li>Limites d’affichage : 500 lignes (plan en préparation), 1 000 lignes (correspondance).</li>
                 </ul>
@@ -762,7 +762,7 @@
                         <tr><td>#</td><td>Rank.</td></tr>
                         <tr><td>Account in the former application</td><td>Number (or “no number”), name, and source card: nature, QuickBooks type and subtype, source balance, origin (“added on …” or “QuickBooks default”), “sub-account of “…””, description, anomaly.</td></tr>
                         <tr><td>Balance</td><td>Source balance.</td></tr>
-                        <tr><td>What we suggest</td><td>Badge “same number”, “same name”, “AI” (with confidence % and reason), “no suggestion” or “created in the chart”. If the AI differs: “✨ the AI rather suggests …”.</td></tr>
+                        <tr><td>What we suggest</td><td>Badge “same number”, “same name”, “known QuickBooks name” (the French or English name, or the QuickBooks sub-type, is an alias set on an account of the default chart: as reliable as a number), “AI” (with confidence % and reason), “no suggestion” or “created in the chart”. If the AI differs: “✨ the AI rather suggests …”.</td></tr>
                         <tr><td>Action</td><td>“— to decide”, Link, Create or Ignore.</td></tr>
                         <tr><td>Class, Subclass, Your account</td><td>Three cascading lists (class with code, name and number range). An account outside the filter stays shown as “(outside filter)”.</td></tr>
                         <tr><td>Note</td><td>500 characters maximum.</td></tr>
@@ -999,7 +999,7 @@
                 </ul>
                 <h3>Duplicates and verdicts</h3>
                 <ul>
-                    <li>Invalid: neither number nor name. Duplicate: same key as a previous row. “Already in the chart”: same number, or same name in one of the 4 languages, with a compatible nature. Same name but different nature: “to decide”.</li>
+                    <li>Invalid: neither number nor name. Duplicate: same key as a previous row. “Already in the chart”: same number, or same name in one of the 4 languages, with a compatible nature. Same name but different nature: “to decide”. Then, for what remains, by <b>QuickBooks alias</b>: a QuickBooks account whose name (French or English) or sub-type is known to the default chart (Sec60Admin › Default chart of accounts) is linked outright to the account with the same number in your chart; the sub-type is used only when it designates a single account.</li>
                     <li>Origin (direct read only): “QuickBooks default” = account created within 10 minutes of the first account; “Added” = created later (accounts specific to the business, to read closely). The “Origin” filter is therefore useful only for a direct-read import.</li>
                     <li>Display limits: 500 rows (chart in staging), 1,000 rows (mapping).</li>
                 </ul>
@@ -1286,7 +1286,7 @@
                         <tr><td>#</td><td>Orden.</td></tr>
                         <tr><td>Cuenta del programa anterior</td><td>Número (o « sin número »), nombre y ficha de origen: naturaleza, tipo y subtipo QuickBooks, saldo de origen, origen (« añadida el … » o « por defecto en QuickBooks »), « subcuenta de « … » », descripción, anomalía.</td></tr>
                         <tr><td>Saldo</td><td>Saldo de origen.</td></tr>
-                        <tr><td>Lo que proponemos</td><td>Etiqueta « mismo número », « mismo nombre », « IA » (con % de confianza y razón), « ninguna propuesta » o « creada en el plan ». Si la IA difiere: « ✨ la IA sugiere más bien … ».</td></tr>
+                        <tr><td>Lo que proponemos</td><td>Etiqueta « mismo número », « mismo nombre », « nombre QuickBooks conocido » (el nombre, francés o inglés, o el subtipo QuickBooks es un alias puesto en una cuenta del plan por defecto: tan seguro como un número), « IA » (con % de confianza y razón), « ninguna propuesta » o « creada en el plan ». Si la IA difiere: « ✨ la IA sugiere más bien … ».</td></tr>
                         <tr><td>Acción</td><td>« — por decidir », Vincular, Crear o Ignorar.</td></tr>
                         <tr><td>Clase, Subclase, Cuenta en su plan</td><td>Tres listas en cascada (clase con código, nombre y rango de números). Una cuenta fuera del filtro sigue mostrándose « (fuera del filtro) ».</td></tr>
                         <tr><td>Nota</td><td>500 caracteres como máximo.</td></tr>
@@ -1523,7 +1523,7 @@
                 </ul>
                 <h3>Duplicados y veredictos</h3>
                 <ul>
-                    <li>Inválida: ni número ni nombre. Duplicado: misma clave que una línea anterior. « Ya en el plan »: mismo número, o mismo nombre en uno de los 4 idiomas, con naturaleza compatible. Mismo nombre pero naturaleza distinta: « por decidir ».</li>
+                    <li>Inválida: ni número ni nombre. Duplicado: misma clave que una línea anterior. « Ya en el plan »: mismo número, o mismo nombre en uno de los 4 idiomas, con naturaleza compatible. Mismo nombre pero naturaleza distinta: « por decidir ». Luego, para lo que queda, por <b>alias QuickBooks</b>: una cuenta QuickBooks cuyo nombre (francés o inglés) o subtipo es conocido por el plan por defecto (Sec60Admin › Plan de cuentas por defecto) se vincula directamente a la cuenta con el mismo número en su plan; el subtipo solo se usa cuando designa una sola cuenta.</li>
                     <li>Origen (solo lectura directa): « Por defecto QuickBooks » = cuenta creada en los 10 minutos siguientes a la primera cuenta; « Añadida » = creada después (cuentas propias de la empresa, por leer de cerca). El filtro « Origen » solo sirve, por tanto, para una importación por lectura directa.</li>
                     <li>Límites de visualización: 500 líneas (plan en preparación), 1 000 líneas (correspondencia).</li>
                 </ul>

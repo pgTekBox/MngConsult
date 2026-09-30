@@ -114,6 +114,9 @@ Public Class wbfPlanComptableDefaut
         Choisir(ddlSens, Txt(r("Sens")))
         chkActif.Checked = Not IsDBNull(r("Actif")) AndAlso Convert.ToBoolean(r("Actif"))
         txtDescription.Text = Txt(r("Description"))
+        txtQboFr.Text = Txt(r("QBOCompteFR"))
+        txtQboEn.Text = Txt(r("QBOCompteEN"))
+        txtQboSousType.Text = Txt(r("QBOSousType"))
         litTitreForm.Text = "Corriger le compte " & Server.HtmlEncode(Txt(r("Numero")) & " " & Txt(r("Nom")))
         btnAnnuler.Visible = True
     End Sub
@@ -160,6 +163,12 @@ Public Class wbfPlanComptableDefaut
             p.Add(New SqlParameter("@Sens", ddlSens.SelectedValue))
             p.Add(New SqlParameter("@Actif", chkActif.Checked))
             p.Add(New SqlParameter("@Description", If(txtDescription.Text.Trim() = "", CObj(DBNull.Value), txtDescription.Text.Trim())))
+            ' Les alias QuickBooks (T292). @QBOMaj = 1 : ces trois valeurs font foi,
+            ' vides comprises — l'ERP, qui ne les connaît pas, appelle sans ce drapeau.
+            p.Add(New SqlParameter("@QBOCompteFR", Vide(txtQboFr.Text)))
+            p.Add(New SqlParameter("@QBOCompteEN", Vide(txtQboEn.Text)))
+            p.Add(New SqlParameter("@QBOSousType", Vide(txtQboSousType.Text)))
+            p.Add(New SqlParameter("@QBOMaj", True))
 
             If modif Then
                 ExecuteSQL("s0055UpdatePlanComptableCompte", p)
@@ -194,6 +203,9 @@ Public Class wbfPlanComptableDefaut
         txtNumero.Text = ""
         txtNom.Text = ""
         txtDescription.Text = ""
+        txtQboFr.Text = ""
+        txtQboEn.Text = ""
+        txtQboSousType.Text = ""
         chkActif.Checked = True
         If ddlClasseParent.Items.Count > 0 Then ddlClasseParent.SelectedIndex = 0
         ChargerSousClasses()
@@ -252,7 +264,14 @@ Public Class wbfPlanComptableDefaut
             Dim actif As Boolean = Bit(r("Actif")), sys As Boolean = Bit(r("Systeme"))
             sb.Append("<tr").Append(If(actif, "", " class='inactif'")).Append(">")
             sb.Append("<td class='num'>").Append(Server.HtmlEncode(Txt(r("Numero")))).Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom")))).Append("</td>")
+            sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom"))))
+            ' Les alias QuickBooks, sous le nom : ce que la reprise d'un plan QBO reconnaît d'office.
+            Dim qbo As New List(Of String)
+            If Txt(r("QBOCompteFR")) <> "" Then qbo.Add(Txt(r("QBOCompteFR")))
+            If Txt(r("QBOCompteEN")) <> "" Then qbo.Add(Txt(r("QBOCompteEN")))
+            If Txt(r("QBOSousType")) <> "" Then qbo.Add("[" & Txt(r("QBOSousType")) & "]")
+            If qbo.Count > 0 Then sb.Append("<span class='desc' style='display:block;color:#64748b;font-size:11.5px' title='Alias QuickBooks'>QBO : ").Append(Server.HtmlEncode(String.Join(" · ", qbo))).Append("</span>")
+            sb.Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("ClasseCode")))).Append(" <span style='color:#64748b'>").Append(Server.HtmlEncode(Txt(r("SousClasseDescription")))).Append("</span></td>")
             sb.Append("<td>").Append(Server.HtmlEncode(LibelleType(Txt(r("TypeBilan"))))).Append("</td>")
             sb.Append("<td>").Append(If(Txt(r("Sens")) = "D", "Débiteur", "Créditeur")).Append("</td>")
@@ -292,6 +311,12 @@ Public Class wbfPlanComptableDefaut
 
     Private Shared Function Txt(v As Object) As String
         Return If(v Is Nothing OrElse IsDBNull(v), "", Convert.ToString(v))
+    End Function
+
+    ''' <summary>Un champ vide devient NULL : l'alias absent n'est pas une chaîne vide.</summary>
+    Private Shared Function Vide(texte As String) As Object
+        Dim t As String = If(texte, "").Trim()
+        Return If(t = "", CObj(DBNull.Value), t)
     End Function
 
     Private Shared Function Bit(v As Object) As Boolean
