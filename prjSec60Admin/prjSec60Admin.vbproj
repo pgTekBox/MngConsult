@@ -371,6 +371,7 @@
     <Content Include="wbfPlaidDiagnostic.aspx" />
     <Content Include="wbfDemoReset.aspx" />
     <Content Include="wbfReservations.aspx" />
+    <Content Include="wbfPlanComptableDefaut.aspx" />
     <Content Include="wbfMail.aspx" />
     <Content Include="JobRunner.ashx" />
     <Content Include="MailAttachment.ashx" />
@@ -536,6 +537,13 @@
     </Compile>
     <Compile Include="wbfReservations.aspx.designer.vb">
       <DependentUpon>wbfReservations.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPlanComptableDefaut.aspx.vb">
+      <DependentUpon>wbfPlanComptableDefaut.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfPlanComptableDefaut.aspx.designer.vb">
+      <DependentUpon>wbfPlanComptableDefaut.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfDemoReset.aspx.vb">
       <DependentUpon>wbfDemoReset.aspx</DependentUpon>

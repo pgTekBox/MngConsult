@@ -387,6 +387,30 @@
                 </ul>
             </section>
 
+            <section id="fr-plan-defaut">
+                <h2>Le plan comptable par défaut</h2>
+                <h3>D’où vient le plan d’une nouvelle compagnie</h3>
+                <p>Chaque compagnie possède son propre plan comptable. À la création, elle reçoit une <b>copie</b> du plan de la <b>compagnie modèle</b> (identifiant <code>00000000-0000-0000-0000-000000000001</code>) : ses classes et sous-classes, ses comptes, ses journaux et ses paramètres. La copie se fait au <b>premier enregistrement des Paramètres</b> de la compagnie (bouton Enregistrer de l’écran Paramètres, procédure s0500InitializeCompanyData), et une seule fois : si la compagnie a déjà des comptes, rien n’est recopié.</p>
+                <h3>Où le modifier</h3>
+                <p>Dans la console d’administration Sec60Admin, page <span class="chemin">Plan comptable par défaut</span> (menu du bas). Elle montre le plan modèle groupé par classe, avec pour chaque compte son numéro, son nom, sa sous-classe, son type de bilan, son sens, son état et sa description. Compteurs : comptes, actifs, système, classes. Une recherche par numéro ou nom filtre la liste.</p>
+                <table class="tableau">
+                    <thead><tr><th>Action</th><th>Ce qu’elle fait</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Ajouter un compte</kbd></td><td>Classe, puis sous-classe (le type de bilan et le sens se remplissent d’après la classe), numéro (libre dans le plan modèle), nom, actif, description. <kbd>Enregistrer</kbd>. Les prochaines compagnies le recevront.</td></tr>
+                        <tr><td><kbd>Corriger</kbd></td><td>Remplit le formulaire avec le compte ; on peut changer le numéro, le nom, la classe, le type, le sens, l’état actif et la description.</td></tr>
+                        <tr><td><kbd>Retirer</kbd></td><td>Supprime le compte du plan modèle après confirmation. Absent pour un compte <b>système</b> (banque principale, taxes, comptes clients et fournisseurs…), que l’application utilise elle-même : il se renomme, il ne se retire pas.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Règles</h3>
+                <ul>
+                    <li>Ce qui change ici vaut pour les compagnies <b>créées ensuite</b>. Les compagnies existantes gardent leur plan : il n’y a pas de resynchronisation.</li>
+                    <li>Les classes et sous-classes (T120) et les journaux (T130) du modèle ne se modifient pas dans cette page.</li>
+                    <li>Un compte inactif est copié mais n’apparaît pas dans les listes des nouvelles compagnies.</li>
+                    <li>Le modèle ne tient aucune écriture : on peut y retirer un compte non système sans conséquence comptable.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Le modèle est une compagnie comme les autres dans la base : ne la réinitialisez pas et n’y saisissez pas de données vivantes.</div>
+            </section>
+
             <section id="fr-remise-a-zero">
                 <h2>Remettre la comptabilité à zéro</h2>
                 <h3>But</h3>
@@ -844,6 +868,30 @@
                 </ul>
             </section>
 
+            <section id="en-default-chart">
+                <h2>The default chart of accounts</h2>
+                <h3>Where a new company’s chart comes from</h3>
+                <p>Each company has its own chart of accounts. At creation it receives a <b>copy</b> of the chart of the <b>model company</b> (identifier <code>00000000-0000-0000-0000-000000000001</code>): its classes and sub-classes, its accounts, its journals and its parameters. The copy happens at the <b>first save of the company’s Settings</b> (Save button of the Settings screen, procedure s0500InitializeCompanyData), and only once: if the company already has accounts, nothing is copied again.</p>
+                <h3>Where to change it</h3>
+                <p>In the Sec60Admin console, page <span class="chemin">Default chart of accounts</span> (bottom menu). It shows the model chart grouped by class, with each account’s number, name, sub-class, balance-sheet type, direction, status and description. Counters: accounts, active, system, classes. A search by number or name filters the list.</p>
+                <table class="tableau">
+                    <thead><tr><th>Action</th><th>What it does</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Add an account</kbd></td><td>Class, then sub-class (the balance-sheet type and direction fill in from the class), number (free in the model chart), name, active, description. <kbd>Save</kbd>. The next companies will receive it.</td></tr>
+                        <tr><td><kbd>Correct</kbd></td><td>Fills the form with the account; number, name, class, type, direction, active status and description can be changed.</td></tr>
+                        <tr><td><kbd>Remove</kbd></td><td>Deletes the account from the model chart after confirmation. Not offered for a <b>system</b> account (main bank, taxes, receivables and payables…), which the application uses itself: it can be renamed, not removed.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Rules</h3>
+                <ul>
+                    <li>What changes here applies to companies <b>created afterwards</b>. Existing companies keep their chart: there is no resynchronization.</li>
+                    <li>The model’s classes and sub-classes (T120) and journals (T130) are not edited on this page.</li>
+                    <li>An inactive account is copied but does not appear in the new companies’ lists.</li>
+                    <li>The model holds no entries: a non-system account can be removed without accounting consequence.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">The model is a company like any other in the database: do not reset it and do not enter live data in it.</div>
+            </section>
+
             <section id="en-reset-accounting">
                 <h2>Resetting the accounting</h2>
                 <h3>Purpose</h3>
@@ -1299,6 +1347,30 @@
                     <li><span class="msg">«El asistente no pudo responder: …»</span> — reintente en un momento.</li>
                     <li><span class="msg">«El micrófono no está autorizado: verifique el permiso del navegador.»</span> — autorice el micrófono para este sitio.</li>
                 </ul>
+            </section>
+
+            <section id="es-plan-por-defecto">
+                <h2>El plan de cuentas por defecto</h2>
+                <h3>De dónde viene el plan de una compañía nueva</h3>
+                <p>Cada compañía tiene su propio plan de cuentas. Al crearse recibe una <b>copia</b> del plan de la <b>compañía modelo</b> (identificador <code>00000000-0000-0000-0000-000000000001</code>): sus clases y subclases, sus cuentas, sus diarios y sus parámetros. La copia se hace en el <b>primer guardado de los Parámetros</b> de la compañía (botón Guardar de la pantalla Parámetros, procedimiento s0500InitializeCompanyData), y una sola vez: si la compañía ya tiene cuentas, no se copia nada.</p>
+                <h3>Dónde modificarlo</h3>
+                <p>En la consola de administración Sec60Admin, página <span class="chemin">Plan de cuentas por defecto</span> (menú inferior). Muestra el plan modelo agrupado por clase, con el número, el nombre, la subclase, el tipo de balance, el sentido, el estado y la descripción de cada cuenta. Contadores: cuentas, activas, sistema, clases. Una búsqueda por número o nombre filtra la lista.</p>
+                <table class="tableau">
+                    <thead><tr><th>Acción</th><th>Qué hace</th></tr></thead>
+                    <tbody>
+                        <tr><td><kbd>Agregar una cuenta</kbd></td><td>Clase, luego subclase (el tipo de balance y el sentido se rellenan según la clase), número (libre en el plan modelo), nombre, activa, descripción. <kbd>Guardar</kbd>. Las próximas compañías la recibirán.</td></tr>
+                        <tr><td><kbd>Corregir</kbd></td><td>Rellena el formulario con la cuenta; se pueden cambiar el número, el nombre, la clase, el tipo, el sentido, el estado activo y la descripción.</td></tr>
+                        <tr><td><kbd>Retirar</kbd></td><td>Elimina la cuenta del plan modelo tras confirmación. No se ofrece para una cuenta de <b>sistema</b> (banco principal, impuestos, cuentas por cobrar y por pagar…), que la aplicación usa por sí misma: se renombra, no se retira.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Reglas</h3>
+                <ul>
+                    <li>Lo que cambia aquí vale para las compañías <b>creadas después</b>. Las compañías existentes conservan su plan: no hay resincronización.</li>
+                    <li>Las clases y subclases (T120) y los diarios (T130) del modelo no se modifican en esta página.</li>
+                    <li>Una cuenta inactiva se copia pero no aparece en las listas de las compañías nuevas.</li>
+                    <li>El modelo no tiene asientos: una cuenta que no sea de sistema puede retirarse sin consecuencia contable.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">El modelo es una compañía como las demás en la base de datos: no la reinicie ni ingrese datos vivos en ella.</div>
             </section>
 
             <section id="es-reinicio-contabilidad">

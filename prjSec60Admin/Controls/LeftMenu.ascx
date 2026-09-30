@@ -197,6 +197,10 @@
                     <span class="nav-ico" aria-hidden="true">🤖</span>
                     <span class="nav-txt">Prompts OpenAI</span>
                 </a>
+                <a class="nav-item subtle" href="~/wbfPlanComptableDefaut.aspx" runat="server" data-navlink>
+                    <span class="nav-ico" aria-hidden="true">📒</span>
+                    <span class="nav-txt">Plan comptable par défaut</span>
+                </a>
                 <a class="nav-item subtle" href="~/wbfDemoReset.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">🔄</span>
                     <span class="nav-txt">Réinitialiser la démo</span>
