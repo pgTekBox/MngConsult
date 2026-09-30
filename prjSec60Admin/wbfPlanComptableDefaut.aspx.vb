@@ -272,18 +272,25 @@ Public Class wbfPlanComptableDefaut
         End If
 
         Dim ds As DataSet
+        Dim filtre As String = ddlFiltreCandidats.SelectedValue
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", New Guid(ddlCompagnie.SelectedValue)))
+            p.Add(New SqlParameter("@Filtre", filtre))
             ds = ExecuteSQLds("s0875GetCandidatsPlanDefaut", p)
         Catch ex As Exception
-            litCandidats.Text = "<div class='msg err'>Les candidats n'ont pas pu être lus : " & Server.HtmlEncode(ex.Message) & "</div>"
+            litCandidats.Text = "<div class='msg err'>Les comptes n'ont pas pu être lus : " & Server.HtmlEncode(ex.Message) & "</div>"
             Return
         End Try
         If ds Is Nothing OrElse ds.Tables.Count < 2 OrElse ds.Tables(0).Rows.Count = 0 Then
-            litCandidats.Text = "<div class='msg info'>Aucun compte décidé « Créer » pour cette compagnie. " &
-                                "Les candidats viennent de l'étape 2 de sa reprise (Correspondance des comptes) : un compte QuickBooks " &
-                                "sans équivalent y est décidé « Créer », et il apparaît ici. Un rechargement du plan remet ces décisions à zéro.</div>"
+            If filtre = "CREER" Then
+                litCandidats.Text = "<div class='msg info'>Aucun compte décidé « Créer » pour cette compagnie. " &
+                                    "Les candidats viennent de l'étape 2 de sa reprise (Correspondance des comptes) : un compte QuickBooks " &
+                                    "sans équivalent y est décidé « Créer », et il apparaît ici. Un rechargement du plan remet ces décisions à zéro. " &
+                                    "Choisissez « tout le plan QuickBooks en préparation » pour voir tous ses comptes.</div>"
+            Else
+                litCandidats.Text = "<div class='msg info'>Aucun compte à montrer pour cette compagnie avec ce filtre.</div>"
+            End If
             Return
         End If
 
@@ -303,7 +310,7 @@ Public Class wbfPlanComptableDefaut
 
         Dim sb As New StringBuilder("<table class='pc-table'><thead><tr>")
         sb.Append("<th><input type='checkbox' onclick=""var c=document.querySelectorAll('input[name=cand]');for(var i=0;i<c.length;i++){if(!c[i].disabled)c[i].checked=this.checked;}"" title='Tout cocher' /></th>")
-        sb.Append("<th>Compte QuickBooks</th><th>Sous-type</th><th>Nature</th><th>Origine</th><th>Au modèle</th><th>Sous-classe du modèle</th>")
+        sb.Append("<th>Compte QuickBooks</th><th>Sous-type</th><th>Nature</th><th>Origine</th><th>Chez la compagnie</th><th>Au modèle</th><th>Sous-classe du modèle</th>")
         sb.Append("</tr></thead><tbody>")
 
         For Each r As DataRow In ds.Tables(0).Rows
@@ -325,6 +332,23 @@ Public Class wbfPlanComptableDefaut
             sb.Append("<td class='desc'>").Append(Server.HtmlEncode(Txt(r("SousTypeSource")))).Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(LibelleType(Txt(r("TypeBilan"))))).Append("</td>")
             sb.Append("<td>").Append(If(Txt(r("Origine")) = "DEFAUT", "<span class='pill'>par défaut QBO</span>", "<span class='pill off'>ajouté par le client</span>")).Append("</td>")
+            ' Ce que la compagnie en a fait : reconnu (par numéro, nom ou alias) et sa décision.
+            sb.Append("<td>")
+            Dim reconnu As String = Txt(r("ReconnuCompte"))
+            If reconnu <> "" Then
+                sb.Append("reconnu → ").Append(Server.HtmlEncode(reconnu & " " & Txt(r("ReconnuNom"))))
+                If Bit(r("ParAlias")) Then sb.Append(" <span class='pill' title='Reconnu par son nom ou son sous-type QuickBooks (alias)'>alias</span>")
+                sb.Append("<br />")
+            Else
+                sb.Append("<span class='desc'>sans jumeau</span><br />")
+            End If
+            Select Case Txt(r("Decision"))
+                Case "LIER" : sb.Append("<span class='pill'>lié</span>")
+                Case "CREER" : sb.Append("<span class='pill sys'>à créer chez elle</span>")
+                Case "IGNORER" : sb.Append("<span class='pill off'>ignoré</span>")
+                Case Else : sb.Append("<span class='desc'>à décider</span>")
+            End Select
+            sb.Append("</td>")
             sb.Append("<td>")
             If deja <> "" Then
                 sb.Append("<span class='pill sys'>déjà là</span> ").Append(Server.HtmlEncode(deja & " " & Txt(r("DejaModeleNom")))).Append("<span class='desc' style='display:block'>").Append(Server.HtmlEncode(Txt(r("DejaModeleMotif")))).Append("</span>")

@@ -171,7 +171,13 @@
             <div class="champs">
                 <div class="champ"><label>Compagnie</label>
                     <asp:DropDownList ID="ddlCompagnie" runat="server" /></div>
-                <div class="champ"><asp:Button ID="btnVoir" runat="server" CssClass="btn" Text="Voir les candidats" CausesValidation="false" /></div>
+                <div class="champ"><label>Montrer</label>
+                    <asp:DropDownList ID="ddlFiltreCandidats" runat="server">
+                        <asp:ListItem Value="CREER" Text="les comptes décidés « Créer » à l'étape 2" />
+                        <asp:ListItem Value="SANS_JUMEAU" Text="les comptes sans jumeau chez la compagnie" />
+                        <asp:ListItem Value="TOUS" Text="tout le plan QuickBooks en préparation" />
+                    </asp:DropDownList></div>
+                <div class="champ"><asp:Button ID="btnVoir" runat="server" CssClass="btn" Text="Voir les comptes" CausesValidation="false" /></div>
             </div>
             <div style="margin-top:12px">
                 <asp:Literal ID="litCandidats" runat="server" />

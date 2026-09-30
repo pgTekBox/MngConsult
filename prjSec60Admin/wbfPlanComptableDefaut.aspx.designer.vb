@@ -84,6 +84,9 @@ Partial Public Class wbfPlanComptableDefaut
     '''<summary>ddlCompagnie</summary>
     Protected WithEvents ddlCompagnie As Global.System.Web.UI.WebControls.DropDownList
 
+    '''<summary>ddlFiltreCandidats</summary>
+    Protected WithEvents ddlFiltreCandidats As Global.System.Web.UI.WebControls.DropDownList
+
     '''<summary>btnVoir</summary>
     Protected WithEvents btnVoir As Global.System.Web.UI.WebControls.Button
 
