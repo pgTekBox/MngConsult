@@ -66,14 +66,23 @@ Partial Public Class wbfPlanComptableDefaut
     '''<summary>txtDescription</summary>
     Protected WithEvents txtDescription As Global.System.Web.UI.WebControls.TextBox
 
-    '''<summary>txtQboFr</summary>
-    Protected WithEvents txtQboFr As Global.System.Web.UI.WebControls.TextBox
+    '''<summary>pnlAlias</summary>
+    Protected WithEvents pnlAlias As Global.System.Web.UI.WebControls.Panel
 
-    '''<summary>txtQboEn</summary>
-    Protected WithEvents txtQboEn As Global.System.Web.UI.WebControls.TextBox
+    '''<summary>litAliases</summary>
+    Protected WithEvents litAliases As Global.System.Web.UI.WebControls.Literal
 
-    '''<summary>txtQboSousType</summary>
-    Protected WithEvents txtQboSousType As Global.System.Web.UI.WebControls.TextBox
+    '''<summary>ddlAliasLangue</summary>
+    Protected WithEvents ddlAliasLangue As Global.System.Web.UI.WebControls.DropDownList
+
+    '''<summary>txtAliasNom</summary>
+    Protected WithEvents txtAliasNom As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>txtAliasSousType</summary>
+    Protected WithEvents txtAliasSousType As Global.System.Web.UI.WebControls.TextBox
+
+    '''<summary>btnAjouterAlias</summary>
+    Protected WithEvents btnAjouterAlias As Global.System.Web.UI.WebControls.Button
 
     '''<summary>btnSave</summary>
     Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button

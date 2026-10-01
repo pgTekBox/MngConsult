@@ -33,6 +33,8 @@ Public Class wbfPlanComptableDefaut
                 PreparerEdition(act.Substring(5))
             ElseIf act.StartsWith("del:") Then
                 Retirer(act.Substring(4))
+            ElseIf act.StartsWith("delalias:") Then
+                RetirerAlias(act.Substring(9))
             End If
         End If
         Afficher()
@@ -116,10 +118,8 @@ Public Class wbfPlanComptableDefaut
         Choisir(ddlSens, Txt(r("Sens")))
         chkActif.Checked = Not IsDBNull(r("Actif")) AndAlso Convert.ToBoolean(r("Actif"))
         txtDescription.Text = Txt(r("Description"))
-        txtQboFr.Text = Txt(r("QBOCompteFR"))
-        txtQboEn.Text = Txt(r("QBOCompteEN"))
-        txtQboSousType.Text = Txt(r("QBOSousType"))
         litTitreForm.Text = "Corriger le compte " & Server.HtmlEncode(Txt(r("Numero")) & " " & Txt(r("Nom")))
+        AfficherAliases(Txt(r("Numero")))
         btnAnnuler.Visible = True
     End Sub
 
@@ -165,12 +165,6 @@ Public Class wbfPlanComptableDefaut
             p.Add(New SqlParameter("@Sens", ddlSens.SelectedValue))
             p.Add(New SqlParameter("@Actif", chkActif.Checked))
             p.Add(New SqlParameter("@Description", If(txtDescription.Text.Trim() = "", CObj(DBNull.Value), txtDescription.Text.Trim())))
-            ' Les alias QuickBooks (T292). @QBOMaj = 1 : ces trois valeurs font foi,
-            ' vides comprises — l'ERP, qui ne les connaît pas, appelle sans ce drapeau.
-            p.Add(New SqlParameter("@QBOCompteFR", Vide(txtQboFr.Text)))
-            p.Add(New SqlParameter("@QBOCompteEN", Vide(txtQboEn.Text)))
-            p.Add(New SqlParameter("@QBOSousType", Vide(txtQboSousType.Text)))
-            p.Add(New SqlParameter("@QBOMaj", True))
 
             If modif Then
                 ExecuteSQL("s0055UpdatePlanComptableCompte", p)
@@ -191,6 +185,91 @@ Public Class wbfPlanComptableDefaut
         Afficher()
     End Sub
 
+    ' =========================================================================
+    ' LES ALIAS QUICKBOOKS D'UN COMPTE (T122, T298)
+    ' =========================================================================
+
+    ''' <summary>Les alias du compte en cours de correction, avec un bouton pour en retirer un.</summary>
+    Private Sub AfficherAliases(compte As String)
+        pnlAlias.Visible = True
+        Dim ds As DataSet
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+            p.Add(New SqlParameter("@Compte", compte))
+            ds = ExecuteSQLds("s0878GetAliasPlanComptable", p)
+        Catch ex As Exception
+            litAliases.Text = "<div class='msg err'>Les alias n'ont pas pu être lus : " & Server.HtmlEncode(ex.Message) & "</div>"
+            Return
+        End Try
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            litAliases.Text = "<p class='aide' style='margin:0'>Aucun alias : ce compte n'est reconnu que par son propre nom.</p>"
+            Return
+        End If
+        Dim sb As New StringBuilder("<table class='pc-table' style='max-width:900px'><thead><tr><th>Langue</th><th>Nom chez QuickBooks</th><th>Sous-type</th><th>Depuis</th><th></th></tr></thead><tbody>")
+        For Each r As DataRow In ds.Tables(0).Rows
+            sb.Append("<tr><td>").Append(Server.HtmlEncode(If(Txt(r("Langue")) = "", "—", Txt(r("Langue")).ToLowerInvariant()))).Append("</td>")
+            sb.Append("<td class='num' style='white-space:normal'>").Append(Server.HtmlEncode(Txt(r("NomSource")))).Append("</td>")
+            sb.Append("<td class='desc'>").Append(Server.HtmlEncode(Txt(r("SousType")))).Append("</td>")
+            sb.Append("<td class='desc'>").Append(Server.HtmlEncode(Txt(r("CreatedBy")))).Append("</td>")
+            sb.Append("<td><button type='submit' class='btn petit danger' name='act' value='delalias:").Append(Txt(r("Id")))
+            sb.Append("' onclick=""if (!confirm('Retirer cet alias ?')) { return false; }"">Retirer</button></td></tr>")
+        Next
+        litAliases.Text = sb.Append("</tbody></table>").ToString()
+    End Sub
+
+    Protected Sub btnAjouterAlias_Click(sender As Object, e As EventArgs) Handles btnAjouterAlias.Click
+        Dim id As Integer
+        If Not Integer.TryParse(hfId.Value, id) Then
+            Message("Enregistrez d'abord le compte : un alias se pose sur un compte existant.", "err")
+            Afficher()
+            Return
+        End If
+        If txtAliasNom.Text.Trim() = "" Then
+            Message("Le nom chez QuickBooks est obligatoire.", "err")
+            PreparerEdition(hfId.Value)
+            Afficher()
+            Return
+        End If
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+            p.Add(New SqlParameter("@Compte", txtNumero.Text.Trim()))
+            p.Add(New SqlParameter("@SystemeSource", "QBO"))
+            p.Add(New SqlParameter("@Langue", If(ddlAliasLangue.SelectedValue = "", CObj(DBNull.Value), ddlAliasLangue.SelectedValue)))
+            p.Add(New SqlParameter("@NomSource", txtAliasNom.Text.Trim()))
+            p.Add(New SqlParameter("@SousType", Vide(txtAliasSousType.Text)))
+            p.Add(New SqlParameter("@CreatedBy", If(Convert.ToString(Session("AdminEmail")) = "", "sec60admin", Convert.ToString(Session("AdminEmail")))))
+            Dim ds As DataSet = ExecuteSQLds("s0879SaveAliasPlanComptable", p)
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Message(Txt(r("Message")), If(Txt(r("Action")) = "REFUSE", "err", "ok"))
+            If Txt(r("Action")) <> "REFUSE" Then
+                txtAliasNom.Text = ""
+                txtAliasSousType.Text = ""
+            End If
+        Catch ex As Exception
+            Message("L'alias n'a pas pu être enregistré : " & ex.Message, "err")
+        End Try
+        PreparerEdition(hfId.Value)
+        Afficher()
+    End Sub
+
+    Private Sub RetirerAlias(idTexte As String)
+        Dim id As Integer
+        If Not Integer.TryParse(idTexte, id) Then Return
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+            p.Add(New SqlParameter("@Id", id))
+            ExecuteSQL("s0880DeleteAliasPlanComptable", p)
+            Message("Alias retiré.", "info")
+        Catch ex As Exception
+            Message("Le retrait de l'alias a échoué : " & ex.Message, "err")
+        End Try
+        ' On reste sur le compte en cours de correction.
+        If hfId.Value <> "" Then PreparerEdition(hfId.Value)
+    End Sub
+
     Protected Sub btnSearch_Click(sender As Object, e As EventArgs) Handles btnSearch.Click
         Afficher()
     End Sub
@@ -205,9 +284,10 @@ Public Class wbfPlanComptableDefaut
         txtNumero.Text = ""
         txtNom.Text = ""
         txtDescription.Text = ""
-        txtQboFr.Text = ""
-        txtQboEn.Text = ""
-        txtQboSousType.Text = ""
+        pnlAlias.Visible = False
+        litAliases.Text = ""
+        txtAliasNom.Text = ""
+        txtAliasSousType.Text = ""
         chkActif.Checked = True
         If ddlClasseParent.Items.Count > 0 Then ddlClasseParent.SelectedIndex = 0
         ChargerSousClasses()
@@ -574,12 +654,9 @@ Public Class wbfPlanComptableDefaut
             sb.Append("<tr").Append(If(actif, "", " class='inactif'")).Append(">")
             sb.Append("<td class='num'>").Append(Server.HtmlEncode(Txt(r("Numero")))).Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom"))))
-            ' Les alias QuickBooks, sous le nom : ce que la reprise d'un plan QBO reconnaît d'office.
-            Dim qbo As New List(Of String)
-            If Txt(r("QBOCompteFR")) <> "" Then qbo.Add(Txt(r("QBOCompteFR")))
-            If Txt(r("QBOCompteEN")) <> "" Then qbo.Add(Txt(r("QBOCompteEN")))
-            If Txt(r("QBOSousType")) <> "" Then qbo.Add("[" & Txt(r("QBOSousType")) & "]")
-            If qbo.Count > 0 Then sb.Append("<span class='desc' style='display:block;color:#64748b;font-size:11.5px' title='Alias QuickBooks'>QBO : ").Append(Server.HtmlEncode(String.Join(" · ", qbo))).Append("</span>")
+            ' Les alias QuickBooks (T122), sous le nom : ce que la reprise d'un plan QBO reconnaît d'office.
+            Dim qbo As String = Txt(r("QBOAlias"))
+            If qbo <> "" Then sb.Append("<span class='desc' style='display:block;color:#64748b;font-size:11.5px' title='Alias QuickBooks'>QBO : ").Append(Server.HtmlEncode(qbo)).Append("</span>")
             sb.Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("ClasseCode")))).Append(" <span style='color:#64748b'>").Append(Server.HtmlEncode(Txt(r("SousClasseDescription")))).Append("</span></td>")
             sb.Append("<td>").Append(Server.HtmlEncode(LibelleType(Txt(r("TypeBilan"))))).Append("</td>")

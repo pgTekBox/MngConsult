@@ -141,19 +141,28 @@
                 <div class="champ"><label>Description</label>
                     <asp:TextBox ID="txtDescription" runat="server" CssClass="desc" MaxLength="250" /></div>
             </div>
-            <p class="aide" style="margin-top:12px">
-                <b>Alias QuickBooks.</b> Le nom que QuickBooks donne à ce compte, en français et en anglais, et son sous-type
-                (par exemple <i>UndepositedFunds</i>). À la reprise d'un plan QuickBooks, un compte qui porte ce nom ou ce sous-type
-                est lié d'office à celui-ci, sans passer par l'IA. Laissez vide si aucun compte QuickBooks par défaut n'y correspond.
-            </p>
-            <div class="champs">
-                <div class="champ"><label>Nom QBO (français)</label>
-                    <asp:TextBox ID="txtQboFr" runat="server" CssClass="nom" MaxLength="200" placeholder="Fonds non déposés" /></div>
-                <div class="champ"><label>Nom QBO (anglais)</label>
-                    <asp:TextBox ID="txtQboEn" runat="server" CssClass="nom" MaxLength="200" placeholder="Undeposited Funds" /></div>
-                <div class="champ"><label>Sous-type QBO</label>
-                    <asp:TextBox ID="txtQboSousType" runat="server" CssClass="nom" MaxLength="100" placeholder="UndepositedFunds" /></div>
-            </div>
+            <asp:Panel ID="pnlAlias" runat="server" Visible="false" Style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0">
+                <p class="aide">
+                    <b>Alias QuickBooks de ce compte.</b> Les noms que QuickBooks donne à ce compte, dans chaque langue, avec leur
+                    sous-type (par exemple <i>UndepositedFunds</i>). Un compte d'ici peut en porter plusieurs ; un nom source ne mène
+                    qu'à un seul compte. À la reprise d'un plan QuickBooks, un compte qui porte un de ces noms, ou ce sous-type s'il
+                    ne désigne qu'un compte, est lié d'office à celui-ci, sans passer par l'IA.
+                </p>
+                <asp:Literal ID="litAliases" runat="server" />
+                <div class="champs" style="margin-top:8px">
+                    <div class="champ"><label>Langue</label>
+                        <asp:DropDownList ID="ddlAliasLangue" runat="server">
+                            <asp:ListItem Value="FR" Text="français" />
+                            <asp:ListItem Value="EN" Text="anglais" />
+                            <asp:ListItem Value="" Text="—" />
+                        </asp:DropDownList></div>
+                    <div class="champ"><label>Nom chez QuickBooks</label>
+                        <asp:TextBox ID="txtAliasNom" runat="server" CssClass="nom" MaxLength="200" placeholder="Fonds non déposés" /></div>
+                    <div class="champ"><label>Sous-type QBO</label>
+                        <asp:TextBox ID="txtAliasSousType" runat="server" CssClass="nom" MaxLength="100" placeholder="UndepositedFunds" /></div>
+                    <div class="champ"><asp:Button ID="btnAjouterAlias" runat="server" CssClass="btn" Text="Ajouter l'alias" CausesValidation="false" /></div>
+                </div>
+            </asp:Panel>
             <div class="champs" style="margin-top:10px">
                 <div class="champ"><asp:Button ID="btnSave" runat="server" CssClass="btn primaire" Text="Enregistrer" CausesValidation="false" /></div>
                 <div class="champ"><asp:Button ID="btnAnnuler" runat="server" CssClass="btn" Text="Annuler" CausesValidation="false" Visible="false" /></div>

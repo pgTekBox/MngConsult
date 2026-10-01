@@ -196,19 +196,18 @@ BEGIN
         DECLARE @NextT121Id INT;
         SELECT @NextT121Id = ISNULL(MAX(Id) + 1, 1) FROM dbo.T121PlanComptable;
 
-        -- Les alias QuickBooks (T292) voyagent avec le compte : la correspondance
-        -- des comptes s'en sert pour lier d'office un plan QBO repris.
+        -- Les alias QuickBooks vivent dans T122PlanComptableAlias sur la compagnie
+        -- modèle seulement (T298) : rien à copier ici, la correspondance les lit
+        -- par numéro de compte.
         INSERT INTO dbo.T121PlanComptable
-            (Id, Compte, Nom, ClasseId, ClasseParentId, TypeBilan, Sens, Ordre, Actif, Systeme, Description, CompanyGUID,
-             QBOCompteFR, QBOCompteEN, QBOSousType)
+            (Id, Compte, Nom, ClasseId, ClasseParentId, TypeBilan, Sens, Ordre, Actif, Systeme, Description, CompanyGUID)
         SELECT
             @NextT121Id - 1 + ROW_NUMBER() OVER (ORDER BY p.Id),
             p.Compte, p.Nom,
             mClasse.NewId,
             mParent.NewId,
             p.TypeBilan, p.Sens, p.Ordre, p.Actif, p.Systeme, p.Description,
-            @CompanyGUID,
-            p.QBOCompteFR, p.QBOCompteEN, p.QBOSousType
+            @CompanyGUID
         FROM dbo.T121PlanComptable p
         LEFT JOIN @MapT120 mClasse ON mClasse.OldId = p.ClasseId
         LEFT JOIN @MapT120 mParent ON mParent.OldId = p.ClasseParentId
