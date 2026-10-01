@@ -812,6 +812,7 @@ Public Class CorrespondanceComptes
 
             If decisions.Count = 0 Then
                 Alerte(pnlAvertissement, litAvertissement, "Rien à enregistrer.")
+                ShowMessageBox("Rien à enregistrer : aucune ligne de correspondance n'a été trouvée.", "Enregistrement impossible")
                 Return
             End If
 
@@ -840,14 +841,26 @@ Public Class CorrespondanceComptes
                                      "un problème : le numéro leur sera attribué à l'étape suivante, dans la " &
                                      "plage de la classe que vous choisirez.",
                                      aDecider, aCreerSansNumero))
+                ShowMessageBox(String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider." & vbLf & vbLf &
+                                             "{1} d'entre eux sont marqués « Créer » sans numéro — ce n'est pas un problème : " &
+                                             "le numéro leur sera attribué à l'étape suivante, dans la plage de la classe " &
+                                             "que vous choisirez.", aDecider, aCreerSansNumero),
+                               "Comptes à décider")
             Else
                 Alerte(pnlSucces, litSucces,
                        String.Format("Correspondances enregistrées. {0} compte(s) restent à décider — " &
                                      "vérifiez qu'un « Lier » pointe bien vers un compte de votre plan.", aDecider))
+                ShowMessageBox(String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider." & vbLf & vbLf &
+                                             "Vérifiez qu'un « Lier » pointe bien vers un compte de votre plan : un « Lier » " &
+                                             "vers un compte inconnu n'est pas conservé et la ligne revient à décider.", aDecider),
+                               "Comptes à décider")
             End If
 
         Catch ex As Exception
+            ' Le bandeau rouge est en haut de page, loin du bouton : la boîte
+            ' de message s'ouvre par-dessus la grille pour que l'échec se voie.
             Alerte(pnlErreur, litErreur, "Enregistrement : " & Server.HtmlEncode(ex.Message))
+            ShowMessageBox("Les correspondances n'ont pas été enregistrées." & vbLf & vbLf & ex.Message, "Erreur à l'enregistrement")
         End Try
     End Sub
 

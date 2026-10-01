@@ -469,7 +469,8 @@
             var hid = tr.querySelector('input[type=hidden][id*=_hfCompte_]');
             if (!act || !hid || act.value !== 'LIER' || hid.value === '') continue;
             var no = tr.querySelector('td') ? tr.querySelector('td').textContent.trim() : String(i + 1);
-            var nom = tr.querySelector('.src-n') ? tr.querySelector('.src-n').textContent.trim() : '';
+            var srcN = tr.querySelector('.src-n');
+            var nom = srcN && srcN.firstChild && srcN.firstChild.nodeType === 3 ? srcN.firstChild.textContent.trim() : '';
             if (!parCible[hid.value]) parCible[hid.value] = [];
             parCible[hid.value].push('ligne ' + no + (nom ? ' (' + nom + ')' : ''));
         }
@@ -479,8 +480,8 @@
             fautes.push('Compte ' + c + (PLAN[c] ? ' — ' + PLAN[c] : '') + ' : ' + parCible[c].join(', '));
         }
         if (fautes.length > 0) {
-            alert('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
-                + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.');
+            showAppMessage('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
+                + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.', 'Enregistrement impossible');
             return false;
         }
 
@@ -499,9 +500,9 @@
             creerPris.push('ligne ' + no2 + ' : le numéro ' + hid2.value + ' — ' + PLAN[hid2.value] + ' existe déjà');
         }
         if (creerPris.length > 0) {
-            alert('« Créer » ne peut pas reprendre un numéro que votre plan connaît déjà.\n\n'
+            showAppMessage('« Créer » ne peut pas reprendre un numéro que votre plan connaît déjà.\n\n'
                 + creerPris.join('\n')
-                + '\n\nPour le rattacher à ce compte, choisissez « Lier ». Pour en créer un nouveau, laissez le compte vide : le numéro sera attribué à l\'étape suivante.');
+                + '\n\nPour le rattacher à ce compte, choisissez « Lier ». Pour en créer un nouveau, laissez le compte vide : le numéro sera attribué à l\'étape suivante.', 'Enregistrement impossible');
             return false;
         }
         return true;
