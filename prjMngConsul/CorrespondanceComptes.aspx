@@ -124,6 +124,8 @@
        pas un verdict. */
     /* La classe du compte propose, sous son nom. */
     .cls-f { width: 100%; min-width: 320px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
+    .cls-cell .cls-f { display: block; margin-bottom: 4px }
+    .cls-cell .scls-f { display: block }
     .scls-f { width: 100%; min-width: 320px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
     .cpt-sel { width: 100%; min-width: 240px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-family: inherit; background: #fff }
     .cls { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-weight: 700; letter-spacing: .2px }
@@ -280,8 +282,7 @@
                         <th class="solde">Solde</th>
                         <th>Ce que nous proposons</th>
                         <th style="width:130px">Action</th>
-                        <th style="width:320px">Classe</th>
-                        <th style="width:320px">Sous-classe</th>
+                        <th style="width:320px">Classe / Sous-classe</th>
                         <th style="width:240px">Compte chez vous</th>
                         <th>Note</th>
                     </tr>
@@ -318,11 +319,8 @@
                                     </asp:DropDownList>
                                 </td>
 
-                                <td>
+                                <td class="cls-cell">
                                     <asp:DropDownList runat="server" ID="ddlClasseFiltre" CssClass="cls-f" />
-                                </td>
-
-                                <td>
                                     <select class="scls-f"></select>
                                 </td>
 
