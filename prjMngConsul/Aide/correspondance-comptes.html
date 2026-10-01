@@ -1,0 +1,415 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Correspondance des comptes — 60Sec-AI</title>
+<link rel="stylesheet" href="aide.css" />
+</head>
+<body>
+<header class="aide-entete">
+    <span class="aide-marque">60Sec-AI <small>ERP</small></span>
+    <a class="aide-retour" href="index.html" data-fr="Sommaire de l’aide" data-en="Help contents" data-es="Índice de la ayuda">Sommaire de l’aide</a>
+    <div class="aide-outils">
+        <input id="aideRecherche" class="aide-recherche" type="search" placeholder="Rechercher dans la page…" />
+        <div class="aide-langues"><button type="button" data-lang="fr">FR</button><button type="button" data-lang="en">EN</button><button type="button" data-lang="es">ES</button></div>
+        <button type="button" id="aideImprimer" class="aide-bouton" data-fr="Imprimer" data-en="Print" data-es="Imprimir">Imprimer</button>
+    </div>
+</header>
+<div class="aide-corps">
+    <nav class="aide-sommaire" id="aideSommaire"></nav>
+    <main>
+
+        <article class="langue" lang="fr">
+            <h1>Correspondance des comptes</h1>
+            <p class="intro">L’écran <span class="chemin">Importation › Correspondance des comptes</span> est l’étape 2 de la reprise du plan comptable. Pour chaque compte de l’ancien logiciel (QuickBooks, Sage 50, Acomba…), vous décidez ce qu’il devient dans 60sec : <strong>le lier</strong> à un compte qui existe déjà, <strong>le créer</strong>, ou <strong>l’ignorer</strong>. Cette page explique comment faire chacun de ces gestes, pas à pas. La vue d’ensemble de la reprise (étapes 1 et 3, tiers, balance, factures) est dans <a href="importation.html">Importation des données</a>.</p>
+
+            <section id="fr-principe">
+                <h2>Le principe en trois mots</h2>
+                <table>
+                    <thead><tr><th>Action</th><th>Ce que ça fait</th><th>Quand la choisir</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Lier</strong></td><td>Rattache le compte de l’ancien logiciel à un compte <em>qui existe déjà</em> dans votre plan 60sec. Les soldes et les factures reprises iront sur ce compte.</td><td>Presque toujours. Le plan standard de 60sec existe dès l’inscription : un compte de banque, de ventes, de TPS, de loyer… a déjà son équivalent ici.</td></tr>
+                        <tr><td><strong>Créer</strong></td><td>Prépare un nouveau compte, qui sera réellement ajouté au plan à l’étape 3 « Créer les comptes au plan ».</td><td>Seulement quand aucun compte d’ici ne convient : un compte propre à votre activité, un deuxième compte de banque, un sous-compte que vous tenez à garder.</td></tr>
+                        <tr><td><strong>Ignorer</strong></td><td>Écarte le compte. Il ne sera ni lié ni créé ; ce qui lui est rattaché dans l’ancien logiciel ne sera pas repris sur ce compte.</td><td>Comptes vides, doublons, comptes techniques de l’ancien logiciel dont vous n’avez plus l’usage.</td></tr>
+                        <tr><td>— à décider</td><td>Aucune décision. Remettre cette valeur annule une décision déjà enregistrée.</td><td>Tant que vous hésitez.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Rien n’est écrit en comptabilité">Enregistrer les correspondances ne crée rien et ne déplace aucun montant : les décisions sont conservées à part, en préparation. Vous pouvez revenir, changer d’avis et réenregistrer autant de fois que nécessaire. Seule l’étape 3 écrit dans le plan.</div>
+                <div class="piege" data-titre="Le piège classique">Tout mettre en « Créer » parce que c’est plus rapide. Vous obtenez alors deux plans parallèles (le standard de 60sec et la copie de l’ancien), des états financiers faux et des taxes réparties sur les mauvais comptes. Liez d’abord ; créez seulement ce qui n’existe vraiment pas.</div>
+            </section>
+
+            <section id="fr-lier">
+                <h2>Comment lier un compte, pas à pas</h2>
+                <ol>
+                    <li><strong>Repérez la ligne.</strong> La colonne « Compte de l’ancien logiciel » montre le numéro (ou « sans numéro »), le nom et la fiche source : nature, type et sous-type QuickBooks, solde, origine. Le filtre de la barre du haut « À décider seulement » ne garde que ce qui reste à faire.</li>
+                    <li><strong>Lisez la proposition.</strong> La colonne « Ce que nous proposons » dit ce que 60sec a reconnu : « même numéro », « même nom », « nom QuickBooks connu — lié d’office », « IA » avec un pourcentage de confiance et une raison, ou « aucune proposition ». Une proposition n’est jamais une décision : c’est vous qui tranchez.</li>
+                    <li><strong>Mettez la liste Action sur « Lier ».</strong> Quand la proposition est « même nom », la liste arrive déjà sur Lier avec le compte proposé en place.</li>
+                    <li><strong>Choisissez le compte chez vous</strong> avec les trois listes en cascade : d’abord la <em>Classe</em> (code, nom et plage de numéros), juste en dessous la <em>Sous-classe</em>, puis dans la colonne suivante le <em>Compte chez vous</em>. Chaque liste restreint la suivante, pour ne pas chercher parmi les 250 comptes du plan d’un coup. Un compte déjà choisi qui sort du filtre reste affiché « (hors filtre) ».</li>
+                    <li><strong>Ajoutez une note si utile</strong> (500 caractères) : pourquoi ce choix, ce qu’il faudra vérifier avec votre comptable.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd></strong> en bas de la page. Le bandeau du haut et, s’il y a un problème, une fenêtre au centre de l’écran vous disent ce qui a été retenu.</li>
+                </ol>
+                <h3>Les raccourcis qui lient pour vous</h3>
+                <ul>
+                    <li><strong>Lié d’office.</strong> Le plan standard connaît les noms que QuickBooks donne à ses comptes par défaut (en français et en anglais) ainsi que leurs sous-types : ce sont les alias. Au chargement, chaque compte reconnu arrive déjà « Lier » vers le compte de même numéro chez vous, avec la note « Lié d’office : nom QuickBooks connu du plan (alias). » Vous pouvez changer cette décision comme n’importe quelle autre.</li>
+                    <li><strong>« Même nom » préréglé.</strong> Quand le nom concorde avec un compte d’ici, la liste Action est déjà sur Lier et le compte est en place : il ne reste qu’à enregistrer.</li>
+                    <li><kbd>Accepter les correspondances par numéro</kbd> lie d’un coup toutes les propositions reconnues par numéro ou par nom, avec la note « Proposition acceptée : même numéro/nom de compte. »</li>
+                    <li><kbd>✨ Proposer avec l’IA</kbd> soumet les comptes encore à décider et votre plan à l’IA, qui propose un compte avec sa confiance et sa raison. Rien n’est décidé : relisez, puis enregistrez ce que vous retenez.</li>
+                    <li><kbd>✨ Assistant</kbd>, sur chaque ligne, explique ce que représente ce compte et où le ranger dans 60sec. Il ne décide rien non plus.</li>
+                </ul>
+                <h3>Une règle à connaître</h3>
+                <p><strong>Un compte de 60sec ne reçoit qu’un seul compte de l’ancien logiciel.</strong> Deux comptes QuickBooks ne peuvent pas être liés au même compte d’ici : le second doit être lié ailleurs, ou créé. La règle est vérifiée dans le navigateur avant l’envoi, puis par la base à l’enregistrement.</p>
+            </section>
+
+            <section id="fr-creer">
+                <h2>Comment créer un compte, pas à pas</h2>
+                <ol>
+                    <li><strong>Assurez-vous qu’aucun compte d’ici ne convient.</strong> Parcourez la classe et la sous-classe correspondantes dans les listes en cascade ; demandez à l’<kbd>✨ Assistant</kbd> au besoin.</li>
+                    <li><strong>Mettez la liste Action sur « Créer ».</strong></li>
+                    <li><strong>Laissez le compte chez vous vide.</strong> Le numéro sera attribué automatiquement à l’étape 3, dans la plage de la classe que vous y choisirez. Si le compte de l’ancien logiciel a un numéro et que ce numéro est libre dans votre plan, il est repris tel quel ; s’il est déjà pris, le champ est vidé et le numéro sera automatique.</li>
+                    <li><strong>Ne choisissez pas un compte existant dans la liste</strong> avec « Créer » : ce compte existe déjà, on ne le crée pas une seconde fois. Si c’est bien celui-là que vous voulez, c’est « Lier » qu’il faut.</li>
+                    <li><strong>Notez le contexte</strong> si le nom seul ne suffit pas à votre comptable.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compteur « À créer » augmente. Le message « N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… » est normal : le numéro vient à l’étape suivante.</li>
+                    <li><strong>Passez à l’étape 3</strong> par <kbd>Créer les comptes au plan →</kbd>. C’est là que le compte est réellement ajouté au plan, avec sa classe et son numéro. De retour ici, la ligne est marquée « Créé ✓ », grisée et verrouillée : elle ne se rediscute plus à l’étape 2.</li>
+                </ol>
+                <h3>Ce qui est refusé</h3>
+                <ul>
+                    <li>« Créer » avec un numéro que votre plan 60sec connaît déjà.</li>
+                    <li>Le même numéro à créer sur deux lignes, ou un numéro déjà réservé par une autre ligne « à créer ».</li>
+                </ul>
+            </section>
+
+            <section id="fr-ignorer">
+                <h2>Ignorer, et revenir en arrière</h2>
+                <ul>
+                    <li>« Ignorer » puis <kbd>Enregistrer</kbd> : le compte compte dans « Ignorés » et sort du filtre « À décider seulement ».</li>
+                    <li>Pour revenir sur une décision (liée, à créer ou ignorée) : remettez « — à décider », ou choisissez directement l’autre action, puis enregistrez.</li>
+                    <li>Une ligne « Créé ✓ » (compte déjà ajouté au plan à l’étape 3) ne se change plus ici. Le compte se corrige dans le plan comptable, comme n’importe quel compte.</li>
+                </ul>
+            </section>
+
+            <section id="fr-enregistrer">
+                <h2>Enregistrer et la fenêtre de message</h2>
+                <p>Le bouton <kbd>Enregistrer les correspondances</kbd> est tout en bas et le bandeau de résultat tout en haut. Dès qu’il y a un problème, une fenêtre s’ouvre donc au centre de l’écran, par-dessus la grille, avec un titre et l’explication ; <kbd>OK</kbd>, la touche Échap ou un clic à côté la ferment, et le bandeau reste en haut pour relecture. Quand tout est enregistré sans réserve, aucune fenêtre ne s’ouvre.</p>
+                <table>
+                    <thead><tr><th>Titre de la fenêtre</th><th>Quand</th><th>Quoi faire</th></tr></thead>
+                    <tbody>
+                        <tr><td>Enregistrement impossible</td><td>Avant même l’envoi : deux lignes « Lier » visent le même compte de 60sec, ou une ligne « Créer » reprend un numéro que votre plan 60sec connaît déjà. Rien n’est enregistré.</td><td>Les lignes fautives sont citées (numéro de ligne et nom). Liez les autres ailleurs ou créez-les ; pour un numéro déjà connu, choisissez « Lier » ou videz le compte.</td></tr>
+                        <tr><td>Enregistrement impossible</td><td>Aucune ligne de correspondance dans la grille.</td><td>Vérifiez que le plan est bien chargé (étape 1).</td></tr>
+                        <tr><td>Comptes à décider</td><td>Les décisions sont enregistrées, mais N comptes restent à décider ; variante « M d’entre eux sont « Créer » sans numéro — ce n’est pas un problème ».</td><td>Continuez : un « Lier » vers un compte inconnu n’est pas conservé et la ligne revient à décider ; un « Créer » sans numéro recevra son numéro à l’étape 3.</td></tr>
+                        <tr><td>Erreur à l’enregistrement</td><td>La base a refusé l’enregistrement.</td><td>Le message est reproduit tel quel (voir ci-dessous) ; corrigez la ligne visée puis enregistrez de nouveau.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="fr-messages">
+                <h2>Les messages nomment les deux logiciels</h2>
+                <p>Un refus parle de deux comptes qui portent parfois le même nom. Pour qu’on sache toujours de quel côté est chacun, les messages nomment les deux logiciels : <strong>« de 60sec »</strong> pour vos comptes d’ici, et le nom du logiciel d’où vient le plan pour les comptes de l’ancien logiciel. Exemple :</p>
+                <p><span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span></p>
+                <h3>D’où vient le nom du logiciel</h3>
+                <table>
+                    <thead><tr><th>Comment le plan a été chargé</th><th>Nom affiché</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lecture directe par le bouton QuickBooks (connecteur Apideck)</td><td>Le service relié : « QuickBooks » (demain Xero, FreshBooks… selon la connexion).</td></tr>
+                        <tr><td>Fichier exporté, logiciel choisi à l’étape 1</td><td>« QuickBooks », « Sage 50 » ou « Acomba ».</td></tr>
+                        <tr><td>Autre logiciel, ou logiciel inconnu</td><td>« l’ancien logiciel ».</td></tr>
+                    </tbody>
+                </table>
+                <h3>Les refus, avec leur formulation</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Le compte N de 60sec est déjà lié à « X » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> — une liaison enregistrée occupe déjà ce compte. Variante « est déjà celui créé pour « X » de QuickBooks » quand c’est un compte que cette reprise a créé pour une autre ligne.</li>
+                    <li><span class="msg">« Le compte N de 60sec recevrait k comptes de QuickBooks (« a », « b »). Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks : liez les autres ailleurs, ou créez-les. »</span> — deux lignes de la page visent le même compte.</li>
+                    <li><span class="msg">« « X » de QuickBooks : le numéro N existe déjà dans votre plan 60sec (Nom). Pour le rattacher à ce compte, choisissez « Lier » ; pour en créer un nouveau, laissez le compte vide… »</span> — « Créer » sur un numéro déjà pris.</li>
+                    <li><span class="msg">« Le numéro N serait créé k fois dans 60sec (« a », « b » de QuickBooks). Un numéro ne se crée qu’une fois. »</span> — deux lignes « Créer » avec le même numéro.</li>
+                    <li><span class="msg">« Le numéro N est déjà réservé par « X » de QuickBooks (à créer). Un numéro ne se crée qu’une fois. »</span> — une autre ligne, déjà enregistrée, créera ce numéro.</li>
+                    <li><span class="msg">« Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. Compte N — Nom de 60sec : ligne 1 (a), ligne 2 (b) de QuickBooks. »</span> — le même contrôle, fait dans le navigateur avant l’envoi.</li>
+                </ul>
+            </section>
+
+            <section id="fr-pieges">
+                <h2>Trucs et pièges</h2>
+                <ul>
+                    <li>Travaillez par classe : filtrez « À décider seulement », traitez l’actif, puis le passif, les revenus, les dépenses. Les listes en cascade suivent le même ordre.</li>
+                    <li>Un sous-compte QuickBooks (« sous-compte de « … » » dans la fiche) se lie souvent au compte parent d’ici ; créez-le seulement si vous tenez au détail.</li>
+                    <li>Les comptes par défaut de QuickBooks (origine « par défaut dans QuickBooks ») sont presque tous reconnus par alias. S’il en reste un à décider, signalez-le : son alias sera ajouté au plan standard pour tous les clients suivants.</li>
+                    <li>Le fichier CSV et la lecture directe QuickBooks ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ». Recharger un plan par la même voie garde les décisions dont la clé (numéro ou nom) n’a pas changé.</li>
+                    <li>Affichage limité à 1 000 lignes.</li>
+                </ul>
+            </section>
+
+            <section id="fr-faq">
+                <h2>Questions fréquentes</h2>
+                <ul>
+                    <li><strong>Je ne trouve pas le compte dans la liste.</strong> Vérifiez la classe et la sous-classe : la liste ne montre que les comptes de la sous-classe choisie. Remettez la sous-classe sur « toutes » pour élargir.</li>
+                    <li><strong>J’ai lié deux comptes au même compte d’ici et l’écran refuse.</strong> C’est la règle « un seul compte source par compte cible ». Liez le second à un autre compte, ou créez-le.</li>
+                    <li><strong>Le compte que je veux créer existe déjà.</strong> Alors c’est « Lier ». « Créer » ne peut pas reprendre un numéro que votre plan 60sec connaît déjà.</li>
+                    <li><strong>J’ai enregistré, mais la ligne est revenue « à décider ».</strong> Un « Lier » dont le compte cible n’est pas dans votre plan n’est pas conservé. Rechoisissez le compte dans les listes.</li>
+                    <li><strong>Quand les comptes « à créer » apparaissent-ils dans le plan ?</strong> À l’étape 3 seulement, après <kbd>Créer les comptes au plan →</kbd>.</li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="langue" lang="en">
+            <h1>Account mapping</h1>
+            <p class="intro">The <span class="chemin">Import › Account mapping</span> screen is step 2 of the chart-of-accounts migration. For each account of the former application (QuickBooks, Sage 50, Acomba…), you decide what it becomes in 60sec: <strong>link it</strong> to an account that already exists, <strong>create it</strong>, or <strong>ignore it</strong>. This page explains each of these actions step by step. The overall migration (steps 1 and 3, parties, trial balance, invoices) is in <a href="importation.html">Data import</a>.</p>
+
+            <section id="en-principle">
+                <h2>The principle in three words</h2>
+                <table>
+                    <thead><tr><th>Action</th><th>What it does</th><th>When to choose it</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Link</strong></td><td>Attaches the former account to an account <em>that already exists</em> in your 60sec chart. Balances and migrated invoices will go to that account.</td><td>Almost always. The 60sec standard chart exists from sign-up: a bank, sales, GST or rent account already has its counterpart here.</td></tr>
+                        <tr><td><strong>Create</strong></td><td>Prepares a new account, actually added to the chart at step 3 “Create the accounts in the chart”.</td><td>Only when no account here fits: an account specific to your business, a second bank account, a sub-account you want to keep.</td></tr>
+                        <tr><td><strong>Ignore</strong></td><td>Sets the account aside. It is neither linked nor created; what is attached to it in the former application will not be migrated to that account.</td><td>Empty accounts, duplicates, technical accounts of the former application you no longer use.</td></tr>
+                        <tr><td>— to decide</td><td>No decision. Setting this value back cancels a saved decision.</td><td>While you hesitate.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Nothing is written to the books">Saving the mappings creates nothing and moves no amount: decisions are kept apart, in preparation. You can come back, change your mind and save again as often as needed. Only step 3 writes to the chart.</div>
+                <div class="piege" data-titre="The classic trap">Setting everything to “Create” because it is faster. You then get two parallel charts (the 60sec standard and a copy of the old one), wrong financial statements and taxes spread over the wrong accounts. Link first; create only what truly does not exist.</div>
+            </section>
+
+            <section id="en-link">
+                <h2>How to link an account, step by step</h2>
+                <ol>
+                    <li><strong>Find the row.</strong> The “Account from the old software” column shows the number (or “no number”), the name and the source card: nature, QuickBooks type and subtype, balance, origin. The top-bar filter “To decide only” keeps only what remains to do.</li>
+                    <li><strong>Read the suggestion.</strong> The “What we suggest” column says what 60sec recognized: “same number”, “same name”, “known QuickBooks name — linked outright”, “AI” with a confidence percentage and a reason, or “no suggestion”. A suggestion is never a decision: you decide.</li>
+                    <li><strong>Set the Action list to “Link”.</strong> When the suggestion is “same name”, the list already comes set to Link with the suggested account in place.</li>
+                    <li><strong>Choose your account</strong> with the three cascading lists: first the <em>Class</em> (code, name and number range), right below it the <em>Subclass</em>, then in the next column <em>Your account</em>. Each list narrows the next one, so you never search among the 250 accounts of the chart at once. A chosen account that falls outside the filter stays shown as “(outside filter)”.</li>
+                    <li><strong>Add a note if useful</strong> (500 characters): why this choice, what to check with your accountant.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd></strong> at the bottom of the page. The banner at the top and, if there is a problem, a popup in the middle of the screen tell you what was kept.</li>
+                </ol>
+                <h3>The shortcuts that link for you</h3>
+                <ul>
+                    <li><strong>Linked outright.</strong> The standard chart knows the names QuickBooks gives its default accounts (in French and in English) and their subtypes: the aliases. On load, each recognized account already comes as “Link” to the account with the same number here, with the note “Linked outright: QuickBooks name known to the chart (alias).” You can change this decision like any other.</li>
+                    <li><strong>“Same name” preset.</strong> When the name matches an account here, the Action list is already on Link and the account is in place: all that is left is to save.</li>
+                    <li><kbd>Accept mappings by number</kbd> links at once every suggestion recognized by number or by name, with the note “Suggestion accepted: same account number/name.”</li>
+                    <li><kbd>✨ Suggest with AI</kbd> submits the accounts still to decide and your chart to the AI, which suggests an account with its confidence and reason. Nothing is decided: review, then save what you keep.</li>
+                    <li><kbd>✨ Assistant</kbd>, on each row, explains what this account represents and where to file it in 60sec. It decides nothing either.</li>
+                </ul>
+                <h3>One rule to know</h3>
+                <p><strong>One 60sec account receives only one account from the former application.</strong> Two QuickBooks accounts cannot be linked to the same account here: the second must be linked elsewhere, or created. The rule is checked in the browser before sending, then by the database on save.</p>
+            </section>
+
+            <section id="en-create">
+                <h2>How to create an account, step by step</h2>
+                <ol>
+                    <li><strong>Make sure no account here fits.</strong> Browse the matching class and subclass in the cascading lists; ask the <kbd>✨ Assistant</kbd> if needed.</li>
+                    <li><strong>Set the Action list to “Create”.</strong></li>
+                    <li><strong>Leave your account empty.</strong> The number will be assigned automatically at step 3, in the range of the class you will choose there. If the former account has a number and that number is free in your chart, it is reused as is; if it is already taken, the field is cleared and the number will be automatic.</li>
+                    <li><strong>Do not pick an existing account from the list</strong> with “Create”: that account already exists, it is not created a second time. If that is the one you want, “Link” is what you need.</li>
+                    <li><strong>Note the context</strong> if the name alone is not enough for your accountant.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The “To create” counter goes up. The message “N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…” is normal: the number comes at the next step.</li>
+                    <li><strong>Go to step 3</strong> with <kbd>Create the accounts in the chart →</kbd>. That is where the account is actually added to the chart, with its class and number. Back here, the row is marked “Created ✓”, greyed and locked: it is no longer discussed at step 2.</li>
+                </ol>
+                <h3>What is refused</h3>
+                <ul>
+                    <li>“Create” with a number your 60sec chart already knows.</li>
+                    <li>The same number to create on two rows, or a number already reserved by another row “to create”.</li>
+                </ul>
+            </section>
+
+            <section id="en-ignore">
+                <h2>Ignore, and go back</h2>
+                <ul>
+                    <li>“Ignore” then <kbd>Save</kbd>: the account counts in “Ignored” and leaves the “To decide only” filter.</li>
+                    <li>To revisit a decision (linked, to create or ignored): set “— to decide” back, or pick the other action directly, then save.</li>
+                    <li>A “Created ✓” row (account already added to the chart at step 3) no longer changes here. The account is corrected in the chart of accounts, like any account.</li>
+                </ul>
+            </section>
+
+            <section id="en-save">
+                <h2>Saving and the message popup</h2>
+                <p>The <kbd>Save mappings</kbd> button is at the very bottom and the result banner at the very top. So whenever there is a problem, a popup opens in the middle of the screen, over the grid, with a title and the explanation; <kbd>OK</kbd>, the Escape key or a click beside it closes it, and the banner stays at the top for re-reading. When everything is saved without reservation, no popup opens.</p>
+                <table>
+                    <thead><tr><th>Popup title</th><th>When</th><th>What to do</th></tr></thead>
+                    <tbody>
+                        <tr><td>Enregistrement impossible (cannot save)</td><td>Before anything is sent: two “Link” rows target the same 60sec account, or a “Create” row reuses a number your 60sec chart already knows. Nothing is saved.</td><td>The faulty rows are listed (row number and name). Link the others elsewhere or create them; for an already known number, choose “Link” or clear the account.</td></tr>
+                        <tr><td>Enregistrement impossible (cannot save)</td><td>No mapping row in the grid.</td><td>Check that the chart is loaded (step 1).</td></tr>
+                        <tr><td>Comptes à décider (accounts to decide)</td><td>Decisions are saved, but N accounts remain to decide; variant “M of them are “Create” without a number — not a problem”.</td><td>Carry on: a “Link” to an unknown account is not kept and the row goes back to “to decide”; a “Create” without a number gets its number at step 3.</td></tr>
+                        <tr><td>Erreur à l’enregistrement (error on save)</td><td>The database refused the save.</td><td>The message is shown as is (see below); fix the row concerned and save again.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="en-messages">
+                <h2>Messages name both applications</h2>
+                <p>A refusal talks about two accounts that sometimes bear the same name. So that you always know which side each one is on, messages name both applications: <strong>“de 60sec”</strong> for your accounts here, and the name of the application the chart comes from for the former accounts. Example (messages are in French on screen):</p>
+                <p><span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> — “60sec account 5060 is already linked to “COST OF GOODS SOLD” from QuickBooks. One 60sec account receives only one QuickBooks account.”</p>
+                <h3>Where the application name comes from</h3>
+                <table>
+                    <thead><tr><th>How the chart was loaded</th><th>Name shown</th></tr></thead>
+                    <tbody>
+                        <tr><td>Direct read through the QuickBooks button (Apideck connector)</td><td>The connected service: “QuickBooks” (later Xero, FreshBooks… depending on the connection).</td></tr>
+                        <tr><td>Exported file, application chosen at step 1</td><td>“QuickBooks”, “Sage 50” or “Acomba”.</td></tr>
+                        <tr><td>Other or unknown application</td><td>“l’ancien logiciel” (the former application).</td></tr>
+                    </tbody>
+                </table>
+                <h3>The refusals, with their wording</h3>
+                <ul class="messages">
+                    <li><span class="msg">“60sec account N is already linked to “X” from QuickBooks. One 60sec account receives only one QuickBooks account.”</span> — a saved link already occupies that account. Variant “is already the one created for “X” from QuickBooks” when it is an account this migration created for another row.</li>
+                    <li><span class="msg">“60sec account N would receive k QuickBooks accounts (“a”, “b”). One 60sec account receives only one QuickBooks account: link the others elsewhere, or create them.”</span> — two rows of the page target the same account.</li>
+                    <li><span class="msg">““X” from QuickBooks: number N already exists in your 60sec chart (Name). To attach it to that account, choose “Link”; to create a new one, leave the account empty…”</span> — “Create” on a taken number.</li>
+                    <li><span class="msg">“Number N would be created k times in 60sec (“a”, “b” from QuickBooks). A number is created only once.”</span> — two “Create” rows with the same number.</li>
+                    <li><span class="msg">“Number N is already reserved by “X” from QuickBooks (to create). A number is created only once.”</span> — another row, already saved, will create that number.</li>
+                    <li><span class="msg">“One 60sec account receives only one QuickBooks account. Account N — Name of 60sec: row 1 (a), row 2 (b) from QuickBooks.”</span> — the same check, done in the browser before sending.</li>
+                </ul>
+            </section>
+
+            <section id="en-pitfalls">
+                <h2>Tips and pitfalls</h2>
+                <ul>
+                    <li>Work by class: filter “To decide only”, handle assets, then liabilities, revenues, expenses. The cascading lists follow the same order.</li>
+                    <li>A QuickBooks sub-account (“sub-account of “…”” in the card) is often linked to the parent account here; create it only if you want the detail.</li>
+                    <li>QuickBooks default accounts (origin “default in QuickBooks”) are almost all recognized by alias. If one is left to decide, report it: its alias will be added to the standard chart for every later customer.</li>
+                    <li>The CSV file and the direct QuickBooks read do not share their decisions: switching paths brings the “to decide” accounts back. Reloading a chart through the same path keeps the decisions whose key (number or name) did not change.</li>
+                    <li>Display limited to 1,000 rows.</li>
+                </ul>
+            </section>
+
+            <section id="en-faq">
+                <h2>Frequently asked questions</h2>
+                <ul>
+                    <li><strong>I cannot find the account in the list.</strong> Check the class and subclass: the list shows only the accounts of the chosen subclass. Set the subclass back to “all” to widen.</li>
+                    <li><strong>I linked two accounts to the same account here and the screen refuses.</strong> That is the “one source account per target account” rule. Link the second one to another account, or create it.</li>
+                    <li><strong>The account I want to create already exists.</strong> Then it is “Link”. “Create” cannot reuse a number your 60sec chart already knows.</li>
+                    <li><strong>I saved, but the row came back “to decide”.</strong> A “Link” whose target account is not in your chart is not kept. Pick the account again in the lists.</li>
+                    <li><strong>When do “to create” accounts appear in the chart?</strong> At step 3 only, after <kbd>Create the accounts in the chart →</kbd>.</li>
+                </ul>
+            </section>
+        </article>
+
+        <article class="langue" lang="es">
+            <h1>Correspondencia de cuentas</h1>
+            <p class="intro">La pantalla <span class="chemin">Importación › Correspondencia de cuentas</span> es la etapa 2 de la migración del plan contable. Para cada cuenta del programa anterior (QuickBooks, Sage 50, Acomba…), usted decide en qué se convierte en 60sec: <strong>vincularla</strong> a una cuenta que ya existe, <strong>crearla</strong> o <strong>ignorarla</strong>. Esta página explica cada uno de esos gestos paso a paso. La visión de conjunto de la migración (etapas 1 y 3, terceros, balance, facturas) está en <a href="importation.html">Importación de datos</a>.</p>
+
+            <section id="es-principio">
+                <h2>El principio en tres palabras</h2>
+                <table>
+                    <thead><tr><th>Acción</th><th>Qué hace</th><th>Cuándo elegirla</th></tr></thead>
+                    <tbody>
+                        <tr><td><strong>Vincular</strong></td><td>Asocia la cuenta del programa anterior a una cuenta <em>que ya existe</em> en su plan 60sec. Los saldos y las facturas migradas irán a esa cuenta.</td><td>Casi siempre. El plan estándar de 60sec existe desde la inscripción: una cuenta de banco, de ventas, de TPS, de alquiler… ya tiene su equivalente aquí.</td></tr>
+                        <tr><td><strong>Crear</strong></td><td>Prepara una cuenta nueva, que se añadirá realmente al plan en la etapa 3 « Crear las cuentas en el plan ».</td><td>Solo cuando ninguna cuenta de aquí conviene: una cuenta propia de su actividad, una segunda cuenta bancaria, una subcuenta que desea conservar.</td></tr>
+                        <tr><td><strong>Ignorar</strong></td><td>Descarta la cuenta. No se vincula ni se crea; lo que está asociado a ella en el programa anterior no se migrará a esa cuenta.</td><td>Cuentas vacías, duplicados, cuentas técnicas del programa anterior que ya no usa.</td></tr>
+                        <tr><td>— por decidir</td><td>Ninguna decisión. Volver a este valor anula una decisión ya guardada.</td><td>Mientras duda.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Nada se escribe en la contabilidad">Guardar las correspondencias no crea nada ni mueve ningún importe: las decisiones se conservan aparte, en preparación. Puede volver, cambiar de opinión y guardar de nuevo tantas veces como haga falta. Solo la etapa 3 escribe en el plan.</div>
+                <div class="piege" data-titre="La trampa clásica">Poner todo en « Crear » porque es más rápido. Obtiene entonces dos planes paralelos (el estándar de 60sec y la copia del antiguo), estados financieros falsos e impuestos repartidos en las cuentas equivocadas. Vincule primero; cree solo lo que realmente no existe.</div>
+            </section>
+
+            <section id="es-vincular">
+                <h2>Cómo vincular una cuenta, paso a paso</h2>
+                <ol>
+                    <li><strong>Localice la línea.</strong> La columna « Cuenta del programa anterior » muestra el número (o « sin número »), el nombre y la ficha de origen: naturaleza, tipo y subtipo QuickBooks, saldo, origen. El filtro de la barra superior « Solo por decidir » conserva únicamente lo que queda por hacer.</li>
+                    <li><strong>Lea la propuesta.</strong> La columna « Lo que proponemos » dice lo que 60sec reconoció: « mismo número », « mismo nombre », « nombre QuickBooks conocido — vinculado de oficio », « IA » con un porcentaje de confianza y una razón, o « ninguna propuesta ». Una propuesta nunca es una decisión: usted decide.</li>
+                    <li><strong>Ponga la lista Acción en « Vincular ».</strong> Cuando la propuesta es « mismo nombre », la lista ya llega en Vincular con la cuenta propuesta en su lugar.</li>
+                    <li><strong>Elija la cuenta de su plan</strong> con las tres listas en cascada: primero la <em>Clase</em> (código, nombre y rango de números), justo debajo la <em>Subclase</em>, y luego en la columna siguiente la <em>Cuenta en su plan</em>. Cada lista restringe la siguiente, para no buscar entre las 250 cuentas del plan de una vez. Una cuenta ya elegida que sale del filtro sigue mostrándose « (fuera del filtro) ».</li>
+                    <li><strong>Añada una nota si es útil</strong> (500 caracteres): por qué esta elección, qué habrá que verificar con su contador.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd></strong> al pie de la página. El banner superior y, si hay un problema, una ventana en el centro de la pantalla le dicen qué se conservó.</li>
+                </ol>
+                <h3>Los atajos que vinculan por usted</h3>
+                <ul>
+                    <li><strong>Vinculado de oficio.</strong> El plan estándar conoce los nombres que QuickBooks da a sus cuentas por defecto (en francés y en inglés) y sus subtipos: los alias. Al cargar, cada cuenta reconocida llega ya en « Vincular » hacia la cuenta del mismo número aquí, con la nota « Vinculado de oficio: nombre QuickBooks conocido del plan (alias). » Puede cambiar esta decisión como cualquier otra.</li>
+                    <li><strong>« Mismo nombre » preajustado.</strong> Cuando el nombre coincide con una cuenta de aquí, la lista Acción ya está en Vincular y la cuenta está en su lugar: solo queda guardar.</li>
+                    <li><kbd>Aceptar las correspondencias por número</kbd> vincula de una vez todas las propuestas reconocidas por número o por nombre, con la nota « Propuesta aceptada: mismo número/nombre de cuenta. »</li>
+                    <li><kbd>✨ Proponer con la IA</kbd> envía las cuentas aún por decidir y su plan a la IA, que propone una cuenta con su confianza y su razón. Nada se decide: relea y guarde lo que retenga.</li>
+                    <li><kbd>✨ Asistente</kbd>, en cada línea, explica qué representa esa cuenta y dónde ubicarla en 60sec. Tampoco decide nada.</li>
+                </ul>
+                <h3>Una regla que conviene conocer</h3>
+                <p><strong>Una cuenta de 60sec solo recibe una cuenta del programa anterior.</strong> Dos cuentas QuickBooks no pueden vincularse a la misma cuenta de aquí: la segunda debe vincularse a otra, o crearse. La regla se verifica en el navegador antes del envío y luego en la base de datos al guardar.</p>
+            </section>
+
+            <section id="es-crear">
+                <h2>Cómo crear una cuenta, paso a paso</h2>
+                <ol>
+                    <li><strong>Asegúrese de que ninguna cuenta de aquí conviene.</strong> Recorra la clase y la subclase correspondientes en las listas en cascada; pregunte al <kbd>✨ Asistente</kbd> si hace falta.</li>
+                    <li><strong>Ponga la lista Acción en « Crear ».</strong></li>
+                    <li><strong>Deje vacía la cuenta en su plan.</strong> El número se asignará automáticamente en la etapa 3, dentro del rango de la clase que elija allí. Si la cuenta del programa anterior tiene un número y ese número está libre en su plan, se reutiliza tal cual; si ya está ocupado, el campo se vacía y el número será automático.</li>
+                    <li><strong>No elija una cuenta existente de la lista</strong> con « Crear »: esa cuenta ya existe, no se crea una segunda vez. Si es justamente esa la que quiere, lo que necesita es « Vincular ».</li>
+                    <li><strong>Anote el contexto</strong> si el nombre solo no basta para su contador.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> El contador « Por crear » aumenta. El mensaje « N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… » es normal: el número llega en la etapa siguiente.</li>
+                    <li><strong>Pase a la etapa 3</strong> con <kbd>Crear las cuentas en el plan →</kbd>. Ahí es donde la cuenta se añade realmente al plan, con su clase y su número. De vuelta aquí, la línea queda marcada « Creada ✓ », en gris y bloqueada: ya no se discute en la etapa 2.</li>
+                </ol>
+                <h3>Lo que se rechaza</h3>
+                <ul>
+                    <li>« Crear » con un número que su plan 60sec ya conoce.</li>
+                    <li>El mismo número por crear en dos líneas, o un número ya reservado por otra línea « por crear ».</li>
+                </ul>
+            </section>
+
+            <section id="es-ignorar">
+                <h2>Ignorar, y volver atrás</h2>
+                <ul>
+                    <li>« Ignorar » y luego <kbd>Guardar</kbd>: la cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ».</li>
+                    <li>Para revisar una decisión (vinculada, por crear o ignorada): vuelva a « — por decidir », o elija directamente la otra acción, y guarde.</li>
+                    <li>Una línea « Creada ✓ » (cuenta ya añadida al plan en la etapa 3) ya no se cambia aquí. La cuenta se corrige en el plan contable, como cualquier cuenta.</li>
+                </ul>
+            </section>
+
+            <section id="es-guardar">
+                <h2>Guardar y la ventana de mensaje</h2>
+                <p>El botón <kbd>Guardar las correspondencias</kbd> está al final y el banner de resultado al principio. Por eso, en cuanto hay un problema, se abre una ventana en el centro de la pantalla, sobre la cuadrícula, con un título y la explicación; <kbd>OK</kbd>, la tecla Escape o un clic al lado la cierran, y el banner permanece arriba para releerlo. Cuando todo se guarda sin reservas, no se abre ninguna ventana.</p>
+                <table>
+                    <thead><tr><th>Título de la ventana</th><th>Cuándo</th><th>Qué hacer</th></tr></thead>
+                    <tbody>
+                        <tr><td>Enregistrement impossible (no se puede guardar)</td><td>Antes del envío: dos líneas « Vincular » apuntan a la misma cuenta de 60sec, o una línea « Crear » reutiliza un número que su plan 60sec ya conoce. No se guarda nada.</td><td>Se citan las líneas con problema (número de línea y nombre). Vincule las demás a otra cuenta o créelas; para un número ya conocido, elija « Vincular » o vacíe la cuenta.</td></tr>
+                        <tr><td>Enregistrement impossible (no se puede guardar)</td><td>Ninguna línea de correspondencia en la cuadrícula.</td><td>Compruebe que el plan está cargado (etapa 1).</td></tr>
+                        <tr><td>Comptes à décider (cuentas por decidir)</td><td>Las decisiones se guardan, pero N cuentas quedan por decidir; variante « M de ellas son « Crear » sin número — no es un problema ».</td><td>Continúe: un « Vincular » hacia una cuenta desconocida no se conserva y la línea vuelve a « por decidir »; un « Crear » sin número recibe su número en la etapa 3.</td></tr>
+                        <tr><td>Erreur à l’enregistrement (error al guardar)</td><td>La base de datos rechazó el guardado.</td><td>El mensaje se muestra tal cual (véase abajo); corrija la línea afectada y guarde de nuevo.</td></tr>
+                    </tbody>
+                </table>
+            </section>
+
+            <section id="es-mensajes">
+                <h2>Los mensajes nombran ambos programas</h2>
+                <p>Un rechazo habla de dos cuentas que a veces llevan el mismo nombre. Para que siempre se sepa de qué lado está cada una, los mensajes nombran ambos programas: <strong>« de 60sec »</strong> para sus cuentas de aquí, y el nombre del programa de donde viene el plan para las cuentas del programa anterior. Ejemplo (los mensajes aparecen en francés en pantalla):</p>
+                <p><span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> — « La cuenta 5060 de 60sec ya está vinculada a « COSTO DE LOS PRODUCTOS VENDIDOS » de QuickBooks. Una cuenta de 60sec solo recibe una cuenta de QuickBooks. »</p>
+                <h3>De dónde viene el nombre del programa</h3>
+                <table>
+                    <thead><tr><th>Cómo se cargó el plan</th><th>Nombre mostrado</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lectura directa con el botón QuickBooks (conector Apideck)</td><td>El servicio conectado: « QuickBooks » (más adelante Xero, FreshBooks… según la conexión).</td></tr>
+                        <tr><td>Archivo exportado, programa elegido en la etapa 1</td><td>« QuickBooks », « Sage 50 » o « Acomba ».</td></tr>
+                        <tr><td>Otro programa, o programa desconocido</td><td>« l’ancien logiciel » (el programa anterior).</td></tr>
+                    </tbody>
+                </table>
+                <h3>Los rechazos, con su formulación</h3>
+                <ul class="messages">
+                    <li><span class="msg">« La cuenta N de 60sec ya está vinculada a « X » de QuickBooks. Una cuenta de 60sec solo recibe una cuenta de QuickBooks. »</span> — una vinculación guardada ya ocupa esa cuenta. Variante « ya es la creada para « X » de QuickBooks » cuando es una cuenta que esta migración creó para otra línea.</li>
+                    <li><span class="msg">« La cuenta N de 60sec recibiría k cuentas de QuickBooks (« a », « b »). Una cuenta de 60sec solo recibe una cuenta de QuickBooks: vincule las demás a otra, o créelas. »</span> — dos líneas de la página apuntan a la misma cuenta.</li>
+                    <li><span class="msg">« « X » de QuickBooks: el número N ya existe en su plan 60sec (Nombre). Para asociarla a esa cuenta, elija « Vincular »; para crear una nueva, deje la cuenta vacía… »</span> — « Crear » sobre un número ocupado.</li>
+                    <li><span class="msg">« El número N se crearía k veces en 60sec (« a », « b » de QuickBooks). Un número se crea una sola vez. »</span> — dos líneas « Crear » con el mismo número.</li>
+                    <li><span class="msg">« El número N ya está reservado por « X » de QuickBooks (por crear). Un número se crea una sola vez. »</span> — otra línea, ya guardada, creará ese número.</li>
+                    <li><span class="msg">« Una cuenta de 60sec solo recibe una cuenta de QuickBooks. Cuenta N — Nombre de 60sec: línea 1 (a), línea 2 (b) de QuickBooks. »</span> — el mismo control, hecho en el navegador antes del envío.</li>
+                </ul>
+            </section>
+
+            <section id="es-trampas">
+                <h2>Consejos y trampas</h2>
+                <ul>
+                    <li>Trabaje por clase: filtre « Solo por decidir », trate el activo, luego el pasivo, los ingresos, los gastos. Las listas en cascada siguen el mismo orden.</li>
+                    <li>Una subcuenta QuickBooks (« subcuenta de « … » » en la ficha) suele vincularse a la cuenta principal de aquí; créela solo si quiere el detalle.</li>
+                    <li>Las cuentas por defecto de QuickBooks (origen « por defecto en QuickBooks ») se reconocen casi todas por alias. Si queda alguna por decidir, infórmelo: su alias se añadirá al plan estándar para todos los clientes siguientes.</li>
+                    <li>El archivo CSV y la lectura directa de QuickBooks no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ». Recargar un plan por la misma vía conserva las decisiones cuya clave (número o nombre) no cambió.</li>
+                    <li>Visualización limitada a 1 000 líneas.</li>
+                </ul>
+            </section>
+
+            <section id="es-faq">
+                <h2>Preguntas frecuentes</h2>
+                <ul>
+                    <li><strong>No encuentro la cuenta en la lista.</strong> Verifique la clase y la subclase: la lista solo muestra las cuentas de la subclase elegida. Vuelva a poner la subclase en « todas » para ampliar.</li>
+                    <li><strong>Vinculé dos cuentas a la misma cuenta de aquí y la pantalla se niega.</strong> Es la regla « una sola cuenta de origen por cuenta destino ». Vincule la segunda a otra cuenta, o créela.</li>
+                    <li><strong>La cuenta que quiero crear ya existe.</strong> Entonces es « Vincular ». « Crear » no puede reutilizar un número que su plan 60sec ya conoce.</li>
+                    <li><strong>Guardé, pero la línea volvió a « por decidir ».</strong> Un « Vincular » cuya cuenta destino no está en su plan no se conserva. Vuelva a elegir la cuenta en las listas.</li>
+                    <li><strong>¿Cuándo aparecen en el plan las cuentas « por crear »?</strong> Solo en la etapa 3, después de <kbd>Crear las cuentas en el plan →</kbd>.</li>
+                </ul>
+            </section>
+        </article>
+
+    </main>
+</div>
+<p class="aide-pied"></p>
+<script src="aide.js"></script>
+</body>
+</html>

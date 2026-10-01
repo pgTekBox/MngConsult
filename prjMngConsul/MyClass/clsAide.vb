@@ -19,7 +19,7 @@ Public NotInheritable Class clsAide
     ''' <summary>Les sections, dans l'ordre du menu. Clé = nom du fichier sans extension.</summary>
     Public Shared ReadOnly Sections As String() = {
         "tableau-de-bord", "ventes", "achats", "produits", "comptabilite", "rapports",
-        "importation", "agenda", "employes", "courriel", "approbations", "administration"}
+        "importation", "correspondance-comptes", "agenda", "employes", "courriel", "approbations", "administration"}
 
     ''' <summary>Titre d'une section dans une langue (pour l'assistant et le sommaire).</summary>
     Public Shared Function Titre(section As String, langue As String) As String
@@ -32,6 +32,7 @@ Public NotInheritable Class clsAide
             Case "comptabilite" : fr = "Comptabilité" : en = "Accounting" : es = "Contabilidad"
             Case "rapports" : fr = "Rapports" : en = "Reports" : es = "Informes"
             Case "importation" : fr = "Importation des données" : en = "Data import" : es = "Importación de datos"
+            Case "correspondance-comptes" : fr = "Correspondance des comptes" : en = "Account mapping" : es = "Correspondencia de cuentas"
             Case "agenda" : fr = "Agenda" : en = "Agenda" : es = "Agenda"
             Case "employes" : fr = "Employés" : en = "Employees" : es = "Empleados"
             Case "courriel" : fr = "Courriel" : en = "Mail" : es = "Correo"
@@ -68,7 +69,8 @@ Public NotInheritable Class clsAide
                  "plaidaccounts", "wbfreleve", "wbfrapporttaxe", "wbffermetureannee", "wbfplancomptable", "wbfplancomptableedit" : Return "comptabilite"
             Case "wbfrapportplancomptable", "wbfetatresultats", "wbfbilan", "wbffluxtresorerie", "wbfbeneficesnonrepartis",
                  "wbfbalanceverification", "wbfaipaiement", "wbfaisale" : Return "rapports"
-            Case "importations", "importapideck", "importplancomptable", "correspondancecomptes", "appliquerplancomptable",
+            Case "correspondancecomptes" : Return "correspondance-comptes"
+            Case "importations", "importapideck", "importplancomptable", "appliquerplancomptable",
                  "importclients", "importfournisseurs", "importproduits", "importbalanceverification", "wbfimport", "wbfimportview" : Return "importation"
             Case "wbfagenda", "wbfappointmentedit" : Return "agenda"
             Case "wbfemployees", "wbfemployeeedit", "wbfmailboxreset" : Return "employes"
