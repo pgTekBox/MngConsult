@@ -137,6 +137,14 @@ Public Class CorrespondanceComptes
             litSousClassesJson.Text = SousClassesJson()
             litNbComptesPlan.Text = ds.Tables(0).Rows.Count.ToString()
 
+            ' Les messages de contrôle nomment les deux logiciels (T302) : « 60sec »
+            ' et celui d'où vient le lot — QuickBooks pour une extraction Apideck.
+            Dim pLog As New Collection
+            pLog.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim rLog = PremiereLigne(ExecuteSQLds("s0884GetNomLogicielSource", pLog))
+            Dim nomLogiciel As String = If(rLog Is Nothing OrElse IsDBNull(rLog("NomLogiciel")), "l'ancien logiciel", Convert.ToString(rLog("NomLogiciel")))
+            litLogiciel.Text = HttpUtility.JavaScriptStringEncode(nomLogiciel)
+
         Catch ex As Exception
             Alerte(pnlErreur, litErreur, "Lecture du plan comptable : " & Server.HtmlEncode(ex.Message))
         End Try

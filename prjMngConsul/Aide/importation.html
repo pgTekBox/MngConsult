@@ -281,11 +281,11 @@
                     <li><span class="msg">« Les correspondances par numéro de compte ont été retenues. Ce qui reste demande une décision. »</span> — acceptation en lot terminée.</li>
                     <li><span class="msg">« Correspondances enregistrées. Tous les comptes sont décidés. »</span> — passez à l’étape 3.</li>
                     <li><span class="msg">« …N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… »</span> — un numéro automatique sera attribué.</li>
-                    <li><span class="msg">« Un compte chez vous ne reçoit qu’un seul compte de l’ancien logiciel. … Liez les autres ailleurs, ou créez-les. »</span> — deux comptes source visent le même compte cible.</li>
-                    <li><span class="msg">« « Créer » ne peut pas reprendre un numéro que votre plan connaît déjà. … »</span> — choisissez « Lier » ou videz le numéro.</li>
-                    <li><span class="msg">« « X » : le numéro N existe déjà dans votre plan (…). Pour le rattacher à ce compte, choisissez « Lier »… »</span> — refus à l’enregistrement.</li>
-                    <li><span class="msg">« Le compte N recevrait k comptes de l’ancien logiciel (…)… »</span> — refus à l’enregistrement.</li>
-                    <li><span class="msg">« Le compte N est déjà lié à « X »… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. … Liez les autres ailleurs, ou créez-les. »</span> — deux comptes source visent le même compte cible. Les messages nomment les deux logiciels : « 60sec » et celui d’où vient le lot (QuickBooks pour une extraction Apideck, Sage 50, Acomba… ; « l’ancien logiciel » faute de mieux).</li>
+                    <li><span class="msg">« « Créer » ne peut pas reprendre un numéro que votre plan 60sec connaît déjà. … »</span> — choisissez « Lier » ou videz le numéro.</li>
+                    <li><span class="msg">« « X » de QuickBooks : le numéro N existe déjà dans votre plan 60sec (…). Pour le rattacher à ce compte, choisissez « Lier »… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Le compte N de 60sec recevrait k comptes de QuickBooks (…). Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks… »</span> — refus à l’enregistrement.</li>
+                    <li><span class="msg">« Le compte N de 60sec est déjà lié à « X » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> — refus à l’enregistrement.</li>
                     <li><span class="msg">« Le numéro N serait créé k fois… Un numéro ne se crée qu’une fois. »</span> — refus à l’enregistrement.</li>
                 </ul>
                 <h3>La liaison d’office par alias</h3>
@@ -833,11 +833,11 @@
                     <li><span class="msg">“Mappings by account number have been kept. What remains needs a decision.”</span> — bulk acceptance done.</li>
                     <li><span class="msg">“Mappings saved. All accounts are decided.”</span> — go to step 3.</li>
                     <li><span class="msg">“…N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…”</span> — an automatic number will be assigned.</li>
-                    <li><span class="msg">“One of your accounts receives only one account from the former application. … Link the others elsewhere, or create them.”</span> — two source accounts target the same account.</li>
-                    <li><span class="msg">““Create” cannot reuse a number your chart already knows. …”</span> — choose “Link” or clear the number.</li>
-                    <li><span class="msg">““X”: number N already exists in your chart (…). To attach it to that account, choose “Link”…”</span> — refused on save.</li>
-                    <li><span class="msg">“Account N would receive k accounts from the former application (…)…”</span> — refused on save.</li>
-                    <li><span class="msg">“Account N is already linked to “X”…”</span> — refused on save.</li>
+                    <li><span class="msg">“One 60sec account receives only one QuickBooks account. … Link the others elsewhere, or create them.”</span> — two source accounts target the same account. Messages name both applications: “60sec” and the one the batch comes from (QuickBooks for an Apideck extraction, Sage 50, Acomba… ; “the former application” otherwise).</li>
+                    <li><span class="msg">““Create” cannot reuse a number your 60sec chart already knows. …”</span> — choose “Link” or clear the number.</li>
+                    <li><span class="msg">““X” from QuickBooks: number N already exists in your 60sec chart (…). To attach it to that account, choose “Link”…”</span> — refused on save.</li>
+                    <li><span class="msg">“60sec account N would receive k QuickBooks accounts (…). One 60sec account receives only one QuickBooks account…”</span> — refused on save.</li>
+                    <li><span class="msg">“60sec account N is already linked to “X” from QuickBooks. One 60sec account receives only one QuickBooks account.”</span> — refused on save.</li>
                     <li><span class="msg">“Number N would be created k times… A number is created only once.”</span> — refused on save.</li>
                 </ul>
                 <h3>The outright link by alias</h3>
@@ -1385,11 +1385,11 @@
                     <li><span class="msg">« Se retuvieron las correspondencias por número de cuenta. Lo que queda requiere una decisión. »</span> — aceptación en lote terminada.</li>
                     <li><span class="msg">« Correspondencias guardadas. Todas las cuentas están decididas. »</span> — pase a la etapa 3.</li>
                     <li><span class="msg">« …N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… »</span> — se asignará un número automático.</li>
-                    <li><span class="msg">« Una cuenta suya solo recibe una cuenta del programa anterior. … Vincule las demás en otro lugar, o créelas. »</span> — dos cuentas de origen apuntan a la misma cuenta destino.</li>
-                    <li><span class="msg">« « Crear » no puede reutilizar un número que su plan ya conoce. … »</span> — elija « Vincular » o vacíe el número.</li>
-                    <li><span class="msg">« « X »: el número N ya existe en su plan (…). Para asociarla a esa cuenta, elija « Vincular »… »</span> — rechazo al guardar.</li>
-                    <li><span class="msg">« La cuenta N recibiría k cuentas del programa anterior (…)… »</span> — rechazo al guardar.</li>
-                    <li><span class="msg">« La cuenta N ya está vinculada a « X »… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« Una cuenta de 60sec solo recibe una cuenta de QuickBooks. … Vincule las demás en otro lugar, o créelas. »</span> — dos cuentas de origen apuntan a la misma cuenta destino. Los mensajes nombran ambos programas: « 60sec » y aquel de donde viene el lote (QuickBooks para una extracción Apideck, Sage 50, Acomba… ; « el programa anterior » en su defecto).</li>
+                    <li><span class="msg">« « Crear » no puede reutilizar un número que su plan 60sec ya conoce. … »</span> — elija « Vincular » o vacíe el número.</li>
+                    <li><span class="msg">« « X » de QuickBooks: el número N ya existe en su plan 60sec (…). Para asociarla a esa cuenta, elija « Vincular »… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« La cuenta N de 60sec recibiría k cuentas de QuickBooks (…). Una cuenta de 60sec solo recibe una cuenta de QuickBooks… »</span> — rechazo al guardar.</li>
+                    <li><span class="msg">« La cuenta N de 60sec ya está vinculada a « X » de QuickBooks. Una cuenta de 60sec solo recibe una cuenta de QuickBooks. »</span> — rechazo al guardar.</li>
                     <li><span class="msg">« El número N se crearía k veces… Un número solo se crea una vez. »</span> — rechazo al guardar.</li>
                 </ul>
                 <h3>El vínculo directo por alias</h3>

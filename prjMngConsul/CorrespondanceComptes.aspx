@@ -452,6 +452,7 @@
     // bloc de code inline : sur les pages à panneau Telerik ceux-ci cassent le
     // rendu, et l'habitude vaut mieux que l'exception.
     var PLAN = <asp:Literal ID="litPlanJson" runat="server" Text="{}" />;
+    var LOGICIEL = '<asp:Literal ID="litLogiciel" runat="server" Text="l’ancien logiciel" />';
     var PLAN_CLS = <asp:Literal ID="litPlanClsJson" runat="server" Text="{}" />;
     var PLAN_MERE = <asp:Literal ID="litPlanMereJson" runat="server" Text="{}" />;
     var SOUS_CLASSES = <asp:Literal ID="litSousClassesJson" runat="server" Text="[]" />;
@@ -477,10 +478,10 @@
         var fautes = [];
         for (var c in parCible) {
             if (!parCible.hasOwnProperty(c) || parCible[c].length < 2) continue;
-            fautes.push('Compte ' + c + (PLAN[c] ? ' — ' + PLAN[c] : '') + ' : ' + parCible[c].join(', '));
+            fautes.push('Compte ' + c + (PLAN[c] ? ' — ' + PLAN[c] : '') + ' de 60sec : ' + parCible[c].join(', ') + ' de ' + LOGICIEL);
         }
         if (fautes.length > 0) {
-            showAppMessage('Un compte chez vous ne reçoit qu\'un seul compte de l\'ancien logiciel.\n\n'
+            showAppMessage('Un compte de 60sec ne reçoit qu\'un seul compte de ' + LOGICIEL + '.\n\n'
                 + fautes.join('\n') + '\n\nLiez les autres ailleurs, ou créez-les.', 'Enregistrement impossible');
             return false;
         }
@@ -500,7 +501,7 @@
             creerPris.push('ligne ' + no2 + ' : le numéro ' + hid2.value + ' — ' + PLAN[hid2.value] + ' existe déjà');
         }
         if (creerPris.length > 0) {
-            showAppMessage('« Créer » ne peut pas reprendre un numéro que votre plan connaît déjà.\n\n'
+            showAppMessage('« Créer » ne peut pas reprendre un numéro que votre plan 60sec connaît déjà.\n\n'
                 + creerPris.join('\n')
                 + '\n\nPour le rattacher à ce compte, choisissez « Lier ». Pour en créer un nouveau, laissez le compte vide : le numéro sera attribué à l\'étape suivante.', 'Enregistrement impossible');
             return false;

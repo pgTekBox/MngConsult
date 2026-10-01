@@ -83,4 +83,7 @@ Partial Public Class CorrespondanceComptes
     '''<summary>litPlanJson</summary>
     Protected WithEvents litPlanJson As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>litLogiciel</summary>
+    Protected WithEvents litLogiciel As Global.System.Web.UI.WebControls.Literal
+
 End Class
