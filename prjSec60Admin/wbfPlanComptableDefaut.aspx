@@ -98,6 +98,8 @@
                 <asp:TextBox ID="txtSearch" runat="server" placeholder="Numéro ou nom de compte…" />
                 <asp:Button ID="btnSearch" runat="server" CssClass="btn" Text="Chercher" CausesValidation="false" />
                 <asp:Button ID="btnTout" runat="server" CssClass="btn" Text="Tout afficher" CausesValidation="false" />
+                <asp:Button ID="btnTraduireTous" runat="server" CssClass="btn" Text="✨ Compléter par l'IA les alias sans l'autre langue" ToolTip="Pour chaque compte dont les alias QuickBooks n'existent que dans une langue, demande à l'IA le libellé officiel dans l'autre et le pose comme alias" CausesValidation="false"
+                    OnClientClick="if (!confirm('Demander à l\'IA le nom QuickBooks manquant (français ou anglais) pour tous les comptes concernés, et poser les alias ?')) { return false; }" />
             </div>
             <div class="pc-tbl-wrap">
                 <asp:Literal ID="litTableau" runat="server" />
@@ -161,6 +163,7 @@
                     <div class="champ"><label>Sous-type QBO</label>
                         <asp:TextBox ID="txtAliasSousType" runat="server" CssClass="nom" MaxLength="100" placeholder="UndepositedFunds" /></div>
                     <div class="champ"><asp:Button ID="btnAjouterAlias" runat="server" CssClass="btn" Text="Ajouter l'alias" CausesValidation="false" /></div>
+                    <div class="champ"><asp:Button ID="btnTraduireAlias" runat="server" CssClass="btn" Text="✨ Compléter l'autre langue par l'IA" ToolTip="Demande à l'IA le libellé officiel de QuickBooks dans la langue qui manque, et le pose comme alias" CausesValidation="false" /></div>
                 </div>
             </asp:Panel>
             <div class="champs" style="margin-top:10px">

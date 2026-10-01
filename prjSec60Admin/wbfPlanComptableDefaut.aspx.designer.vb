@@ -84,6 +84,12 @@ Partial Public Class wbfPlanComptableDefaut
     '''<summary>btnAjouterAlias</summary>
     Protected WithEvents btnAjouterAlias As Global.System.Web.UI.WebControls.Button
 
+    '''<summary>btnTraduireAlias</summary>
+    Protected WithEvents btnTraduireAlias As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>btnTraduireTous</summary>
+    Protected WithEvents btnTraduireTous As Global.System.Web.UI.WebControls.Button
+
     '''<summary>btnSave</summary>
     Protected WithEvents btnSave As Global.System.Web.UI.WebControls.Button
 

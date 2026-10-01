@@ -254,6 +254,165 @@ Public Class wbfPlanComptableDefaut
         Afficher()
     End Sub
 
+    ''' <summary>L'IA complète l'autre langue des alias du compte en cours de correction.</summary>
+    Protected Sub btnTraduireAlias_Click(sender As Object, e As EventArgs) Handles btnTraduireAlias.Click
+        Dim compte As String = txtNumero.Text.Trim()
+        If hfId.Value = "" OrElse compte = "" Then
+            Message("Enregistrez d'abord le compte.", "err")
+            Afficher()
+            Return
+        End If
+        CompleterAliasParIA(compte)
+        PreparerEdition(hfId.Value)
+        Afficher()
+    End Sub
+
+    ''' <summary>L'IA complète l'autre langue pour tous les comptes du modèle qui n'ont qu'une langue d'alias.</summary>
+    Protected Sub btnTraduireTous_Click(sender As Object, e As EventArgs) Handles btnTraduireTous.Click
+        CompleterAliasParIA(Nothing)
+        Afficher()
+    End Sub
+
+    ''' <summary>
+    ''' s0881 liste les comptes dont les alias QuickBooks n'existent que dans une
+    ''' langue ; l'IA (prompt PROMPT_ALIAS_QBO_TRADUCTION) rend le libellé officiel
+    ''' de QuickBooks dans l'autre, en JSON ; chaque nom rendu est posé comme alias
+    ''' par s0879 (refusé s'il mène déjà à un autre compte). Un nom incertain est
+    ''' rendu null et laissé vide : mieux vaut rien qu'un alias inventé.
+    ''' </summary>
+    Private Sub CompleterAliasParIA(compte As String)
+        Dim ds As DataSet
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+            p.Add(New SqlParameter("@Compte", If(compte Is Nothing, CObj(DBNull.Value), compte)))
+            ds = ExecuteSQLds("s0881GetAliasAIncompleter", p)
+        Catch ex As Exception
+            Message("Les alias à compléter n'ont pas pu être lus : " & ex.Message, "err")
+            Return
+        End Try
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            Message(If(compte Is Nothing, "Aucun compte n'a d'alias QuickBooks dans une seule langue : rien à compléter.",
+                       "Ce compte a déjà ses alias dans les deux langues, ou n'en a aucun : rien à compléter."), "info")
+            Return
+        End If
+
+        ' La question : un compte par ligne, tout ce qu'on sait.
+        Dim q As New StringBuilder()
+        q.AppendLine("=== COMPTES À COMPLÉTER (compte | nom chez nous | nom anglais chez nous | alias QuickBooks connus (langue) | sous-type QuickBooks | langue manquante) ===")
+        For Each r As DataRow In ds.Tables(0).Rows
+            q.AppendLine(String.Join(" | ", Txt(r("Compte")), Txt(r("NomCompte")), Txt(r("NomCompteEn")), Txt(r("AliasConnus")), Txt(r("SousType")), Txt(r("LangueManquante"))))
+        Next
+        q.AppendLine()
+        q.Append("Pour chaque compte, le nom officiel QuickBooks en ligne (Canada) dans la langue manquante, en JSON seulement.")
+
+        Dim texte As String
+        Try
+            Dim systeme As String = clsAssistantCompteQBO.PromptNomme("PROMPT_ALIAS_QBO_TRADUCTION")
+            Dim utilisateur As String = If(Convert.ToString(Session("AdminEmail")) = "", "sec60admin", Convert.ToString(Session("AdminEmail")))
+            ' Hors du contexte de la page : les await internes n'ont pas à y revenir.
+            Dim rep = System.Threading.Tasks.Task.Run(Function() clsAssistantCompteQBO.RepondreAsync(ModelGUID, utilisateur, systeme, q.ToString(),
+                                                                                                        "Alias QBO : l'autre langue (" & ds.Tables(0).Rows.Count & " compte(s))", 3000)).GetAwaiter().GetResult()
+            texte = If(rep.Texte, "").Trim()
+        Catch ex As Exception
+            Message("L'IA n'a pas pu répondre : " & ex.Message, "err")
+            Return
+        End Try
+
+        ' La réponse : un tableau JSON, parfois entre balises de code.
+        If texte.StartsWith("```") Then
+            texte = texte.Trim("`"c)
+            If texte.StartsWith("json", StringComparison.OrdinalIgnoreCase) Then texte = texte.Substring(4)
+            texte = texte.Trim()
+        End If
+        Dim debut As Integer = texte.IndexOf("["c), fin As Integer = texte.LastIndexOf("]"c)
+        If debut < 0 OrElse fin <= debut Then
+            Message("Réponse de l'IA illisible : " & Left(texte, 200), "err")
+            Return
+        End If
+        Dim liste As Object() = Nothing
+        Try
+            Dim js As New System.Web.Script.Serialization.JavaScriptSerializer()
+            liste = TryCast(js.DeserializeObject(texte.Substring(debut, fin - debut + 1)), Object())
+        Catch
+        End Try
+        If liste Is Nothing Then
+            Message("Réponse de l'IA illisible : " & Left(texte, 200), "err")
+            Return
+        End If
+
+        Dim poses As Integer = 0, vides As Integer = 0, refuses As Integer = 0
+        Dim details As New List(Of String)
+        Dim attendus As New HashSet(Of String)(ds.Tables(0).Rows.Cast(Of DataRow)().Select(Function(r) Txt(r("Compte")) & "|" & Txt(r("LangueManquante"))))
+        For Each item In liste
+            Dim d = TryCast(item, Dictionary(Of String, Object))
+            If d Is Nothing Then Continue For
+            Dim cpt As String = If(d.ContainsKey("compte"), Convert.ToString(d("compte")), "").Trim()
+            Dim lng As String = If(d.ContainsKey("langue"), Convert.ToString(d("langue")), "").Trim().ToUpperInvariant()
+            Dim nom As String = If(d.ContainsKey("nom") AndAlso d("nom") IsNot Nothing, Convert.ToString(d("nom")), "").Trim()
+            If Not attendus.Contains(cpt & "|" & lng) Then Continue For   ' on ne pose que ce qu'on a demandé
+            If nom = "" Then
+                vides += 1
+                details.Add(cpt & " : pas de nom officiel certain")
+                Continue For
+            End If
+            Try
+                Dim sousType As String = "", nomChezNous As String = "", nomChezNousEn As String = "", aliasConnus As String = ""
+                For Each r As DataRow In ds.Tables(0).Rows
+                    If Txt(r("Compte")) = cpt Then
+                        sousType = Txt(r("SousType")) : nomChezNous = Txt(r("NomCompte")) : nomChezNousEn = Txt(r("NomCompteEn")) : aliasConnus = Txt(r("AliasConnus"))
+                    End If
+                Next
+                ' Le nom de notre propre compte n'est pas un alias QuickBooks : l'IA l'a recopié
+                ' faute de mieux. Même chose pour un nom déjà connu (même libellé dans les deux langues).
+                If String.Equals(nom, nomChezNous, StringComparison.OrdinalIgnoreCase) OrElse String.Equals(nom, nomChezNousEn, StringComparison.OrdinalIgnoreCase) Then
+                    vides += 1
+                    details.Add(cpt & " : l'IA a rendu le nom du compte chez nous (« " & nom & " »), pas un nom QuickBooks — laissé vide")
+                    Continue For
+                End If
+                If aliasConnus.IndexOf(nom & " (", StringComparison.OrdinalIgnoreCase) >= 0 Then
+                    ' Même libellé dans les deux langues (« Services ») : l'alias existant vaut pour les deux.
+                    Dim p0 As New Collection
+                    p0.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+                    p0.Add(New SqlParameter("@Compte", cpt))
+                    p0.Add(New SqlParameter("@NomSource", nom))
+                    ExecuteSQL("s0882AliasToutesLangues", p0)
+                    poses += 1
+                    details.Add(cpt & " « " & nom & " » vaut dans les deux langues")
+                    Continue For
+                End If
+                Dim p As New Collection
+                p.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+                p.Add(New SqlParameter("@Compte", cpt))
+                p.Add(New SqlParameter("@SystemeSource", "QBO"))
+                p.Add(New SqlParameter("@Langue", lng))
+                p.Add(New SqlParameter("@NomSource", nom))
+                p.Add(New SqlParameter("@SousType", If(sousType = "", CObj(DBNull.Value), sousType)))
+                p.Add(New SqlParameter("@CreatedBy", "IA"))
+                Dim rs As DataSet = ExecuteSQLds("s0879SaveAliasPlanComptable", p)
+                Dim r0 As DataRow = rs.Tables(0).Rows(0)
+                If Txt(r0("Action")) = "REFUSE" Then
+                    refuses += 1
+                    details.Add(cpt & " : " & Txt(r0("Message")))
+                Else
+                    poses += 1
+                    details.Add(cpt & " " & lng.ToLowerInvariant() & " « " & nom & " »")
+                End If
+            Catch ex As Exception
+                refuses += 1
+                details.Add(cpt & " : " & ex.Message)
+            End Try
+        Next
+
+        Dim sb As New StringBuilder()
+        sb.Append("Alias complétés par l'IA : ").Append(poses).Append(" posé(s)")
+        If vides > 0 Then sb.Append(", ").Append(vides).Append(" laissé(s) vide(s) faute de nom officiel certain")
+        If refuses > 0 Then sb.Append(", ").Append(refuses).Append(" refusé(s)")
+        sb.Append(". ").Append(String.Join(" · ", details.Take(15)))
+        sb.Append(" — Coût du mois : ").Append(clsAssistantCompteQBO.CoutDuMois(ModelGUID).ToString("0.0000")).Append(" US$")
+        Message(sb.ToString(), If(poses > 0, "ok", If(refuses > 0, "err", "info")))
+    End Sub
+
     Private Sub RetirerAlias(idTexte As String)
         Dim id As Integer
         If Not Integer.TryParse(idTexte, id) Then Return
