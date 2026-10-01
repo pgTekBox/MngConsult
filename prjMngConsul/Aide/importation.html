@@ -314,40 +314,69 @@
 
             <section id="fr-plan-etape3">
                 <h2>Étape 3 : Créer les comptes au plan</h2>
-                <p>« C’est la première étape qui écrit dans votre comptabilité. » (<span class="chemin">Importation › Créer les comptes au plan</span>). Lien « ← revenir à la correspondance ».</p>
-                <h3>Compteurs</h3>
-                <p>À créer, Déjà créés, Liés, Ignorés, Encore à décider.</p>
-                <h3>Colonnes du tableau des comptes à créer</h3>
+                <p>Les comptes que vous avez marqués <strong>Créer</strong> à l’étape 2 entrent ici dans votre plan comptable (<span class="chemin">Importation › Créer les comptes au plan</span>, ou le lien <kbd>Créer les comptes au plan →</kbd> au bas de la correspondance). <strong>C’est la première étape qui écrit dans votre comptabilité</strong> : tout ce qui précède restait en préparation et pouvait être abandonné ; les comptes créés ici existent pour de bon. Rien n’est écrit tant que vous n’avez pas cliqué sur <kbd>Créer les comptes</kbd>. Le lien <kbd>← revenir à la correspondance</kbd> ramène à l’étape 2. Pour la façon de décider ce qui se crée et ce qui se lie, voir l’<a href="correspondance-comptes.html">aide dédiée à la correspondance</a>.</p>
+                <h3>Ce que l’écran montre</h3>
+                <table>
+                    <thead><tr><th>Élément</th><th>Contenu</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lot à appliquer</td><td>Le plan comptable chargé à l’étape 1. Sans lot : « Aucun lot de plan comptable n’a encore été chargé. Commencez par l’étape 1 ».</td></tr>
+                        <tr><td>À créer</td><td>Lignes « Créer » qui n’ont pas encore de compte au plan : ce sont celles du tableau.</td></tr>
+                        <tr><td>Déjà créés</td><td>Lignes « Créer » déjà passées par cette étape : leur compte existe, elles ne reviennent plus dans le tableau et sont verrouillées « Créé ✓ » à l’étape 2.</td></tr>
+                        <tr><td>Liés, Ignorés</td><td>Rappel des décisions de l’étape 2 ; rien à faire ici pour elles.</td></tr>
+                        <tr><td>Encore à décider</td><td>Comptes sans décision. L’avertissement « N compte(s) ne sont pas encore décidés à l’étape 2. Ils ne seront pas repris. Vous pouvez créer les autres maintenant et revenir ensuite » le rappelle : l’étape 3 peut se faire en plusieurs fois.</td></tr>
+                        <tr><td>« Aucun compte à créer dans ce lot »</td><td>Tout est déjà créé, ou tout est lié ou ignoré : l’étape est terminée pour ce lot.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Le tableau des comptes à créer</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Obligatoire</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>—</td><td>Rang.</td></tr>
-                        <tr><td>Compte de l’ancien logiciel</td><td>—</td><td>Numéro et nom source.</td></tr>
-                        <tr><td>Classe — où le ranger</td><td>Oui</td><td>« — choisir une classe — » puis les sous-classes compatibles avec la nature, avec leur plage de numéros.</td></tr>
-                        <tr><td>Numéro</td><td>Non</td><td>Pré-rempli avec le numéro source, ou « auto ». Doit être numérique, dans la plage de la classe et libre.</td></tr>
-                        <tr><td>Nom du compte</td><td>Oui</td><td>150 caractères au maximum.</td></tr>
+                        <tr><td>#</td><td>—</td><td>Rang de la ligne dans le lot.</td></tr>
+                        <tr><td>Compte de l’ancien logiciel</td><td>—</td><td>Le nom source et, dessous, sa nature (actif, passif, capitaux, revenu, dépense). La nature borne les classes proposées à droite.</td></tr>
+                        <tr><td>Classe — où le ranger</td><td><strong>Oui</strong></td><td>« — choisir une classe — » puis les sous-classes de votre plan compatibles avec la nature, sous la forme « code — nom (début-fin) ». Une dépense ne se voit jamais proposer une classe d’actif. C’est la classe qui donne au compte sa place dans vos états financiers, et sa plage de numéros.</td></tr>
+                        <tr><td>Numéro</td><td>Non</td><td>Prérempli avec le numéro source quand il était libre à l’étape 2, sinon vide avec la mention « auto ». Un numéro saisi doit être numérique, dans la plage de la classe et libre.</td></tr>
+                        <tr><td>Nom du compte</td><td><strong>Oui</strong></td><td>Prérempli avec le nom source (ou le nom choisi à l’étape 2). 150 caractères au maximum ; modifiable avant la création.</td></tr>
                     </tbody>
                 </table>
-                <h3>Boutons et actions</h3>
+                <h3>Créer, pas à pas</h3>
+                <ol>
+                    <li>Pour chaque ligne, choisissez la classe. Une ligne laissée sur « — choisir une classe — » n’est pas une erreur : elle est mise de côté et reviendra à la prochaine visite.</li>
+                    <li>Laissez le numéro vide si vous n’avez pas de raison d’en imposer un : 60sec prend le premier numéro libre de la plage, de préférence une dizaine ronde (1010, 1020…). Sinon, saisissez un numéro de la plage affichée entre parenthèses.</li>
+                    <li>Ajustez le nom si celui de l’ancien logiciel ne convient pas tel quel.</li>
+                    <li>Cliquez <kbd>Créer les comptes</kbd> et confirmez : « Créer ces comptes dans votre plan comptable ? C’est une écriture réelle : les comptes existeront pour de bon. »</li>
+                    <li>Lisez le résultat : « N compte(s) créé(s) dans votre plan comptable. k ligne(s) laissée(s) de côté, faute de classe choisie. » et, dessous, le tableau <strong>Comptes créés</strong> avec Numéro, Nom et « Venait de » (le compte source).</li>
+                </ol>
+                <h3>Ce qui se passe à la création</h3>
                 <ul>
-                    <li><kbd>Créer les comptes</kbd> : confirmation « Créer ces comptes dans votre plan comptable ? C’est une écriture réelle : les comptes existeront pour de bon. »</li>
+                    <li>Chaque compte est ajouté au plan comptable avec son numéro, son nom et sa classe, comme si vous l’aviez saisi dans <span class="chemin">Comptabilité › Plan comptable</span>. Il y est modifiable ensuite comme n’importe quel compte.</li>
+                    <li>La décision de l’étape 2 reçoit le compte créé : la ligne y devient « Créé ✓ », grisée, et ne se rediscute plus. Elle compte dans « Déjà créés ».</li>
+                    <li>Le lot est marqué appliqué dès que toutes ses lignes retenues sont décidées et créées ; un lot appliqué ne peut plus être supprimé.</li>
+                    <li>Les étapes suivantes (balance de vérification, factures) reconnaissent ces comptes par la correspondance, exactement comme les comptes liés.</li>
                 </ul>
-                <p>Le tableau « Comptes créés » affiche Numéro, Nom et « Venait de ».</p>
                 <h3>Règles</h3>
                 <ul>
-                    <li>Tout ou rien : la moindre erreur annule la création complète.</li>
-                    <li>Contrôles : classe choisie, nom non vide, numéro numérique dans la plage de la classe, libre, et pas demandé deux fois.</li>
-                    <li>Sans numéro : premier numéro libre de la plage (les dizaines sont privilégiées).</li>
-                    <li>Une ligne sans classe est laissée de côté ; relancez ensuite sans recréer ce qui l’est déjà.</li>
+                    <li><strong>Tout ou rien</strong> : la base refuse le lot entier si une seule ligne est fautive. Le message dit laquelle et pourquoi ; corrigez-la et relancez. Un plan à moitié repris serait plus difficile à démêler qu’un plan pas repris du tout.</li>
+                    <li>Contrôles, dans l’ordre : classe choisie, classe appartenant à votre plan, nom non vide, numéro numérique, numéro dans la plage de la classe, numéro libre dans votre plan, numéro pas demandé deux fois dans le lot.</li>
+                    <li>Sans numéro : premier numéro libre de la plage, dizaines rondes d’abord. Si la plage est pleine, la ligne est refusée : choisissez une autre sous-classe, ou libérez un numéro.</li>
+                    <li>Relancer la création ne recrée jamais un compte déjà créé : seules les lignes « À créer » sont reprises.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« N compte(s) ne sont pas encore décidés à l’étape 2. Ils ne seront pas repris… »</span> — retournez à l’étape 2 si nécessaire.</li>
+                    <li><span class="msg">« N compte(s) ne sont pas encore décidés à l’étape 2. Ils ne seront pas repris… »</span> — avertissement à l’ouverture ; créez les autres, puis revenez.</li>
                     <li><span class="msg">« Aucune classe n’a été choisie : il n’y a rien à créer. »</span> — choisissez une classe sur au moins une ligne.</li>
-                    <li><span class="msg">« N compte(s) créé(s) dans votre plan comptable. k ligne(s) laissée(s) de côté, faute de classe choisie. »</span> — création réussie.</li>
-                    <li><span class="msg">« Rien n’a été créé. »</span> — suivi du motif : « « X » : le numéro N est hors de la plage a-b de la classe C. » ; « … n’est pas un numéro. » ; « Le numéro N est déjà utilisé dans votre plan. » ; « … la plage de numéros de cette classe est pleine. »</li>
+                    <li><span class="msg">« N compte(s) créé(s) dans votre plan comptable. k ligne(s) laissée(s) de côté, faute de classe choisie. »</span> — création réussie ; les lignes sans classe attendent.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : aucune classe choisie. »</span> — ne devrait pas arriver depuis l’écran ; relancez.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : cette classe n’appartient pas à votre plan. »</span> — la classe a été retirée du plan entre-temps ; rechargez la page.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : le nom du compte est vide. »</span> — saisissez un nom.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : « abc » n’est pas un numéro. »</span> — le numéro doit être numérique, ou vide.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : le numéro N est hors de la plage a-b de la classe C. »</span> — videz le numéro ou choisissez-en un dans la plage.</li>
+                    <li><span class="msg">« Rien n’a été créé. Le numéro N est déjà utilisé dans votre plan. »</span> — ce compte existe : c’est « Lier » qu’il fallait à l’étape 2, ou videz le numéro.</li>
+                    <li><span class="msg">« Rien n’a été créé. Le numéro N est demandé deux fois. »</span> — deux lignes avec le même numéro ; videz l’un des deux.</li>
+                    <li><span class="msg">« Rien n’a été créé. « X » : la plage de numéros de cette classe est pleine. »</span> — choisissez une autre sous-classe.</li>
+                    <li><span class="msg">« Aucun compte à créer. »</span> — le lot envoyé était vide.</li>
                 </ul>
                 <div class="astuce" data-titre="Astuce">Un numéro QuickBooks hors plage fait échouer l’étape entière. Videz le champ Numéro : un numéro automatique sera pris dans la plage de la classe.</div>
+                <div class="piege" data-titre="Piège">Créer ici un compte qui existe déjà sous un autre numéro donne deux comptes pour la même chose. Si « Le numéro N est déjà utilisé » apparaît, ou si le nom ressemble à un compte de votre plan, revenez à l’étape 2 et choisissez « Lier ».</div>
             </section>
 
             <section id="fr-tiers-produits">
@@ -869,40 +898,69 @@
 
             <section id="en-chart-step3">
                 <h2>Step 3: Create the accounts in the chart</h2>
-                <p>“This is the first step that writes to your books.” (<span class="chemin">Import › Create the accounts in the chart</span>). Link “← back to mapping”.</p>
-                <h3>Counters</h3>
-                <p>To create, Already created, Linked, Ignored, Still to decide.</p>
-                <h3>Columns of the accounts-to-create table</h3>
+                <p>The accounts you marked <strong>Create</strong> at step 2 enter your chart of accounts here (<span class="chemin">Import › Create the accounts in the chart</span>, or the link <kbd>Create the accounts in the chart →</kbd> at the bottom of the mapping). <strong>This is the first step that writes to your books</strong>: everything before stayed in preparation and could be abandoned; the accounts created here exist for good. Nothing is written until you click <kbd>Create the accounts</kbd>. The link <kbd>← back to mapping</kbd> returns to step 2. For how to decide what gets created and what gets linked, see the <a href="correspondance-comptes.html">dedicated mapping help</a>.</p>
+                <h3>What the screen shows</h3>
+                <table>
+                    <thead><tr><th>Element</th><th>Content</th></tr></thead>
+                    <tbody>
+                        <tr><td>Batch to apply</td><td>The chart loaded at step 1. Without a batch: “No chart-of-accounts batch has been loaded yet. Start with step 1”.</td></tr>
+                        <tr><td>To create</td><td>“Create” rows that do not have an account in the chart yet: those are the rows of the table.</td></tr>
+                        <tr><td>Already created</td><td>“Create” rows that already went through this step: their account exists, they no longer come back in the table and are locked “Created ✓” at step 2.</td></tr>
+                        <tr><td>Linked, Ignored</td><td>Reminder of step-2 decisions; nothing to do here for them.</td></tr>
+                        <tr><td>Still to decide</td><td>Accounts without a decision. The warning “N account(s) are not decided yet at step 2. They will not be migrated. You can create the others now and come back later” reminds you: step 3 can be done in several passes.</td></tr>
+                        <tr><td>“No account to create in this batch”</td><td>Everything is already created, or everything is linked or ignored: the step is finished for this batch.</td></tr>
+                    </tbody>
+                </table>
+                <h3>The table of accounts to create</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Required</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>—</td><td>Rank.</td></tr>
-                        <tr><td>Account in the former application</td><td>—</td><td>Source number and name.</td></tr>
-                        <tr><td>Class — where to file it</td><td>Yes</td><td>“— choose a class —” then the subclasses compatible with the nature, with their number range.</td></tr>
-                        <tr><td>Number</td><td>No</td><td>Prefilled with the source number, or “auto”. Must be numeric, within the class range and free.</td></tr>
-                        <tr><td>Account name</td><td>Yes</td><td>150 characters maximum.</td></tr>
+                        <tr><td>#</td><td>—</td><td>Row rank in the batch.</td></tr>
+                        <tr><td>Account from the old software</td><td>—</td><td>The source name and, below it, its nature (asset, liability, equity, revenue, expense). The nature bounds the classes offered on the right.</td></tr>
+                        <tr><td>Class — where to file it</td><td><strong>Yes</strong></td><td>“— choose a class —” then the subclasses of your chart compatible with the nature, as “code — name (start-end)”. An expense is never offered an asset class. The class gives the account its place in your financial statements, and its number range.</td></tr>
+                        <tr><td>Number</td><td>No</td><td>Prefilled with the source number when it was free at step 2, otherwise empty with the hint “auto”. A typed number must be numeric, within the class range and free.</td></tr>
+                        <tr><td>Account name</td><td><strong>Yes</strong></td><td>Prefilled with the source name (or the name chosen at step 2). 150 characters at most; editable before creation.</td></tr>
                     </tbody>
                 </table>
-                <h3>Buttons and actions</h3>
+                <h3>Creating, step by step</h3>
+                <ol>
+                    <li>For each row, choose the class. A row left on “— choose a class —” is not an error: it is set aside and comes back on the next visit.</li>
+                    <li>Leave the number empty unless you have a reason to impose one: 60sec takes the first free number of the range, preferably a round ten (1010, 1020…). Otherwise type a number within the range shown in brackets.</li>
+                    <li>Adjust the name if the former application’s name does not fit as is.</li>
+                    <li>Click <kbd>Create the accounts</kbd> and confirm: “Create these accounts in your chart of accounts? This is a real write: the accounts will exist for good.”</li>
+                    <li>Read the result: “N account(s) created in your chart of accounts. k row(s) set aside, no class chosen.” and, below, the <strong>Accounts created</strong> table with Number, Name and “Came from” (the source account).</li>
+                </ol>
+                <h3>What happens on creation</h3>
                 <ul>
-                    <li><kbd>Create the accounts</kbd>: confirmation “Create these accounts in your chart of accounts? This is a real write: the accounts will exist for good.”</li>
+                    <li>Each account is added to the chart with its number, name and class, as if you had typed it in <span class="chemin">Accounting › Chart of accounts</span>. It can be edited there afterwards like any account.</li>
+                    <li>The step-2 decision receives the created account: the row becomes “Created ✓” there, greyed, and is no longer discussed. It counts in “Already created”.</li>
+                    <li>The batch is marked applied as soon as all its kept rows are decided and created; an applied batch can no longer be deleted.</li>
+                    <li>The next steps (trial balance, invoices) recognize these accounts through the mapping, exactly like linked accounts.</li>
                 </ul>
-                <p>The “Accounts created” table shows Number, Name and “Came from”.</p>
                 <h3>Rules</h3>
                 <ul>
-                    <li>All or nothing: the slightest error cancels the whole creation.</li>
-                    <li>Checks: class chosen, non-empty name, numeric number within the class range, free, and not requested twice.</li>
-                    <li>Without a number: first free number in the range (tens are preferred).</li>
-                    <li>A row without a class is left aside; run again later without recreating what already exists.</li>
+                    <li><strong>All or nothing</strong>: the database refuses the whole batch if a single row is faulty. The message says which one and why; fix it and run again. A half-migrated chart would be harder to untangle than no migration at all.</li>
+                    <li>Checks, in order: class chosen, class belonging to your chart, non-empty name, numeric number, number within the class range, number free in your chart, number not requested twice in the batch.</li>
+                    <li>Without a number: first free number of the range, round tens first. If the range is full, the row is refused: choose another subclass, or free a number.</li>
+                    <li>Running the creation again never recreates an already created account: only “To create” rows are taken.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“N account(s) are not decided yet in step 2. They will not be taken…”</span> — go back to step 2 if needed.</li>
+                    <li><span class="msg">“N account(s) are not decided yet at step 2. They will not be migrated…”</span> — warning on opening; create the others, then come back.</li>
                     <li><span class="msg">“No class was chosen: there is nothing to create.”</span> — choose a class on at least one row.</li>
-                    <li><span class="msg">“N account(s) created in your chart of accounts. k row(s) left aside, no class chosen.”</span> — creation succeeded.</li>
-                    <li><span class="msg">“Nothing was created.”</span> — followed by the reason: ““X”: number N is outside the a-b range of class C.”; “… is not a number.”; “Number N is already used in your chart.”; “… the number range of this class is full.”</li>
+                    <li><span class="msg">“N account(s) created in your chart of accounts. k row(s) set aside, no class chosen.”</span> — creation succeeded; rows without a class are waiting.</li>
+                    <li><span class="msg">“Nothing was created. “X”: no class chosen.”</span> — should not happen from the screen; run again.</li>
+                    <li><span class="msg">“Nothing was created. “X”: this class does not belong to your chart.”</span> — the class was removed from the chart meanwhile; reload the page.</li>
+                    <li><span class="msg">“Nothing was created. “X”: the account name is empty.”</span> — type a name.</li>
+                    <li><span class="msg">“Nothing was created. “X”: “abc” is not a number.”</span> — the number must be numeric, or empty.</li>
+                    <li><span class="msg">“Nothing was created. “X”: number N is outside the range a-b of class C.”</span> — clear the number or pick one within the range.</li>
+                    <li><span class="msg">“Nothing was created. Number N is already used in your chart.”</span> — that account exists: “Link” was needed at step 2, or clear the number.</li>
+                    <li><span class="msg">“Nothing was created. Number N is requested twice.”</span> — two rows with the same number; clear one of them.</li>
+                    <li><span class="msg">“Nothing was created. “X”: the number range of this class is full.”</span> — choose another subclass.</li>
+                    <li><span class="msg">“No account to create.”</span> — the batch sent was empty.</li>
                 </ul>
-                <div class="astuce" data-titre="Tip">A QuickBooks number outside the range makes the whole step fail. Clear the Number field: an automatic number will be taken from the class range.</div>
+                <div class="astuce" data-titre="Tip">A QuickBooks number outside the range makes the whole step fail. Clear the Number field: an automatic number will be taken within the class range.</div>
+                <div class="piege" data-titre="Pitfall">Creating here an account that already exists under another number gives two accounts for the same thing. If “Number N is already used” appears, or if the name looks like an account of your chart, go back to step 2 and choose “Link”.</div>
             </section>
 
             <section id="en-parties-products">
@@ -1424,40 +1482,69 @@
 
             <section id="es-plan-etapa3">
                 <h2>Etapa 3: Crear las cuentas en el plan</h2>
-                <p>« Es la primera etapa que escribe en su contabilidad. » (<span class="chemin">Importación › Crear las cuentas en el plan</span>). Enlace « ← volver a la correspondencia ».</p>
-                <h3>Contadores</h3>
-                <p>Por crear, Ya creadas, Vinculadas, Ignoradas, Aún por decidir.</p>
-                <h3>Columnas de la tabla de cuentas por crear</h3>
+                <p>Las cuentas que marcó <strong>Crear</strong> en la etapa 2 entran aquí en su plan contable (<span class="chemin">Importación › Crear las cuentas en el plan</span>, o el enlace <kbd>Crear las cuentas en el plan →</kbd> al pie de la correspondencia). <strong>Es la primera etapa que escribe en su contabilidad</strong>: todo lo anterior quedaba en preparación y podía abandonarse; las cuentas creadas aquí existen definitivamente. No se escribe nada mientras no haga clic en <kbd>Crear las cuentas</kbd>. El enlace <kbd>← volver a la correspondencia</kbd> lleva a la etapa 2. Para saber cómo decidir qué se crea y qué se vincula, vea la <a href="correspondance-comptes.html">ayuda dedicada a la correspondencia</a>.</p>
+                <h3>Lo que muestra la pantalla</h3>
+                <table>
+                    <thead><tr><th>Elemento</th><th>Contenido</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lote por aplicar</td><td>El plan contable cargado en la etapa 1. Sin lote: « Todavía no se ha cargado ningún lote de plan contable. Empiece por la etapa 1 ».</td></tr>
+                        <tr><td>Por crear</td><td>Líneas « Crear » que aún no tienen cuenta en el plan: son las líneas de la tabla.</td></tr>
+                        <tr><td>Ya creadas</td><td>Líneas « Crear » que ya pasaron por esta etapa: su cuenta existe, ya no vuelven a la tabla y quedan bloqueadas « Creada ✓ » en la etapa 2.</td></tr>
+                        <tr><td>Vinculadas, Ignoradas</td><td>Recordatorio de las decisiones de la etapa 2; nada que hacer aquí con ellas.</td></tr>
+                        <tr><td>Aún por decidir</td><td>Cuentas sin decisión. El aviso « N cuenta(s) aún no están decididas en la etapa 2. No se migrarán. Puede crear las demás ahora y volver después » lo recuerda: la etapa 3 puede hacerse en varias veces.</td></tr>
+                        <tr><td>« Ninguna cuenta por crear en este lote »</td><td>Todo está ya creado, o todo está vinculado o ignorado: la etapa ha terminado para este lote.</td></tr>
+                    </tbody>
+                </table>
+                <h3>La tabla de cuentas por crear</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Obligatorio</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>—</td><td>Orden.</td></tr>
-                        <tr><td>Cuenta del programa anterior</td><td>—</td><td>Número y nombre de origen.</td></tr>
-                        <tr><td>Clase — dónde ubicarla</td><td>Sí</td><td>« — elegir una clase — » y luego las subclases compatibles con la naturaleza, con su rango de números.</td></tr>
-                        <tr><td>Número</td><td>No</td><td>Prellenado con el número de origen, o « auto ». Debe ser numérico, dentro del rango de la clase y libre.</td></tr>
-                        <tr><td>Nombre de la cuenta</td><td>Sí</td><td>150 caracteres como máximo.</td></tr>
+                        <tr><td>#</td><td>—</td><td>Posición de la línea en el lote.</td></tr>
+                        <tr><td>Cuenta del programa anterior</td><td>—</td><td>El nombre de origen y, debajo, su naturaleza (activo, pasivo, capital, ingreso, gasto). La naturaleza delimita las clases propuestas a la derecha.</td></tr>
+                        <tr><td>Clase — dónde ubicarla</td><td><strong>Sí</strong></td><td>« — elegir una clase — » y luego las subclases de su plan compatibles con la naturaleza, en la forma « código — nombre (inicio-fin) ». A un gasto nunca se le propone una clase de activo. La clase da a la cuenta su lugar en los estados financieros y su rango de números.</td></tr>
+                        <tr><td>Número</td><td>No</td><td>Prellenado con el número de origen cuando estaba libre en la etapa 2; si no, vacío con la indicación « auto ». Un número escrito debe ser numérico, estar dentro del rango de la clase y libre.</td></tr>
+                        <tr><td>Nombre de la cuenta</td><td><strong>Sí</strong></td><td>Prellenado con el nombre de origen (o el nombre elegido en la etapa 2). 150 caracteres como máximo; modificable antes de la creación.</td></tr>
                     </tbody>
                 </table>
-                <h3>Botones y acciones</h3>
+                <h3>Crear, paso a paso</h3>
+                <ol>
+                    <li>Para cada línea, elija la clase. Una línea dejada en « — elegir una clase — » no es un error: se aparta y volverá en la próxima visita.</li>
+                    <li>Deje el número vacío si no tiene motivo para imponer uno: 60sec toma el primer número libre del rango, preferentemente una decena redonda (1010, 1020…). Si no, escriba un número del rango mostrado entre paréntesis.</li>
+                    <li>Ajuste el nombre si el del programa anterior no conviene tal cual.</li>
+                    <li>Haga clic en <kbd>Crear las cuentas</kbd> y confirme: « ¿Crear estas cuentas en su plan contable? Es una escritura real: las cuentas existirán definitivamente. »</li>
+                    <li>Lea el resultado: « N cuenta(s) creada(s) en su plan contable. k línea(s) apartada(s), sin clase elegida. » y, debajo, la tabla <strong>Cuentas creadas</strong> con Número, Nombre y « Venía de » (la cuenta de origen).</li>
+                </ol>
+                <h3>Qué ocurre al crear</h3>
                 <ul>
-                    <li><kbd>Crear las cuentas</kbd>: confirmación « ¿Crear estas cuentas en su plan de cuentas? Es una escritura real: las cuentas existirán definitivamente. »</li>
+                    <li>Cada cuenta se añade al plan contable con su número, su nombre y su clase, como si la hubiera escrito en <span class="chemin">Contabilidad › Plan contable</span>. Después puede modificarse allí como cualquier cuenta.</li>
+                    <li>La decisión de la etapa 2 recibe la cuenta creada: la línea pasa a « Creada ✓ », en gris, y ya no se discute. Cuenta en « Ya creadas ».</li>
+                    <li>El lote se marca aplicado en cuanto todas sus líneas retenidas están decididas y creadas; un lote aplicado ya no puede eliminarse.</li>
+                    <li>Las etapas siguientes (balance de comprobación, facturas) reconocen estas cuentas por la correspondencia, exactamente como las cuentas vinculadas.</li>
                 </ul>
-                <p>La tabla « Cuentas creadas » muestra Número, Nombre y « Venía de ».</p>
                 <h3>Reglas</h3>
                 <ul>
-                    <li>Todo o nada: el menor error anula la creación completa.</li>
-                    <li>Controles: clase elegida, nombre no vacío, número numérico dentro del rango de la clase, libre y no pedido dos veces.</li>
-                    <li>Sin número: primer número libre del rango (se privilegian las decenas).</li>
-                    <li>Una línea sin clase se deja de lado; relance después sin volver a crear lo que ya existe.</li>
+                    <li><strong>Todo o nada</strong>: la base de datos rechaza el lote entero si una sola línea es incorrecta. El mensaje dice cuál y por qué; corríjala y vuelva a lanzar. Un plan migrado a medias sería más difícil de desenredar que un plan no migrado.</li>
+                    <li>Controles, en orden: clase elegida, clase perteneciente a su plan, nombre no vacío, número numérico, número dentro del rango de la clase, número libre en su plan, número no pedido dos veces en el lote.</li>
+                    <li>Sin número: primer número libre del rango, decenas redondas primero. Si el rango está lleno, la línea se rechaza: elija otra subclase o libere un número.</li>
+                    <li>Volver a lanzar la creación nunca recrea una cuenta ya creada: solo se toman las líneas « Por crear ».</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« N cuenta(s) aún no están decididas en la etapa 2. No se tomarán… »</span> — vuelva a la etapa 2 si hace falta.</li>
+                    <li><span class="msg">« N cuenta(s) aún no están decididas en la etapa 2. No se migrarán… »</span> — aviso al abrir; cree las demás y vuelva después.</li>
                     <li><span class="msg">« No se eligió ninguna clase: no hay nada que crear. »</span> — elija una clase en al menos una línea.</li>
-                    <li><span class="msg">« N cuenta(s) creada(s) en su plan de cuentas. k línea(s) dejada(s) de lado, sin clase elegida. »</span> — creación correcta.</li>
-                    <li><span class="msg">« No se creó nada. »</span> — seguido del motivo: « « X »: el número N está fuera del rango a-b de la clase C. »; « … no es un número. »; « El número N ya se usa en su plan. »; « … el rango de números de esta clase está lleno. »</li>
+                    <li><span class="msg">« N cuenta(s) creada(s) en su plan contable. k línea(s) apartada(s), sin clase elegida. »</span> — creación correcta; las líneas sin clase esperan.</li>
+                    <li><span class="msg">« No se creó nada. « X »: ninguna clase elegida. »</span> — no debería ocurrir desde la pantalla; vuelva a lanzar.</li>
+                    <li><span class="msg">« No se creó nada. « X »: esta clase no pertenece a su plan. »</span> — la clase se retiró del plan entretanto; recargue la página.</li>
+                    <li><span class="msg">« No se creó nada. « X »: el nombre de la cuenta está vacío. »</span> — escriba un nombre.</li>
+                    <li><span class="msg">« No se creó nada. « X »: « abc » no es un número. »</span> — el número debe ser numérico, o vacío.</li>
+                    <li><span class="msg">« No se creó nada. « X »: el número N está fuera del rango a-b de la clase C. »</span> — vacíe el número o elija uno dentro del rango.</li>
+                    <li><span class="msg">« No se creó nada. El número N ya se usa en su plan. »</span> — esa cuenta existe: hacía falta « Vincular » en la etapa 2, o vacíe el número.</li>
+                    <li><span class="msg">« No se creó nada. El número N se pide dos veces. »</span> — dos líneas con el mismo número; vacíe una de ellas.</li>
+                    <li><span class="msg">« No se creó nada. « X »: el rango de números de esta clase está lleno. »</span> — elija otra subclase.</li>
+                    <li><span class="msg">« Ninguna cuenta por crear. »</span> — el lote enviado estaba vacío.</li>
                 </ul>
-                <div class="astuce" data-titre="Consejo">Un número de QuickBooks fuera del rango hace fallar toda la etapa. Vacíe el campo Número: se tomará un número automático dentro del rango de la clase.</div>
+                <div class="astuce" data-titre="Consejo">Un número QuickBooks fuera del rango hace fallar toda la etapa. Vacíe el campo Número: se tomará un número automático dentro del rango de la clase.</div>
+                <div class="piege" data-titre="Trampa">Crear aquí una cuenta que ya existe con otro número da dos cuentas para lo mismo. Si aparece « El número N ya se usa », o si el nombre se parece a una cuenta de su plan, vuelva a la etapa 2 y elija « Vincular ».</div>
             </section>
 
             <section id="es-terceros-productos">
