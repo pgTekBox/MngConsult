@@ -290,7 +290,7 @@
                 <tbody>
                     <asp:Repeater ID="rptLignes" runat="server">
                         <ItemTemplate>
-                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>' data-cree='<%# If(EstCree(Container.DataItem), "1", "0") %>'>
+                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>' data-cree='<%# If(EstCree(Container.DataItem), "1", "0") %>' data-solde='<%# If(Eval("Solde") Is DBNull.Value, "0", Convert.ToDecimal(Eval("Solde")).ToString(System.Globalization.CultureInfo.InvariantCulture)) %>'>
                                 <td><%# Eval("LigneNo") %></td>
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
@@ -462,6 +462,25 @@
     // avec les lignes en cause, pour ne pas perdre la saisie de la page.
     function ciblesUniques() {
         var lignes = document.querySelectorAll('tbody tr');
+        // Un compte qui porte un solde ne s'ignore pas : ce montant n'aurait nulle part où aller (T303).
+        var ignoresAvecSolde = [];
+        for (var s = 0; s < lignes.length; s++) {
+            var trS = lignes[s];
+            if (trS.getAttribute('data-cree') === '1') continue;
+            var actS = trS.querySelector('select.act');
+            if (!actS || actS.value !== 'IGNORER') continue;
+            var solde = parseFloat(trS.getAttribute('data-solde') || '0');
+            if (!solde) continue;
+            var noS = trS.querySelector('td') ? trS.querySelector('td').textContent.trim() : String(s + 1);
+            var srcS = trS.querySelector('.src-n');
+            var nomS = srcS && srcS.firstChild && srcS.firstChild.nodeType === 3 ? srcS.firstChild.textContent.trim() : '';
+            ignoresAvecSolde.push('ligne ' + noS + ' : « ' + nomS + ' » de ' + LOGICIEL + ' porte un solde de ' + solde.toLocaleString('fr-CA', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) + ' $');
+        }
+        if (ignoresAvecSolde.length > 0) {
+            showAppMessage('Un compte de ' + LOGICIEL + ' qui porte un solde ne peut pas être ignoré : ce montant disparaîtrait de la reprise.\n\n'
+                + ignoresAvecSolde.join('\n') + '\n\nLiez-le à un compte de 60sec, ou créez-le.', 'Enregistrement impossible');
+            return false;
+        }
         var parCible = {};
         for (var i = 0; i < lignes.length; i++) {
             var tr = lignes[i];
@@ -527,6 +546,13 @@
                     if (scl) scl.style.display = 'none';
                     if (sel) sel.style.display = 'none';
                     return;
+                }
+                // Un compte qui porte un solde ne s'ignore pas (T303) : l'option est grisée,
+                // sauf si c'est la décision déjà enregistrée, pour pouvoir la changer.
+                var actI = tr.querySelector('select.act');
+                if (actI && parseFloat(tr.getAttribute('data-solde') || '0')) {
+                    var optI = actI.querySelector('option[value="IGNORER"]');
+                    if (optI && actI.value !== 'IGNORER') { optI.disabled = true; optI.title = 'Ce compte porte un solde : il ne peut pas être ignoré.'; }
                 }
                 if (!cls || !scl || !sel || !hid) return;
 
