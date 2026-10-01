@@ -106,7 +106,7 @@
             </div>
         </div>
 
-        <div class="pc-card">
+        <div class="pc-card" id="carteCompte">
             <h2><asp:Literal ID="litTitreForm" runat="server" Text="Ajouter un compte au plan par défaut" /></h2>
             <p class="aide">
                 Choisissez d'abord la classe : la sous-classe, le type de bilan et le sens se remplissent d'après elle.

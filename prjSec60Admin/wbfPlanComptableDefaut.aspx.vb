@@ -120,7 +120,22 @@ Public Class wbfPlanComptableDefaut
         txtDescription.Text = Txt(r("Description"))
         litTitreForm.Text = "Corriger le compte " & Server.HtmlEncode(Txt(r("Numero")) & " " & Txt(r("Nom")))
         AfficherAliases(Txt(r("Numero")))
+        AllerAuFormulaire()
         btnAnnuler.Visible = True
+    End Sub
+
+    ''' <summary>
+    ''' Le formulaire est sous la liste, hors de l'écran sur un plan de 250 comptes :
+    ''' après « Corriger » ou « + », la page y descend d'elle-même. Sans ça, le clic
+    ''' semble ne rien faire.
+    ''' </summary>
+    Private Sub AllerAuFormulaire()
+        ' Tout de suite, puis encore quelques fois pendant une seconde : le gabarit
+        ' (RadScriptManager, bootstrap) remet la page en haut après le rendu, et un
+        ' seul défilement serait annulé. Enregistré par le ScriptManager pour valoir
+        ' aussi dans un rendu partiel.
+        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "allerForm",
+            "(function () { var n = 0; function aller() { var c = document.getElementById('carteCompte'); if (c) { c.scrollIntoView({ block: 'start' }); } if (++n < 6) { setTimeout(aller, 200); } } aller(); })();", True)
     End Sub
 
     Private Sub Retirer(idTexte As String)
