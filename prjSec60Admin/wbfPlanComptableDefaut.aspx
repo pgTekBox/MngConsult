@@ -154,7 +154,7 @@
             </div>
             <asp:Panel ID="pnlAlias" runat="server" Visible="false" Style="margin-top:14px; padding-top:12px; border-top:1px dashed #e2e8f0">
                 <p class="aide">
-                    <b>Alias QuickBooks de ce compte.</b> Les noms que QuickBooks donne à ce compte, dans chaque langue, avec leur
+                    <b>Alias QuickBooks de ce compte</b> (le ✨ demande à l'IA le libellé officiel dans la langue qui manque ; un nom déjà porté par un autre compte est refusé). Les noms que QuickBooks donne à ce compte, dans chaque langue, avec leur
                     sous-type (par exemple <i>UndepositedFunds</i>). Un compte d'ici peut en porter plusieurs ; un nom source ne mène
                     qu'à un seul compte. À la reprise d'un plan QuickBooks, un compte qui porte un de ces noms, ou ce sous-type s'il
                     ne désigne qu'un compte, est lié d'office à celui-ci, sans passer par l'IA.
@@ -317,9 +317,16 @@
         </script>
 
         <div class="pc-note">
+            <b>Les alias QuickBooks.</b> La colonne « Alias QuickBooks » montre, pour chaque compte, les noms que QuickBooks lui donne
+            (une pastille par alias, langue devant, sous-type au survol). Un compte peut en porter plusieurs ; un même nom QuickBooks ne
+            mène qu'à un seul compte. Ils vivent ici, sur le plan par défaut, et ne sont pas copiés dans les compagnies : à la reprise d'un
+            plan QuickBooks chez un client, un compte dont le nom est un alias, ou dont le sous-type ne désigne qu'un seul compte, est
+            <b>lié d'office</b> au compte de même numéro chez lui (décision « Lier » créée au chargement, qu'il peut encore changer).
+            Le bouton <b>+</b> ou <kbd>Corriger</kbd> ouvre le compte pour ajouter ou retirer des alias ; <b>✨ Compléter l'autre langue par l'IA</b>
+            demande le libellé officiel de QuickBooks dans la langue qui manque. Ne posez jamais comme alias le nom d'un compte propre à un client.<br /><br />
             <b>Ce qui n'est pas ici.</b> Les classes et sous-classes (T120) et les journaux (T130) du modèle ne se modifient pas
-            dans cette page. Les compagnies déjà créées ne sont jamais resynchronisées : un compte ajouté ici n'apparaît pas chez elles.
-            Le drapeau <span class="pill sys">système</span> marque les comptes que l'application utilise elle-même
+            dans cette page. Les compagnies déjà créées ne sont pas resynchronisées d'elles-mêmes : utilisez le bloc « Resynchroniser une
+            compagnie » plus bas. Le drapeau <span class="pill sys">système</span> marque les comptes que l'application utilise elle-même
             (banque principale, taxes, comptes clients et fournisseurs…) : on peut les renommer, pas les retirer.
         </div>
     </div>
