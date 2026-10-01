@@ -797,8 +797,25 @@ Public Class wbfPlanComptableDefaut
             Return
         End If
 
+        ' Les alias QuickBooks de tout le plan (T122), par numéro de compte, pour la colonne dédiée.
+        Dim aliases As New Dictionary(Of String, List(Of DataRow))
+        Try
+            Dim pa As New Collection
+            pa.Add(New SqlParameter("@CompanyGUID", ModelGUID))
+            pa.Add(New SqlParameter("@Compte", DBNull.Value))
+            Dim da As DataSet = ExecuteSQLds("s0878GetAliasPlanComptable", pa)
+            If da IsNot Nothing AndAlso da.Tables.Count > 0 Then
+                For Each a As DataRow In da.Tables(0).Rows
+                    Dim k As String = Txt(a("Compte"))
+                    If Not aliases.ContainsKey(k) Then aliases(k) = New List(Of DataRow)
+                    aliases(k).Add(a)
+                Next
+            End If
+        Catch
+        End Try
+
         Dim sb As New StringBuilder("<table class='pc-table'><thead><tr>")
-        sb.Append("<th>Numéro</th><th>Nom</th><th>Sous-classe</th><th>Type</th><th>Sens</th><th>État</th><th>Description</th><th></th>")
+        sb.Append("<th>Numéro</th><th>Nom</th><th>Alias QuickBooks</th><th>Sous-classe</th><th>Type</th><th>Sens</th><th>État</th><th>Description</th><th></th>")
         sb.Append("</tr></thead><tbody>")
 
         Dim classe As String = Nothing
@@ -806,16 +823,29 @@ Public Class wbfPlanComptableDefaut
             Dim c As String = Txt(r("ClasseDescription"))
             If c <> classe Then
                 classe = c
-                sb.Append("<tr class='classe'><td colspan='8'>").Append(Server.HtmlEncode(If(c = "", "Sans classe", c))).Append("</td></tr>")
+                sb.Append("<tr class='classe'><td colspan='9'>").Append(Server.HtmlEncode(If(c = "", "Sans classe", c))).Append("</td></tr>")
             End If
 
             Dim actif As Boolean = Bit(r("Actif")), sys As Boolean = Bit(r("Systeme"))
             sb.Append("<tr").Append(If(actif, "", " class='inactif'")).Append(">")
             sb.Append("<td class='num'>").Append(Server.HtmlEncode(Txt(r("Numero")))).Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom"))))
-            ' Les alias QuickBooks (T122), sous le nom : ce que la reprise d'un plan QBO reconnaît d'office.
-            Dim qbo As String = Txt(r("QBOAlias"))
-            If qbo <> "" Then sb.Append("<span class='desc' style='display:block;color:#64748b;font-size:11.5px' title='Alias QuickBooks'>QBO : ").Append(Server.HtmlEncode(qbo)).Append("</span>")
+            sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("Nom")))).Append("</td>")
+            ' La colonne des alias QuickBooks (T122) : une pastille par alias, langue devant,
+            ' sous-type et origine au survol. Un clic ouvre la correction du compte, où
+            ' les alias s'ajoutent et se retirent.
+            sb.Append("<td style='max-width:360px'>")
+            Dim numero As String = Txt(r("Numero"))
+            If aliases.ContainsKey(numero) Then
+                For Each a As DataRow In aliases(numero)
+                    Dim lng As String = Txt(a("Langue"))
+                    Dim info As String = "Alias QuickBooks" & If(Txt(a("SousType")) <> "", " · sous-type " & Txt(a("SousType")), "") & If(Txt(a("CreatedBy")) <> "", " · " & Txt(a("CreatedBy")), "")
+                    sb.Append("<span class='pill' style='margin:1px 4px 1px 0;font-weight:600;white-space:normal' title='").Append(Server.HtmlEncode(info)).Append("'>")
+                    sb.Append("<b style='color:#1d4ed8'>").Append(If(lng = "", "fr·en", lng.ToLowerInvariant())).Append("</b> ").Append(Server.HtmlEncode(Txt(a("NomSource")))).Append("</span>")
+                Next
+            Else
+                sb.Append("<span class='desc'>—</span>")
+            End If
+            sb.Append(" <button type='submit' class='btn petit' name='act' value='edit:").Append(Txt(r("Id"))).Append("' title='Ajouter ou retirer des alias' style='padding:0 6px'>+</button>")
             sb.Append("</td>")
             sb.Append("<td>").Append(Server.HtmlEncode(Txt(r("ClasseCode")))).Append(" <span style='color:#64748b'>").Append(Server.HtmlEncode(Txt(r("SousClasseDescription")))).Append("</span></td>")
             sb.Append("<td>").Append(Server.HtmlEncode(LibelleType(Txt(r("TypeBilan"))))).Append("</td>")
