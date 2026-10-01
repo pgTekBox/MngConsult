@@ -310,7 +310,7 @@
                                     <asp:HiddenField runat="server" ID="hfTypeSource" Value='<%# Eval("TypeNormalise") %>' />
 
                                     <asp:DropDownList runat="server" ID="ddlAction" CssClass="act"
-                                        SelectedValue='<%# ActionChoisie(Eval("Action")) %>'>
+                                        SelectedValue='<%# ActionChoisie(Eval("Action"), Eval("Origine")) %>'>
                                         <asp:ListItem Value="" Text="— à décider" />
                                         <asp:ListItem Value="LIER" Text="Lier" />
                                         <asp:ListItem Value="CREER" Text="Créer" />

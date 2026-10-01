@@ -444,9 +444,16 @@ Public Class CorrespondanceComptes
         End Select
     End Function
 
-    ''' <summary>L'action déjà décidée, ou rien.</summary>
-    Protected Function ActionChoisie(action As Object) As String
-        Return Convert.ToString(action)
+    ''' <summary>
+    ''' L'action déjà décidée ; sinon, quand la proposition est « même nom », la liste
+    ''' est préréglée sur Lier : le compte cible est déjà rempli, il ne reste qu'à
+    ''' enregistrer. Rien n'est décidé tant que l'utilisateur n'enregistre pas.
+    ''' </summary>
+    Protected Function ActionChoisie(action As Object, origine As Object) As String
+        Dim a As String = Convert.ToString(action)
+        If a <> "" Then Return a
+        If Convert.ToString(origine) = "PROPOSE_NOM" Then Return "LIER"
+        Return ""
     End Function
 
     Protected Function EstDecide(origine As Object) As Boolean
