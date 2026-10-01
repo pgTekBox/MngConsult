@@ -241,7 +241,7 @@
                         <tr><td>Ce que nous proposons</td><td>Pastille « même numéro », « même nom », « nom QuickBooks connu — lié d’office » (le nom, français ou anglais, ou le sous-type QuickBooks est un alias posé sur un compte du plan par défaut : la liaison est faite au chargement, elle apparaît déjà décidée « Lier » et reste modifiable), « IA » (avec % de confiance et raison), « aucune proposition » ou « créé au plan ». Si l’IA diverge : « ✨ l’IA suggère plutôt … ».</td></tr>
                         <tr><td>Action</td><td>« — à décider », Lier, Créer ou Ignorer.</td></tr>
                         <tr><td>Classe, Sous-classe, Compte chez vous</td><td>Trois listes en cascade (classe avec code, nom et plage de numéros). Un compte hors filtre reste affiché « (hors filtre) ».</td></tr>
-                        <tr><td>Note</td><td>500 caractères au maximum.</td></tr>
+                        <tr><td>Note</td><td>500 caractères au maximum. Préremplie « Lié d’office : nom QuickBooks connu du plan (alias). » pour une liaison faite par alias, ou « Proposition acceptée : … » après une acceptation en lot.</td></tr>
                     </tbody>
                 </table>
                 <h3>Bas de page</h3>
@@ -278,7 +278,24 @@
                     <li><span class="msg">« Le compte N est déjà lié à « X »… »</span> — refus à l’enregistrement.</li>
                     <li><span class="msg">« Le numéro N serait créé k fois… Un numéro ne se crée qu’une fois. »</span> — refus à l’enregistrement.</li>
                 </ul>
-                <div class="piege" data-titre="Piège">Le plan standard de 60Sec-AI existe déjà. Il faut <strong>lier</strong> les comptes QuickBooks aux comptes existants, pas tout créer. Sinon vous obtenez deux plans parallèles et des états financiers faux.</div>
+                <h3>La liaison d’office par alias</h3>
+                <p>Le plan comptable par défaut de 60Sec-AI connaît les noms que QuickBooks donne à ses comptes par défaut, en français et en anglais, ainsi que leurs sous-types : ce sont les <b>alias</b>, tenus par l’équipe 60Sec. Au chargement de votre plan QuickBooks, chaque compte dont le nom est un alias, ou dont le sous-type ne désigne qu’un seul compte d’ici, est <b>lié d’office</b> au compte de même numéro chez vous. Ce n’est pas une proposition à accepter : la décision « Lier » existe déjà quand la grille s’ouvre.</p>
+                <table>
+                    <thead><tr><th>Ce que vous voyez</th><th>Ce que ça veut dire</th></tr></thead>
+                    <tbody>
+                        <tr><td>Pastille « nom QuickBooks connu — lié d’office » suivie du compte d’ici</td><td>La liaison vient d’un alias. Elle est aussi sûre qu’un numéro commun.</td></tr>
+                        <tr><td>Action déjà sur « Lier », compte chez vous déjà choisi</td><td>La décision est prise et compte dans « Liés » et dans les décidés ; le filtre « Déjà décidés » la montre.</td></tr>
+                        <tr><td>Note « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La trace de l’origine. Vous pouvez la compléter ou la remplacer.</td></tr>
+                        <tr><td>Un compte QuickBooks reconnu par alias, mais encore « à décider »</td><td>Un autre compte QuickBooks visait déjà le même compte d’ici : seul le premier est lié d’office. Liez celui-ci ailleurs, ou créez-le.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Vous gardez la main : changez l’action, le compte cible ou la note comme pour toute décision, puis <kbd>Enregistrer les correspondances</kbd>.</li>
+                    <li><kbd>Accepter les correspondances par numéro</kbd> et <kbd>✨ Proposer avec l’IA</kbd> ne concernent pas ces lignes : elles sont déjà décidées.</li>
+                    <li>Recharger le plan refait la liaison d’office pour les comptes qui n’ont pas encore de décision ; une décision existante n’est jamais écrasée.</li>
+                    <li>Un compte par défaut de QuickBooks qui n’est pas reconnu mérite d’être signalé : son alias sera ajouté au plan par défaut et profitera à tous les clients suivants.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Le plan standard de 60Sec-AI existe déjà. Il faut<strong>lier</strong> les comptes QuickBooks aux comptes existants, pas tout créer. Sinon vous obtenez deux plans parallèles et des états financiers faux.</div>
                 <div class="piege" data-titre="Piège">Le fichier CSV et la lecture directe QuickBooks ne partagent pas leurs décisions. Changer de voie fait réapparaître les comptes « à décider ». Recharger un plan garde les décisions dont la clé est identique ; changer un nom dans QuickBooks change la clé.</div>
             </section>
 
@@ -766,7 +783,7 @@
                         <tr><td>What we suggest</td><td>Badge “same number”, “same name”, “known QuickBooks name — linked outright” (the French or English name, or the QuickBooks sub-type, is an alias set on an account of the default chart: the link is made at load time, it already shows as decided “Link” and remains editable), “AI” (with confidence % and reason), “no suggestion” or “created in the chart”. If the AI differs: “✨ the AI rather suggests …”.</td></tr>
                         <tr><td>Action</td><td>“— to decide”, Link, Create or Ignore.</td></tr>
                         <tr><td>Class, Subclass, Your account</td><td>Three cascading lists (class with code, name and number range). An account outside the filter stays shown as “(outside filter)”.</td></tr>
-                        <tr><td>Note</td><td>500 characters maximum.</td></tr>
+                        <tr><td>Note</td><td>500 characters maximum. Prefilled “Lié d’office : nom QuickBooks connu du plan (alias).” for a link made by alias, or “Proposition acceptée : …” after a bulk acceptance.</td></tr>
                     </tbody>
                 </table>
                 <h3>Bottom of page</h3>
@@ -803,7 +820,24 @@
                     <li><span class="msg">“Account N is already linked to “X”…”</span> — refused on save.</li>
                     <li><span class="msg">“Number N would be created k times… A number is created only once.”</span> — refused on save.</li>
                 </ul>
-                <div class="piege" data-titre="Pitfall">The standard 60Sec-AI chart already exists. You must <strong>link</strong> the QuickBooks accounts to the existing ones, not create everything. Otherwise you get two parallel charts and wrong financial statements.</div>
+                <h3>The outright link by alias</h3>
+                <p>60Sec-AI’s default chart of accounts knows the names QuickBooks gives its default accounts, in French and English, as well as their sub-types: these are the <b>aliases</b>, maintained by the 60Sec team. When your QuickBooks chart is loaded, every account whose name is an alias, or whose sub-type designates a single account of ours, is <b>linked outright</b> to the account with the same number in your chart. It is not a suggestion to accept: the “Link” decision already exists when the grid opens.</p>
+                <table>
+                    <thead><tr><th>What you see</th><th>What it means</th></tr></thead>
+                    <tbody>
+                        <tr><td>Pill “known QuickBooks name — linked outright” followed by our account</td><td>The link comes from an alias. It is as reliable as a common number.</td></tr>
+                        <tr><td>Action already on “Link”, target account already chosen</td><td>The decision is made and counts in “Linked” and among the decided; the “Already decided” filter shows it.</td></tr>
+                        <tr><td>Note “Lié d’office : nom QuickBooks connu du plan (alias).”</td><td>The trace of its origin. You may complete or replace it.</td></tr>
+                        <tr><td>A QuickBooks account recognized by alias but still “to decide”</td><td>Another QuickBooks account already targeted the same account of ours: only the first is linked outright. Link this one elsewhere, or create it.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>You keep control: change the action, the target account or the note as for any decision, then <kbd>Save the mappings</kbd>.</li>
+                    <li><kbd>Accept the mappings by number</kbd> and <kbd>✨ Suggest with the AI</kbd> do not concern these rows: they are already decided.</li>
+                    <li>Reloading the chart makes the outright link again for accounts that have no decision yet; an existing decision is never overwritten.</li>
+                    <li>A QuickBooks default account that is not recognized deserves to be reported: its alias will be added to the default chart and benefit every later customer.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">The standard 60Sec-AI chart already exists. You must<strong>link</strong> the QuickBooks accounts to the existing ones, not create everything. Otherwise you get two parallel charts and wrong financial statements.</div>
                 <div class="piege" data-titre="Pitfall">The CSV file and the QuickBooks direct read do not share their decisions. Switching paths makes accounts reappear as “to decide”. Reloading a chart keeps decisions whose key is identical; renaming an account in QuickBooks changes the key.</div>
             </section>
 
@@ -1291,7 +1325,7 @@
                         <tr><td>Lo que proponemos</td><td>Etiqueta « mismo número », « mismo nombre », « nombre QuickBooks conocido — vinculado directamente » (el nombre, francés o inglés, o el subtipo QuickBooks es un alias puesto en una cuenta del plan por defecto: el vínculo se hace al cargar, ya aparece decidido « Vincular » y sigue siendo modificable), « IA » (con % de confianza y razón), « ninguna propuesta » o « creada en el plan ». Si la IA difiere: « ✨ la IA sugiere más bien … ».</td></tr>
                         <tr><td>Acción</td><td>« — por decidir », Vincular, Crear o Ignorar.</td></tr>
                         <tr><td>Clase, Subclase, Cuenta en su plan</td><td>Tres listas en cascada (clase con código, nombre y rango de números). Una cuenta fuera del filtro sigue mostrándose « (fuera del filtro) ».</td></tr>
-                        <tr><td>Nota</td><td>500 caracteres como máximo.</td></tr>
+                        <tr><td>Nota</td><td>500 caracteres como máximo. Prellenada « Lié d’office : nom QuickBooks connu du plan (alias). » para un vínculo hecho por alias, o « Proposition acceptée : … » tras una aceptación en lote.</td></tr>
                     </tbody>
                 </table>
                 <h3>Pie de página</h3>
@@ -1328,7 +1362,24 @@
                     <li><span class="msg">« La cuenta N ya está vinculada a « X »… »</span> — rechazo al guardar.</li>
                     <li><span class="msg">« El número N se crearía k veces… Un número solo se crea una vez. »</span> — rechazo al guardar.</li>
                 </ul>
-                <div class="piege" data-titre="Trampa">El plan estándar de 60Sec-AI ya existe. Hay que <strong>vincular</strong> las cuentas de QuickBooks a las cuentas existentes, no crearlo todo. Si no, obtendrá dos planes paralelos y estados financieros falsos.</div>
+                <h3>El vínculo directo por alias</h3>
+                <p>El plan de cuentas por defecto de 60Sec-AI conoce los nombres que QuickBooks da a sus cuentas por defecto, en francés y en inglés, así como sus subtipos: son los <b>alias</b>, mantenidos por el equipo de 60Sec. Al cargar su plan QuickBooks, cada cuenta cuyo nombre es un alias, o cuyo subtipo designa una sola cuenta nuestra, se <b>vincula directamente</b> a la cuenta con el mismo número en su plan. No es una propuesta por aceptar: la decisión « Vincular » ya existe cuando se abre la cuadrícula.</p>
+                <table>
+                    <thead><tr><th>Lo que ve</th><th>Lo que significa</th></tr></thead>
+                    <tbody>
+                        <tr><td>Etiqueta « nombre QuickBooks conocido — vinculado directamente » seguida de nuestra cuenta</td><td>El vínculo proviene de un alias. Es tan seguro como un número común.</td></tr>
+                        <tr><td>Acción ya en « Vincular », cuenta destino ya elegida</td><td>La decisión está tomada y cuenta en « Vinculadas » y entre las decididas; el filtro « Ya decididas » la muestra.</td></tr>
+                        <tr><td>Nota « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La huella de su origen. Puede completarla o reemplazarla.</td></tr>
+                        <tr><td>Una cuenta QuickBooks reconocida por alias pero aún « por decidir »</td><td>Otra cuenta QuickBooks ya apuntaba a la misma cuenta nuestra: solo la primera se vincula directamente. Vincule esta en otra parte, o créela.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li>Usted conserva el control: cambie la acción, la cuenta destino o la nota como en cualquier decisión, y luego <kbd>Guardar las correspondencias</kbd>.</li>
+                    <li><kbd>Aceptar las correspondencias por número</kbd> y <kbd>✨ Proponer con la IA</kbd> no afectan a estas filas: ya están decididas.</li>
+                    <li>Recargar el plan vuelve a hacer el vínculo directo para las cuentas que aún no tienen decisión; una decisión existente nunca se sobrescribe.</li>
+                    <li>Una cuenta por defecto de QuickBooks que no se reconoce merece ser señalada: su alias se agregará al plan por defecto y beneficiará a todos los clientes siguientes.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">El plan estándar de 60Sec-AI ya existe. Hay que<strong>vincular</strong> las cuentas de QuickBooks a las cuentas existentes, no crearlo todo. Si no, obtendrá dos planes paralelos y estados financieros falsos.</div>
                 <div class="piege" data-titre="Trampa">El archivo CSV y la lectura directa de QuickBooks no comparten sus decisiones. Cambiar de vía hace reaparecer las cuentas « por decidir ». Recargar un plan conserva las decisiones cuya clave es idéntica; cambiar un nombre en QuickBooks cambia la clave.</div>
             </section>
 
