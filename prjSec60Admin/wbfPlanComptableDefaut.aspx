@@ -214,10 +214,12 @@
             <p class="aide">
                 Le plan d'une compagnie est copié du modèle à sa création et n'est jamais retouché ensuite. Ce bloc le remet
                 au niveau du plan par défaut : <b>ajoute</b> les comptes du modèle qu'elle n'a pas (par numéro, dans la sous-classe
-                de même code, alias compris), <b>aligne</b> sur les comptes communs les alias QuickBooks, les noms anglais et
-                espagnol et la description (le nom français et l'état actif de la compagnie ne bougent pas), et, si vous le
-                demandez, <b>retire</b> les comptes absents du modèle qui ne sont ni système ni référencés par une écriture,
-                un modèle d'écriture ou une liaison de reprise. <b>Simuler</b> montre tout sans rien écrire.
+                de même code), <b>aligne</b> sur les comptes communs les noms anglais et espagnol et la description (le nom
+                français et l'état actif de la compagnie ne bougent pas ; les alias QuickBooks ne sont pas concernés, ils vivent
+                sur le plan par défaut et jouent déjà pour toutes les compagnies), et, si vous le demandez, <b>retire</b> les
+                comptes absents du modèle qui ne sont ni système ni référencés par une écriture, un modèle d'écriture ou une
+                liaison de reprise. Les identifiants des comptes conservés ne changent pas : rien ne se casse chez la compagnie.
+                <b>Simuler</b> montre tout sans rien écrire ; <b>Appliquer</b> fait la même chose pour de vrai, après confirmation.
             </p>
             <div class="champs">
                 <div class="champ"><label>Compagnie</label>
