@@ -51,6 +51,13 @@
         .pc-note { font-size: 12.5px; color: #475569; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 10px; padding: 12px 15px; line-height: 1.6; max-width: 980px; }
         .pc-note b { color: #0f172a; }
 
+        /* La correction d'un compte s'ouvre en fenêtre par-dessus la liste (« Corriger », « + »). */
+        .pc-overlay { position: fixed; inset: 0; z-index: 8000; background: rgba(15,23,42,.45); }
+        .pc-card.pc-modal { position: fixed; top: 4vh; left: 50%; transform: translateX(-50%); width: min(1120px, calc(100vw - 32px)); max-height: 92vh; overflow: auto; z-index: 8001; box-shadow: 0 24px 60px rgba(2,6,23,.35); margin: 0; }
+        .pc-card .pc-x { display: none; float: right; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; width: 30px; height: 30px; font-size: 18px; line-height: 1; cursor: pointer; color: #475569; }
+        .pc-card.pc-modal .pc-x { display: inline-block; }
+        .pc-card .pc-x:hover { background: #f1f5f9; }
+
         /* L'assistant IA sur un compte QuickBooks candidat : bouton et fenêtre flottante (portés de l'ERP). */
         .ia-cpt { margin-left: 8px; padding: 1px 7px; border: 1px solid #c7d2fe; border-radius: 999px; background: #eef2ff; color: #4338ca; font-size: 10.5px; font-weight: 800; cursor: pointer; vertical-align: middle; white-space: nowrap; }
         .ia-cpt:hover { background: #e0e7ff; }
@@ -106,7 +113,9 @@
             </div>
         </div>
 
-        <div class="pc-card" id="carteCompte">
+        <div id="carteOverlay" runat="server" clientidmode="Static" class="pc-overlay" visible="false"></div>
+        <div class="pc-card" id="carteCompte" runat="server" clientidmode="Static">
+            <button type="submit" class="pc-x" name="act" value="cancel" title="Fermer (Échap)" aria-label="Fermer">&times;</button>
             <h2><asp:Literal ID="litTitreForm" runat="server" Text="Ajouter un compte au plan par défaut" /></h2>
             <p class="aide">
                 Choisissez d'abord la classe : la sous-classe, le type de bilan et le sens se remplissent d'après elle.
@@ -239,6 +248,12 @@
             </div>
         </div>
         <script type="text/javascript">
+            // ── La fenêtre de correction d'un compte : Échap la ferme (comme le bouton ×). ──
+            document.addEventListener('keydown', function (e) {
+                if (e.key !== 'Escape') return;
+                var x = document.querySelector('.pc-card.pc-modal .pc-x');
+                if (x) { e.preventDefault(); x.click(); }
+            });
             // ── Assistant sur un compte QuickBooks candidat : fenêtre flottante (déplaçable par sa barre) avec la réponse de l'IA. ──
             (function () {
                 var overlay = document.getElementById('iacOverlay'), dlg = document.getElementById('iacDlg'), corps = document.getElementById('iacCorps');

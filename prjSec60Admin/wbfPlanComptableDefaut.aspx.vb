@@ -35,9 +35,23 @@ Public Class wbfPlanComptableDefaut
                 Retirer(act.Substring(4))
             ElseIf act.StartsWith("delalias:") Then
                 RetirerAlias(act.Substring(9))
+            ElseIf act = "cancel" Then
+                ' Le × ou Échap de la fenêtre de correction.
+                ViderFormulaire()
             End If
         End If
         Afficher()
+    End Sub
+
+    ''' <summary>
+    ''' La correction d'un compte (« Corriger », « + ») s'affiche en fenêtre par-dessus
+    ''' la liste ; l'ajout d'un compte reste en bas de page. L'état se lit sur hfId,
+    ''' quel que soit le bouton qui a provoqué le rendu.
+    ''' </summary>
+    Protected Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
+        Dim modal As Boolean = hfId.Value <> ""
+        carteCompte.Attributes("class") = If(modal, "pc-card pc-modal", "pc-card")
+        carteOverlay.Visible = modal
     End Sub
 
     ' =========================================================================
@@ -120,22 +134,7 @@ Public Class wbfPlanComptableDefaut
         txtDescription.Text = Txt(r("Description"))
         litTitreForm.Text = "Corriger le compte " & Server.HtmlEncode(Txt(r("Numero")) & " " & Txt(r("Nom")))
         AfficherAliases(Txt(r("Numero")))
-        AllerAuFormulaire()
         btnAnnuler.Visible = True
-    End Sub
-
-    ''' <summary>
-    ''' Le formulaire est sous la liste, hors de l'écran sur un plan de 250 comptes :
-    ''' après « Corriger » ou « + », la page y descend d'elle-même. Sans ça, le clic
-    ''' semble ne rien faire.
-    ''' </summary>
-    Private Sub AllerAuFormulaire()
-        ' Tout de suite, puis encore quelques fois pendant une seconde : le gabarit
-        ' (RadScriptManager, bootstrap) remet la page en haut après le rendu, et un
-        ' seul défilement serait annulé. Enregistré par le ScriptManager pour valoir
-        ' aussi dans un rendu partiel.
-        ScriptManager.RegisterStartupScript(Me, Me.GetType(), "allerForm",
-            "(function () { var n = 0; function aller() { var c = document.getElementById('carteCompte'); if (c) { c.scrollIntoView({ block: 'start' }); } if (++n < 6) { setTimeout(aller, 200); } } aller(); })();", True)
     End Sub
 
     Private Sub Retirer(idTexte As String)

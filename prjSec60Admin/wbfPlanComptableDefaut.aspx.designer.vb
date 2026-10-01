@@ -36,6 +36,12 @@ Partial Public Class wbfPlanComptableDefaut
     '''<summary>litTableau</summary>
     Protected WithEvents litTableau As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>carteOverlay</summary>
+    Protected WithEvents carteOverlay As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
+    '''<summary>carteCompte</summary>
+    Protected WithEvents carteCompte As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>litTitreForm</summary>
     Protected WithEvents litTitreForm As Global.System.Web.UI.WebControls.Literal
 
