@@ -465,6 +465,20 @@ Public Class CorrespondanceComptes
     End Function
 
     ''' <summary>Ce qu'affiche la colonne « proposition » pour un compte déjà créé.</summary>
+    ''' <summary>
+    ''' Une liaison faite d'office au chargement parce que le nom QuickBooks est un
+    ''' alias du plan par défaut (T301) : la grille le dit, la décision reste modifiable.
+    ''' </summary>
+    Protected Function TexteLieDOffice(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing OrElse Not r.Row.Table.Columns.Contains("LieDOffice") Then Return ""
+        If IsDBNull(r("LieDOffice")) OrElse Not Convert.ToBoolean(r("LieDOffice")) Then Return ""
+        Return "<span class='pr pr-sur' title='Ce nom QuickBooks est un alias du plan comptable : la liaison a été faite au chargement. Vous pouvez la changer.'>nom QuickBooks connu — lié d'office</span> " &
+               Server.HtmlEncode(Convert.ToString(r("ProposeCompte"))) & " — " &
+               Server.HtmlEncode(Convert.ToString(r("ProposeNom"))) &
+               TexteClasse(r("ProposeClasse"), r("ProposeClasseNom"))
+    End Function
+
     Protected Function TexteCree(item As Object) As String
         If Not EstCree(item) Then Return ""
         Dim r As DataRowView = CType(item, DataRowView)

@@ -297,7 +297,7 @@
                                     <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
-                                <td><%# TexteCree(Container.DataItem) %><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
+                                <td><%# TexteCree(Container.DataItem) %><%# TexteLieDOffice(Container.DataItem) %><%# TexteProposition(Eval("Origine"), Eval("ProposeCompte"), Eval("ProposeNom"),
                                                          Eval("ProposeClasse"), Eval("ProposeClasseNom"),
                                                          Eval("IACompte"), Eval("IANom"), Eval("IAConfiance"), Eval("IARaison"),
                                                          Eval("IAClasse"), Eval("IAClasseNom")) %></td>
