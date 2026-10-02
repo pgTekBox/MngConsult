@@ -217,13 +217,35 @@
 
             <section id="fr-pieges">
                 <h2>Trucs et pièges</h2>
+                <h3>Trucs pour aller vite</h3>
                 <ul>
-                    <li>Travaillez par classe : filtrez « À décider seulement », traitez l’actif, puis le passif, les revenus, les dépenses. Les listes en cascade suivent le même ordre.</li>
-                    <li>Un sous-compte QuickBooks (« sous-compte de « … » » dans la fiche) se lie souvent au compte parent d’ici ; créez-le seulement si vous tenez au détail.</li>
-                    <li>Les comptes par défaut de QuickBooks (origine « par défaut dans QuickBooks ») sont presque tous reconnus par alias. S’il en reste un à décider, signalez-le : son alias sera ajouté au plan standard pour tous les clients suivants.</li>
-                    <li>Le fichier CSV et la lecture directe QuickBooks ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ». Recharger un plan par la même voie garde les décisions dont la clé (numéro ou nom) n’a pas changé.</li>
-                    <li>Affichage limité à 1 000 lignes.</li>
+                    <li><strong>Commencez par ce qui est gratuit.</strong> Les liaisons d’office sont déjà faites à l’ouverture. Cliquez ensuite <kbd>Accepter les correspondances par numéro</kbd> : tout ce qui concorde par numéro ou par nom est lié d’un coup. Il ne reste à trancher que les vrais cas.</li>
+                    <li><strong>Filtrez « À décider seulement ».</strong> La grille ne montre plus que le travail restant, et l’avancement en haut dit où vous en êtes.</li>
+                    <li><strong>Travaillez par classe</strong> : l’actif, puis le passif, les revenus, les dépenses. Les listes en cascade suivent le même ordre, et vous restez dans la même sous-classe d’une ligne à l’autre.</li>
+                    <li><strong>Lisez la fiche sous le nom du compte.</strong> La nature, le type et le sous-type QuickBooks disent presque toujours dans quelle classe chercher.</li>
+                    <li><strong>Demandez à l’<kbd>✨ Assistant</kbd></strong> quand un nom ne vous dit rien : il explique le compte et suggère où le ranger. Pour un lot entier, <kbd>✨ Proposer avec l’IA</kbd> remplit la colonne des propositions ; rien n’est décidé à votre place.</li>
+                    <li><strong>Un sous-compte QuickBooks</strong> (« sous-compte de « … » » dans la fiche) se lie souvent au compte parent d’ici ; créez-le seulement si vous tenez au détail.</li>
+                    <li><strong>Enregistrez souvent.</strong> Les décisions enregistrées sont conservées même si vous quittez l’écran ; un changement non enregistré est perdu.</li>
+                    <li><strong>Notez vos raisons</strong> dans la colonne Note pour les choix discutables : votre comptable relira la correspondance avant l’étape 3.</li>
+                    <li><strong>Signalez un compte par défaut de QuickBooks non reconnu</strong> (origine « par défaut dans QuickBooks » mais encore « à décider ») : son alias sera ajouté au plan standard et profitera à tous les clients suivants.</li>
                 </ul>
+                <h3>Pièges à éviter</h3>
+                <table>
+                    <thead><tr><th>Piège</th><th>Ce qui arrive</th><th>Comment l’éviter</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tout mettre en « Créer »</td><td>Deux plans parallèles, le standard de 60sec et la copie de l’ancien : états financiers faux, taxes sur les mauvais comptes.</td><td>Liez d’abord. Créez seulement ce qui n’a aucun équivalent ici.</td></tr>
+                        <tr><td>Lier deux comptes au même compte de 60sec</td><td>Refus à l’enregistrement : un compte de 60sec ne reçoit qu’un seul compte de l’ancien logiciel.</td><td>Liez le second à un autre compte, ou créez-le.</td></tr>
+                        <tr><td>« Créer » en choisissant un compte existant</td><td>Refus : « Créer » ne peut pas reprendre un numéro que votre plan 60sec connaît déjà.</td><td>Si c’est ce compte que vous voulez, c’est « Lier ». Sinon laissez le compte vide.</td></tr>
+                        <tr><td>Croire qu’un solde à 0 veut dire « inutilisé »</td><td>QuickBooks renvoie toujours 0 pour les revenus et les dépenses. Ignorer un tel compte peut laisser des écritures sans compte.</td><td>Tenez compte de l’encadré jaune ; vérifiez dans l’ancien logiciel avant d’ignorer.</td></tr>
+                        <tr><td>Vouloir ignorer un compte qui porte un solde ou qui est utilisé</td><td>Option grisée, puis refus : le montant, les factures ou les produits n’auraient nulle part où aller.</td><td>Liez ou créez. L’info-bulle de l’option dit la raison exacte.</td></tr>
+                        <tr><td>Changer de voie de chargement en cours de route</td><td>Le fichier CSV et la lecture directe ne partagent pas leurs décisions : les comptes reviennent « à décider ».</td><td>Gardez la même voie du début à la fin.</td></tr>
+                        <tr><td>Renommer un compte dans l’ancien logiciel, puis recharger</td><td>Sans numéro, le nom est la clé : le compte renommé revient « à décider » et l’ancienne décision est orpheline.</td><td>Renommez avant de commencer, ou refaites la décision après le rechargement.</td></tr>
+                        <tr><td>Passer à l’étape 3 sans relire les « Créer »</td><td>Un compte créé par erreur existe pour de bon et ne s’annule pas d’ici.</td><td>Filtrez « Déjà décidés » et relisez les lignes « Créer » avant de créer.</td></tr>
+                        <tr><td>Laisser des comptes « à décider »</td><td>Ils ne sont pas repris : leurs soldes et leurs factures n’auront pas de compte aux étapes suivantes.</td><td>Visez 100 % d’avancement avant la balance et les factures.</td></tr>
+                        <tr><td>Ne regarder que le bandeau du haut</td><td>Le bouton Enregistrer est en bas : un refus peut passer inaperçu.</td><td>La fenêtre de message s’ouvre au centre de l’écran dès qu’il y a un problème ; lisez-la avant de continuer.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Bon à savoir">L’affichage est limité à 1 000 lignes. Au-delà, servez-vous du filtre « Afficher » pour traiter le plan par tranches.</div>
             </section>
 
             <section id="fr-faq">
@@ -436,13 +458,35 @@
 
             <section id="en-pitfalls">
                 <h2>Tips and pitfalls</h2>
+                <h3>Tips to go fast</h3>
                 <ul>
-                    <li>Work by class: filter “To decide only”, handle assets, then liabilities, revenues, expenses. The cascading lists follow the same order.</li>
-                    <li>A QuickBooks sub-account (“sub-account of “…”” in the card) is often linked to the parent account here; create it only if you want the detail.</li>
-                    <li>QuickBooks default accounts (origin “default in QuickBooks”) are almost all recognized by alias. If one is left to decide, report it: its alias will be added to the standard chart for every later customer.</li>
-                    <li>The CSV file and the direct QuickBooks read do not share their decisions: switching paths brings the “to decide” accounts back. Reloading a chart through the same path keeps the decisions whose key (number or name) did not change.</li>
-                    <li>Display limited to 1,000 rows.</li>
+                    <li><strong>Start with what is free.</strong> Outright links are already made on opening. Then click <kbd>Accept mappings by number</kbd>: everything that matches by number or by name is linked at once. Only the real cases remain.</li>
+                    <li><strong>Filter “To decide only”.</strong> The grid shows only the remaining work, and the progress at the top tells you where you stand.</li>
+                    <li><strong>Work by class</strong>: assets, then liabilities, revenues, expenses. The cascading lists follow the same order, and you stay in the same subclass from one row to the next.</li>
+                    <li><strong>Read the card under the account name.</strong> The nature and the QuickBooks type and subtype almost always tell you which class to look in.</li>
+                    <li><strong>Ask the <kbd>✨ Assistant</kbd></strong> when a name means nothing to you: it explains the account and suggests where to file it. For a whole batch, <kbd>✨ Suggest with AI</kbd> fills the suggestions column; nothing is decided for you.</li>
+                    <li><strong>A QuickBooks sub-account</strong> (“sub-account of “…”” in the card) is often linked to the parent account here; create it only if you want the detail.</li>
+                    <li><strong>Save often.</strong> Saved decisions are kept even if you leave the screen; an unsaved change is lost.</li>
+                    <li><strong>Write down your reasons</strong> in the Note column for debatable choices: your accountant will review the mapping before step 3.</li>
+                    <li><strong>Report an unrecognized QuickBooks default account</strong> (origin “default in QuickBooks” but still “to decide”): its alias will be added to the standard chart and benefit every later customer.</li>
                 </ul>
+                <h3>Pitfalls to avoid</h3>
+                <table>
+                    <thead><tr><th>Pitfall</th><th>What happens</th><th>How to avoid it</th></tr></thead>
+                    <tbody>
+                        <tr><td>Setting everything to “Create”</td><td>Two parallel charts, the 60sec standard and a copy of the old one: wrong financial statements, taxes on the wrong accounts.</td><td>Link first. Create only what has no counterpart here.</td></tr>
+                        <tr><td>Linking two accounts to the same 60sec account</td><td>Refused on save: one 60sec account receives only one account from the former application.</td><td>Link the second one to another account, or create it.</td></tr>
+                        <tr><td>“Create” while picking an existing account</td><td>Refused: “Create” cannot reuse a number your 60sec chart already knows.</td><td>If that is the account you want, use “Link”. Otherwise leave the account empty.</td></tr>
+                        <tr><td>Believing a zero balance means “unused”</td><td>QuickBooks always returns 0 for revenue and expense accounts. Ignoring such an account can leave entries without an account.</td><td>Heed the yellow note; check in the former application before ignoring.</td></tr>
+                        <tr><td>Trying to ignore an account that carries a balance or is used</td><td>Option greyed out, then refusal: the amount, the invoices or the products would have nowhere to go.</td><td>Link or create. The option’s tooltip gives the exact reason.</td></tr>
+                        <tr><td>Switching loading paths along the way</td><td>The CSV file and the direct read do not share their decisions: accounts come back “to decide”.</td><td>Keep the same path from start to finish.</td></tr>
+                        <tr><td>Renaming an account in the former application, then reloading</td><td>Without a number, the name is the key: the renamed account comes back “to decide” and the old decision is orphaned.</td><td>Rename before you start, or redo the decision after the reload.</td></tr>
+                        <tr><td>Going to step 3 without reviewing the “Create” rows</td><td>An account created by mistake exists for good and cannot be undone from here.</td><td>Filter “Already decided” and review the “Create” rows before creating.</td></tr>
+                        <tr><td>Leaving accounts “to decide”</td><td>They are not migrated: their balances and invoices will have no account at the next steps.</td><td>Aim for 100% progress before the trial balance and the invoices.</td></tr>
+                        <tr><td>Only looking at the top banner</td><td>The Save button is at the bottom: a refusal can go unnoticed.</td><td>The message popup opens in the middle of the screen whenever there is a problem; read it before going on.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Good to know">Display is limited to 1,000 rows. Beyond that, use the “Show” filter to handle the chart in slices.</div>
             </section>
 
             <section id="en-faq">
@@ -655,13 +699,35 @@
 
             <section id="es-trampas">
                 <h2>Consejos y trampas</h2>
+                <h3>Consejos para ir rápido</h3>
                 <ul>
-                    <li>Trabaje por clase: filtre « Solo por decidir », trate el activo, luego el pasivo, los ingresos, los gastos. Las listas en cascada siguen el mismo orden.</li>
-                    <li>Una subcuenta QuickBooks (« subcuenta de « … » » en la ficha) suele vincularse a la cuenta principal de aquí; créela solo si quiere el detalle.</li>
-                    <li>Las cuentas por defecto de QuickBooks (origen « por defecto en QuickBooks ») se reconocen casi todas por alias. Si queda alguna por decidir, infórmelo: su alias se añadirá al plan estándar para todos los clientes siguientes.</li>
-                    <li>El archivo CSV y la lectura directa de QuickBooks no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ». Recargar un plan por la misma vía conserva las decisiones cuya clave (número o nombre) no cambió.</li>
-                    <li>Visualización limitada a 1 000 líneas.</li>
+                    <li><strong>Empiece por lo que es gratis.</strong> Los vínculos de oficio ya están hechos al abrir. Luego haga clic en <kbd>Aceptar las correspondencias por número</kbd>: todo lo que coincide por número o por nombre se vincula de una vez. Solo quedan los casos reales.</li>
+                    <li><strong>Filtre « Solo por decidir ».</strong> La cuadrícula solo muestra el trabajo pendiente, y el avance de arriba dice dónde está.</li>
+                    <li><strong>Trabaje por clase</strong>: el activo, luego el pasivo, los ingresos, los gastos. Las listas en cascada siguen el mismo orden, y permanece en la misma subclase de una línea a otra.</li>
+                    <li><strong>Lea la ficha bajo el nombre de la cuenta.</strong> La naturaleza, el tipo y el subtipo QuickBooks dicen casi siempre en qué clase buscar.</li>
+                    <li><strong>Pregunte al <kbd>✨ Asistente</kbd></strong> cuando un nombre no le diga nada: explica la cuenta y sugiere dónde ubicarla. Para un lote entero, <kbd>✨ Proponer con la IA</kbd> llena la columna de propuestas; nada se decide por usted.</li>
+                    <li><strong>Una subcuenta QuickBooks</strong> (« subcuenta de « … » » en la ficha) suele vincularse a la cuenta principal de aquí; créela solo si quiere el detalle.</li>
+                    <li><strong>Guarde a menudo.</strong> Las decisiones guardadas se conservan aunque salga de la pantalla; un cambio sin guardar se pierde.</li>
+                    <li><strong>Anote sus razones</strong> en la columna Nota para las elecciones discutibles: su contador revisará la correspondencia antes de la etapa 3.</li>
+                    <li><strong>Informe de una cuenta por defecto de QuickBooks no reconocida</strong> (origen « por defecto en QuickBooks » pero aún « por decidir »): su alias se añadirá al plan estándar y beneficiará a todos los clientes siguientes.</li>
                 </ul>
+                <h3>Trampas que evitar</h3>
+                <table>
+                    <thead><tr><th>Trampa</th><th>Qué ocurre</th><th>Cómo evitarla</th></tr></thead>
+                    <tbody>
+                        <tr><td>Poner todo en « Crear »</td><td>Dos planes paralelos, el estándar de 60sec y la copia del antiguo: estados financieros falsos, impuestos en las cuentas equivocadas.</td><td>Vincule primero. Cree solo lo que no tiene equivalente aquí.</td></tr>
+                        <tr><td>Vincular dos cuentas a la misma cuenta de 60sec</td><td>Rechazo al guardar: una cuenta de 60sec solo recibe una cuenta del programa anterior.</td><td>Vincule la segunda a otra cuenta, o créela.</td></tr>
+                        <tr><td>« Crear » eligiendo una cuenta existente</td><td>Rechazo: « Crear » no puede reutilizar un número que su plan 60sec ya conoce.</td><td>Si es esa la cuenta que quiere, es « Vincular ». Si no, deje la cuenta vacía.</td></tr>
+                        <tr><td>Creer que un saldo 0 significa « sin uso »</td><td>QuickBooks devuelve siempre 0 para los ingresos y los gastos. Ignorar una cuenta así puede dejar asientos sin cuenta.</td><td>Tenga en cuenta el recuadro amarillo; verifique en el programa anterior antes de ignorar.</td></tr>
+                        <tr><td>Querer ignorar una cuenta que lleva saldo o que está en uso</td><td>Opción en gris y luego rechazo: el importe, las facturas o los productos no tendrían adónde ir.</td><td>Vincule o cree. La descripción emergente de la opción da la razón exacta.</td></tr>
+                        <tr><td>Cambiar de vía de carga a mitad de camino</td><td>El archivo CSV y la lectura directa no comparten sus decisiones: las cuentas vuelven a « por decidir ».</td><td>Conserve la misma vía de principio a fin.</td></tr>
+                        <tr><td>Renombrar una cuenta en el programa anterior y recargar</td><td>Sin número, el nombre es la clave: la cuenta renombrada vuelve a « por decidir » y la decisión anterior queda huérfana.</td><td>Renombre antes de empezar, o rehaga la decisión tras la recarga.</td></tr>
+                        <tr><td>Pasar a la etapa 3 sin releer los « Crear »</td><td>Una cuenta creada por error existe definitivamente y no se anula desde aquí.</td><td>Filtre « Ya decididas » y relea las líneas « Crear » antes de crear.</td></tr>
+                        <tr><td>Dejar cuentas « por decidir »</td><td>No se migran: sus saldos y sus facturas no tendrán cuenta en las etapas siguientes.</td><td>Apunte al 100 % de avance antes del balance y de las facturas.</td></tr>
+                        <tr><td>Mirar solo el banner superior</td><td>El botón Guardar está abajo: un rechazo puede pasar desapercibido.</td><td>La ventana de mensaje se abre en el centro de la pantalla en cuanto hay un problema; léala antes de continuar.</td></tr>
+                    </tbody>
+                </table>
+                <div class="note" data-titre="Conviene saber">La visualización está limitada a 1 000 líneas. Más allá, use el filtro « Mostrar » para tratar el plan por tramos.</div>
             </section>
 
             <section id="es-faq">
