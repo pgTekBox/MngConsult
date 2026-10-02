@@ -108,6 +108,8 @@
     table.cor input.cpt-in { width: 110px }
     table.cor input.note-in { width: 100% ; min-width: 120px }
     table.cor select.act { width: 120px }
+    table.cor .avert-ign { margin-top: 4px; max-width: 220px; padding: 4px 6px; border-radius: 6px; background: #fffbeb; border: 1px solid #fde68a; color: #78350f; font-size: 11px; line-height: 1.35 }
+    table.cor .avert-ign[hidden] { display: none }
 
     .nom-cible { font-size: 11.5px; color: #047857; display: block; margin-top: 2px; min-height: 14px }
     .nom-cible.inconnu { color: #b45309 }
@@ -317,6 +319,7 @@
                                         <asp:ListItem Value="CREER" Text="Créer" />
                                         <asp:ListItem Value="IGNORER" Text="Ignorer" />
                                     </asp:DropDownList>
+                                    <div class="avert-ign" hidden>⚠️ <span class="avert-ign-t"></span></div>
                                 </td>
 
                                 <td class="cls-cell">
@@ -453,6 +456,15 @@
     // rendu, et l'habitude vaut mieux que l'exception.
     var PLAN = <asp:Literal ID="litPlanJson" runat="server" Text="{}" />;
     var LOGICIEL = '<asp:Literal ID="litLogiciel" runat="server" Text="l’ancien logiciel" />';
+    // Comptes source utilisés par des lignes de factures ou des produits en préparation (T304) : { clé: [lignes, produits] }.
+    var USAGES = <asp:Literal ID="litUsagesJson" runat="server" Text="{}" />;
+    function cleSource(tr) { var h = tr.querySelector('input[type=hidden][id*=_hfCleSource_]'); return h ? h.value : ''; }
+    function texteUsage(u) {
+        var p = [];
+        if (u[0] > 0) p.push(u[0] + ' ligne(s) de facture');
+        if (u[1] > 0) p.push(u[1] + ' produit(s)');
+        return p.join(' et ');
+    }
     var PLAN_CLS = <asp:Literal ID="litPlanClsJson" runat="server" Text="{}" />;
     var PLAN_MERE = <asp:Literal ID="litPlanMereJson" runat="server" Text="{}" />;
     var SOUS_CLASSES = <asp:Literal ID="litSousClassesJson" runat="server" Text="[]" />;
@@ -462,6 +474,26 @@
     // avec les lignes en cause, pour ne pas perdre la saisie de la page.
     function ciblesUniques() {
         var lignes = document.querySelectorAll('tbody tr');
+        // Un compte que la reprise utilise ne s'ignore pas : ses factures et produits n'auraient aucun compte (T304).
+        var ignoresUtilises = [];
+        for (var u = 0; u < lignes.length; u++) {
+            var trU = lignes[u];
+            if (trU.getAttribute('data-cree') === '1') continue;
+            var actU = trU.querySelector('select.act');
+            if (!actU || actU.value !== 'IGNORER') continue;
+            var usage = USAGES[cleSource(trU)];
+            if (!usage) continue;
+            var noU = trU.querySelector('td') ? trU.querySelector('td').textContent.trim() : String(u + 1);
+            var srcU = trU.querySelector('.src-n');
+            var nomU = srcU && srcU.firstChild && srcU.firstChild.nodeType === 3 ? srcU.firstChild.textContent.trim() : '';
+            ignoresUtilises.push('ligne ' + noU + ' : « ' + nomU + ' » de ' + LOGICIEL + ' est utilisé par ' + texteUsage(usage));
+        }
+        if (ignoresUtilises.length > 0) {
+            showAppMessage('Un compte de ' + LOGICIEL + ' utilisé par une facture ou un produit en préparation ne peut pas être ignoré : ces éléments n\'auraient aucun compte.\n\n'
+                + ignoresUtilises.join('\n') + '\n\nLiez-le à un compte de 60sec, ou créez-le.', 'Enregistrement impossible');
+            return false;
+        }
+
         // Un compte qui porte un solde ne s'ignore pas : ce montant n'aurait nulle part où aller (T303).
         var ignoresAvecSolde = [];
         for (var s = 0; s < lignes.length; s++) {
@@ -554,6 +586,26 @@
                     var optI = actI.querySelector('option[value="IGNORER"]');
                     if (optI && actI.value !== 'IGNORER') { optI.disabled = true; optI.title = 'Ce compte porte un solde : il ne peut pas être ignoré.'; }
                 }
+                // Même chose pour un compte que des factures ou des produits en préparation utilisent (T304).
+                var usageI = USAGES[cleSource(tr)];
+                if (actI && usageI) {
+                    var optU = actI.querySelector('option[value="IGNORER"]');
+                    if (optU && actI.value !== 'IGNORER') { optU.disabled = true; optU.title = 'Ce compte est utilisé par ' + texteUsage(usageI) + ' en préparation : il ne peut pas être ignoré.'; }
+                }
+                // Revenus et dépenses à solde 0 : QuickBooks ne donne pas leur solde. Avertir, sans bloquer (T304).
+                var avert = tr.querySelector('.avert-ign');
+                var hfNat = tr.querySelector('input[type=hidden][id*=_hfTypeSource_]');
+                var natureI = hfNat ? hfNat.value : '';
+                function majAvertIgnorer() {
+                    if (!avert || !actI) return;
+                    var aRisque = actI.value === 'IGNORER' && (natureI === 'PRODUIT' || natureI === 'CHARGE')
+                        && !parseFloat(tr.getAttribute('data-solde') || '0') && !usageI;
+                    if (aRisque) {
+                        avert.querySelector('.avert-ign-t').textContent = LOGICIEL + ' ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n\'a pas servi avant de l\'ignorer.';
+                    }
+                    avert.hidden = !aRisque;
+                }
+                if (actI) { actI.addEventListener('change', majAvertIgnorer); majAvertIgnorer(); }
                 if (!cls || !scl || !sel || !hid) return;
 
 

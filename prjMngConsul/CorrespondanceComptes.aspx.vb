@@ -145,6 +145,22 @@ Public Class CorrespondanceComptes
             Dim nomLogiciel As String = If(rLog Is Nothing OrElse IsDBNull(rLog("NomLogiciel")), "l'ancien logiciel", Convert.ToString(rLog("NomLogiciel")))
             litLogiciel.Text = HttpUtility.JavaScriptStringEncode(nomLogiciel)
 
+            ' Les comptes source que des factures ou des produits en préparation
+            ' utilisent ne s'ignorent pas (T304) : la page grise « Ignorer » sur
+            ' ces lignes et refuse l'envoi, la base refuse de son côté.
+            Dim pUse As New Collection
+            pUse.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim dsUse As DataSet = ExecuteSQLds("s0885GetComptesSourceUtilises", pUse)
+            Dim usages As New Dictionary(Of String, Integer())
+            If dsUse IsNot Nothing AndAlso dsUse.Tables.Count > 0 Then
+                For Each rU As DataRow In dsUse.Tables(0).Rows
+                    usages(Convert.ToString(rU("CleSource"))) =
+                        New Integer() {Convert.ToInt32(rU("NbLignesFactures")), Convert.ToInt32(rU("NbProduits"))}
+                Next
+            End If
+            litUsagesJson.Text = Newtonsoft.Json.JsonConvert.SerializeObject(usages,
+                New Newtonsoft.Json.JsonSerializerSettings With {.StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling.EscapeHtml})
+
         Catch ex As Exception
             Alerte(pnlErreur, litErreur, "Lecture du plan comptable : " & Server.HtmlEncode(ex.Message))
         End Try

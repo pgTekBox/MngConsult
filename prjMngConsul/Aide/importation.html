@@ -194,7 +194,7 @@
                         <tr><td>Compte</td><td>Numéro du compte source.</td></tr>
                         <tr><td>Nom</td><td>Nom du compte source.</td></tr>
                         <tr><td>Nature</td><td>ACTIF, PASSIF, CAPITAUX, PRODUIT ou CHARGE.</td></tr>
-                        <tr><td>Solde / Sens</td><td>Solde lu et sens débit ou crédit. <strong>Un compte dont le solde n’est pas nul ne pourra pas être ignoré à l’étape 2</strong> : il devra être lié à un compte de 60sec ou créé, sinon ce montant disparaîtrait de la reprise. Un compte vide (solde absent ou 0) s’ignore librement.</td></tr>
+                        <tr><td>Solde / Sens</td><td>Solde lu et sens débit ou crédit. <strong>Un compte dont le solde n’est pas nul ne pourra pas être ignoré à l’étape 2</strong> : il devra être lié à un compte de 60sec ou créé, sinon ce montant disparaîtrait de la reprise. Un compte à solde 0 peut s’ignorer, avec deux réserves : QuickBooks ne donne pas le solde des comptes de revenus et de dépenses (ils reviennent toujours à 0, même s’ils ont servi), et un compte utilisé par une facture ou un produit en préparation ne s’ignore pas.</td></tr>
                         <tr><td>Verdict</td><td>Nouveau, Déjà au plan, Doublon ou Invalide.</td></tr>
                         <tr><td>Détail</td><td>Explication du verdict ou anomalie.</td></tr>
                         <tr><td>Type d’origine / Sous-type</td><td>Type et sous-type de l’ancien logiciel.</td></tr>
@@ -270,6 +270,8 @@
                     <li><strong>Lier</strong> rattache à un compte existant. <strong>Créer</strong> ajoute le compte à l’étape 3 (numéro source repris ; s’il est déjà pris, le champ est vidé et le numéro sera automatique). <strong>Ignorer</strong> écarte le compte. Remettre « — à décider » annule la décision.</li>
                     <li><strong>Un seul compte source par compte cible</strong> (vérifié dans le navigateur, puis par la base).</li>
                     <li><strong>Un compte qui porte un solde ne peut pas être ignoré</strong> : l’option « Ignorer » est grisée sur ces lignes, le navigateur refuse l’envoi et la base refuse la décision. Liez-le ou créez-le ; seuls les comptes vides (solde absent ou 0) s’ignorent.</li>
+                    <li><strong>Un compte utilisé par une facture ou un produit en préparation ne peut pas être ignoré</strong>, même à solde 0 : ses lignes de factures et ses produits n’auraient plus de compte. Option « Ignorer » grisée, refus du navigateur, refus de la base. Une fois les factures et les produits créés, le compte n’est plus retenu.</li>
+                    <li><strong>Revenus et dépenses à solde 0 : avertissement, sans blocage.</strong> QuickBooks ne fournit un solde que pour les comptes de bilan. Quand vous choisissez « Ignorer » sur un compte de revenus ou de dépenses à 0, un encadré jaune sous la liste Action rappelle de vérifier qu’il n’a pas servi. La décision reste la vôtre.</li>
                     <li>« Créer » ne peut pas reprendre un numéro que le plan connaît déjà, ni le même numéro deux fois.</li>
                     <li>Les comptes créés sont verrouillés : « Créé ✓ » grisé, note en lecture seule.</li>
                     <li>Proposition par IA : l’IA reçoit les comptes encore à décider (nom complet, nature, type, sous-type, origine, solde, description) et tout votre plan. Une réponse est écartée si le compte est inconnu ou la nature incompatible. Rien n’est décidé avant <kbd>Enregistrer</kbd>.</li>
@@ -291,6 +293,8 @@
                     <li><span class="msg">« Le compte N de 60sec recevrait k comptes de QuickBooks (…). Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks… »</span> — refus à l’enregistrement.</li>
                     <li><span class="msg">« Le compte N de 60sec est déjà lié à « X » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> — refus à l’enregistrement.</li>
                     <li><span class="msg">« « X » de QuickBooks porte un solde de 92 732,08 $ : il ne peut pas être ignoré. Liez-le à un compte de 60sec ou créez-le, sinon ce montant disparaîtrait de la reprise. »</span> — refus à l’enregistrement ; le même contrôle, dans le navigateur, s’intitule « Un compte de QuickBooks qui porte un solde ne peut pas être ignoré ».</li>
+                    <li><span class="msg">« « X » de QuickBooks est utilisé par 3 ligne(s) de facture et 11 produit(s) en préparation : il ne peut pas être ignoré. Liez-le à un compte de 60sec ou créez-le, sinon ces éléments n’auraient aucun compte. »</span> — refus à l’enregistrement ; dans le navigateur : « Un compte de QuickBooks utilisé par une facture ou un produit en préparation ne peut pas être ignoré ».</li>
+                    <li><span class="msg">« ⚠️ QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. »</span> — encadré jaune sous la liste Action ; simple avertissement, l’enregistrement reste possible.</li>
                     <li><span class="msg">« Le numéro N serait créé k fois… Un numéro ne se crée qu’une fois. »</span> — refus à l’enregistrement.</li>
                 </ul>
                 <h3>La liaison d’office par alias</h3>
@@ -780,7 +784,7 @@
                         <tr><td>Account</td><td>Source account number.</td></tr>
                         <tr><td>Name</td><td>Source account name.</td></tr>
                         <tr><td>Nature</td><td>ASSET, LIABILITY, EQUITY, REVENUE or EXPENSE.</td></tr>
-                        <tr><td>Balance / Side</td><td>Balance read and debit or credit side. <strong>An account whose balance is not zero cannot be ignored at step 2</strong>: it will have to be linked to a 60sec account or created, otherwise that amount would vanish from the migration. An empty account (no balance or 0) can be ignored freely.</td></tr>
+                        <tr><td>Balance / Side</td><td>Balance read and debit or credit side. <strong>An account whose balance is not zero cannot be ignored at step 2</strong>: it will have to be linked to a 60sec account or created, otherwise that amount would vanish from the migration. A zero-balance account can be ignored, with two caveats: QuickBooks does not give the balance of revenue and expense accounts (they always come back as 0, even when used), and an account used by an invoice or a product in preparation cannot be ignored.</td></tr>
                         <tr><td>Verdict</td><td>New, Already in the chart, Duplicate or Invalid.</td></tr>
                         <tr><td>Detail</td><td>Explanation of the verdict or anomaly.</td></tr>
                         <tr><td>Source type / Subtype</td><td>Type and subtype from the former application.</td></tr>
@@ -856,6 +860,8 @@
                     <li><strong>Link</strong> attaches to an existing account. <strong>Create</strong> adds the account in step 3 (source number reused; if already taken, the field is cleared and the number will be automatic). <strong>Ignore</strong> sets the account aside. Putting back “— to decide” cancels the decision.</li>
                     <li><strong>One source account per target account</strong> (checked in the browser, then by the database).</li>
                     <li><strong>An account that carries a balance cannot be ignored</strong>: the “Ignore” option is greyed out on those rows, the browser refuses the send and the database refuses the decision. Link it or create it; only empty accounts (no balance or 0) can be ignored.</li>
+                    <li><strong>An account used by an invoice or a product in preparation cannot be ignored</strong>, even with a zero balance: its invoice lines and products would have no account left. “Ignore” option greyed out, browser refusal, database refusal. Once the invoices and products are created, the account is no longer held.</li>
+                    <li><strong>Revenue and expense accounts at zero: a warning, not a block.</strong> QuickBooks only provides a balance for balance-sheet accounts. When you choose “Ignore” on a revenue or expense account at 0, a yellow note under the Action list reminds you to check it has not been used. The decision stays yours.</li>
                     <li>“Create” cannot reuse a number the chart already knows, nor the same number twice.</li>
                     <li>Created accounts are locked: “Created ✓” greyed out, read-only note.</li>
                     <li>AI suggestion: the AI receives the accounts still to decide (full name, nature, type, subtype, origin, balance, description) and your whole chart. An answer is discarded if the account is unknown or the nature incompatible. Nothing is decided before <kbd>Save</kbd>.</li>
@@ -877,6 +883,8 @@
                     <li><span class="msg">“60sec account N would receive k QuickBooks accounts (…). One 60sec account receives only one QuickBooks account…”</span> — refused on save.</li>
                     <li><span class="msg">“60sec account N is already linked to “X” from QuickBooks. One 60sec account receives only one QuickBooks account.”</span> — refused on save.</li>
                     <li><span class="msg">““X” from QuickBooks carries a balance of $92,732.08: it cannot be ignored. Link it to a 60sec account or create it, otherwise that amount would vanish from the migration.”</span> — refused on save; the same check in the browser is titled “A QuickBooks account that carries a balance cannot be ignored”.</li>
+                    <li><span class="msg">““X” from QuickBooks is used by 3 invoice line(s) and 11 product(s) in preparation: it cannot be ignored. Link it to a 60sec account or create it, otherwise these items would have no account.”</span> — refused on save; in the browser: “A QuickBooks account used by an invoice or a product in preparation cannot be ignored”.</li>
+                    <li><span class="msg">“⚠️ QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.”</span> — yellow note under the Action list; a warning only, saving remains possible.</li>
                     <li><span class="msg">“Number N would be created k times… A number is created only once.”</span> — refused on save.</li>
                 </ul>
                 <h3>The outright link by alias</h3>
@@ -1366,7 +1374,7 @@
                         <tr><td>Cuenta</td><td>Número de la cuenta de origen.</td></tr>
                         <tr><td>Nombre</td><td>Nombre de la cuenta de origen.</td></tr>
                         <tr><td>Naturaleza</td><td>ACTIVO, PASIVO, CAPITAL, INGRESO o GASTO.</td></tr>
-                        <tr><td>Saldo / Sentido</td><td>Saldo leído y sentido debe o haber. <strong>Una cuenta cuyo saldo no es cero no podrá ignorarse en la etapa 2</strong>: deberá vincularse a una cuenta de 60sec o crearse; si no, ese importe desaparecería de la migración. Una cuenta vacía (sin saldo o 0) se ignora libremente.</td></tr>
+                        <tr><td>Saldo / Sentido</td><td>Saldo leído y sentido debe o haber. <strong>Una cuenta cuyo saldo no es cero no podrá ignorarse en la etapa 2</strong>: deberá vincularse a una cuenta de 60sec o crearse; si no, ese importe desaparecería de la migración. Una cuenta con saldo 0 puede ignorarse, con dos reservas: QuickBooks no da el saldo de las cuentas de ingresos y de gastos (siempre vuelven a 0, aunque se hayan usado), y una cuenta usada por una factura o un producto en preparación no se ignora.</td></tr>
                         <tr><td>Veredicto</td><td>Nueva, Ya en el plan, Duplicado o Inválida.</td></tr>
                         <tr><td>Detalle</td><td>Explicación del veredicto o anomalía.</td></tr>
                         <tr><td>Tipo de origen / Subtipo</td><td>Tipo y subtipo del programa anterior.</td></tr>
@@ -1442,6 +1450,8 @@
                     <li><strong>Vincular</strong> asocia a una cuenta existente. <strong>Crear</strong> añade la cuenta en la etapa 3 (se reutiliza el número de origen; si ya está tomado, el campo se vacía y el número será automático). <strong>Ignorar</strong> descarta la cuenta. Volver a « — por decidir » anula la decisión.</li>
                     <li><strong>Una sola cuenta de origen por cuenta destino</strong> (verificado en el navegador y luego por la base).</li>
                     <li><strong>Una cuenta que lleva saldo no puede ignorarse</strong>: la opción « Ignorar » aparece en gris en esas líneas, el navegador rechaza el envío y la base rechaza la decisión. Vincúlela o créela; solo las cuentas vacías (sin saldo o 0) se ignoran.</li>
+                    <li><strong>Una cuenta usada por una factura o un producto en preparación no puede ignorarse</strong>, ni siquiera con saldo 0: sus líneas de factura y sus productos se quedarían sin cuenta. Opción « Ignorar » en gris, rechazo del navegador, rechazo de la base. Una vez creadas las facturas y los productos, la cuenta deja de estar retenida.</li>
+                    <li><strong>Ingresos y gastos con saldo 0: aviso, sin bloqueo.</strong> QuickBooks solo da saldo para las cuentas de balance. Cuando elige « Ignorar » en una cuenta de ingresos o de gastos a 0, un recuadro amarillo bajo la lista Acción recuerda verificar que no se haya usado. La decisión sigue siendo suya.</li>
                     <li>« Crear » no puede reutilizar un número que el plan ya conoce, ni el mismo número dos veces.</li>
                     <li>Las cuentas creadas quedan bloqueadas: « Creada ✓ » en gris, nota de solo lectura.</li>
                     <li>Propuesta por IA: la IA recibe las cuentas aún por decidir (nombre completo, naturaleza, tipo, subtipo, origen, saldo, descripción) y todo su plan. Una respuesta se descarta si la cuenta es desconocida o la naturaleza incompatible. Nada se decide antes de <kbd>Guardar</kbd>.</li>
@@ -1463,6 +1473,8 @@
                     <li><span class="msg">« La cuenta N de 60sec recibiría k cuentas de QuickBooks (…). Una cuenta de 60sec solo recibe una cuenta de QuickBooks… »</span> — rechazo al guardar.</li>
                     <li><span class="msg">« La cuenta N de 60sec ya está vinculada a « X » de QuickBooks. Una cuenta de 60sec solo recibe una cuenta de QuickBooks. »</span> — rechazo al guardar.</li>
                     <li><span class="msg">« « X » de QuickBooks lleva un saldo de 92 732,08 $: no puede ignorarse. Vincúlela a una cuenta de 60sec o créela; si no, ese importe desaparecería de la migración. »</span> — rechazo al guardar; el mismo control, en el navegador, se titula « Una cuenta de QuickBooks que lleva saldo no puede ignorarse ».</li>
+                    <li><span class="msg">« « X » de QuickBooks es usada por 3 línea(s) de factura y 11 producto(s) en preparación: no puede ignorarse. Vincúlela a una cuenta de 60sec o créela; si no, esos elementos se quedarían sin cuenta. »</span> — rechazo al guardar; en el navegador: « Una cuenta de QuickBooks usada por una factura o un producto en preparación no puede ignorarse ».</li>
+                    <li><span class="msg">« ⚠️ QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. »</span> — recuadro amarillo bajo la lista Acción; solo un aviso, se puede guardar.</li>
                     <li><span class="msg">« El número N se crearía k veces… Un número solo se crea una vez. »</span> — rechazo al guardar.</li>
                 </ul>
                 <h3>El vínculo directo por alias</h3>
