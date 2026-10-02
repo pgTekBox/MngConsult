@@ -224,6 +224,15 @@
                 <h2>Étape 2 : Correspondance des comptes</h2>
                 <div class="note" data-titre="Aide dédiée">Cet écran a sa propre page d’aide, pas à pas : <a href="correspondance-comptes.html">Correspondance des comptes</a> — comment lier, comment créer, comment ignorer, la fenêtre d’enregistrement et les messages qui nomment les deux logiciels.</div>
                 <p>Décide, compte par compte, ce que devient chaque compte de l’ancien logiciel : le lier à un compte existant, le créer, ou l’ignorer (<span class="chemin">Importation › Correspondance des comptes</span>). Rien n’est écrit en comptabilité : les décisions sont conservées à part.</p>
+                <h3>En bref</h3>
+                <ol>
+                    <li>À l’ouverture, une partie du travail est déjà faite : les comptes dont le nom QuickBooks est connu du plan standard arrivent <strong>liés d’office</strong>, et les propositions « même nom » arrivent préréglées sur « Lier ».</li>
+                    <li>Acceptez d’un coup ce qui est sûr avec <kbd>Accepter les correspondances par numéro</kbd>, puis, si vous le souhaitez, demandez des propositions pour le reste avec <kbd>✨ Proposer avec l’IA</kbd>.</li>
+                    <li>Filtrez sur « À décider seulement » et tranchez ligne par ligne : <strong>Lier</strong> (presque toujours), <strong>Créer</strong> (seulement si rien ne convient) ou <strong>Ignorer</strong> (comptes vides et inutilisés).</li>
+                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd>. S’il y a un problème, une fenêtre l’explique au centre de l’écran ; rien de fautif n’est enregistré.</li>
+                    <li>Quand l’avancement atteint 100 %, passez à l’étape 3 par <kbd>Créer les comptes au plan →</kbd> pour créer réellement les comptes « À créer ».</li>
+                </ol>
+                <p>Rien de ce qui se fait ici n’écrit en comptabilité : vous pouvez enregistrer, revenir et changer d’avis autant de fois que nécessaire.</p>
                 <h3>Barre du haut</h3>
                 <ul>
                     <li>Filtre : Tout, À décider seulement, Déjà décidés, Ajoutés après l’ouverture, Par défaut dans QuickBooks.</li>
@@ -231,35 +240,48 @@
                     <li><kbd>Accepter les correspondances par numéro</kbd> : « Retenir toutes les correspondances où le numéro de compte concorde ? » Lie toutes les propositions reconnues par numéro <strong>ou nom</strong>, avec la note « Proposition acceptée : même numéro/nom de compte. »</li>
                 </ul>
                 <h3>Avancement</h3>
-                <p>« n sur N (x %) » et compteurs À décider, Liés, À créer, Ignorés, Comptes au plan. Quand tout est décidé : « Tous les comptes sont décidés. La correspondance est prête à être relue et signée par votre comptable… »</p>
+                <table>
+                    <thead><tr><th>Élément</th><th>Ce que ça dit</th></tr></thead>
+                    <tbody>
+                        <tr><td>« n sur N (x %) » et la barre</td><td>Comptes décidés sur le total du lot. Une ligne liée d’office compte déjà comme décidée.</td></tr>
+                        <tr><td>À décider</td><td>Lignes sans décision. Tant qu’il en reste, ces comptes ne seront pas repris.</td></tr>
+                        <tr><td>Liés</td><td>Comptes rattachés à un compte existant de votre plan.</td></tr>
+                        <tr><td>À créer</td><td>Comptes marqués « Créer » ; ils n’existent pas encore, l’étape 3 les créera.</td></tr>
+                        <tr><td>Ignorés</td><td>Comptes écartés de la reprise.</td></tr>
+                        <tr><td>Comptes au plan</td><td>Nombre de comptes de votre plan 60sec, c’est-à-dire le choix offert dans « Compte chez vous ».</td></tr>
+                    </tbody>
+                </table>
+                <p>Quand tout est décidé : « Tous les comptes sont décidés. La correspondance est prête à être relue et signée par votre comptable… ». Sans plan chargé : « Aucun plan comptable n’a encore été chargé pour cette compagnie », avec le lien vers l’étape 1. Si le filtre ne retient rien : « Rien à afficher avec ce filtre. »</p>
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>Rang.</td></tr>
                         <tr><td>Compte de l’ancien logiciel</td><td>Numéro (ou « sans numéro »), nom, et fiche source : nature, type et sous-type QuickBooks, solde source, origine (« ajouté le … » ou « par défaut dans QuickBooks »), « sous-compte de « … » », description, anomalie.</td></tr>
-                        <tr><td>Solde</td><td>Solde source.</td></tr>
+                        <tr><td>Solde</td><td>Solde du compte dans l’ancien logiciel. Un solde différent de 0 interdit « Ignorer ». Attention : pour les comptes de revenus et de dépenses, QuickBooks renvoie toujours 0, même s’ils ont servi.</td></tr>
                         <tr><td>Ce que nous proposons</td><td>Pastille « même numéro », « même nom », « nom QuickBooks connu — lié d’office » (le nom, français ou anglais, ou le sous-type QuickBooks est un alias posé sur un compte du plan par défaut : la liaison est faite au chargement, elle apparaît déjà décidée « Lier » et reste modifiable), « IA » (avec % de confiance et raison), « aucune proposition » ou « créé au plan ». Si l’IA diverge : « ✨ l’IA suggère plutôt … ».</td></tr>
-                        <tr><td>Action</td><td>« — à décider », Lier, Créer ou Ignorer. Quand la proposition est « même nom », la liste arrive préréglée sur <b>Lier</b> avec le compte proposé déjà en place : il ne reste qu’à enregistrer, ou à changer. Rien n’est décidé tant que vous n’enregistrez pas.</td></tr>
+                        <tr><td>Action</td><td>« — à décider », Lier, Créer ou Ignorer. Quand la proposition est « même nom », la liste arrive préréglée sur <b>Lier</b> avec le compte proposé déjà en place : il ne reste qu’à enregistrer, ou à changer. Rien n’est décidé tant que vous n’enregistrez pas. « Ignorer » est grisé quand le compte porte un solde ou qu’une facture ou un produit en préparation l’utilise (l’info-bulle dit pourquoi) ; sur un compte de revenus ou de dépenses à 0, un encadré jaune rappelle de vérifier qu’il n’a pas servi. Une ligne « Créé ✓ » est verrouillée : son compte existe déjà.</td></tr>
                         <tr><td>Classe, Sous-classe, Compte chez vous</td><td>Trois listes en cascade : la classe et la sous-classe sont empilées l’une sous l’autre dans la même colonne (classe avec code, nom et plage de numéros), puis le compte. Un compte hors filtre reste affiché « (hors filtre) ».</td></tr>
                         <tr><td>Note</td><td>500 caractères au maximum. Préremplie « Lié d’office : nom QuickBooks connu du plan (alias). » pour une liaison faite par alias, ou « Proposition acceptée : … » après une acceptation en lot.</td></tr>
                     </tbody>
                 </table>
-                <h3>Bas de page</h3>
-                <ul>
-                    <li>Rappel « Lier / Créer / Ignorer ».</li>
-                    <li><kbd>Enregistrer les correspondances</kbd> : conserve les décisions. S’il y a un problème (deux lignes vers le même compte, « Créer » sur un numéro déjà connu, comptes restés à décider, erreur à l’enregistrement), une fenêtre s’ouvre par-dessus la grille avec l’explication ; <kbd>OK</kbd> ou Échap la ferme. Le même message reste affiché dans le bandeau en haut de la page.</li>
-                    <li><kbd>Créer les comptes au plan →</kbd> : ouvre l’étape 3.</li>
-                </ul>
-                <h3>La fenêtre de message à l’enregistrement</h3>
-                <p>Le bandeau de résultat est en haut de la page, loin du bouton <kbd>Enregistrer les correspondances</kbd> qui est tout en bas : on pouvait ne pas le voir. Dès qu’il y a un problème, une fenêtre s’ouvre donc par-dessus la grille, au centre de l’écran, avec un titre et l’explication. <kbd>OK</kbd>, la touche Échap ou un clic à côté la ferment ; le bandeau reste affiché en haut pour relecture. Quand tout est enregistré sans réserve, aucune fenêtre ne s’ouvre.</p>
+                <h3>La liaison d’office par alias</h3>
+                <p>Le plan comptable par défaut de 60Sec-AI connaît les noms que QuickBooks donne à ses comptes par défaut, en français et en anglais, ainsi que leurs sous-types : ce sont les <b>alias</b>, tenus par l’équipe 60Sec. Au chargement de votre plan QuickBooks, chaque compte dont le nom est un alias, ou dont le sous-type ne désigne qu’un seul compte d’ici, est <b>lié d’office</b> au compte de même numéro chez vous. Ce n’est pas une proposition à accepter : la décision « Lier » existe déjà quand la grille s’ouvre.</p>
                 <table>
-                    <tr><th>Titre de la fenêtre</th><th>Quand</th><th>Quoi faire</th></tr>
-                    <tr><td>Enregistrement impossible</td><td>Avant même l’envoi : deux lignes « Lier » visent le même compte chez vous, ou une ligne « Créer » reprend un numéro que votre plan connaît déjà. Rien n’est enregistré.</td><td>Les lignes fautives sont citées (numéro de ligne et nom). Liez les autres ailleurs ou créez-les ; pour un numéro déjà connu, choisissez « Lier » ou videz le compte.</td></tr>
-                    <tr><td>Enregistrement impossible</td><td>Aucune ligne de correspondance n’a été trouvée dans la grille.</td><td>Vérifiez que le lot est bien chargé (étape 1).</td></tr>
-                    <tr><td>Comptes à décider</td><td>Les décisions sont enregistrées, mais N comptes restent à décider. Variante : M d’entre eux sont « Créer » sans numéro — ce n’est pas un problème, le numéro sera attribué à l’étape 3.</td><td>Vérifiez qu’un « Lier » pointe bien vers un compte de votre plan : un « Lier » vers un compte inconnu n’est pas conservé et la ligne revient à décider.</td></tr>
-                    <tr><td>Erreur à l’enregistrement</td><td>La base a refusé l’enregistrement (par exemple « le numéro N existe déjà dans votre plan »).</td><td>Le message de l’erreur est reproduit tel quel ; corrigez la ligne visée puis enregistrez de nouveau.</td></tr>
+                    <thead><tr><th>Ce que vous voyez</th><th>Ce que ça veut dire</th></tr></thead>
+                    <tbody>
+                        <tr><td>Pastille « nom QuickBooks connu — lié d’office » suivie du compte d’ici</td><td>La liaison vient d’un alias. Elle est aussi sûre qu’un numéro commun.</td></tr>
+                        <tr><td>Action déjà sur « Lier », compte chez vous déjà choisi</td><td>La décision est prise et compte dans « Liés » et dans les décidés ; le filtre « Déjà décidés » la montre.</td></tr>
+                        <tr><td>Note « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La trace de l’origine. Vous pouvez la compléter ou la remplacer.</td></tr>
+                        <tr><td>Un compte QuickBooks reconnu par alias, mais encore « à décider »</td><td>Un autre compte QuickBooks visait déjà le même compte d’ici : seul le premier est lié d’office. Liez celui-ci ailleurs, ou créez-le.</td></tr>
+                    </tbody>
                 </table>
+                <ul>
+                    <li>Vous gardez la main : changez l’action, le compte cible ou la note comme pour toute décision, puis <kbd>Enregistrer les correspondances</kbd>.</li>
+                    <li><kbd>Accepter les correspondances par numéro</kbd> et <kbd>✨ Proposer avec l’IA</kbd> ne concernent pas ces lignes : elles sont déjà décidées.</li>
+                    <li>Recharger le plan refait la liaison d’office pour les comptes qui n’ont pas encore de décision ; une décision existante n’est jamais écrasée.</li>
+                    <li>Un compte par défaut de QuickBooks qui n’est pas reconnu mérite d’être signalé : son alias sera ajouté au plan par défaut et profitera à tous les clients suivants.</li>
+                </ul>
                 <h3>Le bouton « ✨ Assistant » sur chaque compte</h3>
                 <p>Dans la colonne « Compte de l’ancien logiciel », chaque ligne porte un petit bouton <kbd>✨ Assistant</kbd> à côté du nom. Il ouvre une fenêtre flottante (déplaçable par sa barre bleue) où l’assistant IA explique ce compte le plus complètement possible, en quatre parties : ce que le compte représente (définition, opérations typiques), ce que disent ses attributs (nature, type et sous-type QuickBooks, sens du solde, solde actuel, origine « par défaut » ou « ajouté », sous-compte, description, anomalie), où le ranger dans 60Sec-AI (classe, sous-classe, compte existant le plus proche, ou « Créer » avec un numéro dans la plage), et les points d’attention.</p>
                 <p>L’assistant reçoit la fiche complète du compte, la décision déjà prise s’il y en a une, et votre plan comptable. Il ne décide rien : ses suggestions se retrouvent dans la fenêtre seulement, à vous de choisir Lier, Créer ou Ignorer. La réponse prend une dizaine de secondes ; <kbd>Copier</kbd> la met dans le presse-papiers, <kbd>Fermer</kbd> ou Échap referme la fenêtre. Chaque question a un coût (quelques cents), affiché au bas de la fenêtre avec le total du mois.</p>
@@ -295,6 +317,21 @@
                     <li><strong>L’avertissement ne bloque rien</strong> : il disparaît si vous changez d’action. Le filet suivant est la balance de vérification, qui signale un compte ignoré portant un montant.</li>
                     <li><strong>Pour sortir d’un refus</strong> : liez le compte à son équivalent de 60sec, ou créez-le. Si vous tenez vraiment à l’écarter, videz-le d’abord dans l’ancien logiciel, puis rechargez le plan.</li>
                 </ul>
+                <h3>Bas de page</h3>
+                <ul>
+                    <li>Rappel « Lier / Créer / Ignorer ».</li>
+                    <li><kbd>Enregistrer les correspondances</kbd> : conserve les décisions. S’il y a un problème (deux lignes vers le même compte, « Créer » sur un numéro déjà connu, comptes restés à décider, erreur à l’enregistrement), une fenêtre s’ouvre par-dessus la grille avec l’explication ; <kbd>OK</kbd> ou Échap la ferme. Le même message reste affiché dans le bandeau en haut de la page.</li>
+                    <li><kbd>Créer les comptes au plan →</kbd> : ouvre l’étape 3.</li>
+                </ul>
+                <h3>La fenêtre de message à l’enregistrement</h3>
+                <p>Le bandeau de résultat est en haut de la page, loin du bouton <kbd>Enregistrer les correspondances</kbd> qui est tout en bas : on pouvait ne pas le voir. Dès qu’il y a un problème, une fenêtre s’ouvre donc par-dessus la grille, au centre de l’écran, avec un titre et l’explication. <kbd>OK</kbd>, la touche Échap ou un clic à côté la ferment ; le bandeau reste affiché en haut pour relecture. Quand tout est enregistré sans réserve, aucune fenêtre ne s’ouvre.</p>
+                <table>
+                    <tr><th>Titre de la fenêtre</th><th>Quand</th><th>Quoi faire</th></tr>
+                    <tr><td>Enregistrement impossible</td><td>Avant même l’envoi : deux lignes « Lier » visent le même compte chez vous, ou une ligne « Créer » reprend un numéro que votre plan connaît déjà. Rien n’est enregistré.</td><td>Les lignes fautives sont citées (numéro de ligne et nom). Liez les autres ailleurs ou créez-les ; pour un numéro déjà connu, choisissez « Lier » ou videz le compte.</td></tr>
+                    <tr><td>Enregistrement impossible</td><td>Aucune ligne de correspondance n’a été trouvée dans la grille.</td><td>Vérifiez que le lot est bien chargé (étape 1).</td></tr>
+                    <tr><td>Comptes à décider</td><td>Les décisions sont enregistrées, mais N comptes restent à décider. Variante : M d’entre eux sont « Créer » sans numéro — ce n’est pas un problème, le numéro sera attribué à l’étape 3.</td><td>Vérifiez qu’un « Lier » pointe bien vers un compte de votre plan : un « Lier » vers un compte inconnu n’est pas conservé et la ligne revient à décider.</td></tr>
+                    <tr><td>Erreur à l’enregistrement</td><td>La base a refusé l’enregistrement (par exemple « le numéro N existe déjà dans votre plan »).</td><td>Le message de l’erreur est reproduit tel quel ; corrigez la ligne visée puis enregistrez de nouveau.</td></tr>
+                </table>
                 <h3>Les messages nomment les deux logiciels</h3>
                 <p>Depuis le 1er octobre 2026, un refus à l’enregistrement dit toujours de quel côté est chaque compte : « de 60sec » pour vos comptes d’ici, et le nom du logiciel d’où vient le plan (« QuickBooks » pour une lecture directe ou un fichier QuickBooks, « Sage 50 », « Acomba », sinon « l’ancien logiciel ») pour les comptes de l’ancien logiciel. Exemple : <span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> Le détail de chaque message est dans l’aide dédiée.</p>
                 <h3>Messages</h3>
@@ -314,23 +351,6 @@
                     <li><span class="msg">« « X » de QuickBooks est utilisé par 3 ligne(s) de facture et 11 produit(s) en préparation : il ne peut pas être ignoré. Liez-le à un compte de 60sec ou créez-le, sinon ces éléments n’auraient aucun compte. »</span> — refus à l’enregistrement ; dans le navigateur : « Un compte de QuickBooks utilisé par une facture ou un produit en préparation ne peut pas être ignoré ».</li>
                     <li><span class="msg">« ⚠️ QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. »</span> — encadré jaune sous la liste Action ; simple avertissement, l’enregistrement reste possible.</li>
                     <li><span class="msg">« Le numéro N serait créé k fois… Un numéro ne se crée qu’une fois. »</span> — refus à l’enregistrement.</li>
-                </ul>
-                <h3>La liaison d’office par alias</h3>
-                <p>Le plan comptable par défaut de 60Sec-AI connaît les noms que QuickBooks donne à ses comptes par défaut, en français et en anglais, ainsi que leurs sous-types : ce sont les <b>alias</b>, tenus par l’équipe 60Sec. Au chargement de votre plan QuickBooks, chaque compte dont le nom est un alias, ou dont le sous-type ne désigne qu’un seul compte d’ici, est <b>lié d’office</b> au compte de même numéro chez vous. Ce n’est pas une proposition à accepter : la décision « Lier » existe déjà quand la grille s’ouvre.</p>
-                <table>
-                    <thead><tr><th>Ce que vous voyez</th><th>Ce que ça veut dire</th></tr></thead>
-                    <tbody>
-                        <tr><td>Pastille « nom QuickBooks connu — lié d’office » suivie du compte d’ici</td><td>La liaison vient d’un alias. Elle est aussi sûre qu’un numéro commun.</td></tr>
-                        <tr><td>Action déjà sur « Lier », compte chez vous déjà choisi</td><td>La décision est prise et compte dans « Liés » et dans les décidés ; le filtre « Déjà décidés » la montre.</td></tr>
-                        <tr><td>Note « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La trace de l’origine. Vous pouvez la compléter ou la remplacer.</td></tr>
-                        <tr><td>Un compte QuickBooks reconnu par alias, mais encore « à décider »</td><td>Un autre compte QuickBooks visait déjà le même compte d’ici : seul le premier est lié d’office. Liez celui-ci ailleurs, ou créez-le.</td></tr>
-                    </tbody>
-                </table>
-                <ul>
-                    <li>Vous gardez la main : changez l’action, le compte cible ou la note comme pour toute décision, puis <kbd>Enregistrer les correspondances</kbd>.</li>
-                    <li><kbd>Accepter les correspondances par numéro</kbd> et <kbd>✨ Proposer avec l’IA</kbd> ne concernent pas ces lignes : elles sont déjà décidées.</li>
-                    <li>Recharger le plan refait la liaison d’office pour les comptes qui n’ont pas encore de décision ; une décision existante n’est jamais écrasée.</li>
-                    <li>Un compte par défaut de QuickBooks qui n’est pas reconnu mérite d’être signalé : son alias sera ajouté au plan par défaut et profitera à tous les clients suivants.</li>
                 </ul>
                 <div class="piege" data-titre="Piège">Le plan standard de 60Sec-AI existe déjà. Il faut<strong>lier</strong> les comptes QuickBooks aux comptes existants, pas tout créer. Sinon vous obtenez deux plans parallèles et des états financiers faux.</div>
                 <div class="piege" data-titre="Piège">Le fichier CSV et la lecture directe QuickBooks ne partagent pas leurs décisions. Changer de voie fait réapparaître les comptes « à décider ». Recharger un plan garde les décisions dont la clé est identique ; changer un nom dans QuickBooks change la clé.</div>
@@ -832,6 +852,15 @@
                 <h2>Step 2: Account mapping</h2>
                 <div class="note" data-titre="Dedicated help">This screen has its own step-by-step help page: <a href="correspondance-comptes.html">Account mapping</a> — how to link, how to create, how to ignore, the save popup and the messages that name both applications.</div>
                 <p>Decides, account by account, what becomes of each account of the former application: link it to an existing account, create it, or ignore it (<span class="chemin">Import › Account mapping</span>). Nothing is written to the books: decisions are kept aside.</p>
+                <h3>In short</h3>
+                <ol>
+                    <li>On opening, part of the work is already done: accounts whose QuickBooks name is known to the standard chart come <strong>linked outright</strong>, and “same name” suggestions come preset to “Link”.</li>
+                    <li>Accept what is certain in one go with <kbd>Accept mappings by number</kbd>, then, if you wish, ask for suggestions for the rest with <kbd>✨ Suggest with AI</kbd>.</li>
+                    <li>Filter on “To decide only” and decide row by row: <strong>Link</strong> (almost always), <strong>Create</strong> (only if nothing fits) or <strong>Ignore</strong> (empty, unused accounts).</li>
+                    <li>Click <kbd>Save mappings</kbd>. If there is a problem, a popup explains it in the middle of the screen; nothing faulty is saved.</li>
+                    <li>When progress reaches 100%, go to step 3 with <kbd>Create the accounts in the chart →</kbd> to actually create the “To create” accounts.</li>
+                </ol>
+                <p>Nothing done here writes to the books: you can save, come back and change your mind as often as needed.</p>
                 <h3>Top bar</h3>
                 <ul>
                     <li>Filter: All, To decide only, Already decided, Added after opening, QuickBooks defaults.</li>
@@ -839,35 +868,48 @@
                     <li><kbd>Accept mappings by number</kbd>: “Keep every mapping where the account number matches?” Links every suggestion recognized by number <strong>or name</strong>, with the note “Suggestion accepted: same account number/name.”</li>
                 </ul>
                 <h3>Progress</h3>
-                <p>“n of N (x %)” and counters To decide, Linked, To create, Ignored, Accounts in the chart. Once everything is decided: “All accounts are decided. The mapping is ready to be reviewed and signed by your accountant…”</p>
+                <table>
+                    <thead><tr><th>Element</th><th>What it says</th></tr></thead>
+                    <tbody>
+                        <tr><td>“n of N (x %)” and the bar</td><td>Decided accounts over the batch total. A row linked outright already counts as decided.</td></tr>
+                        <tr><td>To decide</td><td>Rows without a decision. As long as some remain, those accounts will not be migrated.</td></tr>
+                        <tr><td>Linked</td><td>Accounts attached to an existing account of your chart.</td></tr>
+                        <tr><td>To create</td><td>Accounts marked “Create”; they do not exist yet, step 3 will create them.</td></tr>
+                        <tr><td>Ignored</td><td>Accounts set aside from the migration.</td></tr>
+                        <tr><td>Accounts in the chart</td><td>Number of accounts in your 60sec chart, i.e. the choice offered in “Your account”.</td></tr>
+                    </tbody>
+                </table>
+                <p>Once everything is decided: “All accounts are decided. The mapping is ready to be reviewed and signed by your accountant…”. Without a loaded chart: “No chart of accounts has been loaded for this company yet”, with the link to step 1. If the filter keeps nothing: “Nothing to show with this filter.”</p>
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>Rank.</td></tr>
                         <tr><td>Account in the former application</td><td>Number (or “no number”), name, and source card: nature, QuickBooks type and subtype, source balance, origin (“added on …” or “QuickBooks default”), “sub-account of “…””, description, anomaly.</td></tr>
-                        <tr><td>Balance</td><td>Source balance.</td></tr>
+                        <tr><td>Balance</td><td>Balance of the account in the former application. A balance other than 0 forbids “Ignore”. Beware: for revenue and expense accounts, QuickBooks always returns 0, even when they were used.</td></tr>
                         <tr><td>What we suggest</td><td>Badge “same number”, “same name”, “known QuickBooks name — linked outright” (the French or English name, or the QuickBooks sub-type, is an alias set on an account of the default chart: the link is made at load time, it already shows as decided “Link” and remains editable), “AI” (with confidence % and reason), “no suggestion” or “created in the chart”. If the AI differs: “✨ the AI rather suggests …”.</td></tr>
-                        <tr><td>Action</td><td>“— to decide”, Link, Create or Ignore. When the suggestion is “same name”, the list comes preset to <b>Link</b> with the suggested account already in place: just save, or change it. Nothing is decided until you save.</td></tr>
+                        <tr><td>Action</td><td>“— to decide”, Link, Create or Ignore. When the suggestion is “same name”, the list comes preset to <b>Link</b> with the suggested account already in place: just save, or change it. Nothing is decided until you save. “Ignore” is greyed out when the account carries a balance or when an invoice or product in preparation uses it (the tooltip says why); on a revenue or expense account at 0, a yellow note reminds you to check it has not been used. A “Created ✓” row is locked: its account already exists.</td></tr>
                         <tr><td>Class, Subclass, Your account</td><td>Three cascading lists: the class and the subclass are stacked one under the other in the same column (class with code, name and number range), then the account. An account outside the filter stays shown as “(outside filter)”.</td></tr>
                         <tr><td>Note</td><td>500 characters maximum. Prefilled “Lié d’office : nom QuickBooks connu du plan (alias).” for a link made by alias, or “Proposition acceptée : …” after a bulk acceptance.</td></tr>
                     </tbody>
                 </table>
-                <h3>Bottom of page</h3>
-                <ul>
-                    <li>Reminder “Link / Create / Ignore”.</li>
-                    <li><kbd>Save mappings</kbd>: keeps the decisions. If there is a problem (two rows to the same account, “Create” on an already known number, accounts left to decide, error while saving), a popup opens over the grid with the explanation; <kbd>OK</kbd> or Escape closes it. The same message also stays in the banner at the top of the page.</li>
-                    <li><kbd>Create the accounts in the chart →</kbd>: opens step 3.</li>
-                </ul>
-                <h3>The message popup on save</h3>
-                <p>The result banner sits at the top of the page, far from the <kbd>Save mappings</kbd> button at the very bottom: it could go unnoticed. So whenever there is a problem, a popup opens over the grid, centred on the screen, with a title and the explanation. <kbd>OK</kbd>, the Escape key or a click beside it closes it; the banner stays at the top for re-reading. When everything is saved without reservation, no popup opens.</p>
+                <h3>The outright link by alias</h3>
+                <p>60Sec-AI’s default chart of accounts knows the names QuickBooks gives its default accounts, in French and English, as well as their sub-types: these are the <b>aliases</b>, maintained by the 60Sec team. When your QuickBooks chart is loaded, every account whose name is an alias, or whose sub-type designates a single account of ours, is <b>linked outright</b> to the account with the same number in your chart. It is not a suggestion to accept: the “Link” decision already exists when the grid opens.</p>
                 <table>
-                    <tr><th>Popup title</th><th>When</th><th>What to do</th></tr>
-                    <tr><td>Enregistrement impossible (cannot save)</td><td>Before anything is sent: two “Link” rows target the same account of yours, or a “Create” row reuses a number your chart already knows. Nothing is saved.</td><td>The faulty rows are listed (row number and name). Link the others elsewhere or create them; for an already known number, choose “Link” or clear the account.</td></tr>
-                    <tr><td>Enregistrement impossible (cannot save)</td><td>No mapping row was found in the grid.</td><td>Check that the batch is loaded (step 1).</td></tr>
-                    <tr><td>Comptes à décider (accounts to decide)</td><td>Decisions are saved, but N accounts remain to decide. Variant: M of them are “Create” without a number — not a problem, the number will be assigned at step 3.</td><td>Check that a “Link” points to an account of your chart: a “Link” to an unknown account is not kept and the row goes back to “to decide”.</td></tr>
-                    <tr><td>Erreur à l’enregistrement (error on save)</td><td>The database refused the save (for example “number N already exists in your chart”).</td><td>The error message is shown as is; fix the row concerned and save again.</td></tr>
+                    <thead><tr><th>What you see</th><th>What it means</th></tr></thead>
+                    <tbody>
+                        <tr><td>Pill “known QuickBooks name — linked outright” followed by our account</td><td>The link comes from an alias. It is as reliable as a common number.</td></tr>
+                        <tr><td>Action already on “Link”, target account already chosen</td><td>The decision is made and counts in “Linked” and among the decided; the “Already decided” filter shows it.</td></tr>
+                        <tr><td>Note “Lié d’office : nom QuickBooks connu du plan (alias).”</td><td>The trace of its origin. You may complete or replace it.</td></tr>
+                        <tr><td>A QuickBooks account recognized by alias but still “to decide”</td><td>Another QuickBooks account already targeted the same account of ours: only the first is linked outright. Link this one elsewhere, or create it.</td></tr>
+                    </tbody>
                 </table>
+                <ul>
+                    <li>You keep control: change the action, the target account or the note as for any decision, then <kbd>Save the mappings</kbd>.</li>
+                    <li><kbd>Accept the mappings by number</kbd> and <kbd>✨ Suggest with the AI</kbd> do not concern these rows: they are already decided.</li>
+                    <li>Reloading the chart makes the outright link again for accounts that have no decision yet; an existing decision is never overwritten.</li>
+                    <li>A QuickBooks default account that is not recognized deserves to be reported: its alias will be added to the default chart and benefit every later customer.</li>
+                </ul>
                 <h3>The “✨ Assistant” button on each account</h3>
                 <p>In the “Account from the old software” column, every row has a small <kbd>✨ Assistant</kbd> button next to the name. It opens a floating window (drag it by its blue bar) where the AI assistant explains the account as completely as possible, in four parts: what the account represents (definition, typical transactions), what its attributes mean (nature, QuickBooks type and subtype, normal balance side, current balance, “default” or “added” origin, sub-account, description, anomaly), where to file it in 60Sec-AI (class, subclass, closest existing account, or “Create” with a number in the class range), and points to watch.</p>
                 <p>The assistant receives the full account card, the decision already made if any, and your chart of accounts. It decides nothing: its suggestions stay in the window, you still choose Link, Create or Ignore. The answer takes about ten seconds; <kbd>Copy</kbd> puts it on the clipboard, <kbd>Close</kbd> or Escape closes the window. Each question has a cost (a few cents), shown at the bottom with the month’s total.</p>
@@ -903,6 +945,21 @@
                     <li><strong>The warning blocks nothing</strong>: it disappears if you change the action. The next safety net is the trial balance, which flags an ignored account carrying an amount.</li>
                     <li><strong>To get out of a refusal</strong>: link the account to its 60sec counterpart, or create it. If you really want to set it aside, empty it in the former application first, then reload the chart.</li>
                 </ul>
+                <h3>Bottom of page</h3>
+                <ul>
+                    <li>Reminder “Link / Create / Ignore”.</li>
+                    <li><kbd>Save mappings</kbd>: keeps the decisions. If there is a problem (two rows to the same account, “Create” on an already known number, accounts left to decide, error while saving), a popup opens over the grid with the explanation; <kbd>OK</kbd> or Escape closes it. The same message also stays in the banner at the top of the page.</li>
+                    <li><kbd>Create the accounts in the chart →</kbd>: opens step 3.</li>
+                </ul>
+                <h3>The message popup on save</h3>
+                <p>The result banner sits at the top of the page, far from the <kbd>Save mappings</kbd> button at the very bottom: it could go unnoticed. So whenever there is a problem, a popup opens over the grid, centred on the screen, with a title and the explanation. <kbd>OK</kbd>, the Escape key or a click beside it closes it; the banner stays at the top for re-reading. When everything is saved without reservation, no popup opens.</p>
+                <table>
+                    <tr><th>Popup title</th><th>When</th><th>What to do</th></tr>
+                    <tr><td>Enregistrement impossible (cannot save)</td><td>Before anything is sent: two “Link” rows target the same account of yours, or a “Create” row reuses a number your chart already knows. Nothing is saved.</td><td>The faulty rows are listed (row number and name). Link the others elsewhere or create them; for an already known number, choose “Link” or clear the account.</td></tr>
+                    <tr><td>Enregistrement impossible (cannot save)</td><td>No mapping row was found in the grid.</td><td>Check that the batch is loaded (step 1).</td></tr>
+                    <tr><td>Comptes à décider (accounts to decide)</td><td>Decisions are saved, but N accounts remain to decide. Variant: M of them are “Create” without a number — not a problem, the number will be assigned at step 3.</td><td>Check that a “Link” points to an account of your chart: a “Link” to an unknown account is not kept and the row goes back to “to decide”.</td></tr>
+                    <tr><td>Erreur à l’enregistrement (error on save)</td><td>The database refused the save (for example “number N already exists in your chart”).</td><td>The error message is shown as is; fix the row concerned and save again.</td></tr>
+                </table>
                 <h3>Messages name both applications</h3>
                 <p>Since October 1, 2026, a refusal on save always says which side each account is on: “de 60sec” for your accounts here, and the name of the application the chart comes from (“QuickBooks” for a direct read or a QuickBooks file, “Sage 50”, “Acomba”, otherwise “l’ancien logiciel”) for the former accounts. Example (in French on screen): <span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> Each message is detailed in the dedicated help.</p>
                 <h3>Messages</h3>
@@ -922,23 +979,6 @@
                     <li><span class="msg">““X” from QuickBooks is used by 3 invoice line(s) and 11 product(s) in preparation: it cannot be ignored. Link it to a 60sec account or create it, otherwise these items would have no account.”</span> — refused on save; in the browser: “A QuickBooks account used by an invoice or a product in preparation cannot be ignored”.</li>
                     <li><span class="msg">“⚠️ QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.”</span> — yellow note under the Action list; a warning only, saving remains possible.</li>
                     <li><span class="msg">“Number N would be created k times… A number is created only once.”</span> — refused on save.</li>
-                </ul>
-                <h3>The outright link by alias</h3>
-                <p>60Sec-AI’s default chart of accounts knows the names QuickBooks gives its default accounts, in French and English, as well as their sub-types: these are the <b>aliases</b>, maintained by the 60Sec team. When your QuickBooks chart is loaded, every account whose name is an alias, or whose sub-type designates a single account of ours, is <b>linked outright</b> to the account with the same number in your chart. It is not a suggestion to accept: the “Link” decision already exists when the grid opens.</p>
-                <table>
-                    <thead><tr><th>What you see</th><th>What it means</th></tr></thead>
-                    <tbody>
-                        <tr><td>Pill “known QuickBooks name — linked outright” followed by our account</td><td>The link comes from an alias. It is as reliable as a common number.</td></tr>
-                        <tr><td>Action already on “Link”, target account already chosen</td><td>The decision is made and counts in “Linked” and among the decided; the “Already decided” filter shows it.</td></tr>
-                        <tr><td>Note “Lié d’office : nom QuickBooks connu du plan (alias).”</td><td>The trace of its origin. You may complete or replace it.</td></tr>
-                        <tr><td>A QuickBooks account recognized by alias but still “to decide”</td><td>Another QuickBooks account already targeted the same account of ours: only the first is linked outright. Link this one elsewhere, or create it.</td></tr>
-                    </tbody>
-                </table>
-                <ul>
-                    <li>You keep control: change the action, the target account or the note as for any decision, then <kbd>Save the mappings</kbd>.</li>
-                    <li><kbd>Accept the mappings by number</kbd> and <kbd>✨ Suggest with the AI</kbd> do not concern these rows: they are already decided.</li>
-                    <li>Reloading the chart makes the outright link again for accounts that have no decision yet; an existing decision is never overwritten.</li>
-                    <li>A QuickBooks default account that is not recognized deserves to be reported: its alias will be added to the default chart and benefit every later customer.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall">The standard 60Sec-AI chart already exists. You must<strong>link</strong> the QuickBooks accounts to the existing ones, not create everything. Otherwise you get two parallel charts and wrong financial statements.</div>
                 <div class="piege" data-titre="Pitfall">The CSV file and the QuickBooks direct read do not share their decisions. Switching paths makes accounts reappear as “to decide”. Reloading a chart keeps decisions whose key is identical; renaming an account in QuickBooks changes the key.</div>
@@ -1440,6 +1480,15 @@
                 <h2>Etapa 2: Correspondencia de cuentas</h2>
                 <div class="note" data-titre="Ayuda dedicada">Esta pantalla tiene su propia página de ayuda, paso a paso: <a href="correspondance-comptes.html">Correspondencia de cuentas</a> — cómo vincular, cómo crear, cómo ignorar, la ventana al guardar y los mensajes que nombran ambos programas.</div>
                 <p>Decide, cuenta por cuenta, qué pasa con cada cuenta del programa anterior: vincularla a una cuenta existente, crearla o ignorarla (<span class="chemin">Importación › Correspondencia de cuentas</span>). Nada se escribe en contabilidad: las decisiones se guardan aparte.</p>
+                <h3>En resumen</h3>
+                <ol>
+                    <li>Al abrir, parte del trabajo ya está hecho: las cuentas cuyo nombre QuickBooks es conocido por el plan estándar llegan <strong>vinculadas de oficio</strong>, y las propuestas « mismo nombre » llegan preajustadas en « Vincular ».</li>
+                    <li>Acepte de una vez lo que es seguro con <kbd>Aceptar las correspondencias por número</kbd> y, si lo desea, pida propuestas para el resto con <kbd>✨ Proponer con la IA</kbd>.</li>
+                    <li>Filtre por « Solo por decidir » y decida línea por línea: <strong>Vincular</strong> (casi siempre), <strong>Crear</strong> (solo si nada conviene) o <strong>Ignorar</strong> (cuentas vacías y sin uso).</li>
+                    <li>Haga clic en <kbd>Guardar las correspondencias</kbd>. Si hay un problema, una ventana lo explica en el centro de la pantalla; no se guarda nada incorrecto.</li>
+                    <li>Cuando el avance llegue al 100 %, pase a la etapa 3 con <kbd>Crear las cuentas en el plan →</kbd> para crear realmente las cuentas « Por crear ».</li>
+                </ol>
+                <p>Nada de lo que se hace aquí escribe en la contabilidad: puede guardar, volver y cambiar de opinión tantas veces como haga falta.</p>
                 <h3>Barra superior</h3>
                 <ul>
                     <li>Filtro: Todo, Solo por decidir, Ya decididas, Añadidas tras la apertura, Por defecto en QuickBooks.</li>
@@ -1447,35 +1496,48 @@
                     <li><kbd>Aceptar las correspondencias por número</kbd>: « ¿Retener todas las correspondencias donde el número de cuenta coincide? » Vincula todas las propuestas reconocidas por número <strong>o nombre</strong>, con la nota « Propuesta aceptada: mismo número/nombre de cuenta. »</li>
                 </ul>
                 <h3>Avance</h3>
-                <p>« n de N (x %) » y contadores Por decidir, Vinculadas, Por crear, Ignoradas, Cuentas en el plan. Cuando todo está decidido: « Todas las cuentas están decididas. La correspondencia está lista para ser revisada y firmada por su contador… »</p>
+                <table>
+                    <thead><tr><th>Elemento</th><th>Lo que indica</th></tr></thead>
+                    <tbody>
+                        <tr><td>« n de N (x %) » y la barra</td><td>Cuentas decididas sobre el total del lote. Una línea vinculada de oficio ya cuenta como decidida.</td></tr>
+                        <tr><td>Por decidir</td><td>Líneas sin decisión. Mientras queden, esas cuentas no se migrarán.</td></tr>
+                        <tr><td>Vinculadas</td><td>Cuentas asociadas a una cuenta existente de su plan.</td></tr>
+                        <tr><td>Por crear</td><td>Cuentas marcadas « Crear »; aún no existen, la etapa 3 las creará.</td></tr>
+                        <tr><td>Ignoradas</td><td>Cuentas apartadas de la migración.</td></tr>
+                        <tr><td>Cuentas en el plan</td><td>Número de cuentas de su plan 60sec, es decir, la elección ofrecida en « Cuenta en su plan ».</td></tr>
+                    </tbody>
+                </table>
+                <p>Cuando todo está decidido: « Todas las cuentas están decididas. La correspondencia está lista para ser revisada y firmada por su contador… ». Sin plan cargado: « Todavía no se ha cargado ningún plan contable para esta compañía », con el enlace a la etapa 1. Si el filtro no retiene nada: « Nada que mostrar con este filtro. »</p>
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>Orden.</td></tr>
                         <tr><td>Cuenta del programa anterior</td><td>Número (o « sin número »), nombre y ficha de origen: naturaleza, tipo y subtipo QuickBooks, saldo de origen, origen (« añadida el … » o « por defecto en QuickBooks »), « subcuenta de « … » », descripción, anomalía.</td></tr>
-                        <tr><td>Saldo</td><td>Saldo de origen.</td></tr>
+                        <tr><td>Saldo</td><td>Saldo de la cuenta en el programa anterior. Un saldo distinto de 0 impide « Ignorar ». Atención: para las cuentas de ingresos y de gastos, QuickBooks devuelve siempre 0, aunque se hayan usado.</td></tr>
                         <tr><td>Lo que proponemos</td><td>Etiqueta « mismo número », « mismo nombre », « nombre QuickBooks conocido — vinculado directamente » (el nombre, francés o inglés, o el subtipo QuickBooks es un alias puesto en una cuenta del plan por defecto: el vínculo se hace al cargar, ya aparece decidido « Vincular » y sigue siendo modificable), « IA » (con % de confianza y razón), « ninguna propuesta » o « creada en el plan ». Si la IA difiere: « ✨ la IA sugiere más bien … ».</td></tr>
-                        <tr><td>Acción</td><td>« — por decidir », Vincular, Crear o Ignorar. Cuando la propuesta es « mismo nombre », la lista llega preajustada en <b>Vincular</b> con la cuenta propuesta ya puesta: solo queda guardar, o cambiar. Nada se decide hasta que usted guarde.</td></tr>
+                        <tr><td>Acción</td><td>« — por decidir », Vincular, Crear o Ignorar. Cuando la propuesta es « mismo nombre », la lista llega preajustada en <b>Vincular</b> con la cuenta propuesta ya puesta: solo queda guardar, o cambiar. Nada se decide hasta que usted guarde. « Ignorar » aparece en gris cuando la cuenta lleva saldo o cuando la usa una factura o un producto en preparación (la descripción emergente dice por qué); en una cuenta de ingresos o de gastos a 0, un recuadro amarillo recuerda verificar que no se haya usado. Una línea « Creada ✓ » está bloqueada: su cuenta ya existe.</td></tr>
                         <tr><td>Clase, Subclase, Cuenta en su plan</td><td>Tres listas en cascada: la clase y la subclase están apiladas una debajo de la otra en la misma columna (clase con código, nombre y rango de números), luego la cuenta. Una cuenta fuera del filtro sigue mostrándose « (fuera del filtro) ».</td></tr>
                         <tr><td>Nota</td><td>500 caracteres como máximo. Prellenada « Lié d’office : nom QuickBooks connu du plan (alias). » para un vínculo hecho por alias, o « Proposition acceptée : … » tras una aceptación en lote.</td></tr>
                     </tbody>
                 </table>
-                <h3>Pie de página</h3>
-                <ul>
-                    <li>Recordatorio « Vincular / Crear / Ignorar ».</li>
-                    <li><kbd>Guardar las correspondencias</kbd>: conserva las decisiones. Si hay un problema (dos líneas hacia la misma cuenta, « Crear » sobre un número ya conocido, cuentas por decidir, error al guardar), se abre una ventana sobre la cuadrícula con la explicación; <kbd>OK</kbd> o Escape la cierra. El mismo mensaje permanece en el banner de la parte superior de la página.</li>
-                    <li><kbd>Crear las cuentas en el plan →</kbd>: abre la etapa 3.</li>
-                </ul>
-                <h3>La ventana de mensaje al guardar</h3>
-                <p>El banner de resultado está en la parte superior de la página, lejos del botón <kbd>Guardar las correspondencias</kbd> situado al final: podía pasar desapercibido. Por eso, en cuanto hay un problema, se abre una ventana sobre la cuadrícula, centrada en la pantalla, con un título y la explicación. <kbd>OK</kbd>, la tecla Escape o un clic al lado la cierran; el banner permanece arriba para releerlo. Cuando todo se guarda sin reservas, no se abre ninguna ventana.</p>
+                <h3>El vínculo directo por alias</h3>
+                <p>El plan de cuentas por defecto de 60Sec-AI conoce los nombres que QuickBooks da a sus cuentas por defecto, en francés y en inglés, así como sus subtipos: son los <b>alias</b>, mantenidos por el equipo de 60Sec. Al cargar su plan QuickBooks, cada cuenta cuyo nombre es un alias, o cuyo subtipo designa una sola cuenta nuestra, se <b>vincula directamente</b> a la cuenta con el mismo número en su plan. No es una propuesta por aceptar: la decisión « Vincular » ya existe cuando se abre la cuadrícula.</p>
                 <table>
-                    <tr><th>Título de la ventana</th><th>Cuándo</th><th>Qué hacer</th></tr>
-                    <tr><td>Enregistrement impossible (no se puede guardar)</td><td>Antes del envío: dos líneas « Vincular » apuntan a la misma cuenta suya, o una línea « Crear » reutiliza un número que su plan ya conoce. No se guarda nada.</td><td>Se citan las líneas con problema (número de línea y nombre). Vincule las demás en otro lugar o créelas; para un número ya conocido, elija « Vincular » o vacíe la cuenta.</td></tr>
-                    <tr><td>Enregistrement impossible (no se puede guardar)</td><td>No se encontró ninguna línea de correspondencia en la cuadrícula.</td><td>Compruebe que el lote está cargado (etapa 1).</td></tr>
-                    <tr><td>Comptes à décider (cuentas por decidir)</td><td>Las decisiones se guardan, pero N cuentas quedan por decidir. Variante: M de ellas son « Crear » sin número — no es un problema, el número se asignará en la etapa 3.</td><td>Compruebe que un « Vincular » apunta a una cuenta de su plan: un « Vincular » hacia una cuenta desconocida no se conserva y la línea vuelve a « por decidir ».</td></tr>
-                    <tr><td>Erreur à l’enregistrement (error al guardar)</td><td>La base de datos rechazó el guardado (por ejemplo « el número N ya existe en su plan »).</td><td>El mensaje de error se muestra tal cual; corrija la línea afectada y guarde de nuevo.</td></tr>
+                    <thead><tr><th>Lo que ve</th><th>Lo que significa</th></tr></thead>
+                    <tbody>
+                        <tr><td>Etiqueta « nombre QuickBooks conocido — vinculado directamente » seguida de nuestra cuenta</td><td>El vínculo proviene de un alias. Es tan seguro como un número común.</td></tr>
+                        <tr><td>Acción ya en « Vincular », cuenta destino ya elegida</td><td>La decisión está tomada y cuenta en « Vinculadas » y entre las decididas; el filtro « Ya decididas » la muestra.</td></tr>
+                        <tr><td>Nota « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La huella de su origen. Puede completarla o reemplazarla.</td></tr>
+                        <tr><td>Una cuenta QuickBooks reconocida por alias pero aún « por decidir »</td><td>Otra cuenta QuickBooks ya apuntaba a la misma cuenta nuestra: solo la primera se vincula directamente. Vincule esta en otra parte, o créela.</td></tr>
+                    </tbody>
                 </table>
+                <ul>
+                    <li>Usted conserva el control: cambie la acción, la cuenta destino o la nota como en cualquier decisión, y luego <kbd>Guardar las correspondencias</kbd>.</li>
+                    <li><kbd>Aceptar las correspondencias por número</kbd> y <kbd>✨ Proponer con la IA</kbd> no afectan a estas filas: ya están decididas.</li>
+                    <li>Recargar el plan vuelve a hacer el vínculo directo para las cuentas que aún no tienen decisión; una decisión existente nunca se sobrescribe.</li>
+                    <li>Una cuenta por defecto de QuickBooks que no se reconoce merece ser señalada: su alias se agregará al plan por defecto y beneficiará a todos los clientes siguientes.</li>
+                </ul>
                 <h3>El botón «✨ Asistente» en cada cuenta</h3>
                 <p>En la columna «Cuenta del programa anterior», cada línea lleva un pequeño botón <kbd>✨ Assistant</kbd> junto al nombre. Abre una ventana flotante (arrástrela por su barra azul) donde el asistente de IA explica la cuenta lo más completamente posible, en cuatro partes: qué representa la cuenta (definición, operaciones típicas), qué dicen sus atributos (naturaleza, tipo y subtipo de QuickBooks, sentido del saldo, saldo actual, origen «por defecto» o «añadida», subcuenta, descripción, anomalía), dónde ubicarla en 60Sec-AI (clase, subclase, cuenta existente más cercana, o «Crear» con un número en el rango), y puntos de atención.</p>
                 <p>El asistente recibe la ficha completa de la cuenta, la decisión ya tomada si la hay, y su plan contable. No decide nada: sus sugerencias quedan en la ventana, usted sigue eligiendo Vincular, Crear o Ignorar. La respuesta tarda unos diez segundos; <kbd>Copiar</kbd> la pone en el portapapeles, <kbd>Cerrar</kbd> o Esc cierra la ventana. Cada pregunta tiene un costo (unos centavos), mostrado abajo con el total del mes.</p>
@@ -1511,6 +1573,21 @@
                     <li><strong>El aviso no bloquea nada</strong>: desaparece si cambia de acción. La red siguiente es el balance de comprobación, que señala una cuenta ignorada que lleva un importe.</li>
                     <li><strong>Para salir de un rechazo</strong>: vincule la cuenta a su equivalente de 60sec, o créela. Si de verdad quiere apartarla, vacíela primero en el programa anterior y recargue el plan.</li>
                 </ul>
+                <h3>Pie de página</h3>
+                <ul>
+                    <li>Recordatorio « Vincular / Crear / Ignorar ».</li>
+                    <li><kbd>Guardar las correspondencias</kbd>: conserva las decisiones. Si hay un problema (dos líneas hacia la misma cuenta, « Crear » sobre un número ya conocido, cuentas por decidir, error al guardar), se abre una ventana sobre la cuadrícula con la explicación; <kbd>OK</kbd> o Escape la cierra. El mismo mensaje permanece en el banner de la parte superior de la página.</li>
+                    <li><kbd>Crear las cuentas en el plan →</kbd>: abre la etapa 3.</li>
+                </ul>
+                <h3>La ventana de mensaje al guardar</h3>
+                <p>El banner de resultado está en la parte superior de la página, lejos del botón <kbd>Guardar las correspondencias</kbd> situado al final: podía pasar desapercibido. Por eso, en cuanto hay un problema, se abre una ventana sobre la cuadrícula, centrada en la pantalla, con un título y la explicación. <kbd>OK</kbd>, la tecla Escape o un clic al lado la cierran; el banner permanece arriba para releerlo. Cuando todo se guarda sin reservas, no se abre ninguna ventana.</p>
+                <table>
+                    <tr><th>Título de la ventana</th><th>Cuándo</th><th>Qué hacer</th></tr>
+                    <tr><td>Enregistrement impossible (no se puede guardar)</td><td>Antes del envío: dos líneas « Vincular » apuntan a la misma cuenta suya, o una línea « Crear » reutiliza un número que su plan ya conoce. No se guarda nada.</td><td>Se citan las líneas con problema (número de línea y nombre). Vincule las demás en otro lugar o créelas; para un número ya conocido, elija « Vincular » o vacíe la cuenta.</td></tr>
+                    <tr><td>Enregistrement impossible (no se puede guardar)</td><td>No se encontró ninguna línea de correspondencia en la cuadrícula.</td><td>Compruebe que el lote está cargado (etapa 1).</td></tr>
+                    <tr><td>Comptes à décider (cuentas por decidir)</td><td>Las decisiones se guardan, pero N cuentas quedan por decidir. Variante: M de ellas son « Crear » sin número — no es un problema, el número se asignará en la etapa 3.</td><td>Compruebe que un « Vincular » apunta a una cuenta de su plan: un « Vincular » hacia una cuenta desconocida no se conserva y la línea vuelve a « por decidir ».</td></tr>
+                    <tr><td>Erreur à l’enregistrement (error al guardar)</td><td>La base de datos rechazó el guardado (por ejemplo « el número N ya existe en su plan »).</td><td>El mensaje de error se muestra tal cual; corrija la línea afectada y guarde de nuevo.</td></tr>
+                </table>
                 <h3>Los mensajes nombran ambos programas</h3>
                 <p>Desde el 1 de octubre de 2026, un rechazo al guardar dice siempre de qué lado está cada cuenta: « de 60sec » para sus cuentas de aquí, y el nombre del programa de donde viene el plan (« QuickBooks » para una lectura directa o un archivo QuickBooks, « Sage 50 », « Acomba », si no « l’ancien logiciel ») para las cuentas del programa anterior. Ejemplo (en francés en pantalla): <span class="msg">« Le compte 5060 de 60sec est déjà lié à « COÛT DES PRODUITS VENDUS » de QuickBooks. Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. »</span> Cada mensaje se detalla en la ayuda dedicada.</p>
                 <h3>Mensajes</h3>
@@ -1530,23 +1607,6 @@
                     <li><span class="msg">« « X » de QuickBooks es usada por 3 línea(s) de factura y 11 producto(s) en preparación: no puede ignorarse. Vincúlela a una cuenta de 60sec o créela; si no, esos elementos se quedarían sin cuenta. »</span> — rechazo al guardar; en el navegador: « Una cuenta de QuickBooks usada por una factura o un producto en preparación no puede ignorarse ».</li>
                     <li><span class="msg">« ⚠️ QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. »</span> — recuadro amarillo bajo la lista Acción; solo un aviso, se puede guardar.</li>
                     <li><span class="msg">« El número N se crearía k veces… Un número solo se crea una vez. »</span> — rechazo al guardar.</li>
-                </ul>
-                <h3>El vínculo directo por alias</h3>
-                <p>El plan de cuentas por defecto de 60Sec-AI conoce los nombres que QuickBooks da a sus cuentas por defecto, en francés y en inglés, así como sus subtipos: son los <b>alias</b>, mantenidos por el equipo de 60Sec. Al cargar su plan QuickBooks, cada cuenta cuyo nombre es un alias, o cuyo subtipo designa una sola cuenta nuestra, se <b>vincula directamente</b> a la cuenta con el mismo número en su plan. No es una propuesta por aceptar: la decisión « Vincular » ya existe cuando se abre la cuadrícula.</p>
-                <table>
-                    <thead><tr><th>Lo que ve</th><th>Lo que significa</th></tr></thead>
-                    <tbody>
-                        <tr><td>Etiqueta « nombre QuickBooks conocido — vinculado directamente » seguida de nuestra cuenta</td><td>El vínculo proviene de un alias. Es tan seguro como un número común.</td></tr>
-                        <tr><td>Acción ya en « Vincular », cuenta destino ya elegida</td><td>La decisión está tomada y cuenta en « Vinculadas » y entre las decididas; el filtro « Ya decididas » la muestra.</td></tr>
-                        <tr><td>Nota « Lié d’office : nom QuickBooks connu du plan (alias). »</td><td>La huella de su origen. Puede completarla o reemplazarla.</td></tr>
-                        <tr><td>Una cuenta QuickBooks reconocida por alias pero aún « por decidir »</td><td>Otra cuenta QuickBooks ya apuntaba a la misma cuenta nuestra: solo la primera se vincula directamente. Vincule esta en otra parte, o créela.</td></tr>
-                    </tbody>
-                </table>
-                <ul>
-                    <li>Usted conserva el control: cambie la acción, la cuenta destino o la nota como en cualquier decisión, y luego <kbd>Guardar las correspondencias</kbd>.</li>
-                    <li><kbd>Aceptar las correspondencias por número</kbd> y <kbd>✨ Proponer con la IA</kbd> no afectan a estas filas: ya están decididas.</li>
-                    <li>Recargar el plan vuelve a hacer el vínculo directo para las cuentas que aún no tienen decisión; una decisión existente nunca se sobrescribe.</li>
-                    <li>Una cuenta por defecto de QuickBooks que no se reconoce merece ser señalada: su alias se agregará al plan por defecto y beneficiará a todos los clientes siguientes.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa">El plan estándar de 60Sec-AI ya existe. Hay que<strong>vincular</strong> las cuentas de QuickBooks a las cuentas existentes, no crearlo todo. Si no, obtendrá dos planes paralelos y estados financieros falsos.</div>
                 <div class="piege" data-titre="Trampa">El archivo CSV y la lectura directa de QuickBooks no comparten sus decisiones. Cambiar de vía hace reaparecer las cuentas « por decidir ». Recargar un plan conserva las decisiones cuya clave es idéntica; cambiar un nombre en QuickBooks cambia la clave.</div>
