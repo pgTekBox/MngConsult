@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .val-page { max-width: 1480px; margin: 0 auto; padding: 16px }
+    .val-page { padding: 16px }
 
     .val-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .val-head .ico {

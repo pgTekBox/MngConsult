@@ -14,7 +14,7 @@
        propres à cet écran — équilibre, incohérences, pastilles de gravité — ne
        changent pas de nom : le code-behind les écrit lui-même. */
 
-    .imp-page { max-width: 1150px; margin: 0 auto; padding: 16px }
+    .imp-page { padding: 16px }
 
     .imp-head { display:flex; align-items:center; gap:14px; margin-bottom:6px; }
     .imp-head .ico {

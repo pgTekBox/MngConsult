@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .cor-page { max-width: 1800px; margin: 0 auto; padding: 16px }
+    .cor-page { padding: 16px }
 
     .cor-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 

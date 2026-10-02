@@ -6,7 +6,7 @@
      un même écran, trois usages. Chaque page le pose avec son Genre. --%>
 
 <style>
-    .idn { max-width: 1150px; margin: 0 auto; padding: 16px }
+    .idn { padding: 16px }
 
     .idn-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 

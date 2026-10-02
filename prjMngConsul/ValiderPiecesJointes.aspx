@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .pj-page { max-width: 1320px; margin: 0 auto; padding: 16px }
+    .pj-page { padding: 16px }
 
     .pj-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .pj-head .ico {

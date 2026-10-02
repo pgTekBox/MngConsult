@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .ft-page { max-width: 1320px; margin: 0 auto; padding: 16px }
+    .ft-page { padding: 16px }
     .ft-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .ft-head .ico { width: 46px; height: 46px; border-radius: 13px; border: 1px solid #e2e8f0;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));

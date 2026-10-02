@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .tx-page { max-width: 1320px; margin: 0 auto; padding: 16px }
+    .tx-page { padding: 16px }
 
     .tx-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .tx-head .ico {
