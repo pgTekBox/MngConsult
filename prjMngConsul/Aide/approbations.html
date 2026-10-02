@@ -45,7 +45,7 @@
             <section id="fr-filtres">
                 <h2>Filtres et compteurs</h2>
                 <h3>Filtre d’état</h3>
-                <p>En haut de l’écran, un choix « Filtre » détermine quelles cartes sont affichées. La liste se recharge <strong>dès que vous changez de choix</strong>, sans bouton supplémentaire.</p>
+                <p>Sous les compteurs, une liste déroulante sans libellé détermine quelles cartes sont affichées. La liste se recharge <strong>dès que vous changez de choix</strong>, sans bouton supplémentaire.</p>
                 <table>
                     <thead><tr><th>Choix</th><th>Cartes affichées</th></tr></thead>
                     <tbody>
@@ -109,7 +109,7 @@
                     </tbody>
                 </table>
                 <h3>Zone de décision</h3>
-                <p>Seules les cartes en attente (orange ou rouge) comportent une zone de décision : le champ « Motif » et les deux boutons <kbd>✔ Approuver</kbd> et <kbd>✖ Refuser</kbd>. Les cartes vertes et grises sont en lecture seule.</p>
+                <p>Seules les cartes en attente (orange ou rouge) comportent une zone de décision : une zone de texte sans libellé, où vous saisissez le motif, et les deux boutons <kbd>✔ Approuver</kbd> et <kbd>✖ Refuser</kbd>. Les cartes vertes et grises sont en lecture seule.</p>
                 <div class="note" data-titre="Bon à savoir">La catégorie, le bénéficiaire, le montant et les notes n’apparaissent que s’ils existent. Une carte sans montant n’est pas une carte incomplète : la tâche n’en a tout simplement pas.</div>
             </section>
 
@@ -245,13 +245,13 @@
             <section id="en-purpose">
                 <h2>Purpose and where tasks come from</h2>
                 <h3>Purpose</h3>
-                <p>60Sec-AI has a scheduled-task runner: a service that checks every minute which tasks are due and launches them. Some tasks are considered too sensitive to run on their own. For those, the runner does nothing until a person has decided: it drops the occurrence into the “Tasks to approve” screen and waits. That is what the screen’s introduction says: “The task runner drops here what it is about to do when the task requires validation. Nothing runs until you have decided.”</p>
+                <p>60Sec-AI has a scheduled-task runner: a service that checks every minute which tasks are due and launches them. Some tasks are considered too sensitive to run on their own. For those, the runner does nothing until a person has decided: it drops the occurrence into the “Tasks to approve” screen (its on-screen title reads “Tasks awaiting approval”) and waits. That is what the screen’s introduction says: “The task executor drops here what it is about to do whenever a task requires validation. Nothing runs until you decide.”</p>
                 <p>The screen is therefore a decision inbox, not a scheduler: you do not create tasks here and you do not edit their content. You only answer “yes” or “no” to what the runner proposes, one occurrence at a time.</p>
                 <h3>Where tasks come from</h3>
                 <ul>
                     <li>The runner checks the scheduled tasks of every company <strong>every minute</strong>.</li>
                     <li>A task reaches this screen <strong>only if its definition requires approval</strong>. That setting is <strong>off by default</strong>. It is changed in the <a href="administration.html">administration console</a>, not in the ERP.</li>
-                    <li>As soon as the setting is enabled on a definition, <strong>all of its still-scheduled occurrences</strong> switch to “To approve” and are blocked until you decide.</li>
+                    <li>As soon as the setting is enabled on a definition, <strong>all of its still-scheduled occurrences</strong> switch to “Awaiting approval” and are blocked until you decide.</li>
                     <li>Each occurrence is decided separately: a daily task produces one card per day, a weekly task one card per week.</li>
                 </ul>
                 <h3>What does not go through this screen</h3>
@@ -263,13 +263,13 @@
             <section id="en-filters">
                 <h2>Filters and counters</h2>
                 <h3>Status filter</h3>
-                <p>At the top of the screen, a “Filter” choice decides which cards are displayed. The list reloads <strong>as soon as you change the choice</strong>, with no extra button.</p>
+                <p>Below the counters, an unlabelled drop-down list decides which cards are displayed. The list reloads <strong>as soon as you change the choice</strong>, with no extra button.</p>
                 <table>
                     <thead><tr><th>Choice</th><th>Cards shown</th></tr></thead>
                     <tbody>
-                        <tr><td>To approve</td><td>Occurrences awaiting a decision, including those whose scheduled date has already passed. This is the <strong>default</strong> choice when the screen opens.</td></tr>
+                        <tr><td>Awaiting approval</td><td>Occurrences awaiting a decision, including those whose scheduled date has already passed. This is the <strong>default</strong> choice when the screen opens.</td></tr>
                         <tr><td>Approved</td><td>Occurrences that you (or a colleague) approved.</td></tr>
-                        <tr><td>Rejected</td><td>Rejected occurrences, i.e. permanently cancelled.</td></tr>
+                        <tr><td>Refused</td><td>Rejected occurrences, i.e. permanently cancelled.</td></tr>
                         <tr><td>All</td><td>Every status, pending tasks first.</td></tr>
                     </tbody>
                 </table>
@@ -282,8 +282,8 @@
                 <table>
                     <thead><tr><th>Counter</th><th>Meaning</th></tr></thead>
                     <tbody>
-                        <tr><td>To approve</td><td>Number of occurrences awaiting a decision.</td></tr>
-                        <tr><td>Deadline passed</td><td>Among pending occurrences, those whose scheduled date and time have already gone by. They are not lost: they are still waiting for your decision.</td></tr>
+                        <tr><td>Awaiting approval</td><td>Number of occurrences awaiting a decision.</td></tr>
+                        <tr><td>Past due</td><td>Among pending occurrences, those whose scheduled date and time have already gone by. They are not lost: they are still waiting for your decision.</td></tr>
                     </tbody>
                 </table>
                 <h3>Sorting and limit</h3>
@@ -292,7 +292,7 @@
                     <li>Within each group, the order follows the <strong>scheduled date</strong>.</li>
                     <li>The list shows <strong>at most 200 cards</strong>. With “All”, the oldest decisions may therefore be missing: use a narrower filter.</li>
                 </ul>
-                <div class="astuce" data-titre="Tip">Always start with the “Deadline passed” counter. These are the occurrences the runner will launch <em>immediately</em> after your approval: make sure that is what you want.</div>
+                <div class="astuce" data-titre="Tip">Always start with the “Past due” counter. These are the occurrences the runner will launch <em>immediately</em> after your approval: make sure that is what you want.</div>
             </section>
 
             <section id="en-card">
@@ -304,12 +304,12 @@
                     <tbody>
                         <tr><td>Task name</td><td>The name given to the task in its definition.</td></tr>
                         <tr><td>Execution-type badge</td><td>Indicates the nature of what the runner will do (sending, processing, generation, etc.).</td></tr>
-                        <tr><td>Status badge</td><td>“Approved”, “Rejected” or “Late”. A pending task whose deadline has not passed has no status badge: its orange border is enough.</td></tr>
+                        <tr><td>Status badge</td><td>“Approved”, “Refused” or “Past due”. A pending task whose deadline has not passed has no status badge: its orange border is enough.</td></tr>
                         <tr><td>Description</td><td>The task’s explanatory text.</td></tr>
                         <tr><td>Scheduled for</td><td>Planned date and time, in the form “Scheduled for yyyy-mm-dd hh:mm”.</td></tr>
                         <tr><td>Code</td><td>The task identifier, shown as “Code: …”. Useful when discussing it with a colleague or the administrator.</td></tr>
                         <tr><td>Category</td><td>Shown only if the task has one.</td></tr>
-                        <tr><td>Beneficiary</td><td>Shown only if the task targets a specific person or business.</td></tr>
+                        <tr><td>Payee</td><td>Shown only if the task targets a specific person or business.</td></tr>
                         <tr><td>Amount</td><td>Shown only if the task carries an amount, in Canadian format (for example “1 234,56 $”).</td></tr>
                         <tr><td>Notes</td><td>Shown only if the definition contains any.</td></tr>
                         <tr><td>Decision</td><td>For a task already decided: “Decision: user’s email — date”. If the user could not be identified, “unknown user”.</td></tr>
@@ -321,13 +321,13 @@
                     <thead><tr><th>Colour</th><th>Status</th></tr></thead>
                     <tbody>
                         <tr><td>Orange</td><td>Awaiting a decision, deadline still ahead.</td></tr>
-                        <tr><td>Red</td><td>Late: pending, but the scheduled date has passed.</td></tr>
+                        <tr><td>Red</td><td>Past due: pending, but the scheduled date has passed.</td></tr>
                         <tr><td>Green</td><td>Approved.</td></tr>
-                        <tr><td>Grey</td><td>Rejected.</td></tr>
+                        <tr><td>Grey</td><td>Refused.</td></tr>
                     </tbody>
                 </table>
                 <h3>Decision area</h3>
-                <p>Only pending cards (orange or red) have a decision area: the “Reason” field and the two buttons <kbd>✔ Approve</kbd> and <kbd>✖ Reject</kbd>. Green and grey cards are read-only.</p>
+                <p>Only pending cards (orange or red) have a decision area: an unlabelled text box, where you type the reason, and the two buttons <kbd>✔ Approve</kbd> and <kbd>✖ Refuse</kbd>. Green and grey cards are read-only.</p>
                 <div class="note" data-titre="Good to know">Category, beneficiary, amount and notes appear only when they exist. A card without an amount is not incomplete: the task simply has none.</div>
             </section>
 
@@ -343,22 +343,22 @@
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>✔ Approve</kbd>: asks for confirmation “Approve this task? It will run at the scheduled time.”, then puts the occurrence back into the runner’s normal flow.</li>
-                    <li><kbd>✖ Reject</kbd>: asks for confirmation “Reject this task? It will not run.”, then cancels the occurrence <strong>permanently</strong>.</li>
+                    <li><kbd>✖ Refuse</kbd>: asks for confirmation “Refuse this task? It will not run.”, then cancels the occurrence <strong>permanently</strong>.</li>
                 </ul>
                 <h3>To approve a task</h3>
                 <ol>
-                    <li>Open <span class="chemin">Main menu › Tasks to approve</span>; the “To approve” filter is already selected.</li>
+                    <li>Open <span class="chemin">Main menu › Tasks to approve</span>; the “Awaiting approval” filter is already selected.</li>
                     <li>Read the card: name, description, scheduled date, beneficiary and amount if any.</li>
                     <li>If needed, enter a reason (for example “Checked with management”).</li>
                     <li>Click <kbd>✔ Approve</kbd>, then confirm.</li>
-                    <li>The message “Task approved: it will run at the scheduled time.” appears; the card leaves the “To approve” list and turns green under “Approved”.</li>
+                    <li>The message “Task approved: it will run at the scheduled time.” appears; the card leaves the “Awaiting approval” list and turns green under “Approved”.</li>
                 </ol>
                 <h3>To reject a task</h3>
                 <ol>
-                    <li>Find the card under “To approve”.</li>
+                    <li>Find the card under “Awaiting approval”.</li>
                     <li>Enter a clear reason: it is what will later explain why the task never ran.</li>
-                    <li>Click <kbd>✖ Reject</kbd>, then confirm.</li>
-                    <li>The message “Task rejected: it will not run.” appears; the card turns grey under “Rejected”.</li>
+                    <li>Click <kbd>✖ Refuse</kbd>, then confirm.</li>
+                    <li>The message “Task refused: it will not run.” appears; the card turns grey under “Refused”.</li>
                 </ol>
                 <h3>What happens next</h3>
                 <ul>
@@ -367,7 +367,7 @@
                     <li><strong>Rejected</strong>: the occurrence is cancelled for good. It will be neither relaunched nor postponed. Later occurrences of the same definition are unaffected and will arrive in turn.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall">A rejection is irreversible: there is no “undo decision” button. If you reject a necessary task by mistake, it will have to be rescheduled from the administration console.</div>
-                <div class="piege" data-titre="Pitfall">Approving a “Late” task starts it almost immediately. If the moment is no longer appropriate (for example a mailing planned for the morning that you approve in the evening), reject it and have it rescheduled.</div>
+                <div class="piege" data-titre="Pitfall">Approving a “Past due” task starts it almost immediately. If the moment is no longer appropriate (for example a mailing planned for the morning that you approve in the evening), reject it and have it rescheduled.</div>
                 <div class="astuce" data-titre="Tip">The reason is limited to 500 characters: keep to the essentials (who validated, why, file reference).</div>
             </section>
 
@@ -375,7 +375,7 @@
                 <h2>Rules</h2>
                 <ul>
                     <li>A task appears here only if its definition requires approval; that setting is off by default and is changed in the administration console.</li>
-                    <li>When approval is enabled on a definition, all of its still-scheduled occurrences are blocked and switch to “To approve”.</li>
+                    <li>When approval is enabled on a definition, all of its still-scheduled occurrences are blocked and switch to “Awaiting approval”.</li>
                     <li>The runner checks tasks every minute; nothing runs while an occurrence is pending.</li>
                     <li><strong>Approve</strong> puts the occurrence back into the flow: it runs at the scheduled time, or on the service’s next pass (about one minute) if that time has passed.</li>
                     <li><strong>Reject</strong> cancels the occurrence permanently; it will never run. The reason is kept.</li>
@@ -394,24 +394,24 @@
                 <h2>Messages</h2>
                 <ul class="messages">
                     <li><span class="msg">“Approve this task? It will run at the scheduled time.”</span> — confirmation prompt of the <kbd>✔ Approve</kbd> button. Click “OK” to approve, “Cancel” to return to the card without changing anything.</li>
-                    <li><span class="msg">“Reject this task? It will not run.”</span> — confirmation prompt of the <kbd>✖ Reject</kbd> button. Remember that a rejection is final.</li>
+                    <li><span class="msg">“Refuse this task? It will not run.”</span> — confirmation prompt of the <kbd>✖ Refuse</kbd> button. Remember that a rejection is final.</li>
                     <li><span class="msg">“Task approved: it will run at the scheduled time.”</span> — the decision is recorded. If the time has already passed, it will run within the next minute.</li>
-                    <li><span class="msg">“Task rejected: it will not run.”</span> — the decision is recorded; the occurrence is cancelled.</li>
-                    <li><span class="msg">“This task no longer awaits a decision.”</span> — another user has already decided, or the task changed status since the list was displayed. Click <kbd>🔄 Refresh</kbd> to see the actual status; your click changed nothing.</li>
-                    <li><span class="msg">“No task awaits a decision.”</span> — the list is empty for the chosen filter. Nothing to do.</li>
-                    <li><span class="msg">“A task appears here only if its definition requires approval.”</span> — reminder shown under the empty list: if you were expecting a task, check its approval setting in the administration console.</li>
+                    <li><span class="msg">“Task refused: it will not run.”</span> — the decision is recorded; the occurrence is cancelled.</li>
+                    <li><span class="msg">“This task is no longer waiting for a decision.”</span> — another user has already decided, or the task changed status since the list was displayed. Click <kbd>🔄 Refresh</kbd> to see the actual status; your click changed nothing.</li>
+                    <li><span class="msg">“No task is waiting for a decision.”</span> — the list is empty for the chosen filter. Nothing to do.</li>
+                    <li><span class="msg">“A task shows up here only when its definition requires approval.”</span> — reminder shown under the empty list: if you were expecting a task, check its approval setting in the administration console.</li>
                 </ul>
             </section>
 
             <section id="en-pitfalls">
                 <h2>Tips and pitfalls</h2>
-                <div class="astuce" data-titre="Tip">A late task is not lost: it is still waiting for your decision. The “Deadline passed” counter points them out.</div>
+                <div class="astuce" data-titre="Tip">A late task is not lost: it is still waiting for your decision. The “Past due” counter points them out.</div>
                 <div class="astuce" data-titre="Tip">Fill in the reason above all for a rejection: it is what will later explain why the task never ran. For an approval, a short note (“validated by accounting”) is enough.</div>
                 <div class="piege" data-titre="Pitfall">A rejection is irreversible: there is no “undo decision” button. Read the whole card before rejecting.</div>
                 <div class="piege" data-titre="Pitfall">Each occurrence is decided separately. A daily task will produce one card per day; if you never want to see it again, have approval (or the task itself) disabled in the administration console rather than rejecting it every day.</div>
                 <div class="piege" data-titre="Pitfall">Approving a late task launches it within the minute. Make sure the action still makes sense at that moment.</div>
-                <div class="piege" data-titre="Pitfall">The list is limited to 200 cards. With the “All” filter, the oldest decisions may not be visible: choose “Approved” or “Rejected” to find a specific case.</div>
-                <div class="note" data-titre="Good to know">If two people handle the same card, the first decision wins; the second receives “This task no longer awaits a decision.” and nothing is overwritten.</div>
+                <div class="piege" data-titre="Pitfall">The list is limited to 200 cards. With the “All” filter, the oldest decisions may not be visible: choose “Approved” or “Refused” to find a specific case.</div>
+                <div class="note" data-titre="Good to know">If two people handle the same card, the first decision wins; the second receives “This task is no longer waiting for a decision.” and nothing is overwritten.</div>
                 <div class="note" data-titre="Good to know">Looking to approve a supplier payment? It is not here. Automatic payments are governed by caps and by email; see the <a href="achats.html">Purchases</a> section.</div>
                 <div class="astuce" data-titre="Tip">Note the card’s “Code: …” when asking the administrator for a reschedule: it is the task’s exact identifier.</div>
             </section>
@@ -419,17 +419,17 @@
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
                 <details><summary>Why does my scheduled task not appear under “Tasks to approve”?</summary><p>Because its definition does not require approval. That setting is off by default; it is enabled in the administration console, not in the ERP. While it is off, the task runs on its own at the scheduled time.</p></details>
-                <details><summary>What happens if I never open this screen?</summary><p>Nothing runs. Pending occurrences stay blocked, become “Late” once their time has passed and keep waiting for your decision. The badge in the left menu reminds you.</p></details>
+                <details><summary>What happens if I never open this screen?</summary><p>Nothing runs. Pending occurrences stay blocked, become “Past due” once their time has passed and keep waiting for your decision. The badge in the left menu reminds you.</p></details>
                 <details><summary>I approved a task whose time has passed: when will it run?</summary><p>On the runner’s next pass, i.e. about one minute after your approval.</p></details>
                 <details><summary>Can I undo a rejection?</summary><p>No. A rejection is final and there is no button to go back. If the task is needed, ask for it to be rescheduled in the administration console.</p></details>
                 <details><summary>Can I change the date, amount or beneficiary before approving?</summary><p>No. The screen only lets you approve or reject what the runner proposes. To change the content, reject the occurrence and have the task definition corrected.</p></details>
                 <details><summary>If I approve today, is tomorrow’s occurrence approved too?</summary><p>No. Each occurrence is decided separately. A daily task produces one card per day.</p></details>
                 <details><summary>Is the reason mandatory?</summary><p>No, but it is strongly advised, especially for a rejection. It is limited to 500 characters and stays displayed on the card with your email and the date.</p></details>
-                <details><summary>I get “This task no longer awaits a decision.”: did I do something wrong?</summary><p>No. A colleague decided before you, or the task changed status. Your click changed nothing. Refresh the list to see the decision taken.</p></details>
+                <details><summary>I get “This task is no longer waiting for a decision.”: did I do something wrong?</summary><p>No. A colleague decided before you, or the task changed status. Your click changed nothing. Refresh the list to see the decision taken.</p></details>
                 <details><summary>Why can’t I see another company’s tasks?</summary><p>Only your own company’s tasks are visible and editable. This is an isolation rule.</p></details>
                 <details><summary>Do automatic supplier payments have to be approved here?</summary><p>No. They do not go through this screen. They run on their own within the per-debit and per-month caps. A block, a failure or a 3D Secure request results in an email to the payer, and pre-notifications (24 h for cards, 3 days for bank debits) are sent automatically.</p></details>
                 <details><summary>Why do some cards have neither an amount nor a beneficiary?</summary><p>Those elements are shown only if the task has them. A report-sending task, for example, has no amount.</p></details>
-                <details><summary>I cannot find an old decision with the “All” filter.</summary><p>The list shows at most 200 cards, pending tasks first. Use the “Approved” or “Rejected” filter to narrow the list.</p></details>
+                <details><summary>I cannot find an old decision with the “All” filter.</summary><p>The list shows at most 200 cards, pending tasks first. Use the “Approved” or “Refused” filter to narrow the list.</p></details>
             </section>
 
             <section id="en-glossary">
@@ -440,10 +440,10 @@
                         <tr><td>Task runner</td><td>60Sec-AI service that checks scheduled tasks every minute and launches those that are due.</td></tr>
                         <tr><td>Task definition</td><td>The task as configured in the administration console: name, type, schedule, and the “requires approval” option.</td></tr>
                         <tr><td>Occurrence</td><td>One specific run of a task, at a given date and time. Each occurrence has its own card and its own decision.</td></tr>
-                        <tr><td>To approve</td><td>Status of an occurrence blocked while awaiting a human decision.</td></tr>
-                        <tr><td>Late</td><td>Pending occurrence whose scheduled date and time have already passed. Red border, “Deadline passed” counter.</td></tr>
+                        <tr><td>Awaiting approval</td><td>Status of an occurrence blocked while awaiting a human decision.</td></tr>
+                        <tr><td>Past due</td><td>Pending occurrence whose scheduled date and time have already passed. Red border, “Past due” badge and counter.</td></tr>
                         <tr><td>Approved</td><td>Occurrence put back into the flow: it will run at the scheduled time, or within the minute if that time has passed. Green border.</td></tr>
-                        <tr><td>Rejected</td><td>Occurrence cancelled permanently; it will never run. Grey border.</td></tr>
+                        <tr><td>Refused</td><td>Occurrence cancelled permanently; it will never run. Grey border.</td></tr>
                         <tr><td>Reason</td><td>Optional text (500 characters at most) attached to the decision and kept on the card.</td></tr>
                         <tr><td>Decision</td><td>Record of who decided (email), when (local date and time) and why (reason).</td></tr>
                         <tr><td>Execution-type badge</td><td>Label on the card indicating the nature of the action the runner will perform.</td></tr>
@@ -463,7 +463,7 @@
             <section id="es-proposito">
                 <h2>Propósito y origen de las tareas</h2>
                 <h3>Propósito</h3>
-                <p>60Sec-AI cuenta con un ejecutor de tareas programadas: un servicio que, cada minuto, revisa qué tareas están vencidas y las lanza. Algunas tareas se consideran demasiado delicadas para ejecutarse solas. Para ellas, el ejecutor no hace nada hasta que una persona haya decidido: deposita la ocurrencia en la pantalla « Tareas por aprobar » y espera. Es lo que recuerda el texto de introducción de la pantalla: « El ejecutor de tareas deposita aquí lo que está a punto de hacer cuando la tarea exige una validación. Nada se ejecuta mientras usted no haya decidido. »</p>
+                <p>60Sec-AI cuenta con un ejecutor de tareas programadas: un servicio que, cada minuto, revisa qué tareas están vencidas y las lanza. Algunas tareas se consideran demasiado delicadas para ejecutarse solas. Para ellas, el ejecutor no hace nada hasta que una persona haya decidido: deposita la ocurrencia en la pantalla « Tareas por aprobar » y espera. Es lo que recuerda el texto de introducción de la pantalla: « El ejecutor de tareas deja aquí lo que va a hacer cuando una tarea exige validación. Nada se ejecuta hasta que usted decida. »</p>
                 <p>La pantalla es, por tanto, una bandeja de decisión, no un planificador: aquí no crea tareas ni modifica su contenido. Solo responde « sí » o « no » a lo que propone el ejecutor, ocurrencia por ocurrencia.</p>
                 <h3>De dónde vienen las tareas</h3>
                 <ul>
@@ -481,7 +481,7 @@
             <section id="es-filtros">
                 <h2>Filtros y contadores</h2>
                 <h3>Filtro de estado</h3>
-                <p>En la parte superior de la pantalla, una opción « Filtro » determina qué tarjetas se muestran. La lista se recarga <strong>en cuanto cambia la opción</strong>, sin botón adicional.</p>
+                <p>Debajo de los contadores, una lista desplegable sin etiqueta determina qué tarjetas se muestran. La lista se recarga <strong>en cuanto cambia la opción</strong>, sin botón adicional.</p>
                 <table>
                     <thead><tr><th>Opción</th><th>Tarjetas mostradas</th></tr></thead>
                     <tbody>
@@ -501,7 +501,7 @@
                     <thead><tr><th>Contador</th><th>Significado</th></tr></thead>
                     <tbody>
                         <tr><td>Por aprobar</td><td>Número de ocurrencias en espera de decisión.</td></tr>
-                        <tr><td>Plazo vencido</td><td>Entre las ocurrencias pendientes, aquellas cuya fecha y hora previstas ya pasaron. No están perdidas: siguen esperando su decisión.</td></tr>
+                        <tr><td>Vencidas</td><td>Entre las ocurrencias pendientes, aquellas cuya fecha y hora previstas ya pasaron. No están perdidas: siguen esperando su decisión.</td></tr>
                     </tbody>
                 </table>
                 <h3>Orden y límite</h3>
@@ -510,7 +510,7 @@
                     <li>Dentro de cada grupo, el orden sigue la <strong>fecha prevista</strong>.</li>
                     <li>La lista muestra <strong>como máximo 200 tarjetas</strong>. Con « Todas », las decisiones más antiguas pueden no aparecer: use un filtro más preciso.</li>
                 </ul>
-                <div class="astuce" data-titre="Consejo">Empiece siempre por el contador « Plazo vencido ». Son las ocurrencias que el ejecutor lanzará <em>de inmediato</em> tras su aprobación: asegúrese de que es lo que desea.</div>
+                <div class="astuce" data-titre="Consejo">Empiece siempre por el contador « Vencidas ». Son las ocurrencias que el ejecutor lanzará <em>de inmediato</em> tras su aprobación: asegúrese de que es lo que desea.</div>
             </section>
 
             <section id="es-tarjeta">
@@ -522,7 +522,7 @@
                     <tbody>
                         <tr><td>Nombre de la tarea</td><td>El nombre dado a la tarea en su definición.</td></tr>
                         <tr><td>Insignia del tipo de ejecución</td><td>Indica la naturaleza de lo que hará el ejecutor (envío, procesamiento, generación, etc.).</td></tr>
-                        <tr><td>Insignia de estado</td><td>« Aprobada », « Rechazada » o « Atrasada ». Una tarea pendiente cuyo plazo no ha vencido no tiene insignia de estado: su borde naranja basta.</td></tr>
+                        <tr><td>Insignia de estado</td><td>« Aprobada », « Rechazada » o « Vencida ». Una tarea pendiente cuyo plazo no ha vencido no tiene insignia de estado: su borde naranja basta.</td></tr>
                         <tr><td>Descripción</td><td>El texto explicativo de la tarea.</td></tr>
                         <tr><td>Prevista el</td><td>Fecha y hora de ejecución previstas, con el formato « Prevista el aaaa-mm-dd hh:mm ».</td></tr>
                         <tr><td>Código</td><td>El identificador de la tarea, mostrado como « Código: … ». Útil para hablar de ella con un colega o con el administrador.</td></tr>
@@ -539,13 +539,13 @@
                     <thead><tr><th>Color</th><th>Estado</th></tr></thead>
                     <tbody>
                         <tr><td>Naranja</td><td>En espera de decisión, plazo por venir.</td></tr>
-                        <tr><td>Rojo</td><td>Atrasada: pendiente, pero la fecha prevista ya pasó.</td></tr>
+                        <tr><td>Rojo</td><td>Vencida: pendiente, pero la fecha prevista ya pasó.</td></tr>
                         <tr><td>Verde</td><td>Aprobada.</td></tr>
                         <tr><td>Gris</td><td>Rechazada.</td></tr>
                     </tbody>
                 </table>
                 <h3>Zona de decisión</h3>
-                <p>Solo las tarjetas pendientes (naranjas o rojas) tienen una zona de decisión: el campo « Motivo » y los dos botones <kbd>✔ Aprobar</kbd> y <kbd>✖ Rechazar</kbd>. Las tarjetas verdes y grises son de solo lectura.</p>
+                <p>Solo las tarjetas pendientes (naranjas o rojas) tienen una zona de decisión: un cuadro de texto sin etiqueta, donde escribe el motivo, y los dos botones <kbd>✔ Aprobar</kbd> y <kbd>✖ Rechazar</kbd>. Las tarjetas verdes y grises son de solo lectura.</p>
                 <div class="note" data-titre="Conviene saber">La categoría, el beneficiario, el importe y las notas solo aparecen si existen. Una tarjeta sin importe no es una tarjeta incompleta: la tarea simplemente no lo tiene.</div>
             </section>
 
@@ -585,7 +585,7 @@
                     <li><strong>Rechazada</strong>: la ocurrencia queda anulada para siempre. No se relanzará ni se aplazará. Las ocurrencias siguientes de la misma definición no se ven afectadas y llegarán a su turno.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa">Un rechazo es irreversible: no existe ningún botón « anular la decisión ». Si rechaza por error una tarea necesaria, habrá que reprogramarla desde la consola de administración.</div>
-                <div class="piege" data-titre="Trampa">Aprobar una tarea « Atrasada » la hace arrancar casi de inmediato. Si el momento ya no es oportuno (por ejemplo un envío previsto por la mañana que aprueba por la noche), rechácela y pida que se reprograme.</div>
+                <div class="piege" data-titre="Trampa">Aprobar una tarea « Vencida » la hace arrancar casi de inmediato. Si el momento ya no es oportuno (por ejemplo un envío previsto por la mañana que aprueba por la noche), rechácela y pida que se reprograme.</div>
                 <div class="astuce" data-titre="Consejo">El motivo está limitado a 500 caracteres: vaya a lo esencial (quién validó, por qué, referencia del expediente).</div>
             </section>
 
@@ -617,13 +617,13 @@
                     <li><span class="msg">« Tarea rechazada: no se ejecutará. »</span> — la decisión queda registrada; la ocurrencia se anula.</li>
                     <li><span class="msg">« Esta tarea ya no espera una decisión. »</span> — otro usuario ya decidió, o la tarea cambió de estado desde que se mostró la lista. Pulse <kbd>🔄 Actualizar</kbd> para ver el estado real; su clic no modificó nada.</li>
                     <li><span class="msg">« Ninguna tarea espera una decisión. »</span> — la lista está vacía para el filtro elegido. Nada que hacer.</li>
-                    <li><span class="msg">« Una tarea solo aparece aquí si su definición pide una aprobación. »</span> — recordatorio mostrado bajo la lista vacía: si esperaba una tarea, verifique su ajuste de aprobación en la consola de administración.</li>
+                    <li><span class="msg">« Una tarea aparece aquí solo si su definición exige aprobación. »</span> — recordatorio mostrado bajo la lista vacía: si esperaba una tarea, verifique su ajuste de aprobación en la consola de administración.</li>
                 </ul>
             </section>
 
             <section id="es-trampas">
                 <h2>Consejos y trampas</h2>
-                <div class="astuce" data-titre="Consejo">Una tarea atrasada no está perdida: sigue esperando su decisión. El contador « Plazo vencido » se las señala.</div>
+                <div class="astuce" data-titre="Consejo">Una tarea atrasada no está perdida: sigue esperando su decisión. El contador « Vencidas » se las señala.</div>
                 <div class="astuce" data-titre="Consejo">Rellene el motivo sobre todo en caso de rechazo: es lo que explicará más tarde por qué la tarea nunca se ejecutó. Para una aprobación, una breve mención (« validado por contabilidad ») basta.</div>
                 <div class="piege" data-titre="Trampa">Un rechazo es irreversible: no existe botón « anular la decisión ». Lea la tarjeta completa antes de rechazar.</div>
                 <div class="piege" data-titre="Trampa">Cada ocurrencia se decide por separado. Una tarea diaria producirá una tarjeta por día; si no quiere volver a verla nunca, pida que se desactive la aprobación (o la propia tarea) en la consola de administración en lugar de rechazarla cada día.</div>
@@ -637,7 +637,7 @@
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
                 <details><summary>¿Por qué mi tarea programada no aparece en « Tareas por aprobar »?</summary><p>Porque su definición no pide aprobación. Este ajuste está desactivado por defecto; se activa en la consola de administración, no en el ERP. Mientras esté desactivado, la tarea se ejecuta sola a la hora prevista.</p></details>
-                <details><summary>¿Qué pasa si nunca abro esta pantalla?</summary><p>Nada se ejecuta. Las ocurrencias pendientes permanecen bloqueadas, pasan a « Atrasadas » una vez vencida su hora y siguen esperando su decisión. La insignia del menú de la izquierda se lo recuerda.</p></details>
+                <details><summary>¿Qué pasa si nunca abro esta pantalla?</summary><p>Nada se ejecuta. Las ocurrencias pendientes permanecen bloqueadas, pasan a « Vencida » una vez vencida su hora y siguen esperando su decisión. La insignia del menú de la izquierda se lo recuerda.</p></details>
                 <details><summary>Aprobé una tarea cuya hora ya pasó: ¿cuándo se ejecutará?</summary><p>En la siguiente pasada del servicio de ejecución, es decir, alrededor de un minuto después de su aprobación.</p></details>
                 <details><summary>¿Puedo anular un rechazo?</summary><p>No. El rechazo es definitivo y no existe botón para volver atrás. Si la tarea es necesaria, pida su reprogramación en la consola de administración.</p></details>
                 <details><summary>¿Puedo modificar la fecha, el importe o el beneficiario antes de aprobar?</summary><p>No. La pantalla solo permite aprobar o rechazar lo que propone el ejecutor. Para cambiar el contenido, rechace la ocurrencia y pida que se corrija la definición de la tarea.</p></details>
@@ -659,7 +659,7 @@
                         <tr><td>Definición de tarea</td><td>La tarea tal como está configurada en la consola de administración: nombre, tipo, horario y la opción « exige una aprobación ».</td></tr>
                         <tr><td>Ocurrencia</td><td>Una ejecución concreta de una tarea, en una fecha y hora dadas. Cada ocurrencia tiene su propia tarjeta y su propia decisión.</td></tr>
                         <tr><td>Por aprobar</td><td>Estado de una ocurrencia bloqueada en espera de una decisión humana.</td></tr>
-                        <tr><td>Atrasada</td><td>Ocurrencia pendiente cuya fecha y hora previstas ya pasaron. Borde rojo, contador « Plazo vencido ».</td></tr>
+                        <tr><td>Vencida</td><td>Ocurrencia pendiente cuya fecha y hora previstas ya pasaron. Borde rojo, insignia « Vencida », contador « Vencidas ».</td></tr>
                         <tr><td>Aprobada</td><td>Ocurrencia devuelta al flujo: se ejecutará a la hora prevista o en el minuto siguiente si esa hora ya pasó. Borde verde.</td></tr>
                         <tr><td>Rechazada</td><td>Ocurrencia anulada definitivamente; nunca se ejecutará. Borde gris.</td></tr>
                         <tr><td>Motivo</td><td>Texto opcional (500 caracteres como máximo) adjunto a la decisión y conservado en la tarjeta.</td></tr>

@@ -73,7 +73,7 @@
 
             <section id="fr-journaux">
                 <h2>Journaux comptables</h2>
-                <p>Consulter, filtrer, créer, modifier et supprimer les écritures du journal général (<span class="chemin">Comptabilité › Journaux comptables</span>). L’écran est disponible en français, en anglais et en espagnol.</p>
+                <p>Consulter, filtrer, créer, modifier et supprimer les écritures du journal général (<span class="chemin">Comptabilité › Journaux</span>). L’écran est disponible en français, en anglais et en espagnol.</p>
                 <h3>But</h3>
                 <p>C’est le point d’entrée de toute la comptabilité : la liste montre les écritures automatiques (factures, règlements) et les écritures manuelles, avec leur statut et leurs totaux.</p>
                 <h3>Boutons et actions</h3>
@@ -123,18 +123,18 @@
 
             <section id="fr-ecriture">
                 <h2>Écriture</h2>
-                <p>Fenêtre « Nouvelle écriture » ou « Modifier l’écriture », ouverte depuis <span class="chemin">Comptabilité › Journaux comptables</span>.</p>
+                <p>Fenêtre « Nouvelle écriture » ou « Modifier l’écriture », ouverte depuis <span class="chemin">Comptabilité › Journaux</span>.</p>
                 <h3>But</h3>
                 <p>Saisir ou modifier une écriture en partie double : un en-tête (journal, période, date, pièce, libellé) et des lignes (compte, libellé, débit ou crédit).</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>📋 Charger un template</kbd> : ouvre la liste des modèles <strong>actifs</strong>. Chaque carte affiche Code · Journal, plus la mention « 💰 pré-rempli » si le modèle contient des montants. Une recherche instantanée « Rechercher un template... » filtre la liste ; le bouton <kbd>✕</kbd> (Fermer) la referme.
+                    <li><kbd>📋 Charger un template</kbd> : ouvre la liste des modèles <strong>actifs</strong>. Chaque carte affiche Code · Journal, plus la mention « 💰 pré-rempli » si le modèle contient des montants. Une recherche instantanée « Rechercher un template... » filtre la liste ; le bouton <kbd>✕</kbd> (Fermer) la referme. S’il n’existe aucun modèle actif, la liste affiche « Aucun template défini. »
                         <ul>
                             <li>Si des montants sont déjà saisis, on vous demande : « Charger ce template écrasera les lignes actuelles. Continuer ? ».</li>
                             <li>Le modèle <strong>remplace toutes les lignes</strong> et <strong>impose son journal</strong>. Il ne remplit le libellé de l’écriture que si celui-ci est vide.</li>
                         </ul>
                     </li>
-                    <li>Sélecteur <kbd>Sélectionner un compte ▾</kbd> sur chaque ligne : liste des comptes avec une recherche qui ignore les accents (« Rechercher un compte... »). Si rien ne correspond : « Aucun compte trouvé. »</li>
+                    <li>Sélecteur <kbd>Sélectionner un compte ▾</kbd> sur chaque ligne : liste des comptes avec une recherche qui ignore les accents (« Rechercher un compte... »). Si le plan comptable ne contient aucun compte : « Aucun compte trouvé. »</li>
                     <li>Bouton rond <kbd>+</kbd> (« Ajouter une ligne ») : ajoute une ligne vide.</li>
                     <li><strong>Corbeille</strong> d’une ligne : confirmation « Supprimer cette ligne ? ».</li>
                     <li><kbd>Enregistrer l’écriture</kbd> : vérifie les règles, enregistre, puis ferme la fenêtre.</li>
@@ -151,12 +151,12 @@
                         <tr><td>Libellé de l’écriture</td><td>Oui</td><td>250 caractères au maximum. Aide « Description / mémo... ».</td></tr>
                     </tbody>
                 </table>
-                <h3>Lignes</h3>
+                <h3>Lignes (bloc « Lignes d’écriture »)</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Détails</th></tr></thead>
                     <tbody>
                         <tr><td>Compte</td><td>Sélecteur de compte avec recherche.</td></tr>
-                        <tr><td>Libellé ligne</td><td>Texte propre à la ligne (facultatif).</td></tr>
+                        <tr><td>Libellé ligne</td><td>Texte propre à la ligne (facultatif). 250 caractères au maximum. Aide « Description ligne... ».</td></tr>
                         <tr><td>Débit</td><td>Montant au débit. La virgule est convertie en point ; seuls les chiffres sont acceptés, 2 décimales au maximum.</td></tr>
                         <tr><td>Crédit</td><td>Montant au crédit, mêmes règles.</td></tr>
                     </tbody>
@@ -180,7 +180,7 @@
                 <h3>Marche à suivre</h3>
                 <p>Pour saisir une écriture manuelle :</p>
                 <ol>
-                    <li>Dans <span class="chemin">Comptabilité › Journaux comptables</span>, cliquez sur <kbd>+</kbd>.</li>
+                    <li>Dans <span class="chemin">Comptabilité › Journaux</span>, cliquez sur <kbd>+</kbd>.</li>
                     <li>Choisissez le journal et la période, ajustez la date, tapez le libellé.</li>
                     <li>Sur chaque ligne, choisissez un compte et saisissez un débit ou un crédit. Ajoutez des lignes avec <kbd>+</kbd>.</li>
                     <li>Vérifiez que le badge indique « Équilibré ✓ ».</li>
@@ -263,8 +263,8 @@
                         <tr><td>Journal</td><td>Oui</td><td>Journal que le modèle imposera à l’écriture.</td></tr>
                         <tr><td>Case « Pré-remplir les montants »</td><td>Non</td><td>La modifier recharge la page et change le bandeau d’information (voir ci-dessous).</td></tr>
                         <tr><td>Case « Actif »</td><td>Non</td><td>Cochée par défaut. Décochée, le modèle n’est plus proposé dans la fenêtre d’écriture.</td></tr>
-                        <tr><td>Libellé du modèle</td><td>Oui</td><td>250 caractères au maximum.</td></tr>
-                        <tr><td>Description / Mémo par défaut</td><td>Non</td><td>500 caractères au maximum. Sert de libellé d’écriture si celui-ci est vide au chargement.</td></tr>
+                        <tr><td>Libellé du modèle</td><td>Oui</td><td>250 caractères au maximum. Exemple proposé : « ex: Amortissement mensuel équipement ».</td></tr>
+                        <tr><td>Description / Mémo par défaut</td><td>Non</td><td>500 caractères au maximum. Aide « Description appliquée à l’écriture... ». Sert de libellé d’écriture si celui-ci est vide au chargement.</td></tr>
                     </tbody>
                 </table>
                 <h3>Lignes (bloc « Structure du modèle »)</h3>
@@ -316,7 +316,7 @@
                 <p>Plaid est le service qui relie 60Sec-AI à votre institution financière. Cet écran liste les connexions établies, avec leur solde et leur statut.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Connecter une banque</kbd> (et <kbd>+</kbd> sur mobile) : lance la connexion Plaid (voir le piège ci-dessous).</li>
+                    <li><kbd>Connecter une banque</kbd> : lance la connexion Plaid (voir le piège ci-dessous).</li>
                     <li>Icône <strong>Déconnecter</strong> : visible sur les comptes actifs. Confirmation « Voulez-vous vraiment déconnecter ce compte? ». Le compte passe au statut « Déconnecté » sans être supprimé ; son historique reste visible.</li>
                     <li><strong>Panneau d’import</strong> : liste « Compte : » (comptes actifs), « Du : » (par défaut il y a un mois), « Au : » (aujourd’hui), bouton <kbd>Importer</kbd>.</li>
                 </ul>
@@ -414,7 +414,7 @@
                         <tr><td>TPS — 5 %</td><td>« Perçue sur ventes » moins « CTI sur achats » donne « TPS nette à remettre ».</td></tr>
                         <tr><td>TVQ — 9,975 %</td><td>« Perçue sur ventes » moins « RTI sur achats » donne « TVQ nette à remettre ».</td></tr>
                         <tr><td>TOTAL À REMETTRE À REVENU QUÉBEC</td><td>Somme des deux montants nets. Les montants nets incluent les ajustements de CTI et de RTI.</td></tr>
-                        <tr><td>Pastille de statut</td><td><strong>Brouillon</strong>, <strong>Finalisé</strong> ou <strong>Remis</strong>.</td></tr>
+                        <tr><td>Pastille de statut</td><td>À côté du titre « Détail du rapport » : <strong>Brouillon</strong>, <strong>Finalisé</strong> ou <strong>Remis</strong>.</td></tr>
                         <tr><td>Détail des écritures incluses dans le calcul</td><td>Tableau : Date, Pièce, Libellé, Compte, Catégorie, Débit, Crédit.</td></tr>
                     </tbody>
                 </table>
@@ -478,9 +478,10 @@
             <section id="fr-plan-comptable">
                 <h2>Plan comptable</h2>
                 <p>Consulter et gérer les comptes de la compagnie (<span class="chemin">Comptabilité › Plan comptable</span>).</p>
+                <p>Pour reprendre le plan comptable d’un autre logiciel, voyez <a href="importation.html">Importation des données</a> et <a href="correspondance-comptes.html">Correspondance des comptes</a>.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter un compte</kbd> (et <kbd>+</kbd> sur mobile) : ouvre la fenêtre « Ajouter un compte » (voir <a href="#fr-fiche-compte">Fiche de compte</a>).</li>
+                    <li><kbd>Ajouter un compte</kbd> : ouvre la fenêtre « Ajouter un compte » (voir <a href="#fr-fiche-compte">Fiche de compte</a>).</li>
                     <li><strong>Crayon</strong> : ouvre « Modifier un compte ».</li>
                     <li><strong>Corbeille</strong> : supprime le compte <strong>sans demander de confirmation</strong>.</li>
                     <li>La liste se recharge à la fermeture de la fenêtre d’édition.</li>
@@ -552,6 +553,7 @@
                     <li><span class="msg">« Veuillez sélectionner une sous-classe. »</span> — choisissez d’abord la classe, puis la sous-classe.</li>
                 </ul>
                 <h3>Trucs et pièges</h3>
+                <div class="note" data-titre="Bon à savoir">Cette fenêtre est offerte uniquement en français.</div>
                 <div class="piege" data-titre="Piège">L’écran ne vérifie pas que le numéro est unique ni qu’il est numérique. Consultez le plan comptable avant de choisir un numéro.</div>
                 <div class="piege" data-titre="Piège">Type au bilan et Sens restent modifiables après le remplissage automatique : assurez-vous qu’ils correspondent à la classe choisie, sinon les rapports seront faussés.</div>
             </section>
@@ -640,7 +642,7 @@
                 </table>
                 <p><strong>Balance sheet</strong> accounts (assets, liabilities, equity) keep their balance from one fiscal year to the next. <strong>Income statement</strong> accounts (revenue, cost of sales, expenses) are reset to zero at year-end closing: their net balance becomes the profit (or loss) of the year.</p>
                 <h3>Periods and fiscal years</h3>
-                <p>A <strong>fiscal year</strong> is the company’s financial year. It is split into <strong>periods</strong> (usually months). An entry always belongs to an <strong>open</strong> period: the entry screen only offers those. When a fiscal year is closed, income statement accounts are cleared to retained earnings, the year is locked and the next one is created automatically (see <a href="#en-year-end">Fiscal year-end closing</a>).</p>
+                <p>A <strong>fiscal year</strong> is the company’s financial year. It is split into <strong>periods</strong> (usually months). An entry always belongs to an <strong>open</strong> period: the entry screen only offers those. When a fiscal year is closed, income statement accounts are cleared to retained earnings, the year is locked and the next one is created automatically (see <a href="#en-year-end">Fiscal year-end close</a>).</p>
                 <h3>Journals</h3>
                 <p>A <strong>journal</strong> groups entries of the same nature (sales, purchases, bank, miscellaneous…). Each entry belongs to exactly one journal. Customer invoices, supplier invoices and payments create their entries automatically; you do not touch them. Entries you key in yourself are called <strong>manual</strong> entries.</p>
                 <h3>Entry statuses</h3>
@@ -654,14 +656,14 @@
 
             <section id="en-journals">
                 <h2>Accounting journals</h2>
-                <p>View, filter, create, edit and delete general journal entries (<span class="chemin">Accounting › Accounting journals</span>). The screen is available in French, English and Spanish.</p>
+                <p>View, filter, create, edit and delete general journal entries (<span class="chemin">Accounting › Journals</span>). The screen is available in French, English and Spanish.</p>
                 <h3>Purpose</h3>
                 <p>This is the entry point of the whole accounting module: the list shows automatic entries (invoices, payments) and manual entries, with their status and totals.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li><kbd>Filter</kbd>: reloads the list with the chosen criteria.</li>
                     <li>Round <kbd>+</kbd> button (tooltip “New entry”): opens the “New entry” window (see <a href="#en-entry">Entry</a>).</li>
-                    <li>Clicking the <strong>document number</strong> or the <strong>pencil</strong> icon (“Edit”): opens the “Edit entry” window.</li>
+                    <li>Clicking the <strong>voucher number</strong> or the <strong>pencil</strong> icon (“Edit”): opens the “Edit entry” window.</li>
                     <li><strong>Trash</strong> icon (“Delete”): only shown for entries with the <strong>Draft</strong> status. It asks for confirmation: “Delete this entry?”.</li>
                     <li>When the edit window closes, the list reloads by itself.</li>
                 </ul>
@@ -673,14 +675,14 @@
                         <tr><td>Date to</td><td>Defaults to today.</td></tr>
                         <tr><td>Journal</td><td>“(All)” or one of the company’s journals.</td></tr>
                         <tr><td>Status</td><td>(All), Draft, Validated, Reversed.</td></tr>
-                        <tr><td>Search (doc. no., description)</td><td>Free text, placeholder “Search...”. Looks in the document number and the description.</td></tr>
+                        <tr><td>Search (voucher no., description)</td><td>Free text, placeholder “Search...”. Looks in the voucher number and the description.</td></tr>
                     </tbody>
                 </table>
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Doc. no.</td><td>Document number; click to open the entry.</td></tr>
+                        <tr><td>Voucher no.</td><td>Voucher number; click to open the entry.</td></tr>
                         <tr><td>Date</td><td>yyyy-mm-dd format.</td></tr>
                         <tr><td>Journal</td><td>Code in bold, name underneath.</td></tr>
                         <tr><td>Description</td><td>Entry description, followed by an origin badge: “Cust. inv.”, “Supp. inv.” or “Payment”. Manual entries have no badge.</td></tr>
@@ -690,7 +692,7 @@
                         <tr><td>Actions</td><td>Pencil; trash for drafts only.</td></tr>
                     </tbody>
                 </table>
-                <p>List footer: “N entry(ies)”, “Total Debit:” and “Total Credit:” of the displayed entries.</p>
+                <p>List footer: “N entry(ies)”, “Total debit:” and “Total credit:” of the displayed entries.</p>
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“No entry found for these criteria.”</span> — widen the dates or remove a filter.</li>
@@ -704,18 +706,18 @@
 
             <section id="en-entry">
                 <h2>Entry</h2>
-                <p>“New entry” or “Edit entry” window, opened from <span class="chemin">Accounting › Accounting journals</span>.</p>
+                <p>“New entry” or “Edit entry” window, opened from <span class="chemin">Accounting › Journals</span>.</p>
                 <h3>Purpose</h3>
-                <p>Key in or edit a double-entry transaction: a header (journal, period, date, document number, description) and lines (account, description, debit or credit).</p>
+                <p>Key in or edit a double-entry transaction: a header (journal, period, date, voucher number, description) and lines (account, description, debit or credit).</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>📋 Load a template</kbd>: opens the list of <strong>active</strong> templates. Each card shows Code · Journal, plus “💰 pre-filled” if the template contains amounts. An instant search “Search a template...” filters the list; the <kbd>✕</kbd> (Close) button closes it.
+                    <li><kbd>📋 Load a template</kbd>: opens the list of <strong>active</strong> templates. Each card shows Code · Journal, plus “💰 pre-filled” if the template contains amounts. An instant search “Search for a template...” filters the list; the <kbd>✕</kbd> (Close) button closes it. If no active template exists, the list shows “No template defined.”
                         <ul>
                             <li>If amounts are already entered, you are asked: “Loading this template will overwrite the current lines. Continue?”.</li>
                             <li>The template <strong>replaces all lines</strong> and <strong>forces its journal</strong>. It only fills the entry description if it is empty.</li>
                         </ul>
                     </li>
-                    <li><kbd>Select an account ▾</kbd> picker on each line: list of accounts with an accent-insensitive search (“Search an account...”). If nothing matches: “No account found.”</li>
+                    <li><kbd>Select an account ▾</kbd> picker on each line: list of accounts with an accent-insensitive search (“Search for an account...”). If the chart of accounts contains no account: “No account found.”</li>
                     <li>Round <kbd>+</kbd> button (“Add a line”): adds an empty line.</li>
                     <li>Line <strong>trash</strong>: confirmation “Delete this line?”.</li>
                     <li><kbd>Save entry</kbd>: checks the rules, saves, then closes the window.</li>
@@ -727,17 +729,17 @@
                         <tr><td>Journal</td><td>Yes</td><td>Journal the entry belongs to. A loaded template forces it.</td></tr>
                         <tr><td>Period</td><td>Yes</td><td>The list only contains <strong>open periods</strong>.</td></tr>
                         <tr><td>Entry date</td><td>Yes</td><td>Defaults to today.</td></tr>
-                        <tr><td>“Validate entry” checkbox</td><td>No</td><td>When checked, the entry is saved with the Validated status (final).</td></tr>
-                        <tr><td>Doc. no.</td><td>No</td><td>50 characters maximum. Hint “(auto if left empty)”: a number is assigned automatically.</td></tr>
+                        <tr><td>“Validate the entry” checkbox</td><td>No</td><td>When checked, the entry is saved with the Validated status (final).</td></tr>
+                        <tr><td>Voucher no.</td><td>No</td><td>50 characters maximum. Hint “(auto if left blank)”: a number is assigned automatically.</td></tr>
                         <tr><td>Entry description</td><td>Yes</td><td>250 characters maximum. Hint “Description / memo...”.</td></tr>
                     </tbody>
                 </table>
-                <h3>Lines</h3>
+                <h3>Lines (“Entry lines” block)</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Details</th></tr></thead>
                     <tbody>
                         <tr><td>Account</td><td>Account picker with search.</td></tr>
-                        <tr><td>Line description</td><td>Text specific to the line (optional).</td></tr>
+                        <tr><td>Line description</td><td>Text specific to the line (optional). 250 characters maximum. Hint “Line description...”.</td></tr>
                         <tr><td>Debit</td><td>Debit amount. A comma is converted to a period; only digits are accepted, 2 decimals maximum.</td></tr>
                         <tr><td>Credit</td><td>Credit amount, same rules.</td></tr>
                     </tbody>
@@ -761,11 +763,11 @@
                 <h3>Step by step</h3>
                 <p>To key in a manual entry:</p>
                 <ol>
-                    <li>In <span class="chemin">Accounting › Accounting journals</span>, click <kbd>+</kbd>.</li>
+                    <li>In <span class="chemin">Accounting › Journals</span>, click <kbd>+</kbd>.</li>
                     <li>Choose the journal and the period, adjust the date, type the description.</li>
                     <li>On each line, pick an account and enter a debit or a credit. Add lines with <kbd>+</kbd>.</li>
                     <li>Check that the badge reads “Balanced ✓”.</li>
-                    <li>Leave “Validate entry” unchecked if you want to be able to edit it later, then click <kbd>Save entry</kbd>.</li>
+                    <li>Leave “Validate the entry” unchecked if you want to be able to edit it later, then click <kbd>Save entry</kbd>.</li>
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
@@ -774,15 +776,15 @@
                     <li><span class="msg">“Please enter a date.”</span> — the date is empty or invalid.</li>
                     <li><span class="msg">“The entry description is required.”</span> — type a description.</li>
                     <li><span class="msg">“An entry must have at least 2 lines.”</span> — add a line.</li>
-                    <li><span class="msg">“All lines must have a selected account.”</span> — complete or delete the line without an account.</li>
+                    <li><span class="msg">“All lines must have an account selected.”</span> — complete or delete the line without an account.</li>
                     <li><span class="msg">“All lines must have a Debit or Credit amount.”</span> — a line is at 0; enter an amount or delete it.</li>
-                    <li><span class="msg">“A line cannot have both a Debit and a Credit amount.”</span> — clear one of the two.</li>
+                    <li><span class="msg">“A line cannot have an amount in both Debit and Credit.”</span> — clear one of the two.</li>
                     <li><span class="msg">“The entry is not balanced. Debit = {0} / Credit = {1}”</span> — fix the amounts until the difference is zero.</li>
                     <li><span class="msg">“The entry total must be greater than 0.”</span> — all lines are at zero.</li>
                     <li><span class="msg">“Error while saving: {0}”</span> — saving failed; details follow. Try again.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
-                <div class="attention" data-titre="Warning">Checking “Validate entry” and saving makes the entry <strong>final</strong>. No screen lets you unvalidate or reverse it. When in doubt, save as a draft.</div>
+                <div class="attention" data-titre="Warning">Checking “Validate the entry” and saving makes the entry <strong>final</strong>. No screen lets you unvalidate or reverse it. When in doubt, save as a draft.</div>
                 <div class="piege" data-titre="Pitfall">The screen does not check that the date falls inside the chosen period. Check it yourself before saving.</div>
                 <div class="piege" data-titre="Pitfall">Delete empty lines before saving: a line without an amount blocks the save.</div>
                 <div class="astuce" data-titre="Tip">For entries that come back every month (depreciation, bank fees), create a <a href="#en-templates">template</a>: one click on <kbd>Load a template</kbd> fills all the lines.</div>
@@ -840,12 +842,12 @@
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
-                        <tr><td>Code</td><td>Yes</td><td>50 characters maximum. Suggested example: “e.g. AMORT-MENS”.</td></tr>
+                        <tr><td>Code</td><td>Yes</td><td>50 characters maximum. Suggested example: “e.g. DEPR-MTHLY”.</td></tr>
                         <tr><td>Journal</td><td>Yes</td><td>Journal the template will force on the entry.</td></tr>
                         <tr><td>“Pre-fill amounts” checkbox</td><td>No</td><td>Changing it reloads the page and switches the information banner (see below).</td></tr>
                         <tr><td>“Active” checkbox</td><td>No</td><td>Checked by default. Unchecked, the template is no longer offered in the entry window.</td></tr>
-                        <tr><td>Template name</td><td>Yes</td><td>250 characters maximum.</td></tr>
-                        <tr><td>Description / Default memo</td><td>No</td><td>500 characters maximum. Used as the entry description when it is empty at load time.</td></tr>
+                        <tr><td>Template label</td><td>Yes</td><td>250 characters maximum. Suggested example: “e.g. Monthly equipment depreciation”.</td></tr>
+                        <tr><td>Default description / memo</td><td>No</td><td>500 characters maximum. Hint “Description applied to the entry...”. Used as the entry description when it is empty at load time.</td></tr>
                     </tbody>
                 </table>
                 <h3>Lines (“Template structure” block)</h3>
@@ -861,8 +863,8 @@
                 <p>A new template starts with 2 lines. <kbd>+</kbd> button to add a line; trash with confirmation “Delete this line?”.</p>
                 <h3>Information banner</h3>
                 <ul>
-                    <li>Checkbox checked: “<strong>Pre-filled</strong> mode: the amounts saved here will be used automatically each time the template is applied.”</li>
-                    <li>Checkbox unchecked: “<strong>Structure</strong> mode: only the accounts and their side (Debit/Credit) are stored. Amounts must be entered at each use.”</li>
+                    <li>Checkbox checked: “<strong>Pre-filled</strong> mode: the amounts saved here are automatically used each time the template is applied.”</li>
+                    <li>Checkbox unchecked: “<strong>Structure</strong> mode: only the accounts and their side (Debit/Credit) are stored. Amounts must be entered on each use.”</li>
                 </ul>
                 <h3>Buttons and actions</h3>
                 <ul>
@@ -870,14 +872,14 @@
                 </ul>
                 <h3>Rules</h3>
                 <ul>
-                    <li>Code, name and journal required.</li>
+                    <li>Code, label and journal required.</li>
                     <li>At least 2 lines, each with an account.</li>
                     <li><strong>In pre-filled mode only</strong>: total debits = total credits, and total greater than 0.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“The template code is required.”</span> — enter a code.</li>
-                    <li><span class="msg">“The template name is required.”</span> — enter a name.</li>
+                    <li><span class="msg">“The template label is required.”</span> — enter a label.</li>
                     <li><span class="msg">“Please select a journal.”</span> — pick a journal.</li>
                     <li><span class="msg">“A template must have at least 2 lines.”</span> — add a line.</li>
                     <li><span class="msg">“All lines must have a selected account.”</span> — complete or delete the line.</li>
@@ -887,7 +889,7 @@
                 </ul>
                 <h3>Tips and pitfalls</h3>
                 <div class="piege" data-titre="Pitfall">In structure mode, amounts you type are still saved, without any check. Leave them at 0 to avoid confusion.</div>
-                <div class="astuce" data-titre="Tip">For a fixed monthly depreciation: code “AMORT-MENS”, pre-filled mode, line 1 Depreciation expense on the debit side, line 2 Accumulated depreciation on the credit side, same amount. Each month, load the template and save.</div>
+                <div class="astuce" data-titre="Tip">For a fixed monthly depreciation: code “DEPR-MTHLY”, pre-filled mode, line 1 Depreciation expense on the debit side, line 2 Accumulated depreciation on the credit side, same amount. Each month, load the template and save.</div>
             </section>
 
             <section id="en-bank-accounts">
@@ -897,7 +899,7 @@
                 <p>Plaid is the service that links 60Sec-AI to your financial institution. This screen lists the established connections, with their balance and status.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Connect a bank</kbd> (and <kbd>+</kbd> on mobile): starts the Plaid connection (see the pitfall below).</li>
+                    <li><kbd>Connect a bank</kbd>: starts the Plaid connection (see the pitfall below).</li>
                     <li><strong>Disconnect</strong> icon: shown on active accounts. Confirmation “Do you really want to disconnect this account?”. The account switches to the “Disconnected” status without being deleted; its history stays visible.</li>
                     <li><strong>Import panel</strong>: “Account:” list (active accounts), “From:” (defaults to one month ago), “To:” (today), <kbd>Import</kbd> button.</li>
                 </ul>
@@ -932,7 +934,7 @@
 
             <section id="en-bank-statement">
                 <h2>Bank statement</h2>
-                <p>“Bank transactions review” and bank connection through Plaid (<span class="chemin">Accounting › Bank statement</span>).</p>
+                <p>“View of bank movements” and bank connection through Plaid (<span class="chemin">Accounting › Bank statement</span>).</p>
                 <h3>Purpose</h3>
                 <p>Show, in one list, the bank transactions imported from your connected accounts, with their processing status.</p>
                 <h3>Buttons and actions</h3>
@@ -964,7 +966,7 @@
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No bank transaction found.”</span> — no transaction imported, or the search returns nothing.</li>
+                    <li><span class="msg">“No bank movement found.”</span> — no transaction imported, or the search returns nothing.</li>
                     <li><span class="msg">“Bank account connected successfully.”</span> — the connection is established.</li>
                     <li><span class="msg">“Error while creating the link token.”</span> — Plaid did not provide a token; check the Plaid configuration in Payment processor, then try again.</li>
                     <li><span class="msg">“Error while exchanging the token.”</span> — the connection could not be finalized; start the flow again.</li>
@@ -984,7 +986,7 @@
                 <ul>
                     <li><kbd>‹ Previous</kbd> / <kbd>Next ›</kbd>: change period according to the configured frequency.</li>
                     <li><kbd>Recalculate</kbd>: reruns the computation and shows “Report recalculated.”.</li>
-                    <li><kbd>Mark as remitted</kbd>: opens the “Confirm remittance” window: “You are about to mark this return as remitted. This action: will create the remittance accounting entry; will lock the return (PAID status)”. Fields “Payment date:” (today by default) and “Reference:” (optional, hint “Cheque number, confirmation, ...”). <kbd>Confirm</kbd> and <kbd>Cancel</kbd> buttons.</li>
+                    <li><kbd>Mark as remitted</kbd>: opens the “Confirm the remittance” window: “You are about to mark this declaration as remitted. This action: will create the remittance accounting entry; will lock the declaration (PAID status)”. Fields “Payment date:” (today by default) and “Reference:” (optional, hint “Cheque number, confirmation, ...”). <kbd>Confirm</kbd> and <kbd>Cancel</kbd> buttons.</li>
                 </ul>
                 <h3>Period</h3>
                 <p>The period depends on the <strong>TAX_FREQ</strong> parameter (<span class="chemin">Settings › Taxes</span>): MONTHLY, QUARTERLY (default) or ANNUAL. The subtitle reminds you: “Configured frequency: quarterly.”. Period labels look like “April 2026”, “Q2 2026 (01 Apr — 30 Jun 2026)” or “Year 2026”.</p>
@@ -995,8 +997,8 @@
                         <tr><td>GST — 5%</td><td>“Collected on sales” minus “ITC on purchases” gives “Net GST to remit”.</td></tr>
                         <tr><td>QST — 9.975%</td><td>“Collected on sales” minus “ITR on purchases” gives “Net QST to remit”.</td></tr>
                         <tr><td>TOTAL TO REMIT TO REVENU QUÉBEC</td><td>Sum of the two net amounts. Net amounts include ITC and ITR adjustments.</td></tr>
-                        <tr><td>Status pill</td><td><strong>Draft</strong>, <strong>Finalized</strong> or <strong>Remitted</strong>.</td></tr>
-                        <tr><td>Detail of entries included in the computation</td><td>Table: Date, Document, Description, Account, Category, Debit, Credit.</td></tr>
+                        <tr><td>Status pill</td><td>Next to the “Report details” title: <strong>Draft</strong>, <strong>Finalized</strong> or <strong>Remitted</strong>.</td></tr>
+                        <tr><td>Details of entries included in the calculation</td><td>Table: Date, Voucher, Description, Account, Category, Debit, Credit.</td></tr>
                     </tbody>
                 </table>
                 <h3>Rules</h3>
@@ -1015,7 +1017,7 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“Report recalculated.”</span> — amounts are up to date.</li>
-                    <li><span class="msg">“Remittance made. GST: $x — QST: $y — Total: $z”</span> — the remittance is recorded and the entry created.</li>
+                    <li><span class="msg">“Remittance completed. GST : x $ — QST : y $ — Total : z $”</span> — the remittance is recorded and the entry created.</li>
                     <li><span class="msg">“No report selected.”</span> — change period then try again.</li>
                     <li><span class="msg">“No data”</span> — no tax entry for this period.</li>
                     <li><span class="msg">“Error during remittance: …”</span> — the remittance was not recorded; details follow.</li>
@@ -1026,32 +1028,32 @@
             </section>
 
             <section id="en-year-end">
-                <h2>Fiscal year-end closing</h2>
-                <p>Close a fiscal year (<span class="chemin">Accounting › Fiscal year-end closing</span>).</p>
+                <h2>Fiscal year-end close</h2>
+                <p>Close a fiscal year (<span class="chemin">Accounting › Fiscal year-end close</span>).</p>
                 <h3>Purpose</h3>
                 <p>Clear the income statement accounts, transfer the net profit to <strong>Retained earnings (RE)</strong>, lock the fiscal year and automatically create the next one.</p>
                 <h3>Screen steps</h3>
                 <ol>
-                    <li><strong>“Fiscal year selection”</strong>: “Fiscal year to close:” list of <strong>open</strong> years. Changing the year hides the preview. Click <kbd>Check</kbd>.</li>
-                    <li><strong>“Financial preview of the year”</strong>: Total revenue, Total expenses; Net profit (green if positive, red if negative); RE account, RE balance before closing, RE balance after closing; “Net income account / Journal”; pill <strong>Ready to close</strong>, <strong>With warnings</strong> or <strong>Closing blocked</strong>.</li>
-                    <li><strong>“Detected issues”</strong>: table with severity, title, detail and count.</li>
+                    <li><strong>“Fiscal year selection”</strong>: “Fiscal year to close:” list of <strong>open</strong> years. Changing the year hides the preview. Click <kbd>Verify</kbd>.</li>
+                    <li><strong>“Financial overview of the fiscal year”</strong>: Total revenue, Total expenses; Net income (green if positive, red if negative); Retained earnings account, Retained earnings balance before closing, Retained earnings balance after closing; “Net income account / Journal”; pill <strong>Ready to close</strong>, <strong>With warnings</strong> or <strong>Closing blocked</strong>.</li>
+                    <li><strong>“Issues detected”</strong>: table with severity, title, detail and count.</li>
                     <li><strong>“Closing entries that will be generated”</strong>: Account, Name, Type, Total D, Total C, Closing debit, Closing credit.</li>
                 </ol>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Check</kbd>: analyzes the year and fills the preview, the issues and the planned entries.</li>
+                    <li><kbd>Verify</kbd>: analyzes the year and fills the preview, the issues and the planned entries.</li>
                     <li><kbd>Confirm closing</kbd>: disabled when “Closing blocked”. Confirmation: “This operation is final and will create accounting entries. / The selected fiscal year will be CLOSED and a new OPEN fiscal year will be created automatically. / Do you want to continue?”</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“Please select a fiscal year before checking.”</span> / <span class="msg">“Please select a fiscal year.”</span> — pick a year from the list.</li>
-                    <li><span class="msg">“Fix the blocking issues before you can close the fiscal year.”</span> — read “Detected issues”, fix them, then click <kbd>Check</kbd> again.</li>
-                    <li><span class="msg">“Warnings exist. Check before continuing.”</span> — closing is possible, but read the warnings.</li>
-                    <li><span class="msg">“Fiscal year {0} closed successfully. Net profit: {1}. New fiscal year {2} created automatically.”</span> — the closing is done.</li>
-                    <li><span class="msg">“Error during check: …”</span>, <span class="msg">“SQL error: …”</span>, <span class="msg">“Error: …”</span> — the operation failed; details follow. Nothing was closed.</li>
+                    <li><span class="msg">“Please select a fiscal year before verifying.”</span> / <span class="msg">“Please select a fiscal year.”</span> — pick a year from the list.</li>
+                    <li><span class="msg">“Fix the blocking issues before you can close the fiscal year.”</span> — read “Issues detected”, fix them, then click <kbd>Verify</kbd> again.</li>
+                    <li><span class="msg">“Warnings exist. Review before continuing.”</span> — closing is possible, but read the warnings.</li>
+                    <li><span class="msg">“Fiscal year {0} closed successfully. Net income: {1}. New fiscal year {2} created automatically.”</span> — the closing is done.</li>
+                    <li><span class="msg">“Error during verification: …”</span>, <span class="msg">“SQL error: …”</span>, <span class="msg">“Error: …”</span> — the operation failed; details follow. Nothing was closed.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
-                <div class="attention" data-titre="Warning">Always click <kbd>Check</kbd> right before closing, so the preview reflects the latest entries.</div>
+                <div class="attention" data-titre="Warning">Always click <kbd>Verify</kbd> right before closing, so the preview reflects the latest entries.</div>
                 <div class="piege" data-titre="Pitfall">After closing, the year disappears from the list; the screen does not let you reopen it.</div>
                 <div class="note" data-titre="Good to know">The RE / net income accounts and the journal used are set in <span class="chemin">Settings › Accounting</span> (see <a href="administration.html">Administration</a>).</div>
             </section>
@@ -1059,9 +1061,10 @@
             <section id="en-chart-of-accounts">
                 <h2>Chart of accounts</h2>
                 <p>View and manage the company’s accounts (<span class="chemin">Accounting › Chart of accounts</span>).</p>
+                <p>To bring over a chart of accounts from another software, see <a href="importation.html">Data import</a> and <a href="correspondance-comptes.html">Account mapping</a>.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add an account</kbd> (and <kbd>+</kbd> on mobile): opens the “Add an account” window (see <a href="#en-account-form">Account form</a>).</li>
+                    <li><kbd>Add an account</kbd>: opens the “Add an account” window (see <a href="#en-account-form">Account form</a>).</li>
                     <li><strong>Pencil</strong>: opens “Edit an account”.</li>
                     <li><strong>Trash</strong>: deletes the account <strong>without asking for confirmation</strong>.</li>
                     <li>The list reloads when the edit window closes.</li>
@@ -1079,7 +1082,7 @@
                         <tr><td>Account name</td><td>Name, with the subclass code underneath.</td></tr>
                         <tr><td>Class</td><td>Level 1 class.</td></tr>
                         <tr><td>Type</td><td>BALANCE SHEET or INCOME STATEMENT pill.</td></tr>
-                        <tr><td>Side</td><td>Debit or Credit.</td></tr>
+                        <tr><td>Direction</td><td>Debit or Credit.</td></tr>
                         <tr><td>Active</td><td>Whether the account can be used.</td></tr>
                         <tr><td>Action</td><td>Pencil and trash.</td></tr>
                     </tbody>
@@ -1133,6 +1136,7 @@
                     <li><span class="msg">“Please select a subclass.”</span> — choose the class first, then the subclass.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
+                <div class="note" data-titre="Good to know">This window is offered in French only.</div>
                 <div class="piege" data-titre="Pitfall">The screen does not check that the number is unique or numeric. Look at the chart of accounts before choosing a number.</div>
                 <div class="piege" data-titre="Pitfall">Balance sheet type and Side remain editable after the automatic fill: make sure they match the chosen class, otherwise reports will be wrong.</div>
             </section>
@@ -1162,7 +1166,7 @@
                         <tr><td>Debit / Credit</td><td>The two sides of an entry line; their effect depends on the account’s side.</td></tr>
                         <tr><td>Side (Debit / Credit)</td><td>Side on which an account’s balance is normally positive.</td></tr>
                         <tr><td>Entry</td><td>Set of balanced lines recording a transaction.</td></tr>
-                        <tr><td>Document (Doc. no.)</td><td>Identification number of the entry, assigned automatically when left empty.</td></tr>
+                        <tr><td>Voucher (Voucher no.)</td><td>Identification number of the entry, assigned automatically when left empty.</td></tr>
                         <tr><td>Journal</td><td>Grouping of entries of the same nature.</td></tr>
                         <tr><td>Period / Fiscal year</td><td>Month (or other split) of a financial year; only an open period accepts entries.</td></tr>
                         <tr><td>Draft / Validated / Reversed</td><td>The three entry statuses: editable, final, cancelled.</td></tr>
@@ -1228,21 +1232,21 @@
                 <ul>
                     <li><strong>Borrador</strong>: modificable y eliminable.</li>
                     <li><strong>Validado</strong>: definitivo, solo lectura.</li>
-                    <li><strong>Revertido</strong>: anulado por un asiento inverso; solo lectura.</li>
+                    <li><strong>Reversado</strong>: anulado por un asiento inverso; solo lectura.</li>
                 </ul>
                 <div class="note" data-titre="Conviene saber">Los impuestos de Quebec: TPS 5 % y TVQ 9,975 %. La TPS pagada en sus compras es un <strong>CTI</strong> (crédito fiscal por insumos); la TVQ pagada es un <strong>RTI</strong> (reembolso del impuesto por insumos). El <a href="#es-impuestos">Informe de impuestos</a> los calcula por usted.</div>
             </section>
 
             <section id="es-diarios">
                 <h2>Diarios contables</h2>
-                <p>Consultar, filtrar, crear, modificar y eliminar los asientos del diario general (<span class="chemin">Contabilidad › Diarios contables</span>). La pantalla está disponible en francés, inglés y español.</p>
+                <p>Consultar, filtrar, crear, modificar y eliminar los asientos del diario general (<span class="chemin">Contabilidad › Diarios</span>). La pantalla está disponible en francés, inglés y español.</p>
                 <h3>Objetivo</h3>
                 <p>Es el punto de entrada de toda la contabilidad: la lista muestra los asientos automáticos (facturas, pagos) y los asientos manuales, con su estado y sus totales.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Filtrar</kbd>: recarga la lista con los criterios elegidos.</li>
                     <li>Botón redondo <kbd>+</kbd> (ayuda «Nuevo asiento»): abre la ventana «Nuevo asiento» (vea <a href="#es-asiento">Asiento</a>).</li>
-                    <li>Hacer clic en el <strong>número de documento</strong> o en el icono del <strong>lápiz</strong> («Modificar»): abre la ventana «Modificar el asiento».</li>
+                    <li>Hacer clic en el <strong>número de comprobante</strong> o en el icono del <strong>lápiz</strong> («Editar»): abre la ventana «Editar asiento».</li>
                     <li>Icono de la <strong>papelera</strong> («Eliminar»): solo aparece en los asientos con estado <strong>Borrador</strong>. Pide confirmación: «¿Eliminar este asiento?».</li>
                     <li>Al cerrar la ventana de edición, la lista se recarga sola.</li>
                 </ul>
@@ -1253,25 +1257,25 @@
                         <tr><td>Fecha desde</td><td>Por defecto, el 1.º del mes en curso.</td></tr>
                         <tr><td>Fecha hasta</td><td>Por defecto, hoy.</td></tr>
                         <tr><td>Diario</td><td>«(Todos)» o un diario de la empresa.</td></tr>
-                        <tr><td>Estado</td><td>(Todos), Borrador, Validado, Revertido.</td></tr>
-                        <tr><td>Búsqueda (n.º documento, concepto)</td><td>Texto libre, ayuda «Buscar...». Busca en el número de documento y en el concepto.</td></tr>
+                        <tr><td>Estado</td><td>(Todos), Borrador, Validado, Reversado.</td></tr>
+                        <tr><td>Buscar (n.º comprobante, descripción)</td><td>Texto libre, ayuda «Buscar...». Busca en el número de comprobante y en la descripción.</td></tr>
                     </tbody>
                 </table>
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>N.º documento</td><td>Número del documento; clic para abrir el asiento.</td></tr>
+                        <tr><td>N.º comprobante</td><td>Número del comprobante; clic para abrir el asiento.</td></tr>
                         <tr><td>Fecha</td><td>Formato aaaa-mm-dd.</td></tr>
                         <tr><td>Diario</td><td>Código en negrita, nombre debajo.</td></tr>
-                        <tr><td>Concepto</td><td>Descripción del asiento, seguida de una insignia de origen: «Fact. cliente», «Fact. prov.» o «Pago». Los asientos manuales no tienen insignia.</td></tr>
-                        <tr><td>Debe</td><td>Total debe, 2 decimales.</td></tr>
-                        <tr><td>Haber</td><td>Total haber, 2 decimales.</td></tr>
-                        <tr><td>Estado</td><td>Pastilla: Borrador (naranja), Validado (verde), Revertido (rojo).</td></tr>
+                        <tr><td>Descripción</td><td>Descripción del asiento, seguida de una insignia de origen: «Fact. cliente», «Fact. prov.» o «Pago». Los asientos manuales no tienen insignia.</td></tr>
+                        <tr><td>Débito</td><td>Total débito, 2 decimales.</td></tr>
+                        <tr><td>Crédito</td><td>Total crédito, 2 decimales.</td></tr>
+                        <tr><td>Estado</td><td>Pastilla: Borrador (naranja), Validado (verde), Reversado (rojo).</td></tr>
                         <tr><td>Acciones</td><td>Lápiz; papelera solo en los borradores.</td></tr>
                     </tbody>
                 </table>
-                <p>Pie de la lista: «N asiento(s)», «Total Debe:» y «Total Haber:» de los asientos mostrados.</p>
+                <p>Pie de la lista: «N asiento(s)», «Total débito:» y «Total crédito:» de los asientos mostrados.</p>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«No se encontró ningún asiento con estos criterios.»</span> — amplíe las fechas o quite un filtro.</li>
@@ -1280,26 +1284,26 @@
                 <h3>Trucos y trampas</h3>
                 <div class="piege" data-titre="Trampa">La lista se abre en el mes en curso. Si un asiento parece haber «desaparecido», amplíe primero las fechas antes de buscar en otro lugar.</div>
                 <div class="note" data-titre="Conviene saber">Ningún botón de esta pantalla elimina un asiento validado o revertido. Solo se eliminan los borradores.</div>
-                <div class="astuce" data-titre="Consejo">Para encontrar todos los asientos creados por las facturas de clientes de un mes, filtre por fechas y por diario, y busque la insignia «Fact. cliente» en la columna Concepto.</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar todos los asientos creados por las facturas de clientes de un mes, filtre por fechas y por diario, y busque la insignia «Fact. cliente» en la columna Descripción.</div>
             </section>
 
             <section id="es-asiento">
                 <h2>Asiento</h2>
-                <p>Ventana «Nuevo asiento» o «Modificar el asiento», abierta desde <span class="chemin">Contabilidad › Diarios contables</span>.</p>
+                <p>Ventana «Nuevo asiento» o «Editar asiento», abierta desde <span class="chemin">Contabilidad › Diarios</span>.</p>
                 <h3>Objetivo</h3>
-                <p>Introducir o modificar un asiento por partida doble: una cabecera (diario, período, fecha, documento, concepto) y líneas (cuenta, concepto, debe o haber).</p>
+                <p>Introducir o modificar un asiento por partida doble: una cabecera (diario, período, fecha, comprobante, descripción) y líneas (cuenta, descripción, débito o crédito).</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>📋 Cargar una plantilla</kbd>: abre la lista de plantillas <strong>activas</strong>. Cada tarjeta muestra Código · Diario, más la mención «💰 prerrellenada» si la plantilla contiene importes. Una búsqueda instantánea «Buscar una plantilla...» filtra la lista; el botón <kbd>✕</kbd> (Cerrar) la cierra.
+                    <li><kbd>📋 Cargar una plantilla</kbd>: abre la lista de plantillas <strong>activas</strong>. Cada tarjeta muestra Código · Diario, más la mención «💰 pre-rellenado» si la plantilla contiene importes. Una búsqueda instantánea «Buscar una plantilla...» filtra la lista; el botón <kbd>✕</kbd> (Cerrar) la cierra. Si no existe ninguna plantilla activa, la lista muestra «Ninguna plantilla definida.»
                         <ul>
                             <li>Si ya hay importes introducidos, se le pregunta: «Cargar esta plantilla sobrescribirá las líneas actuales. ¿Continuar?».</li>
-                            <li>La plantilla <strong>reemplaza todas las líneas</strong> e <strong>impone su diario</strong>. Solo rellena el concepto del asiento si está vacío.</li>
+                            <li>La plantilla <strong>reemplaza todas las líneas</strong> e <strong>impone su diario</strong>. Solo rellena la descripción del asiento si está vacía.</li>
                         </ul>
                     </li>
-                    <li>Selector <kbd>Seleccionar una cuenta ▾</kbd> en cada línea: lista de cuentas con una búsqueda que ignora los acentos («Buscar una cuenta...»). Si nada coincide: «No se encontró ninguna cuenta.»</li>
-                    <li>Botón redondo <kbd>+</kbd> («Añadir una línea»): añade una línea vacía.</li>
+                    <li>Selector <kbd>Seleccionar una cuenta ▾</kbd> en cada línea: lista de cuentas con una búsqueda que ignora los acentos («Buscar una cuenta...»). Si el plan contable no contiene ninguna cuenta: «No se encontró ninguna cuenta.»</li>
+                    <li>Botón redondo <kbd>+</kbd> («Agregar una línea»): añade una línea vacía.</li>
                     <li><strong>Papelera</strong> de una línea: confirmación «¿Eliminar esta línea?».</li>
-                    <li><kbd>Guardar el asiento</kbd>: comprueba las reglas, guarda y cierra la ventana.</li>
+                    <li><kbd>Guardar asiento</kbd>: comprueba las reglas, guarda y cierra la ventana.</li>
                 </ul>
                 <h3>Campos de la cabecera</h3>
                 <table>
@@ -1307,59 +1311,59 @@
                     <tbody>
                         <tr><td>Diario</td><td>Sí</td><td>Diario al que pertenece el asiento. Una plantilla cargada lo impone.</td></tr>
                         <tr><td>Período</td><td>Sí</td><td>La lista solo contiene los <strong>períodos abiertos</strong>.</td></tr>
-                        <tr><td>Fecha del asiento</td><td>Sí</td><td>Por defecto, hoy.</td></tr>
+                        <tr><td>Fecha de asiento</td><td>Sí</td><td>Por defecto, hoy.</td></tr>
                         <tr><td>Casilla «Validar el asiento»</td><td>No</td><td>Marcada, el asiento se guarda con el estado Validado (definitivo).</td></tr>
-                        <tr><td>N.º documento</td><td>No</td><td>50 caracteres como máximo. Ayuda «(auto si se deja vacío)»: se asigna un número automáticamente.</td></tr>
-                        <tr><td>Concepto del asiento</td><td>Sí</td><td>250 caracteres como máximo. Ayuda «Descripción / memo...».</td></tr>
+                        <tr><td>N.º de comprobante</td><td>No</td><td>50 caracteres como máximo. Ayuda «(automático si se deja vacío)»: se asigna un número automáticamente.</td></tr>
+                        <tr><td>Descripción del asiento</td><td>Sí</td><td>250 caracteres como máximo. Ayuda «Descripción / nota...».</td></tr>
                     </tbody>
                 </table>
-                <h3>Líneas</h3>
+                <h3>Líneas (bloque «Líneas del asiento»)</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Cuenta</td><td>Selector de cuenta con búsqueda.</td></tr>
-                        <tr><td>Concepto de línea</td><td>Texto propio de la línea (opcional).</td></tr>
-                        <tr><td>Debe</td><td>Importe al debe. La coma se convierte en punto; solo se aceptan cifras, 2 decimales como máximo.</td></tr>
-                        <tr><td>Haber</td><td>Importe al haber, mismas reglas.</td></tr>
+                        <tr><td>Descripción de línea</td><td>Texto propio de la línea (opcional). 250 caracteres como máximo. Ayuda «Descripción de línea...».</td></tr>
+                        <tr><td>Débito</td><td>Importe al débito. La coma se convierte en punto; solo se aceptan cifras, 2 decimales como máximo.</td></tr>
+                        <tr><td>Crédito</td><td>Importe al crédito, mismas reglas.</td></tr>
                     </tbody>
                 </table>
                 <ul>
                     <li>Un nuevo asiento empieza con 2 líneas vacías.</li>
-                    <li>Introducir un debe borra el haber de la misma línea, y viceversa.</li>
-                    <li>Pie de la ventana: Total Debe, Total Haber y «Diferencia (D − H)», en verde si es nula, en rojo si no. Una insignia se recalcula con cada pulsación: «Cuadrado ✓», «Descuadrado ✗» o «Vacío».</li>
+                    <li>Introducir un débito borra el crédito de la misma línea, y viceversa.</li>
+                    <li>Pie de la ventana: Total Débito, Total Crédito y «Diferencia (D − C)», en verde si es nula, en rojo si no. Una insignia se recalcula con cada pulsación: «Cuadrado ✓», «Descuadrado ✗» o «Vacío».</li>
                 </ul>
                 <h3>Reglas</h3>
                 <p>Comprobadas al guardar, en este orden:</p>
                 <ol>
-                    <li>Diario, período, fecha y concepto rellenados.</li>
+                    <li>Diario, período, fecha y descripción rellenados.</li>
                     <li>Al menos 2 líneas.</li>
                     <li>Cada línea tiene una cuenta.</li>
-                    <li>Cada línea tiene un importe al debe <strong>o</strong> al haber, nunca ambos.</li>
-                    <li>Total debe = total haber (tolerancia de 0,005).</li>
+                    <li>Cada línea tiene un importe al débito <strong>o</strong> al crédito, nunca ambos.</li>
+                    <li>Total débito = total crédito (tolerancia de 0,005).</li>
                     <li>El total es superior a 0.</li>
                 </ol>
-                <p>Un asiento <strong>Validado</strong> (🔒) o <strong>Revertido</strong> se abre en solo lectura: campos en gris, botones <kbd>+</kbd>, <kbd>Cargar una plantilla</kbd> y papeleras ocultos, <kbd>Guardar</kbd> desactivado.</p>
+                <p>Un asiento <strong>Validado</strong> (🔒) o <strong>Reversado</strong> se abre en solo lectura: campos en gris, botones <kbd>+</kbd>, <kbd>Cargar una plantilla</kbd> y papeleras ocultos, <kbd>Guardar</kbd> desactivado.</p>
                 <h3>Paso a paso</h3>
                 <p>Para introducir un asiento manual:</p>
                 <ol>
-                    <li>En <span class="chemin">Contabilidad › Diarios contables</span>, haga clic en <kbd>+</kbd>.</li>
-                    <li>Elija el diario y el período, ajuste la fecha, escriba el concepto.</li>
-                    <li>En cada línea, elija una cuenta e introduzca un debe o un haber. Añada líneas con <kbd>+</kbd>.</li>
+                    <li>En <span class="chemin">Contabilidad › Diarios</span>, haga clic en <kbd>+</kbd>.</li>
+                    <li>Elija el diario y el período, ajuste la fecha, escriba la descripción.</li>
+                    <li>En cada línea, elija una cuenta e introduzca un débito o un crédito. Añada líneas con <kbd>+</kbd>.</li>
                     <li>Compruebe que la insignia indica «Cuadrado ✓».</li>
-                    <li>Deje «Validar el asiento» sin marcar si quiere poder retocarlo, y haga clic en <kbd>Guardar el asiento</kbd>.</li>
+                    <li>Deje «Validar el asiento» sin marcar si quiere poder retocarlo, y haga clic en <kbd>Guardar asiento</kbd>.</li>
                 </ol>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«Seleccione un diario.»</span> — elija un diario de la lista.</li>
                     <li><span class="msg">«Seleccione un período.»</span> — elija un período abierto.</li>
-                    <li><span class="msg">«Introduzca una fecha.»</span> — la fecha está vacía o no es válida.</li>
-                    <li><span class="msg">«El concepto del asiento es obligatorio.»</span> — escriba una descripción.</li>
+                    <li><span class="msg">«Ingrese una fecha.»</span> — la fecha está vacía o no es válida.</li>
+                    <li><span class="msg">«La descripción del asiento es obligatoria.»</span> — escriba una descripción.</li>
                     <li><span class="msg">«Un asiento debe tener al menos 2 líneas.»</span> — añada una línea.</li>
                     <li><span class="msg">«Todas las líneas deben tener una cuenta seleccionada.»</span> — complete o elimine la línea sin cuenta.</li>
-                    <li><span class="msg">«Todas las líneas deben tener un importe al Debe o al Haber.»</span> — una línea está a 0; introduzca un importe o elimínela.</li>
-                    <li><span class="msg">«Una línea no puede tener un importe al Debe y al Haber a la vez.»</span> — vacíe uno de los dos.</li>
-                    <li><span class="msg">«El asiento no está cuadrado. Debe = {0} / Haber = {1}»</span> — corrija los importes hasta que la diferencia sea nula.</li>
-                    <li><span class="msg">«El total del asiento debe ser superior a 0.»</span> — todas las líneas están a cero.</li>
+                    <li><span class="msg">«Todas las líneas deben tener un importe en Débito o Crédito.»</span> — una línea está a 0; introduzca un importe o elimínela.</li>
+                    <li><span class="msg">«Una línea no puede tener un importe en Débito y Crédito a la vez.»</span> — vacíe uno de los dos.</li>
+                    <li><span class="msg">«El asiento no está cuadrado. Débito = {0} / Crédito = {1}»</span> — corrija los importes hasta que la diferencia sea nula.</li>
+                    <li><span class="msg">«El total del asiento debe ser mayor que 0.»</span> — todas las líneas están a cero.</li>
                     <li><span class="msg">«Error al guardar: {0}»</span> — el guardado falló; el detalle sigue. Vuelva a intentarlo.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
@@ -1423,10 +1427,10 @@
                     <tbody>
                         <tr><td>Código</td><td>Sí</td><td>50 caracteres como máximo. Ejemplo propuesto: «ej.: AMORT-MENS».</td></tr>
                         <tr><td>Diario</td><td>Sí</td><td>Diario que la plantilla impondrá al asiento.</td></tr>
-                        <tr><td>Casilla «Prerrellenar los importes»</td><td>No</td><td>Modificarla recarga la página y cambia el banner de información (vea más abajo).</td></tr>
-                        <tr><td>Casilla «Activa»</td><td>No</td><td>Marcada por defecto. Desmarcada, la plantilla deja de proponerse en la ventana de asiento.</td></tr>
-                        <tr><td>Nombre de la plantilla</td><td>Sí</td><td>250 caracteres como máximo.</td></tr>
-                        <tr><td>Descripción / Memo por defecto</td><td>No</td><td>500 caracteres como máximo. Sirve de concepto del asiento si este está vacío al cargar.</td></tr>
+                        <tr><td>Casilla «Pre-rellenar los importes»</td><td>No</td><td>Modificarla recarga la página y cambia el banner de información (vea más abajo).</td></tr>
+                        <tr><td>Casilla «Activo»</td><td>No</td><td>Marcada por defecto. Desmarcada, la plantilla deja de proponerse en la ventana de asiento.</td></tr>
+                        <tr><td>Etiqueta de la plantilla</td><td>Sí</td><td>250 caracteres como máximo. Ejemplo propuesto: «ej.: Amortización mensual de equipos».</td></tr>
+                        <tr><td>Descripción / memo predeterminado</td><td>No</td><td>500 caracteres como máximo. Ayuda «Descripción aplicada al asiento...». Sirve de descripción del asiento si esta está vacía al cargar.</td></tr>
                     </tbody>
                 </table>
                 <h3>Líneas (bloque «Estructura de la plantilla»)</h3>
@@ -1434,41 +1438,41 @@
                     <thead><tr><th>Columna</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Cuenta</td><td>Cuenta de la línea (obligatoria).</td></tr>
-                        <tr><td>Concepto de línea</td><td>Texto propio de la línea.</td></tr>
-                        <tr><td>Sentido</td><td>Debe o Haber; Debe por defecto.</td></tr>
-                        <tr><td>Importe</td><td>Se usa solo en modo prerrellenado.</td></tr>
+                        <tr><td>Descripción de la línea</td><td>Texto propio de la línea.</td></tr>
+                        <tr><td>Sentido</td><td>Débito o Crédito; Débito por defecto.</td></tr>
+                        <tr><td>Importe</td><td>Se usa solo en modo pre-rellenado.</td></tr>
                     </tbody>
                 </table>
                 <p>Una nueva plantilla empieza con 2 líneas. Botón <kbd>+</kbd> para añadir una línea; papelera con confirmación «¿Eliminar esta línea?».</p>
                 <h3>Banner de información</h3>
                 <ul>
-                    <li>Casilla marcada: «Modo <strong>prerrellenado</strong>: los importes guardados aquí se usarán automáticamente cada vez que se aplique la plantilla.»</li>
-                    <li>Casilla sin marcar: «Modo <strong>estructura</strong>: solo se memorizan las cuentas y su sentido (Debe/Haber). Los importes deberán introducirse en cada uso.»</li>
+                    <li>Casilla marcada: «Modo <strong>pre-rellenado</strong>: los importes guardados aquí se utilizan automáticamente cada vez que se aplica la plantilla.»</li>
+                    <li>Casilla sin marcar: «Modo <strong>estructura</strong>: solo se guardan las cuentas y su sentido (Débito/Crédito). Los importes deberán ingresarse en cada uso.»</li>
                 </ul>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Guardar la plantilla</kbd>: comprueba las reglas y guarda.</li>
+                    <li><kbd>Guardar plantilla</kbd>: comprueba las reglas y guarda.</li>
                 </ul>
                 <h3>Reglas</h3>
                 <ul>
-                    <li>Código, nombre y diario obligatorios.</li>
+                    <li>Código, etiqueta y diario obligatorios.</li>
                     <li>Al menos 2 líneas, cada una con una cuenta.</li>
-                    <li><strong>Solo en modo prerrellenado</strong>: total de debes = total de haberes, y total superior a 0.</li>
+                    <li><strong>Solo en modo pre-rellenado</strong>: total de débitos = total de créditos, y total superior a 0.</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«El código de la plantilla es obligatorio.»</span> — introduzca un código.</li>
-                    <li><span class="msg">«El nombre de la plantilla es obligatorio.»</span> — introduzca un nombre.</li>
+                    <li><span class="msg">«La etiqueta de la plantilla es obligatoria.»</span> — introduzca una etiqueta.</li>
                     <li><span class="msg">«Seleccione un diario.»</span> — elija un diario.</li>
                     <li><span class="msg">«Una plantilla debe tener al menos 2 líneas.»</span> — añada una línea.</li>
                     <li><span class="msg">«Todas las líneas deben tener una cuenta seleccionada.»</span> — complete o elimine la línea.</li>
-                    <li><span class="msg">«La plantilla prerrellenada no está cuadrada. Debe = {0} / Haber = {1}»</span> — ajuste los importes.</li>
-                    <li><span class="msg">«Los importes prerrellenados deben ser > 0.»</span> — en modo prerrellenado, el total no puede ser nulo.</li>
+                    <li><span class="msg">«La plantilla pre-rellenada no está equilibrada. Débito = {0} / Crédito = {1}»</span> — ajuste los importes.</li>
+                    <li><span class="msg">«Los importes pre-rellenados deben ser > 0.»</span> — en modo pre-rellenado, el total no puede ser nulo.</li>
                     <li><span class="msg">«Error al guardar: {0}»</span> — el guardado falló; el detalle sigue.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
                 <div class="piege" data-titre="Trampa">En modo estructura, los importes introducidos se guardan de todos modos, sin control. Déjelos a 0 para evitar confusiones.</div>
-                <div class="astuce" data-titre="Consejo">Para una amortización mensual fija: código «AMORT-MENS», modo prerrellenado, línea 1 Gasto de amortización al debe, línea 2 Amortización acumulada al haber, mismo importe. Cada mes, cargue la plantilla y guarde.</div>
+                <div class="astuce" data-titre="Consejo">Para una amortización mensual fija: código «AMORT-MENS», modo pre-rellenado, línea 1 Gasto de amortización al débito, línea 2 Amortización acumulada al crédito, mismo importe. Cada mes, cargue la plantilla y guarde.</div>
             </section>
 
             <section id="es-cuentas-bancarias">
@@ -1478,8 +1482,8 @@
                 <p>Plaid es el servicio que vincula 60Sec-AI con su institución financiera. Esta pantalla lista las conexiones establecidas, con su saldo y su estado.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Conectar un banco</kbd> (y <kbd>+</kbd> en móvil): inicia la conexión Plaid (vea la trampa más abajo).</li>
-                    <li>Icono <strong>Desconectar</strong>: visible en las cuentas activas. Confirmación «¿Realmente desea desconectar esta cuenta?». La cuenta pasa al estado «Desconectada» sin eliminarse; su historial sigue visible.</li>
+                    <li><kbd>Conectar un banco</kbd>: inicia la conexión Plaid (vea la trampa más abajo).</li>
+                    <li>Icono <strong>Desconectar</strong>: visible en las cuentas activas. Confirmación «¿Realmente desea desconectar esta cuenta?». La cuenta pasa al estado «Desconectado» sin eliminarse; su historial sigue visible.</li>
                     <li><strong>Panel de importación</strong>: lista «Cuenta:» (cuentas activas), «Desde:» (por defecto hace un mes), «Hasta:» (hoy), botón <kbd>Importar</kbd>.</li>
                 </ul>
                 <h3>Columnas</h3>
@@ -1489,7 +1493,7 @@
                         <tr><td>Banco</td><td>«Banco — Nombre de la cuenta Número».</td></tr>
                         <tr><td>Saldo actual</td><td>Saldo comunicado por el banco.</td></tr>
                         <tr><td>Fecha de conexión</td><td>Fecha en que se estableció el vínculo.</td></tr>
-                        <tr><td>Estado</td><td>Activa o Desconectada.</td></tr>
+                        <tr><td>Estado</td><td>Activo o Desconectado.</td></tr>
                         <tr><td>Acción</td><td>Desconectar (cuentas activas).</td></tr>
                     </tbody>
                 </table>
@@ -1513,7 +1517,7 @@
 
             <section id="es-extracto">
                 <h2>Extracto bancario</h2>
-                <p>«Consulta de los movimientos bancarios» y conexión de un banco mediante Plaid (<span class="chemin">Contabilidad › Extracto bancario</span>).</p>
+                <p>«Consulta de movimientos bancarios» y conexión de un banco mediante Plaid (<span class="chemin">Contabilidad › Extracto bancario</span>).</p>
                 <h3>Objetivo</h3>
                 <p>Mostrar, en una sola lista, los movimientos bancarios importados de sus cuentas conectadas, con su estado de tratamiento.</p>
                 <h3>Botones y acciones</h3>
@@ -1531,7 +1535,7 @@
                         <tr><td>Fecha</td><td>Formato «dd mmm aaaa».</td></tr>
                         <tr><td>Descripción</td><td>Etiqueta transmitida por el banco.</td></tr>
                         <tr><td>Referencia</td><td>Identificador de transacción Plaid (sirve para descartar duplicados).</td></tr>
-                        <tr><td>Estado</td><td><strong>Importado</strong> (línea nueva), <strong>Liquidado</strong> (asociado a un pago), <strong>Pendiente</strong> o <strong>Ignorado</strong>.</td></tr>
+                        <tr><td>Estado</td><td><strong>Importado</strong> (línea nueva), <strong>Conciliado</strong> (asociado a un pago), <strong>Pendiente</strong> o <strong>Ignorado</strong>.</td></tr>
                         <tr><td>Importe</td><td>En color según el signo.</td></tr>
                     </tbody>
                 </table>
@@ -1545,14 +1549,14 @@
                 </ol>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«No se encontró ningún movimiento bancario.»</span> — ninguna transacción importada, o la búsqueda no devuelve nada.</li>
+                    <li><span class="msg">«Ningún movimiento bancario encontrado.»</span> — ninguna transacción importada, o la búsqueda no devuelve nada.</li>
                     <li><span class="msg">«Cuenta bancaria conectada con éxito.»</span> — la conexión está establecida.</li>
                     <li><span class="msg">«Error al crear el link token.»</span> — Plaid no proporcionó un token; compruebe la configuración Plaid en Procesador de pagos y vuelva a intentarlo.</li>
                     <li><span class="msg">«Error al intercambiar el token.»</span> — la conexión no pudo finalizarse; repita el recorrido.</li>
-                    <li><span class="msg">«Error Plaid.»</span> — error general del servicio; inténtelo más tarde.</li>
+                    <li><span class="msg">«Error de Plaid.»</span> — error general del servicio; inténtelo más tarde.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
-                <div class="attention" data-titre="Atención">Esta pantalla es de <strong>solo lectura</strong>. No ofrece ninguna acción de conciliación ni de punteo. El estado «Liquidado» se rellena en otro lugar, al pagar las facturas (vea <a href="ventes.html">Ventas</a> y <a href="achats.html">Compras</a>).</div>
+                <div class="attention" data-titre="Atención">Esta pantalla es de <strong>solo lectura</strong>. No ofrece ninguna acción de conciliación ni de punteo. El estado «Conciliado» se rellena en otro lugar, al pagar las facturas (vea <a href="ventes.html">Ventas</a> y <a href="achats.html">Compras</a>).</div>
                 <div class="piege" data-titre="Trampa">Con la convención Plaid, un importe positivo es un débito bancario (salida de dinero). No lo interprete como un depósito.</div>
             </section>
 
@@ -1573,11 +1577,11 @@
                 <table>
                     <thead><tr><th>Bloque</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>TPS — 5 %</td><td>«Cobrada en ventas» menos «CTI en compras» da «TPS neta a remitir».</td></tr>
-                        <tr><td>TVQ — 9,975 %</td><td>«Cobrada en ventas» menos «RTI en compras» da «TVQ neta a remitir».</td></tr>
+                        <tr><td>IVA — 5 % (la TPS)</td><td>«Recaudado sobre ventas» menos «CTI sobre compras» da «IVA neto a remitir».</td></tr>
+                        <tr><td>IVQ — 9,975 % (la TVQ)</td><td>«Recaudado sobre ventas» menos «RTI sobre compras» da «IVQ neto a remitir».</td></tr>
                         <tr><td>TOTAL A REMITIR A REVENU QUÉBEC</td><td>Suma de los dos importes netos. Los importes netos incluyen los ajustes de CTI y de RTI.</td></tr>
-                        <tr><td>Pastilla de estado</td><td><strong>Borrador</strong>, <strong>Finalizado</strong> o <strong>Remitido</strong>.</td></tr>
-                        <tr><td>Detalle de los asientos incluidos en el cálculo</td><td>Tabla: Fecha, Documento, Concepto, Cuenta, Categoría, Debe, Haber.</td></tr>
+                        <tr><td>Pastilla de estado</td><td>Junto al título «Detalle del informe»: <strong>Borrador</strong>, <strong>Finalizado</strong> o <strong>Remitido</strong>.</td></tr>
+                        <tr><td>Detalle de los asientos incluidos en el cálculo</td><td>Tabla: Fecha, Comprobante, Descripción, Cuenta, Categoría, Débito, Crédito.</td></tr>
                     </tbody>
                 </table>
                 <h3>Reglas</h3>
@@ -1596,7 +1600,7 @@
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«Informe recalculado.»</span> — los importes están actualizados.</li>
-                    <li><span class="msg">«Remesa efectuada. TPS: x $ — TVQ: y $ — Total: z $»</span> — la remesa está registrada y el asiento creado.</li>
+                    <li><span class="msg">«Remesa completada. IVA : x $ — IVQ : y $ — Total : z $»</span> — la remesa está registrada y el asiento creado.</li>
                     <li><span class="msg">«Ningún informe seleccionado.»</span> — cambie de período y vuelva a intentarlo.</li>
                     <li><span class="msg">«Sin datos»</span> — ningún asiento de impuestos para este período.</li>
                     <li><span class="msg">«Error durante la remesa: …»</span> — la remesa no se registró; el detalle sigue.</li>
@@ -1614,20 +1618,20 @@
                 <h3>Pasos de la pantalla</h3>
                 <ol>
                     <li><strong>«Selección del ejercicio»</strong>: lista «Ejercicio a cerrar:» de los ejercicios <strong>abiertos</strong>. Cambiar de ejercicio oculta la vista previa. Haga clic en <kbd>Verificar</kbd>.</li>
-                    <li><strong>«Vista previa financiera del ejercicio»</strong>: Total de ingresos, Total de gastos; Beneficio neto (verde si es positivo, rojo si es negativo); Cuenta BNR, Saldo BNR antes del cierre, Saldo BNR después del cierre; «Cuenta BNE / Diario»; pastilla <strong>Listo para cerrar</strong>, <strong>Con advertencias</strong> o <strong>Cierre bloqueado</strong>.</li>
+                    <li><strong>«Resumen financiero del ejercicio»</strong>: Total de ingresos, Total de gastos; Beneficio neto (verde si es positivo, rojo si es negativo); Cuenta de beneficios no distribuidos, Saldo de beneficios no distribuidos antes del cierre, Saldo de beneficios no distribuidos después del cierre; «Cuenta de beneficio neto / Diario»; pastilla <strong>Listo para cerrar</strong>, <strong>Con advertencias</strong> o <strong>Cierre bloqueado</strong>.</li>
                     <li><strong>«Problemas detectados»</strong>: tabla con gravedad, título, detalle y número.</li>
-                    <li><strong>«Asientos de cierre que se generarán»</strong>: Cuenta, Nombre, Tipo, Total D, Total H, Debe de cierre, Haber de cierre.</li>
+                    <li><strong>«Asientos de cierre que se generarán»</strong>: Cuenta, Nombre, Tipo, Total D, Total C, Débito cierre, Crédito cierre.</li>
                 </ol>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Verificar</kbd>: analiza el ejercicio y rellena la vista previa, los problemas y los asientos previstos.</li>
-                    <li><kbd>Confirmar el cierre</kbd>: desactivado si «Cierre bloqueado». Confirmación: «Esta operación es definitiva y creará asientos contables. / El ejercicio seleccionado quedará CERRADO y se creará automáticamente un nuevo ejercicio ABIERTO. / ¿Desea continuar?»</li>
+                    <li><kbd>Confirmar el cierre</kbd>: desactivado si «Cierre bloqueado». Confirmación: «Esta operación es definitiva y creará asientos contables. / El ejercicio seleccionado será CERRADO y se creará automáticamente un nuevo ejercicio ABIERTO. / ¿Desea continuar?»</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«Seleccione un ejercicio antes de verificar.»</span> / <span class="msg">«Seleccione un ejercicio.»</span> — elija un ejercicio de la lista.</li>
                     <li><span class="msg">«Corrija los problemas bloqueantes antes de poder cerrar el ejercicio.»</span> — consulte «Problemas detectados», corrija y vuelva a hacer clic en <kbd>Verificar</kbd>.</li>
-                    <li><span class="msg">«Existen advertencias. Verifique antes de continuar.»</span> — el cierre es posible, pero lea las advertencias.</li>
+                    <li><span class="msg">«Existen advertencias. Revise antes de continuar.»</span> — el cierre es posible, pero lea las advertencias.</li>
                     <li><span class="msg">«Ejercicio {0} cerrado con éxito. Beneficio neto: {1}. Nuevo ejercicio {2} creado automáticamente.»</span> — el cierre ha terminado.</li>
                     <li><span class="msg">«Error durante la verificación: …»</span>, <span class="msg">«Error SQL: …»</span>, <span class="msg">«Error: …»</span> — la operación falló; el detalle sigue. No se cerró nada.</li>
                 </ul>
@@ -1638,18 +1642,19 @@
             </section>
 
             <section id="es-plan-cuentas">
-                <h2>Plan de cuentas</h2>
-                <p>Consultar y gestionar las cuentas de la empresa (<span class="chemin">Contabilidad › Plan de cuentas</span>).</p>
+                <h2>Plan contable</h2>
+                <p>Consultar y gestionar las cuentas de la empresa (<span class="chemin">Contabilidad › Plan contable</span>).</p>
+                <p>Para retomar el plan contable de otro programa, vea <a href="importation.html">Importación de datos</a> y <a href="correspondance-comptes.html">Correspondencia de cuentas</a>.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Añadir una cuenta</kbd> (y <kbd>+</kbd> en móvil): abre la ventana «Añadir una cuenta» (vea <a href="#es-ficha-cuenta">Ficha de cuenta</a>).</li>
-                    <li><strong>Lápiz</strong>: abre «Modificar una cuenta».</li>
+                    <li><kbd>Agregar una cuenta</kbd>: abre la ventana «Agregar una cuenta» (vea <a href="#es-ficha-cuenta">Ficha de cuenta</a>).</li>
+                    <li><strong>Lápiz</strong>: abre «Editar una cuenta».</li>
                     <li><strong>Papelera</strong>: elimina la cuenta <strong>sin pedir confirmación</strong>.</li>
                     <li>La lista se recarga al cerrar la ventana de edición.</li>
                 </ul>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>Pestañas <strong>Todas</strong>, <strong>Balance</strong>, <strong>Resultados</strong>.</li>
+                    <li>Pestañas <strong>Todos</strong>, <strong>Balance</strong>, <strong>Resultados</strong>.</li>
                     <li>Búsqueda «Buscar (número, nombre…)»: abarca el número, el nombre en los tres idiomas, el código y la descripción de la subclase. Lupa para lanzar, goma para borrar.</li>
                 </ul>
                 <h3>Columnas</h3>
@@ -1660,8 +1665,8 @@
                         <tr><td>Nombre de la cuenta</td><td>Nombre, con el código de subclase debajo.</td></tr>
                         <tr><td>Clase</td><td>Clase de nivel 1.</td></tr>
                         <tr><td>Tipo</td><td>Pastilla BALANCE o RESULTADOS.</td></tr>
-                        <tr><td>Sentido</td><td>Debe o Haber.</td></tr>
-                        <tr><td>Activa</td><td>Si la cuenta puede usarse o no.</td></tr>
+                        <tr><td>Sentido</td><td>Débito o Crédito.</td></tr>
+                        <tr><td>Activo</td><td>Si la cuenta puede usarse o no.</td></tr>
                         <tr><td>Acción</td><td>Lápiz y papelera.</td></tr>
                     </tbody>
                 </table>
@@ -1674,7 +1679,7 @@
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«No se encontró ninguna cuenta.»</span> — la búsqueda o la pestaña no devuelve nada.</li>
+                    <li><span class="msg">«Ninguna cuenta encontrada.»</span> — la búsqueda o la pestaña no devuelve nada.</li>
                     <li><span class="msg">«Esta cuenta es una cuenta de sistema y no puede eliminarse.»</span> — la cuenta es indispensable para el funcionamiento; desactívela en su lugar.</li>
                     <li><span class="msg">«Esta cuenta no pertenece a su plan de cuentas.»</span> — solo puede actuar sobre las cuentas de su empresa.</li>
                 </ul>
@@ -1685,7 +1690,7 @@
 
             <section id="es-ficha-cuenta">
                 <h2>Ficha de cuenta</h2>
-                <p>Ventana «Nueva cuenta» (subtítulo «Rellene la información de la cuenta») o «Modificar la cuenta» (subtítulo «Número: xxxx»), abierta desde <span class="chemin">Contabilidad › Plan de cuentas</span>.</p>
+                <p>Ventana «Nueva cuenta» (subtítulo «Rellene la información de la cuenta») o «Modificar la cuenta» (subtítulo «Número: xxxx»), abierta desde <span class="chemin">Contabilidad › Plan contable</span>.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Guardar</kbd>: comprueba y guarda.</li>
@@ -1714,6 +1719,7 @@
                     <li><span class="msg">«Seleccione una subclase.»</span> — elija primero la clase y después la subclase.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
+                <div class="note" data-titre="Conviene saber">Esta ventana se ofrece únicamente en francés.</div>
                 <div class="piege" data-titre="Trampa">La pantalla no comprueba que el número sea único ni numérico. Consulte el plan de cuentas antes de elegir un número.</div>
                 <div class="piege" data-titre="Trampa">Tipo en el balance y Sentido siguen siendo modificables tras el relleno automático: asegúrese de que corresponden a la clase elegida; de lo contrario, los informes serán erróneos.</div>
             </section>
@@ -1723,12 +1729,12 @@
                 <details><summary>¿Por qué mi asiento no aparece en Diarios contables?</summary><p>La lista se abre en el mes en curso. Amplíe «Fecha desde» y «Fecha hasta», ponga diario y estado en «(Todos)» y haga clic en <kbd>Filtrar</kbd>.</p></details>
                 <details><summary>¿Cómo corrijo un asiento validado?</summary><p>Un asiento validado es definitivo: ninguna pantalla permite desvalidarlo ni revertirlo. Introduzca un nuevo asiento manual que invierta los importes (haber en lugar de debe y viceversa) y después el asiento correcto.</p></details>
                 <details><summary>¿Por qué no aparece la papelera en un asiento?</summary><p>Solo los asientos con estado Borrador pueden eliminarse. Los asientos validados o revertidos no tienen papelera.</p></details>
-                <details><summary>¿Por qué «Guardar el asiento» rechaza mi entrada?</summary><p>Lea el mensaje: indica la regla en cuestión (diario, período, fecha, concepto, menos de 2 líneas, cuenta ausente, línea sin importe o con ambos, descuadre, total nulo). El caso más frecuente es una línea vacía olvidada: elimínela.</p></details>
-                <details><summary>Mi plantilla no se propone en «Cargar una plantilla». ¿Por qué?</summary><p>Solo se listan las plantillas activas. En <span class="chemin">Contabilidad › Plantillas de diarios</span>, desmarque «Solo las activas», abra la plantilla y marque «Activa».</p></details>
-                <details><summary>¿Qué diferencia hay entre una plantilla «prerrellenada» y una plantilla «estructura»?</summary><p>La plantilla prerrellenada memoriza los importes y debe estar cuadrada; la plantilla estructura solo memoriza las cuentas y su sentido, y usted introduce los importes en cada uso.</p></details>
+                <details><summary>¿Por qué «Guardar asiento» rechaza mi entrada?</summary><p>Lea el mensaje: indica la regla en cuestión (diario, período, fecha, descripción, menos de 2 líneas, cuenta ausente, línea sin importe o con ambos, descuadre, total nulo). El caso más frecuente es una línea vacía olvidada: elimínela.</p></details>
+                <details><summary>Mi plantilla no se propone en «Cargar una plantilla». ¿Por qué?</summary><p>Solo se listan las plantillas activas. En <span class="chemin">Contabilidad › Plantillas de diarios</span>, desmarque «Solo las activas», abra la plantilla y marque «Activo».</p></details>
+                <details><summary>¿Qué diferencia hay entre una plantilla «pre-rellenada» y una plantilla «estructura»?</summary><p>La plantilla pre-rellenada memoriza los importes y debe estar cuadrada; la plantilla estructura solo memoriza las cuentas y su sentido, y usted introduce los importes en cada uso.</p></details>
                 <details><summary>El botón «Conectar un banco» no hace nada en Cuentas bancarias. ¿Qué hago?</summary><p>Use el botón del mismo nombre en <span class="chemin">Contabilidad › Extracto bancario</span>: ahí es donde se carga el recorrido Plaid.</p></details>
                 <details><summary>¿Por qué un depósito aparece en negativo en el extracto bancario?</summary><p>Los importes siguen la convención de Plaid: positivo = salida de dinero, negativo = entrada de dinero.</p></details>
-                <details><summary>¿Puedo conciliar mis movimientos bancarios en el Extracto bancario?</summary><p>No. Esta pantalla es de solo lectura; no ofrece conciliación ni punteo. El estado «Liquidado» se actualiza al pagar las facturas.</p></details>
+                <details><summary>¿Puedo conciliar mis movimientos bancarios en el Extracto bancario?</summary><p>No. Esta pantalla es de solo lectura; no ofrece conciliación ni punteo. El estado «Conciliado» se actualiza al pagar las facturas.</p></details>
                 <details><summary>«Marcar como remitido» está en gris en el Informe de impuestos. ¿Por qué?</summary><p>El botón está desactivado si el total a remitir es inferior o igual a 0 (saldo a su favor) o si el período ya está remitido.</p></details>
                 <details><summary>¿Cómo cambio la frecuencia del informe de impuestos?</summary><p>Modifique el parámetro TAX_FREQ en <span class="chemin">Parámetros › Impuestos</span>: MENSUAL, TRIMESTRAL o ANUAL.</p></details>
                 <details><summary>¿Puedo reabrir un ejercicio cerrado?</summary><p>No. Después del cierre, el ejercicio desaparece de la lista y la pantalla no permite reabrirlo. Compruebe cuidadosamente la vista previa antes de confirmar.</p></details>
@@ -1743,11 +1749,11 @@
                         <tr><td>Debe / Haber</td><td>Los dos lados de una línea de asiento; su efecto depende del sentido de la cuenta.</td></tr>
                         <tr><td>Sentido (Deudor / Acreedor)</td><td>Lado en el que el saldo de una cuenta es normalmente positivo.</td></tr>
                         <tr><td>Asiento</td><td>Conjunto de líneas cuadradas que registra una operación.</td></tr>
-                        <tr><td>Documento (N.º documento)</td><td>Número de identificación del asiento, asignado automáticamente si se deja vacío.</td></tr>
+                        <tr><td>Comprobante (N.º comprobante)</td><td>Número de identificación del asiento, asignado automáticamente si se deja vacío.</td></tr>
                         <tr><td>Diario</td><td>Agrupación de asientos de una misma naturaleza.</td></tr>
                         <tr><td>Período / Ejercicio</td><td>Mes (u otra división) de un año financiero; solo un período abierto acepta asientos.</td></tr>
-                        <tr><td>Borrador / Validado / Revertido</td><td>Los tres estados de un asiento: modificable, definitivo, anulado.</td></tr>
-                        <tr><td>Plantilla</td><td>Asiento tipo reutilizable, en modo estructura o prerrellenado.</td></tr>
+                        <tr><td>Borrador / Validado / Reversado</td><td>Los tres estados de un asiento: modificable, definitivo, anulado.</td></tr>
+                        <tr><td>Plantilla</td><td>Asiento tipo reutilizable, en modo estructura o pre-rellenado.</td></tr>
                         <tr><td>Clase / Subclase</td><td>Niveles 1 y 2 de clasificación de las cuentas (ACT-CT, REV, CHG-EXP…).</td></tr>
                         <tr><td>Balance / Resultados</td><td>Cuentas permanentes (activo, pasivo, patrimonio) / cuentas saldadas cada año (ingresos, gastos).</td></tr>
                         <tr><td>Cuenta de sistema</td><td>Cuenta requerida por 60Sec-AI; no puede eliminarse.</td></tr>
@@ -1757,7 +1763,7 @@
                         <tr><td>BNR / BNE</td><td>Beneficios no distribuidos / beneficio neto del ejercicio, cuentas usadas en el cierre del ejercicio.</td></tr>
                         <tr><td>Plaid</td><td>Servicio de conexión bancaria que alimenta el extracto bancario.</td></tr>
                         <tr><td>Plaid Link</td><td>Ventana de identificación ante su banco.</td></tr>
-                        <tr><td>Importado / Liquidado / Pendiente / Ignorado</td><td>Estados de un movimiento del extracto bancario.</td></tr>
+                        <tr><td>Importado / Conciliado / Pendiente / Ignorado</td><td>Estados de un movimiento del extracto bancario.</td></tr>
                     </tbody>
                 </table>
             </section>

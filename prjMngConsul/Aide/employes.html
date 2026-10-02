@@ -250,40 +250,40 @@
 
         <article class="langue" lang="en">
             <h1>Employees</h1>
-            <p class="intro">Your company’s employee list, their form and their personal @60sec.ca mailbox. Employees are also the resources of the <a href="agenda.html#en-calendar">Agenda</a>. Menu <span class="chemin">Employés</span>.</p>
+            <p class="intro">Your company’s employee list, their form and their personal @60sec.ca mailbox. Employees are also the resources of the <a href="agenda.html#en-calendar">Agenda</a>. Menu <span class="chemin">Employees</span>.</p>
 
             <section id="en-employees">
                 <h2>Employees</h2>
-                <p>The <span class="chemin">Employés</span> screen lists the company’s employees and lets you add and edit them, assign them a @60sec.ca mailbox, send them a password reset link, and delete them.</p>
+                <p>The <span class="chemin">Employees</span> screen lists the company’s employees and lets you add and edit them, assign them a @60sec.ca mailbox, send them a password reset link, and delete them.</p>
 
                 <h3>Purpose</h3>
                 <p>Manage employees. They play two roles in 60Sec-AI: they are the <strong>agenda’s resources</strong> (an appointment can be assigned to them) and they can be <strong>holders of a personal e-mail mailbox</strong> @60sec.ca, which they read with their own mail software (IMAP/SMTP).</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Ajouter</kbd> (add): opens the “Ajouter un employé” window (see <a href="#en-employee-form">Employee form</a>).</li>
-                    <li><kbd>🔍</kbd> (magnifier): runs the search typed in “Rechercher (nom, courriel…)”.</li>
-                    <li><kbd>Effacer</kbd> (clear): empties the search box and shows all employees again.</li>
+                    <li><kbd>Add</kbd>: opens the “Add an employee” window (see <a href="#en-employee-form">Employee form</a>).</li>
+                    <li><kbd>🔍</kbd> (magnifier): runs the search typed in “Search (name, email…)”.</li>
+                    <li><kbd>Clear</kbd>: empties the search box and shows all employees again.</li>
                 </ul>
                 <p>Actions available on each row:</p>
                 <ul>
-                    <li><kbd>✎</kbd> (tooltip “Modifier”, edit): opens the employee’s form. The list refreshes when the window closes.</li>
-                    <li><kbd>Attribuer boîte</kbd> (assign mailbox; shown only if the employee has no mailbox yet): creates the employee’s @60sec.ca address. Message: “Boîte attribuée : {address}”.</li>
-                    <li><kbd>Réinit. mot de passe</kbd> (reset password; shown only if the employee has a mailbox): sends to the employee’s external e-mail a link to set or change the mailbox password. Message: “Lien de réinitialisation envoyé à {e-mail}.”</li>
-                    <li><kbd>🗑</kbd> (tooltip “Supprimer”, delete): asks for confirmation “Supprimer cet employé ? Sa boîte @60sec.ca sera aussi libérée.” (delete this employee? their @60sec.ca mailbox will also be released) and then deletes the record.</li>
+                    <li><kbd>✎</kbd> (tooltip “Edit”): opens the employee’s form. The list refreshes when the window closes.</li>
+                    <li><kbd>Assign mailbox</kbd> (shown only if the employee has no mailbox yet): creates the employee’s @60sec.ca address. Message: “Mailbox assigned: {address}”.</li>
+                    <li><kbd>Reset password</kbd> (shown only if the employee has a mailbox): sends to the employee’s external e-mail a link to set or change the mailbox password. Message: “Reset link sent to {e-mail}.”</li>
+                    <li><kbd>🗑</kbd> (tooltip “Delete”): asks for confirmation “Delete this employee? Their @60sec.ca mailbox will also be released.” and then deletes the record.</li>
                 </ul>
 
                 <h3>Filters and search</h3>
-                <p>The “Rechercher (nom, courriel…)” box filters the list. The search covers the display name, first name, last name, number, external e-mail and @60sec.ca address. Run it with the magnifier; the <kbd>Effacer</kbd> button clears it.</p>
+                <p>The “Search (name, email…)” box filters the list. The search covers the display name, first name, last name, number, external e-mail and @60sec.ca address. Run it with the magnifier; the <kbd>Clear</kbd> button clears it.</p>
 
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Employé</td><td>A dot in the employee’s colour, their name, then “number · position”.</td></tr>
-                        <tr><td>Courriel externe</td><td>The employee’s personal or professional e-mail address (outside 60Sec-AI), or “—” if empty.</td></tr>
-                        <tr><td>Boîte @60sec.ca</td><td>The assigned @60sec.ca address, or “aucune” (none). A key 🔑 (tooltip “Mot de passe défini”) shows that the employee has already set a password.</td></tr>
-                        <tr><td>Actif</td><td>“Actif” (active) or “Inactif” (inactive) badge.</td></tr>
+                        <tr><td>Employee</td><td>A dot in the employee’s colour, their name, then “number · position”.</td></tr>
+                        <tr><td>External email</td><td>The employee’s personal or professional e-mail address (outside 60Sec-AI), or “—” if empty.</td></tr>
+                        <tr><td>@60sec.ca mailbox</td><td>The assigned @60sec.ca address, or “aucune” (none, shown in French). A key 🔑 (tooltip “Mot de passe défini”, password set, shown in French) shows that the employee has already set a password.</td></tr>
+                        <tr><td>Active</td><td>“Active” or “Inactive” badge.</td></tr>
                         <tr><td>Actions</td><td>The row buttons described above.</td></tr>
                     </tbody>
                 </table>
@@ -301,51 +301,51 @@
                     </li>
                     <li><strong>Password reset</strong>:
                         <ul>
-                            <li>a @60sec.ca mailbox <strong>and</strong> an external e-mail are both required; otherwise the message “La boîte @60sec.ca et le courriel externe doivent être renseignés.” appears;</li>
+                            <li>a @60sec.ca mailbox <strong>and</strong> an external e-mail are both required; otherwise the message “La boîte @60sec.ca et le courriel externe doivent être renseignés.” (shown in French) appears;</li>
                             <li>the link is valid for <strong>24 hours</strong> and can be used only once;</li>
-                            <li>it is sent from <code>noreply@60sec.ca</code>, with the subject “Réinitialisation du mot de passe de votre boîte 60sec.ca” and a “Définir mon mot de passe” button that opens the <a href="#en-mailbox-reset">Mailbox password reset</a> page.</li>
+                            <li>it is sent from <code>noreply@60sec.ca</code>, in the language of your own session: in English, the subject is “Reset your 60sec.ca mailbox password” and the “Set my password” button opens the <a href="#en-mailbox-reset">Mailbox password reset</a> page.</li>
                         </ul>
                     </li>
-                    <li>An <strong>inactive</strong> employee stays in the list, but disappears from the agenda, from the “Employés :” filter and from the “Employé” list of appointments.</li>
+                    <li>An <strong>inactive</strong> employee stays in the list, but disappears from the agenda, from the “Employees :” filter and from the “Employee” list of appointments.</li>
                 </ul>
 
                 <h3>Step by step</h3>
                 <p>To give a mailbox to a new employee:</p>
                 <ol>
-                    <li>Click <kbd>Ajouter</kbd>, fill in at least the “Nom affiché” (display name, which determines the address) and the “Courriel externe”, then <kbd>Enregistrer</kbd>.</li>
-                    <li>In the list, click <kbd>Attribuer boîte</kbd> on their row: the message “Boîte attribuée : …” confirms the address.</li>
-                    <li>Click <kbd>Réinit. mot de passe</kbd>: the employee receives at their external e-mail a link valid for 24 hours.</li>
-                    <li>The employee sets their password, then configures their mail software (IMAP/SMTP) with their @60sec.ca address and that password. The key 🔑 then appears in the “Boîte @60sec.ca” column.</li>
+                    <li>Click <kbd>Add</kbd>, fill in at least the “Display name” (which determines the address) and the “External email”, then <kbd>Save</kbd>.</li>
+                    <li>In the list, click <kbd>Assign mailbox</kbd> on their row: the message “Mailbox assigned: …” confirms the address.</li>
+                    <li>Click <kbd>Reset password</kbd>: the employee receives at their external e-mail a link valid for 24 hours.</li>
+                    <li>The employee sets their password, then configures their mail software (IMAP/SMTP) with their @60sec.ca address and that password. The key 🔑 then appears in the “@60sec.ca mailbox” column.</li>
                 </ol>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun employé trouvé. »</span> — the list is empty or the search returns nothing; click <kbd>Effacer</kbd> or add an employee.</li>
-                    <li><span class="msg">« Boîte attribuée : {adresse} »</span> — the @60sec.ca mailbox has been created; note the address.</li>
-                    <li><span class="msg">« Lien de réinitialisation envoyé à {courriel}. »</span> — the e-mail went to the employee’s external address; they have 24 hours to use it.</li>
-                    <li><span class="msg">« La boîte @60sec.ca et le courriel externe doivent être renseignés. »</span> — assign the mailbox first, and enter an external e-mail in the form, before requesting the reset.</li>
-                    <li><span class="msg">« Erreur lors de l’attribution : … »</span> — the mailbox could not be created; try again and, if the error persists, check that the employee has a name.</li>
-                    <li><span class="msg">« Impossible d’envoyer le lien. »</span> — the reset e-mail could not be queued; check the external e-mail and try again.</li>
+                    <li><span class="msg">“No employee found.”</span> — the list is empty or the search returns nothing; click <kbd>Clear</kbd> or add an employee.</li>
+                    <li><span class="msg">“Mailbox assigned: {address}”</span> — the @60sec.ca mailbox has been created; note the address.</li>
+                    <li><span class="msg">“Reset link sent to {e-mail}.”</span> — the e-mail went to the employee’s external address; they have 24 hours to use it.</li>
+                    <li><span class="msg">“La boîte @60sec.ca et le courriel externe doivent être renseignés.”</span> — (shown in French: the @60sec.ca mailbox and the external e-mail must both be filled in) assign the mailbox first, and enter an external e-mail in the form, before requesting the reset.</li>
+                    <li><span class="msg">“Error assigning mailbox: …”</span> — the mailbox could not be created; try again and, if the error persists, check that the employee has a name.</li>
+                    <li><span class="msg">“Unable to send the link.”</span> — the reset e-mail could not be queued; check the external e-mail and try again.</li>
                 </ul>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="astuce" data-titre="Tip">Fill in the “Courriel externe” in the form <strong>before</strong> clicking <kbd>Réinit. mot de passe</kbd>: without it, the link has nowhere to go.</div>
+                <div class="astuce" data-titre="Tip">Fill in the “External email” in the form <strong>before</strong> clicking <kbd>Reset password</kbd>: without it, the link has nowhere to go.</div>
                 <div class="piege" data-titre="Pitfall">Choose the final display name before assigning the mailbox: the @60sec.ca address is set once and for all and does not follow name changes.</div>
-                <div class="attention" data-titre="Warning">Deletion is irreversible and releases the mailbox. To keep the history of an employee who leaves, uncheck “Employé actif” in their form instead.</div>
+                <div class="attention" data-titre="Warning">Deletion is irreversible and releases the mailbox. To keep the history of an employee who leaves, uncheck “Active employee” in their form instead.</div>
                 <div class="note" data-titre="Good to know">Employee mailboxes are not shown in the <a href="courriel.html#en-mail">Mail</a> screen of 60Sec-AI, which only shows the company mailbox. Each employee reads their mailbox with their own software (IMAP/SMTP).</div>
             </section>
 
             <section id="en-employee-form">
                 <h2>Employee form</h2>
-                <p>The form opens in a window from the list. Its title is “Ajouter un employé” (add an employee) when creating and “Modifier un employé” (edit an employee) when editing.</p>
+                <p>The form opens in a window from the list. Its title is “Add an employee” when creating and “Edit an employee” when editing.</p>
 
                 <h3>Purpose</h3>
                 <p>Create or edit an employee: identity, position, contact details, hire date, agenda colour and active status.</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Annuler</kbd> (cancel): closes the window without saving.</li>
-                    <li><kbd>Enregistrer</kbd> (save): saves, closes the window and refreshes the list.</li>
+                    <li><kbd>Cancel</kbd>: closes the window without saving.</li>
+                    <li><kbd>Save</kbd>: saves, closes the window and refreshes the list.</li>
                 </ul>
 
                 <h3>Fields</h3>
@@ -353,47 +353,47 @@
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
-                        <tr><td>Numéro (number)</td><td>No</td><td>Employee number or ID. Shown in the list after the name.</td></tr>
-                        <tr><td>Nom affiché (display name)</td><td>See rule</td><td>Name shown in the agenda and the list. Used to build the @60sec.ca address.</td></tr>
-                        <tr><td>Prénom (first name)</td><td>See rule</td><td>Used for the @60sec.ca address if the display name is empty.</td></tr>
-                        <tr><td>Nom (last name)</td><td>See rule</td><td>Same.</td></tr>
-                        <tr><td>Poste (position)</td><td>No</td><td>Shown in the list after the number.</td></tr>
-                        <tr><td>Département (department)</td><td>No</td><td>Free text.</td></tr>
-                        <tr><td>Courriel externe (pour réinitialiser le mot de passe @60sec.ca)</td><td>No</td><td>Address to which the reset link is sent. Essential to use <kbd>Réinit. mot de passe</kbd>.</td></tr>
-                        <tr><td>Téléphone (phone)</td><td>No</td><td>Free text.</td></tr>
+                        <tr><td>Number</td><td>No</td><td>Employee number or ID. Shown in the list after the name.</td></tr>
+                        <tr><td>Display name</td><td>See rule</td><td>Name shown in the agenda and the list. Used to build the @60sec.ca address.</td></tr>
+                        <tr><td>First name</td><td>See rule</td><td>Used for the @60sec.ca address if the display name is empty.</td></tr>
+                        <tr><td>Last name</td><td>See rule</td><td>Same.</td></tr>
+                        <tr><td>Job title</td><td>No</td><td>Shown in the list after the number.</td></tr>
+                        <tr><td>Department</td><td>No</td><td>Free text.</td></tr>
+                        <tr><td>External email (to reset the @60sec.ca password)</td><td>No</td><td>Address to which the reset link is sent. Essential to use <kbd>Reset password</kbd>.</td></tr>
+                        <tr><td>Phone</td><td>No</td><td>Free text.</td></tr>
                         <tr><td>Mobile</td><td>No</td><td>Free text.</td></tr>
-                        <tr><td>Ville (city)</td><td>No</td><td>Free text.</td></tr>
-                        <tr><td>Date d’embauche (hire date)</td><td>No</td><td>Date picker.</td></tr>
-                        <tr><td>Statut d’emploi (employment status)</td><td>No</td><td>Free text (for example “Permanent”, “Contractuel”).</td></tr>
-                        <tr><td>Type d’emploi (employment type)</td><td>No</td><td>Free text (for example “Temps plein”, “Temps partiel”).</td></tr>
-                        <tr><td>Couleur (agenda) (colour)</td><td>No</td><td>Colour picker, plus a text field in #RRGGBB format. Colour of the employee’s dot in the agenda filter.</td></tr>
-                        <tr><td>Actif — “Employé actif” checkbox</td><td>No</td><td>Checked by default. Unchecked, the employee stays in the list but disappears from the agenda.</td></tr>
-                        <tr><td>Boîte @60sec.ca</td><td>Read only</td><td>Shows “Aucune boîte — attribuez-la depuis la liste des employés.” (no mailbox, assign it from the list) or “{address} — gérez le mot de passe depuis la liste des employés.” (manage the password from the list).</td></tr>
+                        <tr><td>City</td><td>No</td><td>Free text.</td></tr>
+                        <tr><td>Hire date</td><td>No</td><td>Date picker.</td></tr>
+                        <tr><td>Employment status</td><td>No</td><td>Free text (for example “Permanent”, “Contract”).</td></tr>
+                        <tr><td>Employment type</td><td>No</td><td>Free text (for example “Full time”, “Part time”).</td></tr>
+                        <tr><td>Color (agenda)</td><td>No</td><td>Colour picker, plus a text field in #RRGGBB format. Colour of the employee’s dot in the agenda filter.</td></tr>
+                        <tr><td>Active — “Active employee” checkbox</td><td>No</td><td>Checked by default. Unchecked, the employee stays in the list but disappears from the agenda.</td></tr>
+                        <tr><td>@60sec.ca mailbox</td><td>Read only</td><td>Shows “No mailbox — assign it from the employee list.” or “{address} — manage the password from the employee list.”</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Rules</h3>
                 <ul>
-                    <li>At least one name is required: “Nom affiché”, “Prénom” or “Nom”.</li>
+                    <li>At least one name is required: “Display name”, “First name” or “Last name”.</li>
                     <li>An invalid colour (not in #RRGGBB format) is replaced by blue #2563eb, without warning.</li>
                     <li>The @60sec.ca mailbox is not managed from the form: assigning it and resetting the password are done with the list buttons.</li>
                 </ul>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Indiquez au moins un nom. »</span> — fill in “Nom affiché”, “Prénom” or “Nom” before saving.</li>
-                    <li><span class="msg">« Employé introuvable. »</span> — the employee was deleted in the meantime (for example by a colleague); close the window and refresh the list.</li>
-                    <li><span class="msg">« Erreur lors de l’enregistrement : … »</span> — saving failed; check the values entered (in particular the colour and the hire date) and try again.</li>
+                    <li><span class="msg">“Enter at least a name.”</span> — fill in “Display name”, “First name” or “Last name” before saving.</li>
+                    <li><span class="msg">“Employee not found.”</span> — the employee was deleted in the meantime (for example by a colleague); close the window and refresh the list.</li>
+                    <li><span class="msg">“Error while saving: …”</span> — saving failed; check the values entered (in particular the colour and the hire date) and try again.</li>
                 </ul>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="piege" data-titre="Pitfall">The employee colour only colours their dot in the agenda’s “Employés :” filter. Appointment blocks take the colour of the appointment <strong>type</strong>.</div>
+                <div class="piege" data-titre="Pitfall">The employee colour only colours their dot in the agenda’s “Employees :” filter. Appointment blocks take the colour of the appointment <strong>type</strong>.</div>
                 <div class="note" data-titre="Good to know">If you type a colour by hand, use the #RRGGBB format (for example #2563eb); any other value is silently replaced by the default blue.</div>
             </section>
 
             <section id="en-mailbox-reset">
                 <h2>Mailbox password reset</h2>
-                <p>Page the employee opens from the link received in the e-mail “Réinitialisation du mot de passe de votre boîte 60sec.ca”. It is reachable <strong>without signing in</strong> to 60Sec-AI: the employee does not need to be an ERP user.</p>
+                <p>Page the employee opens from the link received in the e-mail “Reset your 60sec.ca mailbox password”. It is reachable <strong>without signing in</strong> to 60Sec-AI: the employee does not need to be an ERP user. Opened from the link, the page is displayed in French by default; its labels are quoted below as they appear, with their meaning.</p>
 
                 <h3>Purpose</h3>
                 <p>Let the employee set (or change) the password of their @60sec.ca mailbox themselves. Introductory text: “Choisissez un mot de passe pour votre boîte de courriel {address}.” (choose a password for your mailbox).</p>
@@ -416,13 +416,13 @@
                 <ul>
                     <li>The link works <strong>only once</strong>: it is invalidated as soon as the password is set.</li>
                     <li>The link also expires <strong>24 hours</strong> after it is sent.</li>
-                    <li>An invalid or expired link cannot be “reactivated”: the manager must send a new one with <kbd>Réinit. mot de passe</kbd> in the employee list.</li>
+                    <li>An invalid or expired link cannot be “reactivated”: the manager must send a new one with <kbd>Reset password</kbd> in the employee list.</li>
                 </ul>
 
                 <h3>Step by step</h3>
                 <p>For the employee who receives the e-mail:</p>
                 <ol>
-                    <li>Open the e-mail from <code>noreply@60sec.ca</code> and click the “Définir mon mot de passe” button (within 24 hours).</li>
+                    <li>Open the e-mail from <code>noreply@60sec.ca</code> and click the “Set my password” button (within 24 hours).</li>
                     <li>Type a password of at least 6 characters in “Nouveau mot de passe”, then the same in “Confirmer le mot de passe”.</li>
                     <li>Click <kbd>Définir le mot de passe</kbd>. The message “Mot de passe défini” confirms it was saved.</li>
                     <li>Configure your mail software (IMAP for receiving, SMTP for sending) with your @60sec.ca address and that password.</li>
@@ -439,22 +439,22 @@
 
                 <h3>Tips and pitfalls</h3>
                 <div class="attention" data-titre="Warning">The password is never displayed nor e-mailed: if the employee forgets it, a new reset link must be sent.</div>
-                <div class="astuce" data-titre="Tip">If the e-mail does not arrive, have the employee check their spam folder, then verify the “Courriel externe” in their form before resending a link.</div>
+                <div class="astuce" data-titre="Tip">If the e-mail does not arrive, have the employee check their spam folder, then verify the “External email” in their form before resending a link.</div>
             </section>
 
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
-                <details><summary>The “Réinit. mot de passe” button does not appear on an employee’s row. Why?</summary><p>It only appears if the employee already has a @60sec.ca mailbox. Click <kbd>Attribuer boîte</kbd> first.</p></details>
+                <details><summary>The “Reset password” button does not appear on an employee’s row. Why?</summary><p>It only appears if the employee already has a @60sec.ca mailbox. Click <kbd>Assign mailbox</kbd> first.</p></details>
                 <details><summary>I get “La boîte @60sec.ca et le courriel externe doivent être renseignés”.</summary><p>The reset requires both: an assigned mailbox <strong>and</strong> an external e-mail entered in the form. Complete what is missing, then try again.</p></details>
                 <details><summary>How is the @60sec.ca address chosen?</summary><p>From the display name (or the first and last names), simplified: “Jean Tremblay” gives <code>jean-tremblay@60sec.ca</code>. If it already exists, a suffix -2, -3… is added. Without a usable name, the address starts with “employe”.</p></details>
-                <details><summary>I renamed the employee, but their @60sec.ca address did not change.</summary><p>That is expected: the address is set at assignment time and never changes. Choose the final name before clicking <kbd>Attribuer boîte</kbd>.</p></details>
-                <details><summary>The employee says their link no longer works.</summary><p>The link is valid for 24 hours and works only once. Send a new one with <kbd>Réinit. mot de passe</kbd>.</p></details>
-                <details><summary>What does the key 🔑 in the “Boîte @60sec.ca” column mean?</summary><p>That the employee has already set a password for their mailbox (tooltip “Mot de passe défini”). Without the key, the mailbox exists but the employee cannot sign in to it yet.</p></details>
-                <details><summary>An employee is leaving: delete or deactivate?</summary><p>Deactivate them (uncheck “Employé actif”) to keep their record and history: they disappear from the agenda but stay in the list. Deletion is irreversible and releases their mailbox.</p></details>
+                <details><summary>I renamed the employee, but their @60sec.ca address did not change.</summary><p>That is expected: the address is set at assignment time and never changes. Choose the final name before clicking <kbd>Assign mailbox</kbd>.</p></details>
+                <details><summary>The employee says their link no longer works.</summary><p>The link is valid for 24 hours and works only once. Send a new one with <kbd>Reset password</kbd>.</p></details>
+                <details><summary>What does the key 🔑 in the “@60sec.ca mailbox” column mean?</summary><p>That the employee has already set a password for their mailbox (tooltip “Mot de passe défini”). Without the key, the mailbox exists but the employee cannot sign in to it yet.</p></details>
+                <details><summary>An employee is leaving: delete or deactivate?</summary><p>Deactivate them (uncheck “Active employee”) to keep their record and history: they disappear from the agenda but stay in the list. Deletion is irreversible and releases their mailbox.</p></details>
                 <details><summary>What becomes of a deleted employee’s appointments?</summary><p>They are kept in the agenda, but no longer have an employee.</p></details>
                 <details><summary>Where does the employee read their @60sec.ca mailbox?</summary><p>In their own mail software (Outlook, Thunderbird, phone…) configured with IMAP/SMTP, their address and their password. The <a href="courriel.html#en-mail">Mail</a> screen of 60Sec-AI only shows the company mailbox.</p></details>
                 <details><summary>Why did my colour go back to blue?</summary><p>The value entered was not in #RRGGBB format; it was replaced by #2563eb without warning. Use the picker or a six-digit hexadecimal code.</p></details>
-                <details><summary>Why does an inactive employee no longer appear in appointments?</summary><p>Only active employees are offered in the “Employé” list of the appointment form and in the agenda filter. Check “Employé actif” again to show them.</p></details>
+                <details><summary>Why does an inactive employee no longer appear in appointments?</summary><p>Only active employees are offered in the “Employee” list of the appointment form and in the agenda filter. Check “Active employee” again to show them.</p></details>
             </section>
 
             <section id="en-glossary">
@@ -463,13 +463,13 @@
                     <thead><tr><th>Term</th><th>Definition</th></tr></thead>
                     <tbody>
                         <tr><td>@60sec.ca mailbox</td><td>Personal e-mail mailbox assigned to an employee, of the form firstname-lastname@60sec.ca, read through IMAP/SMTP.</td></tr>
-                        <tr><td>External e-mail (Courriel externe)</td><td>The employee’s e-mail address outside 60Sec-AI, where reset links are sent.</td></tr>
-                        <tr><td>Attribuer boîte (assign mailbox)</td><td>Action that creates an employee’s @60sec.ca address from their name.</td></tr>
+                        <tr><td>External email</td><td>The employee’s e-mail address outside 60Sec-AI, where reset links are sent.</td></tr>
+                        <tr><td>Assign mailbox</td><td>Action that creates an employee’s @60sec.ca address from their name.</td></tr>
                         <tr><td>Reset link</td><td>Single-use link, valid 24 hours, sent from noreply@60sec.ca to set a mailbox password.</td></tr>
                         <tr><td>IMAP / SMTP</td><td>Receiving (IMAP) and sending (SMTP) protocols to configure in the employee’s mail software.</td></tr>
-                        <tr><td>Display name (Nom affiché)</td><td>Employee name shown in the agenda and the list; used to build the @60sec.ca address.</td></tr>
-                        <tr><td>Active employee (Employé actif)</td><td>Employee offered as a resource in the agenda. Inactive, they stay in the list but disappear from the agenda.</td></tr>
-                        <tr><td>Colour (agenda)</td><td>#RRGGBB colour of the employee’s dot in the agenda filter.</td></tr>
+                        <tr><td>Display name</td><td>Employee name shown in the agenda and the list; used to build the @60sec.ca address.</td></tr>
+                        <tr><td>Active employee</td><td>Employee offered as a resource in the agenda. Inactive, they stay in the list but disappear from the agenda.</td></tr>
+                        <tr><td>Color (agenda)</td><td>#RRGGBB colour of the employee’s dot in the agenda filter.</td></tr>
                         <tr><td>noreply@60sec.ca</td><td>Sending address of 60Sec-AI’s automatic e-mails, including reset links.</td></tr>
                     </tbody>
                 </table>
@@ -478,47 +478,47 @@
 
         <article class="langue" lang="es">
             <h1>Empleados</h1>
-            <p class="intro">La lista de empleados de su empresa, su ficha y su buzón de correo personal @60sec.ca. Los empleados son también los recursos de la <a href="agenda.html#es-agenda">Agenda</a>. Menú <span class="chemin">Employés</span>.</p>
+            <p class="intro">La lista de empleados de su empresa, su ficha y su buzón de correo personal @60sec.ca. Los empleados son también los recursos de la <a href="agenda.html#es-agenda">Agenda</a>. Menú <span class="chemin">Empleados</span>.</p>
 
             <section id="es-empleados">
                 <h2>Empleados</h2>
-                <p>La pantalla <span class="chemin">Employés</span> lista los empleados de la empresa y permite añadirlos, modificarlos, asignarles un buzón de correo @60sec.ca, enviarles un enlace de restablecimiento de contraseña y eliminarlos.</p>
+                <p>La pantalla <span class="chemin">Empleados</span> lista los empleados de la empresa y permite añadirlos, modificarlos, asignarles un buzón de correo @60sec.ca, enviarles un enlace de restablecimiento de contraseña y eliminarlos.</p>
 
                 <h3>Objetivo</h3>
                 <p>Gestionar los empleados. Desempeñan dos funciones en 60Sec-AI: son los <strong>recursos de la agenda</strong> (una cita puede asignárseles) y pueden ser <strong>titulares de un buzón de correo personal</strong> @60sec.ca, que consultan con su propio programa de correo (IMAP/SMTP).</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Ajouter</kbd> (añadir): abre la ventana «Ajouter un employé» (vea <a href="#es-ficha-empleado">Ficha de empleado</a>).</li>
-                    <li><kbd>🔍</kbd> (lupa): ejecuta la búsqueda escrita en «Rechercher (nom, courriel…)».</li>
-                    <li><kbd>Effacer</kbd> (borrar): vacía el campo de búsqueda y vuelve a mostrar todos los empleados.</li>
+                    <li><kbd>Agregar</kbd>: abre la ventana «Agregar un empleado» (vea <a href="#es-ficha-empleado">Ficha de empleado</a>).</li>
+                    <li><kbd>🔍</kbd> (lupa): ejecuta la búsqueda escrita en «Buscar (nombre, correo…)».</li>
+                    <li><kbd>Borrar</kbd>: vacía el campo de búsqueda y vuelve a mostrar todos los empleados.</li>
                 </ul>
                 <p>Acciones disponibles en cada fila:</p>
                 <ul>
-                    <li><kbd>✎</kbd> (ayuda «Modifier», modificar): abre la ficha del empleado. La lista se actualiza al cerrar la ventana.</li>
-                    <li><kbd>Attribuer boîte</kbd> (asignar buzón; solo se muestra si el empleado aún no tiene buzón): crea la dirección @60sec.ca del empleado. Mensaje: «Boîte attribuée : {dirección}».</li>
-                    <li><kbd>Réinit. mot de passe</kbd> (restablecer contraseña; solo se muestra si el empleado tiene buzón): envía al correo externo del empleado un enlace para definir o cambiar la contraseña de su buzón. Mensaje: «Lien de réinitialisation envoyé à {correo}.»</li>
-                    <li><kbd>🗑</kbd> (ayuda «Supprimer», eliminar): pide la confirmación «Supprimer cet employé ? Sa boîte @60sec.ca sera aussi libérée.» (¿eliminar este empleado? su buzón @60sec.ca también se liberará) y luego elimina la ficha.</li>
+                    <li><kbd>✎</kbd> (ayuda «Editar»): abre la ficha del empleado. La lista se actualiza al cerrar la ventana.</li>
+                    <li><kbd>Asignar buzón</kbd> (solo se muestra si el empleado aún no tiene buzón): crea la dirección @60sec.ca del empleado. Mensaje: «Buzón asignado: {dirección}».</li>
+                    <li><kbd>Restablecer contraseña</kbd> (solo se muestra si el empleado tiene buzón): envía al correo externo del empleado un enlace para definir o cambiar la contraseña de su buzón. Mensaje: «Enlace de restablecimiento enviado a {correo}.»</li>
+                    <li><kbd>🗑</kbd> (ayuda «Eliminar»): pide la confirmación «¿Eliminar este empleado? Su buzón @60sec.ca también será liberado.» y luego elimina la ficha.</li>
                 </ul>
 
                 <h3>Filtros y búsqueda</h3>
-                <p>El campo «Rechercher (nom, courriel…)» filtra la lista. La búsqueda abarca el nombre mostrado, el nombre de pila, el apellido, el número, el correo externo y la dirección @60sec.ca. Ejecútela con la lupa; el botón <kbd>Effacer</kbd> la vacía.</p>
+                <p>El campo «Buscar (nombre, correo…)» filtra la lista. La búsqueda abarca el nombre visible, el nombre de pila, el apellido, el número, el correo externo y la dirección @60sec.ca. Ejecútela con la lupa; el botón <kbd>Borrar</kbd> la vacía.</p>
 
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Employé</td><td>Punto del color del empleado, su nombre y luego «número · puesto».</td></tr>
-                        <tr><td>Courriel externe</td><td>La dirección de correo personal o profesional del empleado (fuera de 60Sec-AI), o «—» si está vacía.</td></tr>
-                        <tr><td>Boîte @60sec.ca</td><td>La dirección @60sec.ca asignada, o «aucune» (ninguna). Una llave 🔑 (ayuda «Mot de passe défini») indica que el empleado ya definió una contraseña.</td></tr>
-                        <tr><td>Actif</td><td>Insignia «Actif» (activo) o «Inactif» (inactivo).</td></tr>
-                        <tr><td>Actions</td><td>Los botones de la fila descritos arriba.</td></tr>
+                        <tr><td>Empleado</td><td>Punto del color del empleado, su nombre y luego «número · puesto».</td></tr>
+                        <tr><td>Correo externo</td><td>La dirección de correo personal o profesional del empleado (fuera de 60Sec-AI), o «—» si está vacía.</td></tr>
+                        <tr><td>Buzón @60sec.ca</td><td>La dirección @60sec.ca asignada, o «aucune» (ninguna, se muestra en francés). Una llave 🔑 (ayuda «Mot de passe défini», contraseña definida, se muestra en francés) indica que el empleado ya definió una contraseña.</td></tr>
+                        <tr><td>Activo</td><td>Insignia «Activo» o «Inactivo».</td></tr>
+                        <tr><td>Acciones</td><td>Los botones de la fila descritos arriba.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Reglas</h3>
                 <ul>
-                    <li><strong>Dirección del buzón</strong>: se deriva del nombre mostrado (o, en su defecto, del nombre y el apellido), reducido a caracteres simples (minúsculas, sin acentos, espacios sustituidos por guiones). Por ejemplo, «Jean Tremblay» se convierte en <code>jean-tremblay@60sec.ca</code>. Si la dirección ya está ocupada, se añade un sufijo (-2, -3…). Sin un nombre utilizable, la dirección empieza por «employe».</li>
+                    <li><strong>Dirección del buzón</strong>: se deriva del nombre visible (o, en su defecto, del nombre y el apellido), reducido a caracteres simples (minúsculas, sin acentos, espacios sustituidos por guiones). Por ejemplo, «Jean Tremblay» se convierte en <code>jean-tremblay@60sec.ca</code>. Si la dirección ya está ocupada, se añade un sufijo (-2, -3…). Sin un nombre utilizable, la dirección empieza por «employe».</li>
                     <li>Una vez asignada, la dirección no cambia nunca, aunque cambie el nombre del empleado.</li>
                     <li><strong>Eliminación de un empleado</strong>:
                         <ul>
@@ -529,51 +529,51 @@
                     </li>
                     <li><strong>Restablecimiento de la contraseña</strong>:
                         <ul>
-                            <li>se necesita un buzón @60sec.ca <strong>y</strong> un correo externo; si no, aparece el mensaje «La boîte @60sec.ca et le courriel externe doivent être renseignés.»;</li>
+                            <li>se necesita un buzón @60sec.ca <strong>y</strong> un correo externo; si no, aparece el mensaje «La boîte @60sec.ca et le courriel externe doivent être renseignés.» (se muestra en francés);</li>
                             <li>el enlace es válido <strong>24 horas</strong> y solo sirve una vez;</li>
-                            <li>se envía desde <code>noreply@60sec.ca</code>, con el asunto «Réinitialisation du mot de passe de votre boîte 60sec.ca» y un botón «Définir mon mot de passe» que abre la página <a href="#es-restablecimiento">Restablecimiento del buzón de correo</a>.</li>
+                            <li>se envía desde <code>noreply@60sec.ca</code>, en el idioma de su propia sesión: en español, el asunto es «Restablecer la contraseña de su buzón 60sec.ca» y el botón «Establecer mi contraseña» abre la página <a href="#es-restablecimiento">Restablecimiento del buzón de correo</a>.</li>
                         </ul>
                     </li>
-                    <li>Un empleado <strong>inactivo</strong> permanece en la lista, pero desaparece de la agenda, del filtro «Employés :» y de la lista «Employé» de las citas.</li>
+                    <li>Un empleado <strong>inactivo</strong> permanece en la lista, pero desaparece de la agenda, del filtro «Empleados :» y de la lista «Empleado» de las citas.</li>
                 </ul>
 
                 <h3>Paso a paso</h3>
                 <p>Para dar un buzón de correo a un empleado nuevo:</p>
                 <ol>
-                    <li>Haga clic en <kbd>Ajouter</kbd>, rellene al menos el «Nom affiché» (nombre mostrado, que determina la dirección) y el «Courriel externe», y luego <kbd>Enregistrer</kbd>.</li>
-                    <li>En la lista, haga clic en <kbd>Attribuer boîte</kbd> en su fila: el mensaje «Boîte attribuée : …» confirma la dirección.</li>
-                    <li>Haga clic en <kbd>Réinit. mot de passe</kbd>: el empleado recibe en su correo externo un enlace válido 24 horas.</li>
-                    <li>El empleado define su contraseña y luego configura su programa de correo (IMAP/SMTP) con su dirección @60sec.ca y esa contraseña. La llave 🔑 aparece entonces en la columna «Boîte @60sec.ca».</li>
+                    <li>Haga clic en <kbd>Agregar</kbd>, rellene al menos el «Nombre visible» (que determina la dirección) y el «Correo externo», y luego <kbd>Guardar</kbd>.</li>
+                    <li>En la lista, haga clic en <kbd>Asignar buzón</kbd> en su fila: el mensaje «Buzón asignado: …» confirma la dirección.</li>
+                    <li>Haga clic en <kbd>Restablecer contraseña</kbd>: el empleado recibe en su correo externo un enlace válido 24 horas.</li>
+                    <li>El empleado define su contraseña y luego configura su programa de correo (IMAP/SMTP) con su dirección @60sec.ca y esa contraseña. La llave 🔑 aparece entonces en la columna «Buzón @60sec.ca».</li>
                 </ol>
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun employé trouvé. »</span> — la lista está vacía o la búsqueda no devuelve nada; haga clic en <kbd>Effacer</kbd> o añada un empleado.</li>
-                    <li><span class="msg">« Boîte attribuée : {adresse} »</span> — el buzón @60sec.ca se ha creado; anote la dirección.</li>
-                    <li><span class="msg">« Lien de réinitialisation envoyé à {courriel}. »</span> — el correo se envió a la dirección externa del empleado; tiene 24 horas para usarlo.</li>
-                    <li><span class="msg">« La boîte @60sec.ca et le courriel externe doivent être renseignés. »</span> — asigne primero el buzón e indique un correo externo en la ficha antes de pedir el restablecimiento.</li>
-                    <li><span class="msg">« Erreur lors de l’attribution : … »</span> — no se pudo crear el buzón; inténtelo de nuevo y, si el error persiste, compruebe que el empleado tenga un nombre.</li>
-                    <li><span class="msg">« Impossible d’envoyer le lien. »</span> — el correo de restablecimiento no pudo ponerse en cola de envío; compruebe el correo externo e inténtelo de nuevo.</li>
+                    <li><span class="msg">«Ningún empleado encontrado.»</span> — la lista está vacía o la búsqueda no devuelve nada; haga clic en <kbd>Borrar</kbd> o añada un empleado.</li>
+                    <li><span class="msg">«Buzón asignado: {dirección}»</span> — el buzón @60sec.ca se ha creado; anote la dirección.</li>
+                    <li><span class="msg">«Enlace de restablecimiento enviado a {correo}.»</span> — el correo se envió a la dirección externa del empleado; tiene 24 horas para usarlo.</li>
+                    <li><span class="msg">«La boîte @60sec.ca et le courriel externe doivent être renseignés.»</span> — (se muestra en francés: el buzón @60sec.ca y el correo externo deben estar indicados) asigne primero el buzón e indique un correo externo en la ficha antes de pedir el restablecimiento.</li>
+                    <li><span class="msg">«Error al asignar el buzón: …»</span> — no se pudo crear el buzón; inténtelo de nuevo y, si el error persiste, compruebe que el empleado tenga un nombre.</li>
+                    <li><span class="msg">«No se pudo enviar el enlace.»</span> — el correo de restablecimiento no pudo ponerse en cola de envío; compruebe el correo externo e inténtelo de nuevo.</li>
                 </ul>
 
                 <h3>Consejos y trampas</h3>
-                <div class="astuce" data-titre="Consejo">Rellene el «Courriel externe» en la ficha <strong>antes</strong> de hacer clic en <kbd>Réinit. mot de passe</kbd>: sin él, el enlace no tiene adónde ir.</div>
-                <div class="piege" data-titre="Trampa">Elija el nombre mostrado definitivo antes de asignar el buzón: la dirección @60sec.ca se fija de una vez por todas y no sigue los cambios de nombre.</div>
-                <div class="attention" data-titre="Atención">La eliminación es irreversible y libera el buzón de correo. Para conservar el historial de un empleado que se va, desmarque «Employé actif» en su ficha.</div>
+                <div class="astuce" data-titre="Consejo">Rellene el «Correo externo» en la ficha <strong>antes</strong> de hacer clic en <kbd>Restablecer contraseña</kbd>: sin él, el enlace no tiene adónde ir.</div>
+                <div class="piege" data-titre="Trampa">Elija el nombre visible definitivo antes de asignar el buzón: la dirección @60sec.ca se fija de una vez por todas y no sigue los cambios de nombre.</div>
+                <div class="attention" data-titre="Atención">La eliminación es irreversible y libera el buzón de correo. Para conservar el historial de un empleado que se va, desmarque «Empleado activo» en su ficha.</div>
                 <div class="note" data-titre="Conviene saber">Los buzones de los empleados no se muestran en la pantalla <a href="courriel.html#es-correo">Correo</a> de 60Sec-AI, que solo muestra el buzón de la empresa. Cada empleado lee su buzón con su propio programa (IMAP/SMTP).</div>
             </section>
 
             <section id="es-ficha-empleado">
                 <h2>Ficha de empleado</h2>
-                <p>La ficha se abre en una ventana desde la lista. Su título es «Ajouter un employé» (añadir un empleado) al crear y «Modifier un employé» (modificar un empleado) al editar.</p>
+                <p>La ficha se abre en una ventana desde la lista. Su título es «Agregar un empleado» al crear y «Editar un empleado» al editar.</p>
 
                 <h3>Objetivo</h3>
                 <p>Crear o modificar un empleado: identidad, puesto, datos de contacto, fecha de contratación, color en la agenda y estado activo.</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Annuler</kbd> (cancelar): cierra la ventana sin guardar.</li>
-                    <li><kbd>Enregistrer</kbd> (guardar): guarda, cierra la ventana y actualiza la lista.</li>
+                    <li><kbd>Cancelar</kbd>: cierra la ventana sin guardar.</li>
+                    <li><kbd>Guardar</kbd>: guarda, cierra la ventana y actualiza la lista.</li>
                 </ul>
 
                 <h3>Campos</h3>
@@ -581,47 +581,47 @@
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
-                        <tr><td>Numéro (número)</td><td>No</td><td>Número o matrícula del empleado. Se muestra en la lista tras el nombre.</td></tr>
-                        <tr><td>Nom affiché (nombre mostrado)</td><td>Ver regla</td><td>Nombre mostrado en la agenda y la lista. Sirve para componer la dirección @60sec.ca.</td></tr>
-                        <tr><td>Prénom (nombre de pila)</td><td>Ver regla</td><td>Se usa para la dirección @60sec.ca si el nombre mostrado está vacío.</td></tr>
-                        <tr><td>Nom (apellido)</td><td>Ver regla</td><td>Ídem.</td></tr>
-                        <tr><td>Poste (puesto)</td><td>No</td><td>Se muestra en la lista tras el número.</td></tr>
-                        <tr><td>Département (departamento)</td><td>No</td><td>Texto libre.</td></tr>
-                        <tr><td>Courriel externe (pour réinitialiser le mot de passe @60sec.ca)</td><td>No</td><td>Dirección a la que se envía el enlace de restablecimiento. Indispensable para usar <kbd>Réinit. mot de passe</kbd>.</td></tr>
-                        <tr><td>Téléphone (teléfono)</td><td>No</td><td>Texto libre.</td></tr>
-                        <tr><td>Mobile (móvil)</td><td>No</td><td>Texto libre.</td></tr>
-                        <tr><td>Ville (ciudad)</td><td>No</td><td>Texto libre.</td></tr>
-                        <tr><td>Date d’embauche (fecha de contratación)</td><td>No</td><td>Selector de fecha.</td></tr>
-                        <tr><td>Statut d’emploi (situación laboral)</td><td>No</td><td>Texto libre (por ejemplo «Permanent», «Contractuel»).</td></tr>
-                        <tr><td>Type d’emploi (tipo de empleo)</td><td>No</td><td>Texto libre (por ejemplo «Temps plein», «Temps partiel»).</td></tr>
-                        <tr><td>Couleur (agenda) (color)</td><td>No</td><td>Selector de color, más un campo de texto en formato #RRGGBB. Color del punto del empleado en el filtro de la agenda.</td></tr>
-                        <tr><td>Actif — casilla «Employé actif»</td><td>No</td><td>Marcada por defecto. Desmarcada, el empleado permanece en la lista pero desaparece de la agenda.</td></tr>
-                        <tr><td>Boîte @60sec.ca</td><td>Solo lectura</td><td>Muestra «Aucune boîte — attribuez-la depuis la liste des employés.» (ningún buzón; asígnelo desde la lista) o «{dirección} — gérez le mot de passe depuis la liste des employés.» (gestione la contraseña desde la lista).</td></tr>
+                        <tr><td>Número</td><td>No</td><td>Número o matrícula del empleado. Se muestra en la lista tras el nombre.</td></tr>
+                        <tr><td>Nombre visible</td><td>Ver regla</td><td>Nombre mostrado en la agenda y la lista. Sirve para componer la dirección @60sec.ca.</td></tr>
+                        <tr><td>Nombre</td><td>Ver regla</td><td>Nombre de pila. Se usa para la dirección @60sec.ca si el nombre visible está vacío.</td></tr>
+                        <tr><td>Apellido</td><td>Ver regla</td><td>Ídem.</td></tr>
+                        <tr><td>Puesto</td><td>No</td><td>Se muestra en la lista tras el número.</td></tr>
+                        <tr><td>Departamento</td><td>No</td><td>Texto libre.</td></tr>
+                        <tr><td>Correo externo (para restablecer la contraseña @60sec.ca)</td><td>No</td><td>Dirección a la que se envía el enlace de restablecimiento. Indispensable para usar <kbd>Restablecer contraseña</kbd>.</td></tr>
+                        <tr><td>Teléfono</td><td>No</td><td>Texto libre.</td></tr>
+                        <tr><td>Móvil</td><td>No</td><td>Texto libre.</td></tr>
+                        <tr><td>Ciudad</td><td>No</td><td>Texto libre.</td></tr>
+                        <tr><td>Fecha de contratación</td><td>No</td><td>Selector de fecha.</td></tr>
+                        <tr><td>Estado laboral</td><td>No</td><td>Texto libre (por ejemplo «Permanente», «Por contrato»).</td></tr>
+                        <tr><td>Tipo de empleo</td><td>No</td><td>Texto libre (por ejemplo «Tiempo completo», «Tiempo parcial»).</td></tr>
+                        <tr><td>Color (agenda)</td><td>No</td><td>Selector de color, más un campo de texto en formato #RRGGBB. Color del punto del empleado en el filtro de la agenda.</td></tr>
+                        <tr><td>Activo — casilla «Empleado activo»</td><td>No</td><td>Marcada por defecto. Desmarcada, el empleado permanece en la lista pero desaparece de la agenda.</td></tr>
+                        <tr><td>Buzón @60sec.ca</td><td>Solo lectura</td><td>Muestra «Sin buzón — asígnelo desde la lista de empleados.» o «{dirección} — gestione la contraseña desde la lista de empleados.»</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Reglas</h3>
                 <ul>
-                    <li>Se requiere al menos un nombre: «Nom affiché», «Prénom» o «Nom».</li>
+                    <li>Se requiere al menos un nombre: «Nombre visible», «Nombre» o «Apellido».</li>
                     <li>Un color no válido (que no esté en formato #RRGGBB) se sustituye por el azul #2563eb, sin aviso.</li>
                     <li>El buzón @60sec.ca no se gestiona desde la ficha: la asignación y el restablecimiento de la contraseña se hacen con los botones de la lista.</li>
                 </ul>
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Indiquez au moins un nom. »</span> — rellene «Nom affiché», «Prénom» o «Nom» antes de guardar.</li>
-                    <li><span class="msg">« Employé introuvable. »</span> — el empleado fue eliminado entretanto (por ejemplo por un compañero); cierre la ventana y actualice la lista.</li>
-                    <li><span class="msg">« Erreur lors de l’enregistrement : … »</span> — el guardado falló; compruebe los valores introducidos (en particular el color y la fecha de contratación) e inténtelo de nuevo.</li>
+                    <li><span class="msg">«Indique al menos un nombre.»</span> — rellene «Nombre visible», «Nombre» o «Apellido» antes de guardar.</li>
+                    <li><span class="msg">«Empleado no encontrado.»</span> — el empleado fue eliminado entretanto (por ejemplo por un compañero); cierre la ventana y actualice la lista.</li>
+                    <li><span class="msg">«Error al guardar: …»</span> — el guardado falló; compruebe los valores introducidos (en particular el color y la fecha de contratación) e inténtelo de nuevo.</li>
                 </ul>
 
                 <h3>Consejos y trampas</h3>
-                <div class="piege" data-titre="Trampa">El color del empleado solo colorea su punto en el filtro «Employés :» de la agenda. Los bloques de citas toman el color del <strong>tipo</strong> de cita.</div>
+                <div class="piege" data-titre="Trampa">El color del empleado solo colorea su punto en el filtro «Empleados :» de la agenda. Los bloques de citas toman el color del <strong>tipo</strong> de cita.</div>
                 <div class="note" data-titre="Conviene saber">Si escribe un color a mano, respete el formato #RRGGBB (por ejemplo #2563eb); cualquier otro valor se sustituye en silencio por el azul por defecto.</div>
             </section>
 
             <section id="es-restablecimiento">
                 <h2>Restablecimiento del buzón de correo</h2>
-                <p>Página que el empleado abre desde el enlace recibido en el correo «Réinitialisation du mot de passe de votre boîte 60sec.ca». Es accesible <strong>sin iniciar sesión</strong> en 60Sec-AI: el empleado no necesita ser usuario del ERP.</p>
+                <p>Página que el empleado abre desde el enlace recibido en el correo «Restablecer la contraseña de su buzón 60sec.ca». Es accesible <strong>sin iniciar sesión</strong> en 60Sec-AI: el empleado no necesita ser usuario del ERP. Abierta desde el enlace, la página se muestra en francés por defecto; sus textos se citan a continuación tal como aparecen, con su significado.</p>
 
                 <h3>Objetivo</h3>
                 <p>Permitir que el empleado defina (o cambie) por sí mismo la contraseña de su buzón @60sec.ca. Texto de introducción: «Choisissez un mot de passe pour votre boîte de courriel {dirección}.» (elija una contraseña para su buzón).</p>
@@ -644,13 +644,13 @@
                 <ul>
                     <li>El enlace sirve <strong>una sola vez</strong>: se invalida en cuanto se define la contraseña.</li>
                     <li>El enlace también caduca <strong>24 horas</strong> después de su envío.</li>
-                    <li>Un enlace no válido o caducado no puede «reactivarse»: el responsable debe enviar uno nuevo con <kbd>Réinit. mot de passe</kbd> en la lista de empleados.</li>
+                    <li>Un enlace no válido o caducado no puede «reactivarse»: el responsable debe enviar uno nuevo con <kbd>Restablecer contraseña</kbd> en la lista de empleados.</li>
                 </ul>
 
                 <h3>Paso a paso</h3>
                 <p>Para el empleado que recibe el correo:</p>
                 <ol>
-                    <li>Abra el correo procedente de <code>noreply@60sec.ca</code> y haga clic en el botón «Définir mon mot de passe» (dentro de las 24 horas).</li>
+                    <li>Abra el correo procedente de <code>noreply@60sec.ca</code> y haga clic en el botón «Establecer mi contraseña» (dentro de las 24 horas).</li>
                     <li>Escriba una contraseña de al menos 6 caracteres en «Nouveau mot de passe» y la misma en «Confirmer le mot de passe».</li>
                     <li>Haga clic en <kbd>Définir le mot de passe</kbd>. El mensaje «Mot de passe défini» confirma el guardado.</li>
                     <li>Configure su programa de correo (IMAP para recibir, SMTP para enviar) con su dirección @60sec.ca y esa contraseña.</li>
@@ -667,22 +667,22 @@
 
                 <h3>Consejos y trampas</h3>
                 <div class="attention" data-titre="Atención">La contraseña nunca se muestra ni se envía por correo: si el empleado la olvida, hay que enviar un nuevo enlace de restablecimiento.</div>
-                <div class="astuce" data-titre="Consejo">Si el correo no llega, pida al empleado que revise la carpeta de correo no deseado y compruebe el «Courriel externe» en su ficha antes de reenviar el enlace.</div>
+                <div class="astuce" data-titre="Consejo">Si el correo no llega, pida al empleado que revise la carpeta de correo no deseado y compruebe el «Correo externo» en su ficha antes de reenviar el enlace.</div>
             </section>
 
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
-                <details><summary>El botón «Réinit. mot de passe» no aparece en la fila de un empleado. ¿Por qué?</summary><p>Solo aparece si el empleado ya tiene un buzón @60sec.ca. Haga clic primero en <kbd>Attribuer boîte</kbd>.</p></details>
+                <details><summary>El botón «Restablecer contraseña» no aparece en la fila de un empleado. ¿Por qué?</summary><p>Solo aparece si el empleado ya tiene un buzón @60sec.ca. Haga clic primero en <kbd>Asignar buzón</kbd>.</p></details>
                 <details><summary>Obtengo «La boîte @60sec.ca et le courriel externe doivent être renseignés».</summary><p>El restablecimiento exige ambas cosas: un buzón asignado <strong>y</strong> un correo externo indicado en la ficha. Complete lo que falte e inténtelo de nuevo.</p></details>
-                <details><summary>¿Cómo se elige la dirección @60sec.ca?</summary><p>A partir del nombre mostrado (o del nombre y apellido), simplificado: «Jean Tremblay» da <code>jean-tremblay@60sec.ca</code>. Si ya existe, se añade un sufijo -2, -3… Sin un nombre utilizable, la dirección empieza por «employe».</p></details>
-                <details><summary>Cambié el nombre del empleado, pero su dirección @60sec.ca no cambió.</summary><p>Es normal: la dirección se fija al asignarla y no cambia más. Elija el nombre definitivo antes de hacer clic en <kbd>Attribuer boîte</kbd>.</p></details>
-                <details><summary>El empleado dice que su enlace ya no funciona.</summary><p>El enlace es válido 24 horas y solo sirve una vez. Envíe uno nuevo con <kbd>Réinit. mot de passe</kbd>.</p></details>
-                <details><summary>¿Qué significa la llave 🔑 en la columna «Boîte @60sec.ca»?</summary><p>Que el empleado ya definió una contraseña para su buzón (ayuda «Mot de passe défini»). Sin la llave, el buzón existe pero el empleado aún no puede conectarse.</p></details>
-                <details><summary>Un empleado deja la empresa: ¿eliminar o desactivar?</summary><p>Desactívelo (desmarque «Employé actif») para conservar su ficha y el historial: desaparece de la agenda pero permanece en la lista. La eliminación es irreversible y libera su buzón.</p></details>
+                <details><summary>¿Cómo se elige la dirección @60sec.ca?</summary><p>A partir del nombre visible (o del nombre y apellido), simplificado: «Jean Tremblay» da <code>jean-tremblay@60sec.ca</code>. Si ya existe, se añade un sufijo -2, -3… Sin un nombre utilizable, la dirección empieza por «employe».</p></details>
+                <details><summary>Cambié el nombre del empleado, pero su dirección @60sec.ca no cambió.</summary><p>Es normal: la dirección se fija al asignarla y no cambia más. Elija el nombre definitivo antes de hacer clic en <kbd>Asignar buzón</kbd>.</p></details>
+                <details><summary>El empleado dice que su enlace ya no funciona.</summary><p>El enlace es válido 24 horas y solo sirve una vez. Envíe uno nuevo con <kbd>Restablecer contraseña</kbd>.</p></details>
+                <details><summary>¿Qué significa la llave 🔑 en la columna «Buzón @60sec.ca»?</summary><p>Que el empleado ya definió una contraseña para su buzón (ayuda «Mot de passe défini»). Sin la llave, el buzón existe pero el empleado aún no puede conectarse.</p></details>
+                <details><summary>Un empleado deja la empresa: ¿eliminar o desactivar?</summary><p>Desactívelo (desmarque «Empleado activo») para conservar su ficha y el historial: desaparece de la agenda pero permanece en la lista. La eliminación es irreversible y libera su buzón.</p></details>
                 <details><summary>¿Qué pasa con las citas de un empleado eliminado?</summary><p>Se conservan en la agenda, pero ya no tienen empleado.</p></details>
                 <details><summary>¿Dónde lee el empleado su buzón @60sec.ca?</summary><p>En su propio programa de correo (Outlook, Thunderbird, teléfono…) configurado con IMAP/SMTP, su dirección y su contraseña. La pantalla <a href="courriel.html#es-correo">Correo</a> de 60Sec-AI solo muestra el buzón de la empresa.</p></details>
                 <details><summary>¿Por qué mi color volvió al azul?</summary><p>El valor introducido no estaba en formato #RRGGBB; se sustituyó por #2563eb sin aviso. Use el selector o un código hexadecimal de seis dígitos.</p></details>
-                <details><summary>¿Por qué un empleado inactivo ya no aparece en las citas?</summary><p>Solo los empleados activos se proponen en la lista «Employé» de la ficha de cita y en el filtro de la agenda. Vuelva a marcar «Employé actif» para mostrarlo.</p></details>
+                <details><summary>¿Por qué un empleado inactivo ya no aparece en las citas?</summary><p>Solo los empleados activos se proponen en la lista «Empleado» de la ficha de cita y en el filtro de la agenda. Vuelva a marcar «Empleado activo» para mostrarlo.</p></details>
             </section>
 
             <section id="es-glosario">
@@ -691,12 +691,12 @@
                     <thead><tr><th>Término</th><th>Definición</th></tr></thead>
                     <tbody>
                         <tr><td>Buzón @60sec.ca</td><td>Buzón de correo personal asignado a un empleado, de la forma nombre-apellido@60sec.ca, consultado por IMAP/SMTP.</td></tr>
-                        <tr><td>Correo externo (Courriel externe)</td><td>Dirección de correo del empleado fuera de 60Sec-AI, a la que se envían los enlaces de restablecimiento.</td></tr>
-                        <tr><td>Attribuer boîte (asignar buzón)</td><td>Acción que crea la dirección @60sec.ca de un empleado a partir de su nombre.</td></tr>
+                        <tr><td>Correo externo</td><td>Dirección de correo del empleado fuera de 60Sec-AI, a la que se envían los enlaces de restablecimiento.</td></tr>
+                        <tr><td>Asignar buzón</td><td>Acción que crea la dirección @60sec.ca de un empleado a partir de su nombre.</td></tr>
                         <tr><td>Enlace de restablecimiento</td><td>Enlace de un solo uso, válido 24 horas, enviado desde noreply@60sec.ca para definir la contraseña de un buzón.</td></tr>
                         <tr><td>IMAP / SMTP</td><td>Protocolos de recepción (IMAP) y envío (SMTP) que se configuran en el programa de correo del empleado.</td></tr>
-                        <tr><td>Nombre mostrado (Nom affiché)</td><td>Nombre del empleado mostrado en la agenda y la lista; sirve para componer la dirección @60sec.ca.</td></tr>
-                        <tr><td>Empleado activo (Employé actif)</td><td>Empleado propuesto como recurso en la agenda. Inactivo, permanece en la lista pero desaparece de la agenda.</td></tr>
+                        <tr><td>Nombre visible</td><td>Nombre del empleado mostrado en la agenda y la lista; sirve para componer la dirección @60sec.ca.</td></tr>
+                        <tr><td>Empleado activo</td><td>Empleado propuesto como recurso en la agenda. Inactivo, permanece en la lista pero desaparece de la agenda.</td></tr>
                         <tr><td>Color (agenda)</td><td>Color #RRGGBB del punto del empleado en el filtro de la agenda.</td></tr>
                         <tr><td>noreply@60sec.ca</td><td>Dirección de envío de los correos automáticos de 60Sec-AI, incluidos los enlaces de restablecimiento.</td></tr>
                     </tbody>

@@ -82,7 +82,7 @@
                     <tbody>
                         <tr><td>De</td><td>—</td><td>L’adresse @60sec.ca de la compagnie, non modifiable.</td></tr>
                         <tr><td>À</td><td>Oui</td><td>Adresse du destinataire (exemple affiché : destinataire@exemple.com). Saisissez une seule adresse.</td></tr>
-                        <tr><td>Cc</td><td>Non</td><td>Adresse en copie.</td></tr>
+                        <tr><td>Cc</td><td>Non</td><td>Adresse en copie. Le champ affiche « (optionnel) » tant qu’il est vide.</td></tr>
                         <tr><td>Sujet</td><td>Oui</td><td>Objet du courriel.</td></tr>
                         <tr><td>Message</td><td>Oui</td><td>Éditeur de texte enrichi : gras, italique, souligné, barré, alignements, retraits, listes, couleurs, tableau, police et taille.</td></tr>
                         <tr><td>Pièces jointes</td><td>Non</td><td>Sélection de plusieurs fichiers. Mention affichée : « Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total). »</td></tr>
@@ -110,7 +110,7 @@
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — affiché avant l’envoi ; seuls les champs réellement manquants sont listés. Complétez-les.</li>
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — affiché avant l’envoi ; seuls les champs réellement manquants sont listés. Rien n’est transmis et votre sélection de pièces jointes est conservée. Complétez les champs, puis cliquez de nouveau sur <kbd>Envoyer</kbd>.</li>
                     <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — le serveur a reçu un envoi incomplet ; remplissez les trois champs.</li>
                     <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — la boîte de la compagnie n’a pas pu être créée ou trouvée ; rechargez l’écran Courriel, qui crée l’adresse à l’ouverture.</li>
                     <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — succès ; la mention des pièces jointes n’apparaît que s’il y en a. Le courriel partira au prochain passage du service d’envoi.</li>
@@ -118,7 +118,7 @@
                 </ul>
 
                 <h3>Trucs et pièges</h3>
-                <div class="piege" data-titre="Piège">« Envoyé » dans la liste veut d’abord dire « en file » : le courriel n’est pas encore parti. Vérifiez le statut plus tard dans l’onglet Envoyés.</div>
+                <div class="piege" data-titre="Piège">L’onglet Envoyés liste aussi les courriels encore « en file » : tant que le statut n’est pas « envoyé », le courriel n’est pas parti. Vérifiez le statut plus tard dans cet onglet.</div>
                 <div class="piege" data-titre="Piège">Si l’envoi est refusé, les fichiers joints sont perdus : il faut les resélectionner avant de cliquer de nouveau sur <kbd>Envoyer</kbd>.</div>
                 <div class="attention" data-titre="Attention">Ne mettez qu’une adresse dans « À » : le champ ne prévoit pas la saisie de plusieurs destinataires. Utilisez « Cc » pour une deuxième personne.</div>
             </section>
@@ -139,7 +139,7 @@
                 <p>Cet écran ne propose <strong>aucun</strong> envoi direct d’une pièce jointe vers les reçus ou les factures fournisseurs. Pour comptabiliser une facture reçue par courriel :</p>
                 <ol>
                     <li>Ouvrez le message dans <kbd>📥 Réception</kbd> et cliquez sur le lien 📎 de la pièce jointe pour la télécharger.</li>
-                    <li>Allez dans l’écran des reçus (menu <span class="chemin">Achats</span>, voir <a href="achats.html">Achats</a>) et importez le fichier téléchargé.</li>
+                    <li>Allez dans l’écran des reçus (menu <span class="chemin">Achats › Reçus</span>, voir <a href="achats.html">Achats</a>) et importez le fichier téléchargé.</li>
                 </ol>
 
                 <h3>Trucs et pièges</h3>
@@ -210,7 +210,7 @@
 
         <article class="langue" lang="en">
             <h1>Mail</h1>
-            <p class="intro">The webmail of your company’s @60sec.ca mailbox: inbox, sent messages and composing. This section also explains how 60Sec-AI’s automatic e-mails (invoices, reminders, notices) are sent. Menu <span class="chemin">Courriel</span>.</p>
+            <p class="intro">The webmail of your company’s @60sec.ca mailbox: inbox, sent messages and composing. This section also explains how 60Sec-AI’s automatic e-mails (invoices, reminders, notices) are sent. Menu <span class="chemin">Mail</span>; the screen itself is displayed in French, so its labels are quoted here as they appear.</p>
 
             <section id="en-mail">
                 <h2>Company mailbox</h2>
@@ -270,7 +270,7 @@
                     <tbody>
                         <tr><td>De (from)</td><td>—</td><td>The company’s @60sec.ca address, not editable.</td></tr>
                         <tr><td>À (to)</td><td>Yes</td><td>Recipient address (example shown: destinataire@exemple.com). Enter a single address.</td></tr>
-                        <tr><td>Cc</td><td>No</td><td>Copied address.</td></tr>
+                        <tr><td>Cc</td><td>No</td><td>Copied address. The field shows “(optionnel)” (optional) while it is empty.</td></tr>
                         <tr><td>Sujet (subject)</td><td>Yes</td><td>E-mail subject.</td></tr>
                         <tr><td>Message</td><td>Yes</td><td>Rich text editor: bold, italic, underline, strikethrough, alignment, indents, lists, colours, table, font and size.</td></tr>
                         <tr><td>Pièces jointes (attachments)</td><td>No</td><td>Multiple file selection. Note shown: “Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).” (you may select several files, 50 MB max in total).</td></tr>
@@ -298,7 +298,7 @@
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — shown before sending; only the fields actually missing are listed (recipient, subject, message). Fill them in.</li>
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — shown before sending; only the fields actually missing are listed (recipient, subject, message). Nothing is submitted and your attachment selection is kept. Fill in the fields, then click <kbd>Envoyer</kbd> again.</li>
                     <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — the server received an incomplete submission; fill in all three fields.</li>
                     <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — the company mailbox could not be created or found; reload the Mail screen, which creates the address on opening.</li>
                     <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — success; the attachments mention only appears when there are some. The e-mail will leave on the sending service’s next pass.</li>
@@ -306,7 +306,7 @@
                 </ul>
 
                 <h3>Tips and pitfalls</h3>
-                <div class="piege" data-titre="Pitfall">“Sent” in the list first means “queued”: the e-mail has not left yet. Check the status later in the Sent tab.</div>
+                <div class="piege" data-titre="Pitfall">The Sent tab also lists e-mails that are still “en file” (queued): as long as the status is not “envoyé”, the e-mail has not left. Check the status later in that tab.</div>
                 <div class="piege" data-titre="Pitfall">If sending is refused, the attached files are lost: reselect them before clicking <kbd>Envoyer</kbd> again.</div>
                 <div class="attention" data-titre="Warning">Put only one address in “À”: the field is not designed for several recipients. Use “Cc” for a second person.</div>
             </section>
@@ -327,7 +327,7 @@
                 <p>This screen offers <strong>no</strong> direct transfer of an attachment to receipts or supplier invoices. To record an invoice received by e-mail:</p>
                 <ol>
                     <li>Open the message in <kbd>📥 Réception</kbd> and click the attachment’s 📎 link to download it.</li>
-                    <li>Go to the receipts screen (menu <span class="chemin">Achats</span>, see <a href="achats.html">Purchases</a>) and import the downloaded file.</li>
+                    <li>Go to the receipts screen (menu <span class="chemin">Purchases › Receipts</span>, see <a href="achats.html">Purchases</a>) and import the downloaded file.</li>
                 </ol>
 
                 <h3>Tips and pitfalls</h3>
@@ -368,7 +368,7 @@
                 <details><summary>Can I send to several recipients?</summary><p>The “À” field is designed for a single address. Add a second person in “Cc”, or send several e-mails.</p></details>
                 <details><summary>Why is the reception time off?</summary><p>The reception date is stored and displayed in universal time (UTC), 4 to 5 hours ahead of Quebec time.</p></details>
                 <details><summary>Where are the attachments of a message I sent?</summary><p>They did go with the message, but they are not listed when you reread the e-mail in the Sent tab. Keep your original files.</p></details>
-                <details><summary>How do I put an invoice received by e-mail into my receipts?</summary><p>Download the attachment with its 📎 link, then import the file manually in the receipts screen (Achats menu). The Mail screen does not send it automatically.</p></details>
+                <details><summary>How do I put an invoice received by e-mail into my receipts?</summary><p>Download the attachment with its 📎 link, then import the file manually in the receipts screen (Purchases menu). The Mail screen does not send it automatically.</p></details>
                 <details><summary>Where is my employee’s @60sec.ca mailbox?</summary><p>Not in this screen: it only shows the company mailbox. The employee reads their mailbox with their mail software set up with IMAP/SMTP.</p></details>
                 <details><summary>Sending failed and my files disappeared from the selection.</summary><p>That is expected: after a refusal, attachments are lost. Reselect them before clicking Send again.</p></details>
                 <details><summary>How is the company’s @60sec.ca address chosen?</summary><p>It is created the first time the screen is opened, from the trade name (for example <code>macompagnie@60sec.ca</code>), with a -2 suffix if the name is already taken.</p></details>
@@ -398,7 +398,7 @@
 
         <article class="langue" lang="es">
             <h1>Correo</h1>
-            <p class="intro">El correo web del buzón @60sec.ca de su empresa: recepción, mensajes enviados y redacción. Esta sección también explica cómo se envían los correos automáticos de 60Sec-AI (facturas, recordatorios, avisos). Menú <span class="chemin">Courriel</span>.</p>
+            <p class="intro">El correo web del buzón @60sec.ca de su empresa: recepción, mensajes enviados y redacción. Esta sección también explica cómo se envían los correos automáticos de 60Sec-AI (facturas, recordatorios, avisos). Menú <span class="chemin">Correo</span>; la pantalla en sí se muestra en francés, por lo que sus etiquetas se citan aquí tal como aparecen.</p>
 
             <section id="es-correo">
                 <h2>Buzón de la empresa</h2>
@@ -458,7 +458,7 @@
                     <tbody>
                         <tr><td>De (de)</td><td>—</td><td>La dirección @60sec.ca de la empresa, no modificable.</td></tr>
                         <tr><td>À (para)</td><td>Sí</td><td>Dirección del destinatario (ejemplo mostrado: destinataire@exemple.com). Escriba una sola dirección.</td></tr>
-                        <tr><td>Cc</td><td>No</td><td>Dirección en copia.</td></tr>
+                        <tr><td>Cc</td><td>No</td><td>Dirección en copia. El campo muestra «(optionnel)» (opcional) mientras está vacío.</td></tr>
                         <tr><td>Sujet (asunto)</td><td>Sí</td><td>Asunto del correo.</td></tr>
                         <tr><td>Message (mensaje)</td><td>Sí</td><td>Editor de texto enriquecido: negrita, cursiva, subrayado, tachado, alineaciones, sangrías, listas, colores, tabla, fuente y tamaño.</td></tr>
                         <tr><td>Pièces jointes (adjuntos)</td><td>No</td><td>Selección de varios archivos. Nota mostrada: «Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).» (puede seleccionar varios archivos, 50 MB máx. en total).</td></tr>
@@ -486,7 +486,7 @@
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — se muestra antes del envío; solo se listan los campos que realmente faltan (destinatario, asunto, mensaje). Complételos.</li>
+                    <li><span class="msg">« ✖ Champ(s) obligatoire(s) manquant(s) : destinataire, sujet, message. »</span> — se muestra antes del envío; solo se listan los campos que realmente faltan (destinatario, asunto, mensaje). No se transmite nada y su selección de adjuntos se conserva. Complete los campos y haga clic de nuevo en <kbd>Envoyer</kbd>.</li>
                     <li><span class="msg">« ✖ Destinataire, sujet et message sont obligatoires. »</span> — el servidor recibió un envío incompleto; rellene los tres campos.</li>
                     <li><span class="msg">« ✖ Aucune adresse courriel n’est configurée pour cette compagnie. »</span> — el buzón de la empresa no pudo crearse o encontrarse; vuelva a cargar la pantalla Correo, que crea la dirección al abrirse.</li>
                     <li><span class="msg">« ✔ Courriel mis en file d’envoi avec N pièce(s) jointe(s) (destinataire : x). »</span> — éxito; la mención de los adjuntos solo aparece si los hay. El correo saldrá en la próxima pasada del servicio de envío.</li>
@@ -494,7 +494,7 @@
                 </ul>
 
                 <h3>Consejos y trampas</h3>
-                <div class="piege" data-titre="Trampa">«Enviado» en la lista significa primero «en cola»: el correo aún no ha salido. Compruebe el estado más tarde en la pestaña Enviados.</div>
+                <div class="piege" data-titre="Trampa">La pestaña Enviados también lista los correos que siguen «en file» (en cola): mientras el estado no sea «envoyé», el correo no ha salido. Compruebe el estado más tarde en esa pestaña.</div>
                 <div class="piege" data-titre="Trampa">Si el envío se rechaza, los archivos adjuntos se pierden: vuelva a seleccionarlos antes de hacer clic de nuevo en <kbd>Envoyer</kbd>.</div>
                 <div class="attention" data-titre="Atención">Ponga una sola dirección en «À»: el campo no está previsto para varios destinatarios. Use «Cc» para una segunda persona.</div>
             </section>
@@ -515,7 +515,7 @@
                 <p>Esta pantalla no ofrece <strong>ningún</strong> traspaso directo de un adjunto a los recibos o facturas de proveedor. Para registrar una factura recibida por correo:</p>
                 <ol>
                     <li>Abra el mensaje en <kbd>📥 Réception</kbd> y haga clic en el enlace 📎 del adjunto para descargarlo.</li>
-                    <li>Vaya a la pantalla de recibos (menú <span class="chemin">Achats</span>, vea <a href="achats.html">Compras</a>) e importe el archivo descargado.</li>
+                    <li>Vaya a la pantalla de recibos (menú <span class="chemin">Compras › Recibos</span>, vea <a href="achats.html">Compras</a>) e importe el archivo descargado.</li>
                 </ol>
 
                 <h3>Consejos y trampas</h3>
@@ -556,7 +556,7 @@
                 <details><summary>¿Puedo enviar a varios destinatarios?</summary><p>El campo «À» está previsto para una sola dirección. Añada a una segunda persona en «Cc» o envíe varios correos.</p></details>
                 <details><summary>¿Por qué la hora de recepción está desfasada?</summary><p>La fecha de recepción se guarda y se muestra en hora universal (UTC), 4 o 5 horas por delante de la hora de Quebec.</p></details>
                 <details><summary>¿Dónde están los adjuntos de un mensaje que envié?</summary><p>Salieron con el mensaje, pero no se listan al releer el correo en la pestaña Enviados. Conserve sus archivos originales.</p></details>
-                <details><summary>¿Cómo paso una factura recibida por correo a mis recibos?</summary><p>Descargue el adjunto con su enlace 📎 y luego importe el archivo manualmente en la pantalla de recibos (menú Achats). La pantalla Correo no lo envía automáticamente.</p></details>
+                <details><summary>¿Cómo paso una factura recibida por correo a mis recibos?</summary><p>Descargue el adjunto con su enlace 📎 y luego importe el archivo manualmente en la pantalla de recibos (menú Compras). La pantalla Correo no lo envía automáticamente.</p></details>
                 <details><summary>¿Dónde está el buzón @60sec.ca de mi empleado?</summary><p>No en esta pantalla: solo muestra el buzón de la empresa. El empleado lee su buzón con su programa de correo configurado con IMAP/SMTP.</p></details>
                 <details><summary>El envío falló y mis archivos desaparecieron de la selección.</summary><p>Es normal: tras un rechazo, los adjuntos se pierden. Vuelva a seleccionarlos antes de hacer clic de nuevo en Enviar.</p></details>
                 <details><summary>¿Cómo se elige la dirección @60sec.ca de la empresa?</summary><p>Se crea la primera vez que se abre la pantalla, a partir del nombre comercial (por ejemplo <code>macompagnie@60sec.ca</code>), con un sufijo -2 si el nombre ya está ocupado.</p></details>

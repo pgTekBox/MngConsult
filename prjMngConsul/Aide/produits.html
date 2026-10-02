@@ -35,7 +35,7 @@
                 <ul>
                     <li><kbd>Exporter vers Square</kbd> : envoie les produits actifs vers le catalogue Square (voir <a href="#fr-square">Synchronisation Square du catalogue</a>). Aucune confirmation n’est demandée.</li>
                     <li><kbd>Importer depuis Square</kbd> : récupère le catalogue Square dans 60Sec-AI (voir la même section). Aucune confirmation n’est demandée.</li>
-                    <li><kbd>Ajouter un produit</kbd> : ouvre la fenêtre « Ajouter un produit ». Sur mobile, un bouton flottant <kbd>+</kbd> fait la même chose.</li>
+                    <li><kbd>Ajouter un produit</kbd> : ouvre la fenêtre « Ajouter un produit ».</li>
                     <li>Sur chaque ligne :
                         <ul>
                             <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier un produit ».</li>
@@ -170,7 +170,7 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter une catégorie</kbd> : ouvre la fenêtre « Ajouter une catégorie ». Sur mobile, le bouton flottant <kbd>+</kbd> fait la même chose.</li>
+                    <li><kbd>Ajouter une catégorie</kbd> : ouvre la fenêtre « Ajouter une catégorie ».</li>
                     <li>Sur chaque ligne :
                         <ul>
                             <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier une catégorie ».</li>
@@ -227,6 +227,7 @@
                 <p>Les deux boutons se comportent exactement comme dans la fiche produit.</p>
 
                 <h3>Champs</h3>
+                <p>Carte « Informations générales »</p>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
                     <tbody>
@@ -292,13 +293,13 @@
                 <h3>Connexion</h3>
                 <ul>
                     <li>La connexion à Square ne se fait plus dans l’écran des produits. Elle se fait dans le menu <span class="chemin">Processeur de paiement</span> (voir la section <a href="administration.html">Administration</a>).</li>
-                    <li>Au retour de la connexion Square sur la page Produits, l’un de ces messages peut s’afficher :</li>
+                    <li>Au retour de la connexion Square, vous revenez sur l’écran « Processeur de paiement », où l’un de ces messages peut s’afficher :</li>
                 </ul>
                 <ul class="messages">
-                    <li><span class="msg">« Compte Square connecté avec succès. »</span> — la connexion est établie ; vous pouvez exporter et importer.</li>
-                    <li><span class="msg">« Connexion Square refusée par l’utilisateur. »</span> — vous avez refusé l’autorisation dans Square. Recommencez la connexion et acceptez.</li>
-                    <li><span class="msg">« Échec de sécurité OAuth (state invalide). Réessaie la connexion. »</span> — la vérification de sécurité a échoué (page rappelée trop tard ou dans un autre navigateur). Relancez la connexion depuis « Processeur de paiement ».</li>
-                    <li><span class="msg">« Erreur lors de la connexion à Square. »</span> — problème général ; réessayez, puis vérifiez votre compte Square.</li>
+                    <li><span class="msg">« ✔ Compte Square connecté avec succès. »</span> — la connexion est établie ; vous pouvez exporter et importer.</li>
+                    <li><span class="msg">« ✖ Connexion Square annulée. »</span> — vous avez refusé l’autorisation dans Square. Recommencez la connexion et acceptez.</li>
+                    <li><span class="msg">« ✖ Erreur lors de la connexion Square. »</span> — la vérification de sécurité a échoué (page rappelée trop tard ou dans un autre navigateur) ou un problème général est survenu. Relancez la connexion, puis vérifiez votre compte Square.</li>
+                    <li><span class="msg">« ✔ Compte Square déconnecté. »</span> — s’affiche après une déconnexion de Square faite dans ce même écran.</li>
                 </ul>
 
                 <h3>Exporter vers Square (de 60Sec-AI vers Square)</h3>
@@ -397,7 +398,7 @@
                 <details><summary>Le bouton « Exporter vers Square » dit « Aucun produit actif à exporter. » alors que j’ai des produits.</summary><p>Seuls les produits actifs et ayant un nom sont exportés. Vérifiez la pastille « Actif » (verte) dans la liste et activez les produits concernés.</p></details>
                 <details><summary>Mes prix ont changé tout seuls après une modification dans Square. Est-ce normal ?</summary><p>Oui. La synchronisation automatique importe toute modification faite dans Square et écrase le nom, la description et le prix locaux (sauf si la valeur Square est vide ou si le prix Square est 0). Faites vos changements de prix dans 60Sec-AI puis exportez, pour que 60Sec-AI reste la référence.</p></details>
                 <details><summary>Pourquoi l’import a-t-il créé des doublons ?</summary><p>L’import lie un article Square à un produit déjà lié, sinon à un produit actif de même nom, sinon il en crée un. Si vos produits locaux étaient inactifs ou nommés différemment, de nouveaux produits ont été créés. Exportez d’abord, importez ensuite, et gardez des noms identiques dans les deux systèmes.</p></details>
-                <details><summary>Où connecter mon compte Square ?</summary><p>Dans le menu <span class="chemin">Processeur de paiement</span>, pas dans l’écran des produits. Après la connexion, le message « Compte Square connecté avec succès. » apparaît sur la page Produits.</p></details>
+                <details><summary>Où connecter mon compte Square ?</summary><p>Dans le menu <span class="chemin">Processeur de paiement</span>, pas dans l’écran des produits. Après la connexion, le message « ✔ Compte Square connecté avec succès. » apparaît dans ce même écran.</p></details>
                 <details><summary>Les taxes et la catégorie sont-elles envoyées à Square ?</summary><p>Non. L’export transmet seulement le nom, la description et le prix (en dollars canadiens). Catégorie, statut de taxe, quantité par défaut et comptes du plan comptable restent dans 60Sec-AI.</p></details>
                 <details><summary>Puis-je avoir deux catégories avec le même code ?</summary><p>L’écran ne l’empêche pas, mais c’est déconseillé : le code sert à reconnaître la catégorie dans les listes et le sous-titre « CODE — Nom ». Donnez un code unique de 10 caractères au maximum.</p></details>
                 <details><summary>À quoi sert « Ajouter auto aux factures » ?</summary><p>Cochée, cette case fait proposer le produit automatiquement sur les nouvelles factures. Réservez-la aux frais que vous facturez presque toujours (par exemple des frais de déplacement ou d’administration). Voir la section <a href="ventes.html">Ventes</a>.</p></details>
@@ -428,7 +429,7 @@
 
         <article class="langue" lang="en">
             <h1>Products and services</h1>
-            <p class="intro">The catalog of what you sell and buy: products and services, their prices, their tax status and the chart-of-accounts entries attached to them, grouped into categories. This is also where the catalog is synchronized with Square. Menu <span class="chemin">Products and services</span>, which has two entries: <span class="chemin">Products</span> and <span class="chemin">Product category</span>. The screens exist in French, English and Spanish; the labels quoted in this help are those of the French version, translated.</p>
+            <p class="intro">The catalog of what you sell and buy: products and services, their prices, their tax status and the chart-of-accounts entries attached to them, grouped into categories. This is also where the catalog is synchronized with Square. Menu <span class="chemin">Products and services</span>, which has two entries: <span class="chemin">Products</span> and <span class="chemin">Product category</span>. The screens exist in French, English and Spanish; the labels quoted in this help are those of the English version.</p>
 
             <section id="en-products">
                 <h2>Products</h2>
@@ -441,7 +442,7 @@
                 <ul>
                     <li><kbd>Export to Square</kbd>: sends the active products to the Square catalog (see <a href="#en-square">Square catalog synchronization</a>). No confirmation is requested.</li>
                     <li><kbd>Import from Square</kbd>: fetches the Square catalog into 60Sec-AI (see the same section). No confirmation is requested.</li>
-                    <li><kbd>Add a product</kbd>: opens the “Add a product” window. On mobile, a floating <kbd>+</kbd> button does the same.</li>
+                    <li><kbd>Add a product</kbd>: opens the “Add a product” window.</li>
                     <li>On each row:
                         <ul>
                             <li><kbd>Pencil</kbd>: opens the “Edit a product” window.</li>
@@ -518,7 +519,7 @@
                     </tbody>
                 </table>
 
-                <p>“Prices and quantities” card</p>
+                <p>“Price and quantities” card</p>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
@@ -534,8 +535,8 @@
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
-                        <tr><td>Sales account (Revenue)</td><td>No</td><td>Lists only the revenue accounts of the chart of accounts. “Use the category’s account” by default.</td></tr>
-                        <tr><td>Purchase account (Cost / Expenses)</td><td>No</td><td>Lists only the cost-of-sales and operating-expense accounts. “Use the category’s account” by default.</td></tr>
+                        <tr><td>Sales account (Revenue)</td><td>No</td><td>Lists only the revenue accounts of the chart of accounts. “Use the category account” by default.</td></tr>
+                        <tr><td>Purchase account (Cost / Expenses)</td><td>No</td><td>Lists only the cost-of-sales and operating-expense accounts. “Use the category account” by default.</td></tr>
                     </tbody>
                 </table>
 
@@ -553,7 +554,7 @@
                 <ul>
                     <li>There is no “product/service type” field, no unit of measure, no inventory management, no SKU code and no purchase cost. A product and a service are entered the same way.</li>
                     <li>Picking a category <strong>does not prefill</strong> the product’s tax status. You must pick it yourself in “Tax status”.</li>
-                    <li>The account chosen on the product overrides the category’s. Leave “Use the category’s account” to inherit automatically.</li>
+                    <li>The account chosen on the product overrides the category’s. Leave “Use the category account” to inherit automatically.</li>
                     <li>No duplicate check is made on the name: two products can have the same name.</li>
                 </ul>
 
@@ -576,7 +577,7 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add a category</kbd>: opens the “Add a category” window. On mobile, the floating <kbd>+</kbd> button does the same.</li>
+                    <li><kbd>Add a category</kbd>: opens the “Add a category” window.</li>
                     <li>On each row:
                         <ul>
                             <li><kbd>Pencil</kbd>: opens the “Edit a category” window.</li>
@@ -633,6 +634,7 @@
                 <p>Both buttons behave exactly as in the product form.</p>
 
                 <h3>Fields</h3>
+                <p>“General information” card</p>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
@@ -698,13 +700,13 @@
                 <h3>Connection</h3>
                 <ul>
                     <li>The Square connection is no longer made from the products screen. It is made from the <span class="chemin">Payment processor</span> menu (see the <a href="administration.html">Administration</a> section).</li>
-                    <li>When you come back from the Square connection to the Products page, one of these messages may appear:</li>
+                    <li>When you come back from the Square connection, you return to the “Payment processor” screen, where one of these messages may appear:</li>
                 </ul>
                 <ul class="messages">
-                    <li><span class="msg">“Square account connected successfully.”</span> — the connection is established; you can export and import.</li>
-                    <li><span class="msg">“Square connection refused by the user.”</span> — you declined the authorization in Square. Start the connection again and accept.</li>
-                    <li><span class="msg">“OAuth security failure (invalid state). Retry the connection.”</span> — the security check failed (page called back too late or in another browser). Restart the connection from “Payment processor”.</li>
-                    <li><span class="msg">“Error while connecting to Square.”</span> — general problem; try again, then check your Square account.</li>
+                    <li><span class="msg">“✔ Square account connected successfully.”</span> — the connection is established; you can export and import.</li>
+                    <li><span class="msg">“✖ Square connection cancelled.”</span> — you declined the authorization in Square. Start the connection again and accept.</li>
+                    <li><span class="msg">“✖ Error during Square connection.”</span> — the security check failed (page called back too late or in another browser) or a general problem occurred. Restart the connection, then check your Square account.</li>
+                    <li><span class="msg">“✔ Square account disconnected.”</span> — shown after you disconnect Square from that same screen.</li>
                 </ul>
 
                 <h3>Export to Square (from 60Sec-AI to Square)</h3>
@@ -737,7 +739,7 @@
                     <li><span class="msg">“No product to import from Square.”</span> — the Square catalog is empty.</li>
                     <li><span class="msg">“{X} product(s) created and {Y} updated from Square ({Z} found).”</span> — import summary: Z items read, X new products, Y existing products updated.</li>
                     <li><span class="msg">“Error during Square import:”</span> followed by the detail — the import stopped. Check the Square connection and try again.</li>
-                    <li><span class="msg">“…Square.AccessToken is not configured in Web.config.”</span> — the Square connection is not configured. Connect Square in <span class="chemin">Payment processor</span>, then try again.</li>
+                    <li><span class="msg">“…Square.AccessToken n’est pas configure dans Web.config.”</span> — this technical text is always shown in French; it means the Square connection is not configured. Connect Square in <span class="chemin">Payment processor</span>, then try again.</li>
                 </ul>
 
                 <h3>Automatic synchronization</h3>
@@ -766,7 +768,7 @@
             <section id="en-rules">
                 <h2>Business rules</h2>
                 <ul>
-                    <li><strong>Priority of chart-of-accounts entries</strong>: the account chosen on the product wins. If it is empty (“Use the category’s account”), the category’s account applies at invoicing time.</li>
+                    <li><strong>Priority of chart-of-accounts entries</strong>: the account chosen on the product wins. If it is empty (“Use the category account”), the category’s account applies at invoicing time.</li>
                     <li><strong>Category to product</strong>: picking a category does not prefill the product’s tax status. You must pick it yourself.</li>
                     <li><strong>Deletion</strong>: no usage check is made in the screens. If the system refuses to delete a product or category already in use, nothing indicates it on screen: the product simply stays in the list after the reload.</li>
                     <li><strong>Inactive products</strong>: they stay in the list (red badge) but are not exported to Square.</li>
@@ -785,7 +787,7 @@
                     <li>The Square export assumes prices are in Canadian dollars.</li>
                     <li><strong>Exporting before importing</strong> avoids duplicates. Otherwise, the import matches products by name: two active products with the same name may be linked incorrectly.</li>
                     <li><strong>Changing the name or price in Square</strong> then importing, or letting the automatic synchronization run, overwrites the values entered in 60Sec-AI.</li>
-                    <li>If the Square connection is not configured, the error shown is technical (“…Square.AccessToken is not configured in Web.config.”). You must then connect Square in <span class="chemin">Payment processor</span>.</li>
+                    <li>If the Square connection is not configured, the error shown is technical and always in French (“…Square.AccessToken n’est pas configure dans Web.config.”). You must then connect Square in <span class="chemin">Payment processor</span>.</li>
                     <li><strong>Create categories with their chart-of-accounts entries first</strong>: products inherit them, which avoids setting accounts product by product.</li>
                     <li>The <kbd>X</kbd> button of the Products list <strong>also</strong> clears the category filter.</li>
                     <li><kbd>Close</kbd> does not warn you about unsaved changes: get into the habit of clicking <kbd>Save</kbd> before closing.</li>
@@ -803,7 +805,7 @@
                 <details><summary>“Export to Square” says “No active product to export.” although I have products.</summary><p>Only active products with a name are exported. Check the “Active” badge (green) in the list and activate the products concerned.</p></details>
                 <details><summary>My prices changed by themselves after a change in Square. Is that normal?</summary><p>Yes. The automatic synchronization imports every change made in Square and overwrites the local name, description and price (unless the Square value is empty or the Square price is 0). Make your price changes in 60Sec-AI and then export, so that 60Sec-AI stays the reference.</p></details>
                 <details><summary>Why did the import create duplicates?</summary><p>The import links a Square item to an already linked product, otherwise to an active product with the same name, otherwise it creates one. If your local products were inactive or named differently, new products were created. Export first, import second, and keep identical names in both systems.</p></details>
-                <details><summary>Where do I connect my Square account?</summary><p>In the <span class="chemin">Payment processor</span> menu, not in the products screen. After the connection, the “Square account connected successfully.” message appears on the Products page.</p></details>
+                <details><summary>Where do I connect my Square account?</summary><p>In the <span class="chemin">Payment processor</span> menu, not in the products screen. After the connection, the “✔ Square account connected successfully.” message appears on that same screen.</p></details>
                 <details><summary>Are taxes and the category sent to Square?</summary><p>No. The export sends only the name, description and price (in Canadian dollars). Category, tax status, default quantity and chart-of-accounts entries stay in 60Sec-AI.</p></details>
                 <details><summary>Can I have two categories with the same code?</summary><p>The screen does not prevent it, but it is not advisable: the code identifies the category in lists and in the “CODE — Name” subtitle. Give a unique code of 10 characters at most.</p></details>
                 <details><summary>What is “Auto-add to invoices” for?</summary><p>When checked, this box makes the product proposed automatically on new invoices. Reserve it for charges you bill almost always (for example travel or administration fees). See the <a href="ventes.html">Sales</a> section.</p></details>
@@ -834,7 +836,7 @@
 
         <article class="langue" lang="es">
             <h1>Productos y servicios</h1>
-            <p class="intro">El catálogo de lo que usted vende y compra: los productos y servicios, sus precios, su estado fiscal y las cuentas del plan contable asociadas, agrupados en categorías. Aquí también se sincroniza el catálogo con Square. Menú <span class="chemin">Productos y servicios</span>, que contiene dos entradas: <span class="chemin">Productos</span> y <span class="chemin">Categoría de producto</span>. Las pantallas existen en francés, inglés y español; los rótulos citados en esta ayuda son los de la versión francesa, traducidos.</p>
+            <p class="intro">El catálogo de lo que usted vende y compra: los productos y servicios, sus precios, su estado fiscal y las cuentas del plan contable asociadas, agrupados en categorías. Aquí también se sincroniza el catálogo con Square. Menú <span class="chemin">Productos y servicios</span>, que contiene dos entradas: <span class="chemin">Productos</span> y <span class="chemin">Categoría de producto</span>. Las pantallas existen en francés, inglés y español; los rótulos citados en esta ayuda son los de la versión española.</p>
 
             <section id="es-productos">
                 <h2>Productos</h2>
@@ -847,10 +849,10 @@
                 <ul>
                     <li><kbd>Exportar a Square</kbd>: envía los productos activos al catálogo de Square (vea <a href="#es-square">Sincronización del catálogo con Square</a>). No se pide confirmación.</li>
                     <li><kbd>Importar desde Square</kbd>: recupera el catálogo de Square en 60Sec-AI (vea la misma sección). No se pide confirmación.</li>
-                    <li><kbd>Agregar un producto</kbd>: abre la ventana «Agregar un producto». En móvil, un botón flotante <kbd>+</kbd> hace lo mismo.</li>
+                    <li><kbd>Agregar un producto</kbd>: abre la ventana «Agregar un producto».</li>
                     <li>En cada línea:
                         <ul>
-                            <li><kbd>Lápiz</kbd>: abre la ventana «Modificar un producto».</li>
+                            <li><kbd>Lápiz</kbd>: abre la ventana «Editar un producto».</li>
                             <li><kbd>Papelera</kbd>: elimina el producto <strong>de inmediato, sin confirmación</strong>.</li>
                         </ul>
                     </li>
@@ -880,7 +882,7 @@
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«No se encontró ningún producto.»</span> — la lista está vacía, o la búsqueda y el filtro de categoría no devuelven nada. Haga clic en <kbd>X</kbd> para restablecerlo todo.</li>
+                    <li><span class="msg">«Ningún producto encontrado.»</span> — la lista está vacía, o la búsqueda y el filtro de categoría no devuelven nada. Haga clic en <kbd>X</kbd> para restablecerlo todo.</li>
                 </ul>
 
                 <div class="piege" data-titre="Trampa">La <kbd>Papelera</kbd> elimina el producto al primer clic, sin pedir confirmación. Para retirar un producto del uso corriente conservando su historial, abra su ficha y desmarque «Producto activo».</div>
@@ -899,7 +901,7 @@
 
             <section id="es-ficha-producto">
                 <h2>Ficha de producto</h2>
-                <p>La ventana «Nuevo producto» (al crear) o «Modificar el producto» (al modificar) se abre desde la lista de productos. Sirve para crear o modificar un producto o servicio.</p>
+                <p>La ventana «Nuevo producto» (al crear) o «Editar producto» (al modificar) se abre desde la lista de productos. Sirve para crear o modificar un producto o servicio.</p>
 
                 <h3>Objetivo</h3>
                 <ul>
@@ -924,14 +926,14 @@
                     </tbody>
                 </table>
 
-                <p>Tarjeta «Precios y cantidades»</p>
+                <p>Tarjeta «Precio y cantidades»</p>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Precio unitario ($)</td><td>No</td><td>Formato monetario, 2 decimales, sin valores negativos. Si se deja vacío, se guarda como <strong>0</strong>.</td></tr>
-                        <tr><td>Cantidad por defecto</td><td>No</td><td>2 decimales, sin valores negativos, vale 1 por defecto. Si está vacía, se guarda como <strong>1</strong>.</td></tr>
-                        <tr><td>Estado fiscal</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero. Determina si el TPS (5 %) y el TVQ (9,975 %) se aplican a la línea de factura.</td></tr>
-                        <tr><td>Agregar auto a las facturas</td><td>No</td><td>Casilla, desmarcada por defecto. Marcada, el producto se propone automáticamente en las facturas nuevas.</td></tr>
+                        <tr><td>Cantidad predeterminada</td><td>No</td><td>2 decimales, sin valores negativos, vale 1 por defecto. Si está vacía, se guarda como <strong>1</strong>.</td></tr>
+                        <tr><td>Estado de impuesto</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero. Determina si el TPS (5 %) y el TVQ (9,975 %) se aplican a la línea de factura.</td></tr>
+                        <tr><td>Agregar automáticamente a facturas</td><td>No</td><td>Casilla, desmarcada por defecto. Marcada, el producto se propone automáticamente en las facturas nuevas.</td></tr>
                     </tbody>
                 </table>
 
@@ -958,7 +960,7 @@
                 <h3>Reglas</h3>
                 <ul>
                     <li>No hay campo «tipo producto/servicio», ni unidad de medida, ni gestión de inventario, ni código SKU, ni costo de compra. Un producto y un servicio se registran igual.</li>
-                    <li>Elegir una categoría <strong>no rellena</strong> el estado fiscal del producto. Debe elegirlo usted mismo en «Estado fiscal».</li>
+                    <li>Elegir una categoría <strong>no rellena</strong> el estado fiscal del producto. Debe elegirlo usted mismo en «Estado de impuesto».</li>
                     <li>La cuenta elegida en el producto prevalece sobre la de la categoría. Deje «Usar la cuenta de la categoría» para heredar automáticamente.</li>
                     <li>No se hace ningún control de duplicados sobre el nombre: dos productos pueden llevar el mismo nombre.</li>
                 </ul>
@@ -982,10 +984,10 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar una categoría</kbd>: abre la ventana «Agregar una categoría». En móvil, el botón flotante <kbd>+</kbd> hace lo mismo.</li>
+                    <li><kbd>Agregar una categoría</kbd>: abre la ventana «Agregar una categoría».</li>
                     <li>En cada línea:
                         <ul>
-                            <li><kbd>Lápiz</kbd>: abre la ventana «Modificar una categoría».</li>
+                            <li><kbd>Lápiz</kbd>: abre la ventana «Editar una categoría».</li>
                             <li><kbd>Papelera</kbd>: elimina la categoría <strong>de inmediato, sin confirmación</strong>.</li>
                         </ul>
                     </li>
@@ -1004,8 +1006,8 @@
                     <tbody>
                         <tr><td>Código</td><td>El código de la categoría, en fuente de ancho fijo.</td></tr>
                         <tr><td>Nombre</td><td>El nombre, con la descripción debajo.</td></tr>
-                        <tr><td>Cuenta venta</td><td>El número de la cuenta de ingresos, con su nombre debajo.</td></tr>
-                        <tr><td>Cuenta compra</td><td>El número de la cuenta de compra o de costo de ventas, con su nombre debajo.</td></tr>
+                        <tr><td>Cuenta de venta</td><td>El número de la cuenta de ingresos, con su nombre debajo.</td></tr>
+                        <tr><td>Cuenta de compra</td><td>El número de la cuenta de compra o de costo de ventas, con su nombre debajo.</td></tr>
                         <tr><td>Impuesto</td><td>Gravable, Exento o «—».</td></tr>
                         <tr><td>Activo</td><td>Distintivo verde (activa) o rojo (inactiva).</td></tr>
                         <tr><td>Acción</td><td>Los botones <kbd>Lápiz</kbd> y <kbd>Papelera</kbd>.</td></tr>
@@ -1014,7 +1016,7 @@
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«No se encontró ninguna categoría.»</span> — todavía no existe ninguna categoría, o la búsqueda no devuelve nada. Haga clic en <kbd>X</kbd> para borrar la búsqueda.</li>
+                    <li><span class="msg">«Ninguna categoría encontrada.»</span> — todavía no existe ninguna categoría, o la búsqueda no devuelve nada. Haga clic en <kbd>X</kbd> para borrar la búsqueda.</li>
                 </ul>
 
                 <div class="piege" data-titre="Trampa">Como con los productos, la <kbd>Papelera</kbd> elimina la categoría al primer clic, sin confirmación. Prefiera desmarcar «Categoría activa» para una categoría que ya no utiliza.</div>
@@ -1023,7 +1025,7 @@
 
             <section id="es-ficha-categoria">
                 <h2>Ficha de categoría</h2>
-                <p>La ventana «Nueva categoría» (al crear) o «Modificar la categoría» (al modificar) se abre desde la lista de categorías.</p>
+                <p>La ventana «Nueva categoría» (al crear) o «Editar categoría» (al modificar) se abre desde la lista de categorías.</p>
 
                 <h3>Objetivo</h3>
                 <ul>
@@ -1039,13 +1041,14 @@
                 <p>Ambos botones se comportan exactamente como en la ficha de producto.</p>
 
                 <h3>Campos</h3>
+                <p>Tarjeta «Información general»</p>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Código *</td><td>Sí</td><td><strong>10 caracteres como máximo</strong>. Identificador corto mostrado en fuente de ancho fijo en la lista y en el subtítulo «CÓDIGO — Nombre».</td></tr>
                         <tr><td>Nombre *</td><td>Sí</td><td>100 caracteres como máximo.</td></tr>
                         <tr><td>Descripción</td><td>No</td><td>250 caracteres como máximo. Se muestra bajo el nombre en la lista.</td></tr>
-                        <tr><td>Estado fiscal por defecto</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero.</td></tr>
+                        <tr><td>Estado de impuesto predeterminado</td><td>No</td><td>«Seleccionar…», luego Gravable, Exento o Tasa cero.</td></tr>
                         <tr><td>Categoría activa</td><td>No</td><td>Casilla, marcada por defecto.</td></tr>
                     </tbody>
                 </table>
@@ -1075,7 +1078,7 @@
                 <h3>Reglas</h3>
                 <ul>
                     <li>No se hace ningún control de duplicados sobre el código: dos categorías pueden llevar el mismo código. Elija una convención (por ejemplo «SERV», «PIEZAS», «SOFT») y manténgala.</li>
-                    <li>El estado fiscal por defecto de la categoría no se copia en las fichas de producto: sirve de referencia, pero cada producto conserva su propio «Estado fiscal».</li>
+                    <li>El estado fiscal por defecto de la categoría no se copia en las fichas de producto: sirve de referencia, pero cada producto conserva su propio «Estado de impuesto».</li>
                 </ul>
 
                 <h3>Mensajes</h3>
@@ -1091,7 +1094,7 @@
                 <ol>
                     <li>Abra <span class="chemin">Productos y servicios › Categoría de producto</span> y haga clic en <kbd>Agregar una categoría</kbd>.</li>
                     <li>Escriba el «Código» (10 caracteres como máximo) y el «Nombre».</li>
-                    <li>Elija el «Estado fiscal por defecto».</li>
+                    <li>Elija el «Estado de impuesto predeterminado».</li>
                     <li>En «Cuentas del plan contable», elija la cuenta de venta (ingresos) y la cuenta de compra (costo de ventas / gastos).</li>
                     <li>Haga clic en <kbd>Guardar</kbd>.</li>
                 </ol>
@@ -1103,14 +1106,14 @@
 
                 <h3>Conexión</h3>
                 <ul>
-                    <li>La conexión a Square ya no se hace en la pantalla de productos. Se hace en el menú <span class="chemin">Procesador de pagos</span> (vea la sección <a href="administration.html">Administración</a>).</li>
-                    <li>Al volver de la conexión a Square a la página Productos, puede aparecer uno de estos mensajes:</li>
+                    <li>La conexión a Square ya no se hace en la pantalla de productos. Se hace en el menú <span class="chemin">Procesador de pago</span> (vea la sección <a href="administration.html">Administración</a>).</li>
+                    <li>Al volver de la conexión a Square, usted regresa a la pantalla «Procesador de pago», donde puede aparecer uno de estos mensajes:</li>
                 </ul>
                 <ul class="messages">
-                    <li><span class="msg">«Cuenta Square conectada con éxito.»</span> — la conexión está establecida; puede exportar e importar.</li>
-                    <li><span class="msg">«Conexión a Square rechazada por el usuario.»</span> — usted rechazó la autorización en Square. Vuelva a iniciar la conexión y acepte.</li>
-                    <li><span class="msg">«Fallo de seguridad OAuth (state inválido). Reintente la conexión.»</span> — la verificación de seguridad falló (página llamada demasiado tarde o en otro navegador). Reinicie la conexión desde «Procesador de pagos».</li>
-                    <li><span class="msg">«Error al conectar con Square.»</span> — problema general; reintente y luego verifique su cuenta Square.</li>
+                    <li><span class="msg">«✔ Cuenta Square conectada con éxito.»</span> — la conexión está establecida; puede exportar e importar.</li>
+                    <li><span class="msg">«✖ Conexión Square cancelada.»</span> — usted rechazó la autorización en Square. Vuelva a iniciar la conexión y acepte.</li>
+                    <li><span class="msg">«✖ Error durante la conexión Square.»</span> — la verificación de seguridad falló (página llamada demasiado tarde o en otro navegador) o se produjo un problema general. Reinicie la conexión y luego verifique su cuenta Square.</li>
+                    <li><span class="msg">«✔ Cuenta Square desconectada.»</span> — aparece después de desconectar Square en esa misma pantalla.</li>
                 </ul>
 
                 <h3>Exportar a Square (de 60Sec-AI hacia Square)</h3>
@@ -1123,7 +1126,7 @@
                 <ul class="messages">
                     <li><span class="msg">«Ningún producto activo para exportar.»</span> — todos sus productos están inactivos o sin nombre. Actívelos primero.</li>
                     <li><span class="msg">«{X} producto(s) exportado(s) a Square de {Y}.»</span> — balance de la exportación: X enviados de Y candidatos. Si X es inferior a Y, algunos productos no pudieron enviarse.</li>
-                    <li><span class="msg">«Error durante la exportación a Square:»</span> seguido del detalle técnico — la exportación se interrumpió. Verifique la conexión a Square y reintente.</li>
+                    <li><span class="msg">«Error durante la exportación Square:»</span> seguido del detalle técnico — la exportación se interrumpió. Verifique la conexión a Square y reintente.</li>
                 </ul>
 
                 <h3>Importar desde Square (de Square hacia 60Sec-AI)</h3>
@@ -1142,8 +1145,8 @@
                 <ul class="messages">
                     <li><span class="msg">«Ningún producto para importar desde Square.»</span> — el catálogo de Square está vacío.</li>
                     <li><span class="msg">«{X} producto(s) creado(s) y {Y} actualizado(s) desde Square ({Z} encontrado(s)).»</span> — balance de la importación: Z artículos leídos, X productos nuevos, Y productos existentes actualizados.</li>
-                    <li><span class="msg">«Error durante la importación desde Square:»</span> seguido del detalle — la importación se interrumpió. Verifique la conexión a Square y reintente.</li>
-                    <li><span class="msg">«…Square.AccessToken no está configurado en Web.config.»</span> — la conexión a Square no está configurada. Conecte Square en <span class="chemin">Procesador de pagos</span> y reintente.</li>
+                    <li><span class="msg">«Error durante la importación Square:»</span> seguido del detalle — la importación se interrumpió. Verifique la conexión a Square y reintente.</li>
+                    <li><span class="msg">«…Square.AccessToken n’est pas configure dans Web.config.»</span> — este texto técnico aparece siempre en francés; significa que la conexión a Square no está configurada. Conecte Square en <span class="chemin">Procesador de pago</span> y reintente.</li>
                 </ul>
 
                 <h3>Sincronización automática</h3>
@@ -1161,7 +1164,7 @@
 
                 <p>Para poner en marcha la sincronización la primera vez:</p>
                 <ol>
-                    <li>Conecte su cuenta Square en <span class="chemin">Procesador de pagos</span> y espere el mensaje «Cuenta Square conectada con éxito.».</li>
+                    <li>Conecte su cuenta Square en <span class="chemin">Procesador de pago</span> y espere el mensaje «Cuenta Square conectada con éxito.».</li>
                     <li>En <span class="chemin">Productos y servicios › Productos</span>, verifique que los productos que vende estén activos y con nombre, con un precio en dólares canadienses.</li>
                     <li>Haga clic en <kbd>Exportar a Square</kbd> y lea el balance «{X} producto(s) exportado(s) a Square de {Y}.».</li>
                     <li>Solo entonces, haga clic en <kbd>Importar desde Square</kbd> para traer los artículos que solo existían en Square.</li>
@@ -1177,7 +1180,7 @@
                     <li><strong>Eliminación</strong>: no se hace ninguna verificación de uso en las pantallas. Si el sistema rechaza la eliminación de un producto o de una categoría ya utilizados, nada lo indica en la pantalla: el producto simplemente permanece en la lista tras la recarga.</li>
                     <li><strong>Productos inactivos</strong>: permanecen en la lista (distintivo rojo) pero no se exportan a Square.</li>
                     <li><strong>Unicidad</strong>: no se hace ningún control de duplicados en pantalla, ni sobre el nombre de un producto ni sobre el código de una categoría.</li>
-                    <li><strong>Valores por defecto</strong>: precio vacío → 0; cantidad vacía → 1; «Producto activo» y «Categoría activa» marcados; «Agregar auto a las facturas» desmarcado.</li>
+                    <li><strong>Valores por defecto</strong>: precio vacío → 0; cantidad vacía → 1; «Producto activo» y «Categoría activa» marcados; «Agregar automáticamente a facturas» desmarcado.</li>
                     <li><strong>Formatos</strong>: los precios se escriben con 2 decimales y se muestran en formato «1 234,56 $»; las cantidades aceptan 2 decimales.</li>
                 </ul>
             </section>
@@ -1191,7 +1194,7 @@
                     <li>La exportación a Square supone que los precios están en dólares canadienses.</li>
                     <li><strong>Exportar antes de importar</strong> evita los duplicados. Si no, la importación empareja los productos por nombre: dos productos activos con el mismo nombre pueden vincularse mal.</li>
                     <li><strong>Modificar el nombre o el precio en Square</strong> y luego importar, o dejar actuar la sincronización automática, sobrescribe los valores registrados en 60Sec-AI.</li>
-                    <li>Si la conexión a Square no está configurada, el error mostrado es técnico («…Square.AccessToken no está configurado en Web.config.»). Entonces hay que conectar Square en <span class="chemin">Procesador de pagos</span>.</li>
+                    <li>Si la conexión a Square no está configurada, el error mostrado es técnico y siempre en francés («…Square.AccessToken n’est pas configure dans Web.config.»). Entonces hay que conectar Square en <span class="chemin">Procesador de pago</span>.</li>
                     <li><strong>Crear primero las categorías con sus cuentas del plan contable</strong>: los productos las heredan, lo que evita configurar las cuentas producto por producto.</li>
                     <li>El botón <kbd>X</kbd> de la lista Productos borra <strong>también</strong> el filtro de categoría.</li>
                     <li><kbd>Cerrar</kbd> no avisa si tiene cambios sin guardar: acostúmbrese a <kbd>Guardar</kbd> antes de cerrar.</li>
@@ -1205,14 +1208,14 @@
                 <details><summary>Eliminé un producto por error. ¿Puedo recuperarlo?</summary><p>No: la papelera elimina de inmediato, sin confirmación ni papelera de recuperación. Hay que volver a crear el producto. En adelante, desmarque «Producto activo» para retirar un producto sin perderlo.</p></details>
                 <details><summary>¿Por qué mi producto «Tasa cero» muestra «—» en la columna Impuesto?</summary><p>Solo los estados «Gravable» (distintivo azul) y «Exento» (distintivo ámbar) tienen distintivo en la lista. «Tasa cero» y la ausencia de estado se muestran ambos con «—». Abra la ficha para ver el estado exacto.</p></details>
                 <details><summary>¿Qué cuenta de ingresos se usará en mi factura?</summary><p>La de la ficha de producto si está rellena; si no, la de la categoría del producto. Si ninguna de las dos está rellena, el producto no propone ninguna cuenta: rellene al menos la categoría.</p></details>
-                <details><summary>Elegí una categoría «Gravable» pero mi producto no tiene estado fiscal. ¿Por qué?</summary><p>La categoría no rellena el estado fiscal del producto. Elíjalo usted mismo en «Estado fiscal» de la ficha de producto.</p></details>
+                <details><summary>Elegí una categoría «Gravable» pero mi producto no tiene estado fiscal. ¿Por qué?</summary><p>La categoría no rellena el estado fiscal del producto. Elíjalo usted mismo en «Estado de impuesto» de la ficha de producto.</p></details>
                 <details><summary>«Exportar a Square» dice «Ningún producto activo para exportar.» aunque tengo productos.</summary><p>Solo se exportan los productos activos y con nombre. Verifique el distintivo «Activo» (verde) en la lista y active los productos correspondientes.</p></details>
                 <details><summary>Mis precios cambiaron solos tras una modificación en Square. ¿Es normal?</summary><p>Sí. La sincronización automática importa toda modificación hecha en Square y sobrescribe el nombre, la descripción y el precio locales (salvo si el valor de Square está vacío o si el precio de Square es 0). Haga sus cambios de precio en 60Sec-AI y luego exporte, para que 60Sec-AI siga siendo la referencia.</p></details>
                 <details><summary>¿Por qué la importación creó duplicados?</summary><p>La importación vincula un artículo de Square a un producto ya vinculado, si no a un producto activo con el mismo nombre, y si no crea uno. Si sus productos locales estaban inactivos o con otro nombre, se crearon productos nuevos. Exporte primero, importe después y mantenga nombres idénticos en ambos sistemas.</p></details>
-                <details><summary>¿Dónde conecto mi cuenta Square?</summary><p>En el menú <span class="chemin">Procesador de pagos</span>, no en la pantalla de productos. Tras la conexión, el mensaje «Cuenta Square conectada con éxito.» aparece en la página Productos.</p></details>
+                <details><summary>¿Dónde conecto mi cuenta Square?</summary><p>En el menú <span class="chemin">Procesador de pago</span>, no en la pantalla de productos. Tras la conexión, el mensaje «✔ Cuenta Square conectada con éxito.» aparece en esa misma pantalla.</p></details>
                 <details><summary>¿Se envían los impuestos y la categoría a Square?</summary><p>No. La exportación transmite solo el nombre, la descripción y el precio (en dólares canadienses). Categoría, estado fiscal, cantidad por defecto y cuentas del plan contable se quedan en 60Sec-AI.</p></details>
                 <details><summary>¿Puedo tener dos categorías con el mismo código?</summary><p>La pantalla no lo impide, pero no es aconsejable: el código sirve para reconocer la categoría en las listas y en el subtítulo «CÓDIGO — Nombre». Asigne un código único de 10 caracteres como máximo.</p></details>
-                <details><summary>¿Para qué sirve «Agregar auto a las facturas»?</summary><p>Marcada, esta casilla hace que el producto se proponga automáticamente en las facturas nuevas. Resérvela para los cargos que factura casi siempre (por ejemplo gastos de desplazamiento o de administración). Vea la sección <a href="ventes.html">Ventas</a>.</p></details>
+                <details><summary>¿Para qué sirve «Agregar automáticamente a facturas»?</summary><p>Marcada, esta casilla hace que el producto se proponga automáticamente en las facturas nuevas. Resérvela para los cargos que factura casi siempre (por ejemplo gastos de desplazamiento o de administración). Vea la sección <a href="ventes.html">Ventas</a>.</p></details>
             </section>
 
             <section id="es-glosario">
@@ -1222,16 +1225,16 @@
                     <tbody>
                         <tr><td>Producto / servicio</td><td>Elemento del catálogo colocado en las líneas de factura: nombre, descripción, precio unitario, cantidad por defecto, estado fiscal, cuentas.</td></tr>
                         <tr><td>Categoría de producto</td><td>Agrupación de productos que lleva un código, un estado fiscal por defecto y cuentas del plan contable heredadas por sus productos.</td></tr>
-                        <tr><td>Estado fiscal</td><td>Gravable (TPS 5 % y TVQ 9,975 % aplicados), Exento (sin impuesto) o Tasa cero (impuesto al 0 %).</td></tr>
+                        <tr><td>Estado de impuesto</td><td>Gravable (TPS 5 % y TVQ 9,975 % aplicados), Exento (sin impuesto) o Tasa cero (impuesto al 0 %).</td></tr>
                         <tr><td>Cuenta de venta (Ingresos)</td><td>Cuenta del plan contable acreditada al contabilizar una factura de cliente que contiene el producto.</td></tr>
                         <tr><td>Cuenta de compra (Costo / Gastos)</td><td>Cuenta de costo de ventas o de gastos de explotación debitada al contabilizar una factura de proveedor que contiene el producto.</td></tr>
                         <tr><td>Libro mayor (GL)</td><td>Registro contable donde se anotan los asientos; las cuentas del plan contable son sus rúbricas.</td></tr>
-                        <tr><td>Cantidad por defecto</td><td>Cantidad propuesta automáticamente cuando el producto se agrega a una factura (1 si no se indica).</td></tr>
+                        <tr><td>Cantidad predeterminada</td><td>Cantidad propuesta automáticamente cuando el producto se agrega a una factura (1 si no se indica).</td></tr>
                         <tr><td>Producto activo / inactivo</td><td>Un producto inactivo permanece en la lista (distintivo rojo) pero no se exporta a Square.</td></tr>
-                        <tr><td>Square</td><td>Procesador de pagos y catálogo externo con el que 60Sec-AI intercambia los productos (exportación, importación, sincronización automática).</td></tr>
+                        <tr><td>Square</td><td>Procesador de pago y catálogo externo con el que 60Sec-AI intercambia los productos (exportación, importación, sincronización automática).</td></tr>
                         <tr><td>Formato de venta («Standard»)</td><td>Variante de un artículo en Square. La exportación crea solo una, «Standard»; la importación lee solo la primera.</td></tr>
                         <tr><td>Vínculo Square</td><td>Asociación memorizada entre un producto de 60Sec-AI y un artículo de Square, creada al exportar o al importar.</td></tr>
-                        <tr><td>OAuth</td><td>Mecanismo de autorización mediante el cual conecta su cuenta Square a 60Sec-AI desde «Procesador de pagos».</td></tr>
+                        <tr><td>OAuth</td><td>Mecanismo de autorización mediante el cual conecta su cuenta Square a 60Sec-AI desde «Procesador de pago».</td></tr>
                         <tr><td>CAD</td><td>Dólar canadiense, moneda supuesta para todos los precios exportados a Square.</td></tr>
                     </tbody>
                 </table>

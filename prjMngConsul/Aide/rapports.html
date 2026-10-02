@@ -188,7 +188,7 @@
                     <li><strong>CAPITAUX PROPRES</strong>
                         <ul>
                             <li>« Capitaux propres (3000 – 3999) » ;</li>
-                            <li>bloc « Résultat de l’exercice courant », avec une ligne en italique bleu « Bénéfice net de l’exercice » ou « Perte nette de l’exercice », puis « Total — Résultat de l’exercice » ;</li>
+                            <li>bloc « Résultat de l’exercice courant » (affiché seulement si le résultat de l’exercice n’est pas nul), avec une ligne en italique bleu « Bénéfice net de l’exercice » ou « Perte nette de l’exercice », puis « Total — Résultat de l’exercice » ;</li>
                             <li>« TOTAL DES CAPITAUX PROPRES » ;</li>
                             <li>« TOTAL DU PASSIF ET DES CAPITAUX PROPRES ».</li>
                         </ul>
@@ -233,7 +233,7 @@
                 <h3>Structure du rapport</h3>
                 <p><strong>A. « Activités d’exploitation »</strong></p>
                 <ul>
-                    <li>Bénéfice net de la période.</li>
+                    <li>Bénéfice net.</li>
                     <li>Sous-titre « Ajustements pour éléments sans effet sur la trésorerie » : Amortissement ; Créances douteuses ; Gain/Perte sur disposition d’actifs ; Impôts différés ; puis « Total des ajustements ».</li>
                     <li>Sous-titre « Variation des éléments du fonds de roulement » : Comptes clients, Stocks, Frais payés d’avance, Taxes à recevoir ; Comptes fournisseurs, Charges à payer, Taxes à payer, Retenues salariales, Revenus reportés ; puis « Variation nette du fonds de roulement ».</li>
                     <li>Total : « Flux de trésorerie liés aux activités d’exploitation ».</li>
@@ -375,7 +375,7 @@
                 <h3>Boutons et actions</h3>
                 <ul>
                     <li>Boutons de période <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> et <kbd>3 Months</kbd> (par défaut <kbd>3 Months</kbd>) : choisissent l’horizon des paiements affichés. Chaque bouton montre trois compteurs colorés, un par catégorie.</li>
-                    <li>Cliquer sur une carte de catégorie la déplie ou la replie. La catégorie Fournisseur est dépliée par défaut.</li>
+                    <li>Cliquer sur une carte de catégorie la déplie ou la replie. Une seule catégorie est dépliée à la fois : en déplier une replie les autres. La catégorie Fournisseur est dépliée par défaut. Une catégorie sans paiement dans la période n’a rien à déplier.</li>
                     <li><kbd>Payer tout</kbd> (dans une catégorie dépliée) : demande une confirmation, puis affiche un message pour l’ensemble de la catégorie.</li>
                     <li><kbd>Payer</kbd> (sur une ligne) : affiche un message pour la transaction, sans confirmation.</li>
                     <li>Bouton Retour : revient à l’écran précédent.</li>
@@ -395,7 +395,7 @@
                         <tr><td>Bénéficiaire</td><td>Organisme, fournisseur ou employé à payer.</td></tr>
                         <tr><td>Échéance</td><td>Date d’exécution prévue.</td></tr>
                         <tr><td>Montant</td><td>Montant arrondi au dollar, sans décimales.</td></tr>
-                        <tr><td>(bouton)</td><td><kbd>Payer</kbd>.</td></tr>
+                        <tr><td>Action</td><td>Bouton <kbd>Payer</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Règles</h3>
@@ -430,6 +430,7 @@
                     <li>Boutons de période <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> et <kbd>3 Months</kbd> (par défaut <kbd>3 Months</kbd>).</li>
                     <li>Onglets <kbd>Collecté</kbd> (par défaut), <kbd>À recevoir</kbd> et <kbd>Retard</kbd> : filtrent le détail par statut de facture. Chaque onglet affiche un compteur.</li>
                     <li>Icône en forme d’œil sur le widget « Solde bancaire » : masque ou affiche le solde.</li>
+                    <li>Bouton Retour : revient à l’écran précédent.</li>
                 </ul>
                 <h3>Présentation</h3>
                 <ul>
@@ -460,7 +461,7 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">« Aucune vente dans cette catégorie pour cette période. »</span> — aucune facture du statut choisi dans l’intervalle. Changez d’onglet ou élargissez la période.</li>
-                    <li><span class="msg">« Non configuré »</span> (solde bancaire) — aucun compte bancaire n’est désigné dans les paramètres. Renseignez le paramètre « COMPTE_BANQUE ».</li>
+                    <li><span class="msg">« Non configuré »</span> (solde bancaire) — aucun compte bancaire n’est désigné dans les paramètres, ou le compte désigné n’est plus actif. Renseignez le paramètre « COMPTE_BANQUE ».</li>
                     <li><span class="msg">« — »</span> (solde bancaire) — la lecture du solde a échoué.</li>
                     <li><span class="msg">« Erreur : [détail] »</span> — la lecture des ventes a échoué. Rechargez la page.</li>
                 </ul>
@@ -514,7 +515,7 @@
         </article>
         <article class="langue" lang="en">
             <h1>Reports</h1>
-            <p class="intro">The six accounting reports of 60Sec-AI (chart of accounts, income statement, balance sheet, cash flow statement, statement of retained earnings, trial balance) and the two dashboards “AI Payment” and “AI Sales”. Menu <span class="chemin">Reports</span>. The left-hand menu lists the screens in this order: Chart of Accounts, Income Statement, Balance Sheet, Cash Flow Statement, Statement of Retained Earnings, Trial Balance, AI Payment and AI Sales.</p>
+            <p class="intro">The six accounting reports of 60Sec-AI (chart of accounts, income statement, balance sheet, cash flow statement, statement of retained earnings, trial balance) and the two dashboards “AI Payment” and “AI Sales”. Menu <span class="chemin">Reports</span>. The left-hand menu lists the screens in this order: Chart of accounts, Income statement, Balance sheet, Cash flow statement, Retained earnings statement, Trial balance, AI Payment and AI Sales.</p>
 
             <section id="en-common-rules">
                 <h2>Rules common to the accounting reports</h2>
@@ -552,7 +553,7 @@
 
             <section id="en-chart-of-accounts">
                 <h2>Chart of Accounts</h2>
-                <p>Structured list of all the company’s accounts, on three levels: class, sub-class, account (<span class="chemin">Reports › Chart of Accounts</span>). This report contains no amounts: it is used to know and document the structure of the chart of accounts.</p>
+                <p>Structured list of all the company’s accounts, on three levels: class, sub-class, account (<span class="chemin">Reports › Chart of accounts</span>). This report contains no amounts: it is used to know and document the structure of the chart of accounts.</p>
                 <h3>What this report means for a business owner</h3>
                 <p>The chart of accounts is the “table of contents” of your books. Every sale, purchase and payment is filed under one of these accounts. A clear, well-organized chart gives readable financial statements; a chart cluttered with useless or misfiled accounts gives reports that are hard to interpret. Print it once a year and review it with your accountant.</p>
                 <h3>Buttons and actions</h3>
@@ -598,7 +599,7 @@
 
             <section id="en-income-statement">
                 <h2>Income Statement</h2>
-                <p>Revenues, costs and expenses of the period, down to net income (<span class="chemin">Reports › Income Statement</span>).</p>
+                <p>Revenues, costs and expenses of the period, down to net income (<span class="chemin">Reports › Income statement</span>).</p>
                 <h3>What this report means for a business owner</h3>
                 <p>The income statement answers the question “Did I make money during this period?”. It starts from what you sold, subtracts what those sales cost you (gross profit), then your operating expenses (income before taxes), then taxes. Gross profit tells you whether your selling price covers your direct costs; net income tells you what is really left. A positive net income is not cash in the bank: a customer who has not paid yet already counts as revenue. For cash, see the <a href="#en-cash-flow">Cash Flow Statement</a>.</p>
                 <h3>Filters and search</h3>
@@ -645,7 +646,7 @@
 
             <section id="en-balance-sheet">
                 <h2>Balance Sheet</h2>
-                <p>Financial position of the company at a given date: what it owns (assets), what it owes (liabilities) and what belongs to the owners (equity) (<span class="chemin">Reports › Balance Sheet</span>).</p>
+                <p>Financial position of the company at a given date: what it owns (assets), what it owes (liabilities) and what belongs to the owners (equity) (<span class="chemin">Reports › Balance sheet</span>).</p>
                 <h3>What this report means for a business owner</h3>
                 <p>The balance sheet is a snapshot of your business on a precise date. Assets list what you have (cash in the bank, receivables, inventory, equipment); liabilities list what you owe (suppliers, taxes, loans); equity is the net value that belongs to the owners. The basic rule: Assets = Liabilities + Equity. Two useful readings: current assets compared with current liabilities tell you whether you can pay your debts over the next twelve months; the weight of liabilities compared with equity shows how much you depend on credit. It is the report your banker will ask for first.</p>
                 <h3>Filters and search</h3>
@@ -680,7 +681,7 @@
                     <li><strong>CAPITAUX PROPRES</strong> (Equity)
                         <ul>
                             <li>“Capitaux propres (3000 – 3999)”;</li>
-                            <li>block “Résultat de l’exercice courant” (current year result), with a line in blue italics “Bénéfice net de l’exercice” (net income for the year) or “Perte nette de l’exercice” (net loss for the year), then “Total — Résultat de l’exercice”;</li>
+                            <li>block “Résultat de l’exercice courant” (current year result, shown only when the result for the year is not zero), with a line in blue italics “Bénéfice net de l’exercice” (net income for the year) or “Perte nette de l’exercice” (net loss for the year), then “Total — Résultat de l’exercice”;</li>
                             <li>“TOTAL DES CAPITAUX PROPRES”;</li>
                             <li>“TOTAL DU PASSIF ET DES CAPITAUX PROPRES”.</li>
                         </ul>
@@ -706,7 +707,7 @@
 
             <section id="en-cash-flow">
                 <h2>Cash Flow Statement</h2>
-                <p>Explains the change in available cash between the start and the end of the period, using the indirect method (<span class="chemin">Reports › Cash Flow Statement</span>).</p>
+                <p>Explains the change in available cash between the start and the end of the period, using the indirect method (<span class="chemin">Reports › Cash flow statement</span>).</p>
                 <h3>What this report means for a business owner</h3>
                 <p>A business can be profitable and run out of cash, or lose money and have a healthy bank account. This statement reconciles the two: it starts from net income and explains where the money really went. It answers three questions: does my day-to-day business generate cash (operating activities)? how much did I invest in equipment or investments (investing activities)? how much did I borrow, repay, receive or withdraw as an owner (financing activities)? A repeatedly negative operating cash flow is the most important warning sign for a small business, even when the income statement is positive.</p>
                 <h3>Filters and search</h3>
@@ -725,7 +726,7 @@
                 <h3>Report structure</h3>
                 <p><strong>A. “Activités d’exploitation”</strong> (Operating activities)</p>
                 <ul>
-                    <li>Net income for the period.</li>
+                    <li>Net income.</li>
                     <li>Sub-heading “Ajustements pour éléments sans effet sur la trésorerie” (adjustments for non-cash items): Amortissement (depreciation); Créances douteuses (doubtful accounts); Gain/Perte sur disposition d’actifs (gain/loss on disposal of assets); Impôts différés (deferred taxes); then “Total des ajustements”.</li>
                     <li>Sub-heading “Variation des éléments du fonds de roulement” (changes in working capital): Comptes clients (receivables), Stocks (inventory), Frais payés d’avance (prepaid expenses), Taxes à recevoir (taxes receivable); Comptes fournisseurs (payables), Charges à payer (accrued expenses), Taxes à payer (taxes payable), Retenues salariales (payroll deductions), Revenus reportés (deferred revenue); then “Variation nette du fonds de roulement”.</li>
                     <li>Total: “Flux de trésorerie liés aux activités d’exploitation”.</li>
@@ -760,7 +761,7 @@
 
             <section id="en-retained-earnings">
                 <h2>Statement of Retained Earnings</h2>
-                <p>Movement of retained earnings from the beginning to the end of the fiscal year (<span class="chemin">Reports › Statement of Retained Earnings</span>).</p>
+                <p>Movement of retained earnings from the beginning to the end of the fiscal year (<span class="chemin">Reports › Retained earnings statement</span>).</p>
                 <h3>What this report means for a business owner</h3>
                 <p>Retained earnings are the profits accumulated since the company was created and left in it, after dividends or owner withdrawals. This statement shows, for the year, what you earned, what you took out (dividends, withdrawals) and what stays reinvested in the business. It is the measure of the “reserve” you are building. Retained earnings that shrink year after year mean you are taking out more than you earn.</p>
                 <h3>Filters and search</h3>
@@ -807,7 +808,7 @@
 
             <section id="en-trial-balance">
                 <h2>Trial Balance</h2>
-                <p>Debit or credit balance of every account at a given date, to check that total debits equal total credits (<span class="chemin">Reports › Trial Balance</span>).</p>
+                <p>Debit or credit balance of every account at a given date, to check that total debits equal total credits (<span class="chemin">Reports › Trial balance</span>).</p>
                 <h3>What this report means for a business owner</h3>
                 <p>The trial balance is the accountant’s control tool. In double-entry bookkeeping every entry has equal debits and credits; the trial balance confirms that this rule was respected everywhere. It does not tell you whether the business is doing well, but it tells you whether the figures in the other reports can be trusted. It is the first report to check when the balance sheet shows a difference, and the one your accountant will ask for to prepare the year-end financial statements.</p>
                 <h3>Filters and search</h3>
@@ -867,7 +868,7 @@
                 <h3>Buttons and actions</h3>
                 <ul>
                     <li>Period buttons <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> and <kbd>3 Months</kbd> (default <kbd>3 Months</kbd>): choose the horizon of the payments shown. Each button shows three coloured counters, one per category.</li>
-                    <li>Clicking a category card expands or collapses it. The Supplier category is expanded by default.</li>
+                    <li>Clicking a category card expands or collapses it. Only one category is expanded at a time: expanding one collapses the others. The Supplier category is expanded by default. A category with no payment in the period has nothing to expand.</li>
                     <li><kbd>Payer tout</kbd> (Pay all, in an expanded category): asks for confirmation, then shows a message for the whole category.</li>
                     <li><kbd>Payer</kbd> (Pay, on a line): shows a message for the transaction, with no confirmation.</li>
                     <li>Back button: returns to the previous screen.</li>
@@ -887,7 +888,7 @@
                         <tr><td>Bénéficiaire</td><td>Agency, supplier or employee to pay.</td></tr>
                         <tr><td>Échéance</td><td>Scheduled execution date.</td></tr>
                         <tr><td>Montant</td><td>Amount rounded to the dollar, no decimals.</td></tr>
-                        <tr><td>(button)</td><td><kbd>Payer</kbd>.</td></tr>
+                        <tr><td>Action</td><td><kbd>Payer</kbd> button.</td></tr>
                     </tbody>
                 </table>
                 <h3>Rules</h3>
@@ -922,6 +923,7 @@
                     <li>Period buttons <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> and <kbd>3 Months</kbd> (default <kbd>3 Months</kbd>).</li>
                     <li>Tabs <kbd>Collecté</kbd> (Collected, default), <kbd>À recevoir</kbd> (Receivable) and <kbd>Retard</kbd> (Overdue): filter the detail by invoice status. Each tab shows a counter.</li>
                     <li>Eye icon on the “Solde bancaire” (bank balance) widget: hides or shows the balance.</li>
+                    <li>Back button: returns to the previous screen.</li>
                 </ul>
                 <h3>Layout</h3>
                 <ul>
@@ -952,7 +954,7 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“Aucune vente dans cette catégorie pour cette période.”</span> — no invoice with the chosen status in the interval. Change tab or widen the period.</li>
-                    <li><span class="msg">“Non configuré”</span> (bank balance) — no bank account is designated in the settings. Fill in the “COMPTE_BANQUE” parameter.</li>
+                    <li><span class="msg">“Non configuré”</span> (bank balance) — no bank account is designated in the settings, or the designated account is no longer active. Fill in the “COMPTE_BANQUE” parameter.</li>
                     <li><span class="msg">“—”</span> (bank balance) — reading the balance failed.</li>
                     <li><span class="msg">“Erreur : [detail]”</span> — reading the sales failed. Reload the page.</li>
                 </ul>
@@ -1006,7 +1008,7 @@
         </article>
         <article class="langue" lang="es">
             <h1>Informes</h1>
-            <p class="intro">Los seis informes contables de 60Sec-AI (plan de cuentas, estado de resultados, balance general, estado de flujos de efectivo, estado de resultados acumulados, balance de comprobación) y los dos tableros «IA Pagos» e «IA Ventas». Menú <span class="chemin">Informes</span>. El menú de la izquierda presenta las pantallas en este orden: Plan de cuentas, Estado de resultados, Balance general, Estado de flujos de efectivo, Estado de resultados acumulados, Balance de comprobación, IA Pagos e IA Ventas.</p>
+            <p class="intro">Los seis informes contables de 60Sec-AI (plan de cuentas, estado de resultados, balance general, estado de flujos de efectivo, estado de resultados acumulados, balance de comprobación) y los dos tableros «Pago con IA» y «Ventas con IA». Menú <span class="chemin">Informes</span>. El menú de la izquierda presenta las pantallas en este orden: Plan contable, Estado de resultados, Balance general, Estado de flujos de efectivo, Estado de resultados acumulados, Balance de comprobación, Pago con IA y Ventas con IA.</p>
 
             <section id="es-reglas">
                 <h2>Reglas comunes a los informes contables</h2>
@@ -1043,8 +1045,8 @@
             </section>
 
             <section id="es-plan-de-cuentas">
-                <h2>Plan de cuentas</h2>
-                <p>Lista estructurada de todas las cuentas de la empresa, en tres niveles: clase, subclase, cuenta (<span class="chemin">Informes › Plan de cuentas</span>). Este informe no contiene ningún importe: sirve para conocer y documentar la estructura del plan de cuentas.</p>
+                <h2>Plan contable</h2>
+                <p>Lista estructurada de todas las cuentas de la empresa, en tres niveles: clase, subclase, cuenta (<span class="chemin">Informes › Plan contable</span>). Este informe no contiene ningún importe: sirve para conocer y documentar la estructura del plan de cuentas.</p>
                 <h3>Qué significa este informe para un dirigente</h3>
                 <p>El plan de cuentas es el «índice» de su contabilidad. Cada venta, cada compra y cada pago se clasifica en una de estas cuentas. Un plan claro y bien dividido produce estados financieros legibles; un plan lleno de cuentas inútiles o mal clasificadas produce informes difíciles de interpretar. Imprímalo una vez al año y revíselo con su contador.</p>
                 <h3>Botones y acciones</h3>
@@ -1172,7 +1174,7 @@
                     <li><strong>CAPITAUX PROPRES</strong> (Patrimonio)
                         <ul>
                             <li>«Capitaux propres (3000 – 3999)»;</li>
-                            <li>bloque «Résultat de l’exercice courant» (resultado del ejercicio en curso), con una línea en cursiva azul «Bénéfice net de l’exercice» (utilidad neta del ejercicio) o «Perte nette de l’exercice» (pérdida neta del ejercicio), luego «Total — Résultat de l’exercice»;</li>
+                            <li>bloque «Résultat de l’exercice courant» (resultado del ejercicio en curso; solo se muestra si el resultado del ejercicio no es cero), con una línea en cursiva azul «Bénéfice net de l’exercice» (utilidad neta del ejercicio) o «Perte nette de l’exercice» (pérdida neta del ejercicio), luego «Total — Résultat de l’exercice»;</li>
                             <li>«TOTAL DES CAPITAUX PROPRES»;</li>
                             <li>«TOTAL DU PASSIF ET DES CAPITAUX PROPRES».</li>
                         </ul>
@@ -1217,7 +1219,7 @@
                 <h3>Estructura del informe</h3>
                 <p><strong>A. «Activités d’exploitation»</strong> (Actividades de operación)</p>
                 <ul>
-                    <li>Utilidad neta del período.</li>
+                    <li>Utilidad neta.</li>
                     <li>Subtítulo «Ajustements pour éléments sans effet sur la trésorerie» (ajustes por partidas sin efecto en el efectivo): Amortissement (depreciación); Créances douteuses (cuentas dudosas); Gain/Perte sur disposition d’actifs (ganancia/pérdida por venta de activos); Impôts différés (impuestos diferidos); luego «Total des ajustements».</li>
                     <li>Subtítulo «Variation des éléments du fonds de roulement» (variación del capital de trabajo): Comptes clients (cuentas por cobrar), Stocks (inventario), Frais payés d’avance (gastos pagados por anticipado), Taxes à recevoir (impuestos por cobrar); Comptes fournisseurs (cuentas por pagar), Charges à payer (gastos acumulados), Taxes à payer (impuestos por pagar), Retenues salariales (retenciones salariales), Revenus reportés (ingresos diferidos); luego «Variation nette du fonds de roulement».</li>
                     <li>Total: «Flux de trésorerie liés aux activités d’exploitation».</li>
@@ -1352,14 +1354,14 @@
             </section>
 
             <section id="es-ia-pagos">
-                <h2>IA Pagos</h2>
-                <p>Tablero de los pagos por venir, repartidos en tres categorías: Gubernamental (Gouvernemental), Proveedor (Fournisseur) y Empleado (Employé) (<span class="chemin">Informes › IA Pagos</span>). La pantalla lleva el título «AI Payment — Gestion en temps réel avec AI».</p>
+                <h2>Pago con IA</h2>
+                <p>Tablero de los pagos por venir, repartidos en tres categorías: Gubernamental (Gouvernemental), Proveedor (Fournisseur) y Empleado (Employé) (<span class="chemin">Informes › Pago con IA</span>). La pantalla lleva el título «AI Payment — Gestion en temps réel avec AI».</p>
                 <h3>Finalidad</h3>
                 <p>Ver de un vistazo cuánto dinero deberá salir hoy, en la próxima semana, el próximo mes o los próximos tres meses, y a quién. No hay ninguna entrada de texto en esta pantalla.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li>Botones de período <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> y <kbd>3 Months</kbd> (por defecto <kbd>3 Months</kbd>): eligen el horizonte de los pagos mostrados. Cada botón muestra tres contadores de colores, uno por categoría.</li>
-                    <li>Hacer clic en una tarjeta de categoría la despliega o la pliega. La categoría Proveedor está desplegada por defecto.</li>
+                    <li>Hacer clic en una tarjeta de categoría la despliega o la pliega. Solo hay una categoría desplegada a la vez: desplegar una pliega las demás. La categoría Proveedor está desplegada por defecto. Una categoría sin pagos en el período no tiene nada que desplegar.</li>
                     <li><kbd>Payer tout</kbd> (Pagar todo, en una categoría desplegada): pide confirmación y luego muestra un mensaje para toda la categoría.</li>
                     <li><kbd>Payer</kbd> (Pagar, en una línea): muestra un mensaje para la transacción, sin confirmación.</li>
                     <li>Botón Volver: regresa a la pantalla anterior.</li>
@@ -1379,7 +1381,7 @@
                         <tr><td>Bénéficiaire</td><td>Organismo, proveedor o empleado a pagar.</td></tr>
                         <tr><td>Échéance</td><td>Fecha de ejecución prevista.</td></tr>
                         <tr><td>Montant</td><td>Importe redondeado al dólar, sin decimales.</td></tr>
-                        <tr><td>(botón)</td><td><kbd>Payer</kbd>.</td></tr>
+                        <tr><td>Action</td><td>Botón <kbd>Payer</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Reglas</h3>
@@ -1405,8 +1407,8 @@
             </section>
 
             <section id="es-ia-ventas">
-                <h2>IA Ventas</h2>
-                <p>Seguimiento de los cobros sobre ventas y facturas: importes cobrados, por cobrar y atrasados (<span class="chemin">Informes › IA Ventas</span>). La pantalla lleva el título «AI Sales — Gestion intelligente des ventes».</p>
+                <h2>Ventas con IA</h2>
+                <p>Seguimiento de los cobros sobre ventas y facturas: importes cobrados, por cobrar y atrasados (<span class="chemin">Informes › Ventas con IA</span>). La pantalla lleva el título «AI Sales — Gestion intelligente des ventes».</p>
                 <h3>Finalidad</h3>
                 <p>Saber rápidamente qué se ha cobrado, qué queda por cobrar y qué está atrasado en torno a la fecha de hoy, y ver el saldo bancario. No hay ninguna entrada de datos en esta pantalla.</p>
                 <h3>Botones y acciones</h3>
@@ -1414,6 +1416,7 @@
                     <li>Botones de período <kbd>Today</kbd>, <kbd>Week</kbd>, <kbd>Month</kbd> y <kbd>3 Months</kbd> (por defecto <kbd>3 Months</kbd>).</li>
                     <li>Pestañas <kbd>Collecté</kbd> (Cobrado, por defecto), <kbd>À recevoir</kbd> (Por cobrar) y <kbd>Retard</kbd> (Atraso): filtran el detalle por estado de factura. Cada pestaña muestra un contador.</li>
                     <li>Icono en forma de ojo en el widget «Solde bancaire» (saldo bancario): oculta o muestra el saldo.</li>
+                    <li>Botón Volver: regresa a la pantalla anterior.</li>
                 </ul>
                 <h3>Presentación</h3>
                 <ul>
@@ -1444,7 +1447,7 @@
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«Aucune vente dans cette catégorie pour cette période.»</span> — ninguna factura con el estado elegido en el intervalo. Cambie de pestaña o amplíe el período.</li>
-                    <li><span class="msg">«Non configuré»</span> (saldo bancario) — no hay ninguna cuenta bancaria designada en los parámetros. Rellene el parámetro «COMPTE_BANQUE».</li>
+                    <li><span class="msg">«Non configuré»</span> (saldo bancario) — no hay ninguna cuenta bancaria designada en los parámetros, o la cuenta designada ya no está activa. Rellene el parámetro «COMPTE_BANQUE».</li>
                     <li><span class="msg">«—»</span> (saldo bancario) — la lectura del saldo ha fallado.</li>
                     <li><span class="msg">«Erreur : [detalle]»</span> — la lectura de las ventas ha fallado. Recargue la página.</li>
                 </ul>
@@ -1463,10 +1466,10 @@
                 <details><summary>El balance muestra «✗ Écart de … — Le bilan n’est pas en équilibre». ¿Qué hacer?</summary><p>Genere el Balance de comprobación en la misma fecha. Si también muestra una diferencia, un asiento está descuadrado: encuéntrelo en el diario. Si está cuadrado, una cuenta está vinculada a la clase equivocada (por ejemplo una cuenta de gastos en el rango del activo): corrija su clasificación en el plan de cuentas.</p></details>
                 <details><summary>El estado de resultados acumulados señala una diferencia con la cuenta 3300. ¿Es grave?</summary><p>Antes del cierre del ejercicio, no: la utilidad del año aún no se ha trasladado a la cuenta 3300, y la diferencia corresponde a la utilidad neta menos las distribuciones. Después del cierre, busque un asiento registrado directamente en la cuenta 3300.</p></details>
                 <details><summary>Mi estado de resultados muestra una utilidad, pero no tengo ese dinero en el banco. ¿Por qué?</summary><p>La utilidad incluye las facturas emitidas y aún no cobradas, y excluye ciertos desembolsos (compras de equipos, reembolsos de préstamos, retiros). Consulte el Estado de flujos de efectivo: parte de la utilidad neta y explica adónde fue el dinero.</p></details>
-                <details><summary>Una cuenta no aparece en el informe Plan de cuentas.</summary><p>Una cuenta vinculada directamente a una clase principal, sin subclase, no se muestra. Vincúlela a una subclase. Las cuentas inactivas, en cambio, siguen apareciendo con un punto rojo.</p></details>
+                <details><summary>Una cuenta no aparece en el informe Plan contable.</summary><p>Una cuenta vinculada directamente a una clase principal, sin subclase, no se muestra. Vincúlela a una subclase. Las cuentas inactivas, en cambio, siguen apareciendo con un punto rojo.</p></details>
                 <details><summary>Falta una subclase en el estado de resultados.</summary><p>Una subclase sin movimiento durante el período no se muestra. No es un error.</p></details>
-                <details><summary>¿«Payer tout» en IA Pagos efectúa realmente los pagos?</summary><p>No. Por ahora, <kbd>Payer</kbd> y <kbd>Payer tout</kbd> solo muestran un mensaje. No se transmite ningún pago. Para pagar a un proveedor, utilice la sección Compras.</p></details>
-                <details><summary>¿Por qué el saldo bancario de IA Ventas muestra «Non configuré»?</summary><p>No hay ninguna cuenta bancaria designada en los parámetros de la empresa. Rellene el parámetro «COMPTE_BANQUE» (categoría «BANCAIRE») en Administración.</p></details>
+                <details><summary>¿«Payer tout» en Pago con IA efectúa realmente los pagos?</summary><p>No. Por ahora, <kbd>Payer</kbd> y <kbd>Payer tout</kbd> solo muestran un mensaje. No se transmite ningún pago. Para pagar a un proveedor, utilice la sección Compras.</p></details>
+                <details><summary>¿Por qué el saldo bancario de Ventas con IA muestra «Non configuré»?</summary><p>No hay ninguna cuenta bancaria designada en los parámetros de la empresa. Rellene el parámetro «COMPTE_BANQUE» (categoría «BANCAIRE») en Administración.</p></details>
                 <details><summary>El efectivo final del estado de flujos no coincide con mi extracto bancario.</summary><p>Ese importe es calculado (efectivo inicial + variación neta) y no leído en las cuentas bancarias. Una diferencia revela un asiento faltante, un asiento mal clasificado o una conciliación bancaria incompleta.</p></details>
                 <details><summary>¿Puedo comparar este año con el año pasado?</summary><p>No en un mismo informe: ningún informe ofrece una columna comparativa. Genere el informe para cada período y conserve los dos PDF.</p></details>
             </section>
@@ -1491,7 +1494,7 @@
                         <tr><td>Depreciación (Amortissement)</td><td>Gasto que reparte el costo de un equipo a lo largo de su vida útil. Sin salida de dinero, se vuelve a sumar a la utilidad en el estado de flujos.</td></tr>
                         <tr><td>Ejercicio (Exercice)</td><td>Período contable de un año, por defecto del 1 de enero al 31 de diciembre.</td></tr>
                         <tr><td>Cierre del ejercicio</td><td>Asiento que traslada la utilidad del año a los resultados acumulados y pone a cero las cuentas de resultados.</td></tr>
-                        <tr><td>Collecté / À recevoir / Retard</td><td>En IA Ventas: facturas pagadas; facturas abiertas, en curso o parciales; facturas con estado atrasada.</td></tr>
+                        <tr><td>Collecté / À recevoir / Retard</td><td>En Ventas con IA: facturas pagadas; facturas abiertas, en curso o parciales; facturas con estado atrasada.</td></tr>
                     </tbody>
                 </table>
             </section>

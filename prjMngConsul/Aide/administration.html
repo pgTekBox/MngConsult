@@ -131,7 +131,7 @@
                 <p><span class="chemin">Paramètres</span> configure l’entreprise, les taxes, les courriels, la facturation, la comptabilité et le compte bancaire. Chaque compagnie a ses propres paramètres. Accessible à tout utilisateur connecté. Le haut de page montre « Progression du profil » (pourcentage de paramètres remplis dans Entreprise et Taxes), votre identité et votre badge de rôle.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Enregistrer</kbd> : sauvegarde le logo puis tous les onglets. Initialise aussi les données de la compagnie et lui attribue sa boîte courriel @60sec.ca dès que le nom commercial est connu. Messages : « ✔ Paramètres enregistrés. » ou « ✖ Erreur lors de la sauvegarde : … ».</li>
+                    <li><kbd>Enregistrer</kbd> : sauvegarde le logo puis les onglets Entreprise à Bancaire (l’onglet Comptable n’est pas enregistré). Initialise aussi les données de la compagnie et lui attribue sa boîte courriel @60sec.ca dès que le nom commercial est connu. Messages : « ✔ Paramètres enregistrés. » ou « ✖ Erreur lors de la sauvegarde : … ».</li>
                     <li><kbd>Recharger</kbd> : abandonne les modifications non enregistrées. « ✔ Paramètres rechargés. »</li>
                 </ul>
                 <h3>Présentation</h3>
@@ -197,9 +197,9 @@
                 <h3>Onglet Comptabilité</h3>
                 <p>« Comptes par défaut utilisés par les modules de comptabilisation automatique. » Comptes : VP Vente de produit ; AP Achat produits ; CC Crédit client ; CF Crédit fournisseur ; DP Dépense payée perso ; BNR Bénéfices non répartis ; BNE Bénéfice net de l’exercice. « JOURNAL_OD » : code du journal d’opérations diverses. Voir <a href="comptabilite.html">Comptabilité</a>.</p>
                 <h3>Onglet Bancaire</h3>
-                <p>« Compte bancaire par défaut » : liste des comptes Plaid actifs (« Nom — Banque ••1234 ») ou « (Aucun compte) ». Sans compte relié : « Aucun paramètre bancaire configuré pour cet onglet. »</p>
+                <p>« Compte bancaire par défaut » : liste des comptes Plaid actifs (« Nom — Banque ••1234 ») ou « (Aucun compte) ». Onglet sans paramètre : « Aucun paramètre bancaire configuré pour cet onglet. »</p>
                 <h3>Onglet Comptable</h3>
-                <p>« Clé comptable » : clé qui permet à votre comptable d’accéder aux données de la compagnie sans être un utilisateur du compte. Communiquez-la à lui seul.</p>
+                <p>« Clé comptable » : clé qui permet à votre comptable d’accéder aux données de la compagnie sans être un utilisateur du compte. Communiquez-la à lui seul. Une modification tapée dans ce champ n’est pas conservée : <kbd>Enregistrer</kbd> ne sauvegarde pas cet onglet.</p>
                 <div class="astuce" data-titre="Astuce">Pour démarrer vite : 1. déposez votre lettre de l’ARC ou votre immatriculation dans « Remplissage automatique » ; 2. vérifiez Entreprise et Taxes ; 3. choisissez le format de numéro de facture ; 4. cliquez <kbd>Enregistrer</kbd>.</div>
             </section>
 
@@ -267,7 +267,7 @@
                 </ul>
                 <h3>Calendrier</h3>
                 <ul>
-                    <li>Filtres : Statut (Tous, Planifié, En cours, Payé, Échec, Action requise (3DS), Annulé) ; Du / Au (aujourd’hui → +30 jours) ; <kbd>Filtrer</kbd>.</li>
+                    <li>Filtres : « Status » (Tous, Planifié, En cours, Payé, Échec, Action requise (3DS), Annulé) ; Du / Au (aujourd’hui → +30 jours) ; <kbd>Filtrer</kbd>.</li>
                     <li>Affichage par jour (« AUJOURD’HUI ») : facture, moyen de paiement, « ✅ Préavis envoyé » ou « ⏳ Préavis pendant », « Tentatives : n/3 », statut, montant.</li>
                     <li><kbd>🚫 Annuler</kbd> (statuts Planifié et 3DS) : « Annuler ce paiement programmé pour la facture … ? » → « Paiement programmé annulé pour la facture #… » ou « Annulation impossible (status = …) ».</li>
                     <li>Vide : « Aucun paiement programmé sur cette plage. »</li>
@@ -275,7 +275,7 @@
                 <div class="piege" data-titre="Piège">Après une annulation, rafraîchir la page (F5) relance la demande et affiche une erreur. Naviguez plutôt par le menu.</div>
                 <h3>Historique</h3>
                 <ul>
-                    <li>Filtres : Résultat (Tous, Succès, Échec, Action requise, Bloqué (plafond), En attente) ; Du / Au (30 derniers jours) ; Max (50, 200, 500, 1000).</li>
+                    <li>Filtres : Résultat (Tous, Succès, Échec, Action requise, Bloqué (plafond), En attente) ; Du / Au (30 derniers jours) ; Max (50, 200, 500, 1000 ; 200 par défaut) ; <kbd>Filtrer</kbd>.</li>
                 </ul>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
@@ -331,11 +331,11 @@
                         <tr><td>Conditions d’utilisation et Politique de confidentialité</td><td>Oui</td><td>Case à cocher.</td></tr>
                     </tbody>
                 </table>
-                <p>Bouton <kbd>Créer mon compte</kbd> ; le forfait (Solo, ComSolo, COM119) vient du lien d’inscription. Succès : « Vérifiez votre courriel » (lien d’activation valide 24 h), lien <kbd>renvoyer le lien</kbd>, « Vous pouvez fermer cette page. »</p>
+                <p>Bouton <kbd>Créer mon compte</kbd>, suivi du nom du forfait (Solo, ComSolo, COM119) quand il vient du lien d’inscription. Sous le formulaire : « Déjà un compte ? » <kbd>Se connecter</kbd>. Succès : « Vérifiez votre courriel » (lien d’activation valide 24 h), lien <kbd>renvoyer le lien</kbd>, bouton <kbd>Vous pouvez fermer cette page.</kbd> (ferme la session et ramène à la page d’accueil du site).</p>
                 <ul class="messages">
                     <li><span class="msg">« Le courriel est obligatoire. »</span> / <span class="msg">« Le courriel n’est pas valide. »</span> / <span class="msg">« Le mot de passe doit contenir au moins 8 caractères. »</span> / <span class="msg">« Les mots de passe ne correspondent pas. »</span> / <span class="msg">« Vous devez accepter les conditions d’utilisation. »</span> — corrigez le formulaire.</li>
                     <li><span class="msg">« Ce courriel est déjà utilisé. »</span> — connectez-vous ou réinitialisez le mot de passe.</li>
-                    <li><span class="msg">« Une erreur est survenue lors de l’inscription. Veuillez réessayer. »</span> — erreur passagère.</li>
+                    <li><span class="msg">« Une erreur est survenue lors de l’inscription. Veuillez réessayer. »</span> / <span class="msg">« Une erreur est survenue : … »</span> — erreur passagère.</li>
                     <li><span class="msg">« Courriel renvoyé à … »</span> / <span class="msg">« Trop de tentatives. Réessayez dans 1 minute. »</span> / <span class="msg">« Échec d’envoi… »</span> — suite du renvoi du lien.</li>
                 </ul>
                 <h3>Activation</h3>
@@ -365,7 +365,7 @@
                 <ul>
                     <li>Tapez votre question (« Votre question… (Ctrl+Entrée pour envoyer) » sur la page ; Entrée suffit dans la boîte flottante) puis <kbd>Envoyer</kbd>. Longueur maximale : 4 000 caractères.</li>
                     <li>Sans question, la page propose des exemples cliquables : « Comment comptabiliser une facture client ? », « Pourquoi mon bilan n’est-il pas en équilibre ? », « Comment faire ma remise de TPS/TVQ ? », « Comment payer un fournisseur avec Stripe ? », « Par où commencer pour importer QuickBooks ? »</li>
-                    <li>Micro « Poser la question à voix haute » : « Je vous écoute… parlez, puis faites une pause. » La question dictée part automatiquement. Dans la boîte flottante, la réponse est lue à voix haute (bouton « Arrêter la lecture »).</li>
+                    <li>Micro « Poser la question à voix haute » : « Je vous écoute… parlez, puis faites une pause. » La question dictée part automatiquement. Dans la boîte flottante, la réponse à une question dictée est lue à voix haute (bouton « Arrêter la lecture »).</li>
                     <li><kbd>Nouvelle conversation</kbd> efface le fil (« Effacer la conversation ? » dans la boîte flottante). Le fil est partagé entre la boîte et la page.</li>
                     <li>Bas de page : « Coût des questions ce mois-ci : {0} US$ ».</li>
                 </ul>
@@ -533,14 +533,14 @@
 
         <article class="langue" lang="en">
             <h1>Administration and account</h1>
-            <p class="intro">Company profile, users, settings, payment processors, automatic supplier payments, subscription, account sign-in and AI assistant. These screens sit at the bottom of the left menu (<span class="chemin">Company profile</span>, <span class="chemin">Users</span>, <span class="chemin">Settings</span>, <span class="chemin">Payment processor</span>, <span class="chemin">Automatic payments</span>, <span class="chemin">Sign out</span>). Each company has its own settings; everything you see is filtered on the active company of your session.</p>
+            <p class="intro">Company profile, users, settings, payment processors, automatic supplier payments, subscription, account sign-in and AI assistant. These screens sit at the bottom of the left menu (<span class="chemin">Company profile</span>, <span class="chemin">Users</span>, <span class="chemin">Settings</span>, <span class="chemin">Payment processor</span>, <span class="chemin">Automatic payments</span>, <span class="chemin">Log out</span>). Each company has its own settings; everything you see is filtered on the active company of your session.</p>
 
             <section id="en-company-profile">
                 <h2>Company profile</h2>
                 <h3>Purpose</h3>
                 <p><span class="chemin">Company profile</span> records the administrator’s identity and the company’s tax numbers. It is also the first onboarding step suggested after sign-up (“Complete your profile” in the Dashboard welcome box). Any signed-in user can open it.</p>
                 <h3>Automatic fill from a document</h3>
-                <p>Drag and drop (or browse) a PDF, JPG or PNG, then click <kbd>Analyze document</kbd>. The AI reads a Quebec enterprise registration (REQ), a CRA or Revenu Québec letter, or a certificate of incorporation, and fills: legal name, NEQ, federal business number (BN), GST, QST and HST numbers, incorporation date and fiscal year end.</p>
+                <p>Drag and drop (or browse) a PDF, JPG or PNG, then click <kbd>Analyze the document</kbd>. The AI reads a Quebec enterprise registration (REQ), a CRA or Revenu Québec letter, or a certificate of incorporation, and fills: legal name, NEQ, federal business number (BN), GST, QST and HST numbers, incorporation date and fiscal year end.</p>
                 <div class="piege" data-titre="Pitfall">Here the analysis <strong>overwrites</strong> fields already filled. In <span class="chemin">Settings</span>, it only fills empty fields. Always check the result before saving.</div>
                 <h3>Fields</h3>
                 <table>
@@ -548,7 +548,7 @@
                     <tbody>
                         <tr><td>First name</td><td>Yes</td><td>Administrator identity.</td></tr>
                         <tr><td>Last name</td><td>Yes</td><td>Administrator identity.</td></tr>
-                        <tr><td>Email address</td><td>—</td><td>Shown “· not editable”: it is the account email.</td></tr>
+                        <tr><td>Email address</td><td>—</td><td>Shown “· read-only”: it is the account email.</td></tr>
                         <tr><td>Phone</td><td>No</td><td>Administrator’s number.</td></tr>
                         <tr><td>NEQ</td><td>No</td><td>Quebec enterprise number.</td></tr>
                         <tr><td>Company name</td><td>No</td><td>Legal name.</td></tr>
@@ -558,10 +558,10 @@
                         <tr><td>GST, QST and HST numbers</td><td>No</td><td>Tax registration numbers.</td></tr>
                     </tbody>
                 </table>
-                <p>The “Profile progress” bar shows the percentage of fields filled out of 12.</p>
+                <p>The “Profile completion” bar shows the percentage of fields filled out of 12.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Analyze document</kbd>: runs the AI reading of the chosen file.</li>
+                    <li><kbd>Analyze the document</kbd>: runs the AI reading of the chosen file.</li>
                     <li><kbd>Start over</kbd>: reloads the identity and clears the Company fields <strong>on screen only</strong> (nothing is erased until you save).</li>
                     <li><kbd>Save and continue →</kbd>: saves, starts the 30-day free trial and opens the Dashboard. The plan comes from the sign-up link (Solo by default, ComSolo or COM119).</li>
                 </ul>
@@ -569,11 +569,11 @@
                 <ul class="messages">
                     <li><span class="msg">“Please choose a document first.”</span> — no file was dropped before analyzing.</li>
                     <li><span class="msg">“The file is empty.”</span> — the file has no content; pick it again.</li>
-                    <li><span class="msg">“OpenAI configuration is missing. Enter the fields manually.”</span> — AI analysis is unavailable; type the values.</li>
+                    <li><span class="msg">“OpenAI configuration is missing. Please fill the fields manually.”</span> — AI analysis is unavailable; type the values.</li>
                     <li><span class="msg">“Unsupported format. Use a PDF or an image (JPG/PNG).”</span> — convert the document.</li>
-                    <li><span class="msg">“{n} field(s) pre-filled from the document. Check then save.”</span> — review and fix before <kbd>Save and continue →</kbd>.</li>
+                    <li><span class="msg">“{n} field(s) pre-filled from the document. Please review, then save.”</span> — review and fix before <kbd>Save and continue →</kbd>.</li>
                     <li><span class="msg">“No usable information was recognized in this document.”</span> — the document lacks the expected numbers.</li>
-                    <li><span class="msg">“Unable to analyze the document. Try again or enter the fields manually.”</span> — temporary error.</li>
+                    <li><span class="msg">“Could not analyze the document. Try again or fill the fields manually.”</span> — temporary error.</li>
                     <li><span class="msg">“First name is required.”</span> / <span class="msg">“Last name is required.”</span> — complete the identity.</li>
                     <li><span class="msg">“Error while saving: …”</span> — the save failed; try again.</li>
                 </ul>
@@ -639,18 +639,18 @@
             <section id="en-settings">
                 <h2>Settings</h2>
                 <h3>Purpose</h3>
-                <p><span class="chemin">Settings</span> configures the company, taxes, emails, invoicing, accounting and bank account. Each company has its own settings. Open to any signed-in user. The top of the page shows “Profile progress” (percentage of settings filled in Company and Taxes), your identity and your role badge.</p>
+                <p><span class="chemin">Settings</span> configures the company, taxes, emails, invoicing, accounting and bank account. Each company has its own settings. Open to any signed-in user. The top of the page shows “Profile completion” (percentage of settings filled in Company and Taxes), your identity and your role badge.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Save</kbd>: saves the logo then every tab. Also initializes the company data and assigns its @60sec.ca mailbox as soon as the trade name is known. Messages: “✔ Settings saved.” or “✖ Error while saving: …”.</li>
+                    <li><kbd>Save</kbd>: saves the logo then the Company to Banking tabs (the Accountant tab is not saved). Also initializes the company data and assigns its @60sec.ca mailbox as soon as the trade name is known. Messages: “✔ Settings saved.” or “✖ Error while saving: …”.</li>
                     <li><kbd>Reload</kbd>: discards unsaved changes. “✔ Settings reloaded.”</li>
                 </ul>
                 <h3>Layout</h3>
-                <p>Each field shows its label and short code (e.g. “NEQ”). Types: Yes/No; numeric (integer or 3 decimals); date YYYY-MM-DD; masked password; free text of <strong>300 characters max</strong>. Tab without settings: “No setting configured for this tab.” The list of settings comes from the configuration and may vary.</p>
+                <p>Each field shows its label and short code (e.g. “NEQ”). Types: Yes/No; numeric (integer or 3 decimals); date YYYY-MM-DD; masked password; free text of <strong>300 characters max</strong>. Tab without settings: “No parameter configured for this tab.” The list of settings comes from the configuration and may vary.</p>
                 <h3>Company tab</h3>
                 <ul>
-                    <li><strong>Logo</strong>: PNG, JPG or SVG, 1 MB max (“Save to apply.”). “Remove logo” box (takes priority over a new file). Preview or “No logo”. Errors: “Logo exceeds 1 MB.”, “Unsupported format (PNG, JPG or SVG).”</li>
-                    <li><strong>Automatic fill from a document</strong>: the AI fills <strong>only empty fields</strong> of the Company and Taxes tabs. Messages: “Please choose a file first.”; “The file is empty.”; “OpenAI key missing. Contact the administrator.”; “Unsupported format (PDF, JPG or PNG only).”; “{n} field(s) filled automatically. Check, then click Save.”; “No usable information found (or fields already filled).”; “Error while analyzing the document.”</li>
+                    <li><strong>Logo</strong>: PNG, JPG or SVG, 1 MB max (“Save to apply.”). “Remove logo” box (takes priority over a new file). Preview or “No logo”. Errors: “The logo exceeds 1 MB.”, “Unsupported format (PNG, JPG or SVG).”</li>
+                    <li><strong>Automatic fill from a document</strong>: the AI fills <strong>only empty fields</strong> of the Company and Taxes tabs. Messages: “Please choose a file first.”; “The file is empty.”; “OpenAI key missing. Contact the administrator.”; “Unsupported format (PDF, JPG or PNG only).”; “{n} field(s) filled automatically. Review, then click Save.”; “No usable information found (or fields already filled).”; “Error while analyzing the document.”</li>
                 </ul>
                 <table>
                     <thead><tr><th>Setting</th><th>Details</th></tr></thead>
@@ -672,14 +672,14 @@
                         <tr><td>GST, QST, HST numbers</td><td>Registration numbers.</td></tr>
                         <tr><td>GST rate (%), QST rate (%)</td><td>Normally 5 and 9.975.</td></tr>
                         <tr><td>Tax rounding</td><td>2 decimals (cent, default), 4 decimals (internal) or Truncate (2 decimals).</td></tr>
-                        <tr><td>Tax mode</td><td>Taxes extra (default) or Taxes included.</td></tr>
+                        <tr><td>Tax mode</td><td>Taxes added (default) or Taxes included.</td></tr>
                         <tr><td>GST registration date, QST registration date</td><td>Dates of registration.</td></tr>
                     </tbody>
                 </table>
                 <h3>Email tab</h3>
                 <ul>
-                    <li><strong>Sender email</strong> and <kbd>Verify this address</kbd> button (becomes <kbd>Resend link</kbd> once verified). Badges: “✔ Address verified on [date]”, “⏳ Link sent — awaiting confirmation”, “✖ Address not verified”.</li>
-                    <li>The email received is titled “Verify your company’s email address” with a “Confirm my address” button (link valid 24 h). A verified address becomes the reply-to address of emails sent on behalf of the company.</li>
+                    <li><strong>Sender email</strong> and <kbd>Verify this address</kbd> button (becomes <kbd>Resend the link</kbd> once verified). Badges: “✔ Address verified on [date]”, “⏳ Link sent — awaiting confirmation”, “✖ Address not verified”.</li>
+                    <li>The email received is titled “Verify your company email address” with a “Confirm my address” button (link valid 24 h). A verified address becomes the reply-to address of emails sent on behalf of the company.</li>
                     <li><strong>Email signature</strong>: text added at the bottom of emails.</li>
                 </ul>
                 <ul class="messages">
@@ -706,11 +706,11 @@
                 <h3>Processing tab</h3>
                 <p>“Receipt posted automatically” (Yes/No, default No): when Yes, a receipt read by the AI is posted without manual validation.</p>
                 <h3>Accounting tab</h3>
-                <p>“Default accounts used by the automatic posting modules.” Accounts: VP Product sales; AP Product purchases; CC Customer credit; CF Supplier credit; DP Expense paid personally; BNR Retained earnings; BNE Net income for the year. “JOURNAL_OD”: code of the general journal. See <a href="comptabilite.html">Accounting</a>.</p>
+                <p>“Default accounts used by the automatic bookkeeping modules.” Accounts: VP Product sales; AP Product purchases; CC Customer credit; CF Supplier credit; DP Expense paid personally; BNR Retained earnings; BNE Net income for the year. “JOURNAL_OD”: code of the general journal. See <a href="comptabilite.html">Accounting</a>.</p>
                 <h3>Banking tab</h3>
-                <p>“Default bank account”: list of active Plaid accounts (“Name — Bank ••1234”) or “(No account)”. Without a linked account: “No banking setting configured for this tab.”</p>
+                <p>“Default bank account”: list of active Plaid accounts (“Name — Bank ••1234”) or “(No account)”. Tab without settings: “No banking setting configured for this tab.”</p>
                 <h3>Accountant tab</h3>
-                <p>“Accountant key”: key that lets your accountant access the company’s data without being an account user. Share it with them only.</p>
+                <p>“Accountant key”: key that lets your accountant access the company’s data without being an account user. Share it with them only. A change typed in this field is not kept: <kbd>Save</kbd> does not save this tab.</p>
                 <div class="astuce" data-titre="Tip">Quick start: 1. drop your CRA letter or registration in “Automatic fill”; 2. check Company and Taxes; 3. choose the invoice number format; 4. click <kbd>Save</kbd>.</div>
             </section>
 
@@ -720,7 +720,7 @@
                 <p><span class="chemin">Payment processor</span>: “Connect your payment processing accounts.” Three cards: Square, Plaid and Stripe.</p>
                 <h3>Square card</h3>
                 <ul>
-                    <li>Not connected: “Connect your Square account to charge customers (card / Interac) and sync invoices and payments.” <kbd>Connect Square</kbd> opens Square’s authorization page, then returns here.</li>
+                    <li>Not connected: “Connect your Square account to collect from customers (card / Interac) and sync invoices and payments.” <kbd>Connect Square</kbd> opens Square’s authorization page, then returns here.</li>
                     <li>Connected: Merchant ID, Location, Connected since; <kbd>Reconnect</kbd> and <kbd>Disconnect</kbd> buttons. The “Square connected” badge appears in the header. See <a href="ventes.html">Sales</a> for payment links.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall"><kbd>Disconnect</kbd> erases the Square tokens immediately, <strong>without confirmation</strong>.</div>
@@ -736,10 +736,10 @@
                 </ul>
                 <ul class="messages">
                     <li><span class="msg">“✔ Automatic import enabled.”</span> / <span class="msg">“✔ Automatic import disabled.”</span> — the setting is saved.</li>
-                    <li><span class="msg">“✖ Error while saving the setting.”</span> — click the box again.</li>
+                    <li><span class="msg">“✖ Error saving the setting.”</span> — click the box again.</li>
                 </ul>
                 <h3>Stripe card (“Coming soon”)</h3>
-                <p>“Your 60Sec-AI subscription payment is already handled by Stripe. The Stripe connection to charge your own customers is coming soon.”</p>
+                <p>“Your 60Sec-AI subscription billing is already handled by Stripe. Stripe connection to collect your own customers is coming soon.”</p>
                 <div class="note" data-titre="Good to know">Payments <em>to suppliers</em> through Stripe are set up from the supplier list (<a href="achats.html">Purchases</a>). The header shows “N Stripe suppliers”.</div>
             </section>
 
@@ -786,7 +786,7 @@
                 <div class="piege" data-titre="Pitfall">After a cancellation, refreshing the page (F5) resends the request and shows an error. Navigate through the menu instead.</div>
                 <h3>History</h3>
                 <ul>
-                    <li>Filters: Result (All, Success, Failed, Action required, Blocked (cap), Pending); From / To (last 30 days); Max (50, 200, 500, 1000).</li>
+                    <li>Filters: Result (All, Success, Failed, Action required, Blocked (cap), Pending); From / To (last 30 days); Max (50, 200, 500, 1000; 200 by default); <kbd>Filter</kbd>.</li>
                 </ul>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
@@ -804,14 +804,14 @@
             <section id="en-subscription">
                 <h2>Subscription</h2>
                 <h3>Payment page</h3>
-                <p>The “Your plan” card shows the name, tagline, Amount, GST 5%, QST 9.975%, Monthly total, “Estimated taxes (Quebec)…”, features and “{N} free days — no charge today, cancel anytime.” The “Secure payment” block leads to <kbd>Pay with Stripe →</kbd> (Stripe’s secure page).</p>
+                <p>The “Your plan” card shows the name, tagline, Amount, GST 5%, QST 9.975%, Monthly total, “Estimated taxes (Quebec)…”, features and “{N} days free — no charge today, cancel anytime.” The “Secure payment” block leads to <kbd>Pay with Stripe →</kbd> (Stripe’s secure page).</p>
                 <ul class="messages">
                     <li><span class="msg">“Unable to retrieve your account information.”</span> — sign in again.</li>
                     <li><span class="msg">“This plan is not available. Please contact support.”</span> / <span class="msg">“The payment configuration for this plan is incomplete…”</span> — write to support@60sec.ca.</li>
                     <li><span class="msg">“An error occurred while creating the payment session: …”</span> — try again.</li>
                 </ul>
                 <h3>Confirmation</h3>
-                <p>“Payment successful!”, “Thank you for your trust.”, “Your [X] subscription is now active.” Receipt: Transaction no., Date, “Credit card · via Stripe”, Plan, Next billing “(end of free trial)”, Amount paid “Free (trial)”. Link <kbd>Fill in your profile →</kbd>. “A confirmation email has been sent to your address.”</p>
+                <p>“Payment successful!”, “Thank you for your trust.”, “Your [X] subscription is now active.” Receipt: Transaction no., Date, “Credit card · via Stripe”, Plan, Next billing “(end of free trial)”, Amount paid “Free (trial)”. Link <kbd>Complete your profile →</kbd>. “A confirmation email has been sent to your address.”</p>
                 <div class="note" data-titre="Good to know">During the trial, the header shows a ⏳ badge “Trial · N days”, “Trial · last day” then “Trial expired” (alert colour at 3 days or less). No card is required during the trial; a notice is sent 7 days before the end.</div>
             </section>
 
@@ -820,7 +820,7 @@
                 <h3>Sign-in</h3>
                 <p>Email and Password fields, <strong>Remember me</strong> box, <kbd>Forgot password?</kbd> link, <kbd>Sign in</kbd> button.</p>
                 <ul>
-                    <li>Account not activated → “Check your email” page with “resend link”.</li>
+                    <li>Account not activated → “Check your email” page with “resend the link”.</li>
                     <li>Subscription “awaiting payment” → payment page.</li>
                     <li>Otherwise, back to the requested page or the Dashboard.</li>
                 </ul>
@@ -842,30 +842,30 @@
                         <tr><td>Terms of use and Privacy policy</td><td>Yes</td><td>Checkbox.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Create my account</kbd> button; the plan (Solo, ComSolo, COM119) comes from the sign-up link. Success: “Check your email” (activation link valid 24 h), <kbd>resend link</kbd>, “You can close this page.”</p>
+                <p><kbd>Create my account</kbd> button, followed by the plan name (Solo, ComSolo, COM119) when it comes from the sign-up link. Below the form: “Already have an account?” <kbd>Sign in</kbd>. Success: “Check your email” (activation link valid 24 h), <kbd>resend the link</kbd> link, <kbd>You can close this page.</kbd> button (ends the session and returns to the site’s home page).</p>
                 <ul class="messages">
-                    <li><span class="msg">“Email is required.”</span> / <span class="msg">“Email is not valid.”</span> / <span class="msg">“Password must contain at least 8 characters.”</span> / <span class="msg">“Passwords do not match.”</span> / <span class="msg">“You must accept the terms of use.”</span> — fix the form.</li>
-                    <li><span class="msg">“This email is already used.”</span> — sign in or reset the password.</li>
-                    <li><span class="msg">“An error occurred during sign-up. Please try again.”</span> — temporary error.</li>
-                    <li><span class="msg">“Email resent to …”</span> / <span class="msg">“Too many attempts. Try again in 1 minute.”</span> / <span class="msg">“Send failed…”</span> — outcome of resending the link.</li>
+                    <li><span class="msg">“Email is required.”</span> / <span class="msg">“The email is not valid.”</span> / <span class="msg">“The password must be at least 8 characters long.”</span> / <span class="msg">“The passwords do not match.”</span> / <span class="msg">“You must accept the terms of use.”</span> — fix the form.</li>
+                    <li><span class="msg">“This email is already in use.”</span> — sign in or reset the password.</li>
+                    <li><span class="msg">“An error occurred during registration. Please try again.”</span> / <span class="msg">“An error occurred: …”</span> — temporary error.</li>
+                    <li><span class="msg">“Email resent to …”</span> / <span class="msg">“Too many attempts. Try again in 1 minute.”</span> / <span class="msg">“Sending failed…”</span> — outcome of resending the link.</li>
                 </ul>
                 <h3>Activation</h3>
                 <table>
                     <thead><tr><th>Outcome</th><th>Title</th><th>Next</th></tr></thead>
                     <tbody>
                         <tr><td>Success</td><td>“Account activated!”</td><td>Automatic sign-in; <kbd>Continue →</kbd> to payment.</td></tr>
-                        <tr><td>Expired link</td><td>“Link expired” (24 h)</td><td><kbd>Sign up again</kbd>.</td></tr>
+                        <tr><td>Expired link</td><td>“Link expired” (24 h)</td><td><kbd>Start registration again</kbd>.</td></tr>
                         <tr><td>Invalid link</td><td>“Invalid link”</td><td><kbd>Sign in</kbd> / <kbd>Sign up</kbd>.</td></tr>
                         <tr><td>Already activated</td><td>“Account already activated”</td><td><kbd>Sign in</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Forgot password and reset</h3>
                 <ul>
-                    <li>Forgot password: enter the email, <kbd>Send link</kbd>. Error “Please enter a valid email.” Message always shown: “If an account is associated with this email, a reset link has just been sent…” (link valid 60 minutes).</li>
+                    <li>Forgot password: enter the email, <kbd>Send the link</kbd>. Error “Please enter a valid email.” Message always shown: “If an account matches this email, a reset link has just been sent…” (link valid 60 minutes).</li>
                     <li>Reset: New password (8 minimum) and confirmation, <kbd>Reset my password</kbd> button. Success: “Your password has been reset. You can now sign in.” Invalid link: “This reset link is invalid or has expired.” with <kbd>Request a new link</kbd>.</li>
                 </ul>
                 <h3>Company email verification</h3>
-                <p>Public page opened from the received link (Email tab of Settings): “Address verified!” (“Your company’s email address is confirmed: …”), “Link expired” (24 h), “Address already verified” or “Invalid link”. <kbd>Go to settings</kbd> button.</p>
+                <p>Public page opened from the received link (Email tab of Settings): “Address verified!” (“Your company email address is confirmed: …”), “Link expired” (24 h), “Address already verified” or “Invalid link”. <kbd>Go to settings</kbd> button.</p>
             </section>
 
             <section id="en-assistant">
@@ -876,7 +876,7 @@
                 <ul>
                     <li>Type your question (“Your question… (Ctrl+Enter to send)” on the page; Enter is enough in the floating box) then <kbd>Send</kbd>. Maximum length: 4,000 characters.</li>
                     <li>With no question yet, the page offers clickable examples: “How do I post a customer invoice?”, “Why is my balance sheet out of balance?”, “How do I remit GST/QST?”, “How do I pay a supplier with Stripe?”, “Where do I start to import QuickBooks?”</li>
-                    <li>Microphone “Ask the question out loud”: “I’m listening… speak, then pause.” The dictated question is sent automatically. In the floating box the answer is read aloud (“Stop reading” button).</li>
+                    <li>Microphone “Ask the question out loud”: “I’m listening… speak, then pause.” The dictated question is sent automatically. In the floating box the answer to a dictated question is read aloud (“Stop reading” button).</li>
                     <li><kbd>New conversation</kbd> clears the thread (“Clear the conversation?” in the floating box). The thread is shared between the box and the page.</li>
                     <li>Footer: “Cost of questions this month: US${0}”.</li>
                 </ul>
@@ -1012,10 +1012,10 @@
 <details><summary>Why can’t I open the Users screen?</summary><p>It is for administrators only; other roles are sent back to the Dashboard. Ask an administrator to check “Administrator” on your record.</p></details>
                 <details><summary>How do I give my accountant access?</summary><p>Hand them the “Accountant key” from the Accountant tab of Settings. The Accountant role is not created in Users.</p></details>
                 <details><summary>Why did the AI analysis replace my values?</summary><p>In Company profile, the analysis overwrites filled fields. Use the automatic fill in Settings instead, which only touches empty fields.</p></details>
-                <details><summary>The sender email badge stays “awaiting”, what now?</summary><p>Open the “Verify your company’s email address” email and click “Confirm my address” within 24 h; otherwise <kbd>Resend link</kbd>.</p></details>
+                <details><summary>The sender email badge stays “awaiting”, what now?</summary><p>Open the “Verify your company email address” email and click “Confirm my address” within 24 h; otherwise <kbd>Resend the link</kbd>.</p></details>
                 <details><summary>My invoices start with BRO-, is that normal?</summary><p>Yes: it is the draft prefix. The real number is assigned when posting, following the format chosen in the Invoice tab.</p></details>
                 <details><summary>How do I cancel a scheduled automatic payment?</summary><p>Calendar tab, <kbd>🚫 Cancel</kbd> button on Scheduled or 3DS statuses. To stop everything with a supplier, revoke the authorization.</p></details>
-                <details><summary>I did not receive the activation email.</summary><p>Click “resend link” on the “Check your email” page (once a minute). The link is valid 24 h.</p></details>
+                <details><summary>I did not receive the activation email.</summary><p>Click “resend the link” on the “Check your email” page (once a minute). The link is valid 24 h.</p></details>
                 <details><summary>What does “Remember me” do?</summary><p>It keeps your session 7 days on this device, renewed at each visit. Sign out erases the cookie.</p></details>
                 <details><summary>Can the assistant see my customers?</summary><p>No: the profile sent contains only settings and volumes, never names, addresses or numbers.</p></details>
                 <details><summary>Does disconnecting Square ask for confirmation?</summary><p>No, the tokens are erased immediately. Reconnect if needed.</p></details>
@@ -1044,7 +1044,7 @@
 
         <article class="langue" lang="es">
             <h1>Administración y cuenta</h1>
-            <p class="intro">Perfil de la empresa, usuarios, parámetros, procesadores de pago, pagos automáticos a proveedores, suscripción, inicio de sesión y asistente IA. Estas pantallas están al pie del menú izquierdo (<span class="chemin">Perfil de la empresa</span>, <span class="chemin">Usuarios</span>, <span class="chemin">Parámetros</span>, <span class="chemin">Procesador de pago</span>, <span class="chemin">Pagos automáticos</span>, <span class="chemin">Cerrar sesión</span>). Cada compañía tiene sus propios ajustes; todo lo que ve se filtra por la compañía activa de su sesión.</p>
+            <p class="intro">Perfil de la empresa, usuarios, parámetros, procesadores de pago, pagos automáticos a proveedores, suscripción, inicio de sesión y asistente IA. Estas pantallas están al pie del menú izquierdo (<span class="chemin">Perfil de la empresa</span>, <span class="chemin">Usuarios</span>, <span class="chemin">Ajustes</span>, <span class="chemin">Procesador de pago</span>, <span class="chemin">Pagos automáticos</span>, <span class="chemin">Cerrar sesión</span>). Cada compañía tiene sus propios ajustes; todo lo que ve se filtra por la compañía activa de su sesión.</p>
 
             <section id="es-perfil-empresa">
                 <h2>Perfil de la empresa</h2>
@@ -1052,14 +1052,14 @@
                 <p><span class="chemin">Perfil de la empresa</span> registra la identidad del administrador y los números fiscales de la empresa. Es también el primer paso de bienvenida propuesto tras el registro («Completar su perfil» en el cuadro de bienvenida del Tablero). Cualquier usuario conectado puede abrirlo.</p>
                 <h3>Relleno automático desde un documento</h3>
                 <p>Arrastre y suelte (o examine) un PDF, JPG o PNG y haga clic en <kbd>Analizar el documento</kbd>. La IA lee una matrícula del Registro de empresas de Quebec (REQ), una carta de la ARC o de Revenu Québec, o un certificado de constitución, y rellena: nombre legal, NEQ, número de empresa federal (BN), números de TPS, TVQ y TVH, fecha de constitución y fin de ejercicio.</p>
-                <div class="piege" data-titre="Trampa">Aquí el análisis <strong>sobrescribe</strong> los campos ya rellenados. En <span class="chemin">Parámetros</span>, en cambio, solo rellena los campos vacíos. Verifique siempre el resultado antes de guardar.</div>
+                <div class="piege" data-titre="Trampa">Aquí el análisis <strong>sobrescribe</strong> los campos ya rellenados. En <span class="chemin">Ajustes</span>, en cambio, solo rellena los campos vacíos. Verifique siempre el resultado antes de guardar.</div>
                 <h3>Campos</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Nombre</td><td>Sí</td><td>Identidad del administrador.</td></tr>
                         <tr><td>Apellido</td><td>Sí</td><td>Identidad del administrador.</td></tr>
-                        <tr><td>Correo electrónico</td><td>—</td><td>Se muestra «· no modificable»: es el correo de la cuenta.</td></tr>
+                        <tr><td>Correo electrónico</td><td>—</td><td>Se muestra «· no editable»: es el correo de la cuenta.</td></tr>
                         <tr><td>Teléfono</td><td>No</td><td>Número del administrador.</td></tr>
                         <tr><td>NEQ</td><td>No</td><td>Número de empresa de Quebec.</td></tr>
                         <tr><td>Nombre de la empresa</td><td>No</td><td>Nombre legal.</td></tr>
@@ -1073,18 +1073,18 @@
                 <h3>Botones y acciones</h3>
                 <ul>
                     <li><kbd>Analizar el documento</kbd>: lanza la lectura por IA del archivo elegido.</li>
-                    <li><kbd>Recomenzar</kbd>: recarga la identidad y vacía los campos Empresa <strong>solo en pantalla</strong> (nada se borra hasta que guarde).</li>
+                    <li><kbd>Reiniciar</kbd>: recarga la identidad y vacía los campos Empresa <strong>solo en pantalla</strong> (nada se borra hasta que guarde).</li>
                     <li><kbd>Guardar y continuar →</kbd>: guarda, inicia la prueba gratuita de 30 días y abre el Tablero. El plan viene del enlace de registro (Solo por defecto, ComSolo o COM119).</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«Elija primero un documento.»</span> — no se depositó ningún archivo antes de analizar.</li>
                     <li><span class="msg">«El archivo está vacío.»</span> — el archivo no tiene contenido; vuelva a elegirlo.</li>
-                    <li><span class="msg">«Falta la configuración de OpenAI. Introduzca los campos manualmente.»</span> — el análisis IA no está disponible; escriba los valores.</li>
+                    <li><span class="msg">«Falta la configuración de OpenAI. Rellene los campos manualmente.»</span> — el análisis IA no está disponible; escriba los valores.</li>
                     <li><span class="msg">«Formato no admitido. Use un PDF o una imagen (JPG/PNG).»</span> — convierta el documento.</li>
-                    <li><span class="msg">«{n} campo(s) rellenado(s) a partir del documento. Verifique y guarde.»</span> — revise y corrija antes de <kbd>Guardar y continuar →</kbd>.</li>
-                    <li><span class="msg">«No se reconoció ninguna información utilizable en este documento.»</span> — el documento no contiene los números esperados.</li>
-                    <li><span class="msg">«No se pudo analizar el documento. Reintente o introduzca los campos manualmente.»</span> — error pasajero.</li>
+                    <li><span class="msg">«{n} campo(s) rellenado(s) desde el documento. Revise y luego guarde.»</span> — revise y corrija antes de <kbd>Guardar y continuar →</kbd>.</li>
+                    <li><span class="msg">«No se reconoció información utilizable en este documento.»</span> — el documento no contiene los números esperados.</li>
+                    <li><span class="msg">«No se pudo analizar el documento. Inténtelo de nuevo o rellene los campos manualmente.»</span> — error pasajero.</li>
                     <li><span class="msg">«El nombre es obligatorio.»</span> / <span class="msg">«El apellido es obligatorio.»</span> — complete la identidad.</li>
                     <li><span class="msg">«Error al guardar: …»</span> — falló el guardado; reintente.</li>
                 </ul>
@@ -1148,20 +1148,20 @@
             </section>
 
             <section id="es-parametros">
-                <h2>Parámetros</h2>
+                <h2>Ajustes</h2>
                 <h3>Objetivo</h3>
-                <p><span class="chemin">Parámetros</span> configura la empresa, los impuestos, los correos, la facturación, la contabilidad y la cuenta bancaria. Cada compañía tiene sus propios parámetros. Accesible a cualquier usuario conectado. La parte superior muestra «Progreso del perfil» (porcentaje de parámetros rellenados en Empresa e Impuestos), su identidad y su insignia de rol.</p>
+                <p><span class="chemin">Ajustes</span> configura la empresa, los impuestos, los correos, la facturación, la contabilidad y la cuenta bancaria. Cada compañía tiene sus propios parámetros. Accesible a cualquier usuario conectado. La parte superior muestra «Progreso del perfil» (porcentaje de parámetros rellenados en Empresa e Impuestos), su identidad y su insignia de rol.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Guardar</kbd>: guarda el logotipo y luego todas las pestañas. También inicializa los datos de la compañía y le asigna su buzón @60sec.ca en cuanto se conoce el nombre comercial. Mensajes: «✔ Parámetros guardados.» o «✖ Error al guardar: …».</li>
-                    <li><kbd>Recargar</kbd>: abandona los cambios no guardados. «✔ Parámetros recargados.»</li>
+                    <li><kbd>Guardar</kbd>: guarda el logotipo y luego las pestañas Empresa a Bancario (la pestaña Contador no se guarda). También inicializa los datos de la compañía y le asigna su buzón @60sec.ca en cuanto se conoce el nombre comercial. Mensajes: «✔ Ajustes guardados.» o «✖ Error al guardar: …».</li>
+                    <li><kbd>Recargar</kbd>: abandona los cambios no guardados. «✔ Ajustes recargados.»</li>
                 </ul>
                 <h3>Presentación</h3>
                 <p>Cada campo muestra su etiqueta y su código corto (p. ej. «NEQ»). Tipos: Sí/No; numérico (entero o 3 decimales); fecha AAAA-MM-DD; contraseña oculta; texto libre de <strong>300 caracteres máximo</strong>. Pestaña sin parámetros: «Ningún parámetro configurado para esta pestaña.» La lista de parámetros viene de la configuración y puede variar.</p>
                 <h3>Pestaña Empresa</h3>
                 <ul>
-                    <li><strong>Logotipo</strong>: PNG, JPG o SVG, 1 MB máximo («Guarde para aplicar.»). Casilla «Quitar el logotipo» (prioritaria sobre un archivo nuevo). Vista previa o «Sin logotipo». Errores: «El logotipo supera 1 MB.», «Formato no admitido (PNG, JPG o SVG).»</li>
-                    <li><strong>Relleno automático por documento</strong>: la IA rellena <strong>únicamente los campos vacíos</strong> de las pestañas Empresa e Impuestos. Mensajes: «Elija primero un archivo.»; «El archivo está vacío.»; «Falta la clave OpenAI. Contacte al administrador.»; «Formato no admitido (solo PDF, JPG o PNG).»; «{n} campo(s) rellenado(s) automáticamente. Verifique y haga clic en Guardar.»; «No se encontró información utilizable (o campos ya rellenados).»; «Error al analizar el documento.»</li>
+                    <li><strong>Logotipo</strong>: PNG, JPG o SVG, 1 MB máximo («Guarde para aplicar.»). Casilla «Quitar el logotipo» (prioritaria sobre un archivo nuevo). Vista previa o «Sin logotipo». Errores: «El logotipo supera 1 MB.», «Formato no soportado (PNG, JPG o SVG).»</li>
+                    <li><strong>Relleno automático por documento</strong>: la IA rellena <strong>únicamente los campos vacíos</strong> de las pestañas Empresa e Impuestos. Mensajes: «Elija un archivo primero.»; «El archivo está vacío.»; «Falta la clave de OpenAI. Contacte al administrador.»; «Formato no admitido (solo PDF, JPG o PNG).»; «{n} campo(s) rellenado(s) automáticamente. Revise y haga clic en Guardar.»; «No se encontró información utilizable (o los campos ya están llenos).»; «Error al analizar el documento.»</li>
                 </ul>
                 <table>
                     <thead><tr><th>Parámetro</th><th>Detalles</th></tr></thead>
@@ -1187,14 +1187,14 @@
                         <tr><td>Fecha de inscripción TPS, Fecha de inscripción TVQ</td><td>Fechas de inscripción.</td></tr>
                     </tbody>
                 </table>
-                <h3>Pestaña Email</h3>
+                <h3>Pestaña Correo</h3>
                 <ul>
-                    <li><strong>Correo remitente</strong> y botón <kbd>Verificar esta dirección</kbd> (pasa a <kbd>Reenviar el enlace</kbd> una vez verificada). Insignias: «✔ Dirección verificada el [fecha]», «⏳ Enlace enviado — en espera de confirmación», «✖ Dirección no verificada».</li>
+                    <li><strong>Correo remitente</strong> y botón <kbd>Verificar esta dirección</kbd> (pasa a <kbd>Reenviar el enlace</kbd> una vez verificada). Insignias: «✔ Dirección verificada el [fecha]», «⏳ Enlace enviado — esperando confirmación», «✖ Dirección no verificada».</li>
                     <li>El correo recibido tiene por asunto «Verifique la dirección de correo de su empresa» y un botón «Confirmar mi dirección» (enlace válido 24 h). Una dirección verificada se convierte en la dirección de respuesta de los correos enviados en nombre de la compañía.</li>
                     <li><strong>Firma de correo</strong>: texto añadido al pie de los correos.</li>
                 </ul>
                 <ul class="messages">
-                    <li><span class="msg">«Introduzca primero una dirección de correo.»</span> / <span class="msg">«Dirección de correo inválida.»</span> — corrija el campo antes de verificar.</li>
+                    <li><span class="msg">«Introduzca primero una dirección de correo.»</span> / <span class="msg">«Dirección de correo no válida.»</span> — corrija el campo antes de verificar.</li>
                     <li><span class="msg">«Correo de verificación enviado a …»</span> — abra su buzón y haga clic en «Confirmar mi dirección».</li>
                     <li><span class="msg">«No se pudo enviar el correo de verificación: …»</span> — reintente más tarde.</li>
                 </ul>
@@ -1214,14 +1214,14 @@
                         <tr><td>Prefijo de borrador</td><td>Por defecto «BRO»: una factura no contabilizada se muestra BRO-… hasta su contabilización.</td></tr>
                     </tbody>
                 </table>
-                <h3>Pestaña Tratamiento</h3>
+                <h3>Pestaña Procesamiento</h3>
                 <p>«Recibo contabilizado automáticamente» (Sí/No, por defecto No): en Sí, un recibo leído por la IA se contabiliza sin validación manual.</p>
                 <h3>Pestaña Contabilidad</h3>
-                <p>«Cuentas por defecto usadas por los módulos de contabilización automática.» Cuentas: VP Venta de producto; AP Compra de productos; CC Crédito cliente; CF Crédito proveedor; DP Gasto pagado personalmente; BNR Beneficios no distribuidos; BNE Beneficio neto del ejercicio. «JOURNAL_OD»: código del diario de operaciones diversas. Vea <a href="comptabilite.html">Contabilidad</a>.</p>
-                <h3>Pestaña Bancaria</h3>
-                <p>«Cuenta bancaria por defecto»: lista de las cuentas Plaid activas («Nombre — Banco ••1234») o «(Ninguna cuenta)». Sin cuenta vinculada: «Ningún parámetro bancario configurado para esta pestaña.»</p>
+                <p>«Cuentas predeterminadas usadas por los módulos de contabilización automática.» Cuentas: VP Venta de producto; AP Compra de productos; CC Crédito cliente; CF Crédito proveedor; DP Gasto pagado personalmente; BNR Beneficios no distribuidos; BNE Beneficio neto del ejercicio. «JOURNAL_OD»: código del diario de operaciones diversas. Vea <a href="comptabilite.html">Contabilidad</a>.</p>
+                <h3>Pestaña Bancario</h3>
+                <p>«Cuenta bancaria por defecto»: lista de las cuentas Plaid activas («Nombre — Banco ••1234») o «(Sin cuenta)». Pestaña sin parámetros: «Ningún parámetro bancario configurado para esta pestaña.»</p>
                 <h3>Pestaña Contador</h3>
-                <p>«Clave contable»: clave que permite a su contador acceder a los datos de la compañía sin ser usuario de la cuenta. Compártala solo con él.</p>
+                <p>«Clave contable»: clave que permite a su contador acceder a los datos de la compañía sin ser usuario de la cuenta. Compártala solo con él. Un cambio escrito en este campo no se conserva: <kbd>Guardar</kbd> no guarda esta pestaña.</p>
                 <div class="astuce" data-titre="Consejo">Para empezar rápido: 1. deposite su carta de la ARC o su matrícula en «Relleno automático»; 2. verifique Empresa e Impuestos; 3. elija el formato del número de factura; 4. haga clic en <kbd>Guardar</kbd>.</div>
             </section>
 
@@ -1232,7 +1232,7 @@
                 <h3>Tarjeta Square</h3>
                 <ul>
                     <li>No conectado: «Conecte su cuenta Square para cobrar a los clientes (tarjeta / Interac) y sincronizar facturas y pagos.» <kbd>Conectar Square</kbd> abre la página de autorización de Square y luego vuelve aquí.</li>
-                    <li>Conectado: Identificador de comerciante, Ubicación, Conectado desde; botones <kbd>Reconectar</kbd> y <kbd>Desconectar</kbd>. La insignia «Square conectado» aparece en el encabezado. Vea <a href="ventes.html">Ventas</a> para los enlaces de pago.</li>
+                    <li>Conectado: ID de comercio, Ubicación, Conectado desde; botones <kbd>Reconectar</kbd> y <kbd>Desconectar</kbd>. La insignia «Square conectado» aparece en el encabezado. Vea <a href="ventes.html">Ventas</a> para los enlaces de pago.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa"><kbd>Desconectar</kbd> borra los tokens de Square de inmediato, <strong>sin confirmación</strong>.</div>
                 <ul class="messages">
@@ -1243,14 +1243,14 @@
                 <h3>Tarjeta Plaid</h3>
                 <ul>
                     <li>No conectado: <kbd>Conectar un banco</kbd> abre el <a href="comptabilite.html">Extracto bancario</a>, donde está el recorrido Plaid.</li>
-                    <li>Conectado: Bancos, Cuentas vinculadas; casilla <strong>Importación automática de transacciones</strong> (activada por defecto, guardada al hacer clic); botones <kbd>Gestionar las cuentas</kbd> y <kbd>Conectar otro banco</kbd>. El encabezado muestra los bancos conectados o «Plaid no conectado».</li>
+                    <li>Conectado: Bancos, Cuentas vinculadas; casilla <strong>Importación automática de transacciones</strong> (activada por defecto, guardada al hacer clic); botones <kbd>Gestionar cuentas</kbd> y <kbd>Conectar otro banco</kbd>. El encabezado muestra los bancos conectados o «Plaid no conectado».</li>
                 </ul>
                 <ul class="messages">
                     <li><span class="msg">«✔ Importación automática activada.»</span> / <span class="msg">«✔ Importación automática desactivada.»</span> — el ajuste queda guardado.</li>
-                    <li><span class="msg">«✖ Error al guardar el ajuste.»</span> — vuelva a marcar la casilla.</li>
+                    <li><span class="msg">«✖ Error al guardar la configuración.»</span> — vuelva a marcar la casilla.</li>
                 </ul>
                 <h3>Tarjeta Stripe («Próximamente»)</h3>
-                <p>«El pago de su suscripción 60Sec-AI ya lo gestiona Stripe. La conexión Stripe para cobrar a sus propios clientes llegará pronto.»</p>
+                <p>«La facturación de su suscripción 60Sec-AI ya la gestiona Stripe. La conexión de Stripe para cobrar a sus propios clientes llegará pronto.»</p>
                 <div class="note" data-titre="Conviene saber">Los pagos <em>a proveedores</em> por Stripe se configuran desde la lista de proveedores (<a href="achats.html">Compras</a>). El encabezado muestra «N proveedores Stripe».</div>
             </section>
 
@@ -1297,7 +1297,7 @@
                 <div class="piege" data-titre="Trampa">Tras una anulación, actualizar la página (F5) reenvía la solicitud y muestra un error. Navegue mejor por el menú.</div>
                 <h3>Historial</h3>
                 <ul>
-                    <li>Filtros: Resultado (Todos, Éxito, Fallo, Acción requerida, Bloqueado (tope), En espera); Del / Al (últimos 30 días); Máx. (50, 200, 500, 1000).</li>
+                    <li>Filtros: Resultado (Todos, Éxito, Fallo, Acción requerida, Bloqueado (tope), En espera); Del / Al (últimos 30 días); Máx. (50, 200, 500, 1000; 200 por defecto); <kbd>Filtrar</kbd>.</li>
                 </ul>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
@@ -1315,68 +1315,68 @@
             <section id="es-suscripcion">
                 <h2>Suscripción</h2>
                 <h3>Página de pago</h3>
-                <p>La tarjeta «Su plan» muestra el nombre, el lema, el Monto, la TPS 5 %, la TVQ 9,975 %, el Total mensual, «Impuestos estimados (Quebec)…», las funcionalidades y «{N} días gratis — ningún cargo hoy, cancelable en cualquier momento.» El bloque «Pago seguro» lleva al botón <kbd>Pagar con Stripe →</kbd> (página segura de Stripe).</p>
+                <p>La tarjeta «Su plan» muestra el nombre, el lema, el Monto, la TPS 5 %, la TVQ 9,975 %, el Total mensual, «Impuestos estimados (Quebec)…», las funcionalidades y «{N} días gratis — sin cargo hoy, cancele cuando quiera.» El bloque «Pago seguro» lleva al botón <kbd>Pagar con Stripe →</kbd> (página segura de Stripe).</p>
                 <ul class="messages">
                     <li><span class="msg">«No se pudo recuperar la información de su cuenta.»</span> — vuelva a conectarse.</li>
-                    <li><span class="msg">«Este plan no está disponible. Contacte al soporte.»</span> / <span class="msg">«La configuración de pago de este plan está incompleta…»</span> — escriba a support@60sec.ca.</li>
-                    <li><span class="msg">«Ocurrió un error al crear la sesión de pago: …»</span> — reintente.</li>
+                    <li><span class="msg">«Este plan no está disponible. Contacte con soporte.»</span> / <span class="msg">«La configuración de pago para este plan está incompleta…»</span> — escriba a support@60sec.ca.</li>
+                    <li><span class="msg">«Se produjo un error al crear la sesión de pago: …»</span> — reintente.</li>
                 </ul>
                 <h3>Confirmación</h3>
-                <p>«¡Pago exitoso!», «Gracias por su confianza.», «Su suscripción [X] ya está activa.» Recibo: N.º de transacción, Fecha, «Tarjeta de crédito · vía Stripe», Plan, Próxima facturación «(fin de la prueba gratuita)», Monto pagado «Gratis (prueba)». Enlace <kbd>Complete su perfil →</kbd>. «Se envió un correo de confirmación a su dirección.»</p>
-                <div class="note" data-titre="Conviene saber">Durante la prueba, el encabezado muestra una insignia ⏳ «Prueba · N días», «Prueba · último día» y luego «Prueba expirada» (color de alerta a 3 días o menos). No se exige tarjeta durante la prueba; se envía un aviso 7 días antes del fin.</div>
+                <p>«¡Pago exitoso!», «Gracias por su confianza.», «Su suscripción [X] ya está activa.» Recibo: N.º de transacción, Fecha, «Tarjeta de crédito · vía Stripe», Plan, Próxima facturación «(fin del período de prueba)», Importe pagado «Gratis (prueba)». Enlace <kbd>Complete su perfil →</kbd>. «Se ha enviado un correo de confirmación a su dirección.»</p>
+                <div class="note" data-titre="Conviene saber">Durante la prueba, el encabezado muestra una insignia ⏳ «Prueba · N días», «Prueba · último día» y luego «Prueba vencida» (color de alerta a 3 días o menos). No se exige tarjeta durante la prueba; se envía un aviso 7 días antes del fin.</div>
             </section>
 
             <section id="es-conexion">
                 <h2>Conexión y cuenta</h2>
                 <h3>Inicio de sesión</h3>
-                <p>Campos Correo y Contraseña, casilla <strong>Recordarme</strong>, enlace <kbd>¿Olvidó su contraseña?</kbd>, botón <kbd>Iniciar sesión</kbd>.</p>
+                <p>Campos Correo y Contraseña, casilla <strong>Recordarme</strong>, enlace <kbd>¿Contraseña olvidada?</kbd>, botón <kbd>Iniciar sesión</kbd>.</p>
                 <ul>
                     <li>Cuenta no activada → página «Revise su correo» con «reenviar el enlace».</li>
                     <li>Suscripción «en espera de pago» → página de pago.</li>
                     <li>Si no, vuelta a la página solicitada o al Tablero.</li>
                 </ul>
                 <ul class="messages">
-                    <li><span class="msg">«Introduzca su correo y su contraseña.»</span> — un campo está vacío.</li>
-                    <li><span class="msg">«Correo o contraseña incorrectos.»</span> — verifique o use «¿Olvidó su contraseña?».</li>
+                    <li><span class="msg">«Por favor, introduzca su correo electrónico y contraseña.»</span> — un campo está vacío.</li>
+                    <li><span class="msg">«Correo electrónico o contraseña incorrectos.»</span> — verifique o use «¿Contraseña olvidada?».</li>
                 </ul>
                 <h3>Recordarme</h3>
                 <p>Cookie segura válida 7 días, renovada en cada visita. El botón ⎋ (Cerrar sesión) la borra. No marque la casilla en un ordenador compartido.</p>
                 <h3>Registro</h3>
-                <p>«Cree su cuenta» — «Empiece en segundos — gratis, sin tarjeta».</p>
+                <p>«Cree su cuenta» — «Comience en segundos — gratis, sin tarjeta».</p>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>Nombre, Apellido</td><td>No</td><td>Identidad.</td></tr>
                         <tr><td>Correo electrónico</td><td>Sí</td><td>Único en el sistema.</td></tr>
-                        <tr><td>Contraseña</td><td>Sí</td><td>8 caracteres mínimo; indicador Muy débil / Débil / Buena / Excelente.</td></tr>
+                        <tr><td>Contraseña</td><td>Sí</td><td>8 caracteres mínimo; indicador Muy débil / Débil / Bueno / Excelente.</td></tr>
                         <tr><td>Confirmar</td><td>Sí</td><td>Igual a la contraseña.</td></tr>
-                        <tr><td>Condiciones de uso y Política de privacidad</td><td>Sí</td><td>Casilla.</td></tr>
+                        <tr><td>Términos de uso y Política de privacidad</td><td>Sí</td><td>Casilla.</td></tr>
                     </tbody>
                 </table>
-                <p>Botón <kbd>Crear mi cuenta</kbd>; el plan (Solo, ComSolo, COM119) viene del enlace de registro. Éxito: «Revise su correo» (enlace de activación válido 24 h), enlace <kbd>reenviar el enlace</kbd>, «Puede cerrar esta página.»</p>
+                <p>Botón <kbd>Crear mi cuenta</kbd>, seguido del nombre del plan (Solo, ComSolo, COM119) cuando viene del enlace de registro. Debajo del formulario: «¿Ya tiene una cuenta?» <kbd>Iniciar sesión</kbd>. Éxito: «Revise su correo» (enlace de activación válido 24 h), enlace <kbd>reenviar el enlace</kbd>, botón <kbd>Puede cerrar esta página.</kbd> (cierra la sesión y vuelve a la página de inicio del sitio).</p>
                 <ul class="messages">
-                    <li><span class="msg">«El correo es obligatorio.»</span> / <span class="msg">«El correo no es válido.»</span> / <span class="msg">«La contraseña debe contener al menos 8 caracteres.»</span> / <span class="msg">«Las contraseñas no coinciden.»</span> / <span class="msg">«Debe aceptar las condiciones de uso.»</span> — corrija el formulario.</li>
+                    <li><span class="msg">«El correo es obligatorio.»</span> / <span class="msg">«El correo no es válido.»</span> / <span class="msg">«La contraseña debe tener al menos 8 caracteres.»</span> / <span class="msg">«Las contraseñas no coinciden.»</span> / <span class="msg">«Debe aceptar los términos de uso.»</span> — corrija el formulario.</li>
                     <li><span class="msg">«Este correo ya está en uso.»</span> — inicie sesión o restablezca la contraseña.</li>
-                    <li><span class="msg">«Ocurrió un error durante el registro. Reintente.»</span> — error pasajero.</li>
-                    <li><span class="msg">«Correo reenviado a …»</span> / <span class="msg">«Demasiados intentos. Reintente en 1 minuto.»</span> / <span class="msg">«Fallo de envío…»</span> — resultado del reenvío del enlace.</li>
+                    <li><span class="msg">«Se produjo un error durante el registro. Inténtelo de nuevo.»</span> / <span class="msg">«Se produjo un error: …»</span> — error pasajero.</li>
+                    <li><span class="msg">«Correo reenviado a …»</span> / <span class="msg">«Demasiados intentos. Inténtelo en 1 minuto.»</span> / <span class="msg">«Error al enviar…»</span> — resultado del reenvío del enlace.</li>
                 </ul>
                 <h3>Activación</h3>
                 <table>
                     <thead><tr><th>Resultado</th><th>Título</th><th>Siguiente</th></tr></thead>
                     <tbody>
                         <tr><td>Éxito</td><td>«¡Cuenta activada!»</td><td>Conexión automática; <kbd>Continuar →</kbd> hacia el pago.</td></tr>
-                        <tr><td>Enlace expirado</td><td>«Enlace expirado» (24 h)</td><td><kbd>Volver a registrarse</kbd>.</td></tr>
-                        <tr><td>Enlace inválido</td><td>«Enlace inválido»</td><td><kbd>Iniciar sesión</kbd> / <kbd>Registrarse</kbd>.</td></tr>
+                        <tr><td>Enlace expirado</td><td>«Enlace caducado» (24 h)</td><td><kbd>Reiniciar el registro</kbd>.</td></tr>
+                        <tr><td>Enlace inválido</td><td>«Enlace no válido»</td><td><kbd>Iniciar sesión</kbd> / <kbd>Registrarse</kbd>.</td></tr>
                         <tr><td>Ya activada</td><td>«Cuenta ya activada»</td><td><kbd>Iniciar sesión</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Contraseña olvidada y restablecimiento</h3>
                 <ul>
-                    <li>Contraseña olvidada: introduzca el correo, <kbd>Enviar el enlace</kbd>. Error «Introduzca un correo válido.» Mensaje siempre mostrado: «Si una cuenta está asociada a este correo, se acaba de enviar un enlace de restablecimiento…» (enlace válido 60 minutos).</li>
-                    <li>Restablecimiento: Nueva contraseña (8 mínimo) y confirmación, botón <kbd>Restablecer mi contraseña</kbd>. Éxito: «Su contraseña fue restablecida. Ya puede iniciar sesión.» Enlace inválido: «Este enlace de restablecimiento es inválido o expiró.» con <kbd>Solicitar un nuevo enlace</kbd>.</li>
+                    <li>Contraseña olvidada: introduzca el correo, <kbd>Enviar el enlace</kbd>. Error «Introduzca un correo electrónico válido.» Mensaje siempre mostrado: «Si existe una cuenta con este correo, se acaba de enviar un enlace de restablecimiento…» (enlace válido 60 minutos).</li>
+                    <li>Restablecimiento: Nueva contraseña (8 mínimo) y confirmación, botón <kbd>Restablecer mi contraseña</kbd>. Éxito: «Su contraseña ha sido restablecida. Ahora puede iniciar sesión.» Enlace inválido: «Este enlace de restablecimiento no es válido o ha expirado.» con <kbd>Solicitar un nuevo enlace</kbd>.</li>
                 </ul>
                 <h3>Verificación del correo de la empresa</h3>
-                <p>Página pública abierta desde el enlace recibido (pestaña Email de Parámetros): «¡Dirección verificada!» («La dirección de correo de su empresa está confirmada: …»), «Enlace expirado» (24 h), «Dirección ya verificada» o «Enlace inválido». Botón <kbd>Ir a los parámetros</kbd>.</p>
+                <p>Página pública abierta desde el enlace recibido (pestaña Correo de Ajustes): «¡Dirección verificada!» («La dirección de correo de su empresa está confirmada: …»), «Enlace caducado» (24 h), «Dirección ya verificada» o «Enlace no válido». Botón <kbd>Ir a los ajustes</kbd>.</p>
             </section>
 
             <section id="es-asistente">
@@ -1387,7 +1387,7 @@
                 <ul>
                     <li>Escriba su pregunta («Su pregunta… (Ctrl+Intro para enviar)» en la página; Intro basta en el cuadro flotante) y pulse <kbd>Enviar</kbd>. Longitud máxima: 4 000 caracteres.</li>
                     <li>Sin pregunta, la página propone ejemplos clicables: «¿Cómo contabilizo una factura de cliente?», «¿Por qué mi balance no cuadra?», «¿Cómo hago mi remesa de TPS/TVQ?», «¿Cómo pago a un proveedor con Stripe?», «¿Por dónde empiezo para importar QuickBooks?»</li>
-                    <li>Micrófono «Hacer la pregunta en voz alta»: «Le escucho… hable y luego haga una pausa.» La pregunta dictada se envía automáticamente. En el cuadro flotante la respuesta se lee en voz alta (botón «Detener la lectura»).</li>
+                    <li>Micrófono «Hacer la pregunta en voz alta»: «Le escucho… hable y luego haga una pausa.» La pregunta dictada se envía automáticamente. En el cuadro flotante la respuesta a una pregunta dictada se lee en voz alta (botón «Detener la lectura»).</li>
                     <li><kbd>Nueva conversación</kbd> borra el hilo («¿Borrar la conversación?» en el cuadro flotante). El hilo se comparte entre el cuadro y la página.</li>
                     <li>Pie: «Costo de las preguntas este mes: {0} US$».</li>
                 </ul>
@@ -1405,14 +1405,14 @@
                     <li><span class="msg">«La pregunta es demasiado larga (4000 caracteres como máximo).»</span> — acórtela.</li>
                     <li><span class="msg">«Ninguna compañía activa.»</span> — elija una compañía en el encabezado.</li>
                     <li><span class="msg">«El asistente no pudo responder: …»</span> — reintente en un momento.</li>
-                    <li><span class="msg">«El micrófono no está autorizado: verifique el permiso del navegador.»</span> — autorice el micrófono para este sitio.</li>
+                    <li><span class="msg">«El micrófono no está autorizado: revise el permiso del navegador.»</span> — autorice el micrófono para este sitio.</li>
                 </ul>
             </section>
 
             <section id="es-plan-por-defecto">
                 <h2>El plan de cuentas por defecto</h2>
                 <h3>De dónde viene el plan de una compañía nueva</h3>
-                <p>Cada compañía tiene su propio plan de cuentas. Al crearse recibe una <b>copia</b> del plan de la <b>compañía modelo</b> (identificador <code>00000000-0000-0000-0000-000000000001</code>): sus clases y subclases, sus cuentas, sus diarios y sus parámetros. La copia se hace en el <b>primer guardado de los Parámetros</b> de la compañía (botón Guardar de la pantalla Parámetros, procedimiento s0500InitializeCompanyData), y una sola vez: si la compañía ya tiene cuentas, no se copia nada.</p>
+                <p>Cada compañía tiene su propio plan de cuentas. Al crearse recibe una <b>copia</b> del plan de la <b>compañía modelo</b> (identificador <code>00000000-0000-0000-0000-000000000001</code>): sus clases y subclases, sus cuentas, sus diarios y sus parámetros. La copia se hace en el <b>primer guardado de los Ajustes</b> de la compañía (botón Guardar de la pantalla Ajustes, procedimiento s0500InitializeCompanyData), y una sola vez: si la compañía ya tiene cuentas, no se copia nada.</p>
                 <h3>Dónde modificarlo</h3>
                 <p>En la consola de administración Sec60Admin, página <span class="chemin">Plan de cuentas por defecto</span> (menú inferior). Muestra el plan modelo agrupado por clase, con el número, el nombre, la subclase, el tipo de balance, el sentido, el estado y la descripción de cada cuenta. Contadores: cuentas, activas, sistema, clases. Una búsqueda por número o nombre filtra la lista.</p>
                 <table class="tableau">
@@ -1509,11 +1509,11 @@
                     </tbody>
                 </table>
                 <ul>
-                    <li>Parámetros, Procesadores de pago, Pagos automáticos y Perfil de la empresa están abiertos a cualquier usuario conectado.</li>
+                    <li>Ajustes, Procesadores de pago, Pagos automáticos y Perfil de la empresa están abiertos a cualquier usuario conectado.</li>
                     <li>Cambiar de compañía verifica el acceso y devuelve al Tablero. Todos los datos se filtran por la compañía activa.</li>
                     <li>El selector FR / EN / ES recarga la página en el idioma elegido, recordado para la sesión.</li>
                 </ul>
-                <div class="astuce" data-titre="Consejo">Para vincular a su contador: abra <span class="chemin">Parámetros › Contador</span>, copie la «Clave contable» y entréguesela; su compañía aparecerá en su selector.</div>
+                <div class="astuce" data-titre="Consejo">Para vincular a su contador: abra <span class="chemin">Ajustes › Contador</span>, copie la «Clave contable» y entréguesela; su compañía aparecerá en su selector.</div>
             </section>
 
             <section id="es-faq">
@@ -1521,8 +1521,8 @@
                                 <details><summary>¿Puedo borrarlo todo y empezar de nuevo sin perder mi plan contable?</summary><p>Sí: es el <a href="#es-reinicio-contabilidad">reinicio de la contabilidad a cero</a>, que hace el equipo de 60Sec desde su consola de administración. Clientes, proveedores, productos, facturas, asientos y pagos desaparecen; plan contable, diarios, ejercicios, ajustes, usuarios y empleados se conservan. Es irreversible.</p></details>
 <details><summary>La IA no rellenó el otro idioma de un alias QuickBooks. ¿Por qué?</summary><p>Tres casos, legibles en el balance mostrado tras el clic. « Sin nombre oficial seguro »: el nombre conocido no es una cuenta por defecto de QuickBooks (renombrada por un cliente, con sufijo, propia de una empresa) o la IA no está segura de la etiqueta oficial; ingréselo a mano si lo conoce. « La IA devolvió el nombre de nuestra propia cuenta »: solo encontró nuestra propia etiqueta, que no es un alias; lo mismo, a ingresar a mano. « Ya es alias de la cuenta N »: el nombre existe en otra cuenta nuestra, dos cuentas comparten la misma cuenta QuickBooks; elija cuál la representa, retire el alias de la otra y vuelva a lanzar. Los alias puestos por la IA llevan el origen « IA » y se retiran como los demás.</p></details>
 <details><summary>¿Por qué no puedo abrir la pantalla Usuarios?</summary><p>Está reservada a los administradores; los demás roles vuelven al Tablero. Pida a un administrador que marque «Administrador» en su ficha.</p></details>
-                <details><summary>¿Cómo doy acceso a mi contador?</summary><p>Entréguele la «Clave contable» de la pestaña Contador de Parámetros. El rol Contador no se crea en Usuarios.</p></details>
-                <details><summary>¿Por qué el análisis IA reemplazó mis valores?</summary><p>En Perfil de la empresa, el análisis sobrescribe los campos rellenados. Use mejor el relleno automático de Parámetros, que solo toca los campos vacíos.</p></details>
+                <details><summary>¿Cómo doy acceso a mi contador?</summary><p>Entréguele la «Clave contable» de la pestaña Contador de Ajustes. El rol Contador no se crea en Usuarios.</p></details>
+                <details><summary>¿Por qué el análisis IA reemplazó mis valores?</summary><p>En Perfil de la empresa, el análisis sobrescribe los campos rellenados. Use mejor el relleno automático de Ajustes, que solo toca los campos vacíos.</p></details>
                 <details><summary>La insignia del correo remitente sigue «en espera», ¿qué hago?</summary><p>Abra el correo «Verifique la dirección de correo de su empresa» y haga clic en «Confirmar mi dirección» dentro de las 24 h; si no, <kbd>Reenviar el enlace</kbd>.</p></details>
                 <details><summary>Mis facturas empiezan por BRO-, ¿es normal?</summary><p>Sí: es el prefijo de borrador. El número real se asigna al contabilizar, según el formato elegido en la pestaña Factura.</p></details>
                 <details><summary>¿Cómo anulo un pago automático programado?</summary><p>Pestaña Calendario, botón <kbd>🚫 Anular</kbd> en los estados Planificado o 3DS. Para detener todo con un proveedor, revoque la autorización.</p></details>
