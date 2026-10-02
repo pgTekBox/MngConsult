@@ -36,6 +36,26 @@
                 <p>Rien de ce qui se fait ici n’écrit en comptabilité : vous pouvez enregistrer, revenir et changer d’avis autant de fois que nécessaire. Chaque étape du résumé renvoie à la section qui la détaille plus bas.</p>
             </section>
 
+            <section id="fr-etape1">
+                <h2>Avant : l’étape 1 charge le plan</h2>
+                <p>Cet écran travaille sur le plan comptable chargé à l’étape 1, <span class="chemin">Importation › Importer le plan comptable</span>. Sans chargement, il affiche « Aucun plan comptable n’a encore été chargé pour cette compagnie » avec le lien vers l’étape 1. Ce que l’étape 1 a fait explique ce que vous trouvez ici en arrivant :</p>
+                <table>
+                    <thead><tr><th>Ce que l’étape 1 a fait</th><th>Ce que vous voyez ici</th></tr></thead>
+                    <tbody>
+                        <tr><td>Chargé le plan par la lecture directe QuickBooks ou par un fichier CSV</td><td>Les lignes de la grille. La lecture directe apporte en plus le type, le sous-type, l’origine et la description, affichés sous le nom de chaque compte ; un fichier n’apporte que ses colonnes.</td></tr>
+                        <tr><td>Donné un verdict à chaque ligne</td><td>Seuls les comptes retenus (Nouveau ou Déjà au plan) apparaissent ici ; les doublons et les lignes invalides sont restés à l’étape 1. « Déjà au plan » devient une proposition « même numéro » ou « même nom ».</td></tr>
+                        <tr><td>Lié d’office les comptes reconnus par alias</td><td>Des lignes déjà sur « Lier », avec la pastille « nom QuickBooks connu — lié d’office » et la note correspondante.</td></tr>
+                        <tr><td>Mémorisé le solde de chaque compte</td><td>La colonne Solde, et l’option « Ignorer » grisée sur les comptes qui portent un solde.</td></tr>
+                        <tr><td>Conservé les décisions d’un chargement précédent</td><td>Les décisions dont la clé (le numéro, sinon le nom) n’a pas changé sont toujours là. Un compte renommé dans l’ancien logiciel revient « à décider ».</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>Il manque un compte, ou un nom est faux ?</strong> Corrigez dans l’ancien logiciel, puis rechargez à l’étape 1 : le nouveau chargement remplace la préparation sans effacer vos décisions à clé inchangée.</li>
+                    <li><strong>Gardez la même voie de chargement.</strong> La lecture directe et le fichier CSV ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ».</li>
+                    <li>Le fil des trois étapes en haut de l’écran ramène à l’étape 1 en un clic. Le détail de cet écran est dans <a href="importation.html#fr-plan-etape1">Importation des données › Étape 1</a>.</li>
+                </ul>
+            </section>
+
             <section id="fr-principe">
                 <h2>Le principe en trois mots</h2>
                 <table>
@@ -209,6 +229,26 @@
                 <p>Nothing done here writes to the books: you can save, come back and change your mind as often as needed. Each step of the summary links to the section that details it below.</p>
             </section>
 
+            <section id="en-step1">
+                <h2>Before: step 1 loads the chart</h2>
+                <p>This screen works on the chart of accounts loaded at step 1, <span class="chemin">Import › Import the chart of accounts</span>. Without a load, it shows “No chart of accounts has been loaded for this company yet” with the link to step 1. What step 1 did explains what you find here on arrival:</p>
+                <table>
+                    <thead><tr><th>What step 1 did</th><th>What you see here</th></tr></thead>
+                    <tbody>
+                        <tr><td>Loaded the chart through the QuickBooks direct read or a CSV file</td><td>The rows of the grid. The direct read also brings the type, subtype, origin and description, shown under each account’s name; a file only brings its columns.</td></tr>
+                        <tr><td>Gave each line a verdict</td><td>Only the accounts kept (New or Already in the chart) appear here; duplicates and invalid lines stayed at step 1. “Already in the chart” becomes a “same number” or “same name” suggestion.</td></tr>
+                        <tr><td>Linked outright the accounts recognized by alias</td><td>Rows already on “Link”, with the “known QuickBooks name — linked outright” pill and the matching note.</td></tr>
+                        <tr><td>Stored each account’s balance</td><td>The Balance column, and the “Ignore” option greyed out on accounts that carry a balance.</td></tr>
+                        <tr><td>Kept the decisions of a previous load</td><td>Decisions whose key (the number, otherwise the name) did not change are still there. An account renamed in the former application comes back “to decide”.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>An account is missing, or a name is wrong?</strong> Fix it in the former application, then reload at step 1: the new load replaces the staging without erasing your decisions whose key is unchanged.</li>
+                    <li><strong>Keep the same loading path.</strong> The direct read and the CSV file do not share their decisions: switching paths brings the “to decide” accounts back.</li>
+                    <li>The 3-step trail at the top of the screen takes you back to step 1 in one click. That screen is detailed in <a href="importation.html#en-chart-step1">Data import › Step 1</a>.</li>
+                </ul>
+            </section>
+
             <section id="en-principle">
                 <h2>The principle in three words</h2>
                 <table>
@@ -380,6 +420,26 @@
                     <li>Cuando el avance llegue al 100 %, pase a <a href="#es-etapa3">la etapa 3</a> con <kbd>Crear las cuentas en el plan →</kbd> para crear realmente las cuentas « Por crear ».</li>
                 </ol>
                 <p>Nada de lo que se hace aquí escribe en la contabilidad: puede guardar, volver y cambiar de opinión tantas veces como haga falta. Cada paso del resumen enlaza con la sección que lo detalla más abajo.</p>
+            </section>
+
+            <section id="es-etapa1">
+                <h2>Antes: la etapa 1 carga el plan</h2>
+                <p>Esta pantalla trabaja sobre el plan de cuentas cargado en la etapa 1, <span class="chemin">Importación › Importar el plan de cuentas</span>. Sin carga, muestra « Todavía no se ha cargado ningún plan contable para esta compañía » con el enlace a la etapa 1. Lo que hizo la etapa 1 explica lo que encuentra aquí al llegar:</p>
+                <table>
+                    <thead><tr><th>Lo que hizo la etapa 1</th><th>Lo que ve aquí</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cargó el plan por la lectura directa de QuickBooks o por un archivo CSV</td><td>Las líneas de la cuadrícula. La lectura directa trae además el tipo, el subtipo, el origen y la descripción, mostrados bajo el nombre de cada cuenta; un archivo solo trae sus columnas.</td></tr>
+                        <tr><td>Dio un veredicto a cada línea</td><td>Aquí solo aparecen las cuentas retenidas (Nueva o Ya en el plan); los duplicados y las líneas inválidas se quedaron en la etapa 1. « Ya en el plan » se convierte en una propuesta « mismo número » o « mismo nombre ».</td></tr>
+                        <tr><td>Vinculó de oficio las cuentas reconocidas por alias</td><td>Líneas ya en « Vincular », con la etiqueta « nombre QuickBooks conocido — vinculado de oficio » y la nota correspondiente.</td></tr>
+                        <tr><td>Guardó el saldo de cada cuenta</td><td>La columna Saldo, y la opción « Ignorar » en gris en las cuentas que llevan saldo.</td></tr>
+                        <tr><td>Conservó las decisiones de una carga anterior</td><td>Las decisiones cuya clave (el número, o si no el nombre) no cambió siguen ahí. Una cuenta renombrada en el programa anterior vuelve a « por decidir ».</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>¿Falta una cuenta, o un nombre es incorrecto?</strong> Corríjalo en el programa anterior y recargue en la etapa 1: la nueva carga sustituye la preparación sin borrar sus decisiones de clave sin cambios.</li>
+                    <li><strong>Conserve la misma vía de carga.</strong> La lectura directa y el archivo CSV no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ».</li>
+                    <li>El hilo de las tres etapas en la parte superior de la pantalla lleva a la etapa 1 con un clic. El detalle de esa pantalla está en <a href="importation.html#es-plan-etapa1">Importación de datos › Etapa 1</a>.</li>
+                </ul>
             </section>
 
             <section id="es-principio">
