@@ -1,10 +1,13 @@
 using APIWebMngConsul.Controllers;
+using APIWebMngConsul.Security;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.OpenApi.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
+// Secrets locaux (chaîne de connexion, clé de signature des jetons) : dans
+// appsettings.Local.json, ignoré par git. Aucun identifiant n'est dans le code.
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
 
 builder.Services.AddControllers();
 
@@ -13,11 +16,11 @@ builder.Services.Configure<FormOptions>(o =>
     o.MultipartBodyLengthLimit = 20 * 1024 * 1024;
 });
 
-// DI pour ton repo
 builder.Services.AddScoped<IReceiptRepository, ReceiptRepository>();
 
+// Jeton de l'application mobile : exigé par le dépôt de reçus.
+builder.Services.AddSingleton<JwtGuard>();
 
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>
 {
@@ -26,18 +29,13 @@ builder.Services.AddSwaggerGen(c =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-//if (app.Environment.IsDevelopment())
-//{
+// La documentation interactive n'est publiée qu'en développement : elle
+// décrivait tous les points d'entrée à quiconque, en production.
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
-//}
-
-
-// pour forcer l utilisation de HTTPS
-//app.UseHttpsRedirection();
-
-//app.UseAuthorization();
+}
 
 app.MapControllers();
 

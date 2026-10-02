@@ -110,6 +110,12 @@ public class SuppliersController : ControllerBase
 			return BadRequest(new { message = "Fournisseur et au moins une ligne sont requis." });
 		}
 
+		// Le PartyGUID vient du corps de la requête : le tiers doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsPartyAsync(_connectionString, CompanyGuid, request.PartyGUID))
+		{
+			return BadRequest(new { message = "Fournisseur inconnu." });
+		}
+
 		var items = BuildItemsTable(request.Lines);
 
 		await using var conn = new SqlConnection(_connectionString);
@@ -188,6 +194,12 @@ public class SuppliersController : ControllerBase
 	[HttpGet("invoices/{id:int}")]
 	public async Task<ActionResult<InvoiceDetailDto>> GetInvoice(int id)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		await using var conn = new SqlConnection(_connectionString);
 		await conn.OpenAsync();
 

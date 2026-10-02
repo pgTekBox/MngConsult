@@ -527,7 +527,31 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">« Aucun reçu trouvé. »</span> — aucun reçu n’a encore été reçu par la compagnie.</li>
-                </ul>                <h3>Reçus arrivés par courriel et reçus orphelins</h3>
+                </ul>
+                <h3>Reçus déposés depuis l’application mobile</h3>
+                <p>L’application mobile 60Sec-AI numérise un reçu avec l’appareil photo et le dépose directement dans cette liste. Depuis le tableau de bord de l’application, touchez <kbd>📄 Scanner un reçu</kbd>.</p>
+                <ol>
+                    <li>Le scanner du téléphone s’ouvre (« Ouverture du scanner… »). Cadrez le reçu ; vous pouvez numériser plusieurs pages à la suite.</li>
+                    <li>À la validation, l’application affiche « Envoi au serveur… » et envoie chaque page comme un reçu distinct, en JPEG.</li>
+                    <li>Le résultat s’affiche : « ✓ Reçu enregistré avec succès. », ou « ✓ N reçus enregistrés avec succès. » pour plusieurs pages. Le bouton devient <kbd>📄 Scanner un autre reçu</kbd>.</li>
+                    <li>Le reçu apparaît dans <span class="chemin">Achats › Reçus</span>, où il se traite comme les autres : <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                </ol>
+                <table>
+                    <thead><tr><th>Ce qu’il faut savoir</th><th>Détail</th></tr></thead>
+                    <tbody>
+                        <tr><td>Il faut être connecté</td><td>Le dépôt exige la connexion à l’application. Sans connexion valide, rien n’est enregistré.</td></tr>
+                        <tr><td>Le reçu va dans votre compagnie</td><td>La compagnie est celle du compte connecté dans l’application. Elle ne se choisit pas au moment du dépôt : un reçu ne peut pas être rangé dans la compagnie de quelqu’un d’autre.</td></tr>
+                        <tr><td>Session expirée</td><td>La connexion de l’application dure deux heures. Passé ce délai, l’envoi échoue avec « Erreur d’envoi. » : reconnectez-vous, puis numérisez de nouveau.</td></tr>
+                        <tr><td>Formats et taille</td><td>JPEG, PNG ou PDF, 20 Mo au maximum par fichier. Rappel : seuls le JPEG et le PDF sont lus par l’IA.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">« Scanner non disponible sur cet appareil. »</span> — l’appareil n’a pas de scanner de documents ; envoyez le reçu par courriel à la boîte de la compagnie.</li>
+                    <li><span class="msg">« Scan annulé ou aucun reçu détecté. »</span> — rien n’a été numérisé ; recommencez.</li>
+                    <li><span class="msg">« Erreur d’envoi. »</span> — pas de réseau, session expirée ou fichier refusé. Vérifiez la connexion Internet, reconnectez-vous, puis réessayez.</li>
+                </ul>
+                <div class="note" data-titre="Bon à savoir">Si vous êtes comptable de plusieurs compagnies, le reçu déposé depuis l’application va dans la compagnie de votre propre compte. Pour un reçu destiné à une autre compagnie, envoyez-le par courriel à la boîte @60sec.ca de cette compagnie.</div>
+                <h3>Reçus arrivés par courriel et reçus orphelins</h3>
                 <p>Un reçu peut arriver par courriel : un fournisseur (ou vous-même) envoie la facture à la boîte <b>@60sec.ca</b> de la compagnie, ou à celle d’un de ses employés (voir <a href="courriel.html">Courriel</a> et <a href="employes.html">Employés</a>). Le courriel est lu, ses pièces jointes deviennent des reçus, et le reçu est rattaché à la compagnie dont la boîte était destinataire. Il apparaît alors ici, dans <span class="chemin">Achats › Reçus</span>, comme un reçu déposé à la main.</p>
                 <p>La liste ne montre que les reçus de la <b>compagnie active</b> : un comptable qui change de compagnie dans l’en-tête voit une autre liste.</p>
                 <p>Un courriel adressé à une boîte @60sec.ca qui n’appartient à aucune compagnie ni à aucun employé produit un <b>reçu orphelin</b> : il n’a pas de compagnie, il n’apparaît dans aucune liste et une remise à zéro ne l’efface pas. L’équipe 60Sec le voit dans sa console d’administration (bloc « Reçus orphelins »), où elle peut le <b>rattacher</b> à la bonne compagnie ou le <b>supprimer</b>. Si un reçu envoyé par courriel n’apparaît pas, vérifiez l’adresse utilisée, puis demandez à votre soutien de le rattacher.</p>
@@ -1087,7 +1111,31 @@
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“No receipt found.”</span> — the company has not received any receipt yet.</li>
-                </ul>                <h3>Receipts received by email and orphan receipts</h3>
+                </ul>
+                <h3>Receipts uploaded from the mobile app</h3>
+                <p>The 60Sec-AI mobile app scans a receipt with the camera and drops it straight into this list. From the app’s dashboard, tap <kbd>📄 Scan a receipt</kbd>.</p>
+                <ol>
+                    <li>The phone’s scanner opens (“Opening the scanner…”). Frame the receipt; you can scan several pages in a row.</li>
+                    <li>On confirmation, the app shows “Uploading to the server…” and sends each page as a separate receipt, as JPEG.</li>
+                    <li>The result is shown: “✓ Receipt saved successfully.”, or “✓ N receipts saved successfully.” for several pages. The button becomes <kbd>📄 Scan another receipt</kbd>.</li>
+                    <li>The receipt appears in <span class="chemin">Purchases › Receipts</span>, where it is processed like the others: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                </ol>
+                <table>
+                    <thead><tr><th>What to know</th><th>Detail</th></tr></thead>
+                    <tbody>
+                        <tr><td>You must be signed in</td><td>Uploading requires being signed in to the app. Without a valid sign-in, nothing is saved.</td></tr>
+                        <tr><td>The receipt goes to your company</td><td>The company is the one of the account signed in to the app. It is not chosen at upload time: a receipt cannot be filed under someone else’s company.</td></tr>
+                        <tr><td>Expired session</td><td>The app’s sign-in lasts two hours. After that, the upload fails with “Upload error.”: sign in again, then scan again.</td></tr>
+                        <tr><td>Formats and size</td><td>JPEG, PNG or PDF, 20 MB at most per file. Reminder: only JPEG and PDF are read by the AI.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">“Scanner not available on this device.”</span> — the device has no document scanner; send the receipt by email to the company mailbox.</li>
+                    <li><span class="msg">“Scan cancelled or no receipt detected.”</span> — nothing was scanned; try again.</li>
+                    <li><span class="msg">“Upload error.”</span> — no network, expired session or refused file. Check the Internet connection, sign in again, then retry.</li>
+                </ul>
+                <div class="note" data-titre="Good to know">If you are the accountant of several companies, a receipt uploaded from the app goes to the company of your own account. For a receipt meant for another company, send it by email to that company’s @60sec.ca mailbox.</div>
+                <h3>Receipts received by email and orphan receipts</h3>
                 <p>A receipt can arrive by email: a supplier (or you) sends the invoice to the company’s <b>@60sec.ca</b> mailbox, or to one of its employees’ (see <a href="courriel.html">Mail</a> and <a href="employes.html">Employees</a>). The email is read, its attachments become receipts, and the receipt is attached to the company whose mailbox was the recipient. It then shows here, in <span class="chemin">Purchases › Receipts</span>, like a receipt uploaded by hand.</p>
                 <p>The list only shows the receipts of the <b>active company</b>: an accountant who switches company in the header sees another list.</p>
                 <p>An email sent to a @60sec.ca mailbox that belongs to no company and no employee produces an <b>orphan receipt</b>: it has no company, appears in no list, and a reset does not erase it. The 60Sec team sees it in its administration console (“Orphan receipts” block), where it can <b>attach</b> it to the right company or <b>delete</b> it. If a receipt sent by email does not show up, check the address used, then ask your support to attach it.</p>
@@ -1647,7 +1695,31 @@
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">«No se encontró ningún recibo.»</span> — la compañía aún no ha recibido ningún recibo.</li>
-                </ul>                <h3>Recibos recibidos por correo y recibos huérfanos</h3>
+                </ul>
+                <h3>Recibos enviados desde la aplicación móvil</h3>
+                <p>La aplicación móvil 60Sec-AI escanea un recibo con la cámara y lo deposita directamente en esta lista. Desde el panel de la aplicación, toque <kbd>📄 Escanear un recibo</kbd>.</p>
+                <ol>
+                    <li>Se abre el escáner del teléfono. Encuadre el recibo; puede escanear varias páginas seguidas.</li>
+                    <li>Al confirmar, la aplicación muestra « Enviando al servidor… » y envía cada página como un recibo distinto, en JPEG.</li>
+                    <li>Se muestra el resultado: « ✓ Recibo guardado con éxito. », o « ✓ N recibos guardados con éxito. » para varias páginas. El botón pasa a <kbd>📄 Escanear otro recibo</kbd>.</li>
+                    <li>El recibo aparece en <span class="chemin">Compras › Recibos</span>, donde se trata como los demás: <kbd>Process AI</kbd>, <kbd>Voir JSON</kbd>, <kbd>Process JSON</kbd>.</li>
+                </ol>
+                <table>
+                    <thead><tr><th>Lo que conviene saber</th><th>Detalle</th></tr></thead>
+                    <tbody>
+                        <tr><td>Hay que estar conectado</td><td>El envío exige haber iniciado sesión en la aplicación. Sin una sesión válida, no se guarda nada.</td></tr>
+                        <tr><td>El recibo va a su compañía</td><td>La compañía es la de la cuenta conectada en la aplicación. No se elige en el momento del envío: un recibo no puede archivarse en la compañía de otra persona.</td></tr>
+                        <tr><td>Sesión caducada</td><td>La sesión de la aplicación dura dos horas. Pasado ese plazo, el envío falla con « Error de envío. »: vuelva a iniciar sesión y escanee de nuevo.</td></tr>
+                        <tr><td>Formatos y tamaño</td><td>JPEG, PNG o PDF, 20 MB como máximo por archivo. Recordatorio: la IA solo lee JPEG y PDF.</td></tr>
+                    </tbody>
+                </table>
+                <ul class="messages">
+                    <li><span class="msg">« Escáner no disponible en este dispositivo. »</span> — el dispositivo no tiene escáner de documentos; envíe el recibo por correo al buzón de la compañía.</li>
+                    <li><span class="msg">« Escaneo cancelado o ningún recibo detectado. »</span> — no se escaneó nada; vuelva a intentarlo.</li>
+                    <li><span class="msg">« Error de envío. »</span> — sin red, sesión caducada o archivo rechazado. Compruebe la conexión a Internet, vuelva a iniciar sesión y reintente.</li>
+                </ul>
+                <div class="note" data-titre="Conviene saber">Si es contador de varias compañías, un recibo enviado desde la aplicación va a la compañía de su propia cuenta. Para un recibo destinado a otra compañía, envíelo por correo al buzón @60sec.ca de esa compañía.</div>
+                <h3>Recibos recibidos por correo y recibos huérfanos</h3>
                 <p>Un recibo puede llegar por correo: un proveedor (o usted mismo) envía la factura al buzón <b>@60sec.ca</b> de la compañía, o al de uno de sus empleados (vea <a href="courriel.html">Correo</a> y <a href="employes.html">Empleados</a>). El correo se lee, sus adjuntos se convierten en recibos y el recibo se vincula a la compañía cuyo buzón era el destinatario. Aparece entonces aquí, en <span class="chemin">Compras › Recibos</span>, como un recibo depositado a mano.</p>
                 <p>La lista solo muestra los recibos de la <b>compañía activa</b>: un contador que cambia de compañía en el encabezado ve otra lista.</p>
                 <p>Un correo dirigido a un buzón @60sec.ca que no pertenece a ninguna compañía ni a ningún empleado produce un <b>recibo huérfano</b>: no tiene compañía, no aparece en ninguna lista y un reinicio a cero no lo borra. El equipo de 60Sec lo ve en su consola de administración (bloque «Recibos huérfanos»), donde puede <b>vincularlo</b> a la compañía correcta o <b>eliminarlo</b>. Si un recibo enviado por correo no aparece, revise la dirección usada y pida a su soporte que lo vincule.</p>

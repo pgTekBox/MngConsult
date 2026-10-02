@@ -6,9 +6,12 @@ namespace _60SecAI;
 public partial class ReceiptScanPage : ContentPage
 {
 	// Serveur de traitement OCR (identique à prjTakePhoto).
-	private const string UploadUrl = "http://60sec.ai:7090/api/receipts/upload";
+	// Dépôt authentifié de l'API 60SecAI (adresse relative à ApiSettings.BaseUrl).
+	// Le jeton de connexion est joint automatiquement et désigne la compagnie.
+	private const string UploadUrl = "api/receipts/upload";
 
-	private readonly ReceiptApiClient _api = new(new HttpClient());
+	// Résolu à l'usage : le client porte l'adresse de l'API et le jeton (voir MauiProgram).
+	private ReceiptApiClient? _api;
 
 	private static string L(string key) => LocalizationResourceManager.Instance[key];
 
@@ -61,6 +64,8 @@ public partial class ReceiptScanPage : ContentPage
 				}
 
 				var bytes = File.ReadAllBytes(p);
+				_api ??= Handler?.MauiContext?.Services.GetService<ReceiptApiClient>()
+					?? throw new InvalidOperationException("Service de dépôt des reçus indisponible.");
 				await _api.UploadReceiptAsync(
 					UploadUrl,
 					bytes,

@@ -11,6 +11,10 @@ QuestPDF.Settings.License = QuestPDF.Infrastructure.LicenseType.Community;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Secrets locaux (chaîne de connexion, clé de signature) : dans appsettings.Local.json,
+// ignoré par git. Le fichier suivi ne contient plus d'identifiants de base de données.
+builder.Configuration.AddJsonFile("appsettings.Local.json", optional: true, reloadOnChange: false);
+
 // ----- Base de données (SQL Server) -----
 builder.Services.AddDbContext<AppDbContext>(options =>
 	options.UseSqlServer(builder.Configuration.GetConnectionString("Default")));

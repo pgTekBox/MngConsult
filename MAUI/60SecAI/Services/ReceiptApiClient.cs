@@ -3,9 +3,9 @@ using System.Net.Http.Headers;
 namespace _60SecAI.Services;
 
 /// <summary>
-/// Envoi d'un reçu (JPEG brut) au serveur de traitement, en multipart/form-data.
-/// Répliqué à l'identique depuis prjTakePhoto : champ « file », sans authentification.
-/// Le serveur (60sec.ai:7090) fait l'OCR et renvoie le JSON.
+/// Envoi d'un reçu (JPEG brut) à l'API 60SecAI, en multipart/form-data, champ « file ».
+/// Le HttpClient est fourni par MauiProgram : il porte l'adresse de l'API et joint
+/// le jeton de connexion, qui désigne la compagnie où le reçu est rangé.
 /// </summary>
 public sealed class ReceiptApiClient
 {

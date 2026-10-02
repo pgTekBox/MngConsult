@@ -48,3 +48,6 @@ _program files_git_*/
 
 # Espace de travail Claude Code (sessions, worktrees)
 .claude/
+
+# Secrets locaux des API .NET (chaînes de connexion, clé de signature) : jamais dans git.
+**/appsettings.Local.json

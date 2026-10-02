@@ -44,6 +44,12 @@ public static class MauiProgram
 			client.BaseAddress = new Uri(api.BaseUrl))
 			.AddHttpMessageHandler<AuthHeaderHandler>();
 
+		// Dépôt des reçus numérisés : même API, même jeton. La compagnie du reçu
+		// est celle du jeton (avant : un autre serveur, sans authentification).
+		builder.Services.AddHttpClient<ReceiptApiClient>(client =>
+			client.BaseAddress = new Uri(api.BaseUrl))
+			.AddHttpMessageHandler<AuthHeaderHandler>();
+
 		// ----- ViewModels (MVVM) -----
 		builder.Services.AddTransient<LoginViewModel>();
 		builder.Services.AddTransient<DashboardViewModel>();

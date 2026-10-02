@@ -7,7 +7,14 @@ namespace APIWebMngConsul
 {
     public class DatabaseHelper
     {
-     string ConnectionString = "Server=192.168.0.203;Database=MngConsul;User Id=UserMngConsul;Password=pw4MngConsul;TrustServerCertificate=true;";
+        // La chaîne de connexion vient de la configuration (appsettings.Local.json,
+        // non suivi par git). Elle était écrite en dur ici, identifiants compris.
+        private readonly string ConnectionString;
+
+        public DatabaseHelper(string connectionString)
+        {
+            ConnectionString = connectionString;
+        }
 
         public System.Data.DataSet GetDataSet(string StoreProc )
         {

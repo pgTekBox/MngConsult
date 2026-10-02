@@ -267,6 +267,12 @@ public class SalesController : ControllerBase
 	[Consumes("multipart/form-data")]
 	public async Task<ActionResult> AddInvoicePhoto(int id, IFormFile file)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		if (file is null || file.Length == 0)
 		{
 			return BadRequest(new { message = "Fichier manquant." });
@@ -306,6 +312,12 @@ public class SalesController : ControllerBase
 	public async Task<ActionResult> SendInvoice(int id, [FromBody] SendInvoiceRequest? request,
 		[FromServices] InvoiceEmailService emailService)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		var supportEmail = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue(ClaimTypes.Name);
 		var result = await emailService.SendAsync(CompanyGuid, id, request?.IncludeSquare ?? false, supportEmail);
 		return Ok(result);
@@ -318,6 +330,12 @@ public class SalesController : ControllerBase
 	[HttpPost("invoices/{id:int}/paymentlink")]
 	public async Task<ActionResult> CreatePaymentLink(int id, [FromServices] InvoiceEmailService emailService)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		var supportEmail = User.FindFirstValue(ClaimTypes.Email) ?? User.FindFirstValue(ClaimTypes.Name);
 		var result = await emailService.CreatePaymentLinkAsync(CompanyGuid, id, supportEmail);
 		return Ok(result);
@@ -327,6 +345,12 @@ public class SalesController : ControllerBase
 	[HttpGet("invoices/{id:int}/photos")]
 	public async Task<ActionResult<IEnumerable<InvoicePhotoDto>>> GetInvoicePhotos(int id)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		var list = new List<InvoicePhotoDto>();
 
 		await using var conn = new SqlConnection(_connectionString);
@@ -360,6 +384,12 @@ public class SalesController : ControllerBase
 	public async Task<ActionResult> SendPhotoEmail(int id, int photoId, [FromBody] SendPhotoEmailRequest? request,
 		[FromServices] InvoiceEmailService emailService)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		var result = await emailService.SendPhotoEmailAsync(CompanyGuid, id, photoId, request?.To);
 		return Ok(result);
 	}
@@ -368,6 +398,12 @@ public class SalesController : ControllerBase
 	[HttpGet("invoices/{id:int}/photos/{photoId:int}")]
 	public async Task<ActionResult> GetInvoicePhotoContent(int id, int photoId)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		await using var conn = new SqlConnection(_connectionString);
 		await conn.OpenAsync();
 		await using var cmd = new SqlCommand("s0721GetInvoicePhotoContent", conn) { CommandType = CommandType.StoredProcedure };
@@ -402,6 +438,12 @@ public class SalesController : ControllerBase
 		if (request.PartyGUID == Guid.Empty || request.Lines is null || request.Lines.Count == 0)
 		{
 			return BadRequest(new { message = "Client et au moins une ligne sont requis." });
+		}
+
+		// Le PartyGUID vient du corps de la requête : le tiers doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsPartyAsync(_connectionString, CompanyGuid, request.PartyGUID))
+		{
+			return BadRequest(new { message = "Client inconnu." });
 		}
 
 		var items = BuildItemsTable(request.Lines);
@@ -494,6 +536,12 @@ public class SalesController : ControllerBase
 	[HttpGet("invoices/{id:int}")]
 	public async Task<ActionResult<InvoiceDetailDto>> GetInvoice(int id)
 	{
+		// Le numéro vient de l'adresse : la facture doit être à la compagnie du jeton.
+		if (!await Ownership.OwnsDocumentAsync(_connectionString, CompanyGuid, id))
+		{
+			return NotFound();
+		}
+
 		await using var conn = new SqlConnection(_connectionString);
 		await conn.OpenAsync();
 

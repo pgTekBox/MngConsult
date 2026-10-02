@@ -30,6 +30,11 @@ public sealed class InvoiceEmailService
 
 	public async Task<SendResult> SendAsync(Guid companyGuid, int invoiceId, bool includeSquare, string? supportEmail)
 	{
+		if (!await Security.Ownership.OwnsDocumentAsync(_connectionString, companyGuid, invoiceId))
+		{
+			return new SendResult("NotFound", null, null, "NotRequested", null);
+		}
+
 		// 1. Charger les données de la facture (s0696)
 		var (row, ds) = await LoadAsync(invoiceId);
 		if (row is null)
@@ -173,6 +178,11 @@ public sealed class InvoiceEmailService
 	/// <summary>Génère (sans courriel) un lien de paiement Square pour une facture + renvoie le téléphone du client.</summary>
 	public async Task<PaymentLinkResult> CreatePaymentLinkAsync(Guid companyGuid, int invoiceId, string? supportEmail)
 	{
+		if (!await Security.Ownership.OwnsDocumentAsync(_connectionString, companyGuid, invoiceId))
+		{
+			return new PaymentLinkResult("NotFound", null, null, null, 0m, null);
+		}
+
 		var info = await LoadPaymentInfoAsync(invoiceId);
 		if (info is null)
 		{
@@ -219,6 +229,11 @@ public sealed class InvoiceEmailService
 	/// </summary>
 	public async Task<SendResult> SendPhotoEmailAsync(Guid companyGuid, int invoiceId, int photoId, string? toOverride)
 	{
+		if (!await Security.Ownership.OwnsDocumentAsync(_connectionString, companyGuid, invoiceId))
+		{
+			return new SendResult("NotFound", null, invoiceId.ToString(), "NotRequested", null);
+		}
+
 		var info = await LoadPaymentInfoAsync(invoiceId);
 		var docNumber = info?.DocNumber ?? invoiceId.ToString();
 
