@@ -89,6 +89,19 @@
                     <li><strong>Ajoutez une note si utile</strong> (500 caractères) : pourquoi ce choix, ce qu’il faudra vérifier avec votre comptable.</li>
                     <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd></strong> en bas de la page. Le bandeau du haut et, s’il y a un problème, une fenêtre au centre de l’écran vous disent ce qui a été retenu.</li>
                 </ol>
+                <h3>Lire la colonne « Ce que nous proposons »</h3>
+                <table>
+                    <thead><tr><th>Pastille</th><th>Ce que ça veut dire</th><th>Quoi faire</th></tr></thead>
+                    <tbody>
+                        <tr><td>nom QuickBooks connu — lié d’office</td><td>Le nom ou le sous-type QuickBooks est un alias du plan standard. La liaison est déjà faite et enregistrée.</td><td>Rien, sauf si vous préférez un autre compte : changez et enregistrez.</td></tr>
+                        <tr><td>même numéro</td><td>Un compte de votre plan porte le même numéro.</td><td>Vérifiez que le nom concorde aussi, puis « Lier ». <kbd>Accepter les correspondances par numéro</kbd> le fait pour toutes ces lignes.</td></tr>
+                        <tr><td>même nom</td><td>Un compte de votre plan porte le même nom, dans l’une des langues du plan.</td><td>La liste Action est déjà sur « Lier » et le compte en place : enregistrez, ou changez.</td></tr>
+                        <tr><td>IA, avec un pourcentage</td><td>Suggestion de l’IA après <kbd>✨ Proposer avec l’IA</kbd>, avec sa confiance et sa raison.</td><td>Lisez la raison. Une confiance élevée ne dispense pas de vérifier la classe et la nature.</td></tr>
+                        <tr><td>✨ l’IA suggère plutôt…</td><td>L’IA propose un autre compte que la concordance par numéro ou par nom.</td><td>Comparez les deux ; le numéro ou le nom est en général plus sûr.</td></tr>
+                        <tr><td>aucune proposition</td><td>Rien ne concorde dans votre plan.</td><td>Cherchez par classe et sous-classe, ou demandez à l’<kbd>✨ Assistant</kbd>. S’il n’existe vraiment aucun équivalent, c’est un cas pour « Créer ».</td></tr>
+                        <tr><td>créé au plan</td><td>Le compte a déjà été créé à l’étape 3 pour cette ligne.</td><td>Rien : la ligne est verrouillée « Créé ✓ ».</td></tr>
+                    </tbody>
+                </table>
                 <h3>Les raccourcis qui lient pour vous</h3>
                 <ul>
                     <li><strong>Lié d’office.</strong> Le plan standard connaît les noms que QuickBooks donne à ses comptes par défaut (en français et en anglais) ainsi que leurs sous-types : ce sont les alias. Au chargement, chaque compte reconnu arrive déjà « Lier » vers le compte de même numéro chez vous, avec la note « Lié d’office : nom QuickBooks connu du plan (alias). » Vous pouvez changer cette décision comme n’importe quelle autre.</li>
@@ -99,6 +112,14 @@
                 </ul>
                 <h3>Une règle à connaître</h3>
                 <p><strong>Un compte de 60sec ne reçoit qu’un seul compte de l’ancien logiciel.</strong> Deux comptes QuickBooks ne peuvent pas être liés au même compte d’ici : le second doit être lié ailleurs, ou créé. La règle est vérifiée dans le navigateur avant l’envoi, puis par la base à l’enregistrement.</p>
+                <h3>Cas particuliers</h3>
+                <ul>
+                    <li><strong>Le compte de l’ancien logiciel n’a pas de numéro.</strong> C’est courant dans QuickBooks. Son nom sert alors de clé : la liaison se fait de la même façon, par le choix dans les listes.</li>
+                    <li><strong>Deux comptes de l’ancien logiciel pour un seul compte ici.</strong> Par exemple deux comptes de frais bancaires. Liez le principal ; pour l’autre, liez-le à un compte voisin ou créez-le. Si vous vouliez les fusionner, faites-le dans l’ancien logiciel avant de recharger.</li>
+                    <li><strong>Le nom concorde mais pas la nature.</strong> Un compte « Assurances » peut être une dépense ou une charge payée d’avance. Fiez-vous à la nature et au type affichés sous le nom, pas au seul libellé.</li>
+                    <li><strong>Le compte visé est déjà pris.</strong> Le message nomme le compte de l’ancien logiciel qui l’occupe. Décidez lequel des deux doit y aller, et liez ou créez l’autre.</li>
+                    <li><strong>Vous vous êtes trompé de compte.</strong> Rechoisissez dans les listes et enregistrez : la nouvelle liaison remplace l’ancienne.</li>
+                </ul>
             </section>
 
             <section id="fr-creer">
@@ -112,6 +133,13 @@
                     <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compteur « À créer » augmente. Le message « N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… » est normal : le numéro vient à l’étape suivante.</li>
                     <li><strong>Passez à l’étape 3</strong> par <kbd>Créer les comptes au plan →</kbd>. C’est là que le compte est réellement ajouté au plan, avec sa classe et son numéro. De retour ici, la ligne est marquée « Créé ✓ », grisée et verrouillée : elle ne se rediscute plus à l’étape 2.</li>
                 </ol>
+                <h3>À savoir avant de créer</h3>
+                <ul>
+                    <li><strong>La classe du nouveau compte se choisit à l’étape 3</strong>, pas ici. Les listes Classe et Sous-classe de cet écran servent à chercher un compte existant ; avec « Créer », le compte chez vous reste vide.</li>
+                    <li><strong>Le nom repris est celui de l’ancien logiciel.</strong> Vous pourrez l’ajuster à l’étape 3, avant la création.</li>
+                    <li><strong>Créer n’est pas définitif tant que l’étape 3 n’a pas eu lieu.</strong> D’ici là, vous pouvez repasser à « Lier » ou « Ignorer » et enregistrer.</li>
+                    <li><strong>Exemple.</strong> « Revenus de déneigement » n’a pas d’équivalent dans le plan standard : « Créer », compte vide, enregistrer ; à l’étape 3, classe des revenus, numéro automatique.</li>
+                </ul>
                 <h3>Ce qui est refusé</h3>
                 <ul>
                     <li>« Créer » avec un numéro que votre plan 60sec connaît déjà.</li>
@@ -121,14 +149,25 @@
 
             <section id="fr-ignorer">
                 <h2>Ignorer, et revenir en arrière</h2>
-                <ul>
-                    <li>« Ignorer » puis <kbd>Enregistrer</kbd> : le compte compte dans « Ignorés » et sort du filtre « À décider seulement ».</li>
-                    <li><strong>Un compte qui porte un solde ne s’ignore pas.</strong> Sur ces lignes, l’option « Ignorer » est grisée (son info-bulle le dit) ; si elle est tout de même envoyée, le navigateur refuse « Un compte de QuickBooks qui porte un solde ne peut pas être ignoré », et la base refuse de la même façon. Liez le compte à un compte de 60sec, ou créez-le : la balance de vérification doit pouvoir déposer ce solde quelque part. Seuls les comptes vides (solde absent ou 0) s’ignorent.</li>
-                    <li><strong>Un compte utilisé ne s’ignore pas non plus, même à solde 0.</strong> Si des lignes de factures ou des produits en préparation visent ce compte, l’option « Ignorer » est grisée ; son info-bulle donne le décompte (« utilisé par 11 produit(s) en préparation »). Le navigateur puis la base refusent l’envoi. Liez le compte ou créez-le : ces factures et ces produits doivent avoir un compte où pointer. Le blocage tombe de lui-même une fois ces éléments créés.</li>
-                    <li><strong>Un solde à 0 ne veut pas dire « inutilisé ».</strong> QuickBooks ne donne un solde courant qu’aux comptes de bilan ; les comptes de revenus et de dépenses reviennent toujours à 0, même s’ils ont servi toute l’année. Quand vous mettez « Ignorer » sur un tel compte, un encadré jaune apparaît sous la liste Action : « QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. » Ce n’est qu’un avertissement : vous pouvez enregistrer. La balance de vérification, à l’étape suivante, signalera un compte ignoré qui y porte un montant.</li>
-                    <li>Pour revenir sur une décision (liée, à créer ou ignorée) : remettez « — à décider », ou choisissez directement l’autre action, puis enregistrez.</li>
-                    <li>Une ligne « Créé ✓ » (compte déjà ajouté au plan à l’étape 3) ne se change plus ici. Le compte se corrige dans le plan comptable, comme n’importe quel compte.</li>
-                </ul>
+                <h3>Ignorer un compte, pas à pas</h3>
+                <ol>
+                    <li><strong>Vérifiez que le compte est vraiment inutile</strong> : pas de solde, pas d’activité dans l’ancien logiciel, pas de facture ni de produit qui s’y rattache.</li>
+                    <li><strong>Mettez la liste Action sur « Ignorer ».</strong> Si l’option est grisée, le compte ne peut pas être ignoré : l’info-bulle dit pourquoi (voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
+                    <li><strong>Lisez l’encadré jaune s’il apparaît.</strong> Il signale un compte de revenus ou de dépenses dont le solde 0 ne prouve rien. C’est un avertissement, pas un refus.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compte compte dans « Ignorés » et sort du filtre « À décider seulement ».</li>
+                </ol>
+                <p>Un compte ignoré n’est ni lié ni créé : rien de ce qui lui est rattaché dans l’ancien logiciel ne sera repris sur lui. C’est pourquoi un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré. Le détail des quatre situations est dans <a href="#fr-garde-fous">Les garde-fous de « Ignorer »</a>.</p>
+                <h3>Revenir sur une décision</h3>
+                <table>
+                    <thead><tr><th>Décision enregistrée</th><th>Comment la changer</th><th>Ce qui se passe</th></tr></thead>
+                    <tbody>
+                        <tr><td>Lier</td><td>Choisissez un autre compte, une autre action, ou « — à décider », puis enregistrez.</td><td>L’ancienne liaison est remplacée ; le compte de 60sec libéré peut recevoir un autre compte.</td></tr>
+                        <tr><td>Créer, pas encore créé</td><td>Passez à « Lier », « Ignorer » ou « — à décider », puis enregistrez.</td><td>Le compte ne sera pas créé à l’étape 3.</td></tr>
+                        <tr><td>Créer, déjà créé (« Créé ✓ »)</td><td>Impossible ici : la ligne est verrouillée.</td><td>Le compte existe au plan ; il se corrige dans <span class="chemin">Comptabilité › Plan comptable</span>.</td></tr>
+                        <tr><td>Ignorer</td><td>Choisissez « Lier » ou « Créer », ou « — à décider », puis enregistrez.</td><td>Le compte revient dans la reprise.</td></tr>
+                        <tr><td>Lié d’office</td><td>Comme une liaison ordinaire.</td><td>Un rechargement ne refait la liaison d’office que pour les comptes sans décision : votre choix est conservé.</td></tr>
+                    </tbody>
+                </table>
             </section>
 
             <section id="fr-garde-fous">
@@ -155,6 +194,14 @@
             <section id="fr-enregistrer">
                 <h2>Enregistrer et la fenêtre de message</h2>
                 <p>Le bouton <kbd>Enregistrer les correspondances</kbd> est tout en bas et le bandeau de résultat tout en haut. Dès qu’il y a un problème, une fenêtre s’ouvre donc au centre de l’écran, par-dessus la grille, avec un titre et l’explication ; <kbd>OK</kbd>, la touche Échap ou un clic à côté la ferment, et le bandeau reste en haut pour relecture. Quand tout est enregistré sans réserve, aucune fenêtre ne s’ouvre.</p>
+                <h3>Ce que fait l’enregistrement</h3>
+                <ul>
+                    <li><strong>Il contrôle avant d’écrire.</strong> Le navigateur vérifie d’abord la page, puis la base refait les mêmes contrôles. Au moindre refus, <strong>rien</strong> de la page n’est enregistré : corrigez la ligne citée et enregistrez de nouveau, vos autres choix sont restés à l’écran.</li>
+                    <li><strong>Il conserve les décisions à part.</strong> Rien n’est créé ni déplacé en comptabilité ; les compteurs et l’avancement se mettent à jour.</li>
+                    <li><strong>Il écarte un « Lier » sans cible valable.</strong> Une liaison vers un compte absent de votre plan n’est pas conservée : la ligne revient « à décider » et la fenêtre « Comptes à décider » le signale.</li>
+                    <li><strong>Il ne touche pas aux lignes « Créé ✓ ».</strong> Ce que la page renvoie pour elles est ignoré.</li>
+                </ul>
+                <h3>La fenêtre, cas par cas</h3>
                 <table>
                     <thead><tr><th>Titre de la fenêtre</th><th>Quand</th><th>Quoi faire</th></tr></thead>
                     <tbody>
@@ -164,6 +211,11 @@
                         <tr><td>Erreur à l’enregistrement</td><td>La base a refusé l’enregistrement.</td><td>Le message est reproduit tel quel (voir ci-dessous) ; corrigez la ligne visée puis enregistrez de nouveau.</td></tr>
                     </tbody>
                 </table>
+                <h3>Quand tout va bien</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Correspondances enregistrées. Tous les comptes sont décidés. »</span> — bandeau vert, aucune fenêtre. Passez à l’étape 3 si des comptes sont « À créer ».</li>
+                    <li><span class="msg">« Correspondances enregistrées. N compte(s) restent à décider… »</span> — c’est enregistré ; la fenêtre « Comptes à décider » rappelle seulement ce qui reste.</li>
+                </ul>
             </section>
 
             <section id="fr-messages">
@@ -189,6 +241,16 @@
                     <li><span class="msg">« Un compte de 60sec ne reçoit qu’un seul compte de QuickBooks. Compte N — Nom de 60sec : ligne 1 (a), ligne 2 (b) de QuickBooks. »</span> — le même contrôle, fait dans le navigateur avant l’envoi.</li>
                     <li><span class="msg">« « X » de QuickBooks porte un solde de 92 732,08 $ : il ne peut pas être ignoré. Liez-le à un compte de 60sec ou créez-le, sinon ce montant disparaîtrait de la reprise. »</span> — « Ignorer » sur un compte qui porte un solde. Dans le navigateur : « Un compte de QuickBooks qui porte un solde ne peut pas être ignoré », avec les lignes et leurs soldes.</li>
                     <li><span class="msg">« « X » de QuickBooks est utilisé par 3 ligne(s) de facture et 11 produit(s) en préparation : il ne peut pas être ignoré. Liez-le à un compte de 60sec ou créez-le, sinon ces éléments n’auraient aucun compte. »</span> — « Ignorer » sur un compte que la reprise utilise. Dans le navigateur : « Un compte de QuickBooks utilisé par une facture ou un produit en préparation ne peut pas être ignoré », avec les lignes et leur décompte.</li>
+                </ul>
+                <h3>Les autres messages de l’écran</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Rien à soumettre : tous les comptes sont déjà décidés ou reconnus par leur numéro. »</span> — <kbd>✨ Proposer avec l’IA</kbd> n’a rien à proposer.</li>
+                    <li><span class="msg">« Votre plan comptable est vide : il n’y a rien à quoi rattacher ces comptes. »</span> — votre plan 60sec n’a pas encore de comptes ; enregistrez d’abord les paramètres de la compagnie.</li>
+                    <li><span class="msg">« N proposition(s) sur M compte(s) soumis. K réponse(s) écartée(s) … Coût estimé : x US$. Ce ne sont que des propositions… »</span> — résultat de l’IA ; relisez et enregistrez ce que vous retenez.</li>
+                    <li><span class="msg">« Les correspondances par numéro de compte ont été retenues. Ce qui reste demande une décision. »</span> — <kbd>Accepter les correspondances par numéro</kbd> a terminé.</li>
+                    <li><span class="msg">« Rien à afficher avec ce filtre. »</span> — remettez le filtre « Afficher » sur « Tout ».</li>
+                    <li><span class="msg">« Aucun plan comptable n’a encore été chargé pour cette compagnie. »</span> — commencez par l’étape 1.</li>
+                    <li><span class="msg">« ⚠️ QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. »</span> — encadré jaune sous la liste Action ; avertissement sans blocage.</li>
                 </ul>
             </section>
 
@@ -358,6 +420,19 @@
                     <li><strong>Add a note if useful</strong> (500 characters): why this choice, what to check with your accountant.</li>
                     <li><strong>Click <kbd>Save mappings</kbd></strong> at the bottom of the page. The banner at the top and, if there is a problem, a popup in the middle of the screen tell you what was kept.</li>
                 </ol>
+                <h3>Reading the “What we suggest” column</h3>
+                <table>
+                    <thead><tr><th>Badge</th><th>What it means</th><th>What to do</th></tr></thead>
+                    <tbody>
+                        <tr><td>known QuickBooks name — linked outright</td><td>The QuickBooks name or subtype is an alias of the standard chart. The link is already made and saved.</td><td>Nothing, unless you prefer another account: change it and save.</td></tr>
+                        <tr><td>same number</td><td>An account of your chart has the same number.</td><td>Check that the name matches too, then “Link”. <kbd>Accept mappings by number</kbd> does it for all those rows.</td></tr>
+                        <tr><td>same name</td><td>An account of your chart has the same name, in one of the chart’s languages.</td><td>The Action list is already on “Link” and the account in place: save, or change it.</td></tr>
+                        <tr><td>AI, with a percentage</td><td>AI suggestion after <kbd>✨ Suggest with AI</kbd>, with its confidence and reason.</td><td>Read the reason. A high confidence does not exempt you from checking the class and the nature.</td></tr>
+                        <tr><td>✨ the AI rather suggests…</td><td>The AI suggests a different account than the number or name match.</td><td>Compare both; the number or name is usually safer.</td></tr>
+                        <tr><td>no suggestion</td><td>Nothing matches in your chart.</td><td>Search by class and subclass, or ask the <kbd>✨ Assistant</kbd>. If there truly is no counterpart, it is a case for “Create”.</td></tr>
+                        <tr><td>created in the chart</td><td>The account was already created at step 3 for this row.</td><td>Nothing: the row is locked as “Created ✓”.</td></tr>
+                    </tbody>
+                </table>
                 <h3>The shortcuts that link for you</h3>
                 <ul>
                     <li><strong>Linked outright.</strong> The standard chart knows the names QuickBooks gives its default accounts (in French and in English) and their subtypes: the aliases. On load, each recognized account already comes as “Link” to the account with the same number here, with the note “Linked outright: QuickBooks name known to the chart (alias).” You can change this decision like any other.</li>
@@ -368,6 +443,14 @@
                 </ul>
                 <h3>One rule to know</h3>
                 <p><strong>One 60sec account receives only one account from the former application.</strong> Two QuickBooks accounts cannot be linked to the same account here: the second must be linked elsewhere, or created. The rule is checked in the browser before sending, then by the database on save.</p>
+                <h3>Special cases</h3>
+                <ul>
+                    <li><strong>The former account has no number.</strong> This is common in QuickBooks. Its name then serves as the key: linking works the same way, by choosing in the lists.</li>
+                    <li><strong>Two former accounts for a single account here.</strong> For example two bank-fee accounts. Link the main one; link the other to a neighbouring account or create it. If you wanted to merge them, do it in the former application before reloading.</li>
+                    <li><strong>The name matches but not the nature.</strong> An “Insurance” account can be an expense or a prepaid expense. Rely on the nature and type shown under the name, not on the label alone.</li>
+                    <li><strong>The target account is already taken.</strong> The message names the former account that occupies it. Decide which of the two should go there, and link or create the other.</li>
+                    <li><strong>You picked the wrong account.</strong> Choose again in the lists and save: the new link replaces the old one.</li>
+                </ul>
             </section>
 
             <section id="en-create">
@@ -381,6 +464,13 @@
                     <li><strong>Click <kbd>Save mappings</kbd>.</strong> The “To create” counter goes up. The message “N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…” is normal: the number comes at the next step.</li>
                     <li><strong>Go to step 3</strong> with <kbd>Create the accounts in the chart →</kbd>. That is where the account is actually added to the chart, with its class and number. Back here, the row is marked “Created ✓”, greyed and locked: it is no longer discussed at step 2.</li>
                 </ol>
+                <h3>Good to know before creating</h3>
+                <ul>
+                    <li><strong>The class of the new account is chosen at step 3</strong>, not here. The Class and Subclass lists on this screen are for finding an existing account; with “Create”, your account stays empty.</li>
+                    <li><strong>The name carried over is the former application’s.</strong> You can adjust it at step 3, before creation.</li>
+                    <li><strong>Create is not final until step 3 has run.</strong> Until then you can switch back to “Link” or “Ignore” and save.</li>
+                    <li><strong>Example.</strong> “Snow removal revenue” has no counterpart in the standard chart: “Create”, empty account, save; at step 3, revenue class, automatic number.</li>
+                </ul>
                 <h3>What is refused</h3>
                 <ul>
                     <li>“Create” with a number your 60sec chart already knows.</li>
@@ -390,14 +480,25 @@
 
             <section id="en-ignore">
                 <h2>Ignore, and go back</h2>
-                <ul>
-                    <li>“Ignore” then <kbd>Save</kbd>: the account counts in “Ignored” and leaves the “To decide only” filter.</li>
-                    <li><strong>An account that carries a balance cannot be ignored.</strong> On those rows the “Ignore” option is greyed out (its tooltip says so); if it is sent anyway, the browser refuses “A QuickBooks account that carries a balance cannot be ignored”, and the database refuses likewise. Link the account to a 60sec account, or create it: the trial balance must be able to put that balance somewhere. Only empty accounts (no balance or 0) can be ignored.</li>
-                    <li><strong>A used account cannot be ignored either, even at zero.</strong> If invoice lines or products in preparation target this account, the “Ignore” option is greyed out; its tooltip gives the count (“used by 11 product(s) in preparation”). The browser and then the database refuse the send. Link the account or create it: those invoices and products need an account to point to. The block lifts by itself once these items are created.</li>
-                    <li><strong>A zero balance does not mean “unused”.</strong> QuickBooks only gives a current balance to balance-sheet accounts; revenue and expense accounts always come back as 0, even if used all year. When you set “Ignore” on such an account, a yellow note appears under the Action list: “QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.” It is only a warning: you can save. The trial balance, at the next step, will flag an ignored account that carries an amount there.</li>
-                    <li>To revisit a decision (linked, to create or ignored): set “— to decide” back, or pick the other action directly, then save.</li>
-                    <li>A “Created ✓” row (account already added to the chart at step 3) no longer changes here. The account is corrected in the chart of accounts, like any account.</li>
-                </ul>
+                <h3>Ignoring an account, step by step</h3>
+                <ol>
+                    <li><strong>Check that the account is truly useless</strong>: no balance, no activity in the former application, no invoice or product attached to it.</li>
+                    <li><strong>Set the Action list to “Ignore”.</strong> If the option is greyed out, the account cannot be ignored: the tooltip says why (see <a href="#en-safeguards">the safeguards</a>).</li>
+                    <li><strong>Read the yellow note if it appears.</strong> It flags a revenue or expense account whose zero balance proves nothing. It is a warning, not a refusal.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The account counts in “Ignored” and leaves the “To decide only” filter.</li>
+                </ol>
+                <p>An ignored account is neither linked nor created: nothing attached to it in the former application will be migrated to it. That is why an account that carries a balance, or that an invoice or product in preparation uses, cannot be ignored. The four situations are detailed in <a href="#en-safeguards">The safeguards on “Ignore”</a>.</p>
+                <h3>Changing a decision</h3>
+                <table>
+                    <thead><tr><th>Saved decision</th><th>How to change it</th><th>What happens</th></tr></thead>
+                    <tbody>
+                        <tr><td>Link</td><td>Choose another account, another action, or “— to decide”, then save.</td><td>The old link is replaced; the freed 60sec account can receive another account.</td></tr>
+                        <tr><td>Create, not created yet</td><td>Switch to “Link”, “Ignore” or “— to decide”, then save.</td><td>The account will not be created at step 3.</td></tr>
+                        <tr><td>Create, already created (“Created ✓”)</td><td>Not possible here: the row is locked.</td><td>The account exists in the chart; it is corrected in <span class="chemin">Accounting › Chart of accounts</span>.</td></tr>
+                        <tr><td>Ignore</td><td>Choose “Link” or “Create”, or “— to decide”, then save.</td><td>The account comes back into the migration.</td></tr>
+                        <tr><td>Linked outright</td><td>Like an ordinary link.</td><td>A reload only redoes the outright link for accounts without a decision: your choice is kept.</td></tr>
+                    </tbody>
+                </table>
             </section>
 
             <section id="en-safeguards">
@@ -424,6 +525,14 @@
             <section id="en-save">
                 <h2>Saving and the message popup</h2>
                 <p>The <kbd>Save mappings</kbd> button is at the very bottom and the result banner at the very top. So whenever there is a problem, a popup opens in the middle of the screen, over the grid, with a title and the explanation; <kbd>OK</kbd>, the Escape key or a click beside it closes it, and the banner stays at the top for re-reading. When everything is saved without reservation, no popup opens.</p>
+                <h3>What saving does</h3>
+                <ul>
+                    <li><strong>It checks before writing.</strong> The browser checks the page first, then the database runs the same checks again. At the slightest refusal, <strong>nothing</strong> on the page is saved: fix the row mentioned and save again, your other choices are still on screen.</li>
+                    <li><strong>It keeps the decisions apart.</strong> Nothing is created or moved in the books; the counters and progress are updated.</li>
+                    <li><strong>It drops a “Link” without a valid target.</strong> A link to an account missing from your chart is not kept: the row goes back to “to decide” and the “Comptes à décider” popup says so.</li>
+                    <li><strong>It leaves “Created ✓” rows alone.</strong> What the page sends back for them is ignored.</li>
+                </ul>
+                <h3>The popup, case by case</h3>
                 <table>
                     <thead><tr><th>Popup title</th><th>When</th><th>What to do</th></tr></thead>
                     <tbody>
@@ -433,6 +542,11 @@
                         <tr><td>Erreur à l’enregistrement (error on save)</td><td>The database refused the save.</td><td>The message is shown as is (see below); fix the row concerned and save again.</td></tr>
                     </tbody>
                 </table>
+                <h3>When all goes well</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Mappings saved. All accounts are decided.”</span> — green banner, no popup. Go to step 3 if some accounts are “To create”.</li>
+                    <li><span class="msg">“Mappings saved. N account(s) remain to decide…”</span> — it is saved; the “Comptes à décider” popup only reminds you of what is left.</li>
+                </ul>
             </section>
 
             <section id="en-messages">
@@ -458,6 +572,16 @@
                     <li><span class="msg">“One 60sec account receives only one QuickBooks account. Account N — Name of 60sec: row 1 (a), row 2 (b) from QuickBooks.”</span> — the same check, done in the browser before sending.</li>
                     <li><span class="msg">““X” from QuickBooks carries a balance of $92,732.08: it cannot be ignored. Link it to a 60sec account or create it, otherwise that amount would vanish from the migration.”</span> — “Ignore” on an account that carries a balance. In the browser: “A QuickBooks account that carries a balance cannot be ignored”, with the rows and their balances.</li>
                     <li><span class="msg">““X” from QuickBooks is used by 3 invoice line(s) and 11 product(s) in preparation: it cannot be ignored. Link it to a 60sec account or create it, otherwise these items would have no account.”</span> — “Ignore” on an account the migration uses. In the browser: “A QuickBooks account used by an invoice or a product in preparation cannot be ignored”, with the rows and their counts.</li>
+                </ul>
+                <h3>The other messages of the screen</h3>
+                <ul class="messages">
+                    <li><span class="msg">“Nothing to submit: all accounts are already decided or recognized by their number.”</span> — <kbd>✨ Suggest with AI</kbd> has nothing to suggest.</li>
+                    <li><span class="msg">“Your chart of accounts is empty: there is nothing to attach these accounts to.”</span> — your 60sec chart has no accounts yet; save the company settings first.</li>
+                    <li><span class="msg">“N suggestion(s) over M submitted account(s). K answer(s) discarded … Estimated cost: x US$. These are only suggestions…”</span> — AI result; review and save what you keep.</li>
+                    <li><span class="msg">“Mappings by account number have been kept. What remains needs a decision.”</span> — <kbd>Accept mappings by number</kbd> is done.</li>
+                    <li><span class="msg">“Nothing to show with this filter.”</span> — set the “Show” filter back to “All”.</li>
+                    <li><span class="msg">“No chart of accounts has been loaded for this company yet.”</span> — start with step 1.</li>
+                    <li><span class="msg">“⚠️ QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.”</span> — yellow note under the Action list; a warning that blocks nothing.</li>
                 </ul>
             </section>
 
@@ -627,6 +751,19 @@
                     <li><strong>Añada una nota si es útil</strong> (500 caracteres): por qué esta elección, qué habrá que verificar con su contador.</li>
                     <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd></strong> al pie de la página. El banner superior y, si hay un problema, una ventana en el centro de la pantalla le dicen qué se conservó.</li>
                 </ol>
+                <h3>Leer la columna « Lo que proponemos »</h3>
+                <table>
+                    <thead><tr><th>Etiqueta</th><th>Qué significa</th><th>Qué hacer</th></tr></thead>
+                    <tbody>
+                        <tr><td>nombre QuickBooks conocido — vinculado de oficio</td><td>El nombre o el subtipo QuickBooks es un alias del plan estándar. El vínculo ya está hecho y guardado.</td><td>Nada, salvo que prefiera otra cuenta: cambie y guarde.</td></tr>
+                        <tr><td>mismo número</td><td>Una cuenta de su plan lleva el mismo número.</td><td>Verifique que el nombre también coincide, y luego « Vincular ». <kbd>Aceptar las correspondencias por número</kbd> lo hace para todas esas líneas.</td></tr>
+                        <tr><td>mismo nombre</td><td>Una cuenta de su plan lleva el mismo nombre, en uno de los idiomas del plan.</td><td>La lista Acción ya está en « Vincular » y la cuenta en su lugar: guarde, o cambie.</td></tr>
+                        <tr><td>IA, con un porcentaje</td><td>Sugerencia de la IA tras <kbd>✨ Proponer con la IA</kbd>, con su confianza y su razón.</td><td>Lea la razón. Una confianza alta no exime de verificar la clase y la naturaleza.</td></tr>
+                        <tr><td>✨ la IA sugiere más bien…</td><td>La IA propone otra cuenta que la coincidencia por número o por nombre.</td><td>Compare ambas; el número o el nombre suele ser más seguro.</td></tr>
+                        <tr><td>ninguna propuesta</td><td>Nada coincide en su plan.</td><td>Busque por clase y subclase, o pregunte al <kbd>✨ Asistente</kbd>. Si de verdad no existe equivalente, es un caso para « Crear ».</td></tr>
+                        <tr><td>creada en el plan</td><td>La cuenta ya se creó en la etapa 3 para esta línea.</td><td>Nada: la línea está bloqueada « Creada ✓ ».</td></tr>
+                    </tbody>
+                </table>
                 <h3>Los atajos que vinculan por usted</h3>
                 <ul>
                     <li><strong>Vinculado de oficio.</strong> El plan estándar conoce los nombres que QuickBooks da a sus cuentas por defecto (en francés y en inglés) y sus subtipos: los alias. Al cargar, cada cuenta reconocida llega ya en « Vincular » hacia la cuenta del mismo número aquí, con la nota « Vinculado de oficio: nombre QuickBooks conocido del plan (alias). » Puede cambiar esta decisión como cualquier otra.</li>
@@ -637,6 +774,14 @@
                 </ul>
                 <h3>Una regla que conviene conocer</h3>
                 <p><strong>Una cuenta de 60sec solo recibe una cuenta del programa anterior.</strong> Dos cuentas QuickBooks no pueden vincularse a la misma cuenta de aquí: la segunda debe vincularse a otra, o crearse. La regla se verifica en el navegador antes del envío y luego en la base de datos al guardar.</p>
+                <h3>Casos particulares</h3>
+                <ul>
+                    <li><strong>La cuenta del programa anterior no tiene número.</strong> Es habitual en QuickBooks. Su nombre sirve entonces de clave: el vínculo se hace igual, eligiendo en las listas.</li>
+                    <li><strong>Dos cuentas del programa anterior para una sola cuenta aquí.</strong> Por ejemplo dos cuentas de gastos bancarios. Vincule la principal; la otra, vincúlela a una cuenta vecina o créela. Si quería fusionarlas, hágalo en el programa anterior antes de recargar.</li>
+                    <li><strong>El nombre coincide pero no la naturaleza.</strong> Una cuenta « Seguros » puede ser un gasto o un gasto pagado por anticipado. Fíese de la naturaleza y del tipo mostrados bajo el nombre, no solo del rótulo.</li>
+                    <li><strong>La cuenta destino ya está ocupada.</strong> El mensaje nombra la cuenta del programa anterior que la ocupa. Decida cuál de las dos debe ir allí, y vincule o cree la otra.</li>
+                    <li><strong>Se equivocó de cuenta.</strong> Vuelva a elegir en las listas y guarde: el nuevo vínculo sustituye al anterior.</li>
+                </ul>
             </section>
 
             <section id="es-crear">
@@ -650,6 +795,13 @@
                     <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> El contador « Por crear » aumenta. El mensaje « N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… » es normal: el número llega en la etapa siguiente.</li>
                     <li><strong>Pase a la etapa 3</strong> con <kbd>Crear las cuentas en el plan →</kbd>. Ahí es donde la cuenta se añade realmente al plan, con su clase y su número. De vuelta aquí, la línea queda marcada « Creada ✓ », en gris y bloqueada: ya no se discute en la etapa 2.</li>
                 </ol>
+                <h3>Conviene saber antes de crear</h3>
+                <ul>
+                    <li><strong>La clase de la cuenta nueva se elige en la etapa 3</strong>, no aquí. Las listas Clase y Subclase de esta pantalla sirven para buscar una cuenta existente; con « Crear », la cuenta en su plan queda vacía.</li>
+                    <li><strong>El nombre que se toma es el del programa anterior.</strong> Podrá ajustarlo en la etapa 3, antes de la creación.</li>
+                    <li><strong>Crear no es definitivo mientras la etapa 3 no se haya ejecutado.</strong> Hasta entonces puede volver a « Vincular » o « Ignorar » y guardar.</li>
+                    <li><strong>Ejemplo.</strong> « Ingresos por retiro de nieve » no tiene equivalente en el plan estándar: « Crear », cuenta vacía, guardar; en la etapa 3, clase de ingresos, número automático.</li>
+                </ul>
                 <h3>Lo que se rechaza</h3>
                 <ul>
                     <li>« Crear » con un número que su plan 60sec ya conoce.</li>
@@ -659,14 +811,25 @@
 
             <section id="es-ignorar">
                 <h2>Ignorar, y volver atrás</h2>
-                <ul>
-                    <li>« Ignorar » y luego <kbd>Guardar</kbd>: la cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ».</li>
-                    <li><strong>Una cuenta que lleva saldo no se ignora.</strong> En esas líneas la opción « Ignorar » aparece en gris (su descripción emergente lo dice); si aun así se envía, el navegador rechaza « Una cuenta de QuickBooks que lleva saldo no puede ignorarse », y la base rechaza igualmente. Vincule la cuenta a una cuenta de 60sec, o créela: el balance de comprobación debe poder depositar ese saldo en algún lugar. Solo las cuentas vacías (sin saldo o 0) se ignoran.</li>
-                    <li><strong>Una cuenta usada tampoco se ignora, ni siquiera con saldo 0.</strong> Si hay líneas de factura o productos en preparación que apuntan a esta cuenta, la opción « Ignorar » aparece en gris; su descripción emergente da el recuento (« usada por 11 producto(s) en preparación »). El navegador y luego la base rechazan el envío. Vincule la cuenta o créela: esas facturas y esos productos necesitan una cuenta. El bloqueo desaparece por sí solo una vez creados esos elementos.</li>
-                    <li><strong>Un saldo 0 no significa « sin uso ».</strong> QuickBooks solo da saldo corriente a las cuentas de balance; las cuentas de ingresos y de gastos siempre vuelven a 0, aunque se hayan usado todo el año. Cuando pone « Ignorar » en una cuenta así, aparece un recuadro amarillo bajo la lista Acción: « QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. » Es solo un aviso: puede guardar. El balance de comprobación, en la etapa siguiente, señalará una cuenta ignorada que lleve un importe.</li>
-                    <li>Para revisar una decisión (vinculada, por crear o ignorada): vuelva a « — por decidir », o elija directamente la otra acción, y guarde.</li>
-                    <li>Una línea « Creada ✓ » (cuenta ya añadida al plan en la etapa 3) ya no se cambia aquí. La cuenta se corrige en el plan contable, como cualquier cuenta.</li>
-                </ul>
+                <h3>Ignorar una cuenta, paso a paso</h3>
+                <ol>
+                    <li><strong>Verifique que la cuenta sea realmente inútil</strong>: sin saldo, sin actividad en el programa anterior, sin factura ni producto asociado.</li>
+                    <li><strong>Ponga la lista Acción en « Ignorar ».</strong> Si la opción está en gris, la cuenta no puede ignorarse: la descripción emergente dice por qué (véanse <a href="#es-protecciones">las protecciones</a>).</li>
+                    <li><strong>Lea el recuadro amarillo si aparece.</strong> Señala una cuenta de ingresos o de gastos cuyo saldo 0 no prueba nada. Es un aviso, no un rechazo.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ».</li>
+                </ol>
+                <p>Una cuenta ignorada no se vincula ni se crea: nada de lo asociado a ella en el programa anterior se migrará a ella. Por eso una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse. El detalle de las cuatro situaciones está en <a href="#es-protecciones">Las protecciones de « Ignorar »</a>.</p>
+                <h3>Cambiar una decisión</h3>
+                <table>
+                    <thead><tr><th>Decisión guardada</th><th>Cómo cambiarla</th><th>Qué ocurre</th></tr></thead>
+                    <tbody>
+                        <tr><td>Vincular</td><td>Elija otra cuenta, otra acción, o « — por decidir », y guarde.</td><td>El vínculo anterior se sustituye; la cuenta de 60sec liberada puede recibir otra cuenta.</td></tr>
+                        <tr><td>Crear, aún no creada</td><td>Pase a « Vincular », « Ignorar » o « — por decidir », y guarde.</td><td>La cuenta no se creará en la etapa 3.</td></tr>
+                        <tr><td>Crear, ya creada (« Creada ✓ »)</td><td>Imposible aquí: la línea está bloqueada.</td><td>La cuenta existe en el plan; se corrige en <span class="chemin">Contabilidad › Plan contable</span>.</td></tr>
+                        <tr><td>Ignorar</td><td>Elija « Vincular » o « Crear », o « — por decidir », y guarde.</td><td>La cuenta vuelve a la migración.</td></tr>
+                        <tr><td>Vinculada de oficio</td><td>Como un vínculo ordinario.</td><td>Una recarga solo rehace el vínculo de oficio para las cuentas sin decisión: su elección se conserva.</td></tr>
+                    </tbody>
+                </table>
             </section>
 
             <section id="es-protecciones">
@@ -693,6 +856,14 @@
             <section id="es-guardar">
                 <h2>Guardar y la ventana de mensaje</h2>
                 <p>El botón <kbd>Guardar las correspondencias</kbd> está al final y el banner de resultado al principio. Por eso, en cuanto hay un problema, se abre una ventana en el centro de la pantalla, sobre la cuadrícula, con un título y la explicación; <kbd>OK</kbd>, la tecla Escape o un clic al lado la cierran, y el banner permanece arriba para releerlo. Cuando todo se guarda sin reservas, no se abre ninguna ventana.</p>
+                <h3>Qué hace el guardado</h3>
+                <ul>
+                    <li><strong>Controla antes de escribir.</strong> El navegador verifica primero la página, y luego la base repite los mismos controles. Al menor rechazo, <strong>nada</strong> de la página se guarda: corrija la línea citada y guarde de nuevo, sus otras elecciones siguen en pantalla.</li>
+                    <li><strong>Conserva las decisiones aparte.</strong> No se crea ni se mueve nada en la contabilidad; los contadores y el avance se actualizan.</li>
+                    <li><strong>Descarta un « Vincular » sin destino válido.</strong> Un vínculo hacia una cuenta ausente de su plan no se conserva: la línea vuelve a « por decidir » y la ventana « Comptes à décider » lo señala.</li>
+                    <li><strong>No toca las líneas « Creada ✓ ».</strong> Lo que la página devuelve para ellas se ignora.</li>
+                </ul>
+                <h3>La ventana, caso por caso</h3>
                 <table>
                     <thead><tr><th>Título de la ventana</th><th>Cuándo</th><th>Qué hacer</th></tr></thead>
                     <tbody>
@@ -702,6 +873,11 @@
                         <tr><td>Erreur à l’enregistrement (error al guardar)</td><td>La base de datos rechazó el guardado.</td><td>El mensaje se muestra tal cual (véase abajo); corrija la línea afectada y guarde de nuevo.</td></tr>
                     </tbody>
                 </table>
+                <h3>Cuando todo va bien</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Correspondencias guardadas. Todas las cuentas están decididas. »</span> — banner verde, ninguna ventana. Pase a la etapa 3 si hay cuentas « Por crear ».</li>
+                    <li><span class="msg">« Correspondencias guardadas. N cuenta(s) quedan por decidir… »</span> — está guardado; la ventana « Comptes à décider » solo recuerda lo que falta.</li>
+                </ul>
             </section>
 
             <section id="es-mensajes">
@@ -727,6 +903,16 @@
                     <li><span class="msg">« Una cuenta de 60sec solo recibe una cuenta de QuickBooks. Cuenta N — Nombre de 60sec: línea 1 (a), línea 2 (b) de QuickBooks. »</span> — el mismo control, hecho en el navegador antes del envío.</li>
                     <li><span class="msg">« « X » de QuickBooks lleva un saldo de 92 732,08 $: no puede ignorarse. Vincúlela a una cuenta de 60sec o créela; si no, ese importe desaparecería de la migración. »</span> — « Ignorar » en una cuenta que lleva saldo. En el navegador: « Una cuenta de QuickBooks que lleva saldo no puede ignorarse », con las líneas y sus saldos.</li>
                     <li><span class="msg">« « X » de QuickBooks es usada por 3 línea(s) de factura y 11 producto(s) en preparación: no puede ignorarse. Vincúlela a una cuenta de 60sec o créela; si no, esos elementos se quedarían sin cuenta. »</span> — « Ignorar » en una cuenta que la migración usa. En el navegador: « Una cuenta de QuickBooks usada por una factura o un producto en preparación no puede ignorarse », con las líneas y su recuento.</li>
+                </ul>
+                <h3>Los demás mensajes de la pantalla</h3>
+                <ul class="messages">
+                    <li><span class="msg">« Nada que enviar: todas las cuentas ya están decididas o reconocidas por su número. »</span> — <kbd>✨ Proponer con la IA</kbd> no tiene nada que proponer.</li>
+                    <li><span class="msg">« Su plan de cuentas está vacío: no hay nada a lo que vincular estas cuentas. »</span> — su plan 60sec aún no tiene cuentas; guarde primero los ajustes de la compañía.</li>
+                    <li><span class="msg">« N propuesta(s) sobre M cuenta(s) enviadas. K respuesta(s) descartada(s) … Costo estimado: x US$. Solo son propuestas… »</span> — resultado de la IA; revise y guarde lo que retenga.</li>
+                    <li><span class="msg">« Se retuvieron las correspondencias por número de cuenta. Lo que queda requiere una decisión. »</span> — <kbd>Aceptar las correspondencias por número</kbd> ha terminado.</li>
+                    <li><span class="msg">« Nada que mostrar con este filtro. »</span> — vuelva a poner el filtro « Mostrar » en « Todo ».</li>
+                    <li><span class="msg">« Todavía no se ha cargado ningún plan contable para esta compañía. »</span> — empiece por la etapa 1.</li>
+                    <li><span class="msg">« ⚠️ QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. »</span> — recuadro amarillo bajo la lista Acción; aviso sin bloqueo.</li>
                 </ul>
             </section>
 
