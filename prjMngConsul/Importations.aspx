@@ -7,7 +7,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .imp-page { max-width: 1320px; margin: 0 auto; padding: 16px }
+    .imp-page { padding: 16px }
 
     .imp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 
