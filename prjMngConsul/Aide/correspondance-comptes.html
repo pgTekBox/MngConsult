@@ -186,7 +186,33 @@
 
             <section id="fr-etape3">
                 <h2>Et après : l’étape 3 crée les comptes</h2>
-                <p>Les lignes « Créer » enregistrées ici ne deviennent des comptes qu’à l’étape 3, <kbd>Créer les comptes au plan →</kbd> : vous y choisissez la classe de chacun (bornée à sa nature), laissez le numéro vide pour qu’il soit pris dans la plage de la classe, ajustez le nom, puis <kbd>Créer les comptes</kbd>. C’est la première écriture réelle. Tout ou rien : une ligne fautive refuse le lot entier, avec le motif. De retour ici, la ligne est « Créé ✓ », grisée, et compte dans « Déjà créés ». Le détail des colonnes, des règles et des messages est dans <a href="importation.html#fr-plan-etape3">Importation des données › Étape 3</a>.</p>
+                <p>Enregistrer ici ne crée aucun compte. Les lignes « Créer » ne deviennent des comptes qu’à l’étape 3, <span class="chemin">Importation › Créer les comptes au plan</span>, par le lien <kbd>Créer les comptes au plan →</kbd> au bas de la grille ou par le fil des trois étapes. C’est la première étape qui écrit dans votre comptabilité. Ce que vous décidez ici détermine ce que l’étape 3 vous présente :</p>
+                <table>
+                    <thead><tr><th>Ce que vous avez décidé ici</th><th>Ce que l’étape 3 en fait</th></tr></thead>
+                    <tbody>
+                        <tr><td>« Créer », compte laissé vide</td><td>Une ligne à créer avec le numéro sur « auto » : il sera pris dans la plage de la classe que vous choisirez, de préférence une dizaine ronde.</td></tr>
+                        <tr><td>« Créer », numéro de l’ancien logiciel repris</td><td>Une ligne à créer avec ce numéro prérempli. Il doit tomber dans la plage de la classe choisie ; sinon, videz-le.</td></tr>
+                        <tr><td>« Lier »</td><td>Rien à faire : le compte existe déjà. Il compte dans « Liés ».</td></tr>
+                        <tr><td>« Ignorer »</td><td>Rien : le compte est écarté. Il compte dans « Ignorés ».</td></tr>
+                        <tr><td>« — à décider »</td><td>Le compte n’est pas repris. L’étape 3 le rappelle : « N compte(s) ne sont pas encore décidés à l’étape 2 » ; vous pouvez créer les autres et revenir.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Ce que vous y ferez</h3>
+                <ol>
+                    <li>Choisir la <strong>classe</strong> de chaque compte à créer. Seules les classes compatibles avec sa nature sont proposées : une dépense ne se range pas dans l’actif.</li>
+                    <li>Laisser le <strong>numéro</strong> vide, ou en saisir un dans la plage de la classe.</li>
+                    <li>Ajuster le <strong>nom</strong> si celui de l’ancien logiciel ne convient pas.</li>
+                    <li>Cliquer <kbd>Créer les comptes</kbd> et confirmer. Tout ou rien : une seule ligne fautive refuse le lot entier, avec le motif.</li>
+                </ol>
+                <h3>Ce qui change ici ensuite</h3>
+                <ul>
+                    <li>La ligne créée devient <strong>« Créé ✓ »</strong>, grisée et verrouillée : action, listes et note ne se modifient plus. Elle compte dans « Déjà créés » à l’étape 3.</li>
+                    <li>Le compte existe dans votre plan : il se corrige désormais dans <span class="chemin">Comptabilité › Plan comptable</span>, comme n’importe quel compte.</li>
+                    <li>Le compte créé ne peut plus servir de cible : une autre ligne ne peut pas lui être liée, puisqu’il a déjà son compte source.</li>
+                    <li>L’étape 3 se rejoue sans risque : elle ne recrée jamais un compte déjà créé. Vous pouvez donc décider et créer par vagues.</li>
+                </ul>
+                <div class="piege" data-titre="Piège">Vérifiez vos « Créer » avant de passer à l’étape 3. Un compte créé par erreur, alors qu’il fallait le lier, donne deux comptes pour la même chose et ne s’annule pas d’ici : il faudra le corriger dans le plan comptable.</div>
+                <p>Le détail des colonnes, des règles et des douze messages de cet écran est dans <a href="importation.html#fr-plan-etape3">Importation des données › Étape 3</a>.</p>
             </section>
 
             <section id="fr-pieges">
@@ -379,7 +405,33 @@
 
             <section id="en-step3">
                 <h2>Afterwards: step 3 creates the accounts</h2>
-                <p>The “Create” rows saved here only become accounts at step 3, <kbd>Create the accounts in the chart →</kbd>: there you choose each one’s class (bounded by its nature), leave the number empty so it is taken within the class range, adjust the name, then <kbd>Create the accounts</kbd>. It is the first real write. All or nothing: one faulty row refuses the whole batch, with the reason. Back here, the row is “Created ✓”, greyed, and counts in “Already created”. Columns, rules and messages are detailed in <a href="importation.html#en-chart-step3">Data import › Step 3</a>.</p>
+                <p>Saving here creates no account. The “Create” rows only become accounts at step 3, <span class="chemin">Import › Create the accounts in the chart</span>, through the link <kbd>Create the accounts in the chart →</kbd> at the bottom of the grid or the 3-step trail. It is the first step that writes to your books. What you decide here determines what step 3 shows you:</p>
+                <table>
+                    <thead><tr><th>What you decided here</th><th>What step 3 does with it</th></tr></thead>
+                    <tbody>
+                        <tr><td>“Create”, account left empty</td><td>A row to create with the number on “auto”: it will be taken within the range of the class you choose, preferably a round ten.</td></tr>
+                        <tr><td>“Create”, number of the former application reused</td><td>A row to create with that number prefilled. It must fall within the range of the chosen class; otherwise clear it.</td></tr>
+                        <tr><td>“Link”</td><td>Nothing to do: the account already exists. It counts in “Linked”.</td></tr>
+                        <tr><td>“Ignore”</td><td>Nothing: the account is set aside. It counts in “Ignored”.</td></tr>
+                        <tr><td>“— to decide”</td><td>The account is not migrated. Step 3 reminds you: “N account(s) are not decided yet at step 2”; you can create the others and come back.</td></tr>
+                    </tbody>
+                </table>
+                <h3>What you will do there</h3>
+                <ol>
+                    <li>Choose the <strong>class</strong> of each account to create. Only classes compatible with its nature are offered: an expense is not filed under assets.</li>
+                    <li>Leave the <strong>number</strong> empty, or type one within the class range.</li>
+                    <li>Adjust the <strong>name</strong> if the former application’s name does not fit.</li>
+                    <li>Click <kbd>Create the accounts</kbd> and confirm. All or nothing: a single faulty row refuses the whole batch, with the reason.</li>
+                </ol>
+                <h3>What changes here afterwards</h3>
+                <ul>
+                    <li>The created row becomes <strong>“Created ✓”</strong>, greyed and locked: action, lists and note can no longer be changed. It counts in “Already created” at step 3.</li>
+                    <li>The account exists in your chart: from now on it is corrected in <span class="chemin">Accounting › Chart of accounts</span>, like any account.</li>
+                    <li>The created account can no longer be a target: another row cannot be linked to it, since it already has its source account.</li>
+                    <li>Step 3 can be replayed safely: it never recreates an already created account. So you can decide and create in waves.</li>
+                </ul>
+                <div class="piege" data-titre="Pitfall">Check your “Create” rows before going to step 3. An account created by mistake, when it should have been linked, gives two accounts for the same thing and cannot be undone from here: it will have to be fixed in the chart of accounts.</div>
+                <p>Columns, rules and the twelve messages of that screen are detailed in <a href="importation.html#en-chart-step3">Data import › Step 3</a>.</p>
             </section>
 
             <section id="en-pitfalls">
@@ -572,7 +624,33 @@
 
             <section id="es-etapa3">
                 <h2>Y después: la etapa 3 crea las cuentas</h2>
-                <p>Las líneas « Crear » guardadas aquí solo se convierten en cuentas en la etapa 3, <kbd>Crear las cuentas en el plan →</kbd>: allí elige la clase de cada una (delimitada por su naturaleza), deja el número vacío para que se tome dentro del rango de la clase, ajusta el nombre y luego <kbd>Crear las cuentas</kbd>. Es la primera escritura real. Todo o nada: una línea incorrecta rechaza el lote entero, con el motivo. De vuelta aquí, la línea queda « Creada ✓ », en gris, y cuenta en « Ya creadas ». El detalle de columnas, reglas y mensajes está en <a href="importation.html#es-plan-etapa3">Importación de datos › Etapa 3</a>.</p>
+                <p>Guardar aquí no crea ninguna cuenta. Las líneas « Crear » solo se convierten en cuentas en la etapa 3, <span class="chemin">Importación › Crear las cuentas en el plan</span>, mediante el enlace <kbd>Crear las cuentas en el plan →</kbd> al pie de la cuadrícula o el hilo de las tres etapas. Es la primera etapa que escribe en su contabilidad. Lo que decide aquí determina lo que la etapa 3 le presenta:</p>
+                <table>
+                    <thead><tr><th>Lo que decidió aquí</th><th>Lo que hace la etapa 3</th></tr></thead>
+                    <tbody>
+                        <tr><td>« Crear », cuenta dejada vacía</td><td>Una línea por crear con el número en « auto »: se tomará dentro del rango de la clase que elija, preferentemente una decena redonda.</td></tr>
+                        <tr><td>« Crear », número del programa anterior reutilizado</td><td>Una línea por crear con ese número prellenado. Debe caer dentro del rango de la clase elegida; si no, vacíelo.</td></tr>
+                        <tr><td>« Vincular »</td><td>Nada que hacer: la cuenta ya existe. Cuenta en « Vinculadas ».</td></tr>
+                        <tr><td>« Ignorar »</td><td>Nada: la cuenta queda apartada. Cuenta en « Ignoradas ».</td></tr>
+                        <tr><td>« — por decidir »</td><td>La cuenta no se migra. La etapa 3 lo recuerda: « N cuenta(s) aún no están decididas en la etapa 2 »; puede crear las demás y volver.</td></tr>
+                    </tbody>
+                </table>
+                <h3>Lo que hará allí</h3>
+                <ol>
+                    <li>Elegir la <strong>clase</strong> de cada cuenta por crear. Solo se proponen las clases compatibles con su naturaleza: un gasto no se ubica en el activo.</li>
+                    <li>Dejar el <strong>número</strong> vacío, o escribir uno dentro del rango de la clase.</li>
+                    <li>Ajustar el <strong>nombre</strong> si el del programa anterior no conviene.</li>
+                    <li>Hacer clic en <kbd>Crear las cuentas</kbd> y confirmar. Todo o nada: una sola línea incorrecta rechaza el lote entero, con el motivo.</li>
+                </ol>
+                <h3>Lo que cambia aquí después</h3>
+                <ul>
+                    <li>La línea creada pasa a <strong>« Creada ✓ »</strong>, en gris y bloqueada: acción, listas y nota ya no se modifican. Cuenta en « Ya creadas » en la etapa 3.</li>
+                    <li>La cuenta existe en su plan: en adelante se corrige en <span class="chemin">Contabilidad › Plan contable</span>, como cualquier cuenta.</li>
+                    <li>La cuenta creada ya no puede ser destino: otra línea no puede vincularse a ella, puesto que ya tiene su cuenta de origen.</li>
+                    <li>La etapa 3 puede repetirse sin riesgo: nunca recrea una cuenta ya creada. Puede decidir y crear por tandas.</li>
+                </ul>
+                <div class="piege" data-titre="Trampa">Verifique sus « Crear » antes de pasar a la etapa 3. Una cuenta creada por error, cuando había que vincularla, da dos cuentas para lo mismo y no se anula desde aquí: habrá que corregirla en el plan contable.</div>
+                <p>El detalle de columnas, reglas y los doce mensajes de esa pantalla está en <a href="importation.html#es-plan-etapa3">Importación de datos › Etapa 3</a>.</p>
             </section>
 
             <section id="es-trampas">
