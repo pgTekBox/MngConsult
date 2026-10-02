@@ -161,6 +161,24 @@
             <section id="fr-plan-etape1">
                 <h2>Étape 1 : Importer le plan comptable</h2>
                 <p>Charge le plan comptable de l’ancien logiciel en préparation (<span class="chemin">Importation › Importer le plan comptable</span>). Un fil des 3 étapes, cliquable, et un bloc « État de cet écran » figurent en haut de page.</p>
+                <h3>En bref</h3>
+                <ol>
+                    <li>Chargez le plan comptable de l’ancien logiciel : en direct avec <kbd>⬇ Importer depuis QuickBooks</kbd>, ou par un fichier CSV exporté.</li>
+                    <li>Avec un fichier, passez par <kbd>Voir un aperçu</kbd> pour vérifier que les colonnes sont reconnues, puis <kbd>Charger en préparation</kbd>.</li>
+                    <li>Lisez « Ce qui a été lu » : lignes lues, comptes retenus, lignes à regarder. Corrigez la source et rechargez si des comptes manquent.</li>
+                    <li>Parcourez « Ce qui est en préparation » avec le filtre « Afficher » ; les verdicts Doublon et Invalide méritent un coup d’œil.</li>
+                    <li>Cliquez <kbd>Passer à la correspondance →</kbd> : c’est à l’étape 2 que chaque compte est lié, créé ou ignoré.</li>
+                </ol>
+                <p>Rien n’est écrit dans votre plan comptable à cette étape : tout reste en préparation et peut être abandonné.</p>
+                <h3>Deux façons de charger le plan</h3>
+                <table>
+                    <thead><tr><th>Voie</th><th>Comment</th><th>Ce qu’elle apporte</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, en direct</td><td>Encadré « QuickBooks, en direct — sans fichier à exporter », bouton <kbd>⬇ Importer depuis QuickBooks</kbd>. La compagnie doit être reliée une fois (lien « Gérer la liaison » ou « Relier QuickBooks »).</td><td>Aucun fichier à préparer. Rapatrie aussi le type et le sous-type QuickBooks, la description, le sous-compte, l’origine (« Défaut QuickBooks » ou « Ajouté le… ») et le solde courant : c’est ce qui permet la liaison d’office par alias et les filtres par origine.</td></tr>
+                        <tr><td>Fichier CSV</td><td>Bloc repliable « Le fichier à importer » : logiciel d’origine, séparateur, encodage, dépôt du fichier.</td><td>Fonctionne avec tout logiciel (QuickBooks, Acomba, autre). L’origine des comptes n’est pas connue ; le reste dépend des colonnes du fichier.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Piège">Les deux voies ne partagent pas leurs décisions de l’étape 2. Choisissez-en une et gardez-la : changer de voie fait réapparaître les comptes « à décider ».</div>
                 <h3>Le fichier à importer (bloc repliable)</h3>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
@@ -195,12 +213,22 @@
                         <tr><td>Nom</td><td>Nom du compte source.</td></tr>
                         <tr><td>Nature</td><td>ACTIF, PASSIF, CAPITAUX, PRODUIT ou CHARGE.</td></tr>
                         <tr><td>Solde / Sens</td><td>Solde lu et sens débit ou crédit. <strong>Un compte dont le solde n’est pas nul ne pourra pas être ignoré à l’étape 2</strong> : il devra être lié à un compte de 60sec ou créé, sinon ce montant disparaîtrait de la reprise. Un compte à solde 0 peut s’ignorer, avec deux réserves : QuickBooks ne donne pas le solde des comptes de revenus et de dépenses (ils reviennent toujours à 0, même s’ils ont servi), et un compte utilisé par une facture ou un produit en préparation ne s’ignore pas.</td></tr>
-                        <tr><td>Verdict</td><td>Nouveau, Déjà au plan, Doublon ou Invalide.</td></tr>
+                        <tr><td>Verdict</td><td><strong>Nouveau</strong> : compte retenu, inconnu de votre plan, à décider à l’étape 2. <strong>Déjà au plan</strong> : le même numéro (ou le même nom) existe chez vous ; l’étape 2 le proposera « même numéro » ou « même nom ». <strong>Doublon</strong> : même clé qu’une ligne précédente du fichier, écartée. <strong>Invalide</strong> : ni numéro ni nom, écartée.</td></tr>
                         <tr><td>Détail</td><td>Explication du verdict ou anomalie.</td></tr>
                         <tr><td>Type d’origine / Sous-type</td><td>Type et sous-type de l’ancien logiciel.</td></tr>
                         <tr><td>Origine</td><td>« Défaut QuickBooks » ou « Ajouté le aaaa-mm-jj » (lecture directe seulement).</td></tr>
                     </tbody>
                 </table>
+                <h3>Ce qui se passe au chargement</h3>
+                <ul>
+                    <li><strong>Le nouveau chargement remplace le plan en préparation.</strong> Les décisions de l’étape 2 dont la clé (le numéro, sinon le nom) n’a pas changé sont conservées ; renommer un compte dans l’ancien logiciel change sa clé.</li>
+                    <li><strong>Chaque ligne reçoit un verdict</strong> : Nouveau, Déjà au plan, Doublon ou Invalide. Les lignes Doublon et Invalide ne sont pas retenues.</li>
+                    <li><strong>Les comptes reconnus sont liés d’office.</strong> Quand le nom QuickBooks (français ou anglais) ou le sous-type est un alias connu du plan standard, la décision « Lier » est créée tout de suite : elle apparaîtra déjà faite à l’étape 2.</li>
+                    <li><strong>Le solde est mémorisé.</strong> Il sert à l’étape 2 : un compte qui porte un solde ne peut pas y être ignoré.</li>
+                    <li><strong>Rien n’est écrit dans votre plan comptable.</strong> Les comptes ne seront créés qu’à l’étape 3, pour ceux que vous aurez marqués « Créer ».</li>
+                </ul>
+                <h3>Et après : l’étape 2</h3>
+                <p>Le bloc « Étape suivante — la correspondance des comptes » et le bouton <kbd>Passer à la correspondance →</kbd> mènent à l’étape 2, où chaque compte lu est lié à un compte de votre plan, créé ou ignoré. Le fil des trois étapes en haut de page y mène aussi. Cet écran a son aide pas à pas : <a href="correspondance-comptes.html">Correspondance des comptes</a>.</p>
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">« Choisissez d’abord un fichier. »</span> — déposez un fichier avant de cliquer.</li>
@@ -789,6 +817,24 @@
             <section id="en-chart-step1">
                 <h2>Step 1: Import the chart of accounts</h2>
                 <p>Loads the chart of accounts of the former application into staging (<span class="chemin">Import › Import the chart of accounts</span>). A clickable 3-step trail and a “Status of this screen” block sit at the top.</p>
+                <h3>In short</h3>
+                <ol>
+                    <li>Load the chart of accounts of the former application: directly with <kbd>⬇ Import from QuickBooks</kbd>, or through an exported CSV file.</li>
+                    <li>With a file, use <kbd>Preview</kbd> to check that the columns are recognized, then <kbd>Load into staging</kbd>.</li>
+                    <li>Read “What was read”: lines read, accounts kept, lines to look at. Fix the source and reload if accounts are missing.</li>
+                    <li>Browse “What is in staging” with the “Show” filter; the Duplicate and Invalid verdicts deserve a look.</li>
+                    <li>Click <kbd>Go to mapping →</kbd>: step 2 is where each account is linked, created or ignored.</li>
+                </ol>
+                <p>Nothing is written to your chart of accounts at this step: everything stays in staging and can be abandoned.</p>
+                <h3>Two ways to load the chart</h3>
+                <table>
+                    <thead><tr><th>Path</th><th>How</th><th>What it brings</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, live</td><td>The “QuickBooks, live — no file to export” box, button <kbd>⬇ Import from QuickBooks</kbd>. The company must be connected once (link “Manage the connection” or “Connect QuickBooks”).</td><td>No file to prepare. Also brings the QuickBooks type and subtype, the description, the sub-account, the origin (“QuickBooks default” or “Added on…”) and the current balance: this is what enables the outright link by alias and the origin filters.</td></tr>
+                        <tr><td>CSV file</td><td>The collapsible block “The file to import”: source application, separator, encoding, file drop.</td><td>Works with any application (QuickBooks, Acomba, other). The origin of the accounts is not known; the rest depends on the file’s columns.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Pitfall">The two paths do not share their step-2 decisions. Choose one and keep it: switching paths brings the “to decide” accounts back.</div>
                 <h3>The file to import (collapsible block)</h3>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
@@ -823,12 +869,22 @@
                         <tr><td>Name</td><td>Source account name.</td></tr>
                         <tr><td>Nature</td><td>ASSET, LIABILITY, EQUITY, REVENUE or EXPENSE.</td></tr>
                         <tr><td>Balance / Side</td><td>Balance read and debit or credit side. <strong>An account whose balance is not zero cannot be ignored at step 2</strong>: it will have to be linked to a 60sec account or created, otherwise that amount would vanish from the migration. A zero-balance account can be ignored, with two caveats: QuickBooks does not give the balance of revenue and expense accounts (they always come back as 0, even when used), and an account used by an invoice or a product in preparation cannot be ignored.</td></tr>
-                        <tr><td>Verdict</td><td>New, Already in the chart, Duplicate or Invalid.</td></tr>
+                        <tr><td>Verdict</td><td><strong>New</strong>: account kept, unknown to your chart, to be decided at step 2. <strong>Already in the chart</strong>: the same number (or the same name) exists in your chart; step 2 will suggest it as “same number” or “same name”. <strong>Duplicate</strong>: same key as an earlier line of the file, discarded. <strong>Invalid</strong>: neither number nor name, discarded.</td></tr>
                         <tr><td>Detail</td><td>Explanation of the verdict or anomaly.</td></tr>
                         <tr><td>Source type / Subtype</td><td>Type and subtype from the former application.</td></tr>
                         <tr><td>Origin</td><td>“QuickBooks default” or “Added on yyyy-mm-dd” (direct read only).</td></tr>
                     </tbody>
                 </table>
+                <h3>What happens on load</h3>
+                <ul>
+                    <li><strong>The new load replaces the staged chart.</strong> Step-2 decisions whose key (the number, otherwise the name) did not change are kept; renaming an account in the former application changes its key.</li>
+                    <li><strong>Each line gets a verdict</strong>: New, Already in the chart, Duplicate or Invalid. Duplicate and Invalid lines are not kept.</li>
+                    <li><strong>Recognized accounts are linked outright.</strong> When the QuickBooks name (French or English) or the subtype is an alias known to the standard chart, the “Link” decision is created right away: it will show as already made at step 2.</li>
+                    <li><strong>The balance is stored.</strong> It is used at step 2: an account that carries a balance cannot be ignored there.</li>
+                    <li><strong>Nothing is written to your chart of accounts.</strong> Accounts are only created at step 3, for those you marked “Create”.</li>
+                </ul>
+                <h3>Afterwards: step 2</h3>
+                <p>The block “Next step — account mapping” and the button <kbd>Go to mapping →</kbd> lead to step 2, where each account read is linked to an account of your chart, created or ignored. The 3-step trail at the top leads there too. That screen has its own step-by-step help: <a href="correspondance-comptes.html">Account mapping</a>.</p>
                 <h3>Messages</h3>
                 <ul class="messages">
                     <li><span class="msg">“Choose a file first.”</span> — drop a file before clicking.</li>
@@ -1417,6 +1473,24 @@
             <section id="es-plan-etapa1">
                 <h2>Etapa 1: Importar el plan de cuentas</h2>
                 <p>Carga en preparación el plan de cuentas del programa anterior (<span class="chemin">Importación › Importar el plan de cuentas</span>). Arriba figuran un hilo de las 3 etapas, pulsable, y un bloque « Estado de esta pantalla ».</p>
+                <h3>En resumen</h3>
+                <ol>
+                    <li>Cargue el plan de cuentas del programa anterior: en directo con <kbd>⬇ Importar desde QuickBooks</kbd>, o mediante un archivo CSV exportado.</li>
+                    <li>Con un archivo, pase por <kbd>Ver una vista previa</kbd> para verificar que las columnas se reconocen, y luego <kbd>Cargar en preparación</kbd>.</li>
+                    <li>Lea « Qué se leyó »: líneas leídas, cuentas retenidas, líneas por revisar. Corrija el origen y recargue si faltan cuentas.</li>
+                    <li>Recorra « Qué está en preparación » con el filtro « Mostrar »; los veredictos Duplicado e Inválido merecen una mirada.</li>
+                    <li>Haga clic en <kbd>Pasar a la correspondencia →</kbd>: en la etapa 2 cada cuenta se vincula, se crea o se ignora.</li>
+                </ol>
+                <p>En esta etapa no se escribe nada en su plan de cuentas: todo queda en preparación y puede abandonarse.</p>
+                <h3>Dos maneras de cargar el plan</h3>
+                <table>
+                    <thead><tr><th>Vía</th><th>Cómo</th><th>Qué aporta</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, en directo</td><td>Recuadro « QuickBooks, en directo — sin archivo que exportar », botón <kbd>⬇ Importar desde QuickBooks</kbd>. La compañía debe conectarse una vez (enlace « Gestionar la conexión » o « Conectar QuickBooks »).</td><td>Ningún archivo que preparar. Trae también el tipo y el subtipo QuickBooks, la descripción, la subcuenta, el origen (« Por defecto QuickBooks » o « Añadida el… ») y el saldo corriente: eso permite el vínculo de oficio por alias y los filtros por origen.</td></tr>
+                        <tr><td>Archivo CSV</td><td>Bloque plegable « El archivo que importar »: programa de origen, separador, codificación, depósito del archivo.</td><td>Funciona con cualquier programa (QuickBooks, Acomba, otro). No se conoce el origen de las cuentas; el resto depende de las columnas del archivo.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Trampa">Las dos vías no comparten sus decisiones de la etapa 2. Elija una y consérvela: cambiar de vía hace reaparecer las cuentas « por decidir ».</div>
                 <h3>El archivo que importar (bloque plegable)</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
@@ -1451,12 +1525,22 @@
                         <tr><td>Nombre</td><td>Nombre de la cuenta de origen.</td></tr>
                         <tr><td>Naturaleza</td><td>ACTIVO, PASIVO, CAPITAL, INGRESO o GASTO.</td></tr>
                         <tr><td>Saldo / Sentido</td><td>Saldo leído y sentido debe o haber. <strong>Una cuenta cuyo saldo no es cero no podrá ignorarse en la etapa 2</strong>: deberá vincularse a una cuenta de 60sec o crearse; si no, ese importe desaparecería de la migración. Una cuenta con saldo 0 puede ignorarse, con dos reservas: QuickBooks no da el saldo de las cuentas de ingresos y de gastos (siempre vuelven a 0, aunque se hayan usado), y una cuenta usada por una factura o un producto en preparación no se ignora.</td></tr>
-                        <tr><td>Veredicto</td><td>Nueva, Ya en el plan, Duplicado o Inválida.</td></tr>
+                        <tr><td>Veredicto</td><td><strong>Nueva</strong>: cuenta retenida, desconocida en su plan, por decidir en la etapa 2. <strong>Ya en el plan</strong>: el mismo número (o el mismo nombre) existe en su plan; la etapa 2 la propondrá como « mismo número » o « mismo nombre ». <strong>Duplicado</strong>: misma clave que una línea anterior del archivo, descartada. <strong>Inválida</strong>: sin número ni nombre, descartada.</td></tr>
                         <tr><td>Detalle</td><td>Explicación del veredicto o anomalía.</td></tr>
                         <tr><td>Tipo de origen / Subtipo</td><td>Tipo y subtipo del programa anterior.</td></tr>
                         <tr><td>Origen</td><td>« Por defecto QuickBooks » o « Añadida el aaaa-mm-dd » (solo lectura directa).</td></tr>
                     </tbody>
                 </table>
+                <h3>Qué ocurre al cargar</h3>
+                <ul>
+                    <li><strong>La nueva carga sustituye el plan en preparación.</strong> Se conservan las decisiones de la etapa 2 cuya clave (el número, o si no el nombre) no cambió; renombrar una cuenta en el programa anterior cambia su clave.</li>
+                    <li><strong>Cada línea recibe un veredicto</strong>: Nueva, Ya en el plan, Duplicado o Inválida. Las líneas Duplicado e Inválida no se retienen.</li>
+                    <li><strong>Las cuentas reconocidas se vinculan de oficio.</strong> Cuando el nombre QuickBooks (francés o inglés) o el subtipo es un alias conocido del plan estándar, la decisión « Vincular » se crea de inmediato: aparecerá ya tomada en la etapa 2.</li>
+                    <li><strong>El saldo se guarda.</strong> Sirve en la etapa 2: una cuenta que lleva saldo no puede ignorarse allí.</li>
+                    <li><strong>No se escribe nada en su plan de cuentas.</strong> Las cuentas solo se crean en la etapa 3, para las que haya marcado « Crear ».</li>
+                </ul>
+                <h3>Y después: la etapa 2</h3>
+                <p>El bloque « Etapa siguiente — la correspondencia de cuentas » y el botón <kbd>Pasar a la correspondencia →</kbd> llevan a la etapa 2, donde cada cuenta leída se vincula a una cuenta de su plan, se crea o se ignora. El hilo de las tres etapas en la parte superior también lleva allí. Esa pantalla tiene su ayuda paso a paso: <a href="correspondance-comptes.html">Correspondencia de cuentas</a>.</p>
                 <h3>Mensajes</h3>
                 <ul class="messages">
                     <li><span class="msg">« Elija primero un archivo. »</span> — deposite un archivo antes de pulsar.</li>
