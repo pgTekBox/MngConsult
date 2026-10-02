@@ -214,49 +214,25 @@ WHERE pv.[CompanyGUID] = @CompanyGUID
     End Function
 
     ''' <summary>
+    ''' Prépare l'appel d'une procédure de ce tableau de bord. Le paramètre
+    ''' @CompanyGUID y est toujours posé : chaque compagnie ne voit que ses
+    ''' propres données (T305). Aucune lecture de cet écran ne doit s'en passer.
+    ''' </summary>
+    Private Function CommandeCompagnie(procedure As String, cn As SqlConnection) As SqlCommand
+        Dim cmd As New SqlCommand(procedure, cn)
+        cmd.CommandType = CommandType.StoredProcedure
+        cmd.Parameters.Add(New SqlParameter("@CompanyGUID", Company))
+        Return cmd
+    End Function
+
+    ''' <summary>
     ''' Une seule requête SQL qui ramène les 4×3 = 12 sous-totaux
     ''' (Today/Week/Month/3Months × Collecté/Recevoir/Retard).
     ''' </summary>
     Private Sub ChargerKpis()
-        Dim sql As String = "
-DECLARE @T DATE = CAST(GETDATE() AS DATE);
-
-WITH Periodes AS (
-    SELECT v.[Id], v.[Montant], v.[StatutPaiement],
-           ABS(DATEDIFF(DAY, @T, ISNULL(v.[DueDate], v.[DateExecutionPrevue]))) AS DiffDays
-    FROM [dbo].[vwAISales] v
-)
-SELECT
-    -- Compteurs (nombre de ventes par période)
-    SUM(CASE WHEN DiffDays <= 1  THEN 1 ELSE 0 END) AS NbToday,
-    SUM(CASE WHEN DiffDays <= 7  THEN 1 ELSE 0 END) AS NbWeek,
-    SUM(CASE WHEN DiffDays <= 30 THEN 1 ELSE 0 END) AS NbMonth,
-    SUM(CASE WHEN DiffDays <= 90 THEN 1 ELSE 0 END) AS Nb3M,
-
-    -- TODAY × 3 statuts
-    SUM(CASE WHEN DiffDays <= 1 AND StatutPaiement = 'PAYEE'                                  THEN Montant ELSE 0 END) AS TodayCollecte,
-    SUM(CASE WHEN DiffDays <= 1 AND StatutPaiement IN ('OUVERTE','IN_PROGRESS','PARTIELLE')   THEN Montant ELSE 0 END) AS TodayRecevoir,
-    SUM(CASE WHEN DiffDays <= 1 AND StatutPaiement = 'EN_RETARD'                              THEN Montant ELSE 0 END) AS TodayRetard,
-
-    -- WEEK × 3 statuts
-    SUM(CASE WHEN DiffDays <= 7 AND StatutPaiement = 'PAYEE'                                  THEN Montant ELSE 0 END) AS WeekCollecte,
-    SUM(CASE WHEN DiffDays <= 7 AND StatutPaiement IN ('OUVERTE','IN_PROGRESS','PARTIELLE')   THEN Montant ELSE 0 END) AS WeekRecevoir,
-    SUM(CASE WHEN DiffDays <= 7 AND StatutPaiement = 'EN_RETARD'                              THEN Montant ELSE 0 END) AS WeekRetard,
-
-    -- MONTH × 3 statuts
-    SUM(CASE WHEN DiffDays <= 30 AND StatutPaiement = 'PAYEE'                                 THEN Montant ELSE 0 END) AS MonthCollecte,
-    SUM(CASE WHEN DiffDays <= 30 AND StatutPaiement IN ('OUVERTE','IN_PROGRESS','PARTIELLE')  THEN Montant ELSE 0 END) AS MonthRecevoir,
-    SUM(CASE WHEN DiffDays <= 30 AND StatutPaiement = 'EN_RETARD'                             THEN Montant ELSE 0 END) AS MonthRetard,
-
-    -- 3 MONTHS × 3 statuts
-    SUM(CASE WHEN DiffDays <= 90 AND StatutPaiement = 'PAYEE'                                 THEN Montant ELSE 0 END) AS M3Collecte,
-    SUM(CASE WHEN DiffDays <= 90 AND StatutPaiement IN ('OUVERTE','IN_PROGRESS','PARTIELLE')  THEN Montant ELSE 0 END) AS M3Recevoir,
-    SUM(CASE WHEN DiffDays <= 90 AND StatutPaiement = 'EN_RETARD'                             THEN Montant ELSE 0 END) AS M3Retard
-FROM Periodes;"
-
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
-            Using cmd As New SqlCommand(sql, cn)
+            Using cmd As SqlCommand = CommandeCompagnie("s0888GetAiVentesKpis", cn)
                 Using rd = cmd.ExecuteReader()
                     If rd.Read() Then
                         ' Compteurs
@@ -326,35 +302,12 @@ FROM Periodes;"
             Case Else : borneFin = 90
         End Select
 
-        ' Filtre selon le tab
-        Dim filtreStatut As String
-        Select Case TabSel
-            Case "COLLECTE"
-                filtreStatut = "v.[StatutPaiement] = 'PAYEE'"
-            Case "RECEVOIR"
-                filtreStatut = "v.[StatutPaiement] IN ('OUVERTE','IN_PROGRESS','PARTIELLE')"
-            Case Else  ' RETARD
-                filtreStatut = "v.[StatutPaiement] = 'EN_RETARD'"
-        End Select
-
-        Dim sql As String = "
-SELECT
-    v.[Id]                                  AS Id,
-    ISNULL(v.[Beneficiaire], '')            AS Client,
-    ISNULL(v.[Description], v.[Nom])        AS Description,
-    v.[DueDate]                             AS DueDate,
-    ISNULL(v.[Montant], 0)                  AS Montant,
-    ISNULL(v.[StatutPaiement], 'OUVERTE')   AS StatutPaiement
-FROM [dbo].[vwAISales] v
-WHERE ABS(DATEDIFF(DAY, CAST(GETDATE() AS DATE),
-                   ISNULL(v.[DueDate], v.[DateExecutionPrevue]))) <= " & borneFin & "
-  AND " & filtreStatut & "
-ORDER BY ISNULL(v.[DueDate], v.[DateExecutionPrevue]) DESC;"
-
         Dim dt As New DataTable()
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
-            Using cmd As New SqlCommand(sql, cn)
+            Using cmd As SqlCommand = CommandeCompagnie("s0889GetAiVentesListe", cn)
+                cmd.Parameters.Add(New SqlParameter("@Jours", borneFin))
+                cmd.Parameters.Add(New SqlParameter("@Onglet", TabSel))
                 Using da As New SqlDataAdapter(cmd)
                     da.Fill(dt)
                 End Using
@@ -373,18 +326,10 @@ ORDER BY ISNULL(v.[DueDate], v.[DateExecutionPrevue]) DESC;"
     End Sub
 
     Private Sub ChargerCompteursTabs(borneFin As Integer)
-        Dim sql As String = "
-SELECT
-    SUM(CASE WHEN v.[StatutPaiement] = 'PAYEE' THEN 1 ELSE 0 END)                                 AS NbCollecte,
-    SUM(CASE WHEN v.[StatutPaiement] IN ('OUVERTE','IN_PROGRESS','PARTIELLE') THEN 1 ELSE 0 END)  AS NbRecevoir,
-    SUM(CASE WHEN v.[StatutPaiement] = 'EN_RETARD' THEN 1 ELSE 0 END)                             AS NbRetard
-FROM [dbo].[vwAISales] v
-WHERE ABS(DATEDIFF(DAY, CAST(GETDATE() AS DATE),
-                   ISNULL(v.[DueDate], v.[DateExecutionPrevue]))) <= " & borneFin & ";"
-
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
-            Using cmd As New SqlCommand(sql, cn)
+            Using cmd As SqlCommand = CommandeCompagnie("s0890GetAiVentesCompteurs", cn)
+                cmd.Parameters.Add(New SqlParameter("@Jours", borneFin))
                 Using rd = cmd.ExecuteReader()
                     If rd.Read() Then
                         litTabCollecteCount.Text = GetIntSafe(rd, "NbCollecte").ToString()

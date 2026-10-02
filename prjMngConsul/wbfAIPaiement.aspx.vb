@@ -30,11 +30,12 @@ Partial Public Class wbfAIPaiement
         Dim js As String = "var __dispatchTarget = '" & btnDispatchAction.UniqueID & "';"
         ScriptManager.RegisterStartupScript(Me, Me.GetType(), "DispatchTarget", js, True)
 
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             PeriodeSel = "3MONTHS"
             ' La catégorie ouverte par défaut (Fournisseur) est gérée côté client via hfCategorieOpen
             ChargerKpis()
@@ -204,51 +205,23 @@ Partial Public Class wbfAIPaiement
     '  CHARGEMENT DES DONNÉES
     ' =========================================================
 
-    Private Sub ChargerKpis()
-        Dim sql As String = "
-SELECT
-    [Period]      = CASE
-                        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-                         AND v.[DateExecutionPrevue] <  DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
-                            THEN 'TODAY'
-                        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-                         AND v.[DateExecutionPrevue] <  DATEADD(DAY, 7, CAST(GETDATE() AS DATE))
-                            THEN 'WEEK'
-                        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-                         AND v.[DateExecutionPrevue] <  DATEADD(MONTH, 1, CAST(GETDATE() AS DATE))
-                            THEN 'MONTH'
-                        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-                         AND v.[DateExecutionPrevue] <  DATEADD(MONTH, 3, CAST(GETDATE() AS DATE))
-                            THEN '3MONTHS'
-                        ELSE 'OTHER'
-                    END,
-    v.[Category]  AS CategorieNom,
-    COUNT(*)      AS NbPaiements,
-    SUM(ISNULL(v.[Montant], 0)) AS Total
-FROM [dbo].[vwAiPaiement] v
-WHERE v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-GROUP BY
-    CASE
-        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-         AND v.[DateExecutionPrevue] <  DATEADD(DAY, 1, CAST(GETDATE() AS DATE))
-            THEN 'TODAY'
-        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-         AND v.[DateExecutionPrevue] <  DATEADD(DAY, 7, CAST(GETDATE() AS DATE))
-            THEN 'WEEK'
-        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-         AND v.[DateExecutionPrevue] <  DATEADD(MONTH, 1, CAST(GETDATE() AS DATE))
-            THEN 'MONTH'
-        WHEN v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-         AND v.[DateExecutionPrevue] <  DATEADD(MONTH, 3, CAST(GETDATE() AS DATE))
-            THEN '3MONTHS'
-        ELSE 'OTHER'
-    END,
-    v.[Category];"
+    ''' <summary>
+    ''' Prépare l'appel d'une procédure de ce tableau de bord. Le paramètre
+    ''' @CompanyGUID y est toujours posé : chaque compagnie ne voit que ses
+    ''' propres données (T305). Aucune lecture de cet écran ne doit s'en passer.
+    ''' </summary>
+    Private Function CommandeCompagnie(procedure As String, cn As SqlConnection) As SqlCommand
+        Dim cmd As New SqlCommand(procedure, cn)
+        cmd.CommandType = CommandType.StoredProcedure
+        cmd.Parameters.Add(New SqlParameter("@CompanyGUID", Company))
+        Return cmd
+    End Function
 
+    Private Sub ChargerKpis()
         Dim dt As New DataTable()
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
-            Using cmd As New SqlCommand(sql, cn)
+            Using cmd As SqlCommand = CommandeCompagnie("s0886GetAiPaiementKpis", cn)
                 Using da As New SqlDataAdapter(cmd)
                     da.Fill(dt)
                 End Using
@@ -343,32 +316,11 @@ GROUP BY
     End Sub
 
     Private Sub ChargerCategories()
-        Dim borneFin As String
-        Select Case PeriodeSel
-            Case "TODAY" : borneFin = "DATEADD(DAY, 1, CAST(GETDATE() AS DATE))"
-            Case "WEEK" : borneFin = "DATEADD(DAY, 7, CAST(GETDATE() AS DATE))"
-            Case "MONTH" : borneFin = "DATEADD(MONTH, 1, CAST(GETDATE() AS DATE))"
-            Case Else : borneFin = "DATEADD(MONTH, 3, CAST(GETDATE() AS DATE))"
-        End Select
-
-        Dim sql As String = "
-SELECT
-    v.[Category]            AS CategorieNom,
-    v.[Id],
-    v.[Beneficiaire],
-    v.[Montant],
-    v.[Nom],
-    v.[Description],
-    v.[DateExecutionPrevue]
-FROM [dbo].[vwAiPaiement] v
-WHERE v.[DateExecutionPrevue] >= CAST(GETDATE() AS DATE)
-  AND v.[DateExecutionPrevue] <  " & borneFin & "
-ORDER BY v.[Category], v.[DateExecutionPrevue];"
-
         Dim dt As New DataTable()
         Using cn As New SqlConnection(ConnectionString)
             cn.Open()
-            Using cmd As New SqlCommand(sql, cn)
+            Using cmd As SqlCommand = CommandeCompagnie("s0887GetAiPaiementListe", cn)
+                cmd.Parameters.Add(New SqlParameter("@Periode", PeriodeSel))
                 Using da As New SqlDataAdapter(cmd)
                     da.Fill(dt)
                 End Using
