@@ -44,6 +44,18 @@
     /* Plan comptable et balance de vérification : côte à côte, toujours. */
     .grille.duo { grid-template-columns: 1fr 1fr }
 
+    /* Lecture directe : la première boîte — le connecteur — prend toute la largeur ;
+       les écrans qu'elle alimente se rangent d'eux-mêmes en dessous. Dans la boîte
+       large, « ce qui fonctionne » et « ce qui manque » se lisent côte à côte. */
+    .grille.tete > .carte:first-child {
+        grid-column: 1 / -1;
+        display: grid; grid-template-columns: 1fr 1fr; column-gap: 28px; align-items: start;
+    }
+    .grille.tete > .carte:first-child > * { grid-column: 1 / -1 }
+    .grille.tete > .carte:first-child > .fait { grid-column: 1 }
+    .grille.tete > .carte:first-child > .manque { grid-column: 2 }
+    .grille.tete > .carte:first-child > .ouvrir { justify-self: start }
+
     .carte {
         background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
         padding: 15px 17px; display: flex; flex-direction: column;
@@ -219,7 +231,7 @@
     </div>
 
     <h2 class="sect">Lecture directe <span>sans demander d'export au client</span></h2>
-    <div class="grille"><asp:Literal ID="litConnexion" runat="server" /></div>
+    <div class="grille tete"><asp:Literal ID="litConnexion" runat="server" /></div>
 
     <h2 class="sect">Reprise comptable <span>le plan comptable, puis la balance de vérification</span></h2>
     <div class="grille duo"><asp:Literal ID="litParcours" runat="server" /></div>
