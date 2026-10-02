@@ -24,6 +24,18 @@
             <h1>Correspondance des comptes</h1>
             <p class="intro">L’écran <span class="chemin">Importation › Correspondance des comptes</span> est l’étape 2 de la reprise du plan comptable. Pour chaque compte de l’ancien logiciel (QuickBooks, Sage 50, Acomba…), vous décidez ce qu’il devient dans 60sec : <strong>le lier</strong> à un compte qui existe déjà, <strong>le créer</strong>, ou <strong>l’ignorer</strong>. Cette page explique comment faire chacun de ces gestes, pas à pas. La vue d’ensemble de la reprise (étapes 1 et 3, tiers, balance, factures) est dans <a href="importation.html">Importation des données</a>.</p>
 
+            <section id="fr-en-bref">
+                <h2>En bref</h2>
+                <ol>
+                    <li>À l’ouverture, une partie du travail est déjà faite : les comptes dont le nom QuickBooks est connu du plan standard arrivent <strong>liés d’office</strong>, et les propositions « même nom » arrivent préréglées sur « Lier ».</li>
+                    <li>Acceptez d’un coup ce qui est sûr avec <kbd>Accepter les correspondances par numéro</kbd>, puis, si vous le souhaitez, demandez des propositions pour le reste avec <kbd>✨ Proposer avec l’IA</kbd>.</li>
+                    <li>Filtrez sur « À décider seulement » et tranchez ligne par ligne : <a href="#fr-lier"><strong>Lier</strong></a> (presque toujours), <a href="#fr-creer"><strong>Créer</strong></a> (seulement si rien ne convient) ou <a href="#fr-ignorer"><strong>Ignorer</strong></a> (comptes vides et inutilisés, voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
+                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd>. S’il y a un problème, <a href="#fr-enregistrer">une fenêtre l’explique</a> au centre de l’écran ; rien de fautif n’est enregistré.</li>
+                    <li>Quand l’avancement atteint 100 %, passez à <a href="#fr-etape3">l’étape 3</a> par <kbd>Créer les comptes au plan →</kbd> pour créer réellement les comptes « À créer ».</li>
+                </ol>
+                <p>Rien de ce qui se fait ici n’écrit en comptabilité : vous pouvez enregistrer, revenir et changer d’avis autant de fois que nécessaire. Chaque étape du résumé renvoie à la section qui la détaille plus bas.</p>
+            </section>
+
             <section id="fr-principe">
                 <h2>Le principe en trois mots</h2>
                 <table>
@@ -185,6 +197,18 @@
             <h1>Account mapping</h1>
             <p class="intro">The <span class="chemin">Import › Account mapping</span> screen is step 2 of the chart-of-accounts migration. For each account of the former application (QuickBooks, Sage 50, Acomba…), you decide what it becomes in 60sec: <strong>link it</strong> to an account that already exists, <strong>create it</strong>, or <strong>ignore it</strong>. This page explains each of these actions step by step. The overall migration (steps 1 and 3, parties, trial balance, invoices) is in <a href="importation.html">Data import</a>.</p>
 
+            <section id="en-in-short">
+                <h2>In short</h2>
+                <ol>
+                    <li>On opening, part of the work is already done: accounts whose QuickBooks name is known to the standard chart come <strong>linked outright</strong>, and “same name” suggestions come preset to “Link”.</li>
+                    <li>Accept what is certain in one go with <kbd>Accept mappings by number</kbd>, then, if you wish, ask for suggestions for the rest with <kbd>✨ Suggest with AI</kbd>.</li>
+                    <li>Filter on “To decide only” and decide row by row: <a href="#en-link"><strong>Link</strong></a> (almost always), <a href="#en-create"><strong>Create</strong></a> (only if nothing fits) or <a href="#en-ignore"><strong>Ignore</strong></a> (empty, unused accounts, see <a href="#en-safeguards">the safeguards</a>).</li>
+                    <li>Click <kbd>Save mappings</kbd>. If there is a problem, <a href="#en-save">a popup explains it</a> in the middle of the screen; nothing faulty is saved.</li>
+                    <li>When progress reaches 100%, go to <a href="#en-step3">step 3</a> with <kbd>Create the accounts in the chart →</kbd> to actually create the “To create” accounts.</li>
+                </ol>
+                <p>Nothing done here writes to the books: you can save, come back and change your mind as often as needed. Each step of the summary links to the section that details it below.</p>
+            </section>
+
             <section id="en-principle">
                 <h2>The principle in three words</h2>
                 <table>
@@ -345,6 +369,18 @@
         <article class="langue" lang="es">
             <h1>Correspondencia de cuentas</h1>
             <p class="intro">La pantalla <span class="chemin">Importación › Correspondencia de cuentas</span> es la etapa 2 de la migración del plan contable. Para cada cuenta del programa anterior (QuickBooks, Sage 50, Acomba…), usted decide en qué se convierte en 60sec: <strong>vincularla</strong> a una cuenta que ya existe, <strong>crearla</strong> o <strong>ignorarla</strong>. Esta página explica cada uno de esos gestos paso a paso. La visión de conjunto de la migración (etapas 1 y 3, terceros, balance, facturas) está en <a href="importation.html">Importación de datos</a>.</p>
+
+            <section id="es-en-resumen">
+                <h2>En resumen</h2>
+                <ol>
+                    <li>Al abrir, parte del trabajo ya está hecho: las cuentas cuyo nombre QuickBooks es conocido por el plan estándar llegan <strong>vinculadas de oficio</strong>, y las propuestas « mismo nombre » llegan preajustadas en « Vincular ».</li>
+                    <li>Acepte de una vez lo que es seguro con <kbd>Aceptar las correspondencias por número</kbd> y, si lo desea, pida propuestas para el resto con <kbd>✨ Proponer con la IA</kbd>.</li>
+                    <li>Filtre por « Solo por decidir » y decida línea por línea: <a href="#es-vincular"><strong>Vincular</strong></a> (casi siempre), <a href="#es-crear"><strong>Crear</strong></a> (solo si nada conviene) o <a href="#es-ignorar"><strong>Ignorar</strong></a> (cuentas vacías y sin uso, véanse <a href="#es-protecciones">las protecciones</a>).</li>
+                    <li>Haga clic en <kbd>Guardar las correspondencias</kbd>. Si hay un problema, <a href="#es-guardar">una ventana lo explica</a> en el centro de la pantalla; no se guarda nada incorrecto.</li>
+                    <li>Cuando el avance llegue al 100 %, pase a <a href="#es-etapa3">la etapa 3</a> con <kbd>Crear las cuentas en el plan →</kbd> para crear realmente las cuentas « Por crear ».</li>
+                </ol>
+                <p>Nada de lo que se hace aquí escribe en la contabilidad: puede guardar, volver y cambiar de opinión tantas veces como haga falta. Cada paso del resumen enlaza con la sección que lo detalla más abajo.</p>
+            </section>
 
             <section id="es-principio">
                 <h2>El principio en tres palabras</h2>
