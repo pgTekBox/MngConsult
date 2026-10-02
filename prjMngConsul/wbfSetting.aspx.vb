@@ -730,6 +730,8 @@ Partial Public Class wbfSetting
 
     ''' <summary>Écrit un paramètre STRING (sVal) via s0151UpdateParamValue.</summary>
     Private Sub SaveParamString(paramId As Integer, value As String)
+        ' L'Id du paramètre revient d'un champ caché : il doit être à la compagnie (T306).
+        If Not Appartient("PARAM", paramId) Then Return
         Using conn As New SqlConnection(ConnectionString)
             conn.Open()
             Using cmd As New SqlCommand("s0151UpdateParamValue", conn)
@@ -1175,6 +1177,10 @@ Partial Public Class wbfSetting
                         sVal = If(String.IsNullOrEmpty(text), CType(DBNull.Value, Object), text)
                     End If
                 End If
+
+                ' L'Id du paramètre revient d'un champ caché : une ligne qui n'est
+                ' pas à la compagnie de la session est ignorée (T306).
+                If Not Appartient("PARAM", paramId) Then Continue For
 
                 Using cmd As New SqlCommand("s0151UpdateParamValue", conn)
                     cmd.CommandType = CommandType.StoredProcedure

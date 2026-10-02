@@ -83,6 +83,7 @@ Public Class usJournalTemplateList
     Private Sub rpTemplates_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpTemplates.ItemCommand
         If e.CommandName = "DeleteTemplate" Then
             Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            If Not Appartient("TEMPLATE", id) Then Return
             Try
                 Dim p As New Collection
                 p.Add(New SqlParameter("@TemplateId", id))

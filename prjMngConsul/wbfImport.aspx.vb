@@ -13,11 +13,12 @@ Public Class wbfImport
     Private Const OpenAiModel As String = "gpt-4.1-mini"
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             BindRecent()
         End If
     End Sub
@@ -90,6 +91,7 @@ Public Class wbfImport
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@Top", 10))
+            p.Add(New SqlParameter("@CompanyGUID", Company))   ' T306 : la liste était commune à toutes les compagnies
 
             Dim ds As DataSet = ExecuteSQLds("s0601GetRecentImportFiles", p)
             If ds.Tables(0).Rows.Count > 0 Then
@@ -171,6 +173,7 @@ Public Class wbfImport
     End Sub
 
     Private Sub DeleteImportFile(id As Integer)
+        If Not Appartient("IMPORT", id) Then Return
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@Id", id))
@@ -195,6 +198,10 @@ Public Class wbfImport
     End Sub
 
     Private Async Function ProcessFileWithAI(id As Integer) As Task
+        If Not Appartient("IMPORT", id) Then
+            ShowError("Fichier introuvable.")
+            Return
+        End If
         ' 1) Lire le fichier depuis staging.ImportFiles
         Dim p As New Collection
         p.Add(New SqlParameter("@Id", id))

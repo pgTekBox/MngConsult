@@ -10,11 +10,12 @@ Public Class wbfAppointmentEdit
 
         ApplyLocalization()
 
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             LoadCustomers()
             LoadEmployees()
             LoadTypes()      ' ← remplit aussi hfTypeDurations

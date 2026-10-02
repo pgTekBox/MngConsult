@@ -64,11 +64,19 @@ Public Class wbfInvoiceEdit
     End Property
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
+        ' Cet écran n'exigeait aucune connexion : un visiteur pouvait ouvrir la
+        ' facture de n'importe quelle compagnie par son numéro (T306).
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         ApplyLocalization()
 
         If Not IsPostBack Then
 
-            InvoiceId = CInt(Request.QueryString("Id"))
+            InvoiceId = CInt(Val(Request.QueryString("Id")))
+            If InvoiceId > 0 Then ExigerAppartenance("DOCUMENT", InvoiceId)
             CreateItemsTable()
             LoadItemTableFromBD()
             ProductsTable = GetProductsTable()
@@ -974,6 +982,9 @@ Public Class wbfInvoiceEdit
     'Mise a jour de la ligne du Viewstate a l aide du productId
     Sub UpdateItem(ItemLineId As Integer, productId As Integer)
 
+        ' L'identifiant vient d'un argument AJAX : il doit être à la compagnie (T306).
+        If Not Appartient("PRODUIT", productId) Then Return
+
         Dim p2 As New Collection
         p2.Add(New SqlClient.SqlParameter("@ProductId", productId))
         Dim AlldsProducts As DataSet = ExecuteSQLds("s0042GetProductById", p2)
@@ -1014,6 +1025,8 @@ Public Class wbfInvoiceEdit
     End Sub
 
     Sub UpdateItemAccount(ItemLineId As Integer, accountId As Integer)
+
+        If Not Appartient("COMPTE", accountId) Then Return
 
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@AccountId", accountId))

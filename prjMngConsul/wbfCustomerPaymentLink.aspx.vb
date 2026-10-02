@@ -92,6 +92,7 @@ Public Class wbfCustomerPaymentLink
         Try
             Dim n As Integer
             If Not Integer.TryParse(pid, n) OrElse n <= 0 Then Return ""
+            If Not Appartient("PARTY", n) Then Return ""   ' T306 : les adresses se lisent par le seul numéro du tiers
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@PartyId", n))
             Dim ds As DataSet = ExecuteSQLds("s0013GetPastyAddress", p)

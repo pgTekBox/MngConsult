@@ -52,6 +52,8 @@ Public Class wbfSupplierStripeOnboarding
             Dim partyIdStr As String = Request.QueryString("PartyId")
             Dim pid As Integer = 0
             Integer.TryParse(partyIdStr, pid)
+            ' Le fournisseur vient de l'adresse : il doit être à la compagnie (T306).
+            If pid > 0 Then ExigerAppartenance("PARTY", pid)
             PartyId = pid
 
             If PartyId = 0 Then

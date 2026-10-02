@@ -55,6 +55,10 @@ Public Class wbfSupplierPaymentDream
             DocId = Server.HtmlEncode(If(Request.QueryString("DocumentId"), ""))
             PartyId = Server.HtmlEncode(If(Request.QueryString("PartyId"), ""))
 
+            ' Fournisseur et facture viennent de l'adresse : ils doivent être à la compagnie (T306).
+            ExigerAppartenance("PARTY", CInt(Val(PartyId)))
+            If CInt(Val(DocId)) > 0 Then ExigerAppartenance("DOCUMENT", CInt(Val(DocId)))
+
             Dim d As Decimal
             If Decimal.TryParse(If(Request.QueryString("Amount"), ""), NumberStyles.Any, CultureInfo.InvariantCulture, d) Then
                 AmountValue = d

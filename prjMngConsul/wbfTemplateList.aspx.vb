@@ -9,11 +9,12 @@ Public Class wbfTemplateList
     ' =========================================================
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             LoadJournauxFilter()
             BindList()
         End If
@@ -84,6 +85,7 @@ Public Class wbfTemplateList
     Private Sub rpTemplates_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpTemplates.ItemCommand
         If e.CommandName = "DeleteTemplate" Then
             Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            If Not Appartient("TEMPLATE", id) Then Return
             Try
                 Dim p As New Collection
                 p.Add(New SqlParameter("@TemplateId", id))

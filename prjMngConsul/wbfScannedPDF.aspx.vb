@@ -4,11 +4,12 @@ Public Class wbfScannedPDF
     Inherits clsData
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
+
         If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
             RadScannedPDF.Rebind()
         End If
     End Sub
@@ -30,7 +31,10 @@ Public Class wbfScannedPDF
         'p.Add(New SqlClient.SqlParameter("@q", q))
         'Dim ds As DataSet = ExecuteSQLds("s0001GetReceipts", p)
 
-        Dim ds As DataSet = ExecuteSQLds("s0028GetDocScanned")
+        ' T306 : la liste renvoyait les documents de toutes les compagnies.
+        Dim pCie As New Collection
+        pCie.Add(New Data.SqlClient.SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0028GetDocScanned", pCie)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
         Return ds.Tables(0)
     End Function
@@ -41,6 +45,7 @@ Public Class wbfScannedPDF
 
         Dim imageGUID As Guid
         If Not Guid.TryParse(e.CommandArgument.ToString(), imageGUID) Then Return
+        If Not AppartientRecu(imageGUID) Then Return
 
         Select Case e.CommandName
 

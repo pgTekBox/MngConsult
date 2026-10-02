@@ -34,6 +34,8 @@ Public Class wbfSupplierPaymentSuccess
         Dim documentIdStr As String = If(Request.QueryString("DocumentId"), "0").Trim()
         Dim documentId As Integer = 0
         Integer.TryParse(documentIdStr, documentId)
+        ' La facture vient de l'adresse : elle doit être à la compagnie (T306).
+        If documentId > 0 Then ExigerAppartenance("DOCUMENT", documentId)
 
         litDocumentId.Text = If(documentId > 0, documentId.ToString(), "—")
 

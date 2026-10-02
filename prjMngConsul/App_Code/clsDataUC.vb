@@ -342,6 +342,61 @@ Public Class clsDataUC
         oCom.Connection.Close()
 
     End Sub
+    ' ══════════════════════════════════════════════════════════════════════
+    '  Cloisonnement par compagnie (T306)
+    '  Tout identifiant qui revient du navigateur — adresse, champ caché,
+    '  argument AJAX — doit être confronté à la compagnie de la session AVANT
+    '  de lire ou de modifier l'enregistrement : la plupart des procédures
+    '  « par Id » ne reçoivent pas la compagnie et ne peuvent pas le faire.
+    ' ══════════════════════════════════════════════════════════════════════
+
+    ''' <summary>
+    ''' Vrai si l'enregistrement appartient à la compagnie de la session.
+    ''' Types : PARTY, ADRESSE, DOCUMENT, ECRITURE, TEMPLATE, PRODUIT, COMPTE, PARAM, IMPORT.
+    ''' </summary>
+    Public Function Appartient(type As String, id As Integer) As Boolean
+        If id <= 0 Then Return False
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@Type", type))
+            p.Add(New SqlClient.SqlParameter("@Id", id))
+            Dim ds As DataSet = ExecuteSQLds("s0891AppartientCompagnie", p)
+            Return ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+                   Convert.ToBoolean(ds.Tables(0).Rows(0)("Ok"))
+        Catch
+            ' Dans le doute, on refuse.
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>Même contrôle pour un reçu numérisé, identifié par son imageGUID (type RECU).</summary>
+    Public Function AppartientRecu(imageGuid As Guid) As Boolean
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@Type", "RECU"))
+            p.Add(New SqlClient.SqlParameter("@Guid", imageGuid))
+            Dim ds As DataSet = ExecuteSQLds("s0891AppartientCompagnie", p)
+            Return ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+                   Convert.ToBoolean(ds.Tables(0).Rows(0)("Ok"))
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>
+    ''' Arrête la requête (403) si l'enregistrement n'est pas à la compagnie de
+    ''' la session. À appeler dès qu'un identifiant est lu dans l'adresse.
+    ''' </summary>
+    Public Sub ExigerAppartenance(type As String, id As Integer)
+        If Appartient(type, id) Then Return
+        Response.Clear()
+        Response.StatusCode = 403
+        Response.Write("Accès refusé.")
+        Response.End()
+    End Sub
+
     Public Function ExecuteSQLds(ByVal SQLStatement As String) As DataSet
         Dim oDa As New SqlClient.SqlDataAdapter(SQLStatement, ConnectionString)
         Dim oDs As New DataSet

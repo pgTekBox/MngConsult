@@ -5,6 +5,35 @@ Imports Microsoft.SqlServer.Server
 
 Public Class docHandler
     Implements IHttpHandler
+    ' La session est lue pour borner les reçus à la compagnie connectée (T306).
+    Implements System.Web.SessionState.IReadOnlySessionState
+
+    ''' <summary>
+    ''' Un reçu ou un document numérisé (FACTURE_, Voirlerecu_, Optimized_) n'est
+    ''' servi qu'à un utilisateur connecté de la compagnie à laquelle il appartient.
+    ''' Avant T306, n'importe qui le lisait avec le seul GUID dans l'adresse.
+    ''' Le PDF de facture client (INVOICE_) reste public : son lien est envoyé au
+    ''' client par courriel.
+    ''' </summary>
+    Private Shared Function RecuAutorise(context As HttpContext, imageGuid As Guid) As Boolean
+        Try
+            If context.Session Is Nothing Then Return False
+            Dim userId As Integer = 0
+            If context.Session("UserId") IsNot Nothing Then Integer.TryParse(context.Session("UserId").ToString(), userId)
+            If userId = 0 OrElse context.Session("Company") Is Nothing Then Return False
+
+            Dim oData As New clsImage
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", CType(context.Session("Company"), Guid)))
+            p.Add(New SqlParameter("@Type", "RECU"))
+            p.Add(New SqlParameter("@Guid", imageGuid))
+            Dim ds As DataSet = oData.ExecuteSQLds("s0891AppartientCompagnie", p)
+            Return ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 AndAlso
+                   Convert.ToBoolean(ds.Tables(0).Rows(0)("Ok"))
+        Catch
+            Return False
+        End Try
+    End Function
 
     Public ReadOnly Property IsReusable() As Boolean Implements System.Web.IHttpHandler.IsReusable
         Get
@@ -33,6 +62,16 @@ Public Class docHandler
 
 
             Dim ext As String = arrMyGUID(1)
+
+            ' Les reçus et documents numérisés exigent la session et l'appartenance.
+            Dim typeMaj As String = TypeFile.ToUpper()
+            If typeMaj = "FACTURE" OrElse typeMaj = "VOIRLERECU" OrElse typeMaj = "OPTIMIZED" Then
+                Dim gRecu As Guid
+                If Not Guid.TryParse(MyGUID, gRecu) OrElse Not RecuAutorise(context, gRecu) Then
+                    context.Response.StatusCode = 403
+                    Return
+                End If
+            End If
 
 
 

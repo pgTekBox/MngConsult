@@ -20,6 +20,10 @@ Public Class wbfImportView
             ShowError("Identifiant manquant.")
             Return
         End If
+        If Not Appartient("IMPORT", id) Then
+            ShowError("Fichier introuvable.")
+            Return
+        End If
 
         ' Récupérer le TypeImport pour aiguiller vers la bonne proc
         Dim pType As New Collection
@@ -70,6 +74,11 @@ Public Class wbfImportView
         Dim id As Integer
         If Not Integer.TryParse(Request.QueryString("Id"), id) OrElse id <= 0 Then
             ShowError("Identifiant manquant ou invalide. Utilisez l'URL <code>wbfImportView.aspx?Id=&lt;n&gt;</code>.")
+            Return
+        End If
+        ' Le numéro vient de l'adresse : le fichier doit être à la compagnie (T306).
+        If Not Appartient("IMPORT", id) Then
+            ShowError("Fichier introuvable.")
             Return
         End If
 

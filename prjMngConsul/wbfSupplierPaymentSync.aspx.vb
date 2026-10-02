@@ -63,6 +63,8 @@ Public Class wbfSupplierPaymentSync
             Dim docIdStr As String = Request.QueryString("DocumentId")
             Dim docId As Integer = 0
             Integer.TryParse(docIdStr, docId)
+            ' La facture vient de l'adresse : elle doit être à la compagnie (T306).
+            If docId > 0 Then ExigerAppartenance("DOCUMENT", docId)
 
             If docId = 0 Then
                 ShowError("DocumentId manquant.")
@@ -208,6 +210,7 @@ Public Class wbfSupplierPaymentSync
                     Dim docIdStr As String = Request.QueryString("DocumentId")
                     Dim docId As Integer = 0
                     Integer.TryParse(docIdStr, docId)
+                    If docId > 0 Then ExigerAppartenance("DOCUMENT", docId)
                     DocumentId = docId
                 End If
 

@@ -88,6 +88,10 @@ Public Class wbfSupplierPaymentChoice
                 Decimal.TryParse(amountStr, NumberStyles.Any, CultureInfo.InvariantCulture, amt)
             End If
 
+            ' Fournisseur et facture viennent de l'adresse : ils doivent être à la compagnie (T306).
+            ExigerAppartenance("PARTY", partId)
+            If docId > 0 Then ExigerAppartenance("DOCUMENT", docId)
+
             DocumentId = docId
             PartyId = partId
             Amount = amt

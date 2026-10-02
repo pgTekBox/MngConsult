@@ -36,6 +36,7 @@ Public Class wbfTemplateEdit
 
         If Not IsPostBack Then
             TemplateId = CInt(Val(Request.QueryString("Id")))
+            If TemplateId > 0 Then ExigerAppartenance("TEMPLATE", TemplateId)
             CreateLinesTable()
 
             ' Charger combo Journal
@@ -483,6 +484,7 @@ Public Class wbfTemplateEdit
     End Sub
 
     Sub UpdateLineAccount(lineId As Integer, accountId As Integer)
+        If Not Appartient("COMPTE", accountId) Then Return
         Dim p As New Collection
         p.Add(New SqlParameter("@AccountId", accountId))
         Dim ds As DataSet = ExecuteSQLds("s0083Get_GLAccountById", p)

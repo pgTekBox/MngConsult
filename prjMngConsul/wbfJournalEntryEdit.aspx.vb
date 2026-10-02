@@ -50,14 +50,15 @@ Public Class wbfJournalEntryEdit
 
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
 
-        If Not IsPostBack Then
-            If Not isAuthenticated Then
-                Response.Redirect("~/wbfLogin.aspx")
-                Return
-            End If
+        If Not isAuthenticated Then
+            Response.Redirect("~/wbfLogin.aspx")
+            Return
+        End If
 
+        If Not IsPostBack Then
 
             EcritureId = CInt(Val(Request.QueryString("Id")))
+            If EcritureId > 0 Then ExigerAppartenance("ECRITURE", EcritureId)
             CreateLinesTable()
 
             ' Charger les combos avant tout le reste (pour pouvoir les pré-sélectionner)
@@ -611,6 +612,7 @@ Public Class wbfJournalEntryEdit
     End Sub
 
     Sub UpdateLineAccount(lineId As Integer, accountId As Integer)
+        If Not Appartient("COMPTE", accountId) Then Return
         Dim p As New Collection
         p.Add(New SqlParameter("@AccountId", accountId))
         Dim ds As DataSet = ExecuteSQLds("s0083Get_GLAccountById", p)
@@ -637,6 +639,7 @@ Public Class wbfJournalEntryEdit
     ''' Charge un template et remplace les lignes courantes.
     ''' </summary>
     Sub ApplyTemplate(templateId As Integer)
+        If Not Appartient("TEMPLATE", templateId) Then Return
         Dim p As New Collection
         p.Add(New SqlParameter("@TemplateId", templateId))
         Dim ds As DataSet = ExecuteSQLds("s0123ApplyTemplateToEcriture", p)

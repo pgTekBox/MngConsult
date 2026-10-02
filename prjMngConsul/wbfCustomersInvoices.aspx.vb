@@ -712,6 +712,12 @@ Public Class wbfCustomersInvoices
     Private Sub SendInvoiceByEmail(invoiceId As Integer, includeSquare As Boolean,
                                    includePhotos As Boolean, includeGeo As Boolean)
 
+        ' Le numéro de facture arrive dans un argument AJAX : il doit être à la compagnie (T306).
+        If Not Appartient("DOCUMENT", invoiceId) Then
+            ShowSquareMessage(L("msgNotFound"))
+            Return
+        End If
+
         ' 1. Charger les données de la facture
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@InvoiceId", invoiceId))
@@ -982,6 +988,7 @@ Public Class wbfCustomersInvoices
     ''' qui manque (aucune ligne, total à zéro, période fermée…).
     ''' </summary>
     Sub PostDocument(invoiceId As Integer)
+        If Not Appartient("DOCUMENT", invoiceId) Then Return
         Try
             Dim p As New Collection
             p.Add(New SqlClient.SqlParameter("@DocumentId", invoiceId))

@@ -17,6 +17,17 @@ Public Class ExchangeToken
     Protected Async Sub Page_Load(ByVal sender As Object, ByVal e As System.EventArgs) Handles Me.Load
         Response.ContentType = "application/json"
 
+        ' T306 : ces appels étaient ouverts à un visiteur non connecté.
+        If Not isAuthenticated Then
+            Response.StatusCode = 401
+            Response.Write("{""success"":false,""message"":""Connexion requise""}")
+            ' Pas de Response.End ici : dans une méthode Async il lève une erreur 500.
+            Response.Flush()
+            Response.SuppressContent = True   ' rien d'autre que ce JSON ne doit suivre
+            Context.ApplicationInstance.CompleteRequest()
+            Return
+        End If
+
         If Request.HttpMethod <> "POST" Then
             Response.Write("{""success"":false,""message"":""POST requis""}")
             Response.End()

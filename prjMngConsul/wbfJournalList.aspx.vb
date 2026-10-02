@@ -115,6 +115,7 @@ Public Class wbfJournalList
     Private Sub rpEcritures_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rpEcritures.ItemCommand
         If e.CommandName = "DeleteEcriture" Then
             Dim id As Integer = Convert.ToInt32(e.CommandArgument)
+            If Not Appartient("ECRITURE", id) Then Return
 
             Try
                 Dim p As New Collection
