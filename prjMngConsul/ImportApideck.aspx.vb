@@ -1,7 +1,4 @@
-﻿Imports System.Data.SqlClient
-Imports System.Text
-Imports Newtonsoft.Json
-Imports Newtonsoft.Json.Linq
+﻿Imports System.Text
 
 ''' <summary>
 ''' Importer depuis QuickBooks par Apideck — l'autre voie de reprise.
@@ -15,18 +12,22 @@ Imports Newtonsoft.Json.Linq
 '''
 '''   1. staging.ConnecteurDonnee reçoit TOUT, en JSON brut, ressource par
 '''      ressource. Rien n'est interprété : ce qu'Apideck a rendu est conservé
-'''      tel quel, y compris les quinze ressources qui n'ont pas encore
-'''      d'écran. Le jour où l'écran existe, la donnée est déjà là.
+'''      tel quel, y compris les ressources qui n'ont pas encore d'écran. Le
+'''      jour où l'écran existe, la donnée est déjà là.
 '''
-'''   2. Les douze que l'application sait traiter — comptes, clients,
-'''      fournisseurs, produits — sont en plus versées dans les tables de
-'''      préparation habituelles, par les mêmes procédures que les imports par
-'''      fichier. Les écrans Plan comptable, Clients, Fournisseurs et Produits
-'''      les affichent alors sans rien savoir d'Apideck, avec leurs contrôles de
-'''      doublons et leur bouton de création.
+'''   2. Celles que l'application sait traiter — comptes, clients,
+'''      fournisseurs, produits, factures… — sont en plus versées dans les
+'''      tables de préparation habituelles, par les mêmes procédures que les
+'''      imports par fichier. Les écrans d'import les affichent alors sans rien
+'''      savoir d'Apideck, avec leurs contrôles de doublons et leur bouton de
+'''      création.
 '''
 ''' C'est ce deuxième point qui justifie l'écran : sans lui, on aurait des
 ''' données fraîches que personne ne saurait appliquer.
+'''
+''' Il n'y a rien à choisir : chaque extraction rapatrie tout le catalogue.
+''' Trier d'avance obligeait à savoir ce qu'on voulait avant d'avoir vu ce
+''' qu'il y a ; tout prendre, puis décider écran par écran, est plus sûr.
 '''
 ''' Le moteur lui-même — lire, déposer, verser — vit dans ApideckExtraction :
 ''' chaque écran d'import l'appelle aussi, par son propre bouton, pour la
@@ -46,8 +47,7 @@ Public Class ImportApideck
         If IsPostBack Then Return
 
         AfficherEtat()
-        AfficherRessources()
-        AfficherHistorique()
+        AfficherCatalogue()
     End Sub
 
 #End Region
@@ -114,8 +114,7 @@ Public Class ImportApideck
 
     Protected Sub btnVerifier_Click(sender As Object, e As EventArgs) Handles btnVerifier.Click
         AfficherEtat()
-        AfficherRessources()
-        AfficherHistorique()
+        AfficherCatalogue()
     End Sub
 
 #End Region
@@ -123,71 +122,47 @@ Public Class ImportApideck
 #Region "L'extraction"
 
     ''' <summary>
-    ''' L'écran ne fait plus que rassembler : ce qui est coché, la date, la
-    ''' fréquence — et confie le tout au moteur <see cref="ApideckExtraction"/>,
-    ''' celui-là même que chaque écran d'import appelle par son propre bouton.
-    ''' Une ressource qui échoue n'arrête pas les autres ; le tableau le dit.
+    ''' L'écran ne fait que rassembler la date et la fréquence, et confie tout
+    ''' le catalogue au moteur <see cref="ApideckExtraction"/> — celui-là même
+    ''' que chaque écran d'import appelle par son propre bouton. Une ressource
+    ''' qui échoue n'arrête pas les autres ; le compte rendu nomme chaque échec.
+    '''
+    ''' La date est exigée avant de partir : cinq ressources en ont besoin, et
+    ''' puisqu'elles sont toujours demandées, partir sans date garantirait cinq
+    ''' erreurs qu'on aurait pu éviter d'une phrase.
     ''' </summary>
     Protected Sub btnImporter_Click(sender As Object, e As EventArgs) Handles btnImporter.Click
+        AfficherCatalogue()
 
-        Dim choisies As List(Of ApideckExtraction.Ressource) = RessourcesChoisies()
-        If choisies.Count = 0 Then
-            AfficherRessources()
-            AfficherHistorique()
-            Message("Choisissez au moins une ressource à rapatrier.", "err")
+        Dim dateArret As Date? = DateBalance()
+        If Not dateArret.HasValue Then
+            Message("Indiquez la date de bascule avant d'importer : la balance de vérification, le grand livre, " &
+                    "les taxes, les remises et le pointage se lisent sur une période.", "err")
             Return
         End If
 
         Dim moteur As New ApideckExtraction(Me) With {
-            .DateArret = DateBalance(),
+            .DateArret = dateArret,
             .MoisParPeriode = MoisParPeriode()
         }
 
         Dim res As ApideckExtraction.Resultat
 
         Try
-            res = moteur.Importer(choisies)
+            res = moteur.Importer(ApideckExtraction.Catalogue)
         Catch ex As Exception
-            AfficherRessources()
-            AfficherHistorique()
             Message("L'extraction n'a pas pu s'ouvrir : " & ex.Message, "err")
             Return
         End Try
 
-        Dim lignes As New StringBuilder()
-
-        For Each l As ApideckExtraction.LigneResultat In res.Lignes
-            lignes.Append("<tr")
-            If Not l.Reussie Then lignes.Append(" class='ko'")
-            lignes.Append("><td>").Append(Server.HtmlEncode(l.Ressource.Libelle))
-            lignes.Append(" <span style='color:#94a3b8'>").Append(l.Ressource.Cle).Append("</span></td>")
-            lignes.Append("<td class='n'>").Append(If(l.Reussie, l.Nb.ToString("N0"), "—")).Append("</td>")
-
-            lignes.Append("<td>")
-            If Not l.Reussie Then
-                lignes.Append("<span class='ko-txt'>").Append(Server.HtmlEncode(l.Erreur)).Append("</span>")
-            ElseIf l.VersDit <> "" Then
-                lignes.Append("<span class='vers'>").Append(Server.HtmlEncode(l.VersDit)).Append("</span>")
-            Else
-                lignes.Append("<span style='color:#64748b'>déposé en préparation</span>")
-            End If
-            lignes.Append("</td></tr>")
-        Next
-
-        AfficherRessources()
-        AfficherResultat(lignes.ToString(), res.Total, res.Echecs, res.Demandees, res.NoteTaxes)
-        AfficherHistorique()
+        AfficherResultat(res)
     End Sub
 
 #End Region
 
 #Region "Les réglages de l'écran"
 
-    ''' <summary>
-    ''' La date à laquelle la balance est arrêtée, saisie sur l'écran.
-    ''' Vide tant que la ressource n'est pas demandée : c'est la seule qui en a
-    ''' besoin, et on ne va pas imposer une date à qui rapatrie des clients.
-    ''' </summary>
+    ''' <summary>La date de bascule, saisie sur l'écran ; vide si elle manque.</summary>
     Private Function DateBalance() As Date?
         Return ApideckExtraction.LireDate(txtDateBalance.Text)
     End Function
@@ -204,103 +179,73 @@ Public Class ImportApideck
 
 #Region "Affichage"
 
-    Private Sub AfficherRessources()
-        Dim sb As New StringBuilder()
-        sb.Append("<div class='ress'>")
-
-        Dim groupe As String = ""
-        For Each r As ApideckExtraction.Ressource In ApideckExtraction.Catalogue
-            If r.Groupe <> groupe Then
-                groupe = r.Groupe
-                sb.Append("<div class='grp'>").Append(Server.HtmlEncode(groupe)).Append("</div>")
-            End If
-
-            ' Celles que l'application sait appliquer sont cochées d'avance :
-            ' ce sont celles qui font avancer une reprise aujourd'hui.
-            ' Celles que l'application sait appliquer sont cochées d'avance :
-            ' ce sont celles qui font avancer une reprise aujourd'hui.
-            Dim coche As String = If(r.Vers <> "", " checked='checked'", "")
-
-            sb.Append("<label><input type='checkbox' name='res' value='")
-            sb.Append(r.Cle).Append("'").Append(coche).Append(" />")
-            sb.Append(Server.HtmlEncode(r.Libelle))
-
-            If r.Vers <> "" Then
-                sb.Append("<span class='vers'>→ écran d'import</span>")
-            End If
-
-            sb.Append("</label>")
-        Next
-
-        sb.Append("</div>")
-        litRessources.Text = sb.ToString()
+    ''' <summary>
+    ''' Une phrase pour dire ce que l'extraction rapatrie, puisqu'il n'y a plus
+    ''' de liste à lire : le nombre de ressources, et où elles vont ensuite.
+    ''' </summary>
+    Private Sub AfficherCatalogue()
+        Dim total As Integer = ApideckExtraction.Catalogue.Count
+        litTout.Text = "Chaque extraction rapatrie <span class='n'>les " & total & " ressources</span> " &
+                       "que QuickBooks expose par Apideck — plan comptable, tiers, articles, factures, " &
+                       "règlements, grand livre, taxes, paie, inventaire et le reste. Chacune est déposée " &
+                       "en préparation telle quelle, puis rejoint l'écran d'import où elle se valide."
     End Sub
 
-    ''' <summary>Ce que l'utilisateur a coché, dans l'ordre du catalogue.</summary>
-    Private Function RessourcesChoisies() As List(Of ApideckExtraction.Ressource)
-        Dim cochees As String() = Request.Form.GetValues("res")
-        If cochees Is Nothing Then Return New List(Of ApideckExtraction.Ressource)
-
-        Dim voulues As New HashSet(Of String)(cochees)
-        Return ApideckExtraction.Catalogue.Where(Function(r) voulues.Contains(r.Cle)).ToList()
-    End Function
-
-    Private Sub AfficherResultat(lignes As String, total As Integer, echecs As Integer,
-                                 demandees As Integer, noteTaxes As String)
+    ''' <summary>
+    ''' Le compte rendu : le total en une phrase, puis les erreurs en premier et
+    ''' en rouge — c'est ce qu'on vient lire. Le détail des ressources réussies
+    ''' reste disponible, replié, pour qui veut vérifier les décomptes.
+    ''' </summary>
+    Private Sub AfficherResultat(res As ApideckExtraction.Resultat)
         Dim sb As New StringBuilder()
+        Dim echecs = res.Lignes.Where(Function(l) Not l.Reussie).ToList()
+        Dim reussies = res.Lignes.Where(Function(l) l.Reussie).ToList()
 
-        sb.Append("<div class='msg ").Append(If(echecs = 0, "ok", "err")).Append("'>")
-        sb.Append(total.ToString("N0")).Append(" enregistrement(s) déposés en préparation, sur ")
-        sb.Append(demandees).Append(" ressource(s) demandée(s).")
-        If echecs > 0 Then
-            sb.Append(" ").Append(echecs).Append(" n'ont pas répondu — le détail est dans le tableau.")
+        sb.Append("<div class='msg ").Append(If(echecs.Count = 0, "ok", "err")).Append("'>")
+        sb.Append(res.Total.ToString("N0")).Append(" enregistrement(s) déposés en préparation, sur ")
+        sb.Append(res.Demandees).Append(" ressource(s).")
+        If echecs.Count > 0 Then
+            sb.Append(" ").Append(echecs.Count).Append(" n'ont pas répondu — le détail est ci-dessous.")
         End If
         sb.Append(" Rien n'a été écrit en comptabilité : les écrans d'import décident de la suite.")
         sb.Append("</div>")
 
-        If noteTaxes <> "" Then
-            sb.Append("<div class='msg'>").Append(Server.HtmlEncode(noteTaxes)).Append("</div>")
+        If res.NoteTaxes <> "" Then
+            sb.Append("<div class='msg info'>").Append(Server.HtmlEncode(res.NoteTaxes)).Append("</div>")
         End If
 
-        sb.Append("<table class='res'><tr><th>Ressource</th><th style='text-align:right'>Enregistrements</th>")
-        sb.Append("<th>Ce qui en a été fait</th></tr>")
-        sb.Append(lignes).Append("</table>")
+        If echecs.Count > 0 Then
+            sb.Append("<h3 class='erreurs'>").Append(echecs.Count).Append(" ressource(s) en erreur</h3>")
+            sb.Append("<table class='res'><tr><th>Ressource</th><th>Erreur</th></tr>")
+            For Each l As ApideckExtraction.LigneResultat In echecs
+                sb.Append("<tr class='ko'><td>").Append(Server.HtmlEncode(l.Ressource.Libelle))
+                sb.Append(" <span style='color:#94a3b8'>").Append(l.Ressource.Cle).Append("</span></td>")
+                sb.Append("<td><span class='ko-txt'>").Append(Server.HtmlEncode(l.Erreur)).Append("</span></td></tr>")
+            Next
+            sb.Append("</table>")
+        End If
+
+        If reussies.Count > 0 Then
+            sb.Append("<details class='detail'><summary>Voir le détail des ").Append(reussies.Count)
+            sb.Append(" ressource(s) rapatriée(s)</summary>")
+            sb.Append("<table class='res'><tr><th>Ressource</th><th style='text-align:right'>Enregistrements</th>")
+            sb.Append("<th>Ce qui en a été fait</th></tr>")
+            For Each l As ApideckExtraction.LigneResultat In reussies
+                sb.Append("<tr><td>").Append(Server.HtmlEncode(l.Ressource.Libelle))
+                sb.Append(" <span style='color:#94a3b8'>").Append(l.Ressource.Cle).Append("</span></td>")
+                sb.Append("<td class='n'>").Append(l.Nb.ToString("N0")).Append("</td><td>")
+                If l.VersDit <> "" Then
+                    sb.Append("<span class='vers'>").Append(Server.HtmlEncode(l.VersDit)).Append("</span>")
+                Else
+                    sb.Append("<span style='color:#64748b'>déposé en préparation</span>")
+                End If
+                sb.Append("</td></tr>")
+            Next
+            sb.Append("</table></details>")
+        End If
 
         litResultat.Text = sb.ToString()
         pnlResultat.Visible = True
-    End Sub
-
-    Private Sub AfficherHistorique()
-        Dim p As New Collection
-        p.Add(New SqlParameter("@CompanyGUID", Company))
-        Dim ds As DataSet = ExecuteSQLds("s0779GetConnecteurRuns", p)
-
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
-            litHistorique.Text = "<div style='font-size:13px;color:#64748b'>Aucune extraction pour cette compagnie.</div>"
-            Return
-        End If
-
-        Dim sb As New StringBuilder()
-        sb.Append("<table class='res'><tr><th>Quand</th><th>Source</th>")
-        sb.Append("<th style='text-align:right'>Ressources</th><th style='text-align:right'>Enregistrements</th>")
-        sb.Append("<th>État</th></tr>")
-
-        For Each r As DataRow In ds.Tables(0).Rows
-            sb.Append("<tr><td>").Append(Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")).Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(r("Service").ToString())).Append("</td>")
-            sb.Append("<td class='n'>").Append(r("NbRessources")).Append("</td>")
-            sb.Append("<td class='n'>").Append(Convert.ToInt32(r("NbEnregistrements")).ToString("N0")).Append("</td>")
-            sb.Append("<td>").Append(Server.HtmlEncode(r("Statut").ToString()))
-
-            If Not IsDBNull(r("Note")) AndAlso r("Note").ToString() <> "" Then
-                sb.Append(" <span class='ko-txt'>").Append(Server.HtmlEncode(r("Note").ToString())).Append("</span>")
-            End If
-
-            sb.Append("</td></tr>")
-        Next
-
-        sb.Append("</table>")
-        litHistorique.Text = sb.ToString()
     End Sub
 
     Private Sub Message(texte As String, genre As String)

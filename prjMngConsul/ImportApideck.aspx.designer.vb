@@ -24,8 +24,8 @@ Partial Public Class ImportApideck
     '''<summary>btnVerifier</summary>
     Protected WithEvents btnVerifier As Global.System.Web.UI.WebControls.Button
 
-    '''<summary>litRessources</summary>
-    Protected WithEvents litRessources As Global.System.Web.UI.WebControls.Literal
+    '''<summary>litTout</summary>
+    Protected WithEvents litTout As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>txtDateBalance</summary>
     Protected WithEvents txtDateBalance As Global.System.Web.UI.WebControls.TextBox
@@ -41,7 +41,4 @@ Partial Public Class ImportApideck
 
     '''<summary>litResultat</summary>
     Protected WithEvents litResultat As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>litHistorique</summary>
-    Protected WithEvents litHistorique As Global.System.Web.UI.WebControls.Literal
 End Class

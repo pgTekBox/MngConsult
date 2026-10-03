@@ -90,7 +90,7 @@
 
             <section id="fr-quickbooks">
                 <h2>Importer depuis QuickBooks</h2>
-                <p>Lecture directe de la comptabilité QuickBooks, sans fichier à exporter (<span class="chemin">Importation › Importer depuis QuickBooks</span>). L’écran se lit en trois blocs.</p>
+                <p>Lecture directe de la comptabilité QuickBooks, sans fichier à exporter (<span class="chemin">Importation › Importer depuis QuickBooks</span>). L’écran se lit en trois blocs ; le lien <kbd>← Retour aux importations</kbd>, en haut, ramène à la page des importations.</p>
                 <h3>1. La liaison</h3>
                 <ul>
                     <li>Pastille verte : reliée. Orange : non reliée. Rouge : non configurée sur le serveur ou injoignable.</li>
@@ -98,46 +98,36 @@
                     <li><kbd>Vérifier la liaison</kbd> : relit l’état.</li>
                     <li>Tant que la liaison n’est pas faite, <kbd>Importer</kbd> reste désactivé.</li>
                 </ul>
-                <h3>2. Ce qu’on rapatrie</h3>
+                <h3>2. L’extraction</h3>
+                <p>Il n’y a rien à choisir : chaque extraction rapatrie <strong>toutes</strong> les ressources que QuickBooks expose — plan comptable, tiers, articles, factures, règlements, grand livre, taxes, paie, inventaire et le reste. Celles qui ont un écran d’import y sont versées ; les autres attendent en préparation, telles quelles.</p>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
                     <tbody>
-                        <tr><td>Ressources</td><td>Au moins une</td><td>Groupées en Structure, Tiers et articles, Ventes, Achats, Grand livre, Contrôle ; toutes cochées d’avance. Liens <kbd>Tout décocher</kbd> · <kbd>Tout cocher</kbd> et compteur « n sur N choisies ».</td></tr>
-                        <tr><td>Balance de vérification et grand livre arrêtés au</td><td>Oui pour les ressources datées</td><td>La date de bascule : « la veille du premier jour tenu ici ».</td></tr>
-                        <tr><td>Taxes déclarées par</td><td>Non</td><td>Trimestre (défaut), mois ou année.</td></tr>
+                        <tr><td>Date de bascule</td><td>Oui</td><td>« La veille du premier jour tenu ici ». La balance de vérification est arrêtée à cette date ; le grand livre, les remises et le pointage sont lus du 1er janvier à cette date.</td></tr>
+                        <tr><td>Taxes déclarées par</td><td>Non</td><td>Trimestre (défaut), mois ou année — la fréquence de vos déclarations, que QuickBooks ne dit nulle part.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> lance l’extraction. « Une extraction volumineuse peut prendre quelques minutes. »</p>
+                <p><kbd>Importer dans la préparation</kbd> lance l’extraction. « Une extraction complète prend quelques minutes. »</p>
                 <h3>3. Ce qui est arrivé</h3>
+                <p>Une phrase résume le résultat : le nombre d’enregistrements déposés et le nombre de ressources. Puis, <strong>s’il y a des erreurs, elles viennent en premier</strong>, en rouge, dans un tableau à deux colonnes :</p>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Ressource</td><td>Nom de la ressource demandée.</td></tr>
-                        <tr><td>Enregistrements</td><td>Nombre lu.</td></tr>
-                        <tr><td>Ce qui en a été fait</td><td>« versé au plan comptable : N compte(s), M à corriger », « déposé en préparation », ou l’erreur en rouge.</td></tr>
+                        <tr><td>Ressource</td><td>Nom de la ressource qui n’a pas répondu.</td></tr>
+                        <tr><td>Erreur</td><td>Le motif, tel que la source ou le moteur l’a donné.</td></tr>
                     </tbody>
                 </table>
-                <p>Une ressource en échec n’arrête pas les autres.</p>
-                <h3>Les extractions précédentes</h3>
-                <table>
-                    <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
-                    <tbody>
-                        <tr><td>Quand</td><td>Date et heure.</td></tr>
-                        <tr><td>Source</td><td>Logiciel relié.</td></tr>
-                        <tr><td>Ressources</td><td>Ressources demandées.</td></tr>
-                        <tr><td>Enregistrements</td><td>Total lu.</td></tr>
-                        <tr><td>État</td><td>TERMINE ou PARTIEL (une ressource au moins a échoué).</td></tr>
-                    </tbody>
-                </table>
+                <p>Une ressource en échec n’arrête pas les autres. Le détail des ressources réussies — Ressource, Enregistrements, Ce qui en a été fait (« versé au plan comptable : N compte(s), M à corriger » ou « déposé en préparation ») — est replié sous <kbd>Voir le détail des N ressource(s) rapatriée(s)</kbd>.</p>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Choisissez au moins une ressource à rapatrier. »</span> — cochez une ressource.</li>
-                    <li><span class="msg">« Indiquez la date d’arrêt : cette lecture porte sur une période. »</span> — une ressource datée est cochée sans date de bascule.</li>
+                    <li><span class="msg">« Indiquez la date de bascule avant d’importer : la balance de vérification, le grand livre, les taxes, les remises et le pointage se lisent sur une période. »</span> — le champ Date de bascule est vide ; rien n’a été lancé.</li>
                     <li><span class="msg">« Apideck n’est pas configuré sur ce serveur… »</span> — la lecture directe n’est pas disponible ; passez par les fichiers CSV.</li>
                     <li><span class="msg">« Cette compagnie n’a pas encore relié sa comptabilité. »</span> — cliquez <kbd>Relier QuickBooks</kbd>.</li>
-                    <li><span class="msg">« N enregistrement(s) déposés en préparation, sur M ressource(s) demandée(s). … Rien n’a été écrit en comptabilité… »</span> — l’extraction est terminée ; passez aux écrans de préparation.</li>
+                    <li><span class="msg">« L’extraction n’a pas pu s’ouvrir : … »</span> — rien n’a été lu ; relisez le motif, vérifiez la liaison et réessayez.</li>
+                    <li><span class="msg">« N enregistrement(s) déposés en préparation, sur M ressource(s). … Rien n’a été écrit en comptabilité… »</span> — l’extraction est terminée ; passez aux écrans de préparation.</li>
+                    <li><span class="msg">« … K n’ont pas répondu — le détail est ci-dessous. »</span> — K ressources sont en erreur ; le tableau rouge les nomme. Les autres sont bien déposées.</li>
                 </ul>
-                <div class="note" data-titre="Bon à savoir">La liaison ne se fait qu’une fois par compagnie. Les extractions suivantes réutilisent la même liaison.</div>
+                <div class="note" data-titre="Bon à savoir">La liaison ne se fait qu’une fois par compagnie. Les extractions suivantes réutilisent la même liaison, et une nouvelle extraction remplace en préparation ce que la précédente avait déposé pour la même ressource.</div>
             </section>
 
             <section id="fr-bouton-quickbooks">
@@ -757,54 +747,44 @@
 
             <section id="en-quickbooks">
                 <h2>Import from QuickBooks</h2>
-                <p>Direct read of the QuickBooks books, with no file to export (<span class="chemin">Import › Import from QuickBooks</span>). The screen has three blocks.</p>
+                <p>Direct read of the QuickBooks books, with no file to export (<span class="chemin">Import › Import from QuickBooks</span>). The screen has three blocks; the <kbd>← Retour aux importations</kbd> link at the top goes back to the imports page.</p>
                 <h3>1. The connection</h3>
                 <ul>
                     <li>Green dot: connected. Orange: not connected. Red: not configured on the server, or unreachable.</li>
-                    <li><kbd>Connect QuickBooks</kbd>: sends you to the connection page where you enter your QuickBooks credentials. 60Sec-AI never sees them.</li>
-                    <li><kbd>Check the connection</kbd>: re-reads the status.</li>
-                    <li>Until the connection is made, <kbd>Import</kbd> stays disabled.</li>
+                    <li><kbd>Relier QuickBooks</kbd>: sends you to the connection page where you enter your QuickBooks credentials. 60Sec-AI never sees them.</li>
+                    <li><kbd>Vérifier la liaison</kbd>: re-reads the status.</li>
+                    <li>Until the connection is made, <kbd>Importer</kbd> stays disabled.</li>
                 </ul>
-                <h3>2. What to fetch</h3>
+                <h3>2. The extraction</h3>
+                <p>There is nothing to choose: every extraction fetches <strong>all</strong> the resources QuickBooks exposes — chart of accounts, third parties, items, invoices, payments, general ledger, taxes, payroll, inventory and the rest. Those that have an import screen are posted to it; the others wait in staging, as is.</p>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
-                        <tr><td>Resources</td><td>At least one</td><td>Grouped as Structure, Third parties and items, Sales, Purchases, General ledger, Control; all checked by default. Links <kbd>Uncheck all</kbd> · <kbd>Check all</kbd> and counter “n of N selected”.</td></tr>
-                        <tr><td>Trial balance and general ledger as at</td><td>Yes for dated resources</td><td>The cut-over date: “the day before the first day kept here”.</td></tr>
-                        <tr><td>Taxes filed by</td><td>No</td><td>Quarter (default), month or year.</td></tr>
+                        <tr><td>Cut-over date (Date de bascule)</td><td>Yes</td><td>“The day before the first day kept here”. The trial balance is taken as at that date; the general ledger, remittances and cleared status are read from 1 January to that date.</td></tr>
+                        <tr><td>Taxes filed by</td><td>No</td><td>Quarter (default), month or year — the frequency of your filings, which QuickBooks never states.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Import into staging</kbd> starts the extraction. “A large extraction may take a few minutes.”</p>
+                <p><kbd>Importer dans la préparation</kbd> starts the extraction. “A full extraction takes a few minutes.”</p>
                 <h3>3. What arrived</h3>
+                <p>One sentence sums up the result: the number of records placed in staging and the number of resources. Then, <strong>if there are errors, they come first</strong>, in red, in a two-column table:</p>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Resource</td><td>Name of the requested resource.</td></tr>
-                        <tr><td>Records</td><td>Number read.</td></tr>
-                        <tr><td>What was done with it</td><td>“posted to the chart of accounts: N account(s), M to fix”, “placed in staging”, or the error in red.</td></tr>
+                        <tr><td>Resource</td><td>Name of the resource that did not respond.</td></tr>
+                        <tr><td>Error</td><td>The reason, as given by the source or the engine.</td></tr>
                     </tbody>
                 </table>
-                <p>A failed resource does not stop the others.</p>
-                <h3>Previous extractions</h3>
-                <table>
-                    <thead><tr><th>Column</th><th>Content</th></tr></thead>
-                    <tbody>
-                        <tr><td>When</td><td>Date and time.</td></tr>
-                        <tr><td>Source</td><td>Connected application.</td></tr>
-                        <tr><td>Resources</td><td>Resources requested.</td></tr>
-                        <tr><td>Records</td><td>Total read.</td></tr>
-                        <tr><td>Status</td><td>TERMINE (complete) or PARTIEL (at least one resource failed).</td></tr>
-                    </tbody>
-                </table>
+                <p>A failed resource does not stop the others. The detail of the successful resources — Resource, Records, What was done with it (“posted to the chart of accounts: N account(s), M to fix” or “placed in staging”) — is folded under <kbd>Voir le détail des N ressource(s) rapatriée(s)</kbd>.</p>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“Choose at least one resource to fetch.”</span> — check a resource.</li>
-                    <li><span class="msg">“Enter the cut-off date: this read covers a period.”</span> — a dated resource is checked without a cut-over date.</li>
+                    <li><span class="msg">“Enter the cut-over date before importing: the trial balance, general ledger, taxes, remittances and cleared status are read over a period.”</span> — the cut-over date is empty; nothing was started.</li>
                     <li><span class="msg">“Apideck is not configured on this server…”</span> — direct read is not available; use CSV files.</li>
-                    <li><span class="msg">“This company has not connected its books yet.”</span> — click <kbd>Connect QuickBooks</kbd>.</li>
-                    <li><span class="msg">“N record(s) placed in staging, over M requested resource(s). … Nothing has been written to the books…”</span> — extraction done; move on to the staging screens.</li>
+                    <li><span class="msg">“This company has not connected its books yet.”</span> — click <kbd>Relier QuickBooks</kbd>.</li>
+                    <li><span class="msg">“The extraction could not start: …”</span> — nothing was read; read the reason, check the connection and retry.</li>
+                    <li><span class="msg">“N record(s) placed in staging, over M resource(s). … Nothing has been written to the books…”</span> — extraction done; move on to the staging screens.</li>
+                    <li><span class="msg">“… K did not respond — the detail is below.”</span> — K resources failed; the red table names them. The others are safely in staging.</li>
                 </ul>
-                <div class="note" data-titre="Good to know">The connection is made only once per company. Later extractions reuse the same connection.</div>
+                <div class="note" data-titre="Good to know">The connection is made only once per company. Later extractions reuse the same connection, and a new extraction replaces in staging what the previous one had placed for the same resource.</div>
             </section>
 
             <section id="en-quickbooks-button">
@@ -1424,54 +1404,44 @@
 
             <section id="es-quickbooks">
                 <h2>Importar desde QuickBooks</h2>
-                <p>Lectura directa de la contabilidad QuickBooks, sin archivo que exportar (<span class="chemin">Importación › Importar desde QuickBooks</span>). La pantalla tiene tres bloques.</p>
+                <p>Lectura directa de la contabilidad QuickBooks, sin archivo que exportar (<span class="chemin">Importación › Importar desde QuickBooks</span>). La pantalla tiene tres bloques; el enlace <kbd>← Retour aux importations</kbd>, arriba, vuelve a la página de importaciones.</p>
                 <h3>1. La conexión</h3>
                 <ul>
                     <li>Punto verde: conectada. Naranja: no conectada. Rojo: no configurada en el servidor o inaccesible.</li>
-                    <li><kbd>Conectar QuickBooks</kbd>: lo envía a la página de conexión donde escribe sus credenciales de QuickBooks. 60Sec-AI nunca las ve.</li>
-                    <li><kbd>Verificar la conexión</kbd>: vuelve a leer el estado.</li>
-                    <li>Mientras la conexión no esté hecha, <kbd>Importar</kbd> queda desactivado.</li>
+                    <li><kbd>Relier QuickBooks</kbd>: lo envía a la página de conexión donde escribe sus credenciales de QuickBooks. 60Sec-AI nunca las ve.</li>
+                    <li><kbd>Vérifier la liaison</kbd>: vuelve a leer el estado.</li>
+                    <li>Mientras la conexión no esté hecha, <kbd>Importer</kbd> queda desactivado.</li>
                 </ul>
-                <h3>2. Qué se trae</h3>
+                <h3>2. La extracción</h3>
+                <p>No hay nada que elegir: cada extracción trae <strong>todos</strong> los recursos que QuickBooks expone — plan de cuentas, terceros, artículos, facturas, pagos, libro mayor, impuestos, nómina, inventario y el resto. Los que tienen una pantalla de importación se vuelcan en ella; los demás esperan en preparación, tal cual.</p>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
-                        <tr><td>Recursos</td><td>Al menos uno</td><td>Agrupados en Estructura, Terceros y artículos, Ventas, Compras, Libro mayor, Control; todos marcados por defecto. Enlaces <kbd>Desmarcar todo</kbd> · <kbd>Marcar todo</kbd> y contador « n de N elegidos ».</td></tr>
-                        <tr><td>Balance de comprobación y libro mayor cerrados al</td><td>Sí para los recursos con fecha</td><td>La fecha de corte: « la víspera del primer día llevado aquí ».</td></tr>
-                        <tr><td>Impuestos declarados por</td><td>No</td><td>Trimestre (por defecto), mes o año.</td></tr>
+                        <tr><td>Fecha de corte (Date de bascule)</td><td>Sí</td><td>« La víspera del primer día llevado aquí ». El balance de comprobación se cierra a esa fecha; el libro mayor, las remesas y el punteo se leen del 1 de enero a esa fecha.</td></tr>
+                        <tr><td>Impuestos declarados por</td><td>No</td><td>Trimestre (por defecto), mes o año — la frecuencia de sus declaraciones, que QuickBooks no indica en ninguna parte.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importar a la preparación</kbd> lanza la extracción. « Una extracción voluminosa puede tardar unos minutos. »</p>
+                <p><kbd>Importer dans la préparation</kbd> lanza la extracción. « Una extracción completa tarda unos minutos. »</p>
                 <h3>3. Qué llegó</h3>
+                <p>Una frase resume el resultado: el número de registros depositados y el número de recursos. Luego, <strong>si hay errores, van primero</strong>, en rojo, en una tabla de dos columnas:</p>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Recurso</td><td>Nombre del recurso solicitado.</td></tr>
-                        <tr><td>Registros</td><td>Número leído.</td></tr>
-                        <tr><td>Qué se hizo con él</td><td>« volcado al plan de cuentas: N cuenta(s), M por corregir », « depositado en preparación », o el error en rojo.</td></tr>
+                        <tr><td>Recurso</td><td>Nombre del recurso que no respondió.</td></tr>
+                        <tr><td>Error</td><td>El motivo, tal como lo dio el origen o el motor.</td></tr>
                     </tbody>
                 </table>
-                <p>Un recurso fallido no detiene a los demás.</p>
-                <h3>Las extracciones anteriores</h3>
-                <table>
-                    <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
-                    <tbody>
-                        <tr><td>Cuándo</td><td>Fecha y hora.</td></tr>
-                        <tr><td>Fuente</td><td>Programa conectado.</td></tr>
-                        <tr><td>Recursos</td><td>Recursos solicitados.</td></tr>
-                        <tr><td>Registros</td><td>Total leído.</td></tr>
-                        <tr><td>Estado</td><td>TERMINE (completa) o PARTIEL (al menos un recurso falló).</td></tr>
-                    </tbody>
-                </table>
+                <p>Un recurso fallido no detiene a los demás. El detalle de los recursos correctos — Recurso, Registros, Qué se hizo con él (« volcado al plan de cuentas: N cuenta(s), M por corregir » o « depositado en preparación ») — queda plegado bajo <kbd>Voir le détail des N ressource(s) rapatriée(s)</kbd>.</p>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Elija al menos un recurso que traer. »</span> — marque un recurso.</li>
-                    <li><span class="msg">« Indique la fecha de cierre: esta lectura abarca un período. »</span> — un recurso con fecha está marcado sin fecha de corte.</li>
+                    <li><span class="msg">« Indique la fecha de corte antes de importar: el balance de comprobación, el libro mayor, los impuestos, las remesas y el punteo se leen sobre un período. »</span> — el campo Fecha de corte está vacío; no se lanzó nada.</li>
                     <li><span class="msg">« Apideck no está configurado en este servidor… »</span> — la lectura directa no está disponible; use archivos CSV.</li>
-                    <li><span class="msg">« Esta empresa aún no ha conectado su contabilidad. »</span> — pulse <kbd>Conectar QuickBooks</kbd>.</li>
-                    <li><span class="msg">« N registro(s) depositados en preparación, sobre M recurso(s) solicitado(s). … Nada se ha escrito en contabilidad… »</span> — extracción terminada; pase a las pantallas de preparación.</li>
+                    <li><span class="msg">« Esta empresa aún no ha conectado su contabilidad. »</span> — pulse <kbd>Relier QuickBooks</kbd>.</li>
+                    <li><span class="msg">« La extracción no pudo abrirse: … »</span> — no se leyó nada; relea el motivo, verifique la conexión y reintente.</li>
+                    <li><span class="msg">« N registro(s) depositados en preparación, sobre M recurso(s). … Nada se ha escrito en contabilidad… »</span> — extracción terminada; pase a las pantallas de preparación.</li>
+                    <li><span class="msg">« … K no respondieron — el detalle está abajo. »</span> — K recursos fallaron; la tabla roja los nombra. Los demás quedaron bien depositados.</li>
                 </ul>
-                <div class="note" data-titre="Conviene saber">La conexión se hace una sola vez por empresa. Las extracciones siguientes reutilizan la misma conexión.</div>
+                <div class="note" data-titre="Conviene saber">La conexión se hace una sola vez por empresa. Las extracciones siguientes reutilizan la misma conexión, y una nueva extracción sustituye en preparación lo que la anterior había depositado para el mismo recurso.</div>
             </section>
 
             <section id="es-boton-quickbooks">

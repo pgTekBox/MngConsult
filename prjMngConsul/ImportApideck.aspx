@@ -9,6 +9,11 @@
 <style>
     .apd-page { padding: 16px }
 
+    /* Le chemin du retour : l'écran s'ouvre depuis la page des importations,
+       et c'est là qu'on repart une fois l'extraction faite. */
+    .retour { display: inline-block; font-size: 13px; font-weight: 600; color: #2563eb; text-decoration: none; margin-bottom: 12px }
+    .retour:hover { color: #1d4ed8; text-decoration: underline }
+
     .apd-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .apd-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
@@ -40,30 +45,9 @@
     .btn.primaire { background: #2563eb; border-color: #2563eb; color: #fff }
     .btn.primaire:hover { background: #1d4ed8 }
 
-    /* La barre au-dessus de la liste : tout cocher, tout décocher, et le
-       décompte — pour savoir ce qui partira sans relire vingt cases. */
-    .choix { display: flex; align-items: baseline; gap: 8px; margin-bottom: 10px; flex-wrap: wrap }
-
-    .choix .lien {
-        background: none; border: 0; padding: 0; font: inherit; font-size: 12.5px;
-        font-weight: 700; color: #2563eb; cursor: pointer; text-decoration: underline;
-    }
-
-    .choix .lien:hover { color: #1d4ed8 }
-    .choix .sep { color: #cbd5e1 }
-    .choix .compte { margin-left: auto; font-size: 12px; color: #64748b }
-
-    /* Le choix des ressources */
-    .ress { column-count: 3; column-gap: 26px; margin-top: 4px }
-    @media (max-width: 1100px) { .ress { column-count: 2 } }
-    .ress label { display: block; break-inside: avoid; font-size: 13px; color: #0f172a; padding: 3px 0 }
-    .ress input { margin-right: 7px }
-    .ress .grp {
-        break-inside: avoid; font-size: 11px; font-weight: 700; color: #64748b;
-        text-transform: uppercase; letter-spacing: .3px; margin: 12px 0 4px;
-    }
-    .ress .grp:first-child { margin-top: 0 }
-    .ress .vers { font-size: 11.5px; color: #047857; margin-left: 4px }
+    /* Ce que l'extraction rapatrie : tout, et on le dit en une phrase. */
+    .tout { font-size: 13.5px; color: #0f172a; line-height: 1.6; margin: 0 }
+    .tout .n { font-weight: 800 }
 
     .datebloc {
         display: flex; align-items: center; gap: 10px; flex-wrap: wrap;
@@ -95,6 +79,12 @@
     table.res .ko-txt { color: #b91c1c }
     table.res .vers { color: #047857; font-size: 12px }
 
+    /* Les erreurs d'abord, en rouge ; le détail de ce qui a réussi se déplie. */
+    h3.erreurs { font-size: 13.5px; font-weight: 800; color: #b91c1c; margin: 14px 0 4px }
+    details.detail { margin-top: 14px }
+    details.detail summary { cursor: pointer; font-size: 13px; font-weight: 700; color: #2563eb }
+    details.detail summary:hover { color: #1d4ed8 }
+
     .msg { border-radius: 10px; padding: 11px 14px; font-size: 13.5px; margin: 14px 0; line-height: 1.55 }
     .msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
     .msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
@@ -104,6 +94,8 @@
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="apd-page">
+
+    <a class="retour" href="Importations">← Retour aux importations</a>
 
     <div class="apd-head">
         <div class="ico">🔌</div>
@@ -132,24 +124,18 @@
         </div>
     </div>
 
-    <h2 class="sect">2. Ce qu'on rapatrie <span>tout est déposé en préparation</span></h2>
+    <h2 class="sect">2. L'extraction <span>tout est rapatrié, en préparation</span></h2>
     <div class="bloc">
-        <%-- Tout est coché d'avance : quand on ne veut qu'une ressource, il faut
-             pouvoir vider la liste d'un geste plutôt que décocher vingt cases. --%>
-        <div class="choix">
-            <button type="button" class="lien" onclick="cocherRessources(false)">Tout décocher</button>
-            <span class="sep">·</span>
-            <button type="button" class="lien" onclick="cocherRessources(true)">Tout cocher</button>
-            <span class="compte" id="compteRess"></span>
-        </div>
+        <%-- Plus rien à cocher : chaque extraction rapatrie tout le catalogue.
+             Ce qui a un écran d'import y est versé ; le reste attend en préparation. --%>
+        <p class="tout"><asp:Literal ID="litTout" runat="server" /></p>
 
-        <asp:Literal ID="litRessources" runat="server" />
-
-        <%-- Deux ressources demandent une date : la balance de vérification et le
-             grand livre. QuickBooks les rend pour une période, et un rapport à la
-             mauvaise date ressemble à s'y méprendre à un bon. --%>
+        <%-- Plusieurs ressources demandent une date : la balance de vérification, le
+             grand livre, les taxes, les remises et le pointage. QuickBooks les rend
+             pour une période, et un rapport à la mauvaise date ressemble à s'y
+             méprendre à un bon. --%>
         <div class="datebloc">
-            <label for="<%= txtDateBalance.ClientID %>">Balance de vérification et grand livre arrêtés au</label>
+            <label for="<%= txtDateBalance.ClientID %>">Date de bascule</label>
             <asp:TextBox ID="txtDateBalance" runat="server" TextMode="Date" CssClass="datechamp" />
             <asp:DropDownList ID="ddlFrequenceTaxes" runat="server" CssClass="datechamp">
                 <asp:ListItem Value="3" Text="Taxes déclarées par trimestre" Selected="True" />
@@ -157,19 +143,17 @@
                 <asp:ListItem Value="12" Text="Taxes déclarées par année" />
             </asp:DropDownList>
             <span class="aide">
-                La date de bascule — la veille du premier jour tenu ici. QuickBooks exige une
-                période : les comptes de résultats couvriront l'année civile jusqu'à cette date,
-                les comptes de bilan porteront leur solde à cette date. Le grand livre, lui,
-                est lu du 1er janvier à cette date.
-                Les rapports de taxes, eux, sont rapatriés une déclaration à la fois —
-                la fréquence est celle que vous produisez, et QuickBooks ne la dit nulle part.
+                La veille du premier jour tenu ici. QuickBooks exige une période : la balance
+                de vérification est arrêtée à cette date, les comptes de résultats couvrent
+                l'année civile jusqu'à cette date, et le grand livre, les remises et le pointage
+                sont lus du 1er janvier à cette date. Les rapports de taxes, eux, sont rapatriés
+                une déclaration à la fois — la fréquence est celle que vous produisez.
             </span>
         </div>
 
-
         <div class="barre">
             <asp:Button ID="btnImporter" runat="server" CssClass="btn primaire" Text="Importer dans la préparation" CausesValidation="false" />
-            <span class="aide">Une extraction volumineuse peut prendre quelques minutes.</span>
+            <span class="aide">Une extraction complète prend quelques minutes.</span>
         </div>
     </div>
 
@@ -178,40 +162,5 @@
         <div class="bloc"><asp:Literal ID="litResultat" runat="server" /></div>
     </asp:Panel>
 
-    <h2 class="sect">Les extractions précédentes</h2>
-    <div class="bloc"><asp:Literal ID="litHistorique" runat="server" /></div>
-
 </div>
-
-<script type="text/javascript">
-    (function () {
-        var compte = document.getElementById('compteRess');
-
-        function cases() {
-            return document.querySelectorAll("input[type='checkbox'][name='res']");
-        }
-
-        function dire() {
-            if (!compte) return;
-            var toutes = cases(), n = 0;
-            for (var i = 0; i < toutes.length; i++) { if (toutes[i].checked) n++; }
-            compte.textContent = n === 0
-                ? 'aucune ressource choisie'
-                : n + ' sur ' + toutes.length + ' choisie' + (n > 1 ? 's' : '');
-        }
-
-        // Appelée par les deux boutons ; le décompte suit aussi les clics à l'unité.
-        window.cocherRessources = function (etat) {
-            var toutes = cases();
-            for (var i = 0; i < toutes.length; i++) { toutes[i].checked = etat; }
-            dire();
-        };
-
-        var liste = cases();
-        for (var i = 0; i < liste.length; i++) {
-            liste[i].addEventListener('change', dire);
-        }
-        dire();
-    })();
-</script>
 </asp:Content>
