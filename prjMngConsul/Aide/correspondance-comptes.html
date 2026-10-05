@@ -184,6 +184,12 @@
                 <p>Un compte ignoré n’est ni lié ni créé : rien de ce qui lui est rattaché dans l’ancien logiciel ne sera repris sur lui. C’est pourquoi un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré. Le détail des quatre situations est dans <a href="#fr-garde-fous">Les garde-fous de « Ignorer »</a>.</p>
                 <div class="note" data-titre="Le solde de la grille n’est pas celui de la bascule">La colonne Solde est le solde du jour du chargement (lecture directe) ou celui du fichier exporté ; la reprise, elle, se fait à la date de bascule. Un compte vidé en janvier montre 0 ici et portait peut-être un montant au 31 décembre : le garde-fou de la grille ne le voit pas, le contrôle de la balance de vérification le voit. Dans le doute, vérifiez dans l’ancien logiciel avant d’ignorer.</div>
                 <h3>Revenir sur une décision</h3>
+                <ol>
+                    <li>Mettez le filtre « Afficher » sur <strong>« Déjà décidés »</strong> pour ne voir que les lignes enregistrées, ou cherchez la ligne dans « Tout ».</li>
+                    <li>Changez l’<strong>Action</strong>, le compte cible ou la note. « — à décider » annule la décision sans en prendre une autre.</li>
+                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd> : la nouvelle décision remplace l’ancienne, les compteurs et l’avancement suivent. Un changement non enregistré est perdu en quittant la page.</li>
+                </ol>
+                <p>Toute décision se rediscute, sauf une : la ligne dont le compte a été créé à l’étape 3 (« Créé ✓ »). Rien de ce qui se change ici n’écrit en comptabilité.</p>
                 <table>
                     <thead><tr><th>Décision enregistrée</th><th>Comment la changer</th><th>Ce qui se passe</th></tr></thead>
                     <tbody>
@@ -193,6 +199,8 @@
                         <tr><td>Ignorer</td><td>Choisissez « Lier » ou « Créer », ou « — à décider », puis enregistrez.</td><td>Le compte revient dans la reprise.</td></tr>
                         <tr><td>Lié d’office</td><td>Comme une liaison ordinaire.</td><td>Un rechargement ne refait la liaison d’office que pour les comptes sans décision : votre choix est conservé.</td></tr>
                         <tr><td>Ignorer, signalé en Erreur par le contrôle de la balance</td><td>Choisissez « Lier » vers le compte qui doit recevoir le montant, ou « Créer », puis enregistrez.</td><td>Le montant de la balance aura un compte ; relancez le contrôle pour le confirmer.</td></tr>
+                        <tr><td>Décision sur un compte renommé dans QuickBooks, puis rechargé</td><td>Rien à défaire : la ligne est revenue « — à décider », l’ancienne décision est orpheline.</td><td>Reprenez la décision ; la clé étant le nom quand il n’y a pas de numéro, le compte renommé est un nouveau compte pour l’écran.</td></tr>
+                        <tr><td>Décision prise par l’autre voie de chargement (fichier ↔ lecture directe)</td><td>Rechargez par la voie d’origine, ou décidez de nouveau.</td><td>Les deux voies ne partagent pas leurs décisions ; l’extraction complète et le bouton de l’étape 1 sont une seule voie.</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -616,6 +624,12 @@
                 <p>An ignored account is neither linked nor created: nothing attached to it in the former application will be migrated to it. That is why an account that carries a balance, or that an invoice or product in preparation uses, cannot be ignored. The four situations are detailed in <a href="#en-safeguards">The safeguards on “Ignore”</a>.</p>
                 <div class="note" data-titre="The grid’s balance is not the cut-over balance">The Balance column is the balance of the loading day (direct read) or the one of the exported file; the migration itself happens at the cut-over date. An account emptied in January shows 0 here and may have carried an amount on 31 December: the grid’s safeguard does not see it, the trial balance check does. When in doubt, check in the former application before ignoring.</div>
                 <h3>Changing a decision</h3>
+                <ol>
+                    <li>Set the “Show” filter to <strong>“Already decided”</strong> to see only saved rows, or find the row under “All”.</li>
+                    <li>Change the <strong>Action</strong>, the target account or the note. “— to decide” cancels the decision without taking another.</li>
+                    <li>Click <kbd>Save mappings</kbd>: the new decision replaces the old one, counters and progress follow. An unsaved change is lost when you leave the page.</li>
+                </ol>
+                <p>Every decision can be revisited, except one: the row whose account was created in step 3 (“Created ✓”). Nothing changed here writes to the books.</p>
                 <table>
                     <thead><tr><th>Saved decision</th><th>How to change it</th><th>What happens</th></tr></thead>
                     <tbody>
@@ -625,6 +639,8 @@
                         <tr><td>Ignore</td><td>Choose “Link” or “Create”, or “— to decide”, then save.</td><td>The account comes back into the migration.</td></tr>
                         <tr><td>Linked outright</td><td>Like an ordinary link.</td><td>A reload only redoes the outright link for accounts without a decision: your choice is kept.</td></tr>
                         <tr><td>Ignore, flagged as an Error by the trial balance check</td><td>Choose “Link” to the account that must receive the amount, or “Create”, then save.</td><td>The balance amount will have an account; run the check again to confirm.</td></tr>
+                        <tr><td>Decision on an account renamed in QuickBooks, then reloaded</td><td>Nothing to undo: the row came back “— to decide”, the old decision is orphaned.</td><td>Decide again; since the key is the name when there is no number, the renamed account is a new account for the screen.</td></tr>
+                        <tr><td>Decision taken through the other loading path (file ↔ direct read)</td><td>Reload through the original path, or decide again.</td><td>The two paths do not share their decisions; the full extraction and the step 1 button are one single path.</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -1048,6 +1064,12 @@
                 <p>Una cuenta ignorada no se vincula ni se crea: nada de lo asociado a ella en el programa anterior se migrará a ella. Por eso una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse. El detalle de las cuatro situaciones está en <a href="#es-protecciones">Las protecciones de « Ignorar »</a>.</p>
                 <div class="note" data-titre="El saldo de la cuadrícula no es el del corte">La columna Saldo es el saldo del día de la carga (lectura directa) o el del archivo exportado; la migración, en cambio, se hace a la fecha de corte. Una cuenta vaciada en enero muestra 0 aquí y quizá llevaba un importe al 31 de diciembre: la salvaguarda de la cuadrícula no lo ve, el control del balance de comprobación sí. En la duda, compruebe en el programa anterior antes de ignorar.</div>
                 <h3>Cambiar una decisión</h3>
+                <ol>
+                    <li>Ponga el filtro « Mostrar » en <strong>« Ya decididas »</strong> para ver solo las líneas guardadas, o busque la línea en « Todo ».</li>
+                    <li>Cambie la <strong>Acción</strong>, la cuenta destino o la nota. « — por decidir » anula la decisión sin tomar otra.</li>
+                    <li>Pulse <kbd>Guardar las correspondencias</kbd>: la nueva decisión sustituye a la anterior, los contadores y el avance siguen. Un cambio no guardado se pierde al salir de la página.</li>
+                </ol>
+                <p>Toda decisión se puede reconsiderar, salvo una: la línea cuya cuenta se creó en la etapa 3 (« Creada ✓ »). Nada de lo que se cambia aquí escribe en la contabilidad.</p>
                 <table>
                     <thead><tr><th>Decisión guardada</th><th>Cómo cambiarla</th><th>Qué ocurre</th></tr></thead>
                     <tbody>
@@ -1057,6 +1079,8 @@
                         <tr><td>Ignorar</td><td>Elija « Vincular » o « Crear », o « — por decidir », y guarde.</td><td>La cuenta vuelve a la migración.</td></tr>
                         <tr><td>Vinculada de oficio</td><td>Como un vínculo ordinario.</td><td>Una recarga solo rehace el vínculo de oficio para las cuentas sin decisión: su elección se conserva.</td></tr>
                         <tr><td>Ignorar, señalada como Error por el control del balance</td><td>Elija « Vincular » a la cuenta que debe recibir el importe, o « Crear », y guarde.</td><td>El importe del balance tendrá una cuenta; relance el control para confirmarlo.</td></tr>
+                        <tr><td>Decisión sobre una cuenta renombrada en QuickBooks y luego recargada</td><td>Nada que deshacer: la línea volvió « — por decidir », la antigua decisión quedó huérfana.</td><td>Vuelva a decidir; como la clave es el nombre cuando no hay número, la cuenta renombrada es una cuenta nueva para la pantalla.</td></tr>
+                        <tr><td>Decisión tomada por la otra vía de carga (archivo ↔ lectura directa)</td><td>Recargue por la vía original, o decida de nuevo.</td><td>Las dos vías no comparten sus decisiones; la extracción completa y el botón de la etapa 1 son una sola vía.</td></tr>
                     </tbody>
                 </table>
             </section>
