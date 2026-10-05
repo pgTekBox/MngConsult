@@ -129,7 +129,7 @@ Public Class ApideckExtraction
     ''' La page ou le contrôle qui appelle : c'est lui qui porte la compagnie,
     ''' l'utilisateur et la connexion à la base. Le moteur n'a rien à lui.
     ''' </summary>
-    Private ReadOnly hote As clsData
+    Private ReadOnly hote As HoteMoteur
 
     ''' <summary>
     ''' La date de bascule — la veille du premier jour tenu ici. Six ressources
@@ -142,9 +142,110 @@ Public Class ApideckExtraction
     ''' <summary>Le nombre de mois d'une déclaration de taxes : 1, 3 ou 12.</summary>
     Public Property MoisParPeriode As Integer = 3
 
-    Public Sub New(hote As clsData)
+    ''' <summary>
+    ''' Ce que le moteur demande à qui l'héberge : la compagnie, l'utilisateur
+    ''' et la base. Une page le fournit depuis sa session ; l'extraction en
+    ''' arrière-plan, qui n'a plus de session, le fournit depuis ce qu'on lui
+    ''' a donné au départ.
+    ''' </summary>
+    Public MustInherit Class HoteMoteur
+        Public MustOverride ReadOnly Property Company As Guid
+        Public MustOverride ReadOnly Property UserId As Integer
+        Public MustOverride Sub ExecuteSQL(proc As String, params As Collection)
+        Public MustOverride Function ExecuteSQLds(proc As String, params As Collection) As DataSet
+    End Class
+
+    ''' <summary>Une page ou un contrôle : la session porte tout.</summary>
+    Private NotInheritable Class HotePage
+        Inherits HoteMoteur
+        Private ReadOnly page As clsData
+
+        Public Sub New(page As clsData)
+            Me.page = page
+        End Sub
+
+        Public Overrides ReadOnly Property Company As Guid
+            Get
+                Return page.Company
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property UserId As Integer
+            Get
+                Return page.UserId
+            End Get
+        End Property
+
+        Public Overrides Sub ExecuteSQL(proc As String, params As Collection)
+            page.ExecuteSQL(proc, params)
+        End Sub
+
+        Public Overrides Function ExecuteSQLds(proc As String, params As Collection) As DataSet
+            Return page.ExecuteSQLds(proc, params)
+        End Function
+    End Class
+
+    ''' <summary>
+    ''' Hors requête : ni session ni contexte, seulement la compagnie et
+    ''' l'utilisateur reçus au départ, et la base par la chaîne de connexion
+    ''' de la configuration — la même que celle des pages.
+    ''' </summary>
+    Public NotInheritable Class HoteFond
+        Inherits HoteMoteur
+        Private ReadOnly _company As Guid
+        Private ReadOnly _userId As Integer
+
+        Public Sub New(company As Guid, userId As Integer)
+            _company = company
+            _userId = userId
+        End Sub
+
+        Public Overrides ReadOnly Property Company As Guid
+            Get
+                Return _company
+            End Get
+        End Property
+
+        Public Overrides ReadOnly Property UserId As Integer
+            Get
+                Return _userId
+            End Get
+        End Property
+
+        Private Shared Function Commande(proc As String, params As Collection, cn As SqlConnection) As SqlCommand
+            Dim cmd As New SqlCommand(proc, cn) With {.CommandType = CommandType.StoredProcedure, .CommandTimeout = 600}
+            For Each p As SqlParameter In params
+                cmd.Parameters.Add(p)
+            Next
+            Return cmd
+        End Function
+
+        Public Overrides Sub ExecuteSQL(proc As String, params As Collection)
+            Using cn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                cn.Open()
+                Commande(proc, params, cn).ExecuteNonQuery()
+            End Using
+        End Sub
+
+        Public Overrides Function ExecuteSQLds(proc As String, params As Collection) As DataSet
+            Using cn As New SqlConnection(ConfigurationManager.AppSettings("ConnectionString"))
+                Dim ds As New DataSet()
+                Using da As New SqlDataAdapter(Commande(proc, params, cn))
+                    da.Fill(ds)
+                End Using
+                Return ds
+            End Using
+        End Function
+    End Class
+
+    Public Sub New(hote As HoteMoteur)
         If hote Is Nothing Then Throw New ArgumentNullException("hote")
         Me.hote = hote
+    End Sub
+
+    Public Sub New(page As clsData)
+        If page Is Nothing Then Throw New ArgumentNullException("page")
+        Me.hote = New HotePage(page)
     End Sub
 
     ''' <summary>La ressource du catalogue qui porte cette clé, ou rien.</summary>
@@ -254,13 +355,13 @@ Public Class ApideckExtraction
     ''' Lève si l'extraction ne peut même pas s'ouvrir — la base injoignable,
     ''' par exemple. Tout le reste est rendu dans le compte rendu.
     ''' </summary>
-    Public Function Importer(choisies As IList(Of Ressource)) As Resultat
+    Public Function Importer(choisies As IList(Of Ressource), Optional runId As Integer = 0) As Resultat
         If choisies Is Nothing OrElse choisies.Count = 0 Then
             Throw New ArgumentException("Choisissez au moins une ressource à rapatrier.")
         End If
 
         Dim api As New clsApideck(hote.Company.ToString())
-        Dim res As New Resultat With {.RunId = OuvrirRun()}
+        Dim res As New Resultat With {.RunId = If(runId > 0, runId, OuvrirRun())}
         Dim total As Integer = 0
 
         For Each r As Ressource In choisies
@@ -290,19 +391,57 @@ Public Class ApideckExtraction
             End Try
 
             res.Lignes.Add(ligne)
+            EnregistrerRessources(res)
         Next
 
         res.NoteTaxes = RepartirTaxes()
 
-        EnregistrerRessources(res)
+        Dim note As String = If(res.Echecs = 0, "",
+                                res.Echecs & " ressource(s) en échec sur " & choisies.Count & " : " &
+                                String.Join(", ", res.Fautives) & ".")
+        If res.NoteTaxes <> "" Then note = (note & " " & res.NoteTaxes).Trim()
 
         FermerRun(res.RunId, If(res.Echecs = 0, "TERMINE", "PARTIEL"),
-                  If(res.Echecs = 0, Nothing,
-                     res.Echecs & " ressource(s) en échec sur " & choisies.Count & " : " &
-                     String.Join(", ", res.Fautives) & "."),
-                  choisies.Count, res.Echecs)
+                  If(note = "", Nothing, note), choisies.Count, res.Echecs)
 
         Return res
+    End Function
+
+    ''' <summary>
+    ''' La même extraction, mais hors de la requête : l'extraction est ouverte
+    ''' tout de suite — son numéro revient à l'appelant — puis le travail part
+    ''' sur un fil de fond, avec un hôte sans session. Quarante ressources et
+    ''' des dizaines de milliers d'enregistrements ne tiennent pas dans une
+    ''' requête : le navigateur abandonnait, et l'extraction restait « en
+    ''' cours » pour toujours. Ici, elle se termine même si personne ne regarde ;
+    ''' si elle casse, elle le dit en se fermant en ECHEC.
+    ''' </summary>
+    Public Function LancerEnFond(choisies As IList(Of Ressource)) As Integer
+        If choisies Is Nothing OrElse choisies.Count = 0 Then
+            Throw New ArgumentException("Choisissez au moins une ressource à rapatrier.")
+        End If
+
+        Dim runId As Integer = OuvrirRun()
+        Dim liste As List(Of Ressource) = choisies.ToList()
+        Dim fond As New ApideckExtraction(New HoteFond(hote.Company, hote.UserId)) With {
+            .DateArret = DateArret,
+            .MoisParPeriode = MoisParPeriode
+        }
+
+        System.Web.Hosting.HostingEnvironment.QueueBackgroundWorkItem(
+            Sub(ct As Threading.CancellationToken)
+                Try
+                    fond.Importer(liste, runId)
+                Catch ex As Exception
+                    Try
+                        fond.FermerRun(runId, "ECHEC", "L'extraction s'est interrompue : " & ex.Message,
+                                       liste.Count, liste.Count)
+                    Catch
+                    End Try
+                End Try
+            End Sub)
+
+        Return runId
     End Function
 
     ''' <summary>
@@ -484,11 +623,19 @@ Public Class ApideckExtraction
         p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
 
         Dim ds As DataSet = hote.ExecuteSQLds("s0752ChargerPlanComptableStaging", p)
-        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+
+        ' s0752 appelle s0874 (liaison d'office par alias), dont le décompte sort
+        ' en PREMIER jeu de résultats : le bilan du chargement est le jeu qui
+        ' porte NbLignesRetenues, pas le premier venu.
+        Dim bilan As DataTable = Nothing
+        If ds IsNot Nothing Then
+            bilan = ds.Tables.Cast(Of DataTable)().LastOrDefault(Function(x) x.Columns.Contains("NbLignesRetenues"))
+        End If
+        If bilan Is Nothing OrElse bilan.Rows.Count = 0 Then
             Return "versé au plan comptable"
         End If
 
-        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim r As DataRow = bilan.Rows(0)
         Dim texte As String = "versé au plan comptable : " & Lire(r, "NbLignesRetenues") & " compte(s)"
         If Lire(r, "NbAnomalies") > 0 Then texte &= ", " & Lire(r, "NbAnomalies") & " à corriger"
         Return texte
@@ -1079,9 +1226,11 @@ Public Class ApideckExtraction
     ''' page, deux cents pages au plus — vingt mille lignes, la garde contre une
     ''' boucle qui ne finirait pas.
     ''' </summary>
-    Private Shared Function EntitesDeLaSource(api As clsApideck, realm As String, entite As String) As JArray
+    Private Shared Function EntitesDeLaSource(api As clsApideck, realm As String, entite As String,
+                                              Optional filtre As String = "",
+                                              Optional pagesAuPlus As Integer = 0) As JArray
         Const TAILLE_PAGE As Integer = 100
-        Const PLAFOND As Integer = 200
+        Dim PLAFOND As Integer = If(pagesAuPlus > 0, pagesAuPlus, 200)
 
         If realm = "" Then Throw New Exception("Apideck : identifiant de société QuickBooks introuvable.")
 
@@ -1090,7 +1239,8 @@ Public Class ApideckExtraction
 
         For tour As Integer = 1 To PLAFOND
             Dim requete As String = Uri.EscapeDataString(
-                "select * from " & entite & " startposition " & depart & " maxresults " & TAILLE_PAGE)
+                "select * from " & entite & If(filtre <> "", " " & filtre, "") &
+                " startposition " & depart & " maxresults " & TAILLE_PAGE)
             Dim url As String = "https://quickbooks.api.intuit.com/v3/company/" & realm &
                                 "/query?query=" & requete & "&minorversion=75"
 
@@ -3310,8 +3460,9 @@ Public Class ApideckExtraction
 #Region "Les entités natives de QuickBooks (T260)"
 
     ''' <summary>Toutes les pages d'une entité native, par le realm de la connexion.</summary>
-    Private Function LireEntiteNative(api As clsApideck, entite As String) As JArray
-        Return EntitesDeLaSource(api, api.RealmId(), entite)
+    Private Function LireEntiteNative(api As clsApideck, entite As String, Optional filtre As String = "",
+                                      Optional pagesAuPlus As Integer = 0) As JArray
+        Return EntitesDeLaSource(api, api.RealmId(), entite, filtre, pagesAuPlus)
     End Function
 
     ''' <summary>
@@ -3404,15 +3555,33 @@ Public Class ApideckExtraction
     Private Function LireDevises(api As clsApideck) As JArray
         Dim tout As New JArray()
 
-        For Each entite As String In {"CompanyCurrency", "ExchangeRate"}
+        ' Les devises de la société d'abord : vides quand le multidevise est
+        ' désactivé — et alors les taux ne veulent rien dire, on n'en lit aucun.
+        Dim codes As New List(Of String)
+        Try
+            For Each e As JToken In LireEntiteNative(api, "CompanyCurrency")
+                Dim o As JObject = CType(e.DeepClone(), JObject)
+                o("_genre") = "CompanyCurrency"
+                tout.Add(o)
+                If Valeur(e, "Code") <> "" Then codes.Add(Valeur(e, "Code"))
+            Next
+        Catch ex As Exception
+            ' Multidevise désactivé : QuickBooks refuse l'entité. On passe.
+            If Not ex.Message.Contains("400") AndAlso Not ex.Message.ToLowerInvariant().Contains("multi") Then Throw
+        End Try
+
+        ' QuickBooks ignore les filtres et la pagination sur ExchangeRate : il
+        ' rend toujours la même page de cent taux du jour, et une lecture paginée
+        ' les empilait vingt mille fois. Une page par devise, filtrée chez nous.
+        For Each code As String In codes.Distinct()
             Try
-                For Each e As JToken In LireEntiteNative(api, entite)
+                For Each e As JToken In LireEntiteNative(api, "ExchangeRate", "where SourceCurrencyCode = '" & code.Replace("'", "''") & "'", 1)
+                    If Valeur(e, "SourceCurrencyCode") <> "" AndAlso Valeur(e, "SourceCurrencyCode") <> code Then Continue For
                     Dim o As JObject = CType(e.DeepClone(), JObject)
-                    o("_genre") = entite
+                    o("_genre") = "ExchangeRate"
                     tout.Add(o)
                 Next
             Catch ex As Exception
-                ' Multidevise désactivé : QuickBooks refuse l'entité. On passe.
                 If Not ex.Message.Contains("400") AndAlso Not ex.Message.ToLowerInvariant().Contains("multi") Then Throw
             End Try
         Next

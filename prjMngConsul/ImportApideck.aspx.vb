@@ -1,4 +1,5 @@
-﻿Imports System.Text
+﻿Imports System.Data.SqlClient
+Imports System.Text
 
 ''' <summary>
 ''' Importer depuis QuickBooks par Apideck — l'autre voie de reprise.
@@ -48,6 +49,9 @@ Public Class ImportApideck
 
         AfficherEtat()
         AfficherCatalogue()
+
+        Dim enCours As Integer = ExtractionEnCours()
+        If enCours > 0 Then SuivreExtraction(enCours)
     End Sub
 
 #End Region
@@ -141,22 +145,48 @@ Public Class ImportApideck
             Return
         End If
 
+        ' Une extraction qui tourne encore ne doit pas en recevoir une seconde :
+        ' QuickBooks plafonne les appels simultanés, et les deux échoueraient.
+        Dim enCours As Integer = ExtractionEnCours()
+        If enCours > 0 Then
+            Message("Une extraction est déjà en cours pour cette compagnie : son avancement est ci-dessous.", "info")
+            SuivreExtraction(enCours)
+            Return
+        End If
+
         Dim moteur As New ApideckExtraction(Me) With {
             .DateArret = dateArret,
             .MoisParPeriode = MoisParPeriode()
         }
 
-        Dim res As ApideckExtraction.Resultat
+        Dim runId As Integer
 
         Try
-            res = moteur.Importer(ApideckExtraction.Catalogue)
+            runId = moteur.LancerEnFond(ApideckExtraction.Catalogue)
         Catch ex As Exception
             Message("L'extraction n'a pas pu s'ouvrir : " & ex.Message, "err")
             Return
         End Try
 
-        AfficherResultat(res)
+        SuivreExtraction(runId)
     End Sub
+
+    ''' <summary>
+    ''' Le numéro de l'extraction de la compagnie encore en cours, s'il y en a
+    ''' une — s0895 rend INTERROMPUE celle qui n'a plus donné signe de vie depuis
+    ''' trente minutes, et s0776 la soldera. Zéro sinon.
+    ''' </summary>
+    Private Function ExtractionEnCours() As Integer
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        p.Add(New SqlParameter("@RunId", DBNull.Value))
+        Dim ds As DataSet = ExecuteSQLds("s0895GetConnecteurRun", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        If Convert.ToString(r("Statut")) <> "EN_COURS" Then Return 0
+        Return Convert.ToInt32(r("Id"))
+    End Function
 
 #End Region
 
@@ -192,59 +222,16 @@ Public Class ImportApideck
     End Sub
 
     ''' <summary>
-    ''' Le compte rendu : le total en une phrase, puis les erreurs en premier et
-    ''' en rouge — c'est ce qu'on vient lire. Le détail des ressources réussies
-    ''' reste disponible, replié, pour qui veut vérifier les décomptes.
+    ''' Le compte rendu n'est plus rendu ici : l'extraction tourne en arrière-
+    ''' plan, et c'est le navigateur qui la suit, en relisant ApideckEtat.ashx
+    ''' toutes les quelques secondes — les erreurs en premier, le détail des
+    ''' réussites replié. La page ne pose que l'ancre et le numéro.
     ''' </summary>
-    Private Sub AfficherResultat(res As ApideckExtraction.Resultat)
-        Dim sb As New StringBuilder()
-        Dim echecs = res.Lignes.Where(Function(l) Not l.Reussie).ToList()
-        Dim reussies = res.Lignes.Where(Function(l) l.Reussie).ToList()
-
-        sb.Append("<div class='msg ").Append(If(echecs.Count = 0, "ok", "err")).Append("'>")
-        sb.Append(res.Total.ToString("N0")).Append(" enregistrement(s) déposés en préparation, sur ")
-        sb.Append(res.Demandees).Append(" ressource(s).")
-        If echecs.Count > 0 Then
-            sb.Append(" ").Append(echecs.Count).Append(" n'ont pas répondu — le détail est ci-dessous.")
-        End If
-        sb.Append(" Rien n'a été écrit en comptabilité : les écrans d'import décident de la suite.")
-        sb.Append("</div>")
-
-        If res.NoteTaxes <> "" Then
-            sb.Append("<div class='msg info'>").Append(Server.HtmlEncode(res.NoteTaxes)).Append("</div>")
-        End If
-
-        If echecs.Count > 0 Then
-            sb.Append("<h3 class='erreurs'>").Append(echecs.Count).Append(" ressource(s) en erreur</h3>")
-            sb.Append("<table class='res'><tr><th>Ressource</th><th>Erreur</th></tr>")
-            For Each l As ApideckExtraction.LigneResultat In echecs
-                sb.Append("<tr class='ko'><td>").Append(Server.HtmlEncode(l.Ressource.Libelle))
-                sb.Append(" <span style='color:#94a3b8'>").Append(l.Ressource.Cle).Append("</span></td>")
-                sb.Append("<td><span class='ko-txt'>").Append(Server.HtmlEncode(l.Erreur)).Append("</span></td></tr>")
-            Next
-            sb.Append("</table>")
-        End If
-
-        If reussies.Count > 0 Then
-            sb.Append("<details class='detail'><summary>Voir le détail des ").Append(reussies.Count)
-            sb.Append(" ressource(s) rapatriée(s)</summary>")
-            sb.Append("<table class='res'><tr><th>Ressource</th><th style='text-align:right'>Enregistrements</th>")
-            sb.Append("<th>Ce qui en a été fait</th></tr>")
-            For Each l As ApideckExtraction.LigneResultat In reussies
-                sb.Append("<tr><td>").Append(Server.HtmlEncode(l.Ressource.Libelle))
-                sb.Append(" <span style='color:#94a3b8'>").Append(l.Ressource.Cle).Append("</span></td>")
-                sb.Append("<td class='n'>").Append(l.Nb.ToString("N0")).Append("</td><td>")
-                If l.VersDit <> "" Then
-                    sb.Append("<span class='vers'>").Append(Server.HtmlEncode(l.VersDit)).Append("</span>")
-                Else
-                    sb.Append("<span style='color:#64748b'>déposé en préparation</span>")
-                End If
-                sb.Append("</td></tr>")
-            Next
-            sb.Append("</table></details>")
-        End If
-
-        litResultat.Text = sb.ToString()
+    Private Sub SuivreExtraction(runId As Integer)
+        litResultat.Text = "<div id='suivi' data-run='" & runId & "' data-total='" &
+                           ApideckExtraction.Catalogue.Count & "'>" &
+                           "<div class='msg info'>Extraction lancée : l'avancement s'affiche ici, ressource par ressource. " &
+                           "Vous pouvez quitter la page, l'extraction continue.</div></div>"
         pnlResultat.Visible = True
     End Sub
 

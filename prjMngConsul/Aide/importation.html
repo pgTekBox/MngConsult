@@ -107,9 +107,9 @@
                         <tr><td>Taxes déclarées par</td><td>Non</td><td>Trimestre (défaut), mois ou année — la fréquence de vos déclarations, que QuickBooks ne dit nulle part.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> lance l’extraction. « Une extraction complète prend quelques minutes. »</p>
+                <p><kbd>Importer dans la préparation</kbd> lance l’extraction <strong>en arrière-plan</strong> : la page répond tout de suite, et le bloc 3 se met à jour toutes les trois secondes, ressource par ressource. Vous pouvez quitter la page — l’extraction continue — et y revenir : tant qu’elle tourne, elle s’affiche de nouveau. « Une extraction complète prend quelques minutes. » Un second clic pendant qu’elle tourne ne relance rien : « Une extraction est déjà en cours pour cette compagnie ».</p>
                 <h3>3. Ce qui est arrivé</h3>
-                <p>Une phrase résume le résultat : le nombre d’enregistrements déposés et le nombre de ressources. Puis, <strong>s’il y a des erreurs, elles viennent en premier</strong>, en rouge, dans un tableau à deux colonnes :</p>
+                <p>Pendant l’extraction : « Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici », puis la liste « Déjà rapatriées » qui s’allonge. À la fin, une phrase résume le résultat : le nombre d’enregistrements déposés et le nombre de ressources. <strong>S’il y a des erreurs, elles viennent en premier</strong>, en rouge, dans un tableau à deux colonnes :</p>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
@@ -124,6 +124,8 @@
                     <li><span class="msg">« Apideck n’est pas configuré sur ce serveur… »</span> — la lecture directe n’est pas disponible ; passez par les fichiers CSV.</li>
                     <li><span class="msg">« Cette compagnie n’a pas encore relié sa comptabilité. »</span> — cliquez <kbd>Relier QuickBooks</kbd>.</li>
                     <li><span class="msg">« L’extraction n’a pas pu s’ouvrir : … »</span> — rien n’a été lu ; relisez le motif, vérifiez la liaison et réessayez.</li>
+                    <li><span class="msg">« Une extraction est déjà en cours pour cette compagnie : son avancement est ci-dessous. »</span> — attendez qu’elle finisse ; QuickBooks refuse deux lectures en parallèle.</li>
+                    <li><span class="msg">« L’extraction s’est arrêtée avant la fin — … »</span> — le serveur s’est arrêté ou une erreur a tout interrompu ; ce qui était déjà déposé reste en préparation. Relancez.</li>
                     <li><span class="msg">« N enregistrement(s) déposés en préparation, sur M ressource(s). … Rien n’a été écrit en comptabilité… »</span> — l’extraction est terminée ; passez aux écrans de préparation.</li>
                     <li><span class="msg">« … K n’ont pas répondu — le détail est ci-dessous. »</span> — K ressources sont en erreur ; le tableau rouge les nomme. Les autres sont bien déposées.</li>
                 </ul>
@@ -764,9 +766,9 @@
                         <tr><td>Taxes filed by</td><td>No</td><td>Quarter (default), month or year — the frequency of your filings, which QuickBooks never states.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> starts the extraction. “A full extraction takes a few minutes.”</p>
+                <p><kbd>Importer dans la préparation</kbd> starts the extraction <strong>in the background</strong>: the page responds at once, and block 3 refreshes every three seconds, resource by resource. You can leave the page — the extraction carries on — and come back: while it runs, it is shown again. “A full extraction takes a few minutes.” A second click while it runs starts nothing: “Une extraction est déjà en cours pour cette compagnie”.</p>
                 <h3>3. What arrived</h3>
-                <p>One sentence sums up the result: the number of records placed in staging and the number of resources. Then, <strong>if there are errors, they come first</strong>, in red, in a two-column table:</p>
+                <p>While it runs: “Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici”, then the “Déjà rapatriées” list grows. At the end, one sentence sums up the result: the number of records placed in staging and the number of resources. <strong>If there are errors, they come first</strong>, in red, in a two-column table:</p>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
@@ -781,6 +783,8 @@
                     <li><span class="msg">“Apideck is not configured on this server…”</span> — direct read is not available; use CSV files.</li>
                     <li><span class="msg">“This company has not connected its books yet.”</span> — click <kbd>Relier QuickBooks</kbd>.</li>
                     <li><span class="msg">“The extraction could not start: …”</span> — nothing was read; read the reason, check the connection and retry.</li>
+                    <li><span class="msg">“An extraction is already running for this company: its progress is below.”</span> — wait for it to finish; QuickBooks refuses two reads in parallel.</li>
+                    <li><span class="msg">“The extraction stopped before the end — …”</span> — the server stopped or an error interrupted everything; what was already placed stays in staging. Start again.</li>
                     <li><span class="msg">“N record(s) placed in staging, over M resource(s). … Nothing has been written to the books…”</span> — extraction done; move on to the staging screens.</li>
                     <li><span class="msg">“… K did not respond — the detail is below.”</span> — K resources failed; the red table names them. The others are safely in staging.</li>
                 </ul>
@@ -1421,9 +1425,9 @@
                         <tr><td>Impuestos declarados por</td><td>No</td><td>Trimestre (por defecto), mes o año — la frecuencia de sus declaraciones, que QuickBooks no indica en ninguna parte.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> lanza la extracción. « Una extracción completa tarda unos minutos. »</p>
+                <p><kbd>Importer dans la préparation</kbd> lanza la extracción <strong>en segundo plano</strong>: la página responde enseguida y el bloque 3 se actualiza cada tres segundos, recurso por recurso. Puede salir de la página — la extracción continúa — y volver: mientras corre, se muestra de nuevo. « Una extracción completa tarda unos minutos. » Un segundo clic mientras corre no lanza nada: « Une extraction est déjà en cours pour cette compagnie ».</p>
                 <h3>3. Qué llegó</h3>
-                <p>Una frase resume el resultado: el número de registros depositados y el número de recursos. Luego, <strong>si hay errores, van primero</strong>, en rojo, en una tabla de dos columnas:</p>
+                <p>Durante la extracción: « Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici », y la lista « Déjà rapatriées » va creciendo. Al final, una frase resume el resultado: el número de registros depositados y el número de recursos. <strong>Si hay errores, van primero</strong>, en rojo, en una tabla de dos columnas:</p>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
@@ -1438,6 +1442,8 @@
                     <li><span class="msg">« Apideck no está configurado en este servidor… »</span> — la lectura directa no está disponible; use archivos CSV.</li>
                     <li><span class="msg">« Esta empresa aún no ha conectado su contabilidad. »</span> — pulse <kbd>Relier QuickBooks</kbd>.</li>
                     <li><span class="msg">« La extracción no pudo abrirse: … »</span> — no se leyó nada; relea el motivo, verifique la conexión y reintente.</li>
+                    <li><span class="msg">« Ya hay una extracción en curso para esta empresa: su avance está abajo. »</span> — espere a que termine; QuickBooks rechaza dos lecturas en paralelo.</li>
+                    <li><span class="msg">« La extracción se detuvo antes del final — … »</span> — el servidor se detuvo o un error lo interrumpió todo; lo ya depositado queda en preparación. Vuelva a lanzarla.</li>
                     <li><span class="msg">« N registro(s) depositados en preparación, sobre M recurso(s). … Nada se ha escrito en contabilidad… »</span> — extracción terminada; pase a las pantallas de preparación.</li>
                     <li><span class="msg">« … K no respondieron — el detalle está abajo. »</span> — K recursos fallaron; la tabla roja los nombra. Los demás quedaron bien depositados.</li>
                 </ul>

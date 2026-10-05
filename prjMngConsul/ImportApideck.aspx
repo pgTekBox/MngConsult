@@ -163,4 +163,91 @@
     </asp:Panel>
 
 </div>
+
+<script type="text/javascript">
+    // L'extraction tourne en arrière-plan : on relit son état toutes les trois
+    // secondes et on redessine le compte rendu — les erreurs en premier, en
+    // rouge ; le détail des réussites replié. Quand elle se termine, on cesse.
+    (function () {
+        var suivi = document.getElementById('suivi');
+        if (!suivi) return;
+
+        var run = suivi.getAttribute('data-run');
+        var total = parseInt(suivi.getAttribute('data-total'), 10) || 0;
+        var minuterie = null;
+
+        function h(s) {
+            return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
+                return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c];
+            });
+        }
+
+        function nombre(n) { return Number(n || 0).toLocaleString('fr-CA'); }
+
+        function dessiner(e) {
+            var fini = e.statut !== 'EN_COURS';
+            var demandees = e.demandees || total;
+            var ko = e.lignes.filter(function (l) { return !l.reussie; });
+            var ok = e.lignes.filter(function (l) { return l.reussie; });
+            var html = '';
+
+            if (!fini) {
+                html += "<div class='msg info'>Extraction en cours : " + e.lues + " ressource(s) sur " + demandees +
+                        " lue(s), " + nombre(e.total) + " enregistrement(s) déposés jusqu'ici. " +
+                        "Vous pouvez quitter la page, l'extraction continue.</div>";
+            } else {
+                var genre = (e.echecs === 0 && e.statut === 'TERMINE') ? 'ok' : 'err';
+                html += "<div class='msg " + genre + "'>" + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +
+                        demandees + " ressource(s).";
+                if (e.statut === 'ECHEC' || e.statut === 'INTERROMPUE') {
+                    html += " L'extraction s'est arrêtée avant la fin" + (e.note ? " — " + h(e.note) : ".");
+                } else if (e.echecs > 0) {
+                    html += " " + e.echecs + " n'ont pas répondu — le détail est ci-dessous.";
+                }
+                html += " Rien n'a été écrit en comptabilité : les écrans d'import décident de la suite.</div>";
+            }
+
+            if (ko.length) {
+                html += "<h3 class='erreurs'>" + ko.length + " ressource(s) en erreur</h3>" +
+                        "<table class='res'><tr><th>Ressource</th><th>Erreur</th></tr>";
+                ko.forEach(function (l) {
+                    html += "<tr class='ko'><td>" + h(l.libelle) + " <span style='color:#94a3b8'>" + h(l.cle) + "</span></td>" +
+                            "<td><span class='ko-txt'>" + h(l.erreur) + "</span></td></tr>";
+                });
+                html += "</table>";
+            }
+
+            if (ok.length) {
+                html += "<details class='detail'" + (fini ? "" : " open") + "><summary>" +
+                        (fini ? "Voir le détail des " : "Déjà rapatriées : ") + ok.length + " ressource(s) rapatriée(s)</summary>" +
+                        "<table class='res'><tr><th>Ressource</th><th style='text-align:right'>Enregistrements</th></tr>";
+                ok.forEach(function (l) {
+                    html += "<tr><td>" + h(l.libelle) + " <span style='color:#94a3b8'>" + h(l.cle) + "</span></td>" +
+                            "<td class='n'>" + nombre(l.nb) + "</td></tr>";
+                });
+                html += "</table></details>";
+            }
+
+            suivi.innerHTML = html;
+            return fini;
+        }
+
+        function relire() {
+            fetch('ApideckEtat.ashx?run=' + encodeURIComponent(run) + '&t=' + Date.now(), { cache: 'no-store', credentials: 'same-origin' })
+                .then(function (r) { return r.json(); })
+                .then(function (e) {
+                    if (e.erreur) {
+                        suivi.innerHTML = "<div class='msg err'>" + h(e.erreur) + "</div>";
+                        clearInterval(minuterie);
+                        return;
+                    }
+                    if (dessiner(e)) clearInterval(minuterie);
+                })
+                .catch(function () { /* une relecture ratée : la prochaine dira */ });
+        }
+
+        relire();
+        minuterie = setInterval(relire, 3000);
+    })();
+</script>
 </asp:Content>
