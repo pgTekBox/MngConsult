@@ -516,40 +516,60 @@
 
             <section id="fr-balance">
                 <h2>Importer la balance de vérification</h2>
-                <p>Charge la balance de l’ancien logiciel arrêtée à la date de bascule (<span class="chemin">Importation › Balance de vérification</span>), pour contrôler l’équilibre et la comparer au plan. Rapport source : « Balance de vérification — Trial Balance ». « La date compte plus que tout… ».</p>
-                <h3>Champs</h3>
+                <p>Charge la balance de vérification de l’ancien logiciel, <strong>arrêtée à la date de bascule</strong> (<span class="chemin">Importation › Balance de vérification</span>). Elle est lue, contrôlée et mise en préparation à côté du plan comptable, pour vérifier que les deux concordent. <strong>Aucune écriture n’est passée dans vos livres</strong> : la création des soldes d’ouverture reste à faire par votre comptable.</p>
+                <h3>Deux voies pour la charger</h3>
+                <table>
+                    <thead><tr><th>Voie</th><th>Où</th><th>Comment</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, en direct</td><td>Le bandeau bleu « QuickBooks, en direct — sans fichier à exporter », en haut.</td><td>Indiquez la date dans <strong>Arrêté au</strong>, puis <kbd>⬇ Importer depuis QuickBooks</kbd>. Le rapport Trial Balance est lu du 1<sup>er</sup> janvier à cette date et déposé en préparation ; il <strong>remplace</strong> la balance précédente. Le résultat s’affiche sous le bandeau (« N enregistrement(s) rapatriés de QuickBooks — N compte(s) — écran « Balance de vérification » ») et l’écran le présente comme un fichier importé.</td></tr>
+                        <tr><td>Fichier</td><td>Bloc « 1. Le fichier à importer ».</td><td>Exportez dans l’ancien logiciel le rapport « Balance de vérification — Trial Balance » <strong>arrêté à la date de bascule</strong>, puis déposez-le : l’écran ne peut pas vérifier la date d’un fichier, c’est à vous d’exporter à la bonne date.</td></tr>
+                    </tbody>
+                </table>
+                <h3>La date de bascule — ici « Arrêté au »</h3>
+                <p>La veille du premier jour tenu dans 60Sec-AI (31 décembre 2025 pour un début au 1<sup>er</sup> janvier 2026). C’est la date de la balance reprise : les comptes de bilan portent leur solde à cette date, les comptes de résultats couvrent l’année civile jusqu’à cette date. Le champ ne figure que sur le bandeau QuickBooks ; la date saisie est gardée pendant votre session pour les autres écrans qui la demandent.</p>
+                <div class="piege" data-titre="Si vous la laissez vide">Rien ne part : « Indiquez la date d’arrêt : cette lecture porte sur une période. » Aucune extraction n’est ouverte, la balance en préparation n’est pas touchée. Indiquez la date et cliquez de nouveau.</div>
+                <div class="piege" data-titre="Piège">Une mauvaise date ne produit pas d’erreur : une balance au 30 juin ressemble à s’y méprendre à une balance au 31 décembre, et le contrôle « Incohérences » ne la détecte pas. Vérifiez la date avant de lancer ; pour corriger, relancez à la bonne date, la nouvelle balance remplace l’ancienne.</div>
+                <h3>Champs du fichier</h3>
                 <table>
                     <thead><tr><th>Champ</th><th>Obligatoire</th><th>Détails</th></tr></thead>
                     <tbody>
                         <tr><td>D’où viennent vos données ?</td><td>Oui</td><td>Logiciel, séparateur, encodage.</td></tr>
-                        <tr><td>Fichier</td><td>Oui</td><td>.csv ou .txt ; ligne d’en-tête avec <strong>Débit et Crédit</strong> dans les 40 premières lignes ; Nom obligatoire ; lecture arrêtée à TOTAL (qui sert de contrôle).</td></tr>
+                        <tr><td>Fichier</td><td>Oui</td><td>.csv ou .txt, 10 Mo au maximum, une ligne par compte ; ligne d’en-tête avec <strong>Débit et Crédit</strong> ; les lignes de titre, la ligne <strong>TOTAL</strong> et le pied de page sont écartés d’eux-mêmes, et le total annoncé sert à contrôler la lecture.</td></tr>
                         <tr><td>Remplacer la balance déjà importée</td><td>Non</td><td>Cochée par défaut. Décochée, les lignes s’ajoutent à l’ancienne balance.</td></tr>
                     </tbody>
                 </table>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>👁 Voir un aperçu</kbd> ; <kbd>✨ Lire avec l’IA</kbd> (200 000 caractères au maximum) ; <kbd>📥 Importer</kbd>.</li>
-                    <li><kbd>🔍 Incohérences avec le plan comptable</kbd> : contrôle croisé (voir Règles).</li>
+                    <li><kbd>👁 Voir un aperçu</kbd> : « Aperçu — ce que la lecture a compris », sans rien importer.</li>
+                    <li><kbd>✨ Lire avec l’IA</kbd> : pour un fichier mal formé, la lecture est confiée à ChatGPT (200 000 caractères au maximum) ; chaque montant rendu est retrouvé dans le fichier d’origine avant d’être accepté.</li>
+                    <li><kbd>📥 Importer</kbd> : reconnaît les colonnes par leur en-tête et dépose la balance.</li>
+                    <li><kbd>🔍 Incohérences avec le plan comptable</kbd> : contrôle croisé avec le plan chargé à l’étape 1 (voir Règles).</li>
                     <li><kbd>🔄 Nouvel import</kbd> : revient au dépôt de fichier.</li>
                     <li><kbd>🗑 Supprimer la balance importée</kbd> : « Supprimer la balance importée de votre compagnie ? »</li>
                 </ul>
                 <h3>Résultat</h3>
-                <p>Compteurs Insérées, Ignorées, Erreurs ; tableau Compte, Nom du compte, Débit, Crédit, avec total ; bandeaux d’équilibre et de total annoncé ; « Détail des erreurs ». Au retour sur l’écran : « La balance déjà importée — Importée le … depuis « … » — n compte(s). Pour la remplacer, importez simplement un nouveau fichier. »</p>
+                <p>Le bloc « Ce qui a été lu — à vérifier » vient en premier : compteurs Insérées, Ignorées, Erreurs ; tableau Compte, Nom du compte, Débit, Crédit, avec la ligne « Total — n compte(s) » ; bandeaux d’équilibre et de total annoncé ; « Détail des erreurs » (Débit ou Crédit illisible, ligne par ligne). Au retour sur l’écran : « La balance déjà importée — Importée le … depuis « … » — n compte(s). Pour la remplacer, importez simplement un nouveau fichier. »</p>
                 <h3>Règles du contrôle « Incohérences »</h3>
                 <ul>
                     <li><strong>Erreur</strong> : compte absent du plan avec solde ; compte « Ignorer » avec solde ; compte en double.</li>
                     <li><strong>À vérifier</strong> : solde de sens contraire ; solde différent.</li>
                     <li><strong>Info</strong> : compte absent sans solde ; compte du plan absent de la balance.</li>
-                    <li>Rapprochement par numéro, sinon par nom.</li>
+                    <li>Rapprochement par numéro, sinon par nom. Sans plan chargé : « il n’y a rien à comparer. Commencez par l’étape 1 de la reprise du plan comptable. »</li>
+                    <li>Quand tout concorde : « ✔ Aucune incohérence : chaque compte de la balance a son compte au plan, et inversement. »</li>
                     <li>L’écriture d’ouverture n’est pas créée automatiquement : votre comptable la saisit dans <a href="comptabilite.html#fr-journaux">Comptabilité › Journaux</a>.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucune ligne d’en-tête portant une colonne Débit et une colonne Crédit n’a été trouvée… »</span> — vérifiez le rapport exporté.</li>
+                    <li><span class="msg">« Indiquez la date d’arrêt : cette lecture porte sur une période. »</span> — le champ Arrêté au est vide ; rien n’a été lancé.</li>
+                    <li><span class="msg">« Cette compagnie n’a pas encore relié sa comptabilité. »</span> — <kbd>Relier QuickBooks</kbd> ouvre la liaison ; ou passez par le fichier.</li>
+                    <li><span class="msg">« Apideck n’est pas configuré sur ce serveur : rien ne peut être importé. »</span> — la lecture directe n’est pas disponible ; passez par le fichier.</li>
+                    <li><span class="msg">« N enregistrement(s) rapatriés de QuickBooks — K ressource(s) n’ont pas répondu »</span> — la balance n’a pas pu être lue ; le motif suit. Vérifiez la liaison et la date, puis réessayez.</li>
+                    <li><span class="msg">« Aucune ligne d’en-tête portant une colonne Débit et une colonne Crédit n’a été trouvée… »</span> — vérifiez le rapport exporté ; « Si le fichier est mal formaté, essayez « Lire avec l’IA ». »</li>
                     <li><span class="msg">« ⚖️ Balance équilibrée — … »</span> — débits = crédits.</li>
                     <li><span class="msg">« ⚠️ Balance déséquilibrée — écart de … »</span> — une ligne manque ou a été mal lue.</li>
                     <li><span class="msg">« ⚠️ Aucun montant n’a été lu — tous les soldes valent zéro… »</span> — colonnes de montants non reconnues ; vérifiez l’aperçu.</li>
                     <li><span class="msg">« ✔ Le total annoncé par le fichier (…) correspond à la somme des lignes lues… »</span> — la lecture est complète.</li>
+                    <li><span class="msg">« ⚠️ Le fichier annonce … »</span> — le total du fichier diffère de la somme lue ; une ligne a été perdue ou mal lue.</li>
                     <li><span class="msg">« Montant introuvable dans le fichier (…) : ligne refusée. »</span> — l’IA a proposé un montant absent du fichier ; la ligne est écartée.</li>
                 </ul>
                 <div class="attention" data-titre="Attention">Un compte « Ignorer » qui porte un solde fait disparaître ce montant. Le contrôle le signale en Erreur : liez-le ou créez-le.</div>
@@ -1198,43 +1218,63 @@
 
             <section id="en-trial-balance">
                 <h2>Import the trial balance</h2>
-                <p>Loads the trial balance of the former application as at the cut-over date (<span class="chemin">Import › Trial balance</span>), to check that it balances and compare it with the chart. Source report: “Trial Balance”. “The date matters more than anything…”.</p>
-                <h3>Fields</h3>
+                <p>Loads the trial balance of the former application, <strong>as at the cut-over date</strong> (<span class="chemin">Import › Trial balance</span>). It is read, checked and placed in staging next to the chart of accounts, to verify that both agree. <strong>No entry is posted to your books</strong>: the opening balances are still to be entered by your accountant.</p>
+                <h3>Two ways to load it</h3>
+                <table>
+                    <thead><tr><th>Way</th><th>Where</th><th>How</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, live</td><td>The blue banner “QuickBooks, en direct — sans fichier à exporter”, at the top.</td><td>Enter the date in <strong>Arrêté au</strong>, then <kbd>⬇ Importer depuis QuickBooks</kbd>. The Trial Balance report is read from 1 January to that date and placed in staging; it <strong>replaces</strong> the previous balance. The result shows under the banner (“N enregistrement(s) rapatriés de QuickBooks — N compte(s) — écran « Balance de vérification »”) and the screen presents it like an imported file.</td></tr>
+                        <tr><td>File</td><td>Block “1. Le fichier à importer”.</td><td>In the former application, export the “Trial Balance” report <strong>as at the cut-over date</strong>, then drop it: the screen cannot check a file’s date, exporting at the right date is up to you.</td></tr>
+                    </tbody>
+                </table>
+                <h3>The cut-over date — here “Arrêté au”</h3>
+                <p>The day before the first day kept in 60Sec-AI (31 December 2025 for a start on 1 January 2026). It is the date of the balance taken over: balance-sheet accounts carry their balance at that date, income-statement accounts cover the calendar year up to it. The field only appears on the QuickBooks banner; the date entered is kept during your session for the other screens that ask for it.</p>
+                <div class="piege" data-titre="If you leave it empty">Nothing starts: “Indiquez la date d’arrêt : cette lecture porte sur une période.” No extraction is opened, the balance in staging is untouched. Enter the date and click again.</div>
+                <div class="piege" data-titre="Pitfall">A wrong date raises no error: a balance as at 30 June looks exactly like one as at 31 December, and the “Inconsistencies” check does not detect it. Check the date before starting; to fix it, run again with the right date, the new balance replaces the old one.</div>
+                <h3>File fields</h3>
                 <table>
                     <thead><tr><th>Field</th><th>Required</th><th>Details</th></tr></thead>
                     <tbody>
                         <tr><td>Where does your data come from?</td><td>Yes</td><td>Application, separator, encoding.</td></tr>
-                        <tr><td>File</td><td>Yes</td><td>.csv or .txt; header row with <strong>Debit and Credit</strong> within the first 40 rows; Name required; reading stops at TOTAL (used as a check).</td></tr>
+                        <tr><td>File</td><td>Yes</td><td>.csv or .txt, 10 MB at most, one row per account; header row with <strong>Debit and Credit</strong>; title rows, the <strong>TOTAL</strong> row and the footer are discarded by themselves, and the announced total checks the read.</td></tr>
                         <tr><td>Replace the trial balance already imported</td><td>No</td><td>Checked by default. Unchecked, the rows are added to the former balance.</td></tr>
                     </tbody>
                 </table>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>👁 Preview</kbd>; <kbd>✨ Read with AI</kbd> (200,000 characters maximum); <kbd>📥 Import</kbd>.</li>
-                    <li><kbd>🔍 Inconsistencies with the chart of accounts</kbd>: cross-check (see Rules).</li>
-                    <li><kbd>🔄 New import</kbd>: back to the file drop.</li>
-                    <li><kbd>🗑 Delete the imported trial balance</kbd>: “Delete your company’s imported trial balance?”</li>
+                    <li><kbd>👁 Voir un aperçu</kbd>: “Aperçu — ce que la lecture a compris”, without importing anything.</li>
+                    <li><kbd>✨ Lire avec l’IA</kbd>: for a malformed file, the read is handed to ChatGPT (200,000 characters at most); every amount returned is found again in the original file before being accepted.</li>
+                    <li><kbd>📥 Importer</kbd>: recognises the columns by their header and places the balance.</li>
+                    <li><kbd>🔍 Incohérences avec le plan comptable</kbd>: cross-check with the chart loaded in step 1 (see Rules).</li>
+                    <li><kbd>🔄 Nouvel import</kbd>: back to the file drop.</li>
+                    <li><kbd>🗑 Supprimer la balance importée</kbd>: “Supprimer la balance importée de votre compagnie ?”</li>
                 </ul>
                 <h3>Result</h3>
-                <p>Counters Inserted, Ignored, Errors; table Account, Account name, Debit, Credit, with total; balance and announced-total banners; “Error details”. Back on the screen: “The trial balance already imported — Imported on … from “…” — n account(s). To replace it, simply import a new file.”</p>
+                <p>The “Ce qui a été lu — à vérifier” block comes first: counters Insérées, Ignorées, Erreurs; table Compte, Nom du compte, Débit, Crédit, with the row “Total — n compte(s)”; balance and announced-total banners; “Détail des erreurs” (unreadable Debit or Credit, row by row). Back on the screen: “La balance déjà importée — Importée le … depuis « … » — n compte(s). Pour la remplacer, importez simplement un nouveau fichier.”</p>
                 <h3>Rules of the “Inconsistencies” check</h3>
                 <ul>
                     <li><strong>Error</strong>: account missing from the chart with a balance; “Ignore” account with a balance; duplicate account.</li>
                     <li><strong>To check</strong>: balance on the opposite side; different balance.</li>
-                    <li><strong>Info</strong>: missing account without balance; chart account missing from the trial balance.</li>
-                    <li>Matching by number, otherwise by name.</li>
-                    <li>The opening entry is not created automatically: your accountant enters it in <a href="comptabilite.html">Accounting › Journals</a>.</li>
+                    <li><strong>Info</strong>: missing account without balance; chart account missing from the balance.</li>
+                    <li>Matched by number, else by name. Without a loaded chart: “il n’y a rien à comparer. Commencez par l’étape 1 de la reprise du plan comptable.”</li>
+                    <li>When everything agrees: “✔ Aucune incohérence : chaque compte de la balance a son compte au plan, et inversement.”</li>
+                    <li>The opening entry is not created automatically: your accountant enters it in <a href="comptabilite.html#en-journals">Accounting › Journals</a>.</li>
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No header row with a Debit column and a Credit column was found…”</span> — check the exported report.</li>
-                    <li><span class="msg">“⚖️ Balanced trial balance — …”</span> — debits = credits.</li>
-                    <li><span class="msg">“⚠️ Unbalanced trial balance — difference of …”</span> — a row is missing or was misread.</li>
-                    <li><span class="msg">“⚠️ No amount was read — all balances are zero…”</span> — amount columns not recognized; check the preview.</li>
-                    <li><span class="msg">“✔ The total announced by the file (…) matches the sum of the rows read…”</span> — the read is complete.</li>
-                    <li><span class="msg">“Amount not found in the file (…): row refused.”</span> — the AI proposed an amount absent from the file; the row is discarded.</li>
+                    <li><span class="msg">“Indiquez la date d’arrêt : cette lecture porte sur une période.”</span> — the Arrêté au field is empty; nothing was started.</li>
+                    <li><span class="msg">“Cette compagnie n’a pas encore relié sa comptabilité.”</span> — <kbd>Relier QuickBooks</kbd> opens the connection; or use the file.</li>
+                    <li><span class="msg">“Apideck n’est pas configuré sur ce serveur : rien ne peut être importé.”</span> — direct read is not available; use the file.</li>
+                    <li><span class="msg">“N enregistrement(s) rapatriés de QuickBooks — K ressource(s) n’ont pas répondu”</span> — the balance could not be read; the reason follows. Check the connection and the date, then retry.</li>
+                    <li><span class="msg">“Aucune ligne d’en-tête portant une colonne Débit et une colonne Crédit n’a été trouvée…”</span> — check the exported report; “Si le fichier est mal formaté, essayez « Lire avec l’IA ».”</li>
+                    <li><span class="msg">“⚖️ Balance équilibrée — …”</span> — debits = credits.</li>
+                    <li><span class="msg">“⚠️ Balance déséquilibrée — écart de …”</span> — a row is missing or was misread.</li>
+                    <li><span class="msg">“⚠️ Aucun montant n’a été lu — tous les soldes valent zéro…”</span> — amount columns not recognised; check the preview.</li>
+                    <li><span class="msg">“✔ Le total annoncé par le fichier (…) correspond à la somme des lignes lues…”</span> — the read is complete.</li>
+                    <li><span class="msg">“⚠️ Le fichier annonce …”</span> — the file’s total differs from the sum read; a row was lost or misread.</li>
+                    <li><span class="msg">“Montant introuvable dans le fichier (…) : ligne refusée.”</span> — the AI proposed an amount absent from the file; the row is discarded.</li>
                 </ul>
-                <div class="attention" data-titre="Warning">An “Ignore” account carrying a balance makes that amount vanish. The check flags it as an Error: link it or create it.</div>
+                <div class="attention" data-titre="Warning">An “Ignore” account carrying a balance makes that amount disappear. The check flags it as an Error: link it or create it.</div>
             </section>
 
             <section id="en-validate">
@@ -1880,41 +1920,61 @@
 
             <section id="es-balance">
                 <h2>Importar el balance de comprobación</h2>
-                <p>Carga el balance del programa anterior cerrado a la fecha de corte (<span class="chemin">Importación › Balance de comprobación</span>), para controlar el equilibrio y compararlo con el plan. Informe de origen: « Balance de comprobación — Trial Balance ». « La fecha importa más que nada… ».</p>
-                <h3>Campos</h3>
+                <p>Carga el balance de comprobación del programa anterior, <strong>cerrado a la fecha de corte</strong> (<span class="chemin">Importación › Balance de comprobación</span>). Se lee, se controla y se pone en preparación junto al plan de cuentas, para verificar que ambos concuerdan. <strong>Ningún asiento se pasa a sus libros</strong>: los saldos de apertura quedan por crear por su contador.</p>
+                <h3>Dos vías para cargarlo</h3>
+                <table>
+                    <thead><tr><th>Vía</th><th>Dónde</th><th>Cómo</th></tr></thead>
+                    <tbody>
+                        <tr><td>QuickBooks, en directo</td><td>La franja azul « QuickBooks, en direct — sans fichier à exporter », arriba.</td><td>Indique la fecha en <strong>Arrêté au</strong> y pulse <kbd>⬇ Importer depuis QuickBooks</kbd>. El informe Trial Balance se lee del 1 de enero a esa fecha y se deposita en preparación; <strong>sustituye</strong> el balance anterior. El resultado aparece bajo la franja (« N enregistrement(s) rapatriés de QuickBooks — N compte(s) — écran « Balance de vérification » ») y la pantalla lo presenta como un archivo importado.</td></tr>
+                        <tr><td>Archivo</td><td>Bloque « 1. Le fichier à importer ».</td><td>Exporte en el programa anterior el informe « Balance de comprobación — Trial Balance » <strong>cerrado a la fecha de corte</strong> y deposítelo: la pantalla no puede comprobar la fecha de un archivo, exportar a la fecha correcta depende de usted.</td></tr>
+                    </tbody>
+                </table>
+                <h3>La fecha de corte — aquí « Arrêté au »</h3>
+                <p>La víspera del primer día llevado en 60Sec-AI (31 de diciembre de 2025 para un inicio el 1 de enero de 2026). Es la fecha del balance retomado: las cuentas de balance llevan su saldo a esa fecha, las cuentas de resultados cubren el año civil hasta ella. El campo solo figura en la franja QuickBooks; la fecha indicada se guarda durante su sesión para las demás pantallas que la piden.</p>
+                <div class="piege" data-titre="Si la deja vacía">No arranca nada: « Indiquez la date d’arrêt : cette lecture porte sur une période. » No se abre ninguna extracción, el balance en preparación no se toca. Indique la fecha y pulse de nuevo.</div>
+                <div class="piege" data-titre="Trampa">Una fecha equivocada no produce error: un balance al 30 de junio se parece en todo a uno al 31 de diciembre, y el control « Incoherencias » no lo detecta. Compruebe la fecha antes de lanzar; para corregir, vuelva a lanzar con la fecha correcta, el nuevo balance sustituye al anterior.</div>
+                <h3>Campos del archivo</h3>
                 <table>
                     <thead><tr><th>Campo</th><th>Obligatorio</th><th>Detalles</th></tr></thead>
                     <tbody>
                         <tr><td>¿De dónde vienen sus datos?</td><td>Sí</td><td>Programa, separador, codificación.</td></tr>
-                        <tr><td>Archivo</td><td>Sí</td><td>.csv o .txt; línea de encabezado con <strong>Debe y Haber</strong> en las 40 primeras líneas; Nombre obligatorio; lectura detenida en TOTAL (que sirve de control).</td></tr>
-                        <tr><td>Reemplazar el balance ya importado</td><td>No</td><td>Marcada por defecto. Desmarcada, las líneas se añaden al balance anterior.</td></tr>
+                        <tr><td>Archivo</td><td>Sí</td><td>.csv o .txt, 10 MB como máximo, una línea por cuenta; línea de encabezado con <strong>Débito y Crédito</strong>; las líneas de título, la línea <strong>TOTAL</strong> y el pie de página se descartan solos, y el total anunciado sirve para controlar la lectura.</td></tr>
+                        <tr><td>Sustituir el balance ya importado</td><td>No</td><td>Marcada por defecto. Desmarcada, las líneas se añaden al balance anterior.</td></tr>
                     </tbody>
                 </table>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>👁 Ver una vista previa</kbd>; <kbd>✨ Leer con la IA</kbd> (200 000 caracteres como máximo); <kbd>📥 Importar</kbd>.</li>
-                    <li><kbd>🔍 Incoherencias con el plan de cuentas</kbd>: control cruzado (ver Reglas).</li>
-                    <li><kbd>🔄 Nueva importación</kbd>: vuelve al depósito de archivo.</li>
-                    <li><kbd>🗑 Eliminar el balance importado</kbd>: « ¿Eliminar el balance importado de su empresa? »</li>
+                    <li><kbd>👁 Voir un aperçu</kbd>: « Aperçu — ce que la lecture a compris », sin importar nada.</li>
+                    <li><kbd>✨ Lire avec l’IA</kbd>: para un archivo mal formado, la lectura se confía a ChatGPT (200 000 caracteres como máximo); cada importe devuelto se vuelve a encontrar en el archivo original antes de aceptarse.</li>
+                    <li><kbd>📥 Importer</kbd>: reconoce las columnas por su encabezado y deposita el balance.</li>
+                    <li><kbd>🔍 Incohérences avec le plan comptable</kbd>: control cruzado con el plan cargado en la etapa 1 (ver Reglas).</li>
+                    <li><kbd>🔄 Nouvel import</kbd>: vuelve al depósito de archivo.</li>
+                    <li><kbd>🗑 Supprimer la balance importée</kbd>: « Supprimer la balance importée de votre compagnie ? »</li>
                 </ul>
                 <h3>Resultado</h3>
-                <p>Contadores Insertadas, Ignoradas, Errores; tabla Cuenta, Nombre de la cuenta, Debe, Haber, con total; bandas de equilibrio y de total anunciado; « Detalle de los errores ». Al volver a la pantalla: « El balance ya importado — Importado el … desde « … » — n cuenta(s). Para reemplazarlo, simplemente importe un nuevo archivo. »</p>
+                <p>El bloque « Ce qui a été lu — à vérifier » va primero: contadores Insérées, Ignorées, Erreurs; tabla Compte, Nom du compte, Débit, Crédit, con la línea « Total — n compte(s) »; franjas de equilibrio y de total anunciado; « Détail des erreurs » (Débito o Crédito ilegible, línea por línea). Al volver a la pantalla: « La balance déjà importée — Importée le … depuis « … » — n compte(s). Pour la remplacer, importez simplement un nouveau fichier. »</p>
                 <h3>Reglas del control « Incoherencias »</h3>
                 <ul>
                     <li><strong>Error</strong>: cuenta ausente del plan con saldo; cuenta « Ignorar » con saldo; cuenta duplicada.</li>
                     <li><strong>Por verificar</strong>: saldo de sentido contrario; saldo diferente.</li>
                     <li><strong>Info</strong>: cuenta ausente sin saldo; cuenta del plan ausente del balance.</li>
-                    <li>Conciliación por número; si no, por nombre.</li>
-                    <li>El asiento de apertura no se crea automáticamente: su contador lo registra en <a href="comptabilite.html">Contabilidad › Diarios</a>.</li>
+                    <li>Emparejamiento por número y, si no, por nombre. Sin plan cargado: « il n’y a rien à comparer. Commencez par l’étape 1 de la reprise du plan comptable. »</li>
+                    <li>Cuando todo concuerda: « ✔ Aucune incohérence : chaque compte de la balance a son compte au plan, et inversement. »</li>
+                    <li>El asiento de apertura no se crea automáticamente: su contador lo registra en <a href="comptabilite.html#es-diarios">Contabilidad › Diarios</a>.</li>
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">« No se encontró ninguna línea de encabezado con una columna Debe y una columna Haber… »</span> — verifique el informe exportado.</li>
-                    <li><span class="msg">« ⚖️ Balance equilibrado — … »</span> — debe = haber.</li>
-                    <li><span class="msg">« ⚠️ Balance desequilibrado — diferencia de … »</span> — falta una línea o se leyó mal.</li>
-                    <li><span class="msg">« ⚠️ No se leyó ningún importe — todos los saldos valen cero… »</span> — columnas de importes no reconocidas; verifique la vista previa.</li>
-                    <li><span class="msg">« ✔ El total anunciado por el archivo (…) corresponde a la suma de las líneas leídas… »</span> — la lectura está completa.</li>
-                    <li><span class="msg">« Importe no encontrado en el archivo (…): línea rechazada. »</span> — la IA propuso un importe ausente del archivo; la línea se descarta.</li>
+                    <li><span class="msg">« Indiquez la date d’arrêt : cette lecture porte sur une période. »</span> — el campo Arrêté au está vacío; no se lanzó nada.</li>
+                    <li><span class="msg">« Cette compagnie n’a pas encore relié sa comptabilité. »</span> — <kbd>Relier QuickBooks</kbd> abre la conexión; o use el archivo.</li>
+                    <li><span class="msg">« Apideck n’est pas configuré sur ce serveur : rien ne peut être importé. »</span> — la lectura directa no está disponible; use el archivo.</li>
+                    <li><span class="msg">« N enregistrement(s) rapatriés de QuickBooks — K ressource(s) n’ont pas répondu »</span> — el balance no pudo leerse; el motivo sigue. Verifique la conexión y la fecha, y reintente.</li>
+                    <li><span class="msg">« Aucune ligne d’en-tête portant une colonne Débit et une colonne Crédit n’a été trouvée… »</span> — compruebe el informe exportado; « Si le fichier est mal formaté, essayez « Lire avec l’IA ». »</li>
+                    <li><span class="msg">« ⚖️ Balance équilibrée — … »</span> — débitos = créditos.</li>
+                    <li><span class="msg">« ⚠️ Balance déséquilibrée — écart de … »</span> — falta una línea o se leyó mal.</li>
+                    <li><span class="msg">« ⚠️ Aucun montant n’a été lu — tous les soldes valent zéro… »</span> — columnas de importes no reconocidas; compruebe la vista previa.</li>
+                    <li><span class="msg">« ✔ Le total annoncé par le fichier (…) correspond à la somme des lignes lues… »</span> — la lectura está completa.</li>
+                    <li><span class="msg">« ⚠️ Le fichier annonce … »</span> — el total del archivo difiere de la suma leída; una línea se perdió o se leyó mal.</li>
+                    <li><span class="msg">« Montant introuvable dans le fichier (…) : ligne refusée. »</span> — la IA propuso un importe ausente del archivo; la línea se descarta.</li>
                 </ul>
                 <div class="attention" data-titre="Atención">Una cuenta « Ignorar » que lleva saldo hace desaparecer ese importe. El control lo señala como Error: vincúlela o créela.</div>
             </section>
