@@ -54,6 +54,20 @@
                     <li><strong>Gardez la même voie de chargement.</strong> La lecture directe et le fichier CSV ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ».</li>
                     <li>Le fil des trois étapes en haut de l’écran ramène à l’étape 1 en un clic. Le détail de cet écran est dans <a href="importation.html#fr-plan-etape1">Importation des données › Étape 1</a>.</li>
                 </ul>
+                <h3>La date de bascule et le solde affiché</h3>
+                <p>La <strong>date de bascule</strong> est la veille du premier jour tenu dans 60Sec-AI — le 31 décembre 2025 si vous commencez ici le 1<sup>er</sup> janvier 2026. Elle se saisit sur l’écran <span class="chemin">Importation › Importer depuis QuickBooks</span>, et c’est elle qui arrête la balance de vérification et borne le grand livre. <strong>Cet écran-ci ne la demande pas</strong> : un plan comptable n’a pas de date, et la lecture directe du plan (bouton <kbd>Importer depuis QuickBooks</kbd> de l’étape 1) se lance sans elle.</p>
+                <table>
+                    <thead><tr><th>Ce que vous lisez</th><th>À quelle date</th><th>Ce qu’il faut en conclure</th></tr></thead>
+                    <tbody>
+                        <tr><td>La colonne Solde de cette grille</td><td>Au moment du chargement : le solde <strong>du jour</strong> chez QuickBooks (lecture directe) ou celui du fichier exporté.</td><td>Il sert aux garde-fous de « Ignorer » et à repérer les comptes vivants. Il n’est pas le solde repris.</td></tr>
+                        <tr><td>La balance de vérification (écran dédié)</td><td>Arrêtée <strong>à la date de bascule</strong>.</td><td>C’est elle qui porte les soldes repris et qui contrôle la correspondance à la fin.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>Un solde à 0 aujourd’hui n’était pas forcément à 0 à la bascule</strong>, et l’inverse : un compte vidé en janvier portait peut-être un montant au 31 décembre. Décidez « Ignorer » avec cette réserve ; la balance de vérification signalera tout compte ignoré qui porte un montant à la date.</li>
+                    <li>Si la date de bascule est laissée vide sur l’écran QuickBooks, rien n’en part : l’extraction est refusée avec « Indiquez la date de bascule avant d’importer… ». Le plan chargé ici n’est pas touché par ce refus.</li>
+                    <li>Tout sur la date : <a href="importation.html#fr-quickbooks">Importation des données › Importer depuis QuickBooks › La date de bascule</a>.</li>
+                </ul>
             </section>
 
             <section id="fr-principe">
@@ -307,6 +321,7 @@
                         <tr><td>Lier deux comptes au même compte de 60sec</td><td>Refus à l’enregistrement : un compte de 60sec ne reçoit qu’un seul compte de l’ancien logiciel.</td><td>Liez le second à un autre compte, ou créez-le.</td></tr>
                         <tr><td>« Créer » en choisissant un compte existant</td><td>Refus : « Créer » ne peut pas reprendre un numéro que votre plan 60sec connaît déjà.</td><td>Si c’est ce compte que vous voulez, c’est « Lier ». Sinon laissez le compte vide.</td></tr>
                         <tr><td>Croire qu’un solde à 0 veut dire « inutilisé »</td><td>QuickBooks renvoie toujours 0 pour les revenus et les dépenses. Ignorer un tel compte peut laisser des écritures sans compte.</td><td>Tenez compte de l’encadré jaune ; vérifiez dans l’ancien logiciel avant d’ignorer.</td></tr>
+                        <tr><td>Prendre le solde affiché pour le solde à la date de bascule</td><td>La colonne Solde est celle du jour du chargement ; un compte vidé depuis la bascule paraît inutile, un compte ouvert depuis paraît vivant.</td><td>Décidez d’après le rôle du compte, pas d’après ce seul chiffre ; le solde repris est celui de la balance de vérification arrêtée à la date de bascule.</td></tr>
                         <tr><td>Vouloir ignorer un compte qui porte un solde ou qui est utilisé</td><td>Option grisée, puis refus : le montant, les factures ou les produits n’auraient nulle part où aller.</td><td>Liez ou créez. L’info-bulle de l’option dit la raison exacte.</td></tr>
                         <tr><td>Changer de voie de chargement en cours de route</td><td>Le fichier CSV et la lecture directe ne partagent pas leurs décisions : les comptes reviennent « à décider ».</td><td>Gardez la même voie du début à la fin.</td></tr>
                         <tr><td>Renommer un compte dans l’ancien logiciel, puis recharger</td><td>Sans numéro, le nom est la clé : le compte renommé revient « à décider » et l’ancienne décision est orpheline.</td><td>Renommez avant de commencer, ou refaites la décision après le rechargement.</td></tr>
@@ -321,6 +336,7 @@
             <section id="fr-faq">
                 <h2>Questions fréquentes</h2>
                 <h3>Pour commencer</h3>
+                <details><summary>Dois-je indiquer la date de bascule sur cet écran ?</summary><p>Non. La date de bascule — la veille du premier jour tenu dans 60Sec-AI — se saisit sur l’écran <span class="chemin">Importation › Importer depuis QuickBooks</span> ; elle arrête la balance de vérification et borne le grand livre. Le plan comptable, lui, n’a pas de date : cet écran et l’étape 1 se passent d’elle. Si vous la laissez vide là-bas, l’extraction est refusée avant de partir et rien ne change ici. Seule nuance : la colonne Solde est celle du jour du chargement, pas celle de la bascule.</p></details>
                 <details><summary>L’écran dit « Aucun plan comptable n’a encore été chargé ». Que faire ?</summary><p>Chargez d’abord le plan à l’étape 1, <span class="chemin">Importation › Importer le plan comptable</span>, par la lecture directe QuickBooks ou par un fichier CSV. Le lien de l’écran et le fil des trois étapes y mènent.</p></details>
                 <details><summary>Pourquoi des lignes sont-elles déjà sur « Lier » alors que je n’ai rien fait ?</summary><p>Deux raisons possibles. La pastille « nom QuickBooks connu — lié d’office » signale une liaison faite au chargement par un alias du plan standard : elle est déjà enregistrée. Une proposition « même nom » arrive seulement préréglée sur « Lier » : elle ne compte qu’après <kbd>Enregistrer les correspondances</kbd>. Dans les deux cas, vous pouvez changer.</p></details>
                 <details><summary>« Rien à afficher avec ce filtre. » Où sont mes comptes ?</summary><p>Le filtre « Afficher » ne retient aucune ligne, par exemple « À décider seulement » quand tout est décidé. Remettez-le sur « Tout ».</p></details>
@@ -384,6 +400,20 @@
                     <li><strong>An account is missing, or a name is wrong?</strong> Fix it in the former application, then reload at step 1: the new load replaces the staging without erasing your decisions whose key is unchanged.</li>
                     <li><strong>Keep the same loading path.</strong> The direct read and the CSV file do not share their decisions: switching paths brings the “to decide” accounts back.</li>
                     <li>The 3-step trail at the top of the screen takes you back to step 1 in one click. That screen is detailed in <a href="importation.html#en-chart-step1">Data import › Step 1</a>.</li>
+                </ul>
+                <h3>The cut-over date and the balance shown</h3>
+                <p>The <strong>cut-over date</strong> is the day before the first day kept in 60Sec-AI — 31 December 2025 if you start here on 1 January 2026. It is entered on the <span class="chemin">Import › Import from QuickBooks</span> screen, and it is what dates the trial balance and bounds the general ledger. <strong>This screen does not ask for it</strong>: a chart of accounts has no date, and the direct read of the chart (<kbd>Importer depuis QuickBooks</kbd> button in step 1) starts without it.</p>
+                <table>
+                    <thead><tr><th>What you read</th><th>As at which date</th><th>What to conclude</th></tr></thead>
+                    <tbody>
+                        <tr><td>The Balance column of this grid</td><td>At load time: <strong>today’s</strong> balance in QuickBooks (direct read) or the one in the exported file.</td><td>It feeds the “Ignore” safeguards and spots live accounts. It is not the balance taken over.</td></tr>
+                        <tr><td>The trial balance (its own screen)</td><td>As at <strong>the cut-over date</strong>.</td><td>It carries the balances taken over and checks the mapping at the end.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>A balance of 0 today was not necessarily 0 at cut-over</strong>, and the reverse: an account emptied in January may have carried an amount on 31 December. Decide “Ignore” with that reservation; the trial balance will flag any ignored account carrying an amount at the date.</li>
+                    <li>If the cut-over date is left empty on the QuickBooks screen, nothing starts there: the extraction is refused with “Enter the cut-over date before importing…”. The chart loaded here is untouched by that refusal.</li>
+                    <li>Everything about the date: <a href="importation.html#en-quickbooks">Data import › Import from QuickBooks › The cut-over date</a>.</li>
                 </ul>
             </section>
 
@@ -638,6 +668,7 @@
                         <tr><td>Linking two accounts to the same 60sec account</td><td>Refused on save: one 60sec account receives only one account from the former application.</td><td>Link the second one to another account, or create it.</td></tr>
                         <tr><td>“Create” while picking an existing account</td><td>Refused: “Create” cannot reuse a number your 60sec chart already knows.</td><td>If that is the account you want, use “Link”. Otherwise leave the account empty.</td></tr>
                         <tr><td>Believing a zero balance means “unused”</td><td>QuickBooks always returns 0 for revenue and expense accounts. Ignoring such an account can leave entries without an account.</td><td>Heed the yellow note; check in the former application before ignoring.</td></tr>
+                        <tr><td>Taking the balance shown for the balance at cut-over</td><td>The Balance column is the one of the loading day; an account emptied since cut-over looks useless, one opened since looks live.</td><td>Decide by the account’s role, not by that figure alone; the balance taken over is the trial balance as at the cut-over date.</td></tr>
                         <tr><td>Trying to ignore an account that carries a balance or is used</td><td>Option greyed out, then refusal: the amount, the invoices or the products would have nowhere to go.</td><td>Link or create. The option’s tooltip gives the exact reason.</td></tr>
                         <tr><td>Switching loading paths along the way</td><td>The CSV file and the direct read do not share their decisions: accounts come back “to decide”.</td><td>Keep the same path from start to finish.</td></tr>
                         <tr><td>Renaming an account in the former application, then reloading</td><td>Without a number, the name is the key: the renamed account comes back “to decide” and the old decision is orphaned.</td><td>Rename before you start, or redo the decision after the reload.</td></tr>
@@ -652,6 +683,7 @@
             <section id="en-faq">
                 <h2>Frequently asked questions</h2>
                 <h3>Getting started</h3>
+                <details><summary>Do I have to enter the cut-over date on this screen?</summary><p>No. The cut-over date — the day before the first day kept in 60Sec-AI — is entered on the <span class="chemin">Import › Import from QuickBooks</span> screen; it dates the trial balance and bounds the general ledger. The chart of accounts has no date: this screen and step 1 do without it. If you leave it empty there, the extraction is refused before it starts and nothing changes here. One nuance: the Balance column is the one of the loading day, not of the cut-over.</p></details>
                 <details><summary>The screen says “No chart of accounts has been loaded yet”. What should I do?</summary><p>Load the chart first at step 1, <span class="chemin">Import › Import the chart of accounts</span>, through the QuickBooks direct read or a CSV file. The link on the screen and the 3-step trail lead there.</p></details>
                 <details><summary>Why are some rows already on “Link” when I did nothing?</summary><p>Two possible reasons. The “known QuickBooks name — linked outright” pill marks a link made on load through an alias of the standard chart: it is already saved. A “same name” suggestion only comes preset to “Link”: it counts only after <kbd>Save mappings</kbd>. In both cases you can change it.</p></details>
                 <details><summary>“Nothing to show with this filter.” Where are my accounts?</summary><p>The “Show” filter keeps no row, for example “To decide only” when everything is decided. Set it back to “All”.</p></details>
@@ -715,6 +747,20 @@
                     <li><strong>¿Falta una cuenta, o un nombre es incorrecto?</strong> Corríjalo en el programa anterior y recargue en la etapa 1: la nueva carga sustituye la preparación sin borrar sus decisiones de clave sin cambios.</li>
                     <li><strong>Conserve la misma vía de carga.</strong> La lectura directa y el archivo CSV no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ».</li>
                     <li>El hilo de las tres etapas en la parte superior de la pantalla lleva a la etapa 1 con un clic. El detalle de esa pantalla está en <a href="importation.html#es-plan-etapa1">Importación de datos › Etapa 1</a>.</li>
+                </ul>
+                <h3>La fecha de corte y el saldo mostrado</h3>
+                <p>La <strong>fecha de corte</strong> es la víspera del primer día llevado en 60Sec-AI — el 31 de diciembre de 2025 si empieza aquí el 1 de enero de 2026. Se indica en la pantalla <span class="chemin">Importación › Importar desde QuickBooks</span>, y es la que cierra el balance de comprobación y delimita el libro mayor. <strong>Esta pantalla no la pide</strong>: un plan de cuentas no tiene fecha, y la lectura directa del plan (botón <kbd>Importer depuis QuickBooks</kbd> de la etapa 1) se lanza sin ella.</p>
+                <table>
+                    <thead><tr><th>Lo que lee</th><th>A qué fecha</th><th>Qué concluir</th></tr></thead>
+                    <tbody>
+                        <tr><td>La columna Saldo de esta cuadrícula</td><td>En el momento de la carga: el saldo <strong>del día</strong> en QuickBooks (lectura directa) o el del archivo exportado.</td><td>Sirve a las salvaguardas de « Ignorar » y para detectar cuentas vivas. No es el saldo retomado.</td></tr>
+                        <tr><td>El balance de comprobación (su propia pantalla)</td><td>Cerrado <strong>a la fecha de corte</strong>.</td><td>Es el que lleva los saldos retomados y controla la correspondencia al final.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>Un saldo 0 hoy no era necesariamente 0 al corte</strong>, y al revés: una cuenta vaciada en enero quizá llevaba un importe al 31 de diciembre. Decida « Ignorar » con esa reserva; el balance de comprobación señalará toda cuenta ignorada que lleve un importe a la fecha.</li>
+                    <li>Si la fecha de corte se deja vacía en la pantalla QuickBooks, allí no arranca nada: la extracción se rechaza con « Indique la fecha de corte antes de importar… ». El plan cargado aquí no se ve afectado por ese rechazo.</li>
+                    <li>Todo sobre la fecha: <a href="importation.html#es-quickbooks">Importación de datos › Importar desde QuickBooks › La fecha de corte</a>.</li>
                 </ul>
             </section>
 
@@ -969,6 +1015,7 @@
                         <tr><td>Vincular dos cuentas a la misma cuenta de 60sec</td><td>Rechazo al guardar: una cuenta de 60sec solo recibe una cuenta del programa anterior.</td><td>Vincule la segunda a otra cuenta, o créela.</td></tr>
                         <tr><td>« Crear » eligiendo una cuenta existente</td><td>Rechazo: « Crear » no puede reutilizar un número que su plan 60sec ya conoce.</td><td>Si es esa la cuenta que quiere, es « Vincular ». Si no, deje la cuenta vacía.</td></tr>
                         <tr><td>Creer que un saldo 0 significa « sin uso »</td><td>QuickBooks devuelve siempre 0 para los ingresos y los gastos. Ignorar una cuenta así puede dejar asientos sin cuenta.</td><td>Tenga en cuenta el recuadro amarillo; verifique en el programa anterior antes de ignorar.</td></tr>
+                        <tr><td>Tomar el saldo mostrado por el saldo a la fecha de corte</td><td>La columna Saldo es la del día de la carga; una cuenta vaciada desde el corte parece inútil, una abierta desde entonces parece viva.</td><td>Decida según el papel de la cuenta, no solo por esa cifra; el saldo retomado es el del balance de comprobación cerrado a la fecha de corte.</td></tr>
                         <tr><td>Querer ignorar una cuenta que lleva saldo o que está en uso</td><td>Opción en gris y luego rechazo: el importe, las facturas o los productos no tendrían adónde ir.</td><td>Vincule o cree. La descripción emergente de la opción da la razón exacta.</td></tr>
                         <tr><td>Cambiar de vía de carga a mitad de camino</td><td>El archivo CSV y la lectura directa no comparten sus decisiones: las cuentas vuelven a « por decidir ».</td><td>Conserve la misma vía de principio a fin.</td></tr>
                         <tr><td>Renombrar una cuenta en el programa anterior y recargar</td><td>Sin número, el nombre es la clave: la cuenta renombrada vuelve a « por decidir » y la decisión anterior queda huérfana.</td><td>Renombre antes de empezar, o rehaga la decisión tras la recarga.</td></tr>
@@ -983,6 +1030,7 @@
             <section id="es-faq">
                 <h2>Preguntas frecuentes</h2>
                 <h3>Para empezar</h3>
+                <details><summary>¿Debo indicar la fecha de corte en esta pantalla?</summary><p>No. La fecha de corte — la víspera del primer día llevado en 60Sec-AI — se indica en la pantalla <span class="chemin">Importación › Importar desde QuickBooks</span>; cierra el balance de comprobación y delimita el libro mayor. El plan de cuentas no tiene fecha: esta pantalla y la etapa 1 prescinden de ella. Si la deja vacía allí, la extracción se rechaza antes de arrancar y aquí nada cambia. Un matiz: la columna Saldo es la del día de la carga, no la del corte.</p></details>
                 <details><summary>La pantalla dice « Todavía no se ha cargado ningún plan contable ». ¿Qué hago?</summary><p>Cargue primero el plan en la etapa 1, <span class="chemin">Importación › Importar el plan de cuentas</span>, por la lectura directa de QuickBooks o por un archivo CSV. El enlace de la pantalla y el hilo de las tres etapas llevan allí.</p></details>
                 <details><summary>¿Por qué hay líneas ya en « Vincular » si no hice nada?</summary><p>Dos razones posibles. La etiqueta « nombre QuickBooks conocido — vinculado de oficio » señala un vínculo hecho al cargar mediante un alias del plan estándar: ya está guardado. Una propuesta « mismo nombre » solo llega preajustada en « Vincular »: cuenta únicamente después de <kbd>Guardar las correspondencias</kbd>. En ambos casos puede cambiarla.</p></details>
                 <details><summary>« Nada que mostrar con este filtro. » ¿Dónde están mis cuentas?</summary><p>El filtro « Mostrar » no retiene ninguna línea, por ejemplo « Solo por decidir » cuando todo está decidido. Vuelva a ponerlo en « Todo ».</p></details>
