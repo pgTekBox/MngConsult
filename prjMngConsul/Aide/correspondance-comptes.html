@@ -27,11 +27,13 @@
             <section id="fr-en-bref">
                 <h2>En bref</h2>
                 <ol>
+                    <li><strong>Avant d’arriver ici</strong>, le plan de l’ancien logiciel a été chargé : par l’extraction <span class="chemin">Importation › Importer depuis QuickBooks</span> (indiquez la <a href="#fr-etape1">date de bascule</a>, l’extraction tourne en arrière-plan et dépose tout d’un coup), ou par un fichier à l’<a href="#fr-etape1">étape 1</a>. Gardez la même voie jusqu’au bout.</li>
                     <li>À l’ouverture, une partie du travail est déjà faite : les comptes dont le nom QuickBooks est connu du plan standard arrivent <strong>liés d’office</strong>, et les propositions « même nom » arrivent préréglées sur « Lier ».</li>
                     <li>Acceptez d’un coup ce qui est sûr avec <kbd>Accepter les correspondances par numéro</kbd>, puis, si vous le souhaitez, demandez des propositions pour le reste avec <kbd>✨ Proposer avec l’IA</kbd>.</li>
-                    <li>Filtrez sur « À décider seulement » et tranchez ligne par ligne : <a href="#fr-lier"><strong>Lier</strong></a> (presque toujours), <a href="#fr-creer"><strong>Créer</strong></a> (seulement si rien ne convient) ou <a href="#fr-ignorer"><strong>Ignorer</strong></a> (comptes vides et inutilisés, voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
+                    <li>Filtrez sur « À décider seulement » et tranchez ligne par ligne : <a href="#fr-lier"><strong>Lier</strong></a> (presque toujours), <a href="#fr-creer"><strong>Créer</strong></a> (seulement si rien ne convient) ou <a href="#fr-ignorer"><strong>Ignorer</strong></a> (comptes vides et inutilisés, voir <a href="#fr-garde-fous">les garde-fous</a>). La colonne Solde est celle du jour du chargement, pas celle de la bascule.</li>
                     <li>Cliquez <kbd>Enregistrer les correspondances</kbd>. S’il y a un problème, <a href="#fr-enregistrer">une fenêtre l’explique</a> au centre de l’écran ; rien de fautif n’est enregistré.</li>
                     <li>Quand l’avancement atteint 100 %, passez à <a href="#fr-etape3">l’étape 3</a> par <kbd>Créer les comptes au plan →</kbd> pour créer réellement les comptes « À créer ».</li>
+                    <li>Faites ensuite <a href="#fr-etape3">relire la correspondance par la balance de vérification</a> — <kbd>🔍 Incohérences avec le plan comptable</kbd> — avant de reprendre les tiers et les factures. La page Importation note chaque carte sur 10 : c’est là que l’avancement de la reprise se lit.</li>
                 </ol>
                 <p>Rien de ce qui se fait ici n’écrit en comptabilité : vous pouvez enregistrer, revenir et changer d’avis autant de fois que nécessaire. Chaque étape du résumé renvoie à la section qui la détaille plus bas.</p>
             </section>
@@ -421,11 +423,13 @@
             <section id="en-in-short">
                 <h2>In short</h2>
                 <ol>
-                    <li>On opening, part of the work is already done: accounts whose QuickBooks name is known to the standard chart come <strong>linked outright</strong>, and “same name” suggestions come preset to “Link”.</li>
-                    <li>Accept what is certain in one go with <kbd>Accept mappings by number</kbd>, then, if you wish, ask for suggestions for the rest with <kbd>✨ Suggest with AI</kbd>.</li>
-                    <li>Filter on “To decide only” and decide row by row: <a href="#en-link"><strong>Link</strong></a> (almost always), <a href="#en-create"><strong>Create</strong></a> (only if nothing fits) or <a href="#en-ignore"><strong>Ignore</strong></a> (empty, unused accounts, see <a href="#en-safeguards">the safeguards</a>).</li>
-                    <li>Click <kbd>Save mappings</kbd>. If there is a problem, <a href="#en-save">a popup explains it</a> in the middle of the screen; nothing faulty is saved.</li>
+                    <li><strong>Before you get here</strong>, the former application’s chart was loaded: through the <span class="chemin">Import › Import from QuickBooks</span> extraction (enter the <a href="#en-step1">cut-over date</a>; the extraction runs in the background and places everything in one go), or from a file in <a href="#en-step1">step 1</a>. Keep the same way to the end.</li>
+                    <li>On opening, part of the work is already done: accounts whose QuickBooks name is known to the standard chart arrive <strong>linked automatically</strong>, and “same name” proposals arrive preset to “Link”.</li>
+                    <li>Accept what is certain in one go with <kbd>Accept mappings by number</kbd>, then, if you wish, ask for proposals on the rest with <kbd>✨ Suggest with AI</kbd>.</li>
+                    <li>Filter on “To decide only” and settle row by row: <a href="#en-link"><strong>Link</strong></a> (almost always), <a href="#en-create"><strong>Create</strong></a> (only when nothing fits) or <a href="#en-ignore"><strong>Ignore</strong></a> (empty, unused accounts — see <a href="#en-safeguards">the safeguards</a>). The Balance column is the one of the loading day, not of the cut-over.</li>
+                    <li>Click <kbd>Save mappings</kbd>. If there is a problem, <a href="#en-save">a window explains it</a> in the middle of the screen; nothing faulty is saved.</li>
                     <li>When progress reaches 100%, go to <a href="#en-step3">step 3</a> with <kbd>Create the accounts in the chart →</kbd> to actually create the “To create” accounts.</li>
+                    <li>Then have <a href="#en-step3">the trial balance re-read the mapping</a> — <kbd>🔍 Incohérences avec le plan comptable</kbd> — before migrating parties and invoices. The Import page scores every card out of 10: that is where the migration’s progress is read.</li>
                 </ol>
                 <p>Nothing done here writes to the books: you can save, come back and change your mind as often as needed. Each step of the summary links to the section that details it below.</p>
             </section>
@@ -815,13 +819,15 @@
             <section id="es-en-resumen">
                 <h2>En resumen</h2>
                 <ol>
-                    <li>Al abrir, parte del trabajo ya está hecho: las cuentas cuyo nombre QuickBooks es conocido por el plan estándar llegan <strong>vinculadas de oficio</strong>, y las propuestas « mismo nombre » llegan preajustadas en « Vincular ».</li>
-                    <li>Acepte de una vez lo que es seguro con <kbd>Aceptar las correspondencias por número</kbd> y, si lo desea, pida propuestas para el resto con <kbd>✨ Proponer con la IA</kbd>.</li>
-                    <li>Filtre por « Solo por decidir » y decida línea por línea: <a href="#es-vincular"><strong>Vincular</strong></a> (casi siempre), <a href="#es-crear"><strong>Crear</strong></a> (solo si nada conviene) o <a href="#es-ignorar"><strong>Ignorar</strong></a> (cuentas vacías y sin uso, véanse <a href="#es-protecciones">las protecciones</a>).</li>
-                    <li>Haga clic en <kbd>Guardar las correspondencias</kbd>. Si hay un problema, <a href="#es-guardar">una ventana lo explica</a> en el centro de la pantalla; no se guarda nada incorrecto.</li>
-                    <li>Cuando el avance llegue al 100 %, pase a <a href="#es-etapa3">la etapa 3</a> con <kbd>Crear las cuentas en el plan →</kbd> para crear realmente las cuentas « Por crear ».</li>
+                    <li><strong>Antes de llegar aquí</strong>, el plan del programa anterior se cargó: por la extracción <span class="chemin">Importación › Importar desde QuickBooks</span> (indique la <a href="#es-etapa1">fecha de corte</a>; la extracción corre en segundo plano y lo deposita todo de una vez), o por un archivo en la <a href="#es-etapa1">etapa 1</a>. Mantenga la misma vía hasta el final.</li>
+                    <li>Al abrir, parte del trabajo ya está hecho: las cuentas cuyo nombre QuickBooks conoce el plan estándar llegan <strong>vinculadas automáticamente</strong>, y las propuestas « mismo nombre » llegan preajustadas en « Vincular ».</li>
+                    <li>Acepte de una vez lo seguro con <kbd>Aceptar las correspondencias por número</kbd> y, si lo desea, pida propuestas para el resto con <kbd>✨ Proponer con la IA</kbd>.</li>
+                    <li>Filtre « Solo por decidir » y resuelva línea por línea: <a href="#es-vincular"><strong>Vincular</strong></a> (casi siempre), <a href="#es-crear"><strong>Crear</strong></a> (solo si nada encaja) o <a href="#es-ignorar"><strong>Ignorar</strong></a> (cuentas vacías y sin uso, vea <a href="#es-protecciones">las salvaguardas</a>). La columna Saldo es la del día de la carga, no la del corte.</li>
+                    <li>Pulse <kbd>Guardar las correspondencias</kbd>. Si hay un problema, <a href="#es-guardar">una ventana lo explica</a> en el centro de la pantalla; nada erróneo se guarda.</li>
+                    <li>Cuando el avance llega al 100 %, pase a la <a href="#es-etapa3">etapa 3</a> con <kbd>Crear las cuentas en el plan →</kbd> para crear realmente las cuentas « Por crear ».</li>
+                    <li>Haga luego que <a href="#es-etapa3">el balance de comprobación relea la correspondencia</a> — <kbd>🔍 Incohérences avec le plan comptable</kbd> — antes de retomar los terceros y las facturas. La página Importación califica cada tarjeta sobre 10: ahí se lee el avance de la migración.</li>
                 </ol>
-                <p>Nada de lo que se hace aquí escribe en la contabilidad: puede guardar, volver y cambiar de opinión tantas veces como haga falta. Cada paso del resumen enlaza con la sección que lo detalla más abajo.</p>
+                <p>Nada de lo que se hace aquí escribe en la contabilidad: puede guardar, volver y cambiar de opinión tantas veces como haga falta. Cada paso del resumen remite a la sección que lo detalla más abajo.</p>
             </section>
 
             <section id="es-etapa1">
