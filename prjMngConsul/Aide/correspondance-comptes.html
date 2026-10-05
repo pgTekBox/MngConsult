@@ -44,16 +44,18 @@
                 <table>
                     <thead><tr><th>Ce que l’étape 1 a fait</th><th>Ce que vous voyez ici</th></tr></thead>
                     <tbody>
-                        <tr><td>Chargé le plan par la lecture directe QuickBooks ou par un fichier CSV</td><td>Les lignes de la grille. La lecture directe apporte en plus le type, le sous-type, l’origine et la description, affichés sous le nom de chaque compte ; un fichier n’apporte que ses colonnes.</td></tr>
+                        <tr><td>Chargé le plan par la lecture directe QuickBooks ou par un fichier CSV</td><td>Les lignes de la grille. La lecture directe se fait de deux façons qui ne font qu’une : l’extraction complète (<span class="chemin">Importation › Importer depuis QuickBooks</span>, en arrière-plan, avec la date de bascule) ou le bouton <kbd>⬇ Importer depuis QuickBooks</kbd> de l’étape 1, qui ne lit que le plan et ne demande pas de date. La lecture directe apporte en plus le type, le sous-type, l’origine et la description, affichés sous le nom de chaque compte ; un fichier n’apporte que ses colonnes.</td></tr>
                         <tr><td>Donné un verdict à chaque ligne</td><td>Seuls les comptes retenus (Nouveau ou Déjà au plan) apparaissent ici ; les doublons et les lignes invalides sont restés à l’étape 1. « Déjà au plan » devient une proposition « même numéro » ou « même nom ».</td></tr>
                         <tr><td>Lié d’office les comptes reconnus par alias</td><td>Des lignes déjà sur « Lier », avec la pastille « nom QuickBooks connu — lié d’office » et la note correspondante.</td></tr>
-                        <tr><td>Mémorisé le solde de chaque compte</td><td>La colonne Solde, et l’option « Ignorer » grisée sur les comptes qui portent un solde.</td></tr>
+                        <tr><td>Mémorisé le solde de chaque compte</td><td>La colonne Solde, et l’option « Ignorer » grisée sur les comptes qui portent un solde. C’est le solde du jour du chargement, pas celui de la date de bascule (voir plus bas).</td></tr>
                         <tr><td>Conservé les décisions d’un chargement précédent</td><td>Les décisions dont la clé (le numéro, sinon le nom) n’a pas changé sont toujours là. Un compte renommé dans l’ancien logiciel revient « à décider ».</td></tr>
                     </tbody>
                 </table>
                 <ul>
                     <li><strong>Il manque un compte, ou un nom est faux ?</strong> Corrigez dans l’ancien logiciel, puis rechargez à l’étape 1 : le nouveau chargement remplace la préparation sans effacer vos décisions à clé inchangée.</li>
-                    <li><strong>Gardez la même voie de chargement.</strong> La lecture directe et le fichier CSV ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ».</li>
+                    <li><strong>Gardez la même voie de chargement.</strong> La lecture directe et le fichier CSV ne partagent pas leurs décisions : changer de voie fait réapparaître les comptes « à décider ». L’extraction complète et le bouton de l’étape 1 comptent pour la même voie : passer de l’un à l’autre garde vos décisions.</li>
+                    <li><strong>Ce qu’un rechargement refait, et ne refait pas.</strong> Qu’il vienne du fichier, du bouton de l’étape 1 ou d’une nouvelle extraction complète : les décisions à clé inchangée restent ; la liaison d’office est refaite sur les comptes encore sans décision ; un compte renommé revient « à décider » ; la colonne Solde est rafraîchie ; les lignes « Créé ✓ » ne bougent jamais.</li>
+
                     <li>Le fil des trois étapes en haut de l’écran ramène à l’étape 1 en un clic. Le détail de cet écran est dans <a href="importation.html#fr-plan-etape1">Importation des données › Étape 1</a>.</li>
                 </ul>
                 <h3>La date de bascule et le solde affiché</h3>
@@ -475,16 +477,18 @@
                 <table>
                     <thead><tr><th>What step 1 did</th><th>What you see here</th></tr></thead>
                     <tbody>
-                        <tr><td>Loaded the chart through the QuickBooks direct read or a CSV file</td><td>The rows of the grid. The direct read also brings the type, subtype, origin and description, shown under each account’s name; a file only brings its columns.</td></tr>
+                        <tr><td>Loaded the chart through the QuickBooks direct read or a CSV file</td><td>The rows of the grid. The direct read comes in two forms that are one and the same: the full extraction (<span class="chemin">Import › Import from QuickBooks</span>, in the background, with the cut-over date) or the <kbd>⬇ Importer depuis QuickBooks</kbd> button of step 1, which reads only the chart and asks for no date. The direct read also brings the type, subtype, origin and description, shown under each account’s name; a file only brings its columns.</td></tr>
                         <tr><td>Gave each line a verdict</td><td>Only the accounts kept (New or Already in the chart) appear here; duplicates and invalid lines stayed at step 1. “Already in the chart” becomes a “same number” or “same name” suggestion.</td></tr>
                         <tr><td>Linked outright the accounts recognized by alias</td><td>Rows already on “Link”, with the “known QuickBooks name — linked outright” pill and the matching note.</td></tr>
-                        <tr><td>Stored each account’s balance</td><td>The Balance column, and the “Ignore” option greyed out on accounts that carry a balance.</td></tr>
+                        <tr><td>Stored each account’s balance</td><td>The Balance column, and the “Ignore” option greyed out on accounts that carry a balance. It is the balance of the loading day, not of the cut-over date (see below).</td></tr>
                         <tr><td>Kept the decisions of a previous load</td><td>Decisions whose key (the number, otherwise the name) did not change are still there. An account renamed in the former application comes back “to decide”.</td></tr>
                     </tbody>
                 </table>
                 <ul>
                     <li><strong>An account is missing, or a name is wrong?</strong> Fix it in the former application, then reload at step 1: the new load replaces the staging without erasing your decisions whose key is unchanged.</li>
-                    <li><strong>Keep the same loading path.</strong> The direct read and the CSV file do not share their decisions: switching paths brings the “to decide” accounts back.</li>
+                    <li><strong>Keep the same loading path.</strong> The direct read and the CSV file do not share their decisions: switching paths brings the “to decide” accounts back. The full extraction and the step 1 button count as the same path: switching between them keeps your decisions.</li>
+                    <li><strong>What a reload redoes, and does not.</strong> Whether it comes from the file, the step 1 button or a new full extraction: decisions with an unchanged key stay; the automatic linking is redone on accounts still without a decision; a renamed account comes back “to decide”; the Balance column is refreshed; “Créé ✓” rows never move.</li>
+
                     <li>The 3-step trail at the top of the screen takes you back to step 1 in one click. That screen is detailed in <a href="importation.html#en-chart-step1">Data import › Step 1</a>.</li>
                 </ul>
                 <h3>The cut-over date and the balance shown</h3>
@@ -906,16 +910,18 @@
                 <table>
                     <thead><tr><th>Lo que hizo la etapa 1</th><th>Lo que ve aquí</th></tr></thead>
                     <tbody>
-                        <tr><td>Cargó el plan por la lectura directa de QuickBooks o por un archivo CSV</td><td>Las líneas de la cuadrícula. La lectura directa trae además el tipo, el subtipo, el origen y la descripción, mostrados bajo el nombre de cada cuenta; un archivo solo trae sus columnas.</td></tr>
+                        <tr><td>Cargó el plan por la lectura directa de QuickBooks o por un archivo CSV</td><td>Las líneas de la cuadrícula. La lectura directa se hace de dos maneras que son una sola: la extracción completa (<span class="chemin">Importación › Importar desde QuickBooks</span>, en segundo plano, con la fecha de corte) o el botón <kbd>⬇ Importer depuis QuickBooks</kbd> de la etapa 1, que solo lee el plan y no pide fecha. La lectura directa trae además el tipo, el subtipo, el origen y la descripción, mostrados bajo el nombre de cada cuenta; un archivo solo trae sus columnas.</td></tr>
                         <tr><td>Dio un veredicto a cada línea</td><td>Aquí solo aparecen las cuentas retenidas (Nueva o Ya en el plan); los duplicados y las líneas inválidas se quedaron en la etapa 1. « Ya en el plan » se convierte en una propuesta « mismo número » o « mismo nombre ».</td></tr>
                         <tr><td>Vinculó de oficio las cuentas reconocidas por alias</td><td>Líneas ya en « Vincular », con la etiqueta « nombre QuickBooks conocido — vinculado de oficio » y la nota correspondiente.</td></tr>
-                        <tr><td>Guardó el saldo de cada cuenta</td><td>La columna Saldo, y la opción « Ignorar » en gris en las cuentas que llevan saldo.</td></tr>
+                        <tr><td>Guardó el saldo de cada cuenta</td><td>La columna Saldo, y la opción « Ignorar » en gris en las cuentas que llevan saldo. Es el saldo del día de la carga, no el de la fecha de corte (vea más abajo).</td></tr>
                         <tr><td>Conservó las decisiones de una carga anterior</td><td>Las decisiones cuya clave (el número, o si no el nombre) no cambió siguen ahí. Una cuenta renombrada en el programa anterior vuelve a « por decidir ».</td></tr>
                     </tbody>
                 </table>
                 <ul>
                     <li><strong>¿Falta una cuenta, o un nombre es incorrecto?</strong> Corríjalo en el programa anterior y recargue en la etapa 1: la nueva carga sustituye la preparación sin borrar sus decisiones de clave sin cambios.</li>
-                    <li><strong>Conserve la misma vía de carga.</strong> La lectura directa y el archivo CSV no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ».</li>
+                    <li><strong>Conserve la misma vía de carga.</strong> La lectura directa y el archivo CSV no comparten sus decisiones: cambiar de vía hace reaparecer las cuentas « por decidir ». La extracción completa y el botón de la etapa 1 cuentan como la misma vía: pasar de uno a otro conserva sus decisiones.</li>
+                    <li><strong>Lo que una recarga rehace, y lo que no.</strong> Venga del archivo, del botón de la etapa 1 o de una nueva extracción completa: las decisiones con clave sin cambios se conservan; la vinculación automática se rehace en las cuentas aún sin decisión; una cuenta renombrada vuelve « por decidir »; la columna Saldo se actualiza; las líneas « Créé ✓ » nunca se mueven.</li>
+
                     <li>El hilo de las tres etapas en la parte superior de la pantalla lleva a la etapa 1 con un clic. El detalle de esa pantalla está en <a href="importation.html#es-plan-etapa1">Importación de datos › Etapa 1</a>.</li>
                 </ul>
                 <h3>La fecha de corte y el saldo mostrado</h3>
