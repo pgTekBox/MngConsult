@@ -296,6 +296,24 @@
                     <li>L’étape 3 se rejoue sans risque : elle ne recrée jamais un compte déjà créé. Vous pouvez donc décider et créer par vagues.</li>
                 </ul>
                 <div class="piege" data-titre="Piège">Vérifiez vos « Créer » avant de passer à l’étape 3. Un compte créé par erreur, alors qu’il fallait le lier, donne deux comptes pour la même chose et ne s’annule pas d’ici : il faudra le corriger dans le plan comptable.</div>
+                <h3>Puis : la balance de vérification relit la correspondance</h3>
+                <p>La correspondance décide où va chaque compte ; la <strong>balance de vérification</strong>, arrêtée à la date de bascule, dit ce que chaque compte porte. L’écran <span class="chemin">Importation › Balance de vérification</span> la charge — par QuickBooks en direct (champ « Arrêté au ») ou par fichier — puis son bouton <kbd>🔍 Incohérences avec le plan comptable</kbd> confronte chaque ligne de la balance au plan chargé à l’étape 1 <strong>et à vos décisions</strong>. C’est le filet qui rattrape une correspondance fausse avant que les soldes soient repris.</p>
+                <table>
+                    <thead><tr><th>Ce que le contrôle signale</th><th>Gravité</th><th>Ce qu’il faut faire ici</th></tr></thead>
+                    <tbody>
+                        <tr><td>Compte « Ignorer » qui porte un solde</td><td>Erreur</td><td>Revenez sur la ligne : « Lier » vers le compte de 60sec qui recevra ce montant, ou « Créer ». Un compte ignoré avec un solde ferait disparaître ce montant de la reprise.</td></tr>
+                        <tr><td>Compte absent du plan chargé, avec solde</td><td>Erreur</td><td>La balance connaît un compte que l’étape 1 n’a pas chargé : rechargez le plan dans l’ancien logiciel, ou vérifiez que les deux exports datent du même moment.</td></tr>
+                        <tr><td>Compte en double dans la balance</td><td>Erreur</td><td>Corrigez le rapport à la source ; la clé est le numéro, sinon le nom.</td></tr>
+                        <tr><td>Solde de sens contraire, ou différent</td><td>À vérifier</td><td>Le compte de 60sec lié n’a peut-être pas la même nature (un actif lié à un passif) : relisez la cible choisie, ou le solde est légitimement de l’autre côté.</td></tr>
+                        <tr><td>Compte absent sans solde, compte du plan absent de la balance</td><td>Info</td><td>Rien d’obligatoire : un compte vide ou nouveau chez vous n’a pas de montant à reprendre.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>Quand le lancer</strong> : après avoir enregistré vos décisions ici — le contrôle lit les décisions enregistrées, pas celles en cours. Relancez-le après chaque vague de modifications.</li>
+                    <li><strong>Ce qu’il ne fait pas</strong> : il ne crée rien et ne corrige rien ; il ne vérifie pas que la balance est à la bonne date — une balance au 30 juin passe le contrôle comme une balance au 31 décembre.</li>
+                    <li><strong>Le solde repris est celui de la balance</strong>, arrêtée à la date de bascule — pas la colonne Solde de cette grille, qui est celle du jour du chargement.</li>
+                    <li>Le détail de cet écran — les deux voies de chargement, la date de bascule, les messages — est dans <a href="importation.html#fr-balance">Importation des données › Balance de vérification</a>.</li>
+                </ul>
                 <p>Le détail des colonnes, des règles et des douze messages de cet écran est dans <a href="importation.html#fr-plan-etape3">Importation des données › Étape 3</a>.</p>
             </section>
 
@@ -363,7 +381,8 @@
                 <h3>Recharger, IA et suite</h3>
                 <details><summary>J’ai rechargé le plan à l’étape 1. Mes décisions sont-elles perdues ?</summary><p>Non, tant que la clé du compte n’a pas changé : le numéro s’il y en a un, sinon le nom. Un compte renommé dans l’ancien logiciel revient « à décider ». Changer de voie de chargement (fichier ou lecture directe) fait aussi réapparaître les comptes « à décider ».</p></details>
                 <details><summary>L’Assistant et « Proposer avec l’IA » envoient-ils mes données ? Ont-ils un coût ?</summary><p>Ils envoient les comptes concernés (nom, nature, type, sous-type, solde, description) et votre plan comptable. Aucun nom de client ni de fournisseur n’est transmis. Chaque appel coûte quelques cents ; le coût est affiché, avec le total du mois pour l’Assistant.</p></details>
-                <details><summary>Tout est décidé. Et maintenant ?</summary><p>Faites relire la correspondance par votre comptable, puis passez à l’étape 3 par <kbd>Créer les comptes au plan →</kbd> si des comptes sont « À créer ». Viennent ensuite les tiers, les produits, la balance de vérification et les factures, qui s’appuient tous sur cette correspondance.</p></details>
+                <details><summary>Tout est décidé. Et maintenant ?</summary><p>Faites relire la correspondance par votre comptable, puis passez à l’étape 3 par <kbd>Créer les comptes au plan →</kbd> si des comptes sont « À créer ». Chargez ensuite la balance de vérification arrêtée à la date de bascule et lancez son contrôle <kbd>🔍 Incohérences avec le plan comptable</kbd> : il relit vos décisions compte par compte. Viennent enfin les tiers, les produits et les factures, qui s’appuient tous sur cette correspondance.</p></details>
+                <details><summary>Le contrôle de la balance signale un compte « Ignorer » avec solde. Que faire ?</summary><p>Revenir ici et changer la décision : « Lier » vers le compte de 60sec qui doit recevoir ce montant, ou « Créer ». Puis enregistrer et relancer le contrôle. La décision « Ignorer » est normalement grisée quand le compte porte un solde dans cette grille ; le contrôle attrape le cas où le solde n’apparaît qu’à la date de bascule — un compte de revenus ou de dépenses, par exemple, dont QuickBooks ne donne jamais le solde ici.</p></details>
             </section>
         </article>
 
@@ -643,6 +662,24 @@
                     <li>Step 3 can be replayed safely: it never recreates an already created account. So you can decide and create in waves.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall">Check your “Create” rows before going to step 3. An account created by mistake, when it should have been linked, gives two accounts for the same thing and cannot be undone from here: it will have to be fixed in the chart of accounts.</div>
+                <h3>Then: the trial balance re-reads the mapping</h3>
+                <p>The mapping decides where each account goes; the <strong>trial balance</strong>, as at the cut-over date, says what each account carries. The <span class="chemin">Import › Trial balance</span> screen loads it — from QuickBooks live (“Arrêté au” field) or from a file — then its <kbd>🔍 Incohérences avec le plan comptable</kbd> button checks every line of the balance against the chart loaded in step 1 <strong>and against your decisions</strong>. It is the net that catches a wrong mapping before balances are taken over.</p>
+                <table>
+                    <thead><tr><th>What the check flags</th><th>Severity</th><th>What to do here</th></tr></thead>
+                    <tbody>
+                        <tr><td>“Ignore” account carrying a balance</td><td>Error</td><td>Go back to the row: “Link” to the 60sec account that will receive the amount, or “Create”. An ignored account with a balance would make that amount vanish from the migration.</td></tr>
+                        <tr><td>Account missing from the loaded chart, with a balance</td><td>Error</td><td>The balance knows an account that step 1 did not load: reload the chart from the former application, or check that both exports date from the same moment.</td></tr>
+                        <tr><td>Duplicate account in the balance</td><td>Error</td><td>Fix the report at the source; the key is the number, else the name.</td></tr>
+                        <tr><td>Balance on the opposite side, or different</td><td>To check</td><td>The linked 60sec account may not have the same nature (an asset linked to a liability): re-read the chosen target, or the balance is legitimately on the other side.</td></tr>
+                        <tr><td>Missing account without balance, chart account missing from the balance</td><td>Info</td><td>Nothing required: an empty account, or one new on your side, has no amount to take over.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>When to run it</strong>: after saving your decisions here — the check reads saved decisions, not those in progress. Run it again after each wave of changes.</li>
+                    <li><strong>What it does not do</strong>: it creates nothing and fixes nothing; it does not check that the balance is at the right date — a balance as at 30 June passes the check like one as at 31 December.</li>
+                    <li><strong>The balance taken over is the trial balance’s</strong>, as at the cut-over date — not the Balance column of this grid, which is the one of the loading day.</li>
+                    <li>That screen in detail — the two ways to load, the cut-over date, the messages — is in <a href="importation.html#en-trial-balance">Data import › Trial balance</a>.</li>
+                </ul>
                 <p>Columns, rules and the twelve messages of that screen are detailed in <a href="importation.html#en-chart-step3">Data import › Step 3</a>.</p>
             </section>
 
@@ -710,7 +747,8 @@
                 <h3>Reloading, AI and what comes next</h3>
                 <details><summary>I reloaded the chart at step 1. Are my decisions lost?</summary><p>No, as long as the account key did not change: the number if there is one, otherwise the name. An account renamed in the former application comes back “to decide”. Switching loading paths (file or direct read) also brings the “to decide” accounts back.</p></details>
                 <details><summary>Do the Assistant and “Suggest with AI” send my data? Do they have a cost?</summary><p>They send the accounts concerned (name, nature, type, subtype, balance, description) and your chart of accounts. No customer or supplier name is sent. Each call costs a few cents; the cost is shown, with the month’s total for the Assistant.</p></details>
-                <details><summary>Everything is decided. What now?</summary><p>Have your accountant review the mapping, then go to step 3 with <kbd>Create the accounts in the chart →</kbd> if some accounts are “To create”. Next come parties, products, the trial balance and invoices, which all rely on this mapping.</p></details>
+                <details><summary>Everything is decided. What now?</summary><p>Have your accountant review the mapping, then go to step 3 with <kbd>Create the accounts in the chart →</kbd> if some accounts are “To create”. Then load the trial balance as at the cut-over date and run its <kbd>🔍 Incohérences avec le plan comptable</kbd> check: it re-reads your decisions account by account. Finally come parties, products and invoices, which all rely on this mapping.</p></details>
+                <details><summary>The trial balance check flags an “Ignore” account with a balance. What now?</summary><p>Come back here and change the decision: “Link” to the 60sec account that must receive the amount, or “Create”. Then save and run the check again. “Ignore” is normally greyed out when the account carries a balance in this grid; the check catches the case where the balance only shows at the cut-over date — a revenue or expense account, for instance, whose balance QuickBooks never gives here.</p></details>
             </section>
         </article>
 
@@ -990,6 +1028,24 @@
                     <li>La etapa 3 puede repetirse sin riesgo: nunca recrea una cuenta ya creada. Puede decidir y crear por tandas.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa">Verifique sus « Crear » antes de pasar a la etapa 3. Una cuenta creada por error, cuando había que vincularla, da dos cuentas para lo mismo y no se anula desde aquí: habrá que corregirla en el plan contable.</div>
+                <h3>Luego: el balance de comprobación relee la correspondencia</h3>
+                <p>La correspondencia decide adónde va cada cuenta; el <strong>balance de comprobación</strong>, cerrado a la fecha de corte, dice qué lleva cada cuenta. La pantalla <span class="chemin">Importación › Balance de comprobación</span> lo carga — desde QuickBooks en directo (campo « Arrêté au ») o desde un archivo — y su botón <kbd>🔍 Incohérences avec le plan comptable</kbd> confronta cada línea del balance con el plan cargado en la etapa 1 <strong>y con sus decisiones</strong>. Es la red que atrapa una correspondencia equivocada antes de retomar los saldos.</p>
+                <table>
+                    <thead><tr><th>Qué señala el control</th><th>Gravedad</th><th>Qué hacer aquí</th></tr></thead>
+                    <tbody>
+                        <tr><td>Cuenta « Ignorar » que lleva saldo</td><td>Error</td><td>Vuelva a la línea: « Vincular » a la cuenta de 60sec que recibirá ese importe, o « Crear ». Una cuenta ignorada con saldo haría desaparecer ese importe de la migración.</td></tr>
+                        <tr><td>Cuenta ausente del plan cargado, con saldo</td><td>Error</td><td>El balance conoce una cuenta que la etapa 1 no cargó: recargue el plan desde el programa anterior, o compruebe que ambas exportaciones datan del mismo momento.</td></tr>
+                        <tr><td>Cuenta duplicada en el balance</td><td>Error</td><td>Corrija el informe en el origen; la clave es el número y, si no, el nombre.</td></tr>
+                        <tr><td>Saldo de sentido contrario, o diferente</td><td>Por verificar</td><td>La cuenta de 60sec vinculada quizá no tiene la misma naturaleza (un activo vinculado a un pasivo): relea el destino elegido, o el saldo está legítimamente del otro lado.</td></tr>
+                        <tr><td>Cuenta ausente sin saldo, cuenta del plan ausente del balance</td><td>Info</td><td>Nada obligatorio: una cuenta vacía, o nueva en su lado, no tiene importe que retomar.</td></tr>
+                    </tbody>
+                </table>
+                <ul>
+                    <li><strong>Cuándo lanzarlo</strong>: después de guardar sus decisiones aquí — el control lee las decisiones guardadas, no las en curso. Vuelva a lanzarlo tras cada tanda de cambios.</li>
+                    <li><strong>Lo que no hace</strong>: no crea ni corrige nada; no comprueba que el balance esté a la fecha correcta — un balance al 30 de junio pasa el control igual que uno al 31 de diciembre.</li>
+                    <li><strong>El saldo retomado es el del balance</strong>, cerrado a la fecha de corte — no la columna Saldo de esta cuadrícula, que es la del día de la carga.</li>
+                    <li>El detalle de esa pantalla — las dos vías de carga, la fecha de corte, los mensajes — está en <a href="importation.html#es-balance">Importación de datos › Balance de comprobación</a>.</li>
+                </ul>
                 <p>El detalle de columnas, reglas y los doce mensajes de esa pantalla está en <a href="importation.html#es-plan-etapa3">Importación de datos › Etapa 3</a>.</p>
             </section>
 
@@ -1057,7 +1113,8 @@
                 <h3>Recargar, IA y lo que sigue</h3>
                 <details><summary>Recargué el plan en la etapa 1. ¿Se perdieron mis decisiones?</summary><p>No, mientras la clave de la cuenta no haya cambiado: el número si lo hay, si no el nombre. Una cuenta renombrada en el programa anterior vuelve a « por decidir ». Cambiar de vía de carga (archivo o lectura directa) también hace reaparecer las cuentas « por decidir ».</p></details>
                 <details><summary>¿El Asistente y « Proponer con la IA » envían mis datos? ¿Tienen un costo?</summary><p>Envían las cuentas afectadas (nombre, naturaleza, tipo, subtipo, saldo, descripción) y su plan de cuentas. No se transmite ningún nombre de cliente ni de proveedor. Cada llamada cuesta unos centavos; el costo se muestra, con el total del mes para el Asistente.</p></details>
-                <details><summary>Todo está decidido. ¿Y ahora?</summary><p>Haga revisar la correspondencia por su contador y pase a la etapa 3 con <kbd>Crear las cuentas en el plan →</kbd> si hay cuentas « Por crear ». Después vienen los terceros, los productos, el balance de comprobación y las facturas, que se apoyan todos en esta correspondencia.</p></details>
+                <details><summary>Todo está decidido. ¿Y ahora?</summary><p>Haga revisar la correspondencia por su contador y pase a la etapa 3 con <kbd>Crear las cuentas en el plan →</kbd> si hay cuentas « Por crear ». Cargue luego el balance de comprobación cerrado a la fecha de corte y lance su control <kbd>🔍 Incohérences avec le plan comptable</kbd>: relee sus decisiones cuenta por cuenta. Al final vienen los terceros, los productos y las facturas, que se apoyan todos en esta correspondencia.</p></details>
+                <details><summary>El control del balance señala una cuenta « Ignorar » con saldo. ¿Qué hacer?</summary><p>Volver aquí y cambiar la decisión: « Vincular » a la cuenta de 60sec que debe recibir ese importe, o « Crear ». Luego guardar y relanzar el control. « Ignorar » está normalmente en gris cuando la cuenta lleva saldo en esta cuadrícula; el control atrapa el caso en que el saldo solo aparece a la fecha de corte — una cuenta de ingresos o de gastos, por ejemplo, cuyo saldo QuickBooks nunca da aquí.</p></details>
             </section>
         </article>
 
