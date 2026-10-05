@@ -294,6 +294,8 @@ Public Class ApideckExtraction
 
         res.NoteTaxes = RepartirTaxes()
 
+        EnregistrerRessources(res)
+
         FermerRun(res.RunId, If(res.Echecs = 0, "TERMINE", "PARTIEL"),
                   If(res.Echecs = 0, Nothing,
                      res.Echecs & " ressource(s) en échec sur " & choisies.Count & " : " &
@@ -3700,6 +3702,31 @@ Public Class ApideckExtraction
         Dim ds As DataSet = hote.ExecuteSQLds("s0776OuvrirConnecteurRun", p)
         Return Convert.ToInt32(ds.Tables(0).Rows(0)(0))
     End Function
+
+    ''' <summary>
+    ''' L'issue de chaque ressource, gardée en base : c'est ce que les cartes de
+    ''' la page des importations lisent pour noter chaque écran. Un échec ici
+    ''' ne doit pas faire perdre l'extraction elle-même, qui est déjà déposée.
+    ''' </summary>
+    Private Sub EnregistrerRessources(res As Resultat)
+        Try
+            Dim lignes As New JArray()
+            For Each l As LigneResultat In res.Lignes
+                lignes.Add(New JObject(
+                    New JProperty("cle", l.Ressource.Cle),
+                    New JProperty("nb", l.Nb),
+                    New JProperty("reussie", l.Reussie),
+                    New JProperty("erreur", If(l.Reussie, Nothing, l.Erreur))))
+            Next
+
+            Dim p As New Collection
+            p.Add(New SqlParameter("@RunId", CObj(res.RunId)))
+            p.Add(New SqlParameter("@CompanyGUID", hote.Company))
+            p.Add(New SqlParameter("@Lignes", lignes.ToString(Formatting.None)))
+            hote.ExecuteSQL("s0893EnregistrerConnecteurRessources", p)
+        Catch
+        End Try
+    End Sub
 
     Private Sub FermerRun(runId As Integer, statut As String, note As String,
                           demandees As Integer, echecs As Integer)

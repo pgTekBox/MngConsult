@@ -31,6 +31,7 @@ Public Class Importations
         Public Property Manque As String          ' ce qui manque pour aller à 10
         Public Property Icone As String = "📄"
         Public Property Etape As String = ""      ' numéro dans le parcours, si parcours
+        Public Property Ressources As String = "" ' les ressources Apideck que l'écran lit, s'il en lit
     End Class
 
     ''' <summary>
@@ -86,7 +87,7 @@ Public Class Importations
         Get
             Dim ext As Extraction = DerniereExtraction()
 
-            Return New List(Of Poste) From {
+            Return NoterRessources(New List(Of Poste) From {
                 New Poste With {
                     .Icone = "🔌",
                     .Titre = "QuickBooks, en direct",
@@ -105,6 +106,7 @@ Public Class Importations
                     .Source = "ce que l'extraction a déposé, clients et fournisseurs",
                     .Destination = "T060Document + T061DocumentLine, en brouillon",
                     .Page = "~/ValiderFactures.aspx",
+                    .Ressources = "tax-rates,invoices,bills",
                     .Note = 7,
                     .Fait = "Montre chaque facture avec son détail, son tiers et son verdict — " &
                             "nouvelle, déjà en comptabilité, ou à corriger. Toutes les factures sont " &
@@ -121,6 +123,7 @@ Public Class Importations
                     .Source = "les informations de la société lues chez la source",
                     .Destination = "les paramètres de la compagnie — T100/T101, après validation",
                     .Page = "~/ValiderSociete.aspx",
+                    .Ressources = "company-info",
                     .Note = 7,
                     .Fait = "Le seul import qui ne crée rien : le nom légal, l'adresse et le " &
                             "téléphone existent déjà ici. Chaque champ est montré des deux côtés, " &
@@ -134,6 +137,7 @@ Public Class Importations
                     .Source = "modes de paiement, catégories de suivi, départements, emplacements — et, par la passerelle, classes, agences de taxes, devises et taux de change",
                     .Destination = "préparation seulement — aucune destination dans 60Sec-AI à ce jour",
                     .Page = "~/ValiderListes.aspx",
+                    .Ressources = "payment-methods,tracking-categories,departments,locations,classes,tax-agencies,currencies",
                     .Note = 5,
                     .Fait = "Quatre listes lues, chacune dans sa table, avec leurs doublons et leurs " &
                             "éléments inutilisables signalés. Une nouvelle extraction remplace la " &
@@ -148,6 +152,7 @@ Public Class Importations
                     .Source = "QuickBooks : soldes en souffrance, clients et fournisseurs",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
                     .Page = "~/ValiderBalanceAgee.aspx",
+                    .Ressources = "aged-debtors,aged-creditors",
                     .Note = 6,
                     .Fait = "Les tranches d'ancienneté redeviennent des colonnes, et le total est " &
                             "rapproché du solde des factures en préparation, tiers par tiers, par " &
@@ -162,6 +167,7 @@ Public Class Importations
                     .Source = "QuickBooks : General Ledger, par la passerelle",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
                     .Page = "~/ValiderGrandLivre.aspx",
+                    .Ressources = "general-ledger",
                     .Note = 6,
                     .Fait = "Chaque écriture est reprise sous le compte qu'elle touche, avec sa " &
                             "contrepartie, dans l'ordre de la source. Les colonnes sont demandées " &
@@ -177,6 +183,7 @@ Public Class Importations
                     .Source = "QuickBooks : les taux de taxe avec leurs composantes — ou saisis ici, ou par fichier",
                     .Destination = "préparation — staging.TaxeImport ; ce que la répartition lit pour couper TPS et TVQ",
                     .Page = "~/ValiderTaxes.aspx",
+                    .Ressources = "tax-rates",
                     .Note = 8,
                     .Fait = "Montre chaque code de l'ancien logiciel avec son nom, ses composantes " &
                             "TPS et TVQ et le nombre de lignes de factures qui s'en servent ; signale " &
@@ -192,6 +199,7 @@ Public Class Importations
                     .Source = "QuickBooks : taux de taxe, et le rapport TaxSummary par la passerelle",
                     .Destination = "les taux coupent la TPS et la TVQ des pièces ; le rapport, contrôle seulement",
                     .Page = "~/ValiderRapportTaxes.aspx",
+                    .Ressources = "tax-rates,tax-summary",
                     .Note = 8,
                     .Fait = "Les taux arrivent avec leurs composantes, et le classement québécois " &
                             "est fait : un taux unique à 14,975 % ressort en TPS 5 % et TVQ 9,975 %. " &
@@ -214,6 +222,7 @@ Public Class Importations
                     .Source = "QuickBooks : les comptes de banque et de carte de crédit, par la passerelle",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
                     .Page = "~/ValiderSoldesBancaires.aspx",
+                    .Ressources = "bank-accounts",
                     .Note = 6,
                     .Fait = "Les comptes de banque et de carte de crédit arrivent avec leur nature, " &
                             "leur devise, leur hiérarchie et leurs deux soldes — celui du compte " &
@@ -236,6 +245,7 @@ Public Class Importations
                     .Source = "QuickBooks : encaissements, décaissements et remboursements, avec leurs imputations",
                     .Destination = "staging.PaiementImport — contrôle avant reprise",
                     .Page = "~/ValiderReglements.aspx",
+                    .Ressources = "payments,bill-payments,refunds",
                     .Note = 7,
                     .Fait = "Chaque mouvement arrive avec ses imputations : ce qu'il règle, et " &
                             "sur quel document. L'écran nomme les trois cas au lieu de laisser " &
@@ -255,6 +265,7 @@ Public Class Importations
                     .Source = "QuickBooks : la colonne is_cleared de la liste des opérations, par la passerelle",
                     .Destination = "contrôle seulement — T142ReleveBancaire n'est pas touchée",
                     .Page = "~/ValiderNonRapprochees.aspx",
+                    .Ressources = "uncleared",
                     .Note = 7,
                     .Fait = "À la bascule la base est vide : c'est le pointage de la source qui " &
                             "fait foi, et il est repris tel quel. La lettre est conservée en plus " &
@@ -275,6 +286,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité Employee par la passerelle pour les employés ; la paie elle-même n'est pas exposée",
                     .Destination = "staging.PaieEmployeImport, PaieLotImport, PaieImport, PaieLigneImport",
                     .Page = "~/ValiderPaie.aspx",
+                    .Ressources = "employees-native",
                     .Note = 4,
                     .Fait = "Les quatre tables de la reprise sont en place et chargées d'un seul " &
                             "coup, en une transaction : employés, lots, paies et lignes de talon. " &
@@ -298,6 +310,7 @@ Public Class Importations
                     .Source = "QuickBooks : les comptes de retenues du grand livre, par la passerelle",
                     .Destination = "contrôle seulement — ce qui reste dû au fédéral et au Québec",
                     .Page = "~/ValiderRemisesDas.aspx",
+                    .Ressources = "das",
                     .Note = 6,
                     .Fait = "Les retenues s'accumulent au crédit d'un compte de passif à chaque " &
                             "paie et s'éteignent au débit à chaque remise : la différence est la " &
@@ -319,6 +332,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité Item, par la passerelle",
                     .Destination = "contrôle seulement — rapproché du compte d'actif de stock",
                     .Page = "~/ValiderInventaire.aspx",
+                    .Ressources = "inventory",
                     .Note = 6,
                     .Fait = "Quantité en main, coût unitaire et compte de stock par article, avec " &
                             "la valeur calculée à côté de ses deux facteurs. L'écran rapproche la " &
@@ -339,6 +353,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité Attachable, par la passerelle — tout ce qui est attaché, à qui que ce soit",
                     .Destination = "préparation — staging.PieceJointeImport, fichiers compris",
                     .Page = "~/ValiderPiecesJointes.aspx",
+                    .Ressources = "attachments-all",
                     .Note = 5,
                     .Fait = "Toutes les pièces, quelle que soit l'entité porteuse — client, " &
                             "fournisseur, article, dépense, écriture — avec le fichier lui-même " &
@@ -356,6 +371,7 @@ Public Class Importations
                     .Source = "QuickBooks : les entités Deposit et Transfer, par la passerelle",
                     .Destination = "contrôle seulement — staging.MouvementBancaireImport, avec les lignes des dépôts",
                     .Page = "~/ValiderMouvementsBancaires.aspx",
+                    .Ressources = "bank-movements",
                     .Note = 5,
                     .Fait = "Chaque dépôt avec ses lignes — le montant, la contrepartie, le tiers, " &
                             "le mode de paiement, l'encaissement d'origine — et chaque virement " &
@@ -369,6 +385,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité RecurringTransaction, par la passerelle",
                     .Destination = "contrôle seulement — staging.TransactionRecurrenteImport, modèle complet gardé",
                     .Page = "~/ValiderRecurrentes.aspx",
+                    .Ressources = "recurring-transactions",
                     .Note = 5,
                     .Fait = "Chaque modèle avec son type, sa cadence dite en clair, son tiers, son " &
                             "montant et sa prochaine échéance. Les suspendus sont grisés.",
@@ -381,6 +398,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité Budget, par la passerelle",
                     .Destination = "contrôle seulement — staging.BudgetImport, une ligne par compte et par période",
                     .Page = "~/ValiderBudgets.aspx",
+                    .Ressources = "budgets",
                     .Note = 5,
                     .Fait = "Chaque budget, puis ses lignes par compte avec le sous-total du compte " &
                             "et le total, et la ventilation par client, classe ou département " &
@@ -394,6 +412,7 @@ Public Class Importations
                     .Source = "QuickBooks : l'entité TimeActivity, par la passerelle",
                     .Destination = "contrôle seulement — staging.FeuilleTempsImport",
                     .Page = "~/ValiderFeuillesTemps.aspx",
+                    .Ressources = "time-activities",
                     .Note = 5,
                     .Fait = "Par personne, les heures saisies et celles qui restent à facturer ; " &
                             "puis chaque activité avec le client, l'article, la durée, le taux et " &
@@ -401,7 +420,7 @@ Public Class Importations
                     .Manque = "Le temps à facturer n'est pas transformé en factures : c'est ce que " &
                               "la bascule doit régler avant de fermer la source."
                 }
-            }
+            })
         End Get
     End Property
     ''' <summary>
@@ -550,6 +569,88 @@ Public Class Importations
         End If
 
         Return ext
+    End Function
+
+    ''' <summary>Une ressource Apideck, telle que sa dernière lecture l'a laissée.</summary>
+    Private Class EtatRessource
+        Public Property Nb As Integer
+        Public Property Reussie As Boolean
+        Public Property Erreur As String = ""
+        Public Property Quand As Date
+    End Class
+
+    Private _etats As Dictionary(Of String, EtatRessource)
+
+    ''' <summary>La dernière issue de chaque ressource déjà lue (s0894), lue une fois par page.</summary>
+    Private Function EtatsRessources() As Dictionary(Of String, EtatRessource)
+        If _etats IsNot Nothing Then Return _etats
+        _etats = New Dictionary(Of String, EtatRessource)(StringComparer.OrdinalIgnoreCase)
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0894GetEtatRessources", p)
+        If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return _etats
+
+        For Each r As DataRow In ds.Tables(0).Rows
+            _etats(Convert.ToString(r("Ressource"))) = New EtatRessource With {
+                .Nb = Convert.ToInt32(r("Nb")),
+                .Reussie = Convert.ToBoolean(r("Reussie")),
+                .Erreur = If(IsDBNull(r("Erreur")), "", Convert.ToString(r("Erreur"))),
+                .Quand = Convert.ToDateTime(r("Quand"))
+            }
+        Next
+
+        Return _etats
+    End Function
+
+    ''' <summary>
+    ''' Les cartes qui lisent des ressources sont notées comme le connecteur :
+    ''' la part de leurs ressources dont la dernière lecture a réussi, sur 10.
+    ''' Tout lu, 10 ; une ressource en échec ou jamais lue, 9 au plus ; rien de
+    ''' lu encore, 0. Ce que l'écran sait faire reste écrit à la suite ; ce qui
+    ''' a échoué est nommé en tête de « ce qui manque », avec son motif.
+    ''' </summary>
+    Private Function NoterRessources(postes As List(Of Poste)) As List(Of Poste)
+        Dim etats As Dictionary(Of String, EtatRessource) = EtatsRessources()
+
+        For Each poste In postes
+            If poste.Ressources = "" Then Continue For
+
+            Dim cles As List(Of String) = poste.Ressources.Split(","c).
+                Select(Function(c) c.Trim()).Where(Function(c) c <> "").ToList()
+            Dim lues As List(Of String) = cles.Where(Function(c) etats.ContainsKey(c)).ToList()
+            Dim reussies As List(Of String) = lues.Where(Function(c) etats(c).Reussie).ToList()
+            Dim echecs As List(Of String) = lues.Where(Function(c) Not etats(c).Reussie).ToList()
+
+            If lues.Count = 0 Then
+                poste.Note = 0
+                poste.Fait = "Aucune extraction encore pour cette compagnie. " & poste.Fait
+                Continue For
+            End If
+
+            poste.Note = CInt(Math.Round(10.0 * reussies.Count / cles.Count))
+            If reussies.Count < cles.Count AndAlso poste.Note >= 10 Then poste.Note = 9
+            If reussies.Count > 0 AndAlso poste.Note <= 0 Then poste.Note = 1
+
+            Dim quand As Date = lues.Max(Function(c) etats(c).Quand)
+            Dim nb As Integer = reussies.Sum(Function(c) etats(c).Nb)
+            poste.Fait = "Dernière extraction le " & quand.ToString("yyyy-MM-dd HH:mm") & " : " &
+                         reussies.Count & " ressource(s) sur " & cles.Count & " rapatriée(s), " &
+                         nb.ToString("N0") & " enregistrement(s). " & poste.Fait
+
+            If reussies.Count < cles.Count Then
+                Dim bouts As New List(Of String)
+                For Each c As String In echecs
+                    bouts.Add(c & " : " & etats(c).Erreur.TrimEnd("."c))
+                Next
+                For Each c As String In cles.Where(Function(x) Not etats.ContainsKey(x))
+                    bouts.Add(c & " : jamais lue")
+                Next
+                poste.Manque = "En échec — " & String.Join(" ; ", bouts) & ". " & poste.Manque
+            End If
+        Next
+
+        Return postes
     End Function
 
 #End Region
