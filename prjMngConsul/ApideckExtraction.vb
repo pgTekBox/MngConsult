@@ -297,7 +297,8 @@ Public Class ApideckExtraction
         FermerRun(res.RunId, If(res.Echecs = 0, "TERMINE", "PARTIEL"),
                   If(res.Echecs = 0, Nothing,
                      res.Echecs & " ressource(s) en échec sur " & choisies.Count & " : " &
-                     String.Join(", ", res.Fautives) & "."))
+                     String.Join(", ", res.Fautives) & "."),
+                  choisies.Count, res.Echecs)
 
         Return res
     End Function
@@ -3700,12 +3701,15 @@ Public Class ApideckExtraction
         Return Convert.ToInt32(ds.Tables(0).Rows(0)(0))
     End Function
 
-    Private Sub FermerRun(runId As Integer, statut As String, note As String)
+    Private Sub FermerRun(runId As Integer, statut As String, note As String,
+                          demandees As Integer, echecs As Integer)
         Dim p As New Collection
         p.Add(New SqlParameter("@RunId", CObj(runId)))
         p.Add(New SqlParameter("@CompanyGUID", hote.Company))
         p.Add(New SqlParameter("@Statut", statut))
         p.Add(New SqlParameter("@Note", If(note Is Nothing, CObj(DBNull.Value), CObj(note))))
+        p.Add(New SqlParameter("@NbDemandees", CObj(demandees)))
+        p.Add(New SqlParameter("@NbEchecs", CObj(echecs)))
         hote.ExecuteSQL("s0778FermerConnecteurRun", p)
     End Sub
 

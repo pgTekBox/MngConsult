@@ -77,9 +77,15 @@ Public Class Importations
     ''' elle-même. Il est à part parce qu'il ne remplace aucun écran : il les
     ''' alimente. Ce qu'il rapatrie se dépose en préparation, et les écrans
     ''' ci-dessous décident ensuite de ce qui est créé.
+    '''
+    ''' Sa note n'est pas celle du code : c'est celle de la dernière extraction
+    ''' de cette compagnie — la part des ressources qui ont répondu. Tout
+    ''' rapatrié, 10 ; rien d'extrait encore, 0. Voir <see cref="Extraction"/>.
     ''' </summary>
     Private ReadOnly Property Connexion As List(Of Poste)
         Get
+            Dim ext As Extraction = DerniereExtraction()
+
             Return New List(Of Poste) From {
                 New Poste With {
                     .Icone = "🔌",
@@ -87,16 +93,11 @@ Public Class Importations
                     .Source = "Apideck : lecture de la comptabilité source, sans export",
                     .Destination = "préparation — staging.ConnecteurDonnee, puis les écrans ci-dessous",
                     .Page = "~/ImportApideck.aspx",
-                    .Note = 6,
-                    .Fait = "Le client relie son QuickBooks une fois ; chaque extraction ramène " &
-                            "les vingt-sept ressources d'Apideck en préparation. Douze sont en plus " &
-                            "interprétées : le plan comptable, les clients, les fournisseurs et les " &
-                            "produits rejoignent les écrans d'import existants ; les factures clients " &
-                            "et fournisseurs sont déposées avec leurs lignes, leur tiers reconnu et " &
-                            "leur verdict, prêtes à être validées une par une.",
-                    .Manque = "Les quinze autres " &
-                              "ressources se déposent sans être interprétées. Sage passera par le " &
-                              "même chemin, c'est un autre connecteur d'Apideck."
+                    .Note = ext.Note,
+                    .Fait = "Le client relie son QuickBooks une fois ; chaque extraction rapatrie " &
+                            "toutes les ressources d'Apideck en préparation, et chacune rejoint " &
+                            "l'écran d'import qui la valide. " & ext.Fait,
+                    .Manque = ext.Manque
                 },
                 New Poste With {
                     .Icone = "🧾",
@@ -466,6 +467,90 @@ Public Class Importations
             Return New List(Of Poste)
         End Get
     End Property
+
+#End Region
+
+#Region "La dernière extraction"
+
+    ''' <summary>
+    ''' Ce que la dernière extraction de la compagnie permet de dire sur la carte
+    ''' du connecteur : sa note, ce qui a marché, ce qui a manqué.
+    ''' </summary>
+    Private Class Extraction
+        Public Property Note As Integer
+        Public Property Fait As String = ""
+        Public Property Manque As String = ""
+    End Class
+
+    Private _extraction As Extraction
+
+    ''' <summary>
+    ''' Lit la dernière extraction fermée (s0892) et la traduit en note : la part
+    ''' des ressources demandées qui ont répondu, sur 10. Une extraction qui a
+    ''' connu un échec ne monte jamais à 10, même quand l'arrondi le voudrait —
+    ''' 10 veut dire « tout est là ». Sans extraction : 0, et la carte le dit.
+    '''
+    ''' Les extractions antérieures à T308 n'ont pas leurs décomptes : on relit
+    ''' alors la phrase qu'elles ont laissée (« K ressource(s) en échec sur N »),
+    ''' et faute de mieux, TERMINE vaut 10 et PARTIEL vaut 5.
+    ''' </summary>
+    Private Function DerniereExtraction() As Extraction
+        If _extraction IsNot Nothing Then Return _extraction
+
+        Dim ext As New Extraction With {.Note = 0}
+        _extraction = ext
+
+        Dim p As New Collection
+        p.Add(New SqlParameter("@CompanyGUID", Company))
+        Dim ds As DataSet = ExecuteSQLds("s0892GetDerniereExtraction", p)
+
+        If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then
+            ext.Fait = "Aucune extraction encore pour cette compagnie : la note montera avec " &
+                       "les ressources rapatriées."
+            ext.Manque = "Relier QuickBooks, puis lancer l'extraction."
+            Return ext
+        End If
+
+        Dim r As DataRow = ds.Tables(0).Rows(0)
+        Dim statut As String = Convert.ToString(r("Statut"))
+        Dim quand As String = Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")
+        Dim enregistrements As Integer = Convert.ToInt32(r("NbEnregistrements"))
+        Dim note As String = If(IsDBNull(r("Note")), "", Convert.ToString(r("Note")))
+
+        Dim demandees As Integer = 0, echecs As Integer = 0
+
+        If Not IsDBNull(r("NbDemandees")) Then
+            demandees = Convert.ToInt32(r("NbDemandees"))
+            If Not IsDBNull(r("NbEchecs")) Then echecs = Convert.ToInt32(r("NbEchecs"))
+        Else
+            Dim m = Text.RegularExpressions.Regex.Match(note, "(\d+) ressource\(s\) en échec sur (\d+)")
+            If m.Success Then
+                echecs = CInt(m.Groups(1).Value)
+                demandees = CInt(m.Groups(2).Value)
+            End If
+        End If
+
+        If demandees > 0 Then
+            ext.Note = CInt(Math.Round(10.0 * (demandees - echecs) / demandees))
+            If echecs > 0 AndAlso ext.Note >= 10 Then ext.Note = 9
+            If echecs < demandees AndAlso ext.Note <= 0 Then ext.Note = 1
+        Else
+            ext.Note = If(statut = "TERMINE", 10, 5)
+        End If
+
+        ext.Fait = "Dernière extraction le " & quand & " : "
+        If demandees > 0 Then
+            ext.Fait &= (demandees - echecs) & " ressource(s) sur " & demandees & " rapatriée(s), "
+        End If
+        ext.Fait &= enregistrements.ToString("N0") & " enregistrement(s) déposés en préparation."
+
+        If echecs > 0 Then
+            ext.Manque = If(note <> "", note, echecs & " ressource(s) n'ont pas répondu à la dernière extraction.") &
+                         " Relancez l'extraction : ce qui a réussi reste déposé."
+        End If
+
+        Return ext
+    End Function
 
 #End Region
 
