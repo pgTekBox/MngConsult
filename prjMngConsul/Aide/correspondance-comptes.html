@@ -283,6 +283,15 @@
                     <li><span class="msg">« Rien à afficher avec ce filtre. »</span> — remettez le filtre « Afficher » sur « Tout ».</li>
                     <li><span class="msg">« Aucun plan comptable n’a encore été chargé pour cette compagnie. »</span> — commencez par l’étape 1.</li>
                     <li><span class="msg">« ⚠️ QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. »</span> — encadré jaune sous la liste Action ; avertissement sans blocage.</li>
+                    <li><span class="msg">« Ce compte porte un solde : il ne peut pas être ignoré. »</span> et <span class="msg">« Ce compte est utilisé par … en préparation : il ne peut pas être ignoré. »</span> — info-bulles de l’option « Ignorer » grisée ; passez la souris dessus pour lire la raison.</li>
+                    <li><span class="msg">« Retenir toutes les correspondances où le numéro de compte concorde ? »</span> — confirmation de <kbd>Accepter les correspondances par numéro</kbd>.</li>
+                    <li><span class="msg">« Soumettre les comptes encore à décider et votre plan comptable à l’IA ? Elle ne fera que proposer : rien ne sera décidé à votre place. »</span> — confirmation de <kbd>✨ Proposer avec l’IA</kbd>.</li>
+                    <li><span class="msg">« L’IA n’a proposé aucune correspondance pour ces comptes. »</span> — l’IA a répondu sans rien retenir ; cherchez par classe, ou créez.</li>
+                    <li><span class="msg">« La clé d’accès à l’IA n’est pas configurée. »</span> / <span class="msg">« Le prompt de correspondance des comptes n’est pas configuré. »</span> / <span class="msg">« Appel à l’IA : … »</span> — l’IA n’est pas disponible sur ce serveur, ou l’appel a échoué ; décidez sans elle, ou signalez-le à l’administrateur.</li>
+                    <li><span class="msg">« L’assistant réfléchit… (une dizaine de secondes) »</span> puis <span class="msg">« Coût des questions ce mois-ci : x US$ »</span> — fenêtre de l’<kbd>✨ Assistant</kbd> ; le coût cumulé du mois s’affiche sous la réponse.</li>
+                    <li><span class="msg">« Ce lot n’existe plus. »</span> — le plan chargé a été supprimé ou vidé entre-temps ; retournez à l’étape 1.</li>
+                    <li><span class="msg">« Lecture du plan comptable : … »</span>, <span class="msg">« Lecture de l’avancement : … »</span>, <span class="msg">« Lecture des correspondances : … »</span>, <span class="msg">« Enregistrement : … »</span> — bandeau rouge avec le motif rendu par la base ; rechargez la page, et signalez le motif s’il persiste.</li>
+                    <li><span class="msg">« Rien à enregistrer. »</span> — bandeau qui accompagne la fenêtre « Rien à enregistrer : aucune ligne de correspondance n’a été trouvée. »</li>
                 </ul>
             </section>
 
@@ -695,6 +704,15 @@
                     <li><span class="msg">“Nothing to show with this filter.”</span> — set the “Show” filter back to “All”.</li>
                     <li><span class="msg">“No chart of accounts has been loaded for this company yet.”</span> — start with step 1.</li>
                     <li><span class="msg">“⚠️ QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.”</span> — yellow note under the Action list; a warning that blocks nothing.</li>
+                    <li><span class="msg">“Ce compte porte un solde : il ne peut pas être ignoré.”</span> and <span class="msg">“Ce compte est utilisé par … en préparation : il ne peut pas être ignoré.”</span> — tooltips of the greyed-out “Ignore” option; hover to read the reason.</li>
+                    <li><span class="msg">“Retenir toutes les correspondances où le numéro de compte concorde ?”</span> — confirmation of <kbd>Accept mappings by number</kbd>.</li>
+                    <li><span class="msg">“Soumettre les comptes encore à décider et votre plan comptable à l’IA ? Elle ne fera que proposer : rien ne sera décidé à votre place.”</span> — confirmation of <kbd>✨ Suggest with AI</kbd>.</li>
+                    <li><span class="msg">“L’IA n’a proposé aucune correspondance pour ces comptes.”</span> — the AI answered without keeping anything; search by class, or create.</li>
+                    <li><span class="msg">“La clé d’accès à l’IA n’est pas configurée.”</span> / <span class="msg">“Le prompt de correspondance des comptes n’est pas configuré.”</span> / <span class="msg">“Appel à l’IA : …”</span> — the AI is not available on this server, or the call failed; decide without it, or report it to the administrator.</li>
+                    <li><span class="msg">“L’assistant réfléchit… (une dizaine de secondes)”</span> then <span class="msg">“Coût des questions ce mois-ci : x US$”</span> — the <kbd>✨ Assistant</kbd> window; the month’s cumulative cost shows under the answer.</li>
+                    <li><span class="msg">“Ce lot n’existe plus.”</span> — the loaded chart was deleted or emptied in the meantime; go back to step 1.</li>
+                    <li><span class="msg">“Lecture du plan comptable : …”</span>, <span class="msg">“Lecture de l’avancement : …”</span>, <span class="msg">“Lecture des correspondances : …”</span>, <span class="msg">“Enregistrement : …”</span> — red banner with the reason returned by the database; reload the page, and report the reason if it persists.</li>
+                    <li><span class="msg">“Rien à enregistrer.”</span> — banner that goes with the popup “Rien à enregistrer : aucune ligne de correspondance n’a été trouvée.”</li>
                 </ul>
             </section>
 
@@ -1107,6 +1125,15 @@
                     <li><span class="msg">« Nada que mostrar con este filtro. »</span> — vuelva a poner el filtro « Mostrar » en « Todo ».</li>
                     <li><span class="msg">« Todavía no se ha cargado ningún plan contable para esta compañía. »</span> — empiece por la etapa 1.</li>
                     <li><span class="msg">« ⚠️ QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. »</span> — recuadro amarillo bajo la lista Acción; aviso sin bloqueo.</li>
+                    <li><span class="msg">« Ce compte porte un solde : il ne peut pas être ignoré. »</span> y <span class="msg">« Ce compte est utilisé par … en préparation : il ne peut pas être ignoré. »</span> — descripciones emergentes de la opción « Ignorar » en gris; pase el ratón para leer el motivo.</li>
+                    <li><span class="msg">« Retenir toutes les correspondances où le numéro de compte concorde ? »</span> — confirmación de <kbd>Aceptar las correspondencias por número</kbd>.</li>
+                    <li><span class="msg">« Soumettre les comptes encore à décider et votre plan comptable à l’IA ? Elle ne fera que proposer : rien ne sera décidé à votre place. »</span> — confirmación de <kbd>✨ Proponer con la IA</kbd>.</li>
+                    <li><span class="msg">« L’IA n’a proposé aucune correspondance pour ces comptes. »</span> — la IA respondió sin retener nada; busque por clase, o cree.</li>
+                    <li><span class="msg">« La clé d’accès à l’IA n’est pas configurée. »</span> / <span class="msg">« Le prompt de correspondance des comptes n’est pas configuré. »</span> / <span class="msg">« Appel à l’IA : … »</span> — la IA no está disponible en este servidor, o la llamada falló; decida sin ella, o avise al administrador.</li>
+                    <li><span class="msg">« L’assistant réfléchit… (une dizaine de secondes) »</span> y luego <span class="msg">« Coût des questions ce mois-ci : x US$ »</span> — ventana del <kbd>✨ Asistente</kbd>; el coste acumulado del mes se muestra bajo la respuesta.</li>
+                    <li><span class="msg">« Ce lot n’existe plus. »</span> — el plan cargado se eliminó o se vació entre tanto; vuelva a la etapa 1.</li>
+                    <li><span class="msg">« Lecture du plan comptable : … »</span>, <span class="msg">« Lecture de l’avancement : … »</span>, <span class="msg">« Lecture des correspondances : … »</span>, <span class="msg">« Enregistrement : … »</span> — banner rojo con el motivo devuelto por la base; recargue la página y comunique el motivo si persiste.</li>
+                    <li><span class="msg">« Rien à enregistrer. »</span> — banner que acompaña a la ventana « Rien à enregistrer : aucune ligne de correspondance n’a été trouvée. »</li>
                 </ul>
             </section>
 
