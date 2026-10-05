@@ -107,7 +107,30 @@
                         <tr><td>Taxes déclarées par</td><td>Non</td><td>Trimestre (défaut), mois ou année — la fréquence de vos déclarations, que QuickBooks ne dit nulle part.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> lance l’extraction <strong>en arrière-plan</strong> : la page répond tout de suite, et le bloc 3 se met à jour toutes les trois secondes, ressource par ressource. Vous pouvez quitter la page — l’extraction continue — et y revenir : tant qu’elle tourne, elle s’affiche de nouveau. « Une extraction complète prend quelques minutes. » Un second clic pendant qu’elle tourne ne relance rien : « Une extraction est déjà en cours pour cette compagnie ».</p>
+                                <h3>La date de bascule</h3>
+                <p>C’est <strong>la veille du premier jour tenu dans 60Sec-AI</strong>. Si vous commencez à tenir vos livres ici le 1<sup>er</sup> janvier 2026, la date de bascule est le <strong>31 décembre 2025</strong> : tout ce qui est antérieur reste dans QuickBooks, et c’est à cette date qu’on reprend les soldes. QuickBooks ne rend ses rapports que pour une période ou à une date ; c’est elle qui les borne :</p>
+                <table>
+                    <thead><tr><th>Ressource</th><th>Ce que la date commande</th></tr></thead>
+                    <tbody>
+                        <tr><td>Balance de vérification</td><td>Arrêtée <strong>à cette date</strong> : les comptes de bilan portent leur solde à cette date, les comptes de résultats couvrent l’année civile jusqu’à cette date.</td></tr>
+                        <tr><td>Grand livre</td><td>Lu du 1<sup>er</sup> janvier de l’année de la date jusqu’à la date.</td></tr>
+                        <tr><td>Remises de DAS, opérations non rapprochées</td><td>Même période : du 1<sup>er</sup> janvier à la date.</td></tr>
+                        <tr><td>Rapport de taxes</td><td>Une déclaration à la fois, en remontant depuis la date, selon la fréquence choisie à côté (trimestre, mois ou année).</td></tr>
+                        <tr><td>Inventaire</td><td>N’en tient pas compte : QuickBooks ne rend que le stock du jour.</td></tr>
+                        <tr><td>Tout le reste</td><td>Clients, fournisseurs, articles, factures, règlements, écritures… sont rapatriés en entier, sans date.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Si vous la laissez vide">Rien ne part. L’écran refuse avec le message rouge « Indiquez la date de bascule avant d’importer : la balance de vérification, le grand livre, les taxes, les remises et le pointage se lisent sur une période. » Aucune extraction n’est ouverte, rien n’est modifié en préparation ; indiquez la date et cliquez de nouveau. Puisque chaque extraction rapatrie tout, partir sans date garantirait cinq ressources en erreur : on préfère le dire avant.</div>
+                <div class="piege" data-titre="Piège">Une mauvaise date ne produit pas d’erreur : une balance arrêtée au 30 juin ressemble à s’y méprendre à une balance arrêtée au 31 décembre. Vérifiez la date avant de lancer. S’il faut corriger, relancez l’extraction avec la bonne date : ce qu’elle dépose remplace ce que la précédente avait déposé pour la même ressource.</div>
+                <h3>L’extraction en arrière-plan</h3>
+                <ul>
+                    <li><kbd>Importer dans la préparation</kbd> répond tout de suite : l’extraction part <strong>sur le serveur</strong>, pas dans votre navigateur. Le bloc 3 affiche « Extraction lancée », puis se met à jour toutes les trois secondes, ressource par ressource.</li>
+                    <li>Vous pouvez <strong>quitter la page</strong>, fermer le navigateur ou travailler ailleurs : l’extraction continue. En revenant sur l’écran, tant qu’elle tourne, le suivi se raffiche de lui-même.</li>
+                    <li>Une extraction complète prend <strong>deux à cinq minutes</strong> selon la taille de la comptabilité. Chaque ressource est déposée dès qu’elle est lue : une ressource qui échoue n’arrête pas les autres.</li>
+                    <li>Un second clic pendant qu’elle tourne ne relance rien : « Une extraction est déjà en cours pour cette compagnie : son avancement est ci-dessous. » QuickBooks refuse deux lectures en parallèle.</li>
+                    <li>Si le serveur s’arrête en pleine extraction, elle ne se ferme pas d’elle-même : après trente minutes sans signe de vie, elle est marquée <strong>INTERROMPUE</strong> (« L’extraction s’est arrêtée avant la fin »). Ce qui était déjà déposé reste en préparation ; relancez.</li>
+                    <li>À la fin, la carte « QuickBooks, en direct » de la page Importation prend la note de cette extraction : 10/10 quand tout est rapatrié.</li>
+                </ul>
                 <h3>3. Ce qui est arrivé</h3>
                 <p>Pendant l’extraction : « Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici », puis la liste « Déjà rapatriées » qui s’allonge. À la fin, une phrase résume le résultat : le nombre d’enregistrements déposés et le nombre de ressources. <strong>S’il y a des erreurs, elles viennent en premier</strong>, en rouge, dans un tableau à deux colonnes :</p>
                 <table>
@@ -766,7 +789,30 @@
                         <tr><td>Taxes filed by</td><td>No</td><td>Quarter (default), month or year — the frequency of your filings, which QuickBooks never states.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> starts the extraction <strong>in the background</strong>: the page responds at once, and block 3 refreshes every three seconds, resource by resource. You can leave the page — the extraction carries on — and come back: while it runs, it is shown again. “A full extraction takes a few minutes.” A second click while it runs starts nothing: “Une extraction est déjà en cours pour cette compagnie”.</p>
+                                <h3>The cut-over date</h3>
+                <p>It is <strong>the day before the first day kept in 60Sec-AI</strong>. If you start keeping your books here on 1 January 2026, the cut-over date is <strong>31 December 2025</strong>: everything before stays in QuickBooks, and that is the date at which balances are taken over. QuickBooks only renders its reports for a period or at a date; this date bounds them:</p>
+                <table>
+                    <thead><tr><th>Resource</th><th>What the date drives</th></tr></thead>
+                    <tbody>
+                        <tr><td>Trial balance</td><td>Taken <strong>as at that date</strong>: balance-sheet accounts carry their balance at that date, income-statement accounts cover the calendar year up to that date.</td></tr>
+                        <tr><td>General ledger</td><td>Read from 1 January of the date’s year up to the date.</td></tr>
+                        <tr><td>Source deductions remittances, uncleared transactions</td><td>Same period: from 1 January to the date.</td></tr>
+                        <tr><td>Tax report</td><td>One filing at a time, going back from the date, by the frequency chosen next to it (quarter, month or year).</td></tr>
+                        <tr><td>Inventory</td><td>Ignores it: QuickBooks only renders today’s stock.</td></tr>
+                        <tr><td>Everything else</td><td>Customers, suppliers, items, invoices, payments, journal entries… are fetched in full, without a date.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="If you leave it empty">Nothing starts. The screen refuses with the red message “Enter the cut-over date before importing: the trial balance, general ledger, taxes, remittances and cleared status are read over a period.” No extraction is opened, nothing changes in staging; enter the date and click again. Since every extraction fetches everything, starting without a date would guarantee five failed resources: better to say so first.</div>
+                <div class="piege" data-titre="Pitfall">A wrong date raises no error: a trial balance as at 30 June looks exactly like one as at 31 December. Check the date before starting. To fix it, run the extraction again with the right date: what it places replaces what the previous one had placed for the same resource.</div>
+                <h3>The background extraction</h3>
+                <ul>
+                    <li><kbd>Importer dans la préparation</kbd> responds at once: the extraction runs <strong>on the server</strong>, not in your browser. Block 3 shows “Extraction lancée”, then refreshes every three seconds, resource by resource.</li>
+                    <li>You can <strong>leave the page</strong>, close the browser or work elsewhere: the extraction carries on. Back on the screen, while it runs, the follow-up shows again by itself.</li>
+                    <li>A full extraction takes <strong>two to five minutes</strong> depending on the size of the books. Each resource is placed as soon as it is read: a failed resource does not stop the others.</li>
+                    <li>A second click while it runs starts nothing: “Une extraction est déjà en cours pour cette compagnie : son avancement est ci-dessous.” QuickBooks refuses two reads in parallel.</li>
+                    <li>If the server stops mid-extraction, it does not close by itself: after thirty minutes without a sign of life it is marked <strong>INTERROMPUE</strong> (“L’extraction s’est arrêtée avant la fin”). What was already placed stays in staging; start again.</li>
+                    <li>At the end, the “QuickBooks, en direct” card on the Import page takes this extraction’s score: 10/10 when everything was fetched.</li>
+                </ul>
                 <h3>3. What arrived</h3>
                 <p>While it runs: “Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici”, then the “Déjà rapatriées” list grows. At the end, one sentence sums up the result: the number of records placed in staging and the number of resources. <strong>If there are errors, they come first</strong>, in red, in a two-column table:</p>
                 <table>
@@ -1425,7 +1471,30 @@
                         <tr><td>Impuestos declarados por</td><td>No</td><td>Trimestre (por defecto), mes o año — la frecuencia de sus declaraciones, que QuickBooks no indica en ninguna parte.</td></tr>
                     </tbody>
                 </table>
-                <p><kbd>Importer dans la préparation</kbd> lanza la extracción <strong>en segundo plano</strong>: la página responde enseguida y el bloque 3 se actualiza cada tres segundos, recurso por recurso. Puede salir de la página — la extracción continúa — y volver: mientras corre, se muestra de nuevo. « Una extracción completa tarda unos minutos. » Un segundo clic mientras corre no lanza nada: « Une extraction est déjà en cours pour cette compagnie ».</p>
+                                <h3>La fecha de corte</h3>
+                <p>Es <strong>la víspera del primer día llevado en 60Sec-AI</strong>. Si empieza a llevar sus libros aquí el 1 de enero de 2026, la fecha de corte es el <strong>31 de diciembre de 2025</strong>: todo lo anterior queda en QuickBooks, y a esa fecha se retoman los saldos. QuickBooks solo entrega sus informes para un período o a una fecha; esta fecha los delimita:</p>
+                <table>
+                    <thead><tr><th>Recurso</th><th>Qué manda la fecha</th></tr></thead>
+                    <tbody>
+                        <tr><td>Balance de comprobación</td><td>Cerrado <strong>a esa fecha</strong>: las cuentas de balance llevan su saldo a esa fecha, las cuentas de resultados cubren el año civil hasta esa fecha.</td></tr>
+                        <tr><td>Libro mayor</td><td>Leído del 1 de enero del año de la fecha hasta la fecha.</td></tr>
+                        <tr><td>Remesas de retenciones, operaciones no conciliadas</td><td>Mismo período: del 1 de enero a la fecha.</td></tr>
+                        <tr><td>Informe de impuestos</td><td>Una declaración a la vez, retrocediendo desde la fecha, según la frecuencia elegida al lado (trimestre, mes o año).</td></tr>
+                        <tr><td>Inventario</td><td>No la tiene en cuenta: QuickBooks solo entrega el stock del día.</td></tr>
+                        <tr><td>Todo lo demás</td><td>Clientes, proveedores, artículos, facturas, pagos, asientos… se traen enteros, sin fecha.</td></tr>
+                    </tbody>
+                </table>
+                <div class="piege" data-titre="Si la deja vacía">No arranca nada. La pantalla rechaza con el mensaje rojo « Indique la fecha de corte antes de importar: el balance de comprobación, el libro mayor, los impuestos, las remesas y el punteo se leen sobre un período. » No se abre ninguna extracción, nada cambia en preparación; indique la fecha y pulse de nuevo. Como cada extracción lo trae todo, salir sin fecha garantizaría cinco recursos en error: mejor decirlo antes.</div>
+                <div class="piege" data-titre="Trampa">Una fecha equivocada no produce error: un balance cerrado al 30 de junio se parece en todo a uno cerrado al 31 de diciembre. Compruebe la fecha antes de lanzar. Para corregir, vuelva a lanzar la extracción con la fecha correcta: lo que deposita sustituye lo que la anterior había depositado para el mismo recurso.</div>
+                <h3>La extracción en segundo plano</h3>
+                <ul>
+                    <li><kbd>Importer dans la préparation</kbd> responde enseguida: la extracción corre <strong>en el servidor</strong>, no en su navegador. El bloque 3 muestra « Extraction lancée » y luego se actualiza cada tres segundos, recurso por recurso.</li>
+                    <li>Puede <strong>salir de la página</strong>, cerrar el navegador o trabajar en otra cosa: la extracción continúa. Al volver a la pantalla, mientras corre, el seguimiento se muestra solo.</li>
+                    <li>Una extracción completa tarda <strong>de dos a cinco minutos</strong> según el tamaño de la contabilidad. Cada recurso se deposita en cuanto se lee: un recurso fallido no detiene a los demás.</li>
+                    <li>Un segundo clic mientras corre no lanza nada: « Une extraction est déjà en cours pour cette compagnie : son avancement est ci-dessous. » QuickBooks rechaza dos lecturas en paralelo.</li>
+                    <li>Si el servidor se detiene en plena extracción, esta no se cierra sola: tras treinta minutos sin señal de vida se marca <strong>INTERROMPUE</strong> (« L’extraction s’est arrêtée avant la fin »). Lo ya depositado queda en preparación; vuelva a lanzarla.</li>
+                    <li>Al final, la tarjeta « QuickBooks, en direct » de la página Importación toma la nota de esta extracción: 10/10 cuando todo se trajo.</li>
+                </ul>
                 <h3>3. Qué llegó</h3>
                 <p>Durante la extracción: « Extraction en cours : N ressource(s) sur 44 lue(s), K enregistrement(s) déposés jusqu’ici », y la lista « Déjà rapatriées » va creciendo. Al final, una frase resume el resultado: el número de registros depositados y el número de recursos. <strong>Si hay errores, van primero</strong>, en rojo, en una tabla de dos columnas:</p>
                 <table>
