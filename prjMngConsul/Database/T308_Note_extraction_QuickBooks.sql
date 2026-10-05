@@ -1,4 +1,4 @@
--- =============================================================================
+﻿-- =============================================================================
 -- T308 — La note de « QuickBooks, en direct » suit les extractions réussies
 --
 -- Sur l'écran des importations, la carte du connecteur portait une note fixe,
