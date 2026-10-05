@@ -346,6 +346,8 @@
                     <li><strong>Enregistrez souvent.</strong> Les décisions enregistrées sont conservées même si vous quittez l’écran ; un changement non enregistré est perdu.</li>
                     <li><strong>Notez vos raisons</strong> dans la colonne Note pour les choix discutables : votre comptable relira la correspondance avant l’étape 3.</li>
                     <li><strong>Signalez un compte par défaut de QuickBooks non reconnu</strong> (origine « par défaut dans QuickBooks » mais encore « à décider ») : son alias sera ajouté au plan standard et profitera à tous les clients suivants.</li>
+                    <li><strong>Une seule extraction, puis tout est là.</strong> Sur <span class="chemin">Importation › Importer depuis QuickBooks</span>, indiquez la date de bascule et lancez : l’extraction tourne en arrière-plan et dépose le plan comptable, la balance, les tiers, les factures… d’un coup. L’étape 1 n’a plus qu’à être relue, et la balance de vérification est déjà prête pour le contrôle final.</li>
+                    <li><strong>Faites relire vos décisions par la balance.</strong> Après chaque enregistrement important, <span class="chemin">Importation › Balance de vérification</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> : un compte ignoré qui porte un montant à la date de bascule, ou lié à un compte de nature contraire, ressort en rouge avant que les soldes soient repris.</li>
                 </ul>
                 <h3>Pièges à éviter</h3>
                 <table>
@@ -362,6 +364,9 @@
                         <tr><td>Passer à l’étape 3 sans relire les « Créer »</td><td>Un compte créé par erreur existe pour de bon et ne s’annule pas d’ici.</td><td>Filtrez « Déjà décidés » et relisez les lignes « Créer » avant de créer.</td></tr>
                         <tr><td>Laisser des comptes « à décider »</td><td>Ils ne sont pas repris : leurs soldes et leurs factures n’auront pas de compte aux étapes suivantes.</td><td>Visez 100 % d’avancement avant la balance et les factures.</td></tr>
                         <tr><td>Ne regarder que le bandeau du haut</td><td>Le bouton Enregistrer est en bas : un refus peut passer inaperçu.</td><td>La fenêtre de message s’ouvre au centre de l’écran dès qu’il y a un problème ; lisez-la avant de continuer.</td></tr>
+                        <tr><td>Relancer l’extraction QuickBooks au milieu des décisions</td><td>L’extraction complète redépose le plan comptable comme un rechargement : les décisions à clé inchangée restent, mais la liaison d’office est refaite, les comptes renommés reviennent « à décider » et la colonne Solde change.</td><td>Terminez et enregistrez la correspondance avant de relancer ; sinon, relisez les lignes revenues « à décider » après l’extraction.</td></tr>
+                        <tr><td>Cliquer <kbd>Vider les tables de préparation</kbd> sur la page Importation</td><td>Le vidage efface aussi les correspondances et la balance importée — y compris les décisions des comptes déjà créés à l’étape 3, qui ne se rediscutent plus.</td><td>N’y touchez pas une fois la correspondance commencée. Pour recharger le plan, repassez par l’étape 1 ou par l’extraction : elles gardent vos décisions.</td></tr>
+                        <tr><td>Tenir la correspondance pour vérifiée sans la balance</td><td>Un compte ignoré à solde 0 aujourd’hui peut porter un montant à la date de bascule ; une cible de mauvaise nature ne se voit pas dans la grille.</td><td>Lancez le contrôle de la balance de vérification avant de passer aux tiers et aux factures.</td></tr>
                     </tbody>
                 </table>
                 <div class="note" data-titre="Bon à savoir">L’affichage est limité à 1 000 lignes. Au-delà, servez-vous du filtre « Afficher » pour traiter le plan par tranches.</div>
@@ -729,6 +734,8 @@
                     <li><strong>Save often.</strong> Saved decisions are kept even if you leave the screen; an unsaved change is lost.</li>
                     <li><strong>Write down your reasons</strong> in the Note column for debatable choices: your accountant will review the mapping before step 3.</li>
                     <li><strong>Report an unrecognized QuickBooks default account</strong> (origin “default in QuickBooks” but still “to decide”): its alias will be added to the standard chart and benefit every later customer.</li>
+                    <li><strong>One extraction, then everything is here.</strong> On <span class="chemin">Import › Import from QuickBooks</span>, enter the cut-over date and start: the extraction runs in the background and places the chart of accounts, the trial balance, parties, invoices… in one go. Step 1 only needs a re-read, and the trial balance is already there for the final check.</li>
+                    <li><strong>Have the trial balance re-read your decisions.</strong> After each significant save, <span class="chemin">Import › Trial balance</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd>: an ignored account carrying an amount at the cut-over date, or linked to an account of the opposite nature, shows in red before balances are taken over.</li>
                 </ul>
                 <h3>Pitfalls to avoid</h3>
                 <table>
@@ -745,6 +752,9 @@
                         <tr><td>Going to step 3 without reviewing the “Create” rows</td><td>An account created by mistake exists for good and cannot be undone from here.</td><td>Filter “Already decided” and review the “Create” rows before creating.</td></tr>
                         <tr><td>Leaving accounts “to decide”</td><td>They are not migrated: their balances and invoices will have no account at the next steps.</td><td>Aim for 100% progress before the trial balance and the invoices.</td></tr>
                         <tr><td>Only looking at the top banner</td><td>The Save button is at the bottom: a refusal can go unnoticed.</td><td>The message popup opens in the middle of the screen whenever there is a problem; read it before going on.</td></tr>
+                        <tr><td>Running the QuickBooks extraction again in the middle of your decisions</td><td>The full extraction places the chart again, like a reload: decisions with an unchanged key stay, but the automatic linking is redone, renamed accounts come back “to decide” and the Balance column changes.</td><td>Finish and save the mapping before running it again; otherwise re-read the rows back “to decide” after the extraction.</td></tr>
+                        <tr><td>Clicking <kbd>Vider les tables de préparation</kbd> on the Import page</td><td>Emptying also erases the mappings and the imported trial balance — including the decisions of accounts already created in step 3, which cannot be discussed again.</td><td>Leave it alone once the mapping has started. To reload the chart, go through step 1 or the extraction: they keep your decisions.</td></tr>
+                        <tr><td>Taking the mapping as verified without the trial balance</td><td>An ignored account at 0 today may carry an amount at the cut-over date; a target of the wrong nature is invisible in the grid.</td><td>Run the trial balance check before moving on to parties and invoices.</td></tr>
                     </tbody>
                 </table>
                 <div class="note" data-titre="Good to know">Display is limited to 1,000 rows. Beyond that, use the “Show” filter to handle the chart in slices.</div>
@@ -1112,6 +1122,8 @@
                     <li><strong>Guarde a menudo.</strong> Las decisiones guardadas se conservan aunque salga de la pantalla; un cambio sin guardar se pierde.</li>
                     <li><strong>Anote sus razones</strong> en la columna Nota para las elecciones discutibles: su contador revisará la correspondencia antes de la etapa 3.</li>
                     <li><strong>Informe de una cuenta por defecto de QuickBooks no reconocida</strong> (origen « por defecto en QuickBooks » pero aún « por decidir »): su alias se añadirá al plan estándar y beneficiará a todos los clientes siguientes.</li>
+                    <li><strong>Una sola extracción, y todo está aquí.</strong> En <span class="chemin">Importación › Importar desde QuickBooks</span>, indique la fecha de corte y lance: la extracción corre en segundo plano y deposita el plan de cuentas, el balance, los terceros, las facturas… de una vez. La etapa 1 solo necesita una relectura, y el balance de comprobación ya está listo para el control final.</li>
+                    <li><strong>Haga que el balance relea sus decisiones.</strong> Tras cada guardado importante, <span class="chemin">Importación › Balance de comprobación</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd>: una cuenta ignorada que lleva un importe a la fecha de corte, o vinculada a una cuenta de naturaleza contraria, sale en rojo antes de retomar los saldos.</li>
                 </ul>
                 <h3>Trampas que evitar</h3>
                 <table>
@@ -1128,6 +1140,9 @@
                         <tr><td>Pasar a la etapa 3 sin releer los « Crear »</td><td>Una cuenta creada por error existe definitivamente y no se anula desde aquí.</td><td>Filtre « Ya decididas » y relea las líneas « Crear » antes de crear.</td></tr>
                         <tr><td>Dejar cuentas « por decidir »</td><td>No se migran: sus saldos y sus facturas no tendrán cuenta en las etapas siguientes.</td><td>Apunte al 100 % de avance antes del balance y de las facturas.</td></tr>
                         <tr><td>Mirar solo el banner superior</td><td>El botón Guardar está abajo: un rechazo puede pasar desapercibido.</td><td>La ventana de mensaje se abre en el centro de la pantalla en cuanto hay un problema; léala antes de continuar.</td></tr>
+                        <tr><td>Relanzar la extracción QuickBooks en medio de las decisiones</td><td>La extracción completa vuelve a depositar el plan como una recarga: las decisiones con clave sin cambios se conservan, pero la vinculación automática se rehace, las cuentas renombradas vuelven « por decidir » y la columna Saldo cambia.</td><td>Termine y guarde la correspondencia antes de relanzar; si no, relea las líneas que vuelven « por decidir » tras la extracción.</td></tr>
+                        <tr><td>Pulsar <kbd>Vider les tables de préparation</kbd> en la página Importación</td><td>El vaciado borra también las correspondencias y el balance importado — incluidas las decisiones de las cuentas ya creadas en la etapa 3, que ya no se rediscuten.</td><td>No lo toque una vez empezada la correspondencia. Para recargar el plan, pase por la etapa 1 o por la extracción: conservan sus decisiones.</td></tr>
+                        <tr><td>Dar la correspondencia por verificada sin el balance</td><td>Una cuenta ignorada con saldo 0 hoy puede llevar un importe a la fecha de corte; un destino de naturaleza equivocada no se ve en la cuadrícula.</td><td>Lance el control del balance de comprobación antes de pasar a los terceros y las facturas.</td></tr>
                     </tbody>
                 </table>
                 <div class="note" data-titre="Conviene saber">La visualización está limitada a 1 000 líneas. Más allá, use el filtro « Mostrar » para tratar el plan por tramos.</div>
