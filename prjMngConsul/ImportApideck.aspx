@@ -21,7 +21,18 @@
         border: 1px solid #e2e8f0;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .apd-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
+    .apd-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a; display: flex; align-items: center; gap: 10px }
+
+    /* Le crochet vert : la dernière extraction a tout rapatrié. Posé par la
+       page au chargement, ou par le suivi quand l'extraction se termine bien. */
+    .coche {
+        width: 26px; height: 26px; border-radius: 50%; background: #10b981; color: #fff;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 16px; font-weight: 800; line-height: 1; box-shadow: 0 0 0 3px #d1fae5;
+    }
+    /* L'icône d'erreur : la dernière extraction a laissé des ressources en échec,
+       ou s'est arrêtée avant la fin. */
+    .coche.err { background: #dc2626; box-shadow: 0 0 0 3px #fecaca }
     .apd-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
     .apd-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 880px; line-height: 1.6 }
 
@@ -110,8 +121,11 @@
     .ext-jauge.err > div { background: linear-gradient(90deg, #f59e0b, #dc2626) }
     .ext-corps { padding: 12px 16px 16px; overflow: auto }
     .ext-corps .msg { margin: 0 0 12px }
-    .ext-liste { list-style: none; margin: 0; padding: 0; font-size: 13px }
-    .ext-liste li { display: flex; align-items: baseline; gap: 10px; padding: 6px 4px; border-bottom: 1px solid #f1f5f9 }
+    /* Cinq lignes visibles, le reste défile dans la liste : la fenêtre garde
+       sa taille quelle que soit la longueur de l'extraction. */
+    .ext-liste { list-style: none; margin: 0; padding: 0 6px 0 0; font-size: 13px;
+        max-height: 176px; overflow-y: auto; scrollbar-gutter: stable }
+    .ext-liste li { display: flex; align-items: baseline; gap: 10px; padding: 7px 4px; border-bottom: 1px solid #f1f5f9; min-height: 35px; box-sizing: border-box }
     .ext-liste .ico { flex: none; width: 18px; text-align: center; font-weight: 800 }
     .ext-liste li.ok .ico { color: #047857 }
     .ext-liste li.ko .ico { color: #b91c1c }
@@ -134,7 +148,7 @@
     <div class="apd-head">
         <div class="ico">🔌</div>
         <div>
-            <h1>Importer depuis QuickBooks</h1>
+            <h1>Importer depuis QuickBooks <span class="coche" id="spanCoche" runat="server" visible="false" title="La dernière extraction a tout rapatrié">✓</span><span class="coche err" id="spanErreur" runat="server" visible="false" title="La dernière extraction a des erreurs">!</span></h1>
             <div class="sub">Lecture directe, par Apideck — sans export manuel</div>
         </div>
     </div>
@@ -192,7 +206,7 @@
     </div>
 
     <asp:Panel ID="pnlResultat" runat="server" Visible="false">
-        <h2 class="sect">3. Ce qui est arrivé</h2>
+        <h2 class="sect"><asp:Literal ID="litTitreResultat" runat="server" Text="3. Ce qui est arrivé" /></h2>
         <div class="bloc"><asp:Literal ID="litResultat" runat="server" /></div>
     </asp:Panel>
 
@@ -292,6 +306,10 @@
                 html += "<li class='attente'><span class='ico'>…</span><span class='lib'>lecture de la ressource suivante</span><span class='nb'></span></li>";
             }
             liste.innerHTML = html;
+
+            // Tant que ça tourne, on suit la dernière ressource arrivée ; une
+            // fois fini, retour en haut : les erreurs y sont.
+            liste.scrollTop = fini ? 0 : liste.scrollHeight;
         }
 
         function h(s) {
@@ -315,7 +333,7 @@
                         "Vous pouvez quitter la page, l'extraction continue.</div>";
             } else {
                 var genre = (e.echecs === 0 && e.statut === 'TERMINE') ? 'ok' : 'err';
-                html += "<div class='msg " + genre + "'>" + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +
+                html += "<div class='msg " + genre + "'><b>Extraction du " + h(e.debut) + "</b> — " + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +
                         demandees + " ressource(s).";
                 if (e.statut === 'ECHEC' || e.statut === 'INTERROMPUE') {
                     html += " L'extraction s'est arrêtée avant la fin" + (e.note ? " — " + h(e.note) : ".");
@@ -349,6 +367,27 @@
             suivi.innerHTML = html;
 
             dessinerFenetre(e, fini, ko, ok, demandees);
+
+            // L'icône du titre : crochet vert si tout est rapatrié sans erreur,
+            // point d'exclamation rouge si des ressources ont échoué ou si
+            // l'extraction s'est arrêtée avant la fin ; rien tant que ça tourne.
+            var h1 = document.querySelector('.apd-head h1');
+            h1.querySelectorAll('.coche').forEach(function (x) { x.remove(); });
+            if (fini) {
+                var icone = document.createElement('span');
+                if (e.statut === 'TERMINE' && ko.length === 0) {
+                    icone.className = 'coche';
+                    icone.title = 'La dernière extraction a tout rapatrié, le ' + e.debut;
+                    icone.textContent = '✓';
+                } else {
+                    icone.className = 'coche err';
+                    icone.title = (e.statut === 'TERMINE' || e.statut === 'PARTIEL')
+                        ? ko.length + " ressource(s) en échec à la dernière extraction, le " + e.debut
+                        : "La dernière extraction s'est arrêtée avant la fin, le " + e.debut;
+                    icone.textContent = '!';
+                }
+                h1.appendChild(icone);
+            }
             if (premier) {
                 premier = false;
                 if (!fini) ouvrirSuivi();

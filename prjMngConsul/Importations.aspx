@@ -230,14 +230,10 @@
             <div class="v"><asp:Literal ID="litAFaire" runat="server" Text="0" /></div></div>
     </div>
 
-    <h2 class="sect">Lecture directe <span>sans demander d'export au client</span></h2>
+    <h2 class="sect">Lecture directe <span>le connecteur, puis les postes par ordre d'importance — le plan comptable en premier</span></h2>
     <div class="grille tete"><asp:Literal ID="litConnexion" runat="server" /></div>
-
-    <h2 class="sect">Reprise comptable <span>le plan comptable, puis la balance de vérification</span></h2>
-    <div class="grille duo"><asp:Literal ID="litParcours" runat="server" /></div>
-
-    <h2 class="sect">Autres importations <span>indépendantes les unes des autres</span></h2>
-    <div class="grille"><asp:Literal ID="litAutres" runat="server" /></div>
+    <asp:Literal ID="litParcours" runat="server" Visible="false" />
+    <asp:Literal ID="litAutres" runat="server" Visible="false" />
 
     <asp:Literal ID="litTitreAVenir" runat="server" />
     <div class="grille"><asp:Literal ID="litAVenir" runat="server" /></div>

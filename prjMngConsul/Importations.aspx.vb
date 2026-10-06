@@ -43,6 +43,8 @@ Public Class Importations
     ''' </summary>
     Private ReadOnly Property Parcours As List(Of Poste)
         Get
+            Dim plan As EtatPlan = EtatPlanComptable()
+
             Return New List(Of Poste) From {
                 New Poste With {
                     .Icone = "📊",
@@ -50,10 +52,11 @@ Public Class Importations
                     .Source = "QuickBooks : Liste des comptes (Account List)",
                     .Destination = "comptabilité — T121PlanComptable, en trois étapes",
                     .Page = "~/ImportPlanComptable.aspx",
-                    .Note = EtapesReprise.NoteParcours,
-                    .Fait = "Importer le fichier, décider de la correspondance de chaque compte, " &
+                    .Note = plan.Note,
+                    .Fait = plan.Fait & " Importer le fichier, décider de la correspondance de chaque compte, " &
                             "puis créer au plan ceux qui manquent. Chaque écran dit lui-même " &
-                            "ce qui y fonctionne et ce qui y manque."
+                            "ce qui y fonctionne et ce qui y manque.",
+                    .Manque = plan.Manque
                 },
                 New Poste With {
                     .Icone = "⚖️",
@@ -489,6 +492,85 @@ Public Class Importations
 
 #End Region
 
+#Region "L'avancement du plan comptable"
+
+    ''' <summary>Où en est la reprise du plan comptable de cette compagnie.</summary>
+    Private Class EtatPlan
+        Public Property Note As Integer
+        Public Property Fait As String = ""
+        Public Property Manque As String = ""
+    End Class
+
+    ''' <summary>
+    ''' La note du plan comptable suit la reprise elle-même, pas l'état du code :
+    ''' 0 tant qu'aucun plan n'est chargé ; 2 dès qu'il l'est ; jusqu'à 5 points
+    ''' pour la part des comptes décidés à l'étape 2 ; jusqu'à 3 points pour la
+    ''' part des comptes « Créer » réellement créés à l'étape 3. Dix veut dire
+    ''' « tout décidé, tout créé » : tant qu'il reste un compte à décider ou à
+    ''' créer, la note plafonne à 9. Les décomptes sont ceux de l'étape 3 (s0766).
+    ''' </summary>
+    Private Function EtatPlanComptable() As EtatPlan
+        Dim etat As New EtatPlan With {.Note = 0}
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0766GetAAppliquer", p)
+
+            If ds Is Nothing OrElse ds.Tables.Count < 2 OrElse ds.Tables(1).Rows.Count = 0 Then
+                etat.Fait = "Aucun plan comptable chargé pour cette compagnie : la note montera " &
+                            "avec la reprise."
+                etat.Manque = "Charger le plan (étape 1), décider la correspondance (étape 2), créer les comptes (étape 3)."
+                Return etat
+            End If
+
+            Dim r As DataRow = ds.Tables(1).Rows(0)
+            Dim total As Integer = Entier(r("Total"))
+            Dim aCreer As Integer = Entier(r("ACreer"))
+            Dim crees As Integer = Entier(r("DejaCrees"))
+            Dim lies As Integer = Entier(r("Lies"))
+            Dim ignores As Integer = Entier(r("Ignores"))
+            Dim aDecider As Integer = Entier(r("ADecider"))
+
+            If total = 0 Then
+                etat.Fait = "Aucun plan comptable chargé pour cette compagnie : la note montera " &
+                            "avec la reprise."
+                etat.Manque = "Charger le plan (étape 1), décider la correspondance (étape 2), créer les comptes (étape 3)."
+                Return etat
+            End If
+
+            Dim decides As Integer = total - aDecider
+            Dim partDecidee As Double = decides / total
+            Dim partCreee As Double = If(aCreer + crees = 0, 1.0, crees / CDbl(aCreer + crees))
+
+            etat.Note = 2 + CInt(Math.Round(5 * partDecidee)) + CInt(Math.Round(3 * partCreee))
+            If (aDecider > 0 OrElse aCreer > 0) AndAlso etat.Note >= 10 Then etat.Note = 9
+            If aDecider = 0 AndAlso aCreer = 0 Then etat.Note = 10
+
+            etat.Fait = "Plan chargé : " & total & " compte(s), " & decides & " décidé(s) (" &
+                        lies & " lié(s), " & ignores & " ignoré(s), " & crees & " créé(s))."
+
+            If aDecider > 0 OrElse aCreer > 0 Then
+                Dim bouts As New List(Of String)
+                If aDecider > 0 Then bouts.Add(aDecider & " compte(s) à décider à l'étape 2")
+                If aCreer > 0 Then bouts.Add(aCreer & " compte(s) à créer à l'étape 3")
+                etat.Manque = "Reste : " & String.Join(" ; ", bouts) & "."
+            End If
+
+        Catch ex As Exception
+            etat.Note = 0
+            etat.Fait = "L'avancement du plan n'a pas pu être lu : " & ex.Message
+        End Try
+
+        Return etat
+    End Function
+
+    Private Shared Function Entier(v As Object) As Integer
+        Return If(v Is Nothing OrElse IsDBNull(v), 0, Convert.ToInt32(v))
+    End Function
+
+#End Region
+
 #Region "La dernière extraction"
 
     ''' <summary>
@@ -657,6 +739,43 @@ Public Class Importations
 
 #Region "Rendu"
 
+    ''' <summary>
+    ''' L'ordre d'importance des postes, celui d'une reprise : ce qui structure
+    ''' d'abord (plan, balance), puis les tiers et les articles, puis les
+    ''' documents, puis ce qui ne sert qu'au contrôle. Un poste absent de la
+    ''' liste passe en queue, par son titre.
+    ''' </summary>
+    Private Shared ReadOnly OrdreImportance As String() = {
+        "Plan comptable",
+        "Balance de vérification",
+        "Clients",
+        "Fournisseurs",
+        "Produits et services",
+        "Factures clients et fournisseurs",
+        "Codes et taux de taxe",
+        "Acomptes et règlements partiels",
+        "Comparer la fiche d'entreprise",
+        "Grand livre",
+        "Balance âgée",
+        "Rapport de taxes",
+        "Soldes bancaires",
+        "Opérations non rapprochées",
+        "Dépôts et virements bancaires",
+        "Listes de structure",
+        "Inventaire",
+        "Pièces jointes",
+        "Transactions récurrentes",
+        "Budgets",
+        "Feuilles de temps",
+        "Paie",
+        "Remises de DAS"
+    }
+
+    Private Shared Function RangImportance(titre As String) As Integer
+        Dim i As Integer = Array.IndexOf(OrdreImportance, titre)
+        Return If(i < 0, OrdreImportance.Length, i)
+    End Function
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         If Not isAuthenticated Then
@@ -668,9 +787,22 @@ Public Class Importations
 
         If IsPostBack Then Return
 
-        litConnexion.Text = Rendre(Connexion)
-        litParcours.Text = Rendre(Parcours)
-        litAutres.Text = Rendre(Autres)
+        ' Une seule grille : le connecteur en tête, pleine largeur, puis tous les
+        ' postes dans l'ordre d'une reprise — le plan comptable d'abord — chacun
+        ' numéroté pour que l'ordre se lise sans le deviner.
+        Dim connexion As List(Of Poste) = Me.Connexion
+        Dim postes As List(Of Poste) = connexion.Skip(1).Concat(Parcours).Concat(Autres).
+            OrderBy(Function(p) RangImportance(p.Titre)).ThenBy(Function(p) p.Titre).ToList()
+
+        Dim rang As Integer = 0
+        For Each p In postes
+            rang += 1
+            p.Titre = rang & ". " & p.Titre
+        Next
+
+        litConnexion.Text = Rendre(connexion.Take(1).ToList()) & Rendre(postes)
+        litParcours.Text = ""
+        litAutres.Text = ""
         ' La section « À construire » disparaît quand il n'y a plus rien à
         ' construire : un titre suivi du vide ressemble à un écran cassé.
         Dim reste As List(Of Poste) = AVenir

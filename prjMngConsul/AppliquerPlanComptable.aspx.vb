@@ -136,26 +136,41 @@ Public Class AppliquerPlanComptable
         If e.Item.ItemType <> ListItemType.Item AndAlso e.Item.ItemType <> ListItemType.AlternatingItem Then Return
 
         Dim ddl = TryCast(e.Item.FindControl("ddlClasse"), DropDownList)
+        Dim ddlSous = TryCast(e.Item.FindControl("ddlSousClasse"), DropDownList)
         Dim hfNature = TryCast(e.Item.FindControl("hfNature"), HiddenField)
-        If ddl Is Nothing Then Return
+        If ddl Is Nothing OrElse ddlSous Is Nothing Then Return
 
         Dim nature = If(hfNature Is Nothing, "", hfNature.Value)
 
+        ' 1er cran : les grandes classes compatibles avec la nature.
         ddl.Items.Clear()
         ddl.Items.Add(New ListItem("— choisir une classe —", ""))
+        For Each r As DataRow In ClassesPour(nature, 1).Rows
+            ddl.Items.Add(New ListItem(LibelleClasse(r), Convert.ToString(r("Id"))))
+        Next
 
-        For Each r As DataRow In ClassesPour(nature).Rows
-            Dim libelle = String.Format("{0} — {1}  ({2}-{3})",
-                                        Convert.ToString(r("Code")),
-                                        Convert.ToString(r("Description")),
-                                        Convert.ToString(r("NumeroDebut")),
-                                        Convert.ToString(r("NumeroFin")))
-            ddl.Items.Add(New ListItem(libelle, Convert.ToString(r("Id"))))
+        ' 2e cran : toutes les sous-classes compatibles, chacune marquée de sa
+        ' classe ; le navigateur ne montre que celles de la classe choisie.
+        ' C'est elle qui est envoyée à la création : elle fixe la plage.
+        ddlSous.Items.Clear()
+        ddlSous.Items.Add(New ListItem("— choisir une sous-classe —", ""))
+        For Each r As DataRow In ClassesPour(nature, 2).Rows
+            Dim li As New ListItem(LibelleClasse(r), Convert.ToString(r("Id")))
+            li.Attributes("data-parent") = Convert.ToString(r("ParentId"))
+            ddlSous.Items.Add(li)
         Next
     End Sub
 
-    Private Function ClassesPour(nature As String) As DataTable
-        Dim cle = If(nature, "")
+    Private Shared Function LibelleClasse(r As DataRow) As String
+        Return String.Format("{0} — {1}  ({2}-{3})",
+                             Convert.ToString(r("Code")),
+                             Convert.ToString(r("Description")),
+                             Convert.ToString(r("NumeroDebut")),
+                             Convert.ToString(r("NumeroFin")))
+    End Function
+
+    Private Function ClassesPour(nature As String, Optional niveau As Integer = 2) As DataTable
+        Dim cle = niveau.ToString() & "|" & If(nature, "")
         If _classesParNature.ContainsKey(cle) Then Return _classesParNature(cle)
 
         Dim vide As New DataTable()
@@ -163,7 +178,8 @@ Public Class AppliquerPlanComptable
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
-            p.Add(New SqlParameter("@Nature", If(cle = "", CType(DBNull.Value, Object), cle)))
+            p.Add(New SqlParameter("@Nature", If(String.IsNullOrEmpty(nature), CType(DBNull.Value, Object), nature)))
+            p.Add(New SqlParameter("@Niveau", niveau))
 
             Dim ds As DataSet = ExecuteSQLds("s0765GetSousClasses", p)
             Dim dt = If(ds Is Nothing OrElse ds.Tables.Count = 0, vide, ds.Tables(0))
@@ -175,6 +191,90 @@ Public Class AppliquerPlanComptable
             _classesParNature(cle) = vide
             Return vide
         End Try
+    End Function
+
+#End Region
+
+#Region "La fiche du compte d'origine"
+
+    ''' <summary>
+    ''' La même fiche qu'à l'étape 2 (CorrespondanceComptes.FicheSource) : ce
+    ''' que la source dit du compte — nature, type et sous-type QuickBooks,
+    ''' numéro et nom d'origine, solde source, d'où il vient, sous-compte de
+    ''' qui, description — et ce que le chargement en a conclu.
+    ''' </summary>
+    Protected Function FicheSource(item As Object) As String
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing Then Return ""
+
+        Dim nature As String = Champ(r, "TypeNormalise")
+        Dim typeQbo As String = Champ(r, "TypeSource")
+        Dim sousType As String = Champ(r, "SousTypeSource")
+        Dim numeroSrc As String = Champ(r, "CompteSource")
+        Dim nomSrc As String = Champ(r, "NomSource")
+        Dim soldeSrc As String = Champ(r, "SoldeSource")
+        Dim sensSrc As String = Champ(r, "SensSource")
+        Dim systeme As String = Champ(r, "SystemeSource")
+        Dim anomalie As String = Champ(r, "AnomalieChargement")
+        Dim statut As String = Champ(r, "StatutChargement")
+        Dim origine As String = Champ(r, "OrigineSource")
+        Dim creeLe As String = If(Not r.Row.Table.Columns.Contains("CreeLe") OrElse IsDBNull(r("CreeLe")), "", CDate(r("CreeLe")).ToString("yyyy-MM-dd"))
+        Dim descriptionSrc As String = Champ(r, "DescriptionSource")
+        Dim nomComplet As String = Champ(r, "NomComplet")
+        Dim sousCompte As Boolean = (Champ(r, "SousCompte") = "True")
+        Dim solde As String = If(Not r.Row.Table.Columns.Contains("Solde") OrElse IsDBNull(r("Solde")), "", Convert.ToDecimal(r("Solde")).ToString("N2"))
+
+        Dim sb As New StringBuilder()
+
+        ' 1) la nature, puis ce que QuickBooks en dit
+        Dim ligne1 As New List(Of String)
+        If nature <> "" Then ligne1.Add("<b>" & Server.HtmlEncode(nature) & "</b>")
+        If typeQbo <> "" Then ligne1.Add(Server.HtmlEncode(typeQbo))
+        If sousType <> "" Then ligne1.Add(Server.HtmlEncode(sousType))
+        If solde <> "" Then ligne1.Add("solde " & solde)
+        If ligne1.Count > 0 Then sb.Append("<div class='nature'>").Append(String.Join(" · ", ligne1)).Append("</div>")
+
+        ' 2) ce que la source donnait, quand ça diffère de ce qui est affiché
+        Dim ligne2 As New List(Of String)
+        If numeroSrc <> "" AndAlso numeroSrc <> Champ(r, "Compte") Then ligne2.Add("n° source " & Server.HtmlEncode(numeroSrc))
+        If nomSrc <> "" AndAlso Not String.Equals(nomSrc, Champ(r, "Nom"), StringComparison.OrdinalIgnoreCase) Then ligne2.Add("« " & Server.HtmlEncode(nomSrc) & " »")
+        If soldeSrc <> "" AndAlso soldeSrc <> solde Then ligne2.Add("solde source " & Server.HtmlEncode(soldeSrc) & If(sensSrc <> "", " " & Server.HtmlEncode(sensSrc), ""))
+        If systeme <> "" Then ligne2.Add(Server.HtmlEncode(systeme.ToLowerInvariant()))
+        If ligne2.Count > 0 Then sb.Append("<div class='nature'>").Append(String.Join(" · ", ligne2)).Append("</div>")
+
+        ' 3) d'où il vient, sous-compte de qui, description
+        Dim ligne3 As New List(Of String)
+        If origine = "AJOUTE" Then
+            ligne3.Add("<b>ajouté" & If(creeLe <> "", " le " & creeLe, "") & "</b>")
+        ElseIf origine = "DEFAUT" Then
+            ligne3.Add("par défaut dans QuickBooks")
+        End If
+        If sousCompte AndAlso nomComplet <> "" AndAlso nomComplet.Contains(":") Then
+            ligne3.Add("sous-compte de « " & Server.HtmlEncode(nomComplet.Substring(0, nomComplet.LastIndexOf(":"c))) & " »")
+        End If
+        If descriptionSrc <> "" Then ligne3.Add("<i>" & Server.HtmlEncode(descriptionSrc) & "</i>")
+        If ligne3.Count > 0 Then sb.Append("<div class='nature' style='white-space:normal'>").Append(String.Join(" · ", ligne3)).Append("</div>")
+
+        ' 4) ce que le chargement a conclu
+        If statut = "EXISTE" AndAlso anomalie <> "" Then
+            sb.Append("<div class='nature' style='color:#047857'>").Append(Server.HtmlEncode(anomalie)).Append("</div>")
+        ElseIf anomalie <> "" Then
+            sb.Append("<div class='nature' style='color:#b45309;white-space:normal'>").Append(Server.HtmlEncode(anomalie)).Append("</div>")
+        End If
+
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function Champ(r As DataRowView, nom As String) As String
+        If Not r.Row.Table.Columns.Contains(nom) OrElse IsDBNull(r(nom)) Then Return ""
+        Return Convert.ToString(r(nom)).Trim()
+    End Function
+
+    ''' <summary>Le numéro du compte d'origine, ou « sans numéro » — courant avec QuickBooks.</summary>
+    Protected Function CleAffichee(compte As Object) As String
+        Dim c = If(compte Is Nothing OrElse compte Is DBNull.Value, "", Convert.ToString(compte))
+        If c <> "" Then Return Server.HtmlEncode(c)
+        Return "<span class='sans-num'>sans numéro</span>"
     End Function
 
 #End Region
@@ -197,13 +297,15 @@ Public Class AppliquerPlanComptable
 
             For Each item As RepeaterItem In rptLignes.Items
                 Dim hfCle = TryCast(item.FindControl("hfCleSource"), HiddenField)
-                Dim ddl = TryCast(item.FindControl("ddlClasse"), DropDownList)
+                ' C'est la sous-classe qui range le compte (T312) : la classe
+                ' n'est qu'un filtre pour la trouver.
+                Dim ddl = TryCast(item.FindControl("ddlSousClasse"), DropDownList)
                 Dim txtNum = TryCast(item.FindControl("txtNumero"), TextBox)
                 Dim txtNom = TryCast(item.FindControl("txtNom"), TextBox)
 
                 If hfCle Is Nothing OrElse ddl Is Nothing Then Continue For
 
-                ' Une ligne sans classe n'est pas une erreur : c'est un compte
+                ' Une ligne sans sous-classe n'est pas une erreur : c'est un compte
                 ' qu'on remet à plus tard. On l'écarte, on le signale.
                 If ddl.SelectedValue = "" Then
                     sansClasse += 1

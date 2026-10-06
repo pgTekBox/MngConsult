@@ -49,9 +49,52 @@ Public Class ImportApideck
 
         AfficherEtat()
         AfficherCatalogue()
+        AfficherCoche()
 
-        Dim enCours As Integer = ExtractionEnCours()
-        If enCours > 0 Then SuivreExtraction(enCours)
+        ' La dernière extraction est toujours montrée : en cours, on la suit ;
+        ' terminée, on relit son compte rendu — ressource par ressource.
+        Dim enCours As Boolean
+        Dim derniere As Integer = DerniereExtraction(enCours)
+        If derniere > 0 Then SuivreExtraction(derniere, enCours)
+    End Sub
+
+    ''' <summary>
+    ''' Le crochet vert à côté du titre : la dernière extraction fermée de la
+    ''' compagnie a tout rapatrié, sans une ressource en échec. Le suivi en page
+    ''' le pose lui-même quand une extraction se termine bien.
+    ''' </summary>
+    Private Sub AfficherCoche()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0892GetDerniereExtraction", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim statut As String = Convert.ToString(r("Statut"))
+            Dim echecs As Integer = If(IsDBNull(r("NbEchecs")), 0, Convert.ToInt32(r("NbEchecs")))
+            Dim quand As String = Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")
+
+            ' Les extractions d'avant T308 n'ont pas leurs décomptes : la phrase de
+            ' clôture dit le nombre d'échecs.
+            If IsDBNull(r("NbEchecs")) AndAlso Not IsDBNull(r("Note")) Then
+                Dim m = Text.RegularExpressions.Regex.Match(Convert.ToString(r("Note")), "(\d+) ressource\(s\) en échec")
+                If m.Success Then echecs = CInt(m.Groups(1).Value)
+            End If
+
+            spanCoche.Visible = (statut = "TERMINE" AndAlso echecs = 0)
+            spanErreur.Visible = Not spanCoche.Visible
+            If spanCoche.Visible Then
+                spanCoche.Attributes("title") = "La dernière extraction a tout rapatrié, le " & quand
+            ElseIf statut = "TERMINE" OrElse statut = "PARTIEL" Then
+                spanErreur.Attributes("title") = echecs & " ressource(s) en échec à la dernière extraction, le " & quand
+            Else
+                spanErreur.Attributes("title") = "La dernière extraction s'est arrêtée avant la fin, le " & quand
+            End If
+        Catch
+            spanCoche.Visible = False
+            spanErreur.Visible = False
+        End Try
     End Sub
 
 #End Region
@@ -172,11 +215,12 @@ Public Class ImportApideck
     End Sub
 
     ''' <summary>
-    ''' Le numéro de l'extraction de la compagnie encore en cours, s'il y en a
-    ''' une — s0895 rend INTERROMPUE celle qui n'a plus donné signe de vie depuis
-    ''' trente minutes, et s0776 la soldera. Zéro sinon.
+    ''' Le numéro de la dernière extraction de la compagnie (zéro s'il n'y en a
+    ''' jamais eu), et si elle tourne encore — s0895 rend INTERROMPUE celle qui
+    ''' n'a plus donné signe de vie depuis trente minutes, et s0776 la soldera.
     ''' </summary>
-    Private Function ExtractionEnCours() As Integer
+    Private Function DerniereExtraction(ByRef enCours As Boolean) As Integer
+        enCours = False
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@RunId", DBNull.Value))
@@ -184,8 +228,15 @@ Public Class ImportApideck
 
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
         Dim r As DataRow = ds.Tables(0).Rows(0)
-        If Convert.ToString(r("Statut")) <> "EN_COURS" Then Return 0
+        enCours = (Convert.ToString(r("Statut")) = "EN_COURS")
         Return Convert.ToInt32(r("Id"))
+    End Function
+
+    ''' <summary>L'extraction encore en cours, ou zéro.</summary>
+    Private Function ExtractionEnCours() As Integer
+        Dim enCours As Boolean
+        Dim id As Integer = DerniereExtraction(enCours)
+        Return If(enCours, id, 0)
     End Function
 
 #End Region
@@ -227,11 +278,14 @@ Public Class ImportApideck
     ''' toutes les quelques secondes — les erreurs en premier, le détail des
     ''' réussites replié. La page ne pose que l'ancre et le numéro.
     ''' </summary>
-    Private Sub SuivreExtraction(runId As Integer)
+    Private Sub SuivreExtraction(runId As Integer, Optional enCours As Boolean = True)
+        Dim amorce As String = If(enCours,
+            "Extraction lancée : l'avancement s'affiche ici, ressource par ressource. Vous pouvez quitter la page, l'extraction continue.",
+            "Lecture du compte rendu de la dernière extraction…")
         litResultat.Text = "<div id='suivi' data-run='" & runId & "' data-total='" &
                            ApideckExtraction.Catalogue.Count & "'>" &
-                           "<div class='msg info'>Extraction lancée : l'avancement s'affiche ici, ressource par ressource. " &
-                           "Vous pouvez quitter la page, l'extraction continue.</div></div>"
+                           "<div class='msg info'>" & amorce & "</div></div>"
+        litTitreResultat.Text = If(enCours, "3. Ce qui est arrivé", "3. La dernière extraction")
         pnlResultat.Visible = True
     End Sub
 
