@@ -30,6 +30,9 @@
         display: inline-flex; align-items: center; justify-content: center;
         font-size: 16px; font-weight: 800; line-height: 1; box-shadow: 0 0 0 3px #d1fae5;
     }
+    /* L'icône d'erreur : la dernière extraction a laissé des ressources en échec,
+       ou s'est arrêtée avant la fin. */
+    .coche.err { background: #dc2626; box-shadow: 0 0 0 3px #fecaca }
     .apd-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
     .apd-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 880px; line-height: 1.6 }
 
@@ -145,7 +148,7 @@
     <div class="apd-head">
         <div class="ico">🔌</div>
         <div>
-            <h1>Importer depuis QuickBooks <span class="coche" id="spanCoche" runat="server" visible="false" title="La dernière extraction a tout rapatrié">✓</span></h1>
+            <h1>Importer depuis QuickBooks <span class="coche" id="spanCoche" runat="server" visible="false" title="La dernière extraction a tout rapatrié">✓</span><span class="coche err" id="spanErreur" runat="server" visible="false" title="La dernière extraction a des erreurs">!</span></h1>
             <div class="sub">Lecture directe, par Apideck — sans export manuel</div>
         </div>
     </div>
@@ -365,19 +368,25 @@
 
             dessinerFenetre(e, fini, ko, ok, demandees);
 
-            // Le crochet vert du titre : tout rapatrié, sans erreur.
-            var coche = document.getElementById('<%= spanCoche.ClientID %>');
-            if (fini && e.statut === 'TERMINE' && ko.length === 0) {
-                if (!coche) {
-                    coche = document.createElement('span');
-                    coche.className = 'coche';
-                    coche.id = '<%= spanCoche.ClientID %>';
-                    coche.title = 'La dernière extraction a tout rapatrié';
-                    coche.textContent = '✓';
-                    document.querySelector('.apd-head h1').appendChild(coche);
+            // L'icône du titre : crochet vert si tout est rapatrié sans erreur,
+            // point d'exclamation rouge si des ressources ont échoué ou si
+            // l'extraction s'est arrêtée avant la fin ; rien tant que ça tourne.
+            var h1 = document.querySelector('.apd-head h1');
+            h1.querySelectorAll('.coche').forEach(function (x) { x.remove(); });
+            if (fini) {
+                var icone = document.createElement('span');
+                if (e.statut === 'TERMINE' && ko.length === 0) {
+                    icone.className = 'coche';
+                    icone.title = 'La dernière extraction a tout rapatrié, le ' + e.debut;
+                    icone.textContent = '✓';
+                } else {
+                    icone.className = 'coche err';
+                    icone.title = (e.statut === 'TERMINE' || e.statut === 'PARTIEL')
+                        ? ko.length + " ressource(s) en échec à la dernière extraction, le " + e.debut
+                        : "La dernière extraction s'est arrêtée avant la fin, le " + e.debut;
+                    icone.textContent = '!';
                 }
-            } else if (!fini && coche) {
-                coche.remove();
+                h1.appendChild(icone);
             }
             if (premier) {
                 premier = false;

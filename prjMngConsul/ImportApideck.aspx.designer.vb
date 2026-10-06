@@ -21,6 +21,9 @@ Partial Public Class ImportApideck
     '''<summary>spanCoche</summary>
     Protected WithEvents spanCoche As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
+    '''<summary>spanErreur</summary>
+    Protected WithEvents spanErreur As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>btnRelier</summary>
     Protected WithEvents btnRelier As Global.System.Web.UI.WebControls.Button
 

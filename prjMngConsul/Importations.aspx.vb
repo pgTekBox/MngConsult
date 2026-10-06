@@ -657,6 +657,43 @@ Public Class Importations
 
 #Region "Rendu"
 
+    ''' <summary>
+    ''' L'ordre d'importance des postes, celui d'une reprise : ce qui structure
+    ''' d'abord (plan, balance), puis les tiers et les articles, puis les
+    ''' documents, puis ce qui ne sert qu'au contrôle. Un poste absent de la
+    ''' liste passe en queue, par son titre.
+    ''' </summary>
+    Private Shared ReadOnly OrdreImportance As String() = {
+        "Plan comptable",
+        "Balance de vérification",
+        "Clients",
+        "Fournisseurs",
+        "Produits et services",
+        "Factures clients et fournisseurs",
+        "Codes et taux de taxe",
+        "Acomptes et règlements partiels",
+        "Comparer la fiche d'entreprise",
+        "Grand livre",
+        "Balance âgée",
+        "Rapport de taxes",
+        "Soldes bancaires",
+        "Opérations non rapprochées",
+        "Dépôts et virements bancaires",
+        "Listes de structure",
+        "Inventaire",
+        "Pièces jointes",
+        "Transactions récurrentes",
+        "Budgets",
+        "Feuilles de temps",
+        "Paie",
+        "Remises de DAS"
+    }
+
+    Private Shared Function RangImportance(titre As String) As Integer
+        Dim i As Integer = Array.IndexOf(OrdreImportance, titre)
+        Return If(i < 0, OrdreImportance.Length, i)
+    End Function
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
 
         If Not isAuthenticated Then
@@ -668,9 +705,22 @@ Public Class Importations
 
         If IsPostBack Then Return
 
-        litConnexion.Text = Rendre(Connexion)
-        litParcours.Text = Rendre(Parcours)
-        litAutres.Text = Rendre(Autres)
+        ' Une seule grille : le connecteur en tête, pleine largeur, puis tous les
+        ' postes dans l'ordre d'une reprise — le plan comptable d'abord — chacun
+        ' numéroté pour que l'ordre se lise sans le deviner.
+        Dim connexion As List(Of Poste) = Me.Connexion
+        Dim postes As List(Of Poste) = connexion.Skip(1).Concat(Parcours).Concat(Autres).
+            OrderBy(Function(p) RangImportance(p.Titre)).ThenBy(Function(p) p.Titre).ToList()
+
+        Dim rang As Integer = 0
+        For Each p In postes
+            rang += 1
+            p.Titre = rang & ". " & p.Titre
+        Next
+
+        litConnexion.Text = Rendre(connexion.Take(1).ToList()) & Rendre(postes)
+        litParcours.Text = ""
+        litAutres.Text = ""
         ' La section « À construire » disparaît quand il n'y a plus rien à
         ' construire : un titre suivi du vide ressemble à un écran cassé.
         Dim reste As List(Of Poste) = AVenir

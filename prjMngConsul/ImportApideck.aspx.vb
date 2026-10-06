@@ -71,14 +71,29 @@ Public Class ImportApideck
             If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
 
             Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim statut As String = Convert.ToString(r("Statut"))
             Dim echecs As Integer = If(IsDBNull(r("NbEchecs")), 0, Convert.ToInt32(r("NbEchecs")))
-            spanCoche.Visible = (Convert.ToString(r("Statut")) = "TERMINE" AndAlso echecs = 0)
+            Dim quand As String = Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")
+
+            ' Les extractions d'avant T308 n'ont pas leurs décomptes : la phrase de
+            ' clôture dit le nombre d'échecs.
+            If IsDBNull(r("NbEchecs")) AndAlso Not IsDBNull(r("Note")) Then
+                Dim m = Text.RegularExpressions.Regex.Match(Convert.ToString(r("Note")), "(\d+) ressource\(s\) en échec")
+                If m.Success Then echecs = CInt(m.Groups(1).Value)
+            End If
+
+            spanCoche.Visible = (statut = "TERMINE" AndAlso echecs = 0)
+            spanErreur.Visible = Not spanCoche.Visible
             If spanCoche.Visible Then
-                spanCoche.Attributes("title") = "La dernière extraction a tout rapatrié, le " &
-                    Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")
+                spanCoche.Attributes("title") = "La dernière extraction a tout rapatrié, le " & quand
+            ElseIf statut = "TERMINE" OrElse statut = "PARTIEL" Then
+                spanErreur.Attributes("title") = echecs & " ressource(s) en échec à la dernière extraction, le " & quand
+            Else
+                spanErreur.Attributes("title") = "La dernière extraction s'est arrêtée avant la fin, le " & quand
             End If
         Catch
             spanCoche.Visible = False
+            spanErreur.Visible = False
         End Try
     End Sub
 
