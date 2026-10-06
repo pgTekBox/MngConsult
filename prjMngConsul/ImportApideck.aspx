@@ -110,8 +110,11 @@
     .ext-jauge.err > div { background: linear-gradient(90deg, #f59e0b, #dc2626) }
     .ext-corps { padding: 12px 16px 16px; overflow: auto }
     .ext-corps .msg { margin: 0 0 12px }
-    .ext-liste { list-style: none; margin: 0; padding: 0; font-size: 13px }
-    .ext-liste li { display: flex; align-items: baseline; gap: 10px; padding: 6px 4px; border-bottom: 1px solid #f1f5f9 }
+    /* Cinq lignes visibles, le reste défile dans la liste : la fenêtre garde
+       sa taille quelle que soit la longueur de l'extraction. */
+    .ext-liste { list-style: none; margin: 0; padding: 0 6px 0 0; font-size: 13px;
+        max-height: 176px; overflow-y: auto; scrollbar-gutter: stable }
+    .ext-liste li { display: flex; align-items: baseline; gap: 10px; padding: 7px 4px; border-bottom: 1px solid #f1f5f9; min-height: 35px; box-sizing: border-box }
     .ext-liste .ico { flex: none; width: 18px; text-align: center; font-weight: 800 }
     .ext-liste li.ok .ico { color: #047857 }
     .ext-liste li.ko .ico { color: #b91c1c }
@@ -292,6 +295,10 @@
                 html += "<li class='attente'><span class='ico'>…</span><span class='lib'>lecture de la ressource suivante</span><span class='nb'></span></li>";
             }
             liste.innerHTML = html;
+
+            // Tant que ça tourne, on suit la dernière ressource arrivée ; une
+            // fois fini, retour en haut : les erreurs y sont.
+            liste.scrollTop = fini ? 0 : liste.scrollHeight;
         }
 
         function h(s) {
