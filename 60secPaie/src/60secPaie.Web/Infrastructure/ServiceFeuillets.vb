@@ -1,4 +1,4 @@
-Imports Paie60Sec.Calcul
+﻿Imports Paie60Sec.Calcul
 
 ''' <summary>Montants des cases du T4 et du Relevé 1 d'un employé pour une année.</summary>
 Public Class Feuillet
@@ -102,43 +102,27 @@ Public NotInheritable Class ServiceFeuillets
     ''' <summary>Années pour lesquelles des paies confirmées existent et dont les taux sont définis.</summary>
     Public Shared Function AnneesDisponibles() As List(Of Integer)
         Dim annees As New List(Of Integer)()
-        For Each r As DataRow In Db.Table("SELECT DISTINCT YEAR(DatePaie) AS Annee FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY Annee DESC",
+        For Each r As DataRow In Db.Table("paie.spLotPaie_AnneesConfirmees",
                                           Db.P("@c", Contexte.CompagnieId)).Rows
             If ParametresAnnee.EstDisponible(r.Ent("Annee")) Then annees.Add(r.Ent("Annee"))
         Next
         Return annees
     End Function
 
-    Private Const FiltreAnnee As String = "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a"
-
     Public Shared Function Preparer(annee As Integer) As List(Of Feuillet)
         Dim prm = ParametresAnnee.Pour(annee)
         Dim c = Contexte.CompagnieId
 
         ' Les colonnes ImpotQuebec et RRQ portent l'impôt provincial et le régime de pension de la
-        ' province de la paie : on les sépare ici, parce que le T4 ne les met pas dans les mêmes cases.
+        ' province de la paie : la procédure les sépare, parce que le T4 ne les met pas dans les mêmes cases.
         ' Le RQAP aussi : hors Québec, sa colonne est vide ou porte l'impôt sur la paie d'un territoire,
         ' qui n'a pas sa place dans les cases 55 et 56.
-        Const SiHq As String = "SUM(CASE WHEN p.Province <> N'QC' THEN "
-        Const SiQc As String = "SUM(CASE WHEN p.Province <> N'QC' THEN 0 ELSE "
-        Dim totaux = Db.Table(
-            "SELECT p.EmployeId, SUM(p.BrutImposableFederal) BrutFed, SUM(p.ImpotFederal) ImpotFederal, SUM(p.AE) AE, " &
-            "SUM(p.GainsAE) GainsAE, " & SiQc & "p.RQAP END) RQAP, " & SiQc & "p.GainsRQAP END) GainsRQAP, " &
-            SiQc & "p.BrutImposableQuebec END) BrutQc, " & SiQc & "p.ImpotQuebec END) ImpotQuebec, " & SiQc & "p.AE END) AEQc, " &
-            SiQc & "p.RRQ END) RRQ, " & SiQc & "p.RRQ2 END) RRQ2, " & SiQc & "p.GainsRRQ END) GainsRRQ, " &
-            SiHq & "p.ImpotQuebec ELSE 0 END) ImpotProvince, " &
-            SiHq & "p.RRQ ELSE 0 END) RPC, " & SiHq & "p.RRQ2 ELSE 0 END) RPC2, " & SiHq & "p.GainsRRQ ELSE 0 END) GainsRPC " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId", Db.P("@c", c), Db.P("@a", annee))
-        Dim provincesPayees = Db.Table(
-            "SELECT DISTINCT p.EmployeId, p.Province FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee,
-            Db.P("@c", c), Db.P("@a", annee))
+        Dim totaux = Db.Table("paie.spFeuillet_Totaux", Db.P("@c", c), Db.P("@a", annee))
+        Dim provincesPayees = Db.Table("paie.spFeuillet_ProvincesPayees", Db.P("@c", c), Db.P("@a", annee))
         Dim provinceCompagnie = Provinces.Code(Contexte.Province)
-        Dim lignes = Db.Table(
-            "SELECT p.EmployeId, p.Province, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId " &
-            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee & " GROUP BY p.EmployeId, p.Province, pl.CategorieCode", Db.P("@c", c), Db.P("@a", annee))
-        Dim departs = Db.Table(
-            "SELECT d.* FROM paie.CumulatifDepart d JOIN paie.Employe e ON e.Id = d.EmployeId WHERE e.CompagnieId = @c AND d.Annee = @a", Db.P("@c", c), Db.P("@a", annee))
-        Dim employes = Db.Table("SELECT * FROM paie.Employe WHERE CompagnieId = @c ORDER BY Nom, Prenom", Db.P("@c", c))
+        Dim lignes = Db.Table("paie.spFeuillet_Lignes", Db.P("@c", c), Db.P("@a", annee))
+        Dim departs = Db.Table("paie.spCumulatifDepart_Annee", Db.P("@c", c), Db.P("@a", annee))
+        Dim employes = Db.Table("paie.spEmploye_Tous", Db.P("@c", c))
 
         Dim feuillets As New List(Of Feuillet)()
         For Each e As DataRow In employes.Rows
@@ -244,17 +228,7 @@ Public NotInheritable Class ServiceFeuillets
     ''' hors Québec se lisent par province dans ServiceRemise.HorsRemiseProvinces.
     ''' </summary>
     Public Shared Function SommaireEmployeur(annee As Integer) As DataRow
-        Const SiHq As String = "ISNULL(SUM(CASE WHEN p.Province <> N'QC' THEN "
-        Const SiQc As String = "ISNULL(SUM(CASE WHEN p.Province <> N'QC' THEN 0 ELSE "
-        Return Db.Ligne(
-            "SELECT " & SiQc & "p.EmployeurRRQ + p.EmployeurRRQ2 END),0) EmployeurRRQ, ISNULL(SUM(p.EmployeurAE),0) EmployeurAE, ISNULL(SUM(p.EmployeurRQAP),0) EmployeurRQAP, " &
-            SiQc & "p.EmployeurFSS END),0) FSS, " & SiQc & "p.GainsFSS END),0) MasseFSS, " & SiQc & "p.EmployeurCNESST END),0) CNESST, ISNULL(SUM(p.EmployeurCNT),0) CNT, " &
-            SiHq & "p.EmployeurRRQ + p.EmployeurRRQ2 ELSE 0 END),0) EmployeurRPC, " &
-            "ISNULL(SUM(" & ServiceRemise.SqlDuFederal & "),0) DuFederal, " &
-            "ISNULL(SUM(" & ServiceRemise.SqlDuQuebec & "),0) DuQuebec, " &
-            "(SELECT ISNULL(SUM(Total),0) FROM paie.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'F' AND YEAR(DateFinPeriode) = @a) PayeFederal, " &
-            "(SELECT ISNULL(SUM(Total),0) FROM paie.Remise WHERE CompagnieId = @c AND Statut = 'P' AND Gouvernement = 'Q' AND YEAR(DateFinPeriode) = @a) PayeQuebec " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreAnnee, Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+        Return Db.Ligne("paie.spFeuillet_SommaireEmployeur", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
     End Function
 
 End Class

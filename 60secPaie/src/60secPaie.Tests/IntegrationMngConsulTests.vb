@@ -22,10 +22,10 @@ Public Class IntegrationMngConsulTests
         Dim cieA = Guid.NewGuid(), cieB = Guid.NewGuid(), comptable = Guid.NewGuid()
         ' Coût BCrypt de 4 pour des tests rapides ; MngConsul utilise 11, la vérification est identique.
         Dim hachage = BCrypt.Net.BCrypt.HashPassword("Un-Bon-MotDePasse", 4)
-        Db.Exec("INSERT INTO dbo.T010Company (CompanyGUID, ComptableGUID) VALUES (@a, @k), (@b, @k); " &
+        SqlTest.Exec("INSERT INTO dbo.T010Company (CompanyGUID, ComptableGUID) VALUES (@a, @k), (@b, @k); " &
                 "INSERT INTO dbo.StubParam (CompanyGUID, ShortName, sVal) VALUES (@a, 'LEGAL_NAME', 'Alpha inc.'), (@b, 'TRADE_NAME', 'Bravo');",
                 Db.P("@a", cieA), Db.P("@b", cieB), Db.P("@k", comptable))
-        Db.Exec("INSERT INTO dbo.T015User (CompanyGUID, UserGUID, Email, PasswordHash, FirstName, LastName, IsAdmin, isAccountant) VALUES " &
+        SqlTest.Exec("INSERT INTO dbo.T015User (CompanyGUID, UserGUID, Email, PasswordHash, FirstName, LastName, IsAdmin, isAccountant) VALUES " &
                 "(@a, NEWID(), 'usager@alpha.ca', @h, 'Ursule', 'Usager', 0, 0), " &
                 "(@a, @k, 'comptable@cabinet.ca', @h, 'Claude', 'Comptable', 1, 1), " &
                 "(NEWID(), NEWID(), 'orphelin@nulle-part.ca', @h, 'Oscar', 'Orphelin', 0, 0); " &

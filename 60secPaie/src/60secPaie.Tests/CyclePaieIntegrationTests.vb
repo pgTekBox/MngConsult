@@ -32,7 +32,7 @@ Public Class CyclePaieIntegrationTests
         ' de USE : ils s'exécutent dans la base d'essai. 04 (assistant IA) écrit dans une table de MngConsul qui n'a
         ' pas de réplique ici : il n'est pas rejoué.
         Dim baseEssai = Maitre.Replace("Initial Catalog=master", "Initial Catalog=" & BaseTest)
-        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql"}
+        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql", "07_procedures.sql"}
             ExecuterLots(baseEssai, File.ReadAllText(Path.Combine(racine, "Database", script)))
         Next
     End Sub
@@ -59,33 +59,33 @@ Public Class CyclePaieIntegrationTests
     Public Sub CycleComplet_DeuxPaies_PuisAnnulation()
         ' --- Données de base. Côté MngConsul (répliques) : une compagnie, ses employés. Côté 60secPaie : les paramètres de paie.
         Dim guidCompagnie = Guid.NewGuid()
-        Db.Exec("INSERT INTO dbo.T010Company (CompanyGUID, CompanyCode) VALUES (@g, 'ESSAI'); " &
+        SqlTest.Exec("INSERT INTO dbo.T010Company (CompanyGUID, CompanyCode) VALUES (@g, 'ESSAI'); " &
                 "INSERT INTO dbo.StubParam (CompanyGUID, ShortName, sVal) VALUES (@g, 'LEGAL_NAME', 'Compagnie d''essai inc.'), (@g, 'CITY', 'Longueuil');", Db.P("@g", guidCompagnie))
         HttpContext.Current.Items("CompanyGuid") = guidCompagnie
 
-        Dim compagnieId = Db.Inserer("INSERT INTO paie.Compagnie (CompanyGUID, Nom, PeriodesParAnnee, TauxCNESST, ProchainNumeroCheque) VALUES (@g, N'Compagnie d''essai', 26, 1.5, 100)",
+        Dim compagnieId = SqlTest.Inserer("INSERT INTO paie.Compagnie (CompanyGUID, Nom, PeriodesParAnnee, TauxCNESST, ProchainNumeroCheque) VALUES (@g, N'Compagnie d''essai', 26, 1.5, 100)",
                                      Db.P("@g", guidCompagnie))
         Assert.AreEqual(compagnieId, Contexte.CompagnieId)
         Contexte.SynchroniserCompagnie()
-        Assert.AreEqual("Compagnie d'essai inc.", Convert.ToString(Db.Scalaire("SELECT Nom FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId))), "Le nom vient de MngConsul.")
+        Assert.AreEqual("Compagnie d'essai inc.", Convert.ToString(SqlTest.Scalaire("SELECT Nom FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId))), "Le nom vient de MngConsul.")
 
-        Dim horaire = Db.Inserer(
+        Dim horaire = SqlTest.Inserer(
             "INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, DateOfBirth, HireDate, HourlyRate, PayFrequency, StateId, Active) " &
             "VALUES (@g, 'Alice', 'Tremblay <test>', '1990-05-01', '2025-01-01', 30, 'BiWeekly', 2, 1)", Db.P("@g", guidCompagnie))
-        Dim annuel = Db.Inserer(
+        Dim annuel = SqlTest.Inserer(
             "INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, HireDate, AnnualSalary, PayFrequency, Active, [SIN], BankAccount) " &
             "VALUES (@g, 'Bruno', 'Gagnon', '2025-01-01', 104000, 'BiWeekly', 1, '046 454 286', '7654321')", Db.P("@g", guidCompagnie))
-        Db.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Inactif', 'Exclu', 50000, 'BiWeekly', 0)", Db.P("@g", guidCompagnie))
-        Dim nonConfigure = Db.Inserer("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Carl', 'Sans-Paie', 60000, 'BiWeekly', 1)",
+        SqlTest.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Inactif', 'Exclu', 50000, 'BiWeekly', 0)", Db.P("@g", guidCompagnie))
+        Dim nonConfigure = SqlTest.Inserer("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, PayFrequency, Active) VALUES (@g, 'Carl', 'Sans-Paie', 60000, 'BiWeekly', 1)",
                                       Db.P("@g", guidCompagnie))
         ' Employé d'une AUTRE compagnie : ne doit jamais apparaître.
-        Db.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, Active) VALUES (NEWID(), 'Autre', 'Compagnie', 70000, 1)")
+        SqlTest.Exec("INSERT INTO dbo.T300Employees (CompanyGUID, FirstName, LastName, AnnualSalary, Active) VALUES (NEWID(), 'Autre', 'Compagnie', 70000, 1)")
 
         ' La paie est configurée pour Alice (40 h/semaine) et Bruno (dépôt direct) ; pas pour Carl.
-        Db.Exec("INSERT INTO paie.EmployePaie (EmployeId, HeuresSemaine) VALUES (@e, 40)", Db.P("@e", horaire))
-        Db.Exec("INSERT INTO paie.EmployePaie (EmployeId, DepotDirect) VALUES (@e, 1)", Db.P("@e", annuel))
+        SqlTest.Exec("INSERT INTO paie.EmployePaie (EmployeId, HeuresSemaine) VALUES (@e, 40)", Db.P("@e", horaire))
+        SqlTest.Exec("INSERT INTO paie.EmployePaie (EmployeId, DepotDirect) VALUES (@e, 1)", Db.P("@e", annuel))
 
-        Dim vue = Db.Table("SELECT * FROM paie.Employe WHERE CompagnieId = @c ORDER BY Id", Db.P("@c", compagnieId))
+        Dim vue = SqlTest.Table("SELECT * FROM paie.Employe WHERE CompagnieId = @c ORDER BY Id", Db.P("@c", compagnieId))
         Assert.AreEqual(4, vue.Rows.Count, "La vue ne montre que les employés de la compagnie.")
         Dim vueAlice = vue.Select("Id = " & horaire.ToString())(0)
         Assert.AreEqual(30D, vueAlice.Dcm("TauxHoraire"), "Le taux horaire de MngConsul sert de valeur par défaut.")
@@ -96,18 +96,18 @@ Public Class CyclePaieIntegrationTests
 
         ' --- Étape 1 : création du lot
         Dim lot1 = ServicePaie.CreerLot(26, New Date(2026, 1, 10), New Date(2026, 1, 15))
-        Assert.AreEqual(2, Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot1)), "Seuls les employés actifs sont inclus.")
-        Assert.AreEqual(New Date(2025, 12, 28), CDate(Db.Scalaire("SELECT DateDebutPeriode FROM paie.LotPaie WHERE Id = @l", Db.P("@l", lot1))))
+        Assert.AreEqual(2, SqlTest.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot1)), "Seuls les employés actifs sont inclus.")
+        Assert.AreEqual(New Date(2025, 12, 28), CDate(SqlTest.Scalaire("SELECT DateDebutPeriode FROM paie.LotPaie WHERE Id = @l", Db.P("@l", lot1))))
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServicePaie.CreerLot(26, New Date(2026, 1, 24), New Date(2026, 1, 29)), "Un seul brouillon à la fois.")
 
         ' --- Étape 2 : ajout d'un bonus à l'employée horaire
-        Dim paieAlice = Db.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot1), Db.P("@e", horaire))
-        Dim bonus = Db.Inserer("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, N'Bonus', 'BONUS')", Db.P("@c", compagnieId))
+        Dim paieAlice = SqlTest.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot1), Db.P("@e", horaire))
+        Dim bonus = SqlTest.Inserer("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, N'Bonus', 'BONUS')", Db.P("@c", compagnieId))
         ServicePaie.AjouterLigne(paieAlice, bonus, 0D, 0D, 500D)
 
         ' --- Étape 3 : calcul
         ServicePaie.CalculerLot(lot1)
-        Dim alice = Db.Ligne("SELECT * FROM paie.Paie WHERE Id = @p", Db.P("@p", paieAlice))
+        Dim alice = SqlTest.Ligne("SELECT * FROM paie.Paie WHERE Id = @p", Db.P("@p", paieAlice))
         Assert.AreEqual(80D, alice.Dcm("Heures"))
         Assert.AreEqual(2900D, alice.Dcm("BrutVerse"))        ' 80 h × 30 $ + 500 $
         Assert.AreEqual(500D, alice.Dcm("ForfaitairesQuebec"))
@@ -117,7 +117,7 @@ Public Class CyclePaieIntegrationTests
         Assert.AreEqual(43.5D, alice.Dcm("EmployeurCNESST"))   ' 2 900 $ × 1,5 %
         Assert.AreEqual(116D, alice.Dcm("VacancesAccumulees")) ' 4 %
 
-        Dim bruno = Db.Ligne("SELECT * FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot1), Db.P("@e", annuel))
+        Dim bruno = SqlTest.Ligne("SELECT * FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot1), Db.P("@e", annuel))
         Assert.AreEqual(4000D, bruno.Dcm("BrutVerse"))
         Assert.AreEqual(243.52D, bruno.Dcm("RRQ"))
 
@@ -130,9 +130,9 @@ Public Class CyclePaieIntegrationTests
 
         ' --- Étape 4 : confirmation et numérotation des chèques (Bruno est en dépôt direct)
         ServicePaie.ConfirmerLot(lot1)
-        Assert.AreEqual(100, Db.ScalaireEntier("SELECT NumeroCheque FROM paie.Paie WHERE Id = @p", Db.P("@p", paieAlice)))
-        Assert.IsNull(Db.Scalaire("SELECT NumeroCheque FROM paie.Paie WHERE Id = @p", Db.P("@p", bruno.Ent("Id"))))
-        Assert.AreEqual(101, Db.ScalaireEntier("SELECT ProchainNumeroCheque FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId)))
+        Assert.AreEqual(100, SqlTest.ScalaireEntier("SELECT NumeroCheque FROM paie.Paie WHERE Id = @p", Db.P("@p", paieAlice)))
+        Assert.IsNull(SqlTest.Scalaire("SELECT NumeroCheque FROM paie.Paie WHERE Id = @p", Db.P("@p", bruno.Ent("Id"))))
+        Assert.AreEqual(101, SqlTest.ScalaireEntier("SELECT ProchainNumeroCheque FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId)))
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServicePaie.CalculerLot(lot1), "Une paie confirmée n'est plus modifiable.")
 
         ' --- Deuxième paie : les cumulatifs de la première sont repris
@@ -141,23 +141,23 @@ Public Class CyclePaieIntegrationTests
         Assert.AreEqual(500D, cumul.ForfaitairesQuebec)
 
         Dim lot2 = ServicePaie.CreerLot(26, New Date(2026, 1, 24), New Date(2026, 1, 29))
-        Db.Exec("UPDATE paie.Paie SET Inclus = 0 WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", annuel))
+        SqlTest.Exec("UPDATE paie.Paie SET Inclus = 0 WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", annuel))
         ' Cotisation de 100 $ à un RPA, avec son propre compte de grand livre.
-        Dim rpa = Db.Inserer("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode, CompteGL) VALUES (@c, N'RPA', 'DED_RPA', N'2350')", Db.P("@c", compagnieId))
-        ServicePaie.AjouterLigne(Db.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", horaire)), rpa, 0D, 0D, 100D)
+        Dim rpa = SqlTest.Inserer("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode, CompteGL) VALUES (@c, N'RPA', 'DED_RPA', N'2350')", Db.P("@c", compagnieId))
+        ServicePaie.AjouterLigne(SqlTest.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l AND EmployeId = @e", Db.P("@l", lot2), Db.P("@e", horaire)), rpa, 0D, 0D, 100D)
         ServicePaie.CalculerLot(lot2)
         ServicePaie.ConfirmerLot(lot2)
-        Assert.AreEqual(1, Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)), "L'employé exclu est retiré à la confirmation.")
-        Assert.AreEqual(101, Db.ScalaireEntier("SELECT NumeroCheque FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
+        Assert.AreEqual(1, SqlTest.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)), "L'employé exclu est retiré à la confirmation.")
+        Assert.AreEqual(101, SqlTest.ScalaireEntier("SELECT NumeroCheque FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
 
-        Dim talon2 = RenduPaie.Talon(Db.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
+        Dim talon2 = RenduPaie.Talon(SqlTest.ScalaireEntier("SELECT Id FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2)))
         StringAssert.Contains(talon2, Outils.Argent(2900D + 2400D), "Le brut cumulatif additionne les deux paies.")
 
         ' --- Feuillets T4 et Relevés 1
         Dim feuillets = ServiceFeuillets.Preparer(2026)
         Assert.AreEqual(2, feuillets.Count)
         Dim fa = feuillets.First(Function(f) f.Employe.Ent("Id") = horaire)
-        Dim sommeAlice = Db.Ligne("SELECT SUM(p.ImpotFederal) Fed, SUM(p.ImpotQuebec) Qc, SUM(p.RRQ) RRQ FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
+        Dim sommeAlice = SqlTest.Ligne("SELECT SUM(p.ImpotFederal) Fed, SUM(p.ImpotQuebec) Qc, SUM(p.RRQ) RRQ FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
                                   "WHERE p.EmployeId = @e AND l.Statut = 'C'", Db.P("@e", horaire))
         Assert.AreEqual(5300D, fa.CaseT4("14"))
         Assert.AreEqual(5300D, fa.CaseR1("A"))
@@ -170,7 +170,7 @@ Public Class CyclePaieIntegrationTests
         Assert.AreEqual(100D, fa.CaseR1("D"), "...et à la case D du Relevé 1.")
         Assert.AreEqual(0D, fa.CaseT4("44"))
         Dim sommaire = ServiceFeuillets.SommaireEmployeur(2026)
-        Assert.AreEqual(sommaire.Dcm("DuFederal"), CDec(Db.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'")))
+        Assert.AreEqual(sommaire.Dcm("DuFederal"), CDec(SqlTest.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'")))
 
         ' --- Déclaration des salaires CNESST
         Dim cnesst = ServiceCNESST.ParEmploye(2026).Select("Id = " & horaire.ToString())(0)
@@ -185,7 +185,7 @@ Public Class CyclePaieIntegrationTests
         Dim ecritures = ServiceGL.EcrituresDuLot(lot2)
         Assert.AreEqual(ecritures.Sum(Function(x) x.Debit), ecritures.Sum(Function(x) x.Credit), "L'écriture doit être équilibrée.")
         Assert.AreEqual(100D, ecritures.Single(Function(x) x.Compte = "2350").Credit)
-        Assert.AreEqual(CDec(Db.Scalaire("SELECT SUM(Net) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2))), ecritures.Single(Function(x) x.Compte = "1010").Credit)
+        Assert.AreEqual(CDec(SqlTest.Scalaire("SELECT SUM(Net) FROM paie.Paie WHERE LotPaieId = @l", Db.P("@l", lot2))), ecritures.Single(Function(x) x.Compte = "1010").Credit)
         Dim ecrituresMois = ServiceGL.EcrituresDeLaPeriode(New Date(2026, 1, 1), New Date(2026, 1, 31))
         Assert.AreEqual(ecrituresMois.Sum(Function(x) x.Debit), ecrituresMois.Sum(Function(x) x.Credit))
         Assert.IsTrue(ecrituresMois.Sum(Function(x) x.Debit) > ecritures.Sum(Function(x) x.Debit), "Le mois couvre les deux paies.")
@@ -193,9 +193,9 @@ Public Class CyclePaieIntegrationTests
         ' --- Fichier de dépôt direct (Bruno est payé par dépôt direct dans la première paie)
         Assert.IsTrue(ServiceDepotDirect.Problemes(lot1).Count > 0, "Paramètres et coordonnées bancaires manquants.")
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceDepotDirect.Generer(lot1))
-        Db.Exec("UPDATE paie.Compagnie SET DDNumeroEmetteur = 'ABC1234567', DDCentreTraitement = '86900', DDNomCourt = N'Essai inc', DDInstitution = '815', " &
+        SqlTest.Exec("UPDATE paie.Compagnie SET DDNumeroEmetteur = 'ABC1234567', DDCentreTraitement = '86900', DDNomCourt = N'Essai inc', DDInstitution = '815', " &
                 "DDTransit = '30000', DDCompteChiffre = @cpt, Courriel = N'paie@exemple.ca' WHERE Id = @c", Db.P("@cpt", Secret.Proteger("1234567")), Db.P("@c", compagnieId))
-        Db.Exec("UPDATE paie.EmployePaie SET Institution = '006', Transit = '12345' WHERE EmployeId = @e", Db.P("@e", annuel))   ' le compte vient de MngConsul
+        SqlTest.Exec("UPDATE paie.EmployePaie SET Institution = '006', Transit = '12345' WHERE EmployeId = @e", Db.P("@e", annuel))   ' le compte vient de MngConsul
         Assert.AreEqual(0, ServiceDepotDirect.Problemes(lot1).Count)
 
         Dim fichier = ServiceDepotDirect.Generer(lot1)
@@ -208,7 +208,7 @@ Public Class CyclePaieIntegrationTests
         StringAssert.Contains(enregistrements(1), "GAGNON BRUNO")
         StringAssert.StartsWith(enregistrements(2), "Z000000003ABC12345670001" & New String("0"c, 22) & CLng(netBruno * 100D).ToString("00000000000000") & "00000001")
         Assert.AreEqual(1, fichier.NbDepots)
-        Assert.AreEqual(2, Db.ScalaireEntier("SELECT DDProchainNumeroFichier FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId)))
+        Assert.AreEqual(2, SqlTest.ScalaireEntier("SELECT DDProchainNumeroFichier FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId)))
 
         ' --- Talons par courriel (écrits dans un dossier au lieu d'être envoyés)
         Dim dossier = Path.Combine(Path.GetTempPath(), "60secPaie-tests-" & Guid.NewGuid().ToString("N"))
@@ -216,7 +216,7 @@ Public Class CyclePaieIntegrationTests
         ServiceCourriel.FabriqueClient = Function() New Net.Mail.SmtpClient With {
             .DeliveryMethod = Net.Mail.SmtpDeliveryMethod.SpecifiedPickupDirectory, .PickupDirectoryLocation = dossier}
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServiceCourriel.EnvoyerTalons(lot1, False), "Personne n'a demandé son talon par courriel.")
-        Db.Exec("UPDATE paie.EmployePaie SET TalonParCourriel = 1 WHERE EmployeId = @e; UPDATE dbo.T300Employees SET Email = 'alice@exemple.ca' WHERE Id = @e", Db.P("@e", horaire))
+        SqlTest.Exec("UPDATE paie.EmployePaie SET TalonParCourriel = 1 WHERE EmployeId = @e; UPDATE dbo.T300Employees SET Email = 'alice@exemple.ca' WHERE Id = @e", Db.P("@e", horaire))
         Dim bilan = ServiceCourriel.EnvoyerTalons(lot1, False)
         Assert.AreEqual(1, bilan.Envoyes)
         Assert.AreEqual(0, bilan.Erreurs.Count)
@@ -232,7 +232,7 @@ Public Class CyclePaieIntegrationTests
 
         ' Le talon part dans la langue de l'employé, même si la personne qui fait la paie travaille en français.
         I18n.CheminFichier = IntegrationMngConsulTests.DictionnaireDuSite()
-        Db.Exec("UPDATE paie.EmployePaie SET Langue = 'EN' WHERE EmployeId = @e", Db.P("@e", horaire))
+        SqlTest.Exec("UPDATE paie.EmployePaie SET Langue = 'EN' WHERE EmployeId = @e", Db.P("@e", horaire))
         For Each ancien In Directory.GetFiles(dossier, "*.eml") : File.Delete(ancien) : Next
         Assert.AreEqual(1, ServiceCourriel.EnvoyerTalons(lot1, True).Envoyes)
         StringAssert.Contains(File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single()), "Subject: Pay stub for ")
@@ -242,7 +242,7 @@ Public Class CyclePaieIntegrationTests
 
         ' --- Remises gouvernementales
         Dim soldeFed = ServiceRemise.Solde(ServiceRemise.Federal)
-        Dim attenduFed = CDec(Db.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'"))
+        Dim attenduFed = CDec(SqlTest.Scalaire("SELECT SUM(p.ImpotFederal + p.AE + p.EmployeurAE) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.Statut = 'C'"))
         Assert.AreEqual(3, soldeFed.NbPaies)
         Assert.AreEqual(attenduFed, soldeFed.Montant)
         Assert.AreEqual(New Date(2026, 1, 31), soldeFed.FinPeriode.Value)
@@ -257,7 +257,7 @@ Public Class CyclePaieIntegrationTests
         StringAssert.Contains(ServiceRemise.Rendu(lignesQc, ServiceRemise.LotsAPayer(ServiceRemise.Quebec, finQc)), "Total à payer")
 
         Dim remiseQc = ServiceRemise.Enregistrer(ServiceRemise.Quebec, finQc, New Date(2026, 2, 10), True, "")
-        Dim rq = Db.Ligne("SELECT * FROM paie.Remise WHERE Id = @id", Db.P("@id", remiseQc))
+        Dim rq = SqlTest.Ligne("SELECT * FROM paie.Remise WHERE Id = @id", Db.P("@id", remiseQc))
         Assert.AreEqual(102, rq.Ent("NumeroCheque"), "Le chèque de remise suit les chèques de paie 100 et 101.")
         Assert.AreEqual(2, rq.Ent("NbPaies"))
         Assert.AreEqual(2, rq.Ent("NbEmployesDernierePaie"))
@@ -268,7 +268,7 @@ Public Class CyclePaieIntegrationTests
 
         ' Fédéral, tout le mois de janvier : les trois paies.
         Dim remiseFed = ServiceRemise.Enregistrer(ServiceRemise.Federal, New Date(2026, 1, 31), New Date(2026, 2, 12), False, "CONF-123")
-        Dim rf = Db.Ligne("SELECT * FROM paie.Remise WHERE Id = @id", Db.P("@id", remiseFed))
+        Dim rf = SqlTest.Ligne("SELECT * FROM paie.Remise WHERE Id = @id", Db.P("@id", remiseFed))
         Assert.AreEqual(attenduFed, rf.Dcm("Total"))
         Assert.AreEqual(1, rf.Ent("NbEmployesDernierePaie"))
         Assert.IsTrue(rf.IsNull("NumeroCheque"))
@@ -287,14 +287,14 @@ Public Class CyclePaieIntegrationTests
         Assert.IsFalse(ServicePaie.PeutAnnuler(lot1))
         Assert.ThrowsException(Of SaisieInvalideException)(Sub() ServicePaie.AnnulerLot(lot1))
         ServicePaie.AnnulerLot(lot2)
-        Assert.AreEqual("A", Convert.ToString(Db.Scalaire("SELECT Statut FROM paie.LotPaie WHERE Id = @l", Db.P("@l", lot2))))
+        Assert.AreEqual("A", Convert.ToString(SqlTest.Scalaire("SELECT Statut FROM paie.LotPaie WHERE Id = @l", Db.P("@l", lot2))))
         Assert.AreEqual(alice.Dcm("RRQ"), ServicePaie.CumulatifsEmploye(horaire, 2026, 0).RRQ, "La paie annulée sort des cumulatifs.")
         Assert.IsFalse(ServicePaie.PeutAnnuler(lot1), "Ses retenues sont payées à Revenu Québec.")
         ServiceRemise.Annuler(remiseQc)
         Assert.IsTrue(ServicePaie.PeutAnnuler(lot1))
 
         ' 2 confirmations, 1 dépôt direct, 2 envois de talons (français, puis anglais), 2 remises, 2 annulations de remise, 1 annulation de paie
-        Assert.AreEqual(10, Db.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))
+        Assert.AreEqual(10, SqlTest.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))
     End Sub
 
     <TestMethod>

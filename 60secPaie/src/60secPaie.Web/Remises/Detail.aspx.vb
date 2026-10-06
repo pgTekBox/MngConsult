@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 
 Public Class PageDetailRemise
     Inherits PageBase
@@ -10,8 +10,7 @@ Public Class PageDetailRemise
     End Property
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-        Dim r = Db.Ligne("SELECT r.*, c.NumeroEntrepriseFederal, c.NumeroIdentificationRQ FROM paie.Remise r JOIN paie.Compagnie c ON c.Id = r.CompagnieId " &
-                         "WHERE r.Id = @id AND r.CompagnieId = @c", Db.P("@id", RemiseId), Db.P("@c", Contexte.CompagnieId))
+        Dim r = Db.Ligne("paie.spRemise_Detail", Db.P("@id", RemiseId), Db.P("@c", Contexte.CompagnieId))
         If r Is Nothing Then Response.Redirect("~/Remises/Historique.aspx", True)
 
         Dim g = r.Txt("Gouvernement")
@@ -21,7 +20,7 @@ Public Class PageDetailRemise
             ServiceRemise.NomGouvernement(g) & " · retenues accumulées au " & TexteDate(r("DateFinPeriode")) & " · payé le " & TexteDate(r("DatePaiement")) &
             " · " & PageHistoriqueRemises.LibelleMode(r("ModePaiement"), r("NumeroCheque"), r("Reference")) & " · enregistré par " & r.Txt("CreePar"))
 
-        Dim lignes = Db.Table("SELECT Libelle, Montant FROM paie.RemiseLigne WHERE RemiseId = @id ORDER BY Ordre", Db.P("@id", RemiseId))
+        Dim lignes = Db.Table("paie.spRemiseLigne_Liste", Db.P("@id", RemiseId))
         litDetail.Text = ServiceRemise.Rendu(lignes, ServiceRemise.LotsDeLaRemise(RemiseId, g))
 
         Dim sb As New StringBuilder("<table class=""liste""><tbody>")

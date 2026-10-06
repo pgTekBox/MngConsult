@@ -1,4 +1,4 @@
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.Text
 Imports Paie60Sec.Calcul
 
@@ -29,10 +29,7 @@ Public NotInheritable Class ServiceProfilIA
 
     ''' <summary>Les employés de la compagnie, actifs d'abord, dans l'ordre qui fixe leurs codes.</summary>
     Private Shared Function Employes() As DataTable
-        Return Db.Table(
-            "SELECT e.*, ISNULL(e.PeriodesParAnnee, c.PeriodesParAnnee) AS Periodes " &
-            "FROM paie.Employe e JOIN paie.Compagnie c ON c.Id = e.CompagnieId " &
-            "WHERE e.CompagnieId = @c ORDER BY e.Actif DESC, e.Id", Db.P("@c", Contexte.CompagnieId))
+        Return Db.Table("paie.spEmploye_ProfilIA", Db.P("@c", Contexte.CompagnieId))
     End Function
 
     Public Shared Function Legende() As List(Of EntreeLegende)
@@ -51,7 +48,7 @@ Public NotInheritable Class ServiceProfilIA
 
     ''' <summary>Le profil à envoyer : celui en base s'il est frais, sinon un neuf.</summary>
     Public Shared Function Obtenir(Optional forcer As Boolean = False) As String
-        Dim ligne = Db.Ligne("SELECT * FROM paie.ProfilIA WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim ligne = Db.Ligne("paie.spProfilIA_Get", Db.P("@c", Contexte.CompagnieId))
         Dim liste = Employes()
         Dim signature = Empreinte(liste)
 
@@ -61,29 +58,23 @@ Public NotInheritable Class ServiceProfilIA
         If frais AndAlso Not forcer Then Return Assembler(ligne.Txt("ProfilGenere"), ligne.Txt("Particularites"))
 
         Dim genere = Generer(liste)
-        Db.Exec(
-            "IF EXISTS (SELECT 1 FROM paie.ProfilIA WHERE CompagnieId = @c) " &
-            "UPDATE paie.ProfilIA SET ProfilGenere = @p, EmpreinteEmployes = @e, GenereLe = sysdatetime() WHERE CompagnieId = @c " &
-            "ELSE INSERT INTO paie.ProfilIA (CompagnieId, ProfilGenere, EmpreinteEmployes, GenereLe) VALUES (@c, @p, @e, sysdatetime())",
+        Db.Exec("paie.spProfilIA_EnregistrerProfil",
             Db.P("@c", Contexte.CompagnieId), Db.P("@p", genere), Db.P("@e", signature))
         Return Assembler(genere, If(ligne Is Nothing, "", ligne.Txt("Particularites")))
     End Function
 
     Public Shared Function GenereLe() As Date?
-        Dim v = Db.Scalaire("SELECT GenereLe FROM paie.ProfilIA WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim v = Db.Scalaire("paie.spProfilIA_GenereLe", Db.P("@c", Contexte.CompagnieId))
         If v Is Nothing Then Return Nothing
         Return Convert.ToDateTime(v)
     End Function
 
     Public Shared Function Particularites() As String
-        Return Convert.ToString(Db.Scalaire("SELECT Particularites FROM paie.ProfilIA WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)))
+        Return Convert.ToString(Db.Scalaire("paie.spProfilIA_Particularites", Db.P("@c", Contexte.CompagnieId)))
     End Function
 
     Public Shared Sub EnregistrerParticularites(texte As String)
-        Db.Exec(
-            "IF EXISTS (SELECT 1 FROM paie.ProfilIA WHERE CompagnieId = @c) " &
-            "UPDATE paie.ProfilIA SET Particularites = @t, ModifieLe = sysdatetime(), ModifiePar = @u WHERE CompagnieId = @c " &
-            "ELSE INSERT INTO paie.ProfilIA (CompagnieId, Particularites, ModifieLe, ModifiePar) VALUES (@c, @t, sysdatetime(), @u)",
+        Db.Exec("paie.spProfilIA_EnregistrerParticularites",
             Db.P("@c", Contexte.CompagnieId), Db.P("@t", texte), Db.P("@u", Contexte.Utilisateur))
     End Sub
 
@@ -100,7 +91,7 @@ Public NotInheritable Class ServiceProfilIA
     ' ------------------------------------------------------------------
 
     Private Shared Function Generer(employes As DataTable) As String
-        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Dim fr = CultureInfo.GetCultureInfo("fr-CA")
         Dim sb As New StringBuilder()
 
@@ -152,7 +143,7 @@ Public NotInheritable Class ServiceProfilIA
         End If
         sb.AppendLine("- Dépôt direct : " & OuiNon(c.Txt("DDNumeroEmetteur").Length > 0 AndAlso c.Txt("DDCentreTraitement").Length > 0, "paramètres du fichier configurés", "non configuré"))
 
-        Dim unites = Db.Table("SELECT Code, Description, Taux, Actif FROM paie.UniteCNESST WHERE CompagnieId = @c ORDER BY Code", Db.P("@c", Contexte.CompagnieId))
+        Dim unites = Db.Table("paie.spUniteCNESST_Toutes", Db.P("@c", Contexte.CompagnieId))
         If unites.Rows.Count > 0 Then
             sb.AppendLine(If(horsQuebec, "- Classes " & noms.Accidents & " :", "- Unités de classification CNESST :"))
             For Each u As DataRow In unites.Rows
@@ -162,15 +153,14 @@ Public NotInheritable Class ServiceProfilIA
 
         sb.AppendLine()
         sb.AppendLine("## Éléments de paie de la compagnie")
-        For Each el As DataRow In Db.Table("SELECT Description, CategorieCode, Actif, MasquerSurTalon, CompteGL FROM paie.ElementPaie WHERE CompagnieId = @c ORDER BY Actif DESC, Description", Db.P("@c", Contexte.CompagnieId)).Rows
+        For Each el As DataRow In Db.Table("paie.spElementPaie_Liste", Db.P("@c", Contexte.CompagnieId)).Rows
             Dim cat = If(CategoriePaie.Existe(el.Txt("CategorieCode")), CategoriePaie.ParCode(el.Txt("CategorieCode")).LibelleComplet, el.Txt("CategorieCode"))
             sb.AppendLine("- " & el.Txt("Description") & " (" & cat & ")" & If(el.Bln("Actif"), "", " — inactif") & If(el.Bln("MasquerSurTalon"), " — masqué sur le talon", "") & If(el.Txt("CompteGL").Length > 0, " — compte GL " & el.Txt("CompteGL"), ""))
         Next
 
         sb.AppendLine()
         sb.AppendLine("## Employés (codes E1, E2… ; jamais de nom, de NAS ni de compte)")
-        Dim gabarits = Db.Table("SELECT ee.EmployeId, el.Description, el.CategorieCode, ee.Heures, ee.Taux, ee.Montant FROM paie.EmployeElement ee JOIN paie.ElementPaie el ON el.Id = ee.ElementPaieId " &
-                                "JOIN paie.Employe e ON e.Id = ee.EmployeId WHERE e.CompagnieId = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim gabarits = Db.Table("paie.spEmployeElement_Compagnie", Db.P("@c", Contexte.CompagnieId))
         Dim i = 0
         For Each e As DataRow In employes.Rows
             i += 1
@@ -230,18 +220,15 @@ Public NotInheritable Class ServiceProfilIA
 
         sb.AppendLine()
         sb.AppendLine("## État courant")
-        Dim derniere = Db.Ligne("SELECT TOP 1 DatePaie, DateDebutPeriode, DateFinPeriode, PeriodesParAnnee FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC", Db.P("@c", Contexte.CompagnieId))
+        Dim derniere = Db.Ligne("paie.spLotPaie_DernierConfirme", Db.P("@c", Contexte.CompagnieId))
         sb.AppendLine("- Dernière paie confirmée : " & If(derniere Is Nothing, "aucune", Convert.ToDateTime(derniere("DatePaie")).ToString("yyyy-MM-dd") & " (période du " & Convert.ToDateTime(derniere("DateDebutPeriode")).ToString("yyyy-MM-dd") & " au " & Convert.ToDateTime(derniere("DateFinPeriode")).ToString("yyyy-MM-dd") & ", " & LibellePeriodes(derniere("PeriodesParAnnee")) & ")"))
-        Dim brouillon = Db.Ligne("SELECT TOP 1 DateFinPeriode, DatePaie FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'B' ORDER BY Id DESC", Db.P("@c", Contexte.CompagnieId))
+        Dim brouillon = Db.Ligne("paie.spLotPaie_Brouillon", Db.P("@c", Contexte.CompagnieId))
         sb.AppendLine("- Paie en préparation (brouillon) : " & If(brouillon Is Nothing, "aucune", "oui, période se terminant le " & Convert.ToDateTime(brouillon("DateFinPeriode")).ToString("yyyy-MM-dd")))
         Dim annee = Date.Today.Year
-        sb.AppendLine("- Paies confirmées en " & annee.ToString() & " : " & Db.ScalaireEntier("SELECT COUNT(*) FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' AND YEAR(DatePaie) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).ToString())
+        sb.AppendLine("- Paies confirmées en " & annee.ToString() & " : " & Db.ScalaireEntier("paie.spLotPaie_NbConfirmesAnnee", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).ToString())
         ' Une paie hors Québec ne doit rien à Revenu Québec : elle n'y est jamais « non remise ».
         For Each gouv In If(horsQuebec, {"F"}, {"F", "Q"})
-            Dim solde = Db.Ligne(
-                "SELECT COUNT(*) AS Nb, MIN(l.DatePaie) AS Plus_ancienne FROM paie.LotPaie l JOIN paie.Paie p ON p.LotPaieId = l.Id " &
-                "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND " & If(gouv = "F", "p.RemiseFederaleId IS NULL", "p.RemiseQuebecId IS NULL AND p.Province = N'QC'"),
-                Db.P("@c", Contexte.CompagnieId))
+            Dim solde = Db.Ligne("paie.spPaie_NonRemises", Db.P("@c", Contexte.CompagnieId), Db.P("@g", gouv))
             Dim nb = If(solde Is Nothing, 0, solde.Ent("Nb"))
             sb.AppendLine("- Retenues non encore remises " & If(gouv = "F", "au fédéral", "à Revenu Québec") & " : " & If(nb = 0, "aucune", nb.ToString() & " paie(s), la plus ancienne payée le " & Convert.ToDateTime(solde("Plus_ancienne")).ToString("yyyy-MM-dd")))
         Next

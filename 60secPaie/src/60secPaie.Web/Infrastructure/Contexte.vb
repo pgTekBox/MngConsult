@@ -1,4 +1,4 @@
-''' <summary>
+﻿''' <summary>
 ''' Contexte de la requête. Les utilisateurs et les compagnies sont ceux de MngConsul :
 '''   - utilisateur : dbo.T015User, identifié par son courriel (nom du témoin d'authentification) ;
 '''   - compagnies accessibles : procédure s0210GetUserCompanies de MngConsul (un utilisateur normal a sa compagnie,
@@ -95,7 +95,7 @@ Public NotInheritable Class Contexte
         Get
             If Ctx.Items("CompagnieId") Is Nothing Then
                 Dim g = CompanyGuid
-                Ctx.Items("CompagnieId") = If(g = Guid.Empty, 0, Db.ScalaireEntier("SELECT Id FROM paie.Compagnie WHERE CompanyGUID = @g", Db.P("@g", g)))
+                Ctx.Items("CompagnieId") = If(g = Guid.Empty, 0, Db.ScalaireEntier("paie.spCompagnie_IdParGuid", Db.P("@g", g)))
             End If
             Return CInt(Ctx.Items("CompagnieId"))
         End Get
@@ -113,7 +113,7 @@ Public NotInheritable Class Contexte
     Public Shared ReadOnly Property Province As Paie60Sec.Calcul.Province
         Get
             If Ctx.Items("Province") Is Nothing Then
-                Dim code = If(CompagnieId = 0, "", Convert.ToString(Db.Scalaire("SELECT Province FROM paie.Compagnie WHERE Id = @c", Db.P("@c", CompagnieId))))
+                Dim code = If(CompagnieId = 0, "", Convert.ToString(Db.Scalaire("paie.spCompagnie_Province", Db.P("@c", CompagnieId))))
                 Ctx.Items("Province") = If(Paie60Sec.Calcul.Provinces.EstGeree(code), Paie60Sec.Calcul.Provinces.DeCode(code), Paie60Sec.Calcul.Province.Quebec)
             End If
             Return DirectCast(Ctx.Items("Province"), Paie60Sec.Calcul.Province)
@@ -145,18 +145,14 @@ Public NotInheritable Class Contexte
 
     ''' <summary>Nom et coordonnées de la compagnie courante, tels que définis dans MngConsul (paramètres LEGAL_NAME, ADDR1...).</summary>
     Public Shared Function IdentiteCompagnie() As DataRow
-        Return Db.Ligne(
-            "SELECT ISNULL(dbo.fCompanyName(@g), N'') AS Nom, dbo.fParamS(@g, 'ADDR1') AS Adresse1, dbo.fParamS(@g, 'ADDR2') AS Adresse2, " &
-            "dbo.fParamS(@g, 'CITY') AS Ville, dbo.fParamS(@g, 'POSTAL') AS CodePostal, dbo.fParamS(@g, 'PHONE') AS Telephone, " &
-            "dbo.fParamS(@g, 'MAIL_FROM_EMAIL') AS Courriel, dbo.fParamS(@g, 'FED_BN') AS NumeroEntreprise", Db.P("@g", CompanyGuid))
+        Return Db.Ligne("paie.spCompagnie_Identite", Db.P("@g", CompanyGuid))
     End Function
 
     ''' <summary>Recopie le nom et l'adresse de MngConsul dans paie.Compagnie (utilisés par les talons, rapports et fichiers).</summary>
     Public Shared Sub SynchroniserCompagnie()
         If CompagnieId = 0 Then Return
         Dim i = IdentiteCompagnie()
-        Db.Exec("UPDATE paie.Compagnie SET Nom = @n, Adresse1 = @a1, Adresse2 = @a2, Ville = @v, CodePostal = @cp, Telephone = @t, " &
-                "Courriel = COALESCE(@c, Courriel) WHERE Id = @id",
+        Db.Exec("paie.spCompagnie_Synchroniser",
                 Db.P("@n", If(i.Txt("Nom").Length = 0, "(sans nom)", i.Txt("Nom"))), Db.P("@a1", i.Txt("Adresse1")), Db.P("@a2", i.Txt("Adresse2")),
                 Db.P("@v", i.Txt("Ville")), Db.P("@cp", Gauche(i.Txt("CodePostal"), 10)), Db.P("@t", Gauche(i.Txt("Telephone"), 30)),
                 Db.P("@c", i.Txt("Courriel")), Db.P("@id", CompagnieId))
@@ -167,7 +163,7 @@ Public NotInheritable Class Contexte
     End Function
 
     Public Shared Sub Journaliser(description As String, Optional lien As String = Nothing)
-        Db.Exec("INSERT INTO paie.JournalActivite (Utilisateur, Description, Lien, CompagnieId) VALUES (@u, @d, @l, @c)",
+        Db.Exec("paie.spJournalActivite_Inserer",
                 Db.P("@u", If(Utilisateur.Length = 0, "système", Utilisateur)), Db.P("@d", description), Db.P("@l", lien),
                 Db.P("@c", If(CompagnieId = 0, Nothing, CObj(CompagnieId))))
     End Sub

@@ -1,4 +1,4 @@
-Public Class PagePlanComptable
+﻿Public Class PagePlanComptable
     Inherits PageBase
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -17,7 +17,7 @@ Public Class PagePlanComptable
         rptComptes.DataSource = t
         rptComptes.DataBind()
 
-        rptElements.DataSource = Db.Table("SELECT Id, Description, ISNULL(CompteGL, '') AS CompteGL FROM paie.ElementPaie WHERE CompagnieId = @c AND Actif = 1 ORDER BY Description",
+        rptElements.DataSource = Db.Table("paie.spElementPaie_ListeActifs",
                                           Db.P("@c", Contexte.CompagnieId))
         rptElements.DataBind()
     End Sub
@@ -30,7 +30,7 @@ Public Class PagePlanComptable
             For Each item As RepeaterItem In rptElements.Items
                 Dim id As Integer
                 If Integer.TryParse(DirectCast(item.FindControl("hidId"), HiddenField).Value, id) Then
-                    Db.Exec("UPDATE paie.ElementPaie SET CompteGL = @v WHERE Id = @id AND CompagnieId = @c",
+                    Db.Exec("paie.spElementPaie_UpdateCompteGL",
                             Db.P("@v", DirectCast(item.FindControl("txtCompte"), TextBox).Text.Trim()), Db.P("@id", id), Db.P("@c", Contexte.CompagnieId))
                 End If
             Next

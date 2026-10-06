@@ -1,4 +1,4 @@
-Imports System.IO
+﻿Imports System.IO
 Imports System.Net.Http
 Imports System.Net.Http.Headers
 Imports System.Text
@@ -51,13 +51,13 @@ Public NotInheritable Class AssistantIA
 
     ''' <summary>La clé d'accès, là où vivent celles de l'ERP (paramètre CHATGPT).</summary>
     Private Shared Function Cle() As String
-        Dim valeur = Convert.ToString(Db.Scalaire("SELECT [Value] FROM dbo.T0000Parameters WHERE [ParamName] = 'CHATGPT'"))
+        Dim valeur = Convert.ToString(Db.Scalaire("paie.spParametre_Valeur", Db.P("@ParamName", "CHATGPT")))
         If valeur.Trim().Length = 0 Then Throw New SaisieInvalideException(Tr("La clé d'accès à l'IA n'est pas configurée."))
         Return valeur.Trim()
     End Function
 
     Private Shared Function PromptSysteme() As String
-        Dim v = Convert.ToString(Db.Scalaire("SELECT [Value] FROM dbo.T0000Parameters WHERE [ParamName] = 'PROMPT_ASSISTANT_PAIE'"))
+        Dim v = Convert.ToString(Db.Scalaire("paie.spParametre_Valeur", Db.P("@ParamName", "PROMPT_ASSISTANT_PAIE")))
         If v.Trim().Length = 0 Then Throw New SaisieInvalideException(Tr("Le prompt de l'assistant n'est pas configuré."))
         Return v
     End Function
@@ -93,8 +93,7 @@ Public NotInheritable Class AssistantIA
         If question.Length > LongueurMaxQuestion Then Throw New SaisieInvalideException(Tr("La question est trop longue ({0} caractères au plus).", LongueurMaxQuestion))
 
         Dim chrono = Diagnostics.Stopwatch.StartNew()
-        Dim journalId = Db.Inserer(
-            "INSERT INTO paie.ConversationIA (CompagnieId, Utilisateur, Langue, Question, Modele) VALUES (@c, @u, @l, @q, @m)",
+        Dim journalId = Db.Inserer("paie.spConversationIA_Inserer",
             Db.P("@c", Contexte.CompagnieId), Db.P("@u", Contexte.Utilisateur), Db.P("@l", langue), Db.P("@q", question.Trim()), Db.P("@m", Modele))
 
         Try
@@ -136,12 +135,12 @@ Public NotInheritable Class AssistantIA
                 r.OutputTokens = Convert.ToInt32(If(Valeur(usage, "output_tokens"), 0))
             End If
             chrono.Stop()
-            Db.Exec("UPDATE paie.ConversationIA SET Reponse = @r, InputTokens = @i, OutputTokens = @o, CoutUsd = @cout, DureeMs = @d WHERE Id = @id",
+            Db.Exec("paie.spConversationIA_Reponse",
                     Db.P("@r", r.Texte), Db.P("@i", r.InputTokens), Db.P("@o", r.OutputTokens), Db.P("@cout", r.CoutUsd), Db.P("@d", CInt(chrono.ElapsedMilliseconds)), Db.P("@id", journalId))
             Return r
         Catch ex As Exception
             chrono.Stop()
-            Db.Exec("UPDATE paie.ConversationIA SET Erreur = @e, DureeMs = @d WHERE Id = @id",
+            Db.Exec("paie.spConversationIA_Erreur",
                     Db.P("@e", Gauche(ex.Message, 1000)), Db.P("@d", CInt(chrono.ElapsedMilliseconds)), Db.P("@id", journalId))
             Throw
         End Try
@@ -179,7 +178,7 @@ Public NotInheritable Class AssistantIA
 
     ''' <summary>Coût cumulé des questions de la compagnie ce mois-ci, pour l'afficher.</summary>
     Public Shared Function CoutDuMois() As Decimal
-        Dim v = Db.Scalaire("SELECT ISNULL(SUM(CoutUsd), 0) FROM paie.ConversationIA WHERE CompagnieId = @c AND CreeLe >= @d",
+        Dim v = Db.Scalaire("paie.spConversationIA_CoutDepuis",
                             Db.P("@c", Contexte.CompagnieId), Db.P("@d", New Date(Date.Today.Year, Date.Today.Month, 1)))
         Return If(v Is Nothing, 0D, Convert.ToDecimal(v))
     End Function

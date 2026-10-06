@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 ''' <summary>
@@ -15,9 +15,7 @@ Public NotInheritable Class RenduPaie
     End Function
 
     Private Shared Function PaiesDuLot(lotId As Integer) As DataTable
-        Return Db.Table(
-            "SELECT p.*, e.Prenom, e.Nom, e.DepotDirect FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId " &
-            "JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c ORDER BY e.Nom, e.Prenom",
+        Return Db.Table("paie.spPaie_DuLot",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
 
@@ -95,7 +93,7 @@ Public NotInheritable Class RenduPaie
 
         sb.Append("<details><summary>Détail et vérification des calculs - ").Append(H(p.Txt("Prenom") & " " & p.Txt("Nom"))).Append("</summary>")
         sb.Append("<table class=""liste""><thead><tr><th>Ligne</th><th class=""num"">Heures</th><th class=""num"">Taux</th><th class=""num"">Montant</th></tr></thead><tbody>")
-        For Each l As DataRow In Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p ORDER BY Id", Db.P("@p", p.Ent("Id"))).Rows
+        For Each l As DataRow In Db.Table("paie.spPaieLigne_Liste", Db.P("@p", p.Ent("Id"))).Rows
             sb.Append("<tr><td>").Append(H(l.Txt("Description"))).Append("</td><td class=""num"">").Append(If(l.Dcm("Heures") > 0D, Nombre(l("Heures")), ""))
             sb.Append("</td><td class=""num"">").Append(If(l.Dcm("Taux") > 0D, Argent(l("Taux")), "")).Append("</td><td class=""num"">").Append(Argent(l("Montant"))).Append("</td></tr>")
         Next
@@ -123,20 +121,11 @@ Public NotInheritable Class RenduPaie
 
     ''' <summary>Grand total du lot en trois colonnes : revenus et avantages, déductions, parts de l'employeur.</summary>
     Public Shared Function SommaireLot(lotId As Integer) As String
-        Dim totaux = Db.Ligne(
-            "SELECT ISNULL(SUM(ImpotFederal),0) ImpotFederal, ISNULL(SUM(ImpotQuebec),0) ImpotQuebec, ISNULL(SUM(RRQ),0) RRQ, ISNULL(SUM(RRQ2),0) RRQ2, " &
-            "ISNULL(SUM(AE),0) AE, ISNULL(SUM(RQAP),0) RQAP, ISNULL(SUM(EmployeurRRQ),0) EmployeurRRQ, ISNULL(SUM(EmployeurRRQ2),0) EmployeurRRQ2, " &
-            "ISNULL(SUM(EmployeurAE),0) EmployeurAE, ISNULL(SUM(EmployeurRQAP),0) EmployeurRQAP, ISNULL(SUM(EmployeurFSS),0) EmployeurFSS, " &
-            "ISNULL(SUM(EmployeurCNESST),0) EmployeurCNESST, ISNULL(SUM(EmployeurCNT),0) EmployeurCNT, ISNULL(MAX(p.Province), N'QC') Province " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c",
+        Dim totaux = Db.Ligne("paie.spPaie_TotauxLot",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         Dim noms = LibellesProvince.Pour(totaux.Txt("Province"))
 
-        Dim lignes = Db.Table(
-            "SELECT pl.Description, CASE WHEN pl.CategorieCode LIKE 'DED[_]%' THEN 1 ELSE 0 END AS EstDeduction, SUM(pl.Montant) AS Montant " &
-            "FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
-            "WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c " &
-            "GROUP BY pl.Description, CASE WHEN pl.CategorieCode LIKE 'DED[_]%' THEN 1 ELSE 0 END ORDER BY pl.Description",
+        Dim lignes = Db.Table("paie.spPaieLigne_SommaireLot",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
 
         Dim revenus As New List(Of KeyValuePair(Of String, Decimal))()
@@ -180,27 +169,14 @@ Public NotInheritable Class RenduPaie
     ''' </summary>
     Public Shared Function Lire(paieId As Integer) As DonneesTalon
         Dim d As New DonneesTalon()
-        Dim p = Db.Ligne(
-            "SELECT p.*, p.Province AS ProvincePaie, l.DateDebutPeriode, l.DateFinPeriode, l.DatePaie, l.Statut, l.Id AS LotId, " &
-            "e.Prenom, e.Nom, e.Code, e.Adresse1, e.Adresse2, e.Ville, e.Province AS EmployeProvince, e.CodePostal, e.DepotDirect, " &
-            "c.Nom AS CompagnieNom, c.Adresse1 AS CAdresse1, c.Ville AS CVille, c.Province AS CProvince, c.CodePostal AS CCodePostal " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
-            "WHERE p.Id = @p AND l.CompagnieId = @c", Db.P("@p", paieId), Db.P("@c", Contexte.CompagnieId))
+        Dim p = Db.Ligne("paie.spPaie_Talon", Db.P("@p", paieId), Db.P("@c", Contexte.CompagnieId))
         If p Is Nothing Then Return d
 
         Dim datePaie = p.DtN("DatePaie").Value
-        Dim cumul = Db.Ligne(
-            "SELECT ISNULL(SUM(x.BrutVerse),0) Brut, ISNULL(SUM(x.ImpotFederal),0) ImpotFederal, ISNULL(SUM(x.ImpotQuebec),0) ImpotQuebec, " &
-            "ISNULL(SUM(x.RRQ + x.RRQ2),0) RRQ, ISNULL(SUM(x.AE),0) AE, ISNULL(SUM(CASE WHEN x.Province = N'QC' THEN x.RQAP ELSE 0 END),0) RQAP, " &
-            "ISNULL(SUM(CASE WHEN x.Province <> N'QC' THEN x.RQAP ELSE 0 END),0) ImpotPaie, ISNULL(SUM(x.AutresDeductions),0) Autres, ISNULL(SUM(x.Net),0) Net " &
-            "FROM paie.Paie x JOIN paie.LotPaie lx ON lx.Id = x.LotPaieId " &
-            "WHERE x.EmployeId = @e AND x.Inclus = 1 AND YEAR(lx.DatePaie) = @a AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))",
+        Dim cumul = Db.Ligne("paie.spPaie_CumulTalon",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId")))
-        Dim depart = Db.Ligne("SELECT * FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a", Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year))
-        Dim soldeVacances = Convert.ToDecimal(Db.Scalaire(
-            "SELECT ISNULL((SELECT SUM(VacancesSolde) FROM paie.CumulatifDepart WHERE EmployeId = @e), 0) + " &
-            "ISNULL((SELECT SUM(x.VacancesAccumulees - x.VacancesPayees) FROM paie.Paie x JOIN paie.LotPaie lx ON lx.Id = x.LotPaieId " &
-            "        WHERE x.EmployeId = @e AND x.Inclus = 1 AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))), 0)",
+        Dim depart = Db.Ligne("paie.spCumulatifDepart_Get", Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year))
+        Dim soldeVacances = Convert.ToDecimal(Db.Scalaire("paie.spPaie_SoldeVacances",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId"))))
 
         d.Trouve = True
@@ -223,7 +199,7 @@ Public NotInheritable Class RenduPaie
         d.DepotDirect = p.Bln("DepotDirect")
         If Not p.IsNull("NumeroCheque") Then d.NumeroCheque = p.Ent("NumeroCheque")
 
-        Dim lignes = Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p AND MasquerSurTalon = 0 ORDER BY Id", Db.P("@p", paieId))
+        Dim lignes = Db.Table("paie.spPaieLigne_Talon", Db.P("@p", paieId))
         For Each l As DataRow In lignes.Select("CategorieCode NOT LIKE 'DED_%'")
             d.Revenus.Add(New LigneTalon With {
                 .Description = l.Txt("Description"), .Heures = l.Dcm("Heures"), .Taux = l.Dcm("Taux"), .Montant = l.Dcm("Montant")})

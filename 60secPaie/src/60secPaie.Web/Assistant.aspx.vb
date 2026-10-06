@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports System.Text.RegularExpressions
 
 ''' <summary>
@@ -54,7 +54,7 @@ Public Class PageAssistant
         Next
         litLegende.Text = If(sb.Length = 0, Server.HtmlEncode(Tr("Aucun employé.")), sb.ToString())
 
-        Dim profil = Convert.ToString(Db.Scalaire("SELECT ProfilGenere FROM paie.ProfilIA WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)))
+        Dim profil = Convert.ToString(Db.Scalaire("paie.spProfilIA_ProfilGenere", Db.P("@c", Contexte.CompagnieId)))
         litProfil.Text = If(profil.Length = 0, Server.HtmlEncode(Tr("Pas encore généré.")), Server.HtmlEncode(profil))
     End Sub
 

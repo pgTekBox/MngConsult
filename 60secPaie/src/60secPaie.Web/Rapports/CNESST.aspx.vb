@@ -1,4 +1,4 @@
-Imports System.Globalization
+﻿Imports System.Globalization
 Imports System.Text
 Imports Paie60Sec.Calcul
 
@@ -31,7 +31,7 @@ Public Class PageCNESST
         Dim prm = ParametresAnnee.Pour(AnneeChoisie)
         Dim prmProvince = If(horsQuebec, prm.PourProvince(Contexte.Province, New Date(AnneeChoisie, 12, 31)), Nothing)
         Dim maximum = If(Not horsQuebec, prm.CNESSTMaxAssurable, If(prmProvince Is Nothing, 0D, prmProvince.AccidentsMaxAssurable))
-        Dim taux = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
+        Dim taux = Convert.ToDecimal(Db.Scalaire("paie.spCompagnie_TauxCNESST", Db.P("@c", Contexte.CompagnieId)))
 
         If horsQuebec Then Title = "Gains assurables " & noms.Accidents
         Dim sb As New StringBuilder("<div class=""carte table-defilante""><table class=""liste""><thead><tr><th>Employé</th><th>")

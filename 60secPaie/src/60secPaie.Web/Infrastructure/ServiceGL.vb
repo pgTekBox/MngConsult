@@ -1,4 +1,4 @@
-Imports System.Data.SqlClient
+﻿Imports System.Data.SqlClient
 Imports Paie60Sec.Calcul
 
 Public Class LigneGL
@@ -82,7 +82,7 @@ Public NotInheritable Class ServiceGL
 
     Public Shared Function Comptes() As Dictionary(Of String, String)
         Dim d As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
-        For Each r As DataRow In Db.Table("SELECT Cle, Compte FROM paie.CompteGL WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)).Rows
+        For Each r As DataRow In Db.Table("paie.spCompteGL_Liste", Db.P("@c", Contexte.CompagnieId)).Rows
             d(r.Txt("Cle")) = r.Txt("Compte")
         Next
         Return d
@@ -90,32 +90,27 @@ Public NotInheritable Class ServiceGL
 
     Public Shared Sub EnregistrerCompte(cle As String, compte As String)
         If Not Cles.Any(Function(k) k.Cle = cle) Then Throw New SaisieInvalideException("Clé de compte invalide.")
-        Db.Exec("DELETE FROM paie.CompteGL WHERE CompagnieId = @c AND Cle = @k", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle))
+        Db.Exec("paie.spCompteGL_Supprimer", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle))
         If Not String.IsNullOrWhiteSpace(compte) Then
-            Db.Exec("INSERT INTO paie.CompteGL (CompagnieId, Cle, Compte) VALUES (@c, @k, @v)", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle), Db.P("@v", compte.Trim()))
+            Db.Exec("paie.spCompteGL_Inserer", Db.P("@c", Contexte.CompagnieId), Db.P("@k", cle), Db.P("@v", compte.Trim()))
         End If
     End Sub
 
     Public Shared Function EcrituresDuLot(lotId As Integer) As List(Of LigneGL)
-        Return Ecritures("l.Id = @lot AND l.Statut <> 'A'", Function() {Db.P("@c", Contexte.CompagnieId), Db.P("@lot", lotId)})
+        Return Ecritures(Function() {Db.P("@c", Contexte.CompagnieId), Db.P("@lot", lotId)})
     End Function
 
     Public Shared Function EcrituresDeLaPeriode(du As Date, au As Date) As List(Of LigneGL)
-        Return Ecritures("l.Statut = 'C' AND l.DatePaie BETWEEN @du AND @au", Function() {Db.P("@c", Contexte.CompagnieId), Db.P("@du", du), Db.P("@au", au)})
+        Return Ecritures(Function() {Db.P("@c", Contexte.CompagnieId), Db.P("@du", du), Db.P("@au", au)})
     End Function
 
-    ''' <summary>Écriture équilibrée : dépenses au débit ; retenues, cotisations à payer et paies nettes au crédit.</summary>
-    Private Shared Function Ecritures(filtre As String, prms As Func(Of SqlParameter())) As List(Of LigneGL)
-        Dim portee = "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre
-        Dim t = Db.Ligne(
-            "SELECT ISNULL(SUM(p.ImpotFederal),0) ImpotFederal, ISNULL(SUM(p.ImpotQuebec),0) ImpotQuebec, ISNULL(SUM(p.RRQ + p.RRQ2),0) RRQ, ISNULL(SUM(p.AE),0) AE, " &
-            "ISNULL(SUM(p.RQAP),0) RQAP, ISNULL(SUM(p.Net),0) Net, ISNULL(SUM(p.EmployeurRRQ + p.EmployeurRRQ2),0) ERRQ, ISNULL(SUM(p.EmployeurAE),0) EAE, " &
-            "ISNULL(SUM(p.EmployeurRQAP),0) ERQAP, ISNULL(SUM(p.EmployeurFSS),0) FSS, ISNULL(SUM(p.EmployeurCNESST),0) CNESST, ISNULL(SUM(p.EmployeurCNT),0) CNT, " &
-            "ISNULL(SUM(p.VacancesAccumulees),0) Vacances " & portee, prms())
-        Dim lignesPaie = Db.Table(
-            "SELECT el.Description, el.CompteGL, pl.CategorieCode, SUM(pl.Montant) AS Montant FROM paie.PaieLigne pl JOIN paie.ElementPaie el ON el.Id = pl.ElementPaieId " &
-            "JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND p.Inclus = 1 AND " & filtre &
-            " GROUP BY el.Description, el.CompteGL, pl.CategorieCode ORDER BY el.Description", prms())
+    ''' <summary>
+    ''' Écriture équilibrée : dépenses au débit ; retenues, cotisations à payer et paies nettes au crédit.
+    ''' Les paies visées sont celles du lot (@lot, non annulé) ou de la période (@du..@au, confirmées) : procédures paie.spGL_Totaux et paie.spGL_Lignes.
+    ''' </summary>
+    Private Shared Function Ecritures(prms As Func(Of SqlParameter())) As List(Of LigneGL)
+        Dim t = Db.Ligne("paie.spGL_Totaux", prms())
+        Dim lignesPaie = Db.Table("paie.spGL_Lignes", prms())
 
         Dim cpt = Comptes()
         Dim debits As New List(Of LigneGL)()
@@ -181,10 +176,9 @@ Public NotInheritable Class ServiceCNESST
     Private Sub New()
     End Sub
 
-    ' Le rapport est celui de l'organisme de la province de la compagnie : seules les paies de cette
+    ' Le rapport est celui de l'organisme de la province de la compagnie (@prov) : seules les paies de cette
     ' province y entrent. Une compagnie qui a changé de province en cours d'année a donc deux rapports
     ' distincts, celui de la CNESST avant et celui de l'autre commission après (ou l'inverse).
-    Private Const Filtre As String = "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a AND p.Province = @prov"
 
     Private Shared Function Prms(annee As Integer) As SqlParameter()
         Return {Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee), Db.P("@prov", Provinces.Code(Contexte.Province))}
@@ -197,18 +191,8 @@ Public NotInheritable Class ServiceCNESST
     ''' veut la Déclaration des salaires. L'unité est celle figée sur chaque paie.
     ''' </summary>
     Public Shared Function ParEmploye(annee As Integer) As DataTable
-        Dim t = Db.Table(
-            "SELECT e.Id, e.Nom, e.Prenom, e.ExemptCNESST, ISNULL(u.Code, N'') AS Unite, ISNULL(u.Description, N'') AS UniteDescription, " &
-            "ISNULL(p.UniteCNESSTId, 0) AS UniteId, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation, " &
-            "CAST(0 AS decimal(14,2)) AS Brut, CAST(0 AS decimal(14,2)) AS Excedent " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId " &
-            "LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
-            " GROUP BY e.Id, e.Nom, e.Prenom, e.ExemptCNESST, u.Code, u.Description, ISNULL(p.UniteCNESSTId, 0) ORDER BY e.Nom, e.Prenom, u.Code",
-            Prms(annee))
-        Dim lignes = Db.Table(
-            "SELECT p.EmployeId, ISNULL(p.UniteCNESSTId, 0) AS UniteId, pl.CategorieCode, SUM(pl.Montant) AS Montant " &
-            "FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre &
-            " GROUP BY p.EmployeId, ISNULL(p.UniteCNESSTId, 0), pl.CategorieCode", Prms(annee))
+        Dim t = Db.Table("paie.spCNESST_ParEmploye", Prms(annee))
+        Dim lignes = Db.Table("paie.spCNESST_LignesParEmploye", Prms(annee))
 
         t.Columns("Brut").ReadOnly = False
         t.Columns("Excedent").ReadOnly = False
@@ -229,26 +213,16 @@ Public NotInheritable Class ServiceCNESST
     ''' compagnie ». C'est le tableau à recopier dans la Déclaration des salaires.
     ''' </summary>
     Public Shared Function ParUnite(annee As Integer) As DataTable
-        Return Db.Table(
-            "SELECT ISNULL(u.Code, N'') AS Code, ISNULL(u.Description, N'Taux de la compagnie') AS Description, MAX(p.TauxCNESST) AS Taux, " &
-            "COUNT(DISTINCT p.EmployeId) AS NbEmployes, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
-            " GROUP BY u.Code, u.Description ORDER BY CASE WHEN u.Code IS NULL THEN 1 ELSE 0 END, u.Code",
-            Prms(annee))
+        Return Db.Table("paie.spCNESST_ParUnite", Prms(annee))
     End Function
 
     Public Shared Function ParMois(annee As Integer) As DataTable
-        Return Db.Table(
-            "SELECT MONTH(l.DatePaie) AS Mois, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY MONTH(l.DatePaie) ORDER BY Mois",
-            Prms(annee))
+        Return Db.Table("paie.spCNESST_ParMois", Prms(annee))
     End Function
 
     ''' <summary>Versements périodiques à la CNESST compris dans les remises à Revenu Québec enregistrées pour l'année.</summary>
     Public Shared Function VersementsPayes(annee As Integer) As Decimal
-        Return Convert.ToDecimal(Db.Scalaire(
-            "SELECT ISNULL(SUM(rl.Montant), 0) FROM paie.RemiseLigne rl JOIN paie.Remise r ON r.Id = rl.RemiseId " &
-            "WHERE r.CompagnieId = @c AND r.Statut = 'P' AND rl.Code = 'CNESST' AND YEAR(r.DateFinPeriode) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)))
+        Return Convert.ToDecimal(Db.Scalaire("paie.spCNESST_VersementsPayes", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)))
     End Function
 
 End Class

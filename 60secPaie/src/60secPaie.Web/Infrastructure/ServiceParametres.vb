@@ -1,4 +1,4 @@
-Imports Paie60Sec.Calcul
+﻿Imports Paie60Sec.Calcul
 
 ''' <summary>
 ''' Fournit au moteur les taux d'une année depuis la base (paie.ParametresAnnee),
@@ -30,7 +30,7 @@ Public NotInheritable Class ServiceParametres
 
             Dim p As ParametresAnnee = Nothing
             Try
-                Dim r = Db.Ligne("EXEC paie.spParametresAnnee_Get @Annee = @a, @SeulementValide = 1", Db.P("@a", annee))
+                Dim r = Db.Ligne("paie.spParametresAnnee_Get", Db.P("@Annee", annee), Db.P("@SeulementValide", 1))
                 p = ParametresAnnee.DepuisLigne(r)
                 If p IsNot Nothing Then ChargerProvinces(p)
             Catch ex As Exception
@@ -52,8 +52,7 @@ Public NotInheritable Class ServiceParametres
     ''' </summary>
     Private Shared Sub ChargerProvinces(p As ParametresAnnee)
         Try
-            Dim lignes = Db.Table("SELECT Province, EnVigueurLe, Tranches, MontantPersonnelBase, TauxCredits, Particularites, AccidentsMaxAssurable " &
-                                  "FROM paie.ParametresProvince WHERE Annee = @a", Db.P("@a", p.Annee))
+            Dim lignes = Db.Table("paie.spParametresProvince_Annee", Db.P("@a", p.Annee))
             Dim liste As New List(Of ParametresProvince)()
             For Each ligne As DataRow In lignes.Rows
                 liste.Add(ParametresProvince.DepuisLigne(ligne))

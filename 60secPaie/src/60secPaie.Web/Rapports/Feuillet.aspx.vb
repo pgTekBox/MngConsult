@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 ''' <summary>Feuillet de travail d'un employé : toutes les cases du T4 et du Relevé 1, à reporter dans les services en ligne.</summary>
@@ -21,7 +21,7 @@ Public Class PageFeuillet
         Dim f = ServiceFeuillets.Preparer(annee).FirstOrDefault(Function(x) x.Employe.Ent("Id") = IdRequete("employe"))
         If f Is Nothing Then Response.Redirect("~/Rapports/Feuillets.aspx", True)
 
-        Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Dim emp = f.Employe
         Dim nas = NasDe(emp)
         Dim nasAffiche = If(nas.Length = 0, "NAS manquant dans la fiche", If(_nasComplet, nas, Secret.Masquer(nas)))

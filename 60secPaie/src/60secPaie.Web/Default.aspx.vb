@@ -1,10 +1,10 @@
-Public Class PageAccueil
+﻿Public Class PageAccueil
     Inherits PageBase
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         Dim c = Db.P("@c", Contexte.CompagnieId)
-        Dim nbEmployes = Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Employe WHERE CompagnieId = @c AND Actif = 1", c)
-        Dim derniere = Db.Scalaire("SELECT MAX(DatePaie) FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C'", Db.P("@c", Contexte.CompagnieId))
+        Dim nbEmployes = Db.ScalaireEntier("paie.spEmploye_NbActifs", c)
+        Dim derniere = Db.Scalaire("paie.spLotPaie_DernierePaieConfirmee", Db.P("@c", Contexte.CompagnieId))
 
         litResume.Text = Server.HtmlEncode(
             nbEmployes.ToString() & If(nbEmployes > 1, " employés actifs", " employé actif") & " · " &
@@ -20,7 +20,7 @@ Public Class PageAccueil
         litRetenues.Text = LigneSolde(ServiceRemise.Federal, "Fédéral") &
                            If(ServiceRemise.QuebecConcerne(), LigneSolde(ServiceRemise.Quebec, "Revenu Québec"), "")
 
-        Dim activites = Db.Table("SELECT TOP 8 * FROM paie.JournalActivite WHERE CompagnieId = @c ORDER BY Id DESC", Db.P("@c", Contexte.CompagnieId))
+        Dim activites = Db.Table("paie.spJournalActivite_Recents", Db.P("@c", Contexte.CompagnieId))
         rptActivites.DataSource = activites
         rptActivites.DataBind()
         rptActivites.Visible = activites.Rows.Count > 0

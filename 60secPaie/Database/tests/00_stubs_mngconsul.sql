@@ -30,21 +30,21 @@ CREATE TABLE dbo.T015User (
     IsDeleted bit NOT NULL DEFAULT (0),
     isAccountant bit NULL
 );
-CREATE TABLE dbo.T053State (Id int IDENTITY(1,1) NOT NULL PRIMARY KEY, Name varchar(200) NULL);
-INSERT INTO dbo.T053State (Name) VALUES ('unknown'), ('Quebec'), ('Ontario');
+CREATE TABLE dbo.T053State (Id int IDENTITY(1,1) NOT NULL PRIMARY KEY, Name varchar(200) NULL, CountryId int NULL);
+INSERT INTO dbo.T053State (Name, CountryId) VALUES ('unknown', 1), ('Quebec', 1), ('Ontario', 1);
 CREATE TABLE dbo.T300Employees (
     Id int IDENTITY(1,1) NOT NULL PRIMARY KEY,
     EmployeeGUID uniqueidentifier NOT NULL DEFAULT (NEWID()),
     CompanyGUID uniqueidentifier NULL,
     EmployeeNumber varchar(50) NULL,
-    FirstName varchar(150) NULL, LastName varchar(150) NULL,
+    FirstName varchar(150) NULL, LastName varchar(150) NULL, DisplayName varchar(300) NULL,
     DateOfBirth date NULL, [SIN] varchar(20) NULL,
     Email varchar(200) NULL, Phone varchar(50) NULL, Mobile varchar(50) NULL,
-    Address1 varchar(500) NULL, Address2 varchar(500) NULL, City varchar(100) NULL, StateId int NULL, PostalCode varchar(20) NULL,
+    Address1 varchar(500) NULL, Address2 varchar(500) NULL, City varchar(100) NULL, StateId int NULL, CountryId int NULL, PostalCode varchar(20) NULL,
     JobTitle varchar(150) NULL, HireDate date NULL, TerminationDate date NULL,
     HourlyRate decimal(15,2) NULL, AnnualSalary decimal(15,2) NULL, PayFrequency varchar(50) NULL,
     BankTransit varchar(20) NULL, BankInstitution varchar(20) NULL, BankAccount varchar(50) NULL,
-    Active bit NULL
+    Active bit NULL, Created datetime NULL, CreatedBy int NULL
 );
 -- Dans MngConsul, le nom et l'adresse d'une compagnie sont des paramètres (T100ParamComptable / T101ParamValues).
 CREATE TABLE dbo.StubParam (CompanyGUID uniqueidentifier NOT NULL, ShortName varchar(50) NOT NULL, sVal varchar(8000) NULL, PRIMARY KEY (CompanyGUID, ShortName));

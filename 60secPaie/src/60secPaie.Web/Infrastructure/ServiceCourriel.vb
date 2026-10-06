@@ -1,4 +1,4 @@
-Imports System.Configuration
+﻿Imports System.Configuration
 Imports System.IO
 Imports System.Net.Mail
 Imports System.Text
@@ -84,16 +84,12 @@ Public NotInheritable Class ServiceCourriel
 
     ''' <summary>Employés du lot qui reçoivent leur talon par courriel.</summary>
     Public Shared Function Destinataires(lotId As Integer) As DataTable
-        Return Db.Table(
-            "SELECT p.Id AS PaieId, p.TalonEnvoyeLe, e.Prenom, e.Nom, e.Courriel, e.Langue FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
-            "JOIN paie.Employe e ON e.Id = p.EmployeId WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND e.TalonParCourriel = 1 " &
-            "ORDER BY e.Nom, e.Prenom", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Return Db.Table("paie.spPaie_Destinataires", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
     End Function
 
     ''' <summary>Envoie les talons du lot. Par défaut, ceux déjà envoyés ne sont pas renvoyés.</summary>
     Public Shared Function EnvoyerTalons(lotId As Integer, renvoyer As Boolean) As Bilan
-        Dim lot = Db.Ligne("SELECT l.*, c.Nom AS CompagnieNom, c.Courriel AS CompagnieCourriel FROM paie.LotPaie l JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
-                           "WHERE l.Id = @l AND l.CompagnieId = @c AND l.Statut = 'C'", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Dim lot = Db.Ligne("paie.spLotPaie_PourEnvoi", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         If lot Is Nothing Then Throw New SaisieInvalideException("Les talons s'envoient à partir d'une paie confirmée.")
 
         Dim destinataires = ServiceCourriel.Destinataires(lotId)
@@ -134,7 +130,7 @@ Public NotInheritable Class ServiceCourriel
                 Joindre(courriel, paieId, langue)
                 transport.Envoyer(courriel)
 
-                Db.Exec("UPDATE paie.Paie SET TalonEnvoyeLe = sysdatetime() WHERE Id = @p", Db.P("@p", d.Ent("PaieId")))
+                Db.Exec("paie.spPaie_TalonEnvoye", Db.P("@p", d.Ent("PaieId")))
                 bilan.Envoyes += 1
             Catch ex As FormatException
                 bilan.Erreurs.Add(nom & " : " & Tr("adresse de courriel invalide."))

@@ -1,4 +1,4 @@
-Public Class PageConfigDepotDirect
+﻿Public Class PageConfigDepotDirect
     Inherits PageBase
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
@@ -6,7 +6,7 @@ Public Class PageConfigDepotDirect
     End Sub
 
     Private Sub Charger()
-        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         txtEmetteur.Text = c.Txt("DDNumeroEmetteur")
         txtCentre.Text = c.Txt("DDCentreTraitement")
         txtNomCourt.Text = c.Txt("DDNomCourt")
@@ -30,14 +30,13 @@ Public Class PageConfigDepotDirect
             Dim prochain = If(EntierN(txtProchain.Text, "Prochain numéro de fichier"), 1)
             If prochain < 1 OrElse prochain > 9999 Then Throw New SaisieInvalideException("Le numéro de fichier doit se situer entre 1 et 9999.")
 
-            Db.Exec("UPDATE paie.Compagnie SET DDNumeroEmetteur=@e, DDCentreTraitement=@ct, DDNomCourt=@nc, DDNomLong=@nl, DDInstitution=@i, DDTransit=@t, " &
-                    "DDProchainNumeroFichier=@p WHERE Id=@c",
+            Db.Exec("paie.spCompagnie_UpdateDepotDirect",
                     Db.P("@e", txtEmetteur.Text.Trim().ToUpperInvariant()), Db.P("@ct", centre), Db.P("@nc", txtNomCourt.Text.Trim()), Db.P("@nl", txtNomLong.Text.Trim()),
                     Db.P("@i", institution), Db.P("@t", transit), Db.P("@p", prochain), Db.P("@c", Contexte.CompagnieId))
 
             Dim compte = Chiffres(txtCompte.Text)
             If compte.Length > 0 Then
-                Db.Exec("UPDATE paie.Compagnie SET DDCompteChiffre=@v WHERE Id=@c", Db.P("@v", Secret.Proteger(compte)), Db.P("@c", Contexte.CompagnieId))
+                Db.Exec("paie.spCompagnie_UpdateDDCompte", Db.P("@v", Secret.Proteger(compte)), Db.P("@c", Contexte.CompagnieId))
             End If
             Charger()
             Succes("Paramètres de dépôt direct enregistrés.")

@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 ''' <summary>
@@ -35,7 +35,7 @@ Public Class PageCompagnie
         AfficherIdentite()
         If IsPostBack Then Return
 
-        Dim c = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim c = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         If c Is Nothing Then
             txtTauxVacances.Text = "4"
             txtFacteurAE.Text = Champ(1.4D)
@@ -175,12 +175,7 @@ Public Class PageCompagnie
 
             If Contexte.CompagnieId = 0 Then
                 ' Première configuration de la paie pour cette compagnie de MngConsul.
-                Dim id = Db.Inserer(
-                    "INSERT INTO paie.Compagnie (CompanyGUID, Nom, PeriodesParAnnee, MasseSalarialeEstimee, SecteurFSS, FacteurAE, TauxVacancesDefaut, TauxCNESST, " &
-                    "AssujettiCNT, NumeroEntrepriseFederal, NumeroIdentificationRQ, ProchainNumeroCheque, FrequenceRemiseFederale, FrequenceRemiseQuebec, " &
-                    "Province, ISEExemptionAdmissible, TauxSanteEmployeur) " &
-                    "VALUES (@Guid, @Nom, @Periodes, @Masse, @Secteur, @FacteurAE, @TauxVacances, @TauxCNESST, @CNT, @NEFederal, @NIRQ, @Cheque, @FreqFed, @FreqQc, " &
-                    "@Province, @ISE, @TauxSante)", prms)
+                Dim id = Db.Inserer("paie.spCompagnie_Inserer", prms)
                 CreerElementsDeBase(id)
                 Contexte.OublierCompagnie()
                 Contexte.SynchroniserCompagnie()
@@ -189,22 +184,16 @@ Public Class PageCompagnie
             Else
                 Dim provinceAvant = Provinces.Code(Contexte.Province)
                 Dim compagnieId = Contexte.CompagnieId
-                Db.Exec(
-                    "UPDATE paie.Compagnie SET PeriodesParAnnee=@Periodes, MasseSalarialeEstimee=@Masse, SecteurFSS=@Secteur, FacteurAE=@FacteurAE, " &
-                    "TauxVacancesDefaut=@TauxVacances, TauxCNESST=@TauxCNESST, AssujettiCNT=@CNT, NumeroEntrepriseFederal=@NEFederal, " &
-                    "NumeroIdentificationRQ=@NIRQ, ProchainNumeroCheque=@Cheque, FrequenceRemiseFederale=@FreqFed, FrequenceRemiseQuebec=@FreqQc, " &
-                    "Province=@Province, ISEExemptionAdmissible=@ISE, TauxSanteEmployeur=@TauxSante " &
-                    "WHERE Id=@Id AND CompanyGUID=@Guid", prms)
+                Db.Exec("paie.spCompagnie_Update", prms)
                 Contexte.OublierCompagnie()
                 AfficherProvince()
                 AfficherTaux(masse, secteur)
                 If provinceAvant <> province Then
                     ' Une paie en préparation a été calculée avec l'ancienne province : elle est à recalculer.
-                    Db.Exec("UPDATE paie.LotPaie SET Calcule = 0 WHERE CompagnieId = @c AND Statut = 'B'; " &
-                            "UPDATE p SET Province = @prov FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE l.CompagnieId = @c AND l.Statut = 'B'",
+                    Db.Exec("paie.spCompagnie_ChangerProvinceBrouillons",
                             Db.P("@c", compagnieId), Db.P("@prov", province))
                     Contexte.Journaliser("Province d'emploi de la compagnie changée : " & provinceAvant & " → " & province & ".")
-                    Dim dejaPayee = Db.ScalaireEntier("SELECT COUNT(*) FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' AND YEAR(DatePaie) = @a",
+                    Dim dejaPayee = Db.ScalaireEntier("paie.spLotPaie_NbConfirmesAnnee",
                                                       Db.P("@c", compagnieId), Db.P("@a", Date.Today.Year)) > 0
                     If dejaPayee Then
                         Succes("Paramètres de paie enregistrés. La province d'emploi a changé en cours d'année : les paies déjà confirmées gardent la leur. Vérifiez les taux de l'employeur, les unités de classification et les formulaires de crédits des employés, qui étaient ceux de l'autre province, et prévoyez un T4 par province pour les employés payés dans les deux.")
@@ -223,7 +212,7 @@ Public Class PageCompagnie
     ''' <summary>Éléments de paie de départ, pour pouvoir faire une première paie sans configuration.</summary>
     Private Shared Sub CreerElementsDeBase(compagnieId As Integer)
         For Each code In {"SALAIRE", "SALAIRE_FIXE", "TEMPS_DEMI", "FERIE", "VACANCES", "BONUS"}
-            Db.Exec("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, @d, @code)",
+            Db.Exec("paie.spElementPaie_Inserer",
                     Db.P("@c", compagnieId), Db.P("@d", CategoriePaie.ParCode(code).Libelle), Db.P("@code", code))
         Next
     End Sub

@@ -1,4 +1,4 @@
-Imports Paie60Sec.Calcul
+﻿Imports Paie60Sec.Calcul
 
 ''' <summary>
 ''' Cycle de vie d'un lot de paie : brouillon, calcul, confirmation, annulation.
@@ -22,7 +22,7 @@ Public NotInheritable Class ServicePaie
     End Function
 
     Public Shared Function LotBrouillon() As DataRow
-        Return Db.Ligne("SELECT TOP 1 * FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'B' ORDER BY Id DESC",
+        Return Db.Ligne("paie.spLotPaie_Brouillon",
                         Db.P("@c", Contexte.CompagnieId))
     End Function
 
@@ -38,35 +38,27 @@ Public NotInheritable Class ServicePaie
             Throw New SaisieInvalideException("Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord.")
         End If
 
-        Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Dim debut = DebutPeriode(finPeriode, periodes)
 
-        Dim employes = Db.Table(
-            "SELECT * FROM paie.Employe WHERE CompagnieId = @c AND Actif = 1 AND PaieConfiguree = 1 AND ISNULL(PeriodesParAnnee, @pDefaut) = @p " &
-            "AND (DateEmbauche IS NULL OR DateEmbauche <= @fin) AND (DateFinEmploi IS NULL OR DateFinEmploi >= @debut) ORDER BY Nom, Prenom",
+        Dim employes = Db.Table("paie.spEmploye_PourLot",
             Db.P("@c", Contexte.CompagnieId), Db.P("@pDefaut", compagnie.Ent("PeriodesParAnnee")), Db.P("@p", periodes),
             Db.P("@fin", finPeriode), Db.P("@debut", debut))
         If employes.Rows.Count = 0 Then
             Throw New SaisieInvalideException(Tr("Aucun employé actif dont la paie est configurée n'est payé à cette fréquence pour cette période. Vérifiez la page Employés."))
         End If
 
-        Dim lotId = Db.Inserer(
-            "INSERT INTO paie.LotPaie (CompagnieId, PeriodesParAnnee, DateDebutPeriode, DateFinPeriode, DatePaie, CreePar) VALUES (@c, @p, @debut, @fin, @paie, @u)",
+        Dim lotId = Db.Inserer("paie.spLotPaie_Inserer",
             Db.P("@c", Contexte.CompagnieId), Db.P("@p", periodes), Db.P("@debut", debut), Db.P("@fin", finPeriode),
             Db.P("@paie", datePaie), Db.P("@u", Contexte.Utilisateur))
 
         For Each emp As DataRow In employes.Rows
             Dim tauxVacances = If(emp.DcmN("TauxVacances"), compagnie.Dcm("TauxVacancesDefaut"))
-            Dim paieId = Db.Inserer("INSERT INTO paie.Paie (LotPaieId, EmployeId, TauxVacances, Province) VALUES (@l, @e, @v, @prov)",
+            Dim paieId = Db.Inserer("paie.spPaie_Inserer",
                                     Db.P("@l", lotId), Db.P("@e", emp.Ent("Id")), Db.P("@v", tauxVacances),
                                     Db.P("@prov", Provinces.Code(Contexte.Province)))
 
-            Dim copiees = Db.Exec(
-                "INSERT INTO paie.PaieLigne (PaieId, ElementPaieId, Description, CategorieCode, Heures, Taux, Montant, MasquerSurTalon) " &
-                "SELECT @paie, el.Id, el.Description, el.CategorieCode, ee.Heures, ee.Taux, ee.Montant, el.MasquerSurTalon " &
-                "FROM paie.EmployeElement ee JOIN paie.ElementPaie el ON el.Id = ee.ElementPaieId WHERE ee.EmployeId = @e AND el.Actif = 1" &
-                FiltreCategoriesDeLaProvince("el"),
-                Db.P("@paie", paieId), Db.P("@e", emp.Ent("Id")))
+            Dim copiees = Db.Exec("paie.spPaieLigne_CopierGabarit", Db.P("@paie", paieId), Db.P("@e", emp.Ent("Id")), Db.P("@CodesExclus", CodesExclusDeLaProvince()))
 
             If copiees = 0 Then AjouterLigneParDefaut(paieId, emp, periodes)
         Next
@@ -85,11 +77,10 @@ Public NotInheritable Class ServicePaie
         Return cat.Type = TypeCategorie.Avantage AndAlso Not cat.ImpotFederal
     End Function
 
-    ''' <summary>« AND alias.CategorieCode NOT IN (…) » pour ces catégories ; vide au Québec. Les codes viennent du code, jamais d'une saisie.</summary>
-    Private Shared Function FiltreCategoriesDeLaProvince(aliasElement As String) As String
-        Dim codes = CategoriePaie.Toutes.Where(Function(c) HorsProvince(c.Code)).Select(Function(c) "'" & c.Code.Replace("'", "''") & "'").ToList()
-        If codes.Count = 0 Then Return ""
-        Return " AND " & aliasElement & ".CategorieCode NOT IN (" & String.Join(", ", codes) & ")"
+    ''' <summary>Catégories qui n'ont pas leur place dans une paie de la province, séparées par des virgules ; Nothing au Québec. Les codes viennent du code, jamais d'une saisie.</summary>
+    Private Shared Function CodesExclusDeLaProvince() As String
+        Dim codes = CategoriePaie.Toutes.Where(Function(c) HorsProvince(c.Code)).Select(Function(c) c.Code).ToList()
+        Return If(codes.Count = 0, Nothing, String.Join(",", codes))
     End Function
 
     ''' <summary>Sans gabarit : salaire horaire (heures/semaine) ou salaire annuel réparti sur les périodes.</summary>
@@ -105,16 +96,16 @@ Public NotInheritable Class ServicePaie
     End Sub
 
     Private Shared Function ElementPourCategorie(code As String) As Integer
-        Dim id = Db.ScalaireEntier("SELECT TOP 1 Id FROM paie.ElementPaie WHERE CompagnieId = @c AND CategorieCode = @code AND Actif = 1 ORDER BY Id",
+        Dim id = Db.ScalaireEntier("paie.spElementPaie_IdParCategorie",
                                    Db.P("@c", Contexte.CompagnieId), Db.P("@code", code))
         If id > 0 Then Return id
-        Return Db.Inserer("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode) VALUES (@c, @d, @code)",
+        Return Db.Inserer("paie.spElementPaie_Inserer",
                           Db.P("@c", Contexte.CompagnieId), Db.P("@d", CategoriePaie.ParCode(code).Libelle), Db.P("@code", code))
     End Function
 
     ''' <summary>Ajoute une ligne à une paie. Le montant est heures × taux × multiplicateur lorsque des heures sont saisies.</summary>
     Public Shared Sub AjouterLigne(paieId As Integer, elementId As Integer, heures As Decimal, taux As Decimal, montant As Decimal)
-        Dim element = Db.Ligne("SELECT * FROM paie.ElementPaie WHERE Id = @id AND CompagnieId = @c", Db.P("@id", elementId), Db.P("@c", Contexte.CompagnieId))
+        Dim element = Db.Ligne("paie.spElementPaie_Get", Db.P("@id", elementId), Db.P("@c", Contexte.CompagnieId))
         If element Is Nothing Then Throw New SaisieInvalideException("Élément de paie introuvable.")
         If HorsProvince(element.Txt("CategorieCode")) Then
             Throw New SaisieInvalideException("Cet avantage n'est imposable qu'au Québec : il ne s'ajoute pas à une paie d'une autre province.")
@@ -123,8 +114,7 @@ Public NotInheritable Class ServicePaie
         Dim total = MontantLigne(element.Txt("CategorieCode"), heures, taux, montant)
         If total <= 0D Then Throw New SaisieInvalideException("Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant).")
 
-        Db.Exec("INSERT INTO paie.PaieLigne (PaieId, ElementPaieId, Description, CategorieCode, Heures, Taux, Montant, MasquerSurTalon) " &
-                "VALUES (@p, @e, @d, @c, @h, @t, @m, @masquer)",
+        Db.Exec("paie.spPaieLigne_Inserer",
                 Db.P("@p", paieId), Db.P("@e", elementId), Db.P("@d", element.Txt("Description")), Db.P("@c", element.Txt("CategorieCode")),
                 Db.P("@h", heures), Db.P("@t", taux), Db.P("@m", total), Db.P("@masquer", element.Bln("MasquerSurTalon")))
         MarquerNonCalcule(paieId)
@@ -138,7 +128,7 @@ Public NotInheritable Class ServicePaie
     End Function
 
     Public Shared Sub MarquerNonCalcule(paieId As Integer)
-        Db.Exec("UPDATE l SET Calcule = 0 FROM paie.LotPaie l JOIN paie.Paie p ON p.LotPaieId = l.Id WHERE p.Id = @p AND l.Statut = 'B'", Db.P("@p", paieId))
+        Db.Exec("paie.spLotPaie_MarquerNonCalcule", Db.P("@p", paieId))
     End Sub
 
     ''' <summary>
@@ -151,13 +141,7 @@ Public NotInheritable Class ServicePaie
     ''' </summary>
     Public Shared Function CumulatifsEmploye(employeId As Integer, annee As Integer, lotExclu As Integer, Optional codeProvince As String = Nothing) As Cumulatifs
         If codeProvince Is Nothing Then codeProvince = Provinces.Code(Contexte.Province)
-        Dim r = Db.Ligne(
-            "SELECT ISNULL(SUM(p.RRQ),0) RRQ, ISNULL(SUM(p.RRQ2),0) RRQ2, ISNULL(SUM(p.GainsRRQ),0) GainsRRQ, ISNULL(SUM(p.AE),0) AE, " &
-            "ISNULL(SUM(CASE WHEN p.Province = N'QC' THEN p.RQAP ELSE 0 END),0) RQAP, ISNULL(SUM(p.EmployeurRQAP),0) RQAPEmployeur, " &
-            "ISNULL(SUM(CASE WHEN p.Province = @prov THEN p.GainsCNESST ELSE 0 END),0) GainsCNESST, " &
-            "ISNULL(SUM(p.ForfaitairesFederal),0) ForfFed, ISNULL(SUM(p.ForfaitairesQuebec),0) ForfQc, ISNULL(SUM(p.CSBForfaitaires),0) CSB " &
-            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
-            "WHERE p.EmployeId = @e AND p.Inclus = 1 AND l.Statut = 'C' AND YEAR(l.DatePaie) = @a AND l.Id <> @lot",
+        Dim r = Db.Ligne("paie.spPaie_Cumulatifs",
             Db.P("@e", employeId), Db.P("@a", annee), Db.P("@lot", lotExclu), Db.P("@prov", codeProvince))
 
         Dim c As New Cumulatifs With {
@@ -165,7 +149,7 @@ Public NotInheritable Class ServicePaie
             .RQAPEmployeur = r.Dcm("RQAPEmployeur"), .GainsCNESST = r.Dcm("GainsCNESST"),
             .ForfaitairesFederal = r.Dcm("ForfFed"), .ForfaitairesQuebec = r.Dcm("ForfQc"), .CSBForfaitaires = r.Dcm("CSB")}
 
-        Dim depart = Db.Ligne("SELECT * FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a", Db.P("@e", employeId), Db.P("@a", annee))
+        Dim depart = Db.Ligne("paie.spCumulatifDepart_Get", Db.P("@e", employeId), Db.P("@a", annee))
         If depart IsNot Nothing Then
             c.RRQ += depart.Dcm("RRQ")
             c.RRQ2 += depart.Dcm("RRQ2")
@@ -183,7 +167,7 @@ Public NotInheritable Class ServicePaie
     ''' <summary>Calcule toutes les paies incluses du lot en brouillon.</summary>
     Public Shared Sub CalculerLot(lotId As Integer)
         Dim lot = LotModifiable(lotId)
-        Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Dim datePaie = lot.DtN("DatePaie").Value
 
         ' La province est celle de la compagnie au moment du calcul ; elle est figée sur chaque paie.
@@ -196,8 +180,7 @@ Public NotInheritable Class ServicePaie
             .TauxCNESST = compagnie.Dcm("TauxCNESST"),
             .AssujettiCNT = provinceEmploi = Province.Quebec AndAlso compagnie.Bln("AssujettiCNT")}
 
-        Dim paies = Db.Table("SELECT p.Id AS PaieId, p.TauxVacances AS TauxVacancesPaie, e.* FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId " &
-                             "WHERE p.LotPaieId = @l AND p.Inclus = 1", Db.P("@l", lotId))
+        Dim paies = Db.Table("paie.spPaie_ACalculer", Db.P("@l", lotId))
         For Each row As DataRow In paies.Rows
             Dim entree As New EntreePaie With {
                 .Province = provinceEmploi,
@@ -206,7 +189,7 @@ Public NotInheritable Class ServicePaie
                 .Cumul = CumulatifsEmploye(row.Ent("Id"), datePaie.Year, lotId, Provinces.Code(provinceEmploi)),
                 .Employe = ProfilDe(row)}
 
-            For Each ligne As DataRow In Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p", Db.P("@p", row.Ent("PaieId"))).Rows
+            For Each ligne As DataRow In Db.Table("paie.spPaieLigne_Liste", Db.P("@p", row.Ent("PaieId"))).Rows
                 entree.Lignes.Add(New LignePaie With {
                     .CodeCategorie = ligne.Txt("CategorieCode"), .Description = ligne.Txt("Description"),
                     .Heures = ligne.Dcm("Heures"), .Taux = ligne.Dcm("Taux"), .Montant = ligne.Dcm("Montant")})
@@ -217,11 +200,11 @@ Public NotInheritable Class ServicePaie
             ' des salaires se regroupe par unité, même si l'employé en change en cours d'année.
             employeur.TauxCNESST = If(row.DcmN("UniteCNESSTTaux"), compagnie.Dcm("TauxCNESST"))
             Enregistrer(row.Ent("PaieId"), MoteurPaie.Calculer(entree, prm))
-            Db.Exec("UPDATE paie.Paie SET UniteCNESSTId = @u, TauxCNESST = @t WHERE Id = @p",
+            Db.Exec("paie.spPaie_UniteCNESST",
                     Db.P("@u", row("UniteCNESSTId")), Db.P("@t", employeur.TauxCNESST), Db.P("@p", row.Ent("PaieId")))
         Next
 
-        Db.Exec("UPDATE paie.LotPaie SET Calcule = 1 WHERE Id = @l", Db.P("@l", lotId))
+        Db.Exec("paie.spLotPaie_Calcule", Db.P("@l", lotId))
     End Sub
 
     ''' <summary>
@@ -259,13 +242,7 @@ Public NotInheritable Class ServicePaie
     End Function
 
     Private Shared Sub Enregistrer(paieId As Integer, r As ResultatPaie)
-        Db.Exec(
-            "UPDATE paie.Paie SET Province=@Province, Heures=@Heures, BrutVerse=@BrutVerse, AvantagesNonMonetaires=@Avantages, ImpotFederal=@ImpotFederal, ImpotQuebec=@ImpotQuebec, " &
-            "RRQ=@RRQ, RRQ2=@RRQ2, AE=@AE, RQAP=@RQAP, AutresDeductions=@Autres, Net=@Net, " &
-            "EmployeurRRQ=@ERRQ, EmployeurRRQ2=@ERRQ2, EmployeurAE=@EAE, EmployeurRQAP=@ERQAP, EmployeurFSS=@EFSS, EmployeurCNESST=@ECNESST, EmployeurCNT=@ECNT, " &
-            "GainsRRQ=@GRRQ, GainsAE=@GAE, GainsRQAP=@GRQAP, GainsFSS=@GFSS, GainsCNESST=@GCNESST, BrutImposableFederal=@BFed, BrutImposableQuebec=@BQc, " &
-            "ForfaitairesFederal=@FFed, ForfaitairesQuebec=@FQc, CSBForfaitaires=@CSB, VacancesAccumulees=@VacAcc, VacancesPayees=@VacPay, " &
-            "Verification=@Verif, Avertissements=@Avert WHERE Id=@Id",
+        Db.Exec("paie.spPaie_Enregistrer",
             Db.P("@Province", Provinces.Code(r.Province)),
             Db.P("@Heures", r.Heures), Db.P("@BrutVerse", r.BrutVerse), Db.P("@Avantages", r.AvantagesNonMonetaires),
             Db.P("@ImpotFederal", r.ImpotFederal), Db.P("@ImpotQuebec", r.ImpotQuebec), Db.P("@RRQ", r.RRQ), Db.P("@RRQ2", r.RRQ2),
@@ -282,23 +259,14 @@ Public NotInheritable Class ServicePaie
     Public Shared Sub ConfirmerLot(lotId As Integer)
         Dim lot = LotModifiable(lotId)
         If Not lot.Bln("Calcule") Then Throw New SaisieInvalideException("La paie doit être calculée avant d'être confirmée.")
-        If Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l AND Inclus = 1", Db.P("@l", lotId)) = 0 Then
+        If Db.ScalaireEntier("paie.spPaie_NbInclus", Db.P("@l", lotId)) = 0 Then
             Throw New SaisieInvalideException("Aucun employé n'est inclus dans cette paie.")
         End If
-        If Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l AND Inclus = 1 AND Net < 0", Db.P("@l", lotId)) > 0 Then
+        If Db.ScalaireEntier("paie.spPaie_NbNetNegatif", Db.P("@l", lotId)) > 0 Then
             Throw New SaisieInvalideException("Au moins une paie nette est négative. Corrigez les lignes avant de confirmer.")
         End If
 
-        Db.Exec(
-            "SET XACT_ABORT ON; BEGIN TRAN; " &
-            "DELETE FROM paie.Paie WHERE LotPaieId = @l AND Inclus = 0; " &
-            "DECLARE @prochain int = (SELECT ProchainNumeroCheque FROM paie.Compagnie WHERE Id = @c); " &
-            "WITH x AS (SELECT p.Id, ROW_NUMBER() OVER (ORDER BY e.Nom, e.Prenom) AS rn FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId " &
-            "           WHERE p.LotPaieId = @l AND e.DepotDirect = 0) " &
-            "UPDATE p SET NumeroCheque = @prochain + x.rn - 1 FROM paie.Paie p JOIN x ON x.Id = p.Id; " &
-            "UPDATE paie.Compagnie SET ProchainNumeroCheque = @prochain + (SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l AND NumeroCheque IS NOT NULL) WHERE Id = @c; " &
-            "UPDATE paie.LotPaie SET Statut = 'C', DateConfirmation = sysdatetime() WHERE Id = @l AND Statut = 'B'; " &
-            "COMMIT;",
+        Db.Exec("paie.spLotPaie_Confirmer",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
 
         Contexte.Journaliser("Paie du " & TexteDate(lot("DatePaie")) & " confirmée.", "~/Paie/Detail.aspx?lot=" & lotId.ToString())
@@ -306,12 +274,12 @@ Public NotInheritable Class ServicePaie
 
     Public Shared Sub SupprimerBrouillon(lotId As Integer)
         LotModifiable(lotId)
-        Db.Exec("DELETE FROM paie.LotPaie WHERE Id = @l AND Statut = 'B'", Db.P("@l", lotId))
+        Db.Exec("paie.spLotPaie_SupprimerBrouillon", Db.P("@l", lotId))
     End Sub
 
     ''' <summary>Seule la paie confirmée la plus récente peut être annulée, pour garder des cumulatifs cohérents.</summary>
     Public Shared Function PeutAnnuler(lotId As Integer) As Boolean
-        Dim dernier = Db.ScalaireEntier("SELECT TOP 1 Id FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC",
+        Dim dernier = Db.ScalaireEntier("paie.spLotPaie_DernierConfirme",
                                         Db.P("@c", Contexte.CompagnieId))
         If dernier <> lotId Then Return False
         Return Not RetenuesPayees(lotId)
@@ -319,7 +287,7 @@ Public NotInheritable Class ServicePaie
 
     ''' <summary>Vrai si les retenues d'au moins une paie du lot ont déjà été payées à un gouvernement.</summary>
     Public Shared Function RetenuesPayees(lotId As Integer) As Boolean
-        Return Db.ScalaireEntier("SELECT COUNT(*) FROM paie.Paie WHERE LotPaieId = @l AND (RemiseFederaleId IS NOT NULL OR RemiseQuebecId IS NOT NULL)",
+        Return Db.ScalaireEntier("paie.spPaie_RetenuesPayees",
                                  Db.P("@l", lotId)) > 0
     End Function
 
@@ -328,13 +296,13 @@ Public NotInheritable Class ServicePaie
             Throw New SaisieInvalideException("Les retenues de cette paie ont déjà été payées. Annulez d'abord le paiement des retenues.")
         End If
         If Not PeutAnnuler(lotId) Then Throw New SaisieInvalideException("Seule la paie confirmée la plus récente peut être annulée.")
-        Dim lot = Db.Ligne("SELECT * FROM paie.LotPaie WHERE Id = @l", Db.P("@l", lotId))
-        Db.Exec("UPDATE paie.LotPaie SET Statut = 'A' WHERE Id = @l AND Statut = 'C' AND CompagnieId = @c", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Dim lot = Db.Ligne("paie.spLotPaie_Get", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Db.Exec("paie.spLotPaie_Annuler", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         Contexte.Journaliser("Paie du " & TexteDate(lot("DatePaie")) & " annulée.", "~/Paie/Detail.aspx?lot=" & lotId.ToString())
     End Sub
 
     Private Shared Function LotModifiable(lotId As Integer) As DataRow
-        Dim lot = Db.Ligne("SELECT * FROM paie.LotPaie WHERE Id = @l AND CompagnieId = @c", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Dim lot = Db.Ligne("paie.spLotPaie_Get", Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
         If lot Is Nothing Then Throw New SaisieInvalideException("Lot de paie introuvable.")
         If lot.Txt("Statut") <> "B" Then Throw New SaisieInvalideException("Cette paie n'est plus modifiable.")
         Return lot

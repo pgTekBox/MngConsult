@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 ''' <summary>
@@ -15,7 +15,7 @@ Public Class PageFicheEmploye
     End Property
 
     Private Function Employe() As DataRow
-        Dim r = Db.Ligne("SELECT * FROM paie.Employe WHERE Id = @id AND CompagnieId = @c", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
+        Dim r = Db.Ligne("paie.spEmploye_Get", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
         If r Is Nothing Then Response.Redirect("~/Employes/Liste.aspx", True)
         Return r
     End Function
@@ -54,7 +54,7 @@ Public Class PageFicheEmploye
         litCompteActuel.Text = If(compte.Length = 0, "", Server.HtmlEncode(Tr("Compte au dossier : {0}. Laissez vide pour le conserver.", Secret.Masquer(compte))))
 
         ddlPeriodes.SelectedValue = ""
-        Dim periodesPropres = Db.Scalaire("SELECT PeriodesParAnnee FROM paie.EmployePaie WHERE EmployeId = @e", Db.P("@e", EmployeId))
+        Dim periodesPropres = Db.Scalaire("paie.spEmployePaie_Periodes", Db.P("@e", EmployeId))
         If periodesPropres IsNot Nothing AndAlso ddlPeriodes.Items.FindByValue(Convert.ToString(periodesPropres)) IsNot Nothing Then
             ddlPeriodes.SelectedValue = Convert.ToString(periodesPropres)
         End If
@@ -66,10 +66,10 @@ Public Class PageFicheEmploye
         ' L'unité de classification CNESST : celles de la compagnie, actives — plus
         ' celle de l'employé si elle a été désactivée depuis, pour ne pas la perdre
         ' en silence à l'enregistrement.
-        Dim tauxCompagnie = Convert.ToDecimal(Db.Scalaire("SELECT TauxCNESST FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId)))
+        Dim tauxCompagnie = Convert.ToDecimal(Db.Scalaire("paie.spCompagnie_TauxCNESST", Db.P("@c", Contexte.CompagnieId)))
         ddlUniteCNESST.Items.Clear()
         ddlUniteCNESST.Items.Add(New ListItem(Tr("Taux de la compagnie ({0} $ / 100 $)", tauxCompagnie.ToString("0.00##", Globalization.CultureInfo.GetCultureInfo("fr-CA"))), ""))
-        For Each u As DataRow In Db.Table("SELECT Id, Code, Description, Taux, Actif FROM paie.UniteCNESST WHERE CompagnieId = @c AND (Actif = 1 OR Id = @u) ORDER BY Code",
+        For Each u As DataRow In Db.Table("paie.spUniteCNESST_Choix",
                                           Db.P("@c", Contexte.CompagnieId), Db.P("@u", If(r.IsNull("UniteCNESSTId"), 0, r.Ent("UniteCNESSTId")))).Rows
             ddlUniteCNESST.Items.Add(New ListItem(u.Txt("Code") & " — " & u.Txt("Description") & " (" & u.Dcm("Taux").ToString("0.00##", Globalization.CultureInfo.GetCultureInfo("fr-CA")) & " $ / 100 $)" &
                                                   If(u.Bln("Actif"), "", " — " & Tr("inactive")), u.Ent("Id").ToString()))
@@ -200,17 +200,7 @@ Public Class PageFicheEmploye
             If personnesACharge > 20 Then Throw New SaisieInvalideException("Le nombre de personnes à charge semble trop élevé.")
             Dim noms = Contexte.Libelles
 
-            Db.Exec(
-                "SET XACT_ABORT ON; BEGIN TRAN; " &
-                "IF NOT EXISTS (SELECT 1 FROM paie.EmployePaie WHERE EmployeId = @Id) INSERT INTO paie.EmployePaie (EmployeId) VALUES (@Id); " &
-                "UPDATE paie.EmployePaie SET Langue=@Langue, DateNaissance=@DateNaissance, NASChiffre=@NAS, PeriodesParAnnee=@Periodes, HeuresSemaine=@HeuresSemaine, " &
-                "TauxHoraire=@TauxHoraire, SalaireAnnuel=@SalaireAnnuel, TauxVacances=@TauxVacances, UniteCNESSTId=@Unite, " &
-                "ExemptImpotFederal=@ExFed, ExemptImpotQuebec=@ExQc, ExemptRRQ=@ExRRQ, ExemptRQAP=@ExRQAP, ExemptAE=@ExAE, ExemptFSS=@ExFSS, ExemptCNESST=@ExCNESST, " &
-                "TD1MontantDemande=@TD1Montant, TD1ImpotAdditionnel=@TD1L, TD1DeductionZone=@TD1HD, TD1DeductionsAnnuelles=@TD1F1, TD1AutresCredits=@TD1K3, " &
-                "CodeDentaireT4=@Dentaire, TP1015Montant=@TPMontant, TP1015ImpotAdditionnel=@TPL, TP1015DeductionsLigne19=@TPJ, TP1016Deductions=@TPJ1, " &
-                "TP1016Credits=@TPK1, TD1ONMontantDemande=@ONMontant, TD1ONAutresCredits=@ONK3P, TD1ONPersonnesACharge=@ONY, " &
-                "DepotDirect=@Depot, Transit=@Transit, Institution=@Institution, CompteChiffre=@Compte, TalonParCourriel=@TalonCourriel, " &
-                "Note=@Note, ModifiePar=@Par, ModifieLe=sysdatetime() WHERE EmployeId=@Id; COMMIT;",
+            Db.Exec("paie.spEmployePaie_Enregistrer",
                 Db.P("@Id", EmployeId), Db.P("@Langue", ddlLangue.SelectedValue), Db.P("@DateNaissance", naissance), Db.P("@NAS", Secret.Proteger(nas)),
                 Db.P("@Periodes", EntierN(ddlPeriodes.SelectedValue, "Période de paie")),
                 Db.P("@HeuresSemaine", DecN(txtHeuresSemaine.Text, "Heures par semaine")),

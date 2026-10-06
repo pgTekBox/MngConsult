@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 Public Class PageElementsPaie
@@ -18,7 +18,7 @@ Public Class PageElementsPaie
 
             litTitreFormulaire.Text = "Nouvel élément de paie"
             If ElementId > 0 Then
-                Dim el = Db.Ligne("SELECT * FROM paie.ElementPaie WHERE Id = @id AND CompagnieId = @c", Db.P("@id", ElementId), Db.P("@c", Contexte.CompagnieId))
+                Dim el = Db.Ligne("paie.spElementPaie_Get", Db.P("@id", ElementId), Db.P("@c", Contexte.CompagnieId))
                 If el Is Nothing Then Response.Redirect("~/Config/ElementsPaie.aspx", True)
                 litTitreFormulaire.Text = "Modifier l'élément de paie"
                 txtDescription.Text = el.Txt("Description")
@@ -32,7 +32,7 @@ Public Class PageElementsPaie
     End Sub
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
-        rptElements.DataSource = Db.Table("SELECT * FROM paie.ElementPaie WHERE CompagnieId = @c ORDER BY Actif DESC, Description", Db.P("@c", Contexte.CompagnieId))
+        rptElements.DataSource = Db.Table("paie.spElementPaie_Liste", Db.P("@c", Contexte.CompagnieId))
         rptElements.DataBind()
         litMatrice.Text = Matrice(CategoriePaie.ParCode(ddlCategorie.SelectedValue))
     End Sub
@@ -109,16 +109,16 @@ Public Class PageElementsPaie
             If Not CategoriePaie.Existe(ddlCategorie.SelectedValue) Then Throw New SaisieInvalideException("Catégorie invalide.")
 
             If ElementId = 0 Then
-                Db.Exec("INSERT INTO paie.ElementPaie (CompagnieId, Description, CategorieCode, Actif, MasquerSurTalon, CompteGL) VALUES (@c, @d, @cat, @a, @m, @gl)",
+                Db.Exec("paie.spElementPaie_InsererComplet",
                         Db.P("@c", Contexte.CompagnieId), Db.P("@d", description), Db.P("@cat", ddlCategorie.SelectedValue),
                         Db.P("@a", chkActif.Checked), Db.P("@m", chkMasquer.Checked), Db.P("@gl", txtCompteGL.Text))
             Else
-                Dim utilise = Db.ScalaireEntier("SELECT COUNT(*) FROM paie.PaieLigne WHERE ElementPaieId = @id", Db.P("@id", ElementId)) > 0
-                Dim actuelle = Convert.ToString(Db.Scalaire("SELECT CategorieCode FROM paie.ElementPaie WHERE Id = @id", Db.P("@id", ElementId)))
+                Dim utilise = Db.ScalaireEntier("paie.spPaieLigne_NbParElement", Db.P("@id", ElementId)) > 0
+                Dim actuelle = Convert.ToString(Db.Scalaire("paie.spElementPaie_Categorie", Db.P("@id", ElementId)))
                 If utilise AndAlso actuelle <> ddlCategorie.SelectedValue Then
                     Throw New SaisieInvalideException("Cet élément a déjà servi dans une paie : sa catégorie ne peut plus changer. Créez plutôt un nouvel élément.")
                 End If
-                Db.Exec("UPDATE paie.ElementPaie SET Description=@d, CategorieCode=@cat, Actif=@a, MasquerSurTalon=@m, CompteGL=@gl WHERE Id=@id AND CompagnieId=@c",
+                Db.Exec("paie.spElementPaie_Update",
                         Db.P("@d", description), Db.P("@cat", ddlCategorie.SelectedValue), Db.P("@a", chkActif.Checked),
                         Db.P("@m", chkMasquer.Checked), Db.P("@gl", txtCompteGL.Text), Db.P("@id", ElementId), Db.P("@c", Contexte.CompagnieId))
             End If
@@ -129,14 +129,13 @@ Public Class PageElementsPaie
     End Sub
 
     Private Sub btnSupprimer_Click(sender As Object, e As EventArgs) Handles btnSupprimer.Click
-        Dim utilise = Db.ScalaireEntier(
-            "SELECT (SELECT COUNT(*) FROM paie.PaieLigne WHERE ElementPaieId = @id) + (SELECT COUNT(*) FROM paie.EmployeElement WHERE ElementPaieId = @id)",
+        Dim utilise = Db.ScalaireEntier("paie.spElementPaie_NbUtilisations",
             Db.P("@id", ElementId)) > 0
         If utilise Then
             Erreur("Cet élément est utilisé par des employés ou des paies. Rendez-le inactif plutôt que de le supprimer.")
             Return
         End If
-        Db.Exec("DELETE FROM paie.ElementPaie WHERE Id = @id AND CompagnieId = @c", Db.P("@id", ElementId), Db.P("@c", Contexte.CompagnieId))
+        Db.Exec("paie.spElementPaie_Supprimer", Db.P("@id", ElementId), Db.P("@c", Contexte.CompagnieId))
         RedirigerAvecMessage("~/Config/ElementsPaie.aspx", "Élément de paie supprimé.")
     End Sub
 

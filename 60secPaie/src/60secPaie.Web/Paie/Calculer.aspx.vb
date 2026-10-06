@@ -1,4 +1,4 @@
-Imports System.Text
+﻿Imports System.Text
 Imports Paie60Sec.Calcul
 
 ''' <summary>Assistant de paie en 4 étapes. L'état est conservé en base (lot en brouillon) et dans l'URL : ?lot=&amp;etape=&amp;paie=.</summary>
@@ -27,7 +27,7 @@ Public Class PageCalculerPaie
         Dim etape = 1
 
         If LotId > 0 Then
-            _lot = Db.Ligne("SELECT * FROM paie.LotPaie WHERE Id = @l AND CompagnieId = @c", Db.P("@l", LotId), Db.P("@c", Contexte.CompagnieId))
+            _lot = Db.Ligne("paie.spLotPaie_Get", Db.P("@l", LotId), Db.P("@c", Contexte.CompagnieId))
             If _lot Is Nothing Then Response.Redirect("~/Paie/Calculer.aspx", True)
 
             litPeriode.Text = Server.HtmlEncode(
@@ -84,11 +84,11 @@ Public Class PageCalculerPaie
         End If
         If IsPostBack Then Return
 
-        Dim defaut = Db.ScalaireEntier("SELECT PeriodesParAnnee FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
+        Dim defaut = Db.ScalaireEntier("paie.spCompagnie_Periodes", Db.P("@c", Contexte.CompagnieId))
         If ddlPeriodes.Items.FindByValue(defaut.ToString()) IsNot Nothing Then ddlPeriodes.SelectedValue = defaut.ToString()
 
         ' Propose la période qui suit la dernière paie confirmée.
-        Dim derniere = Db.Ligne("SELECT TOP 1 * FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' ORDER BY DatePaie DESC, Id DESC", Db.P("@c", Contexte.CompagnieId))
+        Dim derniere = Db.Ligne("paie.spLotPaie_DernierConfirme", Db.P("@c", Contexte.CompagnieId))
         If derniere IsNot Nothing Then
             Dim p = derniere.Ent("PeriodesParAnnee")
             If ddlPeriodes.Items.FindByValue(p.ToString()) IsNot Nothing Then ddlPeriodes.SelectedValue = p.ToString()
@@ -134,15 +134,11 @@ Public Class PageCalculerPaie
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
         If mvEtapes.GetActiveView() Is vwSaisie Then
-            rptPaies.DataSource = Db.Table(
-                "SELECT p.Id, p.LotPaieId, p.Inclus, e.Nom, e.Prenom, " &
-                "ISNULL((SELECT SUM(pl.Montant) FROM paie.PaieLigne pl WHERE pl.PaieId = p.Id AND pl.CategorieCode NOT LIKE 'DED[_]%' AND pl.CategorieCode NOT LIKE 'AV[_]%'), 0) AS BrutPrevu, " &
-                "ISNULL(STUFF((SELECT ', ' + pl.Description FROM paie.PaieLigne pl WHERE pl.PaieId = p.Id ORDER BY pl.Id FOR XML PATH(''), TYPE).value('.', 'nvarchar(max)'), 1, 2, ''), N'Aucune ligne') AS Resume " &
-                "FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId WHERE p.LotPaieId = @l ORDER BY e.Nom, e.Prenom", Db.P("@l", LotId))
+            rptPaies.DataSource = Db.Table("paie.spPaie_Saisie", Db.P("@l", LotId))
             rptPaies.DataBind()
 
         ElseIf mvEtapes.GetActiveView() Is vwLignes Then
-            Dim t = Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p ORDER BY Id", Db.P("@p", PaieId))
+            Dim t = Db.Table("paie.spPaieLigne_Liste", Db.P("@p", PaieId))
             rptLignes.DataSource = t
             rptLignes.DataBind()
             rptLignes.Visible = t.Rows.Count > 0
@@ -165,8 +161,7 @@ Public Class PageCalculerPaie
                 Dim inclus = DirectCast(item.FindControl("chkInclus"), CheckBox).Checked
                 Dim id As Integer
                 If Integer.TryParse(DirectCast(item.FindControl("hidPaieId"), HiddenField).Value, id) Then
-                    Db.Exec("UPDATE p SET Inclus = @i FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
-                            "WHERE p.Id = @p AND p.LotPaieId = @l AND l.Statut = 'B' AND l.CompagnieId = @c",
+                    Db.Exec("paie.spPaie_Inclure",
                             Db.P("@i", inclus), Db.P("@p", id), Db.P("@l", LotId), Db.P("@c", Contexte.CompagnieId))
                 End If
             Next
@@ -191,7 +186,7 @@ Public Class PageCalculerPaie
     ' ------------------------------------------------------------------ Lignes d'un employé
 
     Private Function PaieDuLot() As DataRow
-        Return Db.Ligne("SELECT p.Id, e.Prenom, e.Nom FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId WHERE p.Id = @p AND p.LotPaieId = @l",
+        Return Db.Ligne("paie.spPaie_DuLotSimple",
                         Db.P("@p", PaieId), Db.P("@l", LotId))
     End Function
 
@@ -202,7 +197,7 @@ Public Class PageCalculerPaie
         lnkRetourSaisie.NavigateUrl = UrlLot()
 
         If Not IsPostBack Then
-            For Each el As DataRow In Db.Table("SELECT Id, Description, CategorieCode FROM paie.ElementPaie WHERE CompagnieId = @c AND Actif = 1 ORDER BY Description",
+            For Each el As DataRow In Db.Table("paie.spElementPaie_ListeActifs",
                                                Db.P("@c", Contexte.CompagnieId)).Rows
                 Dim code = el.Txt("CategorieCode")
                 Dim libelle = If(CategoriePaie.Existe(code), CategoriePaie.ParCode(code).LibelleComplet, code)
@@ -227,7 +222,7 @@ Public Class PageCalculerPaie
 
     Private Sub rptLignes_ItemCommand(source As Object, e As RepeaterCommandEventArgs) Handles rptLignes.ItemCommand
         If e.CommandName <> "Supprimer" OrElse PaieDuLot() Is Nothing OrElse _lot.Txt("Statut") <> "B" Then Return
-        Db.Exec("DELETE FROM paie.PaieLigne WHERE Id = @id AND PaieId = @p", Db.P("@id", Convert.ToInt32(e.CommandArgument)), Db.P("@p", PaieId))
+        Db.Exec("paie.spPaieLigne_Supprimer", Db.P("@id", Convert.ToInt32(e.CommandArgument)), Db.P("@p", PaieId))
         ServicePaie.MarquerNonCalcule(PaieId)
         Succes("Ligne retirée.")
     End Sub

@@ -1,4 +1,4 @@
-Public Class PageCumulatifs
+﻿Public Class PageCumulatifs
     Inherits PageBase
 
     Private ReadOnly Property EmployeId As Integer
@@ -8,7 +8,7 @@ Public Class PageCumulatifs
     End Property
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
-        Dim emp = Db.Ligne("SELECT Prenom, Nom FROM paie.Employe WHERE Id = @id AND CompagnieId = @c", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
+        Dim emp = Db.Ligne("paie.spEmploye_Nom", Db.P("@id", EmployeId), Db.P("@c", Contexte.CompagnieId))
         If emp Is Nothing Then Response.Redirect("~/Employes/Liste.aspx", True)
         litEmploye.Text = Server.HtmlEncode(emp.Txt("Prenom") & " " & emp.Txt("Nom"))
         lnkFiche.NavigateUrl = "~/Employes/Fiche.aspx?id=" & EmployeId.ToString()
@@ -40,7 +40,7 @@ Public Class PageCumulatifs
     End Sub
 
     Private Sub Charger()
-        Dim r = Db.Ligne("SELECT * FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a", Db.P("@e", EmployeId), Db.P("@a", Integer.Parse(ddlAnnee.SelectedValue)))
+        Dim r = Db.Ligne("paie.spCumulatifDepart_Get", Db.P("@e", EmployeId), Db.P("@a", Integer.Parse(ddlAnnee.SelectedValue)))
         txtBrut.Text = Valeur(r, "Brut")
         txtImpotFed.Text = Valeur(r, "ImpotFederal")
         txtImpotQc.Text = Valeur(r, "ImpotQuebec")
@@ -66,10 +66,7 @@ Public Class PageCumulatifs
             ' avant un changement de province ne sont pas effacés. La province enregistrée est celle de la compagnie.
             Dim horsQuebec = Contexte.HorsQuebec
             Dim noms = Contexte.Libelles
-            Db.Exec(
-                "DELETE FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a; " &
-                "INSERT INTO paie.CumulatifDepart (EmployeId, Annee, Brut, ImpotFederal, ImpotQuebec, RRQ, RRQ2, GainsRRQ, AE, RQAP, RQAPEmployeur, GainsCNESST, VacancesSolde, Province) " &
-                "VALUES (@e, @a, @Brut, @Fed, @Qc, @RRQ, @RRQ2, @GainsRRQ, @AE, @RQAP, @RQAPE, @CNESST, @Vac, @Province)",
+            Db.Exec("paie.spCumulatifDepart_Enregistrer",
                 Db.P("@e", EmployeId), Db.P("@a", annee),
                 Db.P("@Brut", Dec(txtBrut.Text, "Rémunération brute")), Db.P("@Fed", Dec(txtImpotFed.Text, "Impôt fédéral")),
                 Db.P("@Qc", Dec(txtImpotQc.Text, noms.ImpotProvincial)),
