@@ -262,7 +262,7 @@
                 <h3>Ce que fait l’enregistrement</h3>
                 <ul>
                     <li><strong>Il contrôle avant d’écrire.</strong> Le navigateur vérifie d’abord la page, puis la base refait les mêmes contrôles. Au moindre refus, <strong>rien</strong> de la page n’est enregistré : corrigez la ligne citée et enregistrez de nouveau, vos autres choix sont restés à l’écran.</li>
-                    <li><strong>Il conserve les décisions à part.</strong> Rien n’est créé ni déplacé en comptabilité ; les compteurs et l’avancement se mettent à jour.</li>
+                    <li><strong>Il conserve les décisions à part.</strong> Rien n’est créé ni déplacé en comptabilité ; les compteurs et l’avancement se mettent à jour, ainsi que le bloc « État de cette étape » en haut : sa note monte avec la part des comptes décidés, 10/10 quand il n’en reste aucun.</li>
                     <li><strong>Il écarte un « Lier » sans cible valable.</strong> Une liaison vers un compte absent de votre plan n’est pas conservée : la ligne revient « à décider » et la fenêtre « Comptes à décider » le signale.</li>
                     <li><strong>Il ne touche pas aux lignes « Créé ✓ ».</strong> Ce que la page renvoie pour elles est ignoré.</li>
                     <li><strong>Il refuse un « Ignorer » bloqué.</strong> Un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré : le navigateur l’arrête avant l’envoi, la base le refuse si la décision passe quand même (voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
@@ -281,7 +281,7 @@
                 </table>
                 <h3>Quand tout va bien</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Correspondances enregistrées. Tous les comptes sont décidés. »</span> — bandeau vert, aucune fenêtre. Passez à l’étape 3 si des comptes sont « À créer ».</li>
+                    <li><span class="msg">« Correspondances enregistrées. Tous les comptes sont décidés. »</span> — bandeau vert, aucune fenêtre. Le bloc « État de cette étape » passe à 10/10 avec « Ce qui reste : Rien ». Passez à l’étape 3 si des comptes sont « À créer ».</li>
                     <li><span class="msg">« Correspondances enregistrées. N compte(s) restent à décider… »</span> — c’est enregistré ; la fenêtre « Comptes à décider » rappelle seulement ce qui reste.</li>
                     <li><strong>Et après l’enregistrement :</strong> la balance de vérification, chargée à la date de bascule, relit vos décisions — <span class="chemin">Importation › Balance de vérification</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd>. Un compte ignoré qui porte un montant à cette date, ou une cible de nature contraire, y est signalé ; revenez ici, changez la décision, enregistrez de nouveau.</li>
                 </ul>
@@ -748,7 +748,7 @@
                 <h3>What saving does</h3>
                 <ul>
                     <li><strong>It checks before writing.</strong> The browser checks the page first, then the database runs the same checks again. At the slightest refusal, <strong>nothing</strong> on the page is saved: fix the row mentioned and save again, your other choices are still on screen.</li>
-                    <li><strong>It keeps the decisions apart.</strong> Nothing is created or moved in the books; the counters and progress are updated.</li>
+                    <li><strong>It keeps the decisions apart.</strong> Nothing is created or moved in the books; the counters and progress are updated, as is the “État de cette étape” block at the top: its score rises with the share of accounts decided, 10/10 when none remains.</li>
                     <li><strong>It drops a “Link” without a valid target.</strong> A link to an account missing from your chart is not kept: the row goes back to “to decide” and the “Comptes à décider” popup says so.</li>
                     <li><strong>It leaves “Created ✓” rows alone.</strong> What the page sends back for them is ignored.</li>
                     <li><strong>It refuses a blocked “Ignore”.</strong> An account carrying a balance, or used by an invoice or a product in staging, cannot be ignored: the browser stops it before sending, the database refuses it if the decision gets through anyway (see <a href="#en-safeguards">the safeguards</a>).</li>
@@ -767,7 +767,7 @@
                 </table>
                 <h3>When all goes well</h3>
                 <ul class="messages">
-                    <li><span class="msg">“Mappings saved. All accounts are decided.”</span> — green banner, no popup. Go to step 3 if some accounts are “To create”.</li>
+                    <li><span class="msg">“Mappings saved. All accounts are decided.”</span> — green banner, no popup. The “État de cette étape” block goes to 10/10 with “Ce qui reste : Rien”. Go to step 3 if some accounts are “To create”.</li>
                     <li><span class="msg">“Mappings saved. N account(s) remain to decide…”</span> — it is saved; the “Comptes à décider” popup only reminds you of what is left.</li>
                     <li><strong>And after saving:</strong> the trial balance, loaded as at the cut-over date, re-reads your decisions — <span class="chemin">Import › Trial balance</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd>. An ignored account carrying an amount at that date, or a target of the opposite nature, is flagged there; come back here, change the decision, save again.</li>
                 </ul>
@@ -1234,7 +1234,7 @@
                 <h3>Qué hace el guardado</h3>
                 <ul>
                     <li><strong>Controla antes de escribir.</strong> El navegador verifica primero la página, y luego la base repite los mismos controles. Al menor rechazo, <strong>nada</strong> de la página se guarda: corrija la línea citada y guarde de nuevo, sus otras elecciones siguen en pantalla.</li>
-                    <li><strong>Conserva las decisiones aparte.</strong> No se crea ni se mueve nada en la contabilidad; los contadores y el avance se actualizan.</li>
+                    <li><strong>Conserva las decisiones aparte.</strong> No se crea ni se mueve nada en la contabilidad; los contadores y el avance se actualizan, igual que el bloque « État de cette étape » arriba: su nota sube con la parte de cuentas decididas, 10/10 cuando no queda ninguna.</li>
                     <li><strong>Descarta un « Vincular » sin destino válido.</strong> Un vínculo hacia una cuenta ausente de su plan no se conserva: la línea vuelve a « por decidir » y la ventana « Comptes à décider » lo señala.</li>
                     <li><strong>No toca las líneas « Creada ✓ ».</strong> Lo que la página devuelve para ellas se ignora.</li>
                     <li><strong>Rechaza un « Ignorar » bloqueado.</strong> Una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse: el navegador lo detiene antes del envío, la base lo rechaza si la decisión pasa de todos modos (vea <a href="#es-protecciones">las salvaguardas</a>).</li>
@@ -1253,7 +1253,7 @@
                 </table>
                 <h3>Cuando todo va bien</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Correspondencias guardadas. Todas las cuentas están decididas. »</span> — banner verde, ninguna ventana. Pase a la etapa 3 si hay cuentas « Por crear ».</li>
+                    <li><span class="msg">« Correspondencias guardadas. Todas las cuentas están decididas. »</span> — banner verde, ninguna ventana. El bloque « État de cette étape » pasa a 10/10 con « Ce qui reste : Rien ». Pase a la etapa 3 si hay cuentas « Por crear ».</li>
                     <li><span class="msg">« Correspondencias guardadas. N cuenta(s) quedan por decidir… »</span> — está guardado; la ventana « Comptes à décider » solo recuerda lo que falta.</li>
                     <li><strong>Y después de guardar:</strong> el balance de comprobación, cargado a la fecha de corte, relee sus decisiones — <span class="chemin">Importación › Balance de comprobación</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd>. Una cuenta ignorada que lleva un importe a esa fecha, o un destino de naturaleza contraria, se señala allí; vuelva aquí, cambie la decisión y guarde de nuevo.</li>
                 </ul>
