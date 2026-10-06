@@ -350,8 +350,8 @@
                 <table>
                     <thead><tr><th>Ce que vous avez décidé ici</th><th>Ce que l’étape 3 en fait</th></tr></thead>
                     <tbody>
-                        <tr><td>« Créer », compte laissé vide</td><td>Une ligne à créer avec le numéro sur « auto » : il sera pris dans la plage de la classe que vous choisirez, de préférence une dizaine ronde.</td></tr>
-                        <tr><td>« Créer », numéro de l’ancien logiciel repris</td><td>Une ligne à créer avec ce numéro prérempli. Il doit tomber dans la plage de la classe choisie ; sinon, videz-le.</td></tr>
+                        <tr><td>« Créer », compte laissé vide</td><td>Une ligne à créer avec le numéro sur « auto » : il sera pris dans la plage de la sous-classe que vous choisirez, de préférence une dizaine ronde.</td></tr>
+                        <tr><td>« Créer », numéro de l’ancien logiciel repris</td><td>Une ligne à créer avec ce numéro prérempli. Il doit tomber dans la plage de la sous-classe choisie ; sinon, videz-le.</td></tr>
                         <tr><td>« Lier »</td><td>Rien à faire : le compte existe déjà. Il compte dans « Liés ».</td></tr>
                         <tr><td>« Ignorer »</td><td>Rien : le compte est écarté. Il compte dans « Ignorés ».</td></tr>
                         <tr><td>« — à décider »</td><td>Le compte n’est pas repris. L’étape 3 le rappelle : « N compte(s) ne sont pas encore décidés à l’étape 2 » ; vous pouvez créer les autres et revenir.</td></tr>
@@ -383,7 +383,7 @@
                 </table>
                 <p><strong>Ce qui reste en préparation est une trace, pas une attente</strong> : les lignes du plan chargé et vos décisions y demeurent, parce que la balance de vérification, les tiers, les produits et les factures s’en servent pour retrouver le bon compte. Seul <kbd>Vider les tables de préparation</kbd>, sur la page Importation, les effacerait — et il n’efface jamais un compte déjà créé dans le plan : celui-ci resterait, mais la correspondance qui y menait serait perdue.</p>
                 <h3>Ce que l’étape 3 affiche de vos décisions</h3>
-                <p>En haut de l’étape 3, cinq compteurs résument cet écran : <strong>À créer</strong> (lignes « Créer » sans compte encore), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> et <strong>Encore à décider</strong>. Le lien <kbd>← revenir à la correspondance</kbd> ramène ici. Quand « À créer » est à zéro, l’étape 3 dit « Aucun compte à créer dans ce lot » : tout est créé, lié ou ignoré.</p>
+                <p>En haut de l’étape 3, cinq compteurs résument cet écran : <strong>À créer</strong> (lignes « Créer » sans compte encore), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> et <strong>Encore à décider</strong>. Le lien <kbd>← revenir à la correspondance</kbd> ramène ici. Quand « À créer » est à zéro, l’étape 3 dit « Aucun compte à créer dans ce lot » : tout est créé, lié ou ignoré. Le bloc « État de cette étape », en haut de l’étape 3, vaut alors 10/10 ; tant qu’il reste des comptes à créer, il donne « N compte(s) créé(s) sur M » et ce qui reste.</p>
                 <h3>Les refus de l’étape 3, et ce qu’ils demandent ici</h3>
                 <p>L’étape 3 crée <strong>tout ou rien</strong> : une seule ligne fautive refuse le lot entier, avec « Rien n’a été créé. » et le motif. La plupart des motifs se règlent à l’étape 3 ; deux d’entre eux renvoient à cet écran.</p>
                 <table>
@@ -838,8 +838,8 @@
                 <table>
                     <thead><tr><th>What you decided here</th><th>What step 3 does with it</th></tr></thead>
                     <tbody>
-                        <tr><td>“Create”, account left empty</td><td>A row to create with the number on “auto”: it will be taken within the range of the class you choose, preferably a round ten.</td></tr>
-                        <tr><td>“Create”, number of the former application reused</td><td>A row to create with that number prefilled. It must fall within the range of the chosen class; otherwise clear it.</td></tr>
+                        <tr><td>“Create”, account left empty</td><td>A row to create with the number on “auto”: it will be taken within the range of the subclass you choose, preferably a round ten.</td></tr>
+                        <tr><td>“Create”, number of the former application reused</td><td>A row to create with that number prefilled. It must fall within the range of the chosen subclass; otherwise clear it.</td></tr>
                         <tr><td>“Link”</td><td>Nothing to do: the account already exists. It counts in “Linked”.</td></tr>
                         <tr><td>“Ignore”</td><td>Nothing: the account is set aside. It counts in “Ignored”.</td></tr>
                         <tr><td>“— to decide”</td><td>The account is not migrated. Step 3 reminds you: “N account(s) are not decided yet at step 2”; you can create the others and come back.</td></tr>
@@ -871,7 +871,7 @@
                 </table>
                 <p><strong>What stays in staging is a trace, not something pending</strong>: the loaded chart rows and your decisions remain there, because the trial balance, parties, products and invoices use them to find the right account. Only <kbd>Vider les tables de préparation</kbd>, on the Import page, would erase them — and it never erases an account already created in the chart: that one would stay, but the mapping leading to it would be lost.</p>
                 <h3>What step 3 shows of your decisions</h3>
-                <p>At the top of step 3, five counters sum up this screen: <strong>À créer</strong> (“Create” rows with no account yet), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> and <strong>Encore à décider</strong>. The <kbd>← revenir à la correspondance</kbd> link brings you back here. When “À créer” is zero, step 3 says “Aucun compte à créer dans ce lot”: everything is created, linked or ignored.</p>
+                <p>At the top of step 3, five counters sum up this screen: <strong>À créer</strong> (“Create” rows with no account yet), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> and <strong>Encore à décider</strong>. The <kbd>← revenir à la correspondance</kbd> link brings you back here. When “À créer” is zero, step 3 says “Aucun compte à créer dans ce lot”: everything is created, linked or ignored. The “État de cette étape” block at the top of step 3 is then 10/10; while accounts remain to create, it gives “N compte(s) créé(s) sur M” and what is left.</p>
                 <h3>Step 3 refusals, and what they ask for here</h3>
                 <p>Step 3 creates <strong>all or nothing</strong>: a single faulty row refuses the whole batch, with “Rien n’a été créé.” and the reason. Most reasons are fixed in step 3; two of them send you back to this screen.</p>
                 <table>
@@ -1326,8 +1326,8 @@
                 <table>
                     <thead><tr><th>Lo que decidió aquí</th><th>Lo que hace la etapa 3</th></tr></thead>
                     <tbody>
-                        <tr><td>« Crear », cuenta dejada vacía</td><td>Una línea por crear con el número en « auto »: se tomará dentro del rango de la clase que elija, preferentemente una decena redonda.</td></tr>
-                        <tr><td>« Crear », número del programa anterior reutilizado</td><td>Una línea por crear con ese número prellenado. Debe caer dentro del rango de la clase elegida; si no, vacíelo.</td></tr>
+                        <tr><td>« Crear », cuenta dejada vacía</td><td>Una línea por crear con el número en « auto »: se tomará dentro del rango de la subclase que elija, preferentemente una decena redonda.</td></tr>
+                        <tr><td>« Crear », número del programa anterior reutilizado</td><td>Una línea por crear con ese número prellenado. Debe caer dentro del rango de la subclase elegida; si no, vacíelo.</td></tr>
                         <tr><td>« Vincular »</td><td>Nada que hacer: la cuenta ya existe. Cuenta en « Vinculadas ».</td></tr>
                         <tr><td>« Ignorar »</td><td>Nada: la cuenta queda apartada. Cuenta en « Ignoradas ».</td></tr>
                         <tr><td>« — por decidir »</td><td>La cuenta no se migra. La etapa 3 lo recuerda: « N cuenta(s) aún no están decididas en la etapa 2 »; puede crear las demás y volver.</td></tr>
@@ -1359,7 +1359,7 @@
                 </table>
                 <p><strong>Lo que queda en preparación es una huella, no algo pendiente</strong>: las líneas del plan cargado y sus decisiones permanecen ahí, porque el balance de comprobación, los terceros, los productos y las facturas las usan para encontrar la cuenta correcta. Solo <kbd>Vider les tables de préparation</kbd>, en la página Importación, las borraría — y nunca borra una cuenta ya creada en el plan: esa quedaría, pero la correspondencia que llevaba a ella se perdería.</p>
                 <h3>Lo que la etapa 3 muestra de sus decisiones</h3>
-                <p>Arriba de la etapa 3, cinco contadores resumen esta pantalla: <strong>À créer</strong> (líneas « Crear » aún sin cuenta), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> y <strong>Encore à décider</strong>. El enlace <kbd>← revenir à la correspondance</kbd> vuelve aquí. Cuando « À créer » está a cero, la etapa 3 dice « Aucun compte à créer dans ce lot »: todo está creado, vinculado o ignorado.</p>
+                <p>Arriba de la etapa 3, cinco contadores resumen esta pantalla: <strong>À créer</strong> (líneas « Crear » aún sin cuenta), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> y <strong>Encore à décider</strong>. El enlace <kbd>← revenir à la correspondance</kbd> vuelve aquí. Cuando « À créer » está a cero, la etapa 3 dice « Aucun compte à créer dans ce lot »: todo está creado, vinculado o ignorado. El bloque « État de cette étape », arriba de la etapa 3, vale entonces 10/10; mientras queden cuentas por crear, da « N compte(s) créé(s) sur M » y lo que falta.</p>
                 <h3>Los rechazos de la etapa 3, y qué piden aquí</h3>
                 <p>La etapa 3 crea <strong>todo o nada</strong>: una sola línea errónea rechaza el lote entero, con « Rien n’a été créé. » y el motivo. La mayoría de los motivos se arreglan en la etapa 3; dos de ellos remiten a esta pantalla.</p>
                 <table>
