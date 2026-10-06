@@ -238,6 +238,22 @@
                     <li><strong>Une nouvelle extraction rafraîchit le solde</strong> de la colonne : un compte à 0 peut se retrouver bloqué, ou l’inverse. Les décisions « Ignorer » déjà enregistrées restent et seront refusées au prochain enregistrement si le compte est désormais bloqué.</li>
                     <li><strong>Pour sortir d’un refus</strong> : liez le compte à son équivalent de 60sec, ou créez-le. Si vous tenez vraiment à l’écarter, videz-le d’abord dans l’ancien logiciel, puis rechargez le plan.</li>
                 </ul>
+                <h3>Tous les garde-fous de la reprise, en un tableau</h3>
+                <p>« Ignorer » n’est pas le seul geste gardé. Voici tout ce qui refuse, bloque ou prévient, de cet écran à l’étape 3, et où chaque garde-fou agit.</p>
+                <table>
+                    <thead><tr><th>Garde-fou</th><th>Où il agit</th><th>Ce qu’il empêche</th></tr></thead>
+                    <tbody>
+                        <tr><td>Un compte de 60sec ne reçoit qu’un seul compte de l’ancien logiciel</td><td>Ici — navigateur avant l’envoi, puis base</td><td>Deux comptes QuickBooks versés sur le même compte d’ici (voir <a href="#fr-lier">lier</a>).</td></tr>
+                        <tr><td>« Créer » ne reprend pas un numéro que votre plan connaît déjà</td><td>Ici — navigateur, puis base</td><td>Un doublon créé alors qu’il fallait « Lier » (voir <a href="#fr-creer">créer</a>).</td></tr>
+                        <tr><td>« Ignorer » refusé si solde ou si utilisé ; avertissement à solde 0 sur revenus et dépenses</td><td>Ici — option grisée, navigateur, base</td><td>Un montant, une facture ou un produit sans compte (les quatre situations ci-dessus).</td></tr>
+                        <tr><td>La ligne « Créé ✓ » est verrouillée</td><td>Ici</td><td>Rediscuter un compte qui existe déjà pour de bon dans le plan.</td></tr>
+                        <tr><td>Création tout ou rien, avec sept contrôles</td><td>Étape 3 — base</td><td>Un plan à moitié créé : classe choisie et à vous, nom non vide, numéro numérique, dans la plage, libre, demandé une seule fois (voir <a href="#fr-etape3">les refus de l’étape 3</a>).</td></tr>
+                        <tr><td>Les classes proposées sont bornées à la nature du compte</td><td>Étape 3</td><td>Une dépense rangée dans l’actif.</td></tr>
+                        <tr><td>Confirmation « C’est une écriture réelle »</td><td>Étape 3</td><td>Créer sans l’avoir voulu : c’est la seule étape qui écrit dans vos livres.</td></tr>
+                        <tr><td>La balance de vérification relit tout à la date de bascule</td><td>Après coup — écran Balance de vérification</td><td>Un compte ignoré qui porte un montant, une cible de nature contraire, un compte absent du plan.</td></tr>
+                    </tbody>
+                </table>
+                <p>Le bloc « État de cette étape », en haut de chaque écran, n’est pas un garde-fou mais un repère : il dit ce qui reste à faire pour que l’étape soit complète.</p>
             </section>
 
             <section id="fr-enregistrer">
@@ -708,6 +724,22 @@
                     <li><strong>A new extraction refreshes the balance</strong> in the column: an account at 0 may end up blocked, or the reverse. “Ignore” decisions already saved stay and will be refused at the next save if the account is now blocked.</li>
                     <li><strong>To get out of a refusal</strong>: link the account to its 60sec counterpart, or create it. If you really want to set it aside, empty it in the former application first, then reload the chart.</li>
                 </ul>
+                <h3>All the migration’s safeguards, in one table</h3>
+                <p>“Ignore” is not the only guarded action. Here is everything that refuses, blocks or warns, from this screen to step 3, and where each safeguard acts.</p>
+                <table>
+                    <thead><tr><th>Safeguard</th><th>Where it acts</th><th>What it prevents</th></tr></thead>
+                    <tbody>
+                        <tr><td>A 60sec account receives only one account from the old software</td><td>Here — browser before sending, then database</td><td>Two QuickBooks accounts poured into the same account here (see <a href="#en-link">linking</a>).</td></tr>
+                        <tr><td>“Create” cannot take a number your chart already knows</td><td>Here — browser, then database</td><td>A duplicate created when “Link” was the answer (see <a href="#en-create">creating</a>).</td></tr>
+                        <tr><td>“Ignore” refused if balance or if used; warning at 0 on revenue and expense accounts</td><td>Here — greyed option, browser, database</td><td>An amount, an invoice or a product without an account (the four situations above).</td></tr>
+                        <tr><td>The “Created ✓” row is locked</td><td>Here</td><td>Rediscussing an account that already exists for good in the chart.</td></tr>
+                        <tr><td>All-or-nothing creation, with seven checks</td><td>Step 3 — database</td><td>A half-created chart: class chosen and yours, non-empty name, numeric number, within range, free, requested only once (see <a href="#en-step3">step 3 refusals</a>).</td></tr>
+                        <tr><td>Offered classes are bounded by the account’s nature</td><td>Step 3</td><td>An expense filed under assets.</td></tr>
+                        <tr><td>Confirmation “C’est une écriture réelle”</td><td>Step 3</td><td>Creating without meaning to: it is the only step that writes to your books.</td></tr>
+                        <tr><td>The trial balance re-reads everything as at the cut-over date</td><td>Afterwards — Trial balance screen</td><td>An ignored account carrying an amount, a target of the opposite nature, an account missing from the chart.</td></tr>
+                    </tbody>
+                </table>
+                <p>The “État de cette étape” block at the top of each screen is not a safeguard but a marker: it says what is left to do for the step to be complete.</p>
             </section>
 
             <section id="en-save">
@@ -1178,6 +1210,22 @@
                     <li><strong>Una nueva extracción actualiza el saldo</strong> de la columna: una cuenta a 0 puede quedar bloqueada, o al revés. Las decisiones « Ignorar » ya guardadas se conservan y serán rechazadas en el próximo guardado si la cuenta está ahora bloqueada.</li>
                     <li><strong>Para salir de un rechazo</strong>: vincule la cuenta a su equivalente de 60sec, o créela. Si de verdad quiere apartarla, vacíela primero en el programa anterior y recargue el plan.</li>
                 </ul>
+                <h3>Todas las salvaguardas de la migración, en una tabla</h3>
+                <p>« Ignorar » no es el único gesto protegido. Aquí está todo lo que rechaza, bloquea o avisa, desde esta pantalla hasta la etapa 3, y dónde actúa cada salvaguarda.</p>
+                <table>
+                    <thead><tr><th>Salvaguarda</th><th>Dónde actúa</th><th>Qué impide</th></tr></thead>
+                    <tbody>
+                        <tr><td>Una cuenta de 60sec recibe una sola cuenta del programa anterior</td><td>Aquí — navegador antes del envío, luego base</td><td>Dos cuentas QuickBooks volcadas en la misma cuenta de aquí (vea <a href="#es-vincular">vincular</a>).</td></tr>
+                        <tr><td>« Crear » no toma un número que su plan ya conoce</td><td>Aquí — navegador, luego base</td><td>Un duplicado creado cuando la respuesta era « Vincular » (vea <a href="#es-crear">crear</a>).</td></tr>
+                        <tr><td>« Ignorar » rechazado si hay saldo o si se usa; aviso a saldo 0 en ingresos y gastos</td><td>Aquí — opción en gris, navegador, base</td><td>Un importe, una factura o un producto sin cuenta (las cuatro situaciones de arriba).</td></tr>
+                        <tr><td>La línea « Creada ✓ » está bloqueada</td><td>Aquí</td><td>Rediscutir una cuenta que ya existe de verdad en el plan.</td></tr>
+                        <tr><td>Creación todo o nada, con siete controles</td><td>Etapa 3 — base</td><td>Un plan creado a medias: clase elegida y suya, nombre no vacío, número numérico, dentro del rango, libre, pedido una sola vez (vea <a href="#es-etapa3">los rechazos de la etapa 3</a>).</td></tr>
+                        <tr><td>Las clases propuestas se limitan a la naturaleza de la cuenta</td><td>Etapa 3</td><td>Un gasto ubicado en el activo.</td></tr>
+                        <tr><td>Confirmación « C’est une écriture réelle »</td><td>Etapa 3</td><td>Crear sin querer: es la única etapa que escribe en sus libros.</td></tr>
+                        <tr><td>El balance de comprobación lo relee todo a la fecha de corte</td><td>Después — pantalla Balance de comprobación</td><td>Una cuenta ignorada que lleva un importe, un destino de naturaleza contraria, una cuenta ausente del plan.</td></tr>
+                    </tbody>
+                </table>
+                <p>El bloque « État de cette étape », arriba de cada pantalla, no es una salvaguarda sino una referencia: dice lo que falta para que la etapa esté completa.</p>
             </section>
 
             <section id="es-guardar">
