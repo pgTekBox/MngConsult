@@ -3,9 +3,15 @@
     <h1>Configuration</h1>
     <%= SousMenuConfig("unites") %>
 
+    <% If HorsQuebec Then %>
+    <p class="note">La commission des accidents du travail de la province (<%: Noms.Accidents %>) classe votre entreprise dans une ou plusieurs <strong>classes</strong> selon l'activité, chacune avec son taux de prime.
+       Inscrivez ici les classes de votre relevé de primes. Dans la fiche de chaque employé, vous choisissez sa classe ; sans classe,
+       c'est le taux de prime de la compagnie (Paramètres de paie) qui s'applique. Le rapport des gains assurables se regroupe ensuite par classe.</p>
+    <% Else %>
     <p class="note">La CNESST classe votre entreprise dans une ou plusieurs <strong>unités de classification</strong> selon l'activité, chacune avec son taux.
        Inscrivez ici les unités de votre décision de classification. Dans la fiche de chaque employé, vous choisissez son unité ; sans unité,
        c'est le taux de versement périodique de la compagnie (Paramètres de paie) qui s'applique. La Déclaration des salaires se regroupe ensuite par unité.</p>
+    <% End If %>
 
     <div class="carte table-defilante">
         <asp:Repeater ID="rptUnites" runat="server">

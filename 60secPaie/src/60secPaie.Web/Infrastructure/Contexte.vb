@@ -76,6 +76,7 @@ Public NotInheritable Class Contexte
         Ctx.Session("Company") = nouvelle
         Ctx.Items.Remove("CompanyGuid")
         Ctx.Items.Remove("CompagnieId")
+        Ctx.Items.Remove("Province")
         Return True
     End Function
 
@@ -102,7 +103,45 @@ Public NotInheritable Class Contexte
 
     Public Shared Sub OublierCompagnie()
         Ctx.Items.Remove("CompagnieId")
+        Ctx.Items.Remove("Province")
     End Sub
+
+    ''' <summary>
+    ''' Province d'emploi de la compagnie courante (paie.Compagnie.Province) : elle décide des
+    ''' retenues calculées, des remises et des feuillets. Le Québec tant que la paie n'est pas configurée.
+    ''' </summary>
+    Public Shared ReadOnly Property Province As Paie60Sec.Calcul.Province
+        Get
+            If Ctx.Items("Province") Is Nothing Then
+                Dim code = If(CompagnieId = 0, "", Convert.ToString(Db.Scalaire("SELECT Province FROM paie.Compagnie WHERE Id = @c", Db.P("@c", CompagnieId))))
+                Ctx.Items("Province") = If(Paie60Sec.Calcul.Provinces.EstGeree(code), Paie60Sec.Calcul.Provinces.DeCode(code), Paie60Sec.Calcul.Province.Quebec)
+            End If
+            Return DirectCast(Ctx.Items("Province"), Paie60Sec.Calcul.Province)
+        End Get
+    End Property
+
+    Public Shared ReadOnly Property EnOntario As Boolean
+        Get
+            Return Province = Paie60Sec.Calcul.Province.Ontario
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Vrai pour toute province ou territoire autre que le Québec : RPC au lieu du RRQ, ni RQAP ni CNT,
+    ''' tout l'impôt remis au Receveur général, T4 sans Relevé 1.
+    ''' </summary>
+    Public Shared ReadOnly Property HorsQuebec As Boolean
+        Get
+            Return Province <> Paie60Sec.Calcul.Province.Quebec
+        End Get
+    End Property
+
+    ''' <summary>Les noms des retenues et cotisations dans la province de la compagnie courante (RRQ ou RPC, FSS ou ISE…).</summary>
+    Public Shared ReadOnly Property Libelles As Paie60Sec.Calcul.LibellesProvince
+        Get
+            Return Paie60Sec.Calcul.LibellesProvince.Pour(Province)
+        End Get
+    End Property
 
     ''' <summary>Nom et coordonnées de la compagnie courante, tels que définis dans MngConsul (paramètres LEGAL_NAME, ADDR1...).</summary>
     Public Shared Function IdentiteCompagnie() As DataRow

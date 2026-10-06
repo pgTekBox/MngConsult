@@ -106,25 +106,55 @@ Public NotInheritable Class ServiceProfilIA
 
         sb.AppendLine("# Profil de la compagnie (généré le " & Date.Now.ToString("yyyy-MM-dd HH:mm") & ")")
         sb.AppendLine()
+        ' La province d'emploi change presque tout ce qui suit : l'assistant doit la connaître d'abord.
+        Dim provinceEmploi = If(Provinces.EstGeree(c.Txt("Province")), Provinces.DeCode(c.Txt("Province")), Province.Quebec)
+        Dim noms = LibellesProvince.Pour(provinceEmploi)
+        Dim horsQuebec = provinceEmploi <> Province.Quebec
+        Dim ontario = provinceEmploi = Province.Ontario
         sb.AppendLine("## Configuration de la paie")
+        sb.AppendLine("- Province d'emploi : " & If(horsQuebec,
+            Provinces.Nom(provinceEmploi) & " (" & "impôt " & Provinces.DeNom(provinceEmploi) & ", RPC, AE au taux ordinaire ; ni RQAP ni CNT ; " &
+            If(noms.ARetenueTerritoriale, "impôt de 2 % sur la paie retenu à l'employé et remis au territoire ; ", "") &
+            "l'employeur paie " & If(noms.ASante, "la cotisation santé (" & noms.Sante & ") et ", "") & "la commission des accidents du travail (" & noms.Accidents &
+            ") ; formulaire de crédits " & noms.FormulaireCredits & " ; T4 seulement, impôts, RPC et AE se remettent à l'ARC)",
+            "Québec (impôt du Québec, RRQ, RQAP, AE au taux réduit ; l'employeur paie le FSS, la CNESST et la CNT ; T4 et Relevé 1 ; remises à l'ARC et à Revenu Québec)"))
         sb.AppendLine("- Fréquence de paie par défaut : " & LibellePeriodes(c("PeriodesParAnnee")))
         sb.AppendLine("- Taux de vacances par défaut : " & Pct(c("TauxVacancesDefaut")))
-        Dim secteur = {"Général", "Primaire et manufacturier", "Secteur public"}(Math.Max(0, Math.Min(2, c.Ent("SecteurFSS"))))
-        Dim tauxFSS As String = ""
-        Try
-            tauxFSS = ParametresAnnee.PourAffichage().TauxFSS(c.Dcm("MasseSalarialeEstimee"), CType(c.Ent("SecteurFSS"), SecteurFSS)).ToString("0.00", fr) & " %"
-        Catch
-        End Try
-        sb.AppendLine("- Masse salariale estimée : " & Montant(c("MasseSalarialeEstimee")) & " ; secteur FSS : " & secteur & If(tauxFSS.Length > 0, " ; taux FSS appliqué : " & tauxFSS, ""))
-        sb.AppendLine("- Facteur de cotisation de l'employeur à l'AE : " & c.Dcm("FacteurAE").ToString("0.0##", fr))
-        sb.AppendLine("- Taux de la CNESST (versement périodique) : " & c.Dcm("TauxCNESST").ToString("0.00##", fr) & " $ par 100 $ ; assujettie à la CNT : " & OuiNon(c.Bln("AssujettiCNT")))
-        sb.AppendLine("- Fréquence des remises : fédéral " & Frequence(c, "FrequenceRemiseFederale") & ", Revenu Québec " & Frequence(c, "FrequenceRemiseQuebec"))
-        sb.AppendLine("- Numéros : RP " & OuiNon(c.Txt("NumeroEntrepriseFederal").Length > 0, "inscrit", "manquant") & ", RS " & OuiNon(c.Txt("NumeroIdentificationRQ").Length > 0, "inscrit", "manquant"))
+        If horsQuebec Then
+            If ontario Then
+                Dim tauxISE As String = ""
+                Try
+                    tauxISE = ParametresAnnee.PourAffichage().TauxISE(c.Dcm("MasseSalarialeEstimee"), c.Bln("ISEExemptionAdmissible")).ToString("0.00##", fr) & " %"
+                Catch
+                End Try
+                sb.AppendLine("- Masse salariale ontarienne estimée : " & Montant(c("MasseSalarialeEstimee")) & " ; exemption de l'ISE : " &
+                              OuiNon(c.Bln("ISEExemptionAdmissible"), "admissible", "non admissible") & If(tauxISE.Length > 0, " ; taux ISE effectif appliqué : " & tauxISE, ""))
+            ElseIf noms.ASante Then
+                sb.AppendLine("- Cotisation santé de l'employeur (" & noms.Sante & ") : taux effectif saisi par l'employeur, " & c.Dcm("TauxSanteEmployeur").ToString("0.00##", fr) &
+                              " % de la rémunération (60secPaie ne le calcule pas)")
+            End If
+            sb.AppendLine("- Facteur de cotisation de l'employeur à l'AE : " & c.Dcm("FacteurAE").ToString("0.0##", fr))
+            sb.AppendLine("- Taux de prime " & noms.Accidents & " : " & c.Dcm("TauxCNESST").ToString("0.00##", fr) & " $ par 100 $")
+            sb.AppendLine("- Fréquence des remises au Receveur général : " & Frequence(c, "FrequenceRemiseFederale") & " (aucune remise provinciale)")
+            sb.AppendLine("- Numéros : RP " & OuiNon(c.Txt("NumeroEntrepriseFederal").Length > 0, "inscrit", "manquant"))
+        Else
+            Dim secteur = {"Général", "Primaire et manufacturier", "Secteur public"}(Math.Max(0, Math.Min(2, c.Ent("SecteurFSS"))))
+            Dim tauxFSS As String = ""
+            Try
+                tauxFSS = ParametresAnnee.PourAffichage().TauxFSS(c.Dcm("MasseSalarialeEstimee"), CType(c.Ent("SecteurFSS"), SecteurFSS)).ToString("0.00", fr) & " %"
+            Catch
+            End Try
+            sb.AppendLine("- Masse salariale estimée : " & Montant(c("MasseSalarialeEstimee")) & " ; secteur FSS : " & secteur & If(tauxFSS.Length > 0, " ; taux FSS appliqué : " & tauxFSS, ""))
+            sb.AppendLine("- Facteur de cotisation de l'employeur à l'AE : " & c.Dcm("FacteurAE").ToString("0.0##", fr))
+            sb.AppendLine("- Taux de la CNESST (versement périodique) : " & c.Dcm("TauxCNESST").ToString("0.00##", fr) & " $ par 100 $ ; assujettie à la CNT : " & OuiNon(c.Bln("AssujettiCNT")))
+            sb.AppendLine("- Fréquence des remises : fédéral " & Frequence(c, "FrequenceRemiseFederale") & ", Revenu Québec " & Frequence(c, "FrequenceRemiseQuebec"))
+            sb.AppendLine("- Numéros : RP " & OuiNon(c.Txt("NumeroEntrepriseFederal").Length > 0, "inscrit", "manquant") & ", RS " & OuiNon(c.Txt("NumeroIdentificationRQ").Length > 0, "inscrit", "manquant"))
+        End If
         sb.AppendLine("- Dépôt direct : " & OuiNon(c.Txt("DDNumeroEmetteur").Length > 0 AndAlso c.Txt("DDCentreTraitement").Length > 0, "paramètres du fichier configurés", "non configuré"))
 
         Dim unites = Db.Table("SELECT Code, Description, Taux, Actif FROM paie.UniteCNESST WHERE CompagnieId = @c ORDER BY Code", Db.P("@c", Contexte.CompagnieId))
         If unites.Rows.Count > 0 Then
-            sb.AppendLine("- Unités de classification CNESST :")
+            sb.AppendLine(If(horsQuebec, "- Classes " & noms.Accidents & " :", "- Unités de classification CNESST :"))
             For Each u As DataRow In unites.Rows
                 sb.AppendLine("  - " & u.Txt("Code") & " " & u.Txt("Description") & " : " & u.Dcm("Taux").ToString("0.00##", fr) & " $ par 100 $" & If(u.Bln("Actif"), "", " (inactive)"))
             Next
@@ -163,19 +193,29 @@ Public NotInheritable Class ServiceProfilIA
             parts.Add("langue " & e.Txt("Langue"))
             Dim ex As New List(Of String)()
             If e.Bln("ExemptImpotFederal") Then ex.Add("impôt fédéral")
-            If e.Bln("ExemptImpotQuebec") Then ex.Add("impôt du Québec")
-            If e.Bln("ExemptRRQ") Then ex.Add("RRQ")
-            If e.Bln("ExemptRQAP") Then ex.Add("RQAP")
+            If e.Bln("ExemptImpotQuebec") Then ex.Add("impôt " & Provinces.DeNom(provinceEmploi))
+            If e.Bln("ExemptRRQ") Then ex.Add(noms.Pension)
+            If e.Bln("ExemptRQAP") AndAlso Not horsQuebec Then ex.Add("RQAP")
+            If e.Bln("ExemptRQAP") AndAlso noms.ARetenueTerritoriale Then ex.Add("impôt sur la paie du territoire")
             If e.Bln("ExemptAE") Then ex.Add("AE")
-            If e.Bln("ExemptFSS") Then ex.Add("FSS")
-            If e.Bln("ExemptCNESST") Then ex.Add("CNESST/CNT")
+            If e.Bln("ExemptFSS") AndAlso noms.ASante Then ex.Add(noms.Sante)
+            If e.Bln("ExemptCNESST") Then ex.Add(If(horsQuebec, noms.Accidents, "CNESST/CNT"))
             parts.Add(If(ex.Count = 0, "aucune exemption", "exemptions : " & String.Join(", ", ex)))
             If Not e.IsNull("TD1MontantDemande") Then parts.Add("TD1 " & Montant(e("TD1MontantDemande")))
             If e.Dcm("TD1ImpotAdditionnel") > 0D Then parts.Add("impôt fédéral additionnel " & Montant(e("TD1ImpotAdditionnel")) & " par paie")
-            If Not e.IsNull("TP1015Montant") Then parts.Add("TP-1015.3 ligne 10 " & Montant(e("TP1015Montant")))
-            If e.Dcm("TP1015ImpotAdditionnel") > 0D Then parts.Add("retenue Québec supplémentaire " & Montant(e("TP1015ImpotAdditionnel")) & " par paie")
+            If horsQuebec Then
+                If Not e.IsNull("TD1ONMontantDemande") Then parts.Add(noms.FormulaireCredits & " " & Montant(e("TD1ONMontantDemande")))
+                If noms.APersonnesACharge AndAlso e.Ent("TD1ONPersonnesACharge") > 0 Then parts.Add("réduction d'impôt de l'Ontario : " & e.Ent("TD1ONPersonnesACharge").ToString() & " personne(s) à charge")
+            Else
+                If Not e.IsNull("TP1015Montant") Then parts.Add("TP-1015.3 ligne 10 " & Montant(e("TP1015Montant")))
+                If e.Dcm("TP1015ImpotAdditionnel") > 0D Then parts.Add("retenue Québec supplémentaire " & Montant(e("TP1015ImpotAdditionnel")) & " par paie")
+            End If
             parts.Add("case 45 dentaire : code " & e.Ent("CodeDentaireT4").ToString())
-            parts.Add(If(e.Txt("UniteCNESSTCode").Length > 0, "unité CNESST " & e.Txt("UniteCNESSTCode"), "unité CNESST : taux de la compagnie"))
+            If horsQuebec Then
+                parts.Add(If(e.Txt("UniteCNESSTCode").Length > 0, "classe " & noms.Accidents & " " & e.Txt("UniteCNESSTCode"), "classe " & noms.Accidents & " : taux de la compagnie"))
+            Else
+                parts.Add(If(e.Txt("UniteCNESSTCode").Length > 0, "unité CNESST " & e.Txt("UniteCNESSTCode"), "unité CNESST : taux de la compagnie"))
+            End If
             parts.Add(If(e.Bln("DepotDirect"), "dépôt direct", "chèque"))
             parts.Add(If(e.Bln("TalonParCourriel"), "talon par courriel", "talon imprimé"))
             sb.AppendLine("- " & code & " : " & String.Join(" ; ", parts))
@@ -196,10 +236,11 @@ Public NotInheritable Class ServiceProfilIA
         sb.AppendLine("- Paie en préparation (brouillon) : " & If(brouillon Is Nothing, "aucune", "oui, période se terminant le " & Convert.ToDateTime(brouillon("DateFinPeriode")).ToString("yyyy-MM-dd")))
         Dim annee = Date.Today.Year
         sb.AppendLine("- Paies confirmées en " & annee.ToString() & " : " & Db.ScalaireEntier("SELECT COUNT(*) FROM paie.LotPaie WHERE CompagnieId = @c AND Statut = 'C' AND YEAR(DatePaie) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).ToString())
-        For Each gouv In {"F", "Q"}
+        ' Une paie hors Québec ne doit rien à Revenu Québec : elle n'y est jamais « non remise ».
+        For Each gouv In If(horsQuebec, {"F"}, {"F", "Q"})
             Dim solde = Db.Ligne(
                 "SELECT COUNT(*) AS Nb, MIN(l.DatePaie) AS Plus_ancienne FROM paie.LotPaie l JOIN paie.Paie p ON p.LotPaieId = l.Id " &
-                "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND " & If(gouv = "F", "p.RemiseFederaleId IS NULL", "p.RemiseQuebecId IS NULL"),
+                "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND " & If(gouv = "F", "p.RemiseFederaleId IS NULL", "p.RemiseQuebecId IS NULL AND p.Province = N'QC'"),
                 Db.P("@c", Contexte.CompagnieId))
             Dim nb = If(solde Is Nothing, 0, solde.Ent("Nb"))
             sb.AppendLine("- Retenues non encore remises " & If(gouv = "F", "au fédéral", "à Revenu Québec") & " : " & If(nb = 0, "aucune", nb.ToString() & " paie(s), la plus ancienne payée le " & Convert.ToDateTime(solde("Plus_ancienne")).ToString("yyyy-MM-dd")))
@@ -208,7 +249,7 @@ Public NotInheritable Class ServiceProfilIA
         sb.AppendLine()
         sb.AppendLine("## Taux de l'année")
         For Each a In {annee, annee + 1}
-            sb.AppendLine("- " & a.ToString() & " : " & If(ParametresAnnee.EstDisponible(a), "taux validés, paies possibles", "taux non validés, paies refusées"))
+            sb.AppendLine("- " & a.ToString() & " : " & If(ParametresAnnee.EstDisponible(a, Contexte.Province), "taux validés, paies possibles", "taux non validés, paies refusées"))
         Next
         Return sb.ToString()
     End Function

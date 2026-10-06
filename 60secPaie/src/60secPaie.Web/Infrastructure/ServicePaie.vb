@@ -1,6 +1,9 @@
 Imports Paie60Sec.Calcul
 
-''' <summary>Cycle de vie d'un lot de paie : brouillon, calcul, confirmation, annulation.</summary>
+''' <summary>
+''' Cycle de vie d'un lot de paie : brouillon, calcul, confirmation, annulation.
+''' La province d'emploi est celle de la compagnie ; chaque paie calculée la garde (paie.Paie.Province).
+''' </summary>
 Public NotInheritable Class ServicePaie
 
     Private Sub New()
@@ -28,6 +31,9 @@ Public NotInheritable Class ServicePaie
         If Not ParametresAnnee.EstDisponible(datePaie.Year) Then
             Throw New SaisieInvalideException("Les taux gouvernementaux de " & datePaie.Year.ToString() & " ne sont pas encore définis dans le logiciel.")
         End If
+        If Not ParametresAnnee.EstDisponible(datePaie.Year, Contexte.Province) Then
+            Throw New SaisieInvalideException("Les taux de " & datePaie.Year.ToString() & " ne sont pas encore définis dans le logiciel pour la province : " & Provinces.Nom(Contexte.Province) & ".")
+        End If
         If LotBrouillon() IsNot Nothing Then
             Throw New SaisieInvalideException("Une paie est déjà en préparation. Terminez-la ou supprimez-la d'abord.")
         End If
@@ -51,19 +57,39 @@ Public NotInheritable Class ServicePaie
 
         For Each emp As DataRow In employes.Rows
             Dim tauxVacances = If(emp.DcmN("TauxVacances"), compagnie.Dcm("TauxVacancesDefaut"))
-            Dim paieId = Db.Inserer("INSERT INTO paie.Paie (LotPaieId, EmployeId, TauxVacances) VALUES (@l, @e, @v)",
-                                    Db.P("@l", lotId), Db.P("@e", emp.Ent("Id")), Db.P("@v", tauxVacances))
+            Dim paieId = Db.Inserer("INSERT INTO paie.Paie (LotPaieId, EmployeId, TauxVacances, Province) VALUES (@l, @e, @v, @prov)",
+                                    Db.P("@l", lotId), Db.P("@e", emp.Ent("Id")), Db.P("@v", tauxVacances),
+                                    Db.P("@prov", Provinces.Code(Contexte.Province)))
 
             Dim copiees = Db.Exec(
                 "INSERT INTO paie.PaieLigne (PaieId, ElementPaieId, Description, CategorieCode, Heures, Taux, Montant, MasquerSurTalon) " &
                 "SELECT @paie, el.Id, el.Description, el.CategorieCode, ee.Heures, ee.Taux, ee.Montant, el.MasquerSurTalon " &
-                "FROM paie.EmployeElement ee JOIN paie.ElementPaie el ON el.Id = ee.ElementPaieId WHERE ee.EmployeId = @e AND el.Actif = 1",
+                "FROM paie.EmployeElement ee JOIN paie.ElementPaie el ON el.Id = ee.ElementPaieId WHERE ee.EmployeId = @e AND el.Actif = 1" &
+                FiltreCategoriesDeLaProvince("el"),
                 Db.P("@paie", paieId), Db.P("@e", emp.Ent("Id")))
 
             If copiees = 0 Then AjouterLigneParDefaut(paieId, emp, periodes)
         Next
 
         Return lotId
+    End Function
+
+    ''' <summary>
+    ''' Hors Québec : un avantage imposable au Québec seulement (part de l'employeur à un régime privé
+    ''' d'assurance maladie) n'a pas sa place dans une paie. Il resterait sur le talon et dans les
+    ''' rapports sans compter dans aucun calcul.
+    ''' </summary>
+    Public Shared Function HorsProvince(categorieCode As String) As Boolean
+        If Not Contexte.HorsQuebec OrElse Not CategoriePaie.Existe(categorieCode) Then Return False
+        Dim cat = CategoriePaie.ParCode(categorieCode)
+        Return cat.Type = TypeCategorie.Avantage AndAlso Not cat.ImpotFederal
+    End Function
+
+    ''' <summary>« AND alias.CategorieCode NOT IN (…) » pour ces catégories ; vide au Québec. Les codes viennent du code, jamais d'une saisie.</summary>
+    Private Shared Function FiltreCategoriesDeLaProvince(aliasElement As String) As String
+        Dim codes = CategoriePaie.Toutes.Where(Function(c) HorsProvince(c.Code)).Select(Function(c) "'" & c.Code.Replace("'", "''") & "'").ToList()
+        If codes.Count = 0 Then Return ""
+        Return " AND " & aliasElement & ".CategorieCode NOT IN (" & String.Join(", ", codes) & ")"
     End Function
 
     ''' <summary>Sans gabarit : salaire horaire (heures/semaine) ou salaire annuel réparti sur les périodes.</summary>
@@ -90,6 +116,9 @@ Public NotInheritable Class ServicePaie
     Public Shared Sub AjouterLigne(paieId As Integer, elementId As Integer, heures As Decimal, taux As Decimal, montant As Decimal)
         Dim element = Db.Ligne("SELECT * FROM paie.ElementPaie WHERE Id = @id AND CompagnieId = @c", Db.P("@id", elementId), Db.P("@c", Contexte.CompagnieId))
         If element Is Nothing Then Throw New SaisieInvalideException("Élément de paie introuvable.")
+        If HorsProvince(element.Txt("CategorieCode")) Then
+            Throw New SaisieInvalideException("Cet avantage n'est imposable qu'au Québec : il ne s'ajoute pas à une paie d'une autre province.")
+        End If
 
         Dim total = MontantLigne(element.Txt("CategorieCode"), heures, taux, montant)
         If total <= 0D Then Throw New SaisieInvalideException("Le montant de la ligne doit être supérieur à 0 (heures × taux, ou montant).")
@@ -112,15 +141,24 @@ Public NotInheritable Class ServicePaie
         Db.Exec("UPDATE l SET Calcule = 0 FROM paie.LotPaie l JOIN paie.Paie p ON p.LotPaieId = l.Id WHERE p.Id = @p AND l.Statut = 'B'", Db.P("@p", paieId))
     End Sub
 
-    ''' <summary>Cumulatifs de l'année : paies confirmées (sauf le lot en cours) et soldes de départ.</summary>
-    Public Shared Function CumulatifsEmploye(employeId As Integer, annee As Integer, lotExclu As Integer) As Cumulatifs
+    ''' <summary>
+    ''' Cumulatifs de l'année : paies confirmées (sauf le lot en cours) et soldes de départ.
+    ''' Le salaire assurable aux accidents du travail ne compte que pour la province calculée : la CNESST,
+    ''' la WSIB et les autres commissions ont chacune leur plafond, et l'un ne s'impute pas à l'autre. Le régime de pension et
+    ''' l'AE, eux, se cumulent : RRQ et RPC partagent leurs maximums de l'année.
+    ''' Le RQAP ne se cumule que sur les paies du Québec : dans un territoire, sa colonne porte l'impôt
+    ''' sur la paie, qui ne doit pas entamer le maximum du RQAP d'une compagnie revenue au Québec.
+    ''' </summary>
+    Public Shared Function CumulatifsEmploye(employeId As Integer, annee As Integer, lotExclu As Integer, Optional codeProvince As String = Nothing) As Cumulatifs
+        If codeProvince Is Nothing Then codeProvince = Provinces.Code(Contexte.Province)
         Dim r = Db.Ligne(
             "SELECT ISNULL(SUM(p.RRQ),0) RRQ, ISNULL(SUM(p.RRQ2),0) RRQ2, ISNULL(SUM(p.GainsRRQ),0) GainsRRQ, ISNULL(SUM(p.AE),0) AE, " &
-            "ISNULL(SUM(p.RQAP),0) RQAP, ISNULL(SUM(p.EmployeurRQAP),0) RQAPEmployeur, ISNULL(SUM(p.GainsCNESST),0) GainsCNESST, " &
+            "ISNULL(SUM(CASE WHEN p.Province = N'QC' THEN p.RQAP ELSE 0 END),0) RQAP, ISNULL(SUM(p.EmployeurRQAP),0) RQAPEmployeur, " &
+            "ISNULL(SUM(CASE WHEN p.Province = @prov THEN p.GainsCNESST ELSE 0 END),0) GainsCNESST, " &
             "ISNULL(SUM(p.ForfaitairesFederal),0) ForfFed, ISNULL(SUM(p.ForfaitairesQuebec),0) ForfQc, ISNULL(SUM(p.CSBForfaitaires),0) CSB " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
             "WHERE p.EmployeId = @e AND p.Inclus = 1 AND l.Statut = 'C' AND YEAR(l.DatePaie) = @a AND l.Id <> @lot",
-            Db.P("@e", employeId), Db.P("@a", annee), Db.P("@lot", lotExclu))
+            Db.P("@e", employeId), Db.P("@a", annee), Db.P("@lot", lotExclu), Db.P("@prov", codeProvince))
 
         Dim c As New Cumulatifs With {
             .RRQ = r.Dcm("RRQ"), .RRQ2 = r.Dcm("RRQ2"), .GainsRRQ = r.Dcm("GainsRRQ"), .AE = r.Dcm("AE"), .RQAP = r.Dcm("RQAP"),
@@ -133,9 +171,11 @@ Public NotInheritable Class ServicePaie
             c.RRQ2 += depart.Dcm("RRQ2")
             c.GainsRRQ += depart.Dcm("GainsRRQ")
             c.AE += depart.Dcm("AE")
-            c.RQAP += depart.Dcm("RQAP")
-            c.RQAPEmployeur += depart.Dcm("RQAPEmployeur")
-            c.GainsCNESST += depart.Dcm("GainsCNESST")
+            If depart.Txt("Province").Length = 0 OrElse depart.Txt("Province") = "QC" Then
+                c.RQAP += depart.Dcm("RQAP")
+                c.RQAPEmployeur += depart.Dcm("RQAPEmployeur")
+            End If
+            If depart.Txt("Province") = codeProvince Then c.GainsCNESST += depart.Dcm("GainsCNESST")
         End If
         Return c
     End Function
@@ -146,19 +186,24 @@ Public NotInheritable Class ServicePaie
         Dim compagnie = Db.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", Contexte.CompagnieId))
         Dim datePaie = lot.DtN("DatePaie").Value
 
+        ' La province est celle de la compagnie au moment du calcul ; elle est figée sur chaque paie.
+        Dim provinceEmploi = Provinces.DeCode(compagnie.Txt("Province"))
+        Dim prm = ParametresAnnee.Pour(datePaie.Year, provinceEmploi)
+
         Dim employeur As New ProfilEmployeur With {
             .FacteurAE = compagnie.Dcm("FacteurAE"),
-            .TauxFSS = ParametresAnnee.Pour(datePaie.Year).TauxFSS(compagnie.Dcm("MasseSalarialeEstimee"), CType(compagnie.Ent("SecteurFSS"), SecteurFSS)),
+            .TauxFSS = TauxSanteEmployeur(compagnie, prm, provinceEmploi),
             .TauxCNESST = compagnie.Dcm("TauxCNESST"),
-            .AssujettiCNT = compagnie.Bln("AssujettiCNT")}
+            .AssujettiCNT = provinceEmploi = Province.Quebec AndAlso compagnie.Bln("AssujettiCNT")}
 
         Dim paies = Db.Table("SELECT p.Id AS PaieId, p.TauxVacances AS TauxVacancesPaie, e.* FROM paie.Paie p JOIN paie.Employe e ON e.Id = p.EmployeId " &
                              "WHERE p.LotPaieId = @l AND p.Inclus = 1", Db.P("@l", lotId))
         For Each row As DataRow In paies.Rows
             Dim entree As New EntreePaie With {
+                .Province = provinceEmploi,
                 .Annee = datePaie.Year, .PeriodesParAnnee = lot.Ent("PeriodesParAnnee"), .DatePaie = datePaie,
                 .Employeur = employeur, .TauxVacances = row.Dcm("TauxVacancesPaie"),
-                .Cumul = CumulatifsEmploye(row.Ent("Id"), datePaie.Year, lotId),
+                .Cumul = CumulatifsEmploye(row.Ent("Id"), datePaie.Year, lotId, Provinces.Code(provinceEmploi)),
                 .Employe = ProfilDe(row)}
 
             For Each ligne As DataRow In Db.Table("SELECT * FROM paie.PaieLigne WHERE PaieId = @p", Db.P("@p", row.Ent("PaieId"))).Rows
@@ -167,17 +212,35 @@ Public NotInheritable Class ServicePaie
                     .Heures = ligne.Dcm("Heures"), .Taux = ligne.Dcm("Taux"), .Montant = ligne.Dcm("Montant")})
             Next
 
-            ' Le taux CNESST est celui de l'unité de classification de l'employé, sinon
+            ' Le taux CNESST (ou celui de la commission de la province) est celui de l'unité de classification de l'employé, sinon
             ' celui de la compagnie. Il est figé sur la paie avec l'unité : la Déclaration
             ' des salaires se regroupe par unité, même si l'employé en change en cours d'année.
             employeur.TauxCNESST = If(row.DcmN("UniteCNESSTTaux"), compagnie.Dcm("TauxCNESST"))
-            Enregistrer(row.Ent("PaieId"), MoteurPaie.Calculer(entree))
+            Enregistrer(row.Ent("PaieId"), MoteurPaie.Calculer(entree, prm))
             Db.Exec("UPDATE paie.Paie SET UniteCNESSTId = @u, TauxCNESST = @t WHERE Id = @p",
                     Db.P("@u", row("UniteCNESSTId")), Db.P("@t", employeur.TauxCNESST), Db.P("@p", row.Ent("PaieId")))
         Next
 
         Db.Exec("UPDATE paie.LotPaie SET Calcule = 1 WHERE Id = @l", Db.P("@l", lotId))
     End Sub
+
+    ''' <summary>
+    ''' Taux (en %) de la cotisation santé de l'employeur appliqué à chaque paie. Au Québec, le FSS ; en
+    ''' Ontario, le taux effectif de l'impôt-santé des employeurs (ISE) — tous deux établis sur la masse
+    ''' salariale estimée de l'année. En Colombie-Britannique, au Manitoba et à Terre-Neuve-et-Labrador,
+    ''' le taux effectif que l'employeur a saisi (paie.Compagnie.TauxSanteEmployeur) : 60secPaie n'en a
+    ''' pas le barème. Zéro partout où il n'y a pas de telle cotisation.
+    ''' </summary>
+    Public Shared Function TauxSanteEmployeur(compagnie As DataRow, prm As ParametresAnnee, provinceEmploi As Province) As Decimal
+        Select Case provinceEmploi
+            Case Province.Quebec
+                Return prm.TauxFSS(compagnie.Dcm("MasseSalarialeEstimee"), CType(compagnie.Ent("SecteurFSS"), SecteurFSS))
+            Case Province.Ontario
+                Return prm.TauxISE(compagnie.Dcm("MasseSalarialeEstimee"), compagnie.Bln("ISEExemptionAdmissible"))
+            Case Else
+                Return If(LibellesProvince.Pour(provinceEmploi).ASante, compagnie.Dcm("TauxSanteEmployeur"), 0D)
+        End Select
+    End Function
 
     Private Shared Function ProfilDe(e As DataRow) As ProfilEmploye
         Return New ProfilEmploye With {
@@ -190,17 +253,20 @@ Public NotInheritable Class ServicePaie
             .TD1AutresCredits = e.Dcm("TD1AutresCredits"),
             .TP1015Montant = e.DcmN("TP1015Montant"), .TP1015ImpotAdditionnel = e.Dcm("TP1015ImpotAdditionnel"),
             .TP1015DeductionsLigne19 = e.Dcm("TP1015DeductionsLigne19"), .TP1016Deductions = e.Dcm("TP1016Deductions"),
-            .TP1016Credits = e.Dcm("TP1016Credits")}
+            .TP1016Credits = e.Dcm("TP1016Credits"),
+            .TD1ProvMontantDemande = e.DcmN("TD1ONMontantDemande"), .TD1ProvAutresCredits = e.Dcm("TD1ONAutresCredits"),
+            .TD1ProvPersonnesACharge = e.Ent("TD1ONPersonnesACharge")}
     End Function
 
     Private Shared Sub Enregistrer(paieId As Integer, r As ResultatPaie)
         Db.Exec(
-            "UPDATE paie.Paie SET Heures=@Heures, BrutVerse=@BrutVerse, AvantagesNonMonetaires=@Avantages, ImpotFederal=@ImpotFederal, ImpotQuebec=@ImpotQuebec, " &
+            "UPDATE paie.Paie SET Province=@Province, Heures=@Heures, BrutVerse=@BrutVerse, AvantagesNonMonetaires=@Avantages, ImpotFederal=@ImpotFederal, ImpotQuebec=@ImpotQuebec, " &
             "RRQ=@RRQ, RRQ2=@RRQ2, AE=@AE, RQAP=@RQAP, AutresDeductions=@Autres, Net=@Net, " &
             "EmployeurRRQ=@ERRQ, EmployeurRRQ2=@ERRQ2, EmployeurAE=@EAE, EmployeurRQAP=@ERQAP, EmployeurFSS=@EFSS, EmployeurCNESST=@ECNESST, EmployeurCNT=@ECNT, " &
             "GainsRRQ=@GRRQ, GainsAE=@GAE, GainsRQAP=@GRQAP, GainsFSS=@GFSS, GainsCNESST=@GCNESST, BrutImposableFederal=@BFed, BrutImposableQuebec=@BQc, " &
             "ForfaitairesFederal=@FFed, ForfaitairesQuebec=@FQc, CSBForfaitaires=@CSB, VacancesAccumulees=@VacAcc, VacancesPayees=@VacPay, " &
             "Verification=@Verif, Avertissements=@Avert WHERE Id=@Id",
+            Db.P("@Province", Provinces.Code(r.Province)),
             Db.P("@Heures", r.Heures), Db.P("@BrutVerse", r.BrutVerse), Db.P("@Avantages", r.AvantagesNonMonetaires),
             Db.P("@ImpotFederal", r.ImpotFederal), Db.P("@ImpotQuebec", r.ImpotQuebec), Db.P("@RRQ", r.RRQ), Db.P("@RRQ2", r.RRQ2),
             Db.P("@AE", r.AE), Db.P("@RQAP", r.RQAP), Db.P("@Autres", r.AutresDeductions), Db.P("@Net", r.Net),

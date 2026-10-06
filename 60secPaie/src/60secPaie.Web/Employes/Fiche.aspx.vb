@@ -24,6 +24,7 @@ Public Class PageFicheEmploye
         Dim r = Employe()
         litTitre.Text = Server.HtmlEncode(r.Txt("Prenom") & " " & r.Txt("Nom"))
         AfficherIdentite(r)
+        AfficherProvince()
         pnlLiens.Visible = True
         lnkElements.NavigateUrl = "~/Employes/ElementsPaie.aspx?id=" & EmployeId.ToString()
         lnkCumulatifs.NavigateUrl = "~/Employes/Cumulatifs.aspx?id=" & EmployeId.ToString()
@@ -32,6 +33,11 @@ Public Class PageFicheEmploye
         Dim prm = ParametresAnnee.PourAffichage()
         litBaseFed.Text = Argent(prm.FedMontantPersonnelBase)
         litBaseQc.Text = Argent(prm.QcMontantPersonnelBase)
+        ' Hors Québec : le montant personnel de base de la province, tel qu'il est en vigueur aujourd'hui
+        ' (ou à la fin de la dernière année connue). « — » tant que les taux de la province ne sont pas définis.
+        Dim prmProvince = If(Contexte.HorsQuebec, prm.PourProvince(Contexte.Province, If(prm.Annee = Date.Today.Year, Date.Today, New Date(prm.Annee, 12, 31))), Nothing)
+        litBaseProv.Text = If(prmProvince Is Nothing, "—", Argent(prmProvince.MontantPersonnelBase))
+        litParPersonne.Text = If(prmProvince Is Nothing, "—", Argent(prmProvince.ReductionParPersonne))
 
         If Not r.Bln("PaieConfiguree") Then
             Erreur(Tr("La paie de cet employé n'est pas encore configurée. Vérifiez les valeurs proposées, puis enregistrez."))
@@ -87,6 +93,10 @@ Public Class PageFicheEmploye
         txtTD1Credits.Text = ChampNonNul(r("TD1AutresCredits"))
         ddlDentaire.SelectedValue = Math.Max(1, Math.Min(5, r.Ent("CodeDentaireT4"))).ToString()
 
+        txtONMontant.Text = Champ(r("TD1ONMontantDemande"))
+        txtONCredits.Text = ChampNonNul(r("TD1ONAutresCredits"))
+        txtONPersonnes.Text = If(r.Ent("TD1ONPersonnesACharge") = 0, "", r.Ent("TD1ONPersonnesACharge").ToString())
+
         txtTPMontant.Text = Champ(r("TP1015Montant"))
         txtTPAdditionnel.Text = ChampNonNul(r("TP1015ImpotAdditionnel"))
         txtTPLigne19.Text = ChampNonNul(r("TP1015DeductionsLigne19"))
@@ -98,6 +108,37 @@ Public Class PageFicheEmploye
         txtTransit.Text = r.Txt("Transit")
         txtInstitution.Text = r.Txt("Institution")
         txtNote.Text = r.Txt("Note")
+    End Sub
+
+    ''' <summary>
+    ''' La fiche suit la province d'emploi de la compagnie. Hors Québec : le formulaire de la province (TD1ON,
+    ''' TD1AB…) à la place du TP-1015.3 ; le RPC, la cotisation santé de l'employeur s'il y en a une et la
+    ''' commission des accidents du travail à la place du RRQ, du FSS et de la CNESST ; pas de RQAP — sauf dans
+    ''' un territoire, où sa case exempte de l'impôt sur la paie. Les valeurs de l'autre province restent au
+    ''' dossier : elles ne sont ni affichées ni effacées.
+    ''' </summary>
+    Private Sub AfficherProvince()
+        Dim horsQuebec = Contexte.HorsQuebec
+        Dim noms = Contexte.Libelles
+        phProvince.Visible = horsQuebec
+        phQuebec.Visible = Not horsQuebec
+        spanExRQAP.Visible = noms.AMaternite OrElse noms.ARetenueTerritoriale
+        spanExFSS.Visible = noms.ASante
+        If Not horsQuebec Then Return
+
+        Dim deLaProvince = Provinces.DeNom(noms.Province)
+        litLegendeProvince.Text = Server.HtmlEncode("Imposition " & deLaProvince)
+        lblProvMontant.Text = noms.FormulaireCredits & " - Montant total de la demande ($)"
+        lblProvCredits.Text = "Autres crédits d'impôt " & deLaProvince & " autorisés ($)"
+        phPersonnesACharge.Visible = noms.APersonnesACharge
+
+        chkExQc.Text = "Ne pas retenir l'impôt " & deLaProvince
+        chkExRRQ.Text = "Ne pas cotiser au RPC"
+        If noms.ARetenueTerritoriale Then chkExRQAP.Text = "Ne pas retenir l'impôt sur la paie du territoire"
+        chkExFSS.Text = "Exclure de la cotisation santé de l'employeur (" & noms.Sante & ")"
+        chkExCNESST.Text = "Exclure de la couverture des accidents du travail (" & noms.Accidents & ")"
+        lblUnite.Text = "Classe " & noms.Accidents
+        litAideUnite.Text = "Sans classe, le taux de prime de la compagnie s'applique. Les classes se définissent dans Configuration."
     End Sub
 
     Private Sub AfficherIdentite(r As DataRow)
@@ -121,7 +162,9 @@ Public Class PageFicheEmploye
     End Sub
 
     Private Function RappelExemptions() As String
-        Dim nb = {chkExFed, chkExQc, chkExRRQ, chkExRQAP, chkExAE, chkExFSS, chkExCNESST}.Where(Function(c) c.Checked).Count()
+        ' Une case masquée dans cette province garde sa valeur, mais n'exempte de rien : elle ne compte pas.
+        Dim nb = {chkExFed, chkExQc, chkExRRQ, chkExRQAP, chkExAE, chkExFSS, chkExCNESST}.Where(
+            Function(c) c.Checked AndAlso (c IsNot chkExRQAP OrElse spanExRQAP.Visible) AndAlso (c IsNot chkExFSS OrElse spanExFSS.Visible)).Count()
         If nb = 0 Then Return ""
         Return " " & Tr("Attention : {0} exemption(s) cochée(s), ces retenues ou cotisations ne seront pas calculées pour cet employé.", nb)
     End Function
@@ -153,6 +196,9 @@ Public Class PageFicheEmploye
             If naissance.HasValue AndAlso naissance.Value > Date.Today Then Throw New SaisieInvalideException(Tr("La date de naissance est dans le futur."))
             Dim tauxVacances = DecN(txtTauxVacances.Text, "Taux de vacances")
             If tauxVacances.HasValue AndAlso tauxVacances.Value > 20D Then Throw New SaisieInvalideException(Tr("Le taux de vacances semble trop élevé."))
+            Dim personnesACharge = If(EntierN(txtONPersonnes.Text, "Personnes à charge"), 0)
+            If personnesACharge > 20 Then Throw New SaisieInvalideException("Le nombre de personnes à charge semble trop élevé.")
+            Dim noms = Contexte.Libelles
 
             Db.Exec(
                 "SET XACT_ABORT ON; BEGIN TRAN; " &
@@ -162,7 +208,8 @@ Public Class PageFicheEmploye
                 "ExemptImpotFederal=@ExFed, ExemptImpotQuebec=@ExQc, ExemptRRQ=@ExRRQ, ExemptRQAP=@ExRQAP, ExemptAE=@ExAE, ExemptFSS=@ExFSS, ExemptCNESST=@ExCNESST, " &
                 "TD1MontantDemande=@TD1Montant, TD1ImpotAdditionnel=@TD1L, TD1DeductionZone=@TD1HD, TD1DeductionsAnnuelles=@TD1F1, TD1AutresCredits=@TD1K3, " &
                 "CodeDentaireT4=@Dentaire, TP1015Montant=@TPMontant, TP1015ImpotAdditionnel=@TPL, TP1015DeductionsLigne19=@TPJ, TP1016Deductions=@TPJ1, " &
-                "TP1016Credits=@TPK1, DepotDirect=@Depot, Transit=@Transit, Institution=@Institution, CompteChiffre=@Compte, TalonParCourriel=@TalonCourriel, " &
+                "TP1016Credits=@TPK1, TD1ONMontantDemande=@ONMontant, TD1ONAutresCredits=@ONK3P, TD1ONPersonnesACharge=@ONY, " &
+                "DepotDirect=@Depot, Transit=@Transit, Institution=@Institution, CompteChiffre=@Compte, TalonParCourriel=@TalonCourriel, " &
                 "Note=@Note, ModifiePar=@Par, ModifieLe=sysdatetime() WHERE EmployeId=@Id; COMMIT;",
                 Db.P("@Id", EmployeId), Db.P("@Langue", ddlLangue.SelectedValue), Db.P("@DateNaissance", naissance), Db.P("@NAS", Secret.Proteger(nas)),
                 Db.P("@Periodes", EntierN(ddlPeriodes.SelectedValue, "Période de paie")),
@@ -184,6 +231,9 @@ Public Class PageFicheEmploye
                 Db.P("@TPJ", Dec(txtTPLigne19.Text, "TP-1015.3 - Ligne 19")),
                 Db.P("@TPJ1", Dec(txtTP1016Deductions.Text, "TP-1016 - Déductions")),
                 Db.P("@TPK1", Dec(txtTP1016Credits.Text, "TP-1016 - Crédits")),
+                Db.P("@ONMontant", DecN(txtONMontant.Text, If(Contexte.HorsQuebec, noms.FormulaireCredits, "TD1ON") & " - Montant de la demande")),
+                Db.P("@ONK3P", Dec(txtONCredits.Text, "Autres crédits de la province")),
+                Db.P("@ONY", personnesACharge),
                 Db.P("@Depot", chkDepot.Checked), Db.P("@Transit", transit), Db.P("@Institution", institution),
                 Db.P("@Compte", Secret.Proteger(compte)), Db.P("@TalonCourriel", chkTalonCourriel.Checked), Db.P("@Note", txtNote.Text),
                 Db.P("@Par", Contexte.Utilisateur))

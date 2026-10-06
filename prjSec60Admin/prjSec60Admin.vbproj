@@ -52,10 +52,9 @@
     <Reference Include="System.Core" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
     <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="System.Net" />
+    <Reference Include="System.Net.Http" />
     <Reference Include="System.Web.Extensions" />
-    <Reference Include="System.Net.Http, Version=4.1.1.3, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
-      <HintPath>packages\System.Net.Http.4.3.4\lib\net46\System.Net.Http.dll</HintPath>
-    </Reference>
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml" />
@@ -379,7 +378,13 @@
     <Content Include="JobRunner.ashx" />
     <Content Include="AssistantCompteQBO.ashx" />
     <Content Include="MailAttachment.ashx" />
-  <Content Include="wbfJobs.aspx" /><Content Include="wbfJobEdit.aspx" /><Content Include="wbfJobSchedule.aspx" /><Content Include="wbfJobMonitoring.aspx" /><Content Include="wbfJobExecution.aspx" /><Content Include="wbfJobDashboard.aspx" /></ItemGroup>
+    <Content Include="wbfJobs.aspx" />
+    <Content Include="wbfJobEdit.aspx" />
+    <Content Include="wbfJobSchedule.aspx" />
+    <Content Include="wbfJobMonitoring.aspx" />
+    <Content Include="wbfJobExecution.aspx" />
+    <Content Include="wbfJobDashboard.aspx" />
+  </ItemGroup>
   <ItemGroup>
     <Compile Include="App_Code\clsData.vb">
       <SubType>ASPXCodeBehind</SubType>
@@ -567,7 +572,49 @@
     <Compile Include="wbfCompanyEdit.aspx.designer.vb">
       <DependentUpon>wbfCompanyEdit.aspx</DependentUpon>
     </Compile>
-  <Compile Include="wbfJobs.aspx.vb"><DependentUpon>wbfJobs.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobs.aspx.designer.vb"><DependentUpon>wbfJobs.aspx</DependentUpon></Compile><Compile Include="wbfJobEdit.aspx.vb"><DependentUpon>wbfJobEdit.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobEdit.aspx.designer.vb"><DependentUpon>wbfJobEdit.aspx</DependentUpon></Compile><Compile Include="wbfJobSchedule.aspx.vb"><DependentUpon>wbfJobSchedule.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobSchedule.aspx.designer.vb"><DependentUpon>wbfJobSchedule.aspx</DependentUpon></Compile><Compile Include="wbfJobMonitoring.aspx.vb"><DependentUpon>wbfJobMonitoring.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobMonitoring.aspx.designer.vb"><DependentUpon>wbfJobMonitoring.aspx</DependentUpon></Compile><Compile Include="wbfJobExecution.aspx.vb"><DependentUpon>wbfJobExecution.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobExecution.aspx.designer.vb"><DependentUpon>wbfJobExecution.aspx</DependentUpon></Compile><Compile Include="wbfJobDashboard.aspx.vb"><DependentUpon>wbfJobDashboard.aspx</DependentUpon><SubType>ASPXCodeBehind</SubType></Compile><Compile Include="wbfJobDashboard.aspx.designer.vb"><DependentUpon>wbfJobDashboard.aspx</DependentUpon></Compile></ItemGroup>
+    <Compile Include="wbfJobs.aspx.vb">
+      <DependentUpon>wbfJobs.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobs.aspx.designer.vb">
+      <DependentUpon>wbfJobs.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobEdit.aspx.vb">
+      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobEdit.aspx.designer.vb">
+      <DependentUpon>wbfJobEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobSchedule.aspx.vb">
+      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobSchedule.aspx.designer.vb">
+      <DependentUpon>wbfJobSchedule.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobMonitoring.aspx.vb">
+      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobMonitoring.aspx.designer.vb">
+      <DependentUpon>wbfJobMonitoring.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobExecution.aspx.vb">
+      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobExecution.aspx.designer.vb">
+      <DependentUpon>wbfJobExecution.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfJobDashboard.aspx.vb">
+      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="wbfJobDashboard.aspx.designer.vb">
+      <DependentUpon>wbfJobDashboard.aspx</DependentUpon>
+    </Compile>
+  </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>

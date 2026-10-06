@@ -16,12 +16,16 @@ Partial Public Class PageFicheEmploye
     Protected WithEvents txtTauxHoraire As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtSalaireAnnuel As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtTauxVacances As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents lblUnite As Global.System.Web.UI.WebControls.Label
     Protected WithEvents ddlUniteCNESST As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents litAideUnite As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents chkExFed As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExQc As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExRRQ As Global.System.Web.UI.WebControls.CheckBox
+    Protected WithEvents spanExRQAP As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     Protected WithEvents chkExRQAP As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExAE As Global.System.Web.UI.WebControls.CheckBox
+    Protected WithEvents spanExFSS As Global.System.Web.UI.HtmlControls.HtmlGenericControl
     Protected WithEvents chkExFSS As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents chkExCNESST As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents txtTD1Montant As Global.System.Web.UI.WebControls.TextBox
@@ -31,6 +35,17 @@ Partial Public Class PageFicheEmploye
     Protected WithEvents txtTD1Deductions As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents ddlDentaire As Global.System.Web.UI.WebControls.DropDownList
     Protected WithEvents txtTD1Credits As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents phProvince As Global.System.Web.UI.WebControls.PlaceHolder
+    Protected WithEvents litLegendeProvince As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents lblProvMontant As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents phPersonnesACharge As Global.System.Web.UI.WebControls.PlaceHolder
+    Protected WithEvents lblProvCredits As Global.System.Web.UI.WebControls.Label
+    Protected WithEvents txtONMontant As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents litBaseProv As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents txtONPersonnes As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents litParPersonne As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents txtONCredits As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents phQuebec As Global.System.Web.UI.WebControls.PlaceHolder
     Protected WithEvents txtTPMontant As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents litBaseQc As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents txtTPAdditionnel As Global.System.Web.UI.WebControls.TextBox

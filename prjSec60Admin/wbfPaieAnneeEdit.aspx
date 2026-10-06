@@ -46,6 +46,9 @@
         table.res th, table.res td { border: 1px solid #e2e8f0; padding: 6px 12px; text-align: right; }
         table.res th:first-child, table.res td:first-child { text-align: left; }
         table.res th { background: #f8fafc; }
+        table.tr.pv { max-width: none; }
+        table.tr.pv td { vertical-align: top; }
+        table.tr.pv textarea.inp { min-width: 260px; font-size: 12px; }
         .pe-warn { background: rgba(245,158,11,.10); border: 1px solid rgba(245,158,11,.35); color: #92400e; border-radius: 12px; padding: 10px 12px; font-size: 13px; margin-bottom: 12px; }
     </style>
 </asp:Content>
@@ -215,6 +218,86 @@
         </div>
 
         <!-- Vérification -->
+        <div class="pe-card">
+            <div class="pe-head"><div class="h">Ontario et hors Québec — T4127</div><div class="s">Taux en fraction. Remplissez toutes les zones de cette section, ou laissez-les toutes vides : une section incomplète laisse l'Ontario indisponible pour l'année.</div></div>
+            <div class="pe-body">
+                <table class="tr">
+                    <tr><th>Tranche</th><th>Revenu imposable annuel jusqu'à</th><th>Taux (V)</th><th>Constante (KP)</th></tr>
+                    <tr><td>1</td><td><asp:TextBox ID="txtOnS1" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnT1" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnC1" runat="server" CssClass="inp" /></td></tr>
+                    <tr><td>2</td><td><asp:TextBox ID="txtOnS2" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnT2" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnC2" runat="server" CssClass="inp" /></td></tr>
+                    <tr><td>3</td><td><asp:TextBox ID="txtOnS3" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnT3" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnC3" runat="server" CssClass="inp" /></td></tr>
+                    <tr><td>4</td><td><asp:TextBox ID="txtOnS4" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnT4" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnC4" runat="server" CssClass="inp" /></td></tr>
+                    <tr><td>5</td><td><asp:TextBox ID="txtOnS5" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnT5" runat="server" CssClass="inp" /></td><td><asp:TextBox ID="txtOnC5" runat="server" CssClass="inp" /></td></tr>
+                </table>
+                <div class="f"><div class="hint">Impôt de l'Ontario. Dernière tranche : seuil « * ».</div></div>
+                <div class="pe-grid" style="margin-top:12px">
+                    <div class="f"><label>Fédéral — taux fixe des paiements forfaitaires, hors Québec</label><asp:TextBox ID="txtFedTauxFixeForfaitaireHorsQuebec" runat="server" CssClass="inp" /><div class="hint">0.10 = 10 % (jusqu'à 5 000 $)</div></div>
+                    <div class="f"><label>Assurance-emploi — taux hors Québec</label><asp:TextBox ID="txtAETauxHorsQuebec" runat="server" CssClass="inp" /><div class="hint">0.0163 = 1,63 %</div></div>
+                    <div class="f"><label>Assurance-emploi — cotisation maximale de l'employé, hors Québec</label><asp:TextBox ID="txtAEMaxEmployeHorsQuebec" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC — maximum des gains admissibles (MGAP)</label><asp:TextBox ID="txtRPCMaxGainsAdmissibles" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC — exemption de base</label><asp:TextBox ID="txtRPCExemption" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC — taux total de l'employé</label><asp:TextBox ID="txtRPCTaux" runat="server" CssClass="inp" /><div class="hint">0.0595 = 5,95 %</div></div>
+                    <div class="f"><label>RPC — taux de base</label><asp:TextBox ID="txtRPCTauxBase" runat="server" CssClass="inp" /><div class="hint">0.0495 = 4,95 %</div></div>
+                    <div class="f"><label>RPC — cotisation maximale de l'employé</label><asp:TextBox ID="txtRPCMaxEmploye" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC — cotisation de base maximale</label><asp:TextBox ID="txtRPCMaxBaseEmploye" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC2 — maximum supplémentaire des gains</label><asp:TextBox ID="txtRPC2MaxSupplementaire" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>RPC2 — taux</label><asp:TextBox ID="txtRPC2Taux" runat="server" CssClass="inp" /><div class="hint">0.04 = 4 %</div></div>
+                    <div class="f"><label>RPC2 — cotisation maximale de l'employé</label><asp:TextBox ID="txtRPC2MaxEmploye" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>Ontario — montant personnel de base (TD1ON)</label><asp:TextBox ID="txtOnMontantPersonnelBase" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>Ontario — taux des crédits</label><asp:TextBox ID="txtOnTauxCredits" runat="server" CssClass="inp" /><div class="hint">0.0505 = 5,05 %</div></div>
+                    <div class="f"><label>Ontario — surtaxe, 1er seuil d'impôt</label><asp:TextBox ID="txtOnSurtaxeSeuil1" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>Ontario — surtaxe, 1er taux</label><asp:TextBox ID="txtOnSurtaxeTaux1" runat="server" CssClass="inp" /><div class="hint">0.20 = 20 %</div></div>
+                    <div class="f"><label>Ontario — surtaxe, 2e seuil d'impôt</label><asp:TextBox ID="txtOnSurtaxeSeuil2" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>Ontario — surtaxe, 2e taux</label><asp:TextBox ID="txtOnSurtaxeTaux2" runat="server" CssClass="inp" /><div class="hint">0.36 = 36 %</div></div>
+                    <div class="f"><label>Ontario — réduction d'impôt, montant de base</label><asp:TextBox ID="txtOnReductionBase" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>Ontario — réduction d'impôt, par personne à charge</label><asp:TextBox ID="txtOnReductionParPersonne" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>ISE — exemption</label><asp:TextBox ID="txtISEExemption" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>ISE — masse salariale au-delà de laquelle l'exemption est perdue</label><asp:TextBox ID="txtISESeuilSansExemption" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>WSIB — salaire maximum assurable</label><asp:TextBox ID="txtWSIBMaxAssurable" runat="server" CssClass="inp" /></div>
+                </div>
+                <div class="pe-grid g2" style="margin-top:12px">
+                    <div class="f"><label>Ontario — contribution-santé (paliers)</label><asp:TextBox ID="txtOnContributionSante" runat="server" CssClass="ta" TextMode="MultiLine" /><div class="hint">Un palier par segment, séparés par « ; » : revenu de départ|montant de départ|taux|plafond. Exemple : 20000|0|0.06|300</div></div>
+                    <div class="f"><label>ISE — barème (tranches)</label><asp:TextBox ID="txtISETranches" runat="server" CssClass="ta" TextMode="MultiLine" /><div class="hint">Séparées par « ; » : masse salariale jusqu'à|taux en pourcentage|0. Dernière tranche : « * ». Exemple : 200000|0.98|0;…;*|1.95|0</div></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="pe-card">
+            <div class="pe-head"><div class="h">Autres provinces et territoires — T4127</div><div class="s">Une ligne par province et par date d'entrée en vigueur : une paie prend la ligne la plus récente en vigueur à sa date. Enregistrées avec le bouton « Enregistrer ».</div></div>
+            <div class="pe-body">
+                <asp:Repeater ID="rptProvinces" runat="server">
+                    <HeaderTemplate>
+                        <table class="tr pv">
+                            <tr><th>Province</th><th>En vigueur le</th><th>Tranches : revenu jusqu'à|taux|constante ; …</th><th>Montant personnel de base</th><th>Taux des crédits</th><th>Particularités</th><th>Maximum assurable (accidents du travail)</th><th></th></tr>
+                    </HeaderTemplate>
+                    <ItemTemplate>
+                            <tr>
+                                <td><b><%# Eval("Province") %></b><asp:HiddenField ID="hfProvince" runat="server" Value='<%# Eval("Province") %>' /><asp:HiddenField ID="hfDate" runat="server" Value='<%# Eval("EnVigueurLe", "{0:yyyy-MM-dd}") %>' /></td>
+                                <td><%# Eval("EnVigueurLe", "{0:yyyy-MM-dd}") %></td>
+                                <td><asp:TextBox ID="txtPTranches" runat="server" CssClass="inp" TextMode="MultiLine" Rows="3" Text='<%# Eval("Tranches") %>' /></td>
+                                <td><asp:TextBox ID="txtPBase" runat="server" CssClass="inp" Text='<%# NombreChamp(Eval("MontantPersonnelBase")) %>' /></td>
+                                <td><asp:TextBox ID="txtPTaux" runat="server" CssClass="inp" Text='<%# NombreChamp(Eval("TauxCredits")) %>' /></td>
+                                <td><asp:TextBox ID="txtPParticularites" runat="server" CssClass="inp" TextMode="MultiLine" Rows="3" Text='<%# Eval("Particularites") %>' /></td>
+                                <td><asp:TextBox ID="txtPAccidents" runat="server" CssClass="inp" Text='<%# NombreChamp(Eval("AccidentsMaxAssurable")) %>' /></td>
+                                <td><asp:LinkButton ID="lnkPSupprimer" runat="server" CommandName="supprimer" CommandArgument='<%# Eval("Province") & "|" & Eval("EnVigueurLe", "{0:yyyy-MM-dd}") %>' CssClass="pe-btn danger" OnClientClick="return confirm('Supprimer cette ligne ?');" CausesValidation="false">Supprimer</asp:LinkButton></td>
+                            </tr>
+                    </ItemTemplate>
+                    <FooterTemplate>
+                        </table>
+                    </FooterTemplate>
+                </asp:Repeater>
+                <asp:Literal ID="litProvincesVide" runat="server" />
+                <div class="f"><div class="hint">Tranches : comme le tableau 8.1 du guide, mais avec le revenu où chaque tranche FINIT ; dernière tranche « * ». Exemple : 54532|0.105|0;155805|0.125|1091;*|0.145|4207<br />
+                    Particularités (clé=valeur, séparées par « ; ») : <asp:Literal ID="litAideParticularites" runat="server" /></div></div>
+                <div class="pe-verif" style="margin-top:14px; max-width:760px; grid-template-columns: 1fr 1fr auto;">
+                    <div class="f"><label>Nouvelle ligne — province</label><asp:DropDownList ID="ddlPNouvelle" runat="server" CssClass="inp" /></div>
+                    <div class="f"><label>En vigueur le (aaaa-mm-jj)</label><asp:TextBox ID="txtPNouvelleDate" runat="server" CssClass="inp" /></div>
+                    <div><asp:Button ID="btnPAjouter" runat="server" Text="Ajouter" CssClass="pe-btn" CausesValidation="false" /></div>
+                </div>
+                <div class="f"><div class="hint">La nouvelle ligne reprend les dernières valeurs de la province ; corrigez-les puis enregistrez. Sert à un changement en cours d'année (édition de juillet du guide).</div></div>
+            </div>
+        </div>
+
         <div class="pe-card">
             <div class="pe-head"><div class="h">Vérifier avec un exemple</div><div class="s">Calcule avec les valeurs saisies ci-dessus, sans les enregistrer. Comparez avec l'exemple des guides ou le calculateur en ligne.</div></div>
             <div class="pe-body">

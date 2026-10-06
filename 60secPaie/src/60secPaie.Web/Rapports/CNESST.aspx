@@ -5,9 +5,9 @@
 
     <div class="barre">
         <div>
-            <h2>Déclaration des salaires pour la CNESST, année
+            <h2><%: If(HorsQuebec, "Gains assurables et primes (" & Noms.Accidents & "), année", "Déclaration des salaires pour la CNESST, année") %>
                 <asp:DropDownList ID="ddlAnnee" runat="server" AutoPostBack="true" Width="110" /></h2>
-            <p class="sous-titre">Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année.</p>
+            <p class="sous-titre"><%: If(HorsQuebec, "Salaires bruts versés, excédents du plafond des gains assurables et primes de l'année.", "Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année.") %></p>
         </div>
         <div class="actions sans-impression">
             <asp:Button ID="btnCsv" runat="server" Text="Exporter en CSV" CssClass="secondaire" />

@@ -124,6 +124,8 @@ mark{background:#ffe89a}
   <a href="#categories">Categorías de nómina</a>
   <a href="#parametres">Parámetros del año 2026</a>
   <a href="#formules">Fórmulas, retención por retención</a>
+  <a href="#ontario">Nómina de Ontario</a>
+  <a href="#provinces">Demás provincias y territorios</a>
   <a href="#arrondis">Redondeos</a>
   <a href="#exemple">Ejemplo con cifras</a>
   <h2>Casos prácticos</h2>
@@ -148,11 +150,12 @@ mark{background:#ffe89a}
 
 <main id="haut">
 <h1>Ayuda de 60secPaie</h1>
-<p class="lede">Esta guía describe cada pantalla, cada campo, cada regla y cada mensaje de 60secPaie, el servicio de nómina para Quebec de 60Sec. Sigue el orden del menú. Las palabras entre comillas « » son las que usted ve en la pantalla. Use el filtro de arriba para encontrar un tema, o <kbd>Ctrl</kbd>+<kbd>F</kbd> para buscar una palabra en toda la página.</p>
+<p class="lede">Esta guía describe cada pantalla, cada campo, cada regla y cada mensaje de 60secPaie, el servicio de nómina de 60Sec para Quebec y Ontario. Sigue el orden del menú. Las palabras entre comillas « » son las que usted ve en la pantalla. Use el filtro de arriba para encontrar un tema, o <kbd>Ctrl</kbd>+<kbd>F</kbd> para buscar una palabra en toda la página.</p>
 <div class="note">Versión de la guía: septiembre de 2026. Tasas vigentes en el programa: año 2026, según la guía T4127 de la ARC y la guía TP-1015.F de Revenu Québec.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Visión general</h2>
+<div class="note">Esta guía describe las pantallas con los términos de Quebec. Para una empresa cuya provincia de empleo es <strong>Ontario</strong>, las mismas pantallas hablan de impuesto de Ontario, RPC, ISE y WSIB, sin RQAP ni Relevé 1: vea <a href="#ontario">Nómina de Ontario</a>. Para las demás provincias y los territorios, vea <a href="#provinces">Nómina de las demás provincias y territorios</a>.</div>
 <p>60secPaie calcula la nómina de los empleados que trabajan en Quebec: impuesto federal, impuesto de Quebec, RRQ, seguro de empleo, RQAP, y los aportes del empleador (RRQ, AE, RQAP, FSS, CNESST, CNT). A partir de las nóminas confirmadas, genera los talones de pago, el archivo de depósito directo, el monto de las retenciones por remitir a los dos gobiernos, las casillas de los comprobantes T4 y Relevé 1, la declaración de salarios CNESST y los asientos contables.</p>
 <p>Comparte sus cuentas de usuario y sus empresas con 60Sec. Los empleados también son los de 60Sec: pueden crearse de un lado o del otro, pero su identidad (nombre, dirección, puesto) se modifica en 60Sec. 60secPaie le añade todo lo que concierne a la nómina.</p>
 
@@ -266,6 +269,7 @@ mark{background:#ffe89a}
 <h3>« Información de nómina »</h3>
 <table>
 <tr><th>Campo</th><th>Función</th><th>Valor predeterminado, validación</th></tr>
+<tr><td>« Provincia de empleo » *</td><td>Provincia del establecimiento donde sus empleados se presentan a trabajar. Determina las retenciones, las remesas y los comprobantes.</td><td>Quebec, Ontario o una de las otras once provincias y territorios. Vea <a href="#ontario">Nómina de Ontario</a> y <a href="#provinces">Nómina de las demás provincias y territorios</a>.</td></tr>
 <tr><td>« Período de pago predeterminado » *</td><td>Frecuencia propuesta en el asistente y aplicada a los empleados que no tienen una propia.</td><td>Cada 2 semanas (26). Opciones: 52, 26, 24, 12, 1.</td></tr>
 <tr><td>« Tasa de vacaciones predeterminada (%) » *</td><td>Tasa de indemnización de vacaciones de los empleados sin tasa propia.</td><td>4. Rechazada por encima de 20: « La tasa de vacaciones parece demasiado alta. »</td></tr>
 <tr><td>« Próximo número de cheque »</td><td>Primer número asignado a las nóminas por cheque y a las remesas por cheque.</td><td>1. Vacío = 1. Avanza automáticamente.</td></tr>
@@ -880,6 +884,143 @@ mark{background:#ffe89a}
 <tr><td>Seguro de empleo (1.30 %)</td><td class="num">$780.00</td><td class="num">$780.00</td></tr>
 <tr><td>RQAP (0.43 %)</td><td class="num">$258.00</td><td class="num">$257.92</td></tr>
 </table>
+
+<!-- ============================================================ -->
+<h2 id="ontario">Entender los cálculos › Nómina de Ontario</h2>
+<p>60secPaie también calcula la nómina de empleados que trabajan en <strong>Ontario</strong>. La <strong>provincia de empleo</strong> es la de la empresa: se elige en <span class="chemin">Configuración › Parámetros de nómina</span>, campo « Provincia de empleo ». Es la provincia del establecimiento donde los empleados se presentan a trabajar, no donde viven. Una empresa tiene una sola provincia; un empleador presente en las dos configura dos empresas. El resto de esta guía describe las pantallas con los términos de Quebec: para una empresa de Ontario, las mismas pantallas muestran los términos de Ontario, según la tabla siguiente.</p>
+<h3>Lo que cambia</h3>
+<table>
+<tr><th></th><th>Quebec</th><th>Ontario</th></tr>
+<tr><td>Impuesto provincial</td><td>« Impuesto de Quebec » (guía TP-1015.F)</td><td>« Impuesto de Ontario » (guía T4127): tabla, sobretasa, contribución de salud de Ontario y reducción de impuesto</td></tr>
+<tr><td>Impuesto federal</td><td>Reducción de 16,5 %</td><td>Sin reducción: es más alto que en Quebec para el mismo salario</td></tr>
+<tr><td>Régimen de pensiones</td><td>« RRQ »</td><td>« RPC » (Régimen de Pensiones de Canadá), con su 2.º aporte adicional</td></tr>
+<tr><td>Seguro de empleo</td><td>Tasa reducida de Quebec</td><td>Tasa ordinaria</td></tr>
+<tr><td>Licencias parentales</td><td>« RQAP »</td><td>Ninguna retención aparte: las cubre el seguro de empleo</td></tr>
+<tr><td>Aporte de salud del empleador</td><td>« FSS »</td><td>« ISE », el impuesto de salud de los empleadores</td></tr>
+<tr><td>Accidentes de trabajo</td><td>« CNESST », unidades de clasificación</td><td>« WSIB », clases</td></tr>
+<tr><td>Normas laborales</td><td>« CNT »</td><td>Ningún aporte</td></tr>
+<tr><td>Formularios del empleado</td><td>TD1 y TP-1015.3</td><td>TD1 y TD1ON</td></tr>
+<tr><td>Remesas</td><td>Receptor General y Revenu Québec</td><td>Solo Receptor General</td></tr>
+<tr><td>Comprobantes</td><td>T4 y Relevé 1</td><td>Solo T4</td></tr>
+</table>
+<h3>Configuración › Parámetros de nómina</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Notas</th></tr>
+<tr><td>« Provincia de empleo » *</td><td>« Quebec », « Ontario » u otra provincia o territorio (vea <a href="#provinces">Nómina de las demás provincias y territorios</a>). Determina las retenciones, las remesas y los comprobantes.</td><td>Los campos propios de la otra provincia desaparecen de la página. La provincia se guarda en cada nómina: si cambia, « las próximas nóminas se calcularán según sus reglas; las nóminas ya confirmadas conservan la suya », y una nómina en preparación debe recalcularse.</td></tr>
+<tr><td>« Masa salarial total estimada ($) »</td><td>En Ontario: remuneración total pagada en Ontario durante el año. Sirve para determinar la tasa del ISE.</td><td>La tasa real se establece en la declaración anual del ISE.</td></tr>
+<tr><td>« Exención del impuesto de salud de los empleadores (ISE) »</td><td>« Con derecho a la exención » o « Sin derecho (sector público, grupo asociado que ya la utiliza) ».</td><td>La ayuda muestra « Tasa ISE aplicada a cada nómina: x,xx % ».</td></tr>
+<tr><td>« Tasa de prima WSIB ($ por cada 100 $ asegurables) »</td><td>Se aplica a los empleados sin clase WSIB.</td><td>« Figura en su estado de primas. » Con varias clases, vea <span class="chemin">Configuración › Clases WSIB</span>.</td></tr>
+</table>
+<p>En Ontario, la página no muestra ni la frecuencia de pago a Revenu Québec, ni el número RS, ni el sector del FSS, ni la casilla de la CNT. El submenú « Unidades CNESST » se llama « Clases WSIB »: misma pantalla, mismas reglas.</p>
+<h3>Empleados › Ficha</h3>
+<p>El bloque « Tributación de Quebec » se reemplaza por « Tributación de Ontario »:</p>
+<table>
+<tr><th>Campo</th><th>Función</th></tr>
+<tr><td>« TD1ON - Monto total de la solicitud ($) »</td><td>Total de la solicitud del formulario TD1ON. Vacío = monto personal básico de Ontario (12 989 $ en 2026).</td></tr>
+<tr><td>« Personas a cargo para la reducción del impuesto de Ontario »</td><td>Número de hijos menores de 19 años y de personas a cargo con una discapacidad (554 $ cada uno en 2026). Vacío si el empleado no solicita ninguno.</td></tr>
+<tr><td>« Otros créditos de impuesto de Ontario autorizados ($) »</td><td>Créditos anuales autorizados por la ARC.</td></tr>
+</table>
+<p>El impuesto adicional por nómina, la deducción por zona designada y las deducciones del T1213 permanecen en « Tributación federal »: fuera de Quebec, valen para los dos impuestos. Las exenciones se llaman « No retener el impuesto de Ontario », « No aportar al RPC », « Excluir del aporte de salud del empleador (ISE) » y « Excluir de la cobertura de accidentes de trabajo (WSIB) »; la del RQAP no se ofrece. En <span class="chemin">Acumulados iniciales</span>, los campos pasan a ser « Impuesto de Ontario retenido ($) », « Ingresos pensionables - RPC ($) », « Aporte al RPC (base + 1.ª adicional) ($) », « 2.º aporte adicional al RPC ($) » e « Ingresos asegurables WSIB ($) ».</p>
+<h3>Parámetros 2026 de Ontario</h3>
+<table>
+<tr><th>Parámetro</th><th>Valor 2026</th></tr>
+<tr><td>Impuesto de Ontario, tramos</td><td>5,05 % hasta 53 891 $; 9,15 % hasta 107 785 $; 11,16 % hasta 150 000 $; 12,16 % hasta 220 000 $; 13,16 % por encima</td></tr>
+<tr><td>Monto personal básico de Ontario</td><td>12 989 $</td></tr>
+<tr><td>Sobretasa</td><td>20 % del impuesto básico por encima de 5 818 $, más 36 % por encima de 7 446 $</td></tr>
+<tr><td>Contribución de salud de Ontario</td><td>0 $ hasta 20 000 $ de ingreso gravable; hasta 300 $, 450 $, 600 $, 750 $ y luego 900 $ por año según el ingreso</td></tr>
+<tr><td>Reducción de impuesto</td><td>Monto básico de 300 $, más 554 $ por persona a cargo</td></tr>
+<tr><td>RPC</td><td>5,95 % de los ingresos por encima de la exención de 3 500 $, máximo de ingresos 74 600 $, aporte máximo 4 230,45 $</td></tr>
+<tr><td>RPC, 2.º aporte adicional</td><td>4 % de los ingresos entre 74 600 $ y 85 000 $, máximo 416 $</td></tr>
+<tr><td>Seguro de empleo</td><td>1,63 % hasta 68 900 $ de ingresos asegurables, máximo 1 123,07 $; empleador: 1,4 veces</td></tr>
+<tr><td>ISE</td><td>De 0,98 % (masa salarial de 200 000 $ o menos) a 1,95 % (más de 400 000 $); exención de 1 000 000 $ para el empleador con derecho cuya masa no supere 5 000 000 $</td></tr>
+<tr><td>WSIB</td><td>Tope de ingresos asegurables: 121 700 $ por empleado</td></tr>
+</table>
+<h3>Fórmulas</h3>
+<ul>
+  <li><strong>RPC</strong>: 5,95 % × (ingresos del período – 3 500 $ ÷ número de períodos), hasta el máximo del año. El empleador paga el mismo monto. Se aporta desde la primera nómina fechada en el mes siguiente al 18.º cumpleaños hasta la última nómina fechada en el mes del 70.º cumpleaños.</li>
+  <li><strong>Seguro de empleo</strong>: 1,63 % de los ingresos asegurables, hasta el máximo del año.</li>
+  <li><strong>Ingreso gravable anual</strong>: el mismo para los dos impuestos — la remuneración del período menos las deducciones que reducen el impuesto (RPA, REER, cuota sindical) y la parte mejorada del aporte al RPC, multiplicada por el número de períodos.</li>
+  <li><strong>Impuesto federal</strong>: tabla federal menos los créditos (monto de la solicitud TD1, aportes al RPC y al AE, monto canadiense por empleo), sin reducción, dividido por el número de períodos.</li>
+  <li><strong>Impuesto de Ontario</strong>: tabla de Ontario menos los créditos (monto de la solicitud TD1ON, aportes al RPC y al AE), más la sobretasa, más la contribución de salud, menos la reducción de impuesto; todo dividido por el número de períodos. La contribución de salud forma parte del impuesto de Ontario retenido: no tiene línea propia en el talón.</li>
+  <li><strong>Bono y pago retroactivo</strong>: el impuesto es la diferencia entre el impuesto del año con y sin el pago. Cuando la remuneración del año no supera 5 000 $, la retención es de 15 % en total: 10 % federal y 5 % de Ontario.</li>
+  <li><strong>ISE</strong>: remuneración de la nómina × tasa efectiva. La tasa efectiva es la tasa de la tabla repartida sobre toda la masa salarial una vez restada la exención; es nula cuando la masa estimada no supera la exención.</li>
+  <li><strong>WSIB</strong>: ingresos asegurables × tasa de la clase del empleado (si no, la de la empresa) ÷ 100, hasta el tope del año.</li>
+  <li><strong>Vacaciones</strong>: la indemnización se acumula sobre el salario bruto, sin el pago de vacaciones mismo.</li>
+</ul>
+<div class="note">El detalle de cada nómina (paso 3 del asistente, « Detalle y verificación de los cálculos ») muestra los valores intermedios: PI, F5, A, K1, K2, T1 para el federal; T4, V1 (sobretasa), V2 (contribución de salud), S (reducción) y T2 para Ontario.</div>
+<h3>Retenciones</h3>
+<p>En Ontario, todo se remite al <strong>Receptor General de Canadá</strong>, en un solo pago: « Impuesto federal », « Impuesto de Ontario », « RPC - aportes de los empleados », « RPC - aporte del empleador » y los aportes de los empleados y del empleador al seguro de empleo. No hay remesa a Revenu Québec: esa opción no se ofrece. Una tarjeta « Ontario: montos fuera de las remesas » da el acumulado del año del impuesto de salud de los empleadores y de la prima de la WSIB: « Estos montos se pagan aparte, a la administración de la provincia o del territorio y a su comisión de accidentes de trabajo. No forman parte de las remesas al Receptor General. »</p>
+<h3>Informes</h3>
+<ul>
+  <li><strong>« Comprobantes T4 »</strong>: casillas 16 y 16A para el RPC (en lugar de 17 y 17A), casilla 10 « ON », casilla 22 que reúne el impuesto federal y el impuesto de Ontario. Ni casillas 55 y 56, ni Relevé 1, ni Sumario 1. Una tarjeta « Ontario: montos fuera de las remesas » da la remuneración sujeta y los montos calculados.</li>
+  <li><strong>« Ingresos asegurables WSIB »</strong>: el informe de la CNESST, para la WSIB — salario bruto, excedente del tope, ingresos asegurables y prima por empleado, por clase y por mes.</li>
+  <li><strong>« Asientos contables »</strong>: mismas cuentas, etiquetas de Ontario (« RPC por pagar », « ISE por pagar », « WSIB por pagar »…). El ISE y la WSIB se registran como gastos y como montos por pagar.</li>
+</ul>
+<h3>Límites</h3>
+<ul>
+  <li>Un empleado pagado en Quebec y en Ontario en el mismo año aparece en un solo comprobante, con una advertencia: la ARC pide un T4 por provincia, y el reparto debe hacerse a mano.</li>
+  <li>El crédito de impuesto de Ontario por fondos de trabajadores no se calcula.</li>
+  <li>La parte del empleador en un régimen privado de seguro de salud solo es un beneficio gravable en Quebec: no se agrega a una nómina de Ontario (« Este beneficio solo es gravable en Quebec: no se agrega a una nómina de otra provincia. ») y no se copia de los elementos recurrentes del empleado.</li>
+  <li>Las tasas del ISE y el tope de la WSIB deben confirmarse con el Ministerio de Finanzas de Ontario y la WSIB. Compare algunas nóminas con la calculadora en línea de la ARC (PDOC).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="provinces">Entender los cálculos › Nómina de las demás provincias y territorios</h2>
+<p>60secPaie calcula la nómina de las <strong>trece provincias y territorios</strong> de Canadá. El campo « Provincia de empleo » de <span class="chemin">Configuración › Parámetros de nómina</span> los ofrece todos: Quebec, Ontario, Alberta, Columbia Británica, Isla del Príncipe Eduardo, Manitoba, Nuevo Brunswick, Nueva Escocia, Nunavut, Saskatchewan, Terranova y Labrador, Territorios del Noroeste y Yukón. Como en Ontario, es la provincia del establecimiento donde los empleados se presentan a trabajar; una empresa tiene una sola provincia, y cada nómina conserva la suya. Esta sección completa <a href="#ontario">Nómina de Ontario</a>: todo lo que allí se dice de las pantallas vale aquí, con los términos de la provincia elegida.</p>
+<h3>Lo que es común fuera de Quebec</h3>
+<ul>
+  <li><strong>RPC</strong> en lugar del RRQ, con su 2.º aporte adicional; el empleador paga el mismo monto.</li>
+  <li><strong>Seguro de empleo con la tasa ordinaria</strong>; no hay RQAP ni aporte a las normas laborales (CNT).</li>
+  <li><strong>Impuesto federal sin reducción</strong>, e impuesto de la provincia o del territorio calculado según la guía T4127 de la ARC, sobre el mismo ingreso gravable.</li>
+  <li><strong>Todo se remite al Receptor General de Canadá</strong>, en un solo pago: impuesto federal, impuesto de la provincia, RPC y seguro de empleo. No hay ninguna remesa a Revenu Québec.</li>
+  <li><strong>Solo T4</strong>: casilla 10 = código de la provincia, casillas 16 y 16A para el RPC, casilla 22 que reúne el impuesto federal y el impuesto de la provincia. Ni Relevé 1, ni Sumario 1.</li>
+  <li>La indemnización de vacaciones se acumula sobre el salario bruto, sin el pago de vacaciones mismo, con la tasa de vacaciones indicada.</li>
+</ul>
+<h3>Los términos de cada provincia</h3>
+<table>
+<tr><th>Provincia o territorio</th><th>Impuesto y formulario de créditos</th><th>Aporte de salud del empleador</th><th>Accidentes de trabajo</th></tr>
+<tr><td>Alberta (AB)</td><td>« Impuesto de Alberta », TD1AB</td><td>Ninguno</td><td>« WCB »</td></tr>
+<tr><td>Columbia Británica (BC)</td><td>« Impuesto de Columbia Británica », TD1BC</td><td>« ISE », el impuesto de salud de los empleadores: tasa por indicar</td><td>« WorkSafeBC »</td></tr>
+<tr><td>Isla del Príncipe Eduardo (PE)</td><td>« Impuesto de la Isla del Príncipe Eduardo », TD1PE</td><td>Ninguno</td><td>« WCB »</td></tr>
+<tr><td>Manitoba (MB)</td><td>« Impuesto de Manitoba », TD1MB</td><td>« ISFP », el impuesto para la salud y la enseñanza postsecundaria: tasa por indicar</td><td>« WCB »</td></tr>
+<tr><td>Nuevo Brunswick (NB)</td><td>« Impuesto de Nuevo Brunswick », TD1NB</td><td>Ninguno</td><td>« WorkSafeNB »</td></tr>
+<tr><td>Nueva Escocia (NS)</td><td>« Impuesto de Nueva Escocia », TD1NS</td><td>Ninguno</td><td>« WCB »</td></tr>
+<tr><td>Nunavut (NU)</td><td>« Impuesto de Nunavut », TD1NU; más el « Impuesto sobre la nómina » del 2 %</td><td>Ninguno</td><td>« WSCC »</td></tr>
+<tr><td>Saskatchewan (SK)</td><td>« Impuesto de Saskatchewan », TD1SK</td><td>Ninguno</td><td>« WCB »</td></tr>
+<tr><td>Terranova y Labrador (NL)</td><td>« Impuesto de Terranova y Labrador », TD1NL</td><td>« ISEPS », el impuesto para la salud y la educación postsecundaria: tasa por indicar</td><td>« WorkplaceNL »</td></tr>
+<tr><td>Territorios del Noroeste (NT)</td><td>« Impuesto de los Territorios del Noroeste », TD1NT; más el « Impuesto sobre la nómina » del 2 %</td><td>Ninguno</td><td>« WSCC »</td></tr>
+<tr><td>Yukón (YT)</td><td>« Impuesto de Yukón », TD1YT</td><td>Ninguno</td><td>« WSCB »</td></tr>
+</table>
+<h3>Configuración › Parámetros de nómina</h3>
+<table>
+<tr><th>Campo</th><th>Función</th><th>Notas</th></tr>
+<tr><td>« Tasa efectiva: … (%) »</td><td>Solo Columbia Británica, Manitoba y Terranova y Labrador: la tasa del aporte de salud del empleador, en porcentaje de la remuneración, aplicada a cada nómina.</td><td>60secPaie no la calcula: « Depende de su masa salarial y de la exención de la provincia ». Obténgala de la administración provincial; deje 0 por debajo del umbral de exención. En las provincias que no tienen tal aporte, el campo no se muestra y no se calcula nada.</td></tr>
+<tr><td>« Tasa de prima … ($ por cada 100 $ asegurables) »</td><td>La tasa de la comisión de accidentes de trabajo de la provincia (WCB, WorkSafeBC, WorkplaceNL, WSCC…), aplicada a los empleados sin clase.</td><td>Con varias clases, el submenú « Clases … » reemplaza a « Unidades CNESST »: misma pantalla, mismas reglas.</td></tr>
+</table>
+<p>La página no muestra la masa salarial, ni la frecuencia de pago a Revenu Québec, ni el número RS, ni el sector del FSS, ni la casilla de la CNT: no sirven fuera de Quebec y Ontario.</p>
+<h3>Empleados › Ficha</h3>
+<p>El bloque « Tributación de Quebec » se reemplaza por el de la provincia (« Tributación de Alberta », « Tributación de Manitoba »…), con el monto total de la solicitud del formulario de la provincia (TD1AB, TD1BC…) y los otros créditos de impuesto autorizados; en blanco, se aplica el monto personal básico de la provincia. El campo de las personas a cargo solo existe en Ontario. Las exenciones toman el nombre de la provincia: « No retener el impuesto de Alberta », « No aportar al RPC », « Excluir de la cobertura de accidentes de trabajo (WCB) »; « Excluir del aporte de salud del empleador (…) » solo se ofrece donde ese aporte existe. En los Territorios del Noroeste y en Nunavut se agrega « No retener el impuesto sobre la nómina del territorio ».</p>
+<h3>Particularidades calculadas</h3>
+<table>
+<tr><th>Provincia o territorio</th><th>Lo que 60secPaie calcula además de la tabla</th></tr>
+<tr><td>Alberta</td><td>El crédito suplementario K5P de la guía T4127, sobre la parte de los créditos personales que supera el umbral de la provincia.</td></tr>
+<tr><td>Columbia Británica</td><td>La reducción de impuesto para bajos ingresos (factor S), y el cambio de tasa del 1 de julio de 2026: una nómina fechada el 1 de julio o después toma las nuevas tasas.</td></tr>
+<tr><td>Manitoba</td><td>El monto personal básico, reducido gradualmente entre 200 000 $ y 400 000 $ de ingreso gravable, hasta cero.</td></tr>
+<tr><td>Terranova y Labrador e Isla del Príncipe Eduardo</td><td>El cambio del 1 de julio de 2026 (monto personal básico en Terranova y Labrador, nuevo tramo en la Isla del Príncipe Eduardo), aplicado según la fecha de la nómina.</td></tr>
+<tr><td>Yukón</td><td>El crédito canadiense por empleo en el nivel territorial (K4P).</td></tr>
+<tr><td>Territorios del Noroeste y Nunavut</td><td>El impuesto del 2 % sobre la nómina, retenido al empleado sobre toda su remuneración gravable. Aparece en el talón como « Impuesto sobre la nómina » y se remite <strong>al gobierno del territorio</strong>, no al Receptor General; no está incluido en la casilla 22 del T4.</td></tr>
+</table>
+<h3>Retenciones e informes</h3>
+<p>En <span class="chemin">Retenciones</span>, solo se ofrece el Receptor General. Una tarjeta « …: montos fuera de las remesas », con el nombre de la provincia, da el acumulado del año de lo que se paga aparte: la prima de la comisión de accidentes de trabajo, el aporte de salud del empleador donde existe y, en un territorio, el impuesto sobre la nómina retenido a los empleados. La misma tarjeta aparece bajo los comprobantes T4, con la remuneración sujeta. El informe « Ingresos asegurables … » es el de la CNESST, para la comisión de la provincia; los asientos contables toman los nombres de la provincia.</p>
+<h3>Lo que 60secPaie no calcula</h3>
+<ul>
+  <li>Los <strong>créditos de impuesto provinciales por fondos de trabajadores</strong> (Manitoba, Nuevo Brunswick, Nueva Escocia, Saskatchewan). El crédito federal sí se calcula.</li>
+  <li>La <strong>tasa del aporte de salud del empleador</strong> en Columbia Británica, Manitoba y Terranova y Labrador: debe indicarse, y el monto real se establece en la declaración anual a la provincia.</li>
+  <li>Las <strong>reglas provinciales de vacaciones y de días feriados</strong> más allá de la tasa de vacaciones indicada: duración del permiso, tasa mínima según la antigüedad, cálculo de la indemnización de un día feriado.</li>
+  <li>La remesa del impuesto sobre la nómina de los territorios, del aporte de salud y de las primas de accidentes de trabajo: 60secPaie da los montos, sin registrar su pago.</li>
+</ul>
+<h3>De dónde vienen las tasas</h3>
+<p>Las tasas del impuesto de las provincias y de los territorios vienen de la guía <strong>T4127</strong> de la ARC, « Fórmulas para el cálculo de las retenciones sobre la nómina »: la 122.ª edición, en vigor el 1 de enero de 2026, y la 123.ª edición, en vigor el 1 de julio de 2026. Cada conjunto de tasas lleva su fecha de entrada en vigor, y una nómina toma el que se aplica en su fecha. Se mantienen al día en <strong>Sec60Admin</strong> (Nómina › Tasas del año), sin actualizar el programa. Mientras las tasas de una provincia no estén definidas para un año, la nómina se rechaza allí: « Las tasas de … aún no están definidas en el programa para la provincia ». Compare algunas nóminas con la calculadora en línea de la ARC (PDOC).</p>
 
 <!-- ============================================================ -->
 <h2 id="cas-demarrage">Caso práctico › Primer arranque</h2>

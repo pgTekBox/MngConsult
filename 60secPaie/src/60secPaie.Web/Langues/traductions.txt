@@ -2884,17 +2884,17 @@ es: RPC/RRQ
 
 # ---------- Page de présentation (Accueil.aspx) ----------
 
-fr: 60secPaie — la paie du Québec, faite comme il faut
-en: 60secPaie — Quebec payroll, done right
-es: 60secPaie — la nómina de Quebec, bien hecha
+fr: 60secPaie — la paie partout au Canada, faite comme il faut
+en: 60secPaie — payroll across Canada, done right
+es: 60secPaie — la nómina en todo Canadá, bien hecha
 
-fr: Logiciel de paie pour les employeurs du Québec : retenues fédérales et provinciales, relevés T4 et RL-1, remises gouvernementales, dépôt direct et écritures au grand livre.
-en: Payroll software for Quebec employers: federal and provincial deductions, T4 and RL-1 slips, government remittances, direct deposit and general ledger entries.
-es: Software de nómina para empleadores de Quebec: retenciones federales y provinciales, formularios T4 y RL-1, remesas gubernamentales, depósito directo y asientos contables.
+fr: Logiciel de paie pour les employeurs du Québec, de l'Ontario et de toutes les provinces et tous les territoires du Canada : retenues fédérales et provinciales, feuillets T4 et RL-1, remises gouvernementales, dépôt direct et écritures au grand livre.
+en: Payroll software for employers in Quebec, Ontario and every province and territory of Canada: federal and provincial deductions, T4 and RL-1 slips, government remittances, direct deposit and general ledger entries.
+es: Software de nómina para empleadores de Quebec, Ontario y todas las provincias y territorios de Canadá: retenciones federales y provinciales, formularios T4 y RL-1, remesas gubernamentales, depósito directo y asientos contables.
 
-fr: Paie canadienne, règles du Québec
-en: Canadian payroll, Quebec rules
-es: Nómina canadiense, reglas de Quebec
+fr: Paie canadienne, règles de votre province
+en: Canadian payroll, your province's rules
+es: Nómina canadiense, reglas de su provincia
 
 fr: Faire la paie ne devrait pas prendre l'après-midi.
 en: Running payroll shouldn't take all afternoon.
@@ -3004,25 +3004,25 @@ fr: Remises gouvernementales
 en: Government remittances
 es: Remesas gubernamentales
 
-fr: Ce que vous devez à l'ARC et à Revenu Québec, avec l'historique des versements.
-en: What you owe the CRA and Revenu Québec, with the payment history.
-es: Lo que debe a la CRA y a Revenu Québec, con el historial de pagos.
+fr: Ce que vous devez à l'ARC, et à Revenu Québec pour une compagnie du Québec, avec l'historique des versements.
+en: What you owe the CRA, and Revenu Québec for a Quebec company, with the payment history.
+es: Lo que debe a la CRA, y a Revenu Québec en el caso de una empresa de Quebec, con el historial de pagos.
 
 fr: T4 et RL-1
 en: T4 and RL-1
 es: T4 y RL-1
 
-fr: Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé.
-en: The year-end slips, built from the employee's year-to-date totals.
-es: Los formularios de fin de año, generados a partir de los acumulados del empleado.
+fr: Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé : le T4 partout, le RL-1 en plus au Québec.
+en: Year-end slips, built from the employee's year-to-date totals: the T4 everywhere, plus the RL-1 in Quebec.
+es: Los formularios de fin de año, elaborados a partir de los acumulados del empleado: el T4 en todas partes, y además el RL-1 en Quebec.
 
 fr: Le grand livre reçoit la paie selon le plan comptable que vous avez choisi.
 en: The general ledger receives the pay run according to the chart of accounts you chose.
 es: El libro mayor recibe la nómina según el plan de cuentas que usted eligió.
 
-fr: Les masses salariales assurables, par unité de classification.
-en: Insurable payroll totals, by classification unit.
-es: Las masas salariales asegurables, por unidad de clasificación.
+fr: Les masses salariales assurables pour la CNESST, la WSIB ou la commission de votre province.
+en: Insurable payroll totals for the CNESST, the WSIB or your province's board.
+es: Las masas salariales asegurables para la CNESST, la WSIB o la comisión de su provincia.
 
 fr: Les taux viennent d'où ils doivent venir
 en: The rates come from where they should
@@ -3098,9 +3098,9 @@ fr: La paie, en quelques minutes.
 en: Payroll, in minutes.
 es: La nómina, en pocos minutos.
 
-fr: Retenues calculées d'après les tables officielles de l'ARC et de Revenu Québec
-en: Deductions calculated from the official CRA and Revenu Québec tables
-es: Retenciones calculadas según las tablas oficiales de la CRA y de Revenu Québec
+fr: Retenues calculées d'après les tables officielles de l'ARC et de Revenu Québec, pour toutes les provinces et tous les territoires
+en: Deductions calculated from the official CRA and Revenu Québec tables, for every province and territory
+es: Retenciones calculadas según las tablas oficiales de la CRA y de Revenu Québec, para todas las provincias y territorios
 
 fr: Talons, T4 et RL-1 produits à partir de vos paies
 en: Stubs, T4 and RL-1 slips produced from your pay runs
@@ -3515,3 +3515,915 @@ es: Le escucho… hable y luego haga una pausa.
 fr: Le micro n'est pas autorisé : vérifiez la permission du navigateur.
 en: The microphone is not allowed: check the browser permission.
 es: El micrófono no está autorizado: revise el permiso del navegador.
+
+# ---------- Ontario ----------
+# Sigles : en anglais RPC=CPP, ISE=EHT ; WSIB reste WSIB. En espagnol, les sigles du français restent.
+
+fr: Impôt de l'Ontario
+en: Ontario tax
+es: Impuesto de Ontario
+
+fr: Impôt Ont.
+en: Ont. tax
+es: Imp. Ont.
+
+fr: RPC
+en: CPP
+es: RPC
+
+fr: RPC 2
+en: CPP 2
+es: RPC 2
+
+fr: RPC - 2e cotisation suppl.
+en: CPP - 2nd additional contribution
+es: RPC - 2.º aporte adicional
+
+fr: ISE
+en: EHT
+es: ISE
+
+fr: Impôt-santé des employeurs (ISE)
+en: Employer Health Tax (EHT)
+es: Impuesto de salud de los empleadores (ISE)
+
+fr: RPC - cotisations des employés
+en: CPP - employee contributions
+es: RPC - aportes de los empleados
+
+fr: RPC - cotisation de l'employeur
+en: CPP - employer contribution
+es: RPC - aporte del empleador
+
+fr: RPC - part de l'employeur
+en: CPP - employer share
+es: RPC - parte del empleador
+
+fr: RPC à payer
+en: CPP payable
+es: RPC por pagar
+
+fr: RPC à payer (employés et employeur)
+en: CPP payable (employees and employer)
+es: RPC por pagar (empleados y empleador)
+
+fr: Impôt de l'Ontario à payer
+en: Ontario tax payable
+es: Impuesto de Ontario por pagar
+
+fr: ISE à payer
+en: EHT payable
+es: ISE por pagar
+
+fr: WSIB à payer
+en: WSIB payable
+es: WSIB por pagar
+
+fr: Dépense - part de l'employeur au RPC
+en: Expense - employer share of CPP
+es: Gasto - parte del empleador al RPC
+
+fr: Dépense - {0}
+en: Expense - {0}
+es: Gasto - {0}
+
+fr: Dépense - WSIB
+en: Expense - WSIB
+es: Gasto - WSIB
+
+fr: Les taux de {#0} ne sont pas encore définis dans le logiciel pour la province : {1}.
+en: The {#0} rates are not yet defined in the software for the province: {1}.
+es: Las tasas de {#0} aún no están definidas en el programa para la provincia: {1}.
+
+fr: Employé de moins de 18 ans : aucune cotisation au RPC avant le mois qui suit son 18e anniversaire.
+en: Employee under 18: no CPP contribution before the month following their 18th birthday.
+es: Empleado menor de 18 años: ningún aporte al RPC antes del mes siguiente a su 18.º cumpleaños.
+
+fr: Employé de plus de 70 ans : aucune cotisation au RPC.
+en: Employee over 70: no CPP contribution.
+es: Empleado mayor de 70 años: ningún aporte al RPC.
+
+fr: Avantage imposable au Québec seulement, ignoré hors Québec : {0}.
+en: Benefit taxable in Québec only, ignored outside Québec: {0}.
+es: Beneficio gravable solo en Quebec, ignorado fuera de Quebec: {0}.
+
+# Configuration › Paramètres de paie
+
+fr: Québec
+en: Québec
+es: Quebec
+
+fr: Province ou territoire de l'établissement où vos employés se présentent au travail. Elle décide des retenues, des remises et des feuillets.
+en: Province or territory of the establishment where your employees report for work. It determines the deductions, the remittances and the slips.
+es: Provincia o territorio del establecimiento donde sus empleados se presentan a trabajar. Determina las retenciones, las remesas y los comprobantes.
+
+fr: Hors Québec : l'impôt fédéral, l'impôt de la province ou du territoire, le RPC et l'assurance-emploi se remettent ensemble au Receveur général, à la fréquence que l'ARC vous a attribuée. Il n'y a pas de remise à Revenu Québec. La cotisation santé de l'employeur, là où il y en a une, et la prime de la commission des accidents du travail se paient à part.
+en: Outside Québec: federal tax, the tax of the province or territory, CPP and employment insurance are remitted together to the Receiver General, at the frequency assigned to you by the CRA. There is no remittance to Revenu Québec. The employer health contribution, where there is one, and the workers' compensation board premium are paid separately.
+es: Fuera de Quebec: el impuesto federal, el impuesto de la provincia o del territorio, el RPC y el seguro de empleo se remiten juntos al Receptor General, con la frecuencia que le asignó la ARC. No hay remesa a Revenu Québec. El aporte de salud del empleador, donde existe, y la prima de la comisión de accidentes de trabajo se pagan aparte.
+
+fr: Rémunération totale versée en Ontario dans l'année. Sert à déterminer le taux de l'impôt-santé des employeurs (ISE).
+en: Total remuneration paid in Ontario during the year. Used to determine the Employer Health Tax (EHT) rate.
+es: Remuneración total pagada en Ontario durante el año. Sirve para determinar la tasa del impuesto de salud de los empleadores (ISE).
+
+fr: Exemption de l'impôt-santé des employeurs (ISE)
+en: Employer Health Tax (EHT) exemption
+es: Exención del impuesto de salud de los empleadores (ISE)
+
+fr: Admissible à l'exemption
+en: Eligible for the exemption
+es: Con derecho a la exención
+
+fr: Non admissible (secteur public, groupe associé qui l'utilise déjà)
+en: Not eligible (public sector, associated group already using it)
+es: Sin derecho (sector público, grupo asociado que ya la utiliza)
+
+fr: Taux ISE appliqué à chaque paie : {0}
+en: EHT rate applied to each pay: {0}
+es: Tasa ISE aplicada a cada nómina: {0}
+
+fr: L'employeur admissible ne paie l'ISE que sur la rémunération qui dépasse l'exemption ; le taux affiché est ramené sur toute la masse salariale.
+en: An eligible employer pays EHT only on remuneration above the exemption; the rate shown is spread over the whole payroll.
+es: El empleador con derecho solo paga el ISE sobre la remuneración que supera la exención; la tasa indicada se reparte sobre toda la masa salarial.
+
+fr: Taux de prime {0} ($ par 100 $ assurables)
+en: {0} premium rate ($ per $100 of insurable earnings)
+es: Tasa de prima {0} ($ por cada 100 $ asegurables)
+
+fr: Inscrit sur votre relevé de primes. Avec plusieurs classes, définissez-les dans « {0} » et affectez chaque employé à la sienne.
+en: Shown on your premium rate statement. With several classes, define them under "{0}" and assign each employee to theirs.
+es: Figura en su estado de primas. Con varias clases, defínalas en « {0} » y asigne a cada empleado la suya.
+
+fr: Paramètres de paie enregistrés. La province d'emploi a changé : les prochaines paies seront calculées selon ses règles ; les paies déjà confirmées gardent la leur. Vérifiez les taux de l'employeur et les formulaires de crédits des employés, qui étaient ceux de l'autre province.
+en: Payroll settings saved. The province of employment has changed: upcoming pay runs will be calculated under its rules; pay runs already confirmed keep theirs. Check the employer rates and the employees' tax credit forms, which were those of the other province.
+es: Parámetros de nómina guardados. La provincia de empleo cambió: las próximas nóminas se calcularán según sus reglas; las nóminas ya confirmadas conservan la suya. Verifique las tasas del empleador y los formularios de créditos de los empleados, que eran los de la otra provincia.
+
+fr: Province d'emploi de la compagnie changée : {0} → {1}.
+en: Company's province of employment changed: {0} → {1}.
+es: Provincia de empleo de la empresa cambiada: {0} → {1}.
+
+fr: Classes {0}
+en: {0} classes
+es: Clases {0}
+
+fr: La commission des accidents du travail de la province ({0}) classe votre entreprise dans une ou plusieurs
+en: The province's workers' compensation board ({0}) classifies your business into one or more
+es: La comisión de accidentes de trabajo de la provincia ({0}) clasifica su empresa en una o varias
+
+fr: classes
+en: classes
+es: clases
+
+fr: selon l'activité, chacune avec son taux de prime. Inscrivez ici les classes de votre relevé de primes. Dans la fiche de chaque employé, vous choisissez sa classe ; sans classe, c'est le taux de prime de la compagnie (Paramètres de paie) qui s'applique. Le rapport des gains assurables se regroupe ensuite par classe.
+en: by activity, each with its own premium rate. Enter here the classes from your premium rate statement. On each employee's record you choose their class; without a class, the company's premium rate (Payroll settings) applies. The insurable earnings report is then grouped by class.
+es: según la actividad, cada una con su tasa de prima. Ingrese aquí las clases de su estado de primas. En la ficha de cada empleado elige su clase; sin clase, se aplica la tasa de prima de la empresa (Parámetros de nómina). El informe de ingresos asegurables se agrupa luego por clase.
+
+# Configuration › Éléments de paie
+
+fr: Impôt fédéral et impôt de l'Ontario
+en: Federal tax and Ontario tax
+es: Impuesto federal e impuesto de Ontario
+
+fr: Réduit l'impôt fédéral et l'impôt de l'Ontario
+en: Reduces federal tax and Ontario tax
+es: Reduce el impuesto federal y el impuesto de Ontario
+
+fr: Crédit fonds de travailleurs (fédéral)
+en: Labour-sponsored fund credit (federal)
+es: Crédito por fondos de trabajadores (federal)
+
+fr: Cet avantage n'est imposable qu'au Québec : il est ignoré dans une paie d'une autre province.
+en: This benefit is taxable in Québec only: it is ignored in a pay of another province.
+es: Este beneficio solo es gravable en Quebec: se ignora en una nómina de otra provincia.
+
+# Fiche de l'employé
+
+fr: Imposition de l'Ontario
+en: Ontario taxation
+es: Tributación de Ontario
+
+fr: {0} - Montant total de la demande ($)
+en: {0} - Total claim amount ($)
+es: {0} - Monto total de la solicitud ($)
+
+fr: Personnes à charge pour la réduction d'impôt de l'Ontario
+en: Dependants for the Ontario tax reduction
+es: Personas a cargo para la reducción del impuesto de Ontario
+
+fr: Enfants de moins de 19 ans et personnes à charge ayant une incapacité ({0} chacun). Laissez vide si l'employé n'en demande pas.
+en: Children under 19 and dependants with a disability ({0} each). Leave blank if the employee does not claim any.
+es: Hijos menores de 19 años y personas a cargo con una discapacidad ({0} cada uno). Deje en blanco si el empleado no solicita ninguno.
+
+fr: Autres crédits d'impôt de l'Ontario autorisés ($)
+en: Other authorized Ontario tax credits ($)
+es: Otros créditos de impuesto de Ontario autorizados ($)
+
+fr: L'impôt additionnel par paie, la déduction pour zone visée et les déductions autorisées (T1213) se saisissent dans l'imposition fédérale : hors Québec, ils valent pour les deux impôts.
+en: Additional tax per pay, the deduction for a prescribed zone and authorized deductions (T1213) are entered under federal taxation: outside Québec, they apply to both taxes.
+es: El impuesto adicional por nómina, la deducción por zona designada y las deducciones autorizadas (T1213) se capturan en la tributación federal: fuera de Quebec, valen para los dos impuestos.
+
+fr: Ne pas retenir l'impôt de l'Ontario
+en: Do not withhold Ontario tax
+es: No retener el impuesto de Ontario
+
+fr: Ne pas cotiser au RPC
+en: Do not contribute to the CPP
+es: No aportar al RPC
+
+fr: Exclure de la cotisation santé de l'employeur ({0})
+en: Exclude from the employer health contribution ({0})
+es: Excluir del aporte de salud del empleador ({0})
+
+fr: Exclure de la couverture des accidents du travail ({0})
+en: Exclude from workers' compensation coverage ({0})
+es: Excluir de la cobertura de accidentes de trabajo ({0})
+
+fr: Classe {0}
+en: {0} class
+es: Clase {0}
+
+fr: Sans classe, le taux de prime de la compagnie s'applique. Les classes se définissent dans Configuration.
+en: Without a class, the company's premium rate applies. Classes are defined in Settings.
+es: Sin clase, se aplica la tasa de prima de la empresa. Las clases se definen en Configuración.
+
+fr: Le nombre de personnes à charge semble trop élevé.
+en: The number of dependants seems too high.
+es: El número de personas a cargo parece demasiado alto.
+
+# Cumulatifs de départ
+
+fr: Si vous commencez à utiliser 60secPaie en cours d'année, inscrivez ici les montants déjà versés et retenus dans votre ancien système. Ils servent à respecter les maximums annuels (RPC, AE, {0}) et s'ajoutent aux cumulatifs du talon de paie.
+en: If you start using 60secPaie during the year, enter here the amounts already paid and withheld in your previous system. They are used to respect the annual maximums (CPP, EI, {0}) and are added to the year-to-date amounts on the pay stub.
+es: Si comienza a usar 60secPaie durante el año, indique aquí los montos ya pagados y retenidos en su sistema anterior. Sirven para respetar los máximos anuales (RPC, AE, {0}) y se suman a los acumulados del talón de pago.
+
+fr: {0} retenu ($)
+en: {0} withheld ($)
+es: {0} retenido ($)
+
+fr: Gains ouvrant droit à pension - RPC ($)
+en: CPP pensionable earnings ($)
+es: Ingresos pensionables - RPC ($)
+
+fr: Cotisation au RPC (base + 1re suppl.) ($)
+en: CPP contribution (base + 1st additional) ($)
+es: Aporte al RPC (base + 1.ª adicional) ($)
+
+fr: 2e cotisation supplémentaire au RPC ($)
+en: 2nd additional CPP contribution ($)
+es: 2.º aporte adicional al RPC ($)
+
+fr: Gains assurables {0} ($)
+en: {0} insurable earnings ($)
+es: Ingresos asegurables {0} ($)
+
+# Tableau de bord
+
+fr: Fiches, renseignements fiscaux (TD1, {0}) et éléments de paie récurrents.
+en: Records, tax information (TD1, {0}) and recurring pay items.
+es: Fichas, datos fiscales (TD1, {0}) y elementos de nómina recurrentes.
+
+fr: Compagnie, taux de l'employeur ({0}, {1}) et éléments de paie.
+en: Company, employer rates ({0}, {1}) and pay items.
+es: Empresa, tasas del empleador ({0}, {1}) y elementos de nómina.
+
+# Retenues
+
+fr: {0} : montants hors remises
+en: {0}: amounts outside the remittances
+es: {0}: montos fuera de las remesas
+
+fr: {0}, cumul de {#1} :
+en: {0}, {#1} year to date:
+es: {0}, acumulado de {#1}:
+
+fr: Prime {0}, cumul de {#1} :
+en: {0} premium, {#1} year to date:
+es: Prima {0}, acumulado de {#1}:
+
+fr: Ces montants se paient à part, à l'administration de la province ou du territoire et à sa commission des accidents du travail. Ils ne font pas partie des remises au Receveur général.
+en: These amounts are paid separately, to the provincial or territorial administration and to its workers' compensation board. They are not part of the remittances to the Receiver General.
+es: Estos montos se pagan aparte, a la administración de la provincia o del territorio y a su comisión de accidentes de trabajo. No forman parte de las remesas al Receptor General.
+
+# Rapports
+
+fr: Feuillets T4
+en: T4 slips
+es: Comprobantes T4
+
+fr: Feuillets T4 de l'année
+en: T4 slips for the year
+es: Comprobantes T4 del año
+
+fr: (ARC), au plus tard le dernier jour de février. Vérifiez les cases avec le guide RC4120 (T4) de l'année. Hors Québec, la case 22 réunit l'impôt fédéral et l'impôt de la province ou du territoire ; il n'y a pas de relevé provincial.
+en: (CRA), no later than the last day of February. Check the boxes against the year's RC4120 guide (T4). Outside Québec, box 22 combines federal tax and the tax of the province or territory; there is no provincial slip.
+es: (ARC), a más tardar el último día de febrero. Verifique las casillas con la guía RC4120 (T4) del año. Fuera de Quebec, la casilla 22 reúne el impuesto federal y el impuesto de la provincia o del territorio; no hay comprobante provincial.
+
+fr: Cotisations de l'employé au RPC
+en: Employee's CPP contributions
+es: Aportes del empleado al RPC
+
+fr: Deuxièmes cotisations supplémentaires de l'employé au RPC
+en: Employee's second additional CPP contributions
+es: Segundos aportes adicionales del empleado al RPC
+
+fr: payé dans plus d'une province ({0}) : un T4 par province
+en: paid in more than one province ({0}): one T4 per province
+es: pagado en más de una provincia ({0}): un T4 por provincia
+
+fr: Cotisations des employés au RPC (cases 16 et 16A)
+en: Employees' CPP contributions (boxes 16 and 16A)
+es: Aportes de los empleados al RPC (casillas 16 y 16A)
+
+fr: Cotisations de l'employeur au RPC
+en: Employer's CPP contributions
+es: Aportes del empleador al RPC
+
+fr: {0} - rémunération assujettie
+en: {0} - remuneration subject to it
+es: {0} - remuneración sujeta
+
+fr: {0} - montant calculé sur les paies
+en: {0} - amount calculated on the pay runs
+es: {0} - monto calculado sobre las nóminas
+
+fr: Gains assurables {0}
+en: {0} insurable earnings
+es: Ingresos asegurables {0}
+
+fr: Prime {0} calculée sur les paies
+en: {0} premium calculated on the pay runs
+es: Prima {0} calculada sobre las nóminas
+
+fr: La cotisation santé de l'employeur se déclare à l'administration de la province : le taux et l'exemption réels s'établissent sur la rémunération totale de l'année.
+en: The employer health contribution is reported to the provincial administration: the actual rate and exemption are established on the year's total remuneration.
+es: El aporte de salud del empleador se declara a la administración de la provincia: la tasa y la exención reales se establecen sobre la remuneración total del año.
+
+fr: Cet employé a été payé dans plus d'une province pendant l'année ({0}). L'ARC demande un T4 par province d'emploi : les montants ci-dessous les réunissent et sont à répartir entre les feuillets.
+en: This employee was paid in more than one province during the year ({0}). The CRA requires one T4 per province of employment: the amounts below combine them and must be split between the slips.
+es: Este empleado fue pagado en más de una provincia durante el año ({0}). La ARC pide un T4 por provincia de empleo: los montos siguientes las reúnen y deben repartirse entre los comprobantes.
+
+fr: Emploi hors Québec : aucun relevé provincial. La case 22 du T4 réunit l'impôt fédéral et l'impôt de la province ou du territoire.
+en: Employment outside Québec: no provincial slip. Box 22 of the T4 combines federal tax and the tax of the province or territory.
+es: Empleo fuera de Quebec: ningún comprobante provincial. La casilla 22 del T4 reúne el impuesto federal y el impuesto de la provincia o del territorio.
+
+fr: Gains assurables et primes ({0}), année
+en: Insurable earnings and premiums ({0}), year
+es: Ingresos asegurables y primas ({0}), año
+
+fr: Salaires bruts versés, excédents du plafond des gains assurables et primes de l'année.
+en: Gross wages paid, amounts over the insurable earnings ceiling and premiums for the year.
+es: Salarios brutos pagados, excedentes del tope de ingresos asegurables y primas del año.
+
+fr: exclu de la couverture des accidents du travail (fiche de l'employé)
+en: excluded from workers' compensation coverage (employee file)
+es: excluido de la cobertura de accidentes de trabajo (ficha del empleado)
+
+fr: Une ligne par classe ; « — » regroupe les paies calculées au taux de la compagnie. Un employé qui a changé de classe en cours d'année compte dans chacune, pour la période correspondante.
+en: One row per class; "—" groups the pay runs calculated at the company rate. An employee who changed class during the year counts in each one, for the corresponding period.
+es: Una línea por clase; « — » agrupa las nóminas calculadas con la tasa de la empresa. Un empleado que cambió de clase durante el año cuenta en cada una, por el período correspondiente.
+
+fr: Prime {0}
+en: {0} premium
+es: Prima {0}
+
+fr: Taux de prime de la compagnie
+en: Company premium rate
+es: Tasa de prima de la empresa
+
+fr: Gains assurables de l'année
+en: Insurable earnings for the year
+es: Ingresos asegurables del año
+
+fr: Prime calculée sur les paies
+en: Premium calculated on the pay runs
+es: Prima calculada sobre las nóminas
+
+fr: Les gains assurables se déclarent et la prime se paie à la commission des accidents du travail de la province, selon la fréquence qu'elle vous a attribuée (mensuelle, trimestrielle ou annuelle), puis se concilient une fois l'an. La prime ne fait pas partie des remises au Receveur général. Les gains des travailleurs non couverts doivent être exclus selon les règles de la commission.
+en: Insurable earnings are reported and the premium is paid to the province's workers' compensation board, at the frequency it assigned to you (monthly, quarterly or annually), then reconciled once a year. The premium is not part of the remittances to the Receiver General. Earnings of workers who are not covered must be excluded under the board's rules.
+es: Los ingresos asegurables se declaran y la prima se paga a la comisión de accidentes de trabajo de la provincia, con la frecuencia que le asignó (mensual, trimestral o anual), y luego se concilian una vez al año. La prima no forma parte de las remesas al Receptor General. Los ingresos de los trabajadores no cubiertos deben excluirse según las reglas de la comisión.
+
+fr: Classe
+en: Class
+es: Clase
+
+fr: Par classe
+en: By class
+es: Por clase
+
+fr: Prime
+en: Premium
+es: Prima
+
+fr: Prime calculée
+en: Calculated premium
+es: Prima calculada
+
+fr: Feuillet T4
+en: T4 slip
+es: Comprobante T4
+
+fr: Taux de prime
+en: Premium rate
+es: Tasa de prima
+
+fr: Personnes à charge
+en: Dependants
+es: Personas a cargo
+
+fr: {0} - Montant de la demande
+en: {0} - Claim amount
+es: {0} - Monto de la solicitud
+
+fr: Autres crédits de la province
+en: Other credits of the province
+es: Otros créditos de la provincia
+
+fr: Gains ouvrant droit à pension - RPC
+en: CPP pensionable earnings
+es: Ingresos pensionables - RPC
+
+fr: Cet avantage n'est imposable qu'au Québec : il ne s'ajoute pas à une paie d'une autre province.
+en: This benefit is taxable in Québec only: it cannot be added to a pay of another province.
+es: Este beneficio solo es gravable en Quebec: no se agrega a una nómina de otra provincia.
+
+fr: Paramètres de paie enregistrés. La province d'emploi a changé en cours d'année : les paies déjà confirmées gardent la leur. Vérifiez les taux de l'employeur, les unités de classification et les formulaires de crédits des employés, qui étaient ceux de l'autre province, et prévoyez un T4 par province pour les employés payés dans les deux.
+en: Payroll settings saved. The province of employment changed during the year: pay runs already confirmed keep theirs. Check the employer rates, the classification units and the employees' tax credit forms, which were those of the other province, and plan one T4 per province for employees paid in both.
+es: Parámetros de nómina guardados. La provincia de empleo cambió durante el año: las nóminas ya confirmadas conservan la suya. Verifique las tasas del empleador, las unidades de clasificación y los formularios de créditos de los empleados, que eran los de la otra provincia, y prevea un T4 por provincia para los empleados pagados en las dos.
+
+# ---------- Autres provinces et territoires ----------
+# Les libellés composés par LibellesProvince (« Impôt de l'Alberta », « Impôt AB »…) ont un bloc par province ;
+# les phrases qui les contiennent passent par des modèles à trou ({0}), qui traduisent le libellé à son tour.
+# Sigles et noms qui ne changent pas d'une langue à l'autre (WCB, WorkSafeBC, WorkplaceNL, WSCC, WSCB, TD1AB…) : aucun bloc.
+
+fr: Territoires du Nord-Ouest et Nunavut : l'impôt de 2 % sur la paie est retenu à l'employé à chaque paie. Il se remet au gouvernement du territoire et ne fait pas partie des remises au Receveur général.
+en: Northwest Territories and Nunavut: the 2% payroll tax is withheld from the employee on each pay. It is remitted to the territorial government and is not part of the remittances to the Receiver General.
+es: Territorios del Noroeste y Nunavut: el impuesto del 2 % sobre la nómina se retiene al empleado en cada pago. Se remite al gobierno del territorio y no forma parte de las remesas al Receptor General.
+
+fr: Taux effectif : {0} (%)
+en: Effective rate: {0} (%)
+es: Tasa efectiva: {0} (%)
+
+fr: Taux effectif, en pourcentage de la rémunération, appliqué à chaque paie. Il dépend de votre masse salariale et de l'exemption de la province : 60secPaie ne le calcule pas. Prenez-le auprès de l'administration provinciale.
+en: Effective rate, as a percentage of remuneration, applied to each pay. It depends on your payroll and on the province's exemption: 60secPaie does not calculate it. Obtain it from the provincial administration.
+es: Tasa efectiva, en porcentaje de la remuneración, aplicada a cada nómina. Depende de su masa salarial y de la exención de la provincia: 60secPaie no la calcula. Obténgala de la administración provincial.
+
+fr: Laissez 0 si votre masse salariale est sous le seuil d'exemption.
+en: Leave 0 if your payroll is below the exemption threshold.
+es: Deje 0 si su masa salarial está por debajo del umbral de exención.
+
+fr: Le taux de la cotisation santé de l'employeur semble trop élevé : inscrivez un pourcentage (par exemple 1,95).
+en: The employer health contribution rate seems too high: enter a percentage (for example 1.95).
+es: La tasa del aporte de salud del empleador parece demasiado alta: indique un porcentaje (por ejemplo 1,95).
+
+fr: Taux de la cotisation santé
+en: Health contribution rate
+es: Tasa del aporte de salud
+
+fr: Cotisation santé
+en: Health contribution
+es: Aporte de salud
+
+fr: Cotisation santé de l'employeur
+en: Employer health contribution
+es: Aporte de salud del empleador
+
+fr: ISFP
+en: HE Levy
+es: ISFP
+
+fr: Impôt pour la santé et l'enseignement postsecondaire (ISFP)
+en: Health and Post Secondary Education Tax Levy (HE Levy)
+es: Impuesto para la salud y la enseñanza postsecundaria (ISFP)
+
+fr: ISEPS
+en: HAPSET
+es: ISEPS
+
+fr: Impôt pour la santé et l'éducation postsecondaire (ISEPS)
+en: Health and Post Secondary Education Tax (HAPSET)
+es: Impuesto para la salud y la educación postsecundaria (ISEPS)
+
+fr: Travail sécuritaire NB
+en: WorkSafeNB
+es: WorkSafeNB
+
+fr: Impôt sur la paie
+en: Payroll tax
+es: Impuesto sobre la nómina
+
+fr: Impôt provincial
+en: Provincial tax
+es: Impuesto provincial
+
+fr: Ne pas retenir l'impôt sur la paie du territoire
+en: Do not withhold the territorial payroll tax
+es: No retener el impuesto sobre la nómina del territorio
+
+fr: Impôt sur la paie du territoire retenu ($)
+en: Territorial payroll tax withheld ($)
+es: Impuesto sobre la nómina del territorio retenido ($)
+
+fr: Impôt sur la paie retenu aux employés, cumul de {#0} :
+en: Payroll tax withheld from employees, {#0} year to date:
+es: Impuesto sobre la nómina retenido a los empleados, acumulado de {#0}:
+
+fr: L'impôt sur la paie se remet au gouvernement du territoire, selon la fréquence qu'il vous a attribuée.
+en: The payroll tax is remitted to the territorial government, at the frequency it assigned to you.
+es: El impuesto sobre la nómina se remite al gobierno del territorio, con la frecuencia que le asignó.
+
+fr: Rémunération assujettie à l'impôt sur la paie
+en: Remuneration subject to the payroll tax
+es: Remuneración sujeta al impuesto sobre la nómina
+
+fr: Impôt sur la paie retenu aux employés
+en: Payroll tax withheld from employees
+es: Impuesto sobre la nómina retenido a los empleados
+
+fr: L'impôt sur la paie se déclare et se remet au gouvernement du territoire. Il n'est pas compris dans la case 22 du T4.
+en: The payroll tax is reported and remitted to the territorial government. It is not included in box 22 of the T4.
+es: El impuesto sobre la nómina se declara y se remite al gobierno del territorio. No está incluido en la casilla 22 del T4.
+
+fr: L'impôt sur la paie du territoire n'est pas compris dans la case 22 : il se déclare et se remet au gouvernement du territoire.
+en: The territorial payroll tax is not included in box 22: it is reported and remitted to the territorial government.
+es: El impuesto sobre la nómina del territorio no está incluido en la casilla 22: se declara y se remite al gobierno del territorio.
+
+fr: La prime se déclare à la commission des accidents du travail selon votre fréquence. Rien de cela ne passe par l'ARC.
+en: The premium is reported to the workers' compensation board at your frequency. None of this goes through the CRA.
+es: La prima se declara a la comisión de accidentes de trabajo según su frecuencia. Nada de esto pasa por la ARC.
+
+fr: Compagnie, taux de l'employeur ({0}) et éléments de paie.
+en: Company, employer rates ({0}) and pay items.
+es: Empresa, tasas del empleador ({0}) y elementos de nómina.
+
+fr: Excédent du maximum
+en: Amount over the maximum
+es: Excedente del máximo
+
+fr: Impôt ON
+en: ON tax
+es: Imp. ON
+
+fr: Impôt de l'Alberta
+en: Alberta tax
+es: Impuesto de Alberta
+
+fr: Impôt AB
+en: AB tax
+es: Imp. AB
+
+fr: Imposition de l'Alberta
+en: Alberta taxation
+es: Tributación de Alberta
+
+fr: Ne pas retenir l'impôt de l'Alberta
+en: Do not withhold Alberta tax
+es: No retener el impuesto de Alberta
+
+fr: Autres crédits d'impôt de l'Alberta autorisés ($)
+en: Other authorized Alberta tax credits ($)
+es: Otros créditos de impuesto de Alberta autorizados ($)
+
+fr: Impôt fédéral et impôt de l'Alberta
+en: Federal tax and Alberta tax
+es: Impuesto federal e impuesto de Alberta
+
+fr: Réduit l'impôt fédéral et l'impôt de l'Alberta
+en: Reduces federal tax and Alberta tax
+es: Reduce el impuesto federal y el impuesto de Alberta
+
+fr: Colombie-Britannique
+en: British Columbia
+es: Columbia Británica
+
+fr: Impôt de la Colombie-Britannique
+en: British Columbia tax
+es: Impuesto de Columbia Británica
+
+fr: Impôt BC
+en: BC tax
+es: Imp. BC
+
+fr: Imposition de la Colombie-Britannique
+en: British Columbia taxation
+es: Tributación de Columbia Británica
+
+fr: Ne pas retenir l'impôt de la Colombie-Britannique
+en: Do not withhold British Columbia tax
+es: No retener el impuesto de Columbia Británica
+
+fr: Autres crédits d'impôt de la Colombie-Britannique autorisés ($)
+en: Other authorized British Columbia tax credits ($)
+es: Otros créditos de impuesto de Columbia Británica autorizados ($)
+
+fr: Impôt fédéral et impôt de la Colombie-Britannique
+en: Federal tax and British Columbia tax
+es: Impuesto federal e impuesto de Columbia Británica
+
+fr: Réduit l'impôt fédéral et l'impôt de la Colombie-Britannique
+en: Reduces federal tax and British Columbia tax
+es: Reduce el impuesto federal y el impuesto de Columbia Británica
+
+fr: Impôt du Manitoba
+en: Manitoba tax
+es: Impuesto de Manitoba
+
+fr: Impôt MB
+en: MB tax
+es: Imp. MB
+
+fr: Imposition du Manitoba
+en: Manitoba taxation
+es: Tributación de Manitoba
+
+fr: Ne pas retenir l'impôt du Manitoba
+en: Do not withhold Manitoba tax
+es: No retener el impuesto de Manitoba
+
+fr: Autres crédits d'impôt du Manitoba autorisés ($)
+en: Other authorized Manitoba tax credits ($)
+es: Otros créditos de impuesto de Manitoba autorizados ($)
+
+fr: Impôt fédéral et impôt du Manitoba
+en: Federal tax and Manitoba tax
+es: Impuesto federal e impuesto de Manitoba
+
+fr: Réduit l'impôt fédéral et l'impôt du Manitoba
+en: Reduces federal tax and Manitoba tax
+es: Reduce el impuesto federal y el impuesto de Manitoba
+
+fr: Nouveau-Brunswick
+en: New Brunswick
+es: Nuevo Brunswick
+
+fr: Impôt du Nouveau-Brunswick
+en: New Brunswick tax
+es: Impuesto de Nuevo Brunswick
+
+fr: Impôt NB
+en: NB tax
+es: Imp. NB
+
+fr: Imposition du Nouveau-Brunswick
+en: New Brunswick taxation
+es: Tributación de Nuevo Brunswick
+
+fr: Ne pas retenir l'impôt du Nouveau-Brunswick
+en: Do not withhold New Brunswick tax
+es: No retener el impuesto de Nuevo Brunswick
+
+fr: Autres crédits d'impôt du Nouveau-Brunswick autorisés ($)
+en: Other authorized New Brunswick tax credits ($)
+es: Otros créditos de impuesto de Nuevo Brunswick autorizados ($)
+
+fr: Impôt fédéral et impôt du Nouveau-Brunswick
+en: Federal tax and New Brunswick tax
+es: Impuesto federal e impuesto de Nuevo Brunswick
+
+fr: Réduit l'impôt fédéral et l'impôt du Nouveau-Brunswick
+en: Reduces federal tax and New Brunswick tax
+es: Reduce el impuesto federal y el impuesto de Nuevo Brunswick
+
+fr: Terre-Neuve-et-Labrador
+en: Newfoundland and Labrador
+es: Terranova y Labrador
+
+fr: Impôt de Terre-Neuve-et-Labrador
+en: Newfoundland and Labrador tax
+es: Impuesto de Terranova y Labrador
+
+fr: Impôt NL
+en: NL tax
+es: Imp. NL
+
+fr: Imposition de Terre-Neuve-et-Labrador
+en: Newfoundland and Labrador taxation
+es: Tributación de Terranova y Labrador
+
+fr: Ne pas retenir l'impôt de Terre-Neuve-et-Labrador
+en: Do not withhold Newfoundland and Labrador tax
+es: No retener el impuesto de Terranova y Labrador
+
+fr: Autres crédits d'impôt de Terre-Neuve-et-Labrador autorisés ($)
+en: Other authorized Newfoundland and Labrador tax credits ($)
+es: Otros créditos de impuesto de Terranova y Labrador autorizados ($)
+
+fr: Impôt fédéral et impôt de Terre-Neuve-et-Labrador
+en: Federal tax and Newfoundland and Labrador tax
+es: Impuesto federal e impuesto de Terranova y Labrador
+
+fr: Réduit l'impôt fédéral et l'impôt de Terre-Neuve-et-Labrador
+en: Reduces federal tax and Newfoundland and Labrador tax
+es: Reduce el impuesto federal y el impuesto de Terranova y Labrador
+
+fr: Nouvelle-Écosse
+en: Nova Scotia
+es: Nueva Escocia
+
+fr: Impôt de la Nouvelle-Écosse
+en: Nova Scotia tax
+es: Impuesto de Nueva Escocia
+
+fr: Impôt NS
+en: NS tax
+es: Imp. NS
+
+fr: Imposition de la Nouvelle-Écosse
+en: Nova Scotia taxation
+es: Tributación de Nueva Escocia
+
+fr: Ne pas retenir l'impôt de la Nouvelle-Écosse
+en: Do not withhold Nova Scotia tax
+es: No retener el impuesto de Nueva Escocia
+
+fr: Autres crédits d'impôt de la Nouvelle-Écosse autorisés ($)
+en: Other authorized Nova Scotia tax credits ($)
+es: Otros créditos de impuesto de Nueva Escocia autorizados ($)
+
+fr: Impôt fédéral et impôt de la Nouvelle-Écosse
+en: Federal tax and Nova Scotia tax
+es: Impuesto federal e impuesto de Nueva Escocia
+
+fr: Réduit l'impôt fédéral et l'impôt de la Nouvelle-Écosse
+en: Reduces federal tax and Nova Scotia tax
+es: Reduce el impuesto federal y el impuesto de Nueva Escocia
+
+fr: Territoires du Nord-Ouest
+en: Northwest Territories
+es: Territorios del Noroeste
+
+fr: Impôt des Territoires du Nord-Ouest
+en: Northwest Territories tax
+es: Impuesto de los Territorios del Noroeste
+
+fr: Impôt NT
+en: NT tax
+es: Imp. NT
+
+fr: Imposition des Territoires du Nord-Ouest
+en: Northwest Territories taxation
+es: Tributación de los Territorios del Noroeste
+
+fr: Ne pas retenir l'impôt des Territoires du Nord-Ouest
+en: Do not withhold Northwest Territories tax
+es: No retener el impuesto de los Territorios del Noroeste
+
+fr: Autres crédits d'impôt des Territoires du Nord-Ouest autorisés ($)
+en: Other authorized Northwest Territories tax credits ($)
+es: Otros créditos de impuesto de los Territorios del Noroeste autorizados ($)
+
+fr: Impôt fédéral et impôt des Territoires du Nord-Ouest
+en: Federal tax and Northwest Territories tax
+es: Impuesto federal e impuesto de los Territorios del Noroeste
+
+fr: Réduit l'impôt fédéral et l'impôt des Territoires du Nord-Ouest
+en: Reduces federal tax and Northwest Territories tax
+es: Reduce el impuesto federal y el impuesto de los Territorios del Noroeste
+
+fr: Impôt du Nunavut
+en: Nunavut tax
+es: Impuesto de Nunavut
+
+fr: Impôt NU
+en: NU tax
+es: Imp. NU
+
+fr: Imposition du Nunavut
+en: Nunavut taxation
+es: Tributación de Nunavut
+
+fr: Ne pas retenir l'impôt du Nunavut
+en: Do not withhold Nunavut tax
+es: No retener el impuesto de Nunavut
+
+fr: Autres crédits d'impôt du Nunavut autorisés ($)
+en: Other authorized Nunavut tax credits ($)
+es: Otros créditos de impuesto de Nunavut autorizados ($)
+
+fr: Impôt fédéral et impôt du Nunavut
+en: Federal tax and Nunavut tax
+es: Impuesto federal e impuesto de Nunavut
+
+fr: Réduit l'impôt fédéral et l'impôt du Nunavut
+en: Reduces federal tax and Nunavut tax
+es: Reduce el impuesto federal y el impuesto de Nunavut
+
+fr: Île-du-Prince-Édouard
+en: Prince Edward Island
+es: Isla del Príncipe Eduardo
+
+fr: Impôt de l'Île-du-Prince-Édouard
+en: Prince Edward Island tax
+es: Impuesto de la Isla del Príncipe Eduardo
+
+fr: Impôt PE
+en: PE tax
+es: Imp. PE
+
+fr: Imposition de l'Île-du-Prince-Édouard
+en: Prince Edward Island taxation
+es: Tributación de la Isla del Príncipe Eduardo
+
+fr: Ne pas retenir l'impôt de l'Île-du-Prince-Édouard
+en: Do not withhold Prince Edward Island tax
+es: No retener el impuesto de la Isla del Príncipe Eduardo
+
+fr: Autres crédits d'impôt de l'Île-du-Prince-Édouard autorisés ($)
+en: Other authorized Prince Edward Island tax credits ($)
+es: Otros créditos de impuesto de la Isla del Príncipe Eduardo autorizados ($)
+
+fr: Impôt fédéral et impôt de l'Île-du-Prince-Édouard
+en: Federal tax and Prince Edward Island tax
+es: Impuesto federal e impuesto de la Isla del Príncipe Eduardo
+
+fr: Réduit l'impôt fédéral et l'impôt de l'Île-du-Prince-Édouard
+en: Reduces federal tax and Prince Edward Island tax
+es: Reduce el impuesto federal y el impuesto de la Isla del Príncipe Eduardo
+
+fr: Impôt de la Saskatchewan
+en: Saskatchewan tax
+es: Impuesto de Saskatchewan
+
+fr: Impôt SK
+en: SK tax
+es: Imp. SK
+
+fr: Imposition de la Saskatchewan
+en: Saskatchewan taxation
+es: Tributación de Saskatchewan
+
+fr: Ne pas retenir l'impôt de la Saskatchewan
+en: Do not withhold Saskatchewan tax
+es: No retener el impuesto de Saskatchewan
+
+fr: Autres crédits d'impôt de la Saskatchewan autorisés ($)
+en: Other authorized Saskatchewan tax credits ($)
+es: Otros créditos de impuesto de Saskatchewan autorizados ($)
+
+fr: Impôt fédéral et impôt de la Saskatchewan
+en: Federal tax and Saskatchewan tax
+es: Impuesto federal e impuesto de Saskatchewan
+
+fr: Réduit l'impôt fédéral et l'impôt de la Saskatchewan
+en: Reduces federal tax and Saskatchewan tax
+es: Reduce el impuesto federal y el impuesto de Saskatchewan
+
+fr: Yukon
+en: Yukon
+es: Yukón
+
+fr: Impôt du Yukon
+en: Yukon tax
+es: Impuesto de Yukón
+
+fr: Impôt YT
+en: YT tax
+es: Imp. YT
+
+fr: Imposition du Yukon
+en: Yukon taxation
+es: Tributación de Yukón
+
+fr: Ne pas retenir l'impôt du Yukon
+en: Do not withhold Yukon tax
+es: No retener el impuesto de Yukón
+
+fr: Autres crédits d'impôt du Yukon autorisés ($)
+en: Other authorized Yukon tax credits ($)
+es: Otros créditos de impuesto de Yukón autorizados ($)
+
+fr: Impôt fédéral et impôt du Yukon
+en: Federal tax and Yukon tax
+es: Impuesto federal e impuesto de Yukón
+
+fr: Réduit l'impôt fédéral et l'impôt du Yukon
+en: Reduces federal tax and Yukon tax
+es: Reduce el impuesto federal y el impuesto de Yukón
+
+fr: Les taux de l'année {#0} ne sont pas définis pour la province : {1}. Complétez-les dans Sec60Admin (Paie › Taux de l'année) à partir du guide T4127 (ARC) avant de calculer une paie.
+en: The rates for {#0} are not defined for the province: {1}. Complete them in Sec60Admin (Payroll › Rates for the year) from the T4127 guide (CRA) before calculating a pay run.
+es: Las tasas del año {#0} no están definidas para la provincia: {1}. Complételas en Sec60Admin (Nómina › Tasas del año) a partir de la guía T4127 (ARC) antes de calcular una nómina.
+
+# ---------- Page d'accueil : toutes les provinces ----------
+
+fr: Accidents du travail
+en: Workers' compensation
+es: Accidentes de trabajo
+
+fr: Partout au Canada
+en: Anywhere in Canada
+es: En todo Canadá
+
+fr: Les dix provinces et les trois territoires : chaque compagnie fait sa paie selon les règles de sa province.
+en: All ten provinces and three territories: each company runs payroll under its own province's rules.
+es: Las diez provincias y los tres territorios: cada empresa hace su nómina según las reglas de su provincia.
+
+fr: Provinces et territoires
+en: Provinces and territories
+es: Provincias y territorios
+
+fr: — l'impôt de chacun selon le même guide T4127, éditions de janvier et de juillet
+en: — each one's income tax under the same T4127 guide, January and July editions
+es: — el impuesto de cada uno según la misma guía T4127, ediciones de enero y de julio
+
+fr: RRQ ou RPC, RQAP, AE, FSS
+en: QPP or CPP, QPIP, EI, HSF
+es: RRQ o RPC, RQAP, AE, FSS

@@ -13,6 +13,20 @@ Public Class PageCumulatifs
         litEmploye.Text = Server.HtmlEncode(emp.Txt("Prenom") & " " & emp.Txt("Nom"))
         lnkFiche.NavigateUrl = "~/Employes/Fiche.aspx?id=" & EmployeId.ToString()
 
+        ' Hors Québec : les mêmes champs reçoivent l'impôt de la province, le RPC et les gains assurables de sa commission
+        ' des accidents du travail. Pas de RQAP ; dans un territoire, son champ reçoit l'impôt sur la paie retenu à l'employé.
+        If Contexte.HorsQuebec Then
+            Dim noms = Contexte.Libelles
+            lblImpotQc.Text = noms.ImpotProvincial & " retenu ($)"
+            lblGainsRRQ.Text = "Gains ouvrant droit à pension - RPC ($)"
+            lblRRQ.Text = "Cotisation au RPC (base + 1re suppl.) ($)"
+            lblRRQ2.Text = "2e cotisation supplémentaire au RPC ($)"
+            lblGainsCNESST.Text = "Gains assurables " & noms.Accidents & " ($)"
+            lblRQAP.Text = "Impôt sur la paie du territoire retenu ($)"
+            phRQAP.Visible = noms.ARetenueTerritoriale
+            phRQAPEmployeur.Visible = False
+        End If
+
         If Not IsPostBack Then
             For annee = Date.Today.Year To Date.Today.Year - 1 Step -1
                 ddlAnnee.Items.Add(annee.ToString())
@@ -48,16 +62,24 @@ Public Class PageCumulatifs
     Private Sub btnEnregistrer_Click(sender As Object, e As EventArgs) Handles btnEnregistrer.Click
         Try
             Dim annee = Integer.Parse(ddlAnnee.SelectedValue)
+            ' Les champs du RQAP sont masqués hors Québec mais gardent leur valeur : des cumulatifs saisis au Québec
+            ' avant un changement de province ne sont pas effacés. La province enregistrée est celle de la compagnie.
+            Dim horsQuebec = Contexte.HorsQuebec
+            Dim noms = Contexte.Libelles
             Db.Exec(
                 "DELETE FROM paie.CumulatifDepart WHERE EmployeId = @e AND Annee = @a; " &
-                "INSERT INTO paie.CumulatifDepart (EmployeId, Annee, Brut, ImpotFederal, ImpotQuebec, RRQ, RRQ2, GainsRRQ, AE, RQAP, RQAPEmployeur, GainsCNESST, VacancesSolde) " &
-                "VALUES (@e, @a, @Brut, @Fed, @Qc, @RRQ, @RRQ2, @GainsRRQ, @AE, @RQAP, @RQAPE, @CNESST, @Vac)",
+                "INSERT INTO paie.CumulatifDepart (EmployeId, Annee, Brut, ImpotFederal, ImpotQuebec, RRQ, RRQ2, GainsRRQ, AE, RQAP, RQAPEmployeur, GainsCNESST, VacancesSolde, Province) " &
+                "VALUES (@e, @a, @Brut, @Fed, @Qc, @RRQ, @RRQ2, @GainsRRQ, @AE, @RQAP, @RQAPE, @CNESST, @Vac, @Province)",
                 Db.P("@e", EmployeId), Db.P("@a", annee),
                 Db.P("@Brut", Dec(txtBrut.Text, "Rémunération brute")), Db.P("@Fed", Dec(txtImpotFed.Text, "Impôt fédéral")),
-                Db.P("@Qc", Dec(txtImpotQc.Text, "Impôt du Québec")), Db.P("@RRQ", Dec(txtRRQ.Text, "RRQ")), Db.P("@RRQ2", Dec(txtRRQ2.Text, "RRQ 2")),
-                Db.P("@GainsRRQ", Dec(txtGainsRRQ.Text, "Salaire admissible au RRQ")), Db.P("@AE", Dec(txtAE.Text, "Assurance-emploi")),
-                Db.P("@RQAP", Dec(txtRQAP.Text, "RQAP employé")), Db.P("@RQAPE", Dec(txtRQAPEmployeur.Text, "RQAP employeur")),
-                Db.P("@CNESST", Dec(txtGainsCNESST.Text, "Salaire assurable CNESST")), Db.P("@Vac", Dec(txtVacances.Text, "Solde de vacances")))
+                Db.P("@Qc", Dec(txtImpotQc.Text, noms.ImpotProvincial)),
+                Db.P("@RRQ", Dec(txtRRQ.Text, noms.Pension)), Db.P("@RRQ2", Dec(txtRRQ2.Text, noms.Pension & " 2")),
+                Db.P("@GainsRRQ", Dec(txtGainsRRQ.Text, If(horsQuebec, "Gains ouvrant droit à pension - RPC", "Salaire admissible au RRQ"))),
+                Db.P("@AE", Dec(txtAE.Text, "Assurance-emploi")),
+                Db.P("@RQAP", Dec(txtRQAP.Text, If(noms.ARetenueTerritoriale, noms.RetenueProvinciale, "RQAP employé"))), Db.P("@RQAPE", Dec(txtRQAPEmployeur.Text, "RQAP employeur")),
+                Db.P("@CNESST", Dec(txtGainsCNESST.Text, If(horsQuebec, "Gains assurables " & noms.Accidents, "Salaire assurable CNESST"))),
+                Db.P("@Vac", Dec(txtVacances.Text, "Solde de vacances")),
+                Db.P("@Province", Paie60Sec.Calcul.Provinces.Code(Contexte.Province)))
             Succes("Cumulatifs de départ " & annee.ToString() & " enregistrés.")
         Catch ex As SaisieInvalideException
             Erreur(ex.Message)

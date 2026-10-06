@@ -48,6 +48,38 @@ Public NotInheritable Class ServiceGL
         Return New CleGL With {.Cle = cle, .Libelle = libelle, .Groupe = groupe}
     End Function
 
+    ' Hors Québec, les mêmes clés désignent l'équivalent de la province : le plan comptable d'une compagnie
+    ' ne change pas de structure, seulement de vocabulaire. Le RQAP et la CNT n'y existent pas ; le compte
+    ' du RQAP à payer reçoit, dans un territoire, l'impôt sur la paie retenu aux employés.
+    Private Shared Function LibelleHorsQuebec(cle As String, noms As LibellesProvince) As String
+        Select Case cle
+            Case "IMPOT_QC_A_PAYER" : Return noms.ImpotProvincial & " à payer"
+            Case "RRQ_A_PAYER" : Return "RPC à payer (employés et employeur)"
+            Case "RQAP_A_PAYER" : Return noms.RetenueProvinciale & " à payer"
+            Case "FSS_A_PAYER" : Return noms.Sante & " à payer"
+            Case "CNESST_A_PAYER" : Return noms.Accidents & " à payer"
+            Case "DEP_RRQ" : Return "Dépense - part de l'employeur au RPC"
+            Case "DEP_FSS" : Return "Dépense - " & noms.SanteLong
+            Case "DEP_CNESST" : Return "Dépense - " & noms.Accidents
+            Case Else : Return Nothing
+        End Select
+    End Function
+
+    ''' <summary>Les clés du plan comptable telles qu'elles se présentent dans la province de la compagnie courante.</summary>
+    Public Shared Function ClesAffichees() As List(Of CleGL)
+        If Not Contexte.HorsQuebec Then Return Cles.ToList()
+        Dim noms = Contexte.Libelles
+        Dim absentes As New List(Of String) From {"CNT_A_PAYER", "DEP_RQAP", "DEP_CNT"}
+        If Not noms.ARetenueTerritoriale Then absentes.Add("RQAP_A_PAYER")
+        If Not noms.ASante Then absentes.AddRange({"FSS_A_PAYER", "DEP_FSS"})
+        Dim liste As New List(Of CleGL)()
+        For Each k In Cles
+            If absentes.Contains(k.Cle) Then Continue For
+            liste.Add(C(k.Cle, If(LibelleHorsQuebec(k.Cle, noms), k.Libelle), k.Groupe))
+        Next
+        Return liste
+    End Function
+
     Public Shared Function Comptes() As Dictionary(Of String, String)
         Dim d As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase)
         For Each r As DataRow In Db.Table("SELECT Cle, Compte FROM paie.CompteGL WHERE CompagnieId = @c", Db.P("@c", Contexte.CompagnieId)).Rows
@@ -104,21 +136,24 @@ Public NotInheritable Class ServiceGL
             End If
         Next
 
+        ' Les libellés suivent la province de la compagnie : les mêmes comptes reçoivent le RRQ ou le RPC, le FSS ou l'ISE…
+        Dim noms = Contexte.Libelles
         debits.Add(Ligne(Compte(cpt, "DEP_VACANCES"), "Vacances accumulées", t.Dcm("Vacances"), 0D))
-        debits.Add(Ligne(Compte(cpt, "DEP_RRQ"), "RRQ - part de l'employeur", t.Dcm("ERRQ"), 0D))
+        debits.Add(Ligne(Compte(cpt, "DEP_RRQ"), noms.Pension & " - part de l'employeur", t.Dcm("ERRQ"), 0D))
         debits.Add(Ligne(Compte(cpt, "DEP_AE"), "Assurance-emploi - part de l'employeur", t.Dcm("EAE"), 0D))
         debits.Add(Ligne(Compte(cpt, "DEP_RQAP"), "RQAP - part de l'employeur", t.Dcm("ERQAP"), 0D))
-        debits.Add(Ligne(Compte(cpt, "DEP_FSS"), "Fonds des services de santé", t.Dcm("FSS"), 0D))
-        debits.Add(Ligne(Compte(cpt, "DEP_CNESST"), "CNESST", t.Dcm("CNESST"), 0D))
+        debits.Add(Ligne(Compte(cpt, "DEP_FSS"), If(Contexte.HorsQuebec, noms.SanteLong, "Fonds des services de santé"), t.Dcm("FSS"), 0D))
+        debits.Add(Ligne(Compte(cpt, "DEP_CNESST"), noms.Accidents, t.Dcm("CNESST"), 0D))
         debits.Add(Ligne(Compte(cpt, "DEP_CNT"), "Normes du travail (CNT)", t.Dcm("CNT"), 0D))
 
         credits.Add(Ligne(Compte(cpt, "IMPOT_FED_A_PAYER"), "Impôt fédéral à payer", 0D, t.Dcm("ImpotFederal")))
-        credits.Add(Ligne(Compte(cpt, "IMPOT_QC_A_PAYER"), "Impôt du Québec à payer", 0D, t.Dcm("ImpotQuebec")))
-        credits.Add(Ligne(Compte(cpt, "RRQ_A_PAYER"), "RRQ à payer", 0D, t.Dcm("RRQ") + t.Dcm("ERRQ")))
+        credits.Add(Ligne(Compte(cpt, "IMPOT_QC_A_PAYER"), noms.ImpotProvincial & " à payer", 0D, t.Dcm("ImpotQuebec")))
+        credits.Add(Ligne(Compte(cpt, "RRQ_A_PAYER"), noms.Pension & " à payer", 0D, t.Dcm("RRQ") + t.Dcm("ERRQ")))
         credits.Add(Ligne(Compte(cpt, "AE_A_PAYER"), "Assurance-emploi à payer", 0D, t.Dcm("AE") + t.Dcm("EAE")))
-        credits.Add(Ligne(Compte(cpt, "RQAP_A_PAYER"), "RQAP à payer", 0D, t.Dcm("RQAP") + t.Dcm("ERQAP")))
-        credits.Add(Ligne(Compte(cpt, "FSS_A_PAYER"), "FSS à payer", 0D, t.Dcm("FSS")))
-        credits.Add(Ligne(Compte(cpt, "CNESST_A_PAYER"), "CNESST à payer", 0D, t.Dcm("CNESST")))
+        ' Dans un territoire, la colonne du RQAP porte l'impôt sur la paie retenu aux employés.
+        credits.Add(Ligne(Compte(cpt, "RQAP_A_PAYER"), If(noms.ARetenueTerritoriale, noms.RetenueProvinciale, "RQAP") & " à payer", 0D, t.Dcm("RQAP") + t.Dcm("ERQAP")))
+        credits.Add(Ligne(Compte(cpt, "FSS_A_PAYER"), noms.Sante & " à payer", 0D, t.Dcm("FSS")))
+        credits.Add(Ligne(Compte(cpt, "CNESST_A_PAYER"), noms.Accidents & " à payer", 0D, t.Dcm("CNESST")))
         credits.Add(Ligne(Compte(cpt, "CNT_A_PAYER"), "CNT à payer", 0D, t.Dcm("CNT")))
         credits.Add(Ligne(Compte(cpt, "VACANCES_A_PAYER"), "Vacances à payer", 0D, t.Dcm("Vacances")))
         credits.Add(Ligne(Compte(cpt, "BANQUE"), "Paies nettes", 0D, t.Dcm("Net")))
@@ -137,13 +172,23 @@ Public NotInheritable Class ServiceGL
 
 End Class
 
-''' <summary>Déclaration annuelle des salaires à la CNESST.</summary>
+''' <summary>
+''' Déclaration annuelle des salaires à la CNESST — ou, pour une compagnie hors Québec, gains assurables
+''' et primes de la commission des accidents du travail de la province (WSIB, WCB…) : mêmes colonnes (GainsCNESST, EmployeurCNESST), mêmes unités de classification.
+''' </summary>
 Public NotInheritable Class ServiceCNESST
 
     Private Sub New()
     End Sub
 
-    Private Const Filtre As String = "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a"
+    ' Le rapport est celui de l'organisme de la province de la compagnie : seules les paies de cette
+    ' province y entrent. Une compagnie qui a changé de province en cours d'année a donc deux rapports
+    ' distincts, celui de la CNESST avant et celui de l'autre commission après (ou l'inverse).
+    Private Const Filtre As String = "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a AND p.Province = @prov"
+
+    Private Shared Function Prms(annee As Integer) As SqlParameter()
+        Return {Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee), Db.P("@prov", Provinces.Code(Contexte.Province))}
+    End Function
 
     ''' <summary>
     ''' Par employé et par unité de classification : salaire brut, excédent du maximum
@@ -159,11 +204,11 @@ Public NotInheritable Class ServiceCNESST
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId " &
             "LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
             " GROUP BY e.Id, e.Nom, e.Prenom, e.ExemptCNESST, u.Code, u.Description, ISNULL(p.UniteCNESSTId, 0) ORDER BY e.Nom, e.Prenom, u.Code",
-            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            Prms(annee))
         Dim lignes = Db.Table(
             "SELECT p.EmployeId, ISNULL(p.UniteCNESSTId, 0) AS UniteId, pl.CategorieCode, SUM(pl.Montant) AS Montant " &
             "FROM paie.PaieLigne pl JOIN paie.Paie p ON p.Id = pl.PaieId JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre &
-            " GROUP BY p.EmployeId, ISNULL(p.UniteCNESSTId, 0), pl.CategorieCode", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            " GROUP BY p.EmployeId, ISNULL(p.UniteCNESSTId, 0), pl.CategorieCode", Prms(annee))
 
         t.Columns("Brut").ReadOnly = False
         t.Columns("Excedent").ReadOnly = False
@@ -189,14 +234,14 @@ Public NotInheritable Class ServiceCNESST
             "COUNT(DISTINCT p.EmployeId) AS NbEmployes, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId LEFT JOIN paie.UniteCNESST u ON u.Id = p.UniteCNESSTId WHERE " & Filtre &
             " GROUP BY u.Code, u.Description ORDER BY CASE WHEN u.Code IS NULL THEN 1 ELSE 0 END, u.Code",
-            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            Prms(annee))
     End Function
 
     Public Shared Function ParMois(annee As Integer) As DataTable
         Return Db.Table(
             "SELECT MONTH(l.DatePaie) AS Mois, SUM(p.GainsCNESST) AS Assurable, SUM(p.EmployeurCNESST) AS Cotisation " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & Filtre & " GROUP BY MONTH(l.DatePaie) ORDER BY Mois",
-            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
+            Prms(annee))
     End Function
 
     ''' <summary>Versements périodiques à la CNESST compris dans les remises à Revenu Québec enregistrées pour l'année.</summary>

@@ -11,14 +11,15 @@ Public Class PageNouvelEmploye
         If IsPostBack Then Return
 
         ' Les provinces du Canada, telles que MngConsul les connaît (T053State) ; la vue paie.Employe
-        ' les traduit en code à deux lettres par leur nom. Le Québec est proposé d'office.
+        ' les traduit en code à deux lettres par leur nom. La province de la compagnie est proposée d'office.
         Dim provinces = Db.Table("SELECT Id, Name FROM dbo.T053State WHERE CountryId = 1 ORDER BY Name")
         ddlProvince.DataSource = provinces
         ddlProvince.DataTextField = "Name"
         ddlProvince.DataValueField = "Id"
         ddlProvince.DataBind()
+        Dim debutNom = DebutNomProvince(Contexte.Province)
         For Each p As DataRow In provinces.Rows
-            If p.Txt("Name").StartsWith("Qu", StringComparison.OrdinalIgnoreCase) Then
+            If p.Txt("Name").StartsWith(debutNom, StringComparison.OrdinalIgnoreCase) Then
                 ddlProvince.SelectedValue = p("Id").ToString()
                 Exit For
             End If
@@ -26,6 +27,25 @@ Public Class PageNouvelEmploye
 
         txtDateEmbauche.Text = Date.Today.ToString("yyyy-MM-dd")
     End Sub
+
+    ''' <summary>Début du nom anglais de la province dans MngConsul (T053State), assez long pour ne désigner qu'elle.</summary>
+    Private Shared Function DebutNomProvince(p As Paie60Sec.Calcul.Province) As String
+        Select Case p
+            Case Paie60Sec.Calcul.Province.Ontario : Return "Ont"
+            Case Paie60Sec.Calcul.Province.Alberta : Return "Alb"
+            Case Paie60Sec.Calcul.Province.ColombieBritannique : Return "British"
+            Case Paie60Sec.Calcul.Province.Manitoba : Return "Man"
+            Case Paie60Sec.Calcul.Province.NouveauBrunswick : Return "New Br"
+            Case Paie60Sec.Calcul.Province.TerreNeuveEtLabrador : Return "Newf"
+            Case Paie60Sec.Calcul.Province.NouvelleEcosse : Return "Nova"
+            Case Paie60Sec.Calcul.Province.TerritoiresDuNordOuest : Return "Northw"
+            Case Paie60Sec.Calcul.Province.Nunavut : Return "Nun"
+            Case Paie60Sec.Calcul.Province.IlePrinceEdouard : Return "Prince"
+            Case Paie60Sec.Calcul.Province.Saskatchewan : Return "Sask"
+            Case Paie60Sec.Calcul.Province.Yukon : Return "Yuk"
+            Case Else : Return "Qu"
+        End Select
+    End Function
 
     Private Sub btnCreer_Click(sender As Object, e As EventArgs) Handles btnCreer.Click
         Try

@@ -5,7 +5,7 @@
 
     <div class="barre">
         <div>
-            <h2>Feuillets T4 et Relevés 1 de l'année
+            <h2><%: If(AvecQuebec, "Feuillets T4 et Relevés 1 de l'année", "Feuillets T4 de l'année") %>
                 <asp:DropDownList ID="ddlAnnee" runat="server" AutoPostBack="true" Width="110" /></h2>
             <p class="sous-titre">Montants calculés à partir des paies confirmées et des cumulatifs de départ.</p>
         </div>
@@ -16,11 +16,19 @@
     </div>
 
     <asp:Panel ID="pnlContenu" runat="server">
+        <% If AvecQuebec Then %>
         <div class="avertissement sans-impression">
             60secPaie calcule les montants de chaque case ; il ne transmet pas les feuillets. Saisissez-les dans <strong>Formulaires Web</strong> (ARC)
             et dans <strong>Mon dossier pour les entreprises</strong> (Revenu Québec), au plus tard le dernier jour de février.
             Vérifiez les cases avec les guides RC4120 (T4) et RL-1.G (Relevé 1) de l'année.
         </div>
+        <% Else %>
+        <div class="avertissement sans-impression">
+            60secPaie calcule les montants de chaque case ; il ne transmet pas les feuillets. Saisissez-les dans <strong>Formulaires Web</strong> (ARC),
+            au plus tard le dernier jour de février. Vérifiez les cases avec le guide RC4120 (T4) de l'année.
+            Hors Québec, la case 22 réunit l'impôt fédéral et l'impôt de la province ou du territoire ; il n'y a pas de relevé provincial.
+        </div>
+        <% End If %>
         <div class="carte table-defilante"><asp:Literal ID="litTableau" runat="server" /></div>
         <asp:Literal ID="litSommaire" runat="server" />
     </asp:Panel>

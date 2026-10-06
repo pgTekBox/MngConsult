@@ -25,7 +25,7 @@
             <div class="connexion-marque-corps">
                 <h1>La paie, en quelques minutes.</h1>
                 <ul class="connexion-points">
-                    <li>Retenues calculées d'après les tables officielles de l'ARC et de Revenu Québec</li>
+                    <li>Retenues calculées d'après les tables officielles de l'ARC et de Revenu Québec, pour toutes les provinces et tous les territoires</li>
                     <li>Talons, T4 et RL-1 produits à partir de vos paies</li>
                     <li>Remises gouvernementales suivies d'une période à l'autre</li>
                 </ul>

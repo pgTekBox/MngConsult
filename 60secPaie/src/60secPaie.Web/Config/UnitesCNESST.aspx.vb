@@ -14,6 +14,7 @@ Public Class PageConfigUnitesCNESST
     End Property
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        If Contexte.HorsQuebec Then Title = "Classes " & Contexte.Libelles.Accidents
         If IsPostBack Then Return
         ChargerListe()
         If UniteId > 0 Then ChargerUnite()

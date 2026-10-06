@@ -1,12 +1,18 @@
 Imports System.Text
+Imports Paie60Sec.Calcul
 
 Public Class PagePayerRemise
     Inherits PageBase
 
     Private Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not IsPostBack Then
+            ' Une compagnie hors Québec ne remet rien à Revenu Québec : tout va au Receveur général.
+            If Not ServiceRemise.QuebecConcerne() Then
+                Dim quebec = ddlGouvernement.Items.FindByValue(ServiceRemise.Quebec)
+                If quebec IsNot Nothing Then ddlGouvernement.Items.Remove(quebec)
+            End If
             Dim g = Request.QueryString("g")
-            If g = ServiceRemise.Federal OrElse g = ServiceRemise.Quebec Then ddlGouvernement.SelectedValue = g
+            If ddlGouvernement.Items.FindByValue(If(g, "")) IsNot Nothing Then ddlGouvernement.SelectedValue = g
             ProposerDates()
         End If
     End Sub
@@ -25,7 +31,19 @@ Public Class PagePayerRemise
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
         Dim sb As New StringBuilder("<div class=""grille-cartes"">")
-        sb.Append(CarteSolde(ServiceRemise.Federal)).Append(CarteSolde(ServiceRemise.Quebec))
+        sb.Append(CarteSolde(ServiceRemise.Federal))
+        If ServiceRemise.QuebecConcerne() Then sb.Append(CarteSolde(ServiceRemise.Quebec))
+
+        ' Hors Québec : la cotisation santé de l'employeur, la prime de la commission des accidents du travail et
+        ' l'impôt sur la paie d'un territoire se paient à part ; on en donne le cumul de l'année, par province.
+        Dim horsRemise = ServiceRemise.HorsRemiseProvinces(Date.Today.Year)
+        Dim courante = Provinces.Code(Contexte.Province)
+        Dim codes = horsRemise.Rows.Cast(Of DataRow)().Select(Function(r) r.Txt("Province").Trim()).ToList()
+        If Contexte.HorsQuebec AndAlso Not codes.Contains(courante) Then codes.Add(courante)
+        For Each code In codes
+            Dim r = horsRemise.Rows.Cast(Of DataRow)().FirstOrDefault(Function(x) x.Txt("Province").Trim() = code)
+            sb.Append(CarteHorsRemise(code, r, code = courante))
+        Next
 
         Dim cnt = ServiceRemise.CntAccumulee(Date.Today.Year)
         If cnt > 0D Then
@@ -34,6 +52,32 @@ Public Class PagePayerRemise
         End If
         litSoldes.Text = sb.Append("</div>").ToString()
     End Sub
+
+    ''' <summary>La carte d'une province ; <paramref name="r"/> est Nothing si rien n'y a encore été payé cette année.</summary>
+    Private Shared Function CarteHorsRemise(code As String, r As DataRow, courante As Boolean) As String
+        If Not Provinces.EstGeree(code) Then Return ""
+        Dim noms = LibellesProvince.Pour(code)
+        Dim sante = If(r Is Nothing, 0D, r.Dcm("Sante"))
+        Dim accidents = If(r Is Nothing, 0D, r.Dcm("Accidents"))
+        Dim impotPaie = If(r Is Nothing, 0D, r.Dcm("ImpotPaie"))
+        If Not courante AndAlso sante = 0D AndAlso accidents = 0D AndAlso impotPaie = 0D Then Return ""
+
+        Dim annee = Date.Today.Year
+        Dim sb As New StringBuilder("<div class=""carte""><h2>")
+        sb.Append(HttpUtility.HtmlEncode(Provinces.Nom(noms.Province) & " : montants hors remises")).Append("</h2>")
+        If noms.ARetenueTerritoriale OrElse impotPaie > 0D Then
+            sb.Append("<p>Impôt sur la paie retenu aux employés, cumul de ").Append(annee).Append(" : <strong>").Append(Argent(impotPaie)).Append("</strong></p>")
+        End If
+        If noms.ASante OrElse sante > 0D Then
+            sb.Append("<p>").Append(HttpUtility.HtmlEncode(noms.SanteLong)).Append(", cumul de ").Append(annee).Append(" : <strong>").Append(Argent(sante)).Append("</strong></p>")
+        End If
+        sb.Append("<p>").Append(HttpUtility.HtmlEncode("Prime " & noms.Accidents)).Append(", cumul de ").Append(annee).Append(" : <strong>").Append(Argent(accidents)).Append("</strong></p>")
+        If noms.ARetenueTerritoriale OrElse impotPaie > 0D Then
+            sb.Append("<p class=""note"">L'impôt sur la paie se remet au gouvernement du territoire, selon la fréquence qu'il vous a attribuée.</p>")
+        End If
+        sb.Append("<p class=""note"">Ces montants se paient à part, à l'administration de la province ou du territoire et à sa commission des accidents du travail. Ils ne font pas partie des remises au Receveur général.</p></div>")
+        Return sb.ToString()
+    End Function
 
     Private Shared Function CarteSolde(gouvernement As String) As String
         Dim s = ServiceRemise.Solde(gouvernement)

@@ -53,9 +53,9 @@
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtTauxVacances" Text="Taux de vacances (%)" />
                 <asp:TextBox ID="txtTauxVacances" runat="server" MaxLength="6" />
                 <div class="aide">Vide = taux par défaut de la compagnie.</div></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="ddlUniteCNESST" Text="Unité de classification CNESST" />
+            <div class="champ"><asp:Label ID="lblUnite" runat="server" AssociatedControlID="ddlUniteCNESST" Text="Unité de classification CNESST" />
                 <asp:DropDownList ID="ddlUniteCNESST" runat="server" />
-                <div class="aide">Sans unité, le taux de versement périodique de la compagnie s'applique. Les unités se définissent dans Configuration.</div></div>
+                <div class="aide"><asp:Literal ID="litAideUnite" runat="server" Text="Sans unité, le taux de versement périodique de la compagnie s'applique. Les unités se définissent dans Configuration." /></div></div>
         </div>
         <p class="note">Le taux horaire, le salaire et la fréquence proposés viennent de 60Sec lorsqu'ils y sont inscrits ; ce que vous enregistrez ici s'applique à la paie.</p>
     </fieldset>
@@ -70,9 +70,9 @@
             <span><asp:CheckBox ID="chkExFed" runat="server" Text="Ne pas retenir l'impôt fédéral" /></span>
             <span><asp:CheckBox ID="chkExQc" runat="server" Text="Ne pas retenir l'impôt du Québec" /></span>
             <span><asp:CheckBox ID="chkExRRQ" runat="server" Text="Ne pas cotiser au RRQ" /></span>
-            <span><asp:CheckBox ID="chkExRQAP" runat="server" Text="Ne pas cotiser au RQAP" /></span>
+            <span id="spanExRQAP" runat="server"><asp:CheckBox ID="chkExRQAP" runat="server" Text="Ne pas cotiser au RQAP" /></span>
             <span><asp:CheckBox ID="chkExAE" runat="server" Text="Ne pas cotiser à l'assurance-emploi" /></span>
-            <span><asp:CheckBox ID="chkExFSS" runat="server" Text="Exclure du FSS" /></span>
+            <span id="spanExFSS" runat="server"><asp:CheckBox ID="chkExFSS" runat="server" Text="Exclure du FSS" /></span>
             <span><asp:CheckBox ID="chkExCNESST" runat="server" Text="Exclure de la CNESST / CNT" /></span>
         </div>
     </fieldset>
@@ -103,6 +103,27 @@
         </div>
     </fieldset>
 
+    <%-- Hors Québec : le formulaire de crédits de la province (TD1ON, TD1AB…). Les colonnes TD1ON* de paie.EmployePaie servent à toutes. --%>
+    <asp:PlaceHolder ID="phProvince" runat="server" Visible="false">
+    <fieldset>
+        <legend><asp:Literal ID="litLegendeProvince" runat="server" /></legend>
+        <div class="champs">
+            <div class="champ"><asp:Label ID="lblProvMontant" runat="server" AssociatedControlID="txtONMontant" />
+                <asp:TextBox ID="txtONMontant" runat="server" MaxLength="12" />
+                <div class="aide">Vide = montant personnel de base (<asp:Literal ID="litBaseProv" runat="server" />).</div></div>
+            <asp:PlaceHolder ID="phPersonnesACharge" runat="server" Visible="false">
+            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtONPersonnes">Personnes à charge pour la réduction d'impôt de l'Ontario</asp:Label>
+                <asp:TextBox ID="txtONPersonnes" runat="server" MaxLength="2" />
+                <div class="aide">Enfants de moins de 19 ans et personnes à charge ayant une incapacité (<asp:Literal ID="litParPersonne" runat="server" /> chacun). Laissez vide si l'employé n'en demande pas.</div></div>
+            </asp:PlaceHolder>
+            <div class="champ"><asp:Label ID="lblProvCredits" runat="server" AssociatedControlID="txtONCredits" />
+                <asp:TextBox ID="txtONCredits" runat="server" MaxLength="12" /></div>
+        </div>
+        <p class="note">L'impôt additionnel par paie, la déduction pour zone visée et les déductions autorisées (T1213) se saisissent dans l'imposition fédérale : hors Québec, ils valent pour les deux impôts.</p>
+    </fieldset>
+    </asp:PlaceHolder>
+
+    <asp:PlaceHolder ID="phQuebec" runat="server">
     <fieldset>
         <legend>Imposition du Québec</legend>
         <div class="champs">
@@ -119,6 +140,7 @@
                 <asp:TextBox ID="txtTP1016Credits" runat="server" MaxLength="12" /></div>
         </div>
     </fieldset>
+    </asp:PlaceHolder>
 
     <fieldset>
         <legend>Paiement</legend>
