@@ -417,15 +417,15 @@
                     <thead><tr><th>Colonne</th><th>Obligatoire</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>—</td><td>Rang de la ligne dans le lot.</td></tr>
-                        <tr><td>Compte de l’ancien logiciel</td><td>—</td><td>Le nom source et, dessous, sa nature (actif, passif, capitaux, revenu, dépense). La nature borne les classes proposées à droite.</td></tr>
-                        <tr><td>Classe — où le ranger</td><td><strong>Oui</strong></td><td>« — choisir une classe — » puis les sous-classes de votre plan compatibles avec la nature, sous la forme « code — nom (début-fin) ». Une dépense ne se voit jamais proposer une classe d’actif. C’est la classe qui donne au compte sa place dans vos états financiers, et sa plage de numéros.</td></tr>
+                        <tr><td>Compte de l’ancien logiciel</td><td>—</td><td>La même fiche qu’à l’étape 2 : le numéro (ou « sans numéro »), le nom, puis la nature (actif, passif, capitaux, revenu, dépense), le type et le sous-type QuickBooks, le solde, le numéro et le nom d’origine s’ils diffèrent, « par défaut dans QuickBooks » ou « ajouté le … », le compte parent pour un sous-compte, la description. La nature borne les classes proposées à droite.</td></tr>
+                        <tr><td>Classe et sous-classe — où le ranger</td><td><strong>Oui</strong> (la sous-classe)</td><td>Deux listes l’une sous l’autre, comme à l’étape 2 : « — choisir une classe — » (les grandes classes compatibles avec la nature), puis « — choisir une sous-classe — » restreinte à la classe choisie, sous la forme « code — nom (début-fin) ». Choisir une sous-classe directement remonte sa classe. Une dépense ne se voit jamais proposer une classe d’actif. C’est la sous-classe qui donne au compte sa place dans vos états financiers, et sa plage de numéros.</td></tr>
                         <tr><td>Numéro</td><td>Non</td><td>Prérempli avec le numéro source quand il était libre à l’étape 2, sinon vide avec la mention « auto ». Un numéro saisi doit être numérique, dans la plage de la classe et libre.</td></tr>
                         <tr><td>Nom du compte</td><td><strong>Oui</strong></td><td>Prérempli avec le nom source (ou le nom choisi à l’étape 2). 150 caractères au maximum ; modifiable avant la création.</td></tr>
                     </tbody>
                 </table>
                 <h3>Créer, pas à pas</h3>
                 <ol>
-                    <li>Pour chaque ligne, choisissez la classe. Une ligne laissée sur « — choisir une classe — » n’est pas une erreur : elle est mise de côté et reviendra à la prochaine visite.</li>
+                    <li>Pour chaque ligne, choisissez la classe puis la sous-classe (ou la sous-classe directement). Une ligne laissée sans sous-classe n’est pas une erreur : elle est mise de côté et reviendra à la prochaine visite.</li>
                     <li>Laissez le numéro vide si vous n’avez pas de raison d’en imposer un : 60sec prend le premier numéro libre de la plage, de préférence une dizaine ronde (1010, 1020…). Sinon, saisissez un numéro de la plage affichée entre parenthèses.</li>
                     <li>Ajustez le nom si celui de l’ancien logiciel ne convient pas tel quel.</li>
                     <li>Cliquez <kbd>Créer les comptes</kbd> et confirmez : « Créer ces comptes dans votre plan comptable ? C’est une écriture réelle : les comptes existeront pour de bon. »</li>
@@ -1117,8 +1117,8 @@
                     <thead><tr><th>Column</th><th>Required</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>—</td><td>Row rank in the batch.</td></tr>
-                        <tr><td>Account from the old software</td><td>—</td><td>The source name and, below it, its nature (asset, liability, equity, revenue, expense). The nature bounds the classes offered on the right.</td></tr>
-                        <tr><td>Class — where to file it</td><td><strong>Yes</strong></td><td>“— choose a class —” then the subclasses of your chart compatible with the nature, as “code — name (start-end)”. An expense is never offered an asset class. The class gives the account its place in your financial statements, and its number range.</td></tr>
+                        <tr><td>Account from the old software</td><td>—</td><td>The same card as in step 2: the number (or “sans numéro”), the name, then the nature (asset, liability, equity, revenue, expense), the QuickBooks type and subtype, the balance, the original number and name if they differ, “par défaut dans QuickBooks” or “ajouté le …”, the parent account for a sub-account, the description. The nature bounds the classes offered on the right.</td></tr>
+                        <tr><td>Class and subclass — where to file it</td><td><strong>Yes</strong> (the subclass)</td><td>Two lists one under the other, as in step 2: “— choisir une classe —” (the main classes compatible with the nature), then “— choisir une sous-classe —” restricted to the chosen class, as “code — name (start-end)”. Choosing a subclass directly sets its class. An expense is never offered an asset class. The subclass gives the account its place in your financial statements, and its number range.</td></tr>
                         <tr><td>Number</td><td>No</td><td>Prefilled with the source number when it was free at step 2, otherwise empty with the hint “auto”. A typed number must be numeric, within the class range and free.</td></tr>
                         <tr><td>Account name</td><td><strong>Yes</strong></td><td>Prefilled with the source name (or the name chosen at step 2). 150 characters at most; editable before creation.</td></tr>
                     </tbody>
@@ -1817,8 +1817,8 @@
                     <thead><tr><th>Columna</th><th>Obligatorio</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>#</td><td>—</td><td>Posición de la línea en el lote.</td></tr>
-                        <tr><td>Cuenta del programa anterior</td><td>—</td><td>El nombre de origen y, debajo, su naturaleza (activo, pasivo, capital, ingreso, gasto). La naturaleza delimita las clases propuestas a la derecha.</td></tr>
-                        <tr><td>Clase — dónde ubicarla</td><td><strong>Sí</strong></td><td>« — elegir una clase — » y luego las subclases de su plan compatibles con la naturaleza, en la forma « código — nombre (inicio-fin) ». A un gasto nunca se le propone una clase de activo. La clase da a la cuenta su lugar en los estados financieros y su rango de números.</td></tr>
+                        <tr><td>Cuenta del programa anterior</td><td>—</td><td>La misma ficha que en la etapa 2: el número (o « sans numéro »), el nombre, luego la naturaleza (activo, pasivo, capital, ingreso, gasto), el tipo y el subtipo QuickBooks, el saldo, el número y el nombre de origen si difieren, « par défaut dans QuickBooks » o « ajouté le … », la cuenta madre para una subcuenta, la descripción. La naturaleza delimita las clases propuestas a la derecha.</td></tr>
+                        <tr><td>Clase y subclase — dónde ubicarla</td><td><strong>Sí</strong> (la subclase)</td><td>Dos listas una bajo la otra, como en la etapa 2: « — choisir une classe — » (las grandes clases compatibles con la naturaleza) y luego « — choisir une sous-classe — » restringida a la clase elegida, en la forma « código — nombre (inicio-fin) ». Elegir una subclase directamente fija su clase. A un gasto nunca se le propone una clase de activo. La subclase da a la cuenta su lugar en los estados financieros y su rango de números.</td></tr>
                         <tr><td>Número</td><td>No</td><td>Prellenado con el número de origen cuando estaba libre en la etapa 2; si no, vacío con la indicación « auto ». Un número escrito debe ser numérico, estar dentro del rango de la clase y libre.</td></tr>
                         <tr><td>Nombre de la cuenta</td><td><strong>Sí</strong></td><td>Prellenado con el nombre de origen (o el nombre elegido en la etapa 2). 150 caracteres como máximo; modificable antes de la creación.</td></tr>
                     </tbody>

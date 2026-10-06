@@ -67,11 +67,15 @@
     table.t td { padding: 8px 9px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.t tr:hover td { background: #f8fafc }
 
+    .src-c { font-weight: 700; color: #0f172a; white-space: nowrap }
+    .src-c .sans-num { font-weight: 500; color: #94a3b8; font-style: italic }
     .src-n { font-weight: 700; color: #0f172a }
-    .nature { font-size: 11px; color: #94a3b8; text-transform: uppercase; letter-spacing: .3px }
+    .nature { font-size: 11px; color: #64748b; white-space: nowrap }
 
     .cls-in { width: 100%; min-width: 260px; padding: 6px 8px; border: 1px solid #cbd5e1;
-              border-radius: 8px; font-size: 12.5px; font-family: inherit }
+              border-radius: 8px; font-size: 12.5px; font-family: inherit; background: #fff }
+    .cls-cell .cls-f { display: block; margin-bottom: 4px }
+    .cls-cell .scls-f { display: block }
     .num-in { width: 82px; padding: 6px 8px; border: 1px solid #cbd5e1; border-radius: 8px;
               font-size: 12.5px; font-family: inherit; text-align: center }
     .nom-in { width: 100%; min-width: 200px; padding: 6px 8px; border: 1px solid #cbd5e1;
@@ -203,7 +207,7 @@
                     <tr>
                         <th style="width:36px">#</th>
                         <th>Compte de l'ancien logiciel</th>
-                        <th style="width:300px">Classe — où le ranger</th>
+                        <th style="width:340px">Classe et sous-classe — où le ranger</th>
                         <th style="width:110px">Numéro</th>
                         <th style="width:260px">Nom du compte</th>
                     </tr>
@@ -216,12 +220,19 @@
                                 <td>
                                     <asp:HiddenField runat="server" ID="hfCleSource" Value='<%# Eval("CleSource") %>' />
                                     <asp:HiddenField runat="server" ID="hfNature" Value='<%# Eval("TypeNormalise") %>' />
+                                    <%-- La même fiche qu'à l'étape 2 (T312) : numéro, nom, nature, type
+                                         et sous-type QuickBooks, solde, origine, sous-compte, description. --%>
+                                    <div class="src-c"><%# CleAffichee(Eval("Compte")) %></div>
                                     <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %></div>
-                                    <div class="nature"><%# Server.HtmlEncode(Convert.ToString(Eval("TypeNormalise"))) %></div>
+                                    <%# FicheSource(Container.DataItem) %>
                                 </td>
-                                <td>
-                                    <asp:DropDownList runat="server" ID="ddlClasse" CssClass="cls-in" />
-                                    <span class="plage">la plage de la classe fixe le numéro</span>
+                                <td class="cls-cell">
+                                    <%-- La classe, puis la sous-classe : la seconde se restreint à la
+                                         première, comme à l'étape 2. C'est la sous-classe qui range le
+                                         compte et fixe sa plage de numéros. --%>
+                                    <asp:DropDownList runat="server" ID="ddlClasse" CssClass="cls-in cls-f" />
+                                    <asp:DropDownList runat="server" ID="ddlSousClasse" CssClass="cls-in scls-f" />
+                                    <span class="plage">la plage de la sous-classe fixe le numéro</span>
                                 </td>
                                 <td>
                                     <asp:TextBox runat="server" ID="txtNumero" CssClass="num-in" MaxLength="20"
@@ -266,4 +277,50 @@
     </asp:Panel>
 
 </div>
+
+<script type="text/javascript">
+    // Classe, puis sous-classe : la seconde liste ne montre que les sous-classes
+    // de la classe choisie (chaque option porte sa classe en data-parent). Choisir
+    // une sous-classe sans classe remonte la classe d'elle-même.
+    (function () {
+        var lignes = document.querySelectorAll('tbody tr');
+        for (var i = 0; i < lignes.length; i++) {
+            (function (tr) {
+                var cls = tr.querySelector('select.cls-f');
+                var scl = tr.querySelector('select.scls-f');
+                if (!cls || !scl) return;
+
+                // Toutes les sous-classes, gardées à part : la liste visible en est un extrait.
+                var toutes = [];
+                for (var j = 0; j < scl.options.length; j++) {
+                    var o = scl.options[j];
+                    toutes.push({ v: o.value, t: o.textContent, p: o.getAttribute('data-parent') || '' });
+                }
+
+                function filtrer() {
+                    var k = cls.value, courant = scl.value;
+                    while (scl.firstChild) { scl.removeChild(scl.firstChild); }
+                    for (var j = 0; j < toutes.length; j++) {
+                        var s = toutes[j];
+                        if (s.v !== '' && k !== '' && s.p !== k) continue;
+                        var o = document.createElement('option');
+                        o.value = s.v; o.textContent = s.t;
+                        if (s.p) o.setAttribute('data-parent', s.p);
+                        scl.appendChild(o);
+                    }
+                    scl.value = courant;
+                    if (scl.value !== courant) scl.value = '';
+                }
+
+                cls.addEventListener('change', filtrer);
+                scl.addEventListener('change', function () {
+                    var o = scl.options[scl.selectedIndex];
+                    var p = o ? o.getAttribute('data-parent') : '';
+                    if (p && cls.value !== p) { cls.value = p; filtrer(); scl.value = o.value; }
+                });
+                filtrer();
+            })(lignes[i]);
+        }
+    })();
+</script>
 </asp:Content>
