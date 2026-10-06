@@ -260,7 +260,7 @@
             if (!fs || !fs.length) return;
 
             if (!/\.(csv|txt)$/i.test(fs[0].name)) {
-                alert('Seuls les fichiers .csv et .txt sont acceptés.');
+                showAppMessage('Seuls les fichiers .csv et .txt sont acceptés.', 'Attention');
                 return;
             }
 

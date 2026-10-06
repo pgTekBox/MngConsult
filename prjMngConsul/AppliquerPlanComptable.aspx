@@ -117,12 +117,7 @@
     .lien-retour { font-size: 12.5px; color: #2563eb; text-decoration: none; margin-left: auto }
     .lien-retour:hover { text-decoration: underline }
 
-    .alert { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px;
              margin-bottom: 14px; font-size: 13.5px; line-height: 1.55 }
-    .alert .ai { font-size: 17px; line-height: 1 }
-    .alert-ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
-    .alert-ko { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .alert-wa { background: #fffbeb; border: 1px solid #fde68a; color: #92400e }
 
     .vide { padding: 26px; text-align: center; color: #64748b; font-size: 13.5px }
 
@@ -163,16 +158,6 @@
             tant que vous n'avez pas cliqué sur <b>Créer les comptes</b>.
         </div>
     </div>
-
-    <asp:Panel ID="pnlSucces" runat="server" Visible="false" CssClass="alert alert-ok">
-        <span class="ai">✅</span><div><asp:Literal ID="litSucces" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="alert alert-ko">
-        <span class="ai">⛔</span><div><asp:Literal ID="litErreur" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlAvertissement" runat="server" Visible="false" CssClass="alert alert-wa">
-        <span class="ai">⚠️</span><div><asp:Literal ID="litAvertissement" runat="server" /></div>
-    </asp:Panel>
 
     <div class="card">
         <div class="bar-top">

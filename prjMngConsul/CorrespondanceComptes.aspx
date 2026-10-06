@@ -55,12 +55,6 @@
     .cpt.att { background: #fffbeb; border-color: #fde68a } .cpt.att .v { color: #b45309 }
     .cpt.ok { background: #ecfdf5; border-color: #a7f3d0 } .cpt.ok .v { color: #047857 }
 
-    .alert { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px; margin-bottom: 14px; font-size: 13.5px }
-    .alert .ai { flex: 0 0 auto; font-size: 16px }
-    .alert-ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
-    .alert-ko { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .alert-wa { background: #fffbeb; border: 1px solid #fde68a; color: #78350f }
-
     .btn { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; border: 1px solid transparent; cursor: pointer; font-family: inherit }
     .btn-p { background: #2563eb; color: #fff }
     .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
@@ -173,16 +167,6 @@
         déplacerait des montants sans que rien ne le signale. Rien n'est encore écrit
         dans votre comptabilité.
     </p>
-
-    <asp:Panel ID="pnlSucces" runat="server" Visible="false" CssClass="alert alert-ok">
-        <span class="ai">✅</span><div><asp:Literal ID="litSucces" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlAvertissement" runat="server" Visible="false" CssClass="alert alert-wa">
-        <span class="ai">⚠️</span><div><asp:Literal ID="litAvertissement" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="alert alert-ko">
-        <span class="ai">❌</span><div><asp:Literal ID="litErreur" runat="server" /></div>
-    </asp:Panel>
 
     <asp:Panel ID="pnlAucunLot" runat="server" Visible="false" CssClass="card">
         <div class="vide">
@@ -607,7 +591,6 @@
                 }
                 if (actI) { actI.addEventListener('change', majAvertIgnorer); majAvertIgnorer(); }
                 if (!cls || !scl || !sel || !hid) return;
-
 
                 // 2e cran : les sous-classes de la classe choisie.
                 function remplirSousClasses() {

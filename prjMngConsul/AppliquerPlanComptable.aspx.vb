@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Étape 3 de la reprise comptable : créer, dans le plan de la compagnie, les
@@ -115,15 +116,16 @@ Public Class AppliquerPlanComptable
 
             ' Un compte encore à décider ne sera pas repris. Le dire ici évite
             ' de découvrir le trou trois étapes plus loin.
-            If aDecider > 0 Then
-                Alerte(pnlAvertissement, litAvertissement,
+            ' Une seule fois, à l'arrivée : après une création, c'est le résultat qui s'affiche.
+            If aDecider > 0 AndAlso Not IsPostBack Then
+                Alerte("Attention",
                        String.Format("<b>{0} compte(s) ne sont pas encore décidés</b> à l'étape 2. " &
                                      "Ils ne seront pas repris. Vous pouvez créer les autres " &
                                      "maintenant et revenir ensuite.", aDecider))
             End If
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture du lot : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture du lot : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -287,7 +289,6 @@ Public Class AppliquerPlanComptable
     ''' plus difficile à démêler qu'un plan pas repris du tout.
     ''' </summary>
     Protected Sub btnCreer_Click(sender As Object, e As EventArgs) Handles btnCreer.Click
-        CacherMessages()
         pnlCrees.Visible = False
         If Not PlanCharge Then Return
 
@@ -321,7 +322,7 @@ Public Class AppliquerPlanComptable
             Next
 
             If lignes.Count = 0 Then
-                Alerte(pnlAvertissement, litAvertissement,
+                Alerte("Attention",
                        "Aucune classe n'a été choisie : il n'y a rien à créer.")
                 Return
             End If
@@ -350,15 +351,15 @@ Public Class AppliquerPlanComptable
                 msg.AppendFormat(" {0} ligne(s) laissée(s) de côté, faute de classe choisie.", sansClasse)
             End If
 
-            Alerte(pnlSucces, litSucces, msg.ToString())
+            Alerte("Fait", msg.ToString())
 
         Catch ex As SqlException
             ' s0767 renvoie ses refus en clair : ils sont faits pour être lus.
-            Alerte(pnlErreur, litErreur,
+            Alerte("Erreur",
                    "<b>Rien n'a été créé.</b><br />" & Server.HtmlEncode(ex.Message))
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Création : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Création : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -371,15 +372,15 @@ Public Class AppliquerPlanComptable
         Return Convert.ToInt32(v)
     End Function
 
-    Private Sub CacherMessages()
-        pnlSucces.Visible = False
-        pnlErreur.Visible = False
-        pnlAvertissement.Visible = False
-    End Sub
-
-    Private Shared Sub Alerte(panneau As Panel, texte As Literal, message As String)
-        texte.Text = message
-        panneau.Visible = True
+    ''' <summary>
+    ''' Le résultat, l'avertissement ou le refus s'affiche dans la fenêtre de message du site
+    ''' (Site.Master), par-dessus la grille : le bouton est en bas de page, un bandeau en haut
+    ''' passerait inaperçu. Le message peut porter un peu de HTML (gras, &lt;br /&gt;) : il est ramené en texte.
+    ''' </summary>
+    Private Sub Alerte(titre As String, message As String)
+        Dim texte = Regex.Replace(If(message, ""), "<br\s*/?>", vbLf, RegexOptions.IgnoreCase)
+        texte = Regex.Replace(texte, "<[^>]+>", "")
+        ShowMessageBox(HttpUtility.HtmlDecode(texte).Trim(), titre)
     End Sub
 
 #End Region

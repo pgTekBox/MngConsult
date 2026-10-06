@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Étape 1 de la migration comptable : le plan comptable.
@@ -241,10 +242,9 @@ Public Class ImportPlanComptable
 #Region "Aperçu"
 
     Protected Sub btnApercu_Click(sender As Object, e As EventArgs) Handles btnApercu.Click
-        CacherMessages()
 
         If Not fuFichier.HasFile Then
-            Alerte(pnlErreur, litErreur, "Choisissez d'abord un fichier.")
+            Alerte("Erreur", "Choisissez d'abord un fichier.")
             Return
         End If
         If Not FichierValide() Then Return
@@ -254,7 +254,7 @@ Public Class ImportPlanComptable
                              chkEntete.Checked, 15)
 
             If dt.Rows.Count = 0 Then
-                Alerte(pnlErreur, litErreur, "Le fichier ne contient aucune ligne de données.")
+                Alerte("Erreur", "Le fichier ne contient aucune ligne de données.")
                 Return
             End If
 
@@ -270,7 +270,7 @@ Public Class ImportPlanComptable
             pnlApercu.Visible = True
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture impossible : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture impossible : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -315,10 +315,9 @@ Public Class ImportPlanComptable
 #Region "Chargement en préparation"
 
     Protected Sub btnCharger_Click(sender As Object, e As EventArgs) Handles btnCharger.Click
-        CacherMessages()
 
         If Not fuFichier.HasFile Then
-            Alerte(pnlErreur, litErreur, "Choisissez d'abord un fichier.")
+            Alerte("Erreur", "Choisissez d'abord un fichier.")
             Return
         End If
         If Not FichierValide() Then Return
@@ -326,7 +325,7 @@ Public Class ImportPlanComptable
         Try
             Dim dt = LireCsv(fuFichier.FileContent, Separateur(), Encodage(), chkEntete.Checked)
             If dt.Rows.Count = 0 Then
-                Alerte(pnlErreur, litErreur, "Le fichier ne contient aucune ligne de données.")
+                Alerte("Erreur", "Le fichier ne contient aucune ligne de données.")
                 Return
             End If
 
@@ -335,7 +334,7 @@ Public Class ImportPlanComptable
             ' facultatif chez eux — et le nom fait alors office de clé.
             Dim map = AssocierColonnes(dt)
             If Not map.ContainsKey("Compte") AndAlso Not map.ContainsKey("Nom") Then
-                Alerte(pnlErreur, litErreur,
+                Alerte("Erreur",
                        "<b>Ni le numéro ni le nom des comptes n'ont été trouvés</b> — il faut au moins " &
                        "l'un des deux pour identifier un compte.<br /><br />" &
                        "Vérifiez le séparateur, ou décochez « la première ligne contient les noms de " &
@@ -362,7 +361,7 @@ Public Class ImportPlanComptable
             Dim r = Charger(ddlSysteme.SelectedValue, fichierId, lignes)
 
             If r Is Nothing Then
-                Alerte(pnlErreur, litErreur, "Le chargement n'a rien retourné.")
+                Alerte("Erreur", "Le chargement n'a rien retourné.")
                 Return
             End If
 
@@ -381,19 +380,19 @@ Public Class ImportPlanComptable
             pnlResultat.Visible = True
 
             If anomalies = 0 Then
-                Alerte(pnlSucces, litSucces,
+                Alerte("Fait",
                        String.Format("{0} compte(s) en préparation. Rien n'a encore été écrit dans votre plan comptable.", retenues))
             Else
-                Alerte(pnlAvertissement, litAvertissement,
+                Alerte("Attention",
                        String.Format("{0} compte(s) en préparation, {1} ligne(s) à regarder de près.", retenues, anomalies))
             End If
 
             ChargerLignes()
 
         Catch ex As SqlException
-            Alerte(pnlErreur, litErreur, "Base de données : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Base de données : " & Server.HtmlEncode(ex.Message))
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Chargement impossible : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Chargement impossible : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -534,7 +533,7 @@ Public Class ImportPlanComptable
             pnlLignes.Visible = True
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture de la préparation : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture de la préparation : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -613,7 +612,6 @@ Public Class ImportPlanComptable
     ''' plan : on n'efface pas la trace de ce qui a été créé.
     ''' </summary>
     Protected Sub btnVider_Click(sender As Object, e As EventArgs) Handles btnVider.Click
-        CacherMessages()
         Try
             Dim p As New Collection
             p.Add(New SqlParameter("@CompanyGUID", Company))
@@ -621,11 +619,11 @@ Public Class ImportPlanComptable
 
             pnlLignes.Visible = False
             pnlResultat.Visible = False
-            Alerte(pnlSucces, litSucces, "Le plan comptable en préparation a été abandonné, et ses correspondances avec lui.")
+            Alerte("Fait", "Le plan comptable en préparation a été abandonné, et ses correspondances avec lui.")
 
         Catch ex As SqlException
             ' 50303 : des comptes ont déjà été créés. Ce n'est pas une panne.
-            Alerte(pnlErreur, litErreur, Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", Server.HtmlEncode(ex.Message))
         End Try
     End Sub
     ''' <summary>Colore la ligne selon son verdict, pour repérer les anomalies d'un coup d'œil.</summary>
@@ -723,14 +721,14 @@ Public Class ImportPlanComptable
         Dim nom = fuFichier.FileName.ToLowerInvariant()
 
         If Not nom.EndsWith(".csv") AndAlso Not nom.EndsWith(".txt") Then
-            Alerte(pnlErreur, litErreur,
+            Alerte("Erreur",
                    "Seuls les fichiers .csv et .txt sont acceptés. " &
                    "Depuis Excel : Fichier ▸ Enregistrer sous ▸ CSV.")
             Return False
         End If
 
         If fuFichier.PostedFile.ContentLength > 10 * 1024 * 1024 Then
-            Alerte(pnlErreur, litErreur, "Fichier trop volumineux : 10 Mo au maximum.")
+            Alerte("Erreur", "Fichier trop volumineux : 10 Mo au maximum.")
             Return False
         End If
 
@@ -753,15 +751,15 @@ Public Class ImportPlanComptable
         End Select
     End Function
 
-    Private Sub CacherMessages()
-        pnlSucces.Visible = False
-        pnlErreur.Visible = False
-        pnlAvertissement.Visible = False
-    End Sub
-
-    Private Shared Sub Alerte(panneau As Panel, texte As Literal, message As String)
-        texte.Text = message
-        panneau.Visible = True
+    ''' <summary>
+    ''' Le résultat, l'avertissement ou le refus s'affiche dans la fenêtre de message du site
+    ''' (Site.Master), par-dessus la grille : le bouton est en bas de page, un bandeau en haut
+    ''' passerait inaperçu. Le message peut porter un peu de HTML (gras, &lt;br /&gt;) : il est ramené en texte.
+    ''' </summary>
+    Private Sub Alerte(titre As String, message As String)
+        Dim texte = Regex.Replace(If(message, ""), "<br\s*/?>", vbLf, RegexOptions.IgnoreCase)
+        texte = Regex.Replace(texte, "<[^>]+>", "")
+        ShowMessageBox(HttpUtility.HtmlDecode(texte).Trim(), titre)
     End Sub
 
 #End Region

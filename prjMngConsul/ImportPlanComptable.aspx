@@ -118,15 +118,9 @@
     .btn-p { background: #2563eb; color: #fff }
     .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
 
-    .alert {
         display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px;
         margin-bottom: 14px; font-size: 13.5px;
     }
-
-    .alert .ai { flex: 0 0 auto; font-size: 16px }
-    .alert-ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
-    .alert-ko { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .alert-wa { background: #fffbeb; border: 1px solid #fde68a; color: #78350f }
 
     .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 4px }
 
@@ -273,15 +267,6 @@
     </p>
 
     <!-- ══════════ MESSAGES ══════════ -->
-    <asp:Panel ID="pnlSucces" runat="server" Visible="false" CssClass="alert alert-ok">
-        <span class="ai">✅</span><div><asp:Literal ID="litSucces" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlAvertissement" runat="server" Visible="false" CssClass="alert alert-wa">
-        <span class="ai">⚠️</span><div><asp:Literal ID="litAvertissement" runat="server" /></div>
-    </asp:Panel>
-    <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="alert alert-ko">
-        <span class="ai">❌</span><div><asp:Literal ID="litErreur" runat="server" /></div>
-    </asp:Panel>
 
     <!-- ══════════ RÉSULTAT ══════════ -->
     <asp:Panel ID="pnlResultat" runat="server" Visible="false" CssClass="step">
@@ -488,7 +473,6 @@
                 </details>
             </asp:Panel>
 
-
             <div class="drop" id="dropZone">
                 <span class="di" id="dropIcone">📁</span>
                 <span class="dt" id="dropTexte"><b>Glissez votre fichier ici</b> ou cliquez pour le choisir</span>
@@ -559,7 +543,7 @@
             if (!fs || !fs.length) return;
 
             if (!/\.(csv|txt)$/i.test(fs[0].name)) {
-                alert('Seuls les fichiers .csv et .txt sont acceptés.');
+                showAppMessage('Seuls les fichiers .csv et .txt sont acceptés.', 'Attention');
                 return;
             }
 

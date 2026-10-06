@@ -12,24 +12,6 @@ Partial Public Class AppliquerPlanComptable
     Protected WithEvents ucEtapes As Global.MngConsul.EtapesReprise
 
 
-    '''<summary>pnlSucces</summary>
-    Protected WithEvents pnlSucces As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>litSucces</summary>
-    Protected WithEvents litSucces As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>pnlErreur</summary>
-    Protected WithEvents pnlErreur As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>litErreur</summary>
-    Protected WithEvents litErreur As Global.System.Web.UI.WebControls.Literal
-
-    '''<summary>pnlAvertissement</summary>
-    Protected WithEvents pnlAvertissement As Global.System.Web.UI.WebControls.Panel
-
-    '''<summary>litAvertissement</summary>
-    Protected WithEvents litAvertissement As Global.System.Web.UI.WebControls.Literal
-
 
     '''<summary>hlRetour</summary>
     Protected WithEvents hlRetour As Global.System.Web.UI.WebControls.HyperLink

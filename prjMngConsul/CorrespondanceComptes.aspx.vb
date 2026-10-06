@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Text
+Imports System.Text.RegularExpressions
 
 ''' <summary>
 ''' Étape 2 de la reprise comptable : dire, pour chaque compte de l'ancien
@@ -162,7 +163,7 @@ Public Class CorrespondanceComptes
                 New Newtonsoft.Json.JsonSerializerSettings With {.StringEscapeHandling = Newtonsoft.Json.StringEscapeHandling.EscapeHtml})
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture du plan comptable : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture du plan comptable : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -300,7 +301,7 @@ Public Class CorrespondanceComptes
             AfficherStats(PremiereLigne(ExecuteSQLds("s0758StatsCorrespondance", p)))
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture de l'avancement : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture de l'avancement : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -355,9 +356,9 @@ Public Class CorrespondanceComptes
             pnlLignes.Visible = Not pnlVide.Visible
 
         Catch ex As SqlException When ex.Number = 50310
-            Alerte(pnlErreur, litErreur, "Ce lot n'existe plus.")
+            Alerte("Erreur", "Ce lot n'existe plus.")
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Lecture des correspondances : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Lecture des correspondances : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -617,7 +618,6 @@ Public Class CorrespondanceComptes
     ''' pas à une immobilisation parce que les noms se ressemblent.
     ''' </summary>
     Protected Async Sub btnIA_Click(sender As Object, e As EventArgs) Handles btnIA.Click
-        CacherMessages()
         If Not PlanCharge Then Return
 
         Try
@@ -627,7 +627,7 @@ Public Class CorrespondanceComptes
             Dim dsSrc As DataSet = ExecuteSQLds("s0763GetComptesAProposer", pSrc)
 
             If dsSrc Is Nothing OrElse dsSrc.Tables.Count = 0 OrElse dsSrc.Tables(0).Rows.Count = 0 Then
-                Alerte(pnlSucces, litSucces,
+                Alerte("Fait",
                        "Rien à soumettre : tous les comptes sont déjà décidés ou reconnus par leur numéro.")
                 Return
             End If
@@ -654,7 +654,7 @@ Public Class CorrespondanceComptes
             Dim dsPlan As DataSet = ExecuteSQLds("s0764GetPlanPourIA", pPlan)
 
             If dsPlan Is Nothing OrElse dsPlan.Tables.Count = 0 OrElse dsPlan.Tables(0).Rows.Count = 0 Then
-                Alerte(pnlErreur, litErreur,
+                Alerte("Erreur",
                        "Votre plan comptable est vide : il n'y a rien à quoi rattacher ces comptes.")
                 Return
             End If
@@ -678,7 +678,7 @@ Public Class CorrespondanceComptes
             Dim dsCle As DataSet = ExecuteSQLds("s0000GetParameter", pCle)
 
             If dsCle Is Nothing OrElse dsCle.Tables.Count = 0 OrElse dsCle.Tables(0).Rows.Count = 0 Then
-                Alerte(pnlErreur, litErreur, "La clé d'accès à l'IA n'est pas configurée.")
+                Alerte("Erreur", "La clé d'accès à l'IA n'est pas configurée.")
                 Return
             End If
             Dim cle As String = Convert.ToString(dsCle.Tables(0).Rows(0)("Value"))
@@ -688,7 +688,7 @@ Public Class CorrespondanceComptes
             Dim dsPr As DataSet = ExecuteSQLds("s0032GetPromptOpenAPI", pPr)
 
             If dsPr Is Nothing OrElse dsPr.Tables.Count = 0 OrElse dsPr.Tables(0).Rows.Count = 0 Then
-                Alerte(pnlErreur, litErreur, "Le prompt de correspondance des comptes n'est pas configuré.")
+                Alerte("Erreur", "Le prompt de correspondance des comptes n'est pas configuré.")
                 Return
             End If
             Dim prompt As String = Convert.ToString(dsPr.Tables(0).Rows(0)("Prompt"))
@@ -698,7 +698,7 @@ Public Class CorrespondanceComptes
             Dim res = Await mapper.ProposerAsync(prompt, source, plan.ToString())
 
             If res.Propositions.Count = 0 Then
-                Alerte(pnlAvertissement, litAvertissement,
+                Alerte("Attention",
                        "L'IA n'a proposé aucune correspondance pour ces comptes.")
                 Return
             End If
@@ -727,10 +727,10 @@ Public Class CorrespondanceComptes
             msg.AppendFormat("Coût estimé : {0} US$. ", res.CoutUsd.ToString("N4"))
             msg.Append("Ce ne sont que des propositions — rien n'est décidé tant que vous n'avez pas enregistré.")
 
-            Alerte(pnlSucces, litSucces, msg.ToString())
+            Alerte("Fait", msg.ToString())
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Appel à l'IA : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Appel à l'IA : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -763,7 +763,6 @@ Public Class CorrespondanceComptes
     ''' reste demande un avis.
     ''' </summary>
     Protected Sub btnAccepter_Click(sender As Object, e As EventArgs) Handles btnAccepter.Click
-        CacherMessages()
         If Not PlanCharge Then Return
 
         Try
@@ -774,12 +773,12 @@ Public Class CorrespondanceComptes
             AfficherStats(PremiereLigne(ExecuteSQLds("s0760AccepterPropositions", p)))
             ChargerLignes()
 
-            Alerte(pnlSucces, litSucces,
+            Alerte("Fait",
                    "Les correspondances par numéro de compte ont été retenues. " &
                    "Ce qui reste demande une décision.")
 
         Catch ex As Exception
-            Alerte(pnlErreur, litErreur, "Enregistrement : " & Server.HtmlEncode(ex.Message))
+            Alerte("Erreur", "Enregistrement : " & Server.HtmlEncode(ex.Message))
         End Try
     End Sub
 
@@ -788,7 +787,6 @@ Public Class CorrespondanceComptes
     ''' « à décider » : c'est ainsi qu'on se dédit.
     ''' </summary>
     Protected Sub btnEnregistrer_Click(sender As Object, e As EventArgs) Handles btnEnregistrer.Click
-        CacherMessages()
         If Not PlanCharge Then Return
 
         Try
@@ -835,7 +833,6 @@ Public Class CorrespondanceComptes
             Next
 
             If decisions.Count = 0 Then
-                Alerte(pnlAvertissement, litAvertissement, "Rien à enregistrer.")
                 ShowMessageBox("Rien à enregistrer : aucune ligne de correspondance n'a été trouvée.", "Enregistrement impossible")
                 Return
             End If
@@ -854,26 +851,17 @@ Public Class CorrespondanceComptes
             Dim aDecider = If(r Is Nothing, 0, Convert.ToInt32(r("ADecider")))
 
             If aDecider = 0 Then
-                Alerte(pnlSucces, litSucces, "Correspondances enregistrées. Tous les comptes sont décidés.")
+                Alerte("Fait", "Correspondances enregistrées. Tous les comptes sont décidés.")
 
             ElseIf aCreerSansNumero > 0 Then
                 ' Cas courant des plans sans numéros. Ce n'est plus un refus :
                 ' l'étape 3 attribuera les numéros.
-                Alerte(pnlAvertissement, litAvertissement,
-                       String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider. " &
-                                     "{1} d'entre eux sont marqués « Créer » <b>sans numéro</b> — ce n'est pas " &
-                                     "un problème : le numéro leur sera attribué à l'étape suivante, dans la " &
-                                     "plage de la classe que vous choisirez.",
-                                     aDecider, aCreerSansNumero))
                 ShowMessageBox(String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider." & vbLf & vbLf &
                                              "{1} d'entre eux sont marqués « Créer » sans numéro — ce n'est pas un problème : " &
                                              "le numéro leur sera attribué à l'étape suivante, dans la plage de la classe " &
                                              "que vous choisirez.", aDecider, aCreerSansNumero),
                                "Comptes à décider")
             Else
-                Alerte(pnlSucces, litSucces,
-                       String.Format("Correspondances enregistrées. {0} compte(s) restent à décider — " &
-                                     "vérifiez qu'un « Lier » pointe bien vers un compte de votre plan.", aDecider))
                 ShowMessageBox(String.Format("Correspondances enregistrées, mais {0} compte(s) restent à décider." & vbLf & vbLf &
                                              "Vérifiez qu'un « Lier » pointe bien vers un compte de votre plan : un « Lier » " &
                                              "vers un compte inconnu n'est pas conservé et la ligne revient à décider.", aDecider),
@@ -881,9 +869,7 @@ Public Class CorrespondanceComptes
             End If
 
         Catch ex As Exception
-            ' Le bandeau rouge est en haut de page, loin du bouton : la boîte
-            ' de message s'ouvre par-dessus la grille pour que l'échec se voie.
-            Alerte(pnlErreur, litErreur, "Enregistrement : " & Server.HtmlEncode(ex.Message))
+            ' La boîte de message s'ouvre par-dessus la grille pour que l'échec se voie.
             ShowMessageBox("Les correspondances n'ont pas été enregistrées." & vbLf & vbLf & ex.Message, "Erreur à l'enregistrement")
         End Try
     End Sub
@@ -901,15 +887,15 @@ Public Class CorrespondanceComptes
         Return Nothing
     End Function
 
-    Private Sub CacherMessages()
-        pnlSucces.Visible = False
-        pnlErreur.Visible = False
-        pnlAvertissement.Visible = False
-    End Sub
-
-    Private Shared Sub Alerte(panneau As Panel, texte As Literal, message As String)
-        texte.Text = message
-        panneau.Visible = True
+    ''' <summary>
+    ''' Le résultat, l'avertissement ou le refus s'affiche dans la fenêtre de message du site
+    ''' (Site.Master), par-dessus la grille : le bouton est en bas de page, un bandeau en haut
+    ''' passerait inaperçu. Le message peut porter un peu de HTML (gras, &lt;br /&gt;) : il est ramené en texte.
+    ''' </summary>
+    Private Sub Alerte(titre As String, message As String)
+        Dim texte = Regex.Replace(If(message, ""), "<br\s*/?>", vbLf, RegexOptions.IgnoreCase)
+        texte = Regex.Replace(texte, "<[^>]+>", "")
+        ShowMessageBox(HttpUtility.HtmlDecode(texte).Trim(), titre)
     End Sub
 
 #End Region
