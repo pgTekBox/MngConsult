@@ -203,7 +203,7 @@
     </div>
 
     <asp:Panel ID="pnlResultat" runat="server" Visible="false">
-        <h2 class="sect">3. Ce qui est arrivé</h2>
+        <h2 class="sect"><asp:Literal ID="litTitreResultat" runat="server" Text="3. Ce qui est arrivé" /></h2>
         <div class="bloc"><asp:Literal ID="litResultat" runat="server" /></div>
     </asp:Panel>
 
@@ -330,7 +330,7 @@
                         "Vous pouvez quitter la page, l'extraction continue.</div>";
             } else {
                 var genre = (e.echecs === 0 && e.statut === 'TERMINE') ? 'ok' : 'err';
-                html += "<div class='msg " + genre + "'>" + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +
+                html += "<div class='msg " + genre + "'><b>Extraction du " + h(e.debut) + "</b> — " + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +
                         demandees + " ressource(s).";
                 if (e.statut === 'ECHEC' || e.statut === 'INTERROMPUE') {
                     html += " L'extraction s'est arrêtée avant la fin" + (e.note ? " — " + h(e.note) : ".");

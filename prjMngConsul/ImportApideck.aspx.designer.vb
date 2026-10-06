@@ -44,4 +44,7 @@ Partial Public Class ImportApideck
 
     '''<summary>litResultat</summary>
     Protected WithEvents litResultat As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litTitreResultat</summary>
+    Protected WithEvents litTitreResultat As Global.System.Web.UI.WebControls.Literal
 End Class

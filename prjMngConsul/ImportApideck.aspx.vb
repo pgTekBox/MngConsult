@@ -51,8 +51,11 @@ Public Class ImportApideck
         AfficherCatalogue()
         AfficherCoche()
 
-        Dim enCours As Integer = ExtractionEnCours()
-        If enCours > 0 Then SuivreExtraction(enCours)
+        ' La dernière extraction est toujours montrée : en cours, on la suit ;
+        ' terminée, on relit son compte rendu — ressource par ressource.
+        Dim enCours As Boolean
+        Dim derniere As Integer = DerniereExtraction(enCours)
+        If derniere > 0 Then SuivreExtraction(derniere, enCours)
     End Sub
 
     ''' <summary>
@@ -197,11 +200,12 @@ Public Class ImportApideck
     End Sub
 
     ''' <summary>
-    ''' Le numéro de l'extraction de la compagnie encore en cours, s'il y en a
-    ''' une — s0895 rend INTERROMPUE celle qui n'a plus donné signe de vie depuis
-    ''' trente minutes, et s0776 la soldera. Zéro sinon.
+    ''' Le numéro de la dernière extraction de la compagnie (zéro s'il n'y en a
+    ''' jamais eu), et si elle tourne encore — s0895 rend INTERROMPUE celle qui
+    ''' n'a plus donné signe de vie depuis trente minutes, et s0776 la soldera.
     ''' </summary>
-    Private Function ExtractionEnCours() As Integer
+    Private Function DerniereExtraction(ByRef enCours As Boolean) As Integer
+        enCours = False
         Dim p As New Collection
         p.Add(New SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlParameter("@RunId", DBNull.Value))
@@ -209,8 +213,15 @@ Public Class ImportApideck
 
         If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
         Dim r As DataRow = ds.Tables(0).Rows(0)
-        If Convert.ToString(r("Statut")) <> "EN_COURS" Then Return 0
+        enCours = (Convert.ToString(r("Statut")) = "EN_COURS")
         Return Convert.ToInt32(r("Id"))
+    End Function
+
+    ''' <summary>L'extraction encore en cours, ou zéro.</summary>
+    Private Function ExtractionEnCours() As Integer
+        Dim enCours As Boolean
+        Dim id As Integer = DerniereExtraction(enCours)
+        Return If(enCours, id, 0)
     End Function
 
 #End Region
@@ -252,11 +263,14 @@ Public Class ImportApideck
     ''' toutes les quelques secondes — les erreurs en premier, le détail des
     ''' réussites replié. La page ne pose que l'ancre et le numéro.
     ''' </summary>
-    Private Sub SuivreExtraction(runId As Integer)
+    Private Sub SuivreExtraction(runId As Integer, Optional enCours As Boolean = True)
+        Dim amorce As String = If(enCours,
+            "Extraction lancée : l'avancement s'affiche ici, ressource par ressource. Vous pouvez quitter la page, l'extraction continue.",
+            "Lecture du compte rendu de la dernière extraction…")
         litResultat.Text = "<div id='suivi' data-run='" & runId & "' data-total='" &
                            ApideckExtraction.Catalogue.Count & "'>" &
-                           "<div class='msg info'>Extraction lancée : l'avancement s'affiche ici, ressource par ressource. " &
-                           "Vous pouvez quitter la page, l'extraction continue.</div></div>"
+                           "<div class='msg info'>" & amorce & "</div></div>"
+        litTitreResultat.Text = If(enCours, "3. Ce qui est arrivé", "3. La dernière extraction")
         pnlResultat.Visible = True
     End Sub
 
