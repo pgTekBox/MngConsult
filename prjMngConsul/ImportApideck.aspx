@@ -89,6 +89,40 @@
     .msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
     .msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
     .msg.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af }
+
+    /* La fenêtre de suivi : l'extraction tourne en arrière-plan, et c'est ici
+       qu'on la regarde avancer, ressource par ressource. Le bloc 3 garde la
+       même liste en page, pour qui ferme la fenêtre. */
+    .ext-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000;
+        display: none; align-items: center; justify-content: center; padding: 24px }
+    .ext-voile.ouvert { display: flex }
+    .ext-fen { width: min(720px, 100%); max-height: min(88vh, 100%); background: #fff; border-radius: 16px;
+        box-shadow: 0 30px 80px rgba(2,6,23,.35); display: flex; flex-direction: column; overflow: hidden }
+    .ext-tete { display: flex; align-items: center; gap: 12px; padding: 12px 16px; border-bottom: 1px solid #e2e8f0; background: #f8fafc }
+    .ext-tete b { flex: 1; font-size: 14.5px; color: #0f172a }
+    .ext-tete .compte { font-size: 12.5px; color: #64748b; font-variant-numeric: tabular-nums }
+    .ext-tete button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px;
+        color: #0f172a; font-weight: 700; font-size: 12.5px; font-family: inherit; cursor: pointer }
+    .ext-tete button:hover { background: #f1f5f9 }
+    .ext-jauge { height: 8px; background: #e2e8f0 }
+    .ext-jauge > div { height: 100%; width: 0; background: linear-gradient(90deg, #2563eb, #10b981); transition: width .4s }
+    .ext-jauge.fini > div { background: linear-gradient(90deg, #10b981, #059669) }
+    .ext-jauge.err > div { background: linear-gradient(90deg, #f59e0b, #dc2626) }
+    .ext-corps { padding: 12px 16px 16px; overflow: auto }
+    .ext-corps .msg { margin: 0 0 12px }
+    .ext-liste { list-style: none; margin: 0; padding: 0; font-size: 13px }
+    .ext-liste li { display: flex; align-items: baseline; gap: 10px; padding: 6px 4px; border-bottom: 1px solid #f1f5f9 }
+    .ext-liste .ico { flex: none; width: 18px; text-align: center; font-weight: 800 }
+    .ext-liste li.ok .ico { color: #047857 }
+    .ext-liste li.ko .ico { color: #b91c1c }
+    .ext-liste li.attente .ico { color: #2563eb }
+    .ext-liste .lib { flex: 1; color: #0f172a }
+    .ext-liste .cle { color: #94a3b8; font-size: 12px; margin-left: 4px }
+    .ext-liste .nb { flex: none; font-variant-numeric: tabular-nums; color: #334155 }
+    .ext-liste li.ko .err { flex-basis: 100%; color: #b91c1c; font-size: 12.5px; padding-left: 28px }
+    .ext-liste li.ko { flex-wrap: wrap }
+    .ext-liste li.attente .lib { color: #2563eb; font-style: italic }
+    .ext-pied { padding: 10px 16px; border-top: 1px solid #e2e8f0; font-size: 12.5px; color: #64748b; background: #f8fafc }
 </style>
 </asp:Content>
 
@@ -162,6 +196,24 @@
         <div class="bloc"><asp:Literal ID="litResultat" runat="server" /></div>
     </asp:Panel>
 
+    <%-- La fenêtre de suivi, par-dessus la page : elle s'ouvre d'elle-même
+         quand une extraction tourne et montre chaque ressource à mesure. --%>
+    <div class="ext-voile" id="extVoile" onclick="if (event.target === this) fermerSuivi();">
+        <div class="ext-fen" role="dialog" aria-modal="true" aria-labelledby="extTitre">
+            <div class="ext-tete">
+                <b id="extTitre">Extraction en cours</b>
+                <span class="compte" id="extCompte"></span>
+                <button type="button" onclick="fermerSuivi()">Fermer ✕</button>
+            </div>
+            <div class="ext-jauge" id="extJauge"><div id="extJaugeBarre"></div></div>
+            <div class="ext-corps">
+                <div id="extMsg"></div>
+                <ul class="ext-liste" id="extListe"></ul>
+            </div>
+            <div class="ext-pied" id="extPied">Vous pouvez fermer cette fenêtre : l'extraction continue, et le bloc 3 la suit.</div>
+        </div>
+    </div>
+
 </div>
 
 <script type="text/javascript">
@@ -175,6 +227,72 @@
         var run = suivi.getAttribute('data-run');
         var total = parseInt(suivi.getAttribute('data-total'), 10) || 0;
         var minuterie = null;
+        var premier = true;
+
+        // La fenêtre de suivi : ouverte d'elle-même tant que l'extraction tourne,
+        // refermable à tout moment — le bloc 3 continue de suivre en page.
+        var voile = document.getElementById('extVoile');
+
+        window.fermerSuivi = function () {
+            voile.classList.remove('ouvert');
+            document.body.style.overflow = '';
+        };
+
+        function ouvrirSuivi() {
+            voile.classList.add('ouvert');
+            document.body.style.overflow = 'hidden';
+        }
+
+        document.addEventListener('keydown', function (ev) { if (ev.key === 'Escape') fermerSuivi(); });
+
+        function dessinerFenetre(e, fini, ko, ok, demandees) {
+            var titre = document.getElementById('extTitre');
+            var compte = document.getElementById('extCompte');
+            var jauge = document.getElementById('extJauge');
+            var barre = document.getElementById('extJaugeBarre');
+            var msg = document.getElementById('extMsg');
+            var liste = document.getElementById('extListe');
+            var pied = document.getElementById('extPied');
+
+            var part = demandees ? Math.round(100 * e.lues / demandees) : 0;
+            barre.style.width = (fini ? 100 : part) + '%';
+            jauge.className = 'ext-jauge' + (fini ? (ko.length || e.statut !== 'TERMINE' ? ' err' : ' fini') : '');
+            compte.textContent = e.lues + ' sur ' + demandees + ' ressource(s) · ' + nombre(e.total) + ' enregistrement(s)';
+
+            if (!fini) {
+                titre.textContent = 'Extraction en cours… ' + part + ' %';
+                msg.innerHTML = '';
+                pied.textContent = "Vous pouvez fermer cette fenêtre : l'extraction continue, et le bloc 3 la suit.";
+            } else if (e.statut === 'ECHEC' || e.statut === 'INTERROMPUE') {
+                titre.textContent = "Extraction arrêtée avant la fin";
+                msg.innerHTML = "<div class='msg err'>" + (e.note ? h(e.note) : "L'extraction s'est arrêtée avant la fin.") +
+                                " Ce qui est déjà déposé reste en préparation ; relancez pour le reste.</div>";
+                pied.textContent = "Le détail reste dans le bloc 3 de la page.";
+            } else {
+                titre.textContent = ko.length ? 'Extraction terminée, avec ' + ko.length + ' erreur(s)' : 'Extraction terminée';
+                msg.innerHTML = "<div class='msg " + (ko.length ? 'err' : 'ok') + "'>" + nombre(e.total) +
+                                " enregistrement(s) déposés en préparation, sur " + demandees + " ressource(s)." +
+                                (ko.length ? ' ' + ko.length + " n'ont pas répondu — en rouge ci-dessous." : '') +
+                                " Rien n'a été écrit en comptabilité : les écrans d'import décident de la suite.</div>";
+                pied.textContent = "Le détail reste dans le bloc 3 de la page.";
+            }
+
+            // Les erreurs en tête, puis les ressources rapatriées dans l'ordre de lecture.
+            var html = '';
+            ko.forEach(function (l) {
+                html += "<li class='ko'><span class='ico'>✗</span><span class='lib'>" + h(l.libelle) +
+                        "<span class='cle'>" + h(l.cle) + "</span></span><span class='nb'>—</span>" +
+                        "<span class='err'>" + h(l.erreur) + "</span></li>";
+            });
+            ok.forEach(function (l) {
+                html += "<li class='ok'><span class='ico'>✓</span><span class='lib'>" + h(l.libelle) +
+                        "<span class='cle'>" + h(l.cle) + "</span></span><span class='nb'>" + nombre(l.nb) + "</span></li>";
+            });
+            if (!fini) {
+                html += "<li class='attente'><span class='ico'>…</span><span class='lib'>lecture de la ressource suivante</span><span class='nb'></span></li>";
+            }
+            liste.innerHTML = html;
+        }
 
         function h(s) {
             return String(s == null ? '' : s).replace(/[&<>"']/g, function (c) {
@@ -229,6 +347,12 @@
             }
 
             suivi.innerHTML = html;
+
+            dessinerFenetre(e, fini, ko, ok, demandees);
+            if (premier) {
+                premier = false;
+                if (!fini) ouvrirSuivi();
+            }
             return fini;
         }
 
