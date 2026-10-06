@@ -341,6 +341,17 @@
                     <li>Le compte créé ne peut plus servir de cible : une autre ligne ne peut pas lui être liée, puisqu’il a déjà son compte source.</li>
                     <li>L’étape 3 se rejoue sans risque : elle ne recrée jamais un compte déjà créé. Vous pouvez donc décider et créer par vagues.</li>
                 </ul>
+                <h3>Après la création : où sont les comptes</h3>
+                <p>Dès que vous confirmez <kbd>Créer les comptes</kbd>, les comptes ne sont plus « en préparation » : ils sont <strong>écrits pour de bon dans votre plan comptable</strong>. C’est la seule étape de la reprise du plan qui écrit en comptabilité, et elle le fait tout ou rien.</p>
+                <table>
+                    <thead><tr><th>Ce que la création fait</th><th>Où</th><th>Ce que ça change</th></tr></thead>
+                    <tbody>
+                        <tr><td>Ajoute chaque compte au plan</td><td><span class="chemin">Comptabilité › Plan comptable</span></td><td>Le compte existe avec sa sous-classe, son numéro et son nom ; il se corrige désormais là-bas, comme n’importe quel compte. L’étape 3 le liste dans « Comptes créés » (Numéro, Nom, Venait de).</td></tr>
+                        <tr><td>Rattache la décision au compte créé</td><td>La correspondance (cet écran)</td><td>La ligne devient « Créé ✓ », grisée : elle ne se rediscute plus, et le compte créé ne peut plus servir de cible à une autre ligne.</td></tr>
+                        <tr><td>Marque le lot comme appliqué</td><td>L’étape 1</td><td>Le plan chargé ne peut plus être supprimé ; il peut être rechargé, sans toucher aux comptes créés.</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>Ce qui reste en préparation est une trace, pas une attente</strong> : les lignes du plan chargé et vos décisions y demeurent, parce que la balance de vérification, les tiers, les produits et les factures s’en servent pour retrouver le bon compte. Seul <kbd>Vider les tables de préparation</kbd>, sur la page Importation, les effacerait — et il n’efface jamais un compte déjà créé dans le plan : celui-ci resterait, mais la correspondance qui y menait serait perdue.</p>
                 <h3>Ce que l’étape 3 affiche de vos décisions</h3>
                 <p>En haut de l’étape 3, cinq compteurs résument cet écran : <strong>À créer</strong> (lignes « Créer » sans compte encore), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> et <strong>Encore à décider</strong>. Le lien <kbd>← revenir à la correspondance</kbd> ramène ici. Quand « À créer » est à zéro, l’étape 3 dit « Aucun compte à créer dans ce lot » : tout est créé, lié ou ignoré.</p>
                 <h3>Les refus de l’étape 3, et ce qu’ils demandent ici</h3>
@@ -781,6 +792,17 @@
                     <li>The created account can no longer be a target: another row cannot be linked to it, since it already has its source account.</li>
                     <li>Step 3 can be replayed safely: it never recreates an already created account. So you can decide and create in waves.</li>
                 </ul>
+                <h3>After creation: where the accounts are</h3>
+                <p>As soon as you confirm <kbd>Créer les comptes</kbd>, the accounts are no longer “in staging”: they are <strong>written for good into your chart of accounts</strong>. It is the only step of the chart migration that writes to the books, and it does so all or nothing.</p>
+                <table>
+                    <thead><tr><th>What creation does</th><th>Where</th><th>What it changes</th></tr></thead>
+                    <tbody>
+                        <tr><td>Adds each account to the chart</td><td><span class="chemin">Accounting › Chart of accounts</span></td><td>The account exists with its subclass, number and name; from now on it is corrected there, like any account. Step 3 lists it under “Comptes créés” (Numéro, Nom, Venait de).</td></tr>
+                        <tr><td>Attaches the decision to the created account</td><td>The mapping (this screen)</td><td>The row becomes “Created ✓”, greyed out: it is no longer discussed, and the created account can no longer be the target of another row.</td></tr>
+                        <tr><td>Marks the batch as applied</td><td>Step 1</td><td>The loaded chart can no longer be deleted; it can be reloaded, without touching the created accounts.</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>What stays in staging is a trace, not something pending</strong>: the loaded chart rows and your decisions remain there, because the trial balance, parties, products and invoices use them to find the right account. Only <kbd>Vider les tables de préparation</kbd>, on the Import page, would erase them — and it never erases an account already created in the chart: that one would stay, but the mapping leading to it would be lost.</p>
                 <h3>What step 3 shows of your decisions</h3>
                 <p>At the top of step 3, five counters sum up this screen: <strong>À créer</strong> (“Create” rows with no account yet), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> and <strong>Encore à décider</strong>. The <kbd>← revenir à la correspondance</kbd> link brings you back here. When “À créer” is zero, step 3 says “Aucun compte à créer dans ce lot”: everything is created, linked or ignored.</p>
                 <h3>Step 3 refusals, and what they ask for here</h3>
@@ -1221,6 +1243,17 @@
                     <li>La cuenta creada ya no puede ser destino: otra línea no puede vincularse a ella, puesto que ya tiene su cuenta de origen.</li>
                     <li>La etapa 3 puede repetirse sin riesgo: nunca recrea una cuenta ya creada. Puede decidir y crear por tandas.</li>
                 </ul>
+                <h3>Tras la creación: dónde están las cuentas</h3>
+                <p>En cuanto confirma <kbd>Créer les comptes</kbd>, las cuentas ya no están « en preparación »: quedan <strong>escritas de verdad en su plan de cuentas</strong>. Es la única etapa de la migración del plan que escribe en la contabilidad, y lo hace todo o nada.</p>
+                <table>
+                    <thead><tr><th>Qué hace la creación</th><th>Dónde</th><th>Qué cambia</th></tr></thead>
+                    <tbody>
+                        <tr><td>Añade cada cuenta al plan</td><td><span class="chemin">Contabilidad › Plan de cuentas</span></td><td>La cuenta existe con su subclase, su número y su nombre; desde ahora se corrige allí, como cualquier cuenta. La etapa 3 la lista en « Comptes créés » (Numéro, Nom, Venait de).</td></tr>
+                        <tr><td>Vincula la decisión a la cuenta creada</td><td>La correspondencia (esta pantalla)</td><td>La línea pasa a « Creada ✓ », en gris: ya no se discute, y la cuenta creada ya no puede ser destino de otra línea.</td></tr>
+                        <tr><td>Marca el lote como aplicado</td><td>La etapa 1</td><td>El plan cargado ya no puede eliminarse; puede recargarse, sin tocar las cuentas creadas.</td></tr>
+                    </tbody>
+                </table>
+                <p><strong>Lo que queda en preparación es una huella, no algo pendiente</strong>: las líneas del plan cargado y sus decisiones permanecen ahí, porque el balance de comprobación, los terceros, los productos y las facturas las usan para encontrar la cuenta correcta. Solo <kbd>Vider les tables de préparation</kbd>, en la página Importación, las borraría — y nunca borra una cuenta ya creada en el plan: esa quedaría, pero la correspondencia que llevaba a ella se perdería.</p>
                 <h3>Lo que la etapa 3 muestra de sus decisiones</h3>
                 <p>Arriba de la etapa 3, cinco contadores resumen esta pantalla: <strong>À créer</strong> (líneas « Crear » aún sin cuenta), <strong>Déjà créés</strong>, <strong>Liés</strong>, <strong>Ignorés</strong> y <strong>Encore à décider</strong>. El enlace <kbd>← revenir à la correspondance</kbd> vuelve aquí. Cuando « À créer » está a cero, la etapa 3 dice « Aucun compte à créer dans ce lot »: todo está creado, vinculado o ignorado.</p>
                 <h3>Los rechazos de la etapa 3, y qué piden aquí</h3>
