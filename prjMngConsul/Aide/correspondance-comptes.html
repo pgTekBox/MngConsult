@@ -116,7 +116,7 @@
                     <li><strong>Mettez la liste Action sur « Lier ».</strong> Quand la proposition est « même nom », la liste arrive déjà sur Lier avec le compte proposé en place.</li>
                     <li><strong>Choisissez le compte chez vous</strong> avec les trois listes en cascade : d’abord la <em>Classe</em> (code, nom et plage de numéros), juste en dessous la <em>Sous-classe</em>, puis dans la colonne suivante le <em>Compte chez vous</em>. Chaque liste restreint la suivante, pour ne pas chercher parmi les 250 comptes du plan d’un coup. Un compte déjà choisi qui sort du filtre reste affiché « (hors filtre) ».</li>
                     <li><strong>Ajoutez une note si utile</strong> (500 caractères) : pourquoi ce choix, ce qu’il faudra vérifier avec votre comptable.</li>
-                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd></strong> en bas de la page. Le bandeau du haut et, s’il y a un problème, une fenêtre au centre de l’écran vous disent ce qui a été retenu.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd></strong> en bas de la page. Le bandeau du haut et, s’il y a un problème, une fenêtre au centre de l’écran vous disent ce qui a été retenu. Le bloc « État de cette étape », tout en haut, monte avec vos décisions enregistrées : 10/10 quand plus aucun compte n’est à décider.</li>
                 </ol>
                 <h3>Lire la colonne « Ce que nous proposons »</h3>
                 <table>
@@ -150,6 +150,7 @@
                     <li><strong>Vous vous êtes trompé de compte.</strong> Rechoisissez dans les listes et enregistrez : la nouvelle liaison remplace l’ancienne.</li>
                     <li><strong>Le compte de l’ancien logiciel porte un solde.</strong> Lier est la bonne réponse : à la reprise des soldes, le montant de la balance de vérification ira sur le compte de 60sec choisi. Vérifiez donc la nature de la cible — un solde débiteur lié à un compte de passif ressortira « À vérifier » au contrôle de la balance.</li>
                     <li><strong>Vous hésitez entre deux comptes de 60sec.</strong> Liez au plus proche, notez l’hésitation dans la colonne Note, puis lancez le contrôle de la balance de vérification : une cible de nature contraire y est signalée, et changer de cible ici reste possible tant que le compte n’est pas créé.</li>
+                    <li><strong>Le compte de 60sec que vous visez n’existe pas encore.</strong> Deux voies. Soit « Créer » : le compte sera ajouté à l’étape 3, avec sa classe et sa sous-classe, et la ligne lui sera rattachée. Soit créez-le d’abord dans <span class="chemin">Comptabilité › Plan comptable</span>, puis rechargez cette page : il apparaît dans les listes et vous pouvez « Lier ». La première voie garde la trace « venait de … » du compte d’origine ; la seconde vous laisse choisir le numéro à la main.</li>
                 </ul>
             </section>
 
@@ -585,7 +586,7 @@
                     <li><strong>Set the Action list to “Link”.</strong> When the suggestion is “same name”, the list already comes set to Link with the suggested account in place.</li>
                     <li><strong>Choose your account</strong> with the three cascading lists: first the <em>Class</em> (code, name and number range), right below it the <em>Subclass</em>, then in the next column <em>Your account</em>. Each list narrows the next one, so you never search among the 250 accounts of the chart at once. A chosen account that falls outside the filter stays shown as “(outside filter)”.</li>
                     <li><strong>Add a note if useful</strong> (500 characters): why this choice, what to check with your accountant.</li>
-                    <li><strong>Click <kbd>Save mappings</kbd></strong> at the bottom of the page. The banner at the top and, if there is a problem, a popup in the middle of the screen tell you what was kept.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd></strong> at the bottom of the page. The banner at the top and, if there is a problem, a popup in the middle of the screen tell you what was kept. The “État de cette étape” block, at the very top, rises with your saved decisions: 10/10 when no account is left to decide.</li>
                 </ol>
                 <h3>Reading the “What we suggest” column</h3>
                 <table>
@@ -619,6 +620,7 @@
                     <li><strong>You picked the wrong account.</strong> Choose again in the lists and save: the new link replaces the old one.</li>
                     <li><strong>The old software’s account carries a balance.</strong> Link is the right answer: when balances are taken over, the trial balance amount goes to the chosen 60sec account. So check the target’s nature — a debit balance linked to a liability account will show “To check” in the trial balance check.</li>
                     <li><strong>You hesitate between two 60sec accounts.</strong> Link to the closest one, note the hesitation in the Note column, then run the trial balance check: a target of the opposite nature is flagged there, and changing the target here stays possible as long as the account is not created.</li>
+                    <li><strong>The 60sec account you are aiming at does not exist yet.</strong> Two ways. Either “Create”: the account will be added in step 3, with its class and subclass, and the row attached to it. Or create it first in <span class="chemin">Accounting › Chart of accounts</span>, then reload this page: it appears in the lists and you can “Link”. The first way keeps the “venait de …” trace of the source account; the second lets you choose the number by hand.</li>
                 </ul>
             </section>
 
@@ -1054,7 +1056,7 @@
                     <li><strong>Ponga la lista Acción en « Vincular ».</strong> Cuando la propuesta es « mismo nombre », la lista ya llega en Vincular con la cuenta propuesta en su lugar.</li>
                     <li><strong>Elija la cuenta de su plan</strong> con las tres listas en cascada: primero la <em>Clase</em> (código, nombre y rango de números), justo debajo la <em>Subclase</em>, y luego en la columna siguiente la <em>Cuenta en su plan</em>. Cada lista restringe la siguiente, para no buscar entre las 250 cuentas del plan de una vez. Una cuenta ya elegida que sale del filtro sigue mostrándose « (fuera del filtro) ».</li>
                     <li><strong>Añada una nota si es útil</strong> (500 caracteres): por qué esta elección, qué habrá que verificar con su contador.</li>
-                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd></strong> al pie de la página. El banner superior y, si hay un problema, una ventana en el centro de la pantalla le dicen qué se conservó.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd></strong> al pie de la página. El banner superior y, si hay un problema, una ventana en el centro de la pantalla le dicen qué se conservó. El bloque « État de cette étape », arriba del todo, sube con sus decisiones guardadas: 10/10 cuando ya no queda ninguna cuenta por decidir.</li>
                 </ol>
                 <h3>Leer la columna « Lo que proponemos »</h3>
                 <table>
@@ -1088,6 +1090,7 @@
                     <li><strong>Se equivocó de cuenta.</strong> Vuelva a elegir en las listas y guarde: el nuevo vínculo sustituye al anterior.</li>
                     <li><strong>La cuenta del programa anterior lleva saldo.</strong> Vincular es la respuesta correcta: al retomar los saldos, el importe del balance de comprobación irá a la cuenta de 60sec elegida. Compruebe por tanto la naturaleza del destino — un saldo deudor vinculado a una cuenta de pasivo saldrá « Por verificar » en el control del balance.</li>
                     <li><strong>Duda entre dos cuentas de 60sec.</strong> Vincule a la más cercana, anote la duda en la columna Nota y lance el control del balance de comprobación: un destino de naturaleza contraria se señala allí, y cambiar de destino aquí sigue siendo posible mientras la cuenta no esté creada.</li>
+                    <li><strong>La cuenta de 60sec a la que apunta no existe todavía.</strong> Dos vías. O « Crear »: la cuenta se añadirá en la etapa 3, con su clase y su subclase, y la línea quedará vinculada a ella. O créela primero en <span class="chemin">Contabilidad › Plan de cuentas</span> y recargue esta página: aparece en las listas y puede « Vincular ». La primera vía conserva la huella « venait de … » de la cuenta de origen; la segunda le deja elegir el número a mano.</li>
                 </ul>
             </section>
 
