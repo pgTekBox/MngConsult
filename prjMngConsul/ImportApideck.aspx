@@ -21,7 +21,15 @@
         border: 1px solid #e2e8f0;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .apd-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
+    .apd-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a; display: flex; align-items: center; gap: 10px }
+
+    /* Le crochet vert : la dernière extraction a tout rapatrié. Posé par la
+       page au chargement, ou par le suivi quand l'extraction se termine bien. */
+    .coche {
+        width: 26px; height: 26px; border-radius: 50%; background: #10b981; color: #fff;
+        display: inline-flex; align-items: center; justify-content: center;
+        font-size: 16px; font-weight: 800; line-height: 1; box-shadow: 0 0 0 3px #d1fae5;
+    }
     .apd-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
     .apd-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 880px; line-height: 1.6 }
 
@@ -137,7 +145,7 @@
     <div class="apd-head">
         <div class="ico">🔌</div>
         <div>
-            <h1>Importer depuis QuickBooks</h1>
+            <h1>Importer depuis QuickBooks <span class="coche" id="spanCoche" runat="server" visible="false" title="La dernière extraction a tout rapatrié">✓</span></h1>
             <div class="sub">Lecture directe, par Apideck — sans export manuel</div>
         </div>
     </div>
@@ -356,6 +364,21 @@
             suivi.innerHTML = html;
 
             dessinerFenetre(e, fini, ko, ok, demandees);
+
+            // Le crochet vert du titre : tout rapatrié, sans erreur.
+            var coche = document.getElementById('<%= spanCoche.ClientID %>');
+            if (fini && e.statut === 'TERMINE' && ko.length === 0) {
+                if (!coche) {
+                    coche = document.createElement('span');
+                    coche.className = 'coche';
+                    coche.id = '<%= spanCoche.ClientID %>';
+                    coche.title = 'La dernière extraction a tout rapatrié';
+                    coche.textContent = '✓';
+                    document.querySelector('.apd-head h1').appendChild(coche);
+                }
+            } else if (!fini && coche) {
+                coche.remove();
+            }
             if (premier) {
                 premier = false;
                 if (!fini) ouvrirSuivi();

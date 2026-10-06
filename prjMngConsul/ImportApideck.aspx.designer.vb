@@ -18,6 +18,9 @@ Partial Public Class ImportApideck
     '''<summary>litEtat</summary>
     Protected WithEvents litEtat As Global.System.Web.UI.WebControls.Literal
 
+    '''<summary>spanCoche</summary>
+    Protected WithEvents spanCoche As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>btnRelier</summary>
     Protected WithEvents btnRelier As Global.System.Web.UI.WebControls.Button
 

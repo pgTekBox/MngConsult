@@ -49,9 +49,34 @@ Public Class ImportApideck
 
         AfficherEtat()
         AfficherCatalogue()
+        AfficherCoche()
 
         Dim enCours As Integer = ExtractionEnCours()
         If enCours > 0 Then SuivreExtraction(enCours)
+    End Sub
+
+    ''' <summary>
+    ''' Le crochet vert à côté du titre : la dernière extraction fermée de la
+    ''' compagnie a tout rapatrié, sans une ressource en échec. Le suivi en page
+    ''' le pose lui-même quand une extraction se termine bien.
+    ''' </summary>
+    Private Sub AfficherCoche()
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0892GetDerniereExtraction", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return
+
+            Dim r As DataRow = ds.Tables(0).Rows(0)
+            Dim echecs As Integer = If(IsDBNull(r("NbEchecs")), 0, Convert.ToInt32(r("NbEchecs")))
+            spanCoche.Visible = (Convert.ToString(r("Statut")) = "TERMINE" AndAlso echecs = 0)
+            If spanCoche.Visible Then
+                spanCoche.Attributes("title") = "La dernière extraction a tout rapatrié, le " &
+                    Convert.ToDateTime(r("Debut")).ToString("yyyy-MM-dd HH:mm")
+            End If
+        Catch
+            spanCoche.Visible = False
+        End Try
     End Sub
 
 #End Region
