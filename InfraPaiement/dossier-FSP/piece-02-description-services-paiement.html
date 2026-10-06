@@ -1,0 +1,808 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>q61.html</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  /* ---------- page de titre ---------- */
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+  .meta b { font-weight: bold; }
+
+  /* ---------- tableaux ---------- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+  th.n { text-align: right; }
+  .oui { color: var(--vert); font-weight: bold; }
+  .non { font-weight: bold; }
+
+  /* ---------- encadrés ---------- */
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+
+  .saut { break-before: page; }
+
+  code { font-family: "DejaVu Sans Mono", monospace; font-size: 8.5pt; }
+
+  .formule {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 9pt;
+    background: var(--alt);
+    border: 0.5pt solid var(--ligne);
+    padding: 7pt 10pt;
+    margin: 8pt 0 10pt 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Description des services et des processus de paiement</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — question 6.1</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 2.0 — 7 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">Le présent document décrit les produits et services que le demandeur entend offrir, les fonctions
+  de paiement qu’il exercera et la manière dont ces services seront offerts à ses utilisateurs finaux. Il se lit avec
+  les diagrammes des processus de paiement joints à la question 6.3, les exemples de contrats joints à la question 6.2,
+  et la description du compte en fiducie jointe à la section 12. Les termes suivis de la mention <i>(voir annexe, section X)</i> sont définis au lexique joint en annexe.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. L’entreprise et ce qu’elle exploite</h2>
+
+<p>Le demandeur exploite <b>60sec-Paiement</b>, une infrastructure de paiement offerte à des entreprises canadiennes.
+La plateforme exécute deux mouvements de fonds pour le compte de ses entreprises abonnées : elle <b>encaisse</b> auprès
+des clients de l’abonné par débit préautorisé <span class="petit">(voir annexe, section C)</span>, et elle <b>décaisse</b> vers les fournisseurs, les créanciers et les
+employés de l’abonné. Entre les deux, les fonds reposent dans un <b>compte en fiducie</b> <span class="petit">(voir annexe, section D)</span> tenu par le demandeur, et
+chaque abonné y détient un solde.</p>
+
+<p>Le paiement constitue le service lui-même. Le demandeur exerce les fonctions de paiement <b>en son propre nom</b>,
+pour ses propres abonnés, sous sa marque et sa tarification, et présente à ce titre sa propre demande d’enregistrement.
+La plateforme est consommée de trois façons : une interface de programmation (API REST), un portail libre-service pour
+l’abonné, et un portail de provisionnement pour les partenaires-distributeurs qui revendent la plateforme sous leur
+propre marque.</p>
+
+<h3>Marché et utilisateurs</h3>
+
+<p>Les entreprises abonnées sont établies au Canada, le Québec étant le marché de lancement. Les <b>contreparties</b>
+de ces abonnées — leurs clients payeurs et leurs fournisseurs bénéficiaires — peuvent être des entreprises <b>ou des
+particuliers</b> : le patient d’une clinique, le locataire d’un immeuble, l’employé qui reçoit sa paie. Le demandeur
+n’offre aucun compte ni aucun service directement à ces personnes, mais il en débite ou en crédite le compte bancaire,
+et il en tire deux conséquences qu’il assume explicitement : les ententes de débit préautorisé personnel emportent un
+<b>droit de réclamation de 90 jours civils</b> <span class="petit">(voir annexe, section C)</span> pour le payeur, et le programme de conformité du demandeur traite ces
+contreparties comme des tiers dont l’identité et le consentement doivent être documentés.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Catégorie</th><th style="width:50%">Description</th><th style="width:24%">Détient un solde chez le demandeur</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Partenaire-distributeur</b></td><td>Éditeur de logiciel sectoriel ou réseau professionnel qui provisionne et gère ses propres abonnés sur la plateforme, par portail ou par API. Niveau optionnel.</td><td>Non</td></tr>
+    <tr><td><b>Abonné (locataire)</b> <span class="petit">(voir annexe, section D)</span></td><td>L’entreprise cliente. C’est l’utilisateur final principal : elle détient un solde, ses propres contreparties, ses clés d’API et ses utilisateurs. Créée directement par le demandeur ou par un partenaire.</td><td><span class="oui">Oui</span></td></tr>
+    <tr><td><b>Utilisateur de l’abonné</b></td><td>Personne physique désignée par l’abonné, avec ou sans droit d’administration, qui prépare et approuve les opérations dans le portail.</td><td>Non — agit sur le solde de l’abonné</td></tr>
+    <tr><td><b>Client payeur</b></td><td>Contrepartie externe de l’abonné, entreprise ou particulier, dont le compte bancaire est débité en vertu d’une entente de débit préautorisé.</td><td>Non</td></tr>
+    <tr><td><b>Fournisseur bénéficiaire</b></td><td>Contrepartie externe de l’abonné — fournisseur, créancier, employé — dont le compte bancaire est crédité.</td><td>Non</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 2 ================= -->
+<h2>2. Les produits et services offerts</h2>
+
+<p>L’offre se compose d’un accès à la plateforme, facturé par abonné, et de frais par opération. Contrairement à un
+logiciel de gestion dans lequel le paiement serait inclus, la tarification du demandeur suit le volume traité.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Produit</th><th style="width:30%">Tarification</th><th style="width:40%">Ce que la fonction de paiement y recouvre</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Accès à la plateforme</b><br>(par abonné)</td>
+      <td>49 $ par mois, 50 opérations incluses</td>
+      <td>Compte abonné, solde, portail libre-service, clé d’API, webhooks, relevés et rapprochement.</td>
+    </tr>
+    <tr>
+      <td><b>Encaissement par débit préautorisé</b><br>(virement de débit, code d’opération 430) <span class="petit">(voir annexe, section C)</span></td>
+      <td>0,85 $ par opération, plus 0,25 % du montant, maximum 4,50 $</td>
+      <td>Production de l’instruction de débit sur le compte du client payeur de l’abonné, dépôt du lot auprès de l’institution financière parraine <span class="petit">(voir annexe, section B)</span>, crédit du solde de l’abonné au règlement.</td>
+    </tr>
+    <tr>
+      <td><b>Décaissement</b><br>(virement de crédit, voir l’annexe)</td>
+      <td>0,85 $ par opération</td>
+      <td>Paiement des fournisseurs, des créanciers, des remises et de la paie de l’abonné, par débit de son solde.</td>
+    </tr>
+    <tr>
+      <td><b>Virement Interac</b></td>
+      <td>1,25 $ par opération</td>
+      <td>Rail parallèle quasi instantané, entrant ou sortant, avec règlement individuel sur dépôt.</td>
+    </tr>
+    <tr>
+      <td><b>Retour, refus ou rejet</b></td>
+      <td>12,50 $ par occurrence</td>
+      <td>Traitement d’un retour pour provision insuffisante, d’un refus de dépôt ou d’un rejet à l’entrée <span class="petit">(voir annexe, section C)</span>, et contre-passation comptable.</td>
+    </tr>
+    <tr>
+      <td><b>Accès partenaire-distributeur</b></td>
+      <td>199 $ par mois, plus partage de revenu convenu par entente</td>
+      <td>Provisionnement d’abonnés, portail partenaire, clé partenaire, action au nom d’un abonné.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="petit">Tarification proposée, en dollars canadiens, sujette à confirmation avant le dépôt. Les frais sont
+prélevés au moment de l’initiation de l’opération et portés au compte de produits du grand livre : l’abonné est crédité
+du montant net, jamais du montant brut.</p>
+
+<h3>La réserve <span class="petit">(voir annexe, section D)</span></h3>
+
+<p>Le demandeur retient, sur le solde de chaque abonné, une <b>réserve</b> égale à 10 % du volume de débits des trente
+derniers jours, libérée par tranches à l’expiration du délai de réclamation applicable. Cette réserve n’est ni un dépôt
+ni un placement : c’est une portion du solde de l’abonné rendue temporairement indisponible pour couvrir les retours.
+Elle est tenue dans un compte distinct du grand livre et demeure la propriété de l’abonné.</p>
+
+<!-- ================= 3 ================= -->
+<h2>3. Les fonctions de paiement exercées</h2>
+
+<p>Le demandeur a examiné les cinq fonctions de paiement définies par la Loi et retient les qualifications suivantes.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Fonction</th><th style="width:10%">Exercée</th><th style="width:60%">Motif</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Fourniture ou tenue d’un compte d’utilisateur final</td>
+      <td><span class="oui">Oui</span></td>
+      <td>La plateforme tient, pour chaque abonné, un compte assorti d’un <b>solde monétaire</b>, alimenté par les encaissements et débité par les décaissements et les frais. Elle conserve également les coordonnées bancaires des contreparties de l’abonné et les ententes de débit préautorisé, en vue de transferts futurs.</td>
+    </tr>
+    <tr>
+      <td>Détention de fonds d’un utilisateur final</td>
+      <td><span class="oui">Oui</span></td>
+      <td>Les fonds encaissés auprès des clients payeurs reposent dans le compte en fiducie du demandeur entre le règlement du débit et le décaissement ou le retrait par l’abonné. Voir la section 4.</td>
+    </tr>
+    <tr>
+      <td>Initiation d’un transfert électronique de fonds</td>
+      <td><span class="oui">Oui</span></td>
+      <td>L’abonné, un utilisateur qu’il a désigné, son partenaire-distributeur agissant en son nom, ou son application par appel d’interface, déclenche l’instruction.</td>
+    </tr>
+    <tr>
+      <td>Autorisation d’un transfert ou transmission d’instructions</td>
+      <td><span class="oui">Oui</span></td>
+      <td>Sur le rail de compensation par lots : vérification des plafonds et du calendrier, double approbation du lot, production des enregistrements de la norme 005 de Paiements Canada <span class="petit">(voir annexe, section A)</span> et transmission du fichier à l’institution financière parraine, puis traitement des accusés, des rejets et des retours. Sur le rail de virement Interac : transmission de la demande au partenaire, puis traitement du dépôt ou du refus.</td>
+    </tr>
+    <tr>
+      <td>Compensation et règlement</td>
+      <td class="non">Non</td>
+      <td>La compensation s’effectue dans le Système automatisé de compensation et de règlement <span class="petit">(voir annexe, section B)</span> par l’institution financière adhérente qui parraine le demandeur ; le règlement s’effectue entre participants à Lynx. Le demandeur n’agit pas comme agent compensateur et ne comptabilise ni crédit ni débit dans le compte d’une autre entité au sens de la Loi.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Conséquence assumée.</b> Parce que le demandeur détient des fonds d’utilisateurs finaux, l’article 20 de la Loi
+  s’applique intégralement : les fonds sont placés dans un compte en fiducie à vocation unique, distinct des fonds
+  propres du demandeur. Les modalités sont décrites à la section 4 et à la section 12 de la demande. Pour la même
+  raison, le demandeur traite comme applicables l’inscription à titre d’entreprise de services monétaires auprès du
+  CANAFE et le permis de l’Autorité des marchés financiers, et joint son programme de conformité à la section 16.</p>
+</div>
+
+<!-- ================= 4 ================= -->
+<h2>4. La détention de fonds et leur protection</h2>
+
+<p>C’est la caractéristique déterminante du service, et elle commande le reste du présent document.</p>
+
+<h3>4.1 Le compte en fiducie</h3>
+
+<p>Les fonds des utilisateurs finaux sont détenus dans un <b>compte en fiducie à vocation unique</b>, ouvert auprès de
+l’institution financière parraine, séparé des fonds propres du demandeur, et dont l’usage est limité aux fonds des
+abonnés. Le compte est <b>mutualisé</b> : il porte les fonds de l’ensemble des abonnés, et c’est le grand livre du
+demandeur qui établit, à tout instant, la part revenant à chacun. Aucun découvert n’y est autorisé, et le demandeur n’y
+puise aucune avance.</p>
+
+<h3>4.2 Le grand livre, miroir du compte</h3>
+
+<p>Chaque mouvement d’argent donne lieu à une écriture en <b>partie double</b>, en cents entiers, dans un grand livre
+<b>immuable</b> <span class="petit">(voir annexe, section D)</span> : une écriture ne se modifie ni ne s’efface, elle se contre-passe. Les comptes de la plateforme —
+fiducie, produits, compte d’attente — et les comptes par abonné — solde, réserve, opérations en compensation entrantes
+et sortantes — sont reliés par un invariant <span class="petit">(voir annexe, section D)</span> vérifié en continu :</p>
+
+<div class="formule">
+  Fiducie = Σ soldes des abonnés + Σ réserves + produits + opérations en compensation
+</div>
+
+<p>Un écart entre le solde bancaire du compte en fiducie et la somme des obligations envers les abonnés est, par
+construction, immédiatement visible. Un rapprochement quotidien confronte en outre le compte de fiducie au relevé de
+l’institution financière.</p>
+
+<h3>4.3 Combien de fonds sont détenus, et pendant combien de temps</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:44%">Élément</th><th style="width:26%">Valeur prévue, an 1</th><th style="width:30%">Détermination</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Délai de retenue sur un encaissement</td><td class="n">5 jours ouvrables</td><td>Politique de rétention du demandeur, à confirmer avec l’institution parraine</td></tr>
+    <tr><td>Réserve constituée sur le solde de l’abonné</td><td class="n">10 % du volume de débits sur 30 jours</td><td>Politique de limites et de réserve</td></tr>
+    <tr><td>Valeur moyenne des fonds détenus</td><td class="n">≈ 210 000 $</td><td>Volume de débits projeté × délai de retenue, plus réserves</td></tr>
+    <tr><td>Valeur de pointe des fonds détenus</td><td class="n">≈ 480 000 $</td><td>Mois de pointe de l’an 1 (mars 2028)</td></tr>
+    <tr><td>Montant maximal d’une opération</td><td class="n">25 000 $</td><td>Plafond configuré dans la plateforme</td></tr>
+    <tr><td>Montant maximal d’un fichier</td><td class="n">250 000 $</td><td>Plafond configuré dans la plateforme</td></tr>
+    <tr><td>Montant maximal par jour, plateforme</td><td class="n">500 000 $</td><td>Plafond configuré dans la plateforme</td></tr>
+    <tr><td>Montant maximal par jour, par abonné</td><td class="n">50 000 $ par défaut</td><td>Plafond par locataire, ajustable à la fiche</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">Estimations fondées sur les volumes de la section 11 ; à revalider au moment du dépôt. Les plafonds
+sont appliqués à la création du lot : tout dépassement annule le lot plutôt que de le tronquer.</p>
+
+<!-- ================= 5 ================= -->
+<h2>5. Le trajet des fonds</h2>
+
+<p>Quatre trajets couvrent la totalité des mouvements. Ils correspondent aux diagrammes joints à la question 6.3.</p>
+
+<h3>5.1 Encaissement — le client de l’abonné paie</h3>
+
+<ol>
+  <li>L’abonné, ou son application par appel d’interface, initie un encaissement sur un client payeur pour lequel une entente de débit préautorisé valide est enregistrée.</li>
+  <li>La plateforme écrit l’initiation au grand livre : l’opération est portée en compensation entrante pour le montant brut, le solde de l’abonné est crédité du montant net et les frais sont portés aux produits.</li>
+  <li>L’opération est intégrée à un lot de virements de débit (code 430), qui doit être <b>créé par une personne et approuvé par une autre</b> avant de pouvoir être transmis.</li>
+  <li>Le fichier conforme à la norme 005 est déposé auprès de l’institution financière parraine, qui le présente à la compensation. L’accusé de réception fait passer le lot à l’état « accusé » ; les articles rejetés à l’entrée sont contre-passés.</li>
+  <li>Au règlement, les fonds arrivent au compte en fiducie et l’écriture correspondante solde la compensation entrante.</li>
+  <li>Les fonds demeurent indisponibles pendant le délai de retenue, réserve déduite, puis sont utilisables par l’abonné.</li>
+</ol>
+
+<h3>5.2 Décaissement — l’abonné paie un fournisseur, un créancier ou un employé</h3>
+
+<p>Le trajet est le miroir du précédent : le solde de l’abonné est débité à l’initiation et l’opération est portée en
+compensation sortante ; l’opération est intégrée à un lot de virements de crédit, soumis à la même double
+approbation et aux mêmes plafonds ; au règlement, le compte en fiducie est débité. Un décaissement n’est jamais
+possible au-delà du solde disponible de l’abonné, réserve déduite : la plateforme n’accorde aucune avance.</p>
+
+<h3>5.3 Virement Interac</h3>
+
+<p>Rail parallèle, offert dans les deux sens, qui emprunte la même machinerie comptable mais se règle
+<b>individuellement</b> au dépôt plutôt qu’en lot, la contrepartie étant identifiée par une adresse de courriel. Les
+états du cycle sont journalisés : demandé, envoyé, déposé, refusé. Un refus entraîne la même contre-passation qu’un
+retour.</p>
+
+<h3>5.4 Retour, refus et rejet</h3>
+
+<p>Un retour peut survenir <b>avant</b> le règlement — rejet à l’entrée par l’institution — ou <b>après</b> —
+provision insuffisante, compte fermé, ordre d’arrêt de paiement, contestation d’une entente de débit préautorisé. Les
+enregistrements de retour reçus de l’institution sont rapprochés par référence croisée à l’opération d’origine, puis
+contre-passés : le solde de l’abonné et les produits du demandeur sont repris. Le demandeur assume que, pour un débit
+préautorisé personnel, la contestation peut survenir jusqu’à <b>90 jours civils</b> après le débit, et dimensionne sa
+réserve en conséquence.</p>
+
+<h3>5.5 Qui est le bénéficiaire de l’entente de débit préautorisé</h3>
+
+<div class="encadre">
+  <p><b>Modèle retenu : le demandeur est bénéficiaire inscrit, pour le compte de l’abonné.</b> <span class="petit">(voir annexe, section B)</span> Une seule identité
+  d’émetteur est utilisée auprès de l’institution parraine, et une seule lettre d’engagement du bénéficiaire est
+  signée. Le demandeur s’engage en contrepartie à ce que chaque prélèvement repose sur une entente de débit préautorisé
+  valide, obtenue du payeur par une méthode commercialement raisonnable de vérification d’identité, et à en conserver
+  la preuve. Le nom de l’abonné apparaît dans la contrepartie et la référence croisée du prélèvement, afin que le payeur
+  reconnaisse l’opération sur son relevé.</p>
+  <p>Le demandeur soumet chaque abonné à une vérification d’entreprise <span class="petit">(voir annexe, section D)</span> préalable et se réserve un droit d’audit sur les
+  ententes détenues par l’abonné. Il ne procède à aucun prélèvement pour le compte d’un abonné dont la vérification
+  n’est pas complétée.</p>
+</div>
+
+<!-- ================= 6 ================= -->
+<h2>6. Comment le service est offert et souscrit</h2>
+
+<h3>Canaux de mise en marché</h3>
+<ul>
+  <li><b>Vente directe</b> — entreprises qui encaissent de façon récurrente auprès d’une clientèle stable. Exemples visés : cliniques et cabinets professionnels facturant des honoraires périodiques ; gestionnaires d’immeubles locatifs percevant des loyers mensuels ; écoles, garderies et organismes percevant des frais ou des cotisations.</li>
+  <li><b>Partenaires-distributeurs</b> — éditeurs de logiciels sectoriels et réseaux professionnels qui intègrent la fonction de paiement à leur propre produit et provisionnent leurs abonnés. Exemples visés : éditeur d’un logiciel de gestion de clinique ; éditeur d’un logiciel de gestion immobilière ; réseau de cabinets comptables offrant l’exécution des paiements à ses clients. C’est le canal principal de croissance.</li>
+  <li><b>Intégration directe par interface de programmation</b> — entreprises disposant de leur propre équipe technique. Exemples visés : plateforme d’abonnement facturant ses membres ; place de marché versant ses vendeurs ; portail de facturation d’une entreprise de services.</li>
+</ul>
+
+<h3>Souscription et activation</h3>
+<ul>
+  <li><b>Contrat</b> — un contrat d’abonnement lie le demandeur à l’abonné ; il répercute les règles de Paiements Canada applicables aux virements et aux débits préautorisés, le fonctionnement du solde et de la réserve, le traitement des retours et la liste des secteurs d’activité exclus. Une entente distincte lie le demandeur au partenaire-distributeur. Des exemples sont joints à la question 6.2.</li>
+  <li><b>Vérification d’entreprise</b> — existence, propriété effective, sanctions, adresse et représentant autorisé sont vérifiés auprès d’un fournisseur spécialisé avant toute activation. Le statut de vérification est porté à la fiche de l’abonné et journalisé.</li>
+  <li><b>Activation</b> — la fonction de paiement n’est activée qu’une fois la vérification concluante et le compte bancaire de règlement de l’abonné rattaché.</li>
+  <li><b>Plafonds</b> — un plafond quotidien est fixé à la fiche de chaque abonné à l’activation, puis révisé selon l’historique de retours.</li>
+  <li><b>Clôture</b> — la clôture d’un compte est refusée tant qu’il reste des fonds ou des opérations en cours. Les données personnelles peuvent être anonymisées sur demande ; le grand livre et les paiements sont conservés sept ans, au Canada, à titre de piste d’audit financière.</li>
+</ul>
+
+<!-- ================= 7 ================= -->
+<h2>7. Le rôle des tiers</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Tiers</th><th style="width:16%">Territoire</th><th style="width:50%">Rôle</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Institution financière parraine</b>, adhérente au Système automatisé de compensation et de règlement <span class="petit">[à retenir]</span></td><td>Canada</td><td>Tient le compte en fiducie et le compte de retour ; attribue l’identité d’émetteur ; dépose les fichiers dans la compensation ; transmet accusés, rejets, retours et relevés.</td></tr>
+    <tr><td><b>Partenaire de virement Interac</b> <span class="petit">[à retenir]</span></td><td>Canada</td><td>Rail parallèle de transfert, envoi et dépôt.</td></tr>
+    <tr><td><b>Fournisseur de vérification d’entreprise</b> <span class="petit">[à retenir]</span></td><td>Canada</td><td>Vérification d’existence, de propriété effective et de sanctions des abonnés, à l’ouverture et en continu.</td></tr>
+    <tr><td><b>Hébergeur infonuagique</b> <span class="petit">[à retenir]</span></td><td>Canada</td><td>Hébergement des données et des services applicatifs, sous entente écrite prévoyant la résidence des données au Canada.</td></tr>
+    <tr><td><b>Partenaires-distributeurs</b></td><td>Canada</td><td>Provisionnement et gestion d’abonnés sous leur propre marque. Ils <b>ne détiennent aucun fonds</b> et n’ont accès ni au compte en fiducie ni au grand livre de la plateforme.</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">La liste des contrats conclus avec ces tiers, et la procédure de suivi et de supervision qui leur est
+appliquée, sont jointes à la section 13.</p>
+
+<!-- ================= 8 ================= -->
+<h2>8. Rôles et accès</h2>
+
+<p>Quatre surfaces donnent accès au même socle comptable, chacune strictement cloisonnée par locataire.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Surface</th><th style="width:22%">Qui</th><th style="width:52%">Ce qu’elle permet en matière de paiement</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Portail d’administration</b></td>
+      <td>Personnel du demandeur</td>
+      <td>Configuration de la plateforme et des plafonds, vérification d’entreprise, création et <b>approbation</b> des lots, supervision, rapprochement, clôture de comptes. Le personnel autorisé peut, à titre exceptionnel et pour dépannage, saisir une opération pour le compte d’un abonné ; cette capacité est nominative, journalisée au registre d’audit inaltérable, et soumise à la même double approbation que toute autre opération avant transmission.</td>
+    </tr>
+    <tr>
+      <td><b>Portail partenaire</b></td>
+      <td>Partenaire-distributeur</td>
+      <td>Provisionne ses abonnés, lance leur vérification d’entreprise, agit au nom d’un abonné désigné. Aucun accès aux fonds, ni au compte en fiducie, ni aux données d’un abonné d’un autre partenaire.</td>
+    </tr>
+    <tr>
+      <td><b>Portail de l’abonné</b></td>
+      <td>Entreprise abonnée</td>
+      <td>Gère ses clients payeurs et ses fournisseurs bénéficiaires, initie encaissements et décaissements, consulte son solde et ses relevés, administre ses utilisateurs, ses clés d’interface et ses notifications.</td>
+    </tr>
+    <tr>
+      <td><b>Interface de programmation</b></td>
+      <td>Application de l’abonné ou du partenaire</td>
+      <td>Mêmes opérations que le portail, par appel authentifié par clé, avec limitation de débit et notifications signées. Chaque appel est rattaché à un seul locataire.</td>
+    </tr>
+  </tbody>
+</table>
+
+<!-- ================= 9 ================= -->
+<h2>9. Les contrôles exercés sur l’initiation et la transmission</h2>
+
+<p>Les contrôles suivants sont en place dans la plateforme et constituent la réponse du demandeur au risque de
+paiement erroné, frauduleux ou non autorisé. Ils sont décrits en détail au cadre de gestion des risques opérationnels
+joint à la section 11.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Contrôle</th><th style="width:66%">Portée</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Double approbation</b></td><td>Aucun lot ne peut être transmis sans avoir été approuvé par une personne distincte de celle qui l’a créé ; l’approbation est refusée si les deux identités coïncident, et l’action est journalisée.</td></tr>
+    <tr><td><b>Plafonds</b></td><td>Par opération, par fichier, par jour et par abonné. Vérifiés à la création du lot ; tout dépassement annule le lot.</td></tr>
+    <tr><td><b>Calendrier ouvrable et heure de tombée</b></td><td>Dates de création et d’échéance calculées sur un calendrier de jours ouvrables tenant compte des jours fériés fédéraux et québécois, en heure de l’Est ; un dépôt postérieur à l’heure de tombée <span class="petit">(voir annexe, section C)</span> est reporté au jour ouvrable suivant.</td></tr>
+    <tr><td><b>Unicité et idempotence</b></td><td>Numérotation séquentielle des fichiers transmis ; clé d’idempotence <span class="petit">(voir annexe, section D)</span> sur chaque écriture comptable, qui empêche le double traitement d’une même instruction.</td></tr>
+    <tr><td><b>Grand livre immuable</b></td><td>Toute tentative de modification ou de suppression d’une écriture est refusée par la base de données ; une erreur se contre-passe.</td></tr>
+    <tr><td><b>Chiffrement des coordonnées bancaires</b></td><td>Numéros d’institution, de transit et de compte des contreparties chiffrés au repos, déchiffrés uniquement au moment de produire l’instruction, masqués dans les exports.</td></tr>
+    <tr><td><b>Registre d’audit inaltérable</b></td><td>Connexions, clés d’interface, vérifications d’entreprise, approbations de lots, exports, clôtures et anonymisations, en ajout seul, exportables.</td></tr>
+    <tr><td><b>Rapprochement quotidien</b></td><td>Confrontation du compte en fiducie au relevé de l’institution financière ; tout écart livre-banque est signalé.</td></tr>
+    <tr><td><b>Isolation des locataires</b></td><td>Toute lecture et toute écriture sont rattachées à un abonné ; l’accès à la base s’effectue exclusivement par procédures, sous un rôle de moindre privilège.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 10 ================= -->
+<h2>10. Ce que le demandeur ne fait pas</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Activité</th><th style="width:70%">Précision</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Compensation et règlement</td><td>Assurés par l’institution financière adhérente qui parraine le demandeur et par les participants aux systèmes de paiement.</td></tr>
+    <tr><td>Crédit, prêt et avance de fonds</td><td>Aucun découvert, aucun financement de facture, aucun préfinancement. Un décaissement est refusé si le solde disponible de l’abonné est insuffisant. La réserve n’est pas une garantie consentie par le demandeur : c’est une portion du solde de l’abonné.</td></tr>
+    <tr><td>Espèces</td><td>Aucune manipulation d’espèces, aucun point de service physique.</td></tr>
+    <tr><td>Devises étrangères</td><td>Opérations en dollars canadiens uniquement, entre comptes canadiens ; aucun service de change ni de transfert international.</td></tr>
+    <tr><td>Cryptoactifs</td><td>Aucun service lié à la monnaie virtuelle.</td></tr>
+    <tr><td>Instruments prépayés</td><td>Aucune émission de carte prépayée ni de portefeuille électronique.</td></tr>
+    <tr><td>Cartes de paiement</td><td>Aucune acquisition de commerçant ni traitement de transactions par carte.</td></tr>
+    <tr><td>Comptes offerts aux consommateurs</td><td>Aucun compte ni solde n’est offert à un particulier. Les particuliers n’interviennent qu’à titre de contrepartie bancaire d’une entreprise abonnée.</td></tr>
+    <tr><td>Hors Canada</td><td>Aucun service offert à des utilisateurs finaux établis hors du Canada.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 11 ================= -->
+<h2>11. Volumes prévus et calendrier</h2>
+
+<p>Le demandeur n’exerce à ce jour aucune activité associée aux paiements de détail. La plateforme est construite et
+éprouvée en environnement simulé ; les rails réels sont subordonnés à la conclusion des ententes avec l’institution
+financière parraine et le partenaire Interac. Le lancement est fixé au 1<sup>er</sup> avril 2027, et aucune
+commercialisation de la fonction de paiement n’aura lieu avant la confirmation de l’inscription au registre public de
+la Banque du Canada.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:40%">Flux</th><th class="n" style="width:14%">Opérations</th><th class="n" style="width:18%">Montant moyen</th><th class="n" style="width:28%">Valeur</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Encaissements par débit préautorisé (code 430)</td><td class="n">26 400</td><td class="n">285 $</td><td class="n">7 524 000 $</td></tr>
+    <tr><td>Décaissements par virement de crédit</td><td class="n">11 900</td><td class="n">640 $</td><td class="n">7 616 000 $</td></tr>
+    <tr><td>Virements Interac, entrants et sortants</td><td class="n">3 000</td><td class="n">240 $</td><td class="n">720 000 $</td></tr>
+    <tr><td><b>Total — avril 2027 à mars 2028</b></td><td class="n"><b>41 300</b></td><td class="n">—</td><td class="n"><b>15 860 000 $</b></td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr><th style="width:60%">Hypothèse</th><th class="n" style="width:40%">Valeur</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Abonnés actifs au lancement</td><td class="n">10</td></tr>
+    <tr><td>Abonnés actifs au 31 mars 2028</td><td class="n">120</td></tr>
+    <tr><td>Mois de pointe (mars 2028)</td><td class="n">≈ 5 800 opérations · ≈ 2 300 000 $</td></tr>
+    <tr><td>Montant maximal d’une opération</td><td class="n">25 000 $</td></tr>
+    <tr><td>Part des opérations effectuées au Canada, en dollars canadiens</td><td class="n">100 %</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">La ventilation mensuelle et les hypothèses détaillées figurent à la section 9 de la demande et à la
+projection de trésorerie jointe à la section 12.</p>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Exemples de contrats et d’ententes, dont le contrat d’abonnement et le modèle d’entente de
+  débit préautorisé du payeur : question 6.2. Diagrammes des processus d’encaissement, de décaissement, de virement
+  Interac et de retour : question 6.3. Schéma du flux de fonds et description du compte en fiducie : section 12. Cadre
+  de gestion des risques opérationnels et cadre de réponse aux incidents : section 11. Programme de conformité :
+  section 16.</p>
+</div>
+
+<!-- ================= ANNEXE ================= -->
+<div class="saut"></div>
+<h2>Annexe — Lexique</h2>
+
+<p>Le présent document emploie les termes du système de paiement canadien. Ils sont définis ici en langage courant,
+pour le lecteur qui n’en a pas l’usage quotidien.</p>
+
+<h3>A. Les normes et les règles</h3>
+
+<p>Paiements Canada est l’organisme qui exploite les systèmes par lesquels transitent les paiements entre institutions
+financières canadiennes. Il publie deux types de textes que le demandeur doit respecter : des <b>normes</b>, qui
+décrivent la forme technique des fichiers échangés, et des <b>règles</b>, qui fixent les obligations des parties.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:20%">Texte</th><th style="width:24%">Objet</th><th style="width:56%">Ce que cela veut dire concrètement</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Norme 005</b></td>
+      <td>Format du fichier de transfert automatisé de fonds</td>
+      <td>C’est le format du fichier que le demandeur produit et remet à son institution financière. Un fichier 005 est un fichier texte à largeur fixe : chaque ligne compte le même nombre de caractères, et chaque information — montant, date, numéro de compte, nom — occupe une position déterminée. Le fichier commence par un enregistrement d’en-tête (A), contient un enregistrement par paiement (C pour un crédit, D pour un débit), et se termine par un enregistrement de totaux (Z) qui permet à l’institution de vérifier qu’aucune ligne n’a été perdue ni altérée. Un caractère à la mauvaise position fait rejeter le fichier entier.</td>
+    </tr>
+    <tr>
+      <td><b>Norme 007</b></td>
+      <td>Codes d’opération</td>
+      <td>Attribue à chaque type de paiement un code à trois chiffres, porté par chaque ligne du fichier 005. Voir la section C ci-dessous.</td>
+    </tr>
+    <tr>
+      <td><b>Règle F1</b></td>
+      <td>Opérations de transfert automatisé de fonds</td>
+      <td>Fixe les obligations de celui qui émet des paiements : comment il doit s’identifier dans le fichier, dans quels délais les échanges ont lieu, et comment se traitent les retours et les annulations.</td>
+    </tr>
+    <tr>
+      <td><b>Règle H1</b></td>
+      <td>Débits préautorisés</td>
+      <td>Encadre le prélèvement sur le compte de quelqu’un d’autre. Elle exige une entente écrite du payeur, impose de vérifier son identité par une méthode commercialement raisonnable, oblige à le prévenir avant tout changement de montant ou de date, et lui ouvre un droit de réclamation après le prélèvement.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>B. Les systèmes et les acteurs</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Système automatisé de compensation et de règlement</b><br><span class="petit">(SACR, ou ACSS en anglais)</span></td>
+      <td>Le système par lequel transitent la quasi-totalité des paiements de détail au Canada : chèques, dépôts directs, débits préautorisés, transactions par carte. Il fonctionne <b>par lots</b> : les institutions y déposent chaque jour l’ensemble de leurs paiements, le système calcule ce que chacune doit aux autres, et seuls ces soldes nets sont réglés le lendemain matin dans les comptes de règlement tenus à la Banque du Canada. C’est dans ce système que les fichiers 005 du demandeur seront déposés.</td>
+    </tr>
+    <tr>
+      <td><b>Lynx</b></td>
+      <td>Le second système de Paiements Canada, réservé aux paiements de grande valeur entre institutions. Il n’achemine aucun paiement du demandeur : il sert au règlement final entre les institutions elles-mêmes.</td>
+    </tr>
+    <tr>
+      <td><b>Adhérent</b><br><span class="petit">(<i>direct clearer</i>)</span></td>
+      <td>Institution financière autorisée à accéder directement au système de compensation. Elle y porte ses propres paiements et ceux des institutions plus petites qui passent par elle. Seul un adhérent peut déposer un fichier dans le système.</td>
+    </tr>
+    <tr>
+      <td><b>Institution financière parraine</b></td>
+      <td>L’adhérent qui accepte de déposer les fichiers du demandeur dans le système, sous sa propre responsabilité. Le demandeur n’étant pas lui-même adhérent, c’est le seul chemin praticable vers le rail. En contrepartie, l’institution vérifie les processus du demandeur, lui impose des plafonds et une réserve, et lui attribue son identité d’émetteur.</td>
+    </tr>
+    <tr>
+      <td><b>Émetteur</b><br><span class="petit">(<i>originator</i>)</span></td>
+      <td>Celui qui produit les instructions de paiement. L’institution parraine lui attribue un <b>numéro de client émetteur</b> et un <b>centre de traitement</b>, qui figurent dans l’en-tête de chaque fichier et identifient sa provenance.</td>
+    </tr>
+    <tr>
+      <td><b>Bénéficiaire inscrit</b><br><span class="petit">(<i>payee of record</i>)</span></td>
+      <td>Devant la règle H1, la personne au bénéfice de laquelle le payeur a signé son entente de débit préautorisé, et qui répond de sa validité. Le demandeur assume ce rôle pour le compte de ses abonnés — voir la section 5.5.</td>
+    </tr>
+    <tr>
+      <td><b>Lettre d’engagement du bénéficiaire</b><br><span class="petit">(<i>letter of undertaking</i>)</span></td>
+      <td>Document exigé par la règle H1, signé par le bénéficiaire inscrit envers l’institution parraine. Il y confirme par écrit qu’il détient une entente valide pour chaque prélèvement, qu’il en conserve la preuve, et qu’il assume les conséquences d’un prélèvement non autorisé.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h3>C. Les opérations</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Virement de crédit</b></td>
+      <td>Opération par laquelle on <b>envoie</b> de l’argent vers le compte de quelqu’un : une paie, un paiement à un fournisseur. C’est un décaissement.</td>
+    </tr>
+    <tr>
+      <td><b>Virement de débit</b></td>
+      <td>Opération par laquelle on <b>prélève</b> de l’argent sur le compte de quelqu’un d’autre, avec son autorisation préalable. C’est un encaissement.</td>
+    </tr>
+    <tr>
+      <td><b>Débit préautorisé</b><br><span class="petit">(PAD)</span></td>
+      <td>Le mécanisme qui rend un virement de débit licite : le payeur a signé d’avance une entente permettant de prélever sur son compte, selon des modalités convenues. Sans cette entente, aucun prélèvement n’est possible.</td>
+    </tr>
+    <tr>
+      <td><b>Droit de réclamation du payeur</b></td>
+      <td>La faculté, pour le payeur, de faire annuler un prélèvement qu’il conteste et d’en être remboursé par son institution. Le délai est de <b>90 jours civils</b> lorsque le payeur est un particulier, et de <b>10 jours ouvrables</b> lorsqu’il s’agit d’une entreprise. C’est ce délai qui commande la réserve décrite à la section 2.</td>
+    </tr>
+    <tr>
+      <td><b>Retour</b><br><span class="petit">(dont la provision insuffisante)</span></td>
+      <td>Un paiement renvoyé par l’institution de la contrepartie, parce que le compte est sans provision suffisante, fermé, introuvable, ou que le payeur conteste. L’argent revient en arrière et l’écriture comptable doit être défaite.</td>
+    </tr>
+    <tr>
+      <td><b>Rejet à l’entrée</b></td>
+      <td>Un fichier ou une ligne refusés par l’institution parraine <b>avant</b> même d’entrer dans la compensation, pour cause de format non conforme, de plafond dépassé ou de coordonnées invalides. Rien n’a bougé : il n’y a qu’à corriger et redéposer.</td>
+    </tr>
+    <tr>
+      <td><b>Jour ouvrable et heure de tombée</b></td>
+      <td>Les fichiers ne circulent que les jours ouvrables, hors samedis, dimanches et jours fériés. Chaque institution fixe en outre une <b>heure de tombée</b> quotidienne : un fichier déposé après cette heure est traité le jour ouvrable suivant. Les dates portées dans le fichier doivent tenir compte de ce calendrier.</td>
+    </tr>
+    <tr>
+      <td><b>Code d’opération</b></td>
+      <td>Le code à trois chiffres de la norme 007, porté par chaque ligne du fichier 005. Il ne détermine pas le sens du mouvement — celui-ci découle du type d’enregistrement, C ou D — mais il déclare la <b>nature</b> du paiement à l’institution qui le reçoit, et cette nature s’affiche sur le relevé de compte de la contrepartie. Les codes sont groupés par plages : 200 à 299 pour les revenus versés à une personne, 330 à 599 pour les opérations préautorisées. Certaines plages sont réservées et interdites au demandeur : 300 à 329 au gouvernement fédéral, 600 à 620 aux gouvernements provinciaux et locaux.</td>
+    </tr>
+  </tbody>
+</table>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10.5pt;color:#0f6e5d;margin:13pt 0 3pt 0;">Les codes retenus par la plateforme</h4>
+
+<table>
+  <thead>
+    <tr><th style="width:10%">Code</th><th style="width:24%">Libellé de la norme</th><th style="width:14%">Sens</th><th style="width:52%">Emploi dans la plateforme</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>430</b></td>
+      <td>Paiement de facture</td>
+      <td>Débit</td>
+      <td><b>Encaissements.</b> Prélèvement, sur le compte du client payeur de l’abonné, d’une somme due en vertu d’une entente de débit préautorisé. C’est le code de la totalité des opérations entrantes décrites à la section 5.1.</td>
+    </tr>
+    <tr>
+      <td><b>200</b></td>
+      <td>Dépôt de paye</td>
+      <td>Crédit</td>
+      <td><b>Décaissements de paie.</b> Versement d’un salaire au compte d’un employé de l’abonné.</td>
+    </tr>
+    <tr>
+      <td><b>450</b></td>
+      <td>Paiement divers</td>
+      <td>Crédit ou débit</td>
+      <td><b>Décaissements courants.</b> Versement à un fournisseur, à un créancier ou à un organisme, lorsque aucun code plus précis ne s’applique.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Les codes définitifs relèvent de l’institution financière parraine.</b> Chaque institution publie la liste des
+  codes qu’elle autorise à ses clients émetteurs, et le sens dans lequel elle en permet l’usage ; son guide
+  d’implantation prime sur la lecture générale de la norme. Le demandeur retiendra les codes ci-dessus sous réserve de
+  cette autorisation, et ajustera la configuration de son générateur de fichiers en conséquence lors de la
+  certification technique.</p>
+</div>
+
+<p class="petit">Les virements Interac décrits à la section 5.3 n’empruntent ni la norme 005 ni les codes d’opération :
+la contrepartie y est identifiée par une adresse de courriel, et chaque transfert se règle individuellement.</p>
+
+<h3>D. Les termes comptables et techniques</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Compte en fiducie à vocation unique</b></td>
+      <td>Un compte bancaire ouvert au nom du demandeur mais qui ne peut contenir que l’argent de ses abonnés, jamais le sien. En cas de difficulté du demandeur, cet argent n’est pas confondu avec son patrimoine. C’est l’une des deux formes de protection des fonds admises par l’article 20 de la Loi ; l’autre est un compte séparé assorti d’une assurance ou d’une garantie.</td>
+    </tr>
+    <tr>
+      <td><b>Compte mutualisé</b></td>
+      <td>Un seul compte bancaire porte l’argent de tous les abonnés à la fois. Ce n’est pas la banque qui sait ce qui revient à chacun : c’est le grand livre du demandeur qui l’établit, à tout instant.</td>
+    </tr>
+    <tr>
+      <td><b>Grand livre en partie double</b></td>
+      <td>Le registre comptable où chaque mouvement s’inscrit deux fois — d’où il part et où il arrive — de sorte que la somme des écritures est toujours nulle. Une somme qui apparaît quelque part a forcément disparu ailleurs, ce qui rend toute erreur ou omission détectable.</td>
+    </tr>
+    <tr>
+      <td><b>Écriture immuable et contre-passation</b></td>
+      <td>Une écriture inscrite au grand livre ne peut plus être modifiée ni effacée. Corriger une erreur consiste à inscrire une écriture inverse qui l’annule : les deux restent visibles, et l’historique demeure vérifiable.</td>
+    </tr>
+    <tr>
+      <td><b>Invariant</b></td>
+      <td>Une égalité qui doit être vraie à tout moment. Ici : l’argent réellement présent au compte en fiducie doit égaler la somme de ce que le demandeur doit à ses abonnés. Un écart signale immédiatement une anomalie.</td>
+    </tr>
+    <tr>
+      <td><b>Réserve</b></td>
+      <td>Une portion du solde d’un abonné rendue temporairement indisponible, destinée à couvrir les retours à venir. Elle demeure la propriété de l’abonné : ce n’est ni un dépôt de garantie versé au demandeur, ni un prêt.</td>
+    </tr>
+    <tr>
+      <td><b>Locataire</b><br><span class="petit">(<i>tenant</i>)</span></td>
+      <td>Chaque abonné dans la plateforme. « Multi-locataire » signifie que plusieurs entreprises utilisent le même logiciel et la même base de données, mais que chacune ne voit que ses propres données, sans exception possible.</td>
+    </tr>
+    <tr>
+      <td><b>Clé d’idempotence</b></td>
+      <td>Un identifiant unique attaché à une instruction. Si la même instruction est reçue deux fois — à la suite d’un incident réseau, par exemple — la seconde est reconnue comme un doublon et ignorée. Personne n’est payé deux fois.</td>
+    </tr>
+    <tr>
+      <td><b>Double approbation</b><br><span class="petit">(<i>maker-checker</i>)</span></td>
+      <td>Règle voulant que la personne qui prépare un lot de paiements ne puisse pas être celle qui l’approuve. Il faut deux personnes distinctes pour qu’un fichier parte.</td>
+    </tr>
+    <tr>
+      <td><b>Vérification d’entreprise</b><br><span class="petit">(KYB, <i>know your business</i>)</span></td>
+      <td>L’examen préalable d’une entreprise avant de lui ouvrir un service : existence légale, propriétaires réels, dirigeants, adresse, absence de sanctions. L’équivalent, pour une société, de la vérification d’identité d’un particulier.</td>
+    </tr>
+  </tbody>
+</table>
+
+
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<p>Les points suivants sont ouverts au 7 septembre 2026. Chacun doit être tranché ou confirmé, et la présente note
+supprimée, avant le téléversement de la pièce dans le portail Connexion FSP.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">Ce qu’il reste à faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Périmètre de la demande</b></td><td>La version 1.0 de cette pièce décrivait un tout autre service : exécution des paiements sous l’enregistrement d’un fournisseur tiers, sans détention de fonds. La présente version ne décrit que 60sec-Paiement. Confirmer qu’aucune autre activité de paiement du demandeur ne doit être déclarée à la question 6.1, faute de quoi la réponse serait incomplète.</td></tr>
+    <tr><td><b>Nom commercial</b></td><td>Vérifier que « 60sec-Paiement » est inscrit au Registraire des entreprises et le déclarer à la question 2.2.</td></tr>
+    <tr><td><b>Tarification</b></td><td>La grille de la section 2 est une proposition cohérente avec le modèle de frais de la plateforme (frais prélevés à l’initiation, portés aux produits). À valider commercialement, puis à reporter dans la projection de trésorerie.</td></tr>
+    <tr><td><b>Volumes</b></td><td>Les chiffres de la section 11 sont construits sur 120 abonnés au terme de l’an 1. À reprendre à partir du plan de vente réel, et à aligner sur la section 9 de la demande.</td></tr>
+    <tr><td><b>Fonds détenus</b></td><td>Les valeurs moyenne et de pointe de la section 4.3 découlent des volumes ci-dessus et d’un délai de retenue de cinq jours ouvrables. À recalculer une fois le délai négocié avec l’institution parraine, et à reporter aux questions 9.6 et 9.7.</td></tr>
+    <tr><td><b>Tiers à retenir</b></td><td>Institution parraine, partenaire Interac, fournisseur de vérification d’entreprise et hébergeur ne sont pas contractés. La pièce 10 (contrats avec les tiers) et la section 13 ne pourront être complétées qu’ensuite.</td></tr>
+    <tr><td><b>Initiation par le personnel</b></td><td>La section 8 décrit la capacité, existante dans le logiciel, pour le personnel de saisir une opération au nom d’un abonné. Soit elle est retirée du produit, soit elle est encadrée comme décrit — dans ce cas, vérifier que la journalisation de cette action est bien en place avant d’en faire état.</td></tr>
+    <tr><td><b>Réserve automatique</b></td><td>Le mécanisme de mise en réserve et de libération existe dans le grand livre, et le solde disponible d’un abonné en est bien diminué. En revanche, la <b>règle</b> de 10 % sur trente jours décrite à la section 2 n’est pas encore automatisée : elle doit être implantée, ou la section reformulée comme une politique appliquée manuellement.</td></tr>
+    <tr><td><b>Code d’opération au crédit</b></td><td>La configuration émetteur de la plateforme porte encore <code>CpaCodeCredit = 230</code>, un bouchon posé au même titre que le numéro d’émetteur. Or le code 230 désigne une <b>pension</b> : il ne correspond ni à un versement à un fournisseur ni à une paie. À remplacer par les codes de l’annexe une fois le guide d’implantation reçu, sans quoi les décaissements seraient présentés aux institutions réceptrices sous une nature erronée.</td></tr>
+    <tr><td><b>Numérotation des fichiers</b></td><td>Le compteur de numéro de création de fichier est séquentiel, mais tronque au-delà de quatre chiffres : une collision surviendrait au rebouclage. À corriger avant la certification technique, faute de quoi l’unicité ne peut pas être affirmée à l’institution parraine.</td></tr>
+    <tr><td><b>Cohérence des autres pièces</b></td><td>Les pièces 04 (diagrammes) et 11 (conformité) affirment encore l’absence de détention de fonds ; la pièce 09 (trésorerie) repose sur une tout autre grille tarifaire. Elles doivent être reprises après celle-ci.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

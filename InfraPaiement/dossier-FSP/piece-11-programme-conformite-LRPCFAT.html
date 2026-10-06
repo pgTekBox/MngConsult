@@ -1,0 +1,500 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-11-programme-conformite-LRPCFAT</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+  .oui { color: var(--vert); font-weight: bold; }
+  .non { font-weight: bold; }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+  .ref { font-size: 8.5pt; color: var(--gris); font-style: italic; break-after: avoid; }
+
+  .saut { break-before: page; }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Programme de conformité<br>LRPCFAT</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — section 16 &nbsp;·&nbsp; Programme établi en vertu de la Loi sur le recyclage
+  des produits de la criminalité et le financement des activités terroristes</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Cadre dirigeant :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Agent de conformité :</b> M<sup>e</sup> Marc Lemieux, externe aux opérations</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">Le présent programme est établi en application du paragraphe 156(1) du Règlement sur le
+  recyclage des produits de la criminalité et le financement des activités terroristes. Il est joint à la demande
+  d’enregistrement auprès de la Banque du Canada parce que les deux régimes se recoupent : la même plateforme, les
+  mêmes abonnés et les mêmes opérations y sont décrits. Il ne remplace pas l’inscription auprès du Centre d’analyse
+  des opérations et déclarations financières du Canada, ni le permis exigé au Québec.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. L’assujettissement du demandeur</h2>
+
+<p>Un programme de conformité n’a de sens que si l’on sait à quel titre on y est tenu. Le demandeur expose donc
+d’abord son analyse.</p>
+
+<h3>1.1 L’activité exercée</h3>
+
+<p>Le demandeur exploite une plateforme qui <b>encaisse</b> des sommes sur le compte bancaire des clients payeurs de
+ses abonnés, les <b>détient</b> dans un compte en fiducie, puis les <b>décaisse</b> vers des fournisseurs, des
+créanciers, des organismes gouvernementaux et des employés. Cette activité correspond à la remise ou à la
+transmission de fonds au sens de la Loi.</p>
+
+<h3>1.2 Pourquoi l’exception applicable au traitement de paiement ne joue pas</h3>
+
+<p>Le Centre d’analyse écarte de la définition d’entreprise de services monétaires l’intermédiaire qui reçoit une
+instruction de paiement entre un payeur et un bénéficiaire fournissant des biens ou des services, lorsque cet
+intermédiaire se borne au traitement technique et ne contrôle pas les fonds. Le demandeur estime ne pas pouvoir
+s’en prévaloir, pour trois raisons qu’il énonce plutôt que de les taire.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Condition de l’exception</th><th style="width:66%">Situation du demandeur</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>L’intermédiaire ne contrôle pas les fonds</td><td><b class="non">Non satisfaite.</b> Les fonds reposent dans un compte en fiducie tenu par le demandeur, et chaque abonné y détient un solde. La détention de fonds d’utilisateurs finaux est la caractéristique déterminante du service.</td></tr>
+    <tr><td>Le bénéficiaire fournit des biens ou des services</td><td><b class="non">Non satisfaite pour une part des flux.</b> Les décaissements comprennent la paie des employés d’un abonné et les remises gouvernementales, qui ne sont pas la contrepartie de biens ou de services fournis au payeur.</td></tr>
+    <tr><td>L’intermédiaire n’effectue qu’un traitement technique</td><td><b class="non">Non satisfaite.</b> Le demandeur exerce en son propre nom, sous sa marque et sa tarification, est bénéficiaire inscrit des ententes de débit préautorisé pour le compte de ses abonnés, et applique ses propres plafonds, retenues et réserves.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Conclusion.</b> Le demandeur se considère comme une <b>entreprise de services monétaires</b> au sens de la
+  Loi et s’inscrira au registre du Centre d’analyse avant d’offrir le service. Il se considère également assujetti
+  au régime québécois des entreprises de services monétaires et sollicitera le permis correspondant. Aucune activité
+  de paiement ne sera exercée avant que l’inscription fédérale et le permis provincial ne soient obtenus, comme
+  aucune ne le sera avant l’enregistrement auprès de la Banque du Canada.</p>
+</div>
+
+<h3>1.3 Ce que le demandeur ne fait pas</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:40%">Activité</th><th style="width:14%">Exercée</th><th style="width:46%">Conséquence sur les obligations</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Opérations en espèces</td><td class="non">Non</td><td>Aucune déclaration d’opérations importantes en espèces.</td></tr>
+    <tr><td>Télévirements internationaux</td><td class="non">Non</td><td>Opérations en dollars canadiens entre comptes canadiens seulement : aucune déclaration de télévirement international.</td></tr>
+    <tr><td>Opérations de change</td><td class="non">Non</td><td>—</td></tr>
+    <tr><td>Monnaie virtuelle</td><td class="non">Non</td><td>Aucune déclaration d’opérations importantes en monnaie virtuelle.</td></tr>
+    <tr><td>Émission ou rachat de mandats et de titres négociables</td><td class="non">Non</td><td>—</td></tr>
+    <tr><td>Comptes offerts à des particuliers</td><td class="non">Non</td><td>Les particuliers n’interviennent qu’à titre de contrepartie bancaire d’une entreprise abonnée.</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">Ces exclusions restreignent les obligations de déclaration, non les obligations de connaissance du
+client, d’évaluation des risques, de tenue de documents et de déclaration d’opérations douteuses, qui demeurent
+entières.</p>
+
+<!-- ================= 2 ================= -->
+<h2>2. Les éléments du programme</h2>
+<p class="ref">Paragraphe 156(1) du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:28%">Élément exigé</th><th style="width:44%">Ce que le demandeur met en place</th><th style="width:28%">Section</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Agent de conformité désigné</b></td><td>M<sup>e</sup> Marc Lemieux, externe aux opérations, doté des pouvoirs et des ressources nécessaires.</td><td>Section 3</td></tr>
+    <tr><td><b>Politiques et procédures écrites</b></td><td>Le présent programme et ses procédures d’application, tenus à jour et approuvés par le cadre dirigeant.</td><td>Sections 5 à 9</td></tr>
+    <tr><td><b>Évaluation des risques</b></td><td>Évaluation portant sur les clients, les produits et services, les canaux de distribution, la géographie et les tiers.</td><td>Section 4</td></tr>
+    <tr><td><b>Programme de formation continue</b></td><td>Formation préalable à tout accès, puis annuelle, avec plan écrit et registre des présences.</td><td>Section 10</td></tr>
+    <tr><td><b>Examen de l’efficacité</b></td><td>Examen indépendant au moins tous les deux ans, résultats remis par écrit au cadre dirigeant dans les 30 jours.</td><td>Section 11</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 3 ================= -->
+<h2>3. L’agent de conformité</h2>
+
+<ul>
+  <li><b>Désignation</b> — l’agent de conformité est désigné par le cadre dirigeant et sa nomination est consignée. Il est <b>externe aux opérations</b> : il n’exerce aucune fonction de préparation ou d’approbation des lots, ce qui écarte tout conflit entre le rendement commercial et la conformité.</li>
+  <li><b>Pouvoirs</b> — il peut exiger tout document et tout accès en lecture nécessaires à son mandat, demander la suspension des opérations d’un abonné, et s’adresser directement au cadre dirigeant et au conseil sans intermédiaire.</li>
+  <li><b>Ressources</b> — un budget annuel lui est affecté, distinct du budget d’exploitation, couvrant sa rémunération, la formation et l’examen d’efficacité.</li>
+  <li><b>Reddition de comptes</b> — il présente au cadre dirigeant un rapport annuel écrit portant sur l’état du programme, les déclarations transmises, les lacunes constatées et les mesures correctives.</li>
+  <li><b>Suppléance</b> — une suppléance est nommée ; une déclaration d’opération douteuse ne peut attendre le retour d’une personne.</li>
+</ul>
+
+<div class="note">
+  <p><b>Deux agents de conformité, deux régimes.</b> Le présent agent de conformité répond du programme LRPCFAT. Le
+  cadre dirigeant, lui, répond du cadre de gestion des risques opérationnels exigé par le régime de la Banque du
+  Canada, joint à la section 11 de la demande. Les deux fonctions se renseignent mutuellement — un incident de
+  fraude est souvent aussi un signal de recyclage — mais elles ne se confondent pas, et l’examen indépendant de
+  chacune est distinct.</p>
+</div>
+
+<!-- ================= 4 ================= -->
+<h2>4. L’évaluation des risques</h2>
+
+<p>L’évaluation porte sur les cinq dimensions prévues au Règlement. Le niveau attribué commande l’intensité des
+mesures, non l’acceptation ou le refus d’un abonné.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:20%">Dimension</th><th style="width:14%">Niveau</th><th style="width:66%">Motif et mesures</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Clients</b><br><span class="petit">les abonnés</span></td>
+      <td>Moyen</td>
+      <td>Entreprises canadiennes, vérifiées avant activation. Le risque tient moins à leur identité qu’à l’usage qu’elles font de la plateforme : un abonné légitime peut prélever sans droit. Mesures : vérification d’entreprise et de propriété effective, secteurs exclus, plafonds par abonné, surveillance du taux de retour.</td>
+    </tr>
+    <tr>
+      <td><b>Produits et services</b></td>
+      <td>Moyen</td>
+      <td>Le débit préautorisé permet de prélever sur le compte d’un tiers : c’est la fonction la plus sensible. Le virement Interac est quasi instantané et donc moins réversible. Mesures : entente valide exigée pour chaque prélèvement, droit d’audit, plafonds par opération, par fichier et par jour, délai de retenue et réserve.</td>
+    </tr>
+    <tr>
+      <td><b>Canaux de distribution</b></td>
+      <td>Élevé</td>
+      <td>Le partenaire-distributeur provisionne des abonnés qu’il a lui-même recrutés : le demandeur n’a pas rencontré ces entreprises. Mesures : la vérification d’entreprise demeure exécutée par le demandeur et jamais déléguée ; le partenaire n’active aucun abonné ; contrôle par échantillon des dossiers provisionnés par chaque partenaire.</td>
+    </tr>
+    <tr>
+      <td><b>Géographie</b></td>
+      <td>Faible</td>
+      <td>Abonnés établis au Canada, opérations en dollars canadiens entre comptes canadiens. Aucun flux transfrontalier, aucune juridiction à risque. Mesure : refus de tout abonné dont la propriété effective se rattache à une juridiction visée par une directive ministérielle.</td>
+    </tr>
+    <tr>
+      <td><b>Entités du même groupe et tiers</b></td>
+      <td>Faible</td>
+      <td>Aucune filiale ni entité affiliée. Les tiers — institution parraine, partenaire de virement, hébergeur, fournisseur de vérification — ne détiennent pas de fonds pour le compte du demandeur. Mesure : ententes écrites et évaluation annuelle.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Le risque propre au modèle.</b> Le demandeur est bénéficiaire inscrit des ententes de débit préautorisé pour
+  le compte de ses abonnés. Il en résulte que la faute d’un abonné — prélever sur des personnes qui n’ont rien
+  signé — se présente au système de paiement sous <b>l’identité d’émetteur du demandeur</b>. C’est ce qui justifie
+  que la vérification d’entreprise ne soit jamais déléguée à un partenaire, et que le taux de retour soit surveillé
+  par abonné plutôt que globalement.</p>
+</div>
+
+<p>L’évaluation des risques est révisée au moins annuellement, et immédiatement lors du lancement d’un nouveau
+produit, de l’ouverture d’un nouveau canal ou de l’ajout d’un secteur d’activité.</p>
+
+<!-- ================= 5 ================= -->
+<h2>5. Connaissance du client</h2>
+
+<h3>5.1 Les abonnés</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Mesure</th><th style="width:70%">Contenu</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Identification de l’entité</b></td><td>Dénomination, numéro d’entreprise, adresse, existence légale confirmée auprès du registre applicable, nature de l’activité.</td></tr>
+    <tr><td><b>Propriété effective</b></td><td>Identité des personnes physiques détenant ou contrôlant, directement ou indirectement, 25 % ou plus, ainsi que des administrateurs. L’information est confirmée par une source raisonnable et consignée ; à défaut de pouvoir la confirmer, l’abonné est traité comme un risque élevé.</td></tr>
+    <tr><td><b>Représentant autorisé</b></td><td>Identité de la personne physique qui souscrit et de celles qui exerceront les droits de préparation et d’approbation.</td></tr>
+    <tr><td><b>Personnes politiquement exposées</b></td><td>Vérification à l’ouverture et périodiquement ; une correspondance entraîne l’examen par l’agent de conformité et la décision d’un dirigeant.</td></tr>
+    <tr><td><b>Sanctions</b></td><td>Vérification à l’ouverture puis en continu contre les listes applicables, pour l’entité, ses propriétaires effectifs et ses administrateurs.</td></tr>
+    <tr><td><b>Objet et nature de la relation</b></td><td>Usage prévu de la plateforme, volume et montants attendus, secteur, type de contreparties. Ces attentes servent de référence à la surveillance : un écart s’apprécie par rapport à elles.</td></tr>
+    <tr><td><b>Activation</b></td><td>Aucune fonction de paiement n’est activée avant que la vérification soit concluante et le compte bancaire de règlement rattaché.</td></tr>
+  </tbody>
+</table>
+
+<h3>5.2 Les contreparties</h3>
+
+<p>Les clients payeurs et les bénéficiaires ne sont pas des clients du demandeur : ils sont les contreparties de ses
+abonnés. Le demandeur ne leur offre aucun compte et ne les identifie pas comme des clients. Il les traite néanmoins
+comme des <b>tiers dont l’identité et le consentement doivent être documentés</b> : chaque prélèvement doit reposer
+sur une entente de débit préautorisé valide, obtenue du payeur par une méthode commercialement raisonnable de
+vérification d’identité, dont l’abonné conserve la preuve et dont le demandeur peut exiger la production.</p>
+
+<h3>5.3 Suivi continu</h3>
+
+<ul>
+  <li>La relation d’affaires avec chaque abonné fait l’objet d’un <b>suivi continu</b> : comparaison des opérations aux attentes consignées à l’ouverture, examen du taux de retour, revue périodique du dossier dont la fréquence dépend du niveau de risque.</li>
+  <li>Un abonné classé à risque élevé fait l’objet de <b>mesures accrues</b> : revue plus fréquente, plafonds abaissés, exigence de justification de l’objet des opérations, et vérification de l’identité renouvelée.</li>
+  <li>Tout changement de propriété effective, de secteur d’activité ou de profil d’opérations déclenche une réévaluation.</li>
+</ul>
+
+<!-- ================= 6 ================= -->
+<h2>6. Les déclarations</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:32%">Déclaration</th><th style="width:14%">Applicable</th><th style="width:54%">Règle appliquée</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Opération douteuse</b></td>
+      <td><span class="oui">Oui</span></td>
+      <td>Transmise dès que possible après que les mesures prises ont permis d’établir des motifs raisonnables de soupçonner qu’une opération, tentée ou effectuée, est liée au recyclage ou au financement d’activités terroristes. La tentative se déclare au même titre que l’opération exécutée.</td>
+    </tr>
+    <tr>
+      <td><b>Biens appartenant à un groupe terroriste</b></td>
+      <td><span class="oui">Oui</span></td>
+      <td>Déclaration sans délai, et gel immédiat des opérations de l’abonné visé.</td>
+    </tr>
+    <tr><td>Opérations importantes en espèces</td><td class="non">Non</td><td>Aucune opération en espèces.</td></tr>
+    <tr><td>Télévirements internationaux</td><td class="non">Non</td><td>Aucun flux transfrontalier.</td></tr>
+    <tr><td>Opérations importantes en monnaie virtuelle</td><td class="non">Non</td><td>Aucun service lié à la monnaie virtuelle.</td></tr>
+  </tbody>
+</table>
+
+<h3>Comment une déclaration se décide</h3>
+<ol>
+  <li>Un signal apparaît — indicateur de la section 7, alerte de surveillance, observation d’une personne de l’exploitation, ou information reçue d’un tiers.</li>
+  <li>L’exploitation consigne le signal et le transmet à l’agent de conformité <b>le jour même</b>, sans l’apprécier elle-même.</li>
+  <li>L’agent de conformité examine le dossier, prend les mesures permettant d’établir s’il existe des motifs raisonnables de soupçonner, et consigne son analyse — y compris lorsqu’il conclut à l’absence de motifs.</li>
+  <li>S’il y a lieu, la déclaration est transmise dès que possible, et le dossier conservé.</li>
+</ol>
+
+<div class="note">
+  <p><b>Interdiction de divulguer.</b> Nul ne révèle à l’abonné, à sa contrepartie ni à quiconque qu’une déclaration
+  d’opération douteuse a été transmise ou envisagée, ni le contenu d’une telle déclaration. Cette interdiction est
+  expliquée en formation, parce qu’elle se heurte à un réflexe naturel : celui d’expliquer à un client pourquoi ses
+  opérations sont suspendues. Une suspension se motive par les stipulations du contrat d’abonnement, jamais par une
+  déclaration.</p>
+</div>
+
+<!-- ================= 7 ================= -->
+<h2>7. Indicateurs d’opérations douteuses propres à la plateforme</h2>
+
+<p>Aux indicateurs généraux publiés par le Centre d’analyse s’ajoutent les indicateurs suivants, tirés du
+fonctionnement même du service. Aucun ne vaut à lui seul : c’est leur accumulation, ou leur écart avec les attentes
+consignées à l’ouverture, qui déclenche l’examen.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Indicateur</th><th style="width:66%">Ce qu’il peut révéler</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Taux de retour anormalement élevé, en particulier des contestations d’entente plutôt que des provisions insuffisantes</td><td>Prélèvements effectués sans entente valide, sur des personnes qui n’ont rien signé.</td></tr>
+    <tr><td>Prélèvements sur des payeurs sans lien apparent avec le secteur déclaré par l’abonné</td><td>Usage de la plateforme pour une activité autre que celle déclarée.</td></tr>
+    <tr><td>Accélération soudaine du volume ou des montants, sans changement d’activité annoncé</td><td>Changement de contrôle de fait, ou usage du compte par un tiers.</td></tr>
+    <tr><td>Opérations fractionnées demeurant juste sous un plafond, ou demandes répétées de relèvement de plafond</td><td>Tentative d’éviter un seuil de contrôle.</td></tr>
+    <tr><td>Décaissements vers des bénéficiaires sans lien avec l’activité de l’abonné, ou vers des personnes physiques multiples</td><td>Dispersion de fonds, paie fictive.</td></tr>
+    <tr><td>Encaissement suivi d’un décaissement quasi intégral et immédiat, sans que l’activité l’explique</td><td>Usage du compte en fiducie comme simple point de passage.</td></tr>
+    <tr><td>Refus de produire les ententes de débit préautorisé lorsque le droit d’audit est exercé</td><td>Absence des ententes.</td></tr>
+    <tr><td>Réticence à fournir l’information sur la propriété effective, ou information changeant sans motif</td><td>Dissimulation du bénéficiaire réel de l’activité.</td></tr>
+    <tr><td>Abonné provisionné par un partenaire dont plusieurs autres abonnés ont déjà été suspendus</td><td>Canal de recrutement compromis.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 8 ================= -->
+<h2>8. Tenue de documents</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:36%">Document</th><th style="width:20%">Conservation</th><th style="width:44%">Précision</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Dossiers d’identification des abonnés et de propriété effective</td><td>Au moins 5 ans</td><td>À compter de la fin de la relation d’affaires.</td></tr>
+    <tr><td>Registres d’opérations, grand livre et paiements</td><td>7 ans</td><td>Le demandeur retient sept ans, ce qui satisfait à la fois l’exigence de la présente Loi et la piste d’audit financière décrite à la question 6.1.</td></tr>
+    <tr><td>Déclarations transmises et analyses ayant conclu à l’absence de motifs</td><td>Au moins 5 ans</td><td>L’analyse négative se conserve comme la déclaration : elle établit que la question a été examinée.</td></tr>
+    <tr><td>Évaluation des risques, formation, examens d’efficacité, approbations</td><td>Au moins 5 ans</td><td>Avec la date, la portée et l’identité de l’auteur.</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">Les documents sont conservés au Canada, sous une forme permettant de les fournir au Centre
+d’analyse dans les 30 jours d’une demande.</p>
+
+<!-- ================= 9 ================= -->
+<h2>9. Directives ministérielles et mesures spéciales</h2>
+
+<ul>
+  <li>Le demandeur suit la publication des <b>directives ministérielles</b> et des mesures de restriction visant une juridiction ou une entité désignée, et applique les mesures prescrites dès leur entrée en vigueur.</li>
+  <li>Aucun abonné dont la propriété effective se rattache à une juridiction visée n’est activé pendant la durée d’application d’une telle directive.</li>
+  <li>Les listes de sanctions sont vérifiées à l’ouverture et en continu ; une correspondance entraîne le gel des opérations et le signalement aux autorités compétentes avant toute communication à l’abonné.</li>
+</ul>
+
+<!-- ================= 10 ================= -->
+<h2>10. Formation continue</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Élément</th><th style="width:74%">Contenu</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Personnes visées</b></td><td>Toute personne ayant accès à la plateforme ou aux dossiers d’abonnés, y compris le cadre dirigeant et les ressources contractuelles.</td></tr>
+    <tr><td><b>Moment</b></td><td>Avant l’octroi de tout accès de production, puis au moins annuellement, et à chaque changement important du programme ou de la réglementation.</td></tr>
+    <tr><td><b>Contenu</b></td><td>Obligations découlant de la Loi ; méthodes de recyclage et de financement d’activités terroristes pertinentes pour un service de prélèvement et de décaissement ; indicateurs de la section 7 ; procédure de signalement interne ; interdiction de divulguer.</td></tr>
+    <tr><td><b>Forme</b></td><td>Plan écrit précisant les participants, les sujets, le mode de prestation et la fréquence ; registre des présences et des évaluations conservé.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 11 ================= -->
+<h2>11. Examen de l’efficacité</h2>
+
+<ul>
+  <li>Le programme fait l’objet d’un <b>examen de son efficacité au moins tous les deux ans</b>, la période courant à partir du début de l’examen précédent.</li>
+  <li>L’examen est confié à une ressource <b>indépendante</b> de l’exploitation et de l’agent de conformité lui-même.</li>
+  <li>Il porte sur les politiques et procédures, l’évaluation des risques, la formation, l’identification des abonnés, la surveillance, les déclarations et la tenue de documents, et comprend un <b>examen par échantillon de dossiers réels</b>.</li>
+  <li>Les résultats, les lacunes constatées et les mesures correctives proposées sont remis par écrit au cadre dirigeant <b>dans les 30 jours suivant la fin de l’examen</b>.</li>
+  <li>Le cadre dirigeant décide des mesures correctives et de leur échéance ; leur exécution est suivie jusqu’à leur clôture.</li>
+</ul>
+
+<!-- ================= 12 ================= -->
+<h2>12. Inscription, permis et calendrier</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Obligation</th><th style="width:24%">Échéance</th><th style="width:42%">Responsable</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Inscription au registre du Centre d’analyse</td><td>Avant toute offre de service</td><td>Cadre dirigeant, avec l’agent de conformité</td></tr>
+    <tr><td>Renouvellement de l’inscription</td><td>Tous les deux ans</td><td>Agent de conformité</td></tr>
+    <tr><td>Permis québécois d’entreprise de services monétaires</td><td>Avant toute offre de service</td><td>Cadre dirigeant, avec le conseiller juridique</td></tr>
+    <tr><td>Approbation du programme par le cadre dirigeant</td><td>Annuelle et à chaque modification importante</td><td>Cadre dirigeant</td></tr>
+    <tr><td>Révision de l’évaluation des risques</td><td>Annuelle, et à tout changement de produit ou de canal</td><td>Agent de conformité</td></tr>
+    <tr><td>Formation</td><td>Préalable à l’accès, puis annuelle</td><td>Agent de conformité</td></tr>
+    <tr><td>Examen de l’efficacité</td><td>Au moins tous les deux ans</td><td>Ressource indépendante</td></tr>
+    <tr><td>Rapport annuel de l’agent de conformité</td><td>Annuel</td><td>Agent de conformité</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Description des services et des processus de paiement : question 6.1. Diagrammes des
+  processus de paiement : question 6.3. Cadre de gestion des risques opérationnels : pièce 05. Cadre de réponse aux
+  incidents : pièce 06. Politiques de cybersécurité : pièce 07. Contrats avec les tiers : section 13.</p>
+</div>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Assujettissement</b></td><td>L’analyse de la section 1 est celle du demandeur. La faire confirmer par le conseiller juridique, et envisager une demande d’interprétation écrite au Centre d’analyse : c’est la conclusion dont dépend tout le reste du programme.</td></tr>
+    <tr><td><b>Régime québécois</b></td><td>Faire confirmer l’assujettissement au permis d’entreprise de services monétaires et le calendrier d’obtention, qui conditionne la date de lancement au même titre que l’enregistrement fédéral.</td></tr>
+    <tr><td><b>Agent de conformité</b></td><td>Confirmer l’acceptation du mandat par lettre, avec la description des pouvoirs, du budget et de la suppléance. Un agent nommé sans mandat écrit ne tient pas devant un examen.</td></tr>
+    <tr><td><b>Seuil de propriété effective</b></td><td>Le seuil de 25 % et les modalités de confirmation sont à valider auprès du conseiller juridique au regard de la version en vigueur du Règlement au moment du dépôt.</td></tr>
+    <tr><td><b>Indicateurs</b></td><td>Les indicateurs de la section 7 sont propres à la plateforme. Les compléter par les indicateurs publiés par le Centre d’analyse pour le secteur des entreprises de services monétaires, et les configurer effectivement dans la surveillance.</td></tr>
+    <tr><td><b>Procédures d’application</b></td><td>Le présent programme énonce les politiques. Les procédures d’application — gabarits de dossier d’abonné, formulaire de signalement interne, marche à suivre de déclaration — restent à joindre en annexe.</td></tr>
+    <tr><td><b>Deux régimes, deux examens</b></td><td>L’examen d’efficacité du présent programme et l’examen indépendant du cadre de gestion des risques opérationnels sont distincts. Vérifier qu’ils ne sont pas confiés à la même ressource sans que l’indépendance de chacun soit préservée.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

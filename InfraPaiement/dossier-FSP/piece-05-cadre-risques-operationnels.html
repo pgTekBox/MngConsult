@@ -1,0 +1,1367 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-05-cadre-risques-operationnels</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+  .meta b { font-weight: bold; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+  th.n { text-align: right; }
+  .oui { color: var(--vert); font-weight: bold; }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+  .ref { font-size: 8.5pt; color: var(--gris); font-style: italic; break-after: avoid; }
+
+  .saut { break-before: page; }
+  svg { display: block; margin: 10pt auto; break-inside: avoid; }
+
+  .formule {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 9pt;
+    background: var(--alt);
+    border: 0.5pt solid var(--ligne);
+    padding: 7pt 10pt;
+    margin: 8pt 0 10pt 0;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Cadre de gestion des risques opérationnels et de réponse aux incidents</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — section 11</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Cadre dirigeant responsable du présent cadre :</b> Yves Perron, président-directeur général</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">Le présent cadre est établi en application de l’article 5 du Règlement sur les activités
+  associées aux paiements de détail. Il énonce les objectifs d’intégrité, de confidentialité et de disponibilité que
+  le demandeur se donne, les risques qu’il recense, les mesures qu’il applique pour les atténuer, la manière dont il
+  détecte un incident et y répond, et les examens et mises à l’essai auxquels il soumet le tout. Il se lit avec la
+  description des services jointe à la question 6.1 et les diagrammes joints à la question 6.3.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. Objet, portée et proportionnalité</h2>
+
+<p>Le présent cadre couvre l’ensemble des activités associées aux paiements de détail du demandeur : les
+encaissements par débit préautorisé, les décaissements par virement de crédit, les virements Interac, la détention
+des fonds des utilisateurs finaux dans le compte en fiducie, ainsi que les systèmes, les données et les processus
+qui les portent. Il couvre également les fonctions confiées à des tiers.</p>
+
+<h3>La proportionnalité, telle que le demandeur l’entend</h3>
+
+<p>Le paragraphe 5(2) du Règlement veut que chaque aspect du cadre soit proportionné aux répercussions possibles
+d’une défaillance, compte tenu de l’ubiquité du fournisseur et de son interconnexion. Le demandeur situe ces deux
+grandeurs comme suit, à partir des volumes déclarés à la section 11 de la demande.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Grandeur</th><th style="width:26%">Valeur, an 1</th><th style="width:40%">Ce que le demandeur en tire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Utilisateurs finaux détenant un solde</td><td class="n">120 abonnés au 31 mars 2028</td><td>Population restreinte et identifiée : chaque abonné peut être joint individuellement en cas d’incident.</td></tr>
+    <tr><td>Opérations traitées</td><td class="n">41 300 · 15 860 000 $</td><td>Volume modeste ; une interruption d’une journée ouvrable touche environ 165 opérations.</td></tr>
+    <tr><td>Fonds détenus, valeur moyenne</td><td class="n">≈ 210 000 $</td><td>C’est le montant réellement exposé à une défaillance d’intégrité, non le volume annuel.</td></tr>
+    <tr><td>Fonds détenus, valeur de pointe</td><td class="n">≈ 480 000 $</td><td>Dimensionne le pire cas retenu pour les essais fondés sur des scénarios.</td></tr>
+    <tr><td>Interconnexion</td><td>Une institution parraine, un partenaire de virement, un hébergeur</td><td>Faible nombre de dépendances, mais aucune redondance : la défaillance d’un seul tiers arrête le service.</td></tr>
+    <tr><td>Ubiquité</td><td>Aucune fonction d’infrastructure partagée</td><td>Le demandeur n’est le point de passage d’aucun autre fournisseur ; une défaillance ne se propage pas au système de paiement.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>La conclusion que le demandeur en tire.</b> L’ubiquité est faible et l’interconnexion est concentrée. Le
+  cadre porte donc son effort sur deux points plutôt que de s’étendre uniformément : <b>l’intégrité du grand livre et
+  du compte en fiducie</b>, parce qu’une erreur y est irréversible pour l’utilisateur final, et <b>la dépendance aux
+  tiers</b>, parce qu’aucun d’eux n’est doublé. La disponibilité vient ensuite : un traitement par lots reporté d’une
+  journée ouvrable est une gêne, non une perte.</p>
+</div>
+
+<!-- ================= 2 ================= -->
+<h2>2. Objectifs, cibles de fiabilité et indicateurs</h2>
+<p class="ref">Alinéas 5(1)a) et 5(1)b) du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:18%">Objectif</th><th style="width:30%">Cible</th><th style="width:32%">Indicateur</th><th style="width:20%">Fréquence</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Intégrité</b></td>
+      <td>Aucun écart entre le compte de fiducie du grand livre et le relevé de l’institution parraine</td>
+      <td>Écart de rapprochement, en cents ; nombre d’écarts non résolus à la clôture du jour</td>
+      <td>Quotidienne</td>
+    </tr>
+    <tr>
+      <td><b>Intégrité</b></td>
+      <td>Invariant du grand livre vérifié sans exception<br><span class="petit">voir la note 1 de l’annexe</span></td>
+      <td>Nombre de vérifications de l’invariant du grand livre en échec</td>
+      <td>À chaque écriture</td>
+    </tr>
+    <tr>
+      <td><b>Intégrité</b></td>
+      <td>Aucun fichier de la norme 005 rejeté à l’entrée pour cause de format<br><span class="petit">fichiers de virements de débit et de crédit déposés auprès de l’institution parraine — voir la note 5 de l’annexe</span></td>
+      <td>Taux de rejet de fichier ; taux de rejet d’article</td>
+      <td>À chaque dépôt</td>
+    </tr>
+    <tr>
+      <td><b>Confidentialité</b></td>
+      <td>Aucun accès non autorisé aux données d’un abonné ou d’une contrepartie</td>
+      <td>Nombre d’accès refusés anormaux ; nombre d’incidents de confidentialité<br><span class="petit">voir la note 6 de l’annexe</span></td>
+      <td>Continue</td>
+    </tr>
+    <tr>
+      <td><b>Disponibilité</b></td>
+      <td>Portail et interface disponibles 99,5 % des heures ouvrables</td>
+      <td>Minutes d’indisponibilité, heures ouvrables</td>
+      <td>Mensuelle</td>
+    </tr>
+    <tr>
+      <td><b>Disponibilité</b></td>
+      <td>Aucun lot manqué en raison de l’heure de tombée de l’institution parraine<br><span class="petit">lots de virements de débit et de crédit du jour, trajets A et B ; le virement Interac ne se traite pas en lot — voir la note 7 de l’annexe</span></td>
+      <td>Nombre de lots transmis après l’heure de tombée</td>
+      <td>Quotidienne</td>
+    </tr>
+    <tr>
+      <td><b>Rétablissement</b></td>
+      <td>Reprise du service en 4 heures ouvrables ; perte de données nulle</td>
+      <td>Délai de reprise constaté ; point de reprise constaté</td>
+      <td>À chaque essai et à chaque incident</td>
+    </tr>
+    <tr>
+      <td><b>Détection</b></td>
+      <td>Tout incident détecté en 60 minutes ; qualification en 4 heures<br><span class="petit">voir la note 11 de l’annexe</span></td>
+      <td>Délai entre survenance et détection ; délai entre détection et qualification</td>
+      <td>À chaque incident</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="petit">Cibles proposées, à confirmer avant le dépôt et à revoir avec l’institution financière parraine,
+dont l’entente fixera notamment les heures de tombée et les délais de transmission.</p>
+
+<!-- ================= 3 ================= -->
+<h2>3. Rôles, responsabilités et ressources</h2>
+<p class="ref">Alinéas 5(1)c) et 5(1)d), paragraphes 5(5) et 5(6), articles 6 et 7 du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Rôle</th><th style="width:70%">Responsabilité au regard du présent cadre</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Cadre dirigeant</b><br><span class="petit">président-directeur général</span></td><td>Établit, met en œuvre et maintient le cadre. Approuve le cadre et chacune de ses modifications importantes. Reçoit les résultats de l’examen annuel, des mises à l’essai et de l’examen indépendant. Décide de la qualification d’un incident et autorise les notifications.</td></tr>
+    <tr><td><b>Conseil d’administration</b></td><td>Approuve le cadre au moins une fois l’an et après chaque modification importante. Le conseil est actuellement composé d’un seul administrateur, qui est aussi le cadre dirigeant — voir l’encadré ci-dessous.</td></tr>
+    <tr><td><b>Exploitation de la plateforme</b></td><td>Prépare et approuve les lots, surveille les indicateurs, exécute le rapprochement quotidien, ouvre et documente les incidents.</td></tr>
+    <tr><td><b>Ingénierie</b></td><td>Applique les correctifs, tient la configuration, exécute les essais techniques et les remises en service.</td></tr>
+    <tr><td><b>Agent de conformité</b></td><td>Programme de lutte contre le recyclage des produits de la criminalité, joint à la section 16 de la demande. Externe aux opérations ; il n’approuve aucun lot.</td></tr>
+    <tr><td><b>Ressource indépendante</b></td><td>Réalise l’examen indépendant prévu à l’article 10 du Règlement. À nommer.</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p><b>Cumul des rôles, et ce que le demandeur fait pour le corriger.</b> À la date de la demande, le demandeur est
+  une entreprise à administrateur unique : la même personne est cadre dirigeant, administrateur et responsable de
+  l’exploitation. Le demandeur ne présente pas ce cumul comme neutre. Trois mesures le compensent, et elles sont
+  vérifiables : la <b>double approbation des lots</b>, qui exige une seconde personne avant toute transmission et
+  qui ne peut être levée par le cadre dirigeant ; l’<b>examen indépendant</b> de l’article 10, confié à une ressource
+  externe et compétente ; et le caractère <b>immuable et rapproché quotidiennement</b> du grand livre, qui rend une
+  intervention unilatérale visible le lendemain. Le recrutement d’une seconde personne habilitée à approuver les lots
+  est une condition d’activation de la fonction de paiement, et non un objectif ultérieur.</p>
+</div>
+
+<h3>Ressources</h3>
+<ul>
+  <li><b>Humaines</b> — au lancement, le cadre dirigeant, une personne d’exploitation habilitée à la seconde approbation, et une ressource d’ingénierie. La formation au présent cadre et au programme de conformité est préalable à l’octroi de tout accès de production.</li>
+  <li><b>Financières</b> — une provision d’exploitation couvrant douze mois de charges fixes, indépendante des fonds des utilisateurs finaux et jamais prélevée sur le compte en fiducie, est maintenue pour financer une réponse à un incident, un examen indépendant ou une remise en service.</li>
+  <li><b>Accès en cas d’incident</b> — les coordonnées de l’institution parraine, du partenaire de virement, de l’hébergeur et de la ressource indépendante sont tenues hors ligne, avec les procédures de dégradation, de sorte qu’une panne des systèmes n’empêche pas d’y accéder.</li>
+</ul>
+
+<!-- ================= 4 ================= -->
+<div class="saut"></div>
+<h2>4. Recensement des actifs et des processus opérationnels</h2>
+<p class="ref">Alinéa 5(1)e) du Règlement. Sensibilité : effet d’une divulgation. Importance : effet d’une indisponibilité ou d’une altération.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Actif ou processus</th><th style="width:13%">Sensibilité</th><th style="width:13%">Importance</th><th style="width:48%">Motif</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Grand livre</b></td><td>Élevée</td><td>Critique</td><td>Établit la part de chaque abonné dans le compte en fiducie. Une altération est une perte de fonds pour un utilisateur final.</td></tr>
+    <tr><td><b>Compte en fiducie et accès bancaire</b></td><td>Élevée</td><td>Critique</td><td>Détient les fonds des utilisateurs finaux. Tout accès est réputé sensible.</td></tr>
+    <tr><td><b>Production et transmission des fichiers 005</b><br><span class="petit">voir la note 5 de l’annexe</span></td><td>Élevée</td><td>Critique</td><td>Porte des coordonnées bancaires de tiers et déclenche des mouvements irréversibles.</td></tr>
+    <tr><td><b>Ententes de débit préautorisé et preuves</b></td><td>Élevée</td><td>Élevée</td><td>Fondent la licéité de chaque prélèvement et la défense en cas de contestation.</td></tr>
+    <tr><td><b>Données des contreparties</b><br><span class="petit">coordonnées bancaires, renseignements personnels</span></td><td>Élevée</td><td>Élevée</td><td>Renseignements personnels de tiers qui ne sont pas clients du demandeur.</td></tr>
+    <tr><td><b>Fiches d’abonné et vérifications</b></td><td>Élevée</td><td>Moyenne</td><td>Contiennent les résultats de vérification d’entreprise et de propriété effective.</td></tr>
+    <tr><td><b>Portail et interface de programmation</b></td><td>Moyenne</td><td>Élevée</td><td>Point d’entrée des instructions ; leur indisponibilité suspend le service sans altérer les fonds.<br><span class="petit">voir la note 8 de l’annexe</span></td></tr>
+    <tr><td><b>Clés d’API, secrets et journaux d’accès</b></td><td>Élevée</td><td>Élevée</td><td>Leur compromission permettrait d’initier des opérations au nom d’un abonné.</td></tr>
+    <tr><td><b>Journaux et piste d’audit</b></td><td>Moyenne</td><td>Élevée</td><td>Seul moyen de reconstituer un incident et d’en établir la cause première.</td></tr>
+    <tr><td><b>Hébergement infonuagique</b><span class="petit"> — externalisé</span></td><td>Élevée</td><td>Critique</td><td>Porte l’ensemble des systèmes ci-dessus. Résidence des données au Canada exigée par entente.</td></tr>
+    <tr><td><b>Portail partenaire</b></td><td>Moyenne</td><td>Moyenne</td><td>Provisionnement d’abonnés par un tiers, sans accès aux fonds ni au grand livre.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 5 ================= -->
+<h2>5. Recensement des risques opérationnels</h2>
+<p class="ref">Alinéa 5(1)f) du Règlement. Les onze catégories prévues sont reprises telles quelles.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:24%">Catégorie</th><th style="width:40%">Risque principal chez le demandeur</th><th style="width:36%">Atténuation dominante</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Continuité des activités et résilience</b></td><td>Indisponibilité de l’hébergeur ou de l’institution parraine un jour de dépôt.</td><td>Procédure de dégradation, report du lot au jour ouvrable suivant, avis aux abonnés touchés.</td></tr>
+    <tr><td><b>Cybersécurité</b></td><td>Compromission d’une clé d’API ou d’un compte d’administration permettant d’initier des opérations.</td><td>Authentification à deux facteurs, moindre privilège, rotation des clés, double approbation des lots.<br><span class="petit">voir la note 2 de l’annexe</span></td></tr>
+    <tr><td><b>Fraude</b></td><td>Prélèvement sans entente valide, ou abonné qui détourne la plateforme pour encaisser sans droit.<br><span class="petit">voir la note 3 de l’annexe</span></td><td>Vérification d’entreprise préalable, droit d’audit sur les ententes, plafonds par abonné, surveillance du taux de retour.</td></tr>
+    <tr><td><b>Gestion des données et des renseignements</b></td><td>Divulgation de coordonnées bancaires de contreparties.</td><td>Chiffrement au repos et en transit, cloisonnement par locataire, journalisation des accès.<br><span class="petit">voir la note 4 de l’annexe</span></td></tr>
+    <tr><td><b>Technologies de l’information</b></td><td>Défaut logiciel produisant un fichier 005 non conforme ou une écriture erronée.<br><span class="petit">voir la note 5 de l’annexe</span></td><td>Cycle de développement contrôlé, jeu d’essais de conformité au format, vérification de l’invariant du grand livre à chaque écriture.</td></tr>
+    <tr><td><b>Ressources humaines</b></td><td>Départ ou indisponibilité de l’unique personne connaissant une procédure.</td><td>Documentation opératoire, suppléance nommée, accès de secours scellés.</td></tr>
+    <tr><td><b>Conception et mise en œuvre de processus</b></td><td>Rapprochement omis ou retour non imputé, laissant un écart s’installer.</td><td>Rapprochement quotidien obligatoire avec blocage de la clôture, file des retours non rapprochés.</td></tr>
+    <tr><td><b>Conception et mise en œuvre des produits</b></td><td>Plafond ou délai de retenue mal calibré exposant le demandeur aux retours.</td><td>Revue des plafonds et de la réserve à l’activation, puis selon l’historique de retours.</td></tr>
+    <tr><td><b>Gestion du changement</b></td><td>Mise en production altérant le comportement d’un trajet de fonds.</td><td>Essais préalables à toute modification importante, remise en service documentée, approbation du cadre dirigeant.</td></tr>
+    <tr><td><b>Sécurité physique des personnes et des actifs</b></td><td>Perte ou vol d’un poste de travail donnant accès aux systèmes.</td><td>Chiffrement intégral des postes, effacement à distance, aucun stockage local de données de production.</td></tr>
+    <tr><td><b>Tiers</b><br><span class="petit">fournisseurs, mandataires, entités affiliées</span></td><td>Défaillance ou résiliation par l’institution parraine, le partenaire de virement ou l’hébergeur.</td><td>Ententes écrites, évaluation régulière, plans de réponse coordonnés, veille sur une solution de rechange.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 6 ================= -->
+<div class="saut"></div>
+<h2>6. Les mesures de protection</h2>
+<p class="ref">Alinéa 5(1)g) du Règlement. Les huit domaines prévus pour les technologies de l’information et la cybersécurité sont repris tels quels.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:28%">Domaine</th><th style="width:72%">Mesure appliquée</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Gestion des accès</b><br><span class="petit">y compris l’accès physique</span></td><td>Comptes nominatifs, moindre privilège, authentification à deux facteurs obligatoire sur tout accès de production. Séparation des droits de préparation et d’approbation d’un lot. Revue trimestrielle des accès. Aucun local physique ne porte de données de production.<br><span class="petit">voir la note 9 de l’annexe</span></td></tr>
+    <tr><td><b>Gestion des vulnérabilités et correctifs</b></td><td>Veille sur les composants employés, application des correctifs critiques dans les délais fixés par leur gravité, suivi des dépendances applicatives.</td></tr>
+    <tr><td><b>Logiciels de sécurité</b></td><td>Protection contre les programmes malveillants sur les postes de travail et les serveurs, mise à jour automatique.</td></tr>
+    <tr><td><b>Configuration sécurisée des appareils</b></td><td>Configuration de référence documentée, chiffrement intégral des postes, verrouillage automatique, effacement à distance.</td></tr>
+    <tr><td><b>Sécurité des réseaux</b></td><td>Chiffrement en transit, restriction des accès administratifs par adresse, cloisonnement des environnements de développement et de production.<br><span class="petit">voir la note 10 de l’annexe</span></td></tr>
+    <tr><td><b>Services infonuagiques et externalisés</b></td><td>Hébergement au Canada sous entente écrite prévoyant la résidence des données, la journalisation et la notification des incidents. Sauvegardes chiffrées, restauration mise à l’essai.</td></tr>
+    <tr><td><b>Supports sécurisés</b></td><td>Aucun support amovible en production. Les exports sont chiffrés, horodatés et journalisés.</td></tr>
+    <tr><td><b>Cycle de développement sécurisé</b></td><td>Revue de code par une seconde personne, jeu d’essais automatisé sur le format 005 et sur l’invariant du grand livre, environnements séparés, aucune donnée de production en développement.<br><span class="petit">voir la note 5 de l’annexe</span></td></tr>
+  </tbody>
+</table>
+
+<h3>Les mesures propres aux fonds et au grand livre</h3>
+<ul>
+  <li><b>Séparation</b> — les fonds des utilisateurs finaux sont dans un compte en fiducie à vocation unique, distinct des fonds propres, sans découvert autorisé.</li>
+  <li><b>Écriture en partie double et immuable</b> — aucune écriture n’est modifiée ni effacée ; une correction est une contre-passation.</li>
+  <li><b>Invariant vérifié en continu</b> — la somme des obligations envers les abonnés est confrontée au compte de fiducie à chaque écriture.</li>
+  <li><b>Rapprochement quotidien</b> — le compte de fiducie du grand livre est confronté au relevé de l’institution parraine ; un écart bloque la clôture du jour.</li>
+  <li><b>Plafonds</b> — 25 000 $ par opération, 250 000 $ par fichier, 500 000 $ par jour pour la plateforme, 50 000 $ par jour et par abonné par défaut. Un dépassement annule le lot.</li>
+  <li><b>Retenue et réserve</b> — cinq jours ouvrables de retenue et une réserve de 10 % du volume de débits sur trente jours absorbent les retours.</li>
+</ul>
+
+<!-- ================= 7 ================= -->
+<h2>7. Détection et contrôle continu</h2>
+<p class="ref">Alinéas 5(1)h) et 5(1)j) du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Signal surveillé</th><th style="width:26%">Seuil interne</th><th style="width:44%">Suite donnée</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Écart de rapprochement</td><td>Tout écart, dès un cent</td><td>Incident ouvert d’office ; clôture du jour bloquée ; enquête immédiate.</td></tr>
+    <tr><td>Vérification de l’invariant du grand livre en échec</td><td>Une seule occurrence</td><td>Suspension des transmissions ; qualification en 4 heures.<br><span class="petit">voir la note 11 de l’annexe</span></td></tr>
+    <tr><td>Rejet d’un fichier à l’entrée</td><td>Une seule occurrence</td><td>Correction et redépôt le jour même si l’heure de tombée le permet ; avis aux abonnés touchés à défaut.</td></tr>
+    <tr><td>Taux de retour d’un abonné<br><span class="petit">voir la note 12 de l’annexe</span></td><td>Au-delà du seuil porté à sa fiche</td><td>Révision du plafond, de la réserve, et examen des ententes de débit préautorisé.</td></tr>
+    <tr><td>Indisponibilité du portail ou de l’interface</td><td>15 minutes continues</td><td>Incident ouvert ; avis aux abonnés si l’indisponibilité dépasse une heure ouvrable.</td></tr>
+    <tr><td>Accès refusés anormaux, connexions inhabituelles</td><td>Selon le profil surveillé</td><td>Vérification, et suspension de la clé ou du compte en cause au besoin.</td></tr>
+    <tr><td>Avis de sécurité d’un tiers<br><span class="petit">voir la note 13 de l’annexe</span></td><td>Tout avis touchant un composant employé</td><td>Évaluation de l’exposition dans le délai fixé par la gravité.</td></tr>
+  </tbody>
+</table>
+
+<p>Le contrôle continu s’appuie sur l’enregistrement et la surveillance des journaux, la détection des programmes
+malveillants, les défenses du réseau, la détection des intrusions et des vulnérabilités, et la veille sur les
+menaces. Les rôles de signalement, les seuils et les délais internes ci-dessus sont documentés et connus des
+personnes qui les appliquent.</p>
+
+<!-- ================= 8 ================= -->
+<div class="saut"></div>
+<h2>8. Plan de réponse et de rétablissement</h2>
+<p class="ref">Alinéa 5(1)i) du Règlement.</p>
+
+<svg viewBox="0 0 1000 300" width="84%" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, sans-serif" role="img" aria-label="Chronologie d’un incident">
+  <defs>
+    <marker id="fl" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto">
+      <path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/>
+    </marker>
+  </defs>
+
+  <rect x="490" y="14" width="210" height="32" rx="4" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.2"/>
+  <text x="595" y="36" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6413">au plus 48 heures</text>
+  <line x1="490" y1="46" x2="490" y2="60" stroke="#d9a03c" stroke-width="1.2"/>
+  <line x1="700" y1="46" x2="700" y2="60" stroke="#d9a03c" stroke-width="1.2"/>
+
+  <line x1="40" y1="60" x2="965" y2="60" stroke="#0f6e5d" stroke-width="2.5" marker-end="url(#fl)"/>
+
+  <g font-size="16" fill="#1f2320">
+    <circle cx="70" cy="60" r="9" fill="#0f6e5d"/>
+    <text x="70" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Survenance</text>
+
+    <circle cx="270" cy="60" r="9" fill="#0f6e5d"/>
+    <text x="270" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Détection</text>
+    <text x="270" y="112" text-anchor="middle">contrôle continu</text>
+    <text x="270" y="132" text-anchor="middle">ou avis d’un tiers</text>
+
+    <circle cx="490" cy="60" r="9" fill="#0f6e5d"/>
+    <text x="490" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Qualification</text>
+    <text x="490" y="112" text-anchor="middle">répercussions</text>
+    <text x="490" y="132" text-anchor="middle">importantes ?</text>
+
+    <circle cx="700" cy="60" r="9" fill="#d9a03c"/>
+    <text x="700" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#8a6413">Notification</text>
+    <text x="700" y="112" text-anchor="middle">Banque du Canada,</text>
+    <text x="700" y="132" text-anchor="middle">utilisateurs finaux,</text>
+    <text x="700" y="152" text-anchor="middle">FSP et chambres touchés</text>
+
+    <circle cx="920" cy="60" r="9" fill="#0f6e5d"/>
+    <text x="920" y="90" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Clôture</text>
+    <text x="920" y="112" text-anchor="middle">et documentation</text>
+  </g>
+
+  <line x1="270" y1="170" x2="270" y2="288" stroke="#d8dedb" stroke-width="1" stroke-dasharray="4 4"/>
+  <line x1="920" y1="170" x2="920" y2="288" stroke="#d8dedb" stroke-width="1" stroke-dasharray="4 4"/>
+
+  <rect x="270" y="196" width="650" height="34" rx="4" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.2"/>
+  <text x="595" y="219" text-anchor="middle" font-size="16" fill="#1f2320">Mesures immédiates, atténuation et rétablissement</text>
+
+  <rect x="270" y="240" width="650" height="34" rx="4" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.2"/>
+  <text x="595" y="263" text-anchor="middle" font-size="16" fill="#1f2320">Enquête sur la cause première, puis traitement de celle-ci</text>
+</svg>
+
+<p class="petit" style="text-align:center;margin:2pt 0 0 0">L’atténuation et l’enquête ne suivent pas la notification : elles
+commencent dès la détection et se poursuivent en parallèle.</p>
+
+<h3 style="margin-top:8pt">Ce que le plan prévoit</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Élément</th><th style="width:70%">Contenu</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Mise en œuvre graduée</b></td><td>L’intensité de la réponse augmente avec la gravité constatée, jusqu’à la suspension des transmissions et le gel des opérations d’un abonné. La coordination avec les tiers fournisseurs de services est prévue à chaque palier.</td></tr>
+    <tr><td><b>Mesures immédiates</b></td><td>Prises pendant l’enquête, pour prévenir ou atténuer toute autre atteinte à l’intégrité, à la confidentialité ou à la disponibilité : suspension d’une clé, retrait d’un accès, arrêt d’un lot, blocage d’un compte.</td></tr>
+    <tr><td><b>Atténuation des répercussions</b></td><td>Dans le délai minimum requis, au besoin par des processus manuels ou des solutions de rechange : dépôt du lot au jour ouvrable suivant, transmission par voie de secours convenue avec l’institution parraine, avis direct aux abonnés touchés.</td></tr>
+    <tr><td><b>Enquête</b></td><td>Amorcée immédiatement. Elle établit la cause première et détermine les répercussions sur les activités, les utilisateurs finaux et les autres fournisseurs.</td></tr>
+    <tr><td><b>Traitement de la cause première</b></td><td>Aussitôt que possible après son identification, de manière à préserver l’intégrité, la confidentialité et la disponibilité.</td></tr>
+    <tr><td><b>Signalement et coordination</b></td><td>Politiques de communication interne et externe, coordination avec les tiers, et respect des obligations légales de signalement — dont l’article 18 de la Loi et, s’il y a lieu, les obligations en matière de renseignements personnels.</td></tr>
+    <tr><td><b>Détermination de l’état des opérations</b></td><td>Récupération des données perdues à partir des sauvegardes et des journaux, réparation des atteintes à l’intégrité par contre-passation, et confirmation de l’invariant du grand livre avant reprise.</td></tr>
+    <tr><td><b>Tenue de documents</b></td><td>Pour chaque incident : chronologie, cause première, répercussions, mesures prises et résultat obtenu.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 9 ================= -->
+<div class="saut"></div>
+<h2>9. Notification des incidents</h2>
+<p class="ref">Article 18 de la Loi ; articles 11 et 12 du Règlement.</p>
+
+<p>Le demandeur notifie sans délai, et au plus tard <b>48 heures</b> après avoir déterminé qu’un incident a des
+répercussions importantes, la Banque du Canada ainsi que les utilisateurs finaux, les autres fournisseurs de
+services de paiement et les chambres de compensation désignées qui sont touchés de manière importante.</p>
+
+<h3>Qui est visé, concrètement</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Catégorie de la Loi</th><th style="width:70%">Ce qu’elle recouvre chez le demandeur</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Utilisateurs finaux touchés</b></td>
+      <td>Les abonnés dont le solde, les opérations ou les données sont en cause, et, lorsque l’atteinte les vise directement, leurs contreparties — client payeur, fournisseur ou employé bénéficiaire — même si ces personnes n’ont aucune relation contractuelle avec le demandeur.</td>
+    </tr>
+    <tr>
+      <td><b>Autres fournisseurs de services de paiement</b></td>
+      <td>Ceux qui interviennent dans le même transfert électronique de fonds : le partenaire de virement Interac, et tout partenaire-distributeur ou éditeur tiers inscrit à ce titre dont les propres utilisateurs sont touchés par l’incident.</td>
+    </tr>
+    <tr>
+      <td><b>Chambres de compensation<br>de systèmes désignés</b></td>
+      <td>La chambre de compensation d’un système de compensation et de règlement désigné au sens de la <i>Loi sur la compensation et le règlement des paiements</i>. Pour les activités du demandeur, il s’agit de <b>Paiements Canada</b>, chambre de compensation des systèmes par lesquels transitent ses fichiers et leur règlement — le Système automatisé de compensation et de règlement et Lynx —, et, pour le trajet C, de l’exploitant du système de virement Interac dans la mesure où celui-ci est désigné.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="petit">L’institution financière parraine n’appartient à aucune de ces trois catégories au sens de la Loi ;
+elle est avisée en vertu de l’entente qui lie le demandeur, et sans attendre, puisque c’est par elle que passent la
+suspension des transmissions et le traitement des retours.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Situation</th><th style="width:66%">Qualification retenue par le demandeur</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Fonds d’un utilisateur final perdus de façon irrécouvrable ou devenus indisponibles de façon permanente</td><td>Répercussions importantes dans tous les cas.</td></tr>
+    <tr><td>Atteinte à l’intégrité du grand livre, des enregistrements d’opérations, ou erreur d’acheminement ou de calcul</td><td>Répercussions importantes dès qu’un solde d’abonné ou un paiement en est affecté.</td></tr>
+    <tr><td>Accès ou communication non autorisés de renseignements confidentiels</td><td>Répercussions importantes lorsqu’il en résulte un risque réel de préjudice grave, ou qu’un tel risque est créé.</td></tr>
+    <tr><td>Panne touchant la disponibilité des activités de paiement</td><td>Répercussions importantes au-delà d’une heure ouvrable, ou dès qu’un lot manque une heure de tombée.</td></tr>
+    <tr><td>Procédure d’insolvabilité</td><td>Répercussions importantes dans tous les cas.</td></tr>
+  </tbody>
+</table>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Destinataire</th><th style="width:70%">Contenu de l’avis</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Banque du Canada</b><br><span class="petit">par le portail de la Banque</span></td><td>Coordonnées du demandeur et de la personne-ressource ; chronologie de l’incident — début, détection, détermination des répercussions importantes, résolution ; mode de détection et description sommaire ; activités de paiement touchées ; ampleur des répercussions, dont le nombre de personnes touchées ; mesures de réponse prises ; analyse de la cause première.</td></tr>
+    <tr><td><b>Utilisateurs finaux, fournisseurs et chambres touchés</b></td><td>Nom du demandeur ; description de l’incident avec les dates de début, de détection et de résolution ; répercussions propres au destinataire ; mesures correctives recommandées.</td></tr>
+  </tbody>
+</table>
+
+<p>La Banque peut exiger des avis de suivi ; le demandeur y répond dans les formes et les délais prescrits, et
+poursuit les avis jusqu’à ce que tous les éléments requis aient été communiqués. Les avis, leurs destinataires et
+leurs dates sont conservés au dossier de l’incident.</p>
+
+<!-- ================= 10 ================= -->
+<h2>10. Tiers fournisseurs de services et mandataires</h2>
+<p class="ref">Paragraphes 5(3) à 5(5) du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Tiers</th><th style="width:30%">Dépendance</th><th style="width:44%">Surveillance exercée</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Institution financière parraine</b></td><td>Compte en fiducie, identité d’émetteur, dépôt des fichiers, accusés et retours</td><td>Entente écrite ; évaluation annuelle ; rapprochement quotidien du relevé ; plan de réponse coordonné et voie de transmission de secours convenue.</td></tr>
+    <tr><td><b>Partenaire de virement Interac</b></td><td>Rail parallèle, envoi et dépôt</td><td>Entente écrite ; suivi des états de virement ; bascule sur le rail par lots si le partenaire est indisponible.</td></tr>
+    <tr><td><b>Hébergeur infonuagique</b></td><td>Ensemble des systèmes et des données</td><td>Entente écrite prévoyant la résidence des données au Canada, la journalisation et la notification des incidents ; restauration mise à l’essai.</td></tr>
+    <tr><td><b>Fournisseur de vérification d’entreprise</b></td><td>Vérification à l’ouverture et en continu</td><td>Entente écrite ; suivi de la qualité des résultats ; procédure manuelle de repli, l’activation d’un abonné étant reportée à défaut.</td></tr>
+    <tr><td><b>Partenaires-distributeurs</b><br><span class="petit">mandataires</span></td><td>Provisionnement et gestion d’abonnés</td><td>Entente distincte ; aucun accès aux fonds, au compte en fiducie ni au grand livre ; revue des accès ; obligation de signalement des incidents au demandeur.</td></tr>
+  </tbody>
+</table>
+
+<p>Le demandeur évalue régulièrement ces tiers, surveille l’exécution de leurs rôles et responsabilités, et suit la
+prestation des services. Les plans de réponse aux incidents sont coordonnés avec eux. La liste des contrats et la
+procédure de supervision figurent à la section 13 de la demande.</p>
+
+<!-- ================= 11 ================= -->
+<div class="saut"></div>
+<h2>11. Mises à l’essai</h2>
+<p class="ref">Article 9 du Règlement.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Catégorie d’essai</th><th style="width:48%">Portée</th><th style="width:26%">Fréquence</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Vérification et validation des contrôles</b></td><td>Double approbation, plafonds, moindre privilège, vérification de l’invariant du grand livre, blocage de la clôture sur écart de rapprochement.</td><td>Semestrielle</td></tr>
+    <tr><td><b>Essais fondés sur des scénarios</b></td><td>Perte de l’hébergeur ; indisponibilité de l’institution parraine un jour de dépôt ; fichier rejeté à l’entrée ; vague de retours au pire cas des fonds détenus ; compromission d’une clé d’API ; départ de l’unique personne détenant une procédure.</td><td>Annuelle</td></tr>
+    <tr><td><b>Essais relatifs aux modifications</b></td><td>Toute modification importante des systèmes, des politiques, des procédures ou des opérations, y compris un changement de tiers ou de format de fichier.</td><td>Avant chaque mise en service</td></tr>
+    <tr><td><b>Restauration des sauvegardes</b></td><td>Reconstitution du grand livre et confirmation de l’invariant du grand livre à partir des seules sauvegardes.</td><td>Semestrielle</td></tr>
+  </tbody>
+</table>
+
+<p>Les essais associent les intéressés internes concernés, dont les décideurs et les personnes responsables de la
+gestion des risques opérationnels, et tiennent compte de la dépendance aux tiers fournisseurs de services. Chaque
+essai est documenté — date, méthode, résultats, mesures correctives — et ses résultats sont remis au cadre
+dirigeant.</p>
+
+<!-- ================= 12 ================= -->
+<h2>12. Examen interne et examen indépendant</h2>
+<p class="ref">Articles 8 et 10 du Règlement.</p>
+
+<h3>Examen interne</h3>
+<p>Le cadre est examiné au moins une fois par année, et avant toute modification importante des activités ou des
+systèmes. L’examen porte sur la conformité au Règlement, sur l’efficacité du cadre à atteindre ses objectifs
+d’intégrité, de confidentialité et de disponibilité, sur la suffisance des ressources humaines et financières, sur
+les systèmes, politiques, procédures, processus et contrôles, ainsi que sur les arrangements conclus avec les tiers
+et les mandataires. Sa date, sa portée, sa méthodologie et ses résultats sont documentés, de même que les lacunes et
+les vulnérabilités relevées, et les résultats sont soumis au cadre dirigeant pour approbation.</p>
+
+<h3>Examen indépendant</h3>
+<p>Le cadre est soumis à une ressource indépendante et compétente, chargée de découvrir les lacunes et les
+vulnérabilités et d’en suivre la correction. Compte tenu du cumul des rôles décrit à la section 3, le demandeur
+considère cet examen non pas comme une formalité annuelle mais comme le principal contrepoids externe à sa taille.</p>
+
+<h3>Calendrier</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:40%">Obligation</th><th style="width:26%">Échéance</th><th style="width:34%">Responsable</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Approbation du cadre par le cadre dirigeant et le conseil</td><td>Annuelle, et après chaque modification importante</td><td>Cadre dirigeant et conseil</td></tr>
+    <tr><td>Examen interne du cadre</td><td>Annuel, et avant toute modification importante</td><td>Cadre dirigeant</td></tr>
+    <tr><td>Examen indépendant</td><td>Selon le cycle convenu avec la ressource indépendante</td><td>Ressource indépendante</td></tr>
+    <tr><td>Essais fondés sur des scénarios</td><td>Annuels</td><td>Exploitation et ingénierie</td></tr>
+    <tr><td>Vérification des contrôles et restauration des sauvegardes</td><td>Semestrielles</td><td>Ingénierie</td></tr>
+    <tr><td>Revue des accès</td><td>Trimestrielle</td><td>Cadre dirigeant</td></tr>
+    <tr><td>Rapprochement du compte en fiducie</td><td>Quotidien</td><td>Exploitation</td></tr>
+    <tr><td>Déclaration annuelle à la Banque du Canada</td><td>Au plus tard le 31 mars</td><td>Cadre dirigeant</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 13 ================= -->
+<h2>13. Documentation et conservation</h2>
+<p class="ref">Articles 6 et 8(3) du Règlement ; obligations de tenue de documents.</p>
+
+<ul>
+  <li>Le présent cadre est écrit, daté, versionné, et mis à la disposition de toute personne qui participe à sa mise en œuvre.</li>
+  <li>Il est protégé contre la suppression, la destruction et la modification non autorisées : conservation versionnée, accès en écriture restreint, journalisation des modifications.</li>
+  <li>Sont conservés au Canada pendant sept ans : le grand livre et les paiements, les journaux et la piste d’audit, les dossiers d’incident, les rapports d’examen et d’essai, les approbations du cadre dirigeant et du conseil.</li>
+  <li>Chaque incident donne lieu à un dossier distinct portant sa chronologie, sa cause première, ses répercussions, les mesures prises, les avis émis et le résultat obtenu.</li>
+</ul>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Description des services et des processus de paiement : question 6.1. Exemples de
+  contrats et d’ententes : question 6.2. Diagrammes des processus de paiement : question 6.3. Schéma du flux de
+  fonds et description du compte en fiducie : section 12. Contrats avec les tiers et procédure de supervision :
+  section 13. Programme de conformité : section 16.</p>
+</div>
+
+<!-- ================= ANNEXE — NOTES EXPLICATIVES ================= -->
+<div class="saut"></div>
+<h2>Annexe — Notes explicatives</h2>
+
+<p>Certaines cibles et certains mécanismes du présent cadre sont énoncés en une ligne dans les tableaux qui
+précèdent. La présente annexe les développe, pour le lecteur qui souhaite comprendre ce que le demandeur s’engage
+exactement à faire. Chaque note renvoie à la section d’où elle provient.</p>
+
+<h3>Note 1 — L’invariant du grand livre vérifié sans exception</h3>
+<p class="ref">Renvoi : section 2, cible d’intégrité.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Ce que le mot signifie</h4>
+
+<p>Un <b>invariant</b> est une affirmation sur l’état d’un système qui doit être vraie en tout temps. Le terme est
+emprunté aux mathématiques et à l’informatique : ce qui ne varie pas pendant que le reste varie. Le système, lui,
+bouge sans cesse — des opérations entrent, des écritures s’ajoutent, des soldes changent — et l’invariant est la
+propriété qui doit tenir avant et après chacun de ces changements.</p>
+
+<p>La distinction avec un contrôle est déterminante. <b>Un contrôle qualifie une action</b> : un plafond examine une
+opération et l’autorise ou la refuse. <b>Un invariant qualifie un état</b> : il ne regarde aucune opération en
+particulier, il constate que l’ensemble est cohérent. Lorsqu’un contrôle échoue, il faut interpréter ; lorsqu’un
+invariant est faux, il n’y a rien à interpréter. L’état n’est pas imparfait, il est invalide, et l’enquête qui suit
+ne sert pas à établir <i>s’il</i> y a un problème mais <i>pourquoi</i> il y en a un. C’est ce qui justifie que la
+section 7 suspende les transmissions dès la première occurrence, sans attendre une seconde.</p>
+
+<p>Un vestiaire en donne l’image la plus simple : la règle veut que chaque manteau reçoive un jeton ; l’invariant
+veut que le nombre de jetons remis égale le nombre de manteaux sur les supports. Nul besoin de savoir qui a pris
+quoi — si les deux nombres diffèrent, quelque chose ne va pas.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">L’invariant du grand livre</h4>
+
+<p>Il s’agit de l’égalité posée à la section 4.2 de la description des services jointe à la question 6.1 :</p>
+
+<div class="formule">
+  Fiducie = Σ soldes des abonnés + Σ réserves + produits + opérations en compensation
+</div>
+
+<p>Elle énonce que chaque dollar inscrit au compte de fiducie appartient à quelqu’un et que le grand livre sait à
+qui : soit à un abonné — son solde ou sa réserve —, soit au demandeur, par les frais portés aux produits, soit à une
+opération encore en cours entre l’initiation et le règlement. Si les deux membres de l’égalité divergent, c’est
+qu’un montant est apparu, a disparu, ou n’est plus attribuable. Chez un fournisseur qui détient des fonds
+d’utilisateurs finaux, c’est la définition même d’une atteinte à l’intégrité.</p>
+
+<p><b>Vérifié</b> signifie que l’égalité est recalculée et confrontée <b>à chaque écriture</b>, à la clôture de la
+transaction comptable, et non échantillonnée ni recalculée en fin de journée. La précision a son importance :
+entre le débit et le crédit d’une même écriture, l’égalité est momentanément fausse. L’invariant du grand livre porte donc sur
+chaque état <b>observable</b> du grand livre, et non sur chaque instant — c’est la transaction qui rend cette
+distinction possible, en ne laissant jamais voir l’état intermédiaire. Une écriture qui romprait l’invariant du grand livre
+est refusée avant d’être inscrite, plutôt que constatée après coup. C’est ce qui distingue un invariant d’un rapport
+de contrôle : le premier empêche, le second signale.</p>
+
+<p><b>Sans exception</b> énonce le seuil, qui est zéro. Là où une cible de disponibilité tolère une marge, celle-ci
+n’admet aucune occurrence : l’indicateur correspondant — le nombre de vérifications de l’invariant du grand livre en échec — est un
+compteur qui doit demeurer nul, et non un taux à surveiller. C’est la raison pour laquelle la section 7 traite une
+occurrence unique comme un déclencheur, avec suspension des transmissions et qualification en quatre heures.</p>
+
+<div class="encadre">
+  <p><b>Ce que l’invariant du grand livre ne couvre pas.</b> Il établit la <b>cohérence interne</b> du grand livre ; il ne démontre
+  pas que les fonds sont effectivement à la banque. Un grand livre parfaitement cohérent peut décrire un compte en
+  fiducie qui, dans les faits, ne porte pas la somme annoncée. C’est le <b>rapprochement quotidien</b> avec le relevé
+  de l’institution financière parraine qui répond à cette seconde question. Les deux contrôles sont complémentaires
+  et ne se remplacent pas : l’un vérifie que le registre se tient par lui-même, l’autre qu’il correspond à la
+  réalité bancaire.</p>
+</div>
+
+<p>Le demandeur assume la conséquence de cet engagement : un échec de l’invariant du grand livre constitue par construction une
+atteinte à l’intégrité, et devient donc un candidat à la notification prévue à l’article 18 de la Loi dès qu’un
+solde d’abonné en est affecté, conformément à la qualification retenue à la section 9.</p>
+
+<h3>Note 2 — Les quatre mesures qui protègent l’initiation d’une opération</h3>
+<p class="ref">Renvoi : section 5, catégorie « Cybersécurité » ; voir aussi la section 6, gestion des accès.</p>
+
+<p>Le risque principal, chez le demandeur, n’est pas qu’un tiers parvienne à <i>lire</i> des données : c’est qu’il
+parvienne à <b>initier une opération</b> au nom d’un abonné, et donc à déplacer des fonds. Les quatre mesures citées
+à la section 5 ne sont pas quatre variantes d’une même précaution. Chacune intervient à un moment différent de la
+même chaîne d’attaque.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:28%">Mesure</th><th style="width:36%">Ce qu’elle empêche</th><th style="width:36%">Ce qu’elle ne fait pas</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Authentification à deux facteurs</b></td>
+      <td>Qu’un identifiant volé, deviné ou réutilisé d’un autre service suffise à entrer. L’accès exige en outre un second facteur détenu physiquement par la personne.</td>
+      <td>Elle ne protège pas contre un appareil déjà compromis, ni contre une clé d’API, qui n’ouvre pas de session.</td>
+    </tr>
+    <tr>
+      <td><b>Moindre privilège</b></td>
+      <td>Qu’un accès obtenu devienne un accès général. Chaque compte et chaque clé n’ouvrent que ce que le rôle exige, et la clé d’un abonné ne porte que sur ses propres données, par le cloisonnement multi-locataire.</td>
+      <td>Elle ne réduit pas la probabilité d’une compromission : elle en borne la portée.</td>
+    </tr>
+    <tr>
+      <td><b>Rotation des clés</b></td>
+      <td>Qu’une clé ou un secret compromis à l’insu du demandeur conserve indéfiniment sa valeur. Les clés ont une durée de vie limitée, sont remplacées périodiquement, et révoquées immédiatement au moindre doute.</td>
+      <td>Elle ne détecte pas la compromission : elle en raccourcit la fenêtre.</td>
+    </tr>
+    <tr>
+      <td><b>Double approbation des lots</b></td>
+      <td>Qu’une seule identité, même parfaitement légitime en apparence, transmette des fonds. Un lot créé par une personne doit être approuvé par une autre, et aucun compte ne cumule les deux droits sur un même lot.</td>
+      <td>Elle n’empêche pas l’intrusion : elle empêche que l’intrusion produise un paiement.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Pourquoi les quatre ensemble.</b> Les trois premières mesures reposent sur le secret : elles rendent une
+  compromission moins probable, moins étendue et moins durable, mais aucune ne survit à un attaquant qui détient
+  effectivement un accès légitime. La quatrième ne repose pas sur le secret du tout : elle exige <b>deux identités
+  distinctes</b>, et conserve donc son effet même lorsque les trois autres ont échoué. C’est la raison pour laquelle
+  elle figure aussi, à la section 3, parmi les contrepoids au cumul des rôles.</p>
+  <p>Cette qualité a une condition, et le demandeur la nomme : la double approbation ne produit son effet que si la
+  seconde personne <b>existe réellement</b> et n’est pas le cadre dirigeant lui-même. C’est pourquoi le présent cadre
+  fait du recrutement d’une seconde personne habilitée une condition d’activation de la fonction de paiement, et non
+  un objectif ultérieur.</p>
+</div>
+
+<div class="saut"></div>
+<h3>Note 3 — Le risque de fraude porté par l’abonné</h3>
+<p class="ref">Renvoi : section 5, catégorie « Fraude » ; voir aussi la section 5.5 de la question 6.1.</p>
+
+<p>Le risque de fraude du demandeur n’est pas d’abord celui d’un intrus : c’est celui d’un <b>abonné</b>, c’est-à-dire
+d’une personne à qui la plateforme a été ouverte régulièrement. Il prend deux formes, qui n’appellent pas les mêmes
+mesures.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Le prélèvement sans entente valide</h4>
+
+<p>Un abonné initie un encaissement sur une personne qui n’a jamais signé d’entente de débit préautorisé, ou qui en
+a signé une pour un autre montant, une autre échéance ou un autre bénéficiaire, ou encore une entente expirée ou
+révoquée. Le geste peut être une négligence — des coordonnées reprises d’un ancien dossier, une entente non mise à
+jour après un changement de montant — comme il peut être délibéré. Le résultat est le même : le payeur conteste,
+l’opération revient, et la règle H1 demande qui répondait de la validité de l’entente.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">L’abonné qui détourne la plateforme</h4>
+
+<p>Cas plus grave, parce qu’il n’est pas une défaillance de contrôle à l’intérieur d’un compte légitime : le compte
+lui-même ne l’est pas. L’abonné souscrit dans le but d’encaisser auprès de personnes qui ne sont pas ses clients, ou
+son activité déclarée sert de couverture. La plateforme fonctionne alors exactement comme prévu — c’est l’usage qui
+est frauduleux.</p>
+
+<div class="encadre">
+  <p><b>Pourquoi ce risque pèse sur le demandeur et non sur l’abonné seul.</b> Le modèle retenu à la section 5.5 de
+  la question 6.1 fait du demandeur le <b>bénéficiaire inscrit</b>, pour le compte de l’abonné : une seule identité
+  d’émetteur auprès de l’institution parraine, une seule lettre d’engagement du bénéficiaire. C’est donc le demandeur,
+  et non l’abonné, qui répond devant l’institution parraine et devant la règle H1 de la validité de chaque
+  prélèvement. La faute de l’abonné devient sa responsabilité, et le remboursement du payeur, sa charge si le solde
+  de l’abonné ne suffit pas. Ce risque est le prix assumé d’un modèle qui évite à chaque abonné d’avoir à obtenir sa
+  propre identité d’émetteur.</p>
+</div>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Les mesures, et leur ordre</h4>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Mesure</th><th style="width:16%">Moment</th><th style="width:58%">Effet recherché</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Vérification d’entreprise préalable</b></td><td>Avant l’activation</td><td>Écarter l’abonné illégitime avant qu’il n’ait accès au rail : existence, propriété effective, sanctions, adresse, représentant autorisé. Aucune fonction de paiement n’est activée sans vérification concluante.</td></tr>
+    <tr><td><b>Secteurs d’activité exclus</b></td><td>Avant l’activation</td><td>Refuser d’emblée les activités dont le taux de contestation est structurellement élevé. La liste figure au contrat d’abonnement.</td></tr>
+    <tr><td><b>Plafonds par abonné</b></td><td>À chaque lot</td><td>Borner ce qu’un abonné peut prélever avant que quiconque s’en aperçoive : 50 000 $ par jour par défaut, ajustable à la fiche.</td></tr>
+    <tr><td><b>Surveillance du taux de retour</b></td><td>En continu</td><td>C’est le signal de détection réel. Un abonné qui prélève sans droit produit des contestations, et le taux s’en ressent avant que la fraude ne soit établie.</td></tr>
+    <tr><td><b>Droit d’audit sur les ententes</b></td><td>Sur déclenchement</td><td>Exiger de l’abonné la preuve des ententes détenues, en particulier lorsque le taux de retour a franchi son seuil.</td></tr>
+    <tr><td><b>Retenue et réserve</b></td><td>En permanence</td><td>Absorber la conséquence financière : cinq jours ouvrables de retenue et 10 % du volume de débits sur trente jours, dimensionnés sur le délai de contestation.</td></tr>
+    <tr><td><b>Suspension et gel</b></td><td>Sur incident</td><td>Arrêter les opérations de l’abonné visé, jusqu’au gel de son solde, selon la gradation prévue à la section 8.</td></tr>
+  </tbody>
+</table>
+
+<p><b>Une limite que le demandeur énonce.</b> Il ne détient pas les ententes de débit préautorisé : elles sont
+signées par le payeur au bénéfice de l’abonné, et c’est l’abonné qui en conserve la preuve. Au moment du
+prélèvement, le demandeur ne peut donc pas vérifier l’existence d’une entente ; il vérifie qu’une entente est
+<i>déclarée</i> au dossier. Le contrôle est nécessairement indirect, et c’est pourquoi il repose sur trois appuis
+plutôt qu’un : la sélection à l’entrée, la mesure du taux de retour, et le droit d’audit. Le volet de ce risque qui
+relève du recyclage des produits de la criminalité est traité par le programme de conformité joint à la section 16.</p>
+
+<div class="saut"></div>
+<h3>Note 4 — La protection des données des contreparties</h3>
+<p class="ref">Renvoi : section 5, catégorie « Gestion des données et des renseignements » ; voir aussi les sections 4 et 6.</p>
+
+<p>La particularité du demandeur, en matière de confidentialité, tient à l’identité des personnes exposées. Les
+données les plus sensibles qu’il détient ne concernent pas ses clients, mais les <b>contreparties</b> de ceux-ci :
+le numéro de compte bancaire du payeur, celui de l’employé qui reçoit sa paie, celui du fournisseur payé. Ces
+personnes n’ont aucune relation contractuelle avec le demandeur, ne l’ont pas choisi, et ne sauraient pas
+nécessairement vers qui se tourner. Le demandeur en tire une conséquence : la protection de ces données ne peut
+reposer sur la vigilance de la personne concernée, comme c’est le cas d’un mot de passe, mais uniquement sur ses
+propres mesures.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Mesure</th><th style="width:37%">Ce qu’elle protège</th><th style="width:37%">Ce qu’elle ne protège pas</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Chiffrement en transit</b></td>
+      <td>Les données qui circulent : appels d’interface, session de portail, transmission d’un fichier, échanges avec les tiers. Elles ne sont pas lisibles par qui les intercepte en chemin.</td>
+      <td>Ni le point de départ ni le point d’arrivée. Une fois la donnée reçue, c’est le chiffrement au repos et le cloisonnement qui prennent le relais.</td>
+    </tr>
+    <tr>
+      <td><b>Chiffrement au repos</b></td>
+      <td>Le support : disque, copie de sauvegarde, image de machine, poste de travail perdu ou volé. Quiconque obtient le support sans la clé n’obtient rien de lisible — y compris, le cas échéant, chez l’hébergeur.</td>
+      <td>Une application compromise. Le système doit pouvoir déchiffrer pour fonctionner : un attaquant qui s’exécute à l’intérieur de l’application lit des données déchiffrées. Le chiffrement au repos défend le support, non le système en marche.</td>
+    </tr>
+    <tr>
+      <td><b>Cloisonnement par locataire</b></td>
+      <td>La séparation entre abonnés : toute lecture est bornée au locataire qui la demande, de sorte qu’aucun abonné, aucun de ses utilisateurs et aucun partenaire-distributeur ne peut atteindre les données d’un autre. C’est le contrôle qui répond au caractère mutualisé de la plateforme.</td>
+      <td>Un accès légitime détourné à l’intérieur d’un même locataire. Ce cas relève de la gestion des accès et de la journalisation.</td>
+    </tr>
+    <tr>
+      <td><b>Journalisation des accès</b></td>
+      <td>Rien, au sens strict : elle n’empêche aucun accès. Elle rend chaque accès <b>attribuable</b> et l’enchaînement <b>reconstituable</b>, ce qui est la condition de tout le reste.</td>
+      <td>Elle ne vaut que si elle est elle-même protégée : les journaux sont conservés hors de portée des comptes qu’ils observent, et leur altération est traitée comme un incident.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Pourquoi la journalisation est indispensable et non accessoire.</b> Lorsqu’un accès non autorisé survient,
+  le demandeur doit déterminer <b>quelles</b> données ont été atteintes et <b>qui</b> en est affecté — c’est la
+  condition d’un avis utile, tant au titre de l’article 18 de la Loi qu’au titre des obligations applicables en
+  matière de renseignements personnels. Sans journal d’accès, cette question n’a pas de réponse : le demandeur
+  serait réduit à supposer le pire ou à ne rien dire, et aucune de ces deux issues n’est acceptable. C’est aussi
+  pourquoi la qualification retenue à la section 9 pour un accès non autorisé repose sur le <b>risque réel de
+  préjudice grave</b> : c’est un jugement qui suppose de savoir ce qui a été touché.</p>
+</div>
+
+<p><b>Conservation et effacement.</b> Le contrat d’abonnement prévoit que les données personnelles peuvent être
+anonymisées sur demande, tandis que le grand livre et les paiements sont conservés sept ans au Canada à titre de
+piste d’audit financière. Ces deux exigences ne se contredisent pas : l’anonymisation porte sur les données
+personnelles rattachées à une contrepartie, non sur les écritures comptables, qui demeurent nécessaires pour établir
+qu’aucun fonds n’a disparu. Le cloisonnement par locataire est ce qui rend cette distinction praticable — il permet
+d’atteindre les données d’une seule contrepartie sans toucher au registre.</p>
+
+<div class="saut"></div>
+<h3>Note 5 — Le fichier de la norme 005</h3>
+<p class="ref">Renvoi : section 2, cible d’intégrité ; voir aussi les sections 5 et 6, et la définition donnée à l’annexe de la question 6.1.</p>
+
+<p>Le fichier de la norme 005 est le seul objet par lequel les instructions du demandeur entrent dans le système de
+compensation. Tout ce que la plateforme a calculé, contrôlé et écrit au grand livre finit dans ce fichier, et rien
+n’en sort autrement. C’est ce qui explique qu’un format de fichier figure parmi les cibles d’<b>intégrité</b> de la
+section 2 plutôt que parmi les questions techniques.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Ce que contient le fichier</h4>
+
+<table>
+  <thead>
+    <tr><th style="width:22%">Enregistrement</th><th style="width:78%">Rôle</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>A</b> — en-tête</td><td>Unique, en tête du fichier. Porte l’identité d’émetteur attribuée par l’institution parraine — numéro de client émetteur et centre de traitement — ainsi qu’un numéro de création de fichier séquentiel qui identifie ce dépôt et interdit qu’un même fichier soit présenté deux fois.</td></tr>
+    <tr><td><b>C</b> et <b>D</b> — détail</td><td>Un enregistrement de crédits, un de débits. Chacun porte plusieurs opérations : montant, date de règlement, institution et transit du compte visé, nom de la contrepartie, référence croisée, code d’opération de la norme 007.</td></tr>
+    <tr><td><b>E</b>, <b>F</b>, <b>I</b>, <b>J</b></td><td>Corrections, annulations et retours, intercalés avec les enregistrements de détail.</td></tr>
+    <tr><td><b>Z</b> — totaux</td><td>Unique, en fin de fichier. Porte le décompte des opérations et la somme des montants, que l’institution recalcule pour vérifier qu’aucune ligne n’a été perdue ni altérée en chemin.</td></tr>
+  </tbody>
+</table>
+
+<p>Le fichier est à <b>largeur fixe</b> : chaque enregistrement compte exactement le même nombre de caractères, et
+chaque information occupe une position déterminée. La spécification usuelle est un enregistrement de 1 464
+caractères, formé d’un en-tête de 24 caractères et de six segments de 240 caractères, soit jusqu’à six opérations
+par enregistrement.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Pourquoi un seul caractère fait rejeter le tout</h4>
+
+<p>Dans un format à largeur fixe, rien ne signale où commence un champ : seule sa position le dit. Un caractère
+inséré ou manquant décale tout ce qui suit, et les champs ne deviennent pas illisibles — ils deviennent
+<i>autre chose</i>. Un montant se lit comme une date, un transit comme un numéro de compte. C’est précisément ce
+qu’une lecture partielle ne détecterait pas, et c’est pourquoi la vérification est structurelle : la longueur de
+chaque enregistrement, la concordance des totaux de l’enregistrement Z avec le détail, et l’homogénéité de
+l’encodage. À défaut, l’institution rejette le fichier entier plutôt que d’en deviner le contenu.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Type de rejet</th><th style="width:34%">Cause usuelle</th><th style="width:40%">Conséquence</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Rejet du fichier</b><br><span class="petit">indicateur « taux de rejet de fichier »</span></td><td>Longueur d’enregistrement non conforme, totaux de l’enregistrement Z discordants, encodage mixte ou caractères de contrôle, en-tête invalide.</td><td>Aucune opération du lot n’entre dans la compensation. Rien n’a bougé : il faut corriger et redéposer, et respecter l’heure de tombée pour ne pas décaler le règlement d’un jour ouvrable.</td></tr>
+    <tr><td><b>Rejet d’un article</b><br><span class="petit">indicateur « taux de rejet d’article »</span></td><td>Numéro de transit ou de compte invalide, coordonnées de contrepartie incohérentes, code d’opération refusé.</td><td>Le lot passe, la ligne est écartée. L’écriture correspondante est contre-passée selon le trajet D.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Le dépôt est un point de non-retour.</b> Une fois le fichier accepté et présenté à la compensation, les
+  opérations qu’il porte ne s’annulent plus : elles se défont par un retour, avec les délais et les frais qui s’y
+  attachent. Tout ce qui peut être vérifié doit donc l’être <b>avant</b> le dépôt. C’est ce qui donne leur place aux
+  contrôles décrits ailleurs dans le présent cadre — les plafonds appliqués à la création du lot, la double
+  approbation, et le jeu d’essais automatisé de conformité au format prévu au cycle de développement sécurisé de la
+  section 6. Le fichier est le dernier moment où une erreur coûte peu.</p>
+</div>
+
+<p><b>Une seule identité d’émetteur pour tous les abonnés.</b> L’en-tête ne porte pas le nom de l’abonné mais celui
+du demandeur, conformément au modèle retenu à la section 5.5 de la question 6.1. C’est pourquoi le nom de l’abonné
+est porté dans la contrepartie et la référence croisée de chaque opération : c’est la seule façon, pour le payeur,
+de reconnaître le prélèvement sur son relevé, et pour le demandeur, d’imputer un retour au bon abonné.</p>
+
+<div class="saut"></div>
+<h3>Note 6 — Les deux indicateurs de confidentialité</h3>
+<p class="ref">Renvoi : section 2, objectif de confidentialité ; voir aussi les sections 7 et 9.</p>
+
+<p>L’objectif de confidentialité est suivi par deux indicateurs qui, malgré leur voisinage dans le tableau, ne sont
+pas de même nature. Le premier compte des <b>tentatives</b> et sert à voir venir ; le second compte des
+<b>faits établis</b> et sert à rendre compte. Les confondre conduirait à les traiter de la même manière, ce qui
+serait une erreur dans les deux sens.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:20%">Indicateur</th><th style="width:40%">Ce qu’il compte</th><th style="width:14%">Cible</th><th style="width:26%">Ce qu’il déclenche</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Accès refusés anormaux</b></td>
+      <td>Les accès que le système a <b>refusés</b> et qui s’écartent du profil habituel : volume inhabituel, heure inhabituelle, provenance inhabituelle, ou forme révélatrice — un grand nombre de comptes différents essayés depuis une même source, ou un même compte essayé contre plusieurs locataires.</td>
+      <td>Aucune cible chiffrée</td>
+      <td>Une vérification, et la suspension de la clé ou du compte en cause s’il y a lieu, selon la section 7.</td>
+    </tr>
+    <tr>
+      <td><b>Incidents de confidentialité</b></td>
+      <td>Les cas où un accès ou une communication non autorisés ont <b>effectivement eu lieu</b>, quelle qu’en soit l’origine :
+        <ul style="margin:4pt 0 0 0;padding-left:12pt">
+          <li>intrusion, identifiant ou clé d’API compromis ;</li>
+          <li>consultation sans motif par une personne pourtant autorisée, chez le demandeur ou chez un abonné ;</li>
+          <li>défaut de configuration ou de cloisonnement rendant une donnée lisible au-delà de son locataire ;</li>
+          <li>erreur d’acheminement — relevé, avis ou fichier transmis au mauvais destinataire ;</li>
+          <li>incident survenu chez un tiers : hébergeur, partenaire de virement, fournisseur de vérification, partenaire-distributeur ;</li>
+          <li>perte ou vol d’un poste de travail, d’un support ou d’une copie de sauvegarde.</li>
+        </ul>
+      </td>
+      <td>Zéro</td>
+      <td>L’ouverture d’un incident, sa qualification au regard du risque réel de préjudice grave selon la section 9, et la notification s’il y a lieu.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Pourquoi le premier n’a délibérément pas de cible.</b> Un système refuse des accès en permanence, et c’est
+  normal : session expirée, clé révoquée, utilisateur d’un abonné qui tente par mégarde d’atteindre au-delà de son
+  locataire. Un refus n’est pas une défaillance — c’est la preuve que le contrôle fonctionne. Si le demandeur se
+  donnait pour cible de faire baisser ce compteur, il se donnerait pour objectif de <i>moins voir</i>, alors que sa
+  fonction est précisément de rendre visible ce qui se produit. Une hausse est donc traitée comme un signal à
+  interpréter, jamais comme un résultat à corriger. Le second indicateur, lui, porte une cible de zéro, parce qu’il
+  ne compte pas des tentatives mais des atteintes.</p>
+</div>
+
+<p><b>La limite du premier indicateur, et ce qui la comble.</b> Un accès refusé laisse une trace parce qu’il a été
+refusé. Le cas dangereux est l’inverse : l’accès qui n’a jamais été refusé — un identifiant légitime employé par la
+mauvaise personne, une donnée rendue lisible par une configuration erronée, un tiers qui consulte ce qu’il n’aurait
+pas dû recevoir. Aucun de ces cas ne fait monter le compteur des refus, et pourtant chacun est un incident de
+confidentialité. Le nombre d’accès refusés anormaux ne borne donc pas le nombre d’incidents : il ne couvre qu’une
+partie du champ. C’est la <b>journalisation des accès</b> — y compris ceux qui ont été accordés — qui couvre
+l’autre, et c’est la raison pour laquelle elle figure parmi les mesures de la section 5 plutôt que parmi les
+commodités d’exploitation.</p>
+
+<div class="saut"></div>
+<h3>Note 7 — Le lot manqué et l’heure de tombée</h3>
+<p class="ref">Renvoi : section 2, objectif de disponibilité ; voir aussi les sections 5 et 7.</p>
+
+<p><b>De quel lot s’agit-il.</b> Un lot est le regroupement, en un fichier de la norme 005, des opérations d’une
+même nature préparées dans la journée : un lot de virements de <b>débit</b> pour les encaissements du trajet A, un
+lot de virements de <b>crédit</b> pour les décaissements du trajet B. Le virement Interac du trajet C n’est pas
+concerné : il se transmet à l’unité et se règle au dépôt, sans fenêtre quotidienne.</p>
+
+<p><b>Ce qu’est l’heure de tombée.</b> C’est l’heure, fixée chaque jour ouvrable par l’institution financière
+parraine, au-delà de laquelle un fichier reçu n’est plus porté à la compensation du jour mais à celle du jour
+ouvrable suivant. Elle ne se négocie pas au cas par cas et ne dépend pas du demandeur : c’est une contrainte subie,
+au même titre que le calendrier des jours ouvrables.</p>
+
+<p><b>Ce que « manquer un lot » veut dire.</b> Des opérations étaient prêtes à partir et ne sont pas parties à
+temps. Les causes possibles sont connues : une approbation obtenue trop tard, un fichier rejeté à l’entrée et
+corrigé après l’heure, une indisponibilité de la plateforme ou de l’institution parraine, ou simplement une
+préparation entamée trop près de la limite.</p>
+
+<div class="encadre">
+  <p><b>Pourquoi c’est une cible de disponibilité et non d’intégrité.</b> Un lot manqué ne fait perdre aucun fonds
+  et ne fausse aucune écriture : les opérations demeurent au grand livre, portées en compensation, et partent le
+  jour ouvrable suivant. Rien n’est à corriger, tout est à retarder. C’est la raison pour laquelle cette cible
+  figure parmi les objectifs de disponibilité, et pourquoi le demandeur écrit à la section 1 qu’un traitement
+  reporté d’une journée ouvrable est une gêne et non une perte.</p>
+</div>
+
+<p><b>La conséquence n’est pourtant pas symétrique.</b> Un encaissement retardé retarde la disponibilité du solde de
+l’abonné, ce qui se rattrape. Un décaissement retardé peut rendre une <b>paie</b> ou une <b>remise
+gouvernementale</b> en retard, et les conséquences de ce retard — pénalités, intérêts, relation avec un employé —
+appartiennent à l’abonné, qui n’en est pas l’auteur. C’est pourquoi l’indicateur est relevé quotidiennement plutôt
+que mensuellement, et pourquoi une échéance de paie ou de remise est traitée comme une journée à risque au même
+titre qu’un mois de pointe.</p>
+
+<p><b>Le report se compte en jours ouvrables.</b> Les fichiers ne circulent ni les fins de semaine ni les jours
+fériés. Un lot manqué la veille d’un congé ne se décale donc pas d’un jour civil mais de plusieurs, ce qui déplace
+d’autant la date de règlement portée dans le fichier. Les mesures qui en découlent sont ordinaires mais explicites :
+préparer et approuver les lots en début de journée plutôt qu’à l’approche de la limite, surveiller quotidiennement
+l’écart entre l’heure de transmission et l’heure de tombée, prévenir les abonnés touchés dès qu’un report est
+acquis, et appliquer la procédure de dégradation prévue à la section 5 lorsque l’indisponibilité vient d’un
+tiers.</p>
+
+<div class="saut"></div>
+<h3>Note 8 — Le point d’entrée des instructions</h3>
+<p class="ref">Renvoi : section 4, portail et interface de programmation ; voir aussi les sections 6 et 7.</p>
+
+<p>Une <b>instruction</b> est une demande, non une exécution. Elle porte une intention — encaisser tel montant sur
+tel client payeur, décaisser tel montant vers tel bénéficiaire — et rien de plus. Elle ne devient une opération
+qu’après les contrôles à l’initiation, et elle ne devient un mouvement de fonds qu’après la mise en lot, la double
+approbation et le dépôt. Le point d’entrée est donc l’endroit de la plateforme où l’on accorde le <b>moins</b> de
+confiance et où l’on vérifie le plus.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Les seules voies d’entrée</h4>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Voie</th><th style="width:34%">Qui l’emprunte</th><th style="width:40%">Ce qui l’authentifie</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Portail libre-service</b></td><td>Un utilisateur désigné par l’abonné, personne physique.</td><td>Une session nominative, avec authentification à deux facteurs et droits distincts de préparation et d’approbation.</td></tr>
+    <tr><td><b>Interface de programmation</b></td><td>L’application de l’abonné, sans intervention humaine à chaque appel.</td><td>Une clé d’API, qui n’ouvre pas de session : d’où la rotation, la révocation immédiate et la restriction de portée décrites à la note 2.</td></tr>
+    <tr><td><b>Portail partenaire</b></td><td>Un partenaire-distributeur, pour provisionner et gérer ses abonnés.</td><td>Une clé partenaire distincte. Cette voie ne porte <b>aucune instruction de paiement</b> et n’ouvre ni le compte en fiducie ni le grand livre.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Pourquoi l’ensemble est fermé.</b> Aucune instruction n’entre autrement : ni par courriel, ni par téléphone,
+  ni par un fichier déposé quelque part, ni par une intervention manuelle dans la base de données. Ce n’est pas une
+  commodité, c’est ce qui rend les contrôles des sections 6 et 7 <b>exhaustifs</b> plutôt que partiels. Une seule
+  voie informelle supplémentaire — une exception consentie à un abonné pressé, un correctif appliqué à la main —
+  suffirait à ouvrir un trou dans chacun d’eux à la fois.</p>
+</div>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Une instruction n’est jamais crue sur parole</h4>
+
+<p>La plateforme revalide chaque instruction pour son propre compte : entente de débit préautorisé déclarée au
+dossier, abonné vérifié et actif, solde disponible réserve déduite, plafonds. Elle ne s’en remet jamais au fait que
+l’appelant aurait déjà vérifié. Cette règle vaut pour toutes les voies, y compris lorsque l’instruction provient
+d’une application qui exerce elle-même une fonction d’administration financière : un logiciel client peut être
+défaillant, mal configuré ou compromis, et sa qualité de client ne lui confère aucune confiance particulière.</p>
+
+<p><b>Ce qui explique le classement de la section 4.</b> Le portail et l’interface sont classés d’importance
+<i>élevée</i> mais de sensibilité <i>moyenne</i>, et l’écart n’est pas une inadvertance. Leur indisponibilité
+suspend le service — aucune instruction ne peut plus entrer, les opérations déjà initiées suivent leur cours — ce
+qui en fait un actif important. Mais ils ne détiennent ni les fonds ni le registre : leur compromission ne permet
+pas d’altérer un solde, seulement de tenter d’initier des opérations, que les contrôles suivants ont pour fonction
+d’arrêter. C’est le grand livre et le compte en fiducie qui portent la sensibilité la plus élevée, et non la porte
+par laquelle on y adresse des demandes.</p>
+
+<div class="saut"></div>
+<h3>Note 9 — La séparation des droits de préparation et d’approbation</h3>
+<p class="ref">Renvoi : section 6, gestion des accès ; voir aussi les sections 3 et 8, et la note 2.</p>
+
+<p>La note 2 explique pourquoi la double approbation résiste là où les autres mesures cèdent. La présente note
+décrit comment elle est <b>construite</b>, car son effet dépend entièrement de sa mise en œuvre : une double
+approbation qui repose sur la bonne volonté n’en est pas une.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Deux droits distincts, et une règle qui ne se contourne pas</h4>
+
+<table>
+  <thead>
+    <tr><th style="width:24%">Droit</th><th style="width:38%">Ce qu’il permet</th><th style="width:38%">Ce qu’il ne permet pas</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Préparation</b></td><td>Créer un lot, y intégrer des opérations, le modifier, le soumettre à l’approbation.</td><td>Le transmettre. Un lot préparé n’est qu’une intention tant qu’il n’est pas approuvé.</td></tr>
+    <tr><td><b>Approbation</b></td><td>Autoriser la transmission d’un lot, après en avoir vu le décompte, le total et les écarts par rapport à l’ordinaire.</td><td>En modifier le contenu. Approuver, c’est accepter ou refuser ce qui est présenté, non le corriger soi-même.</td></tr>
+  </tbody>
+</table>
+
+<p><b>De quelles personnes s’agit-il.</b> De deux <b>personnes physiques</b> distinctes, employées ou mandatées par le
+demandeur, agissant chacune sous un compte nominatif protégé par une authentification à deux facteurs. Ni un rôle,
+ni un service automatisé, ni deux comptes détenus par le même individu ne satisfont à l’exigence. C’est le point où
+l’automatisation s’arrête : une instruction peut entrer par l’interface de programmation sans aucune intervention
+humaine, comme le décrit la note 8, mais aucun lot ne quitte la plateforme sans que deux personnes l’aient vu.</p>
+
+<p>Les deux droits sont des permissions distinctes, attribuées séparément à la fiche de chaque utilisateur. Mais la
+règle déterminante ne porte pas sur les permissions détenues : elle porte sur le <b>lot</b>. La plateforme refuse
+l’approbation d’un lot par le compte qui l’a préparé, quels que soient les droits de ce compte. Une personne peut
+donc détenir les deux droits — ce qui est courant dans une petite équipe — sans jamais pouvoir approuver son propre
+lot.</p>
+
+<div class="encadre">
+  <p><b>Un contrôle de construction, non de politique.</b> Le refus est prononcé par la plateforme, pas par une
+  consigne. Il ne peut être levé ni par l’abonné, ni par un partenaire-distributeur, ni par le cadre dirigeant du
+  demandeur : aucun droit d’administration ne comporte la faculté de transmettre seul. Chaque lot conserve par
+  ailleurs l’identité du préparateur, celle de l’approbateur et les horodatages correspondants, de sorte que
+  l’exercice du contrôle est vérifiable après coup et non seulement affirmé.</p>
+</div>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Ce que cette séparation attrape réellement</h4>
+
+<p>Le geste malveillant est le cas que l’on cite ; l’erreur ordinaire est le cas que l’on rencontre. Un lot préparé
+deux fois, une date de règlement de la semaine précédente, un montant saisi en dollars là où la plateforme attend
+des cents, un fichier de la veille resoumis : ces situations ne relèvent d’aucune intention et coûtent pourtant un
+retour, des frais et une explication à donner à un abonné. La seconde lecture intervient au dernier moment où
+l’erreur se corrige encore sans conséquence — avant le dépôt, qui est le point de non-retour décrit à la note 5.
+C’est pourquoi l’approbateur voit le décompte et le total du lot : ce sont les deux mêmes valeurs que
+l’enregistrement Z présentera à l’institution, et un écart entre ce qui était attendu et ce qui est affiché se
+remarque sans expertise particulière.</p>
+
+<p><b>La faiblesse connue, et ce qui la limite.</b> Une double approbation devient une formalité si l’approbateur
+signe sans regarder. Le demandeur ne prétend pas éliminer ce risque, qui tient au comportement et non au système ;
+il le réduit en présentant à l’approbation des éléments comparables d’un jour à l’autre — décompte, total, écarts —
+plutôt qu’une liste d’opérations à parcourir, et en faisant échouer le lot de plein droit lorsqu’un plafond est
+dépassé, sans laisser à l’approbateur le soin de s’en apercevoir.</p>
+
+<p><b>Aucune dérogation d’urgence.</b> Si la seconde personne est absente, le lot n’est pas transmis : il attend. Le
+cadre ne prévoit aucun mécanisme d’exception permettant de passer outre, parce qu’un tel mécanisme deviendrait la
+voie normale au premier jour de pointe. La conséquence est assumée et se lit à la note 7 : un lot reporté d’un jour
+ouvrable est une gêne, tandis qu’un lot transmis par une seule personne est une atteinte au contrôle. La mesure qui
+répond à cette contrainte n’est pas une dérogation mais une <b>suppléance nommée</b>, prévue à la section 5 au titre
+des ressources humaines.</p>
+
+<div class="saut"></div>
+<h3>Note 10 — Le chiffrement en transit</h3>
+<p class="ref">Renvoi : section 6, sécurité des réseaux ; voir aussi la note 4, qui le situe parmi les mesures de confidentialité.</p>
+
+<p>La note 4 indique ce que le chiffrement en transit protège et ce qu’il ne protège pas. La présente note précise
+<b>quels canaux</b> il couvre chez le demandeur, et où s’arrête sa portée.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Canal</th><th style="width:34%">Ce qui y circule</th><th style="width:36%">Portée</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Portail libre-service</b><br><span class="petit">poste de l’utilisateur ↔ plateforme</span></td><td>Session, instructions, soldes, relevés.</td><td>Du poste jusqu’au service, sans point intermédiaire où le contenu circulerait en clair.</td></tr>
+    <tr><td><b>Interface de programmation</b><br><span class="petit">application de l’abonné ↔ plateforme</span></td><td>Instructions, clé d’API, réponses.</td><td>Même portée. La clé circule protégée, ce qui ne dit rien de la manière dont l’appelant la conserve chez lui.</td></tr>
+    <tr><td><b>Transmission du fichier 005</b><br><span class="petit">plateforme → institution parraine</span></td><td>Coordonnées bancaires de tiers, montants, dates de règlement.</td><td>Le canal est celui qu’impose l’institution parraine. La protection y est autant contractuelle que technique.</td></tr>
+    <tr><td><b>Notifications sortantes</b><br><span class="petit">plateforme → systèmes de l’abonné</span></td><td>Changements d’état d’une opération ou d’un lot.</td><td>Chiffrées jusqu’à la réception. Ce qui en est fait ensuite relève du dispositif de l’abonné.</td></tr>
+    <tr><td><b>Échanges internes</b><br><span class="petit">entre composants et avec l’hébergeur</span></td><td>Écritures, données, journaux.</td><td>Chiffrés également : le demandeur ne traite pas son propre périmètre comme un réseau de confiance.</td></tr>
+  </tbody>
+</table>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Trois garanties, dont une souvent oubliée</h4>
+
+<p>Un canal chiffré apporte trois choses : le contenu n’est pas <b>lisible</b> en chemin ; il n’est pas
+<b>modifiable</b> en chemin sans que l’altération se remarque ; et le service joint est bien celui que l’on croit
+joindre. La deuxième est celle que l’on cite le moins et qui compte le plus ici : s’agissant d’une instruction de
+paiement, un montant <i>altéré</i> en chemin est une conséquence plus grave qu’un montant <i>lu</i>. La
+confidentialité protège la contrepartie ; l’intégrité en transit protège le paiement lui-même.</p>
+
+<div class="encadre">
+  <p><b>Ce que le chiffrement ne dit pas : qui appelle.</b> Un canal parfaitement chiffré établi par un appelant
+  illégitime demeure un canal parfaitement chiffré. Le chiffrement protège la conversation, il n’en désigne pas les
+  participants. C’est l’authentification — session à deux facteurs ou clé d’API, selon la voie — qui répond à cette
+  question, et c’est un contrôle distinct, décrit à la note 8. Les confondre est l’erreur la plus commune en la
+  matière : elle conduit à croire une instruction sur la seule foi du canal par lequel elle est arrivée.</p>
+</div>
+
+<p><b>La portée s’arrête à la réception.</b> Un canal chiffré protège les données jusqu’à leur destinataire, et pas
+au-delà. Ce que l’institution parraine, un partenaire-distributeur ou l’application d’un abonné en font ensuite
+relève de leur propre dispositif. Le demandeur ne peut ni le vérifier en continu ni s’y substituer : il le traite
+par les ententes écrites décrites à la section 10, qui prévoient notamment l’obligation de lui signaler tout
+incident. C’est aussi la raison pour laquelle une erreur d’acheminement figure parmi les origines d’incident de
+confidentialité énumérées à la note 6 — le chiffrement est sans effet sur un envoi correctement protégé mais adressé
+à la mauvaise personne.</p>
+
+<div class="saut"></div>
+<h3>Note 11 — La qualification d’un incident et le délai de quatre heures</h3>
+<p class="ref">Renvoi : section 2, objectif de détection, et section 7 ; voir aussi les sections 8 et 9.</p>
+
+<p><b>Qualifier</b>, ce n’est ni détecter ni comprendre. C’est décider, à partir de ce que l’on sait à un moment
+donné, dans laquelle des trois situations suivantes on se trouve.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Issue de la qualification</th><th style="width:70%">Ce qu’elle entraîne</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Ce n’est pas un incident</b></td><td>L’événement relève du fonctionnement normal — un accès refusé isolé, un rejet d’article corrigé. Consigné, sans suite.</td></tr>
+    <tr><td><b>Incident sans répercussions importantes</b></td><td>Dossier d’incident ouvert, enquête, mesures, documentation. Aucune notification.</td></tr>
+    <tr><td><b>Incident ayant des répercussions importantes</b></td><td>Tout ce qui précède, plus la notification de la Banque du Canada et des personnes touchées, selon la qualification retenue à la section 9.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Pourquoi le demandeur se donne un délai que la Loi ne lui impose pas.</b> Le délai de 48 heures de
+  l’article 18 ne court pas à partir de la survenance, ni de la détection : il court à partir du moment où le
+  fournisseur <b>détermine</b> que l’incident a des répercussions importantes. Un fournisseur qui tarde à
+  déterminer retarde d’autant son obligation de notifier. Le demandeur ferme cette porte par une contrainte
+  interne : la qualification doit être prononcée dans les <b>quatre heures</b> suivant la détection. Ce délai n’est
+  pas une exigence réglementaire, c’est la garantie que l’exigence réglementaire ne puisse pas être différée par
+  l’inaction.</p>
+</div>
+
+<p><b>Pourquoi quatre heures et non moins.</b> Qualifier suppose de réunir un minimum de faits : quelles données
+sont en cause, quels abonnés et quelles contreparties sont touchés, combien, et si des fonds ont bougé. Sans les
+journaux d’accès décrits à la note 4, certaines de ces questions n’ont pas de réponse ; avec eux, elles en ont une
+en quelques heures. Une qualification prononcée en quinze minutes serait une devinette, et une devinette engage
+autant qu’une détermination.</p>
+
+<p><b>Pourquoi quatre heures et non davantage.</b> Parce que la qualification commande la suite : c’est elle qui
+déclenche le compte de 48 heures, et c’est elle qui oriente les mesures — un incident d’intégrité impose la
+suspension des transmissions, un incident de confidentialité impose la révocation d’accès. Différer la
+qualification, c’est différer ces deux choses à la fois.</p>
+
+<p><b>Une qualification provisoire plutôt qu’un report.</b> Si les faits demeurent insuffisants au terme des quatre
+heures, le demandeur qualifie l’incident sur la base de ce qui est connu, en retenant l’hypothèse la plus
+défavorable, quitte à réviser ensuite à la lumière de l’enquête. Il ne suspend pas la qualification en attendant
+d’en savoir plus. Une révision se documente et, le cas échéant, s’accompagne d’un avis de suivi ; un silence
+prolongé, lui, ne se rattrape pas.</p>
+
+<p><b>Le délai se compte en heures réelles.</b> Les soixante minutes de détection, les quatre heures de
+qualification et les quarante-huit heures de notification courent sans égard aux jours ouvrables, aux fins de
+semaine et aux jours fériés — à la différence du traitement des lots, dont la note 7 rappelle qu’il suit le
+calendrier de la compensation. Un incident survenu un vendredi soir se qualifie le vendredi soir.</p>
+
+<p>La qualification appartient au cadre dirigeant, conformément à la section 3, et elle est journalisée : l’heure de
+détection, l’heure de qualification, l’issue retenue et les faits sur lesquels elle repose. C’est cette chronologie
+que la Banque demande dans l’avis d’incident décrit à la section 9. Enfin, la qualification ne retarde jamais les
+mesures immédiates : celles-ci commencent à la détection, comme le montre la chronologie de la section 8.</p>
+
+<div class="saut"></div>
+<h3>Note 12 — Le taux de retour d’un abonné</h3>
+<p class="ref">Renvoi : section 7 ; voir aussi la note 3, qui en fait le signal de détection de la fraude, et la section 5.</p>
+
+<p>Le taux de retour rapporte, pour un abonné donné, les encaissements qui reviennent à ceux qui sont partis :
+provision insuffisante, compte fermé ou introuvable, ordre d’arrêt de paiement, contestation d’une entente de débit
+préautorisé. Il est suivi par abonné et non pour la plateforme entière, parce qu’un taux global dissimulerait
+précisément ce qu’il s’agit de voir — un abonné en difficulté parmi cent qui vont bien.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">La difficulté de mesure, et comment le demandeur la traite</h4>
+
+<p>Un retour n’arrive pas en même temps que l’opération qui le provoque. Une provision insuffisante revient en
+quelques jours ; une contestation d’entente peut survenir jusqu’à <b>90 jours civils</b> après le prélèvement
+lorsque le payeur est un particulier. Un taux calculé sur les opérations récentes est donc systématiquement
+<b>optimiste</b> : les débits les plus récents n’ont pas encore eu le temps de revenir. Un abonné nouvellement
+activé, ou dont le volume croît vite, paraît meilleur qu’il n’est — et c’est exactement le moment où l’on décide de
+ses plafonds.</p>
+
+<p>Le demandeur en tire deux lectures distinctes plutôt qu’un chiffre unique :</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Lecture</th><th style="width:30%">Fenêtre</th><th style="width:44%">Ce à quoi elle sert</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Réaction</b></td><td>Courte, dominée par les retours pour provision insuffisante</td><td>Voir vite qu’un abonné dérape, et suspendre au besoin. Elle réagit, elle ne conclut pas.</td></tr>
+    <tr><td><b>Décision</b></td><td>Mûrie, alignée sur le délai de contestation applicable</td><td>Fixer ou réviser un plafond et la réserve sur des chiffres que le temps ne démentira plus.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>L’indicateur détecte, il ne diagnostique pas.</b> Un taux qui monte admet au moins trois explications, qui
+  appellent trois réponses opposées : la clientèle de l’abonné se détériore, pour des raisons qui lui échappent ; le
+  processus de l’abonné est négligent — montants inexacts, ententes non tenues à jour, coordonnées périmées ; ou
+  l’abonné prélève sans droit, au sens de la note 3. Le taux ne distingue pas ces cas. C’est le <b>droit d’audit sur
+  les ententes</b> qui les distingue, et c’est la raison pour laquelle il est déclenché par le franchissement du
+  seuil plutôt qu’exercé au hasard.</p>
+</div>
+
+<p><b>Le seuil est porté à la fiche de l’abonné</b>, et non fixé une fois pour toutes à l’échelle de la plateforme :
+un secteur où l’on prélève des honoraires mensuels auprès d’une clientèle stable ne se compare pas à un secteur où
+la rotation est forte. Le seuil est établi à l’activation, d’après le secteur déclaré, puis révisé d’après
+l’historique observé.</p>
+
+<p><b>Ce qui suit le franchissement du seuil</b> est gradué, dans cet ordre : révision du plafond quotidien de
+l’abonné, révision de sa réserve, examen des ententes de débit préautorisé au titre du droit d’audit, puis, si les
+explications ne viennent pas, suspension des encaissements et gel du solde selon la section 8.</p>
+
+<p><b>Un indicateur qui n’est pas seulement le sien.</b> Le taux de retour intéresse aussi l’institution financière
+parraine, qui répond du demandeur devant la compensation comme le demandeur répond de ses abonnés. Un taux agrégé
+durablement élevé ne se solde pas par une remontrance : il met en cause l’identité d’émetteur et, avec elle,
+l’accès au rail. C’est ce qui explique que cet indicateur figure parmi les signaux surveillés en continu de la
+section 7, et non parmi les statistiques commerciales.</p>
+
+<div class="saut"></div>
+<h3>Note 13 — L’avis de sécurité d’un tiers</h3>
+<p class="ref">Renvoi : section 7 ; voir aussi les sections 4, 6 et 10, et les notes 6 et 11.</p>
+
+<p>Tous les autres signaux du tableau de la section 7 sont produits par les systèmes du demandeur : ils mesurent ce
+qui se passe chez lui. Celui-ci est le seul à venir de l’extérieur, et à porter sur quelque chose qu’il n’a pas
+écrit. C’est ce qui justifie qu’il soit surveillé au même titre qu’un écart de rapprochement : une part du risque du
+demandeur réside dans des composants et des services dont il n’a pas la maîtrise.</p>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">D’où viennent ces avis</h4>
+
+<ul>
+  <li><b>Des tiers sous entente</b> — hébergeur, institution financière parraine, partenaire de virement, fournisseur de vérification. Leur obligation de signalement est stipulée aux ententes décrites à la section 10.</li>
+  <li><b>Des éditeurs des composants employés</b> — systèmes d’exploitation, bases de données, cadres applicatifs, bibliothèques tierces, y compris celles dont dépendent d’autres bibliothèques.</li>
+  <li><b>Des sources publiques de vulnérabilités</b>, suivies par la veille prévue à la section 6.</li>
+</ul>
+
+<div class="encadre">
+  <p><b>Deux avis de nature opposée, qu’il ne faut pas traiter de la même façon.</b> Le premier dit : « un incident
+  s’est produit chez nous ». Il peut affecter les données ou le service du demandeur, et devient alors un incident
+  du demandeur lui-même : il ouvre un dossier et se qualifie dans les quatre heures selon la note 11, la note 6
+  rangeant d’ailleurs l’incident survenu chez un tiers parmi les origines possibles d’une atteinte à la
+  confidentialité. Le second dit : « une faiblesse existe dans un composant que vous employez ». Rien ne s’est
+  produit ; c’est un avertissement, et il relève de la gestion des vulnérabilités et des correctifs de la section 6.
+  Le premier déclenche un compte à rebours, le second une évaluation. Les confondre conduit soit à s’alarmer sans
+  motif, soit à manquer une obligation de notification.</p>
+</div>
+
+<h4 style="font-family:Carlito,sans-serif;font-size:10pt;color:#0f6e5d;margin:11pt 0 3pt 0;">Le seuil est la pertinence, non la gravité</h4>
+
+<p>Le seuil retenu à la section 7 est « tout avis touchant un composant employé ». Une faille critique dans un
+logiciel que le demandeur n’emploie pas ne le concerne pas ; une faille moyenne dans le chemin qui produit le
+fichier de la norme 005 le concerne au premier chef. Cette formulation a une conséquence exigeante et assumée :
+elle suppose de <b>savoir ce que l’on emploie</b>. Elle repose donc sur le recensement des actifs de la section 4 et
+sur le suivi des dépendances applicatives prévu à la section 6. Un inventaire incomplet ne produit pas des avis
+manqués de façon visible — il produit un silence que rien ne distingue de l’absence de problème.</p>
+
+<p><b>L’évaluation se fait dans cet ordre :</b> le demandeur est-il exposé, compte tenu de la version employée, de
+sa configuration et du fait que le chemin vulnérable soit ou non atteignable ; que permettrait l’exploitation de la
+faiblesse ; existe-t-il une mesure d’atténuation applicable immédiatement, à défaut de correctif ; puis application
+du correctif dans le délai que commande sa gravité. Un avis touchant un actif classé critique à la section 4 — le
+grand livre, la production des fichiers, l’accès bancaire — est traité selon le délai le plus court, quelle que soit
+la gravité annoncée par l’éditeur.</p>
+
+<p><b>La limite, et ce qui la compense.</b> Le demandeur dépend d’un tiers pour être informé, et l’absence d’avis ne
+démontre pas l’absence de problème : un fournisseur peut ignorer son propre incident, ou tarder à le signaler. Deux
+choses limitent cette dépendance sans la supprimer : l’obligation contractuelle de signalement imposée aux tiers,
+et une veille active qui ne se contente pas d’attendre les avis entrants. Le demandeur ne prétend pas ramener ce
+risque à zéro ; il le considère comme l’une des raisons pour lesquelles les mesures de protection ne reposent
+jamais sur un seul contrôle.</p>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Cibles de la section 2</b></td><td>Les cibles et les seuils sont proposés. Les arrêter avant le dépôt, en particulier le 99,5 % de disponibilité, la reprise en 4 heures ouvrables et la détection en 60 minutes, qui engagent le demandeur devant la Banque.</td></tr>
+    <tr><td><b>Seconde personne habilitée</b></td><td>La double approbation des lots suppose une seconde personne. La nommer, la former et documenter sa suppléance ; le cadre en fait une condition d’activation de la fonction de paiement.</td></tr>
+    <tr><td><b>Ressource indépendante</b></td><td>Retenir la ressource chargée de l’examen indépendant de l’article 10 et convenir de son cycle. Elle doit être distincte de l’agent de conformité en matière de recyclage des produits de la criminalité.</td></tr>
+    <tr><td><b>Provision d’exploitation</b></td><td>Chiffrer les douze mois de charges fixes mentionnés à la section 3 et les rattacher à la projection de trésorerie jointe à la section 12.</td></tr>
+    <tr><td><b>Tiers à nommer</b></td><td>Institution financière parraine, partenaire de virement, hébergeur et fournisseur de vérification demeurent génériques, comme à la question 6.1. Y substituer les dénominations retenues, et joindre les ententes à la section 13.</td></tr>
+    <tr><td><b>Conseil d’administration</b></td><td>Le Règlement distingue l’approbation par le cadre dirigeant de celle du conseil. Confirmer auprès du conseiller juridique la forme que prend cette double approbation dans une société à administrateur unique, et consigner les deux approbations séparément.</td></tr>
+    <tr><td><b>Systèmes désignés</b></td><td>Vérifier, au moment du dépôt, la liste des systèmes de compensation et de règlement désignés tenue par la Banque du Canada, et nommer en conséquence les chambres de compensation visées à la section 9 — en particulier le statut du système de virement Interac.</td></tr>
+    <tr><td><b>Spécification du fichier 005</b></td><td>La note 5 donne la spécification usuelle — enregistrement de 1 464 caractères, en-tête de 24 caractères et six segments de 240. Confirmer la version de la norme en vigueur auprès de Paiements Canada et, surtout, le guide de mise en œuvre propre à l’institution parraine retenue, qui peut imposer ses propres contraintes.</td></tr>
+    <tr><td><b>Renseignements personnels</b></td><td>Faire confirmer par le conseiller juridique quelles obligations de signalement en matière de renseignements personnels s’appliquent en parallèle de l’article 18 de la Loi, et les nommer aux sections 8 et 9 et à la note 4 plutôt que d’y renvoyer génériquement.</td></tr>
+    <tr><td><b>Portail de notification</b></td><td>Vérifier les modalités d’accès au portail de la Banque du Canada et le format exact de l’avis d’incident au moment du dépôt.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

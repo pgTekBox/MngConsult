@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-06-cadre-reponse-incidents</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h4 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10pt;
+    color: var(--vert);
+    margin: 11pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+  .ref { font-size: 8.5pt; color: var(--gris); font-style: italic; break-after: avoid; }
+
+  .saut { break-before: page; }
+  svg { display: block; margin: 10pt auto; break-inside: avoid; }
+
+  .gabarit {
+    border: 0.75pt solid var(--ligne);
+    background: var(--alt);
+    padding: 10pt 12pt;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+  }
+  .gabarit p { margin: 0 0 5pt 0; }
+  .gabarit p:last-child { margin-bottom: 0; }
+  .gabarit b { color: var(--vert); }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Cadre de réponse aux incidents</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — section 11</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Cadre dirigeant responsable :</b> Yves Perron, président-directeur général</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">La présente pièce développe le plan de réponse et de rétablissement exigé à l’alinéa 5(1)i) du
+  Règlement sur les activités associées aux paiements de détail, ainsi que les obligations de notification de
+  l’article 18 de la Loi. Elle complète le cadre de gestion des risques opérationnels joint à la même section, sans
+  s’y substituer : celui-là énonce ce que le demandeur prévoit, celle-ci décrit comment il l’exécute. Les termes
+  suivis de la mention <i>(voir pièce 05)</i> y sont définis.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. Objet et articulation avec le cadre de gestion des risques</h2>
+
+<p>Le Règlement exige un cadre unique, qui couvre à la fois la gestion des risques opérationnels et la réponse aux
+incidents. Le demandeur le présente en deux pièces parce qu’elles ne servent pas au même moment : l’une se lit
+avant, l’autre se lit pendant.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:34%">Pièce</th><th style="width:33%">Ce qu’elle établit</th><th style="width:33%">Quand elle sert</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Pièce 05</b> — cadre de gestion des risques opérationnels et de réponse aux incidents</td>
+      <td>Les objectifs, les risques recensés, les mesures de protection, les capacités de détection, les principes du plan de réponse, les examens et les mises à l’essai.</td>
+      <td>À froid : conception, examen annuel, essais, approbation.</td>
+    </tr>
+    <tr>
+      <td><b>Pièce 06</b> — le présent document</td>
+      <td>L’échelle de gravité, les rôles pendant un incident, les procédures par type d’incident, les gabarits d’avis et de dossier, la revue postérieure.</td>
+      <td>À chaud : dès qu’un signal franchit un seuil, et jusqu’à la clôture du dossier.</td>
+    </tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Aucune règle nouvelle n’est introduite ici.</b> Les seuils de détection, les délais de qualification et de
+  notification, la qualification des répercussions importantes et les mesures immédiates sont ceux de la pièce 05.
+  La présente pièce les rend exécutables : qui fait quoi, dans quel ordre, avec quels mots. En cas de divergence
+  entre les deux documents, la pièce 05 prévaut, et la présente pièce est corrigée.</p>
+</div>
+
+<!-- ================= 2 ================= -->
+<h2>2. L’échelle de gravité</h2>
+
+<p>La gravité commande la <b>mobilisation</b> : combien de personnes sont réveillées et à quelle vitesse. Elle ne
+commande pas la notification, qui dépend d’une qualification distincte — celle des répercussions importantes au sens
+de l’article 18. Les deux décisions se prennent séparément, même si elles se rejoignent souvent.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:12%">Niveau</th><th style="width:44%">Situation</th><th style="width:22%">Mobilisation</th><th style="width:22%">Premier geste</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>G1</b><br><span class="petit">critique</span></td>
+      <td>Des fonds d’utilisateurs finaux sont en cause : écart de rapprochement, invariant du grand livre en échec, soupçon de paiement non autorisé, atteinte au compte en fiducie.</td>
+      <td>Immédiate, à toute heure. Cadre dirigeant joint sans délai.</td>
+      <td>Suspension des transmissions.</td>
+    </tr>
+    <tr>
+      <td><b>G2</b><br><span class="petit">majeur</span></td>
+      <td>Le service est interrompu ou une donnée confidentielle est en cause, sans qu’un mouvement de fonds soit erroné : indisponibilité prolongée, compromission d’un accès, incident chez un tiers.</td>
+      <td>Immédiate en heures ouvrables, sans délai hors heures si un lot est en attente.</td>
+      <td>Isolement de l’accès ou du composant en cause.</td>
+    </tr>
+    <tr>
+      <td><b>G3</b><br><span class="petit">modéré</span></td>
+      <td>Une opération ou un lot est retardé ou refusé sans perte : fichier rejeté à l’entrée, lot manqué, refus d’un virement.</td>
+      <td>Heures ouvrables, par l’exploitation.</td>
+      <td>Correction et redépôt, ou report documenté.</td>
+    </tr>
+    <tr>
+      <td><b>G4</b><br><span class="petit">mineur</span></td>
+      <td>Anomalie sans effet sur une opération ni sur une donnée : alerte isolée, dégradation passagère, avis de sécurité sans exposition.</td>
+      <td>Traitement courant.</td>
+      <td>Consignation et suivi.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="petit">La gravité est attribuée à l’ouverture, sur la foi de ce qui est connu, et révisée aussi souvent
+que nécessaire. Elle ne se révise jamais à la baisse pour la seule raison que la réponse progresse : un incident G1
+maîtrisé demeure un incident G1 dans le dossier.</p>
+
+<div class="note">
+  <p><b>Gravité et répercussions importantes ne se confondent pas.</b> Un incident G3 — un lot manqué la veille d’une
+  échéance de paie — peut avoir des répercussions importantes pour les personnes touchées et exiger une
+  notification, tandis qu’un incident G2 contenu en quelques minutes peut n’en avoir aucune. La gravité mesure ce
+  qu’il faut mobiliser ; la qualification mesure ce qu’il faut déclarer. Le cadre dirigeant prononce la seconde dans
+  les quatre heures suivant la détection, selon la pièce 05.</p>
+</div>
+
+<!-- ================= 3 ================= -->
+<h2>3. Le cycle de vie d’un incident</h2>
+
+<svg viewBox="0 0 1000 240" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Les cinq états d’un incident" font-family="Carlito, Calibri, sans-serif">
+  <defs>
+    <marker id="fl6" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto">
+      <path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/>
+    </marker>
+  </defs>
+
+  <g font-size="16" fill="#1f2320">
+    <rect x="8" y="30" width="180" height="56" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.8"/>
+    <text x="98" y="62" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Ouvert</text>
+    <text x="98" y="108" text-anchor="middle">un seuil est franchi</text>
+    <text x="98" y="128" text-anchor="middle">ou un tiers signale</text>
+    <text x="98" y="156" text-anchor="middle" font-size="15" fill="#5f6663">exploitation</text>
+
+    <line x1="196" y1="58" x2="240" y2="58" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl6)"/>
+
+    <rect x="250" y="30" width="180" height="56" rx="6" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.8"/>
+    <text x="340" y="62" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Qualifié</text>
+    <text x="340" y="108" text-anchor="middle">issue retenue,</text>
+    <text x="340" y="128" text-anchor="middle">gravité attribuée</text>
+    <text x="340" y="156" text-anchor="middle" font-size="15" fill="#5f6663">cadre dirigeant · 4 h</text>
+
+    <line x1="438" y1="58" x2="482" y2="58" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl6)"/>
+
+    <rect x="492" y="30" width="180" height="56" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.8"/>
+    <text x="582" y="62" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Maîtrisé</text>
+    <text x="582" y="108" text-anchor="middle">l’atteinte ne</text>
+    <text x="582" y="128" text-anchor="middle">progresse plus</text>
+    <text x="582" y="156" text-anchor="middle" font-size="15" fill="#5f6663">responsable d’incident</text>
+
+    <line x1="680" y1="58" x2="724" y2="58" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl6)"/>
+
+    <rect x="734" y="30" width="120" height="56" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.8"/>
+    <text x="794" y="62" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Rétabli</text>
+    <text x="794" y="108" text-anchor="middle">service normal,</text>
+    <text x="794" y="128" text-anchor="middle">invariant confirmé</text>
+    <text x="794" y="156" text-anchor="middle" font-size="15" fill="#5f6663">cadre dirigeant</text>
+
+    <line x1="862" y1="58" x2="900" y2="58" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl6)"/>
+
+    <rect x="910" y="30" width="82" height="56" rx="6" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.8"/>
+    <text x="951" y="62" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Clos</text>
+    <text x="951" y="108" text-anchor="middle">après revue</text>
+    <text x="951" y="156" text-anchor="middle" font-size="15" fill="#5f6663">cadre dirigeant</text>
+  </g>
+
+  <rect x="250" y="188" width="742" height="34" rx="4" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.2"/>
+  <text x="621" y="210" text-anchor="middle" font-size="16" fill="#1f2320">Notification, s’il y a lieu : au plus 48 heures après la qualification</text>
+</svg>
+
+<p><b>Le passage de « maîtrisé » à « rétabli » est celui que l’on confond le plus.</b> Un incident est
+<b>maîtrisé</b> lorsque l’atteinte ne progresse plus : la clé est révoquée, les transmissions sont suspendues, le
+lot est arrêté. La cause n’est pas nécessairement connue et le service n’est pas nécessairement revenu. Il est
+<b>rétabli</b> lorsque le service fonctionne de nouveau, que l’invariant du grand livre est confirmé et que le
+rapprochement du jour ne présente aucun écart. Entre les deux, le demandeur ne reprend pas les transmissions au
+motif que la situation « semble stable ».</p>
+
+<table>
+  <thead>
+    <tr><th style="width:22%">Passage</th><th style="width:48%">Condition</th><th style="width:30%">Qui le prononce</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Vers <b>ouvert</b></td><td>Un seuil de la section 7 de la pièce 05 est franchi, ou un tiers signale un incident. Le doute suffit : un incident ouvert à tort se referme sans conséquence.</td><td>Toute personne de l’exploitation</td></tr>
+    <tr><td>Vers <b>qualifié</b></td><td>L’issue est retenue parmi les trois de la pièce 05, et la gravité est attribuée. Au plus quatre heures après la détection, au besoin sur l’hypothèse la plus défavorable.</td><td>Cadre dirigeant</td></tr>
+    <tr><td>Vers <b>maîtrisé</b></td><td>Aucune aggravation n’est plus possible par le mécanisme en cause.</td><td>Responsable d’incident</td></tr>
+    <tr><td>Vers <b>rétabli</b></td><td>Service normal, invariant du grand livre confirmé, rapprochement sans écart, lots en attente traités ou reportés en connaissance de cause.</td><td>Cadre dirigeant</td></tr>
+    <tr><td>Vers <b>clos</b></td><td>Cause première établie, mesures correctives décidées et confiées à un responsable, dossier complet, avis de suivi émis s’il y a lieu.</td><td>Cadre dirigeant, après la revue</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 4 ================= -->
+<div class="saut"></div>
+<h2>4. Les rôles pendant un incident</h2>
+
+<p>Les rôles ci-dessous sont des fonctions, non des postes : une même personne peut en tenir plusieurs, à une
+exception près, énoncée dans l’encadré.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Rôle</th><th style="width:74%">Ce qu’il fait pendant l’incident</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Responsable d’incident</b></td><td>Conduit la réponse : tient la chronologie, décide des mesures immédiates, répartit les tâches, prononce la maîtrise. Il est désigné à l’ouverture et son nom figure au dossier. Il ne conduit pas l’enquête technique lui-même s’il peut l’éviter.</td></tr>
+    <tr><td><b>Cadre dirigeant</b></td><td>Qualifie l’incident, autorise et signe les notifications, décide du rétablissement et de la clôture, engage les dépenses nécessaires.</td></tr>
+    <tr><td><b>Exploitation</b></td><td>Ouvre le dossier, applique les mesures sur la plateforme — suspension, gel, révocation —, exécute le rapprochement et le rejeu des lots.</td></tr>
+    <tr><td><b>Ingénierie</b></td><td>Établit la cause première, propose le correctif ou la mesure d’atténuation, procède à la remise en service.</td></tr>
+    <tr><td><b>Communication</b></td><td>Rédige les avis aux abonnés et aux tiers à partir des gabarits de l’annexe A, et tient le registre de ce qui a été dit, à qui et quand.</td></tr>
+    <tr><td><b>Agent de conformité</b></td><td>Est informé de tout incident G1 ou G2 et de tout incident mettant en cause un abonné ; détermine si une déclaration relevant du programme de conformité est requise, indépendamment de la notification prévue à l’article 18.</td></tr>
+  </tbody>
+</table>
+
+<div class="note">
+  <p><b>La seule séparation qui ne se cumule pas.</b> La personne qui conduit la réponse ne prononce pas la
+  qualification : c’est le cadre dirigeant qui la prononce. La raison est simple et vaut d’être dite — celui qui est
+  au milieu de l’action a intérêt, sans même s’en rendre compte, à croire que la situation est moins grave qu’elle
+  ne l’est. Lorsque le cadre dirigeant est lui-même responsable d’incident, il consigne au dossier les faits sur
+  lesquels il fonde sa qualification, de manière que la ressource indépendante prévue à l’article 10 du Règlement
+  puisse la réexaminer.</p>
+</div>
+
+<h3>Joignabilité</h3>
+<ul>
+  <li>Les coordonnées du cadre dirigeant, de la suppléance, de l’institution financière parraine, du partenaire de virement et de l’hébergeur sont tenues <b>hors ligne</b> et à jour, de sorte qu’une panne des systèmes n’empêche pas de les atteindre.</li>
+  <li>Une suppléance nommée existe pour chaque rôle. Un incident ne s’arrête pas parce qu’une personne est en congé.</li>
+  <li>Les incidents G1 et G2 se traitent à toute heure ; les incidents G3 et G4, en heures ouvrables, sauf lorsqu’un lot est en attente de transmission le jour même.</li>
+</ul>
+
+<!-- ================= 5 ================= -->
+<div class="saut"></div>
+<h2>5. Les procédures par type d’incident</h2>
+
+<p>Chaque procédure suit la même structure : les premiers gestes, la qualification, la communication, puis la
+sortie. Elles ne remplacent pas le jugement du responsable d’incident ; elles lui évitent d’avoir à l’exercer sur
+les points déjà tranchés.</p>
+
+<h3>5.1 Écart de rapprochement ou invariant du grand livre en échec</h3>
+<p class="ref">Gravité G1. Signaux : section 7 de la pièce 05.</p>
+<ol>
+  <li><b>Suspendre les transmissions.</b> Aucun lot ne part tant que l’écart n’est pas expliqué. Les instructions continuent d’être acceptées et demeurent en attente.</li>
+  <li><b>Figer l’état.</b> Extraire et conserver l’état du grand livre, le relevé de l’institution parraine et les journaux du jour, avant toute tentative de correction.</li>
+  <li><b>Mesurer.</b> Établir le montant de l’écart, son sens, et les abonnés dont le solde est touché. Un écart d’un cent se traite comme un écart de mille dollars : c’est la cause qui importe, non le montant.</li>
+  <li><b>Qualifier</b> dans les quatre heures. Une atteinte à l’intégrité du grand livre a des répercussions importantes dès qu’un solde d’abonné ou un paiement en est affecté.</li>
+  <li><b>Corriger par contre-passation seulement.</b> Aucune écriture n’est modifiée ni effacée ; l’écriture d’origine demeure visible.</li>
+  <li><b>Rétablir</b> lorsque l’invariant est confirmé et que le rapprochement du jour ne présente plus d’écart. Reprendre alors les transmissions, en vérifiant les dates de règlement portées aux lots en attente.</li>
+</ol>
+
+<h3>5.2 Fichier rejeté à l’entrée ou lot manqué</h3>
+<p class="ref">Gravité G3, ou G2 si une échéance de paie ou de remise est en cause.</p>
+<ol>
+  <li><b>Établir la cause du rejet</b> auprès de l’institution parraine : format, longueur d’enregistrement, totaux de l’enregistrement Z, en-tête.</li>
+  <li><b>Corriger et redéposer</b> si l’heure de tombée le permet encore. Sinon, reporter au jour ouvrable suivant et le consigner.</li>
+  <li><b>Prévenir les abonnés touchés</b> dès que le report est acquis, sans attendre le dépôt effectif, en indiquant la nouvelle date de règlement.</li>
+  <li><b>Qualifier.</b> Un lot manqué a des répercussions importantes lorsqu’il retarde une paie, une remise gouvernementale ou tout paiement à échéance légale.</li>
+  <li><b>Vérifier l’absence de double dépôt</b> avant le redépôt : le numéro de création de fichier doit être unique.</li>
+</ol>
+
+<h3>5.3 Compromission d’un accès, d’une clé ou d’un compte</h3>
+<p class="ref">Gravité G2, ou G1 si une opération a pu être initiée.</p>
+<ol>
+  <li><b>Révoquer</b> la clé, le jeton ou le compte en cause, immédiatement et sans attendre la confirmation de l’hypothèse.</li>
+  <li><b>Rechercher les opérations initiées</b> par cet accès depuis la dernière utilisation légitime connue, et arrêter les lots qui les portent s’ils ne sont pas transmis.</li>
+  <li><b>Déterminer ce qui a été consulté</b>, à partir des journaux d’accès, et non ce qui aurait pu l’être.</li>
+  <li><b>Qualifier.</b> Un accès non autorisé a des répercussions importantes lorsqu’il en résulte un risque réel de préjudice grave, ou qu’un tel risque est créé.</li>
+  <li><b>Aviser l’abonné</b> dont les données ou les clés sont en cause, même si l’origine se trouve chez lui.</li>
+  <li><b>Rétablir</b> après réémission des accès et vérification qu’aucune opération non autorisée n’a été transmise.</li>
+</ol>
+
+<h3>5.4 Indisponibilité d’un tiers</h3>
+<p class="ref">Gravité G2. Tiers visés : hébergeur, institution parraine, partenaire de virement, fournisseur de vérification.</p>
+<ol>
+  <li><b>Constater et joindre</b> le tiers par le canal convenu à l’entente, en notant l’heure du premier contact.</li>
+  <li><b>Appliquer la procédure de dégradation</b> propre au tiers : report du lot, bascule du virement Interac vers le rail par lots, report de l’activation d’un abonné lorsque la vérification d’entreprise est indisponible.</li>
+  <li><b>Estimer la durée</b> et la comparer à l’heure de tombée du jour.</li>
+  <li><b>Prévenir les abonnés</b> si le service est interrompu au-delà d’une heure ouvrable, ou si un lot est reporté.</li>
+  <li><b>Qualifier</b> : l’incident du tiers peut être aussi un incident du demandeur, notamment si des données lui ont échappé.</li>
+</ol>
+
+<h3>5.5 Vague de retours ou abonné suspect</h3>
+<p class="ref">Gravité G2. Signal : taux de retour au-delà du seuil porté à la fiche de l’abonné.</p>
+<ol>
+  <li><b>Abaisser le plafond</b> de l’abonné et, au besoin, suspendre ses encaissements pendant l’examen.</li>
+  <li><b>Exercer le droit d’audit</b> sur les ententes de débit préautorisé détenues par l’abonné.</li>
+  <li><b>Distinguer les trois causes possibles</b> — clientèle qui se détériore, processus négligent, prélèvement sans droit — avant de décider de la suite.</li>
+  <li><b>Informer l’agent de conformité</b> dans tous les cas, et l’institution parraine lorsque le taux agrégé de la plateforme s’en trouve affecté.</li>
+  <li><b>Décider</b> : révision des limites et de la réserve, plan de correction imposé à l’abonné, ou résiliation.</li>
+</ol>
+
+<h3>5.6 Incident signalé par un tiers</h3>
+<p class="ref">Gravité selon l’exposition. Il ne s’agit pas d’un avis de vulnérabilité, qui suit la gestion des correctifs.</p>
+<ol>
+  <li><b>Ouvrir un dossier au nom du demandeur</b> : l’incident d’un tiers qui touche ses données ou son service est son incident.</li>
+  <li><b>Établir l’exposition</b> : quelles données, quels abonnés, quelle période.</li>
+  <li><b>Qualifier</b> sans attendre que le tiers ait terminé son propre examen. Le délai de l’article 18 court à partir de la détermination du demandeur, non de celle du tiers.</li>
+  <li><b>Documenter ce que le tiers a communiqué</b>, à quelle heure, et ce qu’il n’a pas communiqué.</li>
+</ol>
+
+<!-- ================= 6 ================= -->
+<div class="saut"></div>
+<h2>6. La communication</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:24%">Destinataire</th><th style="width:24%">Déclencheur</th><th style="width:52%">Contenu</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Banque du Canada</b></td><td>Qualification de répercussions importantes</td><td>Les éléments exigés à la section 9 de la pièce 05, transmis au plus tard 48 heures après la qualification, puis les avis de suivi requis.</td></tr>
+    <tr><td><b>Utilisateurs finaux touchés</b></td><td>Idem, ou interruption de service au-delà d’une heure ouvrable</td><td>Nature de l’incident, dates de début, de détection et de résolution, répercussions propres au destinataire, mesures correctives recommandées.</td></tr>
+    <tr><td><b>Institution parraine</b></td><td>Tout incident G1, tout rejet de fichier, toute suspension des transmissions</td><td>Ce qui touche les fichiers, le compte en fiducie ou le calendrier de dépôt. Elle est avisée en vertu de l’entente, sans attendre la qualification.</td></tr>
+    <tr><td><b>Autres fournisseurs et chambres de compensation touchés</b></td><td>Qualification de répercussions importantes</td><td>Selon la section 9 de la pièce 05.</td></tr>
+    <tr><td><b>Abonnés non touchés</b></td><td>Interruption générale du service</td><td>Un état de service factuel, sans détail technique exploitable.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Trois règles de rédaction.</b> Ne rien affirmer qui ne soit établi : « nous établissons actuellement si des
+  données ont été consultées » est préférable à « aucune donnée n’a été consultée » tant que les journaux n’ont pas
+  été examinés. Donner une prochaine échéance plutôt qu’une promesse de résultat. Et ne jamais laisser un abonné
+  apprendre d’un tiers un incident qui le concerne.</p>
+</div>
+
+<!-- ================= 7 ================= -->
+<h2>7. Après l’incident</h2>
+
+<ul>
+  <li><b>Revue postérieure</b> — tout incident G1 ou G2 donne lieu à une revue dans les dix jours ouvrables suivant le rétablissement. Elle porte sur la chronologie, la cause première, ce qui a permis de détecter, ce qui a retardé la réponse, et ce qui aurait empêché l’incident.</li>
+  <li><b>Mesures correctives</b> — chacune est confiée à une personne nommée, avec une échéance. Le dossier ne se clôt pas tant qu’elles ne sont pas décidées, même si leur exécution s’étale ensuite.</li>
+  <li><b>Effet sur le cadre</b> — un incident qui révèle une lacune du cadre de gestion des risques déclenche une modification de celui-ci, et donc une nouvelle approbation, sans attendre l’examen annuel.</li>
+  <li><b>Effet sur les essais</b> — un scénario d’incident survenu réellement est ajouté aux essais fondés sur des scénarios prévus à la section 11 de la pièce 05.</li>
+  <li><b>Sans recherche de faute</b> — la revue établit des causes, non des responsabilités individuelles. Un cadre qui punit la déclaration obtient moins de déclarations, non moins d’incidents.</li>
+</ul>
+
+<!-- ================= ANNEXE A ================= -->
+<div class="saut"></div>
+<h2>Annexe A — Gabarits d’avis</h2>
+
+<h3>Avis à la Banque du Canada</h3>
+<div class="gabarit">
+  <p><b>Demandeur :</b> 9567-0048 Québec inc. — 60sec-Paiement — numéro d’enregistrement</p>
+  <p><b>Personne-ressource :</b> nom, fonction, courriel, téléphone joignable</p>
+  <p><b>Numéro d’incident :</b> INC-AAAA-NNN</p>
+  <p><b>Chronologie :</b> début — détection — détermination des répercussions importantes — résolution, s’il y a lieu</p>
+  <p><b>Mode de détection :</b> contrôle continu, avis d’un tiers, signalement d’un abonné</p>
+  <p><b>Description sommaire :</b> ce qui s’est produit, en termes factuels</p>
+  <p><b>Activités de paiement touchées :</b> encaissement, décaissement, virement Interac, détention de fonds</p>
+  <p><b>Ampleur :</b> nombre d’utilisateurs finaux touchés, nombre d’opérations, valeur en cause</p>
+  <p><b>Mesures de réponse prises :</b> mesures immédiates, atténuation, rétablissement</p>
+  <p><b>Cause première :</b> établie, ou état de l’enquête et prochaine échéance</p>
+</div>
+
+<h3>Avis à un utilisateur final touché</h3>
+<div class="gabarit">
+  <p><b>Objet :</b> incident touchant votre compte 60sec-Paiement — INC-AAAA-NNN</p>
+  <p><b>Ce qui s’est produit :</b> une phrase factuelle, sans jargon ni détail technique exploitable</p>
+  <p><b>Quand :</b> date et heure du début, de la détection et, s’il y a lieu, de la résolution</p>
+  <p><b>Ce que cela signifie pour vous :</b> opérations, solde ou données précisément en cause</p>
+  <p><b>Ce que nous avons fait :</b> mesures prises et état actuel</p>
+  <p><b>Ce que nous vous recommandons de faire :</b> mesures correctives à sa portée, s’il y en a</p>
+  <p><b>Prochaine communication :</b> date à laquelle il aura de nos nouvelles, même sans élément nouveau</p>
+  <p><b>Pour nous joindre :</b> canal direct, sans passer par le soutien courant</p>
+</div>
+
+<!-- ================= ANNEXE B ================= -->
+<h2>Annexe B — Le dossier d’incident</h2>
+
+<p>Un dossier est ouvert pour chaque incident, quel que soit son niveau de gravité, et conservé sept ans au Canada.
+Il porte au minimum :</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Rubrique</th><th style="width:70%">Contenu</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Identification</b></td><td>Numéro, date d’ouverture, responsable d’incident désigné, gravité initiale et gravité finale.</td></tr>
+    <tr><td><b>Chronologie</b></td><td>Heures de survenance, de détection, de qualification, de maîtrise, de rétablissement et de clôture, avec la source de chaque horodatage.</td></tr>
+    <tr><td><b>Qualification</b></td><td>Issue retenue, faits sur lesquels elle se fonde, auteur de la décision, et toute révision ultérieure.</td></tr>
+    <tr><td><b>Répercussions</b></td><td>Utilisateurs finaux, opérations et valeurs en cause ; données consultées ou communiquées, le cas échéant.</td></tr>
+    <tr><td><b>Mesures</b></td><td>Mesures immédiates, atténuation, correction, rétablissement — chacune horodatée et attribuée.</td></tr>
+    <tr><td><b>Communications</b></td><td>Chaque avis émis : destinataire, heure, contenu, et accusé de réception s’il y a lieu.</td></tr>
+    <tr><td><b>Cause première</b></td><td>Analyse et conclusion, ou motif pour lequel la cause n’a pu être établie.</td></tr>
+    <tr><td><b>Suites</b></td><td>Mesures correctives, responsables, échéances, et état d’avancement jusqu’à leur exécution.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Cadre de gestion des risques opérationnels : pièce 05. Description des services et des
+  processus de paiement : question 6.1. Diagrammes des processus de paiement : question 6.3. Contrats avec les tiers
+  et procédure de supervision : section 13. Programme de conformité : section 16.</p>
+</div>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Deux pièces ou une</b></td><td>Le Règlement exige un cadre unique. Confirmer que la Banque accepte une présentation en deux pièces, ou fusionner la présente pièce en annexe de la pièce 05 avant le dépôt.</td></tr>
+    <tr><td><b>Échelle de gravité</b></td><td>Les quatre niveaux et leurs seuils de mobilisation sont proposés. Les arrêter, et vérifier qu’ils s’accordent avec les engagements de service pris au contrat d’abonnement.</td></tr>
+    <tr><td><b>Responsable d’incident</b></td><td>Le rôle suppose une personne autre que le cadre dirigeant pour être pleinement effectif. Le nommer en même temps que la seconde personne habilitée à approuver les lots.</td></tr>
+    <tr><td><b>Joignabilité</b></td><td>Constituer la fiche hors ligne des coordonnées et convenir avec chaque tiers du canal d’urgence et de son délai de réponse ; le reporter aux ententes de la section 13.</td></tr>
+    <tr><td><b>Gabarits d’avis</b></td><td>Confronter le gabarit destiné à la Banque au formulaire réel du portail au moment du dépôt, et faire relire le gabarit destiné aux utilisateurs finaux par le conseiller juridique.</td></tr>
+    <tr><td><b>Délai de revue</b></td><td>Les dix jours ouvrables sont une proposition ; l’arrêter et l’inscrire au calendrier de la section 12 de la pièce 05.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

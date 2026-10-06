@@ -1,0 +1,267 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Ce que 60sec-AI remplace</title>
+<style>
+  @page { size: Letter landscape; margin: 8mm 9mm 10mm 9mm; }
+  :root { --vert:#0f6e5d; --or:#d9a03c; --txt:#1f2320; --gris:#5f6663; --ligne:#e2e8e6;
+          --alt:#f6faf8; --tint:#eef5f2; --rouge:#a4342b; --ambre:#8a6516; }
+  * { box-sizing:border-box; }
+  body { font-family:"Carlito","Calibri",sans-serif; color:var(--txt); margin:0; font-size:6.2pt; line-height:1.14; }
+
+  h1 { font-family:"Caladea","Cambria",serif; font-size:13.5pt; color:var(--vert); margin:0 0 1pt 0; }
+  .sous { font-size:6.9pt; color:var(--gris); margin:0 0 3.5pt 0; }
+
+  table { width:100%; border-collapse:collapse; }
+  th { background:var(--vert); color:#fff; text-align:left; padding:2.2pt 4pt; font-size:6.3pt; font-weight:bold; }
+  th.c { text-align:center; }
+  td { padding:1.2pt 4pt; vertical-align:middle; border-bottom:0.4pt solid var(--ligne); }
+  td.c { text-align:center; }
+  tbody tr:nth-child(even) td { background:var(--alt); }
+  td.fx { background:var(--tint) !important; font-weight:bold; color:var(--vert); font-size:7.2pt;
+          border-top:0.4pt solid #cfdcd7; vertical-align:top; padding-top:6pt; }
+
+  .pn { font-weight:bold; font-size:6.9pt; display:block; }
+  .porg { color:var(--gris); font-size:6.3pt; }
+
+  .flag { font-family:"Noto Color Emoji"; font-size:9.5pt; line-height:1; vertical-align:-2pt; margin-right:1.5pt; }
+  .flag-c { font-family:"Noto Color Emoji"; font-size:8pt; line-height:1; vertical-align:-1pt; margin:0 0 0 1pt; }
+  .flag-p { font-family:"Noto Color Emoji"; font-size:11pt; line-height:1; vertical-align:-2pt; margin-right:1.5pt; }
+  svg.qcf-p { width:16px; height:10.7px; vertical-align:-2px; border:0.3pt solid #b8c6c1; margin-right:2pt; }
+  .flag-b { font-family:"Noto Color Emoji"; font-size:12.5pt; line-height:1; vertical-align:-2.5pt; margin-right:1pt; }
+  svg.qcf-b { width:18px; height:12px; vertical-align:-2px; border:0.3pt solid #b8c6c1; margin-right:2pt; }
+  td.hb { padding-top:1.1pt; padding-bottom:1.1pt; }
+  .flag-s { font-family:"Noto Color Emoji"; font-size:9pt; line-height:1; vertical-align:-1pt; margin-right:1pt; }
+  svg.qcf { width:14px; height:9.3px; vertical-align:-1.5px; border:0.3pt solid #b8c6c1; margin-right:2pt; }
+  svg.qcf-s { width:12px; height:8px; vertical-align:-1px; border:0.3pt solid #b8c6c1; margin-right:1.5pt; }
+
+  .oui { color:var(--vert); font-size:11pt; font-weight:bold; line-height:0.8; }
+  .non { color:var(--rouge); font-size:10.5pt; font-weight:bold; line-height:0.8; }
+  .inc { display:inline-block; color:var(--gris); font-size:9pt; font-weight:bold;
+         border:0.8pt dashed #a9b3b0; border-radius:3pt; padding:0.5pt 4pt; line-height:1.1; }
+  .q { color:var(--gris); font-size:5.9pt; display:block; margin-top:0.5pt; line-height:1.15; }
+  .qc-c { color:var(--gris); font-size:5.7pt; display:block; margin-top:0.5pt; text-align:center; line-height:1.15; }
+  .nv { color:var(--gris); font-style:italic; }
+
+  .synthese { margin-top:3pt; background:var(--tint); border-left:2.5pt solid var(--vert); padding:4pt 9pt; font-size:6.7pt; line-height:1.3; }
+  .synthese b { color:var(--vert); }
+  .synthese p { margin:0 0 3pt 0; }
+  .synthese p:last-child { margin-bottom:0; }
+  .legende { font-size:6.2pt; color:var(--gris); margin:0 0 3pt 0; }
+</style>
+</head>
+<body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <g id="fleur" fill="#fff">
+      <path d="M0,-2.6 C0.95,-1.5 0.95,-0.4 0,0.5 C-0.95,-0.4 -0.95,-1.5 0,-2.6 Z"/>
+      <path d="M-0.38,0.1 h0.76 v2.4 h-0.76 Z"/>
+      <path d="M-2.5,-0.7 C-1.7,-1.7 -0.65,-1.15 -0.4,0.1 C-1.3,0.5 -2.3,0.2 -2.5,-0.7 Z"/>
+      <path d="M2.5,-0.7 C1.7,-1.7 0.65,-1.15 0.4,0.1 C1.3,0.5 2.3,0.2 2.5,-0.7 Z"/>
+      <path d="M-1.7,1.15 h3.4 v0.7 h-3.4 Z"/>
+    </g>
+    <symbol id="qcflag" viewBox="0 0 24 16">
+      <rect width="24" height="16" fill="#0055A4"/>
+      <rect x="10.6" width="2.8" height="16" fill="#fff"/>
+      <rect y="6.6" width="24" height="2.8" fill="#fff"/>
+      <use href="#fleur" transform="translate(5.3,3.3) scale(0.78)"/>
+      <use href="#fleur" transform="translate(18.7,3.3) scale(0.78)"/>
+      <use href="#fleur" transform="translate(5.3,12.7) scale(0.78)"/>
+      <use href="#fleur" transform="translate(18.7,12.7) scale(0.78)"/>
+    </symbol>
+  </defs>
+</svg>
+
+<h1>Ce que 60sec-AI remplace</h1>
+<p class="sous">Les logiciels qu'une PME québécoise compose aujourd'hui — prix, langues, pays d'hébergement et conformité. Relevé du 8 septembre 2026.</p>
+
+<p class="legende">
+  <b>Légende.</b>
+  <span class="oui">✓</span> offert en français <b>et</b> en anglais &nbsp;·&nbsp;
+  <span class="non">✗</span> non &nbsp;·&nbsp;
+  <svg class="qcf"><use href="#qcflag"/></svg>conforme au Québec &nbsp;·&nbsp;
+  <span class="flag">🇨🇦</span>conforme au Canada &nbsp;·&nbsp;
+  <span class="inc">?</span> donnée non publiée par l'éditeur — n'affirme pas une non-conformité<br>
+  Hébergement et traitement : <span class="oui">✓</span> au Québec ou au Canada, <span class="non">✗</span> ailleurs. 
+  Le crochet exige le français <b>et</b> l'anglais dans l'interface du produit : un site traduit ne compte pas. Le drapeau indique une conformité documentée par l'éditeur pour les obligations propres à la fonction. Prix consultés le 8 septembre 2026, hors taxes.
+</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="width:8%">Fonction</th>
+      <th style="width:19%">Produit et origine</th>
+      <th style="width:14%">Prix courant</th>
+      <th class="c" style="width:6%">Langues</th>
+      <th class="c" style="width:12%">Hébergement</th>
+      <th class="c" style="width:12%">Traitement</th>
+      <th class="c" style="width:22%">Conformité</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  <tr>
+    <td class="fx" rowspan="5">Comptabilité<br>et facturation</td>
+    <td><span class="pn">QuickBooks En Ligne</span><span class="porg"><span class="flag-p">🇺🇸</span>Intuit</span></td>
+    <td>24 $ à 160 $ / mois</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span><span class="flag-b">🇨🇦</span> <span class="non">✗</span><span class="qc-c">Sauvegarde au Canada</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">RL-1 en XML manuel</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Sage 50</span><span class="porg"><span class="flag-p">🇬🇧</span>Sage</span></td>
+    <td>814 $ à 1 219 $ / an<br>≈ 68 $ à 102 $ / mois</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><b style="font-size:6pt">Poste du client</b> <span class="oui">✓</span></td><td class="c hb"><b style="font-size:6pt">Poste du client</b> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Sommaire des retenues à la main</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Acomba</span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>ACCEO — propriété ontarienne</span></td>
+    <td>39 $ à 399 $ / mois (GO)<br>167 $ à 244 $ / mois</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><svg class="qcf-b"><use href="#qcflag"/></svg> <span class="oui">✓</span><span class="qc-c">Transferts réservés</span></td><td class="c hb"><svg class="qcf-b"><use href="#qcflag"/></svg> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Paie québécoise native</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Xero</span><span class="porg"><span class="flag-p">🇳🇿</span>Xero</span></td>
+    <td>25 $ à 80 $ / mois</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇦🇺</span><span class="flag-b">🇳🇿</span><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td><td class="c hb"><span class="flag-b">🇦🇺</span><span class="flag-b">🇳🇿</span><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Aucune paie canadienne</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Wave</span><span class="porg"><span class="flag-p">🇨🇦</span><span class="flag-p">🇺🇸</span>Toronto, filiale de H&amp;R Block</span></td>
+    <td>0 $ à 25 $ / mois<br>paie 25 $ + 6 $ / employé</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="flag">🇨🇦</span><span class="qc-c">Québec exclu de la paie</span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="3">Paie</td>
+    <td><span class="pn">Nethris</span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>CGI — Montréal</span></td>
+    <td>À partir de 22,46 $<br>par période de paie</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><svg class="qcf-b"><use href="#qcflag"/></svg> <span class="oui">✓</span><span class="qc-c">Aucun transfert</span></td><td class="c hb"><svg class="qcf-b"><use href="#qcflag"/></svg> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Les cinq documentés</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Employeur D</span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>Desjardins</span></td>
+    <td><span class="nv">Non publié — devis</span></td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span><span class="qc-c">ISO 27001</span></td><td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">RL-1, T4, RRQ, CCQ</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Wagepoint</span><span class="porg"><span class="flag-p">🇨🇦</span>Calgary</span></td>
+    <td>20 $ à 40 $ / mois<br>+ 4 $ à 6 $ / employé</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">Non précisé</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span><span class="qc-c">Fournisseurs</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c"><span class="nv">FSS et CNESST non documentés</span></span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="2">Capture<br>des reçus</td>
+    <td><span class="pn">Dext</span><span class="porg"><span class="flag-p">🇬🇧</span></span></td>
+    <td>31,50 $ / mois<br>5 utilisateurs, 250 documents</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">AWS, région non dite</span></td><td class="c hb"><span class="inc">?</span> </td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Aucun engagement de résidence</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Hubdoc</span><span class="porg"><span class="flag-p">🇳🇿</span>Xero</span></td>
+    <td>Inclus dans Xero<br>25 $ à 80 $ / mois</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Aucun engagement de résidence</span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="3">Horaires,<br>poinçon,<br>géolocalisation</td>
+    <td><span class="pn">Agendrix</span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>Sherbrooke</span></td>
+    <td>3,25 $ à 5,25 $ / util. / mois<br>+ 2,25 $ pour le poinçon</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span><span class="qc-c">AWS canadien</span></td><td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Loi 25 · double consentement</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Evolia <span class="porg">(ex-Voilà!)</span></span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>Ville de Québec</span></td>
+    <td>3,50 $ à 7,00 $ / employé / mois<br><span class="nv">devise non étiquetée</span></td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">Aucun pays nommé</span></td><td class="c hb"><span class="inc">?</span> </td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Loi 25 jamais nommée</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Deputy</span><span class="porg"><span class="flag-p">🇺🇸</span><span class="flag-p">🇦🇺</span></span></td>
+    <td>5 $ à 9 $<span class="flag-c">🇺🇸</span> / util. / mois</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇦🇺</span><span class="flag-b">🇬🇧</span><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td><td class="c hb"><span class="flag-b">🇦🇺</span><span class="flag-b">🇬🇧</span><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Ni consentement ni Loi 25</span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="2">Agenda et<br>rendez-vous</td>
+    <td><span class="pn">GOrendezvous</span><span class="porg"><svg class="qcf-p"><use href="#qcflag"/></svg>Montréal</span></td>
+    <td>59 $ à 69 $ / mois<br>+ 20 $ à 25 $ / professionnel</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span><span class="qc-c">Ne quittent pas le Canada</span></td><td class="c hb"><span class="flag-b">🇨🇦</span> <span class="oui">✓</span></td>
+    <td class="c"><svg class="qcf"><use href="#qcflag"/></svg><span class="flag">🇨🇦</span><span class="qc-c">Loi 25, LPRPDE, PHIPA</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Calendly</span><span class="porg"><span class="flag-p">🇺🇸</span></span></td>
+    <td>10 $ à 16 $<span class="flag-c">🇺🇸</span> / siège / mois</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span><span class="qc-c">Ou autre juridiction</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Ni résidence ni Loi 25</span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="2">Courriel et<br>messagerie texte</td>
+    <td><span class="pn">Mailchimp</span><span class="porg"><span class="flag-p">🇺🇸</span>Intuit</span></td>
+    <td>0 $ à 350 $ / mois<br>selon la taille de la liste</td>
+    <td class="c"><span class="oui">✓</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span><span class="qc-c">Et tout pays Intuit</span></td><td class="c hb"><span class="flag-b">🇺🇸</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Aucun engagement de résidence</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Twilio</span><span class="porg"><span class="flag-p">🇺🇸</span></span></td>
+    <td>0,0083 $<span class="flag-c">🇺🇸</span> / SMS<br>+ location du numéro</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="flag-b">🇺🇸</span><span class="flag-b">🇮🇪</span><span class="flag-b">🇦🇺</span> <span class="non">✗</span></td><td class="c hb"><span class="flag-b">🇺🇸</span><span class="flag-b">🇮🇪</span><span class="flag-b">🇦🇺</span> <span class="non">✗</span></td>
+    <td class="c"><span class="non">✗</span><span class="qc-c">Résidence offerte pour l'UE seulement</span></td>
+  </tr>
+
+  <tr>
+    <td class="fx" rowspan="3">Paiement des<br>fournisseurs<br><span style="font-weight:normal;color:#5f6663">(60sec-Paiement)</span></td>
+    <td><span class="pn">Plooto</span><span class="porg"><span class="flag-p">🇨🇦</span>Toronto</span></td>
+    <td>9 $ à 99 $ / mois<br>+ frais par transaction</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">Azure, région non dite</span></td><td class="c hb"><span class="flag-b">🇺🇸</span><span class="flag-b">🇨🇦</span><span class="flag-b">🇳🇱</span> <span class="non">✗</span><span class="qc-c">Fournisseurs</span></td>
+    <td class="c"><span class="inc">?</span><span class="qc-c">FSP et ESM non vérifiables</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Telpay</span><span class="porg"><span class="flag-p">🇨🇦</span>Winnipeg</span></td>
+    <td>10 $ à 41 $ / mois<br>+ frais par transaction</td>
+    <td class="c"><span class="non">✗</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">Non précisé</span></td><td class="c hb"><span class="inc">?</span> </td>
+    <td class="c"><span class="inc">?</span><span class="qc-c">FSP et ESM non vérifiables</span></td>
+  </tr>
+  <tr>
+    <td><span class="pn">Float</span><span class="porg"><span class="flag-p">🇨🇦</span>Toronto</span></td>
+    <td>0 $ à 10 $ / util. / mois<br>minimum 100 $</td>
+    <td class="c"><span class="oui">✓</span><span class="qc-c">Web ou mobile : sources contradictoires</span></td>
+    <td class="c hb"><span class="inc">?</span> <span class="qc-c">Non divulgué</span></td><td class="c hb"><span class="inc">?</span> </td>
+    <td class="c"><span class="inc">?</span><span class="qc-c">N° CANAFE publié ; FSP auto-déclaré</span></td>
+  </tr>
+
+  </tbody>
+</table>
+
+<div class="synthese">
+  <p><b>Quatre produits seulement</b> conjuguent le bilinguisme et un hébergement au Québec ou au Canada — Nethris, Agendrix, GOrendezvous, Acomba — et chacun ne couvre qu'une seule fonction : les assembler, c'est six abonnements et six intégrations. <b>Deux catégories n'ont aucune option québécoise</b> : la capture des reçus et la communication courriel et texto. <b>60sec-AI et 60sec-Paiement sont hébergés et exploités au Québec</b> : plateforme, traitement, IA et serveurs de courriel et de messagerie texte.</p>
+  </div>
+
+</body>
+</html>

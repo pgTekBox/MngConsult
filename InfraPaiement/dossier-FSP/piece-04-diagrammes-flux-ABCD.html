@@ -1,0 +1,778 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-04-diagrammes-flux-ABCD</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+  .meta b { font-weight: bold; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+  .oui { color: var(--vert); font-weight: bold; }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+
+  .saut { break-before: page; }
+
+  .formule {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 9pt;
+    background: var(--alt);
+    border: 0.5pt solid var(--ligne);
+    padding: 7pt 10pt;
+    margin: 8pt 0 10pt 0;
+    text-align: center;
+  }
+
+  /* ---------- diagrammes ---------- */
+  .diag { display: block; margin: 10pt auto 0; break-inside: avoid; }
+  .legende {
+    display: flex; gap: 14pt; flex-wrap: wrap;
+    font-size: 8.5pt; color: var(--gris);
+    margin: 6pt 0 0 0;
+  }
+  .legende span { display: inline-flex; align-items: center; gap: 5pt; }
+  .puce { width: 16pt; height: 9pt; border-radius: 2pt; display: inline-block; }
+  .p-act { background: #fff; border: 1.2pt solid var(--vert); }
+  .p-led { background: var(--tint); border: 1.2pt solid var(--vert); }
+  .p-ext { background: var(--alt); border: 1.2pt solid #9aa5a1; }
+  .p-war { background: #fdf8ef; border: 1.2pt solid var(--or); }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Diagrammes des processus de paiement</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — question 6.3</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">Le présent document représente les quatre trajets de fonds annoncés à la section 5 de la
+  description des services jointe à la question 6.1. Chaque trajet est présenté en voies : l’abonné qui initie,
+  la plateforme qui contrôle, le grand livre qui enregistre, et l’institution financière parraine par laquelle les
+  fonds circulent effectivement. Les écritures correspondantes sont consolidées à la section 7.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. Comment lire les diagrammes</h2>
+
+<p>Chaque diagramme se lit de haut en bas. Une boîte représente un acte ou une écriture, jamais un simple état ;
+son numéro renvoie au pas correspondant de la section 5 de la question 6.1. La voie dans laquelle la boîte se trouve
+indique <b>qui</b> pose l’acte. Le passage d’une voie à l’autre est le point où la responsabilité change de mains. Les termes suivis de la mention <i>(voir annexe, section X)</i> sont définis au lexique joint en annexe.</p>
+
+<h3>Les voies</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Voie</th><th style="width:70%">Ce qu’elle représente</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Abonné</b></td><td>L’entreprise cliente de la plateforme — l’utilisateur final qui détient un solde. La voie la représente comme acteur, qu’elle agisse par un utilisateur qu’elle a désigné dans le portail libre-service ou par sa propre application au moyen de l’interface de programmation : l’origine de la demande est la même dans les deux cas. Elle <b>initie</b> un encaissement, un décaissement ou un virement, et elle <b>reçoit</b> — la disponibilité de son solde et les avis de changement d’état. Ce qu’elle émet est une <b>instruction, non une exécution</b> : la mise en lot, la double approbation et la transmission appartiennent à la plateforme, et c’est pourquoi ces boîtes figurent dans la voie voisine. L’abonné ne touche jamais au compte en fiducie ni au grand livre. Ses contreparties — client payeur, fournisseur, créancier, employé — ne figurent pas dans cette voie : elles se trouvent à l’autre extrémité du trajet, au-delà de l’institution parraine. Enfin, le trajet D ne s’ouvre jamais ici : un retour survient au dehors, et l’abonné en subit l’effet sur son solde.</td></tr>
+    <tr><td><b>Plateforme 60sec-Paiement</b></td><td>Le demandeur. Il contrôle, met en lot, transmet, et applique les plafonds, la retenue et la réserve.</td></tr>
+    <tr><td><b>Grand livre</b></td><td>L’enregistrement en partie double, en cents entiers, dans un registre immuable. Toute boîte de cette voie est une écriture ; aucune n’est réversible autrement que par contre-passation. <span class="petit">(voir annexe, section C)</span></td></tr>
+    <tr><td><b>Institution financière parraine et compensation</b></td><td>Le tiers adhérent au Système automatisé de compensation et de règlement, qui tient le compte en fiducie, dépose les fichiers et retourne accusés, rejets et retours. Pour le trajet C, cette voie représente le partenaire de virement Interac et la contrepartie.</td></tr>
+  </tbody>
+</table>
+
+<h3>La notation</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Signe</th><th style="width:70%">Signification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Boîte blanche bordée de vert</td><td>Acte de l’abonné ou de la plateforme.</td></tr>
+    <tr><td>Boîte teintée bordée de vert</td><td>Écriture au grand livre.</td></tr>
+    <tr><td>Boîte grise</td><td>Acte d’un tiers : institution parraine, compensation, partenaire de virement.</td></tr>
+    <tr><td>Boîte ambre</td><td>Événement subi ou contrainte de délai — retour, rejet, droit de réclamation.</td></tr>
+    <tr><td>Flèche pleine</td><td>Suite normale du trajet.</td></tr>
+    <tr><td>Flèche pointillée ambre</td><td>Déclenchement par un événement extérieur au trajet nominal.</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>L’invariant du grand livre, vérifié en continu.</b> Quel que soit le trajet, la somme des obligations envers les abonnés
+  demeure égale au solde du compte en fiducie :<br><span class="petit">Le terme est défini à l’annexe — lexique, section C.</span></p>
+  <div class="formule">
+    Fiducie = Σ soldes des abonnés + Σ réserves + produits + opérations en compensation
+  </div>
+  <p>Une opération en cours de compensation n’est donc jamais « nulle part » : elle est portée à un compte
+  d’attente qui la rend visible entre l’initiation et le règlement. C’est ce compte qui explique la présence, dans
+  chaque trajet, de deux écritures plutôt qu’une.</p>
+</div>
+
+<h2>2. Les quatre trajets en un coup d’œil</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:22%">Trajet</th><th style="width:30%">Sens des fonds</th><th style="width:24%">Rail</th><th style="width:24%">Règlement</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>A</b> — Encaissement<br><span class="petit">section 3</span></td><td>Du compte du client payeur vers le compte en fiducie, puis vers le solde de l’abonné</td><td>Virement de débit, code d’opération 430</td><td>Par lot, à la compensation</td></tr>
+    <tr><td><b>B</b> — Décaissement<br><span class="petit">section 4</span></td><td>Du solde de l’abonné vers le compte du fournisseur, du créancier ou de l’employé</td><td>Virement de crédit</td><td>Par lot, à la compensation</td></tr>
+    <tr><td><b>C</b> — Virement Interac<br><span class="petit">section 5</span></td><td>Dans les deux sens, entre le solde de l’abonné et une contrepartie</td><td>Virement Interac</td><td>Individuel, au dépôt</td></tr>
+    <tr><td><b>D</b> — Retour, refus, rejet<br><span class="petit">section 6</span></td><td>En sens contraire du trajet d’origine, par contre-passation</td><td>Celui du trajet d’origine</td><td>À la réception de l’enregistrement de retour</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">Les trajets A, B et C sont initiés par l’abonné ; le trajet D est subi. Aucun autre mouvement de
+fonds n’existe dans la plateforme.</p>
+
+<h3>Les contrôles communs aux quatre trajets</h3>
+
+<ul style="break-inside:avoid">
+  <li><b>Vérification préalable de l’abonné</b> — aucune fonction de paiement n’est activée avant que l’existence, la propriété effective et les sanctions aient été vérifiées, et que le compte bancaire de règlement soit rattaché.</li>
+  <li><b>Entente valide pour chaque prélèvement</b> — aucun débit n’est initié sans entente de débit préautorisé valide au dossier, le demandeur étant bénéficiaire inscrit pour le compte de l’abonné.</li>
+  <li><b>Plafonds appliqués à la création du lot</b> <span class="petit">(voir annexe, section D)</span> — par opération, par fichier, par jour et par abonné. Tout dépassement <b>annule</b> le lot plutôt que de le tronquer.</li>
+  <li><b>Double approbation</b> <span class="petit">(voir annexe, section D)</span> — un lot créé par une personne doit être approuvé par une autre avant transmission.</li>
+  <li><b>Aucune avance</b> — un décaissement au-delà du solde disponible, réserve déduite, est refusé à l’initiation.</li>
+  <li><b>Journalisation</b> <span class="petit">(voir annexe, section D)</span> — chaque changement d’état d’une opération et de chaque lot est horodaté et conservé sept ans au Canada, à titre de piste d’audit.</li>
+</ul>
+
+<!-- ================= 3 ================= -->
+<div class="saut"></div>
+<h2>3. Trajet A — Encaissement par débit préautorisé</h2>
+<p class="petit" style="margin-top:2pt">Virement de débit, code d’opération 430 (voir annexe, section E). Le client payeur de l’abonné est débité ; le solde de l’abonné est crédité (voir annexe, section B).</p>
+<svg class="diag" style="width:100%" viewBox="0 0 1000 1100" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, sans-serif" role="img">
+<defs><marker id="a1A" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/></marker><marker id="a2A" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#d9a03c"/></marker></defs>
+<line x1="0" y1="62" x2="0" y2="1100" stroke="#d8dedb" stroke-width="1"/>
+<rect x="0" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="125.0" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Abonné</text>
+<rect x="250" y="62" width="250" height="1038" fill="#fbfcfc"/>
+<line x1="250" y1="62" x2="250" y2="1100" stroke="#d8dedb" stroke-width="1"/>
+<rect x="250" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="375.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Plateforme</text>
+<text x="375.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">60sec-Paiement</text>
+<line x1="500" y1="62" x2="500" y2="1100" stroke="#d8dedb" stroke-width="1"/>
+<rect x="500" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="625.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Grand livre</text>
+<text x="625.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">(partie double)</text>
+<rect x="750" y="62" width="250" height="1038" fill="#fbfcfc"/>
+<line x1="750" y1="62" x2="750" y2="1100" stroke="#d8dedb" stroke-width="1"/>
+<rect x="750" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="875.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Institution parraine</text>
+<text x="875.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">et compensation</text>
+<line x1="1000" y1="62" x2="1000" y2="1100" stroke="#d8dedb" stroke-width="1"/>
+<path d="M125.0,175 L125.0,185.0 L375.0,185.0 L375.0,193" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<path d="M375.0,292 L375.0,302.0 L625.0,302.0 L625.0,310" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<path d="M625.0,427 L625.0,437.0 L375.0,437.0 L375.0,445" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<path d="M375.0,562 L375.0,572.0 L875.0,572.0 L875.0,580" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<line x1="875.0" y1="733" x2="875.0" y2="751" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<path d="M875.0,832 L875.0,842.0 L625.0,842.0 L625.0,850" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<path d="M625.0,949 L625.0,959.0 L375.0,959.0 L375.0,967" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1A)"/>
+<rect x="13" y="78" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="125.0" y="98" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Initiation</text>
+<text x="125.0" y="115" text-anchor="middle" font-size="15.5" fill="#1f2320">Demande d&#x27;encaissement sur</text>
+<text x="125.0" y="133" text-anchor="middle" font-size="15.5" fill="#1f2320">un client payeur, par</text>
+<text x="125.0" y="151" text-anchor="middle" font-size="15.5" fill="#1f2320">portail ou par API</text>
+<circle cx="13" cy="78" r="12" fill="#0f6e5d"/>
+<text x="13" y="83" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+<rect x="263" y="195" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="215" text-anchor="middle" font-size="15.2" font-weight="bold" fill="#0f6e5d">Contrôles à l&#x27;initiation</text>
+<text x="375.0" y="232" text-anchor="middle" font-size="15.5" fill="#1f2320">Entente de débit</text>
+<text x="375.0" y="250" text-anchor="middle" font-size="15.5" fill="#1f2320">préautorisé valide, abonné</text>
+<text x="375.0" y="268" text-anchor="middle" font-size="15.5" fill="#1f2320">vérifié, plafonds respectés</text>
+<circle cx="263" cy="195" r="12" fill="#0f6e5d"/>
+<text x="263" y="200" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+<rect x="513" y="312" width="224" height="115" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="332" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture d&#x27;initiation</text>
+<text x="625.0" y="349" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation entrante au</text>
+<text x="625.0" y="367" text-anchor="middle" font-size="15.5" fill="#1f2320">montant brut</text>
+<text x="625.0" y="385" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde de l&#x27;abonné crédité</text>
+<text x="625.0" y="403" text-anchor="middle" font-size="15.5" fill="#1f2320">au net · frais aux produits</text>
+<circle cx="513" cy="312" r="12" fill="#0f6e5d"/>
+<text x="513" y="317" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+<rect x="263" y="447" width="224" height="115" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="467" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Mise en lot</text>
+<text x="375.0" y="484" text-anchor="middle" font-size="15.5" fill="#1f2320">Lot de virements de débit</text>
+<text x="375.0" y="502" text-anchor="middle" font-size="15.5" fill="#1f2320">(code 430), créé par une</text>
+<text x="375.0" y="520" text-anchor="middle" font-size="15.5" fill="#1f2320">personne et approuvé par</text>
+<text x="375.0" y="538" text-anchor="middle" font-size="15.5" fill="#1f2320">une autre</text>
+<circle cx="263" cy="447" r="12" fill="#0f6e5d"/>
+<text x="263" y="452" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+<rect x="763" y="582" width="224" height="151" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="602" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#3d4744">Dépôt et accusé</text>
+<text x="875.0" y="619" text-anchor="middle" font-size="15.5" fill="#1f2320">Fichier transmis à</text>
+<text x="875.0" y="637" text-anchor="middle" font-size="15.5" fill="#1f2320">l&#x27;institution parraine, qui</text>
+<text x="875.0" y="655" text-anchor="middle" font-size="15.5" fill="#1f2320">le présente à la</text>
+<text x="875.0" y="673" text-anchor="middle" font-size="15.5" fill="#1f2320">compensation. Les articles</text>
+<text x="875.0" y="691" text-anchor="middle" font-size="15.5" fill="#1f2320">rejetés à l&#x27;entrée sont</text>
+<text x="875.0" y="709" text-anchor="middle" font-size="15.5" fill="#1f2320">contre-passés — voir D</text>
+<circle cx="763" cy="582" r="12" fill="#9aa5a1"/>
+<text x="763" y="587" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+<rect x="763" y="753" width="224" height="79" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="773" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#3d4744">Règlement</text>
+<text x="875.0" y="790" text-anchor="middle" font-size="15.5" fill="#1f2320">Les fonds arrivent au</text>
+<text x="875.0" y="808" text-anchor="middle" font-size="15.5" fill="#1f2320">compte en fiducie</text>
+<circle cx="763" cy="753" r="12" fill="#9aa5a1"/>
+<text x="763" y="758" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">6</text>
+<rect x="513" y="852" width="224" height="97" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="872" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture de règlement</text>
+<text x="625.0" y="889" text-anchor="middle" font-size="15.5" fill="#1f2320">Fiducie débitée du brut</text>
+<text x="625.0" y="907" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation entrante</text>
+<text x="625.0" y="925" text-anchor="middle" font-size="15.5" fill="#1f2320">soldée</text>
+<circle cx="513" cy="852" r="12" fill="#0f6e5d"/>
+<text x="513" y="857" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+<rect x="263" y="969" width="224" height="115" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="989" text-anchor="middle" font-size="15.2" font-weight="bold" fill="#0f6e5d">Retenue et disponibilité</text>
+<text x="375.0" y="1006" text-anchor="middle" font-size="15.5" fill="#1f2320">5 jours ouvrables de</text>
+<text x="375.0" y="1024" text-anchor="middle" font-size="15.5" fill="#1f2320">retenue, réserve de 10 %</text>
+<text x="375.0" y="1042" text-anchor="middle" font-size="15.5" fill="#1f2320">déduite, puis le solde</text>
+<text x="375.0" y="1060" text-anchor="middle" font-size="15.5" fill="#1f2320">est utilisable par l&#x27;abonné</text>
+<circle cx="263" cy="969" r="12" fill="#0f6e5d"/>
+<text x="263" y="974" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">8</text>
+</svg>
+<div class="legende">
+  <span><i class="puce p-act"></i> acte de l’abonné ou de la plateforme</span>
+  <span><i class="puce p-led"></i> écriture au grand livre</span>
+  <span><i class="puce p-ext"></i> acte d’un tiers</span>
+</div>
+
+<!-- ================= 4 ================= -->
+<div class="saut"></div>
+<h2>4. Trajet B — Décaissement</h2>
+<p class="petit" style="margin-top:2pt">Virement de crédit. Le solde de l’abonné est débité ; le fournisseur, le créancier ou l’employé est crédité.</p>
+<svg class="diag" style="width:100%" viewBox="0 0 1000 992" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, sans-serif" role="img">
+<defs><marker id="a1B" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/></marker><marker id="a2B" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#d9a03c"/></marker></defs>
+<line x1="0" y1="62" x2="0" y2="992" stroke="#d8dedb" stroke-width="1"/>
+<rect x="0" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="125.0" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Abonné</text>
+<rect x="250" y="62" width="250" height="930" fill="#fbfcfc"/>
+<line x1="250" y1="62" x2="250" y2="992" stroke="#d8dedb" stroke-width="1"/>
+<rect x="250" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="375.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Plateforme</text>
+<text x="375.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">60sec-Paiement</text>
+<line x1="500" y1="62" x2="500" y2="992" stroke="#d8dedb" stroke-width="1"/>
+<rect x="500" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="625.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Grand livre</text>
+<text x="625.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">(partie double)</text>
+<rect x="750" y="62" width="250" height="930" fill="#fbfcfc"/>
+<line x1="750" y1="62" x2="750" y2="992" stroke="#d8dedb" stroke-width="1"/>
+<rect x="750" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="875.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Institution parraine</text>
+<text x="875.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">et compensation</text>
+<line x1="1000" y1="62" x2="1000" y2="992" stroke="#d8dedb" stroke-width="1"/>
+<path d="M125.0,175 L125.0,185.0 L375.0,185.0 L375.0,193" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<path d="M375.0,310 L375.0,320.0 L625.0,320.0 L625.0,328" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<path d="M625.0,427 L625.0,437.0 L375.0,437.0 L375.0,445" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<path d="M375.0,544 L375.0,554.0 L875.0,554.0 L875.0,562" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<line x1="875.0" y1="661" x2="875.0" y2="679" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<path d="M875.0,760 L875.0,770.0 L625.0,770.0 L625.0,778" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<path d="M625.0,859 L625.0,869.0 L875.0,869.0 L875.0,877" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1B)"/>
+<rect x="13" y="78" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="125.0" y="98" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Initiation</text>
+<text x="125.0" y="115" text-anchor="middle" font-size="15.5" fill="#1f2320">Paiement d&#x27;un fournisseur,</text>
+<text x="125.0" y="133" text-anchor="middle" font-size="15.5" fill="#1f2320">d&#x27;un créancier, d&#x27;une</text>
+<text x="125.0" y="151" text-anchor="middle" font-size="15.5" fill="#1f2320">remise ou de la paie</text>
+<circle cx="13" cy="78" r="12" fill="#0f6e5d"/>
+<text x="13" y="83" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+<rect x="263" y="195" width="224" height="115" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="215" text-anchor="middle" font-size="15.2" font-weight="bold" fill="#0f6e5d">Contrôles à l&#x27;initiation</text>
+<text x="375.0" y="232" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde disponible suffisant,</text>
+<text x="375.0" y="250" text-anchor="middle" font-size="15.5" fill="#1f2320">réserve déduite, plafonds</text>
+<text x="375.0" y="268" text-anchor="middle" font-size="15.5" fill="#1f2320">respectés. Aucune avance</text>
+<text x="375.0" y="286" text-anchor="middle" font-size="15.5" fill="#1f2320">n&#x27;est accordée.</text>
+<circle cx="263" cy="195" r="12" fill="#0f6e5d"/>
+<text x="263" y="200" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+<rect x="513" y="330" width="224" height="97" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="350" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture d&#x27;initiation</text>
+<text x="625.0" y="367" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde de l&#x27;abonné débité</text>
+<text x="625.0" y="385" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation sortante au</text>
+<text x="625.0" y="403" text-anchor="middle" font-size="15.5" fill="#1f2320">brut · frais aux produits</text>
+<circle cx="513" cy="330" r="12" fill="#0f6e5d"/>
+<text x="513" y="335" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+<rect x="263" y="447" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="467" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Mise en lot</text>
+<text x="375.0" y="484" text-anchor="middle" font-size="15.5" fill="#1f2320">Lot de virements de crédit,</text>
+<text x="375.0" y="502" text-anchor="middle" font-size="15.5" fill="#1f2320">créé par une personne et</text>
+<text x="375.0" y="520" text-anchor="middle" font-size="15.5" fill="#1f2320">approuvé par une autre</text>
+<circle cx="263" cy="447" r="12" fill="#0f6e5d"/>
+<text x="263" y="452" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+<rect x="763" y="564" width="224" height="97" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="584" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#3d4744">Dépôt du fichier 005</text>
+<text x="875.0" y="601" text-anchor="middle" font-size="15.5" fill="#1f2320">Transmis à l&#x27;institution</text>
+<text x="875.0" y="619" text-anchor="middle" font-size="15.5" fill="#1f2320">parraine, qui le présente</text>
+<text x="875.0" y="637" text-anchor="middle" font-size="15.5" fill="#1f2320">à la compensation</text>
+<circle cx="763" cy="564" r="12" fill="#9aa5a1"/>
+<text x="763" y="569" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+<rect x="763" y="681" width="224" height="79" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="701" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#3d4744">Règlement</text>
+<text x="875.0" y="718" text-anchor="middle" font-size="15.5" fill="#1f2320">Le compte en fiducie</text>
+<text x="875.0" y="736" text-anchor="middle" font-size="15.5" fill="#1f2320">est débité</text>
+<circle cx="763" cy="681" r="12" fill="#9aa5a1"/>
+<text x="763" y="686" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">6</text>
+<rect x="513" y="780" width="224" height="79" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="800" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture de règlement</text>
+<text x="625.0" y="817" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation sortante</text>
+<text x="625.0" y="835" text-anchor="middle" font-size="15.5" fill="#1f2320">soldée · fiducie créditée</text>
+<circle cx="513" cy="780" r="12" fill="#0f6e5d"/>
+<text x="513" y="785" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+<rect x="763" y="879" width="224" height="97" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="899" text-anchor="middle" font-size="16.6" font-weight="bold" fill="#3d4744">Crédit au bénéficiaire</text>
+<text x="875.0" y="916" text-anchor="middle" font-size="15.5" fill="#1f2320">Fournisseur, créancier ou</text>
+<text x="875.0" y="934" text-anchor="middle" font-size="15.5" fill="#1f2320">employé. Un refus de dépôt</text>
+<text x="875.0" y="952" text-anchor="middle" font-size="15.5" fill="#1f2320">suit le trajet D</text>
+<circle cx="763" cy="879" r="12" fill="#9aa5a1"/>
+<text x="763" y="884" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">8</text>
+</svg>
+<div class="encadre">
+  <p><b>Le miroir du trajet A, à une différence près.</b> Le contrôle du solde disponible précède l’écriture :
+  la plateforme n’accorde aucune avance, et un décaissement supérieur au solde disponible, réserve déduite, est
+  refusé avant toute mise en lot. Les remises gouvernementales et la paie empruntent ce même trajet.</p>
+</div>
+
+<!-- ================= 5 ================= -->
+<div class="saut"></div>
+<h2>5. Trajet C — Virement Interac</h2>
+<p class="petit" style="margin-top:2pt">Rail parallèle, règlement individuel au dépôt plutôt qu’en lot, contrepartie identifiée par une adresse de courriel.</p>
+<svg class="diag" style="width:100%" viewBox="0 0 1000 821" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, sans-serif" role="img">
+<defs><marker id="a1C" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/></marker><marker id="a2C" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#d9a03c"/></marker></defs>
+<line x1="0" y1="62" x2="0" y2="821" stroke="#d8dedb" stroke-width="1"/>
+<rect x="0" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="125.0" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Abonné</text>
+<rect x="250" y="62" width="250" height="759" fill="#fbfcfc"/>
+<line x1="250" y1="62" x2="250" y2="821" stroke="#d8dedb" stroke-width="1"/>
+<rect x="250" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="375.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Plateforme</text>
+<text x="375.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">60sec-Paiement</text>
+<line x1="500" y1="62" x2="500" y2="821" stroke="#d8dedb" stroke-width="1"/>
+<rect x="500" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="625.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Grand livre</text>
+<text x="625.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">(partie double)</text>
+<rect x="750" y="62" width="250" height="759" fill="#fbfcfc"/>
+<line x1="750" y1="62" x2="750" y2="821" stroke="#d8dedb" stroke-width="1"/>
+<rect x="750" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="875.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Partenaire Interac</text>
+<text x="875.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">et contrepartie</text>
+<line x1="1000" y1="62" x2="1000" y2="821" stroke="#d8dedb" stroke-width="1"/>
+<path d="M125.0,157 L125.0,167.0 L375.0,167.0 L375.0,175" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<path d="M375.0,274 L375.0,284.0 L625.0,284.0 L625.0,292" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<path d="M625.0,391 L625.0,401.0 L875.0,401.0 L875.0,409" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<line x1="875.0" y1="490" x2="875.0" y2="508" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<path d="M875.0,589 L875.0,599.0 L625.0,599.0 L625.0,607" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<path d="M625.0,688 L625.0,698.0 L375.0,698.0 L375.0,706" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1C)"/>
+<rect x="13" y="78" width="224" height="79" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="125.0" y="98" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Demande de virement</text>
+<text x="125.0" y="115" text-anchor="middle" font-size="15.5" fill="#1f2320">Contrepartie identifiée par</text>
+<text x="125.0" y="133" text-anchor="middle" font-size="15.5" fill="#1f2320">une adresse de courriel</text>
+<circle cx="13" cy="78" r="12" fill="#0f6e5d"/>
+<text x="13" y="83" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+<rect x="263" y="177" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="197" text-anchor="middle" font-size="15.2" font-weight="bold" fill="#0f6e5d">Contrôles à l&#x27;initiation</text>
+<text x="375.0" y="214" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde disponible et</text>
+<text x="375.0" y="232" text-anchor="middle" font-size="15.5" fill="#1f2320">plafonds, mêmes règles</text>
+<text x="375.0" y="250" text-anchor="middle" font-size="15.5" fill="#1f2320">que le trajet B</text>
+<circle cx="263" cy="177" r="12" fill="#0f6e5d"/>
+<text x="263" y="182" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+<rect x="513" y="294" width="224" height="97" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="314" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture d&#x27;initiation</text>
+<text x="625.0" y="331" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde de l&#x27;abonné débité</text>
+<text x="625.0" y="349" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation sortante au</text>
+<text x="625.0" y="367" text-anchor="middle" font-size="15.5" fill="#1f2320">brut · frais aux produits</text>
+<circle cx="513" cy="294" r="12" fill="#0f6e5d"/>
+<text x="513" y="299" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+<rect x="763" y="411" width="224" height="79" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="431" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#3d4744">Transmission</text>
+<text x="875.0" y="448" text-anchor="middle" font-size="15.5" fill="#1f2320">Demande envoyée au</text>
+<text x="875.0" y="466" text-anchor="middle" font-size="15.5" fill="#1f2320">partenaire de virement</text>
+<circle cx="763" cy="411" r="12" fill="#9aa5a1"/>
+<text x="763" y="416" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+<rect x="763" y="510" width="224" height="79" rx="5" fill="#f7f9f8" stroke="#9aa5a1" stroke-width="1.4"/>
+<text x="875.0" y="530" text-anchor="middle" font-size="14.6" font-weight="bold" fill="#3d4744">Dépôt par la contrepartie</text>
+<text x="875.0" y="547" text-anchor="middle" font-size="15.5" fill="#1f2320">Règlement individuel au</text>
+<text x="875.0" y="565" text-anchor="middle" font-size="15.5" fill="#1f2320">dépôt, et non par lot</text>
+<circle cx="763" cy="510" r="12" fill="#9aa5a1"/>
+<text x="763" y="515" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+<rect x="513" y="609" width="224" height="79" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="629" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Écriture de règlement</text>
+<text x="625.0" y="646" text-anchor="middle" font-size="15.5" fill="#1f2320">Compensation sortante</text>
+<text x="625.0" y="664" text-anchor="middle" font-size="15.5" fill="#1f2320">soldée · fiducie créditée</text>
+<circle cx="513" cy="609" r="12" fill="#0f6e5d"/>
+<text x="513" y="614" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">6</text>
+<rect x="263" y="708" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="728" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">États journalisés</text>
+<text x="375.0" y="745" text-anchor="middle" font-size="15.5" fill="#1f2320">demandé · envoyé ·</text>
+<text x="375.0" y="763" text-anchor="middle" font-size="15.5" fill="#1f2320">déposé · refusé.</text>
+<text x="375.0" y="781" text-anchor="middle" font-size="15.5" fill="#1f2320">Un refus suit le trajet D</text>
+<circle cx="263" cy="708" r="12" fill="#0f6e5d"/>
+<text x="263" y="713" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+</svg>
+<div class="encadre">
+  <p><b>Le virement entrant.</b> Le trajet est représenté ici dans le sens sortant. Dans le sens entrant, la
+  contrepartie dépose un virement à l’intention d’un abonné : la plateforme journalise la réception, le compte en
+  fiducie est crédité, et le solde de l’abonné l’est à son tour, frais déduits. La machinerie comptable est la même ;
+  seul le sens des écritures s’inverse.</p>
+  <p>Ce rail ne connaît ni lot ni fenêtre de compensation : chaque virement se règle individuellement, ce qui écarte
+  le délai de retenue mais non la réserve.<br><span class="petit">Délai de retenue : voir annexe, section D. Réserve : voir annexe, section B.</span></p>
+</div>
+
+<!-- ================= 6 ================= -->
+<div class="saut"></div>
+<h2>6. Trajet D — Retour, refus et rejet</h2>
+<p class="petit" style="margin-top:2pt">Trajet subi, applicable aux trois premiers. Il ne supprime aucune écriture : il en ajoute une de sens contraire.</p>
+<svg class="diag" style="width:100%" viewBox="0 0 1000 1019" xmlns="http://www.w3.org/2000/svg" font-family="Carlito, Calibri, sans-serif" role="img">
+<defs><marker id="a1D" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/></marker><marker id="a2D" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto"><path d="M0,1 L8,4.5 L0,8 z" fill="#d9a03c"/></marker></defs>
+<line x1="0" y1="62" x2="0" y2="1019" stroke="#d8dedb" stroke-width="1"/>
+<rect x="0" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="125.0" y="32" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Abonné</text>
+<rect x="250" y="62" width="250" height="957" fill="#fbfcfc"/>
+<line x1="250" y1="62" x2="250" y2="1019" stroke="#d8dedb" stroke-width="1"/>
+<rect x="250" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="375.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Plateforme</text>
+<text x="375.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">60sec-Paiement</text>
+<line x1="500" y1="62" x2="500" y2="1019" stroke="#d8dedb" stroke-width="1"/>
+<rect x="500" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="625.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Grand livre</text>
+<text x="625.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">(partie double)</text>
+<rect x="750" y="62" width="250" height="957" fill="#fbfcfc"/>
+<line x1="750" y1="62" x2="750" y2="1019" stroke="#d8dedb" stroke-width="1"/>
+<rect x="750" y="0" width="250" height="52" fill="#0f6e5d"/>
+<text x="875.0" y="25" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">Institution parraine</text>
+<text x="875.0" y="45" text-anchor="middle" font-size="17" font-weight="bold" fill="#ffffff">et compensation</text>
+<line x1="1000" y1="62" x2="1000" y2="1019" stroke="#d8dedb" stroke-width="1"/>
+<path d="M875.0,229 L875.0,239.0 L375.0,239.0 L375.0,247" fill="none" stroke="#d9a03c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#a2D)"/>
+<line x1="375.0" y1="346" x2="375.0" y2="364" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1D)"/>
+<path d="M375.0,463 L375.0,473.0 L625.0,473.0 L625.0,481" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1D)"/>
+<line x1="625.0" y1="598" x2="625.0" y2="616" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1D)"/>
+<path d="M625.0,715 L625.0,725.0 L375.0,725.0 L375.0,733" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1D)"/>
+<path d="M375.0,850 L375.0,860.0 L125.0,860.0 L125.0,868" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#a1D)"/>
+<rect x="763" y="78" width="224" height="151" rx="5" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.6"/>
+<text x="875.0" y="98" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#8a6413">Événement</text>
+<text x="875.0" y="115" text-anchor="middle" font-size="15.5" fill="#1f2320">Avant le règlement : rejet</text>
+<text x="875.0" y="133" text-anchor="middle" font-size="15.5" fill="#1f2320">à l&#x27;entrée. Après le</text>
+<text x="875.0" y="151" text-anchor="middle" font-size="15.5" fill="#1f2320">règlement : provision</text>
+<text x="875.0" y="169" text-anchor="middle" font-size="15.5" fill="#1f2320">insuffisante, compte fermé,</text>
+<text x="875.0" y="187" text-anchor="middle" font-size="15.5" fill="#1f2320">arrêt de paiement,</text>
+<text x="875.0" y="205" text-anchor="middle" font-size="15.5" fill="#1f2320">contestation de l&#x27;entente</text>
+<circle cx="763" cy="78" r="12" fill="#d9a03c"/>
+<text x="763" y="83" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">1</text>
+<rect x="263" y="249" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="269" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Réception</text>
+<text x="375.0" y="286" text-anchor="middle" font-size="15.5" fill="#1f2320">Enregistrement de retour</text>
+<text x="375.0" y="304" text-anchor="middle" font-size="15.5" fill="#1f2320">reçu de l&#x27;institution</text>
+<text x="375.0" y="322" text-anchor="middle" font-size="15.5" fill="#1f2320">parraine ou du partenaire</text>
+<circle cx="263" cy="249" r="12" fill="#0f6e5d"/>
+<text x="263" y="254" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">2</text>
+<rect x="263" y="366" width="224" height="97" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="386" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Rapprochement</text>
+<text x="375.0" y="403" text-anchor="middle" font-size="15.5" fill="#1f2320">Référence croisée à</text>
+<text x="375.0" y="421" text-anchor="middle" font-size="15.5" fill="#1f2320">l&#x27;opération d&#x27;origine, puis</text>
+<text x="375.0" y="439" text-anchor="middle" font-size="15.5" fill="#1f2320">qualification du motif</text>
+<circle cx="263" cy="366" r="12" fill="#0f6e5d"/>
+<text x="263" y="371" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">3</text>
+<rect x="513" y="483" width="224" height="115" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="503" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Contre-passation</text>
+<text x="625.0" y="520" text-anchor="middle" font-size="15.5" fill="#1f2320">Solde de l&#x27;abonné repris</text>
+<text x="625.0" y="538" text-anchor="middle" font-size="15.5" fill="#1f2320">Produits repris</text>
+<text x="625.0" y="556" text-anchor="middle" font-size="15.5" fill="#1f2320">L&#x27;écriture d&#x27;origine n&#x27;est</text>
+<text x="625.0" y="574" text-anchor="middle" font-size="15.5" fill="#1f2320">jamais effacée</text>
+<circle cx="513" cy="483" r="12" fill="#0f6e5d"/>
+<text x="513" y="488" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">4</text>
+<rect x="513" y="618" width="224" height="97" rx="5" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="625.0" y="638" text-anchor="middle" font-size="18.0" font-weight="bold" fill="#0f6e5d">Frais de retour</text>
+<text x="625.0" y="655" text-anchor="middle" font-size="15.5" fill="#1f2320">12,50 $ portés aux produits</text>
+<text x="625.0" y="673" text-anchor="middle" font-size="15.5" fill="#1f2320">et débités du solde</text>
+<text x="625.0" y="691" text-anchor="middle" font-size="15.5" fill="#1f2320">de l&#x27;abonné</text>
+<circle cx="513" cy="618" r="12" fill="#0f6e5d"/>
+<text x="513" y="623" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">5</text>
+<rect x="263" y="735" width="224" height="115" rx="5" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+<text x="375.0" y="755" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#0f6e5d">Effet sur les limites</text>
+<text x="375.0" y="772" text-anchor="middle" font-size="15.5" fill="#1f2320">L&#x27;historique de retours</text>
+<text x="375.0" y="790" text-anchor="middle" font-size="15.5" fill="#1f2320">commande la révision du</text>
+<text x="375.0" y="808" text-anchor="middle" font-size="15.5" fill="#1f2320">plafond quotidien de</text>
+<text x="375.0" y="826" text-anchor="middle" font-size="15.5" fill="#1f2320">l&#x27;abonné</text>
+<circle cx="263" cy="735" r="12" fill="#0f6e5d"/>
+<text x="263" y="740" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">6</text>
+<rect x="13" y="870" width="224" height="133" rx="5" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.6"/>
+<text x="125.0" y="890" text-anchor="middle" font-size="17.4" font-weight="bold" fill="#8a6413">Délai de contestation</text>
+<text x="125.0" y="907" text-anchor="middle" font-size="15.5" fill="#1f2320">Débit préautorisé</text>
+<text x="125.0" y="925" text-anchor="middle" font-size="15.5" fill="#1f2320">personnel : jusqu&#x27;à</text>
+<text x="125.0" y="943" text-anchor="middle" font-size="15.5" fill="#1f2320">90 jours civils après le</text>
+<text x="125.0" y="961" text-anchor="middle" font-size="15.5" fill="#1f2320">débit. La réserve est</text>
+<text x="125.0" y="979" text-anchor="middle" font-size="15.5" fill="#1f2320">dimensionnée en conséquence</text>
+<circle cx="13" cy="870" r="12" fill="#d9a03c"/>
+<text x="13" y="875" text-anchor="middle" font-size="14" font-weight="bold" fill="#ffffff">7</text>
+</svg>
+<div class="legende">
+  <span><i class="puce p-war"></i> événement subi ou contrainte de délai</span>
+  <span><i class="puce p-act"></i> acte de la plateforme</span>
+  <span><i class="puce p-led"></i> écriture au grand livre</span>
+</div>
+
+<!-- ================= 7 ================= -->
+<div class="saut"></div>
+<h2>7. Les écritures au grand livre, trajet par trajet</h2>
+
+<p>Chaque mouvement donne lieu à deux écritures : l’une à l’initiation, qui constate l’engagement et porte
+l’opération en compensation, l’autre au règlement, qui constate le mouvement réel dans le compte en fiducie. Les
+frais sont prélevés à l’initiation et portés aux produits : l’abonné est crédité du montant net, jamais du montant
+brut.</p>
+
+<p class="petit">Les comptes employés dans le tableau ci-dessous — fiducie, solde de l’abonné, réserve, compensation entrante et sortante, produits — sont définis à l’annexe, section B ; les notions de partie double, de contre-passation et de montant brut ou net, à la section C.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:12%">Trajet</th><th style="width:22%">Moment</th><th style="width:33%">Débit</th><th style="width:33%">Crédit</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>A</b></td><td>Initiation</td><td>Compensation entrante — montant brut</td><td>Solde de l’abonné — montant net<br>Produits — frais</td></tr>
+    <tr><td><b>A</b></td><td>Règlement</td><td>Fiducie — montant brut</td><td>Compensation entrante — montant brut</td></tr>
+    <tr><td><b>A</b></td><td>Fin de la retenue</td><td colspan="2">Aucune écriture : la disponibilité est un état du solde, non un mouvement de fonds.</td></tr>
+    <tr><td><b>B</b> et <b>C</b></td><td>Initiation</td><td>Solde de l’abonné — montant brut<br>Solde de l’abonné — frais</td><td>Compensation sortante — montant brut<br>Produits — frais</td></tr>
+    <tr><td><b>B</b> et <b>C</b></td><td>Règlement</td><td>Compensation sortante — montant brut</td><td>Fiducie — montant brut</td></tr>
+    <tr><td><b>D</b></td><td>Rejet à l’entrée d’un encaissement, avant règlement</td><td>Solde de l’abonné — montant net<br>Produits — frais repris</td><td>Compensation entrante — montant brut</td></tr>
+    <tr><td><b>D</b></td><td>Retour d’un encaissement, après règlement</td><td>Solde de l’abonné — montant net<br>Produits — frais repris</td><td>Fiducie — montant brut</td></tr>
+    <tr><td><b>D</b></td><td>Refus d’un décaissement ou d’un virement</td><td>Fiducie — montant brut</td><td>Solde de l’abonné — montant brut</td></tr>
+    <tr><td><b>D</b></td><td>Frais de retour</td><td>Solde de l’abonné — 12,50 $</td><td>Produits — 12,50 $</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">Les frais d’une opération refusée avant tout mouvement de fonds sont repris ; les frais de retour
+prévus à la grille tarifaire s’appliquent en sus et demeurent acquis. La réserve n’apparaît pas dans ce tableau :
+elle ne déplace pas de fonds, elle rend indisponible une portion du solde de l’abonné, qui en demeure propriétaire.</p>
+
+<div class="encadre">
+  <p><b>Ce que ces diagrammes établissent.</b> Aucun mouvement de fonds n’existe sans écriture correspondante,
+  aucune écriture ne s’efface, et aucun trajet ne permet à un abonné, à un partenaire-distributeur ou à un
+  utilisateur d’accéder directement au compte en fiducie. Les fonds n’y transitent que par les instructions
+  contrôlées, mises en lot et doublement approuvées que représentent les quatre trajets.</p>
+</div>
+
+<!-- ================= ANNEXE ================= -->
+<div class="saut"></div>
+<h2>Annexe — Lexique des diagrammes</h2>
+
+<p>Les termes du système de paiement canadien — norme 005, norme 007, règles F1 et H1, système automatisé de
+compensation et de règlement, adhérent, institution financière parraine, bénéficiaire inscrit, virement de crédit et
+de débit, débit préautorisé, droit de réclamation, retour, rejet à l’entrée — sont définis à
+l’annexe de la question 6.1 et ne sont pas repris ici. Le présent lexique définit le vocabulaire propre aux
+diagrammes : les moments d’un trajet, les comptes qu’il mouvemente, les écritures qu’il produit, les contrôles
+qu’il applique, et le code que porte chaque opération.</p>
+
+<h3>A. Les moments d’un trajet</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Initiation</b></td><td>Le moment où une opération est demandée, par le portail ou par appel d’interface. Rien n’a encore circulé entre institutions, mais l’engagement est pris et il est déjà écrit au grand livre. C’est aussi le moment où les frais sont prélevés.</td></tr>
+    <tr><td><b>Mise en lot</b></td><td>Le regroupement des opérations d’une même nature en un fichier unique, destiné à un dépôt. Un lot a un état — en préparation, approuvé, transmis, accusé — et ne peut être transmis qu’approuvé. Le virement Interac ignore cette étape : il se traite à l’unité.</td></tr>
+    <tr><td><b>Dépôt</b></td><td>La remise du fichier à l’institution financière parraine, seule habilitée à le porter dans la compensation. Le demandeur ne dépose jamais directement dans le système.</td></tr>
+    <tr><td><b>Accusé de réception</b></td><td>La confirmation, par l’institution parraine, que le fichier a été reçu et accepté dans sa forme. Elle ne garantit pas le paiement : elle atteste seulement que le fichier est entré. Les lignes refusées à ce stade sont des rejets à l’entrée.</td></tr>
+    <tr><td><b>Règlement</b></td><td>Le moment où les fonds bougent réellement, entre le compte en fiducie et le compte de la contrepartie. C’est le seul moment où le solde bancaire du compte en fiducie change. Pour les trajets A et B, il survient au traitement du lot par la compensation ; pour le trajet C, au dépôt du virement par la contrepartie.</td></tr>
+    <tr><td><b>Disponibilité</b></td><td>Le moment où l’abonné peut effectivement employer des fonds encaissés, une fois le délai de retenue écoulé et la réserve déduite. Ce n’est pas un mouvement de fonds mais un état du solde : aucune écriture n’y correspond.</td></tr>
+  </tbody>
+</table>
+
+<h3>B. Les comptes mouvementés</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Fiducie</b></td><td>Le compte comptable qui reflète le compte en fiducie tenu à l’institution parraine. Il porte les fonds de tous les abonnés à la fois ; il n’est mouvementé qu’au règlement.</td></tr>
+    <tr><td><b>Solde de l’abonné</b></td><td>La part du compte en fiducie qui revient à un abonné donné. C’est une obligation du demandeur envers lui, non un dépôt bancaire au sens de la <i>Loi sur les banques</i>. Il est mouvementé dès l’initiation.</td></tr>
+    <tr><td><b>Réserve</b></td><td>Une portion du solde de l’abonné rendue temporairement indisponible pour couvrir d’éventuels retours — 10 % du volume de débits des trente derniers jours. Elle demeure la propriété de l’abonné et n’apparaît dans aucune écriture de mouvement : elle limite ce qui est disponible, elle ne déplace rien.</td></tr>
+    <tr><td><b>Compensation entrante</b><br><span class="petit">compte d’attente</span></td><td>Le compte qui porte les encaissements initiés mais non encore réglés. Il rend visible, à tout instant, l’argent attendu mais non arrivé. Il est ouvert à l’initiation et soldé au règlement.</td></tr>
+    <tr><td><b>Compensation sortante</b><br><span class="petit">compte d’attente</span></td><td>Le pendant du précédent pour les décaissements : les fonds sont déjà retirés du solde de l’abonné mais n’ont pas encore quitté le compte en fiducie.</td></tr>
+    <tr><td><b>Produits</b></td><td>Le compte des revenus du demandeur : frais d’opération prélevés à l’initiation, frais de retour, frais d’accès. C’est le seul compte du grand livre qui ne représente pas des fonds d’utilisateurs finaux.</td></tr>
+  </tbody>
+</table>
+
+<h3>C. Les écritures</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Partie double</b></td><td>Toute écriture porte un débit et un crédit d’égal montant. Aucun montant n’apparaît ni ne disparaît sans contrepartie, ce qui rend un déséquilibre immédiatement détectable.</td></tr>
+    <tr><td><b>Invariant du grand livre</b></td><td>Une affirmation sur l’<b>état</b> du grand livre qui doit être vraie en tout temps, et non un contrôle appliqué à une opération. Un contrôle qualifie une action — un plafond examine un paiement et l’autorise ou le refuse ; l’invariant qualifie un état — il constate que l’ensemble est cohérent. Ici, il pose que le compte de fiducie égale en tout temps la somme des soldes des abonnés, des réserves, des produits et des opérations en compensation : autrement dit, que chaque dollar détenu est attribuable à quelqu’un. Il est vérifié à la clôture de chaque écriture, et une écriture qui le romprait est refusée avant d’être inscrite plutôt que constatée après coup. Lorsqu’un contrôle échoue, il faut interpréter ; lorsque l’invariant est faux, l’état n’est pas imparfait, il est invalide. À distinguer du <b>rapprochement</b> : l’invariant établit la cohérence interne du registre, le rapprochement quotidien établit sa correspondance avec le relevé bancaire.</td></tr>
+    <tr><td><b>Grand livre immuable</b></td><td>Une écriture inscrite n’est ni modifiée ni effacée. Une correction prend la forme d’une écriture nouvelle, de sens contraire, qui laisse l’écriture d’origine visible. La piste d’audit est ainsi complète par construction.</td></tr>
+    <tr><td><b>Contre-passation</b></td><td>Cette écriture de sens contraire. C’est le mécanisme unique du trajet D : un retour ne supprime jamais l’opération d’origine, il l’annule par une écriture qui la reflète.</td></tr>
+    <tr><td><b>Montant brut et montant net</b></td><td>Le brut est le montant de l’opération telle qu’elle circule entre institutions ; le net est ce qui revient à l’abonné, frais déduits. Le compte en fiducie et les comptes de compensation sont toujours mouvementés au brut ; le solde de l’abonné, au net.</td></tr>
+    <tr><td><b>Cents entiers</b></td><td>Les montants sont tenus en nombres entiers de cents, jamais en nombres à virgule flottante, afin qu’aucun arrondi ne puisse creuser un écart entre le grand livre et le compte bancaire.</td></tr>
+  </tbody>
+</table>
+
+<h3>D. Les contrôles représentés</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Double approbation</b></td><td>Un lot créé par une personne doit être approuvé par une autre avant transmission. Il s’agit dans les deux cas d’une <b>personne physique</b>, agissant chez le demandeur sous un compte nominatif protégé par une authentification à deux facteurs : ni un rôle, ni un service automatisé, ni deux comptes détenus par le même individu. La règle porte sur le lot plutôt que sur les droits détenus — la plateforme refuse l’approbation d’un lot par le compte qui l’a préparé, quels que soient les droits de ce compte —, de sorte qu’une même personne peut détenir les deux droits sans jamais pouvoir approuver son propre lot. C’est le point où l’automatisation s’arrête : une instruction peut entrer par l’interface de programmation sans intervention humaine, au pas 1 des trajets A et B, mais aucun lot ne part sans que deux personnes l’aient vu.</td></tr>
+    <tr><td><b>Plafond</b></td><td>Une limite de montant appliquée à la création du lot — par opération, par fichier, par jour pour la plateforme, par jour pour chaque abonné. Un dépassement annule le lot plutôt que de le tronquer, afin qu’aucune opération ne soit transmise à moitié.</td></tr>
+    <tr><td><b>Délai de retenue</b></td><td>Le nombre de jours ouvrables — cinq à l’an 1 — pendant lesquels des fonds encaissés demeurent indisponibles, le temps que le risque de retour se réduise.</td></tr>
+    <tr><td><b>Référence croisée</b></td><td>L’identifiant qui relie un enregistrement de retour à l’opération d’origine. Sans elle, un retour ne pourrait être imputé au bon abonné. Elle porte aussi le nom de l’abonné, afin que le payeur reconnaisse le prélèvement sur son relevé.</td></tr>
+    <tr><td><b>Rapprochement</b></td><td>La confrontation quotidienne du compte de fiducie du grand livre au relevé de l’institution parraine. Un écart signale soit une écriture manquante, soit un mouvement bancaire inattendu.</td></tr>
+    <tr><td><b>Journalisation</b></td><td>L’enregistrement horodaté de chaque changement d’état d’une opération et d’un lot, conservé sept ans au Canada. C’est ce qui permet de reconstituer un trajet après coup, pas à pas.</td></tr>
+  </tbody>
+</table>
+
+<h3>E. Le code que porte chaque opération</h3>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Terme</th><th style="width:74%">Définition</th></tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>Code d’opération 430</b><br><span class="petit">« paiement de facture »</span></td>
+      <td>Le code à trois chiffres de la norme 007 que porte chaque ligne de débit du fichier de la norme 005. C’est le code de la totalité des encaissements du <b>trajet A</b> : le prélèvement, sur le compte du client payeur de l’abonné, d’une somme due en vertu d’une entente de débit préautorisé.
+      <br><br><b>Ce qu’il ne fait pas :</b> il ne détermine pas le sens du mouvement. Celui-ci découle du type d’enregistrement — C pour un crédit, D pour un débit. Le code déclare la <b>nature</b> du paiement à l’institution qui le reçoit.
+      <br><br><b>Pourquoi il figure au diagramme :</b> cette nature s’affiche sur le relevé de compte de la contrepartie, à côté du nom de l’abonné porté en référence croisée. C’est par là qu’un payeur reconnaît — ou ne reconnaît pas — le prélèvement, et un prélèvement non reconnu est contesté, ce qui ouvre le trajet D. Le code est arrêté à la mise en lot, au pas 4 du trajet A, et un même lot ne mélange pas les sens.</td>
+    </tr>
+  </tbody>
+</table>
+
+<p class="petit">Les décaissements du trajet B emploient les codes de crédit correspondants — dépôt de paye,
+paiement divers — énumérés à l’annexe de la question 6.1. Les codes définitifs relèvent du guide de mise en œuvre de
+l’institution financière parraine, qui prime sur la lecture générale de la norme. Les virements Interac du trajet C
+n’empruntent ni la norme 005 ni les codes d’opération.</p>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Écritures de la section 7</b></td><td>Traduction, trajet par trajet, de l’invariant du grand livre — défini à l’annexe, lexique, section C — énoncé à la section 4.2 de la question 6.1. À confronter au plan comptable définitif de la plateforme et au libellé exact des comptes avant le dépôt.</td></tr>
+    <tr><td><b>Institution parraine</b></td><td>La voie est nommée génériquement. Y substituer la dénomination de l’institution retenue, comme à la section 7 de la question 6.1.</td></tr>
+    <tr><td><b>Partenaire de virement</b></td><td>Même remarque pour le trajet C.</td></tr>
+    <tr><td><b>Numérotation des pas</b></td><td>Vérifier que les numéros des diagrammes correspondent toujours aux pas de la section 5 de la question 6.1 si celle-ci est révisée.</td></tr>
+    <tr><td><b>Délai de retenue et réserve</b></td><td>Les valeurs portées au trajet A — 5 jours ouvrables, 10 % — reprennent la section 4.3 et suivent le même sort qu’elle si elle est ajustée avec l’institution parraine.</td></tr>
+    <tr><td><b>Lexique</b></td><td>L’annexe ne reprend pas les termes déjà définis à l’annexe de la question 6.1 ; elle s’y réfère. Si les deux pièces ne sont pas déposées ensemble, y ajouter les définitions manquantes.</td></tr>
+    <tr><td><b>Noms des comptes</b></td><td>Les libellés employés à la section 7 et à l’annexe B — fiducie, solde de l’abonné, réserve, compensation entrante et sortante, produits — doivent correspondre exactement à ceux du plan comptable de la plateforme.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

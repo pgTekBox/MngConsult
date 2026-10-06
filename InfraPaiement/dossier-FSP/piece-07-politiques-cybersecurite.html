@@ -1,0 +1,444 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-07-politiques-cybersecurite</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.n { text-align: right; white-space: nowrap; }
+  td.reg { font-weight: bold; white-space: nowrap; color: var(--vert); }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+  .ref { font-size: 8.5pt; color: var(--gris); font-style: italic; break-after: avoid; }
+
+  .saut { break-before: page; }
+  svg { display: block; margin: 10pt auto; break-inside: avoid; }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Politiques de cybersécurité</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — section 11</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Cadre dirigeant responsable :</b> Yves Perron, président-directeur général</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">Le présent document décrit les mesures techniques et organisationnelles qui protègent les
+  systèmes et les données servant aux activités associées aux paiements de détail. Il précise le volet
+  « mesures de protection » du cadre de gestion des risques opérationnels, exigé à l’alinéa 5(1)g) du Règlement sur
+  les activités associées aux paiements de détail, et se lit avec le cadre de réponse aux incidents joint à la même
+  section.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. Objet, portée et articulation</h2>
+
+<p>La présente pièce énonce les règles que le demandeur s’impose pour protéger ses actifs opérationnels. Elle couvre
+les systèmes, les données, les personnes qui y accèdent et les tiers qui les hébergent ou les traitent. Chaque règle
+y est formulée de manière à pouvoir être <b>vérifiée</b> plutôt que seulement affirmée : la colonne « vérification »
+des tableaux indique, pour chacune, ce qui en établit le respect.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:22%">Pièce</th><th style="width:44%">Ce qu’elle établit</th><th style="width:34%">Rapport avec la présente</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Pièce 05</b><br><span class="petit">cadre de gestion des risques</span></td><td>Les risques recensés, les objectifs d’intégrité, de confidentialité et de disponibilité, et les huit domaines de mesures de protection prévus au Règlement.</td><td>Elle énonce <i>qu’une</i> mesure existe ; la présente pièce énonce <i>laquelle</i>, et comment on le vérifie.</td></tr>
+    <tr><td><b>Pièce 06</b><br><span class="petit">réponse aux incidents</span></td><td>La gravité, les rôles, les procédures et les avis lorsqu’une mesure a cédé.</td><td>La présente pièce vise à empêcher ; celle-là, à réagir. Les deux se rejoignent aux mesures immédiates.</td></tr>
+    <tr><td><b>Pièce 07</b><br><span class="petit">le présent document</span></td><td>Les politiques applicables aux accès, aux clés, aux appareils, aux réseaux, aux correctifs, au développement, aux journaux, aux sauvegardes, aux données, aux personnes et aux tiers.</td><td>—</td></tr>
+  </tbody>
+</table>
+
+<h3>Ce que la présente pièce ne couvre pas</h3>
+<ul>
+  <li>Les contrôles proprement financiers — plafonds, double approbation des lots, retenue et réserve — qui relèvent de la conception du service et figurent aux pièces 02 et 05. La double approbation est toutefois reprise ici pour la partie qui touche aux droits d’accès.</li>
+  <li>Le programme de lutte contre le recyclage des produits de la criminalité, joint à la section 16 de la demande.</li>
+  <li>La sécurité physique des locaux : le demandeur n’exploite aucun point de service et ne conserve aucune donnée de production sur support local.</li>
+</ul>
+
+<!-- ================= 2 ================= -->
+<h2>2. Les principes qui commandent les règles</h2>
+
+<p>Les règles qui suivent ne sont pas une collection de bonnes pratiques : elles découlent de six principes, et
+chaque exception à une règle doit être justifiée au regard du principe correspondant.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:30%">Principe</th><th style="width:70%">Ce qu’il commande</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Refus par défaut</b></td><td>Un accès qui n’a pas été accordé explicitement est refusé. Aucune permission ne s’acquiert par ancienneté, par appartenance à une équipe ou par oubli de révocation.</td></tr>
+    <tr><td><b>Moindre privilège</b></td><td>Chaque compte, chaque clé et chaque service ne peuvent que ce que leur fonction exige, et pour la durée où elle l’exige.</td></tr>
+    <tr><td><b>Aucun réseau de confiance</b></td><td>Être à l’intérieur du périmètre ne confère aucun droit. Les échanges internes sont authentifiés et chiffrés comme les autres.</td></tr>
+    <tr><td><b>Défense en profondeur</b></td><td>Aucune mesure n’est supposée tenir seule. Les contrôles sont disposés de manière qu’une compromission doive en franchir plusieurs, dont au moins un qui ne repose pas sur le secret.</td></tr>
+    <tr><td><b>Le secret est périssable</b></td><td>Un secret se protège par sa rotation et sa révocabilité, non par sa longévité. Tout secret a une durée de vie et un moyen de le remplacer sans interruption de service.</td></tr>
+    <tr><td><b>Ce qui touche aux fonds se journalise</b></td><td>Toute action susceptible d’influer sur un solde, un paiement ou une donnée de contrepartie laisse une trace attribuable, conservée hors de portée de celui qui l’a produite.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 3 ================= -->
+<div class="saut"></div>
+<h2>3. La défense en profondeur, appliquée aux fonds</h2>
+
+<svg viewBox="0 0 1000 420" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Les couches de protection entre une attaque et les fonds" font-family="Carlito, Calibri, sans-serif">
+  <defs>
+    <marker id="fl7" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto">
+      <path d="M0,1 L8,4.5 L0,8 z" fill="#8a6413"/>
+    </marker>
+  </defs>
+
+  <text x="14" y="22" font-size="16" font-weight="bold" fill="#8a6413">Chemin d’une compromission</text>
+  <line x1="24" y1="34" x2="24" y2="392" stroke="#d9a03c" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fl7)"/>
+
+  <g font-size="15.5" fill="#1f2320">
+    <rect x="48" y="34" width="944" height="50" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+    <text x="68" y="56" font-size="16.5" font-weight="bold" fill="#0f6e5d">Réseau et chiffrement</text>
+    <text x="68" y="74">Chiffrement en transit, restriction des accès d’administration, cloisonnement des environnements.</text>
+
+    <rect x="48" y="94" width="944" height="50" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+    <text x="68" y="116" font-size="16.5" font-weight="bold" fill="#0f6e5d">Authentification</text>
+    <text x="68" y="134">Comptes nominatifs et deuxième facteur pour les personnes ; clés à durée de vie limitée pour les applications.</text>
+
+    <rect x="48" y="154" width="944" height="50" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+    <text x="68" y="176" font-size="16.5" font-weight="bold" fill="#0f6e5d">Autorisation</text>
+    <text x="68" y="194">Moindre privilège et cloisonnement par locataire : un accès obtenu ne devient pas un accès général.</text>
+
+    <rect x="48" y="214" width="944" height="50" rx="6" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="2"/>
+    <text x="68" y="236" font-size="16.5" font-weight="bold" fill="#0f6e5d">Double approbation des lots</text>
+    <text x="68" y="254">Deux personnes physiques distinctes. C’est la seule couche qui ne repose pas sur le secret.</text>
+
+    <rect x="48" y="274" width="944" height="50" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+    <text x="68" y="296" font-size="16.5" font-weight="bold" fill="#0f6e5d">Grand livre immuable et invariant</text>
+    <text x="68" y="314">Une écriture ne s’efface pas ; l’invariant du grand livre refuse un état incohérent.</text>
+
+    <rect x="48" y="334" width="944" height="50" rx="6" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+    <text x="68" y="356" font-size="16.5" font-weight="bold" fill="#0f6e5d">Journalisation et rapprochement</text>
+    <text x="68" y="374">Ce qui a été fait demeure attribuable ; l’écart apparaît au rapprochement du jour ouvrable suivant.</text>
+  </g>
+
+  <rect x="48" y="394" width="944" height="24" rx="4" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.2"/>
+  <text x="520" y="411" text-anchor="middle" font-size="16" font-weight="bold" fill="#8a6413">Fonds des utilisateurs finaux, au compte en fiducie</text>
+</svg>
+
+<p>Les trois premières couches reposent sur un secret — un mot de passe, un second facteur, une clé. Un attaquant
+qui les détient toutes les franchit. La quatrième ne repose sur aucun secret : elle exige deux identités distinctes,
+et elle demeure donc en travers du chemin lorsque les autres ont cédé. Les deux dernières n’empêchent rien : elles
+garantissent que ce qui a été fait est visible et reconstituable, ce qui borne la durée pendant laquelle une atteinte
+peut passer inaperçue à un jour ouvrable.</p>
+
+<!-- ================= 4 ================= -->
+<h2>4. Gestion des accès</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">4.1</td><td>Tout accès aux systèmes de production se fait par un compte <b>nominatif</b>. Aucun compte partagé, aucun compte générique, aucun compte de service employé par une personne.</td><td>Revue trimestrielle des comptes ; tout compte non attribuable est supprimé.</td></tr>
+    <tr><td class="reg">4.2</td><td>L’<b>authentification à deux facteurs</b> est obligatoire pour tout accès de production, sans exception ni exemption temporaire.</td><td>Configuration vérifiée à la revue trimestrielle et après toute modification importante.</td></tr>
+    <tr><td class="reg">4.3</td><td>Les droits sont attribués par <b>rôle</b>, au niveau minimal requis. Les droits de préparation et d’approbation d’un lot sont distincts, et la plateforme refuse l’approbation d’un lot par le compte qui l’a préparé.</td><td>Essai de vérification des contrôles, semestriel ; tentative d’auto-approbation exécutée et refusée.</td></tr>
+    <tr><td class="reg">4.4</td><td>Un accès est <b>ouvert</b> après vérification de l’identité et formation préalable, et <b>retiré le jour même</b> du départ ou de la fin du mandat.</td><td>Registre des ouvertures et des retraits, rapproché de la liste des personnes actives.</td></tr>
+    <tr><td class="reg">4.5</td><td>Les <b>accès d’administration</b> ne sont employés que pour des tâches d’administration, depuis un poste conforme et une provenance restreinte. Ils ne servent jamais aux opérations courantes.</td><td>Journalisation des sessions d’administration, examinée à la revue trimestrielle.</td></tr>
+    <tr><td class="reg">4.6</td><td>Aucun <b>accès d’urgence</b> ne permet de contourner la double approbation d’un lot. Un accès de secours peut exister pour rétablir un service, jamais pour transmettre des fonds.</td><td>Inventaire des accès de secours ; toute utilisation ouvre un dossier d’incident.</td></tr>
+    <tr><td class="reg">4.7</td><td>Les accès des <b>partenaires-distributeurs</b> sont limités au provisionnement et à la gestion de leurs propres abonnés ; ils n’ouvrent ni le compte en fiducie ni le grand livre.</td><td>Essai fondé sur un scénario, annuel : tentative d’accès croisé entre locataires.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 5 ================= -->
+<h2>5. Clés d’interface et secrets</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">5.1</td><td>Une clé d’interface appartient à un <b>seul abonné</b> et ne porte que sur ses données. Le cloisonnement est appliqué par la plateforme et non par l’appelant.</td><td>Essai d’accès croisé, annuel.</td></tr>
+    <tr><td class="reg">5.2</td><td>Toute clé a une <b>durée de vie limitée</b> et est remplacée périodiquement. Le remplacement se fait sans interruption : deux clés peuvent coexister le temps de la bascule.</td><td>Âge de la clé la plus ancienne, relevé à la revue trimestrielle.</td></tr>
+    <tr><td class="reg">5.3</td><td>Toute clé est <b>révocable immédiatement</b>, par une personne, sans passer par un tiers ni attendre une fenêtre de mise en service.</td><td>Révocation exercée lors de l’essai fondé sur un scénario de compromission.</td></tr>
+    <tr><td class="reg">5.4</td><td>Aucun secret — clé, mot de passe, jeton, chaîne de connexion — n’est inscrit dans le code source, dans un fichier de configuration versionné, ni transmis par courriel ou messagerie.</td><td>Analyse automatisée du dépôt à chaque intégration ; toute occurrence entraîne la révocation du secret trouvé.</td></tr>
+    <tr><td class="reg">5.5</td><td>Les secrets sont conservés dans un magasin dédié, chiffrés au repos, accessibles aux seuls services qui en ont besoin.</td><td>Inventaire des secrets et de leurs porteurs, revu semestriellement.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 6 ================= -->
+<h2>6. Postes de travail et appareils</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">6.1</td><td>Tout poste servant à accéder à la production est <b>chiffré intégralement</b>, verrouillé automatiquement et doté d’un effacement à distance.</td><td>Inventaire des postes et de leur état de conformité, revu trimestriellement.</td></tr>
+    <tr><td class="reg">6.2</td><td>Aucune <b>donnée de production</b> n’est conservée localement. Les extractions nécessaires sont chiffrées, horodatées, journalisées et détruites après usage.</td><td>Journal des extractions, examiné à la revue trimestrielle.</td></tr>
+    <tr><td class="reg">6.3</td><td>Les postes reçoivent les <b>mises à jour de sécurité</b> selon les délais du chapitre 8 et portent une protection contre les programmes malveillants, à jour.</td><td>État de mise à jour relevé au même rythme que les correctifs.</td></tr>
+    <tr><td class="reg">6.4</td><td>Aucun <b>support amovible</b> n’est employé en production.</td><td>Règle appliquée par configuration du poste.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 7 ================= -->
+<h2>7. Réseaux, chiffrement et cloisonnement</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">7.1</td><td>Toute communication est <b>chiffrée en transit</b>, y compris entre composants internes et avec l’hébergeur. Le périmètre n’est pas traité comme un réseau de confiance.</td><td>Configuration vérifiée à chaque mise en service ; absence de canal en clair contrôlée à l’essai semestriel.</td></tr>
+    <tr><td class="reg">7.2</td><td>Les données sont <b>chiffrées au repos</b> : bases de données, sauvegardes, journaux, images de machines.</td><td>Inventaire des dépôts de données et de leur état de chiffrement.</td></tr>
+    <tr><td class="reg">7.3</td><td>Les <b>environnements</b> de développement, d’essai et de production sont séparés ; aucune donnée de production ne se trouve hors production.</td><td>Essai relatif aux modifications, avant chaque mise en service.</td></tr>
+    <tr><td class="reg">7.4</td><td>Les accès d’administration sont restreints par <b>provenance</b> et journalisés.</td><td>Journal des accès d’administration, revu trimestriellement.</td></tr>
+    <tr><td class="reg">7.5</td><td>La transmission des fichiers à l’institution financière parraine emprunte le <b>canal convenu à l’entente</b>, et lui seul.</td><td>Canal et empreintes vérifiés à la certification technique, puis à chaque changement.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 8 ================= -->
+<h2>8. Vulnérabilités et correctifs</h2>
+
+<p>Le délai applicable court à partir du moment où le demandeur est informé de la vulnérabilité et a établi qu’il y
+est exposé, selon la démarche décrite à la note 13 de la pièce 05.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:20%">Gravité</th><th style="width:26%">Délai de correction</th><th style="width:54%">Précisions</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Critique</b></td><td>Sans délai, et au plus 48 heures</td><td>Vulnérabilité exploitée activement, ou touchant l’accès aux fonds, au grand livre ou à la production des fichiers. À défaut de correctif, une mesure d’atténuation est appliquée dans le même délai.</td></tr>
+    <tr><td><b>Élevée</b></td><td>7 jours civils</td><td>Exposition établie sans exploitation connue.</td></tr>
+    <tr><td><b>Moyenne</b></td><td>30 jours civils</td><td>Traitée au cycle courant de mise à jour.</td></tr>
+    <tr><td><b>Faible</b></td><td>Au prochain cycle</td><td>Consignée et suivie ; sans échéance ferme.</td></tr>
+  </tbody>
+</table>
+
+<ul>
+  <li>Les <b>dépendances applicatives</b>, y compris celles dont dépendent d’autres bibliothèques, sont inventoriées et suivies ; un composant qui n’est plus maintenu par son éditeur est traité comme une vulnérabilité élevée jusqu’à son remplacement.</li>
+  <li>Un correctif appliqué à un actif classé critique à la section 4 de la pièce 05 fait l’objet d’un <b>essai relatif aux modifications</b> avant mise en service, sauf lorsque le délai critique l’interdit ; dans ce cas, l’essai suit immédiatement.</li>
+</ul>
+
+<!-- ================= 9 ================= -->
+<h2>9. Développement et mise en service</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">9.1</td><td>Toute modification du code est <b>revue par une seconde personne</b> avant intégration. La revue porte notamment sur les chemins qui produisent une écriture au grand livre ou un enregistrement du fichier de la norme 005.</td><td>Historique des revues conservé avec le code.</td></tr>
+    <tr><td class="reg">9.2</td><td>Un <b>jeu d’essais automatisé</b> couvre le format du fichier 005 et l’invariant du grand livre. Aucune mise en service n’a lieu si l’un des deux échoue.</td><td>Résultat des essais conservé pour chaque mise en service.</td></tr>
+    <tr><td class="reg">9.3</td><td>Aucune <b>donnée de production</b> n’est employée en développement ni en essai. Les jeux d’essai sont synthétiques.</td><td>Contrôle à la revue de code et à l’essai relatif aux modifications.</td></tr>
+    <tr><td class="reg">9.4</td><td>Toute mise en service est <b>réversible</b> : la version précédente demeure déployable, et la procédure de retour en arrière est écrite avant la mise en service, non pendant l’incident.</td><td>Retour en arrière exercé au moins une fois par an, dans le cadre des essais.</td></tr>
+    <tr><td class="reg">9.5</td><td>Une <b>modification importante</b> des systèmes ou des politiques est approuvée par le cadre dirigeant et déclenche la mise à jour du cadre de gestion des risques.</td><td>Registre des modifications importantes et des approbations.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 10 ================= -->
+<h2>10. Journalisation, surveillance, sauvegardes</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:8%">N<sup>o</sup></th><th style="width:56%">Règle</th><th style="width:36%">Vérification</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="reg">10.1</td><td>Sont journalisés, de façon attribuable et horodatée : les authentifications et les refus, les actions d’administration, les changements d’état d’une opération et d’un lot, les écritures au grand livre, les accès aux données de contrepartie, les changements de droits et de configuration.</td><td>Reconstitution d’un trajet complet, exercée à l’essai annuel.</td></tr>
+    <tr><td class="reg">10.2</td><td>Les journaux sont conservés <b>hors de portée</b> des comptes qu’ils observent ; leur altération ou leur suppression est traitée comme un incident.</td><td>Droits d’accès aux journaux revus trimestriellement.</td></tr>
+    <tr><td class="reg">10.3</td><td>Les journaux et la piste d’audit sont conservés <b>sept ans au Canada</b>.</td><td>Politique de conservation vérifiée à l’examen annuel.</td></tr>
+    <tr><td class="reg">10.4</td><td>Les sauvegardes sont <b>chiffrées</b>, conservées au Canada, et leur restauration est mise à l’essai <b>semestriellement</b> — la mise à l’essai comprend la reconstitution du grand livre et la confirmation de l’invariant du grand livre.</td><td>Résultat de la restauration consigné : date, portée, écart constaté.</td></tr>
+    <tr><td class="reg">10.5</td><td>La cible de rétablissement est de <b>quatre heures ouvrables</b>, sans perte de données, conformément à la section 2 de la pièce 05.</td><td>Délai et point de reprise constatés à chaque essai et à chaque incident.</td></tr>
+  </tbody>
+</table>
+
+<!-- ================= 11 ================= -->
+<h2>11. Données</h2>
+
+<ul>
+  <li><b>Classification</b> — les actifs et leur sensibilité sont recensés à la section 4 de la pièce 05. Les données de contrepartie sont réputées sensibles quel que soit leur volume.</li>
+  <li><b>Cloisonnement</b> — toute lecture est bornée au locataire qui la demande ; le cloisonnement est appliqué par la plateforme et fait l’objet d’un essai annuel d’accès croisé.</li>
+  <li><b>Résidence</b> — les données et les sauvegardes demeurent au Canada, en vertu d’une entente écrite avec l’hébergeur.</li>
+  <li><b>Minimisation</b> — le demandeur ne collecte des contreparties que ce qu’exige l’exécution du paiement et la preuve de l’entente.</li>
+  <li><b>Effacement</b> — les données personnelles d’une contrepartie peuvent être anonymisées sur demande, sans toucher aux écritures comptables, qui demeurent nécessaires à la piste d’audit financière.</li>
+</ul>
+
+<!-- ================= 12 ================= -->
+<h2>12. Personnes et tiers</h2>
+
+<h3>Personnes</h3>
+<ul>
+  <li>La <b>formation</b> au présent document et au programme de conformité précède l’octroi de tout accès de production, et se répète annuellement.</li>
+  <li>Un <b>engagement de confidentialité</b> écrit lie chaque personne ayant accès aux données d’abonnés ou de contreparties.</li>
+  <li>Le <b>signalement</b> d’un doute — courriel suspect, comportement inattendu d’un système, geste posé par erreur — est attendu sans délai et n’expose son auteur à aucune sanction. Un cadre qui punit la déclaration obtient moins de déclarations, non moins d’incidents.</li>
+</ul>
+
+<h3>Tiers</h3>
+<ul>
+  <li>Toute entente avec un tiers qui héberge, traite ou transmet des données du demandeur prévoit la <b>résidence au Canada</b>, la <b>journalisation</b>, l’<b>obligation de signaler</b> tout incident sans délai, et le droit d’obtenir la preuve des mesures annoncées.</li>
+  <li>Les tiers sont <b>évalués avant l’engagement</b> et au moins annuellement par la suite.</li>
+  <li>Un tiers défaillant est traité selon la procédure 5.4 de la pièce 06.</li>
+</ul>
+
+<!-- ================= 13 ================= -->
+<h2>13. Exceptions, vérification et révision</h2>
+
+<div class="encadre">
+  <p><b>Les exceptions se comptent.</b> Une dérogation à une règle du présent document est accordée par le cadre
+  dirigeant, par écrit, pour une <b>durée déterminée</b>, avec la mesure compensatoire retenue et la date de retour
+  à la conformité. Une dérogation qui vient à échéance sans être renouvelée devient une lacune, consignée à ce titre
+  et présentée à l’examen annuel. Aucune dérogation n’est admise aux règles 4.2, 4.6 et 9.2 — deuxième facteur,
+  interdiction de contourner la double approbation, et jeu d’essais avant mise en service.</p>
+</div>
+
+<ul>
+  <li><b>Vérification</b> — les colonnes « vérification » du présent document sont exécutées selon le calendrier de la section 12 de la pièce 05 : rapprochement quotidien, revue des accès trimestrielle, vérification des contrôles et restauration semestrielles, essais fondés sur des scénarios annuels.</li>
+  <li><b>Révision</b> — le présent document est révisé au moins une fois par année, et après toute modification importante des systèmes, tout incident de gravité G1 ou G2, et toute constatation de l’examen indépendant.</li>
+  <li><b>Approbation</b> — chaque version est approuvée par le cadre dirigeant, datée et conservée ; les versions antérieures demeurent accessibles.</li>
+</ul>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Cadre de gestion des risques opérationnels : pièce 05. Cadre de réponse aux incidents :
+  pièce 06. Description des services et des processus de paiement : question 6.1. Diagrammes des processus de
+  paiement : question 6.3. Contrats avec les tiers et procédure de supervision : section 13. Programme de
+  conformité : section 16.</p>
+</div>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Délais de correction</b></td><td>Les quatre délais du chapitre 8 sont proposés. Les arrêter, et vérifier qu’ils sont tenables avec les ressources prévues à la section 3 de la pièce 05 avant de les inscrire dans un document déposé.</td></tr>
+    <tr><td><b>Règles supposant un outillage</b></td><td>Les règles 5.4 (analyse du dépôt à la recherche de secrets), 6.1 (effacement à distance) et 10.2 (journaux hors de portée) supposent des outils en place. Confirmer qu’ils le sont, ou reformuler la règle au futur et l’assortir d’une échéance.</td></tr>
+    <tr><td><b>Deuxième personne</b></td><td>Les règles 4.3 et 9.1 supposent une seconde personne habilitée. Même dépendance qu’aux pièces 05 et 06 : à nommer avant l’activation de la fonction de paiement.</td></tr>
+    <tr><td><b>Fréquences</b></td><td>Trimestrielle pour les accès, semestrielle pour les contrôles et les restaurations, annuelle pour les scénarios : aligner ces fréquences sur le calendrier de la section 12 de la pièce 05 si celui-ci est modifié.</td></tr>
+    <tr><td><b>Hébergeur</b></td><td>Plusieurs règles renvoient à l’entente d’hébergement — résidence, journalisation, signalement. Les reporter au contrat au moment de retenir l’hébergeur, faute de quoi elles demeurent des intentions.</td></tr>
+    <tr><td><b>Nombre de pièces</b></td><td>Les pièces 05, 06 et 07 forment ensemble le cadre exigé à l’article 5 du Règlement. Confirmer que la Banque accepte cette présentation, ou les réunir avant le dépôt.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,509 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>piece-03-exemples-contrats-ententes</title>
+<style>
+  @page { size: Letter; margin: 22mm 18mm 20mm 18mm; }
+
+  :root {
+    --vert: #0f6e5d;
+    --or: #d9a03c;
+    --texte: #1f2320;
+    --gris: #5f6663;
+    --ligne: #d8dedb;
+    --alt: #f7f9f8;
+    --tint: #f2f7f5;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    font-family: "Carlito", "Calibri", sans-serif;
+    font-size: 10pt;
+    line-height: 1.5;
+    color: var(--texte);
+    margin: 0;
+    -webkit-print-color-adjust: exact;
+    print-color-adjust: exact;
+  }
+
+  h1 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 25pt;
+    line-height: 1.25;
+    color: var(--vert);
+    margin: 0 0 14pt 0;
+    font-weight: bold;
+  }
+
+  h2 {
+    font-family: "Caladea", "Cambria", serif;
+    font-size: 14pt;
+    color: var(--vert);
+    margin: 20pt 0 3pt 0;
+    padding-bottom: 4pt;
+    border-bottom: 1.5pt solid var(--or);
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  h3 {
+    font-family: "Carlito", sans-serif;
+    font-size: 10.5pt;
+    color: var(--vert);
+    margin: 13pt 0 3pt 0;
+    font-weight: bold;
+    break-after: avoid;
+  }
+
+  p { margin: 0 0 8pt 0; }
+
+  .chapeau { color: var(--gris); font-size: 9.5pt; margin-top: 26pt; }
+
+  .titre-page { padding-top: 158pt; }
+  .titre-page .sous { font-size: 11pt; margin: 0 0 3pt 0; }
+  .meta {
+    border-top: 1.5pt solid #d9a03c;
+    border-bottom: 1.5pt solid #d9a03c;
+    padding: 12pt 0;
+    margin-top: 26pt;
+  }
+  .meta p { margin: 0 0 4pt 0; }
+  .meta p:last-child { margin-bottom: 0; }
+
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 8pt 0 10pt 0;
+    font-size: 9pt;
+    break-inside: auto;
+  }
+  thead { display: table-header-group; }
+  tr { break-inside: avoid; }
+  th {
+    background: var(--vert);
+    color: #fff;
+    font-weight: bold;
+    text-align: left;
+    padding: 5pt 7pt;
+    font-size: 9pt;
+  }
+  td {
+    padding: 5pt 7pt;
+    vertical-align: top;
+    border-bottom: 0.5pt solid var(--ligne);
+  }
+  tbody tr:nth-child(odd) td { background: var(--alt); }
+  td.art { font-weight: bold; white-space: nowrap; color: var(--vert); }
+
+  .encadre {
+    background: var(--tint);
+    border-left: 2.5pt solid var(--vert);
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .encadre p:last-child { margin-bottom: 0; }
+  .encadre b { color: var(--vert); }
+
+  .note {
+    border: 0.75pt solid var(--or);
+    background: #fdf8ef;
+    padding: 9pt 12pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .note p:last-child { margin-bottom: 0; }
+
+  ul, ol { margin: 0 0 8pt 0; padding-left: 16pt; }
+  li { margin-bottom: 4pt; }
+
+  .petit { font-size: 8.5pt; color: var(--gris); margin-top: -4pt; }
+  .ref { font-size: 8.5pt; color: var(--gris); font-style: italic; break-after: avoid; }
+
+  .saut { break-before: page; }
+  svg { display: block; margin: 10pt auto; break-inside: avoid; }
+
+  /* ---------- modèles de contrat ---------- */
+  .modele {
+    border: 0.75pt solid var(--ligne);
+    border-top: 2.5pt solid var(--vert);
+    background: #fdfdfd;
+    padding: 12pt 14pt 10pt;
+    margin: 10pt 0 12pt 0;
+    font-size: 9.5pt;
+  }
+  .modele .titre {
+    font-weight: bold;
+    color: var(--vert);
+    font-size: 11pt;
+    margin: 0 0 3pt 0;
+    text-align: center;
+  }
+  .modele .stitre {
+    text-align: center; color: var(--gris); font-size: 8.5pt; margin: 0 0 10pt 0;
+  }
+  .modele .art { margin: 0 0 7pt 0; }
+  .modele .art:last-child { margin-bottom: 0; }
+  .modele .art b { color: var(--vert); }
+  .modele .champ {
+    font-family: "DejaVu Sans Mono", monospace;
+    font-size: 8.5pt;
+    background: var(--alt);
+    padding: 0 3pt;
+  }
+</style>
+</head>
+<body>
+
+<!-- ================= PAGE DE TITRE ================= -->
+<div class="titre-page">
+  <h1>Exemples de contrats et d’ententes</h1>
+  <p class="sous">9567-0048 Québec inc. — 60sec-Paiement</p>
+  <p class="sous">Pièce jointe à la demande d’enregistrement d’un fournisseur de services de paiement</p>
+  <p class="sous">Banque du Canada — Loi sur les activités associées aux paiements de détail — question 6.2</p>
+
+  <div class="meta">
+    <p><b>Demandeur :</b> 9567-0048 Québec inc., NEQ 1182124850, 102 chemin Miltimore, Sutton (Québec) J0E 2P0</p>
+    <p><b>Nom commercial :</b> 60sec-Paiement</p>
+    <p><b>Personne désignée :</b> Yves Perron, président-directeur général — y@le102.ca — 514-885-9351</p>
+    <p><b>Date prévue de lancement :</b> 1<sup>er</sup> avril 2027</p>
+    <p><b>Version :</b> 1.0 — 8 septembre 2026</p>
+  </div>
+
+  <p class="chapeau">La présente pièce réunit les modèles d’ententes qui lieront le demandeur à ses abonnés et à ses
+  partenaires-distributeurs, ainsi que le modèle d’accord de débit préautorisé que l’abonné fera signer à son
+  payeur. Elle se lit avec la description des services jointe à la question 6.1, dont elle reprend les mécanismes,
+  et avec les diagrammes joints à la question 6.3.</p>
+</div>
+
+<!-- ================= 1 ================= -->
+<div class="saut"></div>
+<h2>1. Objet et statut des documents joints</h2>
+
+<div class="note">
+  <p><b>Ce que sont ces documents, et ce qu’ils ne sont pas.</b> Les trois modèles reproduits ci-après sont des
+  <b>projets</b>, rédigés pour exposer à la Banque du Canada la substance des engagements que le demandeur entend
+  prendre et faire prendre. Ils n’ont pas été signés, et leur rédaction juridique définitive appartient au
+  conseiller juridique du demandeur. Ils sont joints parce qu’un régulateur doit pouvoir vérifier que les règles
+  décrites à la question 6.1 se retrouvent effectivement dans les liens contractuels, et non seulement dans la
+  description du service.</p>
+</div>
+
+<h3>Les liens contractuels du dispositif</h3>
+
+<svg viewBox="0 0 1000 300" width="100%" xmlns="http://www.w3.org/2000/svg" role="img"
+     aria-label="Les liens contractuels entre le demandeur, l’abonné, le payeur et le partenaire"
+     font-family="Carlito, Calibri, sans-serif">
+  <defs>
+    <marker id="fl3" markerWidth="9" markerHeight="9" refX="7.2" refY="4.5" orient="auto">
+      <path d="M0,1 L8,4.5 L0,8 z" fill="#0f6e5d"/>
+    </marker>
+  </defs>
+
+  <rect x="360" y="16" width="280" height="62" rx="7" fill="#f2f7f5" stroke="#0f6e5d" stroke-width="2.2"/>
+  <text x="500" y="42" text-anchor="middle" font-size="18" font-weight="bold" fill="#0f6e5d">Demandeur</text>
+  <text x="500" y="64" text-anchor="middle" font-size="15">60sec-Paiement</text>
+
+  <rect x="30" y="132" width="250" height="62" rx="7" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+  <text x="155" y="158" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Partenaire-distributeur</text>
+  <text x="155" y="180" text-anchor="middle" font-size="15">niveau optionnel</text>
+
+  <rect x="375" y="132" width="250" height="62" rx="7" fill="#ffffff" stroke="#0f6e5d" stroke-width="1.6"/>
+  <text x="500" y="158" text-anchor="middle" font-size="17" font-weight="bold" fill="#0f6e5d">Abonné</text>
+  <text x="500" y="180" text-anchor="middle" font-size="15">l’entreprise cliente</text>
+
+  <rect x="720" y="132" width="250" height="62" rx="7" fill="#ffffff" stroke="#9aa5a1" stroke-width="1.6"/>
+  <text x="845" y="158" text-anchor="middle" font-size="17" font-weight="bold" fill="#3d4744">Client payeur</text>
+  <text x="845" y="180" text-anchor="middle" font-size="15">contrepartie de l’abonné</text>
+
+  <line x1="470" y1="80" x2="470" y2="130" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl3)"/>
+  <text x="482" y="110" font-size="14.5" fill="#1f2320">contrat d’abonnement — modèle A</text>
+
+  <path d="M400,78 L200,78 L200,130" fill="none" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl3)"/>
+  <text x="200" y="70" text-anchor="middle" font-size="14.5" fill="#1f2320">entente partenaire — modèle C</text>
+
+  <line x1="627" y1="163" x2="716" y2="163" stroke="#0f6e5d" stroke-width="2" marker-end="url(#fl3)"/>
+  <text x="672" y="152" text-anchor="middle" font-size="14.5" fill="#1f2320">accord de DPA</text>
+  <text x="672" y="212" text-anchor="middle" font-size="14.5" fill="#1f2320">modèle B</text>
+
+  <path d="M600,78 L900,78 L900,128" fill="none" stroke="#0f6e5d" stroke-width="2" stroke-dasharray="6 4" marker-end="url(#fl3)"/>
+  <text x="900" y="70" text-anchor="middle" font-size="14.5" font-style="italic" fill="#8a6413">bénéficiaire inscrit de l’accord</text>
+
+  <rect x="30" y="238" width="940" height="46" rx="6" fill="#fdf8ef" stroke="#d9a03c" stroke-width="1.2"/>
+  <text x="500" y="258" text-anchor="middle" font-size="15" fill="#1f2320">L’accord de débit préautorisé est signé entre le payeur et l’abonné, mais c’est le demandeur qui en est le</text>
+  <text x="500" y="277" text-anchor="middle" font-size="15" fill="#1f2320">bénéficiaire inscrit auprès de l’institution parraine, et qui répond de sa validité devant la règle H1.</text>
+</svg>
+
+<table>
+  <thead>
+    <tr><th style="width:16%">Modèle</th><th style="width:30%">Parties</th><th style="width:54%">Objet</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>A</b></td><td>Demandeur et abonné</td><td>Contrat d’abonnement : accès à la plateforme, fonctionnement du solde et de la réserve, obligations de l’abonné, traitement des retours, suspension et résiliation.</td></tr>
+    <tr><td><b>B</b></td><td>Payeur et abonné<br><span class="petit">demandeur bénéficiaire inscrit</span></td><td>Accord de débit préautorisé, portant les mentions exigées par la règle H1 de Paiements Canada.</td></tr>
+    <tr><td><b>C</b></td><td>Demandeur et partenaire-distributeur</td><td>Entente de distribution : provisionnement d’abonnés, absence d’accès aux fonds, obligations de signalement.</td></tr>
+  </tbody>
+</table>
+
+<p class="petit">L’entente avec l’institution financière parraine, celle avec le partenaire de virement et celle
+avec l’hébergeur relèvent de la section 13 de la demande et ne sont pas reproduites ici.</p>
+
+<!-- ================= 2 ================= -->
+<div class="saut"></div>
+<h2>2. Modèle A — Contrat d’abonnement</h2>
+
+<p>Les articles reproduits ci-après sont ceux qui intéressent la supervision. Les stipulations commerciales
+ordinaires — tarification détaillée, propriété intellectuelle, limitation de responsabilité, droit applicable —
+figurent au contrat complet et ne sont pas reprises ici.</p>
+
+<div class="modele">
+  <p class="titre">Contrat d’abonnement à la plateforme 60sec-Paiement</p>
+  <p class="stitre">Modèle — projet soumis à validation juridique</p>
+
+  <p class="art"><b>1. Objet.</b> Le fournisseur donne à l’abonné accès à une plateforme d’exécution de paiements
+  qui encaisse des sommes auprès des contreparties désignées par l’abonné, détient ces sommes dans un compte en
+  fiducie, et décaisse vers les bénéficiaires que l’abonné désigne. Le fournisseur agit en son propre nom et pour le
+  compte de l’abonné ; il n’est ni le mandataire ni l’associé de celui-ci pour ses activités commerciales.</p>
+
+  <p class="art"><b>2. Détention des fonds.</b> Les sommes encaissées pour le compte de l’abonné sont détenues dans
+  un compte en fiducie à vocation unique, distinct des fonds propres du fournisseur. Le solde de l’abonné constitue
+  une obligation du fournisseur envers lui ; il ne s’agit ni d’un dépôt bancaire, ni d’un placement, et il ne porte
+  pas intérêt.</p>
+
+  <p class="art"><b>3. Réserve.</b> Le fournisseur retient sur le solde de l’abonné une réserve égale à
+  <span class="champ">10 %</span> du volume de débits des <span class="champ">trente</span> derniers jours, libérée
+  par tranches à l’expiration du délai de contestation applicable. La réserve demeure la propriété de l’abonné et
+  n’est pas une garantie consentie au fournisseur ; elle rend une portion du solde temporairement indisponible.</p>
+
+  <p class="art"><b>4. Délai de retenue.</b> Les sommes encaissées demeurent indisponibles pendant
+  <span class="champ">cinq</span> jours ouvrables suivant leur règlement. Aucun décaissement n’est possible
+  au-delà du solde disponible, réserve déduite : le fournisseur n’accorde aucun découvert, aucune avance et aucun
+  financement.</p>
+
+  <p class="art"><b>5. Ententes de débit préautorisé.</b> L’abonné garantit que chaque prélèvement qu’il demande
+  repose sur un accord de débit préautorisé valide, conforme à la règle H1 de Paiements Canada, obtenu du payeur par
+  une méthode commercialement raisonnable de vérification d’identité, et dont il conserve la preuve. Le fournisseur,
+  bénéficiaire inscrit de ces accords pour le compte de l’abonné, peut en exiger la production en tout temps et
+  procéder à leur audit.</p>
+
+  <p class="art"><b>6. Règles de Paiements Canada.</b> L’abonné se conforme aux règles applicables aux virements et
+  aux débits préautorisés, telles que le fournisseur les lui répercute, notamment quant au préavis de modification
+  du montant ou de la date, au traitement des révocations et aux délais de contestation.</p>
+
+  <p class="art"><b>7. Vérification préalable et activation.</b> Aucune fonction de paiement n’est activée avant que
+  le fournisseur ait vérifié l’existence de l’abonné, sa propriété effective, l’absence de sanctions applicables et
+  l’identité de son représentant autorisé, et avant que le compte bancaire de règlement soit rattaché. L’abonné
+  informe le fournisseur de tout changement de propriété effective ou d’activité dans les
+  <span class="champ">dix</span> jours.</p>
+
+  <p class="art"><b>8. Secteurs exclus.</b> L’abonné déclare que son activité ne relève d’aucun des secteurs
+  énumérés à l’annexe <span class="champ">[à joindre]</span>, et s’engage à ne pas employer la plateforme pour une
+  activité autre que celle déclarée.</p>
+
+  <p class="art"><b>9. Utilisateurs et approbations.</b> L’abonné désigne les personnes physiques autorisées à
+  préparer et à approuver des opérations, et maintient cette liste à jour. Il reconnaît que les droits de
+  préparation et d’approbation sont distincts et qu’un même compte ne peut exercer les deux sur une même
+  opération.</p>
+
+  <p class="art"><b>10. Plafonds.</b> Un plafond quotidien est porté à la fiche de l’abonné à l’activation. Le
+  fournisseur peut le réviser en fonction de l’historique de retours ; une réduction motivée par un risque prend
+  effet sans préavis.</p>
+
+  <p class="art"><b>11. Retours et frais.</b> Un retour, un refus ou un rejet donne lieu à la contre-passation des
+  écritures correspondantes et à des frais de <span class="champ">12,50 $</span> par occurrence, débités du solde de
+  l’abonné. Lorsque le solde est insuffisant, l’abonné rembourse le fournisseur sur demande.</p>
+
+  <p class="art"><b>12. Suspension.</b> Le fournisseur peut suspendre les opérations de l’abonné, ou geler son
+  solde, lorsque le taux de retour franchit le seuil porté à sa fiche, lorsque la preuve des accords de débit
+  préautorisé n’est pas produite, ou lorsqu’une obligation légale l’impose. La suspension est notifiée à l’abonné,
+  sans que le fournisseur soit tenu d’en exposer le détail lorsque la loi le lui interdit.</p>
+
+  <p class="art"><b>13. Résiliation et clôture.</b> Chaque partie peut résilier moyennant un préavis de
+  <span class="champ">trente</span> jours. La clôture est refusée tant qu’il subsiste des fonds au solde ou des
+  opérations en cours ; le solde disponible est versé au compte de règlement de l’abonné à l’expiration des délais
+  de contestation applicables.</p>
+
+  <p class="art"><b>14. Renseignements et conservation.</b> Le fournisseur conserve les registres d’opérations
+  <span class="champ">sept</span> ans au Canada. Les renseignements personnels des contreparties peuvent être
+  anonymisés sur demande, sans que soient touchées les écritures comptables nécessaires à la piste d’audit.</p>
+
+  <p class="art"><b>15. Incidents.</b> Le fournisseur avise l’abonné de tout incident ayant des répercussions
+  importantes sur lui, selon les modalités prévues à son cadre de réponse aux incidents. L’abonné avise le
+  fournisseur sans délai de toute compromission d’un accès, d’une clé ou d’un compte utilisateur.</p>
+</div>
+
+<!-- ================= 3 ================= -->
+<div class="saut"></div>
+<h2>3. Modèle B — Accord de débit préautorisé du payeur</h2>
+<p class="ref">Mentions exigées par la règle H1 de Paiements Canada.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:36%">Mention exigée</th><th style="width:18%">Article</th><th style="width:46%">Précision</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Autorisation expresse de débiter le compte désigné</td><td>1 et 2</td><td>Avec les coordonnées bancaires et une pièce jointe justificative.</td></tr>
+    <tr><td>Catégorie de l’accord</td><td>3</td><td>Personnel ou entreprise : elle détermine le délai de contestation.</td></tr>
+    <tr><td>Montant fixe ou variable, et périodicité</td><td>4</td><td>Pour un débit occasionnel, une autorisation distincte est obtenue avant chaque prélèvement.</td></tr>
+    <tr><td>Préavis avant tout changement de montant ou de date</td><td>5</td><td>Au moins dix jours civils, sauf renonciation exprès du payeur.</td></tr>
+    <tr><td>Droit de révocation et modalités</td><td>6</td><td>En tout temps, moyennant un préavis d’au plus trente jours civils.</td></tr>
+    <tr><td>Énoncé du droit de recours et de remboursement</td><td>7</td><td>Quatre-vingt-dix jours civils pour un accord personnel ; dix jours ouvrables pour un accord d’entreprise.</td></tr>
+    <tr><td>Identité du bénéficiaire et coordonnées</td><td>8</td><td>Le bénéficiaire inscrit est nommé, et l’abonné identifié comme celui pour le compte de qui le prélèvement est effectué.</td></tr>
+  </tbody>
+</table>
+
+<div class="modele">
+  <p class="titre">Accord de débit préautorisé</p>
+  <p class="stitre">Modèle — projet soumis à validation juridique et à l’approbation de l’institution parraine</p>
+
+  <p class="art"><b>1. Payeur.</b> <span class="champ">Nom · adresse · courriel</span></p>
+
+  <p class="art"><b>2. Compte débité.</b> <span class="champ">Institution · transit · numéro de compte</span>. Le
+  payeur joint un spécimen de chèque ou une confirmation de son institution financière, et confirme que toutes les
+  personnes dont la signature est requise sur ce compte ont signé le présent accord.</p>
+
+  <p class="art"><b>3. Catégorie.</b> <span class="champ">☐ Débit préautorisé personnel &nbsp; ☐ Débit préautorisé
+  d’entreprise</span></p>
+
+  <p class="art"><b>4. Montant et périodicité.</b> Le payeur autorise <span class="champ">nom de l’abonné</span>,
+  par l’intermédiaire de 60sec-Paiement, à prélever sur le compte désigné la somme de
+  <span class="champ">montant fixe, ou description de la règle de calcul du montant variable</span>, selon la
+  périodicité suivante : <span class="champ">périodicité, ou événement déclencheur</span>. Lorsque le prélèvement
+  est occasionnel, une autorisation distincte est obtenue avant chaque prélèvement.</p>
+
+  <p class="art"><b>5. Modification.</b> Le payeur recevra un préavis écrit d’au moins <b>dix jours civils</b> avant
+  tout changement du montant ou de la date d’un prélèvement, à moins qu’il n’y renonce par écrit. Lorsque le montant
+  est variable, le préavis est donné selon les modalités convenues au présent accord.</p>
+
+  <p class="art"><b>6. Révocation.</b> Le payeur peut révoquer la présente autorisation en tout temps, sur préavis
+  d’au plus <b>trente jours civils</b>, en écrivant à <span class="champ">coordonnées de l’abonné</span> ou en
+  communiquant avec 60sec-Paiement. La révocation ne libère pas le payeur de ses obligations contractuelles envers
+  l’abonné. Un modèle de révocation et des renseignements sur ce droit peuvent être obtenus de l’institution
+  financière du payeur ou à l’adresse paiements.ca.</p>
+
+  <p class="art"><b>7. Recours.</b> Le payeur a certains droits de recours si un prélèvement n’est pas conforme au
+  présent accord — par exemple s’il a été effectué sans autorisation, ou pour un montant autre que celui convenu.
+  Pour obtenir de l’information sur ces droits, ou pour être remboursé, le payeur doit s’adresser à son institution
+  financière, dans un délai de <b>quatre-vingt-dix jours civils</b> s’il s’agit d’un accord personnel, ou de
+  <b>dix jours ouvrables</b> s’il s’agit d’un accord d’entreprise. D’autres renseignements sont disponibles à
+  l’adresse paiements.ca.</p>
+
+  <p class="art"><b>8. Bénéficiaire.</b> Les prélèvements sont effectués par <b>9567-0048 Québec inc., faisant
+  affaire sous le nom 60sec-Paiement</b>, bénéficiaire inscrit, pour le compte de
+  <span class="champ">nom de l’abonné</span>. Le nom de l’abonné apparaît sur le relevé de compte du payeur.
+  Coordonnées du bénéficiaire : <span class="champ">adresse · courriel · téléphone</span>.</p>
+
+  <p class="art"><b>9. Renseignements personnels.</b> Les renseignements fournis servent au traitement des
+  prélèvements et sont communiqués aux institutions financières concernées à cette seule fin.</p>
+
+  <p class="art"><b>10. Signature.</b> <span class="champ">Signature du payeur · date</span> — ou consentement
+  électronique équivalent, dont la preuve est conservée.</p>
+</div>
+
+<!-- ================= 4 ================= -->
+<h2>4. Modèle C — Entente de partenaire-distributeur</h2>
+
+<div class="modele">
+  <p class="titre">Entente de distribution</p>
+  <p class="stitre">Modèle — projet soumis à validation juridique</p>
+
+  <p class="art"><b>1. Objet.</b> Le partenaire provisionne et gère, sur la plateforme du fournisseur, des abonnés
+  qu’il recrute sous sa propre marque. Il n’exerce aucune activité associée aux paiements de détail pour son propre
+  compte en vertu de la présente entente.</p>
+
+  <p class="art"><b>2. Absence d’accès aux fonds.</b> Le partenaire ne détient aucun fonds d’utilisateur final,
+  n’a accès ni au compte en fiducie ni au grand livre du fournisseur, et ne peut initier, préparer ni approuver
+  aucune opération de paiement pour le compte d’un abonné.</p>
+
+  <p class="art"><b>3. Vérification non déléguée.</b> La vérification d’entreprise, de propriété effective et de
+  sanctions demeure exécutée par le fournisseur et n’est en aucun cas déléguée au partenaire. Le partenaire
+  transmet les renseignements ; le fournisseur décide de l’activation.</p>
+
+  <p class="art"><b>4. Obligations de renseignement.</b> Le partenaire communique au fournisseur, sans délai, tout
+  fait porté à sa connaissance qui met en doute l’identité, la propriété effective ou l’activité déclarée d’un
+  abonné qu’il a provisionné.</p>
+
+  <p class="art"><b>5. Incidents.</b> Le partenaire avise le fournisseur sans délai de tout incident de sécurité ou
+  de confidentialité touchant les données ou les accès liés à la plateforme, et coordonne sa réponse avec celle du
+  fournisseur.</p>
+
+  <p class="art"><b>6. Marque et représentations.</b> Le partenaire peut offrir le service sous sa propre marque,
+  mais ne se présente pas comme un fournisseur de services de paiement enregistré ni comme le détenteur des fonds,
+  et ne prend aucun engagement au nom du fournisseur.</p>
+
+  <p class="art"><b>7. Audit.</b> Le fournisseur peut examiner par échantillon les dossiers des abonnés provisionnés
+  par le partenaire, et exiger la correction de tout dossier incomplet.</p>
+
+  <p class="art"><b>8. Suspension du canal.</b> Le fournisseur peut suspendre le provisionnement par un partenaire
+  lorsque plusieurs abonnés recrutés par lui ont été suspendus, ou lorsque la qualité des dossiers transmis le
+  justifie.</p>
+
+  <p class="art"><b>9. Résiliation et continuité.</b> À la résiliation, les abonnés provisionnés par le partenaire
+  demeurent abonnés du fournisseur, qui leur en donne avis. Le partenaire ne conserve aucun accès à leurs
+  données.</p>
+</div>
+
+<!-- ================= 5 ================= -->
+<h2>5. Correspondance entre les engagements décrits et les clauses</h2>
+
+<p>Le tableau suivant permet de vérifier que chaque mécanisme décrit à la question 6.1 trouve son fondement
+contractuel.</p>
+
+<table>
+  <thead>
+    <tr><th style="width:44%">Mécanisme décrit à la question 6.1</th><th style="width:28%">Fondement contractuel</th><th style="width:28%">Modèle et article</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Détention des fonds en fiducie ; le solde n’est pas un dépôt</td><td>Contrat d’abonnement</td><td>A — 2</td></tr>
+    <tr><td>Réserve de 10 % sur trente jours, propriété de l’abonné</td><td>Contrat d’abonnement</td><td>A — 3</td></tr>
+    <tr><td>Délai de retenue de cinq jours ouvrables ; aucune avance</td><td>Contrat d’abonnement</td><td>A — 4</td></tr>
+    <tr><td>Entente valide exigée pour chaque prélèvement ; droit d’audit</td><td>Contrat d’abonnement</td><td>A — 5</td></tr>
+    <tr><td>Répercussion des règles de Paiements Canada</td><td>Contrat d’abonnement</td><td>A — 6</td></tr>
+    <tr><td>Vérification d’entreprise préalable à l’activation</td><td>Contrat d’abonnement</td><td>A — 7</td></tr>
+    <tr><td>Secteurs d’activité exclus</td><td>Contrat d’abonnement</td><td>A — 8</td></tr>
+    <tr><td>Droits distincts de préparation et d’approbation</td><td>Contrat d’abonnement</td><td>A — 9</td></tr>
+    <tr><td>Plafonds révisables selon l’historique de retours</td><td>Contrat d’abonnement</td><td>A — 10</td></tr>
+    <tr><td>Frais de retour de 12,50 $ et contre-passation</td><td>Contrat d’abonnement</td><td>A — 11</td></tr>
+    <tr><td>Suspension et gel du solde</td><td>Contrat d’abonnement</td><td>A — 12</td></tr>
+    <tr><td>Clôture refusée s’il subsiste des fonds ou des opérations</td><td>Contrat d’abonnement</td><td>A — 13</td></tr>
+    <tr><td>Conservation sept ans ; anonymisation sur demande</td><td>Contrat d’abonnement</td><td>A — 14</td></tr>
+    <tr><td>Avis d’incident dans les deux sens</td><td>Contrat d’abonnement</td><td>A — 15</td></tr>
+    <tr><td>Droit de réclamation de 90 jours civils du payeur particulier</td><td>Accord de DPA</td><td>B — 7</td></tr>
+    <tr><td>Préavis de dix jours avant modification</td><td>Accord de DPA</td><td>B — 5</td></tr>
+    <tr><td>Demandeur bénéficiaire inscrit pour le compte de l’abonné</td><td>Accord de DPA</td><td>B — 8</td></tr>
+    <tr><td>Nom de l’abonné visible au relevé du payeur</td><td>Accord de DPA</td><td>B — 8</td></tr>
+    <tr><td>Le partenaire ne détient aucun fonds</td><td>Entente de distribution</td><td>C — 2</td></tr>
+    <tr><td>La vérification d’entreprise n’est jamais déléguée</td><td>Entente de distribution</td><td>C — 3</td></tr>
+    <tr><td>Suspension d’un canal de recrutement défaillant</td><td>Entente de distribution</td><td>C — 8</td></tr>
+  </tbody>
+</table>
+
+<div class="encadre">
+  <p><b>Documents liés.</b> Description des services et des processus de paiement : question 6.1. Diagrammes des
+  processus de paiement : question 6.3. Cadre de gestion des risques opérationnels : pièce 05. Programme de
+  conformité : pièce 11. Contrats avec les tiers : section 13.</p>
+</div>
+
+<!-- ================= NOTES ================= -->
+<div class="saut"></div>
+<h2>Notes de rédaction — à retirer avant le dépôt</h2>
+
+<table>
+  <thead>
+    <tr><th style="width:26%">Point</th><th style="width:74%">À faire</th></tr>
+  </thead>
+  <tbody>
+    <tr><td><b>Validation juridique</b></td><td>Les trois modèles sont des projets rédigés pour exposer la substance des engagements. Ils doivent être revus et arrêtés par le conseiller juridique avant toute utilisation, et avant le dépôt s’ils sont joints comme exemples signés.</td></tr>
+    <tr><td><b>Approbation de l’accord de DPA</b></td><td>L’institution financière parraine approuve la formulation de l’accord de débit préautorisé et peut imposer la sienne. Le modèle B est donc provisoire jusqu’à la certification technique.</td></tr>
+    <tr><td><b>Version de la règle H1</b></td><td>Vérifier les mentions obligatoires et les délais au regard de la version de la règle H1 en vigueur au moment du dépôt : la règle a fait l’objet de refontes récentes.</td></tr>
+    <tr><td><b>Consentement électronique</b></td><td>Confirmer les conditions dans lesquelles un consentement électronique vaut signature pour un accord de débit préautorisé, et la forme de preuve à conserver.</td></tr>
+    <tr><td><b>Secteurs exclus</b></td><td>Dresser l’annexe des secteurs d’activité exclus visée à l’article 8 du modèle A, en cohérence avec l’évaluation des risques de la pièce 11.</td></tr>
+    <tr><td><b>Clauses commerciales</b></td><td>Les articles non reproduits — tarification détaillée, propriété intellectuelle, responsabilité, droit applicable, règlement des différends — restent à rédiger au contrat complet.</td></tr>
+    <tr><td><b>Entité contractante</b></td><td>Les modèles nomment 9567-0048 Québec inc. Si l’exploitation de 60sec-Paiement est confiée à une autre société, reprendre les trois modèles et l’ensemble des pièces du dossier.</td></tr>
+  </tbody>
+</table>
+
+</body>
+</html>
