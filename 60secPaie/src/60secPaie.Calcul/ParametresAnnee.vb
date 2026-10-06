@@ -14,6 +14,25 @@ Public Structure Tranche
     End Sub
 End Structure
 
+''' <summary>
+''' Palier de la contribution-santé de l'Ontario (T4127, facteur V2). Pour un revenu imposable
+''' annuel A au-dessus de <see cref="Seuil"/> : le moindre du <see cref="Plafond"/> et de
+''' <see cref="Base"/> + <see cref="Taux"/> × (A – Seuil). Le dernier palier dont le seuil est dépassé s'applique.
+''' </summary>
+Public Structure PalierContributionSante
+    Public ReadOnly Seuil As Decimal
+    Public ReadOnly Base As Decimal
+    Public ReadOnly Taux As Decimal
+    Public ReadOnly Plafond As Decimal
+
+    Public Sub New(seuil As Decimal, base As Decimal, taux As Decimal, plafond As Decimal)
+        Me.Seuil = seuil
+        Me.Base = base
+        Me.Taux = taux
+        Me.Plafond = plafond
+    End Sub
+End Structure
+
 Public Enum SecteurFSS
     General = 0
     PrimaireManufacturier = 1
@@ -21,8 +40,9 @@ Public Enum SecteurFSS
 End Enum
 
 ''' <summary>
-''' Taux et plafonds gouvernementaux d'une année, pour un employé du Québec.
+''' Taux et plafonds gouvernementaux d'une année, pour un employé du Québec ou de l'Ontario.
 ''' Sources 2026 : T4127 (122e et 123e éditions, ARC) et TP-1015.F (2026-01, Revenu Québec).
+''' L'Ontario tient tout entier dans le T4127 : impôt provincial, RPC et AE hors Québec.
 '''
 ''' D'OÙ VIENNENT LES TAUX. Deux sources, dans cet ordre :
 '''   1. le <see cref="Fournisseur"/>, branché par l'application (table paie.ParametresAnnee,
@@ -100,6 +120,130 @@ Public Class ParametresAnnee
     Public Property CNTTaux As Decimal
     Public Property CNTMaxAssujetti As Decimal
 
+    ' ==================================================================
+    ' Hors Québec (T4127) : ce qui remplace l'abattement, le RRQ et l'AE au taux réduit
+    ' ==================================================================
+
+    ''' <summary>Gratification quand la rémunération de l'année ne dépasse pas le seuil : taux unique, fédéral ET provincial réunis (15 %).</summary>
+    Public Property FedTauxFixeForfaitaireHorsQuebec As Decimal
+
+    ' --- Assurance-emploi, taux hors Québec (le maximum assurable est le même partout) ---
+    Public Property AETauxHorsQuebec As Decimal
+    Public Property AEMaxEmployeHorsQuebec As Decimal
+
+    ' --- RPC (Régime de pensions du Canada) ---
+    Public Property RPCMaxGainsAdmissibles As Decimal    ' MGAP
+    Public Property RPCExemption As Decimal
+    Public Property RPCTaux As Decimal                   ' base + première supplémentaire
+    Public Property RPCTauxBase As Decimal
+    Public Property RPCMaxEmploye As Decimal
+    Public Property RPCMaxBaseEmploye As Decimal         ' partie « base » utilisée dans K2 et K2P
+    Public Property RPC2MaxSupplementaire As Decimal     ' MSGAP
+    Public Property RPC2Taux As Decimal
+    Public Property RPC2MaxEmploye As Decimal
+
+    ' ==================================================================
+    ' Ontario
+    ' ==================================================================
+
+    ' --- Impôt de l'Ontario (T4127, formules T4 et T2) ---
+    Public Property OnTranches As Tranche()
+    Public Property OnMontantPersonnelBase As Decimal
+    Public Property OnTauxCredits As Decimal             ' taux de la première tranche
+    Public Property OnSurtaxeSeuil1 As Decimal           ' V1 : 20 % de l'impôt de base au-delà de ce seuil…
+    Public Property OnSurtaxeTaux1 As Decimal
+    Public Property OnSurtaxeSeuil2 As Decimal           ' … plus 36 % au-delà de celui-ci
+    Public Property OnSurtaxeTaux2 As Decimal
+    Public Property OnReductionBase As Decimal           ' S : montant de base de la réduction d'impôt
+    Public Property OnReductionParPersonne As Decimal    ' Y : par personne à charge (moins de 19 ans ou incapacité)
+    Public Property OnContributionSante As PalierContributionSante()   ' V2
+
+    ' --- Impôt-santé des employeurs (ISE) ---
+    ' Le taux (en %) se lit dans la tranche de la masse salariale ontarienne ; l'employeur
+    ' admissible retranche l'exemption, tant que sa masse ne dépasse pas le seuil.
+    Public Property ISETranches As Tranche()
+    Public Property ISEExemption As Decimal
+    Public Property ISESeuilSansExemption As Decimal
+
+    ' --- WSIB (CSPAAT) ---
+    Public Property WSIBMaxAssurable As Decimal
+
+    ''' <summary>
+    ''' Vrai si les taux de cette province sont définis pour l'année. Pour l'Ontario, TOUT ce dont
+    ''' l'absence fausserait un montant doit être là : un maximum resté à zéro annulerait le RPC ou
+    ''' l'AE sans rien signaler, et la paie sortirait fausse plutôt que refusée.
+    ''' (La surtaxe et la réduction d'impôt peuvent valoir zéro : une année peut les abolir.)
+    ''' </summary>
+    Public Function EstDefinie(p As Province) As Boolean
+        If p = Province.Quebec Then Return True
+        If p <> Province.Ontario Then Return HorsQuebecDefini AndAlso PourProvince(p, New Date(Annee, 12, 31)) IsNot Nothing
+        Return OnTranches IsNot Nothing AndAlso OnTranches.Length > 0 AndAlso
+               OnContributionSante IsNot Nothing AndAlso
+               ISETranches IsNot Nothing AndAlso ISETranches.Length > 0 AndAlso
+               OnMontantPersonnelBase > 0D AndAlso OnTauxCredits > 0D AndAlso
+               FedTauxFixeForfaitaireHorsQuebec > 0D AndAlso
+               AETauxHorsQuebec > 0D AndAlso AEMaxEmployeHorsQuebec > 0D AndAlso
+               RPCMaxGainsAdmissibles > 0D AndAlso RPCExemption > 0D AndAlso RPCTaux > 0D AndAlso RPCTauxBase > 0D AndAlso
+               RPCMaxEmploye > 0D AndAlso RPCMaxBaseEmploye > 0D AndAlso
+               RPC2MaxSupplementaire > 0D AndAlso RPC2Taux > 0D AndAlso RPC2MaxEmploye > 0D AndAlso
+               WSIBMaxAssurable > 0D
+    End Function
+
+    ''' <summary>Ce qui est commun à toutes les provinces hors Québec : fédéral sans abattement, AE au taux ordinaire, RPC.</summary>
+    Private ReadOnly Property HorsQuebecDefini As Boolean
+        Get
+            Return FedTauxFixeForfaitaireHorsQuebec > 0D AndAlso
+                   AETauxHorsQuebec > 0D AndAlso AEMaxEmployeHorsQuebec > 0D AndAlso
+                   RPCMaxGainsAdmissibles > 0D AndAlso RPCExemption > 0D AndAlso RPCTaux > 0D AndAlso RPCTauxBase > 0D AndAlso
+                   RPCMaxEmploye > 0D AndAlso RPCMaxBaseEmploye > 0D AndAlso
+                   RPC2MaxSupplementaire > 0D AndAlso RPC2Taux > 0D AndAlso RPC2MaxEmploye > 0D
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Les provinces et territoires autres que le Québec et l'Ontario, chacun avec une ou plusieurs
+    ''' dates d'entrée en vigueur dans l'année (table paie.ParametresProvince). Vide : les valeurs du code servent.
+    ''' </summary>
+    Public Property AutresProvinces As New List(Of ParametresProvince)()
+
+    ''' <summary>
+    ''' L'impôt de la province à la date d'une paie : le jeu de valeurs le plus récent entré en vigueur
+    ''' à cette date. Nothing si la province n'est pas définie pour l'année (ou pour le Québec, qui a ses propres formules).
+    ''' </summary>
+    Public Function PourProvince(p As Province, datePaie As Date) As ParametresProvince
+        If p = Province.Quebec Then Return Nothing
+        If p = Province.Ontario Then Return OntarioCommeProvince()
+
+        Dim trouve = PlusRecent(AutresProvinces, p, datePaie)
+        If trouve Is Nothing AndAlso Not AutresProvinces.Any(Function(x) x.Province = p) Then
+            ' Rien en base pour cette province : les valeurs du code, si l'année y est.
+            Dim code = DuCode(Annee)
+            If code IsNot Nothing AndAlso code IsNot Me Then trouve = PlusRecent(code.AutresProvinces, p, datePaie)
+        End If
+        Return trouve
+    End Function
+
+    Private Shared Function PlusRecent(liste As List(Of ParametresProvince), p As Province, datePaie As Date) As ParametresProvince
+        Dim trouve As ParametresProvince = Nothing
+        If liste Is Nothing Then Return Nothing
+        For Each x In liste
+            If x.Province <> p OrElse Not x.EstComplet OrElse x.EnVigueurLe > datePaie.Date Then Continue For
+            If trouve Is Nothing OrElse x.EnVigueurLe > trouve.EnVigueurLe Then trouve = x
+        Next
+        Return trouve
+    End Function
+
+    ''' <summary>L'Ontario, dont les valeurs sont des colonnes de paie.ParametresAnnee, sous la forme commune à toutes les provinces.</summary>
+    Private Function OntarioCommeProvince() As ParametresProvince
+        If OnTranches Is Nothing OrElse OnTranches.Length = 0 Then Return Nothing
+        Return New ParametresProvince With {
+            .Province = Province.Ontario, .EnVigueurLe = New Date(Annee, 1, 1),
+            .Tranches = OnTranches, .MontantPersonnelBase = OnMontantPersonnelBase, .TauxCredits = OnTauxCredits,
+            .SurtaxeSeuil1 = OnSurtaxeSeuil1, .SurtaxeTaux1 = OnSurtaxeTaux1, .SurtaxeSeuil2 = OnSurtaxeSeuil2, .SurtaxeTaux2 = OnSurtaxeTaux2,
+            .ReductionBase = OnReductionBase, .ReductionParPersonne = OnReductionParPersonne,
+            .ContributionSante = OnContributionSante, .AccidentsMaxAssurable = WSIBMaxAssurable}
+    End Function
+
     ''' <summary>
     ''' La source vivante des taux : une fonction qui rend les paramètres d'une
     ''' année, ou Nothing si elle ne les connaît pas (année absente, non validée,
@@ -123,6 +267,31 @@ Public Class ParametresAnnee
     Public Shared Function EstDisponible(annee As Integer) As Boolean
         Return Construire(annee) IsNot Nothing
     End Function
+
+    ''' <summary>
+    ''' Vrai si l'année est connue ET que les taux de cette province y sont définis. Une année
+    ''' saisie pour le Québec seulement ne permet pas de payer un employé de l'Ontario.
+    ''' </summary>
+    Public Shared Function EstDisponible(annee As Integer, p As Province) As Boolean
+        Dim prm = Construire(annee)
+        Return prm IsNot Nothing AndAlso prm.EstDefinie(p)
+    End Function
+
+    ''' <summary>Les taux de l'année pour une province, ou une exception qui dit ce qui manque.</summary>
+    Public Shared Function Pour(annee As Integer, p As Province) As ParametresAnnee
+        Dim prm = Pour(annee)
+        prm.Exiger(p)
+        Return prm
+    End Function
+
+    ''' <summary>Refuse de calculer une province dont les taux ne sont pas définis pour cette année.</summary>
+    Public Sub Exiger(p As Province)
+        If Not EstDefinie(p) Then
+            Throw New NotSupportedException(
+                "Les taux de l'année " & Annee.ToString() & " ne sont pas définis pour la province : " & Provinces.Nom(p) & ". " &
+                "Complétez-les dans Sec60Admin (Paie › Taux de l'année) à partir du guide T4127 (ARC) avant de calculer une paie.")
+        End If
+    End Sub
 
     ''' <summary>
     ''' L'année courante si ses taux sont connus, sinon la plus récente qui le soit.
@@ -226,8 +395,106 @@ Public Class ParametresAnnee
         p.CNESSTMaxAssurable = D(r, "CNESSTMaxAssurable")
         p.CNTTaux = D(r, "CNTTaux")
         p.CNTMaxAssujetti = D(r, "CNTMaxAssujetti")
+
+        LireHorsQuebec(r, p)
         Return p
     End Function
+
+    ''' <summary>
+    ''' Les taux hors Québec et ceux de l'Ontario. Ces colonnes sont arrivées après les autres
+    ''' (script 05_ontario.sql) et peuvent être absentes ou vides : une base pas encore migrée,
+    ''' une année saisie avant l'Ontario. Dans ce cas, les valeurs du code servent pour cette
+    ''' année-là — et s'il n'y en a pas, la province reste indéfinie : Exiger le dira au
+    ''' moment de calculer, plutôt que d'appliquer en silence les taux d'une autre année.
+    ''' </summary>
+    Private Shared Sub LireHorsQuebec(r As DataRow, p As ParametresAnnee)
+        If Not r.Table.Columns.Contains("OnTranches") OrElse r.IsNull("OnTranches") OrElse
+           Convert.ToString(r("OnTranches"), CultureInfo.InvariantCulture).Trim().Length = 0 Then
+            Dim code = DuCode(p.Annee)
+            If code IsNot Nothing Then CopierHorsQuebec(code, p)
+            Return
+        End If
+
+        ' Une ligne à moitié saisie (une colonne restée NULL) ou illisible (tranches mal écrites) laisse
+        ' l'Ontario indéfini pour l'année — et rien d'autre : le Québec de la même ligne reste calculable.
+        For Each colonne In ColonnesHorsQuebec
+            If r.IsNull(colonne) Then Return
+        Next
+        Try
+            LireColonnesHorsQuebec(r, p)
+        Catch ex As FormatException
+            p.OnTranches = Nothing
+        End Try
+    End Sub
+
+    Private Shared ReadOnly ColonnesHorsQuebec As String() = {
+        "FedTauxFixeForfaitaireHorsQuebec", "AETauxHorsQuebec", "AEMaxEmployeHorsQuebec",
+        "RPCMaxGainsAdmissibles", "RPCExemption", "RPCTaux", "RPCTauxBase", "RPCMaxEmploye", "RPCMaxBaseEmploye",
+        "RPC2MaxSupplementaire", "RPC2Taux", "RPC2MaxEmploye",
+        "OnTranches", "OnMontantPersonnelBase", "OnTauxCredits", "OnSurtaxeSeuil1", "OnSurtaxeTaux1", "OnSurtaxeSeuil2", "OnSurtaxeTaux2",
+        "OnReductionBase", "OnReductionParPersonne", "OnContributionSante",
+        "ISETranches", "ISEExemption", "ISESeuilSansExemption", "WSIBMaxAssurable"}
+
+    Private Shared Sub LireColonnesHorsQuebec(r As DataRow, p As ParametresAnnee)
+        p.FedTauxFixeForfaitaireHorsQuebec = D(r, "FedTauxFixeForfaitaireHorsQuebec")
+        p.AETauxHorsQuebec = D(r, "AETauxHorsQuebec")
+        p.AEMaxEmployeHorsQuebec = D(r, "AEMaxEmployeHorsQuebec")
+
+        p.RPCMaxGainsAdmissibles = D(r, "RPCMaxGainsAdmissibles")
+        p.RPCExemption = D(r, "RPCExemption")
+        p.RPCTaux = D(r, "RPCTaux")
+        p.RPCTauxBase = D(r, "RPCTauxBase")
+        p.RPCMaxEmploye = D(r, "RPCMaxEmploye")
+        p.RPCMaxBaseEmploye = D(r, "RPCMaxBaseEmploye")
+        p.RPC2MaxSupplementaire = D(r, "RPC2MaxSupplementaire")
+        p.RPC2Taux = D(r, "RPC2Taux")
+        p.RPC2MaxEmploye = D(r, "RPC2MaxEmploye")
+
+        p.OnTranches = LireTranches(Convert.ToString(r("OnTranches"), CultureInfo.InvariantCulture))
+        p.OnMontantPersonnelBase = D(r, "OnMontantPersonnelBase")
+        p.OnTauxCredits = D(r, "OnTauxCredits")
+        p.OnSurtaxeSeuil1 = D(r, "OnSurtaxeSeuil1")
+        p.OnSurtaxeTaux1 = D(r, "OnSurtaxeTaux1")
+        p.OnSurtaxeSeuil2 = D(r, "OnSurtaxeSeuil2")
+        p.OnSurtaxeTaux2 = D(r, "OnSurtaxeTaux2")
+        p.OnReductionBase = D(r, "OnReductionBase")
+        p.OnReductionParPersonne = D(r, "OnReductionParPersonne")
+        p.OnContributionSante = LirePaliersSante(Convert.ToString(r("OnContributionSante"), CultureInfo.InvariantCulture))
+
+        p.ISETranches = LireTranches(Convert.ToString(r("ISETranches"), CultureInfo.InvariantCulture))
+        p.ISEExemption = D(r, "ISEExemption")
+        p.ISESeuilSansExemption = D(r, "ISESeuilSansExemption")
+        p.WSIBMaxAssurable = D(r, "WSIBMaxAssurable")
+    End Sub
+
+    Private Shared Sub CopierHorsQuebec(de As ParametresAnnee, vers As ParametresAnnee)
+        vers.FedTauxFixeForfaitaireHorsQuebec = de.FedTauxFixeForfaitaireHorsQuebec
+        vers.AETauxHorsQuebec = de.AETauxHorsQuebec
+        vers.AEMaxEmployeHorsQuebec = de.AEMaxEmployeHorsQuebec
+        vers.RPCMaxGainsAdmissibles = de.RPCMaxGainsAdmissibles
+        vers.RPCExemption = de.RPCExemption
+        vers.RPCTaux = de.RPCTaux
+        vers.RPCTauxBase = de.RPCTauxBase
+        vers.RPCMaxEmploye = de.RPCMaxEmploye
+        vers.RPCMaxBaseEmploye = de.RPCMaxBaseEmploye
+        vers.RPC2MaxSupplementaire = de.RPC2MaxSupplementaire
+        vers.RPC2Taux = de.RPC2Taux
+        vers.RPC2MaxEmploye = de.RPC2MaxEmploye
+        vers.OnTranches = de.OnTranches
+        vers.OnMontantPersonnelBase = de.OnMontantPersonnelBase
+        vers.OnTauxCredits = de.OnTauxCredits
+        vers.OnSurtaxeSeuil1 = de.OnSurtaxeSeuil1
+        vers.OnSurtaxeTaux1 = de.OnSurtaxeTaux1
+        vers.OnSurtaxeSeuil2 = de.OnSurtaxeSeuil2
+        vers.OnSurtaxeTaux2 = de.OnSurtaxeTaux2
+        vers.OnReductionBase = de.OnReductionBase
+        vers.OnReductionParPersonne = de.OnReductionParPersonne
+        vers.OnContributionSante = de.OnContributionSante
+        vers.ISETranches = de.ISETranches
+        vers.ISEExemption = de.ISEExemption
+        vers.ISESeuilSansExemption = de.ISESeuilSansExemption
+        vers.WSIBMaxAssurable = de.WSIBMaxAssurable
+    End Sub
 
     Private Shared Function D(r As DataRow, colonne As String) As Decimal
         Dim v = r(colonne)
@@ -262,6 +529,33 @@ Public Class ParametresAnnee
         For Each t In tranches
             Dim seuil = If(t.SeuilMax = Decimal.MaxValue, "*", t.SeuilMax.ToString("0.##", CultureInfo.InvariantCulture))
             parts.Add(seuil & "|" & t.Taux.ToString("0.#####", CultureInfo.InvariantCulture) & "|" & t.Constante.ToString("0.##", CultureInfo.InvariantCulture))
+        Next
+        Return String.Join(";", parts)
+    End Function
+
+    ''' <summary>« 20000|0|0.06|300;36000|300|0.06|450;… » → paliers de la contribution-santé (seuil|base|taux|plafond).</summary>
+    Public Shared Function LirePaliersSante(texte As String) As PalierContributionSante()
+        Dim liste As New List(Of PalierContributionSante)()
+        If String.IsNullOrWhiteSpace(texte) Then Return liste.ToArray()
+        For Each morceau In texte.Split(";"c)
+            If morceau.Trim().Length = 0 Then Continue For
+            Dim champs = morceau.Split("|"c)
+            If champs.Length <> 4 Then Throw New FormatException("Palier illisible : « " & morceau & " ». Attendu : seuil|base|taux|plafond.")
+            liste.Add(New PalierContributionSante(Nombre(champs(0)), Nombre(champs(1)), Nombre(champs(2)), Nombre(champs(3))))
+        Next
+        For i = 1 To liste.Count - 1
+            If liste(i).Seuil <= liste(i - 1).Seuil Then Throw New FormatException("Les seuils des paliers doivent être croissants.")
+        Next
+        Return liste.ToArray()
+    End Function
+
+    ''' <summary>Paliers → texte « seuil|base|taux|plafond;… », l'inverse de LirePaliersSante.</summary>
+    Public Shared Function EcrirePaliersSante(paliers As PalierContributionSante()) As String
+        If paliers Is Nothing Then Return ""
+        Dim parts As New List(Of String)()
+        For Each p In paliers
+            parts.Add(p.Seuil.ToString("0.##", CultureInfo.InvariantCulture) & "|" & p.Base.ToString("0.##", CultureInfo.InvariantCulture) & "|" &
+                      p.Taux.ToString("0.#####", CultureInfo.InvariantCulture) & "|" & p.Plafond.ToString("0.##", CultureInfo.InvariantCulture))
         Next
         Return String.Join(";", parts)
     End Function
@@ -346,7 +640,91 @@ Public Class ParametresAnnee
         p.CNTTaux = 0.0006D
         p.CNTMaxAssujetti = 103000D
 
+        ' ---------- Hors Québec : T4127, 122e édition (1er janvier 2026) ----------
+        ' La 123e édition (1er juillet 2026) ne change rien pour l'Ontario ni pour le fédéral.
+        p.FedTauxFixeForfaitaireHorsQuebec = 0.15D
+
+        p.AETauxHorsQuebec = 0.0163D
+        p.AEMaxEmployeHorsQuebec = 1123.07D
+
+        p.RPCMaxGainsAdmissibles = 74600D
+        p.RPCExemption = 3500D
+        p.RPCTaux = 0.0595D
+        p.RPCTauxBase = 0.0495D
+        p.RPCMaxEmploye = 4230.45D
+        p.RPCMaxBaseEmploye = 3519.45D
+        p.RPC2MaxSupplementaire = 85000D
+        p.RPC2Taux = 0.04D
+        p.RPC2MaxEmploye = 416D
+
+        ' ---------- Ontario : T4127, tableau 8.1 et formules de l'Ontario ----------
+        p.OnTranches = {
+            New Tranche(53891D, 0.0505D, 0D),
+            New Tranche(107785D, 0.0915D, 2210D),
+            New Tranche(150000D, 0.1116D, 4376D),
+            New Tranche(220000D, 0.1216D, 5876D),
+            New Tranche(Decimal.MaxValue, 0.1316D, 8076D)}
+        p.OnMontantPersonnelBase = 12989D
+        p.OnTauxCredits = 0.0505D
+        p.OnSurtaxeSeuil1 = 5818D
+        p.OnSurtaxeTaux1 = 0.2D
+        p.OnSurtaxeSeuil2 = 7446D
+        p.OnSurtaxeTaux2 = 0.36D
+        p.OnReductionBase = 300D
+        p.OnReductionParPersonne = 554D
+        p.OnContributionSante = {
+            New PalierContributionSante(20000D, 0D, 0.06D, 300D),
+            New PalierContributionSante(36000D, 300D, 0.06D, 450D),
+            New PalierContributionSante(48000D, 450D, 0.25D, 600D),
+            New PalierContributionSante(72000D, 600D, 0.25D, 750D),
+            New PalierContributionSante(200000D, 750D, 0.25D, 900D)}
+
+        ' Impôt-santé des employeurs : barème du ministère des Finances de l'Ontario (taux en %).
+        ' À VALIDER auprès du ministère : exemption de 1 000 000 $ et seuil de 5 000 000 $ pour 2026.
+        p.ISETranches = {
+            New Tranche(200000D, 0.98D, 0D),
+            New Tranche(230000D, 1.101D, 0D),
+            New Tranche(260000D, 1.223D, 0D),
+            New Tranche(290000D, 1.344D, 0D),
+            New Tranche(320000D, 1.465D, 0D),
+            New Tranche(350000D, 1.586D, 0D),
+            New Tranche(380000D, 1.708D, 0D),
+            New Tranche(400000D, 1.829D, 0D),
+            New Tranche(Decimal.MaxValue, 1.95D, 0D)}
+        p.ISEExemption = 1000000D
+        p.ISESeuilSansExemption = 5000000D
+
+        ' À VALIDER auprès de la WSIB : plafond des gains assurables de 2026.
+        p.WSIBMaxAssurable = 121700D
+
+        ' ---------- Les autres provinces et territoires ----------
+        p.AutresProvinces = ParametresProvince.Annee2026()
+
         Return p
+    End Function
+
+    ''' <summary>
+    ''' Taux EFFECTIF de l'impôt-santé des employeurs de l'Ontario (en %), à appliquer à chaque paie.
+    ''' Le taux de la tranche se lit sur la masse salariale ontarienne de l'année. L'employeur
+    ''' admissible à l'exemption ne paie que sur l'excédent : le taux est donc ramené sur
+    ''' toute la masse — taux × (masse – exemption) ÷ masse — pour que la charge de l'année
+    ''' se répartisse également sur les paies. Sous l'exemption, il est nul.
+    ''' </summary>
+    Public Function TauxISE(masseSalarialeOntario As Decimal, exemptionAdmissible As Boolean) As Decimal
+        If ISETranches Is Nothing OrElse ISETranches.Length = 0 Then Return 0D
+        Dim masse = Math.Max(0D, masseSalarialeOntario)
+
+        Dim taux As Decimal = ISETranches(ISETranches.Length - 1).Taux
+        For Each t In ISETranches
+            If masse <= t.SeuilMax Then
+                taux = t.Taux
+                Exit For
+            End If
+        Next
+
+        If Not exemptionAdmissible OrElse masse > ISESeuilSansExemption Then Return taux
+        If masse <= ISEExemption Then Return 0D
+        Return Math.Round(taux * (masse - ISEExemption) / masse, 4, MidpointRounding.AwayFromZero)
     End Function
 
     ''' <summary>Taux de cotisation au FSS (en %), selon la masse salariale totale et le secteur (TP-1015.F, partie 5).</summary>

@@ -9,7 +9,7 @@ Public Class PagePlanComptable
         Dim comptes = ServiceGL.Comptes()
         Dim t As New DataTable()
         t.Columns.Add("Cle") : t.Columns.Add("Libelle") : t.Columns.Add("Groupe") : t.Columns.Add("Compte")
-        For Each k In ServiceGL.Cles
+        For Each k In ServiceGL.ClesAffichees()
             Dim v As String = Nothing
             comptes.TryGetValue(k.Cle, v)
             t.Rows.Add(k.Cle, k.Libelle, k.Groupe, If(v, ""))

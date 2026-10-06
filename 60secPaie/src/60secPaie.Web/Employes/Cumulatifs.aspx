@@ -3,7 +3,7 @@
     <h1>Cumulatifs de départ de <asp:Literal ID="litEmploye" runat="server" /></h1>
     <p class="sous-titre">
         Si vous commencez à utiliser 60secPaie en cours d'année, inscrivez ici les montants déjà versés et retenus dans votre ancien système.
-        Ils servent à respecter les maximums annuels (RRQ, AE, RQAP, CNESST) et s'ajoutent aux cumulatifs du talon de paie.
+        <%: If(HorsQuebec, "Ils servent à respecter les maximums annuels (RPC, AE, " & Noms.Accidents & ") et s'ajoutent aux cumulatifs du talon de paie.", "Ils servent à respecter les maximums annuels (RRQ, AE, RQAP, CNESST) et s'ajoutent aux cumulatifs du talon de paie.") %>
     </p>
 
     <fieldset>
@@ -13,21 +13,25 @@
                 <asp:TextBox ID="txtBrut" runat="server" MaxLength="12" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtImpotFed">Impôt fédéral retenu ($)</asp:Label>
                 <asp:TextBox ID="txtImpotFed" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtImpotQc">Impôt du Québec retenu ($)</asp:Label>
+            <div class="champ"><asp:Label ID="lblImpotQc" runat="server" AssociatedControlID="txtImpotQc">Impôt du Québec retenu ($)</asp:Label>
                 <asp:TextBox ID="txtImpotQc" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtGainsRRQ">Salaire admissible au RRQ ($)</asp:Label>
+            <div class="champ"><asp:Label ID="lblGainsRRQ" runat="server" AssociatedControlID="txtGainsRRQ">Salaire admissible au RRQ ($)</asp:Label>
                 <asp:TextBox ID="txtGainsRRQ" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtRRQ">Cotisation au RRQ (base + 1re suppl.) ($)</asp:Label>
+            <div class="champ"><asp:Label ID="lblRRQ" runat="server" AssociatedControlID="txtRRQ">Cotisation au RRQ (base + 1re suppl.) ($)</asp:Label>
                 <asp:TextBox ID="txtRRQ" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtRRQ2">2e cotisation supplémentaire au RRQ ($)</asp:Label>
+            <div class="champ"><asp:Label ID="lblRRQ2" runat="server" AssociatedControlID="txtRRQ2">2e cotisation supplémentaire au RRQ ($)</asp:Label>
                 <asp:TextBox ID="txtRRQ2" runat="server" MaxLength="12" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtAE">Cotisation à l'assurance-emploi ($)</asp:Label>
                 <asp:TextBox ID="txtAE" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtRQAP">Cotisation au RQAP - employé ($)</asp:Label>
+            <asp:PlaceHolder ID="phRQAP" runat="server">
+            <div class="champ"><asp:Label ID="lblRQAP" runat="server" AssociatedControlID="txtRQAP">Cotisation au RQAP - employé ($)</asp:Label>
                 <asp:TextBox ID="txtRQAP" runat="server" MaxLength="12" /></div>
+            </asp:PlaceHolder>
+            <asp:PlaceHolder ID="phRQAPEmployeur" runat="server">
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtRQAPEmployeur">Cotisation au RQAP - employeur ($)</asp:Label>
                 <asp:TextBox ID="txtRQAPEmployeur" runat="server" MaxLength="12" /></div>
-            <div class="champ"><asp:Label runat="server" AssociatedControlID="txtGainsCNESST">Salaire assurable CNESST ($)</asp:Label>
+            </asp:PlaceHolder>
+            <div class="champ"><asp:Label ID="lblGainsCNESST" runat="server" AssociatedControlID="txtGainsCNESST">Salaire assurable CNESST ($)</asp:Label>
                 <asp:TextBox ID="txtGainsCNESST" runat="server" MaxLength="12" /></div>
             <div class="champ"><asp:Label runat="server" AssociatedControlID="txtVacances">Solde de vacances à payer ($)</asp:Label>
                 <asp:TextBox ID="txtVacances" runat="server" MaxLength="12" /></div>

@@ -1,6 +1,10 @@
 Imports System.Text
+Imports Paie60Sec.Calcul
 
-''' <summary>Rendu HTML des résultats de paie (révision, détail d'un lot, talon). Tout texte issu de la base est encodé.</summary>
+''' <summary>
+''' Rendu HTML des résultats de paie (révision, détail d'un lot, talon). Tout texte issu de la base est encodé.
+''' Les noms des retenues suivent la province de la paie (paie.Paie.Province) : RRQ ou RPC, FSS ou ISE, CNESST, WSIB ou WCB…
+''' </summary>
 Public NotInheritable Class RenduPaie
 
     Private Sub New()
@@ -27,14 +31,22 @@ Public NotInheritable Class RenduPaie
         Dim paies = PaiesDuLot(lotId)
         If paies.Rows.Count = 0 Then Return "<p class=""note"">Aucun employé inclus dans cette paie.</p>"
 
+        ' Un lot appartient à une seule province : celle de ses paies.
+        Dim noms = LibellesProvince.Pour(paies.Rows(0).Txt("Province"))
+
         Dim sb As New StringBuilder()
         sb.Append("<div class=""table-defilante""><table class=""liste""><thead><tr><th>Employé</th><th class=""num"">Heures</th><th class=""num"">Brut</th>")
-        sb.Append("<th class=""num"">Impôt féd.</th><th class=""num"">Impôt Qc</th><th class=""num"">RRQ</th><th class=""num"">AE</th><th class=""num"">RQAP</th>")
+        sb.Append("<th class=""num"">Impôt féd.</th><th class=""num"">").Append(H(noms.ImpotProvincialCourt)).Append("</th><th class=""num"">").Append(H(noms.Pension)).Append("</th><th class=""num"">AE</th>")
+        ' La colonne du RQAP porte, dans un territoire, l'impôt sur la paie ; ailleurs hors Québec elle est vide et masquée.
+        Dim avecRetenueProvinciale = noms.AMaternite OrElse noms.ARetenueTerritoriale
+        If avecRetenueProvinciale Then sb.Append("<th class=""num"">").Append(H(noms.RetenueProvinciale)).Append("</th>")
         sb.Append("<th class=""num"">Autres déd.</th><th class=""num"">Net</th><th class=""num"">Parts employeur</th><th class=""num"">Vacances</th>")
         If avecTalons Then sb.Append("<th></th>")
         sb.Append("</tr></thead><tbody>")
 
-        Dim colonnes = {"Heures", "BrutVerse", "ImpotFederal", "ImpotQuebec", "RRQTotal", "AE", "RQAP", "AutresDeductions", "Net", "Employeur", "VacancesAccumulees"}
+        Dim colonnes = If(avecRetenueProvinciale,
+            {"Heures", "BrutVerse", "ImpotFederal", "ImpotQuebec", "RRQTotal", "AE", "RQAP", "AutresDeductions", "Net", "Employeur", "VacancesAccumulees"},
+            {"Heures", "BrutVerse", "ImpotFederal", "ImpotQuebec", "RRQTotal", "AE", "AutresDeductions", "Net", "Employeur", "VacancesAccumulees"})
         Dim totaux As New Dictionary(Of String, Decimal)()
         For Each col In colonnes
             totaux(col) = 0D
@@ -90,8 +102,19 @@ Public NotInheritable Class RenduPaie
         sb.Append("</tbody></table>")
         sb.Append("<pre class=""verification"">").Append(H(p.Txt("Verification"))).Append("</pre>")
 
-        sb.Append("<table class=""matrice""><tr><th>RRQ</th><th>RRQ 2</th><th>AE</th><th>RQAP</th><th>FSS</th><th>CNESST</th><th>CNT</th></tr><tr>")
-        For Each col In {"EmployeurRRQ", "EmployeurRRQ2", "EmployeurAE", "EmployeurRQAP", "EmployeurFSS", "EmployeurCNESST", "EmployeurCNT"}
+        Dim noms = LibellesProvince.Pour(p.Txt("Province"))
+        Dim colonnesEmployeur As String()
+        If noms.Province = Province.Quebec Then
+            sb.Append("<table class=""matrice""><tr><th>RRQ</th><th>RRQ 2</th><th>AE</th><th>RQAP</th><th>FSS</th><th>CNESST</th><th>CNT</th></tr><tr>")
+            colonnesEmployeur = {"EmployeurRRQ", "EmployeurRRQ2", "EmployeurAE", "EmployeurRQAP", "EmployeurFSS", "EmployeurCNESST", "EmployeurCNT"}
+        ElseIf noms.ASante Then
+            sb.Append("<table class=""matrice""><tr><th>RPC</th><th>RPC 2</th><th>AE</th><th>").Append(H(noms.Sante)).Append("</th><th>").Append(H(noms.Accidents)).Append("</th></tr><tr>")
+            colonnesEmployeur = {"EmployeurRRQ", "EmployeurRRQ2", "EmployeurAE", "EmployeurFSS", "EmployeurCNESST"}
+        Else
+            sb.Append("<table class=""matrice""><tr><th>RPC</th><th>RPC 2</th><th>AE</th><th>").Append(H(noms.Accidents)).Append("</th></tr><tr>")
+            colonnesEmployeur = {"EmployeurRRQ", "EmployeurRRQ2", "EmployeurAE", "EmployeurCNESST"}
+        End If
+        For Each col In colonnesEmployeur
             sb.Append("<td>").Append(Argent(p(col))).Append("</td>")
         Next
         sb.Append("</tr></table><p class=""note"">Parts de l'employeur pour cette paie.</p></details>")
@@ -104,9 +127,10 @@ Public NotInheritable Class RenduPaie
             "SELECT ISNULL(SUM(ImpotFederal),0) ImpotFederal, ISNULL(SUM(ImpotQuebec),0) ImpotQuebec, ISNULL(SUM(RRQ),0) RRQ, ISNULL(SUM(RRQ2),0) RRQ2, " &
             "ISNULL(SUM(AE),0) AE, ISNULL(SUM(RQAP),0) RQAP, ISNULL(SUM(EmployeurRRQ),0) EmployeurRRQ, ISNULL(SUM(EmployeurRRQ2),0) EmployeurRRQ2, " &
             "ISNULL(SUM(EmployeurAE),0) EmployeurAE, ISNULL(SUM(EmployeurRQAP),0) EmployeurRQAP, ISNULL(SUM(EmployeurFSS),0) EmployeurFSS, " &
-            "ISNULL(SUM(EmployeurCNESST),0) EmployeurCNESST, ISNULL(SUM(EmployeurCNT),0) EmployeurCNT " &
+            "ISNULL(SUM(EmployeurCNESST),0) EmployeurCNESST, ISNULL(SUM(EmployeurCNT),0) EmployeurCNT, ISNULL(MAX(p.Province), N'QC') Province " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE p.LotPaieId = @l AND p.Inclus = 1 AND l.CompagnieId = @c",
             Db.P("@l", lotId), Db.P("@c", Contexte.CompagnieId))
+        Dim noms = LibellesProvince.Pour(totaux.Txt("Province"))
 
         Dim lignes = Db.Table(
             "SELECT pl.Description, CASE WHEN pl.CategorieCode LIKE 'DED[_]%' THEN 1 ELSE 0 END AS EstDeduction, SUM(pl.Montant) AS Montant " &
@@ -117,16 +141,16 @@ Public NotInheritable Class RenduPaie
 
         Dim revenus As New List(Of KeyValuePair(Of String, Decimal))()
         Dim deductions As New List(Of KeyValuePair(Of String, Decimal)) From {
-            Paire("Impôt fédéral", totaux.Dcm("ImpotFederal")), Paire("Impôt du Québec", totaux.Dcm("ImpotQuebec")),
-            Paire("RRQ", totaux.Dcm("RRQ")), Paire("RRQ - 2e cotisation suppl.", totaux.Dcm("RRQ2")),
-            Paire("Assurance-emploi", totaux.Dcm("AE")), Paire("RQAP", totaux.Dcm("RQAP"))}
+            Paire("Impôt fédéral", totaux.Dcm("ImpotFederal")), Paire(noms.ImpotProvincial, totaux.Dcm("ImpotQuebec")),
+            Paire(noms.Pension, totaux.Dcm("RRQ")), Paire(noms.Pension2, totaux.Dcm("RRQ2")),
+            Paire("Assurance-emploi", totaux.Dcm("AE")), Paire(If(noms.ARetenueTerritoriale, noms.RetenueProvinciale, "RQAP"), totaux.Dcm("RQAP"))}
         For Each l As DataRow In lignes.Rows
             If l.Ent("EstDeduction") = 1 Then deductions.Add(Paire(l.Txt("Description"), l.Dcm("Montant"))) Else revenus.Add(Paire(l.Txt("Description"), l.Dcm("Montant")))
         Next
         Dim employeur As New List(Of KeyValuePair(Of String, Decimal)) From {
-            Paire("RRQ", totaux.Dcm("EmployeurRRQ")), Paire("RRQ - 2e cotisation suppl.", totaux.Dcm("EmployeurRRQ2")),
+            Paire(noms.Pension, totaux.Dcm("EmployeurRRQ")), Paire(noms.Pension2, totaux.Dcm("EmployeurRRQ2")),
             Paire("Assurance-emploi", totaux.Dcm("EmployeurAE")), Paire("RQAP", totaux.Dcm("EmployeurRQAP")),
-            Paire("FSS", totaux.Dcm("EmployeurFSS")), Paire("CNESST", totaux.Dcm("EmployeurCNESST")), Paire("CNT (normes du travail)", totaux.Dcm("EmployeurCNT"))}
+            Paire(noms.Sante, totaux.Dcm("EmployeurFSS")), Paire(noms.Accidents, totaux.Dcm("EmployeurCNESST")), Paire("CNT (normes du travail)", totaux.Dcm("EmployeurCNT"))}
 
         Return "<div class=""grille-cartes"">" & Colonne("Revenus et avantages", revenus) & Colonne("Déductions", deductions) &
                Colonne("Parts de l'employeur", employeur) & "</div>"
@@ -157,8 +181,8 @@ Public NotInheritable Class RenduPaie
     Public Shared Function Lire(paieId As Integer) As DonneesTalon
         Dim d As New DonneesTalon()
         Dim p = Db.Ligne(
-            "SELECT p.*, l.DateDebutPeriode, l.DateFinPeriode, l.DatePaie, l.Statut, l.Id AS LotId, " &
-            "e.Prenom, e.Nom, e.Code, e.Adresse1, e.Adresse2, e.Ville, e.Province, e.CodePostal, e.DepotDirect, " &
+            "SELECT p.*, p.Province AS ProvincePaie, l.DateDebutPeriode, l.DateFinPeriode, l.DatePaie, l.Statut, l.Id AS LotId, " &
+            "e.Prenom, e.Nom, e.Code, e.Adresse1, e.Adresse2, e.Ville, e.Province AS EmployeProvince, e.CodePostal, e.DepotDirect, " &
             "c.Nom AS CompagnieNom, c.Adresse1 AS CAdresse1, c.Ville AS CVille, c.Province AS CProvince, c.CodePostal AS CCodePostal " &
             "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId JOIN paie.Employe e ON e.Id = p.EmployeId JOIN paie.Compagnie c ON c.Id = l.CompagnieId " &
             "WHERE p.Id = @p AND l.CompagnieId = @c", Db.P("@p", paieId), Db.P("@c", Contexte.CompagnieId))
@@ -167,7 +191,8 @@ Public NotInheritable Class RenduPaie
         Dim datePaie = p.DtN("DatePaie").Value
         Dim cumul = Db.Ligne(
             "SELECT ISNULL(SUM(x.BrutVerse),0) Brut, ISNULL(SUM(x.ImpotFederal),0) ImpotFederal, ISNULL(SUM(x.ImpotQuebec),0) ImpotQuebec, " &
-            "ISNULL(SUM(x.RRQ + x.RRQ2),0) RRQ, ISNULL(SUM(x.AE),0) AE, ISNULL(SUM(x.RQAP),0) RQAP, ISNULL(SUM(x.AutresDeductions),0) Autres, ISNULL(SUM(x.Net),0) Net " &
+            "ISNULL(SUM(x.RRQ + x.RRQ2),0) RRQ, ISNULL(SUM(x.AE),0) AE, ISNULL(SUM(CASE WHEN x.Province = N'QC' THEN x.RQAP ELSE 0 END),0) RQAP, " &
+            "ISNULL(SUM(CASE WHEN x.Province <> N'QC' THEN x.RQAP ELSE 0 END),0) ImpotPaie, ISNULL(SUM(x.AutresDeductions),0) Autres, ISNULL(SUM(x.Net),0) Net " &
             "FROM paie.Paie x JOIN paie.LotPaie lx ON lx.Id = x.LotPaieId " &
             "WHERE x.EmployeId = @e AND x.Inclus = 1 AND YEAR(lx.DatePaie) = @a AND (x.Id = @p OR (lx.Statut = 'C' AND (lx.DatePaie < @d OR (lx.DatePaie = @d AND lx.Id < @lot))))",
             Db.P("@e", p.Ent("EmployeId")), Db.P("@a", datePaie.Year), Db.P("@p", paieId), Db.P("@d", datePaie), Db.P("@lot", p.Ent("LotId")))
@@ -189,7 +214,8 @@ Public NotInheritable Class RenduPaie
         d.EmployeCode = p.Txt("Code")
         d.EmployeAdresse1 = p.Txt("Adresse1")
         d.EmployeAdresse2 = p.Txt("Adresse2")
-        d.EmployeLieu = Lieu(p.Txt("Ville"), p.Txt("Province"), p.Txt("CodePostal"))
+        ' Deux provinces à ne pas confondre : celle de l'adresse de l'employé (ici) et celle de la paie (plus bas).
+        d.EmployeLieu = Lieu(p.Txt("Ville"), p.Txt("EmployeProvince"), p.Txt("CodePostal"))
 
         d.DateDebut = p.DtN("DateDebutPeriode").Value
         d.DateFin = p.DtN("DateFinPeriode").Value
@@ -206,11 +232,19 @@ Public NotInheritable Class RenduPaie
         d.BrutVerse = p.Dcm("BrutVerse")
         d.AvantagesNonMonetaires = p.Dcm("AvantagesNonMonetaires")
 
+        ' Le talon nomme les retenues selon la province de la paie : impôt de l'Ontario (de l'Alberta…) et RPC, ou impôt du Québec et RRQ.
+        Dim noms = LibellesProvince.Pour(p.Txt("ProvincePaie"))
         AjouterRetenue(d, "Impôt fédéral", p.Dcm("ImpotFederal"), cumul.Dcm("ImpotFederal") + DepartDe(depart, "ImpotFederal"))
-        AjouterRetenue(d, "Impôt du Québec", p.Dcm("ImpotQuebec"), cumul.Dcm("ImpotQuebec") + DepartDe(depart, "ImpotQuebec"))
-        AjouterRetenue(d, "RRQ", p.Dcm("RRQ") + p.Dcm("RRQ2"), cumul.Dcm("RRQ") + DepartDe(depart, "RRQ") + DepartDe(depart, "RRQ2"))
+        AjouterRetenue(d, noms.ImpotProvincial, p.Dcm("ImpotQuebec"), cumul.Dcm("ImpotQuebec") + DepartDe(depart, "ImpotQuebec"))
+        AjouterRetenue(d, noms.Pension, p.Dcm("RRQ") + p.Dcm("RRQ2"), cumul.Dcm("RRQ") + DepartDe(depart, "RRQ") + DepartDe(depart, "RRQ2"))
         AjouterRetenue(d, "Assurance-emploi", p.Dcm("AE"), cumul.Dcm("AE") + DepartDe(depart, "AE"))
-        AjouterRetenue(d, "RQAP", p.Dcm("RQAP"), cumul.Dcm("RQAP") + DepartDe(depart, "RQAP"))
+        ' La colonne RQAP porte le RQAP au Québec et l'impôt sur la paie dans un territoire : deux retenues
+        ' distinctes, dont les cumulatifs ne se mêlent pas si la compagnie a changé de province dans l'année.
+        Dim paieDuQuebec = noms.Province = Province.Quebec
+        Dim departDuQuebec = depart IsNot Nothing AndAlso (depart.Txt("Province").Length = 0 OrElse depart.Txt("Province") = "QC")
+        AjouterRetenue(d, "RQAP", If(paieDuQuebec, p.Dcm("RQAP"), 0D), cumul.Dcm("RQAP") + If(departDuQuebec, DepartDe(depart, "RQAP"), 0D))
+        AjouterRetenue(d, If(noms.ARetenueTerritoriale, noms.RetenueProvinciale, "Impôt sur la paie"), If(paieDuQuebec, 0D, p.Dcm("RQAP")),
+                       cumul.Dcm("ImpotPaie") + If(depart IsNot Nothing AndAlso Not departDuQuebec, DepartDe(depart, "RQAP"), 0D))
         For Each l As DataRow In lignes.Select("CategorieCode LIKE 'DED_%'")
             d.Retenues.Add(New RetenueTalon With {.Libelle = l.Txt("Description"), .Courant = l.Dcm("Montant"), .AvecCumulatif = False})
         Next

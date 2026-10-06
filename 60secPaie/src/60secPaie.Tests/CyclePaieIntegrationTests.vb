@@ -27,6 +27,14 @@ Public Class CyclePaieIntegrationTests
         For Each script In {Path.Combine("tests", "00_stubs_mngconsul.sql"), "01_schema.sql"}
             ExecuterLots(Maitre, File.ReadAllText(Path.Combine(racine, "Database", script)).Replace("$(Base)", BaseTest))
         Next
+
+        ' Les scripts suivants complètent le schéma « paie » (taux de l'année, unités CNESST, Ontario, autres provinces). Ils n'ont pas
+        ' de USE : ils s'exécutent dans la base d'essai. 04 (assistant IA) écrit dans une table de MngConsul qui n'a
+        ' pas de réplique ici : il n'est pas rejoué.
+        Dim baseEssai = Maitre.Replace("Initial Catalog=master", "Initial Catalog=" & BaseTest)
+        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql"}
+            ExecuterLots(baseEssai, File.ReadAllText(Path.Combine(racine, "Database", script)))
+        Next
     End Sub
 
     Private Shared Sub ExecuterLots(chaine As String, script As String)

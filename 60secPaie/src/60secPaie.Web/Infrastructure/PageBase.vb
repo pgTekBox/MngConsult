@@ -44,6 +44,29 @@ Public Class PageBase
         I18n.RendreTraduit(writer, Sub(w) MyBase.Render(w))
     End Sub
 
+    ' ---------- Province de la compagnie courante ----------
+
+    ''' <summary>Vrai si la compagnie courante fait sa paie hors Québec, dans n'importe quelle autre province ou territoire. Sert aux pages pour choisir leurs libellés.</summary>
+    Protected ReadOnly Property HorsQuebec As Boolean
+        Get
+            Return Contexte.HorsQuebec
+        End Get
+    End Property
+
+    ''' <summary>Vrai en Ontario seulement : pour ce qui lui est propre (barème de l'ISE, personnes à charge du TD1ON).</summary>
+    Protected ReadOnly Property EnOntario As Boolean
+        Get
+            Return Contexte.EnOntario
+        End Get
+    End Property
+
+    ''' <summary>Noms des retenues et cotisations dans la province de la compagnie : RRQ ou RPC, FSS ou ISE, CNESST, WSIB ou WCB…</summary>
+    Protected ReadOnly Property Noms As Paie60Sec.Calcul.LibellesProvince
+        Get
+            Return Contexte.Libelles
+        End Get
+    End Property
+
     ' ---------- Sous-menus ----------
 
     Private Function SousMenu(actif As String, ParamArray items As String()()) As String
@@ -61,13 +84,13 @@ Public Class PageBase
             {"elements", "~/Config/ElementsPaie.aspx", "Éléments de paie"},
             {"comptes", "~/Config/PlanComptable.aspx", "Plan comptable"},
             {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"},
-            {"unites", "~/Config/UnitesCNESST.aspx", "Unités CNESST"})
+            {"unites", "~/Config/UnitesCNESST.aspx", If(HorsQuebec, "Classes " & Noms.Accidents, "Unités CNESST")})
     End Function
 
     Protected Function SousMenuRapports(actif As String) As String
         Return SousMenu(actif,
-            {"feuillets", "~/Rapports/Feuillets.aspx", "T4 et Relevés 1"},
-            {"cnesst", "~/Rapports/CNESST.aspx", "Déclaration des salaires CNESST"},
+            {"feuillets", "~/Rapports/Feuillets.aspx", If(HorsQuebec, "Feuillets T4", "T4 et Relevés 1")},
+            {"cnesst", "~/Rapports/CNESST.aspx", If(HorsQuebec, "Gains assurables " & Noms.Accidents, "Déclaration des salaires CNESST")},
             {"ecritures", "~/Rapports/Ecritures.aspx", "Écritures comptables"})
     End Function
 

@@ -28,12 +28,12 @@
                 </div>
                 <div class="carte">
                     <h2>Employés</h2>
-                    <p>Fiches, renseignements fiscaux (TD1, TP-1015.3) et éléments de paie récurrents.</p>
+                    <p><%: If(HorsQuebec, "Fiches, renseignements fiscaux (TD1, " & Noms.FormulaireCredits & ") et éléments de paie récurrents.", "Fiches, renseignements fiscaux (TD1, TP-1015.3) et éléments de paie récurrents.") %></p>
                     <a runat="server" href="~/Employes/Liste.aspx" class="bouton secondaire">Gérer</a>
                 </div>
                 <div class="carte">
                     <h2>Configuration</h2>
-                    <p>Compagnie, taux de l'employeur (FSS, CNESST) et éléments de paie.</p>
+                    <p><%: If(HorsQuebec, "Compagnie, taux de l'employeur (" & If(Noms.ASante, Noms.Sante & ", ", "") & Noms.Accidents & ") et éléments de paie.", "Compagnie, taux de l'employeur (FSS, CNESST) et éléments de paie.") %></p>
                     <a runat="server" href="~/Config/Compagnie.aspx" class="bouton secondaire">Configurer</a>
                 </div>
             </div>

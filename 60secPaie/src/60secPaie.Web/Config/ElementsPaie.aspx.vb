@@ -48,6 +48,7 @@ Public Class PageElementsPaie
 
     Private Shared Function Matrice(cat As CategoriePaie) As String
         Dim sb As New StringBuilder()
+        If Contexte.HorsQuebec Then Return MatriceHorsQuebec(cat)
         If cat.Type = TypeCategorie.Deduction Then
             sb.Append("<table class=""matrice""><tr><th>Réduit l'impôt fédéral</th><th>Réduit l'impôt du Québec</th><th>Crédit fonds de travailleurs</th><th>Case T4</th><th>Case R1</th></tr><tr>")
             sb.Append("<td>").Append(OuiNon(cat.ImpotFederal)).Append("</td><td>").Append(OuiNon(cat.ImpotQuebec)).Append("</td><td>")
@@ -60,6 +61,43 @@ Public Class PageElementsPaie
         End If
         sb.Append("<td>").Append(HttpUtility.HtmlEncode(If(String.IsNullOrEmpty(cat.CaseT4), "—", cat.CaseT4))).Append("</td>")
         sb.Append("<td>").Append(HttpUtility.HtmlEncode(If(String.IsNullOrEmpty(cat.CaseR1), "—", cat.CaseR1))).Append("</td></tr></table>")
+        sb.Append(NotesCategorie(cat))
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>
+    ''' La même matrice pour une compagnie d'une autre province, avec ses libellés. Hors Québec, le revenu imposable est le même aux deux
+    ''' paliers ; un avantage imposable au Québec seulement n'y est assujetti à rien. Ni RQAP, ni Relevé 1.
+    ''' La colonne de la cotisation santé de l'employeur n'existe que dans les provinces qui en ont une.
+    ''' </summary>
+    Private Shared Function MatriceHorsQuebec(cat As CategoriePaie) As String
+        Dim sb As New StringBuilder()
+        Dim noms = Contexte.Libelles
+        Dim deLaProvince = Provinces.DeNom(noms.Province)
+        Dim quebecSeulement = cat.Type = TypeCategorie.Avantage AndAlso Not cat.ImpotFederal
+        If cat.Type = TypeCategorie.Deduction Then
+            sb.Append("<table class=""matrice""><tr><th>").Append(HttpUtility.HtmlEncode("Réduit l'impôt fédéral et l'impôt " & deLaProvince))
+            sb.Append("</th><th>Crédit fonds de travailleurs (fédéral)</th><th>Case T4</th></tr><tr>")
+            sb.Append("<td>").Append(OuiNon(cat.ImpotFederal)).Append("</td><td>").Append(OuiNon(cat.Fonds <> FondsTravailleurs.Aucun)).Append("</td>")
+        Else
+            sb.Append("<table class=""matrice""><tr><th>").Append(HttpUtility.HtmlEncode("Impôt fédéral et impôt " & deLaProvince)).Append("</th><th>AE</th><th>RPC</th>")
+            If noms.ASante Then sb.Append("<th>").Append(HttpUtility.HtmlEncode(noms.Sante)).Append("</th>")
+            sb.Append("<th>").Append(HttpUtility.HtmlEncode(noms.Accidents)).Append("</th><th>Vacances</th><th>Case T4</th></tr><tr>")
+            Dim valeurs As New List(Of Boolean) From {cat.ImpotFederal, cat.AE, cat.RRQ}
+            If noms.ASante Then valeurs.Add(cat.FSS)
+            valeurs.AddRange({cat.CNESST, cat.Vacances AndAlso Not cat.PaieVacances})
+            For Each v In valeurs
+                sb.Append("<td>").Append(OuiNon(v AndAlso Not quebecSeulement)).Append("</td>")
+            Next
+        End If
+        sb.Append("<td>").Append(HttpUtility.HtmlEncode(If(String.IsNullOrEmpty(cat.CaseT4), "—", cat.CaseT4))).Append("</td></tr></table>")
+        If quebecSeulement Then sb.Append("<p class=""note"">Cet avantage n'est imposable qu'au Québec : il est ignoré dans une paie d'une autre province.</p>")
+        sb.Append(NotesCategorie(cat))
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function NotesCategorie(cat As CategoriePaie) As String
+        Dim sb As New StringBuilder()
         If cat.Forfaitaire Then sb.Append("<p class=""note"">Paiement forfaitaire : l'impôt est calculé selon la méthode des gratifications et paiements rétroactifs.</p>")
         If cat.Type = TypeCategorie.Avantage AndAlso Not cat.VerseEnArgent Then sb.Append("<p class=""note"">Avantage non monétaire : il est imposé mais ne s'ajoute pas à la paie nette.</p>")
         Return sb.ToString()

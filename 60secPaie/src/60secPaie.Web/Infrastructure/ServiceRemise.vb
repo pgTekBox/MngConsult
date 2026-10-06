@@ -1,4 +1,5 @@
 Imports System.Text
+Imports Paie60Sec.Calcul
 
 ''' <summary>Solde des retenues à payer à un gouvernement.</summary>
 Public Class SoldeRemise
@@ -19,10 +20,22 @@ Public Class SoldeRemise
 End Class
 
 ''' <summary>
-''' Remises gouvernementales d'un employeur du Québec.
-''' Fédéral (Receveur général) : impôt fédéral + assurance-emploi (employés et employeur).
-''' Revenu Québec : impôt du Québec + RRQ + RQAP (employés et employeur) + FSS + CNESST.
-''' La cotisation relative aux normes du travail (CNT) se paie une fois l'an avec le sommaire 1 : elle n'en fait pas partie.
+''' Remises gouvernementales. Ce qui est dû dépend de la province de chaque paie (paie.Paie.Province).
+'''
+''' QUÉBEC
+'''   Fédéral (Receveur général) : impôt fédéral + assurance-emploi (employés et employeur).
+'''   Revenu Québec : impôt du Québec + RRQ + RQAP (employés et employeur) + FSS + CNESST.
+'''   La cotisation relative aux normes du travail (CNT) se paie une fois l'an avec le sommaire 1 : elle n'en fait pas partie.
+'''
+''' HORS QUÉBEC (toutes les autres provinces et les territoires)
+'''   Fédéral (Receveur général) : impôt fédéral + impôt de la province + RPC (employés et employeur) + assurance-emploi.
+'''   L'ARC perçoit l'impôt de la province : il n'y a aucune remise provinciale, et rien ne va à Revenu Québec.
+'''   La cotisation santé de l'employeur (ISE de l'Ontario, de la Colombie-Britannique…) et la prime de la commission
+'''   des accidents du travail (WSIB, WCB…) se paient à part : elles sont calculées et affichées, mais ne font
+'''   partie d'aucune remise. Il en va de même de l'impôt de 2 % sur la paie des Territoires du Nord-Ouest et du
+'''   Nunavut, retenu à l'employé et remis au territoire (colonne RQAP de paie.Paie).
+'''
+''' Rappel : hors Québec, l'impôt provincial et le RPC occupent les colonnes ImpotQuebec et RRQ de paie.Paie.
 ''' </summary>
 Public NotInheritable Class ServiceRemise
 
@@ -31,6 +44,38 @@ Public NotInheritable Class ServiceRemise
 
     Private Sub New()
     End Sub
+
+    ''' <summary>Ce qu'une paie doit au Receveur général. Hors Québec s'y ajoutent l'impôt provincial et le RPC.</summary>
+    Public Const SqlDuFederal As String =
+        "p.ImpotFederal + p.AE + p.EmployeurAE + " &
+        "CASE WHEN p.Province <> N'QC' THEN p.ImpotQuebec + p.RRQ + p.RRQ2 + p.EmployeurRRQ + p.EmployeurRRQ2 ELSE 0 END"
+
+    ''' <summary>
+    ''' Ce qu'une paie doit à Revenu Québec : rien pour une paie d'une autre province. (L'impôt sur la paie
+    ''' d'un territoire occupe la colonne RQAP : il ne doit surtout pas s'y retrouver.)
+    ''' </summary>
+    Public Const SqlDuQuebec As String =
+        "CASE WHEN p.Province <> N'QC' THEN 0 ELSE p.ImpotQuebec + p.RRQ + p.RRQ2 + p.EmployeurRRQ + p.EmployeurRRQ2 + " &
+        "p.RQAP + p.EmployeurRQAP + p.EmployeurFSS + p.EmployeurCNESST END"
+
+    Private Const SiHorsQuebec As String = "CASE WHEN p.Province <> N'QC' THEN "
+
+    ''' <summary>
+    ''' Code de la ligne de l'impôt provincial d'une remise fédérale : « IMPOT_ON », « IMPOT_AB »… Une ligne par
+    ''' province, parce qu'une compagnie qui a changé de province peut en remettre deux à la fois.
+    ''' Une paie du Québec donne « IMPOT_PROV », toujours à zéro, que SqlLignes retire.
+    ''' </summary>
+    Private Const SqlCodeImpotProvincial As String = "CASE WHEN p.Province = N'QC' THEN 'IMPOT_PROV' ELSE 'IMPOT_' + p.Province END"
+
+    ''' <summary>« Impôt de l'Ontario », « Impôt de l'Alberta »… selon la province de la paie. Les libellés viennent du code, jamais d'une saisie.</summary>
+    Private Shared Function SqlLibelleImpotProvincial() As String
+        Dim sb As New StringBuilder("CASE p.Province")
+        For Each prov In Provinces.Gerees
+            If prov = Province.Quebec Then Continue For
+            sb.Append(" WHEN N'").Append(Provinces.Code(prov)).Append("' THEN N'").Append(LibellesProvince.Pour(prov).ImpotProvincial.Replace("'", "''")).Append("'")
+        Next
+        Return sb.Append(" ELSE N'Impôt provincial' END").ToString()
+    End Function
 
     Public Shared Function NomGouvernement(gouvernement As Object) As String
         Return If(Convert.ToString(gouvernement) = Federal, "Receveur général du Canada", "Revenu Québec")
@@ -47,9 +92,13 @@ Public NotInheritable Class ServiceRemise
 
     Private Shared Function ValeursLignes(gouvernement As String) As String
         If gouvernement = Federal Then
+            ' Les trois lignes hors Québec valent 0 pour une paie du Québec ; SqlLignes les retire alors de la liste.
             Return "('IMPOT_FED', N'Impôt fédéral', 1, p.ImpotFederal), " &
-                   "('AE_EMPLOYE', N'Assurance-emploi - cotisations des employés', 2, p.AE), " &
-                   "('AE_EMPLOYEUR', N'Assurance-emploi - cotisation de l''employeur', 3, p.EmployeurAE)"
+                   "(" & SqlCodeImpotProvincial & ", " & SqlLibelleImpotProvincial() & ", 2, " & SiHorsQuebec & "p.ImpotQuebec ELSE 0 END), " &
+                   "('RPC_EMPLOYE', N'RPC - cotisations des employés', 3, " & SiHorsQuebec & "p.RRQ + p.RRQ2 ELSE 0 END), " &
+                   "('RPC_EMPLOYEUR', N'RPC - cotisation de l''employeur', 4, " & SiHorsQuebec & "p.EmployeurRRQ + p.EmployeurRRQ2 ELSE 0 END), " &
+                   "('AE_EMPLOYE', N'Assurance-emploi - cotisations des employés', 5, p.AE), " &
+                   "('AE_EMPLOYEUR', N'Assurance-emploi - cotisation de l''employeur', 6, p.EmployeurAE)"
         End If
         Return "('IMPOT_QC', N'Impôt du Québec', 1, p.ImpotQuebec), " &
                "('RRQ_EMPLOYE', N'RRQ - cotisations des employés', 2, p.RRQ + p.RRQ2), " &
@@ -63,12 +112,27 @@ Public NotInheritable Class ServiceRemise
     Private Shared Function SqlLignes(gouvernement As String, filtre As String) As String
         Return "SELECT v.Code, v.Libelle, v.Ordre, SUM(v.Montant) AS Montant FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
                "CROSS APPLY (VALUES " & ValeursLignes(gouvernement) & ") v(Code, Libelle, Ordre, Montant) WHERE " & filtre &
-               " GROUP BY v.Code, v.Libelle, v.Ordre"
+               " GROUP BY v.Code, v.Libelle, v.Ordre" &
+               If(gouvernement = Federal,
+                  " HAVING NOT ((v.Code IN ('IMPOT_PROV', 'RPC_EMPLOYE', 'RPC_EMPLOYEUR') OR v.Code LIKE 'IMPOT[_]__') AND SUM(v.Montant) = 0)", "")
     End Function
 
-    ''' <summary>Paies confirmées dont les retenues ne sont pas encore payées à ce gouvernement.</summary>
+    ''' <summary>
+    ''' Paies confirmées dont les retenues ne sont pas encore payées à ce gouvernement.
+    ''' Une paie d'une autre province ne doit rien à Revenu Québec : elle n'y est jamais « à payer ».
+    ''' </summary>
     Private Shared Function FiltreNonPaye(gouvernement As String) As String
-        Return "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND l.DatePaie <= @fin AND p." & ColonnePaie(gouvernement) & " IS NULL"
+        Return "l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND l.DatePaie <= @fin AND p." & ColonnePaie(gouvernement) & " IS NULL" &
+               If(gouvernement = Quebec, " AND p.Province = N'QC'", "")
+    End Function
+
+    ''' <summary>
+    ''' Vrai si la compagnie a affaire à Revenu Québec : elle est au Québec, ou il lui reste des
+    ''' retenues à y payer (compagnie passée du Québec à une autre province).
+    ''' </summary>
+    Public Shared Function QuebecConcerne() As Boolean
+        If Not Contexte.HorsQuebec Then Return True
+        Return Solde(Quebec).NbPaies > 0
     End Function
 
     ' ---------- Échéances ----------
@@ -90,9 +154,7 @@ Public NotInheritable Class ServiceRemise
     End Function
 
     Public Shared Function Solde(gouvernement As String) As SoldeRemise
-        Dim total = If(gouvernement = Federal,
-            "p.ImpotFederal + p.AE + p.EmployeurAE",
-            "p.ImpotQuebec + p.RRQ + p.RRQ2 + p.EmployeurRRQ + p.EmployeurRRQ2 + p.RQAP + p.EmployeurRQAP + p.EmployeurFSS + p.EmployeurCNESST")
+        Dim total = If(gouvernement = Federal, SqlDuFederal, SqlDuQuebec)
         Dim r = Db.Ligne("SELECT ISNULL(SUM(" & total & "), 0) AS Montant, COUNT(*) AS NbPaies, MIN(l.DatePaie) AS PlusAncienne " &
                          "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId WHERE " & FiltreNonPaye(gouvernement),
                          Db.P("@c", Contexte.CompagnieId), Db.P("@fin", New Date(9999, 12, 31)))
@@ -110,6 +172,24 @@ Public NotInheritable Class ServiceRemise
         Return Convert.ToDecimal(Db.Scalaire(
             "SELECT ISNULL(SUM(p.EmployeurCNT), 0) FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
             "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND YEAR(l.DatePaie) = @a", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)))
+    End Function
+
+    ''' <summary>
+    ''' Hors Québec : ce qui s'accumule dans l'année sans faire partie des remises au Receveur général, une
+    ''' ligne par province (une compagnie peut en avoir changé). Colonnes : Province, Sante et MasseSante
+    ''' (cotisation santé de l'employeur), Accidents et AssurableAccidents (commission des accidents du
+    ''' travail), ImpotPaie et GainsImpotPaie (impôt sur la paie des T.N.-O. et du Nunavut, retenu aux
+    ''' employés et à remettre au territoire). Les montants sont donnés à titre indicatif.
+    ''' </summary>
+    Public Shared Function HorsRemiseProvinces(annee As Integer) As DataTable
+        Return Db.Table(
+            "SELECT p.Province, ISNULL(SUM(p.EmployeurFSS), 0) AS Sante, ISNULL(SUM(p.GainsFSS), 0) AS MasseSante, " &
+            "ISNULL(SUM(p.EmployeurCNESST), 0) AS Accidents, ISNULL(SUM(p.GainsCNESST), 0) AS AssurableAccidents, " &
+            "ISNULL(SUM(p.RQAP), 0) AS ImpotPaie, ISNULL(SUM(p.GainsRQAP), 0) AS GainsImpotPaie " &
+            "FROM paie.Paie p JOIN paie.LotPaie l ON l.Id = p.LotPaieId " &
+            "WHERE l.CompagnieId = @c AND l.Statut = 'C' AND p.Inclus = 1 AND p.Province <> N'QC' AND YEAR(l.DatePaie) = @a " &
+            "GROUP BY p.Province ORDER BY p.Province",
+            Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee))
     End Function
 
     ' ---------- Calcul et enregistrement ----------

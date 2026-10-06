@@ -124,6 +124,8 @@ mark{background:#ffe89a}
   <a href="#categories">Catégories de paie</a>
   <a href="#parametres">Paramètres de l'année 2026</a>
   <a href="#formules">Formules, retenue par retenue</a>
+  <a href="#ontario">Paie de l'Ontario</a>
+  <a href="#provinces">Paie des autres provinces et territoires</a>
   <a href="#arrondis">Arrondis</a>
   <a href="#exemple">Exemple chiffré</a>
   <h2>Cas pratiques</h2>
@@ -148,11 +150,12 @@ mark{background:#ffe89a}
 
 <main id="haut">
 <h1>Aide de 60secPaie</h1>
-<p class="lede">Ce guide décrit chaque écran, chaque champ, chaque règle et chaque message de 60secPaie, le service de paie pour le Québec de 60Sec. Il suit l'ordre du menu. Les mots entre guillemets « » sont ceux que vous voyez à l'écran. Utilisez le filtre en haut pour retrouver un sujet, ou <kbd>Ctrl</kbd>+<kbd>F</kbd> pour chercher un mot dans toute la page.</p>
+<p class="lede">Ce guide décrit chaque écran, chaque champ, chaque règle et chaque message de 60secPaie, le service de paie de 60Sec pour le Québec et l'Ontario. Il suit l'ordre du menu. Les mots entre guillemets « » sont ceux que vous voyez à l'écran. Utilisez le filtre en haut pour retrouver un sujet, ou <kbd>Ctrl</kbd>+<kbd>F</kbd> pour chercher un mot dans toute la page.</p>
 <div class="note">Version du guide : septembre 2026. Taux en vigueur dans le logiciel : année 2026, d'après le guide T4127 de l'ARC et le guide TP-1015.F de Revenu Québec.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Vue d'ensemble</h2>
+<div class="note">Ce guide décrit les écrans avec les mots du Québec. Pour une compagnie dont la province d'emploi est l'<strong>Ontario</strong>, les mêmes écrans parlent d'impôt de l'Ontario, de RPC, d'ISE et de WSIB, sans RQAP ni Relevé 1 : voir <a href="#ontario">Paie de l'Ontario</a>. Pour les autres provinces et les territoires, voir <a href="#provinces">Paie des autres provinces et territoires</a>.</div>
 <p>60secPaie calcule la paie d'employés qui travaillent au Québec : impôt fédéral, impôt du Québec, RRQ, assurance-emploi, RQAP, et les cotisations de l'employeur (RRQ, AE, RQAP, FSS, CNESST, CNT). À partir des paies confirmées, il produit les talons de paie, le fichier de dépôt direct, le montant des retenues à remettre aux deux gouvernements, les cases des feuillets T4 et Relevé 1, la déclaration des salaires CNESST et les écritures comptables.</p>
 <p>Il partage ses comptes utilisateurs et ses compagnies avec 60Sec. Les employés sont aussi ceux de 60Sec : ils peuvent être créés d'un côté ou de l'autre, mais leur identité (nom, adresse, poste) se modifie dans 60Sec. 60secPaie y ajoute tout ce qui concerne la paie.</p>
 
@@ -266,6 +269,7 @@ mark{background:#ffe89a}
 <h3>« Informations de paie »</h3>
 <table>
 <tr><th>Champ</th><th>Rôle</th><th>Valeur par défaut, validation</th></tr>
+<tr><td>« Province d'emploi » *</td><td>Province de l'établissement où vos employés se présentent au travail. Elle décide des retenues, des remises et des feuillets.</td><td>Le Québec, l'Ontario ou l'une des onze autres provinces et territoires. Voir <a href="#ontario">Paie de l'Ontario</a> et <a href="#provinces">Paie des autres provinces et territoires</a>.</td></tr>
 <tr><td>« Période de paie par défaut » *</td><td>Fréquence proposée dans l'assistant et appliquée aux employés qui n'en ont pas de propre.</td><td>Aux 2 semaines (26). Choix : 52, 26, 24, 12, 1.</td></tr>
 <tr><td>« Taux de vacances par défaut (%) » *</td><td>Taux d'indemnité de vacances des employés sans taux propre.</td><td>4. Refusé au-delà de 20 : « Le taux de vacances semble trop élevé. »</td></tr>
 <tr><td>« Prochain numéro de chèque »</td><td>Premier numéro attribué aux paies par chèque et aux remises par chèque.</td><td>1. Vide = 1. Avance automatiquement.</td></tr>
@@ -880,6 +884,143 @@ mark{background:#ffe89a}
 <tr><td>Assurance-emploi (1,30 %)</td><td class="num">780,00 $</td><td class="num">780,00 $</td></tr>
 <tr><td>RQAP (0,43 %)</td><td class="num">258,00 $</td><td class="num">257,92 $</td></tr>
 </table>
+
+<!-- ============================================================ -->
+<h2 id="ontario">Comprendre les calculs › Paie de l'Ontario</h2>
+<p>60secPaie calcule aussi la paie d'employés qui travaillent en <strong>Ontario</strong>. La <strong>province d'emploi</strong> est celle de la compagnie : elle se choisit dans <span class="chemin">Configuration › Paramètres de paie</span>, champ « Province d'emploi ». C'est la province de l'établissement où les employés se présentent au travail, pas celle où ils habitent. Une compagnie a une seule province ; un employeur présent dans les deux configure deux compagnies. Le reste de ce guide décrit les écrans avec les mots du Québec : pour une compagnie de l'Ontario, les mêmes écrans affichent les mots de l'Ontario, selon le tableau ci-dessous.</p>
+<h3>Ce qui change</h3>
+<table>
+<tr><th></th><th>Québec</th><th>Ontario</th></tr>
+<tr><td>Impôt provincial</td><td>« Impôt du Québec » (guide TP-1015.F)</td><td>« Impôt de l'Ontario » (guide T4127) : barème, surtaxe, contribution-santé de l'Ontario et réduction d'impôt</td></tr>
+<tr><td>Impôt fédéral</td><td>Abattement de 16,5 %</td><td>Sans abattement : il est plus élevé qu'au Québec pour le même salaire</td></tr>
+<tr><td>Régime de pension</td><td>« RRQ »</td><td>« RPC » (Régime de pensions du Canada), avec sa 2e cotisation supplémentaire</td></tr>
+<tr><td>Assurance-emploi</td><td>Taux réduit du Québec</td><td>Taux ordinaire</td></tr>
+<tr><td>Congés parentaux</td><td>« RQAP »</td><td>Aucune retenue distincte : ils sont couverts par l'assurance-emploi</td></tr>
+<tr><td>Cotisation santé de l'employeur</td><td>« FSS »</td><td>« ISE », l'impôt-santé des employeurs</td></tr>
+<tr><td>Accidents du travail</td><td>« CNESST », unités de classification</td><td>« WSIB », classes</td></tr>
+<tr><td>Normes du travail</td><td>« CNT »</td><td>Aucune cotisation</td></tr>
+<tr><td>Formulaires de l'employé</td><td>TD1 et TP-1015.3</td><td>TD1 et TD1ON</td></tr>
+<tr><td>Remises</td><td>Receveur général et Revenu Québec</td><td>Receveur général seulement</td></tr>
+<tr><td>Feuillets</td><td>T4 et Relevé 1</td><td>T4 seulement</td></tr>
+</table>
+<h3>Configuration › Paramètres de paie</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Notes</th></tr>
+<tr><td>« Province d'emploi » *</td><td>« Québec », « Ontario » ou une autre province ou un territoire (voir <a href="#provinces">Paie des autres provinces et territoires</a>). Elle décide des retenues, des remises et des feuillets.</td><td>Les champs propres à l'autre province disparaissent de la page. La province est gardée sur chaque paie : si elle change, « les prochaines paies seront calculées selon ses règles ; les paies déjà confirmées gardent la leur », et une paie en préparation est à recalculer.</td></tr>
+<tr><td>« Masse salariale totale estimée ($) »</td><td>En Ontario : rémunération totale versée en Ontario dans l'année. Sert à déterminer le taux de l'ISE.</td><td>Le taux réel s'établit dans la déclaration annuelle de l'ISE.</td></tr>
+<tr><td>« Exemption de l'impôt-santé des employeurs (ISE) »</td><td>« Admissible à l'exemption » ou « Non admissible (secteur public, groupe associé qui l'utilise déjà) ».</td><td>L'aide affiche « Taux ISE appliqué à chaque paie : x,xx % ».</td></tr>
+<tr><td>« Taux de prime WSIB ($ par 100 $ assurables) »</td><td>Appliqué aux employés sans classe WSIB.</td><td>« Inscrit sur votre relevé de primes. » Avec plusieurs classes, voir <span class="chemin">Configuration › Classes WSIB</span>.</td></tr>
+</table>
+<p>En Ontario, la page ne montre ni la fréquence de paiement à Revenu Québec, ni le numéro RS, ni le secteur du FSS, ni la case de la CNT. Le sous-menu « Unités CNESST » s'appelle « Classes WSIB » : même écran, mêmes règles.</p>
+<h3>Employés › Fiche</h3>
+<p>Le bloc « Imposition du Québec » est remplacé par « Imposition de l'Ontario » :</p>
+<table>
+<tr><th>Champ</th><th>Rôle</th></tr>
+<tr><td>« TD1ON - Montant total de la demande ($) »</td><td>Total de la demande du formulaire TD1ON. Vide = montant personnel de base de l'Ontario (12 989 $ en 2026).</td></tr>
+<tr><td>« Personnes à charge pour la réduction d'impôt de l'Ontario »</td><td>Nombre d'enfants de moins de 19 ans et de personnes à charge ayant une incapacité (554 $ chacun en 2026). Vide si l'employé n'en demande pas.</td></tr>
+<tr><td>« Autres crédits d'impôt de l'Ontario autorisés ($) »</td><td>Crédits annuels autorisés par l'ARC.</td></tr>
+</table>
+<p>L'impôt additionnel par paie, la déduction pour zone visée et les déductions du T1213 restent dans « Imposition fédérale » : hors Québec, ils valent pour les deux impôts. Les exemptions s'appellent « Ne pas retenir l'impôt de l'Ontario », « Ne pas cotiser au RPC », « Exclure de la cotisation santé de l'employeur (ISE) » et « Exclure de la couverture des accidents du travail (WSIB) » ; celle du RQAP n'est pas offerte. Dans <span class="chemin">Cumulatifs de départ</span>, les champs deviennent « Impôt de l'Ontario retenu ($) », « Gains ouvrant droit à pension - RPC ($) », « Cotisation au RPC (base + 1re suppl.) ($) », « 2e cotisation supplémentaire au RPC ($) » et « Gains assurables WSIB ($) ».</p>
+<h3>Paramètres 2026 de l'Ontario</h3>
+<table>
+<tr><th>Paramètre</th><th>Valeur 2026</th></tr>
+<tr><td>Impôt de l'Ontario, tranches</td><td>5,05 % jusqu'à 53 891 $ ; 9,15 % jusqu'à 107 785 $ ; 11,16 % jusqu'à 150 000 $ ; 12,16 % jusqu'à 220 000 $ ; 13,16 % au-delà</td></tr>
+<tr><td>Montant personnel de base de l'Ontario</td><td>12 989 $</td></tr>
+<tr><td>Surtaxe</td><td>20 % de l'impôt de base au-delà de 5 818 $, plus 36 % au-delà de 7 446 $</td></tr>
+<tr><td>Contribution-santé de l'Ontario</td><td>0 $ jusqu'à 20 000 $ de revenu imposable ; jusqu'à 300 $, 450 $, 600 $, 750 $ puis 900 $ par année selon le revenu</td></tr>
+<tr><td>Réduction d'impôt</td><td>Montant de base 300 $, plus 554 $ par personne à charge</td></tr>
+<tr><td>RPC</td><td>5,95 % des gains au-delà de l'exemption de 3 500 $, maximum de gains 74 600 $, cotisation maximale 4 230,45 $</td></tr>
+<tr><td>RPC, 2e cotisation supplémentaire</td><td>4 % des gains entre 74 600 $ et 85 000 $, maximum 416 $</td></tr>
+<tr><td>Assurance-emploi</td><td>1,63 % jusqu'à 68 900 $ de gains assurables, maximum 1 123,07 $ ; employeur : 1,4 fois</td></tr>
+<tr><td>ISE</td><td>De 0,98 % (masse salariale de 200 000 $ ou moins) à 1,95 % (plus de 400 000 $) ; exemption de 1 000 000 $ pour l'employeur admissible dont la masse ne dépasse pas 5 000 000 $</td></tr>
+<tr><td>WSIB</td><td>Plafond des gains assurables : 121 700 $ par employé</td></tr>
+</table>
+<h3>Formules</h3>
+<ul>
+  <li><strong>RPC</strong> : 5,95 % × (gains de la période – 3 500 $ ÷ nombre de périodes), jusqu'au maximum de l'année. L'employeur verse le même montant. On cotise de la première paie datée du mois qui suit le 18e anniversaire jusqu'à la dernière paie datée du mois du 70e anniversaire.</li>
+  <li><strong>Assurance-emploi</strong> : 1,63 % des gains assurables, jusqu'au maximum de l'année.</li>
+  <li><strong>Revenu imposable annuel</strong> : le même pour les deux impôts — la rémunération de la période moins les déductions qui réduisent l'impôt (RPA, REER, cotisation syndicale) et la partie bonifiée de la cotisation au RPC, multipliée par le nombre de périodes.</li>
+  <li><strong>Impôt fédéral</strong> : barème fédéral moins les crédits (montant de la demande TD1, cotisations au RPC et à l'AE, montant canadien pour emploi), sans abattement, divisé par le nombre de périodes.</li>
+  <li><strong>Impôt de l'Ontario</strong> : barème de l'Ontario moins les crédits (montant de la demande TD1ON, cotisations au RPC et à l'AE), plus la surtaxe, plus la contribution-santé, moins la réduction d'impôt ; le tout divisé par le nombre de périodes. La contribution-santé fait partie de l'impôt de l'Ontario retenu : elle n'a pas de ligne distincte sur le talon.</li>
+  <li><strong>Bonus et paiement rétroactif</strong> : l'impôt est l'écart entre l'impôt de l'année avec et sans le paiement. Quand la rémunération de l'année ne dépasse pas 5 000 $, la retenue est de 15 % en tout : 10 % au fédéral et 5 % à l'Ontario.</li>
+  <li><strong>ISE</strong> : rémunération de la paie × taux effectif. Le taux effectif est le taux du barème ramené sur toute la masse salariale une fois l'exemption retranchée ; il est nul quand la masse estimée ne dépasse pas l'exemption.</li>
+  <li><strong>WSIB</strong> : gains assurables × taux de la classe de l'employé (sinon celui de la compagnie) ÷ 100, jusqu'au plafond de l'année.</li>
+  <li><strong>Vacances</strong> : l'indemnité s'accumule sur le salaire brut, sans la paie de vacances elle-même.</li>
+</ul>
+<div class="note">Le détail de chaque paie (étape 3 de l'assistant, « Détail et vérification des calculs ») montre les valeurs intermédiaires : PI, F5, A, K1, K2, T1 pour le fédéral ; T4, V1 (surtaxe), V2 (contribution-santé), S (réduction) et T2 pour l'Ontario.</div>
+<h3>Retenues</h3>
+<p>En Ontario, tout se remet au <strong>Receveur général du Canada</strong>, en un seul paiement : « Impôt fédéral », « Impôt de l'Ontario », « RPC - cotisations des employés », « RPC - cotisation de l'employeur », « Assurance-emploi - cotisations des employés » et « Assurance-emploi - cotisation de l'employeur ». Il n'y a pas de remise à Revenu Québec : ce choix n'est pas offert. Une carte « Ontario : montants hors remises » donne le cumul de l'année de l'impôt-santé des employeurs et de la prime de la WSIB : « Ces montants se paient à part, à l'administration de la province ou du territoire et à sa commission des accidents du travail. Ils ne font pas partie des remises au Receveur général. »</p>
+<h3>Rapports</h3>
+<ul>
+  <li><strong>« Feuillets T4 »</strong> : cases 16 et 16A pour le RPC (à la place de 17 et 17A), case 10 « ON », case 22 qui réunit l'impôt fédéral et l'impôt de l'Ontario. Ni cases 55 et 56, ni Relevé 1, ni Sommaire 1. Une carte « Ontario : montants hors remises » donne la rémunération assujettie et les montants calculés.</li>
+  <li><strong>« Gains assurables WSIB »</strong> : le rapport de la CNESST, pour la WSIB — salaire brut, excédent du plafond, gains assurables et prime par employé, par classe et par mois.</li>
+  <li><strong>« Écritures comptables »</strong> : mêmes comptes, libellés de l'Ontario (« RPC à payer », « ISE à payer », « WSIB à payer »…). L'ISE et la WSIB y sont inscrits comme dépenses et comme montants à payer.</li>
+</ul>
+<h3>Limites</h3>
+<ul>
+  <li>Un employé payé au Québec et en Ontario dans la même année paraît sur un seul feuillet, avec un avertissement : l'ARC demande un T4 par province, la répartition est à faire à la main.</li>
+  <li>Le crédit d'impôt de l'Ontario pour fonds de travailleurs n'est pas calculé.</li>
+  <li>La part de l'employeur à un régime privé d'assurance maladie n'est un avantage imposable qu'au Québec : il ne s'ajoute pas à une paie de l'Ontario (« Cet avantage n'est imposable qu'au Québec : il ne s'ajoute pas à une paie d'une autre province. ») et n'y est pas recopié des éléments récurrents de l'employé.</li>
+  <li>Les taux de l'ISE et le plafond de la WSIB sont à confirmer auprès du ministère des Finances de l'Ontario et de la WSIB. Comparez quelques paies avec le calculateur en ligne de l'ARC (PDOC).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="provinces">Comprendre les calculs › Paie des autres provinces et territoires</h2>
+<p>60secPaie calcule la paie des <strong>treize provinces et territoires</strong> du Canada. Le champ « Province d'emploi » de <span class="chemin">Configuration › Paramètres de paie</span> les offre tous : Québec, Ontario, Alberta, Colombie-Britannique, Île-du-Prince-Édouard, Manitoba, Nouveau-Brunswick, Nouvelle-Écosse, Nunavut, Saskatchewan, Terre-Neuve-et-Labrador, Territoires du Nord-Ouest et Yukon. Comme pour l'Ontario, c'est la province de l'établissement où les employés se présentent au travail ; une compagnie a une seule province, et chaque paie garde la sienne. Cette section complète <a href="#ontario">Paie de l'Ontario</a> : tout ce qui y est dit des écrans vaut ici, avec les mots de la province choisie.</p>
+<h3>Ce qui est commun hors Québec</h3>
+<ul>
+  <li><strong>RPC</strong> à la place du RRQ, avec sa 2e cotisation supplémentaire ; l'employeur verse le même montant.</li>
+  <li><strong>Assurance-emploi au taux ordinaire</strong> ; il n'y a ni RQAP ni cotisation aux normes du travail (CNT).</li>
+  <li><strong>Impôt fédéral sans abattement</strong>, et impôt de la province ou du territoire calculé selon le guide T4127 de l'ARC, sur le même revenu imposable.</li>
+  <li><strong>Tout se remet au Receveur général du Canada</strong>, en un seul paiement : impôt fédéral, impôt de la province, RPC et assurance-emploi. Il n'y a aucune remise à Revenu Québec.</li>
+  <li><strong>T4 seulement</strong> : case 10 = code de la province, cases 16 et 16A pour le RPC, case 22 qui réunit l'impôt fédéral et l'impôt de la province. Ni Relevé 1, ni Sommaire 1.</li>
+  <li>L'indemnité de vacances s'accumule sur le salaire brut, sans la paie de vacances elle-même, au taux de vacances saisi.</li>
+</ul>
+<h3>Les mots de chaque province</h3>
+<table>
+<tr><th>Province ou territoire</th><th>Impôt et formulaire de crédits</th><th>Cotisation santé de l'employeur</th><th>Accidents du travail</th></tr>
+<tr><td>Alberta (AB)</td><td>« Impôt de l'Alberta », TD1AB</td><td>Aucune</td><td>« WCB »</td></tr>
+<tr><td>Colombie-Britannique (BC)</td><td>« Impôt de la Colombie-Britannique », TD1BC</td><td>« ISE », l'impôt-santé des employeurs : taux à saisir</td><td>« WorkSafeBC »</td></tr>
+<tr><td>Île-du-Prince-Édouard (PE)</td><td>« Impôt de l'Île-du-Prince-Édouard », TD1PE</td><td>Aucune</td><td>« WCB »</td></tr>
+<tr><td>Manitoba (MB)</td><td>« Impôt du Manitoba », TD1MB</td><td>« ISFP », l'impôt pour la santé et l'enseignement postsecondaire : taux à saisir</td><td>« WCB »</td></tr>
+<tr><td>Nouveau-Brunswick (NB)</td><td>« Impôt du Nouveau-Brunswick », TD1NB</td><td>Aucune</td><td>« Travail sécuritaire NB »</td></tr>
+<tr><td>Nouvelle-Écosse (NS)</td><td>« Impôt de la Nouvelle-Écosse », TD1NS</td><td>Aucune</td><td>« WCB »</td></tr>
+<tr><td>Nunavut (NU)</td><td>« Impôt du Nunavut », TD1NU ; plus l'« Impôt sur la paie » de 2 %</td><td>Aucune</td><td>« WSCC »</td></tr>
+<tr><td>Saskatchewan (SK)</td><td>« Impôt de la Saskatchewan », TD1SK</td><td>Aucune</td><td>« WCB »</td></tr>
+<tr><td>Terre-Neuve-et-Labrador (NL)</td><td>« Impôt de Terre-Neuve-et-Labrador », TD1NL</td><td>« ISEPS », l'impôt pour la santé et l'éducation postsecondaire : taux à saisir</td><td>« WorkplaceNL »</td></tr>
+<tr><td>Territoires du Nord-Ouest (NT)</td><td>« Impôt des Territoires du Nord-Ouest », TD1NT ; plus l'« Impôt sur la paie » de 2 %</td><td>Aucune</td><td>« WSCC »</td></tr>
+<tr><td>Yukon (YT)</td><td>« Impôt du Yukon », TD1YT</td><td>Aucune</td><td>« WSCB »</td></tr>
+</table>
+<h3>Configuration › Paramètres de paie</h3>
+<table>
+<tr><th>Champ</th><th>Rôle</th><th>Notes</th></tr>
+<tr><td>« Taux effectif : … (%) »</td><td>Colombie-Britannique, Manitoba et Terre-Neuve-et-Labrador seulement : le taux de la cotisation santé de l'employeur, en pourcentage de la rémunération, appliqué à chaque paie.</td><td>60secPaie ne le calcule pas : « Il dépend de votre masse salariale et de l'exemption de la province ». Prenez-le auprès de l'administration provinciale ; laissez 0 sous le seuil d'exemption. Dans les provinces qui n'ont pas de telle cotisation, le champ n'est pas affiché et rien n'est calculé.</td></tr>
+<tr><td>« Taux de prime … ($ par 100 $ assurables) »</td><td>Le taux de la commission des accidents du travail de la province (WCB, WorkSafeBC, WorkplaceNL, WSCC…), appliqué aux employés sans classe.</td><td>Avec plusieurs classes, le sous-menu « Classes … » remplace « Unités CNESST » : même écran, mêmes règles.</td></tr>
+</table>
+<p>La page ne montre ni la masse salariale, ni la fréquence de paiement à Revenu Québec, ni le numéro RS, ni le secteur du FSS, ni la case de la CNT : ils ne servent pas hors Québec et Ontario.</p>
+<h3>Employés › Fiche</h3>
+<p>Le bloc « Imposition du Québec » est remplacé par celui de la province (« Imposition de l'Alberta », « Imposition du Manitoba »…), avec le montant total de la demande du formulaire de la province (TD1AB, TD1BC…) et les autres crédits d'impôt autorisés ; vide, le montant personnel de base de la province s'applique. Le champ des personnes à charge n'existe qu'en Ontario. Les exemptions prennent le nom de la province : « Ne pas retenir l'impôt de l'Alberta », « Ne pas cotiser au RPC », « Exclure de la couverture des accidents du travail (WCB) » ; « Exclure de la cotisation santé de l'employeur (…) » n'est offerte que là où cette cotisation existe. Dans les Territoires du Nord-Ouest et au Nunavut s'ajoute « Ne pas retenir l'impôt sur la paie du territoire ».</p>
+<h3>Particularités calculées</h3>
+<table>
+<tr><th>Province ou territoire</th><th>Ce que 60secPaie calcule en plus du barème</th></tr>
+<tr><td>Alberta</td><td>Le crédit supplémentaire K5P du guide T4127, sur la part des crédits personnels qui dépasse le seuil de la province.</td></tr>
+<tr><td>Colombie-Britannique</td><td>La réduction d'impôt pour bas revenus (facteur S), et le changement de taux du 1er juillet 2026 : une paie datée du 1er juillet ou après prend les nouveaux taux.</td></tr>
+<tr><td>Manitoba</td><td>Le montant personnel de base réduit graduellement entre 200 000 $ et 400 000 $ de revenu imposable, jusqu'à zéro.</td></tr>
+<tr><td>Terre-Neuve-et-Labrador et Île-du-Prince-Édouard</td><td>Le changement du 1er juillet 2026 (montant personnel de base à Terre-Neuve-et-Labrador, nouvelle tranche à l'Île-du-Prince-Édouard), appliqué selon la date de la paie.</td></tr>
+<tr><td>Yukon</td><td>Le crédit canadien pour emploi au palier territorial (K4P).</td></tr>
+<tr><td>Territoires du Nord-Ouest et Nunavut</td><td>L'impôt de 2 % sur la paie, retenu à l'employé sur toute sa rémunération imposable. Il paraît sur le talon sous « Impôt sur la paie » et se remet <strong>au gouvernement du territoire</strong>, pas au Receveur général ; il n'est pas compris dans la case 22 du T4.</td></tr>
+</table>
+<h3>Retenues et rapports</h3>
+<p>Dans <span class="chemin">Retenues</span>, seul le Receveur général est offert. Une carte « … : montants hors remises », au nom de la province, donne le cumul de l'année de ce qui se paie à part : la prime de la commission des accidents du travail, la cotisation santé de l'employeur là où il y en a une et, dans un territoire, l'impôt sur la paie retenu aux employés. La même carte paraît sous les feuillets T4, avec la rémunération assujettie. Le rapport « Gains assurables … » est celui de la CNESST, pour la commission de la province ; les écritures comptables prennent les libellés de la province.</p>
+<h3>Ce que 60secPaie ne calcule pas</h3>
+<ul>
+  <li>Les <strong>crédits d'impôt provinciaux pour fonds de travailleurs</strong> (Manitoba, Nouveau-Brunswick, Nouvelle-Écosse, Saskatchewan). Le crédit fédéral, lui, est calculé.</li>
+  <li>Le <strong>taux de la cotisation santé de l'employeur</strong> en Colombie-Britannique, au Manitoba et à Terre-Neuve-et-Labrador : il est à saisir, et le montant réel s'établit dans la déclaration annuelle à la province.</li>
+  <li>Les <strong>règles provinciales de vacances et de jours fériés</strong> au-delà du taux de vacances saisi : durée du congé, taux minimal selon l'ancienneté, calcul de l'indemnité d'un jour férié.</li>
+  <li>La remise de l'impôt sur la paie des territoires, de la cotisation santé et des primes d'accidents du travail : 60secPaie en donne les montants, sans en enregistrer le paiement.</li>
+</ul>
+<h3>D'où viennent les taux</h3>
+<p>Les taux de l'impôt des provinces et des territoires viennent du guide <strong>T4127</strong> de l'ARC, « Formules pour le calcul des retenues sur la paie » : la 122e édition, en vigueur le 1er janvier 2026, et la 123e édition, en vigueur le 1er juillet 2026. Chaque jeu de taux porte sa date d'entrée en vigueur, et une paie prend celui qui s'applique à sa date. Ils se tiennent à jour dans <strong>Sec60Admin</strong> (Paie › Taux de l'année), sans mise à jour du logiciel. Tant que les taux d'une province ne sont pas définis pour une année, la paie y est refusée : « Les taux de … ne sont pas encore définis dans le logiciel pour la province ». Comparez quelques paies avec le calculateur en ligne de l'ARC (PDOC).</p>
 
 <!-- ============================================================ -->
 <h2 id="cas-demarrage">Cas pratique › Premier démarrage</h2>

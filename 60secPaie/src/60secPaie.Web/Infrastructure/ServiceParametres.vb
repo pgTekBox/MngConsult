@@ -32,6 +32,7 @@ Public NotInheritable Class ServiceParametres
             Try
                 Dim r = Db.Ligne("EXEC paie.spParametresAnnee_Get @Annee = @a, @SeulementValide = 1", Db.P("@a", annee))
                 p = ParametresAnnee.DepuisLigne(r)
+                If p IsNot Nothing Then ChargerProvinces(p)
             Catch ex As Exception
                 ' La base ne répond pas ou la ligne est illisible : on le note, et le
                 ' moteur utilisera les valeurs du code s'il en a pour cette année.
@@ -43,6 +44,26 @@ Public NotInheritable Class ServiceParametres
             Return p
         End SyncLock
     End Function
+
+    ''' <summary>
+    ''' Les autres provinces et territoires de l'année (paie.ParametresProvince, script 06_provinces.sql).
+    ''' Table absente, vide ou illisible : la liste reste vide et le moteur prend les valeurs du code
+    ''' pour ces provinces — le Québec et l'Ontario de la même année restent ceux de la base.
+    ''' </summary>
+    Private Shared Sub ChargerProvinces(p As ParametresAnnee)
+        Try
+            Dim lignes = Db.Table("SELECT Province, EnVigueurLe, Tranches, MontantPersonnelBase, TauxCredits, Particularites, AccidentsMaxAssurable " &
+                                  "FROM paie.ParametresProvince WHERE Annee = @a", Db.P("@a", p.Annee))
+            Dim liste As New List(Of ParametresProvince)()
+            For Each ligne As DataRow In lignes.Rows
+                liste.Add(ParametresProvince.DepuisLigne(ligne))
+            Next
+            p.AutresProvinces = liste
+        Catch ex As Exception
+            System.Diagnostics.Trace.TraceError("Taux des provinces de l'année " & p.Annee.ToString() & " : " & ex.ToString())
+            p.AutresProvinces = New List(Of ParametresProvince)()
+        End Try
+    End Sub
 
     ''' <summary>Oublie ce qui est en cache : la prochaine paie relira la base.</summary>
     Public Shared Sub Oublier()

@@ -4,8 +4,8 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>60secPaie — la paie du Québec, faite comme il faut</title>
-    <meta name="description" content="Logiciel de paie pour les employeurs du Québec : retenues fédérales et provinciales, relevés T4 et RL-1, remises gouvernementales, dépôt direct et écritures au grand livre." />
+    <title>60secPaie — la paie partout au Canada, faite comme il faut</title>
+    <meta name="description" content="Logiciel de paie pour les employeurs du Québec, de l'Ontario et de toutes les provinces et tous les territoires du Canada : retenues fédérales et provinciales, feuillets T4 et RL-1, remises gouvernementales, dépôt direct et écritures au grand livre." />
     <link href="~/Content/site.css" rel="stylesheet" />
 </head>
 <body class="page-presentation">
@@ -27,7 +27,7 @@
         <div class="pres-largeur pres-heros-grille">
 
             <div class="pres-heros-texte">
-                <p class="pres-surtitre">Paie canadienne, règles du Québec</p>
+                <p class="pres-surtitre">Paie canadienne, règles de votre province</p>
                 <h1>Faire la paie ne devrait pas prendre l'après-midi.</h1>
                 <p class="pres-promesse">
                     Vous entrez les heures. 60secPaie calcule les retenues, produit les talons,
@@ -119,6 +119,10 @@
 
             <div class="pres-grille">
                 <article class="pres-carte">
+                    <h3>Partout au Canada</h3>
+                    <p>Les dix provinces et les trois territoires : chaque compagnie fait sa paie selon les règles de sa province.</p>
+                </article>
+                <article class="pres-carte">
                     <h3>Talons de paie</h3>
                     <p>Imprimables ou envoyés par courriel, dans la langue de l'employé.</p>
                 </article>
@@ -128,19 +132,19 @@
                 </article>
                 <article class="pres-carte">
                     <h3>Remises gouvernementales</h3>
-                    <p>Ce que vous devez à l'ARC et à Revenu Québec, avec l'historique des versements.</p>
+                    <p>Ce que vous devez à l'ARC, et à Revenu Québec pour une compagnie du Québec, avec l'historique des versements.</p>
                 </article>
                 <article class="pres-carte">
                     <h3>T4 et RL-1</h3>
-                    <p>Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé.</p>
+                    <p>Les feuillets de fin d'année, bâtis à partir des cumulatifs de l'employé : le T4 partout, le RL-1 en plus au Québec.</p>
                 </article>
                 <article class="pres-carte">
                     <h3>Écritures comptables</h3>
                     <p>Le grand livre reçoit la paie selon le plan comptable que vous avez choisi.</p>
                 </article>
                 <article class="pres-carte">
-                    <h3>CNESST</h3>
-                    <p>Les masses salariales assurables, par unité de classification.</p>
+                    <h3>Accidents du travail</h3>
+                    <p>Les masses salariales assurables pour la CNESST, la WSIB ou la commission de votre province.</p>
                 </article>
             </div>
         </div>
@@ -159,8 +163,9 @@
                 <ul class="pres-liste">
                     <li><strong>T4127</strong> — Formules pour le calcul informatisé des retenues sur la paie <span class="pres-source">Agence du revenu du Canada</span></li>
                     <li><strong>TP-1015.F</strong> — Table des retenues à la source d'impôt du Québec <span class="pres-source">Revenu Québec</span></li>
-                    <li><strong>RRQ, RQAP, AE, FSS</strong> — cotisations de l'employé et de l'employeur</li>
-                    <li><strong>CNESST</strong> — taux par unité, selon votre classification</li>
+                    <li><strong>Provinces et territoires</strong> — l'impôt de chacun selon le même guide T4127, éditions de janvier et de juillet</li>
+                    <li><strong>RRQ ou RPC, RQAP, AE, FSS</strong> — cotisations de l'employé et de l'employeur</li>
+                    <li><strong>CNESST, WSIB, WCB</strong> — taux par unité, selon votre classification</li>
                 </ul>
                 <p class="pres-avertissement">
                     Un logiciel ne remplace pas votre jugement : vérifiez toujours une paie avant

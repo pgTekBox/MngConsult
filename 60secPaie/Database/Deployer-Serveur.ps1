@@ -20,9 +20,21 @@ param(
 
 $ErrorActionPreference = 'Stop'
 
-[xml]$xml = Get-Content -LiteralPath $Config -Encoding UTF8
-$noeud = $xml.configuration.appSettings.add | Where-Object { $_.key -eq $Cle } | Select-Object -First 1
-if (-not $noeud) { throw "Clé '$Cle' introuvable dans $Config." }
+# Verifier et Schema visent la base que l'application 60secPaie utilise réellement : sa propre
+# chaîne de connexion (ConnectionStrings.config, entrée « Paie ») passe avant le web.config de MngConsul.
+$configPaie = Join-Path $PSScriptRoot '..\src\60secPaie.Web\ConnectionStrings.config'
+if ($Action -ne 'Configurer' -and -not $PSBoundParameters.ContainsKey('Config') -and (Test-Path -LiteralPath $configPaie)) {
+    [xml]$xmlPaie = Get-Content -LiteralPath $configPaie -Encoding UTF8
+    $noeudPaie = $xmlPaie.connectionStrings.add | Where-Object { $_.name -eq 'Paie' } | Select-Object -First 1
+    if (-not $noeudPaie) { throw "Entrée 'Paie' introuvable dans $configPaie." }
+    $noeud = New-Object psobject -Property @{ value = $noeudPaie.connectionString }
+    Write-Output "Connexion lue dans ConnectionStrings.config de 60secPaie."
+} else {
+    if (-not (Test-Path -LiteralPath $Config)) { throw "Fichier introuvable : $Config. Indiquez le bon web.config avec -Config." }
+    [xml]$xml = Get-Content -LiteralPath $Config -Encoding UTF8
+    $noeud = $xml.configuration.appSettings.add | Where-Object { $_.key -eq $Cle } | Select-Object -First 1
+    if (-not $noeud) { throw "Clé '$Cle' introuvable dans $Config." }
+}
 
 # On reconstruit une chaîne propre : seuls le serveur, la base et le compte sont repris.
 $origine = New-Object System.Data.SqlClient.SqlConnectionStringBuilder $noeud.value

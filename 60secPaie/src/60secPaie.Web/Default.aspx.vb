@@ -17,7 +17,8 @@ Public Class PageAccueil
             lnkBrouillon.NavigateUrl = "~/Paie/Calculer.aspx?lot=" & brouillon.Ent("Id").ToString()
         End If
 
-        litRetenues.Text = LigneSolde(ServiceRemise.Federal, "Fédéral") & LigneSolde(ServiceRemise.Quebec, "Revenu Québec")
+        litRetenues.Text = LigneSolde(ServiceRemise.Federal, "Fédéral") &
+                           If(ServiceRemise.QuebecConcerne(), LigneSolde(ServiceRemise.Quebec, "Revenu Québec"), "")
 
         Dim activites = Db.Table("SELECT TOP 8 * FROM paie.JournalActivite WHERE CompagnieId = @c ORDER BY Id DESC", Db.P("@c", Contexte.CompagnieId))
         rptActivites.DataSource = activites

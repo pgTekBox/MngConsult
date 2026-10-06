@@ -1,0 +1,12 @@
+Demarrage 2026-10-06 10:48:47,30 
+Connexion lue dans ConnectionStrings.config de 60secPaie.
+Serveur : 192.168.0.203   Base : MngConsul   Compte : MngConsul   (mot de passe lu dans le fichier, non affich‚)
+  SQL : Changed database context to 'MngConsul'.
+  SQL : Sch‚ma 60secPaie prˆt.
+  SQL : 02_parametres_annee.sql : termin‚.
+  SQL : 03_unites_cnesst.sql : termin‚.
+  SQL : 04_assistant_ia.sql : termin‚.
+  SQL : 05_ontario.sql : termin‚.
+  SQL : 06_provinces.sql : termin‚.
+Sch‚ma paie d‚ploy‚.
+Fin, code 0 

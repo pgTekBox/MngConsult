@@ -1,6 +1,6 @@
 # 60secPaie
 
-Application Web de calcul de la paie pour des employeurs du **Québec**, **multi-compagnie** et en **trois langues** (français, anglais, espagnol).
+Application Web de calcul de la paie pour des employeurs du **Québec** et de l'**Ontario**, **multi-compagnie** et en **trois langues** (français, anglais, espagnol).
 Les utilisateurs, les compagnies et les employés sont ceux de **MngConsul** (même base de données).
 ASP.NET Web Forms en **VB.NET** (.NET Framework 4.8), SQL Server, Visual Studio 2022/2026.
 Le modèle fonctionnel est Nubis (voir [docs/analyse-nubis.md](docs/analyse-nubis.md)).
@@ -11,7 +11,7 @@ Le modèle fonctionnel est Nubis (voir [docs/analyse-nubis.md](docs/analyse-nubi
 |---|---|
 | `src/60secPaie.Calcul` | Moteur de calcul, sans dépendance Web ni SQL : taux de l'année, catégories de paie, formules. |
 | `src/60secPaie.Web` | Application Web Forms : pages, accès SQL (ADO.NET paramétré), sécurité, assistant de paie. |
-| `src/60secPaie.Tests` | Tests MSTest : exemples chiffrés de Revenu Québec + cycle de paie complet sur LocalDB. |
+| `src/60secPaie.Tests` | Tests MSTest : exemples chiffrés de Revenu Québec, cas de l'Ontario (T4127) + cycle de paie complet sur LocalDB. |
 | `Database` | Script du schéma SQL Server (relançable), déploiement sur le serveur, répliques des tables de MngConsul pour les tests. |
 | `lib` | BCrypt.Net-Next 3.2.1 (vérification des mots de passe de MngConsul) ; le projet n'utilise pas NuGet. |
 | `docs` | Analyse de Nubis, guide TP-1015.F 2026 de Revenu Québec. |
@@ -132,6 +132,99 @@ poste (seule la base est sur le serveur), rien ne change. Le jour où l'applicat
 - **Le PDF** est écrit par `Infrastructure\PdfSimple.vb`, un générateur maison d'environ 250 lignes (Helvetica, WinAnsi, pas de
   dépendance ni de partie native). Il lit le même `DonneesTalon` que le rendu HTML : les deux ne peuvent pas diverger.
 
+## Paie de l'Ontario
+
+La **province d'emploi** est celle de la compagnie : Configuration → Paramètres de paie → « Province d'emploi » (Québec, Ontario ou une autre province ou un territoire — voir la section suivante).
+Une compagnie = une province ; un employeur présent dans les deux configure deux compagnies. La province est **figée sur chaque paie**
+(`paie.Paie.Province`) : une compagnie qui change de province garde un historique juste.
+
+| | Québec | Ontario |
+|---|---|---|
+| Impôt provincial | Impôt du Québec (TP-1015.F) | Impôt de l'Ontario (T4127) : barème, surtaxe (V1), contribution-santé (V2), réduction d'impôt (S) |
+| Impôt fédéral | Abattement de 16,5 %, crédit K2Q | Sans abattement, crédit K2 |
+| Régime de pension | RRQ + 2e cotisation supplémentaire | RPC + 2e cotisation supplémentaire (du mois suivant les 18 ans au mois des 70 ans) |
+| Assurance-emploi | Taux réduit du Québec | Taux ordinaire |
+| Congés parentaux | RQAP | — (compris dans l'AE) |
+| Cotisation santé de l'employeur | FSS | Impôt-santé des employeurs (ISE) |
+| Accidents du travail | CNESST, unités de classification | WSIB (CSPAAT), mêmes « unités » appelées classes |
+| Normes du travail | CNT | — |
+| Formulaires de l'employé | TD1 + TP-1015.3 / TP-1016 | TD1 + TD1ON (montant de la demande, personnes à charge, autres crédits) |
+| Remises | Receveur général + Revenu Québec | Receveur général seulement (impôt fédéral, impôt de l'Ontario, RPC, AE) |
+| Feuillets | T4 (cases 17, 17A, 55, 56) + Relevé 1 | T4 seulement (cases 16, 16A ; la case 22 réunit les deux impôts) |
+| Indemnité de vacances | Sur le salaire brut, paie de vacances comprise | Sur le salaire brut, sans la paie de vacances |
+
+**Aucune colonne de montant n'a été ajoutée.** Les colonnes gardent leur nom québécois et leur contenu suit la province de la paie :
+`ImpotQuebec` = impôt provincial, `RRQ` / `RRQ2` / `GainsRRQ` = régime de pension (RPC en Ontario), `EmployeurFSS` = FSS ou ISE,
+`EmployeurCNESST` = CNESST ou WSIB ; `RQAP` et `EmployeurCNT` valent 0 en Ontario. Les exemptions de la fiche suivent la même règle.
+`LibellesProvince` (projet Calcul) donne le nom à afficher ; `Contexte.Province` et `Contexte.Libelles`, la province de la compagnie courante.
+Le tableau complet est en tête de `Database\05_ontario.sql`.
+
+- **ISE** : le taux se lit dans le barème selon la masse salariale ontarienne estimée ; l'employeur admissible retranche l'exemption
+  (1 000 000 $). Le logiciel applique à chaque paie le **taux effectif** — taux × (masse – exemption) ÷ masse — pour répartir la charge
+  de l'année ; l'écart avec le réel se règle dans la déclaration annuelle (15 mars). Sous l'exemption, l'ISE est nul.
+- **WSIB** : taux de prime de la compagnie ou de la classe de l'employé, jusqu'au plafond des gains assurables de l'année.
+- L'ISE et la WSIB **ne font partie d'aucune remise** : ils se paient au ministère des Finances de l'Ontario et à la WSIB. Le logiciel
+  les calcule, les inscrit aux écritures comptables et en affiche le cumul (Retenues, Rapports).
+- **Gratification** quand la rémunération de l'année ne dépasse pas 5 000 $ : 15 % en tout (T4127), répartis 10 % au fédéral et 5 % à l'Ontario.
+
+### Simplifications et limites propres à l'Ontario
+
+- Une seule province par compagnie. Un employé payé dans les deux provinces la même année apparaît sur un seul feuillet, avec un avertissement :
+  l'ARC veut un T4 par province, la répartition est à faire à la main.
+- **Changement de province en cours d'année** : possible, mais à vérifier. Les paies confirmées et les cumulatifs de départ gardent leur province
+  (`paie.Paie.Province`, `paie.CumulatifDepart.Province`) ; le RRQ et le RPC cumulent leurs maximums, la CNESST et la WSIB ont chacune leur plafond
+  et leur rapport. Le taux et les unités de classification restent ceux saisis : ils sont à remplacer par ceux de la nouvelle province.
+  Les libellés des écritures comptables d'une période suivent la province actuelle de la compagnie.
+- Un élément de paie dont la catégorie n'est imposable qu'au Québec est refusé dans une paie de l'Ontario et n'y est pas recopié du gabarit de l'employé.
+- Crédit d'impôt de l'Ontario pour fonds de travailleurs (LCP) : non calculé. Le crédit fédéral (LCF) l'est.
+- RPC : pas de proratisation des maximums selon le nombre de mois ; l'employé qui choisit de cesser de cotiser (CPT30) se marque « Ne pas cotiser au RPC ».
+- Fréquences de remise accélérées de l'ARC : non gérées, comme au Québec.
+
+## Paie des autres provinces et territoires
+
+Le moteur calcule les **treize** provinces et territoires : après le Québec et l'Ontario, l'Alberta, la Colombie-Britannique,
+l'Île-du-Prince-Édouard, le Manitoba, le Nouveau-Brunswick, la Nouvelle-Écosse, le Nunavut, la Saskatchewan, Terre-Neuve-et-Labrador,
+les Territoires du Nord-Ouest et le Yukon. La liste « Province d'emploi » les offre tous (`Provinces.Gerees`).
+
+Tout ce qui est dit de l'Ontario vaut **hors Québec** : RPC, AE au taux ordinaire, impôt fédéral sans abattement, impôt de la province
+(T4127), tout remis au Receveur général, T4 seulement (case 10 = code de la province, cases 16 et 16A, case 22 = fédéral + provincial).
+Dans la couche web, `Contexte.HorsQuebec` / `PageBase.HorsQuebec` décide de ce comportement commun ; `EnOntario` ne sert plus qu'à ce qui
+est propre à l'Ontario (barème de l'ISE, personnes à charge du TD1ON). Les libellés viennent de `LibellesProvince` (`Contexte.Libelles`,
+`PageBase.Noms`) : « Impôt de l'Alberta », TD1AB, WCB, WorkSafeBC, WorkplaceNL…
+
+Mêmes colonnes que pour l'Ontario (tableau en tête de `Database\06_provinces.sql`), avec deux ajouts :
+
+- **Impôt sur la paie des Territoires du Nord-Ouest et du Nunavut** (2 %, retenu à l'employé) : il occupe `RQAP` et `GainsRQAP`, vides
+  hors Québec. `LibellesProvince.ARetenueTerritoriale` est vrai et `RetenueProvinciale` vaut « Impôt sur la paie » : partout où le RQAP
+  s'affiche (talon, tableau du lot, sommaire, écritures, cumulatifs de départ), la colonne paraît sous ce nom. Il se remet **au territoire** :
+  il n'entre dans aucune remise (ni `SqlDuFederal`, ni `SqlDuQuebec`), ni dans la case 22 du T4, ni dans les cases 55 et 56. La case
+  d'exemption du RQAP de la fiche (`ExemptRQAP`) devient « Ne pas retenir l'impôt sur la paie du territoire ».
+- **Cotisation santé de l'employeur** (`EmployeurFSS`) : elle n'existe qu'en Ontario, en Colombie-Britannique, au Manitoba et à
+  Terre-Neuve-et-Labrador (`LibellesProvince.ASante`). L'ISE de l'Ontario se calcule par barème ; pour les trois autres, l'employeur saisit
+  son **taux effectif** en % dans Paramètres de paie (`paie.Compagnie.TauxSanteEmployeur`, ajoutée par `06_provinces.sql`).
+  `ServicePaie.TauxSanteEmployeur` choisit : FSS, ISE, taux saisi, ou 0 là où il n'y a pas de telle cotisation.
+
+Ce que la page Retenues appelle « montants hors remises » (une carte par province, `ServiceRemise.HorsRemiseProvinces`) réunit ce qui
+se paie ailleurs qu'à l'ARC : prime de la commission des accidents du travail, cotisation santé de l'employeur, impôt sur la paie d'un territoire.
+Dans une remise fédérale, l'impôt provincial a une ligne par province (`IMPOT_ON`, `IMPOT_AB`…).
+
+Particularités calculées (T4127) : crédit supplémentaire K5P de l'Alberta ; réduction d'impôt pour bas revenus de la Colombie-Britannique ;
+montant personnel de base du Manitoba réduit entre 200 000 $ et 400 000 $ ; crédit canadien pour emploi du Yukon (K4P) ; changements
+du 1er juillet 2026 en Colombie-Britannique, à Terre-Neuve-et-Labrador et à l'Île-du-Prince-Édouard, appliqués selon la date de la paie.
+
+Les taux vivent dans `paie.ParametresProvince` (une ligne par province et par date d'entrée en vigueur) et, en secours, dans
+`ParametresProvince.Annee2026()`. Sources : guide **T4127**, 122e édition (1er janvier 2026) et 123e édition (1er juillet 2026).
+Ils se tiennent à jour dans Sec60Admin.
+
+### Ce qui n'est pas calculé
+
+- Crédits d'impôt provinciaux pour fonds de travailleurs (Manitoba, Nouveau-Brunswick, Nouvelle-Écosse, Saskatchewan).
+- Le taux de la cotisation santé de l'employeur en Colombie-Britannique, au Manitoba et à Terre-Neuve-et-Labrador : il est saisi.
+- Les règles provinciales de vacances et de jours fériés au-delà du taux de vacances saisi.
+- La remise de l'impôt sur la paie des territoires : 60secPaie en donne le cumul, sans enregistrer le paiement.
+- Les colonnes `TD1ONMontantDemande`, `TD1ONAutresCredits` et `TD1ONPersonnesACharge` de `paie.EmployePaie` gardent leur nom et servent au
+  formulaire de toute province hors Québec : après un changement de province, le montant de la demande est à revoir employé par employé.
+
 ## Taux gouvernementaux
 
 Les taux sont dans `src/60secPaie.Calcul/ParametresAnnee.vb`. **Seule l'année 2026 est définie.**
@@ -139,14 +232,24 @@ Pour ajouter une année : écrire une fonction `Annee20XX()` sur le modèle de `
 Tout le reste — `Pour`, `EstDisponible`, `DerniereAnneeConnue` — en découle, et le test `AnneesDisponibles_EstDisponibleEtPourSaccordent` vérifie qu'aucune des deux réponses ne diverge.
 Tout ce qui change d'une année à l'autre vit dans cette seule fonction, **y compris la formule du FSS** (taux du secteur public, plancher et plafond de masse salariale, constantes et coefficients). Sources :
 
-- ARC, guide **T4127** - Formules pour le calcul des retenues sur la paie ;
+- ARC, guide **T4127** - Formules pour le calcul des retenues sur la paie (fédéral, RPC, AE **et impôt de l'Ontario**) ;
 - Revenu Québec, guide **TP-1015.F** - Formules pour le calcul des retenues à la source et des cotisations.
+
+Les taux hors Québec et ceux de l'Ontario sont dans la même fonction (`RPC…`, `AE…HorsQuebec`, `On…`, `ISE…`, `WSIBMaxAssurable`) et dans
+des colonnes NULLables de `paie.ParametresAnnee` (script `05_ontario.sql`). Une année dont les taux de l'Ontario manquent reste valide
+pour le Québec ; le moteur **refuse** de calculer une paie de l'Ontario plutôt que d'y appliquer d'autres taux.
+**La console Sec60Admin ne saisit pas encore ces colonnes** : `spParametresAnnee_Save` les accepte en paramètres facultatifs et les laisse
+intactes quand ils sont absents ; `spParametresAnnee_Copier` les recopie. En attendant, les taux de l'Ontario d'une nouvelle année
+se mettent à jour par SQL ou dans `ParametresAnnee.vb`.
 
 Les tests `Annexe…` reproduisent les exemples chiffrés du TP-1015.F 2026 au cent près : les mettre à jour avec les exemples du nouveau guide.
 
 ### À valider avant d'utiliser en production
 
 - **CNESST / CNT** : le salaire maximum assurable (103 000 $) et le taux de la CNT (0,06 %) de 2026 sont à confirmer auprès de la CNESST.
+- **Ontario** : comparer quelques paies avec le calculateur en ligne de l'ARC (PDOC), province « Ontario » — les tests reproduisent les
+  formules du T4127, pas des résultats du PDOC. Confirmer le barème, l'exemption et le seuil de l'**ISE** (ministère des Finances de l'Ontario)
+  et le plafond des gains assurables de la **WSIB** (121 700 $ en 2026).
 - **Impôt fédéral** : comparer quelques paies avec le calculateur en ligne de l'ARC (PDOC). L'impôt du Québec peut être comparé avec WebRAS.
 - Faire une **paie en parallèle** avec Nubis pendant quelques périodes et comparer les talons.
 
@@ -173,11 +276,12 @@ msbuild 60secPaie.sln -restore
 vstest.console src\60secPaie.Tests\bin\Debug\net48\60secPaie.Tests.dll
 ```
 
+`OntarioTests` couvre le moteur pour l'Ontario : barèmes, surtaxe, contribution-santé, réduction d'impôt, RPC et ses maximums, gratifications, ISE, WSIB.
 Les tests d'intégration recréent la base jetable `60secPaie_Test` sur LocalDB, avec des répliques minimales des tables de MngConsul
-(`Database	ests _stubs_mngconsul.sql`) ; ils ne touchent jamais au serveur.
+(`Database\tests\00_stubs_mngconsul.sql`) ; ils ne touchent jamais au serveur.
 
 ## Phase 2 (à venir)
 
-Fait : multi-compagnie et comptes MngConsul, trois langues, paiement des retenues, feuillets T4 / Relevés 1 (montants), déclaration CNESST, écritures comptables, dépôt direct, talons par courriel.
-Reste : transmission XML des feuillets, rapport de vacances, portail employé sécurisé pour les talons, plusieurs unités de classification CNESST,
+Fait : multi-compagnie et comptes MngConsul, trois langues, paie de l'Ontario, paiement des retenues, feuillets T4 / Relevés 1 (montants), déclaration CNESST, écritures comptables, dépôt direct, talons par courriel.
+Reste : saisie des taux de l'Ontario dans Sec60Admin, province d'emploi par employé (plutôt que par compagnie), transmission XML des feuillets, rapport de vacances, portail employé sécurisé pour les talons, plusieurs unités de classification CNESST,
 commissions (méthode cumulative), pourboires, relevé d'emploi (RE).

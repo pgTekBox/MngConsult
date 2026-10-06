@@ -101,4 +101,50 @@ Partial Public Class wbfPaieAnneeEdit
     Protected WithEvents txtCNESSTMaxAssurable As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtCNTTaux As Global.System.Web.UI.WebControls.TextBox
     Protected WithEvents txtCNTMaxAssujetti As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnS1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnT1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnC1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnS2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnT2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnC2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnS3 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnT3 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnC3 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnS4 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnT4 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnC4 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnS5 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnT5 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnC5 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtFedTauxFixeForfaitaireHorsQuebec As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtAETauxHorsQuebec As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtAEMaxEmployeHorsQuebec As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCMaxGainsAdmissibles As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCExemption As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCTaux As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCTauxBase As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCMaxEmploye As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPCMaxBaseEmploye As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPC2MaxSupplementaire As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPC2Taux As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtRPC2MaxEmploye As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnMontantPersonnelBase As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnTauxCredits As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnSurtaxeSeuil1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnSurtaxeTaux1 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnSurtaxeSeuil2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnSurtaxeTaux2 As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnReductionBase As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnReductionParPersonne As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtISEExemption As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtISESeuilSansExemption As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtWSIBMaxAssurable As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtOnContributionSante As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents txtISETranches As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents rptProvinces As Global.System.Web.UI.WebControls.Repeater
+    Protected WithEvents litProvincesVide As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litAideParticularites As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents ddlPNouvelle As Global.System.Web.UI.WebControls.DropDownList
+    Protected WithEvents txtPNouvelleDate As Global.System.Web.UI.WebControls.TextBox
+    Protected WithEvents btnPAjouter As Global.System.Web.UI.WebControls.Button
 End Class

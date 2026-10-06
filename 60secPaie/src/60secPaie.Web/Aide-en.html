@@ -124,6 +124,8 @@ mark{background:#ffe89a}
   <a href="#categories">Pay categories</a>
   <a href="#parametres">2026 parameters</a>
   <a href="#formules">Formulas, deduction by deduction</a>
+  <a href="#ontario">Ontario payroll</a>
+  <a href="#provinces">Other provinces and territories</a>
   <a href="#arrondis">Rounding</a>
   <a href="#exemple">Worked example</a>
   <h2>Practical cases</h2>
@@ -148,11 +150,12 @@ mark{background:#ffe89a}
 
 <main id="haut">
 <h1>60secPaie Help</h1>
-<p class="lede">This guide describes every screen, every field, every rule and every message of 60secPaie, 60Sec's payroll service for Quebec. It follows the order of the menu. The words in quotation marks " " are those you see on screen. Use the filter at the top to find a topic, or <kbd>Ctrl</kbd>+<kbd>F</kbd> to search for a word across the whole page.</p>
+<p class="lede">This guide describes every screen, every field, every rule and every message of 60secPaie, 60Sec's payroll service for Quebec and Ontario. It follows the order of the menu. The words in quotation marks " " are those you see on screen. Use the filter at the top to find a topic, or <kbd>Ctrl</kbd>+<kbd>F</kbd> to search for a word across the whole page.</p>
 <div class="note">Guide version: September 2026. Rates in effect in the software: year 2026, based on the CRA's T4127 guide and Revenu Québec's TP-1015.F guide.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Overview</h2>
+<div class="note">This guide describes the screens in Quebec terms. For a company whose province of employment is <strong>Ontario</strong>, the same screens refer to Ontario tax, CPP, EHT and WSIB, with no QPIP and no RL-1: see <a href="#ontario">Ontario payroll</a>. For the other provinces and the territories, see <a href="#provinces">Payroll for the other provinces and territories</a>.</div>
 <p>60secPaie calculates the pay of employees who work in Quebec: federal tax, Québec tax, QPP, Employment Insurance, QPIP, and the employer contributions (QPP, EI, QPIP, HSF, CNESST, CNT). From confirmed pay runs, it produces the pay stubs, the direct deposit file, the amount of deductions to remit to both governments, the boxes of the T4 and RL-1 slips, the CNESST statement of wages and the journal entries.</p>
 <p>It shares its user accounts and its companies with 60Sec. Employees are also those of 60Sec: they can be created on either side, but their identity (name, address, position) is edited in 60Sec. 60secPaie adds everything that concerns payroll.</p>
 
@@ -266,6 +269,7 @@ mark{background:#ffe89a}
 <h3>"Payroll information"</h3>
 <table>
 <tr><th>Field</th><th>Role</th><th>Default value, validation</th></tr>
+<tr><td>"Province of employment" *</td><td>Province of the establishment where your employees report for work. It determines the deductions, the remittances and the slips.</td><td>Québec, Ontario or one of the eleven other provinces and territories. See <a href="#ontario">Ontario payroll</a> and <a href="#provinces">Payroll for the other provinces and territories</a>.</td></tr>
 <tr><td>"Default pay period" *</td><td>Frequency suggested in the wizard and applied to employees who have none of their own.</td><td>Biweekly (26). Choices: 52, 26, 24, 12, 1.</td></tr>
 <tr><td>"Default vacation rate (%)" *</td><td>Vacation pay rate for employees without a rate of their own.</td><td>4. Refused above 20: "The vacation rate seems too high."</td></tr>
 <tr><td>"Next cheque number"</td><td>First number assigned to pay runs by cheque and to remittances by cheque.</td><td>1. Blank = 1. Advances automatically.</td></tr>
@@ -880,6 +884,143 @@ mark{background:#ffe89a}
 <tr><td>Employment Insurance (1.30%)</td><td class="num">$780.00</td><td class="num">$780.00</td></tr>
 <tr><td>QPIP (0.43%)</td><td class="num">$258.00</td><td class="num">$257.92</td></tr>
 </table>
+
+<!-- ============================================================ -->
+<h2 id="ontario">Understanding the calculations › Ontario payroll</h2>
+<p>60secPaie also calculates payroll for employees who work in <strong>Ontario</strong>. The <strong>province of employment</strong> is the company's: it is chosen under <span class="chemin">Settings › Payroll settings</span>, field "Province of employment". It is the province of the establishment where employees report for work, not where they live. A company has one province; an employer present in both sets up two companies. The rest of this guide describes the screens in Québec terms: for an Ontario company, the same screens show the Ontario terms, as in the table below.</p>
+<h3>What changes</h3>
+<table>
+<tr><th></th><th>Québec</th><th>Ontario</th></tr>
+<tr><td>Provincial tax</td><td>"Québec tax" (guide TP-1015.F)</td><td>"Ontario tax" (guide T4127): tax table, surtax, Ontario Health Premium and tax reduction</td></tr>
+<tr><td>Federal tax</td><td>16.5% abatement</td><td>No abatement: it is higher than in Québec for the same salary</td></tr>
+<tr><td>Pension plan</td><td>"QPP"</td><td>"CPP" (Canada Pension Plan), with its 2nd additional contribution</td></tr>
+<tr><td>Employment insurance</td><td>Reduced Québec rate</td><td>Regular rate</td></tr>
+<tr><td>Parental leave</td><td>"QPIP"</td><td>No separate deduction: covered by employment insurance</td></tr>
+<tr><td>Employer health contribution</td><td>"HSF"</td><td>"EHT", the Employer Health Tax</td></tr>
+<tr><td>Workplace accidents</td><td>"CNESST", classification units</td><td>"WSIB", classes</td></tr>
+<tr><td>Labour standards</td><td>"CNT"</td><td>No contribution</td></tr>
+<tr><td>Employee forms</td><td>TD1 and TP-1015.3</td><td>TD1 and TD1ON</td></tr>
+<tr><td>Remittances</td><td>Receiver General and Revenu Québec</td><td>Receiver General only</td></tr>
+<tr><td>Slips</td><td>T4 and RL-1</td><td>T4 only</td></tr>
+</table>
+<h3>Settings › Payroll settings</h3>
+<table>
+<tr><th>Field</th><th>Purpose</th><th>Notes</th></tr>
+<tr><td>"Province of employment" *</td><td>"Québec", "Ontario" or another province or territory (see <a href="#provinces">Payroll for the other provinces and territories</a>). It determines the deductions, the remittances and the slips.</td><td>Fields specific to the other province disappear from the page. The province is kept on each pay: if it changes, "upcoming pay runs will be calculated under its rules; pay runs already confirmed keep theirs", and a pay run in preparation must be recalculated.</td></tr>
+<tr><td>"Estimated total payroll ($)"</td><td>In Ontario: total remuneration paid in Ontario during the year. Used to determine the EHT rate.</td><td>The actual rate is established in the annual EHT return.</td></tr>
+<tr><td>"Employer Health Tax (EHT) exemption"</td><td>"Eligible for the exemption" or "Not eligible (public sector, associated group already using it)".</td><td>The help shows "EHT rate applied to each pay: x.xx%".</td></tr>
+<tr><td>"WSIB premium rate ($ per $100 of insurable earnings)"</td><td>Applied to employees without a WSIB class.</td><td>"Shown on your premium rate statement." With several classes, see <span class="chemin">Settings › WSIB classes</span>.</td></tr>
+</table>
+<p>In Ontario, the page shows neither the Revenu Québec payment frequency, nor the RS number, nor the HSF sector, nor the CNT checkbox. The "CNESST units" sub-menu is called "WSIB classes": same screen, same rules.</p>
+<h3>Employees › Record</h3>
+<p>The "Québec taxation" block is replaced by "Ontario taxation":</p>
+<table>
+<tr><th>Field</th><th>Purpose</th></tr>
+<tr><td>"TD1ON - Total claim amount ($)"</td><td>Total claim from form TD1ON. Blank = Ontario basic personal amount ($12,989 in 2026).</td></tr>
+<tr><td>"Dependants for the Ontario tax reduction"</td><td>Number of children under 19 and of dependants with a disability ($554 each in 2026). Blank if the employee does not claim any.</td></tr>
+<tr><td>"Other authorized Ontario tax credits ($)"</td><td>Annual credits authorized by the CRA.</td></tr>
+</table>
+<p>Additional tax per pay, the deduction for a prescribed zone and T1213 deductions stay under "Federal taxation": outside Québec, they apply to both taxes. The exemptions are called "Do not withhold Ontario tax", "Do not contribute to the CPP", "Exclude from the employer health contribution (EHT)" and "Exclude from workers' compensation coverage (WSIB)"; the QPIP one is not offered. Under <span class="chemin">Opening balances</span>, the fields become "Ontario tax withheld ($)", "CPP pensionable earnings ($)", "CPP contribution (base + 1st additional) ($)", "2nd additional CPP contribution ($)" and "WSIB insurable earnings ($)".</p>
+<h3>2026 parameters for Ontario</h3>
+<table>
+<tr><th>Parameter</th><th>2026 value</th></tr>
+<tr><td>Ontario tax, brackets</td><td>5.05% up to $53,891; 9.15% up to $107,785; 11.16% up to $150,000; 12.16% up to $220,000; 13.16% above</td></tr>
+<tr><td>Ontario basic personal amount</td><td>$12,989</td></tr>
+<tr><td>Surtax</td><td>20% of basic tax above $5,818, plus 36% above $7,446</td></tr>
+<tr><td>Ontario Health Premium</td><td>$0 up to $20,000 of taxable income; up to $300, $450, $600, $750 then $900 a year depending on income</td></tr>
+<tr><td>Tax reduction</td><td>Basic amount $300, plus $554 per dependant</td></tr>
+<tr><td>CPP</td><td>5.95% of earnings above the $3,500 exemption, maximum earnings $74,600, maximum contribution $4,230.45</td></tr>
+<tr><td>CPP, 2nd additional contribution</td><td>4% of earnings between $74,600 and $85,000, maximum $416</td></tr>
+<tr><td>Employment insurance</td><td>1.63% up to $68,900 of insurable earnings, maximum $1,123.07; employer: 1.4 times</td></tr>
+<tr><td>EHT</td><td>From 0.98% (payroll of $200,000 or less) to 1.95% (over $400,000); $1,000,000 exemption for an eligible employer whose payroll does not exceed $5,000,000</td></tr>
+<tr><td>WSIB</td><td>Insurable earnings ceiling: $121,700 per employee</td></tr>
+</table>
+<h3>Formulas</h3>
+<ul>
+  <li><strong>CPP</strong>: 5.95% × (earnings for the period – $3,500 ÷ number of periods), up to the year's maximum. The employer pays the same amount. Contributions run from the first pay dated in the month after the 18th birthday to the last pay dated in the month of the 70th birthday.</li>
+  <li><strong>Employment insurance</strong>: 1.63% of insurable earnings, up to the year's maximum.</li>
+  <li><strong>Annual taxable income</strong>: the same for both taxes — remuneration for the period less the deductions that reduce tax (RPP, RRSP, union dues) and the enhanced part of the CPP contribution, multiplied by the number of periods.</li>
+  <li><strong>Federal tax</strong>: federal table less credits (TD1 claim amount, CPP and EI contributions, Canada employment amount), with no abatement, divided by the number of periods.</li>
+  <li><strong>Ontario tax</strong>: Ontario table less credits (TD1ON claim amount, CPP and EI contributions), plus the surtax, plus the health premium, less the tax reduction; all divided by the number of periods. The health premium is part of the Ontario tax withheld: it has no separate line on the pay stub.</li>
+  <li><strong>Bonus and retroactive pay</strong>: the tax is the difference between the year's tax with and without the payment. When the year's remuneration does not exceed $5,000, the deduction is 15% in all: 10% federal and 5% Ontario.</li>
+  <li><strong>EHT</strong>: remuneration for the pay × effective rate. The effective rate is the table rate spread over the whole payroll once the exemption is subtracted; it is zero when the estimated payroll does not exceed the exemption.</li>
+  <li><strong>WSIB</strong>: insurable earnings × rate of the employee's class (otherwise the company's) ÷ 100, up to the year's ceiling.</li>
+  <li><strong>Vacation</strong>: vacation pay accrues on gross wages, excluding vacation pay itself.</li>
+</ul>
+<div class="note">The detail of each pay (step 3 of the wizard, "Details and calculation check") shows the intermediate values: PI, F5, A, K1, K2, T1 for federal; T4, V1 (surtax), V2 (health premium), S (reduction) and T2 for Ontario.</div>
+<h3>Remittances</h3>
+<p>In Ontario, everything is remitted to the <strong>Receiver General for Canada</strong>, in a single payment: "Federal tax", "Ontario tax", "CPP - employee contributions", "CPP - employer contribution", "Employment insurance - employee premiums" and "Employment insurance - employer premium". There is no remittance to Revenu Québec: that choice is not offered. An "Ontario: amounts outside the remittances" card gives the year-to-date Employer Health Tax and WSIB premium: "These amounts are paid separately, to the provincial or territorial administration and to its workers' compensation board. They are not part of the remittances to the Receiver General."</p>
+<h3>Reports</h3>
+<ul>
+  <li><strong>"T4 slips"</strong>: boxes 16 and 16A for CPP (instead of 17 and 17A), box 10 "ON", box 22 combining federal tax and Ontario tax. No boxes 55 and 56, no RL-1, no RL-1 summary. An "Ontario: amounts outside the remittances" card gives the remuneration subject to EHT and the calculated amounts.</li>
+  <li><strong>"WSIB insurable earnings"</strong>: the CNESST report, for the WSIB — gross wages, amount over the ceiling, insurable earnings and premium by employee, by class and by month.</li>
+  <li><strong>"Journal entries"</strong>: same accounts, Ontario labels ("CPP payable", "EHT payable", "WSIB payable"…). EHT and WSIB are recorded as expenses and as amounts payable.</li>
+</ul>
+<h3>Limits</h3>
+<ul>
+  <li>An employee paid in Québec and in Ontario in the same year appears on a single slip, with a warning: the CRA requires one T4 per province, and the split must be done by hand.</li>
+  <li>The Ontario labour-sponsored fund tax credit is not calculated.</li>
+  <li>The employer's share of a private health insurance plan is a taxable benefit in Québec only: it cannot be added to an Ontario pay ("This benefit is taxable in Québec only: it cannot be added to a pay of another province.") and is not copied from the employee's recurring items.</li>
+  <li>EHT rates and the WSIB ceiling should be confirmed with the Ontario Ministry of Finance and the WSIB. Compare a few pays with the CRA's online calculator (PDOC).</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="provinces">Understanding the calculations › Payroll for the other provinces and territories</h2>
+<p>60secPaie calculates payroll for all <strong>thirteen provinces and territories</strong> of Canada. The "Province of employment" field under <span class="chemin">Settings › Payroll settings</span> offers them all: Québec, Ontario, Alberta, British Columbia, Prince Edward Island, Manitoba, New Brunswick, Nova Scotia, Nunavut, Saskatchewan, Newfoundland and Labrador, Northwest Territories and Yukon. As for Ontario, it is the province of the establishment where employees report for work; a company has one province, and each pay keeps its own. This section completes <a href="#ontario">Ontario payroll</a>: everything said there about the screens applies here, in the terms of the chosen province.</p>
+<h3>What is common outside Québec</h3>
+<ul>
+  <li><strong>CPP</strong> instead of QPP, with its second additional contribution; the employer pays the same amount.</li>
+  <li><strong>Employment insurance at the regular rate</strong>; there is no QPIP and no labour standards contribution (CNT).</li>
+  <li><strong>Federal tax without the abatement</strong>, and the tax of the province or territory calculated under the CRA's T4127 guide, on the same taxable income.</li>
+  <li><strong>Everything is remitted to the Receiver General for Canada</strong>, in a single payment: federal tax, provincial tax, CPP and employment insurance. There is no remittance to Revenu Québec.</li>
+  <li><strong>T4 only</strong>: box 10 = province code, boxes 16 and 16A for CPP, box 22 combining federal tax and provincial tax. No RL-1, no RL-1 summary.</li>
+  <li>Vacation pay accrues on gross wages, excluding vacation pay itself, at the vacation rate entered.</li>
+</ul>
+<h3>The terms of each province</h3>
+<table>
+<tr><th>Province or territory</th><th>Tax and credit form</th><th>Employer health contribution</th><th>Workers' compensation</th></tr>
+<tr><td>Alberta (AB)</td><td>"Alberta tax", TD1AB</td><td>None</td><td>"WCB"</td></tr>
+<tr><td>British Columbia (BC)</td><td>"British Columbia tax", TD1BC</td><td>"EHT", the Employer Health Tax: rate to be entered</td><td>"WorkSafeBC"</td></tr>
+<tr><td>Prince Edward Island (PE)</td><td>"Prince Edward Island tax", TD1PE</td><td>None</td><td>"WCB"</td></tr>
+<tr><td>Manitoba (MB)</td><td>"Manitoba tax", TD1MB</td><td>"HE Levy", the Health and Post Secondary Education Tax Levy: rate to be entered</td><td>"WCB"</td></tr>
+<tr><td>New Brunswick (NB)</td><td>"New Brunswick tax", TD1NB</td><td>None</td><td>"WorkSafeNB"</td></tr>
+<tr><td>Nova Scotia (NS)</td><td>"Nova Scotia tax", TD1NS</td><td>None</td><td>"WCB"</td></tr>
+<tr><td>Nunavut (NU)</td><td>"Nunavut tax", TD1NU; plus the 2% "Payroll tax"</td><td>None</td><td>"WSCC"</td></tr>
+<tr><td>Saskatchewan (SK)</td><td>"Saskatchewan tax", TD1SK</td><td>None</td><td>"WCB"</td></tr>
+<tr><td>Newfoundland and Labrador (NL)</td><td>"Newfoundland and Labrador tax", TD1NL</td><td>"HAPSET", the Health and Post Secondary Education Tax: rate to be entered</td><td>"WorkplaceNL"</td></tr>
+<tr><td>Northwest Territories (NT)</td><td>"Northwest Territories tax", TD1NT; plus the 2% "Payroll tax"</td><td>None</td><td>"WSCC"</td></tr>
+<tr><td>Yukon (YT)</td><td>"Yukon tax", TD1YT</td><td>None</td><td>"WSCB"</td></tr>
+</table>
+<h3>Settings › Payroll settings</h3>
+<table>
+<tr><th>Field</th><th>Purpose</th><th>Notes</th></tr>
+<tr><td>"Effective rate: … (%)"</td><td>British Columbia, Manitoba and Newfoundland and Labrador only: the employer health contribution rate, as a percentage of remuneration, applied to each pay.</td><td>60secPaie does not calculate it: "It depends on your payroll and on the province's exemption". Obtain it from the provincial administration; leave 0 below the exemption threshold. In provinces with no such contribution, the field is not shown and nothing is calculated.</td></tr>
+<tr><td>"… premium rate ($ per $100 of insurable earnings)"</td><td>The rate of the province's workers' compensation board (WCB, WorkSafeBC, WorkplaceNL, WSCC…), applied to employees without a class.</td><td>With several classes, the "… classes" submenu replaces "CNESST units": same screen, same rules.</td></tr>
+</table>
+<p>The page shows neither the payroll estimate, nor the Revenu Québec remittance frequency, nor the RS number, nor the HSF sector, nor the CNT checkbox: they are not used outside Québec and Ontario.</p>
+<h3>Employees › Record</h3>
+<p>The "Québec taxation" block is replaced by that of the province ("Alberta taxation", "Manitoba taxation"…), with the total claim amount from the province's form (TD1AB, TD1BC…) and the other authorized tax credits; when blank, the province's basic personal amount applies. The dependants field exists in Ontario only. The exemptions take the name of the province: "Do not withhold Alberta tax", "Do not contribute to the CPP", "Exclude from workers' compensation coverage (WCB)"; "Exclude from the employer health contribution (…)" is offered only where that contribution exists. In the Northwest Territories and Nunavut, "Do not withhold the territorial payroll tax" is added.</p>
+<h3>Calculated particularities</h3>
+<table>
+<tr><th>Province or territory</th><th>What 60secPaie calculates beyond the tax table</th></tr>
+<tr><td>Alberta</td><td>The supplemental credit K5P of the T4127 guide, on the part of the personal credits above the province's threshold.</td></tr>
+<tr><td>British Columbia</td><td>The tax reduction for low incomes (factor S), and the rate change of July 1, 2026: a pay dated July 1 or later uses the new rates.</td></tr>
+<tr><td>Manitoba</td><td>The basic personal amount, reduced gradually between $200,000 and $400,000 of taxable income, down to zero.</td></tr>
+<tr><td>Newfoundland and Labrador and Prince Edward Island</td><td>The change of July 1, 2026 (basic personal amount in Newfoundland and Labrador, new bracket in Prince Edward Island), applied according to the pay date.</td></tr>
+<tr><td>Yukon</td><td>The Canada employment credit at the territorial level (K4P).</td></tr>
+<tr><td>Northwest Territories and Nunavut</td><td>The 2% payroll tax, withheld from the employee on all taxable remuneration. It appears on the pay stub as "Payroll tax" and is remitted <strong>to the territorial government</strong>, not to the Receiver General; it is not included in box 22 of the T4.</td></tr>
+</table>
+<h3>Remittances and reports</h3>
+<p>Under <span class="chemin">Remittances</span>, only the Receiver General is offered. A "…: amounts outside the remittances" card, named after the province, gives the year-to-date amounts that are paid separately: the workers' compensation board premium, the employer health contribution where there is one and, in a territory, the payroll tax withheld from employees. The same card appears under the T4 slips, with the remuneration subject to each. The "… insurable earnings" report is the CNESST report, for the province's board; the accounting entries take the province's labels.</p>
+<h3>What 60secPaie does not calculate</h3>
+<ul>
+  <li>The <strong>provincial labour-sponsored fund tax credits</strong> (Manitoba, New Brunswick, Nova Scotia, Saskatchewan). The federal credit is calculated.</li>
+  <li>The <strong>employer health contribution rate</strong> in British Columbia, Manitoba and Newfoundland and Labrador: it must be entered, and the actual amount is established in the annual return to the province.</li>
+  <li>The <strong>provincial vacation and statutory holiday rules</strong> beyond the vacation rate entered: length of leave, minimum rate by seniority, calculation of statutory holiday pay.</li>
+  <li>The remittance of the territorial payroll tax, of the health contribution and of workers' compensation premiums: 60secPaie gives the amounts, without recording their payment.</li>
+</ul>
+<h3>Where the rates come from</h3>
+<p>The provincial and territorial tax rates come from the CRA's <strong>T4127</strong> guide, "Payroll Deductions Formulas": the 122nd edition, effective January 1, 2026, and the 123rd edition, effective July 1, 2026. Each set of rates carries its effective date, and a pay uses the one that applies on its date. They are kept up to date in <strong>Sec60Admin</strong> (Payroll › Rates for the year), with no software update. As long as a province's rates are not defined for a year, payroll is refused there: "The … rates are not yet defined in the software for the province". Compare a few pays with the CRA's online calculator (PDOC).</p>
 
 <!-- ============================================================ -->
 <h2 id="cas-demarrage">Practical case › First start-up</h2>
