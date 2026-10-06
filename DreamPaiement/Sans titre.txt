@@ -1,0 +1,42 @@
+
+Quelques qustion:
+
+Supportez-vous Interac Request for Money (encaissement), ou seulement les payouts Interac ?
+Supportez-vous l'EFT débit avec PAD pour prélever un client ?
+Modèle de comptes pour une plateforme SaaS : chaque abonné a-t-il son propre compte/source de financement (style « connected account »), ou la plateforme finance-t-elle un compte commun ?
+Les fonds transitent-ils par un compte de règlement Dream, et la plateforme intégratrice détient-elle jamais les fonds ? (déterminant pour ton statut FINTRAC)
+
+
+Use case
+
+Interac Request for Money (probablement pas encore supporté,
+Mon client Paysagement inc. (notre abonné dans notre application) veut faire une demande de fonds (d'argent). Paysagement est inscrit au dépôt automatique. La demande de fonds est faite à Luc Besson (client de Paysagement inc.). À l'aide des API de Dream Paiement, notre application fait le Interac Request for Money / Demande de fonds à Luc Besson. Luc Besson reçoit un courriel (ou SMS) avec le Interac Request. Luc Besson complète la demande avec sa banque ABC et l'argent est par la suite déposé directement dans le compte de Paysagement inc.
+ 
+
+
+
+Interac Send Money
+Mon client Paysagement inc. (notre abonné dans notre application) veut envoyer de l'argent à un fournisseur, Terre Cuite inc. Payer une facture par exemple.
+Avec notre application, il choisit une facture fournisseur (Terre Cuite inc.) et paie via Interac e-Transfer. Terre Cuite inc. reçoit un courriel (ou dépôt automatique) et fait la réception du paiement avec sa banque ABC. L'argent est transféré directement depuis le compte bancaire de Paysagement inc. et envoyé par Interac e-Transfer directement dans le compte de Terre Cuite inc.
+
+
+
+EFT (Electronic Funds Transfer) 
+Sens du flux : EFT credit
+Mon client Paysagement inc. (notre abonné dans notre application) veut envoyer de l'argent à un fournisseur, Terre Cuite inc. Dans notre application, nous avons toutes les infos bancaires de Terre Cuite inc. (institution/transit/compte). Paysagement inc. choisit de payer Terre Cuite inc. via l'API de Dream Paiement.
+La transaction est mise en lot chez Dream Paiement. L'argent est crédité du compte de Paysagement inc. vers Terre Cuite inc. Le temps de traitement est de 1 à 5 jours. 
+
+
+EFT (Electronic Funds Transfer) 
+Sens du flux : EFT debit 
+Mon client Paysagement inc. (notre abonné dans notre application) veut débiter de l'argent d'un compte client, Luc Besson. Dans notre application, nous avons toutes les infos bancaires de Luc Besson (institution/transit/compte). Paysagement inc. choisit de débiter le compte de Luc Besson via l'API de Dream Paiement.
+La transaction est mise en lot chez Dream Paiement. L'argent est débité du compte de Luc Besson vers Paysagement inc. Le temps de traitement est de 1 à 5 jours.   
+Pour débiter le compte de Luc Besson, il faut d'abord une autorisation de débit préautorisé (PAD / DPA) — c'est une obligation légale au Canada (règle H1 de Paiements Canada). 
+
+
+Aucun mouvement d'argent ne passe par le compte bancaire (de 60sec) de notre application ; nous ne faisons qu'émettre des ordres via les API de Dream Paiement.  
+
+
+https://www.interac.ca/en/content/news/dream-payments-launches-interac-e-transfer-payouts-across-canada/
+https://www.electronicpaymentsinternational.com/news/dream-payments-interac-e-transfer-canada/
+
