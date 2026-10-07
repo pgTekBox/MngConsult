@@ -32,7 +32,7 @@ Public Class CyclePaieIntegrationTests
         ' de USE : ils s'exécutent dans la base d'essai. 04 (assistant IA) écrit dans une table de MngConsul qui n'a
         ' pas de réplique ici : il n'est pas rejoué.
         Dim baseEssai = Maitre.Replace("Initial Catalog=master", "Initial Catalog=" & BaseTest)
-        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql", "07_procedures.sql"}
+        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql", "07_procedures.sql", "08_feuillets.sql"}
             ExecuterLots(baseEssai, File.ReadAllText(Path.Combine(racine, "Database", script)))
         Next
     End Sub
@@ -236,6 +236,23 @@ Public Class CyclePaieIntegrationTests
         For Each ancien In Directory.GetFiles(dossier, "*.eml") : File.Delete(ancien) : Next
         Assert.AreEqual(1, ServiceCourriel.EnvoyerTalons(lot1, True).Envoyes)
         StringAssert.Contains(File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single()), "Subject: Pay stub for ")
+        ' --- Feuillets T4 et Relevé 1 : PDF (copie de l'employé, copie de l'employeur) et courriel
+        Dim compagnieRow = SqlTest.Ligne("SELECT * FROM paie.Compagnie WHERE Id = @c", Db.P("@c", compagnieId))
+        Dim feuilletAlice = ServiceFeuillets.Preparer(2026).Single(Function(x) x.Employe.Ent("Id") = horaire)
+        Dim pdfEmployeur = FeuilletPdf.Produire(feuilletAlice, compagnieRow, 2026, CopieFeuillet.Employeur)
+        Assert.AreEqual("%PDF-1.4", Text.Encoding.ASCII.GetString(pdfEmployeur, 0, 8), "Le feuillet est un vrai PDF.")
+        StringAssert.Contains(Text.Encoding.GetEncoding(1252).GetString(pdfEmployeur), "Copie de l'employeur")
+        Assert.IsTrue(FeuilletPdf.ProduireTous(ServiceFeuillets.Preparer(2026), compagnieRow, 2026, CopieFeuillet.Employeur).Length > pdfEmployeur.Length, "Tous les feuillets dans un seul document.")
+        For Each ancien In Directory.GetFiles(dossier, "*.eml") : File.Delete(ancien) : Next
+        Dim bilanFeuillets = ServiceCourriel.EnvoyerFeuillets(2026, False)
+        Assert.AreEqual(1, bilanFeuillets.Envoyes, "Seule Alice reçoit son talon par courriel : elle seule reçoit ses feuillets.")
+        Assert.AreEqual(0, bilanFeuillets.Erreurs.Count)
+        Dim courrielFeuillets = File.ReadAllText(Directory.GetFiles(dossier, "*.eml").Single())
+        StringAssert.Contains(courrielFeuillets, "Subject: T4 and RL-1 slips for 2026", "Les feuillets partent dans la langue de l'employé.")
+        StringAssert.Contains(courrielFeuillets, "application/pdf")
+        Assert.AreEqual("%PDF-1.4", DebutDuPdf(courrielFeuillets))
+        Assert.AreEqual(1, ServiceCourriel.EnvoyerFeuillets(2026, False).DejaEnvoyes, "Un feuillet déjà envoyé n'est pas renvoyé sans le demander.")
+        Assert.AreEqual(1, ServiceCourriel.EnvoyerFeuillets(2026, True, horaire).Envoyes, "Un seul employé, en le demandant.")
         Assert.AreEqual("fr", I18n.Langue)
         I18n.CheminFichier = Nothing
         Directory.Delete(dossier, True)
@@ -294,7 +311,7 @@ Public Class CyclePaieIntegrationTests
         Assert.IsTrue(ServicePaie.PeutAnnuler(lot1))
 
         ' 2 confirmations, 1 dépôt direct, 2 envois de talons (français, puis anglais), 2 remises, 2 annulations de remise, 1 annulation de paie
-        Assert.AreEqual(10, SqlTest.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))
+        Assert.AreEqual(12, SqlTest.ScalaireEntier("SELECT COUNT(*) FROM paie.JournalActivite"))  ' + 2 envois de feuillets
     End Sub
 
     <TestMethod>

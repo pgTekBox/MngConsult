@@ -15,6 +15,19 @@
         </div>
     </div>
 
+    <asp:Panel ID="pnlFeuillets" runat="server" CssClass="carte sans-impression">
+        <h2>Feuillets en PDF et par courriel</h2>
+        <p>La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé).
+           La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne
+           permet aussi de le télécharger ou de l'envoyer un à un.</p>
+        <div class="actions">
+            <asp:Button ID="btnPdfTous" runat="server" Text="Télécharger tous les feuillets (PDF, copie de l'employeur)" CssClass="secondaire" />
+            <asp:Button ID="btnCourriels" runat="server" Text="Envoyer les feuillets par courriel" CssClass="secondaire"
+                OnClientClick="return confirmerPuis(this, 'Envoyer les feuillets T4 et Relevé 1 par courriel aux employés qui reçoivent leur talon par courriel ?');" />
+            <asp:CheckBox ID="chkRenvoyer" runat="server" Text="renvoyer aussi les feuillets déjà envoyés" />
+        </div>
+    </asp:Panel>
+
     <asp:Panel ID="pnlContenu" runat="server">
         <% If AvecQuebec Then %>
         <div class="avertissement sans-impression">

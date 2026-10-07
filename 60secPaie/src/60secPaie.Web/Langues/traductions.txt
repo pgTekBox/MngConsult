@@ -2398,10 +2398,6 @@ fr: Retour aux feuillets
 en: Back to slips
 es: Volver a los comprobantes
 
-fr: Feuillets {#0}
-en: Slips {#0}
-es: Comprobantes {#0}
-
 fr: N° de compte RP : {0}
 en: RP account no.: {0}
 es: N.º de cuenta RP: {0}
@@ -4434,3 +4430,161 @@ es: — el impuesto de cada uno según la misma guía T4127, ediciones de enero 
 fr: RRQ ou RPC, RQAP, AE, FSS
 en: QPP or CPP, QPIP, EI, HSF
 es: RRQ o RPC, RQAP, AE, FSS
+
+# ---------- Feuillets T4 et Relevé 1 en PDF et par courriel ----------
+
+fr: Feuillets T4 et Relevé 1 de {#0}
+en: T4 and RL-1 slips for {#0}
+es: Comprobantes T4 y Relevé 1 de {#0}
+
+fr: Feuillet T4 de {#0}
+en: T4 slip for {#0}
+es: Comprobante T4 de {#0}
+
+fr: Feuillets
+en: Slips
+es: Comprobantes
+
+fr: employeur
+en: employer
+es: empleador
+
+fr: Année d'imposition {#0}
+en: Tax year {#0}
+es: Año fiscal {#0}
+
+fr: Copie de l'employé
+en: Employee copy
+es: Copia del empleado
+
+fr: Copie de l'employeur
+en: Employer copy
+es: Copia del empleador
+
+fr: Case
+en: Box
+es: Casilla
+
+fr: Ces montants incluent des cumulatifs de départ saisis à la main : les gains assurables ont été estimés à partir de la rémunération brute.
+en: These amounts include opening balances entered by hand: insurable earnings were estimated from gross pay.
+es: Estos importes incluyen acumulados iniciales ingresados a mano: las ganancias asegurables se estimaron a partir de la remuneración bruta.
+
+fr: Payé dans plus d'une province ({0}) : l'ARC demande un T4 par province d'emploi, les montants ci-dessus les réunissent.
+en: Paid in more than one province ({0}): the CRA requires one T4 per province of employment; the amounts above combine them.
+es: Pagado en más de una provincia ({0}): la CRA exige un T4 por provincia de empleo; los importes anteriores los reúnen.
+
+fr: Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le feuillet transmis à l'ARC.
+en: Amounts calculated by 60secPaie from confirmed pay runs. This document does not replace the slip filed with the CRA.
+es: Importes calculados por 60secPaie a partir de las nóminas confirmadas. Este documento no reemplaza el comprobante presentado a la CRA.
+
+fr: Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le relevé transmis à Revenu Québec.
+en: Amounts calculated by 60secPaie from confirmed pay runs. This document does not replace the slip filed with Revenu Québec.
+es: Importes calculados por 60secPaie a partir de las nóminas confirmadas. Este documento no reemplaza el relevé presentado a Revenu Québec.
+
+fr: Feuillets en PDF et par courriel
+en: Slips as PDF and by email
+es: Comprobantes en PDF y por correo electrónico
+
+fr: La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé). La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne permet aussi de le télécharger ou de l'envoyer un à un.
+en: The employer copy gathers every slip of the year in one document, with full SINs (the download is logged). The employee copy goes out by email, as a PDF, to the employees who receive their pay stub by email; the "Feuillet" link on each row also lets you download or send them one at a time.
+es: La copia del empleador reúne todos los comprobantes del año en un documento, con el NAS completo (descarga registrada). La copia del empleado sale por correo electrónico, en PDF, a los empleados que reciben su talón por correo; el enlace « Feuillet » de cada línea permite también descargarlos o enviarlos uno a uno.
+
+fr: Télécharger tous les feuillets (PDF, copie de l'employeur)
+en: Download all slips (PDF, employer copy)
+es: Descargar todos los comprobantes (PDF, copia del empleador)
+
+fr: Envoyer les feuillets par courriel
+en: Email the slips
+es: Enviar los comprobantes por correo electrónico
+
+fr: Envoyer les feuillets T4 et Relevé 1 par courriel aux employés qui reçoivent leur talon par courriel ?
+en: Email the T4 and RL-1 slips to the employees who receive their pay stub by email?
+es: ¿Enviar los comprobantes T4 y Relevé 1 por correo electrónico a los empleados que reciben su talón por correo?
+
+fr: renvoyer aussi les feuillets déjà envoyés
+en: also resend slips already sent
+es: reenviar también los comprobantes ya enviados
+
+fr: envoyé par courriel le {#0}
+en: emailed on {#0}
+es: enviado por correo electrónico el {#0}
+
+fr: Aucun feuillet pour cette année.
+en: No slip for this year.
+es: Ningún comprobante para este año.
+
+fr: {#0} feuillet(s) envoyé(s).
+en: {#0} slip(s) sent.
+es: {#0} comprobante(s) enviado(s).
+
+fr: {#0} feuillet(s) envoyé(s), {#1} déjà envoyé(s).
+en: {#0} slip(s) sent, {#1} already sent.
+es: {#0} comprobante(s) enviado(s), {#1} ya enviado(s).
+
+fr: {#0} feuillet(s) envoyé(s). Problèmes : {1}
+en: {#0} slip(s) sent. Problems: {1}
+es: {#0} comprobante(s) enviado(s). Problemas: {1}
+
+fr: {#0} feuillet(s) envoyé(s), {#1} déjà envoyé(s). Problèmes : {2}
+en: {#0} slip(s) sent, {#1} already sent. Problems: {2}
+es: {#0} comprobante(s) enviado(s), {#1} ya enviado(s). Problemas: {2}
+
+fr: Télécharger en PDF (copie de l'employé)
+en: Download as PDF (employee copy)
+es: Descargar en PDF (copia del empleado)
+
+fr: Télécharger en PDF (copie de l'employeur)
+en: Download as PDF (employer copy)
+es: Descargar en PDF (copia del empleador)
+
+fr: Envoyer par courriel à l'employé
+en: Email to the employee
+es: Enviar por correo electrónico al empleado
+
+fr: Envoyer les feuillets de cet employé par courriel, en PDF ?
+en: Email this employee's slips, as a PDF?
+es: ¿Enviar los comprobantes de este empleado por correo electrónico, en PDF?
+
+fr: Feuillets envoyés par courriel le {#0} à {1}.
+en: Slips emailed on {#0} to {1}.
+es: Comprobantes enviados por correo electrónico el {#0} a {1}.
+
+fr: Feuillets envoyés par courriel à l'employé.
+en: Slips emailed to the employee.
+es: Comprobantes enviados por correo electrónico al empleado.
+
+fr: Aucun employé n'a demandé ses feuillets par courriel (case « Envoyer le talon de paie par courriel » de sa fiche).
+en: No employee has asked for their slips by email ("Send the pay stub by email" box on their file).
+es: Ningún empleado pidió sus comprobantes por correo electrónico (casilla « Enviar el talón de pago por correo electrónico » de su ficha).
+
+fr: Voici vos feuillets T4 et Relevé 1 de {#0}.
+en: Here are your T4 and RL-1 slips for {#0}.
+es: Aquí tiene sus comprobantes T4 y Relevé 1 de {#0}.
+
+fr: Voici votre feuillet T4 de {#0}.
+en: Here is your T4 slip for {#0}.
+es: Aquí tiene su comprobante T4 de {#0}.
+
+fr: Ils sont joints en PDF : conservez-les pour votre déclaration de revenus.
+en: They are attached as a PDF: keep them for your income tax return.
+es: Van adjuntos en PDF: consérvelos para su declaración de impuestos.
+
+fr: {#0} feuillet(s) {#1} envoyé(s) par courriel.
+en: {#0} slip(s) for {#1} emailed.
+es: {#0} comprobante(s) de {#1} enviado(s) por correo electrónico.
+
+fr: Feuillets {#0} téléchargés en PDF (copie de l'employeur, {#1} employé(s), NAS complet).
+en: {#0} slips downloaded as PDF (employer copy, {#1} employee(s), full SIN).
+es: Comprobantes {#0} descargados en PDF (copia del empleador, {#1} empleado(s), NAS completo).
+
+fr: Feuillets {#0} de l'employé n° {#1} téléchargés en PDF ({2}, NAS complet).
+en: {#0} slips of employee no. {#1} downloaded as PDF ({2}, full SIN).
+es: Comprobantes {#0} del empleado n.º {#1} descargados en PDF ({2}, NAS completo).
+
+fr: copie de l'employé
+en: employee copy
+es: copia del empleado
+
+fr: copie de l'employeur
+en: employer copy
+es: copia del empleador

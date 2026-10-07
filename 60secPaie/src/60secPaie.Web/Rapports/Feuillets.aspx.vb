@@ -28,6 +28,7 @@ Public Class PageFeuillets
         End If
         pnlContenu.Visible = ddlAnnee.Items.Count > 0
         btnCsv.Visible = ddlAnnee.Items.Count > 0
+        pnlFeuillets.Visible = ddlAnnee.Items.Count > 0
         lblAucun.Visible = ddlAnnee.Items.Count = 0
     End Sub
 
@@ -42,6 +43,7 @@ Public Class PageFeuillets
         If Contexte.HorsQuebec Then Title = "Feuillets T4"
         If ddlAnnee.Items.Count = 0 Then Return
         Dim feuillets = ServiceFeuillets.Preparer(Annee)
+        Dim envois = EnvoisDeLAnnee()
 
         ' Les colonnes suivent ce que l'année contient : une compagnie hors Québec n'a ni RRQ, ni RQAP, ni Relevé 1.
         Dim avecHorsQuebec = Contexte.HorsQuebec OrElse feuillets.Any(Function(x) CasesRPC.Any(Function(k) x.CaseT4(k) <> 0D))
@@ -76,7 +78,10 @@ Public Class PageFeuillets
             For Each c In ColonnesR1
                 Cellule(sb, totaux, "R1" & c, f.CaseR1(c))
             Next
-            sb.Append("<td><a href=""Feuillet.aspx?employe=").Append(f.Employe.Ent("Id")).Append("&amp;annee=").Append(Annee).Append(""">Feuillet</a></td></tr>")
+            sb.Append("<td><a href=""Feuillet.aspx?employe=").Append(f.Employe.Ent("Id")).Append("&amp;annee=").Append(Annee).Append(""">Feuillet</a>")
+            Dim envoye As Date
+            If envois.TryGetValue(f.Employe.Ent("Id"), envoye) Then sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(Tr("envoyé par courriel le {#0}", TexteDate(envoye)))).Append("</div>")
+            sb.Append("</td></tr>")
         Next
 
         sb.Append("</tbody><tfoot><tr><td>Total (").Append(feuillets.Count).Append(If(feuillets.Count > 1, " feuillets)", " feuillet)")).Append("</td>")
@@ -171,6 +176,42 @@ Public Class PageFeuillets
 
     Private Shared Sub Ligne(sb As StringBuilder, libelle As String, montant As Decimal)
         sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(libelle)).Append("</td><td class=""num"">").Append(Argent(montant)).Append("</td></tr>")
+    End Sub
+
+    ''' <summary>Date d'envoi des feuillets de l'année par employé (paie.FeuilletEnvoi).</summary>
+    Private Function EnvoisDeLAnnee() As Dictionary(Of Integer, Date)
+        Dim d As New Dictionary(Of Integer, Date)()
+        For Each r As DataRow In Db.Table("paie.spFeuilletEnvoi_Annee", Db.P("@c", Contexte.CompagnieId), Db.P("@a", Annee)).Rows
+            d(r.Ent("EmployeId")) = Convert.ToDateTime(r("EnvoyeLe"))
+        Next
+        Return d
+    End Function
+
+    ''' <summary>Tous les feuillets de l'année, copie de l'employeur, en un seul PDF. Le NAS y est complet : le téléchargement est inscrit au journal.</summary>
+    Private Sub btnPdfTous_Click(sender As Object, e As EventArgs) Handles btnPdfTous.Click
+        Dim feuillets = ServiceFeuillets.Preparer(Annee)
+        If feuillets.Count = 0 Then
+            Erreur("Aucun feuillet pour cette année.")
+            Return
+        End If
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
+        Contexte.Journaliser("Feuillets " & Annee.ToString() & " téléchargés en PDF (copie de l'employeur, " & feuillets.Count.ToString() & " employé(s), NAS complet).", "~/Rapports/Feuillets.aspx")
+        EnvoyerFichier(FeuilletPdf.NomFichier(Annee), FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur), "application/pdf")
+    End Sub
+
+    Private Sub btnCourriels_Click(sender As Object, e As EventArgs) Handles btnCourriels.Click
+        Try
+            Dim bilan = ServiceCourriel.EnvoyerFeuillets(Annee, chkRenvoyer.Checked)
+            Dim message = bilan.Envoyes.ToString() & " feuillet(s) envoyé(s)"
+            If bilan.DejaEnvoyes > 0 Then message &= ", " & bilan.DejaEnvoyes.ToString() & " déjà envoyé(s)"
+            If bilan.Erreurs.Count > 0 Then
+                Erreur(message & ". Problèmes : " & String.Join(" ", bilan.Erreurs))
+            Else
+                Succes(message & ".")
+            End If
+        Catch ex As SaisieInvalideException
+            Erreur(ex.Message)
+        End Try
     End Sub
 
     Private Sub btnCsv_Click(sender As Object, e As EventArgs) Handles btnCsv.Click

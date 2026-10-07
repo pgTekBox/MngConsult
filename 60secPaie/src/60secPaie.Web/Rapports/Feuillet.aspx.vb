@@ -26,6 +26,10 @@ Public Class PageFeuillet
         Dim nas = NasDe(emp)
         Dim nasAffiche = If(nas.Length = 0, "NAS manquant dans la fiche", If(_nasComplet, nas, Secret.Masquer(nas)))
         btnNas.Visible = nas.Length > 0 AndAlso Not _nasComplet
+        btnCourriel.Visible = emp.Bln("TalonParCourriel") AndAlso emp.Txt("Courriel").Length > 0
+        Dim envoi = Db.Table("paie.spFeuilletEnvoi_Annee", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).Rows.Cast(Of DataRow)().FirstOrDefault(Function(r) r.Ent("EmployeId") = emp.Ent("Id"))
+        lblEnvoi.Visible = envoi IsNot Nothing
+        If envoi IsNot Nothing Then lblEnvoi.Text = HttpUtility.HtmlEncode(Tr("Feuillets envoyés par courriel le {#0} à {1}.", TexteDate(envoi("EnvoyeLe")), envoi.Txt("Courriel")))
 
         Dim sb As New StringBuilder("<div class=""talon"">")
         sb.Append("<div class=""talon-entete""><div><strong>").Append(H(compagnie.Txt("Nom"))).Append("</strong><br/>")
@@ -71,6 +75,46 @@ Public Class PageFeuillet
         End If
         sb.Append("</div></div>")
         litFeuillet.Text = sb.ToString()
+    End Sub
+
+    ''' <summary>Le feuillet de l'employé affiché, dans la langue de la personne qui le télécharge.</summary>
+    Private Function FeuilletCourant(ByRef compagnie As DataRow) As Feuillet
+        Dim annee = IdRequete("annee")
+        If Not ParametresAnnee.EstDisponible(annee) Then Return Nothing
+        compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
+        Return ServiceFeuillets.Preparer(annee).FirstOrDefault(Function(x) x.Employe.Ent("Id") = IdRequete("employe"))
+    End Function
+
+    Private Sub Telecharger(copie As CopieFeuillet)
+        Dim compagnie As DataRow = Nothing
+        Dim f = FeuilletCourant(compagnie)
+        If f Is Nothing Then Return
+        Dim annee = IdRequete("annee")
+        Contexte.Journaliser("Feuillets " & annee.ToString() & " de l'employé n° " & f.Employe.Ent("Id").ToString() & " téléchargés en PDF (" &
+                             If(copie = CopieFeuillet.Employe, "copie de l'employé", "copie de l'employeur") & ", NAS complet).",
+                             "~/Rapports/Feuillet.aspx?employe=" & f.Employe.Ent("Id").ToString() & "&annee=" & annee.ToString())
+        EnvoyerFichier(FeuilletPdf.NomFichier(annee, f), FeuilletPdf.Produire(f, compagnie, annee, copie), "application/pdf")
+    End Sub
+
+    Private Sub btnPdfEmploye_Click(sender As Object, e As EventArgs) Handles btnPdfEmploye.Click
+        Telecharger(CopieFeuillet.Employe)
+    End Sub
+
+    Private Sub btnPdfEmployeur_Click(sender As Object, e As EventArgs) Handles btnPdfEmployeur.Click
+        Telecharger(CopieFeuillet.Employeur)
+    End Sub
+
+    Private Sub btnCourriel_Click(sender As Object, e As EventArgs) Handles btnCourriel.Click
+        Try
+            Dim bilan = ServiceCourriel.EnvoyerFeuillets(IdRequete("annee"), True, IdRequete("employe"))
+            If bilan.Erreurs.Count > 0 Then
+                Erreur(String.Join(" ", bilan.Erreurs))
+            Else
+                Succes("Feuillets envoyés par courriel à l'employé.")
+            End If
+        Catch ex As SaisieInvalideException
+            Erreur(ex.Message)
+        End Try
     End Sub
 
     Private Shared Function H(texte As String) As String

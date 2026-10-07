@@ -139,6 +139,7 @@
     <Compile Include="Infrastructure\TalonModele.vb" />
     <Compile Include="Infrastructure\PdfSimple.vb" />
     <Compile Include="Infrastructure\TalonPdf.vb" />
+    <Compile Include="Infrastructure\FeuilletPdf.vb" />
     <Compile Include="Infrastructure\ServiceRemise.vb" />
     <Compile Include="Infrastructure\ServiceFeuillets.vb" />
     <Compile Include="Infrastructure\ServiceGL.vb" />

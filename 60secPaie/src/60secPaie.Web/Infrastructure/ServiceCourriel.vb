@@ -216,4 +216,116 @@ Public NotInheritable Class ServiceCourriel
         Return sb.ToString()
     End Function
 
+
+    ' ================================================================== Feuillets T4 et Relevé 1
+
+    ''' <summary>
+    ''' Envoie les feuillets de l'année (copie de l'employé, en PDF) aux employés qui reçoivent
+    ''' leur talon par courriel — même case de la fiche, même adresse, même langue. Par défaut,
+    ''' ceux déjà envoyés ne sont pas renvoyés. Avec @employeId, un seul employé.
+    ''' </summary>
+    Public Shared Function EnvoyerFeuillets(annee As Integer, renvoyer As Boolean, Optional employeId As Integer = 0) As Bilan
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
+        If compagnie Is Nothing Then Throw New SaisieInvalideException("La paie de la compagnie n'est pas configurée.")
+
+        Dim feuillets = ServiceFeuillets.Preparer(annee).
+            Where(Function(f) (employeId = 0 OrElse f.Employe.Ent("Id") = employeId) AndAlso f.Employe.Bln("TalonParCourriel")).ToList()
+        If feuillets.Count = 0 Then
+            Throw New SaisieInvalideException("Aucun employé n'a demandé ses feuillets par courriel (case « Envoyer le talon de paie par courriel » de sa fiche).")
+        End If
+
+        Dim envois As New Dictionary(Of Integer, Date)()
+        For Each r As DataRow In Db.Table("paie.spFeuilletEnvoi_Annee", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).Rows
+            envois(r.Ent("EmployeId")) = Convert.ToDateTime(r("EnvoyeLe"))
+        Next
+
+        Dim adresseEnvoi = Expediteur()
+        Dim repondreA = compagnie.Txt("Courriel")
+        Dim nomCompagnie = compagnie.Txt("Nom")
+
+        Dim bilan As New Bilan()
+        Dim transport = TransportCourant()
+        For Each f In feuillets
+            Dim emp = f.Employe
+            Dim nom = emp.Txt("Prenom") & " " & emp.Txt("Nom")
+            If envois.ContainsKey(emp.Ent("Id")) AndAlso Not renvoyer Then
+                bilan.DejaEnvoyes += 1
+                Continue For
+            End If
+            If emp.Txt("Courriel").Length = 0 Then
+                bilan.Erreurs.Add(nom & " : " & Tr("aucun courriel dans la fiche."))
+                Continue For
+            End If
+
+            Dim langue = emp.Txt("Langue").ToLowerInvariant()
+            If Not I18n.Valide(langue) Then langue = "fr"
+            Dim feuillet = f
+            Try
+                Dim sujet = If(f.AvecReleve1, "Feuillets T4 et Relevé 1 de " & annee.ToString(), "Feuillet T4 de " & annee.ToString())
+                Dim courriel As New CourrielSortant() With {
+                    .Destinataire = emp.Txt("Courriel"),
+                    .NomDestinataire = nom,
+                    .Expediteur = adresseEnvoi,
+                    .NomExpediteur = nomCompagnie,
+                    .RepondreA = repondreA,
+                    .Sujet = I18n.Traduire(sujet, langue),
+                    .CorpsHtml = I18n.DansLaLangue(langue, Function() I18n.TraduireHtml(CorpsHtmlFeuillets(feuillet, annee, nom, nomCompagnie, langue)))}
+                Dim contenu As Byte() = Nothing
+                Dim nomFichier As String = "feuillets.pdf"
+                I18n.DansLaLangue(langue, Function()
+                                              contenu = FeuilletPdf.Produire(feuillet, compagnie, annee, CopieFeuillet.Employe)
+                                              nomFichier = FeuilletPdf.NomFichier(annee, feuillet)
+                                              Return ""
+                                          End Function)
+                courriel.PiecesJointes.Add(New PieceJointeCourriel With {.Nom = nomFichier, .Contenu = contenu, .TypeMime = "application/pdf"})
+                transport.Envoyer(courriel)
+
+                Db.Exec("paie.spFeuilletEnvoi_Enregistrer", Db.P("@e", emp.Ent("Id")), Db.P("@a", annee), Db.P("@courriel", emp.Txt("Courriel")))
+                bilan.Envoyes += 1
+            Catch ex As FormatException
+                bilan.Erreurs.Add(nom & " : " & Tr("adresse de courriel invalide."))
+            Catch ex As SmtpException
+                bilan.Erreurs.Add(nom & " : " & ex.Message)
+            Catch ex As SqlClient.SqlException
+                bilan.Erreurs.Add(nom & " : " & ex.Message)
+            End Try
+        Next
+
+        If bilan.Envoyes > 0 Then
+            Contexte.Journaliser(bilan.Envoyes.ToString() & " feuillet(s) " & annee.ToString() & " envoyé(s) par courriel.", "~/Rapports/Feuillets.aspx")
+        End If
+        Return bilan
+    End Function
+
+    ''' <summary>Le courriel des feuillets : un mot, les cases non nulles en tableau, et le PDF en pièce jointe.</summary>
+    Private Shared Function CorpsHtmlFeuillets(f As Feuillet, annee As Integer, nomEmploye As String, compagnie As String, langue As String) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<!DOCTYPE html><html lang=""").Append(langue).Append("""><head><meta charset=""utf-8""/><style>")
+        sb.Append("body{font-family:Segoe UI,Arial,sans-serif;font-size:14px;color:#1d2733}")
+        sb.Append("table{border-collapse:collapse;width:100%;margin-bottom:12px}th{text-align:left;border-bottom:1px solid #1d2733;padding:4px 6px;font-size:12px}")
+        sb.Append("td{padding:4px 6px;border-bottom:1px solid #e3e7eb}.num{text-align:right}.note{color:#5b6877;font-size:12px}</style></head><body>")
+        sb.Append("<p>Bonjour ").Append(HttpUtility.HtmlEncode(nomEmploye)).Append(",</p>")
+        sb.Append("<p>").Append(If(f.AvecReleve1, "Voici vos feuillets T4 et Relevé 1 de " & annee.ToString() & ".", "Voici votre feuillet T4 de " & annee.ToString() & ".")).Append("</p>")
+        sb.Append("<p>Ils sont joints en PDF : conservez-les pour votre déclaration de revenus.</p>")
+
+        sb.Append("<table><thead><tr><th colspan=""2"">T4 - État de la rémunération payée</th><th class=""num"">Montant</th></tr></thead><tbody>")
+        sb.Append("<tr><td><strong>10</strong></td><td>Province d'emploi</td><td class=""num"">").Append(HttpUtility.HtmlEncode(If(f.DeuxProvinces, String.Join(", ", f.ProvincesEmploi), f.Province))).Append("</td></tr>")
+        For Each c In ServiceFeuillets.LibellesT4
+            If f.CaseT4(c.Key) = 0D AndAlso c.Key <> "14" AndAlso c.Key <> "22" Then Continue For
+            sb.Append("<tr><td><strong>").Append(c.Key).Append("</strong></td><td>").Append(HttpUtility.HtmlEncode(c.Value)).Append("</td><td class=""num"">").Append(Argent(f.CaseT4(c.Key))).Append("</td></tr>")
+        Next
+        sb.Append("</tbody></table>")
+        If f.AvecReleve1 Then
+            sb.Append("<table><thead><tr><th colspan=""2"">Relevé 1 - Revenus d'emploi et revenus divers</th><th class=""num"">Montant</th></tr></thead><tbody>")
+            For Each c In ServiceFeuillets.LibellesR1
+                If f.CaseR1(c.Key) = 0D AndAlso c.Key <> "A" AndAlso c.Key <> "E" Then Continue For
+                sb.Append("<tr><td><strong>").Append(c.Key).Append("</strong></td><td>").Append(HttpUtility.HtmlEncode(c.Value)).Append("</td><td class=""num"">").Append(Argent(f.CaseR1(c.Key))).Append("</td></tr>")
+            Next
+            sb.Append("</tbody></table>")
+        End If
+        sb.Append("<p class=""note"">Ce message contient des renseignements personnels et confidentiels. Si vous l'avez reçu par erreur, ")
+        sb.Append("veuillez le supprimer et en aviser ").Append(HttpUtility.HtmlEncode(SansPointFinal(compagnie))).Append(".</p></body></html>")
+        Return sb.ToString()
+    End Function
+
 End Class
