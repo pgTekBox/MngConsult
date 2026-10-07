@@ -99,18 +99,33 @@ Public NotInheritable Class ServiceFeuillets
         "3 - Accès : payeur, époux ou conjoint de fait et enfants à charge", "4 - Accès : payeur et époux ou conjoint de fait",
         "5 - Accès : payeur et enfants à charge"}
 
-    ''' <summary>Années pour lesquelles des paies confirmées existent et dont les taux sont définis.</summary>
+    ''' <summary>
+    ''' Années offertes pour les feuillets, la plus récente d'abord : celles qui ont des paies confirmées, des cumulatifs
+    ''' de départ ou un formulaire officiel téléversé. Une année sans taux définis reste offerte : les montants viennent des
+    ''' paies, et seuls les plafonds (gains assurables) sont pris, à défaut, sur la dernière année connue.
+    ''' </summary>
     Public Shared Function AnneesDisponibles() As List(Of Integer)
-        Dim annees As New List(Of Integer)()
-        For Each r As DataRow In Db.Table("paie.spLotPaie_AnneesConfirmees",
-                                          Db.P("@c", Contexte.CompagnieId)).Rows
-            If ParametresAnnee.EstDisponible(r.Ent("Annee")) Then annees.Add(r.Ent("Annee"))
+        Dim annees As New HashSet(Of Integer)()
+        Dim c = Contexte.CompagnieId
+        For Each r As DataRow In Db.Table("paie.spLotPaie_AnneesConfirmees", Db.P("@c", c)).Rows
+            annees.Add(r.Ent("Annee"))
         Next
-        Return annees
+        For Each r As DataRow In Db.Table("paie.spCumulatifDepart_Annees", Db.P("@c", c)).Rows
+            annees.Add(r.Ent("Annee"))
+        Next
+        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", c)).Rows
+            annees.Add(r.Ent("Annee"))
+        Next
+        Return annees.OrderByDescending(Function(a) a).ToList()
+    End Function
+
+    ''' <summary>Les taux de l'année pour les plafonds des feuillets ; à défaut, ceux de la dernière année connue (les paies, elles, ont été calculées avec les bons).</summary>
+    Private Shared Function ParametresPour(annee As Integer) As ParametresAnnee
+        Return If(ParametresAnnee.EstDisponible(annee), ParametresAnnee.Pour(annee), ParametresAnnee.PourAffichage())
     End Function
 
     Public Shared Function Preparer(annee As Integer) As List(Of Feuillet)
-        Dim prm = ParametresAnnee.Pour(annee)
+        Dim prm = ParametresPour(annee)
         Dim c = Contexte.CompagnieId
 
         ' Les colonnes ImpotQuebec et RRQ portent l'impôt provincial et le régime de pension de la

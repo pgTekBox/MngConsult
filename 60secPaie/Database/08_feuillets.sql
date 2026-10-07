@@ -36,3 +36,7 @@ CREATE OR ALTER PROCEDURE paie.spFeuilletEnvoi_Annee @c int, @a int AS
     FROM paie.FeuilletEnvoi f JOIN paie.Employe e ON e.Id = f.EmployeId
     WHERE e.CompagnieId = @c AND f.Annee = @a;
 GO
+-- Les années pour lesquelles des cumulatifs de départ ont été saisis (compagnie).
+CREATE OR ALTER PROCEDURE paie.spCumulatifDepart_Annees @c int AS
+    SELECT DISTINCT d.Annee FROM paie.CumulatifDepart d JOIN paie.Employe e ON e.Id = d.EmployeId WHERE e.CompagnieId = @c;
+GO

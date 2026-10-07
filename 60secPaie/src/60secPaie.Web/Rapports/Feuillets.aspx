@@ -48,5 +48,5 @@
         <div class="carte table-defilante"><asp:Literal ID="litTableau" runat="server" /></div>
         <asp:Literal ID="litSommaire" runat="server" />
     </asp:Panel>
-    <asp:Label ID="lblAucun" runat="server" CssClass="note" Visible="false">Aucune paie confirmée pour l'instant.</asp:Label>
+    <asp:Label ID="lblAucun" runat="server" CssClass="note" Visible="false">Aucune paie confirmée pour l'instant, ni cumulatifs de départ, ni formulaire officiel téléversé.</asp:Label>
 </asp:Content>

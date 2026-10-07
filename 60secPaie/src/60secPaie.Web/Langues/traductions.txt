@@ -4792,3 +4792,6 @@ es: Los comprobantes de {#0} salen en los formularios oficiales subidos ({1}).
 fr: Aucun formulaire officiel téléversé pour {#0} : les feuillets sortent sur la mise en page de 60secPaie (Configuration › Formulaires officiels).
 en: No official form uploaded for {#0}: the slips come out on 60secPaie's layout (Settings › Official forms).
 es: Ningún formulario oficial subido para {#0}: los comprobantes salen en la maqueta de 60secPaie (Configuración › Formularios oficiales).
+fr: Aucune paie confirmée pour l'instant, ni cumulatifs de départ, ni formulaire officiel téléversé.
+en: No confirmed pay run yet, no opening balances, no uploaded official form.
+es: Ninguna nómina confirmada por ahora, ni acumulados iniciales, ni formulario oficial subido.

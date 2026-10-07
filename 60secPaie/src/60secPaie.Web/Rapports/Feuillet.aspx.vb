@@ -16,7 +16,7 @@ Public Class PageFeuillet
         Dim annee = IdRequete("annee")
         lnkRetour.NavigateUrl = "~/Rapports/Feuillets.aspx"
         If Contexte.HorsQuebec Then Title = "Feuillet T4"
-        If Not ParametresAnnee.EstDisponible(annee) Then Response.Redirect("~/Rapports/Feuillets.aspx", True)
+        If annee = 0 Then Response.Redirect("~/Rapports/Feuillets.aspx", True)
 
         Dim f = ServiceFeuillets.Preparer(annee).FirstOrDefault(Function(x) x.Employe.Ent("Id") = IdRequete("employe"))
         If f Is Nothing Then Response.Redirect("~/Rapports/Feuillets.aspx", True)
@@ -80,7 +80,7 @@ Public Class PageFeuillet
     ''' <summary>Le feuillet de l'employé affiché, dans la langue de la personne qui le télécharge.</summary>
     Private Function FeuilletCourant(ByRef compagnie As DataRow) As Feuillet
         Dim annee = IdRequete("annee")
-        If Not ParametresAnnee.EstDisponible(annee) Then Return Nothing
+        If annee = 0 Then Return Nothing
         compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Return ServiceFeuillets.Preparer(annee).FirstOrDefault(Function(x) x.Employe.Ent("Id") = IdRequete("employe"))
     End Function
