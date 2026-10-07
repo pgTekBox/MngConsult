@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Pay items</a>
   <a href="#config-plan">Chart of accounts</a>
   <a href="#config-depot">Direct deposit</a>
+  <a href="#config-formulaires">Official forms</a>
   <a href="#config-unites">CNESST units</a>
   <h2>Employees</h2>
   <a href="#emp-liste">Employee list</a>
@@ -365,6 +366,11 @@ mark{background:#ffe89a}
 <p>The file is generated from the <a href="#detail-depot">details of a confirmed pay run</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-formulaires">Settings › Official forms</h2>
+<p><span class="chemin">Config/Formulaires.aspx</span>. Download the year's fillable T4 from the CRA website (<code>t4-fill-YYe.pdf</code> or <code>t4-fill-YYf.pdf</code>) and the fillable RL-1 from Revenu Québec's, then upload them here: "Année des feuillets", "Formulaire" ("T4 (ARC)" or "Relevé 1 (Revenu Québec)"), "Fichier PDF", "Téléverser". The file is checked — it must be a fillable PDF carrying the slip's fields (box 14 of slip 1 for the T4, box A for the RL-1) —, stripped of its encryption and scripts, then kept per company, year and form; a new upload replaces the previous one. "Formulaires en place" table: year, form, file, date, user, size, "Retirer". Uploads and removals are logged.</p>
+<p>As soon as the year's T4 is in place, that year's slips — employee copy, employer copy, government copies and email attachment (<a href="#feuillets">Reports › T4 and RL-1 slips</a>) — come out on the official form: two T4 slips per page, boxes 10, 12, 14, 16/17, 16A/17A, 18, 22, 24, 26, 28, 45, 54, 55, 56, the employer, the employee and their address; boxes 34, 40, 42 and 85 go to "Other information". With the RL-1, each Québec employee gets their page: copy 1 for Revenu Québec, copy 2 for the employee, copy 3 for the employer, boxes A to N and W, slip code "R", identity and address of both parties. The T4 Summary and Summary 1 are still produced by 60secPaie. Without a form, the slips keep 60secPaie's layout.</p>
+<div class="note">Forms change every year: upload those of the slips' year. The text in the boxes is drawn by the PDF reader on opening (NeedAppearances): Acrobat, Edge and Chrome do it; a rudimentary reader may show empty boxes.</div>
+
 <h2 id="config-unites">Settings › CNESST units</h2>
 <p><span class="chemin">Config/UnitesCNESST.aspx</span>. The CNESST classifies your business into one or more <strong>classification units</strong> by activity, each with its own rate in dollars per $100 of insurable wages. This page is for businesses that have several: with a single activity, the company rate is enough and the page can stay empty.</p>
 <ul>
@@ -741,6 +747,7 @@ mark{background:#ffe89a}
   <li><strong>"Email the slips"</strong>: the employee copy goes out as a PDF, in the employee's language, to the employees who receive their pay stub by email (same "Send the pay stub by email" box on the file, same address). The email lists the non-zero boxes in a table and attaches the PDF. A question comes before sending; the tally says "N slip(s) sent, M already sent" and the problems met (missing or invalid address). An employee without an email is reported, not skipped silently.</li>
   <li><strong>"also resend slips already sent"</strong>: without this box, an employee already served for the year is not sent again. In the table, the row shows "emailed on [date]" under the "Feuillet" link.</li>
 </ul>
+<p>If the year's official forms were uploaded (<a href="#config-formulaires">Settings › Official forms</a>), these same buttons fill in the CRA's T4 and Revenu Québec's RL-1 instead of the layout described below; the note under the card says which ones are in place.</p>
 <p>Each PDF page carries the employer, the RP (or RS) number, the tax year, the "Employee copy" or "Employer copy" mention, the employee with address and SIN, then the boxes in the order of the official slip (box 10, the non-zero boxes, 28 and 45; boxes A to 235 of the RL-1). The footer recalls that the document reproduces the amounts calculated by 60secPaie and does not replace the slip filed with the CRA or Revenu Québec.</p>
 <div class="note">Emails go out from the 60sec.ca domain in the company's name, and replies go to the company's address (Reply-To), as for pay stubs. The activity log keeps "N slip(s) for [year] emailed".</div>
 

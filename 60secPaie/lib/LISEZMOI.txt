@@ -2,3 +2,9 @@ BCrypt.Net-Next 3.2.1 (licence MIT, https://github.com/BcryptNet/bcrypt.net), ve
 Sert a verifier les mots de passe BCrypt des comptes MngConsul (dbo.T015User).
 Cette version est choisie parce qu'elle n'a AUCUNE dependance (les versions 3.5+ et 4.x exigent System.Memory
 et des redirections d'assemblages dans Web.config). Elle verifie les memes hachages $2a$ que la version 4.1.0 de MngConsul.
+
+PDFsharp 6.1.1 (licence MIT, https://www.pdfsharp.net) et ses dépendances netstandard (Microsoft.Extensions.Logging.Abstractions,
+System.Memory, System.Buffers, System.Runtime.CompilerServices.Unsafe, System.Numerics.Vectors, System.ValueTuple,
+System.Threading.Tasks.Extensions, Microsoft.Bcl.AsyncInterfaces, System.Diagnostics.DiagnosticSource) : ne servent qu'à
+remplir les formulaires officiels T4 (ARC) et Relevé 1 (Revenu Québec), chiffrés en AES-128 avec flux d'objets, que
+FormulaireOfficiel.vb ne pourrait pas lire ni écrire à la main. Les versions sont celles des redirections de Web.config.

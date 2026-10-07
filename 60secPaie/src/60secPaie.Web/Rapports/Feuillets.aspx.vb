@@ -44,6 +44,7 @@ Public Class PageFeuillets
         If ddlAnnee.Items.Count = 0 Then Return
         Dim feuillets = ServiceFeuillets.Preparer(Annee)
         Dim envois = EnvoisDeLAnnee()
+        litFormulaires.Text = Server.HtmlEncode(EtatFormulaires())
 
         ' Les colonnes suivent ce que l'année contient : une compagnie hors Québec n'a ni RRQ, ni RQAP, ni Relevé 1.
         Dim avecHorsQuebec = Contexte.HorsQuebec OrElse feuillets.Any(Function(x) CasesRPC.Any(Function(k) x.CaseT4(k) <> 0D))
@@ -178,6 +179,16 @@ Public Class PageFeuillets
         sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(libelle)).Append("</td><td class=""num"">").Append(Argent(montant)).Append("</td></tr>")
     End Sub
 
+    ''' <summary>Les formulaires officiels téléversés pour l'année (sans leur contenu), pour le dire à l'écran.</summary>
+    Private Function EtatFormulaires() As String
+        Dim types As New List(Of String)()
+        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", Contexte.CompagnieId)).Rows
+            If r.Ent("Annee") = Annee Then types.Add(If(r.Txt("Type") = FormulaireOfficiel.TypeT4, "T4", "Relevé 1"))
+        Next
+        If types.Contains("T4") Then Return Tr("Les feuillets de {#0} sortent sur les formulaires officiels téléversés ({1}).", Annee, String.Join(", ", types))
+        Return Tr("Aucun formulaire officiel téléversé pour {#0} : les feuillets sortent sur la mise en page de 60secPaie (Configuration › Formulaires officiels).", Annee)
+    End Function
+
     ''' <summary>Date d'envoi des feuillets de l'année par employé (paie.FeuilletEnvoi).</summary>
     Private Function EnvoisDeLAnnee() As Dictionary(Of Integer, Date)
         Dim d As New Dictionary(Of Integer, Date)()
@@ -196,7 +207,9 @@ Public Class PageFeuillets
         End If
         Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Contexte.Journaliser("Feuillets " & Annee.ToString() & " téléchargés en PDF (copie de l'employeur, " & feuillets.Count.ToString() & " employé(s), NAS complet).", "~/Rapports/Feuillets.aspx")
-        EnvoyerFichier(FeuilletPdf.NomFichier(Annee), FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur), "application/pdf")
+        Dim fo = FormulaireOfficiel.Charger(Annee)
+        EnvoyerFichier(FeuilletPdf.NomFichier(Annee), If(fo.Disponible, FormulaireOfficiel.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur, fo),
+                                                       FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur)), "application/pdf")
     End Sub
 
     ''' <summary>Les copies du gouvernement : T4 et Sommaire T4 (ARC), Relevé 1 et Sommaire 1 (Revenu Québec), en un seul PDF. NAS complet : inscrit au journal.</summary>
@@ -208,8 +221,11 @@ Public Class PageFeuillets
         End If
         Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
         Contexte.Journaliser("Feuillets " & Annee.ToString() & " téléchargés en PDF (copies du gouvernement avec les sommaires, " & feuillets.Count.ToString() & " employé(s), NAS complet).", "~/Rapports/Feuillets.aspx")
+        Dim fo = FormulaireOfficiel.Charger(Annee)
+        Dim sommaire = ServiceFeuillets.SommaireEmployeur(Annee)
         EnvoyerFichier(FeuilletPdf.NomFichier(Annee, Nothing, CopieFeuillet.Gouvernement),
-                       FeuilletPdf.ProduireGouvernement(feuillets, compagnie, Annee, ServiceFeuillets.SommaireEmployeur(Annee)), "application/pdf")
+                       If(fo.Disponible, FormulaireOfficiel.ProduireGouvernement(feuillets, compagnie, Annee, sommaire, fo),
+                          FeuilletPdf.ProduireGouvernement(feuillets, compagnie, Annee, sommaire)), "application/pdf")
     End Sub
 
     Private Sub btnCourriels_Click(sender As Object, e As EventArgs) Handles btnCourriels.Click

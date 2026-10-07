@@ -48,13 +48,12 @@ Public NotInheritable Class FeuilletPdf
     End Function
 
     ''' <summary>Tous les feuillets de l'année dans un seul document, un employé après l'autre (T4 puis Relevé 1 de chacun).</summary>
-    Public Shared Function ProduireTous(feuillets As IEnumerable(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet) As Byte()
+    Public Shared Function ProduireTous(feuillets As IEnumerable(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet, Optional seulementR1 As Boolean = False) As Byte()
         Dim p As New PdfSimple()
         Dim premier = True
         For Each f In feuillets
-            DessinerT4(p, f, compagnie, annee, copie, premier)
-            If f.AvecReleve1 Then DessinerR1(p, f, compagnie, annee, copie)
-            premier = False
+            If Not seulementR1 Then DessinerT4(p, f, compagnie, annee, copie, premier) : premier = False
+            If f.AvecReleve1 Then DessinerR1(p, f, compagnie, annee, copie, premier) : premier = False
         Next
         Return p.Terminer(Tr("Feuillets {#0}", annee))
     End Function
@@ -134,8 +133,8 @@ Public NotInheritable Class FeuilletPdf
         Pied(p, Tr("Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le feuillet transmis à l'ARC."))
     End Sub
 
-    Private Shared Sub DessinerR1(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet)
-        p.NouvellePage()
+    Private Shared Sub DessinerR1(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet, Optional premierePage As Boolean = False)
+        If Not premierePage Then p.NouvellePage()
         Dim y = Entete(p, f, compagnie, annee, copie, Tr("Relevé 1 - Revenus d'emploi et revenus divers"),
                        Tr("N° d'identification RS : {0}", compagnie.Txt("NumeroIdentificationRQ")), Tr("Copie pour Revenu Québec"))
         y = EnteteTableau(p, y)
@@ -187,6 +186,20 @@ Public NotInheritable Class FeuilletPdf
     End Function
 
     ' ------------------------------------------------------------------ les sommaires
+
+    ''' <summary>Le Sommaire T4 seul, à joindre aux T4 sur formulaire officiel.</summary>
+    Public Shared Function ProduireSommaireT4(feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, sommaire As DataRow) As Byte()
+        Dim p As New PdfSimple()
+        SommaireT4(p, feuillets, compagnie, annee, sommaire)
+        Return p.Terminer(Tr("Sommaire T4 (ARC)") & " " & annee.ToString())
+    End Function
+
+    ''' <summary>Le Sommaire 1 seul, à joindre aux Relevés 1 sur formulaire officiel.</summary>
+    Public Shared Function ProduireSommaire1(feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, sommaire As DataRow) As Byte()
+        Dim p As New PdfSimple()
+        Sommaire1(p, feuillets, compagnie, annee, sommaire)
+        Return p.Terminer(Tr("Sommaire 1 (Revenu Québec)") & " " & annee.ToString())
+    End Function
 
     ''' <summary>Le Sommaire T4 : les totaux des cases des feuillets, les cotisations de l'employeur, les versements et le solde.</summary>
     Private Shared Sub SommaireT4(p As PdfSimple, feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, s As DataRow)

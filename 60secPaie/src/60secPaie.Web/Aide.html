@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Éléments de paie</a>
   <a href="#config-plan">Plan comptable</a>
   <a href="#config-depot">Dépôt direct</a>
+  <a href="#config-formulaires">Formulaires officiels</a>
   <a href="#config-unites">Unités CNESST</a>
   <h2>Employés</h2>
   <a href="#emp-liste">Liste des employés</a>
@@ -365,6 +366,11 @@ mark{background:#ffe89a}
 <p>La production du fichier se fait depuis le <a href="#detail-depot">détail d'une paie confirmée</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-formulaires">Configuration › Formulaires officiels</h2>
+<p><span class="chemin">Config/Formulaires.aspx</span>. Téléchargez le « T4 à remplir » de l'année sur le site de l'ARC (fichier <code>t4-fill-AAf.pdf</code>) et le « Relevé 1 à remplir » sur celui de Revenu Québec, puis téléversez-les ici : « Année des feuillets », « Formulaire » (« T4 (ARC) » ou « Relevé 1 (Revenu Québec) »), « Fichier PDF », « Téléverser ». Le fichier est vérifié — il doit être un PDF à remplir qui porte les champs du feuillet (case 14 du feuillet 1 pour le T4, case A pour le Relevé 1) —, débarrassé de son chiffrement et de ses scripts, puis conservé par compagnie, par année et par formulaire ; un nouveau téléversement remplace le précédent. Tableau « Formulaires en place » : année, formulaire, fichier, date, utilisateur, taille, « Retirer ». Téléversement et retrait sont inscrits au journal.</p>
+<p>Dès que le T4 de l'année est en place, les feuillets de cette année — copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels (<a href="#feuillets">Rapports › T4 et Relevés 1</a>) — sortent sur le formulaire officiel : deux T4 par page, les cases 10, 12, 14, 16/17, 16A/17A, 18, 22, 24, 26, 28, 45, 54, 55, 56, l'employeur, l'employé et son adresse ; les cases 34, 40, 42 et 85 vont dans « Autres renseignements ». Avec le Relevé 1, chaque employé du Québec a sa page : copie 1 pour Revenu Québec, copie 2 pour l'employé, copie 3 pour l'employeur, cases A à N et W, code du relevé « R », identité et adresse des deux parties. Les sommaires T4 et 1 restent produits par 60secPaie. Sans formulaire, les feuillets gardent la mise en page de 60secPaie.</p>
+<div class="note">Les formulaires changent chaque année : téléversez ceux de l'année des feuillets. Le texte des cases est dessiné par le lecteur PDF à l'ouverture (NeedAppearances) : Acrobat, Edge et Chrome le font ; un lecteur rudimentaire peut montrer des cases vides.</div>
+
 <h2 id="config-unites">Configuration › Unités CNESST</h2>
 <p><span class="chemin">Config/UnitesCNESST.aspx</span>. La CNESST classe votre entreprise dans une ou plusieurs <strong>unités de classification</strong> selon l'activité, chacune avec son taux en dollars par 100 $ de salaire assurable. Cette page sert aux entreprises qui en ont plusieurs : avec une seule activité, le taux de la compagnie suffit et la page peut rester vide.</p>
 <ul>
@@ -741,6 +747,7 @@ mark{background:#ffe89a}
   <li><strong>« Envoyer les feuillets par courriel »</strong> : la copie de l'employé part en PDF, dans sa langue, aux employés qui reçoivent leur talon par courriel (même case « Envoyer le talon de paie par courriel » de la fiche, même adresse). Le courriel reprend les cases non nulles en tableau et joint le PDF. Une question précède l'envoi ; le bilan dit « N feuillet(s) envoyé(s), M déjà envoyé(s) » et les problèmes rencontrés (adresse manquante ou invalide). Un employé sans courriel est signalé, pas oublié.</li>
   <li><strong>« renvoyer aussi les feuillets déjà envoyés »</strong> : sans cette case, un employé déjà servi pour l'année n'est pas renvoyé. Dans le tableau, la ligne porte « envoyé par courriel le [date] » sous le lien « Feuillet ».</li>
 </ul>
+<p>Si les formulaires officiels de l'année ont été téléversés (<a href="#config-formulaires">Configuration › Formulaires officiels</a>), ces mêmes boutons remplissent le T4 de l'ARC et le Relevé 1 de Revenu Québec au lieu de la mise en page décrite ci-dessous ; la note sous la carte dit lesquels sont en place.</p>
 <p>Chaque page du PDF porte l'employeur, le numéro RP (ou RS), l'année d'imposition, la mention « Copie de l'employé » ou « Copie de l'employeur », l'employé avec son adresse et son NAS, puis les cases dans l'ordre du feuillet officiel (case 10, les cases non nulles, 28 et 45 ; cases A à 235 du Relevé 1). Le pied de page rappelle que le document reproduit les montants calculés par 60secPaie et ne remplace pas le feuillet transmis à l'ARC ou à Revenu Québec.</p>
 <div class="note">Les courriels partent du domaine 60sec.ca au nom de la compagnie, et les réponses vont à l'adresse de la compagnie (Reply-To), comme les talons. Le journal d'activité garde « N feuillet(s) [année] envoyé(s) par courriel ».</div>
 

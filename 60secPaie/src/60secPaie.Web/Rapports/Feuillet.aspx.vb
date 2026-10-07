@@ -93,7 +93,9 @@ Public Class PageFeuillet
         Contexte.Journaliser("Feuillets " & annee.ToString() & " de l'employé n° " & f.Employe.Ent("Id").ToString() & " téléchargés en PDF (" &
                              If(copie = CopieFeuillet.Employe, "copie de l'employé", If(copie = CopieFeuillet.Employeur, "copie de l'employeur", "copie du gouvernement")) & ", NAS complet).",
                              "~/Rapports/Feuillet.aspx?employe=" & f.Employe.Ent("Id").ToString() & "&annee=" & annee.ToString())
-        EnvoyerFichier(FeuilletPdf.NomFichier(annee, f, copie), FeuilletPdf.Produire(f, compagnie, annee, copie), "application/pdf")
+        Dim fo = FormulaireOfficiel.Charger(annee)
+        EnvoyerFichier(FeuilletPdf.NomFichier(annee, f, copie),
+                       If(fo.Disponible, FormulaireOfficiel.Produire(f, compagnie, annee, copie, fo), FeuilletPdf.Produire(f, compagnie, annee, copie)), "application/pdf")
     End Sub
 
     Private Sub btnPdfEmploye_Click(sender As Object, e As EventArgs) Handles btnPdfEmploye.Click

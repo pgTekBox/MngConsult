@@ -242,6 +242,7 @@ Public NotInheritable Class ServiceCourriel
         Dim adresseEnvoi = Expediteur()
         Dim repondreA = compagnie.Txt("Courriel")
         Dim nomCompagnie = compagnie.Txt("Nom")
+        Dim formulaires = FormulaireOfficiel.Charger(annee)
 
         Dim bilan As New Bilan()
         Dim transport = TransportCourant()
@@ -273,7 +274,8 @@ Public NotInheritable Class ServiceCourriel
                 Dim contenu As Byte() = Nothing
                 Dim nomFichier As String = "feuillets.pdf"
                 I18n.DansLaLangue(langue, Function()
-                                              contenu = FeuilletPdf.Produire(feuillet, compagnie, annee, CopieFeuillet.Employe)
+                                              contenu = If(formulaires.Disponible, FormulaireOfficiel.Produire(feuillet, compagnie, annee, CopieFeuillet.Employe, formulaires),
+                                                           FeuilletPdf.Produire(feuillet, compagnie, annee, CopieFeuillet.Employe))
                                               nomFichier = FeuilletPdf.NomFichier(annee, feuillet)
                                               Return ""
                                           End Function)

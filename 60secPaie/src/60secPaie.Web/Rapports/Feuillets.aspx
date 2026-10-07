@@ -21,6 +21,7 @@
            La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne
            permet aussi de le télécharger ou de l'envoyer un à un. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC,
            puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.</p>
+        <p class="note"><asp:Literal ID="litFormulaires" runat="server" /></p>
         <div class="actions">
             <asp:Button ID="btnPdfTous" runat="server" Text="Télécharger tous les feuillets (PDF, copie de l'employeur)" CssClass="secondaire" />
             <asp:Button ID="btnPdfGouv" runat="server" Text="Télécharger les copies du gouvernement (T4 et Sommaire T4, Relevé 1 et Sommaire 1)" CssClass="secondaire" />

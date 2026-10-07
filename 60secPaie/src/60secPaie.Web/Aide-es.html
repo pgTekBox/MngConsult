@@ -92,6 +92,7 @@ mark{background:#ffe89a}
   <a href="#config-elements">Elementos de nómina</a>
   <a href="#config-plan">Plan de cuentas</a>
   <a href="#config-depot">Depósito directo</a>
+  <a href="#config-formulaires">Formularios oficiales</a>
   <a href="#config-unites">Unidades CNESST</a>
   <h2>Empleados</h2>
   <a href="#emp-liste">Lista de empleados</a>
@@ -365,6 +366,11 @@ mark{background:#ffe89a}
 <p>La generación del archivo se hace desde el <a href="#detail-depot">detalle de una nómina confirmada</a>.</p>
 
 <!-- ============================================================ -->
+<h2 id="config-formulaires">Configuración › Formularios oficiales</h2>
+<p><span class="chemin">Config/Formulaires.aspx</span>. Descargue el « T4 para llenar » del año en el sitio de la CRA (archivo <code>t4-fill-AAf.pdf</code>) y el « Relevé 1 para llenar » en el de Revenu Québec, y luego súbalos aquí: « Année des feuillets », « Formulaire » (« T4 (ARC) » o « Relevé 1 (Revenu Québec) »), « Fichier PDF », « Téléverser ». El archivo se verifica — debe ser un PDF para llenar que lleve los campos del comprobante (casilla 14 del comprobante 1 para el T4, casilla A para el Relevé 1) —, se le quitan el cifrado y los scripts, y se conserva por empresa, año y formulario; una nueva carga reemplaza la anterior. Tabla « Formulaires en place »: año, formulario, archivo, fecha, usuario, tamaño, « Retirer ». Carga y retiro quedan registrados en el diario.</p>
+<p>En cuanto el T4 del año está en su lugar, los comprobantes de ese año — copia del empleado, copia del empleador, copias del gobierno y adjunto de los correos (<a href="#feuillets">Informes › T4 y Relevés 1</a>) — salen en el formulario oficial: dos T4 por página, casillas 10, 12, 14, 16/17, 16A/17A, 18, 22, 24, 26, 28, 45, 54, 55, 56, el empleador, el empleado y su dirección; las casillas 34, 40, 42 y 85 van a « Otros datos ». Con el Relevé 1, cada empleado de Quebec tiene su página: copia 1 para Revenu Québec, copia 2 para el empleado, copia 3 para el empleador, casillas A a N y W, código del relevé « R », identidad y dirección de ambas partes. Los sumarios T4 y 1 siguen producidos por 60secPaie. Sin formulario, los comprobantes conservan la maqueta de 60secPaie.</p>
+<div class="note">Los formularios cambian cada año: suba los del año de los comprobantes. El texto de las casillas lo dibuja el lector PDF al abrir (NeedAppearances): Acrobat, Edge y Chrome lo hacen; un lector rudimentario puede mostrar casillas vacías.</div>
+
 <h2 id="config-unites">Configuración › Unidades CNESST</h2>
 <p><span class="chemin">Config/UnitesCNESST.aspx</span>. La CNESST clasifica su empresa en una o varias <strong>unidades de clasificación</strong> según la actividad, cada una con su tasa en dólares por $100 de salario asegurable. Esta página es para las empresas que tienen varias: con una sola actividad, la tasa de la empresa basta y la página puede quedar vacía.</p>
 <ul>
@@ -741,6 +747,7 @@ mark{background:#ffe89a}
   <li><strong>« Enviar los comprobantes por correo electrónico »</strong>: la copia del empleado sale en PDF, en su idioma, a los empleados que reciben su talón por correo (misma casilla « Enviar el talón de pago por correo electrónico » de la ficha, misma dirección). El correo repite las casillas no nulas en una tabla y adjunta el PDF. Una pregunta precede al envío; el balance dice « N comprobante(s) enviado(s), M ya enviado(s) » y los problemas encontrados (dirección faltante o inválida). Un empleado sin correo se señala, no se olvida.</li>
   <li><strong>« reenviar también los comprobantes ya enviados »</strong>: sin esta casilla, un empleado ya atendido en el año no se reenvía. En la tabla, la línea muestra « enviado por correo electrónico el [fecha] » bajo el enlace « Feuillet ».</li>
 </ul>
+<p>Si se subieron los formularios oficiales del año (<a href="#config-formulaires">Configuración › Formularios oficiales</a>), estos mismos botones llenan el T4 de la CRA y el Relevé 1 de Revenu Québec en lugar de la maqueta descrita abajo; la nota bajo la tarjeta dice cuáles están en su lugar.</p>
 <p>Cada página del PDF lleva el empleador, el número RP (o RS), el año fiscal, la mención « Copia del empleado » o « Copia del empleador », el empleado con su dirección y su NAS, y luego las casillas en el orden del comprobante oficial (casilla 10, las casillas no nulas, 28 y 45; casillas A a 235 del Relevé 1). El pie de página recuerda que el documento reproduce los importes calculados por 60secPaie y no reemplaza el comprobante presentado a la CRA o a Revenu Québec.</p>
 <div class="note">Los correos salen del dominio 60sec.ca a nombre de la empresa, y las respuestas van a la dirección de la empresa (Reply-To), como los talones. El diario de actividad guarda « N comprobante(s) de [año] enviado(s) por correo electrónico ».</div>
 

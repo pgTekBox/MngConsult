@@ -4654,3 +4654,141 @@ es: Comprobantes {#0} descargados en PDF (copias del gobierno con los sumarios, 
 fr: La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé). La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne permet aussi de le télécharger ou de l'envoyer un à un. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC, puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.
 en: The employer copy gathers every slip of the year in one document, with full SINs (the download is logged). The employee copy goes out by email, as a PDF, to the employees who receive their pay stub by email; the "Feuillet" link on each row also lets you download or send them one at a time. The government copies gather the T4 slips (copy 1) and the T4 Summary for the CRA, then the RL-1 slips (copy 1) and Summary 1 for Revenu Québec.
 es: La copia del empleador reúne todos los comprobantes del año en un documento, con el NAS completo (descarga registrada). La copia del empleado sale por correo electrónico, en PDF, a los empleados que reciben su talón por correo; el enlace « Feuillet » de cada línea permite también descargarlos o enviarlos uno a uno. Las copias del gobierno reúnen los T4 (copia 1) y el Sumario T4 para la CRA, luego los Relevés 1 (copia 1) y el Sumario 1 para Revenu Québec.
+
+# ---------- Formulaires officiels (T4 de l'ARC, Relevé 1 de Revenu Québec) ----------
+
+fr: Formulaires officiels
+en: Official forms
+es: Formularios oficiales
+
+fr: Téléchargez le T4 à remplir de l'année sur le site de l'ARC (fichier « t4-fill-AAf.pdf ») et le Relevé 1 à remplir sur celui de Revenu Québec, puis téléversez-les ici. Dès qu'ils sont en place, les feuillets de l'année sortent sur ces formulaires : copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels. Sans formulaire, 60secPaie garde sa propre mise en page. Les formulaires changent chaque année : téléversez ceux de l'année des feuillets.
+en: Download the year's fillable T4 from the CRA website (file "t4-fill-YYe.pdf" or "t4-fill-YYf.pdf") and the fillable RL-1 from Revenu Québec's, then upload them here. As soon as they are in place, the year's slips come out on these forms: employee copy, employer copy, government copies and email attachment. Without a form, 60secPaie keeps its own layout. Forms change every year: upload those of the slips' year.
+es: Descargue el T4 para llenar del año en el sitio de la CRA (archivo « t4-fill-AAf.pdf ») y el Relevé 1 para llenar en el de Revenu Québec, y luego súbalos aquí. En cuanto estén en su lugar, los comprobantes del año salen en estos formularios: copia del empleado, copia del empleador, copias del gobierno y adjunto de los correos. Sin formulario, 60secPaie conserva su propia maqueta. Los formularios cambian cada año: suba los del año de los comprobantes.
+
+fr: Téléverser un formulaire
+en: Upload a form
+es: Subir un formulario
+
+fr: Année des feuillets
+en: Year of the slips
+es: Año de los comprobantes
+
+fr: Formulaire
+en: Form
+es: Formulario
+
+fr: T4 (ARC)
+en: T4 (CRA)
+es: T4 (CRA)
+
+fr: Relevé 1 (Revenu Québec)
+en: RL-1 (Revenu Québec)
+es: Relevé 1 (Revenu Québec)
+
+fr: Fichier PDF
+en: PDF file
+es: Archivo PDF
+
+fr: Le formulaire officiel, tel que téléchargé ; 10 Mo au plus. Le fichier est vérifié : il doit porter les champs du feuillet.
+en: The official form, as downloaded; 10 MB at most. The file is checked: it must carry the slip's fields.
+es: El formulario oficial, tal como se descargó; 10 MB como máximo. El archivo se verifica: debe llevar los campos del comprobante.
+
+fr: Téléverser
+en: Upload
+es: Subir
+
+fr: Formulaires en place
+en: Forms in place
+es: Formularios en su lugar
+
+fr: Fichier
+en: File
+es: Archivo
+
+fr: Téléversé le
+en: Uploaded on
+es: Subido el
+
+fr: Par
+en: By
+es: Por
+
+fr: Taille
+en: Size
+es: Tamaño
+
+fr: {#0} Ko
+en: {#0} KB
+es: {#0} KB
+
+fr: Retirer ce formulaire ? Les feuillets de cette année reprendront la mise en page de 60secPaie.
+en: Remove this form? That year's slips will go back to 60secPaie's layout.
+es: ¿Retirar este formulario? Los comprobantes de ese año volverán a la maqueta de 60secPaie.
+
+fr: Aucun formulaire téléversé : les feuillets sortent sur la mise en page de 60secPaie.
+en: No form uploaded: the slips come out on 60secPaie's layout.
+es: Ningún formulario subido: los comprobantes salen en la maqueta de 60secPaie.
+
+fr: Choisissez d'abord un fichier.
+en: Choose a file first.
+es: Elija primero un archivo.
+
+fr: Seul un fichier PDF est accepté.
+en: Only a PDF file is accepted.
+es: Solo se acepta un archivo PDF.
+
+fr: Fichier trop volumineux : 10 Mo au maximum.
+en: File too large: 10 MB at most.
+es: Archivo demasiado grande: 10 MB como máximo.
+
+fr: Formulaire {0} {#1} téléversé. Les feuillets de cette année sortiront dessus.
+en: Form {0} {#1} uploaded. That year's slips will come out on it.
+es: Formulario {0} {#1} subido. Los comprobantes de ese año saldrán en él.
+
+fr: Formulaire retiré.
+en: Form removed.
+es: Formulario retirado.
+
+fr: Formulaire {0} {#1} téléversé ({2}).
+en: Form {0} {#1} uploaded ({2}).
+es: Formulario {0} {#1} subido ({2}).
+
+fr: Formulaire {0} {#1} retiré.
+en: Form {0} {#1} removed.
+es: Formulario {0} {#1} retirado.
+
+fr: Ce fichier n'est pas un PDF lisible : {0}
+en: This file is not a readable PDF: {0}
+es: Este archivo no es un PDF legible: {0}
+
+fr: Ce PDF n'est pas un formulaire à remplir (aucun champ).
+en: This PDF is not a fillable form (no field).
+es: Este PDF no es un formulario para llenar (ningún campo).
+
+fr: Ce PDF n'est pas le formulaire T4 à remplir de l'ARC (t4-fill) : la case 14 du feuillet 1 est introuvable.
+en: This PDF is not the CRA's fillable T4 (t4-fill): box 14 of slip 1 cannot be found.
+es: Este PDF no es el formulario T4 para llenar de la CRA (t4-fill): la casilla 14 del comprobante 1 no se encuentra.
+
+fr: Ce PDF n'est pas le formulaire Relevé 1 à remplir de Revenu Québec : la case A est introuvable.
+en: This PDF is not Revenu Québec's fillable RL-1: box A cannot be found.
+es: Este PDF no es el formulario Relevé 1 para llenar de Revenu Québec: la casilla A no se encuentra.
+
+fr: Type de formulaire inconnu.
+en: Unknown form type.
+es: Tipo de formulario desconocido.
+
+fr: Le formulaire T4 de l'année n'a pas été téléversé.
+en: The year's T4 form has not been uploaded.
+es: El formulario T4 del año no se ha subido.
+
+fr: Le formulaire T4 téléversé n'a pas de champs.
+en: The uploaded T4 form has no fields.
+es: El formulario T4 subido no tiene campos.
+
+fr: Les feuillets de {#0} sortent sur les formulaires officiels téléversés ({1}).
+en: The {#0} slips come out on the uploaded official forms ({1}).
+es: Los comprobantes de {#0} salen en los formularios oficiales subidos ({1}).
+
+fr: Aucun formulaire officiel téléversé pour {#0} : les feuillets sortent sur la mise en page de 60secPaie (Configuration › Formulaires officiels).
+en: No official form uploaded for {#0}: the slips come out on 60secPaie's layout (Settings › Official forms).
+es: Ningún formulario oficial subido para {#0}: los comprobantes salen en la maqueta de 60secPaie (Configuración › Formularios oficiales).

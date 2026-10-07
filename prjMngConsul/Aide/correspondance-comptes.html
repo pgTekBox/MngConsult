@@ -227,14 +227,14 @@
                 <table>
                     <thead><tr><th>Situation du compte de l’ancien logiciel</th><th>« Ignorer »</th><th>Ce que vous voyez</th><th>Pourquoi</th></tr></thead>
                     <tbody>
-                        <tr><td>Porte un solde (différent de 0)</td><td><strong>Refusé</strong></td><td>Option grisée, info-bulle « Ce compte porte un solde : il ne peut pas être ignoré. » Si la décision part quand même : fenêtre « Enregistrement impossible », puis refus de la base.</td><td>Ce montant disparaîtrait de la reprise : la balance de vérification n’aurait nulle part où le poser. Le solde testé est celui de la colonne Solde — celui du jour du chargement, pas celui de la bascule.</td></tr>
+                        <tr><td>Porte un solde (différent de 0)</td><td><strong>Refusé</strong></td><td>Option grisée, info-bulle « Ce compte porte un solde : il ne peut pas être ignoré. » Si la décision part quand même : fenêtre « Enregistrement impossible » du navigateur, puis fenêtre « Erreur » de la base.</td><td>Ce montant disparaîtrait de la reprise : la balance de vérification n’aurait nulle part où le poser. Le solde testé est celui de la colonne Solde — celui du jour du chargement, pas celui de la bascule.</td></tr>
                         <tr><td>Utilisé par une ligne de facture ou un produit en préparation, même à solde 0</td><td><strong>Refusé</strong></td><td>Option grisée, info-bulle avec le décompte (« utilisé par 11 produit(s) en préparation »). Même fenêtre, même refus de la base.</td><td>Ces factures et ces produits n’auraient plus de compte où pointer.</td></tr>
                         <tr><td>Compte de revenus ou de dépenses à solde 0, non utilisé</td><td>Permis, avec <strong>avertissement</strong></td><td>Encadré jaune sous la liste Action : « QuickBooks ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n’a pas servi avant de l’ignorer. »</td><td>QuickBooks ne fournit un solde courant qu’aux comptes de bilan : un 0 ne prouve pas que le compte est inutilisé.</td></tr>
                         <tr><td>Compte de bilan à solde 0, non utilisé</td><td>Permis</td><td>Rien de particulier.</td><td>Le solde est fiable pour ces comptes : 0 veut bien dire vide.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li><strong>Les refus sont vérifiés trois fois</strong> : dans la liste (option grisée), dans le navigateur avant l’envoi, et par la base à l’enregistrement. Rien n’est écrit quand un refus survient.</li>
+                    <li><strong>Les refus sont vérifiés trois fois</strong> : dans la liste (option grisée), dans le navigateur avant l’envoi, et par la base à l’enregistrement. Rien n’est écrit quand un refus survient. Chaque refus s’affiche dans une fenêtre au centre de l’écran — « Enregistrement impossible » quand c’est le navigateur qui arrête, « Erreur » quand c’est la base — avec la ligne et le motif ; fermez-la, corrigez, enregistrez de nouveau.</li>
                     <li><strong>Une décision « Ignorer » déjà enregistrée</strong> sur un compte désormais bloqué reste sélectionnée pour que vous puissiez la changer ; elle sera refusée au prochain enregistrement tant qu’elle n’est pas remplacée par « Lier » ou « Créer ».</li>
                     <li><strong>Le blocage « utilisé » est temporaire</strong> : il ne compte que les factures et les produits encore en préparation. Une fois créés, ils ne retiennent plus le compte.</li>
                     <li><strong>L’avertissement ne bloque rien</strong> : il disparaît si vous changez d’action. Le filet suivant est la balance de vérification, qui signale un compte ignoré portant un montant.</li>
@@ -255,6 +255,9 @@
                         <tr><td>Les classes proposées sont bornées à la nature du compte</td><td>Étape 3</td><td>Une dépense rangée dans l’actif.</td></tr>
                         <tr><td>Confirmation « C’est une écriture réelle »</td><td>Étape 3</td><td>Créer sans l’avoir voulu : c’est la seule étape qui écrit dans vos livres.</td></tr>
                         <tr><td>La balance de vérification relit tout à la date de bascule</td><td>Après coup — écran Balance de vérification</td><td>Un compte ignoré qui porte un montant, une cible de nature contraire, un compte absent du plan.</td></tr>
+                        <tr><td>L’étape 1 n’accepte qu’un fichier .csv ou .txt de 10 Mo au plus, avec un numéro ou un nom de compte</td><td>Étape 1 — navigateur, puis page</td><td>Charger un fichier illisible ou un plan sans clé ; la fenêtre « Erreur » dit quoi corriger.</td></tr>
+                        <tr><td>L’extraction QuickBooks est refusée sans date de bascule</td><td>Importation › Importer depuis QuickBooks</td><td>Une balance et un grand livre arrêtés à une date inconnue.</td></tr>
+                        <tr><td>L’étape 3 prévient des comptes encore à décider</td><td>Étape 3 — fenêtre « Attention » à l’arrivée</td><td>Oublier des comptes : ils ne sont pas repris tant qu’ils restent « à décider » ici.</td></tr>
                     </tbody>
                 </table>
                 <p>Le bloc « État de cette étape », en haut de chaque écran, n’est pas un garde-fou mais un repère : il dit ce qui reste à faire pour que l’étape soit complète.</p>
@@ -725,14 +728,14 @@
                 <table>
                     <thead><tr><th>Situation of the former account</th><th>“Ignore”</th><th>What you see</th><th>Why</th></tr></thead>
                     <tbody>
-                        <tr><td>Carries a balance (not 0)</td><td><strong>Refused</strong></td><td>Option greyed out, tooltip “This account carries a balance: it cannot be ignored.” If the decision is sent anyway: “Enregistrement impossible” popup, then database refusal.</td><td>That amount would vanish from the migration: the trial balance would have nowhere to put it. The balance tested is the Balance column’s — the one of the loading day, not of the cut-over.</td></tr>
+                        <tr><td>Carries a balance (not 0)</td><td><strong>Refused</strong></td><td>Option greyed out, tooltip “This account carries a balance: it cannot be ignored.” If the decision is sent anyway: the browser’s “Enregistrement impossible” window, then the database’s “Erreur” window.</td><td>That amount would vanish from the migration: the trial balance would have nowhere to put it. The balance tested is the Balance column’s — the one of the loading day, not of the cut-over.</td></tr>
                         <tr><td>Used by an invoice line or a product in preparation, even at zero</td><td><strong>Refused</strong></td><td>Option greyed out, tooltip with the count (“used by 11 product(s) in preparation”). Same popup, same database refusal.</td><td>Those invoices and products would have no account to point to.</td></tr>
                         <tr><td>Revenue or expense account at zero, not used</td><td>Allowed, with a <strong>warning</strong></td><td>Yellow note under the Action list: “QuickBooks does not give the balance of revenue and expense accounts: check that this account has not been used before ignoring it.”</td><td>QuickBooks only provides a current balance for balance-sheet accounts: a 0 does not prove the account is unused.</td></tr>
                         <tr><td>Balance-sheet account at zero, not used</td><td>Allowed</td><td>Nothing special.</td><td>The balance is reliable for these accounts: 0 really means empty.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li><strong>Refusals are checked three times</strong>: in the list (greyed option), in the browser before sending, and by the database on save. Nothing is written when a refusal occurs.</li>
+                    <li><strong>Refusals are checked three times</strong>: in the list (greyed option), in the browser before sending, and by the database on save. Nothing is written when a refusal occurs. Every refusal shows in a window in the middle of the screen — “Enregistrement impossible” when the browser stops it, “Erreur” when the database does — with the row and the reason; close it, fix, save again.</li>
                     <li><strong>An “Ignore” decision already saved</strong> on an account that is now blocked stays selected so you can change it; it will be refused on the next save until it is replaced by “Link” or “Create”.</li>
                     <li><strong>The “used” block is temporary</strong>: it only counts invoices and products still in preparation. Once created, they no longer hold the account.</li>
                     <li><strong>The warning blocks nothing</strong>: it disappears if you change the action. The next safety net is the trial balance, which flags an ignored account carrying an amount.</li>
@@ -753,6 +756,9 @@
                         <tr><td>Offered classes are bounded by the account’s nature</td><td>Step 3</td><td>An expense filed under assets.</td></tr>
                         <tr><td>Confirmation “C’est une écriture réelle”</td><td>Step 3</td><td>Creating without meaning to: it is the only step that writes to your books.</td></tr>
                         <tr><td>The trial balance re-reads everything as at the cut-over date</td><td>Afterwards — Trial balance screen</td><td>An ignored account carrying an amount, a target of the opposite nature, an account missing from the chart.</td></tr>
+                        <tr><td>Step 1 accepts only a .csv or .txt file of 10 MB at most, with an account number or name</td><td>Step 1 — browser, then page</td><td>Loading an unreadable file or a chart without a key; the “Erreur” window says what to fix.</td></tr>
+                        <tr><td>The QuickBooks extraction is refused without a cut-over date</td><td>Import › Import from QuickBooks</td><td>A trial balance and a ledger cut at an unknown date.</td></tr>
+                        <tr><td>Step 3 warns about accounts still to decide</td><td>Step 3 — “Attention” window on arrival</td><td>Forgetting accounts: they are not migrated as long as they stay “to decide” here.</td></tr>
                     </tbody>
                 </table>
                 <p>The “État de cette étape” block at the top of each screen is not a safeguard but a marker: it says what is left to do for the step to be complete.</p>
@@ -1223,14 +1229,14 @@
                 <table>
                     <thead><tr><th>Situación de la cuenta del programa anterior</th><th>« Ignorar »</th><th>Lo que ve</th><th>Por qué</th></tr></thead>
                     <tbody>
-                        <tr><td>Lleva saldo (distinto de 0)</td><td><strong>Rechazado</strong></td><td>Opción en gris, descripción emergente « Esta cuenta lleva saldo: no puede ignorarse. » Si la decisión se envía de todos modos: ventana « Enregistrement impossible » y luego rechazo de la base.</td><td>Ese importe desaparecería de la migración: el balance de comprobación no tendría dónde ponerlo. El saldo probado es el de la columna Saldo — el del día de la carga, no el del corte.</td></tr>
+                        <tr><td>Lleva saldo (distinto de 0)</td><td><strong>Rechazado</strong></td><td>Opción en gris, descripción emergente « Esta cuenta lleva saldo: no puede ignorarse. » Si la decisión se envía de todos modos: ventana « Enregistrement impossible » del navegador y luego ventana « Erreur » de la base.</td><td>Ese importe desaparecería de la migración: el balance de comprobación no tendría dónde ponerlo. El saldo probado es el de la columna Saldo — el del día de la carga, no el del corte.</td></tr>
                         <tr><td>Usada por una línea de factura o un producto en preparación, incluso con saldo 0</td><td><strong>Rechazado</strong></td><td>Opción en gris, descripción emergente con el recuento (« usada por 11 producto(s) en preparación »). Misma ventana, mismo rechazo de la base.</td><td>Esas facturas y esos productos se quedarían sin cuenta.</td></tr>
                         <tr><td>Cuenta de ingresos o de gastos con saldo 0, sin uso</td><td>Permitido, con <strong>aviso</strong></td><td>Recuadro amarillo bajo la lista Acción: « QuickBooks no da el saldo de las cuentas de ingresos y de gastos: verifique que esta cuenta no se haya usado antes de ignorarla. »</td><td>QuickBooks solo da saldo corriente a las cuentas de balance: un 0 no prueba que la cuenta esté sin uso.</td></tr>
                         <tr><td>Cuenta de balance con saldo 0, sin uso</td><td>Permitido</td><td>Nada en particular.</td><td>El saldo es fiable para estas cuentas: 0 significa realmente vacía.</td></tr>
                     </tbody>
                 </table>
                 <ul>
-                    <li><strong>Los rechazos se verifican tres veces</strong>: en la lista (opción en gris), en el navegador antes del envío, y en la base al guardar. No se escribe nada cuando hay un rechazo.</li>
+                    <li><strong>Los rechazos se verifican tres veces</strong>: en la lista (opción en gris), en el navegador antes del envío, y en la base al guardar. No se escribe nada cuando hay un rechazo. Cada rechazo se muestra en una ventana en el centro de la pantalla — « Enregistrement impossible » cuando lo detiene el navegador, « Erreur » cuando lo detiene la base — con la línea y el motivo; ciérrela, corrija y guarde de nuevo.</li>
                     <li><strong>Una decisión « Ignorar » ya guardada</strong> en una cuenta ahora bloqueada sigue seleccionada para que pueda cambiarla; se rechazará en el próximo guardado mientras no se sustituya por « Vincular » o « Crear ».</li>
                     <li><strong>El bloqueo « usada » es temporal</strong>: solo cuenta las facturas y los productos aún en preparación. Una vez creados, ya no retienen la cuenta.</li>
                     <li><strong>El aviso no bloquea nada</strong>: desaparece si cambia de acción. La red siguiente es el balance de comprobación, que señala una cuenta ignorada que lleva un importe.</li>
@@ -1251,6 +1257,9 @@
                         <tr><td>Las clases propuestas se limitan a la naturaleza de la cuenta</td><td>Etapa 3</td><td>Un gasto ubicado en el activo.</td></tr>
                         <tr><td>Confirmación « C’est une écriture réelle »</td><td>Etapa 3</td><td>Crear sin querer: es la única etapa que escribe en sus libros.</td></tr>
                         <tr><td>El balance de comprobación lo relee todo a la fecha de corte</td><td>Después — pantalla Balance de comprobación</td><td>Una cuenta ignorada que lleva un importe, un destino de naturaleza contraria, una cuenta ausente del plan.</td></tr>
+                        <tr><td>La etapa 1 solo acepta un archivo .csv o .txt de 10 MB como máximo, con un número o un nombre de cuenta</td><td>Etapa 1 — navegador, luego página</td><td>Cargar un archivo ilegible o un plan sin clave; la ventana « Erreur » dice qué corregir.</td></tr>
+                        <tr><td>La extracción QuickBooks se rechaza sin fecha de corte</td><td>Importación › Importar desde QuickBooks</td><td>Un balance y un libro mayor cortados a una fecha desconocida.</td></tr>
+                        <tr><td>La etapa 3 avisa de las cuentas aún por decidir</td><td>Etapa 3 — ventana « Attention » al llegar</td><td>Olvidar cuentas: no se migran mientras sigan « por decidir » aquí.</td></tr>
                     </tbody>
                 </table>
                 <p>El bloque « État de cette étape », arriba de cada pantalla, no es una salvaguarda sino una referencia: dice lo que falta para que la etapa esté completa.</p>

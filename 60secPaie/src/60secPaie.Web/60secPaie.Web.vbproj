@@ -48,6 +48,39 @@
       <HintPath>..\..\lib\BCrypt.Net-Next.dll</HintPath>
       <Private>True</Private>
     </Reference>
+    <Reference Include="PdfSharp">
+      <HintPath>..\..\lib\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.System">
+      <HintPath>..\..\lib\PdfSharp.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <HintPath>..\..\lib\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Memory">
+      <HintPath>..\..\lib\System.Memory.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Buffers">
+      <HintPath>..\..\lib\System.Buffers.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Runtime.CompilerServices.Unsafe">
+      <HintPath>..\..\lib\System.Runtime.CompilerServices.Unsafe.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Numerics.Vectors">
+      <HintPath>..\..\lib\System.Numerics.Vectors.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple">
+      <HintPath>..\..\lib\System.ValueTuple.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Threading.Tasks.Extensions">
+      <HintPath>..\..\lib\System.Threading.Tasks.Extensions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+      <HintPath>..\..\lib\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <HintPath>..\..\lib\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
     <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
@@ -94,6 +127,7 @@
     <Content Include="Employes\Cumulatifs.aspx" />
     <Content Include="Config\PlanComptable.aspx" />
     <Content Include="Config\DepotDirect.aspx" />
+    <Content Include="Config\Formulaires.aspx" />
     <Content Include="Config\UnitesCNESST.aspx" />
     <Content Include="Rapports\Feuillets.aspx" />
     <Content Include="Rapports\Feuillet.aspx" />
@@ -140,6 +174,7 @@
     <Compile Include="Infrastructure\PdfSimple.vb" />
     <Compile Include="Infrastructure\TalonPdf.vb" />
     <Compile Include="Infrastructure\FeuilletPdf.vb" />
+    <Compile Include="Infrastructure\FormulaireOfficiel.vb" />
     <Compile Include="Infrastructure\ServiceRemise.vb" />
     <Compile Include="Infrastructure\ServiceFeuillets.vb" />
     <Compile Include="Infrastructure\ServiceGL.vb" />
@@ -153,6 +188,13 @@
     </Compile>
     <Compile Include="Config\PlanComptable.aspx.designer.vb">
       <DependentUpon>PlanComptable.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Config\Formulaires.aspx.vb">
+      <DependentUpon>Formulaires.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Config\Formulaires.aspx.designer.vb">
+      <DependentUpon>Formulaires.aspx</DependentUpon>
     </Compile>
     <Compile Include="Config\DepotDirect.aspx.vb">
       <DependentUpon>DepotDirect.aspx</DependentUpon>

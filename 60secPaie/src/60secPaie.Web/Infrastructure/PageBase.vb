@@ -84,6 +84,7 @@ Public Class PageBase
             {"elements", "~/Config/ElementsPaie.aspx", "Éléments de paie"},
             {"comptes", "~/Config/PlanComptable.aspx", "Plan comptable"},
             {"depot", "~/Config/DepotDirect.aspx", "Dépôt direct"},
+            {"formulaires", "~/Config/Formulaires.aspx", "Formulaires officiels"},
             {"unites", "~/Config/UnitesCNESST.aspx", If(HorsQuebec, "Classes " & Noms.Accidents, "Unités CNESST")})
     End Function
 
