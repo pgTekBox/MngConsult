@@ -75,16 +75,24 @@ Public Class SiteMaster
 
     Private Sub Page_PreRender(sender As Object, e As EventArgs) Handles Me.PreRender
         Dim flash = TryCast(Session("flash"), String)
-        If flash IsNot Nothing AndAlso Not pnlMessage.Visible Then
+        If flash IsNot Nothing AndAlso Not _messageAffiche Then
             Session.Remove("flash")
             Afficher(flash, False)
         End If
     End Sub
 
+    Private _messageAffiche As Boolean
+
+    ''' <summary>
+    ''' Ouvre la fenêtre de message au centre de l'écran : résultat (« Fait », vert) ou erreur (rouge).
+    ''' Les titres sont du texte de la page : ils sont traduits au rendu comme le reste.
+    ''' </summary>
     Public Sub Afficher(message As String, estErreur As Boolean)
-        pnlMessage.Visible = True
-        pnlMessage.CssClass = If(estErreur, "message erreur", "message succes")
-        litMessage.Text = Server.HtmlEncode(message)
+        _messageAffiche = True
+        msgVoile.Attributes.Remove("hidden")
+        msgBoite.Attributes("class") = If(estErreur, "msg-boite erreur", "msg-boite succes")
+        litMsgTitre.Text = If(estErreur, "Erreur", "Fait")
+        litMsgTexte.Text = Server.HtmlEncode(message)
     End Sub
 
     Private Sub lnkDeconnexion_Click(sender As Object, e As EventArgs) Handles lnkDeconnexion.Click

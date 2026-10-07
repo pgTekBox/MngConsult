@@ -35,9 +35,31 @@
         </header>
 
         <main class="contenu">
-            <asp:Panel ID="pnlMessage" runat="server" Visible="false">
-                <asp:Literal ID="litMessage" runat="server" />
-            </asp:Panel>
+            <%-- La fenêtre de message : résultat (vert) ou erreur (rouge), au centre de l'écran, par-dessus la page.
+                 Le serveur l'ouvre (SiteMaster.Afficher) ; le script aussi (showAppMessage). OK, Échap ou un clic à côté la ferment. --%>
+            <div id="msgVoile" runat="server" clientidmode="Static" class="msg-voile sans-impression" hidden="hidden" onclick="if (event.target === this) closeAppMessage();">
+                <div id="msgBoite" runat="server" clientidmode="Static" class="msg-boite succes" role="alertdialog" aria-labelledby="msgTitre" aria-describedby="msgTexte">
+                    <h2 id="msgTitre"><asp:Literal ID="litMsgTitre" runat="server" /></h2>
+                    <div id="msgTexte" class="msg-texte"><asp:Literal ID="litMsgTexte" runat="server" /></div>
+                    <div class="msg-actions"><button type="button" id="msgOk" class="bouton" onclick="closeAppMessage()">OK</button></div>
+                </div>
+                <span hidden id="msgTxtFait">Fait</span><span hidden id="msgTxtErreur">Erreur</span>
+            </div>
+            <script type="text/javascript">
+                function showAppMessage(texte, titre, erreur) {
+                    var v = document.getElementById('msgVoile'); if (!v) { return; }
+                    document.getElementById('msgTexte').textContent = texte || '';
+                    document.getElementById('msgTitre').textContent = titre || document.getElementById(erreur ? 'msgTxtErreur' : 'msgTxtFait').textContent;
+                    document.getElementById('msgBoite').className = 'msg-boite ' + (erreur ? 'erreur' : 'succes');
+                    v.removeAttribute('hidden');
+                    document.getElementById('msgOk').focus();
+                }
+                function closeAppMessage() { var v = document.getElementById('msgVoile'); if (v) { v.setAttribute('hidden', 'hidden'); } }
+                document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeAppMessage(); } });
+                document.addEventListener('DOMContentLoaded', function () {
+                    var v = document.getElementById('msgVoile'); if (v && !v.hasAttribute('hidden')) { document.getElementById('msgOk').focus(); }
+                });
+            </script>
             <asp:ContentPlaceHolder ID="Contenu" runat="server" />
         </main>
 
@@ -116,7 +138,7 @@
                         }
                         zone.value = (finale + ' ' + courant).trim();
                     };
-                    rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') alert(txt('iaTxtMicroRefuse')); };
+                    rec.onerror = function (e) { finEcoute(); if (e.error === 'not-allowed' || e.error === 'service-not-allowed') showAppMessage(txt('iaTxtMicroRefuse'), null, true); };
                     rec.onend = function () { finEcoute(); if (finale.trim()) { zone.value = finale.trim(); demander(true); } };
                     ecoute = true; micro.classList.add('actif'); zone.setAttribute('placeholder', txt('iaTxtEcoute')); zone.value = '';
                     try { rec.start(); } catch (err) { finEcoute(); }
