@@ -43,7 +43,7 @@
         </p>
         <div class="actions">
             <asp:Button ID="btnEnregistrer" runat="server" Text="Enregistrer le paiement"
-                OnClientClick="return confirm('Enregistrer ce paiement ? Les paies couvertes ne pourront plus être annulées.');" />
+                OnClientClick="return confirmerPuis(this, 'Enregistrer ce paiement ? Les paies couvertes ne pourront plus être annulées.');" />
         </div>
     </asp:Panel>
 </asp:Content>

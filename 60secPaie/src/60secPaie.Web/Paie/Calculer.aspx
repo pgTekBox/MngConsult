@@ -14,7 +14,7 @@
                 <div class="actions">
                     <asp:HyperLink ID="lnkReprendre" runat="server" CssClass="bouton">Continuer cette paie</asp:HyperLink>
                     <asp:Button ID="btnSupprimerBrouillon" runat="server" Text="Supprimer ce brouillon" CssClass="danger"
-                        OnClientClick="return confirm('Supprimer la paie en préparation ?');" />
+                        OnClientClick="return confirmerPuis(this, 'Supprimer la paie en préparation ?');" />
                 </div>
             </asp:Panel>
 
@@ -65,7 +65,7 @@
             <div class="actions">
                 <asp:Button ID="btnCalculer" runat="server" Text="Calculer la paie" />
                 <asp:Button ID="btnSupprimerLot" runat="server" Text="Abandonner cette paie" CssClass="danger"
-                    OnClientClick="return confirm('Supprimer la paie en préparation ?');" />
+                    OnClientClick="return confirmerPuis(this, 'Supprimer la paie en préparation ?');" />
             </div>
         </asp:View>
 
@@ -119,7 +119,7 @@
             <asp:Literal ID="litSommaire" runat="server" />
             <div class="actions">
                 <asp:Button ID="btnConfirmer" runat="server" Text="Confirmer la paie"
-                    OnClientClick="return confirm('Confirmer cette paie ? Elle sera ajoutée aux cumulatifs des employés.');" />
+                    OnClientClick="return confirmerPuis(this, 'Confirmer cette paie ? Elle sera ajoutée aux cumulatifs des employés.');" />
                 <asp:HyperLink ID="lnkModifier" runat="server" CssClass="bouton secondaire">Modifier la saisie</asp:HyperLink>
             </div>
         </asp:View>

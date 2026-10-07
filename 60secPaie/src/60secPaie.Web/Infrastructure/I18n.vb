@@ -265,7 +265,8 @@ Public NotInheritable Class I18n
     Private Shared ReadOnly AttributsTexte As New Regex("\b(placeholder|title|alt)=""([^""]+)""", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
     Private Shared ReadOnly AttributValeur As New Regex("\bvalue=""([^""]+)""", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
     Private Shared ReadOnly EstBouton As New Regex("\btype=""(submit|button)""", RegexOptions.Compiled Or RegexOptions.IgnoreCase)
-    Private Shared ReadOnly Confirmation As New Regex("confirm\(&#39;(.*?)&#39;\)|confirm\('(.*?)'\)", RegexOptions.Compiled)
+    ''' <summary>confirm('…') du navigateur, ou confirmerPuis(this, '…') — la fenêtre de message du site (Site.Master) : même texte à traduire.</summary>
+    Private Shared ReadOnly Confirmation As New Regex("(confirm\(|confirmerPuis\(this, )&#39;(.*?)&#39;\)|(confirm\(|confirmerPuis\(this, )'(.*?)'\)", RegexOptions.Compiled)
 
     ''' <summary>Traduit le HTML dans la langue courante, ou dans la langue donnée (courriels dans la langue de l'employé).</summary>
     Public Shared Function TraduireHtml(html As String, Optional code As String = Nothing) As String
@@ -318,12 +319,13 @@ Public NotInheritable Class I18n
         If balise.IndexOf("="c) < 0 Then Return balise
         Dim r = AttributsTexte.Replace(balise, Function(m) m.Groups(1).Value & "=""" & TraduireAttribut(m.Groups(2).Value, code) & """")
         If EstBouton.IsMatch(r) Then r = AttributValeur.Replace(r, Function(m) "value=""" & TraduireAttribut(m.Groups(1).Value, code) & """")
-        If r.IndexOf("confirm(", StringComparison.Ordinal) >= 0 Then
+        If r.IndexOf("confirm", StringComparison.Ordinal) >= 0 Then
             r = Confirmation.Replace(r, Function(m)
                                             Dim encode = m.Groups(1).Success
-                                            Dim fr = HttpUtility.HtmlDecode(If(encode, m.Groups(1).Value, m.Groups(2).Value))
+                                            Dim prefixe = If(encode, m.Groups(1).Value, m.Groups(3).Value)
+                                            Dim fr = HttpUtility.HtmlDecode(If(encode, m.Groups(2).Value, m.Groups(4).Value))
                                             Dim js = Traduire(fr, code).Replace("\", "\\").Replace("'", "\'")
-                                            Return If(encode, "confirm(&#39;" & Encoder(js).Replace("'", "&#39;") & "&#39;)", "confirm('" & js & "')")
+                                            Return If(encode, prefixe & "&#39;" & Encoder(js).Replace("'", "&#39;") & "&#39;)", prefixe & "'" & js & "')")
                                         End Function)
         End If
         Return r

@@ -41,20 +41,37 @@
                 <div id="msgBoite" runat="server" clientidmode="Static" class="msg-boite succes" role="alertdialog" aria-labelledby="msgTitre" aria-describedby="msgTexte">
                     <h2 id="msgTitre"><asp:Literal ID="litMsgTitre" runat="server" /></h2>
                     <div id="msgTexte" class="msg-texte"><asp:Literal ID="litMsgTexte" runat="server" /></div>
-                    <div class="msg-actions"><button type="button" id="msgOk" class="bouton" onclick="closeAppMessage()">OK</button></div>
+                    <div class="msg-actions"><button type="button" id="msgAnnuler" class="bouton secondaire" hidden onclick="closeAppMessage()">Annuler</button><button type="button" id="msgOk" class="bouton" onclick="validerAppMessage()">OK</button></div>
                 </div>
-                <span hidden id="msgTxtFait">Fait</span><span hidden id="msgTxtErreur">Erreur</span>
+                <span hidden id="msgTxtFait">Fait</span><span hidden id="msgTxtErreur">Erreur</span><span hidden id="msgTxtConfirmer">Confirmer</span>
             </div>
             <script type="text/javascript">
+                var msgSurOk = null;
                 function showAppMessage(texte, titre, erreur) {
                     var v = document.getElementById('msgVoile'); if (!v) { return; }
+                    msgSurOk = null; document.getElementById('msgAnnuler').setAttribute('hidden', 'hidden');
                     document.getElementById('msgTexte').textContent = texte || '';
                     document.getElementById('msgTitre').textContent = titre || document.getElementById(erreur ? 'msgTxtErreur' : 'msgTxtFait').textContent;
                     document.getElementById('msgBoite').className = 'msg-boite ' + (erreur ? 'erreur' : 'succes');
                     v.removeAttribute('hidden');
                     document.getElementById('msgOk').focus();
                 }
-                function closeAppMessage() { var v = document.getElementById('msgVoile'); if (v) { v.setAttribute('hidden', 'hidden'); } }
+                function closeAppMessage() { var v = document.getElementById('msgVoile'); if (v) { v.setAttribute('hidden', 'hidden'); } msgSurOk = null; }
+                function validerAppMessage() { var f = msgSurOk; closeAppMessage(); if (f) { f(); } }
+                // Une question avec OK et Annuler : surOk n'est appelé que sur OK.
+                function showAppConfirm(texte, titre, surOk) {
+                    showAppMessage(texte, titre || document.getElementById('msgTxtConfirmer').textContent, false);
+                    document.getElementById('msgBoite').className = 'msg-boite confirmation';
+                    document.getElementById('msgAnnuler').removeAttribute('hidden');
+                    msgSurOk = surOk;
+                }
+                // Pour OnClientClick="return confirmerPuis(this, '…')" : retient le bouton, pose la question,
+                // et ne laisse partir le clic (postback) qu'après OK.
+                function confirmerPuis(bouton, texte) {
+                    if (bouton.getAttribute('data-confirme') === '1') { bouton.removeAttribute('data-confirme'); return true; }
+                    showAppConfirm(texte, null, function () { bouton.setAttribute('data-confirme', '1'); bouton.click(); });
+                    return false;
+                }
                 document.addEventListener('keydown', function (e) { if (e.key === 'Escape') { closeAppMessage(); } });
                 document.addEventListener('DOMContentLoaded', function () {
                     var v = document.getElementById('msgVoile'); if (v && !v.hasAttribute('hidden')) { document.getElementById('msgOk').focus(); }
@@ -186,8 +203,10 @@
             envoyer.addEventListener('click', function () { demander(false); });
             zone.addEventListener('keydown', function (e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); demander(); } });
             document.getElementById('iaNouvelle').addEventListener('click', function (e) {
-                e.preventDefault(); if (!confirm(txt('iaTxtConfirmer'))) return;
-                fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
+                e.preventDefault();
+                showAppConfirm(txt('iaTxtConfirmer'), null, function () {
+                    fetch(url, { method: 'DELETE', credentials: 'same-origin' }).then(function () { messages.innerHTML = ''; charge = false; ouvrir(); });
+                });
             });
             document.addEventListener('keydown', function (e) { if (e.key === 'Escape' && !panneau.hidden) fermer(); });
 

@@ -42,7 +42,7 @@
                 <div class="actions">
                     <asp:Button ID="btnEnregistrer" runat="server" Text="Enregistrer" />
                     <asp:Button ID="btnSupprimer" runat="server" Text="Supprimer" CssClass="danger" Visible="false"
-                        OnClientClick="return confirm('Supprimer cet élément de paie ?');" />
+                        OnClientClick="return confirmerPuis(this, 'Supprimer cet élément de paie ?');" />
                 </div>
             </fieldset>
 

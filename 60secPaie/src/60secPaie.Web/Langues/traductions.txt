@@ -3488,9 +3488,10 @@ fr: Fait
 en: Done
 es: Hecho
 
-fr: Erreur
-en: Error
-es: Error
+$1
+fr: Confirmer
+en: Confirm
+es: Confirmar
 
 fr: Bonjour ! Posez votre question sur la paie de cette compagnie : où cliquer, pourquoi une retenue est nulle, quand payer les retenues… Employés, NAS et comptes bancaires ne sont jamais envoyés.
 en: Hello! Ask your question about this company's payroll: where to click, why a deduction is zero, when to pay source deductions… Employee names, SINs and bank accounts are never sent.

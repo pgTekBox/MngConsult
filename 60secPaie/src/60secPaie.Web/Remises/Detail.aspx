@@ -24,6 +24,6 @@
         <h2>Annuler ce paiement</h2>
         <p>À utiliser si le paiement a été enregistré par erreur. Les retenues des paies couvertes redeviendront « à payer ».</p>
         <asp:Button ID="btnAnnuler" runat="server" Text="Annuler le paiement" CssClass="danger"
-            OnClientClick="return confirm('Annuler ce paiement de retenues ?');" />
+            OnClientClick="return confirmerPuis(this, 'Annuler ce paiement de retenues ?');" />
     </asp:Panel>
 </asp:Content>

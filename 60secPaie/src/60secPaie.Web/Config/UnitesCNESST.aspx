@@ -53,7 +53,7 @@
         <div class="actions">
             <asp:Button ID="btnEnregistrer" runat="server" Text="Enregistrer" />
             <asp:Button ID="btnSupprimer" runat="server" Text="Supprimer" CssClass="danger" Visible="false"
-                OnClientClick="if (!confirm('Supprimer cette unité ?')) { return false; }" />
+                OnClientClick="return confirmerPuis(this, 'Supprimer cette unité ?');" />
             <a runat="server" href="~/Config/UnitesCNESST.aspx">Annuler</a>
         </div>
     </fieldset>

@@ -64,8 +64,10 @@ h2 { font-size: 18px; font-weight: 600; margin: 0 0 12px; }
 .msg-boite.erreur { border-top-color: var(--erreur); }
 .msg-boite h2 { margin: 0 0 10px; font-size: 16px; color: var(--succes); }
 .msg-boite.erreur h2 { color: var(--erreur); }
+.msg-boite.confirmation { border-top-color: var(--accent); }
+.msg-boite.confirmation h2 { color: var(--accent); }
 .msg-texte { color: #334155; font-size: 14px; line-height: 1.5; white-space: pre-wrap; margin-bottom: 18px; }
-.msg-actions { display: flex; justify-content: flex-end; }
+.msg-actions { display: flex; justify-content: flex-end; gap: 8px; }
 .avertissement { background: var(--avert-fond); border: 1px solid #ecd98f; border-radius: 6px; padding: 10px 14px; margin: 8px 0; font-size: 14px; }
 .note { color: var(--encre-douce); font-size: 13px; }
 
