@@ -5,6 +5,8 @@ Imports Paie60Sec.Calcul
 Public Enum CopieFeuillet
     Employe
     Employeur
+    ''' <summary>Copie 1 : l'ARC pour le T4, Revenu Québec pour le Relevé 1.</summary>
+    Gouvernement
 End Enum
 
 ''' <summary>
@@ -15,12 +17,13 @@ End Enum
 ''' employé : mêmes cases, mêmes montants. Le document reproduit les montants que
 ''' 60secPaie a calculés ; les feuillets officiels, eux, se saisissent dans les
 ''' services en ligne de l'ARC et de Revenu Québec, et le PDF le rappelle en pied
-''' de page. Il sert à l'employé (sa copie, jointe au courriel) et à l'employeur
-''' (sa copie, à classer avec les sommaires).
+''' de page. Il sert à l'employé (sa copie, jointe au courriel), à l'employeur
+''' (sa copie, à classer avec les sommaires) et aux gouvernements (copie 1, avec
+''' le Sommaire T4 et le Sommaire 1 qui en reprennent les totaux).
 '''
 ''' Le NAS y figure en entier : un feuillet sans NAS ne sert à rien à celui qui
-''' le reçoit. C'est pourquoi la copie de l'employeur se télécharge sur demande,
-''' et que ce téléchargement est inscrit au journal.
+''' le reçoit. C'est pourquoi les copies se téléchargent sur demande, et que le
+''' téléchargement est inscrit au journal.
 '''
 ''' Les libellés passent par Tr() : appelé dans I18n.DansLaLangue, le document
 ''' sort dans la langue de l'employé.
@@ -39,28 +42,58 @@ Public NotInheritable Class FeuilletPdf
 
     Public Shared Function Produire(f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet) As Byte()
         Dim p As New PdfSimple()
-        Dessiner(p, f, compagnie, annee, copie, True)
+        DessinerT4(p, f, compagnie, annee, copie, True)
+        If f.AvecReleve1 Then DessinerR1(p, f, compagnie, annee, copie)
         Return p.Terminer(TitreDocument(f, annee))
     End Function
 
-    ''' <summary>Tous les feuillets de l'année dans un seul document, un employé après l'autre.</summary>
+    ''' <summary>Tous les feuillets de l'année dans un seul document, un employé après l'autre (T4 puis Relevé 1 de chacun).</summary>
     Public Shared Function ProduireTous(feuillets As IEnumerable(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet) As Byte()
         Dim p As New PdfSimple()
         Dim premier = True
         For Each f In feuillets
-            Dessiner(p, f, compagnie, annee, copie, premier)
+            DessinerT4(p, f, compagnie, annee, copie, premier)
+            If f.AvecReleve1 Then DessinerR1(p, f, compagnie, annee, copie)
             premier = False
         Next
         Return p.Terminer(Tr("Feuillets {#0}", annee))
     End Function
 
-    ''' <summary>« Feuillets-2026-Tremblay-Alice.pdf » ; sans employé, « Feuillets-2026-employeur.pdf ».</summary>
-    Public Shared Function NomFichier(annee As Integer, Optional f As Feuillet = Nothing) As String
+    ''' <summary>
+    ''' Ce qui va aux gouvernements : les T4 (copie 1) suivis du Sommaire T4 pour l'ARC, puis les
+    ''' Relevés 1 (copie 1) suivis du Sommaire 1 pour Revenu Québec, s'il y a eu un emploi au Québec.
+    ''' Les sommaires reprennent les totaux des feuillets et les cotisations de l'employeur de l'année
+    ''' (<paramref name="sommaire"/> = ServiceFeuillets.SommaireEmployeur).
+    ''' </summary>
+    Public Shared Function ProduireGouvernement(feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, sommaire As DataRow) As Byte()
+        Dim p As New PdfSimple()
+        Dim premier = True
+        For Each f In feuillets
+            DessinerT4(p, f, compagnie, annee, CopieFeuillet.Gouvernement, premier)
+            premier = False
+        Next
+        If Not premier Then p.NouvellePage()
+        SommaireT4(p, feuillets, compagnie, annee, sommaire)
+
+        Dim quebec = feuillets.Where(Function(f) f.AvecReleve1).ToList()
+        If quebec.Count > 0 Then
+            For Each f In quebec
+                DessinerR1(p, f, compagnie, annee, CopieFeuillet.Gouvernement)
+            Next
+            p.NouvellePage()
+            Sommaire1(p, quebec, compagnie, annee, sommaire)
+        End If
+        Return p.Terminer(Tr("Feuillets {#0}", annee) & " - " & Tr("gouvernement"))
+    End Function
+
+    ''' <summary>« Feuillets-2026-Tremblay-Alice.pdf » ; sans employé, « Feuillets-2026-employeur.pdf » ou « Feuillets-2026-gouvernement.pdf ».</summary>
+    Public Shared Function NomFichier(annee As Integer, Optional f As Feuillet = Nothing, Optional copie As CopieFeuillet = CopieFeuillet.Employeur) As String
         Dim base = Tr("Feuillets") & "-" & annee.ToString()
         If f Is Nothing Then
-            base &= "-" & Tr("employeur")
+            base &= "-" & If(copie = CopieFeuillet.Gouvernement, Tr("gouvernement"), Tr("employeur"))
         Else
             base &= "-" & f.Employe.Txt("Nom") & "-" & f.Employe.Txt("Prenom")
+            If copie = CopieFeuillet.Gouvernement Then base &= "-" & Tr("gouvernement")
         End If
         Dim sb As New StringBuilder()
         For Each c In base.Normalize(NormalizationForm.FormD)
@@ -74,15 +107,13 @@ Public NotInheritable Class FeuilletPdf
         Return If(f.AvecReleve1, Tr("Feuillets T4 et Relevé 1 de {#0}", annee), Tr("Feuillet T4 de {#0}", annee))
     End Function
 
-    ' ------------------------------------------------------------------ les pages
+    ' ------------------------------------------------------------------ les feuillets
 
-    Private Shared Sub Dessiner(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet, premierePage As Boolean)
+    Private Shared Sub DessinerT4(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet, premierePage As Boolean)
         If Not premierePage Then p.NouvellePage()
         Dim emp = f.Employe
-
-        ' ---------- T4 ----------
         Dim y = Entete(p, f, compagnie, annee, copie, Tr("T4 - État de la rémunération payée"),
-                       Tr("N° de compte RP : {0}", compagnie.Txt("NumeroEntrepriseFederal")))
+                       Tr("N° de compte RP : {0}", compagnie.Txt("NumeroEntrepriseFederal")), Tr("Copie pour l'ARC"))
         y = EnteteTableau(p, y)
         y = Texte(p, y, "10", Tr("Province d'emploi"), If(f.DeuxProvinces, String.Join(", ", f.ProvincesEmploi), f.Province))
         For Each c In ServiceFeuillets.LibellesT4
@@ -101,12 +132,12 @@ Public NotInheritable Class FeuilletPdf
             End If
         End If
         Pied(p, Tr("Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le feuillet transmis à l'ARC."))
+    End Sub
 
-        ' ---------- Relevé 1 ----------
-        If Not f.AvecReleve1 Then Return
+    Private Shared Sub DessinerR1(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet)
         p.NouvellePage()
-        y = Entete(p, f, compagnie, annee, copie, Tr("Relevé 1 - Revenus d'emploi et revenus divers"),
-                   Tr("N° d'identification RS : {0}", compagnie.Txt("NumeroIdentificationRQ")))
+        Dim y = Entete(p, f, compagnie, annee, copie, Tr("Relevé 1 - Revenus d'emploi et revenus divers"),
+                       Tr("N° d'identification RS : {0}", compagnie.Txt("NumeroIdentificationRQ")), Tr("Copie pour Revenu Québec"))
         y = EnteteTableau(p, y)
         For Each c In ServiceFeuillets.LibellesR1
             y = Montant(p, y, c.Key, Tr(c.Value), f.CaseR1(c.Key), c.Key = "A" OrElse c.Key = "E")
@@ -118,22 +149,9 @@ Public NotInheritable Class FeuilletPdf
 
     ''' <summary>L'employeur à gauche, le feuillet et l'année à droite, puis l'employé avec son NAS.</summary>
     Private Shared Function Entete(p As PdfSimple, f As Feuillet, compagnie As DataRow, annee As Integer, copie As CopieFeuillet,
-                                   titre As String, numero As String) As Double
-        Dim y As Double = HautPage
-        p.Ecrire(Gauche, y, compagnie.Txt("Nom"), True, 13D)
-        p.EcrireADroite(Droite, y, titre, True, 12D)
-        y += 16D
-        p.Ecrire(Gauche, y, compagnie.Txt("Adresse1"), False, 9D, 0.35D)
-        p.EcrireADroite(Droite, y, Tr("Année d'imposition {#0}", annee), False, 10D)
-        y += 12D
-        p.Ecrire(Gauche, y, Lieu(compagnie.Txt("Ville"), compagnie.Txt("Province"), compagnie.Txt("CodePostal")), False, 9D, 0.35D)
-        p.EcrireADroite(Droite, y, If(copie = CopieFeuillet.Employe, Tr("Copie de l'employé"), Tr("Copie de l'employeur")), True, 9D)
-        y += 12D
-        p.Ecrire(Gauche, y, numero, False, 9D, 0.35D)
-        y += 10D
-        p.Trait(Gauche, y, Droite, y, 1D, 0.15D)
-        y += 20D
-
+                                   titre As String, numero As String, copieGouvernement As String) As Double
+        Dim y = EnteteEmployeur(p, compagnie, annee, titre, numero,
+                                If(copie = CopieFeuillet.Employe, Tr("Copie de l'employé"), If(copie = CopieFeuillet.Employeur, Tr("Copie de l'employeur"), copieGouvernement)))
         Dim emp = f.Employe
         Dim nom = emp.Txt("Prenom") & " " & emp.Txt("Nom")
         If emp.Txt("Code").Length > 0 Then nom &= " (" & emp.Txt("Code") & ")"
@@ -149,6 +167,96 @@ Public NotInheritable Class FeuilletPdf
         Next
         Return y + 14D
     End Function
+
+    ''' <summary>Le bloc du haut commun aux feuillets et aux sommaires : l'employeur, le titre, l'année, la mention de la copie.</summary>
+    Private Shared Function EnteteEmployeur(p As PdfSimple, compagnie As DataRow, annee As Integer, titre As String, numero As String, mention As String) As Double
+        Dim y As Double = HautPage
+        p.Ecrire(Gauche, y, compagnie.Txt("Nom"), True, 13D)
+        p.EcrireADroite(Droite, y, titre, True, 12D)
+        y += 16D
+        p.Ecrire(Gauche, y, compagnie.Txt("Adresse1"), False, 9D, 0.35D)
+        p.EcrireADroite(Droite, y, Tr("Année d'imposition {#0}", annee), False, 10D)
+        y += 12D
+        p.Ecrire(Gauche, y, Lieu(compagnie.Txt("Ville"), compagnie.Txt("Province"), compagnie.Txt("CodePostal")), False, 9D, 0.35D)
+        p.EcrireADroite(Droite, y, mention, True, 9D)
+        y += 12D
+        p.Ecrire(Gauche, y, numero, False, 9D, 0.35D)
+        y += 10D
+        p.Trait(Gauche, y, Droite, y, 1D, 0.15D)
+        Return y + 20D
+    End Function
+
+    ' ------------------------------------------------------------------ les sommaires
+
+    ''' <summary>Le Sommaire T4 : les totaux des cases des feuillets, les cotisations de l'employeur, les versements et le solde.</summary>
+    Private Shared Sub SommaireT4(p As PdfSimple, feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, s As DataRow)
+        Dim y = EnteteEmployeur(p, compagnie, annee, Tr("Sommaire T4 (ARC)"), Tr("N° de compte RP : {0}", compagnie.Txt("NumeroEntrepriseFederal")), Tr("Copie pour l'ARC"))
+        y = EnteteTableau(p, y)
+        Dim total = Function(cle As String) feuillets.Sum(Function(f) f.CaseT4(cle))
+        Dim rpc = total("16") + total("16A")
+        Dim rrq = total("17") + total("17A")
+        Dim ae = total("18")
+        Dim impot = total("22")
+        Dim employeurAE = s.Dcm("EmployeurAE")
+        Dim employeurRPC = s.Dcm("EmployeurRPC")
+        y = Texte(p, y, "88", Tr("Nombre de feuillets T4"), feuillets.Count.ToString())
+        y = Montant(p, y, "14", Tr("Revenus d'emploi"), total("14"), True)
+        y = Montant(p, y, "16", Tr("Cotisations des employés au RPC (cases 16 et 16A)"), rpc, False)
+        y = Montant(p, y, "17", Tr("Cotisations des employés au RRQ (cases 17 et 17A)"), rrq, False)
+        y = Montant(p, y, "18", Tr("Cotisations des employés à l'AE (case 18)"), ae, True)
+        y = Montant(p, y, "22", Tr("Impôt sur le revenu retenu"), impot, True)
+        y = Montant(p, y, "19", Tr("Cotisations de l'employeur à l'AE (case 19)"), employeurAE, True)
+        y = Montant(p, y, "27", Tr("Cotisations de l'employeur au RPC"), employeurRPC, False)
+        y = Montant(p, y, "24", Tr("Gains assurables d'AE"), total("24"), False)
+        y = Montant(p, y, "26", Tr("Gains ouvrant droit à pension - RPC/RRQ"), total("26"), False)
+        y += 6D
+        ' La case 80 réunit ce qui est remis à l'ARC : le RRQ (case 17) va à Revenu Québec, pas ici.
+        Dim retenues = rpc + employeurRPC + ae + employeurAE + impot
+        Dim versements = s.Dcm("PayeFederal")
+        y = Montant(p, y, "80", Tr("Total des retenues déclarées (cases 16, 27, 18, 19 et 22)"), retenues, True)
+        y = Montant(p, y, "82", Tr("Remises enregistrées"), versements, True)
+        If retenues >= versements Then
+            y = Montant(p, y, "86", Tr("Solde dû"), retenues - versements, True)
+        Else
+            y = Montant(p, y, "84", Tr("Paiement en trop"), versements - retenues, True)
+        End If
+        y += 10D
+        y = Note(p, y, Tr("Ce sommaire reprend les totaux des feuillets qui précèdent et les cotisations de l'employeur calculées sur les paies confirmées. Il sert à remplir le Sommaire T4 dans les services en ligne de l'ARC ; les versements sont les remises enregistrées dans 60secPaie dont la période se termine dans l'année."))
+        Pied(p, Tr("Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le feuillet transmis à l'ARC."))
+    End Sub
+
+    ''' <summary>Le Sommaire 1 : les totaux des relevés, les cotisations de l'employeur (RRQ, RQAP, FSS, CNESST, CNT), les versements et le solde.</summary>
+    Private Shared Sub Sommaire1(p As PdfSimple, feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, s As DataRow)
+        Dim y = EnteteEmployeur(p, compagnie, annee, Tr("Sommaire 1 (Revenu Québec)"), Tr("N° d'identification RS : {0}", compagnie.Txt("NumeroIdentificationRQ")), Tr("Copie pour Revenu Québec"))
+        y = EnteteTableau(p, y)
+        Dim total = Function(cle As String) feuillets.Sum(Function(f) f.CaseR1(cle))
+        y = Texte(p, y, "", Tr("Nombre de relevés 1"), feuillets.Count.ToString())
+        y = Montant(p, y, "A", Tr("Revenus d'emploi"), total("A"), True)
+        y = Montant(p, y, "B", Tr("Cotisations des employés au RRQ (cases B.A et B.B)"), total("B.A") + total("B.B"), True)
+        y = Montant(p, y, "C", Tr("Cotisation à l'assurance emploi"), total("C"), True)
+        y = Montant(p, y, "E", Tr("Impôt du Québec retenu"), total("E"), True)
+        y = Montant(p, y, "G", Tr("Salaire admissible au RRQ"), total("G"), False)
+        y = Montant(p, y, "H", Tr("Cotisation au RQAP"), total("H"), True)
+        y = Montant(p, y, "I", Tr("Salaire admissible au RQAP"), total("I"), False)
+        y += 6D
+        y = Montant(p, y, "", Tr("RRQ - employeur"), s.Dcm("EmployeurRRQ"), True)
+        y = Montant(p, y, "", Tr("RQAP - employeur"), s.Dcm("EmployeurRQAP"), True)
+        y = Montant(p, y, "", Tr("Salaires assujettis au FSS"), s.Dcm("MasseFSS"), True)
+        y = Montant(p, y, "", Tr("Cotisation au FSS"), s.Dcm("FSS"), True)
+        y = Montant(p, y, "", Tr("CNESST - versements périodiques calculés"), s.Dcm("CNESST"), True)
+        y = Montant(p, y, "", Tr("Cotisation aux normes du travail (CNT), payable avec le sommaire 1"), s.Dcm("CNT"), True)
+        y += 6D
+        Dim du = s.Dcm("DuQuebec")
+        Dim verse = s.Dcm("PayeQuebec")
+        y = Montant(p, y, "", Tr("Retenues et cotisations de l'année"), du, True)
+        y = Montant(p, y, "", Tr("Remises enregistrées"), verse, True)
+        y = Montant(p, y, "", If(du >= verse, Tr("Solde dû"), Tr("Paiement en trop")), Math.Abs(du - verse), True)
+        y += 10D
+        y = Note(p, y, Tr("Ce sommaire reprend les totaux des relevés qui précèdent et les cotisations de l'employeur calculées sur les paies confirmées. Il sert à remplir le Sommaire 1 dans Mon dossier pour les entreprises ; le taux réel du FSS s'établit sur la masse salariale totale de l'année, et un écart avec le taux estimé se règle dans ce sommaire."))
+        Pied(p, Tr("Montants calculés par 60secPaie à partir des paies confirmées. Ce document ne remplace pas le relevé transmis à Revenu Québec."))
+    End Sub
+
+    ' ------------------------------------------------------------------ outils
 
     Private Shared Function Lieu(ville As String, province As String, codePostal As String) As String
         Dim s = ville
@@ -167,11 +275,7 @@ Public NotInheritable Class FeuilletPdf
 
     Private Shared Function Montant(p As PdfSimple, y As Double, code As String, libelle As String, valeur As Decimal, toujours As Boolean) As Double
         If valeur = 0D AndAlso Not toujours Then Return y
-        p.Ecrire(ColCase + 4D, y, code, True, 9D)
-        p.Ecrire(ColLibelle, y, libelle, False, 9D)
-        p.EcrireADroite(ColMontant, y, Argent(valeur), False, 9D)
-        p.Trait(Gauche, y + 4D, Droite, y + 4D, 0.3D, 0.85D)
-        Return y + 13D
+        Return Texte(p, y, code, libelle, Argent(valeur))
     End Function
 
     Private Shared Function Texte(p As PdfSimple, y As Double, code As String, libelle As String, valeur As String) As Double

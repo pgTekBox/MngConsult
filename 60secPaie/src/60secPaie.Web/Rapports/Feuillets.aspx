@@ -19,9 +19,11 @@
         <h2>Feuillets en PDF et par courriel</h2>
         <p>La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé).
            La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne
-           permet aussi de le télécharger ou de l'envoyer un à un.</p>
+           permet aussi de le télécharger ou de l'envoyer un à un. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC,
+           puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.</p>
         <div class="actions">
             <asp:Button ID="btnPdfTous" runat="server" Text="Télécharger tous les feuillets (PDF, copie de l'employeur)" CssClass="secondaire" />
+            <asp:Button ID="btnPdfGouv" runat="server" Text="Télécharger les copies du gouvernement (T4 et Sommaire T4, Relevé 1 et Sommaire 1)" CssClass="secondaire" />
             <asp:Button ID="btnCourriels" runat="server" Text="Envoyer les feuillets par courriel" CssClass="secondaire"
                 OnClientClick="return confirmerPuis(this, 'Envoyer les feuillets T4 et Relevé 1 par courriel aux employés qui reçoivent leur talon par courriel ?');" />
             <asp:CheckBox ID="chkRenvoyer" runat="server" Text="renvoyer aussi les feuillets déjà envoyés" />

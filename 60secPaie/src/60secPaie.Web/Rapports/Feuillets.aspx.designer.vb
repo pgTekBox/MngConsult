@@ -10,6 +10,7 @@ Partial Public Class PageFeuillets
     Protected WithEvents lblAucun As Global.System.Web.UI.WebControls.Label
     Protected WithEvents pnlFeuillets As Global.System.Web.UI.WebControls.Panel
     Protected WithEvents btnPdfTous As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnPdfGouv As Global.System.Web.UI.WebControls.Button
     Protected WithEvents btnCourriels As Global.System.Web.UI.WebControls.Button
     Protected WithEvents chkRenvoyer As Global.System.Web.UI.WebControls.CheckBox
 End Class

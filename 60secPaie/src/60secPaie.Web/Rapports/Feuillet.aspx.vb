@@ -91,9 +91,9 @@ Public Class PageFeuillet
         If f Is Nothing Then Return
         Dim annee = IdRequete("annee")
         Contexte.Journaliser("Feuillets " & annee.ToString() & " de l'employé n° " & f.Employe.Ent("Id").ToString() & " téléchargés en PDF (" &
-                             If(copie = CopieFeuillet.Employe, "copie de l'employé", "copie de l'employeur") & ", NAS complet).",
+                             If(copie = CopieFeuillet.Employe, "copie de l'employé", If(copie = CopieFeuillet.Employeur, "copie de l'employeur", "copie du gouvernement")) & ", NAS complet).",
                              "~/Rapports/Feuillet.aspx?employe=" & f.Employe.Ent("Id").ToString() & "&annee=" & annee.ToString())
-        EnvoyerFichier(FeuilletPdf.NomFichier(annee, f), FeuilletPdf.Produire(f, compagnie, annee, copie), "application/pdf")
+        EnvoyerFichier(FeuilletPdf.NomFichier(annee, f, copie), FeuilletPdf.Produire(f, compagnie, annee, copie), "application/pdf")
     End Sub
 
     Private Sub btnPdfEmploye_Click(sender As Object, e As EventArgs) Handles btnPdfEmploye.Click
@@ -102,6 +102,9 @@ Public Class PageFeuillet
 
     Private Sub btnPdfEmployeur_Click(sender As Object, e As EventArgs) Handles btnPdfEmployeur.Click
         Telecharger(CopieFeuillet.Employeur)
+    End Sub
+    Private Sub btnPdfGouv_Click(sender As Object, e As EventArgs) Handles btnPdfGouv.Click
+        Telecharger(CopieFeuillet.Gouvernement)
     End Sub
 
     Private Sub btnCourriel_Click(sender As Object, e As EventArgs) Handles btnCourriel.Click

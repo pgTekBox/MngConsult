@@ -243,6 +243,10 @@ Public Class CyclePaieIntegrationTests
         Assert.AreEqual("%PDF-1.4", Text.Encoding.ASCII.GetString(pdfEmployeur, 0, 8), "Le feuillet est un vrai PDF.")
         StringAssert.Contains(Text.Encoding.GetEncoding(1252).GetString(pdfEmployeur), "Copie de l'employeur")
         Assert.IsTrue(FeuilletPdf.ProduireTous(ServiceFeuillets.Preparer(2026), compagnieRow, 2026, CopieFeuillet.Employeur).Length > pdfEmployeur.Length, "Tous les feuillets dans un seul document.")
+        Dim pdfGouv = Text.Encoding.GetEncoding(1252).GetString(FeuilletPdf.ProduireGouvernement(ServiceFeuillets.Preparer(2026), compagnieRow, 2026, ServiceFeuillets.SommaireEmployeur(2026)))
+        StringAssert.Contains(pdfGouv, "Copie pour l'ARC")
+        StringAssert.Contains(pdfGouv, "Sommaire T4", "Les T4 du gouvernement sont suivis du Sommaire T4.")
+        StringAssert.Contains(pdfGouv, "Sommaire 1", "Les Relevés 1 du gouvernement sont suivis du Sommaire 1.")
         For Each ancien In Directory.GetFiles(dossier, "*.eml") : File.Delete(ancien) : Next
         Dim bilanFeuillets = ServiceCourriel.EnvoyerFeuillets(2026, False)
         Assert.AreEqual(1, bilanFeuillets.Envoyes, "Seule Alice reçoit son talon par courriel : elle seule reçoit ses feuillets.")

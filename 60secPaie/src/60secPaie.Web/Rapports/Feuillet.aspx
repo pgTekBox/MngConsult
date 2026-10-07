@@ -9,6 +9,7 @@
     <div class="actions sans-impression" style="margin-bottom:16px">
         <asp:Button ID="btnPdfEmploye" runat="server" Text="Télécharger en PDF (copie de l'employé)" CssClass="secondaire" />
         <asp:Button ID="btnPdfEmployeur" runat="server" Text="Télécharger en PDF (copie de l'employeur)" CssClass="secondaire" />
+        <asp:Button ID="btnPdfGouv" runat="server" Text="Télécharger en PDF (copie du gouvernement)" CssClass="secondaire" />
         <asp:Button ID="btnCourriel" runat="server" Text="Envoyer par courriel à l'employé" CssClass="secondaire"
             OnClientClick="return confirmerPuis(this, 'Envoyer les feuillets de cet employé par courriel, en PDF ?');" />
         <asp:Label ID="lblEnvoi" runat="server" CssClass="note" Visible="false" />

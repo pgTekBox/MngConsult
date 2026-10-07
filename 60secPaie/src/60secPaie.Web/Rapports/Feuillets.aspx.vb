@@ -199,6 +199,19 @@ Public Class PageFeuillets
         EnvoyerFichier(FeuilletPdf.NomFichier(Annee), FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur), "application/pdf")
     End Sub
 
+    ''' <summary>Les copies du gouvernement : T4 et Sommaire T4 (ARC), Relevé 1 et Sommaire 1 (Revenu Québec), en un seul PDF. NAS complet : inscrit au journal.</summary>
+    Private Sub btnPdfGouv_Click(sender As Object, e As EventArgs) Handles btnPdfGouv.Click
+        Dim feuillets = ServiceFeuillets.Preparer(Annee)
+        If feuillets.Count = 0 Then
+            Erreur("Aucun feuillet pour cette année.")
+            Return
+        End If
+        Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
+        Contexte.Journaliser("Feuillets " & Annee.ToString() & " téléchargés en PDF (copies du gouvernement avec les sommaires, " & feuillets.Count.ToString() & " employé(s), NAS complet).", "~/Rapports/Feuillets.aspx")
+        EnvoyerFichier(FeuilletPdf.NomFichier(Annee, Nothing, CopieFeuillet.Gouvernement),
+                       FeuilletPdf.ProduireGouvernement(feuillets, compagnie, Annee, ServiceFeuillets.SommaireEmployeur(Annee)), "application/pdf")
+    End Sub
+
     Private Sub btnCourriels_Click(sender As Object, e As EventArgs) Handles btnCourriels.Click
         Try
             Dim bilan = ServiceCourriel.EnvoyerFeuillets(Annee, chkRenvoyer.Checked)

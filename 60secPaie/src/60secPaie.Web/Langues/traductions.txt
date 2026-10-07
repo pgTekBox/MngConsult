@@ -4485,10 +4485,6 @@ fr: Feuillets en PDF et par courriel
 en: Slips as PDF and by email
 es: Comprobantes en PDF y por correo electrónico
 
-fr: La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé). La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne permet aussi de le télécharger ou de l'envoyer un à un.
-en: The employer copy gathers every slip of the year in one document, with full SINs (the download is logged). The employee copy goes out by email, as a PDF, to the employees who receive their pay stub by email; the "Feuillet" link on each row also lets you download or send them one at a time.
-es: La copia del empleador reúne todos los comprobantes del año en un documento, con el NAS completo (descarga registrada). La copia del empleado sale por correo electrónico, en PDF, a los empleados que reciben su talón por correo; el enlace « Feuillet » de cada línea permite también descargarlos o enviarlos uno a uno.
-
 fr: Télécharger tous les feuillets (PDF, copie de l'employeur)
 en: Download all slips (PDF, employer copy)
 es: Descargar todos los comprobantes (PDF, copia del empleador)
@@ -4588,3 +4584,73 @@ es: copia del empleado
 fr: copie de l'employeur
 en: employer copy
 es: copia del empleador
+
+# ---------- Copies du gouvernement : T4 + Sommaire T4, Relevé 1 + Sommaire 1 ----------
+
+fr: gouvernement
+en: government
+es: gobierno
+
+fr: Copie pour l'ARC
+en: Copy for the CRA
+es: Copia para la CRA
+
+fr: Copie pour Revenu Québec
+en: Copy for Revenu Québec
+es: Copia para Revenu Québec
+
+fr: Nombre de feuillets T4
+en: Number of T4 slips
+es: Número de comprobantes T4
+
+fr: Nombre de relevés 1
+en: Number of RL-1 slips
+es: Número de relevés 1
+
+fr: Cotisations des employés au RRQ (cases 17 et 17A)
+en: Employees' QPP contributions (boxes 17 and 17A)
+es: Cotizaciones de los empleados al RRQ (casillas 17 y 17A)
+
+fr: Total des retenues déclarées (cases 16, 27, 18, 19 et 22)
+en: Total deductions reported (boxes 16, 27, 18, 19 and 22)
+es: Total de retenciones declaradas (casillas 16, 27, 18, 19 y 22)
+
+fr: Solde dû
+en: Balance due
+es: Saldo adeudado
+
+fr: Paiement en trop
+en: Overpayment
+es: Pago en exceso
+
+fr: Cotisations des employés au RRQ (cases B.A et B.B)
+en: Employees' QPP contributions (boxes B.A and B.B)
+es: Cotizaciones de los empleados al RRQ (casillas B.A y B.B)
+
+fr: Ce sommaire reprend les totaux des feuillets qui précèdent et les cotisations de l'employeur calculées sur les paies confirmées. Il sert à remplir le Sommaire T4 dans les services en ligne de l'ARC ; les versements sont les remises enregistrées dans 60secPaie dont la période se termine dans l'année.
+en: This summary takes the totals of the preceding slips and the employer contributions calculated on confirmed pay runs. It helps fill in the T4 Summary in the CRA's online services; the remittances are those recorded in 60secPaie whose period ends in the year.
+es: Este sumario retoma los totales de los comprobantes anteriores y las cotizaciones del empleador calculadas sobre las nóminas confirmadas. Sirve para llenar el Sumario T4 en los servicios en línea de la CRA; las remesas son las registradas en 60secPaie cuyo período termina en el año.
+
+fr: Ce sommaire reprend les totaux des relevés qui précèdent et les cotisations de l'employeur calculées sur les paies confirmées. Il sert à remplir le Sommaire 1 dans Mon dossier pour les entreprises ; le taux réel du FSS s'établit sur la masse salariale totale de l'année, et un écart avec le taux estimé se règle dans ce sommaire.
+en: This summary takes the totals of the preceding slips and the employer contributions calculated on confirmed pay runs. It helps fill in Summary 1 in My Account for businesses; the actual HSF rate is set on the year's total payroll, and any difference with the estimated rate is settled in that summary.
+es: Este sumario retoma los totales de los relevés anteriores y las cotizaciones del empleador calculadas sobre las nóminas confirmadas. Sirve para llenar el Sumario 1 en Mon dossier pour les entreprises; la tasa real del FSS se establece sobre la masa salarial total del año, y una diferencia con la tasa estimada se regulariza en ese sumario.
+
+fr: Télécharger les copies du gouvernement (T4 et Sommaire T4, Relevé 1 et Sommaire 1)
+en: Download the government copies (T4 and T4 Summary, RL-1 and Summary 1)
+es: Descargar las copias del gobierno (T4 y Sumario T4, Relevé 1 y Sumario 1)
+
+fr: Télécharger en PDF (copie du gouvernement)
+en: Download as PDF (government copy)
+es: Descargar en PDF (copia del gobierno)
+
+fr: copie du gouvernement
+en: government copy
+es: copia del gobierno
+
+fr: Feuillets {#0} téléchargés en PDF (copies du gouvernement avec les sommaires, {#1} employé(s), NAS complet).
+en: {#0} slips downloaded as PDF (government copies with the summaries, {#1} employee(s), full SIN).
+es: Comprobantes {#0} descargados en PDF (copias del gobierno con los sumarios, {#1} empleado(s), NAS completo).
+
+fr: La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé). La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne permet aussi de le télécharger ou de l'envoyer un à un. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC, puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.
+en: The employer copy gathers every slip of the year in one document, with full SINs (the download is logged). The employee copy goes out by email, as a PDF, to the employees who receive their pay stub by email; the "Feuillet" link on each row also lets you download or send them one at a time. The government copies gather the T4 slips (copy 1) and the T4 Summary for the CRA, then the RL-1 slips (copy 1) and Summary 1 for Revenu Québec.
+es: La copia del empleador reúne todos los comprobantes del año en un documento, con el NAS completo (descarga registrada). La copia del empleado sale por correo electrónico, en PDF, a los empleados que reciben su talón por correo; el enlace « Feuillet » de cada línea permite también descargarlos o enviarlos uno a uno. Las copias del gobierno reúnen los T4 (copia 1) y el Sumario T4 para la CRA, luego los Relevés 1 (copia 1) y el Sumario 1 para Revenu Québec.

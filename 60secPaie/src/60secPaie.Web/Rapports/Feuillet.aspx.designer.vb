@@ -6,6 +6,7 @@ Partial Public Class PageFeuillet
     Protected WithEvents btnNas As Global.System.Web.UI.WebControls.Button
     Protected WithEvents btnPdfEmploye As Global.System.Web.UI.WebControls.Button
     Protected WithEvents btnPdfEmployeur As Global.System.Web.UI.WebControls.Button
+    Protected WithEvents btnPdfGouv As Global.System.Web.UI.WebControls.Button
     Protected WithEvents btnCourriel As Global.System.Web.UI.WebControls.Button
     Protected WithEvents lblEnvoi As Global.System.Web.UI.WebControls.Label
     Protected WithEvents litFeuillet As Global.System.Web.UI.WebControls.Literal

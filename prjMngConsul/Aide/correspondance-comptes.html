@@ -193,7 +193,7 @@
                     <li><strong>Vérifiez que le compte est vraiment inutile</strong> : pas de solde, pas d’activité dans l’ancien logiciel, pas de facture ni de produit qui s’y rattache.</li>
                     <li><strong>Mettez la liste Action sur « Ignorer ».</strong> Si l’option est grisée, le compte ne peut pas être ignoré : l’info-bulle dit pourquoi (voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
                     <li><strong>Lisez l’encadré jaune s’il apparaît.</strong> Il signale un compte de revenus ou de dépenses dont le solde 0 ne prouve rien. C’est un avertissement, pas un refus.</li>
-                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compte compte dans « Ignorés » et sort du filtre « À décider seulement ». Il compte comme décidé : le bloc « État de cette étape », en haut, monte d’autant, et l’étape 3 l’affiche dans son compteur « Ignorés ».</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compte compte dans « Ignorés » et sort du filtre « À décider seulement ». Il compte comme décidé : le bloc « État de cette étape », en haut, monte d’autant, et l’étape 3 l’affiche dans son compteur « Ignorés ». La fenêtre « Fait » confirme l’enregistrement ; un compte ignoré n’a rien à créer : il ne retient pas l’étape 3.</li>
                     <li><strong>Faites confirmer par la balance de vérification.</strong> Une fois la balance chargée à la date de bascule, <span class="chemin">Importation › Balance de vérification</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> ressort en Erreur tout compte ignoré qui porte un montant à cette date. Si c’est le cas, revenez ici et choisissez « Lier » ou « Créer ».</li>
                 </ol>
                 <p>Un compte ignoré n’est ni lié ni créé : rien de ce qui lui est rattaché dans l’ancien logiciel ne sera repris sur lui. C’est pourquoi un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré. Le détail des quatre situations est dans <a href="#fr-garde-fous">Les garde-fous de « Ignorer »</a>.</p>
@@ -202,7 +202,7 @@
                 <ol>
                     <li>Mettez le filtre « Afficher » sur <strong>« Déjà décidés »</strong> pour ne voir que les lignes enregistrées, ou cherchez la ligne dans « Tout ».</li>
                     <li>Changez l’<strong>Action</strong>, le compte cible ou la note. « — à décider » annule la décision sans en prendre une autre.</li>
-                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd> : la nouvelle décision remplace l’ancienne, les compteurs et l’avancement suivent. Un changement non enregistré est perdu en quittant la page.</li>
+                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd> : la nouvelle décision remplace l’ancienne, les compteurs et l’avancement suivent, et la fenêtre « Fait » le confirme. Un changement non enregistré est perdu en quittant la page.</li>
                 </ol>
                 <p>Toute décision se rediscute, sauf une : la ligne dont le compte a été créé à l’étape 3 (« Créé ✓ »). Rien de ce qui se change ici n’écrit en comptabilité.</p>
                 <table>
@@ -214,6 +214,7 @@
                         <tr><td>Ignorer</td><td>Choisissez « Lier » ou « Créer », ou « — à décider », puis enregistrez.</td><td>Le compte revient dans la reprise.</td></tr>
                         <tr><td>Lié d’office</td><td>Comme une liaison ordinaire.</td><td>Un rechargement ne refait la liaison d’office que pour les comptes sans décision : votre choix est conservé.</td></tr>
                         <tr><td>Ignorer, signalé en Erreur par le contrôle de la balance</td><td>Choisissez « Lier » vers le compte qui doit recevoir le montant, ou « Créer », puis enregistrez.</td><td>Le montant de la balance aura un compte ; relancez le contrôle pour le confirmer.</td></tr>
+                        <tr><td>Ignorer, puis un solde apparu après une nouvelle extraction</td><td>Rien à défaire d’office : la décision reste, le garde-fou de la grille ne se rejoue pas sur une décision déjà enregistrée.</td><td>C’est le contrôle de la balance qui le verra ; relancez-le après chaque extraction, et changez la décision si un montant ressort.</td></tr>
                         <tr><td>Décision sur un compte renommé dans QuickBooks, puis rechargé</td><td>Rien à défaire : la ligne est revenue « — à décider », l’ancienne décision est orpheline.</td><td>Reprenez la décision ; la clé étant le nom quand il n’y a pas de numéro, le compte renommé est un nouveau compte pour l’écran.</td></tr>
                         <tr><td>Décision prise par l’autre voie de chargement (fichier ↔ lecture directe)</td><td>Rechargez par la voie d’origine, ou décidez de nouveau.</td><td>Les deux voies ne partagent pas leurs décisions ; l’extraction complète et le bouton de l’étape 1 sont une seule voie.</td></tr>
                     </tbody>
@@ -690,7 +691,7 @@
                     <li><strong>Check that the account is truly useless</strong>: no balance, no activity in the former application, no invoice or product attached to it.</li>
                     <li><strong>Set the Action list to “Ignore”.</strong> If the option is greyed out, the account cannot be ignored: the tooltip says why (see <a href="#en-safeguards">the safeguards</a>).</li>
                     <li><strong>Read the yellow note if it appears.</strong> It flags a revenue or expense account whose zero balance proves nothing. It is a warning, not a refusal.</li>
-                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The account counts in “Ignored” and leaves the “To decide only” filter. It counts as decided: the “État de cette étape” block at the top rises accordingly, and step 3 shows it in its “Ignorés” counter.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The account counts in “Ignored” and leaves the “To decide only” filter. It counts as decided: the “État de cette étape” block at the top rises accordingly, and step 3 shows it in its “Ignorés” counter. The “Fait” window confirms the save; an ignored account has nothing to create: it does not hold step 3 back.</li>
                     <li><strong>Have the trial balance confirm it.</strong> Once the balance is loaded as at the cut-over date, <span class="chemin">Import › Trial balance</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> flags as an Error any ignored account carrying an amount at that date. If so, come back here and choose “Link” or “Create”.</li>
                 </ol>
                 <p>An ignored account is neither linked nor created: nothing attached to it in the former application will be migrated to it. That is why an account that carries a balance, or that an invoice or product in preparation uses, cannot be ignored. The four situations are detailed in <a href="#en-safeguards">The safeguards on “Ignore”</a>.</p>
@@ -699,7 +700,7 @@
                 <ol>
                     <li>Set the “Show” filter to <strong>“Already decided”</strong> to see only saved rows, or find the row under “All”.</li>
                     <li>Change the <strong>Action</strong>, the target account or the note. “— to decide” cancels the decision without taking another.</li>
-                    <li>Click <kbd>Save mappings</kbd>: the new decision replaces the old one, counters and progress follow. An unsaved change is lost when you leave the page.</li>
+                    <li>Click <kbd>Save mappings</kbd>: the new decision replaces the old one, counters and progress follow, and the “Fait” window confirms it. An unsaved change is lost when you leave the page.</li>
                 </ol>
                 <p>Every decision can be revisited, except one: the row whose account was created in step 3 (“Created ✓”). Nothing changed here writes to the books.</p>
                 <table>
@@ -711,6 +712,7 @@
                         <tr><td>Ignore</td><td>Choose “Link” or “Create”, or “— to decide”, then save.</td><td>The account comes back into the migration.</td></tr>
                         <tr><td>Linked outright</td><td>Like an ordinary link.</td><td>A reload only redoes the outright link for accounts without a decision: your choice is kept.</td></tr>
                         <tr><td>Ignore, flagged as an Error by the trial balance check</td><td>Choose “Link” to the account that must receive the amount, or “Create”, then save.</td><td>The balance amount will have an account; run the check again to confirm.</td></tr>
+                        <tr><td>Ignore, then a balance appeared after a new extraction</td><td>Nothing to undo by itself: the decision stays, the grid’s safeguard does not replay on a decision already saved.</td><td>The trial balance check is what will see it; run it again after every extraction, and change the decision if an amount shows up.</td></tr>
                         <tr><td>Decision on an account renamed in QuickBooks, then reloaded</td><td>Nothing to undo: the row came back “— to decide”, the old decision is orphaned.</td><td>Decide again; since the key is the name when there is no number, the renamed account is a new account for the screen.</td></tr>
                         <tr><td>Decision taken through the other loading path (file ↔ direct read)</td><td>Reload through the original path, or decide again.</td><td>The two paths do not share their decisions; the full extraction and the step 1 button are one single path.</td></tr>
                     </tbody>
@@ -1187,7 +1189,7 @@
                     <li><strong>Verifique que la cuenta sea realmente inútil</strong>: sin saldo, sin actividad en el programa anterior, sin factura ni producto asociado.</li>
                     <li><strong>Ponga la lista Acción en « Ignorar ».</strong> Si la opción está en gris, la cuenta no puede ignorarse: la descripción emergente dice por qué (véanse <a href="#es-protecciones">las protecciones</a>).</li>
                     <li><strong>Lea el recuadro amarillo si aparece.</strong> Señala una cuenta de ingresos o de gastos cuyo saldo 0 no prueba nada. Es un aviso, no un rechazo.</li>
-                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ». Cuenta como decidida: el bloque « État de cette étape », arriba, sube en consecuencia, y la etapa 3 la muestra en su contador « Ignorés ».</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ». Cuenta como decidida: el bloque « État de cette étape », arriba, sube en consecuencia, y la etapa 3 la muestra en su contador « Ignorés ». La ventana « Fait » confirma el guardado; una cuenta ignorada no tiene nada que crear: no retiene la etapa 3.</li>
                     <li><strong>Haga que el balance de comprobación lo confirme.</strong> Una vez cargado el balance a la fecha de corte, <span class="chemin">Importación › Balance de comprobación</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> señala como Error toda cuenta ignorada que lleve un importe a esa fecha. Si es el caso, vuelva aquí y elija « Vincular » o « Crear ».</li>
                 </ol>
                 <p>Una cuenta ignorada no se vincula ni se crea: nada de lo asociado a ella en el programa anterior se migrará a ella. Por eso una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse. El detalle de las cuatro situaciones está en <a href="#es-protecciones">Las protecciones de « Ignorar »</a>.</p>
@@ -1196,7 +1198,7 @@
                 <ol>
                     <li>Ponga el filtro « Mostrar » en <strong>« Ya decididas »</strong> para ver solo las líneas guardadas, o busque la línea en « Todo ».</li>
                     <li>Cambie la <strong>Acción</strong>, la cuenta destino o la nota. « — por decidir » anula la decisión sin tomar otra.</li>
-                    <li>Pulse <kbd>Guardar las correspondencias</kbd>: la nueva decisión sustituye a la anterior, los contadores y el avance siguen. Un cambio no guardado se pierde al salir de la página.</li>
+                    <li>Pulse <kbd>Guardar las correspondencias</kbd>: la nueva decisión sustituye a la anterior, los contadores y el avance siguen, y la ventana « Fait » lo confirma. Un cambio no guardado se pierde al salir de la página.</li>
                 </ol>
                 <p>Toda decisión se puede reconsiderar, salvo una: la línea cuya cuenta se creó en la etapa 3 (« Creada ✓ »). Nada de lo que se cambia aquí escribe en la contabilidad.</p>
                 <table>
@@ -1208,6 +1210,7 @@
                         <tr><td>Ignorar</td><td>Elija « Vincular » o « Crear », o « — por decidir », y guarde.</td><td>La cuenta vuelve a la migración.</td></tr>
                         <tr><td>Vinculada de oficio</td><td>Como un vínculo ordinario.</td><td>Una recarga solo rehace el vínculo de oficio para las cuentas sin decisión: su elección se conserva.</td></tr>
                         <tr><td>Ignorar, señalada como Error por el control del balance</td><td>Elija « Vincular » a la cuenta que debe recibir el importe, o « Crear », y guarde.</td><td>El importe del balance tendrá una cuenta; relance el control para confirmarlo.</td></tr>
+                        <tr><td>Ignorar, y luego un saldo aparecido tras una nueva extracción</td><td>Nada que deshacer por sí solo: la decisión se mantiene, la salvaguarda de la cuadrícula no se repite sobre una decisión ya guardada.</td><td>El control del balance es el que lo verá; vuelva a lanzarlo tras cada extracción y cambie la decisión si aparece un importe.</td></tr>
                         <tr><td>Decisión sobre una cuenta renombrada en QuickBooks y luego recargada</td><td>Nada que deshacer: la línea volvió « — por decidir », la antigua decisión quedó huérfana.</td><td>Vuelva a decidir; como la clave es el nombre cuando no hay número, la cuenta renombrada es una cuenta nueva para la pantalla.</td></tr>
                         <tr><td>Decisión tomada por la otra vía de carga (archivo ↔ lectura directa)</td><td>Recargue por la vía original, o decida de nuevo.</td><td>Las dos vías no comparten sus decisiones; la extracción completa y el botón de la etapa 1 son una sola vía.</td></tr>
                     </tbody>
