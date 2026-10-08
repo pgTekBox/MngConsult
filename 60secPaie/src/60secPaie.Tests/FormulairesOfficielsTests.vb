@@ -30,7 +30,8 @@ Public Class FormulairesOfficielsTests
         Dim feuillets As New List(Of Feuillet) From {Employe(1, "Tremblay", "Alice", 52000D), Employe(2, "Gagnon", "Bruno", 61000D), Employe(3, "Roy", "Chloé", 43000D)}
 
         ' Un employé : une page T4 (feuillet 1 rempli, feuillet 2 vide) et la page du Relevé 1 qui convient à la copie.
-        Dim un = Ouvrir(FormulaireOfficiel.Produire(feuillets(0), compagnie, 2025, CopieFeuillet.Employe, fo))
+        Dim octetsUn = FormulaireOfficiel.Produire(feuillets(0), compagnie, 2025, CopieFeuillet.Employe, fo)
+        Dim un = Ouvrir(octetsUn)
         Assert.AreEqual(2, un.PageCount)
         Dim valeurs = ValeursDe(un)
         Assert.AreEqual("52000.00", valeurs("t4_1_form1[0].Page1[0].Slip1[0].Box14[0].Slip1Box14[0]"), "Case 14 du feuillet 1.")
@@ -38,6 +39,17 @@ Public Class FormulairesOfficielsTests
         Assert.AreEqual("QC", valeurs("t4_1_form1[0].Page1[0].Slip1[0].Box10[0].Slip1Box10[0]"))
         Assert.AreEqual("2025", valeurs("t4_1_form1[0].Page1[0].Slip1[0].Year[0].Slip1Year[0]"))
         Assert.IsFalse(valeurs.ContainsKey("t4_1_form1[0].Page1[0].Slip2[0].Box14[0].Slip1Box14[0]"), "Le feuillet 2 reste vide.")
+        ' Lecture seule : Courier 9 points noir sur les champs de texte, champs verrouillés, document protégé (sans mot de passe d'ouverture).
+        Dim champs = ChampsDe(un)
+        Dim case14 = champs("t4_1_form1[0].Page1[0].Slip1[0].Box14[0].Slip1Box14[0]")
+        Assert.AreEqual("/Cour 9 Tf 0 g", case14.Elements.GetString("/DA"), "Les valeurs sont en Courier 9 points, noir.")
+        Assert.AreEqual(1, case14.Elements.GetInteger("/Ff") And 1, "Le champ est en lecture seule.")
+        Dim exempt = champs.Keys.First(Function(k) k.Contains("Box28") AndAlso Not champs(k).Elements.ContainsKey("/Kids"))
+        Assert.AreNotEqual("/Cour 9 Tf 0 g", champs(exempt).Elements.GetString("/DA"), "Les cases à cocher gardent leur apparence.")
+        Assert.AreEqual(1, champs(exempt).Elements.GetInteger("/Ff") And 1, "Les cases à cocher sont verrouillées aussi.")
+        StringAssert.Contains(Text.Encoding.ASCII.GetString(octetsUn), "/Encrypt", "Le document est protégé contre la modification.")
+        Dim polices = un.Internals.Catalog.Elements.GetDictionary("/AcroForm").Elements.GetDictionary("/DR").Elements.GetDictionary("/Font")
+        Assert.AreEqual("/Courier", polices.Elements.GetDictionary("/Cour").Elements.GetName("/BaseFont"), "Courier est dans les ressources du formulaire.")
         ' La copie 2 (employé) ne porte que les champs « rep_ » : la case A, l'identité, le code du relevé.
         Assert.AreEqual("52000.00", valeurs("r1_1_rep_caseA"), "Case A du Relevé 1, copie de l'employé.")
         StringAssert.Contains(valeurs("r1_1_rep_Identifiant1"), "TREMBLAY")
@@ -88,6 +100,30 @@ Public Class FormulairesOfficielsTests
         If kids Is Nothing Then Return
         For i = 0 To kids.Elements.Count - 1
             Parcourir(kids.Elements.GetDictionary(i), nom, d)
+        Next
+    End Sub
+
+    ''' <summary>Nom complet → dictionnaire du champ, pour chaque champ nommé.</summary>
+    Private Shared Function ChampsDe(doc As PdfDocument) As Dictionary(Of String, PdfDictionary)
+        Dim d As New Dictionary(Of String, PdfDictionary)(StringComparer.Ordinal)
+        Dim fields = doc.Internals.Catalog.Elements.GetDictionary("/AcroForm").Elements.GetArray("/Fields")
+        For i = 0 To fields.Elements.Count - 1
+            ParcourirChamps(fields.Elements.GetDictionary(i), "", d)
+        Next
+        Return d
+    End Function
+
+    Private Shared Sub ParcourirChamps(champ As PdfDictionary, chemin As String, d As Dictionary(Of String, PdfDictionary))
+        If champ Is Nothing Then Return
+        Dim nom = chemin
+        If champ.Elements.ContainsKey("/T") Then
+            nom = If(chemin.Length = 0, "", chemin & ".") & champ.Elements.GetString("/T")
+            d(nom) = champ
+        End If
+        Dim kids = champ.Elements.GetArray("/Kids")
+        If kids Is Nothing Then Return
+        For i = 0 To kids.Elements.Count - 1
+            ParcourirChamps(kids.Elements.GetDictionary(i), nom, d)
         Next
     End Sub
 

@@ -4,6 +4,7 @@ Imports System.Text
 Imports PdfSharp.Pdf
 Imports PdfSharp.Pdf.Advanced
 Imports PdfSharp.Pdf.IO
+Imports PdfSharp.Pdf.Security
 
 ''' <summary>Les formulaires officiels d'une année, tels que la compagnie les a téléversés (Configuration › Formulaires officiels).</summary>
 Public Class FormulairesAnnee
@@ -50,6 +51,11 @@ Public NotInheritable Class FormulaireOfficiel
     Private Const PageR1Gouvernement As Integer = 0
     Private Const PageR1Employe As Integer = 1
     Private Const PageR1Employeur As Integer = 2
+
+    ''' <summary>Apparence des valeurs inscrites : Courier 9 points, noir, comme sur les feuillets des logiciels de paie courants.</summary>
+    Private Const ApparenceValeurs As String = "/Cour 9 Tf 0 g"
+    ''' <summary>Bit « lecture seule » du drapeau /Ff d'un champ.</summary>
+    Private Const ChampLectureSeule As Integer = 1
 
     Private Sub New()
     End Sub
@@ -161,7 +167,18 @@ Public NotInheritable Class FormulaireOfficiel
         End Select
     End Function
 
+    ''' <summary>
+    ''' Le document, en lecture seule : les champs sont verrouillés (AssurerFormulaire) et le PDF est protégé
+    ''' par un mot de passe de propriétaire aléatoire qui interdit la modification, le remplissage et
+    ''' l'annotation ; il s'ouvre sans mot de passe et s'imprime.
+    ''' </summary>
     Private Shared Function Octets(doc As PdfDocument) As Byte()
+        doc.SecurityHandler.SetEncryption(PdfDefaultEncryption.V4UsingAES)
+        doc.SecuritySettings.OwnerPassword = Guid.NewGuid().ToString("N")
+        doc.SecuritySettings.PermitModifyDocument = False
+        doc.SecuritySettings.PermitFormsFill = False
+        doc.SecuritySettings.PermitAnnotations = False
+        doc.SecuritySettings.PermitAssembleDocument = False
         Using m As New MemoryStream()
             doc.Save(m, False)
             Return m.ToArray()
@@ -327,7 +344,10 @@ Public NotInheritable Class FormulaireOfficiel
         AssurerFormulaire(copie)
     End Sub
 
-    ''' <summary>Met la liste des champs du document en accord avec les cases de ses pages (après des imports), sans scripts.</summary>
+    ''' <summary>
+    ''' Met la liste des champs du document en accord avec les cases de ses pages (après des imports), sans scripts ;
+    ''' inscrit les valeurs en Courier 9 points noir et verrouille chaque champ.
+    ''' </summary>
     Private Shared Sub AssurerFormulaire(doc As PdfDocument)
         Dim acro As PdfDictionary
         If doc.Internals.Catalog.Elements.ContainsKey("/AcroForm") Then
@@ -335,10 +355,10 @@ Public NotInheritable Class FormulaireOfficiel
         Else
             acro = New PdfDictionary(doc)
             doc.Internals.AddObject(acro)
-            acro.Elements.SetString("/DA", "/Helv 0 Tf 0 g")
-            acro.Elements.SetBoolean("/NeedAppearances", True)
             doc.Internals.Catalog.Elements.SetReference("/AcroForm", acro)
         End If
+        acro.Elements.SetString("/DA", ApparenceValeurs)
+        AssurerCourier(doc, acro)
         Dim fields As New PdfArray(doc)
         Dim vus As New HashSet(Of PdfReference)()
         For Each page In doc.Pages
@@ -352,11 +372,62 @@ Public NotInheritable Class FormulaireOfficiel
                 ' Sans /P, l'import d'une page n'entraîne pas les autres pages du formulaire (les cases d'un même champ
                 ' se renvoient l'une à l'autre par leur page) : le document produit reste léger.
                 an.Elements.Remove("/P")
+                Verrouiller(an)
             Next
             page.Elements.Remove("/AA")
         Next
         acro.Elements("/Fields") = fields
         acro.Elements.SetBoolean("/NeedAppearances", True)
+    End Sub
+
+    ''' <summary>La police Courier (standard, non incorporée) dans les ressources du formulaire, sous le nom /Cour utilisé par l'apparence des valeurs.</summary>
+    Private Shared Sub AssurerCourier(doc As PdfDocument, acro As PdfDictionary)
+        Dim dr = acro.Elements.GetDictionary("/DR")
+        If dr Is Nothing Then
+            dr = New PdfDictionary(doc)
+            acro.Elements("/DR") = dr
+        End If
+        Dim polices = dr.Elements.GetDictionary("/Font")
+        If polices Is Nothing Then
+            polices = New PdfDictionary(doc)
+            dr.Elements("/Font") = polices
+        End If
+        If polices.Elements.ContainsKey("/Cour") Then Return
+        Dim courier As New PdfDictionary(doc)
+        doc.Internals.AddObject(courier)
+        courier.Elements.SetName("/Type", "/Font")
+        courier.Elements.SetName("/Subtype", "/Type1")
+        courier.Elements.SetName("/BaseFont", "/Courier")
+        courier.Elements.SetName("/Encoding", "/WinAnsiEncoding")
+        polices.Elements.SetReference("/Cour", courier)
+    End Sub
+
+    ''' <summary>
+    ''' La case et sa chaîne de parents jusqu'au champ racine : chaque champ reçoit le drapeau « lecture seule » ;
+    ''' les champs de texte et de choix prennent l'apparence Courier 9 noir (les cases à cocher gardent leur coche).
+    ''' </summary>
+    Private Shared Sub Verrouiller(annotation As PdfDictionary)
+        Dim chaine As New List(Of PdfDictionary)()
+        Dim cur As PdfDictionary = annotation
+        While cur IsNot Nothing AndAlso chaine.Count < 32
+            chaine.Add(cur)
+            cur = cur.Elements.GetDictionary("/Parent")
+        End While
+        Dim ft As String = Nothing
+        For Each d In chaine
+            If d.Elements.ContainsKey("/FT") Then ft = d.Elements.GetName("/FT") : Exit For
+        Next
+        Dim texteOuChoix = (ft = "/Tx" OrElse ft = "/Ch")
+        Dim premierChamp = True
+        For Each d In chaine
+            If d.Elements.ContainsKey("/T") Then
+                d.Elements.SetInteger("/Ff", d.Elements.GetInteger("/Ff") Or ChampLectureSeule)
+                If texteOuChoix AndAlso premierChamp Then d.Elements.SetString("/DA", ApparenceValeurs)
+                premierChamp = False
+            ElseIf texteOuChoix AndAlso d.Elements.ContainsKey("/DA") Then
+                d.Elements.SetString("/DA", ApparenceValeurs)
+            End If
+        Next
     End Sub
 
     ''' <summary>Les champs racines dont une case se trouve sur la page, dans l'ordre des cases.</summary>
