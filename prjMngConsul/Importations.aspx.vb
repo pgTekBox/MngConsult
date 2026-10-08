@@ -138,6 +138,18 @@ Public Class Importations
                     .Manque = plan.Manque
                 },
                 New Poste With {
+                    .Icone = "🤝",
+                    .Titre = "Associer les comptes, un par un",
+                    .Source = "l'étape 2, un compte à la fois : la recommandation de l'assistant, les comptes proches, l'enjeu",
+                    .Destination = "préparation — staging.CorrespondanceCompte, comme la grille de l'étape 2",
+                    .Page = "~/AssocierCompte.aspx",
+                    .Note = plan.Note,
+                    .Fait = "Même décision que la grille, prise un compte à la fois : le compte de l'ancien logiciel avec son " &
+                            "solde, la recommandation de l'assistant, les comptes de 60secondes de même nature qui lui ressemblent, " &
+                            "l'enjeu d'une mauvaise association, et trois réponses — Associer, Plus tard, Demander à mon cabinet certifié. " & plan.Fait,
+                    .Manque = plan.Manque
+                },
+                New Poste With {
                     .Icone = "⚖️",
                     .Titre = "Balance de vérification",
                     .Source = "QuickBooks : Balance de vérification (Trial Balance)",
@@ -826,6 +838,7 @@ Public Class Importations
     ''' </summary>
     Private Shared ReadOnly OrdreImportance As String() = {
         "Plan comptable",
+        "Associer les comptes, un par un",
         "Balance de vérification",
         "Clients",
         "Fournisseurs",
@@ -859,6 +872,7 @@ Public Class Importations
     ''' </summary>
     Private Shared ReadOnly Obligatoires As String() = {
         "Plan comptable",
+        "Associer les comptes, un par un",
         "Balance de vérification",
         "Clients",
         "Fournisseurs",

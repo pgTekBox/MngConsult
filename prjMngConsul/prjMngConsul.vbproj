@@ -508,6 +508,7 @@
     <Content Include="AppliquerPlanComptable.aspx" />
     <Content Include="Importations.aspx" />
     <Content Include="CorrespondanceComptes.aspx" />
+    <Content Include="AssocierCompte.aspx" />
     <Content Include="ImportPlanComptable.aspx" />
     <Content Include="ImportApideck.aspx" />
     <Content Include="ValiderFactures.aspx" />
@@ -780,6 +781,13 @@
     <Compile Include="ImportBalanceVerification.aspx.vb">
       <DependentUpon>ImportBalanceVerification.aspx</DependentUpon>
       <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="AssocierCompte.aspx.designer.vb">
+      <DependentUpon>AssocierCompte.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="AssocierCompte.aspx.vb">
+      <DependentUpon>AssocierCompte.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="CorrespondanceComptes.aspx.designer.vb">
       <DependentUpon>CorrespondanceComptes.aspx</DependentUpon>
