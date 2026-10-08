@@ -30,6 +30,7 @@ Public Class PageFeuillets
         btnCsv.Visible = ddlAnnee.Items.Count > 0
         pnlFeuillets.Visible = ddlAnnee.Items.Count > 0
         lblAucun.Visible = ddlAnnee.Items.Count = 0
+        If Not IsPostBack AndAlso Request.QueryString("pdf") IsNot Nothing Then TelechargerDepuisRequete()
     End Sub
 
     Private ReadOnly Property Annee As Integer
@@ -79,7 +80,7 @@ Public Class PageFeuillets
             For Each c In ColonnesR1
                 Cellule(sb, totaux, "R1" & c, f.CaseR1(c))
             Next
-            sb.Append("<td><a href=""Feuillet.aspx?employe=").Append(f.Employe.Ent("Id")).Append("&amp;annee=").Append(Annee).Append(""">Feuillet</a>")
+            sb.Append(BoutonsLigne(f))
             Dim envoye As Date
             If envois.TryGetValue(f.Employe.Ent("Id"), envoye) Then sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(Tr("envoyé par courriel le {#0}", TexteDate(envoye)))).Append("</div>")
             sb.Append("</td></tr>")
@@ -203,18 +204,84 @@ Public Class PageFeuillets
         Return d
     End Function
 
-    ''' <summary>Tous les feuillets de l'année, copie de l'employeur, en un seul PDF. Le NAS y est complet : le téléchargement est inscrit au journal.</summary>
-    Private Sub btnPdfTous_Click(sender As Object, e As EventArgs) Handles btnPdfTous.Click
-        Dim feuillets = ServiceFeuillets.Preparer(Annee)
+    ''' <summary>La dernière cellule d'une ligne : le lien « Feuillet », puis les boutons T4, Relevé 1 (dans la copie choisie) et Courriel de l'employé.</summary>
+    Private Function BoutonsLigne(f As Feuillet) As String
+        Dim id = f.Employe.Ent("Id").ToString()
+        Dim base = "Feuillets.aspx?annee=" & Annee.ToString() & "&amp;employe=" & id & "&amp;copie=" & HttpUtility.HtmlAttributeEncode(ddlCopie.SelectedValue) & "&amp;pdf="
+        Dim sb As New StringBuilder()
+        sb.Append("<td><a href=""Feuillet.aspx?employe=").Append(id).Append("&amp;annee=").Append(Annee).Append(""">Feuillet</a>")
+        sb.Append("<div class=""actions""><a class=""bouton secondaire"" href=""").Append(base).Append("t4"">T4</a>")
+        If f.AvecReleve1 Then sb.Append("<a class=""bouton secondaire"" href=""").Append(base).Append("r1"">Relevé 1</a>")
+        sb.Append("<a class=""bouton secondaire"" href=""#"" onclick=""if (confirmerPuis(this, 'Envoyer le feuillet de cet employé par courriel ?')) { document.getElementById('") _
+          .Append(hidEmploye.ClientID).Append("').value = '").Append(id).Append("'; __doPostBack('").Append(btnCourrielUn.UniqueID).Append("', ''); } return false;"">Courriel</a></div>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Les liens T4 et Relevé 1 de chaque ligne : ?annee=AAAA&amp;pdf=t4|r1&amp;copie=employe|employeur&amp;employe=N.</summary>
+    Private Sub TelechargerDepuisRequete()
+        Dim annee = IdRequete("annee")
+        If annee = 0 OrElse ddlAnnee.Items.FindByValue(annee.ToString()) Is Nothing Then Return
+        ddlAnnee.SelectedValue = annee.ToString()
+        Dim copie = If(Request.QueryString("copie") = "employe", CopieFeuillet.Employe, CopieFeuillet.Employeur)
+        Telecharger(If(Request.QueryString("pdf") = "r1", FormulaireOfficiel.TypeR1, FormulaireOfficiel.TypeT4), copie, IdRequete("employe"))
+    End Sub
+
+    Private ReadOnly Property CopieChoisie As CopieFeuillet
+        Get
+            Return If(ddlCopie.SelectedValue = "employe", CopieFeuillet.Employe, CopieFeuillet.Employeur)
+        End Get
+    End Property
+
+    ''' <summary>
+    ''' Les T4 ou les Relevés 1 de l'année (d'un employé, ou de tous), dans la copie demandée, en un seul PDF :
+    ''' le formulaire officiel s'il est téléversé, sinon la mise en page de 60secPaie. Le NAS y est complet : inscrit au journal.
+    ''' </summary>
+    Private Sub Telecharger(type As String, copie As CopieFeuillet, employeId As Integer)
+        Dim feuillets As IList(Of Feuillet) = ServiceFeuillets.Preparer(Annee)
+        If employeId > 0 Then feuillets = feuillets.Where(Function(x) x.Employe.Ent("Id") = employeId).ToList()
+        If type = FormulaireOfficiel.TypeR1 Then feuillets = feuillets.Where(Function(x) x.AvecReleve1).ToList()
         If feuillets.Count = 0 Then
             Erreur("Aucun feuillet pour cette année.")
             Return
         End If
         Dim compagnie = Db.Ligne("paie.spCompagnie_Get", Db.P("@c", Contexte.CompagnieId))
-        Contexte.Journaliser("Feuillets " & Annee.ToString() & " téléchargés en PDF (copie de l'employeur, " & feuillets.Count.ToString() & " employé(s), NAS complet).", "~/Rapports/Feuillets.aspx")
+        Dim quoi = If(type = FormulaireOfficiel.TypeR1, "Relevés 1 ", "T4 ") & Annee.ToString()
+        Dim qui = If(employeId > 0, " de l'employé n° " & employeId.ToString(), "")
+        Contexte.Journaliser(quoi & qui & " téléchargés en PDF (" & If(copie = CopieFeuillet.Employe, "copie de l'employé", "copie de l'employeur") & ", " & feuillets.Count.ToString() & " feuillet(s), NAS complet).", "~/Rapports/Feuillets.aspx")
         Dim fo = FormulaireOfficiel.Charger(Annee)
-        EnvoyerFichier(FeuilletPdf.NomFichier(Annee), If(fo.Disponible, FormulaireOfficiel.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur, fo),
-                                                       FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, CopieFeuillet.Employeur)), "application/pdf")
+        Dim contenu As Byte()
+        If type = FormulaireOfficiel.TypeR1 Then
+            contenu = If(fo.Disponible AndAlso fo.R1 IsNot Nothing, FormulaireOfficiel.ProduireR1(feuillets, compagnie, Annee, copie, fo),
+                         FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, copie, seulementR1:=True))
+        Else
+            contenu = If(fo.Disponible, FormulaireOfficiel.ProduireT4(feuillets, compagnie, Annee, fo),
+                         FeuilletPdf.ProduireTous(feuillets, compagnie, Annee, copie, seulementT4:=True))
+        End If
+        EnvoyerFichier(FeuilletPdf.NomFichier(Annee, If(employeId > 0, feuillets(0), Nothing), copie, If(type = FormulaireOfficiel.TypeR1, "Relevé 1", "T4")), contenu, "application/pdf")
+    End Sub
+
+    Private Sub btnPdfT4_Click(sender As Object, e As EventArgs) Handles btnPdfT4.Click
+        Telecharger(FormulaireOfficiel.TypeT4, CopieChoisie, 0)
+    End Sub
+
+    Private Sub btnPdfR1_Click(sender As Object, e As EventArgs) Handles btnPdfR1.Click
+        Telecharger(FormulaireOfficiel.TypeR1, CopieChoisie, 0)
+    End Sub
+
+    ''' <summary>Le bouton « Courriel » d'une ligne : les feuillets de cet employé, même s'ils ont déjà été envoyés.</summary>
+    Private Sub btnCourrielUn_Click(sender As Object, e As EventArgs) Handles btnCourrielUn.Click
+        Dim employeId As Integer
+        If Not Integer.TryParse(hidEmploye.Value, employeId) OrElse employeId <= 0 Then Return
+        Try
+            Dim bilan = ServiceCourriel.EnvoyerFeuillets(Annee, True, employeId)
+            If bilan.Erreurs.Count > 0 Then
+                Erreur(String.Join(" ", bilan.Erreurs))
+            Else
+                Succes("Feuillets envoyés par courriel à l'employé.")
+            End If
+        Catch ex As SaisieInvalideException
+            Erreur(ex.Message)
+        End Try
     End Sub
 
     ''' <summary>Les copies du gouvernement : T4 et Sommaire T4 (ARC), Relevé 1 et Sommaire 1 (Revenu Québec), en un seul PDF. NAS complet : inscrit au journal.</summary>

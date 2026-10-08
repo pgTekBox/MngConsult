@@ -17,18 +17,28 @@
 
     <asp:Panel ID="pnlFeuillets" runat="server" CssClass="carte sans-impression">
         <h2>Feuillets en PDF et par courriel</h2>
-        <p>La copie de l'employeur réunit tous les feuillets de l'année en un document, NAS complet (téléchargement journalisé).
-           La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel ; le lien « Feuillet » de chaque ligne
-           permet aussi de le télécharger ou de l'envoyer un à un. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC,
-           puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.</p>
+        <p>Les boutons du haut réunissent tous les employés de l'année : les T4 en un document, les Relevés 1 en un autre, dans la copie choisie
+           (NAS complet : téléchargement journalisé). Dans le tableau, chaque ligne a ses propres boutons « T4 », « Relevé 1 » et « Courriel ».
+           La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel. Les copies du gouvernement réunissent
+           les T4 (copie 1) et le Sommaire T4 pour l'ARC, puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.</p>
         <p class="note"><asp:Literal ID="litFormulaires" runat="server" /></p>
         <div class="actions">
-            <asp:Button ID="btnPdfTous" runat="server" Text="Télécharger tous les feuillets (PDF, copie de l'employeur)" CssClass="secondaire" />
-            <asp:Button ID="btnPdfGouv" runat="server" Text="Télécharger les copies du gouvernement (T4 et Sommaire T4, Relevé 1 et Sommaire 1)" CssClass="secondaire" />
+            <label>Copie à télécharger
+                <asp:DropDownList ID="ddlCopie" runat="server" AutoPostBack="true">
+                    <asp:ListItem Text="Employeur" Value="employeur" />
+                    <asp:ListItem Text="Employé" Value="employe" />
+                </asp:DropDownList></label>
+            <asp:Button ID="btnPdfT4" runat="server" Text="Télécharger tous les T4" CssClass="secondaire" />
+            <asp:Button ID="btnPdfR1" runat="server" Text="Télécharger tous les Relevés 1" CssClass="secondaire" />
+            <asp:Button ID="btnPdfGouv" runat="server" Text="Télécharger les copies du gouvernement" CssClass="secondaire" />
+        </div>
+        <div class="actions">
             <asp:Button ID="btnCourriels" runat="server" Text="Envoyer les feuillets par courriel" CssClass="secondaire"
                 OnClientClick="return confirmerPuis(this, 'Envoyer les feuillets T4 et Relevé 1 par courriel aux employés qui reçoivent leur talon par courriel ?');" />
             <asp:CheckBox ID="chkRenvoyer" runat="server" Text="renvoyer aussi les feuillets déjà envoyés" />
         </div>
+        <asp:HiddenField ID="hidEmploye" runat="server" />
+        <asp:Button ID="btnCourrielUn" runat="server" Text="Envoyer" Style="display:none" />
     </asp:Panel>
 
     <asp:Panel ID="pnlContenu" runat="server">

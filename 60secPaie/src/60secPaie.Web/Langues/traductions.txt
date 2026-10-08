@@ -4818,3 +4818,31 @@ es: Ningún formulario de la plataforma (consola de administración).
 fr: Formulaires de la plateforme (console d'administration), utilisés à défaut des vôtres : {0}.
 en: Platform forms (admin console), used when you have none of your own: {0}.
 es: Formularios de la plataforma (consola de administración), usados a falta de los suyos: {0}.
+
+fr: Télécharger tous les T4
+en: Download all T4 slips
+es: Descargar todos los T4
+
+fr: Télécharger tous les Relevés 1
+en: Download all RL-1 slips
+es: Descargar todos los Relevé 1
+
+fr: Télécharger les copies du gouvernement
+en: Download the government copies
+es: Descargar las copias del gobierno
+
+fr: Copie à télécharger
+en: Copy to download
+es: Copia para descargar
+
+fr: Employeur
+en: Employer
+es: Empleador
+
+fr: Envoyer le feuillet de cet employé par courriel ?
+en: Email this employee's slip?
+es: ¿Enviar el comprobante de este empleado por correo electrónico?
+
+fr: Les boutons du haut réunissent tous les employés de l'année : les T4 en un document, les Relevés 1 en un autre, dans la copie choisie (NAS complet : téléchargement journalisé). Dans le tableau, chaque ligne a ses propres boutons « T4 », « Relevé 1 » et « Courriel ». La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel. Les copies du gouvernement réunissent les T4 (copie 1) et le Sommaire T4 pour l'ARC, puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.
+en: The buttons at the top gather every employee of the year: the T4 slips in one document, the RL-1 slips in another, in the chosen copy (complete SIN: the download is logged). In the table, each row has its own "T4", "Relevé 1" and "Courriel" buttons. The employee copy goes out by email, as a PDF, to the employees who receive their pay stub by email. The government copies gather the T4 slips (copy 1) and the T4 Summary for the CRA, then the RL-1 slips (copy 1) and Summary 1 for Revenu Québec.
+es: Los botones de arriba reúnen a todos los empleados del año: los T4 en un documento, los Relevés 1 en otro, en la copia elegida (NAS completo: la descarga queda registrada). En la tabla, cada línea tiene sus propios botones « T4 », « Relevé 1 » y « Courriel ». La copia del empleado sale por correo electrónico, en PDF, a los empleados que reciben su talón por correo. Las copias del gobierno reúnen los T4 (copia 1) y el Sumario T4 para la CRA, luego los Relevés 1 (copia 1) y el Sumario 1 para Revenu Québec.

@@ -48,12 +48,12 @@ Public NotInheritable Class FeuilletPdf
     End Function
 
     ''' <summary>Tous les feuillets de l'année dans un seul document, un employé après l'autre (T4 puis Relevé 1 de chacun).</summary>
-    Public Shared Function ProduireTous(feuillets As IEnumerable(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet, Optional seulementR1 As Boolean = False) As Byte()
+    Public Shared Function ProduireTous(feuillets As IEnumerable(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet, Optional seulementR1 As Boolean = False, Optional seulementT4 As Boolean = False) As Byte()
         Dim p As New PdfSimple()
         Dim premier = True
         For Each f In feuillets
             If Not seulementR1 Then DessinerT4(p, f, compagnie, annee, copie, premier) : premier = False
-            If f.AvecReleve1 Then DessinerR1(p, f, compagnie, annee, copie, premier) : premier = False
+            If f.AvecReleve1 AndAlso Not seulementT4 Then DessinerR1(p, f, compagnie, annee, copie, premier) : premier = False
         Next
         Return p.Terminer(Tr("Feuillets {#0}", annee))
     End Function
@@ -86,8 +86,8 @@ Public NotInheritable Class FeuilletPdf
     End Function
 
     ''' <summary>« Feuillets-2026-Tremblay-Alice.pdf » ; sans employé, « Feuillets-2026-employeur.pdf » ou « Feuillets-2026-gouvernement.pdf ».</summary>
-    Public Shared Function NomFichier(annee As Integer, Optional f As Feuillet = Nothing, Optional copie As CopieFeuillet = CopieFeuillet.Employeur) As String
-        Dim base = Tr("Feuillets") & "-" & annee.ToString()
+    Public Shared Function NomFichier(annee As Integer, Optional f As Feuillet = Nothing, Optional copie As CopieFeuillet = CopieFeuillet.Employeur, Optional prefixe As String = Nothing) As String
+        Dim base = If(prefixe, Tr("Feuillets")) & "-" & annee.ToString()
         If f Is Nothing Then
             base &= "-" & If(copie = CopieFeuillet.Gouvernement, Tr("gouvernement"), Tr("employeur"))
         Else

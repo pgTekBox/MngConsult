@@ -73,6 +73,12 @@ Public NotInheritable Class FormulaireOfficiel
     ''' <summary>Cases de montant du T4 de l'ARC : le trait des cents est à 10,4 pt du bord droit du champ, et la case dessinée se prolonge de 20,8 pt au-delà.</summary>
     Private Const TraitCentsT4 As Double = 10.4
     Private Const ProlongementCaseT4 As Double = 20.8
+    ''' <summary>Cases de montant du Relevé 1 : le repère des cents est à 13,6 pt du bord droit du champ ; le champ est prolongé de 6 pt pour loger les cents.</summary>
+    Private Const TraitCentsR1 As Double = 13.6
+    Private Const ProlongementCaseR1 As Double = 6.0
+    ''' <summary>Le point décimal est posé à 2 pt à droite du trait ; en Courier, l'encre du point commence à 0,23 em du début de sa cellule.</summary>
+    Private Const DecalagePoint As Double = 2.0
+    Private Const BordGauchePoint As Double = 0.23
 
     Private Sub New()
     End Sub
@@ -156,6 +162,22 @@ Public NotInheritable Class FormulaireOfficiel
         AjouterT4(sortie, formulaires.T4, feuillets, compagnie, annee, 1)
         Dim quebec = feuillets.Where(Function(x) x.AvecReleve1).ToList()
         If quebec.Count > 0 AndAlso formulaires.R1 IsNot Nothing Then AjouterR1(sortie, formulaires.R1, quebec, compagnie, PageR1(copie), 1000)
+        Return Octets(sortie)
+    End Function
+
+    ''' <summary>Les T4 seuls (deux par page) ; le formulaire de l'ARC est le même pour toutes les copies.</summary>
+    Public Shared Function ProduireT4(feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, formulaires As FormulairesAnnee) As Byte()
+        Dim sortie As New PdfDocument()
+        AjouterT4(sortie, formulaires.T4, feuillets, compagnie, annee, 1)
+        Return Octets(sortie)
+    End Function
+
+    ''' <summary>Les Relevés 1 seuls : la page de la copie demandée, pour chaque employé du Québec.</summary>
+    Public Shared Function ProduireR1(feuillets As IList(Of Feuillet), compagnie As DataRow, annee As Integer, copie As CopieFeuillet, formulaires As FormulairesAnnee) As Byte()
+        If formulaires.R1 Is Nothing Then Throw New SaisieInvalideException("Le formulaire Relevé 1 de l'année n'a pas été téléversé.")
+        Dim sortie As New PdfDocument()
+        Dim quebec = feuillets.Where(Function(x) x.AvecReleve1).ToList()
+        AjouterR1(sortie, formulaires.R1, quebec, compagnie, PageR1(copie), 1000)
         Return Octets(sortie)
     End Function
 
@@ -537,10 +559,21 @@ Public NotInheritable Class FormulaireOfficiel
         Dim q = AlignementDe(chaine)
         Dim multiligne = (DrapeauxDe(chaine) And ChampMultiligne) <> 0
         Dim rect = annotation.Elements.GetRectangle("/Rect")
-        Dim montantT4 = q = 2 AndAlso NomRacine(chaine).StartsWith("t4_", StringComparison.Ordinal) AndAlso Regex.IsMatch(texte, "^\d+\.\d\d$")
-        If montantT4 Then
-            rect = New PdfRectangle(New XPoint(rect.X1, rect.Y1), New XPoint(rect.X2 + ProlongementCaseT4, rect.Y2))
-            annotation.Elements.SetRectangle("/Rect", rect)
+        ' Montant d'un T4 ou d'un Relevé 1 : le point décimal se cale sur le trait des cents du formulaire.
+        Dim racine = NomRacine(chaine)
+        Dim ligneCents As Double = -1
+        If q = 2 AndAlso Regex.IsMatch(texte, "^\d+\.\d\d$") Then
+            Dim trait As Double = 0, prolongement As Double = 0
+            If racine.StartsWith("t4_", StringComparison.Ordinal) Then
+                trait = TraitCentsT4 : prolongement = ProlongementCaseT4
+            ElseIf racine.StartsWith("r1_", StringComparison.Ordinal) Then
+                trait = TraitCentsR1 : prolongement = ProlongementCaseR1
+            End If
+            If trait > 0 Then
+                rect = New PdfRectangle(New XPoint(rect.X1, rect.Y1), New XPoint(rect.X2 + prolongement, rect.Y2))
+                annotation.Elements.SetRectangle("/Rect", rect)
+                ligneCents = rect.Width - prolongement - trait
+            End If
         End If
         Dim ap As New PdfDictionary(doc)
         doc.Internals.AddObject(ap)
@@ -552,14 +585,14 @@ Public NotInheritable Class FormulaireOfficiel
         Dim ressources As New PdfDictionary(doc)
         ressources.Elements("/Font") = polices
         ap.Elements("/Resources") = ressources
-        ap.CreateStream(Encoding.ASCII.GetBytes(ContenuApparence(texte, rect.Width, rect.Height, taille, q, multiligne, montantT4)))
+        ap.CreateStream(Encoding.ASCII.GetBytes(ContenuApparence(texte, rect.Width, rect.Height, taille, q, multiligne, ligneCents)))
         Dim apparences As New PdfDictionary(doc)
         apparences.Elements.SetReference("/N", ap)
         annotation.Elements("/AP") = apparences
     End Sub
 
-    ''' <summary>Le flux de contenu d'une apparence : texte découpé en lignes, placé selon l'alignement.</summary>
-    Friend Shared Function ContenuApparence(texte As String, largeur As Double, hauteur As Double, taille As Integer, q As Integer, multiligne As Boolean, montantT4 As Boolean) As String
+    ''' <summary>Le flux de contenu d'une apparence : texte découpé en lignes, placé selon l'alignement ; ligneCents (ou -1) = position du trait des cents pour un montant.</summary>
+    Friend Shared Function ContenuApparence(texte As String, largeur As Double, hauteur As Double, taille As Integer, q As Integer, multiligne As Boolean, ligneCents As Double) As String
         Dim sb As New StringBuilder()
         sb.Append("/Tx BMC q 0.5 0.5 ").Append(Nb(largeur - 1)).Append(" ").Append(Nb(hauteur - 1)).Append(" re W n BT /Cour ").Append(taille.ToString(CultureInfo.InvariantCulture)).Append(" Tf 0 g ")
         Dim cw = taille * LargeurCourier
@@ -567,10 +600,9 @@ Public NotInheritable Class FormulaireOfficiel
         Dim y As Double = If(multiligne, hauteur - 2 - taille * 0.8, (hauteur - taille * HauteurCapitales) / 2)
         For Each l In lignes
             Dim x As Double
-            If montantT4 Then
-                ' Le trait des cents est à TraitCentsT4 du bord droit du champ d'origine ; la cellule du point finit juste avant.
-                Dim trait = largeur - ProlongementCaseT4 - TraitCentsT4
-                x = trait - 0.3 - cw * (l.Length - 2)
+            If ligneCents >= 0 Then
+                ' L'encre du point décimal commence à DecalagePoint à droite du trait des cents ; les cents suivent.
+                x = ligneCents + DecalagePoint - BordGauchePoint * taille - cw * (l.Length - 3)
                 If x < 1 Then x = largeur - 2 - cw * l.Length
             ElseIf q = 2 Then
                 x = largeur - 2 - cw * l.Length

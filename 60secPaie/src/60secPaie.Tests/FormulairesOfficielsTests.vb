@@ -56,7 +56,12 @@ Public Class FormulairesOfficielsTests
         Dim apparence14 = ApparenceDe(case14)
         StringAssert.Contains(apparence14, "/Cour 9 Tf 0 g", "Courier 9 points, noir.")
         StringAssert.Contains(apparence14, "(52000.00) Tj", "La valeur est dessinée.")
-        StringAssert.Contains(apparence14, " 38.62 5.04 Tm ", "Point décimal contre le trait des cents : 71,4 - 0,3 - 6 x 5,4.")
+        Dim cw = 9 * 0.6
+        Dim x14 = (case14.Elements.GetRectangle("/Rect").Width - 20.8 - 10.4) + 2 - 0.23 * 9 - cw * 5
+        StringAssert.Contains(apparence14, " " & x14.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " 5.04 Tm ", "Point décimal à 2 pt à droite du trait des cents du T4 (10,4 pt du bord du champ).")
+        Dim repA = champs("r1_1_rep_caseA")
+        Dim xA = (CaseDe(repA).Elements.GetRectangle("/Rect").Width - 6 - 13.6) + 2 - 0.23 * 9 - cw * 5
+        StringAssert.Contains(ApparenceDe(repA), " " & xA.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " ", "Point décimal à 2 pt à droite du repère des cents du Relevé 1 (13,6 pt du bord du champ).")
         Assert.AreEqual(455.0, Math.Round(case14.Elements.GetRectangle("/Rect").X2, 1), "La case du champ est prolongée jusqu'au bord dessiné.")
         StringAssert.Contains(ApparenceDe(champs("t4_1_form1[0].Page1[0].Slip1[0].Box10[0].Slip1Box10[0]")), "/Cour 10 Tf 0 g 1 0 0 1 2 4.76 Tm (QC) Tj", "Petite case en 10 points.")
         Assert.IsFalse(champs.Keys.Any(Function(k) k.Contains("ClearData")), "Le bouton « Effacer les données » est retiré.")
@@ -77,6 +82,12 @@ Public Class FormulairesOfficielsTests
         Assert.AreEqual("61000.00", valeurs("t4_1_form1[0].Page1[0].Slip2[0].Box14[0].Slip1Box14[0]"), "Le deuxième employé est sur le feuillet 2 de la page 1.")
         Assert.AreEqual("43000.00", valeurs("t4_2_form1[0].Page1[0].Slip1[0].Box14[0].Slip1Box14[0]"), "Le troisième ouvre la page 2.")
         Assert.AreEqual(3, valeurs.Keys.Where(Function(k) k.EndsWith("_rep_caseA", StringComparison.Ordinal)).Count(), "Un Relevé 1 par employé.")
+
+        ' Les T4 seuls, les Relevés 1 seuls.
+        Assert.AreEqual(2, Ouvrir(FormulaireOfficiel.ProduireT4(feuillets, compagnie, 2025, fo)).PageCount, "Trois T4 : deux pages.")
+        Dim r1 = Ouvrir(FormulaireOfficiel.ProduireR1(feuillets, compagnie, 2025, CopieFeuillet.Employe, fo))
+        Assert.AreEqual(3, r1.PageCount, "Un Relevé 1 par employé du Québec.")
+        Assert.AreEqual("61000.00", ValeursDe(r1)("r1_1001_rep_caseA"))
 
         ' Gouvernement : les T4, le Sommaire T4, les Relevés 1, le Sommaire 1.
         Dim sommaire = SommaireFactice()
@@ -125,9 +136,15 @@ Public Class FormulairesOfficielsTests
         Next
     End Sub
 
+    ''' <summary>La case (widget) d'un champ : lui-même quand ils sont fusionnés, sinon son premier enfant.</summary>
+    Private Shared Function CaseDe(champ As PdfDictionary) As PdfDictionary
+        If champ.Elements.ContainsKey("/AP") OrElse Not champ.Elements.ContainsKey("/Kids") Then Return champ
+        Return champ.Elements.GetArray("/Kids").Elements.GetDictionary(0)
+    End Function
+
     ''' <summary>Le flux de l'apparence normale d'une case.</summary>
     Private Shared Function ApparenceDe(champ As PdfDictionary) As String
-        Dim n = champ.Elements.GetDictionary("/AP").Elements.GetDictionary("/N")
+        Dim n = CaseDe(champ).Elements.GetDictionary("/AP").Elements.GetDictionary("/N")
         Return Text.Encoding.ASCII.GetString(n.Stream.UnfilteredValue)
     End Function
 
