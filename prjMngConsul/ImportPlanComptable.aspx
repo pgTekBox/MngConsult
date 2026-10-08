@@ -25,7 +25,7 @@
 
     .imp-lede {
         font-size: 13.5px; color: #475569; margin: 0 0 18px;
-        max-width: 760px; line-height: 1.6;
+        line-height: 1.6;
     }
 
     .step {
@@ -118,15 +118,13 @@
     .btn-p { background: #2563eb; color: #fff }
     .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
 
-        display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px;
-        margin-bottom: 14px; font-size: 13.5px;
-    }
+    /* Les trois états tiennent sur une seule ligne : libellé et valeur côte à côte dans chaque pastille. */
+    .stats { display: flex; flex-wrap: nowrap; gap: 12px; margin-bottom: 4px }
 
-    .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 4px }
-
-    .stat { border: 1px solid #e2e8f0; border-radius: 11px; padding: 12px 14px; background: #fff }
+    .stat { display: flex; align-items: baseline; gap: 10px; border: 1px solid #e2e8f0; border-radius: 11px; padding: 8px 14px; background: #fff; white-space: nowrap }
     .stat .l { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #64748b }
-    .stat .v { font-size: 23px; font-weight: 800; color: #0f172a; margin-top: 2px }
+    .stat .v { font-size: 19px; font-weight: 800; color: #0f172a; margin-top: 0 }
+    .note-sansnum { font-size: 12.5px; color: #78350f; background: #fffbeb; border: 1px solid #fde68a; border-radius: 9px; padding: 8px 12px; margin: 0 0 10px; line-height: 1.5 }
     .stat.wa { background: #fffbeb; border-color: #fde68a }
     .stat.wa .v { color: #b45309 }
 
@@ -334,6 +332,7 @@
             </div>
 
             <div class="tbl-wrap">
+                <asp:Literal ID="litSansNumero" runat="server" />
                 <asp:GridView ID="gvLignes" runat="server" AutoGenerateColumns="false"
                     CssClass="g" GridLines="None" UseAccessibleHeader="true">
                     <Columns>

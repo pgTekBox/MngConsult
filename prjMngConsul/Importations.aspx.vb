@@ -771,6 +771,25 @@ Public Class Importations
         "Remises de DAS"
     }
 
+    ''' <summary>
+    ''' Les postes sans lesquels rien ne se comptabilise : le plan et la balance
+    ''' (la structure et les soldes d'ouverture), les tiers et les articles (pour
+    ''' porter des factures), les factures elles-mêmes et les codes de taxe. Tout
+    ''' le reste vérifie la reprise sans la conditionner : ce sont les écrans de
+    ''' contrôle. Un poste se déplace d'une section à l'autre en changeant cette liste.
+    ''' </summary>
+    Private Shared ReadOnly Obligatoires As String() = {
+        "Plan comptable",
+        "Balance de vérification",
+        "Clients",
+        "Fournisseurs",
+        "Produits et services",
+        "Factures clients et fournisseurs",
+        "Codes et taux de taxe"
+    }
+    Private Shared Function EstObligatoire(titre As String) As Boolean
+        Return Array.IndexOf(Obligatoires, titre) >= 0
+    End Function
     Private Shared Function RangImportance(titre As String) As Integer
         Dim i As Integer = Array.IndexOf(OrdreImportance, titre)
         Return If(i < 0, OrdreImportance.Length, i)
@@ -787,22 +806,25 @@ Public Class Importations
 
         If IsPostBack Then Return
 
-        ' Une seule grille : le connecteur en tête, pleine largeur, puis tous les
-        ' postes dans l'ordre d'une reprise — le plan comptable d'abord — chacun
-        ' numéroté pour que l'ordre se lise sans le deviner.
+        ' Trois sections : le connecteur en tête, pleine largeur ; puis les postes
+        ' obligatoires pour la comptabilité, dans l'ordre d'une reprise ; puis les
+        ' écrans de contrôle. La numérotation court d'une section à l'autre pour que
+        ' l'ordre se lise sans le deviner.
         Dim connexion As List(Of Poste) = Me.Connexion
         Dim postes As List(Of Poste) = connexion.Skip(1).Concat(Parcours).Concat(Autres).
             OrderBy(Function(p) RangImportance(p.Titre)).ThenBy(Function(p) p.Titre).ToList()
+        Dim obligatoires As List(Of Poste) = postes.Where(Function(p) EstObligatoire(p.Titre)).ToList()
+        Dim controles As List(Of Poste) = postes.Where(Function(p) Not EstObligatoire(p.Titre)).ToList()
 
         Dim rang As Integer = 0
-        For Each p In postes
+        For Each p In obligatoires.Concat(controles)
             rang += 1
             p.Titre = rang & ". " & p.Titre
         Next
 
-        litConnexion.Text = Rendre(connexion.Take(1).ToList()) & Rendre(postes)
-        litParcours.Text = ""
-        litAutres.Text = ""
+        litConnexion.Text = Rendre(connexion.Take(1).ToList())
+        litParcours.Text = Rendre(obligatoires)
+        litAutres.Text = Rendre(controles)
         ' La section « À construire » disparaît quand il n'y a plus rien à
         ' construire : un titre suivi du vide ressemble à un écran cassé.
         Dim reste As List(Of Poste) = AVenir

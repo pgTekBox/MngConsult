@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .app-page { max-width: 1280px; margin: 0 auto; padding: 16px }
+    .app-page { padding: 16px }
 
     .app-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 
@@ -22,7 +22,7 @@
     .app-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
     .app-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
 
-    .app-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 820px; line-height: 1.6 }
+    .app-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; line-height: 1.6 }
 
     .card {
         background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;

@@ -230,10 +230,12 @@
             <div class="v"><asp:Literal ID="litAFaire" runat="server" Text="0" /></div></div>
     </div>
 
-    <h2 class="sect">Lecture directe <span>le connecteur, puis les postes par ordre d'importance — le plan comptable en premier</span></h2>
+    <h2 class="sect">Lecture directe <span>le connecteur QuickBooks : il rapatrie les données que lisent tous les écrans ci-dessous</span></h2>
     <div class="grille tete"><asp:Literal ID="litConnexion" runat="server" /></div>
-    <asp:Literal ID="litParcours" runat="server" Visible="false" />
-    <asp:Literal ID="litAutres" runat="server" Visible="false" />
+    <h2 class="sect">Obligatoires pour la comptabilité <span>dans cet ordre : sans eux, rien ne se comptabilise</span></h2>
+    <div class="grille"><asp:Literal ID="litParcours" runat="server" /></div>
+    <h2 class="sect">Écrans de contrôle <span>pour vérifier la reprise poste par poste ; aucun n'est requis pour comptabiliser</span></h2>
+    <div class="grille"><asp:Literal ID="litAutres" runat="server" /></div>
 
     <asp:Literal ID="litTitreAVenir" runat="server" />
     <div class="grille"><asp:Literal ID="litAVenir" runat="server" /></div>

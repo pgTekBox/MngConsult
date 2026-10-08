@@ -528,6 +528,17 @@ Public Class ImportPlanComptable
             Dim ds As DataSet = ExecuteSQLds("s0753GetPlanComptableStaging", p)
             Dim dt As DataTable = If(ds Is Nothing OrElse ds.Tables.Count = 0, Nothing, ds.Tables(0))
 
+            ' Un plan sans aucun numéro (QuickBooks avec les numéros de compte désactivés) : la colonne
+            ' « Compte » serait vide sur toute la hauteur. On la masque et on dit pourquoi, plutôt que de
+            ' laisser croire à une lecture ratée ; les comptes sont alors reconnus par leur nom.
+            Dim sansNumero As Boolean = dt IsNot Nothing AndAlso dt.Rows.Count > 0 AndAlso
+                dt.Rows.Cast(Of DataRow)().All(Function(r) String.IsNullOrWhiteSpace(Convert.ToString(r("Compte"))) AndAlso
+                                                           String.IsNullOrWhiteSpace(Convert.ToString(r("CompteSource"))))
+            gvLignes.Columns(1).Visible = Not sansNumero
+            litSansNumero.Text = If(sansNumero,
+                "<div class=""note-sansnum""><b>Ce plan n'a pas de numéros de compte</b> : la colonne « Compte » est masquée et les comptes sont reconnus par leur nom. " &
+                "Dans QuickBooks, les numéros n'existent que si « Activer les numéros de compte » est coché (Paramètres de l'entreprise › Avancé › Plan comptable) ; " &
+                "après l'avoir coché et numéroté les comptes, relancez l'extraction.</div>", "")
             gvLignes.DataSource = dt
             gvLignes.DataBind()
             pnlLignes.Visible = True

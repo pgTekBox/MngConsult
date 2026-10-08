@@ -79,6 +79,8 @@ Partial Public Class ImportPlanComptable
     '''<summary>ddlFiltre</summary>
     Protected WithEvents ddlFiltre As Global.System.Web.UI.WebControls.DropDownList
     '''<summary>gvLignes</summary>
+    Protected WithEvents litSansNumero As Global.System.Web.UI.WebControls.Literal
+
     Protected WithEvents gvLignes As Global.System.Web.UI.WebControls.GridView
 
 

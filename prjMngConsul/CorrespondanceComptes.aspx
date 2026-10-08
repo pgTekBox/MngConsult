@@ -22,7 +22,7 @@
     .cor-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
     .cor-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
 
-    .cor-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 800px; line-height: 1.6 }
+    .cor-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; line-height: 1.6 }
     .ia-note { font-size: 12.5px; color: #6b21a8; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; line-height: 1.55 }
 
     .card {
