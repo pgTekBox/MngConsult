@@ -469,7 +469,7 @@ mark{background:#ffe89a}
 <h3>« Pago »</h3>
 <ul>
   <li>« Este empleado cobra por depósito directo »: si no, se le asigna un número de cheque al confirmar cada nómina.</li>
-  <li>« Enviar el talón de pago por correo »: requiere un correo electrónico en 60Sec.</li>
+  <li>« Enviar el talón de pago por correo »: requiere un correo electrónico en 60Sec. La misma casilla y la misma dirección sirven para el envío de los comprobantes T4 y Relevé 1 a fin de año (<a href="#feuillets">Informes › T4 y Relevés 1</a>).</li>
   <li>« Número de tránsito (5 dígitos) », « Número de institución (3 dígitos) », « Número de cuenta » (cifrado; « Cuenta en el expediente: ••••123. Deje vacío para conservarla. »). Si el depósito directo está marcado y falta algo: « Depósito directo: indique el tránsito (5 dígitos), la institución (3 dígitos) y el número de cuenta. »</li>
 </ul>
 <h3>« Notas » y guardado</h3>
@@ -497,6 +497,7 @@ mark{background:#ffe89a}
 <tr><td>Saldo de vacaciones</td><td>Se añade al « Saldo de vacaciones » del talón.</td></tr>
 </table>
 <div class="avert">Los comprobantes de un empleado que tiene acumulados iniciales llevan la advertencia « Estos montos incluyen acumulados iniciales capturados a mano. Los ingresos asegurables (casillas 24, 26, 56, G e I) se estimaron a partir de la remuneración bruta: verifíquelos con su sistema anterior. »</div>
+<p>Un año que solo tiene acumulados iniciales se ofrece igualmente en <a href="#feuillets">Informes › T4 y Relevés 1</a>, y la tabla señala « incluye acumulados iniciales » en la línea del empleado. En los formularios oficiales, la advertencia anterior no se imprime: solo la maqueta de 60secPaie la lleva.</p>
 
 <!-- ============================================================ -->
 <h2 id="paie">Calcular la nómina (asistente en 4 pasos)</h2>
@@ -763,6 +764,7 @@ mark{background:#ffe89a}
 <h3 id="feuillet-employe">Comprobante de un empleado</h3>
 <p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. Botones « Imprimir », « Volver a los comprobantes », « Mostrar el NAS completo » (acción registrada), luego « Descargar en PDF (copia del empleado) », « Descargar en PDF (copia del empleador) », « Descargar en PDF (copia del gobierno) » (descargas registradas, NAS completo) y « Enviar por correo electrónico al empleado » (ofrecido si su ficha pide el talón por correo y tiene una dirección; reenvía aunque ya esté enviado; una nota « Comprobantes enviados por correo electrónico el [fecha] a [dirección] » recuerda el último envío). Encabezado: empresa, « N.º de cuenta RP », « N.º de identificación RS », « Comprobantes {año} », nombre, dirección, « NAS: ••••••123 » (o « NAS faltante en la ficha »). Luego las dos tablas « T4 - Estado de la remuneración pagada » (casilla 10 « Provincia de empleo » = QC, las casillas no nulas, la casilla 28 « Exenciones » y la casilla 45) y « Relevé 1 - Ingresos de empleo e ingresos diversos » (casillas A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235; « Las casillas J, L, M y W ya están incluidas en la casilla A. »).</p>
 
+<p>Cuando los formularios oficiales del año están en su lugar (<a href="#config-formulaires">Configuración › Formularios oficiales</a>), los tres botones PDF producen el T4 de la CRA y, para un empleo en Quebec, la página del Relevé 1 de la copia elegida (copia 1 gobierno, 2 empleado, 3 empleador); los valores van en Courier y el documento es de solo lectura. La página <a href="#feuillets">Informes › T4 y Relevés 1</a> ofrece también, en la línea del empleado, los botones « T4 », « Relevé 1 » y « Courriel », que hacen lo mismo sin abrir esta página.</p>
 <!-- ============================================================ -->
 <h2 id="cnesst">Informes › Declaración de salarios CNESST</h2>
 <p><span class="chemin">Rapports/CNESST.aspx</span>. « Salarios brutos pagados, excedentes del máximo asegurable y pagos periódicos del año. » Botones « Exportar a CSV » (<code>cnesst-AAAA.csv</code>: Nombre, Nombre de pila, Unidad, Salario bruto, Excedente, Salario asegurable, Aporte calculado) e « Imprimir ».</p>

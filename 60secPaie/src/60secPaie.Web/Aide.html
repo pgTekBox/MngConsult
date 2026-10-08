@@ -469,7 +469,7 @@ mark{background:#ffe89a}
 <h3>« Paiement »</h3>
 <ul>
   <li>« Cet employé est payé par dépôt direct » : sinon, un numéro de chèque lui est attribué à la confirmation de chaque paie.</li>
-  <li>« Envoyer le talon de paie par courriel » : nécessite un courriel dans 60Sec.</li>
+  <li>« Envoyer le talon de paie par courriel » : nécessite un courriel dans 60Sec. La même case et la même adresse servent à l'envoi des feuillets T4 et Relevé 1 en fin d'année (<a href="#feuillets">Rapports › T4 et Relevés 1</a>).</li>
   <li>« Numéro de transit (5 chiffres) », « Numéro d'institution (3 chiffres) », « Numéro de compte » (chiffré ; « Compte au dossier : ••••123. Laissez vide pour le conserver. »). Si le dépôt direct est coché et qu'il manque quelque chose : « Dépôt direct : inscrivez le transit (5 chiffres), l'institution (3 chiffres) et le numéro de compte. »</li>
 </ul>
 <h3>« Notes » et enregistrement</h3>
@@ -497,6 +497,7 @@ mark{background:#ffe89a}
 <tr><td>Solde de vacances</td><td>Ajouté au « Solde de vacances » du talon.</td></tr>
 </table>
 <div class="avert">Les feuillets d'un employé qui a des cumulatifs de départ portent l'avertissement « Ces montants incluent des cumulatifs de départ saisis à la main. Les gains assurables (cases 24, 26, 56, G et I) ont été estimés à partir de la rémunération brute : vérifiez-les avec votre ancien système. »</div>
+<p>Une année qui n'a que des cumulatifs de départ est quand même offerte dans <a href="#feuillets">Rapports › T4 et Relevés 1</a>, et le tableau signale « inclut des cumulatifs de départ » sur la ligne de l'employé. Sur les formulaires officiels, l'avertissement ci-dessus n'est pas imprimé : seule la mise en page de 60secPaie le porte.</p>
 
 <!-- ============================================================ -->
 <h2 id="paie">Calculer la paie (assistant en 4 étapes)</h2>
@@ -763,6 +764,7 @@ mark{background:#ffe89a}
 <h3 id="feuillet-employe">Feuillet d'un employé</h3>
 <p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. Boutons « Imprimer », « Retour aux feuillets », « Afficher le NAS complet » (action journalisée), puis « Télécharger en PDF (copie de l'employé) », « Télécharger en PDF (copie de l'employeur) », « Télécharger en PDF (copie du gouvernement) » (téléchargements journalisés, NAS complet) et « Envoyer par courriel à l'employé » (offert si sa fiche demande le talon par courriel et porte une adresse ; renvoie même si déjà envoyé ; une note « Feuillets envoyés par courriel le [date] à [adresse] » rappelle le dernier envoi). En-tête : compagnie, « N° de compte RP », « N° d'identification RS », « Feuillets {année} », nom, adresse, « NAS : ••••••123 » (ou « NAS manquant dans la fiche »). Puis les deux tableaux « T4 - État de la rémunération payée » (case 10 « Province d'emploi » = QC, les cases non nulles, la case 28 « Exemptions » et la case 45) et « Relevé 1 - Revenus d'emploi et revenus divers » (cases A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235 ; « Les cases J, L, M et W sont déjà comprises dans la case A. »).</p>
 
+<p>Quand les formulaires officiels de l'année sont en place (<a href="#config-formulaires">Configuration › Formulaires officiels</a>), les trois boutons PDF sortent le T4 de l'ARC et, pour un emploi au Québec, la page du Relevé 1 de la copie choisie (copie 1 gouvernement, 2 employé, 3 employeur) ; les valeurs sont en Courier et le document est en lecture seule. La page <a href="#feuillets">Rapports › T4 et Relevés 1</a> offre aussi, sur la ligne de l'employé, les boutons « T4 », « Relevé 1 » et « Courriel », qui font la même chose sans ouvrir cette page.</p>
 <!-- ============================================================ -->
 <h2 id="cnesst">Rapports › Déclaration des salaires CNESST</h2>
 <p><span class="chemin">Rapports/CNESST.aspx</span>. « Salaires bruts versés, excédents du maximum assurable et versements périodiques de l'année. » Boutons « Exporter en CSV » (<code>cnesst-AAAA.csv</code> : Nom, Prénom, Unité, Salaire brut, Excédent, Salaire assurable, Cotisation calculée) et « Imprimer ».</p>

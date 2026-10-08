@@ -469,7 +469,7 @@ mark{background:#ffe89a}
 <h3>"Payment"</h3>
 <ul>
   <li>"This employee is paid by direct deposit": otherwise, a cheque number is assigned to them when each pay run is confirmed.</li>
-  <li>"Send the pay stub by email": requires an email in 60Sec.</li>
+  <li>"Send the pay stub by email": requires an email in 60Sec. The same box and the same address are used to email the T4 and RL-1 slips at year end (<a href="#feuillets">Reports › T4 and RL-1 slips</a>).</li>
   <li>"Transit number (5 digits)", "Institution number (3 digits)", "Account number" (encrypted; "Account on file: ••••123. Leave blank to keep it."). If direct deposit is checked and something is missing: "Direct deposit: enter the transit (5 digits), the institution (3 digits) and the account number."</li>
 </ul>
 <h3>"Notes" and saving</h3>
@@ -497,6 +497,7 @@ mark{background:#ffe89a}
 <tr><td>Vacation balance</td><td>Added to the "Vacation balance" on the pay stub.</td></tr>
 </table>
 <div class="avert">The slips of an employee who has opening balances carry the warning "These amounts include opening balances entered by hand. Insurable earnings (boxes 24, 26, 56, G and I) were estimated from gross pay: check them against your previous system."</div>
+<p>A year that only has opening balances is still offered under <a href="#feuillets">Reports › T4 and RL-1 slips</a>, and the table flags "includes opening balances" on the employee's row. On the official forms, the warning above is not printed: only 60secPaie's layout carries it.</p>
 
 <!-- ============================================================ -->
 <h2 id="paie">Run payroll (4-step wizard)</h2>
@@ -763,6 +764,7 @@ mark{background:#ffe89a}
 <h3 id="feuillet-employe">An employee's slips</h3>
 <p><span class="chemin">Rapports/Feuillet.aspx?employe=&amp;annee=</span>. "Print", "Back to slips", "Show full SIN" (logged action) buttons, then "Download as PDF (employee copy)", "Download as PDF (employer copy)", "Download as PDF (government copy)" (logged downloads, full SIN) and "Email to the employee" (offered when the file asks for the pay stub by email and has an address; resends even if already sent; a note "Slips emailed on [date] to [address]" recalls the last sending). Header: company, "RP account no.", "RS identification no.", "Slips {year}", name, address, "SIN: ••••••123" (or "SIN missing from the employee file"). Then the two tables "T4 - Statement of Remuneration Paid" (box 10 "Province of employment" = QC, the non-zero boxes, box 28 "Exemptions" and box 45) and "RL-1 - Employment and Other Income" (boxes A, B.A, B.B, C, D, E, F, G, H, I, J, L, M, N, W, 235; "Boxes J, L, M and W are already included in box A.").</p>
 
+<p>When the year's official forms are in place (<a href="#config-formulaires">Settings › Official forms</a>), the three PDF buttons produce the CRA's T4 and, for employment in Québec, the RL-1 page of the chosen copy (copy 1 government, 2 employee, 3 employer); values are in Courier and the document is read-only. The <a href="#feuillets">Reports › T4 and RL-1 slips</a> page also offers, on the employee's row, the "T4", "Relevé 1" and "Courriel" buttons, which do the same without opening this page.</p>
 <!-- ============================================================ -->
 <h2 id="cnesst">Reports › CNESST statement of wages</h2>
 <p><span class="chemin">Rapports/CNESST.aspx</span>. "Gross wages paid, amounts over the maximum insurable and periodic payments for the year." "Export to CSV" (<code>cnesst-YYYY.csv</code>: Name, First name, Unit, Gross pay, Excess, Insurable wages, Calculated premium) and "Print" buttons.</p>
