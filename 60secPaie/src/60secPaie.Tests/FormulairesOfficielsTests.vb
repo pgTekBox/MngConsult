@@ -32,6 +32,7 @@ Public Class FormulairesOfficielsTests
         ' Un employé : une page T4 (feuillet 1 rempli, feuillet 2 vide) et la page du Relevé 1 qui convient à la copie.
         Dim octetsUn = FormulaireOfficiel.Produire(feuillets(0), compagnie, 2025, CopieFeuillet.Employe, fo)
         Dim un = Ouvrir(octetsUn)
+        Conserver("un.pdf", octetsUn)
         Assert.AreEqual(2, un.PageCount)
         Dim valeurs = ValeursDe(un)
         Assert.AreEqual("52000.00", valeurs("t4_1_form1[0].Page1[0].Slip1[0].Box14[0].Slip1Box14[0]"), "Case 14 du feuillet 1.")
@@ -48,6 +49,17 @@ Public Class FormulairesOfficielsTests
         Assert.AreNotEqual("/Cour 9 Tf 0 g", champs(exempt).Elements.GetString("/DA"), "Les cases à cocher gardent leur apparence.")
         Assert.AreEqual(1, champs(exempt).Elements.GetInteger("/Ff") And 1, "Les cases à cocher sont verrouillées aussi.")
         StringAssert.Contains(Text.Encoding.ASCII.GetString(octetsUn), "/Encrypt", "Le document est protégé contre la modification.")
+        ' Les apparences sont dessinées par 60secPaie (le lecteur n'a rien à régénérer) : Courier 9 sur la case 14, dont le
+        ' point décimal est posé contre le trait des cents (champ prolongé jusqu'au bord de la case) ; 10 points dans la
+        ' petite case 10 ; le bouton « Effacer » du haut du formulaire est retiré.
+        Assert.IsFalse(un.Internals.Catalog.Elements.GetDictionary("/AcroForm").Elements.GetBoolean("/NeedAppearances"))
+        Dim apparence14 = ApparenceDe(case14)
+        StringAssert.Contains(apparence14, "/Cour 9 Tf 0 g", "Courier 9 points, noir.")
+        StringAssert.Contains(apparence14, "(52000.00) Tj", "La valeur est dessinée.")
+        StringAssert.Contains(apparence14, " 38.62 5.04 Tm ", "Point décimal contre le trait des cents : 71,4 - 0,3 - 6 x 5,4.")
+        Assert.AreEqual(455.0, Math.Round(case14.Elements.GetRectangle("/Rect").X2, 1), "La case du champ est prolongée jusqu'au bord dessiné.")
+        StringAssert.Contains(ApparenceDe(champs("t4_1_form1[0].Page1[0].Slip1[0].Box10[0].Slip1Box10[0]")), "/Cour 10 Tf 0 g 1 0 0 1 2 4.76 Tm (QC) Tj", "Petite case en 10 points.")
+        Assert.IsFalse(champs.Keys.Any(Function(k) k.Contains("ClearData")), "Le bouton « Effacer les données » est retiré.")
         Dim polices = un.Internals.Catalog.Elements.GetDictionary("/AcroForm").Elements.GetDictionary("/DR").Elements.GetDictionary("/Font")
         Assert.AreEqual("/Courier", polices.Elements.GetDictionary("/Cour").Elements.GetName("/BaseFont"), "Courier est dans les ressources du formulaire.")
         ' La copie 2 (employé) ne porte que les champs « rep_ » : la case A, l'identité, le code du relevé.
@@ -57,7 +69,9 @@ Public Class FormulairesOfficielsTests
         Assert.IsFalse(valeurs.ContainsKey("r1_1_caseA"), "La case A de la copie 1 n'est pas sur cette page.")
 
         ' Tous : deux T4 par page, puis une page de Relevé 1 par employé.
-        Dim tous = Ouvrir(FormulaireOfficiel.ProduireTous(feuillets, compagnie, 2025, CopieFeuillet.Employeur, fo))
+        Dim octetsTous = FormulaireOfficiel.ProduireTous(feuillets, compagnie, 2025, CopieFeuillet.Employeur, fo)
+        Conserver("tous.pdf", octetsTous)
+        Dim tous = Ouvrir(octetsTous)
         Assert.AreEqual(2 + 3, tous.PageCount)
         valeurs = ValeursDe(tous)
         Assert.AreEqual("61000.00", valeurs("t4_1_form1[0].Page1[0].Slip2[0].Box14[0].Slip1Box14[0]"), "Le deuxième employé est sur le feuillet 2 de la page 1.")
@@ -66,11 +80,19 @@ Public Class FormulairesOfficielsTests
 
         ' Gouvernement : les T4, le Sommaire T4, les Relevés 1, le Sommaire 1.
         Dim sommaire = SommaireFactice()
-        Dim gouv = Ouvrir(FormulaireOfficiel.ProduireGouvernement(feuillets, compagnie, 2025, sommaire, fo))
+        Dim octetsGouv = FormulaireOfficiel.ProduireGouvernement(feuillets, compagnie, 2025, sommaire, fo)
+        Conserver("gouv.pdf", octetsGouv)
+        Dim gouv = Ouvrir(octetsGouv)
         Assert.AreEqual(2 + 1 + 3 + 1, gouv.PageCount)
         valeurs = ValeursDe(gouv)
         Assert.AreEqual("52000.00", valeurs("r1_1000_caseA"), "La copie 1 (Revenu Québec) porte les champs principaux.")
         Assert.AreEqual("TREMBLAY", valeurs("r1_1000_nom1"))
+    End Sub
+
+    ''' <summary>Garde une copie des PDF produits dans le dossier P60_FEUILLETS_SORTIE, quand cette variable d'environnement est définie (inspection visuelle).</summary>
+    Private Shared Sub Conserver(nom As String, pdf As Byte())
+        Dim dossier = Environment.GetEnvironmentVariable("P60_FEUILLETS_SORTIE")
+        If Not String.IsNullOrEmpty(dossier) AndAlso Directory.Exists(dossier) Then File.WriteAllBytes(Path.Combine(dossier, nom), pdf)
     End Sub
 
     Private Shared Function Ouvrir(pdf As Byte()) As PdfDocument
@@ -102,6 +124,12 @@ Public Class FormulairesOfficielsTests
             Parcourir(kids.Elements.GetDictionary(i), nom, d)
         Next
     End Sub
+
+    ''' <summary>Le flux de l'apparence normale d'une case.</summary>
+    Private Shared Function ApparenceDe(champ As PdfDictionary) As String
+        Dim n = champ.Elements.GetDictionary("/AP").Elements.GetDictionary("/N")
+        Return Text.Encoding.ASCII.GetString(n.Stream.UnfilteredValue)
+    End Function
 
     ''' <summary>Nom complet → dictionnaire du champ, pour chaque champ nommé.</summary>
     Private Shared Function ChampsDe(doc As PdfDocument) As Dictionary(Of String, PdfDictionary)

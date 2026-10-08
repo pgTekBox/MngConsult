@@ -1,6 +1,8 @@
 Imports System.Globalization
 Imports System.IO
 Imports System.Text
+Imports System.Text.RegularExpressions
+Imports PdfSharp.Drawing
 Imports PdfSharp.Pdf
 Imports PdfSharp.Pdf.Advanced
 Imports PdfSharp.Pdf.IO
@@ -56,6 +58,21 @@ Public NotInheritable Class FormulaireOfficiel
     Private Const ApparenceValeurs As String = "/Cour 9 Tf 0 g"
     ''' <summary>Bit « lecture seule » du drapeau /Ff d'un champ.</summary>
     Private Const ChampLectureSeule As Integer = 1
+    ''' <summary>Bit « bouton poussoir » du drapeau /Ff d'un champ.</summary>
+    Private Const BoutonPoussoir As Integer = 65536
+    ''' <summary>Bit « multiligne » du drapeau /Ff d'un champ de texte.</summary>
+    Private Const ChampMultiligne As Integer = 4096
+    ''' <summary>Clé privée posée sur une case dont l'apparence est dessinée (le formulaire est assuré après chaque ajout).</summary>
+    Private Const MarqueMiseEnForme As String = "/P60Apparence"
+    Private Const TailleValeurs As Integer = 9
+    Private Const TaillePetitesCases As Integer = 10
+    ''' <summary>Courier : chasse de 0,6 em, capitales de 0,56 em.</summary>
+    Private Const LargeurCourier As Double = 0.6
+    Private Const HauteurCapitales As Double = 0.56
+    Private Const Interligne As Double = 1.15
+    ''' <summary>Cases de montant du T4 de l'ARC : le trait des cents est à 10,4 pt du bord droit du champ, et la case dessinée se prolonge de 20,8 pt au-delà.</summary>
+    Private Const TraitCentsT4 As Double = 10.4
+    Private Const ProlongementCaseT4 As Double = 20.8
 
     Private Sub New()
     End Sub
@@ -341,14 +358,15 @@ Public NotInheritable Class FormulaireOfficiel
         copie.Internals.Catalog.Elements.Remove("/OpenAction")
         copie.Internals.Catalog.Elements.Remove("/AA")
         copie.Internals.Catalog.Elements.Remove("/Names")
-        AssurerFormulaire(copie)
+        AssurerFormulaire(copie, False)
     End Sub
 
     ''' <summary>
-    ''' Met la liste des champs du document en accord avec les cases de ses pages (après des imports), sans scripts ;
-    ''' inscrit les valeurs en Courier 9 points noir et verrouille chaque champ.
+    ''' Met la liste des champs du document en accord avec les cases de ses pages (après des imports), sans scripts ni
+    ''' boutons ; verrouille chaque champ et dessine lui-même l'apparence des valeurs (Courier, noir), identique dans
+    ''' tous les lecteurs : montants du T4 alignés sur le trait des cents, petites cases de code en 10 points.
     ''' </summary>
-    Private Shared Sub AssurerFormulaire(doc As PdfDocument)
+    Private Shared Sub AssurerFormulaire(doc As PdfDocument, Optional apparences As Boolean = True)
         Dim acro As PdfDictionary
         If doc.Internals.Catalog.Elements.ContainsKey("/AcroForm") Then
             acro = doc.Internals.Catalog.Elements.GetDictionary("/AcroForm")
@@ -358,10 +376,11 @@ Public NotInheritable Class FormulaireOfficiel
             doc.Internals.Catalog.Elements.SetReference("/AcroForm", acro)
         End If
         acro.Elements.SetString("/DA", ApparenceValeurs)
-        AssurerCourier(doc, acro)
+        Dim courier = AssurerCourier(doc, acro)
         Dim fields As New PdfArray(doc)
         Dim vus As New HashSet(Of PdfReference)()
         For Each page In doc.Pages
+            RetirerBoutons(page)
             For Each r In RacinesDeLaPage(page)
                 If r.Reference IsNot Nothing AndAlso vus.Add(r.Reference) Then fields.Elements.Add(r.Reference)
             Next
@@ -373,15 +392,18 @@ Public NotInheritable Class FormulaireOfficiel
                 ' se renvoient l'une à l'autre par leur page) : le document produit reste léger.
                 an.Elements.Remove("/P")
                 Verrouiller(an)
+                If apparences Then MettreEnForme(doc, an, courier)
             Next
             page.Elements.Remove("/AA")
         Next
         acro.Elements("/Fields") = fields
-        acro.Elements.SetBoolean("/NeedAppearances", True)
+        ' À la production, les apparences sont dessinées ici et le lecteur n'a rien à régénérer ; à la préparation
+        ' (formulaire vierge téléversé), on laisse le lecteur les dessiner.
+        acro.Elements.SetBoolean("/NeedAppearances", Not apparences)
     End Sub
 
     ''' <summary>La police Courier (standard, non incorporée) dans les ressources du formulaire, sous le nom /Cour utilisé par l'apparence des valeurs.</summary>
-    Private Shared Sub AssurerCourier(doc As PdfDocument, acro As PdfDictionary)
+    Private Shared Function AssurerCourier(doc As PdfDocument, acro As PdfDictionary) As PdfDictionary
         Dim dr = acro.Elements.GetDictionary("/DR")
         If dr Is Nothing Then
             dr = New PdfDictionary(doc)
@@ -392,43 +414,196 @@ Public NotInheritable Class FormulaireOfficiel
             polices = New PdfDictionary(doc)
             dr.Elements("/Font") = polices
         End If
-        If polices.Elements.ContainsKey("/Cour") Then Return
-        Dim courier As New PdfDictionary(doc)
+        Dim courier = polices.Elements.GetDictionary("/Cour")
+        If courier IsNot Nothing AndAlso courier.Reference IsNot Nothing Then Return courier
+        courier = New PdfDictionary(doc)
         doc.Internals.AddObject(courier)
         courier.Elements.SetName("/Type", "/Font")
         courier.Elements.SetName("/Subtype", "/Type1")
         courier.Elements.SetName("/BaseFont", "/Courier")
         courier.Elements.SetName("/Encoding", "/WinAnsiEncoding")
         polices.Elements.SetReference("/Cour", courier)
-    End Sub
+        Return courier
+    End Function
 
-    ''' <summary>
-    ''' La case et sa chaîne de parents jusqu'au champ racine : chaque champ reçoit le drapeau « lecture seule » ;
-    ''' les champs de texte et de choix prennent l'apparence Courier 9 noir (les cases à cocher gardent leur coche).
-    ''' </summary>
-    Private Shared Sub Verrouiller(annotation As PdfDictionary)
+    ''' <summary>La case et sa chaîne de parents jusqu'au champ racine.</summary>
+    Private Shared Function ChaineDe(annotation As PdfDictionary) As List(Of PdfDictionary)
         Dim chaine As New List(Of PdfDictionary)()
         Dim cur As PdfDictionary = annotation
         While cur IsNot Nothing AndAlso chaine.Count < 32
             chaine.Add(cur)
             cur = cur.Elements.GetDictionary("/Parent")
         End While
-        Dim ft As String = Nothing
+        Return chaine
+    End Function
+
+    ''' <summary>L'entrée héritée (la première de la chaîne qui la porte), ou Nothing.</summary>
+    Private Shared Function Herite(chaine As List(Of PdfDictionary), cle As String) As PdfItem
         For Each d In chaine
-            If d.Elements.ContainsKey("/FT") Then ft = d.Elements.GetName("/FT") : Exit For
+            If d.Elements.ContainsKey(cle) Then Return d.Elements(cle)
         Next
+        Return Nothing
+    End Function
+
+    Private Shared Function TypeDeChamp(chaine As List(Of PdfDictionary)) As String
+        Dim ft = TryCast(Herite(chaine, "/FT"), PdfName)
+        Return If(ft Is Nothing, "", ft.Value)
+    End Function
+
+    Private Shared Function DrapeauxDe(chaine As List(Of PdfDictionary)) As Integer
+        Dim ff = TryCast(Herite(chaine, "/Ff"), PdfInteger)
+        Return If(ff Is Nothing, 0, ff.Value)
+    End Function
+
+    Private Shared Function AlignementDe(chaine As List(Of PdfDictionary)) As Integer
+        Dim q = TryCast(Herite(chaine, "/Q"), PdfInteger)
+        Return If(q Is Nothing, 0, q.Value)
+    End Function
+
+    Private Shared Function NomRacine(chaine As List(Of PdfDictionary)) As String
+        Dim racine = chaine(chaine.Count - 1)
+        Return If(racine.Elements.ContainsKey("/T"), racine.Elements.GetString("/T"), "")
+    End Function
+
+    ''' <summary>Les boutons poussoirs du formulaire (« Effacer les données » en haut du T4) sont retirés de la page et de l'arbre des champs.</summary>
+    Private Shared Sub RetirerBoutons(page As PdfPage)
+        For i = page.Annotations.Count - 1 To 0 Step -1
+            Dim an = page.Annotations(i)
+            Dim chaine = ChaineDe(an)
+            If TypeDeChamp(chaine) <> "/Btn" OrElse (DrapeauxDe(chaine) And BoutonPoussoir) = 0 Then Continue For
+            page.Annotations.Remove(an)
+            Detacher(an)
+        Next
+    End Sub
+
+    ''' <summary>Retire un champ de la liste des enfants de son parent ; un parent resté sans enfant est retiré à son tour.</summary>
+    Private Shared Sub Detacher(champ As PdfDictionary)
+        Dim cur = champ
+        Dim parent = cur.Elements.GetDictionary("/Parent")
+        While parent IsNot Nothing
+            Dim kids = parent.Elements.GetArray("/Kids")
+            If kids IsNot Nothing Then
+                For j = kids.Elements.Count - 1 To 0 Step -1
+                    If Object.ReferenceEquals(kids.Elements.GetDictionary(j), cur) Then kids.Elements.RemoveAt(j)
+                Next
+                If kids.Elements.Count > 0 Then Exit While
+            End If
+            cur = parent
+            parent = cur.Elements.GetDictionary("/Parent")
+        End While
+    End Sub
+
+    ''' <summary>
+    ''' Chaque champ de la chaîne reçoit le drapeau « lecture seule » ; les champs de texte et de choix prennent
+    ''' l'apparence Courier noir (les cases à cocher gardent leur coche).
+    ''' </summary>
+    Private Shared Sub Verrouiller(annotation As PdfDictionary)
+        Dim chaine = ChaineDe(annotation)
+        Dim ft = TypeDeChamp(chaine)
         Dim texteOuChoix = (ft = "/Tx" OrElse ft = "/Ch")
+        Dim da = "/Cour " & TailleDe(chaine).ToString(CultureInfo.InvariantCulture) & " Tf 0 g"
         Dim premierChamp = True
         For Each d In chaine
             If d.Elements.ContainsKey("/T") Then
                 d.Elements.SetInteger("/Ff", d.Elements.GetInteger("/Ff") Or ChampLectureSeule)
-                If texteOuChoix AndAlso premierChamp Then d.Elements.SetString("/DA", ApparenceValeurs)
+                If texteOuChoix AndAlso premierChamp Then d.Elements.SetString("/DA", da)
                 premierChamp = False
             ElseIf texteOuChoix AndAlso d.Elements.ContainsKey("/DA") Then
-                d.Elements.SetString("/DA", ApparenceValeurs)
+                d.Elements.SetString("/DA", da)
             End If
         Next
     End Sub
+
+    ''' <summary>9 points, sauf les petites cases de code du T4 (10, 29, 45, codes des autres renseignements) en 10 points.</summary>
+    Private Shared Function TailleDe(chaine As List(Of PdfDictionary)) As Integer
+        If TypeDeChamp(chaine) = "/Ch" AndAlso NomRacine(chaine).StartsWith("t4_", StringComparison.Ordinal) Then Return TaillePetitesCases
+        Return TailleValeurs
+    End Function
+
+    ''' <summary>
+    ''' Dessine l'apparence de la case (texte ou choix) avec sa valeur : Courier noir, alignement du champ ; dans les
+    ''' cases de montant du T4, le point décimal est posé contre le trait des cents et la case du champ est prolongée
+    ''' jusqu'au bord dessiné pour que les cents y tiennent.
+    ''' </summary>
+    Private Shared Sub MettreEnForme(doc As PdfDocument, annotation As PdfDictionary, courier As PdfDictionary)
+        If annotation.Elements.ContainsKey(MarqueMiseEnForme) Then Return
+        Dim chaine = ChaineDe(annotation)
+        Dim ft = TypeDeChamp(chaine)
+        If ft <> "/Tx" AndAlso ft <> "/Ch" Then Return
+        annotation.Elements.SetBoolean(MarqueMiseEnForme, True)
+        Dim v = TryCast(Herite(chaine, "/V"), PdfString)
+        Dim texte = If(v Is Nothing, "", v.Value)
+        Dim taille = TailleDe(chaine)
+        Dim q = AlignementDe(chaine)
+        Dim multiligne = (DrapeauxDe(chaine) And ChampMultiligne) <> 0
+        Dim rect = annotation.Elements.GetRectangle("/Rect")
+        Dim montantT4 = q = 2 AndAlso NomRacine(chaine).StartsWith("t4_", StringComparison.Ordinal) AndAlso Regex.IsMatch(texte, "^\d+\.\d\d$")
+        If montantT4 Then
+            rect = New PdfRectangle(New XPoint(rect.X1, rect.Y1), New XPoint(rect.X2 + ProlongementCaseT4, rect.Y2))
+            annotation.Elements.SetRectangle("/Rect", rect)
+        End If
+        Dim ap As New PdfDictionary(doc)
+        doc.Internals.AddObject(ap)
+        ap.Elements.SetName("/Type", "/XObject")
+        ap.Elements.SetName("/Subtype", "/Form")
+        ap.Elements.SetRectangle("/BBox", New PdfRectangle(New XPoint(0, 0), New XPoint(rect.Width, rect.Height)))
+        Dim polices As New PdfDictionary(doc)
+        polices.Elements.SetReference("/Cour", courier)
+        Dim ressources As New PdfDictionary(doc)
+        ressources.Elements("/Font") = polices
+        ap.Elements("/Resources") = ressources
+        ap.CreateStream(Encoding.ASCII.GetBytes(ContenuApparence(texte, rect.Width, rect.Height, taille, q, multiligne, montantT4)))
+        Dim apparences As New PdfDictionary(doc)
+        apparences.Elements.SetReference("/N", ap)
+        annotation.Elements("/AP") = apparences
+    End Sub
+
+    ''' <summary>Le flux de contenu d'une apparence : texte découpé en lignes, placé selon l'alignement.</summary>
+    Friend Shared Function ContenuApparence(texte As String, largeur As Double, hauteur As Double, taille As Integer, q As Integer, multiligne As Boolean, montantT4 As Boolean) As String
+        Dim sb As New StringBuilder()
+        sb.Append("/Tx BMC q 0.5 0.5 ").Append(Nb(largeur - 1)).Append(" ").Append(Nb(hauteur - 1)).Append(" re W n BT /Cour ").Append(taille.ToString(CultureInfo.InvariantCulture)).Append(" Tf 0 g ")
+        Dim cw = taille * LargeurCourier
+        Dim lignes = If(multiligne, texte.Replace(vbCrLf, vbLf).Split(ChrW(10)), {texte})
+        Dim y As Double = If(multiligne, hauteur - 2 - taille * 0.8, (hauteur - taille * HauteurCapitales) / 2)
+        For Each l In lignes
+            Dim x As Double
+            If montantT4 Then
+                ' Le trait des cents est à TraitCentsT4 du bord droit du champ d'origine ; la cellule du point finit juste avant.
+                Dim trait = largeur - ProlongementCaseT4 - TraitCentsT4
+                x = trait - 0.3 - cw * (l.Length - 2)
+                If x < 1 Then x = largeur - 2 - cw * l.Length
+            ElseIf q = 2 Then
+                x = largeur - 2 - cw * l.Length
+            ElseIf q = 1 Then
+                x = (largeur - cw * l.Length) / 2
+            Else
+                x = 2
+            End If
+            If l.Length > 0 Then sb.Append("1 0 0 1 ").Append(Nb(x)).Append(" ").Append(Nb(y)).Append(" Tm (").Append(Echapper(l)).Append(") Tj ")
+            y -= taille * Interligne
+        Next
+        sb.Append("ET Q EMC")
+        Return sb.ToString()
+    End Function
+
+    Private Shared Function Nb(valeur As Double) As String
+        Return valeur.ToString("0.##", CultureInfo.InvariantCulture)
+    End Function
+
+    ''' <summary>Le texte en WinAnsi, échappé pour une chaîne littérale PDF.</summary>
+    Private Shared Function Echapper(texte As String) As String
+        Dim sb As New StringBuilder()
+        For Each b In Encoding.GetEncoding(1252).GetBytes(texte)
+            If b = 40 OrElse b = 41 OrElse b = 92 Then
+                sb.Append("\"c).Append(ChrW(b))
+            ElseIf b < 32 OrElse b > 126 Then
+                sb.Append("\"c).Append(Convert.ToString(b, 8).PadLeft(3, "0"c))
+            Else
+                sb.Append(ChrW(b))
+            End If
+        Next
+        Return sb.ToString()
+    End Function
 
     ''' <summary>Les champs racines dont une case se trouve sur la page, dans l'ordre des cases.</summary>
     Private Shared Function RacinesDeLaPage(page As PdfPage) As List(Of PdfDictionary)
