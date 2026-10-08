@@ -1257,6 +1257,20 @@ mark{background:#ffe89a}
 <dt>TP-1015.3</dt><dd>Source Deductions Return (Québec), completed by the employee.</dd>
 <dt>TP-1015.F</dt><dd>Revenu Québec guide: formulas for calculating source deductions.</dd>
 <dt>Pay stub</dt><dd>The pay statement given to the employee.</dd>
+<dt>Slip</dt><dd>An employee's year-end statement: the T4 (federal) and, for employment in Québec, the RL-1. 60secPaie calculates them from the confirmed pay runs and the opening balances, produces them as PDF and emails them; it does not file them with the governments.</dd>
+<dt>T4</dt><dd>"Statement of Remuneration Paid", the CRA's federal slip: boxes 14 (employment income), 16/17 (CPP/QPP), 16A/17A (second contributions), 18 (EI), 22 (income tax deducted), 24 and 26 (insurable and pensionable earnings), 28 (exemptions), 45 (dental benefits), 55 and 56 (QPIP). Two slips per page on the official form.</dd>
+<dt>RL-1 (Relevé 1)</dt><dd>"Employment and other income", Revenu Québec's slip for Québec employees: boxes A (employment income), B (QPP), C (EI), E (Québec income tax), G, H, I (QPIP), J, L, M, N, W and additional information. One page per copy: 1 Revenu Québec, 2 employee, 3 employer.</dd>
+<dt>T4 Summary / Summary 1</dt><dd>The employer's annual recaps that go with the slips: the T4 Summary for the CRA (T4 totals, employer contributions, remittances, balance) and Summary 1 for Revenu Québec (QPP, QPIP, HSF, CNESST, CNT, remittances, balance). 60secPaie produces them with the government copies.</dd>
+<dt>Copy (of a slip)</dt><dd>The same slip exists in several copies: the government copy (copy 1, with the summaries), the employee copy (copy 2, emailed) and the employer copy (copy 3, to file). "Copy to download" picks the one the download buttons produce.</dd>
+<dt>Official form</dt><dd>The fillable PDF published every year by the CRA (fillable T4, t4-fill-YYe.pdf) or by Revenu Québec (fillable RL-1). Uploaded per year under Settings › Official forms (or by the platform), it carries the slips; without it, 60secPaie keeps its own layout.</dd>
+<dt>Platform forms</dt><dd>The official forms and the T4 instructions that 60Sec's administration uploads in its console for every company. Those a company uploads itself take precedence.</dd>
+<dt>T4 instructions</dt><dd>The CRA's instructions document that goes with the T4, kept per year by the platform and offered as is, through a link, under Reports › T4 and RL-1 slips and Settings › Official forms.</dd>
+<dt>Web Forms</dt><dd>The CRA's online service where the employer enters its T4 slips and T4 Summary, before the last day of February.</dd>
+<dt>My Account for businesses</dt><dd>Revenu Québec's online space where the employer files its RL-1 slips and Summary 1, before the last day of February.</dd>
+<dt>RC4120 / RL-1.G</dt><dd>The yearly slip guides: RC4120 (CRA) for the T4, RL-1.G (Revenu Québec) for the RL-1. They say what goes in each box.</dd>
+<dt>Opening balances</dt><dd>The amounts already paid before arriving in 60secPaie (mid-year conversion), entered per employee under Employees › Opening balances. They count toward the annual maximums and the slips; the slips table flags "includes opening balances".</dd>
+<dt>Activity log</dt><dd>The trace of sensitive actions, with date and user: display of the complete SIN, download of slips (complete SIN), emailing of slips, upload or removal of an official form.</dd>
+<dt>Read-only (PDF slip)</dt><dd>The slips produced have locked fields and are protected against modification, filling and annotation; they open and print without a password. A correction is made at the source, then the slip is produced again.</dd>
 </dl>
 
 <p class="retour"><a href="#haut">Back to top</a> · <a href="Default.aspx">Back to 60secPaie</a></p>
