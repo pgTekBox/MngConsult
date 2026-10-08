@@ -57,11 +57,11 @@ Public Class FormulairesOfficielsTests
         StringAssert.Contains(apparence14, "/Cour 9 Tf 0 g", "Courier 9 points, noir.")
         StringAssert.Contains(apparence14, "(52000.00) Tj", "La valeur est dessinée.")
         Dim cw = 9 * 0.6
-        Dim x14 = (case14.Elements.GetRectangle("/Rect").Width - 20.8 - 10.4) + 2 - 0.23 * 9 - cw * 5
-        StringAssert.Contains(apparence14, " " & x14.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " 5.04 Tm ", "Point décimal à 2 pt à droite du trait des cents du T4 (10,4 pt du bord du champ).")
+        Dim x14 = (case14.Elements.GetRectangle("/Rect").Width - 20.8 - 10.4) - 0.3 * 9 - cw * 5
+        StringAssert.Contains(apparence14, " " & x14.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " 5.04 Tm ", "Point décimal centré sur le trait des cents du T4 (10,4 pt du bord du champ).")
         Dim repA = champs("r1_1_rep_caseA")
-        Dim xA = (CaseDe(repA).Elements.GetRectangle("/Rect").Width - 6 - 13.6) + 2 - 0.23 * 9 - cw * 5
-        StringAssert.Contains(ApparenceDe(repA), " " & xA.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " ", "Point décimal à 2 pt à droite du repère des cents du Relevé 1 (13,6 pt du bord du champ).")
+        Dim xA = (CaseDe(repA).Elements.GetRectangle("/Rect").Width - 6 - 13.6) - 0.3 * 9 - cw * 5
+        StringAssert.Contains(ApparenceDe(repA), " " & xA.ToString("0.##", Globalization.CultureInfo.InvariantCulture) & " ", "Point décimal centré sur le repère des cents du Relevé 1 (13,6 pt du bord du champ).")
         Assert.AreEqual(455.0, Math.Round(case14.Elements.GetRectangle("/Rect").X2, 1), "La case du champ est prolongée jusqu'au bord dessiné.")
         StringAssert.Contains(ApparenceDe(champs("t4_1_form1[0].Page1[0].Slip1[0].Box10[0].Slip1Box10[0]")), "/Cour 10 Tf 0 g 1 0 0 1 2 4.76 Tm (QC) Tj", "Petite case en 10 points.")
         Assert.IsFalse(champs.Keys.Any(Function(k) k.Contains("ClearData")), "Le bouton « Effacer les données » est retiré.")

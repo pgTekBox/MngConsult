@@ -54,10 +54,10 @@ Public Class PageFeuillets
         Dim ColonnesT4 = CasesT4.Where(Function(k) (avecHorsQuebec OrElse Not CasesRPC.Contains(k)) AndAlso (quebecAussi OrElse Not CasesQuebec.Contains(k))).ToArray()
         Dim ColonnesR1 = If(quebecAussi, CasesR1, New String() {})
 
-        Dim sb As New StringBuilder("<table class=""liste""><thead><tr><th rowspan=""2"">Employé</th>")
+        Dim sb As New StringBuilder("<table class=""liste""><thead><tr><th rowspan=""2""></th><th rowspan=""2"">Employé</th>")
         sb.Append("<th colspan=""").Append(ColonnesT4.Length).Append(""">T4 (cases)</th>")
         If ColonnesR1.Length > 0 Then sb.Append("<th colspan=""").Append(ColonnesR1.Length).Append(""">Relevé 1</th>")
-        sb.Append("<th rowspan=""2""></th></tr><tr>")
+        sb.Append("</tr><tr>")
         For Each c In ColonnesT4
             sb.Append("<th class=""num"">").Append(c).Append("</th>")
         Next
@@ -68,7 +68,7 @@ Public Class PageFeuillets
 
         Dim totaux As New Dictionary(Of String, Decimal)()
         For Each f In feuillets
-            sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(f.NomComplet))
+            sb.Append("<tr>").Append(BoutonsLigne(f, envois)).Append("<td>").Append(HttpUtility.HtmlEncode(f.NomComplet))
             If f.ContientCumulatifsDepart Then sb.Append("<div class=""note"">inclut des cumulatifs de départ</div>")
             If f.DeuxProvinces Then
                 sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(String.Format("payé dans plus d'une province ({0}) : un T4 par province", String.Join(", ", f.ProvincesEmploi)))).Append("</div>")
@@ -80,20 +80,17 @@ Public Class PageFeuillets
             For Each c In ColonnesR1
                 Cellule(sb, totaux, "R1" & c, f.CaseR1(c))
             Next
-            sb.Append(BoutonsLigne(f))
-            Dim envoye As Date
-            If envois.TryGetValue(f.Employe.Ent("Id"), envoye) Then sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(Tr("envoyé par courriel le {#0}", TexteDate(envoye)))).Append("</div>")
-            sb.Append("</td></tr>")
+            sb.Append("</tr>")
         Next
 
-        sb.Append("</tbody><tfoot><tr><td>Total (").Append(feuillets.Count).Append(If(feuillets.Count > 1, " feuillets)", " feuillet)")).Append("</td>")
+        sb.Append("</tbody><tfoot><tr><td></td><td>Total (").Append(feuillets.Count).Append(If(feuillets.Count > 1, " feuillets)", " feuillet)")).Append("</td>")
         For Each c In ColonnesT4
             sb.Append("<td class=""num"">").Append(Argent(Total(totaux, "T4" & c))).Append("</td>")
         Next
         For Each c In ColonnesR1
             sb.Append("<td class=""num"">").Append(Argent(Total(totaux, "R1" & c))).Append("</td>")
         Next
-        sb.Append("<td></td></tr></tfoot></table>")
+        sb.Append("</tr></tfoot></table>")
         litTableau.Text = sb.ToString()
 
         litSommaire.Text = Sommaire(Total(totaux, "T417") + Total(totaux, "T417A"), Total(totaux, "T418"), Total(totaux, "T455"),
@@ -204,8 +201,8 @@ Public Class PageFeuillets
         Return d
     End Function
 
-    ''' <summary>La dernière cellule d'une ligne : le lien « Feuillet », puis les boutons T4, Relevé 1 (dans la copie choisie) et Courriel de l'employé.</summary>
-    Private Function BoutonsLigne(f As Feuillet) As String
+    ''' <summary>La première cellule d'une ligne : le lien « Feuillet », les boutons T4, Relevé 1 (dans la copie choisie) et Courriel de l'employé, et la date du dernier envoi.</summary>
+    Private Function BoutonsLigne(f As Feuillet, envois As Dictionary(Of Integer, Date)) As String
         Dim id = f.Employe.Ent("Id").ToString()
         Dim base = "Feuillets.aspx?annee=" & Annee.ToString() & "&amp;employe=" & id & "&amp;copie=" & HttpUtility.HtmlAttributeEncode(ddlCopie.SelectedValue) & "&amp;pdf="
         Dim sb As New StringBuilder()
@@ -214,7 +211,9 @@ Public Class PageFeuillets
         If f.AvecReleve1 Then sb.Append("<a class=""bouton secondaire"" href=""").Append(base).Append("r1"">Relevé 1</a>")
         sb.Append("<a class=""bouton secondaire"" href=""#"" onclick=""if (confirmerPuis(this, 'Envoyer le feuillet de cet employé par courriel ?')) { document.getElementById('") _
           .Append(hidEmploye.ClientID).Append("').value = '").Append(id).Append("'; __doPostBack('").Append(btnCourrielUn.UniqueID).Append("', ''); } return false;"">Courriel</a></div>")
-        Return sb.ToString()
+        Dim envoye As Date
+        If envois.TryGetValue(f.Employe.Ent("Id"), envoye) Then sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(Tr("envoyé par courriel le {#0}", TexteDate(envoye)))).Append("</div>")
+        Return sb.Append("</td>").ToString()
     End Function
 
     ''' <summary>Les liens T4 et Relevé 1 de chaque ligne : ?annee=AAAA&amp;pdf=t4|r1&amp;copie=employe|employeur&amp;employe=N.</summary>

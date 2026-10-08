@@ -76,9 +76,8 @@ Public NotInheritable Class FormulaireOfficiel
     ''' <summary>Cases de montant du Relevé 1 : le repère des cents est à 13,6 pt du bord droit du champ ; le champ est prolongé de 6 pt pour loger les cents.</summary>
     Private Const TraitCentsR1 As Double = 13.6
     Private Const ProlongementCaseR1 As Double = 6.0
-    ''' <summary>Le point décimal est posé à 2 pt à droite du trait ; en Courier, l'encre du point commence à 0,23 em du début de sa cellule.</summary>
-    Private Const DecalagePoint As Double = 2.0
-    Private Const BordGauchePoint As Double = 0.23
+    ''' <summary>Le point décimal est centré sur le trait des cents ; en Courier, le centre du point est à 0,30 em du début de sa cellule.</summary>
+    Private Const CentrePoint As Double = 0.3
 
     Private Sub New()
     End Sub
@@ -601,8 +600,8 @@ Public NotInheritable Class FormulaireOfficiel
         For Each l In lignes
             Dim x As Double
             If ligneCents >= 0 Then
-                ' L'encre du point décimal commence à DecalagePoint à droite du trait des cents ; les cents suivent.
-                x = ligneCents + DecalagePoint - BordGauchePoint * taille - cw * (l.Length - 3)
+                ' Le point décimal est centré sur le trait des cents ; les cents suivent.
+                x = ligneCents - CentrePoint * taille - cw * (l.Length - 3)
                 If x < 1 Then x = largeur - 2 - cw * l.Length
             ElseIf q = 2 Then
                 x = largeur - 2 - cw * l.Length
