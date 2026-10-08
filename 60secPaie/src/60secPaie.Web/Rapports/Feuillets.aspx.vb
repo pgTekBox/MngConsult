@@ -182,10 +182,15 @@ Public Class PageFeuillets
     ''' <summary>Les formulaires officiels téléversés pour l'année (sans leur contenu), pour le dire à l'écran.</summary>
     Private Function EtatFormulaires() As String
         Dim types As New List(Of String)()
-        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", Contexte.CompagnieId)).Rows
-            If r.Ent("Annee") = Annee Then types.Add(If(r.Txt("Type") = FormulaireOfficiel.TypeT4, "T4", "Relevé 1"))
+        Dim vus As New HashSet(Of String)()
+        For Each proprietaire In {Contexte.CompagnieId, FormulaireOfficiel.Plateforme}
+            For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", proprietaire)).Rows
+                If r.Ent("Annee") <> Annee OrElse Not vus.Add(r.Txt("Type")) Then Continue For
+                Dim libelle = If(r.Txt("Type") = FormulaireOfficiel.TypeT4, "T4", "Relevé 1")
+                types.Add(If(proprietaire = FormulaireOfficiel.Plateforme, libelle & " (plateforme)", libelle))
+            Next
         Next
-        If types.Contains("T4") Then Return Tr("Les feuillets de {#0} sortent sur les formulaires officiels téléversés ({1}).", Annee, String.Join(", ", types))
+        If types.Any(Function(x) x.StartsWith("T4")) Then Return Tr("Les feuillets de {#0} sortent sur les formulaires officiels téléversés ({1}).", Annee, String.Join(", ", types))
         Return Tr("Aucun formulaire officiel téléversé pour {#0} : les feuillets sortent sur la mise en page de 60secPaie (Configuration › Formulaires officiels).", Annee)
     End Function
 

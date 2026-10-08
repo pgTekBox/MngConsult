@@ -99,6 +99,30 @@
       <Private>True</Private>
       <HintPath>..\prjMngConsul\packages\BCrypt.Net-Next.4.1.0\lib\net472\BCrypt.Net-Next.dll</HintPath>
     </Reference>
+    <Reference Include="PdfSharp">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.System">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\PdfSharp.System.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Extensions.Logging.Abstractions">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\Microsoft.Extensions.Logging.Abstractions.dll</HintPath>
+    </Reference>
+    <Reference Include="Microsoft.Bcl.AsyncInterfaces">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\Microsoft.Bcl.AsyncInterfaces.dll</HintPath>
+    </Reference>
+    <Reference Include="System.Diagnostics.DiagnosticSource">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\System.Diagnostics.DiagnosticSource.dll</HintPath>
+    </Reference>
+    <Reference Include="System.ValueTuple">
+      <Private>True</Private>
+      <HintPath>..\60secPaie\lib\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Memory, Version=4.0.5.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
       <Private>True</Private>
       <HintPath>..\prjMngConsul\packages\System.Memory.4.6.3\lib\net462\System.Memory.dll</HintPath>
@@ -357,6 +381,7 @@
     <Content Include="wbfPlans.aspx" />
     <Content Include="wbfPlanEdit.aspx" />
     <Content Include="wbfPaieAnnees.aspx" />
+    <Content Include="wbfPaieFormulaires.aspx" />
     <Content Include="wbfPaieAnneeEdit.aspx" />
     <Content Include="wbfLanding.aspx" />
     <Content Include="wbfLogin.aspx" />
@@ -400,6 +425,7 @@
       <DependentUpon>AssistantCompteQBO.ashx</DependentUpon>
     </Compile>
     <Compile Include="MyClass\clsAssistantCompteQBO.vb" />
+    <Compile Include="MyClass\clsFormulairePdf.vb" />
     <Compile Include="MailAttachment.ashx.vb">
       <DependentUpon>MailAttachment.ashx</DependentUpon>
       <SubType>Component</SubType>
@@ -445,6 +471,13 @@
     </Compile>
     <Compile Include="wbfPlanEdit.aspx.designer.vb">
       <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfPaieFormulaires.aspx.vb">
+      <DependentUpon>wbfPaieFormulaires.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfPaieFormulaires.aspx.designer.vb">
+      <DependentUpon>wbfPaieFormulaires.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfPaieAnnees.aspx.vb">
       <DependentUpon>wbfPaieAnnees.aspx</DependentUpon>

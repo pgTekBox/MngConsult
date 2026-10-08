@@ -113,8 +113,10 @@ Public NotInheritable Class ServiceFeuillets
         For Each r As DataRow In Db.Table("paie.spCumulatifDepart_Annees", Db.P("@c", c)).Rows
             annees.Add(r.Ent("Annee"))
         Next
-        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", c)).Rows
-            annees.Add(r.Ent("Annee"))
+        For Each proprietaire In {c, FormulaireOfficiel.Plateforme}
+            For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", proprietaire)).Rows
+                annees.Add(r.Ent("Annee"))
+            Next
         Next
         Return annees.OrderByDescending(Function(a) a).ToList()
     End Function

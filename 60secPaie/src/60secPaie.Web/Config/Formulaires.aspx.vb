@@ -25,6 +25,14 @@ Public Class PageConfigFormulaires
         rptFormulaires.DataBind()
         rptFormulaires.Visible = t.Rows.Count > 0
         lblAucun.Visible = t.Rows.Count = 0
+
+        ' Les formulaires de la plateforme (console d'administration) : ils servent à défaut des vôtres.
+        Dim plateforme As New List(Of String)()
+        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", FormulaireOfficiel.Plateforme)).Rows
+            plateforme.Add(r.Ent("Annee").ToString() & " " & LibelleType(r("Type")))
+        Next
+        litPlateforme.Text = Server.HtmlEncode(If(plateforme.Count = 0, Tr("Aucun formulaire de la plateforme (console d'administration)."),
+                                                 Tr("Formulaires de la plateforme (console d'administration), utilisés à défaut des vôtres : {0}.", String.Join(", ", plateforme))))
     End Sub
 
     Protected Function LibelleType(type As Object) As String

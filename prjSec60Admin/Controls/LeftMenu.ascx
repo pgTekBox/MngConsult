@@ -148,6 +148,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Taux de l'année
                     </a>
+                    <a class="nav-child" href="~/wbfPaieFormulaires.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Formulaires T4 et Relevé 1
+                    </a>
                 </div>
             </div>
 

@@ -7,7 +7,7 @@
         Téléchargez le T4 à remplir de l'année sur le site de l'ARC (fichier « t4-fill-AAf.pdf ») et le Relevé 1 à remplir
         sur celui de Revenu Québec, puis téléversez-les ici. Dès qu'ils sont en place, les feuillets de l'année sortent sur ces formulaires :
         copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels. Sans formulaire, 60secPaie garde sa propre mise en page.
-        Les formulaires changent chaque année : téléversez ceux de l'année des feuillets.
+        Les formulaires changent chaque année : téléversez ceux de l'année des feuillets. Ceux que l'administration de la plateforme téléverse dans sa console valent pour toutes les compagnies ; ceux d'ici les remplacent pour la vôtre.
     </div>
 
     <fieldset>
@@ -47,4 +47,5 @@
         <FooterTemplate></tbody></table></FooterTemplate>
     </asp:Repeater>
     <asp:Label ID="lblAucun" runat="server" CssClass="note" Visible="false">Aucun formulaire téléversé : les feuillets sortent sur la mise en page de 60secPaie.</asp:Label>
+    <p class="note"><asp:Literal ID="litPlateforme" runat="server" /></p>
 </asp:Content>

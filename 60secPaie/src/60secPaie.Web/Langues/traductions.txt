@@ -3478,13 +3478,19 @@ fr: Ouvrir la page complète
 en: Open the full page
 es: Abrir la página completa
 
-$1
+fr: Fermer
+en: Close
+es: Cerrar
+
 # Titres de la fenêtre de message (Site.Master)
 fr: Fait
 en: Done
 es: Hecho
 
-$1
+fr: Erreur
+en: Error
+es: Error
+
 fr: Confirmer
 en: Confirm
 es: Confirmar
@@ -4661,9 +4667,9 @@ fr: Formulaires officiels
 en: Official forms
 es: Formularios oficiales
 
-fr: Téléchargez le T4 à remplir de l'année sur le site de l'ARC (fichier « t4-fill-AAf.pdf ») et le Relevé 1 à remplir sur celui de Revenu Québec, puis téléversez-les ici. Dès qu'ils sont en place, les feuillets de l'année sortent sur ces formulaires : copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels. Sans formulaire, 60secPaie garde sa propre mise en page. Les formulaires changent chaque année : téléversez ceux de l'année des feuillets.
-en: Download the year's fillable T4 from the CRA website (file "t4-fill-YYe.pdf" or "t4-fill-YYf.pdf") and the fillable RL-1 from Revenu Québec's, then upload them here. As soon as they are in place, the year's slips come out on these forms: employee copy, employer copy, government copies and email attachment. Without a form, 60secPaie keeps its own layout. Forms change every year: upload those of the slips' year.
-es: Descargue el T4 para llenar del año en el sitio de la CRA (archivo « t4-fill-AAf.pdf ») y el Relevé 1 para llenar en el de Revenu Québec, y luego súbalos aquí. En cuanto estén en su lugar, los comprobantes del año salen en estos formularios: copia del empleado, copia del empleador, copias del gobierno y adjunto de los correos. Sin formulario, 60secPaie conserva su propia maqueta. Los formularios cambian cada año: suba los del año de los comprobantes.
+fr: Téléchargez le T4 à remplir de l'année sur le site de l'ARC (fichier « t4-fill-AAf.pdf ») et le Relevé 1 à remplir sur celui de Revenu Québec, puis téléversez-les ici. Dès qu'ils sont en place, les feuillets de l'année sortent sur ces formulaires : copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels. Sans formulaire, 60secPaie garde sa propre mise en page. Les formulaires changent chaque année : téléversez ceux de l'année des feuillets. Ceux que l'administration de la plateforme téléverse dans sa console valent pour toutes les compagnies ; ceux d'ici les remplacent pour la vôtre.
+en: Download the year's fillable T4 from the CRA website (file "t4-fill-YYe.pdf" or "t4-fill-YYf.pdf") and the fillable RL-1 from Revenu Québec's, then upload them here. As soon as they are in place, the year's slips come out on these forms: employee copy, employer copy, government copies and email attachment. Without a form, 60secPaie keeps its own layout. Forms change every year: upload those of the slips' year. Those the platform administration uploads in its console apply to every company; the ones here replace them for yours.
+es: Descargue el T4 para llenar del año en el sitio de la CRA (archivo « t4-fill-AAf.pdf ») y el Relevé 1 para llenar en el de Revenu Québec, y luego súbalos aquí. En cuanto estén en su lugar, los comprobantes del año salen en estos formularios: copia del empleado, copia del empleador, copias del gobierno y adjunto de los correos. Sin formulario, 60secPaie conserva su propia maqueta. Los formularios cambian cada año: suba los del año de los comprobantes. Los que la administración de la plataforma sube en su consola valen para todas las empresas; los de aquí los reemplazan para la suya.
 
 fr: Téléverser un formulaire
 en: Upload a form
@@ -4792,6 +4798,23 @@ es: Los comprobantes de {#0} salen en los formularios oficiales subidos ({1}).
 fr: Aucun formulaire officiel téléversé pour {#0} : les feuillets sortent sur la mise en page de 60secPaie (Configuration › Formulaires officiels).
 en: No official form uploaded for {#0}: the slips come out on 60secPaie's layout (Settings › Official forms).
 es: Ningún formulario oficial subido para {#0}: los comprobantes salen en la maqueta de 60secPaie (Configuración › Formularios oficiales).
+
 fr: Aucune paie confirmée pour l'instant, ni cumulatifs de départ, ni formulaire officiel téléversé.
 en: No confirmed pay run yet, no opening balances, no uploaded official form.
 es: Ninguna nómina confirmada por ahora, ni acumulados iniciales, ni formulario oficial subido.
+
+fr: T4 (plateforme)
+en: T4 (platform)
+es: T4 (plataforma)
+
+fr: Relevé 1 (plateforme)
+en: RL-1 (platform)
+es: Relevé 1 (plataforma)
+
+fr: Aucun formulaire de la plateforme (console d'administration).
+en: No platform form (admin console).
+es: Ningún formulario de la plataforma (consola de administración).
+
+fr: Formulaires de la plateforme (console d'administration), utilisés à défaut des vôtres : {0}.
+en: Platform forms (admin console), used when you have none of your own: {0}.
+es: Formularios de la plataforma (consola de administración), usados a falta de los suyos: {0}.

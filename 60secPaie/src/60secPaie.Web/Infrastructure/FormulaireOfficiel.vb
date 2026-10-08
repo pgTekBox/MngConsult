@@ -56,14 +56,22 @@ Public NotInheritable Class FormulaireOfficiel
 
     ' ------------------------------------------------------------------ chargement
 
-    ''' <summary>Les formulaires de l'année pour la compagnie courante ; Disponible = False s'il n'y a pas de T4.</summary>
+    ''' <summary>Les formulaires de la plateforme (console d'administration) sont rangés sous la compagnie 0.</summary>
+    Public Const Plateforme As Integer = 0
+
+    ''' <summary>
+    ''' Les formulaires de l'année : ceux de la compagnie courante, et à défaut de chacun, ceux de la plateforme
+    ''' (téléversés dans la console Sec60Admin pour toutes les compagnies). Disponible = False s'il n'y a pas de T4.
+    ''' </summary>
     Public Shared Function Charger(annee As Integer) As FormulairesAnnee
         Dim f As New FormulairesAnnee With {.Annee = annee}
-        For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Annee", Db.P("@c", Contexte.CompagnieId), Db.P("@a", annee)).Rows
-            Dim contenu = TryCast(r("Contenu"), Byte())
-            If contenu Is Nothing OrElse contenu.Length = 0 Then Continue For
-            If r.Txt("Type") = TypeT4 Then f.T4 = contenu
-            If r.Txt("Type") = TypeR1 Then f.R1 = contenu
+        For Each c In {Contexte.CompagnieId, Plateforme}
+            For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Annee", Db.P("@c", c), Db.P("@a", annee)).Rows
+                Dim contenu = TryCast(r("Contenu"), Byte())
+                If contenu Is Nothing OrElse contenu.Length = 0 Then Continue For
+                If r.Txt("Type") = TypeT4 AndAlso f.T4 Is Nothing Then f.T4 = contenu
+                If r.Txt("Type") = TypeR1 AndAlso f.R1 Is Nothing Then f.R1 = contenu
+            Next
         Next
         Return f
     End Function
