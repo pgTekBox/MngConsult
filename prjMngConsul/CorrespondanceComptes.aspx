@@ -161,11 +161,8 @@
     </div>
 
     <p class="cor-lede">
-        Pour chaque compte de votre ancien logiciel, dites à quel compte de votre plan
-        il correspond — ou s'il faut le créer. La page propose ce qu'elle peut,
-        <b>elle ne tranche jamais à votre place</b> : une correspondance fausse
-        déplacerait des montants sans que rien ne le signale. Rien n'est encore écrit
-        dans votre comptabilité.
+        Pour chaque compte de l'ancien logiciel, choisissez le compte de votre plan qui lui correspond, ou créez-le.
+        La page propose, <b>vous décidez</b> : rien n'est encore écrit dans votre comptabilité.
     </p>
 
     <asp:Panel ID="pnlAucunLot" runat="server" Visible="false" CssClass="card">

@@ -35,6 +35,85 @@ Public Class Importations
     End Class
 
     ''' <summary>
+    ''' Ce qu'une compagnie a réellement fait d'un poste : ce qui attend en
+    ''' préparation et ce qui a été appliqué (créé en comptabilité, ou reconnu
+    ''' pour les taxes). Lu une fois par page, par s0896GetAvancementImport.
+    ''' </summary>
+    Private Class Avancement
+        Public Property Prepares As Integer
+        Public Property Appliques As Integer
+    End Class
+
+    Private _avancement As Dictionary(Of String, Avancement)
+
+    Private Function AvancementImport() As Dictionary(Of String, Avancement)
+        If _avancement IsNot Nothing Then Return _avancement
+        _avancement = New Dictionary(Of String, Avancement)(StringComparer.OrdinalIgnoreCase)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0896GetAvancementImport", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    _avancement(Convert.ToString(r("Poste"))) = New Avancement With {
+                        .Prepares = Convert.ToInt32(r("Prepares")),
+                        .Appliques = If(IsDBNull(r("Appliques")), 0, Convert.ToInt32(r("Appliques")))}
+                Next
+            End If
+        Catch
+            ' Sans la procédure, les postes gardent leur note de code : rien ne casse.
+        End Try
+        Return _avancement
+    End Function
+
+    ''' <summary>Titre du poste → ligne de l'avancement, pour les postes obligatoires.</summary>
+    Private Shared ReadOnly PostesAvancement As New Dictionary(Of String, String)(StringComparer.Ordinal) From {
+        {"Balance de vérification", "Balance"},
+        {"Clients", "Client"},
+        {"Fournisseurs", "Fournisseur"},
+        {"Produits et services", "Produit"},
+        {"Factures clients et fournisseurs", "Facture"},
+        {"Codes et taux de taxe", "Taxe"}
+    }
+
+    ''' <summary>
+    ''' La note d'un poste obligatoire dit où en est la compagnie, pas la maturité
+    ''' du code : 0 tant que rien n'est en préparation, 5 quand les données
+    ''' attendent, jusqu'à 10 quand tout est appliqué. La balance plafonne à 5 :
+    ''' rien ne l'applique encore. Les quantités s'écrivent en tête de « ce qui
+    ''' fonctionne » pour que la note se vérifie d'un coup d'œil.
+    ''' </summary>
+    Private Function NoterAvancement(postes As List(Of Poste)) As List(Of Poste)
+        Dim av As Dictionary(Of String, Avancement) = AvancementImport()
+        For Each poste In postes
+            Dim cle As String = Nothing
+            If Not PostesAvancement.TryGetValue(poste.Titre, cle) Then Continue For
+            Dim a As Avancement = Nothing
+            If Not av.TryGetValue(cle, a) OrElse a.Prepares = 0 Then
+                poste.Note = 0
+                poste.Fait = "Rien en préparation pour cette compagnie. " & poste.Fait
+                Continue For
+            End If
+            Dim part As Double = a.Appliques / CDbl(a.Prepares)
+            Select Case cle
+                Case "Balance"
+                    poste.Note = 5
+                    poste.Fait = a.Prepares.ToString("N0") & " ligne(s) de balance en préparation ; les soldes d'ouverture ne s'appliquent pas encore. " & poste.Fait
+                Case "Taxe"
+                    poste.Note = 5 + CInt(Math.Round(5 * part))
+                    poste.Fait = a.Prepares.ToString("N0") & " code(s) de taxe lu(s), " & a.Appliques.ToString("N0") & " reconnu(s) avec TPS et TVQ. " & poste.Fait
+                Case "Facture"
+                    poste.Note = 5 + CInt(Math.Round(5 * part))
+                    poste.Fait = a.Prepares.ToString("N0") & " facture(s) en préparation, " & a.Appliques.ToString("N0") & " créée(s) en brouillon. " & poste.Fait
+                Case Else
+                    poste.Note = 5 + CInt(Math.Round(5 * part))
+                    poste.Fait = a.Prepares.ToString("N0") & " " & cle.ToLowerInvariant() & "(s) en préparation, " & a.Appliques.ToString("N0") & " créé(s). " & poste.Fait
+            End Select
+        Next
+        Return postes
+    End Function
+
+    ''' <summary>
     ''' La reprise du plan comptable : une seule boîte, qui mène à l'étape 1.
     ''' Le détail de chaque étape — ce qui fonctionne, ce qui manque — vit sur
     ''' l'écran lui-même, sous le fil des étapes. La note est celle de l'étape
@@ -45,7 +124,7 @@ Public Class Importations
         Get
             Dim plan As EtatPlan = EtatPlanComptable()
 
-            Return New List(Of Poste) From {
+            Return NoterAvancement(New List(Of Poste) From {
                 New Poste With {
                     .Icone = "📊",
                     .Titre = "Plan comptable",
@@ -71,7 +150,7 @@ Public Class Importations
                     .Manque = "Rien ne l'applique encore : les soldes d'ouverture ne sont pas " &
                               "écrits en comptabilité."
                 }
-            }
+            })
         End Get
     End Property
 
@@ -90,7 +169,7 @@ Public Class Importations
         Get
             Dim ext As Extraction = DerniereExtraction()
 
-            Return NoterRessources(New List(Of Poste) From {
+            Return NoterAvancement(NoterRessources(New List(Of Poste) From {
                 New Poste With {
                     .Icone = "🔌",
                     .Titre = "QuickBooks, en direct",
@@ -423,7 +502,7 @@ Public Class Importations
                     .Manque = "Le temps à facturer n'est pas transformé en factures : c'est ce que " &
                               "la bascule doit régler avant de fermer la source."
                 }
-            })
+            }))
         End Get
     End Property
     ''' <summary>
@@ -433,7 +512,7 @@ Public Class Importations
     ''' </summary>
     Private ReadOnly Property Autres As List(Of Poste)
         Get
-            Return New List(Of Poste) From {
+            Return NoterAvancement(New List(Of Poste) From {
                 New Poste With {
                     .Icone = "👥",
                     .Titre = "Clients",
@@ -472,7 +551,7 @@ Public Class Importations
                     .Manque = "Chaque produit prend les comptes de revenus et de dépenses par défaut " &
                               "de la compagnie ; la catégorie et l'inventaire restent à reprendre."
                 }
-            }
+            })
         End Get
     End Property
 
