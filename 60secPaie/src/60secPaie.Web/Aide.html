@@ -152,7 +152,7 @@ mark{background:#ffe89a}
 <main id="haut">
 <h1>Aide de 60secPaie</h1>
 <p class="lede">Ce guide décrit chaque écran, chaque champ, chaque règle et chaque message de 60secPaie, le service de paie de 60Sec pour le Québec et l'Ontario. Il suit l'ordre du menu. Les mots entre guillemets « » sont ceux que vous voyez à l'écran. Utilisez le filtre en haut pour retrouver un sujet, ou <kbd>Ctrl</kbd>+<kbd>F</kbd> pour chercher un mot dans toute la page.</p>
-<div class="note">Version du guide : septembre 2026. Taux en vigueur dans le logiciel : année 2026, d'après le guide T4127 de l'ARC et le guide TP-1015.F de Revenu Québec.</div>
+<div class="note">Version du guide : octobre 2026. Taux en vigueur dans le logiciel : année 2026, d'après le guide T4127 de l'ARC et le guide TP-1015.F de Revenu Québec.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Vue d'ensemble</h2>
@@ -742,7 +742,7 @@ mark{background:#ffe89a}
 <p><strong>« Sommaire 1 (Revenu Québec) »</strong> : RRQ employés et employeur, RQAP employés et employeur, « Salaires assujettis au FSS », « Cotisation au FSS », « CNESST - versements périodiques calculés », « Retenues et cotisations de l'année », « Remises enregistrées », « Solde à payer », « Cotisation aux normes du travail (CNT), payable avec le sommaire 1 ». « Le taux réel du FSS est établi sur la masse salariale totale de l'année : un écart avec le taux estimé utilisé pendant l'année se règle dans le sommaire 1. »</p>
 <p>Le CSV <code>feuillets-AAAA.csv</code> contient « Code », « Nom », « Prénom » et une colonne par case T4 et Relevé 1. <strong>Le NAS n'est volontairement pas exporté.</strong></p>
 <h4>Feuillets en PDF et par courriel</h4>
-<p>Sous le tableau, la carte « Feuillets en PDF et par courriel » produit les feuillets eux-mêmes, à partir des mêmes montants :</p>
+<p>Au-dessus du tableau, la carte « Feuillets en PDF et par courriel » produit les feuillets eux-mêmes, à partir des mêmes montants :</p>
 <ul>
   <li><strong>« Copie à télécharger »</strong> (« Employeur » ou « Employé ») : la copie que produisent les boutons de téléchargement, ceux du haut comme ceux des lignes. La copie de l'employeur est celle à classer avec les sommaires.</li>
   <li><strong>« Télécharger tous les T4 »</strong> : les T4 de tous les employés de l'année en un seul document ; <strong>« Télécharger tous les Relevés 1 »</strong> : les Relevés 1 des employés du Québec en un seul document. Le NAS y est complet : chaque téléchargement est inscrit au journal d'activité.</li>
@@ -1120,6 +1120,7 @@ mark{background:#ffe89a}
   <li>Confirmez toutes les paies datées de l'année. La date de paie décide de l'année : une période de décembre payée en janvier appartient à l'année suivante.</li>
   <li>Enregistrez les dernières remises de l'année dans Retenues.</li>
   <li><span class="chemin">Rapports › T4 et Relevés 1</span> : vérifiez chaque employé (NAS présent, cases cohérentes), exportez le CSV, saisissez les feuillets dans Formulaires Web et Mon dossier pour les entreprises avant le dernier jour de février. Comparez les sommaires T4 et 1 avec vos remises ; payez le solde, dont la CNT.</li>
+  <li>Produisez les feuillets : mettez en place les formulaires officiels de l'année (<a href="#config-formulaires">Configuration › Formulaires officiels</a>, ou ceux de la plateforme), puis, dans la carte « Feuillets en PDF et par courriel », téléchargez tous les T4 et tous les Relevés 1 (copie de l'employeur à classer), envoyez la copie de l'employé par courriel et téléchargez les copies du gouvernement avec les sommaires. Les instructions T4 de l'ARC de l'année, quand la plateforme les a mises en place, s'ouvrent par un lien sur la même page.</li>
   <li><span class="chemin">Rapports › Déclaration des salaires CNESST</span> : déclarez dans Mon Espace CNESST avant le 15 mars ; la carte « Conciliation » donne l'écart avec vos versements.</li>
   <li>Réglez la case 45 (dentaire) et vérifiez les exemptions avant de produire les T4.</li>
   <li>Les taux de l'année suivante doivent être validés par 60Sec dans sa console d'administration avant la première paie de janvier ; sinon l'assistant refuse la paie (« Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »).</li>
@@ -1176,6 +1177,9 @@ mark{background:#ffe89a}
 <details><summary>Puis-je payer un fournisseur ou un travailleur autonome ?</summary><p>Non. 60secPaie ne traite que des employés au sens des lois fiscales, avec retenues à la source. Un travailleur autonome se paie par une facture, dans 60Sec.</p></details>
 <details><summary>Comment les taux de 2027 arrivent-ils dans le logiciel ?</summary><p>Les taux de chaque année (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) sont saisis et validés par 60Sec dans sa console d'administration dès la parution des guides, en décembre. Vous n'avez rien à faire : dès la validation, 60secPaie les utilise pour toute paie datée de l'année, dans les cinq minutes. Tant qu'une année n'est pas validée, l'assistant refuse une paie datée de cette année.</p></details>
 <details><summary>J'ai plusieurs unités de classification CNESST. Comment faire ?</summary><p>Inscrivez chaque unité et son taux dans Configuration › Unités CNESST, puis choisissez l'unité de chaque employé dans sa fiche. Le taux de l'unité s'applique à ses paies, et le rapport CNESST donne un tableau par unité, prêt pour la Déclaration des salaires. Les employés sans unité restent au taux de la compagnie.</p></details>
+<details><summary>Mes feuillets sortent sur la mise en page de 60secPaie et non sur le formulaire de l'ARC ou de Revenu Québec.</summary><p>Aucun formulaire officiel n'est en place pour l'année : téléversez le « T4 à remplir » de l'ARC et le « Relevé 1 à remplir » de Revenu Québec dans <a href="#config-formulaires">Configuration › Formulaires officiels</a>, ou attendez ceux que l'administration de la plateforme téléverse dans sa console. La note sous la carte « Feuillets en PDF et par courriel » dit lesquels sont en place.</p></details>
+<details><summary>Où sont les instructions T4 de l'ARC ?</summary><p>Quand l'administration de la plateforme a téléversé le document de l'année, le lien « Instructions T4 de l'ARC (année) » apparaît dans Rapports › T4 et Relevés 1 pour l'année choisie, et dans Configuration › Formulaires officiels parmi les formulaires de la plateforme. Le PDF s'ouvre dans un nouvel onglet.</p></details>
+<details><summary>Puis-je corriger un feuillet dans le PDF produit ?</summary><p>Non : les feuillets produits sont en lecture seule (champs verrouillés, document protégé). Corrigez la source — paie, cumulatifs de départ, fiche de l'employé, case 45 ou exemptions — puis produisez le feuillet de nouveau ; l'envoi par courriel peut être refait avec « renvoyer aussi les feuillets déjà envoyés » ou le bouton « Courriel » de la ligne.</p></details>
 </div>
 
 <!-- ============================================================ -->

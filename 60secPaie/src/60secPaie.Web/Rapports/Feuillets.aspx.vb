@@ -209,7 +209,7 @@ Public Class PageFeuillets
         Dim base = "Feuillets.aspx?annee=" & Annee.ToString() & "&amp;employe=" & id & "&amp;copie=" & HttpUtility.HtmlAttributeEncode(ddlCopie.SelectedValue) & "&amp;pdf="
         Dim sb As New StringBuilder()
         sb.Append("<td><a href=""Feuillet.aspx?employe=").Append(id).Append("&amp;annee=").Append(Annee).Append(""">Feuillet</a>")
-        sb.Append("<div class=""actions"" style=""flex-wrap:nowrap""><a class=""bouton secondaire"" href=""").Append(base).Append("t4"">T4</a>")
+        sb.Append("<div class=""actions"" style=""flex-wrap:nowrap; white-space:nowrap""><a class=""bouton secondaire"" href=""").Append(base).Append("t4"">T4</a>")
         If f.AvecReleve1 Then sb.Append("<a class=""bouton secondaire"" href=""").Append(base).Append("r1"">Relevé 1</a>")
         sb.Append("<a class=""bouton secondaire"" href=""#"" onclick=""if (confirmerPuis(this, 'Envoyer le feuillet de cet employé par courriel ?')) { document.getElementById('") _
           .Append(hidEmploye.ClientID).Append("').value = '").Append(id).Append("'; __doPostBack('").Append(btnCourrielUn.UniqueID).Append("', ''); } return false;"">Courriel</a></div>")

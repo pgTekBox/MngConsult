@@ -152,7 +152,7 @@ mark{background:#ffe89a}
 <main id="haut">
 <h1>60secPaie Help</h1>
 <p class="lede">This guide describes every screen, every field, every rule and every message of 60secPaie, 60Sec's payroll service for Quebec and Ontario. It follows the order of the menu. The words in quotation marks " " are those you see on screen. Use the filter at the top to find a topic, or <kbd>Ctrl</kbd>+<kbd>F</kbd> to search for a word across the whole page.</p>
-<div class="note">Guide version: September 2026. Rates in effect in the software: year 2026, based on the CRA's T4127 guide and Revenu Québec's TP-1015.F guide.</div>
+<div class="note">Guide version: October 2026. Rates in effect in the software: year 2026, based on the CRA's T4127 guide and Revenu Québec's TP-1015.F guide.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Overview</h2>
@@ -742,7 +742,7 @@ mark{background:#ffe89a}
 <p><strong>"RL-1 Summary (Revenu Québec)"</strong>: QPP employees and employer, QPIP employees and employer, "Wages subject to the HSF", "HSF contribution", "CNESST - periodic payments calculated", "Deductions and contributions for the year", "Remittances recorded", "Balance due", "Labour standards contribution (CNT), payable with the RL-1 summary". "The actual HSF rate is based on the total payroll for the year: any difference with the estimated rate used during the year is settled in the RL-1 summary."</p>
 <p>The <code>feuillets-YYYY.csv</code> CSV contains "Code", "Name", "First name" and one column per T4 and RL-1 box. <strong>The SIN is deliberately not exported.</strong></p>
 <h4>Slips as PDF and by email</h4>
-<p>Below the table, the "Feuillets en PDF et par courriel" card produces the slips themselves, from the same amounts:</p>
+<p>Above the table, the "Feuillets en PDF et par courriel" card produces the slips themselves, from the same amounts:</p>
 <ul>
   <li><strong>"Copy to download"</strong> ("Employer" or "Employee"): the copy produced by the download buttons, those at the top as well as those in the rows. The employer copy is the one to file with the summaries.</li>
   <li><strong>"Download all T4 slips"</strong>: the T4 slips of every employee of the year in one document; <strong>"Download all RL-1 slips"</strong>: the RL-1 slips of the Québec employees in one document. The SIN is complete: each download is recorded in the activity log.</li>
@@ -1120,6 +1120,7 @@ mark{background:#ffe89a}
   <li>Confirm all pay runs dated in the year. The pay date decides the year: a December period paid in January belongs to the following year.</li>
   <li>Record the year's last remittances in Remittances.</li>
   <li><span class="chemin">Reports › T4 and RL-1 slips</span>: check each employee (SIN present, consistent boxes), export the CSV, enter the slips in Web Forms and My Account for businesses before the last day of February. Compare the T4 and RL-1 summaries with your remittances; pay the balance, including the CNT.</li>
+  <li>Produce the slips: put the year's official forms in place (<a href="#config-formulaires">Settings › Official forms</a>, or the platform's), then, in the "Feuillets en PDF et par courriel" card, download all T4 slips and all RL-1 slips (employer copy to file), email the employee copy and download the government copies with the summaries. The CRA's T4 instructions for the year, when the platform has put them in place, open from a link on the same page.</li>
   <li><span class="chemin">Reports › CNESST statement of wages</span>: file in Mon Espace CNESST before March 15; the "Reconciliation" card gives the difference with your payments.</li>
   <li>Set box 45 (dental) and check the exemptions before producing the T4s.</li>
   <li>The following year's rates must be validated by 60Sec in its administration console before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software.").</li>
@@ -1176,6 +1177,9 @@ mark{background:#ffe89a}
 <details><summary>Can I pay a supplier or a self-employed worker?</summary><p>No. 60secPaie only handles employees within the meaning of tax laws, with source deductions. A self-employed worker is paid by invoice, in 60Sec.</p></details>
 <details><summary>How do the 2027 rates get into the software?</summary><p>Each year's rates (T4127, TP-1015.F, QPP, EI, QPIP, HSF, CNESST) are entered and validated by 60Sec in its administration console as soon as the guides are published, in December. You have nothing to do: once validated, 60secPaie uses them for any pay run dated in that year, within five minutes. Until a year is validated, the wizard refuses a pay run dated in that year.</p></details>
 <details><summary>I have several CNESST classification units. What do I do?</summary><p>Enter each unit and its rate under Settings › CNESST units, then pick each employee's unit on their record. The unit's rate applies to their pay runs, and the CNESST report gives a table per unit, ready for the Statement of Wages. Employees without a unit stay at the company rate.</p></details>
+<details><summary>My slips come out on 60secPaie's layout rather than on the CRA or Revenu Québec form.</summary><p>No official form is in place for the year: upload the CRA's fillable T4 and Revenu Québec's fillable RL-1 under <a href="#config-formulaires">Settings › Official forms</a>, or wait for the ones the platform administration uploads in its console. The note under the "Feuillets en PDF et par courriel" card says which ones are in place.</p></details>
+<details><summary>Where are the CRA's T4 instructions?</summary><p>Once the platform administration has uploaded the year's document, the "CRA T4 instructions (year)" link appears under Reports › T4 and RL-1 slips for the chosen year, and under Settings › Official forms among the platform forms. The PDF opens in a new tab.</p></details>
+<details><summary>Can I correct a slip in the PDF produced?</summary><p>No: the slips produced are read-only (locked fields, protected document). Fix the source — pay run, opening balances, employee record, box 45 or exemptions — then produce the slip again; the email can be sent again with "also resend slips already sent" or the row's "Courriel" button.</p></details>
 </div>
 
 <!-- ============================================================ -->

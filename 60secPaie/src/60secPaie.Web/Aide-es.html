@@ -152,7 +152,7 @@ mark{background:#ffe89a}
 <main id="haut">
 <h1>Ayuda de 60secPaie</h1>
 <p class="lede">Esta guía describe cada pantalla, cada campo, cada regla y cada mensaje de 60secPaie, el servicio de nómina de 60Sec para Quebec y Ontario. Sigue el orden del menú. Las palabras entre comillas « » son las que usted ve en la pantalla. Use el filtro de arriba para encontrar un tema, o <kbd>Ctrl</kbd>+<kbd>F</kbd> para buscar una palabra en toda la página.</p>
-<div class="note">Versión de la guía: septiembre de 2026. Tasas vigentes en el programa: año 2026, según la guía T4127 de la ARC y la guía TP-1015.F de Revenu Québec.</div>
+<div class="note">Versión de la guía: octubre de 2026. Tasas vigentes en el programa: año 2026, según la guía T4127 de la ARC y la guía TP-1015.F de Revenu Québec.</div>
 
 <!-- ============================================================ -->
 <h2 id="intro">Visión general</h2>
@@ -742,7 +742,7 @@ mark{background:#ffe89a}
 <p><strong>« Sumario 1 (Revenu Québec) »</strong>: RRQ empleados y empleador, RQAP empleados y empleador, « Salarios sujetos al FSS », « Aporte al FSS », « CNESST - pagos periódicos calculados », « Retenciones y aportes del año », « Remesas registradas », « Saldo por pagar », « Aporte a las normas laborales (CNT), pagadero con el sumario 1 ». « La tasa real del FSS se establece sobre la masa salarial total del año: cualquier diferencia con la tasa estimada usada durante el año se regulariza en el sumario 1. »</p>
 <p>El CSV <code>feuillets-AAAA.csv</code> contiene « Código », « Nombre », « Nombre de pila » y una columna por casilla T4 y Relevé 1. <strong>El NAS deliberadamente no se exporta.</strong></p>
 <h4>Comprobantes en PDF y por correo electrónico</h4>
-<p>Debajo de la tabla, la tarjeta « Feuillets en PDF et par courriel » produce los comprobantes mismos, a partir de los mismos importes:</p>
+<p>Encima de la tabla, la tarjeta « Feuillets en PDF et par courriel » produce los comprobantes mismos, a partir de los mismos importes:</p>
 <ul>
   <li><strong>« Copia para descargar »</strong> (« Empleador » o « Empleado »): la copia que producen los botones de descarga, tanto los de arriba como los de las líneas. La copia del empleador es la que se archiva con los resúmenes.</li>
   <li><strong>« Descargar todos los T4 »</strong>: los T4 de todos los empleados del año en un solo documento; <strong>« Descargar todos los Relevé 1 »</strong>: los Relevés 1 de los empleados de Quebec en un solo documento. El NAS está completo: cada descarga queda registrada en el diario de actividad.</li>
@@ -1120,6 +1120,7 @@ mark{background:#ffe89a}
   <li>Confirme todas las nóminas fechadas en el año. La fecha de pago decide el año: un período de diciembre pagado en enero pertenece al año siguiente.</li>
   <li>Registre las últimas remesas del año en Retenciones.</li>
   <li><span class="chemin">Informes › T4 y Relevés 1</span>: verifique cada empleado (NAS presente, casillas coherentes), exporte el CSV, capture los comprobantes en Formulaires Web y Mon dossier pour les entreprises antes del último día de febrero. Compare los sumarios T4 y 1 con sus remesas; pague el saldo, incluida la CNT.</li>
+  <li>Produzca los comprobantes: ponga en su lugar los formularios oficiales del año (<a href="#config-formulaires">Configuración › Formularios oficiales</a>, o los de la plataforma), luego, en la tarjeta « Feuillets en PDF et par courriel », descargue todos los T4 y todos los Relevés 1 (copia del empleador para archivar), envíe la copia del empleado por correo electrónico y descargue las copias del gobierno con los sumarios. Las instrucciones T4 de la CRA del año, cuando la plataforma las ha puesto en su lugar, se abren con un enlace en la misma página.</li>
   <li><span class="chemin">Informes › Declaración de salarios CNESST</span>: declare en Mon Espace CNESST antes del 15 de marzo; la tarjeta « Conciliación » da la diferencia con sus pagos.</li>
   <li>Configure la casilla 45 (dental) y verifique las exenciones antes de generar los T4.</li>
   <li>Las tasas del año siguiente deben ser validadas por 60Sec en su consola de administración antes de la primera nómina de enero; si no, el asistente rechaza la nómina (« Las tasas gubernamentales de {año} aún no están definidas en el programa. »).</li>
@@ -1176,6 +1177,9 @@ mark{background:#ffe89a}
 <details><summary>¿Puedo pagar a un proveedor o a un trabajador autónomo?</summary><p>No. 60secPaie solo trata empleados en el sentido de las leyes fiscales, con retenciones en la fuente. Un trabajador autónomo se paga mediante una factura, en 60Sec.</p></details>
 <details><summary>¿Cómo llegan las tasas de 2027 al programa?</summary><p>Las tasas de cada año (T4127, TP-1015.F, RRQ, AE, RQAP, FSS, CNESST) las ingresa y valida 60Sec en su consola de administración en cuanto se publican las guías, en diciembre. Usted no tiene que hacer nada: una vez validadas, 60secPaie las usa para toda nómina fechada en ese año, en cinco minutos. Mientras un año no esté validado, el asistente rechaza una nómina fechada en ese año.</p></details>
 <details><summary>Tengo varias unidades de clasificación CNESST. ¿Qué hago?</summary><p>Ingrese cada unidad y su tasa en Configuración › Unidades CNESST y elija la unidad de cada empleado en su ficha. La tasa de la unidad se aplica a sus nóminas, y el informe CNESST da una tabla por unidad, lista para la Declaración de salarios. Los empleados sin unidad se quedan con la tasa de la empresa.</p></details>
+<details><summary>Mis comprobantes salen en la maqueta de 60secPaie y no en el formulario de la CRA o de Revenu Québec.</summary><p>Ningún formulario oficial está en su lugar para el año: suba el « T4 para llenar » de la CRA y el « Relevé 1 para llenar » de Revenu Québec en <a href="#config-formulaires">Configuración › Formularios oficiales</a>, o espere los que la administración de la plataforma sube en su consola. La nota bajo la tarjeta « Feuillets en PDF et par courriel » dice cuáles están en su lugar.</p></details>
+<details><summary>¿Dónde están las instrucciones T4 de la CRA?</summary><p>Cuando la administración de la plataforma ha subido el documento del año, el enlace « Instrucciones T4 de la CRA (año) » aparece en Informes › T4 y Relevés 1 para el año elegido, y en Configuración › Formularios oficiales entre los formularios de la plataforma. El PDF se abre en una pestaña nueva.</p></details>
+<details><summary>¿Puedo corregir un comprobante en el PDF producido?</summary><p>No: los comprobantes producidos son de solo lectura (campos bloqueados, documento protegido). Corrija la fuente — nómina, acumulados iniciales, ficha del empleado, casilla 45 o exenciones — y produzca el comprobante de nuevo; el envío por correo puede repetirse con « reenviar también los comprobantes ya enviados » o el botón « Courriel » de la línea.</p></details>
 </div>
 
 <!-- ============================================================ -->
