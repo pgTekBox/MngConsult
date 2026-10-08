@@ -209,6 +209,10 @@
                     <span class="nav-ico" aria-hidden="true">🔄</span>
                     <span class="nav-txt">Réinitialiser la démo</span>
                 </a>
+                <a class="nav-item subtle" href="~/Aide.html" runat="server" target="_blank" rel="noopener" title="Guide de la console (nouvel onglet)">
+                    <span class="nav-ico" aria-hidden="true">❔</span>
+                    <span class="nav-txt">Aide</span>
+                </a>
                 <a class="nav-item subtle" href="~/About.aspx" runat="server" data-navlink>
                     <span class="nav-ico" aria-hidden="true">ℹ️</span>
                     <span class="nav-txt">À propos</span>

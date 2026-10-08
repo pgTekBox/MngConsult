@@ -382,6 +382,7 @@
     <Content Include="wbfPlanEdit.aspx" />
     <Content Include="wbfPaieAnnees.aspx" />
     <Content Include="wbfPaieFormulaires.aspx" />
+    <Content Include="Aide.html" />
     <Content Include="wbfPaieAnneeEdit.aspx" />
     <Content Include="wbfLanding.aspx" />
     <Content Include="wbfLogin.aspx" />

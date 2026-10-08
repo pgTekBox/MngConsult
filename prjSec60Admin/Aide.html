@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Aide — Sec60Admin, la console d'administration de 60Sec</title>
+<style>
+:root{--encre:#1f2933;--encre-douce:#52606d;--fond:#f5f7fa;--carte:#fff;--bord:#e1e6eb;--accent:#2563eb;--accent-fonce:#1d4ed8;--vert:#16a34a;--rouge:#dc2626;--ambre:#b45309}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Segoe UI",system-ui,-apple-system,Arial,sans-serif;color:var(--encre);background:var(--fond);line-height:1.55;font-size:15px}
+header.entete{position:sticky;top:0;z-index:5;background:var(--carte);border-bottom:1px solid var(--bord);padding:12px 22px;display:flex;align-items:center;gap:14px}
+header.entete b{font-size:17px}
+header.entete span{color:var(--encre-douce);font-size:13px}
+.page{display:grid;grid-template-columns:260px 1fr;min-height:100vh}
+nav.sommaire{position:sticky;top:52px;align-self:start;max-height:calc(100vh - 52px);overflow:auto;padding:18px 14px 40px 22px;border-right:1px solid var(--bord);background:var(--carte);font-size:13.5px}
+nav.sommaire h2{font-size:12px;text-transform:uppercase;letter-spacing:.6px;color:var(--encre-douce);margin:14px 0 6px}
+nav.sommaire a{display:block;color:var(--encre);text-decoration:none;padding:3px 6px;border-radius:4px}
+nav.sommaire a:hover{background:var(--fond);color:var(--accent-fonce)}
+nav.sommaire a.n2{padding-left:18px;color:var(--encre-douce)}
+main{padding:22px 34px 80px;max-width:1040px}
+h1{font-size:26px;margin:4px 0 6px}
+h2{font-size:21px;margin:34px 0 10px;padding-top:10px;border-top:1px solid var(--bord)}
+h3{font-size:16.5px;margin:22px 0 8px}
+h4{font-size:15px;margin:16px 0 6px}
+p{margin:8px 0}
+ul,ol{margin:6px 0 10px;padding-left:24px}
+li{margin:3px 0}
+table{border-collapse:collapse;width:100%;margin:10px 0;background:var(--carte);font-size:14px}
+th,td{border:1px solid var(--bord);padding:6px 9px;text-align:left;vertical-align:top}
+th{background:var(--fond)}
+td.num{text-align:right}
+.carte{background:var(--carte);border:1px solid var(--bord);border-radius:8px;padding:14px 18px;margin:12px 0}
+.note{background:var(--fond);border-left:4px solid var(--accent);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.avert{background:#fff7ed;border-left:4px solid var(--ambre);padding:10px 14px;margin:12px 0;border-radius:0 6px 6px 0}
+.chemin{display:inline-block;background:#eef3f7;border:1px solid var(--bord);border-radius:4px;padding:1px 8px;font-size:13px;color:var(--accent-fonce);font-weight:600}
+kbd{background:#fff;border:1px solid var(--bord);border-bottom-width:2px;border-radius:4px;padding:0 6px;font-family:inherit;font-size:13px}
+code{background:#eef3f7;border-radius:4px;padding:0 5px;font-size:13px}
+.ok{color:var(--vert);font-weight:600}.bad{color:var(--rouge);font-weight:600}
+details{margin:6px 0;background:var(--carte);border:1px solid var(--bord);border-radius:6px;padding:6px 12px}
+summary{cursor:pointer;font-weight:600}
+dl.def dt{font-weight:700;margin-top:10px}
+dl.def dd{margin:2px 0 0 0}
+ol.etapes li{margin:6px 0}
+@media (max-width:980px){.page{grid-template-columns:1fr}nav.sommaire{position:static;max-height:none;border-right:0;border-bottom:1px solid var(--bord)}main{padding:18px 16px 60px}}
+@media print{nav.sommaire,header.entete{display:none}.page{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<header class="entete"><b>Sec60Admin</b><span>Guide de la console d'administration de 60Sec · version d'octobre 2026</span></header>
+<div class="page">
+<nav class="sommaire">
+  <h2>Pour commencer</h2>
+  <a href="#intro">Vue d'ensemble</a>
+  <a href="#connexion">Connexion</a>
+  <a href="#conventions">Conventions de l'écran</a>
+  <a href="#tableau">Tableau de bord</a>
+  <h2>Courriel</h2>
+  <a href="#courriel">Courriel</a>
+  <a href="#comptes-courriel">Comptes de courriel</a>
+  <h2>Sécurité</h2>
+  <a href="#utilisateurs">Utilisateurs</a>
+  <a href="#administrateurs">Administrateurs</a>
+  <h2>Abonnements</h2>
+  <a href="#forfaits">Forfaits</a>
+  <a href="#landing">LandingPage</a>
+  <a href="#reservations">Réservations</a>
+  <a href="#compagnies">Compagnies &amp; abonnements</a>
+  <a href="#webhooks">Webhooks Stripe et Square</a>
+  <a href="#plaid">Connexions Plaid</a>
+  <h2>Paie</h2>
+  <a href="#taux">Taux de l'année</a>
+  <a href="#formulaires">Formulaires T4 et Relevé 1</a>
+  <a href="#instructions" class="n2">Instructions T4</a>
+  <h2>Tâches</h2>
+  <a href="#taches">Tâches de fond</a>
+  <h2>Outils</h2>
+  <a href="#prompts">Prompts OpenAI</a>
+  <a href="#plan-defaut">Plan comptable par défaut</a>
+  <a href="#demos">Gestion des démos</a>
+  <h2>Référence</h2>
+  <a href="#faq">Questions fréquentes</a>
+  <a href="#messages">Messages et leur solution</a>
+  <a href="#glossaire">Glossaire</a>
+</nav>
+<main>
+<h1>Sec60Admin — guide de la console d'administration</h1>
+<p>Sec60Admin est la console réservée à l'équipe de 60Sec. Elle agit sur ce qui vaut pour <strong>toutes les compagnies</strong> de 60Sec-AI et de 60secPaie : comptes et accès, forfaits et abonnements, page d'accueil publique, courriel système, taux de paie de l'année, formulaires officiels, tâches de fond, prompts de l'IA, plan comptable modèle et compagnies de démonstration. Rien de ce qui se fait ici n'est visible des clients autrement que par ses effets.</p>
+<div class="note">Les guides des deux applications sont ailleurs : l'aide de 60Sec-AI (bouton <kbd>?</kbd> dans son en-tête) et le guide de 60secPaie (lien « Aide » de son en-tête). Ce guide ne décrit que la console.</div>
+
+<!-- ============================================================ -->
+<h2 id="intro">Vue d'ensemble</h2>
+<p>La console est une application à part (port et adresse propres), avec sa propre liste d'administrateurs. Le menu de gauche regroupe les pages par domaine ; chaque groupe se replie d'un clic sur son titre. Le pied du menu porte les outils rares (prompts, plan comptable par défaut, démos), « À propos », « Contact », le courriel de la personne connectée et « Déconnexion ».</p>
+<table>
+<tr><th>Groupe</th><th>Pages</th><th>À quoi ça sert</th></tr>
+<tr><td>Tableau de bord</td><td>Accueil</td><td>Point d'entrée de la console.</td></tr>
+<tr><td>Courriel</td><td>Courriel, Comptes de courriel</td><td>Lire et envoyer le courriel du service 60Sec ; gérer les adresses @60sec.ca.</td></tr>
+<tr><td>Sécurité</td><td>Utilisateurs, Administrateurs</td><td>Comptes des clients (par compagnie) et comptes de la console.</td></tr>
+<tr><td>Abonnements</td><td>Forfaits, LandingPage, Réservations, Compagnies &amp; abonnements, Webhooks Stripe, Webhooks Square, Connexions Plaid</td><td>L'offre commerciale, la page d'accueil publique, les compagnies et leur abonnement, les diagnostics des connexions externes.</td></tr>
+<tr><td>Paie</td><td>Taux de l'année, Formulaires T4 et Relevé 1</td><td>Ce que 60secPaie ne laisse pas à ses utilisateurs parce que cela vaut pour toutes les compagnies : les taux gouvernementaux de l'année, les formulaires officiels et les instructions T4.</td></tr>
+<tr><td>Tâches</td><td>Tâches, Calendrier, Suivi, Exécution, Tableau des tâches</td><td>Les traitements de fond planifiés (procédures, connecteurs, courriels) et leur historique.</td></tr>
+<tr><td>Outils</td><td>Prompts OpenAI, Plan comptable par défaut, Réinitialiser la démo</td><td>Textes envoyés à l'IA, plan comptable modèle des nouvelles compagnies, remise en état des démos.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="connexion">Connexion</h2>
+<p><span class="chemin">wbfLogin.aspx</span>. Courriel et mot de passe d'un <strong>administrateur de la console</strong> (page Administrateurs), pas d'un utilisateur de 60Sec-AI. <kbd>Se connecter</kbd> ouvre la console ; toute autre page renvoie ici tant qu'on n'est pas connecté.</p>
+<p>« Mot de passe oublié » : entrez le courriel et cliquez <kbd>Envoyer le lien</kbd>. Un courriel de réinitialisation part par le service de courriel de 60Sec ; son lien ouvre <span class="chemin">wbfResetPassword.aspx</span> (« Nouveau mot de passe », « Confirmation », <kbd>Réinitialiser</kbd>). Le lien ne sert qu'une fois et pour un temps limité.</p>
+<p>« Déconnexion », au pied du menu, ferme la session.</p>
+
+<!-- ============================================================ -->
+<h2 id="conventions">Conventions de l'écran</h2>
+<ul>
+  <li>Le résultat d'une action s'affiche en haut de la page, dans un encadré : <span class="ok">vert</span> quand elle a réussi, <span class="bad">rouge</span> quand elle a échoué, avec l'explication.</li>
+  <li>Avant une action qui retire ou supprime, le navigateur pose une question (« Retirer ce formulaire ? … ») ; rien ne part sans « OK ». Les actions les plus lourdes (supprimer une compagnie, remettre une comptabilité à zéro) demandent en plus de taper un mot de confirmation.</li>
+  <li>Les listes ont un champ « Rechercher (…) » qui filtre à mesure, et un bouton <kbd>+ Ajouter …</kbd> qui ouvre la fiche vide. Une fiche a <kbd>Enregistrer</kbd> et, quand c'est permis, <kbd>Supprimer</kbd>.</li>
+  <li>Les champs marqués <strong>*</strong> sont requis. Les nombres acceptent la virgule ou le point ; les dates s'écrivent AAAA-MM-JJ.</li>
+  <li>Les pages de diagnostic et de tâches ont des filtres (statut, type, période) et <kbd>Appliquer filtres</kbd> ou <kbd>🔄 Actualiser</kbd>.</li>
+  <li>Quand une page cible une compagnie (Utilisateurs, tâches, démos), le sélecteur de compagnie en haut est mémorisé pour la session.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="tableau">Tableau de bord</h2>
+<p><span class="chemin">Default.aspx</span>. La page d'accueil de la console. Tout se fait depuis le menu de gauche.</p>
+
+<!-- ============================================================ -->
+<h2 id="courriel">Courriel</h2>
+<p><span class="chemin">wbfMail.aspx</span>. Le courriel du <strong>service 60Sec</strong> lui-même (pas celui des compagnies). Trois volets :</p>
+<ul>
+  <li><strong>Réception</strong> : les messages reçus par le serveur de courriel de 60Sec, lus tels quels (pièces jointes téléchargeables).</li>
+  <li><strong>Envoyés</strong> : les messages partis du service, avec leur corps.</li>
+  <li><strong>Composer</strong> : « À », « Cc », « Sujet », « Message », « Pièces jointes », <kbd>Envoyer</kbd>. Le message est mis dans la file d'envoi et part par le serveur de 60Sec.</li>
+</ul>
+
+<h2 id="comptes-courriel">Comptes de courriel</h2>
+<p><span class="chemin">wbfMailAccounts.aspx</span>. Les adresses <strong>@60sec.ca</strong> : celles rattachées à une compagnie et les « Adresses système » (boîtes locales non rattachées : réception, scan, factures…). Recherche par compagnie ou adresse. Pour chaque adresse : <kbd>Attribuer</kbd> (à une compagnie), <kbd>Renommer</kbd>, <kbd>Mot de passe</kbd>, <kbd>Désactiver</kbd> / <kbd>Activer</kbd>, <kbd>Retirer</kbd>. <kbd>Enregistrer</kbd> crée une adresse.</p>
+
+<!-- ============================================================ -->
+<h2 id="utilisateurs">Utilisateurs</h2>
+<p><span class="chemin">wbfUsers.aspx</span>. Les comptes des clients, par compagnie : choisissez la compagnie dans le sélecteur du haut (mémorisé pour la session), cherchez par nom ou courriel, <kbd>+ Ajouter un utilisateur</kbd>. Fiche (<span class="chemin">wbfUserEdit.aspx</span>) : « Courriel * », « Prénom », « Nom », « Mot de passe * » (8 caractères au moins) et sa « Confirmation », <kbd>Enregistrer</kbd>, <kbd>Supprimer</kbd>. Le mot de passe est conservé haché ; pour le changer, entrez-en un nouveau.</p>
+
+<h2 id="administrateurs">Administrateurs</h2>
+<p><span class="chemin">wbfAdmins.aspx</span>. Les comptes de <strong>la console</strong>. Mêmes champs qu'un utilisateur (<span class="chemin">wbfAdminEdit.aspx</span>). Un administrateur se connecte à Sec60Admin, pas à 60Sec-AI.</p>
+<div class="avert">Ne supprimez pas le dernier administrateur : plus personne ne pourrait entrer. Créez le nouveau compte avant de retirer l'ancien.</div>
+
+<!-- ============================================================ -->
+<h2 id="forfaits">Forfaits</h2>
+<p><span class="chemin">wbfPlans.aspx</span>. L'offre commerciale affichée sur la page d'accueil et proposée à l'abonnement. Recherche par code ou nom, <kbd>+ Ajouter un forfait</kbd>. Fiche (<span class="chemin">wbfPlanEdit.aspx</span>) :</p>
+<table>
+<tr><th>Champ</th><th>Sens</th></tr>
+<tr><td>Code *, Nom *, Accroche (tagline), Description courte, Contenu mis en forme</td><td>Ce que voit le visiteur ; le contenu mis en forme est affiché sur la page d'accueil.</td></tr>
+<tr><td>Montant *, Devise (CAD, USD, EUR), Cycle de facturation (Mensuel, Annuel), Jours d'essai</td><td>Le prix et l'essai gratuit.</td></tr>
+<tr><td>Ordre d'affichage, Texte du badge</td><td>Position et étiquette (« Populaire »…) sur la page d'accueil.</td></tr>
+<tr><td>Processeur, Stripe Product Id, Stripe Price Id</td><td>Le lien avec le produit et le prix créés chez Stripe : indispensable pour que le paiement de l'abonnement fonctionne.</td></tr>
+<tr><td>Utilisateurs max, Clients max, Documents max, Stockage max (Mo), Tranche d'employés</td><td>Les limites du forfait.</td></tr>
+<tr><td>Permissions / options</td><td>Les fonctions ouvertes par le forfait.</td></tr>
+</table>
+
+<h2 id="landing">LandingPage</h2>
+<p><span class="chemin">wbfLanding.aspx</span>. Le contenu de la page d'accueil publique de 60secondes, section par section et langue par langue : choisissez « Page », « Section », « Langue » (Français, English, Español), modifiez le HTML, <kbd>Enregistrer</kbd>. Le rendu retombe sur le français quand une langue n'est pas remplie. La section « Forfaits » de la page se remplit d'elle-même depuis la page Forfaits.</p>
+
+<h2 id="reservations">Réservations</h2>
+<p><span class="chemin">wbfReservations.aspx</span>. Lecture seule : les demandes « Réserver ma place » faites sur la page d'accueil (N°, Reçue le, Profil, Nom, Courriel, Société / cabinet, Secteur, Détails, Langue, Avis, Source, Statut). La liste sert à rappeler les gens et à préparer le lancement.</p>
+
+<h2 id="compagnies">Compagnies &amp; abonnements</h2>
+<p><span class="chemin">wbfCompanies.aspx</span>. Toutes les compagnies de 60Sec-AI, avec leur forfait et leur statut ; recherche par nom ou code. Fiche (<span class="chemin">wbfCompanyEdit.aspx</span>) : « Nom * », « Raison sociale », « Code », « Structure », « NEQ », « Numéro d'entreprise », « Forfait », « Statut » (Actif, Essai, En pause, Annulé, Expiré), « Montant », « Devise », « Cycle », « Date de début », « Prochaine facturation », « Date de fin », <kbd>Enregistrer</kbd>.</p>
+<div class="avert">La suppression d'une compagnie est <strong>définitive</strong> et emporte toutes ses données ; elle demande une confirmation. Préférez le statut « Annulé » ou « En pause » quand il y a le moindre doute.</div>
+
+<h2 id="webhooks">Webhooks Stripe et Square</h2>
+<p><span class="chemin">wbfStripeWebhookDiagnostic.aspx</span> et <span class="chemin">wbfSquareWebhookDiagnostic.aspx</span>. La surveillance des événements reçus de Stripe (abonnements, factures, paiements, comptes connectés, virements) et de Square (clients, catalogue, factures, paiements, commandes), avec leur traitement. Filtres « Statut » (Tous, Traités, Échoués, En cours, Ignorés), « Type d'event », « Période » (24 h, 7, 30, 90 jours), <kbd>Appliquer filtres</kbd>, <kbd>🔄 Actualiser</kbd>. Un événement « Échoué » se lit avec son message d'erreur ; c'est le premier endroit à regarder quand un paiement ou une synchronisation ne s'est pas reflété dans une compagnie.</p>
+
+<h2 id="plaid">Connexions Plaid</h2>
+<p><span class="chemin">wbfPlaidDiagnostic.aspx</span>. La santé des connexions bancaires : compteurs (items Plaid actifs, connectées, banques distinctes, erreurs sur la période), liste des connexions (Statut Tous / Actifs / Inactifs, recherche par banque, compte ou itemId) et journal de synchronisation. Une connexion en erreur se répare du côté de la compagnie (reconnexion dans 60Sec-AI) ; la console ne fait que montrer.</p>
+
+<!-- ============================================================ -->
+<h2 id="taux">Paie › Taux de l'année</h2>
+<p><span class="chemin">wbfPaieAnnees.aspx</span>. Les taux gouvernementaux qu'utilise 60secPaie pour <strong>toutes les compagnies</strong>, par année : impôt fédéral (T4127), impôt du Québec (TP-1015.F), RRQ, AE, RQAP, et leurs maximums. 60secPaie refuse une paie datée d'une année dont les taux ne sont pas <strong>validés</strong> ici.</p>
+<ul>
+  <li>La liste montre chaque année avec son état (brouillon ou validée), la source des taux et, en gris, création, modification, validation et le nombre de paies confirmées qui s'en servent.</li>
+  <li><kbd>Créer l'année suivante</kbd> copie la dernière année en brouillon pour la suivante, puis ouvre sa fiche : il reste à y porter les nouveaux montants des guides.</li>
+  <li>« Aucune année. Exécutez le script 02_parametres_annee.sql de 60secPaie. » : la base de la paie n'a pas encore ses années ; c'est un travail d'installation.</li>
+</ul>
+<h3>Fiche d'une année</h3>
+<p><span class="chemin">wbfPaieAnneeEdit.aspx</span>. Les tranches d'impôt (« Revenu imposable annuel jusqu'à », « Taux (R) », « Constante (K) » au fédéral ; « Taux (T) » au Québec), les montants personnels de base, les taux de crédit, le montant canadien pour emploi, l'abattement du Québec, les crédits de fonds de travailleurs, les règles des paiements forfaitaires, les maximums de la rémunération assurable et les taux et cotisations maximales de l'employé (RRQ, AE, RQAP), la déduction pour travailleur du Québec. « Guides utilisés » et « Note » gardent la trace des sources. Les nombres se saisissent au point ou à la virgule ; les taux en fraction (0,15 pour 15 %).</p>
+<ul>
+  <li><kbd>Enregistrer</kbd> garde le brouillon ; <kbd>Enregistrer et valider</kbd> le rend utilisable par 60secPaie dès la prochaine paie.</li>
+  <li><kbd>Retirer la validation</kbd> repasse l'année en brouillon : 60secPaie refusera alors les paies de cette année jusqu'à une nouvelle validation. À réserver à une année sans paie confirmée.</li>
+  <li><kbd>Supprimer ce brouillon</kbd> n'existe que pour un brouillon.</li>
+</ul>
+<div class="note">Un brouillon se vérifie avec un exemple chiffré (une paie type calculée à la main ou dans le calculateur de l'ARC et de Revenu Québec) avant d'être validé : une erreur de taux touche toutes les compagnies.</div>
+
+<!-- ============================================================ -->
+<h2 id="formulaires">Paie › Formulaires T4 et Relevé 1</h2>
+<p><span class="chemin">wbfPaieFormulaires.aspx</span>. Les formulaires officiels de fin d'année sur lesquels 60secPaie produit les feuillets, pour toutes les compagnies : le <strong>T4 à remplir</strong> de l'ARC (fichier « t4-fill-AAf.pdf » ou « t4-fill-AAe.pdf ») et le <strong>Relevé 1 à remplir</strong> de Revenu Québec, par année. Dès qu'ils sont ici, les feuillets de l'année sortent dessus dans 60secPaie : copie de l'employé, copie de l'employeur, copies du gouvernement et pièce jointe des courriels. Une compagnie peut téléverser les siens dans sa propre configuration (Configuration › Formulaires officiels) : ils passent alors avant ceux-ci.</p>
+<h3>Téléverser un formulaire</h3>
+<ol class="etapes">
+  <li>« Année des feuillets » : l'année civile des feuillets (en janvier et février, l'année qui vient de finir est proposée d'office).</li>
+  <li>« Formulaire » : « T4 (ARC) », « Relevé 1 (Revenu Québec) » ou « Instructions T4 (ARC) » (voir ci-dessous).</li>
+  <li>« Fichier PDF » : le formulaire officiel <strong>tel que téléchargé</strong> sur le site du gouvernement, sans l'ouvrir ni le réenregistrer dans un autre logiciel ; 10 Mo au plus.</li>
+  <li><kbd>Téléverser</kbd>. Le fichier est vérifié (il doit porter la case 14 du feuillet 1 pour le T4, la case A pour le Relevé 1), débarrassé de son chiffrement et de ses scripts, et conservé : il ne sert qu'à être rempli. Un nouveau téléversement pour la même année et le même type remplace le précédent.</li>
+</ol>
+<p>Le tableau « Formulaires en place » montre année, formulaire, fichier, date, auteur, taille et <kbd>Retirer</kbd> (après une question). Retirer un formulaire fait revenir les feuillets de cette année à la mise en page de 60secPaie, sauf pour les compagnies qui ont téléversé le leur.</p>
+<div class="note">Chaque année, en janvier : téléchargez le T4 à remplir et le Relevé 1 à remplir de l'année qui vient de finir, puis téléversez-les ici pour cette année. Les formulaires changent chaque année ; ceux d'une année ne servent qu'à ses feuillets. Ce que 60secPaie en fait (Courier, point décimal sur le trait des cents, bouton « Effacer les données » retiré, document en lecture seule) est décrit dans le guide de 60secPaie, section Configuration › Formulaires officiels.</div>
+
+<h3 id="instructions">Instructions T4</h3>
+<p>Le type « Instructions T4 (ARC) » conserve, par année, le document d'instructions de l'ARC qui accompagne le T4. Ce n'est pas un formulaire : il n'est vérifié que par son en-tête PDF et il est conservé tel quel. 60secPaie l'offre à <strong>toutes les compagnies</strong> par un lien « Instructions T4 de l'ARC (année) » dans Rapports › T4 et Relevés 1 (pour l'année choisie) et dans Configuration › Formulaires officiels ; le lien ouvre le PDF dans un nouvel onglet. Les compagnies ne peuvent pas téléverser le leur. Le message de confirmation dit « Instructions T4 AAAA téléversées (fichier). Le document est offert tel quel à toutes les compagnies dans 60secPaie. »</p>
+
+<!-- ============================================================ -->
+<h2 id="taches">Tâches de fond</h2>
+<p>Cinq pages venues de l'ERP, cadrées sur la compagnie courante de la console. Elles pilotent des traitements de fond, pas le travail quotidien.</p>
+<ul>
+  <li><strong>Tâches</strong> (<span class="chemin">wbfJobs.aspx</span>) : la liste des jobs (filtres Actifs / Inactifs ; types Procédure stockée, Connecteur, Courriel, Custom), <kbd>Nouveau job</kbd>, <kbd>Éditer</kbd> (<span class="chemin">wbfJobEdit.aspx</span>), <kbd>Run now</kbd> pour lancer tout de suite, <kbd>Historique</kbd>.</li>
+  <li><strong>Calendrier des tâches</strong> (<span class="chemin">wbfJobSchedule.aspx</span>) : les horaires d'un job : toutes les N minutes, quotidien, hebdomadaire, mensuel / trimestriel / semestriel / annuel (avec « -1 — Dernier jour du mois »), expression CRON ou une seule fois ; état Actif, En pause (temporaire), Inactif ; « HandlerParams (JSON) » pour les paramètres ; <kbd>Calculer aperçu</kbd> montre les prochaines exécutions avant d'enregistrer.</li>
+  <li><strong>Suivi des tâches</strong> (<span class="chemin">wbfJobMonitoring.aspx</span>) : l'historique des exécutions, filtrable par résultat (Succès, Échec, Timeout, En cours, Annulé) et par déclencheur (Schedule, Manuel, Retry, Dépendance), paginé.</li>
+  <li><strong>Exécution des tâches</strong> (<span class="chemin">wbfJobExecution.aspx</span>) : le détail d'une exécution et son journal (DEBUG, INFO, WARN, ERROR) ; <kbd>Annuler l'exécution</kbd> pour une exécution en cours, <kbd>Réessayer</kbd> pour une exécution échouée.</li>
+  <li><strong>Tableau des tâches</strong> (<span class="chemin">wbfJobDashboard.aspx</span>) : la vue d'ensemble, <kbd>Rafraîchir</kbd>.</li>
+</ul>
+
+<!-- ============================================================ -->
+<h2 id="prompts">Prompts OpenAI</h2>
+<p><span class="chemin">wbfSettingsOpenAiPrompts.aspx</span>. Les textes envoyés à OpenAI pour extraire des données (factures PDF, reçus, etc.) et pour les assistants. « Bibliothèque » : choisissez un prompt par sa « Clé (unique) » ; « Éditeur » : modifiez le « Texte du prompt », il sera utilisé tel quel lors des appels ; « Modèle » (gpt-4.1-mini par défaut) ; <kbd>Enregistrer</kbd>, <kbd>Recharger</kbd>.</p>
+<div class="avert">Un prompt mal formé touche tout de suite toutes les compagnies. Changez une chose à la fois et vérifiez le résultat sur un document d'essai.</div>
+
+<h2 id="plan-defaut">Plan comptable par défaut</h2>
+<p><span class="chemin">wbfPlanComptableDefaut.aspx</span>. Le plan comptable modèle dont héritent les nouvelles compagnies, groupé par classe. Recherche par numéro ou nom, <kbd>Tout afficher</kbd>. Chaque compte : classe, sous-classe, numéro, nom, type de bilan (Actif, Passif, Capitaux propres, Revenus, Charges), sens (Débiteur, Créditeur), « visible dans les nouvelles compagnies », description, et ses <strong>alias</strong> par langue (« Nom chez QuickBooks », « Sous-type QBO ») qui servent à la correspondance automatique lors d'une reprise. <kbd>Ajouter un compte au plan par défaut</kbd>, <kbd>Ajouter depuis un import QuickBooks</kbd>, <kbd>✨ Compléter par l'IA les alias sans l'autre langue</kbd>, <kbd>Resynchroniser une compagnie avec le plan par défaut</kbd>.</p>
+<p>La page réutilise les procédures du plan comptable de 60Sec-AI ; la correspondance des comptes à la reprise est décrite dans l'aide de 60Sec-AI (Importation › Correspondance des comptes).</p>
+
+<h2 id="demos">Gestion des démos</h2>
+<p><span class="chemin">wbfDemoReset.aspx</span>. Les compagnies de démonstration.</p>
+<ul>
+  <li>« Démo : » choisit la démo ciblée. <kbd>Réinitialiser la démo maintenant</kbd> la remet dans son état de référence (le cliché). <kbd>Recapturer le cliché maintenant</kbd> enregistre l'état actuel comme nouvelle référence : à faire après avoir peaufiné la démo directement dans l'application.</li>
+  <li>« Compagnie : » puis « Tapez … » et <kbd>Remettre la comptabilité à zéro maintenant</kbd> : efface les écritures et soldes d'une compagnie pour repartir à neuf ; le mot de confirmation est obligatoire.</li>
+  <li>Le tableau des courriels reçus (Reçu le, Fichier, Destinataire, Expéditeur, Objet, Taille, IA) permet de <kbd>Rattacher</kbd> les messages cochés à une compagnie ou de <kbd>Supprimer les cochés</kbd>.</li>
+</ul>
+<div class="avert">La remise à zéro comptable ne se défait pas. Vérifiez deux fois la compagnie choisie avant de taper le mot de confirmation.</div>
+
+<!-- ============================================================ -->
+<h2 id="faq">Questions fréquentes</h2>
+<details><summary>60secPaie refuse une paie : « Les taux gouvernementaux de {année} ne sont pas encore définis dans le logiciel. »</summary><p>L'année n'est pas validée dans Paie › Taux de l'année. Créez-la (<kbd>Créer l'année suivante</kbd>), portez les montants des guides T4127 et TP-1015.F, vérifiez avec un exemple chiffré, puis <kbd>Enregistrer et valider</kbd>.</p></details>
+<details><summary>Les feuillets d'une compagnie sortent sur la mise en page de 60secPaie et non sur le formulaire officiel.</summary><p>Aucun formulaire n'est en place pour l'année, ni ici ni dans la compagnie. Téléversez le T4 à remplir et le Relevé 1 à remplir de l'année dans Paie › Formulaires T4 et Relevé 1 : ils valent aussitôt pour toutes les compagnies.</p></details>
+<details><summary>Le téléversement d'un formulaire est refusé.</summary><p>Lisez le message rouge : « Seul un fichier PDF est accepté », « Fichier trop volumineux : 10 Mo au maximum », « Ce PDF n'est pas un formulaire à remplir (aucun champ) » (impression ou numérisation), « Ce PDF n'est pas le formulaire T4 à remplir de l'ARC (t4-fill) : la case 14 du feuillet 1 est introuvable » ou « … Relevé 1 … : la case A est introuvable » (mauvais type choisi ou mauvais fichier). Retéléchargez le formulaire à remplir sur le site du gouvernement et vérifiez le type.</p></details>
+<details><summary>Où mettre le document d'instructions du T4 ?</summary><p>Dans la même page, type « Instructions T4 (ARC) », pour l'année. 60secPaie l'offre ensuite par un lien à toutes les compagnies.</p></details>
+<details><summary>Une compagnie a téléversé ses propres formulaires : lesquels servent ?</summary><p>Les siens. Ceux de la console ne servent qu'à défaut, type par type (une compagnie peut avoir son T4 et prendre le Relevé 1 de la plateforme).</p></details>
+<details><summary>Un paiement Stripe ou une synchronisation Square ne s'est pas reflété dans une compagnie.</summary><p>Ouvrez Webhooks Stripe ou Webhooks Square, filtrez « Échoués » sur la période : le message d'erreur dit ce qui a bloqué. Un événement « Ignoré » est un type que 60Sec-AI ne traite pas.</p></details>
+<details><summary>Comment donner accès à un nouveau membre de l'équipe ?</summary><p>Sécurité › Administrateurs, <kbd>+ Ajouter un administrateur</kbd>. Pour un client, c'est Sécurité › Utilisateurs, dans sa compagnie.</p></details>
+
+<!-- ============================================================ -->
+<h2 id="messages">Messages et leur solution</h2>
+<table>
+<tr><th>Message</th><th>Où</th><th>Solution</th></tr>
+<tr><td>« Choisissez d'abord un fichier. » / « Seul un fichier PDF est accepté. » / « Fichier trop volumineux : 10 Mo au maximum. »</td><td>Formulaires T4 et Relevé 1</td><td>Choisissez le PDF officiel, de moins de 10 Mo, avant <kbd>Téléverser</kbd>.</td></tr>
+<tr><td>« Ce fichier n'est pas un PDF lisible : … » / « Ce PDF n'est pas un formulaire à remplir (aucun champ). »</td><td>Formulaires T4 et Relevé 1</td><td>Fichier abîmé, imprimé ou numérisé : retéléchargez le formulaire à remplir sur le site de l'ARC ou de Revenu Québec, sans le réenregistrer.</td></tr>
+<tr><td>« Ce PDF n'est pas le formulaire T4 à remplir de l'ARC (t4-fill) : la case 14 du feuillet 1 est introuvable. » / « Ce PDF n'est pas le formulaire Relevé 1 à remplir de Revenu Québec : la case A est introuvable. »</td><td>Formulaires T4 et Relevé 1</td><td>Le type choisi ne correspond pas au fichier, ou c'est un autre formulaire. Vérifiez « Formulaire » et le fichier.</td></tr>
+<tr><td>« Ce fichier n'est pas un PDF. »</td><td>Instructions T4</td><td>Le document d'instructions doit être un PDF.</td></tr>
+<tr><td>« Formulaire {type} {année} téléversé (…). Les feuillets de cette année sortiront dessus dans 60secPaie, pour toutes les compagnies. » / « Instructions T4 {année} téléversées (…). » / « Formulaire … retiré. »</td><td>Formulaires T4 et Relevé 1</td><td>Confirmations : rien à faire.</td></tr>
+<tr><td>« Aucune année. Exécutez le script 02_parametres_annee.sql de 60secPaie. »</td><td>Taux de l'année</td><td>La base de la paie n'a pas ses années : exécutez le script d'installation de 60secPaie.</td></tr>
+<tr><td>« Minimum 8 caractères. »</td><td>Utilisateurs, Administrateurs</td><td>Le mot de passe est trop court.</td></tr>
+<tr><td>« Tapez … dans la case pour confirmer … »</td><td>Gestion des démos, suppression d'une compagnie</td><td>Le mot de confirmation est obligatoire pour une action définitive.</td></tr>
+</table>
+
+<!-- ============================================================ -->
+<h2 id="glossaire">Glossaire</h2>
+<dl class="def">
+<dt>Plateforme</dt><dd>Ce que la console règle pour toutes les compagnies à la fois (taux de l'année, formulaires officiels, instructions T4, plan comptable par défaut, prompts). Dans 60secPaie, les formulaires venus d'ici sont dits « de la plateforme ».</dd>
+<dt>Année validée</dt><dd>Une année de taux de paie marquée utilisable par <kbd>Enregistrer et valider</kbd>. 60secPaie n'accepte une paie que dans une année validée.</dd>
+<dt>Formulaire officiel</dt><dd>Le PDF à remplir publié chaque année par l'ARC (T4) ou Revenu Québec (Relevé 1), téléversé par année et rempli par 60secPaie.</dd>
+<dt>Instructions T4</dt><dd>Le document d'instructions de l'ARC qui accompagne le T4, conservé par année et servi tel quel à toutes les compagnies.</dd>
+<dt>Webhook</dt><dd>Un événement que Stripe, Square ou Plaid envoie à 60Sec-AI (paiement reçu, facture, synchronisation). Les pages de diagnostic en gardent le journal.</dd>
+<dt>Job / tâche</dt><dd>Un traitement de fond planifié : procédure stockée, connecteur, courriel ou traitement spécial, avec son calendrier et son historique.</dd>
+<dt>Cliché (démo)</dt><dd>L'état de référence d'une compagnie de démonstration, auquel « Réinitialiser la démo » la ramène.</dd>
+<dt>Alias (plan comptable)</dt><dd>Les autres noms d'un compte du plan par défaut, par langue et chez QuickBooks, qui servent à reconnaître les comptes lors d'une reprise.</dd>
+</dl>
+</main>
+</div>
+</body>
+</html>
