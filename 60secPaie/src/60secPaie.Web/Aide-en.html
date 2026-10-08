@@ -157,7 +157,7 @@ mark{background:#ffe89a}
 <!-- ============================================================ -->
 <h2 id="intro">Overview</h2>
 <div class="note">This guide describes the screens in Quebec terms. For a company whose province of employment is <strong>Ontario</strong>, the same screens refer to Ontario tax, CPP, EHT and WSIB, with no QPIP and no RL-1: see <a href="#ontario">Ontario payroll</a>. For the other provinces and the territories, see <a href="#provinces">Payroll for the other provinces and territories</a>.</div>
-<p>60secPaie calculates the pay of employees who work in Quebec: federal tax, Québec tax, QPP, Employment Insurance, QPIP, and the employer contributions (QPP, EI, QPIP, HSF, CNESST, CNT). From confirmed pay runs, it produces the pay stubs, the direct deposit file, the amount of deductions to remit to both governments, the boxes of the T4 and RL-1 slips, the CNESST statement of wages and the journal entries.</p>
+<p>60secPaie calculates the pay of employees who work in Quebec: federal tax, Québec tax, QPP, Employment Insurance, QPIP, and the employer contributions (QPP, EI, QPIP, HSF, CNESST, CNT). From confirmed pay runs, it produces the pay stubs, the direct deposit file, the amount of deductions to remit to both governments, the T4 and RL-1 slips (calculated boxes, PDF on the CRA's and Revenu Québec's official forms, emailing to employees, government copies with the T4 Summary and Summary 1), the CNESST statement of wages and the journal entries.</p>
 <p>It shares its user accounts and its companies with 60Sec. Employees are also those of 60Sec: they can be created on either side, but their identity (name, address, position) is edited in 60Sec. 60secPaie adds everything that concerns payroll.</p>
 
 <h3 id="cycle">The payroll cycle</h3>
@@ -167,14 +167,14 @@ mark{background:#ffe89a}
   <li><strong>Run payroll</strong> each period, in 4 steps: period, entry, review, confirmation.</li>
   <li><strong>Pay the employees</strong>: numbered cheques or direct deposit file; send the pay stubs by email.</li>
   <li><strong>Remit the deductions</strong> by the due dates, in <span class="chemin">Remittances</span>.</li>
-  <li><strong>At year end</strong>: T4, RL-1 slips, summaries, CNESST statement, in <span class="chemin">Reports</span>.</li>
+  <li><strong>At year end</strong>: put the year's official forms in place, produce the T4 and RL-1 slips (employer copy, employee copy by email, government copies with the summaries), file them with the governments, report wages to the CNESST, in <span class="chemin">Reports</span>; the details are in <a href="#cas-fin-annee">Practical case › Year end</a>.</li>
 </ol>
 
 <h3 id="limites">What 60secPaie does not do</h3>
 <ul>
   <li>It <strong>transmits no payment</strong>, neither to employees nor to governments. It prepares the direct deposit file that you hand over to your bank, and it calculates the remittances that you pay yourself.</li>
-  <li>It <strong>does not file the slips</strong>. It calculates every box; you enter them in Web Forms (CRA) and My Account for businesses (Revenu Québec).</li>
-  <li>It does not handle employees outside Quebec: the province of employment is always QC.</li>
+  <li>It <strong>does not file the slips</strong>. It calculates every box, produces the slips as PDF (on the official forms when uploaded) and emails them to employees; you enter the T4 slips and T4 Summary in Web Forms (CRA), the RL-1 slips and Summary 1 in My Account for businesses (Revenu Québec), before the last day of February.</li>
+  <li>The province of employment is the company's: Québec, or one of those described in <a href="#ontario">Ontario payroll</a> and <a href="#provinces">Payroll for the other provinces and territories</a>. An employee paid in more than one province during the year gets one T4 per province.</li>
   <li>It only knows the rates of the years <strong>validated by 60Sec</strong> in its administration console (2026 today; 2027 is prepared in December). A pay run dated in a year that is not validated is refused.</li>
   <li>It does not replace your judgement: "Always review your pay runs before confirming them." The calculated amounts remain the employer's responsibility.</li>
 </ul>

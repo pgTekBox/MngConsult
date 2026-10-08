@@ -157,7 +157,7 @@ mark{background:#ffe89a}
 <!-- ============================================================ -->
 <h2 id="intro">Vue d'ensemble</h2>
 <div class="note">Ce guide décrit les écrans avec les mots du Québec. Pour une compagnie dont la province d'emploi est l'<strong>Ontario</strong>, les mêmes écrans parlent d'impôt de l'Ontario, de RPC, d'ISE et de WSIB, sans RQAP ni Relevé 1 : voir <a href="#ontario">Paie de l'Ontario</a>. Pour les autres provinces et les territoires, voir <a href="#provinces">Paie des autres provinces et territoires</a>.</div>
-<p>60secPaie calcule la paie d'employés qui travaillent au Québec : impôt fédéral, impôt du Québec, RRQ, assurance-emploi, RQAP, et les cotisations de l'employeur (RRQ, AE, RQAP, FSS, CNESST, CNT). À partir des paies confirmées, il produit les talons de paie, le fichier de dépôt direct, le montant des retenues à remettre aux deux gouvernements, les cases des feuillets T4 et Relevé 1, la déclaration des salaires CNESST et les écritures comptables.</p>
+<p>60secPaie calcule la paie d'employés qui travaillent au Québec : impôt fédéral, impôt du Québec, RRQ, assurance-emploi, RQAP, et les cotisations de l'employeur (RRQ, AE, RQAP, FSS, CNESST, CNT). À partir des paies confirmées, il produit les talons de paie, le fichier de dépôt direct, le montant des retenues à remettre aux deux gouvernements, les feuillets T4 et Relevé 1 (cases calculées, PDF sur les formulaires officiels de l'ARC et de Revenu Québec, envoi par courriel aux employés, copies du gouvernement avec le Sommaire T4 et le Sommaire 1), la déclaration des salaires CNESST et les écritures comptables.</p>
 <p>Il partage ses comptes utilisateurs et ses compagnies avec 60Sec. Les employés sont aussi ceux de 60Sec : ils peuvent être créés d'un côté ou de l'autre, mais leur identité (nom, adresse, poste) se modifie dans 60Sec. 60secPaie y ajoute tout ce qui concerne la paie.</p>
 
 <h3 id="cycle">Le cycle d'une paie</h3>
@@ -167,14 +167,14 @@ mark{background:#ffe89a}
   <li><strong>Calculer la paie</strong> à chaque période, en 4 étapes : période, saisie, révision, confirmation.</li>
   <li><strong>Payer les employés</strong> : chèques numérotés ou fichier de dépôt direct ; envoyer les talons par courriel.</li>
   <li><strong>Remettre les retenues</strong> aux échéances, dans <span class="chemin">Retenues</span>.</li>
-  <li><strong>En fin d'année</strong> : T4, Relevés 1, sommaires, déclaration CNESST, dans <span class="chemin">Rapports</span>.</li>
+  <li><strong>En fin d'année</strong> : mettre en place les formulaires officiels de l'année, produire les T4 et les Relevés 1 (copie de l'employeur, copie de l'employé par courriel, copies du gouvernement avec les sommaires), les transmettre aux gouvernements, déclarer les salaires à la CNESST, dans <span class="chemin">Rapports</span> ; le détail est dans <a href="#cas-fin-annee">Cas pratique › Fin d'année</a>.</li>
 </ol>
 
 <h3 id="limites">Ce que 60secPaie ne fait pas</h3>
 <ul>
   <li>Il <strong>ne transmet aucun paiement</strong> ni aux employés, ni aux gouvernements. Il prépare le fichier de dépôt direct que vous remettez à votre banque, et il calcule les remises que vous payez vous-même.</li>
-  <li>Il <strong>ne transmet pas les feuillets</strong>. Il calcule chaque case ; vous les saisissez dans Formulaires Web (ARC) et Mon dossier pour les entreprises (Revenu Québec).</li>
-  <li>Il ne gère pas les employés hors Québec : la province d'emploi est toujours QC.</li>
+  <li>Il <strong>ne transmet pas les feuillets</strong>. Il calcule chaque case, produit les feuillets en PDF (sur les formulaires officiels s'ils sont téléversés) et les envoie aux employés ; vous saisissez les T4 et le Sommaire T4 dans Formulaires Web (ARC), les Relevés 1 et le Sommaire 1 dans Mon dossier pour les entreprises (Revenu Québec), avant le dernier jour de février.</li>
+  <li>La province d'emploi est celle de la compagnie : Québec, ou l'une de celles décrites dans <a href="#ontario">Paie de l'Ontario</a> et <a href="#provinces">Paie des autres provinces et territoires</a>. Un employé payé dans plus d'une province au cours de l'année reçoit un T4 par province.</li>
   <li>Il ne connaît que les taux des années <strong>validées par 60Sec</strong> dans sa console d'administration (2026 aujourd'hui ; 2027 se prépare en décembre). Une paie datée d'une année non validée est refusée.</li>
   <li>Il ne remplace pas votre jugement : « Vérifiez toujours vos paies avant de les confirmer. » Les montants calculés demeurent sous la responsabilité de l'employeur.</li>
 </ul>
