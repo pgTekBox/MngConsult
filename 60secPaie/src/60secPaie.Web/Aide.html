@@ -1053,11 +1053,12 @@ mark{background:#ffe89a}
   <li>Dans <span class="chemin">Configuration › Dépôt direct</span>, entrez les paramètres remis par votre banque, si vous payez par dépôt direct.</li>
   <li>Dans <span class="chemin">Employés</span>, créez ou vérifiez chaque employé, puis ouvrez « Paramètres de paie » : NAS, fréquence, taux ou salaire, TD1 et TP-1015.3, dépôt direct, talon par courriel. Enregistrez, puis définissez ses éléments récurrents.</li>
   <li>Si vous partez en cours d'année, entrez les <a href="#emp-cumulatifs">cumulatifs de départ</a>.</li>
+  <li>En janvier, pour la fin d'année : téléversez les formulaires officiels de l'année dans <span class="chemin">Configuration › Formulaires officiels</span>, à moins que la plateforme les fournisse déjà ; la suite est dans <a href="#cas-fin-annee">Cas pratique › Fin d'année</a>.</li>
   <li>Faites une première paie et comparez-la avec votre ancien système ou le calculateur de l'ARC et de Revenu Québec avant de la confirmer.</li>
 </ol>
 
 <h2 id="cas-conversion">Cas pratique › Conversion en cours d'année</h2>
-<p>Pour chaque employé, dans <span class="chemin">Employés › Cumulatifs</span>, entrez les cumulatifs de l'année tirés de votre ancien système : brut, impôts retenus, salaire admissible et cotisations RRQ (base et 2e supplémentaire), AE, RQAP employé et employeur, salaire assurable CNESST, solde de vacances. Sans eux, 60secPaie continuerait de retenir RRQ, AE et RQAP après les maximums, et les feuillets seraient incomplets. Les remises déjà faites dans l'ancien système ne s'entrent pas dans 60secPaie : ses sommaires ne couvrent que les paies qu'il a confirmées, ajustez les sommaires de fin d'année en conséquence.</p>
+<p>Pour chaque employé, dans <span class="chemin">Employés › Cumulatifs</span>, entrez les cumulatifs de l'année tirés de votre ancien système : brut, impôts retenus, salaire admissible et cotisations RRQ (base et 2e supplémentaire), AE, RQAP employé et employeur, salaire assurable CNESST, solde de vacances. Sans eux, 60secPaie continuerait de retenir RRQ, AE et RQAP après les maximums, et les feuillets seraient incomplets. Les remises déjà faites dans l'ancien système ne s'entrent pas dans 60secPaie : ses sommaires ne couvrent que les paies qu'il a confirmées, ajustez les sommaires de fin d'année en conséquence. Les cumulatifs de départ entrent dans les feuillets de fin d'année (le tableau de <a href="#feuillets">Rapports › T4 et Relevés 1</a> signale « inclut des cumulatifs de départ ») et suffisent à offrir l'année dans la liste, même avant la première paie confirmée.</p>
 
 <h2 id="cas-nouvel-employe">Cas pratique › Embaucher quelqu'un</h2>
 <ol class="etapes">
@@ -1065,6 +1066,7 @@ mark{background:#ffe89a}
   <li>Sur sa fiche : NAS (demandez-le, il est obligatoire pour les feuillets), date de naissance, langue, fréquence si elle diffère de la compagnie, taux horaire et heures par semaine ou salaire annuel, TD1 et TP-1015.3 remis par l'employé (laissez vide pour les montants de base), dépôt direct et courriel.</li>
   <li>Éléments de paie : ajoutez son salaire si vous voulez un gabarit, et ses déductions récurrentes.</li>
   <li>Il entre dans la prochaine paie dont la fin de période est postérieure à sa date d'embauche.</li>
+  <li>Pensez à la fin d'année dès l'embauche : adresse postale complète, NAS, courriel avec la case « Envoyer le talon de paie par courriel » (c'est aussi l'adresse d'envoi des feuillets T4 et Relevé 1), case 45 (soins dentaires) et exemptions sur la fiche.</li>
 </ol>
 
 <h2 id="cas-depart">Cas pratique › Départ d'un employé</h2>
@@ -1072,6 +1074,7 @@ mark{background:#ffe89a}
   <li>Faites sa dernière paie normalement, avec une ligne « Paie de vacances » pour lui verser son solde de vacances (visible sur son talon, « Solde de vacances »).</li>
   <li>Dans 60Sec, inscrivez sa date de fin d'emploi ou rendez-le inactif. Il n'entre plus dans les paies dont le début de période est postérieur à sa date de fin.</li>
   <li>Le relevé d'emploi (RE) se produit dans RE Web de Service Canada ; 60secPaie ne le produit pas. Ses feuillets T4 et RL-1 sortent en fin d'année comme pour les autres.</li>
+  <li>Pour lui remettre ses feuillets après son départ, <a href="#feuillets">Rapports › T4 et Relevés 1</a> offre sur sa ligne les boutons « T4 », « Relevé 1 » et « Courriel » ; le feuillet reprend l'adresse de la fiche, gardez-la à jour avec son courriel.</li>
 </ol>
 
 <h2 id="cas-assurance">Cas pratique › Assurance collective</h2>
@@ -1104,6 +1107,7 @@ mark{background:#ffe89a}
   <li>Si la paie est encore en brouillon : retournez à l'étape 2, modifiez les lignes, recalculez.</li>
   <li>Si elle est confirmée et qu'elle est la plus récente : ouvrez son détail et « Annuler la paie ». Si ses retenues ont déjà été payées, annulez d'abord ce paiement dans Retenues › Historique. Refaites ensuite la paie. Les chèques déjà émis gardent leur numéro ; les nouveaux en reçoivent un nouveau.</li>
   <li>Si une paie plus ancienne est en cause : annulez les paies suivantes une à une, de la plus récente à la plus ancienne, ou corrigez par une ligne d'ajustement (« Salaire rétroactif » ou une déduction) dans la prochaine paie. Les cumulatifs et les feuillets refléteront la correction.</li>
+  <li>Si des feuillets T4 ou Relevé 1 de l'année ont déjà été produits, produisez-les de nouveau après la correction : les PDF sont en lecture seule et ne se modifient pas. Renvoyez-les par courriel avec le bouton « Courriel » de la ligne ou « renvoyer aussi les feuillets déjà envoyés ». Un feuillet déjà transmis se corrige par un feuillet modifié dans Formulaires Web (ARC) ou Mon dossier pour les entreprises (Revenu Québec).</li>
 </ol>
 
 <h2 id="cas-depot">Cas pratique › Premier dépôt direct</h2>

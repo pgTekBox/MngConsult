@@ -1053,11 +1053,12 @@ mark{background:#ffe89a}
   <li>In <span class="chemin">Settings › Direct deposit</span>, enter the settings provided by your bank, if you pay by direct deposit.</li>
   <li>In <span class="chemin">Employees</span>, create or check each employee, then open "Payroll settings": SIN, frequency, rate or salary, TD1 and TP-1015.3, direct deposit, pay stub by email. Save, then define their recurring items.</li>
   <li>If you are starting mid-year, enter the <a href="#emp-cumulatifs">opening balances</a>.</li>
+  <li>In January, for year end: upload the year's official forms under <span class="chemin">Settings › Official forms</span>, unless the platform already provides them; the rest is in <a href="#cas-fin-annee">Practical case › Year end</a>.</li>
   <li>Run a first pay run and compare it with your previous system or with the CRA's and Revenu Québec's calculators before confirming it.</li>
 </ol>
 
 <h2 id="cas-conversion">Practical case › Mid-year conversion</h2>
-<p>For each employee, in <span class="chemin">Employees › Opening balances</span>, enter the year's cumulative amounts taken from your previous system: gross, taxes withheld, QPP pensionable earnings and contributions (base and 2nd additional), EI, QPIP employee and employer, CNESST insurable wages, vacation balance. Without them, 60secPaie would keep withholding QPP, EI and QPIP past the maximums, and the slips would be incomplete. Remittances already made in the previous system are not entered in 60secPaie: its summaries cover only the pay runs it confirmed, adjust the year-end summaries accordingly.</p>
+<p>For each employee, in <span class="chemin">Employees › Opening balances</span>, enter the year's cumulative amounts taken from your previous system: gross, taxes withheld, QPP pensionable earnings and contributions (base and 2nd additional), EI, QPIP employee and employer, CNESST insurable wages, vacation balance. Without them, 60secPaie would keep withholding QPP, EI and QPIP past the maximums, and the slips would be incomplete. Remittances already made in the previous system are not entered in 60secPaie: its summaries cover only the pay runs it confirmed, adjust the year-end summaries accordingly. Opening balances go into the year-end slips (the table under <a href="#feuillets">Reports › T4 and RL-1 slips</a> flags "includes opening balances") and are enough to offer the year in the list, even before the first confirmed pay run.</p>
 
 <h2 id="cas-nouvel-employe">Practical case › Hiring someone</h2>
 <ol class="etapes">
@@ -1065,6 +1066,7 @@ mark{background:#ffe89a}
   <li>On their record: SIN (ask for it, it is mandatory for the slips), date of birth, language, frequency if it differs from the company's, hourly rate and hours per week or annual salary, TD1 and TP-1015.3 provided by the employee (leave blank for the basic amounts), direct deposit and email.</li>
   <li>Pay items: add their wages if you want a template, and their recurring deductions.</li>
   <li>They are included in the next pay run whose period end is after their hire date.</li>
+  <li>Think of year end from the hiring: full postal address, SIN, email with the "Send the pay stub by email" box (it is also where the T4 and RL-1 slips are sent), box 45 (dental benefits) and exemptions on the record.</li>
 </ol>
 
 <h2 id="cas-depart">Practical case › Employee departure</h2>
@@ -1072,6 +1074,7 @@ mark{background:#ffe89a}
   <li>Run their last pay normally, with a "Vacation pay" line to pay out their vacation balance (visible on their stub, "Vacation balance").</li>
   <li>In 60Sec, enter their termination date or make them inactive. They are no longer included in pay runs whose period start is after their termination date.</li>
   <li>The Record of Employment (ROE) is produced in Service Canada's ROE Web; 60secPaie does not produce it. Their T4 and RL-1 slips come out at year end like everyone else's.</li>
+  <li>To hand them their slips after they leave, <a href="#feuillets">Reports › T4 and RL-1 slips</a> offers the "T4", "Relevé 1" and "Courriel" buttons on their row; the slip uses the record's address, keep it and their email up to date.</li>
 </ol>
 
 <h2 id="cas-assurance">Practical case › Group insurance</h2>
@@ -1104,6 +1107,7 @@ mark{background:#ffe89a}
   <li>If the pay run is still a draft: go back to step 2, edit the lines, recalculate.</li>
   <li>If it is confirmed and it is the most recent: open its details and "Cancel pay run". If its deductions have already been remitted, cancel that payment first in Remittances › History. Then redo the pay run. Cheques already issued keep their number; new ones get a new one.</li>
   <li>If an older pay run is involved: cancel the subsequent pay runs one by one, from the most recent to the oldest, or correct with an adjustment line ("Retroactive pay" or a deduction) in the next pay run. The year-to-date amounts and the slips will reflect the correction.</li>
+  <li>If T4 or RL-1 slips for the year were already produced, produce them again after the correction: the PDFs are read-only and cannot be edited. Resend them by email with the row's "Courriel" button or "also resend slips already sent". A slip already filed is corrected with an amended slip in Web Forms (CRA) or My Account for businesses (Revenu Québec).</li>
 </ol>
 
 <h2 id="cas-depot">Practical case › First direct deposit</h2>

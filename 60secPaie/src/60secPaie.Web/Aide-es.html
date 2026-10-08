@@ -1053,11 +1053,12 @@ mark{background:#ffe89a}
   <li>En <span class="chemin">Configuración › Depósito directo</span>, ingrese los parámetros entregados por su banco, si paga por depósito directo.</li>
   <li>En <span class="chemin">Empleados</span>, cree o verifique cada empleado, luego abra « Parámetros de nómina »: NAS, frecuencia, tarifa o salario, TD1 y TP-1015.3, depósito directo, talón por correo. Guarde, luego defina sus elementos recurrentes.</li>
   <li>Si comienza a mitad de año, ingrese los <a href="#emp-cumulatifs">acumulados iniciales</a>.</li>
+  <li>En enero, para el fin de año: suba los formularios oficiales del año en <span class="chemin">Configuración › Formularios oficiales</span>, a menos que la plataforma ya los proporcione; el resto está en <a href="#cas-fin-annee">Caso práctico › Fin de año</a>.</li>
   <li>Haga una primera nómina y compárela con su sistema anterior o con la calculadora de la ARC y de Revenu Québec antes de confirmarla.</li>
 </ol>
 
 <h2 id="cas-conversion">Caso práctico › Conversión a mitad de año</h2>
-<p>Para cada empleado, en <span class="chemin">Empleados › Acumulados</span>, ingrese los acumulados del año tomados de su sistema anterior: bruto, impuestos retenidos, salario admisible y aportes RRQ (base y 2.º adicional), AE, RQAP empleado y empleador, salario asegurable CNESST, saldo de vacaciones. Sin ellos, 60secPaie seguiría reteniendo RRQ, AE y RQAP después de los máximos, y los comprobantes quedarían incompletos. Las remesas ya hechas en el sistema anterior no se ingresan en 60secPaie: sus sumarios solo cubren las nóminas que él confirmó; ajuste los sumarios de fin de año en consecuencia.</p>
+<p>Para cada empleado, en <span class="chemin">Empleados › Acumulados</span>, ingrese los acumulados del año tomados de su sistema anterior: bruto, impuestos retenidos, salario admisible y aportes RRQ (base y 2.º adicional), AE, RQAP empleado y empleador, salario asegurable CNESST, saldo de vacaciones. Sin ellos, 60secPaie seguiría reteniendo RRQ, AE y RQAP después de los máximos, y los comprobantes quedarían incompletos. Las remesas ya hechas en el sistema anterior no se ingresan en 60secPaie: sus sumarios solo cubren las nóminas que él confirmó; ajuste los sumarios de fin de año en consecuencia. Los acumulados iniciales entran en los comprobantes de fin de año (la tabla de <a href="#feuillets">Informes › T4 y Relevés 1</a> señala « incluye acumulados iniciales ») y bastan para ofrecer el año en la lista, incluso antes de la primera nómina confirmada.</p>
 
 <h2 id="cas-nouvel-employe">Caso práctico › Contratar a alguien</h2>
 <ol class="etapes">
@@ -1065,6 +1066,7 @@ mark{background:#ffe89a}
   <li>En su ficha: NAS (pídalo, es obligatorio para los comprobantes), fecha de nacimiento, idioma, frecuencia si difiere de la de la empresa, tarifa por hora y horas por semana o salario anual, TD1 y TP-1015.3 entregados por el empleado (deje vacío para los montos básicos), depósito directo y correo electrónico.</li>
   <li>Elementos de nómina: agregue su salario si quiere una plantilla, y sus deducciones recurrentes.</li>
   <li>Entra en la próxima nómina cuyo fin de período sea posterior a su fecha de contratación.</li>
+  <li>Piense en el fin de año desde la contratación: dirección postal completa, NAS, correo con la casilla « Enviar el talón de pago por correo electrónico » (es también la dirección de envío de los comprobantes T4 y Relevé 1), casilla 45 (cuidado dental) y exenciones en la ficha.</li>
 </ol>
 
 <h2 id="cas-depart">Caso práctico › Salida de un empleado</h2>
@@ -1072,6 +1074,7 @@ mark{background:#ffe89a}
   <li>Haga su última nómina normalmente, con una línea « Pago de vacaciones » para pagarle su saldo de vacaciones (visible en su talón, « Saldo de vacaciones »).</li>
   <li>En 60Sec, inscriba su fecha de fin de empleo o desactívelo. Ya no entra en las nóminas cuyo inicio de período sea posterior a su fecha de fin.</li>
   <li>El registro de empleo (RE) se genera en RE Web de Service Canada; 60secPaie no lo genera. Sus comprobantes T4 y RL-1 salen a fin de año como para los demás.</li>
+  <li>Para entregarle sus comprobantes después de su salida, <a href="#feuillets">Informes › T4 y Relevés 1</a> ofrece en su línea los botones « T4 », « Relevé 1 » y « Courriel »; el comprobante toma la dirección de la ficha, manténgala al día junto con su correo.</li>
 </ol>
 
 <h2 id="cas-assurance">Caso práctico › Seguro colectivo</h2>
@@ -1104,6 +1107,7 @@ mark{background:#ffe89a}
   <li>Si la nómina todavía está en borrador: vuelva al paso 2, modifique las líneas, recalcule.</li>
   <li>Si está confirmada y es la más reciente: abra su detalle y « Anular la nómina ». Si sus retenciones ya fueron pagadas, anule primero ese pago en Retenciones › Historial. Rehaga luego la nómina. Los cheques ya emitidos conservan su número; los nuevos reciben uno nuevo.</li>
   <li>Si se trata de una nómina más antigua: anule las nóminas siguientes una por una, de la más reciente a la más antigua, o corrija mediante una línea de ajuste (« Salario retroactivo » o una deducción) en la próxima nómina. Los acumulados y los comprobantes reflejarán la corrección.</li>
+  <li>Si ya se produjeron comprobantes T4 o Relevé 1 del año, prodúzcalos de nuevo después de la corrección: los PDF son de solo lectura y no se modifican. Reenvíelos por correo con el botón « Courriel » de la línea o « reenviar también los comprobantes ya enviados ». Un comprobante ya transmitido se corrige con un comprobante modificado en Formulaires Web (CRA) o Mon dossier pour les entreprises (Revenu Québec).</li>
 </ol>
 
 <h2 id="cas-depot">Caso práctico › Primer depósito directo</h2>
