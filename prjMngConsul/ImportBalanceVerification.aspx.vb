@@ -797,6 +797,10 @@ Public Class ImportBalanceVerification
             If Not IsDBNull(ctx("FichierPlan")) Then sb.Append(" — « ").Append(Server.HtmlEncode(Convert.ToString(ctx("FichierPlan")))).Append(" »")
             sb.Append(", importé le ").Append(Server.HtmlEncode(datePlan)).Append(".<br />")
             sb.Append("Rapprochement par le numéro quand les deux en ont un, sinon par le nom : un compte renommé entre les deux exports apparaît comme absent.</p>")
+            ' Sans numéros (QuickBooks avec les numéros de compte désactivés), la colonne « Compte » ne montre que le nom : on le dit.
+            If ctx.Table.Columns.Contains("BalanceSansNumero") AndAlso Convert.ToInt32(ctx("ComptesBalance")) > 0 AndAlso Convert.ToInt32(ctx("BalanceSansNumero")) = Convert.ToInt32(ctx("ComptesBalance")) Then
+                sb.Append("<p class='ctx'><b>Cette balance n'a pas de numéros de compte</b> (QuickBooks sans « Activer les numéros de compte ») : la colonne « Compte » ci-dessous ne montre que le nom, et le rapprochement se fait par le nom.</p>")
+            End If
 
             Dim nErr = Convert.ToInt32(ctx("Erreurs"))
             Dim nVer = Convert.ToInt32(ctx("AVerifier"))
