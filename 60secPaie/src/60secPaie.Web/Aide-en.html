@@ -1116,16 +1116,28 @@ mark{background:#ffe89a}
 </ol>
 
 <h2 id="cas-fin-annee">Practical case › Year end</h2>
+<p>Year end happens in January and February: close the payroll year, produce the T4 and RL-1 slips, file them with the governments and hand them to the employees, then report wages to the CNESST. Everything comes from the confirmed pay runs and the opening balances; nothing is typed by hand into the slips.</p>
+<h3>Deadlines</h3>
+<table>
+<tr><th>What</th><th>When</th><th>Where</th></tr>
+<tr><td>Last remittances of the year (federal, Québec)</td><td>According to your remittance frequency</td><td><a href="#remises">Remittances › Paying the deductions</a></td></tr>
+<tr><td>T4 slips and T4 Summary to the CRA, RL-1 slips and Summary 1 to Revenu Québec; slips to employees</td><td>Last day of February</td><td><a href="#feuillets">Reports › T4 and RL-1 slips</a></td></tr>
+<tr><td>CNESST statement of wages</td><td>March 15</td><td><a href="#cnesst">Reports › CNESST statement of wages</a></td></tr>
+<tr><td>Following year's rates validated in the software</td><td>Before the first January pay run</td><td>60Sec administration console</td></tr>
+</table>
+<h3>Steps</h3>
 <ol class="etapes">
-  <li>Confirm all pay runs dated in the year. The pay date decides the year: a December period paid in January belongs to the following year.</li>
-  <li>Record the year's last remittances in Remittances.</li>
-  <li><span class="chemin">Reports › T4 and RL-1 slips</span>: check each employee (SIN present, consistent boxes), export the CSV, enter the slips in Web Forms and My Account for businesses before the last day of February. Compare the T4 and RL-1 summaries with your remittances; pay the balance, including the CNT.</li>
-  <li>Produce the slips: put the year's official forms in place (<a href="#config-formulaires">Settings › Official forms</a>, or the platform's), then, in the "Feuillets en PDF et par courriel" card, download all T4 slips and all RL-1 slips (employer copy to file), email the employee copy and download the government copies with the summaries. The CRA's T4 instructions for the year, when the platform has put them in place, open from a link on the same page.</li>
-  <li><span class="chemin">Reports › CNESST statement of wages</span>: file in Mon Espace CNESST before March 15; the "Reconciliation" card gives the difference with your payments.</li>
-  <li>Set box 45 (dental) and check the exemptions before producing the T4s.</li>
-  <li>The following year's rates must be validated by 60Sec in its administration console before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software.").</li>
+  <li><strong>Close the payroll year.</strong> Confirm all pay runs dated in the year. The pay date decides the year: a December period paid in January belongs to the following year. A forgotten pay run or one to fix is settled before the slips (<a href="#cas-corriger">Correcting a pay run</a>); after production, the affected slips are produced again.</li>
+  <li><strong>Record the last remittances</strong> under Remittances: the federal and Québec remittances whose period end falls in the year go into the summaries ("Remittances recorded") and give the balance due.</li>
+  <li><strong>Check the employee records</strong> (<a href="#emp-fiche">Employees › Record</a>): SIN present, full address, province of employment, box 45 (dental care), CPP/QPP, EI and QPIP exemptions and, for emailing the slips, the email address with the "Send the pay stub by email" box. For a mid-year conversion, the <a href="#emp-cumulatifs">opening balances</a> complete the amounts.</li>
+  <li><strong>Put the year's official forms in place</strong> (<a href="#config-formulaires">Settings › Official forms</a>): the CRA's fillable T4 and Revenu Québec's fillable RL-1, unless the platform administration already uploaded them (the note under the slips card says so). Without a form, the slips come out on 60secPaie's layout, also accepted for the employee and employer copies. The CRA's T4 instructions for the year, when in place, open from a link on the slips page.</li>
+  <li><strong>Check the amounts</strong> under <a href="#feuillets">Reports › T4 and RL-1 slips</a>: pick the year, go through each row (boxes 14, 22, 16/17, 16A/17A, 18, 24, 26, 55, 56, A, E; "includes opening balances", "paid in more than one province"), open "Feuillet" for an employee's detail, export the CSV if you need to check in a spreadsheet. Compare the T4 and RL-1 summaries with your remittances: the "Balance due" is paid with the summary, including the CNT contribution with Summary 1.</li>
+  <li><strong>Produce and hand out the slips.</strong> In the "Feuillets en PDF et par courriel" card: "Copy to download" on "Employer", then "Download all T4 slips" and "Download all RL-1 slips" for the copy to file; "Email the slips" for the employee copy (the tally says who received theirs and who has no email; each row's "T4", "Relevé 1" and "Courriel" buttons serve one employee at a time, for instance an employee without email to whom you hand the PDF or a printout); "Download the government copies" for the T4 copy 1 with the T4 Summary and the RL-1 copy 1 with Summary 1. Each download is logged, the SIN being complete.</li>
+  <li><strong>File with the governments.</strong> 60secPaie does not transmit the slips: enter the T4 slips and the T4 Summary in <strong>Web Forms</strong> (CRA) and the RL-1 slips with Summary 1 in <strong>My Account for businesses</strong> (Revenu Québec), from the government copies, before the last day of February. Check the boxes against the year's RC4120 (T4) and RL-1.G (RL-1) guides.</li>
+  <li><strong>Report wages to the CNESST</strong> in Mon Espace CNESST before March 15, with <a href="#cnesst">Reports › CNESST statement of wages</a>; the "Reconciliation" card gives the difference with your payments.</li>
+  <li><strong>Prepare the following year.</strong> The following year's rates must be validated by 60Sec in its administration console before the first January pay run; otherwise the wizard refuses the pay run ("The government rates for {year} are not yet defined in the software."). Official forms change every year: those of the year that ends serve only its slips.</li>
 </ol>
-
+<div class="note">The PDF slips produced are read-only: a correction is made at the source (pay run, opening balances, record), then the slip is produced again and sent again ("also resend slips already sent", or the row's "Courriel" button). A slip already filed with the CRA or Revenu Québec is corrected with an amended slip in their online services.</div>
 <!-- ============================================================ -->
 <h2 id="messages">Reference › Messages and their solutions</h2>
 <p>Messages are grouped by screen in the sections above. Here are the most frequent, in a single table.</p>
