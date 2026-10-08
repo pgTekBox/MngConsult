@@ -27,16 +27,25 @@ Public Class PageConfigFormulaires
         lblAucun.Visible = t.Rows.Count = 0
 
         ' Les formulaires de la plateforme (console d'administration) : ils servent à défaut des vôtres.
+        ' Les instructions T4 de l'ARC (type TI) y figurent aussi, avec un lien : le document est offert tel quel à toutes les compagnies.
         Dim plateforme As New List(Of String)()
         For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", FormulaireOfficiel.Plateforme)).Rows
-            plateforme.Add(r.Ent("Annee").ToString() & " " & LibelleType(r("Type")))
+            Dim libelle = Server.HtmlEncode(r.Ent("Annee").ToString() & " " & LibelleType(r("Type")))
+            If r.Txt("Type") = FormulaireOfficiel.TypeInstructionsT4 Then
+                libelle = "<a href=""../Documents.aspx?doc=instructions-t4&amp;annee=" & r.Ent("Annee").ToString() & """ target=""_blank"" rel=""noopener"">" & libelle & "</a>"
+            End If
+            plateforme.Add(libelle)
         Next
-        litPlateforme.Text = Server.HtmlEncode(If(plateforme.Count = 0, Tr("Aucun formulaire de la plateforme (console d'administration)."),
-                                                 Tr("Formulaires de la plateforme (console d'administration), utilisés à défaut des vôtres : {0}.", String.Join(", ", plateforme))))
+        litPlateforme.Text = If(plateforme.Count = 0, Server.HtmlEncode(Tr("Aucun formulaire de la plateforme (console d'administration).")),
+                               String.Format(Server.HtmlEncode(Tr("Formulaires de la plateforme (console d'administration), utilisés à défaut des vôtres : {0}.")), String.Join(", ", plateforme)))
     End Sub
 
     Protected Function LibelleType(type As Object) As String
-        Return If(Convert.ToString(type) = FormulaireOfficiel.TypeT4, "T4 (ARC)", "Relevé 1 (Revenu Québec)")
+        Select Case Convert.ToString(type)
+            Case FormulaireOfficiel.TypeT4 : Return "T4 (ARC)"
+            Case FormulaireOfficiel.TypeInstructionsT4 : Return "Instructions T4 (ARC)"
+            Case Else : Return "Relevé 1 (Revenu Québec)"
+        End Select
     End Function
 
     Protected Function Taille(octets As Object) As String

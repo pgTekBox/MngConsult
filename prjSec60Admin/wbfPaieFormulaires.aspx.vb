@@ -37,7 +37,11 @@ Public Class wbfPaieFormulaires
     End Sub
 
     Protected Function LibelleType(type As Object) As String
-        Return If(Convert.ToString(type) = clsFormulairePdf.TypeT4, "T4 (ARC)", "Relevé 1 (Revenu Québec)")
+        Select Case Convert.ToString(type)
+            Case clsFormulairePdf.TypeT4 : Return "T4 (ARC)"
+            Case clsFormulairePdf.TypeInstructions : Return "Instructions T4 (ARC)"
+            Case Else : Return "Relevé 1 (Revenu Québec)"
+        End Select
     End Function
 
     Protected Function Quand(v As Object) As String
@@ -58,7 +62,8 @@ Public Class wbfPaieFormulaires
 
             Dim type = ddlType.SelectedValue
             Dim annee = Integer.Parse(ddlAnnee.SelectedValue)
-            Dim prepare = clsFormulairePdf.Preparer(fuFichier.FileBytes, type)
+            ' Les instructions T4 sont un simple document, conservé tel quel ; les formulaires sont vérifiés et préparés.
+            Dim prepare = If(type = clsFormulairePdf.TypeInstructions, clsFormulairePdf.VerifierPdf(fuFichier.FileBytes), clsFormulairePdf.Preparer(fuFichier.FileBytes, type))
             Dim nom = IO.Path.GetFileName(fuFichier.FileName)
 
             Dim p As New Collection
@@ -71,7 +76,9 @@ Public Class wbfPaieFormulaires
             ExecuteSQL("paie.spFormulaireFeuillet_Enregistrer", p)
 
             Charger()
-            ShowMsg("Formulaire " & LibelleType(type) & " " & annee.ToString() & " téléversé (" & nom & "). Les feuillets de cette année sortiront dessus dans 60secPaie, pour toutes les compagnies.")
+            ShowMsg(If(type = clsFormulairePdf.TypeInstructions,
+                       "Instructions T4 " & annee.ToString() & " téléversées (" & nom & "). Le document est offert tel quel à toutes les compagnies dans 60secPaie.",
+                       "Formulaire " & LibelleType(type) & " " & annee.ToString() & " téléversé (" & nom & "). Les feuillets de cette année sortiront dessus dans 60secPaie, pour toutes les compagnies."))
         Catch ex As ArgumentException
             ShowMsg(ex.Message, True)
         Catch ex As SqlException

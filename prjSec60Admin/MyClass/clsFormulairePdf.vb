@@ -17,9 +17,19 @@ Public NotInheritable Class clsFormulairePdf
 
     Public Const TypeT4 As String = "T4"
     Public Const TypeR1 As String = "R1"
+    ''' <summary>Les instructions T4 de l'ARC : un simple PDF par année, servi tel quel par 60secPaie à toutes les compagnies.</summary>
+    Public Const TypeInstructions As String = "TI"
 
     Private Sub New()
     End Sub
+
+    ''' <summary>Vérifie qu'un document est bien un PDF (en-tête %PDF) et le rend tel quel.</summary>
+    Public Shared Function VerifierPdf(contenu As Byte()) As Byte()
+        If contenu Is Nothing OrElse contenu.Length < 5 OrElse Text.Encoding.ASCII.GetString(contenu, 0, 5) <> "%PDF-" Then
+            Throw New ArgumentException("Ce fichier n'est pas un PDF.")
+        End If
+        Return contenu
+    End Function
 
     ''' <summary>Vérifie et prépare le fichier ; ArgumentException si ce n'est pas le formulaire attendu.</summary>
     Public Shared Function Preparer(contenu As Byte(), type As String) As Byte()

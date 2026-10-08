@@ -37,7 +37,9 @@
             Le <b>T4 à remplir</b> de l'ARC (fichier « t4-fill-AAf.pdf ») et le <b>Relevé 1 à remplir</b> de Revenu Québec, par année,
             pour toutes les compagnies. Dès qu'ils sont ici, 60secPaie produit les feuillets de l'année sur ces formulaires
             (copie de l'employé, copie de l'employeur, copies du gouvernement, pièce jointe des courriels). Une compagnie peut
-            téléverser les siens dans sa propre configuration : ils l'emportent alors sur ceux-ci.
+            téléverser les siens dans sa propre configuration : ils l'emportent alors sur ceux-ci. Les <b>Instructions T4 (ARC)</b>, par année,
+            sont un simple document : 60secPaie l'offre tel quel à toutes les compagnies (lien dans Rapports › T4 et Relevés 1 et dans
+            Configuration › Formulaires officiels).
         </div>
 
         <asp:Panel ID="pnlMsg" runat="server" Visible="false">
@@ -52,6 +54,7 @@
                     <asp:DropDownList ID="ddlType" runat="server">
                         <asp:ListItem Value="T4" Text="T4 (ARC)" />
                         <asp:ListItem Value="R1" Text="Relevé 1 (Revenu Québec)" />
+                        <asp:ListItem Value="TI" Text="Instructions T4 (ARC)" />
                     </asp:DropDownList></div>
                 <div><label for="fuFichier">Fichier PDF (le formulaire officiel, tel que téléchargé)</label><asp:FileUpload ID="fuFichier" runat="server" /></div>
                 <div><asp:Button ID="btnTeleverser" runat="server" CssClass="pf-btn" Text="Téléverser" /></div>
@@ -84,6 +87,7 @@
             Relevé 1 à remplir sur celui de Revenu Québec, puis téléversez-les ici pour cette année. Le fichier est vérifié
             (il doit porter la case 14 du feuillet 1 pour le T4, la case A pour le Relevé 1), débarrassé de son chiffrement et de
             ses scripts, et conservé tel quel : il ne sert qu'à être rempli. Un nouveau téléversement remplace le précédent.
+            Les instructions T4 ne sont pas vérifiées au-delà de leur en-tête PDF : elles sont servies telles quelles.
         </div>
     </div>
 </asp:Content>

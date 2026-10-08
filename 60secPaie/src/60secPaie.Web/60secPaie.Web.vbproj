@@ -129,6 +129,7 @@
     <Content Include="Config\DepotDirect.aspx" />
     <Content Include="Config\Formulaires.aspx" />
     <Content Include="Config\UnitesCNESST.aspx" />
+    <Content Include="Documents.aspx" />
     <Content Include="Rapports\Feuillets.aspx" />
     <Content Include="Rapports\Feuillet.aspx" />
     <Content Include="Rapports\CNESST.aspx" />
@@ -209,6 +210,10 @@
     </Compile>
     <Compile Include="Config\UnitesCNESST.aspx.designer.vb">
       <DependentUpon>UnitesCNESST.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Documents.aspx.vb">
+      <DependentUpon>Documents.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="Rapports\Feuillets.aspx.vb">
       <DependentUpon>Feuillets.aspx</DependentUpon>

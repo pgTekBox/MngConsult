@@ -22,6 +22,7 @@
            La copie de l'employé part par courriel, en PDF, aux employés qui reçoivent leur talon par courriel. Les copies du gouvernement réunissent
            les T4 (copie 1) et le Sommaire T4 pour l'ARC, puis les Relevés 1 (copie 1) et le Sommaire 1 pour Revenu Québec.</p>
         <p class="note"><asp:Literal ID="litFormulaires" runat="server" /></p>
+        <asp:Literal ID="litInstructions" runat="server" />
         <div class="actions">
             <label>Copie à télécharger
                 <asp:DropDownList ID="ddlCopie" runat="server" AutoPostBack="true">

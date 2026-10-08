@@ -115,6 +115,7 @@ Public NotInheritable Class ServiceFeuillets
         Next
         For Each proprietaire In {c, FormulaireOfficiel.Plateforme}
             For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", proprietaire)).Rows
+                If r.Txt("Type") = FormulaireOfficiel.TypeInstructionsT4 Then Continue For   ' un document d'instructions ne fait pas une année de feuillets
                 annees.Add(r.Ent("Annee"))
             Next
         Next

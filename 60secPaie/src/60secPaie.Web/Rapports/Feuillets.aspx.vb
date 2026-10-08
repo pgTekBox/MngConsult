@@ -46,6 +46,8 @@ Public Class PageFeuillets
         Dim feuillets = ServiceFeuillets.Preparer(Annee)
         Dim envois = EnvoisDeLAnnee()
         litFormulaires.Text = Server.HtmlEncode(EtatFormulaires())
+        Dim instructions = FormulaireOfficiel.InstructionsT4(Annee)
+        litInstructions.Text = If(instructions Is Nothing, "", "<p class=""note"">" & Server.HtmlEncode(Tr("Instructions T4 de l'ARC ({#0}) :", Annee)) & " <a href=""../Documents.aspx?doc=instructions-t4&amp;annee=" & Annee.ToString() & """ target=""_blank"" rel=""noopener"">" & Server.HtmlEncode(instructions.Txt("NomFichier")) & "</a></p>")
 
         ' Les colonnes suivent ce que l'année contient : une compagnie hors Québec n'a ni RRQ, ni RQAP, ni Relevé 1.
         Dim avecHorsQuebec = Contexte.HorsQuebec OrElse feuillets.Any(Function(x) CasesRPC.Any(Function(k) x.CaseT4(k) <> 0D))
@@ -54,7 +56,7 @@ Public Class PageFeuillets
         Dim ColonnesT4 = CasesT4.Where(Function(k) (avecHorsQuebec OrElse Not CasesRPC.Contains(k)) AndAlso (quebecAussi OrElse Not CasesQuebec.Contains(k))).ToArray()
         Dim ColonnesR1 = If(quebecAussi, CasesR1, New String() {})
 
-        Dim sb As New StringBuilder("<table class=""liste""><thead><tr><th rowspan=""2""></th><th rowspan=""2"">Employé</th>")
+        Dim sb As New StringBuilder("<table class=""liste""><thead><tr><th rowspan=""2"">Employé</th><th rowspan=""2""></th>")
         sb.Append("<th colspan=""").Append(ColonnesT4.Length).Append(""">T4 (cases)</th>")
         If ColonnesR1.Length > 0 Then sb.Append("<th colspan=""").Append(ColonnesR1.Length).Append(""">Relevé 1</th>")
         sb.Append("</tr><tr>")
@@ -68,12 +70,12 @@ Public Class PageFeuillets
 
         Dim totaux As New Dictionary(Of String, Decimal)()
         For Each f In feuillets
-            sb.Append("<tr>").Append(BoutonsLigne(f, envois)).Append("<td>").Append(HttpUtility.HtmlEncode(f.NomComplet))
+            sb.Append("<tr><td>").Append(HttpUtility.HtmlEncode(f.NomComplet))
             If f.ContientCumulatifsDepart Then sb.Append("<div class=""note"">inclut des cumulatifs de départ</div>")
             If f.DeuxProvinces Then
                 sb.Append("<div class=""note"">").Append(HttpUtility.HtmlEncode(String.Format("payé dans plus d'une province ({0}) : un T4 par province", String.Join(", ", f.ProvincesEmploi)))).Append("</div>")
             End If
-            sb.Append("</td>")
+            sb.Append("</td>").Append(BoutonsLigne(f, envois))
             For Each c In ColonnesT4
                 Cellule(sb, totaux, "T4" & c, f.CaseT4(c))
             Next
@@ -83,7 +85,7 @@ Public Class PageFeuillets
             sb.Append("</tr>")
         Next
 
-        sb.Append("</tbody><tfoot><tr><td></td><td>Total (").Append(feuillets.Count).Append(If(feuillets.Count > 1, " feuillets)", " feuillet)")).Append("</td>")
+        sb.Append("</tbody><tfoot><tr><td>Total (").Append(feuillets.Count).Append(If(feuillets.Count > 1, " feuillets)", " feuillet)")).Append("</td><td></td>")
         For Each c In ColonnesT4
             sb.Append("<td class=""num"">").Append(Argent(Total(totaux, "T4" & c))).Append("</td>")
         Next
@@ -183,7 +185,7 @@ Public Class PageFeuillets
         Dim vus As New HashSet(Of String)()
         For Each proprietaire In {Contexte.CompagnieId, FormulaireOfficiel.Plateforme}
             For Each r As DataRow In Db.Table("paie.spFormulaireFeuillet_Liste", Db.P("@c", proprietaire)).Rows
-                If r.Ent("Annee") <> Annee OrElse Not vus.Add(r.Txt("Type")) Then Continue For
+                If r.Ent("Annee") <> Annee OrElse r.Txt("Type") = FormulaireOfficiel.TypeInstructionsT4 OrElse Not vus.Add(r.Txt("Type")) Then Continue For
                 Dim libelle = If(r.Txt("Type") = FormulaireOfficiel.TypeT4, "T4", "Relevé 1")
                 types.Add(If(proprietaire = FormulaireOfficiel.Plateforme, libelle & " (plateforme)", libelle))
             Next
@@ -201,7 +203,7 @@ Public Class PageFeuillets
         Return d
     End Function
 
-    ''' <summary>La première cellule d'une ligne : le lien « Feuillet », les boutons T4, Relevé 1 (dans la copie choisie) et Courriel de l'employé, et la date du dernier envoi.</summary>
+    ''' <summary>La cellule d'actions d'une ligne (après le nom) : le lien « Feuillet », les boutons T4, Relevé 1 (dans la copie choisie) et Courriel de l'employé, et la date du dernier envoi.</summary>
     Private Function BoutonsLigne(f As Feuillet, envois As Dictionary(Of Integer, Date)) As String
         Dim id = f.Employe.Ent("Id").ToString()
         Dim base = "Feuillets.aspx?annee=" & Annee.ToString() & "&amp;employe=" & id & "&amp;copie=" & HttpUtility.HtmlAttributeEncode(ddlCopie.SelectedValue) & "&amp;pdf="

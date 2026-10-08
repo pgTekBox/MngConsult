@@ -48,6 +48,8 @@ Public NotInheritable Class FormulaireOfficiel
 
     Public Const TypeT4 As String = "T4"
     Public Const TypeR1 As String = "R1"
+    ''' <summary>Les instructions T4 de l'ARC (document par année, téléversé dans la console d'administration, servi tel quel).</summary>
+    Public Const TypeInstructionsT4 As String = "TI"
 
     ''' <summary>Pages du Relevé 1 : copie 1 Revenu Québec, copie 2 employé, copie 3 employeur.</summary>
     Private Const PageR1Gouvernement As Integer = 0
@@ -91,6 +93,11 @@ Public NotInheritable Class FormulaireOfficiel
     ''' Les formulaires de l'année : ceux de la compagnie courante, et à défaut de chacun, ceux de la plateforme
     ''' (téléversés dans la console Sec60Admin pour toutes les compagnies). Disponible = False s'il n'y a pas de T4.
     ''' </summary>
+    ''' <summary>Les instructions T4 de l'ARC de l'année (NomFichier, Contenu, TeleverseLe), ou Nothing : document de la plateforme, offert à toutes les compagnies.</summary>
+    Public Shared Function InstructionsT4(annee As Integer) As DataRow
+        Return Db.Ligne("paie.spFormulaireFeuillet_Get", Db.P("@c", Plateforme), Db.P("@a", annee), Db.P("@type", TypeInstructionsT4))
+    End Function
+
     Public Shared Function Charger(annee As Integer) As FormulairesAnnee
         Dim f As New FormulairesAnnee With {.Annee = annee}
         For Each c In {Contexte.CompagnieId, Plateforme}

@@ -16,6 +16,7 @@ Partial Public Class PageFeuillets
     Protected WithEvents btnCourriels As Global.System.Web.UI.WebControls.Button
     Protected WithEvents chkRenvoyer As Global.System.Web.UI.WebControls.CheckBox
     Protected WithEvents litFormulaires As Global.System.Web.UI.WebControls.Literal
+    Protected WithEvents litInstructions As Global.System.Web.UI.WebControls.Literal
     Protected WithEvents hidEmploye As Global.System.Web.UI.WebControls.HiddenField
     Protected WithEvents btnCourrielUn As Global.System.Web.UI.WebControls.Button
 End Class

@@ -122,7 +122,7 @@ SELECT @@SERVERNAME AS Serveur, DB_NAME() AS Base, SUSER_SNAME() AS Compte,
     }
     elseif ($Action -eq 'Schema') {
         # Tous les scripts numérotés, dans l'ordre : 01_schema, 02_parametres_annee, 03_unites_cnesst…
-        foreach ($script in Get-ChildItem -Path $PSScriptRoot -Filter '0?_*.sql' | Sort-Object Name) { Invoke-Script $cn $script.FullName }
+        foreach ($script in Get-ChildItem -Path $PSScriptRoot -Filter '*.sql' | Where-Object { $_.Name -match '^\d\d_' } | Sort-Object Name) { Invoke-Script $cn $script.FullName }
         Write-Output 'Schéma paie déployé.'
     }
 }

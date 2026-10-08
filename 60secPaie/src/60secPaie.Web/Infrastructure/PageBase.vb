@@ -97,11 +97,11 @@ Public Class PageBase
 
     ' ---------- Fichiers ----------
 
-    ''' <summary>Envoie un fichier en téléchargement et termine la requête.</summary>
-    Protected Sub EnvoyerFichier(nomFichier As String, contenu As Byte(), typeMime As String)
+    ''' <summary>Envoie un fichier en téléchargement (ou, enLigne, à afficher dans le navigateur) et termine la requête.</summary>
+    Protected Sub EnvoyerFichier(nomFichier As String, contenu As Byte(), typeMime As String, Optional enLigne As Boolean = False)
         Response.Clear()
         Response.ContentType = typeMime
-        Response.AddHeader("Content-Disposition", "attachment; filename=""" & nomFichier.Replace("""", "") & """")
+        Response.AddHeader("Content-Disposition", If(enLigne, "inline", "attachment") & "; filename=""" & nomFichier.Replace("""", "") & """")
         Response.AddHeader("Cache-Control", "no-store")
         Response.BinaryWrite(contenu)
         Response.End()

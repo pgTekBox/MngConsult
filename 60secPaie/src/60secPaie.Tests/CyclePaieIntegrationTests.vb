@@ -32,7 +32,7 @@ Public Class CyclePaieIntegrationTests
         ' de USE : ils s'exécutent dans la base d'essai. 04 (assistant IA) écrit dans une table de MngConsul qui n'a
         ' pas de réplique ici : il n'est pas rejoué.
         Dim baseEssai = Maitre.Replace("Initial Catalog=master", "Initial Catalog=" & BaseTest)
-        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql", "07_procedures.sql", "08_feuillets.sql", "09_formulaires.sql"}
+        For Each script In {"02_parametres_annee.sql", "03_unites_cnesst.sql", "05_ontario.sql", "06_provinces.sql", "07_procedures.sql", "08_feuillets.sql", "09_formulaires.sql", "10_instructions_t4.sql"}
             ExecuterLots(baseEssai, File.ReadAllText(Path.Combine(racine, "Database", script)))
         Next
     End Sub
