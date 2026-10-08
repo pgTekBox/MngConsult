@@ -225,6 +225,11 @@ mark{background:#ffe89a}
   <li>El resultado de una acción se muestra en una ventana en el centro de la pantalla: « Hecho » (verde) cuando tuvo éxito, « Error » (rojo) cuando falló, con la explicación. « OK », la tecla Escape o un clic al lado la cierran. Después de una redirección, el mensaje se muestra una vez en la página siguiente.</li>
   <li>Las exportaciones CSV usan el punto y coma y la codificación UTF-8 con BOM: se abren directamente en Excel. Los montos están en formato « 0,00 ».</li>
   <li>El botón « Imprimir » usa la impresión del navegador; el encabezado, el menú y los botones no se imprimen.</li>
+  <li>Antes de una acción que envía, retira o no se puede deshacer (envío de talones o comprobantes por correo electrónico, retiro de un formulario oficial, anulación de una nómina…), una ventana « Confirmer » hace la pregunta con « Annuler » y « OK »; nada sale mientras no se haga clic en « OK ». Escape cancela.</li>
+  <li>Una descarga (PDF, CSV, archivo de depósito directo) llega a la carpeta de descargas del navegador, con un nombre que dice lo que contiene: « Feuillets-AAAA-Nombre-Apellido.pdf », « T4-AAAA-employeur.pdf », « Releve-1-AAAA-employeur.pdf », « feuillets-AAAA.csv ». Un documento para consultar (instrucciones T4 de la CRA) se abre en cambio en una pestaña nueva.</li>
+  <li>En una tabla, los botones pequeños de una línea (« T4 », « Relevé 1 », « Courriel », « Feuillet ») actúan solo sobre esa línea; los botones encima de la tabla actúan sobre todas las líneas del año o de la nómina elegida. Una nota gris bajo una celda (« enviado por correo electrónico el [fecha] », « incluye acumulados iniciales ») completa la línea sin cambiarla.</li>
+  <li>Las listas desplegables que eligen un año o una copia (« Copia para descargar ») recargan la página de inmediato: los botones y los enlaces lo tienen en cuenta.</li>
+  <li>Las acciones sensibles (visualización del NAS completo, descarga de comprobantes, envío de comprobantes, carga o retiro de un formulario) quedan registradas en el diario de actividad con la fecha y el usuario.</li>
 </ul>
 <h4>Estados de una nómina</h4>
 <table>

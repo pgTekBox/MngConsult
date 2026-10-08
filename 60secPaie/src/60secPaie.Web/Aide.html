@@ -225,6 +225,11 @@ mark{background:#ffe89a}
   <li>Le résultat d'une action s'affiche dans une fenêtre au centre de l'écran : « Fait » (vert) quand elle a réussi, « Erreur » (rouge) quand elle a échoué, avec l'explication. « OK », la touche Échap ou un clic à côté la ferment. Après une redirection, le message s'affiche une fois sur la page suivante.</li>
   <li>Les exports CSV utilisent le point-virgule et l'encodage UTF-8 avec BOM : ils s'ouvrent directement dans Excel. Les montants y sont au format « 0,00 ».</li>
   <li>Le bouton « Imprimer » utilise l'impression du navigateur ; l'en-tête, le menu et les boutons ne s'impriment pas.</li>
+  <li>Avant une action qui envoie, retire ou ne se reprend pas (envoi des talons ou des feuillets par courriel, retrait d'un formulaire officiel, annulation d'une paie…), une fenêtre « Confirmer » pose la question avec « Annuler » et « OK » ; rien ne part tant que « OK » n'est pas cliqué. Échap annule.</li>
+  <li>Un téléchargement (PDF, CSV, fichier de dépôt direct) arrive dans le dossier des téléchargements du navigateur, avec un nom qui dit ce qu'il contient : « Feuillets-AAAA-Nom-Prenom.pdf », « T4-AAAA-employeur.pdf », « Releve-1-AAAA-employeur.pdf », « feuillets-AAAA.csv ». Un document à consulter (instructions T4 de l'ARC) s'ouvre plutôt dans un nouvel onglet.</li>
+  <li>Dans un tableau, les petits boutons d'une ligne (« T4 », « Relevé 1 », « Courriel », « Feuillet ») n'agissent que sur cette ligne ; les boutons au-dessus du tableau agissent sur toutes les lignes de l'année ou de la paie choisie. Une note grise sous une cellule (« envoyé par courriel le [date] », « inclut des cumulatifs de départ ») complète la ligne sans la changer.</li>
+  <li>Les listes déroulantes qui choisissent une année ou une copie (« Copie à télécharger ») rechargent la page aussitôt : les boutons et les liens en tiennent compte.</li>
+  <li>Les actions sensibles (affichage du NAS complet, téléchargement de feuillets, envoi de feuillets, téléversement ou retrait d'un formulaire) sont inscrites au journal d'activité avec la date et l'utilisateur.</li>
 </ul>
 <h4>Statuts d'une paie</h4>
 <table>
