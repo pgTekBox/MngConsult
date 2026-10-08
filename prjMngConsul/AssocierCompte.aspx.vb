@@ -53,10 +53,27 @@ Public Class AssocierCompte
 
 #Region "Cycle de vie"
 
+    ''' <summary>Dans une fenêtre par-dessus une autre page (?popup=1) : ni menu, ni en-tête, ni fil des étapes ; un bouton Fermer.</summary>
+    Private ReadOnly Property EnFenetre As Boolean
+        Get
+            Return Request.QueryString("popup") = "1"
+        End Get
+    End Property
+
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
         If Not isAuthenticated Then
             Response.Redirect("~/wbfLogin.aspx")
             Return
+        End If
+        If EnFenetre Then
+            ucEtapes.Visible = False
+            btnFermer.Visible = True
+            litPopupCss.Text = "<style>" &
+                ".mc-sidebar, .mc-app > *:not(.mc-shell), .ia-flottant { display: none !important }" &
+                ".mc-shell, .mc-maincol { padding: 0 !important; margin: 0 !important; display: block !important }" &
+                ".mc-mainwrap { margin: 0 !important; padding: 0 !important; border: 0 !important; box-shadow: none !important; border-radius: 0 !important }" &
+                ".asc-page { max-width: none; padding: 10px 16px 16px }" &
+                "</style>"
         End If
         If Not IsPostBack Then Charger()
     End Sub
@@ -371,6 +388,7 @@ Public Class AssocierCompte
             Dim stats = PremiereLigne(ExecuteSQLds("s0757SaveCorrespondances", p))
             Dim reste As String = If(stats Is Nothing, "", " Il reste " & Convert.ToString(stats("ADecider")) & " compte(s) à décider.")
             Alerte("Fait", If(creer, "« " & nomSrc & " » sera créé au plan à l'étape 3.", "« " & nomSrc & " » est lié au compte " & choix & " de 60secondes.") & reste)
+            ClientScript.RegisterStartupScript(Me.GetType(), "fenModifie", "try { if (window.parent && window.parent !== window) window.parent.fenModifie = true; } catch (e) { }", True)
             Charger()
         Catch ex As SqlException
             Alerte("Enregistrement impossible", ex.Message)

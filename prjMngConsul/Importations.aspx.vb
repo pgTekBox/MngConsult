@@ -999,7 +999,10 @@ Public Class Importations
             End If
 
             ' ── L'accès ─────────────────────────────────────────────────────
-            If cliquable Then
+            If cliquable AndAlso p.Page.EndsWith("AssocierCompte.aspx", StringComparison.OrdinalIgnoreCase) Then
+                ' Un compte à la fois : dans une fenêtre par-dessus cette page, pour revenir aux cartes à jour.
+                sb.Append("<a class='ouvrir' href='").Append(ResolveUrl(p.Page)).Append("' onclick=""ouvrirFenetre('").Append(ResolveUrl(p.Page)).Append("?popup=1', 'Associer un compte du plan comptable'); return false;"">Ouvrir →</a>")
+            ElseIf cliquable Then
                 sb.Append("<a class='ouvrir' href='").Append(ResolveUrl(p.Page)).Append("'>Ouvrir →</a>")
             Else
                 sb.Append("<span class='absent'>Écran non construit</span>")

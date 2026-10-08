@@ -30,4 +30,8 @@ Partial Public Class AssocierCompte
     Protected WithEvents litFin As Global.System.Web.UI.WebControls.Literal
 
     Protected WithEvents btnReprendre As Global.System.Web.UI.WebControls.Button
+
+    Protected WithEvents btnFermer As Global.System.Web.UI.WebControls.Button
+
+    Protected WithEvents litPopupCss As Global.System.Web.UI.WebControls.Literal
 End Class

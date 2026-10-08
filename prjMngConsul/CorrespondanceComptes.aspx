@@ -195,6 +195,7 @@
                 <asp:Button ID="btnAccepter" runat="server" CssClass="btn btn-s" CausesValidation="false"
                     Text="Accepter les correspondances par numéro"
                     OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
+                <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">🤝 Associer un par un</button>
             </div>
         </div>
 
@@ -673,4 +674,37 @@
     })();
 
 </script>
+    <!-- La fenêtre par-dessus la grille : « Associer un par un », un compte à la fois. -->
+    <style>
+        .fen-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000; display: none; align-items: center; justify-content: center; padding: 20px }
+        .fen-voile.ouvert { display: flex }
+        .fen-boite { width: min(980px, 100%); height: min(92vh, 100%); background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(15,23,42,.35); display: flex; flex-direction: column; overflow: hidden }
+        .fen-boite .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; background: #f8fafc }
+        .fen-boite .barre b { flex: 1; font-size: 14px; color: #0f172a }
+        .fen-boite .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0f172a; font-weight: 700 }
+        .fen-boite iframe { flex: 1; border: 0; width: 100% }
+    </style>
+    <div class="fen-voile" id="fenVoile" onclick="if (event.target === this) fermerFenetre();">
+        <div class="fen-boite" role="dialog" aria-modal="true" aria-labelledby="fenTitre">
+            <div class="barre"><b id="fenTitre"></b><button type="button" onclick="fermerFenetre()">Fermer ✕</button></div>
+            <iframe id="fenCadre" title="Fenêtre"></iframe>
+        </div>
+    </div>
+    <script type="text/javascript">
+        window.fenModifie = false;
+        function ouvrirFenetre(url, titre) {
+            document.getElementById('fenTitre').textContent = titre || '';
+            document.getElementById('fenCadre').setAttribute('src', url);
+            document.getElementById('fenVoile').classList.add('ouvert');
+            document.body.style.overflow = 'hidden';
+        }
+        function fermerFenetre() {
+            document.getElementById('fenVoile').classList.remove('ouvert');
+            document.getElementById('fenCadre').removeAttribute('src');
+            document.body.style.overflow = '';
+            // Une décision prise dans la fenêtre doit se voir dans la grille : on la recharge (sans renvoyer le formulaire).
+            if (window.fenModifie) { window.fenModifie = false; window.location.href = window.location.pathname + window.location.search; }
+        }
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fermerFenetre(); });
+    </script>
 </asp:Content>

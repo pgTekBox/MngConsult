@@ -190,33 +190,44 @@
             <b>Plan de reprise d'une comptabilité QuickBooks</b>
             <span>Fermeture au 31 décembre, rejeu de toutes les transactions de 2026 — la méthode, étape par étape, et l'état du code pour chacune.</span>
         </div>
-        <button type="button" onclick="ouvrirPlan()">Lire le plan</button>
+        <button type="button" onclick="ouvrirFenetre('PlanReprise.html', 'Plan de reprise d'une comptabilité QuickBooks')">Lire le plan</button>
         <a href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
     </div>
 
-    <div class="plan-voile" id="planVoile" onclick="if (event.target === this) fermerPlan();">
+    <div class="plan-voile" id="planVoile" onclick="if (event.target === this) fermerFenetre();">
         <div class="plan-fen" role="dialog" aria-modal="true" aria-label="Plan de reprise">
             <div class="barre">
-                <b>Plan de reprise d'une comptabilité QuickBooks</b>
-                <a href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
-                <button type="button" onclick="fermerPlan()">Fermer ✕</button>
+                <b id="planTitre">Plan de reprise d'une comptabilité QuickBooks</b>
+                <a id="planOnglet" href="PlanReprise.html" target="_blank">ouvrir dans un onglet</a>
+                <button type="button" onclick="fermerFenetre()">Fermer ✕</button>
             </div>
             <iframe id="planCadre" title="Plan de reprise"></iframe>
         </div>
     </div>
 
     <script type="text/javascript">
-        function ouvrirPlan() {
+        window.fenModifie = false;
+        // Une seule fenêtre pour le plan de reprise et pour « Associer les comptes, un par un ».
+        function ouvrirFenetre(url, titre) {
             var cadre = document.getElementById('planCadre');
-            if (!cadre.getAttribute('src')) cadre.setAttribute('src', 'PlanReprise.html');
+            cadre.setAttribute('src', url);
+            document.getElementById('planTitre').textContent = titre || '';
+            var onglet = document.getElementById('planOnglet');
+            onglet.setAttribute('href', url.replace('?popup=1', ''));
+            onglet.style.display = (url.indexOf('popup=1') >= 0) ? 'none' : '';
             document.getElementById('planVoile').classList.add('ouvert');
             document.body.style.overflow = 'hidden';
         }
-        function fermerPlan() {
+        function ouvrirPlan() { ouvrirFenetre('PlanReprise.html', 'Plan de reprise d\x27une comptabilité QuickBooks'); }
+        function fermerFenetre() {
             document.getElementById('planVoile').classList.remove('ouvert');
+            document.getElementById('planCadre').removeAttribute('src');
             document.body.style.overflow = '';
+            // Une décision prise dans la fenêtre change les notes des cartes : on recharge la page.
+            if (window.fenModifie) { window.fenModifie = false; window.location.href = window.location.pathname; }
         }
-        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fermerPlan(); });
+        function fermerPlan() { fermerFenetre(); }
+        document.addEventListener('keydown', function (e) { if (e.key === 'Escape') fermerFenetre(); });
     </script>
 
     <div class="bilan">

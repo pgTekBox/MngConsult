@@ -76,6 +76,7 @@
     .asc-fin .liens { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
     .asc-fin a.asc-btn { text-decoration: none; display: inline-block }
 </style>
+<asp:Literal ID="litPopupCss" runat="server" />
 </asp:Content>
 
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
@@ -87,7 +88,7 @@
         <div>
             <h1>Associer un compte du plan comptable</h1>
             <div class="sub">Étape 2, un compte à la fois : l'assistant propose, vous décidez.
-                <a href="CorrespondanceComptes.aspx">Voir la grille complète</a></div>
+                <a href="CorrespondanceComptes.aspx" target="_top">Voir la grille complète</a></div>
         </div>
     </div>
 
@@ -117,8 +118,9 @@
         <asp:Literal ID="litFin" runat="server" />
         <div class="liens">
             <asp:Button ID="btnReprendre" runat="server" CssClass="asc-btn" Text="Reprendre les comptes reportés" CausesValidation="false" Visible="false" />
-            <a class="asc-btn" href="CorrespondanceComptes.aspx">Voir la grille de l'étape 2</a>
-            <a class="asc-btn primaire" href="AppliquerPlanComptable.aspx">Créer les comptes au plan →</a>
+            <a class="asc-btn" href="CorrespondanceComptes.aspx" target="_top">Voir la grille de l'étape 2</a>
+            <a class="asc-btn primaire" href="AppliquerPlanComptable.aspx" target="_top">Créer les comptes au plan →</a>
+            <asp:Button ID="btnFermer" runat="server" CssClass="asc-btn" Text="Fermer" Visible="false" CausesValidation="false" OnClientClick="ascFermer(); return false;" />
         </div>
     </asp:Panel>
 </div>
@@ -144,6 +146,11 @@
             return false;
         }
         return true;
+    }
+    function ascFermer() {
+        // Dans la fenêtre par-dessus la grille ou le centre d'importation : c'est le parent qui ferme et se rafraîchit.
+        try { if (window.parent && window.parent !== window && window.parent.fermerFenetre) { window.parent.fermerFenetre(); return; } } catch (e) { }
+        window.location.href = 'CorrespondanceComptes.aspx';
     }
     document.addEventListener('DOMContentLoaded', function () {
         var coche = document.querySelector('input[name="cible"]:checked');
