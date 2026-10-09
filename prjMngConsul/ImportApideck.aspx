@@ -275,7 +275,11 @@
 
             if (!fini) {
                 titre.textContent = 'Extraction en cours… ' + part + ' %';
-                msg.innerHTML = '';
+                // Pendant une longue ressource — les pièces jointes, un appel par document —
+                // la jauge ne bouge pas : le signe de vie dit où en est la lecture.
+                msg.innerHTML = e.progression
+                    ? "<div class='msg info'>" + h(e.progression) + (e.signe ? " <span style='color:#94a3b8'>(signe de vie à " + h(e.signe) + ")</span>" : "") + "</div>"
+                    : '';
                 pied.textContent = "Vous pouvez fermer cette fenêtre : l'extraction continue, et le bloc 3 la suit.";
             } else if (e.statut === 'ECHEC' || e.statut === 'INTERROMPUE') {
                 titre.textContent = "Extraction arrêtée avant la fin";
@@ -303,7 +307,7 @@
                         "<span class='cle'>" + h(l.cle) + "</span></span><span class='nb'>" + nombre(l.nb) + "</span></li>";
             });
             if (!fini) {
-                html += "<li class='attente'><span class='ico'>…</span><span class='lib'>lecture de la ressource suivante</span><span class='nb'></span></li>";
+                html += "<li class='attente'><span class='ico'>…</span><span class='lib'>" + (e.progression ? h(e.progression) : "lecture de la ressource suivante") + "</span><span class='nb'></span></li>";
             }
             liste.innerHTML = html;
 
@@ -330,7 +334,8 @@
             if (!fini) {
                 html += "<div class='msg info'>Extraction en cours : " + e.lues + " ressource(s) sur " + demandees +
                         " lue(s), " + nombre(e.total) + " enregistrement(s) déposés jusqu'ici. " +
-                        "Vous pouvez quitter la page, l'extraction continue.</div>";
+                        "Vous pouvez quitter la page, l'extraction continue." +
+                        (e.progression ? "<br>" + h(e.progression) + (e.signe ? " <span style='color:#94a3b8'>(signe de vie à " + h(e.signe) + ")</span>" : "") : "") + "</div>";
             } else {
                 var genre = (e.echecs === 0 && e.statut === 'TERMINE') ? 'ok' : 'err';
                 html += "<div class='msg " + genre + "'><b>Extraction du " + h(e.debut) + "</b> — " + nombre(e.total) + " enregistrement(s) déposés en préparation, sur " +

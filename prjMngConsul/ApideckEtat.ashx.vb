@@ -9,7 +9,8 @@ Imports System.Web.SessionState
 ''' être celle de la compagnie de la session : s0895 ne rend rien sinon.
 '''
 '''   GET ApideckEtat.ashx?run=N   → { statut, debut, fin, demandees, lues,
-'''                                    reussies, echecs, total, note, lignes: [...] }
+'''                                    reussies, echecs, total, note,
+'''                                    signe, progression, lignes: [...] }
 ''' </summary>
 Public Class ApideckEtatHandler
     Implements IHttpHandler, IReadOnlySessionState
@@ -84,6 +85,8 @@ Public Class ApideckEtatHandler
                 .echecs = echecs,
                 .total = total,
                 .note = If(IsDBNull(r("Note")), "", Convert.ToString(r("Note"))),
+                .signe = If(IsDBNull(r("Signe")), "", Convert.ToDateTime(r("Signe")).ToString("HH:mm:ss")),
+                .progression = If(IsDBNull(r("Progression")), "", Convert.ToString(r("Progression"))),
                 .lignes = lignes
             }))
 

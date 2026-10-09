@@ -143,6 +143,17 @@ Public Class ApideckExtraction
     Public Property MoisParPeriode As Integer = 3
 
     ''' <summary>
+    ''' Le jeton d'arrêt du serveur, quand l'extraction tourne en arrière-plan :
+    ''' entre deux ressources et entre deux documents, le moteur le consulte et,
+    ''' s'il est levé, ferme l'extraction en INTERROMPUE au lieu de mourir en
+    ''' silence — la fenêtre restait figée à 89 % jusqu'à la règle des dix minutes.
+    ''' </summary>
+    Public Property Annulation As Threading.CancellationToken = Threading.CancellationToken.None
+
+    ''' <summary>L'extraction en cours, pour les signes de vie (s0898).</summary>
+    Private runCourant As Integer
+
+    ''' <summary>
     ''' Ce que le moteur demande à qui l'héberge : la compagnie, l'utilisateur
     ''' et la base. Une page le fournit depuis sa session ; l'extraction en
     ''' arrière-plan, qui n'a plus de session, le fournit depuis ce qu'on lui
@@ -362,13 +373,21 @@ Public Class ApideckExtraction
 
         Dim api As New clsApideck(hote.Company.ToString())
         Dim res As New Resultat With {.RunId = If(runId > 0, runId, OuvrirRun())}
+        runCourant = res.RunId
         Dim total As Integer = 0
+        Dim rang As Integer = 0
 
         For Each r As Ressource In choisies
             ' QuickBooks plafonne les appels simultanés par société et répond 403
             ' au-delà. Une courte pause entre les ressources vaut mieux que de
             ' compter sur les réessais.
             If total > 0 Then Threading.Thread.Sleep(600)
+            rang += 1
+            If Annulation.IsCancellationRequested Then Return Interrompre(res, choisies.Count)
+
+            ' Un signe de vie à chaque ressource : la fenêtre de suivi dit laquelle
+            ' est en lecture, et la règle d'interruption sait que ça tourne encore.
+            Signer("Lecture de « " & r.Libelle & " » (ressource " & rang & " sur " & choisies.Count & ")…")
 
             Dim ligne As New LigneResultat With {.Ressource = r}
 
@@ -386,6 +405,8 @@ Public Class ApideckExtraction
 
                 total += ligne.Nb
 
+            Catch ex As OperationCanceledException
+                Return Interrompre(res, choisies.Count)
             Catch ex As Exception
                 ligne.Erreur = ex.Message
             End Try
@@ -431,6 +452,7 @@ Public Class ApideckExtraction
         System.Web.Hosting.HostingEnvironment.QueueBackgroundWorkItem(
             Sub(ct As Threading.CancellationToken)
                 Try
+                    fond.Annulation = ct
                     fond.Importer(liste, runId)
                 Catch ex As Exception
                     Try
@@ -1097,7 +1119,16 @@ Public Class ApideckExtraction
 
         If sources Is Nothing OrElse sources.Rows.Count = 0 Then Return tout
 
+        Dim parcouru As Integer = 0
         For Each s As DataRow In sources.Rows
+            parcouru += 1
+            ' Sept cents appels, rien d'écrit avant la fin : sans signe, la fenêtre
+            ' de suivi restait figée. Un signe tous les dix documents, et l'arrêt
+            ' du serveur est pris entre deux documents, pas après le dernier.
+            Annulation.ThrowIfCancellationRequested()
+            If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
+                Signer("Pièces jointes : document " & parcouru & " sur " & sources.Rows.Count & " interrogé…")
+            End If
             Dim genre As String = Convert.ToString(s("Genre"))
             Dim docId As String = Convert.ToString(s("ExterneId"))
             If genre = "" OrElse docId = "" Then Continue For
@@ -1287,7 +1318,12 @@ Public Class ApideckExtraction
         Dim refus As New Dictionary(Of String, String)
         Dim nb As Integer = 0, gardes As Integer = 0, echecs As Integer = 0, lies As Integer = 0
 
+        Dim parcouru As Integer = 0
         For Each pj As JToken In brut
+            parcouru += 1
+            If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
+                Signer("Pièces jointes de toutes les entités : fichier " & parcouru & " sur " & brut.Count & " téléchargé…")
+            End If
             Dim externe As String = Valeur(pj, "externe_id")
             Dim url As String = Valeur(pj, "url")
             Dim taille As Object = Nombre(Valeur(pj, "taille"))
@@ -3859,6 +3895,38 @@ Public Class ApideckExtraction
 
 
 #Region "La base"
+
+    ''' <summary>
+    ''' Un signe de vie en base (s0898) : l'heure, et où en est la lecture. La
+    ''' fenêtre de suivi l'affiche sous la jauge ; un raté ne doit rien casser.
+    ''' </summary>
+    Private Sub Signer(progression As String)
+        If runCourant <= 0 Then Return
+        Try
+            Dim texte As String = If(progression, "")
+            If texte.Length > 300 Then texte = texte.Substring(0, 300)
+            Dim p As New Collection
+            p.Add(New SqlParameter("@RunId", CObj(runCourant)))
+            p.Add(New SqlParameter("@CompanyGUID", hote.Company))
+            p.Add(New SqlParameter("@Progression", texte))
+            hote.ExecuteSQL("s0898SignerConnecteurRun", p)
+        Catch
+        End Try
+    End Sub
+
+    ''' <summary>
+    ''' Le serveur s'arrête : on ferme proprement en INTERROMPUE, avec ce qui a
+    ''' été lu. Ce qui est déposé reste en préparation ; l'écran dit de relancer.
+    ''' </summary>
+    Private Function Interrompre(res As Resultat, demandees As Integer) As Resultat
+        Dim note As String = "Le serveur s'est arrêté pendant l'extraction (" & res.Lignes.Count &
+                             " ressource(s) sur " & demandees & " lue(s)) : ce qui est déposé reste en préparation, relancez pour le reste."
+        Try
+            FermerRun(res.RunId, "INTERROMPUE", note, demandees, res.Echecs)
+        Catch
+        End Try
+        Return res
+    End Function
 
     Private Function OuvrirRun() As Integer
         Dim p As New Collection

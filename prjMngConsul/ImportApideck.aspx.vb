@@ -217,7 +217,7 @@ Public Class ImportApideck
     ''' <summary>
     ''' Le numéro de la dernière extraction de la compagnie (zéro s'il n'y en a
     ''' jamais eu), et si elle tourne encore — s0895 rend INTERROMPUE celle qui
-    ''' n'a plus donné signe de vie depuis trente minutes, et s0776 la soldera.
+    ''' n'a plus donné signe de vie depuis dix minutes (ressource lue, signe de vie ou début), et s0776 la soldera.
     ''' </summary>
     Private Function DerniereExtraction(ByRef enCours As Boolean) As Integer
         enCours = False
