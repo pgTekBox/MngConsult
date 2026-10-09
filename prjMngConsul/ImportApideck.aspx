@@ -268,13 +268,18 @@
             var liste = document.getElementById('extListe');
             var pied = document.getElementById('extPied');
 
+            // La ressource en cours compte pour sa part faite (document N sur M) :
+            // la jauge avance pendant les pièces jointes au lieu de rester à 89 %.
+            var sous = (!fini && e.sousTotal > 0) ? Math.min(1, e.sousFait / e.sousTotal) : 0;
             var part = demandees ? Math.round(100 * e.lues / demandees) : 0;
-            barre.style.width = (fini ? 100 : part) + '%';
+            var partFine = demandees ? Math.min(100, 100 * (e.lues + sous) / demandees) : 0;
+            barre.style.width = (fini ? 100 : partFine) + '%';
             jauge.className = 'ext-jauge' + (fini ? (ko.length || e.statut !== 'TERMINE' ? ' err' : ' fini') : '');
             compte.textContent = e.lues + ' sur ' + demandees + ' ressource(s) · ' + nombre(e.total) + ' enregistrement(s)';
 
             if (!fini) {
-                titre.textContent = 'Extraction en cours… ' + part + ' %';
+                titre.textContent = 'Extraction en cours… ' + Math.floor(partFine) + ' %' +
+                                    (e.sousTotal > 0 ? ' · ' + nombre(e.sousFait) + ' / ' + nombre(e.sousTotal) + ' (' + Math.round(100 * sous) + ' %)' : '');
                 // Pendant une longue ressource — les pièces jointes, un appel par document —
                 // la jauge ne bouge pas : le signe de vie dit où en est la lecture.
                 msg.innerHTML = e.progression

@@ -25,6 +25,11 @@ GO
 IF COL_LENGTH('staging.ConnecteurRun', 'Progression') IS NULL
     ALTER TABLE staging.ConnecteurRun ADD [Progression] NVARCHAR(300) NULL;
 GO
+-- La sous-progression en chiffres : la jauge avance DANS la ressource (le
+-- document N sur M), au lieu de rester à 89 % un quart d'heure.
+IF COL_LENGTH('staging.ConnecteurRun', 'SousFait') IS NULL
+    ALTER TABLE staging.ConnecteurRun ADD [SousFait] INT NULL, [SousTotal] INT NULL;
+GO
 
 -- -----------------------------------------------------------------------------
 -- s0898SignerConnecteurRun — un signe de vie : l'heure, et où en est la lecture.
@@ -33,14 +38,18 @@ GO
 CREATE OR ALTER PROCEDURE [dbo].[s0898SignerConnecteurRun]
     @RunId       INT,
     @CompanyGUID UNIQUEIDENTIFIER,
-    @Progression NVARCHAR(300) = NULL
+    @Progression NVARCHAR(300) = NULL,
+    @Fait        INT = NULL,
+    @Total       INT = NULL
 AS
 BEGIN
     SET NOCOUNT ON;
 
     UPDATE staging.ConnecteurRun
        SET [Signe] = GETDATE(),
-           [Progression] = @Progression
+           [Progression] = @Progression,
+           [SousFait]    = @Fait,
+           [SousTotal]   = @Total
      WHERE [Id] = @RunId
        AND [CompanyGUID] = @CompanyGUID
        AND [Statut] = 'EN_COURS';
@@ -78,7 +87,7 @@ BEGIN
                 THEN 'INTERROMPUE' ELSE r.[Statut] END AS [Statut],
            r.[Debut], r.[Fin],
            r.[NbRessources], r.[NbEnregistrements], r.[NbDemandees], r.[NbEchecs], r.[Note],
-           r.[Signe], r.[Progression]
+           r.[Signe], r.[Progression], r.[SousFait], r.[SousTotal]
       FROM staging.ConnecteurRun r
      WHERE r.[Id] = @Id;
 

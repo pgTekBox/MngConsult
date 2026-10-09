@@ -1127,7 +1127,7 @@ Public Class ApideckExtraction
             ' du serveur est pris entre deux documents, pas après le dernier.
             Annulation.ThrowIfCancellationRequested()
             If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
-                Signer("Pièces jointes : document " & parcouru & " sur " & sources.Rows.Count & " interrogé…")
+                Signer("Pièces jointes : document " & parcouru & " sur " & sources.Rows.Count & " interrogé…", parcouru, sources.Rows.Count)
             End If
             Dim genre As String = Convert.ToString(s("Genre"))
             Dim docId As String = Convert.ToString(s("ExterneId"))
@@ -1322,7 +1322,7 @@ Public Class ApideckExtraction
         For Each pj As JToken In brut
             parcouru += 1
             If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
-                Signer("Pièces jointes de toutes les entités : fichier " & parcouru & " sur " & brut.Count & " téléchargé…")
+                Signer("Pièces jointes de toutes les entités : fichier " & parcouru & " sur " & brut.Count & " téléchargé…", parcouru, brut.Count)
             End If
             Dim externe As String = Valeur(pj, "externe_id")
             Dim url As String = Valeur(pj, "url")
@@ -3900,7 +3900,7 @@ Public Class ApideckExtraction
     ''' Un signe de vie en base (s0898) : l'heure, et où en est la lecture. La
     ''' fenêtre de suivi l'affiche sous la jauge ; un raté ne doit rien casser.
     ''' </summary>
-    Private Sub Signer(progression As String)
+    Private Sub Signer(progression As String, Optional fait As Integer = 0, Optional total As Integer = 0)
         If runCourant <= 0 Then Return
         Try
             Dim texte As String = If(progression, "")
@@ -3909,6 +3909,8 @@ Public Class ApideckExtraction
             p.Add(New SqlParameter("@RunId", CObj(runCourant)))
             p.Add(New SqlParameter("@CompanyGUID", hote.Company))
             p.Add(New SqlParameter("@Progression", texte))
+            p.Add(New SqlParameter("@Fait", If(total > 0, CObj(fait), CObj(DBNull.Value))))
+            p.Add(New SqlParameter("@Total", If(total > 0, CObj(total), CObj(DBNull.Value))))
             hote.ExecuteSQL("s0898SignerConnecteurRun", p)
         Catch
         End Try
