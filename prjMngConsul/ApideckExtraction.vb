@@ -1349,9 +1349,10 @@ Public Class ApideckExtraction
     ''' <summary>
     ''' Verse les pièces de la passerelle, et TÉLÉCHARGE chaque fichier pendant
     ''' que l'adresse de QuickBooks est encore valide — elle expire en quelques
-    ''' minutes, c'est maintenant ou jamais. Une pièce à la fois vers la base,
-    ''' parce que le fichier voyage en binaire, pas en JSON. Une pièce attachée
-    ''' à plusieurs entités n'est téléchargée qu'une fois.
+    ''' minutes, c'est maintenant ou jamais. Les fichiers se téléchargent quatre
+    ''' à la fois, puis les pièces vont une à une vers la base, parce que le
+    ''' fichier voyage en binaire, pas en JSON. Une pièce attachée à plusieurs
+    ''' entités n'est téléchargée qu'une fois.
     '''
     ''' Un téléchargement refusé ne fait pas échouer la ressource : la ligne
     ''' garde son nom, son adresse et l'anomalie, et se relira la prochaine fois.
@@ -1365,15 +1366,82 @@ Public Class ApideckExtraction
         pv.Add(New SqlParameter("@CompanyGUID", hote.Company))
         hote.ExecuteSQLds("s0835ViderPiecesJointesPasserelle", pv)
 
+        ' 1) Les téléchargements, quatre à la fois : un fichier par pièce
+        '    distincte (une pièce attachée à plusieurs entités n'est prise qu'une
+        '    fois), pendant que l'adresse de QuickBooks est encore valide.
         Dim cache As New Dictionary(Of String, Byte())
         Dim refus As New Dictionary(Of String, String)
-        Dim nb As Integer = 0, gardes As Integer = 0, echecs As Integer = 0, lies As Integer = 0
-
-        Dim parcouru As Integer = 0
+        Dim aPrendre As New List(Of KeyValuePair(Of String, String))
+        Dim vus As New HashSet(Of String)
         For Each pj As JToken In brut
-            parcouru += 1
-            If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
-                Signer("Pièces jointes de toutes les entités : fichier " & parcouru & " sur " & brut.Count & " téléchargé…", parcouru, brut.Count)
+            Dim externe As String = Valeur(pj, "externe_id")
+            Dim url As String = Valeur(pj, "url")
+            Dim taille As Object = Nombre(Valeur(pj, "taille"))
+            If url = "" OrElse vus.Contains(externe) Then Continue For
+            vus.Add(externe)
+            If taille IsNot Nothing AndAlso CDec(taille) > PLAFOND_PIECE Then Continue For
+            aPrendre.Add(New KeyValuePair(Of String, String)(externe, url))
+        Next
+
+        Dim total As Integer = aPrendre.Count + brut.Count
+        Dim suivant As Integer = -1
+        Dim faits As Integer = 0
+        Dim arret As Boolean = False
+        Dim verrou As New Object()
+        Dim travail As Threading.ThreadStart =
+            Sub()
+                Do
+                    If arret OrElse Annulation.IsCancellationRequested Then Exit Do
+                    Dim i As Integer = Threading.Interlocked.Increment(suivant)
+                    If i >= aPrendre.Count Then Exit Do
+                    Dim externe As String = aPrendre(i).Key
+                    Try
+                        Dim contenu As Byte() = Telecharger(aPrendre(i).Value)
+                        SyncLock verrou
+                            cache(externe) = contenu
+                        End SyncLock
+                    Catch ex As Exception
+                        SyncLock verrou
+                            refus(externe) = "Téléchargement refusé : " & ex.Message
+                        End SyncLock
+                    End Try
+                    Threading.Interlocked.Increment(faits)
+                Loop
+            End Sub
+
+        Dim fils As New List(Of Threading.Thread)
+        For k As Integer = 1 To Math.Min(FILS_PIECES_JOINTES, aPrendre.Count)
+            Dim t As New Threading.Thread(travail) With {.IsBackground = True, .Name = "Attachables" & k}
+            t.Start()
+            fils.Add(t)
+        Next
+
+        Dim dernierSigne As Integer = -1
+        If aPrendre.Count > 0 Then
+            Signer("Pièces jointes de toutes les entités : fichier 0 sur " & aPrendre.Count & " téléchargé…", 0, total)
+        End If
+        Do
+            Dim vivants As Boolean = False
+            For Each t As Threading.Thread In fils
+                If t.IsAlive Then vivants = True
+            Next
+            If Annulation.IsCancellationRequested Then arret = True
+            Dim f As Integer = Threading.Interlocked.CompareExchange(faits, 0, 0)
+            If f \ 10 <> dernierSigne \ 10 OrElse Not vivants Then
+                Signer("Pièces jointes de toutes les entités : fichier " & f & " sur " & aPrendre.Count & " téléchargé…", f, total)
+                dernierSigne = f
+            End If
+            If Not vivants Then Exit Do
+            Threading.Thread.Sleep(500)
+        Loop
+        Annulation.ThrowIfCancellationRequested()
+
+        ' 2) Le versement, une pièce à la fois vers la base : le fichier voyage
+        '    en binaire, pas en JSON.
+        Dim nb As Integer = 0, gardes As Integer = 0, echecs As Integer = 0, lies As Integer = 0
+        For Each pj As JToken In brut
+            If nb Mod 10 = 0 Then
+                Signer("Pièces jointes de toutes les entités : pièce " & nb & " sur " & brut.Count & " versée…", aPrendre.Count + nb, total)
             End If
             Dim externe As String = Valeur(pj, "externe_id")
             Dim url As String = Valeur(pj, "url")
@@ -1393,15 +1461,9 @@ Public Class ApideckExtraction
                     statut = "TROP_GROS"
                     anomalie = "Le fichier dépasse 25 Mo : il n'est pas gardé en préparation, l'adresse seule est conservée."
                 Else
-                    Try
-                        contenu = Telecharger(url)
-                        cache(externe) = contenu
-                        statut = "TELECHARGE" : anomalie = ""
-                    Catch ex As Exception
-                        statut = "ECHEC"
-                        anomalie = "Téléchargement refusé : " & ex.Message
-                        refus(externe) = anomalie
-                    End Try
+                    ' Le serveur s'est arrêté avant que ce fichier soit pris.
+                    statut = "ECHEC"
+                    anomalie = "Téléchargement non fait : l'extraction s'est interrompue."
                 End If
             End If
 
