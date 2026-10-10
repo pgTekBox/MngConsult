@@ -1107,41 +1107,97 @@ Public Class ApideckExtraction
     ''' Elles ne se lisent pas comme le reste : Apideck n'en donne pas de liste,
     ''' l'adresse est /attachments/{type}/{id}. Il faut donc un appel PAR
     ''' DOCUMENT, et les documents doivent déjà être en préparation — d'où la
-    ''' place de cette ressource en fin de catalogue.
+    ''' place de cette ressource en fin de catalogue. Sept cents documents à la
+    ''' file prenaient un quart d'heure : ils sont interrogés quatre à la fois.
     '''
     ''' Seules les métadonnées sont gardées, pas les octets : rapatrier des
     ''' centaines de PDF pendant une extraction la ferait durer des heures, pour
     ''' des fichiers que personne n'a encore validés.
     ''' </summary>
+    ''' <summary>
+    ''' Combien de documents sont interrogés en même temps. QuickBooks tolère dix
+    ''' appels simultanés par société (au-delà, 403 — que clsApideck réessaie en
+    ''' doublant l'attente) ; quatre fils laissent de la place aux autres usages
+    ''' et aux réessais, et divisent le quart d'heure des pièces jointes par
+    ''' trois ou quatre.
+    ''' </summary>
+    Private Const FILS_PIECES_JOINTES As Integer = 4
+
     Private Function LirePiecesJointes(api As clsApideck) As JArray
         Dim sources As DataTable = SourcesPiecesJointes()
         Dim tout As New JArray()
 
         If sources Is Nothing OrElse sources.Rows.Count = 0 Then Return tout
 
-        Dim parcouru As Integer = 0
-        For Each s As DataRow In sources.Rows
-            parcouru += 1
-            ' Sept cents appels, rien d'écrit avant la fin : sans signe, la fenêtre
-            ' de suivi restait figée. Un signe tous les dix documents, et l'arrêt
-            ' du serveur est pris entre deux documents, pas après le dernier.
-            Annulation.ThrowIfCancellationRequested()
-            If parcouru = 1 OrElse parcouru Mod 10 = 0 Then
-                Signer("Pièces jointes : document " & parcouru & " sur " & sources.Rows.Count & " interrogé…", parcouru, sources.Rows.Count)
+        Dim lignes As DataRow() = sources.Rows.Cast(Of DataRow)().ToArray()
+        Dim total As Integer = lignes.Length
+
+        ' Chaque document garde son rang : la liste finale suit l'ordre des
+        ' sources, quel que soit l'ordre dans lequel les fils ont fini.
+        Dim resultats(total - 1) As JArray
+        Dim suivant As Integer = -1    ' le prochain rang à prendre (Interlocked)
+        Dim faits As Integer = 0       ' les documents interrogés (Interlocked)
+        Dim arret As Boolean = False   ' levé quand le serveur s'arrête
+
+        Dim travail As Threading.ThreadStart =
+            Sub()
+                Do
+                    If arret OrElse Annulation.IsCancellationRequested Then Exit Do
+                    Dim i As Integer = Threading.Interlocked.Increment(suivant)
+                    If i >= total Then Exit Do
+                    Dim s As DataRow = lignes(i)
+                    Dim genre As String = Convert.ToString(s("Genre"))
+                    Dim docId As String = Convert.ToString(s("ExterneId"))
+                    If genre <> "" AndAlso docId <> "" Then
+                        Try
+                            resultats(i) = api.AttachmentsOf(genre, docId)
+                        Catch ex As Exception
+                            ' Un document dont les pièces jointes sont refusées ne doit
+                            ' pas faire échouer les autres : on passe, la ressource
+                            ' reste utile.
+                        End Try
+                    End If
+                    Threading.Interlocked.Increment(faits)
+                    ' Une courte respiration par fil : quatre fils font déjà
+                    ' quatre appels en même temps.
+                    Threading.Thread.Sleep(100)
+                Loop
+            End Sub
+
+        Dim fils As New List(Of Threading.Thread)
+        For k As Integer = 1 To Math.Min(FILS_PIECES_JOINTES, total)
+            Dim t As New Threading.Thread(travail) With {.IsBackground = True, .Name = "PiecesJointes" & k}
+            t.Start()
+            fils.Add(t)
+        Next
+
+        ' Le fil d'appel ne lit rien : il signe tous les dix documents — sans
+        ' signe, la fenêtre de suivi restait figée — et relaie l'arrêt du
+        ' serveur aux fils, pris entre deux documents plutôt qu'après le dernier.
+        Dim dernierSigne As Integer = -1
+        Signer("Pièces jointes : 0 document sur " & total & " interrogé…", 0, total)
+        Do
+            Dim vivants As Boolean = False
+            For Each t As Threading.Thread In fils
+                If t.IsAlive Then vivants = True
+            Next
+            If Annulation.IsCancellationRequested Then arret = True
+            Dim f As Integer = Threading.Interlocked.CompareExchange(faits, 0, 0)
+            If f \ 10 <> dernierSigne \ 10 OrElse Not vivants Then
+                Signer("Pièces jointes : document " & f & " sur " & total & " interrogé…", f, total)
+                dernierSigne = f
             End If
+            If Not vivants Then Exit Do
+            Threading.Thread.Sleep(500)
+        Loop
+        Annulation.ThrowIfCancellationRequested()
+
+        For i As Integer = 0 To total - 1
+            Dim liste As JArray = resultats(i)
+            If liste Is Nothing Then Continue For
+            Dim s As DataRow = lignes(i)
             Dim genre As String = Convert.ToString(s("Genre"))
             Dim docId As String = Convert.ToString(s("ExterneId"))
-            If genre = "" OrElse docId = "" Then Continue For
-
-            Dim liste As JArray
-            Try
-                liste = api.AttachmentsOf(genre, docId)
-            Catch ex As Exception
-                ' Un document dont les pièces jointes sont refusées ne doit pas
-                ' faire échouer les autres : on passe, la ressource reste utile.
-                Continue For
-            End Try
-
             For Each a As JToken In liste
                 Dim o As New JObject()
                 o("genre") = genre
@@ -1156,11 +1212,6 @@ Public Class ApideckExtraction
                 o("date") = Valeur(a, "created_at", "updated_at")
                 tout.Add(o)
             Next
-
-            ' La même courtoisie qu'entre les ressources : QuickBooks n'accepte
-            ' que dix appels simultanés par société, et ici on en enchaîne un
-            ' par document.
-            Threading.Thread.Sleep(250)
         Next
 
         Return tout
