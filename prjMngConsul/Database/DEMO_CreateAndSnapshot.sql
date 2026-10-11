@@ -84,23 +84,65 @@ BEGIN
      (40,'T141ReglementDocument'   ,'DocumentId IN (SELECT Id FROM dbo.T060Document WHERE CompanyGUID = @d) OR ReglementId IN (SELECT Id FROM dbo.T140Reglement WHERE CompanyGUID = @d)','DocumentId IN (SELECT Id FROM dbo.DEMO_T060Document WHERE CompanyGUID = @d) OR ReglementId IN (SELECT Id FROM dbo.DEMO_T140Reglement WHERE CompanyGUID = @d)'),
      (41,'T071_T061DocumentLine_T070RapportTaxe','T061DocumentLine_id IN (SELECT Id FROM dbo.T061DocumentLine WHERE DocumentId IN (SELECT Id FROM dbo.T060Document WHERE CompanyGUID = @d))','T061DocumentLine_id IN (SELECT Id FROM dbo.DEMO_T061DocumentLine WHERE DocumentId IN (SELECT Id FROM dbo.DEMO_T060Document WHERE CompanyGUID = @d))');
 
+    -- Tout ou rien : un cliche a moitie rebati vaudrait moins que l'ancien.
+    SET XACT_ABORT ON;
+    BEGIN TRY
+    BEGIN TRAN;
     DECLARE @t SYSNAME, @live NVARCHAR(1000), @demo NVARCHAR(1000), @sql NVARCHAR(MAX);
     DECLARE cur CURSOR LOCAL FAST_FORWARD FOR SELECT tbl, live, demo FROM @list ORDER BY ord;
     OPEN cur; FETCH NEXT FROM cur INTO @t, @live, @demo;
     WHILE @@FETCH_STATUS = 0
     BEGIN
-        -- DEMO_ := (autres demos, conservees) + (lignes vivantes de @d, rafraichies)
+        -- DEMO_ := (autres demos, conservees) + (lignes vivantes de @d, rafraichies).
+        -- Le cliche est REBATI a la structure VIVANTE : une colonne ajoutee a la
+        -- table depuis le dernier cliche (Sec60Email, MailResetToken, Latitude...)
+        -- entre dans DEMO_ (NULL pour les autres demos, leur valeur pour @d) ;
+        -- sinon l'UNION des deux tables echouait sur un nombre de colonnes inegal.
+        DECLARE @commun NVARCHAR(MAX), @colsLive NVARCHAR(MAX), @colsNul NVARCHAR(MAX);
+        -- la meme liste en CAST(NULL AS type) : en UNION avec la table vivante vide,
+        -- #z perd l'identite et toutes ses colonnes deviennent NULLables, pour
+        -- accepter les lignes du cliche sans les colonnes nouvelles
+        SELECT @colsNul = STRING_AGG('CAST(NULL AS ' +
+            CASE WHEN ty.name IN ('varchar','char','varbinary','binary') THEN ty.name + '(' + CASE WHEN c.max_length = -1 THEN 'MAX' ELSE CAST(c.max_length AS varchar(10)) END + ')'
+                 WHEN ty.name IN ('nvarchar','nchar') THEN ty.name + '(' + CASE WHEN c.max_length = -1 THEN 'MAX' ELSE CAST(c.max_length / 2 AS varchar(10)) END + ')'
+                 WHEN ty.name IN ('decimal','numeric') THEN ty.name + '(' + CAST(c.precision AS varchar(10)) + ',' + CAST(c.scale AS varchar(10)) + ')'
+                 WHEN ty.name IN ('datetime2','time','datetimeoffset') THEN ty.name + '(' + CAST(c.scale AS varchar(10)) + ')'
+                 ELSE ty.name END + ') AS ' + QUOTENAME(c.name), ',') WITHIN GROUP (ORDER BY c.column_id)
+        FROM sys.columns c
+        JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+        WHERE c.object_id = OBJECT_ID('dbo.' + @t)
+          AND c.is_computed = 0 AND ty.name <> 'timestamp';
+        SELECT @colsLive = STRING_AGG(QUOTENAME(c.name), ',') WITHIN GROUP (ORDER BY c.column_id)
+        FROM sys.columns c
+        JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+        WHERE c.object_id = OBJECT_ID('dbo.' + @t)
+          AND c.is_computed = 0 AND ty.name <> 'timestamp';
+        SELECT @commun = STRING_AGG(QUOTENAME(c.name), ',') WITHIN GROUP (ORDER BY c.column_id)
+        FROM sys.columns c
+        JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+        JOIN sys.columns s ON s.object_id = OBJECT_ID('dbo.DEMO_' + @t) AND s.name = c.name
+        WHERE c.object_id = OBJECT_ID('dbo.' + @t)
+          AND c.is_computed = 0 AND ty.name <> 'timestamp';
         SET @sql =
             N'IF OBJECT_ID(''dbo.DEMO_' + @t + ''') IS NULL SELECT * INTO dbo.DEMO_' + @t + N' FROM dbo.' + @t + N' WHERE 1=0;'
-          + N'SELECT * INTO #z FROM (SELECT * FROM dbo.DEMO_' + @t + N' WHERE NOT(' + @demo + N')'
-          + N' UNION ALL SELECT * FROM dbo.' + @t + N' WHERE ' + @live + N') q;'
+            -- #z : les colonnes vivantes, sans identite et toutes NULLables
+          + N'SELECT * INTO #z FROM (SELECT ' + @colsLive + N' FROM dbo.' + @t + N' WHERE 1=0 UNION ALL SELECT ' + @colsNul + N' WHERE 1=0) q;'
+          + N'INSERT INTO #z (' + ISNULL(@commun, @colsLive) + N') SELECT ' + ISNULL(@commun, @colsLive) + N' FROM dbo.DEMO_' + @t + N' WHERE NOT(' + @demo + N');'
+          + N'INSERT INTO #z (' + @colsLive + N') SELECT ' + @colsLive + N' FROM dbo.' + @t + N' WHERE ' + @live + N';'
           + N'DROP TABLE dbo.DEMO_' + @t + N'; SELECT * INTO dbo.DEMO_' + @t + N' FROM #z; DROP TABLE #z;';
         EXEC sp_executesql @sql, N'@d UNIQUEIDENTIFIER', @d = @d;
         FETCH NEXT FROM cur INTO @t, @live, @demo;
     END
     CLOSE cur; DEALLOCATE cur;
+    COMMIT TRAN;
 
     SELECT 'OK' AS Result, 'Cliche demo recapture.' AS Message;
+    END TRY
+    BEGIN CATCH
+        IF @@TRANCOUNT > 0 ROLLBACK TRAN;
+        DECLARE @msg NVARCHAR(2048) = ERROR_MESSAGE();
+        RAISERROR('Echec recapture demo : %s', 16, 1, @msg);
+    END CATCH
 END
 GO
 

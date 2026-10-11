@@ -11,6 +11,11 @@ GO
 -- GARDE : @CompanyGUID doit figurer dans dbo.fnDemoCompanies() (liste blanche),
 -- sinon la proc refuse d'agir -> une vraie compagnie ne peut jamais etre touchee.
 -- Transactionnel (XACT_ABORT + TRY/CATCH). Appelee depuis la console Admin.
+-- COLONNES : seules celles presentes A LA FOIS dans la table vivante et dans son
+-- cliche DEMO_* sont copiees. Une colonne ajoutee apres le cliche (Sec60Email,
+-- MailResetToken, Latitude...) reste a sa valeur par defaut a la reinsertion, et
+-- garde sa valeur courante dans T010Company ; sinon la reinitialisation echouait
+-- sur « Invalid column name » des la premiere table enrichie.
 -- =============================================================================
 CREATE OR ALTER PROCEDURE dbo.s0708ResetDemoCompany
     @CompanyGUID UNIQUEIDENTIFIER
@@ -160,6 +165,7 @@ BEGIN
                 SELECT @cols = STRING_AGG(QUOTENAME(c.name), ',') WITHIN GROUP (ORDER BY c.column_id)
                 FROM sys.columns c
                 JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+                JOIN sys.columns s ON s.object_id = OBJECT_ID('dbo.DEMO_' + @t) AND s.name = c.name
                 WHERE c.object_id = OBJECT_ID('dbo.' + @t)
                   AND c.is_computed = 0 AND ty.name <> 'timestamp';
 
@@ -182,6 +188,7 @@ BEGIN
         SELECT @setcols = STRING_AGG('t.' + QUOTENAME(c.name) + ' = s.' + QUOTENAME(c.name), ',')
         FROM sys.columns c
         JOIN sys.types ty ON ty.user_type_id = c.user_type_id
+        JOIN sys.columns s ON s.object_id = OBJECT_ID('dbo.DEMO_T010Company') AND s.name = c.name
         WHERE c.object_id = OBJECT_ID('dbo.T010Company')
           AND c.is_computed = 0 AND ty.name <> 'timestamp'
           AND c.name NOT IN ('Id', 'CompanyGUID');
