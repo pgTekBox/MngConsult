@@ -369,6 +369,7 @@
                     <li><strong>Un compte qui porte un solde ne peut pas être ignoré</strong> : l’option « Ignorer » est grisée sur ces lignes, le navigateur refuse l’envoi et la base refuse la décision. Liez-le ou créez-le ; seuls les comptes vides (solde absent ou 0) s’ignorent.</li>
                     <li><strong>Un compte utilisé par une facture ou un produit en préparation ne peut pas être ignoré</strong>, même à solde 0 : ses lignes de factures et ses produits n’auraient plus de compte. Option « Ignorer » grisée, refus du navigateur, refus de la base. Une fois les factures et les produits créés, le compte n’est plus retenu.</li>
                     <li><strong>Revenus et dépenses à solde 0 : avertissement, sans blocage.</strong> QuickBooks ne fournit un solde que pour les comptes de bilan. Quand vous choisissez « Ignorer » sur un compte de revenus ou de dépenses à 0, un encadré jaune sous la liste Action rappelle de vérifier qu’il n’a pas servi. La décision reste la vôtre.</li>
+                    <li><strong>Solde 0 et aucune mention dans les données importées : « Ignorer » proposé d’office.</strong> Le compte porte la pastille orange « inutilisé » (solde 0, rien ne s’en sert : ni facture, ni produit, ni écriture, ni grand livre, ni balance, ni paiement, banque, remise, budget, inventaire ou paie) et la liste Action part sur « Ignorer » tant qu’il est à décider. Les comptes qui servent affichent « utilisé : … » avec le décompte. Rien n’est décidé tant que vous n’enregistrez pas.</li>
                     <li>« Créer » ne peut pas reprendre un numéro que le plan connaît déjà, ni le même numéro deux fois.</li>
                     <li>Les comptes créés sont verrouillés : « Créé ✓ » grisé, note en lecture seule.</li>
                     <li>Proposition par IA : l’IA reçoit les comptes encore à décider (nom complet, nature, type, sous-type, origine, solde, description) et tout votre plan. Une réponse est écartée si le compte est inconnu ou la nature incompatible. Rien n’est décidé avant <kbd>Enregistrer</kbd>.</li>
@@ -727,6 +728,7 @@
                 <details><summary>Existe-t-il une aide plus détaillée pour la correspondance des comptes ?</summary><p>Oui : <a href="correspondance-comptes.html">Correspondance des comptes</a> explique pas à pas comment lier, créer et ignorer, avec les pièges et les questions fréquentes propres à cet écran. Le bouton <kbd>?</kbd> de l’écran l’ouvre directement.</p></details>
                 <details><summary>L’extraction est bloquée à 89 %. Que faire ?</summary><p>Rien, le plus souvent : 89 % = 39 ressources sur 44, et la 40<sup>e</sup> est « Pièces jointes », qui interroge QuickBooks document par document. Sous la jauge, la ligne « Pièces jointes : document N sur M interrogé… » et l’heure du signe de vie doivent avancer ; la jauge aussi, lentement. Si l’heure du signe n’a pas bougé depuis plus de dix minutes, l’extraction sera marquée INTERROMPUE : relancez-la, ce qui est déposé est gardé.</p></details>
                 <details><summary>Que veut dire « INTERROMPUE » ?</summary><p>Le serveur s’est arrêté pendant l’extraction (redémarrage, redéploiement, panne). L’extraction l’a remarqué elle-même et s’est fermée proprement, ou bien dix minutes sans signe de vie l’ont fait marquer ainsi. Rien n’est perdu de ce qui était déjà déposé ; relancez pour le reste.</p></details>
+                <details><summary>À l’étape 2, « Ignorer » est déjà choisi sur des comptes. Pourquoi ?</summary><p>Ils portent la pastille « inutilisé » : solde 0 et aucune donnée importée ne les mentionne. Ce sont le plus souvent des comptes par défaut de QuickBooks jamais servis. Enregistrez tel quel pour les écarter, ou changez l’action ; rien n’est décidé avant l’enregistrement.</p></details>
             </section>
 
             <section id="fr-glossaire">
@@ -755,6 +757,7 @@
                         <tr><td>Compte de bilan / compte de résultat</td><td>Actif, passif et capitaux d’un côté ; revenus et dépenses de l’autre. QuickBooks ne fournit un solde courant que pour les comptes de bilan.</td></tr>
                         <tr><td>Signe de vie</td><td>Heure et ligne de progression que l’extraction écrit à chaque ressource et tous les dix documents ; la fenêtre de suivi les affiche, et dix minutes sans signe font marquer l’extraction INTERROMPUE.</td></tr>
                         <tr><td>INTERROMPUE</td><td>État d’une extraction que le serveur a arrêtée avant la fin. Ce qui était déposé reste en préparation ; une nouvelle extraction complète le reste.</td></tr>
+                        <tr><td>Inutilisé</td><td>Compte de l’ancien logiciel à solde 0 qu’aucune donnée importée ne mentionne ; l’étape 2 le marque d’une pastille et propose « Ignorer ».</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -1109,6 +1112,7 @@
                     <li><strong>An account that carries a balance cannot be ignored</strong>: the “Ignore” option is greyed out on those rows, the browser refuses the send and the database refuses the decision. Link it or create it; only empty accounts (no balance or 0) can be ignored.</li>
                     <li><strong>An account used by an invoice or a product in preparation cannot be ignored</strong>, even with a zero balance: its invoice lines and products would have no account left. “Ignore” option greyed out, browser refusal, database refusal. Once the invoices and products are created, the account is no longer held.</li>
                     <li><strong>Revenue and expense accounts at zero: a warning, not a block.</strong> QuickBooks only provides a balance for balance-sheet accounts. When you choose “Ignore” on a revenue or expense account at 0, a yellow note under the Action list reminds you to check it has not been used. The decision stays yours.</li>
+                    <li><strong>Zero balance and no mention in the imported data: “Ignorer” proposed by default.</strong> The account carries the orange “inutilisé” badge (zero balance, nothing uses it: no invoice, product, journal entry, ledger line, trial balance, payment, bank, remittance, budget, inventory or payroll) and the Action list starts on “Ignorer” while it is still to decide. Used accounts show “utilisé : …” with the count. Nothing is decided until you save.</li>
                     <li>“Create” cannot reuse a number the chart already knows, nor the same number twice.</li>
                     <li>Created accounts are locked: “Created ✓” greyed out, read-only note.</li>
                     <li>AI suggestion: the AI receives the accounts still to decide (full name, nature, type, subtype, origin, balance, description) and your whole chart. An answer is discarded if the account is unknown or the nature incompatible. Nothing is decided before <kbd>Save</kbd>.</li>
@@ -1467,6 +1471,7 @@
                 <details><summary>Is there more detailed help for account mapping?</summary><p>Yes: <a href="correspondance-comptes.html">Account mapping</a> explains step by step how to link, create and ignore, with the pitfalls and frequent questions specific to that screen. The <kbd>?</kbd> button of the screen opens it directly.</p></details>
                 <details><summary>The extraction is stuck at 89 %. What should I do?</summary><p>Usually nothing: 89 % = 39 resources of 44, and the 40th is “Pièces jointes”, which queries QuickBooks document by document. Under the bar, the line “Pièces jointes : document N sur M interrogé…” and the time of the sign of life must move; the bar too, slowly. If the sign’s time has not moved for more than ten minutes, the extraction will be marked INTERROMPUE: start it again, what was placed is kept.</p></details>
                 <details><summary>What does “INTERROMPUE” mean?</summary><p>The server stopped during the extraction (restart, redeploy, outage). The extraction noticed it itself and closed cleanly, or ten minutes without a sign of life had it marked so. Nothing already placed is lost; start again for the rest.</p></details>
+                <details><summary>In step 2, “Ignorer” is already selected on some accounts. Why?</summary><p>They carry the “inutilisé” badge: zero balance and no imported data mentions them. They are most often QuickBooks default accounts never used. Save as is to set them aside, or change the action; nothing is decided before saving.</p></details>
             </section>
 
             <section id="en-glossary">
@@ -1495,6 +1500,7 @@
                         <tr><td>Balance-sheet account / income-statement account</td><td>Assets, liabilities and equity on one side; revenues and expenses on the other. QuickBooks only provides a current balance for balance-sheet accounts.</td></tr>
                         <tr><td>Sign of life</td><td>Time and progress line the extraction writes at each resource and every ten documents; the follow-up window shows them, and ten minutes without a sign have the extraction marked INTERROMPUE.</td></tr>
                         <tr><td>INTERROMPUE</td><td>State of an extraction the server stopped before the end. What was placed stays in staging; a new extraction completes the rest.</td></tr>
+                        <tr><td>Inutilisé (unused)</td><td>Account of the former application at zero balance that no imported data mentions; step 2 marks it with a badge and proposes “Ignorer”.</td></tr>
                     </tbody>
                 </table>
             </section>
@@ -1849,6 +1855,7 @@
                     <li><strong>Una cuenta que lleva saldo no puede ignorarse</strong>: la opción « Ignorar » aparece en gris en esas líneas, el navegador rechaza el envío y la base rechaza la decisión. Vincúlela o créela; solo las cuentas vacías (sin saldo o 0) se ignoran.</li>
                     <li><strong>Una cuenta usada por una factura o un producto en preparación no puede ignorarse</strong>, ni siquiera con saldo 0: sus líneas de factura y sus productos se quedarían sin cuenta. Opción « Ignorar » en gris, rechazo del navegador, rechazo de la base. Una vez creadas las facturas y los productos, la cuenta deja de estar retenida.</li>
                     <li><strong>Ingresos y gastos con saldo 0: aviso, sin bloqueo.</strong> QuickBooks solo da saldo para las cuentas de balance. Cuando elige « Ignorar » en una cuenta de ingresos o de gastos a 0, un recuadro amarillo bajo la lista Acción recuerda verificar que no se haya usado. La decisión sigue siendo suya.</li>
+                    <li><strong>Saldo 0 y ninguna mención en los datos importados: « Ignorer » propuesto por defecto.</strong> La cuenta lleva la etiqueta naranja « inutilisé » (saldo 0, nada la usa: ni factura, ni producto, ni asiento, ni línea del libro mayor, ni balance, ni pago, banco, remesa, presupuesto, inventario o nómina) y la lista Acción arranca en « Ignorer » mientras siga por decidir. Las cuentas usadas muestran « utilisé : … » con el recuento. Nada se decide hasta que guarde.</li>
                     <li>« Crear » no puede reutilizar un número que el plan ya conoce, ni el mismo número dos veces.</li>
                     <li>Las cuentas creadas quedan bloqueadas: « Creada ✓ » en gris, nota de solo lectura.</li>
                     <li>Propuesta por IA: la IA recibe las cuentas aún por decidir (nombre completo, naturaleza, tipo, subtipo, origen, saldo, descripción) y todo su plan. Una respuesta se descarta si la cuenta es desconocida o la naturaleza incompatible. Nada se decide antes de <kbd>Guardar</kbd>.</li>
@@ -2207,6 +2214,7 @@
                 <details><summary>¿Existe una ayuda más detallada para la correspondencia de cuentas?</summary><p>Sí: <a href="correspondance-comptes.html">Correspondencia de cuentas</a> explica paso a paso cómo vincular, crear e ignorar, con las trampas y las preguntas frecuentes propias de esa pantalla. El botón <kbd>?</kbd> de la pantalla la abre directamente.</p></details>
                 <details><summary>La extracción está bloqueada en 89 %. ¿Qué hago?</summary><p>Nada, casi siempre: 89 % = 39 recursos de 44, y el 40.º es « Pièces jointes », que consulta QuickBooks documento por documento. Bajo la barra, la línea « Pièces jointes : document N sur M interrogé… » y la hora de la señal de vida deben avanzar; la barra también, despacio. Si la hora de la señal no se ha movido en más de diez minutos, la extracción se marcará INTERROMPUE: vuelva a lanzarla, lo depositado se conserva.</p></details>
                 <details><summary>¿Qué significa « INTERROMPUE »?</summary><p>El servidor se detuvo durante la extracción (reinicio, despliegue, avería). La extracción lo notó por sí misma y se cerró limpiamente, o diez minutos sin señal de vida hicieron que se marcara así. Nada de lo ya depositado se pierde; relance para el resto.</p></details>
+                <details><summary>En la etapa 2, « Ignorer » ya está elegido en algunas cuentas. ¿Por qué?</summary><p>Llevan la etiqueta « inutilisé »: saldo 0 y ningún dato importado las menciona. Suelen ser cuentas por defecto de QuickBooks nunca usadas. Guarde tal cual para apartarlas, o cambie la acción; nada se decide antes de guardar.</p></details>
             </section>
 
             <section id="es-glosario">
@@ -2235,6 +2243,7 @@
                         <tr><td>Cuenta de balance / cuenta de resultados</td><td>Activo, pasivo y capital por un lado; ingresos y gastos por el otro. QuickBooks solo da saldo corriente a las cuentas de balance.</td></tr>
                         <tr><td>Señal de vida</td><td>Hora y línea de progreso que la extracción escribe en cada recurso y cada diez documentos; la ventana de seguimiento las muestra, y diez minutos sin señal hacen marcar la extracción INTERROMPUE.</td></tr>
                         <tr><td>INTERROMPUE</td><td>Estado de una extracción que el servidor detuvo antes del final. Lo depositado queda en preparación; una nueva extracción completa el resto.</td></tr>
+                        <tr><td>Inutilisé (sin uso)</td><td>Cuenta del programa anterior con saldo 0 que ningún dato importado menciona; la etapa 2 la marca con una etiqueta y propone « Ignorer ».</td></tr>
                     </tbody>
                 </table>
             </section>

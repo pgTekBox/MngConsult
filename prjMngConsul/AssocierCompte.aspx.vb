@@ -294,7 +294,15 @@ Public Class AssocierCompte
             sb.Append("Solde non fourni")
         End If
         sb.Append("<br />")
-        If usage(0) > 0 OrElse usage(1) > 0 Then
+        ' Ce que les données importées en font (T317) : tout, pas seulement les
+        ' factures et les produits ; et quand rien ne s'en sert à solde 0, la
+        ' grille de l'étape 2 propose Ignorer — on le dit ici aussi.
+        Dim usagesTous As String = CorrespondanceComptes.TexteUsages(r)
+        If r.Table.Columns.Contains("Inutilise") AndAlso Not IsDBNull(r("Inutilise")) AndAlso Convert.ToInt32(r("Inutilise")) = 1 Then
+            sb.Append("<b>Inutilisé</b> : solde 0, et aucune donnée importée ne s'en sert — l'étape 2 propose Ignorer")
+        ElseIf usagesTous <> "" Then
+            sb.Append("Utilisé : ").Append(HttpUtility.HtmlEncode(usagesTous))
+        ElseIf usage(0) > 0 OrElse usage(1) > 0 Then
             sb.Append(usage(0).ToString()).Append(" ligne(s) de facture · ").Append(usage(1).ToString()).Append(" produit(s) en préparation")
         Else
             sb.Append("Aucune facture ni produit en préparation ne l'utilise")

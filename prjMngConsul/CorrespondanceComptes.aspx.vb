@@ -474,11 +474,43 @@ Public Class CorrespondanceComptes
     ''' est préréglée sur Lier : le compte cible est déjà rempli, il ne reste qu'à
     ''' enregistrer. Rien n'est décidé tant que l'utilisateur n'enregistre pas.
     ''' </summary>
-    Protected Function ActionChoisie(action As Object, origine As Object) As String
+    Protected Function ActionChoisie(action As Object, origine As Object, Optional item As Object = Nothing) As String
         Dim a As String = Convert.ToString(action)
         If a <> "" Then Return a
+        ' Solde 0 et aucune mention dans les données importées (T317) : la liste
+        ' part sur Ignorer, même quand un compte du même nom existe ici — rien à
+        ' reprendre, donc rien à lier. Rien n'est décidé tant qu'on n'enregistre pas.
+        If EstInutilise(item) Then Return "IGNORER"
         If Convert.ToString(origine) = "PROPOSE_NOM" Then Return "LIER"
         Return ""
+    End Function
+
+    ''' <summary>
+    ''' Solde 0 et aucune donnée importée ne mentionne le compte — ni facture, ni
+    ''' produit, ni écriture, ni grand livre, ni balance, ni paiement, banque,
+    ''' budget, inventaire ou paie (s0756.Inutilise, T317).
+    ''' </summary>
+    Protected Function EstInutilise(item As Object) As Boolean
+        Dim r As DataRowView = TryCast(item, DataRowView)
+        If r Is Nothing OrElse Not r.Row.Table.Columns.Contains("Inutilise") OrElse IsDBNull(r("Inutilise")) Then Return False
+        Return Convert.ToInt32(r("Inutilise")) = 1
+    End Function
+
+    ''' <summary>Ce qui, dans les données importées, se sert du compte : un décompte par famille.</summary>
+    Public Shared Function TexteUsages(r As DataRow) As String
+        Dim parts As New List(Of String)
+        Dim ajoute = Sub(col As String, libelle As String)
+                         If Not r.Table.Columns.Contains(col) OrElse IsDBNull(r(col)) Then Return
+                         Dim nb As Integer = Convert.ToInt32(r(col))
+                         If nb > 0 Then parts.Add(nb.ToString() & " " & libelle)
+                     End Sub
+        ajoute("NbLignesFactures", "ligne(s) de facture")
+        ajoute("NbProduits", "produit(s)")
+        ajoute("NbEcritures", "ligne(s) d'écriture")
+        ajoute("NbGrandLivre", "ligne(s) de grand livre")
+        ajoute("NbBalance", "ligne de balance")
+        ajoute("NbAutres", "autre(s) : paiements, banque, remises, budgets, inventaire, paie")
+        Return String.Join(" · ", parts)
     End Function
 
     Protected Function EstDecide(origine As Object) As Boolean
@@ -547,6 +579,16 @@ Public Class CorrespondanceComptes
         Dim sousCompte As Boolean = (Champ(r, "SousCompte") = "True")
 
         Dim sb As New StringBuilder()
+
+        ' 0) ce que les données importées en font (T317) : rien du tout, et le
+        '    solde est 0 — la pastille le dit, et Action part sur Ignorer — ou
+        '    le décompte de ce qui s'en sert.
+        If EstInutilise(item) Then
+            sb.Append("<div class='nature'><span class='pr pr-inut' title=""Solde 0, et aucune donnée importée ne mentionne ce compte : ni facture, ni produit, ni écriture, ni grand livre, ni balance, ni paiement, banque, budget, inventaire ou paie. Ignorer est proposé ; changez l'action si vous tenez à le reprendre."">inutilisé</span>solde 0, rien ne s'en sert dans les données importées</div>")
+        Else
+            Dim usages As String = TexteUsages(r.Row)
+            If usages <> "" Then sb.Append("<div class='nature' style='white-space:normal'>utilisé : ").Append(Server.HtmlEncode(usages)).Append("</div>")
+        End If
 
         ' 1) la nature et le type : ce qui décide de la classe cible
         Dim ligne1 As New List(Of String)

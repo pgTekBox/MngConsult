@@ -113,6 +113,7 @@
     .pr-moyen { background: #fffbeb; color: #b45309 }
     .pr-aucun { background: #f1f5f9; color: #64748b }
     .pr-ia { background: #f5f3ff; color: #6d28d9 }
+    .pr-inut { background: #fff7ed; color: #c2410c }
     .lien-suite { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; background: #047857; color: #fff; text-decoration: none; white-space: nowrap }
     .lien-suite:hover { background: #065f46; color: #fff }
 
@@ -274,7 +275,7 @@
                 <tbody>
                     <asp:Repeater ID="rptLignes" runat="server">
                         <ItemTemplate>
-                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>' data-cree='<%# If(EstCree(Container.DataItem), "1", "0") %>' data-solde='<%# If(Eval("Solde") Is DBNull.Value, "0", Convert.ToDecimal(Eval("Solde")).ToString(System.Globalization.CultureInfo.InvariantCulture)) %>'>
+                            <tr class='<%# If(EstDecide(Eval("Origine")), "decide", "") %>' data-cree='<%# If(EstCree(Container.DataItem), "1", "0") %>' data-solde='<%# If(Eval("Solde") Is DBNull.Value, "0", Convert.ToDecimal(Eval("Solde")).ToString(System.Globalization.CultureInfo.InvariantCulture)) %>' data-inutilise='<%# If(EstInutilise(Container.DataItem), "1", "0") %>'>
                                 <td><%# Eval("LigneNo") %></td>
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
@@ -295,7 +296,7 @@
                                     <asp:HiddenField runat="server" ID="hfTypeSource" Value='<%# Eval("TypeNormalise") %>' />
 
                                     <asp:DropDownList runat="server" ID="ddlAction" CssClass="act"
-                                        SelectedValue='<%# ActionChoisie(Eval("Action"), Eval("Origine")) %>'>
+                                        SelectedValue='<%# ActionChoisie(Eval("Action"), Eval("Origine"), Container.DataItem) %>'>
                                         <asp:ListItem Value="" Text="— à décider" />
                                         <asp:ListItem Value="LIER" Text="Lier" />
                                         <asp:ListItem Value="CREER" Text="Créer" />
@@ -581,7 +582,10 @@
                 function majAvertIgnorer() {
                     if (!avert || !actI) return;
                     var aRisque = actI.value === 'IGNORER' && (natureI === 'PRODUIT' || natureI === 'CHARGE')
-                        && !parseFloat(tr.getAttribute('data-solde') || '0') && !usageI;
+                        && !parseFloat(tr.getAttribute('data-solde') || '0') && !usageI
+                        // Solde 0 ET aucune mention dans les données importées (T317) : la pastille
+                        // « inutilisé » le dit déjà, l'avertissement n'a plus lieu d'être.
+                        && tr.getAttribute('data-inutilise') !== '1';
                     if (aRisque) {
                         avert.querySelector('.avert-ign-t').textContent = LOGICIEL + ' ne donne pas le solde des comptes de revenus et de dépenses : vérifiez que ce compte n\'a pas servi avant de l\'ignorer.';
                     }
