@@ -124,17 +124,24 @@ Public Class Importations
         Get
             Dim plan As EtatPlan = EtatPlanComptable()
 
+            ' Tant qu'aucun plan n'est chargé, la carte mène à l'étape 1 (importer le
+            ' fichier ou lire QuickBooks). Dès qu'il l'est — c'est le cas après une
+            ' extraction QuickBooks — elle ouvre l'étape 2 : la correspondance, où
+            ' le travail se fait. L'étape 1 reste accessible par le fil des étapes.
             Return NoterAvancement(New List(Of Poste) From {
                 New Poste With {
                     .Icone = "📊",
                     .Titre = "Plan comptable",
                     .Source = "QuickBooks : Liste des comptes (Account List)",
                     .Destination = "comptabilité — T121PlanComptable, en trois étapes",
-                    .Page = "~/ImportPlanComptable.aspx",
+                    .Page = If(plan.Charge, "~/CorrespondanceComptes.aspx", "~/ImportPlanComptable.aspx"),
                     .Note = plan.Note,
-                    .Fait = plan.Fait & " Importer le fichier, décider de la correspondance de chaque compte, " &
-                            "puis créer au plan ceux qui manquent. Chaque écran dit lui-même " &
-                            "ce qui y fonctionne et ce qui y manque.",
+                    .Fait = plan.Fait & If(plan.Charge,
+                                            " « Ouvrir » mène à la correspondance des comptes (étape 2) ; " &
+                                            "l'étape 1 reste accessible par le fil des étapes si le plan doit être rechargé.",
+                                            " Importer le fichier ou lire QuickBooks, décider de la correspondance de chaque compte, " &
+                                            "puis créer au plan ceux qui manquent. Chaque écran dit lui-même " &
+                                            "ce qui y fonctionne et ce qui y manque."),
                     .Manque = plan.Manque
                 },
                 New Poste With {
@@ -588,6 +595,8 @@ Public Class Importations
     ''' <summary>Où en est la reprise du plan comptable de cette compagnie.</summary>
     Private Class EtatPlan
         Public Property Note As Integer
+        ''' <summary>Vrai dès qu'un plan est en préparation : la carte ouvre alors l'étape 2, pas l'import du fichier.</summary>
+        Public Property Charge As Boolean
         Public Property Fait As String = ""
         Public Property Manque As String = ""
     End Class
@@ -630,6 +639,7 @@ Public Class Importations
                 Return etat
             End If
 
+            etat.Charge = True
             Dim decides As Integer = total - aDecider
             Dim partDecidee As Double = decides / total
             Dim partCreee As Double = If(aCreer + crees = 0, 1.0, crees / CDbl(aCreer + crees))
