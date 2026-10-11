@@ -27,6 +27,10 @@ Partial Public Class CorrespondanceComptes
     '''<summary>btnAccepter</summary>
     Protected WithEvents btnAccepter As Global.System.Web.UI.WebControls.Button
 
+    Protected WithEvents ddlSeuilIA As Global.System.Web.UI.WebControls.DropDownList
+
+    Protected WithEvents btnLierIA As Global.System.Web.UI.WebControls.Button
+
     '''<summary>litDecides</summary>
     Protected WithEvents litDecides As Global.System.Web.UI.WebControls.Literal
     '''<summary>litTotal</summary>

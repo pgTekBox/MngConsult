@@ -60,6 +60,8 @@
     .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
 
     .acts { display: flex; gap: 9px; flex-wrap: wrap; align-items: center }
+    .seuil-ia { display: inline-flex; align-items: center; gap: 6px; padding: 3px 3px 3px 8px; border: 1px solid #ddd6fe; border-radius: 10px; background: #f5f3ff }
+    .seuil-ia select { padding: 6px 8px; border-radius: 8px; border: 1px solid #c4b5fd; font-size: 12.5px; font-family: inherit; background: #fff }
 
     table.cor { width: 100%; min-width: 1900px; border-collapse: collapse; font-size: 12.5px }
     table.cor th { background: #f8fafc; text-align: left; padding: 9px 10px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1 }
@@ -151,7 +153,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="cor-page">
 
-    <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" />
+    <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" SansEtape1="true" />
 
     <div class="cor-head">
         <div class="ico">🔗</div>
@@ -197,6 +199,17 @@
                     Text="Accepter les correspondances par numéro"
                     OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
                 <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">🤝 Associer un par un</button>
+                <span class="seuil-ia" title="Lie d'un coup les comptes encore à décider dont la proposition de l'IA atteint le seuil choisi. Lancez d'abord « Proposer avec l'IA ».">
+                    <asp:DropDownList runat="server" ID="ddlSeuilIA" CssClass="act-seuil">
+                        <asp:ListItem Value="" Text="Aucun" />
+                        <asp:ListItem Value="90" Text="Lier à 90 % et plus" />
+                        <asp:ListItem Value="80" Text="Lier à 80 % et plus" />
+                        <asp:ListItem Value="70" Text="Lier à 70 % et plus" />
+                    </asp:DropDownList>
+                    <asp:Button ID="btnLierIA" runat="server" CssClass="btn btn-s" CausesValidation="false"
+                        Text="Lier selon l'IA"
+                        OnClientClick="var sIA = document.querySelector('select.act-seuil'); if (!sIA || !sIA.value) { alert('Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus.'); return false; } if (!confirm('Lier tous les comptes encore à décider dont la proposition de l&#39;IA atteint ' + sIA.value + ' % de confiance ou plus ?\n\nLes comptes déjà décidés et les comptes cibles déjà pris ne bougent pas.')) { return false; }" />
+                </span>
             </div>
         </div>
 
@@ -206,6 +219,8 @@
             et quand), le solde et la description — et votre plan entier : numéro, noms, nature,
             classe, sous-classe, sens et description. Elle rend un compte proposé, une confiance et
             une raison ; la page vérifie que le compte existe et que la nature concorde, et vous tranchez.
+            <b>Lier selon l'IA</b> accepte ensuite d'un coup les propositions dont la confiance atteint le
+            seuil choisi (90, 80 ou 70 % et plus) sur les comptes encore à décider ; « Aucun » ne lie rien.
         </p>
 
         <div class="avance">

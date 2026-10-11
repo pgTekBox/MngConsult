@@ -825,6 +825,49 @@ Public Class CorrespondanceComptes
     End Sub
 
     ''' <summary>
+    ''' Lie d'un coup les comptes encore à décider dont la proposition de l'IA
+    ''' atteint le seuil choisi (T318, s0899). Les mêmes garde-fous que
+    ''' l'enregistrement ; deux sources vers le même compte : la plus confiante.
+    ''' </summary>
+    Protected Sub btnLierIA_Click(sender As Object, e As EventArgs) Handles btnLierIA.Click
+        If Not PlanCharge Then Return
+        Dim seuil As Integer
+        If Not Integer.TryParse(ddlSeuilIA.SelectedValue, seuil) OrElse seuil <= 0 Then
+            Alerte("Rien à lier", "Choisissez un seuil : lier à 90, 80 ou 70 % de confiance et plus. « Aucun » ne lie rien.")
+            Return
+        End If
+
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlParameter("@UserId", UserId))
+            p.Add(New SqlParameter("@Seuil", CObj(seuil)))
+            Dim ds As DataSet = ExecuteSQLds("s0899LierParConfianceIA", p)
+            Dim liees As Integer = 0, candidates As Integer = 0
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
+                liees = Convert.ToInt32(ds.Tables(0).Rows(0)("Liees"))
+                candidates = Convert.ToInt32(ds.Tables(0).Rows(0)("Candidates"))
+            End If
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 1 AndAlso ds.Tables(1).Rows.Count > 0 Then AfficherStats(ds.Tables(1).Rows(0))
+            ChargerLignes()
+
+            If liees = 0 Then
+                Alerte("Rien à lier",
+                       "Aucun compte encore à décider ne porte une proposition de l'IA à " & seuil & " % ou plus" &
+                       If(candidates > 0, " dont le compte cible soit libre.", ". Lancez « Proposer avec l'IA », ou baissez le seuil."))
+            Else
+                Alerte("Fait",
+                       liees & " compte(s) lié(s) selon la proposition de l'IA (confiance " & seuil & " % et plus)." &
+                       If(candidates > liees, " " & (candidates - liees) & " proposition(s) visaient un compte déjà pris : à décider à la main.", "") &
+                       " Ce qui reste demande une décision.")
+            End If
+
+        Catch ex As Exception
+            Alerte("Erreur", "Liaison selon l'IA : " & Server.HtmlEncode(ex.Message))
+        End Try
+    End Sub
+
+    ''' <summary>
     ''' Enregistre ce que l'utilisateur a saisi. Une ligne sans action revient
     ''' « à décider » : c'est ainsi qu'on se dédit.
     ''' </summary>

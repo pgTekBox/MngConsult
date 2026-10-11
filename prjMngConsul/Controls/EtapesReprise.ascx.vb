@@ -24,6 +24,12 @@ Public Class EtapesReprise
     ''' <summary>1, 2 ou 3 — l'étape où l'on se trouve.</summary>
     Public Property Etape As Integer = 0
 
+    ''' <summary>
+    ''' Vrai pour ne pas montrer le cran « 1 Importer le fichier » : l'écran de
+    ''' correspondance le demande — à l'étape 2, le fichier est derrière soi.
+    ''' </summary>
+    Public Property SansEtape1 As Boolean = False
+
     Private Structure Cran
         Public No As Integer
         Public Libelle As String
@@ -51,8 +57,8 @@ Public Class EtapesReprise
             .Fait = "Propose par numéro, par nom dans les quatre langues, et par IA avec un " &
                     "degré de confiance et un motif. Choix guidé classe ▸ sous-classe ▸ " &
                     "compte. Rien n'est décidé à votre place.",
-            .Manque = "Aucun traitement en masse hors « accepter les correspondances par " &
-                      "numéro » : le reste se décide ligne par ligne."
+            .Manque = "En masse : « accepter les correspondances par numéro » et « lier selon " &
+                      "l'IA » au-dessus d'un seuil de confiance ; le reste se décide ligne par ligne."
         },
         New Cran With {
             .No = 3, .Libelle = "Créer les comptes au plan", .Page = "~/AppliquerPlanComptable.aspx",
@@ -82,6 +88,7 @@ Public Class EtapesReprise
         Dim sb As New StringBuilder()
 
         For Each c In Crans
+            If SansEtape1 AndAlso c.No = 1 Then Continue For
             ' Les trois crans sont des liens, toujours : il n'y a qu'un plan
             ' comptable en préparation par compagnie, donc rien à désigner dans
             ' l'adresse. L'étape courante reste surlignée.
