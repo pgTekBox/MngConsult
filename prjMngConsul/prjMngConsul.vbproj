@@ -293,6 +293,7 @@
     <Content Include="css\JsonViewer.css" />
     <Content Include="css\landingpage.css" />
     <Content Include="css\listvew.css" />
+    <Content Include="css\telerik-bleumarine.css" />
     <Content Include="css\assistant.css" />
     <Content Include="Aide\aide.css" />
     <Content Include="Aide\aide.js" />

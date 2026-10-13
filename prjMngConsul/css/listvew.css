@@ -6,18 +6,18 @@
         VARIABLES & BASE
 ============================================= */
 :root {
-    --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-    --bg: #f6f8fc;
+    --font: Nunito, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    --bg: #F2F5F9;
     --card: #fff;
-    --text: #0f172a;
+    --text: #0E1F3D;
     --radius: var(--r-lg);
-    --muted: #64748b;
-    --line: #e2e8f0;
-    --primary: #2563eb;
-    --primary-weak: #eff6ff;
+    --muted: #44536E;
+    --line: #D5DDE8;
+    --primary: #1B4F9C;
+    --primary-weak: #E3EBF7;
     --danger: #dc2626;
     --ok: #16a34a;
-    --accent: #2563eb;
+    --accent: #1B4F9C;
     --accent2: #06b6d4;
     --supplier: #7c3aed; /* violet — couleur distincte fournisseur */
     --supplier-weak: #f5f3ff;
@@ -34,7 +34,7 @@ html, body, form {
 
 body {
     margin: 0;
-    background: radial-gradient(1200px 600px at 20% 0%, #eef2ff 0%, transparent 45%), radial-gradient(1200px 600px at 80% 0%, #ecfeff 0%, transparent 45%), var(--bg);
+    background: var(--bg);
     font-family: var(--font);
     color: var(--text);
 }
@@ -67,7 +67,7 @@ body {
 .lien {
     color: var(--primary);
     text-decoration: underline;
-    text-decoration-color: rgba(37,99,235,.35);
+    text-decoration-color: rgba(27,79,156,.35);
     text-underline-offset: 3px;
     cursor: pointer;
     font-weight: 700;
@@ -75,12 +75,12 @@ body {
 }
 
     .lien:hover {
-        color: #1d4ed8;
-        text-decoration-color: rgba(37,99,235,.8);
+        color: #143A73;
+        text-decoration-color: rgba(27,79,156,.8);
     }
 
     .lien:active {
-        color: #1e40af;
+        color: #143A73;
     }
 
 

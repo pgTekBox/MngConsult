@@ -516,6 +516,9 @@ a{
     })();
     </script>
 
+    <%-- Skin « Bleu marine » des contrôles Telerik et des listes : posé en dernier pour passer après Metro/Bootstrap. --%>
+    <link rel="stylesheet" href="css/telerik-bleumarine.css?v=2026101301" />
+
 </form>
 </body>
 </html>

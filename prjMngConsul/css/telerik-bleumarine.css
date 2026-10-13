@@ -1,0 +1,220 @@
+﻿/* =============================================================================
+   Skin « Bleu marine » pour les contrôles Telerik et les grilles de 60secondes
+   -----------------------------------------------------------------------------
+   Une surcouche posée APRÈS les skins Metro et Bootstrap de Telerik (chargée en
+   fin de body par Site.Master) : rien à changer sur les contrôles, Skin="Metro"
+   et Skin="Bootstrap" restent, cette feuille les habille aux couleurs du thème
+   « Doux bleu marine » — bleu marine #0E1F3D, bleu #1B4F9C, fonds doux #E8EDF5
+   / #E3EBF7, filets #D5DDE8, Nunito.
+
+   Couvre : les listes (RadListView : .listview-list / -head / -row, tri, vide),
+   les tableaux d'import (.imp-tbl, .stg-tbl, table.cor), RadWindow (fenêtres,
+   dialogues alert/confirm/prompt), RadComboBox, RadTextBox / RadNumericTextBox,
+   RadDatePicker + RadCalendar, RadButton, RadAjax (voile de chargement).
+   Mode de rendu : lightweight (Web.config Telerik.Web.UI.RenderMode).
+   ============================================================================= */
+
+:root {
+    --tk-navy: #0E1F3D;
+    --tk-primary: #1B4F9C;
+    --tk-primary-dark: #143A73;
+    --tk-muted: #44536E;
+    --tk-line: #D5DDE8;
+    --tk-line2: #AEBBCD;
+    --tk-soft: #E8EDF5;
+    --tk-soft2: #E3EBF7;
+    --tk-page: #F2F5F9;
+    --tk-font: Nunito, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+/* ---------- Les listes (RadListView habillé par les pages) ---------- */
+.listview-list {
+    background: #fff;
+    border: 1px solid var(--tk-line);
+    border-radius: 20px;
+    box-shadow: 0 1px 3px rgba(14, 31, 61, .08);
+    font-family: var(--tk-font);
+}
+.listview-list .listview-list-head {
+    background: var(--tk-page);
+    color: var(--tk-muted);
+    border-bottom: 1px solid var(--tk-line);
+    font-weight: 800;
+    font-size: 12.5px;
+    letter-spacing: .02em;
+}
+.listview-list .listview-list-head .sort-link,
+.listview-list .listview-list-head .sort-link:visited {
+    color: var(--tk-muted);
+    text-decoration: none;
+    font-weight: 800;
+}
+.listview-list .listview-list-head .sort-link:hover { color: var(--tk-primary); }
+.listview-list .listview-row {
+    border-bottom: 1px solid var(--tk-soft);
+    color: var(--tk-navy);
+}
+.listview-list .listview-row:hover { background: var(--tk-page); }
+.listview-list .listview-row:last-child { border-bottom: 0; }
+.listview-list .listview-empty { color: var(--tk-muted); }
+.listview-list .btn-icon:hover { background-color: var(--tk-soft) !important; }
+.listview-actions .btn,
+.listview-actions input[type=submit],
+.listview-actions input[type=button] { border-radius: 999px !important; }
+
+/* ---------- Les tableaux d'import et de préparation ---------- */
+.imp-tbl, .stg-tbl, table.cor, table.data-table, table.detail-table, table.preview-table {
+    border-collapse: separate;
+    border-spacing: 0;
+    font-family: var(--tk-font);
+}
+.imp-tbl th, .stg-tbl th, table.cor thead th, table.data-table th, table.detail-table th, table.preview-table th {
+    background: var(--tk-page);
+    color: var(--tk-muted);
+    font-weight: 800;
+    font-size: 12.5px;
+    border-bottom: 1px solid var(--tk-line);
+}
+.imp-tbl td, .stg-tbl td, table.cor tbody td, table.data-table td, table.detail-table td, table.preview-table td {
+    border-bottom: 1px solid var(--tk-soft);
+}
+.imp-tbl tbody tr:hover td, .stg-tbl tbody tr:hover td, table.cor tbody tr:hover td { background: var(--tk-page); }
+
+/* ---------- RadWindow : fenêtres et dialogues ---------- */
+.RadWindow.RadWindow_Metro, .RadWindow.RadWindow_Bootstrap {
+    border: 1px solid var(--tk-line);
+    border-radius: 16px;
+    box-shadow: 0 24px 60px rgba(14, 31, 61, .25);
+    font-family: var(--tk-font);
+    color: var(--tk-navy);
+    overflow: hidden;
+}
+.RadWindow_Metro .rwTitleBar, .RadWindow_Bootstrap .rwTitleBar {
+    background: #fff;
+    color: var(--tk-navy);
+    border-bottom: 1px solid var(--tk-line);
+    min-height: 46px;
+    cursor: move;
+}
+.RadWindow_Metro .rwTitleBar .rwTitle, .RadWindow_Bootstrap .rwTitleBar .rwTitle,
+.RadWindow_Metro .rwTitleWrapper, .RadWindow_Bootstrap .rwTitleWrapper {
+    color: var(--tk-navy);
+    font-weight: 800;
+    font-size: 15px;
+    font-family: var(--tk-font);
+}
+.RadWindow_Metro .rwCommands a, .RadWindow_Bootstrap .rwCommands a,
+.RadWindow_Metro .rwCommands .rwIcon, .RadWindow_Bootstrap .rwCommands .rwIcon { color: var(--tk-muted); }
+.RadWindow_Metro .rwCommands a:hover, .RadWindow_Bootstrap .rwCommands a:hover {
+    color: var(--tk-navy);
+    background: var(--tk-soft);
+    border-radius: 50%;
+}
+.RadWindow_Metro .rwContent, .RadWindow_Bootstrap .rwContent { background: #fff; }
+.RadWindow_Metro .rwDialog, .RadWindow_Bootstrap .rwDialog { font-family: var(--tk-font); color: var(--tk-navy); }
+.RadWindow_Metro .rwDialogMessage, .RadWindow_Bootstrap .rwDialogMessage { color: var(--tk-navy); font-size: 14px; line-height: 1.5; }
+.RadWindow_Metro .rwDialogButtons a, .RadWindow_Bootstrap .rwDialogButtons a,
+.RadWindow_Metro .rwDialogButtons button, .RadWindow_Bootstrap .rwDialogButtons button {
+    border-radius: 999px;
+    font-weight: 700;
+    font-family: var(--tk-font);
+    padding: 8px 18px;
+    border: 1px solid var(--tk-line2);
+    background: #fff;
+    color: var(--tk-navy);
+}
+.RadWindow_Metro .rwDialogButtons .rwOkBtn, .RadWindow_Bootstrap .rwDialogButtons .rwOkBtn {
+    background: var(--tk-primary);
+    border-color: var(--tk-primary);
+    color: #fff;
+}
+.RadWindow_Metro .rwDialogButtons .rwOkBtn:hover, .RadWindow_Bootstrap .rwDialogButtons .rwOkBtn:hover { background: var(--tk-primary-dark); }
+.TelerikModalOverlay { background-color: rgba(14, 31, 61, .55) !important; opacity: 1 !important; }
+
+/* ---------- RadComboBox ---------- */
+.RadComboBox.RadComboBox_Metro, .RadComboBox.RadComboBox_Bootstrap { font-family: var(--tk-font); }
+.RadComboBox_Metro .rcbInner, .RadComboBox_Bootstrap .rcbInner {
+    border: 1px solid var(--tk-line2);
+    border-radius: 999px;
+    background: #fff;
+    padding-left: 6px;
+}
+.RadComboBox_Metro .rcbInner.rcbFocused, .RadComboBox_Bootstrap .rcbInner.rcbFocused,
+.RadComboBox_Metro .rcbInner:hover, .RadComboBox_Bootstrap .rcbInner:hover {
+    border-color: var(--tk-primary);
+    box-shadow: 0 0 0 3px rgba(27, 79, 156, .15);
+}
+.RadComboBox_Metro .rcbInput, .RadComboBox_Bootstrap .rcbInput { color: var(--tk-navy); font-family: var(--tk-font); }
+.RadComboBox_Metro .rcbActionButton, .RadComboBox_Bootstrap .rcbActionButton {
+    background: transparent;
+    border: 0;
+    color: var(--tk-muted);
+}
+.RadComboBoxDropDown.RadComboBoxDropDown_Metro, .RadComboBoxDropDown.RadComboBoxDropDown_Bootstrap {
+    border: 1px solid var(--tk-line);
+    border-radius: 14px;
+    box-shadow: 0 14px 40px rgba(14, 31, 61, .18);
+    font-family: var(--tk-font);
+    color: var(--tk-navy);
+    overflow: hidden;
+}
+.RadComboBoxDropDown_Metro .rcbItem, .RadComboBoxDropDown_Bootstrap .rcbItem { color: var(--tk-navy); padding: 7px 12px; }
+.RadComboBoxDropDown_Metro .rcbHovered, .RadComboBoxDropDown_Bootstrap .rcbHovered { background: var(--tk-page); color: var(--tk-navy); }
+.RadComboBoxDropDown_Metro .rcbSelected, .RadComboBoxDropDown_Bootstrap .rcbSelected { background: var(--tk-soft2); color: var(--tk-primary-dark); }
+.RadComboBoxDropDown_Metro .rcbCheckAllItems, .RadComboBoxDropDown_Bootstrap .rcbCheckAllItems { border-bottom: 1px solid var(--tk-line); background: var(--tk-page); }
+
+/* ---------- RadTextBox, RadNumericTextBox, RadDatePicker ---------- */
+.RadInput_Metro .riTextBox, .RadInput_Bootstrap .riTextBox,
+.RadPicker_Metro .riTextBox, .RadPicker_Bootstrap .riTextBox,
+.RadInput.RadInput_Metro, .RadInput.RadInput_Bootstrap {
+    border: 1px solid var(--tk-line2);
+    border-radius: 12px;
+    color: var(--tk-navy);
+    font-family: var(--tk-font);
+    background: #fff;
+}
+.RadInput_Metro .riTextBox:focus, .RadInput_Bootstrap .riTextBox:focus,
+.RadInput_Metro .riFocused, .RadInput_Bootstrap .riFocused,
+.RadPicker_Metro .riTextBox:focus, .RadPicker_Bootstrap .riTextBox:focus {
+    border-color: var(--tk-primary);
+    box-shadow: 0 0 0 3px rgba(27, 79, 156, .15);
+    outline: 0;
+}
+.RadInput_Metro .riTextBox.riError, .RadInput_Bootstrap .riTextBox.riError { border-color: #dc2626; }
+.RadPicker_Metro .rcCalPopup, .RadPicker_Bootstrap .rcCalPopup,
+.RadPicker_Metro .rcTimePopup, .RadPicker_Bootstrap .rcTimePopup { color: var(--tk-primary); }
+.RadCalendar_Metro, .RadCalendar_Bootstrap {
+    border: 1px solid var(--tk-line);
+    border-radius: 14px;
+    font-family: var(--tk-font);
+    color: var(--tk-navy);
+    box-shadow: 0 14px 40px rgba(14, 31, 61, .18);
+    overflow: hidden;
+}
+.RadCalendar_Metro .rcTitlebar, .RadCalendar_Bootstrap .rcTitlebar { background: var(--tk-page); color: var(--tk-navy); border-bottom: 1px solid var(--tk-line); }
+.RadCalendar_Metro .rcMain .rcRow a, .RadCalendar_Bootstrap .rcMain .rcRow a { color: var(--tk-navy); border-radius: 50%; }
+.RadCalendar_Metro .rcMain .rcHover a, .RadCalendar_Bootstrap .rcMain .rcHover a { background: var(--tk-soft); color: var(--tk-navy); }
+.RadCalendar_Metro .rcMain .rcSelected a, .RadCalendar_Bootstrap .rcMain .rcSelected a { background: var(--tk-primary); color: #fff; }
+.RadCalendar_Metro .rcMain .rcToday a, .RadCalendar_Bootstrap .rcMain .rcToday a { border: 1px solid var(--tk-primary); }
+
+/* ---------- RadButton ---------- */
+.RadButton.RadButton_Metro, .RadButton.RadButton_Bootstrap {
+    border-radius: 999px;
+    font-family: var(--tk-font);
+    font-weight: 700;
+    border: 1px solid var(--tk-line2);
+    background: #fff;
+    color: var(--tk-navy);
+}
+.RadButton.RadButton_Metro:hover, .RadButton.RadButton_Bootstrap:hover { background: var(--tk-page); border-color: var(--tk-primary); color: var(--tk-navy); }
+.RadButton.RadButton_Metro.rbPrimary, .RadButton.RadButton_Bootstrap.rbPrimary,
+.RadButton.RadButton_Metro.rbPrimaryButton, .RadButton.RadButton_Bootstrap.rbPrimaryButton {
+    background: var(--tk-primary);
+    border-color: var(--tk-primary);
+    color: #fff;
+}
+.RadButton.RadButton_Metro.rbPrimary:hover, .RadButton.RadButton_Bootstrap.rbPrimary:hover { background: var(--tk-primary-dark); border-color: var(--tk-primary-dark); color: #fff; }
+
+/* ---------- RadAjax : le voile et l'indicateur de chargement ---------- */
+.RadAjax_Metro .raDiv, .RadAjax_Bootstrap .raDiv { border-radius: 16px; }
+.RadAjax_Metro .raColor, .RadAjax_Bootstrap .raColor { background-color: var(--tk-page); opacity: .6; }
