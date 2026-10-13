@@ -82,7 +82,7 @@
 <div class="nr-page">
 
     <div class="nr-head">
-        <div class="ico">🔍</div>
+        <div class="ico"><i class="ic ic-search" aria-hidden="true"></i></div>
         <div>
             <h1>Opérations non rapprochées</h1>
             <div class="sub">ce que la source n'avait pas encore pointé</div>

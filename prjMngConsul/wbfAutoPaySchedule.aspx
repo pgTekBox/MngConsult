@@ -89,12 +89,12 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="autopay-page">
 
-        <h1 class="page-title">📅 Calendrier des paiements automatiques</h1>
+        <h1 class="page-title"><i class="ic ic-calendar" aria-hidden="true"></i> Calendrier des paiements automatiques</h1>
 
         <div class="page-tabs">
-            <a href="wbfAutoPayAuthorizations.aspx">🔐 Autorisations</a>
-            <a href="wbfAutoPaySchedule.aspx" class="active">📅 Calendrier (30 j)</a>
-            <a href="wbfAutoPayHistory.aspx">📜 Historique</a>
+            <a href="wbfAutoPayAuthorizations.aspx"><i class="ic ic-lock" aria-hidden="true"></i> Autorisations</a>
+            <a href="wbfAutoPaySchedule.aspx" class="active"><i class="ic ic-calendar" aria-hidden="true"></i> Calendrier (30 j)</a>
+            <a href="wbfAutoPayHistory.aspx"><i class="ic ic-scroll" aria-hidden="true"></i> Historique</a>
         </div>
 
         <asp:Panel ID="pnlAlert" runat="server" Visible="false">

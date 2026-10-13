@@ -43,7 +43,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="bg-page">
     <div class="bg-head">
-        <div class="ico">🎯</div>
+        <div class="ico"><i class="ic ic-target" aria-hidden="true"></i></div>
         <div>
             <h1>Budgets</h1>
             <div class="sub">ce que la source prévoyait, compte par compte et période par période</div>

@@ -9,7 +9,7 @@
             <svg width="22" height="22" viewBox="0 0 24 24" fill="none" aria-hidden="true">
                 <path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
             </svg>
-        </button>
+       </button>
 
         <div class="brand">
             <span class="brand-dot" aria-hidden="true"></span>

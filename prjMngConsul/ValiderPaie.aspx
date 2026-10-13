@@ -97,7 +97,7 @@
 <div class="pa-page">
 
     <div class="pa-head">
-        <div class="ico">🧾</div>
+        <div class="ico"><i class="ic ic-receipt" aria-hidden="true"></i></div>
         <div>
             <h1>Paie</h1>
             <div class="sub">ce qui a été versé, et ce qui a été retenu</div>

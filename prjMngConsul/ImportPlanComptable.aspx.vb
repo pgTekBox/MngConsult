@@ -177,7 +177,7 @@ Public Class ImportPlanComptable
         End If
 
         For Each a In s.Avertissements
-            sb.Append("<div class='aide-avert'><span>⚠️</span><p>")
+            sb.Append("<div class='aide-avert'><span><i class='ic ic-alert' aria-hidden='true'></i></span><p>")
             sb.Append(a)
             sb.Append("</p></div>")
         Next

@@ -360,9 +360,8 @@
             <asp:Button ID="btnFilterBilan" runat="server" CssClass="btn" Text="Bilan" CausesValidation="false" />
             <asp:Button ID="btnFilterResultat" runat="server" CssClass="btn" Text="Résultats" CausesValidation="false" />
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
-                🖨 Imprimer / PDF
-            </button>
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">Imprimer / PDF
+           </button>
         </div>
     </div>
 

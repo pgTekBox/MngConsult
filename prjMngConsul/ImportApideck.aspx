@@ -146,7 +146,7 @@
     <a class="retour" href="Importations">← Retour aux importations</a>
 
     <div class="apd-head">
-        <div class="ico">🔌</div>
+        <div class="ico"><i class="ic ic-plug" aria-hidden="true"></i></div>
         <div>
             <h1>Importer depuis QuickBooks <span class="coche" id="spanCoche" runat="server" visible="false" title="La dernière extraction a tout rapatrié">✓</span><span class="coche err" id="spanErreur" runat="server" visible="false" title="La dernière extraction a des erreurs">!</span></h1>
             <div class="sub">Lecture directe, par Apideck — sans export manuel</div>

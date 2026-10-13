@@ -45,7 +45,7 @@
           font-weight:700; font-size:15px;
           color:#0E1F3D; text-decoration:none;
           background:#f8fafc;">
-    📄 Ouvrir vle PDF
+    <i class="ic ic-file" aria-hidden="true"></i> Ouvrir vle PDF
 </a>
         <%-- iframe --%>
         <iframe id="pdfFrame"

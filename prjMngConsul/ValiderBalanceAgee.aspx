@@ -79,7 +79,7 @@
 <div class="bag-page">
 
     <div class="bag-head">
-        <div class="ico">📉</div>
+        <div class="ico"><i class="ic ic-trend-down" aria-hidden="true"></i></div>
         <div>
             <h1>Balance âgée</h1>
             <div class="sub">qui doit combien, et depuis quand</div>

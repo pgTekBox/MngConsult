@@ -107,7 +107,7 @@
         <div class="layout">
 
             <div class="header-card">
-                <h1>🤖 Programmer un paiement automatique</h1>
+                <h1><i class="ic ic-bot" aria-hidden="true"></i> Programmer un paiement automatique</h1>
                 <div class="meta">
                     Le paiement sera prélevé automatiquement à la date choisie via Stripe,
                     en utilisant l'autorisation que vous avez configurée pour ce fournisseur.
@@ -145,7 +145,7 @@
                 <!-- Date du debit -->
                 <div class="info-block">
                     <div class="input-row">
-                        <label for="<%= tbAutoPayDate.ClientID %>">📅 Date du débit automatique</label>
+                        <label for="<%= tbAutoPayDate.ClientID %>"><i class="ic ic-calendar" aria-hidden="true"></i> Date du débit automatique</label>
                         <asp:TextBox ID="tbAutoPayDate" runat="server" TextMode="Date" />
                     </div>
                     <div style="font-size:11px; color:var(--slate-500);">
@@ -154,7 +154,7 @@
                 </div>
 
                 <div class="alert info">
-                    <strong>📧 Vous recevrez :</strong>
+                    <strong><i class="ic ic-mail" aria-hidden="true"></i> Vous recevrez :</strong>
                     <ul style="margin: 8px 0 0 0; padding-left:18px;">
                         <li>Un email de préavis 24 h avant le débit (si carte)</li>
                         <li>Un email de préavis légal 3 jours avant le débit (si PAD)</li>
@@ -162,7 +162,7 @@
                     </ul>
                 </div>
 
-                <asp:Button ID="btnConfirm" runat="server" Text="🤖 Programmer le paiement automatique"
+                <asp:Button ID="btnConfirm" runat="server" Text="Programmer le paiement automatique"
                     CssClass="btn-confirm" CausesValidation="false" />
 
             </asp:Panel>

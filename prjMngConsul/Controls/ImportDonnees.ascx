@@ -144,13 +144,13 @@
 
     <!-- ══════════ MESSAGES ══════════ -->
     <asp:Panel ID="pnlSucces" runat="server" Visible="false" CssClass="idn-alert idn-ok">
-        <span class="ai">✅</span><div><asp:Literal ID="litSucces" runat="server" /></div>
+        <span class="ai"><i class="ic ic-check-circle" aria-hidden="true"></i></span><div><asp:Literal ID="litSucces" runat="server" /></div>
     </asp:Panel>
     <asp:Panel ID="pnlAvert" runat="server" Visible="false" CssClass="idn-alert idn-wa">
-        <span class="ai">⚠️</span><div><asp:Literal ID="litAvert" runat="server" /></div>
+        <span class="ai"><i class="ic ic-alert" aria-hidden="true"></i></span><div><asp:Literal ID="litAvert" runat="server" /></div>
     </asp:Panel>
     <asp:Panel ID="pnlErreur" runat="server" Visible="false" CssClass="idn-alert idn-ko">
-        <span class="ai">❌</span><div><asp:Literal ID="litErreur" runat="server" /></div>
+        <span class="ai"><i class="ic ic-x-circle" aria-hidden="true"></i></span><div><asp:Literal ID="litErreur" runat="server" /></div>
     </asp:Panel>
 
     <!-- ══════════ CE QUI A ÉTÉ LU ══════════ -->
@@ -165,7 +165,7 @@
                 <asp:Button ID="btnCreer" runat="server" CssClass="idn-btn p" CausesValidation="false" />
                 <asp:HyperLink ID="hlListe" runat="server" CssClass="idn-btn s" Visible="false" />
                 <asp:Button ID="btnAbandonner" runat="server" CssClass="idn-btn d" CausesValidation="false"
-                    Text="🗑 Abandonner ce fichier"
+                    Text="Abandonner ce fichier"
                     OnClientClick="if (!confirm('Abandonner ce fichier et ses lignes en préparation ? Ce qui a déjà été créé dans l\'application reste en place.')) { return false; }" />
             </div>
         </div>
@@ -191,7 +191,7 @@
             <uc:SourceDonnees ID="ucSource" runat="server" AvecEntete="false" />
 
             <div class="idn-drop" id="idnDrop">
-                <span class="di" id="idnIcone">📁</span>
+                <span class="di" id="idnIcone"><i class="ic ic-folder" aria-hidden="true"></i></span>
                 <span class="dt" id="idnTexte"><b>Glissez votre fichier ici</b> ou cliquez pour le choisir</span>
                 <span class="dh" id="idnInfo">.csv ou .txt</span>
             </div>
@@ -202,10 +202,10 @@
             </asp:Panel>
 
             <div class="idn-acts">
-                <asp:Button ID="btnApercu" runat="server" Text="👁 Voir un aperçu" CssClass="idn-btn s" CausesValidation="false" />
-                <asp:Button ID="btnIA" runat="server" Text="✨ Extraire avec l'IA" CssClass="idn-btn ia" CausesValidation="false"
-                    OnClientClick="this.value='⏳ Extraction par l\'IA…';" />
-                <asp:Button ID="btnLire" runat="server" Text="📥 Lire le fichier" CssClass="idn-btn p" CausesValidation="false" />
+                <asp:Button ID="btnApercu" runat="server" Text="Voir un aperçu" CssClass="idn-btn s" CausesValidation="false" />
+                <asp:Button ID="btnIA" runat="server" Text="Extraire avec l'IA" CssClass="idn-btn ia" CausesValidation="false"
+                    OnClientClick="this.value=' Extraction par l\'IA…';" />
+                <asp:Button ID="btnLire" runat="server" Text="Lire le fichier" CssClass="idn-btn p" CausesValidation="false" />
             </div>
 
             <p class="idn-hint">
@@ -220,7 +220,7 @@
 
     <!-- ══════════ APERÇU ══════════ -->
     <asp:Panel ID="pnlApercu" runat="server" Visible="false" CssClass="idn-step">
-        <h2><span class="n">👁</span>Aperçu — ce que la lecture a compris</h2>
+        <h2><span class="n"><i class="ic ic-eye" aria-hidden="true"></i></span>Aperçu — ce que la lecture a compris</h2>
         <div class="body">
             <asp:Literal ID="litApercu" runat="server" />
         </div>

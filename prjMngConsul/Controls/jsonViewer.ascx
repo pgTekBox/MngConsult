@@ -7,7 +7,7 @@
     <div id="jsonModal" runat="server" class="json-modal-overlay" clientidmode="Static" style="display: none;">
         <div class="json-modal-box">
             <div class="json-modal-header">
-                <div>🤖 Résultat Analyse AI (JSON)</div>
+                <div><i class="ic ic-bot" aria-hidden="true"></i> Résultat Analyse AI (JSON)</div>
                 <button type="button" class="json-modal-close" onclick="closeJsonModal()">✖</button>
             </div>
             <pre id="jsonModalContent" runat="server" clientidmode="Static" class="json-modal-content"></pre>

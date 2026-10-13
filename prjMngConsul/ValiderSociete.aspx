@@ -86,7 +86,7 @@
 <div class="soc-page">
 
     <div class="soc-head">
-        <div class="ico">🏢</div>
+        <div class="ico"><i class="ic ic-building" aria-hidden="true"></i></div>
         <div>
             <h1>Fiche d'entreprise</h1>
             <div class="sub">ce que dit la source, ce que dit 60Sec-AI</div>

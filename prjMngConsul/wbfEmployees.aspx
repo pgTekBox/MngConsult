@@ -121,7 +121,7 @@
                                 CommandName="ResetPwd" CommandArgument='<%# Eval("Id") %>' CausesValidation="false"
                                 Visible='<%# CBool(Eval("HasMailbox")) %>' />
 
-                            <asp:Button ID="btnDelete" runat="server" CssClass="btn-mini danger" Text="🗑"
+                            <asp:Button ID="btnDelete" runat="server" CssClass="btn-mini danger" Text=""
                                 ToolTip='<%# L("delete") %>' CommandName="DeleteEmployee" CommandArgument='<%# Eval("Id") %>'
                                 CausesValidation="false" OnClientClick='<%# "return confirm(L_DEL_CONFIRM);" %>' />
                         </div>

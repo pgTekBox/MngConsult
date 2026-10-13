@@ -206,7 +206,7 @@
         <div class="layout">
 
             <div class="header-card">
-                <h1>🔄 Synchroniser les paiements Stripe</h1>
+                <h1><i class="ic ic-refresh" aria-hidden="true"></i> Synchroniser les paiements Stripe</h1>
                 <div class="meta">
                     Facture <strong><asp:Literal ID="litDocumentId" runat="server" /></strong>
                     · Fournisseur <strong><asp:Literal ID="litSupplierName" runat="server" /></strong>
@@ -234,7 +234,7 @@
 
             <div class="footer-bar">
                 <asp:Button ID="btnRefresh" runat="server"
-                    Text="🔄 Vérifier à nouveau"
+                    Text="Vérifier à nouveau"
                     CssClass="btn-secondary"
                     CausesValidation="false" />
                 <asp:HyperLink ID="lnkClose" runat="server"

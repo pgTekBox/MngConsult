@@ -186,13 +186,13 @@
     <div class="autopay-page">
 
         <div class="page-header">
-            <h1 class="page-title">🤖 Paiements automatiques fournisseurs</h1>
+            <h1 class="page-title"><i class="ic ic-bot" aria-hidden="true"></i> Paiements automatiques fournisseurs</h1>
         </div>
 
         <div class="page-tabs">
-            <a href="wbfAutoPayAuthorizations.aspx" class="active">🔐 Autorisations</a>
-            <a href="wbfAutoPaySchedule.aspx">📅 Calendrier (30 j)</a>
-            <a href="wbfAutoPayHistory.aspx">📜 Historique</a>
+            <a href="wbfAutoPayAuthorizations.aspx" class="active"><i class="ic ic-lock" aria-hidden="true"></i> Autorisations</a>
+            <a href="wbfAutoPaySchedule.aspx"><i class="ic ic-calendar" aria-hidden="true"></i> Calendrier (30 j)</a>
+            <a href="wbfAutoPayHistory.aspx"><i class="ic ic-scroll" aria-hidden="true"></i> Historique</a>
         </div>
 
         <asp:Panel ID="pnlAlert" runat="server" Visible="false">
@@ -230,7 +230,7 @@
         <div class="filter-bar">
             <asp:CheckBox ID="chkShowRevoked" runat="server" ClientIDMode="Static" AutoPostBack="true"
                 Text=" Inclure les autorisations révoquées" />
-            <asp:Button ID="btnRefresh" runat="server" Text="🔄 Rafraîchir"
+            <asp:Button ID="btnRefresh" runat="server" Text="Rafraîchir"
                 CssClass="btn-revoke"
                 Style="background:#D5DDE8; color:#143A73; border-color:#bfdbfe;"
                 CausesValidation="false" />
@@ -258,15 +258,15 @@
                                     "<span style='color:#b91c1c; font-weight:700;'>Révoquée le " & FormatDate(Eval("RevokedDate")) & "</span>") %>
                         </div>
                         <div class="auth-stats">
-                            <span>📅 <strong><%# Eval("ScheduledCount") %></strong> programmées</span>
-                            <span>✅ <strong><%# Eval("SuccessCount") %></strong> réussies (vie)</span>
-                            <span>💰 <strong><%# FormatMoneyOrEmpty(Eval("MonthToDateAmount")) %></strong> ce mois</span>
+                            <span><i class="ic ic-calendar" aria-hidden="true"></i> <strong><%# Eval("ScheduledCount") %></strong> programmées</span>
+                            <span><i class="ic ic-check-circle" aria-hidden="true"></i> <strong><%# Eval("SuccessCount") %></strong> réussies (vie)</span>
+                            <span><i class="ic ic-coins" aria-hidden="true"></i> <strong><%# FormatMoneyOrEmpty(Eval("MonthToDateAmount")) %></strong> ce mois</span>
                         </div>
                     </div>
                     <div class="auth-actions">
                         <asp:Button runat="server"
                             CssClass='<%# If(CBool(Eval("IsActive")), "btn-revoke", "btn-revoke btn-disabled") %>'
-                            Text="🚫 Révoquer"
+                            Text="Révoquer"
                             CommandName="Revoke"
                             CommandArgument='<%# Eval("Id") %>'
                             Enabled='<%# CBool(Eval("IsActive")) %>'

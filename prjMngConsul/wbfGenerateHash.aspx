@@ -20,10 +20,10 @@
 <body>
     <form runat="server">
 
-        <h1>🔐 Générateur de hash bcrypt</h1>
+        <h1><i class="ic ic-lock" aria-hidden="true"></i> Générateur de hash bcrypt</h1>
 
         <div class="warning">
-            ⚠️ <strong>SUPPRIMEZ CETTE PAGE après avoir créé votre premier admin.</strong>
+            <i class="ic ic-alert" aria-hidden="true"></i> <strong>SUPPRIMEZ CETTE PAGE après avoir créé votre premier admin.</strong>
             Elle ne doit pas rester accessible en production.
         </div>
 
@@ -33,7 +33,7 @@
             <br /><br />
             <button type="submit" runat="server" id="btnHash" onserverclick="btnHash_Click">
                 Générer le hash
-            </button>
+           </button>
         </div>
 
         <asp:Panel ID="pnlResult" runat="server" Visible="false" CssClass="box">

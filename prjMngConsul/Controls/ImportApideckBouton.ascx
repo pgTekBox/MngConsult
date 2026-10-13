@@ -56,7 +56,7 @@
 
 <div class="apb">
     <div class="apb-row">
-        <span class="apb-ico">🔌</span>
+        <span class="apb-ico"><i class="ic ic-plug" aria-hidden="true"></i></span>
         <div class="apb-txt">
             <b>QuickBooks, en direct</b> — sans fichier à exporter
             <span class="apb-etat" id="spanEtat" runat="server"><asp:Literal ID="litEtat" runat="server" /></span>
@@ -77,7 +77,7 @@
 
         <asp:Button ID="btnImporter" runat="server" CssClass="apb-btn" CausesValidation="false"
             Text="⬇ Importer depuis QuickBooks"
-            OnClientClick="this.value='⏳ Extraction en cours…';" />
+            OnClientClick="this.value=' Extraction en cours…';" />
         <asp:HyperLink ID="hlLiaison" runat="server" CssClass="apb-lien" NavigateUrl="~/ImportApideck.aspx" Text="Gérer la liaison" />
     </div>
 

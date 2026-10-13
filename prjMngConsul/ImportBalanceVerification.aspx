@@ -159,7 +159,7 @@
 <div class="imp-page">
 
     <div class="imp-head">
-        <div class="ico">⚖️</div>
+        <div class="ico"><i class="ic ic-scale" aria-hidden="true"></i></div>
         <div>
             <h1>Importer la balance de vérification</h1>
             <div class="sub">Les soldes d'ouverture de la reprise comptable</div>
@@ -176,13 +176,13 @@
 
     <!-- ══════════ MESSAGES ══════════ -->
     <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="imp-alert imp-alert-ok">
-        <span class="al-ico">✅</span><div class="al-body"><div class="al-title">C'est fait</div><asp:Literal ID="litSuccess" runat="server" /></div>
+        <span class="al-ico"><i class="ic ic-check-circle" aria-hidden="true"></i></span><div class="al-body"><div class="al-title">C'est fait</div><asp:Literal ID="litSuccess" runat="server" /></div>
     </asp:Panel>
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="imp-alert imp-alert-err">
-        <span class="al-ico">❌</span><div class="al-body"><div class="al-title">Erreur</div><asp:Literal ID="litError" runat="server" /></div>
+        <span class="al-ico"><i class="ic ic-x-circle" aria-hidden="true"></i></span><div class="al-body"><div class="al-title">Erreur</div><asp:Literal ID="litError" runat="server" /></div>
     </asp:Panel>
     <asp:Panel ID="pnlWarning" runat="server" Visible="false" CssClass="imp-alert imp-alert-wrn">
-        <span class="al-ico">⚠️</span><div class="al-body"><div class="al-title">Attention</div><asp:Literal ID="litWarning" runat="server" /></div>
+        <span class="al-ico"><i class="ic ic-alert" aria-hidden="true"></i></span><div class="al-body"><div class="al-title">Attention</div><asp:Literal ID="litWarning" runat="server" /></div>
     </asp:Panel>
 
     <!-- ══════════ CE QUI A ÉTÉ LU ══════════ -->
@@ -214,9 +214,9 @@
             <%-- Les actions sont sous ce qu'elles commandent : on décide après avoir
                  regardé, pas dans un encadré à part au bas de la page. --%>
             <div class="imp-actions">
-                <asp:Button ID="btnControle" runat="server" Text="🔍 Incohérences avec le plan comptable" CssClass="imp-btn imp-btn-primary" CausesValidation="false" />
-                <asp:Button ID="btnReset" runat="server" Text="🔄 Nouvel import" CssClass="imp-btn imp-btn-secondary" />
-                <asp:Button ID="btnTruncateTable" runat="server" Text="🗑 Supprimer la balance importée" CssClass="imp-btn imp-btn-danger"
+                <asp:Button ID="btnControle" runat="server" Text="Incohérences avec le plan comptable" CssClass="imp-btn imp-btn-primary" CausesValidation="false" />
+                <asp:Button ID="btnReset" runat="server" Text="Nouvel import" CssClass="imp-btn imp-btn-secondary" />
+                <asp:Button ID="btnTruncateTable" runat="server" Text="Supprimer la balance importée" CssClass="imp-btn imp-btn-danger"
                     OnClientClick="if (!confirm('Supprimer la balance importée de votre compagnie ?')) { return false; }" />
             </div>
         </div>
@@ -242,14 +242,14 @@
                 <uc:SourceDonnees ID="ucSource" runat="server" Donnees="BALANCE" AvecEntete="false" />
 
                 <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuCsvFile.ClientID %>').click();">
-                    <div class="uz-ico">📁</div>
+                    <div class="uz-ico"><i class="ic ic-folder" aria-hidden="true"></i></div>
                     <p><strong>Glissez votre fichier ici</strong> ou cliquez pour parcourir</p>
                     <p class="uz-hint">Formats : .csv, .txt | Max : 10 Mo</p>
                 </div>
                 <asp:FileUpload ID="fuCsvFile" runat="server" style="display:none;" onchange="showFileInfo(this);" accept=".csv,.txt" />
                 <div id="fileInfoDiv" style="display:none;">
                     <div class="file-pill">
-                        <span class="fp-ico">📄</span>
+                        <span class="fp-ico"><i class="ic ic-file" aria-hidden="true"></i></span>
                         <div><div class="fp-name" id="fileName"></div><div class="fp-size" id="fileSize"></div></div>
                         <button type="button" class="fp-rm" onclick="clearFile();">✕</button>
                     </div>
@@ -261,9 +261,9 @@
                 </div>
 
                 <div class="imp-actions">
-                    <asp:Button ID="btnPreview" runat="server" Text="👁 Voir un aperçu" CssClass="imp-btn imp-btn-secondary" />
-                    <asp:Button ID="btnIA" runat="server" Text="✨ Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value='⏳ Lecture par l\'IA…';" />
-                    <asp:Button ID="btnImport" runat="server" Text="📥 Importer" CssClass="imp-btn imp-btn-primary" />
+                    <asp:Button ID="btnPreview" runat="server" Text="Voir un aperçu" CssClass="imp-btn imp-btn-secondary" />
+                    <asp:Button ID="btnIA" runat="server" Text="Lire avec l'IA" CssClass="imp-btn imp-btn-ia" CausesValidation="false" OnClientClick="this.value=' Lecture par l\'IA…';" />
+                    <asp:Button ID="btnImport" runat="server" Text="Importer" CssClass="imp-btn imp-btn-primary" />
                 </div>
 
                 <p class="ia-hint">
@@ -279,10 +279,10 @@
 
     <!-- ══════════ APERÇU ══════════ -->
     <asp:Panel ID="pnlPreview" runat="server" Visible="false" CssClass="imp-section">
-        <h2><span class="n">👁</span>Aperçu — ce que la lecture a compris</h2>
+        <h2><span class="n"><i class="ic ic-eye" aria-hidden="true"></i></span>Aperçu — ce que la lecture a compris</h2>
         <div class="body">
             <div class="tbl-wrap"><asp:GridView ID="gvPreview" runat="server" CssClass="imp-tbl" AutoGenerateColumns="true" ShowHeaderWhenEmpty="true" /></div>
-            <div class="tbl-info">📋 <asp:Literal ID="litPreviewInfo" runat="server" /></div>
+            <div class="tbl-info"><i class="ic ic-clipboard" aria-hidden="true"></i> <asp:Literal ID="litPreviewInfo" runat="server" /></div>
         </div>
     </asp:Panel>
 

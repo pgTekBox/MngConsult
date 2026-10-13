@@ -38,7 +38,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="toolbar">
         <div>
-            <div class="title">🤖 <%= L("titre") %></div>
+            <div class="title"><i class="ic ic-bot" aria-hidden="true"></i> <%= L("titre") %></div>
             <div style="font-size:13px;color:var(--mc-muted)"><%= L("sousTitre") %></div>
         </div>
         <asp:Button ID="btnNouvelle" runat="server" CssClass="btn" CausesValidation="false" />

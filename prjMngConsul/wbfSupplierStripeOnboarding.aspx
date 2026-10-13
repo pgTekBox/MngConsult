@@ -297,7 +297,7 @@
                             </div>
 
                             <asp:Button ID="btnSendInvitation" runat="server"
-                                Text="Envoyer l'invitation par courriel ✉️"
+                                Text="Envoyer l'invitation par courriel"
                                 CssClass="btn btn-primary"
                                 Style="width:100%;"
                                 CausesValidation="false" />
@@ -321,7 +321,7 @@
                         CausesValidation="false"
                         Visible="false" />
                     <asp:Button ID="btnResendInvitation" runat="server"
-                        Text="Renvoyer l'invitation ✉️"
+                        Text="Renvoyer l'invitation"
                         CssClass="btn btn-primary"
                         CausesValidation="false"
                         Visible="false" />

@@ -228,7 +228,7 @@
             </div>
 
             <asp:Panel ID="pnlWarning" runat="server" Visible="false" CssClass="alert">
-                ⏳ Le paiement est en cours de traitement. La confirmation peut prendre quelques minutes.
+                <i class="ic ic-hourglass" aria-hidden="true"></i> Le paiement est en cours de traitement. La confirmation peut prendre quelques minutes.
             </asp:Panel>
 
             <div class="actions">

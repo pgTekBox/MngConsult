@@ -72,7 +72,7 @@
 <div class="tx-page">
 
     <div class="tx-head">
-        <div class="ico">🧮</div>
+        <div class="ico"><i class="ic ic-calculator" aria-hidden="true"></i></div>
         <div>
             <h1>Rapport de taxes</h1>
             <div class="sub">ce que la source déclare avoir perçu et payé</div>

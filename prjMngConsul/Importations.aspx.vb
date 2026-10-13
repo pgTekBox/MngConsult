@@ -130,7 +130,7 @@ Public Class Importations
             ' le travail se fait. L'étape 1 reste accessible par le fil des étapes.
             Return NoterAvancement(New List(Of Poste) From {
                 New Poste With {
-                    .Icone = "📊",
+                    .Icone = "<i class='ic ic-chart' aria-hidden='true'></i>",
                     .Titre = "Plan comptable",
                     .Source = "QuickBooks : Liste des comptes (Account List)",
                     .Destination = "comptabilité — T121PlanComptable, en trois étapes",
@@ -145,7 +145,7 @@ Public Class Importations
                     .Manque = plan.Manque
                 },
                 New Poste With {
-                    .Icone = "🤝",
+                    .Icone = "<i class='ic ic-handshake' aria-hidden='true'></i>",
                     .Titre = "Associer les comptes, un par un",
                     .Source = "l'étape 2, un compte à la fois : la recommandation de l'assistant, les comptes proches, l'enjeu",
                     .Destination = "préparation — staging.CorrespondanceCompte, comme la grille de l'étape 2",
@@ -157,7 +157,7 @@ Public Class Importations
                     .Manque = plan.Manque
                 },
                 New Poste With {
-                    .Icone = "⚖️",
+                    .Icone = "<i class='ic ic-scale' aria-hidden='true'></i>",
                     .Titre = "Balance de vérification",
                     .Source = "QuickBooks : Balance de vérification (Trial Balance)",
                     .Destination = "préparation — staging.BalanceVerification",
@@ -190,7 +190,7 @@ Public Class Importations
 
             Return NoterAvancement(NoterRessources(New List(Of Poste) From {
                 New Poste With {
-                    .Icone = "🔌",
+                    .Icone = "<i class='ic ic-plug' aria-hidden='true'></i>",
                     .Titre = "QuickBooks, en direct",
                     .Source = "Apideck : lecture de la comptabilité source, sans export",
                     .Destination = "préparation — staging.ConnecteurDonnee, puis les écrans ci-dessous",
@@ -202,7 +202,7 @@ Public Class Importations
                     .Manque = ext.Manque
                 },
                 New Poste With {
-                    .Icone = "🧾",
+                    .Icone = "<i class='ic ic-receipt' aria-hidden='true'></i>",
                     .Titre = "Factures clients et fournisseurs",
                     .Source = "ce que l'extraction a déposé, clients et fournisseurs",
                     .Destination = "T060Document + T061DocumentLine, en brouillon",
@@ -219,7 +219,7 @@ Public Class Importations
                               "à la source. Et la comptabilisation reste à faire depuis la grille des factures."
                 },
                 New Poste With {
-                    .Icone = "🏢",
+                    .Icone = "<i class='ic ic-building' aria-hidden='true'></i>",
                     .Titre = "Comparer la fiche d'entreprise",
                     .Source = "les informations de la société lues chez la source",
                     .Destination = "les paramètres de la compagnie — T100/T101, après validation",
@@ -233,7 +233,7 @@ Public Class Importations
                               "comptable, mois de début d'exercice — s'affiche sans pouvoir être repris."
                 },
                 New Poste With {
-                    .Icone = "🗂️",
+                    .Icone = "<i class='ic ic-folder' aria-hidden='true'></i>",
                     .Titre = "Listes de structure",
                     .Source = "modes de paiement, catégories de suivi, départements, emplacements — et, par la passerelle, classes, agences de taxes, devises et taux de change",
                     .Destination = "préparation seulement — aucune destination dans 60Sec-AI à ce jour",
@@ -248,7 +248,7 @@ Public Class Importations
                               "ont été retirés — Apideck ne les expose pas chez QuickBooks."
                 },
                 New Poste With {
-                    .Icone = "📉",
+                    .Icone = "<i class='ic ic-trend-down' aria-hidden='true'></i>",
                     .Titre = "Balance âgée",
                     .Source = "QuickBooks : soldes en souffrance, clients et fournisseurs",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
@@ -263,7 +263,7 @@ Public Class Importations
                               "suppose que les deux extractions viennent de la même journée."
                 },
                 New Poste With {
-                    .Icone = "📚",
+                    .Icone = "<i class='ic ic-library' aria-hidden='true'></i>",
                     .Titre = "Grand livre",
                     .Source = "QuickBooks : General Ledger, par la passerelle",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
@@ -279,7 +279,7 @@ Public Class Importations
                               "compare donc pas compte à compte avec la balance de vérification."
                 },
                 New Poste With {
-                    .Icone = "🧮",
+                    .Icone = "<i class='ic ic-calculator' aria-hidden='true'></i>",
                     .Titre = "Codes et taux de taxe",
                     .Source = "QuickBooks : les taux de taxe avec leurs composantes — ou saisis ici, ou par fichier",
                     .Destination = "préparation — staging.TaxeImport ; ce que la répartition lit pour couper TPS et TVQ",
@@ -295,7 +295,7 @@ Public Class Importations
                               "qu'à couper les factures en préparation."
                 },
                 New Poste With {
-                    .Icone = "📑",
+                    .Icone = "<i class='ic ic-bookmark' aria-hidden='true'></i>",
                     .Titre = "Rapport de taxes",
                     .Source = "QuickBooks : taux de taxe, et le rapport TaxSummary par la passerelle",
                     .Destination = "les taux coupent la TPS et la TVQ des pièces ; le rapport, contrôle seulement",
@@ -318,7 +318,7 @@ Public Class Importations
                               "1er janvier à la date d'arrêt."
                 },
                 New Poste With {
-                    .Icone = "🏦",
+                    .Icone = "<i class='ic ic-landmark' aria-hidden='true'></i>",
                     .Titre = "Soldes bancaires",
                     .Source = "QuickBooks : les comptes de banque et de carte de crédit, par la passerelle",
                     .Destination = "contrôle seulement — rien ne s'applique à la comptabilité",
@@ -341,7 +341,7 @@ Public Class Importations
                               "arrêté à une date, c'est la balance de vérification qu'il faut lire."
                 },
                 New Poste With {
-                    .Icone = "💵",
+                    .Icone = "<i class='ic ic-banknote' aria-hidden='true'></i>",
                     .Titre = "Acomptes et règlements partiels",
                     .Source = "QuickBooks : encaissements, décaissements et remboursements, avec leurs imputations",
                     .Destination = "staging.PaiementImport — contrôle avant reprise",
@@ -361,7 +361,7 @@ Public Class Importations
                               "avant, sinon tout ressort « document absent »."
                 },
                 New Poste With {
-                    .Icone = "🔍",
+                    .Icone = "<i class='ic ic-search' aria-hidden='true'></i>",
                     .Titre = "Opérations non rapprochées",
                     .Source = "QuickBooks : la colonne is_cleared de la liste des opérations, par la passerelle",
                     .Destination = "contrôle seulement — T142ReleveBancaire n'est pas touchée",
@@ -382,7 +382,7 @@ Public Class Importations
                               "ressort non pointée, ce qui est exact mais sans portée."
                 },
                 New Poste With {
-                    .Icone = "🧾",
+                    .Icone = "<i class='ic ic-receipt' aria-hidden='true'></i>",
                     .Titre = "Paie",
                     .Source = "QuickBooks : l'entité Employee par la passerelle pour les employés ; la paie elle-même n'est pas exposée",
                     .Destination = "staging.PaieEmployeImport, PaieLotImport, PaieImport, PaieLigneImport",
@@ -406,7 +406,7 @@ Public Class Importations
                               "en préparation aujourd'hui est simulé, et le registre le dit."
                 },
                 New Poste With {
-                    .Icone = "🏛️",
+                    .Icone = "<i class='ic ic-landmark' aria-hidden='true'></i>",
                     .Titre = "Remises de DAS",
                     .Source = "QuickBooks : les comptes de retenues du grand livre, par la passerelle",
                     .Destination = "contrôle seulement — ce qui reste dû au fédéral et au Québec",
@@ -428,7 +428,7 @@ Public Class Importations
                               "fausses."
                 },
                 New Poste With {
-                    .Icone = "📦",
+                    .Icone = "<i class='ic ic-package' aria-hidden='true'></i>",
                     .Titre = "Inventaire",
                     .Source = "QuickBooks : l'entité Item, par la passerelle",
                     .Destination = "contrôle seulement — rapproché du compte d'actif de stock",
@@ -449,7 +449,7 @@ Public Class Importations
                               "perdrait 114."
                 },
                 New Poste With {
-                    .Icone = "📎",
+                    .Icone = "<i class='ic ic-paperclip' aria-hidden='true'></i>",
                     .Titre = "Pièces jointes",
                     .Source = "QuickBooks : l'entité Attachable, par la passerelle — tout ce qui est attaché, à qui que ce soit",
                     .Destination = "préparation — staging.PieceJointeImport, fichiers compris",
@@ -467,7 +467,7 @@ Public Class Importations
                               "une pièce qui a échoué se relit à la prochaine extraction."
                 },
                 New Poste With {
-                    .Icone = "🏧",
+                    .Icone = "<i class='ic ic-landmark' aria-hidden='true'></i>",
                     .Titre = "Dépôts et virements bancaires",
                     .Source = "QuickBooks : les entités Deposit et Transfer, par la passerelle",
                     .Destination = "contrôle seulement — staging.MouvementBancaireImport, avec les lignes des dépôts",
@@ -481,7 +481,7 @@ Public Class Importations
                               "de contrôle pour le premier rapprochement bancaire."
                 },
                 New Poste With {
-                    .Icone = "🔁",
+                    .Icone = "<i class='ic ic-repeat' aria-hidden='true'></i>",
                     .Titre = "Transactions récurrentes",
                     .Source = "QuickBooks : l'entité RecurringTransaction, par la passerelle",
                     .Destination = "contrôle seulement — staging.TransactionRecurrenteImport, modèle complet gardé",
@@ -494,7 +494,7 @@ Public Class Importations
                               "faudra recréer à la main, et quand."
                 },
                 New Poste With {
-                    .Icone = "🎯",
+                    .Icone = "<i class='ic ic-target' aria-hidden='true'></i>",
                     .Titre = "Budgets",
                     .Source = "QuickBooks : l'entité Budget, par la passerelle",
                     .Destination = "contrôle seulement — staging.BudgetImport, une ligne par compte et par période",
@@ -508,7 +508,7 @@ Public Class Importations
                               "qui n'existe pas encore."
                 },
                 New Poste With {
-                    .Icone = "⏱️",
+                    .Icone = "<i class='ic ic-timer' aria-hidden='true'></i>",
                     .Titre = "Feuilles de temps",
                     .Source = "QuickBooks : l'entité TimeActivity, par la passerelle",
                     .Destination = "contrôle seulement — staging.FeuilleTempsImport",
@@ -533,7 +533,7 @@ Public Class Importations
         Get
             Return NoterAvancement(New List(Of Poste) From {
                 New Poste With {
-                    .Icone = "👥",
+                    .Icone = "<i class='ic ic-users' aria-hidden='true'></i>",
                     .Titre = "Clients",
                     .Source = "QuickBooks : Ventes ▸ Clients ▸ Exporter",
                     .Destination = "T050Party + T054PartyAddress",
@@ -546,7 +546,7 @@ Public Class Importations
                               "repris : il viendra des factures ouvertes."
                 },
                 New Poste With {
-                    .Icone = "🏭",
+                    .Icone = "<i class='ic ic-factory' aria-hidden='true'></i>",
                     .Titre = "Fournisseurs",
                     .Source = "QuickBooks : Dépenses ▸ Fournisseurs ▸ Exporter",
                     .Destination = "T050Party + T054PartyAddress",
@@ -559,7 +559,7 @@ Public Class Importations
                               "fournisseur s'il est déjà client. Le solde dû viendra des factures ouvertes."
                 },
                 New Poste With {
-                    .Icone = "🏷️",
+                    .Icone = "<i class='ic ic-tag' aria-hidden='true'></i>",
                     .Titre = "Produits et services",
                     .Source = "QuickBooks : Ventes ▸ Produits et services ▸ Exporter",
                     .Destination = "T075Products",

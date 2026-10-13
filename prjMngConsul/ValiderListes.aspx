@@ -74,7 +74,7 @@
 <div class="lst-page">
 
     <div class="lst-head">
-        <div class="ico">🗂️</div>
+        <div class="ico"><i class="ic ic-folder" aria-hidden="true"></i></div>
         <div>
             <h1>Listes de structure</h1>
             <div class="sub">ce que la comptabilité source range à côté des comptes</div>

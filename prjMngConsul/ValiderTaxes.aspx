@@ -102,7 +102,7 @@
 <div class="tx-page">
 
     <div class="tx-head">
-        <div class="ico">🧮</div>
+        <div class="ico"><i class="ic ic-calculator" aria-hidden="true"></i></div>
         <div>
             <h1>Codes et taux de taxe</h1>
             <div class="sub">ce que l'ancien logiciel appelle « TPS/TVQ QC », et ce que ça vaut en TPS et en TVQ</div>

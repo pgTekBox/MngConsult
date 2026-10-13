@@ -697,17 +697,17 @@
             <button type="button" class="dlg-opt" onclick="doSendEmail(0)">
                 <span class="dlg-opt-title"><asp:Literal ID="litDlgWithout" runat="server" /></span>
                 <span class="dlg-opt-sub"><asp:Literal ID="litDlgWithoutSub" runat="server" /></span>
-            </button>
+           </button>
 
             <button type="button" id="optSendWithLink" class="dlg-opt dlg-opt-pay" onclick="doSendEmail(1)">
                 <span class="dlg-opt-title"><asp:Literal ID="litDlgWith" runat="server" /></span>
                 <span class="dlg-opt-sub"><asp:Literal ID="litDlgWithSub" runat="server" /></span>
-            </button>
+           </button>
 
             <button type="button" id="optCopyLink" class="dlg-opt dlg-opt-pay" onclick="doPaymentLink()">
                 <span class="dlg-opt-title"><asp:Literal ID="litDlgLink" runat="server" /></span>
                 <span class="dlg-opt-sub"><asp:Literal ID="litDlgLinkSub" runat="server" /></span>
-            </button>
+           </button>
 
             <div id="optPaidNote" style="display:none; color:#44536E; font-size:12px; margin:-2px 0 12px;">
                 <asp:Literal ID="litDlgPaidNote" runat="server" />

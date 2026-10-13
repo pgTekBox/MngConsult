@@ -40,7 +40,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="ft-page">
     <div class="ft-head">
-        <div class="ico">⏱️</div>
+        <div class="ico"><i class="ic ic-timer" aria-hidden="true"></i></div>
         <div>
             <h1>Feuilles de temps</h1>
             <div class="sub">qui a travaillé pour qui, combien de temps, et si c'est facturé</div>

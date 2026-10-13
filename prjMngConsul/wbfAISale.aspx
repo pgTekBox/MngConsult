@@ -289,7 +289,7 @@
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="m15 18-6-6 6-6"/>
                     </svg>
-                </button>
+               </button>
                 <div>
                     <h1>AI Sales</h1>
                     <p class="subtitle">Gestion intelligente des ventes</p>
@@ -322,7 +322,7 @@
                         <path d="M2 12s3-7 10-7 10 7 10 7-3 7-10 7-10-7-10-7Z"/>
                         <circle cx="12" cy="12" r="3"/>
                     </svg>
-                </button>
+               </button>
             </div>
         </div>
 
@@ -398,7 +398,7 @@
                                 <span class="value"><asp:Literal ID="litTodayRetard" runat="server" Text="0 $" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- WEEK -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriodWeek"
@@ -453,7 +453,7 @@
                                 <span class="value"><asp:Literal ID="litWeekRetard" runat="server" Text="0 $" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- MONTH -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriodMonth"
@@ -508,7 +508,7 @@
                                 <span class="value"><asp:Literal ID="litMonthRetard" runat="server" Text="0 $" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- 3 MONTHS -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriod3M"
@@ -563,7 +563,7 @@
                                 <span class="value"><asp:Literal ID="lit3MRetard" runat="server" Text="0 $" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                 </div>
             </div>
@@ -586,7 +586,7 @@
                         </svg>
                         Collecté
                         <span class="tab-pill"><asp:Literal ID="litTabCollecteCount" runat="server" Text="0" /></span>
-                    </a>
+                   </a>
                     <a href="javascript:void(0)" runat="server" id="tabRecevoir" class="tab-btn recevoir"
                        onclick="selectTab('RECEVOIR')">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -596,7 +596,7 @@
                         </svg>
                         À recevoir
                         <span class="tab-pill"><asp:Literal ID="litTabRecevoirCount" runat="server" Text="0" /></span>
-                    </a>
+                   </a>
                     <a href="javascript:void(0)" runat="server" id="tabRetard" class="tab-btn retard"
                        onclick="selectTab('RETARD')">
                         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none"
@@ -607,7 +607,7 @@
                         </svg>
                         Retard
                         <span class="tab-pill"><asp:Literal ID="litTabRetardCount" runat="server" Text="0" /></span>
-                    </a>
+                   </a>
                 </div>
 
                 <!-- Liste des items -->
@@ -621,7 +621,7 @@
 
                     <asp:PlaceHolder ID="phEmpty" runat="server" Visible="false">
                         <div class="empty-state">
-                            <div class="ico">📭</div>
+                            <div class="ico"><i class="ic ic-mailbox" aria-hidden="true"></i></div>
                             <div class="msg">Aucune vente dans cette catégorie pour cette période.</div>
                         </div>
                     </asp:PlaceHolder>

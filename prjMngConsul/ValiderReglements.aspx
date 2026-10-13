@@ -88,7 +88,7 @@
 <div class="rg-page">
 
     <div class="rg-head">
-        <div class="ico">💵</div>
+        <div class="ico"><i class="ic ic-banknote" aria-hidden="true"></i></div>
         <div>
             <h1>Acomptes et règlements partiels</h1>
             <div class="sub">l'argent reçu ou versé, et ce qu'il règle vraiment</div>

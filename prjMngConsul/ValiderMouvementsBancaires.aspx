@@ -55,7 +55,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="mb-page">
     <div class="mb-head">
-        <div class="ico">🏧</div>
+        <div class="ico"><i class="ic ic-landmark" aria-hidden="true"></i></div>
         <div>
             <h1>Dépôts et virements bancaires</h1>
             <div class="sub">l'argent qui bouge entre comptes sans passer par une facture</div>

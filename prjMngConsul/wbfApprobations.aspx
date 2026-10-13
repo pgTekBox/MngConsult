@@ -201,7 +201,7 @@
     <div class="appro-page">
 
         <div class="page-header">
-            <h1 class="page-title">📥 <asp:Literal ID="litTitle" runat="server" /></h1>
+            <h1 class="page-title"><i class="ic ic-inbox" aria-hidden="true"></i> <asp:Literal ID="litTitle" runat="server" /></h1>
         </div>
 
         <p class="page-lead">

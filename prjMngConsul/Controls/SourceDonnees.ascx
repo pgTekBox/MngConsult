@@ -129,7 +129,7 @@
 
         <details class="sd-aide" open>
             <summary>
-                <span>❓</span>
+                <span><i class="ic ic-help" aria-hidden="true"></i></span>
                 Comment sortir ce fichier de <b><asp:Literal ID="litAideTitre" runat="server" /></b>
                 <span class="sd-chev">▾</span>
             </summary>

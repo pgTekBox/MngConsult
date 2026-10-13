@@ -103,6 +103,11 @@ a{
     min-width:0;
 }
 
+/* Les icônes au trait des cartes et des en-têtes d'écran prennent le bleu du thème */
+.ico > .ic, .pg-ico > .ic, .uz-ico > .ic, .kpi-icon > .ic, .wb-step-ico > .ic, .al-ico > .ic, .fp-ico > .ic { color: var(--mc-primary); width: 1.3em; height: 1.3em; vertical-align: -.3em; }
+.al-ico > .ic-x-circle { color: #dc2626; }
+.al-ico > .ic-alert { color: #c2410c; }
+.al-ico > .ic-check-circle { color: #047857; }
 .mc-mainwrap{
     flex:1 1 auto;
     display:flex;
@@ -517,6 +522,7 @@ a{
     </script>
 
     <%-- Skin « Bleu marine » des contrôles Telerik et des listes : posé en dernier pour passer après Metro/Bootstrap. --%>
+    <link rel="stylesheet" href="css/icones-trait.css?v=2026101301" />
     <link rel="stylesheet" href="css/telerik-bleumarine.css?v=2026101301" />
 
 </form>

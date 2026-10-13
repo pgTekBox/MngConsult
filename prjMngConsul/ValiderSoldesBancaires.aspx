@@ -73,7 +73,7 @@
 <div class="sb-page">
 
     <div class="sb-head">
-        <div class="ico">🏦</div>
+        <div class="ico"><i class="ic ic-landmark" aria-hidden="true"></i></div>
         <div>
             <h1>Soldes bancaires</h1>
             <div class="sub">ce que la source porte en banque, et depuis quand</div>

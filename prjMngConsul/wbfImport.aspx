@@ -97,7 +97,7 @@
 
     <div class="toolbar">
         <div class="pg-header">
-            <div class="pg-ico">📥</div>
+            <div class="pg-ico"><i class="ic ic-inbox" aria-hidden="true"></i></div>
             <div>
                 <h1>Import — Clients / Fournisseurs / Produits</h1>
                 <div class="pg-sub">Téléversez un fichier — il sera déposé dans <code>staging.ImportFiles</code></div>
@@ -106,7 +106,7 @@
     </div>
 
     <asp:Panel ID="pnlSuccess" runat="server" Visible="false" CssClass="up-alert up-alert-ok">
-        <span class="al-ico">✅</span>
+        <span class="al-ico"><i class="ic ic-check-circle" aria-hidden="true"></i></span>
         <div class="al-body">
             <div class="al-title">Fichier reçu</div>
             <asp:Literal ID="litSuccess" runat="server" />
@@ -114,7 +114,7 @@
     </asp:Panel>
 
     <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="up-alert up-alert-err">
-        <span class="al-ico">❌</span>
+        <span class="al-ico"><i class="ic ic-x-circle" aria-hidden="true"></i></span>
         <div class="al-body">
             <div class="al-title">Erreur</div>
             <asp:Literal ID="litError" runat="server" />
@@ -129,9 +129,9 @@
             <label for="<%= ddlTypeImport.ClientID %>">Type</label>
             <asp:DropDownList ID="ddlTypeImport" runat="server">
                 <asp:ListItem Value="" Text="-- Choisir --" Selected="True" />
-                <asp:ListItem Value="Client"      Text="👤 Liste de clients" />
-                <asp:ListItem Value="Fournisseur" Text="🏢 Liste de fournisseurs" />
-                <asp:ListItem Value="Produit"     Text="📦 Liste de produits" />
+                <asp:ListItem Value="Client"      Text="Liste de clients" />
+                <asp:ListItem Value="Fournisseur" Text="Liste de fournisseurs" />
+                <asp:ListItem Value="Produit"     Text="Liste de produits" />
             </asp:DropDownList>
             <div class="hint">Le fichier sera étiqueté de ce type dans <code>staging.ImportFiles.TypeImport</code>.</div>
         </div>
@@ -142,7 +142,7 @@
         <p class="sec-desc">Glissez-déposez le fichier ou cliquez pour parcourir.</p>
 
         <div class="upload-zone" id="dropZone" onclick="document.getElementById('<%= fuImportFile.ClientID %>').click();">
-            <div class="uz-ico">📁</div>
+            <div class="uz-ico"><i class="ic ic-folder" aria-hidden="true"></i></div>
             <p><strong>Glissez votre fichier ici</strong> ou cliquez pour parcourir</p>
             <p class="uz-hint">Formats acceptés : .csv, .xlsx, .txt &nbsp;|&nbsp; Taille max : 50 Mo</p>
         </div>
@@ -152,7 +152,7 @@
 
         <div id="fileInfoDiv" style="display:none;">
             <div class="file-pill">
-                <span class="fp-ico" id="fileIcon">📄</span>
+                <span class="fp-ico" id="fileIcon"><i class="ic ic-file" aria-hidden="true"></i></span>
                 <div>
                     <div class="fp-name" id="fileName"></div>
                     <div class="fp-size" id="fileSize"></div>
@@ -168,8 +168,8 @@
         </div>
 
         <div class="up-actions">
-            <asp:Button ID="btnUpload" runat="server" Text="📤 Téléverser dans staging" CssClass="up-btn up-btn-primary" />
-            <asp:Button ID="btnReset"  runat="server" Text="🔄 Réinitialiser" CssClass="up-btn up-btn-secondary" CausesValidation="false" />
+            <asp:Button ID="btnUpload" runat="server" Text="Téléverser dans staging" CssClass="up-btn up-btn-primary" />
+            <asp:Button ID="btnReset"  runat="server" Text="Réinitialiser" CssClass="up-btn up-btn-secondary" CausesValidation="false" />
         </div>
     </div>
 
@@ -192,18 +192,18 @@
                         <asp:BoundField DataField="EstimatedCostUsd" HeaderText="Coût (USD)" DataFormatString="{0:0.0000}" />
                         <asp:TemplateField HeaderText="Action">
                             <ItemTemplate>
-                                <asp:Button runat="server" Text="🤖 Traiter"
+                                <asp:Button runat="server" Text="Traiter"
                                             CssClass="up-btn up-btn-secondary"
                                             CommandName="ProcessAI"
                                             CommandArgument='<%# Eval("Id") %>'
 
                                             CausesValidation="false" />
-                                <asp:LinkButton runat="server" Text="👁 Voir"
+                                <asp:LinkButton runat="server" Text="Voir"
                                                 CssClass="up-btn up-btn-secondary"
                                                 OnClientClick='<%# String.Format("openRadWindow({0}, ""rwImportView"", ""wbfImportView.aspx"", ""Détails import #{0}"", ""Détails import""); return false;", Eval("Id")) %>'
                                                 Visible='<%# Not (Eval("InputTokens") Is DBNull.Value) %>'
                                                 CausesValidation="false" />
-                                <asp:Button runat="server" Text="🗑 Supprimer"
+                                <asp:Button runat="server" Text="Supprimer"
                                             CssClass="up-btn up-btn-danger"
                                             CommandName="DeleteImport"
                                             CommandArgument='<%# Eval("Id") %>'

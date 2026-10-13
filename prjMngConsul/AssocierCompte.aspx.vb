@@ -273,7 +273,7 @@ Public Class AssocierCompte
 
         ' ── Le rendu ────────────────────────────────────────────────────────
         Dim sb As New StringBuilder()
-        sb.Append("<div class='asc-assist'><div class='asc-avatar'>🙂<b>60</b></div><div>")
+        sb.Append("<div class='asc-assist'><div class='asc-avatar'><i class='ic ic-smile' aria-hidden='true'></i><b>60</b></div><div>")
         sb.Append("<div class='qui'>Le 60, votre assistant <span class='asc-badge'>Action requise</span></div>")
         sb.Append("<div class='dit'>").Append(HttpUtility.HtmlEncode(dit)).Append("</div></div></div>")
         sb.Append("<div class='asc-corps'><h2>Associer un compte du plan comptable</h2><div class='asc-deux'>")
@@ -318,7 +318,7 @@ Public Class AssocierCompte
         Next
         Option_(sb, "CREER", creer, premier)
         sb.Append("</div></div></div>")
-        sb.Append("<div class='asc-enjeu' id='ascEnjeu' hidden><span class='pic'>⚠️</span><div id='ascEnjeuTexte'></div></div>")
+        sb.Append("<div class='asc-enjeu' id='ascEnjeu' hidden><span class='pic'><i class='ic ic-alert' aria-hidden='true'></i></span><div id='ascEnjeuTexte'></div></div>")
         sb.Append("</div>")
         Return sb.ToString()
     End Function

@@ -563,7 +563,7 @@
             <div class="content">
                 <div class="container">
 
-                    <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé 🔒"></asp:Label>
+                    <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé"></asp:Label>
 
                     <asp:Panel ID="pnlDocNumber" runat="server" Visible="false" CssClass="doc-number">
                         <asp:Literal ID="litLblDocNumber" runat="server" />

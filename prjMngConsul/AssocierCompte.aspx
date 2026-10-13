@@ -84,7 +84,7 @@
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" />
 
     <div class="asc-head">
-        <div class="ico">🤝</div>
+        <div class="ico"><i class="ic ic-handshake" aria-hidden="true"></i></div>
         <div>
             <h1>Associer un compte du plan comptable</h1>
             <div class="sub">Étape 2, un compte à la fois : l'assistant propose, vous décidez.

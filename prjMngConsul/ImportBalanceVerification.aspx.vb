@@ -780,7 +780,7 @@ Public Class ImportBalanceVerification
             Dim fr = Globalization.CultureInfo.GetCultureInfo("fr-CA")
             Dim sb As New StringBuilder()
 
-            sb.Append("<div class='ctrl'><h3>🔍 Incohérences avec le plan comptable</h3>")
+            sb.Append("<div class='ctrl'><h3><i class='ic ic-search' aria-hidden='true'></i> Incohérences avec le plan comptable</h3>")
 
             If IsDBNull(ctx("SystemePlan")) Then
                 sb.Append("<p class='ctx'>Aucun plan comptable n'a encore été importé pour cette compagnie : ")
@@ -910,14 +910,14 @@ Public Class ImportBalanceVerification
 
         ' Tout à zéro n'est pas un équilibre, c'est une lecture ratée.
         If totalDebit = 0D AndAlso totalCredit = 0D Then
-            bandeau.Append("<div class='equil ko'>⚠️ Aucun montant n'a été lu — tous les soldes valent zéro. ")
+            bandeau.Append("<div class='equil ko'><i class='ic ic-alert' aria-hidden='true'></i> Aucun montant n'a été lu — tous les soldes valent zéro. ")
             bandeau.Append("Le séparateur ou l'encodage ne correspond sans doute pas au fichier. ")
             bandeau.Append("Vérifiez le tableau ci-dessous avant d'aller plus loin.</div>")
         ElseIf ecart = 0D Then
-            bandeau.Append("<div class='equil ok'>⚖️ Balance équilibrée — débits et crédits totalisent chacun ")
+            bandeau.Append("<div class='equil ok'><i class='ic ic-scale' aria-hidden='true'></i> Balance équilibrée — débits et crédits totalisent chacun ")
             bandeau.Append(totalDebit.ToString("N2", fr)).Append(" $.</div>")
         Else
-            bandeau.Append("<div class='equil ko'>⚠️ Balance déséquilibrée — écart de ")
+            bandeau.Append("<div class='equil ko'><i class='ic ic-alert' aria-hidden='true'></i> Balance déséquilibrée — écart de ")
             bandeau.Append(Math.Abs(ecart).ToString("N2", fr)).Append(" $ (")
             bandeau.Append(If(ecart > 0D, "plus de débits que de crédits", "plus de crédits que de débits"))
             bandeau.Append("). Vérifiez l'export avant d'aller plus loin.</div>")
@@ -935,7 +935,7 @@ Public Class ImportBalanceVerification
                 bandeau.Append(fc.ToString("N2", fr)).Append(" $ au crédit) correspond à la somme des lignes lues : ")
                 bandeau.Append("rien n'a été perdu à la lecture.</div>")
             Else
-                bandeau.Append("<div class='equil ko'>⚠️ Le fichier annonce ")
+                bandeau.Append("<div class='equil ko'><i class='ic ic-alert' aria-hidden='true'></i> Le fichier annonce ")
                 bandeau.Append(fd.ToString("N2", fr)).Append(" $ au débit et ")
                 bandeau.Append(fc.ToString("N2", fr)).Append(" $ au crédit ; la lecture donne ")
                 bandeau.Append(totalDebit.ToString("N2", fr)).Append(" $ et ")

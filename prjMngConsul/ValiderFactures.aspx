@@ -116,7 +116,7 @@
 <div class="val-page">
 
     <div class="val-head">
-        <div class="ico">🧾</div>
+        <div class="ico"><i class="ic ic-receipt" aria-hidden="true"></i></div>
         <div>
             <h1>Factures clients et fournisseurs</h1>
             <div class="sub">Ce qui a été rapatrié attend votre accord</div>

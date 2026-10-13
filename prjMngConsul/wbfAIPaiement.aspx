@@ -309,7 +309,7 @@
                         stroke-linecap="round" stroke-linejoin="round">
                         <path d="m15 18-6-6 6-6"/>
                     </svg>
-                </button>
+               </button>
                 <div>
                     <h1>AI Payment</h1>
                     <p class="subtitle">Gestion en temps réel avec AI</p>
@@ -398,7 +398,7 @@
                                 <span class="count"><asp:Literal ID="litTodayEmp" runat="server" Text="0" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- WEEK -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriodWeek"
@@ -444,7 +444,7 @@
                                 <span class="count"><asp:Literal ID="litWeekEmp" runat="server" Text="0" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- MONTH -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriodMonth"
@@ -490,7 +490,7 @@
                                 <span class="count"><asp:Literal ID="litMonthEmp" runat="server" Text="0" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                     <!-- 3 MONTHS -->
                     <a href="javascript:void(0)" runat="server" id="btnPeriod3M"
@@ -536,7 +536,7 @@
                                 <span class="count"><asp:Literal ID="lit3MEmp" runat="server" Text="0" /></span>
                             </div>
                         </div>
-                    </a>
+                   </a>
 
                 </div>
             </div>

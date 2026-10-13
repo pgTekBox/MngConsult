@@ -101,7 +101,7 @@
 <div class="ds-page">
 
     <div class="ds-head">
-        <div class="ico">🏛️</div>
+        <div class="ico"><i class="ic ic-landmark" aria-hidden="true"></i></div>
         <div>
             <h1>Remises de DAS</h1>
             <div class="sub">ce qui a été retenu, ce qui a été versé, ce qui reste dû</div>

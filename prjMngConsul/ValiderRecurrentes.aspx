@@ -41,7 +41,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="tr-page">
     <div class="tr-head">
-        <div class="ico">🔁</div>
+        <div class="ico"><i class="ic ic-repeat" aria-hidden="true"></i></div>
         <div>
             <h1>Transactions récurrentes</h1>
             <div class="sub">ce que la source produit toute seule, à date fixe</div>

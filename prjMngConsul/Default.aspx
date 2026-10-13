@@ -632,7 +632,7 @@
         <!-- BOÎTE DE BIENVENUE (onboarding dépliable) -->
         <details class="welcome-box">
             <summary class="welcome-summary">
-                <span class="wb-emoji" aria-hidden="true">👋</span>
+                <span class="wb-emoji" aria-hidden="true"><i class="ic ic-hand" aria-hidden="true"></i></span>
                 <span class="wb-main">
                     <span class="wb-title"><%= L("wbGreetBefore") %><asp:Literal ID="litFirstName" runat="server" /><%= L("wbGreetAfter") %></span>
                     <span class="wb-sub"><%= L("wbTrialBefore") %><asp:Literal ID="litPlanName" runat="server" Text="Solo" /><%= L("wbTrialMiddle") %><asp:Literal ID="litTrialEnd" runat="server" /> — <%= L("wbToggle") %></span>
@@ -646,7 +646,7 @@
                 <div class="wb-section-title"><%= L("nextSteps") %></div>
                 <div class="wb-steps">
                     <a class="wb-step" href="<%= ResolveUrl("~/wbfNewUser.aspx") %>">
-                        <span class="wb-step-ico wb-ico-blue">👤</span>
+                        <span class="wb-step-ico wb-ico-blue"><i class="ic ic-user" aria-hidden="true"></i></span>
                         <span>
                             <span class="wb-step-num"><%= L("step") %> 1</span>
                             <div class="wb-step-title"><%= L("step1Title") %></div>
@@ -654,7 +654,7 @@
                         </span>
                     </a>
                     <a class="wb-step" href="<%= ResolveUrl("~/wbfCustomers.aspx") %>">
-                        <span class="wb-step-ico wb-ico-cyan">👥</span>
+                        <span class="wb-step-ico wb-ico-cyan"><i class="ic ic-users" aria-hidden="true"></i></span>
                         <span>
                             <span class="wb-step-num"><%= L("step") %> 2</span>
                             <div class="wb-step-title"><%= L("step2Title") %></div>
@@ -670,7 +670,7 @@
                         </span>
                     </a>
                     <a class="wb-step" href="<%= ResolveUrl("~/wbfAgenda.aspx") %>">
-                        <span class="wb-step-ico wb-ico-orange">📅</span>
+                        <span class="wb-step-ico wb-ico-orange"><i class="ic ic-calendar" aria-hidden="true"></i></span>
                         <span>
                             <span class="wb-step-num"><%= L("step") %> 4</span>
                             <div class="wb-step-title"><%= L("step4Title") %></div>
@@ -694,9 +694,9 @@
                 <!-- Ressources -->
                 <div class="wb-section-title"><%= L("resourcesTitle") %></div>
                 <div class="wb-resources">
-                    <a class="wb-res" href="<%= ResolveUrl("~/wbfHelp.aspx") %>">❓ <%= L("helpCenter") %></a>
+                    <a class="wb-res" href="<%= ResolveUrl("~/wbfHelp.aspx") %>"><i class="ic ic-help" aria-hidden="true"></i> <%= L("helpCenter") %></a>
                     <a class="wb-res" href="<%= ResolveUrl("~/wbfTutorials.aspx") %>">🎬 <%= L("videoTutorials") %></a>
-                    <a class="wb-res" href="mailto:support@60sec.ca">✉️ <%= L("contactSupport") %></a>
+                    <a class="wb-res" href="mailto:support@60sec.ca"><i class="ic ic-mail" aria-hidden="true"></i> <%= L("contactSupport") %></a>
                 </div>
 
             </div>
@@ -757,7 +757,7 @@
             <div class="kpi-card">
                 <div class="kpi-head">
                     <div class="kpi-label"><%= L("kpiCustomers") %></div>
-                    <div class="kpi-icon">👥</div>
+                    <div class="kpi-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
                 </div>
                 <div class="kpi-value"><asp:Literal ID="litKpiCustomers" runat="server" Text="0" /></div>
                 <div class="kpi-foot"><%= L("kpiCustomersFoot") %></div>
@@ -766,7 +766,7 @@
             <div class="kpi-card">
                 <div class="kpi-head">
                     <div class="kpi-label"><%= L("kpiSupplierInvoices") %></div>
-                    <div class="kpi-icon">🏭</div>
+                    <div class="kpi-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
                 </div>
                 <div class="kpi-value"><asp:Literal ID="litKpiSupplierInvoices" runat="server" Text="0" /></div>
                 <div class="kpi-foot"><%= L("kpiSupplierInvoicesFoot") %></div>
@@ -775,7 +775,7 @@
             <div class="kpi-card">
                 <div class="kpi-head">
                     <div class="kpi-label"><%= L("kpiProducts") %></div>
-                    <div class="kpi-icon">📦</div>
+                    <div class="kpi-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
                 </div>
                 <div class="kpi-value"><asp:Literal ID="litKpiProducts" runat="server" Text="0" /></div>
                 <div class="kpi-foot"><%= L("kpiProductsFoot") %></div>
@@ -784,7 +784,7 @@
             <div class="kpi-card">
                 <div class="kpi-head">
                     <div class="kpi-label"><%= L("kpiRevenue") %></div>
-                    <div class="kpi-icon">💰</div>
+                    <div class="kpi-icon"><i class="ic ic-coins" aria-hidden="true"></i></div>
                 </div>
                 <div class="kpi-value"><asp:Literal ID="litKpiRevenue" runat="server" Text="0 $" /></div>
                 <div class="kpi-foot"><%= L("kpiRevenueFoot") %></div>
@@ -808,7 +808,7 @@
                     <div class="panel-body">
                         <div class="module-grid">
                             <a class="module-card" href="wbfCustomers.aspx">
-                                <div class="module-icon">👥</div>
+                                <div class="module-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modClients") %></div>
                                 <div class="module-desc">
                                     <%= L("modClientsDesc") %>
@@ -816,7 +816,7 @@
                             </a>
 
                             <a class="module-card" href="wbfSuppliersInvoices.aspx">
-                                <div class="module-icon">🧾</div>
+                                <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modInvoices") %></div>
                                 <div class="module-desc">
                                     <%= L("modInvoicesDesc") %>
@@ -824,7 +824,7 @@
                             </a>
 
                             <a class="module-card" href="wbfProducts.aspx">
-                                <div class="module-icon">📦</div>
+                                <div class="module-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modProducts") %></div>
                                 <div class="module-desc">
                                     <%= L("modProductsDesc") %>
@@ -832,7 +832,7 @@
                             </a>
 
                             <a class="module-card" href="wbfSuppliers.aspx">
-                                <div class="module-icon">🏭</div>
+                                <div class="module-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modSuppliers") %></div>
                                 <div class="module-desc">
                                     <%= L("modSuppliersDesc") %>
@@ -840,7 +840,7 @@
                             </a>
 
                             <a class="module-card" href="wbfReceipt.aspx">
-                                <div class="module-icon">🧾</div>
+                                <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modReceipts") %></div>
                                 <div class="module-desc">
                                     <%= L("modReceiptsDesc") %>
@@ -848,7 +848,7 @@
                             </a>
 
                             <a class="module-card" href="wbfSetting.aspx">
-                                <div class="module-icon">⚙️</div>
+                                <div class="module-icon"><i class="ic ic-settings" aria-hidden="true"></i></div>
                                 <div class="module-title"><%= L("modSettings") %></div>
                                 <div class="module-desc">
                                     <%= L("modSettingsDesc") %>
@@ -941,22 +941,22 @@
                             <a class="quick-btn" href="wbfInvoiceEdit.aspx">
                                 <span class="quick-ico">➕</span>
                                 <span><%= L("qaCreateInvoice") %></span>
-                            </a>
+                           </a>
 
                             <a class="quick-btn" href="wbfCustomers.aspx">
-                                <span class="quick-ico">👤</span>
+                                <span class="quick-ico"> </span>
                                 <span><%= L("qaAddCustomer") %></span>
-                            </a>
+                           </a>
 
                             <a class="quick-btn" href="wbfProducts.aspx">
-                                <span class="quick-ico">📦</span>
+                                <span class="quick-ico"> </span>
                                 <span><%= L("qaAddProduct") %></span>
-                            </a>
+                           </a>
 
                             <a class="quick-btn" href="wbfReceipt.aspx">
-                                <span class="quick-ico">💵</span>
+                                <span class="quick-ico"> </span>
                                 <span><%= L("qaViewReceipts") %></span>
-                            </a>
+                           </a>
                         </div>
                     </div>
                 </div>

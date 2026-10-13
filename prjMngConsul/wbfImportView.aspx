@@ -96,7 +96,7 @@
         <div class="page-wrap">
 
             <div class="pg-header">
-                <div class="pg-ico">👁</div>
+                <div class="pg-ico"><i class="ic ic-eye" aria-hidden="true"></i></div>
                 <div>
                     <h1>Visualisation staging</h1>
                     <div class="pg-sub"><asp:Literal ID="litHeaderSub" runat="server" /></div>
@@ -104,11 +104,11 @@
             </div>
 
             <asp:Panel ID="pnlError" runat="server" Visible="false" CssClass="iv-alert iv-alert-err">
-                <span>❌</span>&nbsp;<asp:Literal ID="litError" runat="server" />
+                <span><i class="ic ic-x-circle" aria-hidden="true"></i></span>&nbsp;<asp:Literal ID="litError" runat="server" />
             </asp:Panel>
 
             <asp:Panel ID="pnlWarning" runat="server" Visible="false" CssClass="iv-alert iv-alert-wrn">
-                <span>⚠️</span>&nbsp;<asp:Literal ID="litWarning" runat="server" />
+                <span><i class="ic ic-alert" aria-hidden="true"></i></span>&nbsp;<asp:Literal ID="litWarning" runat="server" />
             </asp:Panel>
 
             <asp:Panel ID="pnlContent" runat="server" Visible="false">
@@ -186,11 +186,11 @@
 
                 <asp:Panel ID="pnlMigrateResult" runat="server" Visible="false" CssClass="iv-alert iv-alert-ok"
                            style="background:#f0fdf4; color:#166534; border-color:#bbf7d0;">
-                    <span>✅</span>&nbsp;<asp:Literal ID="litMigrateResult" runat="server" />
+                    <span><i class="ic ic-check-circle" aria-hidden="true"></i></span>&nbsp;<asp:Literal ID="litMigrateResult" runat="server" />
                 </asp:Panel>
 
                 <div class="iv-actions">
-                    <asp:Button ID="btnMigrate" runat="server" Text="📤 Pousser vers production"
+                    <asp:Button ID="btnMigrate" runat="server" Text="Pousser vers production"
                                 CssClass="iv-btn"
                                 style="background:var(--mc-blue); color:#fff; border-color:var(--mc-blue);"
                                 OnClientClick="return confirm('Pousser les lignes en attente vers la production ? Cette action est irréversible.');"

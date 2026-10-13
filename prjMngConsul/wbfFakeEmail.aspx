@@ -6,7 +6,7 @@
 <head runat="server">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <title>📧 Simulation d'envoi — 60Sec-AI</title>
+    <title><i class="ic ic-mail" aria-hidden="true"></i> Simulation d'envoi — 60Sec-AI</title>
     <style>
         *, *::before, *::after { box-sizing: border-box; }
         html, body { margin: 0; height: 100%; }
@@ -190,7 +190,7 @@
 
         <asp:Panel ID="pnlEmpty" runat="server" Visible="false" CssClass="mail-frame">
             <div class="empty">
-                <p>📭 Aucun courriel à afficher.</p>
+                <p><i class="ic ic-mailbox" aria-hidden="true"></i> Aucun courriel à afficher.</p>
             </div>
         </asp:Panel>
 

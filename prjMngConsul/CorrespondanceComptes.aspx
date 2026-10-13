@@ -156,7 +156,7 @@
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" SansEtape1="true" />
 
     <div class="cor-head">
-        <div class="ico">🔗</div>
+        <div class="ico"><i class="ic ic-link" aria-hidden="true"></i></div>
         <div>
             <h1>Correspondance des comptes</h1>
             <div class="sub">Étape 2 de la reprise comptable</div>
@@ -193,12 +193,12 @@
             </div>
             <div class="acts" style="margin-left:auto">
                 <asp:Button ID="btnIA" runat="server" CssClass="btn btn-ia" CausesValidation="false"
-                    Text="✨ Proposer avec l'IA"
+                    Text="Proposer avec l'IA"
                     OnClientClick="if (!confirm('Soumettre les comptes encore à décider et votre plan comptable à l&#39;IA ?\n\nElle ne fera que proposer : rien ne sera décidé à votre place.')) { return false; }" />
                 <asp:Button ID="btnAccepter" runat="server" CssClass="btn btn-s" CausesValidation="false"
                     Text="Accepter les correspondances par numéro"
                     OnClientClick="if (!confirm('Retenir toutes les correspondances où le numéro de compte concorde ?')) { return false; }" />
-                <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">🤝 Associer un par un</button>
+                <button type="button" class="btn btn-s" onclick="ouvrirFenetre('AssocierCompte.aspx?popup=1', 'Associer un compte du plan comptable')">Associer un par un</button>
                 <span class="seuil-ia" title="Lie d'un coup les comptes encore à décider dont la proposition de l'IA atteint le seuil choisi. Lancez d'abord « Proposer avec l'IA ».">
                     <asp:DropDownList runat="server" ID="ddlSeuilIA" CssClass="act-seuil">
                         <asp:ListItem Value="" Text="Aucun" />
@@ -214,7 +214,7 @@
         </div>
 
         <p class="ia-note">
-            ✨ <b>Proposer avec l'IA</b> lui soumet, pour chaque compte encore à décider : le nom
+            <i class="ic ic-sparkles" aria-hidden="true"></i> <b>Proposer avec l'IA</b> lui soumet, pour chaque compte encore à décider : le nom
             complet, la nature, le type et le sous-type QuickBooks, l'origine (par défaut ou ajouté,
             et quand), le solde et la description — et votre plan entier : numéro, noms, nature,
             classe, sous-classe, sens et description. Elle rend un compte proposé, une confiance et
@@ -294,7 +294,7 @@
                                 <td><%# Eval("LigneNo") %></td>
                                 <td class="src-c"><%# CleAffichee(Eval("Compte"), Eval("TypeCle")) %></td>
                                 <td>
-                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %><button type="button" class="ia-cpt" data-id='<%# Eval("StagingId") %>' title="Assistant : que représente ce compte et où le ranger ?" aria-label="Assistant pour ce compte">✨ Assistant</button></div>
+                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %><button type="button" class="ia-cpt" data-id='<%# Eval("StagingId") %>' title="Assistant : que représente ce compte et où le ranger ?" aria-label="Assistant pour ce compte">Assistant</button></div>
                                     <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="solde"><%# If(Eval("Solde") Is DBNull.Value, "", Convert.ToDecimal(Eval("Solde")).ToString("N2")) %></td>
@@ -317,7 +317,7 @@
                                         <asp:ListItem Value="CREER" Text="Créer" />
                                         <asp:ListItem Value="IGNORER" Text="Ignorer" />
                                     </asp:DropDownList>
-                                    <div class="avert-ign" hidden>⚠️ <span class="avert-ign-t"></span></div>
+                                    <div class="avert-ign" hidden><i class="ic ic-alert" aria-hidden="true"></i> <span class="avert-ign-t"></span></div>
                                 </td>
 
                                 <td class="cls-cell">
@@ -343,7 +343,7 @@
         </div>
 
         <div class="rappel">
-            <span>💡</span>
+            <span><i class="ic ic-lightbulb" aria-hidden="true"></i></span>
             <p>
                 <b>Lier</b> rattache le compte à un compte existant chez vous.
                 <b>Créer</b> l'ajoutera à votre plan lors de l'application, sous un numéro
@@ -373,7 +373,7 @@
     <div class="iac-dlg" id="iacDlg" role="dialog" aria-modal="true" aria-labelledby="iacTitre">
         <div class="iac-tete" id="iacTete">
             <b id="iacTitre">Assistant</b>
-            <small>✨ explication du compte</small>
+            <small><i class="ic ic-sparkles" aria-hidden="true"></i> explication du compte</small>
             <button type="button" class="iac-x" id="iacFermer" title="Fermer" aria-label="Fermer">&times;</button>
         </div>
         <div class="iac-corps" id="iacCorps"></div>

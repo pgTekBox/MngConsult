@@ -295,9 +295,8 @@
         </div>
         <div class="report-actions">
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
-                🖨 Imprimer / PDF
-            </button>
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">Imprimer / PDF
+           </button>
         </div>
     </div>
 

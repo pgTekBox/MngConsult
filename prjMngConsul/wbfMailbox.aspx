@@ -51,13 +51,13 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
     <div class="mail-wrap">
         <div class="mail-head">
-            <h1>✉️ Courriel</h1>
+            <h1><i class="ic ic-mail" aria-hidden="true"></i> Courriel</h1>
             <span class="mail-addr"><asp:Literal ID="litAddr" runat="server" /></span>
         </div>
 
         <div class="mail-tabs">
-            <asp:LinkButton ID="lbInbox"   runat="server" CssClass="mail-tab" OnClick="lbInbox_Click"   CausesValidation="false">📥 Réception</asp:LinkButton>
-            <asp:LinkButton ID="lbSent"    runat="server" CssClass="mail-tab" OnClick="lbSent_Click"    CausesValidation="false">📤 Envoyés</asp:LinkButton>
+            <asp:LinkButton ID="lbInbox"   runat="server" CssClass="mail-tab" OnClick="lbInbox_Click"   CausesValidation="false">Réception</asp:LinkButton>
+            <asp:LinkButton ID="lbSent"    runat="server" CssClass="mail-tab" OnClick="lbSent_Click"    CausesValidation="false">Envoyés</asp:LinkButton>
             <asp:LinkButton ID="lbCompose" runat="server" CssClass="mail-tab" OnClick="lbCompose_Click" CausesValidation="false">✍️ Composer</asp:LinkButton>
         </div>
 
@@ -73,7 +73,7 @@
                                     <span class="when"><%# FormatDate(Eval("ReceivedAtUtc")) %></span>
                                 </span>
                                 <span class="subj"><%# Server.HtmlEncode(SubjectOr(Eval("SubjectHeader"))) %></span>
-                            </asp:LinkButton>
+                           </asp:LinkButton>
                         </ItemTemplate>
                     </asp:Repeater>
                     <asp:Repeater ID="rptSent" runat="server" OnItemCommand="rptSent_ItemCommand">
@@ -86,7 +86,7 @@
                                 </span>
                                 <span class="subj"><%# Server.HtmlEncode(SubjectOr(Eval("Subject"))) %></span>
                                 <span><%# SentStatusTag(Eval("SendWithSuccess"), Eval("ToSend")) %></span>
-                            </asp:LinkButton>
+                           </asp:LinkButton>
                         </ItemTemplate>
                     </asp:Repeater>
                     <asp:Panel ID="pnlListEmpty" runat="server" Visible="false">
@@ -106,7 +106,7 @@
                                 <div><b>À :</b> <asp:Literal ID="litTo" runat="server" /></div>
                                 <div><b>Date :</b> <asp:Literal ID="litDate" runat="server" /></div>
                                 <asp:Panel ID="pnlAttach" runat="server" Visible="false" CssClass="attach">
-                                    📎 Pièces jointes : <asp:Literal ID="litAttach" runat="server" />
+                                    <i class="ic ic-paperclip" aria-hidden="true"></i> Pièces jointes : <asp:Literal ID="litAttach" runat="server" />
                                 </asp:Panel>
                             </div>
                         </div>

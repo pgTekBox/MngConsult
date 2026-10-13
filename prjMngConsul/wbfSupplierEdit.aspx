@@ -494,7 +494,7 @@
                             <button type="button" id="btnScanToggle" runat="server" class="scan-toggle"
                                 title="" aria-label="">
                                 <span class="chev" aria-hidden="true">&#9662;</span>
-                            </button>
+                           </button>
                         </div>
                         <div class="scan-body">
                             <div class="scan-hint"><asp:Literal ID="litScanHint" runat="server" /></div>

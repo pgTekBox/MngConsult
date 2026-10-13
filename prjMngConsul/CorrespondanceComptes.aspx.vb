@@ -453,7 +453,7 @@ Public Class CorrespondanceComptes
                             iaClasse As Object, iaClasseNom As Object) As String
         If iaCompte = "" OrElse iaCompte = dejaPropose Then Return ""
 
-        Return "<span class='ia-autre'>✨ l'IA suggère plutôt " &
+        Return "<span class='ia-autre'><i class='ic ic-sparkles' aria-hidden='true'></i> l'IA suggère plutôt " &
                Server.HtmlEncode(iaCompte) & " — " &
                Server.HtmlEncode(Convert.ToString(iaNom)) &
                TexteClasse(iaClasse, iaClasseNom) & "</span>"

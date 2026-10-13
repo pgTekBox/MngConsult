@@ -140,7 +140,7 @@
 <div class="imp-page">
 
     <div class="imp-head">
-        <div class="ico">📥</div>
+        <div class="ico"><i class="ic ic-inbox" aria-hidden="true"></i></div>
         <div>
             <h1>Importation des données</h1>
             <div class="sub">Reprendre une comptabilité tenue ailleurs</div>

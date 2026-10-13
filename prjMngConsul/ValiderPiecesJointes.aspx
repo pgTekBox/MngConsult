@@ -100,7 +100,7 @@
 <div class="pj-page">
 
     <div class="pj-head">
-        <div class="ico">📎</div>
+        <div class="ico"><i class="ic ic-paperclip" aria-hidden="true"></i></div>
         <div>
             <h1>Pièces jointes</h1>
             <div class="sub">tout ce que la comptabilité source a attaché, à qui que ce soit</div>
@@ -123,7 +123,7 @@
          fiche du client ou du fournisseur (T057PartyDocument). Idempotent. --%>
     <div class="barre">
         <asp:Button ID="btnRattacher" runat="server" CssClass="btn primaire" CausesValidation="false"
-            Text="📎 Rattacher aux fiches clients et fournisseurs"
+            Text="Rattacher aux fiches clients et fournisseurs"
             OnClientClick="if (!confirm('Copier sur la fiche de chaque client ou fournisseur retrouvé les fichiers qui lui appartiennent ? Les pièces déjà rattachées ne sont pas dupliquées.')) { return false; }" />
         <span class="aide">Les pièces des autres entités (factures, articles…) restent en préparation.</span>
     </div>

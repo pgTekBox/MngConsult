@@ -90,7 +90,7 @@
 <div class="iv-page">
 
     <div class="iv-head">
-        <div class="ico">📦</div>
+        <div class="ico"><i class="ic ic-package" aria-hidden="true"></i></div>
         <div>
             <h1>Inventaire</h1>
             <div class="sub">ce qu'il reste en stock, et ce que ça vaut</div>

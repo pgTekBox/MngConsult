@@ -250,7 +250,7 @@
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="1" />
 
     <div class="imp-head">
-        <div class="ico">📊</div>
+        <div class="ico"><i class="ic ic-chart" aria-hidden="true"></i></div>
         <div>
             <h1>Importer le plan comptable</h1>
             <div class="sub">Étape 1 de la reprise comptable</div>
@@ -311,7 +311,7 @@
 
     <!-- ══════════ CE QUI EST EN PRÉPARATION ══════════ -->
     <asp:Panel ID="pnlLignes" runat="server" Visible="false" CssClass="step">
-        <h2><span class="n">📋</span>Ce qui est en préparation</h2>
+        <h2><span class="n"><i class="ic ic-clipboard" aria-hidden="true"></i></span>Ce qui est en préparation</h2>
         <p class="desc">
             « Déjà au plan » n'est pas une erreur : ce compte existe chez vous, il sera
             mis en correspondance plutôt que créé.
@@ -362,7 +362,7 @@
                  regardé les lignes : c'est à ce moment qu'on décide d'y renoncer,
                  pas au fond d'un encadré à part. --%>
             <div class="acts">
-                <asp:Button ID="btnVider" runat="server" Text="🗑 Abandonner la préparation"
+                <asp:Button ID="btnVider" runat="server" Text="Abandonner la préparation"
                     CssClass="btn secondaire" CausesValidation="false"
                     OnClientClick="if (!confirm('Abandonner le plan comptable en préparation ?\n\nLes correspondances déjà décidées pour ce plan seront effacées aussi.')) { return false; }" />
             </div>
@@ -425,7 +425,7 @@
             <asp:Panel ID="pnlAide" runat="server">
                 <details class="aide" open>
                     <summary>
-                        <span class="aide-ico">❓</span>
+                        <span class="aide-ico"><i class="ic ic-help" aria-hidden="true"></i></span>
                         Comment sortir ce fichier de <b><asp:Literal ID="litAideTitre" runat="server" /></b>
                         <span class="aide-chev">▾</span>
                     </summary>
@@ -473,7 +473,7 @@
             </asp:Panel>
 
             <div class="drop" id="dropZone">
-                <span class="di" id="dropIcone">📁</span>
+                <span class="di" id="dropIcone"><i class="ic ic-folder" aria-hidden="true"></i></span>
                 <span class="dt" id="dropTexte"><b>Glissez votre fichier ici</b> ou cliquez pour le choisir</span>
                 <span class="dh" id="dropInfo">.csv ou .txt</span>
             </div>
@@ -494,7 +494,7 @@
 
     <!-- ══════════ APERÇU ══════════ -->
     <asp:Panel ID="pnlApercu" runat="server" Visible="false" CssClass="step">
-        <h2><span class="n">👁</span>Aperçu</h2>
+        <h2><span class="n"><i class="ic ic-eye" aria-hidden="true"></i></span>Aperçu</h2>
         <p class="desc"><asp:Literal ID="litApercuInfo" runat="server" /></p>
         <div class="body">
 

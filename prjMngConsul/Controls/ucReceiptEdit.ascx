@@ -341,7 +341,7 @@
             <div class="content">
                 <div class="container">
 
-                    <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé 🔒"></asp:Label>
+                    <asp:Label ID="lblPostedBadge" runat="server" CssClass="badge-posted" Visible="false" Text="Comptabilisé"></asp:Label>
 
                     <%-- EN-TÊTE : CLIENT + INFOS RÈGLEMENT --%>
                     <div class="card">

@@ -150,7 +150,7 @@
     </p>
 
     <div class="avert-ecrit">
-        <span>⚠️</span>
+        <span><i class="ic ic-alert" aria-hidden="true"></i></span>
         <div>
             <b>C'est la première étape qui écrit dans votre comptabilité.</b>
             Tout ce qui précède restait en préparation et pouvait être abandonné sans
@@ -230,7 +230,7 @@
                                     <%-- La même fiche qu'à l'étape 2 (T312) : numéro, nom, nature, type
                                          et sous-type QuickBooks, solde, origine, sous-compte, description. --%>
                                     <div class="src-c"><%# CleAffichee(Eval("Compte")) %></div>
-                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %><button type="button" class="ia-cpt" data-id='<%# Eval("StagingId") %>' title="Assistant : que représente ce compte et où le ranger ?" aria-label="Assistant pour ce compte">✨ Assistant</button></div>
+                                    <div class="src-n"><%# Server.HtmlEncode(Convert.ToString(Eval("Nom"))) %><button type="button" class="ia-cpt" data-id='<%# Eval("StagingId") %>' title="Assistant : que représente ce compte et où le ranger ?" aria-label="Assistant pour ce compte">Assistant</button></div>
                                     <%# FicheSource(Container.DataItem) %>
                                 </td>
                                 <td class="cls-cell">
@@ -335,7 +335,7 @@
     <div class="iac-dlg" id="iacDlg" role="dialog" aria-modal="true" aria-labelledby="iacTitre">
         <div class="iac-tete" id="iacTete">
             <b id="iacTitre">Assistant</b>
-            <small>✨ explication du compte</small>
+            <small><i class="ic ic-sparkles" aria-hidden="true"></i> explication du compte</small>
             <button type="button" class="iac-x" id="iacFermer" title="Fermer" aria-label="Fermer">&times;</button>
         </div>
         <div class="iac-corps" id="iacCorps"></div>

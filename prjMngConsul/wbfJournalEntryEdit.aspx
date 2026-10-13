@@ -370,14 +370,14 @@
 
                     <%-- BADGE DE STATUT --%>
                     <asp:Panel ID="pnlStatutBadges" runat="server">
-                        <asp:Label ID="lblValideeBadge" runat="server" CssClass="badge-validee" Visible="false" Text="Validée 🔒"></asp:Label>
+                        <asp:Label ID="lblValideeBadge" runat="server" CssClass="badge-validee" Visible="false" Text="Validée"></asp:Label>
                         <asp:Label ID="lblExtourneeBadge" runat="server" CssClass="badge-extournee" Visible="false" Text="Extournée"></asp:Label>
                     </asp:Panel>
 
                     <%-- ACTIONS HEADER : CHARGER UN TEMPLATE --%>
                     <div class="header-actions">
                         <telerik:RadButton ID="btnLoadTemplate" runat="server"
-                            Text="📋 Charger un template"
+                            Text="Charger un template"
                             AutoPostBack="false"
                             OnClientClicked="openTemplatePicker">
                         </telerik:RadButton>

@@ -91,7 +91,7 @@
 <div class="gl-page">
 
     <div class="gl-head">
-        <div class="ico">📚</div>
+        <div class="ico"><i class="ic ic-library" aria-hidden="true"></i></div>
         <div>
             <h1>Grand livre</h1>
             <div class="sub">chaque écriture, sous le compte qu'elle touche</div>

@@ -4,7 +4,7 @@
 
     <%-- Pastille « fin de l'essai gratuit » (visible seulement pendant l'essai) --%>
     <asp:Panel ID="pnlTrial" runat="server" CssClass="trial-pill" Visible="false">
-        <span class="trial-ico" aria-hidden="true">⏳</span>
+        <span class="trial-ico" aria-hidden="true"><i class="ic ic-hourglass" aria-hidden="true"></i></span>
         <asp:Literal ID="litTrial" runat="server" />
     </asp:Panel>
 

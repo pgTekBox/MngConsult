@@ -419,7 +419,7 @@
                 <!-- Saisie du montant à payer (paiement partiel possible) -->
                 <div style="margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--slate-200);">
                     <label style="display:block; font-size: 11px; font-weight: 800; color: var(--slate-500); text-transform: uppercase; letter-spacing: .08em; margin-bottom: 6px;">
-                        💰 Montant à payer maintenant
+                        <i class="ic ic-coins" aria-hidden="true"></i> Montant à payer maintenant
                     </label>
                     <div style="display:flex; align-items:center; gap:8px;">
                         <input type="number" id="amountToPay"
@@ -437,7 +437,7 @@
 
             <!-- Alerte si le fournisseur n'est pas encore Stripe Connect -->
             <asp:Panel ID="pnlNoStripe" runat="server" Visible="false" CssClass="alert error">
-                ⚠️ Ce fournisseur n'est pas encore configuré pour recevoir des paiements Stripe.
+                <i class="ic ic-alert" aria-hidden="true"></i> Ce fournisseur n'est pas encore configuré pour recevoir des paiements Stripe.
                 <br/><br/>
                 <asp:HyperLink ID="lnkConfigure" runat="server" CssClass="btn-pay"
                     Style="display:inline-block; width:auto; padding:10px 20px; margin-top:8px; text-decoration:none;">
@@ -544,7 +544,7 @@
                     <label class="autopay-toggle" for="chkAuthorizeAutoPay">
                         <asp:CheckBox ID="chkAuthorizeAutoPay" runat="server" ClientIDMode="Static" />
                         <span class="autopay-toggle-label">
-                            <span class="icon">🤖</span>Autoriser le paiement automatique pour
+                            <span class="icon"><i class="ic ic-bot" aria-hidden="true"></i></span>Autoriser le paiement automatique pour
                             <asp:Literal ID="litAutoPaySupplierName" runat="server" />
                             <span class="autopay-sublabel">
                                 Les prochaines factures seront prélevées automatiquement à leur date d'échéance.
@@ -562,7 +562,7 @@
                         </div>
 
                         <div class="autopay-legal" id="autopayLegalCard">
-                            <strong>📋 Conditions — Carte de crédit/débit (MIT)</strong>
+                            <strong><i class="ic ic-clipboard" aria-hidden="true"></i> Conditions — Carte de crédit/débit (MIT)</strong>
                             <ul>
                                 <li>Le moyen de paiement choisi sera sauvegardé de manière sécurisée par Stripe.</li>
                                 <li>Vous recevrez un <strong>email de préavis 24 h avant chaque débit</strong>.</li>
@@ -573,7 +573,7 @@
                         </div>
 
                         <div class="autopay-legal" id="autopayLegalAcss" style="display:none;">
-                            <strong>📋 Convention PAD (Préautorisation de débit) — Règle H1 Paiements Canada</strong>
+                            <strong><i class="ic ic-clipboard" aria-hidden="true"></i> Convention PAD (Préautorisation de débit) — Règle H1 Paiements Canada</strong>
                             <ul>
                                 <li>J'autorise les <strong>prélèvements de type Affaires</strong> à montants variables.</li>
                                 <li>J'accepte un <strong>préavis raccourci de 3 jours</strong> avant chaque débit (conforme à la Règle H1).</li>
@@ -592,7 +592,7 @@
                 <!-- Cas 2 : Autorisation deja active -> indiquer + ne pas redemander -->
                 <asp:Panel ID="pnlAutoPayExisting" runat="server" Visible="false">
                     <div style="display:flex; align-items:center; gap:10px;">
-                        <span style="font-size: 20px;">✅</span>
+                        <span style="font-size: 20px;"><i class="ic ic-check-circle" aria-hidden="true"></i></span>
                         <div>
                             <div style="font-weight: 800; font-size: 13px; color: var(--green-600);">
                                 Paiement automatique déjà activé pour ce fournisseur
