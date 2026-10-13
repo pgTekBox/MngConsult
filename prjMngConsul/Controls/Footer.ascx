@@ -22,36 +22,36 @@
 </footer>
 
 <style>
+/* Le pied de page au style « Doux bleu marine » : filet, Nunito, liens bleu marine. */
 .app-footer{
-    background:white;
-    border-top:1px solid var(--border);
-   /* margin-top:30px;*/
+    background:#ffffff;
+    border-top:1px solid var(--mc-line,#D5DDE8);
+    font-family:var(--mc-font-titre, Nunito, system-ui, sans-serif);
 }
-
 .footer-inner{
-    padding:16px 20px;
+    padding:22px 24px;
     display:flex;
+    flex-wrap:wrap;
     align-items:center;
     justify-content:space-between;
-    font-size:13px;
-    color:var(--muted);
+    gap:10px 24px;
+    font-size:15px;
+    color:var(--mc-muted2,#44536E);
 }
-
+.footer-left{ flex:1 1 auto; }
 .footer-right{
     display:flex;
-    gap:16px;
+    gap:24px;
 }
-
 .footer-right a{
     text-decoration:none;
-    color:var(--muted);
-    font-weight:600;
+    color:var(--mc-navy,#0E1F3D);
+    font-weight:700;
+    padding:6px 0;
 }
-
 .footer-right a:hover{
-    color:var(--primary);
+    color:var(--mc-primary,#1B4F9C);
 }
-
 @media(max-width:768px){
     .footer-inner{
         flex-direction:column;

@@ -29,7 +29,10 @@ Namespace Controls
                        badge.ToString() & "</span></span>"
             End If
 
-            Return "<a class=""" & cls & """ href=""" & ResolveUrl(url) & """ data-navlink>" &
+            ' La page où l'on est : la classe « ici » (fond bleu pâle, icône sur rond
+            ' bleu marine) et aria-current, pour le lecteur d'écran.
+            Dim ici As String = If(EstPageCourante(url), " ici"" aria-current=""page", "")
+            Return "<a class=""" & cls & ici & """ href=""" & ResolveUrl(url) & """ data-navlink>" &
                    "<span class=""nav-ico"" aria-hidden=""true"">" & icon & "</span>" &
                    "<span class=""nav-txt"">" & L(labelKey) & "</span>" & meta & "</a>"
         End Function
@@ -55,8 +58,26 @@ Namespace Controls
             End Try
         End Function
 
+        ''' <summary>
+        ''' Le lien mène-t-il à la page courante ? Par le nom du fichier, sans
+        ''' l'extension ni les paramètres : ~/wbfX.aspx?mode=1 et /wbfX se valent.
+        ''' </summary>
+        Private Function EstPageCourante(url As String) As Boolean
+            Try
+                Dim cible As String = url
+                Dim q As Integer = cible.IndexOf("?"c)
+                If q >= 0 Then cible = cible.Substring(0, q)
+                cible = IO.Path.GetFileNameWithoutExtension(cible)
+                Dim ici As String = IO.Path.GetFileNameWithoutExtension(Request.AppRelativeCurrentExecutionFilePath)
+                Return cible <> "" AndAlso String.Equals(cible, ici, StringComparison.OrdinalIgnoreCase)
+            Catch
+                Return False
+            End Try
+        End Function
+
         Private Function Child(url As String, labelKey As String) As String
-            Return "<a class=""nav-child"" href=""" & ResolveUrl(url) & """ data-navlink>" &
+            Dim ici As String = If(EstPageCourante(url), " ici"" aria-current=""page", "")
+            Return "<a class=""nav-child" & ici & """ href=""" & ResolveUrl(url) & """ data-navlink>" &
                    "<span class=""dot"" aria-hidden=""true""></span>" & L(labelKey) & "</a>"
         End Function
 
