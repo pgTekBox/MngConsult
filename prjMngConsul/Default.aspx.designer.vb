@@ -23,6 +23,16 @@ Partial Public Class _Default
     Protected WithEvents litTrialEnd As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>litKpiCustomers control.</summary>
+    Protected WithEvents litSalut As Global.System.Web.UI.WebControls.Literal
+
+    Protected WithEvents litSalutSous As Global.System.Web.UI.WebControls.Literal
+
+    Protected WithEvents litAttention As Global.System.Web.UI.WebControls.Literal
+
+    Protected WithEvents litMois As Global.System.Web.UI.WebControls.Literal
+
+    Protected WithEvents litCabinet As Global.System.Web.UI.WebControls.Literal
+
     Protected WithEvents litKpiCustomers As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>litKpiSupplierInvoices control.</summary>

@@ -1,6 +1,7 @@
 ﻿Imports System.Data
 Imports System.Data.SqlClient
 Imports System.Globalization
+Imports System.Text
 
 Public Class _Default
     Inherits clsData
@@ -14,6 +15,10 @@ Public Class _Default
         If Not IsPostBack Then
             LoadWelcomeInfo()
             LoadKPIs()
+            LoadSalut()
+            LoadAttention()
+            LoadMois()
+            LoadCabinet()
         End If
     End Sub
 
@@ -21,6 +26,10 @@ Public Class _Default
     ''' Alimente les 4 cartes KPI (Clients, Factures fournisseur, Produits, Revenu du mois)
     ''' avec les vraies valeurs de la compagnie via s0697GetDashboardKPIs.
     ''' </summary>
+    ''' <summary>Les valeurs des KPI, gardées pour « ce qu'il faut regarder » et « Ce mois-ci ».</summary>
+    Private kpiClients As Long, kpiFacturesFourn As Long, kpiProduits As Long, kpiApprobations As Long
+    Private kpiRevenus As Decimal
+
     Private Sub LoadKPIs()
         Dim custCount As Long = 0
         Dim supInvCount As Long = 0
@@ -48,6 +57,105 @@ Public Class _Default
         litKpiSupplierInvoices.Text = supInvCount.ToString("N0", c)
         litKpiProducts.Text = prodCount.ToString("N0", c)
         litKpiRevenue.Text = revenue.ToString("N0", c) & " $"
+        kpiClients = custCount : kpiFacturesFourn = supInvCount : kpiProduits = prodCount : kpiRevenus = revenue
+        kpiApprobations = CompterApprobations()
+    End Sub
+
+    ''' <summary>Les tâches en attente d'une décision (même décompte que la pastille du menu, s0745).</summary>
+    Private Function CompterApprobations() As Long
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0745GetApprobationsCount", p)
+            If ds Is Nothing OrElse ds.Tables.Count = 0 OrElse ds.Tables(0).Rows.Count = 0 Then Return 0
+            Return Convert.ToInt64(ds.Tables(0).Rows(0)("AApprouver"))
+        Catch
+            Return 0
+        End Try
+    End Function
+
+    ''' <summary>« Bonjour, prénom ! Voici votre journée. » — l'accueil du gabarit.</summary>
+    Private Sub LoadSalut()
+        Dim prenom As String = UserFirstName
+        litSalut.Text = If(String.IsNullOrEmpty(prenom), L("salutSansNom"), String.Format(L("salut"), Server.HtmlEncode(prenom)))
+        litSalutSous.Text = L("salutSous")
+    End Sub
+
+    ''' <summary>
+    ''' Les trois choses à regarder, comme dans le gabarit : urgent (les tâches
+    ''' à approuver), à surveiller (les factures fournisseurs), tout va bien (les
+    ''' revenus du mois). Calculées, pas inventées : sans tâche en attente, la
+    ''' première ligne devient « Tout va bien ».
+    ''' </summary>
+    Private Sub LoadAttention()
+        Dim c As CultureInfo = Cult()
+        Dim sb As New StringBuilder()
+        If kpiApprobations > 0 Then
+            sb.Append(Ligne("urgent", "inbox", L("attUrgent"), String.Format(L("attApprob"), kpiApprobations.ToString("N0", c)), L("attApprobSous"), "wbfApprobations.aspx", L("attApprobBtn"), True))
+        Else
+            sb.Append(Ligne("ok", "check-circle", L("attOk"), L("attRienAApprouver"), L("attRienSous"), "wbfApprobations.aspx", L("attVoir"), False))
+        End If
+        If kpiFacturesFourn > 0 Then
+            sb.Append(Ligne("veille", "factory", L("attVeille"), String.Format(L("attFournisseurs"), kpiFacturesFourn.ToString("N0", c)), L("attFournisseursSous"), "wbfSuppliersInvoices.aspx", L("attVoir"), False))
+        Else
+            sb.Append(Ligne("ok", "factory", L("attOk"), L("attAucuneFacture"), L("attAucuneFactureSous"), "wbfSuppliersInvoices.aspx", L("attVoir"), False))
+        End If
+        sb.Append(Ligne("ok", "coins", L("attOk"), String.Format(L("attRevenus"), kpiRevenus.ToString("N0", c)), L("attRevenusSous"), "wbfCustomersInvoices.aspx", L("attVoir"), False))
+        litAttention.Text = sb.ToString()
+    End Sub
+
+    Private Function Ligne(genre As String, icone As String, lbl As String, titre As String, sous As String, url As String, bouton As String, fort As Boolean) As String
+        Return "<div class='carte-b att " & genre & "'><span class='rond'><i class='ic ic-" & icone & "' aria-hidden='true'></i></span>" &
+               "<div class='corps'><div class='lbl'>" & Server.HtmlEncode(lbl) & "</div><div class='titre'>" & Server.HtmlEncode(titre) & "</div><div class='sous'>" & Server.HtmlEncode(sous) & "</div></div>" &
+               "<a class='btn-pill" & If(fort, " navy", "") & "' href='" & url & "'>" & Server.HtmlEncode(bouton) & "</a></div>"
+    End Function
+
+    ''' <summary>« Ce mois-ci » : un point vert, doré ou rouge par indicateur.</summary>
+    Private Sub LoadMois()
+        Dim c As CultureInfo = Cult()
+        Dim sb As New StringBuilder()
+        sb.Append(Point("ok", String.Format(L("moisClients"), kpiClients.ToString("N0", c))))
+        sb.Append(Point("ok", String.Format(L("moisProduits"), kpiProduits.ToString("N0", c))))
+        sb.Append(Point(If(kpiFacturesFourn > 0, "veille", "ok"), String.Format(L("moisFactures"), kpiFacturesFourn.ToString("N0", c))))
+        sb.Append(Point(If(kpiApprobations > 0, "urgent", "ok"), String.Format(L("moisApprob"), kpiApprobations.ToString("N0", c))))
+        sb.Append(Point("ok", String.Format(L("moisRevenus"), kpiRevenus.ToString("N0", c))))
+        litMois.Text = sb.ToString()
+    End Sub
+
+    Private Function Point(genre As String, texte As String) As String
+        Return "<div class='ligne'><span class='pt " & genre & "'></span><span>" & Server.HtmlEncode(texte) & "</span></div>"
+    End Function
+
+    ''' <summary>
+    ''' « Mon cabinet certifié » : les utilisateurs comptables de la compagnie
+    ''' (s0897, les mêmes qu'à « Demander à mon cabinet certifié »), et un bouton
+    ''' pour leur écrire. Sans comptable rattaché, on le dit et on renvoie aux
+    ''' utilisateurs pour en inviter un.
+    ''' </summary>
+    Private Sub LoadCabinet()
+        Dim sb As New StringBuilder()
+        Dim courriels As New List(Of String)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlParameter("@CompanyGUID", Company))
+            Dim ds As DataSet = ExecuteSQLds("s0897GetComptablesCompagnie", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then
+                For Each r As DataRow In ds.Tables(0).Rows
+                    Dim nom As String = (Convert.ToString(r("FirstName")) & " " & Convert.ToString(r("LastName"))).Trim()
+                    Dim mail As String = Convert.ToString(r("Email"))
+                    If mail <> "" Then courriels.Add(mail)
+                    sb.Append("<div class='pers'>").Append(Server.HtmlEncode(If(nom = "", mail, nom))).Append("<small>").Append(Server.HtmlEncode(mail)).Append("</small></div>")
+                Next
+            End If
+        Catch
+        End Try
+        If courriels.Count = 0 Then
+            sb.Append("<div class='aucun'>").Append(Server.HtmlEncode(L("cabinetAucun"))).Append("</div>")
+            sb.Append("<a class='btn-pill' href='wbfUsers.aspx'>").Append(Server.HtmlEncode(L("cabinetInviter"))).Append("</a>")
+        Else
+            sb.Append("<a class='btn-pill' href='mailto:").Append(Server.HtmlEncode(String.Join(",", courriels))).Append("'>").Append(Server.HtmlEncode(L("cabinetEcrire"))).Append("</a>")
+        End If
+        litCabinet.Text = sb.ToString()
     End Sub
 
     ''' <summary>Culture pour le format des dates selon la langue courante.</summary>
@@ -97,6 +205,35 @@ Public Class _Default
         Dim lang As String = CurrentLang
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Tableau de bord — 60Sec-AI", "Dashboard — 60Sec-AI", "Panel — 60Sec-AI")
+            Case "salut" : Return Choose3(lang, "Bonjour, {0} ! Voici votre journée.", "Hello, {0}! Here is your day.", "¡Hola, {0}! Aquí está su día.")
+            Case "salutSansNom" : Return Choose3(lang, "Bonjour ! Voici votre journée.", "Hello! Here is your day.", "¡Hola! Aquí está su día.")
+            Case "salutSous" : Return Choose3(lang, "Trois choses à regarder. Le reste est déjà fait.", "Three things to look at. The rest is already done.", "Tres cosas que mirar. El resto ya está hecho.")
+            Case "attUrgent" : Return Choose3(lang, "Urgent", "Urgent", "Urgente")
+            Case "attVeille" : Return Choose3(lang, "À surveiller", "To watch", "A vigilar")
+            Case "attOk" : Return Choose3(lang, "Tout va bien", "All good", "Todo va bien")
+            Case "attVoir" : Return Choose3(lang, "Jeter un coup d'œil", "Take a look", "Echar un vistazo")
+            Case "attApprob" : Return Choose3(lang, "{0} tâche(s) à approuver", "{0} task(s) to approve", "{0} tarea(s) por aprobar")
+            Case "attApprobSous" : Return Choose3(lang, "Elles attendent votre décision.", "They are waiting for your decision.", "Esperan su decisión.")
+            Case "attApprobBtn" : Return Choose3(lang, "Voir et approuver", "See and approve", "Ver y aprobar")
+            Case "attRienAApprouver" : Return Choose3(lang, "Rien à approuver", "Nothing to approve", "Nada que aprobar")
+            Case "attRienSous" : Return Choose3(lang, "Aucune tâche n'attend votre décision.", "No task is waiting for your decision.", "Ninguna tarea espera su decisión.")
+            Case "attFournisseurs" : Return Choose3(lang, "{0} facture(s) fournisseur", "{0} supplier invoice(s)", "{0} factura(s) de proveedor")
+            Case "attFournisseursSous" : Return Choose3(lang, "À suivre jusqu'au paiement.", "To follow until payment.", "A seguir hasta el pago.")
+            Case "attAucuneFacture" : Return Choose3(lang, "Aucune facture fournisseur", "No supplier invoice", "Ninguna factura de proveedor")
+            Case "attAucuneFactureSous" : Return Choose3(lang, "Rien à faire pour l'instant.", "Nothing to do for now.", "Nada que hacer por ahora.")
+            Case "attRevenus" : Return Choose3(lang, "Revenus du mois : {0} $", "Revenue this month: ${0}", "Ingresos del mes: {0} $")
+            Case "attRevenusSous" : Return Choose3(lang, "Les factures clients comptabilisées ce mois-ci.", "Customer invoices posted this month.", "Las facturas de clientes contabilizadas este mes.")
+            Case "moisTitre" : Return Choose3(lang, "Ce mois-ci", "This month", "Este mes")
+            Case "moisClients" : Return Choose3(lang, "Clients : {0}", "Customers: {0}", "Clientes: {0}")
+            Case "moisProduits" : Return Choose3(lang, "Produits et services : {0}", "Products and services: {0}", "Productos y servicios: {0}")
+            Case "moisFactures" : Return Choose3(lang, "Factures fournisseurs : {0}", "Supplier invoices: {0}", "Facturas de proveedor: {0}")
+            Case "moisApprob" : Return Choose3(lang, "À approuver : {0}", "To approve: {0}", "Por aprobar: {0}")
+            Case "moisRevenus" : Return Choose3(lang, "Revenus : {0} $", "Revenue: ${0}", "Ingresos: {0} $")
+            Case "cabinetTitre" : Return Choose3(lang, "Mon cabinet certifié", "My certified firm", "Mi despacho certificado")
+            Case "cabinetAucun" : Return Choose3(lang, "Aucun comptable n'est rattaché à votre compagnie.", "No accountant is attached to your company.", "Ningún contador está vinculado a su empresa.")
+            Case "cabinetInviter" : Return Choose3(lang, "Inviter mon comptable", "Invite my accountant", "Invitar a mi contador")
+            Case "cabinetEcrire" : Return Choose3(lang, "Écrire à mon comptable", "Write to my accountant", "Escribir a mi contador")
+            Case "exemplesFictifs" : Return Choose3(lang, "Exemples fictifs, pour illustrer.", "Fictional examples, to illustrate.", "Ejemplos ficticios, para ilustrar.")
             Case "heroBadge" : Return Choose3(lang, "<i class='ic ic-sparkles' aria-hidden='true'></i> Tableau de bord principal", "<i class='ic ic-sparkles' aria-hidden='true'></i> Main dashboard", "<i class='ic ic-sparkles' aria-hidden='true'></i> Panel principal")
             Case "heroTitle" : Return Choose3(lang, "Bienvenue dans 60Sec-AI", "Welcome to 60Sec-AI", "Bienvenido a 60Sec-AI")
             Case "heroSub" : Return Choose3(lang, "Gérez vos clients, vos factures, vos produits et vos opérations quotidiennes depuis une seule interface claire, rapide et adaptée au mobile.", "Manage your customers, invoices, products and daily operations from a single interface that's clear, fast and mobile-ready.", "Gestione sus clientes, facturas, productos y operaciones diarias desde una sola interfaz clara, rápida y adaptada al móvil.")

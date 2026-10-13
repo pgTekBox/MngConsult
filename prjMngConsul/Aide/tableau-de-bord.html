@@ -160,14 +160,23 @@
                     </tbody>
                 </table>
 
-                <h3>Bandeau principal</h3>
-                <p>Sous la boîte de bienvenue, le bandeau « Bienvenue dans 60Sec-AI » propose trois boutons et des mini-statistiques.</p>
+                <h3>L’accueil : « Bonjour, prénom ! Voici votre journée. »</h3>
+                <p>Sous la boîte de bienvenue, la carte d’accueil reprend le style « Doux bleu marine » : le visage « Le 60 », votre prénom, et trois boutons en pastilles.</p>
                 <ul>
-                    <li><kbd>Nouvelle facture</kbd> : ouvre directement la fenêtre d’édition d’une facture client.</li>
+                    <li><kbd>+ Nouvelle facture</kbd> : ouvre directement la fenêtre d’édition d’une facture client.</li>
                     <li><kbd>Voir les clients</kbd> : ouvre <span class="chemin">Ventes › Clients</span>.</li>
                     <li><kbd>Paramètres</kbd> : ouvre <span class="chemin">Paramètres</span>.</li>
-                    <li>Mini-statistiques « Ventes du mois », « Factures ouvertes », « Clients actifs », « Produits » : ce sont des <strong>exemples de présentation</strong>, pas vos chiffres (voir « Trucs et pièges »).</li>
                 </ul>
+                <h3>Les trois choses à regarder (données réelles)</h3>
+                <p>Trois lignes, toujours : chacune porte une pastille <strong>Urgent</strong> (rouge), <strong>À surveiller</strong> (doré) ou <strong>Tout va bien</strong> (vert), un titre, une phrase et un bouton qui mène à l’écran concerné.</p>
+                <table>
+                    <thead><tr><th>Ligne</th><th>Ce qu’elle dit</th><th>Où mène le bouton</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tâches à approuver</td><td>« Urgent — N tâche(s) à approuver » s’il y en a (le même décompte que la pastille « Approbations » du menu) ; sinon « Tout va bien — Rien à approuver ».</td><td>Approbations</td></tr>
+                        <tr><td>Factures fournisseur</td><td>« À surveiller — N facture(s) fournisseur » s’il y en a ; sinon « Tout va bien — Aucune facture fournisseur ».</td><td>Achats › Factures fournisseurs</td></tr>
+                        <tr><td>Revenus du mois</td><td>« Tout va bien — Revenus du mois : N $ » : les factures clients comptabilisées ce mois-ci, le même chiffre que la carte « Revenus ».</td><td>Ventes › Factures clients</td></tr>
+                    </tbody>
+                </table>
 
                 <h3>Cartes KPI (données réelles)</h3>
                 <p>Quatre cartes affichent des chiffres réels de la compagnie active. Elles sont recalculées à chaque ouverture de la page.</p>
@@ -184,13 +193,18 @@
                 <h3>Autres panneaux</h3>
                 <ul>
                     <li><strong>Modules</strong> : six tuiles d’accès rapide : Clients, Factures, Produits, Fournisseurs, Reçus, Paramètres.</li>
-                    <li><strong>Factures récentes</strong> : une liste d’exemple avec un lien « Voir tout ».</li>
+                    <li><strong>Factures récentes</strong> : une liste d’exemple avec un lien « Voir tout », signalée « Exemples fictifs, pour illustrer ».</li>
+                </ul>
+                <h3>La colonne de droite</h3>
+                <ul>
+                    <li><strong>Ce mois-ci</strong> (carte bleu marine) : un point par indicateur — vert quand tout va bien, doré pour « à surveiller » (des factures fournisseurs), rouge pour « urgent » (des tâches à approuver) — avec les mêmes chiffres que les cartes KPI.</li>
+                    <li><strong>Mon cabinet certifié</strong> : les utilisateurs comptables rattachés à votre compagnie (les mêmes que « Demander à mon cabinet certifié » dans la reprise comptable), et <kbd>Écrire à mon comptable</kbd>, qui ouvre votre messagerie avec leurs adresses. Sans comptable rattaché : « Aucun comptable n’est rattaché à votre compagnie » et <kbd>Inviter mon comptable</kbd>, qui ouvre <span class="chemin">Utilisateurs</span>.</li>
                     <li><strong>Actions rapides</strong> : Créer une facture, Ajouter un client, Ajouter un produit, Voir les reçus.</li>
-                    <li><strong>Activité récente</strong> et <strong>Résumé</strong> : panneaux de présentation.</li>
+                    <li><strong>Activité récente</strong> : panneau de présentation, signalé « Exemples fictifs ».</li>
                 </ul>
 
                 <h3>Trucs et pièges</h3>
-                <div class="piege" data-titre="Piège">Plusieurs panneaux du Tableau de bord sont des <strong>exemples de présentation</strong> : les mini-statistiques du bandeau, « Factures récentes », « Activité récente » et « Résumé » ne reflètent pas vos données. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) sont réelles. Pour vos vrais chiffres, utilisez les écrans du menu et les <a href="rapports.html">Rapports</a>.</div>
+                <div class="piege" data-titre="Piège">Plusieurs panneaux du Tableau de bord sont des <strong>exemples de présentation</strong> : « Factures récentes » et « Activité récente » ne reflètent pas vos données. Seules les quatre cartes KPI (Clients, Factures fournisseur, Produits, Revenus) sont réelles. Pour vos vrais chiffres, utilisez les écrans du menu et les <a href="rapports.html">Rapports</a>.</div>
                 <div class="piege" data-titre="Piège">Dans le panneau Modules, la tuile <strong>Factures</strong> ouvre les factures <strong>fournisseurs</strong>, pas les factures clients. Pour vos factures de vente, passez par <span class="chemin">Ventes › Factures clients</span> ou par le bouton <kbd>Nouvelle facture</kbd>.</div>
                 <div class="attention" data-titre="Attention">La carte « Revenus » exclut les factures clients qui ne sont pas encore comptabilisées (brouillons). Si le total vous semble bas, vérifiez qu’il ne reste pas de brouillons à comptabiliser dans <span class="chemin">Ventes › Factures clients</span>.</div>
                 <div class="note" data-titre="Bon à savoir">En cas d’erreur de lecture des données, les quatre cartes affichent 0 plutôt qu’un message d’erreur. Rechargez la page ; si les zéros persistent alors que vous avez des données, contactez le soutien.</div>
@@ -445,14 +459,23 @@
                     </tbody>
                 </table>
 
-                <h3>Main banner</h3>
-                <p>Below the welcome box, the “Welcome to 60Sec-AI” banner offers three buttons and mini-statistics.</p>
+                <h3>The welcome card: “Hello, first name! Here is your day.”</h3>
+                <p>Under the welcome box, the welcome card follows the “Doux bleu marine” style: the “Le 60” face, your first name and three pill buttons.</p>
                 <ul>
-                    <li><kbd>New invoice</kbd>: opens the customer-invoice editing window directly.</li>
-                    <li><kbd>View customers</kbd>: opens <span class="chemin">Sales › Customers</span>.</li>
-                    <li><kbd>Settings</kbd>: opens <span class="chemin">Settings</span>.</li>
-                    <li>Mini-statistics “Monthly sales”, “Open invoices”, “Active customers”, “Products”: these are <strong>presentation samples</strong>, not your figures (see “Tips and pitfalls”).</li>
+                    <li><kbd>+ Nouvelle facture</kbd>: opens the customer invoice edit window directly.</li>
+                    <li><kbd>Voir les clients</kbd>: opens <span class="chemin">Ventes › Clients</span>.</li>
+                    <li><kbd>Paramètres</kbd>: opens <span class="chemin">Paramètres</span>.</li>
                 </ul>
+                <h3>The three things to look at (real data)</h3>
+                <p>Always three rows: each carries an <strong>Urgent</strong> (red), <strong>À surveiller</strong> (gold) or <strong>Tout va bien</strong> (green) badge, a title, a sentence and a button to the relevant screen.</p>
+                <table>
+                    <thead><tr><th>Row</th><th>What it says</th><th>Where the button goes</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tasks to approve</td><td>“Urgent — N tâche(s) à approuver” when there are some (the same count as the “Approbations” badge in the menu); otherwise “Tout va bien — Rien à approuver”.</td><td>Approvals</td></tr>
+                        <tr><td>Supplier invoices</td><td>“À surveiller — N facture(s) fournisseur” when there are some; otherwise “Tout va bien — Aucune facture fournisseur”.</td><td>Purchases › Supplier invoices</td></tr>
+                        <tr><td>Revenue this month</td><td>“Tout va bien — Revenus du mois : N $”: customer invoices posted this month, the same figure as the “Revenus” card.</td><td>Sales › Customer invoices</td></tr>
+                    </tbody>
+                </table>
 
                 <h3>KPI cards (real data)</h3>
                 <p>Four cards show real figures of the active company. They are recalculated every time the page opens.</p>
@@ -469,9 +492,14 @@
                 <h3>Other panels</h3>
                 <ul>
                     <li><strong>Modules</strong>: six quick-access tiles: Customers, Invoices, Products, Suppliers, Receipts, Settings.</li>
-                    <li><strong>Recent invoices</strong>: a sample list with a “View all” link.</li>
+                    <li><strong>Recent invoices</strong>: a sample list with a “Voir tout” link, marked “Exemples fictifs, pour illustrer”.</li>
+                </ul>
+                <h3>The right-hand column</h3>
+                <ul>
+                    <li><strong>Ce mois-ci</strong> (navy card): one dot per indicator — green when all is well, gold for “to watch” (supplier invoices), red for “urgent” (tasks to approve) — with the same figures as the KPI cards.</li>
+                    <li><strong>Mon cabinet certifié</strong>: the accountant users attached to your company (the same as “Demander à mon cabinet certifié” in the books migration), and <kbd>Écrire à mon comptable</kbd>, which opens your mail client with their addresses. With no accountant attached: “Aucun comptable n’est rattaché à votre compagnie” and <kbd>Inviter mon comptable</kbd>, which opens <span class="chemin">Utilisateurs</span>.</li>
                     <li><strong>Quick actions</strong>: Create an invoice, Add a customer, Add a product, View receipts.</li>
-                    <li><strong>Recent activity</strong> and <strong>Summary</strong>: presentation panels.</li>
+                    <li><strong>Recent activity</strong>: a presentation panel, marked “Exemples fictifs”.</li>
                 </ul>
 
                 <h3>Tips and pitfalls</h3>
@@ -730,14 +758,23 @@
                     </tbody>
                 </table>
 
-                <h3>Banda principal</h3>
-                <p>Bajo el cuadro de bienvenida, la banda «Bienvenido a 60Sec-AI» ofrece tres botones y miniestadísticas.</p>
+                <h3>La bienvenida: « ¡Hola, nombre! Aquí está su día. »</h3>
+                <p>Bajo la caja de bienvenida, la tarjeta de inicio sigue el estilo « Doux bleu marine »: la cara « Le 60 », su nombre y tres botones en píldora.</p>
                 <ul>
-                    <li><kbd>Nueva factura</kbd>: abre directamente la ventana de edición de una factura de cliente.</li>
-                    <li><kbd>Ver clientes</kbd>: abre <span class="chemin">Ventas › Clientes</span>.</li>
-                    <li><kbd>Ajustes</kbd>: abre <span class="chemin">Ajustes</span>.</li>
-                    <li>Miniestadísticas «Ventas del mes», «Facturas abiertas», «Clientes activos», «Productos»: son <strong>ejemplos de presentación</strong>, no sus cifras (vea «Consejos y trampas»).</li>
+                    <li><kbd>+ Nouvelle facture</kbd>: abre directamente la ventana de edición de una factura de cliente.</li>
+                    <li><kbd>Voir les clients</kbd>: abre <span class="chemin">Ventes › Clients</span>.</li>
+                    <li><kbd>Paramètres</kbd>: abre <span class="chemin">Paramètres</span>.</li>
                 </ul>
+                <h3>Las tres cosas que mirar (datos reales)</h3>
+                <p>Siempre tres líneas: cada una lleva una etiqueta <strong>Urgent</strong> (roja), <strong>À surveiller</strong> (dorada) o <strong>Tout va bien</strong> (verde), un título, una frase y un botón hacia la pantalla correspondiente.</p>
+                <table>
+                    <thead><tr><th>Línea</th><th>Qué dice</th><th>Adónde lleva el botón</th></tr></thead>
+                    <tbody>
+                        <tr><td>Tareas por aprobar</td><td>« Urgent — N tâche(s) à approuver » si las hay (el mismo recuento que la etiqueta « Approbations » del menú); si no, « Tout va bien — Rien à approuver ».</td><td>Aprobaciones</td></tr>
+                        <tr><td>Facturas de proveedor</td><td>« À surveiller — N facture(s) fournisseur » si las hay; si no, « Tout va bien — Aucune facture fournisseur ».</td><td>Compras › Facturas de proveedores</td></tr>
+                        <tr><td>Ingresos del mes</td><td>« Tout va bien — Revenus du mois : N $ »: las facturas de clientes contabilizadas este mes, la misma cifra que la tarjeta « Revenus ».</td><td>Ventas › Facturas de clientes</td></tr>
+                    </tbody>
+                </table>
 
                 <h3>Tarjetas KPI (datos reales)</h3>
                 <p>Cuatro tarjetas muestran cifras reales de la empresa activa. Se recalculan cada vez que se abre la página.</p>
@@ -753,10 +790,15 @@
 
                 <h3>Otros paneles</h3>
                 <ul>
-                    <li><strong>Módulos</strong>: seis mosaicos de acceso rápido: Clientes, Facturas, Productos, Proveedores, Recibos, Ajustes.</li>
-                    <li><strong>Facturas recientes</strong>: una lista de ejemplo con un enlace «Ver todo».</li>
-                    <li><strong>Acciones rápidas</strong>: Crear una factura, Añadir un cliente, Añadir un producto, Ver recibos.</li>
-                    <li><strong>Actividad reciente</strong> y <strong>Resumen</strong>: paneles de presentación.</li>
+                    <li><strong>Módulos</strong>: seis tarjetas de acceso rápido: Clientes, Facturas, Productos, Proveedores, Recibos, Parámetros.</li>
+                    <li><strong>Facturas recientes</strong>: una lista de ejemplo con un enlace « Voir tout », marcada « Exemples fictifs, pour illustrer ».</li>
+                </ul>
+                <h3>La columna derecha</h3>
+                <ul>
+                    <li><strong>Ce mois-ci</strong> (tarjeta azul marino): un punto por indicador — verde cuando todo va bien, dorado para « a vigilar » (facturas de proveedor), rojo para « urgente » (tareas por aprobar) — con las mismas cifras que las tarjetas KPI.</li>
+                    <li><strong>Mon cabinet certifié</strong>: los usuarios contadores vinculados a su empresa (los mismos que « Demander à mon cabinet certifié » en la migración contable), y <kbd>Écrire à mon comptable</kbd>, que abre su correo con sus direcciones. Sin contador vinculado: « Aucun comptable n’est rattaché à votre compagnie » e <kbd>Inviter mon comptable</kbd>, que abre <span class="chemin">Utilisateurs</span>.</li>
+                    <li><strong>Acciones rápidas</strong>: Crear una factura, Añadir un cliente, Añadir un producto, Ver los recibos.</li>
+                    <li><strong>Actividad reciente</strong>: panel de presentación, marcado « Exemples fictifs ».</li>
                 </ul>
 
                 <h3>Consejos y trampas</h3>

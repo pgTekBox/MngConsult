@@ -1,482 +1,106 @@
 ﻿<%@ Page Title="Home Page" Language="VB" MasterPageFile="~/Site.Master" AutoEventWireup="true" CodeBehind="Default.aspx.vb" Inherits="MngConsul._Default" %>
 
 <asp:Content ID="BodyContent" ContentPlaceHolderID="MainContent" runat="server">
-
+<%-- Le tableau de bord au style « Doux bleu marine » du gabarit 60secondes :
+     à gauche, la carte d'accueil (le visage « Le 60 », « Bonjour, prénom ! Voici
+     votre journée. »), les trois choses à regarder (urgent / à surveiller / tout
+     va bien, calculées), les indicateurs, les modules et les factures récentes ;
+     à droite, « Ce mois-ci » sur fond bleu marine, « Mon cabinet certifié » et
+     les actions rapides. La boîte de bienvenue dépliable des nouveaux comptes
+     reste au-dessus. --%>
 <style>
-    :root{
-        --mc-bg:#f6f8fc;
-        --mc-card:#ffffff;
-        --mc-text:#0E1F3D;
-        --mc-muted:#44536E;
-        --mc-line:#D5DDE8;
-        --mc-primary:#1B4F9C;
-        --mc-primary-2:#143A73;
-        --mc-success:#16a34a;
-        --mc-warning:#f59e0b;
-        --mc-danger:#ef4444;
-        --mc-radius:18px;
-        --mc-radius-sm:14px;
-        --mc-shadow:0 12px 32px rgba(15,23,42,.08);
-        --mc-shadow-soft:0 6px 18px rgba(15,23,42,.05);
-    }
+    .home-page{ font-family: var(--mc-font); color: var(--mc-navy); }
+    .home-wrap{ display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; padding:16px; }
+    .home-main{ flex: 999 1 480px; min-width:0; display:flex; flex-direction:column; gap:16px; }
+    .home-side{ flex: 1 1 270px; max-width:320px; display:flex; flex-direction:column; gap:16px; }
+    @media (max-width: 1100px){ .home-side{ max-width:none; } }
 
-    .home-page{
-        padding:24px;
-        background:var(--mc-bg);
-        min-height:calc(100vh - 140px);
-    }
+    /* Cartes et boutons, comme dans le gabarit */
+    .carte-b{ background:#fff; border-radius:24px; padding:22px 24px; }
+    .btn-pill{ display:inline-flex; align-items:center; justify-content:center; gap:8px; min-height:46px; padding:0 20px; border-radius:999px;
+               border:1px solid var(--mc-line2); background:#fff; color:var(--mc-navy); font-weight:700; font-size:15px; text-decoration:none; cursor:pointer; font-family:inherit; white-space:nowrap; }
+    .btn-pill:hover{ background:var(--mc-page); border-color:var(--mc-primary); color:var(--mc-navy); }
+    .btn-pill.p{ background:var(--mc-primary); border-color:var(--mc-primary); color:#fff; font-weight:800; font-size:17px; min-height:52px; padding:0 24px; }
+    .btn-pill.p:hover{ background:var(--mc-primary-dark); border-color:var(--mc-primary-dark); color:#fff; }
+    .btn-pill.navy{ background:var(--mc-navy); border-color:var(--mc-navy); color:#fff; }
+    .btn-pill.navy:hover{ background:#162E5C; border-color:#162E5C; color:#fff; }
 
-    .home-wrap{
-        max-width:1400px;
-        margin:0 auto;
-        display:flex;
-        flex-direction:column;
-        gap:22px;
-    }
+    /* L'accueil */
+    .hero-b{ display:flex; flex-wrap:wrap; align-items:center; gap:16px; }
+    .hero-b .visage{ flex-shrink:0; display:block; }
+    .hero-b .txt{ flex:1 1 260px; min-width:0; }
+    .hero-b h1{ margin:0; font-size:30px; font-weight:800; line-height:1.15; color:var(--mc-navy); }
+    .hero-b p{ margin:2px 0 0; font-size:17px; color:var(--mc-muted2); }
+    .hero-b .acts{ display:flex; flex-wrap:wrap; gap:10px; align-items:center; }
 
-    .hero{
-        background:linear-gradient(135deg, #1B4F9C 0%, #143A73 45%, #0E1F3D 100%);
-        color:#fff;
-        border-radius:24px;
-        padding:28px;
-        box-shadow:var(--mc-shadow);
-        display:grid;
-        grid-template-columns:1.5fr .9fr;
-        gap:20px;
-        overflow:hidden;
-        position:relative;
-    }
+    /* Les trois choses à regarder */
+    .att{ display:flex; flex-wrap:wrap; align-items:center; gap:12px 16px; padding:20px 22px; }
+    .att .rond{ width:44px; height:44px; flex-shrink:0; border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:20px; }
+    .att .corps{ flex:1 1 240px; min-width:0; }
+    .att .lbl{ font-weight:800; font-size:14px; }
+    .att .titre{ font-size:21px; font-weight:800; line-height:1.2; color:var(--mc-navy); }
+    .att .sous{ color:var(--mc-muted2); }
+    .att.urgent .rond{ background:#FDECEA; color:#A3261C; } .att.urgent .lbl{ color:#A3261C; }
+    .att.veille .rond{ background:#FBF1DC; color:#7A5200; } .att.veille .lbl{ color:#7A5200; }
+    .att.ok .rond{ background:#E3F3EA; color:#0F5A3A; } .att.ok .lbl{ color:#0F5A3A; }
+    .att .ic{ width:22px; height:22px; }
 
-    .hero:before{
-        content:"";
-        position:absolute;
-        right:-60px;
-        top:-60px;
-        width:220px;
-        height:220px;
-        border-radius:50%;
-        background:rgba(255,255,255,.08);
-    }
+    /* Les indicateurs */
+    .kpi-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(180px, 1fr)); gap:16px; }
+    .kpi-card{ background:#fff; border-radius:24px; padding:18px 20px; display:flex; flex-direction:column; gap:6px; }
+    .kpi-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .kpi-label{ font-size:13px; font-weight:800; color:var(--mc-muted2); letter-spacing:.02em; }
+    .kpi-icon{ width:36px; height:36px; border-radius:50%; background:var(--mc-page); color:var(--mc-primary); display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .kpi-value{ font-size:28px; font-weight:800; line-height:1.1; color:var(--mc-navy); }
+    .kpi-foot{ font-size:13px; color:var(--mc-muted2); }
 
-    .hero:after{
-        content:"";
-        position:absolute;
-        right:120px;
-        bottom:-80px;
-        width:180px;
-        height:180px;
-        border-radius:50%;
-        background:rgba(255,255,255,.06);
-    }
+    /* Les panneaux */
+    .panel{ background:#fff; border-radius:24px; padding:22px; display:flex; flex-direction:column; gap:14px; }
+    .panel-head{ display:flex; align-items:flex-start; justify-content:space-between; gap:12px; }
+    .panel-title{ font-size:21px; font-weight:800; color:var(--mc-navy); }
+    .panel-sub{ color:var(--mc-muted2); font-size:14px; margin-top:2px; }
+    .link-muted{ color:var(--mc-primary); font-weight:700; text-decoration:none; white-space:nowrap; }
+    .link-muted:hover{ text-decoration:underline; }
 
-    .hero-left,
-    .hero-right{
-        position:relative;
-        z-index:0;
-    }
+    .module-grid{ display:grid; grid-template-columns:repeat(auto-fit, minmax(190px, 1fr)); gap:12px; }
+    .module-card{ display:flex; flex-direction:column; gap:8px; padding:16px; border-radius:18px; background:var(--mc-page); color:var(--mc-navy); text-decoration:none; transition:background .15s; }
+    .module-card:hover{ background:var(--mc-soft2); color:var(--mc-navy); }
+    .module-icon{ width:36px; height:36px; border-radius:50%; background:#fff; color:var(--mc-primary); display:flex; align-items:center; justify-content:center; font-size:18px; }
+    .module-title{ font-weight:800; font-size:15px; }
+    .module-desc{ font-size:13px; color:var(--mc-muted2); line-height:1.45; }
 
-    .hero-badge{
-        display:inline-flex;
-        align-items:center;
-        gap:8px;
-        padding:8px 12px;
-        border-radius:999px;
-        background:rgba(255,255,255,.12);
-        border:1px solid rgba(255,255,255,.18);
-        font-size:12px;
-        font-weight:700;
-        letter-spacing:.3px;
-        margin-bottom:14px;
-    }
+    .table-wrap{ overflow:auto; }
+    .data-table{ width:100%; border-collapse:collapse; font-size:14px; }
+    .data-table th{ text-align:left; padding:10px 12px; font-size:12.5px; font-weight:800; color:var(--mc-muted2); background:var(--mc-page); border-bottom:1px solid var(--mc-line); }
+    .data-table th:first-child{ border-radius:12px 0 0 12px; } .data-table th:last-child{ border-radius:0 12px 12px 0; }
+    .data-table td{ padding:11px 12px; border-bottom:1px solid var(--mc-soft); }
+    .data-table tr:last-child td{ border-bottom:0; }
+    .badge{ display:inline-block; padding:3px 10px; border-radius:999px; font-size:12px; font-weight:800; }
+    .badge-success{ background:#E3F3EA; color:#0F5A3A; } .badge-warning{ background:#FBF1DC; color:#7A5200; } .badge-danger{ background:#FDECEA; color:#A3261C; }
+    .note-fictif{ margin:0; font-size:13px; color:var(--mc-muted2); }
 
-    .hero-title{
-        font-size:32px;
-        line-height:1.15;
-        font-weight:900;
-        margin:0 0 10px 0;
-    }
-
-    .hero-sub{
-        color:rgba(255,255,255,.86);
-        font-size:15px;
-        line-height:1.6;
-        max-width:760px;
-        margin:0;
-    }
-
-    .hero-actions{
-        margin-top:18px;
-        display:flex;
-        flex-wrap:wrap;
-        gap:12px;
-    }
-
-    .btn-hero,
-    .btn-soft{
-        display:inline-flex;
-        align-items:center;
-        justify-content:center;
-        min-height:42px;
-        padding:0 16px;
-        border-radius:12px;
-        text-decoration:none;
-        font-weight:700;
-        transition:.18s ease;
-        border:1px solid transparent;
-    }
-
-    .btn-hero{
-        background:#fff;
-        color:#0E1F3D;
-    }
-
-    .btn-hero:hover{
-        transform:translateY(-1px);
-        box-shadow:0 10px 22px rgba(0,0,0,.16);
-    }
-
-    .btn-soft{
-        background:rgba(255,255,255,.10);
-        color:#fff;
-        border-color:rgba(255,255,255,.16);
-    }
-
-    .btn-soft:hover{
-        background:rgba(255,255,255,.16);
-    }
-
-    .hero-mini-stats{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:12px;
-        align-self:stretch;
-    }
-
-    .mini-stat{
-        background:rgba(255,255,255,.12);
-        border:1px solid rgba(255,255,255,.18);
-        border-radius:16px;
-        padding:16px;
-        backdrop-filter:blur(6px);
-    }
-
-    .mini-stat-label{
-        font-size:12px;
-        text-transform:uppercase;
-        letter-spacing:.4px;
-        color:rgba(255,255,255,.76);
-        margin-bottom:6px;
-    }
-
-    .mini-stat-value{
-        font-size:24px;
-        font-weight:900;
-        margin-bottom:4px;
-    }
-
-    .mini-stat-note{
-        font-size:13px;
-        color:rgba(255,255,255,.82);
-    }
-
-    .kpi-grid{
-        display:grid;
-        grid-template-columns:repeat(4, minmax(0,1fr));
-        gap:18px;
-    }
-
-    .kpi-card{
-        background:var(--mc-card);
-        border:1px solid var(--mc-line);
-        border-radius:var(--mc-radius);
-        box-shadow:var(--mc-shadow-soft);
-        padding:20px;
-        display:flex;
-        flex-direction:column;
-        gap:10px;
-    }
-
-    .kpi-head{
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:12px;
-    }
-
-    .kpi-label{
-        font-size:13px;
-        color:var(--mc-muted);
-        font-weight:700;
-    }
-
-    .kpi-icon{
-        width:42px;
-        height:42px;
-        border-radius:12px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:20px;
-        background:#E3EBF7;
-    }
-
-    .kpi-value{
-        font-size:30px;
-        line-height:1;
-        font-weight:900;
-        color:var(--mc-text);
-    }
-
-    .kpi-foot{
-        font-size:13px;
-        color:var(--mc-muted);
-    }
-
-    .layout-grid{
-        display:grid;
-        grid-template-columns:1.2fr .8fr;
-        gap:22px;
-    }
-
-    .panel{
-        background:var(--mc-card);
-        border:1px solid var(--mc-line);
-        border-radius:22px;
-        box-shadow:var(--mc-shadow-soft);
-        overflow:hidden;
-    }
-
-    .panel-head{
-        padding:18px 20px;
-        border-bottom:1px solid var(--mc-line);
-        display:flex;
-        align-items:center;
-        justify-content:space-between;
-        gap:12px;
-        flex-wrap:wrap;
-    }
-
-    .panel-title{
-        font-size:18px;
-        font-weight:800;
-        color:var(--mc-text);
-        margin:0;
-    }
-
-    .panel-sub{
-        font-size:13px;
-        color:var(--mc-muted);
-        margin-top:4px;
-    }
-
-    .panel-body{
-        padding:18px 20px 20px 20px;
-    }
-
-    .module-grid{
-        display:grid;
-        grid-template-columns:repeat(3, minmax(0,1fr));
-        gap:14px;
-    }
-
-    .module-card{
-        display:block;
-        text-decoration:none;
-        color:inherit;
-        background:#fff;
-        border:1px solid var(--mc-line);
-        border-radius:18px;
-        padding:18px;
-        transition:.18s ease;
-        box-shadow:0 4px 14px rgba(15,23,42,.04);
-    }
-
-    .module-card:hover{
-        transform:translateY(-3px);
-        border-color:#bfdbfe;
-        box-shadow:0 12px 22px rgba(37,99,235,.10);
-    }
-
-    .module-icon{
-        width:48px;
-        height:48px;
-        border-radius:14px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        font-size:24px;
-        margin-bottom:12px;
-        background:#E3EBF7;
-    }
-
-    .module-title{
-        font-size:16px;
-        font-weight:800;
-        color:var(--mc-text);
-        margin-bottom:6px;
-    }
-
-    .module-desc{
-        font-size:13px;
-        line-height:1.5;
-        color:var(--mc-muted);
-    }
-
-    .quick-actions{
-        display:grid;
-        grid-template-columns:1fr 1fr;
-        gap:12px;
-    }
-
-    .quick-btn{
-        display:flex;
-        align-items:center;
-        gap:12px;
-        min-height:56px;
-        border-radius:16px;
-        text-decoration:none;
-        padding:0 14px;
-        font-weight:700;
-        border:1px solid var(--mc-line);
-        color:var(--mc-text);
-        background:#fff;
-        transition:.18s ease;
-    }
-
-    .quick-btn:hover{
-        transform:translateY(-2px);
-        border-color:#bfdbfe;
-        box-shadow:0 10px 18px rgba(37,99,235,.08);
-    }
-
-    .quick-ico{
-        width:36px;
-        height:36px;
-        border-radius:10px;
-        display:flex;
-        align-items:center;
-        justify-content:center;
-        background:#E3EBF7;
-        font-size:18px;
-        flex:0 0 36px;
-    }
-
-    .table-wrap{
-        width:100%;
-        overflow:auto;
-    }
-
-    .data-table{
-        width:100%;
-        border-collapse:collapse;
-        min-width:650px;
-    }
-
-    .data-table th{
-        text-align:left;
-        font-size:12px;
-        letter-spacing:.3px;
-        text-transform:uppercase;
-        color:var(--mc-muted);
-        padding:12px 10px;
-        border-bottom:1px solid var(--mc-line);
-        background:#f8fafc;
-    }
-
-    .data-table td{
-        padding:14px 10px;
-        border-bottom:1px solid #eef2f7;
-        color:var(--mc-text);
-        font-size:14px;
-        vertical-align:middle;
-    }
-
-    .data-table tr:last-child td{
-        border-bottom:none;
-    }
-
-    .badge{
-        display:inline-flex;
-        align-items:center;
-        padding:6px 10px;
-        border-radius:999px;
-        font-size:12px;
-        font-weight:800;
-        line-height:1;
-        white-space:nowrap;
-    }
-
-    .badge-success{
-        background:#dcfce7;
-        color:#166534;
-    }
-
-    .badge-warning{
-        background:#fef3c7;
-        color:#92400e;
-    }
-
-    .badge-danger{
-        background:#fee2e2;
-        color:#991b1b;
-    }
-
-    .activity-list{
-        display:flex;
-        flex-direction:column;
-        gap:14px;
-    }
-
-    .activity-item{
-        display:flex;
-        align-items:flex-start;
-        gap:12px;
-        padding:14px;
-        border:1px solid var(--mc-line);
-        border-radius:16px;
-        background:#fff;
-    }
-
-    .activity-dot{
-        width:12px;
-        height:12px;
-        border-radius:50%;
-        margin-top:4px;
-        flex:0 0 12px;
-    }
-
-    .dot-blue{ background:#1B4F9C; }
-    .dot-green{ background:#16a34a; }
-    .dot-orange{ background:#f59e0b; }
-    .dot-red{ background:#ef4444; }
-
-    .activity-main{
-        flex:1;
-        min-width:0;
-    }
-
-    .activity-text{
-        font-size:14px;
-        color:var(--mc-text);
-        font-weight:600;
-        margin-bottom:3px;
-    }
-
-    .activity-time{
-        font-size:12px;
-        color:var(--mc-muted);
-    }
-
-    .link-muted{
-        color:var(--mc-primary);
-        text-decoration:none;
-        font-weight:700;
-        font-size:13px;
-    }
-
-    .link-muted:hover{
-        text-decoration:underline;
-    }
+    /* La colonne de droite */
+    .side-dark{ background:var(--mc-navy); color:#fff; border-radius:24px; padding:22px; display:flex; flex-direction:column; gap:10px; }
+    .side-dark h2{ margin:0 0 4px; font-size:21px; font-weight:800; color:#E7C377; }
+    .side-dark .ligne{ display:flex; gap:10px; align-items:center; font-size:15px; }
+    .side-dark .pt{ width:14px; height:14px; border-radius:50%; flex-shrink:0; }
+    .pt.ok{ background:#5CD6A0; } .pt.veille{ background:#E7C377; } .pt.urgent{ background:#FF8A7A; }
+    .side-card{ background:#fff; border-radius:24px; padding:22px; display:flex; flex-direction:column; gap:8px; }
+    .side-card h2{ margin:0 0 4px; font-size:21px; font-weight:800; color:var(--mc-navy); }
+    .side-card .pers{ color:var(--mc-navy); font-size:15px; }
+    .side-card .pers small{ display:block; color:var(--mc-muted2); font-size:13px; }
+    .side-card .aucun{ color:var(--mc-muted2); font-size:14px; }
+    .quick-actions{ display:flex; flex-direction:column; gap:6px; }
+    .quick-btn{ display:flex; align-items:center; gap:12px; min-height:46px; padding:0 8px; border-radius:999px; color:var(--mc-navy); text-decoration:none; font-weight:700; }
+    .quick-btn:hover{ background:var(--mc-page); color:var(--mc-navy); }
+    .quick-ico{ width:36px; height:36px; border-radius:50%; background:var(--mc-page); color:var(--mc-primary); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+    .activity-list{ display:flex; flex-direction:column; }
+    .activity-item{ display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-top:1px solid #E3E9F1; }
+    .activity-item:first-child{ border-top:0; padding-top:0; }
+    .activity-dot{ width:10px; height:10px; border-radius:50%; margin-top:6px; flex-shrink:0; }
+    .dot-blue{ background:var(--mc-primary); } .dot-green{ background:#5CD6A0; } .dot-orange{ background:#E7C377; } .dot-red{ background:#FF8A7A; }
+    .activity-text{ font-size:14px; color:var(--mc-navy); }
+    .activity-time{ font-size:12.5px; color:var(--mc-muted2); }
 
     /* ===== Boîte de bienvenue dépliable ===== */
     .welcome-box{
@@ -628,6 +252,7 @@
 
 <main class="home-page">
     <div class="home-wrap">
+        <div class="home-main">
 
         <!-- BOÎTE DE BIENVENUE (onboarding dépliable) -->
         <details class="welcome-box">
@@ -702,348 +327,178 @@
             </div>
         </details>
 
-        <!-- HERO -->
-        <section class="hero">
-            <div class="hero-left">
-                <div class="hero-badge"><%= L("heroBadge") %></div>
+            <!-- L'ACCUEIL -->
+            <section class="carte-b hero-b">
+                <svg class="visage" aria-hidden="true" width="84" height="84" viewBox="0 0 256 256">
+                    <defs><radialGradient id="heroAv" cx=".38" cy=".3" r=".8"><stop offset="0" stop-color="#C8F7F1" /><stop offset="1" stop-color="#3DDCCB" /></radialGradient></defs>
+                    <circle cx="128" cy="128" r="104" fill="url(#heroAv)" />
+                    <ellipse cx="96" cy="62" rx="44" ry="20" fill="#FFFFFF" opacity=".45" transform="rotate(-20 96 62)" />
+                    <circle cx="128" cy="128" r="102" fill="none" stroke="#FFFFFF" stroke-opacity=".35" stroke-width="3" />
+                    <circle cx="96" cy="120" r="16" fill="none" stroke="#06524C" stroke-width="12" />
+                    <path d="M80 120 C78 93 90 77 113 78" fill="none" stroke="#06524C" stroke-width="12" stroke-linecap="round" />
+                    <ellipse cx="160" cy="110" rx="15" ry="25" fill="none" stroke="#06524C" stroke-width="12" />
+                    <path d="M99 166 q29 16 58 0" fill="none" stroke="#06524C" stroke-width="10" stroke-linecap="round" />
+                </svg>
+                <div class="txt">
+                    <h1><asp:Literal ID="litSalut" runat="server" /></h1>
+                    <p><asp:Literal ID="litSalutSous" runat="server" /></p>
+                </div>
+                <div class="acts">
+                    <a class="btn-pill p" href="javascript:void(0)"
+                       onclick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;">+ <%= L("btnNewInvoice") %></a>
+                    <a class="btn-pill" href="wbfCustomers.aspx"><%= L("btnViewCustomers") %></a>
+                    <a class="btn-pill" href="wbfSetting.aspx"><%= L("btnSettings") %></a>
+                </div>
+            </section>
 
-                <h1 class="hero-title">
-                    <%= L("heroTitle") %>
-                </h1>
+            <!-- LES TROIS CHOSES À REGARDER (calculées : approbations, factures fournisseurs, revenus) -->
+            <asp:Literal ID="litAttention" runat="server" />
 
-                <p class="hero-sub">
-                    <%= L("heroSub") %>
-                </p>
+            <!-- LES INDICATEURS -->
+            <section class="kpi-grid">
+                <div class="kpi-card">
+                    <div class="kpi-head">
+                        <div class="kpi-label"><%= L("kpiCustomers") %></div>
+                        <div class="kpi-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="kpi-value"><asp:Literal ID="litKpiCustomers" runat="server" Text="0" /></div>
+                    <div class="kpi-foot"><%= L("kpiCustomersFoot") %></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-head">
+                        <div class="kpi-label"><%= L("kpiSupplierInvoices") %></div>
+                        <div class="kpi-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="kpi-value"><asp:Literal ID="litKpiSupplierInvoices" runat="server" Text="0" /></div>
+                    <div class="kpi-foot"><%= L("kpiSupplierInvoicesFoot") %></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-head">
+                        <div class="kpi-label"><%= L("kpiProducts") %></div>
+                        <div class="kpi-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="kpi-value"><asp:Literal ID="litKpiProducts" runat="server" Text="0" /></div>
+                    <div class="kpi-foot"><%= L("kpiProductsFoot") %></div>
+                </div>
+                <div class="kpi-card">
+                    <div class="kpi-head">
+                        <div class="kpi-label"><%= L("kpiRevenue") %></div>
+                        <div class="kpi-icon"><i class="ic ic-coins" aria-hidden="true"></i></div>
+                    </div>
+                    <div class="kpi-value"><asp:Literal ID="litKpiRevenue" runat="server" Text="0 $" /></div>
+                    <div class="kpi-foot"><%= L("kpiRevenueFoot") %></div>
+                </div>
+            </section>
 
-                <div class="hero-actions">
-                    <a class="btn-hero" href="javascript:void(0)"
-                       onclick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"><%= L("btnNewInvoice") %></a>
-                    <a class="btn-soft" href="wbfCustomers.aspx"><%= L("btnViewCustomers") %></a>
-                    <a class="btn-soft" href="wbfSetting.aspx"><%= L("btnSettings") %></a>
+            <!-- LES MODULES -->
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="panel-title"><%= L("modulesTitle") %></div>
+                        <div class="panel-sub"><%= L("modulesSub") %></div>
+                    </div>
+                </div>
+                <div class="module-grid">
+                    <a class="module-card" href="wbfCustomers.aspx">
+                        <div class="module-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modClients") %></div>
+                        <div class="module-desc"><%= L("modClientsDesc") %></div>
+                    </a>
+                    <a class="module-card" href="wbfSuppliersInvoices.aspx">
+                        <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modInvoices") %></div>
+                        <div class="module-desc"><%= L("modInvoicesDesc") %></div>
+                    </a>
+                    <a class="module-card" href="wbfProducts.aspx">
+                        <div class="module-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modProducts") %></div>
+                        <div class="module-desc"><%= L("modProductsDesc") %></div>
+                    </a>
+                    <a class="module-card" href="wbfSuppliers.aspx">
+                        <div class="module-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modSuppliers") %></div>
+                        <div class="module-desc"><%= L("modSuppliersDesc") %></div>
+                    </a>
+                    <a class="module-card" href="wbfReceipt.aspx">
+                        <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modReceipts") %></div>
+                        <div class="module-desc"><%= L("modReceiptsDesc") %></div>
+                    </a>
+                    <a class="module-card" href="wbfSetting.aspx">
+                        <div class="module-icon"><i class="ic ic-settings" aria-hidden="true"></i></div>
+                        <div class="module-title"><%= L("modSettings") %></div>
+                        <div class="module-desc"><%= L("modSettingsDesc") %></div>
+                    </a>
                 </div>
             </div>
 
-            <div class="hero-right">
-                <div class="hero-mini-stats">
-                    <div class="mini-stat">
-                        <div class="mini-stat-label"><%= L("msSalesLabel") %></div>
-                        <div class="mini-stat-value">24 580 $</div>
-                        <div class="mini-stat-note"><%= L("msSalesNote") %></div>
+            <!-- FACTURES RÉCENTES (exemples, comme dans le gabarit) -->
+            <div class="panel">
+                <div class="panel-head">
+                    <div>
+                        <div class="panel-title"><%= L("recentInvTitle") %></div>
+                        <div class="panel-sub"><%= L("recentInvSub") %></div>
                     </div>
-
-                    <div class="mini-stat">
-                        <div class="mini-stat-label"><%= L("msOpenInvLabel") %></div>
-                        <div class="mini-stat-value">18</div>
-                        <div class="mini-stat-note"><%= L("msOpenInvNote") %></div>
-                    </div>
-
-                    <div class="mini-stat">
-                        <div class="mini-stat-label"><%= L("msActiveCustLabel") %></div>
-                        <div class="mini-stat-value">326</div>
-                        <div class="mini-stat-note"><%= L("msActiveCustNote") %></div>
-                    </div>
-
-                    <div class="mini-stat">
-                        <div class="mini-stat-label"><%= L("msProductsLabel") %></div>
-                        <div class="mini-stat-value">1 248</div>
-                        <div class="mini-stat-note"><%= L("msProductsNote") %></div>
-                    </div>
+                    <a class="link-muted" href="wbfCustomersInvoices.aspx"><%= L("viewAll") %></a>
                 </div>
+                <div class="table-wrap">
+                    <table class="data-table">
+                        <thead>
+                            <tr>
+                                <th><%= L("thNo") %></th>
+                                <th><%= L("thClient") %></th>
+                                <th><%= L("thDate") %></th>
+                                <th><%= L("thAmount") %></th>
+                                <th><%= L("thStatus") %></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>#1048</td><td>Baignoire Expert</td><td><%= L("d1") %></td><td>1 245,00 $</td><td><span class="badge badge-warning"><%= L("stOpen") %></span></td></tr>
+                            <tr><td>#1047</td><td>Construction Nova</td><td><%= L("d2") %></td><td>2 890,00 $</td><td><span class="badge badge-success"><%= L("stPaid") %></span></td></tr>
+                            <tr><td>#1046</td><td>Immeubles Rive-Nord</td><td><%= L("d2") %></td><td>780,00 $</td><td><span class="badge badge-warning"><%= L("stOpen") %></span></td></tr>
+                            <tr><td>#1045</td><td>Atelier du Bain</td><td><%= L("d3") %></td><td>560,00 $</td><td><span class="badge badge-danger"><%= L("stOverdue") %></span></td></tr>
+                            <tr><td>#1044</td><td>Gestion MTL</td><td><%= L("d4") %></td><td>4 120,00 $</td><td><span class="badge badge-success"><%= L("stPaid") %></span></td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                <p class="note-fictif"><%= L("exemplesFictifs") %></p>
             </div>
-        </section>
+        </div>
 
-        <!-- KPI -->
-        <section class="kpi-grid">
-            <div class="kpi-card">
-                <div class="kpi-head">
-                    <div class="kpi-label"><%= L("kpiCustomers") %></div>
-                    <div class="kpi-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
+        <!-- LA COLONNE DE DROITE -->
+        <aside class="home-side">
+            <section class="side-dark">
+                <h2><%= L("moisTitre") %></h2>
+                <asp:Literal ID="litMois" runat="server" />
+            </section>
+            <section class="side-card">
+                <h2><%= L("cabinetTitre") %></h2>
+                <asp:Literal ID="litCabinet" runat="server" />
+            </section>
+            <section class="side-card">
+                <h2><%= L("quickTitle") %></h2>
+                <div class="quick-actions">
+                    <a class="quick-btn" href="javascript:void(0)" onclick="openRadWindow(0, 'rwInvoice', 'wbfInvoiceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;">
+                        <span class="quick-ico"><i class="ic ic-plus" aria-hidden="true"></i></span><span><%= L("qaCreateInvoice") %></span></a>
+                    <a class="quick-btn" href="wbfCustomers.aspx">
+                        <span class="quick-ico"><i class="ic ic-users" aria-hidden="true"></i></span><span><%= L("qaAddCustomer") %></span></a>
+                    <a class="quick-btn" href="wbfProducts.aspx">
+                        <span class="quick-ico"><i class="ic ic-package" aria-hidden="true"></i></span><span><%= L("qaAddProduct") %></span></a>
+                    <a class="quick-btn" href="wbfReceipt.aspx">
+                        <span class="quick-ico"><i class="ic ic-receipt" aria-hidden="true"></i></span><span><%= L("qaViewReceipts") %></span></a>
                 </div>
-                <div class="kpi-value"><asp:Literal ID="litKpiCustomers" runat="server" Text="0" /></div>
-                <div class="kpi-foot"><%= L("kpiCustomersFoot") %></div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-head">
-                    <div class="kpi-label"><%= L("kpiSupplierInvoices") %></div>
-                    <div class="kpi-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
+            </section>
+            <section class="side-card">
+                <h2><%= L("activityTitle") %></h2>
+                <div class="activity-list">
+                    <div class="activity-item"><span class="activity-dot dot-blue"></span><div><div class="activity-text"><%= L("act1") %></div><div class="activity-time"><%= L("act1Time") %></div></div></div>
+                    <div class="activity-item"><span class="activity-dot dot-green"></span><div><div class="activity-text"><%= L("act2") %></div><div class="activity-time"><%= L("act2Time") %></div></div></div>
+                    <div class="activity-item"><span class="activity-dot dot-orange"></span><div><div class="activity-text"><%= L("act3") %></div><div class="activity-time"><%= L("act3Time") %></div></div></div>
+                    <div class="activity-item"><span class="activity-dot dot-red"></span><div><div class="activity-text"><%= L("act4") %></div><div class="activity-time"><%= L("act4Time") %></div></div></div>
                 </div>
-                <div class="kpi-value"><asp:Literal ID="litKpiSupplierInvoices" runat="server" Text="0" /></div>
-                <div class="kpi-foot"><%= L("kpiSupplierInvoicesFoot") %></div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-head">
-                    <div class="kpi-label"><%= L("kpiProducts") %></div>
-                    <div class="kpi-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
-                </div>
-                <div class="kpi-value"><asp:Literal ID="litKpiProducts" runat="server" Text="0" /></div>
-                <div class="kpi-foot"><%= L("kpiProductsFoot") %></div>
-            </div>
-
-            <div class="kpi-card">
-                <div class="kpi-head">
-                    <div class="kpi-label"><%= L("kpiRevenue") %></div>
-                    <div class="kpi-icon"><i class="ic ic-coins" aria-hidden="true"></i></div>
-                </div>
-                <div class="kpi-value"><asp:Literal ID="litKpiRevenue" runat="server" Text="0 $" /></div>
-                <div class="kpi-foot"><%= L("kpiRevenueFoot") %></div>
-            </div>
-        </section>
-
-        <section class="layout-grid">
-
-            <!-- GAUCHE -->
-            <div style="display:flex; flex-direction:column; gap:22px;">
-
-                <!-- MODULES -->
-                <div class="panel">
-                    <div class="panel-head">
-                        <div>
-                            <div class="panel-title"><%= L("modulesTitle") %></div>
-                            <div class="panel-sub"><%= L("modulesSub") %></div>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="module-grid">
-                            <a class="module-card" href="wbfCustomers.aspx">
-                                <div class="module-icon"><i class="ic ic-users" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modClients") %></div>
-                                <div class="module-desc">
-                                    <%= L("modClientsDesc") %>
-                                </div>
-                            </a>
-
-                            <a class="module-card" href="wbfSuppliersInvoices.aspx">
-                                <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modInvoices") %></div>
-                                <div class="module-desc">
-                                    <%= L("modInvoicesDesc") %>
-                                </div>
-                            </a>
-
-                            <a class="module-card" href="wbfProducts.aspx">
-                                <div class="module-icon"><i class="ic ic-package" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modProducts") %></div>
-                                <div class="module-desc">
-                                    <%= L("modProductsDesc") %>
-                                </div>
-                            </a>
-
-                            <a class="module-card" href="wbfSuppliers.aspx">
-                                <div class="module-icon"><i class="ic ic-factory" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modSuppliers") %></div>
-                                <div class="module-desc">
-                                    <%= L("modSuppliersDesc") %>
-                                </div>
-                            </a>
-
-                            <a class="module-card" href="wbfReceipt.aspx">
-                                <div class="module-icon"><i class="ic ic-receipt" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modReceipts") %></div>
-                                <div class="module-desc">
-                                    <%= L("modReceiptsDesc") %>
-                                </div>
-                            </a>
-
-                            <a class="module-card" href="wbfSetting.aspx">
-                                <div class="module-icon"><i class="ic ic-settings" aria-hidden="true"></i></div>
-                                <div class="module-title"><%= L("modSettings") %></div>
-                                <div class="module-desc">
-                                    <%= L("modSettingsDesc") %>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- FACTURES RÉCENTES -->
-                <div class="panel">
-                    <div class="panel-head">
-                        <div>
-                            <div class="panel-title"><%= L("recentInvTitle") %></div>
-                            <div class="panel-sub"><%= L("recentInvSub") %></div>
-                        </div>
-                        <a class="link-muted" href="wbfInvoice.aspx"><%= L("viewAll") %></a>
-                    </div>
-
-                    <div class="panel-body" style="padding-top:0;">
-                        <div class="table-wrap">
-                            <table class="data-table">
-                                <thead>
-                                    <tr>
-                                        <th><%= L("thNo") %></th>
-                                        <th><%= L("thClient") %></th>
-                                        <th><%= L("thDate") %></th>
-                                        <th><%= L("thAmount") %></th>
-                                        <th><%= L("thStatus") %></th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>#1048</td>
-                                        <td>Baignoire Expert</td>
-                                        <td><%= L("d1") %></td>
-                                        <td>1 245,00 $</td>
-                                        <td><span class="badge badge-warning"><%= L("stOpen") %></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#1047</td>
-                                        <td>Construction Nova</td>
-                                        <td><%= L("d2") %></td>
-                                        <td>2 890,00 $</td>
-                                        <td><span class="badge badge-success"><%= L("stPaid") %></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#1046</td>
-                                        <td>Immeubles Rive-Nord</td>
-                                        <td><%= L("d2") %></td>
-                                        <td>780,00 $</td>
-                                        <td><span class="badge badge-warning"><%= L("stOpen") %></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#1045</td>
-                                        <td>Atelier du Bain</td>
-                                        <td><%= L("d3") %></td>
-                                        <td>560,00 $</td>
-                                        <td><span class="badge badge-danger"><%= L("stOverdue") %></span></td>
-                                    </tr>
-                                    <tr>
-                                        <td>#1044</td>
-                                        <td>Gestion MTL</td>
-                                        <td><%= L("d4") %></td>
-                                        <td>4 120,00 $</td>
-                                        <td><span class="badge badge-success"><%= L("stPaid") %></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-            <!-- DROITE -->
-            <div style="display:flex; flex-direction:column; gap:22px;">
-
-                <!-- ACTIONS RAPIDES -->
-                <div class="panel">
-                    <div class="panel-head">
-                        <div>
-                            <div class="panel-title"><%= L("quickTitle") %></div>
-                            <div class="panel-sub"><%= L("quickSub") %></div>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="quick-actions">
-                            <a class="quick-btn" href="wbfInvoiceEdit.aspx">
-                                <span class="quick-ico"><i class="ic ic-plus" aria-hidden="true"></i></span>
-                                <span><%= L("qaCreateInvoice") %></span>
-                           </a>
-
-                            <a class="quick-btn" href="wbfCustomers.aspx">
-                                <span class="quick-ico"> </span>
-                                <span><%= L("qaAddCustomer") %></span>
-                           </a>
-
-                            <a class="quick-btn" href="wbfProducts.aspx">
-                                <span class="quick-ico"> </span>
-                                <span><%= L("qaAddProduct") %></span>
-                           </a>
-
-                            <a class="quick-btn" href="wbfReceipt.aspx">
-                                <span class="quick-ico"> </span>
-                                <span><%= L("qaViewReceipts") %></span>
-                           </a>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ACTIVITÉS -->
-                <div class="panel">
-                    <div class="panel-head">
-                        <div>
-                            <div class="panel-title"><%= L("activityTitle") %></div>
-                            <div class="panel-sub"><%= L("activitySub") %></div>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div class="activity-list">
-                            <div class="activity-item">
-                                <span class="activity-dot dot-blue"></span>
-                                <div class="activity-main">
-                                    <div class="activity-text"><%= L("act1") %></div>
-                                    <div class="activity-time"><%= L("act1Time") %></div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <span class="activity-dot dot-green"></span>
-                                <div class="activity-main">
-                                    <div class="activity-text"><%= L("act2") %></div>
-                                    <div class="activity-time"><%= L("act2Time") %></div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <span class="activity-dot dot-orange"></span>
-                                <div class="activity-main">
-                                    <div class="activity-text"><%= L("act3") %></div>
-                                    <div class="activity-time"><%= L("act3Time") %></div>
-                                </div>
-                            </div>
-
-                            <div class="activity-item">
-                                <span class="activity-dot dot-red"></span>
-                                <div class="activity-main">
-                                    <div class="activity-text"><%= L("act4") %></div>
-                                    <div class="activity-time"><%= L("act4Time") %></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- PETITE CARTE INFO -->
-                <div class="panel">
-                    <div class="panel-head">
-                        <div>
-                            <div class="panel-title"><%= L("summaryTitle") %></div>
-                            <div class="panel-sub"><%= L("summarySub") %></div>
-                        </div>
-                    </div>
-
-                    <div class="panel-body">
-                        <div style="display:flex; flex-direction:column; gap:12px;">
-                            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumCustomers") %></span>
-                                <strong><%= L("sumCustomersVal") %></strong>
-                            </div>
-
-                            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumTaxes") %></span>
-                                <strong><%= L("sumTaxesVal") %></strong>
-                            </div>
-
-                            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumEmails") %></span>
-                                <strong><%= L("sumEmailsVal") %></strong>
-                            </div>
-
-                            <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
-                                <span style="color:var(--mc-muted); font-size:14px;"><%= L("sumPdf") %></span>
-                                <strong><%= L("sumPdfVal") %></strong>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
+                <p class="note-fictif"><%= L("exemplesFictifs") %></p>
+            </section>
+        </aside>
     </div>
 </main>
 
@@ -1062,11 +517,9 @@
 <script type="text/javascript">
     var L_ADD_INVOICE = "<%= L("winAddInvoice") %>";
     var L_EDIT_INVOICE = "<%= L("winEditInvoice") %>";
-
     // Après fermeture du popup, recharger le tableau de bord pour rafraîchir les KPI.
     function rwInvoice_OnClose(sender, args) {
         window.location.reload();
     }
 </script>
-
 </asp:Content>
