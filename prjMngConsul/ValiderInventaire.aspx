@@ -14,44 +14,44 @@
     .iv-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .iv-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .iv-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .iv-lede { font-size: 13.5px; color: #475569; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
+    .iv-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .iv-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .iv-lede { font-size: 13.5px; color: #44536E; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
 
     .repere {
         display: flex; gap: 22px; flex-wrap: wrap; align-items: center;
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 12px;
         padding: 14px 16px; margin-bottom: 16px;
     }
-    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #64748b; font-weight: 700 }
-    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums }
+    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #44536E; font-weight: 700 }
+    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0E1F3D; font-variant-numeric: tabular-nums }
     .repere .bloc .v.alerte { color: #92400e }
 
     /* Le contrôle croisé : la valeur calculée contre le solde au livre. */
-    .ctrl { margin-bottom: 18px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; padding: 15px 16px }
-    .ctrl h2 { font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a }
-    .ctrl .desc { font-size: 12.5px; color: #64748b; margin: 0 0 12px; line-height: 1.55 }
+    .ctrl { margin-bottom: 18px; border: 1px solid #D5DDE8; border-radius: 12px; background: #fff; padding: 15px 16px }
+    .ctrl h2 { font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0E1F3D }
+    .ctrl .desc { font-size: 12.5px; color: #44536E; margin: 0 0 12px; line-height: 1.55 }
     .ctrl .verdict { padding: 11px 14px; border-radius: 10px; font-size: 13.5px; font-weight: 700; border: 1px solid transparent; margin-bottom: 8px }
     .ctrl .verdict.ok   { background: #f0fdf4; color: #166534; border-color: #bbf7d0 }
     .ctrl .verdict.ko   { background: #fffbeb; color: #92400e; border-color: #fde68a }
-    .ctrl .verdict.rien { background: #f8fafc; color: #475569; border-color: #e2e8f0; font-weight: 600 }
+    .ctrl .verdict.rien { background: #f8fafc; color: #44536E; border-color: #D5DDE8; font-weight: 600 }
 
     .tbl-wrap {
         max-height: 620px; overflow: auto;
-        border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;
+        border: 1px solid #D5DDE8; border-radius: 12px; background: #fff;
     }
     table.iv { width: 100%; border-collapse: collapse; font-size: 12.5px }
     table.iv th {
         position: sticky; top: 0; z-index: 2;
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+        color: #44536E; background: #f8fafc; border-bottom: 1px solid #D5DDE8;
         padding: 9px 10px; font-weight: 700; white-space: nowrap;
     }
     table.iv th.n, table.iv td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
-    table.iv td { border-bottom: 1px solid #f1f5f9; padding: 7px 10px; color: #0f172a; vertical-align: top }
+    table.iv td { border-bottom: 1px solid #f1f5f9; padding: 7px 10px; color: #0E1F3D; vertical-align: top }
     table.iv tr.ko td { background: #fffbeb }
     table.iv tr.inactif td { color: #94a3b8 }
     table.iv tfoot td {
@@ -61,7 +61,7 @@
     table.iv .zero { color: #cbd5e1 }
     table.iv .neg { color: #991b1b; font-weight: 700 }
     table.iv td.nom { font-weight: 600 }
-    table.iv .fil { color: #64748b; font-weight: 400 }
+    table.iv .fil { color: #44536E; font-weight: 400 }
 
     .past {
         display: inline-block; padding: 1px 7px; border-radius: 999px;
@@ -69,19 +69,19 @@
     }
     .past.ko   { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca }
     .past.warn { background: #fffbeb; color: #92400e; border: 1px solid #fde68a }
-    .past.off  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0 }
-    .past.bas  { background: #eff6ff; color: #1e40af; border: 1px solid #bfdbfe }
+    .past.off  { background: #f1f5f9; color: #44536E; border: 1px solid #D5DDE8 }
+    .past.bas  { background: #E3EBF7; color: #143A73; border: 1px solid #bfdbfe }
 
     .note {
         margin-top: 16px; padding: 12px 15px; border-radius: 10px;
-        background: #f8fafc; border: 1px solid #e2e8f0;
-        font-size: 12.5px; color: #475569; line-height: 1.6; max-width: 920px;
+        background: #f8fafc; border: 1px solid #D5DDE8;
+        font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 920px;
     }
-    .note b { color: #0f172a }
+    .note b { color: #0E1F3D }
 
     .rien {
         border: 1px dashed #cbd5e1; border-radius: 12px; padding: 30px; text-align: center;
-        color: #64748b; font-size: 13.5px; background: #fff; line-height: 1.7;
+        color: #44536E; font-size: 13.5px; background: #fff; line-height: 1.7;
     }
 </style>
 </asp:Content>

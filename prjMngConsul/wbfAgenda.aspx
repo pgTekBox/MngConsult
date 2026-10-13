@@ -59,12 +59,12 @@
             padding: 8px 14px;
             cursor: pointer;
             font-weight: 700;
-            color: #475569;
+            color: #44536E;
         }
 
         .ag-views button.active {
             background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-            color: #0f172a;
+            color: #0E1F3D;
         }
 
         .ag-iconbtn {
@@ -83,7 +83,7 @@
         .ag-iconbtn:hover { background: #f8fafc; }
 
         .ag-btn-add {
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            background: linear-gradient(135deg, #1B4F9C, #06b6d4);
             color: #fff;
             border: none;
             padding: 10px 14px;
@@ -147,7 +147,7 @@
             text-align: center;
             font-weight: 800;
             font-size: 12px;
-            color: #475569;
+            color: #44536E;
             text-transform: uppercase;
         }
 
@@ -175,7 +175,7 @@
         }
 
         .ag-day.today .ag-day-num {
-            background: #2563eb;
+            background: #1B4F9C;
             color: #fff;
         }
 
@@ -207,11 +207,11 @@
 
         .ag-event.dragging { opacity: .4; }
 
-        .ag-day.drop-target { background: #eff6ff; }
+        .ag-day.drop-target { background: #E3EBF7; }
 
         .ag-event-more {
             font-size: 11px;
-            color: #2563eb;
+            color: #1B4F9C;
             cursor: pointer;
             font-weight: 700;
         }
@@ -235,7 +235,7 @@
         .ag-week-allday .lbl {
             padding: 6px 8px;
             font-weight: 700;
-            color: #64748b;
+            color: #44536E;
             border-right: 1px solid #eef2f7;
             text-align: right;
         }
@@ -264,7 +264,7 @@
         }
 
         .ag-week-head .col.today {
-            color: #2563eb;
+            color: #1B4F9C;
         }
 
         .ag-week-head .col .num {
@@ -288,7 +288,7 @@
             height: 40px;
             padding: 2px 6px;
             font-size: 11px;
-            color: #64748b;
+            color: #44536E;
             text-align: right;
             border-bottom: 1px solid #f1f5f9;
         }
@@ -309,7 +309,7 @@
         }
 
         .ag-day-col.drop-target {
-            background: #eff6ff;
+            background: #E3EBF7;
         }
 
         .ag-week-event {
@@ -380,7 +380,7 @@
         .ag-toast {
             background: #fff;
             border: 1px solid var(--mc-stroke);
-            border-left: 4px solid #2563eb;
+            border-left: 4px solid #1B4F9C;
             border-radius: 10px;
             padding: 10px 14px;
             box-shadow: 0 8px 24px rgba(2,6,23,.15);
@@ -397,7 +397,7 @@
 
         .ag-toast .t-body {
             font-size: 12px;
-            color: #475569;
+            color: #44536E;
         }
 
         @keyframes slideIn {
@@ -473,7 +473,7 @@
 
         <!-- FILTRES RESSOURCES -->
         <div class="ag-resources" id="agResources">
-            <span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;"><asp:Literal ID="litEmployees" runat="server" /> :</span>
+            <span style="font-size:12px; font-weight:700; color:#44536E; align-self:center;"><asp:Literal ID="litEmployees" runat="server" /> :</span>
             <%-- généré par JS --%>
         </div>
 
@@ -599,7 +599,7 @@
         function agRenderResources() {
             var host = document.getElementById('agResources');
             // garde le label
-            host.innerHTML = '<span style="font-size:12px; font-weight:700; color:#64748b; align-self:center;">' + AG_I18N.employees + ' :</span>';
+            host.innerHTML = '<span style="font-size:12px; font-weight:700; color:#44536E; align-self:center;">' + AG_I18N.employees + ' :</span>';
             AG.employees.forEach(function (emp) {
                 var on = AG.empFilter.length === 0 || AG.empFilter.indexOf(emp.Id) !== -1;
                 var pill = document.createElement('span');
@@ -695,7 +695,7 @@
                 dayEvents.slice(0, max).forEach(function (ev) {
                     var box = document.createElement('div');
                     box.className = 'ag-event';
-                    box.style.background = ev.Color || '#2563eb';
+                    box.style.background = ev.Color || '#1B4F9C';
                     box.draggable = true;
                     box.title = ev.Title + (ev.CustomerName ? ' — ' + ev.CustomerName : '');
                     var s = new Date(ev.Start);
@@ -864,7 +864,7 @@
                             var cell = allday.children[i + 1]; // +1 pour le label
                             var pill = document.createElement('div');
                             pill.className = 'ag-event';
-                            pill.style.background = ev.Color || '#2563eb';
+                            pill.style.background = ev.Color || '#1B4F9C';
                             pill.textContent = ev.Title;
                             pill.title = ev.Title;
                             pill.addEventListener('click', function () { agEditAppointment(ev.Id); });
@@ -892,7 +892,7 @@
                     box.className = 'ag-week-event';
                     box.style.top = (topMin / 30 * slotHeightPx) + 'px';
                     box.style.height = (dur / 30 * slotHeightPx - 2) + 'px';
-                    box.style.background = ev.Color || '#2563eb';
+                    box.style.background = ev.Color || '#1B4F9C';
                     box.draggable = true;
                     box.innerHTML = '<div class="ev-time">' + fmtTime(s) + ' – ' + fmtTime(e) + '</div>' +
                         '<div class="ev-title">' + ev.Title + (ev.CustomerName ? ' · ' + ev.CustomerName : '') + '</div>';

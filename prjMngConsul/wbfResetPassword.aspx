@@ -10,11 +10,11 @@
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --primary: #2563eb;
+            --primary: #1B4F9C;
             --secondary: #06b6d4;
-            --text: #0f172a;
-            --muted: #64748b;
-            --line: #e2e8f0;
+            --text: #0E1F3D;
+            --muted: #44536E;
+            --line: #D5DDE8;
             --danger: #dc2626;
             --shadow: 0 20px 50px rgba(15,23,42,.15);
         }

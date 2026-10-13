@@ -15,13 +15,13 @@
 
     .apb-ico {
         width: 34px; height: 34px; border-radius: 10px; flex: none;
-        background: #fff; border: 1px solid #e2e8f0;
+        background: #fff; border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 17px;
     }
 
-    .apb-txt { flex: 1; min-width: 240px; font-size: 13px; color: #0f172a; line-height: 1.45 }
+    .apb-txt { flex: 1; min-width: 240px; font-size: 13px; color: #0E1F3D; line-height: 1.45 }
     .apb-txt b { font-weight: 800 }
-    .apb-etat { display: block; color: #64748b; font-size: 12.5px }
+    .apb-etat { display: block; color: #44536E; font-size: 12.5px }
     .apb-etat.off { color: #b45309 }
     .apb-etat.ko { color: #b91c1c }
 
@@ -34,20 +34,20 @@
 
     .apb-btn {
         padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700;
-        border: 1px solid #2563eb; cursor: pointer; font-family: inherit;
-        background: #2563eb; color: #fff; white-space: nowrap;
+        border: 1px solid #1B4F9C; cursor: pointer; font-family: inherit;
+        background: #1B4F9C; color: #fff; white-space: nowrap;
     }
 
-    .apb-btn:hover { background: #1d4ed8 }
+    .apb-btn:hover { background: #143A73 }
     .apb-btn[disabled] { background: #cbd5e1; border-color: #cbd5e1; color: #fff; cursor: not-allowed }
 
-    .apb-lien { font-size: 12.5px; color: #1d4ed8; text-decoration: none; white-space: nowrap }
+    .apb-lien { font-size: 12.5px; color: #143A73; text-decoration: none; white-space: nowrap }
     .apb-lien:hover { text-decoration: underline }
 
     .apb-msg { border-radius: 10px; padding: 10px 13px; font-size: 13px; margin-top: 10px; line-height: 1.55 }
     .apb-msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
     .apb-msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .apb-msg.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af }
+    .apb-msg.info { background: #E3EBF7; border: 1px solid #bfdbfe; color: #143A73 }
     .apb-msg ul { margin: 6px 0 0; padding-left: 18px }
     .apb-msg li { margin: 2px 0 }
     .apb-msg .ko { color: #b91c1c }

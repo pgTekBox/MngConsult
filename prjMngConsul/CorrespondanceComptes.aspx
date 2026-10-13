@@ -15,18 +15,18 @@
     .cor-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(16,185,129,.14), rgba(37,99,235,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
-    .cor-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .cor-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
+    .cor-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .cor-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .cor-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; line-height: 1.6 }
+    .cor-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; line-height: 1.6 }
     .ia-note { font-size: 12.5px; color: #6b21a8; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; line-height: 1.55 }
 
     .card {
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
         padding: 18px 20px; margin-bottom: 16px;
     }
 
@@ -41,37 +41,37 @@
 
     .avance { margin-top: 16px }
 
-    .avance .lbl { display: flex; justify-content: space-between; font-size: 12.5px; color: #64748b; margin-bottom: 5px }
-    .avance .lbl b { color: #0f172a }
+    .avance .lbl { display: flex; justify-content: space-between; font-size: 12.5px; color: #44536E; margin-bottom: 5px }
+    .avance .lbl b { color: #0E1F3D }
 
     .piste { height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden }
-    .piste > div { height: 100%; background: linear-gradient(90deg, #2563eb, #06b6d4); border-radius: 999px; transition: width .3s }
+    .piste > div { height: 100%; background: linear-gradient(90deg, #1B4F9C, #06b6d4); border-radius: 999px; transition: width .3s }
 
     .compteurs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 14px }
 
-    .cpt { border: 1px solid #e2e8f0; border-radius: 10px; padding: 9px 12px; background: #fff }
-    .cpt .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #64748b }
-    .cpt .v { font-size: 20px; font-weight: 800; color: #0f172a; margin-top: 1px }
+    .cpt { border: 1px solid #D5DDE8; border-radius: 10px; padding: 9px 12px; background: #fff }
+    .cpt .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #44536E }
+    .cpt .v { font-size: 20px; font-weight: 800; color: #0E1F3D; margin-top: 1px }
     .cpt.att { background: #fffbeb; border-color: #fde68a } .cpt.att .v { color: #b45309 }
     .cpt.ok { background: #ecfdf5; border-color: #a7f3d0 } .cpt.ok .v { color: #047857 }
 
     .btn { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; border: 1px solid transparent; cursor: pointer; font-family: inherit }
-    .btn-p { background: #2563eb; color: #fff }
-    .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
+    .btn-p { background: #1B4F9C; color: #fff }
+    .btn-s { background: #f1f5f9; color: #334155; border-color: #D5DDE8 }
 
     .acts { display: flex; gap: 9px; flex-wrap: wrap; align-items: center }
     .seuil-ia { display: inline-flex; align-items: center; gap: 6px; padding: 3px 3px 3px 8px; border: 1px solid #ddd6fe; border-radius: 10px; background: #f5f3ff }
     .seuil-ia select { padding: 6px 8px; border-radius: 8px; border: 1px solid #c4b5fd; font-size: 12.5px; font-family: inherit; background: #fff }
 
     table.cor { width: 100%; min-width: 1900px; border-collapse: collapse; font-size: 12.5px }
-    table.cor th { background: #f8fafc; text-align: left; padding: 9px 10px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1 }
+    table.cor th { background: #f8fafc; text-align: left; padding: 9px 10px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #D5DDE8; position: sticky; top: 0; z-index: 1 }
     table.cor td { padding: 6px 10px; border-bottom: 1px solid #f1f5f9; vertical-align: middle }
     table.cor tr:last-child td { border-bottom: 0 }
     table.cor tr.decide td { background: #f8fafc }
 
-    table.cor .src-c { font-weight: 700; color: #0f172a; white-space: nowrap }
+    table.cor .src-c { font-weight: 700; color: #0E1F3D; white-space: nowrap }
     table.cor .sans-num { font-weight: 400; font-size: 11px; color: #94a3b8; font-style: italic; white-space: nowrap }
-    table.cor .src-n { color: #475569 }
+    table.cor .src-n { color: #44536E }
     /* Bouton Assistant sur chaque compte source, et la fenêtre flottante qui montre la réponse. */
     .ia-cpt { margin-left: 8px; padding: 1px 7px; border: 1px solid #c7d2fe; border-radius: 999px; background: #eef2ff; color: #4338ca; font-size: 10.5px; font-weight: 800; cursor: pointer; vertical-align: middle; white-space: nowrap }
     .ia-cpt:hover { background: #e0e7ff }
@@ -83,17 +83,17 @@
     .iac-tete small { opacity: .8; font-size: 11.5px; white-space: nowrap }
     .iac-x { border: 0; background: rgba(255,255,255,.14); color: #fff; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; cursor: pointer }
     .iac-x:hover { background: rgba(255,255,255,.3) }
-    .iac-corps { padding: 16px 20px; overflow: auto; line-height: 1.55; color: #0f172a }
+    .iac-corps { padding: 16px 20px; overflow: auto; line-height: 1.55; color: #0E1F3D }
     .iac-corps h2 { font-size: 15px; margin: 14px 0 6px; color: #1e3a8a }
     .iac-corps h2:first-child { margin-top: 0 }
     .iac-corps ul { margin: 4px 0 8px; padding-left: 20px }
     .iac-corps p { margin: 6px 0 }
-    .iac-attente { color: #64748b; font-style: italic }
+    .iac-attente { color: #44536E; font-style: italic }
     .iac-erreur { color: #b91c1c; font-weight: 700 }
-    .iac-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid #e2e8f0; background: #f8fafc; font-size: 12px; color: #64748b }
+    .iac-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid #D5DDE8; background: #f8fafc; font-size: 12px; color: #44536E }
     .iac-pied button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; cursor: pointer; margin-left: 6px }
     .iac-pied button:hover { background: #f1f5f9 }
-    table.cor .nature { font-size: 11px; color: #64748b; white-space: nowrap }
+    table.cor .nature { font-size: 11px; color: #44536E; white-space: nowrap }
     table.cor .solde { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums }
 
     table.cor select, table.cor input[type=text] {
@@ -113,7 +113,7 @@
     .pr { display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 10.5px; font-weight: 800; margin-right: 5px }
     .pr-sur { background: #ecfdf5; color: #047857 }
     .pr-moyen { background: #fffbeb; color: #b45309 }
-    .pr-aucun { background: #f1f5f9; color: #64748b }
+    .pr-aucun { background: #f1f5f9; color: #44536E }
     .pr-ia { background: #f5f3ff; color: #6d28d9 }
     .pr-inut { background: #fff7ed; color: #c2410c }
     .lien-suite { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; background: #047857; color: #fff; text-decoration: none; white-space: nowrap }
@@ -127,24 +127,24 @@
     .cls-cell .scls-f { display: block }
     .scls-f { width: 100%; min-width: 320px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 11.5px; font-family: inherit; background: #fff }
     .cpt-sel { width: 100%; min-width: 240px; padding: 5px 6px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 12px; font-family: inherit; background: #fff }
-    .cls { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-weight: 700; letter-spacing: .2px }
-    .ia-raison { display: block; margin-top: 2px; font-size: 10.5px; color: #64748b; font-style: italic }
+    .cls { display: block; margin-top: 2px; font-size: 10.5px; color: #44536E; font-weight: 700; letter-spacing: .2px }
+    .ia-raison { display: block; margin-top: 2px; font-size: 10.5px; color: #44536E; font-style: italic }
     .ia-conf { font-size: 10.5px; color: #6d28d9; font-weight: 700 }
     .ia-autre { display: block; margin-top: 3px; font-size: 10.5px; color: #6d28d9 }
 
     .btn-ia { background: #6d28d9; color: #fff; border-color: #6d28d9 }
     .btn-ia:hover { background: #5b21b6 }
 
-    .tbl-wrap { overflow-x: auto; max-height: 75vh; overflow-y: auto; border: 1px solid #e2e8f0; border-radius: 12px }
+    .tbl-wrap { overflow-x: auto; max-height: 75vh; overflow-y: auto; border: 1px solid #D5DDE8; border-radius: 12px }
 
-    .vide { text-align: center; padding: 34px; color: #64748b; font-size: 13.5px }
+    .vide { text-align: center; padding: 34px; color: #44536E; font-size: 13.5px }
 
-    .rappel { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px; background: #f8fafc; border: 1px solid #e2e8f0; color: #475569; font-size: 13px; margin-top: 14px }
+    .rappel { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px; background: #f8fafc; border: 1px solid #D5DDE8; color: #44536E; font-size: 13px; margin-top: 14px }
     .rappel p { margin: 0 }
 
     .barre-bas {
         position: sticky; bottom: 0; background: rgba(255,255,255,.94);
-        backdrop-filter: blur(8px); border-top: 1px solid #e2e8f0;
+        backdrop-filter: blur(8px); border-top: 1px solid #D5DDE8;
         padding: 12px 0; margin-top: 14px; display: flex; gap: 10px; align-items: center;
     }
 </style>
@@ -361,7 +361,7 @@
                 CssClass="btn btn-p" CausesValidation="false"
                 OnClientClick="if (!ciblesUniques()) { return false; }" />
             <asp:HyperLink ID="hlAppliquer" runat="server" CssClass="lien-suite" Text="Créer les comptes au plan →" />
-            <span style="font-size:12.5px;color:#64748b">
+            <span style="font-size:12.5px;color:#44536E">
                 Rien n'est écrit dans votre comptabilité : les décisions sont conservées à part.
             </span>
         </div>
@@ -698,9 +698,9 @@
         .fen-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000; display: none; align-items: center; justify-content: center; padding: 20px }
         .fen-voile.ouvert { display: flex }
         .fen-boite { width: min(980px, 100%); height: min(92vh, 100%); background: #fff; border-radius: 16px; box-shadow: 0 24px 60px rgba(15,23,42,.35); display: flex; flex-direction: column; overflow: hidden }
-        .fen-boite .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; background: #f8fafc }
-        .fen-boite .barre b { flex: 1; font-size: 14px; color: #0f172a }
-        .fen-boite .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0f172a; font-weight: 700 }
+        .fen-boite .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #D5DDE8; background: #f8fafc }
+        .fen-boite .barre b { flex: 1; font-size: 14px; color: #0E1F3D }
+        .fen-boite .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer; border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0E1F3D; font-weight: 700 }
         .fen-boite iframe { flex: 1; border: 0; width: 100% }
     </style>
     <div class="fen-voile" id="fenVoile" onclick="if (event.target === this) fermerFenetre();">

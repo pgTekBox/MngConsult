@@ -22,7 +22,7 @@
             padding: 14px 16px;
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
@@ -44,7 +44,7 @@
         }
         .field-amount {
             font-weight: 700;
-            color: #0f172a;
+            color: #0E1F3D;
         }
         .field-amount.zero {
             font-weight: 400;
@@ -64,7 +64,7 @@
 
         /* Courriel affiché sous l'adresse. */
         .cust-email {
-            color: #64748b;
+            color: #44536E;
             font-size: 12px;
         }
 

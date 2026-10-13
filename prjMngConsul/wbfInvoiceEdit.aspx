@@ -16,13 +16,13 @@
     gap: 8px;
     margin: 0 0 10px 0;
     font-size: 13px;
-    color: #64748b;
+    color: #44536E;
 }
  .doc-number-value {
     font-family: Consolas, "Courier New", monospace;
     font-size: 15px;
     font-weight: 700;
-    color: #0f172a;
+    color: #0E1F3D;
 }
  .badge-posted {
     display: inline-flex;
@@ -101,7 +101,7 @@
             width: 100%;
             min-height: 38px;
             padding: 8px 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             background: #fff;
             cursor: pointer;
@@ -119,7 +119,7 @@
             .account-selector::after {
                 content: "▾";
                 float: right;
-                color: #64748b;
+                color: #44536E;
             }
 
             .product-selector:active,
@@ -1402,18 +1402,18 @@
              background:rgba(15,23,42,.55); align-items:center; justify-content:center;">
             <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
                  width:92vw; max-width:460px; padding:24px; box-sizing:border-box;">
-                <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:8px;">
+                <div style="font-weight:800; font-size:16px; color:#0E1F3D; margin-bottom:8px;">
                     <asp:Literal ID="litDlgTitle" runat="server" />
                 </div>
-                <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:22px;">
+                <div style="color:#44536E; font-size:14px; line-height:1.5; margin-bottom:22px;">
                     <asp:Literal ID="litDlgQuestion" runat="server" />
                 </div>
                 <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end;">
                     <button type="button" onclick="closeSendEmailDialog()"
-                        style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                        style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#44536E;
                                border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgCancel" runat="server" /></button>
                     <button type="button" onclick="doSendEmail(0)"
-                        style="padding:10px 16px; border:1px solid #2563eb; background:#fff; color:#2563eb;
+                        style="padding:10px 16px; border:1px solid #1B4F9C; background:#fff; color:#1B4F9C;
                                border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgWithout" runat="server" /></button>
                     <button type="button" onclick="doSendEmail(1)"
                         style="padding:10px 16px; border:1px solid #16a34a; background:#16a34a; color:#fff;

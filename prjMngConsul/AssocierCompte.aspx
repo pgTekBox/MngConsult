@@ -14,65 +14,65 @@
     .asc-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(16,185,129,.14), rgba(37,99,235,.10));
-        border: 1px solid #e2e8f0; display: flex; align-items: center; justify-content: center; font-size: 21px;
+        border: 1px solid #D5DDE8; display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .asc-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .asc-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .asc-head .sub a { color: #1d4ed8; text-decoration: none }
+    .asc-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .asc-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .asc-head .sub a { color: #143A73; text-decoration: none }
     .asc-head .sub a:hover { text-decoration: underline }
 
-    .asc-lede { font-size: 13.5px; color: #475569; margin: 0 0 14px; line-height: 1.6 }
+    .asc-lede { font-size: 13.5px; color: #44536E; margin: 0 0 14px; line-height: 1.6 }
 
     /* La carte, telle que la maquette : l'assistant en tête, puis les deux colonnes, puis l'enjeu. */
     .asc-carte { background: #fff; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; margin-bottom: 14px }
-    .asc-assist { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; background: #f8fafc; border-bottom: 1px solid #e2e8f0 }
+    .asc-assist { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; background: #f8fafc; border-bottom: 1px solid #D5DDE8 }
     .asc-avatar { position: relative; width: 60px; height: 60px; flex: 0 0 60px; border-radius: 50%;
                   background: #fde68a; border: 3px solid #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 30px }
     .asc-avatar b { position: absolute; right: -4px; bottom: -4px; width: 24px; height: 24px; border-radius: 50%; background: #1e293b; color: #fff;
                     font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #fff }
-    .asc-assist .qui { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: #0f172a; margin-bottom: 8px }
+    .asc-assist .qui { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: #0E1F3D; margin-bottom: 8px }
     .asc-badge { font-size: 11.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d }
-    .asc-assist .dit { font-size: 14px; color: #1e293b; line-height: 1.55; background: #e2e8f0; border-radius: 10px; padding: 10px 14px }
+    .asc-assist .dit { font-size: 14px; color: #1e293b; line-height: 1.55; background: #D5DDE8; border-radius: 10px; padding: 10px 14px }
 
     .asc-corps { padding: 18px 20px }
-    .asc-corps h2 { font-size: 17px; font-weight: 800; margin: 0 0 14px; color: #0f172a }
+    .asc-corps h2 { font-size: 17px; font-weight: 800; margin: 0 0 14px; color: #0E1F3D }
     .asc-deux { display: grid; grid-template-columns: 1fr 44px 1.4fr; gap: 10px; align-items: start }
-    .asc-fleche { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 90px; font-size: 26px; color: #475569 }
+    .asc-fleche { display: flex; align-items: center; justify-content: center; height: 100%; min-height: 90px; font-size: 26px; color: #44536E }
 
     .asc-source { border: 1px solid #cbd5e1; border-radius: 12px; padding: 12px 14px; background: #fff }
-    .asc-titre { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #64748b; margin-bottom: 6px }
+    .asc-titre { font-size: 10.5px; font-weight: 800; letter-spacing: .06em; text-transform: uppercase; color: #44536E; margin-bottom: 6px }
     .asc-source .num { font-size: 13.5px; color: #334155 }
-    .asc-source .nom { font-size: 15px; font-weight: 800; color: #0f172a; margin: 2px 0 4px }
-    .asc-source .meta { font-size: 12.5px; color: #64748b; line-height: 1.55 }
+    .asc-source .nom { font-size: 15px; font-weight: 800; color: #0E1F3D; margin: 2px 0 4px }
+    .asc-source .meta { font-size: 12.5px; color: #44536E; line-height: 1.55 }
     .asc-source .meta b { color: #334155 }
 
     .asc-choix { display: flex; flex-direction: column; gap: 8px }
     .asc-opt { display: block; border: 1px solid #cbd5e1; border-radius: 12px; padding: 10px 12px; background: #fff; cursor: pointer }
     .asc-opt:hover { border-color: #93c5fd }
-    .asc-opt.active { border-color: #2563eb; background: #eff6ff; box-shadow: 0 0 0 1px #2563eb inset }
-    .asc-opt .ligne { display: flex; align-items: center; gap: 9px; font-size: 14.5px; color: #0f172a }
+    .asc-opt.active { border-color: #1B4F9C; background: #E3EBF7; box-shadow: 0 0 0 1px #1B4F9C inset }
+    .asc-opt .ligne { display: flex; align-items: center; gap: 9px; font-size: 14.5px; color: #0E1F3D }
     .asc-opt .ligne input { margin: 0 }
-    .asc-opt .ligne .num { color: #475569 }
+    .asc-opt .ligne .num { color: #44536E }
     .asc-opt .ligne .nom { font-weight: 800 }
     .asc-opt .reco { display: inline-block; margin: 5px 0 0 25px; font-size: 11.5px; font-weight: 800; padding: 2px 8px; border-radius: 6px; background: #dcfce7; color: #166534 }
-    .asc-opt .raison { margin: 5px 0 0 25px; font-size: 12.5px; color: #475569; line-height: 1.5 }
+    .asc-opt .raison { margin: 5px 0 0 25px; font-size: 12.5px; color: #44536E; line-height: 1.5 }
     .asc-opt .raison.mal { color: #b91c1c }
 
     .asc-enjeu { margin: 14px 0 0; display: flex; gap: 10px; align-items: flex-start; background: #fffbeb; border: 1px solid #fcd34d; border-radius: 10px; padding: 10px 14px; font-size: 13.5px; color: #78350f; line-height: 1.5 }
     .asc-enjeu[hidden] { display: none }
     .asc-enjeu .pic { font-size: 16px; line-height: 1.3 }
 
-    .asc-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 20px; border-top: 1px solid #e2e8f0; background: #fff }
+    .asc-actions { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 14px 20px; border-top: 1px solid #D5DDE8; background: #fff }
     .asc-actions .droite { display: flex; gap: 10px }
-    .asc-btn { padding: 10px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 700; border: 1px solid #cbd5e1; cursor: pointer; font-family: inherit; background: #fff; color: #0f172a }
+    .asc-btn { padding: 10px 16px; border-radius: 9px; font-size: 13.5px; font-weight: 700; border: 1px solid #cbd5e1; cursor: pointer; font-family: inherit; background: #fff; color: #0E1F3D }
     .asc-btn:hover { background: #f1f5f9 }
-    .asc-btn.primaire { background: #2563eb; color: #fff; border-color: #2563eb }
-    .asc-btn.primaire:hover { background: #1d4ed8 }
+    .asc-btn.primaire { background: #1B4F9C; color: #fff; border-color: #1B4F9C }
+    .asc-btn.primaire:hover { background: #143A73 }
 
-    .asc-progres { font-size: 12.5px; color: #64748b; margin: 0 0 10px }
-    .asc-fin { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 22px 24px }
-    .asc-fin h2 { font-size: 18px; font-weight: 800; margin: 0 0 8px; color: #0f172a }
-    .asc-fin p { font-size: 13.5px; color: #475569; margin: 0 0 12px; line-height: 1.6 }
+    .asc-progres { font-size: 12.5px; color: #44536E; margin: 0 0 10px }
+    .asc-fin { background: #fff; border: 1px solid #D5DDE8; border-radius: 14px; padding: 22px 24px }
+    .asc-fin h2 { font-size: 18px; font-weight: 800; margin: 0 0 8px; color: #0E1F3D }
+    .asc-fin p { font-size: 13.5px; color: #44536E; margin: 0 0 12px; line-height: 1.6 }
     .asc-fin .liens { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
     .asc-fin a.asc-btn { text-decoration: none; display: inline-block }
 </style>

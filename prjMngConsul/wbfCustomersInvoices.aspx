@@ -19,7 +19,7 @@
                                
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
@@ -50,7 +50,7 @@
         /* Courriel (billing) affiché sous l'adresse dans la colonne Client */
         .cust-email {
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
             margin-top: 2px;
             word-break: break-all;
         }
@@ -81,15 +81,15 @@
             background: #f8fafc;
             font-size: 11px;
             font-weight: 700;
-            color: #475569;
+            color: #44536E;
             cursor: pointer;
             line-height: 18px;
         }
 
             .media-badge:hover {
-                border-color: #2563eb;
-                color: #2563eb;
-                background: #eff6ff;
+                border-color: #1B4F9C;
+                color: #1B4F9C;
+                background: #E3EBF7;
             }
 
             .media-badge svg {
@@ -107,7 +107,7 @@
 
         .photo-item {
             display: block;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             overflow: hidden;
             background: #f8fafc;
@@ -119,14 +119,14 @@
                 width: 100%;
                 height: 140px;
                 object-fit: cover;
-                background: #e2e8f0;
+                background: #D5DDE8;
             }
 
         .photo-cap {
             display: block;
             padding: 6px 8px;
             font-size: 11px;
-            color: #64748b;
+            color: #44536E;
         }
 
         .photo-geo {
@@ -159,7 +159,7 @@
         }
 
             .dlg-opt:hover {
-                border-color: #2563eb;
+                border-color: #1B4F9C;
                 background: #f8fafc;
             }
 
@@ -167,13 +167,13 @@
                 display: block;
                 font-weight: 800;
                 font-size: 14px;
-                color: #0f172a;
+                color: #0E1F3D;
             }
 
             .dlg-opt .dlg-opt-sub {
                 display: block;
                 font-size: 12px;
-                color: #64748b;
+                color: #44536E;
                 margin-top: 3px;
             }
 
@@ -222,7 +222,7 @@
             .field-date .year,
             .field-echeance .year {
                 display: block;
-                color: #64748b;
+                color: #44536E;
             }
 
         .field-date {
@@ -665,10 +665,10 @@
          background:rgba(15,23,42,.55); align-items:center; justify-content:center;">
         <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
              width:92vw; max-width:480px; padding:24px; box-sizing:border-box;">
-            <div style="font-weight:800; font-size:16px; color:#0f172a; margin-bottom:8px;">
+            <div style="font-weight:800; font-size:16px; color:#0E1F3D; margin-bottom:8px;">
                 <asp:Literal ID="litDlgTitle" runat="server" />
             </div>
-            <div style="color:#475569; font-size:14px; line-height:1.5; margin-bottom:18px;">
+            <div style="color:#44536E; font-size:14px; line-height:1.5; margin-bottom:18px;">
                 <asp:Literal ID="litDlgQuestion" runat="server" />
             </div>
 
@@ -678,17 +678,17 @@
                  de coordonnées depuis la grille). Ne concerne que les deux options
                  d'envoi par courriel : le lien de paiement seul n'envoie rien. --%>
             <div id="mediaOptions" style="display:none; margin-bottom:16px; padding:12px 14px;
-                 border:1px solid #e2e8f0; border-radius:12px; background:#f8fafc;">
-                <div style="font-size:12px; font-weight:800; color:#475569; margin-bottom:8px;">
+                 border:1px solid #D5DDE8; border-radius:12px; background:#f8fafc;">
+                <div style="font-size:12px; font-weight:800; color:#44536E; margin-bottom:8px;">
                     <asp:Literal ID="litMediaOptTitle" runat="server" />
                 </div>
                 <label id="rowInclPhotos" style="display:none; gap:8px; align-items:center;
-                       font-size:13px; color:#0f172a; margin-bottom:6px; cursor:pointer;">
+                       font-size:13px; color:#0E1F3D; margin-bottom:6px; cursor:pointer;">
                     <input type="checkbox" id="chkInclPhotos" />
                     <span id="lblInclPhotos"></span>
                 </label>
                 <label id="rowInclGeo" style="display:none; gap:8px; align-items:center;
-                       font-size:13px; color:#0f172a; cursor:pointer;">
+                       font-size:13px; color:#0E1F3D; cursor:pointer;">
                     <input type="checkbox" id="chkInclGeo" />
                     <span><asp:Literal ID="litInclGeo" runat="server" /></span>
                 </label>
@@ -709,13 +709,13 @@
                 <span class="dlg-opt-sub"><asp:Literal ID="litDlgLinkSub" runat="server" /></span>
             </button>
 
-            <div id="optPaidNote" style="display:none; color:#64748b; font-size:12px; margin:-2px 0 12px;">
+            <div id="optPaidNote" style="display:none; color:#44536E; font-size:12px; margin:-2px 0 12px;">
                 <asp:Literal ID="litDlgPaidNote" runat="server" />
             </div>
 
             <div style="display:flex; justify-content:flex-end; margin-top:6px;">
                 <button type="button" onclick="closeSendEmailDialog()"
-                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#44536E;
                            border-radius:10px; font-weight:700; cursor:pointer;"><asp:Literal ID="litDlgCancel" runat="server" /></button>
             </div>
         </div>
@@ -731,15 +731,15 @@
         <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
              width:92vw; max-width:900px; max-height:86vh; overflow:auto; padding:24px; box-sizing:border-box;">
             <div style="display:flex; align-items:baseline; gap:10px; margin-bottom:14px;">
-                <div id="photoTitle" style="font-weight:800; font-size:16px; color:#0f172a;"></div>
-                <div id="photoSubtitle" style="color:#64748b; font-size:13px;"></div>
+                <div id="photoTitle" style="font-weight:800; font-size:16px; color:#0E1F3D;"></div>
+                <div id="photoSubtitle" style="color:#44536E; font-size:13px;"></div>
             </div>
 
             <div id="photoBody"></div>
 
             <div style="display:flex; justify-content:flex-end; margin-top:18px;">
                 <button type="button" onclick="closePhotos()"
-                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#475569;
+                    style="padding:10px 16px; border:1px solid #cbd5e1; background:#fff; color:#44536E;
                            border-radius:10px; font-weight:700; cursor:pointer;">
                     <asp:Literal ID="litPhotoClose" runat="server" /></button>
             </div>

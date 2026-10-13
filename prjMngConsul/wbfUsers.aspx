@@ -14,7 +14,7 @@
             display: grid;
             grid-template-columns: 50px minmax(220px, 1fr) minmax(180px, 1fr) 100px 90px 130px 100px;
             gap: 16px; padding: 14px 16px;
-            font-weight: 800; font-size: 13px; color: #0f172a;
+            font-weight: 800; font-size: 13px; color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky; top: 0; z-index: 0;
@@ -34,22 +34,22 @@
         .user-avatar {
             width: 36px; height: 36px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            background: linear-gradient(135deg, #1B4F9C, #06b6d4);
             color: #fff;
             display: flex; align-items: center; justify-content: center;
             font-weight: 800; font-size: 14px;
         }
         .user-name { font-weight: 700; }
-        .user-email { color: #475569; font-size: 13px; }
-        .user-meta { font-size: 12px; color: #64748b; }
+        .user-email { color: #44536E; font-size: 13px; }
+        .user-meta { font-size: 12px; color: #44536E; }
 
         .badge {
             display: inline-flex; align-items: center;
             padding: 4px 10px; border-radius: 8px;
             font-size: 11px; font-weight: 800; white-space: nowrap;
         }
-        .badge.admin   { background: rgba(37,99,235,.10);  color: #2563eb; border: 1px solid rgba(37,99,235,.25); }
-        .badge.user    { background: rgba(100,116,139,.10); color: #64748b; border: 1px solid rgba(100,116,139,.25); }
+        .badge.admin   { background: rgba(37,99,235,.10);  color: #1B4F9C; border: 1px solid rgba(37,99,235,.25); }
+        .badge.user    { background: rgba(100,116,139,.10); color: #44536E; border: 1px solid rgba(100,116,139,.25); }
         .badge.active  { background: rgba(22,163,74,.10);  color: #16a34a; border: 1px solid rgba(22,163,74,.25); }
         .badge.inactive { background: rgba(220,38,38,.10); color: #dc2626; border: 1px solid rgba(220,38,38,.25); }
 

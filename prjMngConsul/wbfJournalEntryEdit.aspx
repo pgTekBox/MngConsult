@@ -76,7 +76,7 @@
             width: 100%;
             min-height: 38px;
             padding: 8px 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             background: #fff;
             cursor: pointer;
@@ -86,7 +86,7 @@
         .account-selector::after {
             content: "▾";
             float: right;
-            color: #64748b;
+            color: #44536E;
         }
 
         .account-selector:active { background: #f1f5f9; }

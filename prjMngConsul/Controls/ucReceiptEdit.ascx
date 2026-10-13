@@ -42,7 +42,7 @@
             width: 100%;
             min-height: 38px;
             padding: 8px 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             background: #fff;
             cursor: pointer;
@@ -53,7 +53,7 @@
         .bank-selector::after {
             content: "▾";
             float: right;
-            color: #64748b;
+            color: #44536E;
         }
 
         .customer-selector:active,

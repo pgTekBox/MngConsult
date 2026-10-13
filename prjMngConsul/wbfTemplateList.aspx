@@ -26,7 +26,7 @@
             padding: 4px 10px;
             border-radius: 999px;
             background: #f1f5f9;
-            color: #64748b;
+            color: #44536E;
             font-size: 11px;
             font-weight: 700;
             border: 1px solid #cbd5e1;
@@ -36,8 +36,8 @@
             display: inline-flex;
             padding: 4px 10px;
             border-radius: 999px;
-            background: #eff6ff;
-            color: #1e40af;
+            background: #E3EBF7;
+            color: #143A73;
             font-size: 11px;
             font-weight: 700;
             border: 1px solid #bfdbfe;
@@ -110,7 +110,7 @@
 
         .template-code {
             font-weight: 700;
-            color: #0f172a;
+            color: #0E1F3D;
             cursor: pointer;
         }
 

@@ -9,12 +9,12 @@
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --bg: #f6f7fb; --card: #fff; --text: #0f172a; --muted: #64748b;
-            --line: #e2e8f0; --brand: #006aff; --ok: #16a34a; --ok-weak: #f0fdf4;
+            --bg: #f6f7fb; --card: #fff; --text: #0E1F3D; --muted: #44536E;
+            --line: #D5DDE8; --brand: #006aff; --ok: #16a34a; --ok-weak: #f0fdf4;
         }
         html, body { height: 100%; margin: 0; }
         body { font-family: var(--font); color: var(--text);
-               background: radial-gradient(1200px 600px at 20% 0%, #eff6ff 0%, transparent 45%), var(--bg);
+               background: radial-gradient(1200px 600px at 20% 0%, #E3EBF7 0%, transparent 45%), var(--bg);
                display: flex; align-items: center; justify-content: center; padding: 24px; }
         .card { background: var(--card); border: 1px solid var(--line); border-radius: 18px;
                 box-shadow: 0 18px 40px rgba(15,23,42,.10); padding: 34px 30px; max-width: 460px;

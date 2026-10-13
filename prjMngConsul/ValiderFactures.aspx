@@ -14,50 +14,50 @@
     .val-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .val-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .val-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .val-lede { font-size: 13.5px; color: #475569; margin: 0 0 16px; max-width: 900px; line-height: 1.6 }
+    .val-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .val-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .val-lede { font-size: 13.5px; color: #44536E; margin: 0 0 16px; max-width: 900px; line-height: 1.6 }
 
     .barre {
         display: flex; gap: 10px; align-items: center; flex-wrap: wrap;
-        border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;
+        border: 1px solid #D5DDE8; border-radius: 12px; background: #fff;
         padding: 12px 16px; margin-bottom: 16px;
     }
     .barre .esp { flex: 1 }
 
     .btn {
         display: inline-block; padding: 8px 15px; border-radius: 9px; border: 1px solid #cbd5e1;
-        background: #fff; color: #0f172a; font-size: 13px; font-weight: 600; cursor: pointer;
+        background: #fff; color: #0E1F3D; font-size: 13px; font-weight: 600; cursor: pointer;
     }
     .btn:hover { background: #f8fafc }
-    .btn.primaire { background: #2563eb; border-color: #2563eb; color: #fff }
-    .btn.primaire:hover { background: #1d4ed8 }
+    .btn.primaire { background: #1B4F9C; border-color: #1B4F9C; color: #fff }
+    .btn.primaire:hover { background: #143A73 }
     .btn.danger { color: #b91c1c; border-color: #fecaca }
     .btn.danger:hover { background: #fef2f2 }
 
     /* Le compte rendu du lot */
     .bilan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 16px }
-    .bil { border: 1px solid #e2e8f0; border-radius: 11px; padding: 11px 14px; background: #fff }
-    .bil .l { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .3px }
-    .bil .v { font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 2px }
+    .bil { border: 1px solid #D5DDE8; border-radius: 11px; padding: 11px 14px; background: #fff }
+    .bil .l { font-size: 11px; color: #44536E; text-transform: uppercase; letter-spacing: .3px }
+    .bil .v { font-size: 22px; font-weight: 800; color: #0E1F3D; margin-top: 2px }
     .bil.ok { background: #ecfdf5; border-color: #a7f3d0 } .bil.ok .v { color: #047857 }
     .bil.mi { background: #fffbeb; border-color: #fde68a } .bil.mi .v { color: #b45309 }
     .bil.no { background: #fef2f2; border-color: #fecaca } .bil.no .v { color: #b91c1c }
 
     /* Les documents */
     table.docs { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
-                 border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden }
+                 border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden }
     table.docs th {
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+        color: #44536E; background: #f8fafc; border-bottom: 1px solid #D5DDE8;
         padding: 9px 10px; font-weight: 700;
     }
-    table.docs td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0f172a; vertical-align: top }
+    table.docs td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0E1F3D; vertical-align: top }
     table.docs td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
-    table.docs tr.migre td { background: #f8fafc; color: #64748b }
+    table.docs tr.migre td { background: #f8fafc; color: #44536E }
     table.docs tr.souci td { background: #fffbeb }
     table.docs tr.bloque td { background: #fef2f2 }
 
@@ -79,25 +79,25 @@
     select.tiers { max-width: 240px; padding: 4px 6px; border: 1px solid #fecaca; border-radius: 7px; font-size: 12.5px }
 
     details.lignes { margin-top: 4px }
-    details.lignes summary { font-size: 12px; color: #2563eb; cursor: pointer }
+    details.lignes summary { font-size: 12px; color: #1B4F9C; cursor: pointer }
     table.lig { width: 100%; border-collapse: collapse; font-size: 12px; margin: 6px 0 2px }
-    table.lig th { text-align: left; color: #64748b; font-weight: 600; padding: 3px 6px;
-                   border-bottom: 1px solid #e2e8f0; font-size: 11px }
+    table.lig th { text-align: left; color: #44536E; font-weight: 600; padding: 3px 6px;
+                   border-bottom: 1px solid #D5DDE8; font-size: 11px }
     table.lig td { padding: 3px 6px; border-bottom: 1px solid #f8fafc }
     table.lig td.n { text-align: right; font-variant-numeric: tabular-nums }
 
     .msg { border-radius: 10px; padding: 11px 14px; font-size: 13.5px; margin: 14px 0; line-height: 1.55 }
     .msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
     .msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .msg.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af }
-    .vide { font-size: 13.5px; color: #64748b; padding: 22px; text-align: center;
+    .msg.info { background: #E3EBF7; border: 1px solid #bfdbfe; color: #143A73 }
+    .vide { font-size: 13.5px; color: #44536E; padding: 22px; text-align: center;
             border: 1px dashed #cbd5e1; border-radius: 12px; background: #fff }
 
     /* L'état de paiement, à côté du solde. Rien ne s'affiche pour une facture
        entièrement due : c'est le cas ordinaire d'une reprise. */
     .pay {
         display: inline-block; margin-left: 6px; padding: 1px 7px; border-radius: 999px;
-        font-size: 10.5px; font-weight: 800; background: #f1f5f9; color: #475569;
+        font-size: 10.5px; font-weight: 800; background: #f1f5f9; color: #44536E;
     }
 
     .pay.part { background: #fef3c7; color: #92400e }

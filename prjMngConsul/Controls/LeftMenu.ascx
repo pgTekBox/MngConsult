@@ -36,18 +36,19 @@
 
 <style>
     :root {
-        --bg: #f6f7fb;
+        /* Les jetons que les pages consomment (var(--primary)…), au style « Doux bleu marine » */
+        --bg: #F2F5F9;
         --card: #ffffff;
-        --text: #0f172a;
-        --muted: #64748b;
-        --border: #e5e7eb;
-        --shadow: 0 10px 30px rgba(15, 23, 42, .08);
-        --primary: #2563eb;
-        --primary-weak: #eff6ff;
-        --ring: 0 0 0 4px rgba(37, 99, 235, .18);
+        --text: #0E1F3D;
+        --muted: #44536E;
+        --border: #D5DDE8;
+        --shadow: 0 1px 3px rgba(14, 31, 61, .08);
+        --primary: #1B4F9C;
+        --primary-weak: #E3EBF7;
+        --ring: 0 0 0 4px rgba(27, 79, 156, .18);
         --sidebarW: 280px;
         --radius: 16px;
-        --font: system-ui,-apple-system,"Segoe UI",Roboto,Arial,sans-serif;
+        --font: Nunito, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
     .app-shell {

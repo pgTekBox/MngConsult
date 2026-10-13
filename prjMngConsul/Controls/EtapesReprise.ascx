@@ -5,14 +5,14 @@
 <style>
     .fil {
         display: flex; align-items: stretch; gap: 0; flex-wrap: wrap;
-        border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden;
+        border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden;
         background: #fff; margin-bottom: 16px; font-size: 12.5px;
     }
 
     .fil a, .fil span.cran {
         flex: 1 1 190px; display: flex; align-items: center; gap: 9px;
-        padding: 10px 14px; text-decoration: none; color: #475569;
-        border-right: 1px solid #e2e8f0; min-width: 0;
+        padding: 10px 14px; text-decoration: none; color: #44536E;
+        border-right: 1px solid #D5DDE8; min-width: 0;
     }
 
     .fil a:last-child, .fil span.cran:last-child { border-right: none }
@@ -20,19 +20,19 @@
 
     .fil .no {
         flex: 0 0 auto; width: 22px; height: 22px; border-radius: 999px;
-        background: #f1f5f9; color: #64748b; font-weight: 800; font-size: 11px;
+        background: #f1f5f9; color: #44536E; font-weight: 800; font-size: 11px;
         display: flex; align-items: center; justify-content: center;
     }
 
     .fil .lib { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
 
     /* L'étape courante : surlignée, et cliquable comme les autres. */
-    .fil .ici { background: #eff6ff; color: #1d4ed8; font-weight: 800 }
-    .fil .ici .no { background: #2563eb; color: #fff }
+    .fil .ici { background: #E3EBF7; color: #143A73; font-weight: 800 }
+    .fil .ici .no { background: #1B4F9C; color: #fff }
 
     /* L'état de l'écran courant, replié par défaut. */
-    .etat { margin: -8px 0 16px; font-size: 12.5px; color: #475569 }
-    .etat summary { cursor: pointer; color: #64748b; font-weight: 700 }
+    .etat { margin: -8px 0 16px; font-size: 12.5px; color: #44536E }
+    .etat summary { cursor: pointer; color: #44536E; font-weight: 700 }
     .etat .nt { margin-left: 6px; font-weight: 800 }
     .etat .nt.vert { color: #047857 }
     .etat .nt.jaune { color: #b45309 }

@@ -40,7 +40,7 @@
         .stripe-badge .dot { width: 7px; height: 7px; border-radius: 50%; flex: 0 0 7px; }
         .stripe-badge.on  { background: #ecfdf5; border: 1px solid #a7f3d0; color: #047857; }
         .stripe-badge.on .dot  { background: #10b981; }
-        .stripe-badge.off { background: #f1f5f9; border: 1px solid #e2e8f0; color: #64748b; }
+        .stripe-badge.off { background: #f1f5f9; border: 1px solid #D5DDE8; color: #44536E; }
         .stripe-badge.off .dot { background: #94a3b8; }
         .stripe-badge:hover { filter: brightness(0.97); }
 
@@ -58,7 +58,7 @@
             font-variant-numeric: tabular-nums;
             white-space: nowrap;
         }
-        .field-amount { font-weight: 700; color: #0f172a; }
+        .field-amount { font-weight: 700; color: #0E1F3D; }
         .field-amount.zero { font-weight: 400; color: #94a3b8; }
 
         /* Entêtes cliquables (tri) */
@@ -71,7 +71,7 @@
         .sort-link:hover { text-decoration: underline; }
 
         /* Courriel affiché sous l'adresse */
-        .cust-email { color: #64748b; font-size: 12px; }
+        .cust-email { color: #44536E; font-size: 12px; }
 
         .listview-list-head {
             display: grid;
@@ -84,7 +84,7 @@
             padding: 14px 16px;
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;

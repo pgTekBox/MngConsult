@@ -6,41 +6,41 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
     <style>
-        .mail-wrap { padding: 18px 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #0f172a; }
+        .mail-wrap { padding: 18px 20px; font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; color: #0E1F3D; }
         .mail-head { display: flex; align-items: center; gap: 12px; margin: 0 0 14px; flex-wrap: wrap; }
         .mail-head h1 { font-size: 22px; font-weight: 900; margin: 0; }
-        .mail-addr { font-weight: 800; color: #2563eb; background: #eff6ff; border: 1px solid #dbeafe; padding: 5px 12px; border-radius: 999px; font-size: 14px; }
+        .mail-addr { font-weight: 800; color: #1B4F9C; background: #E3EBF7; border: 1px solid #D5DDE8; padding: 5px 12px; border-radius: 999px; font-size: 14px; }
         .mail-tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-        .mail-tab { padding: 9px 16px; border: 1px solid #e2e8f0; background: #fff; border-radius: 10px; font-weight: 800; font-size: 13px; color: #334155; text-decoration: none; cursor: pointer; }
-        .mail-tab.active { background: #2563eb; color: #fff; border-color: #2563eb; }
+        .mail-tab { padding: 9px 16px; border: 1px solid #D5DDE8; background: #fff; border-radius: 10px; font-weight: 800; font-size: 13px; color: #334155; text-decoration: none; cursor: pointer; }
+        .mail-tab.active { background: #1B4F9C; color: #fff; border-color: #1B4F9C; }
         .mail-cols { display: grid; grid-template-columns: 380px 1fr; gap: 16px; align-items: start; }
-        .mail-list { border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; background: #fff; max-height: 70vh; overflow-y: auto; }
+        .mail-list { border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden; background: #fff; max-height: 70vh; overflow-y: auto; }
         .mrow { display: block; width: 100%; text-align: left; padding: 11px 14px; border: none; border-bottom: 1px solid #f1f5f9; background: #fff; cursor: pointer; text-decoration: none; color: inherit; }
         .mrow:hover { background: #f8fafc; }
         .mrow .r1 { display: flex; justify-content: space-between; gap: 10px; }
-        .mrow .who { font-weight: 800; font-size: 13px; color: #0f172a; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; }
+        .mrow .who { font-weight: 800; font-size: 13px; color: #0E1F3D; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 210px; }
         .mrow .when { font-size: 11px; color: #94a3b8; white-space: nowrap; }
-        .mrow .subj { font-size: 13px; color: #475569; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .mrow .subj { font-size: 13px; color: #44536E; margin-top: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
         .mrow .tag { font-size: 11px; font-weight: 700; padding: 1px 7px; border-radius: 999px; }
         .tag-ok { background: rgba(16,185,129,.12); color: #059669; }
-        .tag-q { background: rgba(37,99,235,.12); color: #2563eb; }
+        .tag-q { background: rgba(37,99,235,.12); color: #1B4F9C; }
         .tag-err { background: rgba(239,68,68,.12); color: #dc2626; }
-        .mail-read { border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; padding: 0; min-height: 320px; }
+        .mail-read { border: 1px solid #D5DDE8; border-radius: 12px; background: #fff; padding: 0; min-height: 320px; }
         .read-head { padding: 14px 16px; border-bottom: 1px solid #eef2f7; }
         .read-subj { font-size: 17px; font-weight: 900; margin: 0 0 8px; }
-        .read-meta { font-size: 12px; color: #475569; line-height: 1.6; }
-        .read-meta b { color: #0f172a; }
+        .read-meta { font-size: 12px; color: #44536E; line-height: 1.6; }
+        .read-meta b { color: #0E1F3D; }
         .mailframe { width: 100%; height: 55vh; border: 0; background: #fff; }
         .read-empty { padding: 40px; text-align: center; color: #94a3b8; font-size: 14px; }
         .attach { margin-top: 6px; font-size: 12px; color: #b45309; }
-        .compose { max-width: 780px; border: 1px solid #e2e8f0; border-radius: 12px; background: #fff; padding: 18px 20px; }
+        .compose { max-width: 780px; border: 1px solid #D5DDE8; border-radius: 12px; background: #fff; padding: 18px 20px; }
         .compose label { display: block; font-size: 12px; font-weight: 800; color: #334155; margin: 12px 0 4px; }
         .compose input[type=text], .compose textarea { width: 100%; padding: 9px 11px; border: 1px solid #cbd5e1; border-radius: 8px; font: inherit; box-sizing: border-box; }
         .compose textarea { min-height: 220px; resize: vertical; }
-        .compose .from-note { font-size: 13px; color: #0f172a; margin-top: 2px; font-weight: 700; }
+        .compose .from-note { font-size: 13px; color: #0E1F3D; margin-top: 2px; font-weight: 700; }
         .compose .compose-file { margin-top: 4px; font: inherit; }
-        .btn-send { margin-top: 16px; padding: 11px 22px; background: #2563eb; color: #fff; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
-        .btn-send:hover { background: #1d4ed8; }
+        .btn-send { margin-top: 16px; padding: 11px 22px; background: #1B4F9C; color: #fff; border: none; border-radius: 10px; font-weight: 800; font-size: 14px; cursor: pointer; }
+        .btn-send:hover { background: #143A73; }
         .send-msg { margin-top: 14px; padding: 10px 14px; border-radius: 10px; font-size: 13px; font-weight: 700; }
         .send-msg.ok { background: rgba(16,185,129,.12); color: #059669; border: 1px solid rgba(16,185,129,.3); }
         .send-msg.err { background: rgba(239,68,68,.1); color: #dc2626; border: 1px solid rgba(239,68,68,.3); }
@@ -173,7 +173,7 @@
 
                 <label for="<%= fuAttach.ClientID %>">Pièces jointes</label>
                 <asp:FileUpload ID="fuAttach" runat="server" AllowMultiple="true" CssClass="compose-file" />
-                <div class="from-note" style="font-weight:600;color:#64748b;">Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).</div>
+                <div class="from-note" style="font-weight:600;color:#44536E;">Vous pouvez sélectionner plusieurs fichiers (50 Mo max au total).</div>
 
                 <div id="composeErr" class="send-msg err" style="display:none;margin-top:10px;"></div>
 

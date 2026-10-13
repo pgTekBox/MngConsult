@@ -6,11 +6,11 @@
     :root{
         --mc-bg:#f6f8fc;
         --mc-card:#ffffff;
-        --mc-text:#0f172a;
-        --mc-muted:#64748b;
-        --mc-line:#e2e8f0;
-        --mc-primary:#2563eb;
-        --mc-primary-2:#1d4ed8;
+        --mc-text:#0E1F3D;
+        --mc-muted:#44536E;
+        --mc-line:#D5DDE8;
+        --mc-primary:#1B4F9C;
+        --mc-primary-2:#143A73;
         --mc-success:#16a34a;
         --mc-warning:#f59e0b;
         --mc-danger:#ef4444;
@@ -35,7 +35,7 @@
     }
 
     .hero{
-        background:linear-gradient(135deg, #2563eb 0%, #1d4ed8 45%, #0f172a 100%);
+        background:linear-gradient(135deg, #1B4F9C 0%, #143A73 45%, #0E1F3D 100%);
         color:#fff;
         border-radius:24px;
         padding:28px;
@@ -127,7 +127,7 @@
 
     .btn-hero{
         background:#fff;
-        color:#0f172a;
+        color:#0E1F3D;
     }
 
     .btn-hero:hover{
@@ -217,7 +217,7 @@
         align-items:center;
         justify-content:center;
         font-size:20px;
-        background:#eff6ff;
+        background:#E3EBF7;
     }
 
     .kpi-value{
@@ -306,7 +306,7 @@
         justify-content:center;
         font-size:24px;
         margin-bottom:12px;
-        background:#eff6ff;
+        background:#E3EBF7;
     }
 
     .module-title{
@@ -356,7 +356,7 @@
         display:flex;
         align-items:center;
         justify-content:center;
-        background:#eff6ff;
+        background:#E3EBF7;
         font-size:18px;
         flex:0 0 36px;
     }
@@ -445,7 +445,7 @@
         flex:0 0 12px;
     }
 
-    .dot-blue{ background:#2563eb; }
+    .dot-blue{ background:#1B4F9C; }
     .dot-green{ background:#16a34a; }
     .dot-orange{ background:#f59e0b; }
     .dot-red{ background:#ef4444; }
@@ -480,7 +480,7 @@
 
     /* ===== Boîte de bienvenue dépliable ===== */
     .welcome-box{
-        background:linear-gradient(135deg,#2563eb 0%,#06b6d4 100%);
+        background:linear-gradient(135deg,#1B4F9C 0%,#06b6d4 100%);
         border-radius:20px;
         box-shadow:var(--mc-shadow);
         overflow:hidden;
@@ -576,7 +576,7 @@
         font-size:22px;
         color:#fff;
     }
-    .wb-ico-blue{ background:linear-gradient(135deg,#3b82f6,#2563eb); }
+    .wb-ico-blue{ background:linear-gradient(135deg,#3b82f6,#1B4F9C); }
     .wb-ico-cyan{ background:linear-gradient(135deg,#06b6d4,#0891b2); }
     .wb-ico-green{ background:linear-gradient(135deg,#10b981,#059669); }
     .wb-ico-orange{ background:linear-gradient(135deg,#f59e0b,#d97706); }

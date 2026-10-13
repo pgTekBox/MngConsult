@@ -14,36 +14,36 @@
     .tx-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .tx-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .tx-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .tx-lede { font-size: 13.5px; color: #475569; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
+    .tx-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .tx-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .tx-lede { font-size: 13.5px; color: #44536E; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
 
     .repere {
         display: flex; gap: 22px; flex-wrap: wrap; align-items: center;
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 12px;
         padding: 14px 16px; margin-bottom: 16px;
     }
-    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #64748b; font-weight: 700 }
-    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums }
+    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #44536E; font-weight: 700 }
+    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0E1F3D; font-variant-numeric: tabular-nums }
     .repere .bloc.no .v { color: #b91c1c }
     .repere .bloc.mi .v { color: #b45309 }
 
     table.tx { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
-               border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; margin-bottom: 16px }
+               border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden; margin-bottom: 16px }
     table.tx th {
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+        color: #44536E; background: #f8fafc; border-bottom: 1px solid #D5DDE8;
         padding: 9px 10px; font-weight: 700; white-space: nowrap;
     }
     table.tx th.n, table.tx td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
-    table.tx td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0f172a; vertical-align: top }
+    table.tx td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0E1F3D; vertical-align: top }
     table.tx tr.verif td { background: #fffbeb }
     table.tx tr.inconnu td { background: #fef2f2 }
     table.tx td.nom { font-weight: 600 }
-    table.tx .fil { color: #64748b; font-weight: 400; font-size: 12px }
+    table.tx .fil { color: #44536E; font-weight: 400; font-size: 12px }
     table.tx .zero { color: #cbd5e1 }
     table.tx .anom { display: block; font-size: 12px; color: #b45309; margin-top: 3px }
 
@@ -52,29 +52,29 @@
     .etiq.ok { background: #d1fae5; color: #065f46 }
     .etiq.verif { background: #fef3c7; color: #92400e }
     .etiq.man { background: #e0e7ff; color: #3730a3 }
-    .etiq.src { background: #f1f5f9; color: #475569 }
+    .etiq.src { background: #f1f5f9; color: #44536E }
     .etiq.inconnu { background: #fee2e2; color: #991b1b }
 
     .btn {
         display: inline-block; padding: 8px 15px; border-radius: 9px; border: 1px solid #cbd5e1;
-        background: #fff; color: #0f172a; font-size: 13px; font-weight: 600; cursor: pointer;
+        background: #fff; color: #0E1F3D; font-size: 13px; font-weight: 600; cursor: pointer;
     }
     .btn:hover { background: #f8fafc }
-    .btn.primaire { background: #2563eb; border-color: #2563eb; color: #fff }
-    .btn.primaire:hover { background: #1d4ed8 }
+    .btn.primaire { background: #1B4F9C; border-color: #1B4F9C; color: #fff }
+    .btn.primaire:hover { background: #143A73 }
     .btn.danger { color: #b91c1c; border-color: #fecaca }
     .btn.danger:hover { background: #fef2f2 }
     .btn.petit { padding: 3px 9px; font-size: 12px; border-radius: 7px }
 
     .carte {
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 12px;
         padding: 14px 16px; margin-bottom: 16px;
     }
-    .carte h2 { font-size: 14px; font-weight: 800; margin: 0 0 4px; color: #0f172a }
-    .carte .aide { font-size: 12.5px; color: #64748b; margin: 0 0 12px; line-height: 1.55 }
+    .carte h2 { font-size: 14px; font-weight: 800; margin: 0 0 4px; color: #0E1F3D }
+    .carte .aide { font-size: 12.5px; color: #44536E; margin: 0 0 12px; line-height: 1.55 }
     .champs { display: flex; gap: 12px; flex-wrap: wrap; align-items: flex-end }
     .champ label { display: block; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-                   color: #64748b; font-weight: 700; margin-bottom: 4px }
+                   color: #44536E; font-weight: 700; margin-bottom: 4px }
     .champ input[type=text] { padding: 7px 9px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 13px }
     .champ input.pct { width: 90px; text-align: right; font-variant-numeric: tabular-nums }
     .champ input.code { width: 130px }
@@ -83,18 +83,18 @@
     .msg { border-radius: 10px; padding: 11px 14px; font-size: 13.5px; margin: 14px 0; line-height: 1.55 }
     .msg.ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46 }
     .msg.err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
-    .msg.info { background: #eff6ff; border: 1px solid #bfdbfe; color: #1e40af }
+    .msg.info { background: #E3EBF7; border: 1px solid #bfdbfe; color: #143A73 }
 
     .rien {
         border: 1px dashed #cbd5e1; border-radius: 12px; padding: 24px; text-align: center;
-        color: #64748b; font-size: 13.5px; background: #fff; line-height: 1.7; margin-bottom: 16px;
+        color: #44536E; font-size: 13.5px; background: #fff; line-height: 1.7; margin-bottom: 16px;
     }
     .note {
         margin-top: 4px; padding: 12px 15px; border-radius: 10px;
-        background: #f8fafc; border: 1px solid #e2e8f0;
-        font-size: 12.5px; color: #475569; line-height: 1.6; max-width: 920px;
+        background: #f8fafc; border: 1px solid #D5DDE8;
+        font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 920px;
     }
-    .note b { color: #0f172a }
+    .note b { color: #0E1F3D }
 </style>
 </asp:Content>
 

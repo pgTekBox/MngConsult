@@ -23,7 +23,7 @@
         .page-title {
             font-size: 22px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0E1F3D;
             margin: 0;
             display: flex;
             align-items: center;
@@ -33,23 +33,23 @@
             display: flex;
             gap: 6px;
             margin-bottom: 18px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
             padding-bottom: 0;
         }
         .page-tabs a {
             padding: 10px 16px;
             text-decoration: none;
-            color: #64748b;
+            color: #44536E;
             font-weight: 700;
             font-size: 13px;
             border: none;
             border-bottom: 3px solid transparent;
             transition: color .15s, border-color .15s;
         }
-        .page-tabs a:hover { color: #2563eb; }
+        .page-tabs a:hover { color: #1B4F9C; }
         .page-tabs a.active {
-            color: #2563eb;
-            border-bottom-color: #2563eb;
+            color: #1B4F9C;
+            border-bottom-color: #1B4F9C;
         }
 
         .stats-row {
@@ -67,7 +67,7 @@
         .stat-card .stat-label {
             font-size: 11px;
             font-weight: 800;
-            color: #64748b;
+            color: #44536E;
             text-transform: uppercase;
             letter-spacing: .08em;
             margin-bottom: 4px;
@@ -75,7 +75,7 @@
         .stat-card .stat-value {
             font-size: 22px;
             font-weight: 900;
-            color: #0f172a;
+            color: #0E1F3D;
         }
         .stat-card.green .stat-value { color: #10b981; }
         .stat-card.red .stat-value { color: #ef4444; }
@@ -91,7 +91,7 @@
         .filter-bar label {
             font-size: 12px;
             font-weight: 700;
-            color: #475569;
+            color: #44536E;
         }
         .filter-bar input[type="checkbox"] { width: 16px; height: 16px; }
 
@@ -117,17 +117,17 @@
         .auth-supplier {
             font-size: 16px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0E1F3D;
         }
         .auth-method {
             font-size: 13px;
-            color: #475569;
+            color: #44536E;
             display: flex;
             align-items: center;
             gap: 6px;
         }
         .badge-method-card { background: #ede9fe; color: #6d28d9; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
-        .badge-method-acss { background: #dbeafe; color: #1d4ed8; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
+        .badge-method-acss { background: #D5DDE8; color: #143A73; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; }
         .auth-meta {
             font-size: 11px;
             color: #94a3b8;
@@ -138,12 +138,12 @@
         }
         .auth-stats {
             font-size: 12px;
-            color: #475569;
+            color: #44536E;
             display: flex;
             gap: 16px;
             margin-top: 6px;
         }
-        .auth-stats strong { color: #0f172a; font-weight: 800; }
+        .auth-stats strong { color: #0E1F3D; font-weight: 800; }
 
         .auth-actions {
             display: flex;
@@ -168,7 +168,7 @@
             border-radius: 12px;
             padding: 40px 24px;
             text-align: center;
-            color: #64748b;
+            color: #44536E;
             font-size: 14px;
         }
         .alert {
@@ -232,7 +232,7 @@
                 Text=" Inclure les autorisations révoquées" />
             <asp:Button ID="btnRefresh" runat="server" Text="🔄 Rafraîchir"
                 CssClass="btn-revoke"
-                Style="background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe;"
+                Style="background:#D5DDE8; color:#143A73; border-color:#bfdbfe;"
                 CausesValidation="false" />
         </div>
 

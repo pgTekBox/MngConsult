@@ -49,7 +49,7 @@
 
         .report-header {
             text-align: center; margin-bottom: 28px; padding-bottom: 16px;
-            border-bottom: 2px solid #0f172a;
+            border-bottom: 2px solid #0E1F3D;
         }
 
         .report-header h1 {
@@ -60,7 +60,7 @@
             font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 2px;
         }
 
-        .report-header .report-date { font-size: 12px; color: #64748b; }
+        .report-header .report-date { font-size: 12px; color: #44536E; }
 
         /* ── Tableau ── */
         .ft-table {
@@ -91,7 +91,7 @@
         .ft-sub-header td {
             font-weight: 700; color: #334155; background: #f1f5f9;
             font-size: 13px; padding: 8px 14px 8px 28px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
 
         /* Ligne de détail */
@@ -105,7 +105,7 @@
 
         .ft-line .item-num {
             font-family: 'Consolas', 'Courier New', monospace;
-            color: #64748b; font-size: 12px; width: 70px; padding-left: 44px;
+            color: #44536E; font-size: 12px; width: 70px; padding-left: 44px;
         }
 
         .ft-amount {
@@ -117,7 +117,7 @@
         /* Sous-total */
         .ft-sub-total td {
             font-weight: 700; font-size: 13px; padding: 6px 14px 6px 28px;
-            border-top: 1px solid #cbd5e1; border-bottom: 1px solid #e2e8f0;
+            border-top: 1px solid #cbd5e1; border-bottom: 1px solid #D5DDE8;
             color: #334155;
         }
 
@@ -127,7 +127,7 @@
         .ft-total td {
             font-weight: 800; font-size: 14px; padding: 10px 14px;
             border-top: 2px solid #334155; border-bottom: 2px solid #334155;
-            background: #f8fafc; color: #0f172a;
+            background: #f8fafc; color: #0E1F3D;
         }
 
         .ft-total .ft-amount { font-weight: 900; font-size: 15px; }
@@ -138,10 +138,10 @@
             background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(6,182,212,.04));
             border-top: 1px solid rgba(37,99,235,.15);
             border-bottom: 1px solid rgba(37,99,235,.15);
-            color: #1e40af;
+            color: #143A73;
         }
 
-        .ft-calc .ft-amount { font-weight: 900; font-size: 15px; color: #1e40af; }
+        .ft-calc .ft-amount { font-weight: 900; font-size: 15px; color: #143A73; }
 
         /* Grand total */
         .ft-grand td {
@@ -176,8 +176,8 @@
         /* Note explicative */
         .ft-note {
             margin-top: 20px; padding: 14px; background: #f8fafc;
-            border: 1px solid #e2e8f0; border-radius: 10px;
-            font-size: 12px; color: #64748b; line-height: 1.6;
+            border: 1px solid #D5DDE8; border-radius: 10px;
+            font-size: 12px; color: #44536E; line-height: 1.6;
         }
 
         .ft-note strong { color: #334155; }
@@ -239,7 +239,7 @@
         </div>
         <div class="report-actions">
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#1d4ed8;">
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
                 🖨 Imprimer / PDF
             </button>
         </div>

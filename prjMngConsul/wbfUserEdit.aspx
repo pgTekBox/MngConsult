@@ -11,8 +11,8 @@
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
             --bg: #f6f7fb; --card: #fff;
-            --text: #0f172a; --muted: #64748b;
-            --line: #e2e8f0; --primary: #2563eb;
+            --text: #0E1F3D; --muted: #44536E;
+            --line: #D5DDE8; --primary: #1B4F9C;
             --danger: #dc2626; --ok: #16a34a;
             --shadow: 0 12px 28px rgba(15,23,42,.08);
             --radius: 16px;
@@ -85,7 +85,7 @@
         }
         .btn.primary {
             border-color: rgba(37,99,235,.4);
-            background: rgba(37,99,235,.08); color: #1d4ed8;
+            background: rgba(37,99,235,.08); color: #143A73;
         }
         .btn.danger {
             border-color: rgba(220,38,38,.35);

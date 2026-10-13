@@ -25,7 +25,7 @@
         .page-title {
             font-size: 22px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0E1F3D;
             margin: 0;
             display: flex;
             align-items: center;
@@ -33,7 +33,7 @@
         }
 
         .page-lead {
-            color: #64748b;
+            color: #44536E;
             font-size: 13px;
             margin: 0 0 18px;
             max-width: 720px;
@@ -48,7 +48,7 @@
 
         .stat-card {
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 12px;
             padding: 14px 16px;
         }
@@ -61,13 +61,13 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: .03em;
-            color: #64748b;
+            color: #44536E;
         }
 
         .stat-value {
             font-size: 26px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0E1F3D;
             margin-top: 4px;
         }
 
@@ -110,7 +110,7 @@
             justify-content: space-between;
             align-items: flex-start;
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-left: 4px solid #f59e0b;
             border-radius: 12px;
             padding: 14px 16px;
@@ -125,12 +125,12 @@
         .appro-job {
             font-size: 15px;
             font-weight: 800;
-            color: #0f172a;
+            color: #0E1F3D;
         }
 
         .appro-desc {
             font-size: 13px;
-            color: #475569;
+            color: #44536E;
             margin-top: 3px;
         }
 
@@ -140,10 +140,10 @@
             gap: 6px 14px;
             margin-top: 8px;
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
         }
 
-            .appro-meta strong { color: #0f172a; }
+            .appro-meta strong { color: #0E1F3D; }
 
         .badge {
             display: inline-block;
@@ -154,10 +154,10 @@
             letter-spacing: .02em;
         }
 
-        .badge-type { background: #eff6ff; color: #1d4ed8; }
+        .badge-type { background: #E3EBF7; color: #143A73; }
         .badge-late { background: #fee2e2; color: #b91c1c; }
         .badge-ok { background: #ecfdf5; color: #047857; }
-        .badge-no { background: #f1f5f9; color: #475569; }
+        .badge-no { background: #f1f5f9; color: #44536E; }
 
         .appro-actions {
             display: flex;
@@ -192,7 +192,7 @@
             border-radius: 12px;
             padding: 28px;
             text-align: center;
-            color: #64748b;
+            color: #44536E;
         }
     </style>
 </asp:Content>

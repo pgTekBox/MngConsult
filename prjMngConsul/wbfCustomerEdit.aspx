@@ -20,11 +20,11 @@
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
             --bg: #f6f7fb;
             --card: #fff;
-            --text: #0f172a;
-            --muted: #64748b;
-            --line: #e2e8f0;
-            --primary: #2563eb;
-            --primary-weak: #eff6ff;
+            --text: #0E1F3D;
+            --muted: #44536E;
+            --line: #D5DDE8;
+            --primary: #1B4F9C;
+            --primary-weak: #E3EBF7;
             --danger: #dc2626;
             --ok: #16a34a;
             --shadow: 0 12px 28px rgba(15,23,42,.08);
@@ -175,7 +175,7 @@
         }
         .field .RadDropDownList_Metro .rddlInner.rddlFocused,
         .field .RadDropDownList_Metro .rddlInner.rddlExpanded {
-            border-color: #2563eb !important;
+            border-color: #1B4F9C !important;
             box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
         }
         .RadDropDownList_Metro .rddlSelect .p-icon::before { font-size: 25px; }
@@ -196,7 +196,7 @@
         .btn.primary {
             border-color: rgba(37,99,235,.4);
             background: rgba(37,99,235,.08);
-            color: #1d4ed8;
+            color: #143A73;
         }
         .btn.danger {
             border-color: rgba(220,38,38,.35);
@@ -368,10 +368,10 @@
             flex: 0 0 auto;
             width: 24px; height: 24px; padding: 0;
             border: none; background: transparent;
-            color: #64748b; cursor: pointer; border-radius: 6px;
+            color: #44536E; cursor: pointer; border-radius: 6px;
             display: flex; align-items: center; justify-content: center;
         }
-        .scan-toggle:hover { background: #e2e8f0; color: #334155; }
+        .scan-toggle:hover { background: #D5DDE8; color: #334155; }
         .scan-toggle .chev { font-size: 13px; line-height: 1; transition: transform .18s ease; }
         .scan-box.collapsed .scan-toggle .chev { transform: rotate(-90deg); }
 
@@ -400,10 +400,10 @@
             cursor: pointer;
             transition: border-color .15s, background .15s;
         }
-        .dropzone:hover { border-color: var(--primary); background: #eff6ff; }
-        .dropzone.drag  { border-color: #1d4ed8; background: rgba(59,130,246,.10); }
+        .dropzone:hover { border-color: var(--primary); background: #E3EBF7; }
+        .dropzone.drag  { border-color: #143A73; background: rgba(59,130,246,.10); }
         .dropzone .dz-ico  { font-size: 18px; line-height: 1; }
-        .dropzone .dz-text { font-size: 12px; color: #475569; font-weight: 600; margin-top: 4px; }
+        .dropzone .dz-text { font-size: 12px; color: #44536E; font-weight: 600; margin-top: 4px; }
         .dropzone .dz-file { font-size: 12px; color: var(--primary); font-weight: 700; margin-top: 4px; min-height: 14px; word-break: break-all; }
         .dropzone .dz-input { position: absolute; width: 1px; height: 1px; opacity: 0; overflow: hidden; }
 
@@ -793,13 +793,13 @@
                     <style>
                         table.pj-tbl { width: 100%; border-collapse: collapse; font-size: 13px }
                         table.pj-tbl th { text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-                                          color: #64748b; border-bottom: 1px solid #e2e8f0; padding: 7px 8px; font-weight: 700 }
+                                          color: #44536E; border-bottom: 1px solid #D5DDE8; padding: 7px 8px; font-weight: 700 }
                         table.pj-tbl td { border-bottom: 1px solid #f1f5f9; padding: 7px 8px; vertical-align: top }
                         table.pj-tbl td.n { text-align: right; white-space: nowrap; font-variant-numeric: tabular-nums }
-                        table.pj-tbl a { color: #1d4ed8; text-decoration: none; font-weight: 600 }
+                        table.pj-tbl a { color: #143A73; text-decoration: none; font-weight: 600 }
                         table.pj-tbl a:hover { text-decoration: underline }
-                        table.pj-tbl .sous { display: block; font-size: 11.5px; color: #64748b; margin-top: 2px }
-                        .pj-vide { font-size: 13px; color: #64748b; padding: 4px 0 }
+                        table.pj-tbl .sous { display: block; font-size: 11.5px; color: #44536E; margin-top: 2px }
+                        .pj-vide { font-size: 13px; color: #44536E; padding: 4px 0 }
                     </style>
                     <asp:Literal ID="litPiecesJointes" runat="server" />
                 </div>

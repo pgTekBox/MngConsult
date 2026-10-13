@@ -26,7 +26,7 @@
              align-items:center;
              justify-content:space-between;
              padding:12px 16px;
-             border-bottom:1px solid #e2e8f0;">
+             border-bottom:1px solid #D5DDE8;">
             <strong id="pdfOverlayTitle">Document PDF</strong>
             <button onclick="closePdfOverlay()"
                     style="border:1px solid #cbd5e1;
@@ -41,9 +41,9 @@
    style="display:none;
           align-items:center; gap:8px;
           padding:12px 20px; margin:20px auto;
-          border:1px solid #e2e8f0; border-radius:12px;
+          border:1px solid #D5DDE8; border-radius:12px;
           font-weight:700; font-size:15px;
-          color:#0f172a; text-decoration:none;
+          color:#0E1F3D; text-decoration:none;
           background:#f8fafc;">
     📄 Ouvrir vle PDF
 </a>

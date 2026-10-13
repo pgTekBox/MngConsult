@@ -16,7 +16,7 @@
             padding: 14px 16px;
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
@@ -69,7 +69,7 @@
             text-align: center;
         }
 
-        .badge-bilan { background: #eff6ff; color: #1d4ed8; }
+        .badge-bilan { background: #E3EBF7; color: #143A73; }
         .badge-resultat { background: #f0fdf4; color: #15803d; }
 
         .badge-sens {
@@ -94,13 +94,13 @@
         .field-numero {
             font-family: 'Consolas', 'Courier New', monospace;
             font-weight: 700;
-            color: #475569;
+            color: #44536E;
         }
 
         .field-code {
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
         }
 
         .field-plage {

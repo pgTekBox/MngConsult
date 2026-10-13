@@ -15,7 +15,7 @@
             gap: 16px; align-items: center; box-sizing: border-box;
         }
         .listview-list-head {
-            padding: 14px 16px; font-weight: 800; font-size: 13px; color: #0f172a;
+            padding: 14px 16px; font-weight: 800; font-size: 13px; color: #0E1F3D;
             background: #f8fafc; border-bottom: 1px solid var(--mc-stroke); position: sticky; top: 0; z-index: 0;
         }
         .listview-row { padding: 14px 16px; border-bottom: 1px solid #eef2f7; background: #fff; }
@@ -23,17 +23,17 @@
         .emp-id { display: flex; align-items: center; gap: 10px; }
         .emp-dot { width: 30px; height: 30px; border-radius: 9px; flex: 0 0 auto; box-shadow: inset 0 0 0 1px rgba(0,0,0,.08); }
         .emp-name { font-weight: 800; font-size: 14px; }
-        .emp-meta { font-size: 12px; color: #64748b; }
-        .emp-mail { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: #0f172a; }
+        .emp-meta { font-size: 12px; color: #44536E; }
+        .emp-mail { font-family: ui-monospace, Consolas, monospace; font-size: 13px; color: #0E1F3D; }
         .emp-none { color: #94a3b8; font-style: italic; }
         .pw-key { margin-left: 6px; }
         .badge { display: inline-flex; align-items: center; padding: 4px 10px; border-radius: 8px; font-size: 11px; font-weight: 800; white-space: nowrap; }
         .badge.on  { background: rgba(22,163,74,.10); color: #16a34a; border: 1px solid rgba(22,163,74,.25); }
-        .badge.off { background: rgba(100,116,139,.10); color: #64748b; border: 1px solid rgba(100,116,139,.25); }
+        .badge.off { background: rgba(100,116,139,.10); color: #44536E; border: 1px solid rgba(100,116,139,.25); }
         .listview-actions { display: flex; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
-        .btn-mini { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--mc-stroke); background: #fff; color: #0f172a; }
+        .btn-mini { display: inline-flex; align-items: center; gap: 6px; padding: 6px 11px; border-radius: 8px; font-size: 12px; font-weight: 700; cursor: pointer; border: 1px solid var(--mc-stroke); background: #fff; color: #0E1F3D; }
         .btn-mini:hover { background: #f8fafc; }
-        .btn-mini.primary { background: #2563eb; border-color: #2563eb; color: #fff; }
+        .btn-mini.primary { background: #1B4F9C; border-color: #1B4F9C; color: #fff; }
         .btn-mini.warn { color: #b45309; border-color: rgba(217,119,6,.35); }
         .btn-mini.danger { color: #dc2626; border-color: rgba(220,38,38,.35); }
         @media (max-width: 1024px) {

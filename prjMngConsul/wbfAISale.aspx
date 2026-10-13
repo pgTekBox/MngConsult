@@ -15,35 +15,35 @@
 
         /* ─── Header ─── */
         .ai-header {
-            background: #fff; border: 1px solid #e2e8f0;
+            background: #fff; border: 1px solid #D5DDE8;
             margin: -24px -24px 24px -24px; padding: 16px 24px;
             display: flex; justify-content: space-between; align-items: center;
         }
         .ai-header h1 { margin: 0; font-size: 24px; color: #1e293b; font-weight: 700; }
-        .ai-header .subtitle { margin: 4px 0 0 0; font-size: 13px; color: #64748b; }
+        .ai-header .subtitle { margin: 4px 0 0 0; font-size: 13px; color: #44536E; }
         .ai-header .left { display: flex; align-items: center; gap: 12px; }
         .ai-header .back-btn {
             background: transparent; border: none; cursor: pointer;
-            padding: 8px; border-radius: 8px; color: #475569;
+            padding: 8px; border-radius: 8px; color: #44536E;
         }
         .ai-header .back-btn:hover { background: #f1f5f9; }
         .ai-header .bank-widget {
             display: flex; align-items: center; gap: 8px;
-            background: #f8fafc; border: 1px solid #e2e8f0;
+            background: #f8fafc; border: 1px solid #D5DDE8;
             border-radius: 12px; padding: 8px 16px;
             box-shadow: 0 1px 2px 0 rgba(0,0,0,0.05);
         }
         .ai-header .bank-icon {
             display: flex; align-items: center; justify-content: center;
             width: 32px; height: 32px;
-            background: linear-gradient(135deg, #2563eb, #1d4ed8);
+            background: linear-gradient(135deg, #1B4F9C, #143A73);
             border-radius: 8px; flex-shrink: 0;
             box-shadow: 0 1px 2px rgba(0,0,0,0.1);
         }
         .ai-header .bank-icon svg { color: #fff; width: 16px; height: 16px; }
         .ai-header .bank-info { text-align: left; line-height: 1; }
         .ai-header .bank-label {
-            font-size: 11px; color: #64748b; font-weight: 500;
+            font-size: 11px; color: #44536E; font-weight: 500;
             margin: 0 0 2px 0;
         }
         .ai-header .bank-value {
@@ -56,23 +56,23 @@
             border-radius: 6px; color: #94a3b8;
             transition: all 0.15s;
         }
-        .ai-header .bank-toggle:hover { color: #475569; background: #e2e8f0; }
+        .ai-header .bank-toggle:hover { color: #44536E; background: #D5DDE8; }
         .ai-header .bank-toggle svg { width: 14px; height: 14px; }
 
         /* ─── Page title ─── */
         .ai-page-title { margin-bottom: 32px; }
         .ai-page-title h2 { font-size: 28px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0; }
-        .ai-page-title p { color: #475569; margin: 0; font-size: 14px; }
+        .ai-page-title p { color: #44536E; margin: 0; font-size: 14px; }
 
         /* ─── Filter card (4 tuiles) ─── */
         .filter-card {
             background: #fff; border-radius: 12px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0; padding: 24px; margin-bottom: 32px;
+            border: 1px solid #D5DDE8; padding: 24px; margin-bottom: 32px;
         }
         .filter-card-header { margin-bottom: 24px; }
         .filter-card-header h3 { font-size: 20px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0; }
-        .filter-card-header p { color: #64748b; margin: 0; font-size: 13px; }
+        .filter-card-header p { color: #44536E; margin: 0; font-size: 13px; }
 
         .periods-grid {
             display: grid;
@@ -80,7 +80,7 @@
             gap: 12px;
         }
         .period-btn {
-            background: #fff; border: 2px solid #e2e8f0;
+            background: #fff; border: 2px solid #D5DDE8;
             border-radius: 12px; padding: 16px; text-align: left;
             cursor: pointer; transition: all 0.2s;
             text-decoration: none; display: block; color: inherit;
@@ -101,13 +101,13 @@
             display: flex; align-items: center; justify-content: center;
             color: #fff; flex-shrink: 0;
         }
-        .period-icon-today  { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .period-icon-today  { background: linear-gradient(135deg, #3b82f6, #1B4F9C); }
         .period-icon-week   { background: linear-gradient(135deg, #06b6d4, #0891b2); }
         .period-icon-month  { background: linear-gradient(135deg, #14b8a6, #0d9488); }
         .period-icon-3month { background: linear-gradient(135deg, #10b981, #059669); }
         .period-name { font-weight: 700; font-size: 14px; color: #1e293b; margin: 0; }
         .period-btn.active .period-name { color: #b45309; }
-        .period-info { font-size: 11px; color: #64748b; margin: 2px 0 0 0; }
+        .period-info { font-size: 11px; color: #44536E; margin: 2px 0 0 0; }
 
         /* Sous-totaux à l'intérieur de chaque tuile */
         .period-stats { display: flex; flex-direction: column; gap: 6px; }
@@ -144,29 +144,29 @@
             font-size: 22px; font-weight: 700; color: #1e293b;
             margin: 0 0 16px 0;
         }
-        .section-title .periode-label { color: #64748b; }
+        .section-title .periode-label { color: #44536E; }
 
         .detail-card {
             background: #fff; border-radius: 12px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1);
-            border: 1px solid #e2e8f0; padding: 24px;
+            border: 1px solid #D5DDE8; padding: 24px;
         }
 
         /* ─── Tabs ─── */
         .tabs-row {
             display: flex; gap: 4px; flex-wrap: wrap;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
             margin-bottom: 16px; padding-bottom: 12px;
         }
         .tab-btn {
             display: inline-flex; align-items: center; gap: 6px;
             padding: 8px 16px; border-radius: 8px; border: 1px solid transparent;
             background: transparent; cursor: pointer;
-            font-size: 13px; font-weight: 600; color: #64748b;
+            font-size: 13px; font-weight: 600; color: #44536E;
             transition: all 0.15s;
             text-decoration: none;
         }
-        .tab-btn:hover { background: #f8fafc; color: #475569; text-decoration: none; }
+        .tab-btn:hover { background: #f8fafc; color: #44536E; text-decoration: none; }
         .tab-btn svg { width: 14px; height: 14px; flex-shrink: 0; }
 
         .tab-btn.active.collecte {
@@ -182,7 +182,7 @@
             display: inline-block; font-size: 11px; font-weight: 700;
             padding: 1px 8px; border-radius: 999px; line-height: 1.4;
         }
-        .tab-btn .tab-pill { background: #e2e8f0; color: #475569; }
+        .tab-btn .tab-pill { background: #D5DDE8; color: #44536E; }
         .tab-btn.active.collecte .tab-pill { background: #a7f3d0; color: #065f46; }
         .tab-btn.active.recevoir .tab-pill { background: #fde68a; color: #92400e; }
         .tab-btn.active.retard .tab-pill { background: #fecaca; color: #991b1b; }
@@ -223,7 +223,7 @@
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
         .item-info .desc {
-            font-size: 11px; color: #64748b;
+            font-size: 11px; color: #44536E;
             white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
         }
 

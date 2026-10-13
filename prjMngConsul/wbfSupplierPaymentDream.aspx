@@ -9,8 +9,8 @@
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --bg: #f6f7fb; --card: #fff; --text: #0f172a; --muted: #64748b;
-            --line: #e2e8f0; --teal: #0d9488; --teal-weak: #f0fdfa; --danger: #dc2626; --ok: #16a34a;
+            --bg: #f6f7fb; --card: #fff; --text: #0E1F3D; --muted: #44536E;
+            --line: #D5DDE8; --teal: #0d9488; --teal-weak: #f0fdfa; --danger: #dc2626; --ok: #16a34a;
         }
         html, body { height: 100%; margin: 0; }
         body { font-family: var(--font); color: var(--text);

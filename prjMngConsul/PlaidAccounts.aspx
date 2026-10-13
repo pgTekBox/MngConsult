@@ -37,7 +37,7 @@
             padding: 14px 16px;
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
@@ -89,7 +89,7 @@
             .import-panel label {
                 font-weight: 700;
                 font-size: 13px;
-                color: #0f172a;
+                color: #0E1F3D;
             }
 
             .import-panel .input,

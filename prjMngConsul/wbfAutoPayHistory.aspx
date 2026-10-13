@@ -9,21 +9,21 @@
     <style>
         .autopay-page { max-width: 1100px; margin: 0 auto; padding: 16px; }
         .page-title { font-size: 22px; font-weight: 800; margin: 0 0 14px 0; display: flex; gap: 10px; align-items: center; }
-        .page-tabs { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; }
+        .page-tabs { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid #D5DDE8; }
         .page-tabs a {
-            padding: 10px 16px; text-decoration: none; color: #64748b;
+            padding: 10px 16px; text-decoration: none; color: #44536E;
             font-weight: 700; font-size: 13px; border-bottom: 3px solid transparent;
         }
-        .page-tabs a:hover { color: #2563eb; }
-        .page-tabs a.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .page-tabs a:hover { color: #1B4F9C; }
+        .page-tabs a.active { color: #1B4F9C; border-bottom-color: #1B4F9C; }
 
         .filter-bar {
             display: flex; gap: 12px; align-items: center; margin-bottom: 14px;
             flex-wrap: wrap; background: #fff; padding: 12px 16px; border-radius: 12px;
         }
-        .filter-bar label { font-size: 12px; font-weight: 700; color: #475569; }
+        .filter-bar label { font-size: 12px; font-weight: 700; color: #44536E; }
         .filter-bar select, .filter-bar input[type="date"] {
-            padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 6px 10px; border: 1px solid #D5DDE8; border-radius: 8px;
             font-family: inherit; font-size: 13px;
         }
 
@@ -34,8 +34,8 @@
         .history-table table { width: 100%; border-collapse: collapse; }
         .history-table th {
             background: #f8fafc; padding: 10px 12px; font-size: 11px;
-            font-weight: 800; color: #475569; text-transform: uppercase;
-            letter-spacing: .05em; text-align: left; border-bottom: 1px solid #e2e8f0;
+            font-weight: 800; color: #44536E; text-transform: uppercase;
+            letter-spacing: .05em; text-align: left; border-bottom: 1px solid #D5DDE8;
         }
         .history-table td {
             padding: 10px 12px; font-size: 13px; border-bottom: 1px solid #f1f5f9;
@@ -55,14 +55,14 @@
         .badge-failed { background: #fecaca; color: #b91c1c; }
         .badge-pending { background: #fef3c7; color: #92400e; }
         .badge-requires_action { background: #ede9fe; color: #6d28d9; }
-        .badge-blocked_cap { background: #e2e8f0; color: #475569; }
+        .badge-blocked_cap { background: #D5DDE8; color: #44536E; }
         .badge-cancelled { background: #f1f5f9; color: #94a3b8; }
 
-        .mono { font-family: monospace; font-size: 11px; color: #64748b; }
+        .mono { font-family: monospace; font-size: 11px; color: #44536E; }
 
         .empty-state {
             background: #fff; border-radius: 12px; padding: 40px 24px;
-            text-align: center; color: #64748b; font-size: 14px;
+            text-align: center; color: #44536E; font-size: 14px;
         }
         .alert {
             padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 14px;
@@ -113,7 +113,7 @@
             </label>
             <asp:Button ID="btnFilter" runat="server" Text="Filtrer"
                 CssClass="result-badge badge-success"
-                Style="background:#dbeafe; color:#1d4ed8; padding:8px 14px; cursor:pointer; border:none;"
+                Style="background:#D5DDE8; color:#143A73; padding:8px 14px; cursor:pointer; border:none;"
                 CausesValidation="false" />
         </div>
 

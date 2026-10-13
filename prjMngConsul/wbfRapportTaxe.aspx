@@ -10,17 +10,17 @@
 
     <style>
         .tax-page { max-width: 1100px; margin: 0 auto; padding: 12px; }
-        .tax-page h2 { color: #0f172a; margin: 0 0 8px 0; }
-        .tax-page .subtitle { color: #64748b; font-size: 13px; margin-bottom: 16px; }
+        .tax-page h2 { color: #0E1F3D; margin: 0 0 8px 0; }
+        .tax-page .subtitle { color: #44536E; font-size: 13px; margin-bottom: 16px; }
 
         .tax-card {
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 8px;
             padding: 16px 20px;
             margin-bottom: 16px;
         }
-        .tax-card h3 { margin: 0 0 12px 0; font-size: 16px; color: #0f172a; }
+        .tax-card h3 { margin: 0 0 12px 0; font-size: 16px; color: #0E1F3D; }
 
         .tax-toolbar {
             display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
@@ -35,27 +35,27 @@
         }
         .tax-block {
             background: #f8fafc;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 8px;
             padding: 14px 16px;
         }
         .tax-block h4 {
-            margin: 0 0 10px 0; font-size: 14px; color: #475569;
-            border-bottom: 1px solid #e2e8f0; padding-bottom: 6px;
+            margin: 0 0 10px 0; font-size: 14px; color: #44536E;
+            border-bottom: 1px solid #D5DDE8; padding-bottom: 6px;
             text-transform: uppercase; letter-spacing: 0.5px;
         }
         .tax-line {
             display: flex; justify-content: space-between; padding: 4px 0;
-            font-size: 14px; color: #0f172a;
+            font-size: 14px; color: #0E1F3D;
         }
-        .tax-line .lbl { color: #64748b; }
+        .tax-line .lbl { color: #44536E; }
         .tax-line .val { font-weight: 500; font-variant-numeric: tabular-nums; }
         .tax-line.minus .val { color: #dc2626; }
         .tax-line.total {
             border-top: 1px solid #cbd5e1; padding-top: 8px; margin-top: 4px;
             font-weight: 600; font-size: 15px;
         }
-        .tax-line.total .val { color: #0f172a; }
+        .tax-line.total .val { color: #0E1F3D; }
 
         /* Total à remettre */
         .total-remise {
@@ -77,15 +77,15 @@
             vertical-align: middle;
         }
         .status-pill.brouillon { background: #e0e7ff; color: #3730a3; }
-        .status-pill.finalise  { background: #dbeafe; color: #1e40af; }
+        .status-pill.finalise  { background: #D5DDE8; color: #143A73; }
         .status-pill.paye      { background: #dcfce7; color: #166534; }
 
         /* Tableau de détail */
         .detail-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .detail-table th, .detail-table td {
-            padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left;
+            padding: 6px 10px; border-bottom: 1px solid #D5DDE8; text-align: left;
         }
-        .detail-table th { background: #f1f5f9; color: #475569; font-weight: 600; }
+        .detail-table th { background: #f1f5f9; color: #44536E; font-weight: 600; }
         .detail-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
         .detail-table .cat-tps-vte { color: #16a34a; }
         .detail-table .cat-tps-ach { color: #dc2626; }
@@ -95,14 +95,14 @@
         /* Action bar */
         .action-bar {
             display: flex; gap: 12px; justify-content: flex-end;
-            padding-top: 16px; border-top: 1px solid #e2e8f0; margin-top: 16px;
+            padding-top: 16px; border-top: 1px solid #D5DDE8; margin-top: 16px;
         }
 
         /* Période button group */
         .period-nav { display: flex; gap: 6px; align-items: center; }
         .period-label {
             padding: 6px 16px; background: #f1f5f9; border-radius: 6px;
-            font-weight: 600; color: #0f172a; min-width: 200px; text-align: center;
+            font-weight: 600; color: #0E1F3D; min-width: 200px; text-align: center;
         }
     </style>
 
@@ -285,7 +285,7 @@
         <ContentTemplate>
             <div style="padding:16px;">
                 <p><asp:Literal ID="litWinIntro" runat="server" /></p>
-                <ul style="font-size:13px;color:#475569;">
+                <ul style="font-size:13px;color:#44536E;">
                     <li><asp:Literal ID="litWinLi1" runat="server" /></li>
                     <li><asp:Literal ID="litWinLi2" runat="server" /></li>
                 </ul>

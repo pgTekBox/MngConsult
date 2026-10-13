@@ -13,31 +13,31 @@
     .idn-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
-    .idn-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .idn-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
+    .idn-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .idn-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .idn-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 760px; line-height: 1.6 }
+    .idn-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; max-width: 760px; line-height: 1.6 }
 
-    .idn-step { background: #fff; border: 1px solid #e2e8f0; border-radius: 14px; padding: 20px; margin-bottom: 16px }
+    .idn-step { background: #fff; border: 1px solid #D5DDE8; border-radius: 14px; padding: 20px; margin-bottom: 16px }
 
     .idn-step > h2,
     .idn-step > summary > h2 {
-        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a;
+        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0E1F3D;
         display: flex; align-items: center; gap: 9px;
     }
 
     .idn-step > h2 .n,
     .idn-step > summary > h2 .n {
         width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto;
-        background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+        background: #E3EBF7; color: #143A73; border: 1px solid #bfdbfe;
         font-size: 12px; display: flex; align-items: center; justify-content: center;
     }
 
-    .idn-step > .desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
+    .idn-step > .desc { font-size: 13px; color: #44536E; margin: 0 0 15px; padding-left: 33px }
     .idn-step > .body { padding-left: 33px }
 
     /* Une étape repliable : le titre devient la poignée, le chevron dit le sens.
@@ -45,7 +45,7 @@
     details.idn-step > summary { list-style: none; cursor: pointer; border-radius: 8px }
     details.idn-step > summary::-webkit-details-marker { display: none }
     details.idn-step > summary::marker { content: "" }
-    details.idn-step > summary:hover h2 { color: #1d4ed8 }
+    details.idn-step > summary:hover h2 { color: #143A73 }
     details.idn-step > summary > h2 { margin: 0 }
     details.idn-step[open] > summary > h2 { margin-bottom: 3px }
     .idn-chev { margin-left: auto; font-size: 12px; color: #94a3b8; transition: transform .15s }
@@ -55,19 +55,19 @@
     .idn-drop {
         display: flex; align-items: center; gap: 9px;
         border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 9px 13px;
-        cursor: pointer; font-size: 13px; color: #475569;
+        cursor: pointer; font-size: 13px; color: #44536E;
         transition: border-color .15s, background .15s;
     }
 
-    .idn-drop:hover { border-color: #2563eb; background: rgba(37,99,235,.04) }
+    .idn-drop:hover { border-color: #1B4F9C; background: rgba(37,99,235,.04) }
     .idn-drop .di { font-size: 17px; line-height: 1 }
     .idn-drop .dt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
     .idn-drop .dh { margin-left: auto; padding-left: 10px; font-size: 11.5px; color: #94a3b8; white-space: nowrap }
-    .idn-drop.over { border-style: solid; border-color: #2563eb; background: rgba(37,99,235,.08); color: #1d4ed8 }
+    .idn-drop.over { border-style: solid; border-color: #1B4F9C; background: rgba(37,99,235,.08); color: #143A73 }
     .idn-drop.has { border-style: solid; border-color: #bfdbfe; background: rgba(37,99,235,.05) }
     .idn-drop.has .dt b { color: #1e293b }
 
-    .idn-memo { font-size: 12.5px; color: #475569; margin-top: 8px }
+    .idn-memo { font-size: 12.5px; color: #44536E; margin-top: 8px }
 
     .idn-acts { display: flex; gap: 9px; flex-wrap: wrap; align-items: center; margin-top: 16px }
 
@@ -77,16 +77,16 @@
         text-decoration: none; display: inline-block;
     }
 
-    .idn-btn.p { background: #2563eb; color: #fff }
-    .idn-btn.p:hover { background: #1d4ed8; color: #fff }
-    .idn-btn.s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
-    .idn-btn.s:hover { background: #e2e8f0; color: #334155 }
+    .idn-btn.p { background: #1B4F9C; color: #fff }
+    .idn-btn.p:hover { background: #143A73; color: #fff }
+    .idn-btn.s { background: #f1f5f9; color: #334155; border-color: #D5DDE8 }
+    .idn-btn.s:hover { background: #D5DDE8; color: #334155 }
     .idn-btn.ia { background: #6d28d9; color: #fff }
     .idn-btn.ia:hover { background: #5b21b6 }
     .idn-btn.d { background: #fff; color: #b91c1c; border-color: #fecaca; margin-left: auto }
     .idn-btn.d:hover { background: #fef2f2 }
 
-    .idn-hint { font-size: 12px; color: #64748b; margin: 12px 0 0; line-height: 1.5 }
+    .idn-hint { font-size: 12px; color: #44536E; margin: 12px 0 0; line-height: 1.5 }
 
     .idn-alert { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px; margin-bottom: 14px; font-size: 13.5px }
     .idn-alert .ai { flex: 0 0 auto; font-size: 16px }
@@ -94,22 +94,22 @@
     .idn-ko { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b }
     .idn-wa { background: #fffbeb; border: 1px solid #fde68a; color: #78350f }
 
-    .idn-origine { font-size: 12.5px; color: #64748b; margin: 0 0 10px; line-height: 1.5 }
+    .idn-origine { font-size: 12.5px; color: #44536E; margin: 0 0 10px; line-height: 1.5 }
 
     .idn-chips { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 12px }
-    .idn-chip { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #475569 }
+    .idn-chip { padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; background: #f1f5f9; color: #44536E }
     .idn-chip.new { background: #ecfdf5; color: #047857 }
-    .idn-chip.ex { background: #eff6ff; color: #1d4ed8 }
+    .idn-chip.ex { background: #E3EBF7; color: #143A73 }
     .idn-chip.wa { background: #fffbeb; color: #b45309 }
     .idn-chip.ok { background: #dcfce7; color: #166534 }
     .idn-chip.ko { background: #fef2f2; color: #b91c1c }
 
-    .idn-tbl { overflow: auto; max-height: 540px; border: 1px solid #e2e8f0; border-radius: 12px }
+    .idn-tbl { overflow: auto; max-height: 540px; border: 1px solid #D5DDE8; border-radius: 12px }
 
     table.idn-g { width: 100%; border-collapse: collapse; font-size: 12.5px }
     table.idn-g th {
         background: #f8fafc; text-align: left; padding: 9px 11px; font-weight: 700; color: #334155;
-        white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0;
+        white-space: nowrap; border-bottom: 1px solid #D5DDE8; position: sticky; top: 0;
     }
     table.idn-g td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.idn-g tr:last-child td { border-bottom: 0 }
@@ -117,15 +117,15 @@
 
     .idn-pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap }
     .idn-pill.p-new { background: #ecfdf5; color: #047857 }
-    .idn-pill.p-ex { background: #eff6ff; color: #1d4ed8 }
+    .idn-pill.p-ex { background: #E3EBF7; color: #143A73 }
     .idn-pill.p-wa { background: #fffbeb; color: #b45309 }
     .idn-pill.p-ok { background: #dcfce7; color: #166534 }
-    .idn-pill.p-gr { background: #f1f5f9; color: #64748b }
+    .idn-pill.p-gr { background: #f1f5f9; color: #44536E }
     .idn-pill.p-ko { background: #fef2f2; color: #b91c1c }
-    .idn-det { display: block; font-size: 11px; color: #64748b; margin-top: 3px; max-width: 280px }
+    .idn-det { display: block; font-size: 11px; color: #44536E; margin-top: 3px; max-width: 280px }
 
     table.idn-map { border-collapse: collapse; font-size: 12.5px; margin-top: 4px }
-    table.idn-map th { text-align: left; padding: 5px 18px 5px 0; color: #64748b; font-weight: 700 }
+    table.idn-map th { text-align: left; padding: 5px 18px 5px 0; color: #44536E; font-weight: 700 }
     table.idn-map td { padding: 4px 18px 4px 0; border-bottom: 1px solid #f1f5f9 }
     table.idn-map .none { color: #cbd5e1 }
 </style>

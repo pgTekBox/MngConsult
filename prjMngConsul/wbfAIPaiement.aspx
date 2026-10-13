@@ -17,7 +17,7 @@
         /* ─── Header ─── */
         .ai-header {
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 0;
             margin: -24px -24px 24px -24px;
             padding: 16px 24px;
@@ -27,18 +27,18 @@
             margin: 0; font-size: 24px; color: #1e293b; font-weight: 700;
         }
         .ai-header .subtitle {
-            margin: 4px 0 0 0; font-size: 13px; color: #64748b;
+            margin: 4px 0 0 0; font-size: 13px; color: #44536E;
         }
         .ai-header .left { display: flex; align-items: center; gap: 12px; }
         .ai-header .back-btn {
             background: transparent; border: none; cursor: pointer;
             padding: 8px; border-radius: 8px; transition: background 0.15s;
-            color: #475569;
+            color: #44536E;
         }
         .ai-header .back-btn:hover { background: #f1f5f9; }
         .ai-header .currency-box { text-align: right; }
         .ai-header .currency-label {
-            font-size: 11px; color: #64748b; margin: 0;
+            font-size: 11px; color: #44536E; margin: 0;
         }
         .ai-header .currency-value {
             font-size: 14px; font-weight: 600; color: #334155; margin: 0;
@@ -50,7 +50,7 @@
             font-size: 28px; font-weight: 700; color: #1e293b; margin: 0 0 4px 0;
         }
         .ai-page-title p {
-            color: #475569; margin: 0; font-size: 14px;
+            color: #44536E; margin: 0; font-size: 14px;
         }
 
         /* ─── Card filtre période ─── */
@@ -58,7 +58,7 @@
             background: #fff;
             border-radius: 12px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             padding: 24px;
             margin-bottom: 24px;
         }
@@ -70,19 +70,19 @@
             font-size: 18px; font-weight: 700; color: #1e293b; margin: 0 0 2px 0;
         }
         .filter-card-header p {
-            color: #64748b; margin: 0; font-size: 13px;
+            color: #44536E; margin: 0; font-size: 13px;
         }
         .filter-totals { display: flex; align-items: center; gap: 20px; }
         .filter-totals .stat { text-align: right; }
         .filter-totals .stat-label {
-            font-size: 11px; color: #64748b; font-weight: 500; margin: 0;
+            font-size: 11px; color: #44536E; font-weight: 500; margin: 0;
         }
         .filter-totals .stat-value {
             font-size: 22px; font-weight: 700; color: #1e293b; margin: 0;
         }
         .filter-totals .stat-value.amount { color: #059669; }
         .filter-totals .divider {
-            width: 1px; height: 40px; background: #e2e8f0;
+            width: 1px; height: 40px; background: #D5DDE8;
         }
 
         /* ─── Boutons période ─── */
@@ -92,7 +92,7 @@
             gap: 12px;
         }
         .period-btn {
-            background: #fff; border: 2px solid #e2e8f0;
+            background: #fff; border: 2px solid #D5DDE8;
             border-radius: 12px; padding: 16px; text-align: left;
             cursor: pointer; transition: all 0.2s;
             text-decoration: none; display: block; color: inherit;
@@ -113,7 +113,7 @@
             display: flex; align-items: center; justify-content: center;
             color: #fff; flex-shrink: 0;
         }
-        .period-icon-today  { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .period-icon-today  { background: linear-gradient(135deg, #3b82f6, #1B4F9C); }
         .period-icon-week   { background: linear-gradient(135deg, #06b6d4, #0891b2); }
         .period-icon-month  { background: linear-gradient(135deg, #14b8a6, #0d9488); }
         .period-icon-3month { background: linear-gradient(135deg, #10b981, #059669); }
@@ -125,11 +125,11 @@
             flex: 1; border-radius: 8px; padding: 6px 4px;
             display: flex; flex-direction: column; align-items: center;
         }
-        .counter-box.cat-gov { background: #eff6ff; }
+        .counter-box.cat-gov { background: #E3EBF7; }
         .counter-box.cat-frn { background: #fffbeb; }
         .counter-box.cat-emp { background: #f0fdfa; }
         .counter-box svg {
-            width: 12px; height: 12px; color: #64748b; margin-bottom: 2px;
+            width: 12px; height: 12px; color: #44536E; margin-bottom: 2px;
         }
         .counter-box .count {
             font-size: 12px; font-weight: 700; color: #334155;
@@ -139,7 +139,7 @@
         .category-list { display: flex; flex-direction: column; gap: 16px; }
         .category-card {
             background: #fff;
-            border: 2px solid #e2e8f0;
+            border: 2px solid #D5DDE8;
             border-radius: 12px;
             box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05);
             overflow: hidden;
@@ -157,7 +157,7 @@
             border: none; background: transparent; text-align: left;
         }
         .category-header:hover { background: #f8fafc; }
-        .category-card.expanded.cat-gov .category-header { background: #eff6ff; }
+        .category-card.expanded.cat-gov .category-header { background: #E3EBF7; }
         .category-card.expanded.cat-frn .category-header { background: #fffbeb; }
         .category-card.expanded.cat-emp .category-header { background: #f0fdfa; }
 
@@ -169,7 +169,7 @@
             display: flex; align-items: center; justify-content: center;
             color: #fff; flex-shrink: 0;
         }
-        .category-icon.cat-gov { background: linear-gradient(135deg, #3b82f6, #2563eb); }
+        .category-icon.cat-gov { background: linear-gradient(135deg, #3b82f6, #1B4F9C); }
         .category-icon.cat-frn { background: linear-gradient(135deg, #f59e0b, #d97706); }
         .category-icon.cat-emp { background: linear-gradient(135deg, #14b8a6, #0d9488); }
 
@@ -177,13 +177,13 @@
             font-size: 18px; font-weight: 700; color: #1e293b; margin: 0;
         }
         .category-info p {
-            font-size: 13px; color: #64748b; margin: 2px 0 0 0;
+            font-size: 13px; color: #44536E; margin: 2px 0 0 0;
         }
         .category-header-right {
             display: flex; align-items: center; gap: 16px;
         }
         .category-total .label {
-            font-size: 11px; color: #64748b; font-weight: 500; margin: 0; text-align: right;
+            font-size: 11px; color: #44536E; font-weight: 500; margin: 0; text-align: right;
         }
         .category-total .value {
             font-size: 20px; font-weight: 700; color: #059669; margin: 0;
@@ -191,7 +191,7 @@
         .category-badge {
             font-size: 11px; font-weight: 700; padding: 6px 12px; border-radius: 999px;
         }
-        .category-badge.cat-gov { background: #dbeafe; color: #1d4ed8; }
+        .category-badge.cat-gov { background: #D5DDE8; color: #143A73; }
         .category-badge.cat-frn { background: #fef3c7; color: #b45309; }
         .category-badge.cat-emp { background: #ccfbf1; color: #0f766e; }
         .chevron {
@@ -201,16 +201,16 @@
         .category-card.expanded .chevron { transform: rotate(180deg); }
 
         /* ★ ★ ★ Toggle JS pur : caché par défaut, visible si expanded */
-        .category-body { display: none; border-top: 1px solid #e2e8f0; }
+        .category-body { display: none; border-top: 1px solid #D5DDE8; }
         .category-card.expanded .category-body { display: block; }
 
         .category-bar {
             display: flex; align-items: center; justify-content: space-between;
             padding: 12px 20px; background: #f8fafc;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
         .category-bar .info {
-            font-size: 13px; color: #475569; font-weight: 500;
+            font-size: 13px; color: #44536E; font-weight: 500;
         }
         .pay-all-btn {
             display: inline-flex; align-items: center; gap: 8px;
@@ -218,7 +218,7 @@
             color: #fff; font-size: 13px; font-weight: 600;
             cursor: pointer; transition: all 0.15s;
         }
-        .pay-all-btn.cat-gov { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .pay-all-btn.cat-gov { background: linear-gradient(90deg, #3b82f6, #1B4F9C); }
         .pay-all-btn.cat-frn { background: linear-gradient(90deg, #f59e0b, #d97706); }
         .pay-all-btn.cat-emp { background: linear-gradient(90deg, #14b8a6, #0d9488); }
         .pay-all-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
@@ -226,9 +226,9 @@
         .pay-table { width: 100%; border-collapse: collapse; }
         .pay-table thead th {
             text-align: left; padding: 12px 16px;
-            font-size: 11px; font-weight: 700; color: #64748b;
+            font-size: 11px; font-weight: 700; color: #44536E;
             text-transform: uppercase; letter-spacing: 0.5px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
         .pay-table thead th.right { text-align: right; }
         .pay-table thead th.center { text-align: center; }
@@ -239,7 +239,7 @@
         .pay-table tbody tr:hover td { background: #fafbfc; }
         .pay-table .id-badge {
             font-family: 'Consolas', 'Monaco', monospace; font-size: 11px;
-            color: #64748b; background: #f1f5f9;
+            color: #44536E; background: #f1f5f9;
             padding: 2px 8px; border-radius: 4px;
         }
         .pay-table .desc { font-weight: 500; color: #1e293b; }
@@ -254,7 +254,7 @@
             color: #fff; font-size: 12px; font-weight: 600;
             cursor: pointer; transition: all 0.15s;
         }
-        .pay-btn.cat-gov { background: linear-gradient(90deg, #3b82f6, #2563eb); }
+        .pay-btn.cat-gov { background: linear-gradient(90deg, #3b82f6, #1B4F9C); }
         .pay-btn.cat-frn { background: linear-gradient(90deg, #f59e0b, #d97706); }
         .pay-btn.cat-emp { background: linear-gradient(90deg, #14b8a6, #0d9488); }
         .pay-btn:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.15); }

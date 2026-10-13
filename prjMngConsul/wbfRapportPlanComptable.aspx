@@ -41,7 +41,7 @@
             text-align: center;
             margin-bottom: 24px;
             padding-bottom: 16px;
-            border-bottom: 2px solid #0f172a;
+            border-bottom: 2px solid #0E1F3D;
         }
 
         .report-header h1 {
@@ -60,7 +60,7 @@
 
         .report-header .report-date {
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
         }
 
         /* Classe principale (Niveau 1) */
@@ -116,7 +116,7 @@
         .sous-classe-header .sc-code {
             font-family: 'Consolas', 'Courier New', monospace;
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
         }
 
         .sous-classe-header .sc-plage {
@@ -137,11 +137,11 @@
             text-align: left;
             font-size: 11px;
             font-weight: 700;
-            color: #64748b;
+            color: #44536E;
             text-transform: uppercase;
             letter-spacing: .04em;
             background: #fafbfc;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
 
         .comptes-table td {
@@ -209,9 +209,9 @@
         .classe-footer {
             padding: 6px 14px;
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
             background: #fafbfc;
-            border-top: 1px solid #e2e8f0;
+            border-top: 1px solid #D5DDE8;
             border-radius: 0 0 10px 10px;
             text-align: right;
             font-weight: 600;
@@ -220,7 +220,7 @@
         /* Sommaire */
         .summary-card {
             margin-top: 24px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             overflow: hidden;
         }
@@ -230,7 +230,7 @@
             background: #f8fafc;
             font-weight: 800;
             font-size: 14px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
 
         .summary-table {
@@ -247,7 +247,7 @@
         .summary-table tr:last-child td {
             border-bottom: none;
             font-weight: 800;
-            border-top: 2px solid #0f172a;
+            border-top: 2px solid #0E1F3D;
         }
 
         .summary-table .num {
@@ -360,7 +360,7 @@
             <asp:Button ID="btnFilterBilan" runat="server" CssClass="btn" Text="Bilan" CausesValidation="false" />
             <asp:Button ID="btnFilterResultat" runat="server" CssClass="btn" Text="Résultats" CausesValidation="false" />
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#1d4ed8;">
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
                 🖨 Imprimer / PDF
             </button>
         </div>

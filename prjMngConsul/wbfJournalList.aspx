@@ -47,8 +47,8 @@
             display: inline-flex;
             padding: 2px 8px;
             border-radius: 999px;
-            background: #eff6ff;
-            color: #1e40af;
+            background: #E3EBF7;
+            color: #143A73;
             font-size: 10px;
             font-weight: 600;
             border: 1px solid #bfdbfe;
@@ -132,7 +132,7 @@
 
         .ecriture-no {
             font-weight: 700;
-            color: #0f172a;
+            color: #0E1F3D;
         }
 
         .ecriture-amount {

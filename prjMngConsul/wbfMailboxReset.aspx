@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= L("title") %></title>
     <style>
-        :root { --font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --primary:#2563eb; }
+        :root { --font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; --text:#0E1F3D; --muted:#44536E; --line:#D5DDE8; --primary:#1B4F9C; }
         html,body { margin:0; height:100%; }
         body { font-family:var(--font); color:var(--text);
                background: radial-gradient(1000px 500px at 50% -10%, #eef2ff 0%, transparent 55%), #f6f7fb;
@@ -20,7 +20,7 @@
         .brand b { font-weight:900; letter-spacing:.2px; }
         h1 { font-size:19px; font-weight:900; margin:0 0 6px; }
         p.sub { margin:0 0 18px; color:var(--muted); font-size:14px; line-height:1.5; }
-        .mono { font-family:ui-monospace,Consolas,monospace; font-weight:700; color:#0f172a; }
+        .mono { font-family:ui-monospace,Consolas,monospace; font-weight:700; color:#0E1F3D; }
         label { display:block; font-size:12px; font-weight:800; color:#334155; margin:12px 0 4px; }
         input[type=password] { width:100%; padding:11px 12px; border:1px solid #cbd5e1; border-radius:10px; font:inherit; box-sizing:border-box; }
         .btn { width:100%; margin-top:18px; padding:12px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:800; font-size:15px; cursor:pointer; }

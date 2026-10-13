@@ -69,7 +69,7 @@
             text-align: center;
             margin-bottom: 28px;
             padding-bottom: 16px;
-            border-bottom: 2px solid #0f172a;
+            border-bottom: 2px solid #0E1F3D;
         }
 
         .report-header h1 {
@@ -82,7 +82,7 @@
         }
 
         .report-header .report-date {
-            font-size: 12px; color: #64748b;
+            font-size: 12px; color: #44536E;
         }
 
         /* ── Tableau principal ── */
@@ -116,7 +116,7 @@
             background: #f1f5f9;
             font-size: 13px;
             padding: 6px 14px 6px 28px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
 
         /* Ligne de compte normal */
@@ -131,7 +131,7 @@
 
         .er-line .account-num {
             font-family: 'Consolas', 'Courier New', monospace;
-            color: #64748b;
+            color: #44536E;
             font-size: 12px;
             width: 70px;
             padding-left: 44px;
@@ -151,7 +151,7 @@
             font-size: 13px;
             padding: 6px 14px 6px 28px;
             border-top: 1px solid #cbd5e1;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
             color: #334155;
         }
 
@@ -167,7 +167,7 @@
             border-top: 2px solid #334155;
             border-bottom: 2px solid #334155;
             background: #f8fafc;
-            color: #0f172a;
+            color: #0E1F3D;
         }
 
         .er-total .er-amount {
@@ -183,13 +183,13 @@
             background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(6,182,212,.04));
             border-top: 1px solid rgba(37,99,235,.15);
             border-bottom: 1px solid rgba(37,99,235,.15);
-            color: #1e40af;
+            color: #143A73;
         }
 
         .er-calc .er-amount {
             font-weight: 900;
             font-size: 15px;
-            color: #1e40af;
+            color: #143A73;
         }
 
         /* Ligne de résultat net */
@@ -281,7 +281,7 @@
             }
 
             .er-calc td {
-                background: #eff6ff !important;
+                background: #E3EBF7 !important;
                 -webkit-print-color-adjust: exact !important;
                 print-color-adjust: exact !important;
             }
@@ -307,7 +307,7 @@
         </div>
         <div class="report-actions">
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#1d4ed8;">
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
                 🖨 Imprimer / PDF
             </button>
         </div>

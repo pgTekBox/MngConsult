@@ -5,7 +5,7 @@
     <meta charset="utf-8" />
     <title>Connexion Square…</title>
 </head>
-<body style="font-family:Arial,sans-serif;color:#0f172a;padding:40px;">
+<body style="font-family:Arial,sans-serif;color:#0E1F3D;padding:40px;">
     <form id="form1" runat="server">
         <p>Connexion à Square en cours…</p>
     </form>

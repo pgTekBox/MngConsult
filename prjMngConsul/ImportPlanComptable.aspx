@@ -16,37 +16,37 @@
     .imp-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
-    .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .imp-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
+    .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .imp-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
     .imp-lede {
-        font-size: 13.5px; color: #475569; margin: 0 0 18px;
+        font-size: 13.5px; color: #44536E; margin: 0 0 18px;
         line-height: 1.6;
     }
 
     .step {
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
         padding: 20px; margin-bottom: 16px;
     }
 
     .step > h2,
     .step > summary > h2 {
-        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a;
+        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0E1F3D;
         display: flex; align-items: center; gap: 9px;
     }
 
     .step > h2 .n,
     .step > summary > h2 .n {
         width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto;
-        background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+        background: #E3EBF7; color: #143A73; border: 1px solid #bfdbfe;
         font-size: 12px; display: flex; align-items: center; justify-content: center;
     }
 
-    .step > .desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
+    .step > .desc { font-size: 13px; color: #44536E; margin: 0 0 15px; padding-left: 33px }
     .step > .body { padding-left: 33px }
 
     /* Une étape qu'on peut replier : le titre devient le bouton, et le chevron
@@ -58,7 +58,7 @@
 
     details.step > summary::-webkit-details-marker { display: none }
     details.step > summary::marker { content: "" }
-    details.step > summary:hover h2 { color: #1d4ed8 }
+    details.step > summary:hover h2 { color: #143A73 }
     details.step > summary > h2 { margin: 0 }
     details.step[open] > summary > h2 { margin-bottom: 3px }
 
@@ -86,19 +86,19 @@
     .drop {
         display: flex; align-items: center; gap: 9px;
         border: 1.5px dashed #cbd5e1; border-radius: 10px; padding: 9px 13px;
-        cursor: pointer; font-size: 13px; color: #475569;
+        cursor: pointer; font-size: 13px; color: #44536E;
         transition: border-color .15s, background .15s;
     }
 
-    .drop:hover { border-color: #2563eb; background: rgba(37,99,235,.04) }
+    .drop:hover { border-color: #1B4F9C; background: rgba(37,99,235,.04) }
     .drop .di { font-size: 17px; line-height: 1 }
     .drop .dt { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap }
     .drop .dh { margin-left: auto; padding-left: 10px; font-size: 11.5px; color: #94a3b8; white-space: nowrap }
 
     /* Survol d'un fichier glissé. */
     .drop.over {
-        border-style: solid; border-color: #2563eb;
-        background: rgba(37,99,235,.08); color: #1d4ed8;
+        border-style: solid; border-color: #1B4F9C;
+        background: rgba(37,99,235,.08); color: #143A73;
     }
 
     /* Un fichier est en place. */
@@ -115,32 +115,32 @@
         border: 1px solid transparent; cursor: pointer; font-family: inherit;
     }
 
-    .btn-p { background: #2563eb; color: #fff }
-    .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
+    .btn-p { background: #1B4F9C; color: #fff }
+    .btn-s { background: #f1f5f9; color: #334155; border-color: #D5DDE8 }
 
     /* Les trois états tiennent sur une seule ligne : libellé et valeur côte à côte dans chaque pastille. */
     .stats { display: flex; flex-wrap: nowrap; gap: 12px; margin-bottom: 4px }
 
-    .stat { display: flex; align-items: baseline; gap: 10px; border: 1px solid #e2e8f0; border-radius: 11px; padding: 8px 14px; background: #fff; white-space: nowrap }
-    .stat .l { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #64748b }
-    .stat .v { font-size: 19px; font-weight: 800; color: #0f172a; margin-top: 0 }
+    .stat { display: flex; align-items: baseline; gap: 10px; border: 1px solid #D5DDE8; border-radius: 11px; padding: 8px 14px; background: #fff; white-space: nowrap }
+    .stat .l { font-size: 11.5px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #44536E }
+    .stat .v { font-size: 19px; font-weight: 800; color: #0E1F3D; margin-top: 0 }
     .note-sansnum { font-size: 12.5px; color: #78350f; background: #fffbeb; border: 1px solid #fde68a; border-radius: 9px; padding: 8px 12px; margin: 0 0 10px; line-height: 1.5 }
     .stat.wa { background: #fffbeb; border-color: #fde68a }
     .stat.wa .v { color: #b45309 }
 
     /* La grille défile dans son cadre : deux cents comptes ne doivent pas pousser
        le bouton d'abandon hors de l'écran. L'entête reste visible en défilant. */
-    .tbl-wrap { overflow: auto; max-height: 540px; border: 1px solid #e2e8f0; border-radius: 12px; margin-top: 12px }
+    .tbl-wrap { overflow: auto; max-height: 540px; border: 1px solid #D5DDE8; border-radius: 12px; margin-top: 12px }
 
     table.g { width: 100%; border-collapse: collapse; font-size: 12.5px }
-    table.g th { background: #f8fafc; text-align: left; padding: 9px 11px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #e2e8f0; position: sticky; top: 0; z-index: 1 }
+    table.g th { background: #f8fafc; text-align: left; padding: 9px 11px; font-weight: 700; color: #334155; white-space: nowrap; border-bottom: 1px solid #D5DDE8; position: sticky; top: 0; z-index: 1 }
     table.g td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.g tr:last-child td { border-bottom: 0 }
     table.g tr.row-ko td { background: #fef2f2 }
     table.g tr.row-info td { background: #f8fafc }
 
     table.map-table { border-collapse: collapse; font-size: 12.5px; margin-top: 6px }
-    table.map-table th { text-align: left; padding: 5px 16px 5px 0; color: #64748b; font-weight: 700 }
+    table.map-table th { text-align: left; padding: 5px 16px 5px 0; color: #44536E; font-weight: 700 }
     table.map-table td { padding: 4px 16px 4px 0; border-bottom: 1px solid #f1f5f9 }
     table.map-table .req { font-size: 10.5px; color: #b45309; font-weight: 700 }
     table.map-table .miss { color: #be123c; font-weight: 700 }
@@ -148,12 +148,12 @@
 
     .pill { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; white-space: nowrap }
     .p-ok { background: #ecfdf5; color: #047857 }
-    .p-ex { background: #eff6ff; color: #1d4ed8 }
+    .p-ex { background: #E3EBF7; color: #143A73 }
     .p-ko { background: #fef2f2; color: #b91c1c }
 
     .note-staging {
         display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px;
-        background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
+        background: #f8fafc; border: 1px solid #D5DDE8; color: #44536E;
         font-size: 13px; margin-top: 14px;
     }
 
@@ -169,14 +169,14 @@
 
     .suite .txt { flex: 1 1 260px; min-width: 0 }
     .suite b { font-size: 13.5px; color: #1e293b }
-    .suite p { margin: 3px 0 0; font-size: 12.5px; color: #475569 }
+    .suite p { margin: 3px 0 0; font-size: 12.5px; color: #44536E }
 
     .suite a {
         padding: 9px 16px; border-radius: 9px; font-size: 13px; font-weight: 700;
-        background: #2563eb; color: #fff; text-decoration: none; white-space: nowrap;
+        background: #1B4F9C; color: #fff; text-decoration: none; white-space: nowrap;
     }
 
-    .suite a:hover { background: #1d4ed8; color: #fff }
+    .suite a:hover { background: #143A73; color: #fff }
 
     /* ───── Aide ───── */
     .aide {
@@ -186,25 +186,25 @@
 
     .aide > summary {
         cursor: pointer; padding: 12px 15px; font-size: 13.5px; font-weight: 700;
-        color: #1d4ed8; list-style: none; display: flex; align-items: center; gap: 9px;
+        color: #143A73; list-style: none; display: flex; align-items: center; gap: 9px;
     }
 
     .aide > summary::-webkit-details-marker { display: none }
-    .aide > summary:hover { background: #eff6ff }
+    .aide > summary:hover { background: #E3EBF7 }
     .aide .aide-ico { font-size: 15px }
     .aide .aide-chev { margin-left: auto; transition: transform .15s; font-size: 12px }
     .aide[open] .aide-chev { transform: rotate(180deg) }
 
-    .aide-corps { padding: 4px 15px 16px; border-top: 1px solid #dbeafe }
+    .aide-corps { padding: 4px 15px 16px; border-top: 1px solid #D5DDE8 }
 
     .aide-rapport { font-size: 13px; color: #334155; margin: 12px 0 0 }
 
     .aide-h {
         font-size: 12px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .04em; color: #64748b; margin: 16px 0 7px;
+        letter-spacing: .04em; color: #44536E; margin: 16px 0 7px;
     }
 
-    .aide-p { font-size: 13px; color: #475569; margin: 0 0 8px; line-height: 1.55 }
+    .aide-p { font-size: 13px; color: #44536E; margin: 0 0 8px; line-height: 1.55 }
 
     .aide-avert {
         display: flex; gap: 10px; margin-top: 12px; padding: 11px 13px;
@@ -215,32 +215,32 @@
     .aide-avert p { margin: 0 }
     .aide-avert span { flex: 0 0 auto }
 
-    ol.aide-etapes { margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6 }
+    ol.aide-etapes { margin: 0; padding-left: 20px; font-size: 13px; color: #44536E; line-height: 1.6 }
     ol.aide-etapes li { margin-bottom: 5px }
 
-    ul.aide-astuces { margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6 }
+    ul.aide-astuces { margin: 0; padding-left: 20px; font-size: 13px; color: #44536E; line-height: 1.6 }
     ul.aide-astuces li { margin-bottom: 5px }
 
-    .col-wrap { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff }
+    .col-wrap { overflow-x: auto; border: 1px solid #D5DDE8; border-radius: 10px; background: #fff }
 
     table.col-table { width: 100%; border-collapse: collapse; font-size: 12.5px }
-    table.col-table th { background: #f8fafc; text-align: left; padding: 8px 11px; font-weight: 700; color: #334155; border-bottom: 1px solid #e2e8f0; white-space: nowrap }
+    table.col-table th { background: #f8fafc; text-align: left; padding: 8px 11px; font-weight: 700; color: #334155; border-bottom: 1px solid #D5DDE8; white-space: nowrap }
     table.col-table td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.col-table tr:last-child td { border-bottom: 0 }
-    table.col-table .kw { color: #64748b; font-size: 11.5px }
+    table.col-table .kw { color: #44536E; font-size: 11.5px }
 
     .st-req { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #fef2f2; color: #b91c1c; white-space: nowrap }
-    .st-cle { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #eff6ff; color: #1d4ed8; white-space: nowrap }
-    .st-opt { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #f1f5f9; color: #64748b; white-space: nowrap }
+    .st-cle { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 800; background: #E3EBF7; color: #143A73; white-space: nowrap }
+    .st-opt { display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px; font-weight: 700; background: #f1f5f9; color: #44536E; white-space: nowrap }
 
     .aide-modele {
         display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
         margin-top: 16px; padding: 12px 14px; border-radius: 10px;
-        background: #fff; border: 1px solid #e2e8f0;
+        background: #fff; border: 1px solid #D5DDE8;
     }
 
     .aide-modele > div { flex: 1 1 260px }
-    .aide-modele b { font-size: 13px; color: #0f172a }
+    .aide-modele b { font-size: 13px; color: #0E1F3D }
 </style>
 </asp:Content>
 
@@ -435,7 +435,7 @@
                             <asp:Literal ID="litAideCorps" runat="server" />
                         </asp:Panel>
 
-                        <asp:Panel ID="pnlAideAbsente" runat="server" Visible="false" CssClass="aide-avert" Style="background:#f8fafc;border-color:#e2e8f0;color:#475569">
+                        <asp:Panel ID="pnlAideAbsente" runat="server" Visible="false" CssClass="aide-avert" Style="background:#f8fafc;border-color:#D5DDE8;color:#44536E">
                             <span>ℹ️</span>
                             <p><asp:Literal ID="litAideAbsente" runat="server" /></p>
                         </asp:Panel>

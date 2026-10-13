@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title><%= L("pageTitle") %></title>
     <style>
-        :root { --font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; --text:#0f172a; --muted:#64748b; --line:#e2e8f0; --primary:#2563eb; }
+        :root { --font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif; --text:#0E1F3D; --muted:#44536E; --line:#D5DDE8; --primary:#1B4F9C; }
         html,body { margin:0; height:100%; }
         body { font-family:var(--font); color:var(--text); background:#f6f7fb; }
         .wrap { padding:18px 20px 90px; }
@@ -22,11 +22,11 @@
         }
         .row-inline { display:flex; align-items:center; gap:10px; }
         .chk { display:flex; align-items:center; gap:8px; font-weight:700; font-size:13px; }
-        .box-note { font-size:13px; color:#475569; background:#eff6ff; border:1px solid #dbeafe; border-radius:10px; padding:10px 12px; }
+        .box-note { font-size:13px; color:#44536E; background:#E3EBF7; border:1px solid #D5DDE8; border-radius:10px; padding:10px 12px; }
         .box-none { color:#94a3b8; font-style:italic; }
         .mono { font-family:ui-monospace,Consolas,monospace; font-weight:700; }
         .footer { position:fixed; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--line); padding:12px 20px; display:flex; justify-content:flex-end; gap:10px; }
-        .btn { padding:10px 18px; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; border:1px solid var(--line); background:#fff; color:#0f172a; text-decoration:none; display:inline-flex; align-items:center; }
+        .btn { padding:10px 18px; border-radius:10px; font-weight:800; font-size:14px; cursor:pointer; border:1px solid var(--line); background:#fff; color:#0E1F3D; text-decoration:none; display:inline-flex; align-items:center; }
         .btn.primary { background:var(--primary); border-color:var(--primary); color:#fff; }
         .msg { margin:0 0 12px; padding:10px 14px; border-radius:10px; font-size:13px; font-weight:700; }
         .msg.err { background:rgba(239,68,68,.1); color:#dc2626; border:1px solid rgba(239,68,68,.3); }
@@ -59,7 +59,7 @@
                 <div class="field">
                     <label><%= L("color") %></label>
                     <div class="row-inline">
-                        <input type="color" id="cpPick" value="#2563eb" oninput="document.getElementById('<%= txtColor.ClientID %>').value=this.value;" />
+                        <input type="color" id="cpPick" value="#1B4F9C" oninput="document.getElementById('<%= txtColor.ClientID %>').value=this.value;" />
                         <asp:TextBox ID="txtColor" runat="server" CssClass="mono" />
                     </div>
                 </div>

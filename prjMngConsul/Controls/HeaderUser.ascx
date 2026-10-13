@@ -81,9 +81,9 @@
     box-sizing:border-box;
     padding:0 14px;
     border-radius:999px;
-    background:#eff6ff;
+    background:#E3EBF7;
     border:1px solid #bfdbfe;
-    color:#1d4ed8;
+    color:#143A73;
     font-size:12px;
     font-weight:800;
     white-space:nowrap;
@@ -202,7 +202,7 @@
     font-family:inherit;
     font-size:13px;
     font-weight:700;
-    color:var(--text, #0f172a);
+    color:var(--text, #0E1F3D);
     outline:none;
     padding:4px 6px;
     cursor:pointer;

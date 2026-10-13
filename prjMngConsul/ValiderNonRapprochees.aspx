@@ -14,41 +14,41 @@
     .nr-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .nr-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .nr-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .nr-lede { font-size: 13.5px; color: #475569; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
+    .nr-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .nr-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .nr-lede { font-size: 13.5px; color: #44536E; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
 
     .repere {
         display: flex; gap: 22px; flex-wrap: wrap; align-items: center;
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 12px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 12px;
         padding: 14px 16px; margin-bottom: 14px;
     }
-    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #64748b; font-weight: 700 }
-    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0f172a; font-variant-numeric: tabular-nums }
+    .repere .bloc .l { font-size: 11px; text-transform: uppercase; letter-spacing: .3px; color: #44536E; font-weight: 700 }
+    .repere .bloc .v { font-size: 17px; font-weight: 800; color: #0E1F3D; font-variant-numeric: tabular-nums }
     .repere .bloc .v.alerte { color: #92400e }
 
-    .filtre { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; color: #475569 }
+    .filtre { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-bottom: 12px; font-size: 13px; color: #44536E }
     .filtre label { display: inline-flex; align-items: center; gap: 6px; cursor: pointer }
 
     .tbl-wrap {
         max-height: 640px; overflow: auto;
-        border: 1px solid #e2e8f0; border-radius: 12px; background: #fff;
+        border: 1px solid #D5DDE8; border-radius: 12px; background: #fff;
     }
     table.nr { width: 100%; border-collapse: collapse; font-size: 12.5px }
     table.nr th {
         position: sticky; top: 0; z-index: 2;
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+        color: #44536E; background: #f8fafc; border-bottom: 1px solid #D5DDE8;
         padding: 9px 10px; font-weight: 700; white-space: nowrap;
     }
     table.nr th.n, table.nr td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
-    table.nr td { border-bottom: 1px solid #f1f5f9; padding: 7px 10px; color: #0f172a; vertical-align: top }
-    table.nr td.memo { color: #64748b; max-width: 260px }
+    table.nr td { border-bottom: 1px solid #f1f5f9; padding: 7px 10px; color: #0E1F3D; vertical-align: top }
+    table.nr td.memo { color: #44536E; max-width: 260px }
     table.nr tr.compte td {
-        background: #eff6ff; border-top: 1px solid #dbeafe; border-bottom: 1px solid #dbeafe;
+        background: #E3EBF7; border-top: 1px solid #D5DDE8; border-bottom: 1px solid #D5DDE8;
         font-weight: 800; color: #1e3a8a; font-size: 13px; padding: 9px 10px;
     }
     table.nr tfoot td {
@@ -66,14 +66,14 @@
 
     .note {
         margin-top: 16px; padding: 12px 15px; border-radius: 10px;
-        background: #f8fafc; border: 1px solid #e2e8f0;
-        font-size: 12.5px; color: #475569; line-height: 1.6; max-width: 920px;
+        background: #f8fafc; border: 1px solid #D5DDE8;
+        font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 920px;
     }
-    .note b { color: #0f172a }
+    .note b { color: #0E1F3D }
 
     .rien {
         border: 1px dashed #cbd5e1; border-radius: 12px; padding: 30px; text-align: center;
-        color: #64748b; font-size: 13.5px; background: #fff; line-height: 1.7;
+        color: #44536E; font-size: 13.5px; background: #fff; line-height: 1.7;
     }
 </style>
 </asp:Content>

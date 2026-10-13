@@ -14,11 +14,11 @@
         :root {
             --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
             --slate-50: #f8fafc;  --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0; --slate-300: #cbd5e1;
-            --slate-400: #94a3b8; --slate-500: #64748b;
-            --slate-600: #475569; --slate-700: #334155;
-            --slate-800: #1e293b; --slate-900: #0f172a;
-            --blue-500: #3b82f6;  --blue-600: #2563eb;  --blue-700: #1d4ed8;
+            --slate-200: #D5DDE8; --slate-300: #cbd5e1;
+            --slate-400: #94a3b8; --slate-500: #44536E;
+            --slate-600: #44536E; --slate-700: #334155;
+            --slate-800: #1e293b; --slate-900: #0E1F3D;
+            --blue-500: #3b82f6;  --blue-600: #1B4F9C;  --blue-700: #143A73;
             --cyan-500: #06b6d4;
             --green-500: #10b981; --green-600: #059669;
             --red-500: #ef4444;
@@ -184,7 +184,7 @@
         .card-visual {
             position: relative;
             margin-bottom: 18px;
-            background: linear-gradient(135deg, #1e293b, #0f172a);
+            background: linear-gradient(135deg, #1e293b, #0E1F3D);
             border-radius: 16px;
             padding: 22px;
             color: white;

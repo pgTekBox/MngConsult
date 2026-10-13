@@ -16,7 +16,7 @@
             padding: 14px 16px;
             font-weight: 800;
             font-size: 13px;
-            color: #0f172a;
+            color: #0E1F3D;
             background: #f8fafc;
             border-bottom: 1px solid var(--mc-stroke);
             position: sticky;
@@ -75,12 +75,12 @@
         .field-code {
             font-family: 'Consolas', 'Courier New', monospace;
             font-weight: 700;
-            color: #475569;
+            color: #44536E;
         }
 
         .field-compte {
             font-size: 12px;
-            color: #64748b;
+            color: #44536E;
             display: flex;
             flex-direction: column;
             gap: 2px;
@@ -105,9 +105,9 @@
             font-weight: 700;
         }
 
-        .badge-taxable { background: #dbeafe; color: #1e40af; }
+        .badge-taxable { background: #D5DDE8; color: #143A73; }
         .badge-exempt  { background: #fef3c7; color: #92400e; }
-        .badge-zero    { background: #f1f5f9; color: #64748b; }
+        .badge-zero    { background: #f1f5f9; color: #44536E; }
 
         .badge-actif {
             display: inline-block;

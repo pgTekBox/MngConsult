@@ -10,17 +10,17 @@
 
     <style>
         .closure-page { max-width: 1100px; margin: 0 auto; padding: 12px; }
-        .closure-page h2 { color: #0f172a; margin: 0 0 8px 0; }
-        .closure-page .subtitle { color: #64748b; font-size: 13px; margin-bottom: 20px; }
+        .closure-page h2 { color: #0E1F3D; margin: 0 0 8px 0; }
+        .closure-page .subtitle { color: #44536E; font-size: 13px; margin-bottom: 20px; }
 
         .closure-card {
             background: #fff;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 8px;
             padding: 16px 20px;
             margin-bottom: 16px;
         }
-        .closure-card h3 { margin: 0 0 12px 0; font-size: 16px; color: #0f172a; }
+        .closure-card h3 { margin: 0 0 12px 0; font-size: 16px; color: #0E1F3D; }
 
         .closure-toolbar {
             display: flex; gap: 12px; align-items: center; flex-wrap: wrap;
@@ -33,8 +33,8 @@
             gap: 8px 24px;
             font-size: 14px;
         }
-        .preview-grid .lbl { color: #64748b; }
-        .preview-grid .val { font-weight: 600; color: #0f172a; text-align: right; }
+        .preview-grid .lbl { color: #44536E; }
+        .preview-grid .val { font-weight: 600; color: #0E1F3D; text-align: right; }
         .preview-grid .val.positive { color: #16a34a; }
         .preview-grid .val.negative { color: #dc2626; }
 
@@ -54,10 +54,10 @@
         .problem-badge.bloquant { background: #dc2626; }
         .problem-badge.warning  { background: #f59e0b; }
         .problem-badge.info     { background: #0ea5e9; }
-        .problem-text .titre { font-weight: 600; color: #0f172a; }
-        .problem-text .detail { color: #475569; font-size: 13px; margin-top: 2px; }
+        .problem-text .titre { font-weight: 600; color: #0E1F3D; }
+        .problem-text .detail { color: #44536E; font-size: 13px; margin-top: 2px; }
         .problem-nb {
-            margin-left: auto; font-weight: 700; color: #0f172a;
+            margin-left: auto; font-weight: 700; color: #0E1F3D;
             background: #fff; padding: 2px 10px; border-radius: 999px;
             border: 1px solid #cbd5e1; font-size: 12px;
         }
@@ -65,15 +65,15 @@
         /* Tableau preview écritures */
         .preview-table { width: 100%; border-collapse: collapse; font-size: 13px; }
         .preview-table th, .preview-table td {
-            padding: 6px 10px; border-bottom: 1px solid #e2e8f0; text-align: left;
+            padding: 6px 10px; border-bottom: 1px solid #D5DDE8; text-align: left;
         }
-        .preview-table th { background: #f1f5f9; color: #475569; font-weight: 600; }
+        .preview-table th { background: #f1f5f9; color: #44536E; font-weight: 600; }
         .preview-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 
         /* Action bar */
         .action-bar {
             display: flex; gap: 12px; justify-content: flex-end;
-            padding-top: 16px; border-top: 1px solid #e2e8f0; margin-top: 16px;
+            padding-top: 16px; border-top: 1px solid #D5DDE8; margin-top: 16px;
         }
         .status-pill {
             display: inline-block; padding: 4px 12px; border-radius: 999px;

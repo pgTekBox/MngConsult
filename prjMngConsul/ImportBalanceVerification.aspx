@@ -20,31 +20,31 @@
     .imp-head .ico {
         width:46px; height:46px; border-radius:13px;
         background:linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
-        border:1px solid #e2e8f0;
+        border:1px solid #D5DDE8;
         display:flex; align-items:center; justify-content:center; font-size:21px;
     }
-    .imp-head h1 { font-size:21px; font-weight:800; margin:0; color:#0f172a }
-    .imp-head .sub { font-size:13px; color:#64748b; margin-top:2px }
+    .imp-head h1 { font-size:21px; font-weight:800; margin:0; color:#0E1F3D }
+    .imp-head .sub { font-size:13px; color:#44536E; margin-top:2px }
 
-    .imp-lede { font-size:13.5px; color:#475569; margin:0 0 18px; max-width:760px; line-height:1.6 }
+    .imp-lede { font-size:13.5px; color:#44536E; margin:0 0 18px; max-width:760px; line-height:1.6 }
 
     .imp-section {
-        background:#fff; border:1px solid #e2e8f0; border-radius:14px;
+        background:#fff; border:1px solid #D5DDE8; border-radius:14px;
         padding:20px; margin-bottom:16px;
     }
 
     .imp-section h2 {
-        font-size:15px; font-weight:800; margin:0 0 3px; color:#0f172a;
+        font-size:15px; font-weight:800; margin:0 0 3px; color:#0E1F3D;
         display:flex; align-items:center; gap:9px;
     }
 
     .imp-section h2 .n {
         width:24px; height:24px; border-radius:999px; flex:0 0 auto;
-        background:#eff6ff; color:#1d4ed8; border:1px solid #bfdbfe;
+        background:#E3EBF7; color:#143A73; border:1px solid #bfdbfe;
         font-size:12px; display:flex; align-items:center; justify-content:center;
     }
 
-    .imp-section .sec-desc { font-size:13px; color:#64748b; margin:0 0 15px; padding-left:33px }
+    .imp-section .sec-desc { font-size:13px; color:#44536E; margin:0 0 15px; padding-left:33px }
     .imp-section > .body { padding-left:33px }
 
     /* Section repliable : le titre devient la poignée, le chevron dit le sens. */
@@ -52,7 +52,7 @@
     details.imp-section > summary::-webkit-details-marker { display:none }
     details.imp-section > summary::marker { content: "" }
     details.imp-section > summary h2 { margin:0 }
-    details.imp-section > summary:hover h2 { color:#1d4ed8 }
+    details.imp-section > summary:hover h2 { color:#143A73 }
     details.imp-section[open] > summary h2 { margin-bottom:3px }
     .imp-chev { margin-left:auto; font-size:12px; color:#94a3b8; transition:transform .15s }
     details.imp-section[open] .imp-chev { transform:rotate(180deg) }
@@ -62,9 +62,9 @@
         display:flex; align-items:center; gap:9px; padding:9px 13px;
         transition:border-color .2s, background .2s; cursor:pointer;
     }
-    .upload-zone:hover, .upload-zone.dragover { border-color:#2563eb; background:rgba(37,99,235,.05); }
+    .upload-zone:hover, .upload-zone.dragover { border-color:#1B4F9C; background:rgba(37,99,235,.05); }
     .upload-zone .uz-ico { font-size:17px; line-height:1; }
-    .upload-zone p { font-size:13px; color:#64748b; margin:0; }
+    .upload-zone p { font-size:13px; color:#44536E; margin:0; }
     .upload-zone .uz-hint { font-size:11.5px; margin-left:auto; padding-left:10px; white-space:nowrap; opacity:.65; }
 
     .file-pill {
@@ -73,11 +73,11 @@
     }
     .file-pill .fp-ico { font-size:17px; }
     .file-pill .fp-name { font-weight:700; font-size:13px; }
-    .file-pill .fp-size { font-size:12px; color:#64748b; }
+    .file-pill .fp-size { font-size:12px; color:#44536E; }
     .file-pill .fp-rm { margin-left:auto; color:#ef4444; cursor:pointer; font-size:16px; background:none; border:none; }
 
     .chk { display:flex; align-items:center; gap:7px; margin-top:13px; font-size:13px }
-    .chk input[type="checkbox"] { width:16px; height:16px; accent-color:#2563eb; }
+    .chk input[type="checkbox"] { width:16px; height:16px; accent-color:#1B4F9C; }
     .chk label { cursor:pointer; }
 
     /* Les actions restent à gauche, sous ce qu'elles commandent — comme ailleurs. */
@@ -88,10 +88,10 @@
         border:1px solid transparent; cursor:pointer; font-family:inherit;
         display:inline-flex; align-items:center; gap:7px;
     }
-    .imp-btn-primary { background:#2563eb; color:#fff; }
+    .imp-btn-primary { background:#1B4F9C; color:#fff; }
     .imp-btn-primary:hover { filter:brightness(.92); }
-    .imp-btn-secondary { background:#f1f5f9; color:#334155; border-color:#e2e8f0; }
-    .imp-btn-secondary:hover { background:#e2e8f0; }
+    .imp-btn-secondary { background:#f1f5f9; color:#334155; border-color:#D5DDE8; }
+    .imp-btn-secondary:hover { background:#D5DDE8; }
     .imp-btn-danger { background:#fef2f2; color:#b91c1c; border-color:#fecaca; }
     .imp-btn-danger:hover { background:#fee2e2; }
     .imp-btn-ia { background:#6d28d9; color:#fff; }
@@ -110,25 +110,25 @@
 
     /* La grille défile dans son cadre, l'entête reste visible : une balance de
        deux cents comptes ne doit pas repousser les boutons hors de l'écran. */
-    .tbl-wrap { overflow:auto; max-height:540px; border:1px solid #e2e8f0; border-radius:12px; margin-top:12px }
+    .tbl-wrap { overflow:auto; max-height:540px; border:1px solid #D5DDE8; border-radius:12px; margin-top:12px }
 
     .imp-tbl { width:100%; border-collapse:collapse; font-size:12.5px; }
     .imp-tbl thead th {
         background:#f8fafc; color:#334155; text-align:left; padding:9px 11px;
-        font-weight:700; white-space:nowrap; border-bottom:1px solid #e2e8f0;
+        font-weight:700; white-space:nowrap; border-bottom:1px solid #D5DDE8;
         position:sticky; top:0; z-index:1;
     }
     .imp-tbl tbody td { padding:7px 11px; border-bottom:1px solid #f1f5f9; vertical-align:top }
     .imp-tbl tbody tr:last-child td { border-bottom:0 }
     .imp-tbl tbody tr:hover { background:#f8fafc; }
     .imp-tbl .num { text-align:right; font-variant-numeric:tabular-nums; white-space:nowrap; }
-    .imp-tbl tfoot td { font-weight:800; padding:9px 11px; border-top:2px solid #e2e8f0; background:#f8fafc; }
+    .imp-tbl tfoot td { font-weight:800; padding:9px 11px; border-top:2px solid #D5DDE8; background:#f8fafc; }
     .tbl-info { font-size:12px; color:#94a3b8; margin-top:8px; display:flex; align-items:center; gap:6px; }
 
     .stats { display:flex; gap:12px; flex-wrap:wrap; }
-    .stat { flex:1; min-width:110px; padding:14px 16px; border-radius:12px; border:1px solid #e2e8f0; }
-    .stat .sv { font-size:26px; font-weight:800; color:#0f172a }
-    .stat .sl { font-size:11.5px; color:#64748b; margin-top:2px; text-transform:uppercase; letter-spacing:.3px }
+    .stat { flex:1; min-width:110px; padding:14px 16px; border-radius:12px; border:1px solid #D5DDE8; }
+    .stat .sv { font-size:26px; font-weight:800; color:#0E1F3D }
+    .stat .sl { font-size:11.5px; color:#44536E; margin-top:2px; text-transform:uppercase; letter-spacing:.3px }
     .s-ok  { background:#f0fdf4; border-color:#bbf7d0 } .s-ok  .sv { color:#16a34a; }
     .s-wrn { background:#fffbeb; border-color:#fde68a } .s-wrn .sv { color:#d97706; }
     .s-err { background:#fef2f2; border-color:#fecaca } .s-err .sv { color:#dc2626; }
@@ -139,11 +139,11 @@
     .equil.ia { background:#f5f3ff; color:#5b21b6; border-color:#ddd6fe; font-weight:600; }
 
     .ia-hint { font-size:12px; color:#94a3b8; margin:14px 0 0; }
-    .origine { font-size:12.5px; color:#64748b; margin:2px 0 12px; line-height:1.5; }
+    .origine { font-size:12.5px; color:#44536E; margin:2px 0 12px; line-height:1.5; }
 
-    .ctrl { border:1px solid #e2e8f0; border-radius:12px; padding:14px 16px; margin:14px 0; background:#fff; }
+    .ctrl { border:1px solid #D5DDE8; border-radius:12px; padding:14px 16px; margin:14px 0; background:#fff; }
     .ctrl h3 { font-size:14px; font-weight:800; margin:0 0 4px; }
-    .ctrl .ctx { font-size:12.5px; color:#64748b; margin:0 0 10px; line-height:1.5; }
+    .ctrl .ctx { font-size:12.5px; color:#44536E; margin:0 0 10px; line-height:1.5; }
     .ctrl .chips { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:10px; }
     .ctrl .chip { padding:4px 10px; border-radius:999px; font-size:12px; font-weight:700; }
     .ctrl .rien { padding:10px 12px; border-radius:10px; background:#f0fdf4; color:#166534; font-weight:700; font-size:13px; }
@@ -151,7 +151,7 @@
     .grv { display:inline-block; padding:1px 8px; border-radius:999px; font-size:11px; font-weight:800; white-space:nowrap; }
     .grv-err { background:#fef2f2; color:#b91c1c; }
     .grv-ver { background:#fffbeb; color:#b45309; }
-    .grv-inf { background:#f1f5f9; color:#64748b; }
+    .grv-inf { background:#f1f5f9; color:#44536E; }
 </style>
 </asp:Content>
 

@@ -11,12 +11,12 @@
         :root {
             --mc-bg: #f6f7fb;
             --mc-card: #ffffff;
-            --mc-muted: #64748b;
-            --mc-text: #0f172a;
+            --mc-muted: #44536E;
+            --mc-text: #0E1F3D;
             --mc-stroke: rgba(15, 23, 42, .12);
             --mc-radius: 14px;
             --mc-font: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --mc-blue: #2563eb;
+            --mc-blue: #1B4F9C;
             --mc-cyan: #06b6d4;
         }
 
@@ -79,7 +79,7 @@
         .badge-pending  { background: #fffbeb; color: #92400e; border: 1px solid #fde68a; }
         .badge-migrated { background: #f0fdf4; color: #166534; border: 1px solid #bbf7d0; }
         .badge-error    { background: #fef2f2; color: #991b1b; border: 1px solid #fecaca; }
-        .badge-skipped  { background: #f1f5f9; color: #475569; border: 1px solid #e2e8f0; }
+        .badge-skipped  { background: #f1f5f9; color: #44536E; border: 1px solid #D5DDE8; }
 
         .iv-actions { display: flex; gap: 10px; justify-content: flex-end; flex-wrap: wrap; }
         .iv-btn {

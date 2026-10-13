@@ -5,17 +5,17 @@
 
 <style>
     .sd-h {
-        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0f172a;
+        font-size: 15px; font-weight: 800; margin: 0 0 3px; color: #0E1F3D;
         display: flex; align-items: center; gap: 9px;
     }
 
     .sd-n {
         width: 24px; height: 24px; border-radius: 999px; flex: 0 0 auto;
-        background: #eff6ff; color: #1d4ed8; border: 1px solid #bfdbfe;
+        background: #E3EBF7; color: #143A73; border: 1px solid #bfdbfe;
         font-size: 12px; display: flex; align-items: center; justify-content: center;
     }
 
-    .sd-desc { font-size: 13px; color: #64748b; margin: 0 0 15px; padding-left: 33px }
+    .sd-desc { font-size: 13px; color: #44536E; margin: 0 0 15px; padding-left: 33px }
     .sd-body { padding-left: 33px }
     .sd-plat { padding-left: 0 }
 
@@ -32,7 +32,7 @@
 
     .sd-ou {
         display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px;
-        background: #f8fafc; border: 1px solid #e2e8f0; color: #475569;
+        background: #f8fafc; border: 1px solid #D5DDE8; color: #44536E;
         font-size: 13px; margin-top: 14px;
     }
 
@@ -45,24 +45,24 @@
 
     .sd-aide > summary {
         cursor: pointer; padding: 12px 15px; font-size: 13.5px; font-weight: 700;
-        color: #1d4ed8; list-style: none; display: flex; align-items: center; gap: 9px;
+        color: #143A73; list-style: none; display: flex; align-items: center; gap: 9px;
     }
 
     .sd-aide > summary::-webkit-details-marker { display: none }
-    .sd-aide > summary:hover { background: #eff6ff }
+    .sd-aide > summary:hover { background: #E3EBF7 }
     .sd-aide .sd-chev { margin-left: auto; transition: transform .15s; font-size: 12px }
     .sd-aide[open] .sd-chev { transform: rotate(180deg) }
 
-    .sd-corps { padding: 4px 15px 16px; border-top: 1px solid #dbeafe }
+    .sd-corps { padding: 4px 15px 16px; border-top: 1px solid #D5DDE8 }
 
     .sd-rapport { font-size: 13px; color: #334155; margin: 12px 0 0 }
 
     .sd-t {
         font-size: 12px; font-weight: 800; text-transform: uppercase;
-        letter-spacing: .04em; color: #64748b; margin: 16px 0 7px;
+        letter-spacing: .04em; color: #44536E; margin: 16px 0 7px;
     }
 
-    .sd-p { font-size: 13px; color: #475569; margin: 10px 0 0; line-height: 1.55 }
+    .sd-p { font-size: 13px; color: #44536E; margin: 10px 0 0; line-height: 1.55 }
 
     .sd-avert {
         display: flex; gap: 10px; margin-top: 12px; padding: 11px 13px;
@@ -72,18 +72,18 @@
 
     .sd-avert p { margin: 0 }
     .sd-avert span { flex: 0 0 auto }
-    .sd-avert.sd-neutre { background: #f8fafc; border-color: #e2e8f0; color: #475569 }
+    .sd-avert.sd-neutre { background: #f8fafc; border-color: #D5DDE8; color: #44536E }
 
-    ol.sd-etapes, ul.sd-astuces { margin: 0; padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.6 }
+    ol.sd-etapes, ul.sd-astuces { margin: 0; padding-left: 20px; font-size: 13px; color: #44536E; line-height: 1.6 }
     ol.sd-etapes li, ul.sd-astuces li { margin-bottom: 5px }
 
-    .sd-cols { overflow-x: auto; border: 1px solid #e2e8f0; border-radius: 10px; background: #fff }
+    .sd-cols { overflow-x: auto; border: 1px solid #D5DDE8; border-radius: 10px; background: #fff }
 
     table.sd-coltbl { width: 100%; border-collapse: collapse; font-size: 12.5px }
-    table.sd-coltbl th { background: #f8fafc; text-align: left; padding: 8px 11px; font-weight: 700; color: #334155; border-bottom: 1px solid #e2e8f0; white-space: nowrap }
+    table.sd-coltbl th { background: #f8fafc; text-align: left; padding: 8px 11px; font-weight: 700; color: #334155; border-bottom: 1px solid #D5DDE8; white-space: nowrap }
     table.sd-coltbl td { padding: 7px 11px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.sd-coltbl tr:last-child td { border-bottom: 0 }
-    table.sd-coltbl .sd-kw { color: #64748b; font-size: 11.5px }
+    table.sd-coltbl .sd-kw { color: #44536E; font-size: 11.5px }
 
     .sd-req {
         display: inline-block; padding: 1px 7px; border-radius: 999px; font-size: 10.5px;

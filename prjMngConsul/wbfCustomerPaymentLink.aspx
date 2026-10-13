@@ -9,12 +9,12 @@
     <style>
         :root {
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
-            --bg: #f6f7fb; --card: #fff; --text: #0f172a; --muted: #64748b;
-            --line: #e2e8f0; --brand: #006aff; --brand-weak: #eff6ff;
+            --bg: #f6f7fb; --card: #fff; --text: #0E1F3D; --muted: #44536E;
+            --line: #D5DDE8; --brand: #006aff; --brand-weak: #E3EBF7;
         }
         html, body { height: 100%; margin: 0; }
         body { font-family: var(--font); color: var(--text);
-               background: radial-gradient(1200px 600px at 20% 0%, #eff6ff 0%, transparent 45%), var(--bg); }
+               background: radial-gradient(1200px 600px at 20% 0%, #E3EBF7 0%, transparent 45%), var(--bg); }
         .wrap { max-width: 600px; margin: 22px auto; padding: 0 18px 30px; }
         .brand { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
         .brand .logo { width: 44px; height: 44px; border-radius: 12px; flex: 0 0 44px;
@@ -27,7 +27,7 @@
         .rowline .k { color: var(--muted); font-size: 13px; }
         .rowline .v { font-weight: 800; }
         .amount { font-size: 24px; font-weight: 900; color: var(--brand); }
-        .notice { background: var(--brand-weak); border: 1px solid #bfdbfe; color: #1e40af;
+        .notice { background: var(--brand-weak); border: 1px solid #bfdbfe; color: #143A73;
                   border-radius: 12px; padding: 12px 14px; font-size: 12.5px; font-weight: 600; }
         .msg { border-radius: 10px; padding: 10px 12px; font-size: 13px; font-weight: 700; margin-bottom: 12px; }
         .msg-ok { background: #f0fdf4; color: #15803d; border: 1px solid #bbf7d0; }

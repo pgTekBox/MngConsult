@@ -14,30 +14,30 @@
     .imp-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
-    .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .imp-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
+    .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .imp-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .imp-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; max-width: 860px; line-height: 1.6 }
+    .imp-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; max-width: 860px; line-height: 1.6 }
 
     /* Le compte rendu d'ensemble */
     .bilan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px }
 
-    .bil { border: 1px solid #e2e8f0; border-radius: 11px; padding: 11px 14px; background: #fff }
-    .bil .l { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .3px }
-    .bil .v { font-size: 22px; font-weight: 800; color: #0f172a; margin-top: 2px }
+    .bil { border: 1px solid #D5DDE8; border-radius: 11px; padding: 11px 14px; background: #fff }
+    .bil .l { font-size: 11px; color: #44536E; text-transform: uppercase; letter-spacing: .3px }
+    .bil .v { font-size: 22px; font-weight: 800; color: #0E1F3D; margin-top: 2px }
     .bil.ok { background: #ecfdf5; border-color: #a7f3d0 } .bil.ok .v { color: #047857 }
     .bil.mi { background: #fffbeb; border-color: #fde68a } .bil.mi .v { color: #b45309 }
-    .bil.no { background: #f8fafc } .bil.no .v { color: #64748b }
+    .bil.no { background: #f8fafc } .bil.no .v { color: #44536E }
 
     h2.sect {
-        font-size: 15px; font-weight: 800; color: #0f172a; margin: 26px 0 4px;
+        font-size: 15px; font-weight: 800; color: #0E1F3D; margin: 26px 0 4px;
         display: flex; align-items: baseline; gap: 10px;
     }
-    h2.sect span { font-size: 12.5px; font-weight: 500; color: #64748b }
+    h2.sect span { font-size: 12.5px; font-weight: 500; color: #44536E }
 
     .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 14px; margin-top: 12px }
 
@@ -57,7 +57,7 @@
     .grille.tete > .carte:first-child > .ouvrir { justify-self: start }
 
     .carte {
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
         padding: 15px 17px; display: flex; flex-direction: column;
     }
 
@@ -74,11 +74,11 @@
 
     .etape {
         display: inline-block; font-size: 10px; font-weight: 800; letter-spacing: .4px;
-        text-transform: uppercase; color: #1d4ed8; background: #eff6ff;
+        text-transform: uppercase; color: #143A73; background: #E3EBF7;
         padding: 1px 7px; border-radius: 999px; margin-bottom: 3px;
     }
 
-    .titre { font-size: 14.5px; font-weight: 800; color: #0f172a; line-height: 1.25 }
+    .titre { font-size: 14.5px; font-weight: 800; color: #0E1F3D; line-height: 1.25 }
     .src { font-size: 11.5px; color: #94a3b8; margin-top: 2px }
 
     .note { flex: 0 0 auto; text-align: right; line-height: 1 }
@@ -96,19 +96,19 @@
     .jauge .orange { background: linear-gradient(90deg, #fb923c, #ea580c) }
     .jauge .gris { background: #cbd5e1 }
 
-    .dest { font-size: 11.5px; color: #64748b; margin-bottom: 9px; font-family: Consolas, monospace }
+    .dest { font-size: 11.5px; color: #44536E; margin-bottom: 9px; font-family: Consolas, monospace }
 
     .carte p { margin: 0 0 8px; font-size: 12.5px; line-height: 1.55 }
-    .fait { color: #475569 }
+    .fait { color: #44536E }
     .fait b { color: #047857 }
-    .manque { color: #475569 }
+    .manque { color: #44536E }
     .manque b { color: #b45309 }
 
     .ouvrir {
         align-self: flex-start; margin-top: auto; padding: 7px 14px; border-radius: 9px;
-        font-size: 12.5px; font-weight: 700; background: #2563eb; color: #fff; text-decoration: none;
+        font-size: 12.5px; font-weight: 700; background: #1B4F9C; color: #fff; text-decoration: none;
     }
-    .ouvrir:hover { background: #1d4ed8; color: #fff }
+    .ouvrir:hover { background: #143A73; color: #fff }
 
     .absent {
         align-self: flex-start; margin-top: auto; font-size: 12px; color: #94a3b8;
@@ -116,8 +116,8 @@
     }
 
     .note-bas {
-        margin-top: 26px; padding-top: 12px; border-top: 1px solid #e2e8f0;
-        font-size: 12.5px; color: #64748b; line-height: 1.6; max-width: 860px;
+        margin-top: 26px; padding-top: 12px; border-top: 1px solid #D5DDE8;
+        font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 860px;
     }
     .vider {
         margin-top: 26px; padding: 16px 18px; border: 1px solid #fecaca;
@@ -163,12 +163,12 @@
             border: 1px solid #bfdbfe; border-radius: 12px;
             background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(16,185,129,.05)) }
         .plan-lien .ico { font-size: 20px; flex: none }
-        .plan-lien .txt { flex: 1; font-size: 13px; color: #0f172a; line-height: 1.45 }
-        .plan-lien .txt span { display: block; color: #64748b; font-size: 12.5px }
-        .plan-lien button { padding: 8px 15px; border-radius: 9px; border: 1px solid #2563eb; background: #2563eb;
+        .plan-lien .txt { flex: 1; font-size: 13px; color: #0E1F3D; line-height: 1.45 }
+        .plan-lien .txt span { display: block; color: #44536E; font-size: 12.5px }
+        .plan-lien button { padding: 8px 15px; border-radius: 9px; border: 1px solid #1B4F9C; background: #1B4F9C;
             color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap }
-        .plan-lien button:hover { background: #1d4ed8 }
-        .plan-lien a { font-size: 12.5px; color: #1d4ed8; text-decoration: none; white-space: nowrap }
+        .plan-lien button:hover { background: #143A73 }
+        .plan-lien a { font-size: 12.5px; color: #143A73; text-decoration: none; white-space: nowrap }
         .plan-lien a:hover { text-decoration: underline }
 
         .plan-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000;
@@ -176,11 +176,11 @@
         .plan-voile.ouvert { display: flex }
         .plan-fen { width: min(1040px, 100%); height: min(92vh, 100%); background: #fff; border-radius: 16px;
             box-shadow: 0 30px 80px rgba(2,6,23,.35); display: flex; flex-direction: column; overflow: hidden }
-        .plan-fen .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #e2e8f0; background: #f8fafc }
-        .plan-fen .barre b { flex: 1; font-size: 14px; color: #0f172a }
+        .plan-fen .barre { display: flex; align-items: center; gap: 10px; padding: 10px 14px; border-bottom: 1px solid #D5DDE8; background: #f8fafc }
+        .plan-fen .barre b { flex: 1; font-size: 14px; color: #0E1F3D }
         .plan-fen .barre a, .plan-fen .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer }
-        .plan-fen .barre a { color: #1d4ed8; text-decoration: none; margin-right: 8px }
-        .plan-fen .barre button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0f172a; font-weight: 700 }
+        .plan-fen .barre a { color: #143A73; text-decoration: none; margin-right: 8px }
+        .plan-fen .barre button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 11px; color: #0E1F3D; font-weight: 700 }
         .plan-fen iframe { flex: 1; border: 0; width: 100% }
     </style>
 

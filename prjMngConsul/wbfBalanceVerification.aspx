@@ -42,7 +42,7 @@
 
         .report-header {
             text-align: center; margin-bottom: 28px; padding-bottom: 16px;
-            border-bottom: 2px solid #0f172a;
+            border-bottom: 2px solid #0E1F3D;
         }
 
         .report-header h1 {
@@ -53,7 +53,7 @@
             font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 2px;
         }
 
-        .report-header .report-date { font-size: 12px; color: #64748b; }
+        .report-header .report-date { font-size: 12px; color: #44536E; }
 
         /* ── Tableau ── */
         .bv-table {
@@ -88,7 +88,7 @@
 
         /* Classe */
         .bv-table .col-classe {
-            font-size: 12px; color: #64748b;
+            font-size: 12px; color: #44536E;
         }
 
         /* Montants */
@@ -99,18 +99,18 @@
             font-weight: 600; white-space: nowrap;
         }
 
-        .bv-table .col-debit { color: #0f172a; }
-        .bv-table .col-credit { color: #0f172a; }
+        .bv-table .col-debit { color: #0E1F3D; }
+        .bv-table .col-credit { color: #0E1F3D; }
 
-        .has-value { color: #0f172a !important; }
+        .has-value { color: #0E1F3D !important; }
         .no-value { color: #cbd5e1 !important; }
 
         /* Ligne de section (classe parente) */
         .bv-section td {
             font-weight: 800; font-size: 13px; padding: 10px 14px;
             background: #f1f5f9; color: #334155;
-            border-bottom: 1px solid #e2e8f0;
-            border-top: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
+            border-top: 1px solid #D5DDE8;
         }
 
         /* Sous-total de section */
@@ -140,7 +140,7 @@
         /* Vérification d'équilibre */
         .bv-check td {
             font-weight: 700; font-size: 13px; padding: 12px 14px;
-            text-align: center; border-top: 3px double #0f172a;
+            text-align: center; border-top: 3px double #0E1F3D;
         }
 
         .bv-check-ok { color: #15803d; background: #f0fdf4; }
@@ -157,18 +157,18 @@
 
         .bv-stat {
             padding: 12px 18px; background: #fff;
-            border: 1px solid #e2e8f0; border-radius: 12px;
+            border: 1px solid #D5DDE8; border-radius: 12px;
             box-shadow: 0 2px 8px rgba(15,23,42,.04);
             min-width: 140px;
         }
 
         .bv-stat-label {
-            font-size: 11px; font-weight: 700; color: #64748b;
+            font-size: 11px; font-weight: 700; color: #44536E;
             text-transform: uppercase; letter-spacing: .04em;
         }
 
         .bv-stat-value {
-            font-size: 20px; font-weight: 900; color: #0f172a;
+            font-size: 20px; font-weight: 900; color: #0E1F3D;
             margin-top: 4px; font-family: 'Consolas', 'Courier New', monospace;
         }
 
@@ -187,7 +187,7 @@
         }
 
         .bv-options input[type="checkbox"] {
-            width: 16px; height: 16px; accent-color: #2563eb;
+            width: 16px; height: 16px; accent-color: #1B4F9C;
         }
 
         /* ═══════════════════════════════════════
@@ -255,7 +255,7 @@
         </div>
         <div class="report-actions">
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#1d4ed8;">
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
                 🖨 Imprimer / PDF
             </button>
         </div>

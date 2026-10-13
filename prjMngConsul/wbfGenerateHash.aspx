@@ -8,12 +8,12 @@
     <title>Générer un hash bcrypt</title>
     <style>
         body { font-family: system-ui, sans-serif; padding: 30px; max-width: 700px; margin: 0 auto; background: #f6f7fb; }
-        h1 { color: #2563eb; }
+        h1 { color: #1B4F9C; }
         .box { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,.08); margin-bottom: 16px; }
         label { display: block; font-weight: 700; margin-bottom: 6px; }
         input[type=text] { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 8px; font-size: 14px; box-sizing: border-box; }
-        button { background: #2563eb; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; }
-        pre { background: #0f172a; color: #06b6d4; padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-all; }
+        button { background: #1B4F9C; color: white; border: none; padding: 10px 20px; border-radius: 8px; font-weight: 700; cursor: pointer; font-size: 14px; }
+        pre { background: #0E1F3D; color: #06b6d4; padding: 14px; border-radius: 8px; overflow-x: auto; font-size: 12px; white-space: pre-wrap; word-break: break-all; }
         .warning { background: #fef3c7; border-left: 4px solid #f59e0b; padding: 12px; border-radius: 8px; margin-bottom: 16px; }
     </style>
 </head>

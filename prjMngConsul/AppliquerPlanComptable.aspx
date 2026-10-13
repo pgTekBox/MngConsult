@@ -15,17 +15,17 @@
     .app-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
-    .app-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .app-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
+    .app-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .app-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .app-lede { font-size: 13.5px; color: #475569; margin: 0 0 18px; line-height: 1.6 }
+    .app-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; line-height: 1.6 }
 
     .card {
-        background: #fff; border: 1px solid #e2e8f0; border-radius: 14px;
+        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
         padding: 18px 20px; margin-bottom: 16px;
     }
 
@@ -40,9 +40,9 @@
 
     .compteurs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 14px }
 
-    .cpt { border: 1px solid #e2e8f0; border-radius: 10px; padding: 9px 12px; background: #fff }
-    .cpt .l { font-size: 11px; color: #64748b; text-transform: uppercase; letter-spacing: .3px }
-    .cpt .v { font-size: 19px; font-weight: 800; color: #0f172a }
+    .cpt { border: 1px solid #D5DDE8; border-radius: 10px; padding: 9px 12px; background: #fff }
+    .cpt .l { font-size: 11px; color: #44536E; text-transform: uppercase; letter-spacing: .3px }
+    .cpt .v { font-size: 19px; font-weight: 800; color: #0E1F3D }
     .cpt.att { background: #fffbeb; border-color: #fde68a }
     .cpt.att .v { color: #b45309 }
     .cpt.ok { background: #ecfdf5; border-color: #a7f3d0 }
@@ -61,16 +61,16 @@
     table.t { border-collapse: collapse; width: 100%; font-size: 13px }
     table.t th {
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; font-weight: 800; padding: 8px 9px; border-bottom: 2px solid #e2e8f0;
+        color: #44536E; font-weight: 800; padding: 8px 9px; border-bottom: 2px solid #D5DDE8;
         white-space: nowrap;
     }
     table.t td { padding: 8px 9px; border-bottom: 1px solid #f1f5f9; vertical-align: top }
     table.t tr:hover td { background: #f8fafc }
 
-    .src-c { font-weight: 700; color: #0f172a; white-space: nowrap }
+    .src-c { font-weight: 700; color: #0E1F3D; white-space: nowrap }
     .src-c .sans-num { font-weight: 500; color: #94a3b8; font-style: italic }
-    .src-n { font-weight: 700; color: #0f172a }
-    .nature { font-size: 11px; color: #64748b; white-space: nowrap }
+    .src-n { font-weight: 700; color: #0E1F3D }
+    .nature { font-size: 11px; color: #44536E; white-space: nowrap }
 
     .cls-in { width: 100%; min-width: 260px; padding: 6px 8px; border: 1px solid #cbd5e1;
               border-radius: 8px; font-size: 12.5px; font-family: inherit; background: #fff }
@@ -87,8 +87,8 @@
 
     .btn { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700;
            border: 1px solid transparent; cursor: pointer; font-family: inherit }
-    .btn-p { background: #2563eb; color: #fff }
-    .btn-s { background: #f1f5f9; color: #334155; border-color: #e2e8f0 }
+    .btn-p { background: #1B4F9C; color: #fff }
+    .btn-s { background: #f1f5f9; color: #334155; border-color: #D5DDE8 }
     .btn-go { background: #047857; color: #fff }
     .btn-go:hover { background: #065f46 }
 
@@ -103,26 +103,26 @@
     .iac-tete small { opacity: .8; font-size: 11.5px; white-space: nowrap }
     .iac-x { border: 0; background: rgba(255,255,255,.14); color: #fff; width: 30px; height: 30px; border-radius: 8px; font-size: 18px; cursor: pointer }
     .iac-x:hover { background: rgba(255,255,255,.3) }
-    .iac-corps { padding: 16px 20px; overflow: auto; line-height: 1.55; color: #0f172a }
+    .iac-corps { padding: 16px 20px; overflow: auto; line-height: 1.55; color: #0E1F3D }
     .iac-corps h2 { font-size: 15px; margin: 14px 0 6px; color: #1e3a8a }
     .iac-corps h2:first-child { margin-top: 0 }
     .iac-corps ul { margin: 4px 0 8px; padding-left: 20px }
     .iac-corps p { margin: 6px 0 }
-    .iac-attente { color: #64748b; font-style: italic }
+    .iac-attente { color: #44536E; font-style: italic }
     .iac-erreur { color: #b91c1c; font-weight: 700 }
-    .iac-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid #e2e8f0; background: #f8fafc; font-size: 12px; color: #64748b }
+    .iac-pied { display: flex; justify-content: space-between; align-items: center; gap: 10px; padding: 10px 16px; border-top: 1px solid #D5DDE8; background: #f8fafc; font-size: 12px; color: #44536E }
     .iac-pied button { border: 1px solid #cbd5e1; background: #fff; border-radius: 8px; padding: 6px 12px; font-weight: 700; cursor: pointer; margin-left: 6px }
     .iac-pied button:hover { background: #f1f5f9 }
 
-    .lien-retour { font-size: 12.5px; color: #2563eb; text-decoration: none; margin-left: auto }
+    .lien-retour { font-size: 12.5px; color: #1B4F9C; text-decoration: none; margin-left: auto }
     .lien-retour:hover { text-decoration: underline }
 
              margin-bottom: 14px; font-size: 13.5px; line-height: 1.55 }
 
-    .vide { padding: 26px; text-align: center; color: #64748b; font-size: 13.5px }
+    .vide { padding: 26px; text-align: center; color: #44536E; font-size: 13.5px }
 
     table.crees { border-collapse: collapse; margin-top: 10px; font-size: 13px }
-    table.crees th { text-align: left; font-size: 11px; text-transform: uppercase; color: #64748b;
+    table.crees th { text-align: left; font-size: 11px; text-transform: uppercase; color: #44536E;
                      padding: 6px 12px 6px 0 }
     table.crees td { padding: 4px 12px 4px 0; border-bottom: 1px solid #f1f5f9 }
     table.crees td.n { font-weight: 800; color: #047857 }

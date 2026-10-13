@@ -42,7 +42,7 @@
 
         .report-header {
             text-align: center; margin-bottom: 28px; padding-bottom: 16px;
-            border-bottom: 2px solid #0f172a;
+            border-bottom: 2px solid #0E1F3D;
         }
 
         .report-header h1 {
@@ -53,7 +53,7 @@
             font-size: 16px; font-weight: 700; color: #334155; margin-bottom: 2px;
         }
 
-        .report-header .report-date { font-size: 12px; color: #64748b; }
+        .report-header .report-date { font-size: 12px; color: #44536E; }
 
         /* ── Tableau ── */
         .bnr-table {
@@ -87,16 +87,16 @@
 
         /* Sous-ligne (détail) */
         .bnr-detail td {
-            border-bottom: 1px solid #f8fafc; font-size: 13px; color: #64748b;
+            border-bottom: 1px solid #f8fafc; font-size: 13px; color: #44536E;
         }
 
         .bnr-detail .item-label { padding-left: 48px; }
-        .bnr-detail .bnr-amount { font-weight: 500; color: #64748b; }
+        .bnr-detail .bnr-amount { font-weight: 500; color: #44536E; }
 
         /* Ligne d'addition (bénéfice net, etc.) */
         .bnr-add td {
             font-weight: 700; font-size: 14px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
             color: #15803d;
         }
 
@@ -106,7 +106,7 @@
         /* Ligne de soustraction (dividendes, retraits) */
         .bnr-sub td {
             font-weight: 700; font-size: 14px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
             color: #dc2626;
         }
 
@@ -117,7 +117,7 @@
         .bnr-subtotal td {
             font-weight: 800; font-size: 14px; padding: 10px 16px;
             border-top: 1px solid #cbd5e1; border-bottom: 1px solid #cbd5e1;
-            background: #f8fafc; color: #0f172a;
+            background: #f8fafc; color: #0E1F3D;
         }
 
         .bnr-subtotal .bnr-amount { font-weight: 800; font-size: 15px; }
@@ -129,7 +129,7 @@
         .bnr-adj-header td {
             font-weight: 700; color: #334155; background: #f1f5f9;
             font-size: 13px; padding: 8px 16px;
-            border-bottom: 1px solid #e2e8f0;
+            border-bottom: 1px solid #D5DDE8;
         }
 
         /* Ligne de clôture */
@@ -143,7 +143,7 @@
         /* Vérification */
         .bnr-check td {
             font-weight: 700; font-size: 12px; padding: 10px 16px;
-            text-align: center; border-top: 3px double #0f172a;
+            text-align: center; border-top: 3px double #0E1F3D;
         }
 
         .bnr-check-ok { color: #15803d; background: #f0fdf4; }
@@ -211,7 +211,7 @@
         </div>
         <div class="report-actions">
             <button type="button" class="btn" onclick="window.print(); return false;"
-                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#1d4ed8;">
+                style="border-color:rgba(37,99,235,.4); background:rgba(37,99,235,.08); color:#143A73;">
                 🖨 Imprimer / PDF
             </button>
         </div>

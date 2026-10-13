@@ -9,21 +9,21 @@
     <style>
         .autopay-page { max-width: 1100px; margin: 0 auto; padding: 16px; }
         .page-title { font-size: 22px; font-weight: 800; margin: 0 0 14px 0; display: flex; gap: 10px; align-items: center; }
-        .page-tabs { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid #e2e8f0; }
+        .page-tabs { display: flex; gap: 6px; margin-bottom: 18px; border-bottom: 1px solid #D5DDE8; }
         .page-tabs a {
-            padding: 10px 16px; text-decoration: none; color: #64748b;
+            padding: 10px 16px; text-decoration: none; color: #44536E;
             font-weight: 700; font-size: 13px; border-bottom: 3px solid transparent;
         }
-        .page-tabs a:hover { color: #2563eb; }
-        .page-tabs a.active { color: #2563eb; border-bottom-color: #2563eb; }
+        .page-tabs a:hover { color: #1B4F9C; }
+        .page-tabs a.active { color: #1B4F9C; border-bottom-color: #1B4F9C; }
 
         .filter-bar {
             display: flex; gap: 12px; align-items: center; margin-bottom: 14px;
             flex-wrap: wrap; background: #fff; padding: 12px 16px; border-radius: 12px;
         }
-        .filter-bar label { font-size: 12px; font-weight: 700; color: #475569; }
+        .filter-bar label { font-size: 12px; font-weight: 700; color: #44536E; }
         .filter-bar select, .filter-bar input[type="date"] {
-            padding: 6px 10px; border: 1px solid #e2e8f0; border-radius: 8px;
+            padding: 6px 10px; border: 1px solid #D5DDE8; border-radius: 8px;
             font-family: inherit; font-size: 13px;
         }
 
@@ -33,7 +33,7 @@
         .day-header {
             display: flex; justify-content: space-between; align-items: center;
             padding: 8px 12px;
-            background: linear-gradient(135deg, #2563eb, #06b6d4);
+            background: linear-gradient(135deg, #1B4F9C, #06b6d4);
             color: #fff; font-weight: 800; border-radius: 8px;
             margin-bottom: 8px;
         }
@@ -46,25 +46,25 @@
             box-shadow: 0 1px 3px rgba(15,23,42,.05);
             display: grid; grid-template-columns: 1fr auto; gap: 10px; align-items: center;
         }
-        .sched-card.planifie { border-left: 4px solid #2563eb; }
+        .sched-card.planifie { border-left: 4px solid #1B4F9C; }
         .sched-card.encours { border-left: 4px solid #f59e0b; }
         .sched-card.paye { border-left: 4px solid #10b981; }
         .sched-card.echec { border-left: 4px solid #ef4444; }
         .sched-card.requires_3ds { border-left: 4px solid #a855f7; }
 
-        .sched-supplier { font-weight: 800; color: #0f172a; font-size: 14px; }
-        .sched-meta { font-size: 12px; color: #64748b; display: flex; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
-        .sched-amount { font-weight: 800; font-size: 16px; color: #0f172a; text-align: right; }
+        .sched-supplier { font-weight: 800; color: #0E1F3D; font-size: 14px; }
+        .sched-meta { font-size: 12px; color: #44536E; display: flex; gap: 12px; margin-top: 4px; flex-wrap: wrap; }
+        .sched-amount { font-weight: 800; font-size: 16px; color: #0E1F3D; text-align: right; }
         .sched-status {
             display: inline-block; padding: 2px 8px; border-radius: 999px; font-size: 11px;
             font-weight: 700; text-transform: uppercase; letter-spacing: .04em;
         }
-        .status-planifie { background: #dbeafe; color: #1d4ed8; }
+        .status-planifie { background: #D5DDE8; color: #143A73; }
         .status-encours { background: #fed7aa; color: #c2410c; }
         .status-paye { background: #d1fae5; color: #047857; }
         .status-echec { background: #fecaca; color: #b91c1c; }
         .status-requires_3ds { background: #ede9fe; color: #6d28d9; }
-        .status-annule { background: #f1f5f9; color: #64748b; }
+        .status-annule { background: #f1f5f9; color: #44536E; }
 
         .sched-actions { display: flex; gap: 6px; align-items: center; margin-top: 6px; }
         .btn-cancel {
@@ -76,7 +76,7 @@
 
         .empty-state {
             background: #fff; border-radius: 12px; padding: 40px 24px;
-            text-align: center; color: #64748b; font-size: 14px;
+            text-align: center; color: #44536E; font-size: 14px;
         }
         .alert {
             padding: 12px 14px; border-radius: 10px; font-size: 13px; margin-bottom: 14px;
@@ -123,7 +123,7 @@
                 <asp:TextBox ID="tbToDate" runat="server" TextMode="Date" />
             </label>
             <asp:Button ID="btnFilter" runat="server" Text="Filtrer" CssClass="btn-cancel"
-                Style="background:#dbeafe; color:#1d4ed8; border-color:#bfdbfe;"
+                Style="background:#D5DDE8; color:#143A73; border-color:#bfdbfe;"
                 CausesValidation="false" />
         </div>
 

@@ -14,35 +14,35 @@
     .lst-head .ico {
         width: 46px; height: 46px; border-radius: 13px;
         background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #e2e8f0;
+        border: 1px solid #D5DDE8;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
-    .lst-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0f172a }
-    .lst-head .sub { font-size: 13px; color: #64748b; margin-top: 2px }
-    .lst-lede { font-size: 13.5px; color: #475569; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
+    .lst-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
+    .lst-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
+    .lst-lede { font-size: 13.5px; color: #44536E; margin: 0 0 16px; max-width: 920px; line-height: 1.6 }
 
     /* Les genres, en onglets */
     .onglets { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px }
     .onglets a {
         display: inline-flex; align-items: baseline; gap: 7px;
         padding: 8px 14px; border-radius: 9px; border: 1px solid #cbd5e1;
-        background: #fff; color: #0f172a; font-size: 13px; font-weight: 600;
+        background: #fff; color: #0E1F3D; font-size: 13px; font-weight: 600;
         text-decoration: none;
     }
     .onglets a:hover { background: #f8fafc }
-    .onglets a.on { background: #2563eb; border-color: #2563eb; color: #fff }
+    .onglets a.on { background: #1B4F9C; border-color: #1B4F9C; color: #fff }
     .onglets a .n { font-size: 11.5px; font-weight: 700; opacity: .75 }
     .onglets a .souci { color: #b45309; font-weight: 700 }
     .onglets a.on .souci { color: #fde68a }
 
     table.lst { width: 100%; border-collapse: collapse; font-size: 13px; background: #fff;
-                border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden }
+                border: 1px solid #D5DDE8; border-radius: 12px; overflow: hidden }
     table.lst th {
         text-align: left; font-size: 11px; text-transform: uppercase; letter-spacing: .3px;
-        color: #64748b; background: #f8fafc; border-bottom: 1px solid #e2e8f0;
+        color: #44536E; background: #f8fafc; border-bottom: 1px solid #D5DDE8;
         padding: 9px 10px; font-weight: 700;
     }
-    table.lst td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0f172a }
+    table.lst td { border-bottom: 1px solid #f1f5f9; padding: 8px 10px; color: #0E1F3D }
     table.lst td.n { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap }
     table.lst td.cle { font-size: 11.5px; color: #94a3b8;
                        font-family: ui-monospace, Menlo, Consolas, monospace }
@@ -59,13 +59,13 @@
 
     .note {
         margin-top: 16px; padding: 12px 15px; border-radius: 10px;
-        background: #f8fafc; border: 1px solid #e2e8f0;
-        font-size: 12.5px; color: #475569; line-height: 1.6; max-width: 920px;
+        background: #f8fafc; border: 1px solid #D5DDE8;
+        font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 920px;
     }
 
     .rien {
         border: 1px dashed #cbd5e1; border-radius: 12px; padding: 30px; text-align: center;
-        color: #64748b; font-size: 13.5px; background: #fff; line-height: 1.7;
+        color: #44536E; font-size: 13.5px; background: #fff; line-height: 1.7;
     }
 </style>
 </asp:Content>

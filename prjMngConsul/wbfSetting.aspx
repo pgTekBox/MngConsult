@@ -42,7 +42,7 @@
         .field-shortname{
             display:inline-block;
             font-weight:700;
-            color:#2563eb;
+            color:#1B4F9C;
             font-size:11px;
             margin-left:6px;
             opacity:0.65;
@@ -109,11 +109,11 @@
             background:#fff; padding:16px; text-align:center; cursor:pointer;
             transition:border-color .15s, background .15s;
         }
-        .dropzone:hover{ border-color:#2563eb; background:#eff6ff; }
-        .dropzone.drag{ border-color:#1d4ed8; background:rgba(59,130,246,.10); }
+        .dropzone:hover{ border-color:#1B4F9C; background:#E3EBF7; }
+        .dropzone.drag{ border-color:#143A73; background:rgba(59,130,246,.10); }
         .dropzone .dz-ico{ font-size:22px; line-height:1; }
-        .dropzone .dz-text{ font-size:12px; color:#475569; font-weight:600; margin-top:6px; }
-        .dropzone .dz-file{ font-size:12px; color:#2563eb; font-weight:700; margin-top:6px; min-height:14px; word-break:break-all; }
+        .dropzone .dz-text{ font-size:12px; color:#44536E; font-weight:600; margin-top:6px; }
+        .dropzone .dz-file{ font-size:12px; color:#1B4F9C; font-weight:700; margin-top:6px; min-height:14px; word-break:break-all; }
         .dropzone .dz-input{ position:absolute; width:1px; height:1px; opacity:0; overflow:hidden; }
         .scan-actions{ margin-top:10px; }
         .scan-msg{ margin-top:10px; padding:8px 10px; border-radius:8px; font-size:12px; font-weight:700; border:1px solid var(--mc-stroke); background:#fff; }
@@ -123,15 +123,15 @@
         .profile-progress{ background:#fff; border:1px solid var(--mc-stroke); border-radius:12px; padding:8px 12px; min-width:190px; }
         .pp-head{ display:flex; justify-content:space-between; align-items:center; gap:14px; margin-bottom:6px; }
         .pp-label{ font-size:12px; font-weight:800; }
-        .pp-pct{ font-size:12px; font-weight:800; color:#2563eb; }
+        .pp-pct{ font-size:12px; font-weight:800; color:#1B4F9C; }
         .pp-track{ height:8px; background:#eef2f7; border-radius:999px; overflow:hidden; }
-        .pp-fill{ height:100%; background:linear-gradient(90deg,#2563eb,#06b6d4); border-radius:999px; transition:width .3s ease; }
+        .pp-fill{ height:100%; background:linear-gradient(90deg,#1B4F9C,#06b6d4); border-radius:999px; transition:width .3s ease; }
         .admin-id{ display:flex; align-items:center; gap:10px; background:#fff; border:1px solid var(--mc-stroke); border-radius:12px; padding:8px 12px; }
-        .admin-avatar{ width:38px; height:38px; flex:0 0 38px; border-radius:10px; background:#eff6ff; color:#2563eb; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; }
+        .admin-avatar{ width:38px; height:38px; flex:0 0 38px; border-radius:10px; background:#E3EBF7; color:#1B4F9C; display:flex; align-items:center; justify-content:center; font-weight:800; font-size:14px; }
         .admin-info{ flex:0 1 auto; min-width:0; max-width:230px; }
         .admin-name{ font-size:14px; font-weight:800; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
         .admin-meta{ font-size:12px; color:var(--mc-muted); overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
-        .admin-role{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:4px 10px; border-radius:999px; background:rgba(37,99,235,.10); color:#2563eb; border:1px solid rgba(37,99,235,.20); white-space:nowrap; }
+        .admin-role{ font-size:11px; font-weight:800; text-transform:uppercase; letter-spacing:.05em; padding:4px 10px; border-radius:999px; background:rgba(37,99,235,.10); color:#1B4F9C; border:1px solid rgba(37,99,235,.20); white-space:nowrap; }
 
         /* Vérification du courriel d'entreprise (MAIL_FROM_EMAIL) */
         .mail-verify-row{
@@ -378,7 +378,7 @@
                                     <asp:HiddenField ID="hidParamType" runat="server" Value='<%# Eval("ParamType") %>' />
                                     <asp:HiddenField ID="hidShortName" runat="server" Value='<%# Eval("ShortName") %>' />
                                     <label>
-                                        <strong style="color:#2563eb;"><%# Eval("ShortName") %></strong> —
+                                        <strong style="color:#1B4F9C;"><%# Eval("ShortName") %></strong> —
                                         <%# Eval("Name") %>
                                     </label>
                                     <asp:PlaceHolder ID="phControl" runat="server" />

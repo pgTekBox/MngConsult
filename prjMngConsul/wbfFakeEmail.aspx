@@ -14,10 +14,10 @@
         :root {
             --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
             --slate-50: #f8fafc;  --slate-100: #f1f5f9;
-            --slate-200: #e2e8f0; --slate-300: #cbd5e1;
-            --slate-500: #64748b; --slate-600: #475569;
+            --slate-200: #D5DDE8; --slate-300: #cbd5e1;
+            --slate-500: #44536E; --slate-600: #44536E;
             --slate-700: #334155; --slate-800: #1e293b;
-            --blue-500: #3b82f6;  --blue-600: #2563eb;
+            --blue-500: #3b82f6;  --blue-600: #1B4F9C;
             --cyan-500: #06b6d4;
             --orange-500: #f59e0b;
             --orange-100: #fef3c7;

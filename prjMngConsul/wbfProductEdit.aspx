@@ -12,11 +12,11 @@
             --font: "Inter", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
             --bg: #f6f7fb;
             --card: #fff;
-            --text: #0f172a;
-            --muted: #64748b;
-            --line: #e2e8f0;
-            --primary: #2563eb;
-            --primary-weak: #eff6ff;
+            --text: #0E1F3D;
+            --muted: #44536E;
+            --line: #D5DDE8;
+            --primary: #1B4F9C;
+            --primary-weak: #E3EBF7;
             --danger: #dc2626;
             --ok: #16a34a;
             --shadow: 0 12px 28px rgba(15,23,42,.08);
@@ -114,7 +114,7 @@
         }
         .field .RadDropDownList_Metro .rddlInner.rddlFocused,
         .field .RadDropDownList_Metro .rddlInner.rddlExpanded {
-            border-color: #2563eb !important;
+            border-color: #1B4F9C !important;
             box-shadow: 0 0 0 3px rgba(37,99,235,.15) !important;
         }
 
@@ -137,7 +137,7 @@
             background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(6,182,212,.10));
             color: var(--text); font-weight: 800; font-family: var(--font);
         }
-        .btn.primary { border-color: rgba(37,99,235,.4); background: rgba(37,99,235,.08); color: #1d4ed8; }
+        .btn.primary { border-color: rgba(37,99,235,.4); background: rgba(37,99,235,.08); color: #143A73; }
         .btn.danger { border-color: rgba(220,38,38,.35); background: rgba(220,38,38,.08); color: var(--danger); }
         .btn:disabled { opacity: .6; cursor: not-allowed; }
 

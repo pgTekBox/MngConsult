@@ -13,9 +13,9 @@
 
         :root {
             --font: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
-            --slate-200: #e2e8f0; --slate-500: #64748b;
-            --slate-600: #475569; --slate-800: #1e293b;
-            --blue-500: #3b82f6;  --blue-600: #2563eb;
+            --slate-200: #D5DDE8; --slate-500: #44536E;
+            --slate-600: #44536E; --slate-800: #1e293b;
+            --blue-500: #3b82f6;  --blue-600: #1B4F9C;
             --cyan-500: #06b6d4;
             --green-500: #10b981; --green-600: #059669;
             --red-500: #ef4444; --red-600: #dc2626;

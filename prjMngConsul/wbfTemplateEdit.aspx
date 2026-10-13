@@ -15,7 +15,7 @@
             width: 100%;
             min-height: 38px;
             padding: 8px 10px;
-            border: 1px solid #e2e8f0;
+            border: 1px solid #D5DDE8;
             border-radius: 10px;
             background: #fff;
             cursor: pointer;
@@ -25,7 +25,7 @@
         .account-selector::after {
             content: "▾";
             float: right;
-            color: #64748b;
+            color: #44536E;
         }
 
         .account-picker-overlay {
@@ -187,10 +187,10 @@
 
         .info-banner {
             padding: 10px 14px;
-            background: #eff6ff;
+            background: #E3EBF7;
             border: 1px solid #bfdbfe;
             border-radius: 10px;
-            color: #1e40af;
+            color: #143A73;
             font-size: 13px;
         }
 
