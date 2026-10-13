@@ -21,7 +21,11 @@ Namespace Controls
         '''Auto-generated field.
         '''To modify move field declaration from designer file to code-behind file.
         '''</remarks>
+        Protected WithEvents lnkLogo As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
         Protected WithEvents litAppName As Global.System.Web.UI.WebControls.Literal
+
+        Protected WithEvents litPortails As Global.System.Web.UI.WebControls.Literal
 
         '''<summary>
         '''HeaderUser control.

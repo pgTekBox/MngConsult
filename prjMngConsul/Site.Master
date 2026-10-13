@@ -27,6 +27,17 @@
     --mc-font: system-ui,-apple-system,Segoe UI,Roboto,Arial,sans-serif;
     --mc-blue:#2563eb;
     --mc-cyan:#06b6d4;
+    /* Le style « Doux bleu marine » retenu pour 60secondes (en-tête) */
+    --mc-navy:#0E1F3D;
+    --mc-primary:#1B4F9C;
+    --mc-primary-dark:#143A73;
+    --mc-muted2:#44536E;
+    --mc-line:#D5DDE8;
+    --mc-line2:#AEBBCD;
+    --mc-soft:#E8EDF5;
+    --mc-soft2:#E3EBF7;
+    --mc-page:#F2F5F9;
+    --mc-font-titre: Nunito, system-ui, -apple-system, "Segoe UI", sans-serif;
 }
 
 *{ box-sizing:border-box; }
@@ -202,6 +213,9 @@ a{
 
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="anonymous" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Nunito:wght;800&display=swap" />
 <link id="lnkAssistantCss" runat="server" rel="stylesheet" type="text/css" />
 <asp:ContentPlaceHolder ID="HeadContent" runat="server" />
 </head>

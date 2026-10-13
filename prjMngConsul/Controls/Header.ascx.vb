@@ -1,5 +1,7 @@
-﻿Imports System.Data
+﻿Imports System.Configuration
+Imports System.Data
 Imports System.Data.SqlClient
+Imports System.Text
 
 Namespace Controls
 
@@ -7,9 +9,41 @@ Namespace Controls
         Inherits clsDataUC
 
         Private Sub Header_Load(sender As Object, e As EventArgs) Handles Me.Load
+            LoadPortails()
             LoadPlaidStatus()
             LoadStripeStatus()
         End Sub
+
+        ''' <summary>
+        ''' La barre des portails, comme sur la page publique : Entreprise (ici, la
+        ''' pastille blanche), puis Cabinets certifiés, Paie et Paiements — seulement
+        ''' ceux dont Web.config donne l'adresse (Portail.Cabinets.Url, Portail.Paie.Url,
+        ''' Portail.Paiements.Url). Sans adresse, le portail n'est pas montré : un lien
+        ''' qui ne mène nulle part vaut moins que pas de lien.
+        ''' </summary>
+        Private Sub LoadPortails()
+            Dim lang As String = CurrentLang
+            Dim sb As New StringBuilder()
+            sb.Append("<span class=""ici"" aria-current=""page"">").Append(Server.HtmlEncode(Mot(lang, "Entreprise", "Business", "Empresa"))).Append("</span>")
+            AjouterPortail(sb, "Portail.Cabinets.Url", Mot(lang, "Cabinets certifiés", "Certified firms", "Despachos certificados"))
+            AjouterPortail(sb, "Portail.Paie.Url", Mot(lang, "Paie", "Payroll", "Nómina"))
+            AjouterPortail(sb, "Portail.Paiements.Url", Mot(lang, "Paiements", "Payments", "Pagos"))
+            litPortails.Text = sb.ToString()
+        End Sub
+
+        Private Sub AjouterPortail(sb As StringBuilder, cle As String, libelle As String)
+            Dim url As String = ConfigurationManager.AppSettings(cle)
+            If String.IsNullOrWhiteSpace(url) Then Return
+            sb.Append("<a href=""").Append(Server.HtmlEncode(url.Trim())).Append(""">").Append(Server.HtmlEncode(libelle)).Append("</a>")
+        End Sub
+
+        Private Shared Function Mot(lang As String, fr As String, en As String, es As String) As String
+            Select Case lang
+                Case "en" : Return en
+                Case "es" : Return es
+                Case Else : Return fr
+            End Select
+        End Function
 
         ''' <summary>Pastille : nombre de fournisseurs connectés à Stripe Connect.</summary>
         Private Sub LoadStripeStatus()
