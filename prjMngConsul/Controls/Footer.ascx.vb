@@ -19,6 +19,20 @@ Namespace Controls
                 Case "es" : litDonnees.Text = "Sus datos permanecen en Canadá."
                 Case Else : litDonnees.Text = "Vos données restent au Canada."
             End Select
+
+            ' Les liens : le courriel du soutien (la même adresse que « Contacter le
+            ' soutien » du tableau de bord), et les documents juridiques du site public
+            ' (le site ouvre le document visé par le #), dans la langue de la session,
+            ' dans un nouvel onglet.
+            Dim lang As String = CurrentLang
+            lnkSupport.HRef = "mailto:support@60sec.ca"
+            lnkConfidentialite.HRef = ResolveUrl("~/LandingPage.aspx") & "?lang=" & lang & "#doc-confidentialite"
+            lnkConditions.HRef = ResolveUrl("~/LandingPage.aspx") & "?lang=" & lang & "#doc-conditions"
+            Select Case lang
+                Case "en" : lnkSupport.InnerText = "Support" : lnkConfidentialite.InnerText = "Privacy" : lnkConditions.InnerText = "Terms"
+                Case "es" : lnkSupport.InnerText = "Soporte" : lnkConfidentialite.InnerText = "Privacidad" : lnkConditions.InnerText = "Condiciones"
+                Case Else : lnkSupport.InnerText = "Support" : lnkConfidentialite.InnerText = "Confidentialité" : lnkConditions.InnerText = "Conditions"
+            End Select
         End Sub
 
     End Class

@@ -158,6 +158,11 @@ Public Class _Default
         litCabinet.Text = sb.ToString()
     End Sub
 
+    ''' <summary>L'aide en ligne (page d'accueil), dans la langue de la session — le lien « Centre d'aide » de la boîte de bienvenue.</summary>
+    Protected Function UrlAide() As String
+        Return ResolveUrl(clsAide.Url("index", CurrentLang))
+    End Function
+
     ''' <summary>Culture pour le format des dates selon la langue courante.</summary>
     Private Function Cult() As CultureInfo
         Select Case CurrentLang

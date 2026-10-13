@@ -319,7 +319,7 @@
                 <!-- Ressources -->
                 <div class="wb-section-title"><%= L("resourcesTitle") %></div>
                 <div class="wb-resources">
-                    <a class="wb-res" href="<%= ResolveUrl("~/wbfHelp.aspx") %>"><i class="ic ic-help" aria-hidden="true"></i> <%= L("helpCenter") %></a>
+                    <a class="wb-res" href="<%= UrlAide() %>" target="aide60sec"><i class="ic ic-help" aria-hidden="true"></i> <%= L("helpCenter") %></a>
                     <a class="wb-res" href="<%= ResolveUrl("~/wbfTutorials.aspx") %>"><i class="ic ic-film" aria-hidden="true"></i> <%= L("videoTutorials") %></a>
                     <a class="wb-res" href="mailto:support@60sec.ca"><i class="ic ic-mail" aria-hidden="true"></i> <%= L("contactSupport") %></a>
                 </div>

@@ -14,9 +14,9 @@
         </div>
 
         <div class="footer-right">
-            <a href="#">Support</a>
-            <a href="#">Confidentialité</a>
-            <a href="#">Conditions</a>
+            <a id="lnkSupport" runat="server" href="~/wbfHelp.aspx">Support</a>
+            <a id="lnkConfidentialite" runat="server" href="~/LandingPage.aspx#doc-confidentialite" target="_blank" rel="noopener">Confidentialité</a>
+            <a id="lnkConditions" runat="server" href="~/LandingPage.aspx#doc-conditions" target="_blank" rel="noopener">Conditions</a>
         </div>
 
     </div>

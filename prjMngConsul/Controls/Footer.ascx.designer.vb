@@ -25,6 +25,12 @@ Namespace Controls
 
         Protected WithEvents litDonnees As Global.System.Web.UI.WebControls.Literal
 
+        Protected WithEvents lnkSupport As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+        Protected WithEvents lnkConfidentialite As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
+        Protected WithEvents lnkConditions As Global.System.Web.UI.HtmlControls.HtmlAnchor
+
         '''<summary>
         '''litVersion control.
         '''</summary>
