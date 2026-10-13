@@ -23,7 +23,7 @@
     <%-- Sélecteur de compagnie (visible uniquement si comptable avec >1 compagnie) --%>
     <asp:Panel ID="pnlCompanyPicker" runat="server" CssClass="company-picker" Visible="false">
         <asp:Literal ID="litCompanyLogoPicker" runat="server" />
-        <span class="company-icon" aria-hidden="true">🏢</span>
+        <span class="company-icon" aria-hidden="true"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/></svg></span>
         <asp:DropDownList ID="ddlCompany" runat="server"
             CssClass="company-select"
             AutoPostBack="true" />
@@ -32,15 +32,15 @@
     <%-- Affichage simple si une seule compagnie --%>
     <asp:Panel ID="pnlCompanyLabel" runat="server" CssClass="company-label" Visible="false">
         <asp:Literal ID="litCompanyLogoLabel" runat="server" />
-        <span class="company-icon" aria-hidden="true">🏢</span>
+        <span class="company-icon" aria-hidden="true"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z"/><path d="M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4"/></svg></span>
         <asp:Literal ID="litCompanyName" runat="server" />
     </asp:Panel>
 
     <%-- Aide en ligne de la section courante, dans une fenêtre à part (Aide/xxx.html?lang=). --%>
-    <a id="lnkAide" runat="server" class="header-action header-aide" href="#" title="Aide">?</a>
+    <a id="lnkAide" runat="server" class="header-action header-aide" href="#" title="Aide"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3M12 17h.01"/></svg></a>
 
     <div class="header-action" title="Notifications">
-        🔔
+        <svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
     </div>
 
     <div class="header-user">
@@ -57,7 +57,7 @@
             </div>
         </div>
 
-        <a href="~/wbfLogout.aspx" runat="server" class="logout-btn" title="Déconnexion">⎋</a>
+        <a href="~/wbfLogout.aspx" runat="server" class="logout-btn" title="Déconnexion"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5M21 12H9"/></svg></a>
     </div>
 
 </div>
@@ -182,9 +182,12 @@
 }
 
 .company-icon{
-    font-size:16px;
+    display:inline-flex;
+    color:var(--mc-primary,#1B4F9C);
     flex-shrink:0;
 }
+.company-icon svg, .header-action svg, .logout-btn svg{ display:block; width:20px; height:20px; }
+.logout-btn svg{ width:18px; height:18px; }
 
 .company-logo{
     width:24px;

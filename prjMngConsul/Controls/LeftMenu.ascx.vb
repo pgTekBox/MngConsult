@@ -91,32 +91,65 @@ Namespace Controls
 
         Private Const GroupEnd As String = "</div></div>"
 
+        ''' <summary>
+        ''' Les icônes du menu, au trait, dans le style du gabarit « Doux bleu
+        ''' marine » : 24 × 24, trait 2.2 arrondi, couleur du texte (currentColor —
+        ''' bleu sur le rond clair, blanc sur le rond bleu marine de la page courante).
+        ''' Un nom inconnu rend un rond vide plutôt qu'une erreur.
+        ''' </summary>
+        Private Shared ReadOnly Traits As New Dictionary(Of String, String)(StringComparer.OrdinalIgnoreCase) From {
+            {"home", "<path d=""M3 11l9-8 9 8v9a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z""/>"},
+            {"receipt", "<path d=""M4 2v20l2-1 2 1 2-1 2 1 2-1 2 1 2-1 2 1V2l-2 1-2-1-2 1-2-1-2 1-2-1-2 1z""/><path d=""M8 8h8M8 12h8M8 16h5""/>"},
+            {"package", "<path d=""M21 8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z""/><path d=""M3.3 7l8.7 5 8.7-5M12 22V12""/>"},
+            {"tag", "<path d=""M20.6 13.4l-7.2 7.2a2 2 0 0 1-2.8 0L3 13V3h10l7.6 7.6a2 2 0 0 1 0 2.8z""/><circle cx=""7.5"" cy=""7.5"" r=""1.5""/>"},
+            {"book", "<path d=""M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z""/><path d=""M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z""/>"},
+            {"calendar", "<rect x=""3"" y=""4"" width=""18"" height=""18"" rx=""2""/><path d=""M8 2v4M16 2v4M3 10h18""/>"},
+            {"users", "<path d=""M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2""/><circle cx=""9"" cy=""7"" r=""4""/><path d=""M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75""/>"},
+            {"mail", "<rect x=""2"" y=""4"" width=""20"" height=""16"" rx=""2""/><path d=""M22 7l-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7""/>"},
+            {"inbox", "<path d=""M22 12h-6l-2 3h-4l-2-3H2""/><path d=""M5.45 5.11L2 12v6a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2v-6l-3.45-6.89A2 2 0 0 0 16.76 4H7.24a2 2 0 0 0-1.79 1.11z""/>"},
+            {"chart", "<path d=""M3 3v18h18""/><path d=""M18 17V9M13 17V5M8 17v-3""/>"},
+            {"import", "<path d=""M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4""/><path d=""M7 10l5 5 5-5M12 15V3""/>"},
+            {"building", "<path d=""M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18z""/><path d=""M6 12H4a2 2 0 0 0-2 2v6a2 2 0 0 0 2 2h2M18 9h2a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-2M10 6h4M10 10h4M10 14h4M10 18h4""/>"},
+            {"user-cog", "<circle cx=""10"" cy=""7"" r=""4""/><path d=""M2 21v-2a4 4 0 0 1 4-4h5""/><circle cx=""18"" cy=""17"" r=""3""/><path d=""M18 12.5v1.5M18 20v1.5M22.5 17H21M15 17h-1.5M21.2 13.8l-1.1 1.1M15.9 19.1l-1.1 1.1M21.2 20.2l-1.1-1.1M15.9 14.9l-1.1-1.1""/>"},
+            {"settings", "<circle cx=""12"" cy=""12"" r=""3""/><path d=""M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09a1.65 1.65 0 0 0-1.08-1.51 1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09a1.65 1.65 0 0 0 1.51-1.08 1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z""/>"},
+            {"card", "<rect x=""2"" y=""5"" width=""20"" height=""14"" rx=""2""/><path d=""M2 10h20""/>"},
+            {"bot", "<path d=""M12 8V4H8""/><rect x=""4"" y=""8"" width=""16"" height=""12"" rx=""2""/><path d=""M2 14h2M20 14h2M15 13v2M9 13v2""/>"},
+            {"logout", "<path d=""M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4""/><path d=""M16 17l5-5-5-5M21 12H9""/>"}
+        }
+
+        Private Shared Function Ico(nom As String) As String
+            Dim trait As String = ""
+            Traits.TryGetValue(nom, trait)
+            Return "<svg aria-hidden=""true"" width=""19"" height=""19"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" " &
+                   "stroke-width=""2.2"" stroke-linecap=""round"" stroke-linejoin=""round"">" & trait & "</svg>"
+        End Function
+
         Private Function BuildMenu() As String
             Dim sb As New StringBuilder()
 
-            sb.Append(Item("~/default.aspx", "🏠", "dashboard"))
+            sb.Append(Item("~/default.aspx", Ico("home"), "dashboard"))
 
             ' Ventes
-            sb.Append(GroupStart("🧾", "sales"))
+            sb.Append(GroupStart(Ico("receipt"), "sales"))
             sb.Append(Child("~/wbfCustomers.aspx", "customers"))
             sb.Append(Child("~/wbfCustomersInvoices.aspx", "customerInvoices"))
             sb.Append(GroupEnd)
 
             ' Achats
-            sb.Append(GroupStart("📦", "purchases"))
+            sb.Append(GroupStart(Ico("package"), "purchases"))
             sb.Append(Child("~/wbfSuppliers.aspx", "suppliers"))
             sb.Append(Child("~/wbfSuppliersInvoices.aspx", "supplierInvoices"))
             sb.Append(Child("~/wbfReceipt.aspx", "receipts"))
             sb.Append(GroupEnd)
 
             ' Produits et services
-            sb.Append(GroupStart("🏷️", "productsServices"))
+            sb.Append(GroupStart(Ico("tag"), "productsServices"))
             sb.Append(Child("~/wbfProducts.aspx", "products"))
             sb.Append(Child("~/wbfProductCategory.aspx", "productCategory"))
             sb.Append(GroupEnd)
 
             ' Comptabilité
-            sb.Append(GroupStart("📒", "accounting"))
+            sb.Append(GroupStart(Ico("book"), "accounting"))
             sb.Append(Child("~/wbfJournal.aspx", "journals"))
             sb.Append(Child("~/wbfTemplate.aspx", "journalTemplates"))
             sb.Append(Child("~/PlaidAccounts.aspx", "bankAccounts"))
@@ -127,13 +160,13 @@ Namespace Controls
             sb.Append(GroupEnd)
 
             ' Agenda
-            sb.Append(Item("~/wbfAgenda.aspx", "📅", "agenda"))
+            sb.Append(Item("~/wbfAgenda.aspx", Ico("calendar"), "agenda"))
 
             ' Employés (ressources de l'agenda)
-            sb.Append(Item("~/wbfEmployees.aspx", "👥", "employees"))
+            sb.Append(Item("~/wbfEmployees.aspx", Ico("users"), "employees"))
 
             ' Courriel
-            sb.Append(Item("~/wbfMailbox.aspx", "✉️", "mailbox"))
+            sb.Append(Item("~/wbfMailbox.aspx", Ico("mail"), "mailbox"))
 
             ' Les tâches planifiées ont été déplacées dans la console
             ' d'administration (prjSec60Admin) : elles pilotent des traitements
@@ -142,10 +175,10 @@ Namespace Controls
             ' Ce qui reste ici, c'est la boîte de messages : les tâches que
             ' l'exécuteur ne lancera pas sans l'accord de l'utilisateur. La
             ' pastille porte le nombre en attente.
-            sb.Append(Item("~/wbfApprobations.aspx", "📥", "approvals", "nav-item", CountApprobations()))
+            sb.Append(Item("~/wbfApprobations.aspx", Ico("inbox"), "approvals", "nav-item", CountApprobations()))
 
             ' Rapports
-            sb.Append(GroupStart("📒", "reports"))
+            sb.Append(GroupStart(Ico("chart"), "reports"))
             sb.Append(Child("~/wbfRapportPlanComptable.aspx", "chartOfAccounts"))
             sb.Append(Child("~/wbfEtatResultats.aspx", "incomeStatement"))
             sb.Append(Child("~/wbfBilan.aspx", "balanceSheet"))
@@ -157,7 +190,7 @@ Namespace Controls
             sb.Append(GroupEnd)
 
             ' Importation
-            sb.Append(GroupStart("📒", "import"))
+            sb.Append(GroupStart(Ico("import"), "import"))
             ' Une seule porte : les ecrans d'importation s'atteignent depuis la
             ' page d'accueil des importations, qui dit aussi ou chacun en est.
             ' Un menu qui les listait tous laissait croire qu'ils se valent, et
@@ -167,12 +200,12 @@ Namespace Controls
 
             ' Footer
             sb.Append("<div class=""sidebar-footer"">")
-            sb.Append(Item("~/wbfNewUser.aspx", "🏢", "companyProfile", "nav-item subtle"))
-            sb.Append(Item("~/wbfUsers.aspx", "⚙️", "users", "nav-item subtle"))
-            sb.Append(Item("~/wbfsetting.aspx", "⚙️", "settings", "nav-item subtle"))
-            sb.Append(Item("~/wbfPaymentProcessors.aspx", "💳", "paymentProcessors", "nav-item subtle"))
-            sb.Append(Item("~/wbfAutoPayAuthorizations.aspx", "🤖", "autoPay", "nav-item subtle"))
-            sb.Append(Item("~/wbfLogout.aspx", "🚪", "logout", "nav-item subtle"))
+            sb.Append(Item("~/wbfNewUser.aspx", Ico("building"), "companyProfile", "nav-item subtle"))
+            sb.Append(Item("~/wbfUsers.aspx", Ico("user-cog"), "users", "nav-item subtle"))
+            sb.Append(Item("~/wbfsetting.aspx", Ico("settings"), "settings", "nav-item subtle"))
+            sb.Append(Item("~/wbfPaymentProcessors.aspx", Ico("card"), "paymentProcessors", "nav-item subtle"))
+            sb.Append(Item("~/wbfAutoPayAuthorizations.aspx", Ico("bot"), "autoPay", "nav-item subtle"))
+            sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout", "nav-item subtle"))
             sb.Append("</div>")
 
             Return sb.ToString()

@@ -221,7 +221,9 @@
         justify-content: center;
         font-size: 17px;
         line-height: 1;
+        color: var(--mc-primary, #1B4F9C);
     }
+    .nav-ico svg { display: block; }
     .nav-txt {
         font-weight: 700;
         font-size: 15px;
