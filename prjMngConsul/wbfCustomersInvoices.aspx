@@ -622,7 +622,7 @@
 
             // Telerik confirm (asynchrone)
             radconfirm(
-                "⚠️ Vous avez des modifications non sauvegardées.<br/>Voulez-vous vraiment fermer ?",
+                "<i class='ic ic-alert' aria-hidden='true'></i> Vous avez des modifications non sauvegardées.<br/>Voulez-vous vraiment fermer ?",
                 function (arg) {
 
                     if (arg) {

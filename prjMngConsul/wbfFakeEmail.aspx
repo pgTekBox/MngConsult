@@ -141,7 +141,7 @@
     <form id="form1" runat="server">
 
         <div class="dev-banner">
-            <span style="font-size: 18px;">🧪</span>
+            <span style="font-size: 18px;"><i class="ic ic-flask" aria-hidden="true"></i></span>
             <div>
                 <strong>Mode développement —</strong>
                 Simulation d'envoi de courriel.

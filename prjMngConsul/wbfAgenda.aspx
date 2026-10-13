@@ -1067,7 +1067,7 @@
             var host = document.getElementById('agToastHost');
             var t = document.createElement('div');
             t.className = 'ag-toast';
-            t.innerHTML = '<div class="t-title">🔔 ' + title + '</div><div class="t-body">' + body + '</div>';
+            t.innerHTML = '<div class="t-title"><i class="ic ic-bell" aria-hidden="true"></i> ' + title + '</div><div class="t-body">' + body + '</div>';
             host.appendChild(t);
             setTimeout(function () {
                 t.style.transition = 'opacity .4s';

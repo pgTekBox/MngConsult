@@ -185,7 +185,7 @@
     </style>
 
     <div class="plan-lien">
-        <span class="ico">🧭</span>
+        <span class="ico"><i class="ic ic-compass" aria-hidden="true"></i></span>
         <div class="txt">
             <b>Plan de reprise d'une comptabilité QuickBooks</b>
             <span>Fermeture au 31 décembre, rejeu de toutes les transactions de 2026 — la méthode, étape par étape, et l'état du code pour chacune.</span>

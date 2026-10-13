@@ -662,7 +662,7 @@
                         </span>
                     </a>
                     <a class="wb-step" href="<%= ResolveUrl("~/wbfProducts.aspx") %>">
-                        <span class="wb-step-ico wb-ico-green">💲</span>
+                        <span class="wb-step-ico wb-ico-green"><i class="ic ic-dollar" aria-hidden="true"></i></span>
                         <span>
                             <span class="wb-step-num"><%= L("step") %> 3</span>
                             <div class="wb-step-title"><%= L("step3Title") %></div>
@@ -695,7 +695,7 @@
                 <div class="wb-section-title"><%= L("resourcesTitle") %></div>
                 <div class="wb-resources">
                     <a class="wb-res" href="<%= ResolveUrl("~/wbfHelp.aspx") %>"><i class="ic ic-help" aria-hidden="true"></i> <%= L("helpCenter") %></a>
-                    <a class="wb-res" href="<%= ResolveUrl("~/wbfTutorials.aspx") %>">🎬 <%= L("videoTutorials") %></a>
+                    <a class="wb-res" href="<%= ResolveUrl("~/wbfTutorials.aspx") %>"><i class="ic ic-film" aria-hidden="true"></i> <%= L("videoTutorials") %></a>
                     <a class="wb-res" href="mailto:support@60sec.ca"><i class="ic ic-mail" aria-hidden="true"></i> <%= L("contactSupport") %></a>
                 </div>
 
@@ -939,7 +939,7 @@
                     <div class="panel-body">
                         <div class="quick-actions">
                             <a class="quick-btn" href="wbfInvoiceEdit.aspx">
-                                <span class="quick-ico">➕</span>
+                                <span class="quick-ico"><i class="ic ic-plus" aria-hidden="true"></i></span>
                                 <span><%= L("qaCreateInvoice") %></span>
                            </a>
 

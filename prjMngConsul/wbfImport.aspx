@@ -257,7 +257,7 @@
                         ? (f.size / 1048576).toFixed(2) + ' Mo'
                         : (f.size / 1024).toFixed(1) + ' Ko';
                 var ext = (f.name.split('.').pop() || '').toLowerCase();
-                document.getElementById('fileIcon').textContent = (ext === 'xlsx') ? '📊' : '📄';
+                document.getElementById('fileIcon').innerHTML = (ext === 'xlsx') ? '<i class="ic ic-chart" aria-hidden="true"></i>' : '<i class="ic ic-file" aria-hidden="true"></i>';
                 document.getElementById('fileInfoDiv').style.display = 'block';
                 document.getElementById('dropZone').style.display = 'none';
             }

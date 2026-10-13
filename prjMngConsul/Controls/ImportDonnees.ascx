@@ -274,7 +274,7 @@
             if (!this.files || !this.files.length) { reinitialiser(); return; }
 
             var f = this.files[0];
-            icone.textContent = '📄';
+            icone.innerHTML = '<i class="ic ic-file" aria-hidden="true"></i>';
             texte.innerHTML = '<b></b>';
             texte.firstChild.textContent = f.name;
             info.textContent = (f.size / 1024).toFixed(0) + ' Ko';
@@ -282,7 +282,7 @@
         });
 
         function reinitialiser() {
-            icone.textContent = '📁';
+            icone.innerHTML = '<i class="ic ic-folder" aria-hidden="true"></i>';
             texte.innerHTML = '<b>Glissez votre fichier ici</b> ou cliquez pour le choisir';
             info.textContent = '.csv ou .txt';
             zone.classList.remove('has');

@@ -58,7 +58,7 @@
         <div class="mail-tabs">
             <asp:LinkButton ID="lbInbox"   runat="server" CssClass="mail-tab" OnClick="lbInbox_Click"   CausesValidation="false">Réception</asp:LinkButton>
             <asp:LinkButton ID="lbSent"    runat="server" CssClass="mail-tab" OnClick="lbSent_Click"    CausesValidation="false">Envoyés</asp:LinkButton>
-            <asp:LinkButton ID="lbCompose" runat="server" CssClass="mail-tab" OnClick="lbCompose_Click" CausesValidation="false">✍️ Composer</asp:LinkButton>
+            <asp:LinkButton ID="lbCompose" runat="server" CssClass="mail-tab" OnClick="lbCompose_Click" CausesValidation="false">Composer</asp:LinkButton>
         </div>
 
         <asp:Panel ID="pnlBrowse" runat="server">
@@ -206,7 +206,7 @@
 
             var box = document.getElementById('composeErr');
             if (miss.length > 0) {
-                if (box) { box.style.display = ''; box.innerHTML = '✖ Champ(s) obligatoire(s) manquant(s) : ' + miss.join(', ') + '.'; }
+                if (box) { box.style.display = ''; box.innerHTML = '<i class="ic ic-x-circle" aria-hidden="true"></i> Champ(s) obligatoire(s) manquant(s) : ' + miss.join(', ') + '.'; }
                 if (miss[0] === 'destinataire' && toEl) toEl.focus();
                 return false;
             }

@@ -135,7 +135,7 @@
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="3" />
 
     <div class="app-head">
-        <div class="ico">📗</div>
+        <div class="ico"><i class="ic ic-book" aria-hidden="true"></i></div>
         <div>
             <h1>Créer les comptes au plan comptable</h1>
             <div class="sub">Étape 3 de la reprise comptable</div>

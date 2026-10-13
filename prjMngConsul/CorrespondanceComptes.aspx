@@ -257,7 +257,7 @@
         </div>
 
         <asp:Panel ID="pnlTermine" runat="server" Visible="false" CssClass="rappel" style="background:#ecfdf5;border-color:#a7f3d0;color:#065f46">
-            <span>🎉</span>
+            <span><i class="ic ic-party" aria-hidden="true"></i></span>
             <p>
                 <b>Tous les comptes sont décidés.</b> La correspondance est prête à être
                 relue et signée par votre comptable. Elle servira ensuite à rattacher

@@ -104,7 +104,7 @@
                         <div class="col-ext emp-meta"><%# IIf(Val_(Eval("Email"))="", "—", Server.HtmlEncode(Val_(Eval("Email")))) %></div>
                         <div class="col-box">
                             <span class='<%# IIf(CBool(Eval("HasMailbox")), "emp-mail", "emp-mail emp-none") %>'><%# IIf(CBool(Eval("HasMailbox")), Server.HtmlEncode(Val_(Eval("Sec60Email"))), "aucune") %></span>
-                            <%# IIf(CBool(Eval("HasPassword")), "<span class=""pw-key"" title=""Mot de passe défini"">🔑</span>", "") %>
+                            <%# IIf(CBool(Eval("HasPassword")), "<span class=""pw-key"" title=""Mot de passe défini""><i class='ic ic-key' aria-hidden='true'></i></span>", "") %>
                         </div>
                         <div>
                             <span class='<%# "badge " & IIf(CBool(Eval("Active")), "on", "off") %>'><%# IIf(CBool(Eval("Active")), L("stActive"), L("stInactive")) %></span>

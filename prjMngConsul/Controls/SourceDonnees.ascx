@@ -123,7 +123,7 @@
         </div>
 
         <div class="sd-ou">
-            <span>📍</span>
+            <span><i class="ic ic-pin" aria-hidden="true"></i></span>
             <p>Dans <b><asp:Literal ID="litNomSysteme" runat="server" /></b> : <asp:Literal ID="litCheminExport" runat="server" /></p>
         </div>
 

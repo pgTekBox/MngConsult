@@ -286,7 +286,7 @@
             </div>
 
             <div class="note-staging">
-                <span>🛡️</span>
+                <span><i class="ic ic-shield" aria-hidden="true"></i></span>
                 <p>
                     Ces comptes sont <b>en préparation</b>. Votre plan comptable n'a pas
                     changé. Vous pouvez recharger un autre fichier, ou abandonner ce lot,
@@ -414,7 +414,7 @@
             </div>
 
             <div class="note-staging" style="margin-top:14px">
-                <span>📍</span>
+                <span><i class="ic ic-pin" aria-hidden="true"></i></span>
                 <p>
                     Dans <b><asp:Literal ID="litNomSysteme" runat="server" /></b> :
                     <asp:Literal ID="litCheminExport" runat="server" />
@@ -560,7 +560,7 @@
             if (!this.files || !this.files.length) { reinitialiser(); return; }
 
             var f = this.files[0];
-            icone.textContent = '📄';
+            icone.innerHTML = '<i class="ic ic-file" aria-hidden="true"></i>';
             texte.innerHTML = '<b></b>';
             texte.firstChild.textContent = f.name;
             info.textContent = (f.size / 1024).toFixed(0) + ' Ko';
@@ -568,7 +568,7 @@
         });
 
         function reinitialiser() {
-            icone.textContent = '📁';
+            icone.innerHTML = '<i class="ic ic-folder" aria-hidden="true"></i>';
             texte.innerHTML = '<b>Glissez votre fichier ici</b> ou cliquez pour le choisir';
             info.textContent = '.csv ou .txt';
             zone.classList.remove('has');

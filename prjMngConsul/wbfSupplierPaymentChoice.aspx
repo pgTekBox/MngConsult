@@ -669,13 +669,13 @@
 
                 if (isNaN(raw) || raw <= 0) {
                     errorEl.style.display = 'block';
-                    errorEl.textContent = '⚠ Le montant doit être supérieur à 0.';
+                    errorEl.innerHTML = '<i class="ic ic-alert" aria-hidden="true"></i> Le montant doit être supérieur à 0.';
                     if (btnPay) btnPay.disabled = true;
                     return;
                 }
                 if (raw > window.maxAmount + 0.001) {
                     errorEl.style.display = 'block';
-                    errorEl.textContent = '⚠ Le montant ne peut dépasser ' + formatMoney(window.maxAmount);
+                    errorEl.innerHTML = '<i class="ic ic-alert" aria-hidden="true"></i> Le montant ne peut dépasser ' + formatMoney(window.maxAmount);
                     if (btnPay) btnPay.disabled = true;
                     return;
                 }
