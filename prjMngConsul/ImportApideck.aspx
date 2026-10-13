@@ -253,6 +253,8 @@
         };
 
         function ouvrirSuivi() {
+            var boite = voile.querySelector('.ext-fen');
+            if (window.rendreDeplacable && boite) { rendreDeplacable(boite, boite.querySelector('.ext-tete')); boite.recentrer(); }
             voile.classList.add('ouvert');
             document.body.style.overflow = 'hidden';
         }

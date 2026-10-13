@@ -215,6 +215,8 @@
             var onglet = document.getElementById('planOnglet');
             onglet.setAttribute('href', url.replace('?popup=1', ''));
             onglet.style.display = (url.indexOf('popup=1') >= 0) ? 'none' : '';
+            var boite = document.querySelector('#planVoile .plan-fen');
+            if (window.rendreDeplacable && boite) { rendreDeplacable(boite, boite.querySelector('.barre')); boite.recentrer(); }
             document.getElementById('planVoile').classList.add('ouvert');
             document.body.style.overflow = 'hidden';
         }

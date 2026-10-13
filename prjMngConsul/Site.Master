@@ -254,11 +254,11 @@ a{
     <div id="mcMsgOverlay" style="display:none; position:fixed; inset:0; z-index:999999;
          background:rgba(15,23,42,.55); align-items:center; justify-content:center;"
          onclick="if (event.target === this) closeAppMessage();">
-        <div style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
+        <div id="mcMsgBox" style="background:#fff; border-radius:16px; box-shadow:0 20px 60px rgba(0,0,0,.3);
              width:92vw; max-width:460px; padding:24px; box-sizing:border-box;
              font-family:inherit;">
             <div id="mcMsgTitle" style="font-weight:800; font-size:16px; color:#0f172a;
-                 margin-bottom:10px;"></div>
+                 margin:-24px -24px 10px; padding:14px 24px 10px; border-radius:16px 16px 0 0; cursor:move;"></div>
             <div id="mcMsgText" style="color:#475569; font-size:14px; line-height:1.5;
                  margin-bottom:22px; white-space:pre-wrap;"></div>
             <div style="display:flex; justify-content:flex-end;">
@@ -279,6 +279,8 @@ a{
             if (!o || !t) { return; }
             t.textContent = text || "";
             if (h) { h.textContent = title || "Information"; }
+            var b = document.getElementById("mcMsgBox");
+            if (b && h) { rendreDeplacable(b, h); b.recentrer(); }
             o.style.display = "flex";
         }
         function closeAppMessage() {
@@ -288,6 +290,53 @@ a{
         document.addEventListener("keydown", function (e) {
             if (e.key === "Escape") { closeAppMessage(); }
         });
+
+        // Les fenêtres maison (boîte de message, plan de reprise, associer un compte,
+        // suivi d'extraction…) se déplacent par leur barre de titre, comme les
+        // RadWindow. rendreDeplacable(boite, barre) pose la poignée une fois ;
+        // boite.recentrer() remet la fenêtre au centre à chaque ouverture. Un clic
+        // sur un bouton ou un lien de la barre reste un clic. Pendant le glissement,
+        // les iframes de la boîte ne captent plus la souris, sinon le mouvement
+        // s'y perd. La fenêtre ne sort jamais tout à fait de l'écran.
+        function rendreDeplacable(boite, barre) {
+            if (!boite || !barre) { return; }
+            if (!boite.recentrer) { boite.recentrer = function () { boite.style.transform = ""; boite.dataset.dx = "0"; boite.dataset.dy = "0"; }; }
+            if (barre.dataset.deplacable) { return; }
+            barre.dataset.deplacable = "1";
+            barre.style.cursor = "move";
+            barre.style.userSelect = "none";
+            barre.setAttribute("title", (barre.getAttribute("title") || "") || "Glissez pour déplacer la fenêtre");
+            barre.addEventListener("pointerdown", function (e) {
+                if (e.button !== 0) { return; }
+                if (e.target.closest("button, a, input, select, textarea, label")) { return; }
+                var x0 = e.clientX, y0 = e.clientY;
+                var bx = parseFloat(boite.dataset.dx || "0"), by = parseFloat(boite.dataset.dy || "0");
+                var r = boite.getBoundingClientRect();
+                var gauche0 = r.left - bx, haut0 = r.top - by;
+                var cadres = boite.querySelectorAll("iframe");
+                cadres.forEach(function (f) { f.style.pointerEvents = "none"; });
+                try { barre.setPointerCapture(e.pointerId); } catch (x) { }
+                function bouge(ev) {
+                    var dx = bx + ev.clientX - x0, dy = by + ev.clientY - y0;
+                    // au moins 80 px de la boîte restent visibles, et la barre ne passe pas sous le haut
+                    dx = Math.max(-(gauche0 + r.width - 80), Math.min(dx, window.innerWidth - gauche0 - 80));
+                    dy = Math.max(-haut0, Math.min(dy, window.innerHeight - haut0 - 40));
+                    boite.dataset.dx = dx; boite.dataset.dy = dy;
+                    boite.style.transform = "translate(" + dx + "px," + dy + "px)";
+                }
+                function fin(ev) {
+                    barre.removeEventListener("pointermove", bouge);
+                    barre.removeEventListener("pointerup", fin);
+                    barre.removeEventListener("pointercancel", fin);
+                    cadres.forEach(function (f) { f.style.pointerEvents = ""; });
+                    try { barre.releasePointerCapture(ev.pointerId); } catch (x) { }
+                }
+                barre.addEventListener("pointermove", bouge);
+                barre.addEventListener("pointerup", fin);
+                barre.addEventListener("pointercancel", fin);
+                e.preventDefault();
+            });
+        }
     </script>
 
     <%-- L'assistant IA flottant : la même boîte que dans 60secPaie, sur toutes les pages.

@@ -714,6 +714,8 @@
         function ouvrirFenetre(url, titre) {
             document.getElementById('fenTitre').textContent = titre || '';
             document.getElementById('fenCadre').setAttribute('src', url);
+            var boite = document.querySelector('#fenVoile .fen-boite');
+            if (window.rendreDeplacable && boite) { rendreDeplacable(boite, boite.querySelector('.barre')); boite.recentrer(); }
             document.getElementById('fenVoile').classList.add('ouvert');
             document.body.style.overflow = 'hidden';
         }
