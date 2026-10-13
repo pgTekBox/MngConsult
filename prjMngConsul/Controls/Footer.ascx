@@ -4,8 +4,9 @@
     <div class="footer-inner">
 
         <div class="footer-left">
-            © <%= DateTime.Now.Year %> 
-            <asp:Literal runat="server" ID="litCompany" Text="396 7557 Canada Inc." />
+            © <%= DateTime.Now.Year %>
+            <asp:Literal runat="server" ID="litCompany" Text="60secondes — 9567-0048 Québec inc., Montréal." />
+            <asp:Literal runat="server" ID="litDonnees" Text="Vos données restent au Canada." />
         </div>
 
         <div class="footer-center">

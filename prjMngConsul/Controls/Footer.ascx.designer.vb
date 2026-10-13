@@ -23,6 +23,8 @@ Namespace Controls
         '''</remarks>
         Protected WithEvents litCompany As Global.System.Web.UI.WebControls.Literal
 
+        Protected WithEvents litDonnees As Global.System.Web.UI.WebControls.Literal
+
         '''<summary>
         '''litVersion control.
         '''</summary>
