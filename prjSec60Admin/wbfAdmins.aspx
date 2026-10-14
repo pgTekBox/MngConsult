@@ -153,7 +153,7 @@
                             <asp:Button ID="btnDelete" runat="server"
                                 CssClass="btn btn-icon btn-icon-delete" Text="" ToolTip="Supprimer"
                                 CommandName="DeleteAdmin" CommandArgument='<%# Eval("Id") %>'
-                                OnClientClick="return confirm('Supprimer cet administrateur ?');"
+                                OnClientClick="if (!confirm('Supprimer cet administrateur ?')) { return false; }"
                                 CausesValidation="false" />
                         </div>
                     </div>

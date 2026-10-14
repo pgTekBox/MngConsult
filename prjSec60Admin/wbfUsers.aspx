@@ -236,7 +236,7 @@
                                 Text="" ToolTip="Supprimer"
                                 CommandName="DeleteUser"
                                 CommandArgument='<%# Eval("Id") %>'
-                                OnClientClick="return confirm('Supprimer cet utilisateur ?');"
+                                OnClientClick="if (!confirm('Supprimer cet utilisateur ?')) { return false; }"
                                 CausesValidation="false" />
                         </div>
                     </div>

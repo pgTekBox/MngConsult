@@ -353,7 +353,7 @@
                                                 CommandName="SupprSched"
                                                 CommandArgument='<%# Eval("Id") %>'
                                                 Text="✕"
-                                                OnClientClick="return confirm('Supprimer ce schedule ?');" />
+                                                OnClientClick="if (!confirm('Supprimer ce schedule ?')) { return false; }" />
                                         </td>
                                     </tr>
                                 </ItemTemplate>

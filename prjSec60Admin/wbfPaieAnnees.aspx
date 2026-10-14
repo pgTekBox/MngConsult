@@ -43,7 +43,7 @@
             </div>
             <div>
                 <asp:Button ID="btnCreer" runat="server" CssClass="pa-btn primary" Text="Créer l'année suivante"
-                    OnClientClick="return confirm('Créer l\'année suivante en brouillon, à partir de la plus récente ?');" />
+                    OnClientClick="if (!confirm('Créer l\'année suivante en brouillon, à partir de la plus récente ?')) { return false; }" />
             </div>
         </div>
 

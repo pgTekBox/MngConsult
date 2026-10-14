@@ -63,12 +63,12 @@
             <div class="pe-bar">
                 <a class="pe-btn" href="wbfPaieAnnees.aspx">← Liste des années</a>
                 <asp:Button ID="btnSupprimer" runat="server" CssClass="pe-btn danger" Text="Supprimer ce brouillon" Visible="false"
-                    OnClientClick="return confirm('Supprimer ce brouillon ? Les valeurs saisies seront perdues.');" />
+                    OnClientClick="if (!confirm('Supprimer ce brouillon ? Les valeurs saisies seront perdues.')) { return false; }" />
                 <asp:Button ID="btnDevalider" runat="server" CssClass="pe-btn" Text="Retirer la validation" Visible="false"
-                    OnClientClick="return confirm('Retirer la validation ? 60secPaie refusera les paies de cette année jusqu\'à une nouvelle validation.');" />
+                    OnClientClick="if (!confirm('Retirer la validation ? 60secPaie refusera les paies de cette année jusqu\'à une nouvelle validation.')) { return false; }" />
                 <asp:Button ID="btnSave" runat="server" CssClass="pe-btn primary" Text="Enregistrer" />
                 <asp:Button ID="btnValider" runat="server" CssClass="pe-btn ok" Text="Enregistrer et valider" Visible="false"
-                    OnClientClick="return confirm('Valider cette année ? 60secPaie l\'utilisera pour toutes les paies datées de cette année, dans les cinq minutes.');" />
+                    OnClientClick="if (!confirm('Valider cette année ? 60secPaie l\'utilisera pour toutes les paies datées de cette année, dans les cinq minutes.')) { return false; }" />
             </div>
         </div>
 
@@ -279,7 +279,7 @@
                                 <td><asp:TextBox ID="txtPTaux" runat="server" CssClass="inp" Text='<%# NombreChamp(Eval("TauxCredits")) %>' /></td>
                                 <td><asp:TextBox ID="txtPParticularites" runat="server" CssClass="inp" TextMode="MultiLine" Rows="3" Text='<%# Eval("Particularites") %>' /></td>
                                 <td><asp:TextBox ID="txtPAccidents" runat="server" CssClass="inp" Text='<%# NombreChamp(Eval("AccidentsMaxAssurable")) %>' /></td>
-                                <td><asp:LinkButton ID="lnkPSupprimer" runat="server" CommandName="supprimer" CommandArgument='<%# Eval("Province") & "|" & Eval("EnVigueurLe", "{0:yyyy-MM-dd}") %>' CssClass="pe-btn danger" OnClientClick="return confirm('Supprimer cette ligne ?');" CausesValidation="false">Supprimer</asp:LinkButton></td>
+                                <td><asp:LinkButton ID="lnkPSupprimer" runat="server" CommandName="supprimer" CommandArgument='<%# Eval("Province") & "|" & Eval("EnVigueurLe", "{0:yyyy-MM-dd}") %>' CssClass="pe-btn danger" OnClientClick="if (!confirm('Supprimer cette ligne ?')) { return false; }" CausesValidation="false">Supprimer</asp:LinkButton></td>
                             </tr>
                     </ItemTemplate>
                     <FooterTemplate>

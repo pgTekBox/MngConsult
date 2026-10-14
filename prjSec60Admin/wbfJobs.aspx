@@ -321,7 +321,7 @@
                                                 CommandName="RunNow"
                                                 CommandArgument='<%# Eval("JobDefinitionId") %>'
                                                 Text="Run now"
-                                                OnClientClick="return confirm('Lancer ce job maintenant ?');" />
+                                                OnClientClick="if (!confirm('Lancer ce job maintenant ?')) { return false; }" />
 
                                             <asp:LinkButton ID="btnToggleActif" runat="server"
                                                 CssClass="action-btn"
@@ -342,7 +342,7 @@
                                                 CommandArgument='<%# Eval("JobDefinitionId") %>'
                                                 Text="✕"
                                                 Visible='<%# Not Convert.ToBoolean(Eval("Systeme")) %>'
-                                                OnClientClick="return confirm('Supprimer définitivement ce job et tout son historique ?');" />
+                                                OnClientClick="if (!confirm('Supprimer définitivement ce job et tout son historique ?')) { return false; }" />
                                         </td>
                                     </tr>
                                     <!-- Volet déplié : schedules du job -->

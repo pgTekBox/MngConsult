@@ -177,7 +177,7 @@
                         <asp:Button ID="btnDelete" runat="server"
                             Text="Supprimer définitivement la compagnie"
                             CssClass="btn danger" CausesValidation="false"
-                            OnClientClick="return confirmDelete();" />
+                            OnClientClick="if (!confirmDelete()) { return false; }" />
                     </div>
                 </div>
             </div>

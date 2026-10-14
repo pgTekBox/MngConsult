@@ -61,7 +61,7 @@
 
             <asp:Button ID="btnReset" runat="server" CssClass="btn-reset"
                 Text="Réinitialiser la démo maintenant"
-                OnClientClick="return confirm('Réinitialiser la démo sélectionnée ? Les modifications actuelles de cette démo seront perdues.');" />
+                OnClientClick="if (!confirm('Réinitialiser la démo sélectionnée ? Les modifications actuelles de cette démo seront perdues.')) { return false; }" />
 
             <asp:Panel ID="pnlMsg" runat="server" Visible="false">
                 <asp:Literal ID="litMsg" runat="server" />
@@ -87,7 +87,7 @@
 
             <asp:Button ID="btnSnapshot" runat="server" CssClass="btn-snap"
                 Text="Recapturer le cliché maintenant"
-                OnClientClick="return confirm('Remplacer le cliché de référence de la démo sélectionnée par son état actuel ?');" />
+                OnClientClick="if (!confirm('Remplacer le cliché de référence de la démo sélectionnée par son état actuel ?')) { return false; }" />
 
             <asp:Panel ID="pnlMsgSnap" runat="server" Visible="false">
                 <asp:Literal ID="litMsgSnap" runat="server" />
