@@ -113,6 +113,10 @@
                         <span class="dot" aria-hidden="true"></span>
                         Compagnies
                     </a>
+                    <a class="nav-child" href="~/wbfCabinets.aspx" runat="server" data-navlink>
+                        <span class="dot" aria-hidden="true"></span>
+                        Cabinets certifiés
+                    </a>
                     <a class="nav-child" href="~/wbfStripeWebhookDiagnostic.aspx" runat="server" data-navlink>
                         <span class="dot" aria-hidden="true"></span>
                         Webhooks Stripe

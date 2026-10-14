@@ -380,6 +380,8 @@
     <Content Include="wbfUserEdit.aspx" />
     <Content Include="wbfPlans.aspx" />
     <Content Include="wbfPlanEdit.aspx" />
+    <Content Include="wbfCabinets.aspx" />
+    <Content Include="wbfCabinetEdit.aspx" />
     <Content Include="wbfPaieAnnees.aspx" />
     <Content Include="wbfPaieFormulaires.aspx" />
     <Content Include="Aide.html" />
@@ -472,6 +474,20 @@
     </Compile>
     <Compile Include="wbfPlanEdit.aspx.designer.vb">
       <DependentUpon>wbfPlanEdit.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCabinets.aspx.vb">
+      <DependentUpon>wbfCabinets.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabinets.aspx.designer.vb">
+      <DependentUpon>wbfCabinets.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="wbfCabinetEdit.aspx.vb">
+      <DependentUpon>wbfCabinetEdit.aspx</DependentUpon>
+      <SubType>ASPXCodebehind</SubType>
+    </Compile>
+    <Compile Include="wbfCabinetEdit.aspx.designer.vb">
+      <DependentUpon>wbfCabinetEdit.aspx</DependentUpon>
     </Compile>
     <Compile Include="wbfPaieFormulaires.aspx.vb">
       <DependentUpon>wbfPaieFormulaires.aspx</DependentUpon>

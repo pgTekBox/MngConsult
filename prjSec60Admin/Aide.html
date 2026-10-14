@@ -65,6 +65,7 @@ ol.etapes li{margin:6px 0}
   <a href="#landing">LandingPage</a>
   <a href="#reservations">Réservations</a>
   <a href="#compagnies">Compagnies &amp; abonnements</a>
+  <a href="#cabinets">Cabinets certifiés</a>
   <a href="#webhooks">Webhooks Stripe et Square</a>
   <a href="#plaid">Connexions Plaid</a>
   <h2>Paie</h2>
@@ -164,6 +165,20 @@ ol.etapes li{margin:6px 0}
 <h2 id="compagnies">Compagnies &amp; abonnements</h2>
 <p><span class="chemin">wbfCompanies.aspx</span>. Toutes les compagnies de 60Sec-AI, avec leur forfait et leur statut ; recherche par nom ou code. Fiche (<span class="chemin">wbfCompanyEdit.aspx</span>) : « Nom * », « Raison sociale », « Code », « Structure », « NEQ », « Numéro d'entreprise », « Forfait », « Statut » (Actif, Essai, En pause, Annulé, Expiré), « Montant », « Devise », « Cycle », « Date de début », « Prochaine facturation », « Date de fin », <kbd>Enregistrer</kbd>.</p>
 <div class="avert">La suppression d'une compagnie est <strong>définitive</strong> et emporte toutes ses données ; elle demande une confirmation. Préférez le statut « Annulé » ou « En pause » quand il y a le moindre doute.</div>
+
+<h2 id="cabinets">Cabinets certifiés</h2>
+<p><span class="chemin">wbfCabinets.aspx</span>. L'annuaire des cabinets comptables certifiés 60secondes : ce que les utilisateurs de 60Sec-AI voient quand ils cliquent <kbd>Cabinets certifiés</kbd> dans l'en-tête de leur application (une fenêtre avec une carte par cabinet, et un champ de recherche). L'annuaire est le même pour toutes les compagnies. Recherche par nom, responsable ou ville ; <kbd>+ Ajouter un cabinet</kbd> ; la corbeille supprime (confirmation). Fiche (<span class="chemin">wbfCabinetEdit.aspx</span>) :</p>
+<table>
+<tr><th>Champ</th><th>Sens</th></tr>
+<tr><td>Nom du cabinet *, Responsable</td><td>Le titre de la carte et la personne-ressource (« Geneviève Lachance, CPA »). Deux cabinets ne peuvent pas porter le même nom.</td></tr>
+<tr><td>Ville, Province, Certifié depuis</td><td>Le lieu, en badge, et l'année de certification (« Certifié · 2026 »).</td></tr>
+<tr><td>Description (500 caractères)</td><td>Une phrase sur la clientèle et la façon de travailler, affichée telle quelle.</td></tr>
+<tr><td>Courriel, Téléphone, Site web</td><td>Les moyens de le joindre : le courriel devient le bouton « Écrire », le site un bouton « Site web » (avec https://), le téléphone est affiché.</td></tr>
+<tr><td>Langues parlées (Français, English, Español)</td><td>Au moins une ; en badge sur la carte.</td></tr>
+<tr><td>Spécialités (Travailleurs autonomes, Sociétés, Paie et employés, Construction, Santé et services)</td><td>En badges, traduits dans la langue de l'utilisateur de 60Sec-AI.</td></tr>
+<tr><td>Actif</td><td>Décoché, le cabinet reste dans la console mais n'est plus proposé aux utilisateurs. Préférez-le à la suppression quand le cabinet peut revenir.</td></tr>
+</table>
+<div class="note">La certification elle-même (formation, entente de confidentialité) se règle hors de la console ; ici on inscrit le cabinet une fois qu'elle est acquise. Les cinq cabinets présents à l'installation sont des exemples aux coordonnées fictives (.example, 555) : remplacez-les par les vrais.</div>
 
 <h2 id="webhooks">Webhooks Stripe et Square</h2>
 <p><span class="chemin">wbfStripeWebhookDiagnostic.aspx</span> et <span class="chemin">wbfSquareWebhookDiagnostic.aspx</span>. La surveillance des événements reçus de Stripe (abonnements, factures, paiements, comptes connectés, virements) et de Square (clients, catalogue, factures, paiements, commandes), avec leur traitement. Filtres « Statut » (Tous, Traités, Échoués, En cours, Ignorés), « Type d'event », « Période » (24 h, 7, 30, 90 jours), <kbd>Appliquer filtres</kbd>, <kbd>🔄 Actualiser</kbd>. Un événement « Échoué » se lit avec son message d'erreur ; c'est le premier endroit à regarder quand un paiement ou une synchronisation ne s'est pas reflété dans une compagnie.</p>
@@ -266,6 +281,7 @@ ol.etapes li{margin:6px 0}
 <details><summary>Où mettre le document d'instructions du T4 ?</summary><p>Dans la même page, type « Instructions T4 (ARC) », pour l'année. 60secPaie l'offre ensuite par un lien à toutes les compagnies.</p></details>
 <details><summary>Une compagnie a téléversé ses propres formulaires : lesquels servent ?</summary><p>Les siens. Ceux de la console ne servent qu'à défaut, type par type (une compagnie peut avoir son T4 et prendre le Relevé 1 de la plateforme).</p></details>
 <details><summary>Un paiement Stripe ou une synchronisation Square ne s'est pas reflété dans une compagnie.</summary><p>Ouvrez Webhooks Stripe ou Webhooks Square, filtrez « Échoués » sur la période : le message d'erreur dit ce qui a bloqué. Un événement « Ignoré » est un type que 60Sec-AI ne traite pas.</p></details>
+<details><summary>Un cabinet comptable veut paraître dans « Cabinets certifiés » de 60Sec-AI.</summary><p>Abonnements › Cabinets certifiés, <kbd>+ Ajouter un cabinet</kbd> : nom, responsable, ville, courriel, langues, spécialités, Actif. Il paraît aussitôt dans l'application, pour toutes les compagnies. Pour le retirer sans le perdre, décochez Actif.</p></details>
 <details><summary>Comment donner accès à un nouveau membre de l'équipe ?</summary><p>Sécurité › Administrateurs, <kbd>+ Ajouter un administrateur</kbd>. Pour un client, c'est Sécurité › Utilisateurs, dans sa compagnie.</p></details>
 
 <!-- ============================================================ -->
@@ -291,6 +307,7 @@ ol.etapes li{margin:6px 0}
 <dt>Instructions T4</dt><dd>Le document d'instructions de l'ARC qui accompagne le T4, conservé par année et servi tel quel à toutes les compagnies.</dd>
 <dt>Webhook</dt><dd>Un événement que Stripe, Square ou Plaid envoie à 60Sec-AI (paiement reçu, facture, synchronisation). Les pages de diagnostic en gardent le journal.</dd>
 <dt>Job / tâche</dt><dd>Un traitement de fond planifié : procédure stockée, connecteur, courriel ou traitement spécial, avec son calendrier et son historique.</dd>
+<dt>Cabinet certifié</dt><dd>Un cabinet comptable formé à 60secondes, inscrit dans l'annuaire de la console et proposé aux utilisateurs de 60Sec-AI par le bouton « Cabinets certifiés » de leur en-tête.</dd>
 <dt>Cliché (démo)</dt><dd>L'état de référence d'une compagnie de démonstration, auquel « Réinitialiser la démo » la ramène.</dd>
 <dt>Alias (plan comptable)</dt><dd>Les autres noms d'un compte du plan par défaut, par langue et chez QuickBooks, qui servent à reconnaître les comptes lors d'une reprise.</dd>
 </dl>
