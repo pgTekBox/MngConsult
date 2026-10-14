@@ -189,15 +189,6 @@ Namespace Controls
             sb.Append(Child("~/wbfAISale.aspx", "aiSales"))
             sb.Append(GroupEnd)
 
-            ' Importation
-            sb.Append(GroupStart(Ico("import"), "import"))
-            ' Une seule porte : les ecrans d'importation s'atteignent depuis la
-            ' page d'accueil des importations, qui dit aussi ou chacun en est.
-            ' Un menu qui les listait tous laissait croire qu'ils se valent, et
-            ' menait droit a l'etape 2 sans avoir fait l'etape 1.
-            sb.Append(Child("~/Importations.aspx", "importations"))
-            sb.Append(GroupEnd)
-
             ' Footer
             sb.Append("<div class=""sidebar-footer"">")
             sb.Append(Item("~/wbfNewUser.aspx", Ico("building"), "companyProfile", "nav-item subtle"))
@@ -205,6 +196,14 @@ Namespace Controls
             sb.Append(Item("~/wbfsetting.aspx", Ico("settings"), "settings", "nav-item subtle"))
             sb.Append(Item("~/wbfPaymentProcessors.aspx", Ico("card"), "paymentProcessors", "nav-item subtle"))
             sb.Append(Item("~/wbfAutoPayAuthorizations.aspx", Ico("bot"), "autoPay", "nav-item subtle"))
+            ' Importation : juste au-dessus de Déconnexion, en bas du menu (le menu défile si la fenêtre est basse).
+            sb.Append(GroupStart(Ico("import"), "import"))
+            ' Une seule porte : les ecrans d'importation s'atteignent depuis la
+            ' page d'accueil des importations, qui dit aussi ou chacun en est.
+            ' Un menu qui les listait tous laissait croire qu'ils se valent, et
+            ' menait droit a l'etape 2 sans avoir fait l'etape 1.
+            sb.Append(Child("~/Importations.aspx", "importations"))
+            sb.Append(GroupEnd)
             sb.Append(Item("~/wbfLogout.aspx", Ico("logout"), "logout", "nav-item subtle"))
             sb.Append("</div>")
 

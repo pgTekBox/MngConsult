@@ -266,6 +266,46 @@ a{
 
     </div>
 
+    <%-- Fenêtre applicative générique : ouvrirFenetreApp(url, titre) ouvre une page
+         dans un cadre par-dessus la page courante — l'en-tête s'en sert pour
+         « Cabinets certifiés » (CabinetsCertifies.aspx?popup=1). Déplaçable par sa
+         barre (rendreDeplacable), fermée par ✕, Échap, un clic sur le voile, ou
+         parent.fermerFenetreApp() depuis la page du cadre. --%>
+    <style>
+        .mc-fen-voile { position: fixed; inset: 0; background: rgba(15,23,42,.55); z-index: 9000; display: none; align-items: center; justify-content: center; padding: 20px }
+        .mc-fen-voile.ouvert { display: flex }
+        .mc-fen-boite { width: min(980px, 100%); height: min(90vh, 100%); background: #fff; border-radius: 20px; box-shadow: 0 24px 60px rgba(15,23,42,.35); display: flex; flex-direction: column; overflow: hidden; font-family: var(--mc-font, Nunito, system-ui, sans-serif) }
+        .mc-fen-boite .barre { display: flex; align-items: center; gap: 10px; padding: 12px 18px; border-bottom: 1px solid var(--mc-line, #D5DDE8); background: #fff }
+        .mc-fen-boite .barre b { flex: 1; font-size: 15px; font-weight: 800; color: var(--mc-navy, #0E1F3D) }
+        .mc-fen-boite .barre button { font-size: 12.5px; font-family: inherit; cursor: pointer; border: 1px solid var(--mc-line2, #AEBBCD); background: #fff; border-radius: 999px; padding: 6px 12px; color: var(--mc-navy, #0E1F3D); font-weight: 700 }
+        .mc-fen-boite .barre button:hover { background: var(--mc-soft, #E8EDF5) }
+        .mc-fen-boite iframe { flex: 1; border: 0; width: 100%; background: var(--mc-page, #F2F5F9) }
+    </style>
+    <div class="mc-fen-voile" id="mcFenVoile" onclick="if (event.target === this) fermerFenetreApp();">
+        <div class="mc-fen-boite" role="dialog" aria-modal="true" aria-labelledby="mcFenTitre">
+            <div class="barre"><b id="mcFenTitre"></b><button type="button" onclick="fermerFenetreApp()">Fermer ✕</button></div>
+            <iframe id="mcFenCadre" title="Fenêtre"></iframe>
+        </div>
+    </div>
+    <script type="text/javascript">
+        function ouvrirFenetreApp(url, titre) {
+            var v = document.getElementById("mcFenVoile"); if (!v) { return; }
+            document.getElementById("mcFenTitre").textContent = titre || "";
+            document.getElementById("mcFenCadre").setAttribute("src", url);
+            var boite = v.querySelector(".mc-fen-boite");
+            if (window.rendreDeplacable && boite) { rendreDeplacable(boite, boite.querySelector(".barre")); boite.recentrer(); }
+            v.classList.add("ouvert");
+            document.body.style.overflow = "hidden";
+        }
+        function fermerFenetreApp() {
+            var v = document.getElementById("mcFenVoile"); if (!v || !v.classList.contains("ouvert")) { return; }
+            v.classList.remove("ouvert");
+            document.getElementById("mcFenCadre").removeAttribute("src");
+            document.body.style.overflow = "";
+        }
+        document.addEventListener("keydown", function (e) { if (e.key === "Escape") { fermerFenetreApp(); } });
+    </script>
+
     <%-- Boîte de message applicative, disponible sur toutes les pages du master.
          Remplace radalert() : appelé depuis un script de démarrage
          (ScriptManager.RegisterStartupScript), radalert s'exécute AVANT que Telerik

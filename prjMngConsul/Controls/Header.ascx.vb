@@ -16,19 +16,30 @@ Namespace Controls
 
         ''' <summary>
         ''' La barre des portails, comme sur la page publique : Entreprise (ici, la
-        ''' pastille blanche), puis Cabinets certifiés, Paie et Paiements — seulement
-        ''' ceux dont Web.config donne l'adresse (Portail.Cabinets.Url, Portail.Paie.Url,
-        ''' Portail.Paiements.Url). Sans adresse, le portail n'est pas montré : un lien
+        ''' pastille blanche), puis le bouton Cabinets certifiés (l'annuaire, en fenêtre),
+        ''' puis Paie et Paiements — seulement ceux dont Web.config donne l'adresse
+        ''' (Portail.Paie.Url, Portail.Paiements.Url). Sans adresse, le portail n'est pas montré : un lien
         ''' qui ne mène nulle part vaut moins que pas de lien.
         ''' </summary>
         Private Sub LoadPortails()
             Dim lang As String = CurrentLang
             Dim sb As New StringBuilder()
             sb.Append("<span class=""ici"" aria-current=""page"">").Append(Server.HtmlEncode(Mot(lang, "Entreprise", "Business", "Empresa"))).Append("</span>")
-            AjouterPortail(sb, "Portail.Cabinets.Url", Mot(lang, "Cabinets certifiés", "Certified firms", "Despachos certificados"))
+            AjouterBoutonCabinets(sb, Mot(lang, "Cabinets certifiés", "Certified firms", "Despachos certificados"))
             AjouterPortail(sb, "Portail.Paie.Url", Mot(lang, "Paie", "Payroll", "Nómina"))
             AjouterPortail(sb, "Portail.Paiements.Url", Mot(lang, "Paiements", "Payments", "Pagos"))
             litPortails.Text = sb.ToString()
+        End Sub
+
+        ''' <summary>
+        ''' « Cabinets certifiés » : un bouton, pas un lien — il ouvre dans une fenêtre
+        ''' par-dessus la page (ouvrirFenetreApp du master) l'annuaire des cabinets
+        ''' comptables certifiés (CabinetsCertifies.aspx?popup=1). Toujours montré : cette
+        ''' liste vit dans la base, pas dans Web.config.
+        ''' </summary>
+        Private Sub AjouterBoutonCabinets(sb As StringBuilder, libelle As String)
+            Dim url As String = ResolveUrl("~/CabinetsCertifies.aspx?popup=1")
+            sb.Append("<button type=""button"" onclick=""ouvrirFenetreApp('").Append(url).Append("', this.textContent)"">").Append(Server.HtmlEncode(libelle)).Append("</button>")
         End Sub
 
         Private Sub AjouterPortail(sb As StringBuilder, cle As String, libelle As String)

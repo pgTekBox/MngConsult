@@ -163,6 +163,8 @@
         background: #fff;
         border-radius: 24px;
         overflow: auto;
+        scrollbar-width: thin;
+        scrollbar-color: var(--mc-line2, #AEBBCD) transparent;
         z-index: 40;
     }
 

@@ -2,8 +2,8 @@
 <%@ Register Src="~/Controls/HeaderUser.ascx" TagPrefix="uc1" TagName="HeaderUser" %>
 <%-- L'en-tête, au style « Doux bleu marine » retenu pour 60secondes : fond blanc,
      filet #D5DDE8, le visage « Le 60 » et le nom en Nunito, les portails en
-     pastilles (Entreprise, Cabinets certifiés, Paie, Paiements — ceux qui ont une
-     adresse dans Web.config, Portail.*.Url), puis à droite les pastilles d'état,
+     pastilles (Entreprise ; le bouton Cabinets certifiés, qui ouvre l'annuaire en
+     fenêtre ; Paie et Paiements quand Web.config en donne l'adresse, Portail.*.Url), puis à droite les pastilles d'état,
      les langues en ronds, la compagnie, l'aide, la cloche et l'utilisateur. --%>
 <header class="app-header">
     <div class="app-header-inner">
@@ -84,7 +84,7 @@
     margin-left:6px;
 }
 .portails:empty{ display:none; }
-.portails a, .portails span{
+.portails a, .portails span, .portails button{
     padding:9px 16px;
     border-radius:999px;
     color:var(--mc-navy,#0E1F3D);
@@ -94,7 +94,9 @@
     white-space:nowrap;
     line-height:1.2;
 }
-.portails a:hover{ background:rgba(255,255,255,.6); }
+.portails a:hover, .portails button:hover{ background:rgba(255,255,255,.6); }
+/* Cabinets certifiés : un bouton qui ouvre l'annuaire en fenêtre (ouvrirFenetreApp) */
+.portails button{ border:0; background:transparent; cursor:pointer; font-family:inherit; }
 .portails .ici{
     background:#ffffff;
     box-shadow:0 1px 2px rgba(14,31,61,.12);
@@ -132,7 +134,7 @@
 .stripe-hdr-pill.off .dot{ background:#94a3b8; }
 .stripe-hdr-pill .num{ font-weight:900; }
 @media(max-width:1280px){
-    .portails a, .portails span{ padding:8px 12px; font-size:13px; }
+    .portails a, .portails span, .portails button{ padding:8px 12px; font-size:13px; }
     .plaid-pill{ max-width:150px; }
     .stripe-hdr-pill .lbl{ display:none; }
 }
