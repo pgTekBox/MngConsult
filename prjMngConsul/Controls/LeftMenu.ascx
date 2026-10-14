@@ -151,16 +151,18 @@
     }
 
     /* Sidebar */
+    /* Le menu : une carte blanche arrondie posée sur le fond, sous l'en-tête de 71 px,
+       comme dans le gabarit « Doux bleu marine ». */
     .sidebar {
         position: fixed;
-        top: 0;
-        left: 0;
-        /* height:100vh; */
-        height: 100%;
-        width: var(--sidebarW);
+        top: 87px;
+        left: 16px;
+        height: auto;
+        max-height: calc(100vh - 103px);
+        width: 270px;
         background: #fff;
-        border-right: 1px solid var(--border);
-        box-shadow: 0 10px 40px rgba(2,6,23,.08);
+        border-radius: 24px;
+        overflow: auto;
         z-index: 40;
     }
 
@@ -169,7 +171,6 @@
         display: flex;
         flex-direction: column;
         padding: 12px;
-        padding-top: 82px; /* sous l'en-tête de 71 px */
         gap: 2px;
         font-family: var(--mc-font-titre, Nunito, system-ui, sans-serif);
     }
@@ -355,6 +356,7 @@
         }
 
         .sidebar {
+            top: 64px; left: 0; width: var(--sidebarW); height: 100%; max-height: none; border-radius: 0;
             transform: translateX(-110%);
             transition: transform .22s ease;
         }

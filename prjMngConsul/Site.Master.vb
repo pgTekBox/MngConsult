@@ -8,6 +8,18 @@ Public Class SiteMaster
     ''' <summary>L'assistant flottant ; visible seulement pour une session ouverte avec une compagnie.</summary>
     Protected WithEvents divAssistant As HtmlGenericControl
 
+    ''' <summary>
+    ''' Vrai quand la page pose elle-même ses boîtes sur le fond (le tableau de bord) :
+    ''' le cadre blanc du corps s'efface, comme dans le gabarit « Doux bleu marine ».
+    ''' </summary>
+    Public Property FondDePage As Boolean
+
+    Protected Sub Page_PreRender(ByVal sender As Object, ByVal e As EventArgs) Handles Me.PreRender
+        If FondDePage AndAlso Not divMain.Attributes("class").Contains("mc-fond") Then
+            divMain.Attributes("class") &= " mc-fond"
+        End If
+    End Sub
+
     Protected Sub Page_Load(ByVal sender As Object, ByVal e As EventArgs) Handles Me.Load
         Dim css As String = Server.MapPath("~/css/assistant.css")
         Dim version As String = If(File.Exists(css), File.GetLastWriteTimeUtc(css).Ticks.ToString(), "1")

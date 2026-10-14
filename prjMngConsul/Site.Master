@@ -115,6 +115,11 @@ a{
     min-height:0;
     min-width:0;
 }
+/* Une page « à boîtes » (le tableau de bord) : le cadre blanc s'efface, ses cartes
+   posent directement sur le fond de la page, comme dans le gabarit. */
+.mc-mainwrap.mc-fond{ background:transparent; border:0; box-shadow:none; overflow:visible; }
+/* La colonne du menu : le menu lui-même est une carte fixe, le cadre dessous ne doit pas se voir */
+.mc-sidebar > .mc-card{ background:transparent; border:0; box-shadow:none; }
 
 .pad{ padding:16px; }
 
@@ -249,7 +254,7 @@ a{
 
             <!-- MAIN CONTENT -->
             <main class="mc-maincol">
-                <div class="mc-card mc-mainwrap">
+                <div class="mc-card mc-mainwrap" id="divMain" runat="server">
                     <asp:ContentPlaceHolder ID="MainContent" runat="server" />
                 </div>
             </main>

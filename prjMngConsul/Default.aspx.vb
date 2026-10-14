@@ -11,6 +11,8 @@ Public Class _Default
             Response.Redirect("wbfLogin.aspx?lang=" & CurrentLang)
         End If
         Page.Title = L("pageTitle")
+        ' Les boîtes du tableau de bord posent sur le fond de la page, sans cadre blanc autour.
+        DirectCast(Master, SiteMaster).FondDePage = True
 
         If Not IsPostBack Then
             LoadKPIs()

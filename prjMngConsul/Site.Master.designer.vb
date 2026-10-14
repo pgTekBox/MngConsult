@@ -58,6 +58,9 @@ Partial Public Class SiteMaster
     '''</remarks>
     Protected WithEvents Header1 As Global.MngConsul.Controls.Header
 
+    '''<summary>divMain control.</summary>
+    Protected WithEvents divMain As Global.System.Web.UI.HtmlControls.HtmlGenericControl
+
     '''<summary>
     '''LeftMenu1 control.
     '''</summary>

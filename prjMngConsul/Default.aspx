@@ -10,7 +10,7 @@
      reste au-dessus. --%>
 <style>
     .home-page{ font-family: var(--mc-font); color: var(--mc-navy); }
-    .home-wrap{ display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; padding:16px; }
+    .home-wrap{ display:flex; flex-wrap:wrap; gap:16px; align-items:flex-start; padding:0; }
     .home-main{ flex: 999 1 480px; min-width:0; display:flex; flex-direction:column; gap:16px; }
     .home-side{ flex: 1 1 270px; max-width:320px; display:flex; flex-direction:column; gap:16px; }
     @media (max-width: 1100px){ .home-side{ max-width:none; } }
