@@ -201,7 +201,7 @@
                                 Text="" ToolTip="Supprimer"
                                 CommandName="DeletePlan"
                                 CommandArgument='<%# Eval("Id") %>'
-                                OnClientClick="return confirm('Supprimer ce forfait ?');"
+                                OnClientClick="if (!confirm('Supprimer ce forfait ?')) { return false; }"
                                 CausesValidation="false" />
                         </div>
                     </div>

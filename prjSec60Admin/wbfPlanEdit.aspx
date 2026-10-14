@@ -142,7 +142,7 @@
                 <div class="bar">
                     <asp:Button ID="btnDelete" runat="server" Text="Supprimer"
                         CssClass="btn danger" Visible="false"
-                        OnClientClick="return confirm('Supprimer ce forfait ?');" />
+                        OnClientClick="if (!confirm('Supprimer ce forfait ?')) { return false; }" />
                     <asp:HyperLink ID="lnkBack" runat="server" CssClass="btn"
                         onclick="closeWin();">← Annuler</asp:HyperLink>
                     <asp:Button ID="btnSave" runat="server" Text="Enregistrer" CssClass="btn primary" />
