@@ -170,7 +170,7 @@
         flex-direction: column;
         padding: 12px;
         padding-top: 82px; /* sous l'en-tête de 71 px */
-        gap: 4px;
+        gap: 2px;
         font-family: var(--mc-font-titre, Nunito, system-ui, sans-serif);
     }
 
@@ -180,7 +180,7 @@
         display: flex;
         align-items: center;
         gap: 12px;
-        min-height: 50px;
+        min-height: 42px;
         padding: 0 8px;
         border-radius: 999px;
         text-decoration: none;
@@ -264,18 +264,18 @@
     }
     /* Accordion */
     .nav-group {
-        padding: 2px 0;
+        padding: 0;
     }
 
     .nav-children {
         display: block;
-        padding: 2px 4px 8px 26px;
+        padding: 0 4px 6px 26px;
     }
     .nav-child {
         display: flex;
         align-items: center;
         gap: 10px;
-        min-height: 38px;
+        min-height: 34px;
         padding: 0 14px;
         border-radius: 999px;
         color: var(--mc-muted2, #44536E);
