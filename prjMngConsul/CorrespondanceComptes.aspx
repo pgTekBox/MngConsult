@@ -8,26 +8,27 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .cor-page { padding: 16px }
+    .cor-page { padding: 0 }
+    /* Les boîtes posent sur le fond de la page (FondDePage), comme dans le gabarit */
+    .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
 
     .cor-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 
     .cor-head .ico {
-        width: 46px; height: 46px; border-radius: 13px;
-        background: linear-gradient(135deg, rgba(16,185,129,.14), rgba(37,99,235,.10));
-        border: 1px solid #D5DDE8;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: var(--mc-soft, #E8EDF5); color: var(--mc-primary, #1B4F9C); border: 0;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
     .cor-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
     .cor-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .cor-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; line-height: 1.6 }
+    .cor-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
     .ia-note { font-size: 12.5px; color: #6b21a8; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; line-height: 1.55 }
 
     .card {
-        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
-        padding: 18px 20px; margin-bottom: 16px;
+        background: #fff; border: 0; border-radius: 24px;
+        padding: 20px 24px; margin-bottom: 16px;
     }
 
     .bar-top { display: flex; gap: 16px; align-items: flex-end; flex-wrap: wrap }
@@ -49,7 +50,7 @@
 
     .compteurs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 14px }
 
-    .cpt { border: 1px solid #D5DDE8; border-radius: 10px; padding: 9px 12px; background: #fff }
+    .cpt { border: 1px solid #D5DDE8; border-radius: 16px; padding: 10px 14px; background: #fff }
     .cpt .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #44536E }
     .cpt .v { font-size: 20px; font-weight: 800; color: #0E1F3D; margin-top: 1px }
     .cpt.att { background: #fffbeb; border-color: #fde68a } .cpt.att .v { color: #b45309 }
@@ -135,11 +136,11 @@
     .btn-ia { background: #6d28d9; color: #fff; border-color: #6d28d9 }
     .btn-ia:hover { background: #5b21b6 }
 
-    .tbl-wrap { overflow-x: auto; max-height: 75vh; overflow-y: auto; border: 1px solid #D5DDE8; border-radius: 12px }
+    .tbl-wrap { overflow-x: auto; max-height: 75vh; overflow-y: auto; border: 1px solid #D5DDE8; border-radius: 16px }
 
     .vide { text-align: center; padding: 34px; color: #44536E; font-size: 13.5px }
 
-    .rappel { display: flex; gap: 11px; padding: 12px 15px; border-radius: 11px; background: #f8fafc; border: 1px solid #D5DDE8; color: #44536E; font-size: 13px; margin-top: 14px }
+    .rappel { display: flex; gap: 11px; padding: 12px 15px; border-radius: 16px; background: #f8fafc; border: 1px solid #D5DDE8; color: #44536E; font-size: 13px; margin-top: 14px }
     .rappel p { margin: 0 }
 
     .barre-bas {
@@ -155,6 +156,7 @@
 
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" SansEtape1="true" />
 
+    <section class="boite">
     <div class="cor-head">
         <div class="ico"><i class="ic ic-link" aria-hidden="true"></i></div>
         <div>
@@ -167,6 +169,7 @@
         Pour chaque compte de l'ancien logiciel, choisissez le compte de votre plan qui lui correspond, ou créez-le.
         La page propose, <b>vous décidez</b> : rien n'est encore écrit dans votre comptabilité.
     </p>
+    </section>
 
     <asp:Panel ID="pnlAucunLot" runat="server" Visible="false" CssClass="card">
         <div class="vide">

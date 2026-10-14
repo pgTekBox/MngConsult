@@ -40,6 +40,8 @@ Public Class CorrespondanceComptes
 
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' Les boîtes de l'étape 2 posent sur le fond de la page, sans cadre blanc autour.
+        DirectCast(Master, SiteMaster).FondDePage = True
 
         If Not isAuthenticated Then
             Response.Redirect("~/wbfLogin.aspx")
