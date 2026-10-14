@@ -61,6 +61,8 @@ Public Class AssocierCompte
     End Property
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' Les boîtes posent sur le fond de la page, sans cadre blanc autour (aussi dans la fenêtre).
+        DirectCast(Master, SiteMaster).FondDePage = True
         If Not isAuthenticated Then
             Response.Redirect("~/wbfLogin.aspx")
             Return

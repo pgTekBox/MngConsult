@@ -8,24 +8,26 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .asc-page { padding: 16px; max-width: 900px }
+    .asc-page { padding: 0; max-width: 900px }
+    /* Les boîtes posent sur le fond de la page (FondDePage), comme dans le gabarit */
+    .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
 
     .asc-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
     .asc-head .ico {
-        width: 46px; height: 46px; border-radius: 13px;
-        background: linear-gradient(135deg, rgba(16,185,129,.14), rgba(37,99,235,.10));
-        border: 1px solid #D5DDE8; display: flex; align-items: center; justify-content: center; font-size: 21px;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: var(--mc-soft, #E8EDF5); color: var(--mc-primary, #1B4F9C); border: 0;
+        display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
     .asc-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
     .asc-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
     .asc-head .sub a { color: #143A73; text-decoration: none }
     .asc-head .sub a:hover { text-decoration: underline }
 
-    .asc-lede { font-size: 13.5px; color: #44536E; margin: 0 0 14px; line-height: 1.6 }
+    .asc-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
 
     /* La carte, telle que la maquette : l'assistant en tête, puis les deux colonnes, puis l'enjeu. */
-    .asc-carte { background: #fff; border: 1px solid #cbd5e1; border-radius: 14px; overflow: hidden; margin-bottom: 14px }
-    .asc-assist { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; background: #f8fafc; border-bottom: 1px solid #D5DDE8 }
+    .asc-carte { background: #fff; border: 0; border-radius: 24px; overflow: hidden; margin-bottom: 16px }
+    .asc-assist { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; background: var(--mc-page, #F2F5F9); border-bottom: 1px solid #D5DDE8 }
     .asc-avatar { position: relative; width: 60px; height: 60px; flex: 0 0 60px; border-radius: 50%;
                   background: #fde68a; border: 3px solid #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 30px }
     .asc-avatar b { position: absolute; right: -4px; bottom: -4px; width: 24px; height: 24px; border-radius: 50%; background: #1e293b; color: #fff;
@@ -70,7 +72,7 @@
     .asc-btn.primaire:hover { background: #143A73 }
 
     .asc-progres { font-size: 12.5px; color: #44536E; margin: 0 0 10px }
-    .asc-fin { background: #fff; border: 1px solid #D5DDE8; border-radius: 14px; padding: 22px 24px }
+    .asc-fin { background: #fff; border: 0; border-radius: 24px; padding: 22px 24px }
     .asc-fin h2 { font-size: 18px; font-weight: 800; margin: 0 0 8px; color: #0E1F3D }
     .asc-fin p { font-size: 13.5px; color: #44536E; margin: 0 0 12px; line-height: 1.6 }
     .asc-fin .liens { display: flex; gap: 10px; flex-wrap: wrap; align-items: center }
@@ -83,6 +85,7 @@
 <div class="asc-page">
     <uc:EtapesReprise ID="ucEtapes" runat="server" Etape="2" />
 
+    <section class="boite">
     <div class="asc-head">
         <div class="ico"><i class="ic ic-handshake" aria-hidden="true"></i></div>
         <div>
@@ -97,6 +100,7 @@
         ressemblent et ce que changerait une mauvaise association. Rien n'est écrit dans votre comptabilité : la décision se range
         en préparation, comme dans la grille.
     </p>
+    </section>
 
     <asp:HiddenField ID="hfCle" runat="server" />
     <asp:Literal ID="litProgres" runat="server" />
