@@ -90,10 +90,10 @@
     .side-card .pers{ color:var(--mc-navy); font-size:15px; }
     .side-card .pers small{ display:block; color:var(--mc-muted2); font-size:13px; }
     .side-card .aucun{ color:var(--mc-muted2); font-size:14px; }
-    .quick-actions{ display:flex; flex-direction:column; gap:6px; }
-    .quick-btn{ display:flex; align-items:center; gap:12px; min-height:46px; padding:0 8px; border-radius:999px; color:var(--mc-navy); text-decoration:none; font-weight:700; }
+    .quick-actions{ display:flex; flex-direction:column; gap:2px; }
+    .quick-btn{ display:flex; align-items:center; gap:10px; min-height:38px; padding:0 6px; border-radius:999px; color:var(--mc-navy); text-decoration:none; font-weight:700; }
     .quick-btn:hover{ background:var(--mc-page); color:var(--mc-navy); }
-    .quick-ico{ width:36px; height:36px; border-radius:50%; background:var(--mc-page); color:var(--mc-primary); display:flex; align-items:center; justify-content:center; font-size:17px; flex-shrink:0; }
+    .quick-ico{ width:30px; height:30px; border-radius:50%; background:var(--mc-page); color:var(--mc-primary); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
     .activity-list{ display:flex; flex-direction:column; }
     .activity-item{ display:flex; gap:10px; align-items:flex-start; padding:9px 0; border-top:1px solid #E3E9F1; }
     .activity-item:first-child{ border-top:0; padding-top:0; }
