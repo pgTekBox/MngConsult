@@ -302,7 +302,7 @@ Public Class wbfSuppliersInvoices
 
 
 
-            If data("ComptabilisationStatus") = "COMPTABILISE" Then
+            If Convert.ToString(data("ComptabilisationStatus")) = "COMPTABILISE" Then
                 Dim btnDelete As Button = CType(item.FindControl("btnDelete"), Button)
                 btnDelete.CssClass &= " btn-icon-lock-red readonly-click-block"
 
