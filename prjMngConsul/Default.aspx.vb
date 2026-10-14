@@ -13,7 +13,6 @@ Public Class _Default
         Page.Title = L("pageTitle")
 
         If Not IsPostBack Then
-            LoadWelcomeInfo()
             LoadKPIs()
             LoadSalut()
             LoadAttention()
@@ -171,39 +170,6 @@ Public Class _Default
             Case Else : Return New CultureInfo("fr-CA")
         End Select
     End Function
-
-    ''' <summary>
-    ''' Alimente la boîte de bienvenue dépliable (prénom, forfait, fin d'essai).
-    ''' L'onboarding vit directement dans le tableau de bord (plus de page séparée).
-    ''' </summary>
-    Private Sub LoadWelcomeInfo()
-
-        Dim firstName As String = UserFirstName
-        If String.IsNullOrEmpty(firstName) Then firstName = L("aboard")
-        litFirstName.Text = firstName
-
-        Dim planName As String = "Solo"
-        Dim trialEnd As Date = Date.Now.AddDays(30)
-
-        Try
-            Dim p As New Collection
-            p.Add(New SqlParameter("@CompanyGUID", Company))
-            Dim ds As DataSet = ExecuteSQLds("s0301GetActiveSubscription", p)
-
-            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 AndAlso ds.Tables(0).Rows.Count > 0 Then
-                Dim r As DataRow = ds.Tables(0).Rows(0)
-                planName = If(r("PlanName") Is DBNull.Value, "Solo", r("PlanName").ToString())
-                If Not r("NextBillingDate") Is DBNull.Value Then
-                    trialEnd = CDate(r("NextBillingDate"))
-                End If
-            End If
-        Catch
-            ' On garde les valeurs par défaut en cas d'erreur
-        End Try
-
-        litPlanName.Text = planName
-        litTrialEnd.Text = trialEnd.ToString("d MMMM yyyy", Cult())
-    End Sub
 
     ''' <summary>Traductions du tableau de bord (fr/en/es).</summary>
     Protected Function L(key As String) As String
