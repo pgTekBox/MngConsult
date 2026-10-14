@@ -7,26 +7,28 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .imp-page { padding: 16px }
+    .imp-page { padding: 0 }
+    /* Les boîtes posent sur le fond de la page (FondDePage), comme dans le gabarit */
+    .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
 
     .imp-head { display: flex; align-items: center; gap: 14px; margin-bottom: 6px }
 
     .imp-head .ico {
-        width: 46px; height: 46px; border-radius: 13px;
-        background: linear-gradient(135deg, rgba(37,99,235,.14), rgba(16,185,129,.10));
-        border: 1px solid #D5DDE8;
+        width: 46px; height: 46px; border-radius: 50%;
+        background: var(--mc-soft, #E8EDF5); color: var(--mc-primary, #1B4F9C);
+        border: 0;
         display: flex; align-items: center; justify-content: center; font-size: 21px;
     }
 
     .imp-head h1 { font-size: 21px; font-weight: 800; margin: 0; color: #0E1F3D }
     .imp-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
-    .imp-lede { font-size: 13.5px; color: #44536E; margin: 0 0 18px; max-width: 860px; line-height: 1.6 }
+    .imp-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; max-width: 860px; line-height: 1.6 }
 
     /* Le compte rendu d'ensemble */
-    .bilan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 22px }
+    .bilan { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; margin-bottom: 16px }
 
-    .bil { border: 1px solid #D5DDE8; border-radius: 11px; padding: 11px 14px; background: #fff }
+    .bil { border: 0; border-radius: 20px; padding: 14px 18px; background: #fff }
     .bil .l { font-size: 11px; color: #44536E; text-transform: uppercase; letter-spacing: .3px }
     .bil .v { font-size: 22px; font-weight: 800; color: #0E1F3D; margin-top: 2px }
     .bil.ok { background: #ecfdf5; border-color: #a7f3d0 } .bil.ok .v { color: #047857 }
@@ -39,7 +41,7 @@
     }
     h2.sect span { font-size: 12.5px; font-weight: 500; color: #44536E }
 
-    .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 14px; margin-top: 12px }
+    .grille { display: grid; grid-template-columns: repeat(auto-fill, minmax(400px, 1fr)); gap: 12px; margin: 12px 0 20px }
 
     /* Plan comptable et balance de vérification : côte à côte, toujours. */
     .grille.duo { grid-template-columns: 1fr 1fr }
@@ -57,11 +59,11 @@
     .grille.tete > .carte:first-child > .ouvrir { justify-self: start }
 
     .carte {
-        background: #fff; border: 1px solid #D5DDE8; border-radius: 14px;
-        padding: 15px 17px; display: flex; flex-direction: column;
+        background: #fff; border: 0; border-radius: 20px;
+        padding: 16px 18px; display: flex; flex-direction: column;
     }
 
-    .carte.inerte { background: #fbfcfd; border-style: dashed }
+    .carte.inerte { background: #F7F9FC; border: 1px dashed #D5DDE8 }
 
     .chef { display: flex; align-items: flex-start; gap: 11px; margin-bottom: 11px }
 
@@ -120,8 +122,8 @@
         font-size: 12.5px; color: #44536E; line-height: 1.6; max-width: 860px;
     }
     .vider {
-        margin-top: 26px; padding: 16px 18px; border: 1px solid #fecaca;
-        border-radius: 10px; background: #fef2f2;
+        margin-top: 16px; padding: 16px 20px; border: 0;
+        border-radius: 20px; background: #FDECEA;
         display: flex; align-items: center; gap: 18px; flex-wrap: wrap;
     }
     .vider .txt { flex: 1 1 380px; font-size: 12.5px; color: #7f1d1d; line-height: 1.6 }
@@ -139,6 +141,7 @@
 <asp:Content ID="cMain" ContentPlaceHolderID="MainContent" runat="server">
 <div class="imp-page">
 
+    <section class="boite">
     <div class="imp-head">
         <div class="ico"><i class="ic ic-inbox" aria-hidden="true"></i></div>
         <div>
@@ -154,18 +157,18 @@
         de bon à la comptabilité. Un écran qui prépare sans jamais appliquer plafonne —
         les données restent en attente et la reprise n'avance pas.
     </p>
+    </section>
 
     <%-- Le plan de reprise : la méthode, étape par étape, dans une fenêtre
          par-dessus la page. Un document HTML autonome (PlanReprise.html),
          pour qu'on puisse aussi l'ouvrir seul ou l'imprimer. --%>
     <style>
-        .plan-lien { display: flex; align-items: center; gap: 12px; padding: 12px 15px; margin: 0 0 18px;
-            border: 1px solid #bfdbfe; border-radius: 12px;
-            background: linear-gradient(135deg, rgba(37,99,235,.06), rgba(16,185,129,.05)) }
+        .plan-lien { display: flex; align-items: center; gap: 12px; padding: 16px 20px; margin: 0 0 16px;
+            border: 0; border-radius: 24px; background: #fff }
         .plan-lien .ico { font-size: 20px; flex: none }
         .plan-lien .txt { flex: 1; font-size: 13px; color: #0E1F3D; line-height: 1.45 }
         .plan-lien .txt span { display: block; color: #44536E; font-size: 12.5px }
-        .plan-lien button { padding: 8px 15px; border-radius: 9px; border: 1px solid #1B4F9C; background: #1B4F9C;
+        .plan-lien button { padding: 9px 18px; border-radius: 999px; border: 1px solid #1B4F9C; background: #1B4F9C;
             color: #fff; font-size: 13px; font-weight: 700; cursor: pointer; font-family: inherit; white-space: nowrap }
         .plan-lien button:hover { background: #143A73 }
         .plan-lien a { font-size: 12.5px; color: #143A73; text-decoration: none; white-space: nowrap }

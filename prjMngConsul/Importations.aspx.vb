@@ -899,6 +899,8 @@ Public Class Importations
     End Function
 
     Protected Sub Page_Load(sender As Object, e As EventArgs) Handles Me.Load
+        ' Les boîtes du centre d'importation posent sur le fond de la page, sans cadre blanc autour.
+        DirectCast(Master, SiteMaster).FondDePage = True
 
         If Not isAuthenticated Then
             Response.Redirect("~/wbfLogin.aspx")
