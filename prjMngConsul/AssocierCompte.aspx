@@ -8,7 +8,7 @@
 
 <asp:Content ID="cHead" ContentPlaceHolderID="HeadContent" runat="server">
 <style>
-    .asc-page { padding: 0; max-width: 900px }
+    .asc-page { padding: 0 }
     /* Les boîtes posent sur le fond de la page (FondDePage), comme dans le gabarit */
     .boite { background: #fff; border-radius: 24px; padding: 20px 24px; margin-bottom: 16px }
 
@@ -25,17 +25,8 @@
 
     .asc-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
 
-    /* La carte, telle que la maquette : l'assistant en tête, puis les deux colonnes, puis l'enjeu. */
+    /* La carte : les deux colonnes, puis l'enjeu (le bloc « Le 60, votre assistant » a été retiré le 2026-10-15). */
     .asc-carte { background: #fff; border: 0; border-radius: 24px; overflow: hidden; margin-bottom: 16px }
-    .asc-assist { display: flex; gap: 16px; align-items: flex-start; padding: 18px 20px; background: var(--mc-page, #F2F5F9); border-bottom: 1px solid #D5DDE8 }
-    .asc-avatar { position: relative; width: 60px; height: 60px; flex: 0 0 60px; border-radius: 50%;
-                  background: #fde68a; border: 3px solid #fbbf24; display: flex; align-items: center; justify-content: center; font-size: 30px }
-    .asc-avatar b { position: absolute; right: -4px; bottom: -4px; width: 24px; height: 24px; border-radius: 50%; background: #1e293b; color: #fff;
-                    font-size: 11px; font-weight: 800; display: flex; align-items: center; justify-content: center; border: 2px solid #fff }
-    .asc-assist .qui { display: flex; align-items: center; gap: 10px; font-size: 17px; font-weight: 800; color: #0E1F3D; margin-bottom: 8px }
-    .asc-badge { font-size: 11.5px; font-weight: 800; padding: 3px 9px; border-radius: 999px; background: #fef3c7; color: #92400e; border: 1px solid #fcd34d }
-    .asc-assist .dit { font-size: 14px; color: #1e293b; line-height: 1.55; background: #D5DDE8; border-radius: 10px; padding: 10px 14px }
-
     .asc-corps { padding: 18px 20px }
     .asc-corps h2 { font-size: 17px; font-weight: 800; margin: 0 0 14px; color: #0E1F3D }
     .asc-deux { display: grid; grid-template-columns: 1fr 44px 1.4fr; gap: 10px; align-items: start }

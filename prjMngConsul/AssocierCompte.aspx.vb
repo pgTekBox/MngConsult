@@ -260,24 +260,8 @@ Public Class AssocierCompte
             .Raison = If(numSrc <> "", numSrc & " · ", "") & nomSrc & ", " & NatureLibelle(natureSrc, True) &
                       If(numSrc = "", " ; le numéro sera attribué à l'étape 3, dans la classe choisie", " ; la classe se choisit à l'étape 3")}
 
-        ' ── Ce que l'assistant dit ──────────────────────────────────────────
-        Dim dit As String
-        If cibles.Count = 0 Then
-            dit = "Je n'ai trouvé aucun compte " & NatureLibelle(natureSrc, False) & " qui ressemble à « " & nomSrc & " » dans 60secondes. " &
-                  "Créez-le, ou choisissez vous-même un compte dans la grille."
-        ElseIf exact Then
-            dit = "J'ai trouvé un compte " & NatureLibelle(natureSrc, False) & " dans " & logiciel & " qui existe déjà dans 60secondes sous « " &
-                  cibles(0).Compte & " " & cibles(0).Nom & " ». Je vous propose de les lier, mais c'est vous qui décidez."
-        Else
-            dit = "J'ai trouvé un compte " & NatureLibelle(natureSrc, False) & " dans " & logiciel & " qui n'a pas d'équivalent exact dans 60secondes. " &
-                  "Je vous propose le plus proche, mais c'est vous qui décidez."
-        End If
-
         ' ── Le rendu ────────────────────────────────────────────────────────
         Dim sb As New StringBuilder()
-        sb.Append("<div class='asc-assist'><div class='asc-avatar'><i class='ic ic-smile' aria-hidden='true'></i><b>60</b></div><div>")
-        sb.Append("<div class='qui'>Le 60, votre assistant <span class='asc-badge'>Action requise</span></div>")
-        sb.Append("<div class='dit'>").Append(HttpUtility.HtmlEncode(dit)).Append("</div></div></div>")
         sb.Append("<div class='asc-corps'><h2>Associer un compte du plan comptable</h2><div class='asc-deux'>")
         ' le compte source
         sb.Append("<div class='asc-source'><div class='asc-titre'>Compte dans ").Append(HttpUtility.HtmlEncode(logiciel)).Append("</div>")
