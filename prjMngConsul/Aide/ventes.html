@@ -171,31 +171,29 @@
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter une facture</kbd> : ouvre la fenêtre « Ajouter une facture » (voir <a href="#fr-edition-facture">Édition d’une facture</a>).</li>
-                    <li><kbd>Importer depuis Square</kbd> (infobulle « Rapatrier les factures et paiements Square comme factures clients ») : les factures Square deviennent des factures clients avec leur en-tête, leurs lignes et les taxes TPS/TVQ ; le client est créé au besoin. Les paiements Square sont rapprochés d’une facture existante ; s’il n’y en a pas, une facture déjà payée est créée avec une seule ligne « Vente au terminal (Square) », sans taxes.</li>
-                    <li>Filtre « État : tous » : cases <strong>Brouillon</strong>, <strong>Comptabilisé</strong> et « Tout cocher ».</li>
-                    <li>Filtre « Paiement : tous » : cases <strong>Ouverte</strong>, <strong>Partielle</strong>, <strong>En retard</strong>, <strong>Payée</strong>, <strong>En cours (brouillon)</strong>.</li>
-                    <li>Zone « Rechercher (nom, courriel, téléphone…) », bouton loupe.</li>
-                    <li><kbd>Effacer</kbd> : vide la recherche <strong>et décoche les deux filtres</strong>.</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter une facture » (voir <a href="#fr-edition-facture">Édition d’une facture</a>).</li>
+                    <li><kbd>Importer de Square</kbd> (infobulle « Rapatrier les factures et paiements Square comme factures clients ») : les factures Square deviennent des factures clients avec leur en-tête, leurs lignes et les taxes TPS/TVQ ; le client est créé au besoin. Les paiements Square sont rapprochés d’une facture existante ; s’il n’y en a pas, une facture déjà payée est créée avec une seule ligne « Vente au terminal (Square) », sans taxes.</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>À recevoir</strong> (le reste à payer des factures ouvertes, partielles ou en retard, et leur nombre), <strong>En retard</strong> (le reste des factures en retard ; point rouge s’il y en a, vert sinon), <strong>Brouillons</strong> (à comptabiliser) et <strong>Payées</strong> (le total des factures payées). Un clic pose le filtre correspondant sur la liste — le cadre de l’indicateur passe en bleu — et un second clic l’enlève.</li>
+                    <li>Les <strong>puces de filtre</strong> de la carte « recherche » : <strong>État</strong> — Toutes, Brouillons, Comptabilisées ; <strong>Paiement</strong> — Tous, En retard, Partielle, Ouverte, Payée, En cours (brouillon). Chaque puce porte son nombre ; une puce cliquée s’allume (fond bleu marine) et se combine aux autres de son groupe ; « Toutes » et « Tous » enlèvent le filtre du groupe.</li>
+                    <li>Champ « Chercher un client », loupe ou touche Entrée.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et enlève les deux filtres</strong>.</li>
                 </ul>
 
                 <h3>Filtres et recherche</h3>
-                <p>Cocher ou décocher une case recharge la liste immédiatement. Les filtres et le tri sont mémorisés pour la durée de votre session. Le tri par défaut est la « Date » décroissante (les plus récentes en haut). Toutes les colonnes se trient sauf « Action ». La liste n’est pas paginée.</p>
-                <div class="piege" data-titre="Piège">Malgré l’intitulé de la zone de recherche, la recherche ne porte que sur le <strong>nom du client</strong>. Un courriel ou un numéro de téléphone ne renvoie rien.</div>
+                <p>Un clic sur un indicateur ou une puce recharge la liste immédiatement. Les filtres et le tri sont mémorisés pour la durée de votre session. Le tri par défaut est la date de facture décroissante (les plus récentes en haut). Chaque entête de colonne trie, sauf « Action ». La liste n’est pas paginée ; son pied dit combien de factures sont montrées sur le total (« 8 sur 22 factures »).</p>
+                <div class="piege" data-titre="Piège">La recherche ne porte que sur le <strong>nom du client</strong>. Un numéro de facture, un courriel ou un téléphone ne renvoient rien.</div>
 
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>Le numéro de la facture. C’est un lien qui ouvre le PDF dans une visionneuse (voir <a href="#fr-pdf-facture">PDF de facture</a>).</td></tr>
-                        <tr><td>Date</td><td>Date de facture au format « 26 sept. », l’année en dessous.</td></tr>
-                        <tr><td>Échéance</td><td>Date d’échéance, même format.</td></tr>
+                        <tr><td>Numéro</td><td>Le numéro de la facture, en bleu. C’est un lien qui ouvre le PDF dans une visionneuse (voir <a href="#fr-pdf-facture">PDF de facture</a>).</td></tr>
+                        <tr><td>Échéance</td><td>La date d’échéance en gras ; en dessous, en petit, la date d’émission (« émise 16 sept. 2026 »).</td></tr>
                         <tr><td>Client</td><td>Nom, adresse et courriel. Si l’application mobile a envoyé des données, des badges s’ajoutent : un appareil photo avec un nombre (« {n} photo(s) prise(s) sur place — cliquer pour voir », ouvre la fenêtre « Photos — facture {n°} ») et une épingle (« Lieu d’intervention — ouvrir la carte », ouvre Google Maps).</td></tr>
-                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE ou IN_PROGRESS (brouillon en cours).</td></tr>
-                        <tr><td>Reste à payer</td><td>Solde encore dû.</td></tr>
-                        <tr><td>Déjà reçu</td><td>Somme des encaissements.</td></tr>
+                        <tr><td>Paiement</td><td>Une pastille colorée : En retard (rouge), Partielle (ambre), Ouverte (bleu), Payée (vert), En cours (gris : brouillon).</td></tr>
+                        <tr><td>Reste</td><td>Le solde encore dû, en rouge quand la facture est en retard ; en dessous, en petit, ce qui est déjà reçu (« reçu 919,80 �) s’il y a eu un encaissement.</td></tr>
                         <tr><td>Total</td><td>Total de la facture, taxes incluses.</td></tr>
-                        <tr><td>État</td><td>Brouillon ou Comptabilisé.</td></tr>
+                        <tr><td>État</td><td>Brouillon (gris) ou Comptabilisé (vert, avec un cadenas : la facture ne se modifie plus).</td></tr>
                         <tr><td>Action</td><td>Les boutons décrits ci-dessous.</td></tr>
                     </tbody>
                 </table>
@@ -653,31 +651,29 @@
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Ajouter une facture</kbd> (Add invoice): opens the “Ajouter une facture” window (see <a href="#en-invoice-editing">Editing an invoice</a>).</li>
-                    <li><kbd>Importer depuis Square</kbd> (tooltip « Rapatrier les factures et paiements Square comme factures clients »): Square invoices become customer invoices with their header, lines and GST/QST; the customer is created if needed. Square payments are matched to an existing invoice; when none matches, a paid invoice is created with a single line “Vente au terminal (Square)”, without taxes.</li>
-                    <li>“État : tous” filter (Status): <strong>Brouillon</strong> (Draft), <strong>Comptabilisé</strong> (Posted) and “Tout cocher” (Check all).</li>
-                    <li>“Paiement : tous” filter (Payment): <strong>Ouverte</strong> (Open), <strong>Partielle</strong> (Partial), <strong>En retard</strong> (Overdue), <strong>Payée</strong> (Paid), <strong>En cours (brouillon)</strong> (In progress, draft).</li>
-                    <li>“Rechercher (nom, courriel, téléphone…)” box and magnifier button.</li>
-                    <li><kbd>Effacer</kbd>: clears the search <strong>and unchecks both filters</strong>.</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (+ New invoice, blue pill at the top right): opens the “Ajouter une facture” window (see <a href="#en-invoice-editing">Editing an invoice</a>).</li>
+                    <li><kbd>Importer de Square</kbd> (tooltip « Rapatrier les factures et paiements Square comme factures clients »): Square invoices become customer invoices with their header, lines and GST/QST; the customer is created if needed. Square payments are matched to an existing invoice; when none matches, a paid invoice is created with a single line “Vente au terminal (Square)”, without taxes.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>À recevoir</strong> (To receive: the balance due of open, partial and overdue invoices, and their count), <strong>En retard</strong> (Overdue: the balance of overdue invoices; red dot when there are some, green otherwise), <strong>Brouillons</strong> (Drafts, to post) and <strong>Payées</strong> (Paid: the total of paid invoices). A click applies the matching filter to the list — the indicator’s frame turns blue — and a second click removes it.</li>
+                    <li>The <strong>filter chips</strong> of the “search” card: <strong>État</strong> (Status) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Payment) — Tous, En retard, Partielle, Ouverte, Payée, En cours (draft). Each chip carries its count; a clicked chip lights up (navy background) and combines with the others of its group; “Toutes” and “Tous” remove the group’s filter.</li>
+                    <li>“Chercher un client” field (Search a customer), magnifier or Enter key.</li>
+                    <li><kbd>✕</kbd> (clear): clears the search <strong>and removes both filters</strong>.</li>
                 </ul>
 
                 <h3>Filters and search</h3>
-                <p>Checking or unchecking a box reloads the list immediately. Filters and sort order are remembered for your session. The default sort is “Date” descending (newest first). Every column sorts except “Action”. The list is not paginated.</p>
-                <div class="piege" data-titre="Pitfall">Despite the search box label, the search only matches the <strong>customer name</strong>. An email or phone number returns nothing.</div>
+                <p>Clicking an indicator or a chip reloads the list immediately. Filters and sort order are remembered for your session. The default sort is the invoice date, descending (newest first). Every column header sorts, except “Action”. The list is not paginated; its footer says how many invoices are shown out of the total (“8 sur 22 factures”).</p>
+                <div class="piege" data-titre="Pitfall">The search only matches the <strong>customer name</strong>. An invoice number, an email or a phone number returns nothing.</div>
 
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>The invoice number. It is a link that opens the PDF in a viewer (see <a href="#en-invoice-pdf">Invoice PDF</a>).</td></tr>
-                        <tr><td>Date</td><td>Invoice date as “26 sept.”, with the year underneath.</td></tr>
-                        <tr><td>Échéance</td><td>Due date, same format.</td></tr>
+                        <tr><td>Numéro</td><td>The invoice number, in blue. It is a link that opens the PDF in a viewer (see <a href="#en-invoice-pdf">Invoice PDF</a>).</td></tr>
+                        <tr><td>Échéance</td><td>The due date in bold; underneath, in small type, the issue date (“émise 16 sept. 2026”).</td></tr>
                         <tr><td>Client</td><td>Name, address and email. When the mobile app sent data, badges appear: a camera with a count (« {n} photo(s) prise(s) sur place — cliquer pour voir », opens the “Photos — facture {no}” window) and a pin (« Lieu d’intervention — ouvrir la carte », opens Google Maps).</td></tr>
-                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE or IN_PROGRESS (draft in progress).</td></tr>
-                        <tr><td>Reste à payer</td><td>Balance still due.</td></tr>
-                        <tr><td>Déjà reçu</td><td>Sum of receipts.</td></tr>
+                        <tr><td>Paiement</td><td>A coloured pill: En retard (red), Partielle (amber), Ouverte (blue), Payée (green), En cours (grey: draft).</td></tr>
+                        <tr><td>Reste</td><td>The balance still due, in red when the invoice is overdue; underneath, in small type, what was already received (“reçu 919,80 $”) when a receipt exists.</td></tr>
                         <tr><td>Total</td><td>Invoice total, taxes included.</td></tr>
-                        <tr><td>État</td><td>Brouillon or Comptabilisé.</td></tr>
+                        <tr><td>État</td><td>Brouillon (grey) or Comptabilisé (green, with a padlock: the invoice can no longer be edited).</td></tr>
                         <tr><td>Action</td><td>The buttons described below.</td></tr>
                     </tbody>
                 </table>
@@ -1135,31 +1131,29 @@
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Ajouter une facture</kbd> (Añadir factura): abre la ventana « Ajouter une facture » (vea <a href="#es-edicion-factura">Edición de una factura</a>).</li>
-                    <li><kbd>Importer depuis Square</kbd> (descripción « Rapatrier les factures et paiements Square comme factures clients »): las facturas Square se convierten en facturas de clientes con su encabezado, sus líneas y los impuestos TPS/TVQ; el cliente se crea si hace falta. Los pagos Square se concilian con una factura existente; si no hay ninguna, se crea una factura ya pagada con una sola línea « Vente au terminal (Square) », sin impuestos.</li>
-                    <li>Filtro « État : tous » (Estado): casillas <strong>Brouillon</strong> (Borrador), <strong>Comptabilisé</strong> (Contabilizada) y « Tout cocher » (Marcar todo).</li>
-                    <li>Filtro « Paiement : tous » (Pago): casillas <strong>Ouverte</strong> (Abierta), <strong>Partielle</strong> (Parcial), <strong>En retard</strong> (Vencida), <strong>Payée</strong> (Pagada), <strong>En cours (brouillon)</strong> (En curso, borrador).</li>
-                    <li>Cuadro « Rechercher (nom, courriel, téléphone…) » y botón lupa.</li>
-                    <li><kbd>Effacer</kbd>: vacía la búsqueda <strong>y desmarca los dos filtros</strong>.</li>
+                    <li><kbd>+ Nouvelle facture</kbd> (+ Nueva factura, píldora azul arriba a la derecha): abre la ventana « Ajouter une facture » (vea <a href="#es-edicion-factura">Edición de una factura</a>).</li>
+                    <li><kbd>Importer de Square</kbd> (descripción « Rapatrier les factures et paiements Square comme factures clients »): las facturas Square se convierten en facturas de clientes con su encabezado, sus líneas y los impuestos TPS/TVQ; el cliente se crea si hace falta. Los pagos Square se concilian con una factura existente; si no hay ninguna, se crea una factura ya pagada con una sola línea « Vente au terminal (Square) », sin impuestos.</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>À recevoir</strong> (Por cobrar: el saldo pendiente de las facturas abiertas, parciales o vencidas, y su número), <strong>En retard</strong> (Vencidas: el saldo de las facturas vencidas; punto rojo si las hay, verde si no), <strong>Brouillons</strong> (Borradores, por contabilizar) y <strong>Payées</strong> (Pagadas: el total de las facturas pagadas). Un clic aplica el filtro correspondiente a la lista — el marco del indicador pasa a azul — y un segundo clic lo quita.</li>
+                    <li>Las <strong>píldoras de filtro</strong> de la tarjeta « búsqueda »: <strong>État</strong> (Estado) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Pago) — Tous, En retard, Partielle, Ouverte, Payée, En cours (borrador). Cada píldora lleva su número; una píldora pulsada se enciende (fondo azul marino) y se combina con las demás de su grupo; « Toutes » y « Tous » quitan el filtro del grupo.</li>
+                    <li>Campo « Chercher un client » (Buscar un cliente), lupa o tecla Intro.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y quita los dos filtros</strong>.</li>
                 </ul>
 
                 <h3>Filtros y búsqueda</h3>
-                <p>Marcar o desmarcar una casilla recarga la lista de inmediato. Los filtros y el orden se recuerdan durante la sesión. El orden predeterminado es « Date » descendente (las más recientes arriba). Todas las columnas se ordenan salvo « Action ». La lista no está paginada.</p>
-                <div class="piege" data-titre="Trampa">A pesar del rótulo del cuadro de búsqueda, la búsqueda solo se aplica al <strong>nombre del cliente</strong>. Un correo electrónico o un número de teléfono no devuelve nada.</div>
+                <p>Un clic en un indicador o una píldora recarga la lista de inmediato. Los filtros y el orden se recuerdan durante la sesión. El orden predeterminado es la fecha de factura descendente (las más recientes arriba). Cada encabezado de columna ordena, salvo « Action ». La lista no está paginada; su pie dice cuántas facturas se muestran del total (« 8 sur 22 factures »).</p>
+                <div class="piege" data-titre="Trampa">La búsqueda solo se aplica al <strong>nombre del cliente</strong>. Un número de factura, un correo o un teléfono no devuelven nada.</div>
 
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>El número de la factura. Es un enlace que abre el PDF en un visor (vea <a href="#es-pdf-factura">PDF de factura</a>).</td></tr>
-                        <tr><td>Date</td><td>Fecha de factura con el formato « 26 sept. », el año debajo.</td></tr>
-                        <tr><td>Échéance</td><td>Fecha de vencimiento, mismo formato.</td></tr>
+                        <tr><td>Numéro</td><td>El número de la factura, en azul. Es un enlace que abre el PDF en un visor (vea <a href="#es-pdf-factura">PDF de factura</a>).</td></tr>
+                        <tr><td>Échéance</td><td>La fecha de vencimiento en negrita; debajo, en pequeño, la fecha de emisión (« émise 16 sept. 2026 »).</td></tr>
                         <tr><td>Client</td><td>Nombre, dirección y correo electrónico. Si la aplicación móvil envió datos, se añaden insignias: una cámara con un número (« {n} photo(s) prise(s) sur place — cliquer pour voir », abre la ventana « Photos — facture {n°} ») y una chincheta (« Lieu d’intervention — ouvrir la carte », abre Google Maps).</td></tr>
-                        <tr><td>Statut paiement</td><td>OUVERTE, PARTIELLE, EN_RETARD, PAYEE o IN_PROGRESS (borrador en curso).</td></tr>
-                        <tr><td>Reste à payer</td><td>Saldo aún pendiente.</td></tr>
-                        <tr><td>Déjà reçu</td><td>Suma de los cobros.</td></tr>
+                        <tr><td>Paiement</td><td>Una píldora de color: En retard (rojo), Partielle (ámbar), Ouverte (azul), Payée (verde), En cours (gris: borrador).</td></tr>
+                        <tr><td>Reste</td><td>El saldo aún pendiente, en rojo cuando la factura está vencida; debajo, en pequeño, lo ya recibido (« reçu 919,80 $ ») si hubo un cobro.</td></tr>
                         <tr><td>Total</td><td>Total de la factura, impuestos incluidos.</td></tr>
-                        <tr><td>État</td><td>Brouillon o Comptabilisé.</td></tr>
+                        <tr><td>État</td><td>Brouillon (gris) o Comptabilisé (verde, con un candado: la factura ya no se modifica).</td></tr>
                         <tr><td>Action</td><td>Los botones descritos a continuación.</td></tr>
                     </tbody>
                 </table>

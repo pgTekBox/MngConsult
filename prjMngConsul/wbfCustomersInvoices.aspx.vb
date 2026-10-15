@@ -16,10 +16,11 @@ Public Class wbfCustomersInvoices
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
-            BindFilters()
             rlvClientsFactures.Rebind()
         End If
     End Sub
@@ -28,72 +29,177 @@ Public Class wbfCustomersInvoices
     ' Filtres à sélection multiple (état comptable / statut de paiement)
     ' ---------------------------------------------------------------------
     ' Les valeurs envoyées à s0026 sont celles de la vue vwCustomersInvoices,
-    ' jamais les libellés traduits. Rien de coché = aucun filtre.
+    ' jamais les libellés traduits. Rien de choisi = aucun filtre. Les puces de
+    ' la carte « recherche et filtres » basculent une valeur ; les indicateurs
+    ' posent exactement leur jeu de valeurs (un second clic l'enlève). Les
+    ' choix sont conservés en session, comme le tri.
     ' =====================================================================
 
-    ''' <summary>Remplit les deux listes déroulantes à cases à cocher.</summary>
-    Private Sub BindFilters()
-        ' « Check All » de Telerik est en anglais par défaut.
-        rcbEtat.Localization.CheckAllString = L("checkAll")
-        rcbStatutPaiement.Localization.CheckAllString = L("checkAll")
+    Private Property EtatsCsv As String
+        Get
+            Return If(TryCast(Session("CustInv.Etats"), String), "")
+        End Get
+        Set(value As String)
+            Session("CustInv.Etats") = value
+        End Set
+    End Property
 
-        rcbEtat.EmptyMessage = L("filterStateAll")
-        rcbEtat.Items.Clear()
-        rcbEtat.Items.Add(New RadComboBoxItem(L("stDraft"), "Brouillon"))
-        rcbEtat.Items.Add(New RadComboBoxItem(L("stPosted"), "Comptabilisé"))
+    Private Property PaiementsCsv As String
+        Get
+            Return If(TryCast(Session("CustInv.Paiements"), String), "")
+        End Get
+        Set(value As String)
+            Session("CustInv.Paiements") = value
+        End Set
+    End Property
 
-        rcbStatutPaiement.EmptyMessage = L("filterPayAll")
-        rcbStatutPaiement.Items.Clear()
-        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payOpen"), "OUVERTE"))
-        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPartial"), "PARTIELLE"))
-        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payLate"), "EN_RETARD"))
-        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payPaid"), "PAYEE"))
-        rcbStatutPaiement.Items.Add(New RadComboBoxItem(L("payInProgress"), "IN_PROGRESS"))
-
-        ' Persistance : on retrouve ses filtres en revenant sur la page.
-        RestoreChecked(rcbEtat, TryCast(Session("CustInv.Etats"), String))
-        RestoreChecked(rcbStatutPaiement, TryCast(Session("CustInv.Paiements"), String))
-    End Sub
-
-    ''' <summary>Recoche les valeurs mémorisées et remet le texte du champ.</summary>
-    Private Sub RestoreChecked(rcb As RadComboBox, csv As String)
-        If String.IsNullOrEmpty(csv) Then Return
-        Dim voulues As New List(Of String)(csv.Split(","c))
-        Dim libelles As New List(Of String)
-        For Each it As RadComboBoxItem In rcb.Items
-            If voulues.Contains(it.Value) Then
-                it.Checked = True
-                libelles.Add(it.Text)
-            End If
+    Private Shared Function LireCsv(csv As String) As HashSet(Of String)
+        Dim s As New HashSet(Of String)(StringComparer.OrdinalIgnoreCase)
+        For Each v As String In If(csv, "").Split(New Char() {","c}, StringSplitOptions.RemoveEmptyEntries)
+            s.Add(v.Trim())
         Next
-        If libelles.Count > 0 Then rcb.Text = String.Join(", ", libelles)
-    End Sub
+        Return s
+    End Function
 
-    ''' <summary>Mémorise l'état des deux filtres pour la prochaine visite.</summary>
-    Private Sub SaveFilterState()
-        Session("CustInv.Etats") = CheckedCsv(rcbEtat)
-        Session("CustInv.Paiements") = CheckedCsv(rcbStatutPaiement)
-    End Sub
+    ''' <summary>Le jeu en texte, trié : deux jeux égaux s'écrivent pareil.</summary>
+    Private Shared Function EcrireCsv(s As IEnumerable(Of String)) As String
+        Return String.Join(",", s.OrderBy(Function(x) x, StringComparer.OrdinalIgnoreCase))
+    End Function
 
-    ''' <summary>Une case cochée/décochée dans l'un des filtres : on recharge la grille.</summary>
-    Protected Sub rcbFiltre_ItemChecked(sender As Object, e As RadComboBoxItemEventArgs)
-        SaveFilterState()
+    Private Shared Function Basculer(csv As String, valeur As String) As String
+        If String.IsNullOrEmpty(valeur) Then Return ""
+        Dim s As HashSet(Of String) = LireCsv(csv)
+        If Not s.Remove(valeur) Then s.Add(valeur)
+        Return EcrireCsv(s)
+    End Function
+
+    ''' <summary>Un indicateur ou une puce cliqué (hfChip = « groupe|valeur »).</summary>
+    Protected Sub btnChip_Click(sender As Object, e As EventArgs) Handles btnChip.Click
+        Dim v As String = If(hfChip.Value, "")
+        hfChip.Value = ""
+        Dim i As Integer = v.IndexOf("|"c)
+        If i < 0 Then Return
+        Dim groupe As String = v.Substring(0, i)
+        Dim valeur As String = EcrireCsv(LireCsv(v.Substring(i + 1)))
+        Select Case groupe
+            Case "etat" : EtatsCsv = Basculer(EtatsCsv, valeur)
+            Case "pay" : PaiementsCsv = Basculer(PaiementsCsv, valeur)
+            Case "kpi-etat"
+                If EtatsCsv = valeur AndAlso PaiementsCsv = "" Then
+                    EtatsCsv = ""
+                Else
+                    EtatsCsv = valeur : PaiementsCsv = ""
+                End If
+            Case "kpi-pay"
+                If PaiementsCsv = valeur AndAlso EtatsCsv = "" Then
+                    PaiementsCsv = ""
+                Else
+                    PaiementsCsv = valeur : EtatsCsv = ""
+                End If
+        End Select
         rlvClientsFactures.Rebind()
     End Sub
 
-    ''' <summary>Valeurs cochées d'un filtre, en liste séparée par des virgules
-    ''' (chaîne vide si rien n'est coché = pas de filtre).</summary>
-    Private Function CheckedCsv(rcb As RadComboBox) As String
-        Dim vals As New List(Of String)
-        For Each it As RadComboBoxItem In rcb.CheckedItems
-            If Not String.IsNullOrEmpty(it.Value) Then vals.Add(it.Value)
-        Next
-        Return String.Join(",", vals)
+    ' =====================================================================
+    ' Les indicateurs et les puces : comptés sur TOUTES les factures de la
+    ' compagnie (sans recherche ni filtre), pour que les nombres restent les
+    ' mêmes quel que soit le filtre posé.
+    ' =====================================================================
+
+    Private Const PAY_OUVERTS As String = "EN_RETARD,OUVERTE,PARTIELLE"
+    Private TotalFactures As Integer
+
+    Private Shared Function PayDe(r As DataRow) As String
+        Return Convert.ToString(r("StatutPaiement")).Trim().ToUpperInvariant()
     End Function
+
+    Private Shared Function Montant(r As DataRow, col As String) As Decimal
+        If IsDBNull(r(col)) Then Return 0D
+        Return Convert.ToDecimal(r(col))
+    End Function
+
+    Private Sub ChargerIndicateurs()
+        Dim rows As New List(Of DataRow)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@Search", ""))
+            p.Add(New SqlClient.SqlParameter("@Etats", ""))
+            p.Add(New SqlClient.SqlParameter("@StatutsPaiement", ""))
+            Dim ds As DataSet = ExecuteSQLds("s0026GetCustomersInvoices", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then rows = ds.Tables(0).Rows.Cast(Of DataRow)().ToList()
+        Catch
+        End Try
+        TotalFactures = rows.Count
+
+        Dim ouverts = LireCsv(PAY_OUVERTS)
+        Dim lOuvertes = rows.Where(Function(r) ouverts.Contains(PayDe(r))).ToList()
+        Dim lRetard = rows.Where(Function(r) PayDe(r) = "EN_RETARD").ToList()
+        Dim lPayees = rows.Where(Function(r) PayDe(r) = "PAYEE").ToList()
+        Dim nBrouillons As Integer = rows.Where(Function(r) Convert.ToString(r("Status")) = "Brouillon").Count()
+        Dim nCompta As Integer = rows.Where(Function(r) Convert.ToString(r("Status")) = "Comptabilisé").Count()
+
+        Dim sb As New StringBuilder()
+        sb.Append(Kpi("kpi-pay", PAY_OUVERTS, L("kpiARecevoir"), lOuvertes.Sum(Function(r) Montant(r, "ResteAPayer")).ToString("C0"),
+                      String.Format(L("kpiOuvertes"), lOuvertes.Count), "#1B4F9C"))
+        sb.Append(Kpi("kpi-pay", "EN_RETARD", L("payLate"), lRetard.Sum(Function(r) Montant(r, "ResteAPayer")).ToString("C0"),
+                      String.Format(L("kpiFactures"), lRetard.Count), If(lRetard.Count > 0, "#E35D55", "#43B47A")))
+        sb.Append(Kpi("kpi-etat", "Brouillon", L("kpiBrouillons"), nBrouillons.ToString(), L("kpiACompta"), "#E3B341"))
+        sb.Append(Kpi("kpi-pay", "PAYEE", L("kpiPayees"), lPayees.Sum(Function(r) Montant(r, "Total")).ToString("C0"),
+                      String.Format(L("kpiFactures"), lPayees.Count), "#43B47A"))
+        litKpis.Text = sb.ToString()
+
+        Dim etats As New List(Of Tuple(Of String, String, Integer, String)) From {
+            Tuple.Create("", L("chipToutes"), rows.Count, ""),
+            Tuple.Create("Brouillon", L("chipBrouillons"), nBrouillons, ""),
+            Tuple.Create("Comptabilisé", L("chipComptabilisees"), nCompta, "")}
+        Dim pays As New List(Of Tuple(Of String, String, Integer, String)) From {
+            Tuple.Create("", L("chipTous"), rows.Count, ""),
+            Tuple.Create("EN_RETARD", L("payLate"), lRetard.Count, "#E35D55"),
+            Tuple.Create("PARTIELLE", L("payPartial"), rows.Where(Function(r) PayDe(r) = "PARTIELLE").Count(), "#E3B341"),
+            Tuple.Create("OUVERTE", L("payOpen"), rows.Where(Function(r) PayDe(r) = "OUVERTE").Count(), "#1B4F9C"),
+            Tuple.Create("PAYEE", L("payPaid"), lPayees.Count, "#43B47A"),
+            Tuple.Create("IN_PROGRESS", L("payInProgressShort"), rows.Where(Function(r) PayDe(r) = "IN_PROGRESS").Count(), "#AEBBCD")}
+        litChips.Text = Groupe(L("colEtat"), "etat", EtatsCsv, etats) & Groupe(L("colPaiement"), "pay", PaiementsCsv, pays)
+    End Sub
+
+    ''' <summary>Un indicateur : actif quand son jeu est exactement le filtre posé.</summary>
+    Private Function Kpi(groupe As String, valeurs As String, lab As String, val As String, sub_ As String, point As String) As String
+        Dim actif As Boolean
+        If groupe = "kpi-etat" Then
+            actif = (EtatsCsv = valeurs AndAlso PaiementsCsv = "")
+        Else
+            actif = (PaiementsCsv = valeurs AndAlso EtatsCsv = "")
+        End If
+        Return "<button type=""button"" class=""fc-kpi" & If(actif, " on", "") & """ aria-pressed=""" & If(actif, "true", "false") &
+               """ onclick=""fcChip('" & groupe & "','" & valeurs & "')"">" &
+               "<span class=""lab""><i style=""background:" & point & """></i>" & Server.HtmlEncode(lab) & "</span>" &
+               "<span class=""val"">" & Server.HtmlEncode(val) & "</span>" &
+               "<span class=""sub"">" & Server.HtmlEncode(sub_) & "</span></button>"
+    End Function
+
+    ''' <summary>Un groupe de puces (libellé, puis une puce par valeur avec son décompte).</summary>
+    Private Function Groupe(titre As String, grp As String, csv As String, puces As List(Of Tuple(Of String, String, Integer, String))) As String
+        Dim choisis As HashSet(Of String) = LireCsv(csv)
+        Dim sb As New StringBuilder()
+        sb.Append("<div class=""fc-groupe"">").Append(Server.HtmlEncode(titre)).Append("<div class=""fc-chips"">")
+        For Each p In puces
+            Dim actif As Boolean = If(p.Item1 = "", choisis.Count = 0, choisis.Contains(p.Item1))
+            sb.Append("<button type=""button"" class=""fc-chip").Append(If(actif, " on", "")).Append(""" aria-pressed=""").Append(If(actif, "true", "false")).
+               Append(""" onclick=""fcChip('").Append(grp).Append("','").Append(HttpUtility.JavaScriptStringEncode(p.Item1)).Append("')"">")
+            If p.Item4 <> "" Then sb.Append("<i style=""background:").Append(p.Item4).Append("""></i>")
+            sb.Append(Server.HtmlEncode(p.Item2)).Append(" <b>").Append(p.Item3).Append("</b></button>")
+        Next
+        sb.Append("</div></div>")
+        Return sb.ToString()
+    End Function
+
 
     ''' <summary>Applique les libellés localisés (fr/en/es) aux contrôles serveur de la page.</summary>
     Private Sub ApplyLocalization()
         SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        litRubrique.Text = L("rubrique")
+        litSousTitre.Text = L("sousTitre")
         btnAddCustomerInvoice.Text = L("addInvoice")
         btnImportSquare.Text = L("importSquare")
         btnImportSquare.ToolTip = L("importSquareTip")
@@ -121,12 +227,10 @@ Public Class wbfCustomersInvoices
     ''' <summary>Libellés des en-têtes de colonnes / message vide (dans les templates du RadListView).</summary>
     Private Sub rlvClientsFactures_PreRender(sender As Object, e As EventArgs) Handles rlvClientsFactures.PreRender
         SetSortHeader(rlvClientsFactures, "lnkSortNum", L("colNum"), "NumeroSort")
-        SetSortHeader(rlvClientsFactures, "lnkSortDate", L("colDate"), "DocumentDate")
         SetSortHeader(rlvClientsFactures, "lnkSortDue", L("colDueDate"), "DueDate")
         SetSortHeader(rlvClientsFactures, "lnkSortCustomer", L("colCustomer"), "NameSort")
         SetSortHeader(rlvClientsFactures, "lnkSortPay", L("colStatutPaiement"), "StatutPaiement")
         SetSortHeader(rlvClientsFactures, "lnkSortReste", L("colResteAPayer"), "ResteAPayer")
-        SetSortHeader(rlvClientsFactures, "lnkSortRecu", L("colDejaRecu"), "DejaRecu")
         SetSortHeader(rlvClientsFactures, "lnkSortTotal", L("colTotal"), "Total")
         SetSortHeader(rlvClientsFactures, "lnkSortEtat", L("colEtat"), "Status")
         SetLiteral(rlvClientsFactures, "litColAction", L("colAction"))
@@ -207,16 +311,16 @@ Public Class wbfCustomersInvoices
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Factures clients — 60Sec-AI", "Customer invoices — 60Sec-AI", "Facturas de clientes — 60Sec-AI")
             Case "pageTitleShort" : Return Choose3(lang, "Factures clients", "Customer invoices", "Facturas de clientes")
-            Case "addInvoice" : Return Choose3(lang, "Ajouter une facture", "Add invoice", "Agregar factura")
-            Case "importSquare" : Return Choose3(lang, "Importer depuis Square", "Import from Square", "Importar desde Square")
+            Case "addInvoice" : Return Choose3(lang, "+ Nouvelle facture", "+ New invoice", "+ Nueva factura")
+            Case "importSquare" : Return Choose3(lang, "Importer de Square", "Import from Square", "Importar de Square")
             Case "importSquareTip" : Return Choose3(lang, "Rapatrier les factures et paiements Square comme factures clients", "Bring back Square invoices and payments as customer invoices", "Traer facturas y pagos de Square como facturas de clientes")
-            Case "searchPh" : Return Choose3(lang, "Rechercher (nom, courriel, téléphone…)", "Search (name, email, phone…)", "Buscar (nombre, correo, teléfono…)")
-            Case "colNum" : Return Choose3(lang, "#", "#", "#")
+            Case "searchPh" : Return Choose3(lang, "Chercher un client", "Search a customer", "Buscar un cliente")
+            Case "colNum" : Return Choose3(lang, "Numéro", "Number", "Número")
             Case "colDate" : Return Choose3(lang, "Date", "Date", "Fecha")
             Case "colDueDate" : Return Choose3(lang, "Échéance", "Due date", "Vencimiento")
             Case "colCustomer" : Return Choose3(lang, "Client", "Customer", "Cliente")
-            Case "colStatutPaiement" : Return Choose3(lang, "Statut paiement", "Payment status", "Estado de pago")
-            Case "colResteAPayer" : Return Choose3(lang, "Reste à payer", "Balance due", "Saldo pendiente")
+            Case "colStatutPaiement" : Return Choose3(lang, "Paiement", "Payment", "Pago")
+            Case "colResteAPayer" : Return Choose3(lang, "Reste", "Balance", "Saldo")
             Case "colDejaRecu" : Return Choose3(lang, "Déjà reçu", "Received", "Recibido")
             Case "colTotal" : Return Choose3(lang, "Total", "Total", "Total")
             Case "colEtat" : Return Choose3(lang, "État", "Status", "Estado")
@@ -243,7 +347,7 @@ Public Class wbfCustomersInvoices
             Case "msgPostFailed" : Return Choose3(lang, "Comptabilisation impossible.", "Posting failed.", "No se pudo contabilizar.")
             Case "tipEdit" : Return Choose3(lang, "Modifier", "Edit", "Editar")
             Case "tipDelete" : Return Choose3(lang, "Supprimer", "Delete", "Eliminar")
-            Case "empty" : Return Choose3(lang, "Aucune facture trouvée.", "No invoice found.", "No se encontró ninguna factura.")
+            Case "empty" : Return Choose3(lang, "Aucune facture ne correspond à ces filtres.", "No invoice matches these filters.", "Ninguna factura coincide con estos filtros.")
             Case "winInvoiceTitle" : Return Choose3(lang, "Ajouter / Modifier une facture", "Add / Edit invoice", "Agregar / Editar factura")
             Case "winCashInTitle" : Return Choose3(lang, "Ajouter / Modifier un encaissement", "Add / Edit cash receipt", "Agregar / Editar cobro")
             Case "winEditInvoice" : Return Choose3(lang, "Modifier une facture", "Edit invoice", "Editar factura")
@@ -285,6 +389,23 @@ Public Class wbfCustomersInvoices
             Case "photoGeoLabel" : Return Choose3(lang, "Lieu d'intervention", "Job location", "Lugar de intervención")
             Case "photoGeoAt" : Return Choose3(lang, "capté le {0}", "captured on {0}", "capturado el {0}")
             Case "photoGeoLink" : Return Choose3(lang, "Ouvrir dans Google Maps", "Open in Google Maps", "Abrir en Google Maps")
+            Case "rubrique" : Return Choose3(lang, "Ventes", "Sales", "Ventas")
+            Case "sousTitre" : Return Choose3(lang, "Vos factures et ce qu'on vous doit.", "Your invoices and what you are owed.", "Sus facturas y lo que le deben.")
+            Case "kpiARecevoir" : Return Choose3(lang, "À recevoir", "To receive", "Por cobrar")
+            Case "kpiOuvertes" : Return Choose3(lang, "{0} facture(s) ouverte(s)", "{0} open invoice(s)", "{0} factura(s) abierta(s)")
+            Case "kpiFactures" : Return Choose3(lang, "{0} facture(s)", "{0} invoice(s)", "{0} factura(s)")
+            Case "kpiBrouillons" : Return Choose3(lang, "Brouillons", "Drafts", "Borradores")
+            Case "kpiACompta" : Return Choose3(lang, "à comptabiliser", "to post", "por contabilizar")
+            Case "kpiPayees" : Return Choose3(lang, "Payées", "Paid", "Pagadas")
+            Case "chipToutes" : Return Choose3(lang, "Toutes", "All", "Todas")
+            Case "chipTous" : Return Choose3(lang, "Tous", "All", "Todos")
+            Case "chipBrouillons" : Return Choose3(lang, "Brouillons", "Drafts", "Borradores")
+            Case "chipComptabilisees" : Return Choose3(lang, "Comptabilisées", "Posted", "Contabilizadas")
+            Case "colPaiement" : Return Choose3(lang, "Paiement", "Payment", "Pago")
+            Case "payInProgressShort" : Return Choose3(lang, "En cours", "In progress", "En curso")
+            Case "emise" : Return Choose3(lang, "émise ", "issued ", "emitida ")
+            Case "recu" : Return Choose3(lang, "reçu {0}", "received {0}", "recibido {0}")
+            Case "pied" : Return Choose3(lang, "{0} sur {1} factures · le numéro ouvre la facture, le $ enregistre un paiement", "{0} of {1} invoices · the number opens the invoice, the $ records a payment", "{0} de {1} facturas · el número abre la factura, el $ registra un pago")
             Case Else : Return ""
         End Select
     End Function
@@ -297,8 +418,10 @@ Public Class wbfCustomersInvoices
         End Select
     End Function
     Private Sub rlvClientsFactures_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvClientsFactures.NeedDataSource
+        ChargerIndicateurs()
         Dim dt As DataTable = GetData()
         rlvClientsFactures.DataSource = dt
+        litPied.Text = Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count), TotalFactures))
     End Sub
 
 
@@ -312,8 +435,8 @@ Public Class wbfCustomersInvoices
         Dim p As New Collection
         p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
         p.Add(New SqlClient.SqlParameter("@Search", sSearch))
-        p.Add(New SqlClient.SqlParameter("@Etats", CheckedCsv(rcbEtat)))
-        p.Add(New SqlClient.SqlParameter("@StatutsPaiement", CheckedCsv(rcbStatutPaiement)))
+        p.Add(New SqlClient.SqlParameter("@Etats", EtatsCsv))
+        p.Add(New SqlClient.SqlParameter("@StatutsPaiement", PaiementsCsv))
         Dim ds As DataSet = ExecuteSQLds("s0026GetCustomersInvoices", p)
         If ds Is Nothing OrElse ds.Tables.Count = 0 Then Return Nothing
 
@@ -415,6 +538,75 @@ Public Class wbfCustomersInvoices
             Return "0"
         End Try
     End Function
+
+    ' =====================================================================
+    ' Les cellules de la liste, au style du gabarit « Portail du client »
+    ' =====================================================================
+
+    ''' <summary>La date courte dans la langue de la session (« 26 sept. 2026 »).</summary>
+    Private Function DateCourte(v As Object) As String
+        If v Is Nothing OrElse IsDBNull(v) Then Return "—"
+        Dim d As DateTime = CDate(v)
+        Dim ci As New Globalization.CultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA")))
+        Return Server.HtmlEncode(d.ToString("d MMM yyyy", ci))
+    End Function
+
+    ''' <summary>L'échéance en gras, la date d'émission en petit dessous.</summary>
+    Public Function EcheanceCell(due As Object, docDate As Object) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<b>").Append(DateCourte(due)).Append("</b>")
+        If docDate IsNot Nothing AndAlso Not IsDBNull(docDate) Then
+            sb.Append("<span>").Append(Server.HtmlEncode(String.Format(L("emise"), ""))).Append(DateCourte(docDate)).Append("</span>")
+        End If
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Le statut de paiement en pastille colorée (les couleurs du gabarit).</summary>
+    Public Function PayPill(statut As Object) As String
+        Dim code As String = Convert.ToString(statut).Trim().ToUpperInvariant()
+        Dim lab As String, bg As String, fg As String
+        Select Case code
+            Case "EN_RETARD" : lab = L("payLate") : bg = "#FDECEA" : fg = "#A3261C"
+            Case "PARTIELLE" : lab = L("payPartial") : bg = "#FBF1DC" : fg = "#7A5200"
+            Case "OUVERTE" : lab = L("payOpen") : bg = "#E8EDF5" : fg = "#143A73"
+            Case "PAYEE" : lab = L("payPaid") : bg = "#E3F3EA" : fg = "#0F5A3A"
+            Case "IN_PROGRESS" : lab = L("payInProgressShort") : bg = "#F2F5F9" : fg = "#5B6B86"
+            Case Else : Return "<span class=""fc-pay"" style=""color:#5B6B86"">—</span>"
+        End Select
+        Return "<span class=""fc-pay"" style=""background:" & bg & ";color:" & fg & """>" & Server.HtmlEncode(lab) & "</span>"
+    End Function
+
+    ''' <summary>La classe de la cellule « Reste » : en rouge quand la facture est en retard.</summary>
+    Public Function ResteClass(statut As Object) As String
+        Return "c-reste" & If(Convert.ToString(statut).Trim().ToUpperInvariant() = "EN_RETARD", " retard", "")
+    End Function
+
+    ''' <summary>Le reste à payer ; le déjà reçu en petit dessous quand il y en a un.</summary>
+    Public Function ResteCell(reste As Object, deja As Object) As String
+        Dim r As Decimal = If(reste Is Nothing OrElse IsDBNull(reste), 0D, Convert.ToDecimal(reste))
+        Dim d As Decimal = If(deja Is Nothing OrElse IsDBNull(deja), 0D, Convert.ToDecimal(deja))
+        Dim s As String = Server.HtmlEncode(r.ToString("C2"))
+        If d > 0D Then s &= "<span>" & Server.HtmlEncode(String.Format(L("recu"), d.ToString("C2"))) & "</span>"
+        Return s
+    End Function
+
+    ''' <summary>L'état comptable : vert avec un cadenas quand la facture est comptabilisée, gris sinon.</summary>
+    Public Function EtatCell(status As Object, compta As Object) As String
+        Dim comptabilisee As Boolean = (Convert.ToString(compta) = "COMPTABILISE")
+        Dim brut As String = Convert.ToString(status)
+        Dim lab As String = brut
+        If brut = "Comptabilisé" Then lab = L("stPosted")
+        If brut = "Brouillon" Then lab = L("stDraft")
+        Dim fg As String = If(comptabilisee OrElse brut = "Comptabilisé", "#0F5A3A", "#44536E")
+        Dim sb As New StringBuilder()
+        sb.Append("<span class=""fc-etat"" style=""color:").Append(fg).Append(""">")
+        If comptabilisee Then
+            sb.Append("<svg aria-hidden=""true"" width=""15"" height=""15"" viewBox=""0 0 24 24"" fill=""none"" stroke=""currentColor"" stroke-width=""2.4"" stroke-linecap=""round"" stroke-linejoin=""round""><path d=""M6 11h12v10H6zM8 11V7a4 4 0 0 1 8 0v4""></path></svg>")
+        End If
+        sb.Append(Server.HtmlEncode(lab)).Append("</span>")
+        Return sb.ToString()
+    End Function
+
 
 
     ' =====================================================================
@@ -1024,10 +1216,7 @@ Public Class wbfCustomersInvoices
         tbSearch.Text = ""
         ' Le bouton « effacer » remet aussi les filtres à zéro : sinon la grille
         ' reste filtrée alors que la recherche paraît vide.
-        For Each it As RadComboBoxItem In rcbEtat.Items : it.Checked = False : Next
-        For Each it As RadComboBoxItem In rcbStatutPaiement.Items : it.Checked = False : Next
-        rcbEtat.Text = "" : rcbStatutPaiement.Text = ""
-        SaveFilterState()
+        EtatsCsv = "" : PaiementsCsv = ""
         rlvClientsFactures.Rebind()
     End Sub
 

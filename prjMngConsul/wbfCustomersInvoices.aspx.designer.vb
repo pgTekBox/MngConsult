@@ -49,6 +49,30 @@ Partial Public Class wbfCustomersInvoices
     '''</remarks>
     Protected WithEvents hfInvoiceDirty As Global.System.Web.UI.WebControls.HiddenField
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpis control.</summary>
+    Protected WithEvents litKpis As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>hfChip control.</summary>
+    Protected WithEvents hfChip As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>btnChip control.</summary>
+    Protected WithEvents btnChip As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlRecherche control.</summary>
+    Protected WithEvents pnlRecherche As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litChips control.</summary>
+    Protected WithEvents litChips As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPied control.</summary>
+    Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''btnAddCustomerInvoice control.
     '''</summary>
@@ -74,16 +98,6 @@ Partial Public Class wbfCustomersInvoices
     '''Auto-generated field.
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
-    '''<summary>
-    '''rcbEtat control.
-    '''</summary>
-    Protected WithEvents rcbEtat As Global.Telerik.Web.UI.RadComboBox
-
-    '''<summary>
-    '''rcbStatutPaiement control.
-    '''</summary>
-    Protected WithEvents rcbStatutPaiement As Global.Telerik.Web.UI.RadComboBox
-
     Protected WithEvents tbSearch As Global.System.Web.UI.WebControls.TextBox
 
     '''<summary>
