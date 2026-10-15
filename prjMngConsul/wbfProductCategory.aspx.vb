@@ -1,4 +1,8 @@
-﻿Imports Telerik.Web.UI
+﻿Imports System.Collections.Generic
+Imports System.Data
+Imports System.Linq
+Imports System.Text
+Imports Telerik.Web.UI
 
 Public Class wbfProductCategory
     Inherits clsData
@@ -9,6 +13,8 @@ Public Class wbfProductCategory
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -19,6 +25,8 @@ Public Class wbfProductCategory
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal dans RAP1.</summary>
     Private Sub ApplyLocalization()
         SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
+        litRubrique.Text = L("rubrique")
+        litSousTitre.Text = L("sousTitre")
         btnAdd.Text = L("addCategory")
         tbSearch.Attributes("placeholder") = L("searchPh")
         rwCategory.Title = L("winTitle")
@@ -47,8 +55,8 @@ Public Class wbfProductCategory
         Select Case key
             Case "pageTitle" : Return Choose3(lang, "Catégories de produits — 60Sec-AI", "Product categories — 60Sec-AI", "Categorías de productos — 60Sec-AI")
             Case "pageTitleShort" : Return Choose3(lang, "Catégories de produits", "Product categories", "Categorías de productos")
-            Case "addCategory" : Return Choose3(lang, "Ajouter une catégorie", "Add a category", "Agregar una categoría")
-            Case "searchPh" : Return Choose3(lang, "Rechercher (code, nom…)", "Search (code, name…)", "Buscar (código, nombre…)")
+            Case "addCategory" : Return Choose3(lang, "+ Ajouter une catégorie", "+ Add a category", "+ Agregar una categoría")
+            Case "searchPh" : Return Choose3(lang, "Chercher un code ou un nom", "Search a code or a name", "Buscar un código o un nombre")
             Case "colCode" : Return Choose3(lang, "Code", "Code", "Código")
             Case "colName" : Return Choose3(lang, "Nom", "Name", "Nombre")
             Case "colSaleAccount" : Return Choose3(lang, "Compte vente", "Sales account", "Cuenta de venta")
@@ -56,11 +64,27 @@ Public Class wbfProductCategory
             Case "colTaxe" : Return Choose3(lang, "Taxe", "Tax", "Impuesto")
             Case "colActive" : Return Choose3(lang, "Actif", "Active", "Activo")
             Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
-            Case "empty" : Return Choose3(lang, "Aucune catégorie trouvée.", "No category found.", "Ninguna categoría encontrada.")
+            Case "empty" : Return Choose3(lang, "Aucune catégorie ne correspond.", "No category matches.", "Ninguna categoría coincide.")
             Case "winTitle" : Return Choose3(lang, "Ajouter / Modifier une catégorie", "Add / Edit a category", "Agregar / Editar una categoría")
             Case "addCategoryWin" : Return Choose3(lang, "Ajouter une catégorie", "Add a category", "Agregar una categoría")
             Case "editCategoryWin" : Return Choose3(lang, "Modifier une catégorie", "Edit a category", "Editar una categoría")
             Case "categoryCount" : Return Choose3(lang, "catégorie(s)", "category(ies)", "categoría(s)")
+            Case "rubrique" : Return Choose3(lang, "Produits et services", "Products and services", "Productos y servicios")
+            Case "sousTitre" : Return Choose3(lang, "Regroupez vos produits et donnez-leur d'avance leurs comptes et leur taxe.", "Group your products and give them their accounts and tax in advance.", "Agrupe sus productos y asígneles de antemano sus cuentas y su impuesto.")
+            Case "kpiActives" : Return Choose3(lang, "Catégories actives", "Active categories", "Categorías activas")
+            Case "kpiActivesSub" : Return Choose3(lang, "offertes dans les fiches", "offered in the records", "ofrecidas en las fichas")
+            Case "kpiInactives" : Return Choose3(lang, "Inactives", "Inactive", "Inactivas")
+            Case "kpiInactivesSub" : Return Choose3(lang, "retirées du choix", "removed from the choice", "retiradas de la elección")
+            Case "kpiSansCompte" : Return Choose3(lang, "Sans compte", "Without account", "Sin cuenta")
+            Case "kpiSansCompteSub" : Return Choose3(lang, "vente ou achat à régler", "sales or purchase to set", "venta o compra por definir")
+            Case "kpiProduits" : Return Choose3(lang, "Produits", "Products", "Productos")
+            Case "kpiProduitsSub" : Return Choose3(lang, "ouvrir le catalogue", "open the catalog", "abrir el catálogo")
+            Case "manque" : Return Choose3(lang, "À compléter : {0}", "To complete: {0}", "Por completar: {0}")
+            Case "mVente" : Return Choose3(lang, "compte vente", "sales account", "cuenta de venta")
+            Case "mAchat" : Return Choose3(lang, "compte achat", "purchase account", "cuenta de compra")
+            Case "actifOui" : Return Choose3(lang, "Active", "Active", "Activa")
+            Case "actifNon" : Return Choose3(lang, "Inactive", "Inactive", "Inactiva")
+            Case "pied" : Return Choose3(lang, "{0} sur {1} catégories", "{0} of {1} categories", "{0} de {1} categorías")
             Case "taxTaxable" : Return Choose3(lang, "Taxable", "Taxable", "Gravable")
             Case "taxExempt" : Return Choose3(lang, "Exempt", "Exempt", "Exento")
             Case Else : Return ""
@@ -92,12 +116,10 @@ Public Class wbfProductCategory
     End Function
 
     Private Sub rlvCategories_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvCategories.NeedDataSource
-        Dim dt As DataTable = GetData()
+        ChargerIndicateurs()
+        Dim dt As DataTable = Filtrer(GetData())
         rlvCategories.DataSource = dt
-
-        If dt IsNot Nothing Then
-            lblInfo.Text = dt.Rows.Count & " " & L("categoryCount")
-        End If
+        litPied.Text = Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count), TotalCategories))
     End Sub
 
     Private Sub rlvCategories_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles rlvCategories.ItemCommand
@@ -138,8 +160,169 @@ Public Class wbfProductCategory
 
     Protected Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
         tbSearch.Text = ""
+        FiltreCourant = ""
         rlvCategories.Rebind()
     End Sub
+
+
+    ' =====================================================================
+    ' Les indicateurs (actives / inactives / sans compte / produits) et le
+    ' filtre qu'ils posent, conservé en session. Les décomptes se font sur
+    ' toutes les catégories, sans la recherche.
+    ' =====================================================================
+
+    Private Property FiltreCourant As String
+        Get
+            Return If(TryCast(Session("Cat.Filtre"), String), "")
+        End Get
+        Set(value As String)
+            Session("Cat.Filtre") = value
+        End Set
+    End Property
+
+    Private TotalCategories As Integer
+
+    ''' <summary>Un indicateur cliqué (hfChip = « kpi|valeur ») : un second clic l'enlève.</summary>
+    Protected Sub btnChip_Click(sender As Object, e As EventArgs) Handles btnChip.Click
+        Dim v As String = If(hfChip.Value, "")
+        hfChip.Value = ""
+        Dim i As Integer = v.IndexOf("|"c)
+        If i < 0 Then Return
+        Dim valeur As String = v.Substring(i + 1).Trim().ToLowerInvariant()
+        If v.Substring(0, i) = "kpi" Then FiltreCourant = If(FiltreCourant = valeur, "", valeur)
+        rlvCategories.Rebind()
+    End Sub
+
+    Private Shared Function Vrai(o As Object) As Boolean
+        If o Is Nothing OrElse IsDBNull(o) Then Return False
+        Try
+            Return Convert.ToBoolean(o)
+        Catch
+            Return False
+        End Try
+    End Function
+
+    Private Shared Function Texte(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Return Convert.ToString(o).Trim()
+    End Function
+
+    ''' <summary>Ce qui manque à une catégorie : le compte de vente, le compte d'achat.</summary>
+    Private Function Manques(compteVente As Object, compteAchat As Object) As List(Of String)
+        Dim m As New List(Of String)
+        If Texte(compteVente) = "" Then m.Add(L("mVente"))
+        If Texte(compteAchat) = "" Then m.Add(L("mAchat"))
+        Return m
+    End Function
+
+    Private Function SansCompte(r As DataRow) As Boolean
+        Return Manques(r("CompteVenteNumero"), r("CompteAchatNumero")).Count > 0
+    End Function
+
+    Private Function LireTout() As List(Of DataRow)
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@Search", ""))
+            Dim ds As DataSet = ExecuteSQLds("s0056GetProductCategories", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Cast(Of DataRow)().ToList()
+        Catch
+        End Try
+        Return New List(Of DataRow)
+    End Function
+
+    Private Function CompterProduits() As Integer
+        Try
+            Dim p As New Collection
+            p.Add(New SqlClient.SqlParameter("@CompanyGUID", Company))
+            p.Add(New SqlClient.SqlParameter("@Search", ""))
+            p.Add(New SqlClient.SqlParameter("@CategoryId", 0))
+            Dim ds As DataSet = ExecuteSQLds("s0076GetProducts", p)
+            If ds IsNot Nothing AndAlso ds.Tables.Count > 0 Then Return ds.Tables(0).Rows.Count
+        Catch
+        End Try
+        Return 0
+    End Function
+
+    Private Sub ChargerIndicateurs()
+        Dim rows As List(Of DataRow) = LireTout()
+        TotalCategories = rows.Count
+        Dim actives As Integer = rows.Where(Function(r) Vrai(r("Actif"))).Count()
+        Dim sansCpt As Integer = rows.Where(Function(r) SansCompte(r)).Count()
+
+        Dim sb As New StringBuilder()
+        sb.Append(Kpi("actives", L("kpiActives"), actives & " / " & rows.Count, L("kpiActivesSub"), "#43B47A"))
+        sb.Append(Kpi("inactives", L("kpiInactives"), (rows.Count - actives).ToString(), L("kpiInactivesSub"), "#AEBBCD"))
+        sb.Append(Kpi("sanscompte", L("kpiSansCompte"), sansCpt.ToString(), L("kpiSansCompteSub"), If(sansCpt > 0, "#E3B341", "#43B47A")))
+        sb.Append("<a class=""fc-kpi"" href=""wbfProducts.aspx""><span class=""lab""><i style=""background:#1B4F9C""></i>" & Server.HtmlEncode(L("kpiProduits")) &
+                  "</span><span class=""val"">" & CompterProduits() & "</span><span class=""sub"">" & Server.HtmlEncode(L("kpiProduitsSub")) & "</span></a>")
+        litKpis.Text = sb.ToString()
+    End Sub
+
+    Private Function Kpi(valeur As String, lab As String, val As String, sub_ As String, point As String) As String
+        Dim actif As Boolean = (FiltreCourant = valeur)
+        Return "<button type=""button"" class=""fc-kpi" & If(actif, " on", "") & """ aria-pressed=""" & If(actif, "true", "false") &
+               """ onclick=""fcChip('kpi','" & valeur & "')"">" &
+               "<span class=""lab""><i style=""background:" & point & """></i>" & Server.HtmlEncode(lab) & "</span>" &
+               "<span class=""val"">" & Server.HtmlEncode(val) & "</span>" &
+               "<span class=""sub"">" & Server.HtmlEncode(sub_) & "</span></button>"
+    End Function
+
+    ''' <summary>Le filtre de l'indicateur posé, appliqué en mémoire.</summary>
+    Private Function Filtrer(dt As DataTable) As DataTable
+        If dt Is Nothing OrElse FiltreCourant = "" Then Return dt
+        Dim rows As IEnumerable(Of DataRow) = dt.Rows.Cast(Of DataRow)()
+        Select Case FiltreCourant
+            Case "actives" : rows = rows.Where(Function(r) Vrai(r("Actif")))
+            Case "inactives" : rows = rows.Where(Function(r) Not Vrai(r("Actif")))
+            Case "sanscompte" : rows = rows.Where(Function(r) SansCompte(r))
+        End Select
+        Dim copie As DataTable = dt.Clone()
+        For Each r As DataRow In rows
+            copie.ImportRow(r)
+        Next
+        Return copie
+    End Function
+
+    ' =====================================================================
+    ' Les cellules de la liste, au style du gabarit « Portail du client »
+    ' =====================================================================
+
+    ''' <summary>Le nom en gras, la description dessous, puis ce qui manque (les comptes).</summary>
+    Public Function NomCell(nom As Object, description As Object, compteVente As Object, compteAchat As Object) As String
+        Dim sb As New StringBuilder()
+        sb.Append("<b>").Append(Server.HtmlEncode(Texte(nom))).Append("</b>")
+        Dim d As String = Texte(description)
+        If d.Length > 80 Then d = d.Substring(0, 80) & "…"
+        If d <> "" Then sb.Append("<span>").Append(Server.HtmlEncode(d)).Append("</span>")
+        Dim m As List(Of String) = Manques(compteVente, compteAchat)
+        If m.Count > 0 Then sb.Append("<em>● ").Append(Server.HtmlEncode(String.Format(L("manque"), String.Join(", ", m)))).Append("</em>")
+        Return sb.ToString()
+    End Function
+
+    ''' <summary>Le numéro du compte en gras, son nom dessous ; un tiret s'il n'y en a pas.</summary>
+    Public Function CompteCell(numero As Object, nom As Object) As String
+        Dim n As String = Texte(numero)
+        If n = "" Then Return "<span class=""rien"">—</span>"
+        Return "<b>" & Server.HtmlEncode(n) & "</b><span>" & Server.HtmlEncode(Texte(nom)) & "</span>"
+    End Function
+
+    Public Function TaxePill(taxe As Object) As String
+        Dim code As Integer = 0
+        If taxe IsNot Nothing AndAlso Not IsDBNull(taxe) Then Integer.TryParse(Convert.ToString(taxe), code)
+        Select Case code
+            Case 1 : Return "<span class=""fc-pay"" style=""background:#E8EDF5;color:#143A73"">" & Server.HtmlEncode(L("taxTaxable")) & "</span>"
+            Case 2 : Return "<span class=""fc-pay"" style=""background:#FBF1DC;color:#7A5200"">" & Server.HtmlEncode(L("taxExempt")) & "</span>"
+            Case Else : Return "<span class=""fc-pay"" style=""color:#5B6B86"">—</span>"
+        End Select
+    End Function
+
+    ''' <summary>Un point vert « Active » ou gris « Inactive ».</summary>
+    Public Function ActifCell(actif As Object) As String
+        Dim ok As Boolean = Vrai(actif)
+        Return "<span class=""fc-etat"" style=""color:" & If(ok, "#0F5A3A", "#5B6B86") & """><i class=""pt"" style=""background:" & If(ok, "#43B47A", "#AEBBCD") & """></i>" &
+               Server.HtmlEncode(If(ok, L("actifOui"), L("actifNon"))) & "</span>"
+    End Function
 
     ' ── Helpers pour badges de taxe ──
 

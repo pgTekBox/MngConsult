@@ -41,15 +41,6 @@ Partial Public Class wbfProducts
     Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
-    '''lblInfo control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''btnConnectSquare control.
     '''</summary>
     '''<remarks>
@@ -120,6 +111,33 @@ Partial Public Class wbfProducts
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents rddlFilterCat As Global.Telerik.Web.UI.RadDropDownList
+
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpis control.</summary>
+    Protected WithEvents litKpis As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>hfChip control.</summary>
+    Protected WithEvents hfChip As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>btnChip control.</summary>
+    Protected WithEvents btnChip As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>pnlRecherche control.</summary>
+    Protected WithEvents pnlRecherche As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litTriLbl control.</summary>
+    Protected WithEvents litTriLbl As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litChips control.</summary>
+    Protected WithEvents litChips As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPied control.</summary>
+    Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>
     '''rlvProducts control.

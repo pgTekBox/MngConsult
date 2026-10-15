@@ -26,16 +26,17 @@
 
             <section id="fr-produits">
                 <h2>Produits</h2>
-                <p>L’écran <span class="chemin">Produits et services › Produits</span> présente la liste « Produits et services ». Il sert à consulter, chercher et filtrer les produits et services de l’entreprise, à en ajouter, en modifier ou en supprimer, et à synchroniser le catalogue avec Square. Sous le titre, un compteur indique « N produit(s) ».</p>
+                <p>L’écran <span class="chemin">Produits et services › Produits</span> présente la liste « Produits et services ». Il sert à consulter, chercher et filtrer les produits et services de l’entreprise, à en ajouter, en modifier ou en supprimer, et à synchroniser le catalogue avec Square. Le titre « Catalogue » pose sur le fond de la page ; en dessous, quatre indicateurs, une carte « recherche et tri », puis la carte de la liste, dont le pied dit combien de produits sont montrés sur le total.</p>
 
                 <h3>But</h3>
                 <p>Un produit ou un service est ce que vous placez sur les lignes de vos factures clients et de vos factures fournisseurs. Sa fiche fixe le nom, la description, le prix unitaire, la quantité proposée par défaut, le statut de taxe et, au besoin, les comptes de revenus et de charges utilisés à la comptabilisation. Un produit et un service se saisissent exactement de la même façon : il n’y a pas de champ « type ».</p>
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Exporter vers Square</kbd> : envoie les produits actifs vers le catalogue Square (voir <a href="#fr-square">Synchronisation Square du catalogue</a>). Aucune confirmation n’est demandée.</li>
-                    <li><kbd>Importer depuis Square</kbd> : récupère le catalogue Square dans 60Sec-AI (voir la même section). Aucune confirmation n’est demandée.</li>
-                    <li><kbd>Ajouter un produit</kbd> : ouvre la fenêtre « Ajouter un produit ».</li>
+                    <li><kbd>Envoyer vers Square</kbd> (pastille blanche, en haut à droite) : envoie les produits actifs vers le catalogue Square (voir <a href="#fr-square">Synchronisation Square du catalogue</a>). Aucune confirmation n’est demandée.</li>
+                    <li><kbd>Importer de Square</kbd> (pastille blanche) : récupère le catalogue Square dans 60Sec-AI (voir la même section). Aucune confirmation n’est demandée.</li>
+                    <li><kbd>+ Ajouter un produit</kbd> (pastille bleue) : ouvre la fenêtre « Ajouter un produit ».</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Produits actifs</strong> (« n / total »), <strong>Inactifs</strong>, <strong>À compléter</strong> (les produits sans prix, sans catégorie ou sans statut de taxe ; point ambre s’il y en a) et <strong>Catégories</strong> (leur nombre ; un clic ouvre la liste des catégories). Un clic sur l’un des trois premiers pose le filtre correspondant sur la liste — le cadre passe en bleu — et un second clic l’enlève. Le filtre est mémorisé pour la session.</li>
                     <li>Sur chaque ligne :
                         <ul>
                             <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier un produit ».</li>
@@ -47,38 +48,39 @@
 
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>La zone « Rechercher (nom, description…) » accompagnée d’une loupe : tapez un mot du nom ou de la description, puis cliquez sur la <kbd>loupe</kbd> pour lancer la recherche.</li>
-                    <li>Le bouton <kbd>X</kbd> vide la zone de recherche <strong>et</strong> remet le filtre de catégorie à « Toutes ».</li>
-                    <li>Le filtre « Catégorie : » est une liste déroulante, à « Toutes » par défaut. La liste se met à jour dès que vous choisissez une catégorie ; il n’y a pas de bouton à cliquer.</li>
+                    <li>Le champ « Chercher un produit ou une description », la <kbd>loupe</kbd> ou la touche Entrée : la recherche porte sur le nom et la description.</li>
+                    <li>La liste déroulante « Catégorie », à « Toutes » par défaut : la liste se met à jour dès que vous choisissez une catégorie.</li>
+                    <li>Les pastilles <strong>Trier</strong> : <strong>Nom</strong> (par défaut), <strong>Catégorie</strong> (puis le nom) ou <strong>Prix</strong> (du plus cher au moins cher). La pastille choisie est blanche ; le tri est mémorisé pour la session.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche, remet la catégorie à « Toutes » <strong>et enlève le filtre de l’indicateur</strong>. Le pied de la liste dit combien de produits sont montrés sur le total.</li>
                 </ul>
 
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Produit</td><td>Le nom en gras. En dessous, la description coupée à 60 caractères et terminée par « … ». La description complète se lit dans la fiche.</td></tr>
-                        <tr><td>Catégorie</td><td>La catégorie du produit, affichée sous forme d’étiquette. Vide si le produit n’a pas de catégorie.</td></tr>
+                        <tr><td>Produit</td><td>Le nom en gras. En dessous, la description coupée à 80 caractères, puis, en ambre, « À compléter : prix, catégorie, taxe » selon ce qui manque. La description complète se lit dans la fiche.</td></tr>
+                        <tr><td>Catégorie</td><td>La catégorie du produit, en pastille bleue, ou « Sans catégorie » en gris.</td></tr>
                         <tr><td>Prix</td><td>Le prix unitaire, au format « 1 234,56 $ ». Un tiret « — » s’affiche si le prix est vide.</td></tr>
                         <tr><td>Qté déf.</td><td>La quantité par défaut : un nombre entier, ou deux décimales s’il y a une fraction (par exemple « 1,50 »).</td></tr>
                         <tr><td>Taxe</td><td>Pastille « Taxable » en bleu ou « Exempt » en ambre. Sinon « — » (aucun statut, ou statut « Détaxé »).</td></tr>
-                        <tr><td>Actif</td><td>Pastille verte si le produit est actif, rouge s’il est inactif.</td></tr>
+                        <tr><td>Actif</td><td>Un point vert « Actif », ou un point gris « Inactif ».</td></tr>
                         <tr><td>Action</td><td>Les boutons <kbd>Crayon</kbd> et <kbd>Corbeille</kbd>.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun produit trouvé. »</span> — la liste est vide, ou la recherche et le filtre de catégorie ne renvoient rien. Cliquez sur <kbd>X</kbd> pour tout réinitialiser.</li>
+                    <li><span class="msg">« Aucun produit ne correspond à ces filtres. »</span> — la liste est vide, ou la recherche, la catégorie et l’indicateur ne renvoient rien. Cliquez sur <kbd>✕</kbd> pour tout réinitialiser.</li>
                 </ul>
 
                 <div class="piege" data-titre="Piège">La <kbd>Corbeille</kbd> supprime le produit dès le premier clic, sans demander de confirmation. Pour retirer un produit du choix courant tout en gardant son historique, ouvrez plutôt sa fiche et décochez « Produit actif ».</div>
-                <div class="astuce" data-titre="Astuce">Le bouton <kbd>X</kbd> efface aussi le filtre de catégorie. Si votre liste vous semble incomplète, vérifiez d’abord que « Catégorie : » est bien à « Toutes ».</div>
+                <div class="astuce" data-titre="Astuce">Le bouton <kbd>✕</kbd> efface aussi la catégorie et l’indicateur. Si votre liste vous semble incomplète, vérifiez d’abord qu’aucun indicateur n’est encadré de bleu et que « Catégorie » est bien à « Toutes ».</div>
                 <div class="note" data-titre="Bon à savoir">Un produit « Détaxé » s’affiche avec « — » dans la colonne Taxe, exactement comme un produit sans statut de taxe. C’est normal : seuls « Taxable » et « Exempt » ont une pastille. Ouvrez la fiche pour connaître le statut exact.</div>
 
                 <p>Pour ajouter rapidement un produit :</p>
                 <ol>
                     <li>Ouvrez <span class="chemin">Produits et services › Produits</span>.</li>
-                    <li>Cliquez sur <kbd>Ajouter un produit</kbd>.</li>
+                    <li>Cliquez sur <kbd>+ Ajouter un produit</kbd>.</li>
                     <li>Saisissez au moins le « Nom du produit / service », puis le prix unitaire et le statut de taxe.</li>
                     <li>Choisissez une catégorie si vous voulez hériter de ses comptes du plan comptable.</li>
                     <li>Cliquez sur <kbd>Enregistrer</kbd> : la fenêtre se ferme et la liste se recharge.</li>
@@ -163,14 +165,15 @@
 
             <section id="fr-categories">
                 <h2>Catégories de produits</h2>
-                <p>L’écran <span class="chemin">Produits et services › Catégorie de produit</span> présente la liste « Catégories de produits ». Il sert à regrouper les produits et à leur attribuer par défaut des comptes de grand livre (GL) et un statut de taxe. Sous le titre, un compteur indique « N catégorie(s) ».</p>
+                <p>L’écran <span class="chemin">Produits et services › Catégorie de produit</span> présente la liste « Catégories de produits ». Il sert à regrouper les produits et à leur attribuer par défaut des comptes de grand livre (GL) et un statut de taxe. Le titre pose sur le fond de la page ; en dessous, quatre indicateurs, une carte « recherche », puis la carte de la liste, dont le pied dit combien de catégories sont montrées sur le total.</p>
 
                 <h3>But</h3>
                 <p>Une catégorie porte un code court, un nom, un statut de taxe par défaut et deux comptes du plan comptable (vente et achat). Les produits rattachés à la catégorie utilisent ces comptes automatiquement à la facturation, sauf s’ils en définissent d’autres dans leur propre fiche. La catégorie sert aussi de filtre dans la liste des produits.</p>
 
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter une catégorie</kbd> : ouvre la fenêtre « Ajouter une catégorie ».</li>
+                    <li><kbd>+ Ajouter une catégorie</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter une catégorie ».</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Catégories actives</strong> (« n / total »), <strong>Inactives</strong>, <strong>Sans compte</strong> (celles dont le compte de vente ou le compte d’achat n’est pas réglé ; point ambre s’il y en a) et <strong>Produits</strong> (le nombre de produits ; un clic ouvre le catalogue). Un clic sur l’un des trois premiers pose le filtre correspondant — le cadre passe en bleu — et un second clic l’enlève. Le filtre est mémorisé pour la session.</li>
                     <li>Sur chaque ligne :
                         <ul>
                             <li><kbd>Crayon</kbd> : ouvre la fenêtre « Modifier une catégorie ».</li>
@@ -182,8 +185,8 @@
 
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>La zone « Rechercher (code, nom…) » avec une <kbd>loupe</kbd> pour lancer la recherche et un bouton <kbd>X</kbd> pour l’effacer.</li>
-                    <li>Il n’y a pas d’autre filtre.</li>
+                    <li>Le champ « Chercher un code ou un nom », la <kbd>loupe</kbd> ou la touche Entrée.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et enlève le filtre de l’indicateur</strong>.</li>
                 </ul>
 
                 <h3>Colonnes</h3>
@@ -191,18 +194,18 @@
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>Code</td><td>Le code de la catégorie, en police à chasse fixe.</td></tr>
-                        <tr><td>Nom</td><td>Le nom, avec la description en dessous.</td></tr>
-                        <tr><td>Compte vente</td><td>Le numéro du compte de revenus, avec son nom en dessous.</td></tr>
-                        <tr><td>Compte achat</td><td>Le numéro du compte d’achat ou de coût des ventes, avec son nom en dessous.</td></tr>
+                        <tr><td>Nom</td><td>Le nom en gras, la description en dessous, puis, en ambre, « À compléter : compte vente, compte achat » selon ce qui manque.</td></tr>
+                        <tr><td>Compte vente</td><td>Le numéro du compte de revenus en gras, son nom en dessous ; « — » s’il n’est pas réglé.</td></tr>
+                        <tr><td>Compte achat</td><td>Le numéro du compte d’achat ou de coût des ventes en gras, son nom en dessous ; « — » s’il n’est pas réglé.</td></tr>
                         <tr><td>Taxe</td><td>Taxable, Exempt ou « — ».</td></tr>
-                        <tr><td>Actif</td><td>Pastille verte (active) ou rouge (inactive).</td></tr>
+                        <tr><td>Actif</td><td>Un point vert « Active », ou un point gris « Inactive ».</td></tr>
                         <tr><td>Action</td><td>Les boutons <kbd>Crayon</kbd> et <kbd>Corbeille</kbd>.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucune catégorie trouvée. »</span> — aucune catégorie n’existe encore, ou la recherche ne renvoie rien. Cliquez sur <kbd>X</kbd> pour effacer la recherche.</li>
+                    <li><span class="msg">« Aucune catégorie ne correspond. »</span> — aucune catégorie n’existe encore, ou la recherche et l’indicateur ne renvoient rien. Cliquez sur <kbd>✕</kbd> pour tout réinitialiser.</li>
                 </ul>
 
                 <div class="piege" data-titre="Piège">Comme pour les produits, la <kbd>Corbeille</kbd> supprime la catégorie dès le premier clic, sans confirmation. Préférez décocher « Catégorie active » pour une catégorie que vous n’utilisez plus.</div>
@@ -433,16 +436,17 @@
 
             <section id="en-products">
                 <h2>Products</h2>
-                <p>The <span class="chemin">Products and services › Products</span> screen shows the “Products and services” list. It lets you view, search and filter the company’s products and services, add, edit or delete them, and synchronize the catalog with Square. Under the title, a counter shows “N product(s)”.</p>
+                <p>The <span class="chemin">Products and services › Products</span> screen shows the “Products and services” list. It lets you view, search and filter the company’s products and services, add, edit or delete them, and synchronize the catalog with Square. The “Catalog” title sits on the page background; below it, four indicators, a “search and sort” card, then the list card, whose footer says how many products are shown out of the total.</p>
 
                 <h3>Purpose</h3>
                 <p>A product or service is what you place on the lines of your customer invoices and supplier invoices. Its form sets the name, description, unit price, default quantity, tax status and, when needed, the revenue and expense accounts used at posting time. A product and a service are entered exactly the same way: there is no “type” field.</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Export to Square</kbd>: sends the active products to the Square catalog (see <a href="#en-square">Square catalog synchronization</a>). No confirmation is requested.</li>
-                    <li><kbd>Import from Square</kbd>: fetches the Square catalog into 60Sec-AI (see the same section). No confirmation is requested.</li>
-                    <li><kbd>Add a product</kbd>: opens the “Add a product” window.</li>
+                    <li><kbd>Send to Square</kbd> (white pill, top right): sends the active products to the Square catalog (see <a href="#en-square">Square catalog synchronization</a>). No confirmation is requested.</li>
+                    <li><kbd>Import from Square</kbd> (white pill): fetches the Square catalog into 60Sec-AI (see the same section). No confirmation is requested.</li>
+                    <li><kbd>+ Add a product</kbd> (blue pill): opens the “Add a product” window.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Active products</strong> (“n / total”), <strong>Inactive</strong>, <strong>To complete</strong> (products with no price, no category or no tax status; amber dot when there are some) and <strong>Categories</strong> (their number; a click opens the category list). Clicking one of the first three applies the matching filter to the list — the frame turns blue — and a second click removes it. The filter is remembered for the session.</li>
                     <li>On each row:
                         <ul>
                             <li><kbd>Pencil</kbd>: opens the “Edit a product” window.</li>
@@ -454,38 +458,39 @@
 
                 <h3>Filters and search</h3>
                 <ul>
-                    <li>The “Search (name, description…)” box with a magnifying glass: type a word from the name or description, then click the <kbd>magnifying glass</kbd> to run the search.</li>
-                    <li>The <kbd>X</kbd> button clears the search box <strong>and</strong> resets the category filter to “All”.</li>
-                    <li>The “Category:” filter is a drop-down list, set to “All” by default. The list refreshes as soon as you pick a category; there is no button to click.</li>
+                    <li>The “Search a product or a description” field, the <kbd>magnifying glass</kbd> or the Enter key: the search covers the name and the description.</li>
+                    <li>The “Category” drop-down list, set to “All” by default: the list refreshes as soon as you pick a category.</li>
+                    <li>The <strong>Sort</strong> pills: <strong>Name</strong> (default), <strong>Category</strong> (then name) or <strong>Price</strong> (highest first). The chosen pill is white; the sort is remembered for the session.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search, puts the category back to “All” <strong>and removes the indicator filter</strong>. The list footer says how many products are shown out of the total.</li>
                 </ul>
 
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Product</td><td>The name in bold. Below it, the description cut at 60 characters and ended with “…”. The full description is in the form.</td></tr>
-                        <tr><td>Category</td><td>The product’s category, shown as a tag. Empty if the product has no category.</td></tr>
+                        <tr><td>Product</td><td>The name in bold. Below it, the description cut at 80 characters, then, in amber, “To complete: price, category, tax” depending on what is missing. The full description is in the form.</td></tr>
+                        <tr><td>Category</td><td>The product’s category as a blue pill, or “No category” in grey.</td></tr>
                         <tr><td>Price</td><td>The unit price, in the “1 234,56 $” format. A dash “—” is shown if the price is empty.</td></tr>
                         <tr><td>Def. qty</td><td>The default quantity: a whole number, or two decimals if there is a fraction (for example “1,50”).</td></tr>
                         <tr><td>Tax</td><td>A blue “Taxable” badge or an amber “Exempt” badge. Otherwise “—” (no status, or “Zero-rated” status).</td></tr>
-                        <tr><td>Active</td><td>Green badge if the product is active, red if it is inactive.</td></tr>
+                        <tr><td>Active</td><td>A green dot “Active”, or a grey dot “Inactive”.</td></tr>
                         <tr><td>Action</td><td>The <kbd>Pencil</kbd> and <kbd>Trash</kbd> buttons.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No product found.”</span> — the list is empty, or the search and the category filter return nothing. Click <kbd>X</kbd> to reset everything.</li>
+                    <li><span class="msg">“No product matches these filters.”</span> — the list is empty, or the search, the category and the indicator return nothing. Click <kbd>✕</kbd> to reset everything.</li>
                 </ul>
 
                 <div class="piege" data-titre="Pitfall">The <kbd>Trash</kbd> deletes the product on the first click, without asking for confirmation. To remove a product from everyday use while keeping its history, open its form instead and uncheck “Active product”.</div>
-                <div class="astuce" data-titre="Tip">The <kbd>X</kbd> button also clears the category filter. If your list looks incomplete, first check that “Category:” is set to “All”.</div>
+                <div class="astuce" data-titre="Tip">The <kbd>✕</kbd> button also clears the category and the indicator. If your list looks incomplete, first check that no indicator is framed in blue and that “Category” is set to “All”.</div>
                 <div class="note" data-titre="Good to know">A “Zero-rated” product shows “—” in the Tax column, exactly like a product with no tax status. This is normal: only “Taxable” and “Exempt” have a badge. Open the form to see the exact status.</div>
 
                 <p>To add a product quickly:</p>
                 <ol>
                     <li>Open <span class="chemin">Products and services › Products</span>.</li>
-                    <li>Click <kbd>Add a product</kbd>.</li>
+                    <li>Click <kbd>+ Add a product</kbd>.</li>
                     <li>Enter at least the “Product / service name”, then the unit price and the tax status.</li>
                     <li>Pick a category if you want to inherit its chart-of-accounts entries.</li>
                     <li>Click <kbd>Save</kbd>: the window closes and the list reloads.</li>
@@ -570,14 +575,15 @@
 
             <section id="en-categories">
                 <h2>Product categories</h2>
-                <p>The <span class="chemin">Products and services › Product category</span> screen shows the “Product categories” list. It groups products and assigns them default general ledger (GL) accounts and a tax status. Under the title, a counter shows “N category(ies)”.</p>
+                <p>The <span class="chemin">Products and services › Product category</span> screen shows the “Product categories” list. It groups products and assigns them default general ledger (GL) accounts and a tax status. The title sits on the page background; below it, four indicators, a “search” card, then the list card, whose footer says how many categories are shown out of the total.</p>
 
                 <h3>Purpose</h3>
                 <p>A category has a short code, a name, a default tax status and two chart-of-accounts entries (sales and purchase). Products attached to the category use these accounts automatically at invoicing time, unless they define other accounts in their own form. The category is also used as a filter in the product list.</p>
 
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add a category</kbd>: opens the “Add a category” window.</li>
+                    <li><kbd>+ Add a category</kbd> (blue pill, top right): opens the “Add a category” window.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Active categories</strong> (“n / total”), <strong>Inactive</strong>, <strong>Without account</strong> (those whose sales or purchase account is not set; amber dot when there are some) and <strong>Products</strong> (the number of products; a click opens the catalog). Clicking one of the first three applies the matching filter — the frame turns blue — and a second click removes it. The filter is remembered for the session.</li>
                     <li>On each row:
                         <ul>
                             <li><kbd>Pencil</kbd>: opens the “Edit a category” window.</li>
@@ -589,8 +595,8 @@
 
                 <h3>Filters and search</h3>
                 <ul>
-                    <li>The “Search (code, name…)” box with a <kbd>magnifying glass</kbd> to run the search and an <kbd>X</kbd> button to clear it.</li>
-                    <li>There is no other filter.</li>
+                    <li>The “Search a code or a name” field, the <kbd>magnifying glass</kbd> or the Enter key.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search <strong>and removes the indicator filter</strong>.</li>
                 </ul>
 
                 <h3>Columns</h3>
@@ -598,18 +604,18 @@
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>Code</td><td>The category code, in a monospaced font.</td></tr>
-                        <tr><td>Name</td><td>The name, with the description below.</td></tr>
-                        <tr><td>Sales account</td><td>The revenue account number, with its name below.</td></tr>
-                        <tr><td>Purchase account</td><td>The purchase or cost-of-sales account number, with its name below.</td></tr>
+                        <tr><td>Name</td><td>The name in bold, the description below, then, in amber, “To complete: sales account, purchase account” depending on what is missing.</td></tr>
+                        <tr><td>Sales account</td><td>The revenue account number in bold, its name below; “—” when it is not set.</td></tr>
+                        <tr><td>Purchase account</td><td>The purchase or cost-of-sales account number in bold, its name below; “—” when it is not set.</td></tr>
                         <tr><td>Tax</td><td>Taxable, Exempt or “—”.</td></tr>
-                        <tr><td>Active</td><td>Green (active) or red (inactive) badge.</td></tr>
+                        <tr><td>Active</td><td>A green dot “Active”, or a grey dot “Inactive”.</td></tr>
                         <tr><td>Action</td><td>The <kbd>Pencil</kbd> and <kbd>Trash</kbd> buttons.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No category found.”</span> — no category exists yet, or the search returns nothing. Click <kbd>X</kbd> to clear the search.</li>
+                    <li><span class="msg">“No category matches.”</span> — no category exists yet, or the search and the indicator return nothing. Click <kbd>✕</kbd> to reset everything.</li>
                 </ul>
 
                 <div class="piege" data-titre="Pitfall">As with products, the <kbd>Trash</kbd> deletes the category on the first click, without confirmation. Prefer unchecking “Active category” for a category you no longer use.</div>
@@ -840,16 +846,17 @@
 
             <section id="es-productos">
                 <h2>Productos</h2>
-                <p>La pantalla <span class="chemin">Productos y servicios › Productos</span> muestra la lista «Productos y servicios». Sirve para consultar, buscar y filtrar los productos y servicios de la empresa, agregarlos, modificarlos o eliminarlos, y sincronizar el catálogo con Square. Bajo el título, un contador indica «N producto(s)».</p>
+                <p>La pantalla <span class="chemin">Productos y servicios › Productos</span> muestra la lista «Productos y servicios». Sirve para consultar, buscar y filtrar los productos y servicios de la empresa, agregarlos, modificarlos o eliminarlos, y sincronizar el catálogo con Square. El título «Catálogo» se apoya en el fondo de la página; debajo, cuatro indicadores, una tarjeta «búsqueda y orden» y luego la tarjeta de la lista, cuyo pie dice cuántos productos se muestran del total.</p>
 
                 <h3>Objetivo</h3>
                 <p>Un producto o servicio es lo que usted coloca en las líneas de sus facturas de clientes y de proveedores. Su ficha fija el nombre, la descripción, el precio unitario, la cantidad propuesta por defecto, el estado fiscal y, si hace falta, las cuentas de ingresos y de gastos utilizadas al contabilizar. Un producto y un servicio se registran exactamente de la misma manera: no existe un campo «tipo».</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Exportar a Square</kbd>: envía los productos activos al catálogo de Square (vea <a href="#es-square">Sincronización del catálogo con Square</a>). No se pide confirmación.</li>
-                    <li><kbd>Importar desde Square</kbd>: recupera el catálogo de Square en 60Sec-AI (vea la misma sección). No se pide confirmación.</li>
-                    <li><kbd>Agregar un producto</kbd>: abre la ventana «Agregar un producto».</li>
+                    <li><kbd>Enviar a Square</kbd> (píldora blanca, arriba a la derecha): envía los productos activos al catálogo de Square (vea <a href="#es-square">Sincronización del catálogo con Square</a>). No se pide confirmación.</li>
+                    <li><kbd>Importar de Square</kbd> (píldora blanca): recupera el catálogo de Square en 60Sec-AI (vea la misma sección). No se pide confirmación.</li>
+                    <li><kbd>+ Agregar un producto</kbd> (píldora azul): abre la ventana «Agregar un producto».</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Productos activos</strong> («n / total»), <strong>Inactivos</strong>, <strong>Por completar</strong> (los productos sin precio, sin categoría o sin estado fiscal; punto ámbar si los hay) y <strong>Categorías</strong> (su número; un clic abre la lista de categorías). Un clic en uno de los tres primeros aplica el filtro correspondiente a la lista — el marco se vuelve azul — y un segundo clic lo quita. El filtro se recuerda durante la sesión.</li>
                     <li>En cada línea:
                         <ul>
                             <li><kbd>Lápiz</kbd>: abre la ventana «Editar un producto».</li>
@@ -861,38 +868,39 @@
 
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>La casilla «Buscar (nombre, descripción…)» acompañada de una lupa: escriba una palabra del nombre o de la descripción y haga clic en la <kbd>lupa</kbd> para lanzar la búsqueda.</li>
-                    <li>El botón <kbd>X</kbd> vacía la casilla de búsqueda <strong>y</strong> restablece el filtro de categoría a «Todas».</li>
-                    <li>El filtro «Categoría:» es una lista desplegable, en «Todas» por defecto. La lista se actualiza en cuanto elige una categoría; no hay ningún botón que pulsar.</li>
+                    <li>El campo «Buscar un producto o una descripción», la <kbd>lupa</kbd> o la tecla Intro: la búsqueda cubre el nombre y la descripción.</li>
+                    <li>La lista desplegable «Categoría», en «Todas» por defecto: la lista se actualiza en cuanto elige una categoría.</li>
+                    <li>Las píldoras <strong>Ordenar</strong>: <strong>Nombre</strong> (por defecto), <strong>Categoría</strong> (luego el nombre) o <strong>Precio</strong> (del más caro al más barato). La píldora elegida es blanca; el orden se recuerda durante la sesión.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda, devuelve la categoría a «Todas» <strong>y quita el filtro del indicador</strong>. El pie de la lista dice cuántos productos se muestran del total.</li>
                 </ul>
 
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Producto</td><td>El nombre en negrita. Debajo, la descripción cortada a 60 caracteres y terminada con «…». La descripción completa se lee en la ficha.</td></tr>
-                        <tr><td>Categoría</td><td>La categoría del producto, mostrada como etiqueta. Vacía si el producto no tiene categoría.</td></tr>
+                        <tr><td>Producto</td><td>El nombre en negrita. Debajo, la descripción cortada a 80 caracteres y luego, en ámbar, «Por completar: precio, categoría, impuesto» según lo que falte. La descripción completa se lee en la ficha.</td></tr>
+                        <tr><td>Categoría</td><td>La categoría del producto en píldora azul, o «Sin categoría» en gris.</td></tr>
                         <tr><td>Precio</td><td>El precio unitario, en formato «1 234,56 $». Se muestra un guion «—» si el precio está vacío.</td></tr>
                         <tr><td>Cant. pred.</td><td>La cantidad por defecto: un número entero, o dos decimales si hay fracción (por ejemplo «1,50»).</td></tr>
                         <tr><td>Impuesto</td><td>Distintivo «Gravable» en azul o «Exento» en ámbar. Si no, «—» (sin estado, o estado «Tasa cero»).</td></tr>
-                        <tr><td>Activo</td><td>Distintivo verde si el producto está activo, rojo si está inactivo.</td></tr>
+                        <tr><td>Activo</td><td>Un punto verde «Activo», o un punto gris «Inactivo».</td></tr>
                         <tr><td>Acción</td><td>Los botones <kbd>Lápiz</kbd> y <kbd>Papelera</kbd>.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ningún producto encontrado.»</span> — la lista está vacía, o la búsqueda y el filtro de categoría no devuelven nada. Haga clic en <kbd>X</kbd> para restablecerlo todo.</li>
+                    <li><span class="msg">«Ningún producto coincide con estos filtros.»</span> — la lista está vacía, o la búsqueda, la categoría y el indicador no devuelven nada. Haga clic en <kbd>✕</kbd> para restablecerlo todo.</li>
                 </ul>
 
                 <div class="piege" data-titre="Trampa">La <kbd>Papelera</kbd> elimina el producto al primer clic, sin pedir confirmación. Para retirar un producto del uso corriente conservando su historial, abra su ficha y desmarque «Producto activo».</div>
-                <div class="astuce" data-titre="Consejo">El botón <kbd>X</kbd> también borra el filtro de categoría. Si su lista le parece incompleta, compruebe primero que «Categoría:» esté en «Todas».</div>
+                <div class="astuce" data-titre="Consejo">El botón <kbd>✕</kbd> también borra la categoría y el indicador. Si su lista le parece incompleta, compruebe primero que ningún indicador esté enmarcado en azul y que «Categoría» esté en «Todas».</div>
                 <div class="note" data-titre="Conviene saber">Un producto «Tasa cero» se muestra con «—» en la columna Impuesto, exactamente igual que un producto sin estado fiscal. Es normal: solo «Gravable» y «Exento» tienen distintivo. Abra la ficha para conocer el estado exacto.</div>
 
                 <p>Para agregar rápidamente un producto:</p>
                 <ol>
                     <li>Abra <span class="chemin">Productos y servicios › Productos</span>.</li>
-                    <li>Haga clic en <kbd>Agregar un producto</kbd>.</li>
+                    <li>Haga clic en <kbd>+ Agregar un producto</kbd>.</li>
                     <li>Escriba al menos el «Nombre del producto / servicio», luego el precio unitario y el estado fiscal.</li>
                     <li>Elija una categoría si desea heredar sus cuentas del plan contable.</li>
                     <li>Haga clic en <kbd>Guardar</kbd>: la ventana se cierra y la lista se recarga.</li>
@@ -977,14 +985,15 @@
 
             <section id="es-categorias">
                 <h2>Categorías de productos</h2>
-                <p>La pantalla <span class="chemin">Productos y servicios › Categoría de producto</span> muestra la lista «Categorías de productos». Sirve para agrupar los productos y asignarles por defecto cuentas del libro mayor (GL) y un estado fiscal. Bajo el título, un contador indica «N categoría(s)».</p>
+                <p>La pantalla <span class="chemin">Productos y servicios › Categoría de producto</span> muestra la lista «Categorías de productos». Sirve para agrupar los productos y asignarles por defecto cuentas del libro mayor (GL) y un estado fiscal. El título se apoya en el fondo de la página; debajo, cuatro indicadores, una tarjeta «búsqueda» y luego la tarjeta de la lista, cuyo pie dice cuántas categorías se muestran del total.</p>
 
                 <h3>Objetivo</h3>
                 <p>Una categoría tiene un código corto, un nombre, un estado fiscal por defecto y dos cuentas del plan contable (venta y compra). Los productos vinculados a la categoría usan estas cuentas automáticamente al facturar, salvo que definan otras en su propia ficha. La categoría sirve también de filtro en la lista de productos.</p>
 
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar una categoría</kbd>: abre la ventana «Agregar una categoría».</li>
+                    <li><kbd>+ Agregar una categoría</kbd> (píldora azul, arriba a la derecha): abre la ventana «Agregar una categoría».</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Categorías activas</strong> («n / total»), <strong>Inactivas</strong>, <strong>Sin cuenta</strong> (aquellas cuya cuenta de venta o de compra no está definida; punto ámbar si las hay) y <strong>Productos</strong> (el número de productos; un clic abre el catálogo). Un clic en uno de los tres primeros aplica el filtro correspondiente — el marco se vuelve azul — y un segundo clic lo quita. El filtro se recuerda durante la sesión.</li>
                     <li>En cada línea:
                         <ul>
                             <li><kbd>Lápiz</kbd>: abre la ventana «Editar una categoría».</li>
@@ -996,8 +1005,8 @@
 
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>La casilla «Buscar (código, nombre…)» con una <kbd>lupa</kbd> para lanzar la búsqueda y un botón <kbd>X</kbd> para borrarla.</li>
-                    <li>No hay ningún otro filtro.</li>
+                    <li>El campo «Buscar un código o un nombre», la <kbd>lupa</kbd> o la tecla Intro.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y quita el filtro del indicador</strong>.</li>
                 </ul>
 
                 <h3>Columnas</h3>
@@ -1005,18 +1014,18 @@
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>Código</td><td>El código de la categoría, en fuente de ancho fijo.</td></tr>
-                        <tr><td>Nombre</td><td>El nombre, con la descripción debajo.</td></tr>
-                        <tr><td>Cuenta de venta</td><td>El número de la cuenta de ingresos, con su nombre debajo.</td></tr>
-                        <tr><td>Cuenta de compra</td><td>El número de la cuenta de compra o de costo de ventas, con su nombre debajo.</td></tr>
+                        <tr><td>Nombre</td><td>El nombre en negrita, la descripción debajo y luego, en ámbar, «Por completar: cuenta de venta, cuenta de compra» según lo que falte.</td></tr>
+                        <tr><td>Cuenta de venta</td><td>El número de la cuenta de ingresos en negrita, su nombre debajo; «—» si no está definida.</td></tr>
+                        <tr><td>Cuenta de compra</td><td>El número de la cuenta de compra o de costo de ventas en negrita, su nombre debajo; «—» si no está definida.</td></tr>
                         <tr><td>Impuesto</td><td>Gravable, Exento o «—».</td></tr>
-                        <tr><td>Activo</td><td>Distintivo verde (activa) o rojo (inactiva).</td></tr>
+                        <tr><td>Activo</td><td>Un punto verde «Activa», o un punto gris «Inactiva».</td></tr>
                         <tr><td>Acción</td><td>Los botones <kbd>Lápiz</kbd> y <kbd>Papelera</kbd>.</td></tr>
                     </tbody>
                 </table>
 
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ninguna categoría encontrada.»</span> — todavía no existe ninguna categoría, o la búsqueda no devuelve nada. Haga clic en <kbd>X</kbd> para borrar la búsqueda.</li>
+                    <li><span class="msg">«Ninguna categoría coincide.»</span> — todavía no existe ninguna categoría, o la búsqueda y el indicador no devuelven nada. Haga clic en <kbd>✕</kbd> para restablecerlo todo.</li>
                 </ul>
 
                 <div class="piege" data-titre="Trampa">Como con los productos, la <kbd>Papelera</kbd> elimina la categoría al primer clic, sin confirmación. Prefiera desmarcar «Categoría activa» para una categoría que ya no utiliza.</div>
