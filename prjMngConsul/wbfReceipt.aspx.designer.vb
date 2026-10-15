@@ -76,6 +76,24 @@ Partial Public Class wbfReceipt
     '''</remarks>
     Protected WithEvents RadReceipt As Global.Telerik.Web.UI.RadListView
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litTitre control.</summary>
+    Protected WithEvents litTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litKpis control.</summary>
+    Protected WithEvents litKpis As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>pnlRecherche control.</summary>
+    Protected WithEvents pnlRecherche As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litPied control.</summary>
+    Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''jsonViewer control.
     '''</summary>

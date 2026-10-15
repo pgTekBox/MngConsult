@@ -15,30 +15,84 @@
 
     <style>
 
-  .listview-list-head {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px   190px;
-                               
-            font-weight: 800;
-            font-size: 13px;
-            color: #0E1F3D;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--mc-stroke);
-            position: sticky;
-            top: 0;
-            z-index: 2;
-        }
+    /* ── Ventes › Factures clients : la signature du gabarit « Portail du client ».
+       Le titre pose sur le fond de la page (FondDePage), puis quatre indicateurs
+       cliquables, la carte « recherche et filtres », et la carte de la liste. ── */
+    .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+    .fc-tete .txt { flex: 1 1 260px }
+    .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+    .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+    .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+    .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
+    .fc-btn, input.fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+    .fc-btn:hover, input.fc-btn:hover { background: #F2F5F9 }
+    .fc-btn.primaire, input.fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+    .fc-btn.primaire:hover, input.fc-btn.primaire:hover { background: #143A73 }
 
-        .listview-row {
-            grid-template-columns: 70px 110px 1fr  90px  90px 100px 90px  90px  190px;
-                                 
-            border-bottom: 1px solid #eef2f7;
-            background: #fff;
-        }
-        
+    .fc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px }
+    .fc-kpi { padding: 14px 16px; border-radius: 22px; text-align: left; display: flex; flex-direction: column; gap: 2px; border: 2px solid transparent; background: #fff; color: #0E1F3D; cursor: pointer; font-family: inherit }
+    .fc-kpi:hover { border-color: #D5DDE8 }
+    .fc-kpi.on { border-color: #1B4F9C }
+    .fc-kpi .lab { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #44536E; font-size: 14px }
+    .fc-kpi .lab i { width: 10px; height: 10px; border-radius: 50%; flex: none }
+    .fc-kpi .val { font-size: 24px; font-weight: 800; line-height: 1.15 }
+    .fc-kpi .sub { font-size: 14px; color: #44536E }
 
-        .listview-actions {
-            flex-wrap: nowrap;
-        }
+    .fc-filtres { padding: 16px 18px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px }
+    .fc-recherche { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 6px 0 14px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff }
+    .fc-recherche:focus-within { border-color: #1B4F9C; box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
+    .fc-recherche svg { flex: none }
+    .fc-recherche input[type=text] { border: 0 !important; outline: none; flex: 1 1 auto; min-width: 0; background: transparent !important; color: #0E1F3D; font: inherit; font-size: 15px; padding: 0 !important; box-shadow: none !important; width: auto !important; border-radius: 0 }
+    .fc-recherche .btn-icon { width: 34px; height: 34px; border: 0; background-color: transparent !important; border-radius: 50% }
+    .fc-recherche .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-groupes { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end }
+    .fc-groupe { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .fc-chips { display: flex; flex-wrap: wrap; gap: 6px }
+    .fc-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 13px; font-family: inherit; cursor: pointer }
+    .fc-chip i { width: 8px; height: 8px; border-radius: 50%; flex: none }
+    .fc-chip b { font-weight: 700; color: #5B6B86 }
+    .fc-chip:hover { background: #F2F5F9 }
+    .fc-chip.on { background: #0E1F3D; border-color: #0E1F3D; color: #fff }
+    .fc-chip.on b { color: #AEBBCD }
+
+    /* La liste : une carte blanche ; en-tête gris-bleu sans fond, lignes à filet doux. */
+    .fc-liste.full-grid { height: auto; min-height: 0 }
+    .fc-liste .list-shell { height: auto; padding: 6px 12px 12px; border-radius: 24px; background: #fff }
+    .fc-liste .list-shell > * { flex: none; display: block }
+    .fc-liste .listview-list-body { overflow: visible }
+    .fc-liste .listview-list-head, .fc-liste .listview-row {
+        display: grid; grid-template-columns: 96px 118px minmax(0, 2fr) 120px 112px 104px 132px 210px;
+        gap: 10px; align-items: center; padding: 10px 6px; box-sizing: border-box;
+    }
+    .fc-liste .listview-list-head { position: static; background: transparent; border: 0; font-size: 14px; font-weight: 800; color: #5B6B86; z-index: auto }
+    .fc-liste .listview-row { border: 0; border-top: 1px solid #E3E9F1; background: #fff; font-size: 15px }
+    .fc-liste .listview-row:hover { background: #FAFCFF }
+    .fc-liste .sort-link, .fc-liste .sort-link:hover, .fc-liste .sort-link:visited { color: inherit; text-decoration: none; cursor: pointer; font-weight: inherit }
+    .fc-liste .sort-link:hover { text-decoration: underline }
+    .fc-liste .adroite { text-align: right }
+    .fc-liste .c-num { white-space: nowrap }
+    .fc-liste .lien { font-weight: 800 }
+    .fc-liste .c-ech { display: flex; flex-direction: column; line-height: 1.3 }
+    .fc-liste .c-ech b { font-weight: 700 }
+    .fc-liste .c-ech span { font-size: 13px; color: #44536E }
+    .fc-liste .c-client { min-width: 0 }
+    .fc-liste .c-client > div:first-child { font-weight: 800 }
+    .fc-liste .cust-email { font-size: 13px; color: #44536E; margin-top: 0 }
+    .fc-pay { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
+    .fc-liste .c-reste { text-align: right; font-weight: 800 }
+    .fc-liste .c-reste.retard { color: #A3261C }
+    .fc-liste .c-reste span { display: block; font-size: 12px; font-weight: 600; color: #44536E }
+    .fc-liste .c-total { text-align: right; font-weight: 700 }
+    .fc-etat { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700 }
+    .fc-etat svg { flex: none }
+    .fc-liste .listview-actions { display: flex; justify-content: flex-end; gap: 4px; flex-wrap: nowrap }
+    .fc-liste .listview-actions .btn-icon { width: 40px; height: 40px; border: 0; border-radius: 10px; background-color: transparent !important; background-size: 22px 22px !important }
+    .fc-liste .listview-actions .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-liste .listview-actions .btn-icon-invoice-send { background-size: 26px 26px !important }
+    .fc-liste .empty-state { padding: 20px 6px; color: #44536E; font-weight: 700 }
+    .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
+    .fc-liste .listview-list { min-width: 1100px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: 90px 112px minmax(170px, 2fr) 104px 104px 100px 124px 256px }
 
         /* Icône PDF (cohérent avec les autres btn-icon-*) */
         .btn-icon-pdf {
@@ -95,90 +149,6 @@
             background-size: 18px 18px !important;
         }
 
-        .listview-list-head,
-        .listview-row {
-            display: grid;
-            gap: 16px;
-            align-items: center;
-            padding: 14px 16px;
-            box-sizing: border-box;
-        }
-
-       
-
-        /* Desktop — les wrappers mobiles sont invisibles */
-        .field-row1,
-        .field-row2 {
-            display: contents; /* ← les enfants participent directement à la grille */
-        }
-
-        .field-number {
-            grid-column: 1;
-            grid-row: 1;
-        }
-
-        .field-date {
-            grid-column: 2;
-            grid-row: 1;
-        }
-
-        .field-supplier {
-            grid-column: 3;
-            grid-row: 1;
-        }
-
-        /* Chaque cellule est posée sur SA colonne : l'ordre du DOM (contraint
-           par les wrappers mobiles) ne suit pas celui des entêtes. L'état et le
-           statut de paiement étaient intervertis. */
-        .field-statutpaiement {
-            grid-column: 4;
-            grid-row: 1;
-        }
-
-       .field-resteapayer{
-            grid-column: 5;
-            grid-row: 1;
-        }
-
-
-      .field-dejapaye{
-            grid-column: 6;
-            grid-row: 1;
-        }
-  .field-total {
-            grid-column: 7;
-            grid-row: 1;
-        }
-
-        .field-etat {
-            grid-column: 8;
-            grid-row: 1;
-        }
-
-        /* Entêtes cliquables (tri) */
-        .sort-link, .sort-link:hover, .sort-link:visited {
-            color: inherit;
-            text-decoration: none;
-            cursor: pointer;
-            font-weight: inherit;
-        }
-        .sort-link:hover { text-decoration: underline; }
-
-      /* .field-encaissement est un bouton DANS la cellule d'actions : il n'est
-         pas un élément de la grille, sa position n'a donc plus d'effet ici. */
-      
-          
-      
-
-
-      
-
-        .listview-actions {
-            grid-column: 9;
-            grid-row: 1;
-        }
-
-
     </style>
 
 </asp:Content>
@@ -190,37 +160,43 @@
 
         <asp:HiddenField ID="hfInvoiceDirty" runat="server" ClientIDMode="Static" Value="0" />
 
-        <div class="page-head">
-            <div class="page-head-left">
-                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique,
+             le titre, le sous-titre, et à droite le bouton en pastille. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litPageTitle" runat="server" /></h1>
+                <p><asp:Literal ID="litSousTitre" runat="server" /></p>
             </div>
-            <div class="searchbox">
+            <div class="btns">
                 <asp:Button ID="btnAddSupplierInvoice" runat="server"
-                    CssClass="btn btnAddRow"  ClientIDMode="Static"
-                    Text="Ajouter Facture"
+                    CssClass="fc-btn primaire"  ClientIDMode="Static"
                     CausesValidation="false"
                     OnClientClick="openRadWindow(0, 'rwSupplierInvoices', 'wbfSupplierInvoinceEdit.aspx', L_EDIT_INVOICE, L_ADD_INVOICE); return false;"
                 />
-                <%-- Filtres à sélection multiple : rien de coché = aucun filtre. --%>
-                <telerik:RadComboBox ID="rcbEtat" runat="server"
-                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
-                    Skin="Metro" RenderMode="Lightweight" Width="180px"
-                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
-
-                <telerik:RadComboBox ID="rcbStatutPaiement" runat="server"
-                    CheckBoxes="true" EnableCheckAllItemsCheckBox="true"
-                    Skin="Metro" RenderMode="Lightweight" Width="220px"
-                    AutoPostBack="true" OnItemChecked="rcbFiltre_ItemChecked" CausesValidation="false" />
-
-                <div class="search-group">
-                    <asp:TextBox ID="tbSearch"  ClientIDMode="Static" runat="server" CssClass="input txttbsearch" placeholder="Rechercher (nom, email, téléphone…)" />
-                    <asp:Button ID="btnSearch"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
-                    <asp:Button ID="btnClear"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
-                </div>
             </div>
         </div>
 
-        <div class="full-grid">
+        <%-- Les quatre indicateurs : un clic pose son filtre sur la liste, un second
+             clic l'enlève (litKpis est rendu par ChargerIndicateurs). --%>
+        <div class="fc-kpis"><asp:Literal ID="litKpis" runat="server" /></div>
+
+        <%-- Un indicateur ou une puce de filtre cliqué : fcChip() pose « groupe|valeur »
+             dans hfChip et clique le bouton caché, qui renvoie au serveur (btnChip_Click). --%>
+        <asp:HiddenField ID="hfChip" runat="server" ClientIDMode="Static" />
+        <asp:Button ID="btnChip" runat="server" ClientIDMode="Static" CausesValidation="false" Text="" style="display:none" />
+
+        <section class="fc-filtres">
+            <asp:Panel ID="pnlRecherche" runat="server" CssClass="fc-recherche" DefaultButton="btnSearch">
+                <svg aria-hidden="true" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#44536E" stroke-width="2.2" stroke-linecap="round"><circle cx="11" cy="11" r="7"></circle><path d="M20 20l-4-4"></path></svg>
+                <asp:TextBox ID="tbSearch"  ClientIDMode="Static" runat="server" CssClass="input txttbsearch" />
+                <asp:Button ID="btnSearch"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-search" Text="" />
+                <asp:Button ID="btnClear"  ClientIDMode="Static" runat="server" CssClass="btn btn-icon btn-icon-clear" Text="" CausesValidation="false" />
+            </asp:Panel>
+            <div class="fc-groupes"><asp:Literal ID="litChips" runat="server" /></div>
+        </section>
+
+        <div class="fc-liste full-grid">
             <div class="list-shell">
 
                 <telerik:RadListView ID="rgFournisseursFactures" runat="server"
@@ -233,32 +209,14 @@
                         <div class="listview-list">
                             <%-- Toutes les colonnes sont triables, sauf « Action ». --%>
                             <div class="listview-list-head">
-                                <div class="colh-numero">
-                                    <asp:LinkButton ID="lnkSortNum" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NumeroSort" CausesValidation="false" />
-                                </div>
-                                <div class="colh-date">
-                                    <asp:LinkButton ID="lnkSortDue" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DueDate" CausesValidation="false" />
-                                </div>
-                                <div class="colh-supplier">
-                                    <asp:LinkButton ID="lnkSortSupplier" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NameSort" CausesValidation="false" />
-                                </div>
-                                <div class="colh-statutpaiement">
-                                    <asp:LinkButton ID="lnkSortPay" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="StatutPaiement" CausesValidation="false" />
-                                </div>
-                                <div class="colh-resteapayer">
-                                    <asp:LinkButton ID="lnkSortReste" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="ResteAPayer" CausesValidation="false" />
-                                </div>
-                                <div class="colh-dejapaye">
-                                    <asp:LinkButton ID="lnkSortPaye" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DejaPaye" CausesValidation="false" />
-                                </div>
-                                <div class="colh-total">
-                                    <asp:LinkButton ID="lnkSortTotal" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Total" CausesValidation="false" />
-                                </div>
-                                <div class="colh-etat">
-                                    <asp:LinkButton ID="lnkSortEtat" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Status" CausesValidation="false" />
-                                </div>
-
-                                <div class="colh-action"><asp:Literal ID="litColAction" runat="server" /></div>
+                                <div><asp:LinkButton ID="lnkSortNum" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NumeroSort" CausesValidation="false" /></div>
+                                <div><asp:LinkButton ID="lnkSortDue" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="DueDate" CausesValidation="false" /></div>
+                                <div><asp:LinkButton ID="lnkSortSupplier" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="NameSort" CausesValidation="false" /></div>
+                                <div><asp:LinkButton ID="lnkSortPay" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="StatutPaiement" CausesValidation="false" /></div>
+                                <div class="adroite"><asp:LinkButton ID="lnkSortReste" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="ResteAPayer" CausesValidation="false" /></div>
+                                <div class="adroite"><asp:LinkButton ID="lnkSortTotal" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Total" CausesValidation="false" /></div>
+                                <div><asp:LinkButton ID="lnkSortEtat" runat="server" CssClass="sort-link" CommandName="SortBy" CommandArgument="Status" CausesValidation="false" /></div>
+                                <div class="adroite"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -270,21 +228,16 @@
                     <ItemTemplate>
                         <div class="listview-row">
 
-                            <%-- Ligne 1 mobile : Numéro + Date + Total --%>
-                            <div class="field-row1">
-                                <span class="field-number"><%# Eval("DocumentNumber") %></span>
-                                <span class="field-date"><%# FormatDateFr(Eval("DueDate")) %></span>
-                                <span class="field-total"><%# Eval("Total", "{0:C2}") %></span>
-                            </div>
-
-                            <%-- Ligne 2 mobile : Nom + État --%>
-                            <div class="field-row2">
-                                <span class="field-supplier"><%# Eval("Name") %></span>
-                                <span class="field-statutpaiement"><%# Eval("StatutPaiement") %></span>
-                                <span class="field-resteapayer"><%# Eval("ResteAPayer") %></span>
-                                <span class="field-dejapaye"><%# Eval("DejaPaye") %></span>
-                                <span class="field-etat"><%# Eval("Status") %></span>
-                            </div>
+                            <%-- Numéro (lien vers le reçu s'il y en a un), échéance avec la date de
+                                 facture dessous, fournisseur et adresse, paiement en pastille (en retard
+                                 si l'échéance est passée), reste (avec le payé), total, état, puis les actions. --%>
+                            <div class="c-num"><%# Eval("DocumentNumber") %></div>
+                            <div class="c-ech"><%# EcheanceCell(Eval("DueDate"), Eval("DocumentDate")) %></div>
+                            <div class="c-client"><%# Eval("Name") %></div>
+                            <div><%# PayPill(Eval("StatutPaiement"), Eval("DueDate"), Eval("ComptabilisationStatus")) %></div>
+                            <div class='<%# ResteClass(Eval("StatutPaiement"), Eval("DueDate"), Eval("ComptabilisationStatus")) %>'><%# ResteCell(Eval("ResteAPayer"), Eval("DejaPaye")) %></div>
+                            <div class="c-total"><%# Eval("Total", "{0:C2}") %></div>
+                            <div><%# EtatCell(Eval("Status"), Eval("ComptabilisationStatus")) %></div>
 
                             <div class="listview-actions">
 
@@ -359,6 +312,8 @@
                     </EmptyDataTemplate>
 
                 </telerik:RadListView>
+
+                <div class="fc-pied"><asp:Literal ID="litPied" runat="server" /></div>
 
             </div>
         </div>
@@ -453,6 +408,13 @@
 
     <telerik:RadCodeBlock ID="rcbInvoicesJs" runat="server">
     <script type="text/javascript">
+        // Un indicateur ou une puce de filtre : « groupe|valeur » dans le champ caché,
+        // puis le bouton caché renvoie au serveur (btnChip_Click) par le RadAjaxPanel.
+        function fcChip(g, v) {
+            document.getElementById("hfChip").value = g + "|" + v;
+            document.getElementById("btnChip").click();
+        }
+
 
         // Libelles localises (fr/en/es). Les blocs de rendu serveur ci-dessous DOIVENT
         // rester dans le RadCodeBlock englobant : sinon ils verrouillent le conteneur

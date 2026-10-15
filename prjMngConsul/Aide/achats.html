@@ -29,7 +29,7 @@
                 <p>L’écran <span class="chemin">Achats › Fournisseurs</span> sert à consulter, rechercher, créer, modifier et supprimer vos fournisseurs. Il montre aussi, pour chacun, le solde que vous lui devez et l’état de son compte Stripe (peut-il recevoir vos paiements en ligne ou non).</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter Fournisseur</kbd> : ouvre la fenêtre « Ajouter un fournisseur ». Quand la fenêtre se ferme, la liste se recharge.</li>
+                    <li><kbd>+ Ajouter un fournisseur</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter un fournisseur ». Quand la fenêtre se ferme, la liste se recharge.</li>
                     <li><kbd>Modifier</kbd> (par ligne) : ouvre la fiche du fournisseur (voir <a href="#fr-fiche-fournisseur">Fiche fournisseur</a>).</li>
                     <li><kbd>Supprimer</kbd> (par ligne) : supprime le fournisseur immédiatement.</li>
                     <li>Carte violette « Configurer paiements Stripe Connect » (colonne Action) : ouvre l’inscription Stripe du fournisseur dans un nouvel onglet (voir <a href="#fr-inscription-stripe">Inscription Stripe Connect</a>).</li>
@@ -37,23 +37,26 @@
                 </ul>
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>Champ « Rechercher (nom, email, téléphone…) » suivi de la loupe : la recherche porte sur le nom, le courriel et le téléphone.</li>
-                    <li><kbd>Effacer</kbd> : vide le champ et réaffiche tous les fournisseurs.</li>
+                    <li>Champ « Chercher un nom, un courriel ou un téléphone », loupe ou touche Entrée : la recherche porte sur le nom, le courriel, le téléphone et l’adresse de facturation.</li>
+                    <li>Les trois pastilles du filtre, à droite du champ : <strong>Tous</strong>, <strong>Avec un solde</strong> (les fournisseurs à qui vous devez quelque chose), <strong>En retard</strong> (au moins une facture échue). Chaque pastille porte son nombre ; la pastille choisie est blanche. Le filtre est mémorisé pour la session.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et remet la pastille sur Tous</strong>. Le pied de la liste dit combien de fournisseurs sont montrés sur le total.</li>
                 </ul>
                 <h3>Colonnes</h3>
-                <p>Un clic sur un en-tête trie la liste ; un second clic inverse l’ordre (▲/▼). Tri par défaut : Nom croissant.</p>
+                <p>Un clic sur un en-tête trie la liste (Fournisseur, Délai, À payer, Stripe) ; un second clic inverse l’ordre (▲/▼). Tri par défaut : Fournisseur croissant.</p>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Nom</td><td>Nom du fournisseur, adresse complète et courriel (en gris).</td></tr>
-                        <tr><td>À payer</td><td>Solde dû, sous la forme « 1 234,56 $ », ou « — » si vous ne devez rien.</td></tr>
+                        <tr><td>Fournisseur</td><td>Un rond aux initiales, le nom en gras, puis le courriel et le téléphone en gris.</td></tr>
+                        <tr><td>Adresse de facturation</td><td>L’adresse de facturation du fournisseur (à défaut, sa première adresse) ; « — » s’il n’en a pas.</td></tr>
+                        <tr><td>Délai</td><td>Le délai de paiement de la fiche (« 30 jours »), ou « À la réception » quand aucun délai n’est fixé.</td></tr>
+                        <tr><td>À payer</td><td>Le solde dû en gras (« 1 234,56 $ »), ou « — » si vous ne devez rien ; en dessous, « à jour » ou, en rouge, le montant en retard et le nombre de factures échues.</td></tr>
                         <tr><td>Stripe</td><td>Pastille verte « Compte Stripe » si le fournisseur peut recevoir des paiements, pastille grise « Aucun compte Stripe » sinon. Un clic ouvre « Voir le statut Stripe » dans un nouvel onglet.</td></tr>
                         <tr><td>Action</td><td>Carte « Configurer paiements Stripe Connect », puis <kbd>Modifier</kbd> et <kbd>Supprimer</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun fournisseur trouvé. »</span> — la recherche ne renvoie rien ; cliquez sur <kbd>Effacer</kbd> ou vérifiez l’orthographe.</li>
+                    <li><span class="msg">« Aucun fournisseur ne correspond. »</span> — la recherche ou la pastille ne renvoient rien ; cliquez sur <kbd>✕</kbd> ou vérifiez l’orthographe.</li>
                 </ul>
                 <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> agit tout de suite, sans demander de confirmation. Vérifiez la ligne avant de cliquer.</div>
                 <div class="astuce" data-titre="Astuce">Le solde « À payer » se met à jour dès qu’une facture fournisseur est comptabilisée ou réglée. Pour voir le détail, ouvrez <span class="chemin">Achats › Factures fournisseurs</span> et recherchez le fournisseur.</div>
@@ -164,7 +167,8 @@
                 <p>L’écran <span class="chemin">Achats › Factures fournisseurs</span> permet de suivre vos factures d’achat : leur saisie, leur comptabilisation et leur paiement (par Stripe, par paiement automatique ou par décaissement manuel).</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter Facture</kbd> (ou <kbd>+</kbd>) : ouvre la fenêtre « Ajouter une facture ».</li>
+                    <li><kbd>+ Nouvelle facture fournisseur</kbd> (pastille bleue, en haut à droite, ou <kbd>+</kbd>) : ouvre la fenêtre « Ajouter une facture ».</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>À payer</strong> (le reste des factures ouvertes ou partielles, et leur nombre), <strong>En retard</strong> (le reste des factures comptabilisées dont l’échéance est passée ; point rouge s’il y en a), <strong>Brouillons</strong> (à comptabiliser) et <strong>Payées</strong>. Un clic pose le filtre correspondant sur la liste — le cadre passe en bleu — et un second clic l’enlève.</li>
                     <li>Boutons par ligne, de gauche à droite :
                         <ol>
                             <li><kbd>Décaissement</kbd> : ouvre le paiement manuel (voir <a href="#fr-decaissement">Paiement manuel</a>) ; toutes les factures ouvertes du fournisseur y sont listées.</li>
@@ -178,33 +182,30 @@
                 </ul>
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>Filtre <strong>État</strong> (libellé « État : tous ») : cases Brouillon, Comptabilisé.</li>
-                    <li>Filtre <strong>Statut paiement</strong> (libellé « Statut paiement : tous ») : cases Ouverte, Partielle, Payée.</li>
-                    <li>Chaque filtre propose « Tout cocher ». Ne rien cocher équivaut à ne pas filtrer. La grille se recharge à chaque case cochée ou décochée. Les filtres sont <strong>mémorisés pendant la session</strong>.</li>
-                    <li>Champ de recherche avec la loupe, et <kbd>Effacer</kbd>.</li>
+                    <li>Les <strong>puces de filtre</strong> de la carte « recherche » : <strong>État</strong> — Toutes, Brouillons, Comptabilisées ; <strong>Paiement</strong> — Tous, En retard, Partielle, Ouverte, Payée. Chaque puce porte son nombre ; une puce cliquée s’allume (fond bleu marine) et se combine aux autres de son groupe ; « Toutes » et « Tous » enlèvent le filtre du groupe. Les filtres sont <strong>mémorisés pendant la session</strong>.</li>
+                    <li>Champ « Chercher un fournisseur », loupe ou touche Entrée ; <kbd>✕</kbd> vide la recherche <strong>et enlève les deux filtres</strong>. Le pied de la liste dit combien de factures sont montrées sur le total.</li>
                 </ul>
                 <h3>Colonnes</h3>
                 <p>Toutes les colonnes se trient, sauf Action ; le tri est mémorisé. Par défaut, les factures les plus récentes sont en premier.</p>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>Numéro de facture du fournisseur (le « No facture fournisseur » saisi dans la facture).</td></tr>
-                        <tr><td>Date échéance</td><td>Date à laquelle la facture doit être payée.</td></tr>
-                        <tr><td>Fournisseur</td><td>Nom du fournisseur.</td></tr>
-                        <tr><td>Statut paiement</td><td>Ouverte, Partielle ou Payée.</td></tr>
-                        <tr><td>Reste à payer</td><td>Montant encore dû.</td></tr>
-                        <tr><td>Déjà payé</td><td>Somme des règlements déjà enregistrés.</td></tr>
+                        <tr><td>Numéro</td><td>Numéro de facture du fournisseur (le « No facture fournisseur » saisi dans la facture) ; un lien ouvre le reçu d’origine s’il y en a un.</td></tr>
+                        <tr><td>Échéance</td><td>La date d’échéance en gras ; en dessous, en petit, la date de facture (« facturée 16 sept. 2026 »).</td></tr>
+                        <tr><td>Fournisseur</td><td>Nom et adresse du fournisseur.</td></tr>
+                        <tr><td>Paiement</td><td>Une pastille colorée : En retard (rouge : comptabilisée, non soldée, échéance passée), Partielle (ambre), Ouverte (bleu), Payée (vert).</td></tr>
+                        <tr><td>Reste</td><td>Le montant encore dû, en rouge quand la facture est en retard ; en dessous, en petit, ce qui est déjà payé (« payé 120,00 $ ») s’il y a eu un règlement.</td></tr>
                         <tr><td>Total</td><td>Total de la facture, taxes comprises.</td></tr>
                         <tr><td>État</td><td>Brouillon ou Comptabilisé.</td></tr>
                     </tbody>
                 </table>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucune facture trouvée. »</span> — aucun résultat pour la recherche ou les filtres en cours ; décochez les filtres ou cliquez sur <kbd>Effacer</kbd>.</li>
+                    <li><span class="msg">« Aucune facture ne correspond à ces filtres. »</span> — aucun résultat pour la recherche ou les filtres en cours ; cliquez sur « Toutes » et « Tous », ou sur <kbd>✕</kbd>.</li>
                     <li><span class="msg">« ⚠️ Vous avez des modifications non sauvegardées. Voulez-vous vraiment fermer ? »</span> (titre « Confirmation ») — vous fermez la fenêtre de facture avec des changements non enregistrés ; répondez Non pour revenir et cliquer sur <kbd>Enregistrer</kbd>.</li>
                 </ul>
                 <div class="piege" data-titre="Piège"><kbd>Supprimer</kbd> ne demande aucune confirmation sur une facture en brouillon. Seules les factures comptabilisées sont protégées (cadenas).</div>
-                <div class="astuce" data-titre="Astuce">Pour retrouver rapidement ce qu’il reste à payer, cochez « Ouverte » et « Partielle » dans le filtre Statut paiement : la sélection reste active jusqu’à la fin de votre session.</div>
+                <div class="astuce" data-titre="Astuce">Pour retrouver rapidement ce qu’il reste à payer, cliquez sur l’indicateur « À payer » ; pour ce qui presse, sur « En retard ». La sélection reste active jusqu’à la fin de votre session.</div>
             </section>
 
             <section id="fr-facture-fournisseur">
@@ -503,7 +504,8 @@
                 <p>L’écran <span class="chemin">Achats › Reçus</span> transforme des reçus ou des factures reçus sous forme de fichiers (photo JPEG, PDF ou texte de courriel) en données comptables : l’IA lit le document, puis 60Sec-AI crée le marchand (fournisseur) et le document d’achat.</p>
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>Champ « Rechercher (fournisseur, fichier, statut…) » avec la loupe, et <kbd>Effacer</kbd>.</li>
+                    <li>Trois indicateurs sous le titre : <strong>À lire par l’IA</strong> (les reçus en attente de lecture ; point ambre s’il y en a), <strong>Lus par l’IA</strong> (résultat à contrôler ou à comptabiliser) et <strong>Reçus en {mois}</strong> (les fichiers arrivés ce mois).</li>
+                    <li>Champ « Chercher un fournisseur, un fichier ou un statut », loupe ou touche Entrée : la recherche filtre la liste sur le nom du fichier, le fournisseur reconnu et le statut. <kbd>✕</kbd> vide la recherche. Le pied de la liste dit combien de reçus sont montrés sur le total.</li>
                 </ul>
                 <h3>Colonnes et boutons</h3>
                 <table>
@@ -511,22 +513,22 @@
                     <tbody>
                         <tr><td>Fichier</td><td>Liens vers le fichier original et vers sa version optimisée.</td></tr>
                         <tr><td>Fournisseur</td><td>Marchand reconnu.</td></tr>
-                        <tr><td>Optimize and AI</td><td>Bouton <kbd>Process AI</kbd>, actif quand l’analyse est possible.</td></tr>
-                        <tr><td>Voir JSON</td><td>Visible une fois l’analyse faite ; ouvre « 🤖 Résultat Analyse AI (JSON) » pour contrôler les données extraites.</td></tr>
-                        <tr><td>Process to Database</td><td>Bouton <kbd>Process JSON</kbd> : crée le marchand (fournisseur) et le document à partir des données extraites.</td></tr>
+                        <tr><td>Lecture IA</td><td>Bouton <kbd>Lire avec l’IA</kbd>, actif quand l’analyse est possible.</td></tr>
+                        <tr><td>Résultat</td><td>Bouton <kbd>Voir le résultat</kbd>, visible une fois l’analyse faite ; ouvre « 🤖 Résultat Analyse AI (JSON) » pour contrôler les données extraites.</td></tr>
+                        <tr><td>Comptabiliser</td><td>Bouton <kbd>Créer en comptabilité</kbd> : crée le marchand (fournisseur) et le document à partir des données extraites.</td></tr>
                         <tr><td>Statut</td><td>Avancement du traitement du reçu.</td></tr>
                         <tr><td>Action</td><td>Corbeille : supprime le reçu <strong>sans confirmation</strong>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Déroulement de la lecture IA</h3>
                 <ol>
-                    <li><kbd>Process AI</kbd> : une photo JPEG est d’abord optimisée (1024 px de large, niveaux de gris, contraste renforcé), puis lue ; un PDF est lu directement ; un texte de courriel est analysé comme du texte.</li>
+                    <li><kbd>Lire avec l’IA</kbd> : une photo JPEG est d’abord optimisée (1024 px de large, niveaux de gris, contraste renforcé), puis lue ; un PDF est lu directement ; un texte de courriel est analysé comme du texte.</li>
                     <li>L’IA extrait : le type de reçu et son numéro ; le marchand (nom, courriel, No TPS, No TVQ, site web, adresse, ville, province, pays, code postal, téléphone) ; la date et la devise ; le sous-total, les taxes, le total et le pourboire ; le mode de paiement et les 4 derniers chiffres de la carte ; les articles (description, quantité, prix unitaire, montant) ; des notes de confiance sur la lecture.</li>
-                    <li>Contrôlez le résultat avec <kbd>Voir JSON</kbd>, puis cliquez sur <kbd>Process JSON</kbd> pour créer le fournisseur et le document.</li>
+                    <li>Contrôlez le résultat avec <kbd>Voir le résultat</kbd>, puis cliquez sur <kbd>Créer en comptabilité</kbd> pour créer le fournisseur et le document.</li>
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun reçu trouvé. »</span> — aucun reçu n’a encore été reçu par la compagnie.</li>
+                    <li><span class="msg">« Aucun reçu ne correspond. »</span> — aucun reçu n’a encore été reçu par la compagnie, ou la recherche ne renvoie rien.</li>
                 </ul>
                 <h3>Reçus déposés depuis l’application mobile</h3>
                 <p>L’application mobile 60Sec-AI numérise un reçu avec l’appareil photo et le dépose directement dans cette liste. Depuis le tableau de bord de l’application, touchez <kbd>📄 Scanner un reçu</kbd>.</p>
@@ -560,7 +562,7 @@
                 <h3>Trucs et pièges</h3>
                 <div class="piege" data-titre="Piège">Chaque clic sur <kbd>Process AI</kbd> déclenche un nouvel appel payant à l’IA. Ne cliquez pas plusieurs fois sur <kbd>Process AI</kbd> ni sur <kbd>Process JSON</kbd> pour le même reçu : vous risquez des frais et des doublons.</div>
                 <div class="attention" data-titre="Attention">Les images PNG (et tout format autre que JPEG, PDF et texte) ne sont pas traitées, et aucun message ne l’indique. Convertissez les captures d’écran en JPEG ou en PDF avant de les envoyer.</div>
-                <div class="note" data-titre="Bon à savoir">La recherche de cet écran ne filtre pas la liste : tous les reçus restent affichés, et <kbd>Effacer</kbd> ne vide pas le champ. Les reçus arrivent aussi par l’application mobile (photo) et par courriel (pièces jointes envoyées à la boîte de la compagnie).</div>
+                <div class="note" data-titre="Bon à savoir">Les reçus arrivent aussi par l’application mobile (photo) et par courriel (pièces jointes envoyées à la boîte de la compagnie).</div>
                 <div class="piege" data-titre="Piège">La corbeille supprime le reçu immédiatement, sans confirmation.</div>
             </section>
 
@@ -613,7 +615,7 @@
                 <p>The <span class="chemin">Purchases › Suppliers</span> screen lets you browse, search, create, edit and delete your suppliers. For each one it also shows the balance you owe and the state of its Stripe account (whether it can receive your online payments or not).</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add supplier</kbd>: opens the “Add a supplier” dialog. When the dialog closes, the list reloads.</li>
+                    <li><kbd>+ Ajouter un fournisseur</kbd> (+ Add a supplier, blue pill at the top right): opens the “Add a supplier” dialog. When the dialog closes, the list reloads.</li>
                     <li><kbd>Edit</kbd> (per row): opens the supplier record (see <a href="#en-supplier-record">Supplier record</a>).</li>
                     <li><kbd>Delete</kbd> (per row): deletes the supplier immediately.</li>
                     <li>Purple card “Configure Stripe Connect payments” (Action column): opens the supplier’s Stripe onboarding in a new tab (see <a href="#en-stripe-onboarding">Stripe Connect onboarding</a>).</li>
@@ -621,23 +623,26 @@
                 </ul>
                 <h3>Filters and search</h3>
                 <ul>
-                    <li>“Search (name, email, phone…)” field followed by the magnifying glass: the search covers name, email and phone.</li>
-                    <li><kbd>Clear</kbd>: empties the field and shows all suppliers again.</li>
+                    <li>“Chercher un nom, un courriel ou un téléphone” field, magnifier or Enter key: the search covers name, email, phone and billing address.</li>
+                    <li>The three filter pills to the right of the field: <strong>Tous</strong> (All), <strong>Avec un solde</strong> (suppliers you owe something to), <strong>En retard</strong> (at least one overdue invoice). Each pill carries its count; the chosen pill is white. The filter is remembered for the session.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search <strong>and puts the pill back on Tous</strong>. The list footer says how many suppliers are shown out of the total.</li>
                 </ul>
                 <h3>Columns</h3>
-                <p>Clicking a header sorts the list; a second click reverses the order (▲/▼). Default sort: Name ascending.</p>
+                <p>Clicking a header sorts the list (Supplier, Terms, Payable, Stripe); a second click reverses the order (▲/▼). Default sort: Supplier ascending.</p>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Name</td><td>Supplier name, full address and email (in grey).</td></tr>
-                        <tr><td>Payable</td><td>Balance due, shown as “1 234,56 $”, or “—” if you owe nothing.</td></tr>
+                        <tr><td>Supplier</td><td>A circle with the initials, the name in bold, then the email and phone in grey.</td></tr>
+                        <tr><td>Billing address</td><td>The supplier’s billing address (otherwise the first address); “—” when there is none.</td></tr>
+                        <tr><td>Terms</td><td>The payment terms of the record (“30 jours”), or “À la réception” (on receipt) when no term is set.</td></tr>
+                        <tr><td>Payable</td><td>The balance due in bold (“1 234,56 $”), or “—” if you owe nothing; underneath, “à jour” (up to date) or, in red, the overdue amount and the number of overdue invoices.</td></tr>
                         <tr><td>Stripe</td><td>Green badge “Stripe account” when the supplier can receive payments, grey badge “No Stripe account” otherwise. A click opens “View Stripe status” in a new tab.</td></tr>
                         <tr><td>Action</td><td>“Configure Stripe Connect payments” card, then <kbd>Edit</kbd> and <kbd>Delete</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No supplier found.”</span> — the search returns nothing; click <kbd>Clear</kbd> or check the spelling.</li>
+                    <li><span class="msg">“No supplier matches.”</span> — the search or the pill returns nothing; click <kbd>✕</kbd> or check the spelling.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> acts immediately, without asking for confirmation. Check the row before clicking.</div>
                 <div class="astuce" data-titre="Tip">The “Payable” balance updates as soon as a supplier invoice is posted or settled. For details, open <span class="chemin">Purchases › Supplier invoices</span> and search for the supplier.</div>
@@ -748,7 +753,8 @@
                 <p>The <span class="chemin">Purchases › Supplier invoices</span> screen tracks your purchase invoices: entry, posting and payment (through Stripe, automatic payment or manual disbursement).</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add invoice</kbd> (or <kbd>+</kbd>): opens the “Add an invoice” dialog.</li>
+                    <li><kbd>+ Nouvelle facture fournisseur</kbd> (+ New supplier invoice, blue pill at the top right, or <kbd>+</kbd>): opens the “Add an invoice” dialog.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>À payer</strong> (To pay: the balance of open or partial invoices, and their count), <strong>En retard</strong> (Overdue: the balance of posted invoices whose due date has passed; red dot when there are some), <strong>Brouillons</strong> (Drafts, to post) and <strong>Payées</strong> (Paid). A click applies the matching filter to the list — the frame turns blue — and a second click removes it.</li>
                     <li>Per-row buttons, from left to right:
                         <ol>
                             <li><kbd>Disbursement</kbd>: opens the manual payment (see <a href="#en-disbursement">Manual payment</a>); all the supplier’s open invoices are listed there.</li>
@@ -762,33 +768,30 @@
                 </ul>
                 <h3>Filters and search</h3>
                 <ul>
-                    <li><strong>Status</strong> filter (label “Status: all”): Draft, Posted checkboxes.</li>
-                    <li><strong>Payment status</strong> filter (label “Payment status: all”): Open, Partial, Paid checkboxes.</li>
-                    <li>Each filter offers “Check all”. Checking nothing means no filter. The grid reloads on every box checked or unchecked. Filters are <strong>remembered for the session</strong>.</li>
-                    <li>Search field with the magnifying glass, and <kbd>Clear</kbd>.</li>
+                    <li>The <strong>filter chips</strong> of the “search” card: <strong>État</strong> (Status) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Payment) — Tous, En retard, Partielle, Ouverte, Payée. Each chip carries its count; a clicked chip lights up (navy background) and combines with the others of its group; “Toutes” and “Tous” remove the group’s filter. Filters are <strong>remembered for the session</strong>.</li>
+                    <li>“Chercher un fournisseur” field (Search a supplier), magnifier or Enter key; <kbd>✕</kbd> clears the search <strong>and removes both filters</strong>. The list footer says how many invoices are shown out of the total.</li>
                 </ul>
                 <h3>Columns</h3>
                 <p>Every column sorts except Action; the sort is remembered. By default the most recent invoices come first.</p>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>The supplier’s invoice number (the “Supplier invoice no.” entered in the invoice).</td></tr>
-                        <tr><td>Due date</td><td>Date the invoice must be paid.</td></tr>
-                        <tr><td>Supplier</td><td>Supplier name.</td></tr>
-                        <tr><td>Payment status</td><td>Open, Partial or Paid.</td></tr>
-                        <tr><td>Balance due</td><td>Amount still owed.</td></tr>
-                        <tr><td>Already paid</td><td>Sum of the settlements already recorded.</td></tr>
+                        <tr><td>Number</td><td>The supplier’s invoice number (the “Supplier invoice no.” entered in the invoice); a link opens the original receipt when there is one.</td></tr>
+                        <tr><td>Due date</td><td>The due date in bold; underneath, in small type, the invoice date (“facturée 16 sept. 2026”).</td></tr>
+                        <tr><td>Supplier</td><td>Supplier name and address.</td></tr>
+                        <tr><td>Payment</td><td>A coloured pill: En retard (red: posted, unsettled, due date passed), Partielle (amber), Ouverte (blue), Payée (green).</td></tr>
+                        <tr><td>Balance</td><td>The amount still owed, in red when the invoice is overdue; underneath, in small type, what was already paid (“payé 120,00 $”) when a settlement exists.</td></tr>
                         <tr><td>Total</td><td>Invoice total, taxes included.</td></tr>
                         <tr><td>Status</td><td>Draft or Posted.</td></tr>
                     </tbody>
                 </table>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No invoice found.”</span> — no result for the current search or filters; uncheck the filters or click <kbd>Clear</kbd>.</li>
+                    <li><span class="msg">“No invoice matches these filters.”</span> — no result for the current search or filters; click “Toutes” and “Tous”, or <kbd>✕</kbd>.</li>
                     <li><span class="msg">“⚠️ You have unsaved changes. Do you really want to close?”</span> (title “Confirmation”) — you are closing the invoice dialog with unsaved changes; answer No to go back and click <kbd>Save</kbd>.</li>
                 </ul>
                 <div class="piege" data-titre="Pitfall"><kbd>Delete</kbd> asks for no confirmation on a draft invoice. Only posted invoices are protected (padlock).</div>
-                <div class="astuce" data-titre="Tip">To quickly find what remains to be paid, check “Open” and “Partial” in the Payment status filter: the selection stays active until the end of your session.</div>
+                <div class="astuce" data-titre="Tip">To quickly find what remains to be paid, click the “À payer” indicator; for what is pressing, “En retard”. The selection stays active until the end of your session.</div>
             </section>
 
             <section id="en-supplier-invoice">
@@ -1087,7 +1090,8 @@
                 <p>The <span class="chemin">Purchases › Receipts</span> screen turns receipts or invoices received as files (JPEG photo, PDF or email text) into accounting data: the AI reads the document, then 60Sec-AI creates the merchant (supplier) and the purchase document.</p>
                 <h3>Filters and search</h3>
                 <ul>
-                    <li>“Search (supplier, file, status…)” field with the magnifying glass, and <kbd>Clear</kbd>.</li>
+                    <li>Three indicators under the title: <strong>À lire par l’IA</strong> (receipts waiting to be read; amber dot when there are some), <strong>Lus par l’IA</strong> (result to check or to post) and <strong>Reçus en {month}</strong> (files received this month).</li>
+                    <li>“Chercher un fournisseur, un fichier ou un statut” field, magnifier or Enter key: the search filters the list on the file name, the recognized supplier and the status. <kbd>✕</kbd> clears the search. The list footer says how many receipts are shown out of the total.</li>
                 </ul>
                 <h3>Columns and buttons</h3>
                 <table>
@@ -1095,18 +1099,18 @@
                     <tbody>
                         <tr><td>File</td><td>Links to the original file and to its optimized version.</td></tr>
                         <tr><td>Supplier</td><td>Recognized merchant.</td></tr>
-                        <tr><td>Optimize and AI</td><td><kbd>Process AI</kbd> button, active when analysis is possible.</td></tr>
-                        <tr><td>View JSON</td><td>Visible once the analysis is done; opens “🤖 AI Analysis Result (JSON)” to check the extracted data.</td></tr>
-                        <tr><td>Process to Database</td><td><kbd>Process JSON</kbd> button: creates the merchant (supplier) and the document from the extracted data.</td></tr>
+                        <tr><td>AI reading</td><td><kbd>Lire avec l’IA</kbd> (Read with the AI) button, active when analysis is possible.</td></tr>
+                        <tr><td>Result</td><td><kbd>Voir le résultat</kbd> (View the result) button, visible once the analysis is done; opens “🤖 AI Analysis Result (JSON)” to check the extracted data.</td></tr>
+                        <tr><td>Post</td><td><kbd>Créer en comptabilité</kbd> (Create in the books) button: creates the merchant (supplier) and the document from the extracted data.</td></tr>
                         <tr><td>Status</td><td>Progress of the receipt’s processing.</td></tr>
                         <tr><td>Action</td><td>Trash icon: deletes the receipt <strong>without confirmation</strong>.</td></tr>
                     </tbody>
                 </table>
                 <h3>How AI reading works</h3>
                 <ol>
-                    <li><kbd>Process AI</kbd>: a JPEG photo is first optimized (1024 px wide, greyscale, enhanced contrast), then read; a PDF is read directly; an email text is analyzed as text.</li>
+                    <li><kbd>Lire avec l’IA</kbd>: a JPEG photo is first optimized (1024 px wide, greyscale, enhanced contrast), then read; a PDF is read directly; an email text is analyzed as text.</li>
                     <li>The AI extracts: receipt type and number; merchant (name, email, GST No., QST No., website, address, city, province, country, postal code, phone); date and currency; subtotal, taxes, total and tip; payment method and last 4 card digits; items (description, quantity, unit price, amount); confidence notes about the reading.</li>
-                    <li>Check the result with <kbd>View JSON</kbd>, then click <kbd>Process JSON</kbd> to create the supplier and the document.</li>
+                    <li>Check the result with <kbd>Voir le résultat</kbd>, then click <kbd>Créer en comptabilité</kbd> to create the supplier and the document.</li>
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
@@ -1197,7 +1201,7 @@
                 <p>La pantalla <span class="chemin">Compras › Proveedores</span> sirve para consultar, buscar, crear, modificar y eliminar sus proveedores. También muestra, para cada uno, el saldo que usted le debe y el estado de su cuenta Stripe (si puede recibir o no sus pagos en línea).</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar proveedor</kbd>: abre la ventana «Agregar un proveedor». Al cerrarse la ventana, la lista se recarga.</li>
+                    <li><kbd>+ Ajouter un fournisseur</kbd> (+ Agregar un proveedor, píldora azul arriba a la derecha): abre la ventana «Agregar un proveedor». Al cerrarse la ventana, la lista se recarga.</li>
                     <li><kbd>Editar</kbd> (por fila): abre la ficha del proveedor (ver <a href="#es-ficha-proveedor">Ficha de proveedor</a>).</li>
                     <li><kbd>Eliminar</kbd> (por fila): elimina el proveedor de inmediato.</li>
                     <li>Tarjeta morada «Configurar pagos Stripe Connect» (columna Acción): abre la inscripción Stripe del proveedor en una pestaña nueva (ver <a href="#es-inscripcion-stripe">Inscripción Stripe Connect</a>).</li>
@@ -1205,23 +1209,26 @@
                 </ul>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>Campo «Buscar (nombre, correo, teléfono…)» seguido de la lupa: la búsqueda cubre nombre, correo y teléfono.</li>
-                    <li><kbd>Borrar</kbd>: vacía el campo y vuelve a mostrar todos los proveedores.</li>
+                    <li>Campo «Chercher un nom, un courriel ou un téléphone», lupa o tecla Intro: la búsqueda cubre nombre, correo, teléfono y dirección de facturación.</li>
+                    <li>Las tres píldoras del filtro, a la derecha del campo: <strong>Tous</strong> (Todos), <strong>Avec un solde</strong> (proveedores a los que debe algo), <strong>En retard</strong> (al menos una factura vencida). Cada píldora lleva su número; la elegida es blanca. El filtro se recuerda durante la sesión.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y devuelve la píldora a Tous</strong>. El pie de la lista dice cuántos proveedores se muestran del total.</li>
                 </ul>
                 <h3>Columnas</h3>
-                <p>Un clic en un encabezado ordena la lista; un segundo clic invierte el orden (▲/▼). Orden predeterminado: Nombre ascendente.</p>
+                <p>Un clic en un encabezado ordena la lista (Proveedor, Plazo, Por pagar, Stripe); un segundo clic invierte el orden (▲/▼). Orden predeterminado: Proveedor ascendente.</p>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Nombre</td><td>Nombre del proveedor, dirección completa y correo (en gris).</td></tr>
-                        <tr><td>Por pagar</td><td>Saldo adeudado, en la forma «1 234,56 $», o «—» si no debe nada.</td></tr>
+                        <tr><td>Proveedor</td><td>Un círculo con las iniciales, el nombre en negrita, luego el correo y el teléfono en gris.</td></tr>
+                        <tr><td>Dirección de facturación</td><td>La dirección de facturación del proveedor (si no, su primera dirección); «—» si no tiene.</td></tr>
+                        <tr><td>Plazo</td><td>El plazo de pago de la ficha («30 jours»), o «À la réception» cuando no hay plazo fijado.</td></tr>
+                        <tr><td>Por pagar</td><td>El saldo adeudado en negrita («1 234,56 $»), o «—» si no debe nada; debajo, «à jour» (al día) o, en rojo, el importe vencido y el número de facturas vencidas.</td></tr>
                         <tr><td>Stripe</td><td>Insignia verde «Cuenta Stripe» si el proveedor puede recibir pagos, insignia gris «Sin cuenta Stripe» si no. Un clic abre «Ver estado de Stripe» en una pestaña nueva.</td></tr>
                         <tr><td>Acción</td><td>Tarjeta «Configurar pagos Stripe Connect», luego <kbd>Editar</kbd> y <kbd>Eliminar</kbd>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ningún proveedor encontrado.»</span> — la búsqueda no devuelve nada; haga clic en <kbd>Borrar</kbd> o revise la ortografía.</li>
+                    <li><span class="msg">«Ningún proveedor coincide.»</span> — la búsqueda o la píldora no devuelven nada; haga clic en <kbd>✕</kbd> o revise la ortografía.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa"><kbd>Eliminar</kbd> actúa de inmediato, sin pedir confirmación. Verifique la fila antes de hacer clic.</div>
                 <div class="astuce" data-titre="Consejo">El saldo «Por pagar» se actualiza en cuanto una factura de proveedor se contabiliza o se paga. Para ver el detalle, abra <span class="chemin">Compras › Facturas de proveedores</span> y busque el proveedor.</div>
@@ -1332,7 +1339,8 @@
                 <p>La pantalla <span class="chemin">Compras › Facturas de proveedores</span> permite seguir sus facturas de compra: su captura, su contabilización y su pago (por Stripe, por pago automático o por desembolso manual).</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar factura</kbd> (o <kbd>+</kbd>): abre la ventana «Agregar una factura».</li>
+                    <li><kbd>+ Nouvelle facture fournisseur</kbd> (+ Nueva factura de proveedor, píldora azul arriba a la derecha, o <kbd>+</kbd>): abre la ventana «Agregar una factura».</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>À payer</strong> (Por pagar: el saldo de las facturas abiertas o parciales, y su número), <strong>En retard</strong> (Vencidas: el saldo de las facturas contabilizadas con vencimiento pasado; punto rojo si las hay), <strong>Brouillons</strong> (Borradores, por contabilizar) y <strong>Payées</strong> (Pagadas). Un clic aplica el filtro correspondiente a la lista — el marco pasa a azul — y un segundo clic lo quita.</li>
                     <li>Botones por fila, de izquierda a derecha:
                         <ol>
                             <li><kbd>Desembolso</kbd>: abre el pago manual (ver <a href="#es-desembolso">Pago manual</a>); allí se listan todas las facturas abiertas del proveedor.</li>
@@ -1346,33 +1354,30 @@
                 </ul>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>Filtro <strong>Estado</strong> (etiqueta «Estado: todos»): casillas Borrador, Contabilizado.</li>
-                    <li>Filtro <strong>Estado de pago</strong> (etiqueta «Estado de pago: todos»): casillas Abierta, Parcial, Pagada.</li>
-                    <li>Cada filtro ofrece «Marcar todo». No marcar nada equivale a no filtrar. La cuadrícula se recarga con cada casilla marcada o desmarcada. Los filtros se <strong>recuerdan durante la sesión</strong>.</li>
-                    <li>Campo de búsqueda con la lupa, y <kbd>Borrar</kbd>.</li>
+                    <li>Las <strong>píldoras de filtro</strong> de la tarjeta «búsqueda»: <strong>État</strong> (Estado) — Toutes, Brouillons, Comptabilisées; <strong>Paiement</strong> (Pago) — Tous, En retard, Partielle, Ouverte, Payée. Cada píldora lleva su número; una píldora pulsada se enciende (fondo azul marino) y se combina con las demás de su grupo; «Toutes» y «Tous» quitan el filtro del grupo. Los filtros se <strong>recuerdan durante la sesión</strong>.</li>
+                    <li>Campo «Chercher un fournisseur» (Buscar un proveedor), lupa o tecla Intro; <kbd>✕</kbd> vacía la búsqueda <strong>y quita los dos filtros</strong>. El pie de la lista dice cuántas facturas se muestran del total.</li>
                 </ul>
                 <h3>Columnas</h3>
                 <p>Todas las columnas se ordenan, salvo Acción; el orden se recuerda. Por defecto, las facturas más recientes van primero.</p>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>#</td><td>Número de factura del proveedor (el «No. factura proveedor» capturado en la factura).</td></tr>
-                        <tr><td>Vencimiento</td><td>Fecha en que debe pagarse la factura.</td></tr>
-                        <tr><td>Proveedor</td><td>Nombre del proveedor.</td></tr>
-                        <tr><td>Estado de pago</td><td>Abierta, Parcial o Pagada.</td></tr>
-                        <tr><td>Saldo pendiente</td><td>Monto aún adeudado.</td></tr>
-                        <tr><td>Ya pagado</td><td>Suma de los pagos ya registrados.</td></tr>
+                        <tr><td>Número</td><td>Número de factura del proveedor (el «No. factura proveedor» capturado en la factura); un enlace abre el recibo de origen si lo hay.</td></tr>
+                        <tr><td>Vencimiento</td><td>La fecha de vencimiento en negrita; debajo, en pequeño, la fecha de factura («facturée 16 sept. 2026»).</td></tr>
+                        <tr><td>Proveedor</td><td>Nombre y dirección del proveedor.</td></tr>
+                        <tr><td>Pago</td><td>Una píldora de color: En retard (rojo: contabilizada, no saldada, vencimiento pasado), Partielle (ámbar), Ouverte (azul), Payée (verde).</td></tr>
+                        <tr><td>Saldo</td><td>El monto aún adeudado, en rojo cuando la factura está vencida; debajo, en pequeño, lo ya pagado («payé 120,00 $») si hubo un pago.</td></tr>
                         <tr><td>Total</td><td>Total de la factura, impuestos incluidos.</td></tr>
                         <tr><td>Estado</td><td>Borrador o Contabilizado.</td></tr>
                     </tbody>
                 </table>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ninguna factura encontrada.»</span> — sin resultado para la búsqueda o los filtros actuales; desmarque los filtros o haga clic en <kbd>Borrar</kbd>.</li>
+                    <li><span class="msg">«Ninguna factura coincide con estos filtros.»</span> — sin resultado para la búsqueda o los filtros actuales; haga clic en «Toutes» y «Tous», o en <kbd>✕</kbd>.</li>
                     <li><span class="msg">«⚠️ Tiene cambios sin guardar. ¿Desea cerrar de todos modos?»</span> (título «Confirmación») — está cerrando la ventana de factura con cambios sin guardar; responda No para volver y hacer clic en <kbd>Guardar</kbd>.</li>
                 </ul>
                 <div class="piege" data-titre="Trampa"><kbd>Eliminar</kbd> no pide ninguna confirmación en una factura en borrador. Solo las facturas contabilizadas están protegidas (candado).</div>
-                <div class="astuce" data-titre="Consejo">Para encontrar rápidamente lo que queda por pagar, marque «Abierta» y «Parcial» en el filtro Estado de pago: la selección se mantiene activa hasta el final de su sesión.</div>
+                <div class="astuce" data-titre="Consejo">Para encontrar rápidamente lo que queda por pagar, haga clic en el indicador «À payer»; para lo urgente, en «En retard». La selección se mantiene activa hasta el final de su sesión.</div>
             </section>
 
             <section id="es-factura-proveedor">
@@ -1671,7 +1676,8 @@
                 <p>La pantalla <span class="chemin">Compras › Recibos</span> transforma recibos o facturas recibidos como archivos (foto JPEG, PDF o texto de correo) en datos contables: la IA lee el documento y luego 60Sec-AI crea el comerciante (proveedor) y el documento de compra.</p>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>Campo «Buscar (proveedor, archivo, estado…)» con la lupa, y <kbd>Borrar</kbd>.</li>
+                    <li>Tres indicadores bajo el título: <strong>À lire par l’IA</strong> (recibos en espera de lectura; punto ámbar si los hay), <strong>Lus par l’IA</strong> (resultado por revisar o contabilizar) y <strong>Reçus en {mes}</strong> (archivos recibidos este mes).</li>
+                    <li>Campo «Chercher un fournisseur, un fichier ou un statut», lupa o tecla Intro: la búsqueda filtra la lista por nombre de archivo, proveedor reconocido y estado. <kbd>✕</kbd> vacía la búsqueda. El pie de la lista dice cuántos recibos se muestran del total.</li>
                 </ul>
                 <h3>Columnas y botones</h3>
                 <table>
@@ -1679,18 +1685,18 @@
                     <tbody>
                         <tr><td>Archivo</td><td>Enlaces al archivo original y a su versión optimizada.</td></tr>
                         <tr><td>Proveedor</td><td>Comerciante reconocido.</td></tr>
-                        <tr><td>Optimize and AI</td><td>Botón <kbd>Process AI</kbd>, activo cuando el análisis es posible.</td></tr>
-                        <tr><td>Ver JSON</td><td>Visible una vez hecho el análisis; abre «🤖 Resultado Análisis AI (JSON)» para revisar los datos extraídos.</td></tr>
-                        <tr><td>Process to Database</td><td>Botón <kbd>Process JSON</kbd>: crea el comerciante (proveedor) y el documento a partir de los datos extraídos.</td></tr>
+                        <tr><td>Lectura IA</td><td>Botón <kbd>Lire avec l’IA</kbd> (Leer con la IA), activo cuando el análisis es posible.</td></tr>
+                        <tr><td>Resultado</td><td>Botón <kbd>Voir le résultat</kbd> (Ver el resultado), visible una vez hecho el análisis; abre «🤖 Resultado Análisis AI (JSON)» para revisar los datos extraídos.</td></tr>
+                        <tr><td>Contabilizar</td><td>Botón <kbd>Créer en comptabilité</kbd> (Crear en contabilidad): crea el comerciante (proveedor) y el documento a partir de los datos extraídos.</td></tr>
                         <tr><td>Estado</td><td>Avance del tratamiento del recibo.</td></tr>
                         <tr><td>Acción</td><td>Papelera: elimina el recibo <strong>sin confirmación</strong>.</td></tr>
                     </tbody>
                 </table>
                 <h3>Desarrollo de la lectura por IA</h3>
                 <ol>
-                    <li><kbd>Process AI</kbd>: una foto JPEG se optimiza primero (1024 px de ancho, escala de grises, contraste reforzado) y luego se lee; un PDF se lee directamente; un texto de correo se analiza como texto.</li>
+                    <li><kbd>Lire avec l’IA</kbd>: una foto JPEG se optimiza primero (1024 px de ancho, escala de grises, contraste reforzado) y luego se lee; un PDF se lee directamente; un texto de correo se analiza como texto.</li>
                     <li>La IA extrae: el tipo de recibo y su número; el comerciante (nombre, correo, No. TPS, No. TVQ, sitio web, dirección, ciudad, provincia, país, código postal, teléfono); la fecha y la moneda; el subtotal, los impuestos, el total y la propina; el método de pago y los 4 últimos dígitos de la tarjeta; los artículos (descripción, cantidad, precio unitario, monto); notas de confianza sobre la lectura.</li>
-                    <li>Revise el resultado con <kbd>Ver JSON</kbd> y luego haga clic en <kbd>Process JSON</kbd> para crear el proveedor y el documento.</li>
+                    <li>Revise el resultado con <kbd>Voir le résultat</kbd> y luego haga clic en <kbd>Créer en comptabilité</kbd> para crear el proveedor y el documento.</li>
                 </ol>
                 <h3>Mensajes</h3>
                 <ul class="messages">

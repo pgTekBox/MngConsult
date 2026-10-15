@@ -85,6 +85,24 @@ Partial Public Class wbfSuppliers
     '''</remarks>
     Protected WithEvents rlvSuppliers As Global.Telerik.Web.UI.RadListView
 
+    '''<summary>litRubrique control.</summary>
+    Protected WithEvents litRubrique As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litSousTitre control.</summary>
+    Protected WithEvents litSousTitre As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>pnlPage control.</summary>
+    Protected WithEvents pnlPage As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>pnlRecherche control.</summary>
+    Protected WithEvents pnlRecherche As Global.System.Web.UI.WebControls.Panel
+
+    '''<summary>litChips control.</summary>
+    Protected WithEvents litChips As Global.System.Web.UI.WebControls.Literal
+
+    '''<summary>litPied control.</summary>
+    Protected WithEvents litPied As Global.System.Web.UI.WebControls.Literal
+
     '''<summary>
     '''rwSupplier control.
     '''</summary>

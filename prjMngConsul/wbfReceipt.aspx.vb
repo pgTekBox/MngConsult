@@ -1,4 +1,6 @@
-﻿Imports Telerik.Web.UI
+﻿Imports System.Data
+Imports System.Linq
+Imports Telerik.Web.UI
 
 Public Class wbfReceipt
     Inherits clsData
@@ -8,6 +10,13 @@ Public Class wbfReceipt
             Response.Redirect("~/wbfLogin.aspx")
             Return
         End If
+
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
+        litRubrique.Text = L("rubrique")
+        litTitre.Text = L("titre")
+        litSousTitre.Text = L("sousTitre")
+        tbSearch.Attributes("placeholder") = L("searchPh")
 
         If Not IsPostBack Then
             RadReceipt.Rebind()
@@ -20,8 +29,18 @@ Public Class wbfReceipt
     End Sub
 
     Private Sub RadReceipt_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles RadReceipt.NeedDataSource
-        Dim dt As DataTable = GetData()
+        Dim tout As DataTable = GetData()
+        ChargerIndicateurs(tout)
+        Dim dt As DataTable = tout
+        Dim q As String = tbSearch.Text.Trim()
+        If dt IsNot Nothing AndAlso q <> "" Then
+            dt = tout.Clone()
+            For Each r As DataRow In tout.Rows
+                If Correspond(r, q) Then dt.ImportRow(r)
+            Next
+        End If
         RadReceipt.DataSource = dt
+        litPied.Text = Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count), TotalRecus))
 
         'lblInfo.Visible = True
         'lblInfo.Text = $"{If(dt IsNot Nothing, dt.Rows.Count, 0)} reçu(s)"
@@ -41,6 +60,127 @@ Public Class wbfReceipt
         Return ds.Tables(0)
     End Function
 
+
+
+    ' =====================================================================
+    ' La signature « Portail du client » : titre sur le fond, trois indicateurs,
+    ' une recherche qui filtre vraiment (fichier, fournisseur, statut), un pied.
+    ' =====================================================================
+
+    Private TotalRecus As Integer
+
+    ''' <summary>Le texte d'une cellule HTML, pour la recherche.</summary>
+    Private Shared Function SansBalises(o As Object) As String
+        If o Is Nothing OrElse IsDBNull(o) Then Return ""
+        Dim s As String = System.Text.RegularExpressions.Regex.Replace(o.ToString(), "<[^>]+>", " ")
+        Return System.Web.HttpUtility.HtmlDecode(s)
+    End Function
+
+    ''' <summary>Vrai si la ligne contient le texte cherché (fichier, fournisseur ou statut).</summary>
+    Private Shared Function Correspond(r As DataRow, q As String) As Boolean
+        If String.IsNullOrEmpty(q) Then Return True
+        Dim texte As String = SansBalises(r("SourceFileName")) & " " & SansBalises(r("SupplierInfo")) & " " & Convert.ToString(r("ProcessingStatus"))
+        Return texte.IndexOf(q, StringComparison.OrdinalIgnoreCase) >= 0
+    End Function
+
+    Private Shared Function Vrai(o As Object) As Boolean
+        If o Is Nothing OrElse IsDBNull(o) Then Return False
+        Try
+            Return Convert.ToInt32(o) <> 0
+        Catch
+            Return False
+        End Try
+    End Function
+
+    ''' <summary>Les indicateurs, comptés sur tous les reçus de la compagnie.</summary>
+    Private Sub ChargerIndicateurs(dt As DataTable)
+        Dim rows As List(Of DataRow) = If(dt Is Nothing, New List(Of DataRow), dt.Rows.Cast(Of DataRow)().ToList())
+        TotalRecus = rows.Count
+        Dim aLire As Integer = rows.Where(Function(r) Vrai(r("CanProcessAI"))).Count()
+        Dim lus As Integer = rows.Where(Function(r) Vrai(r("CanViewJSON"))).Count()
+        Dim debutMois As Date = New Date(Date.Today.Year, Date.Today.Month, 1)
+        Dim duMois As Integer = rows.Where(Function(r) Not IsDBNull(r("Created")) AndAlso CDate(r("Created")) >= debutMois).Count()
+        Dim mois As String = Globalization.CultureInfo.GetCultureInfo(If(CurrentLang = "en", "en-CA", If(CurrentLang = "es", "es-ES", "fr-CA"))).DateTimeFormat.GetMonthName(Date.Today.Month)
+        litKpis.Text = Kpi(L("kpiALire"), aLire.ToString(), L("kpiALireSub"), If(aLire > 0, "#E3B341", "#43B47A")) &
+                       Kpi(L("kpiLus"), lus.ToString(), L("kpiLusSub"), "#1B4F9C") &
+                       Kpi(String.Format(L("kpiMois"), mois), duMois.ToString(), L("kpiMoisSub"), "#43B47A")
+    End Sub
+
+    Private Function Kpi(lab As String, val As String, sub_ As String, point As String) As String
+        Return "<div class=""fc-kpi""><span class=""lab""><i style=""background:" & point & """></i>" & Server.HtmlEncode(lab) & "</span><span class=""val"">" &
+               Server.HtmlEncode(val) & "</span><span class=""sub"">" & Server.HtmlEncode(sub_) & "</span></div>"
+    End Function
+
+    ''' <summary>Les entêtes de colonnes et le texte vide, dans les gabarits du RadListView.</summary>
+    Private Sub RadReceipt_PreRender(sender As Object, e As EventArgs) Handles RadReceipt.PreRender
+        SetLiteral(RadReceipt, "litColFichier", L("colFichier"))
+        SetLiteral(RadReceipt, "litColFournisseur", L("colFournisseur"))
+        SetLiteral(RadReceipt, "litColIA", L("colIA"))
+        SetLiteral(RadReceipt, "litColResultat", L("colResultat"))
+        SetLiteral(RadReceipt, "litColCompta", L("colCompta"))
+        SetLiteral(RadReceipt, "litColStatut", L("colStatut"))
+        SetLiteral(RadReceipt, "litColAction", L("colAction"))
+        SetLiteral(RadReceipt, "litEmpty", L("empty"))
+    End Sub
+
+    Private Shared Sub SetLiteral(root As Control, id As String, text As String)
+        Dim lit = TryCast(FindDeep(root, id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
+    End Sub
+
+    Private Shared Function FindDeep(root As Control, id As String) As Control
+        If root Is Nothing Then Return Nothing
+        Dim direct As Control = root.FindControl(id)
+        If direct IsNot Nothing Then Return direct
+        For Each ch As Control In root.Controls
+            Dim r As Control = FindDeep(ch, id)
+            If r IsNot Nothing Then Return r
+        Next
+        Return Nothing
+    End Function
+
+    Protected Sub btnClear_Click(sender As Object, e As EventArgs) Handles btnClear.Click
+        tbSearch.Text = ""
+        RadReceipt.Rebind()
+    End Sub
+
+    ''' <summary>Traductions (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "rubrique" : Return Choose3(lang, "Achats", "Purchases", "Compras")
+            Case "titre" : Return Choose3(lang, "Reçus", "Receipts", "Recibos")
+            Case "sousTitre" : Return Choose3(lang, "Les reçus photographiés ou arrivés par courriel : l'IA les lit, vous les passez en comptabilité.", "Receipts photographed or received by email: the AI reads them, you post them to the books.", "Los recibos fotografiados o recibidos por correo: la IA los lee, usted los contabiliza.")
+            Case "searchPh" : Return Choose3(lang, "Chercher un fournisseur, un fichier ou un statut", "Search a supplier, a file or a status", "Buscar un proveedor, un archivo o un estado")
+            Case "kpiALire" : Return Choose3(lang, "À lire par l'IA", "To be read by the AI", "Por leer por la IA")
+            Case "kpiALireSub" : Return Choose3(lang, "reçus en attente", "receipts waiting", "recibos en espera")
+            Case "kpiLus" : Return Choose3(lang, "Lus par l'IA", "Read by the AI", "Leídos por la IA")
+            Case "kpiLusSub" : Return Choose3(lang, "résultat à contrôler ou à comptabiliser", "result to check or to post", "resultado por revisar o contabilizar")
+            Case "kpiMois" : Return Choose3(lang, "Reçus en {0}", "Received in {0}", "Recibidos en {0}")
+            Case "kpiMoisSub" : Return Choose3(lang, "fichiers arrivés ce mois", "files received this month", "archivos recibidos este mes")
+            Case "colFichier" : Return Choose3(lang, "Fichier", "File", "Archivo")
+            Case "colFournisseur" : Return Choose3(lang, "Fournisseur", "Supplier", "Proveedor")
+            Case "colIA" : Return Choose3(lang, "Lecture IA", "AI reading", "Lectura IA")
+            Case "colResultat" : Return Choose3(lang, "Résultat", "Result", "Resultado")
+            Case "colCompta" : Return Choose3(lang, "Comptabiliser", "Post", "Contabilizar")
+            Case "colStatut" : Return Choose3(lang, "Statut", "Status", "Estado")
+            Case "colAction" : Return Choose3(lang, "Action", "Action", "Acción")
+            Case "btnIA" : Return Choose3(lang, "Lire avec l'IA", "Read with the AI", "Leer con la IA")
+            Case "btnVoir" : Return Choose3(lang, "Voir le résultat", "View the result", "Ver el resultado")
+            Case "btnCompta" : Return Choose3(lang, "Créer en comptabilité", "Create in the books", "Crear en contabilidad")
+            Case "empty" : Return Choose3(lang, "Aucun reçu ne correspond.", "No receipt matches.", "Ningún recibo coincide.")
+            Case "pied" : Return Choose3(lang, "{0} sur {1} reçus", "{0} of {1} receipts", "{0} de {1} recibos")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
 
     Protected Async Sub RadReceipt_ItemCommand(sender As Object, e As RadListViewCommandEventArgs) Handles RadReceipt.ItemCommand
         If e.CommandArgument Is Nothing Then Return
