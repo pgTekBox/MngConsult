@@ -11,107 +11,98 @@
     <script src="js/viewport.js"></script>
 
     <style>
-        /* Wrappers redeviennent flex */
-        .field-row1 {
-            grid-column: 1;
-            grid-row: 1;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-            flex-wrap: nowrap;
-        }
+    /* ── Ventes › Factures clients : la signature du gabarit « Portail du client ».
+       Le titre pose sur le fond de la page (FondDePage), puis quatre indicateurs
+       cliquables, la carte « recherche et filtres », et la carte de la liste. ── */
+    .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+    .fc-tete .txt { flex: 1 1 260px }
+    .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+    .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+    .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+    .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
+    .fc-btn, input.fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+    .fc-btn:hover, input.fc-btn:hover { background: #F2F5F9 }
+    .fc-btn.primaire, input.fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+    .fc-btn.primaire:hover, input.fc-btn.primaire:hover { background: #143A73 }
 
-        .field-row2 {
-            grid-column: 1;
-            grid-row: 2;
-            display: flex;
-            align-items: center;
-            gap: 2px;
-        }
+    .fc-kpis { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-bottom: 16px }
+    .fc-kpi { padding: 14px 16px; border-radius: 22px; text-align: left; display: flex; flex-direction: column; gap: 2px; border: 2px solid transparent; background: #fff; color: #0E1F3D; cursor: pointer; font-family: inherit }
+    .fc-kpi:hover { border-color: #D5DDE8 }
+    .fc-kpi.on { border-color: #1B4F9C }
+    .fc-kpi .lab { display: flex; align-items: center; gap: 8px; font-weight: 700; color: #44536E; font-size: 14px }
+    .fc-kpi .lab i { width: 10px; height: 10px; border-radius: 50%; flex: none }
+    .fc-kpi .val { font-size: 24px; font-weight: 800; line-height: 1.15 }
+    .fc-kpi .sub { font-size: 14px; color: #44536E }
 
+    .fc-filtres { padding: 16px 18px; border-radius: 24px; background: #fff; display: flex; flex-direction: column; gap: 10px; margin-bottom: 16px }
+    .fc-recherche { display: flex; align-items: center; gap: 8px; min-height: 44px; padding: 0 6px 0 14px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff }
+    .fc-recherche:focus-within { border-color: #1B4F9C; box-shadow: 0 0 0 4px rgba(27,79,156,.14) }
+    .fc-recherche svg { flex: none }
+    .fc-recherche input[type=text] { border: 0 !important; outline: none; flex: 1 1 auto; min-width: 0; background: transparent !important; color: #0E1F3D; font: inherit; font-size: 15px; padding: 0 !important; box-shadow: none !important; width: auto !important; border-radius: 0 }
+    .fc-recherche .btn-icon { width: 34px; height: 34px; border: 0; background-color: transparent !important; border-radius: 50% }
+    .fc-recherche .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-groupes { display: flex; flex-wrap: wrap; gap: 10px 24px; align-items: flex-end }
+    .fc-groupe { display: flex; flex-direction: column; gap: 6px; font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .fc-chips { display: flex; flex-wrap: wrap; gap: 6px }
+    .fc-chip { display: inline-flex; align-items: center; gap: 6px; min-height: 36px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 13px; font-family: inherit; cursor: pointer }
+    .fc-chip i { width: 8px; height: 8px; border-radius: 50%; flex: none }
+    .fc-chip b { font-weight: 700; color: #5B6B86 }
+    .fc-chip:hover { background: #F2F5F9 }
+    .fc-chip.on { background: #0E1F3D; border-color: #0E1F3D; color: #fff }
+    .fc-chip.on b { color: #AEBBCD }
 
-        .listview-list-head {
-            display: grid;
-            grid-template-columns: minmax(200px, 1.5fr) 140px 100px  80px 80px;
-            gap: 16px;
-            padding: 14px 16px;
-            font-weight: 800;
-            font-size: 13px;
-            color: #0E1F3D;
-            background: #f8fafc;
-            border-bottom: 1px solid var(--mc-stroke);
-            position: sticky;
-            top: 0;
-            z-index: 0;
-            box-sizing: border-box;
-        }
-
-        .listview-row {
-            display: grid;
-            grid-template-columns: minmax(200px, 1.5fr) 140px 100px  80px  80px;
-            gap: 16px;
-            align-items: center;
-            padding: 14px 16px;
-            border-bottom: 1px solid #eef2f7;
-            background: #fff;
-            box-sizing: border-box;
-        }
-
-        .field-status-badge {
-            display: inline-block;
-            padding: 3px 10px;
-            border-radius: 8px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .badge-active {
-            background: #ecfdf5;
-            color: #059669;
-        }
-
-        .badge-inactive {
-            background: #fef2f2;
-            color: #dc2626;
-        }
-
-        /* Import panel */
-        .import-panel {
-            display: flex;
-            gap: 10px;
-            flex-wrap: wrap;
-            align-items: center;
-            padding: 14px 16px;
-            border-top: 1px solid var(--mc-stroke);
-            background: #f8fafc;
-        }
-
-            .import-panel label {
-                font-weight: 700;
-                font-size: 13px;
-                color: #0E1F3D;
-            }
-
-            .import-panel .input,
-            .import-panel select,
-            .import-panel input[type="date"] {
-                min-width: 140px;
-            }
-
-        .import-result {
-            padding: 10px 16px;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .text-success {
-            color: #059669;
-        }
-
-        .text-danger {
-            color: #dc2626;
-        }
-
+    /* La liste : une carte blanche ; en-tête gris-bleu sans fond, lignes à filet doux. */
+    .fc-liste.full-grid { height: auto; min-height: 0 }
+    .fc-liste .list-shell { height: auto; padding: 6px 12px 12px; border-radius: 24px; background: #fff }
+    .fc-liste .list-shell > * { flex: none; display: block }
+    .fc-liste .listview-list-body { overflow: visible }
+    .fc-liste .listview-list-head, .fc-liste .listview-row {
+        display: grid; grid-template-columns: 96px 118px minmax(0, 2fr) 120px 112px 104px 132px 210px;
+        gap: 10px; align-items: center; padding: 10px 6px; box-sizing: border-box;
+    }
+    .fc-liste .listview-list-head { position: static; background: transparent; border: 0; font-size: 14px; font-weight: 800; color: #5B6B86; z-index: auto }
+    .fc-liste .listview-row { border: 0; border-top: 1px solid #E3E9F1; background: #fff; font-size: 15px }
+    .fc-liste .listview-row:hover { background: #FAFCFF }
+    .fc-liste .sort-link, .fc-liste .sort-link:hover, .fc-liste .sort-link:visited { color: inherit; text-decoration: none; cursor: pointer; font-weight: inherit }
+    .fc-liste .sort-link:hover { text-decoration: underline }
+    .fc-liste .adroite { text-align: right }
+    .fc-liste .c-num { white-space: nowrap }
+    .fc-liste .lien { font-weight: 800 }
+    .fc-liste .c-ech { display: flex; flex-direction: column; line-height: 1.3 }
+    .fc-liste .c-ech b { font-weight: 700 }
+    .fc-liste .c-ech span { font-size: 13px; color: #44536E }
+    .fc-liste .c-client { min-width: 0 }
+    .fc-liste .c-client > div:first-child { font-weight: 800 }
+    .fc-liste .cust-email { font-size: 13px; color: #44536E; margin-top: 0 }
+    .fc-pay { display: inline-block; padding: 3px 10px; border-radius: 999px; font-size: 13px; font-weight: 800; white-space: nowrap }
+    .fc-liste .c-reste { text-align: right; font-weight: 800 }
+    .fc-liste .c-reste.retard { color: #A3261C }
+    .fc-liste .c-reste span { display: block; font-size: 12px; font-weight: 600; color: #44536E }
+    .fc-liste .c-total { text-align: right; font-weight: 700 }
+    .fc-etat { display: inline-flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 700 }
+    .fc-etat svg { flex: none }
+    .fc-liste .listview-actions { display: flex; justify-content: flex-end; gap: 4px; flex-wrap: nowrap }
+    .fc-liste .listview-actions .btn-icon { width: 40px; height: 40px; border: 0; border-radius: 10px; background-color: transparent !important; background-size: 22px 22px !important }
+    .fc-liste .listview-actions .btn-icon:hover { background-color: #F2F5F9 !important }
+    .fc-liste .listview-actions .btn-icon-invoice-send { background-size: 26px 26px !important }
+    .fc-liste .empty-state { padding: 20px 6px; color: #44536E; font-weight: 700 }
+    .fc-pied { padding: 12px 6px 0; color: #44536E; font-size: 14px }
+    /* Les colonnes : banque, solde, connecté le, état, actions. */
+    .fc-liste .listview-list { min-width: 860px }
+    .fc-liste .listview-list-head, .fc-liste .listview-row { grid-template-columns: minmax(0, 2fr) 150px 150px 140px 100px }
+    .fc-liste .c-banque { display: flex; flex-direction: column; min-width: 0 }
+    .fc-liste .c-banque b { font-weight: 800; color: #0E1F3D }
+    .fc-liste .c-banque span { font-size: 14px; color: #44536E }
+    .fc-liste .c-solde { text-align: right; font-weight: 800; white-space: nowrap }
+    .fc-liste .c-solde.neg { color: #A3261C }
+    .fc-etat .pt { width: 10px; height: 10px; border-radius: 50%; display: inline-block }
+    /* L'importation des transactions, au pied de la carte de la liste. */
+    .import-panel { display: flex; flex-wrap: wrap; align-items: center; gap: 10px 12px; padding: 14px 6px 4px; margin-top: 8px; border-top: 1px solid #E3E9F1 }
+    .import-panel label { font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .import-panel .input, .import-panel select { min-height: 40px; min-width: 150px; padding: 0 12px; border: 1px solid #AEBBCD; border-radius: 12px; background: #fff; font: inherit; font-size: 14px; color: #0E1F3D }
+    .import-result { display: block; padding: 10px 6px 0; font-size: 14px; font-weight: 700 }
+    .text-success { color: #0F5A3A }
+    .text-danger { color: #A3261C }
     </style>
 </asp:Content>
 
@@ -121,21 +112,29 @@
 
     <telerik:RadAjaxPanel ID="RAP1" runat="server" LoadingPanelID="RadAjaxLoadingPanel1" ClientIDMode="Static">
 
-        <div class="page-head">
-            <div class="page-head-left">
-                <div class="page-title"><asp:Literal ID="litPageTitle" runat="server" /></div>
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique,
+             le titre, le sous-titre, et à droite le bouton de connexion en pastille bleue. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litPageTitle" runat="server" /></h1>
+                <p><asp:Literal ID="litSousTitre" runat="server" /></p>
             </div>
-
-            <div class="searchbox">
+            <div class="btns">
+                <a class="fc-btn" href="wbfReleve.aspx"><asp:Literal ID="litReleveBtn" runat="server" /></a>
                 <asp:Button ID="btnConnect" runat="server"
-                    CssClass="btn btnAddRow"
+                    CssClass="fc-btn primaire"
                     Text=""
                     CausesValidation="false"
                     OnClientClick="openPlaidFromPage(); return false;" />
             </div>
         </div>
 
-        <div class="full-grid">
+        <%-- Les quatre indicateurs : comptes connectés, solde des comptes connectés,
+             déconnectés, dernière connexion. --%>
+        <div class="fc-kpis"><asp:Literal ID="litKpis" runat="server" /></div>
+
+        <div class="fc-liste full-grid">
             <div class="list-shell">
 
                 <telerik:RadListView ID="rlvAccounts" runat="server"
@@ -149,10 +148,10 @@
                         <div class="listview-list">
                             <div class="listview-list-head">
                                 <div><asp:Literal ID="litColBank" runat="server" /></div>
-                                <div><asp:Literal ID="litColBalance" runat="server" /></div>
+                                <div class="adroite"><asp:Literal ID="litColBalance" runat="server" /></div>
                                 <div><asp:Literal ID="litColDate" runat="server" /></div>
                                 <div><asp:Literal ID="litColStatus" runat="server" /></div>
-                                <div><asp:Literal ID="litColAction" runat="server" /></div>
+                                <div class="adroite"><asp:Literal ID="litColAction" runat="server" /></div>
                             </div>
 
                             <div class="listview-list-body">
@@ -171,7 +170,7 @@
                                 <asp:TextBox ID="txtEndDate" runat="server" CssClass="input" TextMode="Date"></asp:TextBox>
 
                                 <asp:Button ID="btnImport" runat="server"
-                                    CssClass="btn"
+                                    CssClass="fc-btn"
                                     Text=""
                                     CausesValidation="false" />
                             </div>
@@ -182,28 +181,11 @@
 
                     <ItemTemplate>
                         <div class="listview-row">
-
-                            
-                                <div class="field-bank">
-                                    <%# Eval("BankName") %> — <%# Eval("AccountName") %> <%# Eval("AccountNumber") %>
-                                </div>
-                          
-                                <div class="field-date">
-                                       <span class="field-total"><%# Eval("BalanceCurrent", "{0:C2}") %></span>
-                               </div>
-                           
-                               
-                                <div class="field-date">
-                                    <%# Format(Eval("Created"), "yyyy-MM-dd") %>
-                                </div>
-
-                           
-
-                            <div>
-                                <span class='<%# If(CBool(Eval("Active")), "field-status-badge badge-active", "field-status-badge badge-inactive") %>'>
-                                    <%# If(CBool(Eval("Active")), L("active"), L("inactive")) %>
-                                </span>
-                            </div>
+                            <%-- La banque et le compte, le solde, la date de connexion, l'état, puis l'action. --%>
+                            <div class="c-banque"><%# BanqueCell(Eval("BankName"), Eval("AccountName"), Eval("AccountNumber")) %></div>
+                            <div class='<%# "c-solde" & If(Nombre(Eval("BalanceCurrent")) < 0D, " neg", "") %>'><%# FormatMontant(Eval("BalanceCurrent")) %></div>
+                            <div><%# FormatDateOnly(Eval("Created")) %></div>
+                            <div><%# EtatCell(Eval("Active")) %></div>
 
                             <div class="listview-actions">
                                 <asp:Button ID="btnDisconnect" runat="server"
@@ -213,7 +195,7 @@
                                     CommandName="Disconnect"
                                     CommandArgument='<%# Eval("ItemId") %>'
                                     Visible='<%# CBool(Eval("Active")) %>'
-                                    OnClientClick="return confirm(L_CONFIRM_DISCONNECT);"
+                                    OnClientClick="if (!confirm(L_CONFIRM_DISCONNECT)) { return false; }"
                                     CausesValidation="false" />
                             </div>
                         </div>
@@ -226,6 +208,8 @@
                     </EmptyDataTemplate>
 
                 </telerik:RadListView>
+
+                <div class="fc-pied"><asp:Literal ID="litPied" runat="server" /></div>
 
             </div>
         </div>

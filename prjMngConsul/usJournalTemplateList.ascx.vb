@@ -16,6 +16,37 @@ Public Class usJournalTemplateList
             LoadJournauxFilter()
             BindList()
         End If
+
+        ' La tête de page (fr/en/es), à chaque chargement.
+        SetLiteral("litRubrique", L("rubrique"))
+        SetLiteral("litTitre", L("titre"))
+        SetLiteral("litSousTitre", L("sousTitre"))
+        SetLiteral("litBtnNouveau", L("nouveau"))
+    End Sub
+
+    ''' <summary>Traductions de la tête de l'écran Modèles (fr/en/es).</summary>
+    Protected Function L(key As String) As String
+        Dim lang As String = CurrentLang
+        Select Case key
+            Case "rubrique" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
+            Case "titre" : Return Choose3(lang, "Modèles de journaux", "Journal templates", "Plantillas de diarios")
+            Case "sousTitre" : Return Choose3(lang, "Vos écritures récurrentes, prêtes à charger d'un clic dans une nouvelle écriture.", "Your recurring entries, ready to load with one click into a new entry.", "Sus asientos recurrentes, listos para cargar con un clic en un nuevo asiento.")
+            Case "nouveau" : Return Choose3(lang, "Nouveau modèle", "New template", "Nueva plantilla")
+            Case Else : Return ""
+        End Select
+    End Function
+
+    Private Shared Function Choose3(lang As String, fr As String, en As String, es As String) As String
+        Select Case lang
+            Case "en" : Return en
+            Case "es" : Return es
+            Case Else : Return fr
+        End Select
+    End Function
+
+    Private Sub SetLiteral(id As String, text As String)
+        Dim lit = TryCast(FindControl(id), Literal)
+        If lit IsNot Nothing Then lit.Text = text
     End Sub
 
     ' =========================================================

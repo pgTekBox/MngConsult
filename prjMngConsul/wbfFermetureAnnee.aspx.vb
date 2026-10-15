@@ -15,6 +15,8 @@ Partial Public Class wbfFermetureAnnee
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -31,6 +33,7 @@ Partial Public Class wbfFermetureAnnee
         ' Titres / textes statiques : siblings des zones mises à jour par RadAjaxManager
         ' → Literal obligatoire (pas de <%= %> sinon « Controls collection cannot be modified »).
         SetLiteral(Me, "litH2Title", L("pageTitle"))
+        SetLiteral(Me, "litRubrique", L("rubrique"))
         SetLiteral(Me, "litSubtitle", L("subtitle"))
         SetLiteral(Me, "litH3Step1", L("step1"))
         SetLiteral(Me, "litLblExercice", L("lblExercice"))
@@ -61,6 +64,7 @@ Partial Public Class wbfFermetureAnnee
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key
+            Case "rubrique" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
             Case "pageTitle" : Return Choose3(lang, "Fermeture d'année fiscale", "Fiscal year-end close", "Cierre de ejercicio fiscal")
             Case "subtitle" : Return Choose3(lang,
                 "Clôture des comptes de résultat, affectation du bénéfice net aux Bénéfices non répartis, verrouillage de l'exercice et création automatique de l'exercice suivant.",

@@ -1,5 +1,8 @@
 ﻿Imports System.Data.SqlClient
 Imports Newtonsoft.Json.Linq
+Imports System.Data
+Imports System.Linq
+Imports System.Text
 Imports Telerik.Web.UI
 
 Public Class PlaidAccounts
@@ -11,6 +14,8 @@ Public Class PlaidAccounts
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -27,7 +32,10 @@ Public Class PlaidAccounts
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de la page.</summary>
     Private Sub ApplyLocalization()
         SetLiteral(Me, "litPageTitle", L("pageTitleShort"))
-        btnConnect.Text = L("connectBank")
+        SetLiteral(Me, "litRubrique", L("rubrique"))
+        SetLiteral(Me, "litSousTitre", L("sousTitre"))
+        SetLiteral(Me, "litReleveBtn", L("releveBtn"))
+        btnConnect.Text = "+ " & L("connectBank")
 
         Dim fab As Control = FindDeep(Me, "fabAdd")
         If TypeOf fab Is System.Web.UI.HtmlControls.HtmlControl Then
@@ -55,7 +63,10 @@ Public Class PlaidAccounts
     ' DataSource
     ' ==========================================
     Private Sub rlvAccounts_NeedDataSource(sender As Object, e As RadListViewNeedDataSourceEventArgs) Handles rlvAccounts.NeedDataSource
-        rlvAccounts.DataSource = GetData()
+        Dim dt As DataTable = GetData()
+        rlvAccounts.DataSource = dt
+        ChargerIndicateurs(dt)
+        SetLiteral(Me, "litPied", Server.HtmlEncode(String.Format(L("pied"), If(dt Is Nothing, 0, dt.Rows.Count))))
     End Sub
 
 
@@ -73,6 +84,76 @@ Public Class PlaidAccounts
 
 
 
+
+
+    ' =====================================================================
+    ' Les indicateurs (connectés / solde / déconnectés / dernière connexion)
+    ' et les cellules de la liste, au style du gabarit « Portail du client ».
+    ' =====================================================================
+
+    Private Shared Function Vrai(o As Object) As Boolean
+        If o Is Nothing OrElse IsDBNull(o) Then Return False
+        Try
+            Return Convert.ToBoolean(o)
+        Catch
+            Return False
+        End Try
+    End Function
+
+    Public Shared Function Nombre(o As Object) As Decimal
+        If o Is Nothing OrElse IsDBNull(o) Then Return 0D
+        Try
+            Return Convert.ToDecimal(o)
+        Catch
+            Return 0D
+        End Try
+    End Function
+
+    Private Sub ChargerIndicateurs(dt As DataTable)
+        Dim rows As List(Of DataRow) = If(dt Is Nothing, New List(Of DataRow), dt.Rows.Cast(Of DataRow)().ToList())
+        Dim actifs As List(Of DataRow) = rows.Where(Function(r) Vrai(r("Active"))).ToList()
+        Dim solde As Decimal = actifs.Sum(Function(r) Nombre(r("BalanceCurrent")))
+        Dim derniere As String = "—"
+        If rows.Count > 0 Then
+            Dim d As Object = rows.Select(Function(r) r("Created")).Where(Function(o) o IsNot Nothing AndAlso Not IsDBNull(o)).OrderByDescending(Function(o) Convert.ToDateTime(o)).FirstOrDefault()
+            If d IsNot Nothing Then derniere = FormatDateOnly(d)
+        End If
+        Dim sb As New StringBuilder()
+        sb.Append(Kpi(L("kpiConnectes"), actifs.Count & " / " & rows.Count, L("kpiConnectesSub"), If(actifs.Count > 0, "#43B47A", "#AEBBCD")))
+        sb.Append(Kpi(L("kpiSolde"), FormatMontant(solde), L("kpiSoldeSub"), "#1B4F9C"))
+        sb.Append(Kpi(L("kpiDeconnectes"), (rows.Count - actifs.Count).ToString(), L("kpiDeconnectesSub"), "#AEBBCD"))
+        sb.Append(Kpi(L("kpiDerniere"), derniere, L("kpiDerniereSub"), "#E3B341"))
+        SetLiteral(Me, "litKpis", sb.ToString())
+    End Sub
+
+    Private Function Kpi(lab As String, val As String, sub_ As String, point As String) As String
+        Return "<div class=""fc-kpi""><span class=""lab""><i style=""background:" & point & """></i>" & Server.HtmlEncode(lab) & "</span>" &
+               "<span class=""val"">" & Server.HtmlEncode(val) & "</span><span class=""sub"">" & Server.HtmlEncode(sub_) & "</span></div>"
+    End Function
+
+    ''' <summary>La banque en gras, le compte et son numéro dessous.</summary>
+    Public Function BanqueCell(banque As Object, compte As Object, numero As Object) As String
+        Dim b As String = Convert.ToString(banque).Trim()
+        Dim c As String = (Convert.ToString(compte).Trim() & " " & Convert.ToString(numero).Trim()).Trim()
+        Return "<b>" & Server.HtmlEncode(If(b = "", c, b)) & "</b>" & If(b <> "" AndAlso c <> "", "<span>" & Server.HtmlEncode(c) & "</span>", "")
+    End Function
+
+    Public Function FormatMontant(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return "—"
+        Return Nombre(value).ToString("#,##0.00 $")
+    End Function
+
+    Public Function FormatDateOnly(value As Object) As String
+        If value Is Nothing OrElse IsDBNull(value) Then Return "—"
+        Return Convert.ToDateTime(value).ToString("d MMM yyyy").ToLower()
+    End Function
+
+    ''' <summary>Un point vert « Actif » ou gris « Déconnecté ».</summary>
+    Public Function EtatCell(actif As Object) As String
+        Dim ok As Boolean = Vrai(actif)
+        Return "<span class=""fc-etat"" style=""color:" & If(ok, "#0F5A3A", "#5B6B86") & """><i class=""pt"" style=""background:" & If(ok, "#43B47A", "#AEBBCD") & """></i>" &
+               Server.HtmlEncode(If(ok, L("active"), L("inactive"))) & "</span>"
+    End Function
 
     ' ==========================================
     ' Dropdown comptes actifs
@@ -267,6 +348,18 @@ END"
             Case "pageTitle" : Return Choose3(lang, "Comptes bancaires — 60Sec-AI", "Bank accounts — 60Sec-AI", "Cuentas bancarias — 60Sec-AI")
             Case "pageTitleShort" : Return Choose3(lang, "Comptes bancaires", "Bank accounts", "Cuentas bancarias")
             Case "connectBank" : Return Choose3(lang, "Connecter une banque", "Connect a bank", "Conectar un banco")
+            Case "rubrique" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
+            Case "sousTitre" : Return Choose3(lang, "Vos banques connectées, leurs soldes et l'importation de leurs transactions.", "Your connected banks, their balances and the import of their transactions.", "Sus bancos conectados, sus saldos y la importación de sus transacciones.")
+            Case "releveBtn" : Return Choose3(lang, "Relevé bancaire", "Bank statement", "Estado de cuenta")
+            Case "kpiConnectes" : Return Choose3(lang, "Comptes connectés", "Connected accounts", "Cuentas conectadas")
+            Case "kpiConnectesSub" : Return Choose3(lang, "actifs", "active", "activas")
+            Case "kpiSolde" : Return Choose3(lang, "Solde des comptes", "Accounts balance", "Saldo de las cuentas")
+            Case "kpiSoldeSub" : Return Choose3(lang, "comptes connectés", "connected accounts", "cuentas conectadas")
+            Case "kpiDeconnectes" : Return Choose3(lang, "Déconnectés", "Disconnected", "Desconectadas")
+            Case "kpiDeconnectesSub" : Return Choose3(lang, "historique conservé", "history kept", "historial conservado")
+            Case "kpiDerniere" : Return Choose3(lang, "Dernière connexion", "Last connection", "Última conexión")
+            Case "kpiDerniereSub" : Return Choose3(lang, "banque reliée", "bank linked", "banco vinculado")
+            Case "pied" : Return Choose3(lang, "{0} compte(s)", "{0} account(s)", "{0} cuenta(s)")
             Case "colBank" : Return Choose3(lang, "Banque", "Bank", "Banco")
             Case "colBalance" : Return Choose3(lang, "Solde actuel", "Current balance", "Saldo actual")
             Case "colDate" : Return Choose3(lang, "Date de connexion", "Connection date", "Fecha de conexión")
@@ -280,7 +373,7 @@ END"
             Case "inactive" : Return Choose3(lang, "Déconnecté", "Disconnected", "Desconectado")
             Case "disconnect" : Return Choose3(lang, "Déconnecter", "Disconnect", "Desconectar")
             Case "confirmDisconnect" : Return Choose3(lang, "Voulez-vous vraiment déconnecter ce compte?", "Do you really want to disconnect this account?", "¿Realmente desea desconectar esta cuenta?")
-            Case "empty" : Return Choose3(lang, "Aucun compte bancaire connecté.", "No bank account connected.", "Ninguna cuenta bancaria conectada.")
+            Case "empty" : Return Choose3(lang, "Aucune banque connectée pour l'instant.", "No bank connected yet.", "Ningún banco conectado por ahora.")
             Case "accountNotFound" : Return Choose3(lang, "Compte introuvable.", "Account not found.", "Cuenta no encontrada.")
             Case "txImported" : Return Choose3(lang, "{0} transaction(s) importée(s).", "{0} transaction(s) imported.", "{0} transacción(es) importada(s).")
             Case "errorPrefix" : Return Choose3(lang, "Erreur : ", "Error: ", "Error: ")

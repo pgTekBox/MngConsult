@@ -78,8 +78,9 @@
                 <p>C’est le point d’entrée de toute la comptabilité : la liste montre les écritures automatiques (factures, règlements) et les écritures manuelles, avec leur statut et leurs totaux.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
+                    <li>Le titre « Journaux » pose sur le fond de la page ; à droite, la pastille bleue <kbd>+ Nouvelle écriture</kbd> ouvre la fenêtre « Nouvelle écriture ». Les filtres sont dans une carte blanche, la liste et ses totaux dans deux autres.</li>
                     <li><kbd>Filtrer</kbd> : recharge la liste avec les critères choisis.</li>
-                    <li>Bouton rond <kbd>+</kbd> (info-bulle « Nouvelle écriture ») : ouvre la fenêtre « Nouvelle écriture » (voir <a href="#fr-ecriture">Écriture</a>).</li>
+                    <li>Bouton rond <kbd>+</kbd> (info-bulle « Nouvelle écriture ») ou pastille <kbd>+ Nouvelle écriture</kbd> : ouvre la fenêtre « Nouvelle écriture » (voir <a href="#fr-ecriture">Écriture</a>).</li>
                     <li>Cliquer sur le <strong>numéro de pièce</strong> ou sur l’icône <strong>crayon</strong> (« Modifier ») : ouvre la fenêtre « Modifier l’écriture ».</li>
                     <li>Icône <strong>corbeille</strong> (« Supprimer ») : n’apparaît que pour les écritures au statut <strong>Brouillon</strong>. Elle demande la confirmation « Supprimer cette écriture ? ».</li>
                     <li>À la fermeture de la fenêtre d’édition, la liste se recharge d’elle-même.</li>
@@ -214,8 +215,9 @@
                 <p>Un modèle mémorise la structure d’une écriture (journal, comptes, sens débit/crédit) et, au choix, ses montants. Il se charge ensuite d’un clic dans la fenêtre d’écriture.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
+                    <li>Le titre « Modèles de journaux » pose sur le fond de la page ; à droite, la pastille bleue <kbd>+ Nouveau modèle</kbd> ouvre la fenêtre « Nouveau template ».</li>
                     <li><kbd>Filtrer</kbd> : applique les critères.</li>
-                    <li>Bouton rond <kbd>+</kbd> (« Nouveau template ») : ouvre la fenêtre « Nouveau template » (voir <a href="#fr-fiche-modele">Fiche modèle</a>).</li>
+                    <li>Bouton rond <kbd>+</kbd> (« Nouveau template ») ou pastille <kbd>+ Nouveau modèle</kbd> : ouvre la fenêtre « Nouveau template » (voir <a href="#fr-fiche-modele">Fiche modèle</a>).</li>
                     <li>Clic sur le <strong>code</strong> ou sur le <strong>crayon</strong> : ouvre « Modifier le template ».</li>
                     <li><strong>Corbeille</strong> : confirmation « Supprimer ce template ? ». Proposée pour tous les modèles, actifs ou non.</li>
                 </ul>
@@ -248,7 +250,7 @@
                     <li><span class="msg">« Erreur : … »</span> — la suppression a échoué ; le détail suit.</li>
                 </ul>
                 <h3>Trucs et pièges</h3>
-                <div class="note" data-titre="Bon à savoir">Cet écran est offert uniquement en français.</div>
+                <div class="note" data-titre="Bon à savoir">Le titre, le sous-titre et le bouton de création sont traduits ; les filtres, les colonnes et les messages de cet écran restent en français.</div>
                 <div class="piege" data-titre="Piège">Un modèle inactif n’apparaît pas dans <kbd>Charger un template</kbd> de la fenêtre d’écriture. Pour le retrouver dans cette liste, décochez « Seulement les actifs ».</div>
             </section>
 
@@ -316,18 +318,19 @@
                 <p>Plaid est le service qui relie 60Sec-AI à votre institution financière. Cet écran liste les connexions établies, avec leur solde et leur statut.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Connecter une banque</kbd> : lance la connexion Plaid (voir le piège ci-dessous).</li>
+                    <li><kbd>+ Connecter une banque</kbd> (pastille bleue, en haut à droite) : lance la connexion Plaid (voir le piège ci-dessous). À côté, <kbd>Relevé bancaire</kbd> ouvre le relevé.</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Comptes connectés</strong> (« n / total »), <strong>Solde des comptes</strong> (la somme des soldes des comptes connectés), <strong>Déconnectés</strong> et <strong>Dernière connexion</strong>. Ils informent ; ils ne filtrent pas la liste. Le pied de la liste dit combien de comptes elle montre.</li>
                     <li>Icône <strong>Déconnecter</strong> : visible sur les comptes actifs. Confirmation « Voulez-vous vraiment déconnecter ce compte? ». Le compte passe au statut « Déconnecté » sans être supprimé ; son historique reste visible.</li>
-                    <li><strong>Panneau d’import</strong> : liste « Compte : » (comptes actifs), « Du : » (par défaut il y a un mois), « Au : » (aujourd’hui), bouton <kbd>Importer</kbd>.</li>
+                    <li><strong>Importation des transactions</strong> (au pied de la carte de la liste) : liste « Compte : » (comptes actifs), « Du : » (par défaut il y a un mois), « Au : » (aujourd’hui), bouton <kbd>Importer</kbd>.</li>
                 </ul>
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
-                        <tr><td>Banque</td><td>« Banque — Nom du compte Numéro ».</td></tr>
-                        <tr><td>Solde actuel</td><td>Solde rapporté par la banque.</td></tr>
+                        <tr><td>Banque</td><td>Le nom de la banque en gras ; en dessous, le nom et le numéro du compte.</td></tr>
+                        <tr><td>Solde actuel</td><td>Le solde rapporté par la banque, en gras ; en rouge s’il est négatif.</td></tr>
                         <tr><td>Date de connexion</td><td>Date de l’établissement du lien.</td></tr>
-                        <tr><td>Statut</td><td>Actif ou Déconnecté.</td></tr>
+                        <tr><td>Statut</td><td>Un point vert « Actif » ou gris « Déconnecté ».</td></tr>
                         <tr><td>Action</td><td>Déconnecter (comptes actifs).</td></tr>
                     </tbody>
                 </table>
@@ -338,7 +341,7 @@
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun compte bancaire connecté. »</span> — connectez une banque depuis le Relevé bancaire.</li>
+                    <li><span class="msg">« Aucune banque connectée pour l’instant. »</span> — connectez une banque depuis le Relevé bancaire.</li>
                     <li><span class="msg">« Compte introuvable. »</span> — le compte choisi pour l’import n’existe plus ou a été déconnecté ; rechargez la page.</li>
                     <li><span class="msg">« {0} transaction(s) importée(s). »</span> — l’import a réussi ; consultez le Relevé bancaire.</li>
                     <li><span class="msg">« Erreur : … »</span> — l’opération a échoué ; le détail suit.</li>
@@ -351,26 +354,27 @@
 
             <section id="fr-releve">
                 <h2>Relevé bancaire</h2>
-                <p>« Consultation des mouvements bancaires » et connexion d’une banque par Plaid (<span class="chemin">Comptabilité › Relevé bancaire</span>).</p>
+                <p>Les mouvements de vos comptes connectés, ce qui reste à apparier, et la connexion d’une banque par Plaid (<span class="chemin">Comptabilité › Relevé bancaire</span>).</p>
                 <h3>But</h3>
                 <p>Afficher, dans une seule liste, les mouvements bancaires importés de vos comptes connectés, avec leur statut de traitement.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Connecter une banque</kbd> : demande un jeton à Plaid, ouvre la fenêtre Plaid Link, puis affiche « Compte bancaire connecté avec succès. » et recharge la page. Pour les banques qui passent par leur propre site (RBC, TD…), la connexion <strong>reprend automatiquement</strong> au retour sur la page.</li>
+                    <li><kbd>+ Connecter une banque</kbd> (pastille bleue, en haut à droite ; à côté, <kbd>Comptes bancaires</kbd> ouvre la liste des banques) : demande un jeton à Plaid, ouvre la fenêtre Plaid Link, puis affiche « Compte bancaire connecté avec succès. » et recharge la page. Pour les banques qui passent par leur propre site (RBC, TD…), la connexion <strong>reprend automatiquement</strong> au retour sur la page.</li>
                     <li><strong>Loupe</strong> : lance la recherche.</li>
-                    <li><strong>Gomme</strong> (« Effacer ») : vide la recherche.</li>
+                    <li><kbd>✕</kbd> (effacer) : vide la recherche <strong>et enlève le filtre de l’indicateur</strong>.</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Mouvements</strong> (le total, avec la somme des entrées et des sorties), <strong>À apparier</strong> (importés ou en attente ; point ambre s’il y en a), <strong>Réglés</strong> et <strong>Ignorés</strong>. Un clic sur l’un des trois derniers pose le filtre correspondant — le cadre passe en bleu — et un second clic l’enlève. Le filtre est mémorisé pour la session ; le pied de la liste dit combien de mouvements sont montrés sur le total.</li>
                 </ul>
                 <h3>Filtres et recherche</h3>
-                <p>Un seul champ : « Rechercher (description, référence, compte, statut…) ». Le texte est cherché dans toutes ces colonnes.</p>
+                <p>Un seul champ : « Chercher une description, une référence ou un compte », la loupe ou la touche Entrée. Le texte est cherché dans la description, la référence, le compte et le statut.</p>
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>Date</td><td>Format « jj mmm aaaa ».</td></tr>
-                        <tr><td>Description</td><td>Libellé transmis par la banque.</td></tr>
-                        <tr><td>Référence</td><td>Identifiant de transaction Plaid (sert à écarter les doublons).</td></tr>
-                        <tr><td>Statut</td><td><strong>Importé</strong> (nouvelle ligne), <strong>Réglé</strong> (associée à un règlement), <strong>En attente</strong> ou <strong>Ignoré</strong>.</td></tr>
-                        <tr><td>Montant</td><td>En couleur selon le signe.</td></tr>
+                        <tr><td>Description</td><td>Le libellé transmis par la banque, en gras ; en dessous, l’identifiant de transaction Plaid (la référence, qui sert à écarter les doublons).</td></tr>
+                        <tr><td>Compte</td><td>Le compte bancaire d’où vient le mouvement.</td></tr>
+                        <tr><td>Statut</td><td>Une pastille : <strong>Importé</strong> (nouvelle ligne) et <strong>En attente</strong> en ambre, <strong>Réglé</strong> (associée à un règlement) en vert, <strong>Ignoré</strong> en gris.</td></tr>
+                        <tr><td>Montant</td><td>En gras ; rouge pour une sortie (montant positif), vert pour une entrée.</td></tr>
                     </tbody>
                 </table>
                 <h3>Marche à suivre</h3>
@@ -383,7 +387,7 @@
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun mouvement bancaire trouvé. »</span> — aucune transaction importée, ou la recherche ne renvoie rien.</li>
+                    <li><span class="msg">« Aucun mouvement ne correspond. »</span> — aucune transaction importée, ou la recherche et l’indicateur ne renvoient rien.</li>
                     <li><span class="msg">« Compte bancaire connecté avec succès. »</span> — la connexion est établie.</li>
                     <li><span class="msg">« Erreur lors de la création du link token. »</span> — Plaid n’a pas fourni de jeton ; vérifiez la configuration Plaid dans Processeur de paiement, puis réessayez.</li>
                     <li><span class="msg">« Erreur lors de l’échange du token. »</span> — la connexion n’a pas pu être finalisée ; recommencez le parcours.</li>
@@ -396,7 +400,7 @@
 
             <section id="fr-taxes">
                 <h2>Rapport de taxes</h2>
-                <p>Rapport de remise de taxes TPS / TVQ (<span class="chemin">Comptabilité › Rapport de taxes</span>).</p>
+                <p>Rapport de remise de taxes TPS / TVQ (<span class="chemin">Comptabilité › Rapport de taxes</span>). Le titre pose sur le fond de la page ; chaque bloc est une carte blanche arrondie.</p>
                 <h3>But</h3>
                 <p>Calculer automatiquement les taxes perçues sur les ventes et payées sur les achats pour une période, puis enregistrer la remise à Revenu Québec.</p>
                 <h3>Boutons et actions</h3>
@@ -446,7 +450,7 @@
 
             <section id="fr-fermeture">
                 <h2>Fermeture d’année fiscale</h2>
-                <p>Clôturer un exercice (<span class="chemin">Comptabilité › Fermeture d’année fiscale</span>).</p>
+                <p>Clôturer un exercice (<span class="chemin">Comptabilité › Fermeture d’année fiscale</span>). Le titre pose sur le fond de la page ; chaque étape est une carte blanche arrondie.</p>
                 <h3>But</h3>
                 <p>Solder les comptes de résultat, affecter le bénéfice net aux <strong>Bénéfices non répartis (BNR)</strong>, verrouiller l’exercice et créer automatiquement l’exercice suivant.</p>
                 <h3>Étapes de l’écran</h3>
@@ -481,30 +485,31 @@
                 <p>Pour reprendre le plan comptable d’un autre logiciel, voyez <a href="importation.html">Importation des données</a> et <a href="correspondance-comptes.html">Correspondance des comptes</a>.</p>
                 <h3>Boutons et actions</h3>
                 <ul>
-                    <li><kbd>Ajouter un compte</kbd> : ouvre la fenêtre « Ajouter un compte » (voir <a href="#fr-fiche-compte">Fiche de compte</a>).</li>
+                    <li><kbd>+ Ajouter un compte</kbd> (pastille bleue, en haut à droite) : ouvre la fenêtre « Ajouter un compte » (voir <a href="#fr-fiche-compte">Fiche de compte</a>).</li>
                     <li><strong>Crayon</strong> : ouvre « Modifier un compte ».</li>
                     <li><strong>Corbeille</strong> : supprime le compte <strong>sans demander de confirmation</strong>.</li>
                     <li>La liste se recharge à la fermeture de la fenêtre d’édition.</li>
+                    <li>Les quatre <strong>indicateurs</strong> sous le titre : <strong>Comptes actifs</strong> (« n / total »), <strong>Bilan</strong>, <strong>Résultats</strong> et <strong>Inactifs</strong>. Un clic sur Bilan ou Résultats pose le même filtre que les pastilles — le cadre passe en bleu — et un second clic revient à Tous.</li>
                 </ul>
                 <h3>Filtres et recherche</h3>
                 <ul>
-                    <li>Onglets <strong>Tous</strong>, <strong>Bilan</strong>, <strong>Résultats</strong>.</li>
-                    <li>Recherche « Rechercher (numéro, nom…) » : porte sur le numéro, le nom dans les trois langues, le code et la description de la sous-classe. Loupe pour lancer, gomme pour effacer.</li>
+                    <li>Les pastilles <strong>Afficher</strong> : <strong>Tous</strong>, <strong>Bilan</strong>, <strong>Résultats</strong> ; la pastille choisie est blanche.</li>
+                    <li>Le champ « Chercher un numéro ou un nom de compte », la loupe ou la touche Entrée : porte sur le numéro, le nom dans les trois langues, le code et la description de la sous-classe. <kbd>✕</kbd> vide la recherche <strong>et remet la pastille sur Tous</strong>.</li>
                 </ul>
                 <h3>Colonnes</h3>
                 <table>
                     <thead><tr><th>Colonne</th><th>Contenu</th></tr></thead>
                     <tbody>
                         <tr><td>Numéro</td><td>Numéro du compte.</td></tr>
-                        <tr><td>Nom du compte</td><td>Nom, avec le code de sous-classe en dessous.</td></tr>
+                        <tr><td>Nom du compte</td><td>Le nom en gras, avec le code de sous-classe en dessous.</td></tr>
                         <tr><td>Classe</td><td>Classe de niveau 1.</td></tr>
-                        <tr><td>Type</td><td>Pastille BILAN ou RESULTAT.</td></tr>
-                        <tr><td>Sens</td><td>Débit ou Crédit.</td></tr>
-                        <tr><td>Actif</td><td>Compte utilisable ou non.</td></tr>
+                        <tr><td>Type</td><td>Pastille Bilan (bleu) ou Résultats (vert).</td></tr>
+                        <tr><td>Sens</td><td>Pastille Débit (ambre) ou Crédit (bleu).</td></tr>
+                        <tr><td>Actif</td><td>Un point vert « Actif » ou gris « Inactif ».</td></tr>
                         <tr><td>Action</td><td>Crayon et corbeille.</td></tr>
                     </tbody>
                 </table>
-                <p>Sous-titre : « N compte(s) ».</p>
+                <p>Pied de la liste : « n sur total comptes ».</p>
                 <h3>Règles</h3>
                 <ul>
                     <li>Les classes sont désignées par des codes : ACT-CT, ACT-BNQ, ACT-TAX, PAS-TAX, CP, REV, CDV, CHG-EXP, etc. (voir <a href="#fr-notions">Notions de base</a>).</li>
@@ -513,7 +518,7 @@
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">« Aucun compte trouvé. »</span> — la recherche ou l’onglet ne renvoie rien.</li>
+                    <li><span class="msg">« Aucun compte ne correspond. »</span> — la recherche, la pastille ou l’indicateur ne renvoient rien.</li>
                     <li><span class="msg">« Ce compte est un compte système et ne peut pas être supprimé. »</span> — le compte est indispensable au fonctionnement ; désactivez-le plutôt.</li>
                     <li><span class="msg">« Ce compte n’appartient pas à votre plan comptable. »</span> — vous ne pouvez agir que sur les comptes de votre compagnie.</li>
                 </ul>
@@ -661,8 +666,9 @@
                 <p>This is the entry point of the whole accounting module: the list shows automatic entries (invoices, payments) and manual entries, with their status and totals.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
+                    <li>The “Journals” title sits on the page background; on the right, the blue <kbd>+ New entry</kbd> pill opens the “New entry” window. The filters are in a white card, the list and its totals in two others.</li>
                     <li><kbd>Filter</kbd>: reloads the list with the chosen criteria.</li>
-                    <li>Round <kbd>+</kbd> button (tooltip “New entry”): opens the “New entry” window (see <a href="#en-entry">Entry</a>).</li>
+                    <li>Round <kbd>+</kbd> button (tooltip “New entry”) or <kbd>+ New entry</kbd> pill: opens the “New entry” window (see <a href="#en-entry">Entry</a>).</li>
                     <li>Clicking the <strong>voucher number</strong> or the <strong>pencil</strong> icon (“Edit”): opens the “Edit entry” window.</li>
                     <li><strong>Trash</strong> icon (“Delete”): only shown for entries with the <strong>Draft</strong> status. It asks for confirmation: “Delete this entry?”.</li>
                     <li>When the edit window closes, the list reloads by itself.</li>
@@ -797,8 +803,9 @@
                 <p>A template stores the structure of an entry (journal, accounts, debit/credit side) and, optionally, its amounts. It is then loaded with one click in the entry window.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
+                    <li>The “Journal templates” title sits on the page background; on the right, the blue <kbd>+ New template</kbd> pill opens the “Nouveau template” window.</li>
                     <li><kbd>Filter</kbd>: applies the criteria.</li>
-                    <li>Round <kbd>+</kbd> button (“New template”): opens the “New template” window (see <a href="#en-template-form">Template form</a>).</li>
+                    <li>Round <kbd>+</kbd> button (“New template”) or <kbd>+ New template</kbd> pill: opens the “New template” window (see <a href="#en-template-form">Template form</a>).</li>
                     <li>Clicking the <strong>code</strong> or the <strong>pencil</strong>: opens “Edit template”.</li>
                     <li><strong>Trash</strong>: confirmation “Delete this template?”. Offered for all templates, active or not.</li>
                 </ul>
@@ -831,7 +838,7 @@
                     <li><span class="msg">“Error: …”</span> — the deletion failed; details follow.</li>
                 </ul>
                 <h3>Tips and pitfalls</h3>
-                <div class="note" data-titre="Good to know">This screen is offered in French only.</div>
+                <div class="note" data-titre="Good to know">The title, subtitle and create button are translated; the filters, columns and messages of this screen remain in French.</div>
                 <div class="piege" data-titre="Pitfall">An inactive template does not appear in <kbd>Load a template</kbd> of the entry window. To find it again in this list, uncheck “Active only”.</div>
             </section>
 
@@ -899,18 +906,19 @@
                 <p>Plaid is the service that links 60Sec-AI to your financial institution. This screen lists the established connections, with their balance and status.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Connect a bank</kbd>: starts the Plaid connection (see the pitfall below).</li>
+                    <li><kbd>+ Connect a bank</kbd> (blue pill, top right): starts the Plaid connection (see the pitfall below). Next to it, <kbd>Bank statement</kbd> opens the statement.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Connected accounts</strong> (“n / total”), <strong>Accounts balance</strong> (the sum of the connected accounts’ balances), <strong>Disconnected</strong> and <strong>Last connection</strong>. They inform; they do not filter the list. The list footer says how many accounts it shows.</li>
                     <li><strong>Disconnect</strong> icon: shown on active accounts. Confirmation “Do you really want to disconnect this account?”. The account switches to the “Disconnected” status without being deleted; its history stays visible.</li>
-                    <li><strong>Import panel</strong>: “Account:” list (active accounts), “From:” (defaults to one month ago), “To:” (today), <kbd>Import</kbd> button.</li>
+                    <li><strong>Transaction import</strong> (at the foot of the list card): “Account:” list (active accounts), “From:” (defaults to one month ago), “To:” (today), <kbd>Import</kbd> button.</li>
                 </ul>
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
-                        <tr><td>Bank</td><td>“Bank — Account name Number”.</td></tr>
-                        <tr><td>Current balance</td><td>Balance reported by the bank.</td></tr>
+                        <tr><td>Bank</td><td>The bank name in bold; underneath, the account name and number.</td></tr>
+                        <tr><td>Current balance</td><td>The balance reported by the bank, in bold; red when negative.</td></tr>
                         <tr><td>Connection date</td><td>Date the link was established.</td></tr>
-                        <tr><td>Status</td><td>Active or Disconnected.</td></tr>
+                        <tr><td>Status</td><td>A green dot “Active” or a grey dot “Disconnected”.</td></tr>
                         <tr><td>Action</td><td>Disconnect (active accounts).</td></tr>
                     </tbody>
                 </table>
@@ -921,7 +929,7 @@
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No bank account connected.”</span> — connect a bank from the Bank statement.</li>
+                    <li><span class="msg">“No bank connected yet.”</span> — connect a bank from the Bank statement.</li>
                     <li><span class="msg">“Account not found.”</span> — the account chosen for the import no longer exists or was disconnected; reload the page.</li>
                     <li><span class="msg">“{0} transaction(s) imported.”</span> — the import succeeded; check the Bank statement.</li>
                     <li><span class="msg">“Error: …”</span> — the operation failed; details follow.</li>
@@ -934,26 +942,27 @@
 
             <section id="en-bank-statement">
                 <h2>Bank statement</h2>
-                <p>“View of bank movements” and bank connection through Plaid (<span class="chemin">Accounting › Bank statement</span>).</p>
+                <p>The movements of your connected accounts, what is still to match, and bank connection through Plaid (<span class="chemin">Accounting › Bank statement</span>).</p>
                 <h3>Purpose</h3>
                 <p>Show, in one list, the bank transactions imported from your connected accounts, with their processing status.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Connect a bank</kbd>: requests a token from Plaid, opens the Plaid Link window, then shows “Bank account connected successfully.” and reloads the page. For banks that go through their own website (RBC, TD…), the connection <strong>resumes automatically</strong> when you come back to the page.</li>
+                    <li><kbd>+ Connect a bank</kbd> (blue pill, top right; next to it, <kbd>Bank accounts</kbd> opens the list of banks): requests a token from Plaid, opens the Plaid Link window, then shows “Bank account connected successfully.” and reloads the page. For banks that go through their own website (RBC, TD…), the connection <strong>resumes automatically</strong> when you come back to the page.</li>
                     <li><strong>Magnifier</strong>: runs the search.</li>
-                    <li><strong>Eraser</strong> (“Clear”): clears the search.</li>
+                    <li><kbd>✕</kbd> (clear): empties the search <strong>and removes the indicator filter</strong>.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Movements</strong> (the total, with the sum of money in and out), <strong>To match</strong> (imported or pending; amber dot when there are some), <strong>Settled</strong> and <strong>Ignored</strong>. Clicking one of the last three applies the matching filter — the frame turns blue — and a second click removes it. The filter is remembered for the session; the list footer says how many movements are shown out of the total.</li>
                 </ul>
                 <h3>Filters and search</h3>
-                <p>One field: “Search (description, reference, account, status…)”. The text is searched in all these columns.</p>
+                <p>One field: “Search a description, a reference or an account”, the magnifier or the Enter key. The text is searched in the description, reference, account and status.</p>
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>Date</td><td>“dd mmm yyyy” format.</td></tr>
-                        <tr><td>Description</td><td>Label sent by the bank.</td></tr>
-                        <tr><td>Reference</td><td>Plaid transaction identifier (used to discard duplicates).</td></tr>
-                        <tr><td>Status</td><td><strong>Imported</strong> (new line), <strong>Settled</strong> (matched to a payment), <strong>Pending</strong> or <strong>Ignored</strong>.</td></tr>
-                        <tr><td>Amount</td><td>Coloured according to its sign.</td></tr>
+                        <tr><td>Description</td><td>The label sent by the bank, in bold; underneath, the Plaid transaction identifier (the reference, used to discard duplicates).</td></tr>
+                        <tr><td>Account</td><td>The bank account the movement comes from.</td></tr>
+                        <tr><td>Status</td><td>A pill: <strong>Imported</strong> (new line) and <strong>Pending</strong> in amber, <strong>Settled</strong> (matched to a payment) in green, <strong>Ignored</strong> in grey.</td></tr>
+                        <tr><td>Amount</td><td>In bold; red for money out (positive amount), green for money in.</td></tr>
                     </tbody>
                 </table>
                 <h3>Step by step</h3>
@@ -966,7 +975,7 @@
                 </ol>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No bank movement found.”</span> — no transaction imported, or the search returns nothing.</li>
+                    <li><span class="msg">“No movement matches.”</span> — no transaction imported, or the search and the indicator return nothing.</li>
                     <li><span class="msg">“Bank account connected successfully.”</span> — the connection is established.</li>
                     <li><span class="msg">“Error while creating the link token.”</span> — Plaid did not provide a token; check the Plaid configuration in Payment processor, then try again.</li>
                     <li><span class="msg">“Error while exchanging the token.”</span> — the connection could not be finalized; start the flow again.</li>
@@ -979,7 +988,7 @@
 
             <section id="en-tax-report">
                 <h2>Tax report</h2>
-                <p>GST / QST remittance report (<span class="chemin">Accounting › Tax report</span>).</p>
+                <p>GST / QST remittance report (<span class="chemin">Accounting › Tax report</span>). The title sits on the page background; each block is a rounded white card.</p>
                 <h3>Purpose</h3>
                 <p>Automatically compute the taxes collected on sales and paid on purchases for a period, then record the remittance to Revenu Québec.</p>
                 <h3>Buttons and actions</h3>
@@ -1029,7 +1038,7 @@
 
             <section id="en-year-end">
                 <h2>Fiscal year-end close</h2>
-                <p>Close a fiscal year (<span class="chemin">Accounting › Fiscal year-end close</span>).</p>
+                <p>Close a fiscal year (<span class="chemin">Accounting › Fiscal year-end close</span>). The title sits on the page background; each step is a rounded white card.</p>
                 <h3>Purpose</h3>
                 <p>Clear the income statement accounts, transfer the net profit to <strong>Retained earnings (RE)</strong>, lock the fiscal year and automatically create the next one.</p>
                 <h3>Screen steps</h3>
@@ -1064,30 +1073,31 @@
                 <p>To bring over a chart of accounts from another software, see <a href="importation.html">Data import</a> and <a href="correspondance-comptes.html">Account mapping</a>.</p>
                 <h3>Buttons and actions</h3>
                 <ul>
-                    <li><kbd>Add an account</kbd>: opens the “Add an account” window (see <a href="#en-account-form">Account form</a>).</li>
+                    <li><kbd>+ Add an account</kbd> (blue pill, top right): opens the “Add an account” window (see <a href="#en-account-form">Account form</a>).</li>
                     <li><strong>Pencil</strong>: opens “Edit an account”.</li>
                     <li><strong>Trash</strong>: deletes the account <strong>without asking for confirmation</strong>.</li>
                     <li>The list reloads when the edit window closes.</li>
+                    <li>The four <strong>indicators</strong> under the title: <strong>Active accounts</strong> (“n / total”), <strong>Balance sheet</strong>, <strong>Income statement</strong> and <strong>Inactive</strong>. Clicking Balance sheet or Income statement applies the same filter as the pills — the frame turns blue — and a second click goes back to All.</li>
                 </ul>
                 <h3>Filters and search</h3>
                 <ul>
-                    <li><strong>All</strong>, <strong>Balance sheet</strong>, <strong>Income statement</strong> tabs.</li>
-                    <li>Search “Search (number, name…)”: covers the number, the name in the three languages, the subclass code and description. Magnifier to run, eraser to clear.</li>
+                    <li>The <strong>Show</strong> pills: <strong>All</strong>, <strong>Balance sheet</strong>, <strong>Income statement</strong>; the chosen pill is white.</li>
+                    <li>The “Search an account number or name” field, the magnifier or the Enter key: covers the number, the name in the three languages, the subclass code and description. <kbd>✕</kbd> empties the search <strong>and puts the pill back on All</strong>.</li>
                 </ul>
                 <h3>Columns</h3>
                 <table>
                     <thead><tr><th>Column</th><th>Content</th></tr></thead>
                     <tbody>
                         <tr><td>Number</td><td>Account number.</td></tr>
-                        <tr><td>Account name</td><td>Name, with the subclass code underneath.</td></tr>
+                        <tr><td>Account name</td><td>The name in bold, with the subclass code underneath.</td></tr>
                         <tr><td>Class</td><td>Level 1 class.</td></tr>
-                        <tr><td>Type</td><td>BALANCE SHEET or INCOME STATEMENT pill.</td></tr>
-                        <tr><td>Direction</td><td>Debit or Credit.</td></tr>
-                        <tr><td>Active</td><td>Whether the account can be used.</td></tr>
+                        <tr><td>Type</td><td>Balance sheet (blue) or Income statement (green) pill.</td></tr>
+                        <tr><td>Direction</td><td>Debit (amber) or Credit (blue) pill.</td></tr>
+                        <tr><td>Active</td><td>A green dot “Active” or a grey dot “Inactive”.</td></tr>
                         <tr><td>Action</td><td>Pencil and trash.</td></tr>
                     </tbody>
                 </table>
-                <p>Subtitle: “N account(s)”.</p>
+                <p>List footer: “n of total accounts”.</p>
                 <h3>Rules</h3>
                 <ul>
                     <li>Classes are designated by codes: ACT-CT, ACT-BNQ, ACT-TAX, PAS-TAX, CP, REV, CDV, CHG-EXP, etc. (see <a href="#en-basics">Basics</a>).</li>
@@ -1096,7 +1106,7 @@
                 </ul>
                 <h3>Messages</h3>
                 <ul class="messages">
-                    <li><span class="msg">“No account found.”</span> — the search or tab returns nothing.</li>
+                    <li><span class="msg">“No account matches.”</span> — the search, the pill or the indicator returns nothing.</li>
                     <li><span class="msg">“This account is a system account and cannot be deleted.”</span> — the account is required by the software; deactivate it instead.</li>
                     <li><span class="msg">“This account does not belong to your chart of accounts.”</span> — you can only act on your own company’s accounts.</li>
                 </ul>
@@ -1244,8 +1254,9 @@
                 <p>Es el punto de entrada de toda la contabilidad: la lista muestra los asientos automáticos (facturas, pagos) y los asientos manuales, con su estado y sus totales.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
+                    <li>El título «Diarios» se apoya en el fondo de la página; a la derecha, la píldora azul <kbd>+ Nuevo asiento</kbd> abre la ventana «Nuevo asiento». Los filtros están en una tarjeta blanca; la lista y sus totales, en otras dos.</li>
                     <li><kbd>Filtrar</kbd>: recarga la lista con los criterios elegidos.</li>
-                    <li>Botón redondo <kbd>+</kbd> (ayuda «Nuevo asiento»): abre la ventana «Nuevo asiento» (vea <a href="#es-asiento">Asiento</a>).</li>
+                    <li>Botón redondo <kbd>+</kbd> (ayuda «Nuevo asiento») o píldora <kbd>+ Nuevo asiento</kbd>: abre la ventana «Nuevo asiento» (vea <a href="#es-asiento">Asiento</a>).</li>
                     <li>Hacer clic en el <strong>número de comprobante</strong> o en el icono del <strong>lápiz</strong> («Editar»): abre la ventana «Editar asiento».</li>
                     <li>Icono de la <strong>papelera</strong> («Eliminar»): solo aparece en los asientos con estado <strong>Borrador</strong>. Pide confirmación: «¿Eliminar este asiento?».</li>
                     <li>Al cerrar la ventana de edición, la lista se recarga sola.</li>
@@ -1380,8 +1391,9 @@
                 <p>Una plantilla memoriza la estructura de un asiento (diario, cuentas, sentido debe/haber) y, opcionalmente, sus importes. Después se carga con un clic en la ventana de asiento.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
+                    <li>El título «Plantillas de diarios» se apoya en el fondo de la página; a la derecha, la píldora azul <kbd>+ Nueva plantilla</kbd> abre la ventana «Nouveau template».</li>
                     <li><kbd>Filtrar</kbd>: aplica los criterios.</li>
-                    <li>Botón redondo <kbd>+</kbd> («Nueva plantilla»): abre la ventana «Nueva plantilla» (vea <a href="#es-ficha-plantilla">Ficha de plantilla</a>).</li>
+                    <li>Botón redondo <kbd>+</kbd> («Nueva plantilla») o píldora <kbd>+ Nueva plantilla</kbd>: abre la ventana «Nueva plantilla» (vea <a href="#es-ficha-plantilla">Ficha de plantilla</a>).</li>
                     <li>Clic en el <strong>código</strong> o en el <strong>lápiz</strong>: abre «Modificar la plantilla».</li>
                     <li><strong>Papelera</strong>: confirmación «¿Eliminar esta plantilla?». Se ofrece para todas las plantillas, activas o no.</li>
                 </ul>
@@ -1414,7 +1426,7 @@
                     <li><span class="msg">«Error: …»</span> — la eliminación falló; el detalle sigue.</li>
                 </ul>
                 <h3>Trucos y trampas</h3>
-                <div class="note" data-titre="Conviene saber">Esta pantalla se ofrece únicamente en francés.</div>
+                <div class="note" data-titre="Conviene saber">El título, el subtítulo y el botón de creación están traducidos; los filtros, las columnas y los mensajes de esta pantalla siguen en francés.</div>
                 <div class="piege" data-titre="Trampa">Una plantilla inactiva no aparece en <kbd>Cargar una plantilla</kbd> de la ventana de asiento. Para encontrarla de nuevo en esta lista, desmarque «Solo las activas».</div>
             </section>
 
@@ -1482,18 +1494,19 @@
                 <p>Plaid es el servicio que vincula 60Sec-AI con su institución financiera. Esta pantalla lista las conexiones establecidas, con su saldo y su estado.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Conectar un banco</kbd>: inicia la conexión Plaid (vea la trampa más abajo).</li>
+                    <li><kbd>+ Conectar un banco</kbd> (píldora azul, arriba a la derecha): inicia la conexión Plaid (vea la trampa más abajo). Al lado, <kbd>Estado de cuenta</kbd> abre el extracto.</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Cuentas conectadas</strong> («n / total»), <strong>Saldo de las cuentas</strong> (la suma de los saldos de las cuentas conectadas), <strong>Desconectadas</strong> y <strong>Última conexión</strong>. Informan; no filtran la lista. El pie de la lista dice cuántas cuentas muestra.</li>
                     <li>Icono <strong>Desconectar</strong>: visible en las cuentas activas. Confirmación «¿Realmente desea desconectar esta cuenta?». La cuenta pasa al estado «Desconectado» sin eliminarse; su historial sigue visible.</li>
-                    <li><strong>Panel de importación</strong>: lista «Cuenta:» (cuentas activas), «Desde:» (por defecto hace un mes), «Hasta:» (hoy), botón <kbd>Importar</kbd>.</li>
+                    <li><strong>Importación de transacciones</strong> (al pie de la tarjeta de la lista): lista «Cuenta:» (cuentas activas), «Desde:» (por defecto hace un mes), «Hasta:» (hoy), botón <kbd>Importar</kbd>.</li>
                 </ul>
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
-                        <tr><td>Banco</td><td>«Banco — Nombre de la cuenta Número».</td></tr>
-                        <tr><td>Saldo actual</td><td>Saldo comunicado por el banco.</td></tr>
+                        <tr><td>Banco</td><td>El nombre del banco en negrita; debajo, el nombre y el número de la cuenta.</td></tr>
+                        <tr><td>Saldo actual</td><td>El saldo comunicado por el banco, en negrita; en rojo si es negativo.</td></tr>
                         <tr><td>Fecha de conexión</td><td>Fecha en que se estableció el vínculo.</td></tr>
-                        <tr><td>Estado</td><td>Activo o Desconectado.</td></tr>
+                        <tr><td>Estado</td><td>Un punto verde «Activo» o gris «Desconectado».</td></tr>
                         <tr><td>Acción</td><td>Desconectar (cuentas activas).</td></tr>
                     </tbody>
                 </table>
@@ -1504,7 +1517,7 @@
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ninguna cuenta bancaria conectada.»</span> — conecte un banco desde el Extracto bancario.</li>
+                    <li><span class="msg">«Ningún banco conectado por ahora.»</span> — conecte un banco desde el Extracto bancario.</li>
                     <li><span class="msg">«Cuenta no encontrada.»</span> — la cuenta elegida para la importación ya no existe o fue desconectada; recargue la página.</li>
                     <li><span class="msg">«{0} transacción(es) importada(s).»</span> — la importación tuvo éxito; consulte el Extracto bancario.</li>
                     <li><span class="msg">«Error: …»</span> — la operación falló; el detalle sigue.</li>
@@ -1517,26 +1530,27 @@
 
             <section id="es-extracto">
                 <h2>Extracto bancario</h2>
-                <p>«Consulta de movimientos bancarios» y conexión de un banco mediante Plaid (<span class="chemin">Contabilidad › Extracto bancario</span>).</p>
+                <p>Los movimientos de sus cuentas conectadas, lo que queda por conciliar, y la conexión de un banco mediante Plaid (<span class="chemin">Contabilidad › Extracto bancario</span>).</p>
                 <h3>Objetivo</h3>
                 <p>Mostrar, en una sola lista, los movimientos bancarios importados de sus cuentas conectadas, con su estado de tratamiento.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Conectar un banco</kbd>: pide un token a Plaid, abre la ventana Plaid Link, muestra «Cuenta bancaria conectada con éxito.» y recarga la página. Para los bancos que pasan por su propio sitio (RBC, TD…), la conexión <strong>se reanuda automáticamente</strong> al volver a la página.</li>
+                    <li><kbd>+ Conectar un banco</kbd> (píldora azul, arriba a la derecha; al lado, <kbd>Cuentas bancarias</kbd> abre la lista de bancos): pide un token a Plaid, abre la ventana Plaid Link, muestra «Cuenta bancaria conectada con éxito.» y recarga la página. Para los bancos que pasan por su propio sitio (RBC, TD…), la conexión <strong>se reanuda automáticamente</strong> al volver a la página.</li>
                     <li><strong>Lupa</strong>: lanza la búsqueda.</li>
-                    <li><strong>Goma</strong> («Borrar»): vacía la búsqueda.</li>
+                    <li><kbd>✕</kbd> (borrar): vacía la búsqueda <strong>y quita el filtro del indicador</strong>.</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Movimientos</strong> (el total, con la suma de entradas y salidas), <strong>Por conciliar</strong> (importados o pendientes; punto ámbar si los hay), <strong>Conciliados</strong> e <strong>Ignorados</strong>. Un clic en uno de los tres últimos aplica el filtro correspondiente — el marco se vuelve azul — y un segundo clic lo quita. El filtro se recuerda durante la sesión; el pie de la lista dice cuántos movimientos se muestran del total.</li>
                 </ul>
                 <h3>Filtros y búsqueda</h3>
-                <p>Un solo campo: «Buscar (descripción, referencia, cuenta, estado…)». El texto se busca en todas esas columnas.</p>
+                <p>Un solo campo: «Buscar una descripción, una referencia o una cuenta», la lupa o la tecla Intro. El texto se busca en la descripción, la referencia, la cuenta y el estado.</p>
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>Fecha</td><td>Formato «dd mmm aaaa».</td></tr>
-                        <tr><td>Descripción</td><td>Etiqueta transmitida por el banco.</td></tr>
-                        <tr><td>Referencia</td><td>Identificador de transacción Plaid (sirve para descartar duplicados).</td></tr>
-                        <tr><td>Estado</td><td><strong>Importado</strong> (línea nueva), <strong>Conciliado</strong> (asociado a un pago), <strong>Pendiente</strong> o <strong>Ignorado</strong>.</td></tr>
-                        <tr><td>Importe</td><td>En color según el signo.</td></tr>
+                        <tr><td>Descripción</td><td>La etiqueta transmitida por el banco, en negrita; debajo, el identificador de transacción Plaid (la referencia, que sirve para descartar duplicados).</td></tr>
+                        <tr><td>Cuenta</td><td>La cuenta bancaria de la que proviene el movimiento.</td></tr>
+                        <tr><td>Estado</td><td>Una píldora: <strong>Importado</strong> (línea nueva) y <strong>Pendiente</strong> en ámbar, <strong>Conciliado</strong> (asociado a un pago) en verde, <strong>Ignorado</strong> en gris.</td></tr>
+                        <tr><td>Importe</td><td>En negrita; rojo para una salida (importe positivo), verde para una entrada.</td></tr>
                     </tbody>
                 </table>
                 <h3>Paso a paso</h3>
@@ -1549,7 +1563,7 @@
                 </ol>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ningún movimiento bancario encontrado.»</span> — ninguna transacción importada, o la búsqueda no devuelve nada.</li>
+                    <li><span class="msg">«Ningún movimiento coincide.»</span> — ninguna transacción importada, o la búsqueda y el indicador no devuelven nada.</li>
                     <li><span class="msg">«Cuenta bancaria conectada con éxito.»</span> — la conexión está establecida.</li>
                     <li><span class="msg">«Error al crear el link token.»</span> — Plaid no proporcionó un token; compruebe la configuración Plaid en Procesador de pagos y vuelva a intentarlo.</li>
                     <li><span class="msg">«Error al intercambiar el token.»</span> — la conexión no pudo finalizarse; repita el recorrido.</li>
@@ -1562,7 +1576,7 @@
 
             <section id="es-impuestos">
                 <h2>Informe de impuestos</h2>
-                <p>Informe de remesa de impuestos TPS / TVQ (<span class="chemin">Contabilidad › Informe de impuestos</span>).</p>
+                <p>Informe de remesa de impuestos TPS / TVQ (<span class="chemin">Contabilidad › Informe de impuestos</span>). El título se apoya en el fondo de la página; cada bloque es una tarjeta blanca redondeada.</p>
                 <h3>Objetivo</h3>
                 <p>Calcular automáticamente los impuestos cobrados en las ventas y pagados en las compras de un período, y después registrar la remesa a Revenu Québec.</p>
                 <h3>Botones y acciones</h3>
@@ -1612,7 +1626,7 @@
 
             <section id="es-cierre">
                 <h2>Cierre del ejercicio fiscal</h2>
-                <p>Cerrar un ejercicio (<span class="chemin">Contabilidad › Cierre del ejercicio fiscal</span>).</p>
+                <p>Cerrar un ejercicio (<span class="chemin">Contabilidad › Cierre del ejercicio fiscal</span>). El título se apoya en el fondo de la página; cada etapa es una tarjeta blanca redondeada.</p>
                 <h3>Objetivo</h3>
                 <p>Saldar las cuentas de resultados, asignar el beneficio neto a los <strong>Beneficios no distribuidos (BNR)</strong>, bloquear el ejercicio y crear automáticamente el ejercicio siguiente.</p>
                 <h3>Pasos de la pantalla</h3>
@@ -1647,30 +1661,31 @@
                 <p>Para retomar el plan contable de otro programa, vea <a href="importation.html">Importación de datos</a> y <a href="correspondance-comptes.html">Correspondencia de cuentas</a>.</p>
                 <h3>Botones y acciones</h3>
                 <ul>
-                    <li><kbd>Agregar una cuenta</kbd>: abre la ventana «Agregar una cuenta» (vea <a href="#es-ficha-cuenta">Ficha de cuenta</a>).</li>
+                    <li><kbd>+ Agregar una cuenta</kbd> (píldora azul, arriba a la derecha): abre la ventana «Agregar una cuenta» (vea <a href="#es-ficha-cuenta">Ficha de cuenta</a>).</li>
                     <li><strong>Lápiz</strong>: abre «Editar una cuenta».</li>
                     <li><strong>Papelera</strong>: elimina la cuenta <strong>sin pedir confirmación</strong>.</li>
                     <li>La lista se recarga al cerrar la ventana de edición.</li>
+                    <li>Los cuatro <strong>indicadores</strong> bajo el título: <strong>Cuentas activas</strong> («n / total»), <strong>Balance</strong>, <strong>Resultados</strong> e <strong>Inactivas</strong>. Un clic en Balance o Resultados aplica el mismo filtro que las píldoras — el marco se vuelve azul — y un segundo clic vuelve a Todos.</li>
                 </ul>
                 <h3>Filtros y búsqueda</h3>
                 <ul>
-                    <li>Pestañas <strong>Todos</strong>, <strong>Balance</strong>, <strong>Resultados</strong>.</li>
-                    <li>Búsqueda «Buscar (número, nombre…)»: abarca el número, el nombre en los tres idiomas, el código y la descripción de la subclase. Lupa para lanzar, goma para borrar.</li>
+                    <li>Las píldoras <strong>Mostrar</strong>: <strong>Todos</strong>, <strong>Balance</strong>, <strong>Resultados</strong>; la píldora elegida es blanca.</li>
+                    <li>El campo «Buscar un número o un nombre de cuenta», la lupa o la tecla Intro: abarca el número, el nombre en los tres idiomas, el código y la descripción de la subclase. <kbd>✕</kbd> vacía la búsqueda <strong>y devuelve la píldora a Todos</strong>.</li>
                 </ul>
                 <h3>Columnas</h3>
                 <table>
                     <thead><tr><th>Columna</th><th>Contenido</th></tr></thead>
                     <tbody>
                         <tr><td>Número</td><td>Número de la cuenta.</td></tr>
-                        <tr><td>Nombre de la cuenta</td><td>Nombre, con el código de subclase debajo.</td></tr>
+                        <tr><td>Nombre de la cuenta</td><td>El nombre en negrita, con el código de subclase debajo.</td></tr>
                         <tr><td>Clase</td><td>Clase de nivel 1.</td></tr>
-                        <tr><td>Tipo</td><td>Pastilla BALANCE o RESULTADOS.</td></tr>
-                        <tr><td>Sentido</td><td>Débito o Crédito.</td></tr>
-                        <tr><td>Activo</td><td>Si la cuenta puede usarse o no.</td></tr>
+                        <tr><td>Tipo</td><td>Píldora Balance (azul) o Resultados (verde).</td></tr>
+                        <tr><td>Sentido</td><td>Píldora Débito (ámbar) o Crédito (azul).</td></tr>
+                        <tr><td>Activo</td><td>Un punto verde «Activo» o gris «Inactivo».</td></tr>
                         <tr><td>Acción</td><td>Lápiz y papelera.</td></tr>
                     </tbody>
                 </table>
-                <p>Subtítulo: «N cuenta(s)».</p>
+                <p>Pie de la lista: «n de total cuentas».</p>
                 <h3>Reglas</h3>
                 <ul>
                     <li>Las clases se designan con códigos: ACT-CT, ACT-BNQ, ACT-TAX, PAS-TAX, CP, REV, CDV, CHG-EXP, etc. (vea <a href="#es-nociones">Nociones básicas</a>).</li>
@@ -1679,7 +1694,7 @@
                 </ul>
                 <h3>Mensajes</h3>
                 <ul class="messages">
-                    <li><span class="msg">«Ninguna cuenta encontrada.»</span> — la búsqueda o la pestaña no devuelve nada.</li>
+                    <li><span class="msg">«Ninguna cuenta coincide.»</span> — la búsqueda, la píldora o el indicador no devuelven nada.</li>
                     <li><span class="msg">«Esta cuenta es una cuenta de sistema y no puede eliminarse.»</span> — la cuenta es indispensable para el funcionamiento; desactívela en su lugar.</li>
                     <li><span class="msg">«Esta cuenta no pertenece a su plan de cuentas.»</span> — solo puede actuar sobre las cuentas de su empresa.</li>
                 </ul>

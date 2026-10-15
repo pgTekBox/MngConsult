@@ -104,6 +104,30 @@
             padding: 6px 16px; background: #f1f5f9; border-radius: 6px;
             font-weight: 600; color: #0E1F3D; min-width: 200px; text-align: center;
         }
+        /* ── La signature du gabarit « Portail du client » : la tête sur le fond, des cartes arrondies. ── */
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+        .fc-tete .txt { flex: 1 1 260px }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+        .tax-page { max-width: none; padding: 0 }
+        .tax-card { border: 0; border-radius: 24px; padding: 18px 20px }
+        .tax-card h3 { font-size: 19px; font-weight: 800 }
+        .tax-block { border: 0; border-radius: 18px; background: #F2F5F9 }
+        .tax-block h4 { border-bottom-color: #D5DDE8; font-weight: 800 }
+        .tax-line .val { font-weight: 700 }
+        .tax-line.minus .val { color: #A3261C }
+        .total-remise { border: 0; border-radius: 18px; background: #FBF1DC }
+        .total-remise .lbl, .total-remise .val { color: #7A5200 }
+        .period-label { border-radius: 999px; background: #E8EDF5; font-weight: 800 }
+        .status-pill { font-weight: 800; font-size: 13px }
+        .status-pill.brouillon { background: #FBF1DC; color: #7A5200 }
+        .status-pill.finalise { background: #E3EBF7; color: #143A73 }
+        .status-pill.paye { background: #E3F3EA; color: #0F5A3A }
+        .detail-table th { background: transparent; color: #5B6B86; font-weight: 800; border-bottom: 1px solid #E3E9F1 }
+        .detail-table td { border-bottom-color: #E3E9F1 }
+        .action-bar { border-top-color: #E3E9F1 }
+
     </style>
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -141,9 +165,12 @@
 
     <div class="tax-page">
 
-        <h2><asp:Literal ID="litH2Title" runat="server" /></h2>
-        <div class="subtitle">
-            <asp:Literal ID="litSubtitle" runat="server" /> <asp:Literal ID="litFreqInfo" runat="server" />
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litH2Title" runat="server" /></h1>
+                <p><asp:Literal ID="litSubtitle" runat="server" /> <asp:Literal ID="litFreqInfo" runat="server" /></p>
+            </div>
         </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">

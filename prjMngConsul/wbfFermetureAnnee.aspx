@@ -82,6 +82,33 @@
         .status-pill.ok       { background: #dcfce7; color: #166534; }
         .status-pill.warning  { background: #fef3c7; color: #92400e; }
         .status-pill.bloque   { background: #fee2e2; color: #991b1b; }
+        /* ── La signature du gabarit « Portail du client » : la tête sur le fond, des cartes arrondies. ── */
+        .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+        .fc-tete .txt { flex: 1 1 260px }
+        .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+        .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+        .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+        .closure-page { max-width: none; padding: 0 }
+        .closure-card { border: 0; border-radius: 24px; padding: 18px 20px }
+        .closure-card h3 { font-size: 19px; font-weight: 800 }
+        .preview-grid .val { font-weight: 800 }
+        .preview-grid .val.positive { color: #0F5A3A }
+        .preview-grid .val.negative { color: #A3261C }
+        .problem-row { border-radius: 14px; border-left-width: 4px }
+        .problem-row.bloquant { background: #FDECEA; border-color: #A3261C }
+        .problem-row.warning { background: #FBF1DC; border-color: #E3B341 }
+        .problem-row.info { background: #E3EBF7; border-color: #1B4F9C }
+        .problem-badge.bloquant { background: #A3261C }
+        .problem-badge.warning { background: #7A5200 }
+        .problem-badge.info { background: #1B4F9C }
+        .status-pill { font-weight: 800; font-size: 13px }
+        .status-pill.ok { background: #E3F3EA; color: #0F5A3A }
+        .status-pill.warning { background: #FBF1DC; color: #7A5200 }
+        .status-pill.bloque { background: #FDECEA; color: #A3261C }
+        .preview-table th { background: transparent; color: #5B6B86; font-weight: 800; border-bottom: 1px solid #E3E9F1 }
+        .preview-table td { border-bottom-color: #E3E9F1 }
+        .action-bar { border-top-color: #E3E9F1 }
+
     </style>
 
     <telerik:RadAjaxManager ID="RadAjaxManager1" runat="server">
@@ -112,9 +139,12 @@
 
     <div class="closure-page">
 
-        <h2><asp:Literal ID="litH2Title" runat="server" /></h2>
-        <div class="subtitle">
-            <asp:Literal ID="litSubtitle" runat="server" />
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litH2Title" runat="server" /></h1>
+                <p><asp:Literal ID="litSubtitle" runat="server" /></p>
+            </div>
         </div>
 
         <asp:PlaceHolder ID="phStatus" runat="server" Visible="false">

@@ -160,6 +160,37 @@
         }
 
             .fab-add img { width: 56px; height: 56px; display: block; }
+    /* ── La signature du gabarit « Portail du client » par-dessus la mise en page existante. ── */
+    .fc-tete { display: flex; flex-wrap: wrap; align-items: flex-end; gap: 12px; margin-bottom: 16px }
+    .fc-tete .txt { flex: 1 1 260px }
+    .fc-rubrique { font-size: 14px; font-weight: 800; color: #1B4F9C; text-transform: uppercase; letter-spacing: .06em }
+    .fc-tete h1 { margin: 2px 0 0; font-size: 30px; font-weight: 800; line-height: 1.15; color: #0E1F3D }
+    .fc-tete p { margin: 4px 0 0; font-size: 17px; color: #44536E }
+    .fc-tete .btns { display: flex; flex-wrap: wrap; gap: 8px }
+    .fc-btn { min-height: 44px; padding: 0 16px; border: 1px solid #AEBBCD; border-radius: 999px; background: #fff; color: #0E1F3D; font-weight: 700; font-size: 14px; font-family: inherit; cursor: pointer }
+    .fc-btn:hover { background: #F2F5F9 }
+    .fc-btn.primaire { padding: 0 20px; border-color: #1B4F9C; background: #1B4F9C; color: #fff; font-weight: 800 }
+    .fc-btn.primaire:hover { background: #143A73 }
+    .rw-page { height: auto }
+    .rw-page .topbar { position: static; padding: 16px 18px; border: 0; border-radius: 24px; background: #fff; margin-bottom: 16px }
+    .filter-field label { font-size: 13px; font-weight: 800; color: #5B6B86 }
+    .rw-page .content { padding: 0; margin: 0; width: auto; max-width: none; overflow: visible }
+    .rw-page .container { max-width: none; width: auto; margin: 0; padding: 0 }
+    .grid-wrap { border: 0; border-radius: 24px; box-shadow: none; padding: 6px 12px 12px; overflow-x: auto }
+    .grid-header { background: transparent; border: 0; color: #5B6B86; font-size: 14px; font-weight: 800; padding: 10px 6px; min-width: 900px }
+    .grid-row { border: 0; border-top: 1px solid #E3E9F1; font-size: 15px; padding: 10px 6px; min-width: 900px }
+    .grid-row:hover { background: #FAFCFF }
+    .ecriture-no, .template-code { font-weight: 800; color: #0E1F3D }
+    .badge-validee, .badge-actif { background: #E3F3EA; color: #0F5A3A; border: 0; font-size: 13px; font-weight: 800; padding: 3px 10px }
+    .badge-brouillon { background: #FBF1DC; color: #7A5200; border: 0; font-size: 13px; font-weight: 800; padding: 3px 10px }
+    .badge-extournee { background: #FDECEA; color: #A3261C; border: 0; font-size: 13px; font-weight: 800; padding: 3px 10px }
+    .badge-inactif { background: #F2F5F9; color: #5B6B86; border: 0; font-size: 13px; font-weight: 800; padding: 3px 10px }
+    .badge-source, .badge-prefilled { background: #E3EBF7; color: #143A73; border: 0; font-size: 12px; font-weight: 800 }
+    .btn-icon-edit, .btn-icon-delete { width: 40px; height: 40px; border: 0; border-radius: 10px; background-size: 22px 22px }
+    .btn-icon-edit:hover, .btn-icon-delete:hover { background-color: #F2F5F9 }
+    .empty { padding: 20px 6px; color: #44536E; font-weight: 700 }
+    .fc-pied-carte { margin-top: 12px; padding: 14px 18px; background: #fff; border-radius: 24px; color: #44536E; font-size: 14px }
+
 
     
     </style>
@@ -184,6 +215,19 @@
                 </telerik:AjaxSetting>
             </AjaxSettings>
         </telerik:RadAjaxManager>
+
+        <%-- Le titre pose sur le fond de la page, comme dans le gabarit : la rubrique,
+             le titre, le sous-titre, et à droite le bouton de création en pastille bleue. --%>
+        <div class="fc-tete">
+            <div class="txt">
+                <div class="fc-rubrique"><asp:Literal ID="litRubrique" runat="server" /></div>
+                <h1><asp:Literal ID="litTitre" runat="server" /></h1>
+                <p><asp:Literal ID="litSousTitre" runat="server" /></p>
+            </div>
+            <div class="btns">
+                <button type="button" class="fc-btn primaire" onclick="openTemplate(0); return false;">+ <asp:Literal ID="litBtnNouveau" runat="server" /></button>
+            </div>
+        </div>
 
         <asp:Panel ID="pnlMain" runat="server" CssClass="rw-page">
 
@@ -269,7 +313,7 @@
                         </asp:Panel>
                     </div>
 
-                    <div style="margin-top: 12px; padding: 14px; background: #fff; border: 1px solid var(--line); border-radius: var(--r-xl);">
+                    <div class="fc-pied-carte">
                         <strong><asp:Label ID="lblCount" runat="server" Text="0" /></strong> template(s)
                     </div>
                 </div>

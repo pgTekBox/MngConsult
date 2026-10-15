@@ -53,6 +53,8 @@ Partial Public Class wbfRapportTaxe
             Return
         End If
 
+        ' Les boîtes posent sur le fond de la page, comme dans le gabarit.
+        DirectCast(Master, SiteMaster).FondDePage = True
         ApplyLocalization()
 
         If Not IsPostBack Then
@@ -77,6 +79,7 @@ Partial Public Class wbfRapportTaxe
 
         ' Titre + sous-titre (Literal : pas de <%= %> dans la zone RadAjax)
         SetLiteral(Me, "litH2Title", L("h2Title"))
+        SetLiteral(Me, "litRubrique", L("rubrique"))
         SetLiteral(Me, "litSubtitle", L("subtitle"))
 
         ' Bloc TPS / TVQ (Literal de libellés statiques)
@@ -115,6 +118,7 @@ Partial Public Class wbfRapportTaxe
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key
+            Case "rubrique" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
             Case "pageTitle" : Return Choose3(lang, "Rapport de remise de taxes", "Tax remittance report", "Informe de remesa de impuestos")
             Case "h2Title" : Return Choose3(lang, "Rapport de remise de taxes (TPS / TVQ)", "Tax remittance report (GST / QST)", "Informe de remesa de impuestos (IVA / IVQ)")
             Case "subtitle" : Return Choose3(lang, "Calcul automatique des taxes perçues et payées sur la période, selon la fréquence de remise configurée.", "Automatic calculation of taxes collected and paid during the period, according to the configured remittance frequency.", "Cálculo automático de los impuestos recaudados y pagados en el período, según la frecuencia de remesa configurada.")

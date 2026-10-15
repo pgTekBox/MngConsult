@@ -58,6 +58,12 @@ Partial Public Class wbfReleve
     '''</remarks>
     Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
 
+    '''<summary>hfChip control.</summary>
+    Protected WithEvents hfChip As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>btnChip control.</summary>
+    Protected WithEvents btnChip As Global.System.Web.UI.WebControls.Button
+
     '''<summary>
     '''rlvReleve control.
     '''</summary>

@@ -41,15 +41,6 @@ Partial Public Class wbfPlanComptable
     Protected WithEvents RAP1 As Global.Telerik.Web.UI.RadAjaxPanel
 
     '''<summary>
-    '''lblInfo control.
-    '''</summary>
-    '''<remarks>
-    '''Auto-generated field.
-    '''To modify move field declaration from designer file to code-behind file.
-    '''</remarks>
-    Protected WithEvents lblInfo As Global.System.Web.UI.WebControls.Label
-
-    '''<summary>
     '''btnAdd control.
     '''</summary>
     '''<remarks>
@@ -84,6 +75,12 @@ Partial Public Class wbfPlanComptable
     '''To modify move field declaration from designer file to code-behind file.
     '''</remarks>
     Protected WithEvents btnClear As Global.System.Web.UI.WebControls.Button
+
+    '''<summary>hfChip control.</summary>
+    Protected WithEvents hfChip As Global.System.Web.UI.WebControls.HiddenField
+
+    '''<summary>btnChip control.</summary>
+    Protected WithEvents btnChip As Global.System.Web.UI.WebControls.Button
 
     '''<summary>
     '''btnFilterAll control.

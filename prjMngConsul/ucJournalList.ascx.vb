@@ -23,6 +23,12 @@ Public Class ucJournalList
 
     ''' <summary>Applique la langue (fr/en/es) aux contrôles serveur / Literal de l'écran Journaux.</summary>
     Private Sub ApplyLocalization()
+        ' La tête de page
+        SetLiteral(Me, "litRubrique", L("rubrique"))
+        SetLiteral(Me, "litTitre", L("titre"))
+        SetLiteral(Me, "litSousTitre", L("sousTitre"))
+        SetLiteral(Me, "litBtnNouveau", L("newEntry"))
+
         ' Libellés des filtres
         SetLiteral(Me, "litLblDateFrom", L("lblDateFrom"))
         SetLiteral(Me, "litLblDateTo", L("lblDateTo"))
@@ -246,6 +252,10 @@ Public Class ucJournalList
     Protected Function L(key As String) As String
         Dim lang As String = CurrentLang
         Select Case key
+            ' Tête de page
+            Case "rubrique" : Return Choose3(lang, "Comptabilité", "Accounting", "Contabilidad")
+            Case "titre" : Return Choose3(lang, "Journaux", "Journals", "Diarios")
+            Case "sousTitre" : Return Choose3(lang, "Toutes vos écritures, passées automatiquement à partir de vos ventes, de vos achats et de vos règlements.", "All your entries, posted automatically from your sales, purchases and payments.", "Todos sus asientos, contabilizados automáticamente a partir de sus ventas, compras y pagos.")
             ' Filtres
             Case "lblDateFrom" : Return Choose3(lang, "Date de", "Date from", "Fecha desde")
             Case "lblDateTo" : Return Choose3(lang, "Date à", "Date to", "Fecha hasta")
