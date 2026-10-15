@@ -166,7 +166,7 @@
                     <li><strong>Laissez le compte chez vous vide.</strong> Le numéro sera attribué automatiquement à l’étape 3, dans la plage de la classe que vous y choisirez. Si le compte de l’ancien logiciel a un numéro et que ce numéro est libre dans votre plan, il est repris tel quel ; s’il est déjà pris, le champ est vidé et le numéro sera automatique.</li>
                     <li><strong>Ne choisissez pas un compte existant dans la liste</strong> avec « Créer » : ce compte existe déjà, on ne le crée pas une seconde fois. Si c’est bien celui-là que vous voulez, c’est « Lier » qu’il faut.</li>
                     <li><strong>Notez le contexte</strong> si le nom seul ne suffit pas à votre comptable.</li>
-                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compteur « À créer » augmente. La fenêtre « Comptes à décider » — « N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… » — est normale : le numéro vient à l’étape suivante. Fermez-la et continuez.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> La fenêtre « Comptes à décider » — « N compte(s) restent à décider. M d’entre eux sont marqués « Créer » sans numéro — ce n’est pas un problème… » — est normale : le numéro vient à l’étape suivante. Fermez-la et continuez.</li>
                     <li><strong>Passez à l’étape 3</strong> par <kbd>Créer les comptes au plan →</kbd>. Vous y retrouvez la même fiche du compte et le même <kbd>✨ Assistant</kbd> qu’ici ; vous choisissez la classe puis la sous-classe, le numéro est attribué dans sa plage, et le compte est réellement ajouté à votre plan — il n’est plus en préparation. Le bloc « État de cette étape » y passe à 10/10 quand plus rien n’est à créer, et la carte « 1. Plan comptable » de la page Importation suit quand les trois étapes y sont. Vous pouvez y aller même s’il reste des comptes à décider ici : une fenêtre le rappelle, les comptes marqués « Créer » sont créés, les autres attendent. De retour ici, la ligne est marquée « Créé ✓ », grisée et verrouillée : elle ne se rediscute plus à l’étape 2.</li>
                 </ol>
                 <h3>À savoir avant de créer</h3>
@@ -196,7 +196,7 @@
                     <li><strong>Vérifiez que le compte est vraiment inutile</strong> : pas de solde, pas d’activité dans l’ancien logiciel, pas de facture ni de produit qui s’y rattache.</li>
                     <li><strong>Mettez la liste Action sur « Ignorer ».</strong> Si l’option est grisée, le compte ne peut pas être ignoré : l’info-bulle dit pourquoi (voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
                     <li><strong>Lisez l’encadré jaune s’il apparaît.</strong> Il signale un compte de revenus ou de dépenses dont le solde 0 ne prouve rien. C’est un avertissement, pas un refus.</li>
-                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compte compte dans « Ignorés » et sort du filtre « À décider seulement ». Il compte comme décidé : le bloc « État de cette étape », en haut, monte d’autant, et l’étape 3 l’affiche dans son compteur « Ignorés ». La fenêtre « Fait » confirme l’enregistrement quand tout est décidé ; s’il reste des comptes à décider, c’est la fenêtre « Comptes à décider » qui le dit, et l’enregistrement est fait quand même. Un compte ignoré n’a rien à créer : il ne retient pas l’étape 3.</li>
+                    <li><strong>Cliquez <kbd>Enregistrer les correspondances</kbd>.</strong> Le compte sort du filtre « À décider seulement ». Il compte comme décidé : le bloc « État de cette étape », en haut, monte d’autant, et l’étape 3 l’affiche dans son compteur « Ignorés ». La fenêtre « Fait » confirme l’enregistrement quand tout est décidé ; s’il reste des comptes à décider, c’est la fenêtre « Comptes à décider » qui le dit, et l’enregistrement est fait quand même. Un compte ignoré n’a rien à créer : il ne retient pas l’étape 3.</li>
                     <li><strong>Faites confirmer par la balance de vérification.</strong> Une fois la balance chargée à la date de bascule, <span class="chemin">Importation › Balance de vérification</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> ressort en Erreur tout compte ignoré qui porte un montant à cette date. Si c’est le cas, revenez ici et choisissez « Lier » ou « Créer ». Sans numéros de compte, le contrôle rapproche par le nom et l’annonce en tête : un compte ignoré puis renommé dans QuickBooks n’est pas retrouvé et ressort « absent du plan », pas « ignoré avec solde » — relisez-le aussi.</li>
                 </ol>
                 <p>Un compte ignoré n’est ni lié ni créé : rien de ce qui lui est rattaché dans l’ancien logiciel ne sera repris sur lui. C’est pourquoi un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré. Le détail des quatre situations est dans <a href="#fr-garde-fous">Les garde-fous de « Ignorer »</a>.</p>
@@ -205,7 +205,7 @@
                 <ol>
                     <li>Mettez le filtre « Afficher » sur <strong>« Déjà décidés »</strong> pour ne voir que les lignes enregistrées, ou cherchez la ligne dans « Tout ».</li>
                     <li>Changez l’<strong>Action</strong>, le compte cible ou la note. « — à décider » annule la décision sans en prendre une autre.</li>
-                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd> : la nouvelle décision remplace l’ancienne, les compteurs et l’avancement suivent, et la fenêtre « Fait » (ou « Comptes à décider », s’il en reste) le confirme. Un changement non enregistré est perdu en quittant la page.</li>
+                    <li>Cliquez <kbd>Enregistrer les correspondances</kbd> : la nouvelle décision remplace l’ancienne, l’avancement suit, et la fenêtre « Fait » (ou « Comptes à décider », s’il en reste) le confirme. Un changement non enregistré est perdu en quittant la page.</li>
                 </ol>
                 <p>Toute décision se rediscute, sauf une : la ligne dont le compte a été créé à l’étape 3 (« Créé ✓ »). Rien de ce qui se change ici n’écrit en comptabilité.</p>
                 <table>
@@ -274,7 +274,7 @@
                 <h3>Ce que fait l’enregistrement</h3>
                 <ul>
                     <li><strong>Il contrôle avant d’écrire.</strong> Le navigateur vérifie d’abord la page, puis la base refait les mêmes contrôles. Au moindre refus, <strong>rien</strong> de la page n’est enregistré : corrigez la ligne citée et enregistrez de nouveau, vos autres choix sont restés à l’écran.</li>
-                    <li><strong>Il conserve les décisions à part.</strong> Rien n’est créé ni déplacé en comptabilité ; les compteurs et l’avancement se mettent à jour, ainsi que le bloc « État de cette étape » en haut : sa note monte avec la part des comptes décidés, 10/10 quand il n’en reste aucun.</li>
+                    <li><strong>Il conserve les décisions à part.</strong> Rien n’est créé ni déplacé en comptabilité ; l’avancement se met à jour, ainsi que le bloc « État de cette étape » en haut : sa note monte avec la part des comptes décidés, 10/10 quand il n’en reste aucun.</li>
                     <li><strong>Il écarte un « Lier » sans cible valable.</strong> Une liaison vers un compte absent de votre plan n’est pas conservée : la ligne revient « à décider » et la fenêtre « Comptes à décider » le signale.</li>
                     <li><strong>Il ne touche pas aux lignes « Créé ✓ ».</strong> Ce que la page renvoie pour elles est ignoré.</li>
                     <li><strong>Il refuse un « Ignorer » bloqué.</strong> Un compte qui porte un solde, ou qu’une facture ou un produit en préparation utilise, ne peut pas être ignoré : le navigateur l’arrête avant l’envoi, la base le refuse si la décision passe quand même (voir <a href="#fr-garde-fous">les garde-fous</a>).</li>
@@ -371,7 +371,7 @@
                         <tr><td>« Créer », compte laissé vide</td><td>Une ligne à créer avec le numéro sur « auto » : il sera pris dans la plage de la sous-classe que vous choisirez, de préférence une dizaine ronde.</td></tr>
                         <tr><td>« Créer », numéro de l’ancien logiciel repris</td><td>Une ligne à créer avec ce numéro prérempli. Il doit tomber dans la plage de la sous-classe choisie ; sinon, videz-le.</td></tr>
                         <tr><td>« Lier »</td><td>Rien à faire : le compte existe déjà. Il compte dans « Liés ».</td></tr>
-                        <tr><td>« Ignorer »</td><td>Rien : le compte est écarté. Il compte dans « Ignorés ».</td></tr>
+                        <tr><td>« Ignorer »</td><td>Rien : le compte est écarté.</td></tr>
                         <tr><td>« — à décider »</td><td>Le compte n’est pas repris. L’étape 3 le rappelle : « N compte(s) ne sont pas encore décidés à l’étape 2 » ; vous pouvez créer les autres et revenir.</td></tr>
                     </tbody>
                 </table>
@@ -684,7 +684,7 @@
                     <li><strong>Leave your account empty.</strong> The number will be assigned automatically at step 3, in the range of the class you will choose there. If the former account has a number and that number is free in your chart, it is reused as is; if it is already taken, the field is cleared and the number will be automatic.</li>
                     <li><strong>Do not pick an existing account from the list</strong> with “Create”: that account already exists, it is not created a second time. If that is the one you want, “Link” is what you need.</li>
                     <li><strong>Note the context</strong> if the name alone is not enough for your accountant.</li>
-                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The “To create” counter goes up. The “Comptes à décider” window — “N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…” — is normal: the number comes at the next step. Close it and go on.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The “Comptes à décider” window — “N account(s) remain to decide. M of them are marked “Create” without a number — that is not a problem…” — is normal: the number comes at the next step. Close it and go on.</li>
                     <li><strong>Go to step 3</strong> with <kbd>Create the accounts in the chart →</kbd>. There you find the same account card and the same <kbd>✨ Assistant</kbd> as here; you choose the class then the subclass, the number is assigned within its range, and the account is actually added to your chart — it is no longer in staging. The “État de cette étape” block there reaches 10/10 when nothing is left to create, and the “1. Plan comptable” card on the Import page follows once all three steps are there. You can go there even if accounts are still undecided here: a window reminds you of it, the accounts marked “Create” are created, the others wait. Back here, the row is marked “Created ✓”, greyed and locked: it is no longer discussed at step 2.</li>
                 </ol>
                 <h3>Good to know before creating</h3>
@@ -714,7 +714,7 @@
                     <li><strong>Check that the account is truly useless</strong>: no balance, no activity in the former application, no invoice or product attached to it.</li>
                     <li><strong>Set the Action list to “Ignore”.</strong> If the option is greyed out, the account cannot be ignored: the tooltip says why (see <a href="#en-safeguards">the safeguards</a>).</li>
                     <li><strong>Read the yellow note if it appears.</strong> It flags a revenue or expense account whose zero balance proves nothing. It is a warning, not a refusal.</li>
-                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The account counts in “Ignored” and leaves the “To decide only” filter. It counts as decided: the “État de cette étape” block at the top rises accordingly, and step 3 shows it in its “Ignorés” counter. The “Fait” window confirms the save when everything is decided; if accounts remain to decide, the “Comptes à décider” window says so, and the save is done all the same. An ignored account has nothing to create: it does not hold step 3 back.</li>
+                    <li><strong>Click <kbd>Save mappings</kbd>.</strong> The account leaves the “To decide only” filter. It counts as decided: the “État de cette étape” block at the top rises accordingly, and step 3 shows it in its “Ignorés” counter. The “Fait” window confirms the save when everything is decided; if accounts remain to decide, the “Comptes à décider” window says so, and the save is done all the same. An ignored account has nothing to create: it does not hold step 3 back.</li>
                     <li><strong>Have the trial balance confirm it.</strong> Once the balance is loaded as at the cut-over date, <span class="chemin">Import › Trial balance</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> flags as an Error any ignored account carrying an amount at that date. If so, come back here and choose “Link” or “Create”. Without account numbers, the check matches by name and says so at the top: an ignored account later renamed in QuickBooks is not found and shows as “missing from the chart”, not “ignored with a balance” — re-read it too.</li>
                 </ol>
                 <p>An ignored account is neither linked nor created: nothing attached to it in the former application will be migrated to it. That is why an account that carries a balance, or that an invoice or product in preparation uses, cannot be ignored. The four situations are detailed in <a href="#en-safeguards">The safeguards on “Ignore”</a>.</p>
@@ -723,7 +723,7 @@
                 <ol>
                     <li>Set the “Show” filter to <strong>“Already decided”</strong> to see only saved rows, or find the row under “All”.</li>
                     <li>Change the <strong>Action</strong>, the target account or the note. “— to decide” cancels the decision without taking another.</li>
-                    <li>Click <kbd>Save mappings</kbd>: the new decision replaces the old one, counters and progress follow, and the “Fait” window (or “Comptes à décider”, if some remain) confirms it. An unsaved change is lost when you leave the page.</li>
+                    <li>Click <kbd>Save mappings</kbd>: the new decision replaces the old one, progress follows, and the “Fait” window (or “Comptes à décider”, if some remain) confirms it. An unsaved change is lost when you leave the page.</li>
                 </ol>
                 <p>Every decision can be revisited, except one: the row whose account was created in step 3 (“Created ✓”). Nothing changed here writes to the books.</p>
                 <table>
@@ -791,7 +791,7 @@
                 <h3>What saving does</h3>
                 <ul>
                     <li><strong>It checks before writing.</strong> The browser checks the page first, then the database runs the same checks again. At the slightest refusal, <strong>nothing</strong> on the page is saved: fix the row mentioned and save again, your other choices are still on screen.</li>
-                    <li><strong>It keeps the decisions apart.</strong> Nothing is created or moved in the books; the counters and progress are updated, as is the “État de cette étape” block at the top: its score rises with the share of accounts decided, 10/10 when none remains.</li>
+                    <li><strong>It keeps the decisions apart.</strong> Nothing is created or moved in the books; progress is updated, as is the “État de cette étape” block at the top: its score rises with the share of accounts decided, 10/10 when none remains.</li>
                     <li><strong>It drops a “Link” without a valid target.</strong> A link to an account missing from your chart is not kept: the row goes back to “to decide” and the “Comptes à décider” popup says so.</li>
                     <li><strong>It leaves “Created ✓” rows alone.</strong> What the page sends back for them is ignored.</li>
                     <li><strong>It refuses a blocked “Ignore”.</strong> An account carrying a balance, or used by an invoice or a product in staging, cannot be ignored: the browser stops it before sending, the database refuses it if the decision gets through anyway (see <a href="#en-safeguards">the safeguards</a>).</li>
@@ -888,7 +888,7 @@
                         <tr><td>“Create”, account left empty</td><td>A row to create with the number on “auto”: it will be taken within the range of the subclass you choose, preferably a round ten.</td></tr>
                         <tr><td>“Create”, number of the former application reused</td><td>A row to create with that number prefilled. It must fall within the range of the chosen subclass; otherwise clear it.</td></tr>
                         <tr><td>“Link”</td><td>Nothing to do: the account already exists. It counts in “Linked”.</td></tr>
-                        <tr><td>“Ignore”</td><td>Nothing: the account is set aside. It counts in “Ignored”.</td></tr>
+                        <tr><td>“Ignore”</td><td>Nothing: the account is set aside.</td></tr>
                         <tr><td>“— to decide”</td><td>The account is not migrated. Step 3 reminds you: “N account(s) are not decided yet at step 2”; you can create the others and come back.</td></tr>
                     </tbody>
                 </table>
@@ -1201,7 +1201,7 @@
                     <li><strong>Deje vacía la cuenta en su plan.</strong> El número se asignará automáticamente en la etapa 3, dentro del rango de la clase que elija allí. Si la cuenta del programa anterior tiene un número y ese número está libre en su plan, se reutiliza tal cual; si ya está ocupado, el campo se vacía y el número será automático.</li>
                     <li><strong>No elija una cuenta existente de la lista</strong> con « Crear »: esa cuenta ya existe, no se crea una segunda vez. Si es justamente esa la que quiere, lo que necesita es « Vincular ».</li>
                     <li><strong>Anote el contexto</strong> si el nombre solo no basta para su contador.</li>
-                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> El contador « Por crear » aumenta. La ventana « Comptes à décider » — « N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… » — es normal: el número llega en la etapa siguiente. Ciérrela y continúe.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La ventana « Comptes à décider » — « N cuenta(s) quedan por decidir. M de ellas están marcadas « Crear » sin número — no es un problema… » — es normal: el número llega en la etapa siguiente. Ciérrela y continúe.</li>
                     <li><strong>Pase a la etapa 3</strong> con <kbd>Crear las cuentas en el plan →</kbd>. Allí encuentra la misma ficha de la cuenta y el mismo <kbd>✨ Asistente</kbd> que aquí; elige la clase y luego la subclase, el número se asigna dentro de su rango y la cuenta se añade realmente a su plan — ya no está en preparación. El bloque « État de cette étape » llega allí a 10/10 cuando ya no queda nada por crear, y la tarjeta « 1. Plan comptable » de la página Importación sigue cuando las tres etapas lo están. Puede ir aunque queden cuentas por decidir aquí: una ventana se lo recuerda, las cuentas marcadas « Crear » se crean, las demás esperan. De vuelta aquí, la línea queda marcada « Creada ✓ », en gris y bloqueada: ya no se discute en la etapa 2.</li>
                 </ol>
                 <h3>Conviene saber antes de crear</h3>
@@ -1231,7 +1231,7 @@
                     <li><strong>Verifique que la cuenta sea realmente inútil</strong>: sin saldo, sin actividad en el programa anterior, sin factura ni producto asociado.</li>
                     <li><strong>Ponga la lista Acción en « Ignorar ».</strong> Si la opción está en gris, la cuenta no puede ignorarse: la descripción emergente dice por qué (véanse <a href="#es-protecciones">las protecciones</a>).</li>
                     <li><strong>Lea el recuadro amarillo si aparece.</strong> Señala una cuenta de ingresos o de gastos cuyo saldo 0 no prueba nada. Es un aviso, no un rechazo.</li>
-                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La cuenta cuenta en « Ignoradas » y sale del filtro « Solo por decidir ». Cuenta como decidida: el bloque « État de cette étape », arriba, sube en consecuencia, y la etapa 3 la muestra en su contador « Ignorés ». La ventana « Fait » confirma el guardado cuando todo está decidido; si quedan cuentas por decidir, la ventana « Comptes à décider » lo dice, y el guardado se hace igualmente. Una cuenta ignorada no tiene nada que crear: no retiene la etapa 3.</li>
+                    <li><strong>Haga clic en <kbd>Guardar las correspondencias</kbd>.</strong> La cuenta sale del filtro « Solo por decidir ». Cuenta como decidida: el bloque « État de cette étape », arriba, sube en consecuencia, y la etapa 3 la muestra en su contador « Ignorés ». La ventana « Fait » confirma el guardado cuando todo está decidido; si quedan cuentas por decidir, la ventana « Comptes à décider » lo dice, y el guardado se hace igualmente. Una cuenta ignorada no tiene nada que crear: no retiene la etapa 3.</li>
                     <li><strong>Haga que el balance de comprobación lo confirme.</strong> Una vez cargado el balance a la fecha de corte, <span class="chemin">Importación › Balance de comprobación</span> › <kbd>🔍 Incohérences avec le plan comptable</kbd> señala como Error toda cuenta ignorada que lleve un importe a esa fecha. Si es el caso, vuelva aquí y elija « Vincular » o « Crear ». Sin números de cuenta, el control empareja por el nombre y lo anuncia arriba: una cuenta ignorada y luego renombrada en QuickBooks no se encuentra y aparece como « ausente del plan », no como « ignorada con saldo » — reléala también.</li>
                 </ol>
                 <p>Una cuenta ignorada no se vincula ni se crea: nada de lo asociado a ella en el programa anterior se migrará a ella. Por eso una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse. El detalle de las cuatro situaciones está en <a href="#es-protecciones">Las protecciones de « Ignorar »</a>.</p>
@@ -1240,7 +1240,7 @@
                 <ol>
                     <li>Ponga el filtro « Mostrar » en <strong>« Ya decididas »</strong> para ver solo las líneas guardadas, o busque la línea en « Todo ».</li>
                     <li>Cambie la <strong>Acción</strong>, la cuenta destino o la nota. « — por decidir » anula la decisión sin tomar otra.</li>
-                    <li>Pulse <kbd>Guardar las correspondencias</kbd>: la nueva decisión sustituye a la anterior, los contadores y el avance siguen, y la ventana « Fait » (o « Comptes à décider », si quedan) lo confirma. Un cambio no guardado se pierde al salir de la página.</li>
+                    <li>Pulse <kbd>Guardar las correspondencias</kbd>: la nueva decisión sustituye a la anterior, el avance sigue, y la ventana « Fait » (o « Comptes à décider », si quedan) lo confirma. Un cambio no guardado se pierde al salir de la página.</li>
                 </ol>
                 <p>Toda decisión se puede reconsiderar, salvo una: la línea cuya cuenta se creó en la etapa 3 (« Creada ✓ »). Nada de lo que se cambia aquí escribe en la contabilidad.</p>
                 <table>
@@ -1309,7 +1309,7 @@
                 <h3>Qué hace el guardado</h3>
                 <ul>
                     <li><strong>Controla antes de escribir.</strong> El navegador verifica primero la página, y luego la base repite los mismos controles. Al menor rechazo, <strong>nada</strong> de la página se guarda: corrija la línea citada y guarde de nuevo, sus otras elecciones siguen en pantalla.</li>
-                    <li><strong>Conserva las decisiones aparte.</strong> No se crea ni se mueve nada en la contabilidad; los contadores y el avance se actualizan, igual que el bloque « État de cette étape » arriba: su nota sube con la parte de cuentas decididas, 10/10 cuando no queda ninguna.</li>
+                    <li><strong>Conserva las decisiones aparte.</strong> No se crea ni se mueve nada en la contabilidad; el avance se actualiza, igual que el bloque « État de cette étape » arriba: su nota sube con la parte de cuentas decididas, 10/10 cuando no queda ninguna.</li>
                     <li><strong>Descarta un « Vincular » sin destino válido.</strong> Un vínculo hacia una cuenta ausente de su plan no se conserva: la línea vuelve a « por decidir » y la ventana « Comptes à décider » lo señala.</li>
                     <li><strong>No toca las líneas « Creada ✓ ».</strong> Lo que la página devuelve para ellas se ignora.</li>
                     <li><strong>Rechaza un « Ignorar » bloqueado.</strong> Una cuenta que lleva saldo, o que usa una factura o un producto en preparación, no puede ignorarse: el navegador lo detiene antes del envío, la base lo rechaza si la decisión pasa de todos modos (vea <a href="#es-protecciones">las salvaguardas</a>).</li>
@@ -1406,7 +1406,7 @@
                         <tr><td>« Crear », cuenta dejada vacía</td><td>Una línea por crear con el número en « auto »: se tomará dentro del rango de la subclase que elija, preferentemente una decena redonda.</td></tr>
                         <tr><td>« Crear », número del programa anterior reutilizado</td><td>Una línea por crear con ese número prellenado. Debe caer dentro del rango de la subclase elegida; si no, vacíelo.</td></tr>
                         <tr><td>« Vincular »</td><td>Nada que hacer: la cuenta ya existe. Cuenta en « Vinculadas ».</td></tr>
-                        <tr><td>« Ignorar »</td><td>Nada: la cuenta queda apartada. Cuenta en « Ignoradas ».</td></tr>
+                        <tr><td>« Ignorar »</td><td>Nada: la cuenta queda apartada.</td></tr>
                         <tr><td>« — por decidir »</td><td>La cuenta no se migra. La etapa 3 lo recuerda: « N cuenta(s) aún no están decididas en la etapa 2 »; puede crear las demás y volver.</td></tr>
                     </tbody>
                 </table>

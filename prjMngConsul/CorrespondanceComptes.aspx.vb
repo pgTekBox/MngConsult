@@ -138,7 +138,6 @@ Public Class CorrespondanceComptes
             litPlanClsJson.Text = classes.ToString()
             litPlanMereJson.Text = meres.ToString()
             litSousClassesJson.Text = SousClassesJson()
-            litNbComptesPlan.Text = ds.Tables(0).Rows.Count.ToString()
 
             ' Les messages de contrôle nomment les deux logiciels (T302) : « 60sec »
             ' et celui d'où vient le lot — QuickBooks pour une extraction Apideck.
@@ -315,10 +314,6 @@ Public Class CorrespondanceComptes
 
         litTotal.Text = total.ToString()
         litDecides.Text = decides.ToString()
-        litADecider.Text = Convert.ToString(r("ADecider"))
-        litLies.Text = Convert.ToString(r("Lies"))
-        litACreer.Text = Convert.ToString(r("ACreer"))
-        litIgnores.Text = Convert.ToString(r("Ignores"))
 
         Dim pct As Integer = If(total = 0, 0, CInt(Math.Floor(decides * 100.0 / total)))
         litPct.Text = pct.ToString()

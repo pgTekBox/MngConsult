@@ -24,7 +24,6 @@
     .cor-head .sub { font-size: 13px; color: #44536E; margin-top: 2px }
 
     .cor-lede { font-size: 13.5px; color: #44536E; margin: 10px 0 0; line-height: 1.6 }
-    .ia-note { font-size: 12.5px; color: #6b21a8; background: #faf5ff; border: 1px solid #e9d5ff; border-radius: 6px; padding: 8px 12px; margin: 0 0 14px; line-height: 1.55 }
 
     .card {
         background: #fff; border: 0; border-radius: 24px;
@@ -47,14 +46,6 @@
 
     .piste { height: 8px; background: #f1f5f9; border-radius: 999px; overflow: hidden }
     .piste > div { height: 100%; background: linear-gradient(90deg, #1B4F9C, #06b6d4); border-radius: 999px; transition: width .3s }
-
-    .compteurs { display: grid; grid-template-columns: repeat(5, 1fr); gap: 10px; margin-top: 14px }
-
-    .cpt { border: 1px solid #D5DDE8; border-radius: 16px; padding: 10px 14px; background: #fff }
-    .cpt .l { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; color: #44536E }
-    .cpt .v { font-size: 20px; font-weight: 800; color: #0E1F3D; margin-top: 1px }
-    .cpt.att { background: #fffbeb; border-color: #fde68a } .cpt.att .v { color: #b45309 }
-    .cpt.ok { background: #ecfdf5; border-color: #a7f3d0 } .cpt.ok .v { color: #047857 }
 
     .btn { padding: 9px 15px; border-radius: 9px; font-size: 13px; font-weight: 700; border: 1px solid transparent; cursor: pointer; font-family: inherit }
     .btn-p { background: #1B4F9C; color: #fff }
@@ -216,16 +207,6 @@
             </div>
         </div>
 
-        <p class="ia-note">
-            <i class="ic ic-sparkles" aria-hidden="true"></i> <b>Proposer avec l'IA</b> lui soumet, pour chaque compte encore à décider : le nom
-            complet, la nature, le type et le sous-type QuickBooks, l'origine (par défaut ou ajouté,
-            et quand), le solde et la description — et votre plan entier : numéro, noms, nature,
-            classe, sous-classe, sens et description. Elle rend un compte proposé, une confiance et
-            une raison ; la page vérifie que le compte existe et que la nature concorde, et vous tranchez.
-            <b>Lier selon l'IA</b> accepte ensuite d'un coup les propositions dont la confiance atteint le
-            seuil choisi (90, 80 ou 70 % et plus) sur les comptes encore à décider ; « Aucun » ne lie rien.
-        </p>
-
         <div class="avance">
             <div class="lbl">
                 <span>Avancement</span>
@@ -234,29 +215,6 @@
                     (<asp:Literal ID="litPct" runat="server" Text="0" />&nbsp;%)</span>
             </div>
             <div class="piste"><div id="divBarre" runat="server" style="width:0%"></div></div>
-        </div>
-
-        <div class="compteurs">
-            <div class="cpt att">
-                <div class="l">À décider</div>
-                <div class="v"><asp:Literal ID="litADecider" runat="server" Text="0" /></div>
-            </div>
-            <div class="cpt ok">
-                <div class="l">Liés</div>
-                <div class="v"><asp:Literal ID="litLies" runat="server" Text="0" /></div>
-            </div>
-            <div class="cpt">
-                <div class="l">À créer</div>
-                <div class="v"><asp:Literal ID="litACreer" runat="server" Text="0" /></div>
-            </div>
-            <div class="cpt">
-                <div class="l">Ignorés</div>
-                <div class="v"><asp:Literal ID="litIgnores" runat="server" Text="0" /></div>
-            </div>
-            <div class="cpt">
-                <div class="l">Comptes au plan</div>
-                <div class="v"><asp:Literal ID="litNbComptesPlan" runat="server" Text="0" /></div>
-            </div>
         </div>
 
         <asp:Panel ID="pnlTermine" runat="server" Visible="false" CssClass="rappel" style="background:#ecfdf5;border-color:#a7f3d0;color:#065f46">
@@ -343,20 +301,6 @@
                     </asp:Repeater>
                 </tbody>
             </table>
-        </div>
-
-        <div class="rappel">
-            <span><i class="ic ic-lightbulb" aria-hidden="true"></i></span>
-            <p>
-                <b>Lier</b> rattache le compte à un compte existant chez vous.
-                <b>Créer</b> l'ajoutera à votre plan lors de l'application, sous un numéro
-                attribué à l'étape suivante — un numéro que votre plan connaît déjà est refusé.
-                <b>Ignorer</b> l'écarte — utile pour les comptes techniques de l'ancien
-                logiciel. Un « Lier » vers un numéro que votre plan ne connaît pas
-                n'est pas enregistré. <b>Un compte chez vous ne reçoit qu'un seul compte</b>
-                de l'ancien logiciel : deux comptes liés au même fusionneraient leurs soldes
-                sans que rien ne le dise, alors la page le refuse.
-            </p>
         </div>
 
         <div class="barre-bas">

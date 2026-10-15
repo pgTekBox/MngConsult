@@ -40,16 +40,6 @@ Partial Public Class CorrespondanceComptes
     '''<summary>divBarre</summary>
     Protected WithEvents divBarre As Global.System.Web.UI.HtmlControls.HtmlGenericControl
 
-    '''<summary>litADecider</summary>
-    Protected WithEvents litADecider As Global.System.Web.UI.WebControls.Literal
-    '''<summary>litLies</summary>
-    Protected WithEvents litLies As Global.System.Web.UI.WebControls.Literal
-    '''<summary>litACreer</summary>
-    Protected WithEvents litACreer As Global.System.Web.UI.WebControls.Literal
-    '''<summary>litIgnores</summary>
-    Protected WithEvents litIgnores As Global.System.Web.UI.WebControls.Literal
-    '''<summary>litNbComptesPlan</summary>
-    Protected WithEvents litNbComptesPlan As Global.System.Web.UI.WebControls.Literal
 
     '''<summary>pnlTermine</summary>
     Protected WithEvents pnlTermine As Global.System.Web.UI.WebControls.Panel
